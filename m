@@ -2,27 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22401F2F8
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A684AF2F2
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfD3Jcg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Apr 2019 05:32:36 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:49867 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbfD3JcU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:32:20 -0400
+        id S1726954AbfD3JcW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Apr 2019 05:32:22 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:50917 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbfD3JcV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:32:21 -0400
+X-Originating-IP: 109.213.14.175
 Received: from localhost (alyon-652-1-31-175.w109-213.abo.wanadoo.fr [109.213.14.175])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 5D53B200003;
-        Tue, 30 Apr 2019 09:32:17 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id DB0AA60021;
+        Tue, 30 Apr 2019 09:32:18 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     Baruch Siach <baruch@tkos.co.il>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 3/4] rtc: digicolor: use .set_time
-Date:   Tue, 30 Apr 2019 11:32:11 +0200
-Message-Id: <20190430093212.28425-3-alexandre.belloni@bootlin.com>
+Subject: [PATCH 4/4] rtc: digicolor: convert to SPDX identifier
+Date:   Tue, 30 Apr 2019 11:32:12 +0200
+Message-Id: <20190430093212.28425-4-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190430093212.28425-1-alexandre.belloni@bootlin.com>
 References: <20190430093212.28425-1-alexandre.belloni@bootlin.com>
@@ -33,40 +34,33 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use .set_time instead of the deprecated .set_mmss.
+Use SPDX-License-Identifier instead of a verbose license text.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-digicolor.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-digicolor.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/rtc/rtc-digicolor.c b/drivers/rtc/rtc-digicolor.c
-index e6e16aaac254..ed2fc1adafd5 100644
+index ed2fc1adafd5..0aecc3f8e721 100644
 --- a/drivers/rtc/rtc-digicolor.c
 +++ b/drivers/rtc/rtc-digicolor.c
-@@ -106,11 +106,11 @@ static int dc_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	return 0;
- }
+@@ -1,14 +1,10 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Real Time Clock driver for Conexant Digicolor
+  *
+  * Copyright (C) 2015 Paradox Innovation Ltd.
+  *
+  * Author: Baruch Siach <baruch@tkos.co.il>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the
+- * Free Software Foundation; either version 2 of the License, or (at your
+- * option) any later version.
+  */
  
--static int dc_rtc_set_mmss(struct device *dev, unsigned long secs)
-+static int dc_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct dc_rtc *rtc = dev_get_drvdata(dev);
- 
--	return dc_rtc_write(rtc, secs);
-+	return dc_rtc_write(rtc, rtc_tm_to_time64(tm));
- }
- 
- static int dc_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
-@@ -161,7 +161,7 @@ static int dc_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
- 
- static const struct rtc_class_ops dc_rtc_ops = {
- 	.read_time		= dc_rtc_read_time,
--	.set_mmss		= dc_rtc_set_mmss,
-+	.set_time		= dc_rtc_set_time,
- 	.read_alarm		= dc_rtc_read_alarm,
- 	.set_alarm		= dc_rtc_set_alarm,
- 	.alarm_irq_enable	= dc_rtc_alarm_irq_enable,
+ #include <linux/io.h>
 -- 
 2.20.1
 
