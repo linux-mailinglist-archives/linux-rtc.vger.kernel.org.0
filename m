@@ -2,26 +2,26 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 384CBF306
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5366F301
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbfD3JdW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Apr 2019 05:33:22 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:33773 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfD3JdJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:33:09 -0400
+        id S1727079AbfD3JdM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Apr 2019 05:33:12 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:43483 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726309AbfD3JdL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:33:11 -0400
 Received: from localhost (alyon-652-1-31-175.w109-213.abo.wanadoo.fr [109.213.14.175])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7AF48200025;
-        Tue, 30 Apr 2019 09:33:07 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id E4D74100016;
+        Tue, 30 Apr 2019 09:33:08 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 2/4] rtc: pcap: switch to rtc_time64_to_tm/rtc_tm_to_time64
-Date:   Tue, 30 Apr 2019 11:33:00 +0200
-Message-Id: <20190430093302.28648-2-alexandre.belloni@bootlin.com>
+Subject: [PATCH 3/4] rtc: pcap: use .set_time
+Date:   Tue, 30 Apr 2019 11:33:01 +0200
+Message-Id: <20190430093302.28648-3-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190430093302.28648-1-alexandre.belloni@bootlin.com>
 References: <20190430093302.28648-1-alexandre.belloni@bootlin.com>
@@ -32,50 +32,40 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Call the 64bit versions of rtc_tm time conversion now that the range is
-enforced by the core.
+Use .set_time instead of the deprecated .set_mmss.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pcap.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-pcap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pcap.c b/drivers/rtc/rtc-pcap.c
-index 976240853260..be2678042fcc 100644
+index be2678042fcc..d424339f7abb 100644
 --- a/drivers/rtc/rtc-pcap.c
 +++ b/drivers/rtc/rtc-pcap.c
-@@ -55,7 +55,7 @@ static int pcap_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	ezx_pcap_read(pcap_rtc->pcap, PCAP_REG_RTC_DAYA, &days);
- 	secs += (days & PCAP_RTC_DAY_MASK) * SEC_PER_DAY;
- 
--	rtc_time_to_tm(secs, tm);
-+	rtc_time64_to_tm(secs, tm);
- 
+@@ -92,9 +92,10 @@ static int pcap_rtc_read_time(struct device *dev, struct rtc_time *tm)
  	return 0;
  }
-@@ -63,12 +63,9 @@ static int pcap_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- static int pcap_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 
+-static int pcap_rtc_set_mmss(struct device *dev, unsigned long secs)
++static int pcap_rtc_set_time(struct device *dev, struct rtc_time *tm)
  {
  	struct pcap_rtc *pcap_rtc = dev_get_drvdata(dev);
--	struct rtc_time *tm = &alrm->time;
--	unsigned long secs;
-+	unsigned long secs = rtc_tm_to_time64(&alrm->time);
++	unsigned long secs = rtc_tm_to_time64(tm);
  	u32 tod, days;
  
--	rtc_tm_to_time(tm, &secs);
--
  	tod = secs % SEC_PER_DAY;
- 	ezx_pcap_write(pcap_rtc->pcap, PCAP_REG_RTC_TODA, tod);
+@@ -125,9 +126,9 @@ static int pcap_rtc_alarm_irq_enable(struct device *dev, unsigned int en)
  
-@@ -90,7 +87,7 @@ static int pcap_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	ezx_pcap_read(pcap_rtc->pcap, PCAP_REG_RTC_DAY, &days);
- 	secs += (days & PCAP_RTC_DAY_MASK) * SEC_PER_DAY;
+ static const struct rtc_class_ops pcap_rtc_ops = {
+ 	.read_time = pcap_rtc_read_time,
++	.set_time = pcap_rtc_set_time,
+ 	.read_alarm = pcap_rtc_read_alarm,
+ 	.set_alarm = pcap_rtc_set_alarm,
+-	.set_mmss = pcap_rtc_set_mmss,
+ 	.alarm_irq_enable = pcap_rtc_alarm_irq_enable,
+ };
  
--	rtc_time_to_tm(secs, tm);
-+	rtc_time64_to_tm(secs, tm);
- 
- 	return 0;
- }
 -- 
 2.20.1
 
