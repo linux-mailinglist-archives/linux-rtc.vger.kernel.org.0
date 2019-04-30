@@ -2,83 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC9AF2B4
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DDBF2CF
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 11:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbfD3JW7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Apr 2019 05:22:59 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:44663 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbfD3JW7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:22:59 -0400
-X-Originating-IP: 109.213.14.175
+        id S1726165AbfD3J20 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Apr 2019 05:28:26 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:46829 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbfD3J20 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Apr 2019 05:28:26 -0400
 Received: from localhost (alyon-652-1-31-175.w109-213.abo.wanadoo.fr [109.213.14.175])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id EA81E1BF20F;
-        Tue, 30 Apr 2019 09:22:56 +0000 (UTC)
-Date:   Tue, 30 Apr 2019 11:22:56 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id C9E6410001D;
+        Tue, 30 Apr 2019 09:28:23 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Howey, Dylan" <Dylan.Howey@tennantco.com>
-Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH 1/2] Port rtc-pcf2123 to regmap
-Message-ID: <20190430092256.GC11339@piout.net>
-References: <20190426193648.1599-1-Dylan.Howey@tennantco.com>
- <20190427130054.GY14604@piout.net>
- <20190429150913.GA15052@tennantco.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Mathieu Malaterre <malat@debian.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v2 1/7] rtc: jz4740: set range
+Date:   Tue, 30 Apr 2019 11:28:15 +0200
+Message-Id: <20190430092821.27963-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190429150913.GA15052@tennantco.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 29/04/2019 15:09:18+0000, Howey, Dylan wrote:
-> Thanks for the quick response. This is actually the first time I've
-> submitted changes to this project.
-> 
-> The 04/27/2019 15:00, Alexandre Belloni wrote:
-> > > -static int pcf2123_write_reg(struct device *dev, u8 reg, u8 val)
-> > > -{
-> > > -	u8 txbuf[2];
-> > > +static const struct regmap_range pcf2123_ranges[] = {
-> > > +	{
-> > > +		.range_min = PCF2123_REG_CTRL1,
-> > > +		.range_max = PCF2123_REG_CTDWN_TMR,
-> > > +	},
-> > > +};
-> > >  
-> > > -	txbuf[0] = reg;
-> > > -	txbuf[1] = val;
-> > > -	return pcf2123_write(dev, txbuf, sizeof(txbuf));
-> > > -}
-> > > +static const struct regmap_access_table pcf2123_access_table = {
-> > > +	.yes_ranges = pcf2123_ranges,
-> > > +	.n_yes_ranges = ARRAY_SIZE(pcf2123_ranges),
-> > > +};
-> > 
-> > This covers all the registers, I don't think this is necessary.
-> > 
-> This would cover the same registers that are exposed by the sysfs
-> interface. I can take out the timer registers since this driver does not
-> support the periodic timer.
-> 
+RTC_SEC is a 32-bit seconds counter.
 
-What I meant is that you probably don't need the access table as the
-whole range is already between 0 and max_register so there is no need to
-double check.
+Tested-by: Mathieu Malaterre <malat@debian.org>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-jz4740.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-> I agree with the rest of your feedback. When I send a V2 patch should I
-> respond to this thread?
-> 
-
-This should be sent as a separate thred.
-
-
+diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
+index d0a891777f44..079469627bd7 100644
+--- a/drivers/rtc/rtc-jz4740.c
++++ b/drivers/rtc/rtc-jz4740.c
+@@ -348,10 +348,18 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 
+ 	device_init_wakeup(&pdev->dev, 1);
+ 
+-	rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
+-					&jz4740_rtc_ops, THIS_MODULE);
++	rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(rtc->rtc)) {
+ 		ret = PTR_ERR(rtc->rtc);
++		dev_err(&pdev->dev, "Failed to allocate rtc device: %d\n", ret);
++		return ret;
++	}
++
++	rtc->rtc->ops = &jz4740_rtc_ops;
++	rtc->rtc->range_max = U32_MAX;
++
++	ret = rtc_register_device(rtc->rtc);
++	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register rtc device: %d\n", ret);
+ 		return ret;
+ 	}
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
+
