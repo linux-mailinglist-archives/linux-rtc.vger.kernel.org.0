@@ -2,30 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D567F577
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 13:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B041F5CA
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Apr 2019 13:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbfD3LZr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Apr 2019 07:25:47 -0400
-Received: from guitar.tcltek.co.il ([192.115.133.116]:58371 "EHLO
+        id S1726294AbfD3Lg2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Apr 2019 07:36:28 -0400
+Received: from guitar.tcltek.co.il ([192.115.133.116]:58374 "EHLO
         mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726129AbfD3LZr (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 30 Apr 2019 07:25:47 -0400
+        id S1726202AbfD3Lg1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 30 Apr 2019 07:36:27 -0400
 Received: from tarshish (unknown [10.0.8.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx.tkos.co.il (Postfix) with ESMTPS id C72FE44028D;
-        Tue, 30 Apr 2019 14:25:43 +0300 (IDT)
-References: <20190430093212.28425-1-alexandre.belloni@bootlin.com>
+        by mx.tkos.co.il (Postfix) with ESMTPS id 3EEC444028D;
+        Tue, 30 Apr 2019 14:36:25 +0300 (IDT)
+References: <20190430093212.28425-1-alexandre.belloni@bootlin.com> <20190430093212.28425-2-alexandre.belloni@bootlin.com>
 User-agent: mu4e 1.0; emacs 26.1
 From:   Baruch Siach <baruch@tkos.co.il>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] rtc: digicolor: fix possible race condition
-In-reply-to: <20190430093212.28425-1-alexandre.belloni@bootlin.com>
-Date:   Tue, 30 Apr 2019 14:25:43 +0300
-Message-ID: <878svru43s.fsf@tarshish>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/4] rtc: digicolor: set range
+In-reply-to: <20190430093212.28425-2-alexandre.belloni@bootlin.com>
+Date:   Tue, 30 Apr 2019 14:36:24 +0300
+Message-ID: <877ebbu3lz.fsf@tarshish>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-rtc-owner@vger.kernel.org
@@ -36,54 +36,33 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 Hi Alexandre,
 
 On Tue, Apr 30 2019, Alexandre Belloni wrote:
-> The IRQ is requested before the struct rtc is allocated and registered, but
-> this struct is used in the IRQ handler. This may lead to a NULL pointer
-> dereference.
->
-> Switch to devm_rtc_allocate_device/rtc_register_device to allocate the rtc
-> struct before requesting the IRQ.
+
+> While the range of REFERENCE + TIME is actually 33 bits, the counter
+> itself (TIME) is a 32-bits seconds counter.
 >
 > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  drivers/rtc/rtc-digicolor.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/rtc/rtc-digicolor.c b/drivers/rtc/rtc-digicolor.c
+> index 5bb14c56bc9a..e6e16aaac254 100644
+> --- a/drivers/rtc/rtc-digicolor.c
+> +++ b/drivers/rtc/rtc-digicolor.c
+> @@ -206,6 +206,7 @@ static int __init dc_rtc_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, rtc);
+>  
+>  	rtc->rtc_dev->ops = &dc_rtc_ops;
+> +	rtc->rtc_dev->range_max = U32_MAX;
 
-Acked-by: Baruch Siach <baruch@tkos.co.il>
+Where can I find documentation on the meaning and usage of the range_max
+value? I could not find anything in the kernel source.
 
 baruch
 
-> ---
->  drivers/rtc/rtc-digicolor.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/rtc/rtc-digicolor.c b/drivers/rtc/rtc-digicolor.c
-> index b253bf1b3531..5bb14c56bc9a 100644
-> --- a/drivers/rtc/rtc-digicolor.c
-> +++ b/drivers/rtc/rtc-digicolor.c
-> @@ -192,6 +192,10 @@ static int __init dc_rtc_probe(struct platform_device *pdev)
->  	if (IS_ERR(rtc->regs))
->  		return PTR_ERR(rtc->regs);
 >  
-> +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(rtc->rtc_dev))
-> +		return PTR_ERR(rtc->rtc_dev);
-> +
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq < 0)
->  		return irq;
-> @@ -200,12 +204,10 @@ static int __init dc_rtc_probe(struct platform_device *pdev)
->  		return ret;
->  
->  	platform_set_drvdata(pdev, rtc);
-> -	rtc->rtc_dev = devm_rtc_device_register(&pdev->dev, pdev->name,
-> -						&dc_rtc_ops, THIS_MODULE);
-> -	if (IS_ERR(rtc->rtc_dev))
-> -		return PTR_ERR(rtc->rtc_dev);
->  
-> -	return 0;
-> +	rtc->rtc_dev->ops = &dc_rtc_ops;
-> +
-> +	return rtc_register_device(rtc->rtc_dev);
+>  	return rtc_register_device(rtc->rtc_dev);
 >  }
->  
->  static const struct of_device_id dc_dt_ids[] = {
 
 
 -- 
