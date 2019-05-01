@@ -2,141 +2,86 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AED10BCB
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 May 2019 19:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2157210E0A
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 May 2019 22:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbfEARLz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 May 2019 13:11:55 -0400
-Received: from mail-eopbgr770113.outbound.protection.outlook.com ([40.107.77.113]:61102
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726005AbfEARLz (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 1 May 2019 13:11:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=impinj.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kojW7S+AlG1rx3CFD8ID9aPv2p0VvWWrcMoljH3m8Ik=;
- b=jNSlPJSYueMMqpo7dHLXaFUPCgdqrFHuXreClNhB3Z7G0ihqQFLpFXTIK/FIhyR/JIW8Dl2HXe/RPbBqCN4B0TQzvznh+sl6srsoZKHzSN5JFRJ5Kj0s4SXaCM/sdKFY18eZ226zKG2BiBMtcofFgi1tlOQjlgZNYS2E1oO/1VI=
-Received: from MWHPR0601MB3708.namprd06.prod.outlook.com (10.167.236.38) by
- MWHPR0601MB3596.namprd06.prod.outlook.com (10.167.236.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.10; Wed, 1 May 2019 17:11:50 +0000
-Received: from MWHPR0601MB3708.namprd06.prod.outlook.com
- ([fe80::2d6d:7e4b:d2ff:5e29]) by MWHPR0601MB3708.namprd06.prod.outlook.com
- ([fe80::2d6d:7e4b:d2ff:5e29%3]) with mapi id 15.20.1856.008; Wed, 1 May 2019
- 17:11:44 +0000
-From:   Trent Piepho <tpiepho@impinj.com>
-To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "patrice.chotard@st.com" <patrice.chotard@st.com>,
+        id S1726096AbfEAUae (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 May 2019 16:30:34 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:60931 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfEAUae (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 May 2019 16:30:34 -0400
+Received: from localhost (lfbn-1-3034-80.w90-66.abo.wanadoo.fr [90.66.53.80])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id BE03B240008;
+        Wed,  1 May 2019 20:30:23 +0000 (UTC)
+Date:   Wed, 1 May 2019 22:30:23 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Trent Piepho <tpiepho@impinj.com>
+Cc:     "patrice.chotard@st.com" <patrice.chotard@st.com>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH] rtc: st-lpc: remove unnecessary check
-Thread-Topic: [PATCH] rtc: st-lpc: remove unnecessary check
-Thread-Index: AQHU/5H32hcx4X+jhEK8dI4HvkdrpqZVSbiAgAEKhICAAC6FgA==
-Date:   Wed, 1 May 2019 17:11:44 +0000
-Message-ID: <1556730703.31309.53.camel@impinj.com>
+Message-ID: <20190501203023.GL11339@piout.net>
 References: <20190430201834.12634-1-alexandre.belloni@bootlin.com>
-         <1556663479.31309.36.camel@impinj.com> <20190501142513.GK11339@piout.net>
-In-Reply-To: <20190501142513.GK11339@piout.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=tpiepho@impinj.com; 
-x-originating-ip: [216.207.205.253]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5f998f5b-d709-4b3a-6e6f-08d6ce58165b
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MWHPR0601MB3596;
-x-ms-traffictypediagnostic: MWHPR0601MB3596:
-x-microsoft-antispam-prvs: <MWHPR0601MB359624CB2F7E7F44721D9C8ED33B0@MWHPR0601MB3596.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 00246AB517
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(39850400004)(136003)(366004)(376002)(189003)(199004)(91956017)(68736007)(186003)(71190400001)(6246003)(478600001)(71200400001)(446003)(26005)(2501003)(86362001)(53936002)(229853002)(11346002)(6512007)(2616005)(476003)(76116006)(73956011)(66476007)(25786009)(8936002)(2906002)(486006)(54906003)(5640700003)(81156014)(66556008)(6916009)(36756003)(305945005)(6116002)(5660300002)(64756008)(66446008)(3846002)(99286004)(2351001)(66066001)(103116003)(6506007)(14454004)(14444005)(81166006)(102836004)(6486002)(8676002)(66946007)(256004)(7736002)(6436002)(316002)(4326008)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR0601MB3596;H:MWHPR0601MB3708.namprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: impinj.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: CdNHVVc3M3BSSAHRBa9grt07cs2ZjPhftO1uO/+0uYkQPei6up/y+ihObIZGm0EqdY588gXnLBtSe4GydW8sim1scm58cRInN4FnSEZ8KKIoFMUrhsoOjp6hdK/xJUpv8p7arWHc0DY/BttQiC4AVyqT9RT/NtiGii4sNUNoSXiKf9/WlGSYqFXBpS78MiQvOdubKRksVnuIbxb+TlPghL1ai47nPH0IoHiEtgCepWbNPqTtJigZgn+h1hndMaTa+h2WBbfaKumCzPsLflsDkjxg+2p+YNavAGzC0BQVbnwGn7XEEfBr0tZ9TXNamnnTC4qauUn36hhwjMwK5DuUF5Stic3UaJ8rqn9g4B1MDAUNIXX7lKTi5kRzM0oFY0gUN7QG1qkYKhgTYB7ZdWwBgVjAXIwMCUBv9VzPOy/a3EA=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <49FCA81B3B0C5042BD02E5EC95515723@namprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <1556663479.31309.36.camel@impinj.com>
+ <20190501142513.GK11339@piout.net>
+ <1556730703.31309.53.camel@impinj.com>
 MIME-Version: 1.0
-X-OriginatorOrg: impinj.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f998f5b-d709-4b3a-6e6f-08d6ce58165b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2019 17:11:44.6117
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 6de70f0f-7357-4529-a415-d8cbb7e93e5e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0601MB3596
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1556730703.31309.53.camel@impinj.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-T24gV2VkLCAyMDE5LTA1LTAxIGF0IDE2OjI1ICswMjAwLCBBbGV4YW5kcmUgQmVsbG9uaSB3cm90
-ZToNCj4gT24gMzAvMDQvMjAxOSAyMjozMToxOSswMDAwLCBUcmVudCBQaWVwaG8gd3JvdGU6DQo+
-ID4gT24gVHVlLCAyMDE5LTA0LTMwIGF0IDIyOjE4ICswMjAwLCBBbGV4YW5kcmUgQmVsbG9uaSB3
-cm90ZToNCj4gPiA+IFRoZSBSVEMgY29yZSBhbHJlYWR5IGVuc3VyZXMgdGhlIGFsYXJtIGlzIHNl
-dCB0byBhIHRpbWUgaW4gdGhlIGZ1dHVyZSwgaXQNCj4gPiA+IGlzIG5vdCBuZWNlc3NhcnkgdG8g
-Y2hlY2sgYWdhaW4gaW4gdGhlIGRyaXZlci4NCj4gPiANCj4gPiBNeSByZWFkaW5nIG9mIHRoZSBy
-dGMgY29yZSBjb2RlIGlzIHRoYXQgaXQgY2hlY2tzIGlmIHRoZSBhbGFybSBpcyBpbg0KPiA+IHRo
-ZSBmdXR1cmUgKnR3aWNlKiBiZWZvcmUgaGFuZGluZyBvZmYgdGhlIHNldCBjYWxsIHRvIHRoZSBk
-cml2ZXIsIHdoaWNoDQo+ID4gcG9zc2libHkgY2hlY2tzIGEgM3JkIHRpbWUgKGFzIHNlZW4gaGVy
-ZSkuDQo+ID4gDQo+ID4gSG93ZXZlciwgYWxsIHRoZXNlIGNoZWNrcyBhcmUgZG9uZSAqYmVmb3Jl
-KiBzZXR0aW5nIHRoZSBhbGFybS4gIEl0DQo+ID4gc3RpbGwgcG9zc2libGUgdG8gaGF2ZSBhIHJh
-Y2UgYW5kIHNldCB0aGUgYWxhcm0gYWZ0ZXIgdGhlIHRpbWUgaGFzDQo+ID4gYWxyZWFkeSBwYXNz
-ZWQsIGluIHdoaWNoIGNhc2UgdGhlIGFsYXJtIHdpbGwgbmV2ZXIgZmlyZS4NCj4gPiANCj4gDQo+
-IEkgYWdyZWUgdGhlIGNvcmUgbmVlZCB0byBoYW5kbGUgdGhhdCBwb3NzaWJsZSByYWNlIGJldHRl
-ciBhbmQgdGhpcyBpcw0KPiBzb21ldGhpbmcgSSdtIHBsYW5uaW5nIHRvIHdvcmsgb24uDQo+IA0K
-PiA+IFRoZSB3YXkgdG8gZml4IHRoZSByYWNlIHdvdWxkIGJlIHRvIGhhdmUgdGhlIGRyaXZlciBj
-aGVjayB0aGUgYWxhcm0NCj4gPiAqYWZ0ZXIqIHNldHRpbmcgaXQuICBJbiBwcmVjaXNlbHkgdGhp
-cyBvcmRlciwgZG8gdGhlc2Ugc3RlcHM6DQo+ID4gDQo+ID4gMS4gU2V0IGFsYXJtIGluIFJUQywg
-dG8gVGFsYXJtDQo+ID4gMi4gR2V0IHRpbWUgZnJvbSBSVEMsIGFzIFRjdXJyZW50DQo+ID4gMy4g
-R2V0IGFsYXJtIHN0YXR1cyBmcm9tIFJUQw0KPiA+IA0KPiA+IElmIFRhbGFybSA8IFRjdXJyZW50
-LCBhbGFybSB3YXMgc2V0IHRvIGZ1dHVyZSB0aW1lLCBubyBlcnJvcg0KPiANCj4gVGhpcyBzaG91
-bGQgYmUgVGFsYXJtID4gVGN1cnJlbnQsIHJpZ2h0Pw0KDQpZZXMuICBJIHdyb3RlIHRoYXQgYmFj
-a3dhcmQuDQoNCj4gPiBFbHNlDQo+ID4gICBJZiBzdGF0dXMgPT0gZmlyZWQsIGFsYXJtIHdhcyBz
-ZXQgYW5kIGhhcyBzaW5jZSBmaXJlZCwgbm8gZXJyb3INCj4gPiAgIEVsc2Ugc3RhdHVzID09IG5v
-dCBmaXJlZCwgYWxhcm0gd2FzIHNldCBpbiBwYXN0LCBFSU5WQUwNCj4gPiANCj4gPiBUaGlzIHNo
-b3VsZCBiZSByYWNlIGZyZWUuDQo+ID4gDQo+ID4gDQo+ID4gPiAgDQo+ID4gPiAtCS8qIEludmFs
-aWQgYWxhcm0gdGltZSAqLw0KPiA+ID4gLQlpZiAobm93X3NlY3MgPiBhbGFybV9zZWNzKQ0KPiA+
-ID4gLQkJcmV0dXJuIC1FSU5WQUw7DQo+ID4gPiAtDQo+ID4gPiAgCW1lbWNweSgmcnRjLT5hbGFy
-bSwgdCwgc2l6ZW9mKHN0cnVjdCBydGNfd2thbHJtKSk7DQo+ID4gPiAgDQo+ID4gPiAgCS8qIE5v
-dyBtYW55IHNlY3MgdG8gZmlyZSAqLw0KPiA+IA0KPiA+ICAgICAgICAgYWxhcm1fc2VjcyAtPSBu
-b3dfc2VjczsNCj4gPiAgICAgICAgIGxwYSA9ICh1bnNpZ25lZCBsb25nIGxvbmcpYWxhcm1fc2Vj
-cyAqIHJ0Yy0+Y2xrcmF0ZTsNCj4gPiANCj4gPiBXaGlsZSBpdCdzIHRydWUgdGhlIHRpbWUgd291
-bGRuJ3Qgbm9ybWFsbHkgYmUgaW4gcGFzdCwgaXQgc3RpbGwgcmFjZXMsDQo+ID4gYXMgZGVzY3Jp
-YmUgYWJvdmUuIEluIHRoYXQgY2FzZSwgdGhlIG1hdGggaGVyZSB1bmRlcmZsb3dzIGFsYXJtX3Nl
-Y3MsDQo+ID4gc28gaXQgcHJvYmFibHkgc3RpbGwgbWFrZXMgc2Vuc2UgdG8gY2hlY2suDQo+IA0K
-PiBJIGNhbid0IGJlbGlldmUgeW91IGNhbiBwb3NzaWJseSBoYXZlIG1vcmUgdGhhbiBvbmUgc2Vj
-b25kIGJldHdlZW4gdGhlDQo+IGNoZWNrIGluIHRoZSBjb3JlIGFuZCB0aGUgY2hlY2sgaW4gdGhl
-IGRyaXZlciwgaXQgZG9lc24ndCBtYWtlIG11Y2gNCj4gc2Vuc2UgdG8gY2hlY2ssIGV2ZW4gaW4g
-dGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhlIGNvcmUuDQoNCkl0J3MgY2VydGFpbmx5IHBvc3NpYmxl
-IHRvIGhhdmUgbXVsdGlwbGUgc2Vjb25kcyBwYXNzLiAgRm9yIGFuIGV4dGVybmFsDQpkZXZpY2Ug
-b3ZlciBTUEkgb3IgSTJDLCBvbmUgaGFzIHRvIHdhaXQgZm9yIHRoZSBidXMgdG8gYmVjb21lIGZy
-ZWUuIA0KQW5kIG9uIFNQSSB0aGF0IHJlcXVpcmVzIHRoZSBrZXJuZWwgdGhyZWFkIHJ1bm5pbmcg
-dGhlIGJ1cyB0byBiZSANCnNjaGVkdWxlZC4gIEp1c3QgcHV0IGluIHNvbWUgcmVhbC10aW1lIHRh
-c2tzIGFuZCBtYXliZSBhIGJpZyB0cmFuc2Zlcg0KdG8gYSBmbGFzaCBjaGlwIGFuZCBpdCBjb3Vs
-ZCBiZSBhIHdoaWxlIGJlZm9yZSB0aGF0IGhhcHBlbnMuDQoNCkkgZG9uJ3QgdGhpbmsgdGhpcyBk
-ZXZpY2UgaGFzIHRoYXQgaXNzdWUgYXMgSSBkb24ndCB0aGluayBpdCdzDQpleHRlcm5hbC4gIEFu
-ZCBldmVyIGZvciBhIGRldmljZSBvbiBhbiBleHRlcm5hbCBidXMsIGRlbGF5cyA+IDEgc2Vjb25k
-DQphcmUgdW5saWtlbHkuICBQb3NzaWJsZSwgYnV0IHVubGlrZWx5Lg0KDQpZb3UgY2FuIGFsc28g
-Z2V0IHRoZW0gd2hlbiBMaW51eCBpcyBydW5uaW5nIHVuZGVyIGEgaHlwZXJ2aXNvciwgaS5lLiBh
-DQpMaW51eCBWTS4gIEJ1dCBhbHNvIHNvbWV0aGluZyBsaWtlIGFuIE5NSSBhbmQgQUNQSSBCSU9T
-LiAgSWYgdGhlIExpbnV4DQpndWVzdCBpcyBub3Qgc2NoZWR1bGVkIHRvIHJ1biBmb3Igd2hpbGUg
-YW55dGhpbmcgdGhhdCBpcyBzdXBwb3NlZCB0byBiZQ0KYmFzZWQgb24gcmVhbCB0aW1lLCBsaWtl
-IHRoZSB2YWx1ZSByZXR1cm5lZCBieSBhbiBSVEMsIHdpbGwgc3RpbGwNCmFkdmFuY2UuICBJdCBp
-cyBwb3NzaWJsZSB0aGF0IG11bHRpcGxlIHNlY29uZHMgZWxhcHNlIGZyb20gdGhlIGd1ZXN0DQpD
-UFUgZXhlY3V0aW5nIG9uZSBpbnN0cnVjdGlvbiB0byB0aGUgbmV4dC4NCg0KQnV0IGV2ZW4gaWdu
-b3JpbmcgdGhhdCwgZG9lcyBpdCByZXF1aXJlID4gMSBzZWNvbmQgdG8gZWxhcHNlLiAgQ2FuJ3Qg
-aXQNCmhhcHBlbiB3aGVuIHRoZSBjbG9jayB0aWNrcyBmcm9tIG9uZSBzZWNvbmQgdG8gdGhlIG5l
-eHQsIHdoaWNoIGhhcHBlbnMNCmVmZmVjdGl2ZWx5IGluc3RhbnRseT8NCg0KSWYgdGhlIHRpbWUg
-ZnJvbSB0aGUgY2hlY2sgdG8gdGhlIHRpbWUgd2hlbiB0aGUgYWxhcm0gaXMgc2V0IGlzIDENCm1p
-Y3Jvc2Vjb25kLCBhbmQgdGhlIHRpbWUgdGhpcyBjYWxsIHRvIHNldCB0aGUgYWxhcm0gaXMgbWFk
-ZSBpcw0KcmFuZG9tbHkgZG9uZSBhbmQgbm90IHN5bmNocm9uaXplZCB0byB0aGUgUlRDLCB0aGVu
-IGlzbid0IHRoZXJlIGEgMSBvdXQNCm9mIDEgbWlsbGlvbiBjaGFuY2UgKDEgbWljcm9zZWNvbmQg
-LyAxIHNlY29uZCksIHRoYXQgdGhlIG9uY2UgcGVyDQpzZWNvbmQgY2xvY2sgdGljayB3aWxsIGhp
-dCBvdXIgMSB1cyB3aW5kb3c/
+On 01/05/2019 17:11:44+0000, Trent Piepho wrote:
+> > I can't believe you can possibly have more than one second between the
+> > check in the core and the check in the driver, it doesn't make much
+> > sense to check, even in the current state of the core.
+> 
+> It's certainly possible to have multiple seconds pass.  For an external
+> device over SPI or I2C, one has to wait for the bus to become free. 
+> And on SPI that requires the kernel thread running the bus to be 
+> scheduled.  Just put in some real-time tasks and maybe a big transfer
+> to a flash chip and it could be a while before that happens.
+> 
+> I don't think this device has that issue as I don't think it's
+> external.  And ever for a device on an external bus, delays > 1 second
+> are unlikely.  Possible, but unlikely.
+> 
+> You can also get them when Linux is running under a hypervisor, i.e. a
+> Linux VM.  But also something like an NMI and ACPI BIOS.  If the Linux
+> guest is not scheduled to run for while anything that is supposed to be
+> based on real time, like the value returned by an RTC, will still
+> advance.  It is possible that multiple seconds elapse from the guest
+> CPU executing one instruction to the next.
+> 
+> But even ignoring that, does it require > 1 second to elapse.  Can't it
+> happen when the clock ticks from one second to the next, which happens
+> effectively instantly?
+> 
+> If the time from the check to the time when the alarm is set is 1
+> microsecond, and the time this call to set the alarm is made is
+> randomly done and not synchronized to the RTC, then isn't there a 1 out
+> of 1 million chance (1 microsecond / 1 second), that the once per
+> second clock tick will hit our 1 us window?
+
+No, let's say you want Talarm == Tcurrent + 1, if the core check happens
+right before the next second, then you necessarily end up with
+Talarm == Tcurrent after the check. This means that you now have one
+second before the time read in st-lpc to avoid the
+alarm_secs -= now_secs; underflow.
+
+Obviously, in that case, you are likely to miss the alarm but this is as
+likely to happen with the check that is in the driver. This check
+doesn't provide anything but a false sense of security.
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
