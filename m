@@ -2,428 +2,139 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFED11674
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2019 11:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DD12149
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2019 19:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726266AbfEBJSB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 May 2019 05:18:01 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43719 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbfEBJSB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 May 2019 05:18:01 -0400
-Received: by mail-lj1-f196.google.com with SMTP id t1so1482900lje.10;
-        Thu, 02 May 2019 02:17:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=epSl3spZqeI9f2/hoVfacEbUpMIwis87JJi4pAjJQUQ=;
-        b=oFhCafDwq5px2QK/xaJF3qEFbRXds0f0R3hKTpcQwTKgWJz8FVfMiWBt9LIdrDD6rW
-         QHo3sN5T2SdJsdlyoiclEw6g190ELeAIHlzoQLAiKtoJ+bW7tIiUmYtrJHaXdU4erriC
-         utWbWlEqe2GWDVTHbtSGo9vE4LMMeOIud9y9+/JKcA0dZe1aggAIOGj8FUyJ2mPBrXt6
-         OlrJkoRfyRRiLMbI+vroKgJHo3qJuAcTA/Iu5z5JikNhoQ8QaLAABuWbyN8LSSWP+4UM
-         H9HGRp1YowiwWXQUiJxiFjej484RWSU9Mw71ubxlcqOxei3l1v7zzjaVwgybu9CQ7581
-         S8/Q==
-X-Gm-Message-State: APjAAAW/TCkjy/RW4xIlV5++gJuap/UWRqhHbOStaqT4lFJ3aaq2bRCc
-        UV72wA9kSHIQ66pd52Ps+bM=
-X-Google-Smtp-Source: APXvYqzPfePhmFLT/N5FxZs3+1PD4QytqMuMlpR+YU610lSb/N9Xrmm3OFp3P6uXBA5myO/DpE/l8A==
-X-Received: by 2002:a2e:92ce:: with SMTP id k14mr1285784ljh.83.1556788676829;
-        Thu, 02 May 2019 02:17:56 -0700 (PDT)
-Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id y20sm9372507lfe.8.2019.05.02.02.17.54
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 02:17:56 -0700 (PDT)
-Date:   Thu, 2 May 2019 12:17:43 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        mazziesaccount@gmail.com
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        heikki.haikola@fi.rohmeurope.com, mikko.mutanen@fi.rohmeurope.com
-Subject: [PATCH v14 8/8] watchdog: bd70528: Initial support for ROHM BD70528
- watchdog block
-Message-ID: <d30a0c4e66ba6e88877814f34260e89bd8cf54d6.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1726120AbfEBRwr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 May 2019 13:52:47 -0400
+Received: from esa1.tennantco.iphmx.com ([68.232.153.187]:60216 "EHLO
+        esa1.tennantco.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBRwq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 May 2019 13:52:46 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 May 2019 13:52:45 EDT
+IronPort-PHdr: =?us-ascii?q?9a23=3AfBkR6hIaOiW+F/ISjdmcpTZWNBhigK39O0sv0r?=
+ =?us-ascii?q?FitYgXKvTzrarrMEGX3/hxlliBBdydt6sdzbSH+Pm5BiQp2tWoiDg6aptCVh?=
+ =?us-ascii?q?sI2409vjcLJ4q7M3D9N+PgdCcgHc5PBxdP9nC/NlVJSo6lPwWB6nK94iQPFR?=
+ =?us-ascii?q?rhKAF7Ovr6GpLIj8Swyuu+54Dfbx9HiTagfL9+NhS7oAHeusULnIdvKLs6xw?=
+ =?us-ascii?q?fUrHdPZ+lY335jK0iJnxb76Mew/Zpj/DpVtvk86cNOUrj0crohQ7BAAzsoL2?=
+ =?us-ascii?q?465MvwtRneVgSP/WcTUn8XkhVTHQfI6gzxU4rrvSv7sup93zSaPdHzQLspVz?=
+ =?us-ascii?q?mu87tnRRn1gyocKTU37H/YhdBxjKJDoRKuuRp/w5LPYIqIMPZyZ77Rcc8GSW?=
+ =?us-ascii?q?ZEWMtaSi5PDZ6mb4YXD+QPI/tWr5XzqVUNoxuxBwisC//gxDBHnXL2wbY13v?=
+ =?us-ascii?q?49HQ3awAAtHdQDu2nUotXvM6cSVPi4wqfIzDXHdfxW3yr25orPchEvv/6NXa?=
+ =?us-ascii?q?97fM3fx0gvEwPKlFOQpZbnMTOS2OUCrWia4vF8Ve2xjW4nrRt+oj6zxsgwjY?=
+ =?us-ascii?q?nFnJ4aylfB9Shgxos+ON62SFZjbNK5DJdduDuWOoR0T884Q2xkpDw2x70ItJ?=
+ =?us-ascii?q?KjYSQHzJcqywTBZ/CbfIWE+BzuWeiLLTtmmH5pZKqzhxis/kWj1uHxU8y53V?=
+ =?us-ascii?q?dXoSVZltTBs20C2ALN5cWJT/Zy4Fqu1iqT2w3W8O5JI1s7mrTdJpU82LA/jI?=
+ =?us-ascii?q?ATvl7GHiLunUX2i7KZeVs89+iz7uTnfq3mppiBN49okg3+Mrohmsi4AekgKg?=
+ =?us-ascii?q?YDQ2+V9fi82bH64ED2QqtGguQxkqbCrp/WP8MbprOlAwBO1YYj9hC/ACq83N?=
+ =?us-ascii?q?QAh3kHK05FdwybgIj1OlHOJ/b4Ae24g1SxjDdrw/fGPrriApnXMnfDl7Lhca?=
+ =?us-ascii?q?58605a1gUz0chS649IBrwOOv7+VU38uMbYAxMlKQC5w+jqBM141owEWGKPBq?=
+ =?us-ascii?q?GZMLnVsV+N/u8hLemNZIsPtzb7MfQr5fnujHEnll4dZqSpwYUYaHa+Hvt8JU?=
+ =?us-ascii?q?WZfWbjgtAbHWgWuQo+SfTmiEeeXj5Le3ayQ6U86ykhB4KiE4jCSZqigLqc0y?=
+ =?us-ascii?q?ehAJJafHtJBU6IEXfscIWEXfYMZTmJLc9mlTwESbyhS44n1R20qAD6zL9nJP?=
+ =?us-ascii?q?LO+iIErZLjyMR15+rLmB4o7zB1Dtmd02SIT2FzhW4IWzg23a5hrkxn1leMz7?=
+ =?us-ascii?q?R3g/xCGdxS+/NDSh06OoLEz+xmF9DyXRrMftOISFagX9WnDig9Tsgtw9ASeE?=
+ =?us-ascii?q?t9BdqigQ7Z3yawAL8aiaaLBJoq/aLYxXTxINx9y3mVnJUm2nAiT9tGM2G8i+?=
+ =?us-ascii?q?ZV+gzXAIjI2xGQk6u6fKIQxiOL/mqHyW2IvWlSVwlsVaTDG3sYYx2Fg87+4x?=
+ =?us-ascii?q?buXrunD/wHNRRM2IbWBrpOY9uvrVJZSebLJNnYZWu3h2y3Qx2Pw+XfP8LRZ2?=
+ =?us-ascii?q?wB0XCFWwA/mAcJ8CPDbFBmXH3zqn/CDDFoCVPkal/t9u87sn6gU0so1F/aPV?=
+ =?us-ascii?q?Z52e+z/RgYzbyHRvUf06hMmR9pqi48XTPfl8nTF8LGogNgeKtGZtZozEZD3G?=
+ =?us-ascii?q?SflwtiM42IM61kgFcYbw9w+Ujp0kY/Bw=3D=3D?=
+X-IPAS-Result: =?us-ascii?q?A2HlDABqLMtc/zUyL2hlg1VQW4EGBAsoCoQGg0cDhTGJU?=
+ =?us-ascii?q?Zs7gRADGDwPAS0CgUmCdQIXhkA4EwEDAQEBBAEBAQECAQECaRwMgjopAWE5M?=
+ =?us-ascii?q?gEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQUCODkCAQMSE?=
+ =?us-ascii?q?REMAQERJgEPAgEIGgIFIQICAg0jFRACBA4nhGsDHQGiDD0CYgILgQEpiF9xg?=
+ =?us-ascii?q?S+CeQEBBYUCGFKBPAmBCyeNIz+EIz6ELYMhMoImjU2ZWwcCggtWkV4ngg6KJ?=
+ =?us-ascii?q?4kMoHkCBAIEBQIOAQEFgWYigVYzGiODPIV+ilNAATGBKZITAYEgAQE?=
+X-IronPort-AV: E=Sophos;i="5.60,422,1549951200"; 
+   d="scan'208";a="14444973"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from mail-by2nam05lp2053.outbound.protection.outlook.com (HELO NAM05-BY2-obe.outbound.protection.outlook.com) ([104.47.50.53])
+  by ob1.tennantco.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 May 2019 12:45:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=tennantco.onmicrosoft.com; s=selector1-tennantco-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Lfn75GQRECQiUyuK82L3I38YksWE1DIFCndG0OhYCwQ=;
+ b=n7xvOq6ThY+5PaQqlpeQ2at6/gDs3Rcdwa+nMEPbOiV20ShPP0FNjxxTt23NQzJnT4CgWbXWp3DPR7I6rvGW83e/luE5nmy/qrIYWAxuQegPAKVRwlzkRHpv6zYRK32M445uhv0TDYmyTLHhoik5HrBR53sMJmaG26fJPug9JfQ=
+Received: from CY4PR20MB1381.namprd20.prod.outlook.com (10.173.111.8) by
+ CY4PR20MB1256.namprd20.prod.outlook.com (10.173.113.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Thu, 2 May 2019 17:45:24 +0000
+Received: from CY4PR20MB1381.namprd20.prod.outlook.com
+ ([fe80::6dc9:dee3:edc0:a7be]) by CY4PR20MB1381.namprd20.prod.outlook.com
+ ([fe80::6dc9:dee3:edc0:a7be%4]) with mapi id 15.20.1856.008; Thu, 2 May 2019
+ 17:45:24 +0000
+From:   Dylan Howey <Dylan.Howey@tennantco.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: Re: [PATCH 1/2] Port rtc-pcf2123 to regmap
+Thread-Topic: [PATCH 1/2] Port rtc-pcf2123 to regmap
+Thread-Index: AQHU/GdxJRWxL7Stt0KuQz+yj2UEMaZP+a8AgAL0soCAAYVnAIADsQaA
+Date:   Thu, 2 May 2019 17:45:24 +0000
+Message-ID: <20190502174518.GA12323@tennantco.com>
+References: <20190426193648.1599-1-Dylan.Howey@tennantco.com>
+ <20190427130054.GY14604@piout.net> <20190429150913.GA15052@tennantco.com>
+ <20190430092256.GC11339@piout.net>
+In-Reply-To: <20190430092256.GC11339@piout.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MN2PR04CA0011.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::24) To CY4PR20MB1381.namprd20.prod.outlook.com
+ (2603:10b6:903:8d::8)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Dylan.Howey@tennantco.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [198.204.33.200]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d02003f1-26f7-4ea5-c2c0-08d6cf25f44a
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:CY4PR20MB1256;
+x-ms-traffictypediagnostic: CY4PR20MB1256:
+x-microsoft-antispam-prvs: <CY4PR20MB125617897872E7FCF64B34ABEF340@CY4PR20MB1256.namprd20.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0025434D2D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(39850400004)(366004)(396003)(136003)(376002)(189003)(199004)(2616005)(256004)(446003)(229853002)(14444005)(476003)(11346002)(486006)(6246003)(7736002)(4326008)(6436002)(6486002)(478600001)(72206003)(305945005)(25786009)(8936002)(33656002)(8676002)(81156014)(81166006)(66066001)(102836004)(6116002)(6512007)(53936002)(6916009)(5660300002)(3846002)(26005)(68736007)(54906003)(316002)(36756003)(66946007)(186003)(73956011)(2906002)(66446008)(64756008)(66556008)(66476007)(6506007)(386003)(76176011)(14454004)(99286004)(52116002)(71200400001)(71190400001)(86362001)(1076003);DIR:OUT;SFP:1101;SCL:1;SRVR:CY4PR20MB1256;H:CY4PR20MB1381.namprd20.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: tennantco.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: mER6OnNpdgQWk0dnobRzPrLEZjWsGyrZed3G1MOwJ+lNH3xCb9t69HI1In2LMOCFcQf8ijE2ahQTODw9WUajJJx9hu1hlSVXHK7ZQYSCtLZe0qE3LCzeQRugsh/B7UatWpEHTLTlUh3lMbC05beatIKBYd0Sr4M9o3EMcmGCAMYoUBemnQKiPlnzt4YK92d6IN77savs5SD8TeSOgJ8FimZ0w1c9Lcj8K+xCSRVfmuKzH8HLOvM/tzwUZAQXXvbkwQ55q9y0U+g+ZH2iLc0GFmWQVjV/OzYzEby3KHwh4IyGpWxhvFYD1VAGeFqVnddCxxrAPHYkoaTjdpfvdfxBMbx4wMBybn3TvGKxe+Cvasm1AcNr3ISHiGoEf4geD+geWKF9A7EUf6qQ0g/rXhnDdvEgaaKDwen0myEGxNYYw5o=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EBBB2D76F81D4A44919005F8BA6AA33C@namprd20.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: tennantco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d02003f1-26f7-4ea5-c2c0-08d6cf25f44a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2019 17:45:24.2496
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 854ee4fb-bf50-420c-8a26-5b96d626ac37
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR20MB1256
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Initial support for watchdog block included in ROHM BD70528
-power management IC.
-
-Configurations for low power states are still to be checked.
-
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
-Changelog v14: No changes
-
- drivers/watchdog/Kconfig       |  12 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/bd70528_wdt.c | 290 +++++++++++++++++++++++++++++++++
- 3 files changed, 303 insertions(+)
- create mode 100644 drivers/watchdog/bd70528_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 242eea859637..a00bf649d7f0 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -90,6 +90,18 @@ config SOFT_WATCHDOG_PRETIMEOUT
- 	  watchdog. Be aware that governors might affect the watchdog because it
- 	  is purely software, e.g. the panic governor will stall it!
- 
-+config BD70528_WATCHDOG
-+	tristate "ROHM BD70528 PMIC Watchdog"
-+	depends on MFD_ROHM_BD70528
-+	select WATCHDOG_CORE
-+	help
-+	  Support for the watchdog in the ROHM BD70528 PMIC. Watchdog trigger
-+	  cause system reset.
-+
-+	  Say Y here to include support for the ROHM BD70528 watchdog.
-+	  Alternatively say M to compile the driver as a module,
-+	  which will be called bd70528_wdt.
-+
- config DA9052_WATCHDOG
- 	tristate "Dialog DA9052 Watchdog"
- 	depends on PMIC_DA9052 || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index ba930e464657..3985922c440a 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -205,6 +205,7 @@ obj-$(CONFIG_WATCHDOG_SUN4V)		+= sun4v_wdt.o
- obj-$(CONFIG_XEN_WDT) += xen_wdt.o
- 
- # Architecture Independent
-+obj-$(CONFIG_BD70528_WATCHDOG) += bd70528_wdt.o
- obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
- obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
- obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
-diff --git a/drivers/watchdog/bd70528_wdt.c b/drivers/watchdog/bd70528_wdt.c
-new file mode 100644
-index 000000000000..b0152fef4fc7
---- /dev/null
-+++ b/drivers/watchdog/bd70528_wdt.c
-@@ -0,0 +1,290 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2018 ROHM Semiconductors
-+// ROHM BD70528MWV watchdog driver
-+
-+#include <linux/bcd.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/rohm-bd70528.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/watchdog.h>
-+
-+/*
-+ * Max time we can set is 1 hour, 59 minutes and 59 seconds
-+ * and Minimum time is 1 second
-+ */
-+#define WDT_MAX_MS	((2 * 60 * 60 - 1) * 1000)
-+#define WDT_MIN_MS	1000
-+#define DEFAULT_TIMEOUT	60
-+
-+#define WD_CTRL_MAGIC1 0x55
-+#define WD_CTRL_MAGIC2 0xAA
-+
-+struct wdtbd70528 {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct rohm_regmap_dev *mfd;
-+	struct watchdog_device wdt;
-+};
-+
-+/**
-+ * bd70528_wdt_set - arm or disarm watchdog timer
-+ *
-+ * @data:	device data for the PMIC instance we want to operate on
-+ * @enable:	new state of WDT. zero to disable, non zero to enable
-+ * @old_state:	previous state of WDT will be filled here
-+ *
-+ * Arm or disarm WDT on BD70528 PMIC. Expected to be called only by
-+ * BD70528 RTC and BD70528 WDT drivers. The rtc_timer_lock must be taken
-+ * by calling bd70528_wdt_lock before calling bd70528_wdt_set.
-+ */
-+int bd70528_wdt_set(struct rohm_regmap_dev *data, int enable, int *old_state)
-+{
-+	int ret, i;
-+	unsigned int tmp;
-+	struct bd70528_data *bd70528 = container_of(data, struct bd70528_data,
-+						 chip);
-+	u8 wd_ctrl_arr[3] = { WD_CTRL_MAGIC1, WD_CTRL_MAGIC2, 0 };
-+	u8 *wd_ctrl = &wd_ctrl_arr[2];
-+
-+	ret = regmap_read(bd70528->chip.regmap, BD70528_REG_WDT_CTRL, &tmp);
-+	if (ret)
-+		return ret;
-+
-+	*wd_ctrl = (u8)tmp;
-+
-+	if (old_state) {
-+		if (*wd_ctrl & BD70528_MASK_WDT_EN)
-+			*old_state |= BD70528_WDT_STATE_BIT;
-+		else
-+			*old_state &= ~BD70528_WDT_STATE_BIT;
-+		if ((!enable) == (!(*old_state & BD70528_WDT_STATE_BIT)))
-+			return 0;
-+	}
-+
-+	if (enable) {
-+		if (*wd_ctrl & BD70528_MASK_WDT_EN)
-+			return 0;
-+		*wd_ctrl |= BD70528_MASK_WDT_EN;
-+	} else {
-+		if (*wd_ctrl & BD70528_MASK_WDT_EN)
-+			*wd_ctrl &= ~BD70528_MASK_WDT_EN;
-+		else
-+			return 0;
-+	}
-+
-+	for (i = 0; i < 3; i++) {
-+		ret = regmap_write(bd70528->chip.regmap, BD70528_REG_WDT_CTRL,
-+				   wd_ctrl_arr[i]);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = regmap_read(bd70528->chip.regmap, BD70528_REG_WDT_CTRL, &tmp);
-+	if ((tmp & BD70528_MASK_WDT_EN) != (*wd_ctrl & BD70528_MASK_WDT_EN)) {
-+		dev_err(bd70528->chip.dev,
-+			"Watchdog ctrl mismatch (hw) 0x%x (set) 0x%x\n",
-+			tmp, *wd_ctrl);
-+		ret = -EIO;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(bd70528_wdt_set);
-+
-+/**
-+ * bd70528_wdt_lock - take WDT lock
-+ *
-+ * @bd70528:	device data for the PMIC instance we want to operate on
-+ *
-+ * Lock WDT for arming/disarming in order to avoid race condition caused
-+ * by WDT state changes initiated by WDT and RTC drivers.
-+ */
-+void bd70528_wdt_lock(struct rohm_regmap_dev *data)
-+{
-+	struct bd70528_data *bd70528 = container_of(data, struct bd70528_data,
-+						 chip);
-+
-+	mutex_lock(&bd70528->rtc_timer_lock);
-+}
-+EXPORT_SYMBOL(bd70528_wdt_lock);
-+
-+/**
-+ * bd70528_wdt_unlock - unlock WDT lock
-+ *
-+ * @bd70528:	device data for the PMIC instance we want to operate on
-+ *
-+ * Unlock WDT lock which has previously been taken by call to
-+ * bd70528_wdt_lock.
-+ */
-+void bd70528_wdt_unlock(struct rohm_regmap_dev *data)
-+{
-+	struct bd70528_data *bd70528 = container_of(data, struct bd70528_data,
-+						 chip);
-+
-+	mutex_unlock(&bd70528->rtc_timer_lock);
-+}
-+EXPORT_SYMBOL(bd70528_wdt_unlock);
-+
-+static int bd70528_wdt_set_locked(struct wdtbd70528 *w, int enable)
-+{
-+	return bd70528_wdt_set(w->mfd, enable, NULL);
-+}
-+
-+static int bd70528_wdt_change(struct wdtbd70528 *w, int enable)
-+{
-+	int ret;
-+
-+	bd70528_wdt_lock(w->mfd);
-+	ret = bd70528_wdt_set_locked(w, enable);
-+	bd70528_wdt_unlock(w->mfd);
-+
-+	return ret;
-+}
-+
-+static int bd70528_wdt_start(struct watchdog_device *wdt)
-+{
-+	struct wdtbd70528 *w = watchdog_get_drvdata(wdt);
-+
-+	dev_dbg(w->dev, "WDT ping...\n");
-+	return bd70528_wdt_change(w, 1);
-+}
-+
-+static int bd70528_wdt_stop(struct watchdog_device *wdt)
-+{
-+	struct wdtbd70528 *w = watchdog_get_drvdata(wdt);
-+
-+	dev_dbg(w->dev, "WDT stopping...\n");
-+	return bd70528_wdt_change(w, 0);
-+}
-+
-+static int bd70528_wdt_set_timeout(struct watchdog_device *wdt,
-+				   unsigned int timeout)
-+{
-+	unsigned int hours;
-+	unsigned int minutes;
-+	unsigned int seconds;
-+	int ret;
-+	struct wdtbd70528 *w = watchdog_get_drvdata(wdt);
-+
-+	seconds = timeout;
-+	hours = timeout / (60 * 60);
-+	/* Maximum timeout is 1h 59m 59s => hours is 1 or 0 */
-+	if (hours)
-+		seconds -= (60 * 60);
-+	minutes = seconds / 60;
-+	seconds = seconds % 60;
-+
-+	bd70528_wdt_lock(w->mfd);
-+
-+	ret = bd70528_wdt_set_locked(w, 0);
-+	if (ret)
-+		goto out_unlock;
-+
-+	ret = regmap_update_bits(w->regmap, BD70528_REG_WDT_HOUR,
-+				 BD70528_MASK_WDT_HOUR, hours);
-+	if (ret) {
-+		dev_err(w->dev, "Failed to set WDT hours\n");
-+		goto out_en_unlock;
-+	}
-+	ret = regmap_update_bits(w->regmap, BD70528_REG_WDT_MINUTE,
-+				 BD70528_MASK_WDT_MINUTE, bin2bcd(minutes));
-+	if (ret) {
-+		dev_err(w->dev, "Failed to set WDT minutes\n");
-+		goto out_en_unlock;
-+	}
-+	ret = regmap_update_bits(w->regmap, BD70528_REG_WDT_SEC,
-+				 BD70528_MASK_WDT_SEC, bin2bcd(seconds));
-+	if (ret)
-+		dev_err(w->dev, "Failed to set WDT seconds\n");
-+	else
-+		dev_dbg(w->dev, "WDT tmo set to %u\n", timeout);
-+
-+out_en_unlock:
-+	ret = bd70528_wdt_set_locked(w, 1);
-+out_unlock:
-+	bd70528_wdt_unlock(w->mfd);
-+
-+	return ret;
-+}
-+
-+static const struct watchdog_info bd70528_wdt_info = {
-+	.identity = "bd70528-wdt",
-+	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-+};
-+
-+static const struct watchdog_ops bd70528_wdt_ops = {
-+	.start		= bd70528_wdt_start,
-+	.stop		= bd70528_wdt_stop,
-+	.set_timeout	= bd70528_wdt_set_timeout,
-+};
-+
-+static int bd70528_wdt_probe(struct platform_device *pdev)
-+{
-+	struct rohm_regmap_dev *bd70528;
-+	struct wdtbd70528 *w;
-+	int ret;
-+	unsigned int reg;
-+
-+	bd70528 = dev_get_drvdata(pdev->dev.parent);
-+	if (!bd70528) {
-+		dev_err(&pdev->dev, "No MFD driver data\n");
-+		return -EINVAL;
-+	}
-+	w = devm_kzalloc(&pdev->dev, sizeof(*w), GFP_KERNEL);
-+	if (!w)
-+		return -ENOMEM;
-+
-+	w->regmap = bd70528->regmap;
-+	w->mfd = bd70528;
-+	w->dev = &pdev->dev;
-+
-+	w->wdt.info = &bd70528_wdt_info;
-+	w->wdt.ops =  &bd70528_wdt_ops;
-+	w->wdt.min_hw_heartbeat_ms = WDT_MIN_MS;
-+	w->wdt.max_hw_heartbeat_ms = WDT_MAX_MS;
-+	w->wdt.parent = pdev->dev.parent;
-+	w->wdt.timeout = DEFAULT_TIMEOUT;
-+	watchdog_set_drvdata(&w->wdt, w);
-+	watchdog_init_timeout(&w->wdt, 0, pdev->dev.parent);
-+
-+	ret = bd70528_wdt_set_timeout(&w->wdt, w->wdt.timeout);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to set the watchdog timeout\n");
-+		return ret;
-+	}
-+
-+	bd70528_wdt_lock(w->mfd);
-+	ret = regmap_read(w->regmap, BD70528_REG_WDT_CTRL, &reg);
-+	bd70528_wdt_unlock(w->mfd);
-+
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to get the watchdog state\n");
-+		return ret;
-+	}
-+	if (reg & BD70528_MASK_WDT_EN) {
-+		dev_dbg(&pdev->dev, "watchdog was running during probe\n");
-+		set_bit(WDOG_HW_RUNNING, &w->wdt.status);
-+	}
-+
-+	ret = devm_watchdog_register_device(&pdev->dev, &w->wdt);
-+	if (ret < 0)
-+		dev_err(&pdev->dev, "watchdog registration failed: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static struct platform_driver bd70528_wdt = {
-+	.driver = {
-+		.name = "bd70528-wdt"
-+	},
-+	.probe = bd70528_wdt_probe,
-+};
-+
-+module_platform_driver(bd70528_wdt);
-+
-+MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
-+MODULE_DESCRIPTION("BD70528 watchdog driver");
-+MODULE_LICENSE("GPL");
--- 
-2.17.2
-
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+QXMgSSdtIHdvcmtpbmcgb24gdGhpcyBJJ3ZlIHJ1biBhY3Jvc3Mgc29tZSBvdGhlciBpc3N1ZXM6
+DQoNCiogRHJpdmVyIGRvZXMgbm90IGRvIGEgc29mdHdhcmUgcmVzZXQgb24gaW5pdC4gRGF0YXNo
+ZWV0IHJlY29tbWVuZHMgZG9pbmcNCiAgdGhpcyBhcyB0aGlzIHdpbGwgY2xlYXIgYW55IGludGVy
+cnVwdHMgYW5kIGFsYXJtIGZsYWdzLiBUaGUgZml4IHdvdWxkDQogIHByZXN1bWFibHkgYmUgdG8g
+YWRkIGEgY2FsbCB0byBwY2YyMTIzX3Jlc2V0IGluIHRoZSBpbml0LCBidXQuLi4NCg0KKiBwY2Yy
+MTIzX3Jlc2V0IHN0b3BzIHRoZSBSVEMgZm9yIG5vIGFwcGFyZW50IHJlYXNvbi4gUmVzdWx0IGlz
+IHRoYXQgdGhlDQogIHRpbWUgaXMgaW52YWxpZCBhZnRlciBhIGNhbGwgdG8gcGNmMjEyM19yZXNl
+dCwgd2hpY2ggcmVxdWlyZXMgdGhlIHRpbWUNCiAgdG8gYmUgc2V0IGFnYWluIG1hbnVhbGx5LiBU
+aGUgZml4IHdvdWxkIGJlIHRvIGRlbGV0ZSB0aGUgc3RvcCBjb21tYW5kcy4NCg0KKiBJIGRvbid0
+IHRoaW5rIHBjZjIxMjNfcmVhZF9vZmZzZXQgaXMgd29ya2luZyBjb3JyZWN0bHkuIEluIHRoZSBj
+YXNlIG9mDQogIGEgY29hcnNlIG9mZnNldCB0aGUgdmFsdWUgaXMgbm90IGJlaW5nIHNpZ24gZXh0
+ZW5kZWQuIFNvIGEgbmVnYXRpdmUNCiAgb2Zmc2V0IHJlYWQgd2lsbCBub3QgYmUgY29ycmVjdCBp
+ZiB0aGUgY29hcnNlIGJpdCBpcyBzZXQgKHJlc3VsdCB3b3VsZA0KICBiZSBhIHBvc2l0aXZlIG51
+bWJlciBiZWluZyByZXR1cm5lZCBpZiB0aGlzIGlzIHRydWUpLiBJIG5lZWQgdG8gbG9vaw0KICBp
+bnRvIHRoaXMgc29tZSBtb3JlLiBUaGUgZml4IHdvdWxkIGJlIHRvIHNpZ24gZXh0ZW5kIGZpcnN0
+LCB0aGVuIGlmDQogIGNvYXJzZSBiaXQgaXMgc2V0IG11bHRpcGx5IHRoZSByZXN1bHQgYnkgMi4N
+Cg0KTm90IHN1cmUgaWYgSSdsbCBmaXggdGhlc2UgaXNzdWVzIHJpZ2h0IG5vdy4gQWxzbyB0aGlz
+IFJUQyBkb2VzIGhhdmUgdGhlIA0KYWJpbGl0eSB0byBkbyBwZXJpb2RpYyBpbnRlcnJ1cHRzIGJ1
+dCB0aGUgZmVhdHVyZSBoYXMgbm90IGJlZW4gaW1wbGVtZW50ZWQNCmluIHRoaXMgZHJpdmVyLiBT
+byBJJ2xsIGxlYXZlIHVpZV91bnN1cHBvcnRlZCBzZXQgZm9yIG5vdy4NCg0KLS0gDQpEeWxhbg0K
