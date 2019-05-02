@@ -2,131 +2,81 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EC6122E7
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2019 21:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B57D123AD
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 May 2019 22:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbfEBTuy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 May 2019 15:50:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42318 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBTuy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 May 2019 15:50:54 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id A84AF28423D
-Received: by earth.universe (Postfix, from userid 1000)
-        id 65A1B3C0D1B; Thu,  2 May 2019 21:50:49 +0200 (CEST)
-Date:   Thu, 2 May 2019 21:50:49 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        heikki.haikola@fi.rohmeurope.com, mikko.mutanen@fi.rohmeurope.com
-Subject: Re: [PATCH v14 7/8] power: supply: Initial support for ROHM BD70528
- PMIC charger block
-Message-ID: <20190502195049.brysexbyyq7khtr4@earth.universe>
-References: <cover.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
- <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1726193AbfEBUzU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 May 2019 16:55:20 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:56387 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726022AbfEBUzT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 May 2019 16:55:19 -0400
+X-Originating-IP: 90.66.53.80
+Received: from localhost (lfbn-1-3034-80.w90-66.abo.wanadoo.fr [90.66.53.80])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 858DB1C0009;
+        Thu,  2 May 2019 20:55:17 +0000 (UTC)
+Date:   Thu, 2 May 2019 22:55:16 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dylan Howey <Dylan.Howey@tennantco.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: Re: [PATCH 1/2] Port rtc-pcf2123 to regmap
+Message-ID: <20190502205516.GD22550@piout.net>
+References: <20190426193648.1599-1-Dylan.Howey@tennantco.com>
+ <20190427130054.GY14604@piout.net>
+ <20190429150913.GA15052@tennantco.com>
+ <20190430092256.GC11339@piout.net>
+ <20190502174518.GA12323@tennantco.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bhukgbujt2wxql42"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <eece016c86483d55befab1a06fb299c9d6d17134.1556787930.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190502174518.GA12323@tennantco.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 02/05/2019 17:45:24+0000, Dylan Howey wrote:
+> As I'm working on this I've run across some other issues:
+> 
+> * Driver does not do a software reset on init. Datasheet recommends doing
+>   this as this will clear any interrupts and alarm flags. The fix would
+>   presumably be to add a call to pcf2123_reset in the init, but...
+> 
 
---bhukgbujt2wxql42
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It recommends doing a software reset after power-on in that case, it
+refers to the power-on of the RTC, not the platform. You shouldn't do a
+software reset as this will break time keeping, the offset and reading
+alarms that may have been starting the platform.
 
-Hi,
+> * pcf2123_reset stops the RTC for no apparent reason. Result is that the
+>   time is invalid after a call to pcf2123_reset, which requires the time
+>   to be set again manually. The fix would be to delete the stop commands.
+> 
 
-On Thu, May 02, 2019 at 12:17:12PM +0300, Matti Vaittinen wrote:
-> ROHM BD70528 PMIC includes battery charger block. Support charger
-> staus queries and doing few basic settings like input current limit
-> and charging current.
->=20
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Using the software reset will render the time invalid anyway as this
+will set the OS bit in the seconds register (see Table 7.
+Register reset values).
 
-Please only add Acked-by when you receive one, especially when you
-do not implement all requested changes :)
+> * I don't think pcf2123_read_offset is working correctly. In the case of
+>   a coarse offset the value is not being sign extended. So a negative
+>   offset read will not be correct if the coarse bit is set (result would
+>   be a positive number being returned if this is true). I need to look
+>   into this some more. The fix would be to sign extend first, then if
+>   coarse bit is set multiply the result by 2.
+> 
 
-[...]
+As the comment says, it is properly extended because after shifting,
+bits [6:0] become bit [7:1].
 
-> +static int bd70528_get_irqs(struct platform_device *pdev,
-> +			    struct bd70528_psy *bdpsy)
-> +{
-> +	int irq, i, ret;
-> +	unsigned int mask;
-> +	const struct irq_name_pair bd70528_chg_irqs[] =3D {
-> +		{ .n =3D "bd70528-bat-ov-res", .h =3D BD_IRQ_HND(BAT_OV_RES) },
-> +		{ .n =3D "bd70528-bat-ov-det", .h =3D BD_IRQ_HND(BAT_OV_DET) },
-> +		{ .n =3D "bd70528-bat-dead", .h =3D BD_IRQ_HND(DBAT_DET) },
-> +		{ .n =3D "bd70528-bat-warmed", .h =3D BD_IRQ_HND(COLD_RES) },
-> +		{ .n =3D "bd70528-bat-cold", .h =3D BD_IRQ_HND(COLD_DET) },
-> +		{ .n =3D "bd70528-bat-cooled", .h =3D BD_IRQ_HND(HOT_RES) },
-> +		{ .n =3D "bd70528-bat-hot", .h =3D BD_IRQ_HND(HOT_DET) },
-> +		{ .n =3D "bd70528-chg-tshd", .h =3D BD_IRQ_HND(CHG_TSD) },
-> +		{ .n =3D "bd70528-bat-removed", .h =3D BD_IRQ_HND(BAT_RMV) },
-> +		{ .n =3D "bd70528-bat-detected", .h =3D BD_IRQ_HND(BAT_DET) },
-> +		{ .n =3D "bd70528-dcin2-ov-res", .h =3D BD_IRQ_HND(DCIN2_OV_RES) },
-> +		{ .n =3D "bd70528-dcin2-ov-det", .h =3D BD_IRQ_HND(DCIN2_OV_DET) },
-> +		{ .n =3D "bd70528-dcin2-removed", .h =3D BD_IRQ_HND(DCIN2_RMV) },
-> +		{ .n =3D "bd70528-dcin2-detected", .h =3D BD_IRQ_HND(DCIN2_DET) },
-> +		{ .n =3D "bd70528-dcin1-removed", .h =3D BD_IRQ_HND(DCIN1_RMV) },
-> +		{ .n =3D "bd70528-dcin1-detected", .h =3D BD_IRQ_HND(DCIN1_DET) },
-> +	};
+> Not sure if I'll fix these issues right now. Also this RTC does have the 
+> ability to do periodic interrupts but the feature has not been implemented
+> in this driver. So I'll leave uie_unsupported set for now.
+> 
 
-Please also make it static. That will move the whole thing to
-read-only (because of const) data section. This improves the
-security and the required cpu time at the same time (no need
-to copy values to the stack).
-
-But this can be changed later, so no need to block the whole
-patchset just because of this. If Lee wants to merge this for
-5.2, that would be fine with me. But please add it directly in
-a new patch revision if the patch does not make it into 5.2.
-
--- Sebastian
-
---bhukgbujt2wxql42
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAlzLShUACgkQ2O7X88g7
-+pqErhAAgZNXEYhrDHkaaYDwxjL4Ch28ycvgjE9+HjCig5co2F2nW25/cQPj3IeQ
-KLwc3hAAy0RzDKTc72fMtg//7b8L21Dzj4Qz4pHmQ3vhOETyAvwt3mOK8kiCSh9F
-MlrJ7vtUSnOo3S/QGiBCQ6gjTzrkyYWYtJAK3UabGbwagf9t8bKAUquWNbwFbvuu
-0Q2L++Z8eX4O0b8sbLJ5YxCx9eib2j3W6C2CNHUFG+WLjLom4IskqYq3Y7KELQ4U
-1YQbFUI5p+WFnxZU0uklYPEBfMCRBXd4iG2XBc8c/KBMkeQKOlXkURqUl7lmNT9u
-jgdqBpp0qgOlmJE7YsJTFjgyuwWR/BWLpE9QMKxBR1Ua94G6HRnoNiveq2qty18b
-s6G53YnvJsjI2y0cnP0+wACEKBATa33dUCLDABsKlyXl1jSdeE8csDM3XZ/SMNxZ
-CWayrYggYz3nk9y1bnJK3bkyVNAKaDRlNOA+kezZGAPUdcojFJOWin45Vkm5CFma
-t9SNRSBFArbG/9x/iOcETTVE+Hb7w5czGr+D41vJd/OUM/oE+sCt4ylIi4PA6a/y
-IF5fC7XzuTspKeoLuUo7WWght3JjD5+aGZ5OF6GKOSn7sdn0N2D53CdXp482U+jv
-a3ojwbXAqujhOIZhw5WYMfXjMyfKvhoPjjSIbk+NNRt8ksWKMc8=
-=CJv+
------END PGP SIGNATURE-----
-
---bhukgbujt2wxql42--
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
