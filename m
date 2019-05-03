@@ -2,24 +2,24 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070912AA5
-	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2019 11:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896AA12A99
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 May 2019 11:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbfECJct (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 3 May 2019 05:32:49 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:26709 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727005AbfECJcs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 May 2019 05:32:48 -0400
-X-UUID: 421338f0caaf440a869a180a20173452-20190503
-X-UUID: 421338f0caaf440a869a180a20173452-20190503
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        id S1727513AbfECJdH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 3 May 2019 05:33:07 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:24171 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727474AbfECJdB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 May 2019 05:33:01 -0400
+X-UUID: 1f96bc06db644d2c84d2a755c9dc402a-20190503
+X-UUID: 1f96bc06db644d2c84d2a755c9dc402a-20190503
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
         (envelope-from <hsin-hsiung.wang@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 383949267; Fri, 03 May 2019 17:32:42 +0800
+        with ESMTP id 1390216758; Fri, 03 May 2019 17:32:50 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 3 May 2019 17:32:40 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 3 May 2019 17:32:41 +0800
 Received: from mtkslt302.mediatek.inc (10.21.14.115) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
  Transport; Fri, 3 May 2019 17:32:41 +0800
@@ -39,15 +39,14 @@ CC:     Liam Girdwood <lgirdwood@gmail.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
         <srv_heupstream@mediatek.com>, Ran Bi <ran.bi@mediatek.com>
-Subject: [PATCH v3 09/10] rtc: mt6397: fix alarm register overwrite
-Date:   Fri, 3 May 2019 17:31:16 +0800
-Message-ID: <20190503093117.54830-10-hsin-hsiung.wang@mediatek.com>
+Subject: [PATCH v3 10/10] rtc: Add support for the MediaTek MT6358 RTC
+Date:   Fri, 3 May 2019 17:31:17 +0800
+Message-ID: <20190503093117.54830-11-hsin-hsiung.wang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20190503093117.54830-1-hsin-hsiung.wang@mediatek.com>
 References: <20190503093117.54830-1-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 935890C05F9D5BE6449D34144142DCABCB0F9718DE15F49E5F1BD564D204A59D2000:8
 X-MTK:  N
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -56,97 +55,118 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Ran Bi <ran.bi@mediatek.com>
 
-Alarm registers high byte was reserved for other functions.
-This add mask in alarm registers operation functions.
-This also fix error condition in interrupt handler.
-
-Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+This add support for the MediaTek MT6358 RTC. Driver using
+compatible data to store different RTC_WRTGR address offset.
 
 Signed-off-by: Ran Bi <ran.bi@mediatek.com>
 ---
- drivers/rtc/rtc-mt6397.c | 47 ++++++++++++++++++++++++++++------------
- 1 file changed, 33 insertions(+), 14 deletions(-)
+ drivers/rtc/rtc-mt6397.c | 43 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 35 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-index e9a25ec4d434..f85f1fc29e32 100644
+index f85f1fc29e32..3476e29db87c 100644
 --- a/drivers/rtc/rtc-mt6397.c
 +++ b/drivers/rtc/rtc-mt6397.c
-@@ -55,6 +55,14 @@
+@@ -20,6 +20,7 @@
+ #include <linux/irqdomain.h>
+ #include <linux/platform_device.h>
+ #include <linux/of_address.h>
++#include <linux/of_device.h>
+ #include <linux/of_irq.h>
+ #include <linux/io.h>
+ #include <linux/mfd/mt6397/core.h>
+@@ -27,7 +28,8 @@
+ #define RTC_BBPU		0x0000
+ #define RTC_BBPU_CBUSY		BIT(6)
  
- #define RTC_AL_SEC		0x0018
+-#define RTC_WRTGR		0x003c
++#define RTC_WRTGR_MT6358	0x3a
++#define RTC_WRTGR_MT6397	0x3c
  
-+#define RTC_AL_SEC_MASK		0x003f
-+#define RTC_AL_MIN_MASK		0x003f
-+#define RTC_AL_HOU_MASK		0x001f
-+#define RTC_AL_DOM_MASK		0x001f
-+#define RTC_AL_DOW_MASK		0x0007
-+#define RTC_AL_MTH_MASK		0x000f
-+#define RTC_AL_YEA_MASK		0x007f
+ #define RTC_IRQ_STA		0x0002
+ #define RTC_IRQ_STA_AL		BIT(0)
+@@ -71,6 +73,10 @@
+ #define RTC_NUM_YEARS		128
+ #define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
+ 
++struct mtk_rtc_compatible {
++	u32			wrtgr_addr;
++};
 +
- #define RTC_PDN2		0x002e
- #define RTC_PDN2_PWRON_ALARM	BIT(4)
+ struct mt6397_rtc {
+ 	struct device		*dev;
+ 	struct rtc_device	*rtc_dev;
+@@ -78,7 +84,25 @@ struct mt6397_rtc {
+ 	struct regmap		*regmap;
+ 	int			irq;
+ 	u32			addr_base;
++	const struct mtk_rtc_compatible *dev_comp;
++};
++
++static const struct mtk_rtc_compatible mt6358_rtc_compat = {
++	.wrtgr_addr = RTC_WRTGR_MT6358,
++};
++
++static const struct mtk_rtc_compatible mt6397_rtc_compat = {
++	.wrtgr_addr = RTC_WRTGR_MT6397,
++};
++
++static const struct of_device_id mt6397_rtc_of_match[] = {
++	{ .compatible = "mediatek,mt6358-rtc",
++		.data = (void *)&mt6358_rtc_compat, },
++	{ .compatible = "mediatek,mt6397-rtc",
++		.data = (void *)&mt6397_rtc_compat, },
++	{}
+ };
++MODULE_DEVICE_TABLE(of, mt6397_rtc_of_match);
  
-@@ -111,7 +119,7 @@ static irqreturn_t mtk_rtc_irq_handler_thread(int irq, void *data)
- 		irqen = irqsta & ~RTC_IRQ_EN_AL;
- 		mutex_lock(&rtc->lock);
- 		if (regmap_write(rtc->regmap, rtc->addr_base + RTC_IRQ_EN,
--				 irqen) < 0)
-+				 irqen) == 0)
- 			mtk_rtc_write_trigger(rtc);
- 		mutex_unlock(&rtc->lock);
+ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+ {
+@@ -86,7 +110,8 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+ 	int ret;
+ 	u32 data;
  
-@@ -233,12 +241,12 @@ static int mtk_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
- 	alm->pending = !!(pdn2 & RTC_PDN2_PWRON_ALARM);
- 	mutex_unlock(&rtc->lock);
+-	ret = regmap_write(rtc->regmap, rtc->addr_base + RTC_WRTGR, 1);
++	ret = regmap_write(rtc->regmap,
++			   rtc->addr_base + rtc->dev_comp->wrtgr_addr, 1);
+ 	if (ret < 0)
+ 		return ret;
  
--	tm->tm_sec = data[RTC_OFFSET_SEC];
--	tm->tm_min = data[RTC_OFFSET_MIN];
--	tm->tm_hour = data[RTC_OFFSET_HOUR];
--	tm->tm_mday = data[RTC_OFFSET_DOM];
--	tm->tm_mon = data[RTC_OFFSET_MTH];
--	tm->tm_year = data[RTC_OFFSET_YEAR];
-+	tm->tm_sec = data[RTC_OFFSET_SEC] & RTC_AL_SEC_MASK;
-+	tm->tm_min = data[RTC_OFFSET_MIN] & RTC_AL_MIN_MASK;
-+	tm->tm_hour = data[RTC_OFFSET_HOUR] & RTC_AL_HOU_MASK;
-+	tm->tm_mday = data[RTC_OFFSET_DOM] & RTC_AL_DOM_MASK;
-+	tm->tm_mon = data[RTC_OFFSET_MTH] & RTC_AL_MTH_MASK;
-+	tm->tm_year = data[RTC_OFFSET_YEAR] & RTC_AL_YEA_MASK;
+@@ -332,6 +357,7 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 	struct resource *res;
+ 	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
+ 	struct mt6397_rtc *rtc;
++	const struct of_device_id *of_id;
+ 	int ret;
  
- 	tm->tm_year += RTC_MIN_YEAR_OFFSET;
- 	tm->tm_mon--;
-@@ -259,14 +267,25 @@ static int mtk_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
- 	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
- 	tm->tm_mon++;
+ 	rtc = devm_kzalloc(&pdev->dev, sizeof(struct mt6397_rtc), GFP_KERNEL);
+@@ -341,6 +367,13 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	rtc->addr_base = res->start;
  
--	data[RTC_OFFSET_SEC] = tm->tm_sec;
--	data[RTC_OFFSET_MIN] = tm->tm_min;
--	data[RTC_OFFSET_HOUR] = tm->tm_hour;
--	data[RTC_OFFSET_DOM] = tm->tm_mday;
--	data[RTC_OFFSET_MTH] = tm->tm_mon;
--	data[RTC_OFFSET_YEAR] = tm->tm_year;
++	of_id = of_match_device(mt6397_rtc_of_match, &pdev->dev);
++	if (!of_id) {
++		dev_err(&pdev->dev, "Failed to probe of_node\n");
++		return -EINVAL;
++	}
++	rtc->dev_comp = of_id->data;
++
+ 	rtc->irq = platform_get_irq(pdev, 0);
+ 	if (rtc->irq < 0)
+ 		return rtc->irq;
+@@ -419,12 +452,6 @@ static int mt6397_rtc_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_suspend,
+ 			mt6397_rtc_resume);
+ 
+-static const struct of_device_id mt6397_rtc_of_match[] = {
+-	{ .compatible = "mediatek,mt6397-rtc", },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(of, mt6397_rtc_of_match);
 -
- 	mutex_lock(&rtc->lock);
-+	ret = regmap_bulk_read(rtc->regmap, rtc->addr_base + RTC_AL_SEC,
-+			       data, RTC_OFFSET_COUNT);
-+	if (ret < 0)
-+		goto exit;
-+
-+	data[RTC_OFFSET_SEC] = ((data[RTC_OFFSET_SEC] & ~(RTC_AL_SEC_MASK)) |
-+				(tm->tm_sec & RTC_AL_SEC_MASK));
-+	data[RTC_OFFSET_MIN] = ((data[RTC_OFFSET_MIN] & ~(RTC_AL_MIN_MASK)) |
-+				(tm->tm_min & RTC_AL_MIN_MASK));
-+	data[RTC_OFFSET_HOUR] = ((data[RTC_OFFSET_HOUR] & ~(RTC_AL_HOU_MASK)) |
-+				(tm->tm_hour & RTC_AL_HOU_MASK));
-+	data[RTC_OFFSET_DOM] = ((data[RTC_OFFSET_DOM] & ~(RTC_AL_DOM_MASK)) |
-+				(tm->tm_mday & RTC_AL_DOM_MASK));
-+	data[RTC_OFFSET_MTH] = ((data[RTC_OFFSET_MTH] & ~(RTC_AL_MTH_MASK)) |
-+				(tm->tm_mon & RTC_AL_MTH_MASK));
-+	data[RTC_OFFSET_YEAR] = ((data[RTC_OFFSET_YEAR] & ~(RTC_AL_YEA_MASK)) |
-+				(tm->tm_year & RTC_AL_YEA_MASK));
-+
- 	if (alm->enabled) {
- 		ret = regmap_bulk_write(rtc->regmap,
- 					rtc->addr_base + RTC_AL_SEC,
+ static struct platform_driver mtk_rtc_driver = {
+ 	.driver = {
+ 		.name = "mt6397-rtc",
 -- 
 2.18.0
 
