@@ -2,72 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F141919F6A
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 May 2019 16:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF6D1B96A
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 May 2019 17:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbfEJOiT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 May 2019 10:38:19 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:39797 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbfEJOiT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 May 2019 10:38:19 -0400
-X-Originating-IP: 109.213.220.252
-Received: from localhost (alyon-652-1-77-252.w109-213.abo.wanadoo.fr [109.213.220.252])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3ACD9FF809;
-        Fri, 10 May 2019 14:38:17 +0000 (UTC)
-Date:   Fri, 10 May 2019 16:38:16 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Olof Johansson <olof@lixom.net>
-Subject: Re: [GIT PULL] RTC for 5.2
-Message-ID: <20190510143816.GB7622@piout.net>
-References: <20190509210340.GA23061@piout.net>
+        id S1728882AbfEMPEX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 May 2019 11:04:23 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41566 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730209AbfEMPEX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 May 2019 11:04:23 -0400
+Received: by mail-oi1-f195.google.com with SMTP id y10so9541079oia.8;
+        Mon, 13 May 2019 08:04:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ai6rjPFrafyd6umFHEjlpBi/HrKqyBzAzERgqLZhf2g=;
+        b=nZv+310tUbMrs3XRCk7suGnrRLStfP4tUtSVD4w9CcoBG+fF0jHi2akF2lTkSZuWYo
+         BgB88tsdJ6qSe3ELc5IstRvYyxbGsQhPeY2i3uC0hyL/BuUC+5BZYdhx6YeJdOncImd2
+         7eyK1j0jxIYyiOVkpmRZdd+s0JNRCWbunHYcN1Sy1SuBBMb1hO5DCDajShg+lRceZgD+
+         k/O8JTsnFpcwu2DJta5h8QhDcndQdTGTSVUovhitVbwDRfl458LS9rjnauwwfVSmjBBD
+         KxnNjJEcWn3Vdkgeqr1gM66WiB6eZSlyVCGEm0VmNV6/obamdGaeruuUox7mrtZBB5h9
+         Z7Ew==
+X-Gm-Message-State: APjAAAXmejc2dFmWkcub1TGYtNjy5jIL/3Zjyv/WopXy9IiCOLN4CqEZ
+        JpIrvfdfzBMc1IoJaJJbSA==
+X-Google-Smtp-Source: APXvYqxVXfjOnWaZN5e9dSjye6lhc3XyeNNDviJ/wA+MXXfwKmpzGSqIuCkQvL/GtWBR1trD1GIH4w==
+X-Received: by 2002:aca:c794:: with SMTP id x142mr5118647oif.172.1557759862144;
+        Mon, 13 May 2019 08:04:22 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v6sm4954890otk.53.2019.05.13.08.04.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 13 May 2019 08:04:21 -0700 (PDT)
+Date:   Mon, 13 May 2019 10:04:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
+Subject: Re: [PATCH v3 04/10] dt-bindings: mfd: Add compatible for the
+ MediaTek MT6358 PMIC
+Message-ID: <20190513150420.GA16152@bogus>
+References: <20190503093117.54830-1-hsin-hsiung.wang@mediatek.com>
+ <20190503093117.54830-5-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190509210340.GA23061@piout.net>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <20190503093117.54830-5-hsin-hsiung.wang@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 09/05/2019 23:03:40+0200, Alexandre Belloni wrote:
-> Hello Linus,
+On Fri, May 03, 2019 at 05:31:11PM +0800, Hsin-Hsiung Wang wrote:
+> This adds compatible for the MediaTek MT6358 PMIC.
 > 
-> A huge series from me this cycle. I went through many drivers to set the
-> date and time range supported by the RTC which helps solving HW
-> limitation when the time comes (as early as next year for some). This
-> time, I focused on drivers using .set_mms and .set_mmss64, allowing me
-> to remove those callbacks. About a third of the patches got reviews, I
-> actually own the RTCs and I tested another third and the remaining one
-> are unlikely to cause any issues.
-> 
-> Other than that, a single new driver and the usual fixes here and there.
-> 
-> The following changes since commit 9e98c678c2d6ae3a17cb2de55d17f69dddaa231b:
-> 
->   Linux 5.1-rc1 (2019-03-17 14:22:26 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.2
-> 
-> for you to fetch changes up to dacb6a4035a010e41abaf81c1cfe2beadfb05ec8:
-> 
->   rtc: snvs: Use __maybe_unused instead of #if CONFIG_PM_SLEEP (2019-05-08 22:14:36 +0200)
-> 
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 
-I forgot to mention that you will have a non trivial conflict that is
-properly resolved in linux-next when you will pull arm-soc.
-
-There is no need to check the return value of tm2bcd() after
-35118b7a4ea0 ("rtc: omap: let the core handle range")
-
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Rob Herring <robh@kernel.org>
