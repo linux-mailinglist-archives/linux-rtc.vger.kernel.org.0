@@ -2,72 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4521B97E
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 May 2019 17:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CB91C90E
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 May 2019 14:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729596AbfEMPGE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 May 2019 11:06:04 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:39160 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728659AbfEMPGD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 May 2019 11:06:03 -0400
-Received: by mail-ot1-f66.google.com with SMTP id r7so7567268otn.6;
-        Mon, 13 May 2019 08:06:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bKxni4Tnr4JV/OACFJaw+XVWF/+XkwKuGUE+XE3uQeA=;
-        b=oSMzCMK3+G+J3Ysy045aBRdNxHryn4kqr9UOg2aLVL5fHoBDCxOIE2LSBRVpuwY+N/
-         x3Kk4L1h1YYNOFmTRmMmCKEc13jMnsz6WkwU9F1qRMq9AK5Kh8yBGiD5sUawIYdRPIwE
-         4BJ5eNdRIkH4KIK9ZDVoCCiY+fWt1SB3iaI+PFODH61rNJrAvKU1yqPpQwBJAd/EVW4j
-         uYaZfiXb2cMjd2MqqhIrXuAtjT8fHGksT0BlNziRSTuxCIzeOarPz04r8VYYkI7buAjr
-         QYFs9taf7Gw0tXvbBLN6xikW9YnNPBI+ndTmIROJX4mmsJXVaLXYPx9PIzm09beASmBB
-         g3pg==
-X-Gm-Message-State: APjAAAXV127AKgILGHkx59+TY8BBiA7geQeHISvWGVi4/X0t5c5hNdnD
-        r8EYfG/jDvTlbHSjm7LAvg==
-X-Google-Smtp-Source: APXvYqw/GihQMP21orlofX8NqbcrIV1iCJZoSvbgR6Y1E26mr/GcNPDvJQkTbd5Rg6WgZ+e95G+xuQ==
-X-Received: by 2002:a9d:4808:: with SMTP id c8mr2532355otf.316.1557759962932;
-        Mon, 13 May 2019 08:06:02 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w142sm1648584oie.15.2019.05.13.08.06.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 08:06:02 -0700 (PDT)
-Date:   Mon, 13 May 2019 10:06:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
+        id S1725916AbfENMzc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 May 2019 08:55:32 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com ([46.30.210.185]:56133
+        "EHLO mailrelay4-1.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726009AbfENMza (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 May 2019 08:55:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=haabendal.dk; s=20140924;
+        h=content-type:mime-version:message-id:date:references:in-reply-to:subject:cc:
+         to:from:from;
+        bh=Wa3jMi9KJqQDLWw1Eka2Kg0cxZh4xKk+W+ZTUzGIaG4=;
+        b=oxSmO0LUNg00fuse7wmhh0Fuyyv2SvcOl1hI7vbPECEGfOV7VZgHlGPL9+zifZn/c3jfCVy5y6YlM
+         XlnOoVjElTVY1N5teGwZlLP3Bo+SZrIgD8+pq6wAPeRiijAZwE2B6ML4xOYeVqx8Mei3K3Jbilp+tb
+         +L9lmrDeJgI+EaFQ=
+X-HalOne-Cookie: 1b0e2f114696488111d802a7184ddba9a359d67a
+X-HalOne-ID: 4e568cd5-7645-11e9-abc4-d0431ea8bb10
+Received: from localhost (unknown [193.163.1.7])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 4e568cd5-7645-11e9-abc4-d0431ea8bb10;
+        Tue, 14 May 2019 12:39:25 +0000 (UTC)
+From:   Esben Haabendal <esben@haabendal.dk>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v3 05/10] regulator: Add document for MT6358 regulator
-Message-ID: <20190513150601.GA21798@bogus>
-References: <20190503093117.54830-1-hsin-hsiung.wang@mediatek.com>
- <20190503093117.54830-6-hsin-hsiung.wang@mediatek.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip
+In-Reply-To: <20190409154610.6735-3-tbogendoerfer@suse.de> (Thomas Bogendoerfers's message of "Tue, 9 Apr 2019 17:46:06 +0200")
+References: <20190409154610.6735-1-tbogendoerfer@suse.de>
+        <20190409154610.6735-3-tbogendoerfer@suse.de>
+        <20190508102313.GG3995@dell>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.2 (gnu/linux)
+Date:   Tue, 14 May 2019 14:39:25 +0200
+Message-ID: <87mujpky6a.fsf@haabendal.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190503093117.54830-6-hsin-hsiung.wang@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, May 03, 2019 at 05:31:12PM +0800, Hsin-Hsiung Wang wrote:
-> add dt-binding document for MediaTek MT6358 PMIC
+On Tue, 09 Apr 2019, Thomas Bogendoerfer wrote:
 > 
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> ---
->  .../bindings/regulator/mt6358-regulator.txt   | 358 ++++++++++++++++++
->  1 file changed, 358 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/mt6358-regulator.txt
+> diff --git a/drivers/net/ethernet/sgi/ioc3-eth.c b/drivers/net/ethernet/sgi/ioc3-eth.c
+> index 358e66b81926..21fe722ebcd8 100644
+> --- a/drivers/net/ethernet/sgi/ioc3-eth.c
+> +++ b/drivers/net/ethernet/sgi/ioc3-eth.c
+>  
+>  [ ... ]
+>  
+> -	err = pci_request_regions(pdev, "ioc3");
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Why are you dropping the call to pci_request_regions()?  Shouldn't you
+do something similar in the new mfd driver?
+
+When you are use the the BAR 0 resource as mem_base argument to
+mfd_add_devices() later on, it will be split into child resources for
+the child devices, but they will not be related to the IORESOURCE_MEM
+root tree (iomem_resource) anymore.  I don't think that is how it is
+supposed to be done, as it will allow random other drivers to request
+the exact same memory area.
+
+How/where is the memory resources inserted in the root IORESOURCE_MEM
+resource (iomem_resource)?  Or is it allowed to use resources without
+inserting it into the root tree?
+
+> +	SET_NETDEV_DEV(dev, &pdev->dev);
+> +	ip = netdev_priv(dev);
+> +	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	ip->regs = ioremap(r->start, resource_size(r));
+> +	r = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	ip->ssram = ioremap(r->start, resource_size(r));
+
+Maybe use devm_platform_ioremap_resource() instead, which handles both
+platform_get_resource() and ioremap() in one call..
+
+/Esben
