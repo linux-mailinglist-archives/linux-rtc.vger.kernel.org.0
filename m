@@ -2,174 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7C71CA5E
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 May 2019 16:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0808D1F236
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 May 2019 14:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbfENO3W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 14 May 2019 10:29:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59182 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726060AbfENO3V (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 14 May 2019 10:29:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0F709AD12;
-        Tue, 14 May 2019 14:29:19 +0000 (UTC)
-Date:   Tue, 14 May 2019 16:29:18 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190514162918.a481ac682f36eb6f05aed984@suse.de>
-In-Reply-To: <20190510071419.GB7321@dell>
-References: <20190409154610.6735-1-tbogendoerfer@suse.de>
-        <20190409154610.6735-3-tbogendoerfer@suse.de>
-        <20190508102313.GG3995@dell>
-        <20190509160220.bb5382df931e5bd0972276df@suse.de>
-        <20190510071419.GB7321@dell>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1729845AbfEOMAZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 May 2019 08:00:25 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45768 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730175AbfEOLOr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 May 2019 07:14:47 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r76so2094353lja.12
+        for <linux-rtc@vger.kernel.org>; Wed, 15 May 2019 04:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=globallogic.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=JZxB086EqwggOhFxHexHkttok94oso/OJUjNF3aMwEw=;
+        b=SlWMkZO0NyRYv7qICWGSh++5Zi8+7R3oKxXcZ9+KhhZYU250CR11qNBwz+rXDAuT6C
+         Xqu672PFvC2GjahgiNoNuW+NQAwUkaUTgGxzrlrecppsg7v28PIxURdyOha350W1tksj
+         zKE1GmGYlXMObrHbnO30DZmUh7BaDiLjkOG3X5UWf69H30F/JLN0wdHtBgUdBXZmwln8
+         Uz+Mab6mr7ZAbsBtc26f6leQ04LYBFoERfXP59q4K+v/msGokMRFwTAXxd3ZpX4+5byX
+         gwKrcrnZthl7A/VN02W/Vg+0tQd/xsUh5qkvLvU7bhS5U7nLl1SwcTuT9vnG2j+yvgGE
+         7ueA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JZxB086EqwggOhFxHexHkttok94oso/OJUjNF3aMwEw=;
+        b=keGRqAYXkkDTM7wykL4vB29dE8VTwf243c/HsXdWaGe5h5fkyuUsIDlhuxQhRk2v05
+         I+gx9wSBA9vgKSFqwyBpM93R4uvf5fmw4ZUkR+8psfXUZOZgfAdxUmXMfkpDNuaAydBA
+         mGL1WWN4cxZndTEFaCeF8/Ez98igpI2cyxPYrpvV9b830ANYO426sIqpCzcc6bb/73cz
+         81C4kNAr1TozEBivwKS7a4wFDRgr6hWqgEoymOFz65EvBvDXkTHE7lP3iLUng/2GRmoF
+         +9vpvFdqiJir7GeQKZluqzPZ2s9yCU0DhcS+ZndZHXtwyJrx21FKyMesUuzzQGYWpw/m
+         5fzg==
+X-Gm-Message-State: APjAAAU6soYR6L8BhOwdPf/6JW54VvsQydQjqSde35nzrDjBjXZ0fMgn
+        e7s8mgpkc1QBOlCoa6WswJWvGA==
+X-Google-Smtp-Source: APXvYqzsq1cLndnKfy+6j5tMGL0/yPrXCABoyJowsorG4ompSJaSfGcWbabzviCRJp1SQmcaFCE9Zw==
+X-Received: by 2002:a2e:85c9:: with SMTP id h9mr7217175ljj.110.1557918885495;
+        Wed, 15 May 2019 04:14:45 -0700 (PDT)
+Received: from roman-VirtualBox.synapse.com ([195.238.92.107])
+        by smtp.gmail.com with ESMTPSA id q26sm376027lfd.54.2019.05.15.04.14.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 May 2019 04:14:44 -0700 (PDT)
+From:   roman.stratiienko@globallogic.com
+To:     a.zummo@towertech.it, alexandre.belloni@free-electrons.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Roman Stratiienko <roman.stratiienko@globallogic.com>
+Subject: [PATCH] rtc: test: enable wakeup flags
+Date:   Wed, 15 May 2019 14:14:36 +0300
+Message-Id: <20190515111436.14513-1-roman.stratiienko@globallogic.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 10 May 2019 08:14:19 +0100
-Lee Jones <lee.jones@linaro.org> wrote:
+From: Roman Stratiienko <roman.stratiienko@globallogic.com>
 
-> On Thu, 09 May 2019, Thomas Bogendoerfer wrote:
-> > > > +	}
-> > > > +	pr_err("ioc3: CRC error in NIC address\n");
-> > > > +}
-> > > 
-> > > This all looks like networking code.  If this is the case, it should
-> > > be moved to drivers/networking or similar.
-> > 
-> > no it's not. nic stands for number in a can produced by Dallas Semi also
-> > known under the name 1-Wire (https://en.wikipedia.org/wiki/1-Wire).
-> > SGI used them to provide partnumber, serialnumber and mac addresses.
-> > By placing the code to read the NiCs inside ioc3 driver there is no need
-> > for locking and adding library code for accessing these informations.
-> 
-> Great.  So it looks like you should be using this, no?
-> 
->   drivers/base/regmap/regmap-w1.c
+Alarmtimer interface uses only the RTC with wekeup flags enabled.
+Allow to use rtc-test driver with alarmtimer interface.
 
-not sure about regmap-w1, but drivers/w1 contains usefull stuff
-like w1_crc8. The only drawback I see right now is, that I need
-information about part numbers at ioc3 probe time, but for using
-w1 framework I need to create a platform device, which will give
-me this information not synchronous. I'll see how I could solve that.
+Signed-off-by: Roman Stratiienko <roman.stratiienko@globallogic.com>
+---
+ drivers/rtc/rtc-test.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > > > +static struct resource ioc3_uarta_resources[] = {
-> > > > +	DEFINE_RES_MEM(offsetof(struct ioc3, sregs.uarta),
-> > > 
-> > > You are the first user of offsetof() in MFD.  Could you tell me why
-> > > it's required please?
-> > 
-> > to get the offsets of different chip functions out of a struct.
-> 
-> I can see what it does on a coding level.
-> 
-> What are you using it for in practical/real terms?
-
-ioc3 has one PCI bar, where all different functions are accessible.
-The current ioc3 register map has all these functions set up in one
-struct. The base address of these registers comes out of the PCI
-framework and to use the MFD framework I need offsets for the different
-functions. And because there was already struct ioc3 I'm using
-offsetof on this struct.
-
-> Why wouldn't any other MFD driver require this, but you do?
-
-the other PCI MFD drivers I've looked at, have a PCI BAR per function,
-which makes live easier and no need for offsetof. Other MFD drivers
-#define the offsets and don't have a big struct, which contains all
-function registers. If you really insist on using #defines I need
-to go through a few parts of the kernel where struct ioc3 is still used.
-
-> > > > +	if (ipd->info->funcs & IOC3_SER) {
-> > > > +		writel(GPCR_UARTA_MODESEL | GPCR_UARTB_MODESEL,
-> > > > +			&ipd->regs->gpcr_s);
-> > > > +		writel(0, &ipd->regs->gppr[6]);
-> > > > +		writel(0, &ipd->regs->gppr[7]);
-> > > > +		udelay(100);
-> > > > +		writel(readl(&ipd->regs->port_a.sscr) & ~SSCR_DMA_EN,
-> > > > +		       &ipd->regs->port_a.sscr);
-> > > > +		writel(readl(&ipd->regs->port_b.sscr) & ~SSCR_DMA_EN,
-> > > > +		       &ipd->regs->port_b.sscr);
-> > > > +		udelay(1000);
-> > > 
-> > > No idea what any of this does.
-> > > 
-> > > It looks like it belongs in the serial driver (and needs comments).
-> > 
-> > it configures the IOC3 chip for serial usage. This is not part of
-> > the serial register set, so it IMHO belongs in the MFD driver.
-> 
-> So it does serial things, but doesn't belong in the serial driver?
-
-It sets up IOC3 GPIOs and IOC3 serial mode in way the 8250 driver
-can work with the connected superio.
-
-> Could you please go into a bit more detail as to why you think that?
-> 
-> Why is it better here?
-
-access to gpio and serial mode is outside of the 8250 register space.
-So either I need to export with some additional resources/new special
-platform data or just set it where it is done.
-
-> It's also totally unreadable by the way!
-
-sure, I'll add comments.
-
-> > > > +	}
-> > > > +#if defined(CONFIG_SGI_IP27)
-> > > 
-> > > What is this?  Can't you obtain this dynamically by probing the H/W?
-> > 
-> > that's the machine type and the #ifdef CONFIG_xxx are just for saving space,
-> > when compiled for other machines and it's easy to remove.
-> 
-> Please find other ways to save the space.  #ifery can get very messy,
-> very quickly and is almost always avoidable.
-
-space isn't a problem at all, so removing #ifdef CONFIG is easy.
-
-> 
-> > > > +	if (ipd->info->irq_offset) {
-> > > 
-> > > What does this really signify?
-> > 
-> > IOC3 ASICs are most of the time connected to a SGI bridge chip. IOC3 can
-> > provide two interrupt lines, which are wired to the bridge chip. The first
-> > interrupt is assigned via the PCI core, but since IOC3 is not a PCI multi
-> > function device the second interrupt must be treated here. And the used
-> > interrupt line on the bridge chip differs between boards.
-> 
-> Please provide a MACRO, function or something else which results in
-> more readable code.  Whatever you choose to use, please add this text
-> above, it will be helpful for future readers.
-
-will do.
-
-Thomas.
-
+diff --git a/drivers/rtc/rtc-test.c b/drivers/rtc/rtc-test.c
+index 6c5f09c815e8..c839ae575c77 100644
+--- a/drivers/rtc/rtc-test.c
++++ b/drivers/rtc/rtc-test.c
+@@ -123,6 +123,8 @@ static int test_probe(struct platform_device *plat_dev)
+ 
+ 	platform_set_drvdata(plat_dev, rtd);
+ 
++	device_init_wakeup(&plat_dev->dev, 1);
++
+ 	rtd->rtc = devm_rtc_allocate_device(&plat_dev->dev);
+ 	if (IS_ERR(rtd->rtc))
+ 		return PTR_ERR(rtd->rtc);
 -- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.17.1
+
