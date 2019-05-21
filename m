@@ -2,44 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A952E251F6
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 May 2019 16:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16801251F8
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 May 2019 16:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbfEUO2C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 May 2019 10:28:02 -0400
-Received: from mail2.skidata.com ([91.230.2.91]:32652 "EHLO mail2.skidata.com"
+        id S1728179AbfEUO2J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 May 2019 10:28:09 -0400
+Received: from mail1.skidata.com ([91.230.2.99]:38017 "EHLO mail1.skidata.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726750AbfEUO2B (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 21 May 2019 10:28:01 -0400
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 May 2019 10:28:00 EDT
+        id S1726750AbfEUO2J (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 21 May 2019 10:28:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=skidata.com; i=@skidata.com; q=dns/txt; s=selector1;
-  t=1558448903; x=1589984903;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tZprcqh9LXoNlxO8gu2/EPEJEdKFxz91AfnZIELZi24=;
-  b=JGoE6XbuYBoVl0P6cwUeUVyz5qAnahyEDot1GFFYag6twOIni4MrlZVV
-   VLtwoQR3gZZA1XII77FnhRGJc29iMvv3zG3wUEtFTDCXxFLGaltSxnRkf
-   9AyYPQkr7TzJcjTBCg5VFIqfBQ/lXUBewfRlTtp4gOWPiV/sjpaeN1ims
-   4A7g+4U3qh4zTAeY5vbqWUvBoqGt8vB4wjltm9Zw0LSkh2zKACMaOgoKL
-   gJrbWlP06/DGV1aFFXUSN1Rf7Ke7FzE83XZRox2e/LTMjvKyehUK7zBdB
-   mFABFeesdxvtBYyocteObWHstG114D5OUaea9IF0t/K8QmihftQfPVDrz
-   Q==;
-IronPort-SDR: R9oJvERd0WsFqarg5Vu7T2H4biQbG7n/GQ2SjYFPrZgZiM+UnwDlsvITezDtGFRkpWH5YYwm42
- 4C5HdUYQcmtpiFDkQeHKjSbBAnnTl3S2czdi+0AJnxUMgfvn91cFGfkgbVw3K8iy+Yjyd0kgka
- RSA2GgjO+H3FIiJcSbZWbA0a9FXQYW4KvxRpHcZ5S0S4fQGvqp/R8o6Yj45z0LFMYtngq0GJjt
- 02neaZoH0kDPZe1asN/q5H/922IOUINggRacKHjqYrMIr8vWuvk8jMbGeoglubhzJYxyxcqaui
- i58=
+  t=1558448911; x=1589984911;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=B2hSHlQm+l5Bj0jq+eLK8pzuGFSFBmz1fzAh0yI5TTo=;
+  b=GeNN20td0/AEI1rlaIUfohbmhcMDOAP+YOCB+Ui1Tgx+JHezbqrHhjUe
+   V4Xe5qwtSlkdnsJIoGcS+nX0oREie11pvmqAW9VWgIxNXh1ov+ASJIh7L
+   D3ukLpn8x3RbZcNpXJxIcwHE6InOHbFoSGJkPfSffj0g5FFjF0APAGuz4
+   UysVLlnxBFlhSjamBOB+1/QLhuKUJmlEZXF132PbQNTSJ8BH9+N56VnSN
+   CH6Mu+FsfK+UoBN/NwFLRWgTIkjdVuyU2rHtTt2nsfqMSZeatjiww8A2Y
+   mKzRx8oj3PZdGG88q2GV3tI9AXW17t7oq5TtGrkHh8c7WJUriugqvAiAr
+   w==;
+IronPort-SDR: abjqOS7YmmpNOOT4RZGfXJPRsSyfyHUk4y0k1FG9HRv1LBl6EXFdzYv5o7cS69xJYlpt/0OI2h
+ sIvZ5dmigP1RLgxbb2IYVDFoOs21Pi0IvqlDEbObJicwr9RlWV81FaA+A5o+TlJSLoUKyXOEW4
+ xHEgnE+VhQ8JtR/7QlxcplWoNbGmj7dbSGkvLNDZoKqzZxW8bSfA/zVssszZRt7Rn2HDurI8OL
+ 8uvLRC7et4YC34p80oFn8RU0e+76DCISrCoWnobroChf4vH9h2TA+gZbTpFgLA8xwdWvwNOPZ+
+ sIg=
 X-IronPort-AV: E=Sophos;i="5.60,495,1549926000"; 
-   d="scan'208";a="2150343"
+   d="scan'208";a="17196614"
 From:   Richard Leitner <richard.leitner@skidata.com>
 To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
 CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Richard Leitner <richard.leitner@skidata.com>
-Subject: [PATCH 0/3] rtc: s35390a: uie_unsupported and minor fixes
-Date:   Tue, 21 May 2019 16:20:21 +0200
-Message-ID: <20190521142024.25894-1-richard.leitner@skidata.com>
+Subject: [PATCH 1/3] rtc: s35390a: clarify INT2 pin output modes
+Date:   Tue, 21 May 2019 16:20:22 +0200
+Message-ID: <20190521142024.25894-2-richard.leitner@skidata.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190521142024.25894-1-richard.leitner@skidata.com>
+References: <20190521142024.25894-1-richard.leitner@skidata.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -51,22 +52,60 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-As the s35390a does only support per-minute based alarms we have to
-set the uie_unsupported flag. Otherwise it delays for 10sec and 
-fails afterwards with modern hwclock versions.
+Fix the INT2 mode mask to not include the "TEST" flag. Furthermore
+remove the not needed reversion of bits when parsing the INT2 modes.
+Instead reverse the INT2_MODE defines.
 
-Furthermore some other minor changes are made.
+Additionally mention the flag names from the datasheet for the different
+modes in the comments.
 
-All patches were tested on an i.MX6 platform.
+Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+---
+ drivers/rtc/rtc-s35390a.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-Richard Leitner (3):
-  rtc: s35390a: clarify INT2 pin output modes
-  rtc: s35390a: set uie_unsupported
-  rtc: s35390a: introduce struct device in probe
-
- drivers/rtc/rtc-s35390a.c | 43 +++++++++++++++++++++------------------
- 1 file changed, 23 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 3c64dbb08109..6fb6d835b178 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -45,12 +45,13 @@
+ /* flag for STATUS2 */
+ #define S35390A_FLAG_TEST	0x01
+ 
+-#define S35390A_INT2_MODE_MASK		0xF0
+-
++/* INT2 pin output mode */
++#define S35390A_INT2_MODE_MASK		0x0E
+ #define S35390A_INT2_MODE_NOINTR	0x00
+-#define S35390A_INT2_MODE_FREQ		0x10
+-#define S35390A_INT2_MODE_ALARM		0x40
+-#define S35390A_INT2_MODE_PMIN_EDG	0x20
++#define S35390A_INT2_MODE_ALARM		0x02 /* INT2AE */
++#define S35390A_INT2_MODE_PMIN_EDG	0x04 /* INT2ME */
++#define S35390A_INT2_MODE_FREQ		0x08 /* INT2FE */
++#define S35390A_INT2_MODE_PMIN		0x0C /* INT2ME | INT2FE */
+ 
+ static const struct i2c_device_id s35390a_id[] = {
+ 	{ "s35390a", 0 },
+@@ -303,9 +304,6 @@ static int s35390a_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
+ 	else
+ 		sts = S35390A_INT2_MODE_NOINTR;
+ 
+-	/* This chip expects the bits of each byte to be in reverse order */
+-	sts = bitrev8(sts);
+-
+ 	/* set interupt mode*/
+ 	err = s35390a_set_reg(s35390a, S35390A_CMD_STATUS2, &sts, sizeof(sts));
+ 	if (err < 0)
+@@ -343,7 +341,7 @@ static int s35390a_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
+ 	if (err < 0)
+ 		return err;
+ 
+-	if ((bitrev8(sts) & S35390A_INT2_MODE_MASK) != S35390A_INT2_MODE_ALARM) {
++	if ((sts & S35390A_INT2_MODE_MASK) != S35390A_INT2_MODE_ALARM) {
+ 		/*
+ 		 * When the alarm isn't enabled, the register to configure
+ 		 * the alarm time isn't accessible.
 -- 
 2.20.1
 
