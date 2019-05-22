@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFED26E23
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 May 2019 21:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF54A26D2E
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 May 2019 21:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730851AbfEVTq2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 May 2019 15:46:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50226 "EHLO mail.kernel.org"
+        id S1731250AbfEVTkL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 May 2019 15:40:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730040AbfEVT1t (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 22 May 2019 15:27:49 -0400
+        id S1732905AbfEVT3a (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 22 May 2019 15:29:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6666D2173C;
-        Wed, 22 May 2019 19:27:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87174217D9;
+        Wed, 22 May 2019 19:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553269;
-        bh=3WjJSY7vZLVqoeVZv6ccOG1TIWOYqs8oAQ8eRPMkcSo=;
+        s=default; t=1558553370;
+        bh=Z5M97+wnGla18P25MkB3sjrGHWb2JtxK/um22vBOWNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o3xVTa2nPaqGElsQ+mt1PSz3WmGmQ7pl/Oe8agMzHc3GT/TFy8OpJVcRvDOmOQnfu
-         82FPty9XukjNNutOsybyk2Dc/cMm+zrWUc6qK7lN1h9Hkejp7A9w9km6Trv557JVnm
-         SEEtnYqVj0S/CWkHxu33hE1UYvLE8NqsG6aRmVj4=
+        b=vjW75rpvWsZbEhmkc6YtPIWkbV0exXbfJzJ2VOeFYwZ3iw50uPQePT3avcaozsJTN
+         1AQGRlUQPhKV71TUopvNbbIwIy/vIBdosd6e8qHl8LkdpHT404ZEOBWyKzwPEtrVEM
+         RY1bcVZphqxmaQyaxWTw8Gbo4HuwiECMqAMWTPwA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabien Dessenne <fabien.dessenne@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
+Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 045/244] rtc: stm32: manage the get_irq probe defer case
-Date:   Wed, 22 May 2019 15:23:11 -0400
-Message-Id: <20190522192630.24917-45-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 030/167] rtc: 88pm860x: prevent use-after-free on device remove
+Date:   Wed, 22 May 2019 15:26:25 -0400
+Message-Id: <20190522192842.25858-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
-References: <20190522192630.24917-1-sashal@kernel.org>
+In-Reply-To: <20190522192842.25858-1-sashal@kernel.org>
+References: <20190522192842.25858-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,42 +44,44 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Fabien Dessenne <fabien.dessenne@st.com>
+From: Sven Van Asbroeck <thesven73@gmail.com>
 
-[ Upstream commit cf612c5949aca2bd81a1e28688957c8149ea2693 ]
+[ Upstream commit f22b1ba15ee5785aa028384ebf77dd39e8e47b70 ]
 
-Manage the -EPROBE_DEFER error case for the wake IRQ.
+The device's remove() attempts to shut down the delayed_work scheduled
+on the kernel-global workqueue by calling flush_scheduled_work().
 
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-Acked-by: Amelie Delaunay <amelie.delaunay@st.com>
+Unfortunately, flush_scheduled_work() does not prevent the delayed_work
+from re-scheduling itself. The delayed_work might run after the device
+has been removed, and touch the already de-allocated info structure.
+This is a potential use-after-free.
+
+Fix by calling cancel_delayed_work_sync() during remove(): this ensures
+that the delayed work is properly cancelled, is no longer running, and
+is not able to re-schedule itself.
+
+This issue was detected with the help of Coccinelle.
+
+Signed-off-by: Sven Van Asbroeck <TheSven73@gmail.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-stm32.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-88pm860x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index c5908cfea2340..8e6c9b3bcc29a 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -788,11 +788,14 @@ static int stm32_rtc_probe(struct platform_device *pdev)
- 	ret = device_init_wakeup(&pdev->dev, true);
- 	if (rtc->data->has_wakeirq) {
- 		rtc->wakeirq_alarm = platform_get_irq(pdev, 1);
--		if (rtc->wakeirq_alarm <= 0)
--			ret = rtc->wakeirq_alarm;
--		else
-+		if (rtc->wakeirq_alarm > 0) {
- 			ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
- 							    rtc->wakeirq_alarm);
-+		} else {
-+			ret = rtc->wakeirq_alarm;
-+			if (rtc->wakeirq_alarm == -EPROBE_DEFER)
-+				goto err;
-+		}
- 	}
- 	if (ret)
- 		dev_warn(&pdev->dev, "alarm can't wake up the system: %d", ret);
+diff --git a/drivers/rtc/rtc-88pm860x.c b/drivers/rtc/rtc-88pm860x.c
+index 19e53b3b8e005..166faae3a59cd 100644
+--- a/drivers/rtc/rtc-88pm860x.c
++++ b/drivers/rtc/rtc-88pm860x.c
+@@ -414,7 +414,7 @@ static int pm860x_rtc_remove(struct platform_device *pdev)
+ 	struct pm860x_rtc_info *info = platform_get_drvdata(pdev);
+ 
+ #ifdef VRTC_CALIBRATION
+-	flush_scheduled_work();
++	cancel_delayed_work_sync(&info->calib_work);
+ 	/* disable measurement */
+ 	pm860x_set_bits(info->i2c, PM8607_MEAS_EN2, MEAS2_VRTC, 0);
+ #endif	/* VRTC_CALIBRATION */
 -- 
 2.20.1
 
