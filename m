@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF54A26D2E
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 May 2019 21:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70A026C9E
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 May 2019 21:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731250AbfEVTkL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 May 2019 15:40:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52584 "EHLO mail.kernel.org"
+        id S2387396AbfEVTau (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 May 2019 15:30:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54254 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732905AbfEVT3a (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 22 May 2019 15:29:30 -0400
+        id S1732913AbfEVTas (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 22 May 2019 15:30:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 87174217D9;
-        Wed, 22 May 2019 19:29:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE23921473;
+        Wed, 22 May 2019 19:30:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553370;
+        s=default; t=1558553447;
         bh=Z5M97+wnGla18P25MkB3sjrGHWb2JtxK/um22vBOWNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vjW75rpvWsZbEhmkc6YtPIWkbV0exXbfJzJ2VOeFYwZ3iw50uPQePT3avcaozsJTN
-         1AQGRlUQPhKV71TUopvNbbIwIy/vIBdosd6e8qHl8LkdpHT404ZEOBWyKzwPEtrVEM
-         RY1bcVZphqxmaQyaxWTw8Gbo4HuwiECMqAMWTPwA=
+        b=o+cy/+wVR8Q2Tuue1s+++sEaaVpbgChfOGkTX5Zuv1bNffzgui3BaCtEIM7kE96nu
+         FQd9jZRxZWUYB52eI2irCTR49EMJkKwZYOTrUXF4ndoMOJJOx+fPAqOrAipsdr+cI5
+         ZldGjhuCQqdPqKdUIg5QNwGUCj5eFjtSyBFYSKVA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
         Sven Van Asbroeck <TheSven73@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 030/167] rtc: 88pm860x: prevent use-after-free on device remove
-Date:   Wed, 22 May 2019 15:26:25 -0400
-Message-Id: <20190522192842.25858-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 017/114] rtc: 88pm860x: prevent use-after-free on device remove
+Date:   Wed, 22 May 2019 15:28:40 -0400
+Message-Id: <20190522193017.26567-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192842.25858-1-sashal@kernel.org>
-References: <20190522192842.25858-1-sashal@kernel.org>
+In-Reply-To: <20190522193017.26567-1-sashal@kernel.org>
+References: <20190522193017.26567-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
