@@ -2,86 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EDF26C5D
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 May 2019 21:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA6127C55
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 May 2019 14:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730502AbfEVTd7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 May 2019 15:33:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55224 "EHLO mail.kernel.org"
+        id S1729762AbfEWMCV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 May 2019 08:02:21 -0400
+Received: from mail1.skidata.com ([91.230.2.99]:1617 "EHLO mail1.skidata.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387586AbfEVTbl (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 22 May 2019 15:31:41 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3225A2173C;
-        Wed, 22 May 2019 19:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553500;
-        bh=Z5M97+wnGla18P25MkB3sjrGHWb2JtxK/um22vBOWNQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PvbRErWoTXFOLvwuGYgJVZ3dUU1zswSHi76dQTZimcomh84xbF4JpEzPC187FMD+f
-         n4ZLIlKmo2AcSXgmAaMsrh2q6aRtre6iVMsWDD+VURtXqt9dMphC1mUWsfLSXCkTOB
-         rRVVpYamVk3eULxbhI2bjd+ZO4fye5PuTNavL8QI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Sven Van Asbroeck <TheSven73@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 08/92] rtc: 88pm860x: prevent use-after-free on device remove
-Date:   Wed, 22 May 2019 15:30:03 -0400
-Message-Id: <20190522193127.27079-8-sashal@kernel.org>
+        id S1728309AbfEWMCV (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 23 May 2019 08:02:21 -0400
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 May 2019 08:02:20 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=skidata.com; i=@skidata.com; q=dns/txt; s=selector1;
+  t=1558612963; x=1590148963;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TxGXbfw7z2292Z6hKFmKjnZyC5PGKjytRrBvM3a9feQ=;
+  b=mEoSrR4RWwIu4bsbpPQ4NtwhW0u67Y/BvGwkFAc1TnR3nKQqKiX8gmrB
+   TgETUNeeX9SArl5AbjCAR+QFDr5na3krjVyTfp1AncRtqKqngSTYCMZ4G
+   YeZn5T/wAkky6w57JuCM/8bRR+C7ybIIOI9AuFMZEE9YjvN92kgXS5ImH
+   RbaN54acBmWcpqd49tcnvEpoThiG8uUDkCSiAGu4vpSGr1/CLCQ5x22Xs
+   hcVVBo8UfS6dMrf4k2ADZlxkq4fXPSUMysjAXgKnqIIOhR3mZPkSCNHzW
+   T8ZIbGmZCvt62g2VZoS/CD5+EIpR5VjLy+m10FJw4+xvkE+NQGoe+4QHv
+   Q==;
+IronPort-SDR: GjI7Wes/nu3epiSwuwoBb18m62MUi8Drc+pJORFAZtrYEVK2dKGSpaQiVfpPRFGjy5wcXFZv92
+ kXG/fb+i9bLeLdx45nz9l2c8dT7vP9BadkL30Vobliv5RBIxoVBn191Vqq4WpWw+USLu4TJjwH
+ 5xLc1AdtrCLikmBuT8Upc2RpsM8neeiwVAw+cUtmfYrBfq4ooum9ujYe80Au5Llf8Ku2y9yJyL
+ qFr6j9IgqO8dmk+8X30CyYoV9PBNf7Hdsm97FMHDD0h5LSbVeK7d+s9nt8q7droksQ0DMI3T4e
+ ECw=
+X-IronPort-AV: E=Sophos;i="5.60,502,1549926000"; 
+   d="scan'208";a="17248255"
+From:   Richard Leitner <richard.leitner@skidata.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: [PATCH v2 0/4] rtc: s35390a: uie_unsupported and minor fixes
+Date:   Thu, 23 May 2019 13:54:47 +0200
+Message-ID: <20190523115451.20007-1-richard.leitner@skidata.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522193127.27079-1-sashal@kernel.org>
-References: <20190522193127.27079-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.111.252]
+X-ClientProxiedBy: sdex4srv.skidata.net (192.168.111.82) To
+ sdex5srv.skidata.net (192.168.111.83)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Sven Van Asbroeck <thesven73@gmail.com>
+As the s35390a does only support per-minute based alarms we have to
+set the uie_unsupported flag. Otherwise it delays for 10sec and 
+fails afterwards with modern hwclock versions.
 
-[ Upstream commit f22b1ba15ee5785aa028384ebf77dd39e8e47b70 ]
+Furthermore some other minor changes are made.
 
-The device's remove() attempts to shut down the delayed_work scheduled
-on the kernel-global workqueue by calling flush_scheduled_work().
+All patches were tested on an i.MX6 platform.
 
-Unfortunately, flush_scheduled_work() does not prevent the delayed_work
-from re-scheduling itself. The delayed_work might run after the device
-has been removed, and touch the already de-allocated info structure.
-This is a potential use-after-free.
+CHANGES v2:
+ - use BIT in "clarify INT2 pin output modes"
+ - add "change FLAG defines to use BIT macro"
 
-Fix by calling cancel_delayed_work_sync() during remove(): this ensures
-that the delayed work is properly cancelled, is no longer running, and
-is not able to re-schedule itself.
+Richard Leitner (4):
+  rtc: s35390a: clarify INT2 pin output modes
+  rtc: s35390a: set uie_unsupported
+  rtc: s35390a: introduce struct device in probe
+  rtc: s35390a: change FLAG defines to use BIT macro
 
-This issue was detected with the help of Coccinelle.
+ drivers/rtc/rtc-s35390a.c | 55 +++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 26 deletions(-)
 
-Signed-off-by: Sven Van Asbroeck <TheSven73@gmail.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/rtc/rtc-88pm860x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-88pm860x.c b/drivers/rtc/rtc-88pm860x.c
-index 19e53b3b8e005..166faae3a59cd 100644
---- a/drivers/rtc/rtc-88pm860x.c
-+++ b/drivers/rtc/rtc-88pm860x.c
-@@ -414,7 +414,7 @@ static int pm860x_rtc_remove(struct platform_device *pdev)
- 	struct pm860x_rtc_info *info = platform_get_drvdata(pdev);
- 
- #ifdef VRTC_CALIBRATION
--	flush_scheduled_work();
-+	cancel_delayed_work_sync(&info->calib_work);
- 	/* disable measurement */
- 	pm860x_set_bits(info->i2c, PM8607_MEAS_EN2, MEAS2_VRTC, 0);
- #endif	/* VRTC_CALIBRATION */
 -- 
 2.20.1
 
