@@ -2,73 +2,86 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773712A42F
-	for <lists+linux-rtc@lfdr.de>; Sat, 25 May 2019 13:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E90872B1E3
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 May 2019 12:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfEYLk5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 25 May 2019 07:40:57 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:44247 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726585AbfEYLk5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 25 May 2019 07:40:57 -0400
-Received: from localhost (lfbn-1-3034-80.w90-66.abo.wanadoo.fr [90.66.53.80])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6D48A20000C;
-        Sat, 25 May 2019 11:40:52 +0000 (UTC)
-Date:   Sat, 25 May 2019 13:40:52 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: ds1347: fix warning PTR_ERR_OR_ZERO can be used
-Message-ID: <20190525114052.GI3274@piout.net>
-References: <20190525095322.GA26245@hari-Inspiron-1545>
+        id S1726071AbfE0KOJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 May 2019 06:14:09 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35870 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbfE0KOJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 May 2019 06:14:09 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s17so16376255wru.3;
+        Mon, 27 May 2019 03:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmYyXClEyhCB/k7IkxkZpBXMb+GcpwSLAb7EW1GLi88=;
+        b=I3oyGoSLMpNOl0adhWiJdseBKUmXiEfkBQCy4WrjmAF8wMRV8ogrVD1gUZxw5x7ZZh
+         c7ar2ecnLchcZ8xzZC9cjgwqc2P8UrtWOZnqWiS/NQXm4kg/hZ5yqOP69lekentAl2pH
+         RBHssHXASRuE8WtSC4T+xPhS3s3bUBr+DbrZmJyy/qa75w7qQVVav15nXBg0nf/qlDR3
+         gIHI/Os6RlqPkA5zJQdxZNsSajM0gajnaXvkgmcXW/p5tq9Qod4In8XZL8fuMcIpWkFw
+         BunJV+wn9yzgAicFX2NA7X8eKKpVpfU8WnC3WzH2guGuKTkR0wlzYhFtU1A5ro/8l6Pk
+         +HJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmYyXClEyhCB/k7IkxkZpBXMb+GcpwSLAb7EW1GLi88=;
+        b=og5dkJ3EEgNYUhFWKcJHIc9NeAp/cZ0CBHnVEI+hSv7/ikFfTrQqB/8NayJ8q78rsR
+         8oJCDIiOqmzl4nqjwrPlFguPcGR4igrrd5JkfEHOfIrYKcVvzKNbvun7ucX9jJYqjTdy
+         CZ8eB/Ea8g4z16IGmDrzN6M5IVNiSJFjb1bZVpr6Lv+QeNQiciJQhUZ86jOqAFusTber
+         ZI6YYvaFZ8Sov/z+pbxtyIL5IICro0dQ9OYJPHhHL6sER8BB1SsEXKF3uzms8LsvyTxL
+         PnAWeXXRT4ZI185MqAcnFA+TD3hyu1tu99Y96j/Cq5NOh3UTgtIHFeVBy1Z2uo9twXYt
+         HkKw==
+X-Gm-Message-State: APjAAAXE48IF+S9FwI9xFRDe/38LqwaaVvk109RQXVVOeIXIUilUY/Hs
+        8t11qVvJA8J0WkbbQPR0hd8=
+X-Google-Smtp-Source: APXvYqxhPOJCwQVz46MEKCJymC6evZIIV7z7pSiVare5OCVTssJlh1PTBDczLKmzHQL3arHbuREiqw==
+X-Received: by 2002:a5d:4f0d:: with SMTP id c13mr6408503wru.117.1558952046820;
+        Mon, 27 May 2019 03:14:06 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id s9sm3443171wmc.1.2019.05.27.03.14.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 May 2019 03:14:06 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Kartik Kartik <kkartik@nvidia.com>, linux-rtc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] rtc: tegra: Dust off and deferred probe support
+Date:   Mon, 27 May 2019 12:13:56 +0200
+Message-Id: <20190527101359.5898-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190525095322.GA26245@hari-Inspiron-1545>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+From: Thierry Reding <treding@nvidia.com>
 
-On 25/05/2019 15:23:22+0530, Hariprasad Kelam wrote:
-> fix below warning reported by coccicheck
-> 
-> ./drivers/rtc/rtc-ds1347.c:158:1-3: WARNING: PTR_ERR_OR_ZERO can be used
-> 
+The NVIDIA Tegra RTC driver has accumulated a bit of dust over the
+years. Make a pass over it, addressing checkpatch warnings and fixing
+some inconsistencies in comments and kernel messages as well as in
+variable types and names.
 
-Could you elaborate on what is the exact improvement?
+Once cleaned up, also turn the driver into a regular driver in order
+to support deferred probe which is needed to avoid a future regression
+on Tegra186 and later.
 
-> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
-> ---
->  drivers/rtc/rtc-ds1347.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-ds1347.c b/drivers/rtc/rtc-ds1347.c
-> index 938512c..b97b67f 100644
-> --- a/drivers/rtc/rtc-ds1347.c
-> +++ b/drivers/rtc/rtc-ds1347.c
-> @@ -155,10 +155,7 @@ static int ds1347_probe(struct spi_device *spi)
->  	rtc = devm_rtc_device_register(&spi->dev, "ds1347",
->  				&ds1347_rtc_ops, THIS_MODULE);
->  
-> -	if (IS_ERR(rtc))
-> -		return PTR_ERR(rtc);
-> -
-> -	return 0;
-> +	return PTR_ERR_OR_ZERO(rtc);
->  }
->  
->  static struct spi_driver ds1347_driver = {
-> -- 
-> 2.7.4
-> 
+Thierry
+
+Thierry Reding (3):
+  rtc: tegra: checkpatch and miscellaneous cleanups
+  rtc: tegra: Use consistent variable names and types
+  rtc: tegra: Turn into regular driver
+
+ drivers/rtc/rtc-tegra.c | 254 ++++++++++++++++++++--------------------
+ 1 file changed, 128 insertions(+), 126 deletions(-)
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
+
