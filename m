@@ -2,20 +2,19 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C781D2B3CD
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 May 2019 14:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030E02B3D2
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 May 2019 14:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfE0MAt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 May 2019 08:00:49 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:50987 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbfE0MAt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 May 2019 08:00:49 -0400
-X-Originating-IP: 90.88.147.134
+        id S1726871AbfE0MAz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 May 2019 08:00:55 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:54345 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbfE0MAz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 May 2019 08:00:55 -0400
 Received: from localhost (aaubervilliers-681-1-27-134.w90-88.abo.wanadoo.fr [90.88.147.134])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id BBB0F40008;
-        Mon, 27 May 2019 12:00:43 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 40B5720000F;
+        Mon, 27 May 2019 12:00:47 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -25,207 +24,123 @@ To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rtc@vger.kernel.org
-Subject: [PATCH 01/10] dt-bindings: rtc: Move trivial RTC over to trivial devices
-Date:   Mon, 27 May 2019 14:00:33 +0200
-Message-Id: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
+Subject: [PATCH 02/10] dt-bindings: rtc: Add YAML schemas for the generic RTC bindings
+Date:   Mon, 27 May 2019 14:00:34 +0200
+Message-Id: <3220382f2eb8ba3cda1388882b2f4b53f75414e6.1558958381.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
+References: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RTC generic bindings has a bunch of devices that have a pretty simple
-binding, with just compatible, reg and optional interrupts properties.
-
-This is exactly what the trivial devices YAML schema has been created for,
-so let's move those devices there.
+The real time clocks have a bunch of generic properties that are needed in
+a device tree. Add a YAML schemas for those.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 ---
- Documentation/devicetree/bindings/rtc/rtc.txt          | 39 +--------
- Documentation/devicetree/bindings/trivial-devices.yaml | 54 +++++++++++-
- 2 files changed, 54 insertions(+), 39 deletions(-)
+ Documentation/devicetree/bindings/rtc/rtc.txt  | 34 +-------------
+ Documentation/devicetree/bindings/rtc/rtc.yaml | 50 +++++++++++++++++++-
+ 2 files changed, 51 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc.yaml
 
 diff --git a/Documentation/devicetree/bindings/rtc/rtc.txt b/Documentation/devicetree/bindings/rtc/rtc.txt
-index a97fc6a9a75e..234bd2af1830 100644
+index 234bd2af1830..b8d36fce5e2d 100644
 --- a/Documentation/devicetree/bindings/rtc/rtc.txt
 +++ b/Documentation/devicetree/bindings/rtc/rtc.txt
-@@ -31,42 +31,3 @@ below.
-                             expressed in femto Farad (fF).
-                             The default value shall be listed (if optional),
-                             and likewise all valid values.
+@@ -1,33 +1 @@
+-Generic device tree bindings for Real Time Clock devices
+-========================================================
 -
--Trivial RTCs
--------------
+-This document describes generic bindings which can be used to describe Real Time
+-Clock devices in a device tree.
 -
--This is a list of trivial RTC devices that have simple device tree
--bindings, consisting only of a compatible field, an address and
--possibly an interrupt line.
+-Required properties
+--------------------
 -
+-- compatible : name of RTC device following generic names recommended practice.
 -
--Compatible		Vendor / Chip
--==========		=============
--abracon,abb5zes3	AB-RTCMC-32.768kHz-B5ZE-S3: Real Time Clock/Calendar Module with I2C Interface
--abracon,abeoz9		AB-RTCMC-32.768kHz-EOZ9: Real Time Clock/Calendar Module with I2C Interface
--dallas,ds1374		I2C, 32-Bit Binary Counter Watchdog RTC with Trickle Charger and Reset Input/Output
--dallas,ds1672		Dallas DS1672 Real-time Clock
--dallas,ds3232		Extremely Accurate I²C RTC with Integrated Crystal and SRAM
--epson,rx8010		I2C-BUS INTERFACE REAL TIME CLOCK MODULE
--epson,rx8571		I2C-BUS INTERFACE REAL TIME CLOCK MODULE with Battery Backed RAM
--epson,rx8581		I2C-BUS INTERFACE REAL TIME CLOCK MODULE
--emmicro,em3027		EM Microelectronic EM3027 Real-time Clock
--isil,isl1208		Intersil ISL1208 Low Power RTC with Battery Backed SRAM
--isil,isl1218		Intersil ISL1218 Low Power RTC with Battery Backed SRAM
--isil,isl12022		Intersil ISL12022 Real-time Clock
--microcrystal,rv3028	Real Time Clock Module with I2C-Bus
--microcrystal,rv3029	Real Time Clock Module with I2C-Bus
--microcrystal,rv8523	Real Time Clock
--nxp,pcf2127		Real-time clock
--nxp,pcf2129		Real-time clock
--nxp,pcf8563		Real-time clock/calendar
--pericom,pt7c4338	Real-time Clock Module
--ricoh,r2025sd		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--ricoh,r2221tl		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--ricoh,rs5c372a		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--ricoh,rs5c372b		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--ricoh,rv5c386		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--ricoh,rv5c387a		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--sii,s35390a		2-wire CMOS real-time clock
--whwave,sd3078		I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--xircom,x1205		Xircom X1205 I2C RTC
-diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-index 747fd3f689dc..96035c5970d8 100644
---- a/Documentation/devicetree/bindings/trivial-devices.yaml
-+++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-@@ -26,6 +26,10 @@ properties:
-   compatible:
-     items:
-       - enum:
-+            # AB-RTCMC-32.768kHz-B5ZE-S3: Real Time Clock/Calendar Module with I2C Interface
-+          - abracon,abb5zes3
-+            # AB-RTCMC-32.768kHz-EOZ9: Real Time Clock/Calendar Module with I2C Interface
-+          - abracon,abeoz9
-             # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over Temperature Pin
-           - ad,ad7414
-             # ADM9240:  Complete System Hardware Monitor for uProcessor-Based Systems
-@@ -56,12 +60,18 @@ properties:
-           - capella,cm32181
-             # CM3232: Ambient Light Sensor
-           - capella,cm3232
-+            # I2C, 32-Bit Binary Counter Watchdog RTC with Trickle Charger and Reset Input/Output
-+          - dallas,ds1374
-             # High-Precision Digital Thermometer
-           - dallas,ds1631
-+            # Dallas DS1672 Real-time Clock
-+          - dallas,ds1672
-             # Total-Elapsed-Time Recorder with Alarm
-           - dallas,ds1682
-             # Tiny Digital Thermometer and Thermostat
-           - dallas,ds1775
-+            # Extremely Accurate I²C RTC with Integrated Crystal and SRAM
-+          - dallas,ds3232
-             # CPU Supervisor with Nonvolatile Memory and Programmable I/O
-           - dallas,ds4510
-             # Digital Thermometer and Thermostat
-@@ -80,6 +90,12 @@ properties:
-           - domintech,dmard09
-             # DMARD10: 3-axis Accelerometer
-           - domintech,dmard10
-+            # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
-+          - epson,rx8010
-+            # I2C-BUS INTERFACE REAL TIME CLOCK MODULE with Battery Backed RAM
-+          - epson,rx8571
-+            # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
-+          - epson,rx8581
-             # MMA7660FC: 3-Axis Orientation/Motion Detection Sensor
-           - fsl,mma7660
-             # MMA8450Q: Xtrinsic Low-power, 3-axis Xtrinsic Accelerometer
-@@ -100,6 +116,12 @@ properties:
-           - infineon,slb9645tt
-             # Infineon TLV493D-A1B6 I2C 3D Magnetic Sensor
-           - infineon,tlv493d-a1b6
-+            # Intersil ISL1208 Low Power RTC with Battery Backed SRAM
-+          - isil,isl1208
-+            # Intersil ISL1218 Low Power RTC with Battery Backed SRAM
-+          - isil,isl1218
-+            # Intersil ISL12022 Real-time Clock
-+          - isil,isl12022
-             # Intersil ISL29028 Ambient Light and Proximity Sensor
-           - isil,isl29028
-             # Intersil ISL29030 Ambient Light and Proximity Sensor
-@@ -274,6 +296,12 @@ properties:
-           - microchip,tc654
-             # PWM Fan Speed Controller With Fan Fault Detection
-           - microchip,tc655
-+            # Real Time Clock Module with I2C-Bus
-+          - microcrystal,rv3028
-+            # Real Time Clock Module with I2C-Bus
-+          - microcrystal,rv3029
-+            # Real Time Clock
-+          - microcrystal,rv8523
-             # MiraMEMS DA226 2-axis 14-bit digital accelerometer
-           - miramems,da226
-             # MiraMEMS DA280 3-axis 14-bit digital accelerometer
-@@ -300,18 +328,40 @@ properties:
-           - nxp,pca9556
-             # 8-bit I2C-bus and SMBus I/O port with reset
-           - nxp,pca9557
-+            # Real-time clock
-+          - nxp,pcf2127
-+            # Real-time clock
-+          - nxp,pcf2129
-+            # Real-time clock/calendar
-+          - nxp,pcf8563
-             # OKI ML86V7667 video decoder
-           - oki,ml86v7667
-             # OV5642: Color CMOS QSXGA (5-megapixel) Image Sensor with OmniBSI and Embedded TrueFocus
-           - ovti,ov5642
-+            # Real-time Clock Module
-+          - pericom,pt7c4338
-             # 48-Lane, 12-Port PCI Express Gen 2 (5.0 GT/s) Switch
-           - plx,pex8648
-             # Pulsedlight LIDAR range-finding sensor
-           - pulsedlight,lidar-lite-v2
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,r2025sd
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,r2221tl
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,rs5c372a
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,rs5c372b
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,rv5c386
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - ricoh,rv5c387a
-             # S524AD0XF1 (128K/256K-bit Serial EEPROM for Low Power)
-           - samsung,24ad0xd1
-             # SGX Sensortech VZ89X Sensors
-           - sgx,vz89x
-+            # 2-wire CMOS real-time clock
-+          - sii,s35390a
-             # Relative Humidity and Temperature Sensors
-           - silabs,si7020
-             # Skyworks SKY81452: Six-Channel White LED Driver with Touch Panel Bias Supply
-@@ -336,10 +386,14 @@ properties:
-           - ti,tmp103
-             # Digital Temperature Sensor
-           - ti,tmp275
-+            # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
-+          - whwave,sd3078
-             # Winbond/Nuvoton H/W Monitor
-           - winbond,w83793
-             # i2c trusted platform module (TPM)
-           - winbond,wpct301
-+            # Xircom X1205 I2C RTC
-+          - xircom,x1205
- 
- required:
-   - compatible
-
-base-commit: 89d8c504132e4c247707ac92d4bf6bb6607461dd
+-For other required properties e.g. to describe register sets,
+-clocks, etc. check the binding documentation of the specific driver.
+-
+-Optional properties
+--------------------
+-
+-- start-year : if provided, the default hardware range supported by the RTC is
+-               shifted so the first usable year is the specified one.
+-
+-The following properties may not be supported by all drivers. However, if a
+-driver wants to support one of the below features, it should adapt the bindings
+-below.
+-- trickle-resistor-ohms :   Selected resistor for trickle charger. Should be given
+-                            if trickle charger should be enabled
+-- trickle-diode-disable :   Do not use internal trickle charger diode Should be
+-                            given if internal trickle charger diode should be
+-                            disabled
+-- wakeup-source :           Enables wake up of host system on alarm
+-- quartz-load-femtofarads : The capacitive load of the quartz(x-tal),
+-                            expressed in femto Farad (fF).
+-                            The default value shall be listed (if optional),
+-                            and likewise all valid values.
++This file has been moved to rtc.yaml.
+diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+new file mode 100644
+index 000000000000..ee237b2ed66a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: RTC Generic Binding
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++description: |
++  This document describes generic bindings which can be used to
++  describe Real Time Clock devices in a device tree.
++
++properties:
++  $nodename:
++    pattern: "^rtc(@.*|-[0-9a-f])*$"
++
++  quartz-load-femtofarads:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The capacitive load of the quartz(x-tal), expressed in femto
++      Farad (fF). The default value shall be listed (if optional),
++      and likewise all valid values.
++
++  start-year:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      If provided, the default hardware range supported by the RTC is
++      shifted so the first usable year is the specified one.
++
++  trickle-diode-disable:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Do not use internal trickle charger diode. Should be given if
++      internal trickle charger diode should be disabled.
++
++  trickle-resistor-ohms:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Selected resistor for trickle charger. Should be given
++      if trickle charger should be enabled.
++
++  wakeup-source:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Enables wake up of host system on alarm.
++
++...
 -- 
 git-series 0.9.1
