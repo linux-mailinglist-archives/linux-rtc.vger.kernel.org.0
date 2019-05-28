@@ -2,84 +2,149 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 018752C655
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 May 2019 14:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1402D048
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 May 2019 22:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfE1MUc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 May 2019 08:20:32 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:45153 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726580AbfE1MUc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 May 2019 08:20:32 -0400
+        id S1726698AbfE1Uar (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 May 2019 16:30:47 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:51355 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbfE1Uar (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 May 2019 16:30:47 -0400
+X-Originating-IP: 90.89.68.76
 Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6E6FA200017;
-        Tue, 28 May 2019 12:20:26 +0000 (UTC)
-Date:   Tue, 28 May 2019 14:20:25 +0200
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 1CFF640005;
+        Tue, 28 May 2019 20:30:42 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 01/10] dt-bindings: rtc: Move trivial RTC over to trivial
- devices
-Message-ID: <20190528122025.vv4oyt5cwetj2hzp@flea>
-References: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
- <20190527120626.GM3274@piout.net>
- <20190527121832.lui2n6vhlemlqy2z@flea>
- <20190527160657.GN3274@piout.net>
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH v2 01/11] dt-bindings: rtc: Add YAML schemas for the generic RTC bindings
+Date:   Tue, 28 May 2019 22:30:31 +0200
+Message-Id: <434446bc5541d7dfe5823874355c7db8c7e213fa.1559075389.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190527160657.GN3274@piout.net>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+The real time clocks have a bunch of generic properties that are needed in
+a device tree. Add a YAML schemas for those.
 
-On Mon, May 27, 2019 at 06:06:57PM +0200, Alexandre Belloni wrote:
-> On 27/05/2019 14:18:32+0200, Maxime Ripard wrote:
-> > Hi Alex,
-> >
-> > On Mon, May 27, 2019 at 02:06:26PM +0200, Alexandre Belloni wrote:
-> > > On 27/05/2019 14:00:33+0200, Maxime Ripard wrote:
-> > > > The RTC generic bindings has a bunch of devices that have a pretty simple
-> > > > binding, with just compatible, reg and optional interrupts properties.
-> > > >
-> > >
-> > > This is not true, they all also support the star-year property, this is
-> > > why they are not in the trivial-devices file anymore.
-> >
-> > Ok, I misunderstood the binding then.
-> >
-> > Should we create a separate file for the trivial RTC, on the model of
-> > the trivial-devices but supporting all the RTC properties?
->
-> I would say that this is the way forward. Note that all the RTCs
-> support start-year but you will have to check for the other
-> properties.
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+---
+ Documentation/devicetree/bindings/rtc/rtc.txt  | 34 +-------------
+ Documentation/devicetree/bindings/rtc/rtc.yaml | 50 +++++++++++++++++++-
+ 2 files changed, 51 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc.yaml
 
-The way this will work is that it's a two layers thing. Patch 2
-creates a generic RTC binding schema that will match on two things:
-  - Schemas including it directly,
-  - any devicetree node following the node name pattern.
+diff --git a/Documentation/devicetree/bindings/rtc/rtc.txt b/Documentation/devicetree/bindings/rtc/rtc.txt
+index a97fc6a9a75e..4d6f81dccc68 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc.txt
++++ b/Documentation/devicetree/bindings/rtc/rtc.txt
+@@ -1,36 +1,4 @@
+-Generic device tree bindings for Real Time Clock devices
+-========================================================
+-
+-This document describes generic bindings which can be used to describe Real Time
+-Clock devices in a device tree.
+-
+-Required properties
+--------------------
+-
+-- compatible : name of RTC device following generic names recommended practice.
+-
+-For other required properties e.g. to describe register sets,
+-clocks, etc. check the binding documentation of the specific driver.
+-
+-Optional properties
+--------------------
+-
+-- start-year : if provided, the default hardware range supported by the RTC is
+-               shifted so the first usable year is the specified one.
+-
+-The following properties may not be supported by all drivers. However, if a
+-driver wants to support one of the below features, it should adapt the bindings
+-below.
+-- trickle-resistor-ohms :   Selected resistor for trickle charger. Should be given
+-                            if trickle charger should be enabled
+-- trickle-diode-disable :   Do not use internal trickle charger diode Should be
+-                            given if internal trickle charger diode should be
+-                            disabled
+-- wakeup-source :           Enables wake up of host system on alarm
+-- quartz-load-femtofarads : The capacitive load of the quartz(x-tal),
+-                            expressed in femto Farad (fF).
+-                            The default value shall be listed (if optional),
+-                            and likewise all valid values.
++This file has been moved to rtc.yaml.
+ 
+ Trivial RTCs
+ ------------
+diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+new file mode 100644
+index 000000000000..ee237b2ed66a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+@@ -0,0 +1,50 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: RTC Generic Binding
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++description: |
++  This document describes generic bindings which can be used to
++  describe Real Time Clock devices in a device tree.
++
++properties:
++  $nodename:
++    pattern: "^rtc(@.*|-[0-9a-f])*$"
++
++  quartz-load-femtofarads:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The capacitive load of the quartz(x-tal), expressed in femto
++      Farad (fF). The default value shall be listed (if optional),
++      and likewise all valid values.
++
++  start-year:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      If provided, the default hardware range supported by the RTC is
++      shifted so the first usable year is the specified one.
++
++  trickle-diode-disable:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Do not use internal trickle charger diode. Should be given if
++      internal trickle charger diode should be disabled.
++
++  trickle-resistor-ohms:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Selected resistor for trickle charger. Should be given
++      if trickle charger should be enabled.
++
++  wakeup-source:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Enables wake up of host system on alarm.
++
++...
 
-The point of that schema is to validate that every node (or binding),
-if it has those properties, the schemas will make sure that it's the
-proper type, (and if we would have any) ranges, etc.
-
-Then, it's up for the driver schemas to do a more on-point validation,
-with whatever constraints they have. They can choose to restrict the
-set of properties, or not to, it's really up to the device schema.
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+base-commit: 531b0a360899269bd99a38ba9852a8ba46852bcd
+-- 
+git-series 0.9.1
