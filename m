@@ -2,73 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D78772BDEE
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 May 2019 05:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018752C655
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 May 2019 14:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfE1DsJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 May 2019 23:48:09 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33602 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727320AbfE1DsJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 May 2019 23:48:09 -0400
-Received: by mail-ed1-f66.google.com with SMTP id n17so29585700edb.0;
-        Mon, 27 May 2019 20:48:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ykAmZNM3+M0rf6HLjev/b1JXrJdjuyj6wZaqtDFtAlI=;
-        b=bEkzV1RUMSdZmwHyEBsyYMCxvPUsPAllHosugonLRXE2fnLhrw+edjhaEiU+Y2d1hf
-         KrFCxM/EXGvofnspEdRpqy4+SZdFPI0rV7x6/MPLMWyGX0kjRQ+xAu08Rz+jntU/F8LL
-         HZ0uh2TxjUGhHOeH2FIUjwWpEkqwN5SSVErDLIb7meWwTpkejrDHJCVXTvbYkGA6Kg5t
-         DC4aNP04rf42JTsPk+qTRmtzvdZ0QCWyUHjsr4EQgxFneBgr5ZZ0FtOU0KHh4bOK0ZyO
-         0RoEnrCrlwwNER8n9D4CmEJfHx933PWSjV89rq9bHORNnhzcryozsZ6+A47OoZ6OpEFs
-         /epQ==
-X-Gm-Message-State: APjAAAW7p2sGvTvGY0YZVZWLQ1IAEXm/F94tkZqy7wnoSsGQ4IXISWAV
-        1Xd7LqlLU6poSqd0rNmPJy41ZeN7gQk=
-X-Google-Smtp-Source: APXvYqwZX2+i0QwLdk88jJ0CQhF6Fp5mg93Usl/JQnLDrpkhDARo7nzVXcj52Y+t01KYLRSBKsYyFg==
-X-Received: by 2002:a50:fa01:: with SMTP id b1mr118474532edq.199.1559015286970;
-        Mon, 27 May 2019 20:48:06 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id f19sm2057378eje.53.2019.05.27.20.48.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 20:48:06 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id t5so1149286wmh.3;
-        Mon, 27 May 2019 20:48:06 -0700 (PDT)
-X-Received: by 2002:a1c:e906:: with SMTP id q6mr1327240wmc.47.1559015286157;
- Mon, 27 May 2019 20:48:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
- <834199999676fdb119f3aa1966eb1b1d1391f347.1558958381.git-series.maxime.ripard@bootlin.com>
-In-Reply-To: <834199999676fdb119f3aa1966eb1b1d1391f347.1558958381.git-series.maxime.ripard@bootlin.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Tue, 28 May 2019 11:47:56 +0800
-X-Gmail-Original-Message-ID: <CAGb2v66bYFdv6=VUeQNvugMqOzg2L0dkgFbje7OE9pQC+FN0Fg@mail.gmail.com>
-Message-ID: <CAGb2v66bYFdv6=VUeQNvugMqOzg2L0dkgFbje7OE9pQC+FN0Fg@mail.gmail.com>
-Subject: Re: [PATCH 10/10] ARM: dts: r40: Change the RTC compatible
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726885AbfE1MUc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 May 2019 08:20:32 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:45153 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726580AbfE1MUc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 May 2019 08:20:32 -0400
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 6E6FA200017;
+        Tue, 28 May 2019 12:20:26 +0000 (UTC)
+Date:   Tue, 28 May 2019 14:20:25 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 01/10] dt-bindings: rtc: Move trivial RTC over to trivial
+ devices
+Message-ID: <20190528122025.vv4oyt5cwetj2hzp@flea>
+References: <290402405a34506997fd2fab2c4c1486dbe6b7e5.1558958381.git-series.maxime.ripard@bootlin.com>
+ <20190527120626.GM3274@piout.net>
+ <20190527121832.lui2n6vhlemlqy2z@flea>
+ <20190527160657.GN3274@piout.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190527160657.GN3274@piout.net>
+User-Agent: NeoMutt/20180716
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, May 27, 2019 at 8:01 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
->
-> Unlike what's being reported in the device tree so far, the RTC in the R40
-> is quite different from the H3. Indeed it doesn't have the internal
-> oscillator output, and it has only a single interrupt. Let's add a
-> compatible for it.
->
-> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+Hi,
 
-There's a lot of unnecessary line reordering. Otherwise,
+On Mon, May 27, 2019 at 06:06:57PM +0200, Alexandre Belloni wrote:
+> On 27/05/2019 14:18:32+0200, Maxime Ripard wrote:
+> > Hi Alex,
+> >
+> > On Mon, May 27, 2019 at 02:06:26PM +0200, Alexandre Belloni wrote:
+> > > On 27/05/2019 14:00:33+0200, Maxime Ripard wrote:
+> > > > The RTC generic bindings has a bunch of devices that have a pretty simple
+> > > > binding, with just compatible, reg and optional interrupts properties.
+> > > >
+> > >
+> > > This is not true, they all also support the star-year property, this is
+> > > why they are not in the trivial-devices file anymore.
+> >
+> > Ok, I misunderstood the binding then.
+> >
+> > Should we create a separate file for the trivial RTC, on the model of
+> > the trivial-devices but supporting all the RTC properties?
+>
+> I would say that this is the way forward. Note that all the RTCs
+> support start-year but you will have to check for the other
+> properties.
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+The way this will work is that it's a two layers thing. Patch 2
+creates a generic RTC binding schema that will match on two things:
+  - Schemas including it directly,
+  - any devicetree node following the node name pattern.
+
+The point of that schema is to validate that every node (or binding),
+if it has those properties, the schemas will make sure that it's the
+proper type, (and if we would have any) ranges, etc.
+
+Then, it's up for the driver schemas to do a more on-point validation,
+with whatever constraints they have. They can choose to restrict the
+set of properties, or not to, it's really up to the device schema.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
