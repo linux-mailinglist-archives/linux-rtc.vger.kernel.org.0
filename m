@@ -2,65 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF1D2D05A
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 May 2019 22:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D722D681
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 May 2019 09:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbfE1UbO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 May 2019 16:31:14 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:43079 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727463AbfE1UbO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 May 2019 16:31:14 -0400
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 18C9720001A;
-        Tue, 28 May 2019 20:31:10 +0000 (UTC)
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2 11/11] ARM: dts: sun8i: r40: Change the RTC compatible
-Date:   Tue, 28 May 2019 22:30:41 +0200
-Message-Id: <f123c02a0458a4a90234f636b85a2ef048075794.1559075389.git-series.maxime.ripard@bootlin.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <434446bc5541d7dfe5823874355c7db8c7e213fa.1559075389.git-series.maxime.ripard@bootlin.com>
-References: <434446bc5541d7dfe5823874355c7db8c7e213fa.1559075389.git-series.maxime.ripard@bootlin.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726515AbfE2HiX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 29 May 2019 03:38:23 -0400
+Received: from mail-m972.mail.163.com ([123.126.97.2]:60186 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbfE2HiX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 29 May 2019 03:38:23 -0400
+X-Greylist: delayed 919 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 03:38:23 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=BX/qclNsTllMYtxUyN
+        znnvi5uS276rsIV4MQsuNVavs=; b=QyM70De9F0iMSyvqNNouTCOiJTuwr4OeBO
+        tRvrY6YIgMJK2lLrr1Kv1dqX+NKVLeOJCn3iKHH0bYZxNg2Dii5xxVEYcc9/rHyh
+        hbe++uFPovLA1MzgC+EIa35iVdvnpSNHi56FKlgYr4CACknYBEGWQ9rGOv/VEpxL
+        SKXKI3Aog=
+Received: from localhost.localdomain (unknown [218.106.182.173])
+        by smtp16 (Coremail) with SMTP id GtxpCgBXE7M_M+5cnbSYAA--.352S3;
+        Wed, 29 May 2019 15:22:44 +0800 (CST)
+From:   Xidong Wang <wangxidong_97@163.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Xidong Wang <wangxidong_97@163.com>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] rtc: rv3028: check return value
+Date:   Wed, 29 May 2019 15:22:20 +0800
+Message-Id: <1559114540-30878-1-git-send-email-wangxidong_97@163.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: GtxpCgBXE7M_M+5cnbSYAA--.352S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZrWUAFyUuF48ZF4DWrW7urg_yoW3GFX_Ka
+        4ayryfJa4DGF1YgwnrZr95ZryUKF40qryIvr1xKa93Aw47JFn2vas7uFZrJw1DWry8Z3yY
+        grnruryxurnxJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRZqXtUUUUU==
+X-Originating-IP: [218.106.182.173]
+X-CM-SenderInfo: pzdqw5xlgr0wrbzxqiywtou0bp/xtbBFQTD81XlgQH9kgAAs+
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Unlike what's being reported in the device tree so far, the RTC in the R40
-is quite different from the H3. Indeed it doesn't have the internal
-oscillator output, and it has only a single interrupt. Let's add a
-compatible for it.
+In rv3028_probe(), the return value of devm_regmap_init_i2c() should
+be checked before it is used.
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
-Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+Signed-off-by: Xidong Wang <wangxidong_97@163.com>
 ---
- arch/arm/boot/dts/sun8i-r40.dtsi | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/rtc/rtc-rv3028.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
-index bb856e53b806..6007d0cc252d 100644
---- a/arch/arm/boot/dts/sun8i-r40.dtsi
-+++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-@@ -318,8 +318,7 @@
- 		};
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 06884eb..29a8c4e 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -626,6 +626,10 @@ static int rv3028_probe(struct i2c_client *client)
  
- 		rtc: rtc@1c20400 {
--			compatible = "allwinner,sun8i-r40-rtc",
--				     "allwinner,sun8i-h3-rtc";
-+			compatible = "allwinner,sun8i-r40-rtc";
- 			reg = <0x01c20400 0x400>;
- 			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
- 			clock-output-names = "osc32k", "osc32k-out";
+ 	rv3028->regmap = devm_regmap_init_i2c(client, &regmap_config);
+ 
++	if (IS_ERR(rv3028->regmap)) {
++		return PTR_ERR(rv3028->regmap);
++	}
++
+ 	i2c_set_clientdata(client, rv3028);
+ 
+ 	ret = regmap_read(rv3028->regmap, RV3028_STATUS, &status);
 -- 
-git-series 0.9.1
+2.7.4
+
