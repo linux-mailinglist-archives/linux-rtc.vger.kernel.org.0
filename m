@@ -2,114 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A0835A16
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2019 12:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4073635CD3
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jun 2019 14:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727223AbfFEKD2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 5 Jun 2019 06:03:28 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:50280 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbfFEKD1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jun 2019 06:03:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=u3C13c87086hMiV9w85rPm7zIsQPWFDde0xcEZuXQO4=; b=dorjVI3a+BwPR4KW5H82UKRlg
-        Q9KqAanswJa5R2Wb689KlEmobdDfNHeCIoIrmt5I/PSgctZsHRi60Lg3gnFmHSNLPuQAliaq0R9s2
-        vaYe1Hr5IKUF5PPoEbYIxmcmqmsGkWm/Qs6VhqrIEdJ0/Z6P1uHRVEgDVNJ/doyVFZ37k=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=finisterre.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hYSkO-0008Uv-UU; Wed, 05 Jun 2019 10:02:21 +0000
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-        id 7EA0A440046; Wed,  5 Jun 2019 11:02:20 +0100 (BST)
-Date:   Wed, 5 Jun 2019 11:02:20 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
-        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-iio@vger.kernel.org,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        id S1726331AbfFEM3D (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 5 Jun 2019 08:29:03 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44119 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727486AbfFEM3D (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jun 2019 08:29:03 -0400
+Received: by mail-lf1-f66.google.com with SMTP id r15so18912520lfm.11;
+        Wed, 05 Jun 2019 05:29:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8HVlknpI+BmHQFC/piG0dRX/l8wTKMARAJ5WDZfkyic=;
+        b=Ms2rYs0QFqMMCLu3YyyLF5yBWqj+Bpee1W+md7KV21p2AXZ3bbf/lvJA+pCrBEFiyx
+         o+homoHfmpbb9DJ9fBxqDt/Ulc9PmWNmFyuW0qIHuDpT2UgePwuuSBZq9+MaaLvBaxgR
+         Vv3y97dNDm9/OG6FjLG1NFWtj9d44S8QTQaWh+Pn62HoX8yka1RznREopJOgRgS7JKwV
+         b2e73K3hfizwgYJr81tFRDM+sqrBTjiboQ05/nWM3wbRfF9jNVVlvRsyDxJZaoUkyWGt
+         3PK0mSjaoaxIAHjXSGpwzrntQya9c9s8UcIUve80+oHcBQXxOrIGuWkt2mCM+hGX/Oxj
+         n6TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8HVlknpI+BmHQFC/piG0dRX/l8wTKMARAJ5WDZfkyic=;
+        b=it7KJ5B0WmLD3wdqaDXXK6Se3Ttd7CdnKhXBzzXletbkj51oJE5EW0zehwDAULV5Oe
+         jgFnQ31YqgTkDfSymgNvygd8QR8i93DSECl6kJYZEfSl4pSRJzP0jyGm2BCnlZ3C2L8h
+         rDwNqurO91zzquVWJKe39gniimz8/L4V5ckX/eJkAz38ow6x3ugdyvxqOf5XlsTCy1wG
+         E3dFcnoiMghnLOsf6ZgZt3E0NHddHC7d9Oc80ZOPy0NKunzmypbK43H7mqd4giIPfRLc
+         6kPNKXJiWf3BuMtfcQxmW6OfeM0QOSw9bIF3DTmGF6VofTVwsMqAFSV+n1PxZwB2CIF9
+         YFvQ==
+X-Gm-Message-State: APjAAAUIcCEPEoqK5BdxlACl9G1vTJvjsWne8J95Is389Fyoj+Eklmn8
+        Z2+lxguw5JewSsFHWHq4WfM=
+X-Google-Smtp-Source: APXvYqwax0TiKlVgZKW45dW7mssIGKZdV/et3rVrkRpwCOQ/zRog6pHZ2QRxpfApp+D29cc4/5nKFw==
+X-Received: by 2002:a19:6a07:: with SMTP id u7mr16808990lfu.74.1559737741231;
+        Wed, 05 Jun 2019 05:29:01 -0700 (PDT)
+Received: from localhost.localdomain ([94.29.35.141])
+        by smtp.gmail.com with ESMTPSA id f1sm901969ljf.48.2019.06.05.05.28.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 05:29:00 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Evan Green <evgreen@chromium.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
- mfd includes
-Message-ID: <20190605100220.GN2456@sirena.org.uk>
-References: <20190604152019.16100-1-enric.balletbo@collabora.com>
- <20190604152019.16100-7-enric.balletbo@collabora.com>
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] rtc: tegra: Drop MODULE_ALIAS
+Date:   Wed,  5 Jun 2019 15:26:13 +0300
+Message-Id: <20190605122613.21303-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RnxXMyWEPIZsopkG"
-Content-Disposition: inline
-In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
-X-Cookie: The other line moves faster.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+RTC driver was converted to OF driver long time ago. The MODULE_ALIAS
+macro has no effect for the OF drivers since the alias is overridden by
+the drivers core to follow the OF naming convention of the driver's alias,
+which is based on the device-tree matching name.
 
---RnxXMyWEPIZsopkG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+$ cat /sys/devices/soc0/7000e000.rtc/modalias
+of:NrtcT(null)Cnvidia,tegra20-rtc
 
-On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
-> There is a bit of mess between cros-ec mfd includes and platform
-> includes. For example, we have a linux/mfd/cros_ec.h include that
-> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/rtc/rtc-tegra.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Acked-by: Mark Brown <broonie@kernel.org>
+diff --git a/drivers/rtc/rtc-tegra.c b/drivers/rtc/rtc-tegra.c
+index 8bbaea24926e..8fa1b3febf69 100644
+--- a/drivers/rtc/rtc-tegra.c
++++ b/drivers/rtc/rtc-tegra.c
+@@ -419,5 +419,4 @@ module_platform_driver(tegra_rtc_driver);
+ 
+ MODULE_AUTHOR("Jon Mayo <jmayo@nvidia.com>");
+ MODULE_DESCRIPTION("driver for Tegra internal RTC");
+-MODULE_ALIAS("platform:tegra_rtc");
+ MODULE_LICENSE("GPL");
+-- 
+2.21.0
 
---RnxXMyWEPIZsopkG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlz3kysACgkQJNaLcl1U
-h9BVMAf+I/I3bNW13EZ789wBAFxmn5KXFbH0t6CdJDgbILW9HMsGSKGbJXJRTRDG
-GGeIfMEYK0lv5boeQbArMfoX/kkuVYHVj/71aQVsgC53JIBFFxHS2zEfzrFzgN+R
-sNsvROQYmO1T5gOySrMN+AsqPwnu3CR2LgMPRqsvguCPduIfXzEM3afJQuRh2lAW
-a5Im4U6GQX5cez1MGDHB3/Mk8fH194coSUTUtH134gpeA5LWemALrlDCRsfdSbw2
-G2oeM++LQIDx2VcKfRKWfqvKhC1Ajp5FdiZw6Z7lo6+BXFHKSVupSjKAhtIdT4gj
-RVhPy7IzR78PM8sLvDnqD6CyTHtuXQ==
-=7p/R
------END PGP SIGNATURE-----
-
---RnxXMyWEPIZsopkG--
