@@ -2,31 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 400BB390CA
-	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jun 2019 17:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB92A39619
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jun 2019 21:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728247AbfFGPyr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 7 Jun 2019 11:54:47 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:58506 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729293AbfFGPyr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 7 Jun 2019 11:54:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1559922885; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=vxBqAc96EhZ4PSZvc1D8uQDGXjEbUQwnCFYwSOLsi0g=;
-        b=eHbx2qJx4yi3WXwd2S/9fgnqwkhFpgGCIQx8ZE7jjc+xD088BN55f7hx3cE4zREhIPqw81
-        lJj+Gh7LxLHkC4c4WfC9Cr1p3aDEtdQnTpXFDoxDz26xQWjrGzFot9MAerdTcW60kd+ols
-        BULH75jKY5N9WPgFrFWbFnTZeBnBSWA=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S1729791AbfFGTno (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 7 Jun 2019 15:43:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52850 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729482AbfFGTno (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 7 Jun 2019 15:43:44 -0400
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net [71.197.186.152])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACD9720868;
+        Fri,  7 Jun 2019 19:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559936623;
+        bh=tFAX1TrUh+zWhm4cmBHIYK3G5smuy2djcrTGV59Ksuw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0oUCfe4AFMgIqpLhsK2SHdwXSoWkt+P20/GrYCplr6QfJXa76J7i7SRSkPx2TloI3
+         epYMnraxb41OXVZvSeBI71eWnQWkNU/VlY0qfL2tTCNmFOX2EkIT+SS6RFNmF7ui3p
+         cbaYb85XTpJX3G1h3pDJN5LREahcfvbK12lP7dns=
+From:   Kevin Hilman <khilman@kernel.org>
+To:     linux-rtc@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     od@zcrc.me, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] rtc: jz4740: Make probe function __init_or_module
-Date:   Fri,  7 Jun 2019 17:54:38 +0200
-Message-Id: <20190607155438.14342-1-paul@crapouillou.net>
+Cc:     linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
+Subject: [PATCH 1/2] dt-bindings: rtc: new binding for Amlogic VRTC
+Date:   Fri,  7 Jun 2019 12:43:42 -0700
+Message-Id: <20190607194343.18359-1-khilman@kernel.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -34,28 +40,40 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This allows the probe function to be dropped after the kernel finished
-its initialization, in the case where the driver was not compiled as a
-module.
+From: Kevin Hilman <khilman@baylibre.com>
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Add binding fo the new VRTC driver for Amlogic SoCs.  The 64-bit
+family of SoCs only has an RTC managed by firmware, and this VRTC
+driver provides the simple, one-register firmware interface.
+
+Signed-off-by: Kevin Hilman <khilman@baylibre.com>
 ---
- drivers/rtc/rtc-jz4740.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/rtc/rtc-meson-vrtc.txt   | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
 
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 9e7b3a04debc..a20e7dc794dd 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -303,7 +303,7 @@ static const struct of_device_id jz4740_rtc_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, jz4740_rtc_of_match);
- 
--static int jz4740_rtc_probe(struct platform_device *pdev)
-+static int __init_or_module jz4740_rtc_probe(struct platform_device *pdev)
- {
- 	int ret;
- 	struct jz4740_rtc *rtc;
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt b/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
+new file mode 100644
+index 000000000000..f02886179788
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
+@@ -0,0 +1,16 @@
++* Amlogic Virtual RTC (VRTC)
++
++This is a Linux interface to an RTC managed by firmware, hence it's
++virtual from a Linux perspective.  The interface is 1 register where
++an alarm time is to be written.
++
++Required properties:
++- compatible: should be "amlogic,meson-vrtc"
++- reg: physical address for the alarm register
++
++Example:
++
++	vrtc: rtc@0a8 {
++		compatible = "amlogic,meson-vrtc";
++		reg = <0x0 0x000a8 0x0 0x4>;
++	};
 -- 
-2.21.0.593.g511ec345e18
+2.21.0
 
