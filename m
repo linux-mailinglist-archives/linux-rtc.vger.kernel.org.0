@@ -2,54 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C9A37123
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jun 2019 12:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BDD389E2
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jun 2019 14:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbfFFKBj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 6 Jun 2019 06:01:39 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:41359 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727846AbfFFKBj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jun 2019 06:01:39 -0400
-X-Originating-IP: 90.88.144.139
-Received: from localhost (aaubervilliers-681-1-24-139.w90-88.abo.wanadoo.fr [90.88.144.139])
+        id S1727553AbfFGMLe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 7 Jun 2019 08:11:34 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:46583 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727386AbfFGMLe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 7 Jun 2019 08:11:34 -0400
+X-Originating-IP: 92.137.69.152
+Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7E9F0240023;
-        Thu,  6 Jun 2019 10:01:33 +0000 (UTC)
-Date:   Thu, 6 Jun 2019 12:01:32 +0200
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id F2CF9FF809;
+        Fri,  7 Jun 2019 12:11:26 +0000 (UTC)
+Date:   Fri, 7 Jun 2019 14:11:26 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 01/11] dt-bindings: rtc: Add YAML schemas for the
- generic RTC bindings
-Message-ID: <20190606100132.GB5168@piout.net>
-References: <434446bc5541d7dfe5823874355c7db8c7e213fa.1559075389.git-series.maxime.ripard@bootlin.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] rtc: tegra: Drop MODULE_ALIAS
+Message-ID: <20190607121126.GG5168@piout.net>
+References: <20190605122613.21303-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <434446bc5541d7dfe5823874355c7db8c7e213fa.1559075389.git-series.maxime.ripard@bootlin.com>
+In-Reply-To: <20190605122613.21303-1-digetx@gmail.com>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/05/2019 22:30:31+0200, Maxime Ripard wrote:
-> The real time clocks have a bunch of generic properties that are needed in
-> a device tree. Add a YAML schemas for those.
+On 05/06/2019 15:26:13+0300, Dmitry Osipenko wrote:
+> RTC driver was converted to OF driver long time ago. The MODULE_ALIAS
+> macro has no effect for the OF drivers since the alias is overridden by
+> the drivers core to follow the OF naming convention of the driver's alias,
+> which is based on the device-tree matching name.
 > 
-> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+> $ cat /sys/devices/soc0/7000e000.rtc/modalias
+> of:NrtcT(null)Cnvidia,tegra20-rtc
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  Documentation/devicetree/bindings/rtc/rtc.txt  | 34 +-------------
->  Documentation/devicetree/bindings/rtc/rtc.yaml | 50 +++++++++++++++++++-
->  2 files changed, 51 insertions(+), 33 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/rtc.yaml
+>  drivers/rtc/rtc-tegra.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-Applied 1 to 6, thanks.
+Applied, thanks.
 
 -- 
 Alexandre Belloni, Bootlin
