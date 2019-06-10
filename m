@@ -2,96 +2,81 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D183D3AF5F
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 Jun 2019 09:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463223C028
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jun 2019 01:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387896AbfFJHPh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 10 Jun 2019 03:15:37 -0400
-Received: from sauhun.de ([88.99.104.3]:38844 "EHLO pokefinder.org"
+        id S2390561AbfFJXuC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 10 Jun 2019 19:50:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387541AbfFJHPg (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 10 Jun 2019 03:15:36 -0400
-Received: from localhost (p54B33062.dip0.t-ipconnect.de [84.179.48.98])
-        by pokefinder.org (Postfix) with ESMTPSA id 0E8762C077A;
-        Mon, 10 Jun 2019 09:15:33 +0200 (CEST)
-Date:   Mon, 10 Jun 2019 09:15:32 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 00/34] treewide: simplify getting the adapter of an I2C
- client
-Message-ID: <20190610071532.GB2673@kunai>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <661f1084-da4e-75f0-e632-335134932801@axentia.se>
+        id S2390570AbfFJXuC (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 10 Jun 2019 19:50:02 -0400
+Received: from gmail.com (unknown [104.132.1.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61738206C3;
+        Mon, 10 Jun 2019 23:50:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560210601;
+        bh=4Nz0ZunImL8dBRzdfxHCUv27SCmMJ3PFmP9iuPIVwkA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AhdwmqtEpo5q07BJYL9MWvgj0uN6G24vgul44K0FRdH4A3ENzeM12idqpB0F2844N
+         Ku1VagKp2qHHhKSzj/wxTsDZZfWx51ykw0W15EvOlZVxJ/18U29EHtRmyWc9JjJJsZ
+         DtnJU99ubBhXuBAwhFaZB7jM96h1adlZ3rUezWbw=
+Date:   Mon, 10 Jun 2019 16:49:59 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiwei Sun <jiwei.sun@windriver.com>, linux-rtc@vger.kernel.org
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+08116743f8ad6f9a6de7@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: [rtc] Re: BUG: workqueue lockup (4)
+Message-ID: <20190610234959.GB220379@gmail.com>
+References: <0000000000005764090577a27486@google.com>
+ <CACT4Y+ZAoLro6LHhaA2EuWF1nAWAA=NAVtpMammhspL4V2aMgw@mail.gmail.com>
+ <20181007193918.GC32272@piout.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5/uDoXvLw7AC5HRs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <661f1084-da4e-75f0-e632-335134932801@axentia.se>
+In-Reply-To: <20181007193918.GC32272@piout.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Sun, Oct 07, 2018 at 09:39:18PM +0200, Alexandre Belloni wrote:
+> Hi,
+> 
+> On 07/10/2018 14:18:31+0200, Dmitry Vyukov wrote:
+> > On Sun, Oct 7, 2018 at 2:15 PM, syzbot
+> > <syzbot+08116743f8ad6f9a6de7@syzkaller.appspotmail.com> wrote:
+> > > Hello,
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    c1d84a1b42ef Merge git://git.kernel.org/pub/scm/linux/kern..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14c5f491400000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=c0af03fe452b65fb
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=08116743f8ad6f9a6de7
+> > > compiler:       gcc (GCC) 8.0.1 20180413 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14514a6e400000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1025ebb9400000
+> > 
+> > The reproducer seems to be all about rtc. So +rtc maintainers.
+> > 
+> 
+> It seems to be that bug:
+> http://patchwork.ozlabs.org/patch/898552/
+> 
+> I'm pretty sure the fix is not correct though and didn't have the time
+> to work on a proper fix.
+> 
 
---5/uDoXvLw7AC5HRs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Is there any plan to actually fix this?  Because this bug is still open, syzbot
+isn't able to report "workqueue lockup" bugs elsewhere in the kernel.
 
-Hi Peter,
-
-> Similar things go on in:
->=20
-> drivers/hwmon/lm90.c
-> drivers/leds/leds-is31fl319x.c
-> drivers/of/unittest.c
-
-Right. I'll fix them, too.
-
-> And drivers/rtc/rtc-fm3130.c has a couple of these:
-
-These are fixed in patch 26 of this series.
-
-Thanks and happy hacking,
-
-   Wolfram
-
---5/uDoXvLw7AC5HRs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlz+A5QACgkQFA3kzBSg
-KbYJ9A/8DYTbi6b0TbOp28F+nJSr8CHl41QgvGx/BuNEd1CKh7IiZjPg9sa3l14s
-3zzM5PQhqmR0ff/VzdUS7LJpAK6+ZN6NK8PqxZdgo0Zfm1TgJpYnwdlcEhASGDqQ
-5ttT6o7v/At/zuq8Oa1jL4DMyD3oFS2iXzhq3jydOemRGShD0REUpYVhSPdIBunD
-L+pNcqvwzGZmHgbwT50Flj7+tO1UB2Y9a8Q2KNKdbT1OXO+4yBgz5sJNT4nhCPQB
-2NSaYzPRXpVyzceBHQrT2RbYfR/LjaprvcZNg81cK3oa6mpSTbF7XAMOzMqRFmJj
-MMHHDJYejycQ8vBVCS5y2tpsgmZSocn/6oZDHntMJ0+ytyXxaxcibnYERDGc4SZC
-GaLHEF90ULPzLT/Ar0aD3jWM0q6mn3wgj3OZOmtXZnkinENc2zKqlk5a7K8KcJVP
-2hEqnYC3XjMKX3QcgOxMduau0A71LN2w6eUOa4C4InE/flgR9gcVQ14ll6Gmsi29
-OyasroZ/QMwCatiqo8r71RTo/9GVoum+g9myGBPalukTaicXIZIwu6cli7Ne94Cm
-+nKmaL/VtYvEhh0MpjsVM3LYBa0mtlim419eCoys2ZEHrGyJiSypq+jDLxmJbl/0
-Xt5XhDpZiUMxj+7YmzLVJ8LfoVvxJrQlNk7WO8VtlG3BO7s8rOI=
-=VRPd
------END PGP SIGNATURE-----
-
---5/uDoXvLw7AC5HRs--
+- Eric
