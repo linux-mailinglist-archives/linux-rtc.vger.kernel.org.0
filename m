@@ -2,100 +2,136 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C913C98A
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jun 2019 12:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1DA3D39C
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jun 2019 19:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728922AbfFKK6E (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 11 Jun 2019 06:58:04 -0400
-Received: from mail-eopbgr80070.outbound.protection.outlook.com ([40.107.8.70]:46080
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727278AbfFKK6E (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 11 Jun 2019 06:58:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VSDTy66G3v9zXZ6MIH4p2ote4fKdEljdOE+bpd94pZY=;
- b=df5CtJzIl7QExnky3ueRbPONOlLxlEe61GxfqwNjOdKJYFm48zUHTfyA6THUQglqoplCrqbz2vRxlnSeql3vk784JkXE/qVgzeXAor1nRXEmwM6QNHLfoppFW36wpKIqnWWwJbXtsZVw+Qd8CnGXj9OGN90JKPydamAwgYOr8Cg=
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
- AM0PR04MB6625.eurprd04.prod.outlook.com (20.179.255.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.22; Tue, 11 Jun 2019 10:57:59 +0000
-Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::11e1:3bb9:156b:a3e4]) by AM0PR04MB4211.eurprd04.prod.outlook.com
- ([fe80::11e1:3bb9:156b:a3e4%3]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
- 10:57:59 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH 3/3] arm64: dts: imx8qxp: Add fallback compatible string
- for RTC node
-Thread-Topic: [PATCH 3/3] arm64: dts: imx8qxp: Add fallback compatible string
- for RTC node
-Thread-Index: AQHVIB9gtY/LBADX+EeGM2wZ4BhEnaaWSKzw
-Date:   Tue, 11 Jun 2019 10:57:59 +0000
-Message-ID: <AM0PR04MB4211187F459859CB3F483C7D80ED0@AM0PR04MB4211.eurprd04.prod.outlook.com>
-References: <20190611063333.48501-1-Anson.Huang@nxp.com>
- <20190611063333.48501-3-Anson.Huang@nxp.com>
-In-Reply-To: <20190611063333.48501-3-Anson.Huang@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=aisheng.dong@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a9013890-5f7d-4e04-4ffd-08d6ee5bab14
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB6625;
-x-ms-traffictypediagnostic: AM0PR04MB6625:
-x-microsoft-antispam-prvs: <AM0PR04MB6625EEBB541EBA24638B3A1480ED0@AM0PR04MB6625.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1148;
-x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(39860400002)(376002)(136003)(396003)(189003)(199004)(76116006)(71200400001)(6246003)(73956011)(81156014)(7736002)(66946007)(66066001)(486006)(316002)(26005)(68736007)(476003)(2501003)(110136005)(33656002)(44832011)(14454004)(53936002)(229853002)(74316002)(55016002)(186003)(81166006)(6436002)(8676002)(102836004)(2906002)(76176011)(6116002)(5660300002)(7696005)(2201001)(305945005)(66556008)(66446008)(66476007)(71190400001)(52536014)(25786009)(7416002)(8936002)(4744005)(3846002)(9686003)(11346002)(4326008)(64756008)(99286004)(86362001)(6506007)(478600001)(256004)(446003)(921003)(32563001)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6625;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: mIVrt8s9zWRsUJJdDiDCFFczh0Wn1Wtjno3muFwnuFEYKzb0esT4DloAuOYFpw3u0RFY+2FJuCCp2VHPoGURuukI76R/KNpeD0GRNNF0nzOFW+CAqc5bFkxk56dvpbvCgD+o20+ec1XkfI9YOa0PHWQbdayBcrlcLmz16ngSbzz2DmpNSbWueF2+3NYDArZtjoCScEeF+40X+OqEq4a7Oi8/3vYbZtR5UF9Y/lX4cqaNeTyaWKDFf7D6WxhItQ1acd6Wl667oHjwn5ff5J7BOvhTjKcBemw4TLlHZNk/f2Pb0jsPgREqT+o1HBUax4Jb0DECfAbAS11H4sCeHvtyzs4/qwpDztBLX3NC6uoRhBUW6HjLoZ8/wKyaSnhGRFeyoD6OrKC8I6y74oEphQzaLGzipLZT1hEXhitA6rGA4AA=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2405891AbfFKRKf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 11 Jun 2019 13:10:35 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:44591 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389356AbfFKRKe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 Jun 2019 13:10:34 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t16so7808092pfe.11;
+        Tue, 11 Jun 2019 10:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
+        b=m6uDPrf0xbKxHOBxlYlJgBJluDseTqpUrZe+FhasYzB64ReBzKMIdV5XGEhIGV9N+T
+         GciSYgvch7xUNYa81gxMPnMByXHKgU/Oyv2MWE9wocowq9z8bHYJcScjGr0PcGcTVy4I
+         lGX1/Dn9Pq/uG79uFh2Z+2aImHK6qBLTTR6lwi3S0LODaisIL34fRlEQ9XyAQWRucmCq
+         gxSvkYh0kzEMswZuMDBdN9iubeyxHBLfT0gAiB/xF3+YWiYhw8eQQakd8aQ1mSs0vc7O
+         SCjhUKvcmVw0/pQC222MOMCTzDBLJNwhJoJ9HST5soGEe0+2ih1NjRliyjzmVz3qsaNq
+         dc2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QfcRtoONgWVTwtnQoP4rlwBElT3so0FbJIuhPmULhig=;
+        b=oFvjPrHxfAuJsU6BvBEklWdbMtcEUe+Zv+JGE4+CO5RhAqBAA6npe3KRMwBv+q+Naa
+         Aq24fmJHpcfw0+nxE3VOPdTv/JFvkL/QQiUwmEPI/224lsVercjHWrIhnOZS71KGTl9y
+         m3sUWujZn3c01XPr/1B6pgLf/1s85DG3poEYdhgHdNLm/Q/bJEn7DGNG7eCqT9/4yqLj
+         ZguVZBl68BXFvHtERW3F+XS0OBFEtY6G6/CnTOmC2tPNptBowpZ0ltOHLsbbAP+FJuPq
+         wUdHb1E74Vz0RNRsCfkO6pJUQc9dh5D7rxUIdYvnHQHgNxXwTtzIMZdcXd7eMpNgXxY5
+         eTSw==
+X-Gm-Message-State: APjAAAXojb2UGebfQEybAbsrgmnACc5UQWOIF6KdjMhto9mmM9lP3U+s
+        f0cGRF2lzoNyf4noVY3CCh0=
+X-Google-Smtp-Source: APXvYqwMksWM0B/q19Q0jWzNmvs/opGNhXpundemVkKe3ekBw/AhIEcAanhmfVC6alp8iLNfynW0+g==
+X-Received: by 2002:a63:eb0a:: with SMTP id t10mr19060142pgh.99.1560273033558;
+        Tue, 11 Jun 2019 10:10:33 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id p15sm16391934pgj.61.2019.06.11.10.10.31
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 10:10:32 -0700 (PDT)
+Date:   Tue, 11 Jun 2019 10:10:30 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, gwendal@chromium.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Lee Jones <lee.jones@linaro.org>, kernel@collabora.com,
+        dtor@chromium.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        alsa-devel@alsa-project.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-iio@vger.kernel.org,
+        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        linux-input@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-media@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-pm@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Evan Green <evgreen@chromium.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Mark Brown <broonie@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [PATCH 06/10] mfd / platform: cros_ec: Reorganize platform and
+ mfd includes
+Message-ID: <20190611171030.GC143729@dtor-ws>
+References: <20190604152019.16100-1-enric.balletbo@collabora.com>
+ <20190604152019.16100-7-enric.balletbo@collabora.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9013890-5f7d-4e04-4ffd-08d6ee5bab14
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 10:57:59.8154
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aisheng.dong@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6625
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190604152019.16100-7-enric.balletbo@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-PiBGcm9tOiBBbnNvbi5IdWFuZ0BueHAuY29tIFttYWlsdG86QW5zb24uSHVhbmdAbnhwLmNvbV0N
-Cj4gU2VudDogVHVlc2RheSwgSnVuZSAxMSwgMjAxOSAyOjM0IFBNDQo+IA0KPiBUaGUgaS5NWCBz
-eXN0ZW0gY29udHJvbGxlciBSVEMgZHJpdmVyIHVzZXMgZ2VuZXJpYyBjb21wYXRpYmxlIHN0cmlu
-ZyB0bw0KPiBzdXBwb3J0IGFsbCBpLk1YIFNvQ3Mgd2l0aCBzeXN0ZW0gY29udHJvbGxlciBpbnNp
-ZGUsIHRoaXMgcGF0Y2ggYWRkcyB0aGUgZ2VuZXJpYw0KPiBzeXN0ZW0gY29udHJvbGxlciBSVEMg
-Y29tcGF0aWJsZSBzdHJpbmcgYXMgZmFsbGJhY2sgY29tcGF0aWJsZSBzdHJpbmcNCj4gYWNjb3Jk
-aW5nbHkuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhw
-LmNvbT4NCg0KUmV2aWV3ZWQtYnk6IERvbmcgQWlzaGVuZyA8YWlzaGVuZy5kb25nQG54cC5jb20+
-DQoNClJlZ2FyZHMNCkRvbmcgQWlzaGVuZw0K
+On Tue, Jun 04, 2019 at 05:20:15PM +0200, Enric Balletbo i Serra wrote:
+> There is a bit of mess between cros-ec mfd includes and platform
+> includes. For example, we have a linux/mfd/cros_ec.h include that
+> exports the interface implemented in platform/chrome/cros_ec_proto.c. Or
+> we have a linux/mfd/cros_ec_commands.h file that is non related to the
+> multifunction device (in the sense that is not exporting any function of
+> the mfd device). This causes crossed includes between mfd and
+> platform/chrome subsystems and makes the code difficult to read, apart
+> from creating 'curious' situations where a platform/chrome driver includes
+> a linux/mfd/cros_ec.h file just to get the exported functions that are
+> implemented in another platform/chrome driver.
+> 
+> In order to have a better separation on what the cros-ec multifunction
+> driver does and what the cros-ec core provides move and rework the
+> affected includes doing:
+> 
+>  - Move cros_ec_commands.h to include/linux/platform_data/cros_ec_commands.h
+>  - Get rid of the parts that are implemented in the platform/chrome/cros_ec_proto.c
+>    driver from include/linux/mfd/cros_ec.h to a new file
+>    include/linux/platform_data/cros_ec_proto.h
+>  - Update all the drivers with the new includes, so
+>    - Drivers that only need to know about the protocol include
+>      - linux/platform_data/cros_ec_proto.h
+>      - linux/platform_data/cros_ec_commands.h
+>    - Drivers that need to know about the cros-ec mfd device also include
+>      - linux/mfd/cros_ec.h
+> 
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
+
+Thanks.
+
+-- 
+Dmitry
