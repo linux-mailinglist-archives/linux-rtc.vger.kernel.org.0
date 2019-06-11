@@ -2,24 +2,24 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD21C3C44B
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jun 2019 08:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BBD3C44C
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jun 2019 08:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403903AbfFKGb6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S2403855AbfFKGb6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Tue, 11 Jun 2019 02:31:58 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:42684 "EHLO inva020.nxp.com"
+Received: from inva021.nxp.com ([92.121.34.21]:44710 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403762AbfFKGb6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        id S2403759AbfFKGb6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
         Tue, 11 Jun 2019 02:31:58 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9AB9F1A0A14;
-        Tue, 11 Jun 2019 08:31:54 +0200 (CEST)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3AD20200210;
+        Tue, 11 Jun 2019 08:31:56 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 5F68F1A0A06;
-        Tue, 11 Jun 2019 08:31:47 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id F3F7C200033;
+        Tue, 11 Jun 2019 08:31:48 +0200 (CEST)
 Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4A3A5402D2;
-        Tue, 11 Jun 2019 14:31:38 +0800 (SGT)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id D4E91402CA;
+        Tue, 11 Jun 2019 14:31:39 +0800 (SGT)
 From:   Anson.Huang@nxp.com
 To:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
@@ -29,10 +29,12 @@ To:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rtc@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-Subject: [PATCH 1/3] dt-bindings: fsl: scu: Update RTC compatible string
-Date:   Tue, 11 Jun 2019 14:33:31 +0800
-Message-Id: <20190611063333.48501-1-Anson.Huang@nxp.com>
+Subject: [PATCH 2/3] rtc: imx-sc: Make compatible string more generic
+Date:   Tue, 11 Jun 2019 14:33:32 +0800
+Message-Id: <20190611063333.48501-2-Anson.Huang@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190611063333.48501-1-Anson.Huang@nxp.com>
+References: <20190611063333.48501-1-Anson.Huang@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -41,43 +43,29 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Anson Huang <Anson.Huang@nxp.com>
 
-Update RTC compatible string to make system controller RTC
-driver more generic for all i.MX SoCs with system controller
-inside.
+i.MX system controller RTC driver can support all i.MX SoCs
+with system controller inside, this patch makes the compatible
+string more generic to support other i.MX SoCs with system
+controller inside, such as i.MX8QM etc..
 
 Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
-This patch should be based on below patch which is already picked by
-watchdog maintainer:
-https://patchwork.kernel.org/patch/10962183/
----
- Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-imx-sc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-index fc3844e..7ca20a1 100644
---- a/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-+++ b/Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
-@@ -131,7 +131,9 @@ RTC bindings based on SCU Message Protocol
- ------------------------------------------------------------
+diff --git a/drivers/rtc/rtc-imx-sc.c b/drivers/rtc/rtc-imx-sc.c
+index c933045..38ef3ca 100644
+--- a/drivers/rtc/rtc-imx-sc.c
++++ b/drivers/rtc/rtc-imx-sc.c
+@@ -178,7 +178,7 @@ static int imx_sc_rtc_probe(struct platform_device *pdev)
+ }
  
- Required properties:
--- compatible: should be "fsl,imx8qxp-sc-rtc";
-+- compatible: should be:
-+              "fsl,imx8qxp-sc-rtc"
-+              followed by "fsl,imx-sc-rtc";
- 
- OCOTP bindings based on SCU Message Protocol
- ------------------------------------------------------------
-@@ -226,7 +228,7 @@ firmware {
- 		};
- 
- 		rtc: rtc {
--			compatible = "fsl,imx8qxp-sc-rtc";
-+			compatible = "fsl,imx8qxp-sc-rtc", "fsl,imx-sc-rtc";
- 		};
- 
- 		watchdog {
+ static const struct of_device_id imx_sc_dt_ids[] = {
+-	{ .compatible = "fsl,imx8qxp-sc-rtc", },
++	{ .compatible = "fsl,imx-sc-rtc", },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, imx_sc_dt_ids);
 -- 
 2.7.4
 
