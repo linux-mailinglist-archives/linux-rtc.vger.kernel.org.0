@@ -2,177 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C93DF452B3
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jun 2019 05:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E80F45ADC
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jun 2019 12:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfFNDUG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 13 Jun 2019 23:20:06 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:34690 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFNDUF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Jun 2019 23:20:05 -0400
-Received: from tony.xie?rock-chips.com (unknown [192.168.167.152])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 28D7C54DEB;
-        Fri, 14 Jun 2019 11:17:43 +0800 (CST)
-X-263anti-spam: KSV:0;BIG:0;
-X-MAIL-GRAY: 1
-X-MAIL-DELIVERY: 0
-X-KSVirus-check: 0
-X-ADDR-CHECKED4: 1
-X-ABS-CHECKED: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P20303T139952891324160S1560482259794024_;
-        Fri, 14 Jun 2019 11:17:41 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <253e62f960b9431d8ca182157cc282f4>
-X-RL-SENDER: tony.xie@rock-chips.com
-X-SENDER: xxx@rock-chips.com
-X-LOGIN-NAME: tony.xie@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-From:   Tony Xie <tony.xie@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     broonie@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chenjh@rock-chips.com,
-        xsf@rock-chips.com, zhangqing@rock-chips.com,
-        huangtao@rock-chips.com, tony.xie@rock-chips.com
-Subject: [PATCH v9 6/6] clk: RK808: add RK809 and RK817 support.
-Date:   Thu, 13 Jun 2019 23:17:38 -0400
-Message-Id: <20190614031738.15909-1-tony.xie@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190614031425.15741-1-tony.xie@rock-chips.com>
-References: <20190614031425.15741-1-tony.xie@rock-chips.com>
+        id S1727054AbfFNKrv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Jun 2019 06:47:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:34804 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfFNKrv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Jun 2019 06:47:51 -0400
+Received: by mail-wr1-f65.google.com with SMTP id k11so2035587wrl.1;
+        Fri, 14 Jun 2019 03:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4kJkce9QnAQ2uiZZ7WIZ0dOp6754sfSUCWC444c4ZX8=;
+        b=s9ovk65wR09SMBZkhl/aHPmD0VGxq9BjXa3YN4IvlDonT4j9AB7svsn6ssnuk6dH1T
+         uMIOmzknk7peaKjVah/JWlQDQ7+bnOB9wrBprU9Gc8JatXJmt+xN3s5DqK0YMXSTe4bz
+         GOBDgEy0kNT9tpCVmuEtPoP4WVEvkYRu1rCIK9bBFxpL8zmpgA0FBSWgGL6w6Adyb0+R
+         EorvOb6sQQe3vZN4F4dUBooR1/u7Ju8Mc/pz+Moh42fFOfzYjdchxky+ah1NK/n5A0O0
+         395ikpdlWJUfhvGgMti0G7wofKKqQNqvfUNyDtgxrHT3mCS9IVznIGM/4pybFGKX/oBj
+         aVgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4kJkce9QnAQ2uiZZ7WIZ0dOp6754sfSUCWC444c4ZX8=;
+        b=t5LoMTyBQAZkuvEtLX+DlBTQIA6W/Xo9CaGEjN2o0QmqGruy4ZZSlcXS+9Z0xKZ2H6
+         dUFpHRMk03wlAtg/mAtrfUaXdR9rx0Tqa1XDY+DVycQ7eYqemJWA9Z2/vmxF0nVHRuTO
+         pkRmOI8eBCOQE6OKCOC2uvEm9Jrwpr9wN3OrYWUd/35zeCu2/Nz/Rcc5PHHSFsCc3i6O
+         PrM47zstrVii1KEIW/BubgWcEbE+wNm2Ilrk/0+Iq+FUZohaA72XLboFZSw4n4YyExTi
+         h0k5fWMAJk+8h8RNmZC9HtO7LGo0CoWmoMzj0qyuNvhURpRiVtN0p1p0hbLHqKeUVner
+         Khlw==
+X-Gm-Message-State: APjAAAVLKhgjla2Ht6ViAhrkN9LYwHQTSdT/FC3lWSu6IM8u7ixk2t93
+        VmBjc2/g+l3ZsE0I4ww4xO4=
+X-Google-Smtp-Source: APXvYqxyE04Ux17OdI3cnfl25wz19B8Y9lVATZFL7+lepI3B7xi5/of6zkce+HAIRMo57HhBintKcA==
+X-Received: by 2002:adf:cf0a:: with SMTP id o10mr1009433wrj.37.1560509269308;
+        Fri, 14 Jun 2019 03:47:49 -0700 (PDT)
+Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
+        by smtp.gmail.com with ESMTPSA id y17sm5200554wrg.18.2019.06.14.03.47.48
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 14 Jun 2019 03:47:48 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] clocksource: tegra: Use rating when registering clock source
+Date:   Fri, 14 Jun 2019 12:47:46 +0200
+Message-Id: <20190614104747.19712-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-RK809 and RK817 are power management IC chips for multimedia products.
-most of their functions and registers are same, including the clkout
-funciton.
+From: Thierry Reding <treding@nvidia.com>
 
-Signed-off-by: Tony Xie <tony.xie@rock-chips.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+The rating is parameterized depending on SoC generation to make sure it
+takes precedence on implementations where the architected timer can't be
+used. This rating is already used for the clock event device. Use the
+same rating for the clock source to be consistent.
+
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/clk/Kconfig     |  9 +++---
- drivers/clk/clk-rk808.c | 64 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 67 insertions(+), 6 deletions(-)
+ drivers/clocksource/timer-tegra.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index e5b2fe80eab4..532ab112fa8a 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -52,13 +52,12 @@ config COMMON_CLK_MAX9485
- 	  This driver supports Maxim 9485 Programmable Audio Clock Generator
+diff --git a/drivers/clocksource/timer-tegra.c b/drivers/clocksource/timer-tegra.c
+index f6a8eb0d7322..e6608141cccb 100644
+--- a/drivers/clocksource/timer-tegra.c
++++ b/drivers/clocksource/timer-tegra.c
+@@ -318,7 +318,7 @@ static int __init tegra_init_timer(struct device_node *np, bool tegra20,
+ 	sched_clock_register(tegra_read_sched_clock, 32, TIMER_1MHz);
  
- config COMMON_CLK_RK808
--	tristate "Clock driver for RK805/RK808/RK818"
-+	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
- 	depends on MFD_RK808
- 	---help---
--	  This driver supports RK805, RK808 and RK818 crystal oscillator clock. These
--	  multi-function devices have two fixed-rate oscillators,
--	  clocked at 32KHz each. Clkout1 is always on, Clkout2 can off
--	  by control register.
-+	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
-+	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
-+	  Clkout1 is always on, Clkout2 can off by control register.
- 
- config COMMON_CLK_HI655X
- 	tristate "Clock driver for Hi655x" if EXPERT
-diff --git a/drivers/clk/clk-rk808.c b/drivers/clk/clk-rk808.c
-index 8d90bdf5b946..75f2cf0dfc9f 100644
---- a/drivers/clk/clk-rk808.c
-+++ b/drivers/clk/clk-rk808.c
-@@ -96,6 +96,68 @@ of_clk_rk808_get(struct of_phandle_args *clkspec, void *data)
- 	return idx ? &rk808_clkout->clkout2_hw : &rk808_clkout->clkout1_hw;
- }
- 
-+static int rk817_clkout2_enable(struct clk_hw *hw, bool enable)
-+{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+
-+	return regmap_update_bits(rk808->regmap, RK817_SYS_CFG(1),
-+				  RK817_CLK32KOUT2_EN,
-+				  enable ? RK817_CLK32KOUT2_EN : 0);
-+}
-+
-+static int rk817_clkout2_prepare(struct clk_hw *hw)
-+{
-+	return rk817_clkout2_enable(hw, true);
-+}
-+
-+static void rk817_clkout2_unprepare(struct clk_hw *hw)
-+{
-+	rk817_clkout2_enable(hw, false);
-+}
-+
-+static int rk817_clkout2_is_prepared(struct clk_hw *hw)
-+{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+	unsigned int val;
-+
-+	int ret = regmap_read(rk808->regmap, RK817_SYS_CFG(1), &val);
-+
-+	if (ret < 0)
-+		return 0;
-+
-+	return (val & RK817_CLK32KOUT2_EN) ? 1 : 0;
-+}
-+
-+static const struct clk_ops rk817_clkout2_ops = {
-+	.prepare = rk817_clkout2_prepare,
-+	.unprepare = rk817_clkout2_unprepare,
-+	.is_prepared = rk817_clkout2_is_prepared,
-+	.recalc_rate = rk808_clkout_recalc_rate,
-+};
-+
-+static const struct clk_ops *rkpmic_get_ops(long variant)
-+{
-+	switch (variant) {
-+	case RK809_ID:
-+	case RK817_ID:
-+		return &rk817_clkout2_ops;
-+	/*
-+	 * For the default case, it match the following PMIC type.
-+	 * RK805_ID
-+	 * RK808_ID
-+	 * RK818_ID
-+	 */
-+	default:
-+		return &rk808_clkout2_ops;
-+	}
-+}
-+
- static int rk808_clkout_probe(struct platform_device *pdev)
- {
- 	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
-@@ -127,7 +189,7 @@ static int rk808_clkout_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	init.name = "rk808-clkout2";
--	init.ops = &rk808_clkout2_ops;
-+	init.ops = rkpmic_get_ops(rk808->variant);
- 	rk808_clkout->clkout2_hw.init = &init;
- 
- 	/* optional override of the clockname */
+ 	ret = clocksource_mmio_init(timer_reg_base + TIMERUS_CNTR_1US,
+-				    "timer_us", TIMER_1MHz, 300, 32,
++				    "timer_us", TIMER_1MHz, rating, 32,
+ 				    clocksource_mmio_readl_up);
+ 	if (ret)
+ 		pr_err("failed to register clocksource: %d\n", ret);
 -- 
-2.17.1
-
-
+2.21.0
 
