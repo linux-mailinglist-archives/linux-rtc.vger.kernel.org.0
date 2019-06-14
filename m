@@ -2,48 +2,48 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E80F45ADC
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jun 2019 12:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769F145AE0
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jun 2019 12:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbfFNKrv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 14 Jun 2019 06:47:51 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34804 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfFNKrv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Jun 2019 06:47:51 -0400
-Received: by mail-wr1-f65.google.com with SMTP id k11so2035587wrl.1;
-        Fri, 14 Jun 2019 03:47:50 -0700 (PDT)
+        id S1726767AbfFNKrx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Jun 2019 06:47:53 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37645 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfFNKrw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Jun 2019 06:47:52 -0400
+Received: by mail-wr1-f68.google.com with SMTP id v14so2019888wrr.4;
+        Fri, 14 Jun 2019 03:47:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4kJkce9QnAQ2uiZZ7WIZ0dOp6754sfSUCWC444c4ZX8=;
-        b=s9ovk65wR09SMBZkhl/aHPmD0VGxq9BjXa3YN4IvlDonT4j9AB7svsn6ssnuk6dH1T
-         uMIOmzknk7peaKjVah/JWlQDQ7+bnOB9wrBprU9Gc8JatXJmt+xN3s5DqK0YMXSTe4bz
-         GOBDgEy0kNT9tpCVmuEtPoP4WVEvkYRu1rCIK9bBFxpL8zmpgA0FBSWgGL6w6Adyb0+R
-         EorvOb6sQQe3vZN4F4dUBooR1/u7Ju8Mc/pz+Moh42fFOfzYjdchxky+ah1NK/n5A0O0
-         395ikpdlWJUfhvGgMti0G7wofKKqQNqvfUNyDtgxrHT3mCS9IVznIGM/4pybFGKX/oBj
-         aVgQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ooBSZFxnR/dPszzxCle1YHB8FtLq/QjO6NDm1BiMKMA=;
+        b=Zi3iP8QgPhFS+d20VAcHgPZje4xCDSoj4ulL3j6zP7udO3rmgY9nuQaiTybf+0j+k7
+         nUaKP3b0XdOjClrC6233gAlczWV55HyU9oelRSIcWMuIsAHN891moqcV6uLq3QI0mhov
+         SslNsSvfUOanCNVrS5b60TAunrLyWj2ZvDZ52LLS1U2NSatwb9kO3sXZOR5CRmD7FHy/
+         vT+bkVC+4QkkEsSdqnNNFok4d9NLH3h3zEBBRHG7W3RFQC+2azkODoZ03VkMiIvyCwRM
+         DTYp3lNScrZezb3zrkDVS0/fYEHjqn5XLAmxsqCjQkpWmgUEDOp4yj2xIUjEYhCBQpF8
+         ZuzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4kJkce9QnAQ2uiZZ7WIZ0dOp6754sfSUCWC444c4ZX8=;
-        b=t5LoMTyBQAZkuvEtLX+DlBTQIA6W/Xo9CaGEjN2o0QmqGruy4ZZSlcXS+9Z0xKZ2H6
-         dUFpHRMk03wlAtg/mAtrfUaXdR9rx0Tqa1XDY+DVycQ7eYqemJWA9Z2/vmxF0nVHRuTO
-         pkRmOI8eBCOQE6OKCOC2uvEm9Jrwpr9wN3OrYWUd/35zeCu2/Nz/Rcc5PHHSFsCc3i6O
-         PrM47zstrVii1KEIW/BubgWcEbE+wNm2Ilrk/0+Iq+FUZohaA72XLboFZSw4n4YyExTi
-         h0k5fWMAJk+8h8RNmZC9HtO7LGo0CoWmoMzj0qyuNvhURpRiVtN0p1p0hbLHqKeUVner
-         Khlw==
-X-Gm-Message-State: APjAAAVLKhgjla2Ht6ViAhrkN9LYwHQTSdT/FC3lWSu6IM8u7ixk2t93
-        VmBjc2/g+l3ZsE0I4ww4xO4=
-X-Google-Smtp-Source: APXvYqxyE04Ux17OdI3cnfl25wz19B8Y9lVATZFL7+lepI3B7xi5/of6zkce+HAIRMo57HhBintKcA==
-X-Received: by 2002:adf:cf0a:: with SMTP id o10mr1009433wrj.37.1560509269308;
-        Fri, 14 Jun 2019 03:47:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ooBSZFxnR/dPszzxCle1YHB8FtLq/QjO6NDm1BiMKMA=;
+        b=jz4XQ+u/jK8Hu6f/D3p8Uviu1VVzOI8HX3jQdXaRKPZZw2gGFlNCDSSglMuqU/+2+2
+         Js3j+ZAh+hEuqsPli2Fn8UyV6hAt899xCHiC8QOn7MmADChTQ9YscU3Ieno0gY7SynQF
+         zPhi/Btj2rMB196Uq0NnADh0JaoceQikqKfOiLDVglbsEHiCt/qYodBs5WNAKqAepFYR
+         rCXyvEPRCjSawfSdYLP9jVHYe4W7jI98njbyDKN39qave6pn8H+x7e3q0fGvfrETbLup
+         SfGJoCXjsJmAUpvNVYFR5PUgWJkKKrfkVkD94VPGasXhNm3JEMR016nRLjlns+PEFqLU
+         bhlw==
+X-Gm-Message-State: APjAAAVx22kHjTAtQN27x+q9ttthLRNgYsTadp43oXQckvzQhKmSv5sV
+        65m1okrdK8GkKdZ7H70RmwM=
+X-Google-Smtp-Source: APXvYqwY69ItL8/qEMLnYgZGPysaKgns2sbuPFe6dWMv8TZiqIdVRAF5PrZNCGjdD/8/+1NL0H7Yiw==
+X-Received: by 2002:adf:fdc2:: with SMTP id i2mr14243116wrs.146.1560509270754;
+        Fri, 14 Jun 2019 03:47:50 -0700 (PDT)
 Received: from localhost (p2E5BEF36.dip0.t-ipconnect.de. [46.91.239.54])
-        by smtp.gmail.com with ESMTPSA id y17sm5200554wrg.18.2019.06.14.03.47.48
+        by smtp.gmail.com with ESMTPSA id 11sm3223157wmd.23.2019.06.14.03.47.50
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 14 Jun 2019 03:47:48 -0700 (PDT)
+        Fri, 14 Jun 2019 03:47:50 -0700 (PDT)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,10 +53,12 @@ Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
         Dmitry Osipenko <digetx@gmail.com>,
         linux-tegra@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] clocksource: tegra: Use rating when registering clock source
-Date:   Fri, 14 Jun 2019 12:47:46 +0200
-Message-Id: <20190614104747.19712-1-thierry.reding@gmail.com>
+Subject: [PATCH 2/2] rtc: tegra: Implement suspend clock source
+Date:   Fri, 14 Jun 2019 12:47:47 +0200
+Message-Id: <20190614104747.19712-2-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190614104747.19712-1-thierry.reding@gmail.com>
+References: <20190614104747.19712-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -66,29 +68,168 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-The rating is parameterized depending on SoC generation to make sure it
-takes precedence on implementations where the architected timer can't be
-used. This rating is already used for the clock event device. Use the
-same rating for the clock source to be consistent.
+The suspend clock source for Tegra210 and earlier is currently
+implemented in the Tegra timer driver. However, the suspend clock source
+code accesses registers that are part of the RTC hardware block, so both
+can step on each others' toes. In practice this isn't an issue, but
+there is no reason why the RTC driver can't implement the clock source,
+so move the code over to the tegra-rtc driver.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/clocksource/timer-tegra.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clocksource/timer-tegra.c | 44 -------------------------------
+ drivers/rtc/rtc-tegra.c           | 42 +++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+), 44 deletions(-)
 
 diff --git a/drivers/clocksource/timer-tegra.c b/drivers/clocksource/timer-tegra.c
-index f6a8eb0d7322..e6608141cccb 100644
+index e6608141cccb..87eac618924d 100644
 --- a/drivers/clocksource/timer-tegra.c
 +++ b/drivers/clocksource/timer-tegra.c
-@@ -318,7 +318,7 @@ static int __init tegra_init_timer(struct device_node *np, bool tegra20,
- 	sched_clock_register(tegra_read_sched_clock, 32, TIMER_1MHz);
+@@ -21,10 +21,6 @@
  
- 	ret = clocksource_mmio_init(timer_reg_base + TIMERUS_CNTR_1US,
--				    "timer_us", TIMER_1MHz, 300, 32,
-+				    "timer_us", TIMER_1MHz, rating, 32,
- 				    clocksource_mmio_readl_up);
- 	if (ret)
- 		pr_err("failed to register clocksource: %d\n", ret);
+ #include "timer-of.h"
+ 
+-#define RTC_SECONDS		0x08
+-#define RTC_SHADOW_SECONDS	0x0c
+-#define RTC_MILLISECONDS	0x10
+-
+ #define TIMERUS_CNTR_1US	0x10
+ #define TIMERUS_USEC_CFG	0x14
+ #define TIMERUS_CNTR_FREEZE	0x4c
+@@ -164,34 +160,6 @@ static struct delay_timer tegra_delay_timer = {
+ };
+ #endif
+ 
+-static struct timer_of suspend_rtc_to = {
+-	.flags = TIMER_OF_BASE | TIMER_OF_CLOCK,
+-};
+-
+-/*
+- * tegra_rtc_read - Reads the Tegra RTC registers
+- * Care must be taken that this function is not called while the
+- * tegra_rtc driver could be executing to avoid race conditions
+- * on the RTC shadow register
+- */
+-static u64 tegra_rtc_read_ms(struct clocksource *cs)
+-{
+-	void __iomem *reg_base = timer_of_base(&suspend_rtc_to);
+-
+-	u32 ms = readl_relaxed(reg_base + RTC_MILLISECONDS);
+-	u32 s = readl_relaxed(reg_base + RTC_SHADOW_SECONDS);
+-
+-	return (u64)s * MSEC_PER_SEC + ms;
+-}
+-
+-static struct clocksource suspend_rtc_clocksource = {
+-	.name	= "tegra_suspend_timer",
+-	.rating	= 200,
+-	.read	= tegra_rtc_read_ms,
+-	.mask	= CLOCKSOURCE_MASK(32),
+-	.flags	= CLOCK_SOURCE_IS_CONTINUOUS | CLOCK_SOURCE_SUSPEND_NONSTOP,
+-};
+-
+ static inline unsigned int tegra_base_for_cpu(int cpu, bool tegra20)
+ {
+ 	if (tegra20) {
+@@ -385,15 +353,3 @@ static int __init tegra20_init_timer(struct device_node *np)
+ 	return tegra_init_timer(np, true, rating);
+ }
+ TIMER_OF_DECLARE(tegra20_timer, "nvidia,tegra20-timer", tegra20_init_timer);
+-
+-static int __init tegra20_init_rtc(struct device_node *np)
+-{
+-	int ret;
+-
+-	ret = timer_of_init(np, &suspend_rtc_to);
+-	if (ret)
+-		return ret;
+-
+-	return clocksource_register_hz(&suspend_rtc_clocksource, 1000);
+-}
+-TIMER_OF_DECLARE(tegra20_rtc, "nvidia,tegra20-rtc", tegra20_init_rtc);
+diff --git a/drivers/rtc/rtc-tegra.c b/drivers/rtc/rtc-tegra.c
+index 8fa1b3febf69..6da54264a27a 100644
+--- a/drivers/rtc/rtc-tegra.c
++++ b/drivers/rtc/rtc-tegra.c
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <linux/clk.h>
++#include <linux/clocksource.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+@@ -52,8 +53,15 @@ struct tegra_rtc_info {
+ 	struct clk *clk;
+ 	int irq; /* alarm and periodic IRQ */
+ 	spinlock_t lock;
++
++	struct clocksource clksrc;
+ };
+ 
++static struct tegra_rtc_info *to_tegra_rtc(struct clocksource *clksrc)
++{
++	return container_of(clksrc, struct tegra_rtc_info, clksrc);
++}
++
+ /*
+  * RTC hardware is busy when it is updating its values over AHB once every
+  * eight 32 kHz clocks (~250 us). Outside of these updates the CPU is free to
+@@ -268,6 +276,17 @@ static const struct rtc_class_ops tegra_rtc_ops = {
+ 	.alarm_irq_enable = tegra_rtc_alarm_irq_enable,
+ };
+ 
++static u64 tegra_rtc_read_ms(struct clocksource *clksrc)
++{
++	struct tegra_rtc_info *info = to_tegra_rtc(clksrc);
++	u32 ms, s;
++
++	ms = readl_relaxed(info->base + TEGRA_RTC_REG_MILLI_SECONDS);
++	s = readl_relaxed(info->base + TEGRA_RTC_REG_SHADOW_SECONDS);
++
++	return (u64)s * MSEC_PER_SEC + ms;
++}
++
+ static const struct of_device_id tegra_rtc_dt_match[] = {
+ 	{ .compatible = "nvidia,tegra20-rtc", },
+ 	{}
+@@ -339,6 +358,28 @@ static int tegra_rtc_probe(struct platform_device *pdev)
+ 		goto disable_clk;
+ 	}
+ 
++	/*
++	 * The Tegra RTC is the only reliable clock source that persists
++	 * across an SC7 transition (VDD_CPU and VDD_CORE off) on Tegra210
++	 * and earlier. Starting with Tegra186, the ARM v8 architected timer
++	 * is in an always on power partition and its reference clock keeps
++	 * running during SC7. Therefore, we technically don't need to have
++	 * the RTC register as a clock source on Tegra186 and later, but it
++	 * doesn't hurt either, so we just register it unconditionally here.
++	 */
++	info->clksrc.name = "tegra_rtc";
++	info->clksrc.rating = 200;
++	info->clksrc.read = tegra_rtc_read_ms;
++	info->clksrc.mask = CLOCKSOURCE_MASK(32);
++	info->clksrc.flags = CLOCK_SOURCE_SUSPEND_NONSTOP |
++			     CLOCK_SOURCE_IS_CONTINUOUS;
++
++	ret = clocksource_register_hz(&info->clksrc, 1000);
++	if (ret) {
++		dev_err(&pdev->dev, "failed to register clock source: %d\n", ret);
++		goto disable_clk;
++	}
++
+ 	dev_notice(&pdev->dev, "Tegra internal Real Time Clock\n");
+ 
+ 	return 0;
+@@ -352,6 +393,7 @@ static int tegra_rtc_remove(struct platform_device *pdev)
+ {
+ 	struct tegra_rtc_info *info = platform_get_drvdata(pdev);
+ 
++	clocksource_unregister(&info->clksrc);
+ 	clk_disable_unprepare(info->clk);
+ 
+ 	return 0;
 -- 
 2.21.0
 
