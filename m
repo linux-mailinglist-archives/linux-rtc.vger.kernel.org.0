@@ -2,58 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8284B987
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2019 15:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAD14B9A0
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jun 2019 15:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfFSNSC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Jun 2019 09:18:02 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:59597 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbfFSNSC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jun 2019 09:18:02 -0400
+        id S1726518AbfFSNTb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Jun 2019 09:19:31 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40307 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731836AbfFSNTb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jun 2019 09:19:31 -0400
 X-Originating-IP: 92.137.69.152
 Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id A09081C0009;
-        Wed, 19 Jun 2019 13:17:58 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 0C61B40018;
+        Wed, 19 Jun 2019 13:19:25 +0000 (UTC)
+Date:   Wed, 19 Jun 2019 15:19:25 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     Dylan Howey <Dylan.Howey@tennantco.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc: pcf2123: fix negative offset rounding
-Date:   Wed, 19 Jun 2019 15:17:53 +0200
-Message-Id: <20190619131753.14802-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.21.0
+To:     Dylan Howey <Dylan.Howey@tennantco.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] rtc: pcf2123: port to regmap
+Message-ID: <20190619131925.GM23549@piout.net>
+References: <20190503195149.31297-1-Dylan.Howey@tennantco.com>
+ <20190503195149.31297-2-Dylan.Howey@tennantco.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190503195149.31297-2-Dylan.Howey@tennantco.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Using result = (value + divisor/2) / divisor is rounding values up and only
-works well for positive values. Instead use DIV_ROUND_CLOSEST which does
-the correct thing.
+I'm ready to apply that series but...
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-pcf2123.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 03/05/2019 19:52:10+0000, Dylan Howey wrote:
+>  static int pcf2123_read_offset(struct device *dev, long *offset)
+>  {
+> -	int ret;
+> -	s8 reg;
+> +	struct pcf2123_plat_data *pdata = dev_get_platdata(dev);
+> +	int ret, val;
+> +	unsigned int reg;
+>  
+> -	ret = pcf2123_read(dev, PCF2123_REG_OFFSET, &reg, 1);
+> -	if (ret < 0)
+> +	ret = regmap_read(pdata->map, PCF2123_REG_OFFSET, &reg);
+> +	if (ret)
+>  		return ret;
+>  
+> +	val = sign_extend32((reg & OFFSET_MASK), OFFSET_SIGN_BIT);
+> +
+>  	if (reg & OFFSET_COARSE)
+> -		reg <<= 1; /* multiply by 2 and sign extend */
+> -	else
+> -		reg = sign_extend32(reg, OFFSET_SIGN_BIT);
+> +		val *= 2;
+>  
 
-diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
-index 39da8b214275..80a53d2dc813 100644
---- a/drivers/rtc/rtc-pcf2123.c
-+++ b/drivers/rtc/rtc-pcf2123.c
-@@ -244,7 +244,7 @@ static int pcf2123_set_offset(struct device *dev, long offset)
- 	else if (offset < OFFSET_STEP * -128)
- 		reg = -128;
- 	else
--		reg = (s8)((offset + (OFFSET_STEP >> 1)) / OFFSET_STEP);
-+		reg = DIV_ROUND_CLOSEST(offset, OFFSET_STEP);
- 
- 	/* choose fine offset only for odd values in the normal range */
- 	if (reg & 1 && reg <= 63 && reg >= -64) {
+Please remove that change that sneaked in ;)
+
 -- 
-2.21.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
