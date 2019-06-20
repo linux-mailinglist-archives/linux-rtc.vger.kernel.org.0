@@ -2,83 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B6E4D3A3
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 18:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9DED4D953
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 20:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732205AbfFTQW0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jun 2019 12:22:26 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:39137 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731992AbfFTQW0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 12:22:26 -0400
-X-Originating-IP: 92.137.69.152
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
+        id S1726171AbfFTSek (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jun 2019 14:34:40 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:38353 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbfFTSek (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 14:34:40 -0400
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 0CE2320013;
-        Thu, 20 Jun 2019 16:22:21 +0000 (UTC)
-Date:   Thu, 20 Jun 2019 18:22:20 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id F044B100002;
+        Thu, 20 Jun 2019 18:34:37 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Vincent Donnefort <vdonnefort@gmail.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] rtc: pcf8563: Fix unhandled interrupt storm
-Message-ID: <20190620162220.GA23549@piout.net>
-References: <20190604042337.26129-1-wens@kernel.org>
+To:     linux-rtc@vger.kernel.org
+Cc:     Dylan Howey <Dylan.Howey@tennantco.com>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 1/4] rtc: pcf2123: convert to devm_rtc_allocate_device
+Date:   Thu, 20 Jun 2019 20:34:30 +0200
+Message-Id: <20190620183433.30779-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190604042337.26129-1-wens@kernel.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/06/2019 12:23:34+0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
-> 
-> Hi everyone,
-> 
-> While bringing up my Pine H64, I encountered an interrupt storm from the
-> pcf8563 RTC. The RTC chip's interrupt line is shared with the PMIC, and
-> was not properly added to the device tree. Also, the driver was using an
-> trigger method incompatible with the PMIC, preventing the interrupt line
-> from being shared. Last, the driver only clears and masks the alarm
-> interrupt, while leaving the timer interrupt untouched. This is a
-> problem if previous systems left the timer interrupt enabled, and there
-> was an interrupt pending.
-> 
-> This patch set fixes all three issues, one per patch.
-> 
-> Please have a look.
-> 
+This allows further improvement of the driver.
 
-I don't have that particular RTC so I can't test but the interrupt
-handling in pcf8563_irq seems problematic too. I guess the RTC will only
-trigger once per second because the call to pcf8563_set_alarm_mode will
-explicitely leave the alarm enabled. The core doesn't really care but it
-doesn't really expect the alarm to stay enabled. i.e. It will ensure the
-alarm is enabled again after setting it when necessary. I think it would
-be safer to simply clear both AIE and AF here. Could you test?
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-pcf2123.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-> Chen-Yu Tsai (3):
->   rtc: pcf8563: Fix interrupt trigger method
->   rtc: pcf8563: Clear event flags and disable interrupts before
->     requesting irq
->   arm64: dts: allwinner: h6: Pine H64: Add interrupt line for RTC
-> 
->  .../arm64/boot/dts/allwinner/sun50i-h6-pine-h64.dts |  2 ++
->  drivers/rtc/rtc-pcf8563.c                           | 13 ++++++-------
->  2 files changed, 8 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.20.1
-> 
-
+diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
+index e8100af789ef..29e09ff57f89 100644
+--- a/drivers/rtc/rtc-pcf2123.c
++++ b/drivers/rtc/rtc-pcf2123.c
+@@ -411,14 +411,9 @@ static int pcf2123_probe(struct spi_device *spi)
+ 			(spi->max_speed_hz + 500) / 1000);
+ 
+ 	/* Finalize the initialization */
+-	rtc = devm_rtc_device_register(&spi->dev, pcf2123_driver.driver.name,
+-			&pcf2123_rtc_ops, THIS_MODULE);
+-
+-	if (IS_ERR(rtc)) {
+-		dev_err(&spi->dev, "failed to register.\n");
+-		ret = PTR_ERR(rtc);
+-		goto kfree_exit;
+-	}
++	rtc = devm_rtc_allocate_device(&spi->dev);
++	if (IS_ERR(rtc))
++		return PTR_ERR(rtc);
+ 
+ 	pdata->rtc = rtc;
+ 
+@@ -438,7 +433,18 @@ static int pcf2123_probe(struct spi_device *spi)
+ 	 * support to this driver to generate interrupts more than once
+ 	 * per minute.
+ 	 */
+-	pdata->rtc->uie_unsupported = 1;
++	rtc->uie_unsupported = 1;
++	rtc->ops = &pcf2123_rtc_ops;
++
++	ret = rtc_register_device(rtc);
++	if (ret)
++		return ret;
++
++	if (IS_ERR(rtc)) {
++		dev_err(&spi->dev, "failed to register.\n");
++		ret = PTR_ERR(rtc);
++		goto kfree_exit;
++	}
+ 
+ 	return 0;
+ 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
+
