@@ -2,84 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9FB4D957
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 20:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E65C4D96D
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 20:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726417AbfFTSer (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jun 2019 14:34:47 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:34989 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726403AbfFTSer (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 14:34:47 -0400
+        id S1726591AbfFTSgN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jun 2019 14:36:13 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:49019 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726323AbfFTSgN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 14:36:13 -0400
+X-Originating-IP: 90.65.161.137
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id D0407240005;
-        Thu, 20 Jun 2019 18:34:40 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 59E5E240005;
+        Thu, 20 Jun 2019 18:36:04 +0000 (UTC)
+Date:   Thu, 20 Jun 2019 20:36:04 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     Dylan Howey <Dylan.Howey@tennantco.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 4/4] rtc: pcf2123: add proper compatible string
-Date:   Thu, 20 Jun 2019 20:34:33 +0200
-Message-Id: <20190620183433.30779-4-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190620183433.30779-1-alexandre.belloni@bootlin.com>
-References: <20190620183433.30779-1-alexandre.belloni@bootlin.com>
+To:     Chen-Yu Tsai <wens@kernel.org>
+Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Vincent Donnefort <vdonnefort@gmail.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH 1/3] rtc: pcf8563: Fix interrupt trigger method
+Message-ID: <20190620183604.GC23549@piout.net>
+References: <20190604042337.26129-1-wens@kernel.org>
+ <20190604042337.26129-2-wens@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190604042337.26129-2-wens@kernel.org>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-nxp,rtc-pcf2123 is not a proper compatible strong for this RTC. The part
-name is only pcf2123 and is less confusing.
+On 04/06/2019 12:23:35+0800, Chen-Yu Tsai wrote:
+> From: Chen-Yu Tsai <wens@csie.org>
+> 
+> The PCF8563 datasheet says the interrupt line is active low and stays
+> active until the events are cleared, i.e. a level trigger interrupt.
+> 
+> Fix the flags used to request the interrupt.
+> 
+> Fixes: ede3e9d47cca ("drivers/rtc/rtc-pcf8563.c: add alarm support")
+> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> ---
+> 
+> Not sure if this would cause issues for other platforms. Ideally we'd
+> take the flags from the device tree, but it seems not all platforms
+> support this.
+> 
+> ---
+>  drivers/rtc/rtc-pcf8563.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+Applied, thanks.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt | 4 ++--
- drivers/rtc/rtc-pcf2123.c                              | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt b/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-index 1994f601800a..7371f525a687 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-+++ b/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-@@ -1,7 +1,7 @@
- NXP PCF2123 SPI Real Time Clock
- 
- Required properties:
--- compatible: should be: "nxp,rtc-pcf2123"
-+- compatible: should be: "nxp,pcf2123"
-                       or "microcrystal,rv2123"
- - reg: should be the SPI slave chipselect address
- 
-@@ -11,7 +11,7 @@ Optional properties:
- Example:
- 
- pcf2123: rtc@3 {
--	compatible = "nxp,rtc-pcf2123"
-+	compatible = "nxp,pcf2123"
- 	reg = <3>
- 	spi-cs-high;
- };
-diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
-index f31feffed2d2..2ac016cb2af6 100644
---- a/drivers/rtc/rtc-pcf2123.c
-+++ b/drivers/rtc/rtc-pcf2123.c
-@@ -453,8 +453,10 @@ static int pcf2123_probe(struct spi_device *spi)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id pcf2123_dt_ids[] = {
--	{ .compatible = "nxp,rtc-pcf2123", },
-+	{ .compatible = "nxp,pcf2123", },
- 	{ .compatible = "microcrystal,rv2123", },
-+	/* Deprecated, do not use */
-+	{ .compatible = "nxp,rtc-pcf2123", },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, pcf2123_dt_ids);
 -- 
-2.21.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
