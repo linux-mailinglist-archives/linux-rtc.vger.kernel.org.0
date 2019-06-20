@@ -2,94 +2,165 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E504DA7F
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 21:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810974DC5B
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jun 2019 23:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbfFTToD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jun 2019 15:44:03 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:45177 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfFTToD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 15:44:03 -0400
+        id S1726293AbfFTVRm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jun 2019 17:17:42 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:41003 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726244AbfFTVRm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jun 2019 17:17:42 -0400
 X-Originating-IP: 90.65.161.137
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A75011BF20A;
-        Thu, 20 Jun 2019 19:43:58 +0000 (UTC)
-Date:   Thu, 20 Jun 2019 21:43:58 +0200
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id D39F9C0003;
+        Thu, 20 Jun 2019 21:17:36 +0000 (UTC)
+Date:   Thu, 20 Jun 2019 23:17:36 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     Dylan Howey <Dylan.Howey@tennantco.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] rtc: pcf2123: convert to devm_rtc_allocate_device
-Message-ID: <20190620194358.GE23549@piout.net>
-References: <20190620183433.30779-1-alexandre.belloni@bootlin.com>
+To:     Kevin Hilman <khilman@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH 2/2] rtc: Add Amlogic Virtual Wake RTC
+Message-ID: <20190620211736.GF23549@piout.net>
+References: <20190607194343.18359-1-khilman@kernel.org>
+ <20190607194343.18359-2-khilman@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190620183433.30779-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20190607194343.18359-2-khilman@kernel.org>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 20/06/2019 20:34:30+0200, Alexandre Belloni wrote:
-> This allows further improvement of the driver.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  drivers/rtc/rtc-pcf2123.c | 24 +++++++++++++++---------
->  1 file changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
-> index e8100af789ef..29e09ff57f89 100644
-> --- a/drivers/rtc/rtc-pcf2123.c
-> +++ b/drivers/rtc/rtc-pcf2123.c
-> @@ -411,14 +411,9 @@ static int pcf2123_probe(struct spi_device *spi)
->  			(spi->max_speed_hz + 500) / 1000);
->  
->  	/* Finalize the initialization */
-> -	rtc = devm_rtc_device_register(&spi->dev, pcf2123_driver.driver.name,
-> -			&pcf2123_rtc_ops, THIS_MODULE);
-> -
-> -	if (IS_ERR(rtc)) {
-> -		dev_err(&spi->dev, "failed to register.\n");
-> -		ret = PTR_ERR(rtc);
-> -		goto kfree_exit;
-> -	}
-> +	rtc = devm_rtc_allocate_device(&spi->dev);
-> +	if (IS_ERR(rtc))
-> +		return PTR_ERR(rtc);
->  
->  	pdata->rtc = rtc;
->  
-> @@ -438,7 +433,18 @@ static int pcf2123_probe(struct spi_device *spi)
->  	 * support to this driver to generate interrupts more than once
->  	 * per minute.
->  	 */
-> -	pdata->rtc->uie_unsupported = 1;
-> +	rtc->uie_unsupported = 1;
-> +	rtc->ops = &pcf2123_rtc_ops;
+Hello Kevin,
+
+On 07/06/2019 12:43:43-0700, Kevin Hilman wrote:
+> +static int meson_vrtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	unsigned long local_time;
+> +	struct timespec64 time;
 > +
-> +	ret = rtc_register_device(rtc);
-> +	if (ret)
-> +		return ret;
+> +	ktime_get_raw_ts64(&time);
+> +	local_time = time.tv_sec - (sys_tz.tz_minuteswest * 60);
+The RTC is supposed to be set to UTC so the TZ adjustment is not
+necessary.
+
+> +	rtc_time_to_tm(local_time, tm);
 > +
-> +	if (IS_ERR(rtc)) {
-> +		dev_err(&spi->dev, "failed to register.\n");
-> +		ret = PTR_ERR(rtc);
-> +		goto kfree_exit;
+
+Please use the 64 bit version.
+
+> +	return 0;
+> +}
+> +
+> +static void meson_vrtc_set_wakeup_time(struct meson_vrtc_data *vrtc,
+> +				       unsigned long time)
+> +{
+> +	writel_relaxed(time, vrtc->io_alarm);
+> +
+> +	dev_dbg(&vrtc->pdev->dev, "set_wakeup_time: %lu\n", time);
+> +}
+> +
+> +static int meson_vrtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+> +{
+> +	struct meson_vrtc_data *vrtc = dev_get_drvdata(dev);
+> +	struct timespec64 time;
+> +	unsigned long local_time;
+> +	unsigned long alarm_secs;
+> +	int ret;
+> +
+> +	if (alarm->enabled) {
+> +		ret = rtc_tm_to_time(&alarm->time, &alarm_secs);
+> +		if (ret)
+> +			return ret;
+> +
+
+Use the 64bit version which makes it clear that it never fails (checking
+ret is useless).
+
+> +		ktime_get_raw_ts64(&time);
+> +		local_time = time.tv_sec - (sys_tz.tz_minuteswest * 60);
+> +
+> +		vrtc->alarm_time = alarm_secs;
+> +
+> +		if (alarm_secs >= local_time) {
+
+This is already ensured by the core so no need to check here.
+
+> +			alarm_secs = alarm_secs - local_time;
+> +
+> +			meson_vrtc_set_wakeup_time(vrtc, alarm_secs);
+> +
+> +			pr_debug("system will wakeup %lus later\n", alarm_secs);
+> +		}
+> +	} else {
+> +		vrtc->alarm_time = 0;
+> +		meson_vrtc_set_wakeup_time(vrtc, 0);
 > +	}
->  
+> +
+> +	return 0;
+> +}
+> +
+> +static int meson_vrtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
+> +{
+> +	struct meson_vrtc_data *vrtc = dev_get_drvdata(dev);
+> +
+> +	if (!vrtc->alarm_time) {
 
-I need to rework that part, I'll resend...
+I think this test is inverted.
 
->  	return 0;
->  
-> -- 
-> 2.21.0
-> 
+> +		alm->enabled = true;
+> +
+> +		rtc_time_to_tm(vrtc->alarm_time, &alm->time);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct rtc_class_ops meson_vrtc_ops = {
+> +	.read_time = meson_vrtc_read_time,
+> +	.set_alarm = meson_vrtc_set_alarm,
+> +	.read_alarm = meson_vrtc_read_alarm,
+> +};
+> +
+> +static int meson_vrtc_probe(struct platform_device *pdev)
+> +{
+> +	struct meson_vrtc_data *vrtc;
+> +	struct resource *res;
+> +
+> +	vrtc = devm_kzalloc(&pdev->dev, sizeof(*vrtc), GFP_KERNEL);
+> +	if (!vrtc)
+> +		return -ENOMEM;
+> +
+> +	vrtc->pdev = pdev;
+> +
+> +	/* Alarm registers */
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	vrtc->io_alarm = devm_ioremap_resource(&pdev->dev, res);
+> +	if (IS_ERR(vrtc->io_alarm))
+> +		return PTR_ERR(vrtc->io_alarm);
+> +
+> +	device_init_wakeup(&pdev->dev, 1);
+> +
+> +	platform_set_drvdata(pdev, vrtc);
+> +
+> +	vrtc->rtc = devm_rtc_device_register(&pdev->dev, "meson-vrtc",
+> +					     &meson_vrtc_ops, THIS_MODULE);
+> +	if (IS_ERR(vrtc->rtc))
+> +		return PTR_ERR(vrtc->rtc);
+> +
+
+Please use devm_rtc_allocate_device and rtc_register_device. This
+doesn't help much but my plan is to get rid of devm_rtc_device_register.
+
+I suppose you don't get any interrupt for the alarm?
+
 
 -- 
 Alexandre Belloni, Bootlin
