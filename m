@@ -2,144 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B3B56186
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Jun 2019 06:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA0E567F7
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Jun 2019 13:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbfFZEmh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 26 Jun 2019 00:42:37 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:52468 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfFZEmh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 Jun 2019 00:42:37 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 3CDE329B38;
-        Wed, 26 Jun 2019 00:42:33 -0400 (EDT)
-Date:   Wed, 26 Jun 2019 14:42:31 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-cc:     Alessandro Zummo <a.zummo@towertech.it>, userm57@yahoo.com,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: Don't state that the RTC holds UTC in case it
- doesn't
-In-Reply-To: <20190625092926.GE5690@piout.net>
-Message-ID: <alpine.LNX.2.21.1906261428060.8@nippy.intranet>
-References: <3e1e24a326b8b623b1a8b66a905ac6494ef74a07.1561081886.git.fthain@telegraphics.com.au> <20190624195705.GD5690@piout.net> <alpine.LNX.2.21.1906251043050.8@nippy.intranet> <20190625092926.GE5690@piout.net>
+        id S1727333AbfFZLw4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 26 Jun 2019 07:52:56 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45853 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727243AbfFZLwz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 Jun 2019 07:52:55 -0400
+Received: by mail-wr1-f65.google.com with SMTP id f9so2356985wre.12
+        for <linux-rtc@vger.kernel.org>; Wed, 26 Jun 2019 04:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=pno/4ff/EmVlLZf+cwJB7HjSbJVtgJvFvXzyjJWjZww=;
+        b=FrNk6Np4dKzBgiOqvrCZ9v1nd+0v7nIXo4/H33U5FzHgCYLYA7hOtdyTBWOdQOfNX+
+         HHHdIpZFYCq/JEgJAPOlqWgVVH5FH0Htlv97hysKhCBtqAImccVHJyM7hmvvjtmBlO5J
+         1XrPbvBR/SNIwt+CNPfox7kegKCZVc0GtF0J9p9QlRplCJktwjufwGWfa1a0VOvBluan
+         vijqvZns8aBq6RG8cqZbQpEwGAu65ZB7lPyhQSdpj6KETAVoirRV21LbJLw6qB5yfcnG
+         WbNKGD5apEUUHpkgiva3bhaZ4xPkax61wvAsSwaGPOyQM22WpthkyWzvdDCKu2I5kXfl
+         f0Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=pno/4ff/EmVlLZf+cwJB7HjSbJVtgJvFvXzyjJWjZww=;
+        b=cdsYyqXdZuPOSjFM+B5XLqQefLlmiryL7HZcnU6ueOwL6IIoPOEjS97MhJBpk9rPEB
+         EKQjSLaJwOtdblGEggEp8vORRLM5DY3wnTMFKoRChNDN6RCFlNWLNBsKO90ZiHdFgueB
+         YYFiKF6UY+97dWkH4Zj68Ef9up5eGDfLVUsnKfJTvo1ziNBfjutS8gQwpE9E6nnJrkOh
+         l8hX5UqSmY4Mhq/wY4j/msruPIbybYlUc+CX4py6xy8QVMvwcV6CoFwWlpMnsDweD7mi
+         hTpCiiodLgaFYnK15A4Vpd0IU1lakyek3E2HIWqEzB1QFtV6BU+aROdLI/fHfBkzm3vH
+         KnAg==
+X-Gm-Message-State: APjAAAWId24/g8Fk+J0Sv/vyzLxYc4Rh5pBOU6JIQ6mDJu/FdJR8YM/k
+        Km79ufYLleZ3HQ4UnoWbJgvbBw==
+X-Google-Smtp-Source: APXvYqzkue4b4T2/iz5KX/SFk9Swrlx2jlSbM8pLLMgMOTqmDRsgOwIKUpjFoXL5NkloPNPI8a1GxQ==
+X-Received: by 2002:a5d:53c2:: with SMTP id a2mr3508180wrw.8.1561549973997;
+        Wed, 26 Jun 2019 04:52:53 -0700 (PDT)
+Received: from dell ([2.27.35.164])
+        by smtp.gmail.com with ESMTPSA id y2sm14535504wrl.4.2019.06.26.04.52.52
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 26 Jun 2019 04:52:53 -0700 (PDT)
+Date:   Wed, 26 Jun 2019 12:52:51 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Tony Xie <tony.xie@rock-chips.com>
+Cc:     heiko@sntech.de, broonie@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chenjh@rock-chips.com,
+        xsf@rock-chips.com, zhangqing@rock-chips.com,
+        huangtao@rock-chips.com
+Subject: Re: [PATCH v10 0/6] support a new type of PMIC,including two
+ chips(rk817 and rk809)
+Message-ID: <20190626115251.GR21119@dell>
+References: <20190621103258.8154-1-tony.xie@rock-chips.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190621103258.8154-1-tony.xie@rock-chips.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 25 Jun 2019, Alexandre Belloni wrote:
+On Fri, 21 Jun 2019, Tony Xie wrote:
 
-> On 25/06/2019 11:53:49+1000, Finn Thain wrote:
-> > On Mon, 24 Jun 2019, Alexandre Belloni wrote:
-> > 
-> > > On 21/06/2019 11:51:26+1000, Finn Thain wrote:
-> > > > Some machines store local time in the Real Time Clock. The 
-> > > > hard-coded "UTC" string is wrong on those machines so just omit 
-> > > > that string. Update the log parser so it doesn't require the 
-> > > > string "UTC".
-> > > > 
-> > > 
-> > > I don't agree, hctossys will always think the RTC is in UTC.
-> > 
-> > Well, I wasn't speculating about a theoretical problem. This is a bug 
-> > that was reported to me by a user of Debian/powerpc system.
-> > 
-> > I was able to confirm that the bug also affects dual-boot 
-> > Windows/Linux on x86 with CONFIG_RTC_HCTOSYS=y.
-> > 
-> > > If you store local time in the RTC, then you are probably not using 
-> > > hctosys because it definitively doesn't know about the timezone and 
-> > > will incorrectly set the system time. That information is usually 
-> > > kept in /etc/adjtime.
-> > > 
-> > 
-> > In the Debian/powerpc bug report, the timezone is obtained from the NVRAM:
-> > 
-> > [    0.000000] PowerMac motherboard: PowerBook Wallstreet
-> > ...
-> > [    0.000000] GMT Delta read from XPRAM: -360 minutes, DST: on
-> > ...
-> > [   37.605859] rtc-generic rtc-generic: rtc core: registered rtc-generic as rtc0
-> > ...
-> > [   40.346255] rtc-generic rtc-generic: setting system clock to 2019-06-19 15:17:35 UTC (1560957455)
-> > ...
-> > 
-> > Though I don't know whether the sys_tz value is relevant here.
-> > 
-> > Anyway, here's the bug reproduced on x86 --
-> > 
-> > # dmesg | grep rtc_cmos
-> > [    0.543878] rtc_cmos 00:02: RTC can wake from S4
-> > [    0.544090] rtc_cmos 00:02: rtc core: registered rtc_cmos as rtc0
-> > [    0.544090] rtc_cmos 00:02: alarms up to one month, y3k, 114 bytes nvram, hpet irqs
-> > [    0.545807] rtc_cmos 00:02: setting system clock to 2019-06-25 11:24:14 UTC (1561461854)
-> > # grep . /etc/adjtime /etc/timezone
-> > /etc/adjtime:0.000120 1550184138 0.000000
-> > /etc/adjtime:1550184138
-> > /etc/adjtime:LOCAL
-> > /etc/timezone:Australia/Melbourne
-> > # hwclock --show
-> > 2019-06-25 11:47:49.702660+10:00
-> > # date --iso-8601=s
-> > 2019-06-25T11:48:01+10:00
-> > # 
-> > 
-> > Looks wrong to me. What am I missing?
-> > 
+> Most of functions and registers of the rk817 and rk808 are the same,
+> so they can share allmost all codes.
 > 
-> Userspace is certainly adjusting the timezone after the kernel did. Can 
-> you run the same commands without running your init?
-> 
+> Their specifications are as follows:
+>   1) The RK809 and RK809 consist of 5 DCDCs, 9 LDOs and have the same
+> registers
+>      for these components except dcdc5.
+>   2) The dcdc5 is a boost dcdc for RK817 and is a buck for RK809.
+>   3) The RK817 has one switch but The Rk809 has two.
 
-Sure. I booted into /bin/sh instead of /sbin/init then mounted /proc and 
-/dev, and got this:
-
-# dmesg | grep rtc_cmos
-[    0.544046] rtc_cmos 00:02: RTC can wake from S4
-[    0.544246] rtc_cmos 00:02: rtc core: registered rtc_cmos as rtc0
-[    0.544246] rtc_cmos 00:02: alarms up to one month, y3k, 114 bytes nvram, hpet irqs
-[    0.545514] rtc_cmos 00:02: setting system clock to 2019-06-26 14:19:40 UTC (1561558780)
-# grep . /etc/adjtime /etc/timezone
-/etc/adjtime:0.000120 1550184138 0.000000
-/etc/adjtime:1550184138
-/etc/adjtime:LOCAL
-/etc/timezone:Australia/Melbourne
-# hwclock --show
-2019-06-26 14:22:25.437089+10:00
-# date --iso-8601=s
-2019-06-27T00:22:45+10:00
-
-As expected, the kernel message still agrees with the output from hwclock.
-
-> On stable, you have /etc/init.d/hwclock.sh that still runs and does the 
-> correct thing. My understanding is that systemd also handles the TZ 
-> properly after hctosys (see clock_is_localtime()).
-> 
-
-This was Gentoo/x86 with openrc. The Debian/powerpc problem is exactly the 
-same: the kernel messages report local time whilst claiming that it's UTC.
-
-> Seriously, hctosys does a really bad job at setting the system time, it 
-> is guaranteed to be always wrong on most platforms. My plan is still to 
-> try to get distros to stop enabling it and do that properly in 
-> userspace. This is already ok when using sysV but systemd would need a 
-> few changes to stop relying on it when then is no hwclock initscript. 
-> Unfortunately, I didn't have time to work on that yet.
-> 
-
-It doesn't help if you are able to change all of the future distros. If 
-you remove hctosys you will break some distros which have already shipped.
-
-For example, I've seen a Debian release that will force a fsck of the root 
-filesystem without CONFIG_RTC_HCTOSYS. This is a temporary denial of 
-service not a failure, but in general a backward jump by a few hours can 
-have bad consequences, such as services that refuse to start.
-
-Anyway, this bug is about a misleading printk, it isn't about removing 
-functionality. Why conflate these two issues?
+Just tried to apply this set to a v5.2-rc1 base, but it doesn't seem
+to do so cleanly.  Would you be able to rebase and resend please?
 
 -- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
