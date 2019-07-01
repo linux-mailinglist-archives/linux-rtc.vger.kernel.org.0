@@ -2,113 +2,324 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B4A5AAA2
-	for <lists+linux-rtc@lfdr.de>; Sat, 29 Jun 2019 14:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FF35B6AF
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Jul 2019 10:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfF2MBM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 29 Jun 2019 08:01:12 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:55387 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726892AbfF2MBM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 29 Jun 2019 08:01:12 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 45bXKJ1nSWz1rJCv;
-        Sat, 29 Jun 2019 14:01:08 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 45bXKJ0fQtz1qqkV;
-        Sat, 29 Jun 2019 14:01:08 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id X4kmaTpfWLaY; Sat, 29 Jun 2019 14:01:07 +0200 (CEST)
-X-Auth-Info: PAjTxJHSDYDwaq5O4s/ZGTpHTYdGIRxm2DwIZQpOJrw=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sat, 29 Jun 2019 14:01:07 +0200 (CEST)
-Subject: Re: [PATCH] rtc: abx80x: Implement procfs interface
-To:     Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Cc:     linux-rtc@vger.kernel.org
-References: <20190623120854.3179-1-marex@denx.de>
- <20190623123844.GA3133@piout.net>
- <6b1b912c-4d43-dbaa-3566-c18cfac85fe3@denx.de>
-From:   Marek Vasut <marex@denx.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <4fed45a0-5cd8-a57c-7b0a-217bcb13a4c7@denx.de>
-Date:   Sat, 29 Jun 2019 14:01:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727300AbfGAITG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 1 Jul 2019 04:19:06 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37820 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726840AbfGAITF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Jul 2019 04:19:05 -0400
+Received: by mail-pg1-f195.google.com with SMTP id g15so3760649pgi.4;
+        Mon, 01 Jul 2019 01:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ENqNJlovAzbtIMDMyEuT6YxQGdhBBs3Nh+LrxQq4GI0=;
+        b=dd364buBd+ouEhxHpqNpPkomOOMHJ+9u0FMaw5me+OPu3CSiY0QuGa5VmUQdZLk+Z4
+         IB0Svr4Mc6vcovCTBLVAfL6Qr4KBywUL9p3DWssGoc4UjB9mVpKCdIYUFvPMunx21fvm
+         Qr06rmuD+1IGJ2j5i2LAqds1F5V9kqxeKsinCdFzpmH9EhHPfDA+Ndug3Qzv2jiYvZuv
+         dn0iw1qqwQUxqMIa6B2Uar0Td9ar9Rr0NkNTAOMla8XwX5ryC6AVDIaeOnYCSjR5J7zA
+         AihSwjl96Qazoc0DJh4MJtEQOTuUlFH15SC1nmsDYfuu84secHKIsgBE1ljt10uaSj4X
+         tGDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ENqNJlovAzbtIMDMyEuT6YxQGdhBBs3Nh+LrxQq4GI0=;
+        b=YPnQvt46YVFAqLqE1bI4f3wwge56ixBFJdlEHm8qggJbfSXzoeTHv1t5j8Gj/EkP86
+         aGFe3o3ool/gFJN7tTU5weff9UhpgqW0HguYjkX3DQ817uaqw4t+ywsfHaPfYQsagWKm
+         zqzUBp3cMfi9riQLW8sGD03c7Gd1c3AcmvqOzEkvRuTiOEIsxlcMLB9MR+UV0NTkOOVG
+         XrF1A5qn5K0eiwH+U9w+fQqplh1q2ap3aN9K1b3mc30z9Qy4w/gyADpGllV8LRyiutio
+         RXahbYG+7K4MHSO6JVxN0indD6eBujb3qcksQ3dVLD94o/CdPSLn/i2fDaqk1a4uqgja
+         ZKmA==
+X-Gm-Message-State: APjAAAX7BPHu+bxmJELuqtBQUWkrjLa2rSsoWtNq5Qt8POUKdpvcBdaf
+        bTAylra2krNvarY6Y1esjbw=
+X-Google-Smtp-Source: APXvYqwAiKcJFocYrpTbgg3ZSDAgSgjwkR5cm1zwQU0lsdiTbx4wO0ymCAizzUs48BCIsgtyNwsN0Q==
+X-Received: by 2002:a17:90a:c596:: with SMTP id l22mr30069932pjt.46.1561969144292;
+        Mon, 01 Jul 2019 01:19:04 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id r188sm12219235pfr.16.2019.07.01.01.19.03
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 01 Jul 2019 01:19:03 -0700 (PDT)
+Date:   Mon, 1 Jul 2019 01:19:01 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] Input: add IOC3 serio driver
+Message-ID: <20190701081901.GE172968@dtor-ws>
+References: <20190613170636.6647-1-tbogendoerfer@suse.de>
+ <20190613170636.6647-8-tbogendoerfer@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <6b1b912c-4d43-dbaa-3566-c18cfac85fe3@denx.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613170636.6647-8-tbogendoerfer@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 6/23/19 3:20 PM, Marek Vasut wrote:
-> On 6/23/19 2:38 PM, Alexandre Belloni wrote:
->> Hi Marek,
->>
->> On 23/06/2019 14:08:54+0200, Marek Vasut wrote:
->>> Implement procfs interface for polling battery status of the RTC
->>> via /proc/driver/rtc .
->>>
->>
->> Please don't, this interface is deprecated and doesn't work well. Use
->> RTC_VL_READ instead.
-> That's already implemented, the procfs one isn't, but fine by me.
+Hi Thomas,
 
-Oh, one more thing. The RTC_VL_READ only provides 1 bit of information,
-the state of BLF bit (Battery low/failed IIRC). The procfs interface is
-more verbose and provides explicit battery status (OK/low/exhausted). Is
-there an ioctl for this too ?
+On Thu, Jun 13, 2019 at 07:06:33PM +0200, Thomas Bogendoerfer wrote:
+> This patch adds a platform driver for supporting keyboard and mouse
+> interface of SGI IOC3 chips.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> ---
+>  drivers/input/serio/Kconfig   |  10 +++
+>  drivers/input/serio/Makefile  |   1 +
+>  drivers/input/serio/ioc3kbd.c | 158 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 169 insertions(+)
+>  create mode 100644 drivers/input/serio/ioc3kbd.c
+> 
+> diff --git a/drivers/input/serio/Kconfig b/drivers/input/serio/Kconfig
+> index f3e18f8ef9ca..373a1646019e 100644
+> --- a/drivers/input/serio/Kconfig
+> +++ b/drivers/input/serio/Kconfig
+> @@ -165,6 +165,16 @@ config SERIO_MACEPS2
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called maceps2.
+>  
+> +config SERIO_SGI_IOC3
+> +	tristate "SGI IOC3 PS/2 controller"
+> +	depends on SGI_MFD_IOC3
+> +	help
+> +	  Say Y here if you have an SGI Onyx2, SGI Octane or IOC3 PCI card
+> +	  and you want to attach and use a keyboard, mouse, or both.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called ioc3kbd.
+> +
+>  config SERIO_LIBPS2
+>  	tristate "PS/2 driver library"
+>  	depends on SERIO_I8042 || SERIO_I8042=n
+> diff --git a/drivers/input/serio/Makefile b/drivers/input/serio/Makefile
+> index 67950a5ccb3f..6d97bad7b844 100644
+> --- a/drivers/input/serio/Makefile
+> +++ b/drivers/input/serio/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_HIL_MLC)		+= hp_sdc_mlc.o hil_mlc.o
+>  obj-$(CONFIG_SERIO_PCIPS2)	+= pcips2.o
+>  obj-$(CONFIG_SERIO_PS2MULT)	+= ps2mult.o
+>  obj-$(CONFIG_SERIO_MACEPS2)	+= maceps2.o
+> +obj-$(CONFIG_SERIO_SGI_IOC3)	+= ioc3kbd.o
+>  obj-$(CONFIG_SERIO_LIBPS2)	+= libps2.o
+>  obj-$(CONFIG_SERIO_RAW)		+= serio_raw.o
+>  obj-$(CONFIG_SERIO_AMS_DELTA)	+= ams_delta_serio.o
+> diff --git a/drivers/input/serio/ioc3kbd.c b/drivers/input/serio/ioc3kbd.c
+> new file mode 100644
+> index 000000000000..26fcf57465d6
+> --- /dev/null
+> +++ b/drivers/input/serio/ioc3kbd.c
+> @@ -0,0 +1,158 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * SGI IOC3 PS/2 controller driver for linux
+> + *
+> + * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> + *
+> + * Based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
+> + *               Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/init.h>
+> +#include <linux/io.h>
+> +#include <linux/serio.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <asm/sn/ioc3.h>
+> +
+> +struct ioc3kbd_data {
+> +	struct ioc3_serioregs __iomem *regs;
+> +	struct serio *kbd, *aux;
+> +};
+> +
+> +static int ioc3kbd_write(struct serio *dev, u8 val)
+> +{
+> +	struct ioc3kbd_data *d = dev->port_data;
+> +	unsigned long timeout = 0;
+> +	u32 mask;
+> +
+> +	mask = (dev == d->aux) ? KM_CSR_M_WRT_PEND : KM_CSR_K_WRT_PEND;
+> +	while ((readl(&d->regs->km_csr) & mask) && (timeout < 1000)) {
+> +		udelay(100);
+> +		timeout++;
+> +	}
+> +
+> +	if (timeout >= 1000)
+> +		return -1;
+
+-ETIMEDOUT?
+
+> +
+> +	writel(val, dev == d->aux ?  &d->regs->m_wd : &d->regs->k_wd);
+
+Nit: there are 2 spaces after ?, only one is needed.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t ioc3kbd_intr(int itq, void *dev_id)
+> +{
+> +	struct ioc3kbd_data *d = dev_id;
+> +	u32 data_k, data_m;
+> +
+> +	data_k = readl(&d->regs->k_rd);
+> +	data_m = readl(&d->regs->m_rd);
+> +
+> +	if (data_k & KM_RD_VALID_0)
+> +		serio_interrupt(d->kbd,
+> +		(data_k >> KM_RD_DATA_0_SHIFT) & 0xff, 0);
+
+This is weird formatting, you need one more tab here.
+
+> +	if (data_k & KM_RD_VALID_1)
+> +		serio_interrupt(d->kbd,
+> +		(data_k >> KM_RD_DATA_1_SHIFT) & 0xff, 0);
+> +	if (data_k & KM_RD_VALID_2)
+> +		serio_interrupt(d->kbd,
+> +		(data_k >> KM_RD_DATA_2_SHIFT) & 0xff, 0);
+> +	if (data_m & KM_RD_VALID_0)
+> +		serio_interrupt(d->aux,
+> +		(data_m >> KM_RD_DATA_0_SHIFT) & 0xff, 0);
+> +	if (data_m & KM_RD_VALID_1)
+> +		serio_interrupt(d->aux,
+> +		(data_m >> KM_RD_DATA_1_SHIFT) & 0xff, 0);
+> +	if (data_m & KM_RD_VALID_2)
+> +		serio_interrupt(d->aux,
+> +		(data_m >> KM_RD_DATA_2_SHIFT) & 0xff, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ioc3kbd_probe(struct platform_device *pdev)
+> +{
+> +	struct ioc3_serioregs __iomem *regs;
+> +	struct device *dev = &pdev->dev;
+> +	struct ioc3kbd_data *d;
+> +	struct serio *sk, *sa;
+> +	struct resource *mem;
+> +	int irq, ret;
+> +
+> +	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	regs = devm_ioremap_resource(&pdev->dev, mem);
+
+We have a brand new helper: devm_platform_ioremap_resource()
+
+> +	if (IS_ERR(regs))
+> +		return PTR_ERR(regs);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return -ENXIO;
+> +
+> +	d = devm_kzalloc(&pdev->dev, sizeof(struct ioc3kbd_data), GFP_KERNEL);
+
+I think we nor prefer deriving type from the pointer:
+
+	d = evm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+
+> +	if (!d)
+> +		return -ENOMEM;
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq, ioc3kbd_intr, IRQF_SHARED,
+> +			       "ioc3-kbd", d);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "could not request IRQ %d\n", irq);
+> +		return ret;
+> +	}
+
+You need to make sure that interrupt will not fire while serio ports are
+not yet allocated/registered. Is there a way to inhibit interrupt
+generation on controller side?
+
+> +
+> +	sk = kzalloc(sizeof(struct serio), GFP_KERNEL);
+
+	sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+
+> +	if (!sk)
+> +		return -ENOMEM;
+> +
+> +	sa = kzalloc(sizeof(struct serio), GFP_KERNEL);
+
+	sa = kzalloc(sizeof(*sa), GFP_KERNEL);
+
+> +	if (!sa) {
+> +		kfree(sk);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	sk->id.type = SERIO_8042;
+> +	sk->write = ioc3kbd_write;
+> +	snprintf(sk->name, sizeof(sk->name), "IOC3 keyboard %d", pdev->id);
+> +	snprintf(sk->phys, sizeof(sk->phys), "ioc3/serio%dkbd", pdev->id);
+> +	sk->port_data = d;
+> +	sk->dev.parent = &pdev->dev;
+> +
+> +	sa->id.type = SERIO_8042;
+> +	sa->write = ioc3kbd_write;
+> +	snprintf(sa->name, sizeof(sa->name), "IOC3 auxiliary %d", pdev->id);
+> +	snprintf(sa->phys, sizeof(sa->phys), "ioc3/serio%daux", pdev->id);
+> +	sa->port_data = d;
+> +	sa->dev.parent = dev;
+> +
+> +	d->regs = regs;
+> +	d->kbd = sk;
+> +	d->aux = sa;
+> +
+> +	platform_set_drvdata(pdev, d);
+> +	serio_register_port(d->kbd);
+> +	serio_register_port(d->aux);
+> +	return 0;
+> +}
+> +
+> +static int ioc3kbd_remove(struct platform_device *pdev)
+> +{
+> +	struct ioc3kbd_data *d = platform_get_drvdata(pdev);
+> +
+> +	serio_unregister_port(d->kbd);
+> +	serio_unregister_port(d->aux);
+
+If you unregister ports while interrupt is registered/enabled you may
+get a crash.
+
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver ioc3kbd_driver = {
+> +	.probe          = ioc3kbd_probe,
+> +	.remove         = ioc3kbd_remove,
+> +	.driver = {
+> +		.name = "ioc3-kbd",
+> +	},
+> +};
+> +module_platform_driver(ioc3kbd_driver);
+> +
+> +MODULE_AUTHOR("Thomas Bogendoerfer <tbogendoerfer@suse.de>");
+> +MODULE_DESCRIPTION("SGI IOC3 serio driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.13.7
+> 
 
 -- 
-Best regards,
-Marek Vasut
+Dmitry
