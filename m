@@ -2,75 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FC05C89F
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Jul 2019 07:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D637A5E99E
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Jul 2019 18:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725845AbfGBFKl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 2 Jul 2019 01:10:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54826 "EHLO mail.kernel.org"
+        id S1727182AbfGCQuD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 3 Jul 2019 12:50:03 -0400
+Received: from mout.gmx.net ([212.227.15.15]:44177 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfGBFKk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 2 Jul 2019 01:10:40 -0400
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EFAB216C8;
-        Tue,  2 Jul 2019 05:10:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562044239;
-        bh=4GlxId9YdbFjT52X/hvaAqjT79EiXpf7emdd7hFBdic=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EPLNmdsIaRIi9UZuIJBoJw1UDpeqVMgqzgTDzXxWwmk8eiv/QUpA+yiUfFTINPzW2
-         Dgfwby28AMWubdbDqO84jre/PCJrsKTxeo5Ol95PKM8FjSToXQS3ylZpTOXXOSwefN
-         NI0DS+mGHYy95f61CuBAiW/D1nQoIWAGkRqlDBso=
-Date:   Mon, 1 Jul 2019 22:10:38 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Reminder: 1 open syzbot bug in rtc subsystem
-Message-ID: <20190702051038.GC23743@sol.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1727147AbfGCQtn (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:49:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1562172510;
+        bh=Me1SvsLDyMMGaUAM+H2U6QR3rP8Y3XVwEjAtU6m8VUA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MV6Va6oTlm89ruMxAxb87nEE2pPoh3n4vLdyHMS/pwe0XAqsgXSoh6piSJ85L+fZ+
+         sgvmA53g2n+XMMAAp0AJk0bPzDzrj4b4WNENRhxpuD3EyGTX/635+Twttk5ALFoVPE
+         XNxzEw/MJF8MVJWtuWJW4wXKFLb44ksoCMESeWpA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([217.61.158.204]) by mail.gmx.com
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Mv2xO-1iZJ3G21eS-00r1tZ; Wed, 03 Jul 2019 18:48:30 +0200
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>
+Cc:     Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v2 0/7] implement poweroff for mt6323/6397
+Date:   Wed,  3 Jul 2019 18:48:15 +0200
+Message-Id: <20190703164822.17924-1-frank-w@public-files.de>
+X-Mailer: git-send-email 2.17.1
+X-Provags-ID: V03:K1:Q7bwDdrEsaphQYrmHhp90HE//kekmdWGTaievfmTLBQ650JdlG0
+ ZFc89t3IpqF6r+6VIT+crsEBq/Xze1pedGbOYkWYQfBHJcBZWJae3I7ecQ1H/v2yoJF8OpX
+ Pf8SwioVIe5yR86V2HhD2iyrRPnU9EZxKaK/fDp6sj/cNdKzfwD7IhaXPNReS4u11f3x2QB
+ D7KWSsmavk+XqjXkrbOpA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:80cN8sB+jW0=:MrqNVi7o1rXFaCcRKYMpMr
+ w42OIhPPamz4BFUxxD4WMAHwfFtF5Af/vkftOIq7mwDnmmLVjvzpDCY9WCe+26/fmhm9ILqrW
+ FlaWUzNwCyTbmexafmmy0f91BemYMTQny1Fh37Gy7/GX3Xw+J5/nUfZOCJ2exG/XYIluMDmy1
+ 0q4mBFg7UmyUtQO+ytaMzkxVjE2oF/JKKZ5drh/6iOFGqbGHl6EbrcaI0NGLIiQXE3xynUQaY
+ WW1Yre6qDx+HjMJ9Lk5dJMbEI57lMR5YuwgjOebQDEBq6Xe1uYXOrzQR1wkevI09OhmGYYLlT
+ AimTIiXaIOSqccv46iS0RLais/yHBL82Mz0q6lDrlsJNUJsxltDWWK8DBL2OcuT4ruWkeM1ea
+ BRuglTOqIvDTmPPygFhbdvUPT6iPFC7afxNXsGefI4bbjeNhYX6nS0F6cwLQ2LIWga4XZkEZd
+ z6sIuSnVYTe+hqvFwc+wKCzx53SS1hI7i5L0KpagtNitCMJqykKo0ImhRAKAg080rNWownjRu
+ IPF/cHMBG0dPqoq4tjWbz8fm1ABB8geWNY2G5YJw+XustSCnZIeRDuYUn3vntf3hSxyCvx/h6
+ MUbKc6EOnU3cwHaV2hAPdxdQaQVe0v5g5AqlyYzLoEe7LdHwl/8Ck/aMLs/1/dJgRKxLbPsgC
+ UyZqBeY7unxw19J2xnG0Rh0BmWuPeaNKNP+zSqXTSQtW0xKi6IF4r3mcK8qS4aF+fx1jPOjPU
+ FJ/4FPuvumLOfqR2xMCUtQ6ttO9gm7EQrFRiOoerJYoin92K1LI3mvoWpSnTnqjVhQycnPTH1
+ MeV3DKDczqlWEV/1LfDYSeSftVblK3KgGgG4cTpn710t5TFBO5gsiAHq88wJmaWek/LpO45iM
+ lfH96Cnhp+nsfsx6Zf44h1aGTG813Gh62z+M9mCsiiKkDVkBwA8dthC2A5gYrTY8a+bpgDYYq
+ a/PprCwYWXTxAJDQUXN9vx6seI1oJ1RF8Dn4qKzj8/2YFP3OpbfqnIVlrgV52vYoI/gQq8HBW
+ EDEaEam7lcXmITZU6/tZX/iLapG/9XXkG0MhyT4QusnNpUDoDd0WocRAYIjyBDgPfyREQFliV
+ HSgBUVFAVXoG6U=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-[This email was generated by a script.  Let me know if you have any suggestions
-to make it better, or if you want it re-generated with the latest status.]
+mainline-driver does not support mt6323
 
-Of the currently open syzbot reports against the upstream kernel, I've manually
-marked 1 of them as possibly being a bug in the rtc subsystem.
+this series adds mt6323 to mt6397-rtc-driver and implement
+power-controller on it.
 
-If you believe this bug is no longer valid, please close the syzbot report by
-sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
-original thread, as explained at https://goo.gl/tpsmEJ#status
+with this poweroff is working on bananapi-r2
 
-If you believe I misattributed this bug to the rtc subsystem, please let me
-know, and if possible forward the report to the correct people or mailing list.
+Original Patch from Josef Friedl
 
-Here is the bug:
+changes since v1:
+	- splitted into functional parts
+	- more infos about changes
 
---------------------------------------------------------------------------------
-Title:              BUG: workqueue lockup (4)
-Last occurred:      19 days ago
-Reported:           267 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=0041bf1423916e9ae458b08b760e269a33c14960
-Original thread:    https://lkml.kernel.org/lkml/0000000000005764090577a27486@google.com/T/#u
+Josef Friedl (7):
+  docs: dt-bindings: add poweroff
+  rtc: mt6397: move some common definitions into rtc.h
+  rtc: mt6397: improvements of rtc driver
+  mfd: mt6323: some improvements of mt6397-core
+  power: reset: add driver for mt6323 poweroff
+  MAINTAINERS: add Mediatek shutdown drivers
+  arm: dts: mt6323: add keys, power-controller, rtc and codec
 
-This bug has a C reproducer.
+ .../devicetree/bindings/mfd/mt6397.txt        |  10 +-
+ .../bindings/power/reset/mt6323-poweroff.txt  |  20 ++++
+ .../devicetree/bindings/rtc/rtc-mt6397.txt    |  29 +++++
+ MAINTAINERS                                   |   7 ++
+ arch/arm/boot/dts/mt6323.dtsi                 |  27 +++++
+ drivers/mfd/mt6397-core.c                     |  40 +++++--
+ drivers/power/reset/Kconfig                   |  10 ++
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/mt6323-poweroff.c         |  97 +++++++++++++++
+ drivers/rtc/rtc-mt6397.c                      | 110 ++++--------------
+ include/linux/mfd/mt6397/core.h               |   2 +
+ include/linux/mfd/mt6397/rtc.h                |  71 +++++++++++
+ 12 files changed, 325 insertions(+), 99 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-p=
+oweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ create mode 100644 drivers/power/reset/mt6323-poweroff.c
+ create mode 100644 include/linux/mfd/mt6397/rtc.h
 
-The original thread for this bug received 4 replies; the last was 20 days ago.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+08116743f8ad6f9a6de7@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000005764090577a27486@google.com
+=2D-
+2.17.1
 
