@@ -2,52 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E48165F537
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 11:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A755F53E
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 11:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfGDJLJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Jul 2019 05:11:09 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:35727 "EHLO
+        id S1727106AbfGDJN5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Jul 2019 05:13:57 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:33351 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbfGDJLJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Jul 2019 05:11:09 -0400
-Received: by mail-ed1-f67.google.com with SMTP id w20so4754455edd.2;
-        Thu, 04 Jul 2019 02:11:06 -0700 (PDT)
+        with ESMTP id S1726993AbfGDJN5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Jul 2019 05:13:57 -0400
+Received: by mail-ed1-f67.google.com with SMTP id i11so4761795edq.0;
+        Thu, 04 Jul 2019 02:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nRKw+yBKkC+eUV73JS9ibnT7StNHy1FQJFI3Pon1feg=;
-        b=a4wTkHQHFzM0LKzQO5hOyrn/vphTWIqvE8N8rhWt9/SqG1asYgIIbqQ5sVCiLh+ebv
-         FQrapoz1ecpXu6stmIY/mi0Sy7Q4kGDkO5RQJj6bu8I86/dOJ7s8lvbkdtj7qLiJp1eh
-         FBE7zBn1DvWCzbEwNE2lE8WTW2SfDeDmmetX46mA9r1+cbYmOarHPV/k1L4L6oEoMU2W
-         +AmtP0yVNb+uHra7ObYmSkJ88YM+I2/EVdxt2wYsNrsChhpxquK5Oo5IdjxGSDCFoVIW
-         G6DC73ZhGYaNz4V58QZk/ntS3XZ3aa5YiCLd6oabYHi88OyKUZPKpjkG71mRMNEDbw+M
-         3acw==
+        bh=c7ee4EzpqvBBOD97Gue2pS9SUFXP5n2zFCHJywZAxT8=;
+        b=FqFaVodLiLp4J2FtMlqeGMhJhqBITVh3ygcJyKAysJUQUyUokLURSC3l/LueFGxjUP
+         LmjZyUzwIgxYxPGwUIOWFu3QpBuS0meh9m88eTwr+EQIn1cL2HZlUgAnsLN+qMFDJfps
+         Sbtj3W183v1J8y0hDuMF5iChitciI5Bs3/jfNahmk08TP+yurOdiIiOWMd6yov4/ty+R
+         Tx7GQA2MbsSHgRl2bJtAal2vA7IbLw/Ah7Y95+jwqujXSa1G+JujFJ5O7rdWsLEWIjz0
+         /4KE6/+oXPCc6m/wn3jKoj3JVuE8wdvEYdDUIOU2rQuIJPfYM4Zi8WPLm+fzh+CBhtnz
+         EWXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=nRKw+yBKkC+eUV73JS9ibnT7StNHy1FQJFI3Pon1feg=;
-        b=XwTH9sYVdMP5xJH8/ZITvacqb0+mpzZHYopKhLEd4nHFg7+mLPCfI9CQ7v43P7O+ok
-         Vi91pri0LbYCUamOaKLbTgPMOGt/4NlevAn/Gkx5uqIAhlJPz1dyHSGBcO0+bseVFjDF
-         ++1HKVMQFW6GckqrDNwtjGVbtUzMwml3UEN8oTqe96d0QgofxQzN3PvHf3xo+2D7lwj4
-         CzO/F7LlVvOFCu14seAQGAY+4p9cnEh1g5WkzLcuEqQMDSVkY8R4Urkupjst0FZJRGap
-         7hS2ASx/xLmdYmxriF490Zs2o2Zsl6FHYbjA2L9L4FWAH67fv3k52rdiTY6dlzBGrsNO
-         OF9w==
-X-Gm-Message-State: APjAAAUqgDHxQdHu2SHN2d95btXRhkqqe1DJW3lZT7OBQAnePL3AIv7V
-        Ijow35q9MRmcib5IuZfb1C0=
-X-Google-Smtp-Source: APXvYqwCDxFMkdfkKsI3xqr5jLInDVysGk9vUR3qPWItkvXnYNW02Ig4bg6zmNNPVh3L3p7dT0JQkw==
-X-Received: by 2002:a17:906:6888:: with SMTP id n8mr1329370ejr.134.1562231466177;
-        Thu, 04 Jul 2019 02:11:06 -0700 (PDT)
+        bh=c7ee4EzpqvBBOD97Gue2pS9SUFXP5n2zFCHJywZAxT8=;
+        b=ecSOFl9xdhOLydZg8wll2oiaaczW66YT3ihoP5/4xVSYwigzgXGz9bAy5KqsqEeUaa
+         4tryb0VZQqBvt1cleBENNIIwJ22YU2p7UR9JmN6DFSvSzl6W3V1OJ1bWLGUveUvSNF2v
+         TmtUQO+oiSY79dvbN7Dnpe3fjiVXc4BuFlO8RUjshGokfMu7JGoqNsJiPb/N42JO8/8K
+         Iy8lx+b0HwzRhyfjJhrsRHL+ptuV1htnIL64h1gKaowglylc85UGyvZ+SQi2eP69udB5
+         b7niJ/hX+V9vHryOAL3elCtt0r2pUyhc5WQwLok3/3CqQx+EcWdTZ9kcLJ2sM2yNzUXJ
+         pXkQ==
+X-Gm-Message-State: APjAAAWa1bRRH5go1MZF4xPRQWJgPldK3jxxf/Ee9UGZRZbxlJVgxUPp
+        CjrcM51Q4vZzHP1IZqrKbc4VUaWBJUk=
+X-Google-Smtp-Source: APXvYqz3tv9O9odSgz+mz43n9dqAmWCiKrEJStGGHRYX37If9pKfT/my/9ubNfMao/owx0aiXr7bJQ==
+X-Received: by 2002:aa7:c509:: with SMTP id o9mr46478318edq.164.1562231634296;
+        Thu, 04 Jul 2019 02:13:54 -0700 (PDT)
 Received: from ziggy.stardust ([37.223.141.54])
-        by smtp.gmail.com with ESMTPSA id si13sm954687ejb.82.2019.07.04.02.11.03
+        by smtp.gmail.com with ESMTPSA id h10sm1495224ede.93.2019.07.04.02.13.52
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Jul 2019 02:11:05 -0700 (PDT)
-Subject: Re: [PATCH v2 2/7] rtc: mt6397: move some common definitions into
- rtc.h
+        Thu, 04 Jul 2019 02:13:53 -0700 (PDT)
+Subject: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
 To:     Frank Wunderlich <frank-w@public-files.de>,
         Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -72,7 +71,7 @@ To:     Frank Wunderlich <frank-w@public-files.de>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>
 Cc:     Josef Friedl <josef.friedl@speed.at>
 References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-3-frank-w@public-files.de>
+ <20190703164822.17924-4-frank-w@public-files.de>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
@@ -168,12 +167,12 @@ Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  pac005PuhxCWkKTJz3gCmznnoat4GCnL5gy/m0Qk45l4PFqwWXVLo9AQg2Kp3mlIFZ6fsEKI
  AN5hxlbNvNb9V2Zo5bFZjPWPFTxOteM0omUAS+QopwU0yPLLGJVf2iCmItHcUXI+r2JwH1CJ
  jrHWeQEI2ucSKsNa8FllDmG/fQ==
-Message-ID: <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
-Date:   Thu, 4 Jul 2019 11:11:03 +0200
+Message-ID: <24975910-cb06-7faf-998f-def23ca0891f@gmail.com>
+Date:   Thu, 4 Jul 2019 11:13:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190703164822.17924-3-frank-w@public-files.de>
+In-Reply-To: <20190703164822.17924-4-frank-w@public-files.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -186,171 +185,27 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 03/07/2019 18:48, Frank Wunderlich wrote:
 > From: Josef Friedl <josef.friedl@speed.at>
+> 
+> - use regmap_read_poll_timeout to drop while-loop
+> - use devm-api to drop remove-callback
+> - add new compatible for mt6323
 >
 
-Still missing commit message. Describe here why you need to do that.
+It's up to the maintainer but I don't like patches doing clean-ups together with
+adding support for new HW, although it's a trivial one here.
 
 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > =2D--
-
-Please check your email setting as discussed offline. Otherwise your patches
-won't get accepted.
-
-Regards,
-Matthias
-
->  drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
->  include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
->  2 files changed, 72 insertions(+), 54 deletions(-)
->  create mode 100644 include/linux/mfd/mt6397/rtc.h
+>  drivers/rtc/rtc-mt6397.c | 55 ++++++++++++++++------------------------
+>  1 file changed, 22 insertions(+), 33 deletions(-)
 > 
 > diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> index b46ed4dc7015..c08ee5edf865 100644
+> index c08ee5edf865..e5ddf0d0b6f1 100644
 > =2D-- a/drivers/rtc/rtc-mt6397.c
 > +++ b/drivers/rtc/rtc-mt6397.c
-> @@ -9,60 +9,7 @@
->  #include <linux/module.h>
->  #include <linux/regmap.h>
->  #include <linux/rtc.h>
-> -#include <linux/irqdomain.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/of_address.h>
-> -#include <linux/of_irq.h>
-> -#include <linux/io.h>
-> -#include <linux/mfd/mt6397/core.h>
-> -
-> -#define RTC_BBPU		0x0000
-> -#define RTC_BBPU_CBUSY		BIT(6)
-> -
-> -#define RTC_WRTGR		0x003c
-> -
-> -#define RTC_IRQ_STA		0x0002
-> -#define RTC_IRQ_STA_AL		BIT(0)
-> -#define RTC_IRQ_STA_LP		BIT(3)
-> -
-> -#define RTC_IRQ_EN		0x0004
-> -#define RTC_IRQ_EN_AL		BIT(0)
-> -#define RTC_IRQ_EN_ONESHOT	BIT(2)
-> -#define RTC_IRQ_EN_LP		BIT(3)
-> -#define RTC_IRQ_EN_ONESHOT_AL	(RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
-> -
-> -#define RTC_AL_MASK		0x0008
-> -#define RTC_AL_MASK_DOW		BIT(4)
-> -
-> -#define RTC_TC_SEC		0x000a
-> -/* Min, Hour, Dom... register offset to RTC_TC_SEC */
-> -#define RTC_OFFSET_SEC		0
-> -#define RTC_OFFSET_MIN		1
-> -#define RTC_OFFSET_HOUR		2
-> -#define RTC_OFFSET_DOM		3
-> -#define RTC_OFFSET_DOW		4
-> -#define RTC_OFFSET_MTH		5
-> -#define RTC_OFFSET_YEAR		6
-> -#define RTC_OFFSET_COUNT	7
-> -
-> -#define RTC_AL_SEC		0x0018
-> -
-> -#define RTC_PDN2		0x002e
-> -#define RTC_PDN2_PWRON_ALARM	BIT(4)
-> -
-> -#define RTC_MIN_YEAR		1968
-> -#define RTC_BASE_YEAR		1900
-> -#define RTC_NUM_YEARS		128
-> -#define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
-> -
-> -struct mt6397_rtc {
-> -	struct device		*dev;
-> -	struct rtc_device	*rtc_dev;
-> -	struct mutex		lock;
-> -	struct regmap		*regmap;
-> -	int			irq;
-> -	u32			addr_base;
-> -};
-> +#include <linux/mfd/mt6397/rtc.h>
-> 
->  static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
->  {
-> diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc=
-> .h
-> new file mode 100644
-> index 000000000000..b702c29e8c74
-> =2D-- /dev/null
-> +++ b/include/linux/mfd/mt6397/rtc.h
-> @@ -0,0 +1,71 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2014-2018 MediaTek Inc.
-> + *
-> + * Author: Tianping.Fang <tianping.fang@mediatek.com>
-> + *        Sean Wang <sean.wang@mediatek.com>
-> + */
-> +
-> +#ifndef _LINUX_MFD_MT6397_RTC_H_
-> +#define _LINUX_MFD_MT6397_RTC_H_
-> +
-> +#include <linux/jiffies.h>
-> +#include <linux/mutex.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +
-> +#define RTC_BBPU               0x0000
-> +#define RTC_BBPU_CBUSY         BIT(6)
-> +#define RTC_BBPU_KEY            (0x43 << 8)
-> +
-> +#define RTC_WRTGR              0x003c
-> +
-> +#define RTC_IRQ_STA            0x0002
-> +#define RTC_IRQ_STA_AL         BIT(0)
-> +#define RTC_IRQ_STA_LP         BIT(3)
-> +
-> +#define RTC_IRQ_EN             0x0004
-> +#define RTC_IRQ_EN_AL          BIT(0)
-> +#define RTC_IRQ_EN_ONESHOT     BIT(2)
-> +#define RTC_IRQ_EN_LP          BIT(3)
-> +#define RTC_IRQ_EN_ONESHOT_AL  (RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
-> +
-> +#define RTC_AL_MASK            0x0008
-> +#define RTC_AL_MASK_DOW                BIT(4)
-> +
-> +#define RTC_TC_SEC             0x000a
-> +/* Min, Hour, Dom... register offset to RTC_TC_SEC */
-> +#define RTC_OFFSET_SEC         0
-> +#define RTC_OFFSET_MIN         1
-> +#define RTC_OFFSET_HOUR                2
-> +#define RTC_OFFSET_DOM         3
-> +#define RTC_OFFSET_DOW         4
-> +#define RTC_OFFSET_MTH         5
-> +#define RTC_OFFSET_YEAR                6
-> +#define RTC_OFFSET_COUNT       7
-> +
-> +#define RTC_AL_SEC             0x0018
-> +
-> +#define RTC_PDN2               0x002e
-> +#define RTC_PDN2_PWRON_ALARM   BIT(4)
-> +
-> +#define RTC_MIN_YEAR           1968
-> +#define RTC_BASE_YEAR          1900
-> +#define RTC_NUM_YEARS          128
-> +#define RTC_MIN_YEAR_OFFSET    (RTC_MIN_YEAR - RTC_BASE_YEAR)
-> +
-> +#define MTK_RTC_POLL_DELAY_US  10
-> +#define MTK_RTC_POLL_TIMEOUT   (jiffies_to_usecs(HZ))
-> +
-> +struct mt6397_rtc {
-> +	struct device           *dev;
-> +	struct rtc_device       *rtc_dev;
-> +
-> +	/* Protect register access from multiple tasks */
-> +	struct mutex            lock;
-> +	struct regmap           *regmap;
-> +	int                     irq;
-> +	u32                     addr_base;
-> +};
-> +
-> +#endif /* _LINUX_MFD_MT6397_RTC_H_ */
-> =2D-
-> 2.17.1
-> 
+> @@ -4,16 +4,19 @@
+>  * Author: Tianping.Fang <tianping.fang@mediatek.com>
+
+Missing in the CC list.
+
