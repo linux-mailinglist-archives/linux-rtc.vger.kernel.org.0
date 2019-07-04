@@ -2,29 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 269BB5F70D
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 13:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC035F774
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 13:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfGDLJr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Jul 2019 07:09:47 -0400
-Received: from mout.gmx.net ([212.227.17.22]:51253 "EHLO mout.gmx.net"
+        id S1727594AbfGDLuT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Jul 2019 07:50:19 -0400
+Received: from mout.gmx.net ([212.227.15.19]:44393 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727436AbfGDLJr (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 4 Jul 2019 07:09:47 -0400
+        id S1727548AbfGDLuT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 4 Jul 2019 07:50:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562238524;
-        bh=xewwvH1K14MpwmyPyoSVm3soCqhRG4coEguzC5XFyRU=;
-        h=X-UI-Sender-Class:From:Cc:Subject:Date:In-Reply-To:References;
-        b=F5ztQ6oLQDxWBeKJRudGw4uO/Od6NHcZR42iKjQZwFNvXMU1LDkJcz++vnGjhGhkT
-         rhKPJAk0CjVGVx6E4KYrz4r/6zYDVOF8Z62oh4MlWCmTeJdmMyWg6nyBRNPHdnNkk6
-         4qALyoONjlAPb/+iANBotiT6pDWpFqR33aTqbqDk=
+        s=badeba3b8450; t=1562240946;
+        bh=3XgfK29g7vLa/3fkH4yqnV5cnFE1yxc49nWYpw/CAjE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=knmHJll2oZI2vMmwAv/1ME4hVpqS0PWrF9Ii8PkJp7W5/sqfcY/qrsUAkKjVViwQn
+         3CxBSzc/FCwAmnBG2/JJ/9Qcs9UnGrsKgur1158+rpQ4xA/L8ZOOZucSZQ+H3zoH/H
+         r8/kl+3pUg6RVhZL4FTDAvNzcrsZD9G5hCVre2hI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [217.61.145.121] ([217.61.145.121]) by web-mail.gmx.net
  (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Thu, 4 Jul 2019
- 13:08:44 +0200
+ 13:49:06 +0200
 MIME-Version: 1.0
-Message-ID: <trinity-bad65b37-f133-4f92-9513-965ecc0e0a0b-1562238524435@3c-app-gmx-bs27>
+Message-ID: <trinity-cc209a43-af34-4788-8b7a-8495052c8ca6-1562240946454@3c-app-gmx-bs27>
 From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     "Matthias Brugger" <matthias.bgg@gmail.com>
 Cc:     "Lee Jones" <lee.jones@linaro.org>,
         "Rob Herring" <robh+dt@kernel.org>,
         "Mark Rutland" <mark.rutland@arm.com>,
@@ -47,44 +48,67 @@ Cc:     "Lee Jones" <lee.jones@linaro.org>,
         "Nicolas Ferre" <nicolas.ferre@microchip.com>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>,
         "Josef Friedl" <josef.friedl@speed.at>
-Subject: Aw: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
+Subject: Aw: Re: [PATCH v2 2/7] rtc: mt6397: move some common definitions
+ into rtc.h
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 4 Jul 2019 13:08:44 +0200
+Date:   Thu, 4 Jul 2019 13:49:06 +0200
 Importance: normal
 Sensitivity: Normal
-In-Reply-To: <24975910-cb06-7faf-998f-def23ca0891f@gmail.com>
+In-Reply-To: <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
 References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-4-frank-w@public-files.de>
- <24975910-cb06-7faf-998f-def23ca0891f@gmail.com>
+ <20190703164822.17924-3-frank-w@public-files.de>
+ <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
 X-UI-Message-Type: mail
 X-Priority: 3
-X-Provags-ID: V03:K1:jnRruknwXBDel+OIwmAlBlpZCo1GUcWSFiGCMCvsYCxnT6gNPN47MfQ8d+npte2+5ba3C
- pK6nsUiE1pbreDN5g7uwxCqoVPtzGFjzwnicn7H2HiakjJVH++0nWUZcvMTNbDw41XYyfHz1rvP5
- tyG636rnPhcTQmqemF8FuioIckboC/V+PRYo5xPNkhqnJzTMPGV8c9mOlJm7mL9gNnKhsJ51sgaA
- F2utj5iZ0sWUH8hx4axdegf1shPw2ITfHHB8OiUIm42I/vflDVjo4pyNj0d7P0Z8P9Qmr9ogiFQj
- I8=
+X-Provags-ID: V03:K1:7WCJDoI4ExT7kJKMPI6fq7FNUW7pRNwLc1tUO/5cmP72zZnoBU2v1Y8uix/fw2i48d5FF
+ Wd8wvTQJl1I2afIhS99OdBd4Iyh67OTcrpdbEQzhKKf6oNe+8evBVlNA3mdt3sLZ9EfauHTySxHm
+ DPZWCXm6h5c0Phecn2JIbp8F6eSFLCyZzdI2+ijkEM1IUpZ0cT5dqCmnk8hPwd9Sd1EJDKwLDMdM
+ fnT5RJ/tuLvBBpxa3bA56T8T1C/9SuiwHF1TDpcf69rvk2/9SvDHsBp3GT6hMIlCS4ZRbzcYD2dP
+ 58=
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5dO1uuC4GHI=:HuT9N7g5VLRtNrhu9OZLWM
- s4oHLi+F4JnZ1iuiGNv5fWp6Cawu+ZAFh+3ySZ/XyVDWcO/IoLj6PmevaQtIHibcXyMfldhFr
- H774L3+0s3jPi4KGidGirvKsHonDduG2z+L3Hn5rHCEArBIdknXuOxWNhrmImQjNPngJJeLcN
- AJAbSiX3wEcJQeshB2wsEWtNRopMrBOxtJZbIFBfnOPeRwwo8DEuVkaCYlpp4hz+0/zfIXXQi
- C97yBiCjPLdCIHjsXZ5FIKvjW49IX0pBxKczAEpkfnS2I9CRZNj/n/cISuJ58TiX3s4IcsraE
- +cxkjIKRljQ8Hva6SIjS3R6dPeEXAgsIsIxHYoGiSLg7IjKggeCViPlkbocioMjnsimIFQC1V
- DuNLmHO4HtIuuMWPuDlM7liEmbM9toxtmxxrq02GY+5zxJjdg/CN0JjoKEMogwcNSvPSUJSQ8
- FAKuYh05I68HWtL6BpvPtIfRieUKWEh7fVgNqET3U5VGelkjd5RuHrVWi6gF+quRLHFZdKXzx
- dRRAViLmvut6WTLCuFMLnYaIMCg7WkcaJkU0Ca+zAJNai39ND4MXdE2mvPGhy5qugJUijobm8
- 0iieYHmAd1P9kqyoWbTqNZhVd2cK0Kh6doCKz0cYxypBjEwSttY0c7BBcptAgDVtFMz7wJlco
- CaQE=
-To:     unlisted-recipients:; (no To-header on input)
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mW1rCx44iLA=:/Gajeu7to3A6Ht4fEOGmOM
+ VrVkYrIOaOWFbVz0dUB19QotgPqpUaNZ9s5JK+j8PjaEBomafj/raSFiwvRW1i7F+V8c1yXi3
+ 7UJr7dAlUe5CK5xzgHEMiBNl7adKcmNKYRE/o0poTjKZAwuMVnHV9J+fkUdRrQDVrVkNZQDtY
+ LHvQnas9brIhuezksYFzH9Pol+hd3YXpTP1J/k9Tep1e6ppE6zX3awixfJVVyPXj09b9iFFPP
+ nPpETdXzqQspp2OaySgm9TbPNosj+TI6fbPcuIA9018AH3QcfASNas9uoobDSzUAKc7u2CYCl
+ SmsdGV0F41hBk0LaPWMD5JmQE14GDfYBjsG1BP29GHify4oGtvVCBqrZwZKRCtbUz3G7i9KQG
+ IknEjSp92+qsc71cN9DiVh3WD72v2MeCIqH32Vt5HLNfOb2hbBvkYRepx+55v6D+PY0s0xKDY
+ ld9U5E2roDTiHXZ+GymN4caVOKAi3lsJT8kr9E3JCAEFOuqkGsPN8VrnmnDmvFOlxOumyBJki
+ NqU8IwX2kaZfTf99CDBU5Ortk+6ZMl98egmxvVuWkpX9nml7w1lACPqpLuB1FFc0rFvC1MzXB
+ wDNcELXrKOYz9pdcvEr6jUKFQoA9gQsQbd6KNaUd8V3CtnvF7ZGL1GdRH8I4RJ7AKDsyEeUsy
+ Ekr8=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-> Gesendet: Donnerstag, 04. Juli 2019 um 11:13 Uhr
-> Von: "Matthias Brugger" <matthias.bgg@gmail.com>
+> Still missing commit message. Describe here why you need to do that.
 
-> It's up to the maintainer but I don't like patches doing clean-ups together with
-> adding support for new HW, although it's a trivial one here.
+ok, added note that headers are reused in power-off-driver
 
-i can split again to have clean-up and new functions separated
+https://github.com/frank-w/BPI-R2-4.14/commits/5.2-poweroff-mainline
+
+> Please check your email setting as discussed offline. Otherwise your pat=
+ches
+> won't get accepted.
+
+tested with webmailer where it looks good :(
+
+seems the problem is only shown when imported to patchwork
+
+using only git sendemail in ubuntu 18.4 without any mta (have sendmail not=
+ installed) and no changes made to git sendemail except authentication.
+
+i see that (except cover-letter which is quoted-printable) all is send wit=
+h
+Content-Type: text/plain; charset=3D"us-ascii"
+Content-Transfer-Encoding: 7bit
+
+so i have forced git sendemail now to
+sendemail.composeencoding UTF-8
+
+if this does not work i can try instead
+sendemail.transferEncoding 8bit
+
+regards Frank
