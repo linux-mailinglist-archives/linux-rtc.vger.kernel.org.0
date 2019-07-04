@@ -2,21 +2,20 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E1A5FD27
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 20:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355895FDD4
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 22:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfGDSy7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Jul 2019 14:54:59 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41479 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727017AbfGDSy7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Jul 2019 14:54:59 -0400
-X-Originating-IP: 90.65.161.137
+        id S1727256AbfGDUn6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Jul 2019 16:43:58 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:57599 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbfGDUn6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Jul 2019 16:43:58 -0400
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 565C21C0009;
-        Thu,  4 Jul 2019 18:54:48 +0000 (UTC)
-Date:   Thu, 4 Jul 2019 20:54:48 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id E568E100006;
+        Thu,  4 Jul 2019 20:43:37 +0000 (UTC)
+Date:   Thu, 4 Jul 2019 22:43:36 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Frank Wunderlich <frank-w@public-files.de>
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -40,138 +39,91 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>,
         Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v2 1/7] docs: dt-bindings: add poweroff
-Message-ID: <20190704185448.GI3692@piout.net>
+Subject: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
+Message-ID: <20190704204336.GJ3692@piout.net>
 References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-2-frank-w@public-files.de>
+ <20190703164822.17924-4-frank-w@public-files.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190703164822.17924-2-frank-w@public-files.de>
+In-Reply-To: <20190703164822.17924-4-frank-w@public-files.de>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Please use a better subject line.
+On 03/07/2019 18:48:18+0200, Frank Wunderlich wrote:
+> @@ -271,14 +268,11 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+> 
+>  	platform_set_drvdata(pdev, rtc);
+> 
+> -	rtc->rtc_dev = devm_rtc_allocate_device(rtc->dev);
+> -	if (IS_ERR(rtc->rtc_dev))
+> -		return PTR_ERR(rtc->rtc_dev);
+> +	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
+> +					mtk_rtc_irq_handler_thread,
+> +					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+> +					"mt6397-rtc", rtc);
+> 
 
-On 03/07/2019 18:48:16+0200, Frank Wunderlich wrote:
-> From: Josef Friedl <josef.friedl@speed.at>
-> 
-> add documentation for pmic, rtc and power/reset devicetree bindings
-> 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
->  .../devicetree/bindings/mfd/mt6397.txt        | 10 ++++++-
->  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++
->  .../devicetree/bindings/rtc/rtc-mt6397.txt    | 29 +++++++++++++++++++
+This change may lead to a crash and the allocation was intentionally
+placed before the irq request.
 
-This file is unrelated to the patch, it should be separated.
+> -	ret = request_threaded_irq(rtc->irq, NULL,
+> -				   mtk_rtc_irq_handler_thread,
+> -				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+> -				   "mt6397-rtc", rtc);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
+>  			rtc->irq, ret);
+> @@ -287,6 +281,10 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+> 
+>  	device_init_wakeup(&pdev->dev, 1);
+> 
+> +	rtc->rtc_dev = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(rtc->rtc_dev))
+> +		return PTR_ERR(rtc->rtc_dev);
+> +
+>  	rtc->rtc_dev->ops = &mtk_rtc_ops;
+> 
+>  	ret = rtc_register_device(rtc->rtc_dev);
+> @@ -302,15 +300,6 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+> 
+> -static int mtk_rtc_remove(struct platform_device *pdev)
+> -{
+> -	struct mt6397_rtc *rtc = platform_get_drvdata(pdev);
+> -
+> -	free_irq(rtc->irq, rtc);
+> -
+> -	return 0;
+> -}
+> -
+>  #ifdef CONFIG_PM_SLEEP
+>  static int mt6397_rtc_suspend(struct device *dev)
+>  {
+> @@ -337,6 +326,7 @@ static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_suspend,
+>  			mt6397_rtc_resume);
+> 
+>  static const struct of_device_id mt6397_rtc_of_match[] = {
+> +	{ .compatible = "mediatek,mt6323-rtc", },
 
->  3 files changed, 58 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+Unrelated change, this is not an improvement and must be accompanied by
+a documentation change.
+
+>  	{ .compatible = "mediatek,mt6397-rtc", },
+>  	{ }
+>  };
+> @@ -349,7 +339,6 @@ static struct platform_driver mtk_rtc_driver = {
+>  		.pm = &mt6397_pm_ops,
+>  	},
+>  	.probe	= mtk_rtc_probe,
+> -	.remove = mtk_rtc_remove,
+>  };
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 0ebd08af777d..44acb9827716 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -8,6 +8,7 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
->  - Clock
->  - LED
->  - Keys
-> +- Power controller
-> 
->  It is interfaced to host controller using SPI interface by a proprietary hardware
->  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
-> @@ -22,8 +23,10 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
->  Optional subnodes:
-> 
->  - rtc
-> -	Required properties:
-> +	Required properties: Should be one of follows
-> +		- compatible: "mediatek,mt6323-rtc"
->  		- compatible: "mediatek,mt6397-rtc"
-> +	For details, see Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
->  - regulators
->  	Required properties:
->  		- compatible: "mediatek,mt6397-regulator"
-> @@ -46,6 +49,11 @@ Optional subnodes:
->  		- compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
->  	see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-> 
-> +- power-controller
-> +	Required properties:
-> +		- compatible: "mediatek,mt6323-pwrc"
-> +	For details, see Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-> +
->  Example:
->  	pwrap: pwrap@1000f000 {
->  		compatible = "mediatek,mt8135-pwrap";
-> diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-> new file mode 100644
-> index 000000000000..933f0c48e887
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
-> @@ -0,0 +1,20 @@
-> +Device Tree Bindings for Power Controller on MediaTek PMIC
-> +
-> +The power controller which could be found on PMIC is responsible for externally
-> +powering off or on the remote MediaTek SoC through the circuit BBPU.
-> +
-> +Required properties:
-> +- compatible: Should be one of follows
-> +       "mediatek,mt6323-pwrc": for MT6323 PMIC
-> +
-> +Example:
-> +
-> +       pmic {
-> +               compatible = "mediatek,mt6323";
-> +
-> +               ...
-> +
-> +               power-controller {
-> +                       compatible = "mediatek,mt6323-pwrc";
-> +               };
-> +       }
-> diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
-> new file mode 100644
-> index 000000000000..ebd1cf80dcc8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
-> @@ -0,0 +1,29 @@
-> +Device-Tree bindings for MediaTek PMIC based RTC
-> +
-> +MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
-> +as a type of multi-function device (MFD). The RTC can be configured and set up
-> +with PMIC wrapper bus which is a common resource shared with the other
-> +functions found on the same PMIC.
-> +
-> +For MediaTek PMIC MFD bindings, see:
-> +Documentation/devicetree/bindings/mfd/mt6397.txt
-> +
-> +For MediaTek PMIC wrapper bus bindings, see:
-> +Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> +
-> +Required properties:
-> +- compatible: Should be one of follows
-> +       "mediatek,mt6323-rtc": for MT6323 PMIC
-> +       "mediatek,mt6397-rtc": for MT6397 PMIC
-> +
-> +Example:
-> +
-> +       pmic {
-> +               compatible = "mediatek,mt6323";
-> +
-> +               ...
-> +
-> +               rtc {
-> +                       compatible = "mediatek,mt6323-rtc";
-> +               };
-> +       };
+>  module_platform_driver(mtk_rtc_driver);
 > --
 > 2.17.1
 > 
