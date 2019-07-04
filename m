@@ -2,113 +2,181 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFC035F774
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 13:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E1A5FD27
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Jul 2019 20:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727594AbfGDLuT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Jul 2019 07:50:19 -0400
-Received: from mout.gmx.net ([212.227.15.19]:44393 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727548AbfGDLuT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 4 Jul 2019 07:50:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562240946;
-        bh=3XgfK29g7vLa/3fkH4yqnV5cnFE1yxc49nWYpw/CAjE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=knmHJll2oZI2vMmwAv/1ME4hVpqS0PWrF9Ii8PkJp7W5/sqfcY/qrsUAkKjVViwQn
-         3CxBSzc/FCwAmnBG2/JJ/9Qcs9UnGrsKgur1158+rpQ4xA/L8ZOOZucSZQ+H3zoH/H
-         r8/kl+3pUg6RVhZL4FTDAvNzcrsZD9G5hCVre2hI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.145.121] ([217.61.145.121]) by web-mail.gmx.net
- (3c-app-gmx-bs27.server.lan [172.19.170.79]) (via HTTP); Thu, 4 Jul 2019
- 13:49:06 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-cc209a43-af34-4788-8b7a-8495052c8ca6-1562240946454@3c-app-gmx-bs27>
-From:   "Frank Wunderlich" <frank-w@public-files.de>
-To:     "Matthias Brugger" <matthias.bgg@gmail.com>
-Cc:     "Lee Jones" <lee.jones@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        id S1727114AbfGDSy7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Jul 2019 14:54:59 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41479 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727017AbfGDSy7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Jul 2019 14:54:59 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 565C21C0009;
+        Thu,  4 Jul 2019 18:54:48 +0000 (UTC)
+Date:   Thu, 4 Jul 2019 20:54:48 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        "Eddie Huang" <eddie.huang@mediatek.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Richard Fontana" <rfontana@redhat.com>,
-        "Allison Randal" <allison@lohutok.net>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Allison Randal <allison@lohutok.net>,
         "David S . Miller" <davem@davemloft.net>,
-        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Rob Herring" <robh@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        "Josef Friedl" <josef.friedl@speed.at>
-Subject: Aw: Re: [PATCH v2 2/7] rtc: mt6397: move some common definitions
- into rtc.h
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 4 Jul 2019 13:49:06 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
+        Josef Friedl <josef.friedl@speed.at>
+Subject: Re: [PATCH v2 1/7] docs: dt-bindings: add poweroff
+Message-ID: <20190704185448.GI3692@piout.net>
 References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-3-frank-w@public-files.de>
- <62a4c4ce-7ab3-2f9d-a85e-be92340724a9@gmail.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:7WCJDoI4ExT7kJKMPI6fq7FNUW7pRNwLc1tUO/5cmP72zZnoBU2v1Y8uix/fw2i48d5FF
- Wd8wvTQJl1I2afIhS99OdBd4Iyh67OTcrpdbEQzhKKf6oNe+8evBVlNA3mdt3sLZ9EfauHTySxHm
- DPZWCXm6h5c0Phecn2JIbp8F6eSFLCyZzdI2+ijkEM1IUpZ0cT5dqCmnk8hPwd9Sd1EJDKwLDMdM
- fnT5RJ/tuLvBBpxa3bA56T8T1C/9SuiwHF1TDpcf69rvk2/9SvDHsBp3GT6hMIlCS4ZRbzcYD2dP
- 58=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mW1rCx44iLA=:/Gajeu7to3A6Ht4fEOGmOM
- VrVkYrIOaOWFbVz0dUB19QotgPqpUaNZ9s5JK+j8PjaEBomafj/raSFiwvRW1i7F+V8c1yXi3
- 7UJr7dAlUe5CK5xzgHEMiBNl7adKcmNKYRE/o0poTjKZAwuMVnHV9J+fkUdRrQDVrVkNZQDtY
- LHvQnas9brIhuezksYFzH9Pol+hd3YXpTP1J/k9Tep1e6ppE6zX3awixfJVVyPXj09b9iFFPP
- nPpETdXzqQspp2OaySgm9TbPNosj+TI6fbPcuIA9018AH3QcfASNas9uoobDSzUAKc7u2CYCl
- SmsdGV0F41hBk0LaPWMD5JmQE14GDfYBjsG1BP29GHify4oGtvVCBqrZwZKRCtbUz3G7i9KQG
- IknEjSp92+qsc71cN9DiVh3WD72v2MeCIqH32Vt5HLNfOb2hbBvkYRepx+55v6D+PY0s0xKDY
- ld9U5E2roDTiHXZ+GymN4caVOKAi3lsJT8kr9E3JCAEFOuqkGsPN8VrnmnDmvFOlxOumyBJki
- NqU8IwX2kaZfTf99CDBU5Ortk+6ZMl98egmxvVuWkpX9nml7w1lACPqpLuB1FFc0rFvC1MzXB
- wDNcELXrKOYz9pdcvEr6jUKFQoA9gQsQbd6KNaUd8V3CtnvF7ZGL1GdRH8I4RJ7AKDsyEeUsy
- Ekr8=
-Content-Transfer-Encoding: quoted-printable
+ <20190703164822.17924-2-frank-w@public-files.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703164822.17924-2-frank-w@public-files.de>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-> Still missing commit message. Describe here why you need to do that.
+Please use a better subject line.
 
-ok, added note that headers are reused in power-off-driver
+On 03/07/2019 18:48:16+0200, Frank Wunderlich wrote:
+> From: Josef Friedl <josef.friedl@speed.at>
+> 
+> add documentation for pmic, rtc and power/reset devicetree bindings
+> 
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  .../devicetree/bindings/mfd/mt6397.txt        | 10 ++++++-
+>  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++
+>  .../devicetree/bindings/rtc/rtc-mt6397.txt    | 29 +++++++++++++++++++
 
-https://github.com/frank-w/BPI-R2-4.14/commits/5.2-poweroff-mainline
+This file is unrelated to the patch, it should be separated.
 
-> Please check your email setting as discussed offline. Otherwise your pat=
-ches
-> won't get accepted.
+>  3 files changed, 58 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> index 0ebd08af777d..44acb9827716 100644
+> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> @@ -8,6 +8,7 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
+>  - Clock
+>  - LED
+>  - Keys
+> +- Power controller
+> 
+>  It is interfaced to host controller using SPI interface by a proprietary hardware
+>  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
+> @@ -22,8 +23,10 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
+>  Optional subnodes:
+> 
+>  - rtc
+> -	Required properties:
+> +	Required properties: Should be one of follows
+> +		- compatible: "mediatek,mt6323-rtc"
+>  		- compatible: "mediatek,mt6397-rtc"
+> +	For details, see Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+>  - regulators
+>  	Required properties:
+>  		- compatible: "mediatek,mt6397-regulator"
+> @@ -46,6 +49,11 @@ Optional subnodes:
+>  		- compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
+>  	see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+> 
+> +- power-controller
+> +	Required properties:
+> +		- compatible: "mediatek,mt6323-pwrc"
+> +	For details, see Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> +
+>  Example:
+>  	pwrap: pwrap@1000f000 {
+>  		compatible = "mediatek,mt8135-pwrap";
+> diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> new file mode 100644
+> index 000000000000..933f0c48e887
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> @@ -0,0 +1,20 @@
+> +Device Tree Bindings for Power Controller on MediaTek PMIC
+> +
+> +The power controller which could be found on PMIC is responsible for externally
+> +powering off or on the remote MediaTek SoC through the circuit BBPU.
+> +
+> +Required properties:
+> +- compatible: Should be one of follows
+> +       "mediatek,mt6323-pwrc": for MT6323 PMIC
+> +
+> +Example:
+> +
+> +       pmic {
+> +               compatible = "mediatek,mt6323";
+> +
+> +               ...
+> +
+> +               power-controller {
+> +                       compatible = "mediatek,mt6323-pwrc";
+> +               };
+> +       }
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> new file mode 100644
+> index 000000000000..ebd1cf80dcc8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> @@ -0,0 +1,29 @@
+> +Device-Tree bindings for MediaTek PMIC based RTC
+> +
+> +MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
+> +as a type of multi-function device (MFD). The RTC can be configured and set up
+> +with PMIC wrapper bus which is a common resource shared with the other
+> +functions found on the same PMIC.
+> +
+> +For MediaTek PMIC MFD bindings, see:
+> +Documentation/devicetree/bindings/mfd/mt6397.txt
+> +
+> +For MediaTek PMIC wrapper bus bindings, see:
+> +Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+> +
+> +Required properties:
+> +- compatible: Should be one of follows
+> +       "mediatek,mt6323-rtc": for MT6323 PMIC
+> +       "mediatek,mt6397-rtc": for MT6397 PMIC
+> +
+> +Example:
+> +
+> +       pmic {
+> +               compatible = "mediatek,mt6323";
+> +
+> +               ...
+> +
+> +               rtc {
+> +                       compatible = "mediatek,mt6323-rtc";
+> +               };
+> +       };
+> --
+> 2.17.1
+> 
 
-tested with webmailer where it looks good :(
-
-seems the problem is only shown when imported to patchwork
-
-using only git sendemail in ubuntu 18.4 without any mta (have sendmail not=
- installed) and no changes made to git sendemail except authentication.
-
-i see that (except cover-letter which is quoted-printable) all is send wit=
-h
-Content-Type: text/plain; charset=3D"us-ascii"
-Content-Transfer-Encoding: 7bit
-
-so i have forced git sendemail now to
-sendemail.composeencoding UTF-8
-
-if this does not work i can try instead
-sendemail.transferEncoding 8bit
-
-regards Frank
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
