@@ -2,89 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E476046F
-	for <lists+linux-rtc@lfdr.de>; Fri,  5 Jul 2019 12:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B87560972
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 Jul 2019 17:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728200AbfGEK1T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 5 Jul 2019 06:27:19 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:52366 "EHLO inva020.nxp.com"
+        id S1726851AbfGEPhQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 5 Jul 2019 11:37:16 -0400
+Received: from mout.gmx.net ([212.227.15.19]:56819 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728030AbfGEK1T (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 5 Jul 2019 06:27:19 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 6549B1A0782;
-        Fri,  5 Jul 2019 12:27:17 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 85C6C1A0176;
-        Fri,  5 Jul 2019 12:27:12 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 535FD40297;
-        Fri,  5 Jul 2019 18:27:06 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        leoyang.li@nxp.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaobo.xie@nxp.com, jiafei.pan@nxp.com, ran.wang_1@nxp.com,
-        Biwen Li <biwen.li@nxp.com>
-Subject: [PATCH 2/2] Documentation: dt: binding: rtc: add binding for ftm alarm driver
-Date:   Fri,  5 Jul 2019 18:18:00 +0800
-Message-Id: <20190705101800.44561-2-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20190705101800.44561-1-biwen.li@nxp.com>
-References: <20190705101800.44561-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725497AbfGEPhP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 5 Jul 2019 11:37:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1562340946;
+        bh=+xG973BWcEz2x94VZcUAPePu5GwCe5fwDn2xc5iFqo0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=N0/iBvJc6HtX2nJ4b7IPEhJQHze0yGnFVfDsrmD7ZCrkY1o/NEmt/GfIh0sEBoPZk
+         pUwgP+xFM6zSWbqJykxww7GN6eLJ2skqyA7owjZiCfEOBg042cwWIgn7mjUyrBCEpv
+         jE/dN7C0LP0estl9Ivtpd/Id2IV8oTVe4Tp9sxUo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [185.53.41.182] ([185.53.41.182]) by web-mail.gmx.net
+ (3c-app-gmx-bs68.server.lan [172.19.170.213]) (via HTTP); Fri, 5 Jul 2019
+ 17:35:46 +0200
+MIME-Version: 1.0
+Message-ID: <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
+From:   "Frank Wunderlich" <frank-w@public-files.de>
+To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+Cc:     "Lee Jones" <lee.jones@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        "Sean Wang" <sean.wang@mediatek.com>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        "Eddie Huang" <eddie.huang@mediatek.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Richard Fontana" <rfontana@redhat.com>,
+        "Allison Randal" <allison@lohutok.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Mauro Carvalho Chehab" <mchehab+samsung@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rob Herring" <robh@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        "Paul E . McKenney" <paulmck@linux.ibm.com>,
+        "Josef Friedl" <josef.friedl@speed.at>
+Subject: Aw: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 5 Jul 2019 17:35:46 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20190704204336.GJ3692@piout.net>
+References: <20190703164822.17924-1-frank-w@public-files.de>
+ <20190703164822.17924-4-frank-w@public-files.de>
+ <20190704204336.GJ3692@piout.net>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:3DQjnrcP0qQkneq0N2KGXDypFxKC70Y6B/6Wz6gG83c+zzU8tPfyJ7R1HE1HqAXh3hB2I
+ tgJSbOVBlcwfm2+5WrNhSjWxrIe4AmFQkfXZmEFAprfzxqChBFn9HnyAR9YWrNvCPuG17yU7Op4d
+ ugpFGrIo4Tf+JcmINzOK23uQEhN2f8orMVc5A246lEDzSCXmCflOxlZ6PHU1xgJelMk9hVPkR8fZ
+ DhVDomXvArd2HR4UT+Ec00/BFdO1KKd8+sxf1crLqLghjGrqQGEuEjQemQPPAcQJzokFsPSPjEgJ
+ Ok=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:U5UYnBEkf+0=:lL1CL6XEoZrqJz8T2zwkL5
+ 4VYvmDYvZ5WzNABcDNBejMTkwRG1c67XpMAnjTSAn1VKRZ87YyW8Fes8PHzncewehLQUqaLue
+ LVS2SFGPFzRxC0khTzvlus1KUr5oZY7QijfOK9hocquUSx+iHzpI9TDlAnmWe4UaoMF/42CDH
+ WGqzSesYNDhJ7QrAjfxtUFBYbMU6YGR/80HNhJeKizPb9hMhw1PNX2FTuEKhB9AhTNWDwj9jf
+ iz2TYEYzFWXqIjVYcbNyIpCk5fhnRvSvMFgGnv8nXdIrk/aesBOoI1tMC5dY47eKVhwcxbF3G
+ D+sXhAC/j9gEmrB19oC5cSMkvSvUHyXuG49+ftF/sz8bwRecT//qfKlBN/CWfLF+KTKQ0W48R
+ xrcCxWA4aVF7JhOIHm0iuSzma7jniESyMdd9UufoYSt+hBWPgp+BB9+EF6Ufu4+PeO1WxdTxr
+ CO5FuMMppqZq0zy35n31R7Y7AqTSK4X0aeIIY0rtWO4BOnrtCnxD4Kxjj93N0FpJ/y3CWdPFE
+ r2AHMveJE7FwuKD4IPTmai0ubwLDHQJximoqtKtj7ibjV+W5K1jLBN8QCGyFm+7WaavnB4il9
+ jtB6YIWXJrrwvYpdopClbcSNQtobLh8iTwP4OAZnwlQXtwCqyeKBff4O3dDbmq/Ihzy05qfUB
+ Zrmc=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The patch adds binding for ftm alarm driver
+Hi Alexander,
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
- .../devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt  | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
+thank you for the Review
 
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
-new file mode 100644
-index 0000000..0f330b4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
-@@ -0,0 +1,33 @@
-+Freescale FlexTimer Module (FTM) Alarm
-+
-+Required properties:
-+
-+- compatible : Should be "fsl,ftm-alarm" or "fsl,<chip>-ftm-alarm", the
-+	       supported chips include
-+	       "fsl,ls1012a-ftm-alarm"
-+	       "fsl,ls1021a-ftm-alarm"
-+	       "fsl,ls1028a-ftm-alarm"
-+	       "fsl,ls1043a-ftm-alarm"
-+	       "fsl,ls1046a-ftm-alarm"
-+	       "fsl,ls1088a-ftm-alarm"
-+	       "fsl,ls208xa-ftm-alarm"
-+- reg : Specifies base physical address and size of the register sets for the
-+  FlexTimer Module and base physical address of IP Powerdown Exception Control
-+  Register.
-+- reg-names: names of the mapped memory regions listed in regs property.
-+  should include the following entries:
-+  "ftm":    Address of the register sets for FlexTimer Module
-+  "pmctrl": Address of IP Powerdown Exception Control register
-+- interrupts : Should be the FlexTimer Module interrupt.
-+- big-endian: If the host controller is big-endian mode, specify this property.
-+  The default endian mode is little-endian.
-+
-+Example:
-+ftm_alarm0: timer@29d0000 {
-+	compatible = "fsl,ls1043a-ftm-alarm";
-+	reg = <0x0 0x29d0000 0x0 0x10000>,
-+	      <0x0 0x1ee2140 0x0 0x4>;
-+	reg-names = "ftm", "pmctrl";
-+	interrupts = <0 86 0x4>;
-+	big-endian;
-+};
--- 
-2.7.4
+> Gesendet: Donnerstag, 04. Juli 2019 um 22:43 Uhr
+> Von: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+> > -	rtc->rtc_dev =3D devm_rtc_allocate_device(rtc->dev);
+> > -	if (IS_ERR(rtc->rtc_dev))
+> > -		return PTR_ERR(rtc->rtc_dev);
+> > +	ret =3D devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
+> > +					mtk_rtc_irq_handler_thread,
+> > +					IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+> > +					"mt6397-rtc", rtc);
+> >
+>
+> This change may lead to a crash and the allocation was intentionally
+> placed before the irq request.
 
+i got no crash till now, but i will try to move the allocation before irq-=
+request
+
+> > -	ret =3D request_threaded_irq(rtc->irq, NULL,
+> > -				   mtk_rtc_irq_handler_thread,
+> > -				   IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+> > -				   "mt6397-rtc", rtc);
+> >  	if (ret) {
+> >  		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
+> >  			rtc->irq, ret);
+> > @@ -287,6 +281,10 @@ static int mtk_rtc_probe(struct platform_device *=
+pdev)
+> >
+> >  	device_init_wakeup(&pdev->dev, 1);
+> >
+> > +	rtc->rtc_dev =3D devm_rtc_allocate_device(&pdev->dev);
+> > +	if (IS_ERR(rtc->rtc_dev))
+> > +		return PTR_ERR(rtc->rtc_dev);
+> > +
+> >  	rtc->rtc_dev->ops =3D &mtk_rtc_ops;
+
+
+> >  static const struct of_device_id mt6397_rtc_of_match[] =3D {
+> > +	{ .compatible =3D "mediatek,mt6323-rtc", },
+>
+> Unrelated change, this is not an improvement and must be accompanied by
+> a documentation change.
+
+documentation is changed in 1/7 defining this compatible. i called it impr=
+ovement because existing driver now supports another chip
+
+regards Frank
