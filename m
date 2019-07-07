@@ -2,96 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE98612E2
-	for <lists+linux-rtc@lfdr.de>; Sat,  6 Jul 2019 22:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A749F6157D
+	for <lists+linux-rtc@lfdr.de>; Sun,  7 Jul 2019 18:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbfGFUEa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 6 Jul 2019 16:04:30 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:40343 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfGFUEa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 6 Jul 2019 16:04:30 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4B50AE0003;
-        Sat,  6 Jul 2019 20:04:20 +0000 (UTC)
-Date:   Sat, 6 Jul 2019 22:04:20 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Allison Randal <allison@lohutok.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Paul E . McKenney" <paulmck@linux.ibm.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: Re: Re: [PATCH v2 3/7] rtc: mt6397: improvements of rtc driver
-Message-ID: <20190706200420.GE12409@piout.net>
-References: <20190703164822.17924-1-frank-w@public-files.de>
- <20190703164822.17924-4-frank-w@public-files.de>
- <20190704204336.GJ3692@piout.net>
- <trinity-7b1977bd-252b-4482-b708-cf704a9d3da1-1562340946396@3c-app-gmx-bs68>
- <20190705212448.GB12409@piout.net>
- <trinity-a4e5f99f-00bc-4e90-9a48-64dbc6ba9c08-1562429720701@3c-app-gmx-bs42>
+        id S1726273AbfGGQMx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 7 Jul 2019 12:12:53 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:38312 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfGGQMx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Jul 2019 12:12:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=jvyCMugQL7/NuCl9ddtc+AaWc6qGniwih5Ctu0V8hBI=; b=eCFtECBYHWlRWoPtA9P77SABb
+        /7U7M8KF58zEr277TT9PpO3nNbaGj1/FzhD6I1xVkeguQRJysSXhQPMLXfv4lDd/HPg8s+BFVSh1F
+        dCdJxbzeBabpVNmubtmcpnEf1ND9fv8YkxMwlV3lGo5jBfVRJB3sJK4w+VxIyxMFUoA0r+oF+0lpd
+        8pfqm0IXCcXYY27VTkmlCGQ3EuObJ65jtVKc7ZifLc8mQPDtBa9zS7YZys3BJKm2PHAsYFrx3EBRt
+        nRE7OKZj3eEaroj7mQmEFEVodp31Eh3IcRw13mUHeJNUK4YLk4jJdk9DdaXdg7Y2VzF40xMtXdmAA
+        81nqB2B2w==;
+Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hk9mU-0001Lj-8I; Sun, 07 Jul 2019 16:12:50 +0000
+To:     LKML <linux-kernel@vger.kernel.org>, linux-rtc@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] rtc: bd70528: add dependency to fix build errors
+Message-ID: <420b921d-10ca-1d9a-ac46-5969a7f0e0b9@infradead.org>
+Date:   Sun, 7 Jul 2019 09:12:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-a4e5f99f-00bc-4e90-9a48-64dbc6ba9c08-1562429720701@3c-app-gmx-bs42>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 06/07/2019 18:15:20+0200, Frank Wunderlich wrote:
-> > Gesendet: Freitag, 05. Juli 2019 um 23:24 Uhr
-> > Von: "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-> 
-> > Let's say the RTC has been used to start your platform, then the irq
-> > handler will be called as soon as the irq is requested, leading to a
-> > null pointer dereference.
-> 
-> i cannot test this with my platform, but i have changed it in my repo
-> 
-> https://github.com/frank-w/BPI-R2-4.14/commits/5.2-poweroff-mainline
-> 
-> > Yes and IIRC, I did comment that the rtc change also had to be separated
-> > from 1/7.
-> 
-> also this is put in separate commit, can you take a look before i post v3?
-> 
-> > Also, I really doubt this new compatible is necessary at all as you
-> > could simply directly use mediatek,mt6397-rtc.
-> 
-> imho this can confuse because the wrong chip-name is used in dts
-> 
+From: Randy Dunlap <rdunlap@infradead.org>
 
-This is not true, we do that all the time and the immediate benefit of
-using the mt6397 compatible is that then there is no need to
-synchronize between subsystems. If you want to be absolutely
-conservative, you could use
+Fix build errors when MFD_ROHM_BD70528=m, BD70528_WATCHDOG=m,
+and RTC_DRV_BD70528=y.  Fixes these build errors:
 
-compatible = "mediatek,mt6323-rtc", "mediatek,mt6397-rtc";
+ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_alm_enable':
+rtc-bd70528.c:(.text+0x3a2): undefined reference to `bd70528_wdt_lock'
+ld: rtc-bd70528.c:(.text+0x3f8): undefined reference to `bd70528_wdt_unlock'
+ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_rtc_based_timers':
+rtc-bd70528.c:(.text+0x41c): undefined reference to `bd70528_wdt_set'
+ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_time':
+rtc-bd70528.c:(.text+0x500): undefined reference to `bd70528_wdt_lock'
+ld: rtc-bd70528.c:(.text+0x587): undefined reference to `bd70528_wdt_unlock'
 
-in your DT.
+Also add a blank line to separate the Kconfig entry from the one
+above it.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: linux-rtc@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+---
+Found in mmotm but applies to linux-next.
+
+ drivers/rtc/Kconfig |    2 ++
+ 1 file changed, 2 insertions(+)
+
+--- mmotm-2019-0706-2200.orig/drivers/rtc/Kconfig
++++ mmotm-2019-0706-2200/drivers/rtc/Kconfig
+@@ -498,8 +498,10 @@ config RTC_DRV_M41T80_WDT
+ 	help
+ 	  If you say Y here you will get support for the
+ 	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
++
+ config RTC_DRV_BD70528
+ 	tristate "ROHM BD70528 PMIC RTC"
++	depends on MFD_ROHM_BD70528
+ 	help
+ 	  If you say Y here you will get support for the RTC
+ 	  on ROHM BD70528 Power Management IC.
 
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
