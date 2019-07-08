@@ -2,99 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7CB61F8D
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2019 15:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD34C625DB
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2019 18:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729062AbfGHN3a (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jul 2019 09:29:30 -0400
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:54294 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728166AbfGHN3a (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Jul 2019 09:29:30 -0400
-X-AuditID: c0a8fbf4-501ff700000014c1-ee-5d234538715a
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id AA.EA.05313.835432D5; Mon,  8 Jul 2019 15:29:28 +0200 (CEST)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Mon, 8 Jul 2019 15:29:16 +0200
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-Subject: Re: [PATCH] rtc: bd70528: add dependency to fix build errors
-Thread-Topic: [PATCH] rtc: bd70528: add dependency to fix build errors
-Thread-Index: AQHVNN7SUtH5A1X73EusWSNH7DL6MqbAlw4A
-Date:   Mon, 8 Jul 2019 13:29:14 +0000
-Message-ID: <653472d59d565401d96ec83a42406cf6c2f77453.camel@fi.rohmeurope.com>
-References: <420b921d-10ca-1d9a-ac46-5969a7f0e0b9@infradead.org>
-In-Reply-To: <420b921d-10ca-1d9a-ac46-5969a7f0e0b9@infradead.org>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [84.253.205.146]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <24698226BB6B9A488009ABAA8A3094C1@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1729062AbfGHQLA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jul 2019 12:11:00 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:37494 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728082AbfGHQK7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Jul 2019 12:10:59 -0400
+Received: by mail-qt1-f194.google.com with SMTP id y26so6001453qto.4;
+        Mon, 08 Jul 2019 09:10:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jh0oOry33evDCob3/YqLaYbNG4TIUCz5wsbv0do5P2w=;
+        b=o7CzYH5vJ2cQkP1HRxkor1wrQwSukCQqGhU/EkdhIe0lrOesO0rhMYJH4uQsLIH95B
+         2aonHfEVFYfzk3B+uAmksG1dOvsumq03tor8c5NWfIZSdQ0E2xtwRcheC+E5+509MbZF
+         HG6c626n6aE7vDXYZxviTOyDVXz1OEWk3b6RUWxvwdG/ttRrGM2H7g2omCoT+Dq7bUpE
+         dCbHanAqYHNp55UJ/iYuAqAv18/0RGBtsaG0J6TxDj1HmGGejSbWo55+XNbLIX/KSBge
+         DFKM95ehtupl8fQAp+4aHPISOMWBP5j0Q/Hruzem81ZgLeeKu27RuvH1ePPZ6Goefdf7
+         61CA==
+X-Gm-Message-State: APjAAAWPiNxTUmaanWZbQei3UmMWyGP16IOeWk62QlZJKgxj6L9ANQCs
+        qyLmLuyK/klE/IkPxFjS1iRjxKuoQhajBJWyJoc=
+X-Google-Smtp-Source: APXvYqyUVlqAlYEFg1FiYPVuvS6vybH5FVE/+B+9DSKZt9RHUYdBNACismBwlh/kyryGPOKmOUdWAvsI1rvyHn+Ipoc=
+X-Received: by 2002:ac8:5311:: with SMTP id t17mr14543108qtn.304.1562602258765;
+ Mon, 08 Jul 2019 09:10:58 -0700 (PDT)
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgk+LIzCtJLcpLzFFi42I5sOL3Rl0LV+VYg/NzlCzmrF/DZnH/61FG
-        i8u75rBZHFt9hc3i7Z3pLA6sHptXaHncubaHzePEjN8sHp83yQWwRHHbJCWWlAVnpufp2yVw
-        Zyzo4i24J17R/XoLSwPjBPEuRk4OCQETiZe/TrN3MXJxCAlcY5TY3d7MAuEcZ5To6fnE1sXI
-        wcEmYCPRdROsSERgPaNEy9sWFpBuZoEcid3fHzCD2MICrhIXHv5jArFFBNwkNj7axgphG0m0
-        nl4EVs8ioCLx8uRCVpCZvAJ+Esf79EDCQgIOEicP7AEr4RRwlLiycB8biM0oICvR2fCOCWKV
-        uMSmZ99ZIY4WkFiy5zwzhC0q8fLxP6i4ksTGQ/vATmYW0JRYv0sfotVBonfZTEYIW1FiSvdD
-        dhCbV0BQ4uTMJywTGMVmIdkwC6F7FpLuWUi6ZyHpXsDIuopRIjcxMyc9sSTVUK8otVSvKD8j
-        F0gl5+duYoTE4ZcdjP8PeR5iFOBgVOLhPWSnHCvEmlhWXJl7iFGSg0lJlDckVT5WiC8pP6Uy
-        I7E4I76oNCe1+BCjBAezkghvYhBQjjclsbIqtSgfJiXNwaIkzqvG+ytGSABkc3ZqakFqEUxW
-        hoNDSYJ3vTPQHsGi1PTUirTMnBKENBMHJ8hwLimR4tS8lNSixNKSjHhQWokvBiYWkBQP0N5T
-        IO28xQWJuUBRiNZTjNocE17OXcTMcWTu0kXMQix5+XmpUuK850BKBUBKM0rz4Ba9YhQH+leY
-        94sTUJYHmKzh5rwCWsEEtKIuUglkRUkiQkqqgTGbvb9ggZSCUPLiI0d62/o1YvznOm5j/Nre
-        fkHhzfG26NbY3HlXl75iO7qBWyXYYsfOkGfcSh+2Cuz9sO2uYRT/3YsORotfP7ZYf7mskFc4
-        86+2qr3UB8OHloY8oqVvk+oyldM+hJw7nNDi86rc7avftw2TQg/6rbi1Qf6+vYfzCt/DEQ0q
-        8UosxRmJhlrMRcWJABEHlACTAwAA
+References: <20190708124227.3422311-1-arnd@arndb.de> <e752a638c0bde6893adf805322f73de5bd459dbc.camel@fi.rohmeurope.com>
+In-Reply-To: <e752a638c0bde6893adf805322f73de5bd459dbc.camel@fi.rohmeurope.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 8 Jul 2019 18:10:42 +0200
+Message-ID: <CAK8P3a1HNnstePcreH-ZLyiJi3tNcCNJ=VozZUMnp-VLvYLSaA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: bd70528: fix link error
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gUmFuZHksDQoNClRoYW5rcyBhIGxvdCBmb3IgdHJ5aW5nIHRvIGNsZWFuIHVwIHRoZSBt
-ZXNzIDopDQoNCk9uIFN1biwgMjAxOS0wNy0wNyBhdCAwOToxMiAtMDcwMCwgUmFuZHkgRHVubGFw
-IHdyb3RlOg0KPiBGcm9tOiBSYW5keSBEdW5sYXAgPHJkdW5sYXBAaW5mcmFkZWFkLm9yZz4NCj4g
-DQo+IEZpeCBidWlsZCBlcnJvcnMgd2hlbiBNRkRfUk9ITV9CRDcwNTI4PW0sIEJENzA1MjhfV0FU
-Q0hET0c9bSwNCj4gYW5kIFJUQ19EUlZfQkQ3MDUyOD15LiAgRml4ZXMgdGhlc2UgYnVpbGQgZXJy
-b3JzOg0KPiANCj4gbGQ6IGRyaXZlcnMvcnRjL3J0Yy1iZDcwNTI4Lm86IGluIGZ1bmN0aW9uIGBi
-ZDcwNTI4X2FsbV9lbmFibGUnOg0KPiBydGMtYmQ3MDUyOC5jOigudGV4dCsweDNhMik6IHVuZGVm
-aW5lZCByZWZlcmVuY2UgdG8NCj4gYGJkNzA1Mjhfd2R0X2xvY2snDQo+IGxkOiBydGMtYmQ3MDUy
-OC5jOigudGV4dCsweDNmOCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8NCj4gYGJkNzA1Mjhfd2R0
-X3VubG9jaycNCj4gbGQ6IGRyaXZlcnMvcnRjL3J0Yy1iZDcwNTI4Lm86IGluIGZ1bmN0aW9uDQo+
-IGBiZDcwNTI4X3NldF9ydGNfYmFzZWRfdGltZXJzJzoNCj4gcnRjLWJkNzA1MjguYzooLnRleHQr
-MHg0MWMpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBiZDcwNTI4X3dkdF9zZXQnDQo+IGxkOiBk
-cml2ZXJzL3J0Yy9ydGMtYmQ3MDUyOC5vOiBpbiBmdW5jdGlvbiBgYmQ3MDUyOF9zZXRfdGltZSc6
-DQo+IHJ0Yy1iZDcwNTI4LmM6KC50ZXh0KzB4NTAwKTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0bw0K
-PiBgYmQ3MDUyOF93ZHRfbG9jaycNCj4gbGQ6IHJ0Yy1iZDcwNTI4LmM6KC50ZXh0KzB4NTg3KTog
-dW5kZWZpbmVkIHJlZmVyZW5jZSB0bw0KPiBgYmQ3MDUyOF93ZHRfdW5sb2NrJw0KPiANCj4gQWxz
-byBhZGQgYSBibGFuayBsaW5lIHRvIHNlcGFyYXRlIHRoZSBLY29uZmlnIGVudHJ5IGZyb20gdGhl
-IG9uZQ0KPiBhYm92ZSBpdC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFJhbmR5IER1bmxhcCA8cmR1
-bmxhcEBpbmZyYWRlYWQub3JnPg0KPiBDYzogTGVlIEpvbmVzIDxsZWUuam9uZXNAbGluYXJvLm9y
-Zz4NCj4gQ2M6IE1hdHRpIFZhaXR0aW5lbiA8bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUu
-Y29tPg0KPiBDYzogbGludXgtcnRjQHZnZXIua2VybmVsLm9yZw0KPiBDYzogQW5kcmV3IE1vcnRv
-biA8YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4NCj4gLS0tDQo+IEZvdW5kIGluIG1tb3RtIGJ1
-dCBhcHBsaWVzIHRvIGxpbnV4LW5leHQuDQo+IA0KPiAgZHJpdmVycy9ydGMvS2NvbmZpZyB8ICAg
-IDIgKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gDQo+IC0tLSBtbW90
-bS0yMDE5LTA3MDYtMjIwMC5vcmlnL2RyaXZlcnMvcnRjL0tjb25maWcNCj4gKysrIG1tb3RtLTIw
-MTktMDcwNi0yMjAwL2RyaXZlcnMvcnRjL0tjb25maWcNCj4gQEAgLTQ5OCw4ICs0OTgsMTAgQEAg
-Y29uZmlnIFJUQ19EUlZfTTQxVDgwX1dEVA0KPiAgCWhlbHANCj4gIAkgIElmIHlvdSBzYXkgWSBo
-ZXJlIHlvdSB3aWxsIGdldCBzdXBwb3J0IGZvciB0aGUNCj4gIAkgIHdhdGNoZG9nIHRpbWVyIGlu
-IHRoZSBTVCBNNDFUNjAgYW5kIE00MVQ4MCBSVEMgY2hpcHMgc2VyaWVzLg0KPiArDQo+ICBjb25m
-aWcgUlRDX0RSVl9CRDcwNTI4DQo+ICAJdHJpc3RhdGUgIlJPSE0gQkQ3MDUyOCBQTUlDIFJUQyIN
-Cj4gKwlkZXBlbmRzIG9uIE1GRF9ST0hNX0JENzA1MjgNCg0KVGhpcyBpcyBkZWZpbml0ZWx5IHJl
-cXVpcmVkIGRlcGVuZGVuY3kuIEJ1dCBJIGd1ZXNzIHRoaXMgaXMgc3RpbGwgbm90DQpmaXhpbmcg
-ZXZlcnl0aGluZy4uLiBJIGFzc3VtZSB0aGlzIGFsbG93cyBjb25maWd1cmluZyBNRkQgYW5kIFJU
-QyBpbi0NCmtlcm5lbCB3aGlsZSBsZWF2aW5nIFdERyB0byBiZSBidWlsdCBhcyBtb2R1bGUuIFRo
-YXQgd2lsbCBwcm9iYWJseSBhbHNvDQpmYWlsLiBJIGFtIG5vdCBzdXJlIGhvdyB0byBzb2x2ZSB0
-aGlzIGVsZWdhbnRseSB3aGlsZSBzdGlsbCBhbGxvd2luZw0KV0RHIHRvIGJlIGxlZnQgb3V0IGlm
-IGl0IGlzIG5vdCBuZWVkZWQuDQoNCj4gIAloZWxwDQo+ICAJICBJZiB5b3Ugc2F5IFkgaGVyZSB5
-b3Ugd2lsbCBnZXQgc3VwcG9ydCBmb3IgdGhlIFJUQw0KPiAgCSAgb24gUk9ITSBCRDcwNTI4IFBv
-d2VyIE1hbmFnZW1lbnQgSUMuDQo+IA0KPiANCg0KQnIsDQoJTWF0dGkgVmFpdHRpbmVuDQo=
+On Mon, Jul 8, 2019 at 3:24 PM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+
+> On Mon, 2019-07-08 at 14:41 +0200, Arnd Bergmann wrote:
+> > With CONFIG_BD70528_WATCHDOG=m, a built-in rtc driver cannot call
+> > into the low-level functions that are part of the watchdog module:
+> >
+> > drivers/rtc/rtc-bd70528.o: In function `bd70528_set_time':
+> > rtc-bd70528.c:(.text+0x22c): undefined reference to
+> > `bd70528_wdt_lock'
+> > rtc-bd70528.c:(.text+0x2a8): undefined reference to
+> > `bd70528_wdt_unlock'
+> > drivers/rtc/rtc-bd70528.o: In function
+> > `bd70528_set_rtc_based_timers':
+> > rtc-bd70528.c:(.text+0x50c): undefined reference to `bd70528_wdt_set'
+> >
+> > Add a Kconfig dependency on this driver, but still allow compile-
+> > testing
+> > without it.
+> >
+> > Fixes: 32a4a4ebf768 ("rtc: bd70528: Initial support for ROHM bd70528
+> > RTC")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  drivers/rtc/Kconfig | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> > index 3bfc04a86529..7b071cc74422 100644
+> > --- a/drivers/rtc/Kconfig
+> > +++ b/drivers/rtc/Kconfig
+> > @@ -498,8 +498,10 @@ config RTC_DRV_M41T80_WDT
+> >       help
+> >         If you say Y here you will get support for the
+> >         watchdog timer in the ST M41T60 and M41T80 RTC chips series.
+> > +
+> >  config RTC_DRV_BD70528
+> >       tristate "ROHM BD70528 PMIC RTC"
+> > +     depends on BD70528_WATCHDOG || (COMPILE_TEST &&
+> > !BD70528_WATCHDOG)
+>
+> I am not fan of this. There may well be use-cases where it is desirable
+> to leave the watchdog out but still compile in the RTC. This is why we
+> have static inline stubs in the header for cases where WDG is not
+> compiled in. (RTC does not need to stop WDG if WDG driver is not
+> included)
+>
+> Adding dependency from RTC to MFD for BD70528 should be done - this
+> will avoid most of the issues (And there has been few patches sent for
+> this already). But that's still not complete solution because
+> configuring RTC and MFD to be built in-kernel and WDG as a module will
+> cause errors again.
+>
+> Is there a way to force WDG in-kernel if RTC is in-kernel? (Or
+> disallow configuring RTC in-kernel if WDG is a module - while still
+> allow RTC to be built without WDG?
+
+We could make this
+
+        depends on BD70528_WATCHDOG || !BD70528_WATCHDOG
+
+which would allow building with or without watchdog, even when not
+compile-testing, but still disallow the combination of
+BD70528_WATCHDOG=m with RTC_DRV_BD70528=y.
+
+       Arnd
