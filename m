@@ -2,163 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E92961BCC
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2019 10:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461F761C22
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Jul 2019 11:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727770AbfGHInF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jul 2019 04:43:05 -0400
-Received: from mout.web.de ([212.227.17.11]:48791 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727189AbfGHInF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 8 Jul 2019 04:43:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1562575358;
-        bh=lEJJRcdmXlTIVj8k3C+1nfg3u7cryKn3CqmVSGmDYCg=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=KTYKABnOAbCf1p3uMvKHr4vUuzb9NOLrd8jZdGF/cyX4RH50b5SjfKTwLibFKyde3
-         ywOITkhkZM8YjQHB6uexvoR0EiYi6puRUixnLEpR92Z9DXdKFabzQpqzBKpVhCzi3A
-         dcWwinbr/hB9XGzV+aPUCWdXAlJJVYMkUfVnnbhw=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.165.233]) by smtp.web.de (mrweb103
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0LvSLn-1iRopp28zD-010YiK; Mon, 08
- Jul 2019 10:42:38 +0200
-Subject: [PATCH v2] rtc: stm32: One condition check and function call less in
- stm32_rtc_set_alarm()
-To:     linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
+        id S1727375AbfGHJNX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jul 2019 05:13:23 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:56992 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727065AbfGHJNX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Jul 2019 05:13:23 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x68967am006024;
+        Mon, 8 Jul 2019 11:12:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=J+VrRoM1vmsyKivpX5U+CqP541ilP0xEicODEegVLtM=;
+ b=PIV2XdbgB0aZJqgtreP6xTwlrWKCNkvJeRx2dKmHokXB9K9FELlV+YSQc6+QRoX/Me7z
+ TDtZikvgNRGqiCMZRB6CxGHEcgaz716HWePA8rGEnMVFAgb6Jp7OzvWQw2lUc+ooOdFD
+ P0QAYK42RYrC65eNtzvHzYcSo9p6i1felTNSB4wdhz+Vv4IvE/Jj5+3ZUGGWDBviHQOh
+ NyJOFo8BoqHSL1kyigcxpIpdMnprg4MYIpTXZv+mDaEzkbA2VwNJXmZRdSyvdjWSE4FS
+ TcTm26B+l+W5qLnlT9uiMEkQcH3zFSb5JwxnzketnNSAkFZWo9PJOWX8ha62R74IJ8TL pQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2tjh405r6f-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Mon, 08 Jul 2019 11:12:54 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4971D34;
+        Mon,  8 Jul 2019 09:12:53 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 07A2D2763;
+        Mon,  8 Jul 2019 09:12:53 +0000 (GMT)
+Received: from SFHDAG3NODE2.st.com (10.75.127.8) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 8 Jul
+ 2019 11:12:52 +0200
+Received: from SFHDAG3NODE2.st.com ([fe80::b82f:1ce:8854:5b96]) by
+ SFHDAG3NODE2.st.com ([fe80::b82f:1ce:8854:5b96%20]) with mapi id
+ 15.00.1347.000; Mon, 8 Jul 2019 11:12:52 +0200
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Russell King <linux@armlinux.org.uk>
-Cc:     kernel-janitors@vger.kernel.org,
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rtc: stm32: One condition check and function call less
+ in stm32_rtc_set_alarm()
+Thread-Topic: [PATCH v2] rtc: stm32: One condition check and function call
+ less in stm32_rtc_set_alarm()
+Thread-Index: AQHVNWk64H5f1akvVEOEc4o7Pyqv/6bATj4A
+Date:   Mon, 8 Jul 2019 09:12:52 +0000
+Message-ID: <b614006a-17ac-e738-a3f3-08649f69a42c@st.com>
 References: <f04277da-8a98-473e-2566-ac7846f9f8e1@web.de>
  <20190707211638.sehikkear25dffah@shell.armlinux.org.uk>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
- +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
- mpVJgXGKkNJ1ey+QOXouzlErVvE2fRh+KXXN1Q7fSmTJlAW9XJYHS3BDHb0uRpymRSX3O+E2
- lA87C7R8qAigPDZi6Z7UmwIA83ZMKXQ5stA0lhPyYgQcM7fh7V4ZYhnR0I5/qkUoxKpqaYLp
- YHBczVP+Zx/zHOM0KQphOMbU7X3c1pmMruoe6ti9uZzqZSLsF+NKXFEPBS665tQr66HJvZvY
- GMDlntZFAZ6xQvCC1r3MGoxEC1tuEa24vPCC9RZ9wk2sY5Csbva0WwYv3WKRZZBv8eIhGMxs
- rcpeGShRFyZ/0BYO53wZAPV1pEhGLLxd8eLN/nEWjJE0ejakPC1H/mt5F+yQBJAzz9JzbToU
- 5jKLu0SugNI18MspJut8AiA1M44CIWrNHXvWsQ+nnBKHDHHYZu7MoXlOmB32ndsfPthR3GSv
- jN7YD4Ad724H8fhRijmC1+RpuSce7w2JLj5cYj4MlccmNb8YUxsE8brY2WkXQYS8Ivse39MX
- BE66MQN0r5DQ6oqgoJ4gHIVBUv/ZwgcmUNS5gQkNCFA0dWXznQARAQABtCZNYXJrdXMgRWxm
- cmluZyA8TWFya3VzLkVsZnJpbmdAd2ViLmRlPokCVAQTAQgAPhYhBHDP0hzibeXjwQ/ITuU9
- Figxg9azBQJYNvsQAhsjBQkJZgGABQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEOU9Figx
- g9azcyMP/iVihZkZ4VyH3/wlV3nRiXvSreqg+pGPI3c8J6DjP9zvz7QHN35zWM++1yNek7Ar
- OVXwuKBo18ASlYzZPTFJZwQQdkZSV+atwIzG3US50ZZ4p7VyUuDuQQVVqFlaf6qZOkwHSnk+
- CeGxlDz1POSHY17VbJG2CzPuqMfgBtqIU1dODFLpFq4oIAwEOG6fxRa59qbsTLXxyw+PzRaR
- LIjVOit28raM83Efk07JKow8URb4u1n7k9RGAcnsM5/WMLRbDYjWTx0lJ2WO9zYwPgRykhn2
- sOyJVXk9xVESGTwEPbTtfHM+4x0n0gC6GzfTMvwvZ9G6xoM0S4/+lgbaaa9t5tT/PrsvJiob
- kfqDrPbmSwr2G5mHnSM9M7B+w8odjmQFOwAjfcxoVIHxC4Cl/GAAKsX3KNKTspCHR0Yag78w
- i8duH/eEd4tB8twcqCi3aCgWoIrhjNS0myusmuA89kAWFFW5z26qNCOefovCx8drdMXQfMYv
- g5lRk821ZCNBosfRUvcMXoY6lTwHLIDrEfkJQtjxfdTlWQdwr0mM5ye7vd83AManSQwutgpI
- q+wE8CNY2VN9xAlE7OhcmWXlnAw3MJLW863SXdGlnkA3N+U4BoKQSIToGuXARQ14IMNvfeKX
- NphLPpUUnUNdfxAHu/S3tPTc/E/oePbHo794dnEm57LuuQINBFg2+xABEADZg/T+4o5qj4cw
- nd0G5pFy7ACxk28mSrLuva9tyzqPgRZ2bdPiwNXJUvBg1es2u81urekeUvGvnERB/TKekp25
- 4wU3I2lEhIXj5NVdLc6eU5czZQs4YEZbu1U5iqhhZmKhlLrhLlZv2whLOXRlLwi4jAzXIZAu
- 76mT813jbczl2dwxFxcT8XRzk9+dwzNTdOg75683uinMgskiiul+dzd6sumdOhRZR7YBT+xC
- wzfykOgBKnzfFscMwKR0iuHNB+VdEnZw80XGZi4N1ku81DHxmo2HG3icg7CwO1ih2jx8ik0r
- riIyMhJrTXgR1hF6kQnX7p2mXe6K0s8tQFK0ZZmYpZuGYYsV05OvU8yqrRVL/GYvy4Xgplm3
- DuMuC7/A9/BfmxZVEPAS1gW6QQ8vSO4zf60zREKoSNYeiv+tURM2KOEj8tCMZN3k3sNASfoG
- fMvTvOjT0yzMbJsI1jwLwy5uA2JVdSLoWzBD8awZ2X/eCU9YDZeGuWmxzIHvkuMj8FfX8cK/
- 2m437UA877eqmcgiEy/3B7XeHUipOL83gjfq4ETzVmxVswkVvZvR6j2blQVr+MhCZPq83Ota
- xNB7QptPxJuNRZ49gtT6uQkyGI+2daXqkj/Mot5tKxNKtM1Vbr/3b+AEMA7qLz7QjhgGJcie
- qp4b0gELjY1Oe9dBAXMiDwARAQABiQI8BBgBCAAmFiEEcM/SHOJt5ePBD8hO5T0WKDGD1rMF
- Alg2+xACGwwFCQlmAYAACgkQ5T0WKDGD1rOYSw/+P6fYSZjTJDAl9XNfXRjRRyJSfaw6N1pA
- Ahuu0MIa3djFRuFCrAHUaaFZf5V2iW5xhGnrhDwE1Ksf7tlstSne/G0a+Ef7vhUyeTn6U/0m
- +/BrsCsBUXhqeNuraGUtaleatQijXfuemUwgB+mE3B0SobE601XLo6MYIhPh8MG32MKO5kOY
- hB5jzyor7WoN3ETVNQoGgMzPVWIRElwpcXr+yGoTLAOpG7nkAUBBj9n9TPpSdt/npfok9ZfL
- /Q+ranrxb2Cy4tvOPxeVfR58XveX85ICrW9VHPVq9sJf/a24bMm6+qEg1V/G7u/AM3fM8U2m
- tdrTqOrfxklZ7beppGKzC1/WLrcr072vrdiN0icyOHQlfWmaPv0pUnW3AwtiMYngT96BevfA
- qlwaymjPTvH+cTXScnbydfOQW8220JQwykUe+sHRZfAF5TS2YCkQvsyf7vIpSqo/ttDk4+xc
- Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
- x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
- pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <4da614a4-83c6-548c-a112-033b846c561b@web.de>
-Date:   Mon, 8 Jul 2019 10:42:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190707211638.sehikkear25dffah@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8
+ <4da614a4-83c6-548c-a112-033b846c561b@web.de>
+In-Reply-To: <4da614a4-83c6-548c-a112-033b846c561b@web.de>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wh0iqueJEE1aqZAx5uF+5ResTjObNNmFpBi+frR0Fw4nTVaeDMX
- Rx0keq+a8IZ0LyfQjad9ONCFtDtY9Nx+FXDZ1vlj3bxDOyHbBgzlRLiqNrl8w7Bdm7Yiovg
- PNKHosZwwP8nrU04e3dy8GBQY1PWJSxA+VDnPt1alGW1GxBdh04Yg/Cui3yNm1ywr+QPauG
- nVhk0g0u3Uimsu2VIf8eQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Yn62schdTuU=:DlF2xpvX4dTwP81KGg/kiw
- arykr7yHiCwdAZXkGMTEf0yJOK2hZuwjep91AR2YDCSke8gyqv1n+raS3MEOLelGX7sFQmdtE
- 47Bl/T+2pubfose8p8MvgPHbZ9zbzFxyw/pq9mQm+/pra2hMBulJ4ufvSbos73omjoegfE1je
- 78Ua3KODkUxczYD3IMrqoCpns1xbbcf0K5oglWxb2sojGUsEDD3TbKHQf7tHctXUjiYP9H2uj
- 5mSzcbyh0DWJh5QsMIDiMS35AtPPNb9tM8e3hAKxbfPsI1jDYBgIbt501Yz0hvcMx4QYvFXO8
- 9tgeSe/Lo1tNqzIsIVSvo6us3FZspHAG8cMwGbW+wbipGJUokmSC6cWw8/GOBDlEraKg3kxoE
- w/L9acygJS1diTONfHS0if99BjFyC+taL1LuvKxPorx/Jq80hagLWO/kpsMXf+SET0QrGu/7S
- loq98OAxLXE7kfEPPB81xTfIJkXIQvb6Fnk0JPacsSy/bIn0+1AFRDIAigXybK16XiVb4rypL
- arLFVNEf3e8oXqdYKYTJ9kxZdtQpnctKSUDgGyWIMWT761tyt7dQEq75/Zbj1kuF/5iigDfzf
- 9EmOvxf8vh9E34Da9H/g9BsWETiuYyys3dpS5XVfv4ACP4DKF+/rWh/HlT9a4mXeLh+wceJJF
- 6AAJNPGlBJruegBE3XlL8d00xUQvibxygJQFPxX4NLLzQddR+YLZx75pkYi8d3UAZzag184nC
- 4iSoWuxVJcO+XQJ8Tj9OSa36vaNuAGUoNDO8hD3Q1Fbfa/5jCDLJ0r1G+0htStl6qAhz9XnSf
- mXAbXaA4R/oHrmwrpN+AysyeIVu/rJQO/FIWBF05QYsazH/N1lUBDU44RMtDsoV21xWkBi8HG
- evQpOBbNmMCjuePuXD79DH1sS04cfFFl/yqG5fEdV7gjMiIQ8mFg+qS45h2vCfZ3dwHAcnXW4
- k205m7u36ABwYyi5jy976F+mOpoiMpbv89tWB7YbbKFh7d/8w7PzXiOjQ0aF6Gh0jzYLsl9P2
- MlUR1XUeJR1/x16AzlprbPN3CaaNo8WOrKPXP+d3072RkbAqNDegzRMgk8baVdY+GKMut6aMl
- 2VRVTwTv3zxTR7neA6I/uMgR321iJvzAIoc
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.47]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7C37AB1342C2294A8941E133C33BA759@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-08_02:,,
+ signatures=0
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Mon, 8 Jul 2019 10:26:47 +0200
-
-A condition check was repeated in this function implementation despite of
-a corresponding check in the stm32_rtc_alarm_irq_enable() function.
-Thus delete redundant source code here.
-
-Suggested-by: Russell King <linux@armlinux.org.uk>
-Link: https://lore.kernel.org/lkml/20190707211638.sehikkear25dffah@shell.a=
-rmlinux.org.uk/
-
-This issue was detected by using the Coccinelle software.
-
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
-
-v2:
-Russell King pointed the change possibility out to omit a condition check
-at this place.
-
-
- drivers/rtc/rtc-stm32.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 8e6c9b3bcc29..773a1990b93f 100644
-=2D-- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -519,11 +519,7 @@ static int stm32_rtc_set_alarm(struct device *dev, st=
-ruct rtc_wkalrm *alrm)
- 	/* Write to Alarm register */
- 	writel_relaxed(alrmar, rtc->base + regs->alrmar);
-
--	if (alrm->enabled)
--		stm32_rtc_alarm_irq_enable(dev, 1);
--	else
--		stm32_rtc_alarm_irq_enable(dev, 0);
--
-+	stm32_rtc_alarm_irq_enable(dev, alrm->enabled);
- end:
- 	stm32_rtc_wpr_lock(rtc);
-
-=2D-
-2.22.0
-
+T24gNy84LzE5IDEwOjQyIEFNLCBNYXJrdXMgRWxmcmluZyB3cm90ZToNCj4gRnJvbTogTWFya3Vz
+IEVsZnJpbmcgPGVsZnJpbmdAdXNlcnMuc291cmNlZm9yZ2UubmV0Pg0KPiBEYXRlOiBNb24sIDgg
+SnVsIDIwMTkgMTA6MjY6NDcgKzAyMDANCj4gDQo+IEEgY29uZGl0aW9uIGNoZWNrIHdhcyByZXBl
+YXRlZCBpbiB0aGlzIGZ1bmN0aW9uIGltcGxlbWVudGF0aW9uIGRlc3BpdGUgb2YNCj4gYSBjb3Jy
+ZXNwb25kaW5nIGNoZWNrIGluIHRoZSBzdG0zMl9ydGNfYWxhcm1faXJxX2VuYWJsZSgpIGZ1bmN0
+aW9uLg0KPiBUaHVzIGRlbGV0ZSByZWR1bmRhbnQgc291cmNlIGNvZGUgaGVyZS4NCj4gDQo+IFN1
+Z2dlc3RlZC1ieTogUnVzc2VsbCBLaW5nIDxsaW51eEBhcm1saW51eC5vcmcudWs+DQo+IExpbms6
+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAxOTA3MDcyMTE2Mzguc2VoaWtrZWFyMjVk
+ZmZhaEBzaGVsbC5hcm1saW51eC5vcmcudWsvDQo+IA0KPiBUaGlzIGlzc3VlIHdhcyBkZXRlY3Rl
+ZCBieSB1c2luZyB0aGUgQ29jY2luZWxsZSBzb2Z0d2FyZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6
+IE1hcmt1cyBFbGZyaW5nIDxlbGZyaW5nQHVzZXJzLnNvdXJjZWZvcmdlLm5ldD4NCg0KUmV2aWV3
+ZWQtYnk6IEFtZWxpZSBEZWxhdW5heSA8YW1lbGllLmRlbGF1bmF5QHN0LmNvbT4NCg0KPiAtLS0N
+Cj4gDQo+IHYyOg0KPiBSdXNzZWxsIEtpbmcgcG9pbnRlZCB0aGUgY2hhbmdlIHBvc3NpYmlsaXR5
+IG91dCB0byBvbWl0IGEgY29uZGl0aW9uIGNoZWNrDQo+IGF0IHRoaXMgcGxhY2UuDQo+IA0KPiAN
+Cj4gICBkcml2ZXJzL3J0Yy9ydGMtc3RtMzIuYyB8IDYgKy0tLS0tDQo+ICAgMSBmaWxlIGNoYW5n
+ZWQsIDEgaW5zZXJ0aW9uKCspLCA1IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvcnRjL3J0Yy1zdG0zMi5jIGIvZHJpdmVycy9ydGMvcnRjLXN0bTMyLmMNCj4gaW5kZXgg
+OGU2YzliM2JjYzI5Li43NzNhMTk5MGI5M2YgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvcnRjL3J0
+Yy1zdG0zMi5jDQo+ICsrKyBiL2RyaXZlcnMvcnRjL3J0Yy1zdG0zMi5jDQo+IEBAIC01MTksMTEg
+KzUxOSw3IEBAIHN0YXRpYyBpbnQgc3RtMzJfcnRjX3NldF9hbGFybShzdHJ1Y3QgZGV2aWNlICpk
+ZXYsIHN0cnVjdCBydGNfd2thbHJtICphbHJtKQ0KPiAgIAkvKiBXcml0ZSB0byBBbGFybSByZWdp
+c3RlciAqLw0KPiAgIAl3cml0ZWxfcmVsYXhlZChhbHJtYXIsIHJ0Yy0+YmFzZSArIHJlZ3MtPmFs
+cm1hcik7DQo+IA0KPiAtCWlmIChhbHJtLT5lbmFibGVkKQ0KPiAtCQlzdG0zMl9ydGNfYWxhcm1f
+aXJxX2VuYWJsZShkZXYsIDEpOw0KPiAtCWVsc2UNCj4gLQkJc3RtMzJfcnRjX2FsYXJtX2lycV9l
+bmFibGUoZGV2LCAwKTsNCj4gLQ0KPiArCXN0bTMyX3J0Y19hbGFybV9pcnFfZW5hYmxlKGRldiwg
+YWxybS0+ZW5hYmxlZCk7DQo+ICAgZW5kOg0KPiAgIAlzdG0zMl9ydGNfd3ByX2xvY2socnRjKTsN
+Cj4gDQo+IC0tDQo+IDIuMjIuMA0KPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fDQo+IGxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+
+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBodHRwOi8vbGlzdHMuaW5m
+cmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LWFybS1rZXJuZWwNCj4g
