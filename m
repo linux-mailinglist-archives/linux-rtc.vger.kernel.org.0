@@ -2,70 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C06C262DDD
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jul 2019 04:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7913D62E1C
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jul 2019 04:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbfGICHN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jul 2019 22:07:13 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:44246 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbfGICHM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Jul 2019 22:07:12 -0400
-Received: by mail-io1-f68.google.com with SMTP id s7so39741743iob.11;
-        Mon, 08 Jul 2019 19:07:12 -0700 (PDT)
+        id S1725905AbfGIC2y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jul 2019 22:28:54 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44290 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbfGIC2y (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Jul 2019 22:28:54 -0400
+Received: by mail-io1-f66.google.com with SMTP id s7so39821409iob.11;
+        Mon, 08 Jul 2019 19:28:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Nvxsvabibeqxj9WUVv6Z6wvH54INJItCE0z4PDaTAJQ=;
-        b=inUnYnMgwQ4FdxY/gYW365CzMraj015L/4Roy4UA6bBrJHv5956my6iQQtd89KLHpp
-         jyQ3QYQ2nY3q+sflpiB2Gw9ctD9zfCXsyiZ4av0sHVkw8YXGxwWCZ3PNtEY4uOq1RfTg
-         E1RAowPjWQtMzOFrnrmN6KafCsYkdlimCbA4VHXCa/UH2Zyqjf9QydcuwTLiwW9wY1BW
-         wrgLgNzn2gTIc25dwbm/VnBUcBJPC26tz8TZnlhzaT3C94TV8sUTYBvskmAR2aFTrAzs
-         +OZoxQWLdR3mwtQu/JH9Me7XQsGwFfuof9k/eoEm+eSBrT824eHdUgr6jV1MGLPKYDWf
-         9ZUQ==
-X-Gm-Message-State: APjAAAUa6nf6F4VBjOT1jNcLd+WBt3Ie/B6r9Ce4+H9rR0SIlHJyWeF1
-        F81zjmLKlZCZoE+vog4t9g==
-X-Google-Smtp-Source: APXvYqwfzxJ6xSu2EIIO/95/HygSxORJzSJG1gfO/d33GQTG9fARJwluwHZxXHyRGhhSvqjfx0NCRQ==
-X-Received: by 2002:a02:c487:: with SMTP id t7mr22907623jam.99.1562638031844;
-        Mon, 08 Jul 2019 19:07:11 -0700 (PDT)
+        bh=3eMI25TMjMhXgi4o8mT6brExi7SJNcgzDLJEzsvQung=;
+        b=cYw43l4Sqo+I97pbCsNbsuDq9D33GJE0u9GZLau3GvOaQ81vdz5rGO8TTGlz3zxaAY
+         t+CODmD7tJA4AwGXIhEJo4VsuswZ4kQeDpmDT1Fr2LN1+Q6HOTSHNpyGRTuX+w7pnUua
+         7ibv1/9B18F2IqPv49cobTc/vyZ/2kmv57csNeCD6k0xwLS1+iDiGewIph4w9nYXpn0L
+         cDUgF2+i1QTE6O2eg+uNGJ4rpmofhZk7R1QaM7z4i5pvvSA0bR707LeVsJFHoihDfoyG
+         TIFSyPA37KUC4pEGIwdqYmqc1KmAdAzFFgNiyC6+v2+ETe3qK8rQv96coGM/LndXMPxh
+         WFGw==
+X-Gm-Message-State: APjAAAUqaFGsXytSXCtE3xUt+oJuAAvoJp7GMbEO2ijOaRHXxdaVk5qg
+        nzWQXolbpYcwapYE1LhcPg==
+X-Google-Smtp-Source: APXvYqyHr4jZZoJjV8UUgOHoNnDbmjyv3LXE3PkWqpn9SPPMtZP84tRkS4C8fUpoVCpcpBMJk1LEUQ==
+X-Received: by 2002:a6b:f910:: with SMTP id j16mr19739493iog.256.1562639332885;
+        Mon, 08 Jul 2019 19:28:52 -0700 (PDT)
 Received: from localhost ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id f20sm17526029ioh.17.2019.07.08.19.07.10
+        by smtp.gmail.com with ESMTPSA id m4sm31701032iok.68.2019.07.08.19.28.51
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 08 Jul 2019 19:07:11 -0700 (PDT)
-Date:   Mon, 8 Jul 2019 20:07:09 -0600
+        Mon, 08 Jul 2019 19:28:52 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 20:28:51 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Kevin Hilman <khilman@kernel.org>
-Cc:     linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH 1/2] dt-bindings: rtc: new binding for Amlogic VRTC
-Message-ID: <20190709020709.GA20395@bogus>
-References: <20190607194343.18359-1-khilman@kernel.org>
+To:     Anson.Huang@nxp.com
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        aisheng.dong@nxp.com, ulf.hansson@linaro.org, peng.fan@nxp.com,
+        daniel.baluta@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rtc@vger.kernel.org, Linux-imx@nxp.com
+Subject: Re: [PATCH 1/3] dt-bindings: fsl: scu: Update RTC compatible string
+Message-ID: <20190709022851.GA28421@bogus>
+References: <20190611063333.48501-1-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190607194343.18359-1-khilman@kernel.org>
+In-Reply-To: <20190611063333.48501-1-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri,  7 Jun 2019 12:43:42 -0700, Kevin Hilman wrote:
-> From: Kevin Hilman <khilman@baylibre.com>
+On Tue, 11 Jun 2019 14:33:31 +0800, Anson.Huang@nxp.com wrote:
+> From: Anson Huang <Anson.Huang@nxp.com>
 > 
-> Add binding fo the new VRTC driver for Amlogic SoCs.  The 64-bit
-> family of SoCs only has an RTC managed by firmware, and this VRTC
-> driver provides the simple, one-register firmware interface.
+> Update RTC compatible string to make system controller RTC
+> driver more generic for all i.MX SoCs with system controller
+> inside.
 > 
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
->  .../devicetree/bindings/rtc/rtc-meson-vrtc.txt   | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-meson-vrtc.txt
+> This patch should be based on below patch which is already picked by
+> watchdog maintainer:
+> https://patchwork.kernel.org/patch/10962183/
+> ---
+>  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
