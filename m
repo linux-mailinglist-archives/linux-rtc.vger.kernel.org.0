@@ -2,473 +2,165 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 461A264DE9
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jul 2019 23:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7469654EE
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2019 13:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727307AbfGJVMC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Jul 2019 17:12:02 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40538 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727287AbfGJVMC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Jul 2019 17:12:02 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e8so3615917otl.7;
-        Wed, 10 Jul 2019 14:12:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lhssSLejf4PtZnv0gByOclKPnwiK6s5x+Rfvc6KW7hI=;
-        b=SSb3jGmjn/7rvLLU8oioXmGI3lE3RGTRQzjtAeT5WJLF/Q7sEOvjVjF7Rpy0/O01ZI
-         klp80bWM8xHU/CFW9G/kG+xGIYu6YY7g10SFNmTLZmc8koCBWZmCNk5qr2vseVOAyiQ/
-         Q+dOcQWkLqmVvaCuCVTD4CwMpGBnrzN7X56XhyXOEN203LhhRax23ZYzxupGbKCsGiZG
-         hq/bE9KDyE3ywzVcTY8muVQZLz5GRQCe7ondEK23oZ183UJ/C+UqdBh+KpPas46x9uRJ
-         at3SbQ6vFZTBfj3yozXsbyRR7/FXnLPQmNlQz8Xc28BUcEYtuMQ3UAn9EeGYbzQknE12
-         hTPg==
-X-Gm-Message-State: APjAAAXceMmf4vMk5aM58C2gq3M99BQNfgMM8wGFQPlK/F2Cfe0TM+GA
-        gtXu9udA5vd6MzQtGZ3ue3na60VW
-X-Google-Smtp-Source: APXvYqzBEDg9RHHX5Vzc+SK2p/UirVhyHfFr/f3lyEVN+8JgHDFm1onc72oKlakyxk+fa05h/sic0w==
-X-Received: by 2002:a9d:1718:: with SMTP id i24mr315020ota.269.1562793120830;
-        Wed, 10 Jul 2019 14:12:00 -0700 (PDT)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com. [209.85.167.182])
-        by smtp.gmail.com with ESMTPSA id e10sm1071053oie.37.2019.07.10.14.12.00
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Jul 2019 14:12:00 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id s184so2764698oie.9;
-        Wed, 10 Jul 2019 14:12:00 -0700 (PDT)
-X-Received: by 2002:aca:bb45:: with SMTP id l66mr256637oif.108.1562793120202;
- Wed, 10 Jul 2019 14:12:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190710110424.4254-1-biwen.li@nxp.com>
-In-Reply-To: <20190710110424.4254-1-biwen.li@nxp.com>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Wed, 10 Jul 2019 16:11:48 -0500
-X-Gmail-Original-Message-ID: <CADRPPNR7rQqO6VHYaLn8LGAJJTiUC_+LxwjBSrj4ZkmAw=2mSw@mail.gmail.com>
-Message-ID: <CADRPPNR7rQqO6VHYaLn8LGAJJTiUC_+LxwjBSrj4ZkmAw=2mSw@mail.gmail.com>
-Subject: Re: [v2,1/2] rtc/fsl: add FTM alarm driver as the wakeup source
-To:     Biwen Li <biwen.li@nxp.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        id S1728371AbfGKLEd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Jul 2019 07:04:33 -0400
+Received: from mail-eopbgr60075.outbound.protection.outlook.com ([40.107.6.75]:4571
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728024AbfGKLEc (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 11 Jul 2019 07:04:32 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gd3QGOkcGdGIxqidX4TkJrgPg4/KIdVRM77GD3KyyR5j/NNqiVNIMAHz4UWpkyejm1Wf+rTZb+Hs5Nrcvsn72O3yadU0UNLk93lRUppf3wTe2YlP3lYdFkMmP5TCKSFCQYeeRkck09CiM5grgjzdhQpa1lxXmcytw2UBv9QqiC+2L8JJqk/azGJU/bMYLz6PDI7nkzAQDPI33A7UnIZrlbvnnP2rruTlEXWwLiqXmopUulQTs4V4ffwOhbJMNMZuS50TTsTjWeifPEey0T3e878qI88aeSstYu33k1f7B+n6c5raclTDL6CjNxt8r/OaqcBV6BQeu0TqAZYqdTtgaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5X0PyciOiA5tPFvejIaeavzOtq00YHEkyuEwtYIxGVw=;
+ b=Zi44wcwyjgozJYOc2ZuCv+AgAZAh3rBiFrjT6SDB07lKs8jeTk2qqnY541JOPpnQPEKqkCzECAR4nvsVE5+aIA9fYg82nc6c6e6sUI1eoUwc3swLPWvvf8ex7z9OvPdy0U/TvaK0pP7cN+m2aLhA4ulnXYswY9AUNRHF5vCbn31aHIpsyn1950aeU5PjLHuTvEyPq7VIsZSLgkQutW8TwbJSQKkzKtoyLQlumYfW6C+/HAosJ2MqRXukT6q0/V0oID1vkYI4nzCNfSkr+T+DQPP2Z1P8fhfLCFfwPANaq0Fsdjx23gNPbhRgX17E3dhBG6pnNjTi5jspRlaLy1A2SQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
+ header.d=nxp.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5X0PyciOiA5tPFvejIaeavzOtq00YHEkyuEwtYIxGVw=;
+ b=hNFVMCRMVzHKSWPZTPBQstRiZUn5BSouRBWP79rnJpU78m2+FqkipLw0UXodzoi0gosXEuiODnBR/bKwF6R6tRduTwhwLejI4iTiN1bMDka7ZFqNK18vBNtgNZbueBsOOcQanf1P9Kr5KSjTsqXrcTw/hPFbnA7t4HmpKRNZPm4=
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
+ DB7PR04MB4441.eurprd04.prod.outlook.com (52.135.137.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2073.10; Thu, 11 Jul 2019 11:04:27 +0000
+Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::413e:84ea:f3bb:40bd]) by DB7PR04MB4490.eurprd04.prod.outlook.com
+ ([fe80::413e:84ea:f3bb:40bd%5]) with mapi id 15.20.2073.008; Thu, 11 Jul 2019
+ 11:04:27 +0000
+From:   Biwen Li <biwen.li@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>, Leo Li <leoyang.li@nxp.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
         Xiaobo Xie <xiaobo.xie@nxp.com>,
         Jiafei Pan <jiafei.pan@nxp.com>, Ran Wang <ran.wang_1@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [EXT] Re: [v2,2/2] Documentation: dt: binding: rtc: add binding
+ for ftm alarm driver
+Thread-Topic: [EXT] Re: [v2,2/2] Documentation: dt: binding: rtc: add binding
+ for ftm alarm driver
+Thread-Index: AQHVNxCMhcL7bcNfD0yZEhCl0RK1ZqbEQg8AgAALOwCAAGHlkA==
+Date:   Thu, 11 Jul 2019 11:04:26 +0000
+Message-ID: <DB7PR04MB4490EC6173C05930B15FD7D68FF30@DB7PR04MB4490.eurprd04.prod.outlook.com>
+References: <20190710110424.4254-1-biwen.li@nxp.com>
+ <20190710110424.4254-2-biwen.li@nxp.com>
+ <CADRPPNQ8nZQYq1ZXZ368LLeKnyrXpjB_X8XaHVhW890bw-tU6A@mail.gmail.com>
+ <CAL_JsqLr53neiaiOEpAcmAhDMnqCuxgPLC9qnFB2rZ4zRFxFLg@mail.gmail.com>
+In-Reply-To: <CAL_JsqLr53neiaiOEpAcmAhDMnqCuxgPLC9qnFB2rZ4zRFxFLg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biwen.li@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9e4d437c-2748-4717-6b63-08d705ef8aa8
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4441;
+x-ms-traffictypediagnostic: DB7PR04MB4441:
+x-microsoft-antispam-prvs: <DB7PR04MB444147F0B0EE3771E2C0ADD08FF30@DB7PR04MB4441.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0095BCF226
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(136003)(376002)(366004)(396003)(346002)(13464003)(189003)(199004)(8676002)(66476007)(66556008)(71200400001)(71190400001)(7696005)(64756008)(66946007)(66446008)(76176011)(8936002)(44832011)(4326008)(486006)(81156014)(6506007)(81166006)(53546011)(33656002)(256004)(14444005)(5660300002)(68736007)(478600001)(76116006)(14454004)(305945005)(55016002)(99286004)(6436002)(316002)(6246003)(102836004)(110136005)(54906003)(52536014)(25786009)(9686003)(186003)(74316002)(6636002)(7736002)(446003)(26005)(2906002)(86362001)(66066001)(11346002)(476003)(6116002)(3846002)(53936002)(229853002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4441;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: eFcb2CbvcG49vE479WRtp/Azz9R90mjYenT1XPQ7etd5zI1qG/plZOjV6HsomkZld97C9puH6OPUUnptisFWC51G4GeUblFcEr+qqagoVs6ipCzJt9OcXwltVaPHPtipOaZGMEZ0oEnEFO1yDON6BWhoBlnETYgWS2VxuF5V2hBWoJArLPLAA2dXwq5DNVzZ7VK8rs0f/aZiQC6F0+VeBjRTvj//V9nMl9/DyUntXVKPNrwngvBATAX1X91QqtoU7Trv4nMerA1s8jrKCI577jjT4aZ1WiYK/+HL0xdG7kxqJD2z/WV4IpT74xiIEo5phV4xsaKzDpjJs0vXxp+KcWAW+CGkC1Y21yogrf5Ys8ei8dsw/F5UXYqdwIX2yUW85I03Qe+keXthhu+WHIFWvWZouUCMAzh61WrTvDzgt5k=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e4d437c-2748-4717-6b63-08d705ef8aa8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jul 2019 11:04:27.4552
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: biwen.li@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4441
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 6:35 AM Biwen Li <biwen.li@nxp.com> wrote:
->
-> For the paltforms including LS1012A, LS1021A, LS1028A, LS1043A,
-> LS1046A, LS1088A, LS208xA that has the FlexTimer
-> module, implementing alarm functions within RTC subsystem
-> to wakeup the system when system going to sleep (work with RCPM driver).
->
-> Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> ---
->
-> Change in v2:
->     - remove code about setting rcpm
->
->  drivers/rtc/Kconfig             |  14 ++
->  drivers/rtc/Makefile            |   1 +
->  drivers/rtc/rtc-fsl-ftm-alarm.c | 311 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 326 insertions(+)
->  create mode 100644 drivers/rtc/rtc-fsl-ftm-alarm.c
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 03b60d5..0758a08 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1313,6 +1313,20 @@ config RTC_DRV_IMXDI
->            This driver can also be built as a module, if so, the module
->            will be called "rtc-imxdi".
->
-> +config RTC_DRV_FSL_FTM_ALARM
-> +       tristate "Freescale FlexTimer alarm timer"
-> +       depends on ARCH_LAYERSCAPE
-> +       default y
-> +       help
-> +          For the FlexTimer in LS1012A, LS1021A, LS1028A, LS1043A, LS1046A,
-> +          LS1088A, LS208xA, we can use FTM as the wakeup source.
-> +
-> +          Say y here to enable FTM alarm support. The FTM alarm provides
-> +          alarm functions for wakeup system from deep sleep.
-> +
-> +          This driver can also be built as a module, if so, the module
-> +          will be called "rtc-fsl-ftm-alarm".
-> +
->  config RTC_DRV_MESON
->         tristate "Amlogic Meson RTC"
->         depends on (ARM && ARCH_MESON) || COMPILE_TEST
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 9d997fa..5cccb07 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -79,6 +79,7 @@ obj-$(CONFIG_RTC_DRV_HID_SENSOR_TIME) += rtc-hid-sensor-time.o
->  obj-$(CONFIG_RTC_DRV_HYM8563)  += rtc-hym8563.o
->  obj-$(CONFIG_RTC_DRV_IMXDI)    += rtc-imxdi.o
->  obj-$(CONFIG_RTC_DRV_IMX_SC)   += rtc-imx-sc.o
-> +obj-$(CONFIG_RTC_DRV_FSL_FTM_ALARM)    += rtc-fsl-ftm-alarm.o
->  obj-$(CONFIG_RTC_DRV_ISL12022) += rtc-isl12022.o
->  obj-$(CONFIG_RTC_DRV_ISL12026) += rtc-isl12026.o
->  obj-$(CONFIG_RTC_DRV_ISL1208)  += rtc-isl1208.o
-> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> new file mode 100644
-> index 0000000..1836c2e
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> @@ -0,0 +1,311 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Freescale FlexTimer Module (FTM) alarm device driver.
-> + *
-> + * Copyright 2014 Freescale Semiconductor, Inc.
-> + * Copyright 2019 NXP
-> + *
-> + * This program is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU General Public License
-> + * as published by the Free Software Foundation; either version 2
-> + * of the License, or (at your option) any later version.
-
-No need to add this with the SPDX tag.  And btw, the text here is
-GPL-2.0+ instead of GPL-2.0.
-
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/module.h>
-> +#include <linux/fsl/ftm.h>
-> +#include <linux/rtc.h>
-> +#include <linux/time.h>
-> +
-> +#define FTM_SC_CLK(c)          ((c) << FTM_SC_CLK_MASK_SHIFT)
-> +
-> +/*
-> + * Select Fixed frequency clock as clock source
-> + * of FlexTimer Module
-> + */
-> +#define FTM_SC_CLKS_FIXED_FREQ 0x02
-> +
-> +#define FIXED_FREQ_CLK         32000
-> +#define MAX_FREQ_DIV           (1 << FTM_SC_PS_MASK)
-> +#define MAX_COUNT_VAL          0xffff
-> +
-> +struct ftm_rtc {
-> +       struct rtc_device *rtc_dev;
-> +       void __iomem *base;
-> +       bool endian;
-
-Make it big_endian to be more clear.
-
-> +       u32 alarm_freq;
-> +};
-> +
-> +static inline u32 rtc_readl(struct ftm_rtc *dev, u32 reg)
-> +{
-> +       if (dev->endian)
-> +               return ioread32be(dev->base + reg); /*big endianness*/
-
-No need to have the extra comment with new variable name.
-
-And probably better to use "else" here to make clearer to
-compiler/static analyser.
-
-> +
-> +       return ioread32(dev->base + reg);
-> +}
-> +
-> +static inline void rtc_writel(struct ftm_rtc *dev, u32 reg, u32 val)
-> +{
-> +       if (dev->endian)
-> +               iowrite32be(val, dev->base + reg);
-> +       else
-> +               iowrite32(val, dev->base + reg);
-> +}
-> +
-> +static inline void ftm_counter_enable(struct ftm_rtc *rtc)
-> +{
-> +       u32 val;
-> +
-> +       /* select and enable counter clock source */
-> +       val = rtc_readl(rtc, FTM_SC);
-> +       val &= ~(FTM_SC_PS_MASK | FTM_SC_CLK_MASK);
-> +       val |= (FTM_SC_PS_MASK | FTM_SC_CLK(FTM_SC_CLKS_FIXED_FREQ));
-> +       rtc_writel(rtc, FTM_SC, val);
-> +}
-> +
-> +static inline void ftm_counter_disable(struct ftm_rtc *rtc)
-> +{
-> +       u32 val;
-> +
-> +       /* disable counter clock source */
-> +       val = rtc_readl(rtc, FTM_SC);
-> +       val &= ~(FTM_SC_PS_MASK | FTM_SC_CLK_MASK);
-> +       rtc_writel(rtc, FTM_SC, val);
-> +}
-> +
-> +static inline void ftm_irq_acknowledge(struct ftm_rtc *rtc)
-> +{
-> +       unsigned int timeout = 100;
-> +
-> +       while ((FTM_SC_TOF & rtc_readl(rtc, FTM_SC)) && timeout--)
-> +               rtc_writel(rtc, FTM_SC, rtc_readl(rtc, FTM_SC) & (~FTM_SC_TOF));
-
-Is there a reason that we need to loop here?
-
-> +}
-> +
-> +static inline void ftm_irq_enable(struct ftm_rtc *rtc)
-> +{
-> +       u32 val;
-> +
-> +       val = rtc_readl(rtc, FTM_SC);
-> +       val |= FTM_SC_TOIE;
-> +       rtc_writel(rtc, FTM_SC, val);
-> +}
-> +
-> +static inline void ftm_irq_disable(struct ftm_rtc *rtc)
-> +{
-> +       u32 val;
-> +
-> +       val = rtc_readl(rtc, FTM_SC);
-> +       val &= ~FTM_SC_TOIE;
-> +       rtc_writel(rtc, FTM_SC, val);
-> +}
-> +
-> +static inline void ftm_reset_counter(struct ftm_rtc *rtc)
-> +{
-> +       /*
-> +        * The CNT register contains the FTM counter value.
-> +        * Reset clears the CNT register. Writing any value to COUNT
-> +        * updates the counter with its initial value, CNTIN.
-> +        */
-> +       rtc_writel(rtc, FTM_CNT, 0x00);
-> +}
-> +
-> +static void ftm_clean_alarm(struct ftm_rtc *rtc)
-> +{
-> +       ftm_counter_disable(rtc);
-> +
-> +       rtc_writel(rtc, FTM_CNTIN, 0x00);
-> +       rtc_writel(rtc, FTM_MOD, ~0U);
-> +
-> +       ftm_reset_counter(rtc);
-> +}
-> +
-> +static irqreturn_t ftm_rtc_alarm_interrupt(int irq, void *dev)
-> +{
-> +       struct ftm_rtc *rtc = dev;
-> +
-> +       ftm_irq_acknowledge(rtc);
-> +       ftm_irq_disable(rtc);
-> +       ftm_clean_alarm(rtc);
-> +
-> +       return IRQ_HANDLED;
-> +}
-> +
-> +static int ftm_rtc_alarm_irq_enable(struct device *dev,
-> +               unsigned int enabled)
-> +{
-> +       struct ftm_rtc *rtc = dev_get_drvdata(dev);
-> +
-> +       if (enabled)
-> +               ftm_irq_enable(rtc);
-> +       else
-> +               ftm_irq_disable(rtc);
-> +
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Note:
-> + *     The function is not really getting time from the RTC
-> + *     since FlexTimer is not a RTC device, but we need to
-> + *     get time to setup alarm, so we are using system time
-> + *     for now.
-> + */
-> +static int ftm_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +       struct timespec64 ts64;
-> +       unsigned long local_time;
-> +
-> +       ktime_get_real_ts64(&ts64);
-> +       local_time = (unsigned long)(ts64.tv_sec - (sys_tz.tz_minuteswest * 60));
-> +
-> +       rtc_time_to_tm(local_time, tm);
-> +
-> +       return 0;
-> +}
-
-New line here.
-
-> +static int ftm_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +       return 0;
-
-Why we cannot read the alarm time?
-
-> +}
-> +
-> +/*250Hz, 65536 / 250 = 262 second max*/
-
-Can you make the comment more readable?
-
-> +static int ftm_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +       struct rtc_time tm;
-> +       unsigned long now, alm_time, cycle;
-> +       struct ftm_rtc *rtc = dev_get_drvdata(dev);
-> +
-> +       ftm_rtc_read_time(dev, &tm);
-> +       rtc_tm_to_time(&tm, &now);
-> +       rtc_tm_to_time(&alm->time, &alm_time);
-> +
-> +       ftm_clean_alarm(rtc);
-> +       cycle = (alm_time - now) * rtc->alarm_freq;
-> +       if (cycle > MAX_COUNT_VAL) {
-> +               pr_err("Out of alarm range.\n");
-
-Better to tell the users what the range is than letting them try out.
-
-> +               return -EINVAL;
-> +       }
-> +
-> +       ftm_irq_disable(rtc);
-> +
-> +       /*
-> +        * The counter increments until the value of MOD is reached,
-> +        * at which point the counter is reloaded with the value of CNTIN.
-> +        * The TOF (the overflow flag) bit is set when the FTM counter
-> +        * changes from MOD to CNTIN. So we should using the cycle - 1.
-> +        */
-> +       rtc_writel(rtc, FTM_MOD, cycle - 1);
-> +
-> +       ftm_counter_enable(rtc);
-> +       ftm_irq_enable(rtc);
-> +
-> +       return 0;
-> +
-> +}
-> +
-> +static const struct rtc_class_ops ftm_rtc_ops = {
-> +       .read_time              = ftm_rtc_read_time,
-> +       .read_alarm             = ftm_rtc_read_alarm,
-> +       .set_alarm              = ftm_rtc_set_alarm,
-> +       .alarm_irq_enable       = ftm_rtc_alarm_irq_enable,
-> +};
-
-New line is needed.
-
-> +static int ftm_rtc_probe(struct platform_device *pdev)
-> +{
-> +       struct device_node *np = pdev->dev.of_node;
-> +       struct resource *r;
-> +       int irq;
-> +       int ret;
-> +       struct ftm_rtc *rtc;
-> +
-> +       rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> +       if (unlikely(!rtc)) {
-> +               pr_err("ftm: cannot alloc memery for rtc\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +
-
-No two new lines.
-
-> +       platform_set_drvdata(pdev, rtc);
-> +
-> +       r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       if (!r) {
-> +               pr_err("ftm: cannot get resource for rtc\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       rtc->base = devm_ioremap_resource(&pdev->dev, r);
-> +       if (IS_ERR(rtc->base)) {
-> +               pr_err("ftm: cannot ioremap resource for rtc\n");
-> +               return PTR_ERR(rtc->base);
-> +       }
-> +
-> +       irq = irq_of_parse_and_map(np, 0);
-> +       if (irq <= 0) {
-> +               pr_err("ftm: unable to get IRQ from DT, %d\n", irq);
-> +               return -EINVAL;
-> +       }
-> +
-> +       rtc->endian = of_property_read_bool(np, "big-endian");
-> +
-> +       ret = devm_request_irq(&pdev->dev, irq, ftm_rtc_alarm_interrupt,
-> +                              IRQF_NO_SUSPEND, dev_name(&pdev->dev), rtc);
-> +       if (ret < 0) {
-> +               dev_err(&pdev->dev, "failed to request irq\n");
-> +               return ret;
-> +       }
-> +
-> +       rtc->alarm_freq = (u32)FIXED_FREQ_CLK / (u32)MAX_FREQ_DIV;
-> +
-> +       ftm_clean_alarm(rtc);
-> +
-> +       device_init_wakeup(&pdev->dev, true);
-> +       rtc->rtc_dev = devm_rtc_device_register(&pdev->dev, "ftm-alarm",
-> +                                                       &ftm_rtc_ops,
-> +                                                       THIS_MODULE);
-> +       if (IS_ERR(rtc->rtc_dev)) {
-> +               dev_err(&pdev->dev, "can't register rtc device\n");
-> +               return PTR_ERR(rtc->rtc_dev);
-> +       }
-> +       return ret;
-> +}
-> +
-> +static const struct of_device_id ftm_rtc_match[] = {
-> +       { .compatible = "fsl,ftm-alarm", },
-> +       { .compatible = "fsl,ls1012a-ftm-alarm", },
-> +       { .compatible = "fsl,ls1021a-ftm-alarm", },
-> +       { .compatible = "fsl,ls1043a-ftm-alarm", },
-> +       { .compatible = "fsl,ls1046a-ftm-alarm", },
-> +       { .compatible = "fsl,ls1088a-ftm-alarm", },
-> +       { .compatible = "fsl,ls208xa-ftm-alarm", },
-> +       { .compatible = "fsl,ls1028a-ftm-alarm", },
-> +       { },
-> +};
-> +
-> +static struct platform_driver ftm_rtc_driver = {
-> +       .probe          = ftm_rtc_probe,
-> +       .driver         = {
-> +               .name   = "ftm-alarm",
-> +               .of_match_table = ftm_rtc_match,
-> +       },
-> +};
-> +
-> +static int __init ftm_alarm_init(void)
-> +{
-> +       return platform_driver_register(&ftm_rtc_driver);
-> +}
-> +
-> +/***************
-
-This is not standard Linux multiline comment style.
-
-> + *Ensure that the driver is initialized after
-> + *any real rtc driver
-
-Can you explain why it has to be initialized later than other rtc drivers?
-
-> + */
-> +device_initcall_sync(ftm_alarm_init);
-> +
-> +MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
-> +MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.7.4
->
+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IFJvYiBIZXJyaW5nIDxyb2JoK2R0QGtl
+cm5lbC5vcmc+IA0KU2VudDogMjAxOeW5tDfmnIgxMeaXpSA0OjI2DQpUbzogTGVvIExpIDxsZW95
+YW5nLmxpQG54cC5jb20+DQpDYzogQml3ZW4gTGkgPGJpd2VuLmxpQG54cC5jb20+OyBBbGVzc2Fu
+ZHJvIFp1bW1vIDxhLnp1bW1vQHRvd2VydGVjaC5pdD47IEFsZXhhbmRyZSBCZWxsb25pIDxhbGV4
+YW5kcmUuYmVsbG9uaUBib290bGluLmNvbT47IG9wZW4gbGlzdDpSRUFMIFRJTUUgQ0xPQ0sgKFJU
+QykgU1VCU1lTVEVNIDxsaW51eC1ydGNAdmdlci5rZXJuZWwub3JnPjsgbGttbCA8bGludXgta2Vy
+bmVsQHZnZXIua2VybmVsLm9yZz47IFhpYW9ibyBYaWUgPHhpYW9iby54aWVAbnhwLmNvbT47IEpp
+YWZlaSBQYW4gPGppYWZlaS5wYW5AbnhwLmNvbT47IFJhbiBXYW5nIDxyYW4ud2FuZ18xQG54cC5j
+b20+DQpTdWJqZWN0OiBbRVhUXSBSZTogW3YyLDIvMl0gRG9jdW1lbnRhdGlvbjogZHQ6IGJpbmRp
+bmc6IHJ0YzogYWRkIGJpbmRpbmcgZm9yIGZ0bSBhbGFybSBkcml2ZXINCg0KQ2F1dGlvbjogRVhU
+IEVtYWlsDQoNCk9uIFdlZCwgSnVsIDEwLCAyMDE5IGF0IDE6NDYgUE0gTGkgWWFuZyA8bGVveWFu
+Zy5saUBueHAuY29tPiB3cm90ZToNCj4NCj4gT24gV2VkLCBKdWwgMTAsIDIwMTkgYXQgNjozNSBB
+TSBCaXdlbiBMaSA8Yml3ZW4ubGlAbnhwLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBUaGUgcGF0Y2gg
+YWRkcyBiaW5kaW5nIGZvciBmdG0gYWxhcm0gZHJpdmVyDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBCaXdlbiBMaSA8Yml3ZW4ubGlAbnhwLmNvbT4NCj4NCj4gTG9va3MgbGlrZSBJIGNvbW1lbnRl
+ZCB0aGUgb2xkZXIgdmVyc2lvbiBqdXN0IG5vdy4gIEFkZGluZyBSb2IgdG8gdGhpcyANCj4gdmVy
+c2lvbiB0b28uDQoNCk1vcmUgaW1wb3J0YW50bHksIHJlLXNlbmQgdGhlIHBhdGNoIHRvIHRoZSBE
+VCBsaXN0IHNvIHBhdGNod29yayB0cmFja3MgaXQuDQpbQml3ZW4gTGldIG9rLCBJIHdpbGwgc2Vu
+ZCB0aGUgcGF0Y2ggdG8gdGhlIERUIGxpc3QgaW4gdjMuDQoNCj4NCj4gPiAtLS0NCj4gPiBDaGFu
+Z2UgaW4gdjI6DQo+ID4gICAgIC0gcmVwbGFjZSBsczEwNDNhIHdpdGggbHMxMDg4YSBhcyBleGFt
+cGxlDQo+ID4gICAgIC0gYWRkIHJjcG0gbm9kZSBhbmQgZnNsLHJjcG0td2FrZXVwIHByb3BlcnR5
+DQo+ID4NCj4gPiAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvcnRjL3J0Yy1mc2wtZnRtLWFsYXJt
+LnR4dCAgfCA0MCANCj4gPiArKysrKysrKysrKysrKysrKysrKysrDQo+ID4gIDEgZmlsZSBjaGFu
+Z2VkLCA0MCBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCANCj4gPiBEb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcnRjL3J0Yy1mc2wtZnRtLWFsYXJtLnR4dA0K
+PiA+DQo+ID4gZGlmZiAtLWdpdCANCj4gPiBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5k
+aW5ncy9ydGMvcnRjLWZzbC1mdG0tYWxhcm0udHh0IA0KPiA+IGIvRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL3J0Yy9ydGMtZnNsLWZ0bS1hbGFybS50eHQNCj4gPiBuZXcgZmlsZSBt
+b2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAuLjAxMDk4NGENCj4gPiAtLS0gL2Rldi9udWxs
+DQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3J0Yy9ydGMtZnNs
+LWZ0bS1hbGFybS50eHQNCj4gPiBAQCAtMCwwICsxLDQwIEBADQo+ID4gK0ZyZWVzY2FsZSBGbGV4
+VGltZXIgTW9kdWxlIChGVE0pIEFsYXJtDQo+ID4gKw0KPiA+ICtOb3RlOiBUaGUgZHJpdmVyIG5l
+ZWQgd29yayB3aXRoIFJDUE0gZHJpdmVyIHRvIHdha2UgdXAgc3lzdGVtIGluIHNsZWVwLg0KPiA+
+ICsNCj4gPiArUmVxdWlyZWQgcHJvcGVydGllczoNCj4gPiArDQo+ID4gKy0gY29tcGF0aWJsZSA6
+IFNob3VsZCBiZSAiZnNsLGZ0bS1hbGFybSIgb3IgImZzbCw8Y2hpcD4tZnRtLWFsYXJtIiwgDQo+
+ID4gK3RoZQ0KDQpmc2wsZnRtLWFsYXJtIHNob3VsZCBiZSBhIGZhbGxiYWNrLCBub3Qgb24gaXRz
+IG93bi4NCltCaXdlbiBMaV0gb2ssSSB3aWxsIGRlbGV0ZSAiZnNsLGZ0bS1hbGFybSIgaW4gdjMu
+DQoNCj4gPiArICAgICAgICAgICAgICBzdXBwb3J0ZWQgY2hpcHMgaW5jbHVkZQ0KPiA+ICsgICAg
+ICAgICAgICAgICJmc2wsbHMxMDEyYS1mdG0tYWxhcm0iDQo+ID4gKyAgICAgICAgICAgICAgImZz
+bCxsczEwMjFhLWZ0bS1hbGFybSINCj4gPiArICAgICAgICAgICAgICAiZnNsLGxzMTAyOGEtZnRt
+LWFsYXJtIg0KPiA+ICsgICAgICAgICAgICAgICJmc2wsbHMxMDQzYS1mdG0tYWxhcm0iDQo+ID4g
+KyAgICAgICAgICAgICAgImZzbCxsczEwNDZhLWZ0bS1hbGFybSINCj4gPiArICAgICAgICAgICAg
+ICAiZnNsLGxzMTA4OGEtZnRtLWFsYXJtIg0KPiA+ICsgICAgICAgICAgICAgICJmc2wsbHMyMDh4
+YS1mdG0tYWxhcm0iDQo+ID4gKy0gcmVnIDogU3BlY2lmaWVzIGJhc2UgcGh5c2ljYWwgYWRkcmVz
+cyBhbmQgc2l6ZSBvZiB0aGUgcmVnaXN0ZXIgDQo+ID4gK3NldHMgZm9yIHRoZQ0KPiA+ICsgIEZs
+ZXhUaW1lciBNb2R1bGUgYW5kIGJhc2UgcGh5c2ljYWwgYWRkcmVzcyBvZiBJUCBQb3dlcmRvd24g
+DQo+ID4gK0V4Y2VwdGlvbiBDb250cm9sDQo+ID4gKyAgUmVnaXN0ZXIuDQo+ID4gKy0gcmVnLW5h
+bWVzOiBuYW1lcyBvZiB0aGUgbWFwcGVkIG1lbW9yeSByZWdpb25zIGxpc3RlZCBpbiByZWdzIHBy
+b3BlcnR5Lg0KPiA+ICsgIHNob3VsZCBpbmNsdWRlIHRoZSBmb2xsb3dpbmcgZW50cmllczoNCj4g
+PiArICAiZnRtIjogICAgQWRkcmVzcyBvZiB0aGUgcmVnaXN0ZXIgc2V0cyBmb3IgRmxleFRpbWVy
+IE1vZHVsZQ0KDQpTYXlzIHJlcXVpcmVkLCBidXQgbm90IGluIHRoZSBleGFtcGxlLiBJJ2QganVz
+dCByZW1vdmUgdGhpcyBhcyAtbmFtZXMgaXMgcG9pbnRsZXNzIHdoZW4gdGhlcmUgaXMgb25seSAx
+IGVudHJ5Lg0KW0Jpd2VuIExpXSBJIHdpbGwgcmVtb3ZlIHRoZSByZWctbmFtZXMgcHJvcGVydHkg
+aW4gdjMuDQoNCj4gPiArLSBpbnRlcnJ1cHRzIDogU2hvdWxkIGJlIHRoZSBGbGV4VGltZXIgTW9k
+dWxlIGludGVycnVwdC4NCj4gPiArLSBmc2wscmNwbS13YWtldXAgcHJvcGVydHkgYW5kIHJjcG0g
+bm9kZSA6IFBsZWFzZSByZWZlcg0KPiA+ICsgICAgICAgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL3NvYy9mc2wvcmNwbS50eHQNCj4NCj4gTG9va3MgYmV0dGVyLg0KPg0KPiA+ICst
+IGJpZy1lbmRpYW46IElmIHRoZSBob3N0IGNvbnRyb2xsZXIgaXMgYmlnLWVuZGlhbiBtb2RlLCBz
+cGVjaWZ5IHRoaXMgcHJvcGVydHkuDQo+ID4gKyAgVGhlIGRlZmF1bHQgZW5kaWFuIG1vZGUgaXMg
+bGl0dGxlLWVuZGlhbi4NCj4NCj4gU2FtZSBjb21tZW50IGFib3V0IG9wdGlvbmFsIHByb3BlcnR5
+Lg0KPiBbQml3ZW4gTGldIG9rLCBJIHdpbGwgbW92ZSBiaWctZW5kaWFuIHRvIG9wdGlvbmFsIHBy
+b3BlcnR5IGluIHYzLiAgDQo+DQo+ID4gKw0KPiA+ICtFeGFtcGxlOg0KPiA+ICtyY3BtOiByY3Bt
+QDFlMzQwNTAgew0KPiA+ICsgICAgICAgY29tcGF0aWJsZSA9ICJmc2wsbHMxMDg4YS1yY3BtIiwg
+ImZzbCxxb3JpcS1yY3BtLTIuMSsiOw0KPiA+ICsgICAgICAgcmVnID0gPDB4MCAweDFlMzQwNTAg
+MHgwIDB4ND47DQo+ID4gKyAgICAgICBmc2wsI3JjcG0td2FrZXVwLWNlbGxzID0gPDE+Ow0KDQox
+IGNlbGwgaGVyZS4uLg0KW0Jpd2VuIExpXSB5ZXMsIGl04oCZcyB3cm9uZyxJIHdpbGwgY29ycmVj
+dCBpdCBpbiB2My4NCj4gPiArfQ0KPiA+ICsNCj4gPiArZnRtX2FsYXJtMDogdGltZXJAMjgwMDAw
+MCB7DQo+ID4gKyAgICAgICBjb21wYXRpYmxlID0gImZzbCxmdG0tYWxhcm0iOw0KPiA+ICsgICAg
+ICAgcmVnID0gPDB4MCAweDI4MDAwMDAgMHgwIDB4MTAwMDA+Ow0KPiA+ICsgICAgICAgZnNsLHJj
+cG0td2FrZXVwID0gPCZyY3BtIDB4MCAweDQwMDA+Ow0KDQouLi5hbmQgMiBjZWxscyBoZXJlLg0K
+W0Jpd2VuIExpXSB5ZXMsIGl04oCZcyB3cm9uZyxJIHdpbGwgY29ycmVjdCBpdCBpbiB2My4NCg0K
+PiA+ICsgICAgICAgaW50ZXJydXB0cyA9IDwwIDQ0IDQ+Ow0KPiA+ICt9DQo+ID4gLS0NCj4gPiAy
+LjcuNA0KPiA+DQo=
