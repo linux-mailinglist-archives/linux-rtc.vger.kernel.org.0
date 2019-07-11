@@ -2,101 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B35A065963
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2019 16:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2A965F2F
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Jul 2019 19:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728638AbfGKOwo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 11 Jul 2019 10:52:44 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:50930 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726213AbfGKOwo (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 11 Jul 2019 10:52:44 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 15AA3200949;
-        Thu, 11 Jul 2019 16:52:42 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CDA812001EC;
-        Thu, 11 Jul 2019 16:52:35 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 04CDD402C1;
-        Thu, 11 Jul 2019 22:52:27 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        leoyang.li@nxp.com, robh+dt@kernel.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaobo.xie@nxp.com, jiafei.pan@nxp.com, ran.wang_1@nxp.com,
-        mark.rutland@arm.com, devicetree@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: [v3 2/2] Documentation: dt: binding: rtc: add binding for ftm alarm driver
-Date:   Thu, 11 Jul 2019 22:43:25 +0800
-Message-Id: <20190711144325.10963-1-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728612AbfGKR4V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Jul 2019 13:56:21 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39553 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728355AbfGKR4V (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Jul 2019 13:56:21 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b7so3416128pls.6;
+        Thu, 11 Jul 2019 10:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=xHJTxAeN+1DHjRmeQFcfiA2JAPbl1+ahBCADP6reZQ0=;
+        b=cFW7hCLLVUIvtCgyXqRQzoPJcg5Iex8WEX1KGJRimu0ab3YzyAKpzUK9DnV21MhAjU
+         QIkPc5ZXsO9hD21ubOTgs2NXtdLaq95AYjwfhEPaVKEdD3RsGytBzxMjOu/JaMwMIuXN
+         Qr/MVhwqA8RbQbfzzC2o5ovmGS4sx4YzGoLWt2HWWfTqBongbVj45WFU9Y0/+Zj9j3FI
+         Y0AHigRgCUAmlfneCvWgwTbQOYlYe3iUQ732mm8mgxl4nt6PrFlpMm8yLm5ZVXOBxdYT
+         Rp7NAhrKCftLprkPKv9F/qMX774K3+MFOVy0pTKZOOL+8jbmC0K6a5EEYdziXSJdtAkJ
+         sqiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=xHJTxAeN+1DHjRmeQFcfiA2JAPbl1+ahBCADP6reZQ0=;
+        b=AMOkEoLWeMstjSGO/fsqtLCel4IZgTfABj7s1dBQ9zUHuI47LYiU4yUlWSegaoqDLj
+         Wfp/V1VnmKLDvR47odVITEMiljlW67lppnyvxQXAAOh6ghTdT2f/BbZv6V/8i81BcGVH
+         QCYVuHsQM7TVW12b84Z++YHVmLu/NuU4Jp/yP3AHGq+v3a3i2CqBGfcQONLi4639O2hY
+         BdJCyxPJu91BhEVkI8jb8lraHWBYIBbfRBf1n4qcouZWP2I7rVLZ4/QeXjArJXZkeBen
+         JyM5scDtgCuiRrQpHy0Gl+P/oBgcZUjnrvFMfX41m9hZIx+mOpI9lllySJsmJ9xgI876
+         +9Uw==
+X-Gm-Message-State: APjAAAWHgt+JSTwxptSsAeYfdOlzKklfHc24jWvlIhPXzcs0FcVsqa0G
+        xfOeAd1NgeMI2nblIKYz+ZmUhD0M
+X-Google-Smtp-Source: APXvYqxHOHxvgrAU+bn2EGLCozMw7p2mS2jTI0ziAkSW9JaWO7ZazBexsPNjH5j0vLjwoCtPRb/dNA==
+X-Received: by 2002:a17:902:9f81:: with SMTP id g1mr5932032plq.17.1562867780488;
+        Thu, 11 Jul 2019 10:56:20 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.86.126])
+        by smtp.gmail.com with ESMTPSA id u69sm11029659pgu.77.2019.07.11.10.56.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Jul 2019 10:56:19 -0700 (PDT)
+Date:   Thu, 11 Jul 2019 23:26:15 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        patches@opensource.cirrus.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: rtc: rtc-wm831x: Add IRQF_ONESHOT flag
+Message-ID: <20190711175615.GA13651@hari-Inspiron-1545>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The patch adds binding for ftm alarm driver
+fix below issue reported by coccicheck
+drivers//rtc/rtc-wm831x.c:436:7-32: ERROR: Threaded IRQ with no primary
+handler requested without IRQF_ONESHOT
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
 ---
-Change in v3:
-	- remove reg-names property
-	- correct cells number
+ drivers/rtc/rtc-wm831x.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Change in v2:
-	- replace ls1043a with ls1088a as example
-	- add rcpm node and fsl,rcpm-wakeup property
-
- .../devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt  | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
-
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
-new file mode 100644
-index 0000000..e4eea18
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
-@@ -0,0 +1,38 @@
-+Freescale FlexTimer Module (FTM) Alarm
-+
-+Note: The driver need work with RCPM driver to wake up system in sleep.
-+
-+Required properties:
-+- compatible : Should be "fsl,<chip>-ftm-alarm", the
-+	       supported chips include
-+	       "fsl,ls1012a-ftm-alarm"
-+	       "fsl,ls1021a-ftm-alarm"
-+	       "fsl,ls1028a-ftm-alarm"
-+	       "fsl,ls1043a-ftm-alarm"
-+	       "fsl,ls1046a-ftm-alarm"
-+	       "fsl,ls1088a-ftm-alarm"
-+	       "fsl,ls208xa-ftm-alarm"
-+- reg : Specifies base physical address and size of the register sets for the
-+  FlexTimer Module and base physical address of IP Powerdown Exception Control
-+  Register.
-+- interrupts : Should be the FlexTimer Module interrupt.
-+- fsl,rcpm-wakeup property and rcpm node : Please refer
-+	Documentation/devicetree/bindings/soc/fsl/rcpm.txt
-+
-+Optional properties:
-+- big-endian: If the host controller is big-endian mode, specify this property.
-+  The default endian mode is little-endian.
-+
-+Example:
-+rcpm: rcpm@1e34040 {
-+	compatible = "fsl,ls1088a-rcpm", "fsl,qoriq-rcpm-2.1+";
-+	reg = <0x0 0x1e34040 0x0 0x18>;
-+	fsl,#rcpm-wakeup-cells = <6>;
-+}
-+
-+ftm_alarm0: timer@2800000 {
-+	compatible = "fsl,ls1088a-ftm-alarm";
-+	reg = <0x0 0x2800000 0x0 0x10000>;
-+	fsl,rcpm-wakeup = <&rcpm 0x0 0x0 0x0 0x0 0x4000 0x0>;
-+	interrupts = <0 44 4>;
-+}
+diff --git a/drivers/rtc/rtc-wm831x.c b/drivers/rtc/rtc-wm831x.c
+index d2e8b21..ccef887 100644
+--- a/drivers/rtc/rtc-wm831x.c
++++ b/drivers/rtc/rtc-wm831x.c
+@@ -435,7 +435,8 @@ static int wm831x_rtc_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, alm_irq, NULL,
+ 				wm831x_alm_irq,
+-				IRQF_TRIGGER_RISING, "RTC alarm",
++				IRQF_TRIGGER_RISING | IRQF_ONESHOT,
++				"RTC alarm",
+ 				wm831x_rtc);
+ 	if (ret != 0) {
+ 		dev_err(&pdev->dev, "Failed to request alarm IRQ %d: %d\n",
 -- 
 2.7.4
 
