@@ -2,43 +2,34 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B765167C0A
-	for <lists+linux-rtc@lfdr.de>; Sat, 13 Jul 2019 23:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CEF67C13
+	for <lists+linux-rtc@lfdr.de>; Sat, 13 Jul 2019 23:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbfGMVMr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 13 Jul 2019 17:12:47 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:37147 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727553AbfGMVMq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 13 Jul 2019 17:12:46 -0400
+        id S1727968AbfGMVZK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 13 Jul 2019 17:25:10 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:57693 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727961AbfGMVZK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 13 Jul 2019 17:25:10 -0400
 X-Originating-IP: 90.65.161.137
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id F3454C0002;
-        Sat, 13 Jul 2019 21:12:31 +0000 (UTC)
-Date:   Sat, 13 Jul 2019 23:12:31 +0200
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id A6A021C0004;
+        Sat, 13 Jul 2019 21:25:04 +0000 (UTC)
+Date:   Sat, 13 Jul 2019 23:25:04 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ran Bi <ran.bi@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Rutland <mark.rutland@arm.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Subject: Re: [PATCH 2/3] rtc: Add support for the MediaTek MT2712 RTC
-Message-ID: <20190713211231.GD4732@piout.net>
-References: <20190702032120.16539-1-ran.bi@mediatek.com>
- <20190702032120.16539-3-ran.bi@mediatek.com>
+To:     Biwen Li <biwen.li@nxp.com>
+Cc:     a.zummo@towertech.it, leoyang.li@nxp.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaobo.xie@nxp.com, jiafei.pan@nxp.com, ran.wang_1@nxp.com,
+        robh+dt@kernel.org
+Subject: Re: [v3,1/2] rtc/fsl: add FTM alarm driver as the wakeup source
+Message-ID: <20190713212504.GE4732@piout.net>
+References: <20190711143748.10808-1-biwen.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190702032120.16539-3-ran.bi@mediatek.com>
+In-Reply-To: <20190711143748.10808-1-biwen.li@nxp.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -47,562 +38,398 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 Hi,
 
-On 02/07/2019 11:21:19+0800, Ran Bi wrote:
-> diff --git a/drivers/rtc/rtc-mt2712.c b/drivers/rtc/rtc-mt2712.c
+On 11/07/2019 22:37:48+0800, Biwen Li wrote:
+> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+> index 9d997fa..5cccb07 100644
+> --- a/drivers/rtc/Makefile
+> +++ b/drivers/rtc/Makefile
+> @@ -79,6 +79,7 @@ obj-$(CONFIG_RTC_DRV_HID_SENSOR_TIME) += rtc-hid-sensor-time.o
+>  obj-$(CONFIG_RTC_DRV_HYM8563)	+= rtc-hym8563.o
+>  obj-$(CONFIG_RTC_DRV_IMXDI)	+= rtc-imxdi.o
+>  obj-$(CONFIG_RTC_DRV_IMX_SC)	+= rtc-imx-sc.o
+> +obj-$(CONFIG_RTC_DRV_FSL_FTM_ALARM)	+= rtc-fsl-ftm-alarm.o
+
+This file is sorted alphabetically.
+
+>  obj-$(CONFIG_RTC_DRV_ISL12022)	+= rtc-isl12022.o
+>  obj-$(CONFIG_RTC_DRV_ISL12026)	+= rtc-isl12026.o
+>  obj-$(CONFIG_RTC_DRV_ISL1208)	+= rtc-isl1208.o
+> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
 > new file mode 100644
-> index 000000000000..f98f0ab114c5
+> index 0000000..4fd0d6b
 > --- /dev/null
-> +++ b/drivers/rtc/rtc-mt2712.c
-> @@ -0,0 +1,495 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
+> @@ -0,0 +1,347 @@
+> +// SPDX-License-Identifier: GPL-2.0+
 > +/*
-> + * Copyright (c) 2019 MediaTek Inc.
-> + * Author: Ran Bi <ran.bi@mediatek.com>
+> + * Freescale FlexTimer Module (FTM) alarm device driver.
+> + *
+> + * Copyright 2014 Freescale Semiconductor, Inc.
+> + * Copyright 2019 NXP
+> + *
 > + */
 > +
-> +#include <linux/delay.h>
-> +#include <linux/init.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
 > +#include <linux/io.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/module.h>
 > +#include <linux/of_address.h>
 > +#include <linux/of_irq.h>
 > +#include <linux/platform_device.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/module.h>
+> +#include <linux/fsl/ftm.h>
 > +#include <linux/rtc.h>
+> +#include <linux/time.h>
 > +
-> +#define MTK_RTC_DEV		KBUILD_MODNAME
+> +#define FTM_SC_CLK(c)		((c) << FTM_SC_CLK_MASK_SHIFT)
 > +
-> +#define RTC_BBPU		0x0000
-> +#define RTC_BBPU_CLRPKY		(1U << 4)
-
-Please use BIT(). Also, I don't feel that the RTC prefix is adding any
-value. MT2712 would be a better choice here.
-
-> +#define RTC_BBPU_RELOAD		(1U << 5)
-> +#define RTC_BBPU_CBUSY		(1U << 6)
-> +#define RTC_BBPU_KEY		(0x43 << 8)
+> +/*
+> + * Select Fixed frequency clock (32KHz) as clock source
+> + * of FlexTimer Module
+> + */
+> +#define FTM_SC_CLKS_FIXED_FREQ	0x02
+> +#define FIXED_FREQ_CLK		32000
 > +
-> +#define RTC_IRQ_STA		0x0004
-> +#define RTC_IRQ_STA_AL		(1U << 0)
-> +#define RTC_IRQ_STA_TC		(1U << 1)
+> +/* Select 128 (2^7) as divider factor */
+> +#define MAX_FREQ_DIV		(1 << FTM_SC_PS_MASK)
 > +
-> +#define RTC_IRQ_EN		0x0008
-> +#define RTC_IRQ_EN_AL		(1U << 0)
-> +#define RTC_IRQ_EN_TC		(1U << 1)
-> +#define RTC_IRQ_EN_ONESHOT	(1U << 2)
-> +#define RTC_IRQ_EN_ONESHOT_AL	(RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
+> +/* Maximum counter value in FlexTimer's CNT registers */
+> +#define MAX_COUNT_VAL		0xffff
 > +
-> +#define RTC_CII_EN		0x000c
-> +
-> +#define RTC_AL_MASK		0x0010
-> +#define RTC_AL_MASK_DOW		(1U << 4)
-> +
-> +#define RTC_TC_SEC		0x0014
-> +#define RTC_TC_MIN		0x0018
-> +#define RTC_TC_HOU		0x001c
-> +#define RTC_TC_DOM		0x0020
-> +#define RTC_TC_DOW		0x0024
-> +#define RTC_TC_MTH		0x0028
-> +#define RTC_TC_YEA		0x002c
-> +
-> +#define RTC_AL_SEC		0x0030
-> +#define RTC_AL_MIN		0x0034
-> +#define RTC_AL_HOU		0x0038
-> +#define RTC_AL_DOM		0x003c
-> +#define RTC_AL_DOW		0x0040
-> +#define RTC_AL_MTH		0x0044
-> +#define RTC_AL_YEA		0x0048
-> +
-> +#define RTC_SEC_MASK		0x003f
-> +#define RTC_MIN_MASK		0x003f
-> +#define RTC_HOU_MASK		0x001f
-> +#define RTC_DOM_MASK		0x001f
-> +#define RTC_DOW_MASK		0x0007
-> +#define RTC_MTH_MASK		0x000f
-> +#define RTC_YEA_MASK		0x007f
-> +
-> +#define RTC_POWERKEY1		0x004c
-> +#define RTC_POWERKEY2		0x0050
-> +#define RTC_POWERKEY1_KEY	0xa357
-> +#define RTC_POWERKEY2_KEY	0x67d2
-> +
-> +#define RTC_CON0		0x005c
-> +#define RTC_CON1		0x0060
-> +
-> +#define RTC_PROT		0x0070
-> +#define RTC_PROT_UNLOCK1	0x9136
-> +#define RTC_PROT_UNLOCK2	0x586a
-> +
-> +#define RTC_WRTGR		0x0078
-> +
-> +/* we map HW YEAR 0 to 1968 not 1970 because 2000 is the leap year */
-> +#define RTC_MIN_YEAR		1968
-> +#define RTC_BASE_YEAR		1900
-> +#define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
-
-Do not do that. If this RTC range starts in 200, ths is what the driver
-has to support, you should not care about dates before 2000. Note that
-the RTC core can still properly shift the range if it is absolutely
-necessary.
-
-> +
-> +#define RTC_DEFAULT_YEA		2010
-> +#define RTC_DEFAULT_MTH		1
-> +#define RTC_DEFAULT_DOM		1
-> +
-> +struct mt2712_rtc {
-> +	struct device		*dev;
-> +	struct rtc_device	*rtc_dev;
-> +	void __iomem		*base;
-> +	struct mutex		lock;
-> +	int			irq;
-> +	u8			irq_wake_enabled;
+> +struct ftm_rtc {
+> +	struct rtc_device *rtc_dev;
+> +	void __iomem *base;
+> +	bool big_endian;
+> +	u32 alarm_freq;
 > +};
 > +
-> +static inline u32 rtc_readl(struct mt2712_rtc *rtc, u32 reg)
-
-Please use a more descriptive prefix than just rtc_.
-
+> +static inline u32 rtc_readl(struct ftm_rtc *dev, u32 reg)
 > +{
-> +	return readl(rtc->base + reg);
+> +	if (dev->big_endian)
+> +		return ioread32be(dev->base + reg);
+> +	else
+> +		return ioread32(dev->base + reg);
 > +}
 > +
-> +static inline void rtc_writel(struct mt2712_rtc *rtc, u32 reg, u32 val)
+> +static inline void rtc_writel(struct ftm_rtc *dev, u32 reg, u32 val)
 > +{
-> +	writel(val, rtc->base + reg);
+> +	if (dev->big_endian)
+> +		iowrite32be(val, dev->base + reg);
+> +	else
+> +		iowrite32(val, dev->base + reg);
 > +}
 > +
-> +static void rtc_write_trigger(struct mt2712_rtc *rtc)
+> +static inline void ftm_counter_enable(struct ftm_rtc *rtc)
 > +{
-> +	unsigned long timeout = jiffies + HZ/10;
+> +	u32 val;
 > +
-> +	rtc_writel(rtc, RTC_WRTGR, 1);
-> +	while (1) {
-> +		if (!(rtc_readl(rtc, RTC_BBPU) & RTC_BBPU_CBUSY))
-> +			break;
-> +
-> +		if (time_after(jiffies, timeout)) {
-> +			dev_err(rtc->dev, "%s time out!\n", __func__);
-> +			break;
-> +		}
-> +		cpu_relax();
-> +	}
+> +	/* select and enable counter clock source */
+> +	val = rtc_readl(rtc, FTM_SC);
+> +	val &= ~(FTM_SC_PS_MASK | FTM_SC_CLK_MASK);
+> +	val |= (FTM_SC_PS_MASK | FTM_SC_CLK(FTM_SC_CLKS_FIXED_FREQ));
+> +	rtc_writel(rtc, FTM_SC, val);
 > +}
 > +
-> +static void rtc_writeif_unlock(struct mt2712_rtc *rtc)
+> +static inline void ftm_counter_disable(struct ftm_rtc *rtc)
 > +{
-> +	rtc_writel(rtc, RTC_PROT, RTC_PROT_UNLOCK1);
-> +	rtc_write_trigger(rtc);
-> +	rtc_writel(rtc, RTC_PROT, RTC_PROT_UNLOCK2);
-> +	rtc_write_trigger(rtc);
+> +	u32 val;
+> +
+> +	/* disable counter clock source */
+> +	val = rtc_readl(rtc, FTM_SC);
+> +	val &= ~(FTM_SC_PS_MASK | FTM_SC_CLK_MASK);
+> +	rtc_writel(rtc, FTM_SC, val);
 > +}
 > +
-> +static irqreturn_t rtc_irq_handler_thread(int irq, void *data)
+> +static inline void ftm_irq_acknowledge(struct ftm_rtc *rtc)
 > +{
-> +	struct mt2712_rtc *rtc = data;
-> +	u16 irqsta, irqen;
-> +
-> +	irqsta = rtc_readl(rtc, RTC_IRQ_STA);
-> +	if (irqsta & RTC_IRQ_STA_AL) {
-> +		rtc_update_irq(rtc->rtc_dev, 1, RTC_IRQF | RTC_AF);
-> +		irqen = irqsta & ~RTC_IRQ_EN_AL;
-> +
-> +		mutex_lock(&rtc->lock);
-
-You should take rtc->rtc_dev->ops_lock. This would remove the need for
-rtc->lock.
-
-> +		rtc_writel(rtc, RTC_IRQ_EN, irqen);
-> +		rtc_write_trigger(rtc);
-> +		mutex_unlock(&rtc->lock);
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	return IRQ_NONE;
-> +}
-> +
-> +static void __mtk_rtc_read_time(struct mt2712_rtc *rtc,
-> +				struct rtc_time *tm, int *sec)
-> +{
-> +	mutex_lock(&rtc->lock);
-> +	tm->tm_sec  = rtc_readl(rtc, RTC_TC_SEC) & RTC_SEC_MASK;
-> +	tm->tm_min  = rtc_readl(rtc, RTC_TC_MIN) & RTC_MIN_MASK;
-> +	tm->tm_hour = rtc_readl(rtc, RTC_TC_HOU) & RTC_HOU_MASK;
-> +	tm->tm_mday = rtc_readl(rtc, RTC_TC_DOM) & RTC_DOM_MASK;
-> +	tm->tm_mon  = rtc_readl(rtc, RTC_TC_MTH) & RTC_MTH_MASK;
-> +	tm->tm_year = rtc_readl(rtc, RTC_TC_YEA) & RTC_YEA_MASK;
-> +
-> +	*sec = rtc_readl(rtc, RTC_TC_SEC) & RTC_SEC_MASK;
-> +	mutex_unlock(&rtc->lock);
-> +}
-> +
-> +static int mtk_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +	time64_t time;
-> +	int days, sec;
-> +
-> +	do {
-> +		__mtk_rtc_read_time(rtc, tm, &sec);
-> +	} while (sec < tm->tm_sec);	/* SEC has carried */
-> +
-> +	/* HW register use 7 bits to store year data, minus
-> +	 * RTC_MIN_YEAR_OFFSET brfore write year data to register, and plus
-> +	 * RTC_MIN_YEAR_OFFSET back after read year from register
-> +	 */
-> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
-> +
-
-As stated before, do not do that, simply add 100.
-
-> +	/* HW register start mon from one, but tm_mon start from zero. */
-> +	tm->tm_mon--;
-> +
-> +	/* rtc_tm_to_time64 convert Gregorian date to seconds since
-> +	 * 01-01-1970 00:00:00, and this date is Thursday
-> +	 */
-> +	time = rtc_tm_to_time64(tm);
-> +	days = div_s64(time, 86400);
-> +	tm->tm_wday = (days + 4) % 7;
-> +
-
-This is not necessary, nobody cares about tm_wday, if you don't have it,
-do not set it.
-
-> +	return 0;
-> +}
-> +
-> +static int mtk_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +
-> +	mutex_lock(&rtc->lock);
-> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
-> +	tm->tm_mon++;
-> +
-> +	rtc_writel(rtc, RTC_TC_SEC, tm->tm_sec  & RTC_SEC_MASK);
-> +	rtc_writel(rtc, RTC_TC_MIN, tm->tm_min  & RTC_MIN_MASK);
-> +	rtc_writel(rtc, RTC_TC_HOU, tm->tm_hour & RTC_HOU_MASK);
-> +	rtc_writel(rtc, RTC_TC_DOM, tm->tm_mday & RTC_DOM_MASK);
-> +	rtc_writel(rtc, RTC_TC_MTH, tm->tm_mon  & RTC_MTH_MASK);
-> +	rtc_writel(rtc, RTC_TC_YEA, tm->tm_year & RTC_YEA_MASK);
-> +
-> +	rtc_write_trigger(rtc);
-> +	mutex_unlock(&rtc->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +	struct rtc_time *tm = &alm->time;
-> +	u16 irqen;
-> +
-> +	mutex_lock(&rtc->lock);
-> +	irqen = rtc_readl(rtc, RTC_IRQ_EN);
-> +	alm->enabled = !!(irqen & RTC_IRQ_EN_AL);
-> +
-> +	tm->tm_sec  = rtc_readl(rtc, RTC_AL_SEC) & RTC_SEC_MASK;
-> +	tm->tm_min  = rtc_readl(rtc, RTC_AL_MIN) & RTC_MIN_MASK;
-> +	tm->tm_hour = rtc_readl(rtc, RTC_AL_HOU) & RTC_HOU_MASK;
-> +	tm->tm_mday = rtc_readl(rtc, RTC_AL_DOM) & RTC_DOM_MASK;
-> +	tm->tm_mon  = rtc_readl(rtc, RTC_AL_MTH) & RTC_MTH_MASK;
-> +	tm->tm_year = rtc_readl(rtc, RTC_AL_YEA) & RTC_YEA_MASK;
-> +
-> +	tm->tm_year += RTC_MIN_YEAR_OFFSET;
-> +	tm->tm_mon--;
-> +	mutex_unlock(&rtc->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
-> +{
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +	struct rtc_time *tm = &alm->time;
-> +	u16 irqen;
-> +
-> +	dev_info(rtc->dev, "set al time = %04d-%02d-%02d %02d:%02d:%02d (%d)\n",
-
-Do not use dev_info, dev_dbg is probably what you want here. Also, use
-%ptR.
-
-> +		 tm->tm_year + RTC_BASE_YEAR, tm->tm_mon + 1, tm->tm_mday,
-> +		 tm->tm_hour, tm->tm_min, tm->tm_sec, alm->enabled);
-> +
-> +	tm->tm_year -= RTC_MIN_YEAR_OFFSET;
-> +	tm->tm_mon++;
-> +
-> +	mutex_lock(&rtc->lock);
-
-You probably need to disable the alarm before starting to modify the
-registers.
-
-> +	rtc_writel(rtc, RTC_AL_SEC,
-> +		   (rtc_readl(rtc, RTC_AL_SEC) & ~(RTC_SEC_MASK)) |
-> +		    (tm->tm_sec  & RTC_SEC_MASK));
-> +	rtc_writel(rtc, RTC_AL_MIN,
-> +		   (rtc_readl(rtc, RTC_AL_MIN) & ~(RTC_MIN_MASK)) |
-> +		    (tm->tm_min  & RTC_MIN_MASK));
-> +	rtc_writel(rtc, RTC_AL_HOU,
-> +		   (rtc_readl(rtc, RTC_AL_HOU) & ~(RTC_HOU_MASK)) |
-> +		    (tm->tm_hour & RTC_HOU_MASK));
-> +	rtc_writel(rtc, RTC_AL_DOM,
-> +		   (rtc_readl(rtc, RTC_AL_DOM) & ~(RTC_DOM_MASK)) |
-> +		    (tm->tm_mday & RTC_DOM_MASK));
-> +	rtc_writel(rtc, RTC_AL_MTH,
-> +		   (rtc_readl(rtc, RTC_AL_MTH) & ~(RTC_MTH_MASK)) |
-> +		    (tm->tm_mon  & RTC_MTH_MASK));
-> +	rtc_writel(rtc, RTC_AL_YEA,
-> +		   (rtc_readl(rtc, RTC_AL_YEA) & ~(RTC_YEA_MASK)) |
-> +		    (tm->tm_year & RTC_YEA_MASK));
-> +
-> +	rtc_writel(rtc, RTC_AL_MASK, RTC_AL_MASK_DOW);	/* mask DOW */
-> +
-> +	if (alm->enabled) {
-> +		irqen = rtc_readl(rtc, RTC_IRQ_EN) | RTC_IRQ_EN_ONESHOT_AL;
-> +		rtc_writel(rtc, RTC_IRQ_EN, irqen);
-> +	} else {
-> +		irqen = rtc_readl(rtc, RTC_IRQ_EN) & ~(RTC_IRQ_EN_ONESHOT_AL);
-> +		rtc_writel(rtc, RTC_IRQ_EN, irqen);
-> +	}
-> +	rtc_write_trigger(rtc);
-> +	mutex_unlock(&rtc->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static bool valid_rtc_time(struct mt2712_rtc *rtc)
-
-This function is not necessary, see later.
-
-> +{
-> +	struct rtc_time tm;
-> +	struct rtc_wkalrm alm;
-> +
-> +	mtk_rtc_read_time(rtc->dev, &tm);
-> +	if (rtc_valid_tm(&tm))
-> +		return false;
-> +
-> +	mtk_rtc_read_alarm(rtc->dev, &alm);
-> +	if (rtc_valid_tm(&alm.time))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +static void reset_rtc_time(struct mt2712_rtc *rtc)
-> +{
-> +	rtc_writel(rtc, RTC_TC_YEA, RTC_DEFAULT_YEA - RTC_MIN_YEAR);
-> +	rtc_writel(rtc, RTC_TC_MTH, RTC_DEFAULT_MTH);
-> +	rtc_writel(rtc, RTC_TC_DOM, RTC_DEFAULT_DOM);
-> +	rtc_writel(rtc, RTC_TC_DOW, 1);
-> +	rtc_writel(rtc, RTC_TC_HOU, 0);
-> +	rtc_writel(rtc, RTC_TC_MIN, 0);
-> +	rtc_writel(rtc, RTC_TC_SEC, 0);
-> +
-> +	rtc_writel(rtc, RTC_AL_YEA, 1970 - RTC_MIN_YEAR);
-> +	rtc_writel(rtc, RTC_AL_MTH, 1);
-> +	rtc_writel(rtc, RTC_AL_DOM, 1);
-> +	rtc_writel(rtc, RTC_AL_DOW, 1);
-> +	rtc_writel(rtc, RTC_AL_HOU, 0);
-> +	rtc_writel(rtc, RTC_AL_MIN, 0);
-> +	rtc_writel(rtc, RTC_AL_SEC, 0);
-> +
-> +	rtc_write_trigger(rtc);
-> +}
-> +
-> +/* Init RTC register */
-> +static void rtc_hw_init(struct mt2712_rtc *rtc)
-> +{
-> +	u32 p1, p2;
-> +
-> +	rtc_writel(rtc, RTC_BBPU, RTC_BBPU_KEY | RTC_BBPU_RELOAD);
-> +
-> +	rtc_writel(rtc, RTC_IRQ_EN,  0);
-
-Are you sure you want to disable interrupts every time you reboot? I
-guess the RTC has its own power domain and may be used across reboots.
-
-> +	rtc_writel(rtc, RTC_IRQ_STA, 0);
-> +	rtc_writel(rtc, RTC_CII_EN,  0);
-> +	rtc_writel(rtc, RTC_AL_MASK, 0);
-> +	/* necessary before set RTC_POWERKEY */
-> +	rtc_writel(rtc, RTC_CON0, 0x4848);
-> +	rtc_writel(rtc, RTC_CON1, 0x0048);
-> +
-> +	rtc_write_trigger(rtc);
-> +
-> +	rtc_readl(rtc, RTC_IRQ_STA);	/* read clear */
-> +
-> +	p1 = rtc_readl(rtc, RTC_POWERKEY1);
-> +	p2 = rtc_readl(rtc, RTC_POWERKEY2);
-> +	dev_info(rtc->dev, "%s rtc p1 is %x, p2 is %x!\n", __func__, p1, p2);
-
-This debug message has to be removed.
-
-> +
-> +	 /* RTC need POWERKEY1/2 match, then goto normal work mode */
-> +	rtc_writel(rtc, RTC_POWERKEY1, RTC_POWERKEY1_KEY);
-> +	rtc_writel(rtc, RTC_POWERKEY2, RTC_POWERKEY2_KEY);
-> +	rtc_write_trigger(rtc);
-> +
-> +	rtc_writeif_unlock(rtc);
+> +	unsigned int timeout = 100;
 > +
 > +	/*
-> +	 * register status was not correct,
-> +	 * need set time and alarm to default
+> +	 *Fix errata A-007728 for flextimer
+> +	 *	If the FTM counter reaches the FTM_MOD value between
+> +	 *	the reading of the TOF bit and the writing of 0 to
+> +	 *	the TOF bit, the process of clearing the TOF bit
+> +	 *	does not work as expected when FTMx_CONF[NUMTOF] != 0
+> +	 *	and the current TOF count is less than FTMx_CONF[NUMTOF].
+> +	 *	If the above condition is met, the TOF bit remains set.
+> +	 *	If the TOF interrupt is enabled (FTMx_SC[TOIE] = 1),the
+> +	 *	TOF interrupt also remains asserted.
+> +	 *
+> +	 *	Above is the errata discription
+> +	 *
+> +	 *	In one word: software clearing TOF bit not works when
+> +	 *	FTMx_CONF[NUMTOF] was seted as nonzero and FTM counter
+> +	 *	reaches the FTM_MOD value.
+> +	 *
+> +	 *	The workaround is clearing TOF bit until it works
+> +	 *	(FTM counter doesn't always reache the FTM_MOD anyway),
+> +	 *	which may cost some cycles.
 > +	 */
-> +	if (p1 != RTC_POWERKEY1_KEY || p2 != RTC_POWERKEY2_KEY
-> +	    || !valid_rtc_time(rtc)) {
-> +		reset_rtc_time(rtc);
-
-Do not do that. This is valuable information. If the time is invalid,
-report it as such in read_time and read_alarm. Resetting the time here
-will lead to more issues later (i.e. userspace is not able to know
-whether the time is set correctly or not).
-
-> +		dev_info(rtc->dev, "first boot init!\n");
-> +	}
+> +	while ((FTM_SC_TOF & rtc_readl(rtc, FTM_SC)) && timeout--)
+> +		rtc_writel(rtc, FTM_SC, rtc_readl(rtc, FTM_SC) & (~FTM_SC_TOF));
 > +}
 > +
-> +static const struct rtc_class_ops mtk_rtc_ops = {
-> +	.read_time	= mtk_rtc_read_time,
-> +	.set_time	= mtk_rtc_set_time,
-> +	.read_alarm	= mtk_rtc_read_alarm,
-> +	.set_alarm	= mtk_rtc_set_alarm,
-> +};
-> +
-> +static int mtk_rtc_probe(struct platform_device *pdev)
+> +static inline void ftm_irq_enable(struct ftm_rtc *rtc)
 > +{
-> +	struct resource *res;
-> +	struct mt2712_rtc *rtc;
-> +	int ret;
+> +	u32 val;
 > +
-> +	rtc = devm_kzalloc(&pdev->dev, sizeof(struct mt2712_rtc), GFP_KERNEL);
-> +	if (!rtc)
-> +		return -ENOMEM;
+> +	val = rtc_readl(rtc, FTM_SC);
+> +	val |= FTM_SC_TOIE;
+> +	rtc_writel(rtc, FTM_SC, val);
+> +}
 > +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	rtc->base = devm_ioremap_resource(&pdev->dev, res);
-> +	if (IS_ERR(rtc->base))
-> +		return PTR_ERR(rtc->base);
+> +static inline void ftm_irq_disable(struct ftm_rtc *rtc)
+> +{
+> +	u32 val;
 > +
-> +	rtc->irq = platform_get_irq(pdev, 0);
-> +	if (rtc->irq < 0) {
-> +		dev_err(&pdev->dev, "No IRQ resource\n");
-> +		return rtc->irq;
+> +	val = rtc_readl(rtc, FTM_SC);
+> +	val &= ~FTM_SC_TOIE;
+> +	rtc_writel(rtc, FTM_SC, val);
+> +}
+> +
+> +static inline void ftm_reset_counter(struct ftm_rtc *rtc)
+> +{
+> +	/*
+> +	 * The CNT register contains the FTM counter value.
+> +	 * Reset clears the CNT register. Writing any value to COUNT
+> +	 * updates the counter with its initial value, CNTIN.
+> +	 */
+> +	rtc_writel(rtc, FTM_CNT, 0x00);
+> +}
+> +
+> +static void ftm_clean_alarm(struct ftm_rtc *rtc)
+> +{
+> +	ftm_counter_disable(rtc);
+> +
+> +	rtc_writel(rtc, FTM_CNTIN, 0x00);
+> +	rtc_writel(rtc, FTM_MOD, ~0U);
+> +
+> +	ftm_reset_counter(rtc);
+> +}
+> +
+> +static irqreturn_t ftm_rtc_alarm_interrupt(int irq, void *dev)
+> +{
+> +	struct ftm_rtc *rtc = dev;
+> +
+> +	ftm_irq_acknowledge(rtc);
+> +	ftm_irq_disable(rtc);
+> +	ftm_clean_alarm(rtc);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int ftm_rtc_alarm_irq_enable(struct device *dev,
+> +		unsigned int enabled)
+> +{
+> +	struct ftm_rtc *rtc = dev_get_drvdata(dev);
+> +
+> +	if (enabled)
+> +		ftm_irq_enable(rtc);
+> +	else
+> +		ftm_irq_disable(rtc);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Note:
+> + *	The function is not really getting time from the RTC
+> + *	since FlexTimer is not a RTC device, but we need to
+> + *	get time to setup alarm, so we are using system time
+> + *	for now.
+> + */
+> +static int ftm_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct timespec64 ts64;
+> +	unsigned long local_time;
+> +
+> +	ktime_get_real_ts64(&ts64);
+> +	local_time = (unsigned long)(ts64.tv_sec - (sys_tz.tz_minuteswest * 60));
+
+The RTC time is in UTC time, you should not care about the timezone
+here.
+
+> +
+> +	rtc_time_to_tm(local_time, tm);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ftm_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
+> +{
+> +	return 0;
+> +}
+> +
+> +/*
+> + * 1. Select fixed frequency clock (32KHz) as clock source;
+> + * 2. Select 128 (2^7) as divider factor;
+> + * So clock is 250 Hz (32KHz/128).
+> + *
+> + * 3. FlexTimer's CNT register is a 32bit register,
+> + * but the register's 16 bit as counter value,it's other 16 bit
+> + * is reserved.So minimum counter value is 0x0,maximum counter
+> + * value is 0xffff.
+> + * So max alarm value is 262 (65536 / 250) seconds
+> + */
+> +static int ftm_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
+> +{
+> +	struct rtc_time tm;
+> +	unsigned long now, alm_time, cycle;
+> +	struct ftm_rtc *rtc = dev_get_drvdata(dev);
+> +
+> +	ftm_rtc_read_time(dev, &tm);
+> +	rtc_tm_to_time(&tm, &now);
+> +	rtc_tm_to_time(&alm->time, &alm_time);
+> +
+> +	ftm_clean_alarm(rtc);
+> +	cycle = (alm_time - now) * rtc->alarm_freq;
+> +	if (cycle > MAX_COUNT_VAL) {
+> +		pr_err("Out of alarm range {0~262} seconds.\n");
+> +		return -EINVAL;
+
+Use -ERANGE here.
+
 > +	}
 > +
-> +	mutex_init(&rtc->lock);
-> +	rtc->dev = &pdev->dev;
+> +	ftm_irq_disable(rtc);
+> +
+> +	/*
+> +	 * The counter increments until the value of MOD is reached,
+> +	 * at which point the counter is reloaded with the value of CNTIN.
+> +	 * The TOF (the overflow flag) bit is set when the FTM counter
+> +	 * changes from MOD to CNTIN. So we should using the cycle - 1.
+> +	 */
+> +	rtc_writel(rtc, FTM_MOD, cycle - 1);
+> +
+> +	ftm_counter_enable(rtc);
+> +	ftm_irq_enable(rtc);
+> +
+> +	return 0;
+> +
+> +}
+> +
+> +static const struct rtc_class_ops ftm_rtc_ops = {
+> +	.read_time		= ftm_rtc_read_time,
+> +	.read_alarm		= ftm_rtc_read_alarm,
+> +	.set_alarm		= ftm_rtc_set_alarm,
+> +	.alarm_irq_enable	= ftm_rtc_alarm_irq_enable,
+> +};
+> +
+> +static int ftm_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct resource *r;
+> +	int irq;
+> +	int ret;
+> +	struct ftm_rtc *rtc;
+> +
+> +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> +	if (unlikely(!rtc)) {
+> +		pr_err("ftm: cannot alloc memery for rtc\n");
+> +		return -ENOMEM;
+> +	}
+> +
 > +	platform_set_drvdata(pdev, rtc);
 > +
-> +	rtc->rtc_dev = devm_rtc_allocate_device(rtc->dev);
-> +	if (IS_ERR(rtc->rtc_dev))
-> +		return PTR_ERR(rtc->rtc_dev);
+> +	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!r) {
+> +		pr_err("ftm: cannot get resource for rtc\n");
+> +		return -ENODEV;
+> +	}
 > +
-> +	ret = request_threaded_irq(rtc->irq, NULL,
+> +	rtc->base = devm_ioremap_resource(&pdev->dev, r);
+> +	if (IS_ERR(rtc->base)) {
+> +		pr_err("ftm: cannot ioremap resource for rtc\n");
+> +		return PTR_ERR(rtc->base);
+> +	}
+> +
+> +	irq = irq_of_parse_and_map(np, 0);
+> +	if (irq <= 0) {
+> +		pr_err("ftm: unable to get IRQ from DT, %d\n", irq);
+> +		return -EINVAL;
+> +	}
+> +
+> +	rtc->big_endian = of_property_read_bool(np, "big-endian");
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq, ftm_rtc_alarm_interrupt,
+> +			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), rtc);
 
-devm_request_threaded_irq would remove the need for out_free_irq and
-mtk_rtc_remove().
+There is a possible race condition here. As soon as devm_request_irq is
+called, the interrupt handler may be called leading to a null pointer
+dereference because rtc->rtc_dev is not yet allocated. Please use
+devm_rtc_allocate_device and rtc_register_device to solve that.
 
-> +				   rtc_irq_handler_thread,
-> +				   IRQF_ONESHOT | IRQF_TRIGGER_LOW,
-> +				   dev_name(rtc->dev), rtc);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
-> +			rtc->irq, ret);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "failed to request irq\n");
 > +		return ret;
 > +	}
 > +
-> +	/* rtc hw init */
-> +	rtc_hw_init(rtc);
+> +	rtc->alarm_freq = (u32)FIXED_FREQ_CLK / (u32)MAX_FREQ_DIV;
 > +
+> +	ftm_clean_alarm(rtc);
+> +
+
+Do you really need to remove the alarm here?
+
 > +	device_init_wakeup(&pdev->dev, true);
-> +
-> +	rtc->rtc_dev->ops = &mtk_rtc_ops;
-> +
-> +	ret = rtc_register_device(rtc->rtc_dev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "register rtc device failed\n");
-> +		goto out_free_irq;
+> +	rtc->rtc_dev = devm_rtc_device_register(&pdev->dev, "ftm-alarm",
+> +							&ftm_rtc_ops,
+> +							THIS_MODULE);
+> +	if (IS_ERR(rtc->rtc_dev)) {
+> +		dev_err(&pdev->dev, "can't register rtc device\n");
+> +		return PTR_ERR(rtc->rtc_dev);
 > +	}
-> +
-> +	return 0;
-> +
-> +out_free_irq:
-> +	free_irq(rtc->irq, rtc);
 > +	return ret;
 > +}
 > +
-> +static int mtk_rtc_remove(struct platform_device *pdev)
-> +{
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(&pdev->dev);
-> +
-> +	free_irq(rtc->irq, rtc);
-> +
-> +	return 0;
-> +}
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int mt2712_rtc_suspend(struct device *dev)
-> +{
-> +	int wake_status = 0;
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +
-> +	if (device_may_wakeup(dev)) {
-> +		wake_status = enable_irq_wake(rtc->irq);
-> +		if (!wake_status)
-> +			rtc->irq_wake_enabled = true;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mt2712_rtc_resume(struct device *dev)
-> +{
-> +	int wake_status = 0;
-> +	struct mt2712_rtc *rtc = dev_get_drvdata(dev);
-> +
-> +	if (device_may_wakeup(dev) && rtc->irq_wake_enabled) {
-> +		wake_status = disable_irq_wake(rtc->irq);
-> +		if (!wake_status)
-> +			rtc->irq_wake_enabled = false;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(mt2712_pm_ops, mt2712_rtc_suspend,
-> +			 mt2712_rtc_resume);
-> +#endif
-> +
-> +static const struct of_device_id mt2712_rtc_of_match[] = {
-> +	{ .compatible = "mediatek,mt2712-rtc", },
+> +static const struct of_device_id ftm_rtc_match[] = {
+> +	{ .compatible = "fsl,ls1012a-ftm-alarm", },
+> +	{ .compatible = "fsl,ls1021a-ftm-alarm", },
+> +	{ .compatible = "fsl,ls1043a-ftm-alarm", },
+> +	{ .compatible = "fsl,ls1046a-ftm-alarm", },
+> +	{ .compatible = "fsl,ls1088a-ftm-alarm", },
+> +	{ .compatible = "fsl,ls208xa-ftm-alarm", },
+> +	{ .compatible = "fsl,ls1028a-ftm-alarm", },
 > +	{ },
 > +};
 > +
-> +MODULE_DEVICE_TABLE(of, mt2712_rtc_of_match)
-> +
-> +static struct platform_driver mtk_rtc_driver = {
-> +	.driver = {
-> +		.name = MTK_RTC_DEV,
-> +		.of_match_table = mt2712_rtc_of_match,
-> +		.pm = &mt2712_pm_ops,
+> +static struct platform_driver ftm_rtc_driver = {
+> +	.probe		= ftm_rtc_probe,
+> +	.driver		= {
+> +		.name	= "ftm-alarm",
+> +		.of_match_table = ftm_rtc_match,
 > +	},
-> +	.probe  = mtk_rtc_probe,
-> +	.remove = mtk_rtc_remove,
 > +};
 > +
-> +module_platform_driver(mtk_rtc_driver);
+> +static int __init ftm_alarm_init(void)
+> +{
+> +	return platform_driver_register(&ftm_rtc_driver);
+> +}
 > +
-> +MODULE_DESCRIPTION("MediaTek MT2712 SoC based RTC Driver");
-> +MODULE_AUTHOR("Ran Bi <ran.bi@mediatek.com>");
+> +/*
+> + * Ensure that the driver is initialized after
+> + * any real rtc driver
+> + *	- The flextimer is not a real rtc device,
+> + *	  it don't have time and date registers of rtc.
+> + *	- The flextimer rtc alarm driver gets time from wall time,
+> + *	  but the wall time is not ready.so the time from the driver is wrong.
+> + *	- If system regist it before any other real rtc device,it will
+> + *	  be emulated as rtc0,date command will read wrong time for user.
+> + */
+> +device_initcall_sync(ftm_alarm_init);
+
+No, please register that as a regular RTC driver and stop using
+RTC_HCTOSYS or use the DT aliases to ensure it is not used as the
+primary RTC.
+
+> +
+> +MODULE_DESCRIPTION("NXP/Freescale FlexTimer alarm driver");
+> +MODULE_AUTHOR("Biwen Li <biwen.li@nxp.com>");
 > +MODULE_LICENSE("GPL");
 > -- 
-> 2.18.0
+> 2.7.4
 > 
 
 -- 
