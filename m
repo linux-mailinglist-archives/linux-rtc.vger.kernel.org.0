@@ -2,142 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D376A6E6F9
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2019 15:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6736EAE6
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jul 2019 21:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbfGSN4e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 19 Jul 2019 09:56:34 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:35003 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728760AbfGSN4e (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 Jul 2019 09:56:34 -0400
-X-Originating-IP: 92.137.69.152
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 2B5C31BF207;
-        Fri, 19 Jul 2019 13:56:31 +0000 (UTC)
-Date:   Fri, 19 Jul 2019 15:56:30 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Michael McCormick <michael.mccormick@enatel.net>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf85063: Add support for specifying the clkout
- frequency from device tree node.
-Message-ID: <20190719135630.GD4012@piout.net>
-References: <20190704022439.GA13102@michael-Latitude-5590>
+        id S1728218AbfGSTE2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 19 Jul 2019 15:04:28 -0400
+Received: from us-smtp-delivery-168.mimecast.com ([216.205.24.168]:43053 "EHLO
+        us-smtp-delivery-168.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727344AbfGSTE2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 19 Jul 2019 15:04:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=impinj.com;
+        s=mimecast20190405; t=1563563066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KOSflosmMUO+thxGsJ8vTuoStHwFwJSDICB5eAqCTMw=;
+        b=BurZOwfXeJk7JXz5bGVXSlAYRN26boapA2mYK9MBIK7bu2gGLtUt6i7SDBoLYKc8CvlMDJ
+        AHQngVrhHIfU91xuU7ey5NcrpDroDiG0OHXsk9mrDo6IbT8LvgequYl7B7MYxF9HmFgOWX
+        2ksiBOHVU6eNYLUgvds5vD1oQAs2rGo=
+Received: from NAM03-CO1-obe.outbound.protection.outlook.com
+ (mail-co1nam03lp2059.outbound.protection.outlook.com [104.47.40.59]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ us-mta-207-mxnzqoWEPDibYPYx2TJy_A-1; Fri, 19 Jul 2019 15:04:25 -0400
+Received: from MWHPR0601MB3708.namprd06.prod.outlook.com (10.167.236.38) by
+ MWHPR0601MB3739.namprd06.prod.outlook.com (10.167.236.144) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2094.11; Fri, 19 Jul 2019 19:04:21 +0000
+Received: from MWHPR0601MB3708.namprd06.prod.outlook.com
+ ([fe80::2d66:fca6:b053:764f]) by MWHPR0601MB3708.namprd06.prod.outlook.com
+ ([fe80::2d66:fca6:b053:764f%6]) with mapi id 15.20.2094.011; Fri, 19 Jul 2019
+ 19:04:21 +0000
+From:   Trent Piepho <tpiepho@impinj.com>
+To:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "anson.huang@nxp.com" <anson.huang@nxp.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "aisheng.dong@nxp.com" <aisheng.dong@nxp.com>
+CC:     "linux-imx@nxp.com" <linux-imx@nxp.com>
+Subject: Re: [PATCH] rtc: snvs: fix possible race condition
+Thread-Topic: [PATCH] rtc: snvs: fix possible race condition
+Thread-Index: AQHVO6gKZejg7PMOuUGfI0AjQ/aRL6bOpJgAgAAzT4CAANzngIAA4I4AgACusACAAQ4tAA==
+Date:   Fri, 19 Jul 2019 19:04:21 +0000
+Message-ID: <1563563060.2343.88.camel@impinj.com>
+References: <20190716071858.36750-1-Anson.Huang@nxp.com>
+         <AM0PR04MB421167283C950557E231181480C90@AM0PR04MB4211.eurprd04.prod.outlook.com>
+         <DB3PR0402MB39164D0022E25706D2B871C7F5C90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+         <AM0PR04MB421114F025F27AF2BC5FA21980C80@AM0PR04MB4211.eurprd04.prod.outlook.com>
+         <1563467526.2343.80.camel@impinj.com>
+         <DB3PR0402MB3916053E6344520416BC976BF5CB0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB3916053E6344520416BC976BF5CB0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [216.207.205.253]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ed5a26ca-628f-49b0-4e8f-08d70c7be853
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR0601MB3739;
+x-ms-traffictypediagnostic: MWHPR0601MB3739:
+x-microsoft-antispam-prvs: <MWHPR0601MB373982BA326516CF90E7F6A6D3CB0@MWHPR0601MB3739.namprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01039C93E4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(366004)(136003)(346002)(39850400004)(376002)(189003)(199004)(71200400001)(71190400001)(76116006)(5660300002)(2201001)(91956017)(14454004)(110136005)(6116002)(36756003)(3846002)(476003)(316002)(2906002)(6246003)(229853002)(4326008)(86362001)(66946007)(66446008)(64756008)(66556008)(66476007)(2501003)(478600001)(102836004)(6506007)(6486002)(26005)(7736002)(305945005)(8676002)(6436002)(53936002)(25786009)(99286004)(8936002)(486006)(81166006)(81156014)(256004)(14444005)(68736007)(66066001)(103116003)(2616005)(6512007)(186003)(76176011)(446003)(11346002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR0601MB3739;H:MWHPR0601MB3708.namprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Px5nIZJVj0U1tf5AXD83f8+VcUER5rU866jkVNeWE5frmTSrsLLiqagC7YlrGJXYtd6aDgCNzo6gNihVMLBP2NhfnsebtMwzRkOxWgPR77mWt7ZMsg6d66RCsK9Km02RO1SIUJYdLQrqk08KqPVfv0LH5FtH9E3WQ2iFO1c026rcDYQ1RU+1Mb8wMKffUwk0Olqrj5vHO9rQGEsGXqtD5mBf7LohCJvUIh6syxXFg/UsG4TzGruKYBQuILPP5mA3OeyrR39++UnqIrAsQN7b52v46poavEjkde9HK4lKy6P/VpBka5L/30bzTFsjrUYuBvyFyE84XzlutTAJ5GA7FNB5nv/5L9zbnQ3W6FAM4IkbUBVXsNZ6+rzSJIBC4oaTXqlmANYJzpk4ZXzrHlaEEso1Nzle3OoeEiwaUNyYnGg=
+Content-ID: <B9164D4BA2C38841BE5D28D1E8699A94@namprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190704022439.GA13102@michael-Latitude-5590>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-OriginatorOrg: impinj.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed5a26ca-628f-49b0-4e8f-08d70c7be853
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2019 19:04:21.2886
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6de70f0f-7357-4529-a415-d8cbb7e93e5e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tpiepho@impinj.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0601MB3739
+X-MC-Unique: mxnzqoWEPDibYPYx2TJy_A-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+T24gRnJpLCAyMDE5LTA3LTE5IGF0IDAyOjU3ICswMDAwLCBBbnNvbiBIdWFuZyB3cm90ZToNCj4g
+DQo+ID4gSSBkbyB3b3JyeSB0aGF0IGhhbmRsaW5nIHRoZSBpcnEgYmVmb3JlIHRoZSBydGMgZGV2
+aWNlIGlzIHJlZ2lzdGVyZWQgY291bGQgc3RpbGwNCj4gPiByZXN1bHQgaW4gYSBjcmFzaC4gIEZy
+b20gd2hhdCBJIHNhdywgdGhlIGlycSBwYXRoIGluIHNudnMgb25seSB1c2VzIGRyaXZlciBzdGF0
+ZQ0KPiA+IG1lbWJlcnMgdGhhdCBhcmUgZnVsbHkgaW5pdGlhbGl6ZWQgZm9yIHRoZSBtb3N0IHBh
+cnQsIGFuZCB0aGUgYWxsb2NhdGVkIGJ1dA0KPiA+IHVucmVnaXN0ZXJlZCBkYXRhLT5ydGMgaXMg
+b25seSB1c2VkIGluIG9uZSBjYWxsIHRvIHJ0Y191cGRhdGVfaXJxKCksIHdoaWNoDQo+ID4gYXBw
+ZWFycyB0byBiZSBvayB3aXRoIHRoaXMuDQo+ID4gDQo+ID4gQnV0IGl0IGlzIG5vdCB0aGF0IGhh
+cmQgdG8gaW1hZ2luZSB0aGF0IHNvbWV0aGluZyBjb3VsZCBnbyBpbnRvIHRoZSBydGMgY29yZQ0K
+PiA+IHRoYXQgYXNzdW1lcyBjYWxsIGxpa2UgcnRjX3VwZGF0ZV9pcnEoKSBhcmUgb25seSBtYWRl
+IG9uIHJlZ2lzdGVyZWQgZGV2aWNlcy4NCj4gPiANCj4gPiBJZiB0aGVyZSB3YXMgYSB3YXkgdG8g
+ZG8gaXQsIEkgdGhpbmsgYWxsb2NhdGluZyB0aGUgaXJxIGluIGEgbWFza2VkIHN0YXRlIGFuZA0K
+PiA+IHRoZW4gdW5tYXNraW5nIGl0IGFzIHBhcnQgb2YgdGhlIGZpbmFsIHJlZ2lzdHJhdGlvbiBj
+YWxsIHRvIG1ha2UgdGhlIGRldmljZSBnbw0KPiA+IGxpdmUgd291bGQgYmUgYSBzYWZlciBhbmQg
+bW9yZSBnZW5lcmFsIHBhdHRlcm4uDQo+IA0KPiBJdCBtYWtlcyBzZW5zZSwgSSB0aGluayB3ZSBj
+YW4ganVzdCBtb3ZlIHRoZSBkZXZtX3JlcXVlc3RfaXJxKCkgdG8gYWZ0ZXIgcnRjX3JlZ2lzdGVy
+X2RldmljZSgpLA0KPiBJdCB3aWxsIG1ha2Ugc3VyZSBldmVyeXRoaW5nIGlzIHJlYWR5IGJlZm9y
+ZSBJUlEgaXMgZW5hYmxlZC4gV2lsbCBzZW5kIG91dCBhIFYyIHBhdGNoLiANCg0KVGhhdCB3aWxs
+IG1lYW4gcmVnaXN0ZXJpbmcgdGhlIHJ0YywgdGhlbiB1bnJlZ2lzdGVyaW5nIGl0IGlmIHRoZSBp
+cnENCnJlcXVlc3QgZmFpbHMuICBNb3JlIG9mIGEgcGFpbiB0byB3cml0ZSB0aGlzIGZhaWx1cmUg
+cGF0aC4NCg0KQWxleGFuZHJlLCBpcyBpdCBwYXJ0IG9mIHJ0YyBjb3JlIGRlc2lnbiB0aGF0IHJ0
+Y191cGRhdGVfaXJxKCkgbWlnaHQgYmUNCmNhbGxlZCBvbiBhIHJ0YyBkZXZpY2UgdGhhdCBpcyBw
+cm9wZXJseSBhbGxvY2F0ZWQsIGJ1dCBub3QgcmVnaXN0ZXJlZA0KeWV0Pw0K
 
-On 04/07/2019 14:24:39+1200, Michael McCormick wrote:
-> Primarily this allows the clkout signal to be disabled and save some
-> power when running off battery backup. However, all hardware implemented
-> values are implemented. Uses default value of 32768Hz if node is not
-> specified.
-> 
-
-the proper way of doing that is to register the clkout signal in the
-common clock framework. You can hava a look at rtc-pcf8563.c or rtc-m41t80.c
-
-> Signed-off-by: Michael McCormick <michael.mccormick@enatel.net>
-> ---
->  drivers/rtc/rtc-pcf85063.c | 52 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-> index 1afa6d9fa9fb..5c19381899ed 100644
-> --- a/drivers/rtc/rtc-pcf85063.c
-> +++ b/drivers/rtc/rtc-pcf85063.c
-> @@ -37,6 +37,9 @@
->  #define PCF85063_REG_CTRL2             0x01
->  #define PCF85063_CTRL2_AF              BIT(6)
->  #define PCF85063_CTRL2_AIE             BIT(7)
-> +#define PCF85063_CTRL2_COF2            BIT(2)
-> +#define PCF85063_CTRL2_COF1            BIT(1)
-> +#define PCF85063_CTRL2_COF0            BIT(0)
-> 
->  #define PCF85063_REG_OFFSET            0x02
->  #define PCF85063_OFFSET_SIGN_BIT       6       /* 2's complement sign bit */
-> @@ -369,6 +372,51 @@ static int pcf85063_load_capacitance(struct pcf85063 *pcf85063,
->                                   PCF85063_REG_CTRL1_CAP_SEL, reg);
->  }
-> 
-> +static int pcf85063_set_clkout_mode(struct pcf85063 *pcf85063,
-> +                                   const struct device_node *np)
-> +{
-> +       u32 load = 32768;
-> +       u8 reg = 0;
-> +
-> +       of_property_read_u32(np, "clockout-frequency", &load);
-> +       switch (load) {
-> +       case 0:
-> +               reg = PCF85063_CTRL2_COF2 | PCF85063_CTRL2_COF1 |
-> +                     PCF85063_CTRL2_COF0;
-> +               break;
-> +       case 1:
-> +               reg = PCF85063_CTRL2_COF2 | PCF85063_CTRL2_COF1;
-> +               break;
-> +       case 1024:
-> +               reg = PCF85063_CTRL2_COF2 | PCF85063_CTRL2_COF0;
-> +               break;
-> +       case 2048:
-> +               reg = PCF85063_CTRL2_COF2;
-> +               break;
-> +       case 4096:
-> +               reg = PCF85063_CTRL2_COF1 | PCF85063_CTRL2_COF0;
-> +               break;
-> +       case 8192:
-> +               reg = PCF85063_CTRL2_COF1;
-> +               break;
-> +       case 16384:
-> +               reg = PCF85063_CTRL2_COF0;
-> +               break;
-> +       case 32768:
-> +               reg = 0;
-> +               break;
-> +       default:
-> +               dev_warn(&pcf85063->rtc->dev,
-> +                       "Unknown clockout-frequency: %d. Assuming 32768", load);
-> +               reg = 0;
-> +               break;
-> +       }
-> +
-> +       return regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL2,
-> +                                 PCF85063_CTRL2_COF2 | PCF85063_CTRL2_COF1 |
-> +                                 PCF85063_CTRL2_COF0, reg);
-> +}
-> +
->  static const struct pcf85063_config pcf85063a_config = {
->         .regmap = {
->                 .reg_bits = 8,
-> @@ -443,6 +491,10 @@ static int pcf85063_probe(struct i2c_client *client)
->                 dev_warn(&client->dev, "failed to set xtal load capacitance: %d",
->                          err);
-> 
-> +       err = pcf85063_set_clkout_mode(pcf85063, client->dev.of_node);
-> +       if (err < 0)
-> +               dev_warn(&client->dev, "failed to set clock out mode: %d", err);
-> +
->         pcf85063->rtc->ops = &pcf85063_rtc_ops;
->         pcf85063->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
->         pcf85063->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> --
-> 2.17.1
-> 
-> 
-> 
-> **CONFIDENTIALITY STATEMENT**
-> This message is intended for the sole use of the individual(s) and/or entity to whom it is addressed, and may contain information that is legally privileged, confidential, and exempt from disclosure under applicable law. If you are not the intended addressee, nor authorized to receive for the intended addressee, you are hereby notified that dissemination, distribution, copying or disclosure of this message is strictly prohibited. If you have received this message in error please immediately advise the sender by reply email, and delete the message.
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
