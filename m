@@ -2,27 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AA47071F
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 19:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AE270716
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 19:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfGVR2v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jul 2019 13:28:51 -0400
-Received: from sauhun.de ([88.99.104.3]:42264 "EHLO pokefinder.org"
+        id S1731408AbfGVR2h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Jul 2019 13:28:37 -0400
+Received: from sauhun.de ([88.99.104.3]:42116 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731306AbfGVR0U (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:20 -0400
+        id S1731401AbfGVR0V (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:21 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 929F54A149B;
-        Mon, 22 Jul 2019 19:26:19 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id 27C744A1494;
+        Mon, 22 Jul 2019 19:26:20 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] rtc: isl12026: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:26:15 +0200
-Message-Id: <20190722172618.4061-2-wsa+renesas@sang-engineering.com>
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH 2/4] rtc: max77686: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:26:16 +0200
+Message-Id: <20190722172618.4061-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
 References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
@@ -41,26 +44,28 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/rtc/rtc-isl12026.c | 6 +++---
+ drivers/rtc/rtc-max77686.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-isl12026.c b/drivers/rtc/rtc-isl12026.c
-index 97f594f9667c..5b6b17fb6d62 100644
---- a/drivers/rtc/rtc-isl12026.c
-+++ b/drivers/rtc/rtc-isl12026.c
-@@ -454,9 +454,9 @@ static int isl12026_probe_new(struct i2c_client *client)
+diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+index 4aff349ae301..d04fd1024697 100644
+--- a/drivers/rtc/rtc-max77686.c
++++ b/drivers/rtc/rtc-max77686.c
+@@ -693,11 +693,11 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+ 		goto add_rtc_irq;
+ 	}
  
- 	isl12026_force_power_modes(client);
+-	info->rtc = i2c_new_dummy(parent_i2c->adapter,
++	info->rtc = i2c_new_dummy_device(parent_i2c->adapter,
+ 				  info->drv_data->rtc_i2c_addr);
+-	if (!info->rtc) {
++	if (IS_ERR(info->rtc)) {
+ 		dev_err(info->dev, "Failed to allocate I2C device for RTC\n");
+-		return -ENODEV;
++		return PTR_ERR(info->rtc);
+ 	}
  
--	priv->nvm_client = i2c_new_dummy(client->adapter, ISL12026_EEPROM_ADDR);
--	if (!priv->nvm_client)
--		return -ENOMEM;
-+	priv->nvm_client = i2c_new_dummy_device(client->adapter, ISL12026_EEPROM_ADDR);
-+	if (IS_ERR(priv->nvm_client))
-+		return PTR_ERR(priv->nvm_client);
- 
- 	priv->rtc = devm_rtc_allocate_device(&client->dev);
- 	ret = PTR_ERR_OR_ZERO(priv->rtc);
+ 	info->rtc_regmap = devm_regmap_init_i2c(info->rtc,
 -- 
 2.20.1
 
