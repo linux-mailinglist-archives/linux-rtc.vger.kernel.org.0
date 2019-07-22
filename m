@@ -2,27 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E63770715
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 19:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AA47071F
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 19:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731733AbfGVR2h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jul 2019 13:28:37 -0400
-Received: from sauhun.de ([88.99.104.3]:42260 "EHLO pokefinder.org"
+        id S1726656AbfGVR2v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Jul 2019 13:28:51 -0400
+Received: from sauhun.de ([88.99.104.3]:42264 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731389AbfGVR0V (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:21 -0400
+        id S1731306AbfGVR0U (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:20 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 09FE54A149A;
+        by pokefinder.org (Postfix) with ESMTPSA id 929F54A149B;
         Mon, 22 Jul 2019 19:26:19 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 0/4] rtc: convert subsystem to i2c_new_dummy_device()
-Date:   Mon, 22 Jul 2019 19:26:14 +0200
-Message-Id: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] rtc: isl12026: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:26:15 +0200
+Message-Id: <20190722172618.4061-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
+References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -30,34 +33,34 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This series is part of a tree-wide movement to replace the I2C API call
-'i2c_new_dummy' which returns NULL with its new counterpart returning an
-ERRPTR.
+Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
+ERRPTR which we use in error handling.
 
-The series was generated with coccinelle (audited afterwards, of course) and
-build tested by me and by buildbot. No tests on HW have been performed.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-The branch is based on v5.3-rc1. A branch (with some more stuff included) can
-be found here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i2c/new_dummy
-
-Some drivers still need to be manually converted. Patches for those will be
-sent out individually.
-
-
-Wolfram Sang (4):
-  rtc: isl12026: convert to i2c_new_dummy_device
-  rtc: max77686: convert to i2c_new_dummy_device
-  rtc: s35390a: convert to i2c_new_dummy_device
-  rtc: s5m: convert to i2c_new_dummy_device
+Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
  drivers/rtc/rtc-isl12026.c | 6 +++---
- drivers/rtc/rtc-max77686.c | 6 +++---
- drivers/rtc/rtc-s35390a.c  | 6 +++---
- drivers/rtc/rtc-s5m.c      | 6 +++---
- 4 files changed, 12 insertions(+), 12 deletions(-)
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/rtc/rtc-isl12026.c b/drivers/rtc/rtc-isl12026.c
+index 97f594f9667c..5b6b17fb6d62 100644
+--- a/drivers/rtc/rtc-isl12026.c
++++ b/drivers/rtc/rtc-isl12026.c
+@@ -454,9 +454,9 @@ static int isl12026_probe_new(struct i2c_client *client)
+ 
+ 	isl12026_force_power_modes(client);
+ 
+-	priv->nvm_client = i2c_new_dummy(client->adapter, ISL12026_EEPROM_ADDR);
+-	if (!priv->nvm_client)
+-		return -ENOMEM;
++	priv->nvm_client = i2c_new_dummy_device(client->adapter, ISL12026_EEPROM_ADDR);
++	if (IS_ERR(priv->nvm_client))
++		return PTR_ERR(priv->nvm_client);
+ 
+ 	priv->rtc = devm_rtc_allocate_device(&client->dev);
+ 	ret = PTR_ERR_OR_ZERO(priv->rtc);
 -- 
 2.20.1
 
