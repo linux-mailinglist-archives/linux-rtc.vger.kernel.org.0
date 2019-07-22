@@ -2,57 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD294704BB
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 17:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B9A704BC
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 17:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729477AbfGVP63 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jul 2019 11:58:29 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39974 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728154AbfGVP63 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jul 2019 11:58:29 -0400
-Received: by mail-wr1-f66.google.com with SMTP id r1so39977916wrl.7
+        id S1729718AbfGVP6a (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Jul 2019 11:58:30 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43057 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729238AbfGVP6a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jul 2019 11:58:30 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so39946675wru.10
         for <linux-rtc@vger.kernel.org>; Mon, 22 Jul 2019 08:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jeBc9QMBTIbPNcWr5JyxOr3G6seZ+H3AFkSIXXyaYuI=;
-        b=lQWUtEkRe/2ygHKRMp/C/W4ZUMpL/CyTZzFYv0nTdlF3hjqUuPK6Z/z3w2GDd0YrWU
-         LAZ6WSERvFOvI5ESYxlvyWipW2gD2gLXU75bSnk6XPk1RgMVhxSlvG9IQEtYDb6wgBAK
-         DrRQkMlLjxJxmRMDqJoJzBANvGWXHvSkPpKuSH+uU+XsWRcjHxr+I2dLUjYOwR6iCcBk
-         8f3WqCJbbb1oelacXg6f6RNq+Ko8KcRGsGsOtPHrbVkexT/dLzal31So7yLIJad007tu
-         cEkWpYbDyYNW/aOmriDE+Hc8XpW98fU7yBERB/pWXeRugYbgpelNzfGJ331HKsRffUOz
-         huIA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3NjKQ6bH7M7yJLbzjNkN2jx2rsf9cC0ZyK9exN5M9fc=;
+        b=GeBZSCaVIZd+cqC43S1krfN7aYNL1HxRaLY57XNQo9LbC/RI4XJxVBIwmWd+/eL6qR
+         msztgCuOI8rLTZkd1BBj9/tmxuqN+JAx0G/Px7f/oMRoZbhCQkdXcYVGgGMycEhmGvDX
+         y5ybYulbP7QWOgIF0oS8WniOk9peIr1CRQJ3BDktHDLZZJcOXa4S7RNj3XnspzzV/4/L
+         NHWf1G2/g+ZYg/64muhZANutIuJbyhw4CY+TpG96FE1P2z+QfDbJ6UIcqT2jbolcU/tK
+         XimyJ89mFhSVcQ52VCX72ga9wdezlO0AqR1pDui51Y6R4W/9HtNB/srZP0k1KbIW4ZiL
+         PDtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jeBc9QMBTIbPNcWr5JyxOr3G6seZ+H3AFkSIXXyaYuI=;
-        b=XX2KTGuT6NSpnLrQfv4TIuTp209YQ8NtjwVu2/Zm3aUkKHFg7aMPdNTdGB+ugt0NVq
-         TbK7vhTYNz6s9GV9sLwwst2WvKXjW7UPiIap+qpnyqHM4pyz838yisvRLsP56SUEGxY2
-         a3Dq1Y4cKhoeL4rAwiRXxKreyCcXZqfXPG0yq0l3evO/DY/rZxzdy2361E9B13dLWEwB
-         4YL5sqhAre22WQ3YcRIbp5m9huT9zrJPg76UTBpFB8QRX1HNRbEM+HzafzRFkXzafftR
-         qX0UuxzaSCqEI/ISkT49ojLI8q6jkvgefkhLDxlYvI/DFcDtit8YQ7DzVpia/aNKiuip
-         ZqsQ==
-X-Gm-Message-State: APjAAAWmIfap6ky3axGGrqiEdifaUnd6+tXH9ub+yMIRhBZGFDjivHMJ
-        sp9NonCqSQHI4P5y1/McjhrdCaYQNWg=
-X-Google-Smtp-Source: APXvYqxq0AI7sx9LvqqemGRJHZrydErO3ORS2Ty7e8bqeJWp2hSXJIEnwFtMJ8GpMD+ZYb/sbOD3rA==
-X-Received: by 2002:a5d:66c5:: with SMTP id k5mr78201858wrw.304.1563811107236;
-        Mon, 22 Jul 2019 08:58:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3NjKQ6bH7M7yJLbzjNkN2jx2rsf9cC0ZyK9exN5M9fc=;
+        b=oDkpsUZYuI2PjvRJmiqpcQ4DcHvwyFTbyzlnR/QjXxd1n0J8QrSXnIjEfcOldZIZrH
+         obPmwyr2CiXEiu8v7VuMkk1E+7cnmV1e7nllA4/eCuTsaq6HRVxWYowx9IRPL1+cIC3E
+         pHjnLq6+kQS9QUS6/C+f3bEaU67C5j4xdDGVdEkFLkmL3QKmczQ+chMfmGrhM3Q7bJHo
+         ERGMv6MZq6PEkVUD3Ywz2TsEDpZ3Y0vEkINaQmVi0q7q6iV1+kYVIYEY1ZLBe2X+LPqe
+         mkpFudq0Lx5OdrdzBA4dBXtWzFiJqeee3uW216Tuh+oX23y97mc7POFg45K4iflq9VDM
+         vlpA==
+X-Gm-Message-State: APjAAAWj6jLQFDoewQqlDvBrfKDH5KruT3lyviuu5DfhouWds7yBOUWs
+        m3Om6pUdn/Y7DXTuSb/FTeZTgeR+80g=
+X-Google-Smtp-Source: APXvYqxYa4jh+qGFM0bx2eP3vfJAWwwrr6UIR3VrW0sxiu6ZXWVobDCmXavXA77ziIQ8tvZ9bjUv5Q==
+X-Received: by 2002:adf:db50:: with SMTP id f16mr63500060wrj.214.1563811108193;
+        Mon, 22 Jul 2019 08:58:28 -0700 (PDT)
 Received: from localhost.localdomain (3e6b1cc1.rev.stofanet.dk. [62.107.28.193])
-        by smtp.googlemail.com with ESMTPSA id 91sm84840716wrp.3.2019.07.22.08.58.26
+        by smtp.googlemail.com with ESMTPSA id 91sm84840716wrp.3.2019.07.22.08.58.27
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 08:58:26 -0700 (PDT)
+        Mon, 22 Jul 2019 08:58:27 -0700 (PDT)
 From:   Bruno Thomsen <bruno.thomsen@gmail.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
         bruno.thomsen@gmail.com, bth@kamstrup.com,
         u.kleine-koenig@pengutronix.de
-Subject: [PATCH 0/4] rtc: pcf2127: tamper timestamp and watchdog feature support
-Date:   Mon, 22 Jul 2019 17:58:07 +0200
-Message-Id: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+Subject: [PATCH 1/4] rtc: pcf2127: convert to devm_rtc_allocate_device
+Date:   Mon, 22 Jul 2019 17:58:08 +0200
+Message-Id: <20190722155811.11980-2-bruno.thomsen@gmail.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+References: <20190722155811.11980-1-bruno.thomsen@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -60,38 +62,41 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre
+This allows further improvement of the driver.
 
-This patch series adds support for 2 chip features; tamper
-timestamp and watchdog. Including improvements and cleanup
-of existing code.
+Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Tamper timestamp sysfs interface should match ISL1208 and
-RV3028 RTC drivers; /sys/class/rtc/rtcX/timestamp0.
-
-Watchdog functionality can be enabled with a Kconfig option,
-just like in DS1374 and M41T80 RTC drivers.
-
-In the future we could consider making a generic optional
-RTC device tree binding property to enable the watchdog
-feature, ex. enable-watchdog.
-
-Patches has been tested on a pcf2127 chip using 2MHz SPI
-interface both as built-in and module including with and
-without watchdog feature.
-
-/Bruno
-
-Bruno Thomsen (4):
-  rtc: pcf2127: convert to devm_rtc_allocate_device
-  rtc: pcf2127: cleanup register and bit defines
-  rtc: pcf2127: add tamper detection support
-  rtc: pcf2127: add watchdog feature support
-
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/rtc-pcf2127.c | 360 +++++++++++++++++++++++++++++++++++---
- 2 files changed, 341 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 8632f58fed43..58eb96506e4b 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -237,11 +237,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 
+ 	dev_set_drvdata(dev, pcf2127);
+ 
+-	pcf2127->rtc = devm_rtc_device_register(dev, name, &pcf2127_rtc_ops,
+-						THIS_MODULE);
++	pcf2127->rtc = devm_rtc_allocate_device(dev);
+ 	if (IS_ERR(pcf2127->rtc))
+ 		return PTR_ERR(pcf2127->rtc);
+ 
++	pcf2127->rtc->ops = &pcf2127_rtc_ops;
++
+ 	if (has_nvmem) {
+ 		struct nvmem_config nvmem_cfg = {
+ 			.priv = pcf2127,
+@@ -253,7 +254,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		ret = rtc_nvmem_register(pcf2127->rtc, &nvmem_cfg);
+ 	}
+ 
+-	return ret;
++	return rtc_register_device(pcf2127->rtc);
+ }
+ 
+ #ifdef CONFIG_OF
 -- 
 2.21.0
 
