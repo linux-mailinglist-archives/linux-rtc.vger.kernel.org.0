@@ -2,56 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BCC70ACD
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 22:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B9970ADC
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jul 2019 22:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729929AbfGVUh4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jul 2019 16:37:56 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:51268 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728712AbfGVUhz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jul 2019 16:37:55 -0400
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 242833AA35F;
-        Mon, 22 Jul 2019 20:17:07 +0000 (UTC)
+        id S1729678AbfGVUu6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Jul 2019 16:50:58 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:44667 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727164AbfGVUu6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jul 2019 16:50:58 -0400
+X-Originating-IP: 90.65.161.137
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id CE120100004;
-        Mon, 22 Jul 2019 20:17:05 +0000 (UTC)
-Date:   Mon, 22 Jul 2019 22:17:05 +0200
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 2D5EA1BF20A;
+        Mon, 22 Jul 2019 20:50:56 +0000 (UTC)
+Date:   Mon, 22 Jul 2019 22:50:55 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Anson.Huang@nxp.com
-Cc:     a.zummo@towertech.it, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
-Subject: Re: [PATCH] rtc: imxdi: use devm_platform_ioremap_resource() to
- simplify code
-Message-ID: <20190722201705.GB24911@piout.net>
-References: <20190717081411.30622-1-Anson.Huang@nxp.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 0/4] rtc: convert subsystem to i2c_new_dummy_device()
+Message-ID: <20190722205055.GE24911@piout.net>
+References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190717081411.30622-1-Anson.Huang@nxp.com>
+In-Reply-To: <20190722172618.4061-1-wsa+renesas@sang-engineering.com>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/07/2019 16:14:11+0800, Anson.Huang@nxp.com wrote:
-> From: Anson Huang <Anson.Huang@nxp.com>
+On 22/07/2019 19:26:14+0200, Wolfram Sang wrote:
+> This series is part of a tree-wide movement to replace the I2C API call
+> 'i2c_new_dummy' which returns NULL with its new counterpart returning an
+> ERRPTR.
 > 
-> Use the new helper devm_platform_ioremap_resource() which wraps the
-> platform_get_resource() and devm_ioremap_resource() together, to
-> simplify the code.
+> The series was generated with coccinelle (audited afterwards, of course) and
+> build tested by me and by buildbot. No tests on HW have been performed.
 > 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
->  drivers/rtc/rtc-imxdi.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> The branch is based on v5.3-rc1. A branch (with some more stuff included) can
+> be found here:
 > 
-Applied, thanks.
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/i2c/new_dummy
+> 
+> Some drivers still need to be manually converted. Patches for those will be
+> sent out individually.
+> 
+> 
+> Wolfram Sang (4):
+>   rtc: isl12026: convert to i2c_new_dummy_device
+>   rtc: max77686: convert to i2c_new_dummy_device
+>   rtc: s35390a: convert to i2c_new_dummy_device
+>   rtc: s5m: convert to i2c_new_dummy_device
+> 
+>  drivers/rtc/rtc-isl12026.c | 6 +++---
+>  drivers/rtc/rtc-max77686.c | 6 +++---
+>  drivers/rtc/rtc-s35390a.c  | 6 +++---
+>  drivers/rtc/rtc-s5m.c      | 6 +++---
+>  4 files changed, 12 insertions(+), 12 deletions(-)
+> 
+All applied, thanks!
 
 -- 
 Alexandre Belloni, Bootlin
