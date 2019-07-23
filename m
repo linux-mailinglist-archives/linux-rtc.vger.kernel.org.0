@@ -2,72 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB3671BA3
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 17:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CD371F73
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 20:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731051AbfGWPcd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Jul 2019 11:32:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726276AbfGWPcd (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 23 Jul 2019 11:32:33 -0400
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 30EC9227B7;
-        Tue, 23 Jul 2019 15:32:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563895952;
-        bh=8JOyeEC1zTRyIsqC/PXugWUjwr/APz7sEZnATu2YyJs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sP3APy8eG7NLNOJcAtjsat+n0U+A76FGD91WwUGrbOXE0DyWCcMbzHxuOD0x1oVJW
-         av3EmEpwzod0evwuCQ8DrqENnAYDiHSCpuX9H9pbX6yfwORvSyPgn5MzpfhNhJHdF3
-         4DXkrdG50Caz25rF0/F7d4WzuOhz6hJ5YqOC2Z/g=
-Received: by mail-lf1-f54.google.com with SMTP id 62so24790659lfa.8;
-        Tue, 23 Jul 2019 08:32:32 -0700 (PDT)
-X-Gm-Message-State: APjAAAVp1p1IB+JebWyBCzu2YwGgLl3wTLicg1hHixY6EjfJ/O62lAgZ
-        6gBir5KCihZFG7h36gv8FH+zPFNK8yRbcTNze0s=
-X-Google-Smtp-Source: APXvYqzOqlEdW228CqT7EvzrEoHFXs6Y3HU32V4M67K48CS0QmPYAt/PYW9cZBGXd1rWIk3F5U1PvLTxOdi0akEiPYo=
-X-Received: by 2002:a19:48c5:: with SMTP id v188mr34818692lfa.69.1563895950429;
- Tue, 23 Jul 2019 08:32:30 -0700 (PDT)
+        id S1731080AbfGWSkW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Jul 2019 14:40:22 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:42195 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731007AbfGWSkV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Jul 2019 14:40:21 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AFA3960003;
+        Tue, 23 Jul 2019 18:40:19 +0000 (UTC)
+Date:   Tue, 23 Jul 2019 20:40:19 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, a.zummo@towertech.it, bth@kamstrup.com,
+        u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH 0/4] rtc: pcf2127: tamper timestamp and watchdog feature
+ support
+Message-ID: <20190723184019.GK24911@piout.net>
+References: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+ <CAH+2xPB7y703-WeiNBRoDXfWPKTRMzD=a5P+EYohYmV46BS2ZA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com> <20190722172618.4061-5-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20190722172618.4061-5-wsa+renesas@sang-engineering.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 23 Jul 2019 17:32:19 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPctuy6j34gZ53xdUqVUwcVLWtm1pxUGSbUXQBoTkEKRUA@mail.gmail.com>
-Message-ID: <CAJKOXPctuy6j34gZ53xdUqVUwcVLWtm1pxUGSbUXQBoTkEKRUA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] rtc: s5m: convert to i2c_new_dummy_device
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Sangbeom Kim <sbkim73@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH+2xPB7y703-WeiNBRoDXfWPKTRMzD=a5P+EYohYmV46BS2ZA@mail.gmail.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 22 Jul 2019 at 19:26, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
-> ERRPTR which we use in error handling.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
->
->  drivers/rtc/rtc-s5m.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+On 23/07/2019 16:13:12+0200, Bruno Thomsen wrote:
+> Hi all
+> 
+> > Patches has been tested on a pcf2127 chip using 2MHz SPI
+> > interface both as built-in and module including with and
+> > without watchdog feature.
+> 
+> I did some more testing as I could not understand this bugfix:
+> 
+> 3769a375ab83 rtc: pcf2127: bulk read only date and time registers.
+> 
+> This fix seems to be incomplete as root cause is not auto-increment
+> read aka bulk read, but reading control register 2 triggers zero value
+> in WD_VAL resulting in stopped watchdog until systemd kick the dog
+> again :)
+> 
+> As the watchdog has 2 control registers I will do some more testing
+> to see if this also apply to the other register. But more importantly
+> this issue also affect timestamp0_{store,show} functions in tamper
+> detection support, and I will therefor send a v2 of the patch series.
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
+Please Cc the watchdog maintainer on v2.
 
-Best regards,
-Krzysztof
+> /Bruno
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
