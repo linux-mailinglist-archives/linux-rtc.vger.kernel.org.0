@@ -2,76 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B0E70CD9
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 00:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9618271A04
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 16:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbfGVWvm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jul 2019 18:51:42 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:32919 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728529AbfGVWvm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jul 2019 18:51:42 -0400
-Received: by mail-io1-f67.google.com with SMTP id z3so77730643iog.0;
-        Mon, 22 Jul 2019 15:51:41 -0700 (PDT)
+        id S2390413AbfGWONa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Jul 2019 10:13:30 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:39225 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726201AbfGWONa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Jul 2019 10:13:30 -0400
+Received: by mail-ed1-f68.google.com with SMTP id m10so44071917edv.6
+        for <linux-rtc@vger.kernel.org>; Tue, 23 Jul 2019 07:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HAwiY1/rG8wJqQcR6j1V3fGMWcrvJx133OcdyAaU2eg=;
+        b=oQReH2L+GF4BKa+PtWvuivxhyPuExJzU7cdq1I0SQ9IhOzl4DWZ9hmeIlEO6/Rx4Xu
+         +KOJNBuRqhkD4HTRDYGyDZ4aMFITlgRXBNJu5EUniaT9x3Ov6shUeurYcJlm/tAJFOLO
+         RV9Cv2jdhfdSiYZSEVsvcZYHWg2rAefKZaUmMR1PHZoTAbf8FRKqwxVSeimdAMLTkke5
+         PSyK99KdZ5f19+gQgIsa3hzSTlMZ60QNeXMrD+NHmBmDJM5CPrcMO5RlbvU1/psGS0vJ
+         H8WUqcFHcWY/i2tmUJGolza7sIwWmwESkEePLggVRTqZ7ujmpfh4TuUAm162x5163iDe
+         4IJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sYRqGzsa2Mqfa8UCEWc+Q6d3arkBPq6mEZsIpfw+fso=;
-        b=nFDQJHVRhOLRyaiT1zjKy46M7vIugomAzSolqlUdVYh5NSK7epDlEqva304RVtfaxO
-         vhyD5341lLbIpcnmMD+DJkSGYFpyy53Ij1lVBvIsSMK91Sglixk6Km+RUYAphu8kiWDN
-         Z19O6IXUdMVnQqD1qClEC1or95/uN/j2vdjfa7dpAriogpr/SQMF0Rweh7Wg0hQZbaXm
-         EooLb7zvEphmUrtoqsztLOaCLXcnJY98VXakQ76RhOOeIyMAytPJXZ+/j5gK0Q8PRac0
-         CQI6UCW8+xWWHc0lxNKkDlRlAjliKQVfUJ3dr77zHmqGQnuM/v6kBZPP+hbDsZJaLmm2
-         am6A==
-X-Gm-Message-State: APjAAAV+1zEzs1bnZyi9rj8mw+7k3fajDyscGO1jPiMly5VR1s5qgSev
-        hqU8iiy8PDj5TCnWBp8Xeg==
-X-Google-Smtp-Source: APXvYqxFG3cem2D0uzg43tQTtA1WyJdJngPhgAlqWXVNUVcQmwLGOFIjnFebC9eNH3FaJ4tc0VmjRg==
-X-Received: by 2002:a5d:8d12:: with SMTP id p18mr65859087ioj.251.1563835901424;
-        Mon, 22 Jul 2019 15:51:41 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id k5sm46038653ioj.47.2019.07.22.15.51.40
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 22 Jul 2019 15:51:40 -0700 (PDT)
-Date:   Mon, 22 Jul 2019 16:51:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ran Bi <ran.bi@mediatek.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Rutland <mark.rutland@arm.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Ran Bi <ran.bi@mediatek.com>
-Subject: Re: [PATCH 1/3] bindings: rtc: add bindings for MT2712 RTC
-Message-ID: <20190722225140.GA30571@bogus>
-References: <20190702032120.16539-1-ran.bi@mediatek.com>
- <20190702032120.16539-2-ran.bi@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HAwiY1/rG8wJqQcR6j1V3fGMWcrvJx133OcdyAaU2eg=;
+        b=reZ+MwBjg3OPRAE88bNXoocp6782Sio7i4sauj0/63xACkdjTQA5dFSbuieEnS0QdH
+         VhPIpi9eDGoPg/oHH9VsHVQuvnOER0FqpbdPkHdYIvKTKNIuSmRU9A+JAfz7LepVGr/c
+         w/0zO5xP3Z3vYOVnl2yFcxg/kd2gJCK5+FG9Wb8j9Y/r/qv/toXFe83CiXNOszR/5Ova
+         r2OCNSr2jBpSAL1BSDvwkRzGzr/SiREEw31DMZU3StMioICwtt0W6RiRmaqUdL2DrVok
+         s52TlU5ide615Yho40i2nCV3tBF+f+1ZVb/JNdtRuPUhNU4aw1BpHAGZY+H8P44sEw2i
+         VZyQ==
+X-Gm-Message-State: APjAAAUNkv8LKKWjqrkEYwEElB1ozV7I6TBrZE4+itu8Mka4LV/fIZur
+        m6JrQy0iSFNFgCgNmnjcQeqvVDY8sd6Y1+iX62ORXDqZWTk=
+X-Google-Smtp-Source: APXvYqxI/BYOld3LtRQkgwjP1416koNclTQAf1tUKlNvIN97wRRvjKRp7jue1bZ+8SZx2Vt3N1gt4/eymwC+em58uZw=
+X-Received: by 2002:aa7:d781:: with SMTP id s1mr20617884edq.20.1563891208250;
+ Tue, 23 Jul 2019 07:13:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190702032120.16539-2-ran.bi@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+In-Reply-To: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Tue, 23 Jul 2019 16:13:12 +0200
+Message-ID: <CAH+2xPB7y703-WeiNBRoDXfWPKTRMzD=a5P+EYohYmV46BS2ZA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] rtc: pcf2127: tamper timestamp and watchdog feature support
+To:     linux-rtc@vger.kernel.org
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        bth@kamstrup.com, u.kleine-koenig@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2 Jul 2019 11:21:18 +0800, Ran Bi wrote:
-> Document the binding for MT2712 RTC implemented by rtc-mt2712.
-> 
-> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> ---
->  .../devicetree/bindings/rtc/rtc-mt2712.txt         | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
-> 
+Hi all
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> Patches has been tested on a pcf2127 chip using 2MHz SPI
+> interface both as built-in and module including with and
+> without watchdog feature.
+
+I did some more testing as I could not understand this bugfix:
+
+3769a375ab83 rtc: pcf2127: bulk read only date and time registers.
+
+This fix seems to be incomplete as root cause is not auto-increment
+read aka bulk read, but reading control register 2 triggers zero value
+in WD_VAL resulting in stopped watchdog until systemd kick the dog
+again :)
+
+As the watchdog has 2 control registers I will do some more testing
+to see if this also apply to the other register. But more importantly
+this issue also affect timestamp0_{store,show} functions in tamper
+detection support, and I will therefor send a v2 of the patch series.
+
+/Bruno
