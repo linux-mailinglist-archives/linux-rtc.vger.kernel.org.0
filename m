@@ -2,78 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9618271A04
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 16:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD0C71B8F
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 17:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390413AbfGWONa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Jul 2019 10:13:30 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:39225 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726201AbfGWONa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Jul 2019 10:13:30 -0400
-Received: by mail-ed1-f68.google.com with SMTP id m10so44071917edv.6
-        for <linux-rtc@vger.kernel.org>; Tue, 23 Jul 2019 07:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HAwiY1/rG8wJqQcR6j1V3fGMWcrvJx133OcdyAaU2eg=;
-        b=oQReH2L+GF4BKa+PtWvuivxhyPuExJzU7cdq1I0SQ9IhOzl4DWZ9hmeIlEO6/Rx4Xu
-         +KOJNBuRqhkD4HTRDYGyDZ4aMFITlgRXBNJu5EUniaT9x3Ov6shUeurYcJlm/tAJFOLO
-         RV9Cv2jdhfdSiYZSEVsvcZYHWg2rAefKZaUmMR1PHZoTAbf8FRKqwxVSeimdAMLTkke5
-         PSyK99KdZ5f19+gQgIsa3hzSTlMZ60QNeXMrD+NHmBmDJM5CPrcMO5RlbvU1/psGS0vJ
-         H8WUqcFHcWY/i2tmUJGolza7sIwWmwESkEePLggVRTqZ7ujmpfh4TuUAm162x5163iDe
-         4IJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HAwiY1/rG8wJqQcR6j1V3fGMWcrvJx133OcdyAaU2eg=;
-        b=reZ+MwBjg3OPRAE88bNXoocp6782Sio7i4sauj0/63xACkdjTQA5dFSbuieEnS0QdH
-         VhPIpi9eDGoPg/oHH9VsHVQuvnOER0FqpbdPkHdYIvKTKNIuSmRU9A+JAfz7LepVGr/c
-         w/0zO5xP3Z3vYOVnl2yFcxg/kd2gJCK5+FG9Wb8j9Y/r/qv/toXFe83CiXNOszR/5Ova
-         r2OCNSr2jBpSAL1BSDvwkRzGzr/SiREEw31DMZU3StMioICwtt0W6RiRmaqUdL2DrVok
-         s52TlU5ide615Yho40i2nCV3tBF+f+1ZVb/JNdtRuPUhNU4aw1BpHAGZY+H8P44sEw2i
-         VZyQ==
-X-Gm-Message-State: APjAAAUNkv8LKKWjqrkEYwEElB1ozV7I6TBrZE4+itu8Mka4LV/fIZur
-        m6JrQy0iSFNFgCgNmnjcQeqvVDY8sd6Y1+iX62ORXDqZWTk=
-X-Google-Smtp-Source: APXvYqxI/BYOld3LtRQkgwjP1416koNclTQAf1tUKlNvIN97wRRvjKRp7jue1bZ+8SZx2Vt3N1gt4/eymwC+em58uZw=
-X-Received: by 2002:aa7:d781:: with SMTP id s1mr20617884edq.20.1563891208250;
- Tue, 23 Jul 2019 07:13:28 -0700 (PDT)
+        id S1731306AbfGWP1Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Jul 2019 11:27:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40810 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730663AbfGWP1Q (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 23 Jul 2019 11:27:16 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9DA6227B7;
+        Tue, 23 Jul 2019 15:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563895635;
+        bh=9WN1euChLZIS5nZpn4AMQ7ghHpd6FynN6bvGc+MhFl8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1dQkd4BQHYUfmswOrSO9WT4+Hwd8bKZvxGJG3oyqsqxthHNiyLgCCqHLJW8zo6gOt
+         9qv/hd1dOJ7HhTReScykyaQlE1aOzvdWJmoxuunVBj1iUZexkl6pJd1gfschYDo31O
+         fFm9nMF9JfX6Dh0U1/rgnq2w7Lmd/K3tLjwpcafI=
+Received: by mail-lj1-f180.google.com with SMTP id m23so41396530lje.12;
+        Tue, 23 Jul 2019 08:27:14 -0700 (PDT)
+X-Gm-Message-State: APjAAAUrdoNwh4YkCpqo1PSfUJnyqCpUSTsS5owNLE5ncShXjF3d+gkM
+        vd09HuLu+zMnom1AqqEM1KnLdwas/VqQJW8Pw/Y=
+X-Google-Smtp-Source: APXvYqz58d5i6M/HQ64+pNTNnkPQ90YEnqyBIHUL+geHE3CVj/AoFW26FG7W4EQpj/ik6yQJ2pZ1RbQl31nAD3d/0kw=
+X-Received: by 2002:a2e:6e0c:: with SMTP id j12mr39694281ljc.123.1563895632872;
+ Tue, 23 Jul 2019 08:27:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190722155811.11980-1-bruno.thomsen@gmail.com>
-In-Reply-To: <20190722155811.11980-1-bruno.thomsen@gmail.com>
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Tue, 23 Jul 2019 16:13:12 +0200
-Message-ID: <CAH+2xPB7y703-WeiNBRoDXfWPKTRMzD=a5P+EYohYmV46BS2ZA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] rtc: pcf2127: tamper timestamp and watchdog feature support
-To:     linux-rtc@vger.kernel.org
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        bth@kamstrup.com, u.kleine-koenig@pengutronix.de
+References: <20190722172618.4061-1-wsa+renesas@sang-engineering.com> <20190722172618.4061-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172618.4061-3-wsa+renesas@sang-engineering.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 23 Jul 2019 17:27:01 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPcjEnrBiCD_cBDaeWcVqEDh4k8Lyx6cN=XCwuuytxK72w@mail.gmail.com>
+Message-ID: <CAJKOXPcjEnrBiCD_cBDaeWcVqEDh4k8Lyx6cN=XCwuuytxK72w@mail.gmail.com>
+Subject: Re: [PATCH 2/4] rtc: max77686: convert to i2c_new_dummy_device
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi all
+On Mon, 22 Jul 2019 at 19:26, Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
+> ERRPTR which we use in error handling.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
+>
+>  drivers/rtc/rtc-max77686.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Patches has been tested on a pcf2127 chip using 2MHz SPI
-> interface both as built-in and module including with and
-> without watchdog feature.
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Tested-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-I did some more testing as I could not understand this bugfix:
-
-3769a375ab83 rtc: pcf2127: bulk read only date and time registers.
-
-This fix seems to be incomplete as root cause is not auto-increment
-read aka bulk read, but reading control register 2 triggers zero value
-in WD_VAL resulting in stopped watchdog until systemd kick the dog
-again :)
-
-As the watchdog has 2 control registers I will do some more testing
-to see if this also apply to the other register. But more importantly
-this issue also affect timestamp0_{store,show} functions in tamper
-detection support, and I will therefor send a v2 of the patch series.
-
-/Bruno
+Best regards,
+Krzysztof
