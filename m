@@ -2,218 +2,473 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED2720B3
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jul 2019 22:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8368672225
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2019 00:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727714AbfGWUZC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Jul 2019 16:25:02 -0400
-Received: from antares.kleine-koenig.org ([94.130.110.236]:51352 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726981AbfGWUYa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Jul 2019 16:24:30 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by antares.kleine-koenig.org (Postfix) with ESMTP id 3B542736A32;
-        Tue, 23 Jul 2019 22:24:26 +0200 (CEST)
-Received: from antares.kleine-koenig.org ([127.0.0.1])
-        by localhost (antares.kleine-koenig.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id l3Xx9V8uYmMM; Tue, 23 Jul 2019 22:24:25 +0200 (CEST)
-Received: from [IPv6:2a02:8071:b5c2:53f8:4c50:bd57:a730:11b5] (unknown [IPv6:2a02:8071:b5c2:53f8:4c50:bd57:a730:11b5])
-        by antares.kleine-koenig.org (Postfix) with ESMTPSA;
-        Tue, 23 Jul 2019 22:24:25 +0200 (CEST)
-Subject: Re: [PATCH] ARM: kirkwood: ts219: disable the SoC's RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, tbm@cyrius.com,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Andrew Lunn <andrew@lunn.ch>
-References: <20190723194505.28060-1-uwe@kleine-koenig.org>
- <20190723200321.GN24911@piout.net>
-From:   =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=uwe@kleine-koenig.org; prefer-encrypt=mutual; keydata=
- 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
- kC8vBDJg
-Message-ID: <04efe868-ffaf-8b50-f52f-ce86aa2f3a38@kleine-koenig.org>
-Date:   Tue, 23 Jul 2019 22:24:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2392396AbfGWWTL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Jul 2019 18:19:11 -0400
+Received: from foss.arm.com ([217.140.110.172]:60636 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387490AbfGWWTL (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 23 Jul 2019 18:19:11 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0834C1596;
+        Tue, 23 Jul 2019 15:19:10 -0700 (PDT)
+Received: from dawn-kernel.cambridge.arm.com (unknown [10.1.197.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DD7DD3F694;
+        Tue, 23 Jul 2019 15:19:06 -0700 (PDT)
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>, Dan Murphy <dmurphy@ti.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wpan@vger.kernel.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v3 1/7] drivers: Introduce device lookup variants by name
+Date:   Tue, 23 Jul 2019 23:18:32 +0100
+Message-Id: <20190723221838.12024-2-suzuki.poulose@arm.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190723221838.12024-1-suzuki.poulose@arm.com>
+References: <20190723221838.12024-1-suzuki.poulose@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20190723200321.GN24911@piout.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="nagOG3jHZSzom2nMptycQhUuFND6SjvLu"
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---nagOG3jHZSzom2nMptycQhUuFND6SjvLu
-Content-Type: multipart/mixed; boundary="T6b16624zU0Q6QXUw4GJiVsVraRniPxZF";
- protected-headers="v1"
-From: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, tbm@cyrius.com,
- Oliver Hartkopp <socketcan@hartkopp.net>, Andrew Lunn <andrew@lunn.ch>
-Message-ID: <04efe868-ffaf-8b50-f52f-ce86aa2f3a38@kleine-koenig.org>
-Subject: Re: [PATCH] ARM: kirkwood: ts219: disable the SoC's RTC
-References: <20190723194505.28060-1-uwe@kleine-koenig.org>
- <20190723200321.GN24911@piout.net>
-In-Reply-To: <20190723200321.GN24911@piout.net>
+Add a helper to match the device name for device lookup. Also
+reuse this generic exported helper for the existing bus_find_device_by_name().
+and add similar variants for driver/class.
 
---T6b16624zU0Q6QXUw4GJiVsVraRniPxZF
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexander Aring <alex.aring@gmail.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Dan Murphy <dmurphy@ti.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Harald Freudenberger <freude@linux.ibm.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: linux-leds@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: linux-wpan@vger.kernel.org
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Stefan Schmidt <stefan@datenfreihafen.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+---
+ drivers/base/bus.c               | 24 ------------------
+ drivers/base/core.c              |  6 +++++
+ drivers/hwtracing/stm/core.c     |  9 +------
+ drivers/leds/led-class.c         |  9 +------
+ drivers/rtc/interface.c          | 11 +--------
+ drivers/s390/cio/ccwgroup.c      | 10 +-------
+ drivers/s390/cio/device.c        | 15 +-----------
+ drivers/s390/crypto/zcrypt_api.c | 11 +--------
+ drivers/usb/roles/class.c        |  8 +-----
+ drivers/usb/typec/class.c        |  8 +-----
+ include/linux/device.h           | 42 +++++++++++++++++++++++++++++---
+ net/ieee802154/core.c            |  7 +-----
+ 12 files changed, 54 insertions(+), 106 deletions(-)
 
-On 7/23/19 10:03 PM, Alexandre Belloni wrote:
-> On 23/07/2019 21:45:05+0200, Uwe Kleine-K=C3=B6nig wrote:
->> The internal RTC doesn't work, loading the driver only yields
->>
->> 	rtc-mv f1010300.rtc: internal RTC not ticking
->>
->> . So disable it.
->>
->> Signed-off-by: Uwe Kleine-K=C3=B6nig <uwe@kleine-koenig.org>
->> ---
->>  arch/arm/boot/dts/kirkwood-ts219.dtsi | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/kirkwood-ts219.dtsi b/arch/arm/boot/dts=
-/kirkwood-ts219.dtsi
->> index a88eb22070a1..994cabcf4b51 100644
->> --- a/arch/arm/boot/dts/kirkwood-ts219.dtsi
->> +++ b/arch/arm/boot/dts/kirkwood-ts219.dtsi
->> @@ -104,3 +104,11 @@
->>  &pcie0 {
->>  	status =3D "okay";
->>  };
->> +
->> +&rtc {
->> +	/*
->> +	 * There is a s35390a available on the i2c bus, the internal rtc isn=
-'t
->> +	 * working (probably no crystal assembled).
->> +	 */
->> +	status =3D "disabled";
->> +};
->=20
-> You could also use the aliases to ensure rtc0 is the s35390a. This woul=
-d
-> solve the initial issue.
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index df3cac739813..a1d1e8256324 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -342,30 +342,6 @@ struct device *bus_find_device(struct bus_type *bus,
+ }
+ EXPORT_SYMBOL_GPL(bus_find_device);
+ 
+-static int match_name(struct device *dev, const void *data)
+-{
+-	const char *name = data;
+-
+-	return sysfs_streq(name, dev_name(dev));
+-}
+-
+-/**
+- * bus_find_device_by_name - device iterator for locating a particular device of a specific name
+- * @bus: bus type
+- * @start: Device to begin with
+- * @name: name of the device to match
+- *
+- * This is similar to the bus_find_device() function above, but it handles
+- * searching by a name automatically, no need to write another strcmp matching
+- * function.
+- */
+-struct device *bus_find_device_by_name(struct bus_type *bus,
+-				       struct device *start, const char *name)
+-{
+-	return bus_find_device(bus, start, (void *)name, match_name);
+-}
+-EXPORT_SYMBOL_GPL(bus_find_device_by_name);
+-
+ /**
+  * subsys_find_device_by_id - find a device with a specific enumeration number
+  * @subsys: subsystem
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index da84a73f2ba6..fb83647d685a 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -3357,6 +3357,12 @@ void device_set_of_node_from_dev(struct device *dev, const struct device *dev2)
+ }
+ EXPORT_SYMBOL_GPL(device_set_of_node_from_dev);
+ 
++int device_match_name(struct device *dev, const void *name)
++{
++	return sysfs_streq(dev_name(dev), name);
++}
++EXPORT_SYMBOL_GPL(device_match_name);
++
+ int device_match_of_node(struct device *dev, const void *np)
+ {
+ 	return dev->of_node == np;
+diff --git a/drivers/hwtracing/stm/core.c b/drivers/hwtracing/stm/core.c
+index e55b902560de..2b6bd42632e8 100644
+--- a/drivers/hwtracing/stm/core.c
++++ b/drivers/hwtracing/stm/core.c
+@@ -89,13 +89,6 @@ static struct class stm_class = {
+ 	.dev_groups	= stm_groups,
+ };
+ 
+-static int stm_dev_match(struct device *dev, const void *data)
+-{
+-	const char *name = data;
+-
+-	return sysfs_streq(name, dev_name(dev));
+-}
+-
+ /**
+  * stm_find_device() - find stm device by name
+  * @buf:	character buffer containing the name
+@@ -116,7 +109,7 @@ struct stm_device *stm_find_device(const char *buf)
+ 	if (!stm_core_up)
+ 		return NULL;
+ 
+-	dev = class_find_device(&stm_class, NULL, buf, stm_dev_match);
++	dev = class_find_device_by_name(&stm_class, buf);
+ 	if (!dev)
+ 		return NULL;
+ 
+diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+index 4793e77808e2..d54c8e4d8954 100644
+--- a/drivers/leds/led-class.c
++++ b/drivers/leds/led-class.c
+@@ -213,13 +213,6 @@ static int led_resume(struct device *dev)
+ 
+ static SIMPLE_DEV_PM_OPS(leds_class_dev_pm_ops, led_suspend, led_resume);
+ 
+-static int match_name(struct device *dev, const void *data)
+-{
+-	if (!dev_name(dev))
+-		return 0;
+-	return !strcmp(dev_name(dev), (char *)data);
+-}
+-
+ static int led_classdev_next_name(const char *init_name, char *name,
+ 				  size_t len)
+ {
+@@ -230,7 +223,7 @@ static int led_classdev_next_name(const char *init_name, char *name,
+ 	strlcpy(name, init_name, len);
+ 
+ 	while ((ret < len) &&
+-	       (dev = class_find_device(leds_class, NULL, name, match_name))) {
++	       (dev = class_find_device_by_name(leds_class, name))) {
+ 		put_device(dev);
+ 		ret = snprintf(name, len, "%s_%u", init_name, ++i);
+ 	}
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 72b7ddc43116..c93ef33b01d3 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -663,21 +663,12 @@ void rtc_update_irq(struct rtc_device *rtc,
+ }
+ EXPORT_SYMBOL_GPL(rtc_update_irq);
+ 
+-static int __rtc_match(struct device *dev, const void *data)
+-{
+-	const char *name = data;
+-
+-	if (strcmp(dev_name(dev), name) == 0)
+-		return 1;
+-	return 0;
+-}
+-
+ struct rtc_device *rtc_class_open(const char *name)
+ {
+ 	struct device *dev;
+ 	struct rtc_device *rtc = NULL;
+ 
+-	dev = class_find_device(rtc_class, NULL, name, __rtc_match);
++	dev = class_find_device_by_name(rtc_class, name);
+ 	if (dev)
+ 		rtc = to_rtc_device(dev);
+ 
+diff --git a/drivers/s390/cio/ccwgroup.c b/drivers/s390/cio/ccwgroup.c
+index c522e9313c50..d843e362c167 100644
+--- a/drivers/s390/cio/ccwgroup.c
++++ b/drivers/s390/cio/ccwgroup.c
+@@ -608,13 +608,6 @@ void ccwgroup_driver_unregister(struct ccwgroup_driver *cdriver)
+ }
+ EXPORT_SYMBOL(ccwgroup_driver_unregister);
+ 
+-static int __ccwgroupdev_check_busid(struct device *dev, const void *id)
+-{
+-	const char *bus_id = id;
+-
+-	return (strcmp(bus_id, dev_name(dev)) == 0);
+-}
+-
+ /**
+  * get_ccwgroupdev_by_busid() - obtain device from a bus id
+  * @gdrv: driver the device is owned by
+@@ -631,8 +624,7 @@ struct ccwgroup_device *get_ccwgroupdev_by_busid(struct ccwgroup_driver *gdrv,
+ {
+ 	struct device *dev;
+ 
+-	dev = driver_find_device(&gdrv->driver, NULL, bus_id,
+-				 __ccwgroupdev_check_busid);
++	dev = driver_find_device_by_name(&gdrv->driver, bus_id);
+ 
+ 	return dev ? to_ccwgroupdev(dev) : NULL;
+ }
+diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
+index c421899be20f..131430bd48d9 100644
+--- a/drivers/s390/cio/device.c
++++ b/drivers/s390/cio/device.c
+@@ -1695,18 +1695,6 @@ int ccw_device_force_console(struct ccw_device *cdev)
+ EXPORT_SYMBOL_GPL(ccw_device_force_console);
+ #endif
+ 
+-/*
+- * get ccw_device matching the busid, but only if owned by cdrv
+- */
+-static int
+-__ccwdev_check_busid(struct device *dev, const void *id)
+-{
+-	const char *bus_id = id;
+-
+-	return (strcmp(bus_id, dev_name(dev)) == 0);
+-}
+-
+-
+ /**
+  * get_ccwdev_by_busid() - obtain device from a bus id
+  * @cdrv: driver the device is owned by
+@@ -1723,8 +1711,7 @@ struct ccw_device *get_ccwdev_by_busid(struct ccw_driver *cdrv,
+ {
+ 	struct device *dev;
+ 
+-	dev = driver_find_device(&cdrv->driver, NULL, (void *)bus_id,
+-				 __ccwdev_check_busid);
++	dev = driver_find_device_by_name(&cdrv->driver, bus_id);
+ 
+ 	return dev ? to_ccwdev(dev) : NULL;
+ }
+diff --git a/drivers/s390/crypto/zcrypt_api.c b/drivers/s390/crypto/zcrypt_api.c
+index 1058b4b5cc1e..38a5a47b8c9c 100644
+--- a/drivers/s390/crypto/zcrypt_api.c
++++ b/drivers/s390/crypto/zcrypt_api.c
+@@ -133,12 +133,6 @@ struct zcdn_device {
+ static int zcdn_create(const char *name);
+ static int zcdn_destroy(const char *name);
+ 
+-/* helper function, matches the name for find_zcdndev_by_name() */
+-static int __match_zcdn_name(struct device *dev, const void *data)
+-{
+-	return strcmp(dev_name(dev), (const char *)data) == 0;
+-}
+-
+ /* helper function, matches the devt value for find_zcdndev_by_devt() */
+ static int __match_zcdn_devt(struct device *dev, const void *data)
+ {
+@@ -152,10 +146,7 @@ static int __match_zcdn_devt(struct device *dev, const void *data)
+  */
+ static inline struct zcdn_device *find_zcdndev_by_name(const char *name)
+ {
+-	struct device *dev =
+-		class_find_device(zcrypt_class, NULL,
+-				  (void *) name,
+-				  __match_zcdn_name);
++	struct device *dev = class_find_device_by_name(zcrypt_class, name);
+ 
+ 	return dev ? to_zcdn_dev(dev) : NULL;
+ }
+diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+index 86defca6623e..c8efe60e2465 100644
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@ -90,11 +90,6 @@ static int switch_fwnode_match(struct device *dev, const void *fwnode)
+ 	return dev_fwnode(dev) == fwnode;
+ }
+ 
+-static int switch_name_match(struct device *dev, const void *name)
+-{
+-	return !strcmp((const char *)name, dev_name(dev));
+-}
+-
+ static void *usb_role_switch_match(struct device_connection *con, int ep,
+ 				   void *data)
+ {
+@@ -107,8 +102,7 @@ static void *usb_role_switch_match(struct device_connection *con, int ep,
+ 		dev = class_find_device(role_class, NULL, con->fwnode,
+ 					switch_fwnode_match);
+ 	} else {
+-		dev = class_find_device(role_class, NULL, con->endpoint[ep],
+-					switch_name_match);
++		dev = class_find_device_by_name(role_class, con->endpoint[ep]);
+ 	}
+ 
+ 	return dev ? to_role_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index a18285a990a8..9b0d15b487e5 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -210,11 +210,6 @@ static int typec_port_fwnode_match(struct device *dev, const void *fwnode)
+ 	return dev_fwnode(dev) == fwnode;
+ }
+ 
+-static int typec_port_name_match(struct device *dev, const void *name)
+-{
+-	return !strcmp((const char *)name, dev_name(dev));
+-}
+-
+ static void *typec_port_match(struct device_connection *con, int ep, void *data)
+ {
+ 	struct device *dev;
+@@ -227,8 +222,7 @@ static void *typec_port_match(struct device_connection *con, int ep, void *data)
+ 		return class_find_device(typec_class, NULL, con->fwnode,
+ 					 typec_port_fwnode_match);
+ 
+-	dev = class_find_device(typec_class, NULL, con->endpoint[ep],
+-				typec_port_name_match);
++	dev = class_find_device_by_name(typec_class, con->endpoint[ep]);
+ 
+ 	return dev ? dev : ERR_PTR(-EPROBE_DEFER);
+ }
+diff --git a/include/linux/device.h b/include/linux/device.h
+index c330b75c6c57..3ba376b8b456 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -164,6 +164,7 @@ void subsys_dev_iter_init(struct subsys_dev_iter *iter,
+ struct device *subsys_dev_iter_next(struct subsys_dev_iter *iter);
+ void subsys_dev_iter_exit(struct subsys_dev_iter *iter);
+ 
++int device_match_name(struct device *dev, const void *name);
+ int device_match_of_node(struct device *dev, const void *np);
+ 
+ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+@@ -171,9 +172,20 @@ int bus_for_each_dev(struct bus_type *bus, struct device *start, void *data,
+ struct device *bus_find_device(struct bus_type *bus, struct device *start,
+ 			       const void *data,
+ 			       int (*match)(struct device *dev, const void *data));
+-struct device *bus_find_device_by_name(struct bus_type *bus,
+-				       struct device *start,
+-				       const char *name);
++/**
++ * bus_find_device_by_name - device iterator for locating a particular device
++ * of a specific name.
++ * @bus: bus type
++ * @start: Device to begin with
++ * @name: name of the device to match
++ */
++static inline struct device *bus_find_device_by_name(struct bus_type *bus,
++						     struct device *start,
++						     const char *name)
++{
++	return bus_find_device(bus, start, name, device_match_name);
++}
++
+ struct device *subsys_find_device_by_id(struct bus_type *bus, unsigned int id,
+ 					struct device *hint);
+ int bus_for_each_drv(struct bus_type *bus, struct device_driver *start,
+@@ -342,6 +354,18 @@ struct device *driver_find_device(struct device_driver *drv,
+ 				  struct device *start, const void *data,
+ 				  int (*match)(struct device *dev, const void *data));
+ 
++/**
++ * driver_find_device_by_name - device iterator for locating a particular device
++ * of a specific name.
++ * @driver: the driver we're iterating
++ * @name: name of the device to match
++ */
++static inline struct device *driver_find_device_by_name(struct device_driver *drv,
++							const char *name)
++{
++	return driver_find_device(drv, NULL, name, device_match_name);
++}
++
+ void driver_deferred_probe_add(struct device *dev);
+ int driver_deferred_probe_check_state(struct device *dev);
+ int driver_deferred_probe_check_state_continue(struct device *dev);
+@@ -471,6 +495,18 @@ extern struct device *class_find_device(struct class *class,
+ 					struct device *start, const void *data,
+ 					int (*match)(struct device *, const void *));
+ 
++/**
++ * class_find_device_by_name - device iterator for locating a particular device
++ * of a specific name.
++ * @class: class type
++ * @name: name of the device to match
++ */
++static inline struct device *class_find_device_by_name(struct class *class,
++						       const char *name)
++{
++	return class_find_device(class, NULL, name, device_match_name);
++}
++
+ struct class_attribute {
+ 	struct attribute attr;
+ 	ssize_t (*show)(struct class *class, struct class_attribute *attr,
+diff --git a/net/ieee802154/core.c b/net/ieee802154/core.c
+index 60b7ac56a1f5..de259b5170ab 100644
+--- a/net/ieee802154/core.c
++++ b/net/ieee802154/core.c
+@@ -23,11 +23,6 @@
+ LIST_HEAD(cfg802154_rdev_list);
+ int cfg802154_rdev_list_generation;
+ 
+-static int wpan_phy_match(struct device *dev, const void *data)
+-{
+-	return !strcmp(dev_name(dev), (const char *)data);
+-}
+-
+ struct wpan_phy *wpan_phy_find(const char *str)
+ {
+ 	struct device *dev;
+@@ -35,7 +30,7 @@ struct wpan_phy *wpan_phy_find(const char *str)
+ 	if (WARN_ON(!str))
+ 		return NULL;
+ 
+-	dev = class_find_device(&wpan_phy_class, NULL, str, wpan_phy_match);
++	dev = class_find_device_by_name(&wpan_phy_class, str);
+ 	if (!dev)
+ 		return NULL;
+ 
+-- 
+2.21.0
 
-What do you assume is my initial issue? Adding the alias doesn't make
-the above message disappear from the boot log.
-
-Best regards
-Uwe
-
-
---T6b16624zU0Q6QXUw4GJiVsVraRniPxZF--
-
---nagOG3jHZSzom2nMptycQhUuFND6SjvLu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl03bPUACgkQwfwUeK3K
-7Aleigf+Li64Jyb3dfIVw5kM8h1L2w6rNt1iuK1Jy1K6Eenljf7n5wocptLcCOR2
-rMOdviL18cGDd6MeQTetkbyydsmjl7ho8UDgJ4/npf74N4FMQSwxiSIzg+uhG5R9
-lrebyxGmMkaHsyxaJ/hlbv0hU8gYQGoOIkr2ghvKA9hkI6JkuSNKcPm/Prakpm6Y
-eWrprnGoJtT53USlqfwXGwgQBmRtdFlilBY349X7f11K3lYucs8qugExGCj7ps1Z
-MXX+Hp+x5GmxjD+T+V9E9CHak04LYxMHJ401sAN7d0hf2iiqoglOr2arGm2yysZH
-32reKE1avauOsFBr1TtBzge82a3DfA==
-=ZtFY
------END PGP SIGNATURE-----
-
---nagOG3jHZSzom2nMptycQhUuFND6SjvLu--
