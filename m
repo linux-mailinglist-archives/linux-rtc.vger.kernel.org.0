@@ -2,79 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3608E724E9
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2019 04:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50E9728EB
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Jul 2019 09:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbfGXCuK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Jul 2019 22:50:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47366 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725827AbfGXCuK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 23 Jul 2019 22:50:10 -0400
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9ECBE229F3;
-        Wed, 24 Jul 2019 02:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563936609;
-        bh=xN+wRv1x3pibnAFVRxilNHFnNao5TC+4ihBg1DKbjIo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KR1HsgKkkb/WO2xAB8jk5f/PxCYQZ96KM8Kdd2L/yQRjlTGe52FA5i81AVR2fQyDC
-         1SAYwEj1F1H84pHrqTvTEMitdYwj7gqwJ3KKm82CXdyced9RcCPFF3RjSiY5v1bRSX
-         6E0cPbINAHtVD1N5nYtXU5W9eYuCIjCTTOZQPAYM=
-Date:   Tue, 23 Jul 2019 19:50:08 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Reminder: 1 open syzbot bug in rtc subsystem
-Message-ID: <20190724025008.GL643@sol.localdomain>
-Mail-Followup-To: linux-rtc@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        id S1725944AbfGXHSX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Jul 2019 03:18:23 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43445 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfGXHSX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Jul 2019 03:18:23 -0400
+Received: by mail-ed1-f65.google.com with SMTP id e3so46184079edr.10
+        for <linux-rtc@vger.kernel.org>; Wed, 24 Jul 2019 00:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mg5NAuFGmeyZ+2PG/0W+EUmftqQ8AiNtDR5qG42cRqw=;
+        b=mR1bqYhXcv6Seq8Uz5bDW939uPBBhlK7xpZd+Q/lVSerdeNIm2wqu7+H+p6KFQT26j
+         jk0qwGyL9f1zmmDqldznTzn3BF/riKUVRgjmNsXRjFVVOrqXnwQqHkl0lZhroCBrszI+
+         Qzw4n3brxB+DsL8zmTDFYgBgfsqV2yTTUJgmrWJL7voK5UBtb2LpupiYH64nJwO8dJ2t
+         XW2xlAJbGiPNbi0oTkuJpX3RyI5YuGirKYfZI0FCNEOV8++xaoWKjHerHYRl2YKRk8bk
+         l6gvTNrfT6KpFLhx2Jc/dkE9xZjE6rRoFRLHrEDQzgJO3+xFgdNLUAusmlP6SD3TBf9m
+         qYuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mg5NAuFGmeyZ+2PG/0W+EUmftqQ8AiNtDR5qG42cRqw=;
+        b=fSGxhsYpOpCZEEzscUP/4UHpmWQBWTcWSwrLbSLSImMLtO8KmRS+tti5EeMuQr5fYc
+         gjZcP24NNbpCUlcX/vSJDCk+2rt7w6mpT5wtR3ISLXkr8TWtqPHzhelOrW/kRu3YXCV7
+         g42G9b11IrgFX27sn9iUSTggexZJZK52xrx1nFWuiEul826tgUO3/BrPJG2HT244AkqR
+         IEEHfV4VxW52fVruU/PN8W8pn3BcKhVt27LM6AdrU6evtlkIo9uMJ+I/6xh4xp+6LPj8
+         oIxaXP3YVxBiGnGVvjxG24NGUsSlfhKqhULsKCA7ordziHFf5SNoCOmxM2DDHZXy+ztQ
+         sumQ==
+X-Gm-Message-State: APjAAAUh6FhOtxhha7p1+f2UgkQ/BUwKvlrycgLnjz0qgI29gGgfhxR8
+        XB7JnoFkFm5oPLEYT58mCGrKN2LZzsrmhehvXPw=
+X-Google-Smtp-Source: APXvYqxqN/I8hwL15bR5nCJGNV3ScWmeRL9WR9lbqEafdQunUrfMs6QPBqc3PvnKO4Un1QfMCa5ngg8sJPUXhacWfr4=
+X-Received: by 2002:a50:aeee:: with SMTP id f43mr70451526edd.221.1563952701393;
+ Wed, 24 Jul 2019 00:18:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190722155811.11980-1-bruno.thomsen@gmail.com>
+ <20190722155811.11980-5-bruno.thomsen@gmail.com> <20190723184842.GM24911@piout.net>
+In-Reply-To: <20190723184842.GM24911@piout.net>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Wed, 24 Jul 2019 09:18:05 +0200
+Message-ID: <CAH+2xPAjafxayxFStQOFqiEKZKMtiNaNrYWfy5YbJVdmxYXq7g@mail.gmail.com>
+Subject: Re: [PATCH 4/4] rtc: pcf2127: add watchdog feature support
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, a.zummo@towertech.it, bth@kamstrup.com,
+        u.kleine-koenig@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-[This email was generated by a script.  Let me know if you have any suggestions
-to make it better, or if you want it re-generated with the latest status.]
+Thanks for review.
 
-Of the currently open syzbot reports against the upstream kernel, I've manually
-marked 1 of them as possibly being a bug in the rtc subsystem.
+Den tir. 23. jul. 2019 kl. 20.48 skrev Alexandre Belloni
+<alexandre.belloni@bootlin.com>:
+>
+> > +config RTC_DRV_PCF2127_WDT
+> > +     bool "NXP PCF2127 watchdog timer"
+> > +     depends on RTC_DRV_PCF2127
+> > +     help
+> > +       If you say Y here you will get support for the watchdog timer
+> > +       in the NXP PCF2127 and PCF2129 real-time clock chips.
+> > +
+> > +       The watchdog is usually used together with systemd or the
+> > +       watchdog daemon. Watchdog trigger cause system reset.
+> > +
+>
+> I wouldn't add a new Kconfig entry for that. How much bigger will it be?
 
-If you believe this bug is no longer valid, please close the syzbot report by
-sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply to the
-original thread, as explained at https://goo.gl/tpsmEJ#status
+Delta size on rtc-pcf2127.ko is 3244 bytes when compiled for armv7a.
 
-If you believe I misattributed this bug to the rtc subsystem, please let me
-know, and if possible forward the report to the correct people or mailing list.
+I only added Kconfig option to allow driver load on arm platforms where
+you need to use internal watchdog to restart board. But I will remove it
+for next version, should I extend help text on exiting Kconfig option to
+also include information about other chip features? As this is not a
+simple RTC chip.
 
-Here is the bug:
+> > +static const struct file_operations pcf2127_wdt_fops =3D {
+> > +     .owner =3D THIS_MODULE,
+> > +     .write =3D pcf2127_wdt_write,
+> > +     .unlocked_ioctl =3D pcf2127_wdt_ioctl,
+> > +};
+> > +
+> > +static struct miscdevice pcf2127_miscdev =3D {
+> > +     .minor =3D WATCHDOG_MINOR,
+> > +     .name =3D "watchdog",
+> > +     .fops =3D &pcf2127_wdt_fops,
+> > +};
+>
+> Wow, that is old school, please use the watchdog subsyste=C5=AF.
 
---------------------------------------------------------------------------------
-Title:              BUG: workqueue lockup (4)
-Last occurred:      40 days ago
-Reported:           289 days ago
-Branches:           Mainline and others
-Dashboard link:     https://syzkaller.appspot.com/bug?id=0041bf1423916e9ae458b08b760e269a33c14960
-Original thread:    https://lkml.kernel.org/lkml/0000000000005764090577a27486@google.com/T/#u
+Okay, I was not aware that this was an old API. So I should convert
+to struct watchdog_ops and devm_watchdog_register_device?
 
-This bug has a C reproducer.
-
-The original thread for this bug received 4 replies; the last was 42 days ago.
-
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+08116743f8ad6f9a6de7@syzkaller.appspotmail.com
-
-If you send any email or patch for this bug, please consider replying to the
-original thread.  For the git send-email command to use, or tips on how to reply
-if the thread isn't in your mailbox, see the "Reply instructions" at
-https://lkml.kernel.org/r/0000000000005764090577a27486@google.com
-
+/Bruno
