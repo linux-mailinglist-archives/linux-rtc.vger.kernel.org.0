@@ -2,108 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C637931F
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2019 20:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D81479354
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jul 2019 20:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387850AbfG2Sd6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Jul 2019 14:33:58 -0400
-Received: from mxwww.masterlogin.de ([95.129.51.220]:40432 "EHLO
-        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387536AbfG2Sd6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Jul 2019 14:33:58 -0400
-X-Greylist: delayed 581 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 14:33:56 EDT
-Received: from mxout1.routing.net (unknown [192.168.10.81])
-        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 94D8196323;
-        Mon, 29 Jul 2019 18:24:26 +0000 (UTC)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.253])
-        by mxout1.routing.net (Postfix) with ESMTP id C407B40983;
-        Mon, 29 Jul 2019 18:24:26 +0000 (UTC)
-Received: from localhost.localdomain (fttx-pool-185.76.97.79.bambit.de [185.76.97.79])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 78DB0405D3;
-        Mon, 29 Jul 2019 20:24:25 +0200 (CEST)
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allison Randal <allison@lohutok.net>,
+        id S2387548AbfG2SqA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 29 Jul 2019 14:46:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54436 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387512AbfG2SqA (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 29 Jul 2019 14:46:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 2C7F0AE62;
+        Mon, 29 Jul 2019 18:45:58 +0000 (UTC)
+Date:   Mon, 29 Jul 2019 20:45:57 +0200
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Tianping . Fang" <tianping.fang@mediatek.com>
-Cc:     Josef Friedl <josef.friedl@speed.at>,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: [PATCH v3 10/10] arm: dts: mt6323: add keys, power-controller, rtc and codec
-Date:   Mon, 29 Jul 2019 20:24:21 +0200
-Message-Id: <20190729182421.7192-1-frank-w@public-files.de>
-X-Mailer: git-send-email 2.17.1
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-Id: <20190729204557.468db2153efefda96dd41ec0@suse.de>
+In-Reply-To: <20190725114716.GB23883@dell>
+References: <20190613170636.6647-1-tbogendoerfer@suse.de>
+        <20190613170636.6647-6-tbogendoerfer@suse.de>
+        <20190725114716.GB23883@dell>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Josef Friedl <josef.friedl@speed.at>
+On Thu, 25 Jul 2019 12:47:16 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-support poweroff and power-related keys on bpi-r2
+> On Thu, 13 Jun 2019, Thomas Bogendoerfer wrote:
+> > +/*
+> > + * On IP30 the RTC (a DS1687) is behind the IOC3 on the generic
+> > + * ByteBus regions. We have to write the RTC address of interest to
+> > + * IOC3_BYTEBUS_DEV1, then read the data from IOC3_BYTEBUS_DEV2.
+> > + * rtc->regs already points to IOC3_BYTEBUS_DEV1.
+> > + */
+> > +#define IP30_RTC_ADDR(rtc) (rtc->regs)
+> > +#define IP30_RTC_DATA(rtc) ((rtc->regs) + IOC3_BYTEBUS_DEV2 - IOC3_BYTEBUS_DEV1)
+> > +
+> > +static u8 ip30_rtc_read(struct ds1685_priv *rtc, int reg)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	return readb(IP30_RTC_DATA(rtc));
+> > +}
+> > +
+> > +static void ip30_rtc_write(struct ds1685_priv *rtc, int reg, u8 value)
+> > +{
+> > +	writeb((reg & 0x7f), IP30_RTC_ADDR(rtc));
+> > +	writeb(value, IP30_RTC_DATA(rtc));
+> > +}
+> 
+> Why is this not in the RTC driver?
 
-changes since v2: none (=v2 part 7)
+because rtc1685 is used in different systems and accessing the chip
+differs between those systems. 
 
-Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- arch/arm/boot/dts/mt6323.dtsi | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+> > +static struct ds1685_rtc_platform_data ip30_rtc_platform_data = {
+> > +	.bcd_mode = false,
+> > +	.no_irq = false,
+> > +	.uie_unsupported = true,
+> > +	.alloc_io_resources = true,
+> 
+> > +	.plat_read = ip30_rtc_read,
+> > +	.plat_write = ip30_rtc_write,
+> 
+> Call-backs in a non-subsystem API is pretty ugly IMHO.
 
-diff --git a/arch/arm/boot/dts/mt6323.dtsi b/arch/arm/boot/dts/mt6323.dtsi
-index ba397407c1dd..7fda40ab5fe8 100644
---- a/arch/arm/boot/dts/mt6323.dtsi
-+++ b/arch/arm/boot/dts/mt6323.dtsi
-@@ -238,5 +238,32 @@
- 				regulator-enable-ramp-delay = <216>;
- 			};
- 		};
-+
-+		mt6323keys: mt6323keys {
-+			compatible = "mediatek,mt6323-keys";
-+			mediatek,long-press-mode = <1>;
-+			power-off-time-sec = <0>;
-+
-+			power {
-+				linux,keycodes = <116>;
-+				wakeup-source;
-+			};
-+
-+			home {
-+				linux,keycodes = <114>;
-+			};
-+		};
-+
-+		codec: mt6397codec {
-+			compatible = "mediatek,mt6397-codec";
-+		};
-+
-+		power-controller {
-+			compatible = "mediatek,mt6323-pwrc";
-+		};
-+
-+		rtc {
-+			compatible = "mediatek,mt6323-rtc";
-+		};
- 	};
- };
+I agree
+
+> Where are these called from?
+
+drivers/rtc/rtc-ds1685.c
+
+I could do the same as done for serial8250 and add an additional .c file
+in  drivers/rtc which handles this for SGI-IP30. Alexandre would this work
+for you as well ?
+
+> > +#define IOC3_SID(_name, _sid, _setup) \
+> > +	{								   \
+> > +		.name = _name,						   \
+> > +		.sid = (PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_ ## _sid,   \
+> > +		.setup = _setup,					   \
+> > +	}
+> > +
+> > +static struct {
+> > +	const char *name;
+> > +	u32 sid;
+> > +	int (*setup)(struct ioc3_priv_data *ipd);
+> > +} ioc3_infos[] = {
+> 
+> IMHO it's neater if you separate the definition and static data part.
+
+I don't quite understand what you mean here. Should I move the #define at
+the beginning of the file ? Why is it neater ?
+
+Thomas.
+
 -- 
-2.17.1
-
+SUSE Linux GmbH
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
