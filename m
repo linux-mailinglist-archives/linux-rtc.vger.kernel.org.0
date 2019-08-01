@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B097D9DB
-	for <lists+linux-rtc@lfdr.de>; Thu,  1 Aug 2019 13:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F81E7D9DD
+	for <lists+linux-rtc@lfdr.de>; Thu,  1 Aug 2019 13:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731355AbfHALBs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S1731357AbfHALBs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Thu, 1 Aug 2019 07:01:48 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:3039 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726227AbfHALBq (ORCPT
+Received: from mailgw02.mediatek.com ([210.61.82.184]:12106 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731330AbfHALBq (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Thu, 1 Aug 2019 07:01:46 -0400
-X-UUID: 6f54a5301c2e4239b0b53d9f2b010548-20190801
-X-UUID: 6f54a5301c2e4239b0b53d9f2b010548-20190801
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+X-UUID: 891da93d988149bd8c9b89c86d615c76-20190801
+X-UUID: 891da93d988149bd8c9b89c86d615c76-20190801
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <ran.bi@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1259157827; Thu, 01 Aug 2019 19:01:36 +0800
+        with ESMTP id 1869350164; Thu, 01 Aug 2019 19:01:39 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 1 Aug 2019 19:01:38 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 1 Aug 2019 19:01:40 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 1 Aug 2019 19:01:37 +0800
+ Transport; Thu, 1 Aug 2019 19:01:39 +0800
 From:   Ran Bi <ran.bi@mediatek.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,9 +45,9 @@ CC:     Alessandro Zummo <a.zummo@towertech.it>,
         Flora Fu <flora.fu@mediatek.com>,
         Sean Wang <sean.wang@mediatek.com>,
         Ran Bi <ran.bi@mediatek.com>
-Subject: [PATCH v2 3/4] arm64: dts: add RTC nodes for MT2712
-Date:   Thu, 1 Aug 2019 19:01:21 +0800
-Message-ID: <20190801110122.26834-4-ran.bi@mediatek.com>
+Subject: [PATCH v2 4/4] MAINTAINERS: add MT2712 RTC files
+Date:   Thu, 1 Aug 2019 19:01:22 +0800
+Message-ID: <20190801110122.26834-5-ran.bi@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20190801110122.26834-1-ran.bi@mediatek.com>
 References: <20190801110122.26834-1-ran.bi@mediatek.com>
@@ -59,30 +59,27 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This patch add device node for MT2712 RTC.
+This patch add MT2712 RTC related files to MAINTAINERS.
 
 Signed-off-by: Ran Bi <ran.bi@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-index 43307bad3f0d..31166c17c39a 100644
---- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
-@@ -303,6 +303,12 @@
- 		status = "disabled";
- 	};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 783569e3c4b4..11f73a4c75eb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1892,7 +1892,9 @@ M:	Sean Wang <sean.wang@mediatek.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
++F:	Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
+ F:	Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
++F:	drivers/rtc/rtc-mt2712.c
+ F:	drivers/rtc/rtc-mt6397.c
+ F:	drivers/rtc/rtc-mt7622.c
  
-+	rtc: rtc@10011000 {
-+		compatible = "mediatek,mt2712-rtc";
-+		reg = <0 0x10011000 0 0x1000>;
-+		interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
- 	spis1: spi@10013000 {
- 		compatible = "mediatek,mt2712-spi-slave";
- 		reg = <0 0x10013000 0 0x100>;
 -- 
 2.21.0
 
