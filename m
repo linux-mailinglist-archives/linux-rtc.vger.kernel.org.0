@@ -2,84 +2,121 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F81E7D9DD
-	for <lists+linux-rtc@lfdr.de>; Thu,  1 Aug 2019 13:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E45A7F4F8
+	for <lists+linux-rtc@lfdr.de>; Fri,  2 Aug 2019 12:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731357AbfHALBs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 1 Aug 2019 07:01:48 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:12106 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731330AbfHALBq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 1 Aug 2019 07:01:46 -0400
-X-UUID: 891da93d988149bd8c9b89c86d615c76-20190801
-X-UUID: 891da93d988149bd8c9b89c86d615c76-20190801
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1869350164; Thu, 01 Aug 2019 19:01:39 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 1 Aug 2019 19:01:40 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 1 Aug 2019 19:01:39 +0800
-From:   Ran Bi <ran.bi@mediatek.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Ran Bi <ran.bi@mediatek.com>
-Subject: [PATCH v2 4/4] MAINTAINERS: add MT2712 RTC files
-Date:   Thu, 1 Aug 2019 19:01:22 +0800
-Message-ID: <20190801110122.26834-5-ran.bi@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20190801110122.26834-1-ran.bi@mediatek.com>
-References: <20190801110122.26834-1-ran.bi@mediatek.com>
+        id S2390829AbfHBKYn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 2 Aug 2019 06:24:43 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:43479 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730941AbfHBKYn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 2 Aug 2019 06:24:43 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id DB30980355; Fri,  2 Aug 2019 12:24:27 +0200 (CEST)
+Date:   Fri, 2 Aug 2019 12:24:39 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: Reminder: 1 open syzbot bug in rtc subsystem
+Message-ID: <20190802102439.GA29677@amd>
+References: <20190724025008.GL643@sol.localdomain>
+ <20190728132332.GB8718@xo-6d-61-c0.localdomain>
+ <20190731022707.GC687@sol.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
+Content-Disposition: inline
+In-Reply-To: <20190731022707.GC687@sol.localdomain>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This patch add MT2712 RTC related files to MAINTAINERS.
 
-Signed-off-by: Ran Bi <ran.bi@mediatek.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+--Qxx1br4bt0+wmkIi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 783569e3c4b4..11f73a4c75eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1892,7 +1892,9 @@ M:	Sean Wang <sean.wang@mediatek.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
-+F:	Documentation/devicetree/bindings/rtc/rtc-mt2712.txt
- F:	Documentation/devicetree/bindings/rtc/rtc-mt7622.txt
-+F:	drivers/rtc/rtc-mt2712.c
- F:	drivers/rtc/rtc-mt6397.c
- F:	drivers/rtc/rtc-mt7622.c
- 
--- 
-2.21.0
+On Tue 2019-07-30 19:27:07, Eric Biggers wrote:
+> On Sun, Jul 28, 2019 at 03:23:33PM +0200, Pavel Machek wrote:
+> > On Tue 2019-07-23 19:50:08, Eric Biggers wrote:
+> > > [This email was generated by a script.  Let me know if you have any s=
+uggestions
+> > > to make it better, or if you want it re-generated with the latest sta=
+tus.]
+> > >=20
+> > > Of the currently open syzbot reports against the upstream kernel, I'v=
+e manually
+> > > marked 1 of them as possibly being a bug in the rtc subsystem.
+> > >=20
+> > > If you believe this bug is no longer valid, please close the syzbot r=
+eport by
+> > > sending a '#syz fix', '#syz dup', or '#syz invalid' command in reply =
+to the
+> > > original thread, as explained at https://goo.gl/tpsmEJ#status
+> > >=20
+> > > If you believe I misattributed this bug to the rtc subsystem, please =
+let me
+> > > know, and if possible forward the report to the correct people or mai=
+ling list.
+> > >=20
+> > > Here is the bug:
+> >=20
+> >=20
+> > Can you stop spamming lkml?
+> >=20
+> > Sending 20 "reminders" in a row is not something human would do, and it=
+ is not
+> > something your bot should be allowed to do, either.
+> >=20
+>=20
+> Hi Pavel, just to clarify, though I used a script to generate these email=
+s, I
+> manually reviewed and sent each one; I also manually assigned the subsyst=
+ems and
+> sanity checked the bisection results.  (I'm also not on the syzbot team. =
+ I just
+> care about the security and reliability of the Linux kernel...)  The reas=
+on
+> there are so many of these emails is that there are a lot of kernel subsy=
+stems
+> with open bug reports, many clearly still valid -- even considering that I
+> decided to skip some subsystems after deciding to just fix the bugs mysel=
+f,
+> update the bug statuses myself, send some other email, or just wait.
+>=20
+> I suppose there's some argument to be made that it's too noisy to Cc
+> linux-kernel when I've already assigned a subsystem, though, so I'll try
+> dropping linux-kernel from Cc for next time and just using the subsystem =
+list
+> and maintainers, and see if that goes any better or worse.
 
+That should do the trick. Thanks!
+
+> Note that the syzbot reports themselves are still going to linux-kernel, =
+though.
+
+Yes, I know. I'm not entirely sure that is good idea.
+
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--Qxx1br4bt0+wmkIi
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl1ED2YACgkQMOfwapXb+vIueQCguHwb6twaVho51dNDt9htIUGs
+aQwAoMIK2npDdI7S60cvc1VXN2zWACBg
+=aCxV
+-----END PGP SIGNATURE-----
+
+--Qxx1br4bt0+wmkIi--
