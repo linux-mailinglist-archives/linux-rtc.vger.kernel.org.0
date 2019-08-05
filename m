@@ -2,23 +2,23 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3558117A
+	by mail.lfdr.de (Postfix) with ESMTP id BCC6781179
 	for <lists+linux-rtc@lfdr.de>; Mon,  5 Aug 2019 07:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727229AbfHEFWt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Aug 2019 01:22:49 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:20050 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725951AbfHEFWs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Aug 2019 01:22:48 -0400
-X-UUID: 09dfe8c671794e8bae7a74720beb44bf-20190805
-X-UUID: 09dfe8c671794e8bae7a74720beb44bf-20190805
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        id S1727222AbfHEFXZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Aug 2019 01:23:25 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:61864 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726375AbfHEFWt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Aug 2019 01:22:49 -0400
+X-UUID: a4f0ef492c274da3a0b5023f92302eab-20190805
+X-UUID: a4f0ef492c274da3a0b5023f92302eab-20190805
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <hsin-hsiung.wang@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 411993152; Mon, 05 Aug 2019 13:22:42 +0800
+        with ESMTP id 1811369814; Mon, 05 Aug 2019 13:22:40 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
  15.0.1395.4; Mon, 5 Aug 2019 13:22:41 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
@@ -43,70 +43,75 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
         <srv_heupstream@mediatek.com>
-Subject: [PATCH v4 00/10] Add Support for MediaTek PMIC MT6358
-Date:   Mon, 5 Aug 2019 13:21:48 +0800
-Message-ID: <1564982518-32163-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+Subject: [PATCH v4 01/10] mfd: mt6397: clean up code
+Date:   Mon, 5 Aug 2019 13:21:49 +0800
+Message-ID: <1564982518-32163-2-git-send-email-hsin-hsiung.wang@mediatek.com>
 X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1564982518-32163-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+References: <1564982518-32163-1-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: B7A1D82E4A122D7A7FC8BF3D5936A10879DD64CFF1D5E491B7B59F716D384DAF2000:8
 X-MTK:  N
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This patchset including refactoring interrupt add support to MT6358 PMIC.
-MT6358 is the primary PMIC for MT8183 platform.
+refine some variable name for more readable
 
-changes since v3:
-- refine some coding style in the mt6358 interrupt setting for better
-  code quality.
-- refine some coding style in the mt6358 regulstor for better code
-  quality.
-- fix correct voltage register for vgpu.
-- remove useless define in mt6397-core.c.
-- add rtc node in 6358.dtsi.
+Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+---
+ drivers/mfd/mt6397-core.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Hsin-Hsiung Wang (8):
-  mfd: mt6397: clean up code
-  mfd: mt6397: extract irq related code from core driver
-  mfd: mt6397: modify suspend/resume behavior
-  dt-bindings: mfd: Add compatible for the MediaTek MT6358 PMIC
-  regulator: Add document for MT6358 regulator
-  mfd: Add support for the MediaTek MT6358 PMIC
-  regulator: mt6358: Add support for MT6358 regulator
-  arm64: dts: mt6358: add PMIC MT6358 related nodes
-
-Ran Bi (2):
-  rtc: mt6397: fix alarm register overwrite
-  rtc: Add support for the MediaTek MT6358 RTC
-
- Documentation/devicetree/bindings/mfd/mt6397.txt   |  11 +-
- .../bindings/regulator/mt6358-regulator.txt        | 358 +++++++++++++
- arch/arm64/boot/dts/mediatek/mt6358.dtsi           | 362 +++++++++++++
- drivers/mfd/Makefile                               |   4 +-
- drivers/mfd/mt6358-irq.c                           | 229 ++++++++
- drivers/mfd/mt6397-core.c                          | 281 +++-------
- drivers/mfd/mt6397-irq.c                           | 214 ++++++++
- drivers/regulator/Kconfig                          |   9 +
- drivers/regulator/Makefile                         |   1 +
- drivers/regulator/mt6358-regulator.c               | 580 +++++++++++++++++++++
- drivers/rtc/rtc-mt6397.c                           |  90 +++-
- include/linux/mfd/mt6358/core.h                    | 158 ++++++
- include/linux/mfd/mt6358/registers.h               | 282 ++++++++++
- include/linux/mfd/mt6397/core.h                    |  15 +
- include/linux/regulator/mt6358-regulator.h         |  56 ++
- 15 files changed, 2428 insertions(+), 222 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/mt6358-regulator.txt
- create mode 100644 arch/arm64/boot/dts/mediatek/mt6358.dtsi
- create mode 100644 drivers/mfd/mt6358-irq.c
- create mode 100644 drivers/mfd/mt6397-irq.c
- create mode 100644 drivers/regulator/mt6358-regulator.c
- create mode 100644 include/linux/mfd/mt6358/core.h
- create mode 100644 include/linux/mfd/mt6358/registers.h
- create mode 100644 include/linux/regulator/mt6358-regulator.h
-
+diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+index 337bccc..c070862 100644
+--- a/drivers/mfd/mt6397-core.c
++++ b/drivers/mfd/mt6397-core.c
+@@ -10,17 +10,17 @@
+ #include <linux/of_irq.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/core.h>
+-#include <linux/mfd/mt6397/core.h>
+ #include <linux/mfd/mt6323/core.h>
+-#include <linux/mfd/mt6397/registers.h>
++#include <linux/mfd/mt6397/core.h>
+ #include <linux/mfd/mt6323/registers.h>
++#include <linux/mfd/mt6397/registers.h>
+ 
+ #define MT6397_RTC_BASE		0xe000
+ #define MT6397_RTC_SIZE		0x3e
+ 
+-#define MT6323_CID_CODE		0x23
+-#define MT6391_CID_CODE		0x91
+-#define MT6397_CID_CODE		0x97
++#define MT6323_CHIP_ID		0x23
++#define MT6391_CHIP_ID		0x91
++#define MT6397_CHIP_ID		0x97
+ 
+ static const struct resource mt6397_rtc_resources[] = {
+ 	{
+@@ -290,7 +290,7 @@ static int mt6397_probe(struct platform_device *pdev)
+ 		return pmic->irq;
+ 
+ 	switch (id & 0xff) {
+-	case MT6323_CID_CODE:
++	case MT6323_CHIP_ID:
+ 		pmic->int_con[0] = MT6323_INT_CON0;
+ 		pmic->int_con[1] = MT6323_INT_CON1;
+ 		pmic->int_status[0] = MT6323_INT_STATUS0;
+@@ -304,8 +304,8 @@ static int mt6397_probe(struct platform_device *pdev)
+ 					   0, pmic->irq_domain);
+ 		break;
+ 
+-	case MT6397_CID_CODE:
+-	case MT6391_CID_CODE:
++	case MT6391_CHIP_ID:
++	case MT6397_CHIP_ID:
+ 		pmic->int_con[0] = MT6397_INT_CON0;
+ 		pmic->int_con[1] = MT6397_INT_CON1;
+ 		pmic->int_status[0] = MT6397_INT_STATUS0;
 -- 
 2.6.4
 
