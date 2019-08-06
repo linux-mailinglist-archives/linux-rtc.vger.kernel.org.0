@@ -2,55 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2B182CBF
-	for <lists+linux-rtc@lfdr.de>; Tue,  6 Aug 2019 09:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08F6830DC
+	for <lists+linux-rtc@lfdr.de>; Tue,  6 Aug 2019 13:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732093AbfHFH3A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 6 Aug 2019 03:29:00 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51751 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731787AbfHFH3A (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Aug 2019 03:29:00 -0400
-X-UUID: 133475bd8ce243548306e51b43c35492-20190806
-X-UUID: 133475bd8ce243548306e51b43c35492-20190806
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        id S1726783AbfHFLln (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 6 Aug 2019 07:41:43 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:51559 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726713AbfHFLln (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Aug 2019 07:41:43 -0400
+X-UUID: 9ef266cfa1bb42fbbaeb731b843d0390-20190806
+X-UUID: 9ef266cfa1bb42fbbaeb731b843d0390-20190806
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <ran.bi@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1328225322; Tue, 06 Aug 2019 15:28:50 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 6 Aug 2019 15:28:47 +0800
-Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 6 Aug 2019 15:28:47 +0800
-Message-ID: <1565076527.23984.5.camel@mtksdaap41>
-Subject: Re: [PATCH v4 07/10] regulator: mt6358: Add support for MT6358
- regulator
-From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        Richard Fontana <rfontana@redhat.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Allison Randal" <allison@lohutok.net>,
-        <linux-rtc@vger.kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eddie Huang <eddie.huang@mediatek.com>,
+        with ESMTP id 415061747; Tue, 06 Aug 2019 19:41:32 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs08n1.mediatek.inc
+ (172.21.101.55) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 6 Aug
+ 2019 19:41:34 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 6 Aug 2019 19:41:32 +0800
+Message-ID: <1565091692.24748.3.camel@mhfsdcap03>
+Subject: Re: [PATCH v4 10/10] rtc: Add support for the MediaTek MT6358 RTC
+From:   Ran Bi <ran.bi@mediatek.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
         Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Richard Fontana" <rfontana@redhat.com>,
         Kate Stewart <kstewart@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Tue, 6 Aug 2019 15:28:47 +0800
-In-Reply-To: <20190805131030.GE6432@sirena.org.uk>
+        Allison Randal <allison@lohutok.net>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>
+Date:   Tue, 6 Aug 2019 19:41:32 +0800
+In-Reply-To: <20190805072338.GB3600@piout.net>
 References: <1564982518-32163-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1564982518-32163-8-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <20190805131030.GE6432@sirena.org.uk>
+         <1564982518-32163-11-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <20190805072338.GB3600@piout.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
@@ -61,79 +61,41 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Mark,
+Hi Belloni,
 
-On Mon, 2019-08-05 at 14:10 +0100, Mark Brown wrote:
-> On Mon, Aug 05, 2019 at 01:21:55PM +0800, Hsin-Hsiung Wang wrote:
+On Mon, 2019-08-05 at 09:23 +0200, Alexandre Belloni wrote:
+> Hi,
 > 
-> > +static const u32 vmch_voltages[] = {
-> > +	2900000, 3000000, 3300000,
-> > +};
+> The subject should be:
 > 
-> > +static const u32 vemc_voltages[] = {
-> > +	2900000, 3000000, 3300000,
-> > +};
-> 
-> Several of these tables appear to be identical.
-> 
-I will use the same voltage table in the next patch.
+> "rtc: mt6397: Add support for the MediaTek MT6358 RTC"
 
-> > +static inline unsigned int mt6358_map_mode(unsigned int mode)
-> > +{
-> > +	return mode == MT6358_BUCK_MODE_AUTO ?
-> > +		REGULATOR_MODE_NORMAL : REGULATOR_MODE_FAST;
-> > +}
-> 
-> There is no need for this to be an inline and please write normal
-> conditional statements to improve legibility.  There's other examples in
-> the driver.
-> 
-will fix it in the next patch.
+Will be changed at next patch.
 
-> > +static int mt6358_get_buck_voltage_sel(struct regulator_dev *rdev)
-> > +{
-> > +	int ret, regval;
-> > +	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
-> > +
-> > +	ret = regmap_read(rdev->regmap, info->da_vsel_reg, &regval);
-> > +	if (ret != 0) {
-> > +		dev_info(&rdev->dev,
-> > +			 "Failed to get mt6358 Buck %s vsel reg: %d\n",
-> > +			 info->desc.name, ret);
+> > +struct mtk_rtc_compatible {
 > 
-> dev_err() for errors here and throughout the driver.
+> I would name that struct mtk_rtc_data
 > 
-will fix it in the next patch.
+> > +	u32			wrtgr_addr;
+> 
+> and this member should be wrtgr_offset or simply wrtgr.
+> 
 
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = (regval >> info->da_vsel_shift) & info->da_vsel_mask;
-> > +
-> > +	return ret;
-> > +}
-> 
-> This looks like a standard get_voltage_sel_regmap()?
-> 
-MT6358 has buck voltage status registers to show the actual output
-voltage and the registers are different from the voltage setting
-registers.
-We want to get the actual voltage output, so we use the da_vsel status
-registers here.
+Will be changed at next patch.
 
-> > +err_mode:
-> > +	if (ret != 0)
-> > +		return ret;
-> > +
-> > +	return 0;
+> >  
+> > +	of_id = of_match_device(mt6397_rtc_of_match, &pdev->dev);
+> > +	if (!of_id) {
+> > +		dev_err(&pdev->dev, "Failed to probe of_node\n");
+> > +		return -EINVAL;
 > 
-> Or just return ret unconditionally?
-will modify it to return ret unconditionally in the next patch.
+> This will never happen because probe would not be called if there is no
+> match. You could also use of_device_get_match_data to avoid having to
+> move the of_device_id table.
+> 
 
-Thanks a lot.
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Will use of_device_get_match_data() function instead of
+of_match_device() function.
+
 
 
