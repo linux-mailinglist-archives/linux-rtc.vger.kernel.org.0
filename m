@@ -2,92 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F280859FD
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Aug 2019 07:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB6185C73
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Aug 2019 10:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730743AbfHHFtM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 8 Aug 2019 01:49:12 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:47090 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728090AbfHHFtM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Aug 2019 01:49:12 -0400
-Received: by mail-ed1-f67.google.com with SMTP id z51so1691724edz.13;
-        Wed, 07 Aug 2019 22:49:10 -0700 (PDT)
+        id S1731779AbfHHIF6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 8 Aug 2019 04:05:58 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:34339 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731719AbfHHIF6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Aug 2019 04:05:58 -0400
+Received: by mail-ot1-f67.google.com with SMTP id n5so115237995otk.1;
+        Thu, 08 Aug 2019 01:05:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hJnMSCAXvPmR1BZ+8zibfYrH0y/pT73eVvDwjd3Lsw8=;
-        b=k5o7R1WqxUKFT2Gpl32b2tEoxh18GEKtcRxfBXs+QQzaclP8d868GeOHKZdNmUIj8Y
-         hlzVDNUXj7ZUkntTioJPK1ikYAW8YJKkGZmmcGgrrowKAFRw2W/vOFwInHRdI03I9tdn
-         wqR2hUDALp8ykyI1cwIEE9iTzvndfcJesqwkZ+E4E99/y/d4orLyh3DBZMjiwO/y/Rv7
-         xuEqPxx/L+tMX0V5n3OC+VcYkuFCJofqtdVwhUAsQQ9GqJnXoXd7EGrvSgkxnLcSgZxU
-         k6xmwxOqZXgmK1zDAHli571qVrLkNGsdLVr6Ayo5svDhTbLPu7h1CuX7jY8AE9tnpi5u
-         C5og==
-X-Gm-Message-State: APjAAAXh0JnT5IDlhqbupmw+zqH5YraES+14Bo68Bahh8oCHDKkE88Ll
-        cCx9eGyFliFl5TjhPcs3t2VdNzAO/00=
-X-Google-Smtp-Source: APXvYqxg9vJ4l1QRSKAQTdjsRPjbtcm9XCJ1t7YXpJhG1HoGUipLszFyE3bzb67r8G/bMglEGxNbsw==
-X-Received: by 2002:a17:906:4ed8:: with SMTP id i24mr11500568ejv.118.1565243349525;
-        Wed, 07 Aug 2019 22:49:09 -0700 (PDT)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id b30sm21935944ede.88.2019.08.07.22.49.08
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Aug 2019 22:49:09 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id 10so1079305wmp.3;
-        Wed, 07 Aug 2019 22:49:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:292:: with SMTP id 18mr1427274wmk.51.1565243348647;
- Wed, 07 Aug 2019 22:49:08 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=TtvrwHBBYi+jmQBqq+h4raD1vCv1LyjklWLsWrx2nck=;
+        b=GHgZWqqPvdsaSjThKrEcyB8F2fmAsTD2iRjGLm0O6NzDk2/weU0u4wqkTjViKEv55K
+         wy3ToeOL8E9ufD0PCgVEsSpvmFPBL9KJlvRTPogWvH7TjOCRZgsB07joovN7EiQv3yno
+         71oRj83ZRF0clOrgvstNvm5rs1WG7mKGWi8i93srTbnfdMa5iqRH8AWW2LQpdIc+mZe7
+         3gl+8DISR+UW1g3mmCx3UYr7Ut5hZPHuKMTQLQTV9gQwHqxtT73yCWxoj9HaafpzMJpE
+         nnPZ/nxLwQxPF+1ENrwjZ79gFeioWiLRAy4gTq29Ex8OAZh+Q8vGFdNv6fk4AAvMjWSB
+         YZJA==
+X-Gm-Message-State: APjAAAWfZSlFsOdZAVBmWFMSHgVDL7dzhXGiO8qCb1gxbq2y7yg7Uj1k
+        oXIQ0q6QyPujHT0ljzBRTjHSO1GhhDOhsbcTjIQ=
+X-Google-Smtp-Source: APXvYqxTlUIJTqAQ7wADVSl1f90KSihADYKiCuHyYG/JvGAUchepy/4WCuvCFz5IgZrJ1/yJcH2/BDRva71dz/6mgyo=
+X-Received: by 2002:a05:6830:210f:: with SMTP id i15mr12213592otc.250.1565251557005;
+ Thu, 08 Aug 2019 01:05:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190412120730.473-1-megous@megous.com> <CAGb2v66cbpsoHJoiFJkBwhZ5SbO+uO+Kf6gtnA3kPFQZq0329Q@mail.gmail.com>
- <20190806183045.edhm3qzpegscf2z7@core.my.home> <20190807105502.GK3600@piout.net>
-In-Reply-To: <20190807105502.GK3600@piout.net>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Thu, 8 Aug 2019 13:48:55 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64y+iUknG=h6NC_16JsiBXATim4PpX6g3OVg3G0vDjBwA@mail.gmail.com>
-Message-ID: <CAGb2v64y+iUknG=h6NC_16JsiBXATim4PpX6g3OVg3G0vDjBwA@mail.gmail.com>
-Subject: Re: [linux-sunxi] [PATCH 0/3] Add basic support for RTC on Allwinner
- H6 SoC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
+References: <20190730181557.90391-1-swboyd@chromium.org> <20190730181557.90391-40-swboyd@chromium.org>
+In-Reply-To: <20190730181557.90391-40-swboyd@chromium.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Aug 2019 10:05:46 +0200
+Message-ID: <CAMuHMdXArXKeE0OUaBN2f8bkAakuV6+55acNw9t9Fc5uyk_LXg@mail.gmail.com>
+Subject: Re: [PATCH v6 39/57] rtc: Remove dev_err() usage after platform_get_irq()
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree <devicetree@vger.kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Aug 7, 2019 at 6:55 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hi,
->
-> On 06/08/2019 20:30:45+0200, Ondřej Jirman wrote:
-> > Maybe whether XO or DCXO is used also matters if you want to do some fine
-> > tunning of DCXO (control register has pletny of options), but that's probably
-> > better done in u-boot. And there's still no need to read HOSC source from DT.
-> > The driver can just check compatible, and if it is H6 and OSC_CLK_SRC_SEL is 1,
-> > it can do it's DCXO tunning, or whatever. But neither OS nor bootloader will
-> > be using this info to gate/disable the osciallator.
-> >
->
-> It is actually useful to be able to tweak the crystal tuning at
-> runtime to be able to reduce clock drift and compare with a reliable
-> source (e.g. NTP).
-> I'm curious, what kind of options does this RTC have?
+Hi Stephen,
 
-It has options to set the current, trim cap value, band gap voltage, and also
-change the mode to just accept an external clock signal, instead of driving
-a crystal. The settings for the former parameters are not explained though.
+On Tue, Jul 30, 2019 at 8:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> We don't need dev_err() messages when platform_get_irq() fails now that
+> platform_get_irq() prints an error message itself when something goes
+> wrong. Let's remove these prints with a simple semantic patch.
+>
+> // <smpl>
+> @@
+> expression ret;
+> struct platform_device *E;
+> @@
+>
+> ret =
+> (
+> platform_get_irq(E, ...)
+> |
+> platform_get_irq_byname(E, ...)
+> );
+>
+> if ( \( ret < 0 \| ret <= 0 \) )
+> {
+> (
+> -if (ret != -EPROBE_DEFER)
+> -{ ...
+> -dev_err(...);
+> -... }
+> |
+> ...
+> -dev_err(...);
+> )
+> ...
+> }
+> // </smpl>
+>
+> While we're here, remove braces on if statements that only have one
+> statement (manually).
+>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: linux-rtc@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>
+> Please apply directly to subsystem trees
+>
+>  drivers/rtc/rtc-88pm80x.c    | 1 -
+>  drivers/rtc/rtc-88pm860x.c   | 4 +---
+>  drivers/rtc/rtc-ac100.c      | 4 +---
+>  drivers/rtc/rtc-armada38x.c  | 5 +----
+>  drivers/rtc/rtc-asm9260.c    | 4 +---
+>  drivers/rtc/rtc-at91rm9200.c | 4 +---
+>  drivers/rtc/rtc-at91sam9.c   | 4 +---
+>  drivers/rtc/rtc-bd70528.c    | 5 +----
+>  drivers/rtc/rtc-davinci.c    | 4 +---
+>  drivers/rtc/rtc-jz4740.c     | 4 +---
+>  drivers/rtc/rtc-max77686.c   | 5 +----
+>  drivers/rtc/rtc-mt7622.c     | 1 -
+>  drivers/rtc/rtc-pic32.c      | 4 +---
+>  drivers/rtc/rtc-pm8xxx.c     | 4 +---
+>  drivers/rtc/rtc-puv3.c       | 8 ++------
+>  drivers/rtc/rtc-pxa.c        | 8 ++------
+>  drivers/rtc/rtc-rk808.c      | 6 +-----
+>  drivers/rtc/rtc-s3c.c        | 8 ++------
+>  drivers/rtc/rtc-sc27xx.c     | 4 +---
+>  drivers/rtc/rtc-spear.c      | 4 +---
+>  drivers/rtc/rtc-stm32.c      | 1 -
+>  drivers/rtc/rtc-sun6i.c      | 4 +---
+>  drivers/rtc/rtc-sunxi.c      | 4 +---
+>  drivers/rtc/rtc-tegra.c      | 4 +---
+>  drivers/rtc/rtc-vt8500.c     | 4 +---
+>  drivers/rtc/rtc-xgene.c      | 4 +---
+>  drivers/rtc/rtc-zynqmp.c     | 8 ++------
+>  27 files changed, 28 insertions(+), 92 deletions(-)
 
-See page 364 of
-http://linux-sunxi.org/File:Allwinner_H6_V200_User_Manual_V1.1.pdf
+Failed to catch:
+drivers/rtc/rtc-sh.c:   ret = platform_get_irq(pdev, 0);
+drivers/rtc/rtc-sh.c-   if (unlikely(ret <= 0)) {
+drivers/rtc/rtc-sh.c-           dev_err(&pdev->dev, "No IRQ resource\n");
+drivers/rtc/rtc-sh.c-           return -ENOENT;
+drivers/rtc/rtc-sh.c-   }
+drivers/rtc/rtc-sh.c-
 
-ChenYu
+Note that there are two more calls for optional interrupts:
+drivers/rtc/rtc-sh.c:   rtc->carry_irq = platform_get_irq(pdev, 1);
+drivers/rtc/rtc-sh.c:   rtc->alarm_irq = platform_get_irq(pdev, 2);
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
