@@ -2,147 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB6185C73
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Aug 2019 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F34C86167
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Aug 2019 14:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731779AbfHHIF6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 8 Aug 2019 04:05:58 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34339 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731719AbfHHIF6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Aug 2019 04:05:58 -0400
-Received: by mail-ot1-f67.google.com with SMTP id n5so115237995otk.1;
-        Thu, 08 Aug 2019 01:05:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TtvrwHBBYi+jmQBqq+h4raD1vCv1LyjklWLsWrx2nck=;
-        b=GHgZWqqPvdsaSjThKrEcyB8F2fmAsTD2iRjGLm0O6NzDk2/weU0u4wqkTjViKEv55K
-         wy3ToeOL8E9ufD0PCgVEsSpvmFPBL9KJlvRTPogWvH7TjOCRZgsB07joovN7EiQv3yno
-         71oRj83ZRF0clOrgvstNvm5rs1WG7mKGWi8i93srTbnfdMa5iqRH8AWW2LQpdIc+mZe7
-         3gl+8DISR+UW1g3mmCx3UYr7Ut5hZPHuKMTQLQTV9gQwHqxtT73yCWxoj9HaafpzMJpE
-         nnPZ/nxLwQxPF+1ENrwjZ79gFeioWiLRAy4gTq29Ex8OAZh+Q8vGFdNv6fk4AAvMjWSB
-         YZJA==
-X-Gm-Message-State: APjAAAWfZSlFsOdZAVBmWFMSHgVDL7dzhXGiO8qCb1gxbq2y7yg7Uj1k
-        oXIQ0q6QyPujHT0ljzBRTjHSO1GhhDOhsbcTjIQ=
-X-Google-Smtp-Source: APXvYqxTlUIJTqAQ7wADVSl1f90KSihADYKiCuHyYG/JvGAUchepy/4WCuvCFz5IgZrJ1/yJcH2/BDRva71dz/6mgyo=
-X-Received: by 2002:a05:6830:210f:: with SMTP id i15mr12213592otc.250.1565251557005;
- Thu, 08 Aug 2019 01:05:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190730181557.90391-1-swboyd@chromium.org> <20190730181557.90391-40-swboyd@chromium.org>
-In-Reply-To: <20190730181557.90391-40-swboyd@chromium.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Aug 2019 10:05:46 +0200
-Message-ID: <CAMuHMdXArXKeE0OUaBN2f8bkAakuV6+55acNw9t9Fc5uyk_LXg@mail.gmail.com>
-Subject: Re: [PATCH v6 39/57] rtc: Remove dev_err() usage after platform_get_irq()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1727522AbfHHMMk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 8 Aug 2019 08:12:40 -0400
+Received: from vps.xff.cz ([195.181.215.36]:58886 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727096AbfHHMMk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 8 Aug 2019 08:12:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1565266358; bh=YR0FHwwc4tmQEDY6+l7XAQ5vaMUXhvN625ICx9pNwyg=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=Qd9gwkz+IAUYkFnbm+yGA4MfQAQoeVQH6V5rTGkoD1vjvyoxsK/PxapaGvkli+pa6
+         e/Ni/kZ6HqBP2FbyuQo7jCxVGCdj+3Kex7Wlz2/Omly0lPYtMqc6t7LhW95+WB4WWJ
+         8+3lHLRBfQ201XEZ+VhRuEostHFx1INt+bzJ70eI=
+Date:   Thu, 8 Aug 2019 14:12:37 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Mark Rutland <mark.rutland@arm.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree <devicetree@vger.kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [linux-sunxi] [PATCH 0/3] Add basic support for RTC on Allwinner
+ H6 SoC
+Message-ID: <20190808121237.g6twq2nh3sayu3vx@core.my.home>
+Mail-Followup-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, Mark Rutland <mark.rutland@arm.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        devicetree <devicetree@vger.kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rtc@vger.kernel.org
+References: <20190412120730.473-1-megous@megous.com>
+ <CAGb2v66cbpsoHJoiFJkBwhZ5SbO+uO+Kf6gtnA3kPFQZq0329Q@mail.gmail.com>
+ <20190806183045.edhm3qzpegscf2z7@core.my.home>
+ <20190807105502.GK3600@piout.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190807105502.GK3600@piout.net>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Stephen,
+On Wed, Aug 07, 2019 at 12:55:02PM +0200, Alexandre Belloni wrote:
+> Hi,
+> 
+> On 06/08/2019 20:30:45+0200, Ondřej Jirman wrote:
+> > Maybe whether XO or DCXO is used also matters if you want to do some fine
+> > tunning of DCXO (control register has pletny of options), but that's probably
+> > better done in u-boot. And there's still no need to read HOSC source from DT.
+> > The driver can just check compatible, and if it is H6 and OSC_CLK_SRC_SEL is 1,
+> > it can do it's DCXO tunning, or whatever. But neither OS nor bootloader will
+> > be using this info to gate/disable the osciallator.
+> > 
+> 
+> It is actually useful to be able to tweak the crystal tuning at
+> runtime to be able to reduce clock drift and compare with a reliable
+> source (e.g. NTP).
 
-On Tue, Jul 30, 2019 at 8:21 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> We don't need dev_err() messages when platform_get_irq() fails now that
-> platform_get_irq() prints an error message itself when something goes
-> wrong. Let's remove these prints with a simple semantic patch.
->
-> // <smpl>
-> @@
-> expression ret;
-> struct platform_device *E;
-> @@
->
-> ret =
-> (
-> platform_get_irq(E, ...)
-> |
-> platform_get_irq_byname(E, ...)
-> );
->
-> if ( \( ret < 0 \| ret <= 0 \) )
-> {
-> (
-> -if (ret != -EPROBE_DEFER)
-> -{ ...
-> -dev_err(...);
-> -... }
-> |
-> ...
-> -dev_err(...);
-> )
-> ...
-> }
-> // </smpl>
->
-> While we're here, remove braces on if statements that only have one
-> statement (manually).
->
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: linux-rtc@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->
-> Please apply directly to subsystem trees
->
->  drivers/rtc/rtc-88pm80x.c    | 1 -
->  drivers/rtc/rtc-88pm860x.c   | 4 +---
->  drivers/rtc/rtc-ac100.c      | 4 +---
->  drivers/rtc/rtc-armada38x.c  | 5 +----
->  drivers/rtc/rtc-asm9260.c    | 4 +---
->  drivers/rtc/rtc-at91rm9200.c | 4 +---
->  drivers/rtc/rtc-at91sam9.c   | 4 +---
->  drivers/rtc/rtc-bd70528.c    | 5 +----
->  drivers/rtc/rtc-davinci.c    | 4 +---
->  drivers/rtc/rtc-jz4740.c     | 4 +---
->  drivers/rtc/rtc-max77686.c   | 5 +----
->  drivers/rtc/rtc-mt7622.c     | 1 -
->  drivers/rtc/rtc-pic32.c      | 4 +---
->  drivers/rtc/rtc-pm8xxx.c     | 4 +---
->  drivers/rtc/rtc-puv3.c       | 8 ++------
->  drivers/rtc/rtc-pxa.c        | 8 ++------
->  drivers/rtc/rtc-rk808.c      | 6 +-----
->  drivers/rtc/rtc-s3c.c        | 8 ++------
->  drivers/rtc/rtc-sc27xx.c     | 4 +---
->  drivers/rtc/rtc-spear.c      | 4 +---
->  drivers/rtc/rtc-stm32.c      | 1 -
->  drivers/rtc/rtc-sun6i.c      | 4 +---
->  drivers/rtc/rtc-sunxi.c      | 4 +---
->  drivers/rtc/rtc-tegra.c      | 4 +---
->  drivers/rtc/rtc-vt8500.c     | 4 +---
->  drivers/rtc/rtc-xgene.c      | 4 +---
->  drivers/rtc/rtc-zynqmp.c     | 8 ++------
->  27 files changed, 28 insertions(+), 92 deletions(-)
+I don't think there's a Linux kernel API that you can use to achieve that, so
+that's a rather theoretical concern at the moment.
 
-Failed to catch:
-drivers/rtc/rtc-sh.c:   ret = platform_get_irq(pdev, 0);
-drivers/rtc/rtc-sh.c-   if (unlikely(ret <= 0)) {
-drivers/rtc/rtc-sh.c-           dev_err(&pdev->dev, "No IRQ resource\n");
-drivers/rtc/rtc-sh.c-           return -ENOENT;
-drivers/rtc/rtc-sh.c-   }
-drivers/rtc/rtc-sh.c-
+Also there are multiple clocks, that can drive the RTC, and you usually don't
+drive it from 24MHz DCXO oscillator. The reason is that you'd have to deal with
+the fact that the clock for RTC then becomes 24000000/750 (750 is fixed
+divider), which is 32000.
 
-Note that there are two more calls for optional interrupts:
-drivers/rtc/rtc-sh.c:   rtc->carry_irq = platform_get_irq(pdev, 1);
-drivers/rtc/rtc-sh.c:   rtc->alarm_irq = platform_get_irq(pdev, 2);
+So if you want to get 32768Hz for RTC by tuning the DCXO, it would have to have
+24 576 000 Hz. And even if you could achieve that (doubtful), it would throw off
+timings in the rest of the system (say UART, USB, CPU, display ctl) in a major way.
 
-Gr{oetje,eeting}s,
+I guess you can try tuning 24MHz oscillator so that it's closer to the
+real-world 24MHz via NTP reference for other reasons. But it would be
+complicated, and require precise interaction with other components, like using
+HW timers sourced from 24MHz HOSC clock, because you can't use CPU's timers,
+because of inaccuracies introduced during DVFS, for example.
 
-                        Geert
+regards,
+	o.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> I'm curious, what kind of options does this RTC have?
+> 
+> -- 
+> Alexandre Belloni, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
