@@ -2,130 +2,127 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EC787513
-	for <lists+linux-rtc@lfdr.de>; Fri,  9 Aug 2019 11:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203178777F
+	for <lists+linux-rtc@lfdr.de>; Fri,  9 Aug 2019 12:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406008AbfHIJQ3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 9 Aug 2019 05:16:29 -0400
-Received: from vps.xff.cz ([195.181.215.36]:46522 "EHLO vps.xff.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405641AbfHIJQ3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 9 Aug 2019 05:16:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1565342186; bh=058fnVgEdld0XWcxrIoVMkGIvEFjKF/KELntlth1H7Y=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=QED54Z6SSAM6GpHg9GkeBumXygOE+uGYcbOUyEZ9cs3qsVjloPPJcPaoWwHrtpIsq
-         98dW5idtdWYH3HUAO8Xn4vgDBzZhDR7Bv02o8SKJTsAafO6SXIZSriBzJmZV/HcfIQ
-         BZIUIfh4poi+kviXd1y+WPaGI2SqNEYTghwjBE0Q=
-Date:   Fri, 9 Aug 2019 11:16:26 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Mark Rutland <mark.rutland@arm.com>,
+        id S2406150AbfHIKcq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 9 Aug 2019 06:32:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41558 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726300AbfHIKcp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 9 Aug 2019 06:32:45 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 93C06AFE3;
+        Fri,  9 Aug 2019 10:32:42 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree <devicetree@vger.kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [linux-sunxi] [PATCH 0/3] Add basic support for RTC on Allwinner
- H6 SoC
-Message-ID: <20190809091626.6kanjbmvbi4oipco@core.my.home>
-Mail-Followup-To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>, Mark Rutland <mark.rutland@arm.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree <devicetree@vger.kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org
-References: <20190412120730.473-1-megous@megous.com>
- <CAGb2v66cbpsoHJoiFJkBwhZ5SbO+uO+Kf6gtnA3kPFQZq0329Q@mail.gmail.com>
- <20190806183045.edhm3qzpegscf2z7@core.my.home>
- <20190807105502.GK3600@piout.net>
- <20190808121237.g6twq2nh3sayu3vx@core.my.home>
- <20190808233930.GM3600@piout.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190808233930.GM3600@piout.net>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v4 0/9] Use MFD framework for SGI IOC3 drivers
+Date:   Fri,  9 Aug 2019 12:32:22 +0200
+Message-Id: <20190809103235.16338-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 01:39:30AM +0200, Alexandre Belloni wrote:
-> On 08/08/2019 14:12:37+0200, Ondřej Jirman wrote:
-> > On Wed, Aug 07, 2019 at 12:55:02PM +0200, Alexandre Belloni wrote:
-> > > Hi,
-> > > 
-> > > On 06/08/2019 20:30:45+0200, Ondřej Jirman wrote:
-> > > > Maybe whether XO or DCXO is used also matters if you want to do some fine
-> > > > tunning of DCXO (control register has pletny of options), but that's probably
-> > > > better done in u-boot. And there's still no need to read HOSC source from DT.
-> > > > The driver can just check compatible, and if it is H6 and OSC_CLK_SRC_SEL is 1,
-> > > > it can do it's DCXO tunning, or whatever. But neither OS nor bootloader will
-> > > > be using this info to gate/disable the osciallator.
-> > > > 
-> > > 
-> > > It is actually useful to be able to tweak the crystal tuning at
-> > > runtime to be able to reduce clock drift and compare with a reliable
-> > > source (e.g. NTP).
-> > 
-> > I don't think there's a Linux kernel API that you can use to achieve that, so
-> > that's a rather theoretical concern at the moment.
-> > 
-> 
-> There is /sys/class/rtc/rtcX/offset which is even properly documented.
-> 
-> The reason I asked is that some RTCs have both analog (changing the
-> oscillator capacitance) and digital (changing the RTC counter) so I'm
-> wondering whether this interface should be extended.
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-As I wrote below, that can't be achieved by tuning DCXO.
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
 
-> > Also there are multiple clocks, that can drive the RTC, and you usually don't
-> > drive it from 24MHz DCXO oscillator. The reason is that you'd have to deal with
-> > the fact that the clock for RTC then becomes 24000000/750 (750 is fixed
-> > divider), which is 32000.
-> > 
-> > So if you want to get 32768Hz for RTC by tuning the DCXO, it would have to have
-> > 24 576 000 Hz. And even if you could achieve that (doubtful), it would throw off
-> > timings in the rest of the system (say UART, USB, CPU, display ctl) in a major way.
-> > 
-> > I guess you can try tuning 24MHz oscillator so that it's closer to the
-> > real-world 24MHz via NTP reference for other reasons. But it would be
-> > complicated, and require precise interaction with other components, like using
-> > HW timers sourced from 24MHz HOSC clock, because you can't use CPU's timers,
-> > because of inaccuracies introduced during DVFS, for example.
-> > 
-> > regards,
-> > 	o.
-> > 
-> > > I'm curious, what kind of options does this RTC have?
-> > > 
-> > > -- 
-> > > Alexandre Belloni, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > > 
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-> -- 
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (9):
+  w1: add 1-wire master driver for IP block found in SGI ASICs
+  w1: add DS2501, DS2502, DS2505 EPROM device driver
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: refactor ioc3 special handling
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  MIPS: SGI-IP27: remove ioc3 ethernet init
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  Input: add IOC3 serio driver
+
+ arch/mips/include/asm/mach-ip27/mangle-port.h |    4 +-
+ arch/mips/include/asm/pci/bridge.h            |    1 +
+ arch/mips/include/asm/sn/ioc3.h               |  356 ++---
+ arch/mips/pci/pci-xtalk-bridge.c              |  296 ++--
+ arch/mips/sgi-ip27/ip27-console.c             |    5 +-
+ arch/mips/sgi-ip27/ip27-init.c                |   13 -
+ arch/mips/sgi-ip27/ip27-timer.c               |   20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |   38 +-
+ drivers/input/serio/Kconfig                   |   10 +
+ drivers/input/serio/Makefile                  |    1 +
+ drivers/input/serio/ioc3kbd.c                 |  163 +++
+ drivers/mfd/Kconfig                           |   13 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/ioc3.c                            |  586 ++++++++
+ drivers/net/ethernet/sgi/Kconfig              |    4 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 1936 ++++++++++---------------
+ drivers/nvmem/core.c                          |   62 +-
+ drivers/rtc/rtc-m48t35.c                      |   11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |   98 ++
+ drivers/tty/serial/8250/Kconfig               |   11 +
+ drivers/tty/serial/8250/Makefile              |    1 +
+ drivers/w1/masters/Kconfig                    |    9 +
+ drivers/w1/masters/Makefile                   |    1 +
+ drivers/w1/masters/sgi_w1.c                   |  130 ++
+ drivers/w1/slaves/Kconfig                     |    6 +
+ drivers/w1/slaves/Makefile                    |    1 +
+ drivers/w1/slaves/w1_ds250x.c                 |  293 ++++
+ include/linux/nvmem-consumer.h                |    9 +
+ include/linux/platform_data/sgi-w1.h          |   15 +
+ include/linux/w1.h                            |    2 +
+ 30 files changed, 2522 insertions(+), 1574 deletions(-)
+ create mode 100644 drivers/input/serio/ioc3kbd.c
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+ create mode 100644 drivers/w1/masters/sgi_w1.c
+ create mode 100644 drivers/w1/slaves/w1_ds250x.c
+ create mode 100644 include/linux/platform_data/sgi-w1.h
+
+-- 
+2.13.7
+
