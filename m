@@ -2,87 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F88489027
-	for <lists+linux-rtc@lfdr.de>; Sun, 11 Aug 2019 09:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAE98973A
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 08:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726014AbfHKHcS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Sun, 11 Aug 2019 03:32:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56438 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725810AbfHKHcS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 11 Aug 2019 03:32:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A6A50AD73;
-        Sun, 11 Aug 2019 07:32:15 +0000 (UTC)
-Date:   Sun, 11 Aug 2019 09:32:12 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1726608AbfHLGgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Aug 2019 02:36:21 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46944 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbfHLGgV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 02:36:21 -0400
+Received: by mail-lj1-f195.google.com with SMTP id h13so1815835ljc.13;
+        Sun, 11 Aug 2019 23:36:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/vpEUEVLjdkCAlhcb55giL/kGOPY848dG61+iEK0NcA=;
+        b=XLXSXK0eiWbPF91T+8JDR58rVmLlb8u0BgOX5DPFiAtsWkGBqBBmz0l8PeZwmEoBeD
+         5ZbtGFHbgI+o+dCiTo4xazI6NQm/H6/6nZd31LMshSrIr1g09NbRomTwwCdaChDO1mi5
+         joz8djPaWrX/UYz+uZ2DB3U2iuVCJ60iMZh6Ot1J50DCe+jFqZ1uyR7/tTkDnQSLnksD
+         kEfn+1EcKEIbZwsXDcHlMQvNUDoGS/urLURXEkO3AQqKtFyJhHbOM4MEdxvM+ekEkRSF
+         Xu8BvZJNA0S2AoHxPcgS5da1pScgJBRsFCfZs54OKyJBQMbjoKg/9yRIYr/9w+DfXVN0
+         NJaA==
+X-Gm-Message-State: APjAAAUkK+jBZCL5P1UvvUCY0m9Z2FcliyB9pG0vnPf0F0/Xxl9xgvDQ
+        j+IVQ6JZkMxg4MZ208sGgIQ=
+X-Google-Smtp-Source: APXvYqz7QZCYabUZI+UmwtalsRYtNXtt4fpUnUVFgWSM/ShRImkuc7OeZsTD25D/fcpxoVq69pHj0Q==
+X-Received: by 2002:a2e:7c14:: with SMTP id x20mr4166039ljc.36.1565591779144;
+        Sun, 11 Aug 2019 23:36:19 -0700 (PDT)
+Received: from localhost.localdomain ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id b2sm1741182lje.98.2019.08.11.23.36.18
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 11 Aug 2019 23:36:18 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 09:36:11 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
-In-Reply-To: <20190809142222.4558691e@cakuba.netronome.com>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
-        <20190809103235.16338-8-tbogendoerfer@suse.de>
-        <20190809142222.4558691e@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "yuehaibing@huawei.com" <yuehaibing@huawei.com>
+Subject: [PATCH] rtc: bd70528: fix driver dependencies
+Message-ID: <84462e01e43d39024948a3bdd24087ff87dc2255.1565591387.git.matti.vaittinen@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 9 Aug 2019 14:22:22 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+With CONFIG_BD70528_WATCHDOG=m, a built-in rtc driver cannot call
+into the low-level functions that are part of the watchdog module:
 
-> On Fri,  9 Aug 2019 12:32:29 +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
-> > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
-> > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> 
-> There are a lot of changes in the ethernet part which are not easy to
-> explain by the introduction of the other MFD parts.. Could you possibly
-> break this change up into smaller chunks?
+drivers/rtc/rtc-bd70528.o: In function `bd70528_set_time':
+rtc-bd70528.c:(.text+0x22c): undefined reference to `bd70528_wdt_lock'
+rtc-bd70528.c:(.text+0x2a8): undefined reference to `bd70528_wdt_unlock'
+drivers/rtc/rtc-bd70528.o: In function `bd70528_set_rtc_based_timers':
+rtc-bd70528.c:(.text+0x50c): undefined reference to `bd70528_wdt_set'
 
-working on it
+Add a Kconfig dependency which forces RTC to be a module if watchdog is a
+module. If watchdog is not compiled at all the stub functions for watchdog
+control are used. compiling the RTC without watchdog is fine.
 
-> Also please don't use stdint types in the kernel, please try checkpatch
-> to catch coding style issues.
+Fixes: 32a4a4ebf768 ("rtc: bd70528: Initial support for ROHM bd70528 RTC")
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+---
+ Issue was found by kbuildbot from linux-next. Issue was addressed by
+ Arnd and Randy - but those solutions disallowed compiling the RTC
+ without watchdog. This patch is a result of discussion with Arnd and it
+ was created on top of Linus' tree (tag v5.3-rc4).
+ drivers/rtc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-my patch already reduces them and checkpatch only warns about usage of printk
-for the network part. Changing that to dev_warn/dev_err in the mfd patch didn't
-seem the right thing to do. As I'm splitting the conversion patch into a few
-steps I could also replace the printks.
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index e72f65b61176..add43c337489 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -500,6 +500,7 @@ config RTC_DRV_M41T80_WDT
+ 	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
+ config RTC_DRV_BD70528
+ 	tristate "ROHM BD70528 PMIC RTC"
++	depends on MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
+ 	help
+ 	  If you say Y here you will get support for the RTC
+ 	  on ROHM BD70528 Power Management IC.
+-- 
+2.17.2
 
-Thomas.
 
 -- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
