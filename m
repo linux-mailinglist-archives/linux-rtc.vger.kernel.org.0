@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B935C89B41
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 12:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CAE89B53
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 12:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727323AbfHLKUk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Aug 2019 06:20:40 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38319 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727409AbfHLKUk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 06:20:40 -0400
-Received: by mail-wm1-f66.google.com with SMTP id m125so7204924wmm.3
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Aug 2019 03:20:38 -0700 (PDT)
+        id S1727734AbfHLKWO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Aug 2019 06:22:14 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33632 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727762AbfHLKWO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 06:22:14 -0400
+Received: by mail-wm1-f67.google.com with SMTP id p77so10535599wme.0
+        for <linux-rtc@vger.kernel.org>; Mon, 12 Aug 2019 03:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=wqTQ6b6cfwbQrBuBsS4ZVRP0NDej0Y0Ylh0VQUZjqgY=;
-        b=t3Qr2H34fWbt8fRrhsE0KTVByOzaYjedOJJltCPnMeMOlXg2a9+YRp164xeuTD4YbM
-         lrgMQ9GSXc3yAU9Ua5Pvg2u0KKi7OdsS+1mbgAxIYKSG+v6wt0MmSFjY3wPhTgiJZwHG
-         3SmIlbvswNbBNVK6ECgHoKHH8MMnaenIIWEIIDfMAPNz0pyf8vXAy/fD1SNgTGoiHx6M
-         AMiRQLzKIuE1mTDr9xRSn/UGxK/YhEOIsMCX9BlBbqY/Ouczt3p8B93bzuenedMJw6i/
-         4dJHtCJ9XUDX3uCnhcnpxO7mICVkJw9DoJYJ3hz0cR1rjUiIjy8vSw9kSwQgO1gVbCGm
-         junA==
+        bh=zoPZbXqPW78h/2uThaa7mn2LzRhBNLTRaQs9IxumQJE=;
+        b=vJ2GlkA9v8yTNFNSxD1tYPMv6zm6aAZbc0eagMqBcoc0oVXHforLwDr+jURWjvN6jf
+         k5X8u/x5nlBEex6MPfLs76eV6m/26tMxbrBcX42+QJ7ZM4mAP6i8fYu8SQ0H3b8JExAC
+         GZ1YHoi+MhBvEE+cq5NnWJYuoI+39/Q7rgiyDN5mUiSeITs1GgBFoQi3YLJHh8q0MRbJ
+         RFBv7xI+rinrgHJhfdJ/RsGUI6D3g6Hi/7Fq9MOnHM3Ia2zqXMAtbzveZ6MvNNPZvEdS
+         Z6zV8fvBNCDe74jZ4wmksqFv8KlPMrQLCLZos3iEqE3yjLhQ33iF99G4dOJicHNjI2Kw
+         sqaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=wqTQ6b6cfwbQrBuBsS4ZVRP0NDej0Y0Ylh0VQUZjqgY=;
-        b=XQVdUVG2gsp0zfa1yeEmqem9rpGt8eGdFMpXC4IBOYFmmFcsU9PKca5CpApRj+aWEx
-         6HswJsUPyK0xh8ykDpL9eiXdZxoWtzAMCeCeGXOzeu3XiPhjOLCzWN/ReH7zMvlIVyMp
-         635ZCA/tAPf8XAJyn7lOo7V2NNXzcNLiejC4WTgDfiV2Nn80x+Rum/hpjeZzJ8tEejti
-         hqcCMpeKTa/mXacpw0ZzAsjrAtqyek8M0ObaQRY9FZ9wCZTU00VpzXAG8EC5DdMYKxKx
-         8zmFdxFTO4aqP6q2eUtcb/+pU0q9fvzNGerz+P433OKWNmpqgnsrKEOywOyM9vIyzldJ
-         MCnA==
-X-Gm-Message-State: APjAAAVYZfSeHFls5Fr2U+/CpAGn1AWlyNSvPmqe44yDPA8bEa6YyFD6
-        f2M+6xqAfZXUtR9+s5ftbkyhjg==
-X-Google-Smtp-Source: APXvYqzRSyrYT9+CnNldwN3uU/Yytvk4N9NCIYzWkwcCnwMNp8R3C+kWgZvgsTeSyQKkAOTnKXzSyg==
-X-Received: by 2002:a1c:6c0d:: with SMTP id h13mr24864195wmc.74.1565605238212;
-        Mon, 12 Aug 2019 03:20:38 -0700 (PDT)
+        bh=zoPZbXqPW78h/2uThaa7mn2LzRhBNLTRaQs9IxumQJE=;
+        b=j/ivR9OShExWNFBvbvD1J6Acbnl09hkMZ8TmOGbX/k848hntDKvavbulUphwj/diqy
+         LOhq5zmCguDvTQ5YFXec2l1Gg34mvpQqlI/Pbtz4ibA0rekeIfNIQON0kif3FPTAxD7Y
+         BDDLMUJ/BFyRJ3aVK4klDwa/kVFULgkS7h8zRsEmabD2ixVk6jnJZ9UrGg5B8bXV05Dl
+         r+z6laUsVvVIXE0k+5QVa9j/Wba9nztZMucodpKOgDfKPY3o8BC3uOrF6UH/XUmCr3BS
+         J3Nhuzt9Dl5WM2QbFJNCpaEUDBvOyx0wKrsBlZxXscXR9MHRXcTf1tVY1iXxAVnMLgsO
+         QYhw==
+X-Gm-Message-State: APjAAAWyctBjRwkM9nQPsBE78ElNQFp54hdA3yxst6V0zoMBoxgAbV8+
+        PYEWHn7+Tr/WgTEBp8mP3hAM7w==
+X-Google-Smtp-Source: APXvYqxf3cQUHAep1BdMKN4uIH07FUMOkkx/TJ2wQi9MYR4nJmyC/s/FP0G1PMDE8ki8IyMk5k86nA==
+X-Received: by 2002:a05:600c:22c7:: with SMTP id 7mr15775300wmg.129.1565605332156;
+        Mon, 12 Aug 2019 03:22:12 -0700 (PDT)
 Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id x13sm465212wmj.12.2019.08.12.03.20.37
+        by smtp.gmail.com with ESMTPSA id o126sm14136234wmo.1.2019.08.12.03.22.11
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 03:20:37 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 11:20:35 +0100
+        Mon, 12 Aug 2019 03:22:11 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 11:22:09 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Frank Wunderlich <frank-w@public-files.de>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
@@ -70,15 +70,15 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Tianping . Fang" <tianping.fang@mediatek.com>,
         Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v3 01/10] dt-bindings: add powercontroller
-Message-ID: <20190812102035.GH26727@dell>
+Subject: Re: [PATCH v3 06/10] mfd: mt6323: some improvements of mt6397-core
+Message-ID: <20190812102209.GI26727@dell>
 References: <20190729174154.4335-1-frank-w@public-files.de>
- <20190729174154.4335-2-frank-w@public-files.de>
+ <20190729174154.4335-7-frank-w@public-files.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190729174154.4335-2-frank-w@public-files.de>
+In-Reply-To: <20190729174154.4335-7-frank-w@public-files.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -89,47 +89,29 @@ On Mon, 29 Jul 2019, Frank Wunderlich wrote:
 
 > From: Josef Friedl <josef.friedl@speed.at>
 > 
-> add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
-> an example is shown in mt6323-poweroff.txt
+> simplyfications (resource definitions my DEFINE_RES_* macros)
 > 
-> changes since v2: separated rtc-mt6397.txt to part 2
+> changes since v2: splitted v2 part 4 into 6+7
 > 
-> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
 > Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  .../devicetree/bindings/mfd/mt6397.txt        | 10 +++++++++-
->  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
->  2 files changed, 29 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+>  drivers/mfd/mt6397-core.c | 15 ++++-----------
+>  1 file changed, 4 insertions(+), 11 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 0ebd08af777d..44acb9827716 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -8,6 +8,7 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
->  - Clock
->  - LED
->  - Keys
-> +- Power controller
-> 
->  It is interfaced to host controller using SPI interface by a proprietary hardware
->  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
-> @@ -22,8 +23,10 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
->  Optional subnodes:
-> 
->  - rtc
-> -	Required properties:
-> +	Required properties: Should be one of follows
-> +		- compatible: "mediatek,mt6323-rtc"
->  		- compatible: "mediatek,mt6397-rtc"
-> +	For details, see Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+> index 337bcccdb914..5f7070267c9a 100644
+> --- a/drivers/mfd/mt6397-core.c
+> +++ b/drivers/mfd/mt6397-core.c
+> @@ -1,10 +1,11 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2014 MediaTek Inc.
+> + * Copyright (c) 2014-2018 MediaTek Inc.
 
-Please use relative paths.
+This is out of date.  Please update it.
 
-E.g: ../bindings/rtc/rtc-mt6397.txt
-
-Apart from that, the MFD parts look okay to me.
+Once fixed, please apply my:
 
 For my own reference:
   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
