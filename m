@@ -2,91 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8951A8A789
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 21:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25BF8A8B6
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 22:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfHLTwN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Aug 2019 15:52:13 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:46330 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726931AbfHLTwM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 15:52:12 -0400
-Received: by mail-qt1-f195.google.com with SMTP id j15so10491458qtl.13
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Aug 2019 12:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=kEkVLWwqovwyFjtoRAd3ZuRhWq4pA+S9mUWyYQC3ODQ=;
-        b=Go1xYdCnowLCjBoQHanBZc7stvpdCA4G/sIQJnrvYOMObBB2RF6oSbhmlUQOeUImJi
-         FjU3UE6ZPgHFVoFvHQajdt5DYsYDsfr3MtE4zVRqViB/uQewO2eXWYVzND9A6/k4syDI
-         KiQJ6kbVnAeos66Zydq4l49v2EO55bXWiaIY8YW1yEmsocbSrMGpDqu+fWwU8vgoLsAL
-         BjBZUWdKUw5Ietmf5bF6Q/S0JeYR6CXwsVmVc2s/Qsj4Yz5gyHXdmhwnwpT0kgnEBwjL
-         P516qLnaRnN3sZ9sXUHu8h9MiftUXkp2Ylvq4VMfyG9py3890rhln94s9T5uukkQHTwY
-         uSiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=kEkVLWwqovwyFjtoRAd3ZuRhWq4pA+S9mUWyYQC3ODQ=;
-        b=OPHRCovwHgDnHLdaV9p4WpNSOOUHCr9kLESWmBAMTCbCRqbOstcXnk95hzcAZRGTJG
-         al53HqGscx8WUoANSj0h7aA138XdMc6GJFVivEIUEvD4pV3FGPQgtsnP1/sulV6ZqUGH
-         wUygxvrHImta78ArJ2RycoT7nSviVJZDQZCw/SkdOXEiOYQ47sGwjxsxV7q9sJ9irbrs
-         o2kUEYg+ymDBmAaC33Na3jqTEcQtzJT/7tGDvE4TayeM2BZFlOilyn1HpTbai0Z1f7H4
-         cVy/SRybGaNVDRkOZyLpsHg9k5I7CwL8eFG5kDFfIqo8RWK6HfgqD2umQ8s+7uAWSmp8
-         lHQQ==
-X-Gm-Message-State: APjAAAVboCpeWUQJhmD/fuFWKTeVludAWPsoQqC+7rjr1znh4y9J4x2z
-        M+JIrYzyaZ3URMV3vBwsMecGAw==
-X-Google-Smtp-Source: APXvYqy2g/f0DiyWHWOpG/JWWUORJpCznhP/S1XW87hCBQrOyaFf5OKJtY8YQ6WH8wMHkAb2ye+Nzw==
-X-Received: by 2002:ac8:376c:: with SMTP id p41mr11767771qtb.306.1565639531882;
-        Mon, 12 Aug 2019 12:52:11 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id g24sm3920710qtc.38.2019.08.12.12.52.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 12 Aug 2019 12:52:11 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 12:52:02 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Cc:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-ID: <20190812125202.46608b74@cakuba.netronome.com>
-In-Reply-To: <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
-        <20190809103235.16338-8-tbogendoerfer@suse.de>
-        <20190809142222.4558691e@cakuba.netronome.com>
-        <20190811093212.88635fb1a6c796a073ec71ff@suse.de>
-Organization: Netronome Systems, Ltd.
+        id S1726655AbfHLU5j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Aug 2019 16:57:39 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:55087 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726530AbfHLU5j (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 16:57:39 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id DEDD120007;
+        Mon, 12 Aug 2019 20:57:36 +0000 (UTC)
+Date:   Mon, 12 Aug 2019 22:57:36 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     soc@kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 14/16] rtc: remove w90x900/nuc900 driver
+Message-ID: <20190812205736.GT3600@piout.net>
+References: <20190809202749.742267-1-arnd@arndb.de>
+ <20190809202749.742267-15-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190809202749.742267-15-arnd@arndb.de>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, 11 Aug 2019 09:32:12 +0200, Thomas Bogendoerfer wrote:
-> > Also please don't use stdint types in the kernel, please try checkpatch
-> > to catch coding style issues.  
+On 09/08/2019 22:27:42+0200, Arnd Bergmann wrote:
+> The ARM w90x900 platform is getting removed, so this driver is obsolete.
 > 
-> my patch already reduces them and checkpatch only warns about usage of printk
-> for the network part. Changing that to dev_warn/dev_err in the mfd patch didn't
-> seem the right thing to do. As I'm splitting the conversion patch into a few
-> steps I could also replace the printks.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/rtc/Kconfig      |   7 -
+>  drivers/rtc/Makefile     |   1 -
+>  drivers/rtc/rtc-nuc900.c | 271 ---------------------------------------
+>  3 files changed, 279 deletions(-)
+>  delete mode 100644 drivers/rtc/rtc-nuc900.c
+> 
+Applied, thanks.
 
-Thanks for looking into it. I was referring to the use of uint32_t
-instead of u32. Perhaps checkpatch has to be motivated with the --strict
-option to point those out?
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
