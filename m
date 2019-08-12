@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CAE89B53
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 12:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB77D89B58
+	for <lists+linux-rtc@lfdr.de>; Mon, 12 Aug 2019 12:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727734AbfHLKWO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 12 Aug 2019 06:22:14 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:33632 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727762AbfHLKWO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 06:22:14 -0400
-Received: by mail-wm1-f67.google.com with SMTP id p77so10535599wme.0
-        for <linux-rtc@vger.kernel.org>; Mon, 12 Aug 2019 03:22:12 -0700 (PDT)
+        id S1727707AbfHLKWk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 12 Aug 2019 06:22:40 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:53057 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727762AbfHLKWk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 12 Aug 2019 06:22:40 -0400
+Received: by mail-wm1-f68.google.com with SMTP id s3so11646814wms.2
+        for <linux-rtc@vger.kernel.org>; Mon, 12 Aug 2019 03:22:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=zoPZbXqPW78h/2uThaa7mn2LzRhBNLTRaQs9IxumQJE=;
-        b=vJ2GlkA9v8yTNFNSxD1tYPMv6zm6aAZbc0eagMqBcoc0oVXHforLwDr+jURWjvN6jf
-         k5X8u/x5nlBEex6MPfLs76eV6m/26tMxbrBcX42+QJ7ZM4mAP6i8fYu8SQ0H3b8JExAC
-         GZ1YHoi+MhBvEE+cq5NnWJYuoI+39/Q7rgiyDN5mUiSeITs1GgBFoQi3YLJHh8q0MRbJ
-         RFBv7xI+rinrgHJhfdJ/RsGUI6D3g6Hi/7Fq9MOnHM3Ia2zqXMAtbzveZ6MvNNPZvEdS
-         Z6zV8fvBNCDe74jZ4wmksqFv8KlPMrQLCLZos3iEqE3yjLhQ33iF99G4dOJicHNjI2Kw
-         sqaA==
+        bh=5m2IUZRROGymOefDRF7neqY5caAFmV8hI7w+ygmONvA=;
+        b=VbvHp5gq3ZfIv129Gw/NtZ87lFa2bGMn4EuR83iecdeL2Csep9DpwQiL7+zz5JqjFK
+         X8bIxV0RuZYkwYNxNlQfaKfvyhdfMRe+fsByZ+5/9Q4URPmHiuFfC+v/g4Na72n/MRMw
+         r5gWKC5znHtVRRq1Mdy7xb3V/NfaocaWCQA7G19e1ZfLLTVKay0EAG6Eyp0ykdSV+4+H
+         m8IfxciiLoaWNeDAQlVb35jDEAHgnVhlwiGdrJnKqaWswW3Ci+r549m18+lM5cv/jCuF
+         1hFxRPVjIE+R+CsJoPvG28LQ6WUzne3g9QFS7qHahxLXO0k9kPM/IiwVA3zxzlc5GxvS
+         W5ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=zoPZbXqPW78h/2uThaa7mn2LzRhBNLTRaQs9IxumQJE=;
-        b=j/ivR9OShExWNFBvbvD1J6Acbnl09hkMZ8TmOGbX/k848hntDKvavbulUphwj/diqy
-         LOhq5zmCguDvTQ5YFXec2l1Gg34mvpQqlI/Pbtz4ibA0rekeIfNIQON0kif3FPTAxD7Y
-         BDDLMUJ/BFyRJ3aVK4klDwa/kVFULgkS7h8zRsEmabD2ixVk6jnJZ9UrGg5B8bXV05Dl
-         r+z6laUsVvVIXE0k+5QVa9j/Wba9nztZMucodpKOgDfKPY3o8BC3uOrF6UH/XUmCr3BS
-         J3Nhuzt9Dl5WM2QbFJNCpaEUDBvOyx0wKrsBlZxXscXR9MHRXcTf1tVY1iXxAVnMLgsO
-         QYhw==
-X-Gm-Message-State: APjAAAWyctBjRwkM9nQPsBE78ElNQFp54hdA3yxst6V0zoMBoxgAbV8+
-        PYEWHn7+Tr/WgTEBp8mP3hAM7w==
-X-Google-Smtp-Source: APXvYqxf3cQUHAep1BdMKN4uIH07FUMOkkx/TJ2wQi9MYR4nJmyC/s/FP0G1PMDE8ki8IyMk5k86nA==
-X-Received: by 2002:a05:600c:22c7:: with SMTP id 7mr15775300wmg.129.1565605332156;
-        Mon, 12 Aug 2019 03:22:12 -0700 (PDT)
+        bh=5m2IUZRROGymOefDRF7neqY5caAFmV8hI7w+ygmONvA=;
+        b=XgIfegOH/p5jAGq02L3PeTo9/pVpBsauUOt/K5ALDQq7r2WoPVJSxeSjPy2qT3YwOn
+         ekZ/Qg17XCCqjYuN4RtHUKrGhCU8QW3J+Fya87P80y7N13O3U2dvVj+/Cdl8LcA37VNf
+         hxNTYVHwbfP0+TxV4aN7shOmR32fdKJ43I3GIrrZ4zrcCx71KV0knVrB8qKBOt1gBpQV
+         RPqJ9TwaDeaqRQdxbLc9egtOyCORwlHJ1CGEQyyhu7lQojPyHUfRXedkloEKpM9AFdFv
+         syP2z30emzZYUVgze/L3OiSSYGKV5YcM7qt8zm7K3Vd7PN2aTE/nHEcsgKLs12/Ux6n0
+         yhRQ==
+X-Gm-Message-State: APjAAAUfir/7XPwJa6sfwEcPMNEyf0zWXpgfL04CD57SuSR+L5nR3RTS
+        DFQyou9b8ZCaAbB1dSdei57wnA==
+X-Google-Smtp-Source: APXvYqybIDxE+3tj5T831ZEq1FImfdGr3gRRq6UGg2lHX1HJoq0eScbIUxcvMhMextMyi7Sx8dZgKQ==
+X-Received: by 2002:a1c:6a0b:: with SMTP id f11mr19124477wmc.87.1565605358267;
+        Mon, 12 Aug 2019 03:22:38 -0700 (PDT)
 Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id o126sm14136234wmo.1.2019.08.12.03.22.11
+        by smtp.gmail.com with ESMTPSA id g26sm1478821wmh.32.2019.08.12.03.22.37
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 03:22:11 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 11:22:09 +0100
+        Mon, 12 Aug 2019 03:22:37 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 11:22:35 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Frank Wunderlich <frank-w@public-files.de>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
@@ -70,15 +70,15 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Thomas Gleixner <tglx@linutronix.de>,
         "Tianping . Fang" <tianping.fang@mediatek.com>,
         Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v3 06/10] mfd: mt6323: some improvements of mt6397-core
-Message-ID: <20190812102209.GI26727@dell>
+Subject: Re: [PATCH v3 07/10] mfd: mt6323: add mt6323 rtc+pwrc
+Message-ID: <20190812102235.GJ26727@dell>
 References: <20190729174154.4335-1-frank-w@public-files.de>
- <20190729174154.4335-7-frank-w@public-files.de>
+ <20190729174154.4335-8-frank-w@public-files.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190729174154.4335-7-frank-w@public-files.de>
+In-Reply-To: <20190729174154.4335-8-frank-w@public-files.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -89,29 +89,15 @@ On Mon, 29 Jul 2019, Frank Wunderlich wrote:
 
 > From: Josef Friedl <josef.friedl@speed.at>
 > 
-> simplyfications (resource definitions my DEFINE_RES_* macros)
+> add entry for rtc and power-controller to mt6323
 > 
-> changes since v2: splitted v2 part 4 into 6+7
+> changes since v2: only splitting, second part of v2 part 4
 > 
 > Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  drivers/mfd/mt6397-core.c | 15 ++++-----------
->  1 file changed, 4 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
-> index 337bcccdb914..5f7070267c9a 100644
-> --- a/drivers/mfd/mt6397-core.c
-> +++ b/drivers/mfd/mt6397-core.c
-> @@ -1,10 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (c) 2014 MediaTek Inc.
-> + * Copyright (c) 2014-2018 MediaTek Inc.
-
-This is out of date.  Please update it.
-
-Once fixed, please apply my:
+>  drivers/mfd/mt6397-core.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 
 For my own reference:
   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
