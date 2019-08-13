@@ -2,95 +2,195 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 884318B461
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 11:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82708BCF8
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 17:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbfHMJkm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Aug 2019 05:40:42 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37548 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727129AbfHMJkj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Aug 2019 05:40:39 -0400
-Received: by mail-wm1-f65.google.com with SMTP id z23so863670wmf.2
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Aug 2019 02:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
-        b=ZvsLh64Nk3rAwaI66fNByKOuqlUAVATJ7Anm+IGbigwF8Q1o/w3VJaWo75OL9J4RRh
-         P6MM9VWap5aQfI/N7Lx2+MPdZtbDCPIaa38ij3O+dLMzs1uq4WksSPOpkiqrGPZURKOw
-         F9ySGABl4fJIkLR2xFs7vzM02DlcYhTIt+TzjRUa9xYdL1zKROAHi2grMg0I75OWzLFr
-         dNy0bYJ1bjGDxrwJnHYFPYYpdH9lagy5q2wRtvnRF6Vu6oz+I/mHuHZFELJiQ2Sm7GuK
-         YRLTo+KSwWDHBc4xeE4N5MDdSOEMhHG+XEenWOrsZXIIrZFvWTBFsPxKm2ppGMuAc3HW
-         6jiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t6fEiZ4sytTb7mfNqU+GHgkx4N2cyC0uVxBfUPG4iKY=;
-        b=aEB5lRFQrlfxsOEjyQOQj8ZwOSCD/hT28BfZIKVRJrYAcG/BNGELMyyr+xrat+aW5t
-         2opdrEC9APp9GR7O06ggPvvzhH7+8LGY+ppdncrO24ihzpLfpYwuOT3DoIodQiJ1vUkU
-         UOyvmJFSBxFyurZWg+VeY23aOaDtYypsf0VSuk1aZVsL+o4sc/Tb1wsbwr4KvU3zvD7R
-         cbeWGFQBJgiR8kJWMqORG6cq1SLZTXoI0pcVx9e/XPYUHx3Z7QVc8ZFzXRJntZt1V1H3
-         EDDtDBQXfDGsizAmZnaVWvtdXmJVDJCC/zikRebOUAKOrnoY9eAI8LS/OVasz0V2OWC4
-         TmMA==
-X-Gm-Message-State: APjAAAXJsLhinNUu0sAjEqqGKaxDPIUnhNWXy2vOZx+UCS3ktbcYkp/h
-        v9an/sT/6m73Lr+ilT7x3mVHMvnJU9U=
-X-Google-Smtp-Source: APXvYqxtZp5y+W/eo8hxCFccDh9B73EN2zN9q/ucA2LVNH+5drh1g1mUkC7z2xIrJUpFbM+AMvB0iA==
-X-Received: by 2002:a1c:9a4b:: with SMTP id c72mr2089507wme.102.1565689236579;
-        Tue, 13 Aug 2019 02:40:36 -0700 (PDT)
-Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
-        by smtp.googlemail.com with ESMTPSA id f12sm122487785wrg.5.2019.08.13.02.40.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Aug 2019 02:40:35 -0700 (PDT)
-Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20190809103235.16338-1-tbogendoerfer@suse.de>
- <20190809103235.16338-4-tbogendoerfer@suse.de>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
-Date:   Tue, 13 Aug 2019 10:40:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729586AbfHMP0C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Aug 2019 11:26:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727494AbfHMP0B (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 13 Aug 2019 11:26:01 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAC942184B;
+        Tue, 13 Aug 2019 15:26:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565709960;
+        bh=HmV3d0tX/vIGU4K6vVAo5cUg5Z8uSssDtsYqHJAG5bg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oXTK/Z2XPavPmmocWCTzqLAhdopHEqr0+WhpFAK86e901QMUz2hwOJ782cXRzWt6O
+         dd73osGsviYHzdVpTeZ7PctENRLocN/S6i3IIyyXpit2zvkMSpRGWyOpqenE2s4clG
+         NWV+sTZ4ZhnFbgA7AijE2ghB1sb8nDYpGJvZVppw=
+Received: by mail-qk1-f176.google.com with SMTP id 201so79889272qkm.9;
+        Tue, 13 Aug 2019 08:26:00 -0700 (PDT)
+X-Gm-Message-State: APjAAAWLC6YJdMtPlS/iI+m/2q69RnrRQJSKhRbSsao4/flCJw99Muwd
+        V/7qONQvMCUEJMCrEzeSciYqz86Z16DgmEP+nQ==
+X-Google-Smtp-Source: APXvYqwu0CBqLROjtaQy/EXgqwp575KsDNniswfKsW6qsOEg0w760DgeRdr91KRxD6alIStviaHUoqrBGdSw3n2c0Xw=
+X-Received: by 2002:a37:6944:: with SMTP id e65mr31723600qkc.119.1565709959793;
+ Tue, 13 Aug 2019 08:25:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190809103235.16338-4-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190812121511.4169-1-frank-w@public-files.de> <20190812121511.4169-2-frank-w@public-files.de>
+In-Reply-To: <20190812121511.4169-2-frank-w@public-files.de>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 13 Aug 2019 09:25:47 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+fW=x8MoL3GMj6+ZKC3fd6F6+8Rtx=j5R9vEuL9UHCuQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+fW=x8MoL3GMj6+ZKC3fd6F6+8Rtx=j5R9vEuL9UHCuQ@mail.gmail.com>
+Subject: Re: [PATCH v5 01/10] dt-bindings: add powercontroller
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allison Randal <allison@lohutok.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Tianping . Fang" <tianping.fang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Mon, Aug 12, 2019 at 6:24 AM Frank Wunderlich
+<frank-w@public-files.de> wrote:
+>
+> From: Josef Friedl <josef.friedl@speed.at>
+>
+> add mt6323-rtc and mt6323-pwrc to mt6397 mfd DT bindings
+> an example is shown in mt6323-poweroff.txt
 
+How does this get to v5 with such a terrible subject? At least give
+some indication this is for some Mediatek chip.
 
-On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
-> nvmem_device_find provides a way to search for nvmem devices with
-> the help of a match function simlair to bus_find_device.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+The recipient list needs some work too. Don't Cc git committers that
+get_maintainers.pl lists.
+
+>
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > ---
->   drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
->   include/linux/nvmem-consumer.h |  9 ++++++
->   2 files changed, 41 insertions(+), 30 deletions(-)
+> changes since v4: use relative path
+> changes since v3: none
+> changes since v2: separated rtc-mt6397.txt to part 2
+> ---
+>  .../devicetree/bindings/mfd/mt6397.txt        | 20 +++++++++++++------
+>  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
+>  2 files changed, 34 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+>
+> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> index 0ebd08af777d..063f5fe1cace 100644
+> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> @@ -8,11 +8,12 @@ MT6397/MT6323 is a multifunction device with the following sub modules:
+>  - Clock
+>  - LED
+>  - Keys
+> +- Power controller
+>
+>  It is interfaced to host controller using SPI interface by a proprietary hardware
+>  called PMIC wrapper or pwrap. MT6397/MT6323 MFD is a child device of pwrap.
+>  See the following for pwarp node definitions:
+> -Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+> +../../bindings/soc/mediatek/pwrap.txt
 
-Have you considered using nvmem_register_notifier() ?
+Unrelated change to what the subject says. Clean-ups and new things in
+separate patches please.
 
+>
+>  This document describes the binding for MFD device and its sub module.
+>
+> @@ -22,14 +23,16 @@ compatible: "mediatek,mt6397" or "mediatek,mt6323"
+>  Optional subnodes:
+>
+>  - rtc
+> -       Required properties:
+> +       Required properties: Should be one of follows
+> +               - compatible: "mediatek,mt6323-rtc"
 
---srini
+How is this related to 'powercontroller'?
+
+>                 - compatible: "mediatek,mt6397-rtc"
+> +       For details, see ../../bindings/rtc/rtc-mt6397.txt
+>  - regulators
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-regulator"
+> -       see Documentation/devicetree/bindings/regulator/mt6397-regulator.txt
+> +       see ../../bindings/regulator/mt6397-regulator.txt
+>                 - compatible: "mediatek,mt6323-regulator"
+> -       see Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+> +       see ../../bindings/regulator/mt6323-regulator.txt
+>  - codec
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-codec"
+> @@ -39,12 +42,17 @@ Optional subnodes:
+>  - led
+>         Required properties:
+>                 - compatible: "mediatek,mt6323-led"
+> -       see Documentation/devicetree/bindings/leds/leds-mt6323.txt
+> +       see ../../bindings/leds/leds-mt6323.txt
+>
+>  - keys
+>         Required properties:
+>                 - compatible: "mediatek,mt6397-keys" or "mediatek,mt6323-keys"
+> -       see Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
+> +       see ../../bindings/input/mtk-pmic-keys.txt
+> +
+> +- power-controller
+> +       Required properties:
+> +               - compatible: "mediatek,mt6323-pwrc"
+> +       For details, see ../../bindings/power/reset/mt6323-poweroff.txt
+>
+>  Example:
+>         pwrap: pwrap@1000f000 {
+> diff --git a/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> new file mode 100644
+> index 000000000000..933f0c48e887
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+> @@ -0,0 +1,20 @@
+> +Device Tree Bindings for Power Controller on MediaTek PMIC
+> +
+> +The power controller which could be found on PMIC is responsible for externally
+> +powering off or on the remote MediaTek SoC through the circuit BBPU.
+> +
+> +Required properties:
+> +- compatible: Should be one of follows
+> +       "mediatek,mt6323-pwrc": for MT6323 PMIC
+> +
+> +Example:
+> +
+> +       pmic {
+> +               compatible = "mediatek,mt6323";
+> +
+> +               ...
+> +
+> +               power-controller {
+> +                       compatible = "mediatek,mt6323-pwrc";
+> +               };
+> +       }
+> --
+> 2.17.1
+>
