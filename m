@@ -2,123 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8671D8B091
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 09:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C2C8B2CF
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 10:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727342AbfHMHUX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Aug 2019 03:20:23 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42344 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726705AbfHMHUW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Aug 2019 03:20:22 -0400
-Received: by mail-wr1-f68.google.com with SMTP id b16so10047657wrq.9
-        for <linux-rtc@vger.kernel.org>; Tue, 13 Aug 2019 00:20:21 -0700 (PDT)
+        id S1726005AbfHMIrU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Aug 2019 04:47:20 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54024 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbfHMIrU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Aug 2019 04:47:20 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 10so718262wmp.3;
+        Tue, 13 Aug 2019 01:47:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=jh+u0/5C9sC+jh4TIlKIxaJHuXDdftZDgr4L90RCuIA=;
-        b=hEFcVJVzbO+JRAcIntpp/zkyNlS7/GvdeEjrweS18w0t6brHWY49x4M06TnFdZSwxW
-         GGaQNP7MUgT/naNeXacrDjPlReBWjvfVLRj+jwnfOSnzi0OUNk5l34AoZpS5DnvuLpDl
-         7cNl0BEt+sVJKtQ+LT++mw33Dm284lEGuMdRBBrFKcyC4hjm0k0kVy/4G26aCy6Fo+oY
-         uRsQzWvgL5XujoH7taBtmR3FwWDy8klSb77UV1u2YiYIN/RaktD6HE0sLCjVhZ3gWcxT
-         6MHB9kBjCkdbPzg7uohM0ruCkgjKBGkq74L2O7ondbwMC4ypfOyxsU8N6t9D74MVit5m
-         sEVQ==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:openpgp:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
+        b=ncyhB6mKip2BS/qeyhDZu6RAVH1K5U/lFzQFg8QnqpsTWcpkVsPxr+kmH2ffSwT9K2
+         0/5kneH0Mq6WT76DYFZPQqo7MmWMKVRIDdBkGCt+Sq1P7e+L8k8oGLGFF+0OmG8MW8ol
+         zmQSfu84WwQdwqcA7nGEhMoTsW16bxKbYbM3nD276Fq9NQ6ITTik5JEqPzyvz1TuC6go
+         +1rLOz5eLjWQuCKaRcCSIRR/glitHrjOXvy6GxDfdSCi3a/qts0EbLmu/P2ZHlizWoPD
+         sJfSdBUYZMD7ps5PR6ttZS0GaaFIoqCGfev3H2HCNZ8G0cv+sIbcgZwJdlDi5v7Ux95z
+         P1yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=jh+u0/5C9sC+jh4TIlKIxaJHuXDdftZDgr4L90RCuIA=;
-        b=mtO8FU8S0Fa1UUd1LvLXA6Pt7oSq6y9TxLRMb9NxgrzL8TSYeWG4KBmZl882JNReKU
-         koaqxaMoMXnoHOyrG7aeeDHDVlAZTS+BqaJdHCRd0VVJNoRx95dTYGL9y/RXIA2HcWfL
-         f9cxvKvBkLum7Q1d7Ss2kwQieJ86Mh55siKrBXcPodP+1aIXTRe56m5sjwSwNsebP4E5
-         ZTVZmUhCZyrTv7N7Hp1r6eop+eX0UxXI9PmL16Poi0S05UsEQ5QfRd63sM0tq+YSoAZc
-         0FQenpCxnXiA2saO1gAaJDbdFvZOXnSAfGi0iv6IWWa/6NFy0zXtr0TPWHUf0qCAHjr3
-         cUag==
-X-Gm-Message-State: APjAAAXPdujygNCtaL1ZjzmMTwOJiYWEfLLAc6UZcSzmxEGXx+IYe1uA
-        AIg3q6a9+/9etfpN3VcA6sikQA==
-X-Google-Smtp-Source: APXvYqwQjf7fTO6Udq8hrYKQOuwTwlMrSM8lymQq+3WwhEOVys4N9qu95PdOanYcKCvd51L3ufdJRQ==
-X-Received: by 2002:adf:fe12:: with SMTP id n18mr38762652wrr.105.1565680821103;
-        Tue, 13 Aug 2019 00:20:21 -0700 (PDT)
-Received: from dell ([2.27.35.255])
-        by smtp.gmail.com with ESMTPSA id k1sm14475486wru.49.2019.08.13.00.20.19
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Aug 2019 00:20:20 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 08:20:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Allison Randal <allison@lohutok.net>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:openpgp
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=03y8Wjx7U11up3+RZThjfaMw+lLqPQBXDguRRoaN+LY=;
+        b=C16hToflD/IQ7z+TsArz7I91f6z6F36d6qpke6GCID45O4xyxxgA1Le1Pnek9dTTxj
+         kfUQ9HsIdbvmbvh7a3s2mLakdpNEBu8wZW/53fEEJFRhw+prv6TkWweDFSvsgVKsg9L8
+         4tKkiIqw8cZPquWciferwsLNlAJcFdXMwmtVGgk1CbknEenTjj/DKkZs4PyaxEKmC6g6
+         +QwXilgjW8oP4UTauWbz+2ocSm/NXbZJBSkt3hkRx2rdgFDuM6n7k2tvnSlENTYHK2nm
+         kLrFREo20h0P9ERhXgyMNrM0LuHXBE5eJ7Tj1MJL+ffJQYR1a2MByO+7QBUUGzes0tH3
+         tjVQ==
+X-Gm-Message-State: APjAAAWqIc6ciH9j4dZ28a/q5k2tNCNKrH5Yj0EpIX8bXde2e1Owc2e+
+        bFRo9tm6n8RXdKsIjG3QSxkqMsP7
+X-Google-Smtp-Source: APXvYqxydKntiX7YOVouyRug41eCWhL/ILs06ZTeA7wcYl2JOaFWwyH2oVevfaDyH3m518OCqkWTDQ==
+X-Received: by 2002:a1c:18a:: with SMTP id 132mr1842163wmb.15.1565686036157;
+        Tue, 13 Aug 2019 01:47:16 -0700 (PDT)
+Received: from [192.168.1.35] (251.red-88-10-102.dynamicip.rima-tde.net. [88.10.102.251])
+        by smtp.gmail.com with ESMTPSA id q18sm134573625wrw.36.2019.08.13.01.47.14
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 01:47:15 -0700 (PDT)
+Subject: Re: [PATCH v4 8/9] MIPS: SGI-IP27: fix readb/writeb addressing
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Richard Fontana <rfontana@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Tianping . Fang" <tianping.fang@mediatek.com>,
-        Josef Friedl <josef.friedl@speed.at>
-Subject: Re: [PATCH v5 03/10] rtc: mt6397: move some common definitions into
- rtc.h
-Message-ID: <20190813072018.GZ26727@dell>
-References: <20190812121511.4169-1-frank-w@public-files.de>
- <20190812121511.4169-4-frank-w@public-files.de>
- <20190812151128.GV26727@dell>
- <20190812153856.GR3600@piout.net>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-9-tbogendoerfer@suse.de>
+ <CAHp75Vd_083R9sRsspVuJ3ZMTxpVR79PF5Lg-bpnMxRfN+b7wA@mail.gmail.com>
+ <20190811072907.GA1416@kroah.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
+Openpgp: url=http://pgp.mit.edu/pks/lookup?op=get&search=0xE3E32C2CDEADC0DE
+Message-ID: <90129235-58c2-aeed-a9d3-96f4a8f45709@amsat.org>
+Date:   Tue, 13 Aug 2019 10:47:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <20190811072907.GA1416@kroah.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190812153856.GR3600@piout.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 12 Aug 2019, Alexandre Belloni wrote:
+Hi Thomas,
 
-> On 12/08/2019 16:11:29+0100, Lee Jones wrote:
-> > On Mon, 12 Aug 2019, Frank Wunderlich wrote:
-> > 
-> > > From: Josef Friedl <josef.friedl@speed.at>
-> > > 
-> > > move code to separate header-file to reuse definitions later
-> > > in poweroff-driver (drivers/power/reset/mt6323-poweroff.c)
-> > > 
-> > > Suggested-by: Frank Wunderlich <frank-w@public-files.de>
-> > > Signed-off-by: Josef Friedl <josef.friedl@speed.at>
-> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > > ---
-> > > changes since v4: none
-> > > changes since v3: none
-> > > changes since v2: add missing commit-message
-> > > ---
-> > >  drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
-> > >  include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
-> > 
-> > include/linux/rtc/mt6397.h?
-> > 
+On 8/11/19 9:29 AM, Greg Kroah-Hartman wrote:
+> On Sat, Aug 10, 2019 at 04:22:23PM +0300, Andy Shevchenko wrote:
+>> On Fri, Aug 9, 2019 at 1:34 PM Thomas Bogendoerfer
+>> <tbogendoerfer@suse.de> wrote:
+>>>
+>>> Our chosen byte swapping, which is what firmware already uses, is to
+>>> do readl/writel by normal lw/sw intructions (data invariance). This
+>>> also means we need to mangle addresses for u8 and u16 accesses. The
+>>> mangling for 16bit has been done aready, but 8bit one was missing.
+>>> Correcting this causes different addresses for accesses to the
+>>> SuperIO and local bus of the IOC3 chip. This is fixed by changing
+>>> byte order in ioc3 and m48rtc_rtc structs.
+>>
+>>>  /* serial port register map */
+>>>  struct ioc3_serialregs {
+>>> -       uint32_t        sscr;
+>>> -       uint32_t        stpir;
+>>> -       uint32_t        stcir;
+>>> -       uint32_t        srpir;
+>>> -       uint32_t        srcir;
+>>> -       uint32_t        srtr;
+>>> -       uint32_t        shadow;
+>>> +       u32     sscr;
+>>> +       u32     stpir;
+>>> +       u32     stcir;
+>>> +       u32     srpir;
+>>> +       u32     srcir;
+>>> +       u32     srtr;
+>>> +       u32     shadow;
+>>>  };
+>>
+>> Isn't it a churn? AFAIU kernel documentation the uint32_t is okay to
+>> use, just be consistent inside one module / driver.
+>> Am I mistaken?
 > 
-> It's just a bunch of registers and bit definitions so it may as well
-> stay close to include/linux/mfd/mt6397/registers.h
+> No, but really it uint* shouldn't be used anywhere in the kernel source
+> as it does not make sense.
 
-Sure.  It was a weak preference.
+If you respin your series, please send this cleanup as a separate patch.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks,
+
+Phil.
