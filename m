@@ -2,275 +2,294 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0FA8BD43
-	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 17:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C719A8BE15
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Aug 2019 18:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729185AbfHMPgY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 13 Aug 2019 11:36:24 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:56160 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfHMPgY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Aug 2019 11:36:24 -0400
-Received: by mail-wm1-f66.google.com with SMTP id f72so1927848wmf.5;
-        Tue, 13 Aug 2019 08:36:22 -0700 (PDT)
+        id S1728137AbfHMQTM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Aug 2019 12:19:12 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38573 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727234AbfHMQTL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Aug 2019 12:19:11 -0400
+Received: by mail-pl1-f194.google.com with SMTP id m12so10859377plt.5;
+        Tue, 13 Aug 2019 09:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UYV2yjdUYLPyUUdL20ioXIarD+5iPfqzSdJEEsg/kSI=;
-        b=dXrTFfGDEkVvxDLwnacKoRgFeO7iuOEGHSexsSLhzL87S62xvMVIlNgFdj2jLCtmoz
-         8rNlN3wBepZQl996Dzee9AFSQ6wjcPcbk4onMVOzZ7HMKy86tgmEoukdQKpYi4Tlgngz
-         L81K8p9gDV4Fzk6MtFPMqR2kJBNpJDBVJIXdUBZvbzFs1ib0pPF9szX/zU5g6C0cyabs
-         DmmL3JBqhQuFkUtA8V+xatuOX9w17RryioUertgo+ZhsHEiUc0vHrAOK9QMcd1kVw7++
-         kMXzGhBsmoUOhnNV6MCuf7SXpvZaHTiZQFmc5oA9UGh2Um6OQ3HrpwSnK5u/KIHWLsuu
-         qSKg==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=my0o1s01dLmu/79yESct77Di2k1yz+iXRggCTeXp54c=;
+        b=M9XZ3+L7P0SijEx54Dkne9oM0J0RGF5KNNQCXdpsELjhCDGCyBBrgONrE/fuB9UL5t
+         4sjv6MVNX4gD9l5h3oTEI5Ugg9Obj3UJIRCdcNOppW8s+ic5iSYg3EjV1LY0ZadkQqaW
+         v8D+dupXTPCVLTaTlcqaTkzUQd5TU+k49IrvC1tBMw2HsVh3t+wAM2GfrjGG4D6FQjpk
+         U4UWHAzewUxIrWXoPC0x8aUgOZTIOI3pUZu5M5ou/Rd/rjZ0fw3IIsDKp2F8Vheg7DpD
+         xn0NSCKavHvrbsvYtKAtHRbQ+81L0StWbfB4xXrhMyJCZ7t1Oo9dFu39CM7NPmEH5xKL
+         TVWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UYV2yjdUYLPyUUdL20ioXIarD+5iPfqzSdJEEsg/kSI=;
-        b=MPcAIVJ6JlwHBlY2xOxA6ZhlFC2xnlz/i76SOMiQUr5oN1F8aFlVZ41GHZfOFydCK0
-         EiqRjKsmx6wLVjYVxHIKL33U/+tqj2K8f6jOux0KIU5cNw3cgKkkklitiUq9uOjt+mRy
-         lGKwMsYR19ra/pal+Q8qf1m55j04GQrFyoxEHLKMmHKmrgB6vBGZutdcvV5pfEr1KkR2
-         g1icREcZRjoWesxUvEyZgkNyiLr+xPWFSCNdQAx3jh9XjOAzRQ87vbovdYY6yQvS6+Q0
-         MPiFXXAn0cDuC+rP80KwnJlFq081xEUe0fp9117NmANwZYdEypdqSVYLelU9FaMwYnM9
-         6JpQ==
-X-Gm-Message-State: APjAAAXbJGXu8xOFMDrAQzhbbFOyMiA/YLQQ1CfgOH7s6Gmn9gxu7bwX
-        LyZjr8E5b5fzqP5Kh+cVEdDi8xY/uPHI0g==
-X-Google-Smtp-Source: APXvYqye+cN7G8L2AW3E185LkxkEutFsU3SLaFLHeuJ+QDWUmNVkzrfTmzbWE+qRdEReZNFW+Q2EzQ==
-X-Received: by 2002:a05:600c:2486:: with SMTP id 6mr4023714wms.80.1565710581232;
-        Tue, 13 Aug 2019 08:36:21 -0700 (PDT)
-Received: from localhost.localdomain (3e6b1cc1.rev.stofanet.dk. [62.107.28.193])
-        by smtp.googlemail.com with ESMTPSA id j16sm64744819wrp.62.2019.08.13.08.36.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2019 08:36:20 -0700 (PDT)
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-To:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        u.kleine-koenig@pengutronix.de, sean.nyekjaer@prevas.dk,
-        bth@kamstrup.com, bruno.thomsen@gmail.com
-Subject: [PATCH v2 5/5] rtc: pcf2127: add tamper detection support
-Date:   Tue, 13 Aug 2019 17:36:00 +0200
-Message-Id: <20190813153600.12406-6-bruno.thomsen@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190813153600.12406-1-bruno.thomsen@gmail.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=my0o1s01dLmu/79yESct77Di2k1yz+iXRggCTeXp54c=;
+        b=hT+3cvGqj7BxBor6acrjdjMTonR2/61tnjRmr4vof7SyJ53gQ43CBbJvlTkPnuSuul
+         SiovFUz9z2BFbCIsUmON7L/+facHT7ujpRrMDQcpp89xrVpd5wIltuGlgUcy7U6FsVrF
+         SyDN5FTJIpBb+s9nTH1ONNrSaRNobQB+CSiJw78DXQMyB7d+Ns96IszFN4bfjktUYaYY
+         zmTFrimv8woK0J8ld8UIAM76HX/uiO++rs0EL/gX5L2yEMAMWCU4VWpvj13GaHudPArL
+         i/a1eP5Sw/8M7I+fwO7hadgIPk41OpnlGeif8+5YPgNJ0a+GgdZx7CCuLimAuIyx9wGJ
+         3KDg==
+X-Gm-Message-State: APjAAAVJ7sQIXcqn/AFmM6cfXIIwIXKOdF24Vs7FGbwtfnjqA/Dp9QHu
+        s0dw5d2soo2SwQvIKRO9MO4=
+X-Google-Smtp-Source: APXvYqx2H1+VXuqT8Pr3tsEPTB7NkdAgry5/oDSIG83wJysK3GQnET2UYi64X4TtQoaHLq7bPiwOng==
+X-Received: by 2002:a17:902:740a:: with SMTP id g10mr39074440pll.82.1565713150772;
+        Tue, 13 Aug 2019 09:19:10 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v184sm102183015pgd.34.2019.08.13.09.19.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 09:19:09 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 09:19:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        wim@linux-watchdog.org, u.kleine-koenig@pengutronix.de,
+        sean.nyekjaer@prevas.dk, bth@kamstrup.com
+Subject: Re: [PATCH v2 4/5] rtc: pcf2127: add watchdog feature support
+Message-ID: <20190813161908.GA7857@roeck-us.net>
 References: <20190813153600.12406-1-bruno.thomsen@gmail.com>
+ <20190813153600.12406-5-bruno.thomsen@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190813153600.12406-5-bruno.thomsen@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add support for integrated tamper detection function in both PCF2127 and
-PCF2129 chips. This patch implements the feature by adding an additional
-timestamp0 file to sysfs device path. This file contains seconds since
-epoch, if an event occurred, or is empty, if none occurred.
-Interface should match ISL1208 and RV3028 RTC drivers.
+On Tue, Aug 13, 2019 at 05:35:59PM +0200, Bruno Thomsen wrote:
+> Add partial support for the watchdog functionality of
+> both PCF2127 and PCF2129 chips.
+> 
+> The programmable watchdog timer is currently using a fixed
+> clock source of 1Hz. This result in a selectable range of
+> 1-255 seconds, which covers most embedded Linux use-cases.
+> 
+> Clock sources of 4096Hz, 64Hz and 1/60Hz is mostly useful
+> in MCU use-cases.
+> 
+> Countdown timer not available when using watchdog feature.
+> 
+> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+> ---
+>  drivers/rtc/Kconfig       |   7 ++-
+>  drivers/rtc/rtc-pcf2127.c | 127 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 133 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index e72f65b61176..a3bb58a08879 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -876,7 +876,12 @@ config RTC_DRV_PCF2127
+>  	depends on RTC_I2C_AND_SPI
+>  	help
+>  	  If you say yes here you get support for the NXP PCF2127/29 RTC
+> -	  chips.
+> +	  chips with integrated quartz crystal for industrial applications.
+> +	  Both chips also have watchdog timer and tamper switch detection
+> +	  features.
+> +
+> +	  PCF2127 has an additional feature of 512 bytes battery backed
+> +	  memory that's accessible using nvmem interface.
+>  
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called rtc-pcf2127.
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index ee4921e4a47c..700db7dd3eef 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -5,6 +5,9 @@
+>   *
+>   * Author: Renaud Cerrato <r.cerrato@til-technologies.fr>
+>   *
+> + * Watchdog and tamper functions
+> + * Author: Bruno Thomsen <bruno.thomsen@gmail.com>
+> + *
+>   * based on the other drivers in this same directory.
+>   *
+>   * Datasheet: http://cache.nxp.com/documents/data_sheet/PCF2127.pdf
+> @@ -18,6 +21,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/regmap.h>
+> +#include <linux/watchdog.h>
+>  
+>  /* Control register 1 */
+>  #define PCF2127_REG_CTRL1		0x00
+> @@ -35,6 +39,13 @@
+>  #define PCF2127_REG_DW			0x07
+>  #define PCF2127_REG_MO			0x08
+>  #define PCF2127_REG_YR			0x09
+> +/* Watchdog registers */
+> +#define PCF2127_REG_WD_CTL		0x10
+> +#define PCF2127_BIT_WD_CTL_TF0			BIT(0)
+> +#define PCF2127_BIT_WD_CTL_TF1			BIT(1)
+> +#define PCF2127_BIT_WD_CTL_CD0			BIT(6)
+> +#define PCF2127_BIT_WD_CTL_CD1			BIT(7)
+> +#define PCF2127_REG_WD_VAL		0x11
+>  /*
+>   * RAM registers
+>   * PCF2127 has 512 bytes general-purpose static RAM (SRAM) that is
+> @@ -45,9 +56,15 @@
+>  #define PCF2127_REG_RAM_WRT_CMD		0x1C
+>  #define PCF2127_REG_RAM_RD_CMD		0x1D
+>  
+> +/* Watchdog timer value constants */
+> +#define PCF2127_WD_VAL_STOP		0
+> +#define PCF2127_WD_VAL_MIN		2
+> +#define PCF2127_WD_VAL_MAX		255
+> +#define PCF2127_WD_VAL_DEFAULT		60
+>  
+>  struct pcf2127 {
+>  	struct rtc_device *rtc;
+> +	struct watchdog_device wdd;
+>  	struct regmap *regmap;
+>  };
+>  
+> @@ -220,6 +237,81 @@ static int pcf2127_nvmem_write(void *priv, unsigned int offset,
+>  	return ret ?: bytes;
+>  }
+>  
+> +/* watchdog driver */
+> +
+> +static int pcf2127_wdt_ping(struct watchdog_device *wdd)
+> +{
+> +	struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
+> +
+> +	return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL, wdd->timeout);
+> +}
+> +
+> +/*
+> + * Restart watchdog timer if feature is active.
+> + *
+> + * Note: Reading CTRL2 register causes watchdog to stop which is unfortunate,
+> + * since register also contain control/status flags for other features.
+> + * Always call this function after reading CTRL2 register.
+> + */
+> +static int pcf2127_wdt_active_ping(struct watchdog_device *wdd)
+> +{
+> +	int ret = 0;
+> +
+> +	if (watchdog_active(wdd)) {
+> +		ret = pcf2127_wdt_ping(wdd);
+> +		if (ret)
+> +			dev_err(wdd->parent,
+> +				"%s: watchdog restart failed, ret=%d\n",
+> +				__func__, ret);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int pcf2127_wdt_start(struct watchdog_device *wdd)
+> +{
+> +	dev_info(wdd->parent, "watchdog enabled\n");
+> +
+> +	return pcf2127_wdt_ping(wdd);
+> +}
+> +
+> +static int pcf2127_wdt_stop(struct watchdog_device *wdd)
+> +{
+> +	struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
+> +
+> +	dev_info(wdd->parent, "watchdog disabled\n");
+> +
 
-Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
----
- drivers/rtc/rtc-pcf2127.c | 160 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 160 insertions(+)
+There is a lot of noise in this driver. Please reconsider.
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 700db7dd3eef..9a5c042cf267 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -25,11 +25,18 @@
- 
- /* Control register 1 */
- #define PCF2127_REG_CTRL1		0x00
-+#define PCF2127_BIT_CTRL1_TSF1			BIT(4)
- /* Control register 2 */
- #define PCF2127_REG_CTRL2		0x01
-+#define PCF2127_BIT_CTRL2_TSIE			BIT(2)
-+#define PCF2127_BIT_CTRL2_TSF2			BIT(5)
- /* Control register 3 */
- #define PCF2127_REG_CTRL3		0x02
-+#define PCF2127_BIT_CTRL3_BLIE			BIT(0)
-+#define PCF2127_BIT_CTRL3_BIE			BIT(1)
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
-+#define PCF2127_BIT_CTRL3_BF			BIT(3)
-+#define PCF2127_BIT_CTRL3_BTSE			BIT(4)
- /* Time and date registers */
- #define PCF2127_REG_SC			0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -46,6 +53,16 @@
- #define PCF2127_BIT_WD_CTL_CD0			BIT(6)
- #define PCF2127_BIT_WD_CTL_CD1			BIT(7)
- #define PCF2127_REG_WD_VAL		0x11
-+/* Tamper timestamp registers */
-+#define PCF2127_REG_TS_CTRL		0x12
-+#define PCF2127_BIT_TS_CTRL_TSOFF		BIT(6)
-+#define PCF2127_BIT_TS_CTRL_TSM			BIT(7)
-+#define PCF2127_REG_TS_SC		0x13
-+#define PCF2127_REG_TS_MN		0x14
-+#define PCF2127_REG_TS_HR		0x15
-+#define PCF2127_REG_TS_DM		0x16
-+#define PCF2127_REG_TS_MO		0x17
-+#define PCF2127_REG_TS_YR		0x18
- /*
-  * RAM registers
-  * PCF2127 has 512 bytes general-purpose static RAM (SRAM) that is
-@@ -312,6 +329,97 @@ static const struct watchdog_ops pcf2127_watchdog_ops = {
- 	.set_timeout = pcf2127_wdt_set_timeout,
- };
- 
-+/* sysfs interface */
-+
-+static ssize_t timestamp0_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-+				 PCF2127_BIT_CTRL1_TSF1, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: update ctrl1 ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_TSF2, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: update ctrl2 ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+};
-+
-+static ssize_t timestamp0_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
-+	struct rtc_time tm;
-+	int ret;
-+	unsigned char data[25];
-+
-+	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, data,
-+			       sizeof(data));
-+	if (ret) {
-+		dev_err(dev, "%s: read error ret=%d\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(dev,
-+		"%s: raw data is cr1=%02x, cr2=%02x, cr3=%02x, ts_sc=%02x, "
-+		"ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
-+		__func__, data[PCF2127_REG_CTRL1], data[PCF2127_REG_CTRL2],
-+		data[PCF2127_REG_CTRL3], data[PCF2127_REG_TS_SC],
-+		data[PCF2127_REG_TS_MN], data[PCF2127_REG_TS_HR],
-+		data[PCF2127_REG_TS_DM], data[PCF2127_REG_TS_MO],
-+		data[PCF2127_REG_TS_YR]);
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
-+	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
-+		return 0;
-+
-+	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
-+	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
-+	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
-+	tm.tm_mday = bcd2bin(data[PCF2127_REG_TS_DM] & 0x3F);
-+	/* TS_MO register (month) value range: 1-12 */
-+	tm.tm_mon = bcd2bin(data[PCF2127_REG_TS_MO] & 0x1F) - 1;
-+	tm.tm_year = bcd2bin(data[PCF2127_REG_TS_YR]);
-+	if (tm.tm_year < 70)
-+		tm.tm_year += 100; /* assume we are in 1970...2069 */
-+
-+	ret = rtc_valid_tm(&tm);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%llu\n",
-+		       (unsigned long long)rtc_tm_to_time64(&tm));
-+};
-+
-+static DEVICE_ATTR_RW(timestamp0);
-+
-+static struct attribute *pcf2127_attrs[] = {
-+	&dev_attr_timestamp0.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group pcf2127_attr_group = {
-+	.attrs	= pcf2127_attrs,
-+};
-+
- static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 			const char *name, bool has_nvmem)
- {
-@@ -380,6 +488,58 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return ret;
- 	}
- 
-+	/*
-+	 * Disable battery low/switch-over timestamp and interrupts.
-+	 * Clear battery interrupt flags which can block new trigger events.
-+	 * Note: This is the default chip behaviour but added to ensure
-+	 * correct tamper timestamp and interrupt function.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				 PCF2127_BIT_CTRL3_BTSE |
-+				 PCF2127_BIT_CTRL3_BF |
-+				 PCF2127_BIT_CTRL3_BIE |
-+				 PCF2127_BIT_CTRL3_BLIE, 0);
-+	if (ret) {
-+		dev_err(dev, "%s: interrupt config (ctrl3) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable timestamp function and store timestamp of first trigger
-+	 * event until TSF1 and TFS2 interrupt flags are cleared.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_TS_CTRL,
-+				 PCF2127_BIT_TS_CTRL_TSOFF |
-+				 PCF2127_BIT_TS_CTRL_TSM,
-+				 PCF2127_BIT_TS_CTRL_TSM);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper detection config (ts_ctrl) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Enable interrupt generation when TSF1 or TSF2 timestamp flags
-+	 * are set. Interrupt signal is an open-drain output and can be
-+	 * left floating if unused.
-+	 */
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_TSIE,
-+				 PCF2127_BIT_CTRL2_TSIE);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper detection config (ctrl2) failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
-+	ret = rtc_add_group(pcf2127->rtc, &pcf2127_attr_group);
-+	if (ret) {
-+		dev_err(dev, "%s: tamper sysfs registering failed\n",
-+			__func__);
-+		return ret;
-+	}
-+
- 	return rtc_register_device(pcf2127->rtc);
- }
- 
--- 
-2.21.0
+Guenter
 
+> +	return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL,
+> +			    PCF2127_WD_VAL_STOP);
+> +}
+> +
+> +static int pcf2127_wdt_set_timeout(struct watchdog_device *wdd,
+> +				   unsigned int new_timeout)
+> +{
+> +	int ret = 0;
+> +
+> +	dev_info(wdd->parent, "new watchdog timeout: %is (old: %is)\n",
+> +		new_timeout, wdd->timeout);
+> +
+> +	wdd->timeout = new_timeout;
+> +	ret = pcf2127_wdt_active_ping(wdd);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct watchdog_info pcf2127_wdt_info = {
+> +	.identity = "NXP PCF2127/PCF2129 Watchdog",
+> +	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
+> +};
+> +
+> +static const struct watchdog_ops pcf2127_watchdog_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = pcf2127_wdt_start,
+> +	.stop = pcf2127_wdt_stop,
+> +	.ping = pcf2127_wdt_ping,
+> +	.set_timeout = pcf2127_wdt_set_timeout,
+> +};
+> +
+>  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  			const char *name, bool has_nvmem)
+>  {
+> @@ -242,6 +334,16 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  
+>  	pcf2127->rtc->ops = &pcf2127_rtc_ops;
+>  
+> +	pcf2127->wdd.parent = dev;
+> +	pcf2127->wdd.info = &pcf2127_wdt_info;
+> +	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
+> +	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
+> +	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
+> +	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
+> +	pcf2127->wdd.min_hw_heartbeat_ms = 500;
+> +
+> +	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
+> +
+>  	if (has_nvmem) {
+>  		struct nvmem_config nvmem_cfg = {
+>  			.priv = pcf2127,
+> @@ -253,6 +355,31 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  		ret = rtc_nvmem_register(pcf2127->rtc, &nvmem_cfg);
+>  	}
+>  
+> +	/*
+> +	 * Watchdog timer enabled and reset pin /RST activated when timed out.
+> +	 * Select 1Hz clock source for watchdog timer.
+> +	 * Timer is not started until WD_VAL is loaded with a valid value.
+> +	 * Note: Countdown timer disabled and not available.
+> +	 */
+> +	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
+> +				 PCF2127_BIT_WD_CTL_CD1 |
+> +				 PCF2127_BIT_WD_CTL_CD0 |
+> +				 PCF2127_BIT_WD_CTL_TF1 |
+> +				 PCF2127_BIT_WD_CTL_TF0,
+> +				 PCF2127_BIT_WD_CTL_CD1 |
+> +				 PCF2127_BIT_WD_CTL_CD0 |
+> +				 PCF2127_BIT_WD_CTL_TF1);
+> +	if (ret) {
+> +		dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_watchdog_register_device(dev, &pcf2127->wdd);
+> +	if (ret) {
+> +		dev_err(dev, "%s: watchdog registering failed\n", __func__);
+> +		return ret;
+> +	}
+> +
+>  	return rtc_register_device(pcf2127->rtc);
+>  }
+>  
+> -- 
+> 2.21.0
+> 
