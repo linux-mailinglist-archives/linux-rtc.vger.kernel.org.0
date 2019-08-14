@@ -2,83 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 154D88D6EC
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Aug 2019 17:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096B48D88B
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Aug 2019 18:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbfHNPKR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Aug 2019 11:10:17 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:40731 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728303AbfHNPKQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 14 Aug 2019 11:10:16 -0400
-Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 10A11200011;
-        Wed, 14 Aug 2019 15:10:14 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH v2 9/9] rtc: pcf2123: add proper compatible string
-Date:   Wed, 14 Aug 2019 17:10:02 +0200
-Message-Id: <20190814151002.7324-9-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190814151002.7324-1-alexandre.belloni@bootlin.com>
-References: <20190814151002.7324-1-alexandre.belloni@bootlin.com>
+        id S1727273AbfHNQ6D (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 14 Aug 2019 12:58:03 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:38570 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfHNQ6C (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 14 Aug 2019 12:58:02 -0400
+Received: by mail-wm1-f66.google.com with SMTP id m125so5059890wmm.3;
+        Wed, 14 Aug 2019 09:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MTEkYKL8BVYhxHYUGvIBzu9AUXRPM4JLAqesOWugBI4=;
+        b=XW6JU+744xiPyvNGXbdLzF9iT8xBjUrwuGqjiEzePGIE10acGza/QX9wb4sifiJBAM
+         s+Vyy/HYTvljbdR154FO5gtmYoW1+UlIcJRZC9sXJuXt1rDFpF/OQwU0XchQtQblKFbc
+         IkklEWAlaDopBwgale8LaS9oJ0BfMiMIf2P5Nf2A2xJh3tCNntxuMYi6K/sZSEDYpkBY
+         BNknRECBO3vUKy9XXwwvOCy0UiOp5wehR1znL40YUof9CC48bZXbB8MA0F/O+O5wI/ll
+         bhPZL/2ucJSM9SDYCOe08SqxFuKEREop4O6V9kG+Jmm0KY45RiDm46Dt3cDJD2ouV5lm
+         UXoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MTEkYKL8BVYhxHYUGvIBzu9AUXRPM4JLAqesOWugBI4=;
+        b=IMRRaITUThNW8X0GDlfDRHchVTbSGB0Zl/OTkJCFXVKTdngbvuryXTwJfgKPiOnT93
+         pLOXSvnxdb1eViQbRKtyOd/fw9FSco5o1lIzGGdbmcfjjclP955RMWfXPs/I1LYppgVD
+         69/PxO4a//G79FrXaXo2FVNvlKJbFQuGrEm4HQFPGOvhJOBt71wSHmv23EXrvdQmjr/C
+         7eQqQI7osRyWWPRcQ6bIYLHQC+tmtRxZEugC3MfFo5P25NkmCQV8sYo1OpUnETWRPbSP
+         OugScLkieW77mKuSRTjF5LXrSpgCpMv4rTzMfj+qbbWwZ4u6mVLWLZJ6XHsA0iZwQLth
+         AkVA==
+X-Gm-Message-State: APjAAAVvkFqjpexBZzmVj+wi6Xf+Ckv/pHUkuhfakmhbhcVy24SncZVa
+        6714H2EACqXkmB7sC+Axnd1wMJeepmSuSWVvd4c=
+X-Google-Smtp-Source: APXvYqwkB83yqS+8NjQ83QcF+PEzdvw0fVo5cYYg9YRmO2gZttUCgzRF+qn91dqYvwhB3wvP6frRE/cX8xn120tcF9I=
+X-Received: by 2002:a05:600c:54c:: with SMTP id k12mr79276wmc.117.1565801879761;
+ Wed, 14 Aug 2019 09:57:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190809103235.16338-1-tbogendoerfer@suse.de> <20190809103235.16338-10-tbogendoerfer@suse.de>
+ <CAOiHx=kuQtOuNfsJ+fDrps+hbrbp5cPujmQpi8Vfy+0qeP8dtA@mail.gmail.com> <20190814163733.82f624e342d061866ba8ff87@suse.de>
+In-Reply-To: <20190814163733.82f624e342d061866ba8ff87@suse.de>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Wed, 14 Aug 2019 18:57:55 +0200
+Message-ID: <CAOiHx=mjLpLg9r=mE25T7RQFNRT8wEPkRcy2ZkfT7H=Y5RT-vw@mail.gmail.com>
+Subject: Re: [PATCH v4 9/9] Input: add IOC3 serio driver
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-nxp,rtc-pcf2123 is not a proper compatible strong for this RTC. The part
-name is only pcf2123 and is less confusing.
+On Wed, 14 Aug 2019 at 16:37, Thomas Bogendoerfer <tbogendoerfer@suse.de> wrote:
+>
+> On Wed, 14 Aug 2019 15:20:14 +0200
+> Jonas Gorski <jonas.gorski@gmail.com> wrote:
+>
+> > > +       d = devm_kzalloc(&pdev->dev, sizeof(*d), GFP_KERNEL);
+> >
+> > &pdev->dev => dev
+>
+> will change.
+>
+> >
+> > > +       if (!d)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       sk = kzalloc(sizeof(*sk), GFP_KERNEL);
+> >
+> > any reason not to devm_kzalloc this as well? Then you won't need to
+> > manually free it in the error cases.
+>
+> it has different life time than the device, so it may not allocated
+> via devm_kzalloc
+>
+> > > +static int ioc3kbd_remove(struct platform_device *pdev)
+> > > +{
+> > > +       struct ioc3kbd_data *d = platform_get_drvdata(pdev);
+> > > +
+> > > +       devm_free_irq(&pdev->dev, d->irq, d);
+> > > +       serio_unregister_port(d->kbd);
+> > > +       serio_unregister_port(d->aux);
+> > > +       return 0;
+> > > +}
+> >
+> > and on that topic, won't you need to kfree d->kbd and d->aux here?
+>
+> that's done in serio_release_port() by the serio core.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt | 4 ++--
- drivers/rtc/rtc-pcf2123.c                              | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+i see. But in that case, don't the kfree's after the
+serio_unregister_port's in the error path of the .probe function cause
+a double free?
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt b/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-index 1994f601800a..7371f525a687 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-+++ b/Documentation/devicetree/bindings/rtc/nxp,rtc-2123.txt
-@@ -1,7 +1,7 @@
- NXP PCF2123 SPI Real Time Clock
- 
- Required properties:
--- compatible: should be: "nxp,rtc-pcf2123"
-+- compatible: should be: "nxp,pcf2123"
-                       or "microcrystal,rv2123"
- - reg: should be the SPI slave chipselect address
- 
-@@ -11,7 +11,7 @@ Optional properties:
- Example:
- 
- pcf2123: rtc@3 {
--	compatible = "nxp,rtc-pcf2123"
-+	compatible = "nxp,pcf2123"
- 	reg = <3>
- 	spi-cs-high;
- };
-diff --git a/drivers/rtc/rtc-pcf2123.c b/drivers/rtc/rtc-pcf2123.c
-index bda4b1687318..c3691fa4210e 100644
---- a/drivers/rtc/rtc-pcf2123.c
-+++ b/drivers/rtc/rtc-pcf2123.c
-@@ -443,8 +443,10 @@ static int pcf2123_probe(struct spi_device *spi)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id pcf2123_dt_ids[] = {
--	{ .compatible = "nxp,rtc-pcf2123", },
-+	{ .compatible = "nxp,pcf2123", },
- 	{ .compatible = "microcrystal,rv2123", },
-+	/* Deprecated, do not use */
-+	{ .compatible = "nxp,rtc-pcf2123", },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, pcf2123_dt_ids);
--- 
-2.21.0
 
+Regards
+Jonas
