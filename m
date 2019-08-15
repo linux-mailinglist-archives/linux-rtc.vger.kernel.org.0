@@ -2,152 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D55368E384
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Aug 2019 06:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE9A8EFE6
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Aug 2019 18:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbfHOEUq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Aug 2019 00:20:46 -0400
-Received: from mail-eopbgr30047.outbound.protection.outlook.com ([40.107.3.47]:4608
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725880AbfHOEUq (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 15 Aug 2019 00:20:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hRxBIOqC1115thJLJrGYfo/3+jg1REOP5nQfgis2SCg1k0ZadZ5STEIi/nXIX41MtwbPQb8Q5EkHqm0JWyJ+GMxDvkBWMRGK5YbV+cBg5jxYUmD+qPkiLslOA9TTUDhA9ya6jIV3l3OkRrYsdVMIF2pQo1QEpClxMtzaGXCJMwC0v8IvqhlQ91NeBdycN8qbgEkp4SmAzExVOR67dVf6R9McxPco+JE29aGCHjafSzlpMs+CZiA7hYGGc6en/3jixt5ZCCP/1wtQ6d4dAfKY6ITGA7TPSET8qHklFNF26RN57XNIvkZkboQMdORFalHVrFeHNX2tTdODPGripKlKyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y7YBoZUo+Dy/sbGTrQdgxIQ8HSZ4piQBNLT8/HB5sJY=;
- b=oU8I/nF4naCNATHSpA+REdKGkDYZA2vOKCi0jO15hNc0bqFA4fau5/CNNW9Ab4kKsfdjgIHlQMIJSTi2w7TUeNP48WQJb5zcho1eQbm9agwvuqGLE9m0l/7XudkyrR1jFKeK0UeDPAcUtz8Yk8NNTCN8puRbuX52s0NBPx+rlccCf10Mn3C2BQ/z9Shh9ZzifpN0T/Kt3R6KTW8aF5QLn9D2S+G4M0K32BwwW5vtRSm65s3VubvPM+hFIHq5C9FL2Cy/Ie27rRKl+DpyRTxUAFmQ9afXXoUkJ7zICGRZ1QePEekesekpJgeYxW3RTzddYX/a9QHAVPq63K1Wzi7d/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y7YBoZUo+Dy/sbGTrQdgxIQ8HSZ4piQBNLT8/HB5sJY=;
- b=nqO3JFv1eF1bo4gaqt5X1xVQvWJWBKkL53/apmoH1qJTHzBgTL5Rb5NvduOtf0dz71EUbSqVi1MTDBFS6mBh6tyuGnoWQ+1h6xpp39c6ZtziIU+SYC9dYzbPjFQM4t5n83M9fZM2GUVsQVMaL9Zlrg9PTElnGfTpLbqZT8nbLeg=
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
- DB7PR04MB4665.eurprd04.prod.outlook.com (52.135.139.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.23; Thu, 15 Aug 2019 04:20:42 +0000
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::ccc8:8:c071:8283]) by DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::ccc8:8:c071:8283%5]) with mapi id 15.20.2157.022; Thu, 15 Aug 2019
- 04:20:42 +0000
-From:   Biwen Li <biwen.li@nxp.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        Leo Li <leoyang.li@nxp.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: rtc: pcf85363/pcf85263: fix error that failed to run
- hwclock -w
-Thread-Topic: [EXT] Re: rtc: pcf85363/pcf85263: fix error that failed to run
- hwclock -w
-Thread-Index: AQHVUoSfyAMvxeFinU6CH649Ec3dZ6b6a68AgAEvbGA=
-Date:   Thu, 15 Aug 2019 04:20:42 +0000
-Message-ID: <DB7PR04MB4490882B1235995B82AA67CB8FAC0@DB7PR04MB4490.eurprd04.prod.outlook.com>
-References: <20190814093249.40065-1-biwen.li@nxp.com>
- <20190814100930.GI3600@piout.net>
-In-Reply-To: <20190814100930.GI3600@piout.net>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biwen.li@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 667dddcf-d96b-4006-8ac0-08d72137efe7
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4665;
-x-ms-traffictypediagnostic: DB7PR04MB4665:
-x-ms-exchange-purlcount: 2
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB4665193AC13C103B3B284CC28FAC0@DB7PR04MB4665.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-forefront-prvs: 01304918F3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(396003)(366004)(39860400002)(376002)(199004)(189003)(8936002)(478600001)(14444005)(74316002)(81166006)(52536014)(99286004)(4326008)(81156014)(305945005)(25786009)(14454004)(33656002)(256004)(45080400002)(966005)(5660300002)(66066001)(2906002)(11346002)(186003)(486006)(26005)(7736002)(53936002)(6116002)(6436002)(8676002)(71190400001)(6246003)(476003)(9686003)(102836004)(446003)(316002)(44832011)(55016002)(71200400001)(6306002)(6506007)(76116006)(86362001)(66476007)(64756008)(6916009)(229853002)(66446008)(66556008)(66946007)(7696005)(76176011)(54906003)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4665;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ZYBPZAieoMZNc+rRih2JbWJ5ZncKVVt1gUwj32hRphnIaiQ+PdSXzv+Wdb0WETnkfl8Iu4aLkDXQ0cJmwxBSv9Vd5CEq+KffSUKisJR6X4L1v7LnZrKjM92Wn2c74HYFuU7RaPf5ouOBBDCa4mOzYrci1vZZ2WYIs2mNJhkZ4eURjwjQrT5KqHYgazRyo7azPtGXySsr022L4AzLimxNxn9V/R3/uGjvpTfTnbBbJcqQI9h+VjS321PY6J+e83iQ07TE+k8xacAczG7txmw5JBaIjhZPYHXKz8R5hyieN+VDueIy0XtxyGpkl3XArnLHLIecf/HT5UhQLYsCMyRFy/Zv9yx6o/QGdDM6CBMB/lfhDNYWH8WokpyZDM7/fN1AvCp5oqvSWIbGdWMbdWyOaUaVWja0jER8cY7DyAX7f5w=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1729585AbfHOQAX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Aug 2019 12:00:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729539AbfHOQAX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 15 Aug 2019 12:00:23 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 74E6A206C1;
+        Thu, 15 Aug 2019 16:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565884822;
+        bh=pln53YyoxIrrm78qGdr+loO6ia2BSdIYlVyYfDz+Ck8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Txfhv8QBYpK2livl6OXHUknugGqueIyUg/oPjQY0GQ9j/n+qYFhX6mcfNvBqdAJdu
+         AzIKZaGLoIj8jaAg+h2Eld8FGlTFia13cJwukraa1G+bcbS7q3Nqug+7o8mJNuUSpe
+         qFehkLroFRc6XDy/sw27axiMadXjVsw6HRPXs9fA=
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, bot@kernelci.org,
+        tomeu.vizoso@collabora.com, guillaume.tucker@collabora.com,
+        mgalka@collabora.com, broonie@kernel.org, matthew.hart@linaro.org,
+        khilman@baylibre.com, enric.balletbo@collabora.com,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, Jun Nie <jun.nie@linaro.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sugaya Taichi <sugaya.taichi@socionext.com>,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH 0/4] Followup to "Make clk_hw::init NULL after clk registration"
+Date:   Thu, 15 Aug 2019 09:00:16 -0700
+Message-Id: <20190815160020.183334-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 667dddcf-d96b-4006-8ac0-08d72137efe7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2019 04:20:42.7071
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vRSbzjzeCLg5ekTZawI5CdmQ6CeHAhzgX36M8C85mbbDIs4dk2xVQKpJAxtV6j5+iSplIgFppba3qAuJL3C6tg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4665
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-> Caution: EXT Email
->=20
-> Hi,
->=20
-> On 14/08/2019 17:32:49+0800, Biwen Li wrote:
-> > Issue:
-> >     # hwclock -w
-> >     hwclock: RTC_SET_TIME: Invalid argument
-> >
-> > The patch fixes error when run command hwclock -w with rtc
-> > pcf85363/pcf85263
-> >
->=20
-> Could you describe a bit more the issue and what causes it?
-1. Relative patch: https://lkml.org/lkml/2019/4/3/55 , this patch will alwa=
-ys check for unwritable registers, it will compare reg with max_register in=
- regmap_writeable.
+I found some more cases where the init structure is referenced from
+within the clk_hw struct after clk_registration is called. I suspect the
+rtc driver fix is useful to avoid crashes on Allwinner devices, reported
+by kernel-ci.
 
-2. In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS is 0,=
- max_regiter is 0x2f, then reg will be equal to 0x30, '0x30 < 0x2f' is fals=
-e,so regmap_writeable will return false.
->=20
-> IIRC I wrote that code and it works on my pcf85363.
->=20
-> > Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> > ---
-> >  drivers/rtc/rtc-pcf85363.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-> > index a075e77617dc..3450d615974d 100644
-> > --- a/drivers/rtc/rtc-pcf85363.c
-> > +++ b/drivers/rtc/rtc-pcf85363.c
-> > @@ -166,7 +166,12 @@ static int pcf85363_rtc_set_time(struct device *de=
-v,
-> struct rtc_time *tm)
-> >       buf[DT_YEARS] =3D bin2bcd(tm->tm_year % 100);
-> >
-> >       ret =3D regmap_bulk_write(pcf85363->regmap, CTRL_STOP_EN,
-> > -                             tmp, sizeof(tmp));
-> > +                             tmp, 2);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     ret =3D regmap_bulk_write(pcf85363->regmap, DT_100THS,
-> > +                             buf, sizeof(tmp) - 2);
-> >       if (ret)
-> >               return ret;
-> >
-> > --
-> > 2.17.1
-> >
->=20
-> --
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbootl=
-in.
-> com&amp;data=3D02%7C01%7Cbiwen.li%40nxp.com%7C8ef8fda7d05a48ef707
-> 308d7209f8029%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63
-> 7013741730886353&amp;sdata=3DePC651YZUzvL5ocjXAZqKT0tIZpJM01LgRNSa
-> 7i7wLE%3D&amp;reserved=3D0
+Cc: <bot@kernelci.org>                                                                                                                                      
+Cc: <tomeu.vizoso@collabora.com>
+Cc: <guillaume.tucker@collabora.com>
+Cc: <mgalka@collabora.com>
+Cc: <broonie@kernel.org>
+Cc: <matthew.hart@linaro.org>
+Cc: <khilman@baylibre.com>
+Cc: <enric.balletbo@collabora.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>      
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: Jun Nie <jun.nie@linaro.org>
+Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sugaya Taichi <sugaya.taichi@socionext.com>
+Cc: Taniya Das <tdas@codeaurora.org>
+
+Stephen Boyd (4):
+  clk: milbeaut:  Don't reference clk_init_data after registration
+  clk: zx296718: Don't reference clk_init_data after registration
+  rtc: sun6i: Don't reference clk_init_data after registration
+  clk: qcom: Remove error prints from DFS registration
+
+ drivers/clk/clk-milbeaut.c     |   2 +-
+ drivers/clk/qcom/clk-rcg2.c    |   8 +--
+ drivers/clk/zte/clk-zx296718.c | 109 +++++++++++++++------------------
+ drivers/rtc/rtc-sun6i.c        |   2 +-
+ 4 files changed, 52 insertions(+), 69 deletions(-)
+
+-- 
+Sent by a computer through tubes
+
