@@ -2,104 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E224C8F2DA
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Aug 2019 20:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15748F6BC
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Aug 2019 23:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731221AbfHOSKN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Aug 2019 14:10:13 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44804 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729366AbfHOSKM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Aug 2019 14:10:12 -0400
-Received: by mail-pg1-f196.google.com with SMTP id i18so1616416pgl.11;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=refM5sSMD7XaWN2cBYtXuBqQL++UFaQwWAlfDTzJPByqFlruWjmG6Yh089jW7TdpbD
-         NrxNm0s2FZstcIYgXU/1OVsLWK+FGl/oYQP7+rTaMZkVBgGR23anbQo8oXgra9wTo9FE
-         j2SPBqMOEPNcKZuxqfPe/Pg1VNQm0EO34QutZQTrQlKL2cYjCOVrLe8Oxo+zJZteOQlu
-         B8hMLNBQEAo1UHIr3ABYn9iPuYxpRN+b0Z+J5xpbw/J0aCqSamjWusXlwPIWC+3YINI7
-         nT835bJJdCLvSjcjCqTDzc+ntlidStA5Dl6+CgzdON8g1MYQ6qhhFDs0HvmQv88M+BJb
-         dCaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YGZciRmFKywos7phtHka3BMLOjJ5GD0teHhlJqhmVkk=;
-        b=TAK2zbsMzphSzYHz0H+jiKefk9nQKLojQnv4w2oyYEe9IVnsv354JFR9RuqHQ0oMi4
-         VQTQa57wU3hGBoM/IEoFWeBxu4mAr8acyuAqgMG/NBMEEw2c3zDpBm020QPkxixO0aVH
-         mLP5/NMFXxSsEMBzEJVX2zGlrizflC6RWasibeQJHy2UrJ+GoGd+TwZn0XC7QaSkYowt
-         hydSrYVAui5rOYlArGaUrnv+3gENtC5Etf3+v2aQWrWPmUXLZg4rFYLKnCnkka/vhW8+
-         JY/kY3kxJPN/dQ5UIcMKejxj60WjTpazOn8A/n49jEPjZy7aRzF9ysJpT+Em3lrLOlvA
-         NR6w==
-X-Gm-Message-State: APjAAAV6j9qQDjQtnH/jr9u1i4Nfj209bB1zZ38L3bQDW6zGIsDifbnJ
-        EqZeVTw88JRFV32515soid0=
-X-Google-Smtp-Source: APXvYqxIDdyy6by/HwcLogs24nzI99cv+AM8Nkc5yJYlPuae0cwXsF1pvVTorAHFvjBOwQbrOwQiZw==
-X-Received: by 2002:a62:38d7:: with SMTP id f206mr6797850pfa.102.1565892612133;
-        Thu, 15 Aug 2019 11:10:12 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n98sm1927437pjc.26.2019.08.15.11.10.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 11:10:11 -0700 (PDT)
-Date:   Thu, 15 Aug 2019 11:10:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Anatolij Gustschin <agust@denx.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-um@lists.infradead.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 06/18] compat_ioctl: move WDIOC handling into wdt
- drivers
-Message-ID: <20190815181010.GA28580@roeck-us.net>
-References: <20190814204259.120942-1-arnd@arndb.de>
- <20190814205245.121691-1-arnd@arndb.de>
+        id S1733210AbfHOV7s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Aug 2019 17:59:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730803AbfHOV7r (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 15 Aug 2019 17:59:47 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C06492083B;
+        Thu, 15 Aug 2019 21:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565906386;
+        bh=mEVjBqVTehrFxgdgqD2Yu12Sff3Abl8yi0X38S7mGKs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=vrNCBIlOvUZBhh6F0hNPaJ+1mWyUYRM0n5/huK1edKLL7Mmq62L2XCswp10WUPDex
+         dc/jveN4l9Nuka7NVBJSRzRUEFjAClFhy628vVpID6N5audrCf7h0cxG0XTeoTqUT8
+         Q/iF1LI1EWCiVl/kzpooqVJ8SjZjOsgoAMnLW3zs=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190814205245.121691-1-arnd@arndb.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190815160020.183334-4-sboyd@kernel.org>
+References: <20190815160020.183334-1-sboyd@kernel.org> <20190815160020.183334-4-sboyd@kernel.org>
+Subject: Re: [PATCH 3/4] rtc: sun6i: Don't reference clk_init_data after registration
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 15 Aug 2019 14:59:45 -0700
+Message-Id: <20190815215946.C06492083B@mail.kernel.org>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 10:49:18PM +0200, Arnd Bergmann wrote:
-> All watchdog drivers implement the same set of ioctl commands, and
-> fortunately all of them are compatible between 32-bit and 64-bit
-> architectures.
-> 
-> Modern drivers always go through drivers/watchdog/wdt.c as an abstraction
-> layer, but older ones implement their own file_operations on a character
-> device for this.
-> 
-> Move the handling from fs/compat_ioctl.c into the individual drivers.
-> 
-> Note that most of the legacy drivers will never be used on 64-bit
-> hardware, because they are for an old 32-bit SoC implementation, but
-> doing them all at once is safer than trying to guess which ones do
-> or do not need the compat_ioctl handling.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Quoting Stephen Boyd (2019-08-15 09:00:19)
+> A future patch is going to change semantics of clk_register() so that
+> clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
+> referencing this member here so that we don't run into NULL pointer
+> exceptions.
+>=20
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+>=20
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Looks like this fixed the sunxi boot crashes in -next. I'll add a tag
+for kernelci credit.
 
-This patch doesn't seem to have a useful base (or at least git says so).
-It does not apply to mainline nor to my own watchdog-next branch.
-I assume you plan to apply the entire series together. Please not
-that there will be conflicts against watchdog-next when you do so.
-
-Guenter
