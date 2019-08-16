@@ -2,79 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB0D905BC
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Aug 2019 18:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30E2906AC
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Aug 2019 19:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfHPQ22 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Aug 2019 12:28:28 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:60161 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfHPQ21 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Aug 2019 12:28:27 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id BE01E60002;
-        Fri, 16 Aug 2019 16:28:25 +0000 (UTC)
-Date:   Fri, 16 Aug 2019 18:28:25 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Biwen Li <biwen.li@nxp.com>, a.zummo@towertech.it,
-        linux-rtc@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [v2] rtc: pcf85363/pcf85263: fix error that failed to run
- hwclock -w
-Message-ID: <20190816162825.GE3545@piout.net>
-References: <20190816024636.34738-1-biwen.li@nxp.com>
- <20190816080417.GB3545@piout.net>
- <CADRPPNRkqbWzGEvUJyi0Qff3oS6biO0v7BTrK1Jiz9AMnOYF=Q@mail.gmail.com>
+        id S1727423AbfHPRUn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Aug 2019 13:20:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49300 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726469AbfHPRUn (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 16 Aug 2019 13:20:43 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29DC720665;
+        Fri, 16 Aug 2019 17:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565976042;
+        bh=dNOS0LnqCohDGlt5COYLN7CpHwjC+0zqmb4wtlqBFvI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=BLxrOKz05otBjxeQwZLSn2LJ4Upqg7rB91ODQCJxkEOKtcnvWyJOCOc/VoZC6V64f
+         wd4O4KQKjBxEB2Kr7Ja75HBeEYykyiUI5XUhIdZ8ifhDUv3k6MSadP5ARD/h9/2EX0
+         B06sOQI+BmUabwbsHzP+MAPm9NovLfLDCrse01pQ=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADRPPNRkqbWzGEvUJyi0Qff3oS6biO0v7BTrK1Jiz9AMnOYF=Q@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190815160020.183334-4-sboyd@kernel.org>
+References: <20190815160020.183334-1-sboyd@kernel.org> <20190815160020.183334-4-sboyd@kernel.org>
+Subject: Re: [PATCH 3/4] rtc: sun6i: Don't reference clk_init_data after registration
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Fri, 16 Aug 2019 10:20:41 -0700
+Message-Id: <20190816172042.29DC720665@mail.kernel.org>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 16/08/2019 10:50:49-0500, Li Yang wrote:
-> On Fri, Aug 16, 2019 at 3:05 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > On 16/08/2019 10:46:36+0800, Biwen Li wrote:
-> > > Issue:
-> > >     - # hwclock -w
-> > >       hwclock: RTC_SET_TIME: Invalid argument
-> > >
-> > > Why:
-> > >     - Relative patch: https://lkml.org/lkml/2019/4/3/55 , this patch
-> > >       will always check for unwritable registers, it will compare reg
-> > >       with max_register in regmap_writeable.
-> > >
-> > >     - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS
-> > >       is 0, max_regiter is 0x2f, then reg will be equal to 0x30,
-> > >       '0x30 < 0x2f' is false,so regmap_writeable will return false.
-> > >
-> > >     - Root cause: the buf[] was written to a wrong place in the file
-> > >       drivers/rtc/rtc-pcf85363.c
-> > >
-> >
-> > This is not true, the RTC wraps the register accesses properly and this
-> 
-> This performance hack probably deserve some explanation in the code comment.  :)
-> 
-> > is probably something that should be handled by regmap_writable.
-> 
-> The address wrapping is specific to this RTC chip.  Is it also
-> commonly used by other I2C devices?  I'm not sure if regmap_writable
-> should handle the wrapping case if it is too special.
-> 
+Quoting Stephen Boyd (2019-08-15 09:00:19)
+> A future patch is going to change semantics of clk_register() so that
+> clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
+> referencing this member here so that we don't run into NULL pointer
+> exceptions.
+>=20
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-Most of the i2c RTCs do address wrapping which is sometimes the only way
-to properly set the time.
+Applied to clk-next
 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
