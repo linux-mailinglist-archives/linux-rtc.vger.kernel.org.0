@@ -2,81 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0011990429
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Aug 2019 16:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7680B90473
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Aug 2019 17:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfHPOuZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Aug 2019 10:50:25 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:51219 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727291AbfHPOuZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Aug 2019 10:50:25 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id B2E85FF80C;
-        Fri, 16 Aug 2019 14:50:22 +0000 (UTC)
-Date:   Fri, 16 Aug 2019 16:50:22 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Subject: Re: [PATCH 3/4] rtc: sun6i: Don't reference clk_init_data after
- registration
-Message-ID: <20190816145022.GD3545@piout.net>
-References: <20190815160020.183334-1-sboyd@kernel.org>
- <20190815160020.183334-4-sboyd@kernel.org>
+        id S1727430AbfHPPOQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Aug 2019 11:14:16 -0400
+Received: from elvis.franken.de ([193.175.24.41]:35094 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727388AbfHPPOP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 16 Aug 2019 11:14:15 -0400
+X-Greylist: delayed 2654 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 11:14:14 EDT
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1hydEn-0007f5-00; Fri, 16 Aug 2019 16:29:53 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 00486C25F1; Fri, 16 Aug 2019 16:09:42 +0200 (CEST)
+Date:   Fri, 16 Aug 2019 16:09:42 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v4 3/9] nvmem: core: add nvmem_device_find
+Message-ID: <20190816140942.GA15050@alpha.franken.de>
+References: <20190809103235.16338-1-tbogendoerfer@suse.de>
+ <20190809103235.16338-4-tbogendoerfer@suse.de>
+ <8d18de64-9234-fcba-aa3d-b46789eb62a5@linaro.org>
+ <20190814134616.b4dab3c0aa6ac913d78edb6a@suse.de>
+ <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190815160020.183334-4-sboyd@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <31d680ee-ddb3-8536-c915-576222d263e1@linaro.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/08/2019 09:00:19-0700, Stephen Boyd wrote:
-> A future patch is going to change semantics of clk_register() so that
-> clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
-> referencing this member here so that we don't run into NULL pointer
-> exceptions.
+On Wed, Aug 14, 2019 at 01:52:49PM +0100, Srinivas Kandagatla wrote:
+> On 14/08/2019 12:46, Thomas Bogendoerfer wrote:
+> >On Tue, 13 Aug 2019 10:40:34 +0100
+> >Srinivas Kandagatla <srinivas.kandagatla@linaro.org> wrote:
+> >>On 09/08/2019 11:32, Thomas Bogendoerfer wrote:
+> >>>nvmem_device_find provides a way to search for nvmem devices with
+> >>>the help of a match function simlair to bus_find_device.
+> >>>
+> >>>Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> >>>---
+> >>>   drivers/nvmem/core.c           | 62 ++++++++++++++++++++++--------------------
+> >>>   include/linux/nvmem-consumer.h |  9 ++++++
+> >>>   2 files changed, 41 insertions(+), 30 deletions(-)
+> >>
+> >>Have you considered using nvmem_register_notifier() ?
+> >
+> >yes, that was the first idea. But then I realized I need to build up
+> >a private database of information already present in nvmem bus. So I
+> >looked for a way to retrieve it from there. Unfortunately I couldn't
+> >use bus_find_device directly, because nvmem_bus_type and struct nvmem_device
+> >is hidden. So I refactured the lookup code and added a more universal
+> >lookup function, which fits my needs and should be usable for more.
+> I see your point.
 > 
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> overall the patch as it is look good, but recently we added more generic
+> lookups for DT node, looks like part of your patch is un-doing generic
+> device name lookup.
+> 
+> DT node match lookup is in https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/log/?h=generic_lookup_helpers
 
-> ---
-> 
-> Please ack so I can take this through clk tree.
-> 
->  drivers/rtc/rtc-sun6i.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index c0e75c373605..d50ee023b559 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -279,7 +279,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
->  
->  	of_property_read_string_index(node, "clock-output-names", 1,
->  				      &clkout_name);
-> -	rtc->ext_losc = clk_register_gate(NULL, clkout_name, rtc->hw.init->name,
-> +	rtc->ext_losc = clk_register_gate(NULL, clkout_name, init.name,
->  					  0, rtc->base + SUN6I_LOSC_OUT_GATING,
->  					  SUN6I_LOSC_OUT_GATING_EN_OFFSET, 0,
->  					  &rtc->lock);
-> -- 
-> Sent by a computer through tubes
-> 
+these patches are not in Linus tree, yet. I guess they will show up
+in 5.4. No idea how to deal with it right now, do you ?
+
+> Other missing bit is adding this api to documentation in
+> ./Documentation/driver-api/nvmem.rst
+
+ok, will do.
+
+Thomas.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
