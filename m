@@ -2,100 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BD790845
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Aug 2019 21:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1E990D93
+	for <lists+linux-rtc@lfdr.de>; Sat, 17 Aug 2019 08:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727593AbfHPTlB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Aug 2019 15:41:01 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37753 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbfHPTlB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Aug 2019 15:41:01 -0400
-Received: by mail-ot1-f66.google.com with SMTP id f17so10680237otq.4;
-        Fri, 16 Aug 2019 12:41:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1R66yssDcHWAJTD9zChtdiGEAX5lfwcGN38LfE0HvWY=;
-        b=YxkrC8O+lTFZXw87G0yjv5g2u9x3f7kf0/d9hAKBwKd2+HZ5/fAznYMbquKcQ73+3C
-         Sf95YGEsxrtd4oMxJpoNxUbKujy0l6mPDYsGqrkeXVEx2eLzNO4y+grESbdDBvCdDq7u
-         BCJJSf1IOgC40RDenRFQASYBrfmqqIEOnllNLKu8ixehulzEJBZW1kj2y35D7sht4Qc9
-         lZamsveiNkCdTMIU3bwZUu3I82zqMemOg8Ffqbo+IpPEZ9o5+l23wnq96YpvEVBWHhJI
-         qw3OYR/G/gbSJVy5DoJiMO/GUtBJ4JbHhTgF8A4q2TK1+3yFJdElqWVmq8A8UB1+8o3p
-         yEWw==
-X-Gm-Message-State: APjAAAXfLNy+XtHqEYlGuoyk2Sad2MG/TmkDmIlbBwel9tzEm/CTKkEZ
-        ZUrkSdjZk2ZiZHwZRUSZ7m+mjdDiVPM=
-X-Google-Smtp-Source: APXvYqyc99Wp93T8UT/+7bXts4cD13JmbrdL7MiQUZX03bZmkakHsBH1WsEbcFb+Z8UJpxrwnf+G8g==
-X-Received: by 2002:a9d:5911:: with SMTP id t17mr8322460oth.159.1565984459913;
-        Fri, 16 Aug 2019 12:40:59 -0700 (PDT)
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com. [209.85.210.49])
-        by smtp.gmail.com with ESMTPSA id t81sm1666315oie.48.2019.08.16.12.40.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Aug 2019 12:40:59 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id c7so10729583otp.1;
-        Fri, 16 Aug 2019 12:40:58 -0700 (PDT)
-X-Received: by 2002:a05:6830:1bd9:: with SMTP id v25mr905159ota.205.1565984458858;
- Fri, 16 Aug 2019 12:40:58 -0700 (PDT)
+        id S1725965AbfHQG4n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 17 Aug 2019 02:56:43 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:51946 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725832AbfHQG4n (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 17 Aug 2019 02:56:43 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7H6rkhg051043;
+        Sat, 17 Aug 2019 06:56:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=4xPc7OH03Qeh9EEBQIHWiTpUV95grQ6Z7qmeUrKMVG0=;
+ b=Wwwaz8R2N5fmwk1zSVdU1rEm6WTQMW3OO/Dv+Ma2/72OrYbmQEg1XuIjg0zyI9DCUZnP
+ zFk5979UacELNqSGXDu/tnxXQ4waXla0/96CooIT+/trVoT2fcqEyAVV7OWKGmRQrC7/
+ MzpI2yqAXC1at897I/Eb0UCzXcSXwwTCOsZIHBl1IORt+YHd3kPFskGasbZIAQF98afY
+ RfYGANYDbY8ND9Ri9o4uS7fZBS5PdD4Rc9TZfzPHsr5KnIPewuMcxdWp1KJG6bo8rWrE
+ JdFcucnaoPJlGvJQ3TMV/X3fH0jCoxQkyoXB9N0DNMt85viDvdr2BshcDCQ4KD7d+6GE Pg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2ue9hp0hhx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 17 Aug 2019 06:56:20 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7H6s3Ps117026;
+        Sat, 17 Aug 2019 06:56:20 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2ue8wwd5ag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 17 Aug 2019 06:56:19 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7H6uBgs032722;
+        Sat, 17 Aug 2019 06:56:13 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 16 Aug 2019 23:56:10 -0700
+Date:   Sat, 17 Aug 2019 09:56:04 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Tom Evans <tom.evans@motec.com.au>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] rtc: rv3029: Revert my error handling patch to
+ rv3029_eeprom_write()
+Message-ID: <20190817065604.GB29951@mwanda>
 MIME-Version: 1.0
-References: <20190816024636.34738-1-biwen.li@nxp.com> <20190816080417.GB3545@piout.net>
- <CADRPPNRkqbWzGEvUJyi0Qff3oS6biO0v7BTrK1Jiz9AMnOYF=Q@mail.gmail.com> <20190816162825.GE3545@piout.net>
-In-Reply-To: <20190816162825.GE3545@piout.net>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Fri, 16 Aug 2019 14:40:47 -0500
-X-Gmail-Original-Message-ID: <CADRPPNQwcGrVXLm8eHbXKmyecMhT6Mt9rNGnspJA1+MnV4K8oQ@mail.gmail.com>
-Message-ID: <CADRPPNQwcGrVXLm8eHbXKmyecMhT6Mt9rNGnspJA1+MnV4K8oQ@mail.gmail.com>
-Subject: Re: [v2] rtc: pcf85363/pcf85263: fix error that failed to run hwclock -w
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, nandor.han@vaisala.com
-Cc:     Biwen Li <biwen.li@nxp.com>, a.zummo@towertech.it,
-        linux-rtc@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9351 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908170074
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9351 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908170074
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 11:30 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 16/08/2019 10:50:49-0500, Li Yang wrote:
-> > On Fri, Aug 16, 2019 at 3:05 AM Alexandre Belloni
-> > <alexandre.belloni@bootlin.com> wrote:
-> > >
-> > > On 16/08/2019 10:46:36+0800, Biwen Li wrote:
-> > > > Issue:
-> > > >     - # hwclock -w
-> > > >       hwclock: RTC_SET_TIME: Invalid argument
-> > > >
-> > > > Why:
-> > > >     - Relative patch: https://lkml.org/lkml/2019/4/3/55 , this patch
-> > > >       will always check for unwritable registers, it will compare reg
-> > > >       with max_register in regmap_writeable.
-> > > >
-> > > >     - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS
-> > > >       is 0, max_regiter is 0x2f, then reg will be equal to 0x30,
-> > > >       '0x30 < 0x2f' is false,so regmap_writeable will return false.
-> > > >
-> > > >     - Root cause: the buf[] was written to a wrong place in the file
-> > > >       drivers/rtc/rtc-pcf85363.c
-> > > >
-> > >
-> > > This is not true, the RTC wraps the register accesses properly and this
-> >
-> > This performance hack probably deserve some explanation in the code comment.  :)
-> >
-> > > is probably something that should be handled by regmap_writable.
-> >
-> > The address wrapping is specific to this RTC chip.  Is it also
-> > commonly used by other I2C devices?  I'm not sure if regmap_writable
-> > should handle the wrapping case if it is too special.
-> >
->
-> Most of the i2c RTCs do address wrapping which is sometimes the only way
-> to properly set the time.
+My error handling "cleanup" was totally wrong.  Both the "err" and "ret"
+variables are required.  The "err" variable holds the error codes for
+rv3029_eeprom_enter/exit() and the "ret" variable holds the error codes
+for if actual write fails.  In my patch if the write failed, the
+function probably still returned success.
 
-Adding Mark and Nandor to the loop.
+Reported-by: Tom Evans <tom.evans@motec.com.au>
+Fixes: 97f5b0379c38 ("rtc: rv3029: Clean up error handling in rv3029_eeprom_write()")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/rtc/rtc-rv3029c2.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Regards,
-Leo
+diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
+index 4a0e8ec015cc..4cdf6588e1d9 100644
+--- a/drivers/rtc/rtc-rv3029c2.c
++++ b/drivers/rtc/rtc-rv3029c2.c
+@@ -278,13 +278,13 @@ static int rv3029_eeprom_read(struct device *dev, u8 reg,
+ static int rv3029_eeprom_write(struct device *dev, u8 reg,
+ 			       u8 const buf[], size_t len)
+ {
+-	int ret;
++	int ret, err;
+ 	size_t i;
+ 	u8 tmp;
+ 
+-	ret = rv3029_eeprom_enter(dev);
+-	if (ret < 0)
+-		return ret;
++	err = rv3029_eeprom_enter(dev);
++	if (err < 0)
++		return err;
+ 
+ 	for (i = 0; i < len; i++, reg++) {
+ 		ret = rv3029_read_regs(dev, reg, &tmp, 1);
+@@ -300,11 +300,11 @@ static int rv3029_eeprom_write(struct device *dev, u8 reg,
+ 			break;
+ 	}
+ 
+-	ret = rv3029_eeprom_exit(dev);
+-	if (ret < 0)
+-		return ret;
++	err = rv3029_eeprom_exit(dev);
++	if (err < 0)
++		return err;
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int rv3029_eeprom_update_bits(struct device *dev,
+-- 
+2.20.1
+
