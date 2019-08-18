@@ -2,124 +2,127 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1E990D93
-	for <lists+linux-rtc@lfdr.de>; Sat, 17 Aug 2019 08:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D1A91702
+	for <lists+linux-rtc@lfdr.de>; Sun, 18 Aug 2019 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfHQG4n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 17 Aug 2019 02:56:43 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:51946 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725832AbfHQG4n (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 17 Aug 2019 02:56:43 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7H6rkhg051043;
-        Sat, 17 Aug 2019 06:56:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=4xPc7OH03Qeh9EEBQIHWiTpUV95grQ6Z7qmeUrKMVG0=;
- b=Wwwaz8R2N5fmwk1zSVdU1rEm6WTQMW3OO/Dv+Ma2/72OrYbmQEg1XuIjg0zyI9DCUZnP
- zFk5979UacELNqSGXDu/tnxXQ4waXla0/96CooIT+/trVoT2fcqEyAVV7OWKGmRQrC7/
- MzpI2yqAXC1at897I/Eb0UCzXcSXwwTCOsZIHBl1IORt+YHd3kPFskGasbZIAQF98afY
- RfYGANYDbY8ND9Ri9o4uS7fZBS5PdD4Rc9TZfzPHsr5KnIPewuMcxdWp1KJG6bo8rWrE
- JdFcucnaoPJlGvJQ3TMV/X3fH0jCoxQkyoXB9N0DNMt85viDvdr2BshcDCQ4KD7d+6GE Pg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2ue9hp0hhx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 17 Aug 2019 06:56:20 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7H6s3Ps117026;
-        Sat, 17 Aug 2019 06:56:20 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2ue8wwd5ag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 17 Aug 2019 06:56:19 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7H6uBgs032722;
-        Sat, 17 Aug 2019 06:56:13 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 16 Aug 2019 23:56:10 -0700
-Date:   Sat, 17 Aug 2019 09:56:04 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Tom Evans <tom.evans@motec.com.au>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] rtc: rv3029: Revert my error handling patch to
- rv3029_eeprom_write()
-Message-ID: <20190817065604.GB29951@mwanda>
+        id S1726823AbfHROES (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 18 Aug 2019 10:04:18 -0400
+Received: from mxwww.masterlogin.de ([95.129.51.220]:42936 "EHLO
+        mxwww.masterlogin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbfHROER (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 18 Aug 2019 10:04:17 -0400
+X-Greylist: delayed 472 seconds by postgrey-1.27 at vger.kernel.org; Sun, 18 Aug 2019 10:04:15 EDT
+Received: from mxout1.routing.net (unknown [192.168.10.81])
+        by new.mxwww.masterlogin.de (Postfix) with ESMTPS id 09B50965DB;
+        Sun, 18 Aug 2019 13:56:21 +0000 (UTC)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.253])
+        by mxout1.routing.net (Postfix) with ESMTP id 50D3843D5A;
+        Sun, 18 Aug 2019 13:56:21 +0000 (UTC)
+Received: from localhost.localdomain (fttx-pool-185.53.43.183.bambit.de [185.53.43.183])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 5A90D36043A;
+        Sun, 18 Aug 2019 15:56:20 +0200 (CEST)
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org,
+        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
+        <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Tianping Fang" <tianping.fang@mediatek.com>
+Subject: [PATCH v6 00/13] implement poweroff for mt6323 / bpi-r2
+Date:   Sun, 18 Aug 2019 15:55:58 +0200
+Message-Id: <20190818135611.7776-1-frank-w@public-files.de>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9351 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908170074
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9351 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908170074
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-My error handling "cleanup" was totally wrong.  Both the "err" and "ret"
-variables are required.  The "err" variable holds the error codes for
-rv3029_eeprom_enter/exit() and the "ret" variable holds the error codes
-for if actual write fails.  In my patch if the write failed, the
-function probably still returned success.
+mainline-driver does not support mt6323
 
-Reported-by: Tom Evans <tom.evans@motec.com.au>
-Fixes: 97f5b0379c38 ("rtc: rv3029: Clean up error handling in rv3029_eeprom_write()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/rtc/rtc-rv3029c2.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+this series makes some cleanup to mt6397-rtc-driver, adds mt6323 and
+implement power-controller on it.
 
-diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index 4a0e8ec015cc..4cdf6588e1d9 100644
---- a/drivers/rtc/rtc-rv3029c2.c
-+++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -278,13 +278,13 @@ static int rv3029_eeprom_read(struct device *dev, u8 reg,
- static int rv3029_eeprom_write(struct device *dev, u8 reg,
- 			       u8 const buf[], size_t len)
- {
--	int ret;
-+	int ret, err;
- 	size_t i;
- 	u8 tmp;
- 
--	ret = rv3029_eeprom_enter(dev);
--	if (ret < 0)
--		return ret;
-+	err = rv3029_eeprom_enter(dev);
-+	if (err < 0)
-+		return err;
- 
- 	for (i = 0; i < len; i++, reg++) {
- 		ret = rv3029_read_regs(dev, reg, &tmp, 1);
-@@ -300,11 +300,11 @@ static int rv3029_eeprom_write(struct device *dev, u8 reg,
- 			break;
- 	}
- 
--	ret = rv3029_eeprom_exit(dev);
--	if (ret < 0)
--		return ret;
-+	err = rv3029_eeprom_exit(dev);
-+	if (err < 0)
-+		return err;
- 
--	return 0;
-+	return ret;
- }
- 
- static int rv3029_eeprom_update_bits(struct device *dev,
+tested on bananapi-r2
+
+Original Patch from Josef Friedl
+
+changes since v5:
+	- splitted part 1 to separate changes and additions not related to pwrc
+	- move mfd/mt6397/core.h from v4.8 in separate patch "add mutex include"
+	- changed recipients (moved from To to Cc, removed committers)
+changes since v4:
+	- relative path in part 1+2
+	- drop change of copyright-year in part 5
+changes since v3:
+	- moved SOB in 2/10 and 9/10
+	- moved part 5 to 6 to be near driver-change
+	- changehistory of patches below ---
+
+changes since v2:
+	- Splitted some parts and rebased on 5.3-rc2:
+
+	v2.1 dt-bindings: add powercontroller – try to make better subject
+	v2.2 separate rtc-mt6397.txt (suggested by Alexandre Belloni)
+	     add missing commit-message (suggested by Matthias Brugger)
+	v2.3 fix alloc after IRQ (suggested by Alexandre Belloni)
+	     new compatible (splitting suggested by Alexandre Belloni)
+	     needed due to different rtc-base/size see #7
+	v2.4 simplifications (Define-res-macros)
+	     add mt6323 rtc+pwrc
+	v2.5 add poweroff-driver (no change)
+	v2.6 MAINTAINERS (no change)
+	v2.7 DTS-Changes (no change)
+
+
+Frank Wunderlich (1):
+  dt-bindings: mfd: mediatek: mt6397: change to relative paths
+
+Josef Friedl (12):
+  dt-bindings: mfd: mediatek: update rtc to include mt6323
+  dt-bindings: mfd: mediatek: add mt6323 power-controller
+  dt-bindings: rtc: mediatek: add missing mt6397 rtc
+  rtc: mt6397: move some common definitions into rtc.h
+  mfd: mt6397: add mutex include
+  rtc: mt6397: improvements of rtc driver
+  mfd: mt6323: some improvements of mt6397-core
+  rtc: mt6397: add compatible for mt6323
+  mfd: mt6323: add mt6323 rtc+pwrc
+  power: reset: add driver for mt6323 poweroff
+  MAINTAINERS: add Mediatek shutdown drivers
+  arm: dts: mt6323: add keys, power-controller, rtc and codec
+
+ .../devicetree/bindings/mfd/mt6397.txt        |  20 +++-
+ .../bindings/power/reset/mt6323-poweroff.txt  |  20 ++++
+ .../devicetree/bindings/rtc/rtc-mt6397.txt    |  29 +++++
+ MAINTAINERS                                   |   7 ++
+ arch/arm/boot/dts/mt6323.dtsi                 |  27 +++++
+ drivers/mfd/mt6397-core.c                     |  38 +++++--
+ drivers/power/reset/Kconfig                   |  10 ++
+ drivers/power/reset/Makefile                  |   1 +
+ drivers/power/reset/mt6323-poweroff.c         |  97 ++++++++++++++++
+ drivers/rtc/rtc-mt6397.c                      | 107 ++++--------------
+ include/linux/mfd/mt6397/core.h               |   2 +
+ include/linux/mfd/mt6397/rtc.h                |  71 ++++++++++++
+ 12 files changed, 327 insertions(+), 102 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+ create mode 100644 drivers/power/reset/mt6323-poweroff.c
+ create mode 100644 include/linux/mfd/mt6397/rtc.h
+
 -- 
-2.20.1
+2.17.1
 
