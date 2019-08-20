@@ -2,165 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B51964D1
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Aug 2019 17:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5E79687F
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Aug 2019 20:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730034AbfHTPmw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Aug 2019 11:42:52 -0400
-Received: from sauhun.de ([88.99.104.3]:37548 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729810AbfHTPms (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:42:48 -0400
-Received: from localhost (p54B333DC.dip0.t-ipconnect.de [84.179.51.220])
-        by pokefinder.org (Postfix) with ESMTPSA id 360BA2E3540;
-        Tue, 20 Aug 2019 17:42:46 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] rtc: s35390a: convert to devm_i2c_new_dummy_device()
-Date:   Tue, 20 Aug 2019 17:42:38 +0200
-Message-Id: <20190820154239.8230-3-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190820154239.8230-1-wsa+renesas@sang-engineering.com>
-References: <20190820154239.8230-1-wsa+renesas@sang-engineering.com>
+        id S1729639AbfHTSW1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Aug 2019 14:22:27 -0400
+Received: from mail-ed1-f100.google.com ([209.85.208.100]:44857 "EHLO
+        mail-ed1-f100.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728682AbfHTSW1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Aug 2019 14:22:27 -0400
+Received: by mail-ed1-f100.google.com with SMTP id a21so7388648edt.11
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Aug 2019 11:22:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NR2PNGTBj2Ayh7JYEBW6jlJcbOTazJsR2jdieZr7OKM=;
+        b=DvS0So07lD8TCgtwZq/DwR0lK3RtqJPJ1OwHjZoTOqKB7SBT/Fs/ZtIJZFhDYzxDX8
+         wFVuScLqK7bnE34erWVopT3GJaQ0eAOCz9C0r2K1rmFfkeMZr7ThcoGwfMewz4DxbO9h
+         KuP4jJ0i0WSzqrYDl63RrDqkg/oPKqtjNJwNEp0Ar8+psFVLVlZyKEug83uAQWz7G2bA
+         9xFDDcDTBJbnbSyln6+yXJ1GtoSqccpCjDw6tk5yCh5je6UgE8RNz9xqutaBVJOT1Id3
+         4oHnx53IhqXlP+jT9Gwf5TkmUfFbJwuefGqTCoMiaVYX8LaqkaPejV7UHpEpcRWU65Yb
+         Aj4w==
+X-Gm-Message-State: APjAAAXugUDVjECxkopKztemIk4f1tqQmLAsl+rdYQY2H0fDR5yCobKP
+        fNKqA5CgaQywaxKkzs+FMX/fH6ZQ58YUW1mNi26LOkEYg4dl3o81gKtGbSs58pClLQ==
+X-Google-Smtp-Source: APXvYqx+CTiwFr1QwQk7cRBWMES9QXV0lxv8/m4Eyo9SNeMlbU7AuoA5rNcbBKrLCRF1Crb1fdQUZsoIV+E7
+X-Received: by 2002:a50:b875:: with SMTP id k50mr32683032ede.232.1566325345649;
+        Tue, 20 Aug 2019 11:22:25 -0700 (PDT)
+Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
+        by smtp-relay.gmail.com with ESMTPS id me6sm122372ejb.79.2019.08.20.11.22.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2019 11:22:25 -0700 (PDT)
+X-Relaying-Domain: sirena.org.uk
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1i08m0-0003Br-UB; Tue, 20 Aug 2019 18:22:24 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 3470D2742B4A; Tue, 20 Aug 2019 19:22:24 +0100 (BST)
+Date:   Tue, 20 Aug 2019 19:22:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        nandor.han@vaisala.com, Biwen Li <biwen.li@nxp.com>,
+        a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [v2] rtc: pcf85363/pcf85263: fix error that failed to run
+ hwclock -w
+Message-ID: <20190820182224.GI4738@sirena.co.uk>
+References: <20190816024636.34738-1-biwen.li@nxp.com>
+ <20190816080417.GB3545@piout.net>
+ <CADRPPNRkqbWzGEvUJyi0Qff3oS6biO0v7BTrK1Jiz9AMnOYF=Q@mail.gmail.com>
+ <20190816162825.GE3545@piout.net>
+ <CADRPPNQwcGrVXLm8eHbXKmyecMhT6Mt9rNGnspJA1+MnV4K8oQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6lCXDTVICvIQMz0h"
+Content-Disposition: inline
+In-Reply-To: <CADRPPNQwcGrVXLm8eHbXKmyecMhT6Mt9rNGnspJA1+MnV4K8oQ@mail.gmail.com>
+X-Cookie: It's the thought, if any, that counts!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-I was about to simplify the call to i2c_unregister_device() when I
-realized that converting to devm_i2c_new_dummy_device() will simplify
-the driver a lot. So I took this approach.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Build tested only, buildbot is happy, too.
+--6lCXDTVICvIQMz0h
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Please apply to your tree.
+On Fri, Aug 16, 2019 at 02:40:47PM -0500, Li Yang wrote:
+> On Fri, Aug 16, 2019 at 11:30 AM Alexandre Belloni
 
- drivers/rtc/rtc-s35390a.c | 54 ++++++++++-----------------------------
- 1 file changed, 13 insertions(+), 41 deletions(-)
+> > Most of the i2c RTCs do address wrapping which is sometimes the only way
+> > to properly set the time.
 
-diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 5826209a3f30..da34cfd70f95 100644
---- a/drivers/rtc/rtc-s35390a.c
-+++ b/drivers/rtc/rtc-s35390a.c
-@@ -434,37 +434,32 @@ static int s35390a_probe(struct i2c_client *client,
- 	char buf, status1;
- 	struct device *dev = &client->dev;
- 
--	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
--		err = -ENODEV;
--		goto exit;
--	}
-+	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
-+		return -ENODEV;
- 
- 	s35390a = devm_kzalloc(dev, sizeof(struct s35390a), GFP_KERNEL);
--	if (!s35390a) {
--		err = -ENOMEM;
--		goto exit;
--	}
-+	if (!s35390a)
-+		return -ENOMEM;
- 
- 	s35390a->client[0] = client;
- 	i2c_set_clientdata(client, s35390a);
- 
- 	/* This chip uses multiple addresses, use dummy devices for them */
- 	for (i = 1; i < 8; ++i) {
--		s35390a->client[i] = i2c_new_dummy_device(client->adapter,
--					client->addr + i);
-+		s35390a->client[i] = devm_i2c_new_dummy_device(dev,
-+							       client->adapter,
-+							       client->addr + i);
- 		if (IS_ERR(s35390a->client[i])) {
- 			dev_err(dev, "Address %02x unavailable\n",
- 				client->addr + i);
--			err = PTR_ERR(s35390a->client[i]);
--			goto exit_dummy;
-+			return PTR_ERR(s35390a->client[i]);
- 		}
- 	}
- 
- 	err_read = s35390a_read_status(s35390a, &status1);
- 	if (err_read < 0) {
--		err = err_read;
- 		dev_err(dev, "error resetting chip\n");
--		goto exit_dummy;
-+		return err_read;
- 	}
- 
- 	if (status1 & S35390A_FLAG_24H)
-@@ -478,13 +473,13 @@ static int s35390a_probe(struct i2c_client *client,
- 		err = s35390a_set_reg(s35390a, S35390A_CMD_STATUS2, &buf, 1);
- 		if (err < 0) {
- 			dev_err(dev, "error disabling alarm");
--			goto exit_dummy;
-+			return err;
- 		}
- 	} else {
- 		err = s35390a_disable_test_mode(s35390a);
- 		if (err < 0) {
- 			dev_err(dev, "error disabling test mode\n");
--			goto exit_dummy;
-+			return err;
- 		}
- 	}
- 
-@@ -493,10 +488,8 @@ static int s35390a_probe(struct i2c_client *client,
- 	s35390a->rtc = devm_rtc_device_register(dev, s35390a_driver.driver.name,
- 						&s35390a_rtc_ops, THIS_MODULE);
- 
--	if (IS_ERR(s35390a->rtc)) {
--		err = PTR_ERR(s35390a->rtc);
--		goto exit_dummy;
--	}
-+	if (IS_ERR(s35390a->rtc))
-+		return PTR_ERR(s35390a->rtc);
- 
- 	/* supports per-minute alarms only, therefore set uie_unsupported */
- 	s35390a->rtc->uie_unsupported = 1;
-@@ -505,26 +498,6 @@ static int s35390a_probe(struct i2c_client *client,
- 		rtc_update_irq(s35390a->rtc, 1, RTC_AF);
- 
- 	return 0;
--
--exit_dummy:
--	for (i = 1; i < 8; ++i)
--		if (s35390a->client[i])
--			i2c_unregister_device(s35390a->client[i]);
--
--exit:
--	return err;
--}
--
--static int s35390a_remove(struct i2c_client *client)
--{
--	unsigned int i;
--	struct s35390a *s35390a = i2c_get_clientdata(client);
--
--	for (i = 1; i < 8; ++i)
--		if (s35390a->client[i])
--			i2c_unregister_device(s35390a->client[i]);
--
--	return 0;
- }
- 
- static struct i2c_driver s35390a_driver = {
-@@ -533,7 +506,6 @@ static struct i2c_driver s35390a_driver = {
- 		.of_match_table = of_match_ptr(s35390a_of_match),
- 	},
- 	.probe		= s35390a_probe,
--	.remove		= s35390a_remove,
- 	.id_table	= s35390a_id,
- };
- 
--- 
-2.20.1
+> Adding Mark and Nandor to the loop.
 
+Is there a specific question or something here?
+
+--6lCXDTVICvIQMz0h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1cOl8ACgkQJNaLcl1U
+h9BjnAf+JasBDezU/5IgpHDFc80ChLOoHUNgI9IyaopUZvdSwEi/QerwIKVw//Vw
+gXezgpTsalSWbdyBhWEozA7guXOovO1uX4BRN9+81S8e6/RdZ7RUuv7/QX2fSgW6
+Wz0Jvxx4NgnVb2qXRCpqIKsbHWVRZmGDAuSP61kqfFd+ih0BrZbOjiK3nq2TQ1at
+lCu6WwCwdUEicVBKQbHNAelujZNNjaW8R0KnKa4OwwVU0KNDC/TCMVbcnpUaZ43O
+PLWvbgHWJ0wJgEFmQkOiIV362ogz+iBM6LUcXwDJAmqYRy17Ec3OOuwO167heevO
+nyXbEur1lhluFlhHZmH9GFKXOHrFiQ==
+=sZs9
+-----END PGP SIGNATURE-----
+
+--6lCXDTVICvIQMz0h--
