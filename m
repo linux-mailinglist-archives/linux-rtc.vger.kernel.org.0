@@ -2,91 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22E3E95940
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Aug 2019 10:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410C396418
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Aug 2019 17:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729308AbfHTIRh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 20 Aug 2019 04:17:37 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51140 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729150AbfHTIRh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 20 Aug 2019 04:17:37 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 6F5DEAEA1;
-        Tue, 20 Aug 2019 08:17:35 +0000 (UTC)
-Date:   Tue, 20 Aug 2019 10:17:34 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v5 15/17] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20190820101734.bffe41588e0c92094b9dba3d@suse.de>
-In-Reply-To: <20190820062308.GK3545@piout.net>
-References: <20190819163144.3478-1-tbogendoerfer@suse.de>
-        <20190819163144.3478-16-tbogendoerfer@suse.de>
-        <20190820062308.GK3545@piout.net>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1730443AbfHTPTh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Aug 2019 11:19:37 -0400
+Received: from vps.xff.cz ([195.181.215.36]:32796 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729137AbfHTPTh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 20 Aug 2019 11:19:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1566314375; bh=3n0q7CBc9P4bQG/G0hfq9MsM1NWknDFFdma8+IRC/cg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RqPDvgDPVzlnaRwp8M3IghFK1wQglwVFc5+QYKZLLecgLDG5Wil2dozlnMco/EYls
+         /tTRCmZRHy22lpoHwy9E9Fr/ySqpCuyc55Qs9fnt0P+1UVmbOrWTAtsc86mOFmndqh
+         t3CYfwOjHBGp7SjGsGvlX8D7XF7SfRw54iJgeEMc=
+From:   megous@megous.com
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Ondrej Jirman <megous@megous.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: [PATCH v2 0/3] Add basic support for RTC on Allwinner H6 SoC
+Date:   Tue, 20 Aug 2019 17:19:31 +0200
+Message-Id: <20190820151934.3860-1-megous@megous.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 20 Aug 2019 08:23:08 +0200
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> On 19/08/2019 18:31:38+0200, Thomas Bogendoerfer wrote:
-> > diff --git a/drivers/mfd/ioc3.c b/drivers/mfd/ioc3.c
-> > new file mode 100644
-> > index 000000000000..5bcb3461a189
-> > --- /dev/null
-> > +++ b/drivers/mfd/ioc3.c
-> > @@ -0,0 +1,586 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * SGI IOC3 multifunction device driver
-> > + *
-> > + * Copyright (C) 2018, 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> > + *
-> > + * Based on work by:
-> > + *   Stanislaw Skowronek <skylark@unaligned.org>
-> > + *   Joshua Kinard <kumba@gentoo.org>
-> > + *   Brent Casavant <bcasavan@sgi.com> - IOC4 master driver
-> > + *   Pat Gefre <pfg@sgi.com> - IOC3 serial port IRQ demuxer
-> > + */
-> > +
-> > +#include <linux/delay.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pci.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/platform_data/sgi-w1.h>
-> > +#include <linux/rtc/ds1685.h>
-> I don't think this include is necessary.
+From: Ondrej Jirman <megous@megous.com>
 
-you are right. I'll move it to the patch where IP30 systemboard gets added.
+I went through the datasheets for H6 and H5, and compared the differences.
+RTCs are largely similar, but not entirely compatible. Incompatibilities
+are in details not yet implemented by the rtc driver though.
 
-Thanks,
-Thomas.
+I also corrected the clock tree in H6 DTSI.
+
+This patchset is necessary for implementing the WiFi/Bluetooth support
+on boards using H6 SoC.
+
+There was some discussion previously of describing HOSC, DCXO and XO
+oscillators and clocks as part of RTC in DT, but I decided against it
+because it's not necessary, becuse information that would be provided
+as a part of DT can already be determined at runtime from RTC registers,
+so this woudn't add any value and would only introduce complications
+to the driver. See: https://patchwork.kernel.org/cover/10898083/
+
+Please take a look.
+
+
+Thank you and regards,
+  Ondrej Jirman
+
+
+Changes in v2:
+- bindings converted to yaml
+- added reviewed by tags
+
+Ondrej Jirman (3):
+  dt-bindings: Add compatible for H6 RTC
+  rtc: sun6i: Add support for H6 RTC
+  arm64: dts: sun50i-h6: Add support for RTC and fix the clock tree
+
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml | 13 ++++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 30 +++++++-------
+ drivers/rtc/rtc-sun6i.c                       | 40 ++++++++++++++++++-
+ 3 files changed, 67 insertions(+), 16 deletions(-)
 
 -- 
-SUSE Linux GmbH
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.22.1
+
