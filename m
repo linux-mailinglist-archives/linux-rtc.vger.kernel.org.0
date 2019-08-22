@@ -2,74 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6591599423
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 14:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6397C9946E
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 15:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731126AbfHVMqe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Aug 2019 08:46:34 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:43107 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729922AbfHVMqe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Aug 2019 08:46:34 -0400
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 01503100003;
-        Thu, 22 Aug 2019 12:46:28 +0000 (UTC)
-Date:   Thu, 22 Aug 2019 14:46:28 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ran Bi <ran.bi@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
-        YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Subject: Re: [PATCH v2 2/4] rtc: Add support for the MediaTek MT2712 RTC
-Message-ID: <20190822124628.GS27031@piout.net>
-References: <20190801110122.26834-1-ran.bi@mediatek.com>
- <20190801110122.26834-3-ran.bi@mediatek.com>
- <20190820201744.GZ3545@piout.net>
- <1566477254.12318.41.camel@mhfsdcap03>
+        id S1731563AbfHVNEh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Aug 2019 09:04:37 -0400
+Received: from mga09.intel.com ([134.134.136.24]:48582 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731541AbfHVNEh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 22 Aug 2019 09:04:37 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Aug 2019 06:04:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,416,1559545200"; 
+   d="scan'208";a="378509664"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2019 06:04:32 -0700
+Received: from andy by smile with local (Exim 4.92.1)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1i0mlR-0001dM-TB; Thu, 22 Aug 2019 16:04:29 +0300
+Date:   Thu, 22 Aug 2019 16:04:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        tony.luck@intel.com, x86@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, alan@linux.intel.com,
+        linux-kernel@vger.kernel.org, qi-ming.wu@intel.com,
+        cheol.yong.kim@intel.com, rahul.tanwar@intel.com
+Subject: Re: [PATCH v1 1/2] x86/rtc: Add option to skip using RTC
+Message-ID: <20190822130429.GN30120@smile.fi.intel.com>
+References: <cover.1566458029.git.rahul.tanwar@linux.intel.com>
+ <becacc523508b295a52db9f1592e2868e3988e28.1566458029.git.rahul.tanwar@linux.intel.com>
+ <20190822090208.GJ30120@smile.fi.intel.com>
+ <25f6947d-7ba0-c23c-25aa-c4c4173da6b0@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566477254.12318.41.camel@mhfsdcap03>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <25f6947d-7ba0-c23c-25aa-c4c4173da6b0@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 22/08/2019 20:34:14+0800, Ran Bi wrote:
-> > > +	/* RTC need POWERKEY1/2 match, then goto normal work mode */
-> > > +	mt2712_writel(rtc, MT2712_POWERKEY1, MT2712_POWERKEY1_KEY);
-> > > +	mt2712_writel(rtc, MT2712_POWERKEY2, MT2712_POWERKEY2_KEY);
-> > 
-> > This should be written when setting the time after power was lost.
-> > 
+On Thu, Aug 22, 2019 at 05:26:33PM +0800, Tanwar, Rahul wrote:
+> On 22/8/2019 5:02 PM, Andy Shevchenko wrote:
+> > On Thu, Aug 22, 2019 at 03:44:03PM +0800, Rahul Tanwar wrote:
+> > > Use a newly introduced optional "status" property of "motorola,mc146818"
+> > > compatible DT node to determine if RTC is supported. Skip read/write from
+> > > RTC device only when this node is present and status is "disabled". In all
+> > > other cases, proceed as before.
+> > Can't we rather update ->get_wallclock() and ->set_wallclock() based on this?
 > 
-> I suppose we can move this into mt2712_rtc_read_time function's "if
-> (p1 != MT2712_POWERKEY1_KEY || p2 != MT2712_POWERKEY2_KEY)" condition
-> which will be added at next patch. We need additional flag to mark this
-> condition or another if condition in mt2712_rtc_set_time fucntion if we
-> put these code in mt2712_rtc_set_time function.
 > 
+> get_wallclock() and set_wallclock() are function pointers of platform_ops
+> 
+> which are initialized to mach_get_cmos_time() and mach_set_rtc_mmss()
+> 
+> at init time. Since adding a new platform to override these functions is
+> 
+> discouraged, so the only way is to modify RTC get/set functions.
 
-It is fine to test both in read_time and in set_time.
+Shouldn't it be platform agnostic code?
+So, my point is, instead of hacking two functions, perhaps better to avoid them
+at all.
+
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+With Best Regards,
+Andy Shevchenko
+
+
