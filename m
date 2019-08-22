@@ -2,92 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D057699291
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 13:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D9A993D3
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 14:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732003AbfHVLuU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Aug 2019 07:50:20 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:58326 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731963AbfHVLuU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Aug 2019 07:50:20 -0400
-X-UUID: 71a13bff9db64a2fa70989b6ffec4cbb-20190822
-X-UUID: 71a13bff9db64a2fa70989b6ffec4cbb-20190822
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1308780366; Thu, 22 Aug 2019 19:50:14 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs07n2.mediatek.inc
- (172.21.101.141) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 22 Aug
- 2019 19:50:08 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 22 Aug 2019 19:50:06 +0800
-Message-ID: <1566474611.12318.9.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 2/4] rtc: Add support for the MediaTek MT2712 RTC
-From:   Ran Bi <ran.bi@mediatek.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        "Flora Fu" <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Date:   Thu, 22 Aug 2019 19:50:11 +0800
-In-Reply-To: <20190822092008.GR27031@piout.net>
-References: <20190801110122.26834-1-ran.bi@mediatek.com>
-         <20190801110122.26834-3-ran.bi@mediatek.com>
-         <c4e8b041-4a35-578e-07a3-2ebc99848ee2@gmail.com>
-         <20190822092008.GR27031@piout.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2388659AbfHVMeM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Aug 2019 08:34:12 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:38664 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387767AbfHVMeM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Aug 2019 08:34:12 -0400
+Received: by mail-lf1-f66.google.com with SMTP id h28so4409228lfj.5
+        for <linux-rtc@vger.kernel.org>; Thu, 22 Aug 2019 05:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=qQwouDogyXJvS+YAsG7u3jI4chdOO2iCwbnUv4qV7/t3H0mpAnkar5BQ6W4yzvm3w4
+         MFy7lbM3I35ux+N13OWQLqMSp+JYBfamJOBS4Rv9YtwGFbdx/1nZ3P/IH2tA3AOy5PjU
+         kwMZko6qlgHP0UHJGHFvzgceOWtw4tjNefrQZ96MP6AChhfKt94B36gjTZhv6W5d2u3q
+         XLX/JEQ53zQai3qewoG2X6xDeNJ4HOzQU6TV4Cb4zGt4uQQf5AD05mnaufLgjsYbqLh0
+         X5GVMmJW05ufNL+28p6nLz0lCjVsZITmyIS1mIvW9/VAX3eTcLMat0TkK0bawj8l1wal
+         unaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=d18PbzEs5z7BxeS8nnUFScF1BvftNuweqlFAABEviFbDSOKM3dmVoil7oIpSk71xI3
+         Id3rB+hVpGigaqGTycKnL5wIfq9eFAW+mwWasoQSHXHZWgUwH90w/u6Mw2lsw9lydPq6
+         LaNcVc598QbT4mRdR5/3pooW81Z5tyBYC6HmLJFTSXH9odZIJ1FXEtVXITvN0ifRf+QK
+         2NqcvhrWc4FesCW3SakwT4M+T0YW3/YyEVkzQSNfpooeQben1m6i6MMAVeI89hBaw9Ps
+         x4B0qOVY+PXN+kfBrDEpqNG/MXjCT3jSj1gIshDqY+ZrYbtoJfymial5o+2XFhqThDBi
+         slhA==
+X-Gm-Message-State: APjAAAXXlubZ3ALUV9KnBBegZPv93sjjRZt4nFCs2yYn3Ty2FYef76UV
+        g49NoTxPrDYqFgMqITkuG1bqyY1LwlsAUc9tVZc=
+X-Google-Smtp-Source: APXvYqyvt2RXzV9cZsTsiBwjcFFEoyd1HLlAwIQQPxXOemblWJ85A0QXgz94gt7tcllsT417ikCMvXpOU1ZxhrqMZqI=
+X-Received: by 2002:ac2:42c3:: with SMTP id n3mr13722899lfl.117.1566477250738;
+ Thu, 22 Aug 2019 05:34:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:34:10
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:34:10 +0000
+Message-ID: <CAN-_bTZ04fanuBw0m=mWQFHTKscwdYgns3LR19ZdaFDanOVNGQ@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 2019-08-22 at 11:20 +0200, Alexandre Belloni wrote:
-> On 22/08/2019 11:12:29+0200, Matthias Brugger wrote:
-> > 
-> > 
-> > On 01/08/2019 13:01, Ran Bi wrote:
-> > > This add support for the MediaTek MT2712 RTC. It was SoC based RTC, but
-> > > had different architecture compared with MT7622 RTC.
-> > > 
-> > > Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> > > ---
-> > >  drivers/rtc/Kconfig      |  10 +
-> > >  drivers/rtc/Makefile     |   1 +
-> > >  drivers/rtc/rtc-mt2712.c | 444 +++++++++++++++++++++++++++++++++++++++
-> > 
-> > Can't we just adjust rtc-mt7622.c (and rename it) to unify the source for both
-> > devices. What is the difference that we need to write a driver of our own?
-> > 
-> 
-> If they are compatible, this is the way to go but the file can't be
-> renamed (and that is fine).
-> 
-> 
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-They are not compatible. Both registers and operating methods are
-different.
-
-Best Regards,
-Ran
-
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
