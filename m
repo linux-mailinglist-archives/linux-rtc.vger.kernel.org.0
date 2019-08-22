@@ -2,67 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD939A22B
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 23:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC139A22D
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Aug 2019 23:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732398AbfHVV21 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Aug 2019 17:28:27 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43053 "EHLO
+        id S2388515AbfHVV2l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Aug 2019 17:28:41 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:60703 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730897AbfHVV21 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Aug 2019 17:28:27 -0400
+        with ESMTP id S2388346AbfHVV2l (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 22 Aug 2019 17:28:41 -0400
 X-Originating-IP: 90.65.161.137
 Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 3F3241C0003;
-        Thu, 22 Aug 2019 21:28:25 +0000 (UTC)
-Date:   Thu, 22 Aug 2019 23:28:25 +0200
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 5FFED1C0004;
+        Thu, 22 Aug 2019 21:28:39 +0000 (UTC)
+Date:   Thu, 22 Aug 2019 23:28:39 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Bruno Thomsen <bruno.thomsen@gmail.com>
 Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         a.zummo@towertech.it, wim@linux-watchdog.org, linux@roeck-us.net,
         u.kleine-koenig@pengutronix.de, bth@kamstrup.com
-Subject: Re: [PATCH v3 3/5] rtc: pcf2127: bugfix: read rtc disables watchdog
-Message-ID: <20190822212825.GI27031@piout.net>
+Subject: Re: [PATCH v3 4/5] rtc: pcf2127: add watchdog feature support
+Message-ID: <20190822212839.GJ27031@piout.net>
 References: <20190822131936.18772-1-bruno.thomsen@gmail.com>
- <20190822131936.18772-3-bruno.thomsen@gmail.com>
+ <20190822131936.18772-4-bruno.thomsen@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190822131936.18772-3-bruno.thomsen@gmail.com>
+In-Reply-To: <20190822131936.18772-4-bruno.thomsen@gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 22/08/2019 15:19:34+0200, Bruno Thomsen wrote:
-> The previous fix listed bulk read of registers as root cause of
-> accendential disabling of watchdog, since the watchdog counter
-> register (WD_VAL) was zeroed.
+On 22/08/2019 15:19:35+0200, Bruno Thomsen wrote:
+> Add partial support for the watchdog functionality of
+> both PCF2127 and PCF2129 chips.
 > 
-> Fixes: 3769a375ab83 rtc: pcf2127: bulk read only date and time registers.
+> The programmable watchdog timer is currently using a fixed
+> clock source of 1Hz. This result in a selectable range of
+> 1-255 seconds, which covers most embedded Linux use-cases.
 > 
-> Tested with the same PCF2127 chip as Sean reveled root cause
-> of WD_VAL register value zeroing was caused by reading CTRL2
-> register which is one of the watchdog feature control registers.
+> Clock sources of 4096Hz, 64Hz and 1/60Hz is mostly useful
+> in MCU use-cases.
 > 
-> So the solution is to not read the first two control registers
-> (CTRL1 and CTRL2) in pcf2127_rtc_read_time as they are not
-> needed anyway. Size of local buf variable is kept to allow
-> easy usage of register defines to improve readability of code.
-> 
-> Debug trace line was updated after CTRL1 and CTRL2 are no longer
-> read from the chip. Also replaced magic numbers in buf access
-> with register defines.
+> Countdown timer not available when using watchdog feature.
 > 
 > Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
 > ---
-> v3: no change.
-> v2: new bugfix, not in v1.
+> v3: removed 2 x dev_info() and 1 x dev_err() traces.
+>     lowered dev_info() to dbg_info() in pcf2127_wdt_set_timeout.
+>     removed unneeded ret variable in pcf2127_wdt_set_timeout.
+> v2: use new watchdog api, e.g. devm_watchdog_register_device.
+>     remove watchdog Kconfig option.
+>     update existing Kconfig option with additional information.
 > 
->  drivers/rtc/rtc-pcf2127.c | 32 ++++++++++++--------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
+>  drivers/rtc/Kconfig       |   7 ++-
+>  drivers/rtc/rtc-pcf2127.c | 118 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 124 insertions(+), 1 deletion(-)
 > 
 Applied, thanks.
 
