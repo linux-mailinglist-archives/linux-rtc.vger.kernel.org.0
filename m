@@ -2,61 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C32889AC8A
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 12:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C63B9ACF4
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 12:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392301AbfHWKH5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Aug 2019 06:07:57 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:37206 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726423AbfHWKH5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 23 Aug 2019 06:07:57 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id DB66F200724;
-        Fri, 23 Aug 2019 12:07:55 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4C6A120070F;
-        Fri, 23 Aug 2019 12:07:51 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 1AC654031D;
-        Fri, 23 Aug 2019 18:07:45 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        leoyang.li@nxp.com, robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>
-Subject: [3/3] rtc/fsl: support flextimer for SoC LS1021A (ARM32)
-Date:   Fri, 23 Aug 2019 17:57:40 +0800
-Message-Id: <20190823095740.12280-3-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190823095740.12280-1-biwen.li@nxp.com>
-References: <20190823095740.12280-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2387905AbfHWKS3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Aug 2019 06:18:29 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38634 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732509AbfHWKS3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 06:18:29 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1i16eG-0005xF-88; Fri, 23 Aug 2019 10:18:24 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Biwen Li <biwen.li@nxp.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][rtc-next] rtc: fsl: fix spelling mistake: "memery" -> "memory"
+Date:   Fri, 23 Aug 2019 11:18:23 +0100
+Message-Id: <20190823101823.18402-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Support flextimer for SoC LS1021A (ARM32)
+From: Colin Ian King <colin.king@canonical.com>
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
+There is a spelling mistake in a dev_err error message. Fix it.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/rtc/Kconfig | 2 +-
+ drivers/rtc/rtc-fsl-ftm-alarm.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 319bec4bef05..58d8b5f7cfc5 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1324,7 +1324,7 @@ config RTC_DRV_IMXDI
+diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
+index 4f7259c2d6a3..4bb98310cc3f 100644
+--- a/drivers/rtc/rtc-fsl-ftm-alarm.c
++++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
+@@ -255,7 +255,7 @@ static int ftm_rtc_probe(struct platform_device *pdev)
  
- config RTC_DRV_FSL_FTM_ALARM
- 	tristate "Freescale FlexTimer alarm timer"
--	depends on ARCH_LAYERSCAPE
-+	depends on ARCH_LAYERSCAPE || SOC_LS1021A
- 	select FSL_RCPM
- 	default y
- 	help
+ 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+ 	if (unlikely(!rtc)) {
+-		dev_err(&pdev->dev, "cannot alloc memery for rtc\n");
++		dev_err(&pdev->dev, "cannot alloc memory for rtc\n");
+ 		return -ENOMEM;
+ 	}
+ 
 -- 
-2.17.1
+2.20.1
 
