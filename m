@@ -2,98 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B89F9B01F
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 14:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C43609B114
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 15:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394979AbfHWM4M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Aug 2019 08:56:12 -0400
-Received: from mga17.intel.com ([192.55.52.151]:8367 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394976AbfHWM4L (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 23 Aug 2019 08:56:11 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Aug 2019 05:56:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,421,1559545200"; 
-   d="scan'208";a="208538168"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.145])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Aug 2019 05:56:07 -0700
-Received: from andy by smile with local (Exim 4.92.1)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1i196q-00035N-LO; Fri, 23 Aug 2019 15:56:04 +0300
-Date:   Fri, 23 Aug 2019 15:56:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        tony.luck@intel.com, x86@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, alan@linux.intel.com,
-        linux-kernel@vger.kernel.org, qi-ming.wu@intel.com,
-        cheol.yong.kim@intel.com, rahul.tanwar@intel.com
-Subject: Re: [PATCH v1 1/2] x86/rtc: Add option to skip using RTC
-Message-ID: <20190823125604.GS30120@smile.fi.intel.com>
-References: <cover.1566458029.git.rahul.tanwar@linux.intel.com>
- <becacc523508b295a52db9f1592e2868e3988e28.1566458029.git.rahul.tanwar@linux.intel.com>
- <20190822090208.GJ30120@smile.fi.intel.com>
- <25f6947d-7ba0-c23c-25aa-c4c4173da6b0@linux.intel.com>
- <20190822130429.GN30120@smile.fi.intel.com>
- <a6717e97-01cf-771c-8467-be5946528dd0@linux.intel.com>
+        id S2405632AbfHWNiV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Aug 2019 09:38:21 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36336 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726894AbfHWNiV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 09:38:21 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w2so6498367pfi.3;
+        Fri, 23 Aug 2019 06:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=W1wVVamLiZ9h3NTS9ZqHD5eQU+X6FPNoaBYhmtpr1I4=;
+        b=Tu77bVf00t9cOu0XYvtVU4hD+7TKPcsyzhR/Q25Q2VHCa/6mYNgnNRTdXc/S5/UA4O
+         4M/MYRMl/J/JS/qV961EsYxP6+26Egbeob/KkZ4DXXkR7jDKkzB6Zx89s81pbc2yszgH
+         LOJ4s97IBDhAv/2gH92TMYeaehhvfbpj6jMXABLtE/wMiZK7LqKtg01zETljzc18YQVQ
+         Q9aB2U23iVI/tbAzdCg2aITLsIHcWtBeEglRKUD1wBDGZ+qmhf0HDlKrG9PS5HXvq4xQ
+         G2KlBCDlSl59dzNLpwABF2k3mkCkKpZIE4zyNtHIZeT2TSPbwYzUCjoGbkBzwe7flqAj
+         7aNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=W1wVVamLiZ9h3NTS9ZqHD5eQU+X6FPNoaBYhmtpr1I4=;
+        b=aCZdUVdfLbssi/wQSGrMt4TfHqeBHxBOMOPDBmTqvzW//rSpO4UTHjZyEtXWuWTphy
+         BbdsdEQrCwGeHogFKAtzYSn/OlPbcBXWbnmAzkIAj/XeQcjRVzFCPbcS8eVRoMEscKjt
+         9dtoj0CZhBDscoAg8tzZaoN0xL0Nh6A7rXZkWcibhj6Oz80nFZnM4gCA1Y4ERyBIvoth
+         dlUKVKtcY3uwPZJaxAeqnE+kSQopVEjFwNvZusmgS7KB7Jsc6lD1byUZDZIA8n2x7nZJ
+         bqIu5P+IwvO4K2kNBae7/3nKkBXJH1axZA5v/6bU7CIKgBUmM6X7CJ2WSn62RyT2z1md
+         5FtA==
+X-Gm-Message-State: APjAAAXzhqUbadoTd5fjsaT+1dpKEwbasuTTlRFiuRW3pMBXgR90X2QN
+        QkITL1W5iKps+WrCQagoAEP1kKqF
+X-Google-Smtp-Source: APXvYqwfHcDqfQL4dvQYvM243XnOfEH8FwG1RwYozWmegxqNgulx0Iy/lHhUX2sOIrlLUqB+Fgm7Zg==
+X-Received: by 2002:a65:60d3:: with SMTP id r19mr4053001pgv.91.1566567500072;
+        Fri, 23 Aug 2019 06:38:20 -0700 (PDT)
+Received: from server.roeck-us.net (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
+        by smtp.gmail.com with ESMTPSA id s5sm2762083pjo.26.2019.08.23.06.38.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 23 Aug 2019 06:38:18 -0700 (PDT)
+Subject: Re: [PATCH -next] rtc: pcf2127: Fix build error without
+ CONFIG_WATCHDOG_CORE
+To:     YueHaibing <yuehaibing@huawei.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, bruno.thomsen@gmail.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190823124553.19364-1-yuehaibing@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c1a11d06-ce3a-d289-2a61-607ba8e0509f@roeck-us.net>
+Date:   Fri, 23 Aug 2019 06:38:17 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6717e97-01cf-771c-8467-be5946528dd0@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190823124553.19364-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 11:37:38AM +0800, Tanwar, Rahul wrote:
-> On 22/8/2019 9:04 PM, Andy Shevchenko wrote:
-> > On Thu, Aug 22, 2019 at 05:26:33PM +0800, Tanwar, Rahul wrote:
-> > > On 22/8/2019 5:02 PM, Andy Shevchenko wrote:
-> > > > On Thu, Aug 22, 2019 at 03:44:03PM +0800, Rahul Tanwar wrote:
-> > > > > Use a newly introduced optional "status" property of "motorola,mc146818"
-> > > > > compatible DT node to determine if RTC is supported. Skip read/write from
-> > > > > RTC device only when this node is present and status is "disabled". In all
-> > > > > other cases, proceed as before.
-> > > > Can't we rather update ->get_wallclock() and ->set_wallclock() based on this?
-> > > 
-> > > get_wallclock() and set_wallclock() are function pointers of platform_ops
-> > > 
-> > > which are initialized to mach_get_cmos_time() and mach_set_rtc_mmss()
-> > > 
-> > > at init time. Since adding a new platform to override these functions is
-> > > 
-> > > discouraged, so the only way is to modify RTC get/set functions.
-> > Shouldn't it be platform agnostic code?
-> > So, my point is, instead of hacking two functions, perhaps better to avoid them
-> > at all.
+On 8/23/19 5:45 AM, YueHaibing wrote:
+> If WATCHDOG_CORE is not set, build fails:
 > 
-> Sorry, i could not understand your point. The changes are platform
+> drivers/rtc/rtc-pcf2127.o: In function `pcf2127_probe.isra.6':
+> drivers/rtc/rtc-pcf2127.c:478: undefined reference to `devm_watchdog_register_device'
 > 
-> agnostic i.e. it doesn't break existing use cases. Are you recommending
+> Add WATCHDOG_CORE Kconfig dependency to fix this.
 > 
-> to add a new platform and make changes there ?
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: bbc597561ce1 ("rtc: pcf2127: add watchdog feature support")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Nope, I propose to do something like
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-void __init foo()
-{
-	if (platform has RTC)
-		return;
-
-	set_wallclock = noop;
-	get_wallclock = noop;
-}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> ---
+>   drivers/rtc/Kconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 25af63d..9dce7dc 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -886,6 +886,8 @@ config RTC_DRV_DS3232_HWMON
+>   config RTC_DRV_PCF2127
+>   	tristate "NXP PCF2127"
+>   	depends on RTC_I2C_AND_SPI
+> +	depends on WATCHDOG
+> +	select WATCHDOG_CORE
+>   	help
+>   	  If you say yes here you get support for the NXP PCF2127/29 RTC
+>   	  chips with integrated quartz crystal for industrial applications.
+> 
 
