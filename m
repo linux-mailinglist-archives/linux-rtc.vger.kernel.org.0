@@ -2,75 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0771D9B2C1
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 16:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDFC9B320
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 17:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387946AbfHWO4T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Aug 2019 10:56:19 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39721 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727553AbfHWO4S (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 10:56:18 -0400
-Received: by mail-ed1-f67.google.com with SMTP id g8so13867182edm.6;
-        Fri, 23 Aug 2019 07:56:17 -0700 (PDT)
+        id S2395546AbfHWPM0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Aug 2019 11:12:26 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:39164 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbfHWPMZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 11:12:25 -0400
+Received: by mail-ed1-f68.google.com with SMTP id g8so13935206edm.6;
+        Fri, 23 Aug 2019 08:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vc6Gx2XXn8mE1Um3OLMZNNCJMOj5NkFPfvT3diwCpBg=;
-        b=pVfPwkKUr9sq+nNpGcMbDHjFhIRn2STxZ+FOGcqpDikPBDMstWFBOdVI9lxVtH/dYp
-         TiEfIVVk9xKU7pS1Pb3PJKtgVhSdRO3MxlACXU+mPfnVP7Eu2M72mKIWuvTnmg38if9X
-         WC2PJ1Avq3T1prm4nuQ8hw0xFGS97o8FWvIHelD9lBnoDNa0FZN/hcxjMU/tT8pxHz88
-         qXzfycCKYCxjJpwQ9q4QRxz2ndbruI3AFI0qVtPXm8aoazZ95gU1cqw8Sf+Nyo+KJCYr
-         xJq++XGOSwB0nCkxv9gtn2CUza5K0x3Mjp1H3wLyCo8pmgQLLMYgc8vj46N/oacUh5VO
-         +ieA==
+        bh=JoGdLrC3EvZUqi2gbY94UkjQTiA3x5eqpgLZ2Pse0sI=;
+        b=IQm6d4iLkYzHr+O6p+z3NdWwgH56Ey0SNSwgc4Ew8Z51xVmz49yJ27EqgckIJTWvDF
+         TmUmpKCa/2eGrr1koNrGSxlELm1YW45Z5gJ69Baud00M2z8o3+IKRWTQI/u6+w+dRBLK
+         KpNQMJdrv1UY9K3EQvmoiX9YAEdR1JA6C8xUYAfGS3WQ6o37ph668ILOK2uX71AdIFr/
+         1qbz5Cv2Q1ZnMNxC4NXOuaB8CzunGx/ufSFYAWGQgRzXlTRttRobi1begjO6GeanA4V8
+         /K9Jmwf1jd4p3bY55rp32rjbsGn77musQRsE7PEcaB1az/SKAdkck9KtkFNDNeybk+nm
+         QRew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=vc6Gx2XXn8mE1Um3OLMZNNCJMOj5NkFPfvT3diwCpBg=;
-        b=m5z2UXUNcec+KGavR1Ej5vgl/hPDbHQtrMkhe0nDlsvtvGhHMDHEppYr06uiNJmKR9
-         Onnuu9FogX9d7PVNTV2QI550i/taCeraWB2KhpiWg7RgVbd3lphf4cKdVIhXj38lVVW3
-         GVZvEuJxS1h5cIrTnHBhBOtVP0GbsJwdmeNnypC387atb/5/u4PFu8QBpxyyIEhFTeGx
-         MkzeV4X5o3mWG8Dcm3gZWNXJ0HGMnhQ9WaK0G98r3tvrbfCv6D6v5B5Utwtp8fXhl6sa
-         bfFHd3ZN6xBuuZZSlAU4JRDskoX7eMgwQzBgVTyz3DIdE+AYsY0JAkpf/WztRJ2JHjns
-         JL8g==
-X-Gm-Message-State: APjAAAW+0DztxfS//1f0w633IBiki99pr2JarbJmv39bqcBX+/YqgxhI
-        9hlgDr2EJRXZokLlFwbQomA=
-X-Google-Smtp-Source: APXvYqy72RsLE6itDxrZinw34NCX4LfEASPWAasJsSIXDG9g0zqjdtg1wjZE6aRzGVQe+No4cvUwXg==
-X-Received: by 2002:aa7:d285:: with SMTP id w5mr4946766edq.134.1566572176710;
-        Fri, 23 Aug 2019 07:56:16 -0700 (PDT)
+        bh=JoGdLrC3EvZUqi2gbY94UkjQTiA3x5eqpgLZ2Pse0sI=;
+        b=YgdScIwfZ/rclBQlxcw2IugjBO28OSBonuqYqs3dOQZdVRAQsb3vOpwsEjNayul8cy
+         VzpFgZrG3ab9RCZ6zNt5wRkwFzBEjJbMtYTFn4EhunLD5MvWsKbWDdCIDl5V2Fj+TfqA
+         ge2oqtnLswrHweG28SvIeVXRJWxfD1kvQvVtsMuijL1RbB5UCC7UzLm7Tg7QhaX7shEy
+         Z8dNRC9dBA/3AHuX6Eqy2BRLonZiaKH+OhQ4roSKBsaZYEMZCzmonQhjnBOrhyJ/+RUU
+         4jzE3kqRO4rwoS4xjbN8yc76J+cgNkFGDIKXSrl3e2mQO5AMpGZ2iKGlxG3TAwn9ufb4
+         eFYQ==
+X-Gm-Message-State: APjAAAV7dAksYa4LqYjjNbw+r6O6zV3fZghJI6GuDJNfY8/Ih4YNWkku
+        G+zQ5mSJYaGFQJP3woLTioQ=
+X-Google-Smtp-Source: APXvYqwLArA9O8RyF4HUnW7Ze7YcFpvlS3J54RiXdyPWMI0f9TNdWQgR4sYWYrfGOIzssBcCYs8tOg==
+X-Received: by 2002:a17:906:11d6:: with SMTP id o22mr4875515eja.60.1566573141505;
+        Fri, 23 Aug 2019 08:12:21 -0700 (PDT)
 Received: from ziggy.stardust ([37.223.137.147])
-        by smtp.gmail.com with ESMTPSA id t12sm565818edw.40.2019.08.23.07.56.14
+        by smtp.gmail.com with ESMTPSA id h10sm587257edh.64.2019.08.23.08.12.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2019 07:56:16 -0700 (PDT)
-Subject: Re: [BUG] [PATCH v5 02/10] mfd: mt6397: extract irq related code from
- core driver
-To:     Frank Wunderlich <frank-w@public-files.de>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Fri, 23 Aug 2019 08:12:20 -0700 (PDT)
+Subject: Re: [PATCH v5 03/10] mfd: mt6397: modify suspend/resume behavior
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        srv_heupstream@mediatek.com, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Sean Wang <sean.wang@mediatek.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Richard Fontana <rfontana@redhat.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
         Eddie Huang <eddie.huang@mediatek.com>,
-        linux-rtc@vger.kernel.org,
-        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
 References: <1566531931-9772-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1566531931-9772-3-git-send-email-hsin-hsiung.wang@mediatek.com>
- <trinity-1f82bff1-535e-47cd-9a2f-8faccb56e356-1566562433314@3c-app-gmx-bs11>
+ <1566531931-9772-4-git-send-email-hsin-hsiung.wang@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
@@ -166,12 +161,12 @@ Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
  pac005PuhxCWkKTJz3gCmznnoat4GCnL5gy/m0Qk45l4PFqwWXVLo9AQg2Kp3mlIFZ6fsEKI
  AN5hxlbNvNb9V2Zo5bFZjPWPFTxOteM0omUAS+QopwU0yPLLGJVf2iCmItHcUXI+r2JwH1CJ
  jrHWeQEI2ucSKsNa8FllDmG/fQ==
-Message-ID: <e8a918ab-3e7a-b487-db77-df28d56518ce@gmail.com>
-Date:   Fri, 23 Aug 2019 16:56:13 +0200
+Message-ID: <53bed53c-13a5-b745-25a0-0c8720f64441@gmail.com>
+Date:   Fri, 23 Aug 2019 17:12:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <trinity-1f82bff1-535e-47cd-9a2f-8faccb56e356-1566562433314@3c-app-gmx-bs11>
+In-Reply-To: <1566531931-9772-4-git-send-email-hsin-hsiung.wang@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -182,51 +177,272 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 
 
-On 23/08/2019 14:13, Frank Wunderlich wrote:
-> Hi,
+On 23/08/2019 05:45, Hsin-Hsiung Wang wrote:
+> Some pmics don't need backup interrupt settings, so we change to use
+> pm notifier for the pmics which are necessary to store settings.
 > 
-> this commit breaks mt6323 pmic on BananaPi-R2
+> Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  drivers/mfd/mt6397-core.c       | 89 +++++++++++++++++------------------------
+>  drivers/mfd/mt6397-irq.c        | 33 +++++++++++++++
+>  include/linux/mfd/mt6397/core.h |  3 ++
+>  3 files changed, 73 insertions(+), 52 deletions(-)
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a4872e80ce7d2a1844328176dbf279d0a2b89bdb
-> 
-> resulting in this message in dmesg:
-> 
-> mt6397 1000d000.pwrap:mt6323: unsupported chip: 0x0
-> and multiple
-> mtk-cpufreq mtk-cpufreq: failed to initialize dvfs info for cpu0
-> 
-> see discussion here:
-> http://lists.infradead.org/pipermail/linux-mediatek/2019-August/022505.html
-> 
-> after reverting this one the errors are gone, please provide a fix
+> diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+> index 93c8881..8f94187 100644
+> --- a/drivers/mfd/mt6397-core.c
+> +++ b/drivers/mfd/mt6397-core.c
+> @@ -4,7 +4,6 @@
+>   * Author: Flora Fu, MediaTek
+>   */
+>  
+> -#include <linux/interrupt.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of_irq.h>
+> @@ -82,40 +81,27 @@
+>  	}
+>  };
+>  
+> -#ifdef CONFIG_PM_SLEEP
+> -static int mt6397_irq_suspend(struct device *dev)
+> -{
+> -	struct mt6397_chip *chip = dev_get_drvdata(dev);
+> -
+> -	regmap_write(chip->regmap, chip->int_con[0], chip->wake_mask[0]);
+> -	regmap_write(chip->regmap, chip->int_con[1], chip->wake_mask[1]);
+> -
+> -	enable_irq_wake(chip->irq);
+> -
+> -	return 0;
+> -}
+> -
+> -static int mt6397_irq_resume(struct device *dev)
+> -{
+> -	struct mt6397_chip *chip = dev_get_drvdata(dev);
+> -
+> -	regmap_write(chip->regmap, chip->int_con[0], chip->irq_masks_cur[0]);
+> -	regmap_write(chip->regmap, chip->int_con[1], chip->irq_masks_cur[1]);
+> -
+> -	disable_irq_wake(chip->irq);
+> +struct chip_data {
+> +	u32 cid_addr;
+> +	u32 cid_shift;
+> +};
+>  
+> -	return 0;
+> -}
+> -#endif
+> +static const struct chip_data mt6323_core = {
+> +	.cid_addr = MT6323_CID,
+> +	.cid_shift = 0,
+> +};
+>  
+> -static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_irq_suspend,
+> -			mt6397_irq_resume);
+> +static const struct chip_data mt6397_core = {
+> +	.cid_addr = MT6397_CID,
+> +	.cid_shift = 0,
+> +};
+>  
+>  static int mt6397_probe(struct platform_device *pdev)
+>  {
+>  	int ret;
+>  	unsigned int id;
+>  	struct mt6397_chip *pmic;
+> +	const struct chip_data *pmic_core;
+>  
+>  	pmic = devm_kzalloc(&pdev->dev, sizeof(*pmic), GFP_KERNEL);
+>  	if (!pmic)
+> @@ -131,28 +117,30 @@ static int mt6397_probe(struct platform_device *pdev)
+>  	if (!pmic->regmap)
+>  		return -ENODEV;
+>  
+> -	platform_set_drvdata(pdev, pmic);
+> +	pmic_core = of_device_get_match_data(&pdev->dev);
+> +	if (!pmic_core)
+> +		return -ENODEV;
+>  
+> -	ret = regmap_read(pmic->regmap, MT6397_CID, &id);
+> +	ret = regmap_read(pmic->regmap, pmic_core->cid_addr, &id);
+>  	if (ret) {
+> -		dev_err(pmic->dev, "Failed to read chip id: %d\n", ret);
+> +		dev_err(&pdev->dev, "Failed to read chip id: %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> +	pmic->chip_id = (id >> pmic_core->cid_shift) & 0xff;
+> +
+> +	platform_set_drvdata(pdev, pmic);
+> +
 
-are you sure that you provide the correct chip_id here? I saw 0x2023 (if I
-remember correctly), while this switch checks for 0x23, 0x91 and 0x97, so I'm
-not sure if the problem really lies here. I didn't dig into the code to find out
-how the chip_id is created.
+What do this changes have to do with the commit message/subject?
+
+>  	pmic->irq = platform_get_irq(pdev, 0);
+>  	if (pmic->irq <= 0)
+>  		return pmic->irq;
+>  
+> -	switch (id & 0xff) {
+> -	case MT6323_CHIP_ID:
+> -		pmic->int_con[0] = MT6323_INT_CON0;
+> -		pmic->int_con[1] = MT6323_INT_CON1;
+> -		pmic->int_status[0] = MT6323_INT_STATUS0;
+> -		pmic->int_status[1] = MT6323_INT_STATUS1;
+> -		ret = mt6397_irq_init(pmic);
+> -		if (ret)
+> -			return ret;
+
+This looks to me as if it should be part of 02/10.
+
+> +	ret = mt6397_irq_init(pmic);
+> +	if (ret)
+> +		return ret;
+>  
+> +	switch (pmic->chip_id) {
+> +	case MT6323_CHIP_ID:
+>  		ret = devm_mfd_add_devices(&pdev->dev, -1, mt6323_devs,
+>  					   ARRAY_SIZE(mt6323_devs), NULL,
+>  					   0, pmic->irq_domain);
+> @@ -160,21 +148,13 @@ static int mt6397_probe(struct platform_device *pdev)
+>  
+>  	case MT6391_CHIP_ID:
+>  	case MT6397_CHIP_ID:
+> -		pmic->int_con[0] = MT6397_INT_CON0;
+> -		pmic->int_con[1] = MT6397_INT_CON1;
+> -		pmic->int_status[0] = MT6397_INT_STATUS0;
+> -		pmic->int_status[1] = MT6397_INT_STATUS1;
+> -		ret = mt6397_irq_init(pmic);
+> -		if (ret)
+> -			return ret;
+> -
+
+Same here.
 
 Regards,
 Matthias
 
-> 
-> regards Frank
-> 
-> 
->> Gesendet: Freitag, 23. August 2019 um 05:45 Uhr
->> Von: "Hsin-Hsiung Wang" <hsin-hsiung.wang@mediatek.com>
->> Betreff: [PATCH v5 02/10] mfd: mt6397: extract irq related code from core driver
->>
->> In order to support different types of irq design, we decide to add
->> separate irq drivers for different design and keep mt6397 mfd core
->> simple and reusable to all generations of PMICs so far.
->>
->> Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
->> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
->> ---
->>  drivers/mfd/Makefile            |   3 +-
->>  drivers/mfd/mt6397-core.c       | 146 --------------------------------
->>  drivers/mfd/mt6397-irq.c        | 181 ++++++++++++++++++++++++++++++++++++++++
->>  include/linux/mfd/mt6397/core.h |   9 ++
->>  4 files changed, 192 insertions(+), 147 deletions(-)
->>  create mode 100644 drivers/mfd/mt6397-irq.c
+>  		ret = devm_mfd_add_devices(&pdev->dev, -1, mt6397_devs,
+>  					   ARRAY_SIZE(mt6397_devs), NULL,
+>  					   0, pmic->irq_domain);
+>  		break;
+>  
+>  	default:
+> -		dev_err(&pdev->dev, "unsupported chip: %d\n", id);
+> +		dev_err(&pdev->dev, "unsupported chip: %d\n", pmic->chip_id);
+>  		return -ENODEV;
+>  	}
+>  
+> @@ -187,9 +167,15 @@ static int mt6397_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct of_device_id mt6397_of_match[] = {
+> -	{ .compatible = "mediatek,mt6397" },
+> -	{ .compatible = "mediatek,mt6323" },
+> -	{ }
+> +	{
+> +		.compatible = "mediatek,mt6323",
+> +		.data = &mt6323_core,
+> +	}, {
+> +		.compatible = "mediatek,mt6397",
+> +		.data = &mt6397_core,
+> +	}, {
+> +		/* sentinel */
+> +	}
+>  };
+>  MODULE_DEVICE_TABLE(of, mt6397_of_match);
+>  
+> @@ -204,7 +190,6 @@ static int mt6397_probe(struct platform_device *pdev)
+>  	.driver = {
+>  		.name = "mt6397",
+>  		.of_match_table = of_match_ptr(mt6397_of_match),
+> -		.pm = &mt6397_pm_ops,
+>  	},
+>  	.id_table = mt6397_id,
+>  };
+> diff --git a/drivers/mfd/mt6397-irq.c b/drivers/mfd/mt6397-irq.c
+> index b2d3ce1..669e93d 100644
+> --- a/drivers/mfd/mt6397-irq.c
+> +++ b/drivers/mfd/mt6397-irq.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/of_irq.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/suspend.h>
+>  #include <linux/mfd/mt6323/core.h>
+>  #include <linux/mfd/mt6323/registers.h>
+>  #include <linux/mfd/mt6397/core.h>
+> @@ -128,6 +129,36 @@ static int mt6397_irq_domain_map(struct irq_domain *d, unsigned int irq,
+>  	.map = mt6397_irq_domain_map,
+>  };
+>  
+> +static int mt6397_irq_pm_notifier(struct notifier_block *notifier,
+> +				  unsigned long pm_event, void *unused)
+> +{
+> +	struct mt6397_chip *chip =
+> +		container_of(notifier, struct mt6397_chip, pm_nb);
+> +
+> +	switch (pm_event) {
+> +	case PM_SUSPEND_PREPARE:
+> +		regmap_write(chip->regmap,
+> +			     chip->int_con[0], chip->wake_mask[0]);
+> +		regmap_write(chip->regmap,
+> +			     chip->int_con[1], chip->wake_mask[1]);
+> +		enable_irq_wake(chip->irq);
+> +		break;
+> +
+> +	case PM_POST_SUSPEND:
+> +		regmap_write(chip->regmap,
+> +			     chip->int_con[0], chip->irq_masks_cur[0]);
+> +		regmap_write(chip->regmap,
+> +			     chip->int_con[1], chip->irq_masks_cur[1]);
+> +		disable_irq_wake(chip->irq);
+> +		break;
+> +
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+>  int mt6397_irq_init(struct mt6397_chip *chip)
+>  {
+>  	int ret;
+> @@ -159,6 +190,7 @@ int mt6397_irq_init(struct mt6397_chip *chip)
+>  	regmap_write(chip->regmap, chip->int_con[0], 0x0);
+>  	regmap_write(chip->regmap, chip->int_con[1], 0x0);
+>  
+> +	chip->pm_nb.notifier_call = mt6397_irq_pm_notifier;
+>  	chip->irq_domain = irq_domain_add_linear(chip->dev->of_node,
+>  						 MT6397_IRQ_NR,
+>  						 &mt6397_irq_domain_ops,
+> @@ -177,5 +209,6 @@ int mt6397_irq_init(struct mt6397_chip *chip)
+>  		return ret;
+>  	}
+>  
+> +	register_pm_notifier(&chip->pm_nb);
+>  	return 0;
+>  }
+> diff --git a/include/linux/mfd/mt6397/core.h b/include/linux/mfd/mt6397/core.h
+> index 9320c2a..23e21da 100644
+> --- a/include/linux/mfd/mt6397/core.h
+> +++ b/include/linux/mfd/mt6397/core.h
+> @@ -7,6 +7,8 @@
+>  #ifndef __MFD_MT6397_CORE_H__
+>  #define __MFD_MT6397_CORE_H__
+>  
+> +#include <linux/notifier.h>
+> +
+>  enum chip_id {
+>  	MT6323_CHIP_ID = 0x23,
+>  	MT6391_CHIP_ID = 0x91,
+> @@ -52,6 +54,7 @@ enum mt6397_irq_numbers {
+>  struct mt6397_chip {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> +	struct notifier_block pm_nb;
+>  	int irq;
+>  	struct irq_domain *irq_domain;
+>  	struct mutex irqlock;
 > 
