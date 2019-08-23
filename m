@@ -2,98 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6BA9A7B2
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 08:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFBC9AA28
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Aug 2019 10:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404619AbfHWGh3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Aug 2019 02:37:29 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42055 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2404002AbfHWGh3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 02:37:29 -0400
-X-UUID: 0fd848586a7c48bc827217bc605e4756-20190823
-X-UUID: 0fd848586a7c48bc827217bc605e4756-20190823
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 1445397444; Fri, 23 Aug 2019 14:37:23 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by mtkmbs07n1.mediatek.inc
- (172.21.101.16) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 23 Aug
- 2019 14:37:16 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 23 Aug 2019 14:37:15 +0800
-Message-ID: <1566542240.12318.53.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 2/4] rtc: Add support for the MediaTek MT2712 RTC
-From:   Ran Bi <ran.bi@mediatek.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, YT Shen <yt.shen@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        "Flora Fu" <flora.fu@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Date:   Fri, 23 Aug 2019 14:37:20 +0800
-In-Reply-To: <20190822133649.GT27031@piout.net>
-References: <20190801110122.26834-1-ran.bi@mediatek.com>
-         <20190801110122.26834-3-ran.bi@mediatek.com>
-         <20190820201744.GZ3545@piout.net> <1566477254.12318.41.camel@mhfsdcap03>
-         <20190822124628.GS27031@piout.net> <1566480361.12318.50.camel@mhfsdcap03>
-         <20190822133649.GT27031@piout.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2405204AbfHWITY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Aug 2019 04:19:24 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:35197 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729113AbfHWITX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Aug 2019 04:19:23 -0400
+X-Originating-IP: 86.250.200.211
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 8809F60007;
+        Fri, 23 Aug 2019 08:19:20 +0000 (UTC)
+Date:   Fri, 23 Aug 2019 10:19:20 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     megous@megous.com
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v2 3/3] arm64: dts: sun50i-h6: Add support for RTC and
+ fix the clock tree
+Message-ID: <20190823081920.xxqg6w7tlnvvkzlx@flea>
+References: <20190820151934.3860-1-megous@megous.com>
+ <20190820151934.3860-4-megous@megous.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bvvuqig3adpl6wgr"
+Content-Disposition: inline
+In-Reply-To: <20190820151934.3860-4-megous@megous.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 2019-08-22 at 15:36 +0200, Alexandre Belloni wrote:
-> On 22/08/2019 21:26:01+0800, Ran Bi wrote:
-> > On Thu, 2019-08-22 at 14:46 +0200, Alexandre Belloni wrote:
-> > > On 22/08/2019 20:34:14+0800, Ran Bi wrote:
-> > > > > > +	/* RTC need POWERKEY1/2 match, then goto normal work mode */
-> > > > > > +	mt2712_writel(rtc, MT2712_POWERKEY1, MT2712_POWERKEY1_KEY);
-> > > > > > +	mt2712_writel(rtc, MT2712_POWERKEY2, MT2712_POWERKEY2_KEY);
-> > > > > 
-> > > > > This should be written when setting the time after power was lost.
-> > > > > 
-> > > > 
-> > > > I suppose we can move this into mt2712_rtc_read_time function's "if
-> > > > (p1 != MT2712_POWERKEY1_KEY || p2 != MT2712_POWERKEY2_KEY)" condition
-> > > > which will be added at next patch. We need additional flag to mark this
-> > > > condition or another if condition in mt2712_rtc_set_time fucntion if we
-> > > > put these code in mt2712_rtc_set_time function.
-> > > > 
-> > > 
-> > > It is fine to test both in read_time and in set_time.
-> > > 
-> > 
-> > Do you mean that we can test powerkey and then set powerkey both in
-> > read_time and in set_time?
-> > 
-> 
-> I mean that can test in read_time and test and set in set_time
-> 
-> 
 
-Ok, I will change it at next patch.
+--bvvuqig3adpl6wgr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best Regards,
-Ran
+On Tue, Aug 20, 2019 at 05:19:34PM +0200, megous@megous.com wrote:
+> From: Ondrej Jirman <megous@megous.com>
+>
+> This patch adds RTC node and fixes the clock properties and nodes
+> to reflect the real clock tree.
+>
+> The device nodes for the internal oscillator and osc32k are removed,
+> as these clocks are now provided by the RTC device. Clock references
+> are fixed accordingly, too.
+>
+> Signed-off-by: Ondrej Jirman <megous@megous.com>
 
+The prefix should be "arm64: dts: allwinner: h6:"
+
+I've fixed it up and applied it.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--bvvuqig3adpl6wgr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXV+hiAAKCRDj7w1vZxhR
+xQlxAP9kdMuf4hAYTBGWFaQzFVjFmqRMRi1y/pCcJ+PHKLK3TAD8DZOSzZhHJZFE
+oscKRT3ZVaryNY1pphYVt0LlyyDu2Q0=
+=Ngr3
+-----END PGP SIGNATURE-----
+
+--bvvuqig3adpl6wgr--
