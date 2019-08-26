@@ -2,206 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA56F9CEFA
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 14:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFE09D03D
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 15:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731462AbfHZMGS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 26 Aug 2019 08:06:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731060AbfHZMGS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 26 Aug 2019 08:06:18 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 64D3F2187F;
-        Mon, 26 Aug 2019 12:06:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566821176;
-        bh=pSm3PvDMTIhWrias2jUj42UGA5TFBFdrlS5QO6QgtCQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=io3aMAGY1vLQLpnXBTGGQRmRoMF0Z3ucgOly06j72Whv8rl7xT1KFCYyKmlLidWs3
-         Qit/fL3LL7kfMz6VSYutfHMnEYhIKe+/vtK0zd5YWrozSPVEGU8qnMYwsvvDG/CMl8
-         nKvLGU3h6Se1hrH6oINn9wwihCiN7pzs42pZsyN4=
-Received: by mail-qt1-f176.google.com with SMTP id j15so17486591qtl.13;
-        Mon, 26 Aug 2019 05:06:16 -0700 (PDT)
-X-Gm-Message-State: APjAAAV6TFX+4zvCfT+S2DIM9+B1r8stCY6Gl6bFY2XSL5eN8eX4poZg
-        liVbv00ZOIytea9cknjGnvpzdrMUgPgr7uyOFQ==
-X-Google-Smtp-Source: APXvYqywXvicr53vDpn7Lf7WyzQ+wjP/YIGuHrEhvTUukwIr28KdgsvczQlUyUAExmZ1tGD9jxYqR9nGPsTCyWlJexY=
-X-Received: by 2002:ad4:4050:: with SMTP id r16mr15115021qvp.200.1566821175529;
- Mon, 26 Aug 2019 05:06:15 -0700 (PDT)
+        id S1732220AbfHZNU6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 26 Aug 2019 09:20:58 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43901 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726953AbfHZNU6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 26 Aug 2019 09:20:58 -0400
+Received: by mail-pg1-f194.google.com with SMTP id k3so10600416pgb.10;
+        Mon, 26 Aug 2019 06:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ke9VgdWxkTDSfhJn5FtwLPXDcQ8jktEKphO56apG3uc=;
+        b=if1MFW3zoOohAGEDXi7RhCiqITLAGw+gPYjDJwgk1onp5AlMt/MlEwygjexmHuKLPN
+         VGs1RUngTz2bQ4tlG7W33WulabOY4NG4rmTlbnCi0aGP+emsJUFzeX9NGVW1CFwK49wk
+         N8zPd3NrylH3Yv8MvHcrT1Lbqb1NOQPm88m+WcpvIbTe8QAiOp3QQHQknsuvSUmHiRfj
+         Ohcgankjj4Kofl0rgJnJckvQ47yIB4ZWpxsnIajo9wKXnBOAua+VpXHLC5uj72cgExuo
+         Dn6/dAcw9RyG+pcf848d2bSnvDFjxswLKpBu1u778y9VU3VkEAtytnC7y+9wn9yrJCYF
+         0oRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ke9VgdWxkTDSfhJn5FtwLPXDcQ8jktEKphO56apG3uc=;
+        b=NXahza3W5KZvLIBJBMSTQEhw8esjNx6M0I//eA81XI95Fgo3nuvlGO9xY8J/sEa9hX
+         Pmzr4/TV+C7IM3Vx9iRNw+u2i69aLwq2G5l38XjGfv28J15GhsJx1vfs/xU3KxxlYVLg
+         6cjVH+iUvpSKq2K3pWHNqoBuNpIbTpL6uqT+gbu1us9ujfaqPW3l9Xixj6QSDRRja5JX
+         ln4cT29i/cEfQDQVlAh+5UjfuAhro7hiqsqnaUnu/9alJ1EEEs8S9YDWnPSlbE6CPxGS
+         +DNgr3SZfY08UutThvm4ZkTCDl8zOHTDBkKcaPrzuD2ZZOUo9AZlNDRcv6bSXiC6Lzdg
+         KuCA==
+X-Gm-Message-State: APjAAAXa9Ye401F56oP0GGQidpe/pIGLExPzAPsy5cZ8vDydBQXS3JpB
+        kxZ8oxVnJ1/FihfjClC+7j3OnWL2
+X-Google-Smtp-Source: APXvYqz8O3Ph5j6/3aVJUbVOGZ18VvJxtXlqGJ7c5xsvLe3qQeKX2ww51740a03oZK0I2qtjyCEi4A==
+X-Received: by 2002:aa7:91d3:: with SMTP id z19mr19969213pfa.135.1566825657669;
+        Mon, 26 Aug 2019 06:20:57 -0700 (PDT)
+Received: from server.roeck-us.net (108-223-40-66.lightspeed.sntcca.sbcglobal.net. [108.223.40.66])
+        by smtp.gmail.com with ESMTPSA id u21sm1502386pjn.5.2019.08.26.06.20.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Aug 2019 06:20:56 -0700 (PDT)
+Subject: Re: [PATCH -next] rtc: pcf2127: Fix build error without
+ CONFIG_WATCHDOG_CORE
+To:     Yuehaibing <yuehaibing@huawei.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, bruno.thomsen@gmail.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190823124553.19364-1-yuehaibing@huawei.com>
+ <20190823140513.GB9844@piout.net>
+ <4b608c55-2541-30cf-ad88-c19a5c0cc84f@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <01a2b6b2-eb15-1b40-1edc-de122bbdb5a2@roeck-us.net>
+Date:   Mon, 26 Aug 2019 06:20:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190823145356.6341-1-krzk@kernel.org> <20190823145356.6341-7-krzk@kernel.org>
-In-Reply-To: <20190823145356.6341-7-krzk@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 26 Aug 2019 07:06:02 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKCpKuc=-4UyWFFv_RenKuSJcr9cdSKjbkL8F1ni+VODw@mail.gmail.com>
-Message-ID: <CAL_JsqKCpKuc=-4UyWFFv_RenKuSJcr9cdSKjbkL8F1ni+VODw@mail.gmail.com>
-Subject: Re: [RFC 7/9] dt-bindings: rtc: s3c: Convert S3C/Exynos RTC bindings
- to json-schema
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, notify@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <4b608c55-2541-30cf-ad88-c19a5c0cc84f@huawei.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 9:54 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> Convert Samsung S3C/Exynos Real Time Clock bindings to DT schema format
-> using json-schema.
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  .../devicetree/bindings/rtc/s3c-rtc.txt       | 31 ------
->  .../devicetree/bindings/rtc/s3c-rtc.yaml      | 95 +++++++++++++++++++
->  2 files changed, 95 insertions(+), 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/s3c-rtc.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+On 8/26/19 1:12 AM, Yuehaibing wrote:
+> 
+> 
+> On 2019/8/23 22:05, Alexandre Belloni wrote:
+>> On 23/08/2019 20:45:53+0800, YueHaibing wrote:
+>>> If WATCHDOG_CORE is not set, build fails:
+>>>
+>>> drivers/rtc/rtc-pcf2127.o: In function `pcf2127_probe.isra.6':
+>>> drivers/rtc/rtc-pcf2127.c:478: undefined reference to `devm_watchdog_register_device'
+>>>
+>>> Add WATCHDOG_CORE Kconfig dependency to fix this.
+>>>
+>>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>>> Fixes: bbc597561ce1 ("rtc: pcf2127: add watchdog feature support")
+>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>>> ---
+>>>   drivers/rtc/Kconfig | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+>>> index 25af63d..9dce7dc 100644
+>>> --- a/drivers/rtc/Kconfig
+>>> +++ b/drivers/rtc/Kconfig
+>>> @@ -886,6 +886,8 @@ config RTC_DRV_DS3232_HWMON
+>>>   config RTC_DRV_PCF2127
+>>>   	tristate "NXP PCF2127"
+>>>   	depends on RTC_I2C_AND_SPI
+>>> +	depends on WATCHDOG
+>>
+>> Definitively not, I fixed it that way:
+>> +       select WATCHDOG_CORE if WATCHDOG
+> 
+> 
+> No, this still fails while WATCHDOG is not set
+> 
 
+Correct, there are no dummy functions for watchdog device registration.
+There would have to be conditional code in the driver if the watchdog
+is supposed to be optional.
 
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> new file mode 100644
-> index 000000000000..44b021812a83
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/s3c-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Samsung S3C, S5P and Exynos Real Time Clock controller
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzk@kernel.org>
-> +
-> +# Select also deprecated compatibles (for finding deprecate usage)
-> +select:
-> +  properties:
-> +    compatible:
-> +      items:
-> +        - enum:
-> +            - samsung,s3c2410-rtc
-> +            - samsung,s3c2416-rtc
-> +            - samsung,s3c2443-rtc
-> +            - samsung,s3c6410-rtc
-> +            # Deprecated, use samsung,s3c6410-rtc
-> +            - samsung,exynos3250-rtc
-
-We've come up with a better way of doing this that doesn't need a
-custom 'select'. Add a 'oneOf' to compatible and add another entry:
-
-- const: samsung,exynos3250-rtc
-  deprecated: true
-
-It's not implemented yet in the tool, but we'll keep the compatible
-for 'select' and otherwise drop schema marked deprecated.
-
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-
-You can drop 'items' when there's only 1 entry.
-
-> +          - samsung,s3c2410-rtc
-> +          - samsung,s3c2416-rtc
-> +          - samsung,s3c2443-rtc
-> +          - samsung,s3c6410-rtc
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Must contain a list of phandle and clock specifier for the rtc
-> +      clock and in the case of a s3c6410 compatible controller, also
-> +      a source clock.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    description:
-> +      Must contain "rtc" and for a s3c6410 compatible controller,
-> +      a "rtc_src" sorted in the same order as the clocks property.
-> +    oneOf:
-> +      - items:
-> +          - const: rtc
-> +      - items:
-> +          # TODO: This can be in any order matching clocks, how to express it?
-
-It shouldn't be in any order. Fix the dts files.
-
-> +          - const: rtc
-> +          - const: rtc_src
-
-You should drop all this and add an else clause below.
-
-> +
-> +  interrupts:
-> +    description:
-> +      Two interrupt numbers to the cpu should be specified. First
-> +      interrupt number is the rtc alarm interrupt and second interrupt number
-> +      is the rtc tick interrupt. The number of cells representing a interrupt
-> +      depends on the parent interrupt controller.
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - samsung,s3c6410-rtc
-> +              - samsung,exynos3250-rtc
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          maxItems: 2
-> +        clock-names:
-> +          items:
-> +          - const: rtc
-> +          - const: rtc_src
-
-Should be indented 2 more spaces.
-
-> +
-> +examples:
-> +  - |
-> +    rtc@10070000 {
-> +      compatible = "samsung,s3c6410-rtc";
-> +      reg = <0x10070000 0x100>;
-> +      interrupts = <0 44 4>, <0 45 4>;
-> +      clocks = <&clock 0>, // CLK_RTC
-> +               <&s2mps11_osc 0>; // S2MPS11_CLK_AP
-> +      clock-names = "rtc", "rtc_src";
-> +    };
-> --
-> 2.17.1
->
+Guenter
