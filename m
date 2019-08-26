@@ -2,81 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B8B9C8A8
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 07:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DE09CB4D
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 10:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbfHZFXJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 26 Aug 2019 01:23:09 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:47672 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729244AbfHZFXJ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 26 Aug 2019 01:23:09 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9409B2000CA;
-        Mon, 26 Aug 2019 07:23:07 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 64D3320007B;
-        Mon, 26 Aug 2019 07:23:03 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E54A8402A5;
-        Mon, 26 Aug 2019 13:22:57 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        leoyang.li@nxp.com, broonie@kernel.org, nandor.han@vaisala.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: [v3] rtc: pcf85363/pcf85263: fix error that failed to run hwclock -w
-Date:   Mon, 26 Aug 2019 13:12:56 +0800
-Message-Id: <20190826051256.42139-1-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729737AbfHZIM2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 26 Aug 2019 04:12:28 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:36370 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729582AbfHZIM2 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 26 Aug 2019 04:12:28 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E48CEA667BA6D685D08A;
+        Mon, 26 Aug 2019 16:12:24 +0800 (CST)
+Received: from [127.0.0.1] (10.133.213.239) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Mon, 26 Aug 2019
+ 16:12:20 +0800
+Subject: Re: [PATCH -next] rtc: pcf2127: Fix build error without
+ CONFIG_WATCHDOG_CORE
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20190823124553.19364-1-yuehaibing@huawei.com>
+ <20190823140513.GB9844@piout.net>
+CC:     <a.zummo@towertech.it>, <bruno.thomsen@gmail.com>,
+        <linux@roeck-us.net>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+From:   Yuehaibing <yuehaibing@huawei.com>
+Message-ID: <4b608c55-2541-30cf-ad88-c19a5c0cc84f@huawei.com>
+Date:   Mon, 26 Aug 2019 16:12:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
+MIME-Version: 1.0
+In-Reply-To: <20190823140513.GB9844@piout.net>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Issue:
-    - hwclock -w
-      hwclock: RTC_SET_TIME: Invalid argument
 
-Why:
-    - Relative patch: https://lkml.org/lkml/2019/4/3/55 , this patch
-      will always check for unwritable registers, it will compare reg
-      with max_register in regmap_writeable.
-    - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS
-      is 0, max_regiter is 0x2f, then reg will be equal to 0x30,
-      0x30 < 0x2f is false,so regmap_writeable will return false.
 
-How:
-    - increase max_register to skip failed
-      when checking max_register.
+On 2019/8/23 22:05, Alexandre Belloni wrote:
+> On 23/08/2019 20:45:53+0800, YueHaibing wrote:
+>> If WATCHDOG_CORE is not set, build fails:
+>>
+>> drivers/rtc/rtc-pcf2127.o: In function `pcf2127_probe.isra.6':
+>> drivers/rtc/rtc-pcf2127.c:478: undefined reference to `devm_watchdog_register_device'
+>>
+>> Add WATCHDOG_CORE Kconfig dependency to fix this.
+>>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Fixes: bbc597561ce1 ("rtc: pcf2127: add watchdog feature support")
+>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>> ---
+>>  drivers/rtc/Kconfig | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+>> index 25af63d..9dce7dc 100644
+>> --- a/drivers/rtc/Kconfig
+>> +++ b/drivers/rtc/Kconfig
+>> @@ -886,6 +886,8 @@ config RTC_DRV_DS3232_HWMON
+>>  config RTC_DRV_PCF2127
+>>  	tristate "NXP PCF2127"
+>>  	depends on RTC_I2C_AND_SPI
+>> +	depends on WATCHDOG
+> 
+> Definitively not, I fixed it that way:
+> +       select WATCHDOG_CORE if WATCHDOG
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
-Change in v3:
-	- replace old scheme with new scheme:
-	  increase max_register.
 
-Change in v2:
-	- add Why and How into commit message.
+No, this still fails while WATCHDOG is not set
 
- drivers/rtc/rtc-pcf85363.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index a075e77617dc..e9d4ef59febd 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -336,7 +336,8 @@ static const struct pcf85x63_config pcf_85263_config = {
- 	.regmap = {
- 		.reg_bits = 8,
- 		.val_bits = 8,
--		.max_register = 0x2f,
-+		.max_register = 0x2f * 2, /* skip failed when
-+					     checking max_register */
- 	},
- 	.num_nvram = 1
- };
--- 
-2.17.1
+> 
+> 
 
