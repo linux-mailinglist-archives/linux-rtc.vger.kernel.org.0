@@ -2,227 +2,297 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3B89CD69
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 12:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31229CE42
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Aug 2019 13:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730188AbfHZKkm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 26 Aug 2019 06:40:42 -0400
-Received: from mail-eopbgr40079.outbound.protection.outlook.com ([40.107.4.79]:58850
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730116AbfHZKkm (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 26 Aug 2019 06:40:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hvrEVZfCBRDbKO/Z0T5Qe2NZhJoGwStxfu7cZcF2PBg6GuSNsqiNbpAUe6YsG9dxocFuH1VfSsPXK9LNJAjbXqE6lPfPccALTqsrKvvkBfwmSotvTyZZHle900DNtsaMebsd8NdTxzyWgsj8U40knLtVpjJSI3Bs1Bap5ztmYgpeH60jZOLP21TNUKMDJmroC8gPOC7EmQx2hskeOlCx+TtA8mq6h2fhHgC5oWHndkWLVzfFuB0uhWffFGW14bxdZyEA2sCN7DaG/x1PH23/aX+X4QiGQ6RoHeJ9pv9pa1dQxFE5Tf0Y3op4RFaTZldftVerWiFKN0sW11NjORfeig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jr5rLjXnThuqs8TZ5t84q3H2HcsJavQ6gNXvXg+X+uE=;
- b=eMJeL1wLvlVI1StXoYMcA+6+Ux+K765CQIGgmwiz4envKIb2DZZkaYeZqxCpBMWNaG/yLTSJvo8wkDdoKzXtP2GkE8BnVpfGAqpJROmzteoFzJUv6sMlaQ+Ld5vUYszHX8unAE+SaslgU7MaeM9YTR5kc6h7KVCEefikHK56EgP+4JpJa5XVykk6XZ1uCjMODEPn6Jrqzm8k0uUU5/ai++1mBJ9DNqcHj//VfNEjeVPExZElS5f360pYSbNesEBxcySeOPxOHq2uDqx0+ZP3cJ0P3u63esmpgur7XyPWaGFejTLqzCI/AC4eMDj4Go2pFPKW9e2dX6ok/wZJTYpafg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jr5rLjXnThuqs8TZ5t84q3H2HcsJavQ6gNXvXg+X+uE=;
- b=SMzCt2WlD6nCAkF9IAcUU3cTlydoAKWlwq6tpooqRBGQT1xrbryMvBpZZSWS+FOSa3taQIQKtXRC3O8ymDXdCtfKCazZnHk48mNgY3eUwRc2kZuTxR0RN+X23saQpAx1lPDZn6vXLIt7rDeZUekGx9wD8kOKVb4mxbCHHETiyWc=
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com (52.135.138.150) by
- DB7PR04MB4780.eurprd04.prod.outlook.com (20.176.235.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.21; Mon, 26 Aug 2019 10:40:37 +0000
-Received: from DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::3cd8:4bcf:8626:4254]) by DB7PR04MB4490.eurprd04.prod.outlook.com
- ([fe80::3cd8:4bcf:8626:4254%3]) with mapi id 15.20.2199.021; Mon, 26 Aug 2019
- 10:40:37 +0000
-From:   Biwen Li <biwen.li@nxp.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Nandor Han <nandor.han@vaisala.com>, Leo Li <leoyang.li@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: RE: [EXT] Re: [v2] rtc: pcf85363/pcf85263: fix error that failed to
- run hwclock -w
-Thread-Topic: [EXT] Re: [v2] rtc: pcf85363/pcf85263: fix error that failed to
- run hwclock -w
-Thread-Index: AQHVU944/chRI20GGkSPTXSrUh+lT6b9aqqAgACCWYCAAAqBgIAANb+AgAb78oCAB7jGEIAAVF2AgAAIeTCAAAVmAIAACJGw
-Date:   Mon, 26 Aug 2019 10:40:37 +0000
-Message-ID: <DB7PR04MB4490A1949E964EAD1F539F2E8FA10@DB7PR04MB4490.eurprd04.prod.outlook.com>
-References: <20190816024636.34738-1-biwen.li@nxp.com>
- <20190816080417.GB3545@piout.net>
- <CADRPPNRkqbWzGEvUJyi0Qff3oS6biO0v7BTrK1Jiz9AMnOYF=Q@mail.gmail.com>
- <20190816162825.GE3545@piout.net>
- <CADRPPNQwcGrVXLm8eHbXKmyecMhT6Mt9rNGnspJA1+MnV4K8oQ@mail.gmail.com>
- <ff198737-acb5-7186-7e14-a1e1cdc0f72c@vaisala.com>
- <DB7PR04MB4490614205732E4508B8A8B38FA10@DB7PR04MB4490.eurprd04.prod.outlook.com>
- <21f417e3-db50-5930-ddc9-eed54f5d5893@vaisala.com>
- <DB7PR04MB449081DBB762BB30E2C55F638FA10@DB7PR04MB4490.eurprd04.prod.outlook.com>
- <20190826100650.GB21713@piout.net>
-In-Reply-To: <20190826100650.GB21713@piout.net>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biwen.li@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a6f407a2-23e1-4c14-7ab4-08d72a11d500
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4780;
-x-ms-traffictypediagnostic: DB7PR04MB4780:
-x-ms-exchange-purlcount: 2
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB47809F8A7928CC033B1632FC8FA10@DB7PR04MB4780.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:431;
-x-forefront-prvs: 01415BB535
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(199004)(189003)(186003)(53546011)(26005)(6506007)(8936002)(446003)(102836004)(3846002)(6116002)(5660300002)(52536014)(476003)(81156014)(8676002)(81166006)(11346002)(44832011)(486006)(25786009)(4326008)(6306002)(14454004)(14444005)(256004)(86362001)(71200400001)(55016002)(45080400002)(53936002)(6246003)(966005)(9686003)(71190400001)(478600001)(6436002)(54906003)(316002)(6916009)(64756008)(66946007)(74316002)(66476007)(305945005)(66556008)(66446008)(76116006)(99286004)(66066001)(7696005)(7736002)(229853002)(33656002)(2906002)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4780;H:DB7PR04MB4490.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: hDqp3AgFwY0SA58lowQFV1NBaRMIprN82IeGkaXVJxWIad3gqVtJPPFb0bN35g3BFY8ZAcGD3tcDAhD5B81eJOY7tkBZ0zl1GU6mTiGOKcCcwXRAOG0LrOUqNQJr2BXmw7mgBuEQ/tsGH2ySUUfeSIc4ZmAyKTLosBBjFGwGKZ86rfFuXgRG9CcIhsDHKoYnsUjJ6+bjOgNXRuj/++EyRME0jH8LQ6mmvSQKVeDFH+CDD35/71jj2vndnj8ywBEI0+5vxBuTFsgEZrVDpZRQPhQSn+YW6EKuw4k/1ArikqnernPz1CVsFlNntHvbTGzhbM7PMTP4hdNmKOEwe73ss+gXgx8whEp21roIe3abhEKUTgG2hZTGO5J7pTgc00o3ln7LimKM2z/5Vk7Yj+GbQITuegK91Rrwco78PFLwKM8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1730656AbfHZLiG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 26 Aug 2019 07:38:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55196 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727095AbfHZLiF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 26 Aug 2019 07:38:05 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2E0521883;
+        Mon, 26 Aug 2019 11:38:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566819483;
+        bh=pPU7Oq6YBXwlfSpisXUSN7O/E9G4jOkzVz+PI2hUrds=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YVVkeqCGrG3RnXOr6Gj+t4zHOIB+BlcZI5yyr6HPo3yZJzIqmToqczkqCm9j4iU5m
+         lBHTgRoC7bhbhO9gFftmcJJYi0hmi5yEgD2avu6Q2AMUK5XXsvxVRGd496PE3SUSY+
+         hh+ONrjTKnrsJmIEt3wP6wh030ihBpf+X0tIGFCI=
+Received: by mail-qk1-f172.google.com with SMTP id m2so13678915qkd.10;
+        Mon, 26 Aug 2019 04:38:03 -0700 (PDT)
+X-Gm-Message-State: APjAAAUKTnPpmx2Neb0m5LulH+y9z3rlPwpo9MkBv/fAgbXHvLknWkKn
+        4lCVwXYB+e9FFfyHwtkMCaHDY16TAuazzoQTbQ==
+X-Google-Smtp-Source: APXvYqxFdFrhr6QC432iXohr425U9ALeyY0/jK/ZTob9D6kmp205upnoTXJdzQJK7UQEdHEAqtMAyO/qvMbS4UVFyYM=
+X-Received: by 2002:a37:4941:: with SMTP id w62mr14495060qka.119.1566819482797;
+ Mon, 26 Aug 2019 04:38:02 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6f407a2-23e1-4c14-7ab4-08d72a11d500
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2019 10:40:37.1744
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c0dQ4Bs8JIC9PG0wJu/zm/67qFbg+6OnkKBJ4rScDp7dRpBpV32lCR/9iQMLPG70jgkiTHN0567V3A3QKpvifQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4780
+References: <20190823145356.6341-1-krzk@kernel.org>
+In-Reply-To: <20190823145356.6341-1-krzk@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 26 Aug 2019 06:37:50 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+5MpPSjRtFp-xf8P0rBuArMFbum7yadcHNBQz_N=Ergg@mail.gmail.com>
+Message-ID: <CAL_Jsq+5MpPSjRtFp-xf8P0rBuArMFbum7yadcHNBQz_N=Ergg@mail.gmail.com>
+Subject: Re: [RFC 1/9] dt-bindings: arm: samsung: Convert Samsung board/soc
+ bindings to json-schema
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, notify@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
->=20
-> Hi,
->=20
-> On 26/08/2019 09:49:49+0000, Biwen Li wrote:
-> > >
-> > > On 8/26/19 7:29 AM, Biwen Li wrote:
-> > > >>
-> > > >> On 8/16/19 10:40 PM, Li Yang wrote:
-> > > >>> On Fri, Aug 16, 2019 at 11:30 AM Alexandre Belloni
-> > > >>> <alexandre.belloni@bootlin.com> wrote:
-> > > >>>>
-> > > >>>> On 16/08/2019 10:50:49-0500, Li Yang wrote:
-> > > >>>>> On Fri, Aug 16, 2019 at 3:05 AM Alexandre Belloni
-> > > >>>>> <alexandre.belloni@bootlin.com> wrote:
-> > > >>>>>>
-> > > >>>>>> On 16/08/2019 10:46:36+0800, Biwen Li wrote:
-> > > >>>>>>> Issue:
-> > > >>>>>>>       - # hwclock -w
-> > > >>>>>>>         hwclock: RTC_SET_TIME: Invalid argument
-> > > >>>>>>>
-> > > >>>>>>> Why:
-> > > >>>>>>>       - Relative patch:
-> > > >> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2
-> > > >>
-> Flkml.org&amp;data=3D02%7C01%7Cbiwen.li%40nxp.com%7C03141ff7858343
-> 3
-> > > >>
-> 20be408d72a0d1e10%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
-> 7C63
-> > > >>
-> 7024108138794294&amp;sdata=3DQrALkFN6heF%2B7S73FQ9c%2FyKNRHyBuL
-> %2B6
-> > > >> %2B4PDM9hYRyM%3D&amp;reserved=3D0
-> > > >> %2Flkml%2F2019%2F4%2F3%2F55&amp;data=3D02%7C01%7Cbiwen.li%
-> 40n
-> > > xp.
-> > > >>
-> > >
-> com%7Cff8cebc3f1034ae3fa9608d725ff9e5e%7C686ea1d3bc2b4c6fa92cd99
-> > > >>
-> > >
-> c5c301635%7C0%7C0%7C637019652111923736&amp;sdata=3DspY6e22YOkOF
-> > > >>
-> 3%2BF7crSM0M6xPmOhgULDqMZLQw%2BAmdI%3D&amp;reserved=3D0 ,
-> > > this patch
-> > > >>>>>>>         will always check for unwritable registers, it will c=
-ompare
-> reg
-> > > >>>>>>>         with max_register in regmap_writeable.
-> > > >>>>>>>
-> > > >>>>>>>       - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e,
-> > > >>>>>>> but
-> > > >> DT_100THS
-> > > >>>>>>>         is 0, max_regiter is 0x2f, then reg will be equal to =
-0x30,
-> > > >>>>>>>         '0x30 < 0x2f' is false,so regmap_writeable will retur=
-n
-> false.
-> > > >>>>>>>
-> > > >>>>>>>       - Root cause: the buf[] was written to a wrong place in=
- the
-> file
-> > > >>>>>>>         drivers/rtc/rtc-pcf85363.c
-> > > >>>>>>>
-> > > >>>>>>
-> > > >>>>>> This is not true, the RTC wraps the register accesses
-> > > >>>>>> properly and this
-> > > >>>>>
-> > > >>>>> This performance hack probably deserve some explanation in the
-> > > >>>>> code comment.  :)
-> > > >>>>>
-> > > >>>>>> is probably something that should be handled by regmap_writabl=
-e.
-> > > >>>>>
-> > > >>>>> The address wrapping is specific to this RTC chip.  Is it also
-> > > >>>>> commonly used by other I2C devices?  I'm not sure if
-> > > >>>>> regmap_writable should handle the wrapping case if it is too sp=
-ecial.
-> > > >>>>>
-> > > >>>>
-> > > >>>> Most of the i2c RTCs do address wrapping which is sometimes the
-> > > >>>> only way to properly set the time.
-> > > >>>
-> > > >>> Adding Mark and Nandor to the loop.
-> > > >>>
-> > > >>> Regards,
-> > > >>> Leo
-> > > >>>
-> > > >>
-> > > >> Hi,
-> > > >>     `regmap` provides couple of ways to validate the registers:
-> > > >> max_register, callback function and write table. All of these are
-> > > >> optional, so it gives you the freedom to customize it as needed.
-> > > >>
-> > > >> In this situation probably you could:
-> > > >>     1. Avoid using the wrapping feature of pcf85363 (you can just
-> > > >> provide separate calls for stop, reset and time confguration). In
-> > > >> this way the `max_register` validation method will work fine.
-> > > > Yes, I use this way. Path as follows:
-> > > > Stop and reset - > set time > stop
-> > > >
-> > >
-> > > Some of the concerns regarding this method was that it might not be
-> > > precise enough. That because you need 2 I2C operations (one for stop
-> > > and one for time configuration). Not sure about your case if this is =
-a problem
-> or not.
-> > Ok, got it, thanks.
->=20
-> To be clear, for this RTC it is fine to separate both writes. Want I want=
- is a
-> corrected commit message with a proper reference to
-> 8b9f9d4dc511309918c4f6793bae7387c0c638af instead of a link to lkml.org
-> and a proper explanation.
-Ok, got it, thanks.I will replace link to lkml.org with
-8b9f9d4dc511309918c4f6793bae7387c0c638af and add a proper explanation
-to the commit message in v4.
->=20
+On Fri, Aug 23, 2019 at 9:54 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> Convert Samsung S5P and Exynos SoC bindings to DT schema format using
+> json-schema.  This is purely conversion of already documented bindings
+> so it does not cover all of DTS in the Linux kernel (few S5P/Exynos and
+> all S3C are missing).
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>
+> ---
+>
+> If the schema looks sensible, I will continue on converting other
+> SoC and driver bindings and later adding missing schemas (S3C
+> SoCs).
+
+Looks pretty good.
+
+> ---
+>  .../bindings/arm/samsung/samsung-boards.txt   |  83 --------
+>  .../bindings/arm/samsung/samsung-boards.yaml  | 188 ++++++++++++++++++
+>  2 files changed, 188 insertions(+), 83 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/samsung/samsung-boards.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+
+
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> new file mode 100644
+> index 000000000000..e963fd70c436
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+> @@ -0,0 +1,188 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/samsung/samsung-boards.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Samsung Exynos and S5P SoC based boards
+> +
+> +maintainers:
+> +  - Krzysztof Kozlowski <krzk@kernel.org>
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: S5PV210 based Aries boards
+> +        items:
+> +          - enum:
+> +              - samsung,fascinate4g             # Samsung Galaxy S Fascinate 4G (SGH-T959P)
+> +              - samsung,galaxys                 # Samsung Galaxy S (i9000)
+> +          - const: samsung,aries
+> +          - const: samsung,s5pv210
+> +
+> +      - description: Exynos3250 based boards
+> +        items:
+> +          - enum:
+> +              - samsung,monk                    # Samsung Simband
+> +              - samsung,rinato                  # Samsung Gear2
+> +          - const: samsung,exynos3250
+> +          - const: samsung,exynos3
+> +
+> +      - description: Samsung ARTIK5 boards
+> +        items:
+> +          - enum:
+> +              - samsung,artik5-eval             # Samsung ARTIK5 eval board
+> +          - const: samsung,artik5               # Samsung ARTIK5 module
+> +          - const: samsung,exynos3250
+> +          - const: samsung,exynos3
+> +
+> +      - description: Exynos4210 based boards
+> +        items:
+> +          - enum:
+> +              - insignal,origen                 # Insignal Origen
+> +              - samsung,smdkv310                # Samsung SMDKV310 eval
+> +              - samsung,trats                   # Samsung Tizen Reference
+> +              - samsung,universal_c210          # Samsung C210
+> +          - const: samsung,exynos4210
+> +          - const: samsung,exynos4
+> +
+> +      - description: Exynos4412 based boards
+> +        items:
+> +          - enum:
+> +              - friendlyarm,tiny4412            # FriendlyARM TINY4412
+> +              - hardkernel,odroid-u3            # Hardkernel Odroid U3
+> +              - hardkernel,odroid-x             # Hardkernel Odroid X
+> +              - hardkernel,odroid-x2            # Hardkernel Odroid X2
+> +              - insignal,origen4412             # Insignal Origen
+> +              - samsung,smdk4412                # Samsung SMDK4412 eval
+> +              - topeet,itop4412-elite           # TOPEET Elite base
+> +          - const: samsung,exynos4412
+> +          - const: samsung,exynos4
+> +
+> +      - description: Samsung Midas family boards
+> +        items:
+> +          - enum:
+> +              - samsung,i9300                   # Samsung GT-I9300
+> +              - samsung,i9305                   # Samsung GT-I9305
+> +              - samsung,n710x                   # Samsung GT-N7100/GT-N7105
+> +              - samsung,trats2                  # Samsung Tizen Reference
+> +          - const: samsung,midas
+> +          - const: samsung,exynos4412
+> +          - const: samsung,exynos4
+> +
+> +      - description: Exynos5250 based boards
+> +        items:
+> +          - enum:
+> +              - google,snow-rev5                # Google Snow Rev 5+
+> +              - google,spring                   # Google Spring
+> +              - insignal,arndale                # Insignal Arndale
+> +              - samsung,smdk5250                # Samsung SMDK5250 eval
+> +          - const: samsung,exynos5250
+> +          - const: samsung,exynos5
+> +
+> +      - description: Google Snow Boards (Rev 4+)
+> +        items:
+> +          - enum:
+> +              - google,snow-rev4
+
+const here as I wouldn't expect this list to grow.
+
+> +          - const: google,snow
+> +          - const: samsung,exynos5250
+> +          - const: samsung,exynos5
+> +
+> +      - description: Exynos5260 based boards
+> +        items:
+> +          - enum:
+> +              - samsung,xyref5260               # Samsung Xyref5260 eval
+> +          - const: samsung,exynos5260
+> +          - const: samsung,exynos5
+> +
+> +      - description: Exynos5410 based boards
+> +        items:
+> +          - enum:
+> +              - hardkernel,odroid-xu            # Hardkernel Odroid XU
+> +              - samsung,smdk5410                # Samsung SMDK5410 eval
+> +          - const: samsung,exynos5410
+> +          - const: samsung,exynos5
+> +
+> +      - description: Exynos5420 based boards
+> +        items:
+> +          - enum:
+> +              - insignal,arndale-octa           # Insignal Arndale Octa
+> +              - samsung,smdk5420                # Samsung SMDK5420 eval
+> +          - const: samsung,exynos5420
+> +          - const: samsung,exynos5
+> +
+> +      - description: Google Peach Pit Boards (Rev 6+)
+> +        items:
+> +          - enum:
+> +              - google,pit-rev16
+
+const
+
+> +          - const: google,pit-rev15
+> +          - const: google,pit-rev14
+> +          - const: google,pit-rev13
+> +          - const: google,pit-rev12
+> +          - const: google,pit-rev11
+> +          - const: google,pit-rev10
+> +          - const: google,pit-rev9
+> +          - const: google,pit-rev8
+> +          - const: google,pit-rev7
+> +          - const: google,pit-rev6
+> +          - const: google,pit
+> +          - const: google,peach
+> +          - const: samsung,exynos5420
+> +          - const: samsung,exynos5
+> +
+> +      - description: Exynos5800 based boards
+> +        items:
+> +          - enum:
+> +              - hardkernel,odroid-xu3           # Hardkernel Odroid XU3
+> +              - hardkernel,odroid-xu3-lite      # Hardkernel Odroid XU3 Lite
+> +              - hardkernel,odroid-xu4           # Hardkernel Odroid XU4
+> +              - hardkernel,odroid-hc1           # Hardkernel Odroid HC1
+> +          - const: samsung,exynos5800
+> +          - const: samsung,exynos5
+> +
+> +      - description: Google Peach Pi Boards (Rev 10+)
+> +        items:
+> +          - enum:
+> +              - google,pi-rev16
+> +          - const: google,pi-rev15
+> +          - const: google,pi-rev14
+> +          - const: google,pi-rev13
+> +          - const: google,pi-rev12
+> +          - const: google,pi-rev11
+> +          - const: google,pi-rev10
+> +          - const: google,pi
+> +          - const: google,peach
+> +          - const: samsung,exynos5800
+> +          - const: samsung,exynos5
+> +
+> +      - description: Exynos5433 based boards
+> +        items:
+> +          - enum:
+> +              - samsung,tm2                     # Samsung TM2
+> +              - samsung,tm2e                    # Samsung TM2E
+> +          - const: samsung,exynos5433
+> +
+> +  firmware:
+
+This should be moved to its own file.
+
+> +    type: object
+> +    description:
+> +      node specifying presence and type of secure firmware
+> +    properties:
+> +      compatible:
+> +        enum:
+> +         - samsung,secure-firmware
+> +      reg:
+> +        description:
+> +          address of non-secure SYSRAM used for communication with firmware
+> +        maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +
+> +examples:
+> +  - |
+> +    firmware@203f000 {
+> +      compatible = "samsung,secure-firmware";
+> +      reg = <0x0203F000 0x1000>;
+> +    };
 > --
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbootl=
-in.
-> com&amp;data=3D02%7C01%7Cbiwen.li%40nxp.com%7C03141ff7858343320b
-> e408d72a0d1e10%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6
-> 37024108138794294&amp;sdata=3DXnAxJmOkh1VVA9ed%2FLr%2BbvWbVpLD
-> bwLjJrdaFidRtDk%3D&amp;reserved=3D0
+> 2.17.1
+>
