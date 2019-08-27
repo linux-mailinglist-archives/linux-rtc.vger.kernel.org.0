@@ -2,62 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D28519F018
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2019 18:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72629F03F
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2019 18:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbfH0Q0R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 27 Aug 2019 12:26:17 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:53387 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726678AbfH0Q0R (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Aug 2019 12:26:17 -0400
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 7AE5924000A;
-        Tue, 27 Aug 2019 16:26:14 +0000 (UTC)
-Date:   Tue, 27 Aug 2019 18:26:11 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     linux@roeck-us.net, yuehaibing@huawei.com, a.zummo@towertech.it,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH] rtc: pcf2127: bugfix: watchdog build dependency
-Message-ID: <20190827162611.GB21922@piout.net>
-References: <20190827143656.4734-1-bruno.thomsen@gmail.com>
+        id S1730461AbfH0QdS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 27 Aug 2019 12:33:18 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46450 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730454AbfH0QdS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Aug 2019 12:33:18 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t24so15416982oij.13;
+        Tue, 27 Aug 2019 09:33:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UzdCUGlHV5X682Kzeexag26wntDzMS6Jj26RZbJJmdQ=;
+        b=BdBgoyaR8PAoM7ztTiOkM/BsFVE4odcwQMvkOfc2924P3OEikfN8zgjfj5lzCAV68s
+         5znodeKuWxXFN1Udym0XIQiCx3wTp50/5QVJPMK0DRPrtqAQpQ8WAolRiC1Xv2NHFuY0
+         R7nrzCfrputzgbhWcnAzhng2o28I+z7yLoGORKQHk6y6DJ18fsGtUBPp0CrszY0ghJ6Z
+         9S42eg43eX55PcFmk4Zr/y69pWCa2KV4bz336SvkKbNjQyANfimY8t4mxHC0CoR6du3O
+         KuMQPg13HfEoetjxCduEjCqGAmtj+YLUHBC0lLjXpS2MOdxNDqJS3VldbE33EZB7bNdK
+         NJag==
+X-Gm-Message-State: APjAAAUUqeGbsMIe084LBudW6qncJdLrlvuS5dfs4jKgeuXDCKNjAAUx
+        Dw0BbV8sHgC/l9uGW+Z4ZQ==
+X-Google-Smtp-Source: APXvYqyLYFFzwrl9JxWS98fBy8t+nwRyuksVVJLjy7fG7gUGnBOGgC7pm9hA0aqSzS12hgYwHLc/rQ==
+X-Received: by 2002:aca:f5c1:: with SMTP id t184mr17262932oih.25.1566923597041;
+        Tue, 27 Aug 2019 09:33:17 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id z9sm4341038oid.39.2019.08.27.09.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 09:33:16 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 11:33:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org,
+        "linux-arm-kernel @ lists . infradead . org Alessandro Zummo" 
+        <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tianping Fang <tianping.fang@mediatek.com>
+Subject: Re: [PATCH v6 01/13] dt-bindings: mfd: mediatek: mt6397: change to
+ relative paths
+Message-ID: <20190827163316.GA31496@bogus>
+References: <20190818135611.7776-1-frank-w@public-files.de>
+ <20190818135611.7776-2-frank-w@public-files.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190827143656.4734-1-bruno.thomsen@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190818135611.7776-2-frank-w@public-files.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 27/08/2019 16:36:56+0200, Bruno Thomsen wrote:
-> Disable watchdog registation when kernel is build without
-> watchdog functionality, and enable watchdog core otherwise.
-> This removes compile errors like the one below:
+On Sun, 18 Aug 2019 15:55:59 +0200, Frank Wunderlich wrote:
+> paths in dt-bindings should be relative as suggested by Lee Johnes
 > 
-> drivers/rtc/rtc-pcf2127.o: in function `pcf2127_probe.constprop.3':
-> rtc-pcf2127.c:(.text.unlikely+0x2c8): undefined reference to
-> `devm_watchdog_register_device'
-> 
-> Watchdog feature in chip will always be configured as
-> this is safe to do in both cases and minimize code churn.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Reported-by: YueHaibing <yuehaibing@huawei.com>
-> Fixes: bbc597561ce1 ("rtc: pcf2127: add watchdog feature support")
-> Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+> Suggested-By: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  drivers/rtc/Kconfig       | 1 +
->  drivers/rtc/rtc-pcf2127.c | 2 ++
->  2 files changed, 3 insertions(+)
+> changes since v5: splitted from dt-bindings: add powercontroller
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-Applied, thanks.
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Rob Herring <robh@kernel.org>
