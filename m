@@ -2,98 +2,71 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5079DCC5
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2019 06:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4179E0F8
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Aug 2019 10:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729215AbfH0Erm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 27 Aug 2019 00:47:42 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:48216 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725795AbfH0Erm (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 27 Aug 2019 00:47:42 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 17B3A1A0586;
-        Tue, 27 Aug 2019 06:47:40 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DCEDB1A0203;
-        Tue, 27 Aug 2019 06:47:35 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 74616402BF;
-        Tue, 27 Aug 2019 12:47:30 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        leoyang.li@nxp.com, broonie@kernel.org, nandor.han@vaisala.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biwen Li <biwen.li@nxp.com>
-Subject: [v4] rtc: pcf85363/pcf85263: fix error that failed to run hwclock -w
-Date:   Tue, 27 Aug 2019 12:37:35 +0800
-Message-Id: <20190827043735.31231-1-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1732587AbfH0IHa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 27 Aug 2019 04:07:30 -0400
+Received: from hel-mailgw-01.vaisala.com ([193.143.230.17]:1433 "EHLO
+        hel-mailgw-01.vaisala.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730471AbfH0IH3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Aug 2019 04:07:29 -0400
+IronPort-SDR: okybydZ720+8OTwnjqV7ZPqywGZbnhKb8NRjL2NRQMPXdMcSBwJyoLUqB8v5ZMm4sxpVvvlpFx
+ hOfUACiyFH6O8EAks9bxBSd72rCqjZODFF3YyLrDtzw8xpU6sK0/ddpK0tVouK1qzwK+wUFswv
+ WREYy70Tr7Zje/3PAirQo+ORfuq9/3sdwKmPQnDL827V2U2PKdGccPFHljqaNYJQ3/KJLfHNne
+ VecGmHAFdce0jaVJgYrohFH6mGfaFeQ/MvvJmpf4N+hNp9bzPO+u/pLYrUfouBhpWUGb5kn1E7
+ acs=
+X-IronPort-AV: E=Sophos;i="5.64,436,1559509200"; 
+   d="scan'208";a="229735730"
+Subject: Re: [v4] rtc: pcf85363/pcf85263: fix error that failed to run hwclock
+ -w
+To:     Biwen Li <biwen.li@nxp.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, leoyang.li@nxp.com,
+        broonie@kernel.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190827043735.31231-1-biwen.li@nxp.com>
+From:   Nandor Han <nandor.han@vaisala.com>
+Message-ID: <2b49e282-fc03-ee59-2719-5a3c1ce573ce@vaisala.com>
+Date:   Tue, 27 Aug 2019 11:07:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <20190827043735.31231-1-biwen.li@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-OriginalArrivalTime: 27 Aug 2019 08:07:24.0220 (UTC) FILETIME=[757897C0:01D55CAE]
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Issue:
-    - # hwclock -w
-      hwclock: RTC_SET_TIME: Invalid argument
+On 8/27/19 7:37 AM, Biwen Li wrote:
+>   - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS
+>        is 0, max_regiter is 0x2f, then reg will be equal to 0x30,
+>        '0x30 < 0x2f' is false,so regmap_writeable will return false.
+> 
+>      - The pcf85363/pcf85263 has the capability of address wrapping
+>        which means if you access a continuous address range across a
+>        certain boundary(max_register of struct regmap_config) the
+>        hardware actually wraps the access to a lower address. But the
+>        address violation check of regmap rejects such access.
 
-Why:
-    - Relative commit: 8b9f9d4dc511309918c4f6793bae7387c0c638af, this patch
-      will always check for unwritable registers, it will compare reg
-      with max_register in regmap_writeable.
+nitpick: This 2 paragraphs could be combined to clear up the issue:
 
-    - In drivers/rtc/rtc-pcf85363.c, CTRL_STOP_EN is 0x2e, but DT_100THS
-      is 0, max_regiter is 0x2f, then reg will be equal to 0x30,
-      '0x30 < 0x2f' is false,so regmap_writeable will return false.
+`
+The pcf85363/pcf85263 has the capability of address wrapping
+which means if you access an address outside the allowed range 
+(0x00-0x2f) the hardware actually wraps the access to a lower address. 
+The rtc-pf85363 driver will use this feature to configure the time and 
+execute 2 actions in the same i2c write operation (stopping the clock 
+and configure the time). However the driver has also configured the 
+`regmap maxregister` protection mechanism that will block accessing 
+addresses outside valid range (0x00-0x2f).
+`
 
-    - The pcf85363/pcf85263 has the capability of address wrapping
-      which means if you access a continuous address range across a
-      certain boundary(max_register of struct regmap_config) the
-      hardware actually wraps the access to a lower address. But the
-      address violation check of regmap rejects such access.
+nitpick: I would also use separate buffers for this actions. Up to you :)
 
-How:
-    - Split of writing regs to two parts, first part writes control
-      registers about stop_enable and resets, second part writes
-      RTC time and date registers.
+Otherwise LGTM +1
 
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
-Change in v4:
-	- use old scheme
-	- replace link to lkml.org with commit
-	- add proper explanation
-
-Change in v3:
-	- replace old scheme with new scheme:
-	  increase max_register.
-
-Change in v2:
-	- add Why and How into commit message.
-
- drivers/rtc/rtc-pcf85363.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index a075e77617dc..3450d615974d 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -166,7 +166,12 @@ static int pcf85363_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[DT_YEARS] = bin2bcd(tm->tm_year % 100);
- 
- 	ret = regmap_bulk_write(pcf85363->regmap, CTRL_STOP_EN,
--				tmp, sizeof(tmp));
-+				tmp, 2);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_write(pcf85363->regmap, DT_100THS,
-+				buf, sizeof(tmp) - 2);
- 	if (ret)
- 		return ret;
- 
--- 
-2.17.1
-
+Nandor
