@@ -2,76 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBEDA120C
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2019 08:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B436AA1C4C
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2019 16:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbfH2Gpz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Aug 2019 02:45:55 -0400
-Received: from hel-mailgw-01.vaisala.com ([193.143.230.17]:47641 "EHLO
-        hel-mailgw-01.vaisala.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726889AbfH2Gpz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Aug 2019 02:45:55 -0400
-IronPort-SDR: FqoXct+zFHhJMNCd/gHRyGElCirhOi+C4lY5TP0Jdt5YObFMePTZWwBJIWo7z2WZ3Y5kftHqgB
- hDDmIYuJI7fMepslUtSpeC1aKdFYaL7eop6x/+xs3JzpuXqKYjDVnBOTBjxbmklSBBC8YWtXr1
- pNpC0RBskdgH+pdZpvV82wGx0oJZ+Vf1nKA+2k+ujn/XIHVAo/STu/3KBG5pySLgQbB6zJhdj7
- ICOAgt8ZeK5xBNCx3gmhmEeQza4zWhYfVvkXRmUdsBFcUvQOv8+38Ps+GBoCpS9j7qw7JFh4Tm
- 0L0=
-X-IronPort-AV: E=Sophos;i="5.64,442,1559509200"; 
-   d="scan'208";a="230033197"
-Subject: Re: [v5] rtc: pcf85363/pcf85263: fix error that failed to run hwclock
- -w
-To:     Biwen Li <biwen.li@nxp.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, leoyang.li@nxp.com,
-        broonie@kernel.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190829021418.4607-1-biwen.li@nxp.com>
-From:   Nandor Han <nandor.han@vaisala.com>
-Message-ID: <65a85fb2-0482-2007-4a84-b622e5308c3d@vaisala.com>
-Date:   Thu, 29 Aug 2019 09:45:50 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1727066AbfH2OEx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 29 Aug 2019 10:04:53 -0400
+Received: from mail-ed1-f49.google.com ([209.85.208.49]:43972 "EHLO
+        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727063AbfH2OEw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Aug 2019 10:04:52 -0400
+Received: by mail-ed1-f49.google.com with SMTP id h13so4185198edq.10;
+        Thu, 29 Aug 2019 07:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5XrYpbZokJ0uFDtRrg4QMHh8QMmoNf0yygZI19dOceA=;
+        b=ATLRDHWe3jUWrX5jam+pWx349PMbQEJL2dVu+BdsFcYVO4VEdlv6wayE3oNcHZ8/7K
+         CxoKPuyCxWUtmlQwTC7XAsQz+4zrH/sDqeiR3xJ9coRomyOJP5ng9m1CtZgbdVm6RkWk
+         xMexcFibvPGyONCsKwAFfhEr2GgBkKLTl5ylI8IFWOtoCclIiDBWV/gS4qPRDIFE3k0Q
+         veYEi32Zf4DDlPWuw5wTDRjxwFY2wRVKYkuLUDIS8XEQIFbf+Z7qsIw3p5wYUOechUvl
+         tttaMO89K8Vrb8HEWfIRSzAnz1S9yjLarTGKOMqZpJHH8GVgzZnYO/q3ts052VUqBrM+
+         U/ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5XrYpbZokJ0uFDtRrg4QMHh8QMmoNf0yygZI19dOceA=;
+        b=IIjCH7Lt1ui+5KeimvJhVxBgkD2ME5UNNbDuGsj6PNlzpd+2dCRGdrkJP+L5kCcEBH
+         CBYIHyhbEgUKQ4gojIA1JiKwxAEsBQz1pfCbNsGQQrpd7ayps+8mXYOFBJJ6Zo0Gdx6Q
+         dDjwRypQ9RTO9Goy/K11PffhpkGkpOJnGAt1sht4Coyv6sLOPao4VUWDH+beIFlp3ZgR
+         yJ/3bFplFohExyCKC8vJN89j4nR2GCQnDWlI0551+re3uUdPLBecj2ebkDRXwBwj/UwC
+         gtORAZ2WhKnZncbZ5Ilp1c44JH2G50qmT99zGc4iV6KfXV7jv2woTdPMP9lw5P+NYDay
+         RE2g==
+X-Gm-Message-State: APjAAAVQY06O/9gYK1w7IvgubbqFrVQiqvxRQpPEHWqnTByqGhaCFoO7
+        uGMgior8WVPclN7W3l2MfwLqKOuXaFwb4z0pkuI=
+X-Google-Smtp-Source: APXvYqzh64P93+HzWnZXGWHngmQqqqEecdRf/S2FlEbcebA+hFxcs869D+rDpSAc9shQvzVrqhLajNWsRk2+3jjVqmY=
+X-Received: by 2002:a17:906:e294:: with SMTP id gg20mr8059700ejb.76.1567087490938;
+ Thu, 29 Aug 2019 07:04:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190829021418.4607-1-biwen.li@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-OriginalArrivalTime: 29 Aug 2019 06:45:49.0936 (UTC) FILETIME=[65139F00:01D55E35]
+References: <20190823124553.19364-1-yuehaibing@huawei.com> <20190823140513.GB9844@piout.net>
+ <36720fae-ef20-61d4-1d9d-421e7199a0eb@infradead.org>
+In-Reply-To: <36720fae-ef20-61d4-1d9d-421e7199a0eb@infradead.org>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Thu, 29 Aug 2019 16:04:34 +0200
+Message-ID: <CAH+2xPAGe0H=WRtebd52yE6_Tpjoc+vgTnuJrGHt=K4NutYCNQ@mail.gmail.com>
+Subject: Re: [PATCH -next] rtc: pcf2127: Fix build error without CONFIG_WATCHDOG_CORE
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        YueHaibing <yuehaibing@huawei.com>, a.zummo@towertech.it,
+        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 8/29/19 5:14 AM, Biwen Li wrote:
-> Issue:
->      - # hwclock -w
->        hwclock: RTC_SET_TIME: Invalid argument
-> 
-> Why:
->      - Relative commit: 8b9f9d4dc511309918c4f6793bae7387c0c638af, this patch
->        will always check for unwritable registers, it will compare reg
->        with max_register in regmap_writeable.
-> 
->      - The pcf85363/pcf85263 has the capability of address wrapping
->        which means if you access an address outside the allowed range
->        (0x00-0x2f) hardware actually wraps the access to a lower address.
->        The rtc-pcf85363 driver will use this feature to configure the time
->        and execute 2 actions in the same i2c write operation (stopping the
->        clock and configure the time). However the driver has also
->        configured the `regmap maxregister` protection mechanism that will
->        block accessing addresses outside valid range (0x00-0x2f).
-> 
-> How:
->      - Split of writing regs to two parts, first part writes control
->        registers about stop_enable and resets, second part writes
->        RTC time and date registers.
-> 
-> Signed-off-by: Biwen Li <biwen.li@nxp.com>
-> ---
-> Change in v5:
-> 	- drop robust explanation
-> 
+Den ons. 28. aug. 2019 kl. 19.19 skrev Randy Dunlap <rdunlap@infradead.org>:
+> > Definitively not, I fixed it that way:
+> > +       select WATCHDOG_CORE if WATCHDOG
+> >
+>
+> No, that's not a fix.  The build error still happens with that patch applied.
 
-LGTM +1
+Hi Randy,
 
-Nandor
+A bugfix has been created[1] and applied to the rtc tree.
 
+Bruno
+
+[1] https://lkml.org/lkml/2019/8/27/1018
