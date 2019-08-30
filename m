@@ -2,79 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0097A28DD
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Aug 2019 23:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4BAA33F8
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Aug 2019 11:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728293AbfH2V0A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Aug 2019 17:26:00 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:39615 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728230AbfH2V0A (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Aug 2019 17:26:00 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 797EF1C000A;
-        Thu, 29 Aug 2019 21:25:58 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5/5] rtc: pcf8563: let the core handle range offsetting
-Date:   Thu, 29 Aug 2019 23:25:47 +0200
-Message-Id: <20190829212547.19185-5-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190829212547.19185-1-alexandre.belloni@bootlin.com>
-References: <20190829212547.19185-1-alexandre.belloni@bootlin.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728094AbfH3J1d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 30 Aug 2019 05:27:33 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:50538 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726461AbfH3J1d (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 30 Aug 2019 05:27:33 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C9E9D1A03CC;
+        Fri, 30 Aug 2019 11:27:30 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 395DE1A00A9;
+        Fri, 30 Aug 2019 11:27:26 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4B845402D7;
+        Fri, 30 Aug 2019 17:27:20 +0800 (SGT)
+From:   Biwen Li <biwen.li@nxp.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, leoyang.li@nxp.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>,
+        Martin Fuzzey <mfuzzey@parkeon.com>
+Subject: [1/2] dt-bindings: rtc: pcf85263/pcf85363: add some properties
+Date:   Fri, 30 Aug 2019 17:17:19 +0800
+Message-Id: <20190830091720.41156-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Set the RTC range properly and use the core windowing and offsetting to
-(unfortunately) map back to a 1970-2069 range.
+Add some properties for pcf85263/pcf85363 as follows:
+  - interrupt-output-pin: string type
+  - quartz-load-capacitance: integer type
+  - quartz-drive-strength: integer type
+  - quartz-low-jitter: bool type
+  - wakeup-source: bool type
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Martin Fuzzey <mfuzzey@parkeon.com>
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
 ---
- drivers/rtc/rtc-pcf8563.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ .../devicetree/bindings/rtc/pcf85363.txt      | 31 +++++++++++++++++++
+ include/dt-bindings/rtc/pcf85363.h            | 15 +++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 include/dt-bindings/rtc/pcf85363.h
 
-diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
-index 45462ec460a3..24baa4767b11 100644
---- a/drivers/rtc/rtc-pcf8563.c
-+++ b/drivers/rtc/rtc-pcf8563.c
-@@ -229,9 +229,7 @@ static int pcf8563_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	tm->tm_mday = bcd2bin(buf[PCF8563_REG_DM] & 0x3F);
- 	tm->tm_wday = buf[PCF8563_REG_DW] & 0x07;
- 	tm->tm_mon = bcd2bin(buf[PCF8563_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
--	tm->tm_year = bcd2bin(buf[PCF8563_REG_YR]);
--	if (tm->tm_year < 70)
--		tm->tm_year += 100;	/* assume we are in 1970...2069 */
-+	tm->tm_year = bcd2bin(buf[PCF8563_REG_YR]) + 100;
- 	/* detect the polarity heuristically. see note above. */
- 	pcf8563->c_polarity = (buf[PCF8563_REG_MO] & PCF8563_MO_C) ?
- 		(tm->tm_year >= 100) : (tm->tm_year < 100);
-@@ -268,7 +266,7 @@ static int pcf8563_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[PCF8563_REG_MO] = bin2bcd(tm->tm_mon + 1);
+diff --git a/Documentation/devicetree/bindings/rtc/pcf85363.txt b/Documentation/devicetree/bindings/rtc/pcf85363.txt
+index 94adc1cf93d9..d83359990bd7 100644
+--- a/Documentation/devicetree/bindings/rtc/pcf85363.txt
++++ b/Documentation/devicetree/bindings/rtc/pcf85363.txt
+@@ -8,10 +8,41 @@ Required properties:
+ Optional properties:
+ - interrupts: IRQ line for the RTC (not implemented).
  
- 	/* year and century */
--	buf[PCF8563_REG_YR] = bin2bcd(tm->tm_year % 100);
-+	buf[PCF8563_REG_YR] = bin2bcd(tm->tm_year - 100);
- 	if (pcf8563->c_polarity ? (tm->tm_year >= 100) : (tm->tm_year < 100))
- 		buf[PCF8563_REG_MO] |= PCF8563_MO_C;
++- interrupt-output-pin: The interrupt output pin must be
++  "NONE", "INTA" or "INTB", default value is "NONE"
++
++- quartz-load-capacitance: The internal capacitor to select for the quartz:
++	PCF85263_QUARTZCAP_7pF		[0]
++	PCF85263_QUARTZCAP_6pF		[1]
++	PCF85263_QUARTZCAP_12p5pF	[2] DEFAULT
++
++- quartz-drive-strength: Drive strength for the quartz:
++	PCF85263_QUARTZDRIVE_NORMAL	[0] DEFAULT
++	PCF85263_QUARTZDRIVE_LOW	[1]
++	PCF85263_QUARTZDRIVE_HIGH	[2]
++
++- quartz-low-jitter: Boolean property, if present enables low jitter mode
++  which reduces jitter at the cost of increased power consumption.
++
++- wakeup-source: Boolean property, mark the chip as a wakeup source,
++  independently of the availability of an IRQ line connected to the SoC.
++  This is useful if the IRQ line is connected to a PMIC or other circuit
++  that can power up the device rather than to a normal SOC interrupt.
++
+ Example:
  
-@@ -590,6 +588,9 @@ static int pcf8563_probe(struct i2c_client *client,
- 	pcf8563->rtc->ops = &pcf8563_rtc_ops;
- 	/* the pcf8563 alarm only supports a minute accuracy */
- 	pcf8563->rtc->uie_unsupported = 1;
-+	pcf8563->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	pcf8563->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	pcf8563->rtc->set_start_time = true;
+ pcf85363: pcf85363@51 {
+ 	compatible = "nxp,pcf85363";
+ 	reg = <0x51>;
++
++	interrupt-parent = <&gpio1>;
++	interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
++
++	#include <dt-bindings/rtc/pcf85363.h>
++	wakeup-source;
++	interrupt-output-pin = "INTA";
++	quartz-load-capacitance = <PCF85363_QUARTZCAP_12p5pF>;
++	quartz-drive-strength = <PCF85363_QUARTZDRIVE_LOW>;
++	quartz-low-jitter;
+ };
  
- 	if (client->irq > 0) {
- 		err = devm_request_threaded_irq(&client->dev, client->irq,
+diff --git a/include/dt-bindings/rtc/pcf85363.h b/include/dt-bindings/rtc/pcf85363.h
+new file mode 100644
+index 000000000000..2c06c28eb5ff
+--- /dev/null
++++ b/include/dt-bindings/rtc/pcf85363.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _DT_BINDINGS_RTC_PCF85363_H
++#define _DT_BINDINGS_RTC_PCF85363_H
++
++/* Quartz capacitance */
++#define PCF85363_QUARTZCAP_7pF		0
++#define PCF85363_QUARTZCAP_6pF		1
++#define PCF85363_QUARTZCAP_12p5pF	2
++
++/* Quartz drive strength */
++#define PCF85363_QUARTZDRIVE_NORMAL	0
++#define PCF85363_QUARTZDRIVE_LOW	1
++#define PCF85363_QUARTZDRIVE_HIGH	2
++
++#endif /* _DT_BINDINGS_RTC_PCF85363_H */
 -- 
-2.21.0
+2.17.1
 
