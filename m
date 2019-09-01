@@ -2,104 +2,81 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E3BA45CB
-	for <lists+linux-rtc@lfdr.de>; Sat, 31 Aug 2019 20:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64052A487B
+	for <lists+linux-rtc@lfdr.de>; Sun,  1 Sep 2019 11:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728500AbfHaSiv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 31 Aug 2019 14:38:51 -0400
-Received: from schedar.uberspace.de ([185.26.156.41]:40680 "EHLO
-        schedar.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726705AbfHaSiv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 31 Aug 2019 14:38:51 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Sat, 31 Aug 2019 14:38:51 EDT
-Received: (qmail 32212 invoked from network); 31 Aug 2019 18:32:06 -0000
-Received: from localhost (HELO ?192.168.188.41?) (127.0.0.1)
-  by schedar.uberspace.de with SMTP; 31 Aug 2019 18:32:06 -0000
-To:     linux-rtc@vger.kernel.org
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
-From:   Michael <michael@mipisi.de>
-Subject: Problem when function alarmtimer_suspend returns 0 if time delta is
- zero
-Message-ID: <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de>
-Date:   Sat, 31 Aug 2019 20:32:06 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728617AbfIAJCb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 1 Sep 2019 05:02:31 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:51707 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728390AbfIAJCb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 1 Sep 2019 05:02:31 -0400
+X-Originating-IP: 90.65.161.137
+Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 84556C0005;
+        Sun,  1 Sep 2019 09:02:28 +0000 (UTC)
+Date:   Sun, 1 Sep 2019 11:02:28 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alejandro =?iso-8859-1?Q?Gonz=E1lez?= 
+        <alejandro.gonzalez.correo@gmail.com>
+Cc:     a.zummo@towertech.it, maxime.ripard@bootlin.com, wens@csie.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [RESEND PATCH 1/1] rtc: sun6i: Allow using as wakeup source from
+ suspend
+Message-ID: <20190901090228.GW21922@piout.net>
+References: <20190821210056.11995-1-alejandro.gonzalez.correo@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: de-DE
+In-Reply-To: <20190821210056.11995-1-alejandro.gonzalez.correo@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear members of the linux-rtc list,
+On 21/08/2019 23:00:56+0200, Alejandro Gonz�lez wrote:
+> This patch allows userspace to set up wakeup alarms on any RTC handled by the
+> sun6i driver, and adds the necessary PM operations to allow resuming from
+> suspend when the configured wakeup alarm fires a IRQ. Of course, that the
+> device actually resumes depends on the suspend state and how a particular
+> hardware reacts to it, but that is out of scope for this patch.
+> 
+> I've tested these changes on a Pine H64 model B, which contains a
+> Allwinner H6 SoC, with the help of CONFIG_PM_TEST_SUSPEND kernel option.
+> These are the interesting outputs from the kernel and commands which
+> show that it works. As every RTC handled by this driver is largely the
+> same, I think that it shouldn't introduce any regression on other SoCs,
+> but I may be wrong.
+> 
+> [    1.092705] PM: test RTC wakeup from 'freeze' suspend
+> [    1.098230] PM: suspend entry (s2idle)
+> [    1.212907] PM: suspend devices took 0.080 seconds
+> (The SoC freezes for some seconds)
+> [    3.197604] PM: resume devices took 0.104 seconds
+> [    3.215937] PM: suspend exit
+> 
+> [    1.092812] PM: test RTC wakeup from 'mem' suspend
+> [    1.098089] PM: suspend entry (deep)
+> [    1.102033] PM: suspend exit
+> [    1.105205] PM: suspend test failed, error -22
+> 
+> In any case, the RTC alarm interrupt gets fired as exptected:
+> 
+> $ echo +5 > /sys/class/rtc/rtc0/wakealarm && sleep 5 && grep rtc /proc/interrupts
+>  29:          1          0          0          0     GICv2 133 Level     7000000.rtc
+> 
+> Signed-off-by: Alejandro Gonz�lez <alejandro.gonzalez.correo@gmail.com>
+> ---
+>  drivers/rtc/rtc-sun6i.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+Applied, thanks.
 
-currently I have a problem with the alarmtimer i'm using to cyclically 
-wake up my i.MX6 ULL board from suspend to RAM.
-
-The problem is that in principle the timer wake ups work fine but seem 
-to be not 100% stable. In about 1 percent the wake up alarm from suspend 
-is missing.
-
-When I look at the code of alarmtimer in function alarmtimer_suspend 
-(kernel/time/alarmtimer.c)
-I find the following:
-
-....
-
-/* Find the soonest timer to expire*/
-
-     for (i = 0; i < ALARM_NUMTYPE; i++) {
-         struct alarm_base *base = &alarm_bases[i];
-         struct timerqueue_node *next;
-         ktime_t delta;
-
-         spin_lock_irqsave(&base->lock, flags);
-         next = timerqueue_getnext(&base->timerqueue);
-         spin_unlock_irqrestore(&base->lock, flags);
-         if (!next)
-             continue;
-         delta = ktime_sub(next->expires, base->gettime());
-         if (!min || (delta < min)) {
-             expires = next->expires;
-             min = delta;
-             type = i;
-         }
-     }
-     if (min == 0)
-         return 0;
-
-     if (ktime_to_ns(min) < 2 * NSEC_PER_SEC) {
-         __pm_wakeup_event(ws, 2 * MSEC_PER_SEC);
-         return -EBUSY;
-     }
-
-In my error case the alarm wake up always fails if the path "if(min==0)" 
-is entered. If I understand this code correctly that means that
-when ever one of the timers in the list has a remaining tick time of 
-zero, the function just returns 0 and continues the suspend process until
-it reaches suspend mode.
-
-If I implement a hack here "if(min == 0) {min = 1;}" and do not return, 
-my system runs 100% ok, as the following -EBUSY path is hit.
-
-So my question to you is: Why is there a check if min < 2 seconds and do 
-a return -EBUSY here, but handle (min==0) differently?
-Could there be some race condition here, where the function 
-alarmtimer_suspend just returns 0 and shortly after this the alarmtimer 
-expires
-right before the RTC driver was able to allow the wake up interrupt?
-
-If I look through the kernel versions I found the alarmtimer_suspend to 
-be a very stable function, so I don't think there is anything wrong here.
-
-But do you have a hint for me where else I could have a look to encircle 
-the error?
-
-Thank you very much!
-
-Br,
-Michael
-
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
