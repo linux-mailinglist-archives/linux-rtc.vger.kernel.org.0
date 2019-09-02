@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AB8A5336
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2019 11:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0529A5344
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2019 11:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730835AbfIBJot (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Sep 2019 05:44:49 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34008 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730260AbfIBJot (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Sep 2019 05:44:49 -0400
-Received: by mail-wr1-f66.google.com with SMTP id s18so13349078wrn.1
-        for <linux-rtc@vger.kernel.org>; Mon, 02 Sep 2019 02:44:48 -0700 (PDT)
+        id S1730287AbfIBJrG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 Sep 2019 05:47:06 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52736 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730373AbfIBJrF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Sep 2019 05:47:05 -0400
+Received: by mail-wm1-f68.google.com with SMTP id t17so13812619wmi.2
+        for <linux-rtc@vger.kernel.org>; Mon, 02 Sep 2019 02:47:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=qd++qlXo+afPltQBesGSfDh/78ykDbV4CflLE8Z4FBI=;
-        b=CmcNGkZYbOXX56CkkyUQiEcj2V/JwCX/HPonVAuRIH/jfFxLuIXgB/AQ67mn1ufEGG
-         kg2qfhRcSGATrqKjKdds6Tp3aqpt29i4pYMDp4zrA2C/2v1vDDR9SlkRMDr11o7EdUBb
-         qCQ7gKVZ8awETYWQ8cpQ09UfE3qotA+q3rmDNURtCvoBXgBeS8/MYX3qbfgsnzRNatc7
-         lO/hXSzdOPqYfFqBKmjzdTfF3D8nKgBHZWKIx3YXfG5WMLX+qb2icEeOW7r5XJjCs54C
-         t+YvB/Ymr7JjDpaxktA9g5I+a7eHzMNHeJjNoE96/Ag9zpbphvfNXea4hrooRMzrSS7b
-         uZDg==
+        bh=d0Fmd8+tPhsncECjkpyfN40FKyAZ9dwp7GhgzrHppXE=;
+        b=qVngIIwui1J9tByelwV/mGZbVHFBFHyDB8d+zUgLu3YBU/pt2PyBLaNu6aJVP3PZu+
+         ihkRHhUgNreGoIsCbkx1FNEXIz6W3YzxsPtykCOFZra1Ph5YrfDGBk5pUhNPXnyQhdOw
+         D9ABWajSIFLGxjIDL3ZgE8fjcP4o/qvxAq8ScG/ooH2FuTnduj/fyZWm7jHaTjH42E/D
+         Ei0dGMTfBr8owiAqXxN0DezEgPDMt9Z1EvGzVnLLyrgPVWZ3lXxJ9oZIffCqMvqKZt1l
+         C76KOLTdO84oTFmQbF26UtdsQg6gT2TxP7R0Ue3uQ2+bt919+f7rtplpS6l1WtkiwEYy
+         +qOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=qd++qlXo+afPltQBesGSfDh/78ykDbV4CflLE8Z4FBI=;
-        b=lGizT/lDljyf791A8vg53KowKVixO7qhZCq2hN3rEZb1sqbV863sGandY+SFGqfbMS
-         sT58vVqs8HlahP/zV/hVJF4XkBLXO4TnF1kjmUm2yzlJ61fgwKvgADXe/J2FYXDkgBLp
-         Yr6dQHlCH5HQak00rje5RCVRe1C4mk0M1xjDYKhTTvjq7oqy4kCL3DUVhRfEPJRWIGkG
-         eBDGIQcNXErDWbNBW/A9jyCJDr/6qiBG/1IDO/AqTqwFp7hJz5nF/d+diSbgk6z3A9dj
-         d65Hqa0uUt3qTffa4E0rAotWLrkH4rwlKsHgJE3S75Jv7F0Q1af9GblEuik4UlOGYos2
-         FbSg==
-X-Gm-Message-State: APjAAAXKiqROutTr8eJFBpg1qwy2e7w/rR4PThzsLfvimqtcHI3rEd2T
-        a77vWgXTbSOZYLip/uzS4TNPSA==
-X-Google-Smtp-Source: APXvYqzBC9wQvqJpV9XW7R3+58fb834Rs94m6nZbv917724zDE4pMNUIC8FJHqYHZ/5VOym469o4yA==
-X-Received: by 2002:adf:e7c4:: with SMTP id e4mr31602370wrn.62.1567417487988;
-        Mon, 02 Sep 2019 02:44:47 -0700 (PDT)
+        bh=d0Fmd8+tPhsncECjkpyfN40FKyAZ9dwp7GhgzrHppXE=;
+        b=hF3rk7zblCNOIxQz0W6tciY7wVhzL+rgfLZyjPhZTolO5JuBMJ0vKafMGwkihDihxO
+         dE6YQl69dciRyJ1TKeH+RVMpv8Buf+YYTdVLvr0mk+qUtoLk7YhPL4EzvZe4bgR4aKk0
+         sqsusWyX08+895RGBzEcAhtL+ipdZV0Mhwup0XHIaQQT2qPSbxE7FvLwxxZi7+xJwh9G
+         dbE9aLMoTYI7iILacfqvo/2UNHJTDieAbTHic5wGMo9yBH4THeqnve99psAPiSSh0omY
+         +pjU27uvcQsNhw+m/KDX2/CcUnAUk5yL8PyFu2x3gOOZ2VmjH4sxnVwVF2msuhXSKLUF
+         j2hQ==
+X-Gm-Message-State: APjAAAVzotSbSJG228Rdbs6UyH5Aua21ZKzw6VWJiqV3t4oR/LghazVJ
+        GL3ZG1UfhhpsrFqTBGLGaaUS+A==
+X-Google-Smtp-Source: APXvYqzpAmIdXWUOa0YAoYYeALNbgpYYaMFH/Rih64cJ0rC02eyJ+NoygykybAEJqvvgTgzMlJYBEA==
+X-Received: by 2002:a1c:f106:: with SMTP id p6mr31938241wmh.148.1567417622917;
+        Mon, 02 Sep 2019 02:47:02 -0700 (PDT)
 Received: from dell ([95.147.198.93])
-        by smtp.gmail.com with ESMTPSA id y6sm4378512wmi.14.2019.09.02.02.44.47
+        by smtp.gmail.com with ESMTPSA id b18sm18199417wro.34.2019.09.02.02.47.02
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 02 Sep 2019 02:44:47 -0700 (PDT)
-Date:   Mon, 2 Sep 2019 10:44:45 +0100
+        Mon, 02 Sep 2019 02:47:02 -0700 (PDT)
+Date:   Mon, 2 Sep 2019 10:47:00 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Frank Wunderlich <frank-w@public-files.de>
 Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
@@ -63,16 +63,16 @@ Cc:     linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
         Sean Wang <sean.wang@mediatek.com>,
         Sebastian Reichel <sre@kernel.org>,
         Tianping Fang <tianping.fang@mediatek.com>
-Subject: Re: [PATCH v6 03/13] dt-bindings: mfd: mediatek: add mt6323
- power-controller
-Message-ID: <20190902094445.GR32232@dell>
+Subject: Re: [PATCH v6 05/13] rtc: mt6397: move some common definitions into
+ rtc.h
+Message-ID: <20190902094700.GS32232@dell>
 References: <20190818135611.7776-1-frank-w@public-files.de>
- <20190818135611.7776-4-frank-w@public-files.de>
+ <20190818135611.7776-6-frank-w@public-files.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190818135611.7776-4-frank-w@public-files.de>
+In-Reply-To: <20190818135611.7776-6-frank-w@public-files.de>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -83,25 +83,105 @@ On Sun, 18 Aug 2019, Frank Wunderlich wrote:
 
 > From: Josef Friedl <josef.friedl@speed.at>
 > 
-> - add powercontroller-section to existing binding-document
-> - add mt6323-pwrc bindings-document with example
+> move code to separate header-file to reuse definitions later
+> in poweroff-driver (drivers/power/reset/mt6323-poweroff.c)
 > 
 > Suggested-by: Frank Wunderlich <frank-w@public-files.de>
 > Signed-off-by: Josef Friedl <josef.friedl@speed.at>
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > ---
-> changes since v5: split out non-pwrc related changes
+> changes since v5: none
 > changes since v4: none
 > changes since v3: none
-> changes since v2: none (=v2 part 7)
+> changes since v2: add missing commit-message
 > ---
->  .../devicetree/bindings/mfd/mt6397.txt        |  6 ++++++
->  .../bindings/power/reset/mt6323-poweroff.txt  | 20 +++++++++++++++++++
->  2 files changed, 26 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/mt6323-poweroff.txt
+>  drivers/rtc/rtc-mt6397.c       | 55 +-------------------------
+>  include/linux/mfd/mt6397/rtc.h | 71 ++++++++++++++++++++++++++++++++++
+>  2 files changed, 72 insertions(+), 54 deletions(-)
+>  create mode 100644 include/linux/mfd/mt6397/rtc.h
+> 
+> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+> index b46ed4dc7015..c08ee5edf865 100644
+> --- a/drivers/rtc/rtc-mt6397.c
+> +++ b/drivers/rtc/rtc-mt6397.c
+> @@ -9,60 +9,7 @@
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+>  #include <linux/rtc.h>
+> -#include <linux/irqdomain.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/of_address.h>
+> -#include <linux/of_irq.h>
+> -#include <linux/io.h>
+> -#include <linux/mfd/mt6397/core.h>
+> -
+> -#define RTC_BBPU		0x0000
+> -#define RTC_BBPU_CBUSY		BIT(6)
+> -
+> -#define RTC_WRTGR		0x003c
+> -
+> -#define RTC_IRQ_STA		0x0002
+> -#define RTC_IRQ_STA_AL		BIT(0)
+> -#define RTC_IRQ_STA_LP		BIT(3)
+> -
+> -#define RTC_IRQ_EN		0x0004
+> -#define RTC_IRQ_EN_AL		BIT(0)
+> -#define RTC_IRQ_EN_ONESHOT	BIT(2)
+> -#define RTC_IRQ_EN_LP		BIT(3)
+> -#define RTC_IRQ_EN_ONESHOT_AL	(RTC_IRQ_EN_ONESHOT | RTC_IRQ_EN_AL)
+> -
+> -#define RTC_AL_MASK		0x0008
+> -#define RTC_AL_MASK_DOW		BIT(4)
+> -
+> -#define RTC_TC_SEC		0x000a
+> -/* Min, Hour, Dom... register offset to RTC_TC_SEC */
+> -#define RTC_OFFSET_SEC		0
+> -#define RTC_OFFSET_MIN		1
+> -#define RTC_OFFSET_HOUR		2
+> -#define RTC_OFFSET_DOM		3
+> -#define RTC_OFFSET_DOW		4
+> -#define RTC_OFFSET_MTH		5
+> -#define RTC_OFFSET_YEAR		6
+> -#define RTC_OFFSET_COUNT	7
+> -
+> -#define RTC_AL_SEC		0x0018
+> -
+> -#define RTC_PDN2		0x002e
+> -#define RTC_PDN2_PWRON_ALARM	BIT(4)
+> -
+> -#define RTC_MIN_YEAR		1968
+> -#define RTC_BASE_YEAR		1900
+> -#define RTC_NUM_YEARS		128
+> -#define RTC_MIN_YEAR_OFFSET	(RTC_MIN_YEAR - RTC_BASE_YEAR)
+> -
+> -struct mt6397_rtc {
+> -	struct device		*dev;
+> -	struct rtc_device	*rtc_dev;
+> -	struct mutex		lock;
+> -	struct regmap		*regmap;
+> -	int			irq;
+> -	u32			addr_base;
+> -};
+> +#include <linux/mfd/mt6397/rtc.h>
+>  
+>  static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+>  {
+> diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc.h
+> new file mode 100644
+> index 000000000000..b702c29e8c74
+> --- /dev/null
+> +++ b/include/linux/mfd/mt6397/rtc.h
+> @@ -0,0 +1,71 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2014-2018 MediaTek Inc.
 
-Applied, thanks.
+This is out of date.
+
+Once corrected, please apply my:
+
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
 Lee Jones [李琼斯]
