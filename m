@@ -2,185 +2,211 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B547EA5489
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2019 12:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 217FCA569C
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Sep 2019 14:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731133AbfIBK5x (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Sep 2019 06:57:53 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:57433 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730702AbfIBK5w (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Sep 2019 06:57:52 -0400
-Received: from p5de0b6c5.dip0.t-ipconnect.de ([93.224.182.197] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1i4k1s-0003AW-Ei; Mon, 02 Sep 2019 12:57:48 +0200
-Date:   Mon, 2 Sep 2019 12:57:47 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-cc:     Michael <michael@mipisi.de>, linux-rtc@vger.kernel.org,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
- is zero
-In-Reply-To: <20190902074917.GA21922@piout.net>
-Message-ID: <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
-References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org> <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1730187AbfIBMsL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 Sep 2019 08:48:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729707AbfIBMsL (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 2 Sep 2019 08:48:11 -0400
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 479D422DBF;
+        Mon,  2 Sep 2019 12:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567428489;
+        bh=HRPdP6IoZxIKzVyOlsz8h5aGfiCrnDwoIA8rqSjMhRM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mojGZV5oAnM90ECPfyUnZxLnQg5FAEU7IHZztlBj52IrmhvAD32oB7WbU888c04pr
+         IfiJXxL9wsE3n37P3IKeLmF3FFfFlEXgVQIyZ//aYhp+A45/EO3Ge14QBTptFUrmtD
+         A4l0D+dHtwqJ7+EC+Ao9ho0yiRBDMhlNHMID1BCM=
+Received: by mail-lj1-f177.google.com with SMTP id d5so1768680lja.10;
+        Mon, 02 Sep 2019 05:48:09 -0700 (PDT)
+X-Gm-Message-State: APjAAAWL3sCXszC7z1xTZR2oHPv6uiXSNY7ogL7GJiwP5Mj+dQEt5lMl
+        4xB9ku5kM3HbKHoZ1/6CVLGvI3D8hO0OmBZFZz0=
+X-Google-Smtp-Source: APXvYqwsQ0jKyySStl5IspgIxl6esl8OcqilEKBAJg/dod6mua7Muq88O0wbce7GxRjmTRa8z4MXHmevjQBq3jJ5+j0=
+X-Received: by 2002:a2e:7818:: with SMTP id t24mr15549999ljc.210.1567428487319;
+ Mon, 02 Sep 2019 05:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20190823145356.6341-1-krzk@kernel.org> <20190823145356.6341-7-krzk@kernel.org>
+ <CAL_JsqKCpKuc=-4UyWFFv_RenKuSJcr9cdSKjbkL8F1ni+VODw@mail.gmail.com>
+In-Reply-To: <CAL_JsqKCpKuc=-4UyWFFv_RenKuSJcr9cdSKjbkL8F1ni+VODw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Mon, 2 Sep 2019 14:47:55 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPddVJvpGgd1K_W63eho8tu+X_nr+0PYpjBafp+bw=-70w@mail.gmail.com>
+Message-ID: <CAJKOXPddVJvpGgd1K_W63eho8tu+X_nr+0PYpjBafp+bw=-70w@mail.gmail.com>
+Subject: Re: [RFC 7/9] dt-bindings: rtc: s3c: Convert S3C/Exynos RTC bindings
+ to json-schema
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, notify@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Michael,
+On Mon, 26 Aug 2019 at 14:06, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Fri, Aug 23, 2019 at 9:54 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > Convert Samsung S3C/Exynos Real Time Clock bindings to DT schema format
+> > using json-schema.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
+> >  .../devicetree/bindings/rtc/s3c-rtc.txt       | 31 ------
+> >  .../devicetree/bindings/rtc/s3c-rtc.yaml      | 95 +++++++++++++++++++
+> >  2 files changed, 95 insertions(+), 31 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/rtc/s3c-rtc.txt
+> >  create mode 100644 Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+>
+>
+> > diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> > new file mode 100644
+> > index 000000000000..44b021812a83
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> > @@ -0,0 +1,95 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/s3c-rtc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Samsung S3C, S5P and Exynos Real Time Clock controller
+> > +
+> > +maintainers:
+> > +  - Krzysztof Kozlowski <krzk@kernel.org>
+> > +
+> > +# Select also deprecated compatibles (for finding deprecate usage)
+> > +select:
+> > +  properties:
+> > +    compatible:
+> > +      items:
+> > +        - enum:
+> > +            - samsung,s3c2410-rtc
+> > +            - samsung,s3c2416-rtc
+> > +            - samsung,s3c2443-rtc
+> > +            - samsung,s3c6410-rtc
+> > +            # Deprecated, use samsung,s3c6410-rtc
+> > +            - samsung,exynos3250-rtc
+>
+> We've come up with a better way of doing this that doesn't need a
+> custom 'select'. Add a 'oneOf' to compatible and add another entry:
+>
+> - const: samsung,exynos3250-rtc
+>   deprecated: true
+>
+> It's not implemented yet in the tool, but we'll keep the compatible
+> for 'select' and otherwise drop schema marked deprecated.
 
-On Mon, 2 Sep 2019, Alexandre Belloni wrote:
-> On 31/08/2019 20:32:06+0200, Michael wrote:
-> > currently I have a problem with the alarmtimer i'm using to cyclically wake
-> > up my i.MX6 ULL board from suspend to RAM.
-> > 
-> > The problem is that in principle the timer wake ups work fine but seem to be
-> > not 100% stable. In about 1 percent the wake up alarm from suspend is
-> > missing.
+OK
 
-> > In my error case the alarm wake up always fails if the path "if(min==0)" is
-> > entered. If I understand this code correctly that means that
-> > when ever one of the timers in the list has a remaining tick time of zero,
-> > the function just returns 0 and continues the suspend process until
-> > it reaches suspend mode.
+>
+> > +  required:
+> > +    - compatible
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - enum:
+>
+> You can drop 'items' when there's only 1 entry.
 
-No. That code is simply broken because it tries to handle the case where a
-alarmtimer nanosleep got woken up by the freezer. That's broken because it
-makes the delta = 0 assumption which leads to the issue you discovered.
+Indeed.
 
-That whole cruft can be removed by switching alarmtimer nanosleep to use
-freezable_schedule(). That keeps the timer queued and avoids all the issues.
+>
+> > +          - samsung,s3c2410-rtc
+> > +          - samsung,s3c2416-rtc
+> > +          - samsung,s3c2443-rtc
+> > +          - samsung,s3c6410-rtc
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description:
+> > +      Must contain a list of phandle and clock specifier for the rtc
+> > +      clock and in the case of a s3c6410 compatible controller, also
+> > +      a source clock.
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  clock-names:
+> > +    description:
+> > +      Must contain "rtc" and for a s3c6410 compatible controller,
+> > +      a "rtc_src" sorted in the same order as the clocks property.
+> > +    oneOf:
+> > +      - items:
+> > +          - const: rtc
+> > +      - items:
+> > +          # TODO: This can be in any order matching clocks, how to express it?
+>
+> It shouldn't be in any order. Fix the dts files.
 
-Completely untested patch below.
+I see, other schemas also require specific ordering.
 
-Thanks,
+>
+> > +          - const: rtc
+> > +          - const: rtc_src
+>
+> You should drop all this and add an else clause below.
 
-	tglx
+Yes
 
-8<----------------------
+>
+> > +
+> > +  interrupts:
+> > +    description:
+> > +      Two interrupt numbers to the cpu should be specified. First
+> > +      interrupt number is the rtc alarm interrupt and second interrupt number
+> > +      is the rtc tick interrupt. The number of cells representing a interrupt
+> > +      depends on the parent interrupt controller.
+> > +    minItems: 2
+> > +    maxItems: 2
+> > +
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - samsung,s3c6410-rtc
+> > +              - samsung,exynos3250-rtc
+> > +
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          minItems: 2
+> > +          maxItems: 2
+> > +        clock-names:
+> > +          items:
+> > +          - const: rtc
+> > +          - const: rtc_src
+>
+> Should be indented 2 more spaces.
 
-kernel/time/alarmtimer.c |   57 +++--------------------------------------------
- 1 file changed, 4 insertions(+), 53 deletions(-)
+Thanks for feedback.
 
---- a/kernel/time/alarmtimer.c
-+++ b/kernel/time/alarmtimer.c
-@@ -46,14 +46,6 @@ static struct alarm_base {
- 	clockid_t		base_clockid;
- } alarm_bases[ALARM_NUMTYPE];
- 
--#if defined(CONFIG_POSIX_TIMERS) || defined(CONFIG_RTC_CLASS)
--/* freezer information to handle clock_nanosleep triggered wakeups */
--static enum alarmtimer_type freezer_alarmtype;
--static ktime_t freezer_expires;
--static ktime_t freezer_delta;
--static DEFINE_SPINLOCK(freezer_delta_lock);
--#endif
--
- #ifdef CONFIG_RTC_CLASS
- static struct wakeup_source *ws;
- 
-@@ -241,19 +233,12 @@ EXPORT_SYMBOL_GPL(alarm_expires_remainin
-  */
- static int alarmtimer_suspend(struct device *dev)
- {
--	ktime_t min, now, expires;
-+	ktime_t now, expires, min = KTIME_MAX;
- 	int i, ret, type;
- 	struct rtc_device *rtc;
- 	unsigned long flags;
- 	struct rtc_time tm;
- 
--	spin_lock_irqsave(&freezer_delta_lock, flags);
--	min = freezer_delta;
--	expires = freezer_expires;
--	type = freezer_alarmtype;
--	freezer_delta = 0;
--	spin_unlock_irqrestore(&freezer_delta_lock, flags);
--
- 	rtc = alarmtimer_get_rtcdev();
- 	/* If we have no rtcdev, just return */
- 	if (!rtc)
-@@ -271,13 +256,13 @@ static int alarmtimer_suspend(struct dev
- 		if (!next)
- 			continue;
- 		delta = ktime_sub(next->expires, base->gettime());
--		if (!min || (delta < min)) {
-+		if (delta < min) {
- 			expires = next->expires;
- 			min = delta;
- 			type = i;
- 		}
- 	}
--	if (min == 0)
-+	if (min == KTIME_MAX)
- 		return 0;
- 
- 	if (ktime_to_ns(min) < 2 * NSEC_PER_SEC) {
-@@ -479,38 +464,6 @@ u64 alarm_forward_now(struct alarm *alar
- EXPORT_SYMBOL_GPL(alarm_forward_now);
- 
- #ifdef CONFIG_POSIX_TIMERS
--
--static void alarmtimer_freezerset(ktime_t absexp, enum alarmtimer_type type)
--{
--	struct alarm_base *base;
--	unsigned long flags;
--	ktime_t delta;
--
--	switch(type) {
--	case ALARM_REALTIME:
--		base = &alarm_bases[ALARM_REALTIME];
--		type = ALARM_REALTIME_FREEZER;
--		break;
--	case ALARM_BOOTTIME:
--		base = &alarm_bases[ALARM_BOOTTIME];
--		type = ALARM_BOOTTIME_FREEZER;
--		break;
--	default:
--		WARN_ONCE(1, "Invalid alarm type: %d\n", type);
--		return;
--	}
--
--	delta = ktime_sub(absexp, base->gettime());
--
--	spin_lock_irqsave(&freezer_delta_lock, flags);
--	if (!freezer_delta || (delta < freezer_delta)) {
--		freezer_delta = delta;
--		freezer_expires = absexp;
--		freezer_alarmtype = type;
--	}
--	spin_unlock_irqrestore(&freezer_delta_lock, flags);
--}
--
- /**
-  * clock2alarm - helper that converts from clockid to alarmtypes
-  * @clockid: clockid.
-@@ -715,7 +668,7 @@ static int alarmtimer_do_nsleep(struct a
- 		set_current_state(TASK_INTERRUPTIBLE);
- 		alarm_start(alarm, absexp);
- 		if (likely(alarm->data))
--			schedule();
-+			freezable_schedule();
- 
- 		alarm_cancel(alarm);
- 	} while (alarm->data && !signal_pending(current));
-@@ -727,8 +680,6 @@ static int alarmtimer_do_nsleep(struct a
- 	if (!alarm->data)
- 		return 0;
- 
--	if (freezing(current))
--		alarmtimer_freezerset(absexp, type);
- 	restart = &current->restart_block;
- 	if (restart->nanosleep.type != TT_NONE) {
- 		struct timespec64 rmt;
+Best regards,
+Krzysztof
