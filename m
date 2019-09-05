@@ -2,21 +2,21 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0E3A9ADF
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Sep 2019 08:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0ED5A9AE2
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Sep 2019 08:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731190AbfIEGqY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Sep 2019 02:46:24 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:35678 "EHLO huawei.com"
+        id S1731248AbfIEGqc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Sep 2019 02:46:32 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6679 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726120AbfIEGqX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 5 Sep 2019 02:46:23 -0400
+        id S1726097AbfIEGqY (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 5 Sep 2019 02:46:24 -0400
 Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id A5A599B3E27DF3E625FB;
+        by Forcepoint Email with ESMTP id 6D03CDB8DBB710AB9656;
         Thu,  5 Sep 2019 14:46:21 +0800 (CST)
 Received: from linux-ibm.site (10.175.102.37) by
  DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 5 Sep 2019 14:46:12 +0800
+ 14.3.439.0; Thu, 5 Sep 2019 14:46:13 +0800
 From:   zhong jiang <zhongjiang@huawei.com>
 To:     <tony@atomide.com>, <udeep.dutt@intel.com>,
         <ashutosh.dixit@intel.com>, <gregkh@linuxfoundation.org>,
@@ -25,9 +25,9 @@ To:     <tony@atomide.com>, <udeep.dutt@intel.com>,
 CC:     <zhongjiang@huawei.com>, <linux-kernel@vger.kernel.org>,
         <linux-rtc@vger.kernel.org>, <arnd@arndb.de>,
         <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 2/4] misc: mic: Use PTR_ERR_OR_ZERO rather than its implementation
-Date:   Thu, 5 Sep 2019 14:43:13 +0800
-Message-ID: <1567665795-5901-3-git-send-email-zhongjiang@huawei.com>
+Subject: [PATCH 3/4] phy: tegra: Use PTR_ERR_OR_ZERO rather than its implementation
+Date:   Thu, 5 Sep 2019 14:43:14 +0800
+Message-ID: <1567665795-5901-4-git-send-email-zhongjiang@huawei.com>
 X-Mailer: git-send-email 1.7.12.4
 In-Reply-To: <1567665795-5901-1-git-send-email-zhongjiang@huawei.com>
 References: <1567665795-5901-1-git-send-email-zhongjiang@huawei.com>
@@ -45,25 +45,25 @@ use it directly. hence just replace it.
 
 Signed-off-by: zhong jiang <zhongjiang@huawei.com>
 ---
- drivers/misc/mic/scif/scif_epd.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/phy/tegra/phy-tegra194-p2u.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/misc/mic/scif/scif_epd.h b/drivers/misc/mic/scif/scif_epd.h
-index d3837f8..0b9dfe1 100644
---- a/drivers/misc/mic/scif/scif_epd.h
-+++ b/drivers/misc/mic/scif/scif_epd.h
-@@ -156,9 +156,8 @@ static inline int scif_verify_epd(struct scif_endpt *ep)
- static inline int scif_anon_inode_getfile(scif_epd_t epd)
- {
- 	epd->anon = anon_inode_getfile("scif", &scif_anon_fops, NULL, 0);
--	if (IS_ERR(epd->anon))
--		return PTR_ERR(epd->anon);
+diff --git a/drivers/phy/tegra/phy-tegra194-p2u.c b/drivers/phy/tegra/phy-tegra194-p2u.c
+index 7042bed..40bc550 100644
+--- a/drivers/phy/tegra/phy-tegra194-p2u.c
++++ b/drivers/phy/tegra/phy-tegra194-p2u.c
+@@ -92,10 +92,8 @@ static int tegra_p2u_probe(struct platform_device *pdev)
+ 	phy_set_drvdata(generic_phy, phy);
+ 
+ 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+-	if (IS_ERR(phy_provider))
+-		return PTR_ERR(phy_provider);
+ 
 -	return 0;
-+
-+	return PTR_ERR_OR_ZERO(epd->anon);
++	return PTR_ERR_OR_ZERO(phy_provider);
  }
  
- static inline void scif_anon_inode_fput(scif_epd_t epd)
+ static const struct of_device_id tegra_p2u_id_table[] = {
 -- 
 1.7.12.4
 
