@@ -2,114 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A57AED48
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Sep 2019 16:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B2AAEE63
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Sep 2019 17:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729140AbfIJOkQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Sep 2019 10:40:16 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42599 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727815AbfIJOkP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Sep 2019 10:40:15 -0400
-Received: by mail-wr1-f66.google.com with SMTP id q14so20775945wrm.9
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Sep 2019 07:40:13 -0700 (PDT)
+        id S1731099AbfIJPTv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Sep 2019 11:19:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41356 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726060AbfIJPTu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Sep 2019 11:19:50 -0400
+Received: by mail-wr1-f65.google.com with SMTP id h7so20048672wrw.8
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Sep 2019 08:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tqxD7ov2Kumh7FsbKIaAwtDQZtl0cBFUR7VvvrKEYIM=;
-        b=PlwLNLVOUgCbdysqM/uqhc5TLxDP80EbYI0iuhRqk0ViBnBXT3ks0U5CWlxEPwJrtJ
-         RbN6C52JGK5IhbOYtPA2IhYRJMAbKh02pduAbUoys2N6PPIYaYawLNrQaidizV68ZjHd
-         ygS2cDF6eA+rPHWVD8GuTYIhcCuuoWEQA/dKYjB6t7LuG2vNlxK7F9G+Z9kEepKSRNn/
-         IDMqiPPI1RRONBVQfPhK+JcxL5CQk09GfXTy7Dhm6c7Fod/x4l3h5yGIrNmaHoais0Ep
-         y8cUUh6Ee/jRm4/mEHYYwPisBImfkMfaq8+HCHv4sY5BMnL2qU4WBTF2WQjnDMH1D/xX
-         GgOA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=vmUuCMkzir2Sv0OO2nHQXi9m+juUE2w8XHaiTSroSHA=;
+        b=kYw/oUI/H82GJRyFfkUzR4+OURd1LYYPwpXS5Eassv7VrsNI7XMdZAjX/Hem4mUJmh
+         Q07kd8PYu2S/HY2W5SC/lu+yJ4R0w793l/6htAF9mDMKAzMoFl2DMq1iT6b+LwK6IaQ7
+         UOtLAN5bR7qX4XSlusnmqgKWZ9hozJtU1Zp8s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tqxD7ov2Kumh7FsbKIaAwtDQZtl0cBFUR7VvvrKEYIM=;
-        b=HLknOAJbhyyuftzYNArFkPwSHrx6jWjF9Wp8rcyBVLTaZmeRHF0efSQBs1qhLv3SRG
-         86+7b6daih61mLxAWKg8fo+sP/6C8OWjkq5FMBqIG+PvoPH1M5JmTKrzy3POJcXOIx44
-         4tIkhAM3fE+pq8104/RiviIi5pah6Hr39aCrdTJFwW9j0y9IMZzvKTgVtajzkAgFlGQh
-         roGu+WbR3ItB+qtNB5TjQPBCkMZB+a/3/bkxR6sY8g2EJjNy5XgK33UV2EX4Xo/ZLavQ
-         Qkjc7yAq/nAE8Wbj/LNz+V4sdC7vbd1ecbRfs09Ci7hK8S+9UGEctXCy+pRriop+bwHd
-         eP1Q==
-X-Gm-Message-State: APjAAAXzjTDgIIIlXEahukfz7RSJpPug4YxV7b98h/Sekj3GnaHKn/9I
-        KmlrB4UtCJKNB6z9m7y0zL7bQcXMqpk=
-X-Google-Smtp-Source: APXvYqzsB7tMiN4itYyUFAxd2rplsT9C9eLeBL3Ld/+lzUFDI2O24EsLCfF9PDVsxuHxG2l1rsmhhA==
-X-Received: by 2002:adf:bb8e:: with SMTP id q14mr4067920wrg.74.1568126412425;
-        Tue, 10 Sep 2019 07:40:12 -0700 (PDT)
-Received: from localhost.localdomain (3e6b1cc1.rev.stofanet.dk. [62.107.28.193])
-        by smtp.googlemail.com with ESMTPSA id k9sm34057068wrd.7.2019.09.10.07.40.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2019 07:40:11 -0700 (PDT)
-From:   Bruno Thomsen <bruno.thomsen@gmail.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        u.kleine-koenig@pengutronix.de, bth@kamstrup.com,
-        Bruno Thomsen <bruno.thomsen@gmail.com>
-Subject: [PATCH] rtc: pcf2127: default power management mode
-Date:   Tue, 10 Sep 2019 16:39:45 +0200
-Message-Id: <20190910143945.9364-1-bruno.thomsen@gmail.com>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=vmUuCMkzir2Sv0OO2nHQXi9m+juUE2w8XHaiTSroSHA=;
+        b=SG5RnrKDXUZOiJr0du7udc0rJzMp/Ef0RmV7NKbo5jIgTUcuE6WxqaSvUP+/2TzLx9
+         O6mqMluvVNv0s5+O353bO/MRJ7y40uH3u5k1iCMc8CuS02anoi9wyqSRv2nXR3UUsPsp
+         KuFB6nPHEFdFNvuEsFzG1C8hfd7ejezNbF7G9IPMdanGpkve+cXZjQzXN7r0rQfUkM/p
+         6vmw16szq77Fe4Gw3yA/L1lL6TJyT6xGUg8gNhh9+3sWakxc7iB/rWC+xgNPCsa5zVtF
+         utwSr2UoLk1rlThUDhBw4qnh4rm1mgxGg2R9D6rjuGJ++RC+TQ1D9YPTKjc3eMCP4QxI
+         Rxuw==
+X-Gm-Message-State: APjAAAWqfA9ZFZWFHZicU2g9wMyRaKhKWxdpDz4WuP1+hLFJqFPqlgSK
+        yp+RQIEuBSh/R6+VgMSbvhZCPQ==
+X-Google-Smtp-Source: APXvYqw39BL6cpTQ2h3WRAEb89m10wkW4DGlcBRXCORRYb3DbUpcGPbZICuw3hLTec/QOR2bEOCGEQ==
+X-Received: by 2002:a5d:678a:: with SMTP id v10mr26708489wru.145.1568128788717;
+        Tue, 10 Sep 2019 08:19:48 -0700 (PDT)
+Received: from penguin.lxd ([148.69.85.38])
+        by smtp.gmail.com with ESMTPSA id o22sm32753305wra.96.2019.09.10.08.19.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Sep 2019 08:19:48 -0700 (PDT)
+From:   Nick Crews <ncrews@chromium.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Duncan Laurie <dlaurie@google.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Nick Crews <ncrews@chromium.org>
+Subject: [PATCH] rtc: wilco-ec: Sanitize values received from RTC
+Date:   Tue, 10 Sep 2019 16:19:29 +0100
+Message-Id: <20190910151929.780-1-ncrews@chromium.org>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This improves the rtc driver robustness by ensuring that the
-chip power management functions are operating in default mode.
+Check that the time received from the RTC HW is valid,
+otherwise the computation of rtc_year_days() in the next
+line could, and sometimes does, crash the kernel.
 
-As out-of-tree drivers could have changed mode thus resulting in
-subtle differences that isn't immediately revealed on upgraded
-System-on-Modules (SoM). This happens since chip configuration is
-unchanged during reboot and power-cycle of the SoM.
+While we're at it, fix the license to plain "GPL".
 
-Signed-off-by: Bruno Thomsen <bruno.thomsen@gmail.com>
+Signed-off-by: Nick Crews <ncrews@chromium.org>
 ---
- drivers/rtc/rtc-pcf2127.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/rtc/rtc-wilco-ec.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 02b069caffd5..694ec8eefea5 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -37,6 +37,9 @@
- #define PCF2127_BIT_CTRL3_BLF			BIT(2)
- #define PCF2127_BIT_CTRL3_BF			BIT(3)
- #define PCF2127_BIT_CTRL3_BTSE			BIT(4)
-+#define PCF2127_BIT_CTRL3_PWRMNG0		BIT(5)
-+#define PCF2127_BIT_CTRL3_PWRMNG1		BIT(6)
-+#define PCF2127_BIT_CTRL3_PWRMNG2		BIT(7)
- /* Time and date registers */
- #define PCF2127_REG_SC			0x03
- #define PCF2127_BIT_SC_OSF			BIT(7)
-@@ -484,10 +487,22 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	/*
- 	 * Disable battery low/switch-over timestamp and interrupts.
- 	 * Clear battery interrupt flags which can block new trigger events.
-+	 * Power management configuration:
-+	 * - Battery switch-over function is operating in standard mode.
-+	 *   Hardware has to ensure VDD drops slower than 0.7 V/ms otherwise
-+	 *   oscillator stop can occur. Since switch-over threshold is typical
-+	 *   2.5 V and sampled every 1 ms with a power management operating
-+	 *   limit of 1.8 V. See NXP AN11186 for more info.
-+	 * - Battery low detection function is enabled.
-+	 * - Extra power fail detection function is enabled.
-+	 *
- 	 * Note: This is the default chip behaviour but added to ensure
- 	 * correct tamper timestamp and interrupt function.
- 	 */
- 	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL3,
-+				 PCF2127_BIT_CTRL3_PWRMNG2 |
-+				 PCF2127_BIT_CTRL3_PWRMNG1 |
-+				 PCF2127_BIT_CTRL3_PWRMNG0 |
- 				 PCF2127_BIT_CTRL3_BTSE |
- 				 PCF2127_BIT_CTRL3_BF |
- 				 PCF2127_BIT_CTRL3_BIE |
+diff --git a/drivers/rtc/rtc-wilco-ec.c b/drivers/rtc/rtc-wilco-ec.c
+index 8ad4c4e6d557..0ccbf2dce832 100644
+--- a/drivers/rtc/rtc-wilco-ec.c
++++ b/drivers/rtc/rtc-wilco-ec.c
+@@ -110,8 +110,16 @@ static int wilco_ec_rtc_read(struct device *dev, struct rtc_time *tm)
+ 	tm->tm_mday	= rtc.day;
+ 	tm->tm_mon	= rtc.month - 1;
+ 	tm->tm_year	= rtc.year + (rtc.century * 100) - 1900;
+-	tm->tm_yday	= rtc_year_days(tm->tm_mday, tm->tm_mon, tm->tm_year);
+ 
++	if (rtc_valid_tm(tm)) {
++		dev_warn(dev,
++			 "Time computed from EC RTC is invalid: sec=%d, min=%d, hour=%d, mday=%d, mon=%d, year=%d",
++			 tm->tm_sec, tm->tm_min, tm->tm_hour, tm->mday,
++			 tm->mon, tm->year);
++		return -EIO;
++	}
++
++	tm->tm_yday = rtc_year_days(tm->tm_mday, tm->tm_mon, tm->tm_year);
+ 	/* Don't compute day of week, we don't need it. */
+ 	tm->tm_wday = -1;
+ 
+@@ -188,5 +196,5 @@ module_platform_driver(wilco_ec_rtc_driver);
+ 
+ MODULE_ALIAS("platform:rtc-wilco-ec");
+ MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
+-MODULE_LICENSE("GPL v2");
++MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("Wilco EC RTC driver");
 -- 
-2.21.0
+2.11.0
 
