@@ -2,195 +2,225 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2614B007F
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2019 17:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E63B03EC
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Sep 2019 20:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbfIKPs3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Sep 2019 11:48:29 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:55100 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728271AbfIKPs3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Sep 2019 11:48:29 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 46T5sP06Mqz1r7hg;
-        Wed, 11 Sep 2019 17:48:24 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 46T5sN69pbz1qqkw;
-        Wed, 11 Sep 2019 17:48:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id FKitvMXOmW3W; Wed, 11 Sep 2019 17:48:22 +0200 (CEST)
-X-Auth-Info: xd2sm1XRNSYrwIX2giQpW1xnFCUOjECH5odT+gLl0rg=
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Wed, 11 Sep 2019 17:48:22 +0200 (CEST)
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH] rtc: Add support for century bits to m41t62 (rv4162) RTC devices
-Date:   Wed, 11 Sep 2019 17:48:03 +0200
-Message-Id: <20190911154803.15969-1-lukma@denx.de>
-X-Mailer: git-send-email 2.11.0
+        id S1730160AbfIKStf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Sep 2019 14:49:35 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:15820 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730050AbfIKStf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Sep 2019 14:49:35 -0400
+X-UUID: 39ff3adccfad45a68dd0489c47847c57-20190912
+X-UUID: 39ff3adccfad45a68dd0489c47847c57-20190912
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 787524690; Thu, 12 Sep 2019 02:49:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 12 Sep 2019 02:49:26 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 12 Sep 2019 02:49:26 +0800
+Message-ID: <1568227767.8481.4.camel@mtkswgap22>
+Subject: Re: [PATCH v7 5/7] power: reset: add driver for mt6323 poweroff
+From:   Sean Wang <sean.wang@mediatek.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+CC:     <linux-mediatek@lists.infradead.org>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        <linux-pm@vger.kernel.org>, Josef Friedl <josef.friedl@speed.at>,
+        <linux-kernel@vger.kernel.org>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Thu, 12 Sep 2019 02:49:27 +0800
+In-Reply-To: <20190910070446.639-6-frank-w@public-files.de>
+References: <20190910070446.639-1-frank-w@public-files.de>
+         <20190910070446.639-6-frank-w@public-files.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 40F2DA63D46F5CD798C0546348146FBED6745C18E6A0AE0525103705EBD596C12000:8
+X-MTK:  N
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This change adds support for 'century bits' on 4162 family of RTC devices
-(from ST or microcrystal), which allow storing time beyond year 2099.
+Hi, Frank
 
-For rv4162 century bits - CB1[7]:CB0[6] are stored in reg6 - 0x6 (MONTH):
-CB1  CB0
- 0    0      (year 2000 - 2099)
- 0    1      (year 2100 - 2199)
- 1    0      (year 2200 - 2299)
- 1    1      (year 2300 - 2399)
+On Tue, 2019-09-10 at 09:04 +0200, Frank Wunderlich wrote:
+> From: Josef Friedl <josef.friedl@speed.at>
+> 
+> add poweroff driver for mt6323 and make Makefile and Kconfig-Entries
+> 
+> Suggested-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Josef Friedl <josef.friedl@speed.at>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-The driver has been also adjusted to allow setting time up to year 2399
-if the M41T80_FEATURE_CB is set in its DTS/I2C data.
 
-There shall be no functional changes for devices not supporting this
-feature. However, other devices - like m41t80 - have different approaches
-to handle century information.
+Thanks for your help keep the unfinished driver to upstream
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
- drivers/rtc/rtc-m41t80.c | 56 +++++++++++++++++++++++++++++++---------
- 1 file changed, 44 insertions(+), 12 deletions(-)
+Acked-by: Sean Wang <sean.wang@mediatek.com>
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index 9fdc284c943b..5452ab693568 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -68,9 +68,22 @@
- #define M41T80_FEATURE_SQ	BIT(2)	/* Squarewave feature */
- #define M41T80_FEATURE_WD	BIT(3)	/* Extra watchdog resolution */
- #define M41T80_FEATURE_SQ_ALT	BIT(4)	/* RSx bits are in reg 4 */
-+#define M41T80_FEATURE_CB	BIT(5)	/* Century Bits[CB1:CB0] are in reg 6 */
-+
-+/*
-+ * Century bits - CB1[7]:CB0[6] in reg6 (MONTH):
-+ * CB1  CB0
-+ * 0    0      (year 2000 - 2099)
-+ * 0    1      (year 2100 - 2199)
-+ * 1    0      (year 2200 - 2299)
-+ * 1    1      (year 2300 - 2399)
-+ */
-+#define M41T80_CB_SHIFT         6       /* CB[0] bit position */
-+#define M41T80_CB_MASK          0xc0    /* Century bits mask */
- 
- static const struct i2c_device_id m41t80_id[] = {
--	{ "m41t62", M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT },
-+	{ "m41t62", M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT |
-+	  M41T80_FEATURE_CB},
- 	{ "m41t65", M41T80_FEATURE_HT | M41T80_FEATURE_WD },
- 	{ "m41t80", M41T80_FEATURE_SQ },
- 	{ "m41t81", M41T80_FEATURE_HT | M41T80_FEATURE_SQ},
-@@ -80,7 +93,8 @@ static const struct i2c_device_id m41t80_id[] = {
- 	{ "m41st84", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
- 	{ "m41st85", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
- 	{ "m41st87", M41T80_FEATURE_HT | M41T80_FEATURE_BL | M41T80_FEATURE_SQ },
--	{ "rv4162", M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT },
-+	{ "rv4162", M41T80_FEATURE_SQ | M41T80_FEATURE_WD |
-+	  M41T80_FEATURE_SQ_ALT | M41T80_FEATURE_CB},
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, m41t80_id);
-@@ -88,7 +102,8 @@ MODULE_DEVICE_TABLE(i2c, m41t80_id);
- static const struct of_device_id m41t80_of_match[] = {
- 	{
- 		.compatible = "st,m41t62",
--		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT)
-+		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_SQ_ALT |
-+				 M41T80_FEATURE_CB)
- 	},
- 	{
- 		.compatible = "st,m41t65",
-@@ -128,16 +143,19 @@ static const struct of_device_id m41t80_of_match[] = {
- 	},
- 	{
- 		.compatible = "microcrystal,rv4162",
--		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
-+		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD |
-+				 M41T80_FEATURE_SQ_ALT | M41T80_FEATURE_CB)
- 	},
- 	/* DT compatibility only, do not use compatibles below: */
- 	{
- 		.compatible = "st,rv4162",
--		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
-+		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD |
-+				 M41T80_FEATURE_SQ_ALT | M41T80_FEATURE_CB)
- 	},
- 	{
- 		.compatible = "rv4162",
--		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD | M41T80_FEATURE_SQ_ALT)
-+		.data = (void *)(M41T80_FEATURE_SQ | M41T80_FEATURE_WD |
-+				 M41T80_FEATURE_SQ_ALT | M41T80_FEATURE_CB)
- 	},
- 	{ }
- };
-@@ -197,6 +215,7 @@ static irqreturn_t m41t80_handle_irq(int irq, void *dev_id)
- static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
-+	struct m41t80_data *clientdata = i2c_get_clientdata(client);
- 	unsigned char buf[8];
- 	int err, flags;
- 
-@@ -222,9 +241,13 @@ static int m41t80_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	tm->tm_mday = bcd2bin(buf[M41T80_REG_DAY] & 0x3f);
- 	tm->tm_wday = buf[M41T80_REG_WDAY] & 0x07;
- 	tm->tm_mon = bcd2bin(buf[M41T80_REG_MON] & 0x1f) - 1;
--
--	/* assume 20YY not 19YY, and ignore the Century Bit */
-+	/* assume 20YY not 19YY */
- 	tm->tm_year = bcd2bin(buf[M41T80_REG_YEAR]) + 100;
-+
-+	if (clientdata->features & M41T80_FEATURE_CB)
-+		tm->tm_year += ((buf[M41T80_REG_MON] & M41T80_CB_MASK)
-+				>> M41T80_CB_SHIFT) * 100;
-+
- 	return 0;
- }
- 
-@@ -232,10 +255,13 @@ static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct m41t80_data *clientdata = i2c_get_clientdata(client);
-+	int err, flags, max_year = 199;
- 	unsigned char buf[8];
--	int err, flags;
- 
--	if (tm->tm_year < 100 || tm->tm_year > 199)
-+	if (clientdata->features & M41T80_FEATURE_CB)
-+		max_year = 499;
-+
-+	if (tm->tm_year < 100 || tm->tm_year > max_year)
- 		return -EINVAL;
- 
- 	buf[M41T80_REG_SSEC] = 0;
-@@ -243,8 +269,14 @@ static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[M41T80_REG_MIN] = bin2bcd(tm->tm_min);
- 	buf[M41T80_REG_HOUR] = bin2bcd(tm->tm_hour);
- 	buf[M41T80_REG_DAY] = bin2bcd(tm->tm_mday);
--	buf[M41T80_REG_MON] = bin2bcd(tm->tm_mon + 1);
--	buf[M41T80_REG_YEAR] = bin2bcd(tm->tm_year - 100);
-+	if (clientdata->features & M41T80_FEATURE_CB) {
-+		buf[M41T80_REG_YEAR] = bin2bcd((tm->tm_year - 100) % 100);
-+		buf[M41T80_REG_MON] = bin2bcd(tm->tm_mon + 1) |
-+			(((tm->tm_year - 100) / 100) << M41T80_CB_SHIFT);
-+	} else {
-+		buf[M41T80_REG_MON] = bin2bcd(tm->tm_mon + 1);
-+		buf[M41T80_REG_YEAR] = bin2bcd(tm->tm_year - 100);
-+	}
- 	buf[M41T80_REG_WDAY] = tm->tm_wday;
- 
- 	/* If the square wave output is controlled in the weekday register */
--- 
-2.20.1
+> ---
+> changes since v6: none
+> changes since v5: split out mfd/mt6397/core.h
+> changes since v4: none
+> changes since v3: none
+> changes since v2: none (=v2 part 5)
+> ---
+>  drivers/power/reset/Kconfig           | 10 +++
+>  drivers/power/reset/Makefile          |  1 +
+>  drivers/power/reset/mt6323-poweroff.c | 97 +++++++++++++++++++++++++++
+>  3 files changed, 108 insertions(+)
+>  create mode 100644 drivers/power/reset/mt6323-poweroff.c
+> 
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index a564237278ff..c721939767eb 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -140,6 +140,16 @@ config POWER_RESET_LTC2952
+>  	  This driver supports an external powerdown trigger and board power
+>  	  down via the LTC2952. Bindings are made in the device tree.
+>  
+> +config POWER_RESET_MT6323
+> +       bool "MediaTek MT6323 power-off driver"
+> +       depends on MFD_MT6397
+> +       help
+> +         The power-off driver is responsible for externally shutdown down
+> +         the power of a remote MediaTek SoC MT6323 is connected to through
+> +         controlling a tiny circuit BBPU inside MT6323 RTC.
+> +
+> +         Say Y if you have a board where MT6323 could be found.
+> +
+>  config POWER_RESET_QNAP
+>  	bool "QNAP power-off driver"
+>  	depends on OF_GPIO && PLAT_ORION
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 85da3198e4e0..da37f8b851dc 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
+>  obj-$(CONFIG_POWER_RESET_HISI) += hisi-reboot.o
+>  obj-$(CONFIG_POWER_RESET_MSM) += msm-poweroff.o
+> +obj-$(CONFIG_POWER_RESET_MT6323) += mt6323-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_QCOM_PON) += qcom-pon.o
+>  obj-$(CONFIG_POWER_RESET_OCELOT_RESET) += ocelot-reset.o
+>  obj-$(CONFIG_POWER_RESET_PIIX4_POWEROFF) += piix4-poweroff.o
+> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+> new file mode 100644
+> index 000000000000..1caf43d9e46d
+> --- /dev/null
+> +++ b/drivers/power/reset/mt6323-poweroff.c
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Power off through MediaTek PMIC
+> + *
+> + * Copyright (C) 2018 MediaTek Inc.
+> + *
+> + * Author: Sean Wang <sean.wang@mediatek.com>
+> + *
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/mt6397/core.h>
+> +#include <linux/mfd/mt6397/rtc.h>
+> +
+> +struct mt6323_pwrc {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	u32 base;
+> +};
+> +
+> +static struct mt6323_pwrc *mt_pwrc;
+> +
+> +static void mt6323_do_pwroff(void)
+> +{
+> +	struct mt6323_pwrc *pwrc = mt_pwrc;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
+> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
+> +
+> +	ret = regmap_read_poll_timeout(pwrc->regmap,
+> +					pwrc->base + RTC_BBPU, val,
+> +					!(val & RTC_BBPU_CBUSY),
+> +					MTK_RTC_POLL_DELAY_US,
+> +					MTK_RTC_POLL_TIMEOUT);
+> +	if (ret)
+> +		dev_err(pwrc->dev, "failed to write BBPU: %d\n", ret);
+> +
+> +	/* Wait some time until system down, otherwise, notice with a warn */
+> +	mdelay(1000);
+> +
+> +	WARN_ONCE(1, "Unable to power off system\n");
+> +}
+> +
+> +static int mt6323_pwrc_probe(struct platform_device *pdev)
+> +{
+> +	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
+> +	struct mt6323_pwrc *pwrc;
+> +	struct resource *res;
+> +
+> +	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
+> +	if (!pwrc)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	pwrc->base = res->start;
+> +	pwrc->regmap = mt6397_chip->regmap;
+> +	pwrc->dev = &pdev->dev;
+> +	mt_pwrc = pwrc;
+> +
+> +	pm_power_off = &mt6323_do_pwroff;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mt6323_pwrc_remove(struct platform_device *pdev)
+> +{
+> +	if (pm_power_off == &mt6323_do_pwroff)
+> +		pm_power_off = NULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mt6323_pwrc_dt_match[] = {
+> +	{ .compatible = "mediatek,mt6323-pwrc" },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mt6323_pwrc_dt_match);
+> +
+> +static struct platform_driver mt6323_pwrc_driver = {
+> +	.probe          = mt6323_pwrc_probe,
+> +	.remove         = mt6323_pwrc_remove,
+> +	.driver         = {
+> +		.name   = "mt6323-pwrc",
+> +		.of_match_table = mt6323_pwrc_dt_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(mt6323_pwrc_driver);
+> +
+> +MODULE_DESCRIPTION("Poweroff driver for MT6323 PMIC");
+> +MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
+
 
