@@ -2,118 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F334DB0728
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2019 05:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28ADB09E7
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Sep 2019 10:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbfILDcb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Sep 2019 23:32:31 -0400
-Received: from [110.188.70.11] ([110.188.70.11]:62541 "EHLO spam2.hygon.cn"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726157AbfILDcb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 11 Sep 2019 23:32:31 -0400
-Received: from MK-FE.hygon.cn ([172.23.18.61])
-        by spam2.hygon.cn with ESMTP id x8C3V7lU025932;
-        Thu, 12 Sep 2019 11:31:07 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-FE.hygon.cn with ESMTP id x8C3Uqr4027879;
-        Thu, 12 Sep 2019 11:30:52 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from bogon.hygon.cn (172.23.18.44) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Thu, 12 Sep
- 2019 11:31:02 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jinke Fan <fanjinke@hygon.cn>
-Subject: [PATCH RFC] rtc: Fix the AltCentury value on AMD/Hygon platform
-Date:   Thu, 12 Sep 2019 11:30:39 +0800
-Message-ID: <20190912033039.7282-1-fanjinke@hygon.cn>
-X-Mailer: git-send-email 2.17.1
+        id S1729905AbfILIKC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 12 Sep 2019 04:10:02 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:50019 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729903AbfILIKB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 Sep 2019 04:10:01 -0400
+X-Originating-IP: 213.58.148.146
+Received: from localhost (unknown [213.58.148.146])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 1F9C4E0003;
+        Thu, 12 Sep 2019 08:09:59 +0000 (UTC)
+Date:   Thu, 12 Sep 2019 10:09:53 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Nick Crews <ncrews@chromium.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Duncan Laurie <dlaurie@google.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: Re: [PATCH] rtc: wilco-ec: Sanitize values received from RTC
+Message-ID: <20190912080953.GO21254@piout.net>
+References: <20190910151929.780-1-ncrews@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.23.18.44]
-X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
- (172.23.18.10)
-X-MAIL: spam2.hygon.cn x8C3V7lU025932
-X-DNSRBL: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190910151929.780-1-ncrews@chromium.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When using following operations:
-date -s "21190910 19:20:00"
-hwclock -w
-to change date from 2019 to 2119 for test, it will fail on Hygon
-Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
-platform.
+Hi Nick,
 
-MC146818 driver use function mc146818_set_time() to set register
-RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-reset value on Intel platform to 1.
+On 10/09/2019 16:19:29+0100, Nick Crews wrote:
+> Check that the time received from the RTC HW is valid,
+> otherwise the computation of rtc_year_days() in the next
+> line could, and sometimes does, crash the kernel.
+> 
+> While we're at it, fix the license to plain "GPL".
+> 
+> Signed-off-by: Nick Crews <ncrews@chromium.org>
+> ---
+>  drivers/rtc/rtc-wilco-ec.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-wilco-ec.c b/drivers/rtc/rtc-wilco-ec.c
+> index 8ad4c4e6d557..0ccbf2dce832 100644
+> --- a/drivers/rtc/rtc-wilco-ec.c
+> +++ b/drivers/rtc/rtc-wilco-ec.c
+> @@ -110,8 +110,16 @@ static int wilco_ec_rtc_read(struct device *dev, struct rtc_time *tm)
+>  	tm->tm_mday	= rtc.day;
+>  	tm->tm_mon	= rtc.month - 1;
+>  	tm->tm_year	= rtc.year + (rtc.century * 100) - 1900;
+> -	tm->tm_yday	= rtc_year_days(tm->tm_mday, tm->tm_mon, tm->tm_year);
 
-While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-as reserved.
+If your driver doesn't care about yday, userspace doesn't either. You
+can simply not set it.
 
-DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-(AltCentury), the CMOS write will be failed on code:
-CMOS_WRITE(century, acpi_gbl_FADT.century).
+>  
+> +	if (rtc_valid_tm(tm)) {
+> +		dev_warn(dev,
+> +			 "Time computed from EC RTC is invalid: sec=%d, min=%d, hour=%d, mday=%d, mon=%d, year=%d",
+> +			 tm->tm_sec, tm->tm_min, tm->tm_hour, tm->mday,
+> +			 tm->mon, tm->year);
+> +		return -EIO;
+> +	}
+> +
+> +	tm->tm_yday = rtc_year_days(tm->tm_mday, tm->tm_mon, tm->tm_year);
+>  	/* Don't compute day of week, we don't need it. */
+>  	tm->tm_wday = -1;
+>  
+> @@ -188,5 +196,5 @@ module_platform_driver(wilco_ec_rtc_driver);
+>  
+>  MODULE_ALIAS("platform:rtc-wilco-ec");
+>  MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
+> -MODULE_LICENSE("GPL v2");
+> +MODULE_LICENSE("GPL");
 
-Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-enable AltCentury(0x32) register writing and finally setup century as
-expected.
+This should be in a separate patch.
 
-Test results on AMD/Hygon machine show that it works as expected.
+>  MODULE_DESCRIPTION("Wilco EC RTC driver");
+> -- 
+> 2.11.0
+> 
 
-Reference:
-https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-section: 3.13 Real Time Clock (RTC)
-
-Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
----
- drivers/rtc/rtc-mc146818-lib.c | 9 +++++++--
- include/linux/mc146818rtc.h    | 2 ++
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2ecd8752b088..c09fe486ae67 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -170,9 +170,14 @@ int mc146818_set_time(struct rtc_time *time)
- 	}
- 
- 	save_control = CMOS_READ(RTC_CONTROL);
--	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
-+	CMOS_WRITE((save_control | RTC_SET), RTC_CONTROL);
- 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
-+		CMOS_WRITE((save_freq_select & (~RTC_DV0)), RTC_FREQ_SELECT);
-+	else
-+		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
- 
- #ifdef CONFIG_MACH_DECSTATION
- 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
-diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
-index 0661af17a758..b8ba6556c371 100644
---- a/include/linux/mc146818rtc.h
-+++ b/include/linux/mc146818rtc.h
-@@ -86,6 +86,8 @@ struct cmos_rtc_board_info {
-    /* 2 values for divider stage reset, others for "testing purposes only" */
- #  define RTC_DIV_RESET1	0x60
- #  define RTC_DIV_RESET2	0x70
-+   /* DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1 on AMD/Hygon platform */
-+#  define RTC_DV0		0x10
-   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
- # define RTC_RATE_SELECT 	0x0F
- 
 -- 
-2.17.1
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
