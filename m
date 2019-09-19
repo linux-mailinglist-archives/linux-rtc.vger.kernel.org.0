@@ -2,590 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2524AB7157
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Sep 2019 03:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30D1B811D
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Sep 2019 21:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388364AbfISB4T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Sep 2019 21:56:19 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:52376 "EHLO inva021.nxp.com"
+        id S2392146AbfISTAf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Sep 2019 15:00:35 -0400
+Received: from mout.gmx.net ([212.227.17.21]:33897 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387841AbfISB4T (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 18 Sep 2019 21:56:19 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 26934200019;
-        Thu, 19 Sep 2019 03:56:16 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9C8E320015C;
-        Thu, 19 Sep 2019 03:56:10 +0200 (CEST)
-Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 87579402FC;
-        Thu, 19 Sep 2019 09:56:04 +0800 (SGT)
-From:   Biwen Li <biwen.li@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, leoyang.li@nxp.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>,
-        Martin Fuzzey <mfuzzey@parkeon.com>
-Subject: [v5,2/2] rtc: pcf85263/pcf85363: support PM, wakeup device, improve performance
-Date:   Thu, 19 Sep 2019 09:45:20 +0800
-Message-Id: <20190919014520.15500-2-biwen.li@nxp.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190919014520.15500-1-biwen.li@nxp.com>
-References: <20190919014520.15500-1-biwen.li@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2389123AbfISTAf (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 19 Sep 2019 15:00:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1568919580;
+        bh=hj0v1Dk284VBCCqtbevoonaHYwBxNHrfdQxj3+1olfo=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=Q3ls9dDaa3lO23ToTcVtAxpChrkrT67aZVQKDBGAWOCCrvsABcWRYXnWiuyIoimY0
+         5z/z7hnxea5Qoy+C30DO7BORwklbHAWP4H/Kw0K8Vwx0cuD+UMdUDUHnkQfNdMSaMW
+         QU0gINfMFb8OWKPNbB7O7wUPJUuoG2sB9og87XgA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.10.26] ([80.208.215.153]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MbAgq-1hdtp60qym-00ba2G; Thu, 19
+ Sep 2019 20:59:40 +0200
+Date:   Thu, 19 Sep 2019 20:59:35 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1567059876.15320.3.camel@mtksdaap41>
+References: <1566531931-9772-1-git-send-email-hsin-hsiung.wang@mediatek.com> <1566531931-9772-3-git-send-email-hsin-hsiung.wang@mediatek.com> <trinity-1f82bff1-535e-47cd-9a2f-8faccb56e356-1566562433314@3c-app-gmx-bs11> <e8a918ab-3e7a-b487-db77-df28d56518ce@gmail.com> <0A87F427-2D81-412A-9549-09A51A021799@public-files.de> <b5a21908-faee-17d1-ce26-99b941c0fa70@gmail.com> <trinity-a57f08bb-e30e-4e74-911c-c40e335d00da-1566580580817@3c-app-gmx-bs75> <1567059876.15320.3.camel@mtksdaap41>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: Aw: Re: [BUG] [PATCH v5 02/10] mfd: mt6397: extract irq related code from core driver
+Reply-to: frank-w@public-files.de
+To:     linux-mediatek@lists.infradead.org,
+        Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        srv_heupstream@mediatek.com, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Richard Fontana <rfontana@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        =?ISO-8859-1?Q?=22Ren=E9_van_Dorst=22?= <opensource@vdorst.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <904EC97A-486D-4C22-9D36-838D25EB7A6F@public-files.de>
+X-Provags-ID: V03:K1:row03C78r7NZowZd8aVAl1Eeyaqqfenw5BZOEshUX8lFBJvuhz4
+ T+PL7oTN1F06ozQi0+zBKKCvCjoji4fkxqRZYCs4Niyy/E2/wOLW0QO2w/ZBpvxECmQWl/i
+ A6QlqHL6V32iBPMdpj4GYf0evMqUF1ziUcKsrai89pMK9PRtGVWj6HXo3RI2nn0FwZR5Jz+
+ lrl7R4R95drFfoDuQz9Wg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e7BeDAeyJjA=:q/h5IzV1+NgCc3T9CmosSg
+ 5EqJDfGKXmoIHjQZkXq8oJq+sjZkfSZvZPdGHFckLlVfGVh5bL98PsKt6DGldZNBHN1p8Yh22
+ gSANqdGmtfpzBVbqmWzawdC++Qo/URhEqfAYw5t/5jtZQaPbcETwtqJhaTocnUeRNq7O2m10k
+ +giTC5JeqqoydXT5s7p06GpravF0F08jWcA1B5/BtR05ITCeHOhJlIF+gHZD50PqFOALYnfUn
+ oOaARwN2zGdGdZRmVB579kngNnoqBcIyI7A0dnwrs1o4TvpFvkvUVHvJ6xIxglodmj0yYnHDz
+ JJIWTw93tIZ/s66GZQ2dKEkq2Ds7+KW6e3GysK20VR1rX3r/Ll0iL4tJDV19WRY+oPTqiuipD
+ c0Qh1fvK+ew0WTzxbaASsidqATQNvDEOrhKcGvhawSEAYIXo3jI769l7TEelE0RtDp5pon/xq
+ wWSbWtnDb4smBSrqADxXE1aXBh0gLJTgwO0s6Qy/sJSvmXyaCP8yfExTQypOoDE51gkDR/l7V
+ UoINLG06vd6EaqaYgJgy+92YLhugFzupIcVSP2ZDdHOo/c3bbPSvPWFwyyrPTXR3aDDR4bzWF
+ N9xPJZWCLNeqql2BqXyX/BNWPLRwJM49HBfIUJs7OHpYn0pMV5XYI5KM/Zf78qiVNQZ5YHYvV
+ 3uiAjYU849vUmDCkwmCFJjZoLqKbEwgaTmKmS9A9i1gE89hEsHOiIa2Qf5Bng9H1Utnysq3lC
+ KdssfnlXSmZa4CPktrrC9DqVjtUr+2hVZjujLB5vpumb884hT0Ruz886H/4GQg4ZsL5/K51Kj
+ ugJHHH0LTsFdQVGGoFFr1jMdoy/cMDU/jBAnoa9lunXk+b5hPlMLrmEHOjGu0CJU0WRq/yggs
+ QpXzZpFp6ulWwdKNnN2ZZL0OnX3r45zjcx4Vf3qOT6nGLoDlXaBfaHwwPyp0+1Krq7N8uJMl5
+ sO+lQ9qXsLMNxRaU0Trv/0E0bjZPFylaGGXPnau15KgXPiuInFIgwlcU3Q8XsNvo7xXtO4873
+ 6sw++dLvqQu+fBI0pzrJnYwVph+StTcKRW0+qHJ0LrQQZPM/pgplDHHPdV5vBUrMBG1hH3IeL
+ wXBRjnkwpGFFAeyz10TtMtqXJHcIpt9wvcc4camaPl5slaFI3rCrt8Xq3qhpBimk5htF+VdVU
+ MYhdw0Cjsxc6opGMtremMxOcVHEMcGiCD7lqvu66REZg68HyRdcLnZzDXqYv9H75zooPiMPzE
+ bdHoJ3bB+sx8eukAEEgyWXBXIGQge/cIOeL7NxJyMbLQgww1Yphgbj/o7mgk=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add some features as follow:
-    - Set quartz oscillator load capacitance by DT
-      (generate more accuracy frequency)
-    - Set quartz oscillator drive control by DT
-      (reduce/increase the current consumption)
-    - Set low jitter mode by DT
-      (improve jitter performance)
-    - Set wakeup source by DT
-      (wakeup device from suspend
-    - Select interrupt output pin by DT
-      (INTA/TS(INTB))
-    - Select interrupt type by DT
-    - Add power management
-    - Add ioctl to check rtc status
-      (check whether oscillator of pcf85263/pcf85363 is stopped)
+Hi
 
-Datasheet url:
-    - https://www.nxp.com/docs/en/data-sheet/PCF85263A.pdf
-    - https://www.nxp.com/docs/en/data-sheet/PCF85363A.pdf
+When is new version ready? First 2 patches are still in next for 5=2E4 and=
+ i see no fix so i guess it is still broken=2E
 
-Signed-off-by: Martin Fuzzey <mfuzzey@parkeon.com>
-Signed-off-by: Biwen Li <biwen.li@nxp.com>
----
-Change in v5:
-	- Replace nxp,quartz-drive-strength
-	  with quartz-drive-strength-ohms
-	- Select ohm unit for quartz drive strength
+Regards Frank
 
-Change in v4:
-	- Add nxp,rtc-interrupt-type property
-	- Interrupt output pin Cooperate with interrupt type
-
-Change in v3:
-	- Fix compilation error
-
-Change in v2:
-	- Replace properties name
-	  quartz-load-capacitance -> quartz-load-femtofarads
-	  quartz-drive-strength -> nxp,quartz-drive-strength
-	  quartz-low-jitter -> nxp,quartz-low-jitter
-	- Set default interrupt-output-pin as "INTA"
-
- drivers/rtc/rtc-pcf85363.c | 372 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 349 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/rtc/rtc-pcf85363.c b/drivers/rtc/rtc-pcf85363.c
-index 3450d615974d..4240c6b57875 100644
---- a/drivers/rtc/rtc-pcf85363.c
-+++ b/drivers/rtc/rtc-pcf85363.c
-@@ -18,6 +18,16 @@
- #include <linux/of_device.h>
- #include <linux/regmap.h>
- 
-+/* Quartz capacitance */
-+#define PCF85363_QUARTZCAP_7pF		0
-+#define PCF85363_QUARTZCAP_6pF		1
-+#define PCF85363_QUARTZCAP_12p5pF	2
-+
-+/* Quartz drive strength */
-+#define PCF85363_QUARTZDRIVE_NORMAL	0
-+#define PCF85363_QUARTZDRIVE_LOW	1
-+#define PCF85363_QUARTZDRIVE_HIGH	2
-+
- /*
-  * Date/Time registers
-  */
-@@ -96,10 +106,20 @@
- #define FLAGS_PIF	BIT(7)
- 
- #define PIN_IO_INTAPM	GENMASK(1, 0)
--#define PIN_IO_INTA_CLK	0
--#define PIN_IO_INTA_BAT	1
--#define PIN_IO_INTA_OUT	2
--#define PIN_IO_INTA_HIZ	3
-+#define PIN_IO_INTAPM_SHIFT	0
-+#define PIN_IO_INTA_CLK	(0 << PIN_IO_INTAPM_SHIFT)
-+#define PIN_IO_INTA_BAT	(1 << PIN_IO_INTAPM_SHIFT)
-+#define PIN_IO_INTA_OUT	(2 << PIN_IO_INTAPM_SHIFT)
-+#define PIN_IO_INTA_HIZ	(3 << PIN_IO_INTAPM_SHIFT)
-+
-+#define PIN_IO_TSPM	 GENMASK(3, 2)
-+#define PIN_IO_TSPM_SHIFT	2
-+#define PIN_IO_TS_DISABLE	(0x0 << PIN_IO_TSPM_SHIFT)
-+#define PIN_IO_TS_INTB_OUT	(0x1 << PIN_IO_TSPM_SHIFT)
-+#define PIN_IO_TS_CLK_OUT	(0x2 << PIN_IO_TSPM_SHIFT)
-+#define PIN_IO_TS_IN	(0x3 << PIN_IO_TSPM_SHIFT)
-+
-+#define PIN_IO_CLKPM	BIT(7) /* 0 = enable CLK pin,1 = disable CLK pin */
- 
- #define STOP_EN_STOP	BIT(0)
- 
-@@ -107,9 +127,35 @@
- 
- #define NVRAM_SIZE	0x40
- 
-+#define DT_SECS_OS BIT(7)
-+
-+#define CTRL_OSCILLATOR_CL_MASK	GENMASK(1, 0)
-+#define CTRL_OSCILLATOR_CL_SHIFT	0
-+#define CTRL_OSCILLATOR_OSCD_MASK	GENMASK(3, 2)
-+#define CTRL_OSCILLATOR_OSCD_SHIFT	2
-+#define CTRL_OSCILLATOR_LOWJ		BIT(4)
-+
-+#define CTRL_FUNCTION_COF_OFF	0x7 /* No clock output */
-+
-+enum pcf85363_irqpin {
-+	IRQPIN_INTA,
-+	IRQPIN_INTB,
-+	IRQPIN_MAX,
-+};
-+
-+static const char *const pcf85363_irqpin_names[] = {
-+	[IRQPIN_INTA] = "INTA",
-+	[IRQPIN_INTB] = "INTB",
-+	[IRQPIN_MAX] = "",
-+};
-+
-+
- struct pcf85363 {
-+	struct device *dev;
- 	struct rtc_device	*rtc;
- 	struct regmap		*regmap;
-+	int irq;
-+	u8 irq_type[IRQPIN_MAX];
- };
- 
- struct pcf85x63_config {
-@@ -205,26 +251,60 @@ static int pcf85363_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	return 0;
- }
- 
--static int _pcf85363_rtc_alarm_irq_enable(struct pcf85363 *pcf85363, unsigned
--					  int enabled)
-+static int _pcf85363_rtc_alarm_irq_enable(struct pcf85363 *pcf85363,
-+					  unsigned int enabled,
-+					  int irq_pin)
- {
--	unsigned int alarm_flags = ALRM_SEC_A1E | ALRM_MIN_A1E | ALRM_HR_A1E |
-+	unsigned int alarm1_flags = ALRM_SEC_A1E | ALRM_MIN_A1E | ALRM_HR_A1E |
- 				   ALRM_DAY_A1E | ALRM_MON_A1E;
--	int ret;
-+	unsigned int alarm2_flags = ALRM_MIN_A2E | ALRM_HR_A2E | ALRM_DAY_A2E;
-+	unsigned int alarm_flags = 0;
-+	int ret, reg;
-+	u8 reg_val = 0, ctrl_flags = FLAGS_A1F;
-+
-+	if (pcf85363->irq_type[irq_pin] & INT_A1IE) {
-+		alarm_flags = alarm1_flags;
-+		ctrl_flags = FLAGS_A1F;
-+	}
- 
-+	if (pcf85363->irq_type[irq_pin] & INT_A2IE) {
-+		alarm_flags |= alarm2_flags;
-+		ctrl_flags |= FLAGS_A2F;
-+	}
- 	ret = regmap_update_bits(pcf85363->regmap, DT_ALARM_EN, alarm_flags,
- 				 enabled ? alarm_flags : 0);
- 	if (ret)
- 		return ret;
- 
--	ret = regmap_update_bits(pcf85363->regmap, CTRL_INTA_EN,
--				 INT_A1IE, enabled ? INT_A1IE : 0);
--
--	if (ret || enabled)
-+	reg = CTRL_INTA_EN;
-+	reg_val = INT_A1IE;
-+	if (pcf85363->irq_type[irq_pin]) {
-+		switch (irq_pin) {
-+		case IRQPIN_INTA:
-+			reg = CTRL_INTA_EN;
-+			reg_val = pcf85363->irq_type[irq_pin] &
-+				  (INT_A1IE | INT_A2IE);
-+			break;
-+
-+		case IRQPIN_INTB:
-+			reg = CTRL_INTB_EN;
-+			reg_val = pcf85363->irq_type[irq_pin] &
-+				  (INT_A1IE | INT_A2IE);
-+			break;
-+
-+		default:
-+			dev_err(pcf85363->dev, "Failed to enable some \
-+				interrupts on some interrupt output pins\n");
-+			return -EINVAL;
-+		}
-+	}
-+	ret = regmap_update_bits(pcf85363->regmap, reg,
-+				 reg_val, enabled ? reg_val : 0);
-+	if (ret || !enabled)
- 		return ret;
- 
- 	/* clear current flags */
--	return regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, FLAGS_A1F, 0);
-+	return regmap_update_bits(pcf85363->regmap, CTRL_FLAGS, ctrl_flags, 0);
- }
- 
- static int pcf85363_rtc_alarm_irq_enable(struct device *dev,
-@@ -232,7 +312,7 @@ static int pcf85363_rtc_alarm_irq_enable(struct device *dev,
- {
- 	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
- 
--	return _pcf85363_rtc_alarm_irq_enable(pcf85363, enabled);
-+	return _pcf85363_rtc_alarm_irq_enable(pcf85363, enabled, IRQPIN_INTA);
- }
- 
- static int pcf85363_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-@@ -251,7 +331,7 @@ static int pcf85363_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	 * Disable the alarm interrupt before changing the value to avoid
- 	 * spurious interrupts
- 	 */
--	ret = _pcf85363_rtc_alarm_irq_enable(pcf85363, 0);
-+	ret = _pcf85363_rtc_alarm_irq_enable(pcf85363, 0, IRQPIN_INTA);
- 	if (ret)
- 		return ret;
- 
-@@ -260,7 +340,9 @@ static int pcf85363_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	if (ret)
- 		return ret;
- 
--	return _pcf85363_rtc_alarm_irq_enable(pcf85363, alrm->enabled);
-+	return _pcf85363_rtc_alarm_irq_enable(pcf85363,
-+					      alrm->enabled,
-+					      IRQPIN_INTA);
- }
- 
- static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
-@@ -282,12 +364,55 @@ static irqreturn_t pcf85363_rtc_handle_irq(int irq, void *dev_id)
- 	return IRQ_NONE;
- }
- 
-+static int pcf85363_osc_is_stopped(struct pcf85363 *pcf85363)
-+{
-+	unsigned int regval;
-+	int ret;
-+
-+	ret = regmap_read(pcf85363->regmap, DT_SECS, &regval);
-+	if (ret)
-+		return ret;
-+
-+	ret = regval & DT_SECS_OS ? 1 : 0;
-+	if (ret)
-+		dev_warn(pcf85363->dev, "Oscillator stop detected, date/time is not reliable.\n");
-+
-+	return ret;
-+}
-+
-+static int pcf85363_ioctl(struct device *dev,
-+			  unsigned int cmd, unsigned long arg)
-+{
-+	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	switch (cmd) {
-+	case RTC_VL_READ:
-+		ret = pcf85363_osc_is_stopped(pcf85363);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (copy_to_user((void __user *)arg, &ret, sizeof(int)))
-+			return -EFAULT;
-+		return 0;
-+
-+	case RTC_VL_CLR:
-+		return regmap_update_bits(pcf85363->regmap,
-+					  DT_SECS,
-+					  DT_SECS_OS, 0);
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+}
-+
- static const struct rtc_class_ops rtc_ops = {
-+	.ioctl = pcf85363_ioctl,
- 	.read_time	= pcf85363_rtc_read_time,
- 	.set_time	= pcf85363_rtc_set_time,
- };
- 
- static const struct rtc_class_ops rtc_ops_alarm = {
-+	.ioctl = pcf85363_ioctl,
- 	.read_time	= pcf85363_rtc_read_time,
- 	.set_time	= pcf85363_rtc_set_time,
- 	.read_alarm	= pcf85363_rtc_read_alarm,
-@@ -355,6 +480,155 @@ static const struct pcf85x63_config pcf_85363_config = {
- 	.num_nvram = 2
- };
- 
-+/*
-+ * On some boards the interrupt line may not be wired to the CPU but only to
-+ * a power supply circuit.
-+ * In that case no interrupt will be specified in the device tree but the
-+ * wakeup-source DT property may be used to enable wakeup programming in
-+ * sysfs
-+ */
-+static bool pcf85363_can_wakeup_machine(struct pcf85363 *pcf85363)
-+{
-+	return pcf85363->irq ||
-+		of_property_read_bool(pcf85363->dev->of_node, "wakeup-source");
-+}
-+
-+static int pcf85363_init_hw(struct pcf85363 *pcf85363)
-+{
-+	struct device_node *np = pcf85363->dev->of_node;
-+	unsigned int regval = 0;
-+	u32 propval;
-+	int i, ret;
-+
-+	/* Determine if oscilator has been stopped (probably low power) */
-+	ret = pcf85363_osc_is_stopped(pcf85363);
-+	if (ret < 0) {
-+		/* Log here since this is the first hw access on probe */
-+		dev_err(pcf85363->dev, "Unable to read register\n");
-+
-+		return ret;
-+	}
-+
-+	ret = regmap_read(pcf85363->regmap, CTRL_OSCILLATOR, &regval);
-+	if (ret)
-+		return ret;
-+
-+	/* Set oscilator register */
-+	propval = PCF85363_QUARTZCAP_12p5pF;
-+	ret = of_property_read_u32(np, "quartz-load-femtofarads", &propval);
-+	if (!ret) {
-+		switch (propval) {
-+		case 6000:
-+			propval = PCF85363_QUARTZCAP_6pF;
-+			break;
-+		case 7000:
-+			propval = PCF85363_QUARTZCAP_7pF;
-+			break;
-+		case 12500:
-+			propval = PCF85363_QUARTZCAP_12p5pF;
-+			break;
-+		default:
-+			dev_info(pcf85363->dev, "invalid quartz-load-femtofarads, \
-+				use default value 12500\n");
-+			break;
-+		}
-+	}
-+	regval |= ((propval << CTRL_OSCILLATOR_CL_SHIFT)
-+		    & CTRL_OSCILLATOR_CL_MASK);
-+
-+	propval = PCF85363_QUARTZDRIVE_NORMAL;
-+	ret = of_property_read_u32(np, "quartz-drive-strength-ohms", &propval);
-+	if (!ret) {
-+		switch (propval) {
-+		case 60000:
-+			propval = PCF85363_QUARTZDRIVE_LOW;
-+			break;
-+		case 100000:
-+			propval = PCF85363_QUARTZDRIVE_NORMAL;
-+			break;
-+		case 500000:
-+			propval = PCF85363_QUARTZDRIVE_HIGH;
-+			break;
-+		default:
-+			dev_info(pcf85363->dev, "invalid quartz-drive-strength-ohms, \
-+				 use default value 100000\n");
-+			break;
-+		}
-+	}
-+	regval |= ((propval << CTRL_OSCILLATOR_OSCD_SHIFT)
-+		    & CTRL_OSCILLATOR_OSCD_MASK);
-+
-+	if (of_property_read_bool(np, "nxp,quartz-low-jitter"))
-+		regval |= CTRL_OSCILLATOR_LOWJ;
-+
-+	ret = regmap_write(pcf85363->regmap, CTRL_OSCILLATOR, regval);
-+	if (ret)
-+		return ret;
-+
-+	/* Set function register
-+	 * (100th second disabled
-+	 * no periodic interrupt
-+	 * real-time clock mode
-+	 * RTC stop is controlled by STOP bit only
-+	 * no clock output)
-+	 */
-+	ret = regmap_write(pcf85363->regmap, CTRL_FUNCTION,
-+			   CTRL_FUNCTION_COF_OFF);
-+	if (ret)
-+		return ret;
-+
-+	/* Set all interrupts to disabled, level mode */
-+	ret = regmap_write(pcf85363->regmap, CTRL_INTA_EN,
-+			   INT_ILP);
-+	if (ret)
-+		return ret;
-+	ret = regmap_write(pcf85363->regmap, CTRL_INTB_EN,
-+			   INT_ILP);
-+	if (ret)
-+		return ret;
-+
-+	/* Determine which interrupt pin the board uses */
-+	pcf85363->irq_type[IRQPIN_INTA] = INT_A1IE;
-+	pcf85363->irq_type[IRQPIN_INTB] = 0;
-+	for (i = 0; i < IRQPIN_MAX; i++) {
-+		const char *irq_output_pin;
-+		u32 irq_type = 0;
-+
-+		if (pcf85363_can_wakeup_machine(pcf85363)) {
-+			if (!of_property_read_string_index(pcf85363->dev->of_node,
-+							   "nxp,rtc-interrupt-output-pin",
-+							   i, &irq_output_pin))
-+				if (!strncmp(pcf85363_irqpin_names[i],
-+					     irq_output_pin,
-+					     strlen(pcf85363_irqpin_names[i]))) {
-+					if (!of_property_read_u32_index(pcf85363->dev->of_node,
-+									"nxp,rtc-interrupt-type",
-+									i, &irq_type))
-+						pcf85363->irq_type[IRQPIN_INTA] = (u8)(0xff & irq_type);
-+				}
-+		}
-+
-+		/* Setup IO pin config register */
-+		regval = PIN_IO_CLKPM; /* disable CLK pin*/
-+		if (pcf85363->irq_type[i]) {
-+			switch (i) {
-+			case IRQPIN_INTA:
-+				regval |= (PIN_IO_INTA_OUT | PIN_IO_TS_DISABLE);
-+				break;
-+			case IRQPIN_INTB:
-+				regval |= (PIN_IO_INTA_HIZ | PIN_IO_TS_INTB_OUT);
-+				break;
-+			default:
-+				dev_err(pcf85363->dev, "Failed to set interrupt out pin\n");
-+				return -EINVAL;
-+			}
-+			ret = regmap_write(pcf85363->regmap, CTRL_PIN_IO, regval);
-+		}
-+	}
-+	return ret;
-+}
-+
-+
- static int pcf85363_probe(struct i2c_client *client,
- 			  const struct i2c_device_id *id)
- {
-@@ -394,9 +668,11 @@ static int pcf85363_probe(struct i2c_client *client,
- 		return PTR_ERR(pcf85363->regmap);
- 	}
- 
-+	pcf85363->irq = client->irq;
-+	pcf85363->dev = &client->dev;
- 	i2c_set_clientdata(client, pcf85363);
- 
--	pcf85363->rtc = devm_rtc_allocate_device(&client->dev);
-+	pcf85363->rtc = devm_rtc_allocate_device(pcf85363->dev);
- 	if (IS_ERR(pcf85363->rtc))
- 		return PTR_ERR(pcf85363->rtc);
- 
-@@ -404,20 +680,28 @@ static int pcf85363_probe(struct i2c_client *client,
- 	pcf85363->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	pcf85363->rtc->range_max = RTC_TIMESTAMP_END_2099;
- 
--	if (client->irq > 0) {
-+	ret = pcf85363_init_hw(pcf85363);
-+	if (ret)
-+		return ret;
-+
-+	if (pcf85363->irq > 0) {
- 		regmap_write(pcf85363->regmap, CTRL_FLAGS, 0);
--		regmap_update_bits(pcf85363->regmap, CTRL_PIN_IO,
--				   PIN_IO_INTA_OUT, PIN_IO_INTAPM);
--		ret = devm_request_threaded_irq(&client->dev, client->irq,
-+		ret = devm_request_threaded_irq(pcf85363->dev, pcf85363->irq,
- 						NULL, pcf85363_rtc_handle_irq,
--						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+						IRQF_TRIGGER_FALLING |
-+						IRQF_ONESHOT,
- 						"pcf85363", client);
--		if (ret)
-+		if (ret) {
- 			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
-+			pcf85363->irq = 0;
-+		}
- 		else
- 			pcf85363->rtc->ops = &rtc_ops_alarm;
- 	}
- 
-+	if (pcf85363_can_wakeup_machine(pcf85363))
-+		device_init_wakeup(pcf85363->dev, true);
-+
- 	ret = rtc_register_device(pcf85363->rtc);
- 
- 	for (i = 0; i < config->num_nvram; i++) {
-@@ -425,6 +709,10 @@ static int pcf85363_probe(struct i2c_client *client,
- 		rtc_nvmem_register(pcf85363->rtc, &nvmem_cfg[i]);
- 	}
- 
-+	/* We cannot support UIE mode if we do not have an IRQ line */
-+	if (!pcf85363->irq)
-+		pcf85363->rtc->uie_unsupported = 1;
-+
- 	return ret;
- }
- 
-@@ -435,12 +723,50 @@ static const struct of_device_id dev_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, dev_ids);
- 
-+static int pcf85363_remove(struct i2c_client *client)
-+{
-+	struct pcf85363 *pcf85363 = i2c_get_clientdata(client);
-+
-+	if (pcf85363_can_wakeup_machine(pcf85363))
-+		device_init_wakeup(pcf85363->dev, false);
-+
-+	return 0;
-+}
-+
-+#ifdef CONFIG_PM_SLEEP
-+static int pcf85363_suspend(struct device *dev)
-+{
-+	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	if (device_may_wakeup(dev))
-+		ret = enable_irq_wake(pcf85363->irq);
-+
-+	return ret;
-+}
-+
-+static int pcf85363_resume(struct device *dev)
-+{
-+	struct pcf85363 *pcf85363 = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	if (device_may_wakeup(dev))
-+		ret = disable_irq_wake(pcf85363->irq);
-+
-+	return ret;
-+}
-+#endif
-+
-+static SIMPLE_DEV_PM_OPS(pcf85363_pm_ops, pcf85363_suspend,  pcf85363_resume);
-+
- static struct i2c_driver pcf85363_driver = {
- 	.driver	= {
- 		.name	= "pcf85363",
- 		.of_match_table = of_match_ptr(dev_ids),
-+		.pm = &pcf85363_pm_ops,
- 	},
- 	.probe	= pcf85363_probe,
-+	.remove	= pcf85363_remove,
- };
- 
- module_i2c_driver(pcf85363_driver);
--- 
-2.17.1
-
+Am 29=2E August 2019 08:24:36 MESZ schrieb Hsin-hsiung Wang <hsin-hsiung=
+=2Ewang@mediatek=2Ecom>:
+>Hi Frank/Matthias,
+>
+>Thanks for your comments=2E
+>The root cause seems I didn't split the code well=2E
+>I will fix it in the next version=2E
