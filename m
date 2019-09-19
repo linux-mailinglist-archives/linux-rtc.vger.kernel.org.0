@@ -2,93 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4372B6CF2
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Sep 2019 21:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209BFB7153
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Sep 2019 03:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729968AbfIRTvO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Sep 2019 15:51:14 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:33721 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfIRTvO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Sep 2019 15:51:14 -0400
-X-Originating-IP: 90.65.161.137
-Received: from localhost (lfbn-1-1545-137.w90-65.abo.wanadoo.fr [90.65.161.137])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id CC8F7C0007
-        for <linux-rtc@vger.kernel.org>; Wed, 18 Sep 2019 19:51:11 +0000 (UTC)
-Received: from spool.mail.gandi.net (spool4.mail.gandi.net [217.70.178.213])
-        by nmboxes159.sd4.0x35.net (Postfix) with ESMTP id C24D841928
-        for <alexandre.belloni@bootlin.com>; Mon, 16 Sep 2019 18:13:02 +0000 (UTC)
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by spool.mail.gandi.net (Postfix) with ESMTPS id 72C6D7804A8
-        for <alexandre.belloni@bootlin.com>; Mon, 16 Sep 2019 18:13:02 +0000 (UTC)
-Received: by mail-io1-f42.google.com with SMTP id d17so1123021ios.13
-        for <alexandre.belloni@bootlin.com>; Mon, 16 Sep 2019 11:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FCdfvdOk6i1PoT83esv8mw4MKjFjtOqfKz5poFVmLek=;
-        b=YwceST0KP0kuGGiavZuwZVI2YGvsxAJeNIpoLigO78+4BkdeHFkbppJCuJVAkY5I9m
-         MR0Kx9oNVgvCfR+Kcx/9qKEUvpnxDEdr3Je3yWFS2NQSQU/4cjoU+8HsN6QySbRh1k2A
-         rbLoamwkXeT6Zo7+dFCWx2pLTAHrb7NbwBJCk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FCdfvdOk6i1PoT83esv8mw4MKjFjtOqfKz5poFVmLek=;
-        b=fNSltgm8KM2795YFkLrCYt8xUrlGwcq0KHAd5M1GBfYj3Mdq8u0ixVphlwjPtFwakz
-         y6n/N1ZdsPJMCUIgPGSDJ1zJxh+XMisYmBq8HCYpQ2vv7Cn1xTQVVykCm/JOoRa54jE5
-         SQYz2IKlsz87Jm7Ff4hhdXQvdUdUtW2MUkpCXjKAoBncxi6iB+a7UZyvBuSifbwbIoc7
-         3fmGjSgpGm5uSv0nmoBFikLE78zJ8ezH0HAAAZ3fczNQQxPcPGkMzVEIboqApXNp4YH8
-         akXpBxqhwc0UvQEmZo/GeOURMxxx/NUEniGeNIKCWeoLz/kPNh3TQFGGMSzSYSiuIMLm
-         cq3Q==
-X-Gm-Message-State: APjAAAWcnR+gR/dbEeggS2ryhnjQNuX+DaVPaFxxsQuS3gPbLJ64Ddtl
-        UBc9UXs9FauNu+4FbMCIAjjK8A==
-X-Google-Smtp-Source: APXvYqx0AthyDGP+i6oETR4PDu0mVnx6IZxg7STns05chD4X85djTTMnfuOMorZz7aPKrM2cJIMIcA==
-X-Received: by 2002:a6b:8bd8:: with SMTP id n207mr1205205iod.147.1568657581367;
-        Mon, 16 Sep 2019 11:13:01 -0700 (PDT)
-Received: from ncrews2.bld.corp.google.com ([2620:15c:183:200:cb43:2cd4:65f5:5c84])
-        by smtp.gmail.com with ESMTPSA id t9sm10889188iop.86.2019.09.16.11.13.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 16 Sep 2019 11:13:00 -0700 (PDT)
-From:   Nick Crews <ncrews@chromium.org>
-To:     bleung@chromium.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Cc:     enric.balletbo@collabora.com, linux-kernel@vger.kernel.org,
-        dlaurie@chromium.org, Nick Crews <ncrews@chromium.org>
-Subject: [PATCH v2 2/2] rtc: wilco-ec: Fix license to GPL from GPLv2
-Date:   Mon, 16 Sep 2019 12:12:17 -0600
-Message-Id: <20190916181215.501-2-ncrews@chromium.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190916181215.501-1-ncrews@chromium.org>
-References: <20190916181215.501-1-ncrews@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Received-SPF: pass (spool4: domain of chromium.org designates 209.85.166.42 as permitted sender) client-ip=209.85.166.42; envelope-from=ncrews@chromium.org; helo=mail-io1-f42.google.com;
-X-TUID: XPxQVuQfnr0A
+        id S2387851AbfISB4S (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 18 Sep 2019 21:56:18 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:52356 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387690AbfISB4R (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 18 Sep 2019 21:56:17 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D2EAA20016B;
+        Thu, 19 Sep 2019 03:56:14 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 824A4200019;
+        Thu, 19 Sep 2019 03:56:09 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 7C7A9402CA;
+        Thu, 19 Sep 2019 09:56:03 +0800 (SGT)
+From:   Biwen Li <biwen.li@nxp.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, leoyang.li@nxp.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>,
+        Martin Fuzzey <mfuzzey@parkeon.com>
+Subject: [v5,1/2] dt-bindings: rtc: pcf85263/pcf85363: add some properties
+Date:   Thu, 19 Sep 2019 09:45:19 +0800
+Message-Id: <20190919014520.15500-1-biwen.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Signed-off-by: Nick Crews <ncrews@chromium.org>
----
- drivers/rtc/rtc-wilco-ec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Add some properties for pcf85263/pcf85363 as follows:
+  - nxp,rtc-interrupt-type: integer type
+  - nxp,rtc-interrupt-output-pin: string type
+  - quartz-load-femtofarads: integer type
+  - quartz-drive-strength-ohms: integer type
+  - nxp,quartz-low-jitter: bool type
+  - wakeup-source: bool type
 
-diff --git a/drivers/rtc/rtc-wilco-ec.c b/drivers/rtc/rtc-wilco-ec.c
-index e84faa268caf..951268f5e690 100644
---- a/drivers/rtc/rtc-wilco-ec.c
-+++ b/drivers/rtc/rtc-wilco-ec.c
-@@ -184,5 +184,5 @@ module_platform_driver(wilco_ec_rtc_driver);
+Signed-off-by: Martin Fuzzey <mfuzzey@parkeon.com>
+Signed-off-by: Biwen Li <biwen.li@nxp.com>
+---
+Change in v5:
+	- Replace nxp,quartz-drive-strength with
+	  quartz-drive-strength-ohms
+	- Select ohm unit for quartz drive strength
+
+Change in v4:
+	- Drop robust defines in include/dt-bindings/rtc/pcf85363.h
+	- Add nxp,rtc-interrupt-type property
+	- Replace interrupt-output-pin with nxp,rtc-interrupt-output-pin
+
+Change in v3:
+	- None
+
+Change in v2:
+	- Replace properties name
+	  quartz-load-capacitance -> quartz-load-femtofarads
+	  quartz-drive-strength -> nxp,quartz-drive-strength
+	  quartz-low-jitter -> nxp,quartz-low-jitter
+	- Replace drive strength name
+	  PCF85263_QUARTZDRIVE_NORMAL -> PCF85263_QUARTZDRIVE_100ko
+	  PCF85263_QUARTZDRIVE_LOW -> PCF85263_QUARTZDRIVE_60ko
+	  PCF85263_QUARTZDRIVE_HIGH -> PCF85263_QUARTZDRIVE_500ko
+	- Set default interrupt-output-pin as "INTA"
+
+ .../devicetree/bindings/rtc/pcf85363.txt      | 44 ++++++++++++++++++-
+ include/dt-bindings/rtc/pcf85363.h            | 14 ++++++
+ 2 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100644 include/dt-bindings/rtc/pcf85363.h
+
+diff --git a/Documentation/devicetree/bindings/rtc/pcf85363.txt b/Documentation/devicetree/bindings/rtc/pcf85363.txt
+index 94adc1cf93d9..7f907581d5db 100644
+--- a/Documentation/devicetree/bindings/rtc/pcf85363.txt
++++ b/Documentation/devicetree/bindings/rtc/pcf85363.txt
+@@ -8,10 +8,52 @@ Required properties:
+ Optional properties:
+ - interrupts: IRQ line for the RTC (not implemented).
  
- MODULE_ALIAS("platform:rtc-wilco-ec");
- MODULE_AUTHOR("Nick Crews <ncrews@chromium.org>");
--MODULE_LICENSE("GPL v2");
-+MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("Wilco EC RTC driver");
++- nxp,rtc-interrupt-type: integer property, represent the interrupt's
++  type. Valid values are
++  INT_PIE(periodic interrupt enable),
++  INT_OIE(offset correction interrupt enable),
++  INT_A1IE(alarm1 interrupt enable),
++  INT_A2IE(alarm2 interrupt enable),
++  INT_TSRIE(timestamp register interrupt enable)
++  INT_BSIE(battery switch interrupt enable),
++  INT_WDIE(WatchDog interrupt enable,and
++  compose these values such as: INT_A1IE | INT_A2IE,
++  but currently only support INT_A1IE, default value is INT_A1IE.
++  The property and property nxp,rtc-interrupt-output-pin
++  work together to generate some interrupts on some pins.
++
++- nxp,rtc-interrupt-output-pin: The interrupt output pin must be
++  "INTA" or "INTB", default value is "INTA". The property and property
++  nxp,rtc-interrupt-type work together to generate some interrupts on
++  some pins.
++
++- quartz-load-femtofarads: The internal capacitor to select for the quartz,
++  expressed in femto Farad (fF). Valid values are 6000, 7000 and 12500.
++  Default value is 12500fF.
++
++- quartz-drive-strength-ohms: Drive strength for the quartz,
++  expressed in ohm, Valid values are 60000, 100000 and 500000.
++  Default value is 100000 ohm.
++
++- nxp,quartz-low-jitter: Boolean property, if present enables low jitter mode
++  which reduces jitter at the cost of increased power consumption.
++
++- wakeup-source: Boolean property, Please refer to
++  Documentation/devicetree/bindings/power/wakeup-source.txt
++
+ Example:
+ 
+ pcf85363: pcf85363@51 {
+ 	compatible = "nxp,pcf85363";
+ 	reg = <0x51>;
+-};
+ 
++	interrupt-parent = <&gpio1>;
++	interrupts = <18 IRQ_TYPE_EDGE_FALLING>;
++
++	wakeup-source;
++	nxp,rtc-interrupt-output-pin = "INTA";
++	nxp,rtc-interrupt-type = <INT_A1IE>;
++	quartz-load-femtofarads = <12500>;
++	quartz-drive-strength-ohms = <60000>;
++	nxp,quartz-low-jitter;
++};
+diff --git a/include/dt-bindings/rtc/pcf85363.h b/include/dt-bindings/rtc/pcf85363.h
+new file mode 100644
+index 000000000000..6340bf2da8f5
+--- /dev/null
++++ b/include/dt-bindings/rtc/pcf85363.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _DT_BINDINGS_RTC_PCF85363_H
++#define _DT_BINDINGS_RTC_PCF85363_H
++
++/* Interrupt type */
++#define INT_WDIE	(1 << 0)
++#define INT_BSIE	(1 << 1)
++#define INT_TSRIE	(1 << 2)
++#define INT_A2IE	(1 << 3)
++#define INT_A1IE	(1 << 4)
++#define INT_OIE		(1 << 5)
++#define INT_PIE		(1 << 6)
++
++#endif /* _DT_BINDINGS_RTC_PCF85363_H */
 -- 
-2.21.0
+2.17.1
 
