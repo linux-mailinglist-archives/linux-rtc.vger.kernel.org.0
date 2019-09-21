@@ -2,34 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB95B9D3B
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Sep 2019 12:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2ABFB9D71
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Sep 2019 12:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405654AbfIUKBE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 21 Sep 2019 06:01:04 -0400
-Received: from mout.web.de ([217.72.192.78]:59627 "EHLO mout.web.de"
+        id S2407436AbfIUKsm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 21 Sep 2019 06:48:42 -0400
+Received: from mout.web.de ([217.72.192.78]:45379 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405440AbfIUKBE (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 21 Sep 2019 06:01:04 -0400
+        id S2407271AbfIUKsl (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 21 Sep 2019 06:48:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569060054;
-        bh=9om8hD/kLaf9e9fQUs6omNYsjXudzvqtIiKV5m1awsY=;
+        s=dbaedf251592; t=1569062907;
+        bh=2KlsMu3Yr2Jz4vFlxK+RT/uUmCETBSIvHkQo4xghl4k=;
         h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=EZ5XJ0OVva5N4xddt9Ox+uofQUZw+jafS918t7wQPFSWdh/bznObMAPipk03KjwSU
-         tFkYEqcaa8gaZ/gfeVQnAVklnxcp+s0os4H7Rl8qjEnb30a2+UUFIbqrZnK8qxoldC
-         /7+xlAH/QrhdrxmOd8LyeWna0etzWVddTy2IJp+E=
+        b=GrIiA3DjUajilEfhe5yVl4eIU+wnpy1sYdprmgb44hZhhAhJZyZhnIzl731LMsHN3
+         JrTwGgCQZ4jCA728IZnelIW5nPFQQxxhhrUK7PkY7y32xu0+6j3KcJFBHqrnIPDYjI
+         /S3QTiLZnoeMcieXXLSIE8l4fpREGvtrUjOCA9wo=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0LilNJ-1hd6rI3brx-00cxvm; Sat, 21
- Sep 2019 12:00:53 +0200
+Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb103
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MHp4r-1iCRDa12jd-003a1n; Sat, 21
+ Sep 2019 12:48:27 +0200
 To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Biwen Li <biwen.li@nxp.com>
+        Miodrag Dinic <miodrag.dinic@mips.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        kernel-janitors@vger.kernel.org,
+        Aleksandar Markovic <aleksandar.markovic@imgtec.com>,
+        Goran Ferenc <goran.ferenc@imgtec.com>
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] rtc: fsl-ftm-alarm: Use devm_platform_ioremap_resource() in
- ftm_rtc_probe()
+Subject: [PATCH] rtc: goldfish: Use devm_platform_ioremap_resource() in
+ goldfish_rtc_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -73,45 +75,45 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <4552ef52-f218-93b1-6dfa-668d137676f8@web.de>
-Date:   Sat, 21 Sep 2019 12:00:52 +0200
+Message-ID: <5ecfcf43-d6b2-1a38-dee8-b8806f30bc83@web.de>
+Date:   Sat, 21 Sep 2019 12:48:25 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:PdS6VDi89nQ5MEz616+aD8BLYHe8fFIFFttx8Q1QfI/O1vGuHJ/
- stDZ13wS8Kf6tTtIcRB8rpHjD1N+oua420FVjfOKbccUv498P8vc6AFzxfjJc19qeU7XqG1
- 8yj68XIMfbL0Mb60u/pzMqzpomX+tHpFQcrFNtfrsNX5K0Ti1liCEwp1LNqB0Dk2XZoOhI0
- DoqhWWiFB0qiBdABqJm9g==
+X-Provags-ID: V03:K1:N3NnE9ynw+TLhydFjG05ejJtWADOH98Ta018iGgzSfvz22KdUvQ
+ 4zSis1r5kI05XgdZC2hMkLO/j14fGQ8145XvWJCz8uBr6yT5dtdITzkK6jSWfuo95bkrlaK
+ 60JJD3Ldde6GEYrwNxlzIYaqDMGUqNOwRzAiX5cRmnArBbgnSibs5UM21j+6z8tn80mOoOT
+ HRw/9CQgm4BrQWvO4iYHA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MVTIGAREZiM=:yZXRK+m9tX1/qFF2DIp1du
- z7+IADNwTWEHEEHESJz9ZrCtxecvnS6o1qLLxx75laDVRHhjPDR0lwThuOAc+9BmA0IY6EzOu
- kZaouoaTQWBtuhf5123va1ixRzMCvVr6K8STObVub0IdbEBHugl4pozrj1r84yAC+4bhrtZYr
- CYFc539Zd3NteFJ1qifqDI6FVWqLye4iW90+zZBDLvEnD1mO6p/CyaQhJziSSD+V8N5sXTGo9
- HfEB9lUnOQ/Y+Og02RHUeS3GyXKSJQnAQrDdewpqovbSgxMiVa94OUTXCkv0YHl0X5bF0XRO5
- JFJFL20xqMzpr3FUsi0l7sScIh5x2i6PRc0RFdY8UAH9tKy75JyZPKH9ui0yzquxmQWQQtqKG
- 3pTCwOalgXemerM1sMsatdiC8ZAEGOS9G7o6zoUceKah1OpktIFzUnU48ZBG3eMVAH4YvaSUi
- +9RkTcsQFiAKInSsZdPs3VHeu2wwImkGA+aTloI1hYeaIczj9PUe+Cp0fhUV5jNcb+Q81crlE
- 3R74fxtMkvvHi2XMI81SZ0HRX5mADAMbCIisB3RdPROXwafz5dklgCNVuljt5kVziC5fpdVAQ
- RfHfYah58O6KDlzUAUT7sXod9WeMDJuUhNLytxrmhkqdQ7pEdw29XaaklnMP7T+RG63N/c0Zs
- xZqPMQU6yyVBFHDUTH8nJQoCnh3h1+RZz2ZWTs9boO631dSnuNTFpykM+/ZSNgPXBEo7bIjEw
- WPTge+x59lH6p8RwN10n+Nf1hoOhxrrKbOc4YfWmL5/oAqipeAE9kaJbEzx4rFkEhRRP9aKla
- a2kvPs+ZpCgxPoaLiZ84KN0OPbOLtWX0Im7MsbaGjgZenkuB1Xha2hII7ncOsqk+1JqZ24Tca
- vGQI1IiOHJIAmeFS7nRuURNdxHNLQUFvXPxVNxB6E3REQDBDQbqEFeCrwQCB/F91mmR064/8G
- EZsqE2GGFLbqOg5GXuxAdMJeLW7iCJgvzNfErOX5boZuO+vAx680BSXwMzprhGFreJB3LoU7Y
- 3WWzo4dc8yIylUbUnvcRxSp1qeFHw1c7LwZNGrcMCijZ/VOIqS/u4zI/5+6B2/NlM/PXPMk+8
- ibd8iUEC6o3uUDXClqwO1hm8Ws2AfGbfxRQSupX+RHYkdwiT7B3ao+dK73EZGBOv+2dflWVsV
- hO2U+VehsQJqDAEwNEnM3c70Y6hhIrCYP4bmD05jg9UB/ZzZhvKNxSFynOP5XVZZQUvd+TCRS
- dwpts4k8nOCIuUD7/f+pL5x2RWDdPFDlbbLh+G6ctrNeqbaFtP4L21vtVAoE=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FWNLfKQZnz8=:VyeVERNzXzFkFT0eIX8teI
+ dh5T2rfIfvprA+WFE6zAJL8EnmlfYB2dnsLfe4S9q59EHxTu+esN8Ebh7YCrji4E/f3ZD2ajG
+ WLy2G75+QX+MskCh9urUyP2LfCa+pd2v0b1QtkDdNnK3kd7eRtfk0UsTndHxwM0myrAhGi52o
+ UxLzLjznKC8DYzSYHfplUn3tBjq+brycnzfO/H2R0PujNDwFhCYmRfxOVg/463cukVk5w9FS3
+ 8aNisxxhR3W3IRMCZamo/SnOGQzArk6jOdqwyrMcFf0qd2+I3qAjlXomH50shApAacABF6XLk
+ 4VIxft9d0YDQx8W/0ZDmz3qlhVZnsX7C1imjuIiTdQtcw//zKiuCnGfyo9CHH0V9gxjYNeRkf
+ yQ1fwJu9UJSR6Hv+zxAUCBPWv0N/WFhem0ZK1F2glWhr4T2aLFUayJgvBN/amC2WkF4hN1E4W
+ aZwJCmxlIRYeOLeC3VSdWpKCikPFIKbM+OJu/BoNu5PsuC3U3r999Lm+fEfJE7F6DxvddOsLl
+ Xk62153sI3H+JkRjQW5S7SrRse26CLuyFSFEKk1BiDs8FiLtlJT9IeE27+chCn/NKmNxnU8tf
+ 2/l4ykgHrRNOX1LinacPlxDTJoci5o32gy5q7QfpCr6gyZqp1zU5MWhqOvSWGL/vAz90zu3jy
+ uopzVhzAcmRR+PwZN7U6/QDNytiOhPzExqD21SdCtU4BfYBptx4jHazS3OTcSFvkx46HhbZVH
+ 0uGzGpMaLZ4HrSinxtL6J9kOJOAF7yKujS8xBE6G64hKXOIXq/N0V3/uQkBpFfEjTYAJRjEof
+ Aa/9TUfjDZ63hZEGCuNb6KhTS+FPFLa9gQIxkU3OsIH0WGENZMV2tZNpkUATnlXj3oqwyGKYn
+ x6h1U9gIiczIj9mL63CgtSgKD6w6/ujfuP4tIFzeuVSCyJtrsNCdmXMhJZr0k2yYAy28vOX2I
+ A+9FHpjNoftxaQ9AEE1G3vEOeFIh9YvvLq1B1OohDTHb2f2tkzFGax9rAmlO6QnglbHLXqvqT
+ C0FEC62xAPy7ISSP6owhvD+6AakJVilZ9xAHpz7uB2mzeNWas+FO33mTEFCL5TrUo8rtxie1r
+ 6LJRlmTGbqVkrWZiz9CCiZwv6stLJi6NKlOOULIyPf/3U1uGzEQ0TUoUFZfj5knDwy76kLaOY
+ Nkogm+NwHWL/dl5QrCi3IL1jUV2g03JwxGjwGE4KPuYrQD3oOAlUswiNlPpHbV1kQopkYkM7Z
+ MqCWGC5VX9tN0r1lV64XZFN02tEokKe9kob8CngvRJcGww1KZER3RSrcdEcE=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 11:49:01 +0200
+Date: Sat, 21 Sep 2019 12:20:11 +0200
 
 Simplify this function implementation by using a known wrapper function.
 
@@ -119,38 +121,37 @@ This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/rtc/rtc-fsl-ftm-alarm.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/rtc/rtc-goldfish.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-ala=
-rm.c
-index 8df2075af9a2..b83f7afa8311 100644
-=2D-- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-+++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-@@ -248,7 +248,6 @@ static const struct rtc_class_ops ftm_rtc_ops =3D {
- static int ftm_rtc_probe(struct platform_device *pdev)
+diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+index 1a3420ee6a4d..cb6b0ad7ec3f 100644
+=2D-- a/drivers/rtc/rtc-goldfish.c
++++ b/drivers/rtc/rtc-goldfish.c
+@@ -165,7 +165,6 @@ static const struct rtc_class_ops goldfish_rtc_ops =3D=
  {
- 	struct device_node *np =3D pdev->dev.of_node;
+ static int goldfish_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct goldfish_rtc *rtcdrv;
 -	struct resource *r;
- 	int irq;
- 	int ret;
- 	struct ftm_rtc *rtc;
-@@ -265,13 +264,7 @@ static int ftm_rtc_probe(struct platform_device *pdev=
-)
- 	if (IS_ERR(rtc->rtc_dev))
- 		return PTR_ERR(rtc->rtc_dev);
+ 	int err;
 
--	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "cannot get resource for rtc\n");
--		return -ENODEV;
--	}
+ 	rtcdrv =3D devm_kzalloc(&pdev->dev, sizeof(*rtcdrv), GFP_KERNEL);
+@@ -173,12 +172,7 @@ static int goldfish_rtc_probe(struct platform_device =
+*pdev)
+ 		return -ENOMEM;
+
+ 	platform_set_drvdata(pdev, rtcdrv);
 -
--	rtc->base =3D devm_ioremap_resource(&pdev->dev, r);
-+	rtc->base =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(rtc->base)) {
- 		dev_err(&pdev->dev, "cannot ioremap resource for rtc\n");
- 		return PTR_ERR(rtc->base);
+-	r =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!r)
+-		return -ENODEV;
+-
+-	rtcdrv->base =3D devm_ioremap_resource(&pdev->dev, r);
++	rtcdrv->base =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rtcdrv->base))
+ 		return -ENODEV;
+
 =2D-
 2.23.0
 
