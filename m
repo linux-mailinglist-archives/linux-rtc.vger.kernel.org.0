@@ -2,33 +2,34 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E255EB9D9B
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Sep 2019 13:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB165B9DAE
+	for <lists+linux-rtc@lfdr.de>; Sat, 21 Sep 2019 13:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407543AbfIULal (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 21 Sep 2019 07:30:41 -0400
-Received: from mout.web.de ([212.227.17.12]:52095 "EHLO mout.web.de"
+        id S2394111AbfIULt0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 21 Sep 2019 07:49:26 -0400
+Received: from mout.web.de ([217.72.192.78]:33217 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407428AbfIULak (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 21 Sep 2019 07:30:40 -0400
+        id S2389497AbfIULt0 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 21 Sep 2019 07:49:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569065430;
-        bh=qo/Wuz+07R6dBwZTGNB45QvhHNJk+Q9DA0Zq4F9rHz4=;
+        s=dbaedf251592; t=1569066553;
+        bh=3BmTDmp6iKuuz4ABn/3dTpvuueFCJwVtF9AXtIawYXw=;
         h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=jm4jVIgZzI3dNAFG2s0nJX943KkUUZU4FbtpBmYoXvijc1bbZ+HgcgLHjkE8QYMIB
-         ajj9/XfsiO3Kv8m0AEbxLvsgm18duS2Lrzo8yN6cLAIJM+ocD48KI3EY7pFoX8gpCX
-         s6j4AD06CHUs56OQXhodeJRNMCmYmKDtp23UE+/4=
+        b=qaGk9OcWGdV9o6lvlwwXMp+rW8dpNLQDaCpSM4yztGEzWDqwROt7+/rMRA7Z3RLXB
+         a1JeCSewjxMMMrH/q6o2NVRdrINRYb4pJtyT8VMrsA4GGhDr8l9IsTYphkuuACMVnz
+         0GKhVrBhHLKkdEQF8S5hXpIBGqEvjOwH8GuN6Dkc=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MXpdL-1ifBbd2AQJ-00Wj6v; Sat, 21
- Sep 2019 13:30:30 +0200
-To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+Received: from [192.168.1.2] ([2.244.64.44]) by smtp.web.de (mrweb102
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0LzKIP-1i7mEy2yCf-014U6w; Sat, 21
+ Sep 2019 13:49:13 +0200
+To:     linux-rtc@vger.kernel.org, Akinobu Mita <akinobu.mita@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
+        kernel-janitors@vger.kernel.org, Rob Herring <robh@kernel.org>
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] rtc: m48t86: Use devm_platform_ioremap_resource() in
- m48t86_rtc_probe()
+Subject: [PATCH] rtc: r7301: Use devm_platform_ioremap_resource() in
+ rtc7301_rtc_probe()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -72,45 +73,45 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <25448e11-c43f-9ae0-4c43-6f789accc026@web.de>
-Date:   Sat, 21 Sep 2019 13:30:29 +0200
+Message-ID: <8c17a59c-82ff-aa6b-5653-a38d786d3e83@web.de>
+Date:   Sat, 21 Sep 2019 13:49:12 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JwSnI6lSedHJGoEU5PTGg5UX7g9KLhHv1cPOk2Bpo2TXSt/7Brd
- LxQX8XT62sjdSE06odvInb8UtgQs5JnhCjzrCPL+pSmDRxFkoNq6EX38j9AlNGyWhaETAqr
- JGvC/4PkQAcbM91SV8Q1peO7ln0frRuRz7Gm7JESmR9l9pyHel0ZIwNn3krmHMV3QhTHh/w
- ERo0hq7XtuTZJpZpZYsvQ==
+X-Provags-ID: V03:K1:FSXYSJXSqpG5FQ0Yy9xUAQkmypljm0MuAK4xnRLwb3zYKkW+0K4
+ kdPAcwVo/hXo7jn16R4y5zfM6nJLAru5hBSLQlLB2Rpa5IW/E2TESbkhp+kl0ag+FbxoIyP
+ DVUSNuvCzruICgYRp/nOFPvX10DveUOnyPNhMizuxDYauTqtf9q+eEntNJCdypcv3xs1R45
+ BkGcmnMfs2f0yz1y50NTQ==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0XuPjzpJV4E=:ElqUk+WbWRqRKgek+qIDYl
- 59LLd4n7TVW78JWnsflfCoqRCXj9KpNXU+/JiZ4739SaR5QuT2yAR4Jt9zcF0nmKyLDtoFRyw
- fmRTkx1oitVc4tRaxU1KpTck5kSS7NKtyFb0wWsN7OnCUGA02++1N0MTV9SqFvU0pf16/MMeR
- vkUXJ4Yn68tmOI8iCAS57zbIYnKGh/qJ6UJxA1IPZSbChx+zAK4Z5u1jiWOM6SPX/zBFkbQfK
- gYoh14Y0KStJWEyh5sIfyYXUdCgIm+sX/GxeOODPUGY9DR/3qDlkfQvA6yQj7gE7I1N74MLSE
- 7y/N3FlXa/DI8dDVn7x3n7PTf7HGTyx6smgii/u9SDMcDhRm2/a9pCB9TAQhPtUj6/u8MbgH+
- IJH0UKgG3+KqAWfQrcIcYgDkL5pIVSd1GopJYFxQyN6neXAv2WulKxPD3Znch/k0acyUWOaSq
- g4PhVJZcVF91NZuxyr+U1b0DurYyLK5J7hp2AdKgNHkKi122tId1ayd05dBI48I8cMhUuw7Ag
- vzr/w9RGGBy/g3qbNY589S0yg6t+ts9JvSWHXIbIfUXDmB/Ng8xVe2/sH/RNis0i1iqTeUydf
- kiIXkviUOWRfwHVgeCnX8revrfwCeJIhU6wMrRy2YKKFUTtbUHg8C2g337zI3uVrdcQulXSaU
- vE5hQiYvckl0yuP4ST7rvDRKRZKBpWV7vsU5Y9Lq2rUgx2PNlHd6FXEwNyaEGiCX+RALIEa4+
- W1Pnwpd4d7POxr69G9272MqD+BX1Rn1iM18QC+wgvzzRQP/IcfZQl2P79WxrYqanI/f7Fdhry
- XvWL0fgSjsuB+gXgh+gDm20n5NwAJM2MV0LMDM4tuD37SkU8MH2vSF+hFeUqV2VAQqNyvnIwI
- ARx9BMzFzaEAYNUGodcH43J8y0HRjOXaT6fY3bmNAZaJ/OqbSNyNgh7YEYl7Utqe5JV2FFuJR
- XXGOKgfXtfIHqiqd1R/1jOlALSvWWLtgEvdsVMstfiVJZw7DobhgMvzpvSTD/VyHdl9MdKU0K
- V6NFJcvTMBcx/YQ0BwUAUaVIj4MOmQ/fkMnmEW1j4CrsBFT7vK/Uyv3wbpIWFjRXCF6m5zRQr
- +i/QSRi7VFVFhnpyGhzQmvP0PQIkKRx4pMD4R0zrSsAZzkjjk4Zx5+PoggvoAg169VQoXLh+c
- 5kgBNzgJjc7fjHXn/Izi0Amo0QLMEUNT8tvCT7mhDOtaXdKnQVZrz7xL/gud1HgrWIFny4VhM
- m9B50vb/GfqwpsX+tw7gok1cw+cRjndgNXXU7e47E42i/BST0z6QOAT+cgRs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:B06/QBIJIdE=:TvFOfESuat+rpiJIuAz8Nq
+ S1xexZUZ2aEZIXsOA7yLGLMCSvvjm6aj+FReYBTdW7amxL+wcMM8qC4gc34ZgtdHeG0KnhRvC
+ kgoH/scwHw6Wec54+6qm2eWLtJBJqB+0Ky4U6uHiN3aZwqu1CTu+PUji4oXxEohwMnWEP6PrR
+ fMe3rEhhZXzCQLEq7qICJzyqbNOLYqaDtpltiQ1vf9pm7BLoe35YUqQg/YDCdKE3CfsNNd0/U
+ uRUcBu4AjnYVUbwZJ3VjpVcOZgGnu2MWOipCvtTvIf2lZAYPFVaw7V68RnKiFZksbK6ZRry+C
+ JOQ2F/w9FHFpCAdxCdCjL3uvJ9ROD99hc6/mqAvhhWnu8FcFK8IWbi6HHsvgHT62PONJcus7o
+ b7A1/rCkDxxeCDu3LxUtoRYYJkzOWOs/WKrId0xJo1/IlbQOmpJlRBy6JZ/r3ONYb0B9p+uPq
+ thcrC7jF1nlLW3IBAFbYGOWJiEYURx7jsqouQ/0VHkucJhKmv03Y66aK8G6Z+mgjbVy7AtnTQ
+ 1S30M2Q+K+YzXH1SEGhUsdVSCK77V+JuW+lDX89/rdqBSkDpsyMHqej5ZUHv7WrJUZKlr9xd5
+ CdmX/pJTcy+xa/JLDN2rCpLATks0BdonXxTqhRgfL6tTWfkJm9pwVksZ4RUvz4lx+20b/Q1qh
+ 7M4uhGkJ9k3qOXcIQzBGROgnytTa1hlAsV7X7DQ+OqQFVEfRNfUUkch0zULXqM0WzhCGZ/UzC
+ JWTNohkDbGp7wxaDXy8wJAuWz64dPX35BiKHiZUVuwF/Cw+SrMjVueXhB15QqSdntEbrVA+XI
+ o3r3pia7nDafdQeB7SdPhsve/gab4M3qzDE4lYJCGHW4qDFZMdecixuB1+gsKrq3U/JmZ3ING
+ zce/R9RplHEaoxavCLSf3P7o3EQKeRf/aEG+IBN/cZTEDI0Lqwy51PgzMcGcbOyH6WJw24kNC
+ zaSEWKvJQ2eWvBgybSiE1WbSPCQ6ZoVMPa9BSC2N+IA98Eek978sBUJcdvAMMzH57DyInBfqb
+ ZE8OOOcMSC1jdWHdRpszEGxL8d6k/CLRqv4eTvHnWVbUqoWmTeUBzAVgW/3NP+X3mSMjCQh0W
+ znk7z9S67LrqHHDJ76H+0KzfX6oFKur050GMBdQTsauJIOKJf8P8jf8adFJ1OYu7ZC5Vbcy1E
+ W6j3zsXN2sX1Ox3zDbzkCHS0Ry5c64f5xAxbiQqxOh129YKX5RAl5BGWVxyZ/lmlFynRi/CPh
+ nSyvtfho4ADLi0M5aifDGgS+pThYNVb4wbhB3pyJ8+MAKmvJXxCWCQNvBcgk=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Sat, 21 Sep 2019 13:13:35 +0200
+Date: Sat, 21 Sep 2019 13:43:07 +0200
 
 Simplify this function implementation by using a known wrapper function.
 
@@ -118,42 +119,35 @@ This issue was detected by using the Coccinelle software.
 
 Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 =2D--
- drivers/rtc/rtc-m48t86.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/rtc/rtc-r7301.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/rtc/rtc-m48t86.c b/drivers/rtc/rtc-m48t86.c
-index 59b54ed9b841..75a0e73071d8 100644
-=2D-- a/drivers/rtc/rtc-m48t86.c
-+++ b/drivers/rtc/rtc-m48t86.c
-@@ -218,7 +218,6 @@ static bool m48t86_verify_chip(struct platform_device =
-*pdev)
- static int m48t86_rtc_probe(struct platform_device *pdev)
+diff --git a/drivers/rtc/rtc-r7301.c b/drivers/rtc/rtc-r7301.c
+index 2498278853af..aaf1b95e3990 100644
+=2D-- a/drivers/rtc/rtc-r7301.c
++++ b/drivers/rtc/rtc-r7301.c
+@@ -354,21 +354,16 @@ static void rtc7301_init(struct rtc7301_priv *priv)
+
+ static int __init rtc7301_rtc_probe(struct platform_device *dev)
  {
- 	struct m48t86_rtc_info *info;
 -	struct resource *res;
- 	unsigned char reg;
- 	int err;
- 	struct nvmem_config m48t86_nvmem_cfg =3D {
-@@ -235,17 +234,11 @@ static int m48t86_rtc_probe(struct platform_device *=
-pdev)
- 	if (!info)
+ 	void __iomem *regs;
+ 	struct rtc7301_priv *priv;
+ 	struct rtc_device *rtc;
+ 	int ret;
+
+-	res =3D platform_get_resource(dev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -ENODEV;
+-
+ 	priv =3D devm_kzalloc(&dev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
  		return -ENOMEM;
 
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENODEV;
--	info->index_reg =3D devm_ioremap_resource(&pdev->dev, res);
-+	info->index_reg =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(info->index_reg))
- 		return PTR_ERR(info->index_reg);
-
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	if (!res)
--		return -ENODEV;
--	info->data_reg =3D devm_ioremap_resource(&pdev->dev, res);
-+	info->data_reg =3D devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(info->data_reg))
- 		return PTR_ERR(info->data_reg);
+-	regs =3D devm_ioremap_resource(&dev->dev, res);
++	regs =3D devm_platform_ioremap_resource(dev, 0);
+ 	if (IS_ERR(regs))
+ 		return PTR_ERR(regs);
 
 =2D-
 2.23.0
