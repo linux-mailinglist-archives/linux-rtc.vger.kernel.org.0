@@ -2,205 +2,170 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BF9BB308
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Sep 2019 13:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B6FBB36E
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Sep 2019 14:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439542AbfIWLqy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Sep 2019 07:46:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54780 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729982AbfIWLqx (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 23 Sep 2019 07:46:53 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 51009B152;
-        Mon, 23 Sep 2019 11:46:51 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v6 4/4] MIPS: SGI-IP27: fix readb/writeb addressing
-Date:   Mon, 23 Sep 2019 13:46:34 +0200
-Message-Id: <20190923114636.6748-5-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20190923114636.6748-1-tbogendoerfer@suse.de>
-References: <20190923114636.6748-1-tbogendoerfer@suse.de>
+        id S1730569AbfIWMOJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Sep 2019 08:14:09 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:59926 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbfIWMOJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Sep 2019 08:14:09 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 6F7E125AD78;
+        Mon, 23 Sep 2019 22:14:07 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id 6B047944434; Mon, 23 Sep 2019 14:14:05 +0200 (CEST)
+From:   Simon Horman <horms+renesas@verge.net.au>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Simon Horman <horms+renesas@verge.net.au>
+Subject: [PATCH v2] dt-bindings: rtc: rtc-sh: convert bindings to json-schema
+Date:   Mon, 23 Sep 2019 14:14:04 +0200
+Message-Id: <20190923121404.32585-1-horms+renesas@verge.net.au>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Our chosen byte swapping, which is what firmware already uses, is to
-do readl/writel by normal lw/sw intructions (data invariance). This
-also means we need to mangle addresses for u8 and u16 accesses. The
-mangling for 16bit has been done aready, but 8bit one was missing.
-Correcting this causes different addresses for accesses to the
-SuperIO and local bus of the IOC3 chip. This is fixed by changing
-byte order in ioc3 and m48rtc_rtc structs.
+Convert Real Time Clock for Renesas SH and ARM SoCs bindings documentation
+to json-schema.  Also name bindings documentation file according to the
+compat string being documented.
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Also correct syntax error in interrupts field in example.
+
+Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 ---
- arch/mips/include/asm/mach-ip27/mangle-port.h |  4 +--
- arch/mips/include/asm/sn/ioc3.h               | 38 +++++++++++++--------------
- drivers/rtc/rtc-m48t35.c                      | 11 ++++++++
- drivers/tty/serial/8250/8250_ioc3.c           |  4 +--
- 4 files changed, 34 insertions(+), 23 deletions(-)
+v2
+* Added reviewed-by tag from Ulrich
+* Constrain clocks and clock-names as suggested by Rob Herring
+---
+ .../devicetree/bindings/rtc/renesas,sh-rtc.yaml    | 70 ++++++++++++++++++++++
+ Documentation/devicetree/bindings/rtc/rtc-sh.txt   | 28 ---------
+ 2 files changed, 70 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-sh.txt
 
-diff --git a/arch/mips/include/asm/mach-ip27/mangle-port.h b/arch/mips/include/asm/mach-ip27/mangle-port.h
-index f6e4912ea062..27c56efa519f 100644
---- a/arch/mips/include/asm/mach-ip27/mangle-port.h
-+++ b/arch/mips/include/asm/mach-ip27/mangle-port.h
-@@ -8,7 +8,7 @@
- #ifndef __ASM_MACH_IP27_MANGLE_PORT_H
- #define __ASM_MACH_IP27_MANGLE_PORT_H
- 
--#define __swizzle_addr_b(port)	(port)
-+#define __swizzle_addr_b(port)	((port) ^ 3)
- #define __swizzle_addr_w(port)	((port) ^ 2)
- #define __swizzle_addr_l(port)	(port)
- #define __swizzle_addr_q(port)	(port)
-@@ -20,6 +20,6 @@
- # define ioswabl(a, x)		(x)
- # define __mem_ioswabl(a, x)	cpu_to_le32(x)
- # define ioswabq(a, x)		(x)
--# define __mem_ioswabq(a, x)	cpu_to_le32(x)
-+# define __mem_ioswabq(a, x)	cpu_to_le64(x)
- 
- #endif /* __ASM_MACH_IP27_MANGLE_PORT_H */
-diff --git a/arch/mips/include/asm/sn/ioc3.h b/arch/mips/include/asm/sn/ioc3.h
-index 78ef760ddde4..3865d3225780 100644
---- a/arch/mips/include/asm/sn/ioc3.h
-+++ b/arch/mips/include/asm/sn/ioc3.h
-@@ -21,50 +21,50 @@ struct ioc3_serialregs {
- 
- /* SUPERIO uart register map */
- struct ioc3_uartregs {
-+	u8	iu_lcr;
- 	union {
--		u8	iu_rbr;	/* read only, DLAB == 0 */
--		u8	iu_thr;	/* write only, DLAB == 0 */
--		u8	iu_dll;	/* DLAB == 1 */
-+		u8	iu_iir;	/* read only */
-+		u8	iu_fcr;	/* write only */
- 	};
- 	union {
- 		u8	iu_ier;	/* DLAB == 0 */
- 		u8	iu_dlm;	/* DLAB == 1 */
- 	};
- 	union {
--		u8	iu_iir;	/* read only */
--		u8	iu_fcr;	/* write only */
-+		u8	iu_rbr;	/* read only, DLAB == 0 */
-+		u8	iu_thr;	/* write only, DLAB == 0 */
-+		u8	iu_dll;	/* DLAB == 1 */
- 	};
--	u8	iu_lcr;
--	u8	iu_mcr;
--	u8	iu_lsr;
--	u8	iu_msr;
- 	u8	iu_scr;
-+	u8	iu_msr;
-+	u8	iu_lsr;
-+	u8	iu_mcr;
- };
- 
- struct ioc3_sioregs {
- 	u8	fill[0x141];	/* starts at 0x141 */
- 
--	u8	uartc;
- 	u8	kbdcg;
-+	u8	uartc;
- 
--	u8	fill0[0x150 - 0x142 - 1];
-+	u8	fill0[0x151 - 0x142 - 1];
- 
--	u8	pp_data;
--	u8	pp_dsr;
- 	u8	pp_dcr;
-+	u8	pp_dsr;
-+	u8	pp_data;
- 
--	u8	fill1[0x158 - 0x152 - 1];
-+	u8	fill1[0x159 - 0x153 - 1];
- 
--	u8	pp_fifa;
--	u8	pp_cfgb;
- 	u8	pp_ecr;
-+	u8	pp_cfgb;
-+	u8	pp_fifa;
- 
--	u8	fill2[0x168 - 0x15a - 1];
-+	u8	fill2[0x16a - 0x15b - 1];
- 
--	u8	rtcad;
- 	u8	rtcdat;
-+	u8	rtcad;
- 
--	u8	fill3[0x170 - 0x169 - 1];
-+	u8	fill3[0x170 - 0x16b - 1];
- 
- 	struct ioc3_uartregs	uartb;	/* 0x20170  */
- 	struct ioc3_uartregs	uarta;	/* 0x20178  */
-diff --git a/drivers/rtc/rtc-m48t35.c b/drivers/rtc/rtc-m48t35.c
-index d3a75d447fce..e8194f1f01a8 100644
---- a/drivers/rtc/rtc-m48t35.c
-+++ b/drivers/rtc/rtc-m48t35.c
-@@ -20,6 +20,16 @@
- 
- struct m48t35_rtc {
- 	u8	pad[0x7ff8];    /* starts at 0x7ff8 */
-+#ifdef CONFIG_SGI_IP27
-+	u8	hour;
-+	u8	min;
-+	u8	sec;
-+	u8	control;
-+	u8	year;
-+	u8	month;
-+	u8	date;
-+	u8	day;
-+#else
- 	u8	control;
- 	u8	sec;
- 	u8	min;
-@@ -28,6 +38,7 @@ struct m48t35_rtc {
- 	u8	date;
- 	u8	month;
- 	u8	year;
-+#endif
- };
- 
- #define M48T35_RTC_SET		0x80
-diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
-index 2be6ed2967e0..4c405f1b9c67 100644
---- a/drivers/tty/serial/8250/8250_ioc3.c
-+++ b/drivers/tty/serial/8250/8250_ioc3.c
-@@ -23,12 +23,12 @@ struct ioc3_8250_data {
- 
- static unsigned int ioc3_serial_in(struct uart_port *p, int offset)
- {
--	return readb(p->membase + offset);
-+	return readb(p->membase + (offset ^ 3));
- }
- 
- static void ioc3_serial_out(struct uart_port *p, int offset, int value)
- {
--	writeb(value, p->membase + offset);
-+	writeb(value, p->membase + (offset ^ 3));
- }
- 
- static int serial8250_ioc3_probe(struct platform_device *pdev)
+diff --git a/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml b/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
+new file mode 100644
+index 000000000000..dcff573cbdb1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/renesas,sh-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Real Time Clock for Renesas SH and ARM SoCs
++
++maintainers:
++  - Chris Brandt <chris.brandt@renesas.com>
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++properties:
++  compatible:
++    items:
++      - const: renesas,r7s72100-rtc  # RZ/A1H
++      - const: renesas,sh-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 3
++
++  interrupt-names:
++    items:
++      - const: alarm
++      - const: period
++      - const: carry
++
++  clocks:
++    # The functional clock source for the RTC controller must be listed
++    # first (if it exists). Additionally, potential clock counting sources
++    # are to be listed.
++    minItems: 1
++    maxItems: 4
++
++  clock-names:
++    # The functional clock must be labeled as "fck". Other clocks
++    # may be named in accordance to the SoC hardware manuals.
++    minItems: 1
++    maxItems: 4
++    items:
++      enum: [ fck, rtc_x1, rtc_x3, extal ]
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++
++examples:
++  - |
++    #include <dt-bindings/clock/r7s72100-clock.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    rtc: rtc@fcff1000 {
++        compatible = "renesas,r7s72100-rtc", "renesas,sh-rtc";
++        reg = <0xfcff1000 0x2e>;
++        interrupts = <GIC_SPI 276 IRQ_TYPE_EDGE_RISING>,
++                     <GIC_SPI 277 IRQ_TYPE_EDGE_RISING>,
++                     <GIC_SPI 278 IRQ_TYPE_EDGE_RISING>;
++        interrupt-names = "alarm", "period", "carry";
++        clocks = <&mstp6_clks R7S72100_CLK_RTC>, <&rtc_x1_clk>,
++                 <&rtc_x3_clk>, <&extal_clk>;
++        clock-names = "fck", "rtc_x1", "rtc_x3", "extal";
++    };
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-sh.txt b/Documentation/devicetree/bindings/rtc/rtc-sh.txt
+deleted file mode 100644
+index 7676c7d28874..000000000000
+--- a/Documentation/devicetree/bindings/rtc/rtc-sh.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-* Real Time Clock for Renesas SH and ARM SoCs
+-
+-Required properties:
+-- compatible: Should be "renesas,r7s72100-rtc" and "renesas,sh-rtc" as a
+-  fallback.
+-- reg: physical base address and length of memory mapped region.
+-- interrupts: 3 interrupts for alarm, period, and carry.
+-- interrupt-names: The interrupts should be labeled as "alarm", "period", and
+-  "carry".
+-- clocks: The functional clock source for the RTC controller must be listed
+-  first (if exists). Additionally, potential clock counting sources are to be
+-  listed.
+-- clock-names: The functional clock must be labeled as "fck". Other clocks
+-  may be named in accordance to the SoC hardware manuals.
+-
+-
+-Example:
+-rtc: rtc@fcff1000 {
+-	compatible = "renesas,r7s72100-rtc", "renesas,sh-rtc";
+-	reg = <0xfcff1000 0x2e>;
+-	interrupts = <GIC_SPI 276 IRQ_TYPE_EDGE_RISING
+-		      GIC_SPI 277 IRQ_TYPE_EDGE_RISING
+-		      GIC_SPI 278 IRQ_TYPE_EDGE_RISING>;
+-	interrupt-names = "alarm", "period", "carry";
+-	clocks = <&mstp6_clks R7S72100_CLK_RTC>, <&rtc_x1_clk>,
+-		 <&rtc_x3_clk>, <&extal_clk>;
+-	clock-names = "fck", "rtc_x1", "rtc_x3", "extal";
+-};
 -- 
-2.13.7
+2.11.0
 
