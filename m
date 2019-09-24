@@ -2,170 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B6FBB36E
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Sep 2019 14:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD42BC045
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Sep 2019 04:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730569AbfIWMOJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Sep 2019 08:14:09 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:59926 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726212AbfIWMOJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Sep 2019 08:14:09 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 6F7E125AD78;
-        Mon, 23 Sep 2019 22:14:07 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 6B047944434; Mon, 23 Sep 2019 14:14:05 +0200 (CEST)
-From:   Simon Horman <horms+renesas@verge.net.au>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Simon Horman <horms+renesas@verge.net.au>
-Subject: [PATCH v2] dt-bindings: rtc: rtc-sh: convert bindings to json-schema
-Date:   Mon, 23 Sep 2019 14:14:04 +0200
-Message-Id: <20190923121404.32585-1-horms+renesas@verge.net.au>
-X-Mailer: git-send-email 2.11.0
+        id S2393731AbfIXCmv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Sep 2019 22:42:51 -0400
+Received: from spam01.hygon.cn ([110.188.70.11]:59442 "EHLO spam2.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2407965AbfIXCmv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 23 Sep 2019 22:42:51 -0400
+Received: from MK-DB.hygon.cn ([172.23.18.60])
+        by spam2.hygon.cn with ESMTP id x8O2g4ZJ068535;
+        Tue, 24 Sep 2019 10:42:04 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-DB.hygon.cn with ESMTP id x8O2fvYM086978;
+        Tue, 24 Sep 2019 10:41:57 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from bogon.hygon.cn (172.23.18.44) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 24 Sep
+ 2019 10:41:59 +0800
+From:   Jinke Fan <fanjinke@hygon.cn>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
+CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jinke Fan <fanjinke@hygon.cn>
+Subject: [RESEND PATCH RFC] rtc: Fix the AltCentury value on AMD/Hygon platform
+Date:   Tue, 24 Sep 2019 10:41:08 +0800
+Message-ID: <20190924024108.51286-1-fanjinke@hygon.cn>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.23.18.44]
+X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
+ (172.23.18.10)
+X-MAIL: spam2.hygon.cn x8O2g4ZJ068535
+X-DNSRBL: 
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert Real Time Clock for Renesas SH and ARM SoCs bindings documentation
-to json-schema.  Also name bindings documentation file according to the
-compat string being documented.
+When using following operations:
+date -s "21190910 19:20:00"
+hwclock -w
+to change date from 2019 to 2119 for test, it will fail on Hygon
+Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
+platform.
 
-Also correct syntax error in interrupts field in example.
+MC146818 driver use function mc146818_set_time() to set register
+RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
+reset value on Intel platform to 0x7.
 
-Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
+DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
+as reserved.
+
+DV0 is set to 1, it will select Bank 1, which will disable AltCentury
+register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
+(AltCentury), the CMOS write will be failed on code:
+CMOS_WRITE(century, acpi_gbl_FADT.century).
+
+Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
+enable AltCentury(0x32) register writing and finally setup century as
+expected.
+
+Test results on AMD/Hygon machine show that it works as expected.
+
+Reference:
+https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
+section: 3.13 Real Time Clock (RTC)
+
+Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
 ---
-v2
-* Added reviewed-by tag from Ulrich
-* Constrain clocks and clock-names as suggested by Rob Herring
----
- .../devicetree/bindings/rtc/renesas,sh-rtc.yaml    | 70 ++++++++++++++++++++++
- Documentation/devicetree/bindings/rtc/rtc-sh.txt   | 28 ---------
- 2 files changed, 70 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-sh.txt
+ drivers/rtc/rtc-mc146818-lib.c | 9 +++++++--
+ include/linux/mc146818rtc.h    | 2 ++
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml b/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
-new file mode 100644
-index 000000000000..dcff573cbdb1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/renesas,sh-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index 2ecd8752b088..c09fe486ae67 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -170,9 +170,14 @@ int mc146818_set_time(struct rtc_time *time)
+ 	}
+ 
+ 	save_control = CMOS_READ(RTC_CONTROL);
+-	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
++	CMOS_WRITE((save_control | RTC_SET), RTC_CONTROL);
+ 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
+-	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
 +
-+title: Real Time Clock for Renesas SH and ARM SoCs
-+
-+maintainers:
-+  - Chris Brandt <chris.brandt@renesas.com>
-+  - Geert Uytterhoeven <geert+renesas@glider.be>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: renesas,r7s72100-rtc  # RZ/A1H
-+      - const: renesas,sh-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 3
-+
-+  interrupt-names:
-+    items:
-+      - const: alarm
-+      - const: period
-+      - const: carry
-+
-+  clocks:
-+    # The functional clock source for the RTC controller must be listed
-+    # first (if it exists). Additionally, potential clock counting sources
-+    # are to be listed.
-+    minItems: 1
-+    maxItems: 4
-+
-+  clock-names:
-+    # The functional clock must be labeled as "fck". Other clocks
-+    # may be named in accordance to the SoC hardware manuals.
-+    minItems: 1
-+    maxItems: 4
-+    items:
-+      enum: [ fck, rtc_x1, rtc_x3, extal ]
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r7s72100-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    rtc: rtc@fcff1000 {
-+        compatible = "renesas,r7s72100-rtc", "renesas,sh-rtc";
-+        reg = <0xfcff1000 0x2e>;
-+        interrupts = <GIC_SPI 276 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 277 IRQ_TYPE_EDGE_RISING>,
-+                     <GIC_SPI 278 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "alarm", "period", "carry";
-+        clocks = <&mstp6_clks R7S72100_CLK_RTC>, <&rtc_x1_clk>,
-+                 <&rtc_x3_clk>, <&extal_clk>;
-+        clock-names = "fck", "rtc_x1", "rtc_x3", "extal";
-+    };
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-sh.txt b/Documentation/devicetree/bindings/rtc/rtc-sh.txt
-deleted file mode 100644
-index 7676c7d28874..000000000000
---- a/Documentation/devicetree/bindings/rtc/rtc-sh.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--* Real Time Clock for Renesas SH and ARM SoCs
--
--Required properties:
--- compatible: Should be "renesas,r7s72100-rtc" and "renesas,sh-rtc" as a
--  fallback.
--- reg: physical base address and length of memory mapped region.
--- interrupts: 3 interrupts for alarm, period, and carry.
--- interrupt-names: The interrupts should be labeled as "alarm", "period", and
--  "carry".
--- clocks: The functional clock source for the RTC controller must be listed
--  first (if exists). Additionally, potential clock counting sources are to be
--  listed.
--- clock-names: The functional clock must be labeled as "fck". Other clocks
--  may be named in accordance to the SoC hardware manuals.
--
--
--Example:
--rtc: rtc@fcff1000 {
--	compatible = "renesas,r7s72100-rtc", "renesas,sh-rtc";
--	reg = <0xfcff1000 0x2e>;
--	interrupts = <GIC_SPI 276 IRQ_TYPE_EDGE_RISING
--		      GIC_SPI 277 IRQ_TYPE_EDGE_RISING
--		      GIC_SPI 278 IRQ_TYPE_EDGE_RISING>;
--	interrupt-names = "alarm", "period", "carry";
--	clocks = <&mstp6_clks R7S72100_CLK_RTC>, <&rtc_x1_clk>,
--		 <&rtc_x3_clk>, <&extal_clk>;
--	clock-names = "fck", "rtc_x1", "rtc_x3", "extal";
--};
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++		CMOS_WRITE((save_freq_select & (~RTC_DV0)), RTC_FREQ_SELECT);
++	else
++		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
+ 
+ #ifdef CONFIG_MACH_DECSTATION
+ 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
+diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+index 0661af17a758..b8ba6556c371 100644
+--- a/include/linux/mc146818rtc.h
++++ b/include/linux/mc146818rtc.h
+@@ -86,6 +86,8 @@ struct cmos_rtc_board_info {
+    /* 2 values for divider stage reset, others for "testing purposes only" */
+ #  define RTC_DIV_RESET1	0x60
+ #  define RTC_DIV_RESET2	0x70
++   /* DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1 on AMD/Hygon platform */
++#  define RTC_DV0		0x10
+   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
+ # define RTC_RATE_SELECT 	0x0F
+ 
 -- 
-2.11.0
+2.17.1
 
