@@ -2,91 +2,250 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B19BC03CF
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 Sep 2019 13:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713B0C071B
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Sep 2019 16:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbfI0LEv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 Sep 2019 07:04:51 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33440 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726809AbfI0LEv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Sep 2019 07:04:51 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b9so2269790wrs.0
-        for <linux-rtc@vger.kernel.org>; Fri, 27 Sep 2019 04:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=9ciKUllz8cRvciY2ix6rQnwrk8CF26+Aq3v7PMw8/fc=;
-        b=ir885x5GJOVfSktjxh6gFJ9iBvr7R1ZUwYMpR6excNT+0hzyuLO50CEXmYrBZngyyY
-         rDFmLktMsM2h6cBYyHiLMZEcOl7umafGtZpDjtuqYIssuqJRKXVjObOmflLL73k0FEE1
-         BRkgwBX2eWpcPIow4jcLkzY5nuIfKvWqQEIjFVFykJ6lSQDO07s+HZkW2Flbyu6Ssz+G
-         TawL8S7LrgNu7tVoFwQl2yADKIZJP/7sN7uXKnJk6BJda9Zqi6s9ReszCxqw/6s8k06w
-         I3HcTCdKO8QpBgOk/2k9g22TPlrq2GU/dl6zUKm2Ubne8p+c+mKrnGsPoJpmKSaOoZ23
-         YTKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=9ciKUllz8cRvciY2ix6rQnwrk8CF26+Aq3v7PMw8/fc=;
-        b=iZQZUcr1BdM04hDaew1tYIBKt3nlxa165lHgD3Hjnsa6EwnLBM3F1BryIz5gp96+G8
-         2ZNbrZ8jCegB+gVnytvqLVDlfGMeiSAB8UXgEL3PjcMLxY4/jqb3WlDOkHH7eF5wcOeF
-         wgPufLOxsXFWvg2Tfg5wsiIczLCgAzVYMupeIwq3SjXa0/EmLvYz1igxrhQAhL/+a6K5
-         +jOhwp/rxYHhiCsbr4XCYRfYK2jyN6T9b7xJY3YmXUJKvuO8gb9rlAyCR6fkrTZyMV27
-         aaQ8Hdmg6IsTFR+431/wqG+nRkhkXyWSzlUBBSlMDgdYOgZECFNpoJzPcJXMED0yTXYA
-         Y2Aw==
-X-Gm-Message-State: APjAAAWKwRYJ1aDiadaUzfNTiwjZOKfwGG7chtzdZqBOW+qsJlTYgu3H
-        zTTQjIyKbKtzQYff7i6wH75Ib4mzwBg=
-X-Google-Smtp-Source: APXvYqxE9JowBA73dwKob1+hQUqcyLnYGK6sJRPLEkwuMaQayboSKLGvGWjMGOSo+oanhRdvezfm+Q==
-X-Received: by 2002:adf:ef8d:: with SMTP id d13mr2532352wro.31.1569582289165;
-        Fri, 27 Sep 2019 04:04:49 -0700 (PDT)
-Received: from gmail.com (171.42.137.88.rev.sfr.net. [88.137.42.171])
-        by smtp.gmail.com with ESMTPSA id o188sm9234925wma.14.2019.09.27.04.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2019 04:04:48 -0700 (PDT)
-Date:   Fri, 27 Sep 2019 13:04:46 +0200
-From:   Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: use timeu64_t for range_max
-Message-ID: <20190927110446.GA6289@gmail.com>
+        id S1726540AbfI0OPX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Sep 2019 10:15:23 -0400
+Received: from mail-out.m-online.net ([212.18.0.10]:58961 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbfI0OPX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Sep 2019 10:15:23 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 46fv2b42mvz1rGRj;
+        Fri, 27 Sep 2019 16:15:19 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 46fv2b3FCbz1qqkK;
+        Fri, 27 Sep 2019 16:15:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id RoaC08cbO-fC; Fri, 27 Sep 2019 16:15:18 +0200 (CEST)
+X-Auth-Info: RIzVffhVXjeYrCf6SREmhidKiI/+8A01vOUCNHwJtZU=
+Received: from xpert.denx.de (unknown [62.91.23.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri, 27 Sep 2019 16:15:18 +0200 (CEST)
+From:   Parthiban Nallathambi <pn@denx.de>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        parthitce@gmail.com, Parthiban Nallathambi <pn@denx.de>
+Subject: [PATCH] rtc: rv3028: add clkout support
+Date:   Fri, 27 Sep 2019 16:15:05 +0200
+Message-Id: <20190927141505.640751-1-pn@denx.de>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-for rtc drivers where rtc->range_max is set U64_MAX, like the PS3 rtc,
-rtc_valid_range() always returns -ERANGE. This is because the local
-variable range_max has type time64_t, so the test
-	if (time < range_min || time > range_max)
-		return -ERANGE;
-becomes (time < range_min || time > -1), which always evaluates to true.
-timeu64_t should be used, since it's the type of rtc->range_max.
+rv3028 provides clkout (enabled by default). Add clkout
+to clock framework source and control from device tree for
+variable frequency with enable and disable functionality.
 
-Signed-off-by: Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
+Signed-off-by: Parthiban Nallathambi <pn@denx.de>
 ---
- drivers/rtc/interface.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-rv3028.c | 156 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 156 insertions(+)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index c93ef33b01d3..eea700723976 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -70,7 +70,7 @@ static int rtc_valid_range(struct rtc_device *rtc, struct rtc_time *tm)
- 		time64_t time = rtc_tm_to_time64(tm);
- 		time64_t range_min = rtc->set_start_time ? rtc->start_secs :
- 			rtc->range_min;
--		time64_t range_max = rtc->set_start_time ?
-+		timeu64_t range_max = rtc->set_start_time ?
- 			(rtc->start_secs + rtc->range_max - rtc->range_min) :
- 			rtc->range_max;
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 2b316661a578..61a2ed32639f 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -8,6 +8,7 @@
+  *
+  */
+ 
++#include <linux/clk-provider.h>
+ #include <linux/bcd.h>
+ #include <linux/bitops.h>
+ #include <linux/i2c.h>
+@@ -52,6 +53,11 @@
+ #define RV3028_STATUS_CLKF		BIT(6)
+ #define RV3028_STATUS_EEBUSY		BIT(7)
+ 
++#define RV3028_CLKOUT_FD_MASK		GENMASK(2, 0)
++#define RV3028_CLKOUT_PORIE		BIT(3)
++#define RV3028_CLKOUT_CLKSY		BIT(6)
++#define RV3028_CLKOUT_CLKOE		BIT(7)
++
+ #define RV3028_CTRL1_EERD		BIT(3)
+ #define RV3028_CTRL1_WADA		BIT(5)
+ 
+@@ -84,6 +90,9 @@ struct rv3028_data {
+ 	struct regmap *regmap;
+ 	struct rtc_device *rtc;
+ 	enum rv3028_type type;
++#ifdef CONFIG_COMMON_CLK
++	struct clk_hw clkout_hw;
++#endif
+ };
+ 
+ static u16 rv3028_trickle_resistors[] = {1000, 3000, 6000, 11000};
+@@ -581,6 +590,150 @@ static int rv3028_eeprom_read(void *priv, unsigned int offset, void *val,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_COMMON_CLK
++#define clkout_hw_to_rv3028(hw) container_of(hw, struct rv3028_data, clkout_hw)
++
++static int clkout_rates[] = {
++	32768,
++	8192,
++	1024,
++	64,
++	32,
++	1,
++};
++
++static unsigned long rv3028_clkout_recalc_rate(struct clk_hw *hw,
++					       unsigned long parent_rate)
++{
++	int clkout, ret;
++	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
++
++	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &clkout);
++	if (ret < 0)
++		return 0;
++
++	clkout &= RV3028_CLKOUT_FD_MASK;
++	return clkout_rates[clkout];
++}
++
++static long rv3028_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
++				     unsigned long *prate)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
++		if (clkout_rates[i] <= rate)
++			return clkout_rates[i];
++
++	return 0;
++}
++
++static int rv3028_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
++				  unsigned long parent_rate)
++{
++	int i, ret;
++	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
++
++	ret = regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
++				 RV3028_STATUS_CLKF, 0);
++	if (ret < 0)
++		return ret;
++
++	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++) {
++		if (clkout_rates[i] == rate) {
++			ret = regmap_update_bits(rv3028->regmap,
++						 RV3028_CLKOUT,
++						 RV3028_CLKOUT_FD_MASK, i);
++			if (ret < 0)
++				return ret;
++
++			return regmap_write(rv3028->regmap, RV3028_CLKOUT,
++				RV3028_CLKOUT_CLKSY | RV3028_CLKOUT_CLKOE);
++		}
++	}
++
++	return -EINVAL;
++}
++
++static int rv3028_clkout_prepare(struct clk_hw *hw)
++{
++	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
++
++	return regmap_write(rv3028->regmap, RV3028_CLKOUT,
++			    RV3028_CLKOUT_CLKSY | RV3028_CLKOUT_CLKOE);
++}
++
++static void rv3028_clkout_unprepare(struct clk_hw *hw)
++{
++	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
++
++	regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
++	regmap_update_bits(rv3028->regmap, RV3028_STATUS,
++			   RV3028_STATUS_CLKF, 0);
++}
++
++static int rv3028_clkout_is_prepared(struct clk_hw *hw)
++{
++	int clkout, ret;
++	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
++
++	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &clkout);
++	if (ret < 0)
++		return ret;
++
++	return !!(clkout & RV3028_CLKOUT_CLKOE);
++}
++
++static const struct clk_ops rv3028_clkout_ops = {
++	.prepare = rv3028_clkout_prepare,
++	.unprepare = rv3028_clkout_unprepare,
++	.is_prepared = rv3028_clkout_is_prepared,
++	.recalc_rate = rv3028_clkout_recalc_rate,
++	.round_rate = rv3028_clkout_round_rate,
++	.set_rate = rv3028_clkout_set_rate,
++};
++
++static int rv3028_clkout_register_clk(struct rv3028_data *rv3028,
++				      struct i2c_client *client)
++{
++	int ret;
++	struct clk *clk;
++	struct clk_init_data init;
++	struct device_node *node = client->dev.of_node;
++
++	/* disable the clkout output */
++	ret = regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
++	if (ret < 0)
++		return ret;
++
++	ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
++				 RV3028_STATUS_CLKF, 0);
++	if (ret < 0)
++		return ret;
++
++	init.name = "rv3028-clkout";
++	init.ops = &rv3028_clkout_ops;
++	init.flags = 0;
++	init.parent_names = NULL;
++	init.num_parents = 0;
++	rv3028->clkout_hw.init = &init;
++
++	/* optional override of the clockname */
++	of_property_read_string(node, "clock-output-names", &init.name);
++
++	/* register the clock */
++	clk = devm_clk_register(&client->dev, &rv3028->clkout_hw);
++	if (!IS_ERR(clk))
++		of_clk_add_provider(node, of_clk_src_simple_get, clk);
++
++	return 0;
++}
++#endif
++
+ static struct rtc_class_ops rv3028_rtc_ops = {
+ 	.read_time = rv3028_get_time,
+ 	.set_time = rv3028_set_time,
+@@ -708,6 +861,9 @@ static int rv3028_probe(struct i2c_client *client)
+ 
+ 	rv3028->rtc->max_user_freq = 1;
+ 
++#ifdef CONFIG_COMMON_CLK
++	rv3028_clkout_register_clk(rv3028, client);
++#endif
+ 	return 0;
+ }
  
 -- 
-2.23.0
+2.21.0
 
