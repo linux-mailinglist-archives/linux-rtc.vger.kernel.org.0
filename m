@@ -2,250 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 713B0C071B
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 Sep 2019 16:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C977C094D
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Sep 2019 18:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfI0OPX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 Sep 2019 10:15:23 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:58961 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfI0OPX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Sep 2019 10:15:23 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 46fv2b42mvz1rGRj;
-        Fri, 27 Sep 2019 16:15:19 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 46fv2b3FCbz1qqkK;
-        Fri, 27 Sep 2019 16:15:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id RoaC08cbO-fC; Fri, 27 Sep 2019 16:15:18 +0200 (CEST)
-X-Auth-Info: RIzVffhVXjeYrCf6SREmhidKiI/+8A01vOUCNHwJtZU=
-Received: from xpert.denx.de (unknown [62.91.23.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 27 Sep 2019 16:15:18 +0200 (CEST)
-From:   Parthiban Nallathambi <pn@denx.de>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        parthitce@gmail.com, Parthiban Nallathambi <pn@denx.de>
-Subject: [PATCH] rtc: rv3028: add clkout support
-Date:   Fri, 27 Sep 2019 16:15:05 +0200
-Message-Id: <20190927141505.640751-1-pn@denx.de>
-X-Mailer: git-send-email 2.21.0
+        id S1727416AbfI0QNc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Sep 2019 12:13:32 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45326 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727349AbfI0QNc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Sep 2019 12:13:32 -0400
+Received: by mail-oi1-f193.google.com with SMTP id o205so5624732oib.12;
+        Fri, 27 Sep 2019 09:13:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=R0kFwxjKhbKX7zTefNj1C9kL38Pdttr44VLkkd4aR6M=;
+        b=IZpCYSWlF+BoeMTK/82g/bQvxkT1+8ZiggCwYMFZ50/QWwsyrgPY8MODo5VGNBGuPG
+         rangAF24vxBp4Go2zNCo2AA92Qu75ZFzkVBzzlHm8JHyQa2JWrUyXde2FwraoZph2aQo
+         rfIAMVJjfuvPLBHmzuxScGfjdrAYdU1QeMyidWjI0/YuuVxmpgqKinZTsCGoOHsEr/69
+         2djhBm+F1jP09QmkMa150C1J5o0rTwUmQrYTcFdwogMgdrKQLU7l/v5Gynme8K04PipY
+         zB2rBEgmOIOhtSw9qoaDmgopRvC/2VSL8YWSLmnUl5BZYxdfDdjSr6K3TCK4cjnh14gL
+         aSnw==
+X-Gm-Message-State: APjAAAWBw88ep7ZOpxPcmYyDf6gdqC9fmr7cCFER24etOaJ4edwFLqHl
+        loeWZ+mf65gOzDrKwOwGojhI7DA=
+X-Google-Smtp-Source: APXvYqxiXG4nUbngZE7HV8pQpIyNW2FpjPrxNR4WhkRALYxubiNWTduYFFSLqHtfuti/TCRrBze2Ag==
+X-Received: by 2002:aca:ebd1:: with SMTP id j200mr7380934oih.111.1569600811153;
+        Fri, 27 Sep 2019 09:13:31 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w13sm1689397oih.54.2019.09.27.09.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2019 09:13:30 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 11:13:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Biwen Li <biwen.li@nxp.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, leoyang.li@nxp.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Biwen Li <biwen.li@nxp.com>,
+        Martin Fuzzey <mfuzzey@parkeon.com>
+Subject: Re: [v5,1/2] dt-bindings: rtc: pcf85263/pcf85363: add some properties
+Message-ID: <20190927161330.GA22996@bogus>
+References: <20190919014520.15500-1-biwen.li@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190919014520.15500-1-biwen.li@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-rv3028 provides clkout (enabled by default). Add clkout
-to clock framework source and control from device tree for
-variable frequency with enable and disable functionality.
+On Thu, 19 Sep 2019 09:45:19 +0800, Biwen Li wrote:
+> Add some properties for pcf85263/pcf85363 as follows:
+>   - nxp,rtc-interrupt-type: integer type
+>   - nxp,rtc-interrupt-output-pin: string type
+>   - quartz-load-femtofarads: integer type
+>   - quartz-drive-strength-ohms: integer type
+>   - nxp,quartz-low-jitter: bool type
+>   - wakeup-source: bool type
+> 
+> Signed-off-by: Martin Fuzzey <mfuzzey@parkeon.com>
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+> Change in v5:
+> 	- Replace nxp,quartz-drive-strength with
+> 	  quartz-drive-strength-ohms
+> 	- Select ohm unit for quartz drive strength
+> 
+> Change in v4:
+> 	- Drop robust defines in include/dt-bindings/rtc/pcf85363.h
+> 	- Add nxp,rtc-interrupt-type property
+> 	- Replace interrupt-output-pin with nxp,rtc-interrupt-output-pin
+> 
+> Change in v3:
+> 	- None
+> 
+> Change in v2:
+> 	- Replace properties name
+> 	  quartz-load-capacitance -> quartz-load-femtofarads
+> 	  quartz-drive-strength -> nxp,quartz-drive-strength
+> 	  quartz-low-jitter -> nxp,quartz-low-jitter
+> 	- Replace drive strength name
+> 	  PCF85263_QUARTZDRIVE_NORMAL -> PCF85263_QUARTZDRIVE_100ko
+> 	  PCF85263_QUARTZDRIVE_LOW -> PCF85263_QUARTZDRIVE_60ko
+> 	  PCF85263_QUARTZDRIVE_HIGH -> PCF85263_QUARTZDRIVE_500ko
+> 	- Set default interrupt-output-pin as "INTA"
+> 
+>  .../devicetree/bindings/rtc/pcf85363.txt      | 44 ++++++++++++++++++-
+>  include/dt-bindings/rtc/pcf85363.h            | 14 ++++++
+>  2 files changed, 57 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/rtc/pcf85363.h
+> 
 
-Signed-off-by: Parthiban Nallathambi <pn@denx.de>
----
- drivers/rtc/rtc-rv3028.c | 156 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 156 insertions(+)
-
-diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-index 2b316661a578..61a2ed32639f 100644
---- a/drivers/rtc/rtc-rv3028.c
-+++ b/drivers/rtc/rtc-rv3028.c
-@@ -8,6 +8,7 @@
-  *
-  */
- 
-+#include <linux/clk-provider.h>
- #include <linux/bcd.h>
- #include <linux/bitops.h>
- #include <linux/i2c.h>
-@@ -52,6 +53,11 @@
- #define RV3028_STATUS_CLKF		BIT(6)
- #define RV3028_STATUS_EEBUSY		BIT(7)
- 
-+#define RV3028_CLKOUT_FD_MASK		GENMASK(2, 0)
-+#define RV3028_CLKOUT_PORIE		BIT(3)
-+#define RV3028_CLKOUT_CLKSY		BIT(6)
-+#define RV3028_CLKOUT_CLKOE		BIT(7)
-+
- #define RV3028_CTRL1_EERD		BIT(3)
- #define RV3028_CTRL1_WADA		BIT(5)
- 
-@@ -84,6 +90,9 @@ struct rv3028_data {
- 	struct regmap *regmap;
- 	struct rtc_device *rtc;
- 	enum rv3028_type type;
-+#ifdef CONFIG_COMMON_CLK
-+	struct clk_hw clkout_hw;
-+#endif
- };
- 
- static u16 rv3028_trickle_resistors[] = {1000, 3000, 6000, 11000};
-@@ -581,6 +590,150 @@ static int rv3028_eeprom_read(void *priv, unsigned int offset, void *val,
- 	return ret;
- }
- 
-+#ifdef CONFIG_COMMON_CLK
-+#define clkout_hw_to_rv3028(hw) container_of(hw, struct rv3028_data, clkout_hw)
-+
-+static int clkout_rates[] = {
-+	32768,
-+	8192,
-+	1024,
-+	64,
-+	32,
-+	1,
-+};
-+
-+static unsigned long rv3028_clkout_recalc_rate(struct clk_hw *hw,
-+					       unsigned long parent_rate)
-+{
-+	int clkout, ret;
-+	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
-+
-+	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &clkout);
-+	if (ret < 0)
-+		return 0;
-+
-+	clkout &= RV3028_CLKOUT_FD_MASK;
-+	return clkout_rates[clkout];
-+}
-+
-+static long rv3028_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				     unsigned long *prate)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
-+		if (clkout_rates[i] <= rate)
-+			return clkout_rates[i];
-+
-+	return 0;
-+}
-+
-+static int rv3028_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				  unsigned long parent_rate)
-+{
-+	int i, ret;
-+	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
-+
-+	ret = regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
-+				 RV3028_STATUS_CLKF, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++) {
-+		if (clkout_rates[i] == rate) {
-+			ret = regmap_update_bits(rv3028->regmap,
-+						 RV3028_CLKOUT,
-+						 RV3028_CLKOUT_FD_MASK, i);
-+			if (ret < 0)
-+				return ret;
-+
-+			return regmap_write(rv3028->regmap, RV3028_CLKOUT,
-+				RV3028_CLKOUT_CLKSY | RV3028_CLKOUT_CLKOE);
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int rv3028_clkout_prepare(struct clk_hw *hw)
-+{
-+	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
-+
-+	return regmap_write(rv3028->regmap, RV3028_CLKOUT,
-+			    RV3028_CLKOUT_CLKSY | RV3028_CLKOUT_CLKOE);
-+}
-+
-+static void rv3028_clkout_unprepare(struct clk_hw *hw)
-+{
-+	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
-+
-+	regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
-+	regmap_update_bits(rv3028->regmap, RV3028_STATUS,
-+			   RV3028_STATUS_CLKF, 0);
-+}
-+
-+static int rv3028_clkout_is_prepared(struct clk_hw *hw)
-+{
-+	int clkout, ret;
-+	struct rv3028_data *rv3028 = clkout_hw_to_rv3028(hw);
-+
-+	ret = regmap_read(rv3028->regmap, RV3028_CLKOUT, &clkout);
-+	if (ret < 0)
-+		return ret;
-+
-+	return !!(clkout & RV3028_CLKOUT_CLKOE);
-+}
-+
-+static const struct clk_ops rv3028_clkout_ops = {
-+	.prepare = rv3028_clkout_prepare,
-+	.unprepare = rv3028_clkout_unprepare,
-+	.is_prepared = rv3028_clkout_is_prepared,
-+	.recalc_rate = rv3028_clkout_recalc_rate,
-+	.round_rate = rv3028_clkout_round_rate,
-+	.set_rate = rv3028_clkout_set_rate,
-+};
-+
-+static int rv3028_clkout_register_clk(struct rv3028_data *rv3028,
-+				      struct i2c_client *client)
-+{
-+	int ret;
-+	struct clk *clk;
-+	struct clk_init_data init;
-+	struct device_node *node = client->dev.of_node;
-+
-+	/* disable the clkout output */
-+	ret = regmap_write(rv3028->regmap, RV3028_CLKOUT, 0x0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
-+				 RV3028_STATUS_CLKF, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	init.name = "rv3028-clkout";
-+	init.ops = &rv3028_clkout_ops;
-+	init.flags = 0;
-+	init.parent_names = NULL;
-+	init.num_parents = 0;
-+	rv3028->clkout_hw.init = &init;
-+
-+	/* optional override of the clockname */
-+	of_property_read_string(node, "clock-output-names", &init.name);
-+
-+	/* register the clock */
-+	clk = devm_clk_register(&client->dev, &rv3028->clkout_hw);
-+	if (!IS_ERR(clk))
-+		of_clk_add_provider(node, of_clk_src_simple_get, clk);
-+
-+	return 0;
-+}
-+#endif
-+
- static struct rtc_class_ops rv3028_rtc_ops = {
- 	.read_time = rv3028_get_time,
- 	.set_time = rv3028_set_time,
-@@ -708,6 +861,9 @@ static int rv3028_probe(struct i2c_client *client)
- 
- 	rv3028->rtc->max_user_freq = 1;
- 
-+#ifdef CONFIG_COMMON_CLK
-+	rv3028_clkout_register_clk(rv3028, client);
-+#endif
- 	return 0;
- }
- 
--- 
-2.21.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
