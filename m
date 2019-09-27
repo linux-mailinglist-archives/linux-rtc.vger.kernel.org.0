@@ -2,133 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E5DBF2B5
-	for <lists+linux-rtc@lfdr.de>; Thu, 26 Sep 2019 14:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B19BC03CF
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Sep 2019 13:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfIZMPi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 26 Sep 2019 08:15:38 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:17171 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725886AbfIZMPi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 26 Sep 2019 08:15:38 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: 0TiS9fIcdcyV9inCyL6awYTBqCeAB47Y4vUBe6VSskTJHwuRiBvGgrPOuq17nKJvQ3vV9G5tpm
- eG7TTnxDdGBrMkjbXYsYishcE8/yKsvGEN9t3SfBQ+bQ83i/24RlIAIzWvjSjjBgUA/U7INWtY
- 2Gv4gI/KUxz82u4HzHk9w3shhs4XnkllpU3lA0s6MwhDxgHrxfdblzPZaZqu9DZlg9tshkX3WJ
- JpWkpEYn+BqjExgzHmh28uVSMIKtHEHIg3IS+zfjfhaY2BIKZDhqPsw7Xkk0PY82uh0ztlXXpO
- 2Uk=
-X-IronPort-AV: E=Sophos;i="5.64,551,1559545200"; 
-   d="scan'208";a="50424041"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Sep 2019 05:15:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 26 Sep 2019 05:15:36 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.85.251) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Thu, 26 Sep 2019 05:15:34 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <nicolas.ferre@microchip.com>, <ludovic.desroches@microchip.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] rtc: at91rm9200: use of_device_get_match_data()
-Date:   Thu, 26 Sep 2019 15:15:32 +0300
-Message-ID: <1569500132-21164-1-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
+        id S1725882AbfI0LEv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Sep 2019 07:04:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33440 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726809AbfI0LEv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Sep 2019 07:04:51 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b9so2269790wrs.0
+        for <linux-rtc@vger.kernel.org>; Fri, 27 Sep 2019 04:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=9ciKUllz8cRvciY2ix6rQnwrk8CF26+Aq3v7PMw8/fc=;
+        b=ir885x5GJOVfSktjxh6gFJ9iBvr7R1ZUwYMpR6excNT+0hzyuLO50CEXmYrBZngyyY
+         rDFmLktMsM2h6cBYyHiLMZEcOl7umafGtZpDjtuqYIssuqJRKXVjObOmflLL73k0FEE1
+         BRkgwBX2eWpcPIow4jcLkzY5nuIfKvWqQEIjFVFykJ6lSQDO07s+HZkW2Flbyu6Ssz+G
+         TawL8S7LrgNu7tVoFwQl2yADKIZJP/7sN7uXKnJk6BJda9Zqi6s9ReszCxqw/6s8k06w
+         I3HcTCdKO8QpBgOk/2k9g22TPlrq2GU/dl6zUKm2Ubne8p+c+mKrnGsPoJpmKSaOoZ23
+         YTKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=9ciKUllz8cRvciY2ix6rQnwrk8CF26+Aq3v7PMw8/fc=;
+        b=iZQZUcr1BdM04hDaew1tYIBKt3nlxa165lHgD3Hjnsa6EwnLBM3F1BryIz5gp96+G8
+         2ZNbrZ8jCegB+gVnytvqLVDlfGMeiSAB8UXgEL3PjcMLxY4/jqb3WlDOkHH7eF5wcOeF
+         wgPufLOxsXFWvg2Tfg5wsiIczLCgAzVYMupeIwq3SjXa0/EmLvYz1igxrhQAhL/+a6K5
+         +jOhwp/rxYHhiCsbr4XCYRfYK2jyN6T9b7xJY3YmXUJKvuO8gb9rlAyCR6fkrTZyMV27
+         aaQ8Hdmg6IsTFR+431/wqG+nRkhkXyWSzlUBBSlMDgdYOgZECFNpoJzPcJXMED0yTXYA
+         Y2Aw==
+X-Gm-Message-State: APjAAAWKwRYJ1aDiadaUzfNTiwjZOKfwGG7chtzdZqBOW+qsJlTYgu3H
+        zTTQjIyKbKtzQYff7i6wH75Ib4mzwBg=
+X-Google-Smtp-Source: APXvYqxE9JowBA73dwKob1+hQUqcyLnYGK6sJRPLEkwuMaQayboSKLGvGWjMGOSo+oanhRdvezfm+Q==
+X-Received: by 2002:adf:ef8d:: with SMTP id d13mr2532352wro.31.1569582289165;
+        Fri, 27 Sep 2019 04:04:49 -0700 (PDT)
+Received: from gmail.com (171.42.137.88.rev.sfr.net. [88.137.42.171])
+        by smtp.gmail.com with ESMTPSA id o188sm9234925wma.14.2019.09.27.04.04.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2019 04:04:48 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 13:04:46 +0200
+From:   Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: use timeu64_t for range_max
+Message-ID: <20190927110446.GA6289@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use of_device_get_match_data() since all platforms should now use DT
-bindings. AVR32 architecture has been removed in
-commit 26202873bb51 ("avr32: remove support for AVR32 architecture").
+Hi,
+for rtc drivers where rtc->range_max is set U64_MAX, like the PS3 rtc,
+rtc_valid_range() always returns -ERANGE. This is because the local
+variable range_max has type time64_t, so the test
+	if (time < range_min || time > range_max)
+		return -ERANGE;
+becomes (time < range_min || time > -1), which always evaluates to true.
+timeu64_t should be used, since it's the type of rtc->range_max.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
 ---
- drivers/rtc/Kconfig          |  1 +
- drivers/rtc/rtc-at91rm9200.c | 19 +------------------
- 2 files changed, 2 insertions(+), 18 deletions(-)
+ drivers/rtc/interface.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index e72f65b61176..d0b08b1ebcdf 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1433,6 +1433,7 @@ config RTC_DRV_PL031
- config RTC_DRV_AT91RM9200
- 	tristate "AT91RM9200 or some AT91SAM9 RTC"
- 	depends on ARCH_AT91 || COMPILE_TEST
-+	depends on OF
- 	help
- 	  Driver for the internal RTC (Realtime Clock) module found on
- 	  Atmel AT91RM9200's and some  AT91SAM9 chips. On AT91SAM9 chips
-diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index 82a54e93ff04..4dc413d07138 100644
---- a/drivers/rtc/rtc-at91rm9200.c
-+++ b/drivers/rtc/rtc-at91rm9200.c
-@@ -319,7 +319,6 @@ static const struct at91_rtc_config at91sam9x5_config = {
- 	.use_shadow_imr	= true,
- };
- 
--#ifdef CONFIG_OF
- static const struct of_device_id at91_rtc_dt_ids[] = {
- 	{
- 		.compatible = "atmel,at91rm9200-rtc",
-@@ -332,22 +331,6 @@ static const struct of_device_id at91_rtc_dt_ids[] = {
- 	}
- };
- MODULE_DEVICE_TABLE(of, at91_rtc_dt_ids);
--#endif
--
--static const struct at91_rtc_config *
--at91_rtc_get_config(struct platform_device *pdev)
--{
--	const struct of_device_id *match;
--
--	if (pdev->dev.of_node) {
--		match = of_match_node(at91_rtc_dt_ids, pdev->dev.of_node);
--		if (!match)
--			return NULL;
--		return (const struct at91_rtc_config *)match->data;
--	}
--
--	return &at91rm9200_config;
--}
- 
- static const struct rtc_class_ops at91_rtc_ops = {
- 	.read_time	= at91_rtc_readtime,
-@@ -367,7 +350,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
- 	struct resource *regs;
- 	int ret = 0;
- 
--	at91_rtc_config = at91_rtc_get_config(pdev);
-+	at91_rtc_config = of_device_get_match_data(&pdev->dev);
- 	if (!at91_rtc_config)
- 		return -ENODEV;
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index c93ef33b01d3..eea700723976 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -70,7 +70,7 @@ static int rtc_valid_range(struct rtc_device *rtc, struct rtc_time *tm)
+ 		time64_t time = rtc_tm_to_time64(tm);
+ 		time64_t range_min = rtc->set_start_time ? rtc->start_secs :
+ 			rtc->range_min;
+-		time64_t range_max = rtc->set_start_time ?
++		timeu64_t range_max = rtc->set_start_time ?
+ 			(rtc->start_secs + rtc->range_max - rtc->range_min) :
+ 			rtc->range_max;
  
 -- 
-2.7.4
+2.23.0
 
