@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CC9C186D
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Sep 2019 19:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC88AC181D
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Sep 2019 19:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729412AbfI2Rbn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 Sep 2019 13:31:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42254 "EHLO mail.kernel.org"
+        id S1730074AbfI2Rdb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 29 Sep 2019 13:33:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729400AbfI2Rbm (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:31:42 -0400
+        id S1730049AbfI2Rdb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:33:31 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55EDC21927;
-        Sun, 29 Sep 2019 17:31:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E68121D7C;
+        Sun, 29 Sep 2019 17:33:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778302;
+        s=default; t=1569778410;
         bh=YDlb7eJfsCJYSe+W+bAGfQM6oR+1wKO4K2sY+007I9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ck8SwxTPB0FMQOPifGumC2DFFe0amVNVrz4g2yvnkH9zuScnQABJE5iwLQRtb/Uwq
-         U5kpjExtM4B15kIhkZKUY42yXIqmBNFOjJciabpFf3bfJin9ybVJl3AOPBDwJ/XL91
-         3if0Nq44qb5ip+GkM5SAG2NAGODxY4HLSoC6jyfA=
+        b=du/I6ZntEAHQUnFTk6WGLJTUvNilRGF+m/HhCt0QRiTBXkey1lHnyRacHW90mg8Td
+         wkCQk8aHKfPeaa3hvlG7nCXjdgfp7agyffKmd3Yx9DPt+l+tnuEEyb1eXO1d/ETMwG
+         dJZ1Z7nS9wfIusxdgsw33ExkFb6pG/27N13g9cXs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Biwen Li <biwen.li@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 22/49] rtc: pcf85363/pcf85263: fix regmap error in set_time
-Date:   Sun, 29 Sep 2019 13:30:22 -0400
-Message-Id: <20190929173053.8400-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 20/42] rtc: pcf85363/pcf85263: fix regmap error in set_time
+Date:   Sun, 29 Sep 2019 13:32:19 -0400
+Message-Id: <20190929173244.8918-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173053.8400-1-sashal@kernel.org>
-References: <20190929173053.8400-1-sashal@kernel.org>
+In-Reply-To: <20190929173244.8918-1-sashal@kernel.org>
+References: <20190929173244.8918-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
