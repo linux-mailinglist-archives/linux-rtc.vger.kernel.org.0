@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4E9C16D9
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 Sep 2019 19:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E441DC178B
+	for <lists+linux-rtc@lfdr.de>; Sun, 29 Sep 2019 19:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730080AbfI2Rdc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 Sep 2019 13:33:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44798 "EHLO mail.kernel.org"
+        id S1729888AbfI2Rii (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 29 Sep 2019 13:38:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48260 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730069AbfI2Rda (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:33:30 -0400
+        id S1730700AbfI2Rf7 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:35:59 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BCA421A4C;
-        Sun, 29 Sep 2019 17:33:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF46E2196E;
+        Sun, 29 Sep 2019 17:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778409;
-        bh=Qh1KlvMoxLrpk6JpK1J4brdqfWQuG6tOYpJ91Mr/430=;
+        s=default; t=1569778558;
+        bh=QKRCG8f/z7TmRpXy/oFC4HCqvZVx9ImvcBK7A1PeQ10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAcL46SzlVdoaxXOHNX9Lw2tXf0wQIO9/fj1m4KrMgNED32bus15lTOcDP0kRx9QB
-         MYArH95ahjfC/GIr4MeCcsOGVMtVz+EbBqBNz/zf65IY781LWEZLZowkExsM9eTAEH
-         0pJP9mJ9I6tzplrDbB0WueOvI4QNpbFKMVJnohUs=
+        b=qqQ8ghHx4M6wlN/IXfIAveqOirkpdoEs0z3Fg8lM309oUdct/siDHNb7ZdF494+Ed
+         DVL0UYFSkBq005gBf54dvQ+gBgNYYXs6BvFZENY4CVwgqQUW+1srxkyiHY2CHvBTig
+         zwvyRH6NWLiHh2CtvjDOaM9aC5HWtmfQLPeTpZyU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anson Huang <Anson.Huang@nxp.com>,
         Dong Aisheng <aisheng.dong@nxp.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 19/42] rtc: snvs: fix possible race condition
-Date:   Sun, 29 Sep 2019 13:32:18 -0400
-Message-Id: <20190929173244.8918-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 11/23] rtc: snvs: fix possible race condition
+Date:   Sun, 29 Sep 2019 13:35:21 -0400
+Message-Id: <20190929173535.9744-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173244.8918-1-sashal@kernel.org>
-References: <20190929173244.8918-1-sashal@kernel.org>
+In-Reply-To: <20190929173535.9744-1-sashal@kernel.org>
+References: <20190929173535.9744-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,10 +65,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
-index 7ee673a25fd0a..4f9a107a04277 100644
+index 71eee39520f0b..7aa2c5ea0de4f 100644
 --- a/drivers/rtc/rtc-snvs.c
 +++ b/drivers/rtc/rtc-snvs.c
-@@ -279,6 +279,10 @@ static int snvs_rtc_probe(struct platform_device *pdev)
+@@ -280,6 +280,10 @@ static int snvs_rtc_probe(struct platform_device *pdev)
  	if (!data)
  		return -ENOMEM;
  
@@ -79,7 +79,7 @@ index 7ee673a25fd0a..4f9a107a04277 100644
  	data->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node, "regmap");
  
  	if (IS_ERR(data->regmap)) {
-@@ -343,10 +347,9 @@ static int snvs_rtc_probe(struct platform_device *pdev)
+@@ -342,10 +346,9 @@ static int snvs_rtc_probe(struct platform_device *pdev)
  		goto error_rtc_device_register;
  	}
  
