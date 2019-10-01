@@ -2,144 +2,262 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 255DCC2785
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Sep 2019 22:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1221CC3107
+	for <lists+linux-rtc@lfdr.de>; Tue,  1 Oct 2019 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731051AbfI3U6o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Sep 2019 16:58:44 -0400
-Received: from mout.gmx.net ([212.227.17.20]:46773 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727720AbfI3U6n (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 30 Sep 2019 16:58:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1569877121;
-        bh=YVn0d0IypIL/I8h6vV2cKfUczuH9hqHhzSGumXeWyH0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=AMPrAM7ELWyCVxZjrXAB/9N5xT8tVG0I/V2NGx4vMQRwJ6o8AnTXeboWVyJh35Hlk
-         m/UWsmb/ycW3lzs3FbfdeQBKSi5HD8CrW81404JR7GNGYxXRJRXua+OvuRHll2aF24
-         AjUrpIxtmirprjRAEcmwA/+txKTK9E1mB2wh6unY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.208.215.36] ([80.208.215.36]) by web-mail.gmx.net
- (3c-app-gmx-bap76.server.lan [172.19.172.64]) (via HTTP); Mon, 30 Sep 2019
- 21:44:12 +0200
+        id S1729983AbfJAKMD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 1 Oct 2019 06:12:03 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33643 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730310AbfJAKMD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Oct 2019 06:12:03 -0400
+Received: by mail-wm1-f67.google.com with SMTP id r17so2129338wme.0
+        for <linux-rtc@vger.kernel.org>; Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
+        b=J7AYTjPqD5jXOPq7aic9RA8CQUOWh4TzXM79Ki6WY5pV+NU0lcnsopzWRK734enmtS
+         aIN8K2zIIsNuDNokBRn5ANOCSDxrJASgmDumtnQiAFlKDHCYPR9QLokvRL1+7pI+r5eG
+         EgGd8Zbkw0NIMKrY90aFXTCqcOLlhj0wWeSYELbaGGKRRS1HeVoTBbyueR2JdfkEsQ8r
+         6x2jjpafrgoFux01vRuGQqxDlqebtdUR0AK8nda/osYxrW+JA9rma3mZbCbek0UG6lT1
+         jg0Gi4EF4iTC25c+QTBfhRILf7Zc2pdnFte2FmXGPfpyRrxO8+pWrfYewQD8hrKfCeH9
+         f29w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8hy45pyP7kv6EXfVxQmzNrFK2VbFBW1Lka/Gmb0X5J0=;
+        b=AaBAvSrgR/pHpO9uzccMXDNHlnqpjvzhQ8dVbEM6miWszh0kNXIWgmFOqhxDrTxoAE
+         S1fRBUMKMx+0dnjzaQtPFAi4VbS9n5v/JnJUtTgxQul+YWHDIFEH9leH+xxxpLdYqduM
+         ltBCNYzu1xG/u0RdPRKs1bG6q5jhBYYGoYspwPw4qSaaJKZjyyKxOyU2+vP+BBNAYnjg
+         Y+68A1ctzxnJDkW/sSNPdvNRcAOAJDaaHo+SSDGPwpbhkE02mTUEocJgem8hvlzyK3Y+
+         gnec/R7/LIEOHRimATgKWSHVtxjj4aFGfhQgkWJZ5vy0mRtuFNi/KXXSOUp/TNUwLLA4
+         LsDA==
+X-Gm-Message-State: APjAAAU9m3e0K7N6/4WHl6Bvc/YoHK9cUsCpbpN9PTK+0QJQGy99qrfO
+        N8ihncl2sV+Sk/bpnSBz5JWMxA==
+X-Google-Smtp-Source: APXvYqyce6kLiNa02VTrU6yr/ckelEv9Vwx7Pd1FX7YNYnZ2gxLu2G+aiD+MbyaODltXlPmlKz4Vqg==
+X-Received: by 2002:a7b:cf12:: with SMTP id l18mr3198121wmg.25.1569924720081;
+        Tue, 01 Oct 2019 03:12:00 -0700 (PDT)
+Received: from [192.168.86.34] (cpc89974-aztw32-2-0-cust43.18-1.cable.virginm.net. [86.30.250.44])
+        by smtp.googlemail.com with ESMTPSA id r2sm4155309wma.1.2019.10.01.03.11.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Oct 2019 03:11:59 -0700 (PDT)
+Subject: Re: [PATCH v6 1/4] nvmem: core: add nvmem_device_find
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20190923114636.6748-1-tbogendoerfer@suse.de>
+ <20190923114636.6748-2-tbogendoerfer@suse.de>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Message-ID: <ce44c762-f9a6-b4ef-fa8a-19ee4a6d391f@linaro.org>
+Date:   Tue, 1 Oct 2019 11:11:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Message-ID: <trinity-d5c9e092-508c-4db6-8f36-d5917466a750-1569872652621@3c-app-gmx-bap76>
-From:   "Frank Wunderlich" <frank-w@public-files.de>
-To:     "Hsin-hsiung Wang" <hsin-hsiung.wang@mediatek.com>,
-        "Lee Jones" <lee.jones@linaro.org>
-Cc:     "Matthias Brugger" <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        srv_heupstream@mediatek.com, devicetree@vger.kernel.org,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        "Richard Fontana" <rfontana@redhat.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?Q?=22Ren=C3=A9_van_Dorst=22?= <opensource@vdorst.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Eddie Huang" <eddie.huang@mediatek.com>,
-        "Lee Jones" <lee.jones@linaro.org>,
-        "Kate Stewart" <kstewart@linuxfoundation.org>,
-        linux-rtc@vger.kernel.org
-Subject: Aw: Re:  Re: [BUG] [PATCH v5 02/10] mfd: mt6397: extract irq
- related code from core driver
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 30 Sep 2019 21:44:12 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <1567059876.15320.3.camel@mtksdaap41>
-References: <1566531931-9772-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1566531931-9772-3-git-send-email-hsin-hsiung.wang@mediatek.com>
- <trinity-1f82bff1-535e-47cd-9a2f-8faccb56e356-1566562433314@3c-app-gmx-bs11>
- <e8a918ab-3e7a-b487-db77-df28d56518ce@gmail.com>
- <0A87F427-2D81-412A-9549-09A51A021799@public-files.de>
- <b5a21908-faee-17d1-ce26-99b941c0fa70@gmail.com>
- <trinity-a57f08bb-e30e-4e74-911c-c40e335d00da-1566580580817@3c-app-gmx-bs75>
- <1567059876.15320.3.camel@mtksdaap41>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:mOl5gwFlxXjAE9+q+U636kiILkcV8ouZYqUdavCDgk4kn81Id6pYOUZvJ59xPd2j9ozHN
- 8waSlJARwZGU/e+50l22obqu3bIr+fL4TvaYl9BbpYpSPN6sD78VLxIX6iCavbN4CWcQixxp0LcY
- 5DMu3BAQcL30VwmxUM6nn/+9zZbxJ+jCY8cBjW5TziN0HhvBmsrBmtkIW/5QN9djuXXP1JwXpdK/
- 5ni345mWrIhAsZlycA0M1+K7mg7469HwJwnFxncOyxiAT1no+CMD4+aeZeHKqIzsg87h4YZ/pSN+
- 5k=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eEhx1ooA/04=:yFlthYLfXFmb/8JnXCxFLQ
- cG572Ry6AOo0ntKRtpi1jnHwc/MifgtiZkrySHAdMEOwN6U4z5WDniyM2c03SYL4B62yLtMa/
- U19bsTBne7BMQPjUckdu0B6QiZ0aOoGEnogtZ3jkMM2FJ9cfBDeZ4CUM9xrBKWgV9hbYVeYw8
- ctFPp6ZCNOqhulXKMQIq+18/is4xcSGNMxRZVGEwzEMJx++U8FWWJCXC2qy+OwbZsiU72J1rN
- m0hRFgWfSdyu7DwPtFdm/ovEci+00L8n2eHp9e7vBYq6McTpBh3Zd/WuDEeZzaxvPnKIy5OVf
- b6FkzIpwpHNXEv2StcmxkmbpDXuhQmIwZNrLvzNtH0Dy4DR4VWOxCmyD/V4BvyhwngFa5AoUf
- p+0254Ps+QSAuiZx6/4VolVMGw14K3ZT1m4ZxpEuXrppadOsmVegWD2159755ceTite04Efsy
- aKgVhK3bCQDnzeo74/tTd4hgr2ySrWoHotVQtsl5aFU0dX2cVt06TH1Vrr0HNAMLhmR/AJQQq
- 0vxTG/EVGDBwvbGEVSllSOx9YpYL7nCGG5O7NFtVFTceEiRJT6zON3viUDNQX97Gp/gxzhX6g
- NY/z5hM5Y+1aVY5vxs2Tj7113FlLFIkd5i+3BOcw9/X5mZha9TUWCedWKxOEUpA1LhYQX1jCD
- Z1RfE1KJ1ZBns7KbOVb5V6YdZR92v3GnYP7c031/xzI5bUKRkkgIrxVsxHjqzVOmNeHM=
+In-Reply-To: <20190923114636.6748-2-tbogendoerfer@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-bug is still present in 5=2E4-rc1
-
-dmesg prints this line and at least switch is not inialized on bananapi-r2
-
-mt6397 1000d000=2Epwrap:mt6323: unsupported chip: 0x0
-
-regards Frank
 
 
-> Gesendet: Donnerstag, 29=2E August 2019 um 08:24 Uhr
-> Von: "Hsin-hsiung Wang" <hsin-hsiung=2Ewang@mediatek=2Ecom>
-> An: "Frank Wunderlich" <frank-w@public-files=2Ede>, "Matthias Brugger" <=
-matthias=2Ebgg@gmail=2Ecom>
-> Cc: linux-mediatek@lists=2Einfradead=2Eorg, "Mark Rutland" <mark=2Erutla=
-nd@arm=2Ecom>, "Alessandro Zummo" <a=2Ezummo@towertech=2Eit>, "Alexandre Be=
-lloni" <alexandre=2Ebelloni@bootlin=2Ecom>, srv_heupstream@mediatek=2Ecom, =
-devicetree@vger=2Ekernel=2Eorg, "Greg Kroah-Hartman" <gregkh@linuxfoundatio=
-n=2Eorg>, "Sean Wang" <sean=2Ewang@mediatek=2Ecom>, "Liam Girdwood" <lgirdw=
-ood@gmail=2Ecom>, "Rob Herring" <robh+dt@kernel=2Eorg>, linux-kernel@vger=
-=2Ekernel=2Eorg, "Richard Fontana" <rfontana@redhat=2Ecom>, "Mark Brown" <b=
-roonie@kernel=2Eorg>, linux-arm-kernel@lists=2Einfradead=2Eorg, "Ren=C3=A9 =
-van Dorst" <opensource@vdorst=2Ecom>, "Thomas Gleixner" <tglx@linutronix=2E=
-de>, "Eddie Huang" <eddie=2Ehuang@mediatek=2Ecom>, "Lee Jones" <lee=2Ejones=
-@linaro=2Eorg>, "Kate Stewart" <kstewart@linuxfoundation=2Eorg>, linux-rtc@=
-vger=2Ekernel=2Eorg
-> Betreff: Re: Aw: Re: [BUG] [PATCH v5 02/10] mfd: mt6397: extract irq rel=
-ated code from core driver
->
-> Hi Frank/Matthias,
->=20
-> On Fri, 2019-08-23 at 19:16 +0200, Frank Wunderlich wrote:
-> > > Gesendet: Freitag, 23=2E August 2019 um 17:42 Uhr
-> > > Von: "Matthias Brugger" <matthias=2Ebgg@gmail=2Ecom>
-> >=20
-> > > I suppose that's because 3/10 has code that should be in 2/10 and fo=
-r some
-> > > reason 3/10 was not pushed for linux-next inclusion=2E Although it h=
-as the same
-> > > Acked-for-mfd-by tag=2E
-> > >
-> > > @Frank, can you test if adding 3/10 to your code base fixes the issu=
-e?
-> >=20
-> > adding part 3 [1] seems to fix the issue too
-> >=20
-> > [    4=2E960051] mt6323-regulator mt6323-regulator: Chip ID =3D 0x2023
-> >=20
-> > thanks
-> >=20
-> > [1] https://patchwork=2Ekernel=2Eorg/patch/11110509/
-> Thanks for your comments=2E
-> The root cause seems I didn't split the code well=2E
-> I will fix it in the next version=2E
->=20
->
+On 23/09/2019 12:46, Thomas Bogendoerfer wrote:
+> nvmem_device_find provides a way to search for nvmem devices with
+> the help of a match function simlair to bus_find_device.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+> ---
+
+
+Thanks for the patch,
+This patch looks good for me.
+
+Do you know which tree is going to pick this series up?
+
+I can either apply this patch to nvmem tree
+
+or here is my Ack for this patch to take it via other trees.
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+>   Documentation/driver-api/nvmem.rst |  2 ++
+>   drivers/nvmem/core.c               | 61 +++++++++++++++++---------------------
+>   include/linux/nvmem-consumer.h     |  9 ++++++
+>   3 files changed, 38 insertions(+), 34 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
+> index d9d958d5c824..287e86819640 100644
+> --- a/Documentation/driver-api/nvmem.rst
+> +++ b/Documentation/driver-api/nvmem.rst
+> @@ -129,6 +129,8 @@ To facilitate such consumers NVMEM framework provides below apis::
+>     struct nvmem_device *nvmem_device_get(struct device *dev, const char *name);
+>     struct nvmem_device *devm_nvmem_device_get(struct device *dev,
+>   					   const char *name);
+> +  struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data));
+>     void nvmem_device_put(struct nvmem_device *nvmem);
+>     int nvmem_device_read(struct nvmem_device *nvmem, unsigned int offset,
+>   		      size_t bytes, void *buf);
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 057d1ff87d5d..9f1ee9c766ec 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -76,33 +76,6 @@ static struct bus_type nvmem_bus_type = {
+>   	.name		= "nvmem",
+>   };
+>   
+> -static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
+> -{
+> -	struct device *d;
+> -
+> -	if (!nvmem_np)
+> -		return NULL;
+> -
+> -	d = bus_find_device_by_of_node(&nvmem_bus_type, nvmem_np);
+> -
+> -	if (!d)
+> -		return NULL;
+> -
+> -	return to_nvmem_device(d);
+> -}
+> -
+> -static struct nvmem_device *nvmem_find(const char *name)
+> -{
+> -	struct device *d;
+> -
+> -	d = bus_find_device_by_name(&nvmem_bus_type, NULL, name);
+> -
+> -	if (!d)
+> -		return NULL;
+> -
+> -	return to_nvmem_device(d);
+> -}
+> -
+>   static void nvmem_cell_drop(struct nvmem_cell *cell)
+>   {
+>   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_CELL_REMOVE, cell);
+> @@ -532,13 +505,16 @@ int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
+>   }
+>   EXPORT_SYMBOL(devm_nvmem_unregister);
+>   
+> -static struct nvmem_device *__nvmem_device_get(struct device_node *np,
+> -					       const char *nvmem_name)
+> +static struct nvmem_device *__nvmem_device_get(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+>   {
+>   	struct nvmem_device *nvmem = NULL;
+> +	struct device *dev;
+>   
+>   	mutex_lock(&nvmem_mutex);
+> -	nvmem = np ? of_nvmem_find(np) : nvmem_find(nvmem_name);
+> +	dev = bus_find_device(&nvmem_bus_type, NULL, data, match);
+> +	if (dev)
+> +		nvmem = to_nvmem_device(dev);
+>   	mutex_unlock(&nvmem_mutex);
+>   	if (!nvmem)
+>   		return ERR_PTR(-EPROBE_DEFER);
+> @@ -587,7 +563,7 @@ struct nvmem_device *of_nvmem_device_get(struct device_node *np, const char *id)
+>   	if (!nvmem_np)
+>   		return ERR_PTR(-ENOENT);
+>   
+> -	return __nvmem_device_get(nvmem_np, NULL);
+> +	return __nvmem_device_get(nvmem_np, device_match_of_node);
+>   }
+>   EXPORT_SYMBOL_GPL(of_nvmem_device_get);
+>   #endif
+> @@ -613,10 +589,26 @@ struct nvmem_device *nvmem_device_get(struct device *dev, const char *dev_name)
+>   
+>   	}
+>   
+> -	return __nvmem_device_get(NULL, dev_name);
+> +	return __nvmem_device_get((void *)dev_name, device_match_name);
+>   }
+>   EXPORT_SYMBOL_GPL(nvmem_device_get);
+>   
+> +/**
+> + * nvmem_device_find() - Find nvmem device with matching function
+> + *
+> + * @data: Data to pass to match function
+> + * @match: Callback function to check device
+> + *
+> + * Return: ERR_PTR() on error or a valid pointer to a struct nvmem_device
+> + * on success.
+> + */
+> +struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+> +{
+> +	return __nvmem_device_get(data, match);
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_device_find);
+> +
+>   static int devm_nvmem_device_match(struct device *dev, void *res, void *data)
+>   {
+>   	struct nvmem_device **nvmem = res;
+> @@ -710,7 +702,8 @@ nvmem_cell_get_from_lookup(struct device *dev, const char *con_id)
+>   		if ((strcmp(lookup->dev_id, dev_id) == 0) &&
+>   		    (strcmp(lookup->con_id, con_id) == 0)) {
+>   			/* This is the right entry. */
+> -			nvmem = __nvmem_device_get(NULL, lookup->nvmem_name);
+> +			nvmem = __nvmem_device_get((void *)lookup->nvmem_name,
+> +						   device_match_name);
+>   			if (IS_ERR(nvmem)) {
+>   				/* Provider may not be registered yet. */
+>   				cell = ERR_CAST(nvmem);
+> @@ -780,7 +773,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
+>   	if (!nvmem_np)
+>   		return ERR_PTR(-EINVAL);
+>   
+> -	nvmem = __nvmem_device_get(nvmem_np, NULL);
+> +	nvmem = __nvmem_device_get(nvmem_np, device_match_of_node);
+>   	of_node_put(nvmem_np);
+>   	if (IS_ERR(nvmem))
+>   		return ERR_CAST(nvmem);
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+> index 8f8be5b00060..02dc4aa992b2 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -89,6 +89,9 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries,
+>   int nvmem_register_notifier(struct notifier_block *nb);
+>   int nvmem_unregister_notifier(struct notifier_block *nb);
+>   
+> +struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data));
+> +
+>   #else
+>   
+>   static inline struct nvmem_cell *nvmem_cell_get(struct device *dev,
+> @@ -204,6 +207,12 @@ static inline int nvmem_unregister_notifier(struct notifier_block *nb)
+>   	return -EOPNOTSUPP;
+>   }
+>   
+> +static inline struct nvmem_device *nvmem_device_find(void *data,
+> +			int (*match)(struct device *dev, const void *data))
+> +{
+> +	return NULL;
+> +}
+> +
+>   #endif /* CONFIG_NVMEM */
+>   
+>   #if IS_ENABLED(CONFIG_NVMEM) && IS_ENABLED(CONFIG_OF)
+> 
