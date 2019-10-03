@@ -2,66 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43823CB139
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 23:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946DECB16F
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 23:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731413AbfJCVfu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Oct 2019 17:35:50 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41373 "EHLO
+        id S1732108AbfJCVov (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Oct 2019 17:44:51 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:35055 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730020AbfJCVfu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Oct 2019 17:35:50 -0400
+        with ESMTP id S1728763AbfJCVov (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Oct 2019 17:44:51 -0400
 X-Originating-IP: 86.202.229.42
 Received: from localhost (lfbn-lyo-1-146-42.w86-202.abo.wanadoo.fr [86.202.229.42])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id AC2561C0003;
-        Thu,  3 Oct 2019 21:35:48 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 43E311C0003;
+        Thu,  3 Oct 2019 21:44:50 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 23:44:49 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc: m41t80: set range
-Date:   Thu,  3 Oct 2019 23:35:44 +0200
-Message-Id: <20191003213544.5359-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.21.0
+To:     Martin =?iso-8859-1?Q?Hundeb=F8ll?= <martin@geanix.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        Bruno Thomsen <bruno.thomsen@gmail.com>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
+Message-ID: <20191003214449.GU4106@piout.net>
+References: <20191003124849.117888-1-martin@geanix.com>
+ <20191003133351.118538-1-martin@geanix.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191003133351.118538-1-martin@geanix.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This is a standard BCD RTC that will fail in 2100. The century bits don't
-help because 2100 will be considered a leap year while it is not.
+Hi,
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-m41t80.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+This seems good to me but..
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index 5f46f85f814b..b813295a2eb5 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -235,9 +235,6 @@ static int m41t80_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	unsigned char buf[8];
- 	int err, flags;
- 
--	if (tm->tm_year < 100 || tm->tm_year > 199)
--		return -EINVAL;
--
- 	buf[M41T80_REG_SSEC] = 0;
- 	buf[M41T80_REG_SEC] = bin2bcd(tm->tm_sec);
- 	buf[M41T80_REG_MIN] = bin2bcd(tm->tm_min);
-@@ -925,6 +922,8 @@ static int m41t80_probe(struct i2c_client *client,
- 	}
- 
- 	m41t80_data->rtc->ops = &m41t80_rtc_ops;
-+	m41t80_data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	m41t80_data->rtc->range_max = RTC_TIMESTAMP_END_2099;
- 
- 	if (client->irq <= 0) {
- 		/* We cannot support UIE mode if we do not have an IRQ line */
+On 03/10/2019 15:33:51+0200, Martin Hundebøll wrote:
+> Linux should handle when the pcf2127 watchdog feature is enabled by the
+> bootloader. This is done by checking the watchdog timer value during
+> init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
+> 
+> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+> ---
+> 
+> Change since v1:
+>  * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+> 
+>  drivers/rtc/rtc-pcf2127.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index cb3472f..4229915 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -420,6 +420,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  			const char *name, bool has_nvmem)
+>  {
+>  	struct pcf2127 *pcf2127;
+> +	u32 wdd_timeout;
+>  	int ret = 0;
+>  
+>  	dev_dbg(dev, "%s\n", __func__);
+> @@ -462,7 +463,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  	/*
+>  	 * Watchdog timer enabled and reset pin /RST activated when timed out.
+>  	 * Select 1Hz clock source for watchdog timer.
+> -	 * Timer is not started until WD_VAL is loaded with a valid value.
+>  	 * Note: Countdown timer disabled and not available.
+>  	 */
+>  	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
+> @@ -478,6 +478,16 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  		return ret;
+>  	}
+>  
+> +	/* Test if watchdog timer is started by bootloader */
+> +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
+> +	if (ret) {
+> +		dev_err(dev, "%s: watchdog value (wd_wal) failed\n", __func__);
+
+I'd like to question the addition of yet another debug string in the
+kernel that will most likely never be printed. Do you really think it is
+necessary?
+
+
 -- 
-2.21.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
