@@ -2,96 +2,125 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39248C9241
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Oct 2019 21:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185E5C9B36
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 11:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729074AbfJBTYy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Wed, 2 Oct 2019 15:24:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60996 "EHLO mx1.suse.de"
+        id S1729469AbfJCJwx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Oct 2019 05:52:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37284 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726076AbfJBTYy (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 2 Oct 2019 15:24:54 -0400
+        id S1728992AbfJCJww (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 3 Oct 2019 05:52:52 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 6EB2FAD09;
-        Wed,  2 Oct 2019 19:24:51 +0000 (UTC)
-Date:   Wed, 2 Oct 2019 21:08:31 +0200
+        by mx1.suse.de (Postfix) with ESMTP id 67E80B14A;
+        Thu,  3 Oct 2019 09:52:49 +0000 (UTC)
 From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+To:     Jonathan Corbet <corbet@lwn.net>,
         Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
         James Hogan <jhogan@kernel.org>,
         Lee Jones <lee.jones@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH v6 1/4] nvmem: core: add nvmem_device_find
-Message-Id: <20191002210831.f7fa10ad7f055801df26669d@suse.de>
-In-Reply-To: <20191002183327.grhkxlbyu65vvhr4@pburton-laptop>
-References: <20190923114636.6748-1-tbogendoerfer@suse.de>
-        <20190923114636.6748-2-tbogendoerfer@suse.de>
-        <ce44c762-f9a6-b4ef-fa8a-19ee4a6d391f@linaro.org>
-        <20191002183327.grhkxlbyu65vvhr4@pburton-laptop>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v7 0/5] Use MFD framework for SGI IOC3 drivers
+Date:   Thu,  3 Oct 2019 11:52:28 +0200
+Message-Id: <20191003095235.5158-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 2 Oct 2019 18:33:28 +0000
-Paul Burton <paul.burton@mips.com> wrote:
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-> Hello,
-> 
-> On Tue, Oct 01, 2019 at 11:11:58AM +0100, Srinivas Kandagatla wrote:
-> > On 23/09/2019 12:46, Thomas Bogendoerfer wrote:
-> > > nvmem_device_find provides a way to search for nvmem devices with
-> > > the help of a match function simlair to bus_find_device.
-> > > 
-> > > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> > > ---
-> > 
-> > Thanks for the patch,
-> > This patch looks good for me.
-> > 
-> > Do you know which tree is going to pick this series up?
-> > 
-> > I can either apply this patch to nvmem tree
-> > 
-> > or here is my Ack for this patch to take it via other trees.
-> > 
-> > Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> > Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> 
-> Thanks - if you don't mind I'll take this through mips-next along with
-> the following patch that depends on it.
-> 
-> Thomas: I see patch 3 has an issue reported by the kbuild test robot,
+Changes in v7:
+ - added patch to enable ethernet phy for Origin 200 systems
+ - depend on 64bit for ioc3 mfd driver
 
-yes, that's because kbuild robot tries to build it 32bit. I'm going to make
-it depend on 64bit all possible ioc3 platforms only support 64bit kernels.
+Changes in v6:
+ - dropped patches accepted for v5.4-rc1
+ - moved serio patch to ip30 patch series
+ - adapted nvmem patch
 
->         and still needs acks from the MFD & network maintainers. Can I
-> 	presume it's safe to apply patches 1 & 2 without 3 & 4 in the
-> 	meantime?
+Changes in v5:
+ - requested by Jakub I've splited ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
 
-yes, thank you.
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
 
-Thomas.
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (5):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
+
+ Documentation/driver-api/nvmem.rst            |   2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
+ arch/mips/include/asm/pci/bridge.h            |   1 +
+ arch/mips/include/asm/sn/ioc3.h               |  47 ++-
+ arch/mips/pci/pci-ip27.c                      |  22 +
+ arch/mips/pci/pci-xtalk-bridge.c              | 135 +++++-
+ arch/mips/sgi-ip27/ip27-timer.c               |  20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |  38 +-
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ioc3.c                            | 585 ++++++++++++++++++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |   4 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 561 +++++-------------------
+ drivers/nvmem/core.c                          |  61 ++-
+ drivers/rtc/rtc-m48t35.c                      |  11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |  98 +++++
+ drivers/tty/serial/8250/Kconfig               |  11 +
+ drivers/tty/serial/8250/Makefile              |   1 +
+ include/linux/nvmem-consumer.h                |   9 +
+ 19 files changed, 1076 insertions(+), 548 deletions(-)
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
 
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 247165 (AG München)
-Geschäftsführer: Felix Imendörffer
+2.16.4
+
