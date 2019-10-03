@@ -2,49 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6902FCAF8A
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 21:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D43DCAF9C
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 21:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfJCTu1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Oct 2019 15:50:27 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:57259 "EHLO
+        id S1730979AbfJCTz7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Oct 2019 15:55:59 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:48405 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729616AbfJCTu1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Oct 2019 15:50:27 -0400
+        with ESMTP id S1730787AbfJCTz7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Oct 2019 15:55:59 -0400
 X-Originating-IP: 86.202.229.42
 Received: from localhost (lfbn-lyo-1-146-42.w86-202.abo.wanadoo.fr [86.202.229.42])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7119540002;
-        Thu,  3 Oct 2019 19:50:25 +0000 (UTC)
-Date:   Thu, 3 Oct 2019 21:50:25 +0200
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 09B5740003;
+        Thu,  3 Oct 2019 19:55:57 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 21:55:57 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     a.zummo@towertech.it, nicolas.ferre@microchip.com,
-        ludovic.desroches@microchip.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] rtc: at91rm9200: use of_device_get_match_data()
-Message-ID: <20191003195025.GJ575@piout.net>
-References: <1569500132-21164-1-git-send-email-claudiu.beznea@microchip.com>
+To:     Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: use timeu64_t for range_max
+Message-ID: <20191003195557.GL575@piout.net>
+References: <20190927110446.GA6289@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1569500132-21164-1-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <20190927110446.GA6289@gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 26/09/2019 15:15:32+0300, Claudiu Beznea wrote:
-> Use of_device_get_match_data() since all platforms should now use DT
-> bindings. AVR32 architecture has been removed in
-> commit 26202873bb51 ("avr32: remove support for AVR32 architecture").
+On 27/09/2019 13:04:46+0200, Emmanuel Nicolet wrote:
+> Hi,
+> for rtc drivers where rtc->range_max is set U64_MAX, like the PS3 rtc,
+> rtc_valid_range() always returns -ERANGE. This is because the local
+> variable range_max has type time64_t, so the test
+> 	if (time < range_min || time > range_max)
+> 		return -ERANGE;
+> becomes (time < range_min || time > -1), which always evaluates to true.
+> timeu64_t should be used, since it's the type of rtc->range_max.
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Signed-off-by: Emmanuel Nicolet <emmanuel.nicolet@gmail.com>
 > ---
->  drivers/rtc/Kconfig          |  1 +
->  drivers/rtc/rtc-at91rm9200.c | 19 +------------------
->  2 files changed, 2 insertions(+), 18 deletions(-)
+>  drivers/rtc/interface.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 Applied, thanks.
 
