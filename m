@@ -2,102 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF05C9F83
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 15:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6EBC9FBE
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Oct 2019 15:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730461AbfJCNd6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Oct 2019 09:33:58 -0400
-Received: from first.geanix.com ([116.203.34.67]:47034 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729919AbfJCNd6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 3 Oct 2019 09:33:58 -0400
-Received: from kamstrup.kamstrup.dk (unknown [185.181.22.4])
-        by first.geanix.com (Postfix) with ESMTPSA id 7DE5A506F5;
-        Thu,  3 Oct 2019 13:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1570109571; bh=ynXtdICKBqQj5VK73b7OkVEKh0+y8XzpQnXgOFdV1us=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=IbuzFILYXz2K42UkRNTkTd+8rqbM32lY4ZfRWkJy8hV38pYLAT6RKr61U8SWU/qSo
-         SeuiFJnybyi2PIcFIkeKVizrvFKT0q1gqe7GrhfkeOckZmK/fcFPi4ZVaPRGnqhdLG
-         mpy1Kxk2eFmleKXqdXQowC9BCbjzsLMIPTMd423UnyjsgaVhfN2MfoaJcIgVbZZNGG
-         EtMIuLNpelhBCtAKXlSCRUMfJL0bPbzE0DxWniaVBFgQmNTuW6mc6niocp9ldMTd/l
-         Deih9Tr9GFrMvZm4CZEIZbu2PNHT+cs6lytFywXxAtxVGhq3TEu1M/5eXexBUapVFL
-         /u3y/UQAhEnEA==
-From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
-        Bruno Thomsen <bruno.thomsen@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
-Date:   Thu,  3 Oct 2019 15:33:51 +0200
-Message-Id: <20191003133351.118538-1-martin@geanix.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191003124849.117888-1-martin@geanix.com>
-References: <20191003124849.117888-1-martin@geanix.com>
+        id S1727943AbfJCNnc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Oct 2019 09:43:32 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:38055 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbfJCNnc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Oct 2019 09:43:32 -0400
+Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 58E5420000A;
+        Thu,  3 Oct 2019 13:43:30 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 15:43:29 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: Add support for century bits to m41t62 (rv4162) RTC
+ devices
+Message-ID: <20191003134329.GB575@piout.net>
+References: <20190911154803.15969-1-lukma@denx.de>
+ <20191003114831.GR4106@piout.net>
+ <20191003142150.3d73a9d7@jawa>
+ <20191003123538.GS4106@piout.net>
+ <20191003151434.49762715@jawa>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,UNPARSEABLE_RELAY
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on b8b5098bc1bc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191003151434.49762715@jawa>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Linux should handle when the pcf2127 watchdog feature is enabled by the
-bootloader. This is done by checking the watchdog timer value during
-init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
+On 03/10/2019 15:14:34+0200, Lukasz Majewski wrote:
+> Hi Alexandre,
+> 
+> > On 03/10/2019 14:21:50+0200, Lukasz Majewski wrote:
+> > > > 
+> > > > See the datasheet:
+> > > > 
+> > > > "During any year which is a multiple of 4, the RV-4162 RTC will
+> > > > automatically insert leap day, February 29.  Therefore, the
+> > > > application software must correct for this during the exception
+> > > > years (2100, 2200, etc.) as noted above."  
+> > > 
+> > > I'm wondering what the phrase "application software" means here?
+> > > 
+> > > If it is the userland SW, then we shall at least be able to set
+> > > 2099 in this device and then count on software correction.
+> > > 
+> > > If the "application software" is the kernel driver - the date
+> > > correction shall be done there (maybe some lookup table?).
+> > > 
+> > > Personally, I do prefer the first option - this means that with this
+> > > patch we can set the time to e.g. 2234 year and then rely on
+> > > userland software (or libc) to do the correction.
+> > >   
+> > 
+> > It is not possible to ensure this correction is properly done in
+> > software, there is no point in letting the user set those bits.
+> > 
+> > 
+> 
+> I see your point.
+> 
+> However, could you share your idea on testing setting RTC time to year
+> 2100 on this particular IC (by using hctosys and friends)?
+> 
 
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
----
+You can use rtc from
+https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/rtc-tools.git/
 
-Change since v1:
- * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+You can also use rtc-range with your patch to observe that it fails in
+2100.
 
- drivers/rtc/rtc-pcf2127.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index cb3472f..4229915 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -420,6 +420,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 			const char *name, bool has_nvmem)
- {
- 	struct pcf2127 *pcf2127;
-+	u32 wdd_timeout;
- 	int ret = 0;
- 
- 	dev_dbg(dev, "%s\n", __func__);
-@@ -462,7 +463,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	/*
- 	 * Watchdog timer enabled and reset pin /RST activated when timed out.
- 	 * Select 1Hz clock source for watchdog timer.
--	 * Timer is not started until WD_VAL is loaded with a valid value.
- 	 * Note: Countdown timer disabled and not available.
- 	 */
- 	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
-@@ -478,6 +478,16 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return ret;
- 	}
- 
-+	/* Test if watchdog timer is started by bootloader */
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
-+	if (ret) {
-+		dev_err(dev, "%s: watchdog value (wd_wal) failed\n", __func__);
-+		return ret;
-+	}
-+
-+	if (wdd_timeout)
-+		set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
-+
- 	ret = devm_watchdog_register_device(dev, &pcf2127->wdd);
- 	if (ret)
- 		return ret;
 -- 
-2.7.4
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
