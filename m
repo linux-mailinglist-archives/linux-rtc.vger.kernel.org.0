@@ -2,135 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B482CC517
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Oct 2019 23:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88F3CCFCC
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Oct 2019 11:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729291AbfJDVoP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 4 Oct 2019 17:44:15 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41035 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731002AbfJDVnl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Oct 2019 17:43:41 -0400
-Received: by mail-pl1-f195.google.com with SMTP id t10so3723018plr.8
-        for <linux-rtc@vger.kernel.org>; Fri, 04 Oct 2019 14:43:39 -0700 (PDT)
+        id S1726372AbfJFJHW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Oct 2019 05:07:22 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:45093 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbfJFJHV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Oct 2019 05:07:21 -0400
+Received: by mail-ed1-f66.google.com with SMTP id h33so9664778edh.12;
+        Sun, 06 Oct 2019 02:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bAfMi4NSBoja5vxxnTEYMZ6gxDSssSgVHfIbff12mb4=;
-        b=I0UP6QjOkuk9029ycIGlBRYjuryADPNl2rs34QcwDy7DnSdfOXcB/b4kY7TUCGXC/k
-         IJiGk5ETewSWBrF7ld044EOqYn1Pdu43lwCaDi9y6kk9EwIJtcCsSJvqR9/L1EzcsfJT
-         uqI7gqcYOF9lRF314+CkfUmQdzqeJGSTbKmVE=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LdLmw3jyu9VpLL7rNNOoIJG1aiZHneRVRzCW/lfPaZE=;
+        b=CSzpzytaFsbzYH1PIqCUYlvwYCdvZVfevBS2bX2i7r7pGE/nhCdIndR+VRS66LHa/V
+         cMvGGCf3uzS2EOB0C764z3q9cin8ozp5UZkOez/4dFngkZxaX6SCM/bRQuZtSOSCTWix
+         QFcx9svyIiJIdCddKe7vhse+gP7jsa8guDWGQVkElq1VqiPmdy9uZdyfPzPIWVuuAMup
+         Cz0+iSqTWY+CUBm3Bt/SIBqeZhJ9bdE3NkceaSOmeiNY40Uj4YF7JK4wm6qu+ew1k8hm
+         eXlSbKlPBOGzkCvKi0hFja1eg65sh2qvvaE+pP/QlEcNecNldYzC2c4yKTgY7Kvg7R6K
+         RmYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bAfMi4NSBoja5vxxnTEYMZ6gxDSssSgVHfIbff12mb4=;
-        b=DRB2BGt1F/pz8HKJTanpG7f1fGiPC1ES+SZQ2BH2bJPz9AdhUZ7e/MOliEiqZW6uiQ
-         2tOEBy3bSMwIdqpgcJl5n4wmwj7dFG+CQCvTRCRj//dBKoc7xZ9ah6oBq3BkyXqR0FvM
-         vDV0XPFBw1Vphr9fld1T2Q538z3YtKkCRqKSDq65qw/7ToenVvMR9nd1X8YfPqMORx7Y
-         zETSQdmcy6UF3sRM2j2GciBZ3kvKBVNqzVgSDk5QotUs2ooOQO4Rwe0wMktcjHsjBWTK
-         sCWCtB+9XzkVYiGWQml3uibr+vK293x3K7hA41wm3XYnB+FhrO/6glCHI7KU0NzBQON+
-         MDgg==
-X-Gm-Message-State: APjAAAVM/fDq+QegDblB968mL87IL3lK2MpYOPaMT7xKupsRUWmaTdo8
-        tbF0MjlOUInKBK3duZBKY3kPBA==
-X-Google-Smtp-Source: APXvYqxihsu1cUaj4qIQSJ2iXk6r9CdGaCYQYuCvV6SJdCiuuuOPIC9sLcbvOHlmoausFB13h9lJTg==
-X-Received: by 2002:a17:902:5987:: with SMTP id p7mr17651026pli.242.1570225419271;
-        Fri, 04 Oct 2019 14:43:39 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id a11sm10446799pfg.94.2019.10.04.14.43.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 14:43:38 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH 03/10] rtc: armada38x: Use of_device_get_match_data()
-Date:   Fri,  4 Oct 2019 14:43:27 -0700
-Message-Id: <20191004214334.149976-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
-In-Reply-To: <20191004214334.149976-1-swboyd@chromium.org>
-References: <20191004214334.149976-1-swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LdLmw3jyu9VpLL7rNNOoIJG1aiZHneRVRzCW/lfPaZE=;
+        b=mk66wuI+VpfL9edjmgYHDNSe8Zk8LJ031T1mRaQJpZbZz6vfuOuGHqFt1v8nh+BA15
+         ama2J3v8YqYTtx86nxCBu7aaKqkgraEH+1c2hUnfy7erFP6kEdRiu9nlS+MwuOFdOHBQ
+         1aUZgQKdMfFbBhBDOXmADQyCMLyIC0WmREVZI3DGVFdtkYSFdWwkCwS93Fnew4LhXZQX
+         0bYYrVkdUzBkymatcybeAz8uhGSTY1Fjvh9q936D453hvWoJ1Vb+1rxQ5lZYcQh0/alQ
+         jtRy+dqvx+fz2FD91N7bgD6d1IW9MLAS+UiAPx3UJmrtn0K3IRMXmjQbnuE/yp+pQP9E
+         7dzw==
+X-Gm-Message-State: APjAAAXzpd67a6WbEwB2jLfeWDqkOOVbZp4uIV7jYhqMLvf8R3mcPGwE
+        TvxhoQC5sQhj8xxlx/hv6t30FtK9JikfGa5TmG/9Mg==
+X-Google-Smtp-Source: APXvYqxu7TIbKAQcHIe0HsB1B9NxDGUSu1ICwJMDCpt9K+IdcTqN7xxz3YkK/LkRXGk2QiJsaUl0ZCGnnT1+r2ecI58=
+X-Received: by 2002:a50:ac0d:: with SMTP id v13mr23495378edc.189.1570352840015;
+ Sun, 06 Oct 2019 02:07:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191003124849.117888-1-martin@geanix.com> <20191003133351.118538-1-martin@geanix.com>
+In-Reply-To: <20191003133351.118538-1-martin@geanix.com>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Sun, 6 Oct 2019 11:07:03 +0200
+Message-ID: <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
+Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
+To:     =?UTF-8?Q?Martin_Hundeb=C3=B8ll?= <martin@geanix.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use the more modern API to get the match data out of the of match table.
-This saves some code, lines, and nicely avoids referencing the match
-table when it is undefined with configurations where CONFIG_OF=n.
+Hi Martin,
 
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Jason Cooper <jason@lakedaemon.net>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Gregory Clement <gregory.clement@bootlin.com>
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: <linux-rtc@vger.kernel.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+Den tor. 3. okt. 2019 kl. 15.33 skrev Martin Hundeb=C3=B8ll <martin@geanix.=
+com>:
+>
+> Linux should handle when the pcf2127 watchdog feature is enabled by the
+> bootloader. This is done by checking the watchdog timer value during
+> init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
+>
+> Signed-off-by: Martin Hundeb=C3=B8ll <martin@geanix.com>
+> ---
+>
+> Change since v1:
+>  * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+>
+>  drivers/rtc/rtc-pcf2127.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index cb3472f..4229915 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -420,6 +420,7 @@ static int pcf2127_probe(struct device *dev, struct r=
+egmap *regmap,
+>                         const char *name, bool has_nvmem)
+>  {
+>         struct pcf2127 *pcf2127;
+> +       u32 wdd_timeout;
+>         int ret =3D 0;
+>
+>         dev_dbg(dev, "%s\n", __func__);
+> @@ -462,7 +463,6 @@ static int pcf2127_probe(struct device *dev, struct r=
+egmap *regmap,
+>         /*
+>          * Watchdog timer enabled and reset pin /RST activated when timed=
+ out.
+>          * Select 1Hz clock source for watchdog timer.
+> -        * Timer is not started until WD_VAL is loaded with a valid value=
+.
 
-Please ack or pick for immediate merge so the last patch can be merged.
+Your patch does not change the fact that the watchdog timer is first
+started after loading a
+valid value into WD_VAL register. This driver can be used perfectly
+fine without enabling the
+watchdog feature from userspace. If someone chooses to reboot without
+stopping the watchdog
+it is of course expected to still run on next boot (e.g. device probe).
 
- drivers/rtc/rtc-armada38x.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+> +       /* Test if watchdog timer is started by bootloader */
+> +       ret =3D regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_tim=
+eout);
+> +       if (ret) {
+> +               dev_err(dev, "%s: watchdog value (wd_wal) failed\n", __fu=
+nc__);
+> +               return ret;
+> +       }
+> +
+> +       if (wdd_timeout)
+> +               set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+> +
 
-diff --git a/drivers/rtc/rtc-armada38x.c b/drivers/rtc/rtc-armada38x.c
-index 9351bd52477e..94d7c22fc4f3 100644
---- a/drivers/rtc/rtc-armada38x.c
-+++ b/drivers/rtc/rtc-armada38x.c
-@@ -74,7 +74,7 @@ struct armada38x_rtc {
- 	int		    irq;
- 	bool		    initialized;
- 	struct value_to_freq *val_to_freq;
--	struct armada38x_rtc_data *data;
-+	const struct armada38x_rtc_data *data;
- };
- 
- #define ALARM1	0
-@@ -501,17 +501,14 @@ static __init int armada38x_rtc_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
- 	struct armada38x_rtc *rtc;
--	const struct of_device_id *match;
--
--	match = of_match_device(armada38x_rtc_of_match_table, &pdev->dev);
--	if (!match)
--		return -ENODEV;
- 
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(struct armada38x_rtc),
- 			    GFP_KERNEL);
- 	if (!rtc)
- 		return -ENOMEM;
- 
-+	rtc->data = of_device_get_match_data(&pdev->dev);
-+
- 	rtc->val_to_freq = devm_kcalloc(&pdev->dev, SAMPLE_NR,
- 				sizeof(struct value_to_freq), GFP_KERNEL);
- 	if (!rtc->val_to_freq)
-@@ -553,7 +550,6 @@ static __init int armada38x_rtc_probe(struct platform_device *pdev)
- 		 */
- 		rtc->rtc_dev->ops = &armada38x_rtc_ops_noirq;
- 	}
--	rtc->data = (struct armada38x_rtc_data *)match->data;
- 
- 	/* Update RTC-MBUS bridge timing parameters */
- 	rtc->data->update_mbus_timing(rtc);
--- 
-Sent by a computer through tubes
+I do not agree that this should be the default setting as
+WDOG_HW_RUNNING bit causes
+watchdog core to kick watchdog until userland takes over, e.g. you
+have just broken the
+chain-of-monitoring in the embedded Linux device:
 
+Hardware watchdog -> systemd -> daemon(s) / application(s)
+
+At this point in time you only know that u-boot / barebox can load and
+start the kernel with
+a device tree blob.
+
+What if mounting of rootfs fails?
+What if systemd fails to start?
+
+When doing a reboot due to ex. firmware upgrade, systemd will keep
+kicking the watchdog
+until the last sec before restart handler is called and the hardware
+watchdog should not be
+touched before systemd is in control of the system again.
+
+Bruno
