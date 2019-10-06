@@ -2,89 +2,154 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D43CCD0F2
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Oct 2019 12:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1358FCD242
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Oct 2019 16:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727282AbfJFKeN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 6 Oct 2019 06:34:13 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:45234 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727264AbfJFKeN (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 6 Oct 2019 06:34:13 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 1EA89D08BB2E59D6385F;
-        Sun,  6 Oct 2019 18:34:09 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Sun, 6 Oct 2019
- 18:34:03 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <joel@jms.id.au>, <andrew@aj.id.au>, <nicolas.ferre@microchip.com>,
-        <ludovic.desroches@microchip.com>, <computersforpeace@gmail.com>,
-        <gregory.0xf0@gmail.com>, <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linus.walleij@linaro.org>, <baruch@tkos.co.il>,
-        <paul@crapouillou.net>, <vz@mleia.com>, <slemieux.tyco@gmail.com>,
-        <khilman@baylibre.com>, <eddie.huang@mediatek.com>,
-        <sean.wang@mediatek.com>, <matthias.bgg@gmail.com>,
-        <patrice.chotard@st.com>, <mcoquelin.stm32@gmail.com>,
-        <alexandre.torgue@st.com>, <mripard@kernel.org>, <wens@csie.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux@prisktech.co.nz>, <michal.simek@xilinx.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-tegra@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next 34/34] rtc: zynqmp: use devm_platform_ioremap_resource() to simplify code
-Date:   Sun, 6 Oct 2019 18:29:53 +0800
-Message-ID: <20191006102953.57536-35-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-In-Reply-To: <20191006102953.57536-1-yuehaibing@huawei.com>
-References: <20191006102953.57536-1-yuehaibing@huawei.com>
+        id S1726484AbfJFO3t (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Oct 2019 10:29:49 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42656 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726481AbfJFO3t (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Oct 2019 10:29:49 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q12so6960319pff.9;
+        Sun, 06 Oct 2019 07:29:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=e2PvVQWXeeJvUoDlLq/SR4VjGXnDfbPSvMXYVPkIUOE=;
+        b=F54QHf6vFQkX5AKSoQWu12ikp7hS+PwlL3WfDIMyndTZI7zuhYhlvW8HWkU3ok1qIp
+         qym7OjytMxdbq31th+Y5XF7nh937HU/ikw+xyKRzjwAFrmbG8tbUQOBWQeYYVzqd/fWJ
+         IFKCJJtu75Ei20q2nXoDu+9BotAo+dngJhC4QzPb5wiL84kRJ/MnQraOFcwF9OWWZlDO
+         DSOs8+V8KMJcRAsWvtbkHiebmM/ayK2kvEen13dhQW0JmvAMnhbVD0Pj5pyel/DBXqRD
+         /PPMtAfi7uhDYWzujRRWQigazDRmW4q0mywRliIo9HBs0e00HF2nM4uiJdx8/Wd5OcvX
+         +O6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=e2PvVQWXeeJvUoDlLq/SR4VjGXnDfbPSvMXYVPkIUOE=;
+        b=neWcHK2eJukw+/RFaFRfLgsLivmTHJhChWUK+XpEvO2FbBnFHFodO+0jQlQ6GCZ94F
+         zfnlarLu5iua+9Ju/oNPTcbPOfN73zOV+Al8ve1WN5nvQtFVkRhQyjc6H8CwKghsHTJg
+         JVFFC9i2JBFxHvKCVOhpduDSlEO790IntdwMLXKsrjRc1OBol7Cy7qr0Q/uBC5bdQGY7
+         /o1uxVD0pqZNXx9V+/VD2yV+SLsBkjV0LPai8Ansk3Zn9+rTE8bCuF5XfASBU6RmHa+Y
+         I5rJl2vS7NVfHKuC8ssjnaYm7Q+cYm+/8/VezVI+yTcA7NDd2Dq7ru5+rVz4Ue/eE005
+         TZTQ==
+X-Gm-Message-State: APjAAAXkLHvlmffv8dWsBPWVsRGxoGpvxOktK02YPBxCsWBNE07tK67B
+        FZJVGrq1PwWS7i4MpppHR8ppbVCA
+X-Google-Smtp-Source: APXvYqwf7gihMXxmnlLjPRFFxG9NQVGHtGrMFvFpABvUqdjQzEZqe4ZlhMbkl397aITgkXMzpOIMoQ==
+X-Received: by 2002:a63:4754:: with SMTP id w20mr12311058pgk.134.1570372188003;
+        Sun, 06 Oct 2019 07:29:48 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z21sm11307466pfa.119.2019.10.06.07.29.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 06 Oct 2019 07:29:46 -0700 (PDT)
+Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
+To:     Bruno Thomsen <bruno.thomsen@gmail.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20191003124849.117888-1-martin@geanix.com>
+ <20191003133351.118538-1-martin@geanix.com>
+ <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <f741d1bd-bcde-d1e1-09b7-98bb6a30db33@roeck-us.net>
+Date:   Sun, 6 Oct 2019 07:29:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+In-Reply-To: <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
+On 10/6/19 2:07 AM, Bruno Thomsen wrote:
+> Hi Martin,
+> 
+> Den tor. 3. okt. 2019 kl. 15.33 skrev Martin Hundebøll <martin@geanix.com>:
+>>
+>> Linux should handle when the pcf2127 watchdog feature is enabled by the
+>> bootloader. This is done by checking the watchdog timer value during
+>> init, and set the WDOG_HW_RUNNING flag if the value differs from zero.
+>>
+>> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+>> ---
+>>
+>> Change since v1:
+>>   * remove setting of WDOG_HW_RUNNING in pcf2127_wdt_start()
+>>
+>>   drivers/rtc/rtc-pcf2127.c | 12 +++++++++++-
+>>   1 file changed, 11 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+>> index cb3472f..4229915 100644
+>> --- a/drivers/rtc/rtc-pcf2127.c
+>> +++ b/drivers/rtc/rtc-pcf2127.c
+>> @@ -420,6 +420,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>>                          const char *name, bool has_nvmem)
+>>   {
+>>          struct pcf2127 *pcf2127;
+>> +       u32 wdd_timeout;
+>>          int ret = 0;
+>>
+>>          dev_dbg(dev, "%s\n", __func__);
+>> @@ -462,7 +463,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>>          /*
+>>           * Watchdog timer enabled and reset pin /RST activated when timed out.
+>>           * Select 1Hz clock source for watchdog timer.
+>> -        * Timer is not started until WD_VAL is loaded with a valid value.
+> 
+> Your patch does not change the fact that the watchdog timer is first
+> started after loading a
+> valid value into WD_VAL register. This driver can be used perfectly
+> fine without enabling the
+> watchdog feature from userspace. If someone chooses to reboot without
+> stopping the watchdog
+> it is of course expected to still run on next boot (e.g. device probe).
+> 
+>> +       /* Test if watchdog timer is started by bootloader */
+>> +       ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
+>> +       if (ret) {
+>> +               dev_err(dev, "%s: watchdog value (wd_wal) failed\n", __func__);
+>> +               return ret;
+>> +       }
+>> +
+>> +       if (wdd_timeout)
+>> +               set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+>> +
+> 
+> I do not agree that this should be the default setting as
+> WDOG_HW_RUNNING bit causes
+> watchdog core to kick watchdog until userland takes over, e.g. you
+> have just broken the
+> chain-of-monitoring in the embedded Linux device:
+> 
+> Hardware watchdog -> systemd -> daemon(s) / application(s)
+> 
+> At this point in time you only know that u-boot / barebox can load and
+> start the kernel with
+> a device tree blob.
+> 
+> What if mounting of rootfs fails?
+> What if systemd fails to start?
+> 
+> When doing a reboot due to ex. firmware upgrade, systemd will keep
+> kicking the watchdog
+> until the last sec before restart handler is called and the hardware
+> watchdog should not be
+> touched before systemd is in control of the system again.
+> 
+ > Bruno
+ >
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/rtc/rtc-zynqmp.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+This should not be decided on driver level. The intended means to enforce
+an initial timeout would be to set CONFIG_WATCHDOG_OPEN_TIMEOUT, or to use
+the open_timeout kernel parameter.
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index 2c76275..55646e0 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -195,7 +195,6 @@ static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
- static int xlnx_rtc_probe(struct platform_device *pdev)
- {
- 	struct xlnx_rtc_dev *xrtcdev;
--	struct resource *res;
- 	int ret;
- 
- 	xrtcdev = devm_kzalloc(&pdev->dev, sizeof(*xrtcdev), GFP_KERNEL);
-@@ -211,9 +210,7 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
- 	xrtcdev->rtc->ops = &xlnx_rtc_ops;
- 	xrtcdev->rtc->range_max = U32_MAX;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	xrtcdev->reg_base = devm_ioremap_resource(&pdev->dev, res);
-+	xrtcdev->reg_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(xrtcdev->reg_base))
- 		return PTR_ERR(xrtcdev->reg_base);
- 
--- 
-2.7.4
-
-
+Guenter
