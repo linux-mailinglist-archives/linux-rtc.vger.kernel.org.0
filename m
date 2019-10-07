@@ -2,80 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09548CE30D
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Oct 2019 15:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FC2CE426
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Oct 2019 15:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728340AbfJGNSD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Oct 2019 09:18:03 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:58533 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727490AbfJGNSD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Oct 2019 09:18:03 -0400
+        id S1728057AbfJGNrc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Oct 2019 09:47:32 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:54871 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727715AbfJGNrb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Oct 2019 09:47:31 -0400
 X-Originating-IP: 86.207.98.53
 Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D4830E0003;
-        Mon,  7 Oct 2019 13:17:58 +0000 (UTC)
-Date:   Mon, 7 Oct 2019 15:17:56 +0200
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 3FFCA1BF203;
+        Mon,  7 Oct 2019 13:47:29 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: rtc: s3c: Include generic dt-schema
- bindings
-Message-ID: <20191007131756.GK4254@piout.net>
-References: <20191002160744.11307-1-krzk@kernel.org>
- <20191002160744.11307-3-krzk@kernel.org>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 01/10] rtc: add a timestamp for year 0
+Date:   Mon,  7 Oct 2019 15:47:15 +0200
+Message-Id: <20191007134724.15505-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002160744.11307-3-krzk@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 02/10/2019 18:07:43+0200, Krzysztof Kozlowski wrote:
-> Include the generic rtc.yaml bindings in Samsung S3C RTC bindings.  This
-> brings the requirement of proper node names and adds parsing of
-> additional properties.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+A few RTCs handle dates from year 0 to year 9999. Add a timestamp even if
+years before 1970 will probably never be used.
 
-> ---
->  Documentation/devicetree/bindings/rtc/s3c-rtc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 4d91cdc9b998..76bbf8b7555b 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -48,6 +48,7 @@ properties:
->      maxItems: 2
->  
->  allOf:
-> +  - $ref: rtc.yaml#
->    - if:
->        properties:
->          compatible:
-> -- 
-> 2.17.1
-> 
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ include/linux/rtc.h | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index df666cf29ef1..2680f9b2b119 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -160,6 +160,7 @@ struct rtc_device {
+ #define to_rtc_device(d) container_of(d, struct rtc_device, dev)
+ 
+ /* useful timestamps */
++#define RTC_TIMESTAMP_BEGIN_0000	-62167219200ULL /* 0000-01-01 00:00:00 */
+ #define RTC_TIMESTAMP_BEGIN_1900	-2208988800LL /* 1900-01-01 00:00:00 */
+ #define RTC_TIMESTAMP_BEGIN_2000	946684800LL /* 2000-01-01 00:00:00 */
+ #define RTC_TIMESTAMP_END_2063		2966371199LL /* 2063-12-31 23:59:59 */
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
+
