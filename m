@@ -2,117 +2,215 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31094CE1BC
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Oct 2019 14:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21107CE2FB
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Oct 2019 15:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727511AbfJGMb5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Oct 2019 08:31:57 -0400
-Received: from mail-pf1-f170.google.com ([209.85.210.170]:38601 "EHLO
-        mail-pf1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727467AbfJGMb5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Oct 2019 08:31:57 -0400
-Received: by mail-pf1-f170.google.com with SMTP id h195so8577381pfe.5;
-        Mon, 07 Oct 2019 05:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3gI7bpdbWjmVG6mgR1rp7nZKPq7PDSoA3GLqSGZYdkA=;
-        b=SthJ+vH9MEWI1q1T3DBrvlIFKm+tNDIYlvD00339dKu2hUYpiiCWjAH+UafsNTZ4ra
-         P6aQiPqip3AV6XZC42uixTbbISWjFmQZsmq0c69Ut4EeZywF9vGJnyqOpazeA0nPUTQ9
-         ikcyb6yboSqgkw58TDbT2PNNf+B1y1/XtM3981zaWHdHmY2J+p3c9tPD/3rgb6ZWsDF+
-         3UA3bU171vdznt6Kzk0qb5hujBVdOAH70MH7DYluR66+mAKCLKNI/xoFZ4mn06YwMQlP
-         OIrr3H8W+Y0ldTHW4EteElzVnF1MqxVyVZhmOlaKFlEa94pPGfWhX2qZy1ZqvVCc07hY
-         5T0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3gI7bpdbWjmVG6mgR1rp7nZKPq7PDSoA3GLqSGZYdkA=;
-        b=hh9Sg6ufjV5bjq/Oye4thdpEkO63jvlbKvdXtDHRk1/a1NbXNuDCylZ5MitpILKtBw
-         h7kXMkZDtLbfdt2CDsMQ4zlJAY79hOV3P5gSOlRy3/dHSnagWfylL/asWOvG7aEq9rtp
-         +/I6Reyf/fqw6fYKVEC29g02u2RW7iHhlY3kHZfIligKXdH7eKec/NOrMMpRCO0m1uZO
-         9WMxxUNUNHSCe0FJjN5v40HI1f4yl9ah5/7+VW7US9RWZLIIje52m127Ay+Mtjz5yINu
-         BaL/cjLS8EsUtmrkKtxGHl1lQy8tWV/dPGg3K6rG1M+b92irXDB3bN5IqKjm5mMqIVXy
-         zFrQ==
-X-Gm-Message-State: APjAAAU0C2ihwae0fQvr8GKv3IlZ+lv43lZr0+qpHTa7lWhuLeRxhUKH
-        IZQ5ILfIEyIA4dtNsa+LGJpY5Wk2
-X-Google-Smtp-Source: APXvYqz8a3LjZoNxpy0AmFGmEJ0mcc5vIDdvrn/ygsX+zrYVtBIsk9egNlEczOjyJs5Cml/+IbCy8g==
-X-Received: by 2002:a62:8749:: with SMTP id i70mr31462301pfe.12.1570451516506;
-        Mon, 07 Oct 2019 05:31:56 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w6sm17294232pfj.17.2019.10.07.05.31.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Oct 2019 05:31:55 -0700 (PDT)
-Subject: Re: [PATCHv2] rtc: pcf2127: handle boot-enabled watchdog feature
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        id S1728216AbfJGNR3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Oct 2019 09:17:29 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:45311 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727490AbfJGNR0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Oct 2019 09:17:26 -0400
+Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id BEDD6240009;
+        Mon,  7 Oct 2019 13:17:22 +0000 (UTC)
+Date:   Mon, 7 Oct 2019 15:17:22 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Sebastian Reichel <sre@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20191003124849.117888-1-martin@geanix.com>
- <20191003133351.118538-1-martin@geanix.com>
- <CAH+2xPAtxcxd1xXuCmHc25X-Ai2_w-5rxZrgYbavjAzntMxX-Q@mail.gmail.com>
- <f741d1bd-bcde-d1e1-09b7-98bb6a30db33@roeck-us.net>
- <CC1D25DB-F95B-4110-809C-E8BE1493CDB7@geanix.com>
- <403595f7-99b4-142d-b4ff-7c574a3974fa@roeck-us.net>
- <CAH+2xPDkezVexmJRcuMmZ-vFbmw6CjDn3k4_SUNw_FNzy93AgQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <036e1e1d-1925-b003-8fb4-d568ae066d44@roeck-us.net>
-Date:   Mon, 7 Oct 2019 05:31:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: samsung: Indent examples with four
+ spaces
+Message-ID: <20191007131722.GI4254@piout.net>
+References: <20191002160744.11307-1-krzk@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAH+2xPDkezVexmJRcuMmZ-vFbmw6CjDn3k4_SUNw_FNzy93AgQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002160744.11307-1-krzk@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/7/19 3:49 AM, Bruno Thomsen wrote:
-> Hi Guenter & Martin
+On 02/10/2019 18:07:41+0200, Krzysztof Kozlowski wrote:
+> Change the indentation of examples used in json-schema bindings from two
+> to four spaces as this makes the code easier to read and seems to be
+> preferred in other files.
 > 
-> Den søn. 6. okt. 2019 kl. 18.19 skrev Guenter Roeck <linux@roeck-us.net>:
->>>>
->>>> This should not be decided on driver level. The intended means to
->>>> enforce
->>>> an initial timeout would be to set CONFIG_WATCHDOG_OPEN_TIMEOUT, or to
->>>> use
->>>> the open_timeout kernel parameter.
->>>
->>> That, and WATCHDOG_HANDLE_BOOT_ENABLED
->>>
->>
->> To clarify: If WATCHDOG_HANDLE_BOOT_ENABLED is disabled, the watchdog core
->> does not ping the watchdog on its own, and Bruno's argument does not apply
->> in the first place.
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+> ---
+>  .../bindings/arm/samsung/exynos-chipid.yaml   |  4 +-
+>  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 64 +++++++++----------
+>  .../bindings/power/reset/syscon-poweroff.yaml |  8 +--
+>  .../bindings/power/reset/syscon-reboot.yaml   |  8 +--
+>  .../devicetree/bindings/rtc/s3c-rtc.yaml      | 12 ++--
+>  5 files changed, 48 insertions(+), 48 deletions(-)
 > 
-> Thanks for clarifying.
-> 
-> When reading the WDOG_HW_RUNNING bit description in kernel api [1]
-> documentation around line 247 you don't get the impression that the behavior
-> can be modified by 2 Kconfig options and 1 runtime option. Maybe add an
-> additional note?
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> index 9c573ad7dc7d..ce40adabb4e8 100644
+> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> @@ -20,6 +20,6 @@ properties:
+>  examples:
+>    - |
+>      chipid@10000000 {
+> -      compatible = "samsung,exynos4210-chipid";
+> -      reg = <0x10000000 0x100>;
+> +        compatible = "samsung,exynos4210-chipid";
+> +        reg = <0x10000000 0x100>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> index b4c6c26681d9..a0a9b909ac40 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> @@ -112,40 +112,40 @@ allOf:
+>  examples:
+>    - |
+>      adc: adc@12d10000 {
+> -      compatible = "samsung,exynos-adc-v1";
+> -      reg = <0x12d10000 0x100>;
+> -      interrupts = <0 106 0>;
+> -      #io-channel-cells = <1>;
+> -      io-channel-ranges;
+> -
+> -      clocks = <&clock 303>;
+> -      clock-names = "adc";
+> -
+> -      vdd-supply = <&buck5_reg>;
+> -      samsung,syscon-phandle = <&pmu_system_controller>;
+> -
+> -      /* NTC thermistor is a hwmon device */
+> -      ncp15wb473@0 {
+> -        compatible = "murata,ncp15wb473";
+> -        pullup-uv = <1800000>;
+> -        pullup-ohm = <47000>;
+> -        pulldown-ohm = <0>;
+> -        io-channels = <&adc 4>;
+> -      };
+> +        compatible = "samsung,exynos-adc-v1";
+> +        reg = <0x12d10000 0x100>;
+> +        interrupts = <0 106 0>;
+> +        #io-channel-cells = <1>;
+> +        io-channel-ranges;
+> +
+> +        clocks = <&clock 303>;
+> +        clock-names = "adc";
+> +
+> +        vdd-supply = <&buck5_reg>;
+> +        samsung,syscon-phandle = <&pmu_system_controller>;
+> +
+> +        /* NTC thermistor is a hwmon device */
+> +        ncp15wb473@0 {
+> +            compatible = "murata,ncp15wb473";
+> +            pullup-uv = <1800000>;
+> +            pullup-ohm = <47000>;
+> +            pulldown-ohm = <0>;
+> +            io-channels = <&adc 4>;
+> +          };
+>      };
+>  
+>    - |
+>      adc@126c0000 {
+> -      compatible = "samsung,exynos3250-adc";
+> -      reg = <0x126C0000 0x100>;
+> -      interrupts = <0 137 0>;
+> -      #io-channel-cells = <1>;
+> -      io-channel-ranges;
+> -
+> -      clocks = <&cmu 0>, // CLK_TSADC
+> -               <&cmu 1>; // CLK_SCLK_TSADC
+> -      clock-names = "adc", "sclk";
+> -
+> -      vdd-supply = <&buck5_reg>;
+> -      samsung,syscon-phandle = <&pmu_system_controller>;
+> +        compatible = "samsung,exynos3250-adc";
+> +        reg = <0x126C0000 0x100>;
+> +        interrupts = <0 137 0>;
+> +        #io-channel-cells = <1>;
+> +        io-channel-ranges;
+> +
+> +        clocks = <&cmu 0>, // CLK_TSADC
+> +                 <&cmu 1>; // CLK_SCLK_TSADC
+> +        clock-names = "adc", "sclk";
+> +
+> +        vdd-supply = <&buck5_reg>;
+> +        samsung,syscon-phandle = <&pmu_system_controller>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> index fb812937b534..520e07e6f21b 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> @@ -53,8 +53,8 @@ allOf:
+>  examples:
+>    - |
+>      poweroff {
+> -      compatible = "syscon-poweroff";
+> -      regmap = <&regmapnode>;
+> -      offset = <0x0>;
+> -      mask = <0x7a>;
+> +        compatible = "syscon-poweroff";
+> +        regmap = <&regmapnode>;
+> +        offset = <0x0>;
+> +        mask = <0x7a>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> index a7920f5eef79..d38006b1f1f4 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> @@ -53,8 +53,8 @@ allOf:
+>  examples:
+>    - |
+>      reboot {
+> -      compatible = "syscon-reboot";
+> -      regmap = <&regmapnode>;
+> -      offset = <0x0>;
+> -      mask = <0x1>;
+> +        compatible = "syscon-reboot";
+> +        regmap = <&regmapnode>;
+> +        offset = <0x0>;
+> +        mask = <0x1>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> index 951a6a485709..95570d7e19eb 100644
+> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> @@ -76,10 +76,10 @@ allOf:
+>  examples:
+>    - |
+>      rtc@10070000 {
+> -      compatible = "samsung,s3c6410-rtc";
+> -      reg = <0x10070000 0x100>;
+> -      interrupts = <0 44 4>, <0 45 4>;
+> -      clocks = <&clock 0>, // CLK_RTC
+> -               <&s2mps11_osc 0>; // S2MPS11_CLK_AP
+> -      clock-names = "rtc", "rtc_src";
+> +        compatible = "samsung,s3c6410-rtc";
+> +        reg = <0x10070000 0x100>;
+> +        interrupts = <0 44 4>, <0 45 4>;
+> +        clocks = <&clock 0>, // CLK_RTC
+> +                 <&s2mps11_osc 0>; // S2MPS11_CLK_AP
+> +        clock-names = "rtc", "rtc_src";
+>      };
+> -- 
+> 2.17.1
 > 
 
-That is probably because the two configuration options were added later
-and the documentation was not updated. Patches welcome.
-
-Guenter
-
-> I am overall okay with the change, but I have a few extra comments.
-> 
-> If the dev_err message is kept there is a typo in register name: wd_val.
-> 
-> The variable name wdd_timeout is a bit misleading as the register does not
-> contain the initial timeout value but a countdown value, ex. wdd_value.
-> 
-> Bruno
-> 
-> [1] Documentation/watchdog/watchdog-kernel-api.rst
-> 
-
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
