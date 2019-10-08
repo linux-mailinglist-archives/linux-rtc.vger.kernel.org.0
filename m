@@ -2,131 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A611CF897
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2019 13:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFA8CFC5D
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Oct 2019 16:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730118AbfJHLhn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Oct 2019 07:37:43 -0400
-Received: from spam01.hygon.cn ([110.188.70.11]:46016 "EHLO spam2.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730316AbfJHLhn (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 8 Oct 2019 07:37:43 -0400
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam2.hygon.cn with ESMTP id x98Bai4T009785;
-        Tue, 8 Oct 2019 19:36:45 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id x98BaTN1019959;
-        Tue, 8 Oct 2019 19:36:29 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from bogon.higon.com (172.23.18.44) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 8 Oct 2019
- 19:36:41 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jinke Fan <fanjinke@hygon.cn>
-Subject: [PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon platform
-Date:   Tue, 8 Oct 2019 19:36:16 +0800
-Message-ID: <20191008113616.103734-1-fanjinke@hygon.cn>
+        id S1725795AbfJHOZr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Oct 2019 10:25:47 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:38876 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbfJHOZr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Oct 2019 10:25:47 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 3so3351219wmi.3
+        for <linux-rtc@vger.kernel.org>; Tue, 08 Oct 2019 07:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=T1EoziBTkltAHMdc4buw9CGaKKcLnkZK2Xg/SL3bAR4=;
+        b=yXu869UJT4DZ6ShP3Lq21w+k8SvrbwZ8BBXbEyayU0MvLGlVN3E2x1fFomLnlsmvYZ
+         DbfNuFvjNpjti30lwXOENTvIDu4MiRca3YQ2N3r+cql9Kj2PyDju9lqX0OP8pmASzC6d
+         OY7DttRSnAnzlQTE+sbf2xRBiizj5VykngpWgDfQ+hqVB7DmbyCkvXuR1zl9aBHvDCuL
+         I4vAqaRSq+jigGBskbCgUemaslfTPxO6cVZS13SB++qADsBWF5EETqcj6joc8XpjbF4w
+         mccVrmF0uFeTTkh+HJgtHsrDi+bbyz9pdJ3c0muVodEpQYuYq4hFnwbSUaXHLE9N1CUh
+         hPOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=T1EoziBTkltAHMdc4buw9CGaKKcLnkZK2Xg/SL3bAR4=;
+        b=AwyYOw4RUzJgfjjbldARCPd5RZo84AuEXEk8RzdHGRaO70Hk7e2Mty+UFtjtvigrKd
+         OdEDB4A3wTzZEOnSh9yhjn+vz9gBUszVGD5gVgn0cY3EK8IFA4A0jlqOaFFi7Km4J8kI
+         b4AG64Iqxs3jCnjaaDjvcvkoi/V2cmKs74OK2R9aLIbOBBKEYDmLPLjV4hyqlEXST7hT
+         FEAThq71+HL4AOC2osTbyFD+YF25WLYllwEg5eZFcqEat8af91oIXwpsbg7fS9OKqd9q
+         TGJeRemSIPPZH+yqZQhSWmAeboVVk7eV3R4KU+WDO1Z3W3LLAGnehEoHHGlyKMndl68/
+         y6WA==
+X-Gm-Message-State: APjAAAXC+I9gOgFJWq+KC4Kuj7qdV2hSOgA34wdqkuuePrJJDDBH0nJ9
+        pM5Pg2srVv7EYFLmQ3efPCaS1g==
+X-Google-Smtp-Source: APXvYqyWKsQ9SfdIDOC7smhgfVGN4ZnXDTPhORIUYTwQs0c17NQHzryFDWGsfQjjV5PUvpaqvl9hSQ==
+X-Received: by 2002:a1c:1fd3:: with SMTP id f202mr3957965wmf.18.1570544743722;
+        Tue, 08 Oct 2019 07:25:43 -0700 (PDT)
+Received: from localhost (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id d10sm4485803wma.42.2019.10.08.07.25.42
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 08 Oct 2019 07:25:42 -0700 (PDT)
+From:   Michal Simek <michal.simek@xilinx.com>
+To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Srinivas Goud <srinivas.goud@xilinx.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: xilinx: Fix calibval variable type
+Date:   Tue,  8 Oct 2019 16:25:41 +0200
+Message-Id: <20765c4c27aa92c75426b82fd2815ebef6471492.1570544738.git.michal.simek@xilinx.com>
 X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.23.18.44]
-X-ClientProxiedBy: cncheex01.Hygon.cn (172.23.18.10) To cncheex01.Hygon.cn
- (172.23.18.10)
-X-MAIL: spam2.hygon.cn x98Bai4T009785
-X-DNSRBL: 
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When using following operations:
-date -s "21190910 19:20:00"
-hwclock -w
-to change date from 2019 to 2119 for test, it will fail on Hygon
-Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
-platform.
+From: Srinivas Goud <srinivas.goud@xilinx.com>
 
-MC146818 driver use function mc146818_set_time() to set register
-RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-reset value on Intel platform to 0x7.
+This patch fixes the warnings reported by static code analysis.
+Updated calibval variable type to unsigned type from signed.
 
-While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-as reserved.
-
-DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-(AltCentury), the CMOS write will be failed on code:
-CMOS_WRITE(century, acpi_gbl_FADT.century).
-
-Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-enable AltCentury(0x32) register writing and finally setup century as
-expected.
-
-Test results on AMD/Hygon machine show that it works as expected.
-
-Reference:
-https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-section: 3.13 Real Time Clock (RTC)
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
+Signed-off-by: Srinivas Goud <srinivas.goud@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
 ---
 
-v2->v3:
-  - Make the changes only relevant to AMD/Hygon.
+ drivers/rtc/rtc-zynqmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1->v2:
-  - Fix the compile errors on sparc64/alpha platform.
-
- drivers/rtc/rtc-mc146818-lib.c | 11 ++++++++++-
- include/linux/mc146818rtc.h    |  6 ++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2ecd8752b088..70502881785d 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -172,7 +172,16 @@ int mc146818_set_time(struct rtc_time *time)
- 	save_control = CMOS_READ(RTC_CONTROL);
- 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
- 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+
-+#ifdef CONFIG_X86
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
-+		CMOS_WRITE((save_freq_select & (~RTC_DV0)), RTC_FREQ_SELECT);
-+	else
-+		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+#else
-+	CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+#endif
+diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+index 2c762757fb54..da0dbea8def3 100644
+--- a/drivers/rtc/rtc-zynqmp.c
++++ b/drivers/rtc/rtc-zynqmp.c
+@@ -44,7 +44,7 @@ struct xlnx_rtc_dev {
+ 	void __iomem		*reg_base;
+ 	int			alarm_irq;
+ 	int			sec_irq;
+-	int			calibval;
++	unsigned int		calibval;
+ };
  
- #ifdef CONFIG_MACH_DECSTATION
- 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
-diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
-index 0661af17a758..7066a7bced61 100644
---- a/include/linux/mc146818rtc.h
-+++ b/include/linux/mc146818rtc.h
-@@ -86,6 +86,12 @@ struct cmos_rtc_board_info {
-    /* 2 values for divider stage reset, others for "testing purposes only" */
- #  define RTC_DIV_RESET1	0x60
- #  define RTC_DIV_RESET2	0x70
-+
-+#ifdef CONFIG_X86
-+   /* DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1 on AMD/Hygon platform */
-+#  define RTC_DV0		0x10
-+#endif
-+
-   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
- # define RTC_RATE_SELECT 	0x0F
- 
+ static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
 -- 
 2.17.1
 
