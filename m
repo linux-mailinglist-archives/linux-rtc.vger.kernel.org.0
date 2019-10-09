@@ -2,103 +2,134 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDE1D08B6
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2019 09:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71BED0C83
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2019 12:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725440AbfJIHqn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Oct 2019 03:46:43 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33970 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729771AbfJIHql (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Oct 2019 03:46:41 -0400
-Received: by mail-lj1-f195.google.com with SMTP id j19so1480927lja.1
-        for <linux-rtc@vger.kernel.org>; Wed, 09 Oct 2019 00:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hZEfc+r3FkjJNXGg5OrQndZ7EVhjrXvy0Arp8Ba6y3Y=;
-        b=wjvQivs+C+mNfu/kBT+oqZ7KD4q6+IZ5Kth6hhfGFbltlKdqAJ38C7ajvyZ31te4gJ
-         C5EqhO//ZRTNxmVHsnWpL4FPvGmq6RGPaLctgOfRFcn64vZmRPcZzkMMWQJ5TtpYGxOS
-         ++ZFPLLjrWzBCECqMtnDgmicGmA0oWmKIWQeYM/ZOxDhwuAVKbdEN/zSfWvAA3hLQZZq
-         ubaT/P3ZZ59MYBEbi3oE/Ge+OFG+iQYKsWIiR5Ef3yKK7kivB5XTNZls9k74vNap0dO9
-         ytr/crl5hSQEYBvLZjmMXVpBhkzUNMwtOdUVNlFdxRC9uu49L9C1IMRlaxaQ+WnE44XU
-         dFHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hZEfc+r3FkjJNXGg5OrQndZ7EVhjrXvy0Arp8Ba6y3Y=;
-        b=alMqiW9bbMmB82V3aKr55QIGmq8DOIFjfTkdvStCyn0WhxEU7HKOOHoIAE+U9KUWy8
-         W2YN5TK7+R9hQe/nDKPd2ZYSpsM+2qhDeQ8vOZMHp61DNOF3IdMVB1zM4fR36m1splbw
-         BCAI7n8FYX275d3G4uhvbuwt0gwsCM+oZcVvXko4u771rbgBi0c8sRcV5mcSAXomCxqZ
-         QhTQsjnpjKrb6/laylhy0zimmWZrLlm3TQQw4g4aBbjeu33PYIyrgAJSInVMYW5US2rR
-         cEQk9cDNo32Pnh3BbDelwgdJAQCPVNWkH5HAJ+YUQc9flu5GEuGc0Z5L2GGsPn7ZvEEN
-         CQ0A==
-X-Gm-Message-State: APjAAAUz0arHHQGHaoWutD4FhVmwUHz1WTltCTAX9gMS9mjtg+y765FM
-        ioi60UIadXAwxKzvmbRJigwvC0jr5DSWC326vNKWmw==
-X-Google-Smtp-Source: APXvYqzKb6yyez5/a7eDQjEjte0+mGMXwCtZbVyeffNWrWYP4x2euviqJJy4ezdD4TVfujVbQ0UR4GcHrwjyGqp8gXQ=
-X-Received: by 2002:a2e:80d1:: with SMTP id r17mr1435527ljg.118.1570607198839;
- Wed, 09 Oct 2019 00:46:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191006102953.57536-1-yuehaibing@huawei.com> <20191006102953.57536-7-yuehaibing@huawei.com>
-In-Reply-To: <20191006102953.57536-7-yuehaibing@huawei.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 9 Oct 2019 09:46:27 +0200
-Message-ID: <CACRpkdY5x3wG4h6Wm_L5OXWXB7SPqHimUFOQa2jOeqDETWciYg@mail.gmail.com>
-Subject: Re: [PATCH -next 06/34] rtc: coh901331: use devm_platform_ioremap_resource()
- to simplify code
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S1730663AbfJIKRb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Oct 2019 06:17:31 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60986 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725935AbfJIKRb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 9 Oct 2019 06:17:31 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id DCCAFAF85;
+        Wed,  9 Oct 2019 10:17:27 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        huang eddie <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Patrice CHOTARD <patrice.chotard@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-rtc@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v7 0/5] Use MFD framework for SGI IOC3 drivers
+Date:   Wed,  9 Oct 2019 12:17:07 +0200
+Message-Id: <20191009101713.12238-1-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Oct 6, 2019 at 12:32 PM YueHaibing <yuehaibing@huawei.com> wrote:
+SGI IOC3 ASIC includes support for ethernet, PS2 keyboard/mouse,
+NIC (number in a can), GPIO and a byte  bus. By attaching a
+SuperIO chip to it, it also supports serial lines and a parallel
+port. The chip is used on a variety of SGI systems with different
+configurations. This patchset moves code out of the network driver,
+which doesn't belong there, into its new place a MFD driver and
+specific platform drivers for the different subfunctions.
 
-> Use devm_platform_ioremap_resource() to simplify the code a bit.
-> This is detected by coccinelle.
->
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Changes in v8:
+ - Re-worked comments in drivers/mfd/ioc3.c
+ - Added select CRC16 to ioc3-eth.c
+ - Patches 1 and 2 are already taken to mips-next, but
+   for completeness of the series they are still included.
+   What's missing to get the remaining 3 patches via the MIPS
+   tree is an ack from a network maintainer
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Changes in v7:
+ - added patch to enable ethernet phy for Origin 200 systems
+ - depend on 64bit for ioc3 mfd driver
 
-Yours,
-Linus Walleij
+Changes in v6:
+ - dropped patches accepted for v5.4-rc1
+ - moved serio patch to ip30 patch series
+ - adapted nvmem patch
+
+Changes in v5:
+ - requested by Jakub I've splited ioc3 ethernet driver changes into
+   more steps to make the transition more visible; on the way there 
+   I've "checkpatched" the driver and reduced code reorderings
+ - dropped all uint16_t and uint32_t
+ - added nvmem API extension to the documenation file
+ - changed to use request_irq/free_irq in serio driver
+ - removed wrong kfree() in serio error path
+
+Changes in v4:
+ - added w1 drivers to the series after merge in 5.3 failed because
+   of no response from maintainer and other parts of this series
+   won't work without that drivers
+ - moved ip30 systemboard support to the ip30 series, which will
+   deal with rtc oddity Lee found
+ - converted to use devm_platform_ioremap_resource
+ - use PLATFORM_DEVID_AUTO for serial, ethernet and serio in mfd driver
+ - fixed reverse christmas order in ioc3-eth.c
+ - formating issue found by Lee
+ - re-worked irq request/free in serio driver to avoid crashes during
+   probe/remove
+
+Changes in v3:
+ - use 1-wire subsystem for handling proms
+ - pci-xtalk driver uses prom information to create PCI subsystem
+   ids for use in MFD driver
+ - changed MFD driver to only use static declared mfd_cells
+ - added IP30 system board setup to MFD driver
+ - mac address is now read from ioc3-eth driver with nvmem framework
+
+Changes in v2:
+ - fixed issue in ioc3kbd.c reported by Dmitry Torokhov
+ - merged IP27 RTC removal and 8250 serial driver addition into
+   main MFD patch to keep patches bisectable
+
+Thomas Bogendoerfer (5):
+  nvmem: core: add nvmem_device_find
+  MIPS: PCI: use information from 1-wire PROM for IOC3 detection
+  mfd: ioc3: Add driver for SGI IOC3 chip
+  MIPS: SGI-IP27: fix readb/writeb addressing
+  MIPS: SGI-IP27: Enable ethernet phy on second Origin 200 module
+
+ Documentation/driver-api/nvmem.rst            |   2 +
+ arch/mips/include/asm/mach-ip27/mangle-port.h |   4 +-
+ arch/mips/include/asm/pci/bridge.h            |   1 +
+ arch/mips/include/asm/sn/ioc3.h               |  47 +-
+ arch/mips/pci/pci-ip27.c                      |  22 +
+ arch/mips/pci/pci-xtalk-bridge.c              | 135 +++++-
+ arch/mips/sgi-ip27/ip27-timer.c               |  20 -
+ arch/mips/sgi-ip27/ip27-xtalk.c               |  38 +-
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ioc3.c                            | 588 ++++++++++++++++++++++++++
+ drivers/net/ethernet/sgi/Kconfig              |   5 +-
+ drivers/net/ethernet/sgi/ioc3-eth.c           | 561 +++++-------------------
+ drivers/nvmem/core.c                          |  61 ++-
+ drivers/rtc/rtc-m48t35.c                      |  11 +
+ drivers/tty/serial/8250/8250_ioc3.c           |  98 +++++
+ drivers/tty/serial/8250/Kconfig               |  11 +
+ drivers/tty/serial/8250/Makefile              |   1 +
+ include/linux/nvmem-consumer.h                |   9 +
+ 19 files changed, 1080 insertions(+), 548 deletions(-)
+ create mode 100644 drivers/mfd/ioc3.c
+ create mode 100644 drivers/tty/serial/8250/8250_ioc3.c
+
+-- 
+2.16.4
+
