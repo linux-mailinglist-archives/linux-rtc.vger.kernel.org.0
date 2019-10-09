@@ -2,73 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40274D05CD
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2019 05:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDE1D08B6
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2019 09:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729688AbfJIDSv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Oct 2019 23:18:51 -0400
-Received: from spam01.hygon.cn ([110.188.70.11]:62230 "EHLO spam1.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726490AbfJIDSv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 8 Oct 2019 23:18:51 -0400
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam1.hygon.cn with ESMTP id x993I9X4008137;
-        Wed, 9 Oct 2019 11:18:09 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id x993Hsub046203;
-        Wed, 9 Oct 2019 11:17:55 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Wed, 9 Oct 2019
- 11:18:07 +0800
-Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
- ([172.23.18.10]) with mapi id 15.01.1466.003; Wed, 9 Oct 2019 11:18:07 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        Wen Pu <puwen@hygon.cn>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rtc: Fix the AltCentury value on AMD/Hygon platform
-Thread-Topic: [PATCH v2] rtc: Fix the AltCentury value on AMD/Hygon platform
-Thread-Index: AQHVfbwNh2t6OD3bgkOc8c92ZozDV6dP+FWAgAEmbYA=
-Date:   Wed, 9 Oct 2019 03:18:07 +0000
-Message-ID: <55aaed33-9f65-7580-74be-f5cd92c26e27@hygon.cn>
-References: <20191008093712.102158-1-fanjinke@hygon.cn>
- <20191008094419.GT4254@piout.net>
-In-Reply-To: <20191008094419.GT4254@piout.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.18.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <522CD2A2D093884EB8FAC17E0C1DA2BF@Hygon.cn>
-Content-Transfer-Encoding: base64
+        id S1725440AbfJIHqn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Oct 2019 03:46:43 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33970 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729771AbfJIHql (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Oct 2019 03:46:41 -0400
+Received: by mail-lj1-f195.google.com with SMTP id j19so1480927lja.1
+        for <linux-rtc@vger.kernel.org>; Wed, 09 Oct 2019 00:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hZEfc+r3FkjJNXGg5OrQndZ7EVhjrXvy0Arp8Ba6y3Y=;
+        b=wjvQivs+C+mNfu/kBT+oqZ7KD4q6+IZ5Kth6hhfGFbltlKdqAJ38C7ajvyZ31te4gJ
+         C5EqhO//ZRTNxmVHsnWpL4FPvGmq6RGPaLctgOfRFcn64vZmRPcZzkMMWQJ5TtpYGxOS
+         ++ZFPLLjrWzBCECqMtnDgmicGmA0oWmKIWQeYM/ZOxDhwuAVKbdEN/zSfWvAA3hLQZZq
+         ubaT/P3ZZ59MYBEbi3oE/Ge+OFG+iQYKsWIiR5Ef3yKK7kivB5XTNZls9k74vNap0dO9
+         ytr/crl5hSQEYBvLZjmMXVpBhkzUNMwtOdUVNlFdxRC9uu49L9C1IMRlaxaQ+WnE44XU
+         dFHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hZEfc+r3FkjJNXGg5OrQndZ7EVhjrXvy0Arp8Ba6y3Y=;
+        b=alMqiW9bbMmB82V3aKr55QIGmq8DOIFjfTkdvStCyn0WhxEU7HKOOHoIAE+U9KUWy8
+         W2YN5TK7+R9hQe/nDKPd2ZYSpsM+2qhDeQ8vOZMHp61DNOF3IdMVB1zM4fR36m1splbw
+         BCAI7n8FYX275d3G4uhvbuwt0gwsCM+oZcVvXko4u771rbgBi0c8sRcV5mcSAXomCxqZ
+         QhTQsjnpjKrb6/laylhy0zimmWZrLlm3TQQw4g4aBbjeu33PYIyrgAJSInVMYW5US2rR
+         cEQk9cDNo32Pnh3BbDelwgdJAQCPVNWkH5HAJ+YUQc9flu5GEuGc0Z5L2GGsPn7ZvEEN
+         CQ0A==
+X-Gm-Message-State: APjAAAUz0arHHQGHaoWutD4FhVmwUHz1WTltCTAX9gMS9mjtg+y765FM
+        ioi60UIadXAwxKzvmbRJigwvC0jr5DSWC326vNKWmw==
+X-Google-Smtp-Source: APXvYqzKb6yyez5/a7eDQjEjte0+mGMXwCtZbVyeffNWrWYP4x2euviqJJy4ezdD4TVfujVbQ0UR4GcHrwjyGqp8gXQ=
+X-Received: by 2002:a2e:80d1:: with SMTP id r17mr1435527ljg.118.1570607198839;
+ Wed, 09 Oct 2019 00:46:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MAIL: spam1.hygon.cn x993I9X4008137
-X-DNSRBL: 
+References: <20191006102953.57536-1-yuehaibing@huawei.com> <20191006102953.57536-7-yuehaibing@huawei.com>
+In-Reply-To: <20191006102953.57536-7-yuehaibing@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 9 Oct 2019 09:46:27 +0200
+Message-ID: <CACRpkdY5x3wG4h6Wm_L5OXWXB7SPqHimUFOQa2jOeqDETWciYg@mail.gmail.com>
+Subject: Re: [PATCH -next 06/34] rtc: coh901331: use devm_platform_ioremap_resource()
+ to simplify code
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        huang eddie <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Patrice CHOTARD <patrice.chotard@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-rtc@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-T24gMjAxOS8xMC84IDE3OjQ0LCBBbGV4YW5kcmUgQmVsbG9uaSB3cm90ZToNCj4gT24gMDgvMTAv
-MjAxOSAxNzozNzoxMiswODAwLCBKaW5rZSBGYW4gd3JvdGU6DQo+PiBXaGVuIHVzaW5nIGZvbGxv
-d2luZyBvcGVyYXRpb25zOg0KPj4gICAJc2F2ZV9jb250cm9sID0gQ01PU19SRUFEKFJUQ19DT05U
-Uk9MKTsNCj4+IC0JQ01PU19XUklURSgoc2F2ZV9jb250cm9sfFJUQ19TRVQpLCBSVENfQ09OVFJP
-TCk7DQo+PiArCUNNT1NfV1JJVEUoKHNhdmVfY29udHJvbCB8IFJUQ19TRVQpLCBSVENfQ09OVFJP
-TCk7DQo+IA0KPiBVbnJlbGF0ZWQgY2hhbmdlLg0KDQpPSywgdGhpcyBsaW5lIGNoYW5nZSB3aWxs
-IGJlIGNhbmNlbGxlZCBpbiB0aGUgcGF0Y2ggdjMuDQoNCj4+ICAgCXNhdmVfZnJlcV9zZWxlY3Qg
-PSBDTU9TX1JFQUQoUlRDX0ZSRVFfU0VMRUNUKTsNCj4+IC0JQ01PU19XUklURSgoc2F2ZV9mcmVx
-X3NlbGVjdHxSVENfRElWX1JFU0VUMiksIFJUQ19GUkVRX1NFTEVDVCk7DQo+PiArDQo+PiArI2lm
-IGRlZmluZWQoQ09ORklHX0NQVV9TVVBfQU1EKSB8fCBkZWZpbmVkKENPTkZJR19DUFVfU1VQX0hZ
-R09OKQ0KPj4gKwlDTU9TX1dSSVRFKChzYXZlX2ZyZXFfc2VsZWN0ICYgKH5SVENfRFYwKSksIFJU
-Q19GUkVRX1NFTEVDVCk7DQo+IA0KPiBUaGF0IGRvZXMgYnJlYWsgYWxsIHRoZSBvdGhlciB4ODYg
-cGxhdGZvcm1zLg0KDQpZZXMsIGl0J3MgYSBtaXN0YWtlLiBJbiB0aGUgcGF0Y2ggdjMsIHRoZSBt
-b2RpZmljYXRpb25zIHdpbGwgYmUNCmxpbWl0ZWQgdG8gQU1EL0h5Z29uIHZlbmRvciBpZC4NCg0K
-LS0gDQpCZXN0IFJlZ2FyZHMsDQpKaW5rZSBGYW4NCg==
+On Sun, Oct 6, 2019 at 12:32 PM YueHaibing <yuehaibing@huawei.com> wrote:
+
+> Use devm_platform_ioremap_resource() to simplify the code a bit.
+> This is detected by coccinelle.
+>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
