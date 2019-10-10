@@ -2,250 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E07F8D0EDD
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Oct 2019 14:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DBBD1D74
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 02:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731228AbfJIMdU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Oct 2019 08:33:20 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46275 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731225AbfJIMdT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Oct 2019 08:33:19 -0400
-Received: by mail-wr1-f66.google.com with SMTP id o18so2708981wrv.13;
-        Wed, 09 Oct 2019 05:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vtczsSGiPqX2EarRjg69FTPPSDg/+oHy5PBJ6riudmE=;
-        b=VRKHcF33MuAVh8nJp6TdXPlcz8puGlOW1dMxMm9921cfiAdGpqfTgRYnpXPxV4yfEQ
-         rmDG/XRipy5J2QrF391S1rH40u5q2O3yUuoiRyQbeIQ4toi0jtadtuvVadmy//AhZuuD
-         ftjYKXFvrCPbaRonwq3L0hIZjuv4DDJ1IMoSO5TNad/vdqWVz9UoQG0UL7qqbplUM1Tf
-         vtV9k+cWmTKpmcGVxLAZEfzQ/BfgivnsgyBq8zKK74r8qf29yrzwKnt7/3lo07jQFDPx
-         9VyHcHBG3pidk2RsyDgimMETdHU6kbCDA0uMazDqaiM+MAYYFaZ8qWHpTjTohMAn8I+v
-         DeFA==
+        id S1731542AbfJJAfu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Oct 2019 20:35:50 -0400
+Received: from mx6.ucr.edu ([138.23.62.71]:24530 "EHLO mx6.ucr.edu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731230AbfJJAft (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 9 Oct 2019 20:35:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
+  t=1570667749; x=1602203749;
+  h=mime-version:from:date:message-id:subject:to;
+  bh=nWu3ebWjqXjCvzB4v842JIolrNY8p92IVVNrwebapD4=;
+  b=ONissujfcMeMqvgW9vzgAndrQgUr7u2J+0Mt2QKqN+NA8btYr4nzzJzW
+   e8BldebK/8kzlOkSFiWV2AEjLhWZhv/sOycfsNFMFqOLn+Th6WMRddL6/
+   AD51fx7f8yvt5BCcZ8xaPjfeKS88VEzy6fOeHtXMr9j7lsKWHBvqlPABG
+   kOLJ65T2sIoSwXqh1qDElManjqllYQYlA0yJLClEaCjsBrV8YidUVFEEo
+   L7w8foXL9lU2jSaho+u6KVfSVa53c9X7xBi4erB3XK5wrek2/uT1etsqF
+   YSr3TsnztklhbEuxGQQRyyQqAeiuFXuiNRMBQOqOqAhfqumlL0iz9ANzQ
+   w==;
+IronPort-SDR: yxEo9rgZK33RYns9+M8FfHa6Ym1OtgkOtwVRYTq/WFsx+yFE5B1IK3UQ7sMAonRi5os24ZQDM6
+ IxOho3cu50CKEHzPemYrr6Fu+WJbUJ9kT10TlpR63anMnCzQgnU3cBD0S66ppEQrCPVgdHw8cc
+ N1CPDr4LqjWUOHS92e1lWzkUUL7HVlFVQBCDmLH63JS2FNRiu5WCimJpDKM5vGvAoUrzTh3Vb5
+ br74neq4mQLxcHcTB5ZkV4c+j0BlPTlYxMzhrpw0f8NfpLr26THh47JMXrbIrxd8z0BPffbtZQ
+ DEw=
+IronPort-PHdr: =?us-ascii?q?9a23=3A/drsYBOeSF5kRi+S8dAl6mtUPXoX/o7sNwtQ0K?=
+ =?us-ascii?q?IMzox0I/j4rarrMEGX3/hxlliBBdydt6sfzbSM+Pu/EUU7or+5+EgYd5JNUx?=
+ =?us-ascii?q?JXwe43pCcHRPC/NEvgMfTxZDY7FskRHHVs/nW8LFQHUJ2mPw6arXK99yMdFQ?=
+ =?us-ascii?q?viPgRpOOv1BpTSj8Oq3Oyu5pHfeQpFiCezbL9oLRi6swrdu8cUjIB/Nqs/1x?=
+ =?us-ascii?q?zFr2dSde9L321oP1WTnxj95se04pFu9jlbtuwi+cBdT6j0Zrw0QrNEAjsoNW?=
+ =?us-ascii?q?A1/9DrugLYTQST/HscU34ZnQRODgPY8Rz1RJbxsi/9tupgxCmXOND9QL4oVT?=
+ =?us-ascii?q?i+6apgVQTlgzkbOTEn7G7Xi9RwjKNFrxKnuxx/2JPfbIWMOPZjYq/RYdYWSG?=
+ =?us-ascii?q?xcVchTSiNBGJuxYIQPAeQPPuhWspfzqEcVoBuiGQWhHv/jxiNUinL026Axzu?=
+ =?us-ascii?q?QvERvB3AwlB98BsnXUrdT1NKcPVuC+0arHzTXZYPNXxDzw74jJcxEhof6WXL?=
+ =?us-ascii?q?J8bdbdxEc0GgPYklqQs5bpMC2I2eQQqmWW6fdrW+G3i2M/tQ19vjyiyt0vh4?=
+ =?us-ascii?q?TJnI4Z11HJ+CdjzIs3ONG1TlNwb8S+H5tKrS6aMpN7QsYlQ251pik30qYGuZ?=
+ =?us-ascii?q?unfCgSz5Qn2gLfZ+SHc4eW5hLjU/6cITJii3JkfLKznhKy8Ua9xuHlWMm50k?=
+ =?us-ascii?q?tGojBKktnLsXAN2BjT5dadRvRh+Ueh3C6D1wHV6u5aPUA5jbTXJ4Ilz7IqlZ?=
+ =?us-ascii?q?cesV7PEjL3lUj0lqObdFgo9vCt6+v9Y7XmopGcN5VzigH7Kqkvms2+AeQiPQ?=
+ =?us-ascii?q?gPQ2SX5eqx2ab+/ULlWrVGlOM5nbTEsJzCP8QUura5AxNJ0oYk8xu/Czam0N?=
+ =?us-ascii?q?IFnXgINV5FYg6HgJTyNlHQL/D3E+2/j06vkDh13fDGOKPuApHXInjEirfhcu?=
+ =?us-ascii?q?U110kJ4Q4+1stW4Z5ODfkzPff2XQelvZrKExo8NCSoxPnqEslw3YNYWH7ZRu?=
+ =?us-ascii?q?ewNK7CuFmE/O9nCeSIYIgTuX6pIvwo9/fogWU031UQea2u25o/Yne/AvBnJQ?=
+ =?us-ascii?q?OSZn+6xp8FEGEXrk8kUOfCllKPS3hQamy0UqZ64Ss0TMqiDIHeVsWujaaH0S?=
+ =?us-ascii?q?OTAJJbfCZFB0qKHHOucJ+LH78+aCODP8kpqz0NU/D1WY8gxAyorSfx0Px6Jf?=
+ =?us-ascii?q?CS9yEF49ar/9h44eLCiFkJ8jp7R5CWyGaLQEl/hSUVTCVw0axi9x9T0FCGhJ?=
+ =?us-ascii?q?l5kfxFEpRh5/pIGlMrJ57VzrQiUPjvURiHc9uUHgX1Cu66CC08G4pii+QFZF?=
+ =?us-ascii?q?xwTpD71kjO?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2GYAgCLfJ5dh0enVdFmDoIzhBGETY5?=
+ =?us-ascii?q?cgW0FgyUBjWmIOYF7AQgBAQEOLwEBhxIjNQgOAgMJAQEFAQEBAQEFBAEBAhA?=
+ =?us-ascii?q?BAQEIDQkIKYVAgjopAYNVEXwDDAImAiQSAQUBIgEaGoMAgngFpGWBAzyLJoE?=
+ =?us-ascii?q?yiGUBCQ2BSBJ6KIwOgheDbnOHUoJeBIE5AQEBlS+WVwEGAoIQFAOMUYhFG4I?=
+ =?us-ascii?q?qAZcVji2ZTw8jgTECgg4zGiV/BmeBT08QFIFpjXFbJJFLAQE?=
+X-IPAS-Result: =?us-ascii?q?A2GYAgCLfJ5dh0enVdFmDoIzhBGETY5cgW0FgyUBjWmIO?=
+ =?us-ascii?q?YF7AQgBAQEOLwEBhxIjNQgOAgMJAQEFAQEBAQEFBAEBAhABAQEIDQkIKYVAg?=
+ =?us-ascii?q?jopAYNVEXwDDAImAiQSAQUBIgEaGoMAgngFpGWBAzyLJoEyiGUBCQ2BSBJ6K?=
+ =?us-ascii?q?IwOgheDbnOHUoJeBIE5AQEBlS+WVwEGAoIQFAOMUYhFG4IqAZcVji2ZTw8jg?=
+ =?us-ascii?q?TECgg4zGiV/BmeBT08QFIFpjXFbJJFLAQE?=
+X-IronPort-AV: E=Sophos;i="5.67,278,1566889200"; 
+   d="scan'208";a="81350252"
+Received: from mail-lf1-f71.google.com ([209.85.167.71])
+  by smtpmx6.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Oct 2019 17:35:48 -0700
+Received: by mail-lf1-f71.google.com with SMTP id r3so979541lfn.13
+        for <linux-rtc@vger.kernel.org>; Wed, 09 Oct 2019 17:35:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vtczsSGiPqX2EarRjg69FTPPSDg/+oHy5PBJ6riudmE=;
-        b=MjfoVKuGRcMrO8K0PAnmFmh41IK/MK5mS8ZNBjGep1zXNh2ixQ/cM3zU/eNhK4oKfa
-         Q0Y8b56Hi7csQK/DDEc8bM/ZLKiZFL4mbeGBYZO12AA6Jh8BD1SYvHvFZDFw8pIk1sAO
-         REqlWoNIfO4wJ1GCn90oPXvJOYH9W4o5IyraZYHuenZ0WM8MNs82VoLNJrgvwfL4oC0p
-         TyfBoCHGjPL3dHCMm8/lnpT85fj2d5R2+P6+OPucPzbmqSsuoIZsa5NUxlj6ii1PYwct
-         PSUcoPOmIiZl/n/iIzS76j2eADbMzurr1ef+xPoGKZmgyk9xLtGujaXolkslkRGqpsiV
-         aMjQ==
-X-Gm-Message-State: APjAAAXx2Uhn9CUelqURUFAeDNqr1CM+Zed4CZbo/L97rUqF5RF9O88+
-        Pwxf01QkLgCZRoCDMjtGleNZ+OzGtRk=
-X-Google-Smtp-Source: APXvYqxV4P4UsHua3rlzN/cRN7SJ3sI08LuJFjwO/Tfeazlm5xN6PUyppxrB5XdoOows7eA+mcwiJw==
-X-Received: by 2002:a5d:6b03:: with SMTP id v3mr2850669wrw.182.1570624395704;
-        Wed, 09 Oct 2019 05:33:15 -0700 (PDT)
-Received: from [192.168.1.35] (46.red-83-42-66.dynamicip.rima-tde.net. [83.42.66.46])
-        by smtp.gmail.com with ESMTPSA id t13sm4432525wra.70.2019.10.09.05.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Oct 2019 05:33:14 -0700 (PDT)
-Subject: Re: [PATCH v8 1/5] nvmem: core: add nvmem_device_find
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20191009101713.12238-1-tbogendoerfer@suse.de>
- <20191009101713.12238-2-tbogendoerfer@suse.de>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <f4bug@amsat.org>
-Message-ID: <6d1d6ec0-344d-e94c-6c65-2b1d41cdc2ce@amsat.org>
-Date:   Wed, 9 Oct 2019 14:33:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=G4W3e3qGvtDBybhSHNkiyzwqamwrUZ6xOAFBHkAsOEk=;
+        b=bkAvZ7h+3WXtly4kgst+unEbMrFvwgXNa8rEPFG33+IU68AbqZ0jcmDW+TXuOt+vOH
+         3jzadEE6f9EBtQZBdk9MF0m9frkQd6v+Kbmp4wTSGhYewPW/2mLPXXLeTFDVo0QjJHj2
+         qty2cWdGRx0WITopDE8blq6eaDV+REqCiQJwjcgzaof0NieXPvVBpzH+SYTPYZii8FLU
+         FkYm1dLPCgB8D6y4xz3T8FyouauALRTm7fBVyMUUldKXfqNYRKbezPif7+Yt6CLZsPhG
+         Sseey4yxGaH6z8kh2EnZrH956vCDglmwnPk/wU3RyxQUPdiZQXInY6N6n5Qnk1FoGeXg
+         Eztw==
+X-Gm-Message-State: APjAAAV5QTUxeYdeLpzewyodsOLjkQW4FWL6vIxUjdzrsygkrosRFK7N
+        d8iKGpHTdGqYlgL6Pf8aayIJzjIOR0PjuE1wOtzEwzxzTG+jliBoRjWimQ0rWkRjptt6Nvkf5st
+        VXOTwwYLlyTFkaXJt9qoGdrirXKF3Yt8QlYnjBw==
+X-Received: by 2002:a2e:9a4e:: with SMTP id k14mr4006719ljj.104.1570667746628;
+        Wed, 09 Oct 2019 17:35:46 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzvF9cWwtovR/T13+tT+9QEtwd/pWMQ6spGIHADyJ6SkZx60DwAP8BAZs9zWtZz8M8Q2/bsxHfBns3rLL9Dquk=
+X-Received: by 2002:a2e:9a4e:: with SMTP id k14mr4006714ljj.104.1570667746390;
+ Wed, 09 Oct 2019 17:35:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191009101713.12238-2-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Yizhuo Zhai <yzhai003@ucr.edu>
+Date:   Wed, 9 Oct 2019 17:36:28 -0700
+Message-ID: <CABvMjLRirOKZvCaknF6isxRPvOgMeij2YZe1ef83EEg0kFnUjg@mail.gmail.com>
+Subject: Potential uninitialized variables in rtc: ds1343
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhiyun Qian <zhiyunq@cs.ucr.edu>,
+        Chengyu Song <csong@cs.ucr.edu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/9/19 12:17 PM, Thomas Bogendoerfer wrote:
-> nvmem_device_find provides a way to search for nvmem devices with
-> the help of a match function simlair to bus_find_device.
-> 
-> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> ---
->   Documentation/driver-api/nvmem.rst |  2 ++
->   drivers/nvmem/core.c               | 61 +++++++++++++++++---------------------
->   include/linux/nvmem-consumer.h     |  9 ++++++
->   3 files changed, 38 insertions(+), 34 deletions(-)
-> 
-> diff --git a/Documentation/driver-api/nvmem.rst b/Documentation/driver-api/nvmem.rst
-> index d9d958d5c824..287e86819640 100644
-> --- a/Documentation/driver-api/nvmem.rst
-> +++ b/Documentation/driver-api/nvmem.rst
-> @@ -129,6 +129,8 @@ To facilitate such consumers NVMEM framework provides below apis::
->     struct nvmem_device *nvmem_device_get(struct device *dev, const char *name);
->     struct nvmem_device *devm_nvmem_device_get(struct device *dev,
->   					   const char *name);
-> +  struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data));
->     void nvmem_device_put(struct nvmem_device *nvmem);
->     int nvmem_device_read(struct nvmem_device *nvmem, unsigned int offset,
->   		      size_t bytes, void *buf);
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 057d1ff87d5d..9f1ee9c766ec 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -76,33 +76,6 @@ static struct bus_type nvmem_bus_type = {
->   	.name		= "nvmem",
->   };
->   
-> -static struct nvmem_device *of_nvmem_find(struct device_node *nvmem_np)
-> -{
-> -	struct device *d;
-> -
-> -	if (!nvmem_np)
-> -		return NULL;
-> -
-> -	d = bus_find_device_by_of_node(&nvmem_bus_type, nvmem_np);
-> -
-> -	if (!d)
-> -		return NULL;
-> -
-> -	return to_nvmem_device(d);
-> -}
-> -
-> -static struct nvmem_device *nvmem_find(const char *name)
-> -{
-> -	struct device *d;
-> -
-> -	d = bus_find_device_by_name(&nvmem_bus_type, NULL, name);
-> -
-> -	if (!d)
-> -		return NULL;
-> -
-> -	return to_nvmem_device(d);
-> -}
-> -
->   static void nvmem_cell_drop(struct nvmem_cell *cell)
->   {
->   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_CELL_REMOVE, cell);
-> @@ -532,13 +505,16 @@ int devm_nvmem_unregister(struct device *dev, struct nvmem_device *nvmem)
->   }
->   EXPORT_SYMBOL(devm_nvmem_unregister);
->   
-> -static struct nvmem_device *__nvmem_device_get(struct device_node *np,
-> -					       const char *nvmem_name)
-> +static struct nvmem_device *__nvmem_device_get(void *data,
-> +			int (*match)(struct device *dev, const void *data))
->   {
->   	struct nvmem_device *nvmem = NULL;
-> +	struct device *dev;
->   
->   	mutex_lock(&nvmem_mutex);
-> -	nvmem = np ? of_nvmem_find(np) : nvmem_find(nvmem_name);
-> +	dev = bus_find_device(&nvmem_bus_type, NULL, data, match);
-> +	if (dev)
-> +		nvmem = to_nvmem_device(dev);
->   	mutex_unlock(&nvmem_mutex);
->   	if (!nvmem)
->   		return ERR_PTR(-EPROBE_DEFER);
-> @@ -587,7 +563,7 @@ struct nvmem_device *of_nvmem_device_get(struct device_node *np, const char *id)
->   	if (!nvmem_np)
->   		return ERR_PTR(-ENOENT);
->   
-> -	return __nvmem_device_get(nvmem_np, NULL);
-> +	return __nvmem_device_get(nvmem_np, device_match_of_node);
->   }
->   EXPORT_SYMBOL_GPL(of_nvmem_device_get);
->   #endif
-> @@ -613,10 +589,26 @@ struct nvmem_device *nvmem_device_get(struct device *dev, const char *dev_name)
->   
->   	}
->   
-> -	return __nvmem_device_get(NULL, dev_name);
-> +	return __nvmem_device_get((void *)dev_name, device_match_name);
->   }
->   EXPORT_SYMBOL_GPL(nvmem_device_get);
->   
-> +/**
-> + * nvmem_device_find() - Find nvmem device with matching function
-> + *
-> + * @data: Data to pass to match function
-> + * @match: Callback function to check device
-> + *
-> + * Return: ERR_PTR() on error or a valid pointer to a struct nvmem_device
-> + * on success.
-> + */
-> +struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data))
-> +{
-> +	return __nvmem_device_get(data, match);
-> +}
-> +EXPORT_SYMBOL_GPL(nvmem_device_find);
-> +
->   static int devm_nvmem_device_match(struct device *dev, void *res, void *data)
->   {
->   	struct nvmem_device **nvmem = res;
-> @@ -710,7 +702,8 @@ nvmem_cell_get_from_lookup(struct device *dev, const char *con_id)
->   		if ((strcmp(lookup->dev_id, dev_id) == 0) &&
->   		    (strcmp(lookup->con_id, con_id) == 0)) {
->   			/* This is the right entry. */
-> -			nvmem = __nvmem_device_get(NULL, lookup->nvmem_name);
-> +			nvmem = __nvmem_device_get((void *)lookup->nvmem_name,
-> +						   device_match_name);
->   			if (IS_ERR(nvmem)) {
->   				/* Provider may not be registered yet. */
->   				cell = ERR_CAST(nvmem);
-> @@ -780,7 +773,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
->   	if (!nvmem_np)
->   		return ERR_PTR(-EINVAL);
->   
-> -	nvmem = __nvmem_device_get(nvmem_np, NULL);
-> +	nvmem = __nvmem_device_get(nvmem_np, device_match_of_node);
->   	of_node_put(nvmem_np);
->   	if (IS_ERR(nvmem))
->   		return ERR_CAST(nvmem);
-> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
-> index 8f8be5b00060..02dc4aa992b2 100644
-> --- a/include/linux/nvmem-consumer.h
-> +++ b/include/linux/nvmem-consumer.h
-> @@ -89,6 +89,9 @@ void nvmem_del_cell_lookups(struct nvmem_cell_lookup *entries,
->   int nvmem_register_notifier(struct notifier_block *nb);
->   int nvmem_unregister_notifier(struct notifier_block *nb);
->   
-> +struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data));
-> +
->   #else
->   
->   static inline struct nvmem_cell *nvmem_cell_get(struct device *dev,
-> @@ -204,6 +207,12 @@ static inline int nvmem_unregister_notifier(struct notifier_block *nb)
->   	return -EOPNOTSUPP;
->   }
->   
-> +static inline struct nvmem_device *nvmem_device_find(void *data,
-> +			int (*match)(struct device *dev, const void *data))
-> +{
-> +	return NULL;
-> +}
-> +
->   #endif /* CONFIG_NVMEM */
->   
->   #if IS_ENABLED(CONFIG_NVMEM) && IS_ENABLED(CONFIG_OF)
-> 
+Hi All:
+drivers/rtc/rtc-ds1343.c:
+Inside function ds1343_show_glitchfilter(), variable "data" could be
+uninitialized if regmap_read() returns -EINVAL. However,"data"
+is used later in the if statement, which is potentially unsafe. Patch
+for this case is hard since the return value -EINVAL is unacceptable
+for ds1343_show_glitchfilter().
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+-- 
+Kind Regards,
+
+Yizhuo Zhai
+
+Computer Science, Graduate Student
+University of California, Riverside
