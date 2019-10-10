@@ -2,259 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FE9D2EDB
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 18:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA58D338A
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 23:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbfJJQsx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Oct 2019 12:48:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726038AbfJJQsx (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 10 Oct 2019 12:48:53 -0400
-Received: from earth.universe (tmo-080-106.customers.d1-online.com [80.187.80.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 92BF6218AC;
-        Thu, 10 Oct 2019 16:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570726131;
-        bh=CIYAHbrsHehDhmC0lEz5QCXbhpUiDbqLb2gCs6WSC9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WPr9a1pE8sZmfRWug8YooAsGNOcCWMRytUoxhQwNsZE29Jef4wv1zF90wnJ7kuIQx
-         iWMsPt3LLGLLjt/K4MV65uLw4ajdEuIHa5S6wKZbThMUII5ERwnhrMLnbBzgw2bT2b
-         pDfQXm/V146Zqxin4fVe3wjvoVzW+bqg8q8LXHwc=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 57D1D3C0CA2; Thu, 10 Oct 2019 18:48:47 +0200 (CEST)
-Date:   Thu, 10 Oct 2019 18:48:47 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1727164AbfJJVkM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Oct 2019 17:40:12 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:32827 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbfJJVkM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Oct 2019 17:40:12 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 60so6237523otu.0;
+        Thu, 10 Oct 2019 14:40:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OhBmb9lod5Y57x5hzCm24bUq/WGP4qSxDISKT1yzR6Q=;
+        b=heOtNVXq48eqzEIAGObMX84V+tP1s8TAoqrTc7PyrWYy4R0eGczIEoFptgNf7Uml0C
+         z8nskw0PRyzMejEoTPyrI70/eJff4JUkQUeaAidYKJfNgTABS3jn+QVoEV29r+LzN256
+         5/88lYfGoaTDVoI3CLByHCIiQxvh9u9+mZ9NS/HA1soXcFH2fIkGdlSQ0CLAUD83W5fb
+         ON0ZqpitLgyV62sYx8RGEexOOOynrDaa8GWer0bq/DUEBit0wJZXYBXA4E3edXmqWlGV
+         CFAIUhb+1T+3wmLhshNpSNxO7M3JhHADFd0ii1C/cwKfwqULl+qPDGD9ShYFpCCjDRII
+         yWdg==
+X-Gm-Message-State: APjAAAU16kyF1UkJ0bkKvPxBJJmsgEe3unG0r06NiofK/iYuZDRrmklQ
+        NNklz08uwaOaD3vWm7cl8P+753Q=
+X-Google-Smtp-Source: APXvYqz/xLLLoYlYKuqeF5HS+9KV3dUn7CVP1+Pcqsf9s366MQnZGaFwgYQxrsbuODkR3pUz3ATndQ==
+X-Received: by 2002:a05:6830:14c9:: with SMTP id t9mr8372392otq.133.1570743610981;
+        Thu, 10 Oct 2019 14:40:10 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l81sm2025740oih.10.2019.10.10.14.40.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 14:40:10 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 16:40:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Simon Horman <horms+renesas@verge.net.au>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: samsung: Indent examples with four
- spaces
-Message-ID: <20191010164847.ntbhecap6pbesvk7@earth.universe>
-References: <20191002160744.11307-1-krzk@kernel.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Simon Horman <horms+renesas@verge.net.au>
+Subject: Re: [PATCH v2] dt-bindings: rtc: rtc-sh: convert bindings to
+ json-schema
+Message-ID: <20191010214009.GA4348@bogus>
+References: <20190923121404.32585-1-horms+renesas@verge.net.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="us5fnkoji2afabie"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191002160744.11307-1-krzk@kernel.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190923121404.32585-1-horms+renesas@verge.net.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---us5fnkoji2afabie
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Oct 02, 2019 at 06:07:41PM +0200, Krzysztof Kozlowski wrote:
-> Change the indentation of examples used in json-schema bindings from two
-> to four spaces as this makes the code easier to read and seems to be
-> preferred in other files.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-Acked-by: Sebastian Reichel <sre@kernel.org> # for power/reset
-
--- Sebastian
-
+On Mon, 23 Sep 2019 14:14:04 +0200, Simon Horman wrote:
+> Convert Real Time Clock for Renesas SH and ARM SoCs bindings documentation
+> to json-schema.  Also name bindings documentation file according to the
+> compat string being documented.
+> 
+> Also correct syntax error in interrupts field in example.
+> 
+> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 > ---
->  .../bindings/arm/samsung/exynos-chipid.yaml   |  4 +-
->  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 64 +++++++++----------
->  .../bindings/power/reset/syscon-poweroff.yaml |  8 +--
->  .../bindings/power/reset/syscon-reboot.yaml   |  8 +--
->  .../devicetree/bindings/rtc/s3c-rtc.yaml      | 12 ++--
->  5 files changed, 48 insertions(+), 48 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.=
-yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> index 9c573ad7dc7d..ce40adabb4e8 100644
-> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
-> @@ -20,6 +20,6 @@ properties:
->  examples:
->    - |
->      chipid@10000000 {
-> -      compatible =3D "samsung,exynos4210-chipid";
-> -      reg =3D <0x10000000 0x100>;
-> +        compatible =3D "samsung,exynos4210-chipid";
-> +        reg =3D <0x10000000 0x100>;
->      };
-> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc=
-=2Eyaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> index b4c6c26681d9..a0a9b909ac40 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
-> @@ -112,40 +112,40 @@ allOf:
->  examples:
->    - |
->      adc: adc@12d10000 {
-> -      compatible =3D "samsung,exynos-adc-v1";
-> -      reg =3D <0x12d10000 0x100>;
-> -      interrupts =3D <0 106 0>;
-> -      #io-channel-cells =3D <1>;
-> -      io-channel-ranges;
-> -
-> -      clocks =3D <&clock 303>;
-> -      clock-names =3D "adc";
-> -
-> -      vdd-supply =3D <&buck5_reg>;
-> -      samsung,syscon-phandle =3D <&pmu_system_controller>;
-> -
-> -      /* NTC thermistor is a hwmon device */
-> -      ncp15wb473@0 {
-> -        compatible =3D "murata,ncp15wb473";
-> -        pullup-uv =3D <1800000>;
-> -        pullup-ohm =3D <47000>;
-> -        pulldown-ohm =3D <0>;
-> -        io-channels =3D <&adc 4>;
-> -      };
-> +        compatible =3D "samsung,exynos-adc-v1";
-> +        reg =3D <0x12d10000 0x100>;
-> +        interrupts =3D <0 106 0>;
-> +        #io-channel-cells =3D <1>;
-> +        io-channel-ranges;
-> +
-> +        clocks =3D <&clock 303>;
-> +        clock-names =3D "adc";
-> +
-> +        vdd-supply =3D <&buck5_reg>;
-> +        samsung,syscon-phandle =3D <&pmu_system_controller>;
-> +
-> +        /* NTC thermistor is a hwmon device */
-> +        ncp15wb473@0 {
-> +            compatible =3D "murata,ncp15wb473";
-> +            pullup-uv =3D <1800000>;
-> +            pullup-ohm =3D <47000>;
-> +            pulldown-ohm =3D <0>;
-> +            io-channels =3D <&adc 4>;
-> +          };
->      };
-> =20
->    - |
->      adc@126c0000 {
-> -      compatible =3D "samsung,exynos3250-adc";
-> -      reg =3D <0x126C0000 0x100>;
-> -      interrupts =3D <0 137 0>;
-> -      #io-channel-cells =3D <1>;
-> -      io-channel-ranges;
-> -
-> -      clocks =3D <&cmu 0>, // CLK_TSADC
-> -               <&cmu 1>; // CLK_SCLK_TSADC
-> -      clock-names =3D "adc", "sclk";
-> -
-> -      vdd-supply =3D <&buck5_reg>;
-> -      samsung,syscon-phandle =3D <&pmu_system_controller>;
-> +        compatible =3D "samsung,exynos3250-adc";
-> +        reg =3D <0x126C0000 0x100>;
-> +        interrupts =3D <0 137 0>;
-> +        #io-channel-cells =3D <1>;
-> +        io-channel-ranges;
-> +
-> +        clocks =3D <&cmu 0>, // CLK_TSADC
-> +                 <&cmu 1>; // CLK_SCLK_TSADC
-> +        clock-names =3D "adc", "sclk";
-> +
-> +        vdd-supply =3D <&buck5_reg>;
-> +        samsung,syscon-phandle =3D <&pmu_system_controller>;
->      };
-> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-powerof=
-f.yaml b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
-> index fb812937b534..520e07e6f21b 100644
-> --- a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
-> @@ -53,8 +53,8 @@ allOf:
->  examples:
->    - |
->      poweroff {
-> -      compatible =3D "syscon-poweroff";
-> -      regmap =3D <&regmapnode>;
-> -      offset =3D <0x0>;
-> -      mask =3D <0x7a>;
-> +        compatible =3D "syscon-poweroff";
-> +        regmap =3D <&regmapnode>;
-> +        offset =3D <0x0>;
-> +        mask =3D <0x7a>;
->      };
-> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.=
-yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> index a7920f5eef79..d38006b1f1f4 100644
-> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-> @@ -53,8 +53,8 @@ allOf:
->  examples:
->    - |
->      reboot {
-> -      compatible =3D "syscon-reboot";
-> -      regmap =3D <&regmapnode>;
-> -      offset =3D <0x0>;
-> -      mask =3D <0x1>;
-> +        compatible =3D "syscon-reboot";
-> +        regmap =3D <&regmapnode>;
-> +        offset =3D <0x0>;
-> +        mask =3D <0x1>;
->      };
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documen=
-tation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 951a6a485709..95570d7e19eb 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -76,10 +76,10 @@ allOf:
->  examples:
->    - |
->      rtc@10070000 {
-> -      compatible =3D "samsung,s3c6410-rtc";
-> -      reg =3D <0x10070000 0x100>;
-> -      interrupts =3D <0 44 4>, <0 45 4>;
-> -      clocks =3D <&clock 0>, // CLK_RTC
-> -               <&s2mps11_osc 0>; // S2MPS11_CLK_AP
-> -      clock-names =3D "rtc", "rtc_src";
-> +        compatible =3D "samsung,s3c6410-rtc";
-> +        reg =3D <0x10070000 0x100>;
-> +        interrupts =3D <0 44 4>, <0 45 4>;
-> +        clocks =3D <&clock 0>, // CLK_RTC
-> +                 <&s2mps11_osc 0>; // S2MPS11_CLK_AP
-> +        clock-names =3D "rtc", "rtc_src";
->      };
-> --=20
-> 2.17.1
->=20
+> v2
+> * Added reviewed-by tag from Ulrich
+> * Constrain clocks and clock-names as suggested by Rob Herring
+> ---
+>  .../devicetree/bindings/rtc/renesas,sh-rtc.yaml    | 70 ++++++++++++++++++++++
+>  Documentation/devicetree/bindings/rtc/rtc-sh.txt   | 28 ---------
+>  2 files changed, 70 insertions(+), 28 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-sh.txt
+> 
 
---us5fnkoji2afabie
-Content-Type: application/pgp-signature; name="signature.asc"
+Applied, thanks.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2fYOwACgkQ2O7X88g7
-+ppSrg//bVatCCeRxdy3A8zBUf1L3vjwbU/1yfhQsQDeUnYJ+HvG3pebohHnDXXj
-VGg/bTCDnD8PT9wRFI78GC2GDhYhi3XQpntuKVvtCuwGWoI4FqFZDyJ8X1A6kRSi
-PtQHqaYLaBaq4glfLaXmmJfbYq+lnMAZzJzJfPYSBfe3dAvj7YwMM7C+i6VLD68c
-hyDKiCqqHb2JqH9C6j3i8eiLfmmodhYapdfCace5V1xCO3Usd52gxta+XxDf+YBm
-dc3DVL8qg+8GRlGinNWXhpv5GrKV4CTJuJYpHydE2P85PY5/Q3gnLGn/I1lHaxH5
-/pd9HAoRnIF26bX5hwrH4kI0wt3QAr83sttQo5GRljN09BkGyCgmJOdoq/d/ar8H
-2UKKGFPeERuBkii6jQoCx12oKHjnOw9PMEPa9o7Yvs1Y7qjDVujLPojonG7k9+JU
-cU1LfJP482TWwtWBOjy2RlslEWKWzwswuPpk2y05ufwxXE32CCjyXYudOLcBOQPU
-Ucio2laTAkwAIkKRav9HILRm1ihrAp6SHQMpcALQWf/a8aZYe8MLWo/axy4gLna2
-jh/COFBA+feof+MBzlAqoVVtzriiuK6ehlX8PcuIzMYFfbxCaGX1oO3zDXecLezb
-5Oahbja8sKKws7/GufvZtbhr/aOkK34qZErnLyGas/Mm/CpChmI=
-=xmZh
------END PGP SIGNATURE-----
-
---us5fnkoji2afabie--
+Rob
