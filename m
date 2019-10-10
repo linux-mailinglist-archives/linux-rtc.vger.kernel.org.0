@@ -2,131 +2,259 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D68CD2EAF
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 18:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FE9D2EDB
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 18:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbfJJQhW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Oct 2019 12:37:22 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46876 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbfJJQhV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Oct 2019 12:37:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id d1so6839143ljl.13
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Oct 2019 09:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yfyOriptMBDiaNAXMAHeFqoD+N162h27NUaqIbiMn8g=;
-        b=MStOefh8juSpz0SHnnQad09QT4Fa6DBUzzsFT+0kynCLK95vCaQjDcLVS5v/xzigeU
-         qCpyG75sS7RxMUxZmmOhdOl/epXfJeRXXOfrA4nvR6kFbjPVCgFF5evbfVSP37qQYDxS
-         fUfhRHIyYZrsNsXMHDHxL4hZCXSQD0rD3FYGQzoGBdIjSAdGPgN/CndJNspJ5TzDDt/V
-         8+qfJjBselXWOwch9wHOBIMAbn0EM7xsyXfWJ/thT94GFR5K4sF+VRWYQS6DzF1vJIP6
-         xnmDEvdwh7CsQgLndLAdyoT8cjr1XKTH1qVG3y9nHq3AYOlQ6yv2IxOHCjUIx8V4D+Gg
-         6lxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=yfyOriptMBDiaNAXMAHeFqoD+N162h27NUaqIbiMn8g=;
-        b=XN4GkBsxW6MdrBFgEFR9dAeVaMTGjJhL4bJg0MTdXD+nrGOauOJ6aD3eviDCbaLtV7
-         Rs2TzSPzWgOiHPUaG2TEh+gQlC1XU0pRcr1fNSJJP3iySX07zc7Y/aBpAxA/hWZJ4ATl
-         0c+mpYRc1HXwvhE6GDN8dnsKvbtr4wTBB46wz0bzAt2cupOUDLeSiLLiFYl42PV4JkbB
-         e4PIdJWGocUrvlm1vxufs9fKIKrZega3U0hYvR2eqBAE7pg5JI8oveBh5AOmDkdbOYFX
-         USoUu6zNE/IXpTisbzHkIBqx+zkJv6evRcprIQL4j9xBkkXvVs5DW0Pi9nubZoJ1mmqm
-         3GPQ==
-X-Gm-Message-State: APjAAAXJFZNMnPNEZ0w2bTNaLzz+qd8GY1aQ4Q+jx6rXjvPRCeeP1DX4
-        ESMsVT0uWyLndAdTPdtr1Jm1i3Ootbg=
-X-Google-Smtp-Source: APXvYqxQzg7PeYXEqZES/u8aJpwejbzcaBWpM2ZrtmNSR43Do+7YWdlXHee3xVamjDLKq3Nb1NVijA==
-X-Received: by 2002:a2e:9119:: with SMTP id m25mr6930040ljg.106.1570725438077;
-        Thu, 10 Oct 2019 09:37:18 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:46de:289:1600:123:1371:e3f7])
-        by smtp.gmail.com with ESMTPSA id b20sm1328867ljo.106.2019.10.10.09.37.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Oct 2019 09:37:17 -0700 (PDT)
-Subject: Re: [PATCH v9 5/5] MIPS: SGI-IP27: Enable ethernet phy on second
- Origin 200 module
-To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        id S1726440AbfJJQsx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Oct 2019 12:48:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60504 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726038AbfJJQsx (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 10 Oct 2019 12:48:53 -0400
+Received: from earth.universe (tmo-080-106.customers.d1-online.com [80.187.80.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 92BF6218AC;
+        Thu, 10 Oct 2019 16:48:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570726131;
+        bh=CIYAHbrsHehDhmC0lEz5QCXbhpUiDbqLb2gCs6WSC9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WPr9a1pE8sZmfRWug8YooAsGNOcCWMRytUoxhQwNsZE29Jef4wv1zF90wnJ7kuIQx
+         iWMsPt3LLGLLjt/K4MV65uLw4ajdEuIHa5S6wKZbThMUII5ERwnhrMLnbBzgw2bT2b
+         pDfQXm/V146Zqxin4fVe3wjvoVzW+bqg8q8LXHwc=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 57D1D3C0CA2; Thu, 10 Oct 2019 18:48:47 +0200 (CEST)
+Date:   Thu, 10 Oct 2019 18:48:47 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20191010145953.21327-1-tbogendoerfer@suse.de>
- <20191010145953.21327-6-tbogendoerfer@suse.de>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <102db20a-0c37-3e28-2d14-e9c6eaa55f5c@cogentembedded.com>
-Date:   Thu, 10 Oct 2019 19:37:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: samsung: Indent examples with four
+ spaces
+Message-ID: <20191010164847.ntbhecap6pbesvk7@earth.universe>
+References: <20191002160744.11307-1-krzk@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20191010145953.21327-6-tbogendoerfer@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="us5fnkoji2afabie"
+Content-Disposition: inline
+In-Reply-To: <20191002160744.11307-1-krzk@kernel.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/10/2019 05:59 PM, Thomas Bogendoerfer wrote:
 
-> PROM only enables ethernet PHY on first Origin 200 module, so we must
-> do it ourselves for the second module.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+--us5fnkoji2afabie
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Wed, Oct 02, 2019 at 06:07:41PM +0200, Krzysztof Kozlowski wrote:
+> Change the indentation of examples used in json-schema bindings from two
+> to four spaces as this makes the code easier to read and seems to be
+> preferred in other files.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Acked-by: Sebastian Reichel <sre@kernel.org> # for power/reset
+
+-- Sebastian
+
 > ---
->  arch/mips/pci/pci-ip27.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-> index 441eb9383b20..7cc784cb299b 100644
-> --- a/arch/mips/pci/pci-ip27.c
-> +++ b/arch/mips/pci/pci-ip27.c
-> @@ -7,6 +7,11 @@
->   * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
->   * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
->   */
-> +#include <asm/sn/addrs.h>
-> +#include <asm/sn/types.h>
-> +#include <asm/sn/klconfig.h>
-> +#include <asm/sn/hub.h>
-> +#include <asm/sn/ioc3.h>
->  #include <asm/pci/bridge.h>
->  
->  dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
-> @@ -31,3 +36,20 @@ int pcibus_to_node(struct pci_bus *bus)
->  }
->  EXPORT_SYMBOL(pcibus_to_node);
->  #endif /* CONFIG_NUMA */
+>  .../bindings/arm/samsung/exynos-chipid.yaml   |  4 +-
+>  .../bindings/iio/adc/samsung,exynos-adc.yaml  | 64 +++++++++----------
+>  .../bindings/power/reset/syscon-poweroff.yaml |  8 +--
+>  .../bindings/power/reset/syscon-reboot.yaml   |  8 +--
+>  .../devicetree/bindings/rtc/s3c-rtc.yaml      | 12 ++--
+>  5 files changed, 48 insertions(+), 48 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.=
+yaml b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> index 9c573ad7dc7d..ce40adabb4e8 100644
+> --- a/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> +++ b/Documentation/devicetree/bindings/arm/samsung/exynos-chipid.yaml
+> @@ -20,6 +20,6 @@ properties:
+>  examples:
+>    - |
+>      chipid@10000000 {
+> -      compatible =3D "samsung,exynos4210-chipid";
+> -      reg =3D <0x10000000 0x100>;
+> +        compatible =3D "samsung,exynos4210-chipid";
+> +        reg =3D <0x10000000 0x100>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc=
+=2Eyaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> index b4c6c26681d9..a0a9b909ac40 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> @@ -112,40 +112,40 @@ allOf:
+>  examples:
+>    - |
+>      adc: adc@12d10000 {
+> -      compatible =3D "samsung,exynos-adc-v1";
+> -      reg =3D <0x12d10000 0x100>;
+> -      interrupts =3D <0 106 0>;
+> -      #io-channel-cells =3D <1>;
+> -      io-channel-ranges;
+> -
+> -      clocks =3D <&clock 303>;
+> -      clock-names =3D "adc";
+> -
+> -      vdd-supply =3D <&buck5_reg>;
+> -      samsung,syscon-phandle =3D <&pmu_system_controller>;
+> -
+> -      /* NTC thermistor is a hwmon device */
+> -      ncp15wb473@0 {
+> -        compatible =3D "murata,ncp15wb473";
+> -        pullup-uv =3D <1800000>;
+> -        pullup-ohm =3D <47000>;
+> -        pulldown-ohm =3D <0>;
+> -        io-channels =3D <&adc 4>;
+> -      };
+> +        compatible =3D "samsung,exynos-adc-v1";
+> +        reg =3D <0x12d10000 0x100>;
+> +        interrupts =3D <0 106 0>;
+> +        #io-channel-cells =3D <1>;
+> +        io-channel-ranges;
 > +
-> +static void ip29_fixup_phy(struct pci_dev *dev)
-> +{
-> +	int nasid = pcibus_to_node(dev->bus);
-> +	u32 sid;
+> +        clocks =3D <&clock 303>;
+> +        clock-names =3D "adc";
 > +
-> +	if (nasid != 1)
-> +		return; /* only needed on second module */
+> +        vdd-supply =3D <&buck5_reg>;
+> +        samsung,syscon-phandle =3D <&pmu_system_controller>;
 > +
-> +	/* enable ethernet PHY on IP29 systemboard */
-> +	pci_read_config_dword(dev, PCI_SUBSYSTEM_VENDOR_ID, &sid);
-> +	if (sid == ((PCI_VENDOR_ID_SGI << 16) | IOC3_SUBSYS_IP29_SYSBOARD))
+> +        /* NTC thermistor is a hwmon device */
+> +        ncp15wb473@0 {
+> +            compatible =3D "murata,ncp15wb473";
+> +            pullup-uv =3D <1800000>;
+> +            pullup-ohm =3D <47000>;
+> +            pulldown-ohm =3D <0>;
+> +            io-channels =3D <&adc 4>;
+> +          };
+>      };
+> =20
+>    - |
+>      adc@126c0000 {
+> -      compatible =3D "samsung,exynos3250-adc";
+> -      reg =3D <0x126C0000 0x100>;
+> -      interrupts =3D <0 137 0>;
+> -      #io-channel-cells =3D <1>;
+> -      io-channel-ranges;
+> -
+> -      clocks =3D <&cmu 0>, // CLK_TSADC
+> -               <&cmu 1>; // CLK_SCLK_TSADC
+> -      clock-names =3D "adc", "sclk";
+> -
+> -      vdd-supply =3D <&buck5_reg>;
+> -      samsung,syscon-phandle =3D <&pmu_system_controller>;
+> +        compatible =3D "samsung,exynos3250-adc";
+> +        reg =3D <0x126C0000 0x100>;
+> +        interrupts =3D <0 137 0>;
+> +        #io-channel-cells =3D <1>;
+> +        io-channel-ranges;
+> +
+> +        clocks =3D <&cmu 0>, // CLK_TSADC
+> +                 <&cmu 1>; // CLK_SCLK_TSADC
+> +        clock-names =3D "adc", "sclk";
+> +
+> +        vdd-supply =3D <&buck5_reg>;
+> +        samsung,syscon-phandle =3D <&pmu_system_controller>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-powerof=
+f.yaml b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> index fb812937b534..520e07e6f21b 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml
+> @@ -53,8 +53,8 @@ allOf:
+>  examples:
+>    - |
+>      poweroff {
+> -      compatible =3D "syscon-poweroff";
+> -      regmap =3D <&regmapnode>;
+> -      offset =3D <0x0>;
+> -      mask =3D <0x7a>;
+> +        compatible =3D "syscon-poweroff";
+> +        regmap =3D <&regmapnode>;
+> +        offset =3D <0x0>;
+> +        mask =3D <0x7a>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.=
+yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> index a7920f5eef79..d38006b1f1f4 100644
+> --- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+> @@ -53,8 +53,8 @@ allOf:
+>  examples:
+>    - |
+>      reboot {
+> -      compatible =3D "syscon-reboot";
+> -      regmap =3D <&regmapnode>;
+> -      offset =3D <0x0>;
+> -      mask =3D <0x1>;
+> +        compatible =3D "syscon-reboot";
+> +        regmap =3D <&regmapnode>;
+> +        offset =3D <0x0>;
+> +        mask =3D <0x1>;
+>      };
+> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documen=
+tation/devicetree/bindings/rtc/s3c-rtc.yaml
+> index 951a6a485709..95570d7e19eb 100644
+> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
+> @@ -76,10 +76,10 @@ allOf:
+>  examples:
+>    - |
+>      rtc@10070000 {
+> -      compatible =3D "samsung,s3c6410-rtc";
+> -      reg =3D <0x10070000 0x100>;
+> -      interrupts =3D <0 44 4>, <0 45 4>;
+> -      clocks =3D <&clock 0>, // CLK_RTC
+> -               <&s2mps11_osc 0>; // S2MPS11_CLK_AP
+> -      clock-names =3D "rtc", "rtc_src";
+> +        compatible =3D "samsung,s3c6410-rtc";
+> +        reg =3D <0x10070000 0x100>;
+> +        interrupts =3D <0 44 4>, <0 45 4>;
+> +        clocks =3D <&clock 0>, // CLK_RTC
+> +                 <&s2mps11_osc 0>; // S2MPS11_CLK_AP
+> +        clock-names =3D "rtc", "rtc_src";
+>      };
+> --=20
+> 2.17.1
+>=20
 
-   I thought PCI was little endian, thuis vendor ID at offset 0 and device ID
-at offset 2?
+--us5fnkoji2afabie
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[...]
+-----BEGIN PGP SIGNATURE-----
 
-MBR, Sergei
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl2fYOwACgkQ2O7X88g7
++ppSrg//bVatCCeRxdy3A8zBUf1L3vjwbU/1yfhQsQDeUnYJ+HvG3pebohHnDXXj
+VGg/bTCDnD8PT9wRFI78GC2GDhYhi3XQpntuKVvtCuwGWoI4FqFZDyJ8X1A6kRSi
+PtQHqaYLaBaq4glfLaXmmJfbYq+lnMAZzJzJfPYSBfe3dAvj7YwMM7C+i6VLD68c
+hyDKiCqqHb2JqH9C6j3i8eiLfmmodhYapdfCace5V1xCO3Usd52gxta+XxDf+YBm
+dc3DVL8qg+8GRlGinNWXhpv5GrKV4CTJuJYpHydE2P85PY5/Q3gnLGn/I1lHaxH5
+/pd9HAoRnIF26bX5hwrH4kI0wt3QAr83sttQo5GRljN09BkGyCgmJOdoq/d/ar8H
+2UKKGFPeERuBkii6jQoCx12oKHjnOw9PMEPa9o7Yvs1Y7qjDVujLPojonG7k9+JU
+cU1LfJP482TWwtWBOjy2RlslEWKWzwswuPpk2y05ufwxXE32CCjyXYudOLcBOQPU
+Ucio2laTAkwAIkKRav9HILRm1ihrAp6SHQMpcALQWf/a8aZYe8MLWo/axy4gLna2
+jh/COFBA+feof+MBzlAqoVVtzriiuK6ehlX8PcuIzMYFfbxCaGX1oO3zDXecLezb
+5Oahbja8sKKws7/GufvZtbhr/aOkK34qZErnLyGas/Mm/CpChmI=
+=xmZh
+-----END PGP SIGNATURE-----
+
+--us5fnkoji2afabie--
