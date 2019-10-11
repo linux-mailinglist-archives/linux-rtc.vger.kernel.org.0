@@ -2,85 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA58D338A
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Oct 2019 23:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5B7D37A9
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Oct 2019 05:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727164AbfJJVkM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Oct 2019 17:40:12 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:32827 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfJJVkM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Oct 2019 17:40:12 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 60so6237523otu.0;
-        Thu, 10 Oct 2019 14:40:11 -0700 (PDT)
+        id S1726720AbfJKDAT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Oct 2019 23:00:19 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46559 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726692AbfJKDAT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Oct 2019 23:00:19 -0400
+Received: by mail-pg1-f196.google.com with SMTP id b8so4887401pgm.13
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Oct 2019 20:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=nP3GB4eev/Uw/7TzzPBf7q6vVOFurBjXFqfQUZ+MDGI=;
+        b=KzBWLKoFEXWJXPLXk8rihO70idubrVY0AvebVOxegnFY86QJmJGnQAku+lqeexuYjB
+         9G74EjZ5ZvlXtWdwx6WwfpqvWL6VZhkBTLucMGD8v4+2hORNhyJnUiBwwpBCF8JxvYyl
+         Y/VEUCQaO4qMcQjX25jnBmyNowejWuBTvCczZAtLpuYiP3fyFPOQUIuwfkc7KI12BXX2
+         EwM6/7cZLGE5aW9q4v+KkZG7M4Ko8VEfRigsYkPSfXxu8CCT86YN8Kz/jywZSNG+JnPs
+         /EYL79jv7SvwRhbBYvBe5MtI4NC0fHqrZX5X0RP9DTqt0mKF84SdidfQjH90hJrCfHuU
+         JAsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OhBmb9lod5Y57x5hzCm24bUq/WGP4qSxDISKT1yzR6Q=;
-        b=heOtNVXq48eqzEIAGObMX84V+tP1s8TAoqrTc7PyrWYy4R0eGczIEoFptgNf7Uml0C
-         z8nskw0PRyzMejEoTPyrI70/eJff4JUkQUeaAidYKJfNgTABS3jn+QVoEV29r+LzN256
-         5/88lYfGoaTDVoI3CLByHCIiQxvh9u9+mZ9NS/HA1soXcFH2fIkGdlSQ0CLAUD83W5fb
-         ON0ZqpitLgyV62sYx8RGEexOOOynrDaa8GWer0bq/DUEBit0wJZXYBXA4E3edXmqWlGV
-         CFAIUhb+1T+3wmLhshNpSNxO7M3JhHADFd0ii1C/cwKfwqULl+qPDGD9ShYFpCCjDRII
-         yWdg==
-X-Gm-Message-State: APjAAAU16kyF1UkJ0bkKvPxBJJmsgEe3unG0r06NiofK/iYuZDRrmklQ
-        NNklz08uwaOaD3vWm7cl8P+753Q=
-X-Google-Smtp-Source: APXvYqz/xLLLoYlYKuqeF5HS+9KV3dUn7CVP1+Pcqsf9s366MQnZGaFwgYQxrsbuODkR3pUz3ATndQ==
-X-Received: by 2002:a05:6830:14c9:: with SMTP id t9mr8372392otq.133.1570743610981;
-        Thu, 10 Oct 2019 14:40:10 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l81sm2025740oih.10.2019.10.10.14.40.10
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=nP3GB4eev/Uw/7TzzPBf7q6vVOFurBjXFqfQUZ+MDGI=;
+        b=fHiOZ1nx7IUAAl2zhewp9glV3hJW2ESJYtfSk0Rd8A1tp+5Sitey++gbEOKenaM/YR
+         Kqv/Gly5RS2Cj28VLQf35yJF1MbIqxMuZwJqlKYv+dtWoEolrcTA7xq3j5bH7bFMgxlB
+         1Pt2X4+4xpzU4M0LmfXRMxJu1rAEjzHuqjlX/wBhnYnpECF+4gRoGHnD2z4gvf1+h+cK
+         alFC2Ow0hLsuV3Qjujo0xMhOsfJrCjrySWVVO7poNTfTunqpG00N18KeYxFWPD87wsaQ
+         XaN9HJ8gZMtwPuvnyh9Sr+a0e/1Dr0yCRJek3cdspMJ/5x8px6u2Hj+UPo5ywM09BegS
+         UW5w==
+X-Gm-Message-State: APjAAAUu6Oo2Z+pKicZx2/OX1cZe0d5fdGSvO4c/D6DcodqY8gHGsR8k
+        3sVXXTGe+5P+U0xP49Mtb0+Zpw==
+X-Google-Smtp-Source: APXvYqyC7PSkR8RT7VypdyqNldAyGXeW91322WLbhsrNNwrkgAMBn6eiIibb+JzCUjR+ko/vo+L6ow==
+X-Received: by 2002:a65:688a:: with SMTP id e10mr13223631pgt.122.1570762818461;
+        Thu, 10 Oct 2019 20:00:18 -0700 (PDT)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id q6sm8505284pgn.44.2019.10.10.20.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 14:40:10 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 16:40:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Simon Horman <horms+renesas@verge.net.au>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Thu, 10 Oct 2019 20:00:18 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 20:00:02 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Yoshihiro Kaneko <ykaneko0929@gmail.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Simon Horman <horms+renesas@verge.net.au>
-Subject: Re: [PATCH v2] dt-bindings: rtc: rtc-sh: convert bindings to
- json-schema
-Message-ID: <20191010214009.GA4348@bogus>
-References: <20190923121404.32585-1-horms+renesas@verge.net.au>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v9 3/5] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20191010200002.5fe5f34f@cakuba.netronome.com>
+In-Reply-To: <20191010145953.21327-4-tbogendoerfer@suse.de>
+References: <20191010145953.21327-1-tbogendoerfer@suse.de>
+        <20191010145953.21327-4-tbogendoerfer@suse.de>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190923121404.32585-1-horms+renesas@verge.net.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 23 Sep 2019 14:14:04 +0200, Simon Horman wrote:
-> Convert Real Time Clock for Renesas SH and ARM SoCs bindings documentation
-> to json-schema.  Also name bindings documentation file according to the
-> compat string being documented.
-> 
-> Also correct syntax error in interrupts field in example.
-> 
-> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
-> Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
-> ---
-> v2
-> * Added reviewed-by tag from Ulrich
-> * Constrain clocks and clock-names as suggested by Rob Herring
-> ---
->  .../devicetree/bindings/rtc/renesas,sh-rtc.yaml    | 70 ++++++++++++++++++++++
->  Documentation/devicetree/bindings/rtc/rtc-sh.txt   | 28 ---------
->  2 files changed, 70 insertions(+), 28 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/renesas,sh-rtc.yaml
->  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-sh.txt
-> 
+On Thu, 10 Oct 2019 16:59:49 +0200, Thomas Bogendoerfer wrote:
+>  	dev = alloc_etherdev(sizeof(struct ioc3_private));
+> -	if (!dev) {
+> -		err = -ENOMEM;
+> -		goto out_disable;
+> -	}
+> -
+> -	if (pci_using_dac)
+> -		dev->features |= NETIF_F_HIGHDMA;
 
-Applied, thanks.
+Looks like the NETIF_F_HIGHDMA feature will not longer be set, is that
+okay?
 
-Rob
+> -	err = pci_request_regions(pdev, "ioc3");
+> -	if (err)
+> -		goto out_free;
+> +	if (!dev)
+> +		return -ENOMEM;
+>  
+>  	SET_NETDEV_DEV(dev, &pdev->dev);
+>  
+>  	ip = netdev_priv(dev);
+> -	ip->dev = dev;
+> -	ip->dma_dev = &pdev->dev;
+> -
+> -	dev->irq = pdev->irq;
+> +	ip->dma_dev = pdev->dev.parent;
+> +	ip->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (!ip->regs) {
+> +		err = -ENOMEM;
+> +		goto out_free;
+> +	}
+
