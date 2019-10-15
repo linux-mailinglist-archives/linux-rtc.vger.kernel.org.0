@@ -2,213 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F177D6B58
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Oct 2019 23:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138C6D70C5
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2019 10:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730366AbfJNVqi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Oct 2019 17:46:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53098 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729054AbfJNVqi (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 14 Oct 2019 17:46:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 27535B2D8;
-        Mon, 14 Oct 2019 21:46:36 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2] rtc: ds1685: add indirect access method and remove plat_read/plat_write
-Date:   Mon, 14 Oct 2019 23:46:21 +0200
-Message-Id: <20191014214621.25257-1-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.16.4
+        id S1728523AbfJOIKK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Oct 2019 04:10:10 -0400
+Received: from spam01.hygon.cn ([110.188.70.11]:18461 "EHLO spam1.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728295AbfJOIKK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 15 Oct 2019 04:10:10 -0400
+Received: from MK-FE.hygon.cn ([172.23.18.61])
+        by spam1.hygon.cn with ESMTP id x9F89CRw070512;
+        Tue, 15 Oct 2019 16:09:13 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-FE.hygon.cn with ESMTP id x9F88uHP054359;
+        Tue, 15 Oct 2019 16:08:56 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from bogon.higon.com (172.23.18.44) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 15 Oct
+ 2019 16:09:07 +0800
+From:   Jinke Fan <fanjinke@hygon.cn>
+To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>,
+        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
+CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jinke Fan <fanjinke@hygon.cn>
+Subject: [RESEND RFC PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon platform
+Date:   Tue, 15 Oct 2019 16:08:27 +0800
+Message-ID: <20191015080827.11589-1-fanjinke@hygon.cn>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [172.23.18.44]
+X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
+ (172.23.18.10)
+X-MAIL: spam1.hygon.cn x9F89CRw070512
+X-DNSRBL: 
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGI Octane (IP30) doesn't have RTC register directly mapped into CPU
-address space, but accesses RTC registers with an address and data
-register.  This is now supported by additional access functions, which
-are selected by a new field in platform data. Removed plat_read/plat_write
-since there is no user and their usage could introduce lifetime issue,
-when functions are placed in different modules.
+When using following operations:
+date -s "21190910 19:20:00"
+hwclock -w
+to change date from 2019 to 2119 for test, it will fail on Hygon
+Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
+platform.
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+MC146818 driver use function mc146818_set_time() to set register
+RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
+reset value on Intel platform to 0x7.
+
+While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
+DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
+as reserved.
+
+DV0 is set to 1, it will select Bank 1, which will disable AltCentury
+register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
+(AltCentury), the CMOS write will be failed on code:
+CMOS_WRITE(century, acpi_gbl_FADT.century).
+
+Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
+enable AltCentury(0x32) register writing and finally setup century as
+expected.
+
+Test results on AMD/Hygon machine show that it works as expected.
+
+Reference:
+https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
+section: 3.13 Real Time Clock (RTC)
+
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
 ---
-Changes in v2:
 
-- check if rtc->read and rtc->write are setup
-- spell out indirect in function names and explain difference
-  between standard and indirect functions
+v2->v3:
+  - Make the changes only relevant to AMD/Hygon.
 
- arch/mips/sgi-ip32/ip32-platform.c |  2 +-
- drivers/rtc/rtc-ds1685.c           | 78 +++++++++++++++++++++++++-------------
- include/linux/rtc/ds1685.h         |  8 ++--
- 3 files changed, 58 insertions(+), 30 deletions(-)
+v1->v2:
+  - Fix the compile errors on sparc64/alpha platform.
 
-diff --git a/arch/mips/sgi-ip32/ip32-platform.c b/arch/mips/sgi-ip32/ip32-platform.c
-index 5a2a82148d8d..c3909bd8dd1a 100644
---- a/arch/mips/sgi-ip32/ip32-platform.c
-+++ b/arch/mips/sgi-ip32/ip32-platform.c
-@@ -115,7 +115,7 @@ ip32_rtc_platform_data[] = {
- 		.bcd_mode = true,
- 		.no_irq = false,
- 		.uie_unsupported = false,
--		.alloc_io_resources = true,
-+		.access_type = ds1685_reg_direct,
- 		.plat_prepare_poweroff = ip32_prepare_poweroff,
- 	},
- };
-diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-index 349a8d1caca1..98d06b3ee913 100644
---- a/drivers/rtc/rtc-ds1685.c
-+++ b/drivers/rtc/rtc-ds1685.c
-@@ -31,7 +31,10 @@
- 
- 
- /* ----------------------------------------------------------------------- */
--/* Standard read/write functions if platform does not provide overrides */
-+/*
-+ *  Standard read/write
-+ *  all registers are mapped in CPU address space
-+ */
- 
- /**
-  * ds1685_read - read a value from an rtc register.
-@@ -59,6 +62,35 @@ ds1685_write(struct ds1685_priv *rtc, int reg, u8 value)
- }
- /* ----------------------------------------------------------------------- */
- 
-+/*
-+ * Indirect read/write functions
-+ * access happens via address and data register mapped in CPU address space
-+ */
+ drivers/rtc/rtc-mc146818-lib.c | 11 ++++++++++-
+ include/linux/mc146818rtc.h    |  6 ++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index 2ecd8752b088..70502881785d 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -172,7 +172,16 @@ int mc146818_set_time(struct rtc_time *time)
+ 	save_control = CMOS_READ(RTC_CONTROL);
+ 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+ 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
+-	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
 +
-+/**
-+ * ds1685_indirect_read - read a value from an rtc register.
-+ * @rtc: pointer to the ds1685 rtc structure.
-+ * @reg: the register address to read.
-+ */
-+static u8
-+ds1685_indirect_read(struct ds1685_priv *rtc, int reg)
-+{
-+	writeb(reg, rtc->regs);
-+	return readb(rtc->data);
-+}
++#ifdef CONFIG_X86
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++		CMOS_WRITE((save_freq_select & (~RTC_DV0)), RTC_FREQ_SELECT);
++	else
++		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
++#else
++	CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
++#endif
+ 
+ #ifdef CONFIG_MACH_DECSTATION
+ 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
+diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+index 0661af17a758..7066a7bced61 100644
+--- a/include/linux/mc146818rtc.h
++++ b/include/linux/mc146818rtc.h
+@@ -86,6 +86,12 @@ struct cmos_rtc_board_info {
+    /* 2 values for divider stage reset, others for "testing purposes only" */
+ #  define RTC_DIV_RESET1	0x60
+ #  define RTC_DIV_RESET2	0x70
 +
-+/**
-+ * ds1685_indirect_write - write a value to an rtc register.
-+ * @rtc: pointer to the ds1685 rtc structure.
-+ * @reg: the register address to write.
-+ * @value: value to write to the register.
-+ */
-+static void
-+ds1685_indirect_write(struct ds1685_priv *rtc, int reg, u8 value)
-+{
-+	writeb(reg, rtc->regs);
-+	writeb(value, rtc->data);
-+}
- 
- /* ----------------------------------------------------------------------- */
- /* Inlined functions */
-@@ -1062,42 +1094,36 @@ ds1685_rtc_probe(struct platform_device *pdev)
- 	if (!rtc)
- 		return -ENOMEM;
- 
--	/*
--	 * Allocate/setup any IORESOURCE_MEM resources, if required.  Not all
--	 * platforms put the RTC in an easy-access place.  Like the SGI Octane,
--	 * which attaches the RTC to a "ByteBus", hooked to a SuperIO chip
--	 * that sits behind the IOC3 PCI metadevice.
--	 */
--	if (pdata->alloc_io_resources) {
-+	/* Setup resources and access functions */
-+	switch (pdata->access_type) {
-+	case ds1685_reg_direct:
-+		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(rtc->regs))
-+			return PTR_ERR(rtc->regs);
-+		rtc->read = ds1685_read;
-+		rtc->write = ds1685_write;
-+		break;
-+	case ds1685_reg_indirect:
- 		rtc->regs = devm_platform_ioremap_resource(pdev, 0);
- 		if (IS_ERR(rtc->regs))
- 			return PTR_ERR(rtc->regs);
-+		rtc->data = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(rtc->data))
-+			return PTR_ERR(rtc->data);
-+		rtc->read = ds1685_indirect_read;
-+		rtc->write = ds1685_indirect_write;
-+		break;
- 	}
- 
-+	if (!rtc->read || !rtc->write)
-+		return -ENXIO;
++#ifdef CONFIG_X86
++   /* DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1 on AMD/Hygon platform */
++#  define RTC_DV0		0x10
++#endif
 +
- 	/* Get the register step size. */
- 	if (pdata->regstep > 0)
- 		rtc->regstep = pdata->regstep;
- 	else
- 		rtc->regstep = 1;
- 
--	/* Platform read function, else default if mmio setup */
--	if (pdata->plat_read)
--		rtc->read = pdata->plat_read;
--	else
--		if (pdata->alloc_io_resources)
--			rtc->read = ds1685_read;
--		else
--			return -ENXIO;
--
--	/* Platform write function, else default if mmio setup */
--	if (pdata->plat_write)
--		rtc->write = pdata->plat_write;
--	else
--		if (pdata->alloc_io_resources)
--			rtc->write = ds1685_write;
--		else
--			return -ENXIO;
--
- 	/* Platform pre-shutdown function, if defined. */
- 	if (pdata->plat_prepare_poweroff)
- 		rtc->prepare_poweroff = pdata->plat_prepare_poweroff;
-diff --git a/include/linux/rtc/ds1685.h b/include/linux/rtc/ds1685.h
-index 101c7adc05a2..67ee9d20cc5a 100644
---- a/include/linux/rtc/ds1685.h
-+++ b/include/linux/rtc/ds1685.h
-@@ -42,6 +42,7 @@
- struct ds1685_priv {
- 	struct rtc_device *dev;
- 	void __iomem *regs;
-+	void __iomem *data;
- 	u32 regstep;
- 	int irq_num;
- 	bool bcd_mode;
-@@ -70,12 +71,13 @@ struct ds1685_rtc_platform_data {
- 	const bool bcd_mode;
- 	const bool no_irq;
- 	const bool uie_unsupported;
--	const bool alloc_io_resources;
--	u8 (*plat_read)(struct ds1685_priv *, int);
--	void (*plat_write)(struct ds1685_priv *, int, u8);
- 	void (*plat_prepare_poweroff)(void);
- 	void (*plat_wake_alarm)(void);
- 	void (*plat_post_ram_clear)(void);
-+	enum {
-+		ds1685_reg_direct,
-+		ds1685_reg_indirect
-+	} access_type;
- };
- 
+   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
+ # define RTC_RATE_SELECT 	0x0F
  
 -- 
-2.16.4
+2.17.1
 
