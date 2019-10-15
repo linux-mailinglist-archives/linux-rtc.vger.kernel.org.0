@@ -2,132 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90980D70ED
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2019 10:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8867CD72D1
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2019 12:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbfJOI1Y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Oct 2019 04:27:24 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:58715 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbfJOI1Y (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Oct 2019 04:27:24 -0400
-X-Originating-IP: 86.207.98.53
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 56596FF811;
-        Tue, 15 Oct 2019 08:27:20 +0000 (UTC)
-Date:   Tue, 15 Oct 2019 10:27:20 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jinke Fan <fanjinke@hygon.cn>
-Cc:     a.zummo@towertech.it, puwen@hygon.cn, thomas.lendacky@amd.com,
-        kim.phillips@amd.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S1727868AbfJOKJH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Oct 2019 06:09:07 -0400
+Received: from spam01.hygon.cn ([110.188.70.11]:19923 "EHLO spam2.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727018AbfJOKJH (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 15 Oct 2019 06:09:07 -0400
+Received: from MK-FE.hygon.cn ([172.23.18.61])
+        by spam2.hygon.cn with ESMTP id x9FA8HvJ025917;
+        Tue, 15 Oct 2019 18:08:17 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex02.Hygon.cn ([172.23.18.12])
+        by MK-FE.hygon.cn with ESMTP id x9FA85iU064248;
+        Tue, 15 Oct 2019 18:08:05 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex02.Hygon.cn
+ (172.23.18.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 15 Oct
+ 2019 18:08:16 +0800
+Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
+ ([172.23.18.10]) with mapi id 15.01.1466.003; Tue, 15 Oct 2019 18:08:16 +0800
+From:   Jinke Fan <fanjinke@hygon.cn>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        Wen Pu <puwen@hygon.cn>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "kim.phillips@amd.com" <kim.phillips@amd.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [RESEND RFC PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon
  platform
-Message-ID: <20191015082720.GW3125@piout.net>
+Thread-Topic: [RESEND RFC PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon
+ platform
+Thread-Index: AQHVgy/RkjjnHG3zLEyv1IS/Xg7OVqda2DwAgAAcM4A=
+Date:   Tue, 15 Oct 2019 10:08:16 +0000
+Message-ID: <9eceb1b6-bd61-d48f-0bc8-ec5c9de5f25a@hygon.cn>
 References: <20191015080827.11589-1-fanjinke@hygon.cn>
+ <20191015082720.GW3125@piout.net>
+In-Reply-To: <20191015082720.GW3125@piout.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.18.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <55A0941C8CBFE54FA3479EAD7AD6CCE6@Hygon.cn>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191015080827.11589-1-fanjinke@hygon.cn>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-MAIL: spam2.hygon.cn x9FA8HvJ025917
+X-DNSRBL: 
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Oh come on, you sent that patch only a week ago and v2 had a so obvious
-mistake that my trust in your code quality is now very low.
-
-On 15/10/2019 16:08:27+0800, Jinke Fan wrote:
-> When using following operations:
-> date -s "21190910 19:20:00"
-> hwclock -w
-> to change date from 2019 to 2119 for test, it will fail on Hygon
-> Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
-> platform.
-> 
-> MC146818 driver use function mc146818_set_time() to set register
-> RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-> reset value on Intel platform to 0x7.
-> 
-> While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-> DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-> as reserved.
-> 
-> DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-> register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-> (AltCentury), the CMOS write will be failed on code:
-> CMOS_WRITE(century, acpi_gbl_FADT.century).
-> 
-> Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-> enable AltCentury(0x32) register writing and finally setup century as
-> expected.
-> 
-> Test results on AMD/Hygon machine show that it works as expected.
-> 
-> Reference:
-> https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-> section: 3.13 Real Time Clock (RTC)
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
-> ---
-> 
-> v2->v3:
->   - Make the changes only relevant to AMD/Hygon.
-> 
-> v1->v2:
->   - Fix the compile errors on sparc64/alpha platform.
-> 
->  drivers/rtc/rtc-mc146818-lib.c | 11 ++++++++++-
->  include/linux/mc146818rtc.h    |  6 ++++++
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-> index 2ecd8752b088..70502881785d 100644
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -172,7 +172,16 @@ int mc146818_set_time(struct rtc_time *time)
->  	save_control = CMOS_READ(RTC_CONTROL);
->  	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
->  	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
-> -	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-> +
-> +#ifdef CONFIG_X86
-> +	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-> +	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
-> +		CMOS_WRITE((save_freq_select & (~RTC_DV0)), RTC_FREQ_SELECT);
-> +	else
-> +		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-> +#else
-> +	CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-> +#endif
->  
->  #ifdef CONFIG_MACH_DECSTATION
->  	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
-> diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
-> index 0661af17a758..7066a7bced61 100644
-> --- a/include/linux/mc146818rtc.h
-> +++ b/include/linux/mc146818rtc.h
-> @@ -86,6 +86,12 @@ struct cmos_rtc_board_info {
->     /* 2 values for divider stage reset, others for "testing purposes only" */
->  #  define RTC_DIV_RESET1	0x60
->  #  define RTC_DIV_RESET2	0x70
-> +
-> +#ifdef CONFIG_X86
-> +   /* DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1 on AMD/Hygon platform */
-> +#  define RTC_DV0		0x10
-> +#endif
-> +
->    /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
->  # define RTC_RATE_SELECT 	0x0F
->  
-> -- 
-> 2.17.1
-> 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+T24gMjAxOS8xMC8xNSAxNjoyNywgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IE9oIGNvbWUg
+b24sIHlvdSBzZW50IHRoYXQgcGF0Y2ggb25seSBhIHdlZWsgYWdvIGFuZCB2MiBoYWQgYSBzbyBv
+YnZpb3VzDQo+IG1pc3Rha2UgdGhhdCBteSB0cnVzdCBpbiB5b3VyIGNvZGUgcXVhbGl0eSBpcyBu
+b3cgdmVyeSBsb3cuDQpIaSBBbGV4YW5kcmUsDQoNClRoZSBwYXRjaCB2MyBoYXMgYmVlbiBjb21w
+aWxlZCBmb3Igc3BhcmM2NCBhbmQgYWxwaGEgYXJjaGl0ZWN0dXJlcyB3aXRoOg0KICAtIEdDQ19W
+RVJTSU9OPTcuNC4wIG1ha2UuY3Jvc3MgQVJDSD1zcGFyYzY0DQogIC0gR0NDX1ZFUlNJT049Ny40
+LjAgbWFrZS5jcm9zcyBBUkNIPWFscGhhDQp0aGUgcmVzdWx0IHdhcyBwYXNzZWQuIEFuZCB0ZXN0
+ZWQgb24gSHlnb24gcGxhdGZvcm0sIGl0IHdvcmtlZCB3ZWxsLg0KDQpBcyB5b3VyIGNvbW1lbnQs
+IHRoZSBtb2RpZmljYXRpb24gd2lsbCBiZSBzdHJpY3RseSBsaW1pdGVkIHRvIEFNRCANCkVQWUMo
+MTdoKSBhbmQgSHlnb24gQ1BVIGluIHRoZSBuZXh0IHZlcnNpb24uIEFsc28gSSB3aWxsIGRvIG1v
+cmUgdGVzdHMgDQpvbiB0aGVzZSBwbGF0Zm9ybXMuDQoNCkFueSBtb3JlIHN1Z2dlc3Rpb25zPw0K
+DQotLSANCkJlc3QgUmVnYXJkcywNCkppbmtlIEZhbg==
