@@ -2,72 +2,206 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8867CD72D1
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2019 12:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A443AD75E2
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Oct 2019 14:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727868AbfJOKJH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Oct 2019 06:09:07 -0400
-Received: from spam01.hygon.cn ([110.188.70.11]:19923 "EHLO spam2.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727018AbfJOKJH (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 15 Oct 2019 06:09:07 -0400
-Received: from MK-FE.hygon.cn ([172.23.18.61])
-        by spam2.hygon.cn with ESMTP id x9FA8HvJ025917;
-        Tue, 15 Oct 2019 18:08:17 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex02.Hygon.cn ([172.23.18.12])
-        by MK-FE.hygon.cn with ESMTP id x9FA85iU064248;
-        Tue, 15 Oct 2019 18:08:05 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex02.Hygon.cn
- (172.23.18.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 15 Oct
- 2019 18:08:16 +0800
-Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
- ([172.23.18.10]) with mapi id 15.01.1466.003; Tue, 15 Oct 2019 18:08:16 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        Wen Pu <puwen@hygon.cn>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "kim.phillips@amd.com" <kim.phillips@amd.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND RFC PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon
- platform
-Thread-Topic: [RESEND RFC PATCH v3] rtc: Fix the AltCentury value on AMD/Hygon
- platform
-Thread-Index: AQHVgy/RkjjnHG3zLEyv1IS/Xg7OVqda2DwAgAAcM4A=
-Date:   Tue, 15 Oct 2019 10:08:16 +0000
-Message-ID: <9eceb1b6-bd61-d48f-0bc8-ec5c9de5f25a@hygon.cn>
-References: <20191015080827.11589-1-fanjinke@hygon.cn>
- <20191015082720.GW3125@piout.net>
-In-Reply-To: <20191015082720.GW3125@piout.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.18.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <55A0941C8CBFE54FA3479EAD7AD6CCE6@Hygon.cn>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MAIL: spam2.hygon.cn x9FA8HvJ025917
-X-DNSRBL: 
+        id S1731089AbfJOMKI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Oct 2019 08:10:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58308 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730896AbfJOMKI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 15 Oct 2019 08:10:08 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C7528B3BB;
+        Tue, 15 Oct 2019 12:10:01 +0000 (UTC)
+From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
+To:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v10 5/6] MIPS: SGI-IP27: fix readb/writeb addressing
+Date:   Tue, 15 Oct 2019 14:09:50 +0200
+Message-Id: <20191015120953.2597-6-tbogendoerfer@suse.de>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191015120953.2597-1-tbogendoerfer@suse.de>
+References: <20191015120953.2597-1-tbogendoerfer@suse.de>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-T24gMjAxOS8xMC8xNSAxNjoyNywgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+IE9oIGNvbWUg
-b24sIHlvdSBzZW50IHRoYXQgcGF0Y2ggb25seSBhIHdlZWsgYWdvIGFuZCB2MiBoYWQgYSBzbyBv
-YnZpb3VzDQo+IG1pc3Rha2UgdGhhdCBteSB0cnVzdCBpbiB5b3VyIGNvZGUgcXVhbGl0eSBpcyBu
-b3cgdmVyeSBsb3cuDQpIaSBBbGV4YW5kcmUsDQoNClRoZSBwYXRjaCB2MyBoYXMgYmVlbiBjb21w
-aWxlZCBmb3Igc3BhcmM2NCBhbmQgYWxwaGEgYXJjaGl0ZWN0dXJlcyB3aXRoOg0KICAtIEdDQ19W
-RVJTSU9OPTcuNC4wIG1ha2UuY3Jvc3MgQVJDSD1zcGFyYzY0DQogIC0gR0NDX1ZFUlNJT049Ny40
-LjAgbWFrZS5jcm9zcyBBUkNIPWFscGhhDQp0aGUgcmVzdWx0IHdhcyBwYXNzZWQuIEFuZCB0ZXN0
-ZWQgb24gSHlnb24gcGxhdGZvcm0sIGl0IHdvcmtlZCB3ZWxsLg0KDQpBcyB5b3VyIGNvbW1lbnQs
-IHRoZSBtb2RpZmljYXRpb24gd2lsbCBiZSBzdHJpY3RseSBsaW1pdGVkIHRvIEFNRCANCkVQWUMo
-MTdoKSBhbmQgSHlnb24gQ1BVIGluIHRoZSBuZXh0IHZlcnNpb24uIEFsc28gSSB3aWxsIGRvIG1v
-cmUgdGVzdHMgDQpvbiB0aGVzZSBwbGF0Zm9ybXMuDQoNCkFueSBtb3JlIHN1Z2dlc3Rpb25zPw0K
-DQotLSANCkJlc3QgUmVnYXJkcywNCkppbmtlIEZhbg==
+Our chosen byte swapping, which is what firmware already uses, is to
+do readl/writel by normal lw/sw intructions (data invariance). This
+also means we need to mangle addresses for u8 and u16 accesses. The
+mangling for 16bit has been done aready, but 8bit one was missing.
+Correcting this causes different addresses for accesses to the
+SuperIO and local bus of the IOC3 chip. This is fixed by changing
+byte order in ioc3 and m48rtc_rtc structs.
+
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+---
+ arch/mips/include/asm/mach-ip27/mangle-port.h |  4 +--
+ arch/mips/include/asm/sn/ioc3.h               | 38 +++++++++++++--------------
+ drivers/rtc/rtc-m48t35.c                      | 11 ++++++++
+ drivers/tty/serial/8250/8250_ioc3.c           |  4 +--
+ 4 files changed, 34 insertions(+), 23 deletions(-)
+
+diff --git a/arch/mips/include/asm/mach-ip27/mangle-port.h b/arch/mips/include/asm/mach-ip27/mangle-port.h
+index f6e4912ea062..27c56efa519f 100644
+--- a/arch/mips/include/asm/mach-ip27/mangle-port.h
++++ b/arch/mips/include/asm/mach-ip27/mangle-port.h
+@@ -8,7 +8,7 @@
+ #ifndef __ASM_MACH_IP27_MANGLE_PORT_H
+ #define __ASM_MACH_IP27_MANGLE_PORT_H
+ 
+-#define __swizzle_addr_b(port)	(port)
++#define __swizzle_addr_b(port)	((port) ^ 3)
+ #define __swizzle_addr_w(port)	((port) ^ 2)
+ #define __swizzle_addr_l(port)	(port)
+ #define __swizzle_addr_q(port)	(port)
+@@ -20,6 +20,6 @@
+ # define ioswabl(a, x)		(x)
+ # define __mem_ioswabl(a, x)	cpu_to_le32(x)
+ # define ioswabq(a, x)		(x)
+-# define __mem_ioswabq(a, x)	cpu_to_le32(x)
++# define __mem_ioswabq(a, x)	cpu_to_le64(x)
+ 
+ #endif /* __ASM_MACH_IP27_MANGLE_PORT_H */
+diff --git a/arch/mips/include/asm/sn/ioc3.h b/arch/mips/include/asm/sn/ioc3.h
+index 78ef760ddde4..3865d3225780 100644
+--- a/arch/mips/include/asm/sn/ioc3.h
++++ b/arch/mips/include/asm/sn/ioc3.h
+@@ -21,50 +21,50 @@ struct ioc3_serialregs {
+ 
+ /* SUPERIO uart register map */
+ struct ioc3_uartregs {
++	u8	iu_lcr;
+ 	union {
+-		u8	iu_rbr;	/* read only, DLAB == 0 */
+-		u8	iu_thr;	/* write only, DLAB == 0 */
+-		u8	iu_dll;	/* DLAB == 1 */
++		u8	iu_iir;	/* read only */
++		u8	iu_fcr;	/* write only */
+ 	};
+ 	union {
+ 		u8	iu_ier;	/* DLAB == 0 */
+ 		u8	iu_dlm;	/* DLAB == 1 */
+ 	};
+ 	union {
+-		u8	iu_iir;	/* read only */
+-		u8	iu_fcr;	/* write only */
++		u8	iu_rbr;	/* read only, DLAB == 0 */
++		u8	iu_thr;	/* write only, DLAB == 0 */
++		u8	iu_dll;	/* DLAB == 1 */
+ 	};
+-	u8	iu_lcr;
+-	u8	iu_mcr;
+-	u8	iu_lsr;
+-	u8	iu_msr;
+ 	u8	iu_scr;
++	u8	iu_msr;
++	u8	iu_lsr;
++	u8	iu_mcr;
+ };
+ 
+ struct ioc3_sioregs {
+ 	u8	fill[0x141];	/* starts at 0x141 */
+ 
+-	u8	uartc;
+ 	u8	kbdcg;
++	u8	uartc;
+ 
+-	u8	fill0[0x150 - 0x142 - 1];
++	u8	fill0[0x151 - 0x142 - 1];
+ 
+-	u8	pp_data;
+-	u8	pp_dsr;
+ 	u8	pp_dcr;
++	u8	pp_dsr;
++	u8	pp_data;
+ 
+-	u8	fill1[0x158 - 0x152 - 1];
++	u8	fill1[0x159 - 0x153 - 1];
+ 
+-	u8	pp_fifa;
+-	u8	pp_cfgb;
+ 	u8	pp_ecr;
++	u8	pp_cfgb;
++	u8	pp_fifa;
+ 
+-	u8	fill2[0x168 - 0x15a - 1];
++	u8	fill2[0x16a - 0x15b - 1];
+ 
+-	u8	rtcad;
+ 	u8	rtcdat;
++	u8	rtcad;
+ 
+-	u8	fill3[0x170 - 0x169 - 1];
++	u8	fill3[0x170 - 0x16b - 1];
+ 
+ 	struct ioc3_uartregs	uartb;	/* 0x20170  */
+ 	struct ioc3_uartregs	uarta;	/* 0x20178  */
+diff --git a/drivers/rtc/rtc-m48t35.c b/drivers/rtc/rtc-m48t35.c
+index d3a75d447fce..e8194f1f01a8 100644
+--- a/drivers/rtc/rtc-m48t35.c
++++ b/drivers/rtc/rtc-m48t35.c
+@@ -20,6 +20,16 @@
+ 
+ struct m48t35_rtc {
+ 	u8	pad[0x7ff8];    /* starts at 0x7ff8 */
++#ifdef CONFIG_SGI_IP27
++	u8	hour;
++	u8	min;
++	u8	sec;
++	u8	control;
++	u8	year;
++	u8	month;
++	u8	date;
++	u8	day;
++#else
+ 	u8	control;
+ 	u8	sec;
+ 	u8	min;
+@@ -28,6 +38,7 @@ struct m48t35_rtc {
+ 	u8	date;
+ 	u8	month;
+ 	u8	year;
++#endif
+ };
+ 
+ #define M48T35_RTC_SET		0x80
+diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
+index 2be6ed2967e0..4c405f1b9c67 100644
+--- a/drivers/tty/serial/8250/8250_ioc3.c
++++ b/drivers/tty/serial/8250/8250_ioc3.c
+@@ -23,12 +23,12 @@ struct ioc3_8250_data {
+ 
+ static unsigned int ioc3_serial_in(struct uart_port *p, int offset)
+ {
+-	return readb(p->membase + offset);
++	return readb(p->membase + (offset ^ 3));
+ }
+ 
+ static void ioc3_serial_out(struct uart_port *p, int offset, int value)
+ {
+-	writeb(value, p->membase + offset);
++	writeb(value, p->membase + (offset ^ 3));
+ }
+ 
+ static int serial8250_ioc3_probe(struct platform_device *pdev)
+-- 
+2.16.4
+
