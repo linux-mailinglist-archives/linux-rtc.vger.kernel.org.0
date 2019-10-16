@@ -2,80 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E10BD98A8
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2019 19:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB525D9B0B
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2019 22:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391158AbfJPRnx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Wed, 16 Oct 2019 13:43:53 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49672 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390723AbfJPRnw (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 16 Oct 2019 13:43:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 687E2B5FD;
-        Wed, 16 Oct 2019 17:23:22 +0000 (UTC)
-Date:   Wed, 16 Oct 2019 19:23:21 +0200
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v10 4/6] mfd: ioc3: Add driver for SGI IOC3 chip
-Message-Id: <20191016192321.c1ef8ea7c2533d6c8e1b98a2@suse.de>
-In-Reply-To: <20191015122349.612a230b@cakuba.netronome.com>
-References: <20191015120953.2597-1-tbogendoerfer@suse.de>
-        <20191015120953.2597-5-tbogendoerfer@suse.de>
-        <20191015122349.612a230b@cakuba.netronome.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1733266AbfJPUIw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Oct 2019 16:08:52 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:45603 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731404AbfJPUIw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Oct 2019 16:08:52 -0400
+X-Originating-IP: 86.202.229.42
+Received: from localhost (lfbn-lyo-1-146-42.w86-202.abo.wanadoo.fr [86.202.229.42])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 185001BF204;
+        Wed, 16 Oct 2019 20:08:50 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 1/2] rtc: s35390a: convert to devm_rtc_allocate_device
+Date:   Wed, 16 Oct 2019 22:08:47 +0200
+Message-Id: <20191016200848.30246-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 15 Oct 2019 12:23:49 -0700
-Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
+This allows further improvement of the driver and removes the need to
+forward declare s35390a_driver.
 
-> On Tue, 15 Oct 2019 14:09:49 +0200, Thomas Bogendoerfer wrote:
-> > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
-> > It also supports connecting a SuperIO chip for serial and parallel
-> > interfaces. IOC3 is used inside various SGI systemboards and add-on
-> > cards with different equipped external interfaces.
-> > 
-> > Support for ethernet and serial interfaces were implemented inside
-> > the network driver. This patchset moves out the not network related
-> > parts to a new MFD driver, which takes care of card detection,
-> > setup of platform devices and interrupt distribution for the subdevices.
-> > 
-> > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> > 
-> > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
-> 
-> Looks good, I think.
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-s35390a.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-thank you. 
-
-Now how do I get an Acked-by for the network part to merge it via
-the MIPS tree ?
-
-Thomas.
-
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index da34cfd70f95..66684b80028f 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -423,8 +423,6 @@ static const struct rtc_class_ops s35390a_rtc_ops = {
+ 	.ioctl          = s35390a_rtc_ioctl,
+ };
+ 
+-static struct i2c_driver s35390a_driver;
+-
+ static int s35390a_probe(struct i2c_client *client,
+ 			 const struct i2c_device_id *id)
+ {
+@@ -456,6 +454,10 @@ static int s35390a_probe(struct i2c_client *client,
+ 		}
+ 	}
+ 
++	s35390a->rtc = devm_rtc_allocate_device(dev);
++	if (IS_ERR(s35390a->rtc))
++		return PTR_ERR(s35390a->rtc);
++
+ 	err_read = s35390a_read_status(s35390a, &status1);
+ 	if (err_read < 0) {
+ 		dev_err(dev, "error resetting chip\n");
+@@ -485,11 +487,7 @@ static int s35390a_probe(struct i2c_client *client,
+ 
+ 	device_set_wakeup_capable(dev, 1);
+ 
+-	s35390a->rtc = devm_rtc_device_register(dev, s35390a_driver.driver.name,
+-						&s35390a_rtc_ops, THIS_MODULE);
+-
+-	if (IS_ERR(s35390a->rtc))
+-		return PTR_ERR(s35390a->rtc);
++	s35390a->rtc->ops = &s35390a_rtc_ops;
+ 
+ 	/* supports per-minute alarms only, therefore set uie_unsupported */
+ 	s35390a->rtc->uie_unsupported = 1;
+@@ -497,7 +495,7 @@ static int s35390a_probe(struct i2c_client *client,
+ 	if (status1 & S35390A_FLAG_INT2)
+ 		rtc_update_irq(s35390a->rtc, 1, RTC_AF);
+ 
+-	return 0;
++	return rtc_register_device(s35390a->rtc);
+ }
+ 
+ static struct i2c_driver s35390a_driver = {
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 36809 (AG Nürnberg)
-Geschäftsführer: Felix Imendörffer
+2.21.0
+
