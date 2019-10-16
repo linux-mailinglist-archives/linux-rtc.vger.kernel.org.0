@@ -2,32 +2,29 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E625D9B40
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2019 22:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376EAD9B5A
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Oct 2019 22:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394715AbfJPUOT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Oct 2019 16:14:19 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:52353 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394703AbfJPUOS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Oct 2019 16:14:18 -0400
+        id S2389858AbfJPUQc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Oct 2019 16:16:32 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43561 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732607AbfJPUQc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Oct 2019 16:16:32 -0400
+X-Originating-IP: 86.202.229.42
 Received: from localhost (lfbn-lyo-1-146-42.w86-202.abo.wanadoo.fr [86.202.229.42])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 1E25B240006;
-        Wed, 16 Oct 2019 20:14:17 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 66BF31C0003;
+        Wed, 16 Oct 2019 20:16:29 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
-Cc:     Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org,
+Cc:     Tony Prisk <linux@prisktech.co.nz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 2/2] rtc: cros-ec: let the core handle rtc range
-Date:   Wed, 16 Oct 2019 22:14:14 +0200
-Message-Id: <20191016201414.30934-2-alexandre.belloni@bootlin.com>
+Subject: [PATCH 1/5] rtc: add timestamp for end of 2199
+Date:   Wed, 16 Oct 2019 22:16:22 +0200
+Message-Id: <20191016201626.31309-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191016201414.30934-1-alexandre.belloni@bootlin.com>
-References: <20191016201414.30934-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -35,51 +32,25 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Let the rtc core check the date/time against the RTC range.
+Some RTCs handle date up to 2199.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-cros-ec.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ include/linux/rtc.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index da209d00731e..d043d30f05bc 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -107,11 +107,7 @@ static int cros_ec_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	struct cros_ec_rtc *cros_ec_rtc = dev_get_drvdata(dev);
- 	struct cros_ec_device *cros_ec = cros_ec_rtc->cros_ec;
- 	int ret;
--	time64_t time;
--
--	time = rtc_tm_to_time64(tm);
--	if (time < 0 || time > U32_MAX)
--		return -EINVAL;
-+	time64_t time = rtc_tm_to_time64(tm);
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 2680f9b2b119..e86a9f307b82 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -165,6 +165,7 @@ struct rtc_device {
+ #define RTC_TIMESTAMP_BEGIN_2000	946684800LL /* 2000-01-01 00:00:00 */
+ #define RTC_TIMESTAMP_END_2063		2966371199LL /* 2063-12-31 23:59:59 */
+ #define RTC_TIMESTAMP_END_2099		4102444799LL /* 2099-12-31 23:59:59 */
++#define RTC_TIMESTAMP_END_2199		7258118399LL /* 2199-12-31 23:59:59 */
+ #define RTC_TIMESTAMP_END_9999		253402300799LL /* 9999-12-31 23:59:59 */
  
- 	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_VALUE, (u32)time);
- 	if (ret < 0) {
-@@ -348,12 +344,17 @@ static int cros_ec_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	cros_ec_rtc->rtc = devm_rtc_device_register(&pdev->dev, DRV_NAME,
--						    &cros_ec_rtc_ops,
--						    THIS_MODULE);
-+	cros_ec_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(cros_ec_rtc->rtc))
- 		return PTR_ERR(cros_ec_rtc->rtc);
- 
-+	cros_ec_rtc->rtc->ops = &cros_ec_rtc_ops;
-+	cros_ec_rtc->rtc->range_max = U32_MAX;
-+
-+	ret = rtc_register_device(cros_ec_rtc->rtc);
-+	if (ret)
-+		return ret;
-+
- 	/* Get RTC events from the EC. */
- 	cros_ec_rtc->notifier.notifier_call = cros_ec_rtc_event;
- 	ret = blocking_notifier_chain_register(&cros_ec->event_notifier,
+ extern struct rtc_device *devm_rtc_device_register(struct device *dev,
 -- 
 2.21.0
 
