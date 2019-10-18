@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AC6DD2D6
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2019 00:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA1CDD2C5
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2019 00:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387696AbfJRWIV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Oct 2019 18:08:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40740 "EHLO mail.kernel.org"
+        id S2389171AbfJRWOG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Oct 2019 18:14:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42186 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387671AbfJRWIT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:08:19 -0400
+        id S2389020AbfJRWJg (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:09:36 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B4AB205F4;
-        Fri, 18 Oct 2019 22:08:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D0E1222C2;
+        Fri, 18 Oct 2019 22:09:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436499;
+        s=default; t=1571436575;
         bh=Z4Vr1KaooQILrkTf+O1jZFGQD7EZq+zGisiVEVxIL2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ml7D9Tkhmi+TTFYxHgGvzoyS3P2l3J+Sx+0QQ2LjPW3DGldWxPqQ7iJpmlusqwWqp
-         0vVfBaW/bi4ecnb9I8/S3Iu7Lc9pTvTpUuZqPPbXnvtqiI2Oti56GmtG763eFzxsFL
-         f9TA4OC/mBDZVsmqEhX8VpjRY5TVXyPyzImT8DKU=
+        b=hZtv6ykupRIlGI7s6t3v3J+m+r20e9d+V0OXVUiaJE2b1Uu6I/jRW39MzG8mROBMB
+         5AclyWBJWDgwbr84LMv7l/Z2axTOSUNQ5qDu65dIPVjSLG19xIVZ8ODMzp+k3uhxr8
+         APQAKcIvJbGQH2et56Qy87k+om0YT/TmyBlllJhU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Sam Ravnborg <sam@ravnborg.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/56] rtc: pcf8523: set xtal load capacitance from DT
-Date:   Fri, 18 Oct 2019 18:07:09 -0400
-Message-Id: <20191018220753.10002-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 07/29] rtc: pcf8523: set xtal load capacitance from DT
+Date:   Fri, 18 Oct 2019 18:08:58 -0400
+Message-Id: <20191018220920.10545-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220753.10002-1-sashal@kernel.org>
-References: <20191018220753.10002-1-sashal@kernel.org>
+In-Reply-To: <20191018220920.10545-1-sashal@kernel.org>
+References: <20191018220920.10545-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
