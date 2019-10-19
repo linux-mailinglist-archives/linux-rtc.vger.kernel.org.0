@@ -2,27 +2,26 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8869FDDAF5
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2019 22:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C790DDB08
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Oct 2019 22:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbfJSUtq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 19 Oct 2019 16:49:46 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:48895 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbfJSUtq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Oct 2019 16:49:46 -0400
-X-Originating-IP: 86.202.229.42
+        id S1726541AbfJSUuM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 19 Oct 2019 16:50:12 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:56831 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726146AbfJSUtr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Oct 2019 16:49:47 -0400
 Received: from localhost (lfbn-lyo-1-146-42.w86-202.abo.wanadoo.fr [86.202.229.42])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id B727F240008;
-        Sat, 19 Oct 2019 20:49:44 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 29F64240003;
+        Sat, 19 Oct 2019 20:49:45 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 3/9] rtc: ds1343: use burst write to set time
-Date:   Sat, 19 Oct 2019 22:49:35 +0200
-Message-Id: <20191019204941.6203-3-alexandre.belloni@bootlin.com>
+Subject: [PATCH 4/9] rtc: ds1343: use rtc_add_group
+Date:   Sat, 19 Oct 2019 22:49:36 +0200
+Message-Id: <20191019204941.6203-4-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20191019204941.6203-1-alexandre.belloni@bootlin.com>
 References: <20191019204941.6203-1-alexandre.belloni@bootlin.com>
@@ -33,77 +32,115 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-To avoid possible race condition, use regmap_bulk_write to write all the
-date/time registers at once instead of sequentially.
+Use rtc_add_group to add the sysfs group in a race free manner.
+This has the side effect of moving the files to their proper location.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-ds1343.c | 52 ++++++++++------------------------------
- 1 file changed, 12 insertions(+), 40 deletions(-)
+ drivers/rtc/rtc-ds1343.c | 47 ++++++++++++++--------------------------
+ 1 file changed, 16 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/rtc/rtc-ds1343.c b/drivers/rtc/rtc-ds1343.c
-index 9d7d571e722b..8a4f1fbb57fd 100644
+index 8a4f1fbb57fd..ec8d1e82d7ac 100644
 --- a/drivers/rtc/rtc-ds1343.c
 +++ b/drivers/rtc/rtc-ds1343.c
-@@ -236,46 +236,18 @@ static int ds1343_read_time(struct device *dev, struct rtc_time *dt)
- static int ds1343_set_time(struct device *dev, struct rtc_time *dt)
+@@ -90,7 +90,7 @@ struct ds1343_priv {
+ static ssize_t ds1343_show_glitchfilter(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
  {
- 	struct ds1343_priv *priv = dev_get_drvdata(dev);
--	int res;
+-	struct ds1343_priv *priv = dev_get_drvdata(dev);
++	struct ds1343_priv *priv = dev_get_drvdata(dev->parent);
+ 	int glitch_filt_status, data;
+ 
+ 	regmap_read(priv->map, DS1343_CONTROL_REG, &data);
+@@ -107,7 +107,7 @@ static ssize_t ds1343_store_glitchfilter(struct device *dev,
+ 					struct device_attribute *attr,
+ 					const char *buf, size_t count)
+ {
+-	struct ds1343_priv *priv = dev_get_drvdata(dev);
++	struct ds1343_priv *priv = dev_get_drvdata(dev->parent);
+ 	int data;
+ 
+ 	regmap_read(priv->map, DS1343_CONTROL_REG, &data);
+@@ -148,7 +148,7 @@ static int ds1343_nvram_read(void *priv, unsigned int off, void *val,
+ static ssize_t ds1343_show_tricklecharger(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+-	struct ds1343_priv *priv = dev_get_drvdata(dev);
++	struct ds1343_priv *priv = dev_get_drvdata(dev->parent);
+ 	int data;
+ 	char *diodes = "disabled", *resistors = " ";
+ 
+@@ -189,28 +189,15 @@ static ssize_t ds1343_show_tricklecharger(struct device *dev,
+ 
+ static DEVICE_ATTR(trickle_charger, S_IRUGO, ds1343_show_tricklecharger, NULL);
+ 
+-static int ds1343_sysfs_register(struct device *dev)
+-{
+-	int err;
 -
--	res = regmap_write(priv->map, DS1343_SECONDS_REG,
--				bin2bcd(dt->tm_sec));
--	if (res)
--		return res;
+-	err = device_create_file(dev, &dev_attr_glitch_filter);
+-	if (err)
+-		return err;
 -
--	res = regmap_write(priv->map, DS1343_MINUTES_REG,
--				bin2bcd(dt->tm_min));
--	if (res)
--		return res;
+-	err = device_create_file(dev, &dev_attr_trickle_charger);
+-	if (!err)
+-		return 0;
 -
--	res = regmap_write(priv->map, DS1343_HOURS_REG,
--				bin2bcd(dt->tm_hour) & 0x3F);
--	if (res)
--		return res;
+-	device_remove_file(dev, &dev_attr_glitch_filter);
 -
--	res = regmap_write(priv->map, DS1343_DAY_REG,
--				bin2bcd(dt->tm_wday + 1));
--	if (res)
--		return res;
--
--	res = regmap_write(priv->map, DS1343_DATE_REG,
--				bin2bcd(dt->tm_mday));
--	if (res)
--		return res;
--
--	res = regmap_write(priv->map, DS1343_MONTH_REG,
--				bin2bcd(dt->tm_mon + 1));
--	if (res)
--		return res;
--
--	dt->tm_year %= 100;
--
--	res = regmap_write(priv->map, DS1343_YEAR_REG,
--				bin2bcd(dt->tm_year));
--	if (res)
--		return res;
--
--	return 0;
-+	u8 buf[7];
+-	return err;
+-}
++static struct attribute *ds1343_attrs[] = {
++	&dev_attr_glitch_filter.attr,
++	&dev_attr_trickle_charger.attr,
++	NULL
++};
+ 
+-static void ds1343_sysfs_unregister(struct device *dev)
+-{
+-	device_remove_file(dev, &dev_attr_glitch_filter);
+-	device_remove_file(dev, &dev_attr_trickle_charger);
+-}
++static const struct attribute_group ds1343_attr_group = {
++	.attrs  = ds1343_attrs,
++};
+ 
+ static int ds1343_read_time(struct device *dev, struct rtc_time *dt)
+ {
+@@ -474,6 +461,11 @@ static int ds1343_probe(struct spi_device *spi)
+ 	priv->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	priv->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 
++	res = rtc_add_group(priv->rtc, &ds1343_attr_group);
++	if (res)
++		dev_err(&spi->dev,
++			"unable to create sysfs entries for rtc ds1343\n");
 +
-+	buf[0] = bin2bcd(dt->tm_sec);
-+	buf[1] = bin2bcd(dt->tm_min);
-+	buf[2] = bin2bcd(dt->tm_hour) & 0x3F;
-+	buf[3] = bin2bcd(dt->tm_wday + 1);
-+	buf[4] = bin2bcd(dt->tm_mday);
-+	buf[5] = bin2bcd(dt->tm_mon + 1);
-+	buf[6] = bin2bcd(dt->tm_year - 100);
-+
-+	return regmap_bulk_write(priv->map, DS1343_SECONDS_REG,
-+				 buf, sizeof(buf));
+ 	res = rtc_register_device(priv->rtc);
+ 	if (res)
+ 		return res;
+@@ -497,11 +489,6 @@ static int ds1343_probe(struct spi_device *spi)
+ 		}
+ 	}
+ 
+-	res = ds1343_sysfs_register(&spi->dev);
+-	if (res)
+-		dev_err(&spi->dev,
+-			"unable to create sysfs entries for rtc ds1343\n");
+-
+ 	return 0;
  }
  
- static int ds1343_update_alarm(struct device *dev)
+@@ -521,8 +508,6 @@ static int ds1343_remove(struct spi_device *spi)
+ 
+ 	spi_set_drvdata(spi, NULL);
+ 
+-	ds1343_sysfs_unregister(&spi->dev);
+-
+ 	return 0;
+ }
+ 
 -- 
 2.21.0
 
