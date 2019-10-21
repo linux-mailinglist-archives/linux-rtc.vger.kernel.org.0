@@ -2,576 +2,263 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C16DDE3F9
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 07:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263C6DE529
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 09:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbfJUFlv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Oct 2019 01:41:51 -0400
-Received: from mail.andi.de1.cc ([85.214.55.253]:39302 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727160AbfJUFlr (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 21 Oct 2019 01:41:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=References:In-Reply-To:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=wfg7aYCy6uBCNFeKVZP8RHbxAsqqNzB9YdHZKSVnsjc=; b=cJZTkQD+ZDecptvukmGlzSsw4
-        rC035bTc1meOaM4GUuaIJxTOzy5x/1NOxbnAaX9toErqam4a9rJ7xnSj470A4hr/x5JaUAxokKjAI
-        69bPN4Zm6nSlgMADoV/KRlThpsodDiEqTxSOq2UIU0XgX9O2hjhrevn5wAc3b9lp/i67I=;
-Received: from [77.247.85.102] (helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1iMQRq-0002hc-N7; Mon, 21 Oct 2019 07:41:43 +0200
-Received: from andi by localhost with local (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1iMQRp-0006ot-LG; Mon, 21 Oct 2019 07:41:41 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, phh@phh.me, b.galvani@gmail.com,
-        stefan@agner.ch, letux-kernel@openphoenux.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 5/5] rtc: rtc-rc5t583: add ricoh rc5t619 RTC driver
-Date:   Mon, 21 Oct 2019 07:41:04 +0200
-Message-Id: <20191021054104.26155-6-andreas@kemnade.info>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20191021054104.26155-1-andreas@kemnade.info>
-References: <20191021054104.26155-1-andreas@kemnade.info>
-X-Spam-Score: -1.0 (-)
+        id S1727110AbfJUHPv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Oct 2019 03:15:51 -0400
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:58824 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbfJUHPu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Oct 2019 03:15:50 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Oct 2019 03:15:48 EDT
+X-AuditID: c0a8fbf4-183ff70000001fa6-48-5dad579da846
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 8A.CD.08102.D975DAD5; Mon, 21 Oct 2019 09:00:45 +0200 (CEST)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Mon, 21 Oct 2019 09:00:35 +0200
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>
+CC:     "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>
+Subject: Re: [RFC PATCH 10/13] gpio: bd71828: Initial support for ROHM
+ BD71828 PMIC GPIOs
+Thread-Topic: [RFC PATCH 10/13] gpio: bd71828: Initial support for ROHM
+ BD71828 PMIC GPIOs
+Thread-Index: AQHVhNC0M8qm8vzoP0yjRB+AhWv9dadepj4AgAXpHQA=
+Date:   Mon, 21 Oct 2019 07:00:34 +0000
+Message-ID: <3ae3507649f2e9a66053a99b4a71e29786fc3d34.camel@fi.rohmeurope.com>
+References: <cover.1571302099.git.matti.vaittinen@fi.rohmeurope.com>
+         <f8f8c323d378244afe4e94f48c0a94bb296cbbe0.1571302099.git.matti.vaittinen@fi.rohmeurope.com>
+         <CAMpxmJWXQccY8HsM6MXYBW8KC0U+7iOk+Ve-4nk=cpa=Zuk1cg@mail.gmail.com>
+In-Reply-To: <CAMpxmJWXQccY8HsM6MXYBW8KC0U+7iOk+Ve-4nk=cpa=Zuk1cg@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3BB9148FD5F63A42AE768B1933F528E4@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPJsWRmVeSWpSXmKPExsVyYMXvTbpzw9fGGjw8bW2x5OJVdov2d8vY
+        Lb7MPcViMfXhEzaL+UfOsVp0n97CanF76wYWi/tfjzJafLvSwWQx5c9yJouPPfdYLTbP/8No
+        cXnXHDaLrW/WMVocW32FzWLp9YtMFnOWnmCxuHjK1eLuqaNsFq17j7Bb/Lu2kcVB1GPNvDWM
+        Hu9vtLJ7zFtT7bFz1l12j02rOtk87lzbw+Zx/MZ2Jo/p834yeaxY/Z3d4/MmuQCuKG6bpMSS
+        suDM9Dx9uwTujB29E1kLFuRW/P7cyN7AuCOri5GTQ0LARGL5zBfsILaQwDVGiVsrJLsYuYDs
+        E4wSFzo6mbsYOTjYBGwkum6C1YgIWEu8vX6GCaSGWWAWh8Sm/T1gCWGBaIk5G2+wQBTFSLz5
+        /JgFpFdEwEpi9wIjkDCLgKpE99XNTCA2r4CfxMbbHUwQu14zSnycchusnlMgUKL5riBIDaOA
+        rERnwzuwemYBcYlNz76zQtwsILFkz3lmCFtU4uXjf1BxJYm9Px+CjWEW0JRYv0sfotVBom9/
+        MyuErSgxpfshO8QJghInZz5hmcAoNgvJhlkI3bOQdM9C0j0LSfcCRtZVjBK5iZk56YklqYZ6
+        RamlekX5GblAKjk/dxMjJMF82cH4/5DnIUYmDsZDjJIcTEqivHn6a2KF+JLyUyozEosz4otK
+        c1KLDzFKcDArifDeMVgbK8SbklhZlVqUD5OS5mBREudVfzgxVkgAZFd2ampBahFMVoaDQ0mC
+        1y0MqFGwKDU9tSItM6cEIc3EwQkynEtKpDg1LyW1KLG0JCMelDrii4HJAyTFA7T3RSjI3uKC
+        xFygKETrKUZtjgkv5y5i5jgyd+kiZiGWvPy8VClx3i8gpQIgpRmleXCLXjGKczAqCfMmgtzB
+        A8w1cHNeAa1gAlqxWnI1yIqSRISUVANj6uSe93Icay63tcjmb2f6/zTmStThpqi7U0I0r236
+        yPXmFQ/jrLl6RVdDjJVnSPLI9ynVM68MFTo4Rel6oMvq/Y8Dnim47RSariUxp9g9yPF1/eSa
+        pd++LJTT7W187fP6LLNAi012q6UZ443WmO71k8RMrx8yzsv+XVvBZfTT790C/yyTD4eUWIoz
+        Eg21mIuKEwFwaEHk8gMAAA==
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add an RTC driver for the RTC device on Ricoh MFD rc5t619,
-which is implemented as a variant of rn5t618
-
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/rtc/Kconfig       |  10 +
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-rc5t619.c | 476 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 487 insertions(+)
- create mode 100644 drivers/rtc/rtc-rc5t619.c
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index e72f65b61176..a4dc04c49fec 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -588,6 +588,16 @@ config RTC_DRV_RC5T583
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-rc5t583.
- 
-+config RTC_DRV_RC5T619
-+	tristate "RICOH RC5T619 RTC driver"
-+	depends on MFD_RN5T618
-+	help
-+	  If you say yes here you get support for the RTC on the
-+	  RICOH RC5T619 chips.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-rc5t619.
-+
- config RTC_DRV_S35390A
- 	tristate "Seiko Instruments S-35390A"
- 	select BITREVERSE
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 6b09c21dc1b6..1d0673fd0954 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -136,6 +136,7 @@ obj-$(CONFIG_RTC_DRV_PXA)	+= rtc-pxa.o
- obj-$(CONFIG_RTC_DRV_R7301)	+= rtc-r7301.o
- obj-$(CONFIG_RTC_DRV_R9701)	+= rtc-r9701.o
- obj-$(CONFIG_RTC_DRV_RC5T583)	+= rtc-rc5t583.o
-+obj-$(CONFIG_RTC_DRV_RC5T619)	+= rtc-rc5t619.o
- obj-$(CONFIG_RTC_DRV_RK808)	+= rtc-rk808.o
- obj-$(CONFIG_RTC_DRV_RP5C01)	+= rtc-rp5c01.o
- obj-$(CONFIG_RTC_DRV_RS5C313)	+= rtc-rs5c313.o
-diff --git a/drivers/rtc/rtc-rc5t619.c b/drivers/rtc/rtc-rc5t619.c
-new file mode 100644
-index 000000000000..311788ff0723
---- /dev/null
-+++ b/drivers/rtc/rtc-rc5t619.c
-@@ -0,0 +1,476 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * drivers/rtc/rtc-ricoh619.c
-+ *
-+ * Real time clock driver for RICOH R5T619 power management chip.
-+ *
-+ * Copyright (C) 2019 Andreas Kemnade
-+ *
-+ * Based on code
-+ *  Copyright (C) 2012-2014 RICOH COMPANY,LTD
-+ *
-+ * Based on code
-+ *  Copyright (C) 2011 NVIDIA Corporation
-+ */
-+
-+/* #define debug		1 */
-+/* #define verbose_debug	1 */
-+
-+#include <linux/kernel.h>
-+#include <linux/device.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mfd/rn5t618.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/bcd.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+#include <linux/irqdomain.h>
-+
-+struct rc5t619_rtc {
-+	int			irq;
-+	struct rtc_device	*rtc;
-+	struct rn5t618 *rn5t618;
-+};
-+
-+#define CTRL1_ALARM_ENABLED 0x40
-+#define CTRL1_24HR 0x20
-+#define CTRL1_PERIODIC_MASK 0xf
-+
-+#define CTRL2_PON 0x10
-+#define CTRL2_ALARM_STATUS 0x80
-+#define CTRL2_CTFG 0x4
-+#define CTRL2_CTC 0x1
-+
-+static int rc5t619_rtc_periodic_disable(struct device *dev)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+
-+	/* disable function */
-+	err = regmap_update_bits(rtc->rn5t618->regmap,
-+			RN5T618_RTC_CTRL1, CTRL1_PERIODIC_MASK, 0);
-+	if (err < 0)
-+		return err;
-+
-+	/* clear alarm flag and CTFG */
-+	err = regmap_update_bits(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2,
-+			CTRL2_ALARM_STATUS | CTRL2_CTFG | CTRL2_CTC, 0);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_clk_adjust(struct device *dev, uint8_t clk)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	return regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_ADJUST, clk);
-+}
-+
-+static int rc5t619_rtc_pon_get_clr(struct device *dev, uint8_t *pon_f)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+	unsigned int reg_data;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &reg_data);
-+	if (err < 0)
-+		return err;
-+
-+	if (reg_data & CTRL2_PON) {
-+		*pon_f = 1;
-+		/* clear VDET PON */
-+		reg_data &= ~(CTRL2_PON | CTRL2_CTC | 0x4a);	/* 0101-1011 */
-+		reg_data |= 0x20;	/* 0010-0000 */
-+		err = regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2,
-+					reg_data);
-+	} else {
-+		*pon_f = 0;
-+	}
-+
-+	return err;
-+}
-+
-+/* 0-12hour, 1-24hour */
-+static int rc5t619_rtc_24hour_mode_set(struct device *dev, int mode)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	return regmap_update_bits(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1,
-+			CTRL1_24HR, mode ? CTRL1_24HR : 0);
-+}
-+
-+
-+static int rc5t619_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[7];
-+	int err;
-+	int cent_flag;
-+
-+	err = regmap_bulk_read(rtc->rn5t618->regmap, RN5T618_RTC_SECONDS,
-+				buff, sizeof(buff));
-+	if (err < 0) {
-+		dev_err(dev, "failed to read time: %d\n", err);
-+		return err;
-+	}
-+
-+	if (buff[5] & 0x80)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	buff[5] = buff[5] & 0x1f;		/* bit5 19_20 */
-+
-+	tm->tm_sec  = bcd2bin(buff[0]);
-+	tm->tm_min  = bcd2bin(buff[1]);
-+	tm->tm_hour = bcd2bin(buff[2]);		/* bit5 PA_H20 */
-+	tm->tm_wday = bcd2bin(buff[3]);
-+	tm->tm_mday = bcd2bin(buff[4]);
-+	tm->tm_mon  = bcd2bin(buff[5]) - 1;	/* back to system 0-11 */
-+	tm->tm_year = bcd2bin(buff[6]) + 100 * cent_flag;
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[7];
-+	int err;
-+	int cent_flag;
-+
-+	if (tm->tm_year >= 100)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	tm->tm_mon = tm->tm_mon + 1;
-+	buff[0] = bin2bcd(tm->tm_sec);
-+	buff[1] = bin2bcd(tm->tm_min);
-+	buff[2] = bin2bcd(tm->tm_hour);
-+	buff[3] = bin2bcd(tm->tm_wday);
-+	buff[4] = bin2bcd(tm->tm_mday);
-+	buff[5] = bin2bcd(tm->tm_mon);		/* system set 0-11 */
-+	buff[6] = bin2bcd(tm->tm_year - cent_flag * 100);
-+
-+	if (cent_flag)
-+		buff[5] |= 0x80;
-+
-+	err = regmap_bulk_write(rtc->rn5t618->regmap, RN5T618_RTC_SECONDS,
-+				buff, sizeof(buff));
-+	if (err < 0) {
-+		dev_err(dev, "failed to program new time: %d\n", err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_alarm_is_enabled(struct device *dev,  uint8_t *enabled)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+	unsigned int reg_data;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &reg_data);
-+	if (err) {
-+		dev_err(dev, "read RTC_CTRL1 error %d\n", err);
-+		*enabled = 0;
-+	} else {
-+		if (reg_data & CTRL1_ALARM_ENABLED)
-+			*enabled = 1;
-+		else
-+			*enabled = 0;
-+	}
-+
-+	return err;
-+}
-+
-+/* 0-disable, 1-enable */
-+static int rc5t619_rtc_alarm_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+
-+	err = regmap_update_bits(rtc->rn5t618->regmap,
-+			RN5T618_RTC_CTRL1,
-+			CTRL1_ALARM_ENABLED,
-+			enabled ? CTRL1_ALARM_ENABLED : 0);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[6];
-+	unsigned int buff_cent;
-+	int err;
-+	int cent_flag;
-+	unsigned int enabled_flag;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_MONTH, &buff_cent);
-+	if (err < 0) {
-+		dev_err(dev, "failed to read time: %d\n", err);
-+		return err;
-+	}
-+
-+	if (buff_cent & 0x80)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	err = regmap_bulk_read(rtc->rn5t618->regmap, RN5T618_RTC_ALARM_Y_SEC,
-+				buff, sizeof(buff));
-+	if (err)
-+		return err;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1,
-+				&enabled_flag);
-+	if (err)
-+		return err;
-+
-+	if (enabled_flag & CTRL1_ALARM_ENABLED)
-+		enabled_flag = 1;
-+	else
-+		enabled_flag = 0;
-+
-+
-+	buff[3] = buff[3] & 0x3f;
-+
-+	alrm->time.tm_sec  = bcd2bin(buff[0]);
-+	alrm->time.tm_min  = bcd2bin(buff[1]);
-+	alrm->time.tm_hour = bcd2bin(buff[2]);
-+	alrm->time.tm_mday = bcd2bin(buff[3]);
-+	alrm->time.tm_mon  = bcd2bin(buff[4]) - 1;
-+	alrm->time.tm_year = bcd2bin(buff[5]) + 100 * cent_flag;
-+	alrm->enabled = enabled_flag;
-+	dev_dbg(dev, "read alarm: %d/%d/%d %d:%d:%d\n",
-+		(alrm->time.tm_mon), alrm->time.tm_mday, alrm->time.tm_year,
-+		 alrm->time.tm_hour, alrm->time.tm_min, alrm->time.tm_sec);
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[6];
-+	int err;
-+	int cent_flag;
-+
-+	err = 0;
-+	rc5t619_rtc_alarm_enable(dev, 0);
-+	if (rtc->irq == -1)
-+		return -EIO;
-+
-+	if (alrm->enabled == 0)
-+		return 0;
-+
-+	if (alrm->time.tm_year >= 100)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	alrm->time.tm_mon += 1;
-+	buff[0] = bin2bcd(alrm->time.tm_sec);
-+	buff[1] = bin2bcd(alrm->time.tm_min);
-+	buff[2] = bin2bcd(alrm->time.tm_hour);
-+	buff[3] = bin2bcd(alrm->time.tm_mday);
-+	buff[4] = bin2bcd(alrm->time.tm_mon);
-+	buff[5] = bin2bcd(alrm->time.tm_year - 100 * cent_flag);
-+	buff[3] |= 0x80;	/* set DAL_EXT */
-+
-+	err = regmap_bulk_write(rtc->rn5t618->regmap, RN5T618_RTC_ALARM_Y_SEC,
-+				buff, sizeof(buff));
-+	if (err) {
-+		dev_err(dev, "unable to set alarm: %d\n", err);
-+		return -EBUSY;
-+	}
-+
-+	rc5t619_rtc_alarm_enable(dev, alrm->enabled);
-+
-+	return 0;
-+}
-+
-+static const struct rtc_class_ops rc5t619_rtc_ops = {
-+	.read_time	= rc5t619_rtc_read_time,
-+	.set_time	= rc5t619_rtc_set_time,
-+	.set_alarm	= rc5t619_rtc_set_alarm,
-+	.read_alarm	= rc5t619_rtc_read_alarm,
-+	.alarm_irq_enable = rc5t619_rtc_alarm_enable,
-+};
-+
-+static int rc5t619_rtc_alarm_flag_clr(struct device *dev)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	/* clear alarm-D status bits.*/
-+	return regmap_update_bits(rtc->rn5t618->regmap,
-+				RN5T618_RTC_CTRL2,
-+				CTRL2_ALARM_STATUS | CTRL2_CTC, 0);
-+}
-+
-+static irqreturn_t rc5t619_rtc_irq(int irq, void *data)
-+{
-+	struct device *dev = data;
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	rc5t619_rtc_alarm_flag_clr(dev);
-+
-+	rtc_update_irq(rtc->rtc, 1, RTC_IRQF | RTC_AF);
-+	return IRQ_HANDLED;
-+}
-+
-+
-+static int rc5t619_rtc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rn5t618 *rn5t618 = dev_get_drvdata(pdev->dev.parent);
-+	struct rc5t619_rtc *rtc;
-+	uint8_t pon_flag, alarm_flag;
-+	int err;
-+
-+	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
-+	if (IS_ERR(rtc)) {
-+		err = PTR_ERR(rtc);
-+		dev_err(&pdev->dev, "no enough memory for rc5t619_rtc using\n");
-+		return -ENOMEM;
-+	}
-+
-+	rtc->rn5t618 = rn5t618;
-+
-+	dev_set_drvdata(dev, rtc);
-+	rtc->irq = -1;
-+
-+	if (rn5t618->irq_data)
-+		rtc->irq = regmap_irq_get_virq(rn5t618->irq_data,
-+				RN5T618_IRQ_RTC);
-+
-+	if (rtc->irq  < 0) {
-+		dev_err(dev, "no irq specified, wakeup is disabled\n");
-+		rtc->irq = -1;
-+	}
-+
-+	/* get interrupt flag */
-+	err = rc5t619_rtc_alarm_is_enabled(dev, &alarm_flag);
-+	if (err)
-+		return err;
-+
-+	/* get PON flag */
-+	err = rc5t619_rtc_pon_get_clr(&pdev->dev, &pon_flag);
-+	if (err) {
-+		dev_err(&pdev->dev, "get PON flag error: %d\n", err);
-+		return err;
-+	}
-+
-+	/* using 24h-mode */
-+	err = rc5t619_rtc_24hour_mode_set(&pdev->dev, 1);
-+
-+	/* disable rtc periodic function */
-+	err = rc5t619_rtc_periodic_disable(&pdev->dev);
-+	if (err) {
-+		dev_err(&pdev->dev, "disable rtc periodic int: %d\n", err);
-+		return err;
-+	}
-+
-+	/* clearing RTC Adjust register */
-+	err = rc5t619_rtc_clk_adjust(&pdev->dev, 0);
-+	if (err) {
-+		dev_err(&pdev->dev, "unable to program RTC_ADJUST: %d\n", err);
-+		return err;
-+	}
-+
-+	/* disable interrupt */
-+	err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+	if (err) {
-+		dev_err(&pdev->dev, "disable alarm interrupt: %d\n", err);
-+		return err;
-+	}
-+
-+	if (pon_flag) {
-+		alarm_flag = 0;
-+		err = rc5t619_rtc_alarm_flag_clr(&pdev->dev);
-+		if (err) {
-+			dev_err(&pdev->dev,
-+				"pon=1 clear alarm flag error: %d\n", err);
-+			return err;
-+		}
-+	}
-+
-+	device_init_wakeup(&pdev->dev, 1);
-+
-+	rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
-+				       &rc5t619_rtc_ops, THIS_MODULE);
-+
-+	if (IS_ERR(rtc->rtc)) {
-+		err = PTR_ERR(rtc->rtc);
-+		dev_err(dev, "RTC device register: err %d\n", err);
-+		return err;
-+	}
-+
-+	/* set interrupt and enable it */
-+	if (rtc->irq != -1) {
-+		err = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-+						rc5t619_rtc_irq,
-+						IRQF_ONESHOT,
-+						"rtc-rc5t619",
-+						&pdev->dev);
-+		if (err < 0) {
-+			dev_err(&pdev->dev, "request IRQ:%d fail\n", rtc->irq);
-+			rtc->irq = -1;
-+
-+			err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+			if (err)
-+				return err;
-+
-+		} else {
-+			/* enable wake */
-+			enable_irq_wake(rtc->irq);
-+			/* enable alarm_d */
-+			err = rc5t619_rtc_alarm_enable(&pdev->dev, alarm_flag);
-+			if (err) {
-+				dev_err(&pdev->dev, "failed rtc setup\n");
-+				return -EBUSY;
-+			}
-+		}
-+	} else {
-+		/* system don't want to using alarm interrupt, so close it */
-+		err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+		if (err) {
-+			dev_err(&pdev->dev, "disable rtc alarm error\n");
-+			return err;
-+		}
-+
-+		dev_err(&pdev->dev, "ricoh61x interrupt is disabled\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_remove(struct platform_device *pdev)
-+{
-+	rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver rc5t619_rtc_driver = {
-+	.driver	= {
-+		.name	= "rc5t619-rtc",
-+	},
-+	.probe	= rc5t619_rtc_probe,
-+	.remove	= rc5t619_rtc_remove,
-+};
-+
-+module_platform_driver(rc5t619_rtc_driver);
-+MODULE_ALIAS("platform:rc5t619-rtc");
-+MODULE_DESCRIPTION("RICOH RC5T619 RTC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.11.0
-
+SGVsbG8gQmFydG9zeiwNCg0KVGhhbmtzIGZvciByZWFkaW5nIHRoaXMgdGhyb3VnaCEgSSdsbCBy
+ZXdvcmsgdGhpcyBwYXRjaCBkdXJpbmcgdGhpcw0Kd2VlayA6KQ0KDQpPbiBUaHUsIDIwMTktMTAt
+MTcgYXQgMTQ6NDUgKzAyMDAsIEJhcnRvc3ogR29sYXN6ZXdza2kgd3JvdGU6DQo+IGN6dy4sIDE3
+IHBhxbogMjAxOSBvIDExOjUzIE1hdHRpIFZhaXR0aW5lbg0KPiA8bWF0dGkudmFpdHRpbmVuQGZp
+LnJvaG1ldXJvcGUuY29tPiBuYXBpc2HFgihhKToNCj4gPiBST0hNIEJENzE4MjggUE1JQyBjb250
+YWlucyA0IHBpbnMgd2hpY2ggY2FuIGJlIGNvbmZpZ3VyZWQgYnkgT1RQDQo+ID4gdG8gYmUgdXNl
+ZCBmb3IgZ2VuZXJhbCBwdXJwb3Nlcy4gRmlyc3QgMyBjYW4gYmUgdXNlZCBhcyBvdXRwdXRzDQo+
+ID4gYW5kIDQudGggcGluIGNhbiBiZSB1c2VkIGFzIGlucHV0LiBBbGxvdyB0aGVtIHRvIGJlIGNv
+bnRyb2xsZWQNCj4gPiB2aWEgR1BJTyBmcmFtZXdvcmsuDQo+ID4gDQo+ID4gVGhlIGRyaXZlciBh
+c3N1bWVzIGFsbCBvZiB0aGUgcGlucyBhcmUgY29uZmlndXJlZCBhcyBHUElPcyBhbmQNCj4gPiBy
+dXN0cyB0aGF0IHRoZSByZXNlcnZlZCBwaW5zIGluIG90aGVyIE9UUCBjb25maWd1cmF0aW9ucyBh
+cmUNCj4gPiBleGNsdWRlZCBmcm9tIGNvbnRyb2wgdXNpbmcgImdwaW8tcmVzZXJ2ZWQtcmFuZ2Vz
+IiBkZXZpY2UgdHJlZQ0KPiA+IHByb3BlcnR5IChvciBsZWZ0IHVudG91Y2hlZCBieSBHUElPIHVz
+ZXJzKS4NCj4gPiANCj4gPiBUeXBpY2FsIHVzZSBmb3IgNC50aCBwaW4gKGlucHV0KSBpcyB0byB1
+c2UgaXQgYXMgSEFMTCBzZW5zb3INCj4gPiBpbnB1dCBzbyB0aGF0IHRoaXMgcGluIHN0YXRlIGlz
+IHRvZ2dsZWQgd2hlbiBIQUxMIHNlbnNvciBkZXRlY3RzDQo+ID4gTElEIHBvc2l0aW9uIGNoYW5n
+ZSAoZnJvbSBjbG9zZSB0byBvcGVuIG9yIG9wZW4gdG8gY2xvc2UpLiBQTUlDDQo+ID4gSFcgaW1w
+bGVtZW50cyBzb21lIGV4dHJhIGxvZ2ljIHdoaWNoIGFsbG93cyBQTUlDIHRvIHBvd2VyLXVwIHRo
+ZQ0KPiA+IHN5c3RlbSB3aGVuIHRoaXMgcGluIGlzIHRvZ2dsZWQuIFBsZWFzZSBzZWUgdGhlIGRh
+dGEgc2hlZXQgZm9yDQo+ID4gZGV0YWlscyBvZiBHUElPIG9wdGlvbnMgd2hpY2ggY2FuIGJlIHNl
+bGN0ZWQgYnkgT1RQIHNldHRpbmdzLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZh
+aXR0aW5lbiA8bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPg0KPiA+IA0KPiA+ICsr
+KyBiL2RyaXZlcnMvZ3Bpby9ncGlvLWJkNzE4MjguYw0KPiA+IEBAIC0wLDAgKzEsMTYxIEBADQo+
+ID4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKy8vIENvcHlyaWdo
+dCAoQykgMjAxOCBST0hNIFNlbWljb25kdWN0b3JzDQo+ID4gKy8vIGdwaW8tYmQ3MTgyOC5jIFJP
+SE0gQkQ3MTgyOCBncGlvIGRyaXZlcg0KPiANCj4gSSBkb24ndCB0aGluayB0aGUgbmFtZSBvZiB0
+aGUgc291cmNlIGZpbGUgaXMgbmVlZGVkIGhlcmUuDQoNCkkgQWdyZWUuDQoNCj4gDQo+ID4gKw0K
+PiA+ICsjaW5jbHVkZSA8bGludXgvZ3Bpby9kcml2ZXIuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4
+L21mZC9yb2htLWJkNzE4MjguaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L21vZHVsZS5oPg0KPiA+
+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
+eC9yZWdtYXAuaD4NCj4gPiArDQo+ID4gKyNkZWZpbmUgT1VUIDANCj4gPiArI2RlZmluZSBJTiAx
+DQo+IA0KPiBJZiB5b3UgcmVhbGx5IHdhbnQgdG8gZGVmaW5lIHRob3NlLCBwbGVhc2UgdXNlIGEg
+Y29tbW9uIHByZWZpeCBmb3INCj4gYWxsDQo+IHN5bWJvbHMgaW4gdGhlIGRyaXZlci4NCg0KSSBw
+cmVmZXIgZGVmaW5pbmcgdGhlbSBiZWNhdXNlIEkgYWx3YXlzIG5lZWQgdG8gY2hlY2sgdGhlIG1l
+YW5pbmcgb2YNCnRoZXNlIHZhbHVlcy4gTXkgYnJhaW5zIGp1c3QgcmVmdXNlIGZyb20gcmVtZW1i
+ZXJpbmcgd2hpY2ggdmFsdWUgaXMNCnVzZWQgZm9yIGluIGFuZCB3aGljaCBmb3Igb3V0LiBJIHdp
+bGwgYWRkIHRoZSBwcmVmaXggZXZlbiB0aG91Z2ggdGhlDQpzY29wZSBvZiB0aGVzZSBkZWZpbmVz
+IGlzIGxpbWl0ZWQgdG8gdGhpcyBmaWxlIDopDQoNCj4gDQo+ID4gKyNkZWZpbmUgR1BJT19PVVRf
+UkVHKG9mZikgKEJENzE4MjhfUkVHX0dQSU9fQ1RSTDEgKyAob2ZmKSkNCj4gPiArI2RlZmluZSBI
+QUxMX0dQSU9fT0ZGU0VUIDMNCj4gPiArDQo+ID4gK3N0cnVjdCBiZDcxODI4X2dwaW8gew0KPiA+
+ICsgICAgICAgc3RydWN0IHJvaG1fcmVnbWFwX2RldiBjaGlwOw0KPiA+ICsgICAgICAgc3RydWN0
+IGdwaW9fY2hpcCBncGlvOw0KPiA+ICt9Ow0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgYmQ3MTgy
+OF9ncGlvX3NldChzdHJ1Y3QgZ3Bpb19jaGlwICpjaGlwLCB1bnNpZ25lZCBpbnQNCj4gPiBvZmZz
+ZXQsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICBpbnQgdmFsdWUpDQo+ID4gK3sN
+Cj4gPiArICAgICAgIGludCByZXQ7DQo+ID4gKyAgICAgICBzdHJ1Y3QgYmQ3MTgyOF9ncGlvICpi
+ZGdwaW8gPSBncGlvY2hpcF9nZXRfZGF0YShjaGlwKTsNCj4gPiArICAgICAgIHU4IHZhbCA9ICh2
+YWx1ZSkgPyBCRDcxODI4X0dQSU9fT1VUX0hJIDoNCj4gPiBCRDcxODI4X0dQSU9fT1VUX0xPOw0K
+PiA+ICsNCj4gPiArICAgICAgIGlmIChvZmZzZXQgPT0gSEFMTF9HUElPX09GRlNFVCkNCj4gPiAr
+ICAgICAgICAgICAgICAgcmV0dXJuOw0KPiANCj4gQ2FuIHlvdSBhZGQgYSBjb21tZW50IGhlcmUg
+c2F5aW5nIHRoYXQgdGhpcyBwaW4gY2FuIG9ubHkgYmUgdXNlZCBhcw0KPiBpbnB1dD8gT3RoZXJ3
+aXNlIHRoaXMgaW5mb3JtYXRpb24gaXMgb25seSBhdmFpbGFibGUgaW4gdGhlIGNvbW1pdA0KPiBt
+ZXNzYWdlLg0KDQpTdXJlIHRoaW5nLiBJIHRob3VnaHQgdGhlIGNvbW1lbnQgaW4gZ2V0X2RpcmVj
+dGlvbiB3YXMgc3VmZmljaWVudCBidXQNCnlvdSBhcmUgY29ycmVjdCAtIGl0J3MgbmljZSB0byBz
+ZWUgdGhpcyBsaW1pdGF0aW9uIGFsc28gaGVyZS4NCg0KPiA+ICsNCj4gPiArICAgICAgIHJldCA9
+IHJlZ21hcF91cGRhdGVfYml0cyhiZGdwaW8tPmNoaXAucmVnbWFwLA0KPiA+IEdQSU9fT1VUX1JF
+RyhvZmZzZXQpLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEJENzE4Mjhf
+R1BJT19PVVRfTUFTSywgdmFsKTsNCj4gPiArICAgICAgIGlmIChyZXQpDQo+ID4gKyAgICAgICAg
+ICAgICAgIGRldl9lcnIoYmRncGlvLT5jaGlwLmRldiwgIkNvdWxkIG5vdCBzZXQgZ3BpbyB0bw0K
+PiA+ICVkXG4iLCB2YWx1ZSk7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgYmQ3MTgy
+OF9ncGlvX2dldChzdHJ1Y3QgZ3Bpb19jaGlwICpjaGlwLCB1bnNpZ25lZCBpbnQNCj4gPiBvZmZz
+ZXQpDQo+ID4gK3sNCj4gPiArICAgICAgIGludCByZXQ7DQo+ID4gKyAgICAgICB1bnNpZ25lZCBp
+bnQgdmFsOw0KPiA+ICsgICAgICAgc3RydWN0IGJkNzE4MjhfZ3BpbyAqYmRncGlvID0gZ3Bpb2No
+aXBfZ2V0X2RhdGEoY2hpcCk7DQo+ID4gKw0KPiA+ICsgICAgICAgaWYgKG9mZnNldCA9PSBIQUxM
+X0dQSU9fT0ZGU0VUKQ0KPiA+ICsgICAgICAgICAgICAgICByZXQgPSByZWdtYXBfcmVhZChiZGdw
+aW8tPmNoaXAucmVnbWFwLA0KPiA+IEJENzE4MjhfUkVHX0lPX1NUQVQsDQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICZ2YWwpOw0KPiA+ICsgICAgICAgZWxzZQ0KPiA+ICsg
+ICAgICAgICAgICAgICByZXQgPSByZWdtYXBfcmVhZChiZGdwaW8tPmNoaXAucmVnbWFwLA0KPiA+
+IEdQSU9fT1VUX1JFRyhvZmZzZXQpLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAmdmFsKTsNCj4gPiArICAgICAgIGlmICghcmV0KQ0KPiA+ICsgICAgICAgICAgICAgICBy
+ZXQgPSAodmFsICYgQkQ3MTgyOF9HUElPX09VVF9NQVNLKTsNCj4gPiArDQo+ID4gKyAgICAgICBy
+ZXR1cm4gcmV0Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGJkNzE4MjhfZ3Bpb19z
+ZXRfY29uZmlnKHN0cnVjdCBncGlvX2NoaXAgKmNoaXAsDQo+ID4gdW5zaWduZWQgaW50IG9mZnNl
+dCwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcg
+Y29uZmlnKQ0KPiA+ICt7DQo+ID4gKyAgICAgICBzdHJ1Y3QgYmQ3MTgyOF9ncGlvICpiZGdwaW8g
+PSBncGlvY2hpcF9nZXRfZGF0YShjaGlwKTsNCj4gPiArDQo+ID4gKyAgICAgICBpZiAob2Zmc2V0
+ID09IEhBTExfR1BJT19PRkZTRVQpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAtRU5PVFNV
+UFA7DQo+ID4gKw0KPiA+ICsgICAgICAgc3dpdGNoIChwaW5jb25mX3RvX2NvbmZpZ19wYXJhbShj
+b25maWcpKSB7DQo+ID4gKyAgICAgICBjYXNlIFBJTl9DT05GSUdfRFJJVkVfT1BFTl9EUkFJTjoN
+Cj4gPiArICAgICAgICAgICAgICAgcmV0dXJuIHJlZ21hcF91cGRhdGVfYml0cyhiZGdwaW8tPmNo
+aXAucmVnbWFwLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IEdQSU9fT1VUX1JFRyhvZmZzZXQpLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIEJENzE4MjhfR1BJT19EUklWRV9NQVNLLA0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIEJENzE4MjhfR1BJT19PUEVOX0RSQUlOKTsNCj4g
+PiArICAgICAgIGNhc2UgUElOX0NPTkZJR19EUklWRV9QVVNIX1BVTEw6DQo+ID4gKyAgICAgICAg
+ICAgICAgIHJldHVybiByZWdtYXBfdXBkYXRlX2JpdHMoYmRncGlvLT5jaGlwLnJlZ21hcCwNCj4g
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBHUElPX09VVF9SRUco
+b2Zmc2V0KSwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBC
+RDcxODI4X0dQSU9fRFJJVkVfTUFTSywNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBCRDcxODI4X0dQSU9fUFVTSF9QVUxMKTsNCj4gPiArICAgICAgIGRlZmF1
+bHQ6DQo+ID4gKyAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsgICAgICAgfQ0KPiA+ICsgICAg
+ICAgcmV0dXJuIC1FTk9UU1VQUDsNCj4gK30rc3RhdGljIGludCBiZDcxODI4X2dldF9kaXJlY3Rp
+b24oc3RydWN0IGdwaW9fY2hpcCAqY2hpcCwgdW5zaWduZWQNCj4gaW50IG9mZnNldCkNCj4gPiAr
+ew0KPiA+ICsgICAgICAgLyoNCj4gPiArICAgICAgICAqIFBpbiB1c2FnZSBpcyBzZWxlY3RlZCBi
+eSBPVFAgZGF0YS4gV2UgY2FuJ3QgcmVhZCBpdA0KPiA+IHJ1bnRpbWUuIEhlbmNlDQo+ID4gKyAg
+ICAgICAgKiB3ZSB0cnVzdCB0aGF0IGlmIHRoZSBwaW4gaXMgbm90IGV4Y2x1ZGVkIGJ5ICJncGlv
+LQ0KPiA+IHJlc2VydmVkLXJhbmdlcyINCj4gPiArICAgICAgICAqIHRoZSBPVFAgY29uZmlndXJh
+dGlvbiBpcyBzZXQgdG8gT1VULiAoT3RoZXIgcGlucyBidXQNCj4gPiBIQUxMIGlucHV0IHBpbg0K
+PiA+ICsgICAgICAgICogb24gQkQ3MTgyOCBjYW4ndCByZWFsbHkgYmUgdXNlZCBmb3IgZ2VuZXJh
+bCBwdXJwb3NlDQo+ID4gaW5wdXQgLSBpbnB1dA0KPiA+ICsgICAgICAgICogc3RhdGVzIGFyZSB1
+c2VkIGZvciBzcGVjaWZpYyBjYXNlcyBsaWtlIHJlZ3VsYXRvcg0KPiA+IGNvbnRyb2wgb3INCj4g
+PiArICAgICAgICAqIFBNSUNfT05fUkVRLg0KPiA+ICsgICAgICAgICovDQo+ID4gKyAgICAgICBp
+ZiAob2Zmc2V0ID09IEhBTExfR1BJT19PRkZTRVQpDQo+ID4gKyAgICAgICAgICAgICAgIHJldHVy
+biBJTjsNCj4gPiArDQo+ID4gKyAgICAgICByZXR1cm4gT1VUOw0KPiA+ICt9DQo+ID4gKw0KPiA+
+ICtzdGF0aWMgaW50IGJkNzE4MjhfZ3Bpb19wYXJzZV9kdChzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+
+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGJkNzE4MjhfZ3BpbyAq
+YmRncGlvKQ0KPiA+ICt7DQo+ID4gKyAgICAgICAvKg0KPiA+ICsgICAgICAgICogVEJEOiBTZWUg
+aWYgd2UgbmVlZCBzb21lIGltcGxlbWVudGF0aW9uIHRvIG1hcmsgc29tZQ0KPiA+IFBJTnMgYXMN
+Cj4gPiArICAgICAgICAqIG5vdCBjb250cm9sbGFibGUgYmFzZWQgb24gRFQgaW5mbyBvciBpZiBj
+b3JlIGNhbiBoYW5kbGUNCj4gPiArICAgICAgICAqICJncGlvLXJlc2VydmVkLXJhbmdlcyIgYW5k
+IGV4Y2x1ZGUgdGhlbSBmcm9tIGNvbnRyb2wNCj4gPiArICAgICAgICAqLw0KPiA+ICsgICAgICAg
+cmV0dXJuIDA7DQo+ID4gK30NCj4gDQo+IFBsZWFzZSBkb24ndCBpbXBsZW1lbnQgZW1wdHkgZnVu
+Y3Rpb25zLiBKdXN0IGFkZCB0aGlzIGNvbW1lbnQgbmV4dCB0bw0KPiBncGlvY2hpcCdzIGluaXRp
+YWxpemF0aW9uLi4uDQoNClllcC4gSSBzaG91bGQgaGF2ZSBjbGVhbmVkIHRoaXMgYmVmb3JlIHNl
+bmRpbmcgZXZlbiB0aGlzLiBUaGFua3MgZm9yDQpwb2ludGluZyBpdCBvdXQhDQoNCj4gDQo+IA0K
+PiA+ICsNCj4gPiArICAgICAgIGJkZ3Bpby0+Y2hpcC5kZXYgPSAmcGRldi0+ZGV2Ow0KPiA+ICsg
+ICAgICAgYmRncGlvLT5ncGlvLnBhcmVudCA9IHBkZXYtPmRldi5wYXJlbnQ7DQo+ID4gKyAgICAg
+ICBiZGdwaW8tPmdwaW8ubGFiZWwgPSAiYmQ3MTgyOC1ncGlvIjsNCj4gPiArICAgICAgIGJkZ3Bp
+by0+Z3Bpby5vd25lciA9IFRISVNfTU9EVUxFOw0KPiA+ICsgICAgICAgYmRncGlvLT5ncGlvLmdl
+dF9kaXJlY3Rpb24gPSBiZDcxODI4X2dldF9kaXJlY3Rpb247DQo+ID4gKyAgICAgICBiZGdwaW8t
+PmdwaW8uc2V0X2NvbmZpZyA9IGJkNzE4MjhfZ3Bpb19zZXRfY29uZmlnOw0KPiA+ICsgICAgICAg
+YmRncGlvLT5ncGlvLmNhbl9zbGVlcCA9IHRydWU7DQo+ID4gKyAgICAgICBiZGdwaW8tPmdwaW8u
+Z2V0ID0gYmQ3MTgyOF9ncGlvX2dldDsNCj4gPiArICAgICAgIGJkZ3Bpby0+Z3Bpby5zZXQgPSBi
+ZDcxODI4X2dwaW9fc2V0Ow0KPiANCj4gTm90IGltcGxlbWVudGluZyBkaXJlY3Rpb25fb3V0cHV0
+KCkgYW5kIGRpcmVjdGlvbl9pbnB1dCgpIGhlcmUgd2lsbA0KPiByZXN1bHRzIGluIHdhcm5pbmdz
+IGZyb20gdGhlIEdQSU8gZnJhbWV3b3JrOiBmb3IgaW5zdGFuY2UgeW91DQo+IGltcGxlbWVudCBz
+ZXQoKSBidXQgbm90IGRpcmVjdGlvbl9vdXRwdXQoKS4gSSdkIHNheToganVzdCBhZGQgdGhvc2UN
+Cj4gY2FsbGJhY2tzIGFuZCByZXR1cm4gYW4gZXJyb3IgaWYgdGhleSdyZSBjYWxsZWQgZm9yIGlu
+dmFsaWQgbGluZXMNCj4gKGZvcg0KPiBpbnN0YW5jZTogZGlyZWN0aW9uX291dHB1dCgpIGJlaW5n
+IGNhbGxlZCBmb3IgbGluZSAzKS4NCg0KT2suIEkgd2lsbCBpbXBsZW1lbnQgZHVtbXkgZnVuY3Rp
+b25zLg0KDQpCdXQgb3V0IG9mIHRoZSBjdXJpb3NpdHkgLSB3aHkgdGhlIEdQSU8gY29yZSBlbWl0
+cyB0aGUgd2FybmluZ3MgaWYNCnRoZXNlIGFyZSBub3QgaW1wbGVtZW50ZWQ/IEkgdGhpbmsgdGhl
+IGNvcmUgc2hvdWxkIG5vdCByZXF1aXJlICJuby0NCm9wZXJhdGlvbiIgZnVuY3Rpb25zIHRvIGJl
+IGltcGxlbWVudGVkIGZvciBwaW5zIHdoaWNoIGRvbid0IHN1cHBvcnQNCmJvdGggb2YgdGhlIGRp
+cmVjdGlvbnMuIEdQSU8gY29yZSBjb3VsZCBvbmx5IGVtaXQgd2FybmluZyBpZiBpdCBuZWVkcw0K
+dG8gc2V0IGRpcmVjdGlvbiB0byBzb21ldGhpbmcgdGhlIEhXIGRvZXMgbm90IHN1cHBvcnQuIFRo
+YXQgd291bGQgYXZvaWQNCmFkZGluZyB0aGUgZHVtbXkgZnVuY3Rpb25zIHRvIGFsbCBvZiB0aGUg
+ZHJpdmVycywgcmlnaHQ/DQoNCj4gDQo+ID4gKyAgICAgICBiZGdwaW8tPmdwaW8uYmFzZSA9IC0x
+Ow0KPiA+ICsgICAgICAgYmRncGlvLT5ncGlvLm5ncGlvID0gNDsNCj4gPiArI2lmZGVmIENPTkZJ
+R19PRl9HUElPDQo+IA0KPiBUaGlzIGlzIG5vdCBuZWVkZWQgLSBmb3IgQ09ORklHX09GX0dQSU8g
+ZGlzYWJsZWQgdGhlIHBhcmVudCBvZl9ub2RlDQo+IHdpbGwgYmUgTlVMTC4NCg0KUmlnaHQuIFRo
+YW5rcy4NCg0KPiA+ICsgICAgICAgYmRncGlvLT5ncGlvLm9mX25vZGUgPSBwZGV2LT5kZXYucGFy
+ZW50LT5vZl9ub2RlOw0KPiA+ICsjZW5kaWYNCj4gPiArICAgICAgIGJkZ3Bpby0+Y2hpcC5yZWdt
+YXAgPSBiZDcxODI4LT5yZWdtYXA7DQo+ID4gKw0KPiA+ICsgICAgICAgcmV0ID0gZGV2bV9ncGlv
+Y2hpcF9hZGRfZGF0YSgmcGRldi0+ZGV2LCAmYmRncGlvLT5ncGlvLA0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICBiZGdwaW8pOw0KPiA+ICsgICAgICAgaWYgKHJldCkN
+Cj4gPiArICAgICAgICAgICAgICAgZGV2X2VycigmcGRldi0+ZGV2LCAiZ3Bpb19pbml0OiBGYWls
+ZWQgdG8gYWRkDQo+ID4gYmQ3MTgyOC1ncGlvXG4iKTsNCj4gDQo+IFNpbmNlIHRoZXJlIGFyZW4n
+dCBtYW55IHBsYWNlcyB3aGVyZSB0aGlzIGZ1bmN0aW9uIGNhbiBmYWlsLCB5b3UgY2FuDQo+IGRp
+cmVjdGx5IHJldHVybiBkZXZtX2dwaW9jaGlwX2FkZF9kYXRhKCkgaGVyZS4NCg0KT2suDQoNCj4g
+PiArDQo+ID4gKyAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMg
+c3RydWN0IHBsYXRmb3JtX2RyaXZlciBiZDcxODI4X2dwaW8gPSB7DQo+ID4gKyAgICAgICAuZHJp
+dmVyID0gew0KPiA+ICsgICAgICAgICAgICAgICAubmFtZSA9ICJiZDcxODI4LWdwaW8iDQo+ID4g
+KyAgICAgICB9LA0KPiA+ICsgICAgICAgLnByb2JlID0gYmQ3MTgyOF9wcm9iZSwNCj4gPiArfTsN
+Cj4gPiArDQo+ID4gK21vZHVsZV9wbGF0Zm9ybV9kcml2ZXIoYmQ3MTgyOF9ncGlvKTsNCj4gPiAr
+DQo+ID4gK01PRFVMRV9BVVRIT1IoIk1hdHRpIFZhaXR0aW5lbiA8bWF0dGkudmFpdHRpbmVuQGZp
+LnJvaG1ldXJvcGUuY29tPg0KPiA+ICIpOw0KPiA+ICtNT0RVTEVfREVTQ1JJUFRJT04oIkJENzE4
+Mjggdm9sdGFnZSByZWd1bGF0b3IgZHJpdmVyIik7DQo+ID4gK01PRFVMRV9MSUNFTlNFKCJHUEwi
+KTsNCj4gDQo+IERvbid0IHlvdSBuZWVkIGEgTU9EVUxFX0FMSUFTKCkgaGVyZSBzaW5jZSB0aGlz
+IGlzIGFuIE1GRCBzdWItbW9kdWxlPw0KDQpJIG11c3QgYWRtaXQgSSBkb24ndCBrbm93IHRoZSBk
+ZXRhaWxzIG9mIGhvdyBtb2R1bGUgbG9hZGluZyBpcyBkb25lLiBJDQp1c2VkIHN5c3RlbSB3aGVy
+ZSBtb2R1bGVzIGFyZSBsb2FkIGJ5IHNjcmlwdHMuIChJIGd1ZXNzIHRoZSBtb2R1bGUNCmFsaWFz
+IGNvdWxkIGJlIHVzZWQgdG8gYWxsb3cgYXV0b21hdGljIG1vZHVsZSBsb2FkaW5nIFtieSB1ZGV2
+P10pDQoNCkNhbiB5b3UgcGxlYXNlIGVkdWNhdGUgbWUgLSBJZiBJIGFkZCBtb2R1bGUgYWxpYXNl
+cyBtYXRjaGluZyB0aGUgc3ViLQ0KZGV2aWNlIG5hbWUgZ2l2ZW4gaW4gaW4gTUZEIGNlbGwgLSBz
+aG91bGQgdGhlIHN1YiBtb2R1bGUgbG9hZGluZyBiZQ0KYXV0b21hdGljIHdoZW4gTUZEIGRyaXZl
+ciBnZXRzIHByb2JlZD8gRm9yIHNvbWUgcmVhc29uIEkgZGlkbid0IGdldA0KdGhhdCB3b3JraW5n
+IG9uIG15IHRlc3QgYmVkLiBPciBtYXliZSBJIG1pc3VuZGVyc3Rvb2Qgc29tZXRoaW5nLg0KDQpF
+ZywgdGhpcyBzaG91bGQgYmUgZW5vdWdoIGZvciBHUElPIHN1Yi1tb2R1bGUgdG8gYmUgYWxzbyBs
+b2FkOg0KDQpNRkQ6DQpzdGF0aWMgc3RydWN0IG1mZF9jZWxsIGJkNzE4MjhfbWZkX2NlbGxzW10g
+PSB7DQogICAgICAgIHsgLm5hbWUgPSAiYmQ3MTgyOC1wbWljIiwgfSwNCiAgICAgICAgeyAubmFt
+ZSA9ICJiZDcxODI4LWdwaW8iLCB9LA0KLi4uDQpyZXQgPSBkZXZtX21mZF9hZGRfZGV2aWNlcygm
+aTJjLT5kZXYsIFBMQVRGT1JNX0RFVklEX0FVVE8sDQogICAgICAgICAgICAgICAgICAgICAgICAg
+ICBiZDcxODI4X21mZF9jZWxscywNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIEFSUkFZX1NJ
+WkUoYmQ3MTgyOF9tZmRfY2VsbHMpLCBOVUxMLCAwLA0KICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgcmVnbWFwX2lycV9nZXRfZG9tYWluKGlycV9kYXRhKSk7IA0KDQpHUElPIGRyaXZlcjoNCk1P
+RFVMRV9BTElBUygicGxhdGZvcm06YmQ3MTgyOC1ncGlvIik7DQoNCkkgaGFkIHRoZSBzdWItZGV2
+aWNlcyBwcm9iZWQgZXZlbiB3aXRob3V0IHRoZSBNT0RVTEVfQUxJQVMgLSBidXQgbWFudWFsDQps
+b2FkaW5nIGlzIHJlcXVpcmVkLiBJIHdpbGwgZ2xhZGx5IGFkZCB0aGUgYWxpYXMgaWYgaXQgc2hv
+dWxkIGVuYWJsZQ0KdGhlIGF1dG9tYXRpYyBtb2R1bGUgbG9hZGluZy4NCg0KQnIsDQoJTWF0dGkg
+VmFpdHRpbmVuDQoNCg==
