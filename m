@@ -2,177 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B98DF0EF
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 17:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CC5DF132
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 17:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729428AbfJUPKF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Oct 2019 11:10:05 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:55925 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfJUPKF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Oct 2019 11:10:05 -0400
-X-Originating-IP: 86.207.98.53
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 353C420009;
-        Mon, 21 Oct 2019 15:10:00 +0000 (UTC)
-Date:   Mon, 21 Oct 2019 17:09:59 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Andreas Kemnade <andreas@kemnade.info>, linux-rtc@vger.kernel.org,
-        a.zummo@towertech.it,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        lee.jones@linaro.org,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Subject: Re: [Letux-kernel] [PATCH 5/5] rtc: rtc-rc5t583: add ricoh rc5t619
- RTC driver
-Message-ID: <20191021150959.GX3125@piout.net>
+        id S1728937AbfJUPVq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Oct 2019 11:21:46 -0400
+Received: from mail.andi.de1.cc ([85.214.55.253]:49222 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728044AbfJUPVq (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 21 Oct 2019 11:21:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
+        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ive50pzx0WvHvVBcHs4Tzw6cThZ+6wdZ4fZseJxKh6Y=; b=ayXC65dyk+YOSvIqBmmJY2x7V
+        TWyVZxCtI01zsfw8AMN+8dQ+LYmDlCY3KB+73mt7MI2Vge8+mDP4wN2edfxFs3eE9vYplJfCXX5Xx
+        Nxh/VXE1kITiMjPNGqK6LiU9HvidAyB0U85G4md1nV1yt5NED5oEsyuPiEThoNfI1i2a8=;
+Received: from ip-109-41-64-49.web.vodafone.de ([109.41.64.49] helo=localhost)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1iMZV8-0001G7-Rs; Mon, 21 Oct 2019 17:21:43 +0200
+Received: from [::1] (helo=localhost)
+        by eeepc with esmtp (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1iMZV5-0001HV-EV; Mon, 21 Oct 2019 17:21:39 +0200
+Date:   Mon, 21 Oct 2019 17:20:55 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Stefan Agner <stefan@agner.ch>, lee.jones@linaro.org,
+        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, phh@phh.me, b.galvani@gmail.com,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH 5/5] rtc: rtc-rc5t583: add ricoh rc5t619 RTC driver
+Message-ID: <20191021172055.2fa66549@kemnade.info>
+In-Reply-To: <20191021135028.GV3125@piout.net>
 References: <20191021054104.26155-1-andreas@kemnade.info>
- <20191021054104.26155-6-andreas@kemnade.info>
- <20191021101528.GU3125@piout.net>
- <F16BC3B8-5497-4A7D-AC88-4DB221038519@goldelico.com>
+        <20191021054104.26155-6-andreas@kemnade.info>
+        <d59b7e21112ac96a2d88ae623eb523fc@agner.ch>
+        <20191021135028.GV3125@piout.net>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F16BC3B8-5497-4A7D-AC88-4DB221038519@goldelico.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/uCseBc73aLEs0S5AZO0JIAC"; protocol="application/pgp-signature"
+X-Spam-Score: -1.0 (-)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 21/10/2019 12:31:30+0200, H. Nikolaus Schaller wrote:
-> >> @@ -0,0 +1,476 @@
-> >> +// SPDX-License-Identifier: GPL-2.0+
-> >> +/*
-> >> + * drivers/rtc/rtc-ricoh619.c
-> >> + *
-> >> + * Real time clock driver for RICOH R5T619 power management chip.
-> >> + *
-> >> + * Copyright (C) 2019 Andreas Kemnade
-> >> + *
-> >> + * Based on code
-> >> + *  Copyright (C) 2012-2014 RICOH COMPANY,LTD
-> >> + *
-> >> + * Based on code
-> >> + *  Copyright (C) 2011 NVIDIA Corporation
-> > 
-> > Based on is not useful.
-> 
-> Yes, it is difficult to track what the real contribution was
-> and what is left over.
-> 
-> On the other hand it is IMHO fair to attribute those who have
-> spent time to save ours.
-> 
-> What would be a better way for attribution?
-> 
+--Sig_/uCseBc73aLEs0S5AZO0JIAC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I don't think this require attribution
+On Mon, 21 Oct 2019 15:50:28 +0200
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-> >> +static int rc5t619_rtc_clk_adjust(struct device *dev, uint8_t clk)
-> >> +{
-> >> +	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-> >> +
-> >> +	return regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_ADJUST, clk);
-> > 
-> > Is it useful to have a function for a single regmap_write?
-> 
-> I'd say yes. It is wrapping all regmap accesses in getter/setter functions
-> whose name describes what it is setting. And it may do type conversion.
-> IMHO this makes code better readable and maintainable.
-> And a good compiler may even decide to inline this.
-> 
+> On 21/10/2019 15:19:09+0200, Stefan Agner wrote:
+> > On 2019-10-21 07:41, Andreas Kemnade wrote: =20
+> > > Add an RTC driver for the RTC device on Ricoh MFD rc5t619,
+> > > which is implemented as a variant of rn5t618
+> > >=20
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > ---
+> > >  drivers/rtc/Kconfig       |  10 +
+> > >  drivers/rtc/Makefile      |   1 +
+> > >  drivers/rtc/rtc-rc5t619.c | 476 ++++++++++++++++++++++++++++++++++++=
+++++++++++ =20
+> >=20
+> > Parts of this driver look very similar to drivers/rtc/rtc-rc5t583.c. Can
+> > it maybe shared?
+> >  =20
+>=20
+> If this could be done it would be better. I can't find any public
+> datasheet though...
+>=20
+at least they have different alarm configurations, The rc5t619 can specify
+alarm in seconds, the rc5t583 not but has other alarm configurations which
+are not present in the rn5t619 (judging by the lack of unused registers whe=
+re
+thoes information could be filled in).=20
 
-But this takes up a lot of space in the file which makes it harder to
-read while adding no information, how is rc5t619_rtc_clk_adjust more
-informative than regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_ADJUST,
-clk)?
+Register addresses do not match.
+Some details seem to be the same like century flag.
+Interestingly the rc5t583 driver does not care about 12h/24h mode.
+So there is a bug there.=20
 
-in both cases, I can easily deduce that the RTC adjust register is
-changed.
+Regards,
+Andreas
 
+--Sig_/uCseBc73aLEs0S5AZO0JIAC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> >> +/* 0-12hour, 1-24hour */
-> >> +static int rc5t619_rtc_24hour_mode_set(struct device *dev, int mode)
-> >> +{
-> >> +	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-> >> +
-> >> +	return regmap_update_bits(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1,
-> >> +			CTRL1_24HR, mode ? CTRL1_24HR : 0);
-> > 
-> > Is it useful to have a function for a single regmap_update_bits?
-> 
-> Same as above. I can immediately understand
-> 
-> 	r = rc5t619_rtc_24hour_mode_set(dev, MODE_SOMETHING);
-> 
-> somewhere else in code but deciphering 
-> 
-> 	r = regmap_update_bits(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1,
-> 				CTRL1_24HR, mode ? CTRL1_24HR : 0);
-> 
-> spread over several places is probably difficult.
-> 
+-----BEGIN PGP SIGNATURE-----
 
-I can immediately understand updating CTRL1_24HR in RN5T618_RTC_CTRL1
-And it is used exactly once...
+iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl2tzNcACgkQl4jFM1s/
+ye+ZuQ//fgwnaZghXCAjYyw0akgrJV9QoXWIwpcFg3jaD8MlWr3W6ykUn8iN2rZh
+dyolY1S7hFMI7asXpyW4DyI30AQ81fdEbivD3XeBYGWkWxm9/gmeSjyHyg5D3Qhm
+5HtJnaBL+7ejSyi8bDp8cc01ayYfbI6RlBdTxl0tqN50yRiPkgoDaf37d6GDt6Nk
+RfrD7W9UuXXDcHBXyimVK2QOx5Z1MPoCHXSa60tW1Mnv91ygut7C+b+lfKdwCHOC
+Edf4atI1gBAzog6/miUMmpqmqZr3d0bPJNx/wyOHqF0ERq76b2LYu1HIPj0Fpm1M
+ZxpcgqOmrwoWSYggbWOF9KLe1zldRWShJnUObAn9Nz0iSLu3byvexhLhz+/d8qVu
+ojbOFDeIXhl1PosjEVwyRlmmaJPRW7Lq7eodTFZTMUd9wKvt5Ih+6MCmXAVMFYeD
+9Wb1rkzzAt0JZR489SaXFpdXtYtlkYnkuTb712j0o7LzYqIkk0Bz9EiInJJLPcPH
+AgCwQMVG7BWi/d2HDBmHXb97vsuZeJcOjfYpe442Fl8zaT47vUHc28UHjseor8hy
+ZkBEUIQFlWlBGObgdowziC5tBrUjks3Ez8Oo43rqxKDACs2SJuWvfJPlHieeWS6H
+OHIMic6DjQLCZNH4bGcJpU7F5QiffqsFe/wZKiEluauiPACxl3M=
+=URg8
+-----END PGP SIGNATURE-----
 
-If this is all about naming and understanding, then why that driver
-still had so many magic values?
-
-
-> > 
-> >> +}
-> >> +
-> >> +
-> >> +static int rc5t619_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> >> +{
-> >> +	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-> >> +	u8 buff[7];
-> >> +	int err;
-> >> +	int cent_flag;
-> >> +
-> >> +	err = regmap_bulk_read(rtc->rn5t618->regmap, RN5T618_RTC_SECONDS,
-> >> +				buff, sizeof(buff));
-> >> +	if (err < 0) {
-> >> +		dev_err(dev, "failed to read time: %d\n", err);
-> > 
-> > Please reconsider adding so many strings in the driver, they add almost
-> > no value but will increase the kernel memory footprint.
-> 
-> You mean removing error messages is better than taking some footprint?
-> 
-
-Definitively yes, what is the value of the error message on the device?
-What should the end user do about it? Is there even an end user reading
-that message?
-
-> >> +static int rc5t619_rtc_alarm_is_enabled(struct device *dev,  uint8_t *enabled)
-> >> +{
-> >> +	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-> >> +	int err;
-> >> +	unsigned int reg_data;
-> >> +
-> >> +	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &reg_data);
-> >> +	if (err) {
-> >> +		dev_err(dev, "read RTC_CTRL1 error %d\n", err);
-> >> +		*enabled = 0;
-> > 
-> > Is it necessary to set enabled here?
-> 
-> Well, in case of error it is probably more safe to assume it is *not* enabled
-> that keeping the random value passed by the caller of this function.
-> 
-
-I would certainly hope that the caller is smart enough to not use a
-value when the function calling it returns an error. This has to be
-removed, it is useless.
-
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--Sig_/uCseBc73aLEs0S5AZO0JIAC--
