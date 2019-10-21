@@ -2,146 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA57DE762
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 11:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 147B1DE8C7
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Oct 2019 11:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727150AbfJUJHO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Oct 2019 05:07:14 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:55467 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726181AbfJUJHO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Oct 2019 05:07:14 -0400
-X-Originating-IP: 86.207.98.53
-Received: from localhost (aclermont-ferrand-651-1-259-53.w86-207.abo.wanadoo.fr [86.207.98.53])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5AA8B60009;
-        Mon, 21 Oct 2019 09:07:10 +0000 (UTC)
-Date:   Mon, 21 Oct 2019 11:07:10 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     lee.jones@linaro.org, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        phh@phh.me, b.galvani@gmail.com, stefan@agner.ch,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH 2/5] mfd: rn5t618: add irq support
-Message-ID: <20191021090710.GT3125@piout.net>
-References: <20191021054104.26155-1-andreas@kemnade.info>
- <20191021054104.26155-3-andreas@kemnade.info>
+        id S1727924AbfJUJ7P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Oct 2019 05:59:15 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:36481 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727674AbfJUJ7O (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Oct 2019 05:59:14 -0400
+Received: by mail-ua1-f65.google.com with SMTP id r25so3619585uam.3
+        for <linux-rtc@vger.kernel.org>; Mon, 21 Oct 2019 02:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pdHS5iTjhH216W3OQmstavgIx2TJJX3EShTQ+j4ScZ4=;
+        b=A+lOYOm+Xr9/QoAPbGmRqhJkdtF0Lqe8WUL4ACj5RU0nNNF8swHXxJ1znB4G8Os5Ny
+         GFNaGZ/ejdu+ewHfdHOPCmruyouYE59ddCzoE/xVdTrwx+9jDUvHxy7BDp9wIDVdNxfI
+         /6ZVUUwI4YOYuKQGiiojp4zvyT6amzLfph0exWZKznf04jiM3DxdRAExfvqYeyeqcqdD
+         +jHYiIvYbVFtFjJ+6C1ZbvLjFHV0Oba7w+6LuMl93+fW5xmlBomtFj1iieYNFONPPx+n
+         GuW5fPipC9llariB4WKqkEzYSA5LiCXyADKzbRoQItF2MbOokfHyNH6+nW64EQTg2+/Q
+         SDPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pdHS5iTjhH216W3OQmstavgIx2TJJX3EShTQ+j4ScZ4=;
+        b=fWaGvVCZsR+AV6HhtmqBP+AyD06OavPIw5ReYjqWaW5aJHdbZglGb99F+y1G84SIsu
+         yAaKQeVpTCjt0Ffgma+FnH1ThmrfhWTtJJsYX0qIetclkLSZpXTJcSDs0c/TAviOK+Kp
+         NA96AUwY/DwyzJ0s/cXjAhTovRLfKn3kIazGbzoTajUFWqPR36b/uWuvulreMZMyHswM
+         4Fq8nu/J65kYKCJ+uP8WBjjrAhIEFYbJEByE9FyJAL3WK1Q73tNmdeZwShgJqYI0/ACk
+         Ua5pSA+FPMhGRbgDqFDZz0uRPEUein/e850NmoVTKvBESGI74zUhYdHJgM8E+juuuhSQ
+         6R6w==
+X-Gm-Message-State: APjAAAWIWU5IoR1SHE0syqUOROlDGWIsJFKponhqO4D5eFy9eqAujwL4
+        X+GdVv404Iy9oDDHiZed2x8uLMn06aVipQvJauuqgjd+
+X-Google-Smtp-Source: APXvYqyX35z25w9uC+afBeqWkMX+7aKojU6riMDxod1s9TtFAaRTKL1Dky4gIujxC0cprlM32BbtJAeRhAkOs/Lhxl0=
+X-Received: by 2002:ab0:5a97:: with SMTP id w23mr2075364uae.129.1571651953620;
+ Mon, 21 Oct 2019 02:59:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021054104.26155-3-andreas@kemnade.info>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
+In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 21 Oct 2019 11:58:37 +0200
+Message-ID: <CAPDyKFqHoPOPAA_0WpxQUjBTXJ-5BfMbcNXhFNr7rv3RObsgow@mail.gmail.com>
+Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On Fri, 18 Oct 2019 at 17:43, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> The mach/hardware.h is included in lots of places, and it provides
+> three different things on pxa:
+>
+> - the cpu_is_pxa* macros
+> - an indirect inclusion of mach/addr-map.h
+> - the __REG() and io_pv2() helper macros
+>
+> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
+> headers, then change all the files that use mach/hardware.h to
+> include the exact set of those three headers that they actually
+> need, allowing for further more targeted cleanup.
+>
+> linux/soc/pxa/cpu.h can remain permanently exported and is now in
+> a global location along with similar headers. pxa-regs.h and
+> addr-map.h are only used in a very small number of drivers now
+> and can be moved to arch/arm/mach-pxa/ directly when those drivers
+> are to pass the necessary data as resources.
+>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On 21/10/2019 07:41:01+0200, Andreas Kemnade wrote:
-> +#if 0
-> +/*
-> + * REVISIT when implementing charger:
-> + * according to some other implementation it needs special treatment,
-> + * inverted but experiments seem not to confirm that.
-> + */
-> +	[RN5T618_IRQ_CHG] = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 6),
-> +	}
-> +#endif
+[...]
 
-Please avoid submitting dead code.
+For the mmc part:
 
-> +};
-> +
-> +static const struct regmap_irq_chip rc5t619_irq_chip = {
-> +	.name = "rc5t619",
-> +	.irqs = rc5t619_irqs,
-> +	.num_irqs = ARRAY_SIZE(rc5t619_irqs),
-> +	.num_regs = 1,
-> +	.status_base = RN5T618_INTMON,
-> +	.mask_base = RN5T618_INTEN,
-> +	.mask_invert = true,
-> +};
-> +
-> +int rn5t618_irq_init(struct rn5t618 *rn5t618)
-> +{
-> +	const struct regmap_irq_chip *irq_chip;
-> +	int ret;
-> +
-> +	if (!rn5t618->chip_irq)
-> +		return 0;
-> +
-> +	switch (rn5t618->variant) {
-> +	case RC5T619:
-> +		irq_chip = &rc5t619_irq_chip;
-> +		break;
-> +
-> +		/* TODO: check irq definitions for other variants */
-> +
-> +	default:
-> +		irq_chip = NULL;
-> +		break;
-> +	}
-> +
-> +	if (!irq_chip) {
-> +		dev_err(rn5t618->dev, "no IRQ definition known for variant\n");
-> +		return -ENOENT;
-> +	}
-> +
-> +	ret = devm_regmap_add_irq_chip(rn5t618->dev, rn5t618->regmap,
-> +				rn5t618->chip_irq,
-> +				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +				0, irq_chip, &rn5t618->irq_data);
-> +	if (ret != 0) {
-> +		dev_err(rn5t618->dev, "Failed to register IRQ chip\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/include/linux/mfd/rn5t618.h b/include/linux/mfd/rn5t618.h
-> index d62ef48060b5..4d680f34ad2f 100644
-> --- a/include/linux/mfd/rn5t618.h
-> +++ b/include/linux/mfd/rn5t618.h
-> @@ -242,9 +242,27 @@ enum {
->  	RC5T619,
->  };
->  
-> +
-> +/* RN5T618 IRQ definitions */
-> +enum {
-> +	RN5T618_IRQ_SYS,
-> +	RN5T618_IRQ_DCDC,
-> +	RN5T618_IRQ_RTC,
-> +	RN5T618_IRQ_ADC,
-> +	RN5T618_IRQ_GPIO,
-> +	RN5T618_IRQ_CHG,
-> +	RN5T618_NR_IRQS,
-> +};
-> +
-> +
-
-Spurious blank line.
-
->  struct rn5t618 {
->  	struct regmap *regmap;
-> +	struct device *dev;
->  	long variant;
-> +
-> +	int chip_irq;
-> +	struct regmap_irq_chip_data *irq_data;
->  };
->  
-> +extern int rn5t618_irq_init(struct rn5t618 *rn5t618);
->  #endif /* __LINUX_MFD_RN5T618_H */
-> -- 
-> 2.11.0
-> 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
