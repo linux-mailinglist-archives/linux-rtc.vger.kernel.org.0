@@ -2,124 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9B1DFE9B
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2019 09:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45786DFE98
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Oct 2019 09:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387769AbfJVHuG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Oct 2019 03:50:06 -0400
-Received: from spam01.hygon.cn ([110.188.70.11]:57916 "EHLO spam1.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726978AbfJVHuG (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 22 Oct 2019 03:50:06 -0400
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam1.hygon.cn with ESMTP id x9M7mw2a048343;
-        Tue, 22 Oct 2019 15:48:58 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id x9M7mo6S017121;
-        Tue, 22 Oct 2019 15:48:50 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from bogon.higon.com (172.23.18.44) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 22 Oct
- 2019 15:48:55 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>,
-        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jinke Fan <fanjinke@hygon.cn>
-Subject: [PATCH v4] rtc: Fix the AltCentury value on AMD/Hygon platform
-Date:   Tue, 22 Oct 2019 15:48:07 +0800
-Message-ID: <20191022074807.32430-1-fanjinke@hygon.cn>
-X-Mailer: git-send-email 2.17.1
+        id S2387692AbfJVHsu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Oct 2019 03:48:50 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44812 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729458AbfJVHsu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Oct 2019 03:48:50 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 1CD9D28C250
+Subject: Re: [PATCH 1/2] rtc: cros-ec: remove superfluous error message
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+References: <20191016201414.30934-1-alexandre.belloni@bootlin.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <00ed2977-3627-16ca-6a01-db263534a071@collabora.com>
+Date:   Tue, 22 Oct 2019 09:48:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.23.18.44]
-X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
- (172.23.18.10)
-X-MAIL: spam1.hygon.cn x9M7mw2a048343
-X-DNSRBL: 
+In-Reply-To: <20191016201414.30934-1-alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When using following operations:
-date -s "21190910 19:20:00"
-hwclock -w
-to change date from 2019 to 2119 for test, it will fail on Hygon
-Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
-platform.
+Hi Alexandre,
 
-MC146818 driver use function mc146818_set_time() to set register
-RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-reset value on Intel platform to 0x7.
+On 16/10/19 22:14, Alexandre Belloni wrote:
+> The RTC core now has error messages in case of registration failure, there
+> is no need to have other messages in the drivers.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-as reserved.
+That makes totally sense for me.
 
-DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-(AltCentury), the CMOS write will be failed on code:
-CMOS_WRITE(century, acpi_gbl_FADT.century).
+Reviewed-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-enable AltCentury(0x32) register writing and finally setup century as
-expected.
-
-Test results on Intel i7, AMD EPYC(17h) and Hygon machine show that it
-works as expected.
-Compiling for sparc64 and alpha architectures are passed.
-
-Reference:
-https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-section: 3.13 Real Time Clock (RTC)
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
----
-
-v3->v4:
-  - Limited modification to AMD EPYC(17h).
-  - Change the macro RTC_DV0 to RTC_DIV_RESET2.
-  - Make sure save_freq_select's bit4 is cleared.
-
-v2->v3:
-  - Make the changes only relevant to AMD/Hygon.
-
-v1->v2:
-  - Fix the compile errors on sparc64/alpha platform.
-
- drivers/rtc/rtc-mc146818-lib.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2ecd875..df2829d 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -172,7 +172,20 @@ int mc146818_set_time(struct rtc_time *time)
- 	save_control = CMOS_READ(RTC_CONTROL);
- 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
- 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+
-+#ifdef CONFIG_X86
-+	if ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
-+	     boot_cpu_data.x86 == 0x17) ||
-+	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
-+		CMOS_WRITE((save_freq_select & (~RTC_DIV_RESET2)),
-+			RTC_FREQ_SELECT);
-+		save_freq_select &= ~RTC_DIV_RESET2;
-+	} else
-+		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2),
-+			RTC_FREQ_SELECT);
-+#else
-+	CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+#endif
- 
- #ifdef CONFIG_MACH_DECSTATION
- 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
--- 
-2.7.4
-
+> ---
+>  drivers/rtc/rtc-cros-ec.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+> index 6909e01936d9..da209d00731e 100644
+> --- a/drivers/rtc/rtc-cros-ec.c
+> +++ b/drivers/rtc/rtc-cros-ec.c
+> @@ -351,11 +351,8 @@ static int cros_ec_rtc_probe(struct platform_device *pdev)
+>  	cros_ec_rtc->rtc = devm_rtc_device_register(&pdev->dev, DRV_NAME,
+>  						    &cros_ec_rtc_ops,
+>  						    THIS_MODULE);
+> -	if (IS_ERR(cros_ec_rtc->rtc)) {
+> -		ret = PTR_ERR(cros_ec_rtc->rtc);
+> -		dev_err(&pdev->dev, "failed to register rtc device\n");
+> -		return ret;
+> -	}
+> +	if (IS_ERR(cros_ec_rtc->rtc))
+> +		return PTR_ERR(cros_ec_rtc->rtc);
+>  
+>  	/* Get RTC events from the EC. */
+>  	cros_ec_rtc->notifier.notifier_call = cros_ec_rtc_event;
+> 
