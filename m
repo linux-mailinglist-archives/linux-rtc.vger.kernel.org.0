@@ -2,51 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B15E1F2F
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 17:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE15E20E3
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 18:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406642AbfJWPXj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Oct 2019 11:23:39 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37481 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403978AbfJWPXi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 11:23:38 -0400
-X-Originating-IP: 92.137.17.54
-Received: from localhost (alyon-657-1-975-54.w92-137.abo.wanadoo.fr [92.137.17.54])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id F283640003;
-        Wed, 23 Oct 2019 15:23:32 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 17:23:32 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+        id S1725783AbfJWQrb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Oct 2019 12:47:31 -0400
+Received: from mail.windriver.com ([147.11.1.11]:37846 "EHLO
+        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388366AbfJWQra (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 12:47:30 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id x9NGfliR025448
+        (version=TLSv1 cipher=AES128-SHA bits=128 verify=FAIL);
+        Wed, 23 Oct 2019 09:41:47 -0700 (PDT)
+Received: from yow-pgortmak-d1.corp.ad.wrs.com (128.224.56.57) by
+ ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
+ 14.3.468.0; Wed, 23 Oct 2019 09:41:46 -0700
+Received: by yow-pgortmak-d1.corp.ad.wrs.com (Postfix, from userid 1000)        id
+ 435D72E04C3; Wed, 23 Oct 2019 12:41:46 -0400 (EDT)
+Date:   Wed, 23 Oct 2019 12:41:46 -0400
+From:   Paul Gortmaker <paul.gortmaker@windriver.com>
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        linux-kernel@vger.kernel.org
+        Matt Turner <mattst88@gmail.com>,
+        <linux-alpha@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 2/2] rtc/alpha: remove legacy rtc driver
-Message-ID: <20191023152332.GR3125@piout.net>
+Message-ID: <20191023164145.GF1385@windriver.com>
 References: <20191023150311.844123-1-arnd@arndb.de>
  <20191023150311.844123-2-arnd@arndb.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 In-Reply-To: <20191023150311.844123-2-arnd@arndb.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/10/2019 17:01:59+0200, Arnd Bergmann wrote:
+[[PATCH 2/2] rtc/alpha: remove legacy rtc driver] On 23/10/2019 (Wed 17:01) Arnd Bergmann wrote:
+
 > The old drivers/char/rtc.c driver was originally the implementation
 > for x86 PCs but got subsequently replaced by the rtc class driver
 > on all architectures except alpha.
 > 
 > Move alpha over to the portable driver and remove the old one
 > for good.
+
+Git history will show I'm in favour of showing old code and old drivers
+to the curb - even if it is stuff that I wrote myself 20+ years ago!  So
+if all users are now on the formalized rtc framework, then this relic
+should go away, and you can add my ack'd for the commit.
+
+Thanks,
+Paul.
+--
+
 > 
 > The CONFIG_JS_RTC option was only ever used on SPARC32 but
 > has not been available for many years, this was used to build
@@ -58,8 +74,6 @@ On 23/10/2019 17:01:59+0200, Arnd Bergmann wrote:
 > Cc: linux-alpha@vger.kernel.org
 > Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
 > ---
 > This was last discussed in early 2018 in
 > https://lore.kernel.org/lkml/CAK8P3a0QZNY+K+V1HG056xCerz=_L2jh5UfZ+2LWkDqkw5Zznw@mail.gmail.com/
@@ -1498,8 +1512,3 @@ Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > -- 
 > 2.20.0
 > 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
