@@ -2,55 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAE9E1F27
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 17:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B15E1F2F
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 17:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403857AbfJWPXG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Oct 2019 11:23:06 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:56901 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392424AbfJWPXG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 11:23:06 -0400
+        id S2406642AbfJWPXj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Oct 2019 11:23:39 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37481 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403978AbfJWPXi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 11:23:38 -0400
 X-Originating-IP: 92.137.17.54
 Received: from localhost (alyon-657-1-975-54.w92-137.abo.wanadoo.fr [92.137.17.54])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E60F5240006;
-        Wed, 23 Oct 2019 15:23:01 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 17:23:01 +0200
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id F283640003;
+        Wed, 23 Oct 2019 15:23:32 +0000 (UTC)
+Date:   Wed, 23 Oct 2019 17:23:32 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        linux-ia64@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Stephane Eranian <eranian@google.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc/ia64: remove legacy efirtc driver
-Message-ID: <20191023152301.GQ3125@piout.net>
+Subject: Re: [PATCH 2/2] rtc/alpha: remove legacy rtc driver
+Message-ID: <20191023152332.GR3125@piout.net>
 References: <20191023150311.844123-1-arnd@arndb.de>
+ <20191023150311.844123-2-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191023150311.844123-1-arnd@arndb.de>
+In-Reply-To: <20191023150311.844123-2-arnd@arndb.de>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/10/2019 17:01:58+0200, Arnd Bergmann wrote:
-> There are two EFI RTC drivers, the original drivers/char/efirtc.c
-> driver and the more modern drivers/rtc/rtc-efi.c.
+On 23/10/2019 17:01:59+0200, Arnd Bergmann wrote:
+> The old drivers/char/rtc.c driver was originally the implementation
+> for x86 PCs but got subsequently replaced by the rtc class driver
+> on all architectures except alpha.
 > 
-> Both implement the same interface, but the new one does so
-> in a more portable way.
+> Move alpha over to the portable driver and remove the old one
+> for good.
 > 
-> Move everything over to that one and remove the old one.
+> The CONFIG_JS_RTC option was only ever used on SPARC32 but
+> has not been available for many years, this was used to build
+> the same rtc driver with a different module name.
 > 
-> Cc: linux-ia64@vger.kernel.org
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Stephane Eranian <eranian@google.com>
+> Cc: Richard Henderson <rth@twiddle.net>
+> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> Cc: Matt Turner <mattst88@gmail.com>
+> Cc: linux-alpha@vger.kernel.org
+> Cc: Paul Gortmaker <paul.gortmaker@windriver.com>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
@@ -62,500 +68,1433 @@ Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > If there is any reason to keep the driver after all,
 > please let us know.
 > ---
->  arch/ia64/configs/bigsur_defconfig    |   3 +-
->  arch/ia64/configs/generic_defconfig   |   3 +-
->  arch/ia64/configs/gensparse_defconfig |   3 +-
->  arch/ia64/configs/tiger_defconfig     |   3 +-
->  arch/ia64/configs/zx1_defconfig       |   3 +-
->  drivers/char/Kconfig                  |   4 -
->  drivers/char/Makefile                 |   1 -
->  drivers/char/efirtc.c                 | 366 --------------------------
->  include/linux/miscdevice.h            |   2 +-
->  9 files changed, 11 insertions(+), 377 deletions(-)
->  delete mode 100644 drivers/char/efirtc.c
+>  arch/alpha/configs/defconfig |    3 +-
+>  drivers/char/Kconfig         |   56 --
+>  drivers/char/Makefile        |    4 -
+>  drivers/char/rtc.c           | 1311 ----------------------------------
+>  4 files changed, 2 insertions(+), 1372 deletions(-)
+>  delete mode 100644 drivers/char/rtc.c
 > 
-> diff --git a/arch/ia64/configs/bigsur_defconfig b/arch/ia64/configs/bigsur_defconfig
-> index b630bd7351c4..f3ba813a5b80 100644
-> --- a/arch/ia64/configs/bigsur_defconfig
-> +++ b/arch/ia64/configs/bigsur_defconfig
-> @@ -57,7 +57,8 @@ CONFIG_SERIAL_8250_CONSOLE=y
->  CONFIG_SERIAL_8250_EXTENDED=y
->  CONFIG_SERIAL_8250_SHARE_IRQ=y
->  # CONFIG_HW_RANDOM is not set
-> -CONFIG_EFI_RTC=y
+> diff --git a/arch/alpha/configs/defconfig b/arch/alpha/configs/defconfig
+> index f4ec420d7f2d..e10c1be3c0d1 100644
+> --- a/arch/alpha/configs/defconfig
+> +++ b/arch/alpha/configs/defconfig
+> @@ -53,7 +53,8 @@ CONFIG_NET_PCI=y
+>  CONFIG_YELLOWFIN=y
+>  CONFIG_SERIAL_8250=y
+>  CONFIG_SERIAL_8250_CONSOLE=y
+> -CONFIG_RTC=y
 > +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
->  CONFIG_I2C=y
->  CONFIG_I2C_CHARDEV=y
->  CONFIG_AGP=m
-> diff --git a/arch/ia64/configs/generic_defconfig b/arch/ia64/configs/generic_defconfig
-> index 661d90b3e148..cb267a07c57f 100644
-> --- a/arch/ia64/configs/generic_defconfig
-> +++ b/arch/ia64/configs/generic_defconfig
-> @@ -94,7 +94,8 @@ CONFIG_SERIAL_8250_NR_UARTS=6
->  CONFIG_SERIAL_8250_EXTENDED=y
->  CONFIG_SERIAL_8250_SHARE_IRQ=y
->  # CONFIG_HW_RANDOM is not set
-> -CONFIG_EFI_RTC=y
-> +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
->  CONFIG_RAW_DRIVER=m
->  CONFIG_HPET=y
->  CONFIG_AGP=m
-> diff --git a/arch/ia64/configs/gensparse_defconfig b/arch/ia64/configs/gensparse_defconfig
-> index 7844e6a956a4..7e25f2f031b6 100644
-> --- a/arch/ia64/configs/gensparse_defconfig
-> +++ b/arch/ia64/configs/gensparse_defconfig
-> @@ -82,7 +82,8 @@ CONFIG_SERIAL_8250_NR_UARTS=6
->  CONFIG_SERIAL_8250_EXTENDED=y
->  CONFIG_SERIAL_8250_SHARE_IRQ=y
->  # CONFIG_HW_RANDOM is not set
-> -CONFIG_EFI_RTC=y
-> +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
->  CONFIG_RAW_DRIVER=m
->  CONFIG_HPET=y
->  CONFIG_AGP=m
-> diff --git a/arch/ia64/configs/tiger_defconfig b/arch/ia64/configs/tiger_defconfig
-> index 1d6e2a01452b..3f486d5bdc2d 100644
-> --- a/arch/ia64/configs/tiger_defconfig
-> +++ b/arch/ia64/configs/tiger_defconfig
-> @@ -86,7 +86,8 @@ CONFIG_SERIAL_8250_NR_UARTS=6
->  CONFIG_SERIAL_8250_EXTENDED=y
->  CONFIG_SERIAL_8250_SHARE_IRQ=y
->  # CONFIG_HW_RANDOM is not set
-> -CONFIG_EFI_RTC=y
-> +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
->  CONFIG_RAW_DRIVER=m
->  CONFIG_HPET=y
->  CONFIG_AGP=m
-> diff --git a/arch/ia64/configs/zx1_defconfig b/arch/ia64/configs/zx1_defconfig
-> index 8c92e095f8bb..70788a500448 100644
-> --- a/arch/ia64/configs/zx1_defconfig
-> +++ b/arch/ia64/configs/zx1_defconfig
-> @@ -69,7 +69,8 @@ CONFIG_SERIAL_8250_NR_UARTS=8
->  CONFIG_SERIAL_8250_EXTENDED=y
->  CONFIG_SERIAL_8250_SHARE_IRQ=y
->  # CONFIG_HW_RANDOM is not set
-> -CONFIG_EFI_RTC=y
-> +CONFIG_RTC_CLASS=y
-> +CONFIG_RTC_DRV_EFI=y
->  CONFIG_I2C_CHARDEV=y
->  CONFIG_AGP=y
->  CONFIG_AGP_HP_ZX1=y
+> +CONFIG_RTC_DRV_CMOS=y
+>  CONFIG_EXT2_FS=y
+>  CONFIG_REISERFS_FS=m
+>  CONFIG_ISO9660_FS=y
 > diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-> index df0fc997dc3e..dabbf3f519c6 100644
+> index dabbf3f519c6..c2ac4f257c82 100644
 > --- a/drivers/char/Kconfig
 > +++ b/drivers/char/Kconfig
-> @@ -297,10 +297,6 @@ config JS_RTC
+> @@ -243,62 +243,6 @@ config NVRAM
 >  	  To compile this driver as a module, choose M here: the
->  	  module will be called js-rtc.
+>  	  module will be called nvram.
 >  
-> -config EFI_RTC
-> -	bool "EFI Real Time Clock Services"
-> -	depends on IA64
+> -#
+> -# These legacy RTC drivers just cause too many conflicts with the generic
+> -# RTC framework ... let's not even try to coexist any more.
+> -#
+> -if RTC_LIB=n
 > -
->  endif # RTC_LIB
->  
+> -config RTC
+> -	tristate "Enhanced Real Time Clock Support (legacy PC RTC driver)"
+> -	depends on ALPHA
+> -	---help---
+> -	  If you say Y here and create a character special file /dev/rtc with
+> -	  major number 10 and minor number 135 using mknod ("man mknod"), you
+> -	  will get access to the real time clock (or hardware clock) built
+> -	  into your computer.
+> -
+> -	  Every PC has such a clock built in. It can be used to generate
+> -	  signals from as low as 1Hz up to 8192Hz, and can also be used
+> -	  as a 24 hour alarm. It reports status information via the file
+> -	  /proc/driver/rtc and its behaviour is set by various ioctls on
+> -	  /dev/rtc.
+> -
+> -	  If you run Linux on a multiprocessor machine and said Y to
+> -	  "Symmetric Multi Processing" above, you should say Y here to read
+> -	  and set the RTC in an SMP compatible fashion.
+> -
+> -	  If you think you have a use for such a device (such as periodic data
+> -	  sampling), then say Y here, and read <file:Documentation/admin-guide/rtc.rst>
+> -	  for details.
+> -
+> -	  To compile this driver as a module, choose M here: the
+> -	  module will be called rtc.
+> -
+> -config JS_RTC
+> -	tristate "Enhanced Real Time Clock Support"
+> -	depends on SPARC32 && PCI
+> -	---help---
+> -	  If you say Y here and create a character special file /dev/rtc with
+> -	  major number 10 and minor number 135 using mknod ("man mknod"), you
+> -	  will get access to the real time clock (or hardware clock) built
+> -	  into your computer.
+> -
+> -	  Every PC has such a clock built in. It can be used to generate
+> -	  signals from as low as 1Hz up to 8192Hz, and can also be used
+> -	  as a 24 hour alarm. It reports status information via the file
+> -	  /proc/driver/rtc and its behaviour is set by various ioctls on
+> -	  /dev/rtc.
+> -
+> -	  If you think you have a use for such a device (such as periodic data
+> -	  sampling), then say Y here, and read <file:Documentation/admin-guide/rtc.rst>
+> -	  for details.
+> -
+> -	  To compile this driver as a module, choose M here: the
+> -	  module will be called js-rtc.
+> -
+> -endif # RTC_LIB
+> -
 >  config DTLK
+>  	tristate "Double Talk PC internal speech card support"
+>  	depends on ISA
 > diff --git a/drivers/char/Makefile b/drivers/char/Makefile
-> index 7c5ea6f9df14..abe3138b1f5a 100644
+> index abe3138b1f5a..ffce287ef415 100644
 > --- a/drivers/char/Makefile
 > +++ b/drivers/char/Makefile
-> @@ -22,7 +22,6 @@ obj-$(CONFIG_APPLICOM)		+= applicom.o
+> @@ -20,7 +20,6 @@ obj-$(CONFIG_APM_EMULATION)	+= apm-emulation.o
+>  obj-$(CONFIG_DTLK)		+= dtlk.o
+>  obj-$(CONFIG_APPLICOM)		+= applicom.o
 >  obj-$(CONFIG_SONYPI)		+= sonypi.o
->  obj-$(CONFIG_RTC)		+= rtc.o
+> -obj-$(CONFIG_RTC)		+= rtc.o
 >  obj-$(CONFIG_HPET)		+= hpet.o
-> -obj-$(CONFIG_EFI_RTC)		+= efirtc.o
 >  obj-$(CONFIG_XILINX_HWICAP)	+= xilinx_hwicap/
 >  obj-$(CONFIG_NVRAM)		+= nvram.o
->  obj-$(CONFIG_TOSHIBA)		+= toshiba.o
-> diff --git a/drivers/char/efirtc.c b/drivers/char/efirtc.c
+> @@ -45,9 +44,6 @@ obj-$(CONFIG_TCG_TPM)		+= tpm/
+>  
+>  obj-$(CONFIG_PS3_FLASH)		+= ps3flash.o
+>  
+> -obj-$(CONFIG_JS_RTC)		+= js-rtc.o
+> -js-rtc-y = rtc.o
+> -
+>  obj-$(CONFIG_XILLYBUS)		+= xillybus/
+>  obj-$(CONFIG_POWERNV_OP_PANEL)	+= powernv-op-panel.o
+>  obj-$(CONFIG_ADI)		+= adi.o
+> diff --git a/drivers/char/rtc.c b/drivers/char/rtc.c
 > deleted file mode 100644
-> index 4f73064d0c6f..000000000000
-> --- a/drivers/char/efirtc.c
+> index 3b91184b77ae..000000000000
+> --- a/drivers/char/rtc.c
 > +++ /dev/null
-> @@ -1,366 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
+> @@ -1,1311 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
 > -/*
-> - * EFI Time Services Driver for Linux
+> - *	Real Time Clock interface for Linux
 > - *
-> - * Copyright (C) 1999 Hewlett-Packard Co
-> - * Copyright (C) 1999 Stephane Eranian <eranian@hpl.hp.com>
+> - *	Copyright (C) 1996 Paul Gortmaker
 > - *
-> - * Based on skeleton from the drivers/char/rtc.c driver by P. Gortmaker
+> - *	This driver allows use of the real time clock (built into
+> - *	nearly all computers) from user space. It exports the /dev/rtc
+> - *	interface supporting various ioctl() and also the
+> - *	/proc/driver/rtc pseudo-file for status information.
 > - *
-> - * This code provides an architected & portable interface to the real time
-> - * clock by using EFI instead of direct bit fiddling. The functionalities are 
-> - * quite different from the rtc.c driver. The only way to talk to the device 
-> - * is by using ioctl(). There is a /proc interface which provides the raw 
-> - * information.
+> - *	The ioctls can be used to set the interrupt behaviour and
+> - *	generation rate from the RTC via IRQ 8. Then the /dev/rtc
+> - *	interface can be used to make use of these timer interrupts,
+> - *	be they interval or alarm based.
 > - *
-> - * Please note that we have kept the API as close as possible to the
-> - * legacy RTC. The standard /sbin/hwclock program should work normally 
-> - * when used to get/set the time.
+> - *	The /dev/rtc interface will block on reads until an interrupt
+> - *	has been received. If a RTC interrupt has already happened,
+> - *	it will output an unsigned long and then block. The output value
+> - *	contains the interrupt status in the low byte and the number of
+> - *	interrupts since the last read in the remaining high bytes. The
+> - *	/dev/rtc interface can also be used with the select(2) call.
 > - *
-> - * NOTES:
-> - *	- Locking is required for safe execution of EFI calls with regards
-> - *	  to interrupts and SMP.
+> - *	Based on other minimal char device drivers, like Alan's
+> - *	watchdog, Ted's random, etc. etc.
 > - *
-> - * TODO (December 1999):
-> - * 	- provide the API to set/get the WakeUp Alarm (different from the
-> - *	  rtc.c alarm).
-> - *	- SMP testing
-> - * 	- Add module support
+> - *	1.07	Paul Gortmaker.
+> - *	1.08	Miquel van Smoorenburg: disallow certain things on the
+> - *		DEC Alpha as the CMOS clock is also used for other things.
+> - *	1.09	Nikita Schmidt: epoch support and some Alpha cleanup.
+> - *	1.09a	Pete Zaitcev: Sun SPARC
+> - *	1.09b	Jeff Garzik: Modularize, init cleanup
+> - *	1.09c	Jeff Garzik: SMP cleanup
+> - *	1.10	Paul Barton-Davis: add support for async I/O
+> - *	1.10a	Andrea Arcangeli: Alpha updates
+> - *	1.10b	Andrew Morton: SMP lock fix
+> - *	1.10c	Cesar Barros: SMP locking fixes and cleanup
+> - *	1.10d	Paul Gortmaker: delete paranoia check in rtc_exit
+> - *	1.10e	Maciej W. Rozycki: Handle DECstation's year weirdness.
+> - *	1.11	Takashi Iwai: Kernel access functions
+> - *			      rtc_register/rtc_unregister/rtc_control
+> - *      1.11a   Daniele Bellucci: Audit create_proc_read_entry in rtc_init
+> - *	1.12	Venkatesh Pallipadi: Hooks for emulating rtc on HPET base-timer
+> - *		CONFIG_HPET_EMULATE_RTC
+> - *	1.12a	Maciej W. Rozycki: Handle memory-mapped chips properly.
+> - *	1.12ac	Alan Cox: Allow read access to the day of week register
+> - *	1.12b	David John: Remove calls to the BKL.
 > - */
 > -
+> -#define RTC_VERSION		"1.12b"
+> -
+> -/*
+> - *	Note that *all* calls to CMOS_READ and CMOS_WRITE are done with
+> - *	interrupts disabled. Due to the index-port/data-port (0x70/0x71)
+> - *	design of the RTC, we don't want two different things trying to
+> - *	get to it at once. (e.g. the periodic 11 min sync from
+> - *      kernel/time/ntp.c vs. this driver.)
+> - */
+> -
+> -#include <linux/interrupt.h>
+> -#include <linux/module.h>
+> -#include <linux/kernel.h>
 > -#include <linux/types.h>
-> -#include <linux/errno.h>
 > -#include <linux/miscdevice.h>
+> -#include <linux/ioport.h>
+> -#include <linux/fcntl.h>
+> -#include <linux/mc146818rtc.h>
 > -#include <linux/init.h>
-> -#include <linux/rtc.h>
+> -#include <linux/poll.h>
 > -#include <linux/proc_fs.h>
 > -#include <linux/seq_file.h>
-> -#include <linux/efi.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/sched/signal.h>
+> -#include <linux/sysctl.h>
+> -#include <linux/wait.h>
+> -#include <linux/bcd.h>
+> -#include <linux/delay.h>
 > -#include <linux/uaccess.h>
+> -#include <linux/ratelimit.h>
 > -
+> -#include <asm/current.h>
 > -
-> -#define EFI_RTC_VERSION		"0.4"
+> -#ifdef CONFIG_X86
+> -#include <asm/hpet.h>
+> -#endif
 > -
-> -#define EFI_ISDST (EFI_TIME_ADJUST_DAYLIGHT|EFI_TIME_IN_DAYLIGHT)
-> -/*
-> - * EFI Epoch is 1/1/1998
-> - */
-> -#define EFI_RTC_EPOCH		1998
+> -#ifdef CONFIG_SPARC32
+> -#include <linux/of.h>
+> -#include <linux/of_device.h>
+> -#include <asm/io.h>
 > -
-> -static DEFINE_SPINLOCK(efi_rtc_lock);
+> -static unsigned long rtc_port;
+> -static int rtc_irq;
+> -#endif
 > -
-> -static long efi_rtc_ioctl(struct file *file, unsigned int cmd,
-> -							unsigned long arg);
+> -#ifdef	CONFIG_HPET_EMULATE_RTC
+> -#undef	RTC_IRQ
+> -#endif
 > -
-> -#define is_leap(year) \
-> -          ((year) % 4 == 0 && ((year) % 100 != 0 || (year) % 400 == 0))
+> -#ifdef RTC_IRQ
+> -static int rtc_has_irq = 1;
+> -#endif
 > -
-> -static const unsigned short int __mon_yday[2][13] =
+> -#ifndef CONFIG_HPET_EMULATE_RTC
+> -#define is_hpet_enabled()			0
+> -#define hpet_set_alarm_time(hrs, min, sec)	0
+> -#define hpet_set_periodic_freq(arg)		0
+> -#define hpet_mask_rtc_irq_bit(arg)		0
+> -#define hpet_set_rtc_irq_bit(arg)		0
+> -#define hpet_rtc_timer_init()			do { } while (0)
+> -#define hpet_rtc_dropped_irq()			0
+> -#define hpet_register_irq_handler(h)		({ 0; })
+> -#define hpet_unregister_irq_handler(h)		({ 0; })
+> -#ifdef RTC_IRQ
+> -static irqreturn_t hpet_rtc_interrupt(int irq, void *dev_id)
 > -{
-> -	/* Normal years.  */
-> -	{ 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 },
-> -	/* Leap years.  */  
-> -	{ 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
+> -	return 0;
+> -}
+> -#endif
+> -#endif
+> -
+> -/*
+> - *	We sponge a minor off of the misc major. No need slurping
+> - *	up another valuable major dev number for this. If you add
+> - *	an ioctl, make sure you don't conflict with SPARC's RTC
+> - *	ioctls.
+> - */
+> -
+> -static struct fasync_struct *rtc_async_queue;
+> -
+> -static DECLARE_WAIT_QUEUE_HEAD(rtc_wait);
+> -
+> -#ifdef RTC_IRQ
+> -static void rtc_dropped_irq(struct timer_list *unused);
+> -
+> -static DEFINE_TIMER(rtc_irq_timer, rtc_dropped_irq);
+> -#endif
+> -
+> -static ssize_t rtc_read(struct file *file, char __user *buf,
+> -			size_t count, loff_t *ppos);
+> -
+> -static long rtc_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
+> -static void rtc_get_rtc_time(struct rtc_time *rtc_tm);
+> -
+> -#ifdef RTC_IRQ
+> -static __poll_t rtc_poll(struct file *file, poll_table *wait);
+> -#endif
+> -
+> -static void get_rtc_alm_time(struct rtc_time *alm_tm);
+> -#ifdef RTC_IRQ
+> -static void set_rtc_irq_bit_locked(unsigned char bit);
+> -static void mask_rtc_irq_bit_locked(unsigned char bit);
+> -
+> -static inline void set_rtc_irq_bit(unsigned char bit)
+> -{
+> -	spin_lock_irq(&rtc_lock);
+> -	set_rtc_irq_bit_locked(bit);
+> -	spin_unlock_irq(&rtc_lock);
+> -}
+> -
+> -static void mask_rtc_irq_bit(unsigned char bit)
+> -{
+> -	spin_lock_irq(&rtc_lock);
+> -	mask_rtc_irq_bit_locked(bit);
+> -	spin_unlock_irq(&rtc_lock);
+> -}
+> -#endif
+> -
+> -#ifdef CONFIG_PROC_FS
+> -static int rtc_proc_show(struct seq_file *seq, void *v);
+> -#endif
+> -
+> -/*
+> - *	Bits in rtc_status. (6 bits of room for future expansion)
+> - */
+> -
+> -#define RTC_IS_OPEN		0x01	/* means /dev/rtc is in use	*/
+> -#define RTC_TIMER_ON		0x02	/* missed irq timer active	*/
+> -
+> -/*
+> - * rtc_status is never changed by rtc_interrupt, and ioctl/open/close is
+> - * protected by the spin lock rtc_lock. However, ioctl can still disable the
+> - * timer in rtc_status and then with del_timer after the interrupt has read
+> - * rtc_status but before mod_timer is called, which would then reenable the
+> - * timer (but you would need to have an awful timing before you'd trip on it)
+> - */
+> -static unsigned long rtc_status;	/* bitmapped status byte.	*/
+> -static unsigned long rtc_freq;		/* Current periodic IRQ rate	*/
+> -static unsigned long rtc_irq_data;	/* our output to the world	*/
+> -static unsigned long rtc_max_user_freq = 64; /* > this, need CAP_SYS_RESOURCE */
+> -
+> -/*
+> - *	If this driver ever becomes modularised, it will be really nice
+> - *	to make the epoch retain its value across module reload...
+> - */
+> -
+> -static unsigned long epoch = 1900;	/* year corresponding to 0x00	*/
+> -
+> -static const unsigned char days_in_mo[] =
+> -{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+> -
+> -/*
+> - * Returns true if a clock update is in progress
+> - */
+> -static inline unsigned char rtc_is_updating(void)
+> -{
+> -	unsigned long flags;
+> -	unsigned char uip;
+> -
+> -	spin_lock_irqsave(&rtc_lock, flags);
+> -	uip = (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP);
+> -	spin_unlock_irqrestore(&rtc_lock, flags);
+> -	return uip;
+> -}
+> -
+> -#ifdef RTC_IRQ
+> -/*
+> - *	A very tiny interrupt handler. It runs with interrupts disabled,
+> - *	but there is possibility of conflicting with the set_rtc_mmss()
+> - *	call (the rtc irq and the timer irq can easily run at the same
+> - *	time in two different CPUs). So we need to serialize
+> - *	accesses to the chip with the rtc_lock spinlock that each
+> - *	architecture should implement in the timer code.
+> - *	(See ./arch/XXXX/kernel/time.c for the set_rtc_mmss() function.)
+> - */
+> -
+> -static irqreturn_t rtc_interrupt(int irq, void *dev_id)
+> -{
+> -	/*
+> -	 *	Can be an alarm interrupt, update complete interrupt,
+> -	 *	or a periodic interrupt. We store the status in the
+> -	 *	low byte and the number of interrupts received since
+> -	 *	the last read in the remainder of rtc_irq_data.
+> -	 */
+> -
+> -	spin_lock(&rtc_lock);
+> -	rtc_irq_data += 0x100;
+> -	rtc_irq_data &= ~0xff;
+> -	if (is_hpet_enabled()) {
+> -		/*
+> -		 * In this case it is HPET RTC interrupt handler
+> -		 * calling us, with the interrupt information
+> -		 * passed as arg1, instead of irq.
+> -		 */
+> -		rtc_irq_data |= (unsigned long)irq & 0xF0;
+> -	} else {
+> -		rtc_irq_data |= (CMOS_READ(RTC_INTR_FLAGS) & 0xF0);
+> -	}
+> -
+> -	if (rtc_status & RTC_TIMER_ON)
+> -		mod_timer(&rtc_irq_timer, jiffies + HZ/rtc_freq + 2*HZ/100);
+> -
+> -	spin_unlock(&rtc_lock);
+> -
+> -	wake_up_interruptible(&rtc_wait);
+> -
+> -	kill_fasync(&rtc_async_queue, SIGIO, POLL_IN);
+> -
+> -	return IRQ_HANDLED;
+> -}
+> -#endif
+> -
+> -/*
+> - * sysctl-tuning infrastructure.
+> - */
+> -static struct ctl_table rtc_table[] = {
+> -	{
+> -		.procname	= "max-user-freq",
+> -		.data		= &rtc_max_user_freq,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec,
+> -	},
+> -	{ }
 > -};
 > -
-> -/*
-> - * returns day of the year [0-365]
-> - */
-> -static inline int
-> -compute_yday(efi_time_t *eft)
+> -static struct ctl_table rtc_root[] = {
+> -	{
+> -		.procname	= "rtc",
+> -		.mode		= 0555,
+> -		.child		= rtc_table,
+> -	},
+> -	{ }
+> -};
+> -
+> -static struct ctl_table dev_root[] = {
+> -	{
+> -		.procname	= "dev",
+> -		.mode		= 0555,
+> -		.child		= rtc_root,
+> -	},
+> -	{ }
+> -};
+> -
+> -static struct ctl_table_header *sysctl_header;
+> -
+> -static int __init init_sysctl(void)
 > -{
-> -	/* efi_time_t.month is in the [1-12] so, we need -1 */
-> -	return  __mon_yday[is_leap(eft->year)][eft->month-1]+ eft->day -1;
+> -    sysctl_header = register_sysctl_table(dev_root);
+> -    return 0;
 > -}
-> -/*
-> - * returns day of the week [0-6] 0=Sunday
-> - *
-> - * Don't try to provide a year that's before 1998, please !
-> - */
-> -static int
-> -compute_wday(efi_time_t *eft)
+> -
+> -static void __exit cleanup_sysctl(void)
 > -{
-> -	int y;
-> -	int ndays = 0;
+> -    unregister_sysctl_table(sysctl_header);
+> -}
 > -
-> -	if ( eft->year < 1998 ) {
-> -		printk(KERN_ERR "efirtc: EFI year < 1998, invalid date\n");
-> -		return -1;
-> -	}
+> -/*
+> - *	Now all the various file operations that we export.
+> - */
 > -
-> -	for(y=EFI_RTC_EPOCH; y < eft->year; y++ ) {
-> -		ndays += 365 + (is_leap(y) ? 1 : 0);
-> -	}
-> -	ndays += compute_yday(eft);
+> -static ssize_t rtc_read(struct file *file, char __user *buf,
+> -			size_t count, loff_t *ppos)
+> -{
+> -#ifndef RTC_IRQ
+> -	return -EIO;
+> -#else
+> -	DECLARE_WAITQUEUE(wait, current);
+> -	unsigned long data;
+> -	ssize_t retval;
+> -
+> -	if (rtc_has_irq == 0)
+> -		return -EIO;
 > -
 > -	/*
-> -	 * 4=1/1/1998 was a Thursday
+> -	 * Historically this function used to assume that sizeof(unsigned long)
+> -	 * is the same in userspace and kernelspace.  This lead to problems
+> -	 * for configurations with multiple ABIs such a the MIPS o32 and 64
+> -	 * ABIs supported on the same kernel.  So now we support read of both
+> -	 * 4 and 8 bytes and assume that's the sizeof(unsigned long) in the
+> -	 * userspace ABI.
 > -	 */
-> -	return (ndays + 4) % 7;
-> -}
+> -	if (count != sizeof(unsigned int) && count !=  sizeof(unsigned long))
+> -		return -EINVAL;
 > -
-> -static void
-> -convert_to_efi_time(struct rtc_time *wtime, efi_time_t *eft)
-> -{
+> -	add_wait_queue(&rtc_wait, &wait);
 > -
-> -	eft->year	= wtime->tm_year + 1900;
-> -	eft->month	= wtime->tm_mon + 1; 
-> -	eft->day	= wtime->tm_mday;
-> -	eft->hour	= wtime->tm_hour;
-> -	eft->minute	= wtime->tm_min;
-> -	eft->second 	= wtime->tm_sec;
-> -	eft->nanosecond = 0; 
-> -	eft->daylight	= wtime->tm_isdst ? EFI_ISDST: 0;
-> -	eft->timezone	= EFI_UNSPECIFIED_TIMEZONE;
-> -}
+> -	do {
+> -		/* First make it right. Then make it fast. Putting this whole
+> -		 * block within the parentheses of a while would be too
+> -		 * confusing. And no, xchg() is not the answer. */
 > -
-> -static void
-> -convert_from_efi_time(efi_time_t *eft, struct rtc_time *wtime)
-> -{
-> -	memset(wtime, 0, sizeof(*wtime));
-> -	wtime->tm_sec  = eft->second;
-> -	wtime->tm_min  = eft->minute;
-> -	wtime->tm_hour = eft->hour;
-> -	wtime->tm_mday = eft->day;
-> -	wtime->tm_mon  = eft->month - 1;
-> -	wtime->tm_year = eft->year - 1900;
+> -		__set_current_state(TASK_INTERRUPTIBLE);
 > -
-> -	/* day of the week [0-6], Sunday=0 */
-> -	wtime->tm_wday = compute_wday(eft);
+> -		spin_lock_irq(&rtc_lock);
+> -		data = rtc_irq_data;
+> -		rtc_irq_data = 0;
+> -		spin_unlock_irq(&rtc_lock);
 > -
-> -	/* day in the year [1-365]*/
-> -	wtime->tm_yday = compute_yday(eft);
-> -
-> -
-> -	switch (eft->daylight & EFI_ISDST) {
-> -		case EFI_ISDST:
-> -			wtime->tm_isdst = 1;
+> -		if (data != 0)
 > -			break;
-> -		case EFI_TIME_ADJUST_DAYLIGHT:
-> -			wtime->tm_isdst = 0;
-> -			break;
-> -		default:
-> -			wtime->tm_isdst = -1;
+> -
+> -		if (file->f_flags & O_NONBLOCK) {
+> -			retval = -EAGAIN;
+> -			goto out;
+> -		}
+> -		if (signal_pending(current)) {
+> -			retval = -ERESTARTSYS;
+> -			goto out;
+> -		}
+> -		schedule();
+> -	} while (1);
+> -
+> -	if (count == sizeof(unsigned int)) {
+> -		retval = put_user(data,
+> -				  (unsigned int __user *)buf) ?: sizeof(int);
+> -	} else {
+> -		retval = put_user(data,
+> -				  (unsigned long __user *)buf) ?: sizeof(long);
 > -	}
+> -	if (!retval)
+> -		retval = count;
+> - out:
+> -	__set_current_state(TASK_RUNNING);
+> -	remove_wait_queue(&rtc_wait, &wait);
+> -
+> -	return retval;
+> -#endif
 > -}
 > -
-> -static long efi_rtc_ioctl(struct file *file, unsigned int cmd,
-> -							unsigned long arg)
+> -static int rtc_do_ioctl(unsigned int cmd, unsigned long arg, int kernel)
 > -{
+> -	struct rtc_time wtime;
 > -
-> -	efi_status_t	status;
-> -	unsigned long	flags;
-> -	efi_time_t	eft;
-> -	efi_time_cap_t	cap;
-> -	struct rtc_time	wtime;
-> -	struct rtc_wkalrm __user *ewp;
-> -	unsigned char	enabled, pending;
-> -
-> -	switch (cmd) {
-> -		case RTC_UIE_ON:
-> -		case RTC_UIE_OFF:
-> -		case RTC_PIE_ON:
-> -		case RTC_PIE_OFF:
-> -		case RTC_AIE_ON:
+> -#ifdef RTC_IRQ
+> -	if (rtc_has_irq == 0) {
+> -		switch (cmd) {
 > -		case RTC_AIE_OFF:
-> -		case RTC_ALM_SET:
-> -		case RTC_ALM_READ:
+> -		case RTC_AIE_ON:
+> -		case RTC_PIE_OFF:
+> -		case RTC_PIE_ON:
+> -		case RTC_UIE_OFF:
+> -		case RTC_UIE_ON:
 > -		case RTC_IRQP_READ:
 > -		case RTC_IRQP_SET:
-> -		case RTC_EPOCH_READ:
-> -		case RTC_EPOCH_SET:
+> -			return -EINVAL;
+> -		}
+> -	}
+> -#endif
+> -
+> -	switch (cmd) {
+> -#ifdef RTC_IRQ
+> -	case RTC_AIE_OFF:	/* Mask alarm int. enab. bit	*/
+> -	{
+> -		mask_rtc_irq_bit(RTC_AIE);
+> -		return 0;
+> -	}
+> -	case RTC_AIE_ON:	/* Allow alarm interrupts.	*/
+> -	{
+> -		set_rtc_irq_bit(RTC_AIE);
+> -		return 0;
+> -	}
+> -	case RTC_PIE_OFF:	/* Mask periodic int. enab. bit	*/
+> -	{
+> -		/* can be called from isr via rtc_control() */
+> -		unsigned long flags;
+> -
+> -		spin_lock_irqsave(&rtc_lock, flags);
+> -		mask_rtc_irq_bit_locked(RTC_PIE);
+> -		if (rtc_status & RTC_TIMER_ON) {
+> -			rtc_status &= ~RTC_TIMER_ON;
+> -			del_timer(&rtc_irq_timer);
+> -		}
+> -		spin_unlock_irqrestore(&rtc_lock, flags);
+> -
+> -		return 0;
+> -	}
+> -	case RTC_PIE_ON:	/* Allow periodic ints		*/
+> -	{
+> -		/* can be called from isr via rtc_control() */
+> -		unsigned long flags;
+> -
+> -		/*
+> -		 * We don't really want Joe User enabling more
+> -		 * than 64Hz of interrupts on a multi-user machine.
+> -		 */
+> -		if (!kernel && (rtc_freq > rtc_max_user_freq) &&
+> -						(!capable(CAP_SYS_RESOURCE)))
+> -			return -EACCES;
+> -
+> -		spin_lock_irqsave(&rtc_lock, flags);
+> -		if (!(rtc_status & RTC_TIMER_ON)) {
+> -			mod_timer(&rtc_irq_timer, jiffies + HZ/rtc_freq +
+> -					2*HZ/100);
+> -			rtc_status |= RTC_TIMER_ON;
+> -		}
+> -		set_rtc_irq_bit_locked(RTC_PIE);
+> -		spin_unlock_irqrestore(&rtc_lock, flags);
+> -
+> -		return 0;
+> -	}
+> -	case RTC_UIE_OFF:	/* Mask ints from RTC updates.	*/
+> -	{
+> -		mask_rtc_irq_bit(RTC_UIE);
+> -		return 0;
+> -	}
+> -	case RTC_UIE_ON:	/* Allow ints for RTC updates.	*/
+> -	{
+> -		set_rtc_irq_bit(RTC_UIE);
+> -		return 0;
+> -	}
+> -#endif
+> -	case RTC_ALM_READ:	/* Read the present alarm time */
+> -	{
+> -		/*
+> -		 * This returns a struct rtc_time. Reading >= 0xc0
+> -		 * means "don't care" or "match all". Only the tm_hour,
+> -		 * tm_min, and tm_sec values are filled in.
+> -		 */
+> -		memset(&wtime, 0, sizeof(struct rtc_time));
+> -		get_rtc_alm_time(&wtime);
+> -		break;
+> -	}
+> -	case RTC_ALM_SET:	/* Store a time into the alarm */
+> -	{
+> -		/*
+> -		 * This expects a struct rtc_time. Writing 0xff means
+> -		 * "don't care" or "match all". Only the tm_hour,
+> -		 * tm_min and tm_sec are used.
+> -		 */
+> -		unsigned char hrs, min, sec;
+> -		struct rtc_time alm_tm;
+> -
+> -		if (copy_from_user(&alm_tm, (struct rtc_time __user *)arg,
+> -				   sizeof(struct rtc_time)))
+> -			return -EFAULT;
+> -
+> -		hrs = alm_tm.tm_hour;
+> -		min = alm_tm.tm_min;
+> -		sec = alm_tm.tm_sec;
+> -
+> -		spin_lock_irq(&rtc_lock);
+> -		if (hpet_set_alarm_time(hrs, min, sec)) {
+> -			/*
+> -			 * Fallthru and set alarm time in CMOS too,
+> -			 * so that we will get proper value in RTC_ALM_READ
+> -			 */
+> -		}
+> -		if (!(CMOS_READ(RTC_CONTROL) & RTC_DM_BINARY) ||
+> -							RTC_ALWAYS_BCD) {
+> -			if (sec < 60)
+> -				sec = bin2bcd(sec);
+> -			else
+> -				sec = 0xff;
+> -
+> -			if (min < 60)
+> -				min = bin2bcd(min);
+> -			else
+> -				min = 0xff;
+> -
+> -			if (hrs < 24)
+> -				hrs = bin2bcd(hrs);
+> -			else
+> -				hrs = 0xff;
+> -		}
+> -		CMOS_WRITE(hrs, RTC_HOURS_ALARM);
+> -		CMOS_WRITE(min, RTC_MINUTES_ALARM);
+> -		CMOS_WRITE(sec, RTC_SECONDS_ALARM);
+> -		spin_unlock_irq(&rtc_lock);
+> -
+> -		return 0;
+> -	}
+> -	case RTC_RD_TIME:	/* Read the time/date from RTC	*/
+> -	{
+> -		memset(&wtime, 0, sizeof(struct rtc_time));
+> -		rtc_get_rtc_time(&wtime);
+> -		break;
+> -	}
+> -	case RTC_SET_TIME:	/* Set the RTC */
+> -	{
+> -		struct rtc_time rtc_tm;
+> -		unsigned char mon, day, hrs, min, sec, leap_yr;
+> -		unsigned char save_control, save_freq_select;
+> -		unsigned int yrs;
+> -#ifdef CONFIG_MACH_DECSTATION
+> -		unsigned int real_yrs;
+> -#endif
+> -
+> -		if (!capable(CAP_SYS_TIME))
+> -			return -EACCES;
+> -
+> -		if (copy_from_user(&rtc_tm, (struct rtc_time __user *)arg,
+> -				   sizeof(struct rtc_time)))
+> -			return -EFAULT;
+> -
+> -		yrs = rtc_tm.tm_year + 1900;
+> -		mon = rtc_tm.tm_mon + 1;   /* tm_mon starts at zero */
+> -		day = rtc_tm.tm_mday;
+> -		hrs = rtc_tm.tm_hour;
+> -		min = rtc_tm.tm_min;
+> -		sec = rtc_tm.tm_sec;
+> -
+> -		if (yrs < 1970)
 > -			return -EINVAL;
 > -
-> -		case RTC_RD_TIME:
-> -			spin_lock_irqsave(&efi_rtc_lock, flags);
+> -		leap_yr = ((!(yrs % 4) && (yrs % 100)) || !(yrs % 400));
 > -
-> -			status = efi.get_time(&eft, &cap);
+> -		if ((mon > 12) || (day == 0))
+> -			return -EINVAL;
 > -
-> -			spin_unlock_irqrestore(&efi_rtc_lock,flags);
+> -		if (day > (days_in_mo[mon] + ((mon == 2) && leap_yr)))
+> -			return -EINVAL;
 > -
-> -			if (status != EFI_SUCCESS) {
-> -				/* should never happen */
-> -				printk(KERN_ERR "efitime: can't read time\n");
-> -				return -EINVAL;
-> -			}
+> -		if ((hrs >= 24) || (min >= 60) || (sec >= 60))
+> -			return -EINVAL;
 > -
-> -			convert_from_efi_time(&eft, &wtime);
+> -		yrs -= epoch;
+> -		if (yrs > 255)		/* They are unsigned */
+> -			return -EINVAL;
 > -
-> - 			return copy_to_user((void __user *)arg, &wtime,
-> -					    sizeof (struct rtc_time)) ? - EFAULT : 0;
+> -		spin_lock_irq(&rtc_lock);
+> -#ifdef CONFIG_MACH_DECSTATION
+> -		real_yrs = yrs;
+> -		yrs = 72;
 > -
-> -		case RTC_SET_TIME:
+> -		/*
+> -		 * We want to keep the year set to 73 until March
+> -		 * for non-leap years, so that Feb, 29th is handled
+> -		 * correctly.
+> -		 */
+> -		if (!leap_yr && mon < 3) {
+> -			real_yrs--;
+> -			yrs = 73;
+> -		}
+> -#endif
+> -		/* These limits and adjustments are independent of
+> -		 * whether the chip is in binary mode or not.
+> -		 */
+> -		if (yrs > 169) {
+> -			spin_unlock_irq(&rtc_lock);
+> -			return -EINVAL;
+> -		}
+> -		if (yrs >= 100)
+> -			yrs -= 100;
 > -
-> -			if (!capable(CAP_SYS_TIME)) return -EACCES;
+> -		if (!(CMOS_READ(RTC_CONTROL) & RTC_DM_BINARY)
+> -		    || RTC_ALWAYS_BCD) {
+> -			sec = bin2bcd(sec);
+> -			min = bin2bcd(min);
+> -			hrs = bin2bcd(hrs);
+> -			day = bin2bcd(day);
+> -			mon = bin2bcd(mon);
+> -			yrs = bin2bcd(yrs);
+> -		}
 > -
-> -			if (copy_from_user(&wtime, (struct rtc_time __user *)arg,
-> -					   sizeof(struct rtc_time)) )
-> -				return -EFAULT;
+> -		save_control = CMOS_READ(RTC_CONTROL);
+> -		CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+> -		save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
+> -		CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
 > -
-> -			convert_to_efi_time(&wtime, &eft);
+> -#ifdef CONFIG_MACH_DECSTATION
+> -		CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
+> -#endif
+> -		CMOS_WRITE(yrs, RTC_YEAR);
+> -		CMOS_WRITE(mon, RTC_MONTH);
+> -		CMOS_WRITE(day, RTC_DAY_OF_MONTH);
+> -		CMOS_WRITE(hrs, RTC_HOURS);
+> -		CMOS_WRITE(min, RTC_MINUTES);
+> -		CMOS_WRITE(sec, RTC_SECONDS);
 > -
-> -			spin_lock_irqsave(&efi_rtc_lock, flags);
+> -		CMOS_WRITE(save_control, RTC_CONTROL);
+> -		CMOS_WRITE(save_freq_select, RTC_FREQ_SELECT);
 > -
-> -			status = efi.set_time(&eft);
-> -
-> -			spin_unlock_irqrestore(&efi_rtc_lock,flags);
-> -
-> -			return status == EFI_SUCCESS ? 0 : -EINVAL;
-> -
-> -		case RTC_WKALM_SET:
-> -
-> -			if (!capable(CAP_SYS_TIME)) return -EACCES;
-> -
-> -			ewp = (struct rtc_wkalrm __user *)arg;
-> -
-> -			if (  get_user(enabled, &ewp->enabled)
-> -			   || copy_from_user(&wtime, &ewp->time, sizeof(struct rtc_time)) )
-> -				return -EFAULT;
-> -
-> -			convert_to_efi_time(&wtime, &eft);
-> -
-> -			spin_lock_irqsave(&efi_rtc_lock, flags);
-> -			/*
-> -			 * XXX Fixme:
-> -			 * As of EFI 0.92 with the firmware I have on my
-> -			 * machine this call does not seem to work quite
-> -			 * right
-> -			 */
-> -			status = efi.set_wakeup_time((efi_bool_t)enabled, &eft);
-> -
-> -			spin_unlock_irqrestore(&efi_rtc_lock,flags);
-> -
-> -			return status == EFI_SUCCESS ? 0 : -EINVAL;
-> -
-> -		case RTC_WKALM_RD:
-> -
-> -			spin_lock_irqsave(&efi_rtc_lock, flags);
-> -
-> -			status = efi.get_wakeup_time((efi_bool_t *)&enabled, (efi_bool_t *)&pending, &eft);
-> -
-> -			spin_unlock_irqrestore(&efi_rtc_lock,flags);
-> -
-> -			if (status != EFI_SUCCESS) return -EINVAL;
-> -
-> -			ewp = (struct rtc_wkalrm __user *)arg;
-> -
-> -			if (  put_user(enabled, &ewp->enabled)
-> -			   || put_user(pending, &ewp->pending)) return -EFAULT;
-> -
-> -			convert_from_efi_time(&eft, &wtime);
-> -
-> -			return copy_to_user(&ewp->time, &wtime,
-> -					    sizeof(struct rtc_time)) ? -EFAULT : 0;
+> -		spin_unlock_irq(&rtc_lock);
+> -		return 0;
 > -	}
-> -	return -ENOTTY;
+> -#ifdef RTC_IRQ
+> -	case RTC_IRQP_READ:	/* Read the periodic IRQ rate.	*/
+> -	{
+> -		return put_user(rtc_freq, (unsigned long __user *)arg);
+> -	}
+> -	case RTC_IRQP_SET:	/* Set periodic IRQ rate.	*/
+> -	{
+> -		int tmp = 0;
+> -		unsigned char val;
+> -		/* can be called from isr via rtc_control() */
+> -		unsigned long flags;
+> -
+> -		/*
+> -		 * The max we can do is 8192Hz.
+> -		 */
+> -		if ((arg < 2) || (arg > 8192))
+> -			return -EINVAL;
+> -		/*
+> -		 * We don't really want Joe User generating more
+> -		 * than 64Hz of interrupts on a multi-user machine.
+> -		 */
+> -		if (!kernel && (arg > rtc_max_user_freq) &&
+> -					!capable(CAP_SYS_RESOURCE))
+> -			return -EACCES;
+> -
+> -		while (arg > (1<<tmp))
+> -			tmp++;
+> -
+> -		/*
+> -		 * Check that the input was really a power of 2.
+> -		 */
+> -		if (arg != (1<<tmp))
+> -			return -EINVAL;
+> -
+> -		rtc_freq = arg;
+> -
+> -		spin_lock_irqsave(&rtc_lock, flags);
+> -		if (hpet_set_periodic_freq(arg)) {
+> -			spin_unlock_irqrestore(&rtc_lock, flags);
+> -			return 0;
+> -		}
+> -
+> -		val = CMOS_READ(RTC_FREQ_SELECT) & 0xf0;
+> -		val |= (16 - tmp);
+> -		CMOS_WRITE(val, RTC_FREQ_SELECT);
+> -		spin_unlock_irqrestore(&rtc_lock, flags);
+> -		return 0;
+> -	}
+> -#endif
+> -	case RTC_EPOCH_READ:	/* Read the epoch.	*/
+> -	{
+> -		return put_user(epoch, (unsigned long __user *)arg);
+> -	}
+> -	case RTC_EPOCH_SET:	/* Set the epoch.	*/
+> -	{
+> -		/*
+> -		 * There were no RTC clocks before 1900.
+> -		 */
+> -		if (arg < 1900)
+> -			return -EINVAL;
+> -
+> -		if (!capable(CAP_SYS_TIME))
+> -			return -EACCES;
+> -
+> -		epoch = arg;
+> -		return 0;
+> -	}
+> -	default:
+> -		return -ENOTTY;
+> -	}
+> -	return copy_to_user((void __user *)arg,
+> -			    &wtime, sizeof wtime) ? -EFAULT : 0;
 > -}
+> -
+> -static long rtc_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+> -{
+> -	long ret;
+> -	ret = rtc_do_ioctl(cmd, arg, 0);
+> -	return ret;
+> -}
+> -
+> -/*
+> - *	We enforce only one user at a time here with the open/close.
+> - *	Also clear the previous interrupt data on an open, and clean
+> - *	up things on a close.
+> - */
+> -static int rtc_open(struct inode *inode, struct file *file)
+> -{
+> -	spin_lock_irq(&rtc_lock);
+> -
+> -	if (rtc_status & RTC_IS_OPEN)
+> -		goto out_busy;
+> -
+> -	rtc_status |= RTC_IS_OPEN;
+> -
+> -	rtc_irq_data = 0;
+> -	spin_unlock_irq(&rtc_lock);
+> -	return 0;
+> -
+> -out_busy:
+> -	spin_unlock_irq(&rtc_lock);
+> -	return -EBUSY;
+> -}
+> -
+> -static int rtc_fasync(int fd, struct file *filp, int on)
+> -{
+> -	return fasync_helper(fd, filp, on, &rtc_async_queue);
+> -}
+> -
+> -static int rtc_release(struct inode *inode, struct file *file)
+> -{
+> -#ifdef RTC_IRQ
+> -	unsigned char tmp;
+> -
+> -	if (rtc_has_irq == 0)
+> -		goto no_irq;
+> -
+> -	/*
+> -	 * Turn off all interrupts once the device is no longer
+> -	 * in use, and clear the data.
+> -	 */
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	if (!hpet_mask_rtc_irq_bit(RTC_PIE | RTC_AIE | RTC_UIE)) {
+> -		tmp = CMOS_READ(RTC_CONTROL);
+> -		tmp &=  ~RTC_PIE;
+> -		tmp &=  ~RTC_AIE;
+> -		tmp &=  ~RTC_UIE;
+> -		CMOS_WRITE(tmp, RTC_CONTROL);
+> -		CMOS_READ(RTC_INTR_FLAGS);
+> -	}
+> -	if (rtc_status & RTC_TIMER_ON) {
+> -		rtc_status &= ~RTC_TIMER_ON;
+> -		del_timer(&rtc_irq_timer);
+> -	}
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -no_irq:
+> -#endif
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	rtc_irq_data = 0;
+> -	rtc_status &= ~RTC_IS_OPEN;
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -	return 0;
+> -}
+> -
+> -#ifdef RTC_IRQ
+> -static __poll_t rtc_poll(struct file *file, poll_table *wait)
+> -{
+> -	unsigned long l;
+> -
+> -	if (rtc_has_irq == 0)
+> -		return 0;
+> -
+> -	poll_wait(file, &rtc_wait, wait);
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	l = rtc_irq_data;
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -	if (l != 0)
+> -		return EPOLLIN | EPOLLRDNORM;
+> -	return 0;
+> -}
+> -#endif
 > -
 > -/*
 > - *	The various file operations we support.
 > - */
 > -
-> -static const struct file_operations efi_rtc_fops = {
+> -static const struct file_operations rtc_fops = {
 > -	.owner		= THIS_MODULE,
-> -	.unlocked_ioctl	= efi_rtc_ioctl,
 > -	.llseek		= no_llseek,
+> -	.read		= rtc_read,
+> -#ifdef RTC_IRQ
+> -	.poll		= rtc_poll,
+> -#endif
+> -	.unlocked_ioctl	= rtc_ioctl,
+> -	.open		= rtc_open,
+> -	.release	= rtc_release,
+> -	.fasync		= rtc_fasync,
 > -};
 > -
-> -static struct miscdevice efi_rtc_dev= {
-> -	EFI_RTC_MINOR,
-> -	"efirtc",
-> -	&efi_rtc_fops
+> -static struct miscdevice rtc_dev = {
+> -	.minor		= RTC_MINOR,
+> -	.name		= "rtc",
+> -	.fops		= &rtc_fops,
 > -};
 > -
-> -/*
-> - *	We export RAW EFI information to /proc/driver/efirtc
-> - */
-> -static int efi_rtc_proc_show(struct seq_file *m, void *v)
+> -static resource_size_t rtc_size;
+> -
+> -static struct resource * __init rtc_request_region(resource_size_t size)
 > -{
-> -	efi_time_t 	eft, alm;
-> -	efi_time_cap_t	cap;
-> -	efi_bool_t	enabled, pending;	
-> -	unsigned long	flags;
+> -	struct resource *r;
 > -
-> -	memset(&eft, 0, sizeof(eft));
-> -	memset(&alm, 0, sizeof(alm));
-> -	memset(&cap, 0, sizeof(cap));
-> -
-> -	spin_lock_irqsave(&efi_rtc_lock, flags);
-> -
-> -	efi.get_time(&eft, &cap);
-> -	efi.get_wakeup_time(&enabled, &pending, &alm);
-> -
-> -	spin_unlock_irqrestore(&efi_rtc_lock,flags);
-> -
-> -	seq_printf(m,
-> -		   "Time           : %u:%u:%u.%09u\n"
-> -		   "Date           : %u-%u-%u\n"
-> -		   "Daylight       : %u\n",
-> -		   eft.hour, eft.minute, eft.second, eft.nanosecond, 
-> -		   eft.year, eft.month, eft.day,
-> -		   eft.daylight);
-> -
-> -	if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
-> -		seq_puts(m, "Timezone       : unspecified\n");
+> -	if (RTC_IOMAPPED)
+> -		r = request_region(RTC_PORT(0), size, "rtc");
 > -	else
-> -		/* XXX fixme: convert to string? */
-> -		seq_printf(m, "Timezone       : %u\n", eft.timezone);
-> -		
+> -		r = request_mem_region(RTC_PORT(0), size, "rtc");
 > -
-> -	seq_printf(m,
-> -		   "Alarm Time     : %u:%u:%u.%09u\n"
-> -		   "Alarm Date     : %u-%u-%u\n"
-> -		   "Alarm Daylight : %u\n"
-> -		   "Enabled        : %s\n"
-> -		   "Pending        : %s\n",
-> -		   alm.hour, alm.minute, alm.second, alm.nanosecond, 
-> -		   alm.year, alm.month, alm.day, 
-> -		   alm.daylight,
-> -		   enabled == 1 ? "yes" : "no",
-> -		   pending == 1 ? "yes" : "no");
+> -	if (r)
+> -		rtc_size = size;
 > -
-> -	if (eft.timezone == EFI_UNSPECIFIED_TIMEZONE)
-> -		seq_puts(m, "Timezone       : unspecified\n");
+> -	return r;
+> -}
+> -
+> -static void rtc_release_region(void)
+> -{
+> -	if (RTC_IOMAPPED)
+> -		release_region(RTC_PORT(0), rtc_size);
 > -	else
-> -		/* XXX fixme: convert to string? */
-> -		seq_printf(m, "Timezone       : %u\n", alm.timezone);
+> -		release_mem_region(RTC_PORT(0), rtc_size);
+> -}
+> -
+> -static int __init rtc_init(void)
+> -{
+> -#ifdef CONFIG_PROC_FS
+> -	struct proc_dir_entry *ent;
+> -#endif
+> -#if defined(__alpha__) || defined(__mips__)
+> -	unsigned int year, ctrl;
+> -	char *guess = NULL;
+> -#endif
+> -#ifdef CONFIG_SPARC32
+> -	struct device_node *ebus_dp;
+> -	struct platform_device *op;
+> -#else
+> -	void *r;
+> -#ifdef RTC_IRQ
+> -	irq_handler_t rtc_int_handler_ptr;
+> -#endif
+> -#endif
+> -
+> -#ifdef CONFIG_SPARC32
+> -	for_each_node_by_name(ebus_dp, "ebus") {
+> -		struct device_node *dp;
+> -		for_each_child_of_node(ebus_dp, dp) {
+> -			if (of_node_name_eq(dp, "rtc")) {
+> -				op = of_find_device_by_node(dp);
+> -				if (op) {
+> -					rtc_port = op->resource[0].start;
+> -					rtc_irq = op->irqs[0];
+> -					goto found;
+> -				}
+> -			}
+> -		}
+> -	}
+> -	rtc_has_irq = 0;
+> -	printk(KERN_ERR "rtc_init: no PC rtc found\n");
+> -	return -EIO;
+> -
+> -found:
+> -	if (!rtc_irq) {
+> -		rtc_has_irq = 0;
+> -		goto no_irq;
+> -	}
 > -
 > -	/*
-> -	 * now prints the capabilities
+> -	 * XXX Interrupt pin #7 in Espresso is shared between RTC and
+> -	 * PCI Slot 2 INTA# (and some INTx# in Slot 1).
 > -	 */
-> -	seq_printf(m,
-> -		   "Resolution     : %u\n"
-> -		   "Accuracy       : %u\n"
-> -		   "SetstoZero     : %u\n",
-> -		   cap.resolution, cap.accuracy, cap.sets_to_zero);
+> -	if (request_irq(rtc_irq, rtc_interrupt, IRQF_SHARED, "rtc",
+> -			(void *)&rtc_port)) {
+> -		rtc_has_irq = 0;
+> -		printk(KERN_ERR "rtc: cannot register IRQ %d\n", rtc_irq);
+> -		return -EIO;
+> -	}
+> -no_irq:
+> -#else
+> -	r = rtc_request_region(RTC_IO_EXTENT);
+> -
+> -	/*
+> -	 * If we've already requested a smaller range (for example, because
+> -	 * PNPBIOS or ACPI told us how the device is configured), the request
+> -	 * above might fail because it's too big.
+> -	 *
+> -	 * If so, request just the range we actually use.
+> -	 */
+> -	if (!r)
+> -		r = rtc_request_region(RTC_IO_EXTENT_USED);
+> -	if (!r) {
+> -#ifdef RTC_IRQ
+> -		rtc_has_irq = 0;
+> -#endif
+> -		printk(KERN_ERR "rtc: I/O resource %lx is not free.\n",
+> -		       (long)(RTC_PORT(0)));
+> -		return -EIO;
+> -	}
+> -
+> -#ifdef RTC_IRQ
+> -	if (is_hpet_enabled()) {
+> -		int err;
+> -
+> -		rtc_int_handler_ptr = hpet_rtc_interrupt;
+> -		err = hpet_register_irq_handler(rtc_interrupt);
+> -		if (err != 0) {
+> -			printk(KERN_WARNING "hpet_register_irq_handler failed "
+> -					"in rtc_init().");
+> -			return err;
+> -		}
+> -	} else {
+> -		rtc_int_handler_ptr = rtc_interrupt;
+> -	}
+> -
+> -	if (request_irq(RTC_IRQ, rtc_int_handler_ptr, 0, "rtc", NULL)) {
+> -		/* Yeah right, seeing as irq 8 doesn't even hit the bus. */
+> -		rtc_has_irq = 0;
+> -		printk(KERN_ERR "rtc: IRQ %d is not free.\n", RTC_IRQ);
+> -		rtc_release_region();
+> -
+> -		return -EIO;
+> -	}
+> -	hpet_rtc_timer_init();
+> -
+> -#endif
+> -
+> -#endif /* CONFIG_SPARC32 vs. others */
+> -
+> -	if (misc_register(&rtc_dev)) {
+> -#ifdef RTC_IRQ
+> -		free_irq(RTC_IRQ, NULL);
+> -		hpet_unregister_irq_handler(rtc_interrupt);
+> -		rtc_has_irq = 0;
+> -#endif
+> -		rtc_release_region();
+> -		return -ENODEV;
+> -	}
+> -
+> -#ifdef CONFIG_PROC_FS
+> -	ent = proc_create_single("driver/rtc", 0, NULL, rtc_proc_show);
+> -	if (!ent)
+> -		printk(KERN_WARNING "rtc: Failed to register with procfs.\n");
+> -#endif
+> -
+> -#if defined(__alpha__) || defined(__mips__)
+> -	rtc_freq = HZ;
+> -
+> -	/* Each operating system on an Alpha uses its own epoch.
+> -	   Let's try to guess which one we are using now. */
+> -
+> -	if (rtc_is_updating() != 0)
+> -		msleep(20);
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	year = CMOS_READ(RTC_YEAR);
+> -	ctrl = CMOS_READ(RTC_CONTROL);
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -	if (!(ctrl & RTC_DM_BINARY) || RTC_ALWAYS_BCD)
+> -		year = bcd2bin(year);       /* This should never happen... */
+> -
+> -	if (year < 20) {
+> -		epoch = 2000;
+> -		guess = "SRM (post-2000)";
+> -	} else if (year >= 20 && year < 48) {
+> -		epoch = 1980;
+> -		guess = "ARC console";
+> -	} else if (year >= 48 && year < 72) {
+> -		epoch = 1952;
+> -		guess = "Digital UNIX";
+> -#if defined(__mips__)
+> -	} else if (year >= 72 && year < 74) {
+> -		epoch = 2000;
+> -		guess = "Digital DECstation";
+> -#else
+> -	} else if (year >= 70) {
+> -		epoch = 1900;
+> -		guess = "Standard PC (1900)";
+> -#endif
+> -	}
+> -	if (guess)
+> -		printk(KERN_INFO "rtc: %s epoch (%lu) detected\n",
+> -			guess, epoch);
+> -#endif
+> -#ifdef RTC_IRQ
+> -	if (rtc_has_irq == 0)
+> -		goto no_irq2;
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	rtc_freq = 1024;
+> -	if (!hpet_set_periodic_freq(rtc_freq)) {
+> -		/*
+> -		 * Initialize periodic frequency to CMOS reset default,
+> -		 * which is 1024Hz
+> -		 */
+> -		CMOS_WRITE(((CMOS_READ(RTC_FREQ_SELECT) & 0xF0) | 0x06),
+> -			   RTC_FREQ_SELECT);
+> -	}
+> -	spin_unlock_irq(&rtc_lock);
+> -no_irq2:
+> -#endif
+> -
+> -	(void) init_sysctl();
+> -
+> -	printk(KERN_INFO "Real Time Clock Driver v" RTC_VERSION "\n");
 > -
 > -	return 0;
 > -}
-> -static int __init 
-> -efi_rtc_init(void)
+> -
+> -static void __exit rtc_exit(void)
 > -{
-> -	int ret;
-> -	struct proc_dir_entry *dir;
+> -	cleanup_sysctl();
+> -	remove_proc_entry("driver/rtc", NULL);
+> -	misc_deregister(&rtc_dev);
 > -
-> -	printk(KERN_INFO "EFI Time Services Driver v%s\n", EFI_RTC_VERSION);
-> -
-> -	ret = misc_register(&efi_rtc_dev);
-> -	if (ret) {
-> -		printk(KERN_ERR "efirtc: can't misc_register on minor=%d\n",
-> -				EFI_RTC_MINOR);
-> -		return ret;
+> -#ifdef CONFIG_SPARC32
+> -	if (rtc_has_irq)
+> -		free_irq(rtc_irq, &rtc_port);
+> -#else
+> -	rtc_release_region();
+> -#ifdef RTC_IRQ
+> -	if (rtc_has_irq) {
+> -		free_irq(RTC_IRQ, NULL);
+> -		hpet_unregister_irq_handler(hpet_rtc_interrupt);
 > -	}
-> -
-> -	dir = proc_create_single("driver/efirtc", 0, NULL, efi_rtc_proc_show);
-> -	if (dir == NULL) {
-> -		printk(KERN_ERR "efirtc: can't create /proc/driver/efirtc.\n");
-> -		misc_deregister(&efi_rtc_dev);
-> -		return -1;
-> -	}
-> -	return 0;
+> -#endif
+> -#endif /* CONFIG_SPARC32 */
 > -}
-> -device_initcall(efi_rtc_init);
 > -
+> -module_init(rtc_init);
+> -module_exit(rtc_exit);
+> -
+> -#ifdef RTC_IRQ
 > -/*
+> - *	At IRQ rates >= 4096Hz, an interrupt may get lost altogether.
+> - *	(usually during an IDE disk interrupt, with IRQ unmasking off)
+> - *	Since the interrupt handler doesn't get called, the IRQ status
+> - *	byte doesn't get read, and the RTC stops generating interrupts.
+> - *	A timer is set, and will call this function if/when that happens.
+> - *	To get it out of this stalled state, we just read the status.
+> - *	At least a jiffy of interrupts (rtc_freq/HZ) will have been lost.
+> - *	(You *really* shouldn't be trying to use a non-realtime system
+> - *	for something that requires a steady > 1KHz signal anyways.)
+> - */
+> -
+> -static void rtc_dropped_irq(struct timer_list *unused)
+> -{
+> -	unsigned long freq;
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -
+> -	if (hpet_rtc_dropped_irq()) {
+> -		spin_unlock_irq(&rtc_lock);
+> -		return;
+> -	}
+> -
+> -	/* Just in case someone disabled the timer from behind our back... */
+> -	if (rtc_status & RTC_TIMER_ON)
+> -		mod_timer(&rtc_irq_timer, jiffies + HZ/rtc_freq + 2*HZ/100);
+> -
+> -	rtc_irq_data += ((rtc_freq/HZ)<<8);
+> -	rtc_irq_data &= ~0xff;
+> -	rtc_irq_data |= (CMOS_READ(RTC_INTR_FLAGS) & 0xF0);	/* restart */
+> -
+> -	freq = rtc_freq;
+> -
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -	printk_ratelimited(KERN_WARNING "rtc: lost some interrupts at %ldHz.\n",
+> -			   freq);
+> -
+> -	/* Now we have new data */
+> -	wake_up_interruptible(&rtc_wait);
+> -
+> -	kill_fasync(&rtc_async_queue, SIGIO, POLL_IN);
+> -}
+> -#endif
+> -
+> -#ifdef CONFIG_PROC_FS
+> -/*
+> - *	Info exported via "/proc/driver/rtc".
+> - */
+> -
+> -static int rtc_proc_show(struct seq_file *seq, void *v)
+> -{
+> -#define YN(bit) ((ctrl & bit) ? "yes" : "no")
+> -#define NY(bit) ((ctrl & bit) ? "no" : "yes")
+> -	struct rtc_time tm;
+> -	unsigned char batt, ctrl;
+> -	unsigned long freq;
+> -
+> -	spin_lock_irq(&rtc_lock);
+> -	batt = CMOS_READ(RTC_VALID) & RTC_VRT;
+> -	ctrl = CMOS_READ(RTC_CONTROL);
+> -	freq = rtc_freq;
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -
+> -	rtc_get_rtc_time(&tm);
+> -
+> -	/*
+> -	 * There is no way to tell if the luser has the RTC set for local
+> -	 * time or for Universal Standard Time (GMT). Probably local though.
+> -	 */
+> -	seq_printf(seq,
+> -		   "rtc_time\t: %ptRt\n"
+> -		   "rtc_date\t: %ptRd\n"
+> -		   "rtc_epoch\t: %04lu\n",
+> -		   &tm, &tm, epoch);
+> -
+> -	get_rtc_alm_time(&tm);
+> -
+> -	/*
+> -	 * We implicitly assume 24hr mode here. Alarm values >= 0xc0 will
+> -	 * match any value for that particular field. Values that are
+> -	 * greater than a valid time, but less than 0xc0 shouldn't appear.
+> -	 */
+> -	seq_puts(seq, "alarm\t\t: ");
+> -	if (tm.tm_hour <= 24)
+> -		seq_printf(seq, "%02d:", tm.tm_hour);
+> -	else
+> -		seq_puts(seq, "**:");
+> -
+> -	if (tm.tm_min <= 59)
+> -		seq_printf(seq, "%02d:", tm.tm_min);
+> -	else
+> -		seq_puts(seq, "**:");
+> -
+> -	if (tm.tm_sec <= 59)
+> -		seq_printf(seq, "%02d\n", tm.tm_sec);
+> -	else
+> -		seq_puts(seq, "**\n");
+> -
+> -	seq_printf(seq,
+> -		   "DST_enable\t: %s\n"
+> -		   "BCD\t\t: %s\n"
+> -		   "24hr\t\t: %s\n"
+> -		   "square_wave\t: %s\n"
+> -		   "alarm_IRQ\t: %s\n"
+> -		   "update_IRQ\t: %s\n"
+> -		   "periodic_IRQ\t: %s\n"
+> -		   "periodic_freq\t: %ld\n"
+> -		   "batt_status\t: %s\n",
+> -		   YN(RTC_DST_EN),
+> -		   NY(RTC_DM_BINARY),
+> -		   YN(RTC_24H),
+> -		   YN(RTC_SQWE),
+> -		   YN(RTC_AIE),
+> -		   YN(RTC_UIE),
+> -		   YN(RTC_PIE),
+> -		   freq,
+> -		   batt ? "okay" : "dead");
+> -
+> -	return  0;
+> -#undef YN
+> -#undef NY
+> -}
+> -#endif
+> -
+> -static void rtc_get_rtc_time(struct rtc_time *rtc_tm)
+> -{
+> -	unsigned long uip_watchdog = jiffies, flags;
+> -	unsigned char ctrl;
+> -#ifdef CONFIG_MACH_DECSTATION
+> -	unsigned int real_year;
+> -#endif
+> -
+> -	/*
+> -	 * read RTC once any update in progress is done. The update
+> -	 * can take just over 2ms. We wait 20ms. There is no need to
+> -	 * to poll-wait (up to 1s - eeccch) for the falling edge of RTC_UIP.
+> -	 * If you need to know *exactly* when a second has started, enable
+> -	 * periodic update complete interrupts, (via ioctl) and then
+> -	 * immediately read /dev/rtc which will block until you get the IRQ.
+> -	 * Once the read clears, read the RTC time (again via ioctl). Easy.
+> -	 */
+> -
+> -	while (rtc_is_updating() != 0 &&
+> -	       time_before(jiffies, uip_watchdog + 2*HZ/100))
+> -		cpu_relax();
+> -
+> -	/*
+> -	 * Only the values that we read from the RTC are set. We leave
+> -	 * tm_wday, tm_yday and tm_isdst untouched. Note that while the
+> -	 * RTC has RTC_DAY_OF_WEEK, we should usually ignore it, as it is
+> -	 * only updated by the RTC when initially set to a non-zero value.
+> -	 */
+> -	spin_lock_irqsave(&rtc_lock, flags);
+> -	rtc_tm->tm_sec = CMOS_READ(RTC_SECONDS);
+> -	rtc_tm->tm_min = CMOS_READ(RTC_MINUTES);
+> -	rtc_tm->tm_hour = CMOS_READ(RTC_HOURS);
+> -	rtc_tm->tm_mday = CMOS_READ(RTC_DAY_OF_MONTH);
+> -	rtc_tm->tm_mon = CMOS_READ(RTC_MONTH);
+> -	rtc_tm->tm_year = CMOS_READ(RTC_YEAR);
+> -	/* Only set from 2.6.16 onwards */
+> -	rtc_tm->tm_wday = CMOS_READ(RTC_DAY_OF_WEEK);
+> -
+> -#ifdef CONFIG_MACH_DECSTATION
+> -	real_year = CMOS_READ(RTC_DEC_YEAR);
+> -#endif
+> -	ctrl = CMOS_READ(RTC_CONTROL);
+> -	spin_unlock_irqrestore(&rtc_lock, flags);
+> -
+> -	if (!(ctrl & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
+> -		rtc_tm->tm_sec = bcd2bin(rtc_tm->tm_sec);
+> -		rtc_tm->tm_min = bcd2bin(rtc_tm->tm_min);
+> -		rtc_tm->tm_hour = bcd2bin(rtc_tm->tm_hour);
+> -		rtc_tm->tm_mday = bcd2bin(rtc_tm->tm_mday);
+> -		rtc_tm->tm_mon = bcd2bin(rtc_tm->tm_mon);
+> -		rtc_tm->tm_year = bcd2bin(rtc_tm->tm_year);
+> -		rtc_tm->tm_wday = bcd2bin(rtc_tm->tm_wday);
+> -	}
+> -
+> -#ifdef CONFIG_MACH_DECSTATION
+> -	rtc_tm->tm_year += real_year - 72;
+> -#endif
+> -
+> -	/*
+> -	 * Account for differences between how the RTC uses the values
+> -	 * and how they are defined in a struct rtc_time;
+> -	 */
+> -	rtc_tm->tm_year += epoch - 1900;
+> -	if (rtc_tm->tm_year <= 69)
+> -		rtc_tm->tm_year += 100;
+> -
+> -	rtc_tm->tm_mon--;
+> -}
+> -
+> -static void get_rtc_alm_time(struct rtc_time *alm_tm)
+> -{
+> -	unsigned char ctrl;
+> -
+> -	/*
+> -	 * Only the values that we read from the RTC are set. That
+> -	 * means only tm_hour, tm_min, and tm_sec.
+> -	 */
+> -	spin_lock_irq(&rtc_lock);
+> -	alm_tm->tm_sec = CMOS_READ(RTC_SECONDS_ALARM);
+> -	alm_tm->tm_min = CMOS_READ(RTC_MINUTES_ALARM);
+> -	alm_tm->tm_hour = CMOS_READ(RTC_HOURS_ALARM);
+> -	ctrl = CMOS_READ(RTC_CONTROL);
+> -	spin_unlock_irq(&rtc_lock);
+> -
+> -	if (!(ctrl & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
+> -		alm_tm->tm_sec = bcd2bin(alm_tm->tm_sec);
+> -		alm_tm->tm_min = bcd2bin(alm_tm->tm_min);
+> -		alm_tm->tm_hour = bcd2bin(alm_tm->tm_hour);
+> -	}
+> -}
+> -
+> -#ifdef RTC_IRQ
+> -/*
+> - * Used to disable/enable interrupts for any one of UIE, AIE, PIE.
+> - * Rumour has it that if you frob the interrupt enable/disable
+> - * bits in RTC_CONTROL, you should read RTC_INTR_FLAGS, to
+> - * ensure you actually start getting interrupts. Probably for
+> - * compatibility with older/broken chipset RTC implementations.
+> - * We also clear out any old irq data after an ioctl() that
+> - * meddles with the interrupt enable/disable bits.
+> - */
+> -
+> -static void mask_rtc_irq_bit_locked(unsigned char bit)
+> -{
+> -	unsigned char val;
+> -
+> -	if (hpet_mask_rtc_irq_bit(bit))
+> -		return;
+> -	val = CMOS_READ(RTC_CONTROL);
+> -	val &=  ~bit;
+> -	CMOS_WRITE(val, RTC_CONTROL);
+> -	CMOS_READ(RTC_INTR_FLAGS);
+> -
+> -	rtc_irq_data = 0;
+> -}
+> -
+> -static void set_rtc_irq_bit_locked(unsigned char bit)
+> -{
+> -	unsigned char val;
+> -
+> -	if (hpet_set_rtc_irq_bit(bit))
+> -		return;
+> -	val = CMOS_READ(RTC_CONTROL);
+> -	val |= bit;
+> -	CMOS_WRITE(val, RTC_CONTROL);
+> -	CMOS_READ(RTC_INTR_FLAGS);
+> -
+> -	rtc_irq_data = 0;
+> -}
+> -#endif
+> -
+> -MODULE_AUTHOR("Paul Gortmaker");
 > -MODULE_LICENSE("GPL");
-> -*/
-> diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-> index 3247a3dc7934..4ab05916046c 100644
-> --- a/include/linux/miscdevice.h
-> +++ b/include/linux/miscdevice.h
-> @@ -25,7 +25,7 @@
->  #define TEMP_MINOR		131	/* Temperature Sensor */
->  #define APM_MINOR_DEV		134
->  #define RTC_MINOR		135
-> -#define EFI_RTC_MINOR		136	/* EFI Time services */
-> +/*#define EFI_RTC_MINOR		136	was EFI Time services */
->  #define VHCI_MINOR		137
->  #define SUN_OPENPROM_MINOR	139
->  #define DMAPI_MINOR		140	/* unused */
+> -MODULE_ALIAS_MISCDEV(RTC_MINOR);
 > -- 
 > 2.20.0
 > 
