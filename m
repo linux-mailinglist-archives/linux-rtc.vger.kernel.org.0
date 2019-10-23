@@ -2,46 +2,46 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C84E1941
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 13:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0F7E1943
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Oct 2019 13:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390794AbfJWLr1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Oct 2019 07:47:27 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33932 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390566AbfJWLr0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 07:47:26 -0400
-Received: by mail-lj1-f195.google.com with SMTP id j19so20770860lja.1;
-        Wed, 23 Oct 2019 04:47:25 -0700 (PDT)
+        id S1732149AbfJWLsC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Oct 2019 07:48:02 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42164 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404768AbfJWLsC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Oct 2019 07:48:02 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u4so6626548ljj.9;
+        Wed, 23 Oct 2019 04:48:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=YAqjCYndjyjb4IlD06dDEpbQdw5J16aymsS3GxVNxno=;
-        b=s6LfvdTrZW88BBic7lkqUXRdA8CVEwHhyOqNGQ6d2W2dZC+lYRkl+iWwEt+FummunV
-         QwHkermvmkX6wiF/RQ3gcnmTULpiE4lMtkeKx+cB6HMQ8NnTs3ifwRxxzCPDY3rLkw/G
-         7LGF1pQkGcpT8uza3wFTf2muo9tZrgjZ9KPzRYbKkcbUlbOMEQSlG4K2vIEs8Pqr6duc
-         HAO81uVgmU+MGiwCQ13kO/miy4uBo38TOWaRVAOyUWEOotVRSix1zO60IcvDNNokvN8r
-         L008SbRfSww9W52IvrQQCcQYJRCcVpEsCJj/rcf87T00zx9K4qkXmwGgwgaHdtG956XO
-         u+SQ==
-X-Gm-Message-State: APjAAAXkYfnalcRwVn0ZNzynjmWUqFkB+RBEQuMKjXENl5aH7jvJgBFr
-        YhzAefGOWB1LHSg29yhSwlw=
-X-Google-Smtp-Source: APXvYqw7dFHxkzDAU3F6Ge+LjB4hsmaP2tq3czgTMDhqkv8Zjs3DByhnLLmQSeqetI83Nh0NS8lXLA==
-X-Received: by 2002:a2e:a0d6:: with SMTP id f22mr22151941ljm.81.1571831244557;
-        Wed, 23 Oct 2019 04:47:24 -0700 (PDT)
+        bh=1RZOqy8olQ0Z21PCLjnAyMEjEa/GxrB/WLwasx5fjjM=;
+        b=aFslU6vi7+LbiZdoPAgw9VUNbICoNpMmf2U2o05c+U/1qnsMQaZMBu1zLe0bBaWraZ
+         AWEFnfm48Mog9DoBV5Jx2oJtXCYN/Pp7EtWINiWRo79w4YbA77bixZfkeRiQ0l8CKMcB
+         a9iduecJCOF4eYWwBMLg202FWfZfBUTO5DGPQJQwmkObFqpcGVc+59a8Gl5sWj3tJPMu
+         yyg5UMNHotFVtWe0B+RUARJxDUJDdQfLwRtwNDH1uhK52SP2LM2zzBaMYfB90v/xVFBC
+         kg6q2N+WpWz9mTVBqO9Dp5MhAs7EdA6sz68JI9gLZc2S/aeZwpOvWeA5SfFJZcnWwg+t
+         FcRA==
+X-Gm-Message-State: APjAAAX1a1Y3eoyXPxClioaVPHhHTXO4ZClNKRIWNLwsHVq3DCDg/MDV
+        aiD0y1qvBzGFQJoyctA486UZbEM8yXA=
+X-Google-Smtp-Source: APXvYqy1SqKAElfOHH63lhJITfsORJftrngeSfin5Y+K+PYLnh3mvMcDa29qVpOlPhUMprZ4Murbig==
+X-Received: by 2002:a2e:87ca:: with SMTP id v10mr21558662ljj.43.1571831279878;
+        Wed, 23 Oct 2019 04:47:59 -0700 (PDT)
 Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id f16sm9416905lfc.26.2019.10.23.04.47.23
+        by smtp.gmail.com with ESMTPSA id e29sm9493170ljb.105.2019.10.23.04.47.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 04:47:23 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 14:47:11 +0300
+        Wed, 23 Oct 2019 04:47:59 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 14:47:51 +0300
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] rtc: bd70528: Add MODULE ALIAS to autoload module
-Message-ID: <20191023114711.GA13954@localhost.localdomain>
+Subject: [PATCH 2/2] rtc: bd70528: Fix hour register mask
+Message-ID: <20191023114751.GA14100@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -51,28 +51,29 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The bd70528 RTC driver is probed by MFD driver. Add MODULE_ALIAS
-in order to allow udev to load the module when MFD sub-device cell
-for RTC is added.
-
-I'm not sure if this is a bugfix or feature addition but I guess
-fixes tag won't harm in this case.
+When RTC is used in 24H mode (and it is by this driver) the maximum
+hour value is 24 in BCD. This occupies bits [5:0] - which means
+correct mask for HOUR register is 0x3f not 0x1f. Fix the mask
 
 Fixes: 32a4a4ebf768 ("rtc: bd70528: Initial support for ROHM bd70528 RTC")
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
- drivers/rtc/rtc-bd70528.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/mfd/rohm-bd70528.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-index f9bdd555e1a2..41fd54b622b1 100644
---- a/drivers/rtc/rtc-bd70528.c
-+++ b/drivers/rtc/rtc-bd70528.c
-@@ -498,3 +498,4 @@ module_platform_driver(bd70528_rtc);
- MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
- MODULE_DESCRIPTION("BD70528 RTC driver");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platofrm:bd70528-rtc");
+diff --git a/include/linux/mfd/rohm-bd70528.h b/include/linux/mfd/rohm-bd70528.h
+index 1013e60c5b25..b0109ee6dae2 100644
+--- a/include/linux/mfd/rohm-bd70528.h
++++ b/include/linux/mfd/rohm-bd70528.h
+@@ -317,7 +317,7 @@ enum {
+ #define BD70528_MASK_RTC_MINUTE		0x7f
+ #define BD70528_MASK_RTC_HOUR_24H	0x80
+ #define BD70528_MASK_RTC_HOUR_PM	0x20
+-#define BD70528_MASK_RTC_HOUR		0x1f
++#define BD70528_MASK_RTC_HOUR		0x3f
+ #define BD70528_MASK_RTC_DAY		0x3f
+ #define BD70528_MASK_RTC_WEEK		0x07
+ #define BD70528_MASK_RTC_MONTH		0x1f
 -- 
 2.21.0
 
