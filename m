@@ -2,94 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BD4E48B8
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2019 12:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96057E48E4
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2019 12:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392797AbfJYKmI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Oct 2019 06:42:08 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:53835 "EHLO
+        id S2394507AbfJYKvJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Oct 2019 06:51:09 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:45981 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730471AbfJYKmI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Oct 2019 06:42:08 -0400
-Received: from mail-qk1-f182.google.com ([209.85.222.182]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N1u2b-1hzrbb2og5-012Ep5; Fri, 25 Oct 2019 12:42:06 +0200
-Received: by mail-qk1-f182.google.com with SMTP id f18so1290312qkm.1;
-        Fri, 25 Oct 2019 03:42:06 -0700 (PDT)
-X-Gm-Message-State: APjAAAVLC2FIsJIdM1fMSJDuCck3en4dmzQqmmPcMOz9f8gqIBP/vBN1
-        WmledsWWy6iTJLG9ffbx9oNnPXZ+40kAGe14FN4=
-X-Google-Smtp-Source: APXvYqxI6dezxK6sXX9nX4PhPDdDApdJ0O4YhP9ibTLjyxglotNogMKPpNlF6D2BCoswO2YF56qq9iWcNTYt5q0q+Uw=
-X-Received: by 2002:a05:620a:4f:: with SMTP id t15mr2285922qkt.286.1572000125364;
- Fri, 25 Oct 2019 03:42:05 -0700 (PDT)
+        with ESMTP id S2392198AbfJYKvJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Oct 2019 06:51:09 -0400
+Received: from mail-qk1-f181.google.com ([209.85.222.181]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mj831-1hlZxU1VH3-00fEqI; Fri, 25 Oct 2019 12:51:05 +0200
+Received: by mail-qk1-f181.google.com with SMTP id q70so1261022qke.12;
+        Fri, 25 Oct 2019 03:51:04 -0700 (PDT)
+X-Gm-Message-State: APjAAAWA6fFViRcJqREnWWJ4XnLSnh9uc5TR3f3XkJRs4iop43nFUxmc
+        NGQ8ccT6lVNGOrvmjR3QEB2RQ+274bWdUrVtGAM=
+X-Google-Smtp-Source: APXvYqx2Oor6PcLHOX4Sy8TtHwX6a9dti7RuLVSJPm8RZ72aJo7WkeFnANJ7SePVIoWyJuP+ht+PknNC97FPJwMamtQ=
+X-Received: by 2002:a37:58d:: with SMTP id 135mr2252602qkf.394.1572000663226;
+ Fri, 25 Oct 2019 03:51:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191023150311.844123-1-arnd@arndb.de> <20191023184616.GA17078@agluck-desk2.amr.corp.intel.com>
- <20191023200135.GT3125@piout.net> <3908561D78D1C84285E8C5FCA982C28F7F4AD7F7@ORSMSX115.amr.corp.intel.com>
- <20191023232004.GV3125@piout.net> <CAK8P3a2=9dw2YN-sc7yxwwnRi-6Bos32==523qPaqW=avLs60Q@mail.gmail.com>
- <3908561D78D1C84285E8C5FCA982C28F7F4AEDED@ORSMSX115.amr.corp.intel.com>
-In-Reply-To: <3908561D78D1C84285E8C5FCA982C28F7F4AEDED@ORSMSX115.amr.corp.intel.com>
+References: <20191018154052.1276506-1-arnd@arndb.de> <87v9slg9k5.fsf@belgarion.home>
+ <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+ <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+ <87r239f2g8.fsf@belgarion.home> <87eez1rhqo.fsf@belgarion.home>
+In-Reply-To: <87eez1rhqo.fsf@belgarion.home>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Oct 2019 12:41:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a28aRv5TpRn1xhjZFO9n=+CBG6V276Roqm=bE_eQZkw_w@mail.gmail.com>
-Message-ID: <CAK8P3a28aRv5TpRn1xhjZFO9n=+CBG6V276Roqm=bE_eQZkw_w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] rtc/ia64: remove legacy efirtc driver
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Fri, 25 Oct 2019 12:50:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
+Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
+Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
+To:     Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:AQJYad2nzIMeigdvbY44ZK9T/iQdV1L1xSiR8DuyrfaDgPZfSJ4
- knCb7zpCXzcBxbKCZQQntmOnld6x/aBxTci6ZXjbXGlOP8In5kbzG1/nTVDdAsbhbiy/jZo
- zBcUOod4JMtuQ1FoHdrdFNAHuGPrLXaho/cDsF8CqIhrxyY+oFlSE/UuLzDAAb5UD0AzoJ7
- 59LrVLPnUUOyxon66pOLA==
+X-Provags-ID: V03:K1:bBFl5bX9BqXoDP8OrdvcfGlrYLRY5B1GUhWZJswEMUsHfqL7ZPS
+ wNKiBQqI9J4lWaKwMKWpeuRP8Q7gNW1Huux28MpdQbLQHsG8keYqULuxokAyz8cXvUuDQNr
+ Y4OmkYoxdwxMOhV/OoYmkmbTVaeZ1jGsBbuhOyjPDaixMEDPYwwWYKYrS8WnrToePTYktVe
+ isgPlih4bJp7b5na0cbDg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:AKUuhn2oHmo=:RN18oMQsgWRk+4XLcDS3hH
- relJMhlrq8wGAgjG8wmwyZ85ZOl2Ha8FLKSX41TBRHnYAd5wsOhMq4CzqivRfeCgBjzfLWyVG
- AGaXeHXtNeqVROGCj1OhNFSIcNVlLgfhaAPiJ4Mn0B+n6XkgxRc7bTyxdl3FHKr9poP6dytde
- pCCQBbUDtGeEwABgfCHOD5+VjgurfeG+ycWvauVB5AqZZUyd6ea+1b9m4fzH91kT0fqahU6en
- vrVmo6h5WZZIk6WOS3cFIqEO8T0jlyW7WVE++mMDitbfvCtFF9Wjm/qrL/pl6Bn84f0L/TepN
- hAmfoBpPigD+BwvWOIKLJwrCLzL6rOfdzQsMHg8NlBkBls/Jz1kmIc6HJBaftC3au/44tQXYC
- LYD4r6Mgo+n5Wk8hXyxqAw8sFSfMygVJ0gyyM9Sd3xzpQ87TOtHx7CKkgCnKvhhFoHONfQUMC
- 1AOXJKNYQZw6hwP0AHPhopPDlltlvq2vMfCjZ8rgyJ4yDljhX8PVAVwTmkU4QGnCE5As1yDYx
- P3apa/tOHcQltQR38ojnnmk0BV1IUD8lgla+6AuXXAVvm487jIjAkR/ALwicB97E30lmOqdT3
- i09BuodtDMxsCzBsDDrryJJyyDDkf8oyRVxGywHFEKT2fMqfDQFTXTb0JfsfZ9cEGvEhULEWi
- OoH1Y8QFeQs6p1KvW2SCXdPmrjTUhHL/O47Mewp8F5ch9N2+MEJame44wDmkETUTYLsHruuXI
- 0aemIABVYyXObB86WTXolthxUYNignlOzp119VYCN+HG1gPcSOn/+NSRJoRPLxa+9xggX/q0M
- nHNdTcpznQCOuyujC2pVPdTfGXET0k4eg2J1Qhr8i3iVntKSg5ljKyl0mmhc4Hx3GeG3L5uhV
- zr/iBR1AR5HDAW/SchFQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+amIHTsvEsM=:wxrSdcXp8fCl0WvOtbji8T
+ eiMYbEG4cst6pRKOmo34ky4eqFrbI9L+1xHjnaiY+H7o5c4AvretiveY6HsD/8Q4GCTo+d4EF
+ 6KHQlLX/3bCOUITQRQRqZXMcO8+d/5yBWQ4PLvO/++od9zW+FSeEXlBspQqZItGbvkewyaSgM
+ V2RuqHgZsRHubh1xP1lsxIE2YLtSonVpvh2iNYDMLLKocefeURCWHULZHpLKqb637/1ILOFmh
+ oY55eIQP5dCvyMde+02h4Sc41A/coK0VSMYnmjZbIdabokN8wJmd5BpuqN52whvBKMyQB7Drx
+ +rJNk043np+L19CHym/KU1GD0+Jh/hYMmdbAesunIc/XFNfshrJppNPggA2jYuD+WHt0GoW0h
+ vIRvBMeg6dWxtHSt5iN2OWe8YRwmJozAghx6eaxs/+mtKjhlwdb8pg8wgjMJTT4UVZPNck6ai
+ ETIxAKLIg48ERY2PKPCwjHZWIF59mr9ihwrIm7/PoRVzhB2DgY1bXT+r0Xf1ifNLX95PYOB5M
+ zAGClTyzoyjzTzKwNgwcV4nTh4Je81xIc8FEG8D5S5n2odlouWYtMUHvQkobX+2UgP+dk+Rdq
+ Yf9piYlNy1SKL1OHQdycWsLTFQ3jMWeWKCJRb5PSzWdnYIqeBZU1jM0z+jjUqPYhNrA/3/oIY
+ 6RHI26+ovszi6E37l9e4YOUqQLgkyayuNJDsaLxUKkKdzoog8Z1n6LZPKD/u4+MRIXZCKCrGx
+ pWVDvdMh6MitMHpzAZXm52z3k1A8T63a1CoAVUlqw1z/kLR1+hrsr4BnhFtpR4HNXe8FSWIge
+ SE0Vg8VrS1FRrUX3m8HXrRagLwmAmfEk5PCq5WPOx/NjbgPEUnw5nqQ9HVCS9jOGnKIZvBw5Z
+ /NMhJY+Zi7eyYSpPjOOA==
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 6:57 PM Luck, Tony <tony.luck@intel.com> wrote:
->
-> > arch/ia64 has a read_persistent_clock64() function, so it ends up reading
-> > the system time regardless of the RTC driver or CONFIG_RTC_HCTOSYS.
+On Thu, Oct 24, 2019 at 10:50 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
+> Robert Jarzmik <robert.jarzmik@free.fr> writes:
+> >>> I've now pushed it to
+> >>>
+> >>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
+> >>> pxa-multiplatform
+> >>
+> >> Sorry for the duplication, I had some problems with email configuration
+> >> so my reply got rejected, let's see if it goes through this time.
+> > I have it now, thanks, I'll test and review as soon as I can.
 > >
-> > As ia64 sets neither ARCH_HIBERNATION_POSSIBLE nor
-> > ARCH_SUSPEND_POSSIBLE, so we could just remove the
-> > read_persistent_clock64() and efi_gettimeofday(), relying instead
-> > on user space (/sbin/hwclock) or CONFIG_RTC_HCTOSYS.
+> > Cheers.
 >
-> Seems weird. ia64 has always assumed from day 1 that it is running
-> on a UEFI capable platorm (well at day 1 it was called "EFI", the "U"
-> came later).
+> Ok Arnd, I have a preliminary test report.
 >
-> So read_persistent_clock64() just calls EFI directly to get the time.
+> I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
+> only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
+> the regulator framework (which is a known issue [1]), your version seems
+> equivalent so far in terms of runtime to Linux 5.4-rc3).
 >
-> Seems simpler than worrying about having the right drivers and CONFIG
-> bits set.
+> The sound and RTC seem broken, but not by you ...
+>
+> I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
+> time, and try to review as well the mach-pxa part.
 
-It would just be a little more consistent. Most architectures cannot
-implement  read_persistent_clock64()  or CONFIG_RTC_HCTOSYS
-when the RTC driver is a loadable module, so distros normally have to
-set the system time after loading modules already. If some architectures
-have a reliable platform interface that allows setting the time at early
-boot, that doesn't mean we have to rely on that.
+Awesome, thanks for testing so far and for the report!
 
-       Arnd
+        Arnd
