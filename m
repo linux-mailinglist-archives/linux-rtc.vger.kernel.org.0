@@ -2,110 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7728E6EDC
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2019 10:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7908CE6FD8
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2019 11:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387744AbfJ1JS1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35882 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727664AbfJ1JS1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1F3B20717;
-        Mon, 28 Oct 2019 09:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572254305;
-        bh=Y0pjFTnEi7fofZFVzScrzdhMzlM8KuUwtUfFJMd6jEM=;
-        h=In-Reply-To:References:Cc:From:Subject:To:Date:From;
-        b=RgzxngTnQ5mhx9Hl2fC158gkHbjFpCK1xE9h+M1GjeCZxXb6MUInbliEaxAObjuqL
-         wSQcKENaW7bda+XlQFMQ4kSrY/CYQhZIb7yuVvXU8ecOVokkeGpi3FpJqjni84Zghu
-         HHQWsB9WCGlUQTC7Hz+Y655Ladb2jywc3qV2avTY=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
-References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        id S1732891AbfJ1Kqv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 28 Oct 2019 06:46:51 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41562 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730796AbfJ1Kqv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 28 Oct 2019 06:46:51 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 2A7BBB1B0;
+        Mon, 28 Oct 2019 10:46:49 +0000 (UTC)
+Subject: Re: [PATCH v2 2/8] dt-bindings: rtc: realtek: Convert RTD119x to
+ schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-realtek-soc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-To:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-User-Agent: alot/0.8.1
-Date:   Mon, 28 Oct 2019 02:18:24 -0700
-Message-Id: <20191028091825.A1F3B20717@mail.kernel.org>
+        Mark Rutland <mark.rutland@arm.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191020040817.16882-1-afaerber@suse.de>
+ <20191020040817.16882-3-afaerber@suse.de> <20191025212015.GA29978@bogus>
+From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+Organization: SUSE Software Solutions Germany GmbH
+Message-ID: <5491f3ed-93bf-1c4d-60f8-5d646c3bd2fb@suse.de>
+Date:   Mon, 28 Oct 2019 11:46:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191025212015.GA29978@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Arnd Bergmann (2019-10-18 08:41:20)
-> The mach/hardware.h is included in lots of places, and it provides
-> three different things on pxa:
->=20
-> - the cpu_is_pxa* macros
-> - an indirect inclusion of mach/addr-map.h
-> - the __REG() and io_pv2() helper macros
->=20
-> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
-> headers, then change all the files that use mach/hardware.h to
-> include the exact set of those three headers that they actually
-> need, allowing for further more targeted cleanup.
->=20
-> linux/soc/pxa/cpu.h can remain permanently exported and is now in
-> a global location along with similar headers. pxa-regs.h and
-> addr-map.h are only used in a very small number of drivers now
-> and can be moved to arch/arm/mach-pxa/ directly when those drivers
-> are to pass the necessary data as resources.
->=20
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Am 25.10.19 um 23:20 schrieb Rob Herring:
+> On Sun, Oct 20, 2019 at 06:08:11AM +0200, Andreas Färber wrote:
+>> Convert the RTD119x binding to a YAML schema.
+>>
+>> Signed-off-by: Andreas Färber <afaerber@suse.de>
+>> ---
+>>  v2: New
+>>  
+>>  .../devicetree/bindings/rtc/realtek,rtd119x.txt    | 16 ---------
+>>  .../devicetree/bindings/rtc/realtek,rtd119x.yaml   | 38 ++++++++++++++++++++++
+>>  2 files changed, 38 insertions(+), 16 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/rtc/realtek,rtd119x.txt
+>>  create mode 100644 Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
+> 
+> 
+>> diff --git a/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml b/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
+>> new file mode 100644
+>> index 000000000000..71b7396bd469
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+While renaming the file to .yaml I would like to also rename it to 1195.
+It would need to be 1x9x to cover RTD1195 and e.g. RTD1296, and looking
+forward the wildcard may need to be 1xxx to cover also RTD1619, which
+quickly becomes unrecognizable.
 
+>> @@ -0,0 +1,38 @@
+>> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> 
+> Missing ()
+
+Fixed.
+
+> 
+> Though I'm not sure it matters other than consistency.
+> 
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/rtc/realtek,rtd119x.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Realtek RTD129x Real-Time Clock
+>> +
+>> +allOf:
+>> +  - $ref: "rtc.yaml#"
+>> +
+>> +maintainers:
+>> +  - Andreas Färber <afaerber@suse.de>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: realtek,rtd1295-rtc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +    description: Specifies the clock gate
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +
+>> +examples:
+>> +  - |
+>> +	rtc@9801b600 {
+>> +		compatible = "realtek,rtd1295-clk";
+
+This reveals a bug in the original binding example. Fixed to -rtc.
+
+>> +		reg = <0x9801b600 0x100>;
+>> +		clocks = <&clkc RTD1295_CLK_EN_MISC_RTC>;
+> 
+> You need the include file here or the example won't build (run 'make 
+> dt_binding_check').
+
+We can't. You acked the clk binding but the driver never got any review,
+so it didn't get merged and cannot be depended on here.
+
+I've changed it to an artificial 42 so that dt_binding_check passes.
+I've also needed to fix the indentation to 4 spaces.
+
+Regards,
+Andreas
+
+> 
+>> +	};
+>> +...
+>> -- 
+>> 2.16.4
+>>
+
+
+-- 
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 Nürnberg, Germany
+GF: Felix Imendörffer
+HRB 36809 (AG Nürnberg)
