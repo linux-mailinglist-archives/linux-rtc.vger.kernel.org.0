@@ -2,130 +2,110 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FA6E55BF
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Oct 2019 23:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7728E6EDC
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Oct 2019 10:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbfJYVUS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Oct 2019 17:20:18 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33296 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbfJYVUS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Oct 2019 17:20:18 -0400
-Received: by mail-oi1-f195.google.com with SMTP id a15so2556579oic.0;
-        Fri, 25 Oct 2019 14:20:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=JUXQFIqn/d86Rnbor0L71lToepY+28ApeXSzEW1WrrY=;
-        b=Z9YZNCD0qdWPS5D6PmXn3t7lk1x2n5HB2cMpnqPK+AmjVa+HuZuFP7fDOzbRXJ0qsH
-         HgGzMHO/uUpZrqCIxUBbG/CRaSofExMvULktaACAVl3hoxyqzcVYbCm/RgDPtpUUJTUx
-         wqZQUHFxLHV51rhwd0OOR9oQ5Mxr+IiPuUnPIGa1xmP/E9OySsVPlBruWD/C67sbp7kC
-         lQsknTUNgNbj75Q2B1qm/DgAQN8/Ad1j7bH1gC04SiiCfUmskhIN2xdNo/mpbdUgb2f0
-         xaaEQgng3vcjlPs48gvtdy0cPrYaU++CqkJ71SvRER/ziXIisxHmZp/BWznX99OAom6g
-         nJDw==
-X-Gm-Message-State: APjAAAU+1Vo3UautgOV7Sul9kk7EcOCQ7LfyIq1CQQubx8ZlCLDx3ogy
-        JjYAzsIB/Sjo8kkHia55BuZE51w=
-X-Google-Smtp-Source: APXvYqz+woZytbel6lM3PcEJFze0yi42BfFRIteIU1+6GGt93bF3v+SwJ+tZUfL0epSsIXoR2YEYnA==
-X-Received: by 2002:a05:6808:10:: with SMTP id u16mr4879719oic.16.1572038416910;
-        Fri, 25 Oct 2019 14:20:16 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x80sm908528oia.37.2019.10.25.14.20.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 14:20:15 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 16:20:15 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
-Cc:     linux-realtek-soc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] dt-bindings: rtc: realtek: Convert RTD119x to
- schema
-Message-ID: <20191025212015.GA29978@bogus>
-References: <20191020040817.16882-1-afaerber@suse.de>
- <20191020040817.16882-3-afaerber@suse.de>
+        id S2387744AbfJ1JS1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 28 Oct 2019 05:18:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727664AbfJ1JS1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 28 Oct 2019 05:18:27 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1F3B20717;
+        Mon, 28 Oct 2019 09:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572254305;
+        bh=Y0pjFTnEi7fofZFVzScrzdhMzlM8KuUwtUfFJMd6jEM=;
+        h=In-Reply-To:References:Cc:From:Subject:To:Date:From;
+        b=RgzxngTnQ5mhx9Hl2fC158gkHbjFpCK1xE9h+M1GjeCZxXb6MUInbliEaxAObjuqL
+         wSQcKENaW7bda+XlQFMQ4kSrY/CYQhZIb7yuVvXU8ecOVokkeGpi3FpJqjni84Zghu
+         HHQWsB9WCGlUQTC7Hz+Y655Ladb2jywc3qV2avTY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191020040817.16882-3-afaerber@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
+References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
+To:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+User-Agent: alot/0.8.1
+Date:   Mon, 28 Oct 2019 02:18:24 -0700
+Message-Id: <20191028091825.A1F3B20717@mail.kernel.org>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Oct 20, 2019 at 06:08:11AM +0200, Andreas Färber wrote:
-> Convert the RTD119x binding to a YAML schema.
-> 
-> Signed-off-by: Andreas Färber <afaerber@suse.de>
+Quoting Arnd Bergmann (2019-10-18 08:41:20)
+> The mach/hardware.h is included in lots of places, and it provides
+> three different things on pxa:
+>=20
+> - the cpu_is_pxa* macros
+> - an indirect inclusion of mach/addr-map.h
+> - the __REG() and io_pv2() helper macros
+>=20
+> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
+> headers, then change all the files that use mach/hardware.h to
+> include the exact set of those three headers that they actually
+> need, allowing for further more targeted cleanup.
+>=20
+> linux/soc/pxa/cpu.h can remain permanently exported and is now in
+> a global location along with similar headers. pxa-regs.h and
+> addr-map.h are only used in a very small number of drivers now
+> and can be moved to arch/arm/mach-pxa/ directly when those drivers
+> are to pass the necessary data as resources.
+>=20
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  v2: New
->  
->  .../devicetree/bindings/rtc/realtek,rtd119x.txt    | 16 ---------
->  .../devicetree/bindings/rtc/realtek,rtd119x.yaml   | 38 ++++++++++++++++++++++
->  2 files changed, 38 insertions(+), 16 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/realtek,rtd119x.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
 
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
-> diff --git a/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml b/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
-> new file mode 100644
-> index 000000000000..71b7396bd469
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/realtek,rtd119x.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-
-Missing ()
-
-Though I'm not sure it matters other than consistency.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/realtek,rtd119x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Realtek RTD129x Real-Time Clock
-> +
-> +allOf:
-> +  - $ref: "rtc.yaml#"
-> +
-> +maintainers:
-> +  - Andreas Färber <afaerber@suse.de>
-> +
-> +properties:
-> +  compatible:
-> +    const: realtek,rtd1295-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: Specifies the clock gate
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +examples:
-> +  - |
-> +	rtc@9801b600 {
-> +		compatible = "realtek,rtd1295-clk";
-> +		reg = <0x9801b600 0x100>;
-> +		clocks = <&clkc RTD1295_CLK_EN_MISC_RTC>;
-
-You need the include file here or the example won't build (run 'make 
-dt_binding_check').
-
-> +	};
-> +...
-> -- 
-> 2.16.4
-> 
