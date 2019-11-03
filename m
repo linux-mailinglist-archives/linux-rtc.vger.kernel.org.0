@@ -2,70 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F76ED39D
-	for <lists+linux-rtc@lfdr.de>; Sun,  3 Nov 2019 15:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C3BED633
+	for <lists+linux-rtc@lfdr.de>; Sun,  3 Nov 2019 23:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727636AbfKCOsD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 3 Nov 2019 09:48:03 -0500
-Received: from sonic305-2.consmr.mail.bf2.yahoo.com ([74.6.133.41]:41032 "EHLO
-        sonic305-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727425AbfKCOsD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 3 Nov 2019 09:48:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1572792482; bh=E+ks7AydzaUb4ISZTuxin7s0E6gVmk5020fTLYVYB5E=; h=Date:From:Reply-To:Subject:From:Subject; b=ps9q7rhB62NXJ8hsxXX2Ya+PvUpIy9P14NOjYmu9xhIRMbmgP4OtTAG3iMsr/aNT61drWhwkvTyvIU4CHc603mWLZG0tfrELYF1iPlLfFuMOItzfKwZS8Rh0b3DtIQHmzA+qnovD0Y7x4pdB2ANHqseFg1X2H+ZR7lGqWy7iCDbwiG2NoK8JIxAQLBd8kdjEusj2rQXQn5caYmZiNTXaPzIote7tRAwKKLMy86QAbJQD6yx0iwQ+jogn8OlcAwnThNN5UBl+QxoL0cuqkDt46L0vj/2PF2FF9IKxPkmvTGuXYboRgwc9BKglmmOvRc7yNXvsDdVp4NvsbA6Qf+hBqA==
-X-YMail-OSG: lxBrJWIVM1mnOL8P97YIdYhopZiLo.oMWvp5WZb_Ukj1tp0nCRNz.r0OCFvVuA.
- 7gJPlAF4uOzjwx3aQochxSYHvW_B4SRizxxYLBaHznBrqaFwflUwqkBk01QljAA96vm5P7TO6Gf1
- nEGcaOfg_qOz.KQ7QTxwSVLYfnu4Dws1nfZQVF_DoxbbGoIUkzNb9wz4HpIVDfUAdE3gaNcAVpy_
- JzU2kvZidX64PGx3p64HeR8PbedZ4ZIUwcqDXZrQQwWw6WDG7DbZ.RZo1Tqoe8fqj.dqe3YJBdDr
- of_K_FG1VM99MsanTuCjUV2j0BBhCNNjUYmdiuZu_qfJydp2A4X7u9TpQo1RNp6q9kjNhUs.1rWc
- V9LsPF_3XljRvr7ja114MW08CUdEVcst..nTBu4aCqUcFXydYgVrojQJNwkZN8gIbOoFO_2ZAwsL
- nPt0.wpqvKPZlYtBhNkTjPeRVnDzPe.BeDtHEHLB9QA9CYWy9oPcQW4wiWTnnQ6wlniAP_vNMU7S
- R.YRIwsV87EKuR5abUesULSZ9q3HA..eyWyWmF3d5Fj9YlA9WHLV9yRRt2CaePfEOXnNVxGRxjm5
- nUITKi_Rl2nf9B_GMnaR9bx1dko0JYyDM1oTK7Rw9HqYpHrZutYunZtK1ujhJ.lnkBN3Ud04lj9c
- sz5262eOnq40pmHgjA5jBpesPsUZmqq4C1MeO.bf2n1ZCs4UvroAF9noaI7OO9YatKOLwJA2kfTf
- 2hPfH3I4DwZHc_hMZuREJnSL7sqAyfn8r0YrYfA.ZKaiYgrYl4CHhnIgUrQfpsbJNM5nfaEGB4Yy
- HtY.0uYZ8I4XyfgYzymsGztcCy93ynrWWE8zHQdtcXBnRPEtzb.lNlBF5Ofb8szTUJeAEKJpq.KS
- fTZ73MBiYWg6Mx._BWxTf9GeBXSJLa2MAZnmlcCGHI_Fn_IPovnJJVcWOGu4esC70hJ8NJIVdyMw
- bgea8nkj0WqWrE.1hzH1Lgm3SibixFQw8lAYs2lrwo623ZO1K0VwrFOTG6Cttxz_kq_B0hplNPIJ
- fhLMeGNWFa8Ca.AG0z6CJO._dNwRnXfJVvbqawwekr7mp.nAN2L8oBGDJbUiMYubeZHjBjeyFr11
- 9U9sMjln4U5rhH3g83o0BBrNEDoGN8GneMhBo7WEkcG6WGQkh4z7sk0R2JMKoqYg79_IWwoj7MET
- H09nFG.1uFIUoaR8pgpDW.MO4tng9n9ZZWwDhDxvSMVA1yZWBrdiZ75QWBQIgvmUnKTiPzfPvsaf
- 9aEJ4Hz5ZcpZ38GGntOCQxNcApQlaDe7VJoZ_6jJ4H4r.RmeQZVFO8p0JNBjWLIv56tU5sg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Sun, 3 Nov 2019 14:48:02 +0000
-Date:   Sun, 3 Nov 2019 14:48:01 +0000 (UTC)
-From:   Aisha Gaddafi <gaddafi50@aol.com>
-Reply-To: gaddafia504@gmail.com
-Message-ID: <1693605648.300692.1572792481051@mail.yahoo.com>
-Subject: Dear Friend,
+        id S1728073AbfKCW1S (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 3 Nov 2019 17:27:18 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:41698 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728049AbfKCW1R (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 3 Nov 2019 17:27:17 -0500
+Received: by mail-lf1-f68.google.com with SMTP id j14so10794348lfb.8
+        for <linux-rtc@vger.kernel.org>; Sun, 03 Nov 2019 14:27:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IzPJeK2cpUMQjH/975cPTUdiwrvG/dQ6KV42xRB7wAA=;
+        b=TuHGE1F1+ZfQMWfZYOEceMUBeLUnTeKK5wwL276Sz2hY+xKk8yxeRPuxVCLI4K8K1b
+         xc/+Bs3KENTr75oENU5Oij2awZZ1CEWkkAhr9YxWRcPvSoAZ0jwnjIPdTOs9KHH+bkjA
+         gFA/bMn9usVK1w4Rsab/nFcqIguaiTrbPF90x6B7U0CPqlgL7IVMYuqCg0LkJ7UmqPtp
+         nbt7syLDUloMjZ2JaJ7lBtj1V/QwAg3ng3c13tJGYyVP8U5en7JxXggkdqBp6at+kXvj
+         ITQxqRfoZDCgVCzD0WsGKF7ftP+d2VB9+BO8PhPn6vdBZfC19rjv4tRamOHUEGXgKOd+
+         5IUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IzPJeK2cpUMQjH/975cPTUdiwrvG/dQ6KV42xRB7wAA=;
+        b=FReCr58yF5qopJEkybeDeZjWTmErYwB3ECXlqKrm23veAZu5qPd/xaA6+5OgyUc05p
+         3yuy7t5q3KhX5jf1ikEzn3qZbCAXiNEts+C18qarWjW/H3FyG1FhDups3ejyype8Ie1V
+         +gG2XkWF9N8AC8F/9rj2j6WGwNfJMCRs0sOzCkyBdpkXf1z8opSUgwuGIqbvMQvBmsBh
+         cZWz1GDNvqTQgHvC7CVSO+W1V3XmgiTf79ilDoJ3uHw5vzGktTicyrsph6P0Xl9xwThu
+         PPDZZiV14vJYo5rjHIXlw3IZB/PtBLrYSJ5tXQrv7ktNsEx9pqeQoNFqEidcUlP2Z/mP
+         jh+A==
+X-Gm-Message-State: APjAAAV2yaaiYyCbK1j2ivLIkWJaVGbYj2W4NVsOSKPPnDoBzCY4XZLP
+        c2gjHcq/eQ4Z2+lsmHgkpQI2SOWkeUGMm2dKHeURPPCJbKY=
+X-Google-Smtp-Source: APXvYqyjdYFNN9CDPrBMD1LL8+RPj9zGpSDVydNpsun9Cd81xB4a7KEsrKrdBFbr3NcThDQn/dcVLwc/glAw4mUAc7w=
+X-Received: by 2002:a19:6a0d:: with SMTP id u13mr5835609lfu.86.1572820033814;
+ Sun, 03 Nov 2019 14:27:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com> <2a8fa03308b08b2a15019d9b457d9bff7aafce94.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <2a8fa03308b08b2a15019d9b457d9bff7aafce94.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 3 Nov 2019 23:27:02 +0100
+Message-ID: <CACRpkdZYw3QQcQ4h5y_C0UD6+4Wz9AdmQ0qSrrjfUweuJj8hyQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 10/15] regulator: bd71828: Add GPIO based run-level
+ control for regulators
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Friend,
+On Fri, Nov 1, 2019 at 12:43 PM Matti Vaittinen
+<matti.vaittinen@fi.rohmeurope.com> wrote:
 
-I came across your e-mail contact prior a private search while in need of 
-your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
-three Children. I am the only biological Daughter of late Libyan President 
-(Late Colonel Muammar Gaddafi).
+> Bucks 1,2,6 and 7 on ROHM BD71828 can be either controlled as
+> individual regulartors - or they can be grouped to a group of
+> regulators that are controlled by 'run levels'. This can be
+> done via I2C. Each regulator can be assigned a voltage and
+> enable/disable status for each run-level. These statuses are
+> also changeable via I2C.
+>
+> Run-levels can then be changed either by I2C or GPIO. This
+> control mechanism is selected by data in one time programmable
+> area (during production) and can't be changed later.
+>
+> Allow regulators to be controlled via run-levels and allow
+> getting/setting the current run-level also via GPIO.
+>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 
-I have investment funds worth Twenty Seven Million Five Hundred Thousand 
-United State Dollar ($27.500.000.00 ) and i need a trusted investment 
-Manager/Partner because of my current refugee status, however, I am 
-interested in you for investment project assistance in your country, may be 
-from there, we can build business relationship in the nearest future.
+I like the way you use the gpio API so FWIW:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-I am willing to negotiate investment/business profit sharing ratio with you 
-base on the future investment earning profits.
+I do not understand the regulator parts of the patch.
 
-If you are willing to handle this project on my behalf kindly reply urgent 
-to enable me provide you more information about the investment funds.
-
-Your Urgent Reply Will Be Appreciated.
-
-Best Regards
-Mrs Aisha Gaddafi
-(gaddafia504@gmail.com)
+Yours,
+Linus Walleij
