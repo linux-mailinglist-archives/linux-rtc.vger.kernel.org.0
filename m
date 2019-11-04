@@ -2,21 +2,21 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FFAED9C4
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2019 08:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A3DEE42C
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Nov 2019 16:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727588AbfKDHFU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 4 Nov 2019 02:05:20 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:55086 "EHLO
+        id S1728999AbfKDPsd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 4 Nov 2019 10:48:33 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:49486 "EHLO
         mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726633AbfKDHFU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Nov 2019 02:05:20 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-c3-5dbfcdad7647
+        with ESMTP id S1727838AbfKDPsc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Nov 2019 10:48:32 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-92-5dc0484eb3ae
 Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id E7.DB.08102.DADCFBD5; Mon,  4 Nov 2019 08:05:17 +0100 (CET)
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id DB.5F.08102.E4840CD5; Mon,  4 Nov 2019 16:48:30 +0100 (CET)
 Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
  WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Mon, 4 Nov 2019 08:05:07 +0100
+ 14.03.0439.000; Mon, 4 Nov 2019 16:48:17 +0100
 From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
 To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
 CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
@@ -39,80 +39,62 @@ CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
         "lee.jones@linaro.org" <lee.jones@linaro.org>,
         "broonie@kernel.org" <broonie@kernel.org>,
         "pavel@ucw.cz" <pavel@ucw.cz>
-Subject: Re: [RFC PATCH v3 10/15] regulator: bd71828: Add GPIO based
- run-level control for regulators
-Thread-Topic: [RFC PATCH v3 10/15] regulator: bd71828: Add GPIO based
- run-level control for regulators
-Thread-Index: AQHVkKmUb1A5TsbkA0WleApZHP5SaKd5+YkAgACQyoA=
-Date:   Mon, 4 Nov 2019 07:05:06 +0000
-Message-ID: <1550472ac1e105bd38da25803358cfbc0404bf38.camel@fi.rohmeurope.com>
+Subject: Re: [RFC PATCH v3 14/15] gpio: Add definition for GPIO direction
+Thread-Topic: [RFC PATCH v3 14/15] gpio: Add definition for GPIO direction
+Thread-Index: AQHVkKp+hdqKw9vEbUql9O/haZZyiad5+mgAgAEiGoA=
+Date:   Mon, 4 Nov 2019 15:48:17 +0000
+Message-ID: <411ac5e107cd2a6c628d1fb46e7d284c8f594768.camel@fi.rohmeurope.com>
 References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
-         <2a8fa03308b08b2a15019d9b457d9bff7aafce94.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
-         <CACRpkdZYw3QQcQ4h5y_C0UD6+4Wz9AdmQ0qSrrjfUweuJj8hyQ@mail.gmail.com>
-In-Reply-To: <CACRpkdZYw3QQcQ4h5y_C0UD6+4Wz9AdmQ0qSrrjfUweuJj8hyQ@mail.gmail.com>
+         <f08d265c12ebf185c0e1dbbfe0a3f86de4907194.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+         <CACRpkdYhasTEQq2btQ_3GSo=hMJetp128jFo-6hE=JMeX4MJSA@mail.gmail.com>
+In-Reply-To: <CACRpkdYhasTEQq2btQ_3GSo=hMJetp128jFo-6hE=JMeX4MJSA@mail.gmail.com>
 Accept-Language: en-US, de-DE
 Content-Language: de-DE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
+x-originating-ip: [176.93.201.147]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <E431E9F5DA350547A5D0E307336A633F@de.rohmeurope.com>
+Content-ID: <FFD78040917F6B49BA61C44DADDD2B28@de.rohmeurope.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TXUwcVRjNnd+7244MwyJXqiauJgZFamM1t6YxfbBxqkSrPDRp3OCsjAxh
-        f8jMYsDWlgerlmpCG8S6XagS2NYCLT+tKELRlT8pYNaWdhssZEOjgdIaWihiN+Bcpy083XPP
-        +c459+G7kJbGuXRY4Auouk/xODk789PxOy3PNA13u54NlT+P66KjPP7kRpjHc9WDDP4ifpXD
-        R3tGWHzg3GkWj51pZvDEfC/Aty98SuHKxDEKz342zuK2owmAz3eEOHxm5iTAfQ0XOFx/KUrh
-        UP0Ag6ODW/GVwV4O7+vq4fHSxRZmS6rcWNMI5L9j+3i5pnGX/EPwCi+3ntjPyX9c7OTk/lg7
-        JX9Zs0jJxxsWePlW66Pb7TvXbHYrgfdzCvJ96196Z422PNFCF910lNya6WTLQKOjHNggEjei
-        lsU+thzYoSSOAjTbMMxZl36AmiILpgIhJ25G5Zd5YnCIm9AvAyGGzNBiCKJvx0dYIqSI+ajq
-        o4OcNaSh+f7P7xpeRP9W/cyTHEZ8AtWGPyS0IL6O2r85TxMsidcAiiVUgm3imyg8Fv6fB+Ij
-        aH/ZDYpgWkxDrX8usNajRVTX+Rtt4VQ0Nbl0l3eirsU4Q6poMQOd6lhvwS2o/fcdVspjqPJA
-        nLdekIx+/eoqUwEeDK4qCK6Ygyvm4CpzcJX5a8CeAMirFHjylYC6IUtXi7N0v+Y1j3f93lZg
-        7cvc92A5si0CKAgi4CFIOVOF2ktnXdIDbn9eqaYYWq5e7FGNCECQdjqE6OEulyTkKaUfqLr/
-        nrQOMs404cn4QZckkq5CVS1S9XvqwxA6kZA41+2SknU1Xy15r8ATWJEpaCPh9nSHofryVF0p
-        Dmi5ZDlyDXM7iLTW7G0bMu2CUaR4TdayDoKnYcVUdS0Ne6rra2mJ8fl9anqasIeMimRUK/bd
-        L5oGaRA4U4TbRF1rfpr7OdNmBWVWZE+eJRUBZUVKLwM9iVfdGUZSfN3yx6evpxzaNFJzBNwc
-        n5MrS2KvJScVJoWnMp472Zzz8uFJ98JS804h8xWbu+uFY3tnLu94S/ird3F6I3vqzmzd0Nbp
-        Cmk053HvkfneKiMp274rdu3HzGyjdDkHJjfb/uloKHvDU9T09rZqh9aR6Ti0fWziu8K23VHO
-        yRiasuEpWjeU/wDZVjMd8QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta1BMYRzGvee2p9bh2Mq+FuGMcScZH14m5ANODY3LjHGZJoeOdml3c3ZD
+        jJkdMw1tzGQmyU4Xk80lTSlChLValzWDnbbUqIiGKU2NEYZWnNOiPp1n/s/z/H/nw/+lcc0b
+        SkcbTFZRMgmpHBVKuC4NVM1P4F2JCx82RCOnr1GFjvVeUKH+Qi+BTnd0Uqi4/jmJsp9dJ9Hr
+        mqsEevPVA9A3/3EM5QYuYujziXYSXSsOANRwu4BCNT0VAD264qdQ6SsfhgpKnxDI512F2rwe
+        CmXerVehwaYqIjaCLy8qB3xfc6aKLyo/zNc62lR8dVkWxbc21VH84+abGH+m6AfGX7ryXcV/
+        qY5cH7pNHbNTsO7fZEgxRS3fodb7jwbItHvqg80v8oAN5KvtgKYhuxja8yU7CKE1bCOAg2cN
+        dhAq68cA9g4OkEqGYmOgvUWlZMLZJfDhkwJCyeBsAQ0vtz8nFSOMjYP3A96/oXiYe86FB/VS
+        +LP4BqXsIdjpsKomUhkzbAJ0dvWQQdYnAD1f3w11Q9gN8PJbN6ZowE6GWbbeIY2zWlj94fsQ
+        C7IsdNa9wIM6Ana9H/w752Ddj/OYwsLZ2bDydlSwGgt/nSoDQT0N5mZ3qIL/MA4+PdtJ5IDx
+        jhEEx3DbMaLtGNF2jGifA2QZgEbBkJoiWMXoBZKYvkAy643yZ5fZWA2CB9N/C/x2x7kBRgM3
+        mEBjXAQzb6krUTNmpzk5Qy9Y9ElSeqpocQNI41w448u/m6hhkoWMQ6Jk/mdNpAlOy8zsOJWo
+        YRXWXlFME6V/7iSa5iAjrJGXjpPEFPHgbkOqddjG6BBleagu3CKakkVJSLfqk5TrSLLI56FY
+        o2Xuy9VynbGkCUZ5Gqx6wVw6p6uwBKfrC0tLcA1hMptEnZaZrZBYJapPN/0HdQMtDbgwhpCf
+        h2a0/Gr+7+mWEZiMWPv+noKwCsOWzgYyMm2v26+POuI/U7KnJeBRG1p1TVvIGyVgirZ1c9TJ
+        FdbAjMw7O/zTKxbFGwce9FMr76w5IOZE5rU4Y27647K291QkVNZGSfatz7oLN66bld3ZV3Ts
+        wthArWNCw4x9bpfN53I3ZuX9Mve5yp0NVxM8c8LamM9Tr3H3Y8d+7KvULuMIi16InoNLFuEP
+        d930ovIDAAA=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gTGludXMsDQoNCk9uIFN1biwgMjAxOS0xMS0wMyBhdCAyMzoyNyArMDEwMCwgTGludXMg
-V2FsbGVpaiB3cm90ZToNCj4gT24gRnJpLCBOb3YgMSwgMjAxOSBhdCAxMjo0MyBQTSBNYXR0aSBW
-YWl0dGluZW4NCj4gPG1hdHRpLnZhaXR0aW5lbkBmaS5yb2htZXVyb3BlLmNvbT4gd3JvdGU6DQo+
-IA0KPiA+IEJ1Y2tzIDEsMiw2IGFuZCA3IG9uIFJPSE0gQkQ3MTgyOCBjYW4gYmUgZWl0aGVyIGNv
-bnRyb2xsZWQgYXMNCj4gPiBpbmRpdmlkdWFsIHJlZ3VsYXJ0b3JzIC0gb3IgdGhleSBjYW4gYmUg
-Z3JvdXBlZCB0byBhIGdyb3VwIG9mDQo+ID4gcmVndWxhdG9ycyB0aGF0IGFyZSBjb250cm9sbGVk
-IGJ5ICdydW4gbGV2ZWxzJy4gVGhpcyBjYW4gYmUNCj4gPiBkb25lIHZpYSBJMkMuIEVhY2ggcmVn
-dWxhdG9yIGNhbiBiZSBhc3NpZ25lZCBhIHZvbHRhZ2UgYW5kDQo+ID4gZW5hYmxlL2Rpc2FibGUg
-c3RhdHVzIGZvciBlYWNoIHJ1bi1sZXZlbC4gVGhlc2Ugc3RhdHVzZXMgYXJlDQo+ID4gYWxzbyBj
-aGFuZ2VhYmxlIHZpYSBJMkMuDQo+ID4gDQo+ID4gUnVuLWxldmVscyBjYW4gdGhlbiBiZSBjaGFu
-Z2VkIGVpdGhlciBieSBJMkMgb3IgR1BJTy4gVGhpcw0KPiA+IGNvbnRyb2wgbWVjaGFuaXNtIGlz
-IHNlbGVjdGVkIGJ5IGRhdGEgaW4gb25lIHRpbWUgcHJvZ3JhbW1hYmxlDQo+ID4gYXJlYSAoZHVy
-aW5nIHByb2R1Y3Rpb24pIGFuZCBjYW4ndCBiZSBjaGFuZ2VkIGxhdGVyLg0KPiA+IA0KPiA+IEFs
-bG93IHJlZ3VsYXRvcnMgdG8gYmUgY29udHJvbGxlZCB2aWEgcnVuLWxldmVscyBhbmQgYWxsb3cN
-Cj4gPiBnZXR0aW5nL3NldHRpbmcgdGhlIGN1cnJlbnQgcnVuLWxldmVsIGFsc28gdmlhIEdQSU8u
-DQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVuIDxtYXR0aS52YWl0dGlu
-ZW5AZmkucm9obWV1cm9wZS5jb20+DQo+IA0KPiBJIGxpa2UgdGhlIHdheSB5b3UgdXNlIHRoZSBn
-cGlvIEFQSSBzbyBGV0lXOg0KPiBSZXZpZXdlZC1ieTogTGludXMgV2FsbGVpaiA8bGludXMud2Fs
-bGVpakBsaW5hcm8ub3JnPg0KDQpUaGFua3MuIEFuZCBJIGxpa2UgdGhlIEdQSU8gc2V0IG11bHRp
-cGxlIC0gdGhhdCdzIHJlcXVpcmVkIGluIG9yZGVyIHRvDQpkbyBzb21lIG9mIHRoZSBydW4tbGV2
-ZWwgY2hhbmdlcyB3aXRob3V0IGludGVybWVkaWF0ZSBzdGF0ZXMuIChFZy4gYm90aA0KRFZTIEdQ
-SU9zIG5lZWQgdG8gYmUgdG9nZ2xlZCB2aWEgc2luZ2xlIHJlZ2lzdGVyIHdyaXRlKS4NCg0KPiBJ
-IGRvIG5vdCB1bmRlcnN0YW5kIHRoZSByZWd1bGF0b3IgcGFydHMgb2YgdGhlIHBhdGNoLg0KDQpJ
-J20gc29ycnkuIFRoZSBwYXRjaCBpcyBub3QgY2xlYXJlc3Qgb25lIHdoYXQgY29tZXMgdG8gdGhl
-IHJlZ3VsYXRvcg0Kc3R1ZmYuIEkgY2FuIHRyeSBzcGxpdHRpbmcgaXQgdG8gc21hbGxlciBhbmQg
-bW9yZSBsb2dpY2FsIGNoYW5nZXMgaWYNCnlvdSwgTWFyayBvciBvdGhlciBpbnRlcmVzdGVkIHBl
-b3BsZSBob3BlIHRvIGdldCBpdCBzcGxpdHRlZC4gT3INCnBlcmhhcHMgaXQgd291bGQgYmUgc2lt
-cGxlc3QgdG8gcmV2aWV3IGlmIGl0IHdhcyBhbGwgaW4gb25lIHBhdGNoPyANCg0KUmF0aW9uYWxl
-IGZvciBzcGxpdHRpbmcgaXQgaW4gZmlyc3QgcGxhY2Ugd2FzIHRoYXQgSSBob3BlZCB0aGUgYmFz
-aWMNCnN1cHBvcnQgKGZpcnN0IHR3byByZWd1bGF0b3IgcGF0Y2hlcykgdG8gYmUgYWNjZXB0YWJs
-ZSB3aXRob3V0IGh1Z2UNCmNoYW5nZXMgLSB3aGVyZWFzIHRoZSBmb2xsb3cgdXAgcGF0Y2hlcyBh
-cmUgbW9yZSBsaWtlIHF1ZXN0aW9uIHRoYXQgaG93DQp0aGUgaGVjayBzaG91bGQgSSBpbXBsZW1l
-bnQgdGhpcyA6XSBJJ3ZlIG5vdCBoaXQgc2ltaWxhciAnY2hhbmdlIGJ1bmNoDQpvZiByZWd1bGF0
-b3Igc3RhdGVzIGF0IG9uZSBnbycgZHJpdmVycy9oYXJkd2FyZSBiZWZvcmUuDQoNCkJyLA0KCU1h
-dHRpIFZhaXR0aW5lbg0K
+SGVsbG8gQWxsLA0KDQpPbiBTdW4sIDIwMTktMTEtMDMgYXQgMjM6MzAgKzAxMDAsIExpbnVzIFdh
+bGxlaWogd3JvdGU6DQo+IEhpIE1hdHRpIQ0KPiANCj4gR29vZCBpbml0aWF0aXZlIChhbmQgSSB3
+aWxsIHNlZSBhIHRvbiBvZiBqYW5pdG9yaWFsIHBhdGNoZXMgYXMgYQ0KPiByZXN1bHQgb2YgdGhp
+cy4uLikNCg0KSSBoYXZlIHNvbWV3aGVyZSBuZWFyIDYyIHBhdGNoZXMgd2FpdGluZyB0byBiZSBz
+ZW50ID0pIFRoZXkncmUgcHJldHR5DQpzbWFsbCBidXQgSSdkIGFwcHJlY2lhdGUgdGhvcm91Z2gg
+cmV2aWV3IGFzIHRoZXkncmUgbW9zdGx5IHVudGVzdGVkLi4uDQpEbyB5b3UgbWluZCByZWNlaXZp
+bmcgdGhlbSBhbGwgaW4gb25lIGdvPyBPciBkbyB5b3UgdGhpbmsgSSBzaG91bGQgc2VuZA0KdGhl
+IHNlcmllcyBpbiBzbWFsbGVyIGNodW5ja3M/DQoNCj4gT24gRnJpLCBOb3YgMSwgMjAxOSBhdCAx
+Mjo1MCBQTSBNYXR0aSBWYWl0dGluZW4NCj4gPG1hdHRpLnZhaXR0aW5lbkBmaS5yb2htZXVyb3Bl
+LmNvbT4gd3JvdGU6DQo+IA0KPiA+IEF0IGxlYXN0IGZvciBtZSBpdCBpcyBkaWZmaWN1bHQgdG8g
+cmVtZW1iZXIgdGhlIG1lYW5pbmcgb2YgR1BJTw0KPiA+IGRpcmVjdGlvbiB2YWx1ZXMuIERlZmlu
+ZSBHUElPX0lOIGFuZCBHUElPX09VVCBzbyB0aGF0IG9jY2FzaW9uYWwNCj4gPiBHUElPIGNvbnRy
+aWJ1dG9ycyB3b3VsZCBub3QgbmVlZCB0byBhbHdheXMgY2hlY2sgdGhlIG1lYW5pbmcgb2YNCj4g
+PiBoYXJkIGNvZGVkIHZhbHVlcyAxIGFuZCAwLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1h
+dHRpIFZhaXR0aW5lbiA8bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPg0KPiAoLi4u
+KQ0KPiA+ICsjZGVmaW5lIEdQSU9fSU4gICAgICAgICAgICAgICAgMQ0KPiA+ICsjZGVmaW5lIEdQ
+SU9fT1VUICAgICAgIDANCj4gDQo+IFBsZWFzZSBzcGVsbCBpdCBvdXQgb3IgcGVvcGxlIHdpbGwg
+YmUgY29uZnVzZWQ6DQo+IA0KPiBHUElPX0xJTkVfRElSRUNUSU9OX0lODQo+IEdQSU9fTElORV9E
+SVJFQ1RJT05fT1VUDQo+IA0KPiBZb3VycywNCj4gTGludXMgV2FsbGVpag0KDQo=
