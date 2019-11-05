@@ -2,43 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5A2F0762
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2019 21:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BA0F0782
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2019 21:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbfKEU5V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Nov 2019 15:57:21 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35109 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729632AbfKEU5U (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Nov 2019 15:57:20 -0500
-Received: by mail-oi1-f195.google.com with SMTP id n16so18903672oig.2;
-        Tue, 05 Nov 2019 12:57:20 -0800 (PST)
+        id S1729781AbfKEU7h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Nov 2019 15:59:37 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:45558 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728515AbfKEU7g (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Nov 2019 15:59:36 -0500
+Received: by mail-oi1-f194.google.com with SMTP id k2so18866504oij.12;
+        Tue, 05 Nov 2019 12:59:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YH8No3YE+SfIIhr1pRJYlkmraO4srBIJPhAWx/BUo7o=;
-        b=LtJCMP9BEuJo7AoGc9whEW4mnbuPZPsc+twyDY6qbUHYR6y48eKt9sSOr024qIZMpC
-         +vBPT3LwkjdhPd8/zomVZvQJYCTFUTe3Na+3wWdneNNiuZy0hk4pTjTYjw8Z4aojRiGN
-         1dMAu7b2yoLyaCXjMxGJOtwYumKQVUkkSp9CNNB2m8j1qDWIk6gM9k6V83Q+U3nx5pEq
-         0XkkGLCXoN6OSU63kzVaLamiCLKMlunMLgpmHv3PJG1W0p26OWQfJDGc0Wc05EBv5HTK
-         V9kabL72vZ/VYqQXAKuMVkp51jG3O1tN28DXCyTqLfAm7ZxD43kfT3cEbOoVglm+SV56
-         AISA==
-X-Gm-Message-State: APjAAAV1sf4kuI/iLEkWfM8e5uV/g4ZlAASe7p8y/PImIdU9nCZ+pf3Z
-        uWfjp2gcTFKOqN1PnI6mJQ==
-X-Google-Smtp-Source: APXvYqz4PTn4LH3MKQJeJhit6JeqNJpYt06BezFqeq80P3WV6oQcYKUwj76O8XCo+mV0pvazH22q3A==
-X-Received: by 2002:aca:ecd0:: with SMTP id k199mr873786oih.166.1572987439487;
-        Tue, 05 Nov 2019 12:57:19 -0800 (PST)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=GTdZcSlaCj6B0DkM9Lw5qj2TAkpu7tNssud6DV2YzpE=;
+        b=BFtYrSbJmAbz9M+hSjxg81pt0y/7FjdQnZxy5eRdMY3TWwvGTdG2X3kUmEPa464A6O
+         CV5a2bMAFnoODAFvVFYs8I+JYzyKVVrTaSoXONTUJ1oBMpPxHTNSZ0toUCTjPmTX2dxn
+         XT51LxXBTT/gIAd4czhCJm9uNfEh7g23R/eCoesRacasOqAbbR3uamgT0jqYjOf53RXU
+         8pBC+llf3XMFWjyt6W7IuB9OKrKHVJ+yFt7Cqxxf4uAk/ZlnEf7FuqjaQqsatmV0QEiy
+         whwPQJLeXObgtqoO1O7b6+UTO7clHAOilCjRGunshvQ5v+k5ypxZSctYOI5ihp4uawLe
+         /UwA==
+X-Gm-Message-State: APjAAAXRe6HctQ0FdS7Lvn1fJPxrtKcu8EuRF4jReHb2ABj2I/4FvvVM
+        iJ/igI9CIuHKY5BWh8h7xw==
+X-Google-Smtp-Source: APXvYqxfoZQYXzrqWbqrf5YESnzLMdDJ74I9O0OJcWuzBYYa9Qz/tEUJ92oPye+EYoq65rZtqp2VDA==
+X-Received: by 2002:aca:b6c3:: with SMTP id g186mr860975oif.173.1572987575575;
+        Tue, 05 Nov 2019 12:59:35 -0800 (PST)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o18sm6597103otj.38.2019.11.05.12.57.18
+        by smtp.gmail.com with ESMTPSA id l7sm6413475otf.39.2019.11.05.12.59.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 12:57:18 -0800 (PST)
-Date:   Tue, 5 Nov 2019 14:57:18 -0600
+        Tue, 05 Nov 2019 12:59:35 -0800 (PST)
+Date:   Tue, 5 Nov 2019 14:59:34 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com,
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com,
         Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
         Mark Rutland <mark.rutland@arm.com>,
         Lee Jones <lee.jones@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -54,101 +56,113 @@ Cc:     mazziesaccount@gmail.com,
         linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
 Subject: Re: [RFC PATCH v3 04/15] dt-bindings: leds: ROHM BD71282 PMIC LED
  driver
-Message-ID: <20191105205718.GC629@bogus>
+Message-ID: <20191105205934.GD629@bogus>
 References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
  <f9178204ea3925b454ecbe58df4c297fec346a4f.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+ <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f9178204ea3925b454ecbe58df4c297fec346a4f.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Nov 01, 2019 at 01:32:33PM +0200, Matti Vaittinen wrote:
-> Document ROHM BD71828 PMIC LED driver device tree bindings.
+On Tue, Nov 05, 2019 at 01:14:33PM -0600, Dan Murphy wrote:
+> Matti
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> ---
-> 
-> Changes from v2 - new patch
-> 
->  .../bindings/leds/rohm,leds-bd71828.yaml      | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> new file mode 100644
-> index 000000000000..d8aeac9911ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/rohm,leds-bd71828.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ROHM BD71828 Power Management Integrated Circuit LED driver
-> +
-> +maintainers:
-> +  - Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> +  - Pavel Machek <pavel@ucw.cz>
-> +  - Dan Murphy <dmurphy@ti.com>
-> +  - Rob Herring <robh+dt@kernel.org>
-> +  - Mark Rutland <mark.rutland@arm.com>
-> +
-> +description: |
-> +  This module is part of the ROHM BD71828 MFD device. For more details
-> +  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
-> +
-> +  The LED controller is represented as a sub-node of the PMIC node on the device
-> +  tree.
-> +
-> +  The device has two LED outputs referred as GRNLED and AMBLED in data-sheet.
-> +
-> +properties:
-> +  compatible:
-> +    const: rohm,bd71828-led
-> +
-> +patternProperties:
-> +  "^led-[1-2]$":
-> +    type: object
-> +    description:
-> +      Properties for a single LED. Nodes must be named as led-1 and led-2.
-> +    properties:
-> +      #$ref: "common.yaml#"
-> +      function:
-> +        description:
-> +          Purpose of LED as defined in dt-bindings/leds/common.h
-> +        $ref: "/schemas/types.yaml#/definitions/string"
-> +      color:
-> +        description:
-> +          LED colour as defined in dt-bindings/leds/common.h
-> +        $ref: "/schemas/types.yaml#/definitions/uint32"
+> On 11/1/19 6:32 AM, Matti Vaittinen wrote:
+> > Document ROHM BD71828 PMIC LED driver device tree bindings.
+> > 
+> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > ---
+> > 
+> > Changes from v2 - new patch
+> > 
+> >   .../bindings/leds/rohm,leds-bd71828.yaml      | 46 +++++++++++++++++++
+> >   1 file changed, 46 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
+> > new file mode 100644
+> > index 000000000000..d8aeac9911ef
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
+> > @@ -0,0 +1,46 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/rohm,leds-bd71828.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ROHM BD71828 Power Management Integrated Circuit LED driver
+> > +
+> > +maintainers:
+> > +  - Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> > +  - Pavel Machek <pavel@ucw.cz>
+> > +  - Dan Murphy <dmurphy@ti.com>
+> > +  - Rob Herring <robh+dt@kernel.org>
+> > +  - Mark Rutland <mark.rutland@arm.com>
+> I believe you are the maintainer of this driver not the maintainers
 
-You can assume that we will have a common schema for these. So the only 
-thing needed is whether you use the properties ("true" is enough for 
-that), any additional constraints (not likely here), and whether 
-required or not.
+Right, should have been clearer in my other response. Put 
+owner/maintainer of the device binding, not subsystem.
 
-> +
-> +required:
-> +  - compatible
-> -- 
-> 2.21.0
+> > +
+> > +description: |
+> > +  This module is part of the ROHM BD71828 MFD device. For more details
+> > +  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
+> > +
+> > +  The LED controller is represented as a sub-node of the PMIC node on the device
+> > +  tree.
+> > +
+> > +  The device has two LED outputs referred as GRNLED and AMBLED in data-sheet.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: rohm,bd71828-led
+> > +
+> > +patternProperties:
+> > +  "^led-[1-2]$":
+> > +    type: object
+> > +    description:
+> > +      Properties for a single LED. Nodes must be named as led-1 and led-2.
 > 
+> Why is this required?  Can't we use the reg as the number and then we can
+> use standard node labels
 > 
-> -- 
-> Matti Vaittinen, Linux device drivers
-> ROHM Semiconductors, Finland SWDC
-> Kiviharjunlenkki 1E
-> 90220 OULU
-> FINLAND
+> like led@<reg value>.  Then we can check in the code to make sure that the
+> output is not out of bounds.
 > 
-> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-> Simon says - in Latin please.
-> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-> Thanks to Simon Glass for the translation =] 
+> > +    properties:
+> > +      #$ref: "common.yaml#"
+> > +      function:
+> > +        description:
+> > +          Purpose of LED as defined in dt-bindings/leds/common.h
+> > +        $ref: "/schemas/types.yaml#/definitions/string"
+> > +      color:
+> > +        description:
+> > +          LED colour as defined in dt-bindings/leds/common.h
+> 
+> s/colour/color
+> 
+> But again I believe it is indicated above that the LEDs are either going to
+> be green or amber.  Unless they can be any color.
+> 
+> Are there plans to make sure that the color is either green or amber in the
+> code?  I don't see a patch for the code in this series
+> 
+> > +        $ref: "/schemas/types.yaml#/definitions/uint32"
+> > +
+> > +required:
+> > +  - compatible
+> 
+> Is there an example of the node and properties?
+
+For MFDs, I prefer a complete example in the MFD binding doc. We need it 
+complete to validate the example.
+
+Rob
