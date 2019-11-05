@@ -2,124 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF23BEF768
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2019 09:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D95EFE45
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2019 14:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729597AbfKEIlO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Nov 2019 03:41:14 -0500
-Received: from spam01.hygon.cn ([110.188.70.11]:55541 "EHLO spam1.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725806AbfKEIlO (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 5 Nov 2019 03:41:14 -0500
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam1.hygon.cn with ESMTP id xA58e3Cc096750;
-        Tue, 5 Nov 2019 16:40:03 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id xA58e0ur006406;
-        Tue, 5 Nov 2019 16:40:00 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from bogon.higon.com (172.23.18.44) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Tue, 5 Nov 2019
- 16:40:00 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>,
-        <puwen@hygon.cn>, <thomas.lendacky@amd.com>, <kim.phillips@amd.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jinke Fan <fanjinke@hygon.cn>
-Subject: [RESEND PATCH v4] rtc: Fix the AltCentury value on AMD/Hygon platform
-Date:   Tue, 5 Nov 2019 16:39:43 +0800
-Message-ID: <20191105083943.115320-1-fanjinke@hygon.cn>
-X-Mailer: git-send-email 2.17.1
+        id S2389079AbfKENYb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Nov 2019 08:24:31 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43093 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389078AbfKENYb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Nov 2019 08:24:31 -0500
+Received: by mail-lf1-f68.google.com with SMTP id j5so15102469lfh.10
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Nov 2019 05:24:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OriTvqKjGZz26vq3sX+0nz0hNVWCQx915SM+y16L4zI=;
+        b=mmSF+IAUX1udzNA10gxQDs4IVguwwokEurVOW3StfXUANAJNYQv4/+zWORcXWFMJz6
+         m8BMOmIIg6IdlyXqx/JOil3Nbe1GQJOjv3TKF4sU9Y8IhkaCAxvvuN9OIs6XmIOXlhaV
+         3yDCu8ShhTKAlUTHth4u2KT53qkmJ5SC02XPDZHD1F7NmyWDtGHSU+gmVOKet8p9J0tg
+         tOUcealyAZisw9u0YxSTwLwJi9mNZL5v3AiyePab1IAJp9k9ulTtGJUtUmXfCzS/M3vK
+         ttjdpKUqRtjmkL88v5AmTh1EY7ErppJQbMgbmt1rENGRy7NzGgSd1ie29VbCA1Ll9hDA
+         riGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OriTvqKjGZz26vq3sX+0nz0hNVWCQx915SM+y16L4zI=;
+        b=aTeSU4iE9Zoq9ljf9LjlHxztmlu/HzS8OKNh6AcDSaksuQ8Btp2I4vGX5wYCzdxANP
+         ZhpZ+GoghGMV/S+qq/qRjwrjGxajwCWMvf7WigcNccViDu5EV/lnTUU9mDXXCcLgqBwF
+         A5ayMpN91x5Ve456T9y1Xx3cWEqaGgHMcVfSF4GxvFkG4ORRx9+NGHYWjgvhJXgkj04P
+         0rp0lKX1zuVT+OstV2D2Cam2xTymYtyFnGHjJfeuVkX39ZVe2VzNIKQctxAFxPDV5TNe
+         cNORA/3ZX+bWxVQZ7npyQ66BFmehqv6Li7Io6IlPIq9IEJWG8/7CIXRMQxUTFc+DGdyQ
+         VQrw==
+X-Gm-Message-State: APjAAAUfBgClOphLchWMyDrAhxySIhlq4XRFZxq2foqF4ZI5Y0uL2VIE
+        ZiW4nM+tlP6eUIp54WmVU8ih2PloQAJ3iBNSU8AKvA==
+X-Google-Smtp-Source: APXvYqzoypaV1FwIebV/f2TxtU2nRgrE/Ebq2efFlxTgxI/d4F0Qe39na0QD1eDLDWhk898Dgs+NBvY32AC34gSuqMc=
+X-Received: by 2002:ac2:5295:: with SMTP id q21mr20306882lfm.93.1572960267714;
+ Tue, 05 Nov 2019 05:24:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.23.18.44]
-X-ClientProxiedBy: cncheex02.Hygon.cn (172.23.18.12) To cncheex01.Hygon.cn
- (172.23.18.10)
-X-MAIL: spam1.hygon.cn xA58e3Cc096750
-X-DNSRBL: 
+References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+ <2a8fa03308b08b2a15019d9b457d9bff7aafce94.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+ <CACRpkdZYw3QQcQ4h5y_C0UD6+4Wz9AdmQ0qSrrjfUweuJj8hyQ@mail.gmail.com> <1550472ac1e105bd38da25803358cfbc0404bf38.camel@fi.rohmeurope.com>
+In-Reply-To: <1550472ac1e105bd38da25803358cfbc0404bf38.camel@fi.rohmeurope.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 5 Nov 2019 14:24:15 +0100
+Message-ID: <CACRpkdYkgEg=4H9tQQrVcvx1xtETYD_cHxhqd-BW6g67jpEeEg@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 10/15] regulator: bd71828: Add GPIO based run-level
+ control for regulators
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When using following operations:
-date -s "21190910 19:20:00"
-hwclock -w
-to change date from 2019 to 2119 for test, it will fail on Hygon
-Dhyana and AMD Zen CPUs, while the same operations run ok on Intel i7
-platform.
+On Mon, Nov 4, 2019 at 8:05 AM Vaittinen, Matti
+<Matti.Vaittinen@fi.rohmeurope.com> wrote:
+> On Sun, 2019-11-03 at 23:27 +0100, Linus Walleij wrote:
 
-MC146818 driver use function mc146818_set_time() to set register
-RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-reset value on Intel platform to 0x7.
+> > I do not understand the regulator parts of the patch.
+>
+> I'm sorry. The patch is not clearest one what comes to the regulator
+> stuff. I can try splitting it to smaller and more logical changes if
+> you, Mark or other interested people hope to get it splitted. Or
+> perhaps it would be simplest to review if it was all in one patch?
 
-While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-as reserved.
+As long as the regulator experts are happy with the format,
+stay with that. I am just a drive-by coder when it comes to regulators.
 
-DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-(AltCentury), the CMOS write will be failed on code:
-CMOS_WRITE(century, acpi_gbl_FADT.century).
-
-Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-enable AltCentury(0x32) register writing and finally setup century as
-expected.
-
-Test results on Intel i7, AMD EPYC(17h) and Hygon machine show that it
-works as expected.
-Compiling for sparc64 and alpha architectures are passed.
-
-Reference:
-https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-section: 3.13 Real Time Clock (RTC)
-
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Jinke Fan <fanjinke@hygon.cn>
----
-
-v3->v4:
-  - Limited modification to AMD EPYC(17h).
-  - Change the macro RTC_DV0 to RTC_DIV_RESET2.
-  - Make sure save_freq_select's bit4 is cleared.
-
-v2->v3:
-  - Make the changes only relevant to AMD/Hygon.
-
-v1->v2:
-  - Fix the compile errors on sparc64/alpha platform.
-
- drivers/rtc/rtc-mc146818-lib.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2ecd875..df2829d 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -172,7 +172,20 @@ int mc146818_set_time(struct rtc_time *time)
- 	save_control = CMOS_READ(RTC_CONTROL);
- 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
- 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+
-+#ifdef CONFIG_X86
-+	if ((boot_cpu_data.x86_vendor == X86_VENDOR_AMD &&
-+	     boot_cpu_data.x86 == 0x17) ||
-+	     boot_cpu_data.x86_vendor == X86_VENDOR_HYGON) {
-+		CMOS_WRITE((save_freq_select & (~RTC_DIV_RESET2)),
-+			RTC_FREQ_SELECT);
-+		save_freq_select &= ~RTC_DIV_RESET2;
-+	} else
-+		CMOS_WRITE((save_freq_select | RTC_DIV_RESET2),
-+			RTC_FREQ_SELECT);
-+#else
-+	CMOS_WRITE((save_freq_select | RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+#endif
- 
- #ifdef CONFIG_MACH_DECSTATION
- 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
--- 
-2.7.4
-
+Yours,
+Linus Walleij
