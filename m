@@ -2,155 +2,271 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 061B6F1690
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2019 14:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CE1F1F2C
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2019 20:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730913AbfKFNFP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Nov 2019 08:05:15 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:61590 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730530AbfKFNFP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 08:05:15 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-05-5dc2c507663f
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id A4.FC.08102.705C2CD5; Wed,  6 Nov 2019 14:05:11 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Wed, 6 Nov 2019 14:05:06 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "dmurphy@ti.com" <dmurphy@ti.com>
-CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>
-Subject: Re: [RFC PATCH v3 04/15] dt-bindings: leds: ROHM BD71282 PMIC LED
- driver
-Thread-Topic: [RFC PATCH v3 04/15] dt-bindings: leds: ROHM BD71282 PMIC LED
- driver
-Thread-Index: AQHVkKgPi9BQDVNbQEqWWkMqaKUihqd86G+AgAErIAA=
-Date:   Wed, 6 Nov 2019 13:05:05 +0000
-Message-ID: <113d20653c41a311b0c5227eb5bbc6ad43d24c2c.camel@fi.rohmeurope.com>
-References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
-         <f9178204ea3925b454ecbe58df4c297fec346a4f.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
-         <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
-In-Reply-To: <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D11D9541D7CF324FBB493C0718F49F08@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEJsWRmVeSWpSXmKPExsVyYMXvTbrsRw/FGhy8amyx5OJVdov2d8vY
-        Lb7MPcViMfXhEzaL+UfOsVp0n97CanF76wYWi/tfjzJafLvSwWQx5c9yJouPPfdYLTbP/8No
-        cXnXHDaLrW/WMVocW32FzWLp9YtMFnOWnmCxuHjK1eLuqaNsFq17j7Bb/Lu2kcVB1GPNvDWM
-        Hu9vtLJ7zFtT7bFz1l12j02rOtk87lzbw+Zx/MZ2Jo/p834yeaxY/Z3d4/MmuQCuKG6bpMSS
-        suDM9Dx9uwTujHeTJjIW/NKu2NvWwN7A+EKri5GTQ0LARGJ3x2+2LkYuDiGBq4wSy1e8Z4Rw
-        jjNKTJv+nrmLkYODTcBGousmO0iDiECcxLKLB8EamAW+s0t8vdjBCpIQFgiWeN33hwmiKERi
-        3ok/UA1WEnNfzgOzWQRUJBZcmw1m8wr4Sdzf+IgJYtkVRonpP26wgCQ4gRreP+wGsxkFZCU6
-        G96BDWUWEJfY9Ow7K8TZAhJL9pxnhrBFJV4+/gcVV5LY+/MhC8jRzAKaEut36UO0OkjsftPG
-        DGErSkzpfgh1g6DEyZlPWCYwis1CsmEWQvcsJN2zkHTPQtK9gJF1FaNEbmJmTnpiSaqhXlFq
-        qV5RfkYukErOz93ECEkzX3Yw/j/keYiRiYPxEKMkB5OSKK/xoUOxQnxJ+SmVGYnFGfFFpTmp
-        xYcYJTiYlUR4Y/oOxgrxpiRWVqUW5cOkpDlYlMR51R9OjBUSANmVnZpakFoEk5Xh4FCS4FUE
-        GSpYlJqeWpGWmVOCkGbi4AQZziUlUpyal5JalFhakhEPSiDxxcAUApLiAdrbBtLOW1yQmAsU
-        hWg9xajNMeHl3EXMHEfmLl3ELMSSl5+XKiXOe2wrUKkASGlGaR7coleM4hyMSsK8/SCDeIAZ
-        B27OK6AVTEArfB7vA1lRkoiQkmpg5Nh/qt9DQa7M3P/Br4SbLNFWHaaKYhp7XzWfXstc0K93
-        S/f2fR3d1ZNPCk1ZPeF0Z2LaJZnaTFdZte3T5zaenr2+6q6C4D+3o/HH/r2aMX8rb8LZrK44
-        s9lW5+oVdUwuzvVlDY3qib22RL4sfv+yloVMXGZLL/NnbQlbebN6P4vzCxvLmjmLlViKMxIN
-        tZiLihMBXTiQxfUDAAA=
+        id S1727319AbfKFTqp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Nov 2019 14:46:45 -0500
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:50648 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfKFTqn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 14:46:43 -0500
+Received: by mail-pf1-f201.google.com with SMTP id e13so13148118pff.17
+        for <linux-rtc@vger.kernel.org>; Wed, 06 Nov 2019 11:46:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=XMIoZmq3jzflCx/mOOBG8L+JHVjKdPs5Ze6dku/isc8=;
+        b=bMol0jV6gQMh4E3B2H837bFujfxShKd7aFYex3oQh76AgZHWxQAJxDcki+arj1XaMw
+         zetFAVUTVnvecFKwY/bgQFYe4cUPxHrYu24rdycUO0yj1FKnz3QMTKlLoNMq2eScr1a8
+         OQSRIPY+UiH509bu20sMuySS8jRDCXTV54fQNGPaoZ/YhnfFEY1zSrfjLMLe2dxIu71C
+         9LawlybmZsw4CEFKGzTFHPMUYKEg0gXzNSK6IXV9JmGL/uat3VsL2ybIduQZx3HP1RNH
+         Lc71aKXI0TG0SNFTR8shGe5xf3PSIyZanQjwOGyE8OLjLNCHaezVnfJARiXRPkBsv/YS
+         6hQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=XMIoZmq3jzflCx/mOOBG8L+JHVjKdPs5Ze6dku/isc8=;
+        b=YYoLsqESl2itBAQbpfG5QLNq6BoKbMk9fKizsDnpo5/Sl3jSdJxpfa89k63n972e5S
+         U5/N111GYYG3K9dVjUNZL/chi+hRqzbCqVbBK0q+bCf/dNlxCOuiO2HpC2j6SQDBsepx
+         DnAyt+Eahgayp8aVvBm948mvxFYBivuWIq868vXCnxclddaF121odcppN6nhiZf7AeSc
+         V4LYz3lm3lyM1chliUB7kGjKYRZrZF9iKTVHSsadbDaIa6vMXesgQLq2zRjfOMUBYHMe
+         iOsEiOV/tQYUWeRkAKBl2eB6/YHAclyoG617gJ0wZ6OAUUh9dDKDie2cdeZYurEhK56K
+         UMqw==
+X-Gm-Message-State: APjAAAXo/zHf9pe3FzK/QQ2oX0mSF3jQHMsjdGwpt4dMrDNj03Y+ZqKS
+        ldJzR4wXMG4sLL1Ya3WSGTGRjif7CHcA
+X-Google-Smtp-Source: APXvYqwt4qM5R0zDv+lGCi4SZzw6mIxaprwzDEWcuzztj6HRSd5IOz1TMwpaUdYlD5mkkc7cZfXJTWmyTUOd
+X-Received: by 2002:a63:a05c:: with SMTP id u28mr5138858pgn.333.1573069600951;
+ Wed, 06 Nov 2019 11:46:40 -0800 (PST)
+Date:   Wed,  6 Nov 2019 11:46:25 -0800
+Message-Id: <20191106194625.116692-1-smuckle@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
+Subject: [PATCH] rtc: class: support hctosys from modular RTC drivers
+From:   Steve Muckle <smuckle@google.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        kernel-team@android.com, Steve Muckle <smuckle@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gRGFuLA0KDQpUaGFua3MgZm9yIHRoZSBjaGVjayBvbmNlIGFnYWluIQ0KDQpPbiBUdWUs
-IDIwMTktMTEtMDUgYXQgMTM6MTQgLTA2MDAsIERhbiBNdXJwaHkgd3JvdGU6DQo+IE1hdHRpDQo+
-IA0KPiBPbiAxMS8xLzE5IDY6MzIgQU0sIE1hdHRpIFZhaXR0aW5lbiB3cm90ZToNCj4gPiBEb2N1
-bWVudCBST0hNIEJENzE4MjggUE1JQyBMRUQgZHJpdmVyIGRldmljZSB0cmVlIGJpbmRpbmdzLg0K
-PiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZhaXR0aW5lbiA8bWF0dGkudmFpdHRpbmVu
-QGZpLnJvaG1ldXJvcGUuY29tPg0KPiA+IC0tLQ0KPiA+IA0KPiA+IENoYW5nZXMgZnJvbSB2MiAt
-IG5ldyBwYXRjaA0KPiA+IA0KPiA+ICAgLi4uL2JpbmRpbmdzL2xlZHMvcm9obSxsZWRzLWJkNzE4
-MjgueWFtbCAgICAgIHwgNDYNCj4gPiArKysrKysrKysrKysrKysrKysrDQo+ID4gICAxIGZpbGUg
-Y2hhbmdlZCwgNDYgaW5zZXJ0aW9ucygrKQ0KPiA+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4g
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2xlZHMvcm9obSxsZWRzLWJkNzE4Mjgu
-eWFtbA0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvbGVkcy9yb2htLGxlZHMtDQo+ID4gYmQ3MTgyOC55YW1sIGIvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL2xlZHMvcm9obSxsZWRzLQ0KPiA+IGJkNzE4MjgueWFtbA0KPiA+
-IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5kOGFlYWM5OTEx
-ZWYNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL2xlZHMvcm9obSxsZWRzLWJkNzE4MjgueWFtbA0KPiA+IEBAIC0wLDAgKzEsNDYg
-QEANCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiA+ICslWUFNTCAx
-LjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvbGVk
-cy9yb2htLGxlZHMtYmQ3MTgyOC55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJl
-ZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBST0hNIEJE
-NzE4MjggUG93ZXIgTWFuYWdlbWVudCBJbnRlZ3JhdGVkIENpcmN1aXQgTEVEIGRyaXZlcg0KPiA+
-ICsNCj4gPiArbWFpbnRhaW5lcnM6DQo+ID4gKyAgLSBKYWNlayBBbmFzemV3c2tpIDxqYWNlay5h
-bmFzemV3c2tpQGdtYWlsLmNvbT4NCj4gPiArICAtIFBhdmVsIE1hY2hlayA8cGF2ZWxAdWN3LmN6
-Pg0KPiA+ICsgIC0gRGFuIE11cnBoeSA8ZG11cnBoeUB0aS5jb20+DQo+ID4gKyAgLSBSb2IgSGVy
-cmluZyA8cm9iaCtkdEBrZXJuZWwub3JnPg0KPiA+ICsgIC0gTWFyayBSdXRsYW5kIDxtYXJrLnJ1
-dGxhbmRAYXJtLmNvbT4NCj4gSSBiZWxpZXZlIHlvdSBhcmUgdGhlIG1haW50YWluZXIgb2YgdGhp
-cyBkcml2ZXIgbm90IHRoZSBtYWludGFpbmVycw0KDQpSaWdodC4gVGhhbmtzIGZvciBwb2ludGlu
-ZyB0aGF0IG91dC4NCg0KPiA+ICsNCj4gPiArZGVzY3JpcHRpb246IHwNCj4gPiArICBUaGlzIG1v
-ZHVsZSBpcyBwYXJ0IG9mIHRoZSBST0hNIEJENzE4MjggTUZEIGRldmljZS4gRm9yIG1vcmUNCj4g
-PiBkZXRhaWxzDQo+ID4gKyAgc2VlIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9t
-ZmQvcm9obSxiZDcxODI4LQ0KPiA+IHBtaWMueWFtbC4NCj4gPiArDQo+ID4gKyAgVGhlIExFRCBj
-b250cm9sbGVyIGlzIHJlcHJlc2VudGVkIGFzIGEgc3ViLW5vZGUgb2YgdGhlIFBNSUMgbm9kZQ0K
-PiA+IG9uIHRoZSBkZXZpY2UNCj4gPiArICB0cmVlLg0KPiA+ICsNCj4gPiArICBUaGUgZGV2aWNl
-IGhhcyB0d28gTEVEIG91dHB1dHMgcmVmZXJyZWQgYXMgR1JOTEVEIGFuZCBBTUJMRUQgaW4NCj4g
-PiBkYXRhLXNoZWV0Lg0KPiA+ICsNCj4gPiArcHJvcGVydGllczoNCj4gPiArICBjb21wYXRpYmxl
-Og0KPiA+ICsgICAgY29uc3Q6IHJvaG0sYmQ3MTgyOC1sZWQNCj4gPiArDQo+ID4gK3BhdHRlcm5Q
-cm9wZXJ0aWVzOg0KPiA+ICsgICJebGVkLVsxLTJdJCI6DQo+ID4gKyAgICB0eXBlOiBvYmplY3QN
-Cj4gPiArICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsgICAgICBQcm9wZXJ0aWVzIGZvciBhIHNpbmds
-ZSBMRUQuIE5vZGVzIG11c3QgYmUgbmFtZWQgYXMgbGVkLTENCj4gPiBhbmQgbGVkLTIuDQo+IA0K
-PiBXaHkgaXMgdGhpcyByZXF1aXJlZD8gIENhbid0IHdlIHVzZSB0aGUgcmVnIGFzIHRoZSBudW1i
-ZXIgYW5kIHRoZW4NCj4gd2UgDQo+IGNhbiB1c2Ugc3RhbmRhcmQgbm9kZSBsYWJlbHMNCg0KVGhp
-cyB3YXMgcmVsYXRlZCB0byBteSBpZGVhIG9mIHVzaW5nIHRoZSBub2RlLW5hbWVzIGFzIHVuaXF1
-ZSBrZXlzLg0KUGxlYXNlIHNlZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvY292ZXIu
-MTU3MjM1MTc3NC5naXQubWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tLw0KDQpXaGF0
-IHdvdWxkIHlvdSBleHBlY3QgdGhlIHJlZyA9IDw+OyB0byBkZXNjcmliZSBmcm9tIEhXPw0KDQo+
-IGxpa2UgbGVkQDxyZWcgdmFsdWU+LiAgVGhlbiB3ZSBjYW4gY2hlY2sgaW4gdGhlIGNvZGUgdG8g
-bWFrZSBzdXJlDQo+IHRoYXQgDQo+IHRoZSBvdXRwdXQgaXMgbm90IG91dCBvZiBib3VuZHMuDQo+
-IA0KPiA+ICsgICAgcHJvcGVydGllczoNCj4gPiArICAgICAgIyRyZWY6ICJjb21tb24ueWFtbCMi
-DQo+ID4gKyAgICAgIGZ1bmN0aW9uOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOg0KPiA+ICsg
-ICAgICAgICAgUHVycG9zZSBvZiBMRUQgYXMgZGVmaW5lZCBpbiBkdC1iaW5kaW5ncy9sZWRzL2Nv
-bW1vbi5oDQo+ID4gKyAgICAgICAgJHJlZjogIi9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRp
-b25zL3N0cmluZyINCj4gPiArICAgICAgY29sb3I6DQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246
-DQo+ID4gKyAgICAgICAgICBMRUQgY29sb3VyIGFzIGRlZmluZWQgaW4gZHQtYmluZGluZ3MvbGVk
-cy9jb21tb24uaA0KPiANCj4gcy9jb2xvdXIvY29sb3INCg0KVGhhdCBkZXBlbmRzIG9uIHlvdXIg
-bG9jYXRpb24gOikNCg0KPiBCdXQgYWdhaW4gSSBiZWxpZXZlIGl0IGlzIGluZGljYXRlZCBhYm92
-ZSB0aGF0IHRoZSBMRURzIGFyZSBlaXRoZXINCj4gZ29pbmcgDQo+IHRvIGJlIGdyZWVuIG9yIGFt
-YmVyLiAgVW5sZXNzIHRoZXkgY2FuIGJlIGFueSBjb2xvci4NCg0KVGhpcyB3YXMgbXkgb3JpZ2lu
-YWwgcmVhc29uIGZvciBvbWl0dGluZyB0aGUgRFQgZm9yIEJENzE4MjggTEVEcw0KYWx0b2dldGhl
-ci4gTEVEcyBhcmUgZXhwZWN0ZWQgdG8gYmUgZ3JlZW4gYW5kIGFtYmVyIC0gYnV0IGl0IGlzIHRy
-dWUNCnRoYXQgUE1JQyBjYW4gbm90IGVuc3VyZSB0aGVyZSB3aWxsIGJlIG5vIG90aGVyIGNvbG91
-cnMuDQoNCj4gQXJlIHRoZXJlIHBsYW5zIHRvIG1ha2Ugc3VyZSB0aGF0IHRoZSBjb2xvciBpcyBl
-aXRoZXIgZ3JlZW4gb3IgYW1iZXINCj4gaW4gDQo+IHRoZSBjb2RlPyAgSSBkb24ndCBzZWUgYSBw
-YXRjaCBmb3IgdGhlIGNvZGUgaW4gdGhpcyBzZXJpZXMNCg0KWWVzLiBBcyBJIHdyb3RlIGluIGNv
-dmVyLWxldHRlciwgdGhlIExFRCBkcml2ZXIgaXMgcGVuZGluZyB1bnRpbCBJIHNlZQ0KaG93IHRo
-ZSBSRkMgZm9yIGFkZGluZyBMRUQgbm9kZSBmaW5kaW5nIGFuZCBzb21lIG1vcmUgY29tbW9uIHBy
-b3BlcnR5DQpwYXJzaW5nIHRvIExFRCBjb3JlIGlzIHJlY2VpdmVkIGJ5IG90aGVycy4gKEFsdGhv
-dWdoIEkgZG8gdW5kZXJzdGFuZCBpZg0KeW91IGRpZG4ndCByZWFkIHRoZSBjb3Zlci1sZXR0ZXIu
-IEl0J3MgcXVpdGUgYSBidW5jaCBvZiB0ZXh0IGFuZA0KcmVhZGluZyBpdCBvdmVyIGFuZCBvdmVy
-IGFnYWluIGlzIG5vIGZ1bikuDQoNCj4gDQo+ID4gKyAgICAgICAgJHJlZjogIi9zY2hlbWFzL3R5
-cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMiINCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+
-ICsgIC0gY29tcGF0aWJsZQ0KPiANCj4gSXMgdGhlcmUgYW4gZXhhbXBsZSBvZiB0aGUgbm9kZSBh
-bmQgcHJvcGVydGllcz8NCg0KWWVzLCBpbiBNRkQgZG9jLg0KDQpCciwNCglNYXR0aSBWYWl0dGlu
-ZW4NCg==
+Due to distribution constraints it may not be possible to statically
+compile the required RTC driver into the kernel.
+
+Expand RTC_HCTOSYS support to cover all RTC devices (statically compiled
+or not) by checking at the end of RTC device registration whether the
+time should be synced.
+
+Signed-off-by: Steve Muckle <smuckle@google.com>
+---
+ drivers/rtc/Kconfig   | 18 ++++++-----
+ drivers/rtc/Makefile  |  1 -
+ drivers/rtc/class.c   | 63 +++++++++++++++++++++++++++++++++++++++
+ drivers/rtc/hctosys.c | 69 -------------------------------------------
+ 4 files changed, 73 insertions(+), 78 deletions(-)
+ delete mode 100644 drivers/rtc/hctosys.c
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 1adf9f815652..f663d77deb41 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -35,14 +35,16 @@ config RTC_HCTOSYS_DEVICE
+ 	depends on RTC_HCTOSYS
+ 	default "rtc0"
+ 	help
+-	  The RTC device that will be used to (re)initialize the system
+-	  clock, usually rtc0. Initialization is done when the system
+-	  starts up, and when it resumes from a low power state. This
+-	  device should record time in UTC, since the kernel won't do
+-	  timezone correction.
+-
+-	  The driver for this RTC device must be loaded before late_initcall
+-	  functions run, so it must usually be statically linked.
++	  The RTC device that will be used to (re)initialize the system clock,
++	  usually rtc0. Initialization is done when the driver for the RTC
++	  device registers, and when it resumes from a low power state. This
++	  device should record time in UTC, since the kernel won't do timezone
++	  correction.
++
++	  During startup it is useful to initialize the system clock from the
++	  RTC as early as possible. For this reason the driver for this RTC
++	  device should be statically linked, or alternately, the kernel module
++	  for the RTC device driver loaded immediately.
+ 
+ 	  This clock should be battery-backed, so that it reads the correct
+ 	  time when the system boots from a power-off state. Otherwise, your
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 4ac8f19fb631..33f932d08262 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -6,7 +6,6 @@
+ ccflags-$(CONFIG_RTC_DEBUG)	:= -DDEBUG
+ 
+ obj-$(CONFIG_RTC_LIB)		+= lib.o
+-obj-$(CONFIG_RTC_HCTOSYS)	+= hctosys.o
+ obj-$(CONFIG_RTC_SYSTOHC)	+= systohc.o
+ obj-$(CONFIG_RTC_CLASS)		+= rtc-core.o
+ obj-$(CONFIG_RTC_MC146818_LIB)	+= rtc-mc146818-lib.o
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 9458e6d6686a..b1ed5f3be223 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -34,6 +34,64 @@ static void rtc_device_release(struct device *dev)
+ #ifdef CONFIG_RTC_HCTOSYS_DEVICE
+ /* Result of the last RTC to system clock attempt. */
+ int rtc_hctosys_ret = -ENODEV;
++
++/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
++ * whether it stores the most close value or the value with partial
++ * seconds truncated. However, it is important that we use it to store
++ * the truncated value. This is because otherwise it is necessary,
++ * in an rtc sync function, to read both xtime.tv_sec and
++ * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
++ * of >32bits is not possible. So storing the most close value would
++ * slow down the sync API. So here we have the truncated value and
++ * the best guess is to add 0.5s.
++ */
++
++static int rtc_hctosys(void)
++{
++	int err = -ENODEV;
++	struct rtc_time tm;
++	struct timespec64 tv64 = {
++		.tv_nsec = NSEC_PER_SEC >> 1,
++	};
++	struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
++
++	if (!rtc) {
++		pr_info("unable to open rtc device (%s)\n",
++			CONFIG_RTC_HCTOSYS_DEVICE);
++		goto err_open;
++	}
++
++	err = rtc_read_time(rtc, &tm);
++	if (err) {
++		dev_err(rtc->dev.parent,
++			"hctosys: unable to read the hardware clock\n");
++		goto err_read;
++	}
++
++	tv64.tv_sec = rtc_tm_to_time64(&tm);
++
++#if BITS_PER_LONG == 32
++	if (tv64.tv_sec > INT_MAX) {
++		err = -ERANGE;
++		goto err_read;
++	}
++#endif
++
++	err = do_settimeofday64(&tv64);
++
++	dev_info(rtc->dev.parent, "setting system clock to %ptR UTC (%lld)\n",
++		 &tm, (long long)tv64.tv_sec);
++
++err_read:
++	rtc_class_close(rtc);
++
++err_open:
++	rtc_hctosys_ret = err;
++
++	return err;
++}
++
++
+ #endif
+ 
+ #if defined(CONFIG_PM_SLEEP) && defined(CONFIG_RTC_HCTOSYS_DEVICE)
+@@ -375,6 +433,11 @@ int __rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	dev_info(rtc->dev.parent, "registered as %s\n",
+ 		 dev_name(&rtc->dev));
+ 
++#ifdef CONFIG_RTC_HCTOSYS_DEVICE
++	if (!strcmp(dev_name(&rtc->dev), CONFIG_RTC_HCTOSYS_DEVICE))
++		rtc_hctosys();
++#endif
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(__rtc_register_device);
+diff --git a/drivers/rtc/hctosys.c b/drivers/rtc/hctosys.c
+deleted file mode 100644
+index a74d0d890600..000000000000
+--- a/drivers/rtc/hctosys.c
++++ /dev/null
+@@ -1,69 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * RTC subsystem, initialize system time on startup
+- *
+- * Copyright (C) 2005 Tower Technologies
+- * Author: Alessandro Zummo <a.zummo@towertech.it>
+- */
+-
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/rtc.h>
+-
+-/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
+- * whether it stores the most close value or the value with partial
+- * seconds truncated. However, it is important that we use it to store
+- * the truncated value. This is because otherwise it is necessary,
+- * in an rtc sync function, to read both xtime.tv_sec and
+- * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
+- * of >32bits is not possible. So storing the most close value would
+- * slow down the sync API. So here we have the truncated value and
+- * the best guess is to add 0.5s.
+- */
+-
+-static int __init rtc_hctosys(void)
+-{
+-	int err = -ENODEV;
+-	struct rtc_time tm;
+-	struct timespec64 tv64 = {
+-		.tv_nsec = NSEC_PER_SEC >> 1,
+-	};
+-	struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
+-
+-	if (!rtc) {
+-		pr_info("unable to open rtc device (%s)\n",
+-			CONFIG_RTC_HCTOSYS_DEVICE);
+-		goto err_open;
+-	}
+-
+-	err = rtc_read_time(rtc, &tm);
+-	if (err) {
+-		dev_err(rtc->dev.parent,
+-			"hctosys: unable to read the hardware clock\n");
+-		goto err_read;
+-	}
+-
+-	tv64.tv_sec = rtc_tm_to_time64(&tm);
+-
+-#if BITS_PER_LONG == 32
+-	if (tv64.tv_sec > INT_MAX) {
+-		err = -ERANGE;
+-		goto err_read;
+-	}
+-#endif
+-
+-	err = do_settimeofday64(&tv64);
+-
+-	dev_info(rtc->dev.parent, "setting system clock to %ptR UTC (%lld)\n",
+-		 &tm, (long long)tv64.tv_sec);
+-
+-err_read:
+-	rtc_class_close(rtc);
+-
+-err_open:
+-	rtc_hctosys_ret = err;
+-
+-	return err;
+-}
+-
+-late_initcall(rtc_hctosys);
+-- 
+2.24.0.rc1.363.gb1bccd3e3d-goog
+
