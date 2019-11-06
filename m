@@ -2,167 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BA0F0782
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Nov 2019 21:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F33F0F50
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Nov 2019 07:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729781AbfKEU7h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Nov 2019 15:59:37 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45558 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728515AbfKEU7g (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Nov 2019 15:59:36 -0500
-Received: by mail-oi1-f194.google.com with SMTP id k2so18866504oij.12;
-        Tue, 05 Nov 2019 12:59:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=GTdZcSlaCj6B0DkM9Lw5qj2TAkpu7tNssud6DV2YzpE=;
-        b=BFtYrSbJmAbz9M+hSjxg81pt0y/7FjdQnZxy5eRdMY3TWwvGTdG2X3kUmEPa464A6O
-         CV5a2bMAFnoODAFvVFYs8I+JYzyKVVrTaSoXONTUJ1oBMpPxHTNSZ0toUCTjPmTX2dxn
-         XT51LxXBTT/gIAd4czhCJm9uNfEh7g23R/eCoesRacasOqAbbR3uamgT0jqYjOf53RXU
-         8pBC+llf3XMFWjyt6W7IuB9OKrKHVJ+yFt7Cqxxf4uAk/ZlnEf7FuqjaQqsatmV0QEiy
-         whwPQJLeXObgtqoO1O7b6+UTO7clHAOilCjRGunshvQ5v+k5ypxZSctYOI5ihp4uawLe
-         /UwA==
-X-Gm-Message-State: APjAAAXRe6HctQ0FdS7Lvn1fJPxrtKcu8EuRF4jReHb2ABj2I/4FvvVM
-        iJ/igI9CIuHKY5BWh8h7xw==
-X-Google-Smtp-Source: APXvYqxfoZQYXzrqWbqrf5YESnzLMdDJ74I9O0OJcWuzBYYa9Qz/tEUJ92oPye+EYoq65rZtqp2VDA==
-X-Received: by 2002:aca:b6c3:: with SMTP id g186mr860975oif.173.1572987575575;
-        Tue, 05 Nov 2019 12:59:35 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l7sm6413475otf.39.2019.11.05.12.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 12:59:35 -0800 (PST)
-Date:   Tue, 5 Nov 2019 14:59:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        mazziesaccount@gmail.com,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [RFC PATCH v3 04/15] dt-bindings: leds: ROHM BD71282 PMIC LED
- driver
-Message-ID: <20191105205934.GD629@bogus>
+        id S1731391AbfKFGwH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Nov 2019 01:52:07 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:48286 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731330AbfKFGwG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 01:52:06 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-76-5dc26d945d76
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 4D.4A.08102.49D62CD5; Wed,  6 Nov 2019 07:52:04 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Wed, 6 Nov 2019 07:52:00 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+CC:     "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>
+Subject: Re: [RFC PATCH v3 14/15] gpio: Add definition for GPIO direction
+Thread-Topic: [RFC PATCH v3 14/15] gpio: Add definition for GPIO direction
+Thread-Index: AQHVkKp+hdqKw9vEbUql9O/haZZyiad5+mgAgAEiGoCAAYY1gIABCI2A
+Date:   Wed, 6 Nov 2019 06:51:59 +0000
+Message-ID: <c4a2462cf810c4468638522d901b6416d1a770a4.camel@fi.rohmeurope.com>
 References: <cover.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
- <f9178204ea3925b454ecbe58df4c297fec346a4f.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
- <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
+         <f08d265c12ebf185c0e1dbbfe0a3f86de4907194.1572606437.git.matti.vaittinen@fi.rohmeurope.com>
+         <CACRpkdYhasTEQq2btQ_3GSo=hMJetp128jFo-6hE=JMeX4MJSA@mail.gmail.com>
+         <411ac5e107cd2a6c628d1fb46e7d284c8f594768.camel@fi.rohmeurope.com>
+         <CACRpkdaRt3Du4y_Yhv39d7KoQ=hOkPR-RqXYjPukxb7JG_yymQ@mail.gmail.com>
+In-Reply-To: <CACRpkdaRt3Du4y_Yhv39d7KoQ=hOkPR-RqXYjPukxb7JG_yymQ@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <25065393F3209F438FDBAA6CC3CC6B53@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <37d85b2d-8fca-a998-95ae-61f0c049054d@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta0gUaxjHeWdmZ16tkWnSfM9mlzMEUVEmRL5FSF+sKSK60nWxKUd3ay8y
+        u0pWkN0w1+iGUS3rJU+W6NJlLTIp01HL9pwKy8yoFE/SSbtxyDLJLjOOpZ/eP8//+T+/58Pz
+        QpJvp83Q5vTIilOyC3Q4VVP69fL0PIdqmfmlTcBnmx4zOPv9OQb35IcofKKjk8aF9fdNOPfv
+        Kyb87OolCrd/agD4c/NBAuf1nyfw/4faTLiisB/gR1V+Gl99ewHg2+XNNC550kRgf0kjhZtC
+        ifhFqIHGB27WM/h7y2VqfpQYKAgA8UPrAUYsCOwUr/teMGKwLIcWn7fcoMU7rdcI8WRBHyGW
+        lvcy4sfg+GXh60fM2yx5MlbaUp2xCZtGWGtadqVVRmx/F+o2ZYGDEV4QBhE3Cx327yO8IBzy
+        3GOA/gpVULrBc3cACn5a5QUQ0tw85H3K6OVIbg6qa/QPtJCcH6I9ret0PZpbhG71hwZ7FqO8
+        ohrS0AvQq95OQtcUNwn1qW9oXbPcUlT5bzkwuH0E6ipqGBgaxi1H7Q/eDYQBNw7lZL0nDFg0
+        Cr7qNRlLc+jsjQekoaNQ18vvg3UB3ezroPSdSW4KulgVa0Tno7YnewZ3/hPl5XYwxg6j0N3T
+        ndRRMMY3jOAbSvuGpX3D0r5h6SJgKgPIIdnsqZJHjpuhyOkzFJfVoT1bXI4gMA6mpxL8UBep
+        gIBABX9AQohiF9tqLXzEZldyplVyW5OUdLvsVgGCpBDJbjyseWyylLlDVly/rLGQEqLZyR3H
+        LDyns7bJcpqs/HJjIBQQW2VXLfwoRU6Vt6fY7J4hm4Bh+vBwc6RbdibLipTusSbp15Hk1s5D
+        t0Zq3MZtWpx1p0kOrWpEQ2AaPNqVX0zC+vySYpKnnC6nbI5mP+skTm+1pjt/g7pBNATCaHat
+        7o7Ufs3vOd0agtAQS15W6wiPNGSZs8Dse7nAc/zEDnqqhz/utQfiV2TfSlxtCfTsXLv3dft/
+        Unn/qurbcZnNlT27fyT5shLWnVIz1qhr6ipMMdPHJr651lu0oWl1c1kbX1z9ZcKHbwtex5vX
+        f3yUuDUlPiclNmZvRm1pXVnC0piF1jNXJs6Ws5lAq7i/di6Ye+SflpJLUvVDgXJbpbippOKW
+        fgLtDG6o8gMAAA==
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 01:14:33PM -0600, Dan Murphy wrote:
-> Matti
-> 
-> On 11/1/19 6:32 AM, Matti Vaittinen wrote:
-> > Document ROHM BD71828 PMIC LED driver device tree bindings.
-> > 
-> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > ---
-> > 
-> > Changes from v2 - new patch
-> > 
-> >   .../bindings/leds/rohm,leds-bd71828.yaml      | 46 +++++++++++++++++++
-> >   1 file changed, 46 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> > new file mode 100644
-> > index 000000000000..d8aeac9911ef
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/leds/rohm,leds-bd71828.yaml
-> > @@ -0,0 +1,46 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/leds/rohm,leds-bd71828.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: ROHM BD71828 Power Management Integrated Circuit LED driver
-> > +
-> > +maintainers:
-> > +  - Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> > +  - Pavel Machek <pavel@ucw.cz>
-> > +  - Dan Murphy <dmurphy@ti.com>
-> > +  - Rob Herring <robh+dt@kernel.org>
-> > +  - Mark Rutland <mark.rutland@arm.com>
-> I believe you are the maintainer of this driver not the maintainers
-
-Right, should have been clearer in my other response. Put 
-owner/maintainer of the device binding, not subsystem.
-
-> > +
-> > +description: |
-> > +  This module is part of the ROHM BD71828 MFD device. For more details
-> > +  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
-> > +
-> > +  The LED controller is represented as a sub-node of the PMIC node on the device
-> > +  tree.
-> > +
-> > +  The device has two LED outputs referred as GRNLED and AMBLED in data-sheet.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: rohm,bd71828-led
-> > +
-> > +patternProperties:
-> > +  "^led-[1-2]$":
-> > +    type: object
-> > +    description:
-> > +      Properties for a single LED. Nodes must be named as led-1 and led-2.
-> 
-> Why is this required?  Can't we use the reg as the number and then we can
-> use standard node labels
-> 
-> like led@<reg value>.  Then we can check in the code to make sure that the
-> output is not out of bounds.
-> 
-> > +    properties:
-> > +      #$ref: "common.yaml#"
-> > +      function:
-> > +        description:
-> > +          Purpose of LED as defined in dt-bindings/leds/common.h
-> > +        $ref: "/schemas/types.yaml#/definitions/string"
-> > +      color:
-> > +        description:
-> > +          LED colour as defined in dt-bindings/leds/common.h
-> 
-> s/colour/color
-> 
-> But again I believe it is indicated above that the LEDs are either going to
-> be green or amber.  Unless they can be any color.
-> 
-> Are there plans to make sure that the color is either green or amber in the
-> code?  I don't see a patch for the code in this series
-> 
-> > +        $ref: "/schemas/types.yaml#/definitions/uint32"
-> > +
-> > +required:
-> > +  - compatible
-> 
-> Is there an example of the node and properties?
-
-For MFDs, I prefer a complete example in the MFD binding doc. We need it 
-complete to validate the example.
-
-Rob
+SGVsbG8gTGludXMsDQoNCk9uIFR1ZSwgMjAxOS0xMS0wNSBhdCAxNjowNSArMDEwMCwgTGludXMg
+V2FsbGVpaiB3cm90ZToNCj4gT24gTW9uLCBOb3YgNCwgMjAxOSBhdCA0OjQ4IFBNIFZhaXR0aW5l
+biwgTWF0dGkNCj4gPE1hdHRpLlZhaXR0aW5lbkBmaS5yb2htZXVyb3BlLmNvbT4gd3JvdGU6DQo+
+IA0KPiA+ID4gR29vZCBpbml0aWF0aXZlIChhbmQgSSB3aWxsIHNlZSBhIHRvbiBvZiBqYW5pdG9y
+aWFsIHBhdGNoZXMgYXMgYQ0KPiA+ID4gcmVzdWx0IG9mIHRoaXMuLi4pDQo+ID4gDQo+ID4gSSBo
+YXZlIHNvbWV3aGVyZSBuZWFyIDYyIHBhdGNoZXMgd2FpdGluZyB0byBiZSBzZW50ID0pIFRoZXkn
+cmUNCj4gPiBwcmV0dHkNCj4gPiBzbWFsbCBidXQgSSdkIGFwcHJlY2lhdGUgdGhvcm91Z2ggcmV2
+aWV3IGFzIHRoZXkncmUgbW9zdGx5DQo+ID4gdW50ZXN0ZWQuLi4NCj4gPiBEbyB5b3UgbWluZCBy
+ZWNlaXZpbmcgdGhlbSBhbGwgaW4gb25lIGdvPyBPciBkbyB5b3UgdGhpbmsgSSBzaG91bGQNCj4g
+PiBzZW5kDQo+ID4gdGhlIHNlcmllcyBpbiBzbWFsbGVyIGNodW5ja3M/DQo+IA0KPiBJIHdvdWxk
+IGJlIGZpbmUgd2l0aCBvbmUgcGF0Y2ggaW50cm9kdWNpbmcgdGhlIGRlZmluZXMgYW5kIHRoZW4N
+Cj4gb25lIGJpZyBwYXRjaCBzd2l0Y2hpbmcgZXZlcnlib2R5IGFuZCB0aGVpciBkb2cgb3ZlciB0
+byB1c2luZw0KPiB0aGVzZSBkZWZpbml0aW9ucy4NCj4gDQo+IEkgdXN1YWxseSBrZWVwIHRvIGEg
+cGF0Y2ggYmVpbmcgIm9uZSB0ZWNobmljYWwgc3RlcCIgYW5kIGl0IGlzDQo+IGNsZWFybHkgKElN
+Tykgb25lIHN0ZXAgdG8gaW50cm9kdWNlIHRoZSBkZWZpbmVzIGFuZCBvbmUgc3RlcA0KPiB0byBt
+YWtlIHVzZSBvZiBpdCBpbiBhbGwgbGVnYWN5IGRyaXZlcnMuDQo+IA0KPiBJdCdzIGxhdGUgaW4g
+dGhlIGtlcm5lbCBjeWNsZSBidXQgdGhpcyBwYXJ0aWN1bGFyIHBhcnQgKHRoZSBkZWZpbmVzDQo+
+IGFuZCBzd2l0Y2hpbmcgb3ZlciBvbGQgZHJpdmVyIHRvIHVzZSBpdCkgSSdkIGJlIGhhcHB5DQo+
+IHRvIG1lcmdlIGZvciB2NS41Lg0KDQpJJ2xsIHByZXBhcmUgb25lIHBhdGNoIGZvciBkZWZpbmVz
+IGFuZCBvbmUgbGFyZ2UgcGF0Y2ggZm9yIGRyaXZlcg0KY2hhbmdlcyBvbiB0b3Agb2YgR1BJTyB0
+cmVlIHRoZW4uIEknbGwgbGVhdmUgb3V0IHRoZSBsYXN0IG9uZSA2Mi82MiAtDQppdCBjYW4gYmUg
+YXBwbGllZCBsYXRlciBpZiBpdCBpcyBjb25zaWRlcmVkIGEgZ29vZCBpZGVhIC0gSSdkDQphcHBy
+ZWNpYXRlIGlmIHlvdSAvIEJhcnRvc3ogaGFkIHRoZSB0aW1lIHRvIGNoZWNrIGl0IHRob3VnaC4g
+DQoNCj4gDQo+IFlvdXJzLA0KPiBMaW51cyBXYWxsZWlqDQoNCg==
