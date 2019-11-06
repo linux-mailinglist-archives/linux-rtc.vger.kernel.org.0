@@ -2,267 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B16C5F2275
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2019 00:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF00F22BB
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2019 00:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbfKFXTi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Nov 2019 18:19:38 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:39721 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfKFXTi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 18:19:38 -0500
-X-Originating-IP: 92.184.100.196
-Received: from localhost (unknown [92.184.100.196])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 9FD0660002;
-        Wed,  6 Nov 2019 23:19:26 +0000 (UTC)
-Date:   Thu, 7 Nov 2019 00:19:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Steve Muckle <smuckle@google.com>
+        id S1728412AbfKFXhy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Nov 2019 18:37:54 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35752 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbfKFXhy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 18:37:54 -0500
+Received: by mail-pf1-f196.google.com with SMTP id d13so472494pfq.2
+        for <linux-rtc@vger.kernel.org>; Wed, 06 Nov 2019 15:37:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=I8dPU8PsIcjQN/qde2NZnnh3S5qLVWrToiL1ovmtnNY=;
+        b=Ws7n2u3+b3+8KEXtZJewZYqykECNj6uA47mb/cDxScvuF7J8mD7C4qC58TQwUWfOhT
+         zKiLyWDL8556asRqUA4bS5qUDJ0dNIFZ5veM3tP5KuIsKIMokH1TKDBFqiom+XC8B1n0
+         T4MJXSSrD/wBLaLOdl4fL46deH893TQucIACAhPYdYId3aUBQigD5B1NgQDTvLr895qH
+         ZUTosV/4fPVHtkzn8PKNYjX0OcXZebWpXVqxVFWTLQxBC6S6dnG7vqt608q65h7A3kJd
+         bzeRGGVDTubEzwqtBiAnP7BRNsQnygMFmWlEtVzOeKChMgHte95VNYuCzUszrzSSQc7Z
+         KhbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=I8dPU8PsIcjQN/qde2NZnnh3S5qLVWrToiL1ovmtnNY=;
+        b=KINCv3Yl7XZrLya6WbUih2b9ak/pzAbGzzDCpkgWvhtnZkCraIjKm3G3MQRraG0ci7
+         Yam/GAGwl+nWJIC3lntyVpae7+AaqwZPFRX3QOI3Fw5HZgMKY2opW3MP+conWKj3pS5i
+         3CbbPvG5Q4ftgke/5Zgz4JR9RdmS/IX49JoZN4LbqGtEhLFVa3CHZg5Q9SCWEn5DcscG
+         i85hKobKwNwTABlnFcL0trR1HVBBXucC4dp5efL5sMb1lWusUPxJ1hTGcPFky9t9M+Rl
+         cZfqmSx9u3L8NFjvpKBDr2t1MHysPHJahFSnQ4qsLpvjDWneT0n7acPPNGuCNOSIEiSw
+         QEvQ==
+X-Gm-Message-State: APjAAAXhMOIgNXU3UoKZ8xAVj+ytzxk5b4TVAhb1TDDdW8mL3sOanfcQ
+        J7ii4ITb9NJXyVJuiWo1m7KrxQ==
+X-Google-Smtp-Source: APXvYqw9iZMhdp6QP4E2+vOP8jk/LTcrF0hI26oCv/HF5wbRGuVeoDYZzb1ZlU6yuqTo+vQkhG8n+Q==
+X-Received: by 2002:a63:181f:: with SMTP id y31mr592777pgl.186.1573083471320;
+        Wed, 06 Nov 2019 15:37:51 -0800 (PST)
+Received: from smuckle.san.corp.google.com ([2620:15c:2d:3:8fbe:ee3b:c81d:238d])
+        by smtp.gmail.com with ESMTPSA id i13sm92639pfo.39.2019.11.06.15.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Nov 2019 15:37:50 -0800 (PST)
+Subject: Re: [PATCH] rtc: class: support hctosys from modular RTC drivers
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         kernel-team@android.com
-Subject: Re: [PATCH] rtc: class: support hctosys from modular RTC drivers
-Message-ID: <20191106231923.GK8309@piout.net>
 References: <20191106194625.116692-1-smuckle@google.com>
+ <20191106231923.GK8309@piout.net>
+From:   Steve Muckle <smuckle@google.com>
+Message-ID: <b96f085b-8a0c-7c71-4fde-8af83d49823a@google.com>
+Date:   Wed, 6 Nov 2019 15:37:49 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191106194625.116692-1-smuckle@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191106231923.GK8309@piout.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 06/11/2019 11:46:25-0800, Steve Muckle wrote:
-> Due to distribution constraints it may not be possible to statically
-> compile the required RTC driver into the kernel.
+On 11/6/19 3:19 PM, Alexandre Belloni wrote:
+> On 06/11/2019 11:46:25-0800, Steve Muckle wrote:
+>> Due to distribution constraints it may not be possible to statically
+>> compile the required RTC driver into the kernel.
+>>
+>> Expand RTC_HCTOSYS support to cover all RTC devices (statically compiled
+>> or not) by checking at the end of RTC device registration whether the
+>> time should be synced.
+>>
 > 
-> Expand RTC_HCTOSYS support to cover all RTC devices (statically compiled
-> or not) by checking at the end of RTC device registration whether the
-> time should be synced.
-> 
+> This does not really help distributions because most of them will still
+> have "rtc0" hardcoded and rtc0 is often the rtc that shouldn't be used.
 
-This does not really help distributions because most of them will still
-have "rtc0" hardcoded and rtc0 is often the rtc that shouldn't be used.
+Just for my own edification, why is that? Is rtc0 normally useless on PC 
+for some reason?
 
-Can't you move away from HCTOSYS and do the correct thing in userspace
-instead of the crap hctosys is doing?
+On the platforms I'm working with I believe it can be assured that rtc0 
+will be the correct rtc. That doesn't help typical distributions though.
 
-> Signed-off-by: Steve Muckle <smuckle@google.com>
-> ---
->  drivers/rtc/Kconfig   | 18 ++++++-----
->  drivers/rtc/Makefile  |  1 -
->  drivers/rtc/class.c   | 63 +++++++++++++++++++++++++++++++++++++++
->  drivers/rtc/hctosys.c | 69 -------------------------------------------
->  4 files changed, 73 insertions(+), 78 deletions(-)
->  delete mode 100644 drivers/rtc/hctosys.c
-> 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 1adf9f815652..f663d77deb41 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -35,14 +35,16 @@ config RTC_HCTOSYS_DEVICE
->  	depends on RTC_HCTOSYS
->  	default "rtc0"
->  	help
-> -	  The RTC device that will be used to (re)initialize the system
-> -	  clock, usually rtc0. Initialization is done when the system
-> -	  starts up, and when it resumes from a low power state. This
-> -	  device should record time in UTC, since the kernel won't do
-> -	  timezone correction.
-> -
-> -	  The driver for this RTC device must be loaded before late_initcall
-> -	  functions run, so it must usually be statically linked.
-> +	  The RTC device that will be used to (re)initialize the system clock,
-> +	  usually rtc0. Initialization is done when the driver for the RTC
-> +	  device registers, and when it resumes from a low power state. This
-> +	  device should record time in UTC, since the kernel won't do timezone
-> +	  correction.
-> +
-> +	  During startup it is useful to initialize the system clock from the
-> +	  RTC as early as possible. For this reason the driver for this RTC
-> +	  device should be statically linked, or alternately, the kernel module
-> +	  for the RTC device driver loaded immediately.
->  
->  	  This clock should be battery-backed, so that it reads the correct
->  	  time when the system boots from a power-off state. Otherwise, your
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 4ac8f19fb631..33f932d08262 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -6,7 +6,6 @@
->  ccflags-$(CONFIG_RTC_DEBUG)	:= -DDEBUG
->  
->  obj-$(CONFIG_RTC_LIB)		+= lib.o
-> -obj-$(CONFIG_RTC_HCTOSYS)	+= hctosys.o
->  obj-$(CONFIG_RTC_SYSTOHC)	+= systohc.o
->  obj-$(CONFIG_RTC_CLASS)		+= rtc-core.o
->  obj-$(CONFIG_RTC_MC146818_LIB)	+= rtc-mc146818-lib.o
-> diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-> index 9458e6d6686a..b1ed5f3be223 100644
-> --- a/drivers/rtc/class.c
-> +++ b/drivers/rtc/class.c
-> @@ -34,6 +34,64 @@ static void rtc_device_release(struct device *dev)
->  #ifdef CONFIG_RTC_HCTOSYS_DEVICE
->  /* Result of the last RTC to system clock attempt. */
->  int rtc_hctosys_ret = -ENODEV;
-> +
-> +/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
-> + * whether it stores the most close value or the value with partial
-> + * seconds truncated. However, it is important that we use it to store
-> + * the truncated value. This is because otherwise it is necessary,
-> + * in an rtc sync function, to read both xtime.tv_sec and
-> + * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
-> + * of >32bits is not possible. So storing the most close value would
-> + * slow down the sync API. So here we have the truncated value and
-> + * the best guess is to add 0.5s.
-> + */
-> +
-> +static int rtc_hctosys(void)
-> +{
-> +	int err = -ENODEV;
-> +	struct rtc_time tm;
-> +	struct timespec64 tv64 = {
-> +		.tv_nsec = NSEC_PER_SEC >> 1,
-> +	};
-> +	struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
-> +
-> +	if (!rtc) {
-> +		pr_info("unable to open rtc device (%s)\n",
-> +			CONFIG_RTC_HCTOSYS_DEVICE);
-> +		goto err_open;
-> +	}
-> +
-> +	err = rtc_read_time(rtc, &tm);
-> +	if (err) {
-> +		dev_err(rtc->dev.parent,
-> +			"hctosys: unable to read the hardware clock\n");
-> +		goto err_read;
-> +	}
-> +
-> +	tv64.tv_sec = rtc_tm_to_time64(&tm);
-> +
-> +#if BITS_PER_LONG == 32
-> +	if (tv64.tv_sec > INT_MAX) {
-> +		err = -ERANGE;
-> +		goto err_read;
-> +	}
-> +#endif
-> +
-> +	err = do_settimeofday64(&tv64);
-> +
-> +	dev_info(rtc->dev.parent, "setting system clock to %ptR UTC (%lld)\n",
-> +		 &tm, (long long)tv64.tv_sec);
-> +
-> +err_read:
-> +	rtc_class_close(rtc);
-> +
-> +err_open:
-> +	rtc_hctosys_ret = err;
-> +
-> +	return err;
-> +}
-> +
-> +
->  #endif
->  
->  #if defined(CONFIG_PM_SLEEP) && defined(CONFIG_RTC_HCTOSYS_DEVICE)
-> @@ -375,6 +433,11 @@ int __rtc_register_device(struct module *owner, struct rtc_device *rtc)
->  	dev_info(rtc->dev.parent, "registered as %s\n",
->  		 dev_name(&rtc->dev));
->  
-> +#ifdef CONFIG_RTC_HCTOSYS_DEVICE
-> +	if (!strcmp(dev_name(&rtc->dev), CONFIG_RTC_HCTOSYS_DEVICE))
-> +		rtc_hctosys();
-> +#endif
-> +
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(__rtc_register_device);
-> diff --git a/drivers/rtc/hctosys.c b/drivers/rtc/hctosys.c
-> deleted file mode 100644
-> index a74d0d890600..000000000000
-> --- a/drivers/rtc/hctosys.c
-> +++ /dev/null
-> @@ -1,69 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * RTC subsystem, initialize system time on startup
-> - *
-> - * Copyright (C) 2005 Tower Technologies
-> - * Author: Alessandro Zummo <a.zummo@towertech.it>
-> - */
-> -
-> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> -
-> -#include <linux/rtc.h>
-> -
-> -/* IMPORTANT: the RTC only stores whole seconds. It is arbitrary
-> - * whether it stores the most close value or the value with partial
-> - * seconds truncated. However, it is important that we use it to store
-> - * the truncated value. This is because otherwise it is necessary,
-> - * in an rtc sync function, to read both xtime.tv_sec and
-> - * xtime.tv_nsec. On some processors (i.e. ARM), an atomic read
-> - * of >32bits is not possible. So storing the most close value would
-> - * slow down the sync API. So here we have the truncated value and
-> - * the best guess is to add 0.5s.
-> - */
-> -
-> -static int __init rtc_hctosys(void)
-> -{
-> -	int err = -ENODEV;
-> -	struct rtc_time tm;
-> -	struct timespec64 tv64 = {
-> -		.tv_nsec = NSEC_PER_SEC >> 1,
-> -	};
-> -	struct rtc_device *rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
-> -
-> -	if (!rtc) {
-> -		pr_info("unable to open rtc device (%s)\n",
-> -			CONFIG_RTC_HCTOSYS_DEVICE);
-> -		goto err_open;
-> -	}
-> -
-> -	err = rtc_read_time(rtc, &tm);
-> -	if (err) {
-> -		dev_err(rtc->dev.parent,
-> -			"hctosys: unable to read the hardware clock\n");
-> -		goto err_read;
-> -	}
-> -
-> -	tv64.tv_sec = rtc_tm_to_time64(&tm);
-> -
-> -#if BITS_PER_LONG == 32
-> -	if (tv64.tv_sec > INT_MAX) {
-> -		err = -ERANGE;
-> -		goto err_read;
-> -	}
-> -#endif
-> -
-> -	err = do_settimeofday64(&tv64);
-> -
-> -	dev_info(rtc->dev.parent, "setting system clock to %ptR UTC (%lld)\n",
-> -		 &tm, (long long)tv64.tv_sec);
-> -
-> -err_read:
-> -	rtc_class_close(rtc);
-> -
-> -err_open:
-> -	rtc_hctosys_ret = err;
-> -
-> -	return err;
-> -}
-> -
-> -late_initcall(rtc_hctosys);
-> -- 
-> 2.24.0.rc1.363.gb1bccd3e3d-goog
-> 
+What about a kernel parameter to optionally override the rtc hctosys 
+device at runtime?
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Can't you move away from HCTOSYS and do the correct thing in userspace
+> instead of the crap hctosys is doing?
+
+Yes, I just figured it's a small change, and if hctosys can be made to 
+work might as well use that.
