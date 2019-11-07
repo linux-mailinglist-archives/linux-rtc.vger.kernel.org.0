@@ -2,95 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF00F22BB
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2019 00:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41938F2414
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Nov 2019 02:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728412AbfKFXhy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Nov 2019 18:37:54 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35752 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbfKFXhy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 18:37:54 -0500
-Received: by mail-pf1-f196.google.com with SMTP id d13so472494pfq.2
-        for <linux-rtc@vger.kernel.org>; Wed, 06 Nov 2019 15:37:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=I8dPU8PsIcjQN/qde2NZnnh3S5qLVWrToiL1ovmtnNY=;
-        b=Ws7n2u3+b3+8KEXtZJewZYqykECNj6uA47mb/cDxScvuF7J8mD7C4qC58TQwUWfOhT
-         zKiLyWDL8556asRqUA4bS5qUDJ0dNIFZ5veM3tP5KuIsKIMokH1TKDBFqiom+XC8B1n0
-         T4MJXSSrD/wBLaLOdl4fL46deH893TQucIACAhPYdYId3aUBQigD5B1NgQDTvLr895qH
-         ZUTosV/4fPVHtkzn8PKNYjX0OcXZebWpXVqxVFWTLQxBC6S6dnG7vqt608q65h7A3kJd
-         bzeRGGVDTubEzwqtBiAnP7BRNsQnygMFmWlEtVzOeKChMgHte95VNYuCzUszrzSSQc7Z
-         KhbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=I8dPU8PsIcjQN/qde2NZnnh3S5qLVWrToiL1ovmtnNY=;
-        b=KINCv3Yl7XZrLya6WbUih2b9ak/pzAbGzzDCpkgWvhtnZkCraIjKm3G3MQRraG0ci7
-         Yam/GAGwl+nWJIC3lntyVpae7+AaqwZPFRX3QOI3Fw5HZgMKY2opW3MP+conWKj3pS5i
-         3CbbPvG5Q4ftgke/5Zgz4JR9RdmS/IX49JoZN4LbqGtEhLFVa3CHZg5Q9SCWEn5DcscG
-         i85hKobKwNwTABlnFcL0trR1HVBBXucC4dp5efL5sMb1lWusUPxJ1hTGcPFky9t9M+Rl
-         cZfqmSx9u3L8NFjvpKBDr2t1MHysPHJahFSnQ4qsLpvjDWneT0n7acPPNGuCNOSIEiSw
-         QEvQ==
-X-Gm-Message-State: APjAAAXhMOIgNXU3UoKZ8xAVj+ytzxk5b4TVAhb1TDDdW8mL3sOanfcQ
-        J7ii4ITb9NJXyVJuiWo1m7KrxQ==
-X-Google-Smtp-Source: APXvYqw9iZMhdp6QP4E2+vOP8jk/LTcrF0hI26oCv/HF5wbRGuVeoDYZzb1ZlU6yuqTo+vQkhG8n+Q==
-X-Received: by 2002:a63:181f:: with SMTP id y31mr592777pgl.186.1573083471320;
-        Wed, 06 Nov 2019 15:37:51 -0800 (PST)
-Received: from smuckle.san.corp.google.com ([2620:15c:2d:3:8fbe:ee3b:c81d:238d])
-        by smtp.gmail.com with ESMTPSA id i13sm92639pfo.39.2019.11.06.15.37.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2019 15:37:50 -0800 (PST)
-Subject: Re: [PATCH] rtc: class: support hctosys from modular RTC drivers
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        kernel-team@android.com
-References: <20191106194625.116692-1-smuckle@google.com>
- <20191106231923.GK8309@piout.net>
-From:   Steve Muckle <smuckle@google.com>
-Message-ID: <b96f085b-8a0c-7c71-4fde-8af83d49823a@google.com>
-Date:   Wed, 6 Nov 2019 15:37:49 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728412AbfKGBNC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Nov 2019 20:13:02 -0500
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:48993 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbfKGBNB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Nov 2019 20:13:01 -0500
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3CA908365A;
+        Thu,  7 Nov 2019 14:12:56 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1573089176;
+        bh=BRGEYlyoHZxHSnXUdYbHANXyj64ZkbYo9cpJq3/Hmcs=;
+        h=From:To:Cc:Subject:Date;
+        b=q1dvCrlDc9Tclr+trmoR0TahhRju1SeYal0jv5KCqXXT+PaGDXZrVe01gQsicEy4e
+         44LY2myFUIImDyHMeMi0uEy+HN3zs39ZD6KiJUienQpork3lPsa6mrQX7fbfp/mpS2
+         Z1H+sI8UR42dBVZYh7eEuDZcGr117dkgajptclnTaL3kry6XTIHi35e1gleNicGD9h
+         0++AXdyjdWe+yJgwOg0dMYhlSirvnzbDo0cYfBCijSEFvmLj41iRaj9VTilhjE0Qmb
+         aBdcN/4bsTZ0djEvqRKi1UPc8rhvsUzXGCxIcTY0Q0r3ZHif+vXkk1o74vq2tWbMKe
+         P6vqHsu2mv0TA==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5dc36f950000>; Thu, 07 Nov 2019 14:12:56 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 9A15213EEEB;
+        Thu,  7 Nov 2019 14:12:52 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id F3EAC28005F; Thu,  7 Nov 2019 14:12:52 +1300 (NZDT)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        John Collis <john.collis@alliedtelesis.co.nz>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] rtc: ds1307: check for oscillator fault on ds1388
+Date:   Thu,  7 Nov 2019 14:12:45 +1300
+Message-Id: <20191107011245.26796-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <20191106231923.GK8309@piout.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/6/19 3:19 PM, Alexandre Belloni wrote:
-> On 06/11/2019 11:46:25-0800, Steve Muckle wrote:
->> Due to distribution constraints it may not be possible to statically
->> compile the required RTC driver into the kernel.
->>
->> Expand RTC_HCTOSYS support to cover all RTC devices (statically compiled
->> or not) by checking at the end of RTC device registration whether the
->> time should be synced.
->>
-> 
-> This does not really help distributions because most of them will still
-> have "rtc0" hardcoded and rtc0 is often the rtc that shouldn't be used.
+Ensure that the oscillator is running and check the OSF bit for the
+ds1388 variant. The FLAG and CONTROL registers are at a different
+location to the other supported RTCs so this requires an extra case in
+the existing switch statement.
 
-Just for my own edification, why is that? Is rtc0 normally useless on PC 
-for some reason?
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/rtc/rtc-ds1307.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-On the platforms I'm working with I believe it can be assured that rtc0 
-will be the correct rtc. That doesn't help typical distributions though.
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 1f7e8aefc1eb..865c06347d0a 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -101,6 +101,10 @@ enum ds_type {
+ #	define DS1337_BIT_A2I		0x02
+ #	define DS1337_BIT_A1I		0x01
+ #define DS1339_REG_ALARM1_SECS	0x07
++#define DS1388_REG_FLAG		0x0b
++#	define DS1388_BIT_OSF		0x80
++#define DS1388_REG_CONTROL	0x0c
++#	define DS1388_BIT_nEOSC		0x80
+=20
+ #define DS13XX_TRICKLE_CHARGER_MAGIC	0xa0
+=20
+@@ -1688,6 +1692,26 @@ static int ds1307_probe(struct i2c_client *client,
+ 		}
+ 		break;
+=20
++	case ds_1388:
++		err =3D regmap_bulk_read(ds1307->regmap, DS1388_REG_FLAG,
++				       regs, 2);
++		if (err) {
++			dev_dbg(ds1307->dev, "read error %d\n", err);
++			goto exit;
++		}
++
++		if (regs[1] & DS1388_BIT_nEOSC) {
++			regmap_write(ds1307->regmap, DS1388_REG_CONTROL,
++				     regs[1] & ~DS1388_BIT_nEOSC);
++		}
++
++		if (regs[0] & DS1388_BIT_OSF) {
++			regmap_write(ds1307->regmap, DS1388_REG_FLAG,
++				     regs[0]  & ~DS1388_BIT_OSF);
++			dev_warn(ds1307->dev, "SET TIME!\n");
++		}
++		break;
++
+ 	case rx_8025:
+ 		err =3D regmap_bulk_read(ds1307->regmap,
+ 				       RX8025_REG_CTRL1 << 4 | 0x08, regs, 2);
+--=20
+2.24.0
 
-What about a kernel parameter to optionally override the rtc hctosys 
-device at runtime?
-
-> Can't you move away from HCTOSYS and do the correct thing in userspace
-> instead of the crap hctosys is doing?
-
-Yes, I just figured it's a small change, and if hctosys can be made to 
-work might as well use that.
