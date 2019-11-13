@@ -2,150 +2,193 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83280FBB9A
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Nov 2019 23:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE22EFBC3C
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Nov 2019 00:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726434AbfKMW1b (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Nov 2019 17:27:31 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40556 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbfKMW1b (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Nov 2019 17:27:31 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 5C0F42911AD
-Received: by earth.universe (Postfix, from userid 1000)
-        id BF57C3C0C78; Wed, 13 Nov 2019 23:27:26 +0100 (CET)
-Date:   Wed, 13 Nov 2019 23:27:26 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [RFCv1] rtc: m41t80: disable clock provider support
-Message-ID: <20191113222726.ifjp2bhwmplm5r7z@earth.universe>
-References: <20191108170135.9053-1-sebastian.reichel@collabora.com>
- <20191108175329.GH216543@piout.net>
- <20191108223415.dio3pwkf24jfs5o4@earth.universe>
- <20191109002449.534B6207FA@mail.kernel.org>
- <20191109014151.yd2untpgnuinermj@earth.universe>
- <20191109065334.64A03214E0@mail.kernel.org>
- <20191112151526.txl5rwpuiwjpopzx@earth.universe>
- <20191112222012.157CC20674@mail.kernel.org>
+        id S1726528AbfKMXIK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Nov 2019 18:08:10 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36785 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbfKMXIK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Nov 2019 18:08:10 -0500
+Received: by mail-lf1-f67.google.com with SMTP id m6so3363883lfl.3;
+        Wed, 13 Nov 2019 15:08:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CMXle6FOj7sNaEUWjPwsRpDGPjEMhO8gArBWaBc7RnQ=;
+        b=KbeO5gt7g5oQmoIzg76ofNu//Cwkn9y66SX1Se9lt/AcOiYd8vSLXDWyaHTyl/UPtB
+         7kAIG4iRNeOZYVnHEIDuuAspOMjPC/E0dV/Jgd+jM1QV3AEsUOvMEmp/ynCggay5BJFW
+         vRh8HiycH8X4WSUWP3dDy8JVUuHtre3ekbdqML+hU+y5CpW5O7qwzsWEYjf96jT8QBb5
+         ucKqRwm+wf62S4nGI6qQeUnSDJKFlHY7G9MfFK7WIBGECHWOA8ppRantclcM50XZXbiy
+         WM+uVSn9fu4pPINh4SRgpQYkz9RmHPZJ5F4AnKoTL+rSDHraauhqA4uvaNPJ4X9d3Ng+
+         HnSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=CMXle6FOj7sNaEUWjPwsRpDGPjEMhO8gArBWaBc7RnQ=;
+        b=CMSIjvllRrVzjPr+XtYlYiCTkHPQZka/o0TkbrnLU+pJsT7PQKEAU+GXm8oZX0dvMo
+         +zEz+oI9zWgyaQbemXATmn44lLaKHC8DcCNOxNueAhMjaPKZPhUyqoaw9PSDclRRG4pl
+         yBPP7IhJfZ+OItU9BzFtnO1u79aFMgm4q9+uiNOL1GDz3pxmSSGAmLJiebYFCTicr20Q
+         5KUpVOT0X8N7t2fqKStmeQUVXMPCwVMhv0aN5zYW7Sp/T3YL1bxgJfNtg/IuFDIVhwxN
+         /1R6kRVde2K++cKHGySq9ROucneZPbBWHsGQj/eEfVFxd3eh/yOT2nxU/U0c8z9lbQsp
+         E75Q==
+X-Gm-Message-State: APjAAAXQbinAseu5OyXceWTaklpssGVHsLar5fK3w2yYu8q5uWUHEVnS
+        EvLF+atXSNh2VYhE8TLCBqqNTK9y
+X-Google-Smtp-Source: APXvYqzrbm6t2mCSCwFrd/Lbp6XX59P4pGigxEcp1BH5sfd5J+QKu5liUfIzdYWUPjC9XK9A2B2dFw==
+X-Received: by 2002:a19:494d:: with SMTP id l13mr4557332lfj.66.1573686486865;
+        Wed, 13 Nov 2019 15:08:06 -0800 (PST)
+Received: from localhost ([188.243.226.168])
+        by smtp.gmail.com with ESMTPSA id f24sm1614876lfk.74.2019.11.13.15.08.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 15:08:05 -0800 (PST)
+Date:   Thu, 14 Nov 2019 02:08:05 +0300
+From:   Andrey Skvortsov <andrej.skvortzov@gmail.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: tps65910: allow using RTC without alarm interrupt
+Message-ID: <20191113230805.GH13629@skv.local>
+Mail-Followup-To: Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191109154652.7419-1-andrej.skvortzov@gmail.com>
+ <20191111171915.GA3572@piout.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c27ca4y5vep6oudt"
+        protocol="application/pgp-signature"; boundary="HYC+c85AsWjroYih"
 Content-Disposition: inline
-In-Reply-To: <20191112222012.157CC20674@mail.kernel.org>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20191111171915.GA3572@piout.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---c27ca4y5vep6oudt
-Content-Type: text/plain; charset=us-ascii
+--HYC+c85AsWjroYih
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
-
-On Tue, Nov 12, 2019 at 02:20:11PM -0800, Stephen Boyd wrote:
-> Quoting Sebastian Reichel (2019-11-12 07:15:26)
-> > On Fri, Nov 08, 2019 at 10:53:33PM -0800, Stephen Boyd wrote:
-> > > Quoting Sebastian Reichel (2019-11-08 17:41:51)
-> > > > On Fri, Nov 08, 2019 at 04:24:48PM -0800, Stephen Boyd wrote:
-> > > > >=20
-> > > > > Is this the chicken-egg scenario? I read this thread but I can't =
-follow
-> > > > > along with what the problem is. Sorry.
-> > > >=20
-> > > > Yes. The board has an I2C based RTC (m41t62), which provides a prog=
-rammable 1
-> > > > Hz to 32 kHz square wave (SQW) output defaulting to 32 kHz. The boa=
-rd designers
-> > > > connected the RTC's SQW output to the i.MX6 CKIL clock input instea=
-d of adding
-> > > > another oscillator. The i.MX6 CCM acquires that clock in imx6q_cloc=
-ks_init()
-> > > > (and assumes it is a fixed clock):
-> > > >=20
-> > > > hws[IMX6QDL_CLK_CKIL] =3D imx6q_obtain_fixed_clk_hw(ccm_node, "ckil=
-", 0);
-> > >=20
-> > > Who uses the IMX6QDL_CLK_CKIL though? Grep on kernel sources shows me
-> > > nothing.
-> >=20
-> > The manual specifies, that CKIL is synchronized with the main system
-> > clock. The resulting clock is used by all kind of IP cores inside
-> > the i.MX6, for example the SNVS RTC and watchdog. I couldn't find
-> > any registers to configure the CKIL pipeline and CKIL input is
-> > usually a fixed clock, so current implementation might be "broken"
-> > without anyone noticing. Checking a running i.MX6 system, that
-> > actually seems to be the case :(
-> >=20
-> > $ cat /sys/kernel/debug/clk/ckil/clk_rate        =20
-> > 32768
-> > $ cat /sys/kernel/debug/clk/ckil/clk_enable_count=20
-> > 0
-> > $ cat /sys/kernel/debug/clk/ckil/clk_prepare_count=20
-> > 0
-> > $ cat /sys/kernel/debug/clk/ckil/clk_flags        =20
-> > CLK_IS_BASIC
-> >=20
-> > I suppose an easy fix would be to mark that clock as critical and
-> > that would also keep the parent clocks enabled?
+On 19-11-11 18:19, Alexandre Belloni wrote:
+> Hi,
 >=20
-> Yes. It sounds like some sort of low frequency timer clk. It probably
-> should always be left enabled with CLK_IS_CRITICAL then.
+> This needs a proper commit message.
 
-Right, system expects that clock to be always available including
-low power states. This is supposed not to be turned off at all.
+Add in v2.
+=20
+> On 09/11/2019 18:46:52+0300, Andrey Skvortsov wrote:
+> > Signed-off-by: Andrey Skvortsov <andrej.skvortzov@gmail.com>
+> > ---
+> >  drivers/rtc/rtc-tps65910.c | 19 +++++++++++++++----
+> >  1 file changed, 15 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/rtc/rtc-tps65910.c b/drivers/rtc/rtc-tps65910.c
+> > index 2c0467a9e717..aa3a001ef413 100644
+> > --- a/drivers/rtc/rtc-tps65910.c
+> > +++ b/drivers/rtc/rtc-tps65910.c
+> > @@ -361,6 +361,13 @@ static const struct rtc_class_ops tps65910_rtc_ops=
+ =3D {
+> >  	.set_offset	=3D tps65910_set_offset,
+> >  };
+> > =20
+> > +static const struct rtc_class_ops tps65910_rtc_ops_noirq =3D {
+> > +	.read_time	=3D tps65910_rtc_read_time,
+> > +	.set_time	=3D tps65910_rtc_set_time,
+> > +	.read_offset	=3D tps65910_read_offset,
+> > +	.set_offset	=3D tps65910_set_offset,
+> > +};
+> > +
+> >  static int tps65910_rtc_probe(struct platform_device *pdev)
+> >  {
+> >  	struct tps65910 *tps65910 =3D NULL;
+> > @@ -415,13 +422,17 @@ static int tps65910_rtc_probe(struct platform_dev=
+ice *pdev)
+> >  		tps65910_rtc_interrupt, IRQF_TRIGGER_LOW,
+> >  		dev_name(&pdev->dev), &pdev->dev);
+> >  	if (ret < 0) {
+> > -		dev_err(&pdev->dev, "IRQ is not free.\n");
+> > -		return ret;
+> > +		dev_err(&pdev->dev, "request IRQ:%d failed, err =3D %d\n",
+> > +			 irq, ret);
+>=20
+> Do we actually need an error message here?
 
-I gave it a try today (I defined ckil clock in DT as fixed
-rate clock with divider and multiplier set to 1 and used
-the RTC as parent clock) and it happened exactly what I
-expected: I received -EPROBE_DEFER. This results in
-the problem, that I pointed out.
+You are right. This is definitely not an error anymore.
+What about
+dev_warn(&pdev->dev, "unable to request IRQ, alarms disabled\n");
+like some other drivers do?
 
-Actually imx6 clock manager driver registers a fixed clock, when
-the DT part fails (incl. a -EPROBE_DEFER error), so it still boots.
-But then the reference to the parent clock is obviously missing,
-so RTC clock is not enabled and CKIL is effectivly missing.
 
-If the error code is handled properly the boot does not finish,
-since the i2c bus driver probe defers without the clock manager's
-clocks being available. Without the i2c bus driver, the RTC driver
-is not probed, so the clock never appears.
+grep -RHn 'unable to request IRQ, alarms disabled'
+rtc-rv8803.c:576:			dev_warn(&client->dev, "unable to request IRQ, alarms d=
+isabled\n");
+rtc-m41t80.c:914:			dev_warn(&client->dev, "unable to request IRQ, alarms d=
+isabled\n");
+rtc-rv3028.c:651:			dev_warn(&client->dev, "unable to request IRQ, alarms d=
+isabled\n");
+rtc-pcf85363.c:416:			dev_warn(&client->dev, "unable to request IRQ, alarms=
+ disabled\n");
+rtc-pcf85063.c:458:				 "unable to request IRQ, alarms disabled\n");
+rtc-rv3029c2.c:828:			dev_warn(dev, "unable to request IRQ, alarms disabled=
+\n");
+rtc-rx8025.c:540:			dev_err(&client->dev, "unable to request IRQ, alarms di=
+sabled\n");
+rtc-abx80x.c:839:			dev_err(&client->dev, "unable to request IRQ, alarms di=
+sabled\n");
 
-The simplest fix would be to export of_clk_detect_critical()
-and call it in the RTC driver. Reading the comment above the
-function I suppose this is not an acceptable solution?
 
--- Sebastian
+>=20
+> > +		irq =3D -1;
+> >  	}
+> >  	tps_rtc->irq =3D irq;
+> > -	device_set_wakeup_capable(&pdev->dev, 1);
+> > +	if (irq !=3D -1) {
+> > +		device_set_wakeup_capable(&pdev->dev, 1);
+> > +		tps_rtc->rtc->ops =3D &tps65910_rtc_ops;
+> > +	} else
+> > +		tps_rtc->rtc->ops =3D &tps65910_rtc_ops_noirq;
+> > =20
+> > -	tps_rtc->rtc->ops =3D &tps65910_rtc_ops;
+> >  	tps_rtc->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> >  	tps_rtc->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> > =20
+> > --=20
+> > 2.20.1
+> >=20
+>=20
+> --=20
+> Alexandre Belloni, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
---c27ca4y5vep6oudt
+--=20
+Best regards,
+Andrey Skvortsov
+
+--HYC+c85AsWjroYih
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl3Mg0gACgkQ2O7X88g7
-+prbuA/9H7pQ9y3BOKoO+N4g6YrlW3p4gZJ8BlNNtICeD5ZSYj3782tWJo5DKl2+
-myLZhch30TFObkni/Xl6ZZKbj3GH0d12Jy+sogyffS3S2DKvbhj5mZ78xcEVHqJB
-u/4VyRnqOl9Sadb55S+Zti/8CPgAsoz9MOh72H/kfT4INXsRBeEPAiv4/y4K6QNW
-ysmPG7ZjSgByJQkFNEFk/ULcJViE47IRaY4rNHmpAYQwz+xe1kHIAXKYDJMUEMbO
-Pwtqh/XtxA2XqgFOlRh7SGq10R5NKbXoX9ApHuFtSjZsxMdfcEu1BENF8Xen5AZ1
-5RZN4dfgl1ue10z7qMW/vVZ8RsJmm75zzIFVImFBO+VPmQjNYrqh7aSyQgQJJsgR
-Y2vARKQ/OM7TY4q9UT4Q2yCgHiC50IsRqTpRaqUWXLywBfmhQjSoPDHsJC9hIMB1
-i+7BqFUv5hzFA3sKB0MVjZSZiPtNbGT06YaSeFWRgH75rgWiLZaZ0jQC82SQZyhx
-5wN/3+PnWAdN2MfmltX5qQ6jtKERDTMF69qOIR5iny4pA8whiXnoZVxjWH7a1CNO
-wN4Q2aB70a+7o3d8efRU7Pvj/raYIogB/4fqNbDIKXRei33cQZkXIiAgKvGECEmk
-do7GBKKi0srxWYh2N82gn3qdk8dSdGsUUn411GFeiYaxkHOe3dM=
-=yJyD
+iQIzBAABCgAdFiEEQ575tvhxWSXeo3tPAXzLovVIsK0FAl3MjM8ACgkQAXzLovVI
+sK1lPxAAvSdgY5bOXPlM53wypSyBxGTbjygKd3QmKLR+vK9Oj+RnmCkWM3IML1Kc
+TsaGKqqinXuiTi5xCV5aH0MTNetcFkqvr2yrQ0oQYLqBKQcF2rwgV6h4FHsai4Jd
+30s4sbXB5Pr2VI2DWWo9WwQwS4tj4llNiFvKJzaPX9OSWOOOfyBMjrdx0ht4S+cx
+DsJrGyMzkuVhwHgagsN0j2KAr+aPqDW8kWof01jHVJFnUCiTawr9UWo5WREMA2ex
+8lpvICaIEAqouXrtG3F3rK0UBqXapYtVwRwOcGF0TmlExpz+OFYmph2caUx7EwUr
+QsHRECRDpmKOad2dDZ0EcyyYk+AdCfHAEnsFOvN5TnjATNgB0tR9v9HAg9IZ+79b
+TisDorXh+Lco2l0NMVsVxB9xBepBLhyKIA4PYychMPwrylVHc7CyooQkWBccB9Gv
+8hB/wjjlS4y/DhSh00WbZHcdYRA7uCbdbPE8G/rCzfPbdmui3pICxKRHL4sWDqrv
+xOiNKm/Bv+01JLmzehs9HeNoI1UTCAAmBpy/y1/hJwLanxAq7htSkddn6UCj2b8K
+RtxnN0EAa9yq9m+3+DdtCraG7Jh4OVn8RqW28Av/VpXdrj1Nar8Y13BKZ5pTugiU
+6JPbNlt3BBeZZITRkBsE0uPDIMNh8AeFOVh0oD+s0AFsi6gHbN0=
+=V66C
 -----END PGP SIGNATURE-----
 
---c27ca4y5vep6oudt--
+--HYC+c85AsWjroYih--
