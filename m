@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07199FEF5C
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 16:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A65FF2F5
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 17:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731430AbfKPPyV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 16 Nov 2019 10:54:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35972 "EHLO mail.kernel.org"
+        id S1728853AbfKPQWZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Nov 2019 11:22:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731423AbfKPPyV (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:54:21 -0500
+        id S1728656AbfKPPnR (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:43:17 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F84221882;
-        Sat, 16 Nov 2019 15:54:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ABD7F207DD;
+        Sat, 16 Nov 2019 15:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919660;
-        bh=D6JT7FvDOOq9sWuwoDemas30vIqXwcUFtXk+E/9t1d8=;
+        s=default; t=1573918997;
+        bh=CUQm85ZwFc3ZiJ3wii7Anj20FIV1fgD/Xl2COzvfJSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m//isy9lybY/sUZvDFQVsXP3YSYisSVo8njDjLx6JIg9kU8eSjALJXmyO0eOdW5bN
-         nZxA4i8MPI2GNiwtcm5tnT+uW3y9zujNKzQEsU/6toa+lwYQhTig5JU+t9skQbBTZy
-         rPn3Bl/hBoSgzj+W6aTQsNIVlVsjKivUsRTXN0UA=
+        b=QorIwn+MEykI+H2YPPdKegQmzuj8b1by47sToCgr9z7iyaMWvRNE89l2kXeUiFMzA
+         1Hh5lED21clx35BhepXnsLCB6pcxIGLOrFRjoGoeEUeaSG2bMlRDypLhNf43VcPdhJ
+         vk7DExyfhDDoHdOyDUufqughs1SFphUXXBE/qFDc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.4 33/77] rtc: s35390a: Change buf's type to u8 in s35390a_init
-Date:   Sat, 16 Nov 2019 10:52:55 -0500
-Message-Id: <20191116155339.11909-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 101/237] rtc: s35390a: Change buf's type to u8 in s35390a_init
+Date:   Sat, 16 Nov 2019 10:38:56 -0500
+Message-Id: <20191116154113.7417-101-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
-References: <20191116155339.11909-1-sashal@kernel.org>
+In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
+References: <20191116154113.7417-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -68,12 +68,12 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
-index 00662dd28d66a..9a931efd50d36 100644
+index 77feb603cd4c0..3c64dbb08109a 100644
 --- a/drivers/rtc/rtc-s35390a.c
 +++ b/drivers/rtc/rtc-s35390a.c
-@@ -106,7 +106,7 @@ static int s35390a_get_reg(struct s35390a *s35390a, int reg, char *buf, int len)
-  */
- static int s35390a_reset(struct s35390a *s35390a, char *status1)
+@@ -108,7 +108,7 @@ static int s35390a_get_reg(struct s35390a *s35390a, int reg, char *buf, int len)
+ 
+ static int s35390a_init(struct s35390a *s35390a)
  {
 -	char buf;
 +	u8 buf;
