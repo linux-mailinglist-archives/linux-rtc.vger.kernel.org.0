@@ -2,120 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86119FEBF0
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 12:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7377BFEE11
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 16:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727440AbfKPLqc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 16 Nov 2019 06:46:32 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33096 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726794AbfKPLqc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 16 Nov 2019 06:46:32 -0500
-Received: by mail-wr1-f65.google.com with SMTP id w9so13817127wrr.0;
-        Sat, 16 Nov 2019 03:46:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=hYZLZ+t7zW9QpC69y3DTNhSSDoe8rUBNplslYwkF1mk=;
-        b=hNwHoNzk/uvJrn+JxoCqulz7jJxt2FAzMGnH3MaJkz2T1cx38hbvRHV8pnI504jgaG
-         HSoTCY80cIIKgIZICacgPSvFpqSotzWhKTrBl/KLDwC/24CT0q/bh7gf+Z7eV9782qil
-         XORkOSaXopgaMkGYkyjwvV2JfwfUo4PAbuL95JUuPoUVZSwwEjy1wRUaKeF4R5JjOYc3
-         zVkLmDHAyW033W+035Vnr7e+1zyRYHUv4eGXQoRM2ZHkAD48yMHwpxjoZgdXGBJTVf4R
-         yXGZ6lxe50OEzkwi8WaJcvD5iO/SnaIbcJurFBriBKedcg39ov4Ge39sdO7yIT7DqUOs
-         I2cA==
-X-Gm-Message-State: APjAAAW7U01wOJQHy0njxNi53q9h0YbNF1DXHPt8uABulZPzYzAOgaxr
-        fqZpU58x5+PqHFq1WqCoG34=
-X-Google-Smtp-Source: APXvYqzS7oielao94d4xPw0PIiTo9cBhVJcLFmaaElIt5rw2gXjykFtYdreC24iMgCvRErDEC1QwHg==
-X-Received: by 2002:adf:e94e:: with SMTP id m14mr21057939wrn.233.1573904790163;
-        Sat, 16 Nov 2019 03:46:30 -0800 (PST)
-Received: from localhost.localdomain (2001-1c06-18c6-e000-2463-1bcb-8fa3-05f8.cable.dynamic.v6.ziggo.nl. [2001:1c06:18c6:e000:2463:1bcb:8fa3:5f8])
-        by smtp.gmail.com with ESMTPSA id f17sm11918869wmj.40.2019.11.16.03.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Nov 2019 03:46:29 -0800 (PST)
-From:   Kars de Jong <jongk@linux-m68k.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kars de Jong <jongk@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] rtc: msm6242: Remove unneeded msm6242_set()/msm6242_clear() functions
-Date:   Sat, 16 Nov 2019 12:46:20 +0100
-Message-Id: <20191116114620.9193-1-jongk@linux-m68k.org>
-X-Mailer: git-send-email 2.17.1
+        id S1730133AbfKPPsl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Nov 2019 10:48:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55902 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728642AbfKPPsk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:48:40 -0500
+Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 100C820870;
+        Sat, 16 Nov 2019 15:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573919320;
+        bh=ciBTAO0/irxf/1CCJl7nrAegNLguTJ7+lSjQc6WKeCA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vEzkBOgNs5Q6fIOo8G4EqdbOfqzEiFdwHvroqIkIb26lMhfkNTCmQjeg52xFhVQZ0
+         0yxLsYGK344/pAJh9eazdo8/vGyvwMr6EAfRSdKNf2Y7KxgdM+R6L/ms++FfcIq/VS
+         DA7kml1iYDdNJxJ+GgVccDFNhdsnmbU3XyXDeBm0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.14 062/150] rtc: s35390a: Change buf's type to u8 in s35390a_init
+Date:   Sat, 16 Nov 2019 10:46:00 -0500
+Message-Id: <20191116154729.9573-62-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
+References: <20191116154729.9573-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The msm6242_set()/msm6242_clear() functions are used when writing to Control
-Register D to set or clear the HOLD bit when reading the current time from
-the RTC.
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-Doing this with a read-modify-write cycle will potentially clear an
-interrupt condition which occurs between the read and the write.
+[ Upstream commit ef0f02fd69a02b50e468a4ddbe33e3d81671e248 ]
 
-The datasheet states the following about this:
+Clang warns:
 
-  When writing the HOLD or 30 second adjust bits of register D, it is
-  necessary to write the IRQ FLAG bit to a "1".
+drivers/rtc/rtc-s35390a.c:124:27: warning: implicit conversion from
+'int' to 'char' changes value from 192 to -64 [-Wconstant-conversion]
+        buf = S35390A_FLAG_RESET | S35390A_FLAG_24H;
+            ~ ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+1 warning generated.
 
-Since the only other bits in the register are the 30 second adjust bit
-(which is not used) and the BUSY bit (which is read-only), the
-read-modify-write cycle can be replaced by a simple write with the IRQ FLAG
-bit set to 1 and the other bits (except HOLD) set to 0.
+Update buf to be an unsigned 8-bit integer, which matches the buf member
+in struct i2c_msg.
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Tested-by: Kars de Jong <jongk@linux-m68k.org>
-Signed-off-by: Kars de Jong <jongk@linux-m68k.org>
+https://github.com/ClangBuiltLinux/linux/issues/145
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-msm6242.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+ drivers/rtc/rtc-s35390a.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-msm6242.c b/drivers/rtc/rtc-msm6242.c
-index b1f2bedee77e..80e364baac53 100644
---- a/drivers/rtc/rtc-msm6242.c
-+++ b/drivers/rtc/rtc-msm6242.c
-@@ -88,28 +88,16 @@ static inline void msm6242_write(struct msm6242_priv *priv, unsigned int val,
- 	__raw_writel(val, &priv->regs[reg]);
- }
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 7067bca5c20d9..6bfff0a6d6552 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -108,7 +108,7 @@ static int s35390a_get_reg(struct s35390a *s35390a, int reg, char *buf, int len)
  
--static inline void msm6242_set(struct msm6242_priv *priv, unsigned int val,
--			       unsigned int reg)
--{
--	msm6242_write(priv, msm6242_read(priv, reg) | val, reg);
--}
--
--static inline void msm6242_clear(struct msm6242_priv *priv, unsigned int val,
--				 unsigned int reg)
--{
--	msm6242_write(priv, msm6242_read(priv, reg) & ~val, reg);
--}
--
- static void msm6242_lock(struct msm6242_priv *priv)
+ static int s35390a_init(struct s35390a *s35390a)
  {
- 	int cnt = 5;
+-	char buf;
++	u8 buf;
+ 	int ret;
+ 	unsigned initcount = 0;
  
--	msm6242_set(priv, MSM6242_CD_HOLD, MSM6242_CD);
-+	msm6242_write(priv, MSM6242_CD_HOLD|MSM6242_CD_IRQ_FLAG, MSM6242_CD);
- 
- 	while ((msm6242_read(priv, MSM6242_CD) & MSM6242_CD_BUSY) && cnt) {
--		msm6242_clear(priv, MSM6242_CD_HOLD, MSM6242_CD);
-+		msm6242_write(priv, MSM6242_CD_IRQ_FLAG, MSM6242_CD);
- 		udelay(70);
--		msm6242_set(priv, MSM6242_CD_HOLD, MSM6242_CD);
-+		msm6242_write(priv, MSM6242_CD_HOLD|MSM6242_CD_IRQ_FLAG, MSM6242_CD);
- 		cnt--;
- 	}
- 
-@@ -120,7 +108,7 @@ static void msm6242_lock(struct msm6242_priv *priv)
- 
- static void msm6242_unlock(struct msm6242_priv *priv)
- {
--	msm6242_clear(priv, MSM6242_CD_HOLD, MSM6242_CD);
-+	msm6242_write(priv, MSM6242_CD_IRQ_FLAG, MSM6242_CD);
- }
- 
- static int msm6242_read_time(struct device *dev, struct rtc_time *tm)
 -- 
-2.17.1
+2.20.1
 
