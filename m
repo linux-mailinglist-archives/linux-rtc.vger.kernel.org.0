@@ -2,29 +2,29 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D89FE9E0
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 01:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB74FEB04
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Nov 2019 07:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbfKPAmg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Nov 2019 19:42:36 -0500
-Received: from mga17.intel.com ([192.55.52.151]:3521 "EHLO mga17.intel.com"
+        id S1726748AbfKPGwm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Nov 2019 01:52:42 -0500
+Received: from mga14.intel.com ([192.55.52.115]:17603 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727151AbfKPAmg (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 15 Nov 2019 19:42:36 -0500
+        id S1725978AbfKPGwm (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 16 Nov 2019 01:52:42 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 16:42:29 -0800
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 22:52:38 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,310,1569308400"; 
-   d="gz'50?scan'50,208,50";a="195553991"
+X-IronPort-AV: E=Sophos;i="5.68,311,1569308400"; 
+   d="gz'50?scan'50,208,50";a="230675073"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2019 16:42:25 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 15 Nov 2019 22:52:35 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1iVmAT-000D52-4a; Sat, 16 Nov 2019 08:42:25 +0800
-Date:   Sat, 16 Nov 2019 08:41:57 +0800
+        id 1iVrwh-000IhT-Ds; Sat, 16 Nov 2019 14:52:35 +0800
+Date:   Sat, 16 Nov 2019 14:52:16 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Andreas Kemnade <andreas@kemnade.info>
 Cc:     kbuild-all@lists.01.org, lee.jones@linaro.org,
@@ -33,13 +33,13 @@ Cc:     kbuild-all@lists.01.org, lee.jones@linaro.org,
         phh@phh.me, b.galvani@gmail.com, stefan@agner.ch,
         letux-kernel@openphoenux.org,
         Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH v2 1/5] mfd: rn5t618: prepare for irq handling
-Message-ID: <201911160829.S06EQ8zj%lkp@intel.com>
-References: <20191031213835.11390-2-andreas@kemnade.info>
+Subject: Re: [PATCH v2 2/5] mfd: rn5t618: add irq support
+Message-ID: <201911161421.TgvA3AAZ%lkp@intel.com>
+References: <20191031213835.11390-3-andreas@kemnade.info>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="sxxmmpw2qszb5wrq"
+Content-Type: multipart/mixed; boundary="q6h3drasv3gwkfpr"
 Content-Disposition: inline
-In-Reply-To: <20191031213835.11390-2-andreas@kemnade.info>
+In-Reply-To: <20191031213835.11390-3-andreas@kemnade.info>
 X-Patchwork-Hint: ignore
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-rtc-owner@vger.kernel.org
@@ -48,7 +48,7 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---sxxmmpw2qszb5wrq
+--q6h3drasv3gwkfpr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -77,7 +77,6 @@ Reported-by: kbuild test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/devtmpfs.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/sysfs.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/generic_ops.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/common.o' being placed in section `.ctors.65435'.
@@ -177,7 +176,8 @@ All warnings (new ones prefixed by >>):
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/atmel-flexcom.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/palmas.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rk808.o' being placed in section `.ctors.65435'.
->> powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-core.o' being placed in section `.ctors.65435'.
+   powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-core.o' being placed in section `.ctors.65435'.
+>> powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-irq.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/syscon.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/lm3533-core.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/lm3533-ctrlbank.o' being placed in section `.ctors.65435'.
@@ -279,7 +279,6 @@ All warnings (new ones prefixed by >>):
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mtd/parsers/redboot.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mtd/mtd_blkdevs.o' being placed in section `.ctors.65435'.
 --
-   powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/devtmpfs.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/sysfs.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/generic_ops.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/base/power/common.o' being placed in section `.ctors.65435'.
@@ -379,7 +378,8 @@ All warnings (new ones prefixed by >>):
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/atmel-flexcom.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/palmas.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rk808.o' being placed in section `.ctors.65435'.
->> powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-core.o' being placed in section `.ctors.65435'.
+   powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-core.o' being placed in section `.ctors.65435'.
+>> powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/rn5t618-irq.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/syscon.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/lm3533-core.o' being placed in section `.ctors.65435'.
    powerpc64-linux-ld: warning: orphan section `.ctors.65435' from `drivers/mfd/lm3533-ctrlbank.o' being placed in section `.ctors.65435'.
@@ -486,12 +486,12 @@ All warnings (new ones prefixed by >>):
 0-DAY kernel test infrastructure                 Open Source Technology Center
 https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
 
---sxxmmpw2qszb5wrq
+--q6h3drasv3gwkfpr
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICBgvz10AAy5jb25maWcAjFxbc+Q2rn7Pr+iavOzWVhJ7xtPJ2VN+oCiqm2lJlEmpfXlh
+H4sICJ6Hz10AAy5jb25maWcAjFxbc+Q2rn7Pr+iavOzWVhJ7xtPJ2VN+oCiqm2lJlEmpfXlh
 OZ72xLW+Hbudzfz7A1A3koLak0olbgCkSBAEPoCUfvzhxwV72z89XO/vbq7v778tvu4edy/X
 +92Xxe3d/e5/F6lalKpeiFTWP4Nwfvf49vcvz0//3b083yw+/3zy89FPLzfHi83u5XF3v+BP
 j7d3X9+gg7unxx9+/AH+/RGID8/Q18u/F1275clP99jPT19vbhb/WHH+z8Wv2BNIc1VmcmU5
@@ -1054,4 +1054,4 @@ I82aLr84NWxv+GVW4quU6iYpkHgRA1sxojHJw4bLeaOHpbCFffUgWdmKUeodpsMG4gaMd4Jk
 ED+QLmNb1tyQUx8jWVy7N20OghZHXbU2wQgc4BjX9J3h28bQiGoiOT4xrG/jcbAsuTTJWEDT
 4Y5k6Zc6Mciw4R+FdEzB/wU1D/X3vt8BAA==
 
---sxxmmpw2qszb5wrq--
+--q6h3drasv3gwkfpr--
