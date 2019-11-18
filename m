@@ -2,149 +2,207 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD6100B0F
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2019 19:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5620D100E73
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Nov 2019 22:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKRSDr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 18 Nov 2019 13:03:47 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:65376 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfKRSDr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Nov 2019 13:03:47 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-59-5dd2dd006027
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 38.49.08102.00DD2DD5; Mon, 18 Nov 2019 19:03:44 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Mon, 18 Nov 2019 19:03:43 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "hofrat@osadl.org" <hofrat@osadl.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>
-Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
- regulator bindings
-Thread-Topic: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
- regulator bindings
-Thread-Index: AQHVndzxthsd4Y8wKkm7W/92Uslk+KeRDPcAgAAbkIA=
-Date:   Mon, 18 Nov 2019 18:03:42 +0000
-Message-ID: <fd1e4e652840346bd990c769eabe2f966bda4ed6.camel@fi.rohmeurope.com>
+        id S1727112AbfKRVzQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 Nov 2019 16:55:16 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39062 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726788AbfKRVzP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Nov 2019 16:55:15 -0500
+Received: by mail-wr1-f67.google.com with SMTP id l7so21356765wrp.6;
+        Mon, 18 Nov 2019 13:55:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nBdReiwfNdG1ZF5L1z3OLmO8W9Ht5rJykoy9uzz4vdw=;
+        b=gYwLrHxGUGXwCD6RxM7i+0YYCY0unPGu45F94zozvNvEDvHtWLLV0k1adw624d0/T3
+         jc1CSlTbloQ92b3wjZMI5tZ+ImIFnt45Bj3+86u379GqRiEjKrDX7h2qSGR3AVe+oX5g
+         cWadgC6tze3TMg6MUltEEKQCd0jrrVyG65A9JhNfp0s0Rfn7eyfkBGwXh/HSYZ0hBP43
+         yH+ZX1ouAH31IJdMld3ym7pXwIeqplV8Ulgmx5ee+tORAQCQBuGnNwM1qAdO+m+uvTTb
+         SnvXHOkY/rcViAlZvlCiOF7O41TBh+2X5gJlMwE3idDSeb3X1OJcO2ajSUemFnZpgQMw
+         eYHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=nBdReiwfNdG1ZF5L1z3OLmO8W9Ht5rJykoy9uzz4vdw=;
+        b=Y9pfqqyqgu7x2nz9EzMljDttLC7d2IxUN+D5V99u3in0yG0VGakqCjRYIkuZ9eFYNR
+         vwbq6VUSioeu7/6w5JJ7GygykAh16hw67a+l/DUgXdoEBB5kUjWnB1/CA34XQh9AEbBS
+         oRAU09VJF7HHa5RgeTxwHbR51JQ7Mo2R3hHbBII/6ULcZScUicgOySX+guHzZx6uYP3t
+         W6lDaPWdURWT62syZNQ7nF7bSOMz3djd4Mz6nIPLTvDi2s5dTz4r2MOmU1p8koiQNKow
+         2SMmrwmJyF1rW2dt0NDqdTOoucfy+n/V3SBR7abxXLn+z26McXCq36iFiBPyaGg7eeqM
+         5NqQ==
+X-Gm-Message-State: APjAAAWOhAdMD9ym9boJpX1Mdsw/UCOwFPEBb6xBP3TKfkmey0JbR77x
+        Yl2VyfXH5RYFExY3Bi2epNS2a62/
+X-Google-Smtp-Source: APXvYqxqlzBiiSVTT5MNK+9uX5eG46Z7CcB13jJUInglIfiKHTQQ/z/1qOlGYfPG2x3fXSvszvnW/g==
+X-Received: by 2002:a5d:49cf:: with SMTP id t15mr33176605wrs.183.1574114111759;
+        Mon, 18 Nov 2019 13:55:11 -0800 (PST)
+Received: from [192.168.1.19] (cji233.neoplus.adsl.tpnet.pl. [83.31.58.233])
+        by smtp.gmail.com with ESMTPSA id z2sm12649357wrs.89.2019.11.18.13.55.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2019 13:55:11 -0800 (PST)
+Subject: Re: [PATCH v5 15/16] leds: Add common LED binding parsing support to
+ LED class/core
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     Lee Jones <lee.jones@linaro.org>, Pavel Machek <pavel@ucw.cz>,
+        Dan Murphy <dmurphy@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Nicholas Mc Guire <hofrat@osadl.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
 References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
-         <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
-         <20191118162502.GJ9761@sirena.org.uk>
-In-Reply-To: <20191118162502.GJ9761@sirena.org.uk>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [82.203.185.189]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6C4A6AAF0465DE4A9847D36F93A87E22@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+ <258b5c9934e2b31a5f433a7dbb908dfe5da3d30c.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Autocrypt: addr=jacek.anaszewski@gmail.com; prefer-encrypt=mutual; keydata=
+ xsFNBFWjfaEBEADd66EQbd6yd8YjG0kbEDT2QIkx8C7BqMXR8AdmA1OMApbfSvEZFT1D/ECR
+ eWFBS8XtApKQx1xAs1j5z70k3zebk2eeNs5ahxi6vM4Qh89vBM46biSKeeX5fLcv7asmGb/a
+ FnHPAfQaKFyG/Bj9V+//ef67hpjJWR3s74C6LZCFLcbZM0z/wTH+baA5Jwcnqr4h/ygosvhP
+ X3gkRzJLSFYekmEv+WHieeKXLrJdsUPUvPJTZtvi3ELUxHNOZwX2oRJStWpmL2QGMwPokRNQ
+ 29GvnueQdQrIl2ylhul6TSrClMrKZqOajDFng7TLgvNfyVZE8WQwmrkTrdzBLfu3kScjE14Q
+ Volq8OtQpTsw5570D4plVKh2ahlhrwXdneSot0STk9Dh1grEB/Jfw8dknvqkdjALUrrM45eF
+ FM4FSMxIlNV8WxueHDss9vXRbCUxzGw37Ck9JWYo0EpcpcvwPf33yntYCbnt+RQRjv7vy3w5
+ osVwRR4hpbL/fWt1AnZ+RvbP4kYSptOCPQ+Pp1tCw16BOaPjtlqSTcrlD2fo2IbaB5D21SUa
+ IsdZ/XkD+V2S9jCrN1yyK2iKgxtDoUkWiqlfRgH2Ep1tZtb4NLF/S0oCr7rNLO7WbqLZQh1q
+ ShfZR16h7YW//1/NFwnyCVaG1CP/L/io719dPWgEd/sVSKT2TwARAQABzS1KYWNlayBBbmFz
+ emV3c2tpIDxqYWNlay5hbmFzemV3c2tpQGdtYWlsLmNvbT7Cwa8EEwEIAEICGwMHCwkIBwMC
+ AQYVCAIJCgsDFgIBAh4BAheABQkJZgNMFiEEvx38ClaPBfeVdXCQvWpQHLeLfCYFAl05/9sC
+ GQEAIQkQvWpQHLeLfCYWIQS/HfwKVo8F95V1cJC9alAct4t8JqsxD/0U39aol03a1/rGQ/RE
+ XJLh+3SxPTjOQ4IV84zGzyZn4pmgxT5fdr58SmkMvvGBEWkfIZoR6XuVKLV6q3OypnkmIdsN
+ LUe3UbxO0BNvyryJ3ryp5J5baZ/NotD3w08QsZ9RcWhSpRCQbnPan3ZSsYXgy6PW84hb3enC
+ 8Ti4Ok2yX6OuLAeiYu2MhShm0hGMZ9lELJRAjS+LktjNcJ5u7MCMYPsmHZgCnt8Mau/epOry
+ xf4NQngf/4jw+Iv6NcqQR6mmoiGUEkmXhZyCCAy7dza6WNgO6pFiCG17fcFfII8Chx87b+w3
+ 7IlFRNW5EWU7FSTiyvP9bxJAPA4DC0pXtPN3IXX+M4YHFbBLXcSMxvi7dfA8zNw+URA10irP
+ vo0WYn33FgS+CQCYWZGKjG4FNG/wWzVzWNDTRZYnm97OpjqVxx0Oug9qVdZ4XN8+MiEptXcs
+ BhOWq/Qi3vkZb37RMGE+p1MzXkOsJVcHtR6ztScPkUG1bB7BOfCv5y7y17jj1UMzM3Yj5r1g
+ onWzq5mbOHkee4qfq0B8bJCHwy6NI4yVms0etGwiwtc6N4ZVrzhCT/Bq0Rw6jJDt35hpWixT
+ Q4JmXQaV29sanXPa7xx3Y38cnt0CAWFDt20ZeZ1em3ZYpC9O9BeEisJZVASs1hsNkMPZXRNm
+ 2U8Fpk/h+RQOS8f5LM4zBFsKioYWCSsGAQQB2kcPAQEHQFCKEG5pCgebryz66pTa9eAo+r8y
+ TkMEEnG8UR5oWFt3wsIbBBgBCAAgFiEEvx38ClaPBfeVdXCQvWpQHLeLfCYFAlsKioYCGwIA
+ rwkQvWpQHLeLfCaNIAQZFggAHRYhBBTDHErITmX+em3wBGIQbFEb9KXbBQJbCoqGACEJEGIQ
+ bFEb9KXbFiEEFMMcSshOZf56bfAEYhBsURv0pdvELgD/U+y3/hsz0bIjMQJY0LLxM/rFY9Vz
+ 1L43+lQHXjL3MPsA/1lNm5sailsY7aFBVJxAzTa8ZAGWBdVaGo6KCvimDB8GFiEEvx38ClaP
+ BfeVdXCQvWpQHLeLfCbuOg/+PH6gY6Z1GiCzuYb/8f7D0NOcF8+md+R6KKiQZij/6G5Y7lXQ
+ Bz21Opl4Vz/+39i5gmfBa9LRHH4ovR9Pd6H0FCjju4XjIOJkiJYs2HgCCm6nUxRJWzPgyMPS
+ VbqCG2ctwaUiChUdbS+09bWb2MBNjIlI4b8wLWIOtxhyn25Vifm0p+QR5A2ym4bqJJ9LSre1
+ qM8qdPWcnExPFU4PZFYQgZ9pX1Jyui73ZUP94L7/wg1GyJZL3ePeE4ogBXldE0g0Wq3ORqA9
+ gA/yvrCSyNKOHTV9JMGnnPGN+wjBYMPMOuqDPC/zcK+stdFXc6UbUM1QNgDnaomvjuloflAx
+ aYdblM26gFfypvpFb8czcPM+BP6X6vWk+Mw9+8vW3tyK9lSg+43OjIWlBGPpO9aLZsYYxAqv
+ J5iSxcbbOLb5q8wWct6U7EZ1RnuOfVInoBttrlYvdWtcI/5NQTptkuB/DyRhrxBJc/fKzJ4w
+ jS2ikcWe0FnxrQpcE2yqoUIFaZMdd/Cx9bRWAGZG087t5dUHJuMnVVcpHZFnHBKr8ag1eH/K
+ tFdDFtyln5A/f9O22xsV0pyJni7e2z7lTBitrQFG69vnVGJlHbBE2dR4GddZqAlVOUbtEcE7
+ /aMk4TrCtx0IyOzQiLA81aaJWhkD3fRO8cDlR4YQ3F0aqjYy8x1EnnhhohHOwU0EVaN9oQEQ
+ AMPNymBNoCWc13U6qOztXrIKBVsLGZXq/yOaR2n7gFbFACD0TU7XuH2UcnwvNR+uQFwSrRqa
+ EczX2V6iIy2CITXKg5Yvg12yn09gTmafuoIyKoU16XvC3aZQQ2Bn3LO2sRP0j/NuMD9GlO37
+ pHCVRpI2DPxFE39TMm1PLbHnDG8+lZql+dpNwWw8dDaRgyXx2Le542CcTBT52VCeeWDtqd2M
+ wOr4LioYlfGfAqmwcwucBdTEBUxklQaOR3VbJQx6ntI2oDOBlNGvjnVDzZe+iREd5l40l+Oj
+ TaiWvBGXkv6OI+wx5TFPp+BM6ATU+6UzFRTUWbj+LqVA/JMqYHQp04Y4H5GtjbHCa8abRvBw
+ IKEvpwTyWZlfXPtp8gRlNmxYn6gQlTyEZAWodXwE7CE+KxNnq7bPHeLvrSn8bLNK682PoTGr
+ 0Y00bguYLfyvEwuDYek1/h9YSXtHaCR3CEj4LU1B561G1j7FVaeYbX9bKBAoy/GxAW8J5O1n
+ mmw7FnkSHuwO/QDe0COoO0QZ620Cf9IBWYHW4m2M2yh5981lUaiMcNM2kPgsJFYloFo2XGn6
+ lWU9BrWjEoNDhHZtF+yaPEuwjZo6x/3E2Tu3E5Jj0VpVcE9U1Zq/fquDY79l2RJn5ENogOs5
+ +Pi0GjVpEYQVWfm0PTCxNPOzOzGR4QB3BNFvABEBAAHCwWUEGAEIAA8FAlWjfaECGwwFCQlm
+ AYAACgkQvWpQHLeLfCZqGxAAlWBWVvjU6xj70GwengiqYZwmW1i8gfS4TNibQT/KRq0zkBnE
+ wgKwXRbVoW38pYVuGa5x/JDQMJDrLAJ0wrCOS3XxbSHCWOl/k2ZD9OaxUeXq6N+OmGTzfrYv
+ PUvWS1Hy04q9AD1dIaMNruZQmvnRfkOk2UDncDIg0166/NTHiYI09H5mpWGpHn/2aT6dmpVw
+ uoM9/rHlF5s5qAAo95tZ0QW2BtIceG9/rbYlL57waSMPF49awvwLQX5RhWoF8mPS5LsBrXXK
+ hmizIsn40tLbi2RtWjzDWgZYitqmmqijeCnDvISN4qJ/nCLO4DjiSGs59w5HR+l0nwePDhOC
+ A4RYZqS1e2Clx1VSkDXFpL3egabcIsqK7CZ6a21r8lXVpo4RnMlQsmXZTnRx4SajFvX7PrRg
+ /02C811fLfh2r5O5if8sKQ6BKKlHpuuioqfj/w9z3B0aQ71e4n1zNJBO1kcdznikPLAbr7jG
+ gkBUXT1yJiwpTfRQr5y2Uo12IJsKxohnNFVYtK8X/R6S0deKPjrZWvAkllgIPcHjMi2Va8yw
+ KTj/JgcpUO5KN906Pf7ywZISe7Kbcc/qnE0YjPPSqFOvoeZvHe6EZCMW9+xZsaipvlqpByQV
+ UHnVg09K9YFvjUBsBPdC8ef6YwgfR9o6AnPmxl0oMUIXkCCC5c99fzJY/k8=
+Message-ID: <745e427d-819e-12d7-5c94-7a8d1a414956@gmail.com>
+Date:   Mon, 18 Nov 2019 22:55:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf0wTZxjH995d7w7klpcK8o6pkVuWxS3iWPbHqyGTf4jnshiTzWRhIXiM
-        G22gLbm2m7gsQRfUVoe4aaYNv+THYFAQKmboysBCN6iss4iui3YMqG6gATcZOEXdHafCX+/3
-        fb/P5/k+fzwvS+rdTDJrNNsk2SwW8nQs1dv0wLPhuchw9uveCIvrQ1cYfGD6GwbPVgYofHws
-        SuNo7wGAq/uDOnzoYqcO186c0GGH46AOXzvbTuGBM6MAj/7rB3hu5CCBjy00Evjvw7/r8Kn9
-        9RQ+U70A8OXzFTQ+e7sN4B9bRmjc2h9hcMOvIQJXNAxQeOYfB4FDgUwcCfhp/HkoTOLS7n4G
-        P7raQeGy4NaMtYK7yg2EmXApI1S5PxXOuSKMUOedJARPs4MWrl/10kJd2Vc64a/DfZQwN3SU
-        Eso6m4Fw89RpSvgp/B0hfF31HyE0tcwzwl3P2h0wa0V6rmj7+F1jvnnjW7tWGCIj43RRFb+7
-        +uIRugS4U5wghkXwTXRk4Q/aCWJZPbwCUJu/nNEuAwDVtX8LnIBlaZiOnL8xKpAAN6Dj9+sW
-        ARKejEM/BL8nVGMl3IU6b01QWpGIauYeEJrejO4MjtCqpuDL6IRvEKiag9uRt6P3SfIQQBWN
-        5xaNGPgGut3VSqoawDXIUTK92IiESchzc16njQ1RvfcXUtOJaHLi0ZN3HvX4g6Q6NAnXo9Pn
-        N2poBrrX1kVpOgUdOzTGaDPEo8GTUaocrHItS3At0a5ltGsZ7VpG1wBdM0Am0ViYL9qktFRZ
-        sqfKFoNJOT60mDxA277ZLvDYt80HCBb4wAsswSdy2zzD2frncy15xQbRasiR7YWS1QcQS/IJ
-        3PbxS9l6Lk8s3iPJlqfWiyzFJ3GvjB3N1kM1q0CSiiT5qbuaZXnE3b2mNI2XpXxp90fGQtuS
-        TbAxavPY5ASrZM6TZNFuM+SoC5JjVTZEteKU3H0qzlmLRJPyqqEB8BpbPllZS7L9lQ21pJ4y
-        W8xSchKXsV4phWqpwW5+FjQFkljAr+Sy1EZxyhd81mdKiSCUiI7WxQibuGQll4DYTf6fP+m+
-        Y9yybmiHs2Xzffhe3/7QhaLRWcflW2vebqLXNRZsXR2F1QXh9ogb5mWm0NNf+Df5Al25L6XO
-        vV+60yRRkT3X/6RL5y/05oQ/2+vt2VLTeS/THj+c5R9/OBG5tM/zQXpP8Y1oWnll994bfUHw
-        ztSXuSn8quHEloLxIT1PWQ1i2qukbBX/BxjTQ6o/BAAA
+In-Reply-To: <258b5c9934e2b31a5f433a7dbb908dfe5da3d30c.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gTWFyaywNCg0KSXQncyBuaWNlIHRvIGhlYXIgZnJvbSB5b3UgYWdhaW4gOikgSSBob3Bl
-IHlvdSdyZSBlbmpveWluZyBhbGwgdGhlIG5ldw0KdGhpbmdzIDopDQoNCk9uIE1vbiwgMjAxOS0x
-MS0xOCBhdCAxNjoyNSArMDAwMCwgTWFyayBCcm93biB3cm90ZToNCj4gT24gTW9uLCBOb3YgMTgs
-IDIwMTkgYXQgMDg6NTM6NTdBTSArMDIwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiANCj4g
-PiArI1N1cHBvcnRlZCBkZWZhdWx0IERWUyBzdGF0ZXM6DQo+ID4gKyNidWNrCQl8IHJ1bgkJfCBp
-ZGxlCQl8IHN1c3BlbmQJDQo+ID4gfCBscHNyDQo+ID4gKyMtLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+IC0tLS0tLS0t
-LS0tDQo+ID4gKyMxLCAyLCA2LCBhbmQgNwl8IHN1cHBvcnRlZAl8IHN1cHBvcnRlZAl8IAlzdXBw
-b3J0ZWQNCj4gPiAoKikNCj4gPiArIy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gLS0tLS0tLS0tLS0NCj4gPiArIzMs
-IDQsIGFuZCA1CXwgCQkJc3VwcG9ydGVkICgqKikNCj4gPiArIy0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4gLS0tLS0t
-LS0tLS0NCj4gPiArIygqKSAgTFBTUiBhbmQgU1VTUEVORCBzdGF0ZXMgdXNlIHNhbWUgdm9sdGFn
-ZSBidXQgYm90aCBzdGF0ZXMNCj4gPiBoYXZlIG93biBlbmFibGUgLw0KPiA+ICsjICAgICBkaXNh
-YmxlIHNldHRpbmdzLiBWb2x0YWdlIDAgY2FuIGJlIHNwZWNpZmllZCBmb3IgYSBzdGF0ZSB0bw0K
-PiA+IG1ha2UgcmVndWxhdG9yDQo+ID4gKyMgICAgIGRpc2FibGVkIG9uIHRoYXQgc3RhdGUuDQo+
-ID4gKyMoKiopIEFsbCBzdGF0ZXMgdXNlIHNhbWUgdm9sdGFnZSBidXQgaGF2ZSBvd24gZW5hYmxl
-IC8gZGlzYWJsZQ0KPiA+IHNldHRpbmdzLg0KPiA+ICsjICAgICBWb2x0YWdlIDAgY2FuIGJlIHNw
-ZWNpZmllZCBmb3IgYSBzdGF0ZSB0byBtYWtlIHJlZ3VsYXRvcg0KPiA+IGRpc2FibGVkIG9uIHRo
-YXQNCj4gPiArIyAgICAgc3RhdGUuDQo+ID4gKw0KPiA+ICsgICAgICByb2htLGR2cy1ydW5sdmwt
-Y3RybDoNCj4gPiArICAgICAgICBkZXNjcmlwdGlvbjogfA0KPiA+ICsgICAgICAgICAgYnVjayBj
-b250cm9sIGlzIGRvbmUgYmFzZWQgb24gcnVuLWxldmVsLiBSZWd1bGF0b3IgaXMNCj4gPiBub3QN
-Cj4gPiArICAgICAgICAgIGluZGl2aWR1YWxseSBjb250cm9sbGFibGUuIFNlZSAuLi9tZmQvcm9o
-bSxiZDcxODI4LQ0KPiA+IHBtaWMueWFtbCBmb3INCj4gPiArICAgICAgICAgIGhvdyB0byBzcGVj
-aWZ5IHJ1bi1sZXZlbCBjb250cm9sIG1lY2hhbmlzbS4gT25seSBidWNrcw0KPiA+IDEsIDIsIDYN
-Cj4gPiArICAgICAgICAgIGFuZCA3IHN1cHBvcnQgdGhpcy4NCj4gPiArICAgICAgICB0eXBlOiBi
-b29sZWFuDQo+IA0KPiBJIGRvbid0IHRoaW5rIEkgc2F3IHRoaXMgaGF2aW5nIHRoZSBlZmZlY3Qg
-b24gc2V0X3ZvbHRhZ2UoKSB0aGF0IEknZA0KPiBoYXZlIGV4cGVjdGVkIGluIHRoZSBkcml2ZXI/
-ICANCg0KVGhlIHN1cHBvcnQgZm9yIHRoaXMgaXMgYWRkZWQgaW4gcGF0Y2ggMTIuIEkgc2hvdWxk
-J3ZlIG9yZGVyZWQgdGhlDQpwYXRjaCBzZXJpZXMgc28gdGhhdCBhbGwgcmVndWxhdG9yIHBhdGNo
-ZXMgd2VyZSBvbmUgYWZ0ZXIgYW5vdGhlci4NClNvcnJ5IGZvciB0aGF0Lg0KVGhlIHBhdGNoIDEy
-IGFkZHMgdGhlIHJ1bi1sZXZlbCBzdXBwb3J0LiBQbGVhc2Ugc2VlIHRoZSBmdW5jdGlvbnMNCmdl
-dF9ydW5jb250cm9sbGVkX2J1Y2tzX2R0KCksDQptYXJrX3JlZ3VsYXRvcl9ydW5sdmxfY29udHJv
-bGxlZCgpIChzZXRzIHRoZSBnLT5ydW5sdmwpDQphbmQgc2V0X2J1Y2tfcnVubHZsX2NvbnRyb2xs
-ZWQoKSAoY2FsbGVkIGJhc2VkIG9uIGctPnJ1bmx2bCkNCndoaWNoIGNoYW5nZXMgdGhlIG9wcyB0
-byBkaXNhbGxvdyBzZXR0ZXJzIGFuZCB0byBnZXQgdm9sdGFnZSBiYXNlZCBvbg0KY3VycmVudCBy
-dW5sZXZlbCAtIGFuZCBkaWZmZXJlbnQgb3BzIGRlcGVuZGluZyBvbiBpZiBydW5sZXZlbHMgYXJl
-DQpjb250cm9sbGVkIGJ5IEdQSU8gb3IgSTJDLiBBZGRpdGlvbmFsbHkgc2V0X2J1Y2tfcnVubHZs
-X2NvbnRyb2xsZWQoKQ0KYWRkcyBEVCBwYXJzaW5nIGNhbGwtYmFjayBmb3Igc2V0dGluZyB0aGUg
-aW5pdGlhbCB2b2x0YWdlcy4NCg0KQ29tcGxleCwgSSBrbm93LiBJJ20gb3BlbiB0byBoaW50cyx0
-aXBzIGFuZCBzdWdnZXN0aW9ucyA6KQ0KDQo+ID4gKyAgICAgIHJvaG0sZHZzLXJ1bmxldmVsLW1p
-Y3Jvdm9sdHM6DQo+ID4gKyAgICAgICAgbWluaW11bTogMA0KPiA+ICsgICAgICAgIG1heGltdW06
-IDIwMDAwMDANCj4gPiArICAgICAgICBtYXhJdGVtczogNA0KPiA+ICsgICAgICAgIGRlc2NyaXB0
-aW9uOg0KPiA+ICsgICAgICAgICAgQXJyYXkgb2Ygdm9sdGFnZXMgZm9yIHJ1bi1sZXZlbHMuIEZp
-cnN0IHZhbHVlIGlzIGZvcg0KPiA+IHJ1bi1sZXZlbCAwLA0KPiA+ICsgICAgICAgICAgc2Vjb25k
-IGZvciBydW4tbGV2ZWwgMSBldGMuIE1pY3Jvdm9sdHMuDQo+IA0KPiBXaGF0J3MgdGhlIG1hcHBp
-bmcgZnJvbSBhcnJheSBpbmRleGVzIHRvIHRoZSBuYW1lcyB1c2VkIGVsc2V3aGVyZSB0bw0KPiBz
-dXBwb3J0IHJ1bmxldmVscz8NCg0KSG1tLiBTb3JyeSBNYXJrLCBJIGRvbid0IHRoaW5rIEkgZm9s
-bG93IHlvdXIgcXVlc3Rpb24uIERvIHlvdSBtZWFuDQpuYW1lcyBsaWtlIExQU1IsIFNVU1BFTkQs
-IElETEUsIFJVTj8gSWYgc28sIHRoZW4gSSBtaWdodCBuZWVkIHRvDQpyZXBocmFzZSB0aGlzLiBU
-aGUgcnVubGV2ZWxzIHJlZmVycmVkIGhlcmUgYXJlIGRpZmZlcmVudCBmcm9tIExQU1IsDQpTVVNQ
-RU5ELCBJRExFIGV0Yy4gVGhleSBhcmUgYWN0dWFsbHkgJ3N1Yi1sZXZlbHMnIGZvciBQTUlDJ3Mg
-UlVOIHN0YXRlLg0KRWcsIGtpbmQgb2YgYSAnZmFzdCB3YXknIHRvIGNoYW5nZSB2b2x0YWdlcyBm
-b3IgbXVsdGlwbGUgcG93ZXIgcmFpbHMNCndoZW4gU29DIGlzIGF0IFJVTiBzdGF0ZS4gVGhlIG5h
-bWVzIEkgaGF2ZSBzZWVuIGFyZSBSVU4wLCBSVU4xLCBSVU4yDQphbmQgUlVOMy4gVGhhdCBtYXBw
-aW5nIGlzIGRlc2NyaWJlZCBpbiBkZXNjcmlwdGlvbiBhYm92ZS4NCg0KQnIsDQoJTWF0dGkgVmFp
-dHRpbmVuDQo=
+Hi Matti,
+
+Thank you for the patch. If your driver does not depend
+on it then please send is separately. Besides, we would require
+to convert many of current LED drivers to verify how the
+proposed parsing mechanism will work with them. I've been testing
+my LED name composition series using QEMU and stubbing things in
+drivers where necessary and I propose to use the same approach
+in this case.
+
+Best regards,
+Jacek Anaszewski
+
+On 11/18/19 8:03 AM, Matti Vaittinen wrote:
+> Qucik grep for 'for_each' or 'linux,default-trigger' or
+> 'default-state' under drivers/leds can tell quite a lot. It seems
+> multiple LED controller drivers implement the very similar looping
+> through the child nodes in order to locate the LED nodes and read
+> and support the common LED dt bindings. Implementing this same
+> stuff for all LED controllers gets old pretty fast.
+> 
+> This commit adds support for locating the LED node (based on known
+> node names - or linux,led-compatible property) and handling of
+> few common LED properties.
+> 
+> linux,default-trigger,
+> default-state (with the exception of keep),
+> 
+> (in addition to already handled
+> function-enumerator,
+> function,
+> color
+> and label).
+> 
+> Regarding the node look-up: If no init_data is given, then no
+> node-lookup is done and cdev name is used as such.
+> 
+> If init_data is goven but no starting point for node lookup - then
+> (parent) device's own DT node is used. If no led-compatible is given,
+> then of_match is searched for. If neither led-compatible not of_match
+> is given then device's own node or passed starting point are used as
+> such.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+> 
+> Changes from v4:
+> Fixed issues reported by Dan Carpenter and kbuild-bot.
+> (leftover kfree and uninitialized return value)
+> 
+>  drivers/leds/led-class.c |  88 ++++++++++++--
+>  drivers/leds/led-core.c  | 246 +++++++++++++++++++++++++++++++--------
+>  include/linux/leds.h     |  90 ++++++++++++--
+>  3 files changed, 359 insertions(+), 65 deletions(-)
+> 
+
+-- 
+Best regards,
+Jacek Anaszewski
