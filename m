@@ -2,160 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13157102722
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Nov 2019 15:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529AF102B37
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Nov 2019 18:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbfKSOoC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Nov 2019 09:44:02 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:43967 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727693AbfKSOoB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Nov 2019 09:44:01 -0500
-Received: by mail-lf1-f66.google.com with SMTP id l14so10593078lfh.10
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Nov 2019 06:44:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3HGForXYrnzKKwFOiKAr5qSOuuqdU2k4wA1CfbalcbQ=;
-        b=o8/7NQNCdscgcAzoUXE+jNTk/DJagMvuw5Z5JaWY30/Z/muA51WNthzWcG+/MtHPBP
-         ny6dVonMKRnen+it9ngeeXt1nR2rMvm4MxOKRsW5mUt9arjSEhZM4tMEKXJRcjqQx8t8
-         UwAYBSUYodJCrJjJxwSpcnYicu7wJuE+0By/ddHV3P+BQR3Lp7t+G1kjRHchnAx24qMJ
-         SA9vVP9M+gd+aI6o0RnPHJ0b1q0yRooX6UUA86zcAYvWai/ge//6X1NsbP93Bwm+VLIX
-         BqN6l+PH8M5Cw6YFIvmW/Ygb/vNNIT3uU4vu68nKXH9wt785xkMpxaAXLMSC4C3ZTGrO
-         vEUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3HGForXYrnzKKwFOiKAr5qSOuuqdU2k4wA1CfbalcbQ=;
-        b=lNlD1kUNyPQjiq8eM/GCDFrTF1z/n14YE+y5GFPrgMVtzZGpkSUEanSJ9nYewqcM43
-         KQlh7lcAqQRGoN+wCKzBCZMhXfZfNBA/YcmD0L/oCw7Hh+1BEbB35t/GE8Sp9/7frhYd
-         LwK5PX6a7OeeGydlAUBMTaxaBbARrtZhFe36cWPE9zQxkW2CLlbDDSQxMpsD2ZBRV3eh
-         T9Tr8larGbwq94MvFYhqld4f2JX7HXnWxC4rXLjE8jDibtNnIXYNXcR+bSewloI3Xq9G
-         /UkyyNnvobOgT6W6+5mXtRxJoedG4Tr6uMUsF+LD2yM4UqdDjoRqz5ZqtzHJHoRth68A
-         Mg2w==
-X-Gm-Message-State: APjAAAW23mLNtppQTnnDVW35X5Q5puhU4QCOMQ63u6ApNwH10vFYdLVj
-        t0XSKZWPDd7J4OX7NWZCwr/aOuLVoTEHVvy8qz5VEg==
-X-Google-Smtp-Source: APXvYqxiJDKtjaMparegwwsvRl+fvmQtXcsqSKBMv1kiOZ+otWv/0CzoTQp+omLTRtPr/aKLvkVblynEb9GKo+vyzx0=
-X-Received: by 2002:a19:651b:: with SMTP id z27mr4166813lfb.117.1574174639988;
- Tue, 19 Nov 2019 06:43:59 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com> <8dd9dad2765d47fd6c6fec20566326d00e48a696.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <8dd9dad2765d47fd6c6fec20566326d00e48a696.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 19 Nov 2019 15:43:47 +0100
-Message-ID: <CACRpkdY_2WzAnK01bQdMF69KsDvHHu9TXuyRoBcmiQMziux=eQ@mail.gmail.com>
-Subject: Re: [PATCH v5 10/16] gpio: devres: Add devm_gpiod_get_parent_array
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Nicholas Mc Guire <hofrat@osadl.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        id S1727239AbfKSRy3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Nov 2019 12:54:29 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:60094 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbfKSRy3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Nov 2019 12:54:29 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-55-5dd42c5123c0
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id F8.5F.08102.15C24DD5; Tue, 19 Nov 2019 18:54:25 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Tue, 19 Nov 2019 18:54:25 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "hofrat@osadl.org" <hofrat@osadl.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+Subject: Re: [PATCH v5 10/16] gpio: devres: Add devm_gpiod_get_parent_array
+Thread-Topic: [PATCH v5 10/16] gpio: devres: Add devm_gpiod_get_parent_array
+Thread-Index: AQHVnd2XL+xAnx6QeEuZbGk0ju43uqeSgwCAgAA1PIA=
+Date:   Tue, 19 Nov 2019 17:54:24 +0000
+Message-ID: <ece1ab1418e237d6f4968fc4cf59202c35f02ba7.camel@fi.rohmeurope.com>
+References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+         <8dd9dad2765d47fd6c6fec20566326d00e48a696.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+         <CACRpkdY_2WzAnK01bQdMF69KsDvHHu9TXuyRoBcmiQMziux=eQ@mail.gmail.com>
+In-Reply-To: <CACRpkdY_2WzAnK01bQdMF69KsDvHHu9TXuyRoBcmiQMziux=eQ@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [82.203.185.189]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0468ECED5D432047BC0A3EE8F832215A@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TfVBUVRSf+77BffZYUW6kTq5jjGCilTM3x0xrHJ+Vjox/NOkQPeK1S8Iu
+        83bXEW2cLUNYFnekEGRjIWBRZmFDUPxgcEJcDKiQVSAkkYF2KNAgSTSKsPd8Kfx1zz2/r/PH
+        OQyu9dKRTLLRIkpGIUVHhRJNlf/Uvhi3qit+zUBFLPIEummUOXaSRvfd7QQ6PhikULApE6AS
+        fweJHN+fJVHZ+AkS2e1ZJPq5/jSBWs8MADQw2QLQg64sDOVNn8LQvZzbJCo94iHQmZJpgG40
+        FFGo/u43AF2t6qKQz99Po4qfAhgqqmgl0PiEHUOB9i2ov72FQocDvTjKuOSn0UxPLYGcHVs3
+        LeWri6sBP96bQfPF1Qf5i65+mi9vHMH4Oq+d4m/1NFJ8ufNLkv8t5wrBP/ghl+CdZ72AHy6t
+        Ifjves9jfEHxFMZXVj2k+T/rlu7kds/bkChY9u1K1htjN34wz3DqUi6W9teq/UeLb1I2EIzJ
+        BiEM5F6Bt89/SmaDUEbLdQOY01lEqZ9WAL9ouisjDENxG2D2TVoRhHOvwiutRYTCwbmjGjg1
+        mk8owALubZhxwkeppHdgYbAQU+v1MGum6rEPwa2A5T9uVtostwP22QtoNesOgBn19bTCCeHi
+        4JjjTYUDuCXQbht7bINzEbBu+CGpDs1BT+M1XK0XwpFfZv7v6+C3LR24YoNzK2FNQ6wq3QSP
+        H7lBqPUymOcYpNURwmBbYZA4Bha55iS4ZtWuOWrXHLVrjvprQHoBTBWSU/SCRVy7WhKtqyWT
+        IVV+PjSl1gF19+5fAI+atzUDjAHN4FkG0y1kbaArXjs/0ZSUbhDMhgTJmiKamwFkcF04u2Oo
+        M17LJgnpB0TJ9AR6jiF0EWzUYG68llOy9opimig9QRczjA6yU1GyaZgk6sX9HyWnWGZhjAlR
+        zEMjw82iMUmUBKvFkKCsR4JZ3g8F0si556JlOWtOE1LlriptBzHMsRF3Gc743RVluJYwmoxi
+        ZARrf0amcgrVYDU+DRoFEQzQLWCnFSONfIBPfUblCEyOqPVdVyIswiwUaQOeyx+vsHguv54P
+        /d4G/2FD1OSjuIOdvpc0L2sP/H0h7P2sQyd97tKc7T3/Vn4yHGUl7eeWwD/0uz6fSDod1rbn
+        +UCB843ozOV6W37J4qmveu+F9q0fuvXe1YtvOX5PfG2b49rOod171uXWCO867/z6wqG89M+6
+        +zau3OIeb9samEiLKdVM6gizQVgbjUtm4T9YqqrqPQQAAA==
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 7:58 AM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
-
-> Bunch of MFD sub-devices which are instantiated by MFD do not have
-> own device-tree nodes but have (for example) the GPIO consumer
-> information in parent device's DT node. Add resource managed
-> devm_gpiod_get_array() for such devices so that they can get the
-> consumer information from parent DT while still binding the GPIO
-> reservation life-time to this sub-device life time.
->
-> If devm_gpiod_get_array is used as such - then unloading and then
-> re-loading the child device fails as the GPIOs reserved during first
-> load are not freed when driver for sub-device is unload (if parent
-> stays there).
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-(...)
-> +static struct gpio_descs *__must_check
-> +__devm_gpiod_get_array(struct device *gpiodev,
-> +                      struct device *managed,
-> +                      const char *con_id,
-> +                      enum gpiod_flags flags)
-
-I'm opposed to functions named __underscore_something()
-so find a proper name for this function.
-devm_gpiod_get_array_common() works if nothing else.
-
-> @@ -292,19 +284,62 @@ struct gpio_descs *__must_check devm_gpiod_get_array(struct device *dev,
->         if (!dr)
->                 return ERR_PTR(-ENOMEM);
->
-> -       descs = gpiod_get_array(dev, con_id, flags);
-> +       descs = gpiod_get_array(gpiodev, con_id, flags);
->         if (IS_ERR(descs)) {
->                 devres_free(dr);
->                 return descs;
->         }
->
->         *dr = descs;
-> -       devres_add(dev, dr);
-> +       if (managed)
-> +               devres_add(managed, dr);
-> +       else
-> +               devres_add(gpiodev, dr);
-
-So we only get managed resources if the "managed" device is
-passed in.
-
-> +/**
-> + * devm_gpiod_get_array - Resource-managed gpiod_get_array()
-
-And this function is supposed to be resource managed for sure.
-
-> + * @dev:       GPIO consumer
-> + * @con_id:    function within the GPIO consumer
-> + * @flags:     optional GPIO initialization flags
-> + *
-> + * Managed gpiod_get_array(). GPIO descriptors returned from this function are
-> + * automatically disposed on driver detach. See gpiod_get_array() for detailed
-> + * information about behavior and return values.
-> + */
-> +struct gpio_descs *__must_check devm_gpiod_get_array(struct device *dev,
-> +                                                    const char *con_id,
-> +                                                    enum gpiod_flags flags)
-> +{
-> +       return __devm_gpiod_get_array(dev, NULL, con_id, flags);
-
-So what is this? NULL?
-
-Doesn't that mean you just removed all resource management for this
-call?
-
-Or am I reading it wrong?
-
-Yours,
-Linus Walleij
+SGVsbG8gTGludXMsDQoNCk9uIFR1ZSwgMjAxOS0xMS0xOSBhdCAxNTo0MyArMDEwMCwgTGludXMg
+V2FsbGVpaiB3cm90ZToNCj4gT24gTW9uLCBOb3YgMTgsIDIwMTkgYXQgNzo1OCBBTSBNYXR0aSBW
+YWl0dGluZW4NCj4gPG1hdHRpLnZhaXR0aW5lbkBmaS5yb2htZXVyb3BlLmNvbT4gd3JvdGU6DQo+
+IA0KPiA+IEJ1bmNoIG9mIE1GRCBzdWItZGV2aWNlcyB3aGljaCBhcmUgaW5zdGFudGlhdGVkIGJ5
+IE1GRCBkbyBub3QgaGF2ZQ0KPiA+IG93biBkZXZpY2UtdHJlZSBub2RlcyBidXQgaGF2ZSAoZm9y
+IGV4YW1wbGUpIHRoZSBHUElPIGNvbnN1bWVyDQo+ID4gaW5mb3JtYXRpb24gaW4gcGFyZW50IGRl
+dmljZSdzIERUIG5vZGUuIEFkZCByZXNvdXJjZSBtYW5hZ2VkDQo+ID4gZGV2bV9ncGlvZF9nZXRf
+YXJyYXkoKSBmb3Igc3VjaCBkZXZpY2VzIHNvIHRoYXQgdGhleSBjYW4gZ2V0IHRoZQ0KPiA+IGNv
+bnN1bWVyIGluZm9ybWF0aW9uIGZyb20gcGFyZW50IERUIHdoaWxlIHN0aWxsIGJpbmRpbmcgdGhl
+IEdQSU8NCj4gPiByZXNlcnZhdGlvbiBsaWZlLXRpbWUgdG8gdGhpcyBzdWItZGV2aWNlIGxpZmUg
+dGltZS4NCj4gPiANCj4gPiBJZiBkZXZtX2dwaW9kX2dldF9hcnJheSBpcyB1c2VkIGFzIHN1Y2gg
+LSB0aGVuIHVubG9hZGluZyBhbmQgdGhlbg0KPiA+IHJlLWxvYWRpbmcgdGhlIGNoaWxkIGRldmlj
+ZSBmYWlscyBhcyB0aGUgR1BJT3MgcmVzZXJ2ZWQgZHVyaW5nDQo+ID4gZmlyc3QNCj4gPiBsb2Fk
+IGFyZSBub3QgZnJlZWQgd2hlbiBkcml2ZXIgZm9yIHN1Yi1kZXZpY2UgaXMgdW5sb2FkIChpZiBw
+YXJlbnQNCj4gPiBzdGF5cyB0aGVyZSkuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkg
+VmFpdHRpbmVuIDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ICguLi4pDQo+
+ID4gK3N0YXRpYyBzdHJ1Y3QgZ3Bpb19kZXNjcyAqX19tdXN0X2NoZWNrDQo+ID4gK19fZGV2bV9n
+cGlvZF9nZXRfYXJyYXkoc3RydWN0IGRldmljZSAqZ3Bpb2RldiwNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgIHN0cnVjdCBkZXZpY2UgKm1hbmFnZWQsDQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICBjb25zdCBjaGFyICpjb25faWQsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICBlbnVt
+IGdwaW9kX2ZsYWdzIGZsYWdzKQ0KPiANCj4gSSdtIG9wcG9zZWQgdG8gZnVuY3Rpb25zIG5hbWVk
+IF9fdW5kZXJzY29yZV9zb21ldGhpbmcoKQ0KPiBzbyBmaW5kIGEgcHJvcGVyIG5hbWUgZm9yIHRo
+aXMgZnVuY3Rpb24uDQo+IGRldm1fZ3Bpb2RfZ2V0X2FycmF5X2NvbW1vbigpIHdvcmtzIGlmIG5v
+dGhpbmcgZWxzZS4NCg0KT2suIFdlIGFsbCBoYXZlIG91ciBvd24gcGVjdWxhcml0aWUuLi4gSSBt
+ZWFuIHByZWZlcmVuY2VzIDopIEJ1dCBhcw0KdGhpcyBpcyBkZWZpbml0ZWx5IHlvdXIgdGVycml0
+b3J5IC0gSSdsbCBjaGFuZ2UgdGhlIG5hbWUgOikgTm8gcHJvYmxlbS4NCg0KPiANCj4gPiBAQCAt
+MjkyLDE5ICsyODQsNjIgQEAgc3RydWN0IGdwaW9fZGVzY3MgKl9fbXVzdF9jaGVjaw0KPiA+IGRl
+dm1fZ3Bpb2RfZ2V0X2FycmF5KHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gPiAgICAgICAgIGlmICgh
+ZHIpDQo+ID4gICAgICAgICAgICAgICAgIHJldHVybiBFUlJfUFRSKC1FTk9NRU0pOw0KPiA+IA0K
+PiA+IC0gICAgICAgZGVzY3MgPSBncGlvZF9nZXRfYXJyYXkoZGV2LCBjb25faWQsIGZsYWdzKTsN
+Cj4gPiArICAgICAgIGRlc2NzID0gZ3Bpb2RfZ2V0X2FycmF5KGdwaW9kZXYsIGNvbl9pZCwgZmxh
+Z3MpOw0KPiA+ICAgICAgICAgaWYgKElTX0VSUihkZXNjcykpIHsNCj4gPiAgICAgICAgICAgICAg
+ICAgZGV2cmVzX2ZyZWUoZHIpOw0KPiA+ICAgICAgICAgICAgICAgICByZXR1cm4gZGVzY3M7DQo+
+ID4gICAgICAgICB9DQo+ID4gDQo+ID4gICAgICAgICAqZHIgPSBkZXNjczsNCj4gPiAtICAgICAg
+IGRldnJlc19hZGQoZGV2LCBkcik7DQo+ID4gKyAgICAgICBpZiAobWFuYWdlZCkNCj4gPiArICAg
+ICAgICAgICAgICAgZGV2cmVzX2FkZChtYW5hZ2VkLCBkcik7DQo+ID4gKyAgICAgICBlbHNlDQo+
+ID4gKyAgICAgICAgICAgICAgIGRldnJlc19hZGQoZ3Bpb2RldiwgZHIpOw0KPiANCj4gU28gd2Ug
+b25seSBnZXQgbWFuYWdlZCByZXNvdXJjZXMgaWYgdGhlICJtYW5hZ2VkIiBkZXZpY2UgaXMNCj4g
+cGFzc2VkIGluLg0KDQpIbW0uIEFjdHVhbGx5LCBubyBpZiBJIGFtIG5vdCBtaXNyZWFkaW5nIHRo
+aXMuIFdlIGdldCBtYW5hZ2VkIGRldmljZXMNCmluIGFueSBjYXNlLCBidXQgdGhlIGxpZmV0aW1l
+IGlzIGVpdGhlciBib3VuZCB0byBleGl0ZW5jZSBvZiB0aGUgZ3Bpbw0KY29uc3VtZXIgZGV2aWNl
+ICh3aGljaCBpcyBzdGFuZGFyZCB3YXkpIC0gb3IgZXhpc3RlbmNlIG9mIHNwZWNpZmljDQonbWFu
+YWdlZCcgZGV2aWNlLg0KDQpJbiBjYXNlIG9mIE1GRCBzdWItZGV2aWNlIChsaWtlIEJENzE4Mjgg
+cmVndWxhdG9yIHN1YmRldikgd2hpY2ggaGFzDQpHUElPIGNvbnN1bWVyIHByb3BlcnRpZXMgaW4g
+TUZEIG5vZGUgLSB0aGUgR1BJTyBjb25zdW1lciBpbmZvcm1hdGlvbiBpcw0KaW4gcGFyZW50IGRl
+dmljZSdzIChCRDcxODI4IE1GRCBkZXZpY2UpIGRhdGEgLSBidXQgdGhlIGxpZmV0aW1lIHNob3Vs
+ZA0KYmUgYm91bmQgdG8gc3ViLWRldmljZXMgKEJENzE4MjggcmVndWxhdG9yIGRldmljZSkgbGlm
+ZXRpbWUuIFRodXMgd2UNCm5lZWQgdHdvIGRpZmZlcmVudCBkZXZpY2VzIGhlcmUuDQoNCj4gDQo+
+ID4gKy8qKg0KPiA+ICsgKiBkZXZtX2dwaW9kX2dldF9hcnJheSAtIFJlc291cmNlLW1hbmFnZWQg
+Z3Bpb2RfZ2V0X2FycmF5KCkNCj4gDQo+IEFuZCB0aGlzIGZ1bmN0aW9uIGlzIHN1cHBvc2VkIHRv
+IGJlIHJlc291cmNlIG1hbmFnZWQgZm9yIHN1cmUuDQoNClllcy4gVGhpcyBpcyB0aGUgc3RhbmRh
+cmQgY2FzZSB3aGVyZSBkZXZpY2Ugd2hpY2ggaGFzIHRoZSBjb25zdW1lciBkYXRhDQppcyBhbHNv
+IHRoZSBvbmUgd2hvICdtYW5hZ2VzJyB0aGUgR1BJTy4NCg0KPiANCj4gPiArICogQGRldjogICAg
+ICAgR1BJTyBjb25zdW1lcg0KPiA+ICsgKiBAY29uX2lkOiAgICBmdW5jdGlvbiB3aXRoaW4gdGhl
+IEdQSU8gY29uc3VtZXINCj4gPiArICogQGZsYWdzOiAgICAgb3B0aW9uYWwgR1BJTyBpbml0aWFs
+aXphdGlvbiBmbGFncw0KPiA+ICsgKg0KPiA+ICsgKiBNYW5hZ2VkIGdwaW9kX2dldF9hcnJheSgp
+LiBHUElPIGRlc2NyaXB0b3JzIHJldHVybmVkIGZyb20gdGhpcw0KPiA+IGZ1bmN0aW9uIGFyZQ0K
+PiA+ICsgKiBhdXRvbWF0aWNhbGx5IGRpc3Bvc2VkIG9uIGRyaXZlciBkZXRhY2guIFNlZSBncGlv
+ZF9nZXRfYXJyYXkoKQ0KPiA+IGZvciBkZXRhaWxlZA0KPiA+ICsgKiBpbmZvcm1hdGlvbiBhYm91
+dCBiZWhhdmlvciBhbmQgcmV0dXJuIHZhbHVlcy4NCj4gPiArICovDQo+ID4gK3N0cnVjdCBncGlv
+X2Rlc2NzICpfX211c3RfY2hlY2sgZGV2bV9ncGlvZF9nZXRfYXJyYXkoc3RydWN0IGRldmljZQ0K
+PiA+ICpkZXYsDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBjb25zdCBjaGFyDQo+ID4gKmNvbl9pZCwNCj4gPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVudW0NCj4gPiBncGlvZF9mbGFn
+cyBmbGFncykNCj4gPiArew0KPiA+ICsgICAgICAgcmV0dXJuIF9fZGV2bV9ncGlvZF9nZXRfYXJy
+YXkoZGV2LCBOVUxMLCBjb25faWQsIGZsYWdzKTsNCj4gDQo+IFNvIHdoYXQgaXMgdGhpcz8gTlVM
+TD8NCg0KSGVyZSB3ZSBkb24ndCBoYXZlIHNlcGFyYXRlIG1hbmFnZXIgZGV2aWNlIC0gdGh1cyB0
+aGUgbWFuYWdlciBpcyBOVUxMDQotYW5kIHRoZSBjb25zdW1lciBkZXZpY2UgKCJkZXYiIGhlcmUp
+IGlzIHdoYXQgd2UgdXNlIHRvIG1hbmFnZSBHUElPLg0KDQo+IA0KPiBEb2Vzbid0IHRoYXQgbWVh
+biB5b3UganVzdCByZW1vdmVkIGFsbCByZXNvdXJjZSBtYW5hZ2VtZW50IGZvciB0aGlzDQo+IGNh
+bGw/DQoNCk5vIDopDQoNCj4gDQo+IE9yIGFtIEkgcmVhZGluZyBpdCB3cm9uZz8NCg0KRWl0aGVy
+IHlvdSBhcmUgcmVhZGluZyBpdCB3cm9uZyBvciBJIGFtIHdyaXRpbmcgaXQgd3JvbmcgeEQuIElu
+IGFueQ0KY2FzZSB0aGlzIG1lYW5zIEkgbmVlZCB0byBkcm9wIGZldyBjb21tZW50cyBpbiBjb2Rl
+IDopIFRoYW5rcy4NCg0KQnIsDQoJTWF0dGkgVmFpdHRpbmVuDQoNCg==
