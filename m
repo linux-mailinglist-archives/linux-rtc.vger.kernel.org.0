@@ -2,68 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E939103C07
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Nov 2019 14:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BCB104D58
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Nov 2019 09:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730005AbfKTNjp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Nov 2019 08:39:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47510 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728748AbfKTNjo (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 20 Nov 2019 08:39:44 -0500
-Received: from localhost.localdomain (unknown [118.189.143.39])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 97F5222506;
-        Wed, 20 Nov 2019 13:39:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574257183;
-        bh=sUts0cXMAdfrDXI+3vnyBTJ7WISQ2WDFOrVCG2tEg2M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=relpmhSwilqmYbKwdHb20YfbjA1pbkoimU73eM9vr6yNJO/kUk16a1t+hhVmf3e3P
-         h19joR/n6+AVqnhVbLiBE0rav20o/KXGtOKdCZXgs/WgHhPIfzZ+YYe6xcKrb/t2Qy
-         6F3uGHm0xqsAxOSHTcJyAmhdGMkH6GTDKmm0YYII=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: Fix Kconfig indentation
-Date:   Wed, 20 Nov 2019 21:39:40 +0800
-Message-Id: <20191120133940.13881-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1727016AbfKUIJb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Nov 2019 03:09:31 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45203 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727014AbfKUIJb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Nov 2019 03:09:31 -0500
+Received: from erbse.hi.pengutronix.de ([2001:67c:670:100:9e5c:8eff:fece:cdfe])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <bst@pengutronix.de>)
+        id 1iXhWr-00043f-Vd; Thu, 21 Nov 2019 09:09:29 +0100
+Subject: Re: [PATCH V2] rtc: ds1307: Enable battery backup on RX8130
+To:     Marek Vasut <marex@denx.de>, linux-rtc@vger.kernel.org
+Cc:     Arnaud Ebalard <arno@natisbad.org>,
+        Alexandre Belloni <alexandre.belloni@free-electrons.com>
+References: <20190905130336.10651-1-marex@denx.de>
+From:   Bastian Krause <bst@pengutronix.de>
+Message-ID: <3c07a9d4-e28e-df67-8a0b-9a6db48a9dc4@pengutronix.de>
+Date:   Thu, 21 Nov 2019 09:09:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20190905130336.10651-1-marex@denx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:9e5c:8eff:fece:cdfe
+X-SA-Exim-Mail-From: bst@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-	$ sed -e 's/^        /\t/' -i */Kconfig
+On 9/5/19 3:03 PM, Marek Vasut wrote:
+> The battery backup can be disabled on this RTC, e.g. if populated right
+> out of production. Force the battery backup bit on to enable it.
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Arnaud Ebalard <arno@natisbad.org>
+> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> Cc: Bastian Krause <bst@pengutronix.de>
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/rtc/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Bastian Krause <bst@pengutronix.de>
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index c3c271c7431d..d77515d8382c 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1509,9 +1509,9 @@ config RTC_DRV_PXA
- 	depends on ARCH_PXA
- 	select RTC_DRV_SA1100
- 	help
--         If you say Y here you will get access to the real time clock
--         built into your PXA27x or PXA3xx CPU. This RTC is actually 2 RTCs
--         consisting of an SA1100 compatible RTC and the extended PXA RTC.
-+	 If you say Y here you will get access to the real time clock
-+	 built into your PXA27x or PXA3xx CPU. This RTC is actually 2 RTCs
-+	 consisting of an SA1100 compatible RTC and the extended PXA RTC.
- 
- 	 This RTC driver uses PXA RTC registers available since pxa27x
- 	 series (RDxR, RYxR) instead of legacy RCNR, RTAR.
+Regards,
+Bastian
+
+> ---
+> V2: Drop the custom offset, let regmap handle that
+> ---
+>  drivers/rtc/rtc-ds1307.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+> index 1f7e8aefc1eb..f2d1e59478c2 100644
+> --- a/drivers/rtc/rtc-ds1307.c
+> +++ b/drivers/rtc/rtc-ds1307.c
+> @@ -121,6 +121,8 @@ enum ds_type {
+>  #define RX8130_REG_FLAG_AF		BIT(3)
+>  #define RX8130_REG_CONTROL0		0x1e
+>  #define RX8130_REG_CONTROL0_AIE		BIT(3)
+> +#define RX8130_REG_CONTROL1		0x1f
+> +#define RX8130_REG_CONTROL1_INIEN	BIT(4)
+>  
+>  #define MCP794XX_REG_CONTROL		0x07
+>  #	define MCP794XX_BIT_ALM0_EN	0x10
+> @@ -1750,6 +1752,11 @@ static int ds1307_probe(struct i2c_client *client,
+>  				     DS1307_REG_HOUR << 4 | 0x08, hour);
+>  		}
+>  		break;
+> +	case rx_8130:
+> +		/* make sure that the backup battery is enabled */
+> +		regmap_write(ds1307->regmap, RX8130_REG_CONTROL1,
+> +			     RX8130_REG_CONTROL1_INIEN);
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> 
+
+
 -- 
-2.17.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
