@@ -2,108 +2,254 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B6D10725D
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2019 13:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79FE107AD1
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2019 23:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbfKVMqW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 22 Nov 2019 07:46:22 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:39678 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726716AbfKVMqW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Nov 2019 07:46:22 -0500
-Received: by mail-wr1-f65.google.com with SMTP id y11so5362250wrt.6;
-        Fri, 22 Nov 2019 04:46:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bDXNK5v9qKr7OQwTjxq99LXUWs6eeVepuS3dcsLFtW4=;
-        b=KQRc7C3C3W4oWTdKKQFt1duNp43vDWUBDrRy7K4xUZzxwE5/3K3pQV1f7S5lOS4QN5
-         LVUMD2p4rkzT2VaJ4eD0Whbg54UIeDGEmgrLtzzjuD4uRRh6ohbYwXcQ2fsDQ2jxy068
-         dIzGjNN2eBWyWmc2BRE599Pq8TuJ/wW6lX8IL6tDRFEeGi23bx+QHI+xLQRvNs05rH9n
-         c2Q+TuA5/l3kQHkRRAy9NYfQTzBi7gZtoBJu1LRTqHvLIjLzACB8orjGOmE6XpTEX2mK
-         kxL1Q+XQdHUGQEtZfz4s8mJqcImvL77qqOAGGkFWpf1dndmo5XaQWWLrr8w2pjoEUwJR
-         Qttw==
+        id S1726735AbfKVWsk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 22 Nov 2019 17:48:40 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39657 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbfKVWsj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Nov 2019 17:48:39 -0500
+Received: by mail-oi1-f195.google.com with SMTP id v138so7975609oif.6;
+        Fri, 22 Nov 2019 14:48:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bDXNK5v9qKr7OQwTjxq99LXUWs6eeVepuS3dcsLFtW4=;
-        b=sfZ2G0sDCulXJ13rvDdD9QgrTiTvf6flhjDuTLYUwsSYdv6p/IE164OIGGd01QYXcP
-         Gfq/X+EAaZxjEJxa5V6dEyfcHRrHZi7SP8ybawXZapDkueBCk8YyYA2CWUb1sAxYgnu7
-         pIE/Uew8VeIkMvOKlltRE9tvHrRVMEJuGTcwnmRcX3MtNEC1MEZMun3ECuoiN+eRqbqk
-         gNj48L4XlaFy4hhgUDMGW94i5tyYV3oVTWfHv063mAOnqQJ1p1nyzs9fq1iHYGJSemRi
-         X3jefQtJSOaiu0VT44fw4T8VIo8bUhkCH1Q3VxDzSXfHQ/G8411LYT19cp3cdlTyQq0I
-         EeYQ==
-X-Gm-Message-State: APjAAAVSTU5m3HLvnJKtBZ1BdVKpqoizvd2TVkOy3YKIgd/9Q5qDFXwq
-        Fu05Yeh/J7q6kVnYbtrYiv8=
-X-Google-Smtp-Source: APXvYqyGWX+rpJz20h7BkrtsSPSMbI2yhMEZ//p5Lx12ldQjaqQpRtHl1+9DJBO/Gk3XUoWVhM5xYQ==
-X-Received: by 2002:a5d:518c:: with SMTP id k12mr17605096wrv.104.1574426779895;
-        Fri, 22 Nov 2019 04:46:19 -0800 (PST)
-Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
-        by smtp.gmail.com with ESMTPSA id t16sm2669042wmt.38.2019.11.22.04.46.18
+        bh=rN+xXlHiqtwE2I732mBe4YEtOdoVVWt0shahQQ1i45E=;
+        b=nvP07f099V0+hP3fXH6zVK/mOSKBBJLgfTadVnJlsiBeRbjosOOjaer8+pYZRm+SDc
+         ZBjiNvpSpUGTlZko4lxD9FrthGYTpkvxvWG72WQA39j3bWTmtA0nrAZ0HWW1e/0VYCuP
+         PviO7EQBT7iB4j7qG5h9ACEk0zCB5skMa0km1clbsrHFU+N2t16N9Z0QYK1WXis4T+s1
+         eJO0YCsvKkxDw9DAfmW50JGhwdoFU0LydaMOraR+XWzJPULs6DJh9iq23qVAeldNLTbs
+         YNaT8fcKZ1UQFMYWcti4Ig0m3Vj5j7DpY2d1vC9rRkOIbYAwgAIc7kABfz6nE4Ou417p
+         aFow==
+X-Gm-Message-State: APjAAAUma2TtgRmMWjQ2OP46EPkekrT9BpbeReldV1eX9uMiZlyWiuaS
+        S/t3VvHOTLCKRFr4ykdnog==
+X-Google-Smtp-Source: APXvYqwqXhlYdVOA8XmvWt0YO3nV0XXcoxh6FqvqjrFA1/yoNOu5VtpLAI7i/HQFdZ5mkGPvM/Umjw==
+X-Received: by 2002:aca:b10a:: with SMTP id a10mr14438745oif.26.1574462918016;
+        Fri, 22 Nov 2019 14:48:38 -0800 (PST)
+Received: from localhost ([2607:fb90:bde:716a:c9ec:246b:67b7:9768])
+        by smtp.gmail.com with ESMTPSA id 4sm2676245otc.77.2019.11.22.14.48.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2019 04:46:18 -0800 (PST)
-Date:   Fri, 22 Nov 2019 13:46:17 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH 7/8] rtc: tegra: remove set but unused variable
-Message-ID: <20191122124617.GA1315704@ulmo>
-References: <20191122102212.400158-1-alexandre.belloni@bootlin.com>
- <20191122102212.400158-8-alexandre.belloni@bootlin.com>
+        Fri, 22 Nov 2019 14:48:36 -0800 (PST)
+Date:   Fri, 22 Nov 2019 16:48:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Nicholas Mc Guire <hofrat@osadl.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
+ regulator bindings
+Message-ID: <20191122224834.GA9158@bogus>
+References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+ <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191122102212.400158-8-alexandre.belloni@bootlin.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---ZGiS0Q5IWpPtfppv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 22, 2019 at 11:22:11AM +0100, Alexandre Belloni wrote:
-> Fix the following warning:
-> drivers/rtc/rtc-tegra.c: In function =E2=80=98tegra_rtc_read_time=E2=80=
-=99:
-> drivers/rtc/rtc-tegra.c:106:11: warning: variable =E2=80=98msec=E2=80=99 =
-set but not used [-Wunused-but-set-variable]
->=20
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Mon, Nov 18, 2019 at 08:53:57AM +0200, Matti Vaittinen wrote:
+> Document ROHM BD71828 PMIC regulator device tree bindings.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 > ---
->  drivers/rtc/rtc-tegra.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> No changes from v4
+> 
+>  .../regulator/rohm,bd71828-regulator.yaml     | 122 ++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+> new file mode 100644
+> index 000000000000..c23ec4d8584b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+> @@ -0,0 +1,122 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Please dual license new bindings:
 
---ZGiS0Q5IWpPtfppv
-Content-Type: application/pgp-signature; name="signature.asc"
+(GPL-2.0-only OR BSD-2-Clause)
 
------BEGIN PGP SIGNATURE-----
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/rohm,bd71828-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ROHM BD71828 Power Management Integrated Circuit regulators
+> +
+> +maintainers:
+> +  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +
+> +description: |
+> +  This module is part of the ROHM BD71828 MFD device. For more details
+> +  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
+> +
+> +  The regulator controller is represented as a sub-node of the PMIC node
+> +  on the device tree.
+> +
+> +  Regulator nodes should be named to BUCK_<number> and LDO_<number>.
+> +  The valid names for BD71828 regulator nodes are
+> +  BUCK1, BUCK2, BUCK3, BUCK4, BUCK5, BUCK6, BUCK7
+> +  LDO1, LDO2, LDO3, LDO4, LDO5, LDO6, LDO7
+> +
+> +patternProperties:
+> +  "^LDO[1-7]$":
+> +    type: object
+> +    allOf:
+> +      - $ref: regulator.yaml#
+> +    description:
+> +      Properties for single LDO regulator.
+> +
+> +    properties:
+> +      #Is there a nice way to check the name is same as node name but lower case
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl3X2I8ACgkQ3SOs138+
-s6FlCw//ce/vcaSSR1eDEaIkl+t8qLZ/7jPZ2XG4Qurs6y0mO7DOM8rIYY8JYT3p
-r6xx3tL59DWK4q5JM/As+n/aCnltdeP7/N4zYAX4OqBnmCuXFVwMJKVI+6dKYMuS
-CEeb7U/gjWGy+cT8sgRTDYu9JdHaBrLVthJ+egI9HCZwXsssuWbsCPtqgotJwrgY
-a3gnytR4C44HSxpl80j94rH6kMbbOxoJ88Wt3b1BxVbpixMISeXdDWvbPjQOsyWG
-LyYex1CLjoh/xIXKArNQ3kcyGUtMWvVaUzFwZNYS7NSTSKeEtJLjTQz2s+iHueIv
-VR4OPuQ5MM8JHJea1gCCBeuzamu5HjI8lCV4L+rcZre3pGKhYiXy22UwQUCRb54W
-sfi7HSvA32cfeCAOJW3BeuAznILWOnRtypqQqb4pNA1e+I8J3P/WllLNYI4sImXi
-etjgaGB1Qi15GR/Do/CjN03GS0wq/qgXbmyjnln4sOHsVEtRnm7jv9lcedkvlKeq
-Ps26vJC6NV9dw5OVV8Zr6uI3fk7VjThsnvAyqwY+FpurbQrbanQKWrA8mZpzYDV2
-Ytbv5ftlO0dRlGlhOgH2YWUpVYBAOifOHlKvRl5PatA6MaFhTYCithXJd33P++TY
-ev8YnqXS41FTDoDUG0uuk5g2m0+AtiCN8lGKspYOO9YVdhm/4x8=
-=Lkzk
------END PGP SIGNATURE-----
+Nope.
 
---ZGiS0Q5IWpPtfppv--
+Why not make the node names lower case? That's the preference though 
+the regulator binding is special.
+
+> +      regulator-name:
+> +        pattern: "^ldo[1-7]$"
+> +        description:
+> +          should be "ldo1", ..., "ldo7"
+> +
+> +  "^BUCK[1-7]$":
+> +    type: object
+> +    allOf:
+> +      - $ref: regulator.yaml#
+> +    description:
+> +      Properties for single BUCK regulator.
+> +
+> +    properties:
+> +      #Is there a nice way to check the name is same as node name but lower case
+> +      regulator-name:
+> +        pattern: "^buck[1-7]$"
+> +        description:
+> +          should be "buck1", ..., "buck7"
+> +
+> +      rohm,dvs-run-voltage:
+> +        allOf:
+> +          - $ref: "/schemas/types.yaml#/definitions/uint32"
+> +          - minimum: 0
+> +            maximum: 3300000
+> +        description:
+> +          PMIC default "RUN" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +
+> +      rohm,dvs-idle-voltage:
+> +        allOf:
+> +          - $ref: "/schemas/types.yaml#/definitions/uint32"
+> +          - minimum: 0
+> +            maximum: 3300000
+> +        description:
+> +          PMIC default "IDLE" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +
+> +      rohm,dvs-suspend-voltage:
+> +        allOf:
+> +          - $ref: "/schemas/types.yaml#/definitions/uint32"
+> +          - minimum: 0
+> +            maximum: 3300000
+> +        description:
+> +          PMIC default "SUSPEND" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +
+> +      rohm,dvs-lpsr-voltage:
+> +        allOf:
+> +          - $ref: "/schemas/types.yaml#/definitions/uint32"
+> +          - minimum: 0
+> +            maximum: 3300000
+> +        description:
+> +          PMIC default "LPSR" state voltage in uV. See below table for
+> +          bucks which support this. 0 means disabled.
+> +
+> +#Supported default DVS states:
+> +#buck		| run		| idle		| suspend	| lpsr
+> +#----------------------------------------------------------------------------
+> +#1, 2, 6, and 7	| supported	| supported	| 	supported (*)
+> +#----------------------------------------------------------------------------
+> +#3, 4, and 5	| 			supported (**)
+> +#----------------------------------------------------------------------------
+> +#(*)  LPSR and SUSPEND states use same voltage but both states have own enable /
+> +#     disable settings. Voltage 0 can be specified for a state to make regulator
+> +#     disabled on that state.
+> +#(**) All states use same voltage but have own enable / disable settings.
+> +#     Voltage 0 can be specified for a state to make regulator disabled on that
+> +#     state.
+
+Would be nicer if indented to the same level.
+
+> +
+> +      rohm,dvs-runlvl-ctrl:
+> +        description: |
+> +          buck control is done based on run-level. Regulator is not
+> +          individually controllable. See ../mfd/rohm,bd71828-pmic.yaml for
+> +          how to specify run-level control mechanism. Only bucks 1, 2, 6
+> +          and 7 support this.
+> +        type: boolean
+> +
+> +      rohm,dvs-runlevel-microvolts:
+> +        minimum: 0
+> +        maximum: 2000000
+> +        maxItems: 4
+
+Mixing array and scalar constraints.
+
+maxItems: 4
+items:
+  minimum: 0
+  maximum: 2000000
+
+
+> +        description:
+> +          Array of voltages for run-levels. First value is for run-level 0,
+> +          second for run-level 1 etc. Microvolts.
+> +
+> +    required:
+> +      - regulator-name
+> +  additionalProperties: false
+> +additionalProperties: false
+> -- 
+> 2.21.0
+> 
+> 
+> -- 
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+> 
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =] 
