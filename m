@@ -2,86 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9918A106933
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2019 10:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272621069D6
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Nov 2019 11:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfKVJsK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 22 Nov 2019 04:48:10 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59467 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726500AbfKVJsJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Nov 2019 04:48:09 -0500
-Received: from erbse.hi.pengutronix.de ([2001:67c:670:100:9e5c:8eff:fece:cdfe])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <bst@pengutronix.de>)
-        id 1iY5Xs-0006ul-IO; Fri, 22 Nov 2019 10:48:08 +0100
-Subject: Re: [PATCH V2] rtc: ds1307: Enable battery backup on RX8130
-To:     Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Cc:     Marek Vasut <marex@denx.de>, linux-rtc@vger.kernel.org,
-        Arnaud Ebalard <arno@natisbad.org>, kernel@pengutronix.de
-References: <20190905130336.10651-1-marex@denx.de>
- <3c07a9d4-e28e-df67-8a0b-9a6db48a9dc4@pengutronix.de>
- <ed1ef0a9-ff99-f986-8b9a-e2329bc82761@denx.de>
- <55288b3f-64e6-7ddb-3bcb-3418c976c59c@pengutronix.de>
- <20191121161303.GD299836@piout.net>
-From:   Bastian Krause <bst@pengutronix.de>
-Message-ID: <b3cb28a9-6e3f-56fa-39c3-88ab73634a76@pengutronix.de>
-Date:   Fri, 22 Nov 2019 10:48:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726568AbfKVKW3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 22 Nov 2019 05:22:29 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:37435 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726563AbfKVKW3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Nov 2019 05:22:29 -0500
+X-Originating-IP: 92.184.97.94
+Received: from localhost (unknown [92.184.97.94])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 546921BF214;
+        Fri, 22 Nov 2019 10:22:27 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 0/8] rtc: fix W=1 warnings and errors
+Date:   Fri, 22 Nov 2019 11:22:04 +0100
+Message-Id: <20191122102212.400158-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191121161303.GD299836@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:9e5c:8eff:fece:cdfe
-X-SA-Exim-Mail-From: bst@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/21/19 5:39 PM, Alexandre Belloni wrote:
-> On 21/11/2019 09:21:49+0100, Bastian Krause wrote:
->>
->> On 11/21/19 9:14 AM, Marek Vasut wrote:
->>> On 11/21/19 9:09 AM, Bastian Krause wrote:
->>>> On 9/5/19 3:03 PM, Marek Vasut wrote:
->>>>> The battery backup can be disabled on this RTC, e.g. if populated right
->>>>> out of production. Force the battery backup bit on to enable it.
->>>>>
->>>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>>> Cc: Arnaud Ebalard <arno@natisbad.org>
->>>>> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
->>>>> Cc: Bastian Krause <bst@pengutronix.de>
->>>>
->>>> Reviewed-by: Bastian Krause <bst@pengutronix.de>
->>>>
->>>
->>> I recall there was some comment about setting BIT(5) as well,
->>> RX8130_REG_CONTROL1_CHGEN , can you check that ?
->>
->> RX8130_REG_CONTROL1_CHGEN decides whether the battery or the supercap
->> should be charged or not. I think this patch is okay as is. I'll send a
->> follow-up patch which will set RX8130_REG_CONTROL1_CHGEN depending on a
->> new dt-binding "epson,backup-battery-chargeable" once this one is applied.
->>
-> 
-> You need to have a generic RTC property, either reuse
-> trickle-diode-disable (I know the name is a bit unfortunate but that is
-> waht we have) or have a new property stating that the auxiliary voltage
-> is chargeable. using battery in the name is probably not wise because
-> this may as well be a supercap.
+This series fixes kerneldoc and unused variables issues detected when
+using W=1.
 
-Alright, thanks for the suggestion. I will incorporate into the patch.
+Alexandre Belloni (8):
+  rtc: sysfs: fix hctosys_show kerneldoc
+  rtc: ds1374: remove unused variable
+  rtc: ds1685: remove set but unused variables
+  rtc: ds1685: fix build error with make W=1
+  rtc: m41t80: remove excess kerneldoc
+  rtc: pm8xxx: update kerneldoc for struct pm8xxx_rtc
+  rtc: tegra: remove set but unused variable
+  rtc: v3020: remove set but unused variable
 
-Regards,
-Bastian
+ drivers/rtc/rtc-ds1374.c |  3 +--
+ drivers/rtc/rtc-ds1685.c | 12 +++++-------
+ drivers/rtc/rtc-m41t80.c |  1 -
+ drivers/rtc/rtc-pm8xxx.c |  2 +-
+ drivers/rtc/rtc-tegra.c  |  4 ++--
+ drivers/rtc/rtc-v3020.c  |  3 +--
+ drivers/rtc/sysfs.c      |  5 ++++-
+ 7 files changed, 14 insertions(+), 16 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.23.0
+
