@@ -2,174 +2,172 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9726010C753
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Nov 2019 11:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D75B10CC72
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Nov 2019 17:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfK1K6D (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Nov 2019 05:58:03 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:45245 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726191AbfK1K6D (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Nov 2019 05:58:03 -0500
-Received: from localhost (lfbn-1-1480-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id AA691200021;
-        Thu, 28 Nov 2019 10:57:53 +0000 (UTC)
-Date:   Thu, 28 Nov 2019 11:57:51 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     lee.jones@linaro.org, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        phh@phh.me, b.galvani@gmail.com, stefan@agner.ch,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v2 5/5] rtc: rtc-rc5t619: add ricoh rc5t619 RTC driver
-Message-ID: <20191128105751.GM299836@piout.net>
-References: <20191031213835.11390-1-andreas@kemnade.info>
- <20191031213835.11390-6-andreas@kemnade.info>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191031213835.11390-6-andreas@kemnade.info>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1726569AbfK1QEW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Nov 2019 11:04:22 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:45060 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbfK1QEW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Nov 2019 11:04:22 -0500
+Received: by mail-qk1-f194.google.com with SMTP id x1so8391479qkl.12
+        for <linux-rtc@vger.kernel.org>; Thu, 28 Nov 2019 08:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=J1Wqf15Iqmyuyh56cgyHRZJp3Hgujck0x+MYQFJQgzY=;
+        b=pv9651yDY5NzgOVa9fKXkrrZTF43xkgIiLfyTkzQS7M6kj6RZjxPfWHbsMZMNmQ0O8
+         EaMICdIW3ZUwq/ykyNPwdwlh3vh+YXaMyc2rgi0Na2tB0g4deWPeOPsUlHU0tsAjB+z3
+         Zl7/ow5DhXpzQ9pipHj34+MRahTdgCvc1TmeqoFfv/LRl4IP4FFP4dWYxEm12qRkOyZH
+         o/FwOX4qluejk6YSBstwR13syMRmmposewQouoJyAgwAy1VJ66CKoZgSluHIyYzKgy1F
+         26oJq/emsw8tUtIe54u50pI5nI62kPkURcL+31o/JC8yeRvPlNRsg2MUhKBObMVjmgSp
+         aYzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=J1Wqf15Iqmyuyh56cgyHRZJp3Hgujck0x+MYQFJQgzY=;
+        b=l2ixRX2IVXQJYzVZKKd2iU3BHO4ZodzrABfWZtLjQFE/az1NgRtR+gQfhon5NhrQ89
+         YDAWAvrYYAabvMkz5jr4WK7bTCIVjsM9mdl1JD+gOt1reIPTcaVoHp6YHQzV8BVW+XIz
+         HtlL5rISp1DZ/0aK8/dEhK9SES/5x5oPZ5cpbgyyz+SI3PNshViP6xxksllATCQqKmMf
+         lEIpgbwAb8fXfmZJoN9wUatpc0cuVzmqa5y7RMuyNkLz3mEBL+64eFdwJ8Sx4fJdvXYD
+         bGAQo0lBMZ/Gp3z3V7101BfYi3JI4U4YGuQ7h/4dR1o3XU7sUaJ32CqyzZeknNApWXJI
+         YSsw==
+X-Gm-Message-State: APjAAAVjmhaEXp7+Qh1VHyekNiPhDu7KnYIkc7arVpPIFuWB+g7dcsKd
+        5er1L9t5SkThMTYpjeCXsjODBoNRkGk6MA==
+X-Google-Smtp-Source: APXvYqzDRfMXeBD33YSmCQTcR3ARztThKKh11dXmadFlHuBNGtABcdLm6byLC25lHq0K+Ibm4B2FNg==
+X-Received: by 2002:ae9:e704:: with SMTP id m4mr10672281qka.153.1574957060775;
+        Thu, 28 Nov 2019 08:04:20 -0800 (PST)
+Received: from jfdmac.sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
+        by smtp.gmail.com with ESMTPSA id o70sm8763985qke.47.2019.11.28.08.04.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Nov 2019 08:04:20 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH 2/2] rtc: zynqmp: fix invalid read_time before 1 second
+From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+In-Reply-To: <ca78b7e6-a0c3-745b-1533-6b8424d97623@xilinx.com>
+Date:   Thu, 28 Nov 2019 11:04:19 -0500
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        Srinivas Goud <sgoud@xilinx.com>, git@xilinx.com,
+        linux-rtc@vger.kernel.org, champagne.guillaume.c@gmail.com,
+        =?utf-8?Q?Maxime_Roussin-B=C3=A9langer?= 
+        <maxime.roussinbelanger@gmail.com>,
+        Mathieu Gallichand <Mathieu.Gallichand@Sonatest.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CD70064B-5087-4A0F-9197-1F4A3DAA8B50@gmail.com>
+References: <20191128015613.10003-1-jeff.dagenais@gmail.com>
+ <20191128015613.10003-2-jeff.dagenais@gmail.com>
+ <ca78b7e6-a0c3-745b-1533-6b8424d97623@xilinx.com>
+To:     Michal Simek <michal.simek@xilinx.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+Hi Michal, all,
 
-checkpatch.pl --strict complains about multiple blank lines and alignment.
+> On Nov 28, 2019, at 03:19, Michal Simek <michal.simek@xilinx.com> =
+wrote:
+>=20
+>> in CURRENT_TIME and proceeds to use SET_TIME_READ (RTC_SET_TM_RD in =
+the
+>> code). This register contains garbage at this moment and this is
+>> returned as the current time.
+>=20
+> How did you test this?
 
-On 31/10/2019 22:38:35+0100, Andreas Kemnade wrote:
-> +static int rc5t619_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct rn5t618 *rn5t618 = dev_get_drvdata(pdev->dev.parent);
-> +	struct rc5t619_rtc *rtc;
-> +	uint8_t alarm_flag;
-> +	unsigned int ctrl2;
-> +	int err;
-> +
-> +	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
-> +	if (IS_ERR(rtc)) {
-> +		err = PTR_ERR(rtc);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	rtc->rn5t618 = rn5t618;
-> +
-> +	dev_set_drvdata(dev, rtc);
-> +	rtc->irq = -1;
-> +
-> +	if (rn5t618->irq_data)
-> +		rtc->irq = regmap_irq_get_virq(rn5t618->irq_data,
-> +				RN5T618_IRQ_RTC);
-> +
-> +	if (rtc->irq  < 0) {
-> +		dev_err(dev, "no irq specified, wakeup is disabled\n");
+Remember the linux trampoline code... jumping from FSBL to the kernel =
+without
+u-boot? Well, got it working and it speeds our boot substantially. This =
+means we
+now reach rtc-zynqmp.c's probe within one second of power on. When we =
+boot the
+board without a psbatt, and no internet connection (which means
+systemd-timesyncd cannot fix the bunkers date), we were ending up with a =
+date in
+the very distant future (>50 years into the future). Aside from the date =
+in our
+UI, all our SSL connections were failing because of certificate dates. =
+This got
+our attention.
 
-I don't think it is worth having an error message here, especially since
-you have a second one later.
+We drilled down quite a lot to find the real root cause. We used JTAG =
+with xsct
+with our board simply powered on but not booted (bootselect SD without =
+an SD
+card). This means no FSBL/psu_init code has run.
 
-> +		rtc->irq = -1;
-> +	}
-> +
-> +	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &ctrl2);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	/* get interrupt flag */
-> +	err = rc5t619_rtc_alarm_is_enabled(dev, &alarm_flag);
-> +	if (err)
-> +		return err;
-> +
-> +	/* disable rtc periodic function */
-> +	err = rc5t619_rtc_periodic_disable(&pdev->dev);
-> +	if (err)
-> +		return err;
-> +
-> +	/* disable interrupt */
-> +	err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-> +	if (err)
-> +		return err;
+Exhibit A:
 
-Is it really useful to disable the alarm to reenable them later?
+xsct% rrd rtc
+     set_time_write                  set_time_read: 00000000
+        calib_write                     calib_read: 00000000
+       current_time: 00000000                alarm: 00000000
+     rtc_int_status:       00         rtc_int_mask:       03
+         rtc_int_en                    rtc_int_dis
+         addr_error:       00  addr_error_int_mask:       01
+  addr_error_int_en             addr_error_int_dis
+            control: 01000000           safety_chk: 00000000
 
-> +
-> +	if (ctrl2 & CTRL2_PON) {
-> +		alarm_flag = 0;
-> +		err = rc5t619_rtc_alarm_flag_clr(&pdev->dev);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +
 
-Please remove this blank line.
+Then we enable the RTC:
 
-> +	if (IS_ERR(rtc->rtc)) {
-> +		err = PTR_ERR(rtc->rtc);
-> +		dev_err(dev, "RTC device register: err %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	rtc->rtc->ops = &rc5t619_rtc_ops;
-> +	rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
-> +	rtc->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	/* set interrupt and enable it */
-> +	if (rtc->irq != -1) {
-> +		device_init_wakeup(&pdev->dev, 1);
-> +
-> +		err = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-> +						rc5t619_rtc_irq,
-> +						IRQF_ONESHOT,
-> +						"rtc-rc5t619",
-> +						&pdev->dev);
-> +		if (err < 0) {
-> +			dev_err(&pdev->dev, "request IRQ:%d fail\n", rtc->irq);
-> +			rtc->irq = -1;
-> +
-> +			err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-> +			if (err)
-> +				return err;
-> +
-> +		} else {
-> +			/* enable wake */
+xsct% rwr rtc control 0x81000000
 
-I think you should move device_init_wakeup() here, unless your parse the
-wakeup-source property.
+The counter now counts, set_time_read and calib_read are garbage:
+xsct% rrd rtc
+     set_time_write                  set_time_read: fffe6bff
+        calib_write                     calib_read: 000f7fff
+       current_time: 00000002                alarm: 00000000
+     rtc_int_status:       01         rtc_int_mask:       03
+         rtc_int_en                    rtc_int_dis
+         addr_error:       00  addr_error_int_mask:       01
+  addr_error_int_en             addr_error_int_dis
+            control: 81000000           safety_chk: 00000000
+xsct% rrd rtc
+     set_time_write                  set_time_read: fffe6bff
+        calib_write                     calib_read: 000f7fff
+       current_time: 00000005                alarm: 00000000
+     rtc_int_status:       01         rtc_int_mask:       03
+         rtc_int_en                    rtc_int_dis
+         addr_error:       00  addr_error_int_mask:       01
+  addr_error_int_en             addr_error_int_dis
+            control: 81000000           safety_chk: 00000000
+xsct% rrd rtc
+     set_time_write                  set_time_read: fffe6bff
+        calib_write                     calib_read: 000f7fff
+       current_time: 00000008                alarm: 00000000
+     rtc_int_status:       01         rtc_int_mask:       03
+         rtc_int_en                    rtc_int_dis
+         addr_error:       00  addr_error_int_mask:       01
+  addr_error_int_en             addr_error_int_dis
+            control: 81000000           safety_chk: 00000000
 
-> +			enable_irq_wake(rtc->irq);
-> +			/* enable alarm_d */
-> +			err = rc5t619_rtc_alarm_enable(&pdev->dev, alarm_flag);
-> +			if (err) {
-> +				dev_err(&pdev->dev, "failed rtc setup\n");
-> +				return -EBUSY;
-> +			}
-> +		}
-> +	} else {
-> +		/* system don't want to using alarm interrupt, so close it */
-> +		err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-> +		if (err) {
-> +			dev_err(&pdev->dev, "disable rtc alarm error\n");
+We tested further, inserted a psbatt, enabled the RTC, but never touched
+set_time_write. Powered our board on and off. The observations is that =
+that
+set_time_read and calib_read registers are not initialized to 0x0 upon =
+power on.
+Once set though, they keep their values as long as the system is powered =
+on or
+psbatt keeps the RTC alive. This is a contradiction of the register POR =
+values
+specification.
 
-I don't think this message is necessary.
+So for rtc-zynqmp.c, it means that using the set_time_read register is a =
+bad
+idea unless the code can definitely say that the set_time_write has been =
+written
+to. And this is exactly what our patch does, by use of the seconds =
+interrupt
+being enabled which signals the read_time() function that there is a =
+pending
+write, and therefore the set_time_read can reliably be read.
 
-> +			return err;
-> +		}
-> +
-> +		dev_err(&pdev->dev, "ricoh61x interrupt is disabled\n");
+Hope this helps!
 
-Maybe dev_warn as the driver just continues on.
-
-> +	}
-> +
-> +	return rtc_register_device(rtc->rtc);
-> +}
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
