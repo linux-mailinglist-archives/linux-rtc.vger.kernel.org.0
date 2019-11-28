@@ -2,26 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 398C710ABB8
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Nov 2019 09:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C4E10C202
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Nov 2019 02:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfK0I3j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 27 Nov 2019 03:29:39 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:39463 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbfK0I3j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 27 Nov 2019 03:29:39 -0500
-Received: from localhost (lfbn-1-1480-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 93296240007;
-        Wed, 27 Nov 2019 08:29:36 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc: interface fix kerneldoc comments
-Date:   Wed, 27 Nov 2019 09:29:32 +0100
-Message-Id: <20191127082932.666869-1-alexandre.belloni@bootlin.com>
+        id S1728315AbfK1B4o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 27 Nov 2019 20:56:44 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:46314 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727432AbfK1B4o (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 27 Nov 2019 20:56:44 -0500
+Received: by mail-qv1-f66.google.com with SMTP id w11so9709272qvu.13
+        for <linux-rtc@vger.kernel.org>; Wed, 27 Nov 2019 17:56:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UT47JVtv6T5wr+7MLrmWqlrQXnuUlrgJNXN7E5T5sys=;
+        b=HCHAanvEibF4gLoVTZEabDNNsQ+jkOCBde/T5I5Su82NoeZxwYeCe17HQNBAd5ilPo
+         6b8uq1gJm0emuK2Ienir+jwuIVruASZrMe6giRNJus/WPbkMyssAoWmTpZg0ePanUcxd
+         cvp1yb/pLNWwdYs7a+SJCf7u6HPirQz755QbUY3hAq1At7olBhnzUNtb5Kesz0FtrlDh
+         fDXPA5YrWjfqXqKVmzVkDHbbhhrK4XYNPUGSbB5emPAoPOhztNGaSdGABkSuX9qeY0IB
+         +UCOFjB1QNt/9DGVwQ2ip8rTJp56g2WhCxtWotuK6YjPIb42Dcpp528AmCoZ0J0Y7ARR
+         ADeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UT47JVtv6T5wr+7MLrmWqlrQXnuUlrgJNXN7E5T5sys=;
+        b=USNpnfTnTanjaEagMrmUzZTD+6S3Whhf3ybQQwWH8TpuaoBbWHqQ67tk3Er8La0YmC
+         1jQA561I8zMLduOqwFkkho9ugj4eTEyjexrq6xnIlrjiGGbHlTB1VFCfOKOmlIw+nKpF
+         fajraBvmE7QVw1GQanrPtpy3hn7JSdyPTijge1PEi5MnQdHBjybLdGOeH9R9FyvWOOAK
+         c5Bq9dwmOHMCnsO3+XnyYzR1Tvv1FKk/5I4b0wvav/YlpxAcDwEKXKn0f1hex5/S+JaO
+         2jt6gXTHt+sJstmv5mfh2zd6GKme6i7seMtKXzUThyHxsaGsgkf683XjvYAVDoF9KG0R
+         fKHQ==
+X-Gm-Message-State: APjAAAX3nHRoX55NkBE92+K3Pgsa6eWUuy2I+yve1lw9ixmnunj6q5si
+        tdWmyoXoiZ10mcgQglS5FKU=
+X-Google-Smtp-Source: APXvYqzKsiYoMGLbxLXyn+006SMyekaUrqoQqT+kINo7IudkHkLJMXyhfs77JG4zKadUEQHslaxzZg==
+X-Received: by 2002:a0c:d6c8:: with SMTP id l8mr8635589qvi.44.1574906202287;
+        Wed, 27 Nov 2019 17:56:42 -0800 (PST)
+Received: from jfddesk.Sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
+        by smtp.gmail.com with ESMTPSA id m27sm9064572qta.21.2019.11.27.17.56.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 27 Nov 2019 17:56:41 -0800 (PST)
+From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     git@xilinx.com, linux-rtc@vger.kernel.org, michal.simek@xilinx.com,
+        champagne.guillaume.c@gmail.com, maxime.roussinbelanger@gmail.com,
+        Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+Subject: [PATCH 1/2] rtc: zynqmp: re-use rtc_time64_to_tm operation
+Date:   Wed, 27 Nov 2019 20:56:12 -0500
+Message-Id: <20191128015613.10003-1-jeff.dagenais@gmail.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -30,92 +60,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Fix kerneldoc warnings:
+This allows a subsequent commit to spin_unlock sooner.
 
-drivers/rtc/interface.c:619: warning: Function parameter or member 'num' not described in 'rtc_handle_legacy_irq'
-drivers/rtc/interface.c:619: warning: Function parameter or member 'mode' not described in 'rtc_handle_legacy_irq'
-drivers/rtc/interface.c:804: warning: Function parameter or member 'rtc' not described in 'rtc_timer_enqueue'
-drivers/rtc/interface.c:804: warning: Function parameter or member 'timer' not described in 'rtc_timer_enqueue'
-drivers/rtc/interface.c:864: warning: Function parameter or member 'rtc' not described in 'rtc_timer_remove'
-drivers/rtc/interface.c:864: warning: Function parameter or member 'timer' not described in 'rtc_timer_remove'
-drivers/rtc/interface.c:900: warning: Function parameter or member 'work' not described in 'rtc_timer_do_work'
-drivers/rtc/interface.c:1035: warning: Function parameter or member 'rtc' not described in 'rtc_read_offset'
-drivers/rtc/interface.c:1035: warning: Function parameter or member 'offset' not described in 'rtc_read_offset'
-drivers/rtc/interface.c:1070: warning: Function parameter or member 'rtc' not described in 'rtc_set_offset'
-drivers/rtc/interface.c:1070: warning: Function parameter or member 'offset' not described in 'rtc_set_offset'
-
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Jean-Francois Dagenais <jeff.dagenais@gmail.com>
 ---
- drivers/rtc/interface.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-zynqmp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index bd8034b7bc93..794a4f036b99 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -610,6 +610,8 @@ EXPORT_SYMBOL_GPL(rtc_update_irq_enable);
- /**
-  * rtc_handle_legacy_irq - AIE, UIE and PIE event hook
-  * @rtc: pointer to the rtc device
-+ * @num: number of occurence of the event
-+ * @mode: type of the event, RTC_AF, RTC_UF of RTC_PF
-  *
-  * This function is called when an AIE, UIE or PIE mode interrupt
-  * has occurred (or been emulated).
-@@ -790,8 +792,8 @@ int rtc_irq_set_freq(struct rtc_device *rtc, int freq)
+diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
+index 2c762757fb54..cb78900ec1f5 100644
+--- a/drivers/rtc/rtc-zynqmp.c
++++ b/drivers/rtc/rtc-zynqmp.c
+@@ -94,7 +94,7 @@ static int xlnx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 		 * RTC has updated the CURRENT_TIME with the time written into
+ 		 * SET_TIME_WRITE register.
+ 		 */
+-		rtc_time64_to_tm(readl(xrtcdev->reg_base + RTC_CUR_TM), tm);
++		read_time = readl(xrtcdev->reg_base + RTC_CUR_TM);
+ 	} else {
+ 		/*
+ 		 * Time written in SET_TIME_WRITE has not yet updated into
+@@ -104,8 +104,8 @@ static int xlnx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 		 * reading.
+ 		 */
+ 		read_time = readl(xrtcdev->reg_base + RTC_SET_TM_RD) - 1;
+-		rtc_time64_to_tm(read_time, tm);
+ 	}
++	rtc_time64_to_tm(read_time, tm);
  
- /**
-  * rtc_timer_enqueue - Adds a rtc_timer to the rtc_device timerqueue
-- * @rtc rtc device
-- * @timer timer being added.
-+ * @rtc: rtc device
-+ * @timer: timer being added.
-  *
-  * Enqueues a timer onto the rtc devices timerqueue and sets
-  * the next alarm event appropriately.
-@@ -850,8 +852,8 @@ static void rtc_alarm_disable(struct rtc_device *rtc)
- 
- /**
-  * rtc_timer_remove - Removes a rtc_timer from the rtc_device timerqueue
-- * @rtc rtc device
-- * @timer timer being removed.
-+ * @rtc: rtc device
-+ * @timer: timer being removed.
-  *
-  * Removes a timer onto the rtc devices timerqueue and sets
-  * the next alarm event appropriately.
-@@ -888,8 +890,7 @@ static void rtc_timer_remove(struct rtc_device *rtc, struct rtc_timer *timer)
- 
- /**
-  * rtc_timer_do_work - Expires rtc timers
-- * @rtc rtc device
-- * @timer timer being removed.
-+ * @work: work item
-  *
-  * Expires rtc timers. Reprograms next alarm event if needed.
-  * Called via worktask.
-@@ -1022,8 +1023,8 @@ void rtc_timer_cancel(struct rtc_device *rtc, struct rtc_timer *timer)
- 
- /**
-  * rtc_read_offset - Read the amount of rtc offset in parts per billion
-- * @ rtc: rtc device to be used
-- * @ offset: the offset in parts per billion
-+ * @rtc: rtc device to be used
-+ * @offset: the offset in parts per billion
-  *
-  * see below for details.
-  *
-@@ -1051,8 +1052,8 @@ int rtc_read_offset(struct rtc_device *rtc, long *offset)
- 
- /**
-  * rtc_set_offset - Adjusts the duration of the average second
-- * @ rtc: rtc device to be used
-- * @ offset: the offset in parts per billion
-+ * @rtc: rtc device to be used
-+ * @offset: the offset in parts per billion
-  *
-  * Some rtc's allow an adjustment to the average duration of a second
-  * to compensate for differences in the actual clock rate due to temperature,
+ 	return 0;
+ }
 -- 
 2.23.0
 
