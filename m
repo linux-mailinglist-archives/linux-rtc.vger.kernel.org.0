@@ -2,160 +2,123 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F02F10D578
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2019 13:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1863A10D73F
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2019 15:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbfK2MJ2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 29 Nov 2019 07:09:28 -0500
-Received: from foss.arm.com ([217.140.110.172]:46922 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726360AbfK2MJ2 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 29 Nov 2019 07:09:28 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8653C1FB;
-        Fri, 29 Nov 2019 04:09:27 -0800 (PST)
-Received: from localhost (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B4ED3F52E;
-        Fri, 29 Nov 2019 04:09:27 -0800 (PST)
-Date:   Fri, 29 Nov 2019 12:09:25 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "hofrat@osadl.org" <hofrat@osadl.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>
-Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
- regulator bindings
-Message-ID: <20191129120925.GA5747@sirena.org.uk>
-References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
- <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
- <20191118162502.GJ9761@sirena.org.uk>
- <fd1e4e652840346bd990c769eabe2f966bda4ed6.camel@fi.rohmeurope.com>
- <20191119181325.GD3634@sirena.org.uk>
- <fa69d01504817e3260d2b023ae2637aa2f1b2862.camel@fi.rohmeurope.com>
- <20191119193636.GH3634@sirena.org.uk>
- <eb685cc78b936bc61ed9f7fbfa18c96398b00909.camel@fi.rohmeurope.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tThc/1wpZn/ma/RB"
-Content-Disposition: inline
-In-Reply-To: <eb685cc78b936bc61ed9f7fbfa18c96398b00909.camel@fi.rohmeurope.com>
-X-Cookie: To love is good, love being difficult.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726843AbfK2Opm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 29 Nov 2019 09:45:42 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:40186 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726808AbfK2Opm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 Nov 2019 09:45:42 -0500
+Received: by mail-qk1-f193.google.com with SMTP id a137so23903835qkc.7
+        for <linux-rtc@vger.kernel.org>; Fri, 29 Nov 2019 06:45:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TWfKzcQl60jtCPLoRfmxjCctpkhz2BfZWwCKg7J3VrA=;
+        b=mCKKemmaFzimC5ij3uzJg1fMLerJ5cahsNJSvbYfMaTXicD62h2Ath5igR7aGbYFb9
+         zIqaEAZOn3d1c/otFgnZIysvQruBQzhsrEJjR2az6erTNRLODFbUrNcR12Vo5FgRezkn
+         +lZHh5GszM4Htq3xAqCncIfe4MqTSDOD0tWuLseLhOU/zUxeylxCfBv4RH2Bm7/WnklB
+         9HmWJUf0/d2ETEs6u15hX6N3XkDqt967qcWQVbM08f7FyemRwwABFtfglrjYjFssZXGG
+         pF3x0re4LW5N35ai5AhN5AjQX4nmDDxbwkwFaVZ7CfUYN9ja/tNagLfK9W8CF8pzm79v
+         nPeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=TWfKzcQl60jtCPLoRfmxjCctpkhz2BfZWwCKg7J3VrA=;
+        b=muLoN0JpsphF8sZk2FYfTCXrvut+NrNxQ4i7KU1DJ0YWtgAE9xC9Z3703bw1ZYJe5I
+         kpE3EU1BOLMSyNV1F3kM2ef8K5qd03MmXKRBnmKxLnU3rPzQvU2+uCXa8L3TzsJbtP8p
+         VO04ADmvsX8y9szW4x/aB17yCpkYviQxevMRo54+zumTOHLMt6MZ9svyg1w/hZRWvTpk
+         DbYaiQygSebAjIJNnuwcgObR/SjIyx83PkVWM8xopPHTVCVuaJvo/H3iyYjoM2bLJ3KI
+         T3WITwfiO7wiDJBD5T320QySEGNumzDFu/sLND9NIpaYp3tHvI/51LLKzNz7jf1GSCqK
+         zx3w==
+X-Gm-Message-State: APjAAAVNsYHdTw4IpFI4e4GTmcCiXzMWMnhELvtXHXPp+UDSQxCAtZ36
+        nT7lJRJJ77OKjErr4kqpWLRCCTi/kUQS3g==
+X-Google-Smtp-Source: APXvYqx9DDTat6ZAlZI+uCgwRQjQ7mwcOC/YsQuEVl+60H3Z3qEJxpzGoZ20Zb7QWND0yRwXSRNPTg==
+X-Received: by 2002:a37:a9cd:: with SMTP id s196mr16455169qke.264.1575038741354;
+        Fri, 29 Nov 2019 06:45:41 -0800 (PST)
+Received: from jfdmac.sonatest.net (ipagstaticip-d73c7528-4de5-0861-800b-03d8b15e3869.sdsl.bell.ca. [174.94.156.236])
+        by smtp.gmail.com with ESMTPSA id z3sm860366qts.50.2019.11.29.06.45.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 29 Nov 2019 06:45:40 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH 2/2] rtc: zynqmp: fix invalid read_time before 1 second
+From:   Jean-Francois Dagenais <jeff.dagenais@gmail.com>
+In-Reply-To: <20191128172957.GS299836@piout.net>
+Date:   Fri, 29 Nov 2019 09:45:39 -0500
+Cc:     Michal Simek <michal.simek@xilinx.com>, a.zummo@towertech.it,
+        Srinivas Goud <sgoud@xilinx.com>, git@xilinx.com,
+        linux-rtc@vger.kernel.org, champagne.guillaume.c@gmail.com,
+        =?utf-8?Q?Maxime_Roussin-B=C3=A9langer?= 
+        <maxime.roussinbelanger@gmail.com>,
+        Mathieu Gallichand <Mathieu.Gallichand@sonatest.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6C8E7EEC-A71D-48CE-8128-FACBD77EBD2E@gmail.com>
+References: <20191128015613.10003-1-jeff.dagenais@gmail.com>
+ <20191128015613.10003-2-jeff.dagenais@gmail.com>
+ <ca78b7e6-a0c3-745b-1533-6b8424d97623@xilinx.com>
+ <CD70064B-5087-4A0F-9197-1F4A3DAA8B50@gmail.com>
+ <20191128172957.GS299836@piout.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Bonjour Alexandre!
 
---tThc/1wpZn/ma/RB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Nov 28, 2019, at 12:29, Alexandre Belloni =
+<alexandre.belloni@bootlin.com> wrote:
+>=20
+>> Then we enable the RTC:
+>>=20
+>> xsct% rwr rtc control 0x81000000
+>>=20
+>=20
+> Doesn't that enable battery switchover instead of simply enabling the
+> rtc, I though you didn't have a battery.
 
-On Fri, Nov 29, 2019 at 07:48:13AM +0000, Vaittinen, Matti wrote:
-> On Tue, 2019-11-19 at 19:36 +0000, Mark Brown wrote:
+In our tests, psbatt present only means that the RTC preserves it's =
+state and
+registers when the platform is powered off. Before toggling bit 31, the =
+counter
+(current_time) doesn't move despite the platform being on (psbatt =
+present or
+not). This indicates that effectively, the bit turns on the RTC.
 
-> > The driver interface was added in "regulator: add PM suspend and
-> > resume
-> > hooks".
+>=20
+> Or does that mean that your previous read of control returning bit 24
+> set is also bogus?
 
-> I looked through the set but didn't spot any new interface towards the
-> regulator driver (which accesses the HW). I saw interface towards
-> regulator consumer driver which can be used to set the constrains
-> though.
+https://www.xilinx.com/html_docs/registers/ug1087/rtc___control.html#
+Bits 30:28 are reserved, and not 0x0 as this reference page suggests, so =
+who knows
+what the bits mean... well someone at Xilinx knows!
 
-The regulator driver has a bunch fo set_suspend_ operations.
+>=20
+> I ask because the simpler solution would simply to return -EINVAL in
+> xlnx_rtc_read_time when you detect a power on condition.
 
-> Specifically, I don't see voltage setting callback for different run-
-> modes. Nor do I see voltage setting (or differentiation) of more than
-> one suspend state.
+That could also work, but how would we determine that? Oh, perhaps by =
+looking at
+the Battery_Enable (31) bit. But then we would need to keep it disabled =
+during
+probe so that the time_read could test the bit to see if current_time is =
+valid,
+and then after this, when would we enable it? Perhaps at the first call =
+to
+set_time_write? This is all interesting but for now we have run out of =
+time to
+investigate further. Unless someone comes up with a ready made =
+alternative
+solution, we here are actually going to go into production with our =
+patch. It
+works well.
 
-set_suspend_voltage.
-
-> To explain it further - my assumption is that the BD71828 'run-levels'
-> (RUN0, ... RUN3) could be mapped to regulator modes
-> REGULATOR_MODE_FAST, REGULATOR_MODE_NORMAL, REGULATOR_MODE_IDLE and=20
-> REGULATOR_MODE_STANDBY. But regulators which are controlled by these
-
-That doesn't make sense at all, the modes affect the quality of
-regulation not the voltage that is set.
-
-> run-levels, can't be individually controlled. If state for one is
-> changed, the state is changed for all of them. The DVS bucks 1,2,6 and
-
-We don't really have anything that'd only work for group configuration
-except for the suspend modes.
-
-> > Ah, that's actually better.  It opens up possiblities for making use
-> > of
-> > the feature without encoding voltages in DT.  For example, you can
-> > cache
-> > the last however many voltages that were set and jump quickly to them
-> > or
-> > do something like put the top of the constraints in to help with
-> > governors like ondemand.  I'd recommend trying for something like
-> > that
-> > rather than encoding in DT, it'll probably be more robust with things
-> > like cpufreq changing.
-
-> I wish I was working with the full product so that I could see and
-> learn a proper example on how the cpufreq actually uses these
-> interfaces :) I'd really like to understand this much better. Maybe
-> this could be a topic for you to present in some Linux conference ;)
-> Just please ping me when you are doing that and I'll be listening there
-> for sure ;)
-
-The cpufreq code is all there in kernel - drivers/cpufreq.  I can't
-remember if Android still has a custom governor in their trees but it
-doesn't really make much difference in terms of how it interacts with
-the regulator drivers.
-
-> Anyways, my idea was to set the inital voltage values for these states
-> via DT - but allow the voltages to be changed at run-time too (I guess
-> this idea is visible in the patch 12).
-
-It'd be much better if you could avoid putting the voltages in the
-binding if they're not strictly required.
-
---tThc/1wpZn/ma/RB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3hCnMACgkQJNaLcl1U
-h9DYngf+IXV00SV4baSzbbPD499t+tcmC50xm6QHtyWWK8Cp9civk8HKVm+I8Hq4
-QD4QuFuR+eqK2qDTm+BAX6fTA64j0WeXKdEzN7PL83q4TlUI+f6n3l7baWyikfS+
-jvtHyZGD6QeSMlTBIpR3pDt4u61HM7aFgSH6m86zZX/trPBDfMqk5AynMT4kePZ1
-/F2ygmNUUbuZKkS1NLLKsQxr7nvtNvGyR+4HbQbNBuLlMN9BZaFGnQPmVzeksPe4
-PnJgOV90Ka3VvoJfRUKKs2z2hvdUP7j+NVjib9COrIhiz987HedXU52OxS/Ae90c
-08uWP7tcnqokEsVNIdA6qRO5Jn/lug==
-=D2yP
------END PGP SIGNATURE-----
-
---tThc/1wpZn/ma/RB--
+Cheers!=
