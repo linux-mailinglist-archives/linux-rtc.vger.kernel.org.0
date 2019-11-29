@@ -2,239 +2,182 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BE910D1A9
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2019 08:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18E410D207
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Nov 2019 08:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726702AbfK2HAR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 29 Nov 2019 02:00:17 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:44840 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbfK2HAR (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 29 Nov 2019 02:00:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=XUFxHeXPY+Po16LCpmJQMNJk/K05F2Rj6JlfQtegUCI=; b=M0oLNiNCrbelqyV3eMJCSroNV
-        5VfHZkvDyXmUxVhc834Q+A47szyOqeBb7c87/JZsHlWpzHJRr3KuZb/Re0ZXCBBoe3AJVkIIpUi8W
-        wcigJzc+xevBj/r4tHAay3RTlspipZPFxGWm4JtDZObqgRxTjxNIvshcqF5E6G0vwH0Ks=;
-Received: from [2a02:790:ff:919:7ee9:d3ff:fe1f:a246] (helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1iaaG6-0002UI-Ov; Fri, 29 Nov 2019 08:00:10 +0100
-Received: from [::1] (helo=localhost)
-        by localhost with esmtp (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1iaaFo-0000jl-EO; Fri, 29 Nov 2019 07:59:48 +0100
-Date:   Fri, 29 Nov 2019 07:59:40 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     lee.jones@linaro.org, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        phh@phh.me, b.galvani@gmail.com, stefan@agner.ch,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v2 5/5] rtc: rtc-rc5t619: add ricoh rc5t619 RTC driver
-Message-ID: <20191129075940.3b1c2631@kemnade.info>
-In-Reply-To: <20191128105751.GM299836@piout.net>
-References: <20191031213835.11390-1-andreas@kemnade.info>
-        <20191031213835.11390-6-andreas@kemnade.info>
-        <20191128105751.GM299836@piout.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
+        id S1726847AbfK2HsW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 29 Nov 2019 02:48:22 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:55590 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbfK2HsV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 Nov 2019 02:48:21 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-5f-5de0cd42b140
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 00.DB.08102.24DC0ED5; Fri, 29 Nov 2019 08:48:18 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Fri, 29 Nov 2019 08:48:14 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "broonie@kernel.org" <broonie@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "hofrat@osadl.org" <hofrat@osadl.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>
+Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
+ regulator bindings
+Thread-Topic: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
+ regulator bindings
+Thread-Index: AQHVndzxthsd4Y8wKkm7W/92Uslk+KeRDPcAgAAbkICAAZUNgIAACqYAgAAMmACADvFigA==
+Date:   Fri, 29 Nov 2019 07:48:13 +0000
+Message-ID: <eb685cc78b936bc61ed9f7fbfa18c96398b00909.camel@fi.rohmeurope.com>
+References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+         <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+         <20191118162502.GJ9761@sirena.org.uk>
+         <fd1e4e652840346bd990c769eabe2f966bda4ed6.camel@fi.rohmeurope.com>
+         <20191119181325.GD3634@sirena.org.uk>
+         <fa69d01504817e3260d2b023ae2637aa2f1b2862.camel@fi.rohmeurope.com>
+         <20191119193636.GH3634@sirena.org.uk>
+In-Reply-To: <20191119193636.GH3634@sirena.org.uk>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4A7012CE0C8B984CBF9A799F6553634D@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/89ohO/B5I0jdh09q.AS/jSH"; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TW0wUVxjOmTlz4TJmXBb3dG1Nuq29IQjWtifGtKSpceiDJaE1adMtDmVk
+        0WWXzO5aL21CYi0sINF0rbpyc7mKVGSBVDdoDUVEQJGIiuKKRGqEEmkRMSDFzjBVeDpf/u/2
+        P/yHJXXVjJFNtzkl2SZaTXQoPFf9tD7640t3zbGeiVhc3nONwdkPKxk8UdQB8YHBIRoPncsG
+        uKT1MoXzOhsp7Bs7RGG3O4fC/U0nIW5vGAB44PF5gCd7cwjsmaki8D/5dyh89KdyiBtKZgC+
+        GiikcdPoCYDbjvfS+NfWIIMrbvQQuLCiHeKxcTeBezrW4WDHeRrv7ukj8Z4zrQyevV4PccHl
+        9fHLhNriWiCM9e1hhOLaXcJpb5ARypqHCcFf46aF29ebaaGs4GdKeJD/BxQmu/ZDoaCxBgj3
+        j9ZB4ULfb4RwsHiKEKqPP2GER/5lifxXYWtTROe2pPQ028oPN4VZHvf+DjI9q7cX/70XZoEH
+        q3IByyJ+NTpZacgFIayOvwaQ58g3uSBUwe0AdZ/Og6qG5tei3JuMqtHz0ejAdBmtakj+cDgq
+        vOSnVSKC34Qa/7oHNZGISiefEhreiHzBIVLNgfxyNJ3vVMccvwGVBkZJrauGRP7AjTlNCL8K
+        1d/iVA3gX0HurIdzMSRvQP77TygVI55H5c3dpIYj0fC92f/nJnRmanBuZZJ/G9UFVmrWeJRd
+        u5fS8KvIkzfIaCssRhcPD8F9YIl3QYN33u1d4PYucHsXuEsBVQNQhphuTROdUlyMLLliZLsl
+        Q3m+tWf4gXZ5E6fAs5aEFkCwoAW8xBKmSG5RyYBZtyjFnrrDIjosybLLKjlaAGJJk55LKVI4
+        LlXcsVOS7c+ppSw0Gbg3B/ebdbzatVWSMiX5Ofsyy5oQ90XnXbNusSylSds3p1ud8zTBhqjh
+        oUa9Q7KlSrLoclqS1eNIdijXoVLhSu+Pqp1zZIoZylSzdoAodt9wkY9kW4sqfKQO2uw2yWjg
+        7F2KlFelFpftRdEIMLDAFMGtUNlw5fu9yBlRKgil4mzBHbXCKc5TxixQdiXs9Snp1K3hyq83
+        Nvzp2hnIORbxb1L/zDHX+8HX2HdzRqIix/1N9pjls7EcmeDebE66uP6XQFXc1bMfXZkO8SfG
+        dn6aqU/68rtu4+cnrB+gIxcSXD98tmbJhrb4N7p841veSvQl9m+zRjcsfa8tSq87+P3uNY9W
+        rPskdFddfcx41czoMxN0WMS4d0jZIf4Hc3Z7HDsEAAA=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---Sig_/89ohO/B5I0jdh09q.AS/jSH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Thu, 28 Nov 2019 11:57:51 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> Hello,
->=20
-> checkpatch.pl --strict complains about multiple blank lines and alignment.
->=20
-I have not used the strict flag there. But I think I can make
---strict happy.
-
-> On 31/10/2019 22:38:35+0100, Andreas Kemnade wrote:
-> > +static int rc5t619_rtc_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev =3D &pdev->dev;
-> > +	struct rn5t618 *rn5t618 =3D dev_get_drvdata(pdev->dev.parent);
-> > +	struct rc5t619_rtc *rtc;
-> > +	uint8_t alarm_flag;
-> > +	unsigned int ctrl2;
-> > +	int err;
-> > +
-> > +	rtc =3D devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
-> > +	if (IS_ERR(rtc)) {
-> > +		err =3D PTR_ERR(rtc);
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	rtc->rn5t618 =3D rn5t618;
-> > +
-> > +	dev_set_drvdata(dev, rtc);
-> > +	rtc->irq =3D -1;
-> > +
-> > +	if (rn5t618->irq_data)
-> > +		rtc->irq =3D regmap_irq_get_virq(rn5t618->irq_data,
-> > +				RN5T618_IRQ_RTC);
-> > +
-> > +	if (rtc->irq  < 0) {
-> > +		dev_err(dev, "no irq specified, wakeup is disabled\n"); =20
->=20
-> I don't think it is worth having an error message here, especially since
-> you have a second one later.
->=20
-agreed.
-
-> > +		rtc->irq =3D -1;
-> > +	}
-> > +
-> > +	err =3D regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &ctrl2);
-> > +	if (err < 0)
-> > +		return err;
-> > +
-> > +	/* get interrupt flag */
-> > +	err =3D rc5t619_rtc_alarm_is_enabled(dev, &alarm_flag);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	/* disable rtc periodic function */
-> > +	err =3D rc5t619_rtc_periodic_disable(&pdev->dev);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	/* disable interrupt */
-> > +	err =3D rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-> > +	if (err)
-> > +		return err; =20
->=20
-> Is it really useful to disable the alarm to reenable them later?
->=20
-Well, yes, seems to be nonsense.
-Am I right that I do not need to prevent alarm irqs between
-alloc() and register()?
-
-> > +
-> > +	if (ctrl2 & CTRL2_PON) {
-> > +		alarm_flag =3D 0;
-> > +		err =3D rc5t619_rtc_alarm_flag_clr(&pdev->dev);
-> > +		if (err)
-> > +			return err;
-> > +	}
-> > +
-> > +	rtc->rtc =3D devm_rtc_allocate_device(&pdev->dev);
-> > + =20
->=20
-> Please remove this blank line.
->=20
-Ok.
-
-> > +	if (IS_ERR(rtc->rtc)) {
-> > +		err =3D PTR_ERR(rtc->rtc);
-> > +		dev_err(dev, "RTC device register: err %d\n", err);
-> > +		return err;
-> > +	}
-> > +
-> > +	rtc->rtc->ops =3D &rc5t619_rtc_ops;
-> > +	rtc->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_1900;
-> > +	rtc->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
-> > +
-> > +	/* set interrupt and enable it */
-> > +	if (rtc->irq !=3D -1) {
-> > +		device_init_wakeup(&pdev->dev, 1);
-> > +
-> > +		err =3D devm_request_threaded_irq(&pdev->dev,
-> > rtc->irq, NULL,
-> > +						rc5t619_rtc_irq,
-> > +						IRQF_ONESHOT,
-> > +						"rtc-rc5t619",
-> > +						&pdev->dev);
-> > +		if (err < 0) {
-> > +			dev_err(&pdev->dev, "request IRQ:%d
-> > fail\n", rtc->irq);
-> > +			rtc->irq =3D -1;
-> > +
-> > +			err =3D rc5t619_rtc_alarm_enable(&pdev->dev,
-> > 0);
-> > +			if (err)
-> > +				return err;
-> > +
-> > +		} else {
-> > +			/* enable wake */ =20
->=20
-> I think you should move device_init_wakeup() here, unless your parse
-> the wakeup-source property.
->=20
-yes, makes sense.
-
-> > +			enable_irq_wake(rtc->irq);
-> > +			/* enable alarm_d */
-> > +			err =3D rc5t619_rtc_alarm_enable(&pdev->dev,
-> > alarm_flag);
-> > +			if (err) {
-> > +				dev_err(&pdev->dev, "failed rtc
-> > setup\n");
-> > +				return -EBUSY;
-> > +			}
-> > +		}
-> > +	} else {
-> > +		/* system don't want to using alarm interrupt, so
-> > close it */
-> > +		err =3D rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-> > +		if (err) {
-> > +			dev_err(&pdev->dev, "disable rtc alarm
-> > error\n"); =20
->=20
-> I don't think this message is necessary.
->=20
-yes, agreed, that would be just another symptom of an i2c problem.
-> > +			return err;
-> > +		}
-> > +
-> > +		dev_err(&pdev->dev, "ricoh61x interrupt is
-> > disabled\n"); =20
->=20
-> Maybe dev_warn as the driver just continues on.
->=20
-Ok.
-
-Regards,
-Andreas
-
---Sig_/89ohO/B5I0jdh09q.AS/jSH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl3gwdwACgkQl4jFM1s/
-ye+7HBAAtrx3tG234kWVtzwOYLaouVvIBTJVenn4vrL9or+rf2MQ8HxA1nmujQ0N
-DZVOa6ugbxw7GqcyQHkrBrouF/8rv+7svFS45hylZauagNkIdlRL4b8j7wdo5vma
-Nim4r8c3ITPzT1FF41thRuY99EOxTzmk10sXIV7n5+KTzardFUOHV4VdJDTDQ/B0
-eoLQCJT6bjBUQyt+7uqfUgHB3trA5RNB085GHED/1flvhWgfhY1wCSLsPK8KHsJl
-DKt67bgqHpsR9LZ6vbNdQygEByOH5baaNYFX4+C+9p3z6i37PviLYWsajCPso1bX
-HbTiW+9pqpLF74HlpkKdjgl3PHxNmSD8K913JMtOt+HOqqMZkiZeMX7YB1wXPemM
-L9FUwxSXU9XSgZnCnvcouvmHgBNokWJOIG4Jw0F1ueFt3H5MwiO3fQd3l/R5aUod
-jYfSnNe0zOrpxCwCJsBTBXCezVTXZDk/NRr1ia1IsL6et94c9n1gF8q7bnfj3nJx
-3CyiwhBRbnIlvsks2n9lW+bXC28PCsuyLUBu4noch/61Q2rAubJ1z4Q/Zsxy2PqF
-3X7VYfF/PnTidxBO120sIGq21V0NdCJyLQaTX/DsSt/QLKwc3MMjnPNVMX+YN72f
-63ix4qOXs64tvdc3VJEsea4kT66Mqy0SotT17HH8/8+U4NgJKM0=
-=kKsG
------END PGP SIGNATURE-----
-
---Sig_/89ohO/B5I0jdh09q.AS/jSH--
+SGVsbG8gQWdhaW4gTWFyaywNCg0KU29ycnkgZm9yIGxvbmcgZGVsYXkgLSBJIGFtIHJlYWxseSBo
+YXZpbmcgdG9vIG1hbnkgdGhpbmdzIG9uIG15IHRhYmxlDQpyaWdodCBub3cgOi8NCg0KT24gVHVl
+LCAyMDE5LTExLTE5IGF0IDE5OjM2ICswMDAwLCBNYXJrIEJyb3duIHdyb3RlOg0KPiBPbiBUdWUs
+IE5vdiAxOSwgMjAxOSBhdCAwNjo1MTozN1BNICswMDAwLCBWYWl0dGluZW4sIE1hdHRpIHdyb3Rl
+Og0KPiA+IE9uIFR1ZSwgMjAxOS0xMS0xOSBhdCAxODoxMyArMDAwMCwgTWFyayBCcm93biB3cm90
+ZToNCj4gPiA+IEFoLCBPSy4gIEkgZGlkbid0IGV2ZW4gbm90aWNlIHRoYXQgcGF0Y2ggd2hlbiBJ
+IHNjYW5uZWQgdGhlDQo+ID4gPiBzZXJpZXMuDQo+ID4gPiBJJ2xsIGxvb2sgb3V0IGZvciB0aGlz
+IG5leHQgdGltZSBhcm91bmQgYnV0IHRoYXQgc291bmRzIGxpa2UgaXQncw0KPiA+ID4gZ2VuZXJh
+bGx5IGdvaW5nIGluIHRoZSByaWdodCBkaXJlY3Rpb24sIGVzcGVjaWFsbHkgaWYgaXQncw0KPiA+
+ID4gaW50ZWdyYXRlZA0KPiA+ID4gd2l0aCB0aGUgc3VzcGVuZCBtb2RlIHJlZ3VsYXRvciBiaW5k
+aW5ncyB0aGF0IENodW55YW4gZGlkLg0KPiA+IFByb2JhYmx5IGl0IGlzIG5vdCBhcyBJIGFtIG5v
+dCBmYW1pbGlhciB3aXRoIENodW55YW4ncyB3b3JrLiBJJ2xsDQo+ID4gdHJ5DQo+ID4gbG9va2lu
+ZyB3aGF0IGhhcyBiZWVuIGRvbmUgb24gdGhhdCBmcm9udCA6KSBBbmQgSSBhbSBwcmV0dHkgc3Vy
+ZQ0KPiA+IHlvdQ0KPiA+IG1pZ2h0IG5vdCBiZSBoYXBweSB3aXRoIHRoYXQgcGF0Y2ggLSBidXQg
+cGVyaGFwcyB5b3UgY2FuIGdpdmUgbWUgYQ0KPiA+IG51ZGdlIHRvIGJldHRlciBkaXJlY3Rpb24u
+Li4NCj4gDQo+IFRoZSBkcml2ZXIgaW50ZXJmYWNlIHdhcyBhZGRlZCBpbiAicmVndWxhdG9yOiBh
+ZGQgUE0gc3VzcGVuZCBhbmQNCj4gcmVzdW1lDQo+IGhvb2tzIi4NCg0KSSBsb29rZWQgdGhyb3Vn
+aCB0aGUgc2V0IGJ1dCBkaWRuJ3Qgc3BvdCBhbnkgbmV3IGludGVyZmFjZSB0b3dhcmRzIHRoZQ0K
+cmVndWxhdG9yIGRyaXZlciAod2hpY2ggYWNjZXNzZXMgdGhlIEhXKS4gSSBzYXcgaW50ZXJmYWNl
+IHRvd2FyZHMNCnJlZ3VsYXRvciBjb25zdW1lciBkcml2ZXIgd2hpY2ggY2FuIGJlIHVzZWQgdG8g
+c2V0IHRoZSBjb25zdHJhaW5zDQp0aG91Z2guDQoNClNwZWNpZmljYWxseSwgSSBkb24ndCBzZWUg
+dm9sdGFnZSBzZXR0aW5nIGNhbGxiYWNrIGZvciBkaWZmZXJlbnQgcnVuLQ0KbW9kZXMuIE5vciBk
+byBJIHNlZSB2b2x0YWdlIHNldHRpbmcgKG9yIGRpZmZlcmVudGlhdGlvbikgb2YgbW9yZSB0aGFu
+DQpvbmUgc3VzcGVuZCBzdGF0ZS4NCg0KVG8gZXhwbGFpbiBpdCBmdXJ0aGVyIC0gbXkgYXNzdW1w
+dGlvbiBpcyB0aGF0IHRoZSBCRDcxODI4ICdydW4tbGV2ZWxzJw0KKFJVTjAsIC4uLiBSVU4zKSBj
+b3VsZCBiZSBtYXBwZWQgdG8gcmVndWxhdG9yIG1vZGVzDQpSRUdVTEFUT1JfTU9ERV9GQVNULCBS
+RUdVTEFUT1JfTU9ERV9OT1JNQUwsIFJFR1VMQVRPUl9NT0RFX0lETEUgYW5kIA0KUkVHVUxBVE9S
+X01PREVfU1RBTkRCWS4gQnV0IHJlZ3VsYXRvcnMgd2hpY2ggYXJlIGNvbnRyb2xsZWQgYnkgdGhl
+c2UNCnJ1bi1sZXZlbHMsIGNhbid0IGJlIGluZGl2aWR1YWxseSBjb250cm9sbGVkLiBJZiBzdGF0
+ZSBmb3Igb25lIGlzDQpjaGFuZ2VkLCB0aGUgc3RhdGUgaXMgY2hhbmdlZCBmb3IgYWxsIG9mIHRo
+ZW0uIFRoZSBEVlMgYnVja3MgMSwyLDYgYW5kDQo3IHN1cHBvcnQgdGhpcy4gUmVzdCBvZiB0aGUg
+TERPcyBhbmQgQlVDS3MgKGFuZCBhbHNvIHRob3NlIERWUyBidWNrcw0Kd2hpY2ggYXJlIG5vdCBj
+b25maWd1cmVkIHRvIGJlIGNvbnRyb2xsZWQgYnkgcnVuLWxldmVscykgaGF2ZSBtb2RlcyBSVU4N
+CmFuZCBJRExFLCB3aGVyZSB0aGUgcHJvY2Vzc29yIHN0YXlzIHBvd2VyZWQuDQoNCkluIGFkZGl0
+aW9uIHRvIHRoZXNlIChhY3RpdmUpIG1vZGVzL3N0YXRlcywgdGhlcmUgaXMgZmV3IHN0YXRlcyB3
+aGVyZQ0KcHJvY2Vzc29yIGlzIG5vdCBwb3dlcmVkLiBJIGd1ZXNzIHRoZXNlIGNvdWxkIGJlIG1h
+cHBlZCB0byAnZGlmZmVyZW50Jw0Kc3VzcGVuZCBzdGF0ZXMuIEF0IGxlYXN0IExQU1IsIEhCTlQg
+YW5kIFNISVAgc3RhdGVzIGFyZSBzdWNoLiBUaGVzZSBhcmUNCmFnYWluIGdsb2JhbCBQTUlDIHN0
+YXRlcyAtIG5vdCBwZXIgcmVndWxhdG9yIHN0YXRlcy4gVGhleSBjYW4gYmUgZWl0aGVyDQpjb250
+cm9sbGVkIGJ5IGRyaXZpbmcgYSBwaW4gb24gUE1JQyAtIG9yIGJ5IEkyQyByZWdpc3RlciBzZXR0
+aW5nLiBJDQpkb24ndCBzZWUgaG93IEkgY291bGQgZGlmZmVyZW50aWF0ZSB0aGVzZSBzdGF0ZXMg
+d2hlbiB1c2luZyBzdGFuZGFyZA0KQVBJcyAtIG5vciBkbyBJIGtub3cgaWYgdGhlc2Ugc2hvdWxk
+IGJlIGNoYW5nZWQgdmlhIHJlZ3VsYXRvcg0KaW50ZXJmYWNlcyBhdCBhbGwuDQoNCkFsbCBpbiBh
+bGwgLSBJIGFtIGFsc28gYSBiaXQgdW5zdXJlIGhvdyBJIHNob3VsZCBkbyB0aGUgbWFwcGluZyBv
+ZiB0aGUNClBNSUMgbG93LXBvd2VyIG1vZGVzIHRvIHRoZSBtb2RlcyB1c2VkIGJ5IExpbnV4IC0g
+dGhlIGN1cnNlIG9mIHdvcmtpbmcNCmZvciBjb21wb25lbnQgdmVuZG9yIGlzIHRoYXQgSSBoYXZl
+IGxpbWl0ZWQgdmlzaWJpbGl0eSB0byBhY3R1YWwgZW5kLQ0KcHJvZHVjdHMgLSBpZiB0aGV5IGFy
+ZSBub3QgaW4tdHJlZS4gOiggQW5kIEkgZG9uJ3QgdGhpbmsgd2UgaGF2ZSBhbnkNCmluLXRyZWUg
+Ym9hcmRzIHdoaWNoIHVzZSB0aGVzZSBsb3ctcG93ZXIgc3RhdGVzIChhdCBsZWFzdCBmb3Igbm93
+KSAtIFNvDQppZiB5b3Ugb3IgUm9iIGRvIG5vdCBvYmplY3QgLSBJIHdpbGwgbGVhdmUgdGhlc2Ug
+YmluZGluZ3MgaW4gdGhpcyBkb2MgLQ0KYnV0IEkgbmVlZCB0byBjb25zaWRlciB0aGUgdmFsdWUg
+b2YgYWRkaW5nIHN0dWZmIHByZXNlbnRlZCBpbiBwYXRjaCAxMg0KaW4tdHJlZSBrZXJuZWwuLi4g
+R3Vlc3MgSSdsbCBkcm9wIGl0IG91dCB1bmxlc3MgSSBnZXQgc29tZSBiZXR0ZXINCnVuZGVyc3Rh
+bmRpbmcgaG93IHJ1bi1sZXZlbHMgYW5kIGxvdy1wb3dlciBtb2RlcyBhcmUgaGFuZGxlZCBpbiBz
+b21lIG9mDQp0aGUgYWN0dWFsIGRldmljZXMuIFdlIGNhbiBhbHdheXMgYWRkIHRoaXMgc3VwcG9y
+dCBsYXRlciA6KQ0KDQo+ID4gPiBZZXMsIEkgdGhpbmsgdGhpcyBuZWVkcyBjbGFyaWZpY2F0aW9u
+IGFzIEkgY29tcGxldGVseSBmYWlsZWQgdG8NCj4gPiA+IHBpY2sNCj4gPiA+IHVwDQo+ID4gPiBv
+biB0aGlzIGFuZCBkaWQgaW5kZWVkIHJlYWQgdGhpcyBhcyByZWZlcnJpbmcgdG8gdGhlDQo+ID4g
+PiBtb2Rlcy4gICJWb2x0YWdlcw0KPiA+ID4gdGhhdCBjYW4gYmUgc2V0IGluIFJVTiBtb2RlIiBv
+ciBzb21ldGhpbmc/ICBJIHRha2UgaXQgdGhlc2UNCj4gPiA+IHZvbHRhZ2VzDQo+ID4gPiBhcmUN
+Cj4gPiA+IGZpeGVkIGFuZCB0aGUgT1MgY2FuJ3QgY2hhbmdlIHRoZW0/DQo+ID4gVW5mb3J0dW5h
+dGVseSB0aGV5IGFyZSBub3QuIFZvbHRhZ2VzIGFuZCBlbmFibGUvZGlzYWJsZSBzdGF0dXNlcw0K
+PiA+IGZvcg0KPiA+IGVhY2ggcnVuLWxldmVsIChhbmQgaW5kaXZpZHVhbGx5IGZvciBlYWNoIHJ1
+bi1sZXZlbCBjYXBhYmxlIGJ1Y2spDQo+ID4gY2FuDQo+ID4gYmUgY2hhbmdlZCBhdCBydW50aW1l
+IHZpYSBJMkMuIEFuZCBhIGN1c3RvbWVyIHJlcXVlc3RlZCBtZSBhbHNvIHRvDQo+ID4gc3VwcG9y
+dCB0aGlzIC0gaGVuY2UgdGhlIGluLWtlcm5lbCBBUEkgLSBidXQgSSBhbSBzdXJlIHlvdSBoYXZl
+DQo+ID4gc29tZQ0KPiA+IG5pY2Ugd29yZHMgd2hlbiB5b3UgY2hlY2sgdGhlIHBhdGNoIDEyLiA6
+XQ0KPiANCj4gQWgsIHRoYXQncyBhY3R1YWxseSBiZXR0ZXIuICBJdCBvcGVucyB1cCBwb3NzaWJs
+aXRpZXMgZm9yIG1ha2luZyB1c2UNCj4gb2YNCj4gdGhlIGZlYXR1cmUgd2l0aG91dCBlbmNvZGlu
+ZyB2b2x0YWdlcyBpbiBEVC4gIEZvciBleGFtcGxlLCB5b3UgY2FuDQo+IGNhY2hlDQo+IHRoZSBs
+YXN0IGhvd2V2ZXIgbWFueSB2b2x0YWdlcyB0aGF0IHdlcmUgc2V0IGFuZCBqdW1wIHF1aWNrbHkg
+dG8gdGhlbQ0KPiBvcg0KPiBkbyBzb21ldGhpbmcgbGlrZSBwdXQgdGhlIHRvcCBvZiB0aGUgY29u
+c3RyYWludHMgaW4gdG8gaGVscCB3aXRoDQo+IGdvdmVybm9ycyBsaWtlIG9uZGVtYW5kLiAgSSdk
+IHJlY29tbWVuZCB0cnlpbmcgZm9yIHNvbWV0aGluZyBsaWtlDQo+IHRoYXQNCj4gcmF0aGVyIHRo
+YW4gZW5jb2RpbmcgaW4gRFQsIGl0J2xsIHByb2JhYmx5IGJlIG1vcmUgcm9idXN0IHdpdGggdGhp
+bmdzDQo+IGxpa2UgY3B1ZnJlcSBjaGFuZ2luZy4NCg0KSSB3aXNoIEkgd2FzIHdvcmtpbmcgd2l0
+aCB0aGUgZnVsbCBwcm9kdWN0IHNvIHRoYXQgSSBjb3VsZCBzZWUgYW5kDQpsZWFybiBhIHByb3Bl
+ciBleGFtcGxlIG9uIGhvdyB0aGUgY3B1ZnJlcSBhY3R1YWxseSB1c2VzIHRoZXNlDQppbnRlcmZh
+Y2VzIDopIEknZCByZWFsbHkgbGlrZSB0byB1bmRlcnN0YW5kIHRoaXMgbXVjaCBiZXR0ZXIuIE1h
+eWJlDQp0aGlzIGNvdWxkIGJlIGEgdG9waWMgZm9yIHlvdSB0byBwcmVzZW50IGluIHNvbWUgTGlu
+dXggY29uZmVyZW5jZSA7KQ0KSnVzdCBwbGVhc2UgcGluZyBtZSB3aGVuIHlvdSBhcmUgZG9pbmcg
+dGhhdCBhbmQgSSdsbCBiZSBsaXN0ZW5pbmcgdGhlcmUNCmZvciBzdXJlIDspDQoNCkFueXdheXMs
+IG15IGlkZWEgd2FzIHRvIHNldCB0aGUgaW5pdGFsIHZvbHRhZ2UgdmFsdWVzIGZvciB0aGVzZSBz
+dGF0ZXMNCnZpYSBEVCAtIGJ1dCBhbGxvdyB0aGUgdm9sdGFnZXMgdG8gYmUgY2hhbmdlZCBhdCBy
+dW4tdGltZSB0b28gKEkgZ3Vlc3MNCnRoaXMgaWRlYSBpcyB2aXNpYmxlIGluIHRoZSBwYXRjaCAx
+MikuDQoNCkJyLA0KCU1hdHRpIFZhaXR0aW5lbg0KDQo=
