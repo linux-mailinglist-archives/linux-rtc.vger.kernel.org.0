@@ -2,299 +2,269 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7BC10EBF4
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2019 15:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FF310EE2D
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Dec 2019 18:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbfLBO6C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Dec 2019 09:58:02 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27946 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727401AbfLBO6C (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Dec 2019 09:58:02 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB2Eqcmi006832;
-        Mon, 2 Dec 2019 15:57:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=3UQF47IsQbbR4j5RQNmAelC5cxXMhW2+SZ9c6QJK0wI=;
- b=eV/4aBZPeBkt2hJLCUfhHcaifv35f4nx370D/gAlXrx97PD6jrlvdHYkbrhYLdk4LKPj
- biXd4Qsr0KJp3/Y4M+QWvtPEqG5Mog6PP5RqBaHTNNzk2gjnf6kzYUl4oVGcQENT1gyB
- tNv/zL6tkmdLDAuAFkKNhEZzqtyYjnmWw2XCbYIulBnFZuc/JfpzYuh81SEwfCwoVr+q
- J2vtnKTFxman2htG25UofrLG3KTiQwcjYIx7a812O/6Br5OnJ0kJcBSXaKRPzBNJhe5W
- r8Alkbuvp/46gt+lrjTczGLekP7aGF3f0JlwYowdKKodtAK8yS7//wJqN36pbdp8xImv Kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2wkee9thqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 Dec 2019 15:57:43 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E231B10002A;
-        Mon,  2 Dec 2019 15:57:42 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D44A62BE22B;
-        Mon,  2 Dec 2019 15:57:42 +0100 (CET)
-Received: from localhost (10.75.127.49) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 2 Dec 2019 15:57:42
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <alexandre.torgue@st.com>
-CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH] dt-bindings: rtc: Convert stm32 rtc bindings to json-schema
-Date:   Mon, 2 Dec 2019 15:57:40 +0100
-Message-ID: <20191202145740.29123-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        id S1727556AbfLBR3J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 Dec 2019 12:29:09 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:52323 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727542AbfLBR3J (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Dec 2019 12:29:09 -0500
+X-Originating-IP: 90.65.102.129
+Received: from localhost (lfbn-1-1480-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E1FEBC000A;
+        Mon,  2 Dec 2019 17:29:06 +0000 (UTC)
+Date:   Mon, 2 Dec 2019 18:29:06 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 5.5
+Message-ID: <20191202172906.GA1034578@piout.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-02_02:2019-11-29,2019-12-02 signatures=0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert the STM32 RTC binding to DT schema format using json-schema
+Hello Linus,
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- .../devicetree/bindings/rtc/st,stm32-rtc.txt       |  61 ---------
- .../devicetree/bindings/rtc/st,stm32-rtc.yaml      | 152 +++++++++++++++++++++
- 2 files changed, 152 insertions(+), 61 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/st,stm32-rtc.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+Here is the pull-request for the RTC subsystem for 5.5.
 
-diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.txt b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.txt
-deleted file mode 100644
-index 130ca5b98253..000000000000
---- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.txt
-+++ /dev/null
-@@ -1,61 +0,0 @@
--STM32 Real Time Clock
--
--Required properties:
--- compatible: can be one of the following:
--  - "st,stm32-rtc" for devices compatible with stm32(f4/f7).
--  - "st,stm32h7-rtc" for devices compatible with stm32h7.
--  - "st,stm32mp1-rtc" for devices compatible with stm32mp1.
--- reg: address range of rtc register set.
--- clocks: can use up to two clocks, depending on part used:
--  - "rtc_ck": RTC clock source.
--  - "pclk": RTC APB interface clock.
--    It is not present on stm32(f4/f7).
--    It is required on stm32(h7/mp1).
--- clock-names: must be "rtc_ck" and "pclk".
--    It is required on stm32(h7/mp1).
--- interrupts: rtc alarm interrupt. On stm32mp1, a second interrupt is required
--  for rtc alarm wakeup interrupt.
--- st,syscfg: phandle/offset/mask triplet. The phandle to pwrcfg used to
--  access control register at offset, and change the dbp (Disable Backup
--  Protection) bit represented by the mask, mandatory to disable/enable backup
--  domain (RTC registers) write protection.
--    It is required on stm32(f4/f7/h7).
--
--Optional properties (to override default rtc_ck parent clock on stm32(f4/f7/h7):
--- assigned-clocks: reference to the rtc_ck clock entry.
--- assigned-clock-parents: phandle of the new parent clock of rtc_ck.
--
--Example:
--
--	rtc: rtc@40002800 {
--		compatible = "st,stm32-rtc";
--		reg = <0x40002800 0x400>;
--		clocks = <&rcc 1 CLK_RTC>;
--		assigned-clocks = <&rcc 1 CLK_RTC>;
--		assigned-clock-parents = <&rcc 1 CLK_LSE>;
--		interrupt-parent = <&exti>;
--		interrupts = <17 1>;
--		st,syscfg = <&pwrcfg 0x00 0x100>;
--	};
--
--	rtc: rtc@58004000 {
--		compatible = "st,stm32h7-rtc";
--		reg = <0x58004000 0x400>;
--		clocks = <&rcc RTCAPB_CK>, <&rcc RTC_CK>;
--		clock-names = "pclk", "rtc_ck";
--		assigned-clocks = <&rcc RTC_CK>;
--		assigned-clock-parents = <&rcc LSE_CK>;
--		interrupt-parent = <&exti>;
--		interrupts = <17 1>;
--		interrupt-names = "alarm";
--		st,syscfg = <&pwrcfg 0x00 0x100>;
--	};
--
--	rtc: rtc@5c004000 {
--		compatible = "st,stm32mp1-rtc";
--		reg = <0x5c004000 0x400>;
--		clocks = <&rcc RTCAPB>, <&rcc RTC>;
--		clock-names = "pclk", "rtc_ck";
--		interrupts-extended = <&intc GIC_SPI 3 IRQ_TYPE_NONE>,
--				      <&exti 19 1>;
--	};
-diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-new file mode 100644
-index 000000000000..80c445005bfb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
-@@ -0,0 +1,152 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/st,stm32-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STM32 Real Time Clock Bindings
-+
-+maintainers:
-+  - Gabriel Fernandez <gabriel.fernandez@st.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stm32-rtc
-+      - st,stm32h7-rtc
-+      - st,stm32mp1-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: pclk
-+      - const: rtc_ck
-+
-+  interrupts:
-+    maxItems: 1
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - st,stm32-rtc
-+              - st,stm32h7-rtc
-+    then:
-+      properties:
-+        st,syscfg:
-+          allOf:
-+            - $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+            - items:
-+                minItems: 3
-+                maxItems: 3
-+          description: |
-+            Phandle/offset/mask triplet. The phandle to pwrcfg used to
-+            access control register at offset, and change the dbp (Disable Backup
-+            Protection) bit represented by the mask, mandatory to disable/enable backup
-+            domain (RTC registers) write protection.
-+
-+        assigned-clocks:
-+          allOf:
-+            - $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+          description: |
-+            override default rtc_ck parent clock reference to the rtc_ck clock entry
-+          maxItems: 1
-+
-+        assigned-clock-parents:
-+          allOf:
-+           - $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+          description: |
-+            override default rtc_ck parent clock phandle of the new parent clock of rtc_ck
-+          maxItems: 1
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: st,stm32-rtc
-+
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 1
-+          maxItems: 1
-+
-+        clock-names: false
-+
-+      required:
-+        - st,syscfg
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: st,stm32h7-rtc
-+
-+    then:
-+       properties:
-+         clocks:
-+           minItems: 2
-+           maxItems: 2
-+
-+       required:
-+         - clock-names
-+         - st,syscfg
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: st,stm32mp1-rtc
-+
-+    then:
-+       properties:
-+         clocks:
-+           minItems: 2
-+           maxItems: 2
-+
-+         assigned-clocks: false
-+         assigned-clock-parents: false
-+
-+       required:
-+         - clock-names
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/mfd/stm32f4-rcc.h>
-+    #include <dt-bindings/clock/stm32fx-clock.h>
-+    rtc@40002800 {
-+      compatible = "st,stm32-rtc";
-+      reg = <0x40002800 0x400>;
-+      clocks = <&rcc 1 CLK_RTC>;
-+      assigned-clocks = <&rcc 1 CLK_RTC>;
-+      assigned-clock-parents = <&rcc 1 CLK_LSE>;
-+      interrupt-parent = <&exti>;
-+      interrupts = <17 1>;
-+      st,syscfg = <&pwrcfg 0x00 0x100>;
-+    };
-+
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    rtc@5c004000 {
-+      compatible = "st,stm32mp1-rtc";
-+      reg = <0x5c004000 0x400>;
-+      clocks = <&rcc RTCAPB>, <&rcc RTC>;
-+      clock-names = "pclk", "rtc_ck";
-+      interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-+    };
-+
-+...
+A lot of unnecessary code removal in this pull request that ends up
+decreasing the number of lines in the subsystem. The ds1343 and ds1347
+drivers got cleaned up. The rest are the usual fixes and new features.
+
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
+
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.5
+
+for you to fetch changes up to f830f7cf4752f6f0db48777b7e16c010bdc95083:
+
+  rtc: Fix Kconfig indentation (2019-11-27 09:31:14 +0100)
+
+----------------------------------------------------------------
+RTC for 5.5
+
+Subsystem:
+ - fix warnings and errors with make W=1
+ - UIE are now disabled while setting the RTC time
+ - UIE are now disallowed when the RTC time is not set.
+
+Drivers:
+ - remove unecessary .remove callbacks
+ - Set RTC range for cros-ec, ds1343, ds1347, m41t80, s35390a, vt8500
+ - Use devm_platform_ioremap_resource where applicable
+ - rv3028: add clock out support
+
+----------------------------------------------------------------
+Alexandre Belloni (49):
+      rtc: m41t80: set range
+      rtc: add a timestamp for year 0
+      rtc: ds1347: remove verbose messages
+      rtc: ds1347: remove useless read
+      rtc: ds1347: simplify getting .driver_data
+      rtc: ds1347: mask ALM OUT when reading time
+      rtc: ds1347: convert to devm_rtc_allocate_device
+      rtc: ds1347: set range
+      rtc: ds1347: properly handle oscillator failures
+      rtc: ds1347: use regmap_update_bits
+      rtc: ds1347: handle century register
+      rtc: meson-vrtc: move config option to proper location
+      rtc: s35390a: convert to devm_rtc_allocate_device
+      rtc: s35390a: set range
+      rtc: add timestamp for end of 2199
+      rtc: vt8500: remove useless label
+      rtc: vt8500: remove superfluous error message
+      rtc: vt8500: convert to devm_rtc_allocate_device
+      rtc: vt8500: let the core handle rtc range
+      rtc: introduce lock helpers
+      rtc: ds1343: set range
+      rtc: ds1343: remove dead code
+      rtc: ds1343: use burst write to set time
+      rtc: ds1343: use rtc_add_group
+      rtc: ds1343: use regmap_update_bits for glitch filter
+      rtc: ds1343: check regmap_read return value
+      rtc: ds1343: remove unnecessary mutex
+      rtc: ds1343: rework interrupt handling
+      rtc: ds1343: cleanup .remove
+      rtc: fsl-ftm-alarm: switch to ktime_get_real_seconds
+      rtc: fsl-ftm-alarm: switch to rtc_time64_to_tm/rtc_tm_to_time64
+      rtc: fsl-ftm-alarm: avoid struct rtc_time conversions
+      rtc: disable uie before setting time and enable after
+      rtc: disallow update interrupts when time is invalid
+      rtc: ab-b5ze-s3: remove .remove
+      rtc: lpc32xx: remove .remove
+      rtc: sc27xx: remove .remove
+      rtc: sirfsoc: remove .remove
+      rtc: cros-ec: remove superfluous error message
+      rtc: cros-ec: let the core handle rtc range
+      rtc: interface: fix kerneldoc comments
+      rtc: sysfs: fix hctosys_show kerneldoc
+      rtc: ds1374: remove unused variable
+      rtc: ds1685: remove set but unused variables
+      rtc: ds1685: fix build error with make W=1
+      rtc: m41t80: remove excess kerneldoc
+      rtc: pm8xxx: update kerneldoc for struct pm8xxx_rtc
+      rtc: tegra: remove set but unused variable
+      rtc: v3020: remove set but unused variable
+
+Andrey Skvortsov (1):
+      rtc: tps65910: allow using RTC without alarm interrupt
+
+Chuhong Yuan (1):
+      rtc: brcmstb-waketimer: add missed clk_disable_unprepare
+
+Claudiu Beznea (1):
+      rtc: at91rm9200: use of_device_get_match_data()
+
+Colin Ian King (2):
+      rtc: bd70528: fix module alias to autoload module
+      rtc: meson: remove redundant assignment to variable retries
+
+Emmanuel Nicolet (1):
+      rtc: interface: use timeu64_t for range_max
+
+Ilya Ledvich (1):
+      rtc: em3027: correct month value
+
+Jinke Fan (1):
+      rtc: Fix the AltCentury value on AMD/Hygon platform
+
+Kars de Jong (2):
+      rtc: msm6242: Fix reading of 10-hour digit
+      rtc: msm6242: Remove unneeded msm6242_set()/msm6242_clear() functions
+
+Krzysztof Kozlowski (2):
+      rtc: da9063: Handle invalid IRQ from platform_get_irq_byname()
+      rtc: Fix Kconfig indentation
+
+Li Yang (1):
+      rtc: fsl-ftm-alarm: remove select FSL_RCPM and default y from Kconfig
+
+Markus Elfring (1):
+      rtc: Use devm_platform_ioremap_resource()
+
+Martin Hundebøll (1):
+      rtc: pcf2127: handle boot-enabled watchdog feature
+
+Matti Vaittinen (1):
+      rtc: bd70528: Add MODULE ALIAS to autoload module
+
+Nick Crews (1):
+      rtc: wilco-ec: Handle reading invalid times
+
+Nobuhiro Iwamatsu (8):
+      rtc: rx6110: Remove useless rx6110_remove
+      rtc: rx6110: Convert to SPDX identifier
+      rtc: ds1302: Remove unused DRV_NAME
+      rtc: pcf8563: Constify clkout_rates
+      rtc: pcf8523: Remove struct pcf8523
+      rtc: st-lpc: Remove struct resource from struct st_rtc
+      rtc: sun6i: Remove struct device from sun6i_rtc_dev
+      rtc: xgene: Remove unused struct device in struct xgene_rtc_dev
+
+Parthiban Nallathambi (1):
+      rtc: rv3028: add clkout support
+
+Srinivas Goud (1):
+      rtc: xilinx: Fix calibval variable type
+
+Stephen Boyd (1):
+      rtc: armada38x: Use of_device_get_match_data()
+
+Thomas Bogendoerfer (3):
+      rts: ds1685: remove not needed fields from private struct
+      rtc: ds1685: use devm_platform_ioremap_resource helper
+      rtc: ds1685: add indirect access method and remove plat_read/plat_write
+
+YueHaibing (1):
+      rtc: use devm_platform_ioremap_resource() to simplify code
+
+ arch/mips/sgi-ip32/ip32-platform.c  |   2 +-
+ drivers/rtc/Kconfig                 |  31 ++--
+ drivers/rtc/interface.c             |  58 +++++--
+ drivers/rtc/rtc-ab-b5ze-s3.c        |  11 --
+ drivers/rtc/rtc-armada38x.c         |  10 +-
+ drivers/rtc/rtc-asm9260.c           |   4 +-
+ drivers/rtc/rtc-aspeed.c            |   4 +-
+ drivers/rtc/rtc-at91rm9200.c        |  19 +--
+ drivers/rtc/rtc-at91sam9.c          |   4 +-
+ drivers/rtc/rtc-bd70528.c           |   1 +
+ drivers/rtc/rtc-brcmstb-waketimer.c |   5 +-
+ drivers/rtc/rtc-cadence.c           |   4 +-
+ drivers/rtc/rtc-coh901331.c         |   4 +-
+ drivers/rtc/rtc-cros-ec.c           |  22 ++-
+ drivers/rtc/rtc-da9063.c            |   3 +
+ drivers/rtc/rtc-davinci.c           |   4 +-
+ drivers/rtc/rtc-digicolor.c         |   4 +-
+ drivers/rtc/rtc-ds1216.c            |   4 +-
+ drivers/rtc/rtc-ds1286.c            |   4 +-
+ drivers/rtc/rtc-ds1302.c            |   2 -
+ drivers/rtc/rtc-ds1343.c            | 297 ++++++++++--------------------------
+ drivers/rtc/rtc-ds1347.c            | 102 +++++++------
+ drivers/rtc/rtc-ds1374.c            |   3 +-
+ drivers/rtc/rtc-ds1511.c            |   4 +-
+ drivers/rtc/rtc-ds1553.c            |   4 +-
+ drivers/rtc/rtc-ds1685.c            | 116 +++++++-------
+ drivers/rtc/rtc-em3027.c            |   4 +-
+ drivers/rtc/rtc-ep93xx.c            |   4 +-
+ drivers/rtc/rtc-fsl-ftm-alarm.c     |  24 +--
+ drivers/rtc/rtc-goldfish.c          |   8 +-
+ drivers/rtc/rtc-jz4740.c            |   4 +-
+ drivers/rtc/rtc-lpc24xx.c           |   4 +-
+ drivers/rtc/rtc-lpc32xx.c           |  15 +-
+ drivers/rtc/rtc-m41t80.c            |   6 +-
+ drivers/rtc/rtc-m48t86.c            |  11 +-
+ drivers/rtc/rtc-mc146818-lib.c      |  15 +-
+ drivers/rtc/rtc-meson.c             |   6 +-
+ drivers/rtc/rtc-msm6242.c           |  23 +--
+ drivers/rtc/rtc-mt7622.c            |   4 +-
+ drivers/rtc/rtc-mv.c                |   4 +-
+ drivers/rtc/rtc-omap.c              |   4 +-
+ drivers/rtc/rtc-pcf2127.c           |  10 +-
+ drivers/rtc/rtc-pcf8523.c           |  18 +--
+ drivers/rtc/rtc-pcf8563.c           |   2 +-
+ drivers/rtc/rtc-pic32.c             |   4 +-
+ drivers/rtc/rtc-pm8xxx.c            |   2 +-
+ drivers/rtc/rtc-r7301.c             |   7 +-
+ drivers/rtc/rtc-rtd119x.c           |   4 +-
+ drivers/rtc/rtc-rv3028.c            | 146 ++++++++++++++++++
+ drivers/rtc/rtc-rx6110.c            |  16 +-
+ drivers/rtc/rtc-s35390a.c           |  16 +-
+ drivers/rtc/rtc-s3c.c               |   4 +-
+ drivers/rtc/rtc-sa1100.c            |   4 +-
+ drivers/rtc/rtc-sc27xx.c            |   7 -
+ drivers/rtc/rtc-sirfsoc.c           |   8 -
+ drivers/rtc/rtc-spear.c             |   4 +-
+ drivers/rtc/rtc-st-lpc.c            |   5 +-
+ drivers/rtc/rtc-stk17ta8.c          |   4 +-
+ drivers/rtc/rtc-stm32.c             |   4 +-
+ drivers/rtc/rtc-sun6i.c             |   2 -
+ drivers/rtc/rtc-sunxi.c             |   4 +-
+ drivers/rtc/rtc-tegra.c             |   8 +-
+ drivers/rtc/rtc-tps65910.c          |  21 ++-
+ drivers/rtc/rtc-tx4939.c            |   4 +-
+ drivers/rtc/rtc-v3020.c             |   3 +-
+ drivers/rtc/rtc-vt8500.c            |  32 ++--
+ drivers/rtc/rtc-wilco-ec.c          |   8 +-
+ drivers/rtc/rtc-xgene.c             |   6 +-
+ drivers/rtc/rtc-zynqmp.c            |   7 +-
+ drivers/rtc/sysfs.c                 |   5 +-
+ include/linux/rtc.h                 |   5 +
+ include/linux/rtc/ds1685.h          |  12 +-
+ 72 files changed, 566 insertions(+), 678 deletions(-)
+
 -- 
-2.15.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
