@@ -2,98 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 484C8113D54
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2019 09:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EA9114466
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Dec 2019 17:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfLEIu7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Dec 2019 03:50:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58280 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbfLEIu7 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 5 Dec 2019 03:50:59 -0500
-Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4DB4F205ED;
-        Thu,  5 Dec 2019 08:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575535858;
-        bh=jv3bVtccHNR/eO6WUrlGuplkynPeqmKgBox/+jgglmY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=zJ2Pgng4JVDyPDNCnaCPVIuU4jWEK7fe+PHC7tvpnKoUvx93g75P4sFbdREl/Zw8p
-         /bM6Ao3pHaM1MNS83wq5HStQHqVgS9QC7HkwRQM/Q82q0WsFYYTRjWadNWKsj/FWWK
-         2sWWQ1VmT1c9uzt3wrafhsOLLDYXqPNnwbzhpNkI=
-Received: by wens.tw (Postfix, from userid 1000)
-        id C09F55FA9F; Thu,  5 Dec 2019 16:50:54 +0800 (CST)
-From:   Chen-Yu Tsai <wens@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
+        id S1726257AbfLEQHG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Dec 2019 11:07:06 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:42562 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbfLEQHG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Dec 2019 11:07:06 -0500
+Received: by mail-pj1-f68.google.com with SMTP id o11so1463721pjp.9;
+        Thu, 05 Dec 2019 08:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0EteF4iAsRPHclRrUrgDLpQZXRR6Kg6d9lRSQjCvFTM=;
+        b=MwasEGI7lm+mGeCpcG6eU/GbXC7zNqrFuCiJB87Bv7lJ6q2aJsS0HYDmpRLMlUSnqr
+         bUH7uorWtXJHy2FK4Zsht6aeU4IUKqqwnZqXstHWd3GAuGh+2N3gtLqJwHkC/4cMwELe
+         TGBTIYm8HyoAcyb5tC2dN1UQVgxQuiHpHniL2G1fqOZ/R6OVf+4+qGsuMYxKegG66IJ2
+         YXBVIsZfNABYv3Sz4wFzY0T7O3TSMvsnzhbjAXUcVF9SdWMXZEDFPTsPS0jcIVerLj22
+         wzKbLoCckcPxFqGApIK4ifdjwT7ETBkDktx5+KbEIahJMKhckepyBFeQaknkWrs1ja12
+         So1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0EteF4iAsRPHclRrUrgDLpQZXRR6Kg6d9lRSQjCvFTM=;
+        b=Zdvbzf1nN+YR+ROLMej5FwlsNYVSlyTLnH6NuTstmjk904hFb9THuv0MbABfcXlusq
+         m09F36s6O0FNRNyJTHs0WPnu+5kOlXyqzsrbk2m4Uz4o+Xpk64xMrdsoKv6ftsfwPgNh
+         jNU1LQyGJVkEZ+rA+qL//3P3sxU5MZleHESwBrT6NXgM7y+VafKC90HVVWvYYqfMyhGM
+         z09FCw/jrH+siVX586UQWm/hWzqUHEbFDDCbHCmx0OSHwjErm3dfyNpiTguoC9GUCgni
+         8G1KLrxR7PEMFW9azgZz9qV+3ZzzBiuGmZ6FUHa76Z3gSKz1fdPOwfFs9tY2tM1DS1u6
+         o23g==
+X-Gm-Message-State: APjAAAXcK/w7NdOOTFZtI47T0M0f5LPDz4SutaLcSKTGH4DaDLD0LhAi
+        EGrnwBHCK/gqHjQbkMwl+bg=
+X-Google-Smtp-Source: APXvYqywhPRYNArYzVQFWv+PuF/L2d6dUUNgv5VAlL+Ittq3144uB72j/wDmK/qj00I0S7d386YuRA==
+X-Received: by 2002:a17:902:7c0a:: with SMTP id x10mr9926650pll.168.1575562026013;
+        Thu, 05 Dec 2019 08:07:06 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id h5sm13877752pfk.30.2019.12.05.08.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2019 08:07:05 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH] rtc: sun6i: Add support for RTC clocks on R40
-Date:   Thu,  5 Dec 2019 16:50:54 +0800
-Message-Id: <20191205085054.6049-1-wens@kernel.org>
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] rtc: stm32: add missed clk_disable_unprepare in error path of resume
+Date:   Fri,  6 Dec 2019 00:06:55 +0800
+Message-Id: <20191205160655.32188-1-hslester96@gmail.com>
 X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+The resume() forgets to call clk_disable_unprepare() when failed.
+Add the missed call to fix it.
 
-When support for the R40 in the rtc-sun6i driver was split out for a
-separate compatible string, only the RTC half was covered, and not the
-clock half. Unfortunately this results in the whole driver not working,
-as the RTC half expects the clock half to have been initialized.
-
-Add support for the clock part as well. The clock part is like the H3,
-but does not need to export the internal oscillator, nor does it have
-a gateable LOSC external output.
-
-This fixes issues with WiFi and Bluetooth not working on the BPI M2U.
-
-Fixes: d6624cc75021 ("rtc: sun6i: Add R40 compatible")
-Cc: <stable@vger.kernel.org> # 5.3.x
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
+ drivers/rtc/rtc-stm32.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Please merge this for fixes.
-
----
- drivers/rtc/rtc-sun6i.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 5e2bd9f1d01e..fc32be687606 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -380,6 +380,22 @@ static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
- CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
- 		      sun50i_h6_rtc_clk_init);
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index 781cabb2afca..d774aa18f57a 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -897,8 +897,11 @@ static int stm32_rtc_resume(struct device *dev)
+ 	}
  
-+/*
-+ * The R40 user manual is self-conflicting on whether the prescaler is
-+ * fixed or configurable. The clock diagram shows it as fixed, but there
-+ * is also a configurable divider in the RTC block.
-+ */
-+static const struct sun6i_rtc_clk_data sun8i_r40_rtc_data = {
-+	.rc_osc_rate = 16000000,
-+	.fixed_prescaler = 512,
-+};
-+static void __init sun8i_r40_rtc_clk_init(struct device_node *node)
-+{
-+	sun6i_rtc_clk_init(node, &sun8i_r40_rtc_data);
-+}
-+CLK_OF_DECLARE_DRIVER(sun8i_r40_rtc_clk, "allwinner,sun8i-r40-rtc",
-+		      sun8i_r40_rtc_clk_init);
-+
- static const struct sun6i_rtc_clk_data sun8i_v3_rtc_data = {
- 	.rc_osc_rate = 32000,
- 	.has_out_clk = 1,
+ 	ret = stm32_rtc_wait_sync(rtc);
+-	if (ret < 0)
++	if (ret < 0) {
++		if (rtc->data->has_pclk)
++			clk_disable_unprepare(rtc->pclk);
+ 		return ret;
++	}
+ 
+ 	if (device_may_wakeup(dev))
+ 		return disable_irq_wake(rtc->irq_alarm);
 -- 
 2.24.0
 
