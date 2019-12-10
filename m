@@ -2,84 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA092116A1E
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Dec 2019 10:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018A51182D2
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 09:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbfLIJub (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Dec 2019 04:50:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60382 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725994AbfLIJub (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 9 Dec 2019 04:50:31 -0500
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 393F324680;
-        Mon,  9 Dec 2019 09:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575885030;
-        bh=kK/I1htj5iKmRP2SOIMYrpp9j8JAcrd7L6geivuOKJ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pd3bkAeCwLsfknhYLwW5D5ACMrJir0Nd8fxBEHXzX23+IvhzeXMqC795QiGC6ii+t
-         Ab/ujdrOpc5MkZkjlFcuehhQsp+UtrbtsuVAZXR09sVyu3LXeVIzUPJJ/QlVWw25Lg
-         p9/gl1rc3XARVg/MwzOjTm7CT9xzPxo9/fE4NTOw=
-Date:   Mon, 9 Dec 2019 10:50:27 +0100
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] rtc: sun6i: Add support for RTC clocks on R40
-Message-ID: <20191209095027.ivvatpcmft6357hs@gilmour.lan>
-References: <20191205085054.6049-1-wens@kernel.org>
+        id S1726883AbfLJIwx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Dec 2019 03:52:53 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46703 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726847AbfLJIwx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 03:52:53 -0500
+Received: by mail-wr1-f68.google.com with SMTP id z7so18942160wrl.13
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Dec 2019 00:52:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=wu72ZcmsFHLVkAALMmbmLhHmQQPjxMnxvhre6csNNNw=;
+        b=Jpct3dZ79bLrJVYVAnUUlQlf9+z5GnfPRqxm1SCkWaAX4EzJW1DvJaHb1kwIoqbS2T
+         x3iqypxU0qLYRpUk16PdsdbC7hDJMPnlljbS9sAmBEj7xerpWHSzo7Vu6DDioD2Sl0R/
+         RtHnkO8jP0Q3zEAflyhfyb0U9435zmG0Eljeu26sigkMCO9Sy7QnwPBqlAfKiUYIq3mx
+         UQYu4oKbrloYniRIIbNrvLgVazCm0gSj+KiZiExfq7Ky64IMfAD3qQkgDyB0ruTnNFZn
+         xO8FOXbKKu4oIy1Y5a7i2yklkS6q0PkPaG/NcvXoMwjVUZPs2ju4LLfsLlMbvyMb/2Ad
+         5qyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=wu72ZcmsFHLVkAALMmbmLhHmQQPjxMnxvhre6csNNNw=;
+        b=Fzt4I27hYAHGK7X6lQ7iKSY8G9AnUCJ1DtfgZA+nUvnwUuJ+kt59+z2+GALWodvji6
+         aBKvnwVvlr6xWvGrxseJZu9SCCXE9ukkfDnhMiIig3aQkNkT9QN9bxL7IYuZsoKpd5sX
+         haTtRPv8Z1ue1zAJ/NFeqORxuJ4BlVDFcBghHiiN/ep2u+xE3326Wl1TF5qeC4the70f
+         oD5id9tjlM9uRe7HtNBmY6eX0r1kjXj6JQybRpffAAdQ+7URBTM9CfzuWzsUxm6VlAPc
+         vtbJm5vtACmYms+lWpwbCfxF/eYtOFR7u9+6+BsmD7E7cys9dYsrXaVHyf4RNZjqM+bm
+         zGwg==
+X-Gm-Message-State: APjAAAUWBbb0O5+m5bwOd1LimknhQLGwwgFsiB9Zt03oeQVcGG4Ck5ID
+        iBccToehpnHThA2g9cxBkqfsug==
+X-Google-Smtp-Source: APXvYqxNtdqEUf0ybgBiLfNWM/2TgJzzIP+gMMTyOVmPeFHLT7MsWwJUI/pg+ie8aPi1hMxoH7lPLg==
+X-Received: by 2002:adf:f850:: with SMTP id d16mr1853669wrq.161.1575967971012;
+        Tue, 10 Dec 2019 00:52:51 -0800 (PST)
+Received: from dell (h185-20-99-176.host.redstation.co.uk. [185.20.99.176])
+        by smtp.gmail.com with ESMTPSA id s15sm2518432wrp.4.2019.12.10.00.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 00:52:50 -0800 (PST)
+Date:   Tue, 10 Dec 2019 08:52:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v3 1/6] dt-bindings: mfd: rn5t618: Document optional
+ property interrupts
+Message-ID: <20191210085243.GR3468@dell>
+References: <20191129212045.18325-1-andreas@kemnade.info>
+ <20191129212045.18325-2-andreas@kemnade.info>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="adfqrlv2c7xcdepi"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191205085054.6049-1-wens@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191129212045.18325-2-andreas@kemnade.info>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Fri, 29 Nov 2019, Andreas Kemnade wrote:
 
---adfqrlv2c7xcdepi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> These chips use interrupts for various things like rtc alarm.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  Documentation/devicetree/bindings/mfd/rn5t618.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/rn5t618.txt b/Documentation/devicetree/bindings/mfd/rn5t618.txt
+> index b74e5e94d1cb..05650e1ab28a 100644
+> --- a/Documentation/devicetree/bindings/mfd/rn5t618.txt
+> +++ b/Documentation/devicetree/bindings/mfd/rn5t618.txt
+> @@ -15,6 +15,7 @@ Required properties:
+>   - reg: the I2C slave address of the device
+>  
+>  Optional properties:
+> + - interrupts: interrupt mapping for IRQ
 
-On Thu, Dec 05, 2019 at 04:50:54PM +0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
->
-> When support for the R40 in the rtc-sun6i driver was split out for a
-> separate compatible string, only the RTC half was covered, and not the
-> clock half. Unfortunately this results in the whole driver not working,
-> as the RTC half expects the clock half to have been initialized.
->
-> Add support for the clock part as well. The clock part is like the H3,
-> but does not need to export the internal oscillator, nor does it have
-> a gateable LOSC external output.
->
-> This fixes issues with WiFi and Bluetooth not working on the BPI M2U.
->
-> Fixes: d6624cc75021 ("rtc: sun6i: Add R40 compatible")
-> Cc: <stable@vger.kernel.org> # 5.3.x
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+Please link to the document that describes it, as below.
 
-Acked-by: Maxime Ripard <mripard@kernel.org>
+NB: Relative paths are usually preferred.
 
-Maxime
+>   - system-power-controller:
+>     See Documentation/devicetree/bindings/power/power-controller.txt
+>  
+> @@ -32,6 +33,8 @@ Example:
+>  	pmic@32 {
+>  		compatible = "ricoh,rn5t618";
+>  		reg = <0x32>;
+> +		interrupt-parent = <&gpio5>;
+> +		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
+>  		system-power-controller;
+>  
+>  		regulators {
 
---adfqrlv2c7xcdepi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXe4Y4wAKCRDj7w1vZxhR
-xYNaAQCetuw+MBQxkDVO9bmDf8kmcwTq+uA3DS6rDGX1p7rgGwD/SEy8iOesX8M3
-XURC17yL4C6iJ4kO/yUvMDP24FhMpg0=
-=FAWR
------END PGP SIGNATURE-----
-
---adfqrlv2c7xcdepi--
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
