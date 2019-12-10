@@ -2,69 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 888ED1189EC
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 14:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8A1118A1C
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 14:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfLJNeE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Dec 2019 08:34:04 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37603 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbfLJNeE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 08:34:04 -0500
+        id S1727320AbfLJNrC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Dec 2019 08:47:02 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:38979 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727145AbfLJNrC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 08:47:02 -0500
 X-Originating-IP: 90.182.112.136
 Received: from localhost (136.112.broadband15.iol.cz [90.182.112.136])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B67AC40011;
-        Tue, 10 Dec 2019 13:34:01 +0000 (UTC)
-Date:   Tue, 10 Dec 2019 14:33:52 +0100
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 47BD71C0011;
+        Tue, 10 Dec 2019 13:47:00 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] rtc: sun6i: Add support for RTC clocks on R40
-Message-ID: <20191210133352.GM1463890@piout.net>
-References: <20191205085054.6049-1-wens@kernel.org>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] mailmap: Update email address for Alexandre Belloni
+Date:   Tue, 10 Dec 2019 14:46:53 +0100
+Message-Id: <20191210134653.2995661-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191205085054.6049-1-wens@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/12/2019 16:50:54+0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
-> 
-> When support for the R40 in the rtc-sun6i driver was split out for a
-> separate compatible string, only the RTC half was covered, and not the
-> clock half. Unfortunately this results in the whole driver not working,
-> as the RTC half expects the clock half to have been initialized.
-> 
-> Add support for the clock part as well. The clock part is like the H3,
-> but does not need to export the internal oscillator, nor does it have
-> a gateable LOSC external output.
-> 
-> This fixes issues with WiFi and Bluetooth not working on the BPI M2U.
-> 
-> Fixes: d6624cc75021 ("rtc: sun6i: Add R40 compatible")
-> Cc: <stable@vger.kernel.org> # 5.3.x
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-> ---
-> 
-> Please merge this for fixes.
-> 
-> ---
->  drivers/rtc/rtc-sun6i.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-Applied, thanks.
+Free Electrons is now Bootlin.
 
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/.mailmap b/.mailmap
+index c24773db04a7..41422ec7b7c7 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -18,6 +18,7 @@ Aleksey Gorelov <aleksey_gorelov@phoenix.com>
+ Aleksandar Markovic <aleksandar.markovic@mips.com> <aleksandar.markovic@imgtec.com>
+ Alex Shi <alex.shi@linux.alibaba.com> <alex.shi@intel.com>
+ Alex Shi <alex.shi@linux.alibaba.com> <alex.shi@linaro.org>
++Alexandre Belloni <alexandre.belloni@bootlin.com> <alexandre.belloni@free-electrons.com>
+ Alexei Starovoitov <ast@kernel.org> <ast@plumgrid.com>
+ Alexei Starovoitov <ast@kernel.org> <alexei.starovoitov@gmail.com>
+ Alexei Starovoitov <ast@kernel.org> <ast@fb.com>
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.23.0
+
