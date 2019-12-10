@@ -2,363 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CA911839B
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 10:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE0511854B
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 11:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbfLJJcd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Dec 2019 04:32:33 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:37092 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbfLJJcd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 04:32:33 -0500
-Received: by mail-wm1-f68.google.com with SMTP id f129so2306590wmf.2
-        for <linux-rtc@vger.kernel.org>; Tue, 10 Dec 2019 01:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=PSQScSDnlo93GQoR20fpTB0eabm3bHRkOsN6d+uG2Do=;
-        b=eNIDMvR7jYjMDJ33K7agoubEz5UWh0Io+iFSLRF9tX5UlGsDktzRU0FsSJKS5TNhDd
-         qlzsjbcqiNxRwHPUyzOfiW/xjVrOT7IYd7PwcsGg3vGI/IPjT4UKIhjz5w2JP8ToV1si
-         cZg+la7VhwCun03B5aBU3ewEWjmWEL5W4OWNJ0Sb2ZL5KCCSf4FYxREbcOYL1I9L8wIX
-         2USnsNPJ13f9zZmRgzK7Br5OyU5kNS+VF4hokDJBl2ARoUAn6vaIlrqpHSwm/4BhIz5u
-         1mRXLGPXvGNYdg+npJP0+Gnuoz8JTm6CgmlmIJ/bFSKZ3zUuZN6dZy61nRO83mixc+r0
-         qdHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=PSQScSDnlo93GQoR20fpTB0eabm3bHRkOsN6d+uG2Do=;
-        b=jABaPGdV6XeEZCONRlH7dAlvMWauNORrz89OnaZp6qW03tDYvhES4Utuwpt0oBydjl
-         XfPMS09pRX0LJOAgTq05Zj1VB7by3QNOTQHKeALGee5fo3IZ9gAGdUDoOA4CTjT1Y9Y9
-         gDdIiA5VzyApVGIdIAZW3dn+W6uLI3q+pbxUqO9Ho6+kT0dcfFvXTT3/lanXTe5/w0Vk
-         IVTpqSmG9aX8GPTo5skP6Nrg89g5dK5NCTbw8nIcz6sZ8+BW0ENZFocdAU96BjTDsXnI
-         CwIb+MDK9MtjV43IUOrWYk9j8Df1CzqGqaA9Uk6NJyjkaz/dlH69eX89c98WEVvYQe6H
-         MeBQ==
-X-Gm-Message-State: APjAAAVZEfUy/o3/ddon9n5fvZQYxzNZOzx9/pJlph5fqEYgBIVITUJM
-        8atQx2GV5Mgxx5fXbuRPJ9ZViw==
-X-Google-Smtp-Source: APXvYqxd7XdmmKIlfxIhihp8NUrV17zAGt34iW5Yzln3ZQcnD4qVroNU36dFKANfT88q64YCiOxP0g==
-X-Received: by 2002:a1c:407:: with SMTP id 7mr3889627wme.29.1575970351127;
-        Tue, 10 Dec 2019 01:32:31 -0800 (PST)
-Received: from dell (h185-20-99-176.host.redstation.co.uk. [185.20.99.176])
-        by smtp.gmail.com with ESMTPSA id f1sm2517194wrp.93.2019.12.10.01.32.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 01:32:30 -0800 (PST)
-Date:   Tue, 10 Dec 2019 09:32:25 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v3 3/6] mfd: rn5t618: add irq support
-Message-ID: <20191210093225.GT3468@dell>
-References: <20191129212045.18325-1-andreas@kemnade.info>
- <20191129212045.18325-4-andreas@kemnade.info>
+        id S1727317AbfLJKkH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Dec 2019 05:40:07 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:50958 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfLJKkG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 05:40:06 -0500
+X-AuditID: c0a8fbf4-199ff70000001fa6-8f-5def76030a76
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 42.1B.08102.3067FED5; Tue, 10 Dec 2019 11:40:03 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Tue, 10 Dec 2019 11:39:58 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "broonie@kernel.org" <broonie@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "hofrat@osadl.org" <hofrat@osadl.org>,
+        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>
+Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
+ regulator bindings
+Thread-Topic: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
+ regulator bindings
+Thread-Index: AQHVndzxthsd4Y8wKkm7W/92Uslk+KeRDPcAgAAbkICAAZUNgIAACqYAgAAMmACADvFigIAASP2AgARwk4CAAFfQAIAADk+AgAMPioCAAAc/gIAAESOAgAkyBwA=
+Date:   Tue, 10 Dec 2019 10:39:57 +0000
+Message-ID: <aea80c251dbafa8f2cd433eaf397a754812338d8.camel@fi.rohmeurope.com>
+References: <20191119181325.GD3634@sirena.org.uk>
+         <fa69d01504817e3260d2b023ae2637aa2f1b2862.camel@fi.rohmeurope.com>
+         <20191119193636.GH3634@sirena.org.uk>
+         <eb685cc78b936bc61ed9f7fbfa18c96398b00909.camel@fi.rohmeurope.com>
+         <20191129120925.GA5747@sirena.org.uk>
+         <297fa021fb243072dbbb7bca455e57c13e8c6843.camel@fi.rohmeurope.com>
+         <20191202131140.GD1998@sirena.org.uk>
+         <72a1f4c5768b8c08c2669ea01e60d1b614095a43.camel@fi.rohmeurope.com>
+         <20191204124717.GR1998@sirena.org.uk>
+         <6f7b96c71bd1257b0b218a092f8aca7f32ef5468.camel@fi.rohmeurope.com>
+         <20191204141433.GU1998@sirena.org.uk>
+In-Reply-To: <20191204141433.GU1998@sirena.org.uk>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7EDEB04F51B872489D3A15D2A5378E04@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191129212045.18325-4-andreas@kemnade.info>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0wUVxjNnffiDh0XKFeqpN3U2NoAYvxxE03RJtaxbZq2/jAxpTiUKbtx
+        2V1ndo2PGqkGYReCWKEtW96P8nCtFUFbAxa2IHR9UFpWMbqYVbSilkWrKGppZ5gq/Lrnfuc7
+        53w3+S6DG7x0HGO2OkTJKliMVATR2fjkSAK+JZy6ZE8jh+oGAjTKHfuORvfL/QQqCY1QaKQz
+        F6DK7nMkyj/dSqKa8DckcrnySHSp7QcC9R29AtCVBz0ATQzmYaj4aQOG7hYMk6h6bx2BjlY+
+        BeiPE2UUarvzPUCnDg5S6FB3kEb1FwYwVFbfR6DwPReGBvyrUdDfQ6E9A0M4yunoptHU+SME
+        Kjy3ZmU8763wAj48lEPzFd4d/E+eIM3Xto9ifEuzi+Ivn2+n+NrCAyR/s+AXgp84s5/gC1ub
+        AX+j+jDB9w4dx/ivKyYxvvHgQ5r/uyX+A27DnBXpgmPLOnOmNenNjXNMx/t7aHt75NbcyhI8
+        GxREuoGOgdwy+PuxfNoNIhgDFwCw0XcX1y59AAZ+HlcuDENxK6D7Iq0KorkEWPK4llJ7cK5U
+        Dx9NTlIqEcVthK23rxFakwCrJp5gGnYDePLPhSomuIXQnVNGqpjl3ofB0/WYFnaZgHmFXdOE
+        jlsKG6bGp40AtwC6ssemjXAuFrbceEhqY3Owrr0f13AMHL029X/dCDsmQ4Q6NM69Dg+fSNKk
+        K2FX7z1aw6/A4vwQrc0wF/5aOkIUgRc9sxI8M2rPLLVnltozS10FyGYAswSzJVNwiMmJkuhM
+        lGymLOX41JbVArTtu/8j+Ne31gcwBvjAPAYzxrCHLOFUQ2S6LWObSZBNaZLTIso+ABncGM32
+        7h1LNbAZwrbtomR7Rr3EEMZYdlFof6qBU7M2iaJdlJ6x8xnGCNkmh2I6VxIzxa2fmS2OGRpj
+        dKp5RFy0LFozRElwOkxp6oKkycqGqJReydU7FTkr24UspapJ/eANpmi0vAZnusvra3ADYbVZ
+        xbhYtlRN4tRWk9P6POgWiGWAMYrNVI30yhd87nNLicCUCFeG+jTZIcxQcdmg68MiLPDxqt6o
+        f3Y+fut6fMP4eLHJKicNr1r+8pmlbVfZHS+crdqQ8uqp94qDTYu/NI8l0+A13WD15pTVHcw7
+        Qd3Nk8Nr0uZd2tfs/TbmkcjuMzT57e+mNB0ILX/wW8TuTQs6wfqPvnp7/hefLCmXNgcWeRPS
+        ye1nd19fu+svvF9vT/z8mJGQTULyYlyShf8AEWHJOj8EAAA=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 29 Nov 2019, Andreas Kemnade wrote:
-
-> This adds support for irq handling in the rc5t619 which is required
-
-Please capitalise abbreviations and device names (as they do in the
-datasheet).
-
-> for properly implementing subdevices like rtc.
-
-"RTC"
-
-> For now only definitions for the variant rc5t619 are included.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> Changes in v3:
-> alignment cleanup
-> 
-> Changes in v2:
-> - no dead code, did some more testing and thinking for that
-> - remove extra empty lines
-> 
->  drivers/mfd/Kconfig         |  1 +
->  drivers/mfd/Makefile        |  2 +-
->  drivers/mfd/rn5t618-core.c  | 34 ++++++++++++++-
->  drivers/mfd/rn5t618-irq.c   | 85 +++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/rn5t618.h | 16 +++++++
->  5 files changed, 136 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/mfd/rn5t618-irq.c
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index ae24d3ea68ea..522e068d0082 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1057,6 +1057,7 @@ config MFD_RN5T618
->  	depends on OF
->  	select MFD_CORE
->  	select REGMAP_I2C
-> +	select REGMAP_IRQ
->  	help
->  	  Say yes here to add support for the Ricoh RN5T567,
->  	  RN5T618, RC5T619 PMIC.
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 110ea700231b..2906d5db67d0 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -217,7 +217,7 @@ obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
->  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
->  obj-$(CONFIG_MFD_RK808)		+= rk808.o
->  
-> -rn5t618-objs			:= rn5t618-core.o
-> +rn5t618-objs			:= rn5t618-core.o rn5t618-irq.o
->  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
->  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
->  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
-> diff --git a/drivers/mfd/rn5t618-core.c b/drivers/mfd/rn5t618-core.c
-> index da5cd9c92a59..1e2326217681 100644
-> --- a/drivers/mfd/rn5t618-core.c
-> +++ b/drivers/mfd/rn5t618-core.c
-> @@ -8,6 +8,7 @@
->  
->  #include <linux/delay.h>
->  #include <linux/i2c.h>
-> +#include <linux/interrupt.h>
->  #include <linux/mfd/core.h>
->  #include <linux/mfd/rn5t618.h>
->  #include <linux/module.h>
-> @@ -105,7 +106,8 @@ static int rn5t618_i2c_probe(struct i2c_client *i2c,
->  
->  	i2c_set_clientdata(i2c, priv);
->  	priv->variant = (long)of_id->data;
-> -
-> +	priv->chip_irq = i2c->irq;
-> +	priv->dev = &i2c->dev;
-
-'\n'
-
->  	priv->regmap = devm_regmap_init_i2c(i2c, &rn5t618_regmap_config);
->  	if (IS_ERR(priv->regmap)) {
->  		ret = PTR_ERR(priv->regmap);
-> @@ -137,6 +139,11 @@ static int rn5t618_i2c_probe(struct i2c_client *i2c,
->  		return ret;
->  	}
->  
-> +	if (priv->chip_irq > 0) {
-> +		if (rn5t618_irq_init(priv))
-> +			priv->chip_irq = 0;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -154,15 +161,40 @@ static int rn5t618_i2c_remove(struct i2c_client *i2c)
->  	return 0;
->  }
->  
-> +static int __maybe_unused rn5t618_i2c_suspend(struct device *dev)
-> +{
-> +	struct rn5t618 *priv = dev_get_drvdata(dev);
-> +
-> +	if (priv->chip_irq)
-> +		disable_irq(priv->chip_irq);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused rn5t618_i2c_resume(struct device *dev)
-> +{
-> +	struct rn5t618 *priv = dev_get_drvdata(dev);
-> +
-> +	if (priv->chip_irq)
-> +		enable_irq(priv->chip_irq);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct i2c_device_id rn5t618_i2c_id[] = {
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, rn5t618_i2c_id);
-
-Not this patch I know, but it's strange to see this empty.
-
-> +static SIMPLE_DEV_PM_OPS(rn5t618_i2c_dev_pm_ops,
-> +			rn5t618_i2c_suspend,
-> +			rn5t618_i2c_resume);
-> +
->  static struct i2c_driver rn5t618_i2c_driver = {
->  	.driver = {
->  		.name = "rn5t618",
->  		.of_match_table = of_match_ptr(rn5t618_of_match),
-> +		.pm = &rn5t618_i2c_dev_pm_ops,
->  	},
->  	.probe = rn5t618_i2c_probe,
->  	.remove = rn5t618_i2c_remove,
-> diff --git a/drivers/mfd/rn5t618-irq.c b/drivers/mfd/rn5t618-irq.c
-
-Why does this need to be separate from the core file?
-
-> new file mode 100644
-> index 000000000000..8a4c56429768
-> --- /dev/null
-> +++ b/drivers/mfd/rn5t618-irq.c
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright 2019 Andreas Kemnade
-> + */
-> +#include <linux/device.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <linux/mfd/rn5t618.h>
-> +
-> +static const struct regmap_irq rc5t619_irqs[] = {
-> +	[RN5T618_IRQ_SYS] = {
-> +		.reg_offset = 0,
-> +		.mask = (0 << 1)
-> +	},
-> +	[RN5T618_IRQ_DCDC] = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 1)
-
-BIT()
-
-> +	},
-> +	[RN5T618_IRQ_RTC]  = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 2)
-> +	},
-> +	[RN5T618_IRQ_ADC] = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 3)
-> +	},
-> +	[RN5T618_IRQ_GPIO] = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 4)
-> +	},
-> +	[RN5T618_IRQ_CHG] = {
-> +		.reg_offset = 0,
-> +		.mask = (1 << 6),
-> +	}
-> +};
-
-There are probably macros available to tidy this up.
-
-Take a look in include/linux/regmap.h
-
-> +static const struct regmap_irq_chip rc5t619_irq_chip = {
-> +	.name = "rc5t619",
-> +	.irqs = rc5t619_irqs,
-> +	.num_irqs = ARRAY_SIZE(rc5t619_irqs),
-> +	.num_regs = 1,
-> +	.status_base = RN5T618_INTMON,
-> +	.mask_base = RN5T618_INTEN,
-> +	.mask_invert = true,
-> +};
-> +
-> +int rn5t618_irq_init(struct rn5t618 *rn5t618)
-> +{
-> +	const struct regmap_irq_chip *irq_chip;
-> +	int ret;
-> +
-> +	if (!rn5t618->chip_irq)
-> +		return 0;
-> +
-> +	switch (rn5t618->variant) {
-> +	case RC5T619:
-> +		irq_chip = &rc5t619_irq_chip;
-> +		break;
-> +
-> +		/* TODO: check irq definitions for other variants */
-
-No need for this.  It's implied.
-
-OOI, when support for more variants be added?
-
-> +	default:
-> +		irq_chip = NULL;
-> +		break;
-> +	}
-> +
-> +	if (!irq_chip) {
-> +		dev_err(rn5t618->dev, "no IRQ definition known for variant\n");
-
-How about '"Variant %d not currently supported", rn5t618->variant'
-
-> +		return -ENOENT;
-> +	}
-> +
-> +	ret = devm_regmap_add_irq_chip(rn5t618->dev, rn5t618->regmap,
-> +				       rn5t618->chip_irq,
-> +				       IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +				       0, irq_chip, &rn5t618->irq_data);
-> +	if (ret != 0) {
-
-if (ret)
-
-> +		dev_err(rn5t618->dev, "Failed to register IRQ chip\n");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/include/linux/mfd/rn5t618.h b/include/linux/mfd/rn5t618.h
-> index d62ef48060b5..edd2b6485e3b 100644
-> --- a/include/linux/mfd/rn5t618.h
-> +++ b/include/linux/mfd/rn5t618.h
-> @@ -242,9 +242,25 @@ enum {
->  	RC5T619,
->  };
->  
-> +/* RN5T618 IRQ definitions */
-> +enum {
-> +	RN5T618_IRQ_SYS,
-
-= 0?
-
-> +	RN5T618_IRQ_DCDC,
-> +	RN5T618_IRQ_RTC,
-> +	RN5T618_IRQ_ADC,
-> +	RN5T618_IRQ_GPIO,
-> +	RN5T618_IRQ_CHG,
-> +	RN5T618_NR_IRQS,
-> +};
-> +
->  struct rn5t618 {
->  	struct regmap *regmap;
-> +	struct device *dev;
->  	long variant;
-> +
-> +	int chip_irq;
-
-Are there any other kinds of IRQ?
-
-If you don't have to differentiate between multiple, just 'irq' will
-do.
-
-This could also get confused with 'irq_chip'.
-
-> +	struct regmap_irq_chip_data *irq_data;
->  };
->  
-> +extern int rn5t618_irq_init(struct rn5t618 *rn5t618);
->  #endif /* __LINUX_MFD_RN5T618_H */
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+DQpPbiBXZWQsIDIwMTktMTItMDQgYXQgMTQ6MTQgKzAwMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo+
+IE9uIFdlZCwgRGVjIDA0LCAyMDE5IGF0IDAxOjEzOjA4UE0gKzAwMDAsIFZhaXR0aW5lbiwgTWF0
+dGkgd3JvdGU6DQo+IA0KPiA+IEkgdGhpbmsgSSBvbmNlIGFnYWluIGV4cGxhaW5lZCBteXNlbGYg
+YmFkbHkuIFRoZXJlIGNhbiBiZSBvbmx5IG9uZQ0KPiA+IGdyb3VwIHdpdGggNCBSVU4gc3RhdGVz
+IHNlbGVjdGVkIGJ5IGNvbWJpbmF0aW9uIG9mIDIgR1BJTyBsaW5lcy4NCj4gPiBidWNrcw0KPiA+
+IDEsMiw2IGFuZCA3IGNhbiBlYWNoIGVpdGhlciBiZSBhc3NpZ25lZCBpbnRvIHRoaXMgb25lIGdy
+b3VwIG9yDQo+ID4gY29udHJvbGxlZCBpbmRpdmlkdWFsbHkgdmlhIEkyQy4gQnV0IEkgZG91YnQg
+YXNzaWduaW5nIG9ubHkgb25lIG9mDQo+ID4gdGhlDQo+ID4gYnVja3MgaW4gdGhpcyBncm91cCBp
+cyB0aGUgdHlwaWNhbCB1c2UtY2FzZS4gV2hhdCB3ZSB3b3VsZCBuZWVkDQo+ID4gd291bGQNCj4g
+DQo+IEkgZG9uJ3QgdGhpbmsgdGhpcyBpcyBhcyB1bnVzdWFsIGFzIHlvdSdyZSB0aGlua2luZyAt
+IHRoZQ0KPiByZWd1bGF0b3JzIHBlb3BsZSB3YW50IHRvIGNvbnRyb2wgcXVpY2tseSBhcmUgdXN1
+YWxseSB0aGUgbWFpbg0KPiBDUFUgc3VwcGx5IHJlZ3VsYXRvcnMgYW5kIHRoZXNlIG9mdGVuIHZh
+cnkgaW5kZXBlbmRlbnRseSBvZg0KPiBhbnl0aGluZyBlbHNlLg0KDQpIbW0uIEkgc2VlIHlvdXIg
+cG9pbnQuIFlvdSBtaWdodCBiZSBjb3JyZWN0LiBBbGxvd2luZyBvbmx5IG9uZSBidWNrIHRvDQpi
+ZSBhc3NpZ25lZCBpbiAncnVuLWxldmVsIGdyb3VwJyAodG8gYmUgY29udHJvbGxlZCBieSBHUElP
+cykgd291bGQgYmUNCnRvdGFsbHkgcG9zc2libGUgd2l0aCBjdXJyZW50IHJlZ3VsYXRvciBBUEkg
+LSBhbmQgaXQgbWlnaHQgYmUgdXNlZnVsDQpmb3Igc2NhbGluZyB0aGUgQ1BVIHZvbHRhZ2UuIEkg
+YXBwcmVjaWF0ZSB5b3VyIGhlbHAgYW5kIGV4cGVyaWVuY2UgaGVyZQ0KOikgSW1wbGVtZW50aW5n
+IGl0IHdvdWxkIGJlIGFsc28gcHJldHR5IHNpbXBsZSwgY2FjaGluZyBhbmQgY29udHJvbGxpbmcN
+CnRoZSBydW4tbGV2ZWwgdm9sdGFnZXMgaXMgYWxyZWFkeSB0aGVyZSBpbiBwYXRjaCAxMiwgSSBq
+dXN0IHNob3VsZA0KcmVzdHJpY3QgdGhlIGdyb3VwIHNpemUgdG8gb25lIGJ1Y2suIEkgd2lsbCBz
+ZWUgaG93IGl0IHdvcmtzIGFuZCBhbHNvDQphc2sgaWYgbXkgY29sbGVhZ3VlcyBrbm93IHdoZXRo
+ZXIgdGhpcyBpcyB2YWx1YWJsZSB3aXRoIG91ciBjdXJyZW50DQpjdXN0b21lcidzIFNPQ3MuIFRo
+YW5rcyBhIGJ1bmNoIQ0KDQpCciwNCglNYXR0aSBWYWl0dGluZW4NCg==
