@@ -2,108 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0015A11AA16
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 12:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3124E11AA32
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 12:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728976AbfLKLnp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Dec 2019 06:43:45 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:40504 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727477AbfLKLnp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 11 Dec 2019 06:43:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ysyNjTSsmEcgClf9ZxXEgP2ysGGg+LMv85Q0mUD/N2k=; b=A/LOMSEg2V59J0lHgD2cVZD75
-        ugtsfbeLru2x5FGQCofE/qiFcQZFRoJ5WTmhgRATb//dMfit2N/Y6oqH/4Mc5VfZuJ7+DEVia7es8
-        3naHAHrh/gRO1+PalhZ20fH71nctjrpLmaPDOTbutAAuagjczbp2l40iHY5L9+HwP5EY0=;
-Received: from leintor.e.ffh.zone ([81.3.6.94] helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1if0P3-0006ib-VN; Wed, 11 Dec 2019 12:43:38 +0100
-Received: from [::1] (helo=localhost)
-        by eeepc with esmtp (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1if0P1-00060J-Iy; Wed, 11 Dec 2019 12:43:35 +0100
-Date:   Wed, 11 Dec 2019 12:43:20 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v3 3/6] mfd: rn5t618: add irq support
-Message-ID: <20191211124320.5744531f@kemnade.info>
-In-Reply-To: <20191211075021.GW3468@dell>
-References: <20191129212045.18325-1-andreas@kemnade.info>
-        <20191129212045.18325-4-andreas@kemnade.info>
-        <20191210093225.GT3468@dell>
-        <20191210175900.64df7de8@kemnade.info>
-        <20191211075021.GW3468@dell>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
+        id S1728997AbfLKLtF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Dec 2019 06:49:05 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:49254 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727477AbfLKLtF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 06:49:05 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-9a-5df0d7ae1537
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 34.B2.08102.EA7D0FD5; Wed, 11 Dec 2019 12:49:02 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Wed, 11 Dec 2019 12:48:56 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "noralf@tronnes.org" <noralf@tronnes.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+Subject: Re: [PATCH v6 12/15] rtc: bd70528 add BD71828 support
+Thread-Topic: [PATCH v6 12/15] rtc: bd70528 add BD71828 support
+Thread-Index: AQHVsAgtLDOE1gVnBUinFPzstDImkqe0vi8AgAAC8oA=
+Date:   Wed, 11 Dec 2019 11:48:56 +0000
+Message-ID: <830dad816b6d7f375e7c821e8e435931d1cd4afa.camel@fi.rohmeurope.com>
+References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+         <16a2492d4c70a80628dbf1a64a85c5b554c7f6e4.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+         <20191211113828.GW1463890@piout.net>
+In-Reply-To: <20191211113828.GW1463890@piout.net>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0A0135D61D3D4542ABB9B3608955BE32@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/MuFE3bBo6T9L2my3GBgeHNO"; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxjfuff23gN49VBwHOo08266OSOORJOTxTkX5nb5ZzHRZK8QvI47
+        SoS2uS0bbv/gCNWiM+jAzQaq1qIMG6sFHyMwXcOzGpQOCmaiKyKJOis6wfkY7t4Whb/Od77f
+        63zJdyCtr+MMsMBkkxWTVCiwicy5+icnlh0bGMt5u/GHBcTT28+RbdHDHPlvTwdHHtQGGVId
+        GWHJyLltgOxv69GRHeebdKTskI8lf548zpBr4+2ATPRtp0jV0yMUubfzqo4ctHsY0rj/KSB/
+        NNew5OTfxwDpONrHkrqBXorU1HUx5O59B0V6g2tJdTDKkaFgO0vKegdpUt7axpHJ8AmG7Or5
+        aM180evyAvHJ4z1AvDtYzoku73fir84hTvQ3OFjxSriFFc/Wejnx0K4fdeLEhd2MOHrQx4id
+        g6cp8SfXI0r07WwDYv3Rh5z4j3/BOvR50qpNku3r9QX5puWrNyYZw6eyLMN0yeVLIaoU9NEV
+        IAFitAKHIj9zFSAR6lE/wK7AMzZ+6QK4vO+6ikDIolW44jKnCVJRFnZdtDMah0a/JeEbVQdi
+        TiloNf634fYU6T0cqqli4vU7+N54S4zDoEXYPzAc8+TRx7ijZyr4PMB3fLcpjZOAMnHpmJ/V
+        aoDmY0dpNNanURr2jz7UxV+NsKfl4tQEc/HN65NTfQG3Poowmj+NlmBf8/K4dA3eXjPMxeuF
+        uGpHJFbzKBl37xthKsHLzhkJzmm1c4baOUPtnKE+AHQNABdJBYX5kk3OzFDk4gzFbCxSjy/N
+        RX4QX7sHZ8CzQHYAUBAEQDqkhLk83T2Wo5+9yZy3xShZjblKcaFsDQAMaSGV77RHc/R8nrTl
+        W1kxP4fmQUZI49+I7M7RIy1rsyxbZOU5+gqEAua5ftU0WZHz5ZKvCgpt0zAFEzTzREOqVTbl
+        yYpUbDPmauuRa1X3Q4NmqbmWsCrnrRapSO3GpUGwFFberHXTsK22zk3rGZPZJBvSeLuWhDSq
+        sdj0IugWSINASOHdmtEs9e+98LmlRlBqhCNPG81qk6YhQylo8Fa+u6G1uvnS1tnu9O55uGRF
+        lhC6L7c8HvZcG+0SGqO/eyLuiGWyiZQ3dW6YsL/efuRKwgdnK7t/Wfm9dOGzJVdXfug3LD3z
+        ycDE0J2y9GV0fcberW9mfTMJx19ljKHjn4b3/WXI/uKlU4eT39+4+DXY5ECG7M1z8N4bGYtS
+        sGMtLTBWo5T5Fq1Ypf8B6qHyojgEAAA=
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---Sig_/MuFE3bBo6T9L2my3GBgeHNO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 11 Dec 2019 07:50:21 +0000
-Lee Jones <lee.jones@linaro.org> wrote:
-
-[...]
-> > > > +
-> > > >  static const struct i2c_device_id rn5t618_i2c_id[] =3D {
-> > > >  	{ }
-> > > >  };
-> > > >  MODULE_DEVICE_TABLE(i2c, rn5t618_i2c_id);   =20
-> > >=20
-> > > Not this patch I know, but it's strange to see this empty. =20
-> >=20
-> > Yes, should be cleaned up. For now the device tree stuff seems to kick =
-in. =20
->=20
-> I think this can be removed completely.
->=20
-> Just make sure you use .probe2 and it should be automatic.
->=20
-Hmm, I cannot find probe2 but probe_new. So you mean probe_new?
-
-I will send a separate cleanup patch
-
-Regards,
-Andreas
-
---Sig_/MuFE3bBo6T9L2my3GBgeHNO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl3w1lgACgkQl4jFM1s/
-ye8mzxAAwCQcnHLPZi7KSYFXNKvY03FrI5UA5XrQCmZuhsjhGl1WdxClm0fnj9Vw
-GDhsb6IJXyRJ+CyCokNnjD8mClv/Wis3Z/smz/10l2b89ZY8lryfaSWs4AAffQLi
-QXrOV+XR9gx66FralblNB8sCJdSIOVaDjnsQgrMVNrR7yXHvzG3q8vpl7ObI/1oj
-iXC2dzygKaBxBVtM/KTCBSHEbOgGMKWKU0Lvr5M6L9oktjnoOtLdMljiisMhlMgy
-stOEuAXJ33G112OkcW+He/F1zxLAydzmTT4ZYXvK+IqLAc3X1mrUgWg4O+HBNioe
-6LBGBV06gXtj7wgjHWGdq1yT5h1lSzAuZLonoaECocppkbqdUgMvOdFZcYch70Wj
-PAIDtguSQEAQOTWJS6kSkD66vZeHSSUm5xCopmGOijmBKYGvXS5MNeZLDXje2oag
-lTvJE2Z35wR3TYK2x4ynmMUKI6JQEcdaCt1V4+41WeFJGQg7zYZ82fdVejb9vrRR
-UDmLYoFFHKaYYdvg57S6Sz5UGb82aCnPjdWREPnQR2tfjpOA2GuHE0rVHK037vrv
-aVSgHfOJNVKeuzzvlRWX6fsRIv5j0pOL6KiZiiYRWk0Y+hLhl9WHPoo0HdwPeaxJ
-dwKmfJNEbktanEiGTago7CmyEgx7dwiYYxp1a5NaKozRl0EovKU=
-=lfsU
------END PGP SIGNATURE-----
-
---Sig_/MuFE3bBo6T9L2my3GBgeHNO--
+SGVsbG8gQWxleGFuZHJlLA0KDQpPbiBXZWQsIDIwMTktMTItMTEgYXQgMTI6MzggKzAxMDAsIEFs
+ZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBIaSwNCj4gDQo+IEkganVzdCByZWFsaXNlZCB0aGUg
+c3ViamVjdCBpcyBtaXNzaW5nIGEgY29sb24sIGl0IHNob3VsZCBiZToNCj4gDQo+IHJ0YzogYmQ3
+MDUyODogYWRkIEJENzE4Mjggc3VwcG9ydA0KDQpSaWdodC4gVGhhbmtzIGZvciBwb2ludGluZyBp
+dCBvdXQgOikNCg0KPiBQbGVhc2UgZml4IGl0IGluIGNhc2UgeW91IGV2ZXIgaGF2ZSB0byByZXNl
+bmQgZm9yIGFub3RoZXIgcmVhc29uLg0KDQpXaWxsIGRvIDopDQoNCkJyLA0KCU1hdHRpIFZhaXR0
+aW5lbg0KDQo=
