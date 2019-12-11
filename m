@@ -2,96 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3124E11AA32
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 12:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CBB11AAB9
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 13:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728997AbfLKLtF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Dec 2019 06:49:05 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:49254 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727477AbfLKLtF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 06:49:05 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-9a-5df0d7ae1537
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 34.B2.08102.EA7D0FD5; Wed, 11 Dec 2019 12:49:02 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Wed, 11 Dec 2019 12:48:56 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>
-Subject: Re: [PATCH v6 12/15] rtc: bd70528 add BD71828 support
-Thread-Topic: [PATCH v6 12/15] rtc: bd70528 add BD71828 support
-Thread-Index: AQHVsAgtLDOE1gVnBUinFPzstDImkqe0vi8AgAAC8oA=
-Date:   Wed, 11 Dec 2019 11:48:56 +0000
-Message-ID: <830dad816b6d7f375e7c821e8e435931d1cd4afa.camel@fi.rohmeurope.com>
-References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-         <16a2492d4c70a80628dbf1a64a85c5b554c7f6e4.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-         <20191211113828.GW1463890@piout.net>
-In-Reply-To: <20191211113828.GW1463890@piout.net>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0A0135D61D3D4542ABB9B3608955BE32@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1729131AbfLKMZT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Dec 2019 07:25:19 -0500
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:42883 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728128AbfLKMZT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 07:25:19 -0500
+X-Originating-IP: 90.182.112.136
+Received: from localhost (136.112.broadband15.iol.cz [90.182.112.136])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 42316FF80D;
+        Wed, 11 Dec 2019 12:25:13 +0000 (UTC)
+Date:   Wed, 11 Dec 2019 13:25:09 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Ran Bi <ran.bi@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
+Subject: Re: [PATCH v7 5/6] rtc: mt6397: fix alarm register overwrite
+Message-ID: <20191211122509.GX1463890@piout.net>
+References: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1576057435-3561-6-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxjfuff23gN49VBwHOo08266OSOORJOTxTkX5nb5ZzHRZK8QvI47
-        SoS2uS0bbv/gCNWiM+jAzQaq1qIMG6sFHyMwXcOzGpQOCmaiKyKJOis6wfkY7t4Whb/Od77f
-        63zJdyCtr+MMsMBkkxWTVCiwicy5+icnlh0bGMt5u/GHBcTT28+RbdHDHPlvTwdHHtQGGVId
-        GWHJyLltgOxv69GRHeebdKTskI8lf548zpBr4+2ATPRtp0jV0yMUubfzqo4ctHsY0rj/KSB/
-        NNew5OTfxwDpONrHkrqBXorU1HUx5O59B0V6g2tJdTDKkaFgO0vKegdpUt7axpHJ8AmG7Or5
-        aM180evyAvHJ4z1AvDtYzoku73fir84hTvQ3OFjxSriFFc/Wejnx0K4fdeLEhd2MOHrQx4id
-        g6cp8SfXI0r07WwDYv3Rh5z4j3/BOvR50qpNku3r9QX5puWrNyYZw6eyLMN0yeVLIaoU9NEV
-        IAFitAKHIj9zFSAR6lE/wK7AMzZ+6QK4vO+6ikDIolW44jKnCVJRFnZdtDMah0a/JeEbVQdi
-        TiloNf634fYU6T0cqqli4vU7+N54S4zDoEXYPzAc8+TRx7ijZyr4PMB3fLcpjZOAMnHpmJ/V
-        aoDmY0dpNNanURr2jz7UxV+NsKfl4tQEc/HN65NTfQG3Poowmj+NlmBf8/K4dA3eXjPMxeuF
-        uGpHJFbzKBl37xthKsHLzhkJzmm1c4baOUPtnKE+AHQNABdJBYX5kk3OzFDk4gzFbCxSjy/N
-        RX4QX7sHZ8CzQHYAUBAEQDqkhLk83T2Wo5+9yZy3xShZjblKcaFsDQAMaSGV77RHc/R8nrTl
-        W1kxP4fmQUZI49+I7M7RIy1rsyxbZOU5+gqEAua5ftU0WZHz5ZKvCgpt0zAFEzTzREOqVTbl
-        yYpUbDPmauuRa1X3Q4NmqbmWsCrnrRapSO3GpUGwFFberHXTsK22zk3rGZPZJBvSeLuWhDSq
-        sdj0IugWSINASOHdmtEs9e+98LmlRlBqhCNPG81qk6YhQylo8Fa+u6G1uvnS1tnu9O55uGRF
-        lhC6L7c8HvZcG+0SGqO/eyLuiGWyiZQ3dW6YsL/efuRKwgdnK7t/Wfm9dOGzJVdXfug3LD3z
-        ycDE0J2y9GV0fcberW9mfTMJx19ljKHjn4b3/WXI/uKlU4eT39+4+DXY5ECG7M1z8N4bGYtS
-        sGMtLTBWo5T5Fq1Ypf8B6qHyojgEAAA=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1576057435-3561-6-git-send-email-hsin-hsiung.wang@mediatek.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gQWxleGFuZHJlLA0KDQpPbiBXZWQsIDIwMTktMTItMTEgYXQgMTI6MzggKzAxMDAsIEFs
-ZXhhbmRyZSBCZWxsb25pIHdyb3RlOg0KPiBIaSwNCj4gDQo+IEkganVzdCByZWFsaXNlZCB0aGUg
-c3ViamVjdCBpcyBtaXNzaW5nIGEgY29sb24sIGl0IHNob3VsZCBiZToNCj4gDQo+IHJ0YzogYmQ3
-MDUyODogYWRkIEJENzE4Mjggc3VwcG9ydA0KDQpSaWdodC4gVGhhbmtzIGZvciBwb2ludGluZyBp
-dCBvdXQgOikNCg0KPiBQbGVhc2UgZml4IGl0IGluIGNhc2UgeW91IGV2ZXIgaGF2ZSB0byByZXNl
-bmQgZm9yIGFub3RoZXIgcmVhc29uLg0KDQpXaWxsIGRvIDopDQoNCkJyLA0KCU1hdHRpIFZhaXR0
-aW5lbg0KDQo=
+On 11/12/2019 17:43:54+0800, Hsin-Hsiung Wang wrote:
+> From: Ran Bi <ran.bi@mediatek.com>
+> 
+> Alarm registers high byte was reserved for other functions.
+> This add mask in alarm registers operation functions.
+> This also fix error condition in interrupt handler.
+> 
+> Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+> 
+> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  drivers/rtc/rtc-mt6397.c       | 39 +++++++++++++++++++++++++--------------
+>  include/linux/mfd/mt6397/rtc.h |  8 ++++++++
+>  2 files changed, 33 insertions(+), 14 deletions(-)
+> 
+
+Applied to rtc-fixes. I'm not sure why you used my previous email
+address though, v6 had the correct one.
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
