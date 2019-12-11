@@ -2,132 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D6B11A143
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 03:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D02611A541
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 08:44:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727605AbfLKCTj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Dec 2019 21:19:39 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:59657 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727302AbfLKCTj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 21:19:39 -0500
-X-UUID: 165e4f02be654651ba7986a8681e7bd2-20191211
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=rhfdqi2eRRPOmkQEKUGmuq54EZ73uOUii6nqn78dZ8M=;
-        b=q50bYmGYPizR+0jps0AvO/uOh8KtsxOOYaIgX10598imLcEZpN6cXQfF6TQuBAyS0jEsnOiK986JSxCyf2pLOC/tzMvO568Obf+hYDAblDvwVcFHe1iPILfiA7SVOtxL2Y9NK7gKhU2R3drDXwyLHha1CEDDxomlz1hhMETlSHY=;
-X-UUID: 165e4f02be654651ba7986a8681e7bd2-20191211
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 267267415; Wed, 11 Dec 2019 10:19:35 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 11 Dec 2019 10:19:26 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 11 Dec 2019 10:19:35 +0800
-Message-ID: <1576030774.24528.2.camel@mtksdaap41>
-Subject: Re: [PATCH v6 5/6] rtc: mt6397: fix alarm register overwrite
-From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, Ran Bi <ran.bi@mediatek.com>
-Date:   Wed, 11 Dec 2019 10:19:34 +0800
-In-Reply-To: <20191210164139.GT1463890@piout.net>
-References: <1575639183-17606-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1575639183-17606-6-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <20191210164139.GT1463890@piout.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726230AbfLKHoI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Dec 2019 02:44:08 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51930 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727829AbfLKHoI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 02:44:08 -0500
+Received: by mail-wm1-f66.google.com with SMTP id d73so2620670wmd.1
+        for <linux-rtc@vger.kernel.org>; Tue, 10 Dec 2019 23:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=8t/GKPkjCc55Q23WSZ4kx8DWb4EGXXPpMvhgPGlpJnc=;
+        b=oNQj8T25SlXlalDjaeeB+QS8RBx3bJYT7Zh+65iQm+T6kLKoWCaoICEy8MjZ3V/qqq
+         +aUUql1k88gtuazxEmo4f67CEpanwiUSbXUBpUBbezDuzBOY1mxjgSa645xjhtjJheo0
+         8amA5Icav4bSCJwkbuPi2VqsswLEjULOHM/q1GjtoWl9D+PiMqQYXtn1+gbCntJk7Ksb
+         piIgFPSAL3aLk3voSmpIQc9vJhZSoejM+dMYwdOV23Ydp+mLNvInOee4i+ReVF1aMV26
+         oXVbSmIyB3tnLU50Gq++qbH96uLbNxh1j2UkONxF9hjkiZ5v3zL7VFgsa8sKZS1jWhPz
+         PsKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=8t/GKPkjCc55Q23WSZ4kx8DWb4EGXXPpMvhgPGlpJnc=;
+        b=heZocmzldZ4tEqG8VyF+vCeK1VA8vLts2oZ3LKgzyB+FwQIwWRuCGbz1UrradHDOQO
+         TxZSCLSz+29/N9s19z+YyR5GwClw9DWrFZ4UEXpmVU1L4i+ppg3PJqhOvEJOlMTTkiDv
+         lWCAB9h1x40+wBJMAPu5mBsSrOJO4QihF1YocYnOu5mHagJMD8wYkGQPj03GzXFoXMvU
+         DSGVP4nUTyBgwGEP74okev3y4A1uG4BSiCH37dx+egeqIb+ypuC4KvLGPmKtBj72Rd8m
+         m8MHetOMWnT4LpsiCuVJ2nL6La050yfqZwLrbyri6sjbd8Lwwoem5KoyiiHsw9hYPhKR
+         P+wg==
+X-Gm-Message-State: APjAAAWOeydEgtMMO6doo1XqdfSjVVjRqRTYoB/RSYKHqfbbbYDJJ5Rp
+        lW0heGTs8H6Ts81uqXlD27YhHQ==
+X-Google-Smtp-Source: APXvYqzVwgTlMa03+ubhsFOuv2y8pE2uSEYmITOdpwC2p4zfLOpocy1LE8xPAMNEo7lgP48izjiyIg==
+X-Received: by 2002:a05:600c:204:: with SMTP id 4mr1982085wmi.1.1576050246175;
+        Tue, 10 Dec 2019 23:44:06 -0800 (PST)
+Received: from dell ([2.27.35.147])
+        by smtp.gmail.com with ESMTPSA id i16sm1307003wmb.36.2019.12.10.23.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 23:44:05 -0800 (PST)
+Date:   Wed, 11 Dec 2019 07:44:00 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v3 2/6] mfd: rn5t618: prepare for irq handling
+Message-ID: <20191211074400.GV3468@dell>
+References: <20191129212045.18325-1-andreas@kemnade.info>
+ <20191129212045.18325-3-andreas@kemnade.info>
+ <20191210091351.GS3468@dell>
+ <20191210173146.6b31e599@kemnade.info>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191210173146.6b31e599@kemnade.info>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGksDQoNCk9uIFR1ZSwgMjAxOS0xMi0xMCBhdCAxNzo0MSArMDEwMCwgQWxleGFuZHJlIEJlbGxv
-bmkgd3JvdGU6DQo+IEhpLA0KPiANCj4gT24gMDYvMTIvMjAxOSAyMTozMzowMiswODAwLCBIc2lu
-LUhzaXVuZyBXYW5nIHdyb3RlOg0KPiA+IEZyb206IFJhbiBCaSA8cmFuLmJpQG1lZGlhdGVrLmNv
-bT4NCj4gPiANCj4gPiBBbGFybSByZWdpc3RlcnMgaGlnaCBieXRlIHdhcyByZXNlcnZlZCBmb3Ig
-b3RoZXIgZnVuY3Rpb25zLg0KPiA+IFRoaXMgYWRkIG1hc2sgaW4gYWxhcm0gcmVnaXN0ZXJzIG9w
-ZXJhdGlvbiBmdW5jdGlvbnMuDQo+ID4gVGhpcyBhbHNvIGZpeCBlcnJvciBjb25kaXRpb24gaW4g
-aW50ZXJydXB0IGhhbmRsZXIuDQo+ID4gDQo+ID4gRml4ZXM6IGZjMjk3OTExOGYzZiAoInJ0Yzog
-bWVkaWF0ZWs6IEFkZCBNVDYzOTcgUlRDIGRyaXZlciIpDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1i
-eTogUmFuIEJpIDxyYW4uYmlAbWVkaWF0ZWsuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEhzaW4t
-SHNpdW5nIFdhbmcgPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+
-ICBkcml2ZXJzL3J0Yy9ydGMtbXQ2Mzk3LmMgfCA0NyArKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKystLS0tLS0tLS0tLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzMgaW5zZXJ0aW9u
-cygrKSwgMTQgZGVsZXRpb25zKC0pDQo+ID4gDQo+IA0KPiBDYW4geW91IHJlYmFzZSB0aGF0IG9u
-ZSBvbiB0b3Agb2YgdjUuNS1yYzEgc29vbj8gSSdsbCBpbmNsdWRlIGl0IGluIC1maXhlcy4NCj4g
-DQpTdXJlLCBJIHdpbGwgc2VuZCB0aGUgbmV4dCB2ZXJzaW9uIGxhdGVyLg0KDQo+ID4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvcnRjL3J0Yy1tdDYzOTcuYyBiL2RyaXZlcnMvcnRjL3J0Yy1tdDYzOTcu
-Yw0KPiA+IGluZGV4IDcwNDIyOWUuLmIyMTZiZGMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9y
-dGMvcnRjLW10NjM5Ny5jDQo+ID4gKysrIGIvZHJpdmVycy9ydGMvcnRjLW10NjM5Ny5jDQo+ID4g
-QEAgLTQ3LDYgKzQ3LDE0IEBADQo+ID4gIA0KPiA+ICAjZGVmaW5lIFJUQ19BTF9TRUMJCTB4MDAx
-OA0KPiA+ICANCj4gPiArI2RlZmluZSBSVENfQUxfU0VDX01BU0sJCTB4MDAzZg0KPiA+ICsjZGVm
-aW5lIFJUQ19BTF9NSU5fTUFTSwkJMHgwMDNmDQo+ID4gKyNkZWZpbmUgUlRDX0FMX0hPVV9NQVNL
-CQkweDAwMWYNCj4gPiArI2RlZmluZSBSVENfQUxfRE9NX01BU0sJCTB4MDAxZg0KPiA+ICsjZGVm
-aW5lIFJUQ19BTF9ET1dfTUFTSwkJMHgwMDA3DQo+ID4gKyNkZWZpbmUgUlRDX0FMX01USF9NQVNL
-CQkweDAwMGYNCj4gPiArI2RlZmluZSBSVENfQUxfWUVBX01BU0sJCTB4MDA3Zg0KPiA+ICsNCj4g
-PiAgI2RlZmluZSBSVENfUEROMgkJMHgwMDJlDQo+ID4gICNkZWZpbmUgUlRDX1BETjJfUFdST05f
-QUxBUk0JQklUKDQpDQo+ID4gIA0KPiA+IEBAIC0xMDMsNyArMTExLDcgQEAgc3RhdGljIGlycXJl
-dHVybl90IG10a19ydGNfaXJxX2hhbmRsZXJfdGhyZWFkKGludCBpcnEsIHZvaWQgKmRhdGEpDQo+
-ID4gIAkJaXJxZW4gPSBpcnFzdGEgJiB+UlRDX0lSUV9FTl9BTDsNCj4gPiAgCQltdXRleF9sb2Nr
-KCZydGMtPmxvY2spOw0KPiA+ICAJCWlmIChyZWdtYXBfd3JpdGUocnRjLT5yZWdtYXAsIHJ0Yy0+
-YWRkcl9iYXNlICsgUlRDX0lSUV9FTiwNCj4gPiAtCQkJCSBpcnFlbikgPCAwKQ0KPiA+ICsJCQkJ
-IGlycWVuKSA9PSAwKQ0KPiA+ICAJCQltdGtfcnRjX3dyaXRlX3RyaWdnZXIocnRjKTsNCj4gPiAg
-CQltdXRleF91bmxvY2soJnJ0Yy0+bG9jayk7DQo+ID4gIA0KPiA+IEBAIC0yMjUsMTIgKzIzMywx
-MiBAQCBzdGF0aWMgaW50IG10a19ydGNfcmVhZF9hbGFybShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0
-cnVjdCBydGNfd2thbHJtICphbG0pDQo+ID4gIAlhbG0tPnBlbmRpbmcgPSAhIShwZG4yICYgUlRD
-X1BETjJfUFdST05fQUxBUk0pOw0KPiA+ICAJbXV0ZXhfdW5sb2NrKCZydGMtPmxvY2spOw0KPiA+
-ICANCj4gPiAtCXRtLT50bV9zZWMgPSBkYXRhW1JUQ19PRkZTRVRfU0VDXTsNCj4gPiAtCXRtLT50
-bV9taW4gPSBkYXRhW1JUQ19PRkZTRVRfTUlOXTsNCj4gPiAtCXRtLT50bV9ob3VyID0gZGF0YVtS
-VENfT0ZGU0VUX0hPVVJdOw0KPiA+IC0JdG0tPnRtX21kYXkgPSBkYXRhW1JUQ19PRkZTRVRfRE9N
-XTsNCj4gPiAtCXRtLT50bV9tb24gPSBkYXRhW1JUQ19PRkZTRVRfTVRIXTsNCj4gPiAtCXRtLT50
-bV95ZWFyID0gZGF0YVtSVENfT0ZGU0VUX1lFQVJdOw0KPiA+ICsJdG0tPnRtX3NlYyA9IGRhdGFb
-UlRDX09GRlNFVF9TRUNdICYgUlRDX0FMX1NFQ19NQVNLOw0KPiA+ICsJdG0tPnRtX21pbiA9IGRh
-dGFbUlRDX09GRlNFVF9NSU5dICYgUlRDX0FMX01JTl9NQVNLOw0KPiA+ICsJdG0tPnRtX2hvdXIg
-PSBkYXRhW1JUQ19PRkZTRVRfSE9VUl0gJiBSVENfQUxfSE9VX01BU0s7DQo+ID4gKwl0bS0+dG1f
-bWRheSA9IGRhdGFbUlRDX09GRlNFVF9ET01dICYgUlRDX0FMX0RPTV9NQVNLOw0KPiA+ICsJdG0t
-PnRtX21vbiA9IGRhdGFbUlRDX09GRlNFVF9NVEhdICYgUlRDX0FMX01USF9NQVNLOw0KPiA+ICsJ
-dG0tPnRtX3llYXIgPSBkYXRhW1JUQ19PRkZTRVRfWUVBUl0gJiBSVENfQUxfWUVBX01BU0s7DQo+
-ID4gIA0KPiA+ICAJdG0tPnRtX3llYXIgKz0gUlRDX01JTl9ZRUFSX09GRlNFVDsNCj4gPiAgCXRt
-LT50bV9tb24tLTsNCj4gPiBAQCAtMjUxLDE0ICsyNTksMjUgQEAgc3RhdGljIGludCBtdGtfcnRj
-X3NldF9hbGFybShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBydGNfd2thbHJtICphbG0pDQo+
-ID4gIAl0bS0+dG1feWVhciAtPSBSVENfTUlOX1lFQVJfT0ZGU0VUOw0KPiA+ICAJdG0tPnRtX21v
-bisrOw0KPiA+ICANCj4gPiAtCWRhdGFbUlRDX09GRlNFVF9TRUNdID0gdG0tPnRtX3NlYzsNCj4g
-PiAtCWRhdGFbUlRDX09GRlNFVF9NSU5dID0gdG0tPnRtX21pbjsNCj4gPiAtCWRhdGFbUlRDX09G
-RlNFVF9IT1VSXSA9IHRtLT50bV9ob3VyOw0KPiA+IC0JZGF0YVtSVENfT0ZGU0VUX0RPTV0gPSB0
-bS0+dG1fbWRheTsNCj4gPiAtCWRhdGFbUlRDX09GRlNFVF9NVEhdID0gdG0tPnRtX21vbjsNCj4g
-PiAtCWRhdGFbUlRDX09GRlNFVF9ZRUFSXSA9IHRtLT50bV95ZWFyOw0KPiA+IC0NCj4gPiAgCW11
-dGV4X2xvY2soJnJ0Yy0+bG9jayk7DQo+ID4gKwlyZXQgPSByZWdtYXBfYnVsa19yZWFkKHJ0Yy0+
-cmVnbWFwLCBydGMtPmFkZHJfYmFzZSArIFJUQ19BTF9TRUMsDQo+ID4gKwkJCSAgICAgICBkYXRh
-LCBSVENfT0ZGU0VUX0NPVU5UKTsNCj4gPiArCWlmIChyZXQgPCAwKQ0KPiA+ICsJCWdvdG8gZXhp
-dDsNCj4gPiArDQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfU0VDXSA9ICgoZGF0YVtSVENfT0ZGU0VU
-X1NFQ10gJiB+KFJUQ19BTF9TRUNfTUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1fc2VjICYgUlRD
-X0FMX1NFQ19NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfTUlOXSA9ICgoZGF0YVtSVENf
-T0ZGU0VUX01JTl0gJiB+KFJUQ19BTF9NSU5fTUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1fbWlu
-ICYgUlRDX0FMX01JTl9NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfSE9VUl0gPSAoKGRh
-dGFbUlRDX09GRlNFVF9IT1VSXSAmIH4oUlRDX0FMX0hPVV9NQVNLKSkgfA0KPiA+ICsJCQkJKHRt
-LT50bV9ob3VyICYgUlRDX0FMX0hPVV9NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfRE9N
-XSA9ICgoZGF0YVtSVENfT0ZGU0VUX0RPTV0gJiB+KFJUQ19BTF9ET01fTUFTSykpIHwNCj4gPiAr
-CQkJCSh0bS0+dG1fbWRheSAmIFJUQ19BTF9ET01fTUFTSykpOw0KPiA+ICsJZGF0YVtSVENfT0ZG
-U0VUX01USF0gPSAoKGRhdGFbUlRDX09GRlNFVF9NVEhdICYgfihSVENfQUxfTVRIX01BU0spKSB8
-DQo+ID4gKwkJCQkodG0tPnRtX21vbiAmIFJUQ19BTF9NVEhfTUFTSykpOw0KPiA+ICsJZGF0YVtS
-VENfT0ZGU0VUX1lFQVJdID0gKChkYXRhW1JUQ19PRkZTRVRfWUVBUl0gJiB+KFJUQ19BTF9ZRUFf
-TUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1feWVhciAmIFJUQ19BTF9ZRUFfTUFTSykpOw0KPiA+
-ICsNCj4gPiAgCWlmIChhbG0tPmVuYWJsZWQpIHsNCj4gPiAgCQlyZXQgPSByZWdtYXBfYnVsa193
-cml0ZShydGMtPnJlZ21hcCwNCj4gPiAgCQkJCQlydGMtPmFkZHJfYmFzZSArIFJUQ19BTF9TRUMs
-DQo+ID4gLS0gDQo+ID4gMi42LjQNCj4gDQoNCg==
+On Tue, 10 Dec 2019, Andreas Kemnade wrote:
 
+> accidently send it only to Lee, that was unintended.
+> 
+> On Tue, 10 Dec 2019 09:13:51 +0000
+> Lee Jones <lee.jones@linaro.org> wrote:
+> 
+> > On Fri, 29 Nov 2019, Andreas Kemnade wrote:
+> > 
+> > > rn5t618 currently lacks irq handling. To prepare implementation  
+> > 
+> > "RN5T618"
+> > "IRQ"
+> > 
+> > > in a rn5t618-irq.c, move main file to rn5t618-core.c  
+> > 
+> > Why do you *need* to call it "core"?
+> > 
+> Well, the pattern is that irq stuff is in a separate file
+> for other mfds. And when I want to link things together to a rn5t618.[k]o
+> I think that none objects cannot be called rn5t618.o and so no source
+> file rn5t618.o. Am I wrong here? Of course if things can live in one file
+> this thing is not needed.
+
+Unless you have a good reason for separating out the code, having it
+all in a single file is preferred.
+
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > ---
+> > >  drivers/mfd/Makefile                      | 2 ++
+> > >  drivers/mfd/{rn5t618.c => rn5t618-core.c} | 0
+> > >  2 files changed, 2 insertions(+)
+> > >  rename drivers/mfd/{rn5t618.c => rn5t618-core.c} (100%)
+> > > 
+> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > > index c1067ea46204..110ea700231b 100644
+> > > --- a/drivers/mfd/Makefile
+> > > +++ b/drivers/mfd/Makefile
+> > > @@ -216,6 +216,8 @@ obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
+> > >  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
+> > >  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+> > >  obj-$(CONFIG_MFD_RK808)		+= rk808.o
+> > > +
+> > > +rn5t618-objs			:= rn5t618-core.o
+> > >  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
+> > >  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
+> > >  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
+> > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618-core.c
+> > > similarity index 100%
+> > > rename from drivers/mfd/rn5t618.c
+> > > rename to drivers/mfd/rn5t618-core.c  
+> > 
+
+
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
