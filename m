@@ -2,160 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE83E11A7B9
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 10:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990AF11A7BF
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 10:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728637AbfLKJne (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Dec 2019 04:43:34 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45692 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728370AbfLKJnd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 04:43:33 -0500
-Received: by mail-lf1-f65.google.com with SMTP id 203so16100462lfa.12;
-        Wed, 11 Dec 2019 01:43:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+biBEQreu589nhDfTn2/9rER8Ofo2M73AkOaXykP3cY=;
-        b=Dgx/fJMXoX30hYDAFkrQ5CmLRvrBKwc1D3OTUSlWonvIoRaZolizs2sE5QDtmXOZmX
-         eBXw7KevbLNAHeYBM7QAPXtD+k9glaAU+30/8Qd4stHzJ4wIy5rC4TaREZecqlddEdEK
-         UnnIFvKhRe0RstkO3wdT7lZUTaIKiQ3XCevtzhRl1bnM79oNDPHGrzk5tTzCb4nr9fPl
-         WdvdqV5mi7OhGOKbN0CkcLk8T4HoJk+jypUupNhBe3OVL5TLb++njtP+D9d+aGdlHWN6
-         is1GMU8Tsek/6pAdBG7FjJ3JrgVeIwjj/loekAU2ttqgMxHX5IMyUaXT5dPc5D4LhHKv
-         05ZQ==
-X-Gm-Message-State: APjAAAW7hFvFd6gLuQdAzInjhXjRx+qDdPjiwUKQzx1gF4bDhi/4owpX
-        QTfuNFS3oehOecdynt5A6aw=
-X-Google-Smtp-Source: APXvYqzfy3MGetNTGCQwBQiEPvpTeLG1Lv7I3w3JEVExp0tqLwNz5RTxNqn61tFOCFdJuWHe9TS8Uw==
-X-Received: by 2002:a19:4a:: with SMTP id 71mr1573471lfa.50.1576057410729;
-        Wed, 11 Dec 2019 01:43:30 -0800 (PST)
-Received: from localhost.localdomain ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id 207sm897874ljj.72.2019.12.11.01.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 01:43:30 -0800 (PST)
-Date:   Wed, 11 Dec 2019 11:43:18 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S1728494AbfLKJoE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Dec 2019 04:44:04 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:24958 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728492AbfLKJoD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 Dec 2019 04:44:03 -0500
+X-UUID: 51e171cc18ad41168840dcf356d416d1-20191211
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Dm3mlfxD96MxnkXGJUHjOsMb6SebZYhQjiXuyxfYDOs=;
+        b=ff63CxZHTdDQhidjt51kkhecXPHpYK3K+OKzpv83ES4LxyUQGLKBvS+BOb+oR65NyTmvvUBO/LjAA6EIlnY8GV27P7IOyNfPCXa2D/EwcsxSzoWJImPaspZv6UPPsncTO3vOcF+ARgL9i817FcKWesBfNLLkeU3w+0L6vJ/WW0Y=;
+X-UUID: 51e171cc18ad41168840dcf356d416d1-20191211
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1264764905; Wed, 11 Dec 2019 17:43:58 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 11 Dec 2019 17:43:42 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 11 Dec 2019 17:43:33 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v6 06/15] mfd: input: bd71828: Add power-key support
-Message-ID: <3ae6840d5984463f2d6f3ce068242269dba21989.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Ran Bi <ran.bi@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>
+Subject: [PATCH v7 0/6] Add Support for MediaTek PMIC MT6358
+Date:   Wed, 11 Dec 2019 17:43:49 +0800
+Message-ID: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use gpio_keys to send power input-event to user-space when power
-button (short) press is detected.
+VGhpcyBwYXRjaHNldCBpbmNsdWRpbmcgbW9kaWZ5aW5nIHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9y
+IGFkZCBzdXBwb3J0IHRvIE1UNjM1OCBQTUlDLg0KTVQ2MzU4IGlzIHRoZSBwcmltYXJ5IFBNSUMg
+Zm9yIE1UODE4MyBwbGF0Zm9ybS4NCg0KY2hhbmdlcyBzaW5jZSB2NjoNCi0gcmViYXNlIHNlcmll
+cyBvbiA1LjUtcmMxDQoNCkhzaW4tSHNpdW5nIFdhbmcgKDQpOg0KICBtZmQ6IG10NjM5NzogbW9k
+aWZ5IHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9yDQogIGR0LWJpbmRpbmdzOiBtZmQ6IEFkZCBjb21w
+YXRpYmxlIGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFBNSUMNCiAgbWZkOiBBZGQgc3VwcG9ydCBm
+b3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDDQogIGFybTY0OiBkdHM6IG10NjM1ODogYWRkIFBN
+SUMgTVQ2MzU4IHJlbGF0ZWQgbm9kZXMNCg0KUmFuIEJpICgyKToNCiAgcnRjOiBtdDYzOTc6IGZp
+eCBhbGFybSByZWdpc3RlciBvdmVyd3JpdGUNCiAgcnRjOiBBZGQgc3VwcG9ydCBmb3IgdGhlIE1l
+ZGlhVGVrIE1UNjM1OCBSVEMNCg0KIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9t
+ZmQvbXQ2Mzk3LnR4dCB8ICAxNCArLQ0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2
+MzU4LmR0c2kgICAgICAgICB8IDM2MSArKysrKysrKysrKysrKysrKysrKysrKw0KIGFyY2gvYXJt
+NjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWV2Yi5kdHMgICAgICB8ICAgMSArDQogZHJpdmVy
+cy9tZmQvTWFrZWZpbGUgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstDQogZHJp
+dmVycy9tZmQvbXQ2MzU4LWlycS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgMjI0ICsrKysr
+KysrKysrKysrDQogZHJpdmVycy9tZmQvbXQ2Mzk3LWNvcmUuYyAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDc1ICsrKy0tDQogZHJpdmVycy9tZmQvbXQ2Mzk3LWlycS5jICAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDMzICsrKw0KIGRyaXZlcnMvcnRjL3J0Yy1tdDYzOTcuYyAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICA2MyArKy0tDQogaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUu
+aCAgICAgICAgICAgICAgICAgIHwgMTU4ICsrKysrKysrKysNCiBpbmNsdWRlL2xpbnV4L21mZC9t
+dDYzNTgvcmVnaXN0ZXJzLmggICAgICAgICAgICAgfCAyODIgKysrKysrKysrKysrKysrKysrDQog
+aW5jbHVkZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUuaCAgICAgICAgICAgICAgICAgIHwgICA1ICsN
+CiBpbmNsdWRlL2xpbnV4L21mZC9tdDYzOTcvcnRjLmggICAgICAgICAgICAgICAgICAgfCAgMjQg
+Ky0NCiAxMiBmaWxlcyBjaGFuZ2VkLCAxMTgzIGluc2VydGlvbnMoKyksIDU5IGRlbGV0aW9ucygt
+KQ0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NjM1
+OC5kdHNpDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvbWZkL210NjM1OC1pcnEuYw0KIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvY29yZS5oDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9yZWdpc3RlcnMuaA0KDQotLSAN
+CjIuNi40DQo=
 
-Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-
-No changes since v5
-
- drivers/mfd/rohm-bd71828.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-bd71828.c
-index 7f445d699fd9..b892b50ec555 100644
---- a/drivers/mfd/rohm-bd71828.c
-+++ b/drivers/mfd/rohm-bd71828.c
-@@ -4,7 +4,9 @@
- //
- // ROHM BD71828 PMIC driver
- 
-+#include <linux/gpio_keys.h>
- #include <linux/i2c.h>
-+#include <linux/input.h>
- #include <linux/interrupt.h>
- #include <linux/ioport.h>
- #include <linux/irq.h>
-@@ -15,6 +17,18 @@
- #include <linux/regmap.h>
- #include <linux/types.h>
- 
-+static struct gpio_keys_button button = {
-+	.code = KEY_POWER,
-+	.gpio = -1,
-+	.type = EV_KEY,
-+};
-+
-+static struct gpio_keys_platform_data bd71828_powerkey_data = {
-+	.buttons = &button,
-+	.nbuttons = 1,
-+	.name = "bd71828-pwrkey",
-+};
-+
- static const struct resource rtc_irqs[] = {
- 	DEFINE_RES_IRQ_NAMED(BD71828_INT_RTC0, "bd71828-rtc-alm-0"),
- 	DEFINE_RES_IRQ_NAMED(BD71828_INT_RTC1, "bd71828-rtc-alm-1"),
-@@ -35,6 +49,10 @@ static struct mfd_cell bd71828_mfd_cells[] = {
- 		.name = "bd71828-rtc",
- 		.resources = rtc_irqs,
- 		.num_resources = ARRAY_SIZE(rtc_irqs),
-+	}, {
-+		.name = "gpio-keys",
-+		.platform_data = &bd71828_powerkey_data,
-+		.pdata_size = sizeof(bd71828_powerkey_data),
- 	},
- };
- 
-@@ -288,6 +306,14 @@ static int bd71828_i2c_probe(struct i2c_client *i2c)
- 	dev_dbg(&i2c->dev, "Registered %d IRQs for chip\n",
- 		bd71828_irq_chip.num_irqs);
- 
-+	ret = regmap_irq_get_virq(irq_data, BD71828_INT_SHORTPUSH);
-+	if (ret < 0) {
-+		dev_err(&i2c->dev, "Failed to get the power-key IRQ\n");
-+		return ret;
-+	}
-+
-+	button.irq = ret;
-+
- 	ret = devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
- 				   bd71828_mfd_cells,
- 				   ARRAY_SIZE(bd71828_mfd_cells), NULL, 0,
--- 
-2.21.0
-
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
