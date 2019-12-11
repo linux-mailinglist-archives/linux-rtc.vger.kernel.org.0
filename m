@@ -2,137 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 982E0118E8C
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Dec 2019 18:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D6B11A143
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 03:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727536AbfLJRHD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Dec 2019 12:07:03 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:37854 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727525AbfLJRHD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 10 Dec 2019 12:07:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=14t3M7FRUcrAAT08sCCcDF5opKxVYW1DWqA46kBJpoU=; b=Gzg8Jay5rFyrL64iOMHkPzLa7
-        bwqW55F3jLJC88TtpMYqIMklcWPuoDsGvtROu2PLfNkNdaiU/0P3Vm6h/pL/NRNpv6+VzjOTRV3UW
-        dpWyhku5oM1bpJpVniztT9zG7TAfq9udHAsWmD85CWFoH+Csaa7GO4JpfJt+qXLZ8atRc=;
-Received: from [185.238.219.18] (helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1ieiyO-0007Wh-HK; Tue, 10 Dec 2019 18:06:56 +0100
-Received: from [::1] (helo=localhost)
-        by eeepc with esmtp (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1ieiyM-00056V-Lv; Tue, 10 Dec 2019 18:06:55 +0100
-Date:   Tue, 10 Dec 2019 18:06:53 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v3 2/6] mfd: rn5t618: prepare for irq handling
-Message-ID: <20191210173146.6b31e599@kemnade.info>
-In-Reply-To: <20191210091351.GS3468@dell>
-References: <20191129212045.18325-1-andreas@kemnade.info>
- <20191129212045.18325-3-andreas@kemnade.info>
- <20191210091351.GS3468@dell>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
+        id S1727605AbfLKCTj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Dec 2019 21:19:39 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:59657 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727302AbfLKCTj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Dec 2019 21:19:39 -0500
+X-UUID: 165e4f02be654651ba7986a8681e7bd2-20191211
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=rhfdqi2eRRPOmkQEKUGmuq54EZ73uOUii6nqn78dZ8M=;
+        b=q50bYmGYPizR+0jps0AvO/uOh8KtsxOOYaIgX10598imLcEZpN6cXQfF6TQuBAyS0jEsnOiK986JSxCyf2pLOC/tzMvO568Obf+hYDAblDvwVcFHe1iPILfiA7SVOtxL2Y9NK7gKhU2R3drDXwyLHha1CEDDxomlz1hhMETlSHY=;
+X-UUID: 165e4f02be654651ba7986a8681e7bd2-20191211
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 267267415; Wed, 11 Dec 2019 10:19:35 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 11 Dec 2019 10:19:26 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 11 Dec 2019 10:19:35 +0800
+Message-ID: <1576030774.24528.2.camel@mtksdaap41>
+Subject: Re: [PATCH v6 5/6] rtc: mt6397: fix alarm register overwrite
+From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, Ran Bi <ran.bi@mediatek.com>
+Date:   Wed, 11 Dec 2019 10:19:34 +0800
+In-Reply-To: <20191210164139.GT1463890@piout.net>
+References: <1575639183-17606-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <1575639183-17606-6-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <20191210164139.GT1463890@piout.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/lcL2C=9LQcpfETqHHrb8+K3"; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---Sig_/lcL2C=9LQcpfETqHHrb8+K3
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+SGksDQoNCk9uIFR1ZSwgMjAxOS0xMi0xMCBhdCAxNzo0MSArMDEwMCwgQWxleGFuZHJlIEJlbGxv
+bmkgd3JvdGU6DQo+IEhpLA0KPiANCj4gT24gMDYvMTIvMjAxOSAyMTozMzowMiswODAwLCBIc2lu
+LUhzaXVuZyBXYW5nIHdyb3RlOg0KPiA+IEZyb206IFJhbiBCaSA8cmFuLmJpQG1lZGlhdGVrLmNv
+bT4NCj4gPiANCj4gPiBBbGFybSByZWdpc3RlcnMgaGlnaCBieXRlIHdhcyByZXNlcnZlZCBmb3Ig
+b3RoZXIgZnVuY3Rpb25zLg0KPiA+IFRoaXMgYWRkIG1hc2sgaW4gYWxhcm0gcmVnaXN0ZXJzIG9w
+ZXJhdGlvbiBmdW5jdGlvbnMuDQo+ID4gVGhpcyBhbHNvIGZpeCBlcnJvciBjb25kaXRpb24gaW4g
+aW50ZXJydXB0IGhhbmRsZXIuDQo+ID4gDQo+ID4gRml4ZXM6IGZjMjk3OTExOGYzZiAoInJ0Yzog
+bWVkaWF0ZWs6IEFkZCBNVDYzOTcgUlRDIGRyaXZlciIpDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1i
+eTogUmFuIEJpIDxyYW4uYmlAbWVkaWF0ZWsuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEhzaW4t
+SHNpdW5nIFdhbmcgPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+
+ICBkcml2ZXJzL3J0Yy9ydGMtbXQ2Mzk3LmMgfCA0NyArKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKystLS0tLS0tLS0tLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMzMgaW5zZXJ0aW9u
+cygrKSwgMTQgZGVsZXRpb25zKC0pDQo+ID4gDQo+IA0KPiBDYW4geW91IHJlYmFzZSB0aGF0IG9u
+ZSBvbiB0b3Agb2YgdjUuNS1yYzEgc29vbj8gSSdsbCBpbmNsdWRlIGl0IGluIC1maXhlcy4NCj4g
+DQpTdXJlLCBJIHdpbGwgc2VuZCB0aGUgbmV4dCB2ZXJzaW9uIGxhdGVyLg0KDQo+ID4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvcnRjL3J0Yy1tdDYzOTcuYyBiL2RyaXZlcnMvcnRjL3J0Yy1tdDYzOTcu
+Yw0KPiA+IGluZGV4IDcwNDIyOWUuLmIyMTZiZGMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9y
+dGMvcnRjLW10NjM5Ny5jDQo+ID4gKysrIGIvZHJpdmVycy9ydGMvcnRjLW10NjM5Ny5jDQo+ID4g
+QEAgLTQ3LDYgKzQ3LDE0IEBADQo+ID4gIA0KPiA+ICAjZGVmaW5lIFJUQ19BTF9TRUMJCTB4MDAx
+OA0KPiA+ICANCj4gPiArI2RlZmluZSBSVENfQUxfU0VDX01BU0sJCTB4MDAzZg0KPiA+ICsjZGVm
+aW5lIFJUQ19BTF9NSU5fTUFTSwkJMHgwMDNmDQo+ID4gKyNkZWZpbmUgUlRDX0FMX0hPVV9NQVNL
+CQkweDAwMWYNCj4gPiArI2RlZmluZSBSVENfQUxfRE9NX01BU0sJCTB4MDAxZg0KPiA+ICsjZGVm
+aW5lIFJUQ19BTF9ET1dfTUFTSwkJMHgwMDA3DQo+ID4gKyNkZWZpbmUgUlRDX0FMX01USF9NQVNL
+CQkweDAwMGYNCj4gPiArI2RlZmluZSBSVENfQUxfWUVBX01BU0sJCTB4MDA3Zg0KPiA+ICsNCj4g
+PiAgI2RlZmluZSBSVENfUEROMgkJMHgwMDJlDQo+ID4gICNkZWZpbmUgUlRDX1BETjJfUFdST05f
+QUxBUk0JQklUKDQpDQo+ID4gIA0KPiA+IEBAIC0xMDMsNyArMTExLDcgQEAgc3RhdGljIGlycXJl
+dHVybl90IG10a19ydGNfaXJxX2hhbmRsZXJfdGhyZWFkKGludCBpcnEsIHZvaWQgKmRhdGEpDQo+
+ID4gIAkJaXJxZW4gPSBpcnFzdGEgJiB+UlRDX0lSUV9FTl9BTDsNCj4gPiAgCQltdXRleF9sb2Nr
+KCZydGMtPmxvY2spOw0KPiA+ICAJCWlmIChyZWdtYXBfd3JpdGUocnRjLT5yZWdtYXAsIHJ0Yy0+
+YWRkcl9iYXNlICsgUlRDX0lSUV9FTiwNCj4gPiAtCQkJCSBpcnFlbikgPCAwKQ0KPiA+ICsJCQkJ
+IGlycWVuKSA9PSAwKQ0KPiA+ICAJCQltdGtfcnRjX3dyaXRlX3RyaWdnZXIocnRjKTsNCj4gPiAg
+CQltdXRleF91bmxvY2soJnJ0Yy0+bG9jayk7DQo+ID4gIA0KPiA+IEBAIC0yMjUsMTIgKzIzMywx
+MiBAQCBzdGF0aWMgaW50IG10a19ydGNfcmVhZF9hbGFybShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0
+cnVjdCBydGNfd2thbHJtICphbG0pDQo+ID4gIAlhbG0tPnBlbmRpbmcgPSAhIShwZG4yICYgUlRD
+X1BETjJfUFdST05fQUxBUk0pOw0KPiA+ICAJbXV0ZXhfdW5sb2NrKCZydGMtPmxvY2spOw0KPiA+
+ICANCj4gPiAtCXRtLT50bV9zZWMgPSBkYXRhW1JUQ19PRkZTRVRfU0VDXTsNCj4gPiAtCXRtLT50
+bV9taW4gPSBkYXRhW1JUQ19PRkZTRVRfTUlOXTsNCj4gPiAtCXRtLT50bV9ob3VyID0gZGF0YVtS
+VENfT0ZGU0VUX0hPVVJdOw0KPiA+IC0JdG0tPnRtX21kYXkgPSBkYXRhW1JUQ19PRkZTRVRfRE9N
+XTsNCj4gPiAtCXRtLT50bV9tb24gPSBkYXRhW1JUQ19PRkZTRVRfTVRIXTsNCj4gPiAtCXRtLT50
+bV95ZWFyID0gZGF0YVtSVENfT0ZGU0VUX1lFQVJdOw0KPiA+ICsJdG0tPnRtX3NlYyA9IGRhdGFb
+UlRDX09GRlNFVF9TRUNdICYgUlRDX0FMX1NFQ19NQVNLOw0KPiA+ICsJdG0tPnRtX21pbiA9IGRh
+dGFbUlRDX09GRlNFVF9NSU5dICYgUlRDX0FMX01JTl9NQVNLOw0KPiA+ICsJdG0tPnRtX2hvdXIg
+PSBkYXRhW1JUQ19PRkZTRVRfSE9VUl0gJiBSVENfQUxfSE9VX01BU0s7DQo+ID4gKwl0bS0+dG1f
+bWRheSA9IGRhdGFbUlRDX09GRlNFVF9ET01dICYgUlRDX0FMX0RPTV9NQVNLOw0KPiA+ICsJdG0t
+PnRtX21vbiA9IGRhdGFbUlRDX09GRlNFVF9NVEhdICYgUlRDX0FMX01USF9NQVNLOw0KPiA+ICsJ
+dG0tPnRtX3llYXIgPSBkYXRhW1JUQ19PRkZTRVRfWUVBUl0gJiBSVENfQUxfWUVBX01BU0s7DQo+
+ID4gIA0KPiA+ICAJdG0tPnRtX3llYXIgKz0gUlRDX01JTl9ZRUFSX09GRlNFVDsNCj4gPiAgCXRt
+LT50bV9tb24tLTsNCj4gPiBAQCAtMjUxLDE0ICsyNTksMjUgQEAgc3RhdGljIGludCBtdGtfcnRj
+X3NldF9hbGFybShzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBydGNfd2thbHJtICphbG0pDQo+
+ID4gIAl0bS0+dG1feWVhciAtPSBSVENfTUlOX1lFQVJfT0ZGU0VUOw0KPiA+ICAJdG0tPnRtX21v
+bisrOw0KPiA+ICANCj4gPiAtCWRhdGFbUlRDX09GRlNFVF9TRUNdID0gdG0tPnRtX3NlYzsNCj4g
+PiAtCWRhdGFbUlRDX09GRlNFVF9NSU5dID0gdG0tPnRtX21pbjsNCj4gPiAtCWRhdGFbUlRDX09G
+RlNFVF9IT1VSXSA9IHRtLT50bV9ob3VyOw0KPiA+IC0JZGF0YVtSVENfT0ZGU0VUX0RPTV0gPSB0
+bS0+dG1fbWRheTsNCj4gPiAtCWRhdGFbUlRDX09GRlNFVF9NVEhdID0gdG0tPnRtX21vbjsNCj4g
+PiAtCWRhdGFbUlRDX09GRlNFVF9ZRUFSXSA9IHRtLT50bV95ZWFyOw0KPiA+IC0NCj4gPiAgCW11
+dGV4X2xvY2soJnJ0Yy0+bG9jayk7DQo+ID4gKwlyZXQgPSByZWdtYXBfYnVsa19yZWFkKHJ0Yy0+
+cmVnbWFwLCBydGMtPmFkZHJfYmFzZSArIFJUQ19BTF9TRUMsDQo+ID4gKwkJCSAgICAgICBkYXRh
+LCBSVENfT0ZGU0VUX0NPVU5UKTsNCj4gPiArCWlmIChyZXQgPCAwKQ0KPiA+ICsJCWdvdG8gZXhp
+dDsNCj4gPiArDQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfU0VDXSA9ICgoZGF0YVtSVENfT0ZGU0VU
+X1NFQ10gJiB+KFJUQ19BTF9TRUNfTUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1fc2VjICYgUlRD
+X0FMX1NFQ19NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfTUlOXSA9ICgoZGF0YVtSVENf
+T0ZGU0VUX01JTl0gJiB+KFJUQ19BTF9NSU5fTUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1fbWlu
+ICYgUlRDX0FMX01JTl9NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfSE9VUl0gPSAoKGRh
+dGFbUlRDX09GRlNFVF9IT1VSXSAmIH4oUlRDX0FMX0hPVV9NQVNLKSkgfA0KPiA+ICsJCQkJKHRt
+LT50bV9ob3VyICYgUlRDX0FMX0hPVV9NQVNLKSk7DQo+ID4gKwlkYXRhW1JUQ19PRkZTRVRfRE9N
+XSA9ICgoZGF0YVtSVENfT0ZGU0VUX0RPTV0gJiB+KFJUQ19BTF9ET01fTUFTSykpIHwNCj4gPiAr
+CQkJCSh0bS0+dG1fbWRheSAmIFJUQ19BTF9ET01fTUFTSykpOw0KPiA+ICsJZGF0YVtSVENfT0ZG
+U0VUX01USF0gPSAoKGRhdGFbUlRDX09GRlNFVF9NVEhdICYgfihSVENfQUxfTVRIX01BU0spKSB8
+DQo+ID4gKwkJCQkodG0tPnRtX21vbiAmIFJUQ19BTF9NVEhfTUFTSykpOw0KPiA+ICsJZGF0YVtS
+VENfT0ZGU0VUX1lFQVJdID0gKChkYXRhW1JUQ19PRkZTRVRfWUVBUl0gJiB+KFJUQ19BTF9ZRUFf
+TUFTSykpIHwNCj4gPiArCQkJCSh0bS0+dG1feWVhciAmIFJUQ19BTF9ZRUFfTUFTSykpOw0KPiA+
+ICsNCj4gPiAgCWlmIChhbG0tPmVuYWJsZWQpIHsNCj4gPiAgCQlyZXQgPSByZWdtYXBfYnVsa193
+cml0ZShydGMtPnJlZ21hcCwNCj4gPiAgCQkJCQlydGMtPmFkZHJfYmFzZSArIFJUQ19BTF9TRUMs
+DQo+ID4gLS0gDQo+ID4gMi42LjQNCj4gDQoNCg==
 
-accidently send it only to Lee, that was unintended.
-
-On Tue, 10 Dec 2019 09:13:51 +0000
-Lee Jones <lee.jones@linaro.org> wrote:
-
-> On Fri, 29 Nov 2019, Andreas Kemnade wrote:
->=20
-> > rn5t618 currently lacks irq handling. To prepare implementation =20
->=20
-> "RN5T618"
-> "IRQ"
->=20
-> > in a rn5t618-irq.c, move main file to rn5t618-core.c =20
->=20
-> Why do you *need* to call it "core"?
->=20
-Well, the pattern is that irq stuff is in a separate file
-for other mfds. And when I want to link things together to a rn5t618.[k]o
-I think that none objects cannot be called rn5t618.o and so no source
-file rn5t618.o. Am I wrong here? Of course if things can live in one file
-this thing is not needed.
-
-Regards,
-Andreas
-
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > ---
-> >  drivers/mfd/Makefile                      | 2 ++
-> >  drivers/mfd/{rn5t618.c =3D> rn5t618-core.c} | 0
-> >  2 files changed, 2 insertions(+)
-> >  rename drivers/mfd/{rn5t618.c =3D> rn5t618-core.c} (100%)
-> >=20
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index c1067ea46204..110ea700231b 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -216,6 +216,8 @@ obj-$(CONFIG_MFD_PALMAS)	+=3D palmas.o
-> >  obj-$(CONFIG_MFD_VIPERBOARD)    +=3D viperboard.o
-> >  obj-$(CONFIG_MFD_RC5T583)	+=3D rc5t583.o rc5t583-irq.o
-> >  obj-$(CONFIG_MFD_RK808)		+=3D rk808.o
-> > +
-> > +rn5t618-objs			:=3D rn5t618-core.o
-> >  obj-$(CONFIG_MFD_RN5T618)	+=3D rn5t618.o
-> >  obj-$(CONFIG_MFD_SEC_CORE)	+=3D sec-core.o sec-irq.o
-> >  obj-$(CONFIG_MFD_SYSCON)	+=3D syscon.o
-> > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618-core.c
-> > similarity index 100%
-> > rename from drivers/mfd/rn5t618.c
-> > rename to drivers/mfd/rn5t618-core.c =20
->=20
-> --=20
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
-> Linaro Services Technical Lead
-> Linaro.org =E2=94=82 Open source software for ARM SoCs
-> Follow Linaro: Facebook | Twitter | Blog
->=20
-
---Sig_/lcL2C=9LQcpfETqHHrb8+K3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl3v0K0ACgkQl4jFM1s/
-ye/ilA/+OzgyZOMtqGTMLVIQy3K+s3tkm31ltQ6hT2NILDZsgmCwPUo5IkG+GJdL
-9s5LX3lPEB7tP523Vxz+CUk/9+WD59jwtoTaQ3Rz7p0CZfvjQhTPbPPu4SFmDYrp
-6VljHW/0sMgGsSQ/IyNFH949Obi2OZNe6n33UWr65MoNxPaMi/aNrzyHWjHIzqVo
-jjrYmI0pvzOspPojvFYfxOlHfNJrdtAnOdmp5dT+eckGhRk6cdprGvDEN9sZ6WiK
-enR5A6/y+5dRVW3L/ljm53rR2VK74gTNvVNDI+zwwNsgMSFBZwZeKgd8K3cVhNYr
-XC8ZtHrP0tPVxChyaDUoTT2ewUMFsp7jCRoFYu4kLYwLfKNo4VNLh+oK+7MWLldb
-GYsVMLemK1lISA4gmaZo6DYOL29J4b9yauXgbaPHHbfsMf77QZgOGX+HQGDpZb0f
-tyKw8aym6lot/pciMw08ehFPgxJsqOHB6HIbxBLeIFhNkLoG1hHbUpCUcae6x7vQ
-Xrb3uOyS3o+Fxcv4Qwf15sJ5T3oAWLUln4LbLtS9JAHDGvpYVKW/0zQydnCJ9fae
-mXY3J8AcaR0ktYsAUGCeFs1y4gACSSwGIunximx+mQB5thhA6C89nSkp9BYC7ykU
-Sq5n7wEcM+dDgwMD4NQwfaRGh5mDxgWMdvGXsr2TMskmoGF241Y=
-=t/ga
------END PGP SIGNATURE-----
-
---Sig_/lcL2C=9LQcpfETqHHrb8+K3--
