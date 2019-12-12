@@ -2,582 +2,241 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ADD11BF75
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 Dec 2019 22:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2067711C3F9
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2019 04:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726911AbfLKVyg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 Dec 2019 16:54:36 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:36688 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbfLKVyf (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 11 Dec 2019 16:54:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=References:In-Reply-To:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=78kkiXgodIlw83CKHqHDCvd4Wwsn51o8iRVWgQG6aPg=; b=dYWwz6tbQvEb/e1nvnPRTTLx+
-        LamFlBEwYwghb0hqpzR3yhDpWiTWNweohaYkZXimGmdmzjtXPDb84OVis42KUZBulkKtHC1vf41W6
-        nscaiNTcneqrBzWP8TfQ1zgVMN9U8b1OF5MDppNkeQ49uGMMmaKSjRphGIv9B6fBnB15A=;
-Received: from p5dcc331a.dip0.t-ipconnect.de ([93.204.51.26] helo=eeepc)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1if9wC-0002F7-C0; Wed, 11 Dec 2019 22:54:28 +0100
-Received: from andi by eeepc with local (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1if9wB-00005m-FU; Wed, 11 Dec 2019 22:54:27 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, stefan@agner.ch, b.galvani@gmail.com,
-        phh@phh.me, letux-kernel@openphoenux.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v4 5/5] rtc: rc5t619: add ricoh rc5t619 RTC driver
-Date:   Wed, 11 Dec 2019 22:54:09 +0100
-Message-Id: <20191211215409.32764-6-andreas@kemnade.info>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20191211215409.32764-1-andreas@kemnade.info>
-References: <20191211215409.32764-1-andreas@kemnade.info>
-X-Spam-Score: -1.0 (-)
+        id S1727675AbfLLDkC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 Dec 2019 22:40:02 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58618 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727507AbfLLDkC (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 11 Dec 2019 22:40:02 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id EA039AE34;
+        Thu, 12 Dec 2019 03:39:58 +0000 (UTC)
+From:   =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>
+To:     linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-amlogic@lists.infradead.org, Roc He <hepeng@zidoo.tv>,
+        zypeng@titanmec.com, sales@fdhisi.com, csd@princeton.com.tw
+Subject: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement TM1628/FD628/AiP1618 LED controllers
+Date:   Thu, 12 Dec 2019 04:39:27 +0100
+Message-Id: <20191212033952.5967-1-afaerber@suse.de>
+X-Mailer: git-send-email 2.16.4
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add an RTC driver for the RTC device on Ricoh MFD RC5T619,
-which is implemented as a variant of RN5T618.
+Hello,
 
-rtc-range output:
-Testing 2000-02-28 23:59:59.
-OK
+This patch series implements the LED controllers found in some RTD1295 based
+TV set-top boxes.
 
-Testing 2038-01-19 03:14:07.
-OK
+Ever since I've had mainline Linux kernels booting on my Zidoo X9S TV box,
+it's been bugging me that it kept displaying "boot" on its front display.
+A hot lead was a TM1628 chip on the front display's daughterboard, which
+English and Chinese datasheets were available for. The biggest hurdle
+to overcome was whether and how this chip was connected to the SoC.
+Confusingly the datasheet talks about "Serial Interface" and shows pins
+DIO, SCLK and STB; whereas neither UART nor SPI DT nodes seemed to be in use
+for this, no mention of such chipset in the binary vendor DT, and only one
+seemingly unrelated exported GPIO. Sadly Zidoo have refused to share GPL
+sourcecode with me, and the public GPL code drops from NAS and SBC vendors
+didn't seem to include drivers for this chip. Last weekend, review of vendor
+DT pinctrl nodes revealed a "spi@1" pinctrl node in use by the pinctrl node
+itself, despite there being only one GSPI block on the SoC. debugfs under
+Android revealed GPIO pins named "fp_stb", "fp_data" and "fp_clk" (on X5:
+3x "vfdtest", unhelpfully). So I hereby present my first 3-wire SPI slave,
+using standard spi-gpio driver.
 
-Testing 2069-12-31 23:59:59.
-OK
+This required to extend the spi-gpio driver with Little Endian support.
 
-Testing 2099-12-31 23:59:59.
-KO RTC_RD_TIME returned 22 (line 138)
+TM1628 and related chipsets have an internal Display RAM, from which they
+control a two-dimensional array of LED components, often used for
+seven-segment displays, i.e. clock display, but also for indicators.
+Individual LEDs can be turned on/off, but brightness is applied globally.
+Some chipsets also support polling a two-dimensional key pad.
 
-Testing 2100-02-28 23:59:59.
-KO RTC_SET_TIME returned 34 (line 122)
+This initial RFC implements a SPI slave driver within Linux leds subsystem
+and lets DT expose individual LED components as two-state LEDs, allowing
+to assign standard Linux LED triggers and to control them via sysfs.
 
-Testing 2106-02-07 06:28:15.
-KO RTC_SET_TIME returned 34 (line 122)
+It goes on to add a "text" attribute to the driver that enables DT-configured
+seven-segment displays; I was expecting to find precedence in auxdisplay
+subsystem but came up empty. So my driver currently integrates its own
+generic (but incomplete) character-to-8-segments mapping, as well as in a
+second step a combined-characters-to-8-segments mapping, which then gets
+mapped to the chipset's available output lines. Doing this as sysfs device
+attribute had the advantage of being able to test it quickly; it also leaves
+timezone management to userspace and lets it choose between wall clock and
+playback time as needed. LED triggers appeared to be per-LED; otherwise an
+RTC-implemented interrupt based LED trigger would've been nice for RTD1195+,
+since my pending irqchip driver exposes interrupts down to half-second that
+would seem ideal for accurately driving such a display, with blinking colon.
 
-Testing 2262-04-11 23:47:16.
-KO RTC_SET_TIME returned 34 (line 122)
+Finally, it sketches how keypad handling could be integrated into the leds
+driver, but I am lacking a test case for that functionality.
+Distinguishing LEDs and key inputs in DT may get difficult...
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
-Changes in v3:
-- further output cleanup
-- remove useless toggling of alarm flag in rtc probe
-- alignment cleanup
+For brightness control I am still investigating the backlight API and
+defaulting to the chipset's default (lowest) brightness.
 
-Changes in v2:
-- correct subject line
-- reset pon flag not at probe but later
-- initialize things only on pon
-- 12h handling
-- ranges
-- style cleanup
-- less magic values
+Prepended is a new DT for Xnano X5 OTT TV Box, featuring an FD628 display.
 
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-rc5t619.c | 444 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 455 insertions(+)
- create mode 100644 drivers/rtc/rtc-rc5t619.c
+Displays connected to these controllers didn't have any model or vendor
+usually, and for the lengthy numbers from my X9S, Google found no hits.
+Therefore I've been unable to come up with compatible strings for those
+displays and need to configure it per .dts, even though some may be using
+the same, e.g., "88:88" type display model.
+Whereas the same display might be connected to different LED controllers,
+thus is orthogonal to the controller's compatible string.
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 1adf9f815652..b8e5bfa8efc6 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -600,6 +600,16 @@ config RTC_DRV_RC5T583
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-rc5t583.
- 
-+config RTC_DRV_RC5T619
-+	tristate "RICOH RC5T619 RTC driver"
-+	depends on MFD_RN5T618
-+	help
-+	  If you say yes here you get support for the RTC on the
-+	  RICOH RC5T619 chips.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-rc5t619.
-+
- config RTC_DRV_S35390A
- 	tristate "Seiko Instruments S-35390A"
- 	select BITREVERSE
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 4ac8f19fb631..7612912cdf00 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -137,6 +137,7 @@ obj-$(CONFIG_RTC_DRV_PXA)	+= rtc-pxa.o
- obj-$(CONFIG_RTC_DRV_R7301)	+= rtc-r7301.o
- obj-$(CONFIG_RTC_DRV_R9701)	+= rtc-r9701.o
- obj-$(CONFIG_RTC_DRV_RC5T583)	+= rtc-rc5t583.o
-+obj-$(CONFIG_RTC_DRV_RC5T619)	+= rtc-rc5t619.o
- obj-$(CONFIG_RTC_DRV_RK808)	+= rtc-rk808.o
- obj-$(CONFIG_RTC_DRV_RP5C01)	+= rtc-rp5c01.o
- obj-$(CONFIG_RTC_DRV_RS5C313)	+= rtc-rs5c313.o
-diff --git a/drivers/rtc/rtc-rc5t619.c b/drivers/rtc/rtc-rc5t619.c
-new file mode 100644
-index 000000000000..24e386ecbc7e
---- /dev/null
-+++ b/drivers/rtc/rtc-rc5t619.c
-@@ -0,0 +1,444 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * drivers/rtc/rtc-rc5t619.c
-+ *
-+ * Real time clock driver for RICOH RC5T619 power management chip.
-+ *
-+ * Copyright (C) 2019 Andreas Kemnade
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/device.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mfd/rn5t618.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/bcd.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+#include <linux/irqdomain.h>
-+
-+struct rc5t619_rtc {
-+	int			irq;
-+	struct rtc_device	*rtc;
-+	struct rn5t618 *rn5t618;
-+};
-+
-+#define CTRL1_ALARM_ENABLED 0x40
-+#define CTRL1_24HR 0x20
-+#define CTRL1_PERIODIC_MASK 0xf
-+
-+#define CTRL2_PON 0x10
-+#define CTRL2_ALARM_STATUS 0x80
-+#define CTRL2_CTFG 0x4
-+#define CTRL2_CTC 0x1
-+
-+#define MONTH_CENTFLAG 0x80
-+#define HOUR_PMFLAG 0x20
-+#define MDAY_DAL_EXT 0x80
-+
-+static uint8_t rtc5t619_12hour_bcd2bin(uint8_t hour)
-+{
-+	if (hour & HOUR_PMFLAG) {
-+		hour = bcd2bin(hour & ~HOUR_PMFLAG);
-+		return hour == 12 ? 12 : 12 + hour;
-+	}
-+
-+	hour = bcd2bin(hour);
-+	return hour == 12 ? 0 : hour;
-+}
-+
-+static uint8_t rtc5t619_12hour_bin2bcd(uint8_t hour)
-+{
-+	if (!hour)
-+		return 0x12;
-+
-+	if (hour < 12)
-+		return bin2bcd(hour);
-+
-+	if (hour == 12)
-+		return 0x12 | HOUR_PMFLAG;
-+
-+	return bin2bcd(hour - 12) | HOUR_PMFLAG;
-+}
-+
-+static int rc5t619_rtc_periodic_disable(struct device *dev)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+
-+	/* disable function */
-+	err = regmap_update_bits(rtc->rn5t618->regmap,
-+				 RN5T618_RTC_CTRL1, CTRL1_PERIODIC_MASK, 0);
-+	if (err < 0)
-+		return err;
-+
-+	/* clear alarm flag and CTFG */
-+	err = regmap_update_bits(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2,
-+				 CTRL2_ALARM_STATUS | CTRL2_CTFG | CTRL2_CTC,
-+				 0);
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
-+
-+/* things to be done once after power on */
-+static int rc5t619_rtc_pon_setup(struct device *dev)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	int err;
-+	unsigned int reg_data;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &reg_data);
-+	if (err < 0)
-+		return err;
-+
-+	/* clear VDET PON */
-+	reg_data &= ~(CTRL2_PON | CTRL2_CTC | 0x4a);	/* 0101-1011 */
-+	reg_data |= 0x20;	/* 0010-0000 */
-+	err = regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, reg_data);
-+	if (err < 0)
-+		return err;
-+
-+	/* clearing RTC Adjust register */
-+	err = regmap_write(rtc->rn5t618->regmap, RN5T618_RTC_ADJUST, 0);
-+	if (err)
-+		return err;
-+
-+	return regmap_update_bits(rtc->rn5t618->regmap,
-+					RN5T618_RTC_CTRL1,
-+					CTRL1_24HR, CTRL1_24HR);
-+}
-+
-+static int rc5t619_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[7];
-+	int err;
-+	int cent_flag;
-+	unsigned int ctrl1;
-+	unsigned int ctrl2;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &ctrl2);
-+	if (err < 0)
-+		return err;
-+
-+	if (ctrl2 & CTRL2_PON)
-+		return -EINVAL;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &ctrl1);
-+	if (err < 0)
-+		return err;
-+
-+	err = regmap_bulk_read(rtc->rn5t618->regmap, RN5T618_RTC_SECONDS,
-+			       buff, sizeof(buff));
-+	if (err < 0)
-+		return err;
-+
-+	if (buff[5] & MONTH_CENTFLAG)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	tm->tm_sec  = bcd2bin(buff[0]);
-+	tm->tm_min  = bcd2bin(buff[1]);
-+
-+	if (ctrl1 & CTRL1_24HR)
-+		tm->tm_hour = bcd2bin(buff[2]);
-+	else
-+		tm->tm_hour = rtc5t619_12hour_bcd2bin(buff[2]);
-+
-+	tm->tm_wday = bcd2bin(buff[3]);
-+	tm->tm_mday = bcd2bin(buff[4]);
-+	tm->tm_mon  = bcd2bin(buff[5] & 0x1f) - 1; /* back to system 0-11 */
-+	tm->tm_year = bcd2bin(buff[6]) + 100 * cent_flag;
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[7];
-+	int err;
-+	int cent_flag;
-+	unsigned int ctrl1;
-+	unsigned int ctrl2;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &ctrl2);
-+	if (err < 0)
-+		return err;
-+
-+	if (ctrl2 & CTRL2_PON)
-+		rc5t619_rtc_pon_setup(dev);
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &ctrl1);
-+	if (err < 0)
-+		return err;
-+
-+	if (tm->tm_year >= 100)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	buff[0] = bin2bcd(tm->tm_sec);
-+	buff[1] = bin2bcd(tm->tm_min);
-+
-+	if (ctrl1 & CTRL1_24HR)
-+		buff[2] = bin2bcd(tm->tm_hour);
-+	else
-+		buff[2] = rtc5t619_12hour_bin2bcd(tm->tm_hour);
-+
-+	buff[3] = bin2bcd(tm->tm_wday);
-+	buff[4] = bin2bcd(tm->tm_mday);
-+	buff[5] = bin2bcd(tm->tm_mon + 1);	/* system set 0-11 */
-+	buff[6] = bin2bcd(tm->tm_year - cent_flag * 100);
-+
-+	if (cent_flag)
-+		buff[5] |= MONTH_CENTFLAG;
-+
-+	err = regmap_bulk_write(rtc->rn5t618->regmap, RN5T618_RTC_SECONDS,
-+				buff, sizeof(buff));
-+	if (err < 0) {
-+		dev_err(dev, "failed to program new time: %d\n", err);
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+/* 0-disable, 1-enable */
-+static int rc5t619_rtc_alarm_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	return regmap_update_bits(rtc->rn5t618->regmap,
-+			RN5T618_RTC_CTRL1,
-+			CTRL1_ALARM_ENABLED,
-+			enabled ? CTRL1_ALARM_ENABLED : 0);
-+}
-+
-+static int rc5t619_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[6];
-+	unsigned int buff_cent;
-+	int err;
-+	int cent_flag;
-+	unsigned int ctrl1;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &ctrl1);
-+	if (err)
-+		return err;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_MONTH, &buff_cent);
-+	if (err < 0) {
-+		dev_err(dev, "failed to read time: %d\n", err);
-+		return err;
-+	}
-+
-+	if (buff_cent & MONTH_CENTFLAG)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	err = regmap_bulk_read(rtc->rn5t618->regmap, RN5T618_RTC_ALARM_Y_SEC,
-+			       buff, sizeof(buff));
-+	if (err)
-+		return err;
-+
-+	buff[3] = buff[3] & 0x3f;
-+
-+	alrm->time.tm_sec  = bcd2bin(buff[0]);
-+	alrm->time.tm_min  = bcd2bin(buff[1]);
-+
-+	if (ctrl1 & CTRL1_24HR)
-+		alrm->time.tm_hour = bcd2bin(buff[2]);
-+	else
-+		alrm->time.tm_hour = rtc5t619_12hour_bcd2bin(buff[2]);
-+
-+	alrm->time.tm_mday = bcd2bin(buff[3]);
-+	alrm->time.tm_mon  = bcd2bin(buff[4]) - 1;
-+	alrm->time.tm_year = bcd2bin(buff[5]) + 100 * cent_flag;
-+	alrm->enabled = !!(ctrl1 & CTRL1_ALARM_ENABLED);
-+	dev_dbg(dev, "read alarm: %ptR\n", &alrm->time);
-+
-+	return 0;
-+}
-+
-+static int rc5t619_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+	u8 buff[6];
-+	int err;
-+	int cent_flag;
-+	unsigned int ctrl1;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL1, &ctrl1);
-+	if (err)
-+		return err;
-+
-+	err = rc5t619_rtc_alarm_enable(dev, 0);
-+	if (err < 0)
-+		return err;
-+
-+	if (rtc->irq == -1)
-+		return -EINVAL;
-+
-+	if (alrm->enabled == 0)
-+		return 0;
-+
-+	if (alrm->time.tm_year >= 100)
-+		cent_flag = 1;
-+	else
-+		cent_flag = 0;
-+
-+	alrm->time.tm_mon += 1;
-+	buff[0] = bin2bcd(alrm->time.tm_sec);
-+	buff[1] = bin2bcd(alrm->time.tm_min);
-+
-+	if (ctrl1 & CTRL1_24HR)
-+		buff[2] = bin2bcd(alrm->time.tm_hour);
-+	else
-+		buff[2] = rtc5t619_12hour_bin2bcd(alrm->time.tm_hour);
-+
-+	buff[3] = bin2bcd(alrm->time.tm_mday);
-+	buff[4] = bin2bcd(alrm->time.tm_mon);
-+	buff[5] = bin2bcd(alrm->time.tm_year - 100 * cent_flag);
-+	buff[3] |= MDAY_DAL_EXT;
-+
-+	err = regmap_bulk_write(rtc->rn5t618->regmap, RN5T618_RTC_ALARM_Y_SEC,
-+				buff, sizeof(buff));
-+	if (err < 0)
-+		return err;
-+
-+	return rc5t619_rtc_alarm_enable(dev, alrm->enabled);
-+}
-+
-+static const struct rtc_class_ops rc5t619_rtc_ops = {
-+	.read_time	= rc5t619_rtc_read_time,
-+	.set_time	= rc5t619_rtc_set_time,
-+	.set_alarm	= rc5t619_rtc_set_alarm,
-+	.read_alarm	= rc5t619_rtc_read_alarm,
-+	.alarm_irq_enable = rc5t619_rtc_alarm_enable,
-+};
-+
-+static int rc5t619_rtc_alarm_flag_clr(struct device *dev)
-+{
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	/* clear alarm-D status bits.*/
-+	return regmap_update_bits(rtc->rn5t618->regmap,
-+				RN5T618_RTC_CTRL2,
-+				CTRL2_ALARM_STATUS | CTRL2_CTC, 0);
-+}
-+
-+static irqreturn_t rc5t619_rtc_irq(int irq, void *data)
-+{
-+	struct device *dev = data;
-+	struct rc5t619_rtc *rtc = dev_get_drvdata(dev);
-+
-+	rc5t619_rtc_alarm_flag_clr(dev);
-+
-+	rtc_update_irq(rtc->rtc, 1, RTC_IRQF | RTC_AF);
-+	return IRQ_HANDLED;
-+}
-+
-+static int rc5t619_rtc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rn5t618 *rn5t618 = dev_get_drvdata(pdev->dev.parent);
-+	struct rc5t619_rtc *rtc;
-+	unsigned int ctrl2;
-+	int err;
-+
-+	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
-+	if (IS_ERR(rtc)) {
-+		err = PTR_ERR(rtc);
-+		return -ENOMEM;
-+	}
-+
-+	rtc->rn5t618 = rn5t618;
-+
-+	dev_set_drvdata(dev, rtc);
-+	rtc->irq = -1;
-+
-+	if (rn5t618->irq_data)
-+		rtc->irq = regmap_irq_get_virq(rn5t618->irq_data,
-+					       RN5T618_IRQ_RTC);
-+
-+	if (rtc->irq  < 0)
-+		rtc->irq = -1;
-+
-+	err = regmap_read(rtc->rn5t618->regmap, RN5T618_RTC_CTRL2, &ctrl2);
-+	if (err < 0)
-+		return err;
-+
-+	/* disable rtc periodic function */
-+	err = rc5t619_rtc_periodic_disable(&pdev->dev);
-+	if (err)
-+		return err;
-+
-+	if (ctrl2 & CTRL2_PON) {
-+		err = rc5t619_rtc_alarm_flag_clr(&pdev->dev);
-+		if (err)
-+			return err;
-+	}
-+
-+	rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(rtc->rtc)) {
-+		err = PTR_ERR(rtc->rtc);
-+		dev_err(dev, "RTC device register: err %d\n", err);
-+		return err;
-+	}
-+
-+	rtc->rtc->ops = &rc5t619_rtc_ops;
-+	rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
-+	rtc->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	/* set interrupt and enable it */
-+	if (rtc->irq != -1) {
-+		err = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
-+						rc5t619_rtc_irq,
-+						IRQF_ONESHOT,
-+						"rtc-rc5t619",
-+						&pdev->dev);
-+		if (err < 0) {
-+			dev_err(&pdev->dev, "request IRQ:%d fail\n", rtc->irq);
-+			rtc->irq = -1;
-+
-+			err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+			if (err)
-+				return err;
-+
-+		} else {
-+			/* enable wake */
-+			device_init_wakeup(&pdev->dev, 1);
-+			enable_irq_wake(rtc->irq);
-+		}
-+	} else {
-+		/* system don't want to using alarm interrupt, so close it */
-+		err = rc5t619_rtc_alarm_enable(&pdev->dev, 0);
-+		if (err)
-+			return err;
-+
-+		dev_warn(&pdev->dev, "rc5t619 interrupt is disabled\n");
-+	}
-+
-+	return rtc_register_device(rtc->rtc);
-+}
-+
-+static struct platform_driver rc5t619_rtc_driver = {
-+	.driver	= {
-+		.name	= "rc5t619-rtc",
-+	},
-+	.probe	= rc5t619_rtc_probe,
-+};
-+
-+module_platform_driver(rc5t619_rtc_driver);
-+MODULE_ALIAS("platform:rc5t619-rtc");
-+MODULE_DESCRIPTION("RICOH RC5T619 RTC driver");
-+MODULE_LICENSE("GPL");
+Another aspect here is that the leds binding expects to have child nodes
+per LED directly on the LED controller node. So I've gone to lengths to
+shoehorn my display child node into that scheme via wildcard reg property.
+
+The alternative would be to define some special child node, as done for the
+SPI controller's "slave" node, to use as display. But in theory there might
+be multiple displays connected to one controller (which is neglected here).
+And in theory the same display might be wired up differently, so at most
+the display model could tell us about layout and availability of LEDs, but
+we'd still need a mapping from the LED controller's to the display's pins.
+So far neither of the two displays tested actually use the segment lines
+for the segments, but rather switch segment and grid lines.
+
+So in theory we might consider the display as LED controller and implement
+binding/driver on that level (moving it to DT root node like gpio-leds),
+if we can hook it up to the actual LED controller in this case on SPI bus?
+Assuming we can actually identify the display with some compatible string,
+that is.
+However, update efficiency has been a concern, with clock display in mind.
+Thus, forcing two SPI commands (three SPI transfers) per LED segment, as the
+the current LED API would entail, should better be avoided. This led to the
+current design of having everything in tm1628 driver, so that we can easily
+determine the scope of an update operation there (one per LED; all for text,
+to be optimized through bit field of dirtied bytes).
+
+Locking is completely missing still. We'll need at least a mutex to avoid,
+e.g., a heartbeat LED trigger and a text update conflicting on SPI bus or
+"hazards" becoming visible on the display during conflicting byte updates.
+
+Module remove support is missing, too.
+
+We may also need to revisit my error checking and either inline functions
+or drop checks on the LED bit level, if it becomes a performance bottleneck.
+
+On the cosmetic side, some lines are still beyond 80 characters.
+
+Some more notes:
+* Public TM1628 V1.1 datasheet is in Chinese only and differs from the
+  unversioned English version found elsewhere on datasheet sites by
+  documenting more display modes, included here (guessed from Arabic numbers).
+* Public FD628 datasheet is Chinese only (guesses based on Arabic numbers).
+  FD623 appears to have more output lines, which would fit current data types.
+* AiP1618 links were all broken (404); try Google "site:szfdwdz.com" search
+  to actually find the documents available on their site.
+* Princeton PT6964 is another related LED controller with public datasheet
+  that I did not encounter in my TV boxes yet, thus not included here.
+  Datasheets are linked only for PT6959 and PT6967, but PT6964 V1.3 and V1.4
+  are available elsewhere. PT6967 has more output lines, which my current
+  data types could barely hold. Maybe bump them all to u32 type right away?
+* TM1628 is also found on MeLE V9 TV box, to be tested.
+* FD628 is also found on Amlogic S905X2 based Vontar X96 Max TV box,
+  to be tested (once UART is soldered).
+* AiP1618 was found on Ava and Lake I TV boxes, to be tested.
+* It remained unclear to me which of these many similar chipsets was first.
+  My driver name is therefore based on the chip I encountered first.
+
+This series is based on my not-yet-posted RTD1295 pinctrl and GPIO drivers.
+
+Latest experimental patches at:
+https://github.com/afaerber/linux/commits/rtd1295-next
+
+Have a lot of fun!
+
+Cheers,
+Andreas
+
+Cc: linux-leds@vger.kernel.org
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Dan Murphy <dmurphy@ti.com>
+
+Cc: linux-rtc@vger.kernel.org
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+Cc: devicetree@vger.kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>
+
+Cc: linux-spi@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>
+
+Cc: linux-amlogic@lists.infradead.org
+
+Cc: Roc He <hepeng@zidoo.tv>
+# No email for Xnano
+
+Cc: zypeng@titanmec.com
+Cc: sales@fdhisi.com
+# No email for szfdwdz.com
+Cc: csd@princeton.com.tw
+
+Andreas Färber (25):
+  dt-bindings: vendor-prefixes: Add Xnano
+  dt-bindings: arm: realtek: Add Xnano X5
+  arm64: dts: realtek: rtd1295: Add Xnano X5
+  spi: gpio: Implement LSB First bitbang support
+  dt-bindings: vendor-prefixes: Add Titan Micro Electronics
+  dt-bindings: leds: Add Titan Micro Electronics TM1628
+  leds: Add Titan Micro Electronics TM1628
+  arm64: dts: realtek: rtd129x-zidoo-x9s: Add TM1628 LED controller
+  arm64: dts: realtek: rtd1295-zidoo-x9s: Add regular LEDs to TM1628
+  dt-bindings: vendor-prefixes: Add Fuda Hisi Microelectronics
+  dt-bindings: leds: tm1628: Add Fuda Hisi Microelectronics FD628
+  leds: tm1628: Add Fuda Hisi Microelectronics FD628
+  arm64: dts: realtek: rtd1295-xnano-x5: Add FD628 LED controller
+  arm64: dts: realtek: rtd1295-xnano-x5: Add regular LEDs to FD628
+  dt-bindings: vendor-prefixes: Add Fude Microelectronics
+  dt-bindings: leds: tm1628: Add Fude Microelectronics AiP1618
+  leds: tm1628: Prepare Fude Microelectronics AiP1618
+  dt-bindings: leds: tm1628: Define display child nodes
+  leds: tm1628: Add 7-segment display support
+  arm64: dts: realtek: rtd1295-zidoo-x9s: Add display to TM1628
+  arm64: dts: realtek: rtd1295-xnano-x5: Add display to FD628
+  leds: tm1826: Add combined glyph support
+  WIP: leds: tm1628: Prepare TM1628 keys
+  WIP: leds: tm1628: Prepare FD628 keys
+  WIP: leds: tm1628: Prepare AiP1618 keys
+
+ Documentation/devicetree/bindings/arm/realtek.yaml |   1 +
+ .../devicetree/bindings/leds/titanmec,tm1628.yaml  | 134 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   8 +
+ arch/arm64/boot/dts/realtek/Makefile               |   1 +
+ arch/arm64/boot/dts/realtek/rtd1295-xnano-x5.dts   | 108 +++
+ arch/arm64/boot/dts/realtek/rtd1295-zidoo-x9s.dts  |  36 +-
+ drivers/leds/Kconfig                               |  12 +
+ drivers/leds/Makefile                              |   1 +
+ drivers/leds/leds-tm1628.c                         | 727 +++++++++++++++++++++
+ drivers/spi/spi-bitbang-txrx.h                     |  68 +-
+ drivers/spi/spi-gpio.c                             |  42 +-
+ 11 files changed, 1126 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/titanmec,tm1628.yaml
+ create mode 100644 arch/arm64/boot/dts/realtek/rtd1295-xnano-x5.dts
+ create mode 100644 drivers/leds/leds-tm1628.c
+
 -- 
-2.11.0
+2.16.4
 
