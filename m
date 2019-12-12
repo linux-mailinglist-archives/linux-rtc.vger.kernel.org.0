@@ -2,175 +2,271 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 980A111CDB6
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2019 14:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1B111CDF8
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 Dec 2019 14:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729297AbfLLNBk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 12 Dec 2019 08:01:40 -0500
-Received: from mail-co1nam11on2080.outbound.protection.outlook.com ([40.107.220.80]:28858
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729191AbfLLNBk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 12 Dec 2019 08:01:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LZUNUyi4qpk2XjwydW2MjacSi48ZCH+jrzzxCCV+5yLKpWTR52kqJm5PYwWeavCRLqb8tPkMdzS8uZtv60GFx4GQw0QFIIGGPeNYj83j1tR2NTvqYWQ8qm1cyCR6LWi/O2/zM4LDD+MaFyR/VgxpxeYECqi7/TtxCMuqsPvJjnrqsaJbd60GR5YV7PxpXADOPXhbc3aP8huMJlT+8A8+RAfLPIu0qQnMXJ3eufRgIUpHc77ARdQZdwnT2sPHCQXB4sKAJGfDbnpiJA4wHuGP/bySAO4sGUoI3LR/1P68uEI+i6Rcl5JRrhiqtXubI4ac0yS1p3yHd4hWa8wjvCOznw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R/rPvPinEHq9E+nittqb6XQDb0zF5NzNyLm66p5zOa4=;
- b=YKXMtb5t4Kj4AuOWpOmopGMxJJY87XCKIKEbu/dfidQnRVyDrIDfaOh7vqP4i+XfqXkbYQwAJ8YX4W73HArOFlmI7hNcl/z2kdzQ3UpZxFj8LAq2KYIi+oPZ2BZKjpM/w6I1kgvx2QKrd18Jk4CoZm73Ix1iKDSy5g1W+8caNolkkPSSOmAQzC8SJd8NbzT1LxA51vH/eq279hz3Gj9e/QEfwuc9b/lFWUdyA3PhUnYWPnhKvqkbpNDaf33LBMJ5b/iHD+0OT75kbiLH/9Io7sGlPadi8zcR6ZgN3ew36rhtoYjjP+9esQTONOBW6jqKGZBd3ZHn6P5w4QCLFZrxew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=towertech.it smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R/rPvPinEHq9E+nittqb6XQDb0zF5NzNyLm66p5zOa4=;
- b=O3a9gbQUnoQzKuKwNPK5GfyPGxZqi3kFeFWvkGE3pvHze66NvCiP+JyNsCReNN1Qap2Is/gYi7HmSrC2plQ0UtVgOC7hHjCG3LkWWWtEBWxcnl/wcRaUDM3QSL6bDMwVSRjyPTEp72AZCsWvj/HjEv2pi+HUoy27nZRYIEQHpzc=
-Received: from BL0PR02CA0098.namprd02.prod.outlook.com (2603:10b6:208:51::39)
- by BL0PR02MB6513.namprd02.prod.outlook.com (2603:10b6:208:1c3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.17; Thu, 12 Dec
- 2019 13:01:24 +0000
-Received: from SN1NAM02FT036.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::206) by BL0PR02CA0098.outlook.office365.com
- (2603:10b6:208:51::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.17 via Frontend
- Transport; Thu, 12 Dec 2019 13:01:24 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; towertech.it; dkim=none (message not signed)
- header.d=none;towertech.it; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- SN1NAM02FT036.mail.protection.outlook.com (10.152.72.149) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2538.14
- via Frontend Transport; Thu, 12 Dec 2019 13:01:23 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1ifO5r-00041z-49; Thu, 12 Dec 2019 05:01:23 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1ifO5m-00040j-0t; Thu, 12 Dec 2019 05:01:18 -0800
-Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1ifO5f-0003rT-19; Thu, 12 Dec 2019 05:01:11 -0800
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        michal.simek@xilinx.com, sgoud@xilinx.com, shubhraj@xilinx.com
-Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH] rtc: zynqmp: Clear alarm interrupt status before interrupt enable
-Date:   Thu, 12 Dec 2019 18:30:18 +0530
-Message-Id: <1576155618-7933-1-git-send-email-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(189003)(199004)(426003)(81166006)(44832011)(8936002)(2616005)(336012)(4326008)(5660300002)(9786002)(81156014)(6636002)(7696005)(356004)(186003)(2906002)(70206006)(8676002)(36756003)(26005)(70586007)(498600001)(107886003);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR02MB6513;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+        id S1729389AbfLLNO7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 12 Dec 2019 08:14:59 -0500
+Received: from foss.arm.com ([217.140.110.172]:46472 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728996AbfLLNO7 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 12 Dec 2019 08:14:59 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F10ED30E;
+        Thu, 12 Dec 2019 05:14:57 -0800 (PST)
+Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15FBD3F718;
+        Thu, 12 Dec 2019 05:14:50 -0800 (PST)
+Subject: Re: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement
+ TM1628/FD628/AiP1618 LED controllers
+To:     =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Roc He <hepeng@zidoo.tv>, csd@princeton.com.tw,
+        devicetree@vger.kernel.org, sales@fdhisi.com,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, zypeng@titanmec.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Dan Murphy <dmurphy@ti.com>
+References: <20191212033952.5967-1-afaerber@suse.de>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <7110806f-ddbd-f055-e107-7a1f7e223102@arm.com>
+Date:   Thu, 12 Dec 2019 13:14:45 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 645924df-a5d7-4604-7c26-08d77f036415
-X-MS-TrafficTypeDiagnostic: BL0PR02MB6513:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB65131333B16F8BC942B4A85EAF550@BL0PR02MB6513.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
-X-Forefront-PRVS: 0249EFCB0B
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S7IK9iCjklnsPsahiZrf1D5LBHJj26vQ8M6Vet+K1ByOnRCauJlSfXLx1Sntz5lrn8nnqv/x/P1XKblPGM6PI91ApOFtWzET4UyxYm+UX5un6S2c0miKE75pqG870g2SJeqAggql9Y7NIabGOjO/94IesasGgkN4rA3Z5a+IdyYwO4jAVCz+nxKaDEsbBz1URIefTs4aEPf960KaixrRdixtiTlpEa7ict19z2Bhi5Vs67EHzwCUFdXXUuDkvuvm1X920hJicrypDKCq7buPI3M2RjTER/CSCbsuYaLSyJdm1SWbk1mLSu0YwIjuDE8nxBUDfl13diNdLkaeSlYEnt2J1CUb3de9yNpUXFqbUdEFrMoksql73UB19fZuf/FCthz+fH6IAYoaw3k04NJQ/6HXc8vPQihS0Q8609CQ0DsPikMILS0GFp/4Jbt0oRMR
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2019 13:01:23.5832
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 645924df-a5d7-4604-7c26-08d77f036415
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB6513
+In-Reply-To: <20191212033952.5967-1-afaerber@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Fix multiple occurring interrupts for alarm interrupt. RTC module doesn't
-clear the alarm interrupt status bit immediately after the interrupt is
-triggered.This is due to the sticky nature of the alarm interrupt status
-register. The alarm interrupt status register can be cleared only after
-the second counter outruns the set alarm value. To fix multiple spurious
-interrupts, disable alarm interrupt in the handler and clear the status
-bit before enabling the alarm interrupt.
+Hi Andreas,
 
-Fixes: 11143c19eb57 ("rtc: add xilinx zynqmp rtc driver")
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
- drivers/rtc/rtc-zynqmp.c | 29 ++++++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
+On 12/12/2019 3:39 am, Andreas Färber wrote:
+> Hello,
+> 
+> This patch series implements the LED controllers found in some RTD1295 based
+> TV set-top boxes.
+> 
+> Ever since I've had mainline Linux kernels booting on my Zidoo X9S TV box,
+> it's been bugging me that it kept displaying "boot" on its front display.
+> A hot lead was a TM1628 chip on the front display's daughterboard, which
+> English and Chinese datasheets were available for. The biggest hurdle
+> to overcome was whether and how this chip was connected to the SoC.
+> Confusingly the datasheet talks about "Serial Interface" and shows pins
+> DIO, SCLK and STB; whereas neither UART nor SPI DT nodes seemed to be in use
+> for this, no mention of such chipset in the binary vendor DT, and only one
+> seemingly unrelated exported GPIO. Sadly Zidoo have refused to share GPL
+> sourcecode with me, and the public GPL code drops from NAS and SBC vendors
+> didn't seem to include drivers for this chip. Last weekend, review of vendor
+> DT pinctrl nodes revealed a "spi@1" pinctrl node in use by the pinctrl node
+> itself, despite there being only one GSPI block on the SoC. debugfs under
+> Android revealed GPIO pins named "fp_stb", "fp_data" and "fp_clk" (on X5:
+> 3x "vfdtest", unhelpfully). So I hereby present my first 3-wire SPI slave,
+> using standard spi-gpio driver.
+> 
+> This required to extend the spi-gpio driver with Little Endian support.
+> 
+> TM1628 and related chipsets have an internal Display RAM, from which they
+> control a two-dimensional array of LED components, often used for
+> seven-segment displays, i.e. clock display, but also for indicators.
+> Individual LEDs can be turned on/off, but brightness is applied globally.
+> Some chipsets also support polling a two-dimensional key pad.
+> 
+> This initial RFC implements a SPI slave driver within Linux leds subsystem
+> and lets DT expose individual LED components as two-state LEDs, allowing
+> to assign standard Linux LED triggers and to control them via sysfs.
+> 
+> It goes on to add a "text" attribute to the driver that enables DT-configured
+> seven-segment displays; I was expecting to find precedence in auxdisplay
+> subsystem but came up empty. So my driver currently integrates its own
+> generic (but incomplete) character-to-8-segments mapping, as well as in a
+> second step a combined-characters-to-8-segments mapping, which then gets
+> mapped to the chipset's available output lines. Doing this as sysfs device
+> attribute had the advantage of being able to test it quickly; it also leaves
+> timezone management to userspace and lets it choose between wall clock and
+> playback time as needed. LED triggers appeared to be per-LED; otherwise an
+> RTC-implemented interrupt based LED trigger would've been nice for RTD1195+,
+> since my pending irqchip driver exposes interrupts down to half-second that
+> would seem ideal for accurately driving such a display, with blinking colon.
+> 
+> Finally, it sketches how keypad handling could be integrated into the leds
+> driver, but I am lacking a test case for that functionality.
+> Distinguishing LEDs and key inputs in DT may get difficult...
+> 
+> For brightness control I am still investigating the backlight API and
+> defaulting to the chipset's default (lowest) brightness.
+> 
+> Prepended is a new DT for Xnano X5 OTT TV Box, featuring an FD628 display.
+> 
+> Displays connected to these controllers didn't have any model or vendor
+> usually, and for the lengthy numbers from my X9S, Google found no hits.
+> Therefore I've been unable to come up with compatible strings for those
+> displays and need to configure it per .dts, even though some may be using
+> the same, e.g., "88:88" type display model.
+> Whereas the same display might be connected to different LED controllers,
+> thus is orthogonal to the controller's compatible string.
+> 
+> Another aspect here is that the leds binding expects to have child nodes
+> per LED directly on the LED controller node. So I've gone to lengths to
+> shoehorn my display child node into that scheme via wildcard reg property.
+> 
+> The alternative would be to define some special child node, as done for the
+> SPI controller's "slave" node, to use as display. But in theory there might
+> be multiple displays connected to one controller (which is neglected here).
+> And in theory the same display might be wired up differently, so at most
+> the display model could tell us about layout and availability of LEDs, but
+> we'd still need a mapping from the LED controller's to the display's pins.
+> So far neither of the two displays tested actually use the segment lines
+> for the segments, but rather switch segment and grid lines.
+> 
+> So in theory we might consider the display as LED controller and implement
+> binding/driver on that level (moving it to DT root node like gpio-leds),
+> if we can hook it up to the actual LED controller in this case on SPI bus?
+> Assuming we can actually identify the display with some compatible string,
+> that is.
+> However, update efficiency has been a concern, with clock display in mind.
+> Thus, forcing two SPI commands (three SPI transfers) per LED segment, as the
+> the current LED API would entail, should better be avoided. This led to the
+> current design of having everything in tm1628 driver, so that we can easily
+> determine the scope of an update operation there (one per LED; all for text,
+> to be optimized through bit field of dirtied bytes).
+> 
+> Locking is completely missing still. We'll need at least a mutex to avoid,
+> e.g., a heartbeat LED trigger and a text update conflicting on SPI bus or
+> "hazards" becoming visible on the display during conflicting byte updates.
+> 
+> Module remove support is missing, too.
+> 
+> We may also need to revisit my error checking and either inline functions
+> or drop checks on the LED bit level, if it becomes a performance bottleneck.
+> 
+> On the cosmetic side, some lines are still beyond 80 characters.
+> 
+> Some more notes:
+> * Public TM1628 V1.1 datasheet is in Chinese only and differs from the
+>    unversioned English version found elsewhere on datasheet sites by
+>    documenting more display modes, included here (guessed from Arabic numbers).
+> * Public FD628 datasheet is Chinese only (guesses based on Arabic numbers).
+>    FD623 appears to have more output lines, which would fit current data types.
+> * AiP1618 links were all broken (404); try Google "site:szfdwdz.com" search
+>    to actually find the documents available on their site.
+> * Princeton PT6964 is another related LED controller with public datasheet
+>    that I did not encounter in my TV boxes yet, thus not included here.
+>    Datasheets are linked only for PT6959 and PT6967, but PT6964 V1.3 and V1.4
+>    are available elsewhere. PT6967 has more output lines, which my current
+>    data types could barely hold. Maybe bump them all to u32 type right away?
+> * TM1628 is also found on MeLE V9 TV box, to be tested.
+> * FD628 is also found on Amlogic S905X2 based Vontar X96 Max TV box,
+>    to be tested (once UART is soldered).
+> * AiP1618 was found on Ava and Lake I TV boxes, to be tested.
+> * It remained unclear to me which of these many similar chipsets was first.
+>    My driver name is therefore based on the chip I encountered first.
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index 5786866c09e9..d311e3ef1f21 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -38,6 +38,8 @@
- 
- #define RTC_CALIB_DEF		0x198233
- #define RTC_CALIB_MASK		0x1FFFFF
-+#define RTC_ALRM_MASK          BIT(1)
-+#define RTC_MSEC               1000
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
-@@ -124,11 +126,28 @@ static int xlnx_rtc_alarm_irq_enable(struct device *dev, u32 enabled)
- {
- 	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
- 
--	if (enabled)
-+	unsigned int status;
-+	ulong timeout;
-+
-+	timeout = jiffies + msecs_to_jiffies(RTC_MSEC);
-+
-+	if (enabled) {
-+		while (1) {
-+			status = readl(xrtcdev->reg_base + RTC_INT_STS);
-+			if (!((status & RTC_ALRM_MASK) == RTC_ALRM_MASK))
-+				break;
-+
-+			if (time_after_eq(jiffies, timeout)) {
-+				dev_err(dev, "Time out occur, while clearing alarm status bit\n");
-+				return -ETIMEDOUT;
-+			}
-+			writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_STS);
-+		}
-+
- 		writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_EN);
--	else
-+	} else {
- 		writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_DIS);
--
-+	}
- 	return 0;
- }
- 
-@@ -183,8 +202,8 @@ static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
- 	if (!(status & (RTC_INT_SEC | RTC_INT_ALRM)))
- 		return IRQ_NONE;
- 
--	/* Clear RTC_INT_ALRM interrupt only */
--	writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_STS);
-+	/* Disable RTC_INT_ALRM interrupt only */
-+	writel(RTC_INT_ALRM, xrtcdev->reg_base + RTC_INT_DIS);
- 
- 	if (status & RTC_INT_ALRM)
- 		rtc_update_irq(xrtcdev->rtc, 1, RTC_IRQF | RTC_AF);
--- 
-2.7.4
+It's pretty cool to see this! My Rockchip box has an AiP1618-driven 
+display that I've also spent a bit of time hacking around with - I did 
+get some way into writing an LED driver, but ultimately gave up and 
+wrote a simple thing to bit-bang the GPIO chardev from userspace (and 
+since there are enough clocks in my house, I now have a cpufreq display!)
 
+In case it helps, in my research I found that ARTSCHIP are another 
+vendor of these things with accessible datasheets[1], and as far as I 
+could tell the command set appears to derive from (or is at least common 
+to) some old Holtek VFD controllers.
+
+If I can figure out the DT parts (which was one of the areas that 
+stalled my attempt) I'll try to have a play with this series over the 
+holidays. One thought to ponder is that I have an "88:88" display where 
+the entire middle grid is reserved for the colon (which is wired to just 
+one segment) - I'm not sure how that could be sanely described :/
+
+Robin.
+
+[1] 
+http://www.artschip.com/products.asp?lx=small&anid=779&ParentName=Signal%20management%20_I_O%20Extender
+
+> This series is based on my not-yet-posted RTD1295 pinctrl and GPIO drivers.
+> 
+> Latest experimental patches at:
+> https://github.com/afaerber/linux/commits/rtd1295-next
+> 
+> Have a lot of fun!
+> 
+> Cheers,
+> Andreas
+> 
+> Cc: linux-leds@vger.kernel.org
+> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Dan Murphy <dmurphy@ti.com>
+> 
+> Cc: linux-rtc@vger.kernel.org
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> 
+> Cc: devicetree@vger.kernel.org
+> Cc: Rob Herring <robh+dt@kernel.org>
+> 
+> Cc: linux-spi@vger.kernel.org
+> Cc: Mark Brown <broonie@kernel.org>
+> 
+> Cc: linux-amlogic@lists.infradead.org
+> 
+> Cc: Roc He <hepeng@zidoo.tv>
+> # No email for Xnano
+> 
+> Cc: zypeng@titanmec.com
+> Cc: sales@fdhisi.com
+> # No email for szfdwdz.com
+> Cc: csd@princeton.com.tw
+> 
+> Andreas Färber (25):
+>    dt-bindings: vendor-prefixes: Add Xnano
+>    dt-bindings: arm: realtek: Add Xnano X5
+>    arm64: dts: realtek: rtd1295: Add Xnano X5
+>    spi: gpio: Implement LSB First bitbang support
+>    dt-bindings: vendor-prefixes: Add Titan Micro Electronics
+>    dt-bindings: leds: Add Titan Micro Electronics TM1628
+>    leds: Add Titan Micro Electronics TM1628
+>    arm64: dts: realtek: rtd129x-zidoo-x9s: Add TM1628 LED controller
+>    arm64: dts: realtek: rtd1295-zidoo-x9s: Add regular LEDs to TM1628
+>    dt-bindings: vendor-prefixes: Add Fuda Hisi Microelectronics
+>    dt-bindings: leds: tm1628: Add Fuda Hisi Microelectronics FD628
+>    leds: tm1628: Add Fuda Hisi Microelectronics FD628
+>    arm64: dts: realtek: rtd1295-xnano-x5: Add FD628 LED controller
+>    arm64: dts: realtek: rtd1295-xnano-x5: Add regular LEDs to FD628
+>    dt-bindings: vendor-prefixes: Add Fude Microelectronics
+>    dt-bindings: leds: tm1628: Add Fude Microelectronics AiP1618
+>    leds: tm1628: Prepare Fude Microelectronics AiP1618
+>    dt-bindings: leds: tm1628: Define display child nodes
+>    leds: tm1628: Add 7-segment display support
+>    arm64: dts: realtek: rtd1295-zidoo-x9s: Add display to TM1628
+>    arm64: dts: realtek: rtd1295-xnano-x5: Add display to FD628
+>    leds: tm1826: Add combined glyph support
+>    WIP: leds: tm1628: Prepare TM1628 keys
+>    WIP: leds: tm1628: Prepare FD628 keys
+>    WIP: leds: tm1628: Prepare AiP1618 keys
+> 
+>   Documentation/devicetree/bindings/arm/realtek.yaml |   1 +
+>   .../devicetree/bindings/leds/titanmec,tm1628.yaml  | 134 ++++
+>   .../devicetree/bindings/vendor-prefixes.yaml       |   8 +
+>   arch/arm64/boot/dts/realtek/Makefile               |   1 +
+>   arch/arm64/boot/dts/realtek/rtd1295-xnano-x5.dts   | 108 +++
+>   arch/arm64/boot/dts/realtek/rtd1295-zidoo-x9s.dts  |  36 +-
+>   drivers/leds/Kconfig                               |  12 +
+>   drivers/leds/Makefile                              |   1 +
+>   drivers/leds/leds-tm1628.c                         | 727 +++++++++++++++++++++
+>   drivers/spi/spi-bitbang-txrx.h                     |  68 +-
+>   drivers/spi/spi-gpio.c                             |  42 +-
+>   11 files changed, 1126 insertions(+), 12 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/leds/titanmec,tm1628.yaml
+>   create mode 100644 arch/arm64/boot/dts/realtek/rtd1295-xnano-x5.dts
+>   create mode 100644 drivers/leds/leds-tm1628.c
+> 
