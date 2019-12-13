@@ -2,115 +2,238 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE1211E5AE
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Dec 2019 15:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE4611EE6B
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 00:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727766AbfLMOgg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 13 Dec 2019 09:36:36 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40462 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727711AbfLMOgg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 13 Dec 2019 09:36:36 -0500
-Received: by mail-ot1-f66.google.com with SMTP id i15so6698860oto.7;
-        Fri, 13 Dec 2019 06:36:35 -0800 (PST)
+        id S1726638AbfLMXZY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 13 Dec 2019 18:25:24 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39879 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfLMXZY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 13 Dec 2019 18:25:24 -0500
+Received: by mail-oi1-f196.google.com with SMTP id a67so2075424oib.6;
+        Fri, 13 Dec 2019 15:25:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GGDHCjU3MM6dIoUZbPeaqvOt8azxG8D7bJ42yMYhguQ=;
-        b=Fg68g20DS9J34weDnrWGHF/e32qZHaPKuqqvTc5id+1NwJ8EhouTc3Sf5tDMNjnnY6
-         SqQa4qIVZqeLiYz9B5rO5FMd51FlHFwY1JMgj0K+BhdT1V9epD8WwlMWnyf56xe6qeqV
-         qtDhx3Lc4/+sNcFyLjAxnsIyQrqOaGSf1+EEb/qrGvKObeP2TnFYG0q+bi2ALBnd2gZz
-         04rZ79DmSzgBfSHIjkOYSPqFtxM5Br/Uz4emFiZN5CYUPReMTar0yFkYKcpjvjWgPNst
-         1ENDf3Fds4LmZ6vE1oAXSNaazzPtAN8jCYtfe+47tRQYQW5cH9oTN3bOJVXsxXA+ZVMO
-         2iNQ==
-X-Gm-Message-State: APjAAAUnN0pkrsHwA1bpmgIGHR0UBwkkOpB9uLf6PLVkKBpOBoVCgn5V
-        P58Gs8CdSrgYjbnrXx16OHRguMn9WoIYwiQZtH4=
-X-Google-Smtp-Source: APXvYqwKdL1VCGK4Oe8rL01hvhyHoDgd/HFUlME0PAelLe/cixzON7bfU2Iq4k7pCixPL7UT2s6qDca45N2N5QcrkBo=
-X-Received: by 2002:a9d:7984:: with SMTP id h4mr15219004otm.297.1576247795212;
- Fri, 13 Dec 2019 06:36:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dLfBlRiHKWoew0reabXfa/MbAeC9Mc4ikeTkPhntb9g=;
+        b=eDKWVU/bMyFbkGbT+ctHZ2p4R79oCo2q5vuBAegVEEH4BUx1EbBJvedqh6USdzdV6Q
+         jGfkDz6BW80ELHG54V3s2/ZwE0VZpnJR5FWoF6s4MPVrcBjn1GxAQDbjRiDQBfEF6xEd
+         P8OYvzLtAblJ5JVsSyOFzwRH8hd10nqrqWo1lstNq0YBvGEv3mp6FdnZse5EiiZOw67s
+         UNLaQnb8UNTN230uhJ+Tof7mFFMOy+n4+d3CY7jTz+fSbKyJXpKIxY2JERqKgY4PwGIO
+         RyDyK2qcL5PHhPY9rtuNVByeEUPNGDJKOi2zOEK5awJPcenVmKLfZpq8MT8xD+8796QS
+         WESw==
+X-Gm-Message-State: APjAAAUFTY9Tcimall73qMm+tsdEtu2Mvp+Vapvor7qarT9/SjQI9q8I
+        UEWi9XTb5v4s+TiTFfzeaw==
+X-Google-Smtp-Source: APXvYqwoHMOiga8bgQ2raABQGFJaX4uqduovQEJFvsdi+ExC6o+PYKI9rlCu3Kwb/ygG5liYl0HTJQ==
+X-Received: by 2002:aca:4eca:: with SMTP id c193mr7743827oib.37.1576279522531;
+        Fri, 13 Dec 2019 15:25:22 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n15sm3855369otr.67.2019.12.13.15.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 15:25:21 -0800 (PST)
+Date:   Fri, 13 Dec 2019 17:25:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        mark.rutland@arm.com, alexandre.torgue@st.com,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: rtc: Convert stm32 rtc bindings to
+ json-schema
+Message-ID: <20191213232521.GA20953@bogus>
+References: <20191202145740.29123-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-References: <20191212033952.5967-1-afaerber@suse.de> <7110806f-ddbd-f055-e107-7a1f7e223102@arm.com>
- <c86c6bc0-b0e5-c46e-da87-9d910b95f9f3@suse.de> <04e7d7cd-a8bc-621b-9205-1a058521cabe@arm.com>
-In-Reply-To: <04e7d7cd-a8bc-621b-9205-1a058521cabe@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Dec 2019 15:36:24 +0100
-Message-ID: <CAMuHMdXddQ4v8-by_SmcS09EYykoBZ2G2vcFUpqPadHFaasy7A@mail.gmail.com>
-Subject: Re: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement
- TM1628/FD628/AiP1618 LED controllers
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        linux-realtek-soc@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        csd@princeton.com.tw,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, sales@fdhisi.com,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, zypeng@titanmec.com,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dan Murphy <dmurphy@ti.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191202145740.29123-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Robin,
+On Mon, Dec 02, 2019 at 03:57:40PM +0100, Benjamin Gaignard wrote:
+> Convert the STM32 RTC binding to DT schema format using json-schema
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  .../devicetree/bindings/rtc/st,stm32-rtc.txt       |  61 ---------
+>  .../devicetree/bindings/rtc/st,stm32-rtc.yaml      | 152 +++++++++++++++++++++
+>  2 files changed, 152 insertions(+), 61 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/st,stm32-rtc.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
 
-On Fri, Dec 13, 2019 at 3:08 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> On 12/12/2019 8:55 pm, Andreas Färber wrote:
-> > Am 12.12.19 um 14:14 schrieb Robin Murphy:
-> >> and as far as I
-> >> could tell the command set appears to derive from (or is at least common
-> >> to) some old Holtek VFD controllers.
-> >
-> > Hmm, HT16515 looks similar and has more lines, RAM and mode bits than I
-> > prepared here.
-> > https://www.holtek.com/productdetail/-/vg/ht16515
-> >
-> > So I'd need to make more numbers model-dependent and allocate the
-> > Display RAM buffer dynamically.
-> >
-> > Whereas HT16D35A seems incompatible command-wise, and HT16528 appears to
-> > be out of scope, for dot displays and with fancy embedded character map.
-> >
-> > No Holtek email alias that I can quickly spot.
-> >
-> > But given that I'm proposing vendor-specific compatibles just in case,
-> > the main decisions will be the Kconfig symbol and module name. The
-> > driver code itself we could always refactor after merging, and renaming
-> > the schema file (as opposed to compatible) should also be possible.
->
-> Yeah, I'm not sure that it really matters, as I doubt there are many
-> Linux-capable devices with a real VFD anyway; it just seemed like an
-> interesting datapoint that fell out of scouring the web trying to find
-> any evidence for which the "canonical" 1618 might be (and the Holtek
-> connection was actually a coincidence from a misidentification of the
-> ARTSCHIP part number).
 
-My Sony Blu-Ray/Home Theatre has a nice one (14-segment!), also driven
-by an HT16515.  While the specific model predates the arrival of Linux
-in the next stepping of the hardware, it should be sufficiently powerful
-to run Linux.
+> diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> new file mode 100644
+> index 000000000000..80c445005bfb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+> @@ -0,0 +1,152 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/st,stm32-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectronics STM32 Real Time Clock Bindings
+> +
+> +maintainers:
+> +  - Gabriel Fernandez <gabriel.fernandez@st.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - st,stm32-rtc
+> +      - st,stm32h7-rtc
+> +      - st,stm32mp1-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk
+> +      - const: rtc_ck
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - st,stm32-rtc
+> +              - st,stm32h7-rtc
+> +    then:
+> +      properties:
+> +        st,syscfg:
+> +          allOf:
+> +            - $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +            - items:
+> +                minItems: 3
+> +                maxItems: 3
+> +          description: |
+> +            Phandle/offset/mask triplet. The phandle to pwrcfg used to
+> +            access control register at offset, and change the dbp (Disable Backup
+> +            Protection) bit represented by the mask, mandatory to disable/enable backup
+> +            domain (RTC registers) write protection.
+> +
+> +        assigned-clocks:
+> +          allOf:
+> +            - $ref: "/schemas/types.yaml#/definitions/phandle-array"
 
-Unfortunately it's in active use, so hacking experiments would be vetoed by
-the family ;-)
+Already has a type, so drop this.
 
-Gr{oetje,eeting}s,
+> +          description: |
+> +            override default rtc_ck parent clock reference to the rtc_ck clock entry
+> +          maxItems: 1
+> +
+> +        assigned-clock-parents:
+> +          allOf:
+> +           - $ref: "/schemas/types.yaml#/definitions/phandle-array"
 
-                        Geert
+Same here.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Since you have the false schema below, I think these can go in base 
+schema rather than under the if.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +          description: |
+> +            override default rtc_ck parent clock phandle of the new parent clock of rtc_ck
+> +          maxItems: 1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: st,stm32-rtc
+> +
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
+> +          maxItems: 1
+> +
+> +        clock-names: false
+> +
+> +      required:
+> +        - st,syscfg
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: st,stm32h7-rtc
+> +
+> +    then:
+> +       properties:
+> +         clocks:
+> +           minItems: 2
+> +           maxItems: 2
+> +
+> +       required:
+> +         - clock-names
+> +         - st,syscfg
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: st,stm32mp1-rtc
+> +
+> +    then:
+> +       properties:
+> +         clocks:
+> +           minItems: 2
+> +           maxItems: 2
+> +
+> +         assigned-clocks: false
+> +         assigned-clock-parents: false
+> +
+> +       required:
+> +         - clock-names
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/mfd/stm32f4-rcc.h>
+> +    #include <dt-bindings/clock/stm32fx-clock.h>
+> +    rtc@40002800 {
+> +      compatible = "st,stm32-rtc";
+> +      reg = <0x40002800 0x400>;
+> +      clocks = <&rcc 1 CLK_RTC>;
+> +      assigned-clocks = <&rcc 1 CLK_RTC>;
+> +      assigned-clock-parents = <&rcc 1 CLK_LSE>;
+> +      interrupt-parent = <&exti>;
+> +      interrupts = <17 1>;
+> +      st,syscfg = <&pwrcfg 0x00 0x100>;
+> +    };
+> +
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/stm32mp1-clks.h>
+> +    rtc@5c004000 {
+> +      compatible = "st,stm32mp1-rtc";
+> +      reg = <0x5c004000 0x400>;
+> +      clocks = <&rcc RTCAPB>, <&rcc RTC>;
+> +      clock-names = "pclk", "rtc_ck";
+> +      interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +
+> +...
+> -- 
+> 2.15.0
+> 
