@@ -2,29 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BC011F46C
-	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6956011F4A0
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727224AbfLNWDO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 14 Dec 2019 17:03:14 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:44439 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727185AbfLNWDL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:03:11 -0500
+        id S1726820AbfLNWK2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 14 Dec 2019 17:10:28 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:39499 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfLNWK2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:10:28 -0500
+X-Originating-IP: 90.65.92.102
 Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 53BD3100006;
-        Sat, 14 Dec 2019 22:03:09 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 41FBA1BF204;
+        Sat, 14 Dec 2019 22:10:26 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 17/17] rtc: rx8010: return meaningful value for RTC_VL_READ
-Date:   Sat, 14 Dec 2019 23:02:59 +0100
-Message-Id: <20191214220259.621996-18-alexandre.belloni@bootlin.com>
+Subject: [PATCH 00/16] rtc: rv3029: cleanup and features
+Date:   Sat, 14 Dec 2019 23:10:06 +0100
+Message-Id: <20191214221022.622482-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191214220259.621996-1-alexandre.belloni@bootlin.com>
-References: <20191214220259.621996-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -32,31 +31,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-RX8010_FLAG_VLF means the voltage dropped too low and data has been lost.
+Hi,
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-rx8010.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+This series cleans up the rv3029 driver and adds a few features:
+RTC_VL_READ and RTC_VL_CLR support, correct rtc range enforcement, NVRAM
+support.
 
-diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-index 9b106a26c64b..4021844bf2fa 100644
---- a/drivers/rtc/rtc-rx8010.c
-+++ b/drivers/rtc/rtc-rx8010.c
-@@ -399,11 +399,8 @@ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
- 		if (flagreg < 0)
- 			return flagreg;
- 
--		tmp = !!(flagreg & RX8010_FLAG_VLF);
--		if (copy_to_user((void __user *)arg, &tmp, sizeof(int)))
--			return -EFAULT;
--
--		return 0;
-+		tmp = flagreg & RX8010_FLAG_VLF ? RTC_VL_DATA_INVALID : 0;
-+		return put_user(tmp, (unsigned int __user *)arg);
- 
- 	default:
- 		return -ENOIOCTLCMD;
+This series depends on the previously sent RTC_VL_READ unification.
+
+Alexandre Belloni (16):
+  rtc: rv3029: use proper name for the driver
+  rtc: rv3029: let regmap validate the register ranges
+  rtc: rv3029: remove open coded regmap_update_bits
+  rtc: rv3029: remove race condition when update STATUS
+  rtc: rv3029: avoid reading the status register uselessly
+  rtc: rv3029: get rid of rv3029_get_sr
+  rtc: rv3029: simplify rv3029_alarm_irq_enable
+  rtc: rv3029: simplify rv3029_set_alarm
+  rtc: rv3029: drop rv3029_read_regs and rv3029_write_regs
+  rtc: rv3029: add RTC_VL_READ and RTC_VL_CLEAR support
+  rtc: rv3029: correctly handle PON and VLOW2
+  rtc: rv3029: convert to devm_rtc_allocate_device
+  rtc: rv3029: let the core handle rtc range
+  rtc: rv3029: remove useless error messages
+  rtc: rv3029: annotate init and exit functions
+  rtc: rv3029: add nvram support
+
+ drivers/rtc/rtc-rv3029c2.c | 444 +++++++++++++++----------------------
+ include/linux/rtc.h        |   1 +
+ 2 files changed, 185 insertions(+), 260 deletions(-)
+
 -- 
 2.23.0
 
