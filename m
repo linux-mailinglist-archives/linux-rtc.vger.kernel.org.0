@@ -2,27 +2,26 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C26011F471
-	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298CF11F472
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727184AbfLNWDJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 14 Dec 2019 17:03:09 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:52943 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727148AbfLNWDI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:03:08 -0500
-X-Originating-IP: 90.65.92.102
+        id S1727297AbfLNWDZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 14 Dec 2019 17:03:25 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:44755 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727162AbfLNWDK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:03:10 -0500
 Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 4C62840009;
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id B22F1100005;
         Sat, 14 Dec 2019 22:03:07 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 12/17] rtc: rv3028: remove RTC_VL_CLR handling
-Date:   Sat, 14 Dec 2019 23:02:54 +0100
-Message-Id: <20191214220259.621996-13-alexandre.belloni@bootlin.com>
+Subject: [PATCH 13/17] rtc: rv3028: return meaningful value for RTC_VL_READ
+Date:   Sat, 14 Dec 2019 23:02:55 +0100
+Message-Id: <20191214220259.621996-14-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191214220259.621996-1-alexandre.belloni@bootlin.com>
 References: <20191214220259.621996-1-alexandre.belloni@bootlin.com>
@@ -33,32 +32,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Remove RTC_VL_CLR handling because it is a disservice to userspace as it
-removes the important information that the RTC data is invalid. This may
-lead userspace to set an invalid system time later on.
+RV3028_STATUS_PORF means the voltage dropped too low and data has been
+lost.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rv3028.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/rtc/rtc-rv3028.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-index 6b7b3a69601a..d1a2c22861f2 100644
+index d1a2c22861f2..a0ddc86c975a 100644
 --- a/drivers/rtc/rtc-rv3028.c
 +++ b/drivers/rtc/rtc-rv3028.c
-@@ -438,12 +438,6 @@ static int rv3028_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+@@ -428,15 +428,8 @@ static int rv3028_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ 		if (ret < 0)
+ 			return ret;
  
- 		return 0;
+-		if (status & RV3028_STATUS_PORF)
+-			dev_warn(&rv3028->rtc->dev, "Voltage low, data loss detected.\n");
+-
+-		status &= RV3028_STATUS_PORF;
+-
+-		if (copy_to_user((void __user *)arg, &status, sizeof(int)))
+-			return -EFAULT;
+-
+-		return 0;
++		status = status & RV3028_STATUS_PORF ? RTC_VL_DATA_INVALID : 0;
++		return put_user(status, (unsigned int __user *)arg);
  
--	case RTC_VL_CLR:
--		ret = regmap_update_bits(rv3028->regmap, RV3028_STATUS,
--					 RV3028_STATUS_PORF, 0);
--
--		return ret;
--
  	default:
  		return -ENOIOCTLCMD;
- 	}
 -- 
 2.23.0
 
