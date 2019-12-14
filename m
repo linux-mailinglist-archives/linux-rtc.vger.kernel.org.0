@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFCE11F4A2
-	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E1C11F4A4
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfLNWK2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 14 Dec 2019 17:10:28 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:44995 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbfLNWK2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:10:28 -0500
+        id S1727127AbfLNWKc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 14 Dec 2019 17:10:32 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:50053 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfLNWK3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:10:29 -0500
 X-Originating-IP: 90.65.92.102
 Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 6D9DB1C0007;
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id CC7451BF207;
         Sat, 14 Dec 2019 22:10:27 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 03/16] rtc: rv3029: remove open coded regmap_update_bits
-Date:   Sat, 14 Dec 2019 23:10:09 +0100
-Message-Id: <20191214221022.622482-4-alexandre.belloni@bootlin.com>
+Subject: [PATCH 04/16] rtc: rv3029: remove race condition when update STATUS
+Date:   Sat, 14 Dec 2019 23:10:10 +0100
+Message-Id: <20191214221022.622482-5-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191214221022.622482-1-alexandre.belloni@bootlin.com>
 References: <20191214221022.622482-1-alexandre.belloni@bootlin.com>
@@ -33,72 +33,82 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-rv3029_update_bits open codes regmap_update_bits and forgets to properly
-lock the register range while doing so. Use regmap_update_bits instead.
+There is no lock preventing concurrent access to the status register from
+bth the rtc subsystem and the hwmon subsystem. Use regmap_update_bits to
+ensure updating RV3029_STATUS is properly locked.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rv3029c2.c | 26 ++++++--------------------
- 1 file changed, 6 insertions(+), 20 deletions(-)
+ drivers/rtc/rtc-rv3029c2.c | 34 ++++++----------------------------
+ 1 file changed, 6 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index aed28e29a5fd..36b4da260caf 100644
+index 36b4da260caf..4e7514433b79 100644
 --- a/drivers/rtc/rtc-rv3029c2.c
 +++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -137,23 +137,6 @@ static int rv3029_write_regs(struct device *dev, u8 reg, u8 const buf[],
- 	return regmap_bulk_write(rv3029->regmap, reg, buf, len);
+@@ -147,19 +147,6 @@ static int rv3029_get_sr(struct device *dev, u8 *buf)
+ 	return 0;
  }
  
--static int rv3029_update_bits(struct device *dev, u8 reg, u8 mask, u8 set)
+-static int rv3029_set_sr(struct device *dev, u8 val)
 -{
--	u8 buf;
--	int ret;
+-	u8 buf[1];
+-	int sr;
 -
--	ret = rv3029_read_regs(dev, reg, &buf, 1);
--	if (ret < 0)
--		return ret;
--	buf &= ~mask;
--	buf |= set & mask;
--	ret = rv3029_write_regs(dev, reg, &buf, 1);
--	if (ret < 0)
--		return ret;
--
+-	buf[0] = val;
+-	sr = rv3029_write_regs(dev, RV3029_STATUS, buf, 1);
+-	dev_dbg(dev, "status = 0x%.2x (%d)\n", buf[0], buf[0]);
+-	if (sr < 0)
+-		return -EIO;
 -	return 0;
 -}
 -
- static int rv3029_get_sr(struct device *dev, u8 *buf)
+ static int rv3029_eeprom_busywait(struct device *dev)
  {
- 	int ret = rv3029_read_regs(dev, RV3029_STATUS, buf, 1);
-@@ -200,14 +183,17 @@ static int rv3029_eeprom_busywait(struct device *dev)
+ 	int i, ret;
+@@ -205,9 +192,9 @@ static int rv3029_eeprom_enter(struct device *dev)
+ 		/* We clear the bits and retry once just in case
+ 		 * we had a brown out in early startup.
+ 		 */
+-		sr &= ~RV3029_STATUS_VLOW1;
+-		sr &= ~RV3029_STATUS_VLOW2;
+-		ret = rv3029_set_sr(dev, sr);
++		ret = regmap_update_bits(rv3029->regmap, RV3029_STATUS,
++					 RV3029_STATUS_VLOW1 |
++					 RV3029_STATUS_VLOW2, 0);
+ 		if (ret < 0)
+ 			return ret;
+ 		usleep_range(1000, 10000);
+@@ -515,6 +502,7 @@ static int rv3029_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
  
- static int rv3029_eeprom_exit(struct device *dev)
+ static int rv3029_set_time(struct device *dev, struct rtc_time *tm)
  {
 +	struct rv3029_data *rv3029 = dev_get_drvdata(dev);
-+
- 	/* Re-enable eeprom refresh */
--	return rv3029_update_bits(dev, RV3029_ONOFF_CTRL,
-+	return regmap_update_bits(rv3029->regmap, RV3029_ONOFF_CTRL,
- 				  RV3029_ONOFF_CTRL_EERE,
- 				  RV3029_ONOFF_CTRL_EERE);
- }
- 
- static int rv3029_eeprom_enter(struct device *dev)
- {
-+	struct rv3029_data *rv3029 = dev_get_drvdata(dev);
+ 	u8 regs[8];
  	int ret;
- 	u8 sr;
  
-@@ -236,8 +222,8 @@ static int rv3029_eeprom_enter(struct device *dev)
- 	}
- 
- 	/* Disable eeprom refresh. */
--	ret = rv3029_update_bits(dev, RV3029_ONOFF_CTRL, RV3029_ONOFF_CTRL_EERE,
--				 0);
-+	ret = regmap_update_bits(rv3029->regmap, RV3029_ONOFF_CTRL,
-+				 RV3029_ONOFF_CTRL_EERE, 0);
+@@ -539,19 +527,9 @@ static int rv3029_set_time(struct device *dev, struct rtc_time *tm)
  	if (ret < 0)
  		return ret;
  
+-	ret = rv3029_get_sr(dev, regs);
+-	if (ret < 0) {
+-		dev_err(dev, "%s: reading SR failed\n", __func__);
+-		return ret;
+-	}
+ 	/* clear PON bit */
+-	ret = rv3029_set_sr(dev, (regs[0] & ~RV3029_STATUS_PON));
+-	if (ret < 0) {
+-		dev_err(dev, "%s: reading SR failed\n", __func__);
+-		return ret;
+-	}
+-
+-	return 0;
++	return regmap_update_bits(rv3029->regmap, RV3029_STATUS,
++				  RV3029_STATUS_PON, 0);
+ }
+ 
+ static const struct rv3029_trickle_tab_elem {
 -- 
 2.23.0
 
