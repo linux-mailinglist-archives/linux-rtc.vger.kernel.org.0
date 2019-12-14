@@ -2,27 +2,26 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B099811F4AD
-	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F31F11F4B5
+	for <lists+linux-rtc@lfdr.de>; Sat, 14 Dec 2019 23:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727250AbfLNWKn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 14 Dec 2019 17:10:43 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:50733 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727036AbfLNWKc (ORCPT
+        id S1727387AbfLNWK4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 14 Dec 2019 17:10:56 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:48551 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727126AbfLNWKc (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Sat, 14 Dec 2019 17:10:32 -0500
-X-Originating-IP: 90.65.92.102
 Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id A3B9F40008;
-        Sat, 14 Dec 2019 22:10:30 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 1E35D100007;
+        Sat, 14 Dec 2019 22:10:31 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 11/16] rtc: rv3029: correctly handle PON and VLOW2
-Date:   Sat, 14 Dec 2019 23:10:17 +0100
-Message-Id: <20191214221022.622482-12-alexandre.belloni@bootlin.com>
+Subject: [PATCH 12/16] rtc: rv3029: convert to devm_rtc_allocate_device
+Date:   Sat, 14 Dec 2019 23:10:18 +0100
+Message-Id: <20191214221022.622482-13-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191214221022.622482-1-alexandre.belloni@bootlin.com>
 References: <20191214221022.622482-1-alexandre.belloni@bootlin.com>
@@ -33,75 +32,43 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In case the data is invalid (PON or VLOW2 are set in STATUS, explicitly
-tell userspace that the time is invalid. Only remove VLOW2 when setting a
-new valid time.
+This allows further improvement of the driver.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rv3029c2.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-rv3029c2.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index 6ae96baa111a..433aad16897e 100644
+index 433aad16897e..555c88c2edbb 100644
 --- a/drivers/rtc/rtc-rv3029c2.c
 +++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -159,20 +159,21 @@ static int rv3029_eeprom_enter(struct rv3029_data *rv3029)
- 	ret = regmap_read(rv3029->regmap, RV3029_STATUS, &sr);
- 	if (ret < 0)
- 		return ret;
--	if (sr & (RV3029_STATUS_VLOW1 | RV3029_STATUS_VLOW2)) {
-+	if (sr & RV3029_STATUS_VLOW2)
-+		return -ENODEV;
-+	if (sr & RV3029_STATUS_VLOW1) {
- 		/* We clear the bits and retry once just in case
- 		 * we had a brown out in early startup.
- 		 */
- 		ret = regmap_update_bits(rv3029->regmap, RV3029_STATUS,
--					 RV3029_STATUS_VLOW1 |
--					 RV3029_STATUS_VLOW2, 0);
-+					 RV3029_STATUS_VLOW1, 0);
- 		if (ret < 0)
- 			return ret;
- 		usleep_range(1000, 10000);
- 		ret = regmap_read(rv3029->regmap, RV3029_STATUS, &sr);
- 		if (ret < 0)
- 			return ret;
--		if (sr & (RV3029_STATUS_VLOW1 | RV3029_STATUS_VLOW2)) {
-+		if (sr & RV3029_STATUS_VLOW1) {
- 			dev_err(rv3029->dev,
- 				"Supply voltage is too low to safely access the EEPROM.\n");
- 			return -ENODEV;
-@@ -306,9 +307,17 @@ static irqreturn_t rv3029_handle_irq(int irq, void *dev_id)
- static int rv3029_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct rv3029_data *rv3029 = dev_get_drvdata(dev);
-+	unsigned int sr;
- 	int ret;
- 	u8 regs[RV3029_WATCH_SECTION_LEN] = { 0, };
+@@ -731,12 +731,9 @@ static int rv3029_probe(struct device *dev, struct regmap *regmap, int irq,
+ 	rv3029_trickle_config(dev);
+ 	rv3029_hwmon_register(dev, name);
  
-+	ret = regmap_read(rv3029->regmap, RV3029_STATUS, &sr);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (sr & (RV3029_STATUS_VLOW2 | RV3029_STATUS_PON))
-+		return -EINVAL;
-+
- 	ret = regmap_bulk_read(rv3029->regmap, RV3029_W_SEC, regs,
- 			       RV3029_WATCH_SECTION_LEN);
- 	if (ret < 0) {
-@@ -454,9 +463,9 @@ static int rv3029_set_time(struct device *dev, struct rtc_time *tm)
- 	if (ret < 0)
- 		return ret;
+-	rv3029->rtc = devm_rtc_device_register(dev, name, &rv3029_rtc_ops,
+-					       THIS_MODULE);
+-	if (IS_ERR(rv3029->rtc)) {
+-		dev_err(dev, "unable to register the class device\n");
++	rv3029->rtc = devm_rtc_allocate_device(dev);
++	if (IS_ERR(rv3029->rtc))
+ 		return PTR_ERR(rv3029->rtc);
+-	}
  
--	/* clear PON bit */
-+	/* clear PON and VLOW2 bits */
- 	return regmap_update_bits(rv3029->regmap, RV3029_STATUS,
--				  RV3029_STATUS_PON, 0);
-+				  RV3029_STATUS_PON | RV3029_STATUS_VLOW2, 0);
+ 	if (rv3029->irq > 0) {
+ 		rc = devm_request_threaded_irq(dev, rv3029->irq,
+@@ -753,7 +750,9 @@ static int rv3029_probe(struct device *dev, struct regmap *regmap, int irq,
+ 		}
+ 	}
+ 
+-	return 0;
++	rv3029->rtc->ops = &rv3029_rtc_ops;
++
++	return rtc_register_device(rv3029->rtc);
  }
  
- static int rv3029_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ static const struct regmap_range rv3029_holes_range[] = {
 -- 
 2.23.0
 
