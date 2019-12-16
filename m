@@ -2,169 +2,119 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D12120EBB
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 17:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E650120FCF
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 17:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfLPQCD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 11:02:03 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:44228 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725836AbfLPQCD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 16 Dec 2019 11:02:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=PFTbYGO/dc90I2YXG41N9f41dU8GVWMEed9i++G4Wv8=; b=AAQQx//12skpZ/haFxx66yTiC
-        dN9Vm0vL43P4Cm/Jxigzt0tPdg0f4RovXhWvsx7jGU+5eDHgQ/IR1fADbyAW8tN2Ivmtj29p5X/Xf
-        GOeC8uxFOI+i9ArqkrmhWraELxw4+KIExOuPqswF6nBIpY+OijyxDiVlq9BKFsVACDyq4=;
-Received: from [77.247.85.102] (helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1igson-0005GN-4P; Mon, 16 Dec 2019 17:01:57 +0100
-Received: from [::1] (helo=localhost)
-        by eeepc with esmtp (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1igsoj-0004ec-Vp; Mon, 16 Dec 2019 17:01:54 +0100
-Date:   Mon, 16 Dec 2019 17:01:52 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v4 2/5] mfd: rn5t618: add IRQ support
-Message-ID: <20191216170152.25da1051@kemnade.info>
-In-Reply-To: <20191216152715.GH2369@dell>
-References: <20191211215409.32764-1-andreas@kemnade.info>
-        <20191211215409.32764-3-andreas@kemnade.info>
-        <20191216152715.GH2369@dell>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
+        id S1726296AbfLPQlW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Dec 2019 11:41:22 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:40428 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726016AbfLPQlW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 11:41:22 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c14so8104136wrn.7
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 08:41:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=Wad68DLaXUpd0xmHmGc4hyH7aNMrYmcFPI6lvzyrzXQ=;
+        b=ZUl2wU8huzRepFCJe7yB6pF057RW3caVmmRvTKRDOdPECwbEIB0WefXqVHnVyANG51
+         g5T22LDlh2yQLNAv708JsGohtDmViR8MgHBxQn/6No0xuswgQ4YrVXCmjytjX67eleE/
+         Rp5jkygE9YLzltRq1VkqZtxx5kK4h//PSSw742m0L7HWFdlUHnuEIRaEcjkJ4raUcfEf
+         HmrOkebAcd8HbWC4sFmTPedNt2WDm1JwiFfKxlJaij8xugE1B7IIRHaL6KnfDFYpeBgL
+         qERcKs/N55IXPtvl60tG6bSo+GEcxPhvEHpnvh0EEp7lhMx+dCHIkAkrvVV+IB7cNeB+
+         nl8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Wad68DLaXUpd0xmHmGc4hyH7aNMrYmcFPI6lvzyrzXQ=;
+        b=uBqXGwsAG6u/3CAYWY8/rv8Y0iLpEah7lNHEGmaEi1lGJCI32ueIFTSW2oVudvWnMJ
+         L8MDLvB7/OMhM4WMDs73c6clv4OSNLmBhqa1udW1yrbOFMoNpTff5t7HhAt7ixjSvfa7
+         7fGGtpmRCb5YBeskKRWMCYB6GtSBy4kDE1EQRTH0aWH9gsZSWBxewBKC8uuBoE4WXrwQ
+         DX6T8i3jfvx2iUk3C6IRiwQQuS7vE2aLhxTXzVoWX4C+SWEJ+OpMKwh1pMriJguaM1au
+         7H6erzuaSw3zArXHXssvIAV/L+p4qyMvsG5Fx1PArdO2sm5ag90jTPkXTOk7IDllhikx
+         FSkA==
+X-Gm-Message-State: APjAAAXfVQksIHlZU67tw723ZwAvU4fDxYzZRj2hlFBOZSYyhayweekN
+        itHxQr98LZerYkuEXk6dby1IHA==
+X-Google-Smtp-Source: APXvYqwzL/lxHeATvNiqlDcJrYl6wzPRCIG9ji/dIYZtc3SBOtEVGWzMvLG64qHY14Tril+j6sQMqA==
+X-Received: by 2002:adf:f1c6:: with SMTP id z6mr15126699wro.279.1576514481576;
+        Mon, 16 Dec 2019 08:41:21 -0800 (PST)
+Received: from dell ([185.17.149.202])
+        by smtp.gmail.com with ESMTPSA id z3sm22137942wrs.94.2019.12.16.08.41.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 08:41:20 -0800 (PST)
+Date:   Mon, 16 Dec 2019 16:41:20 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v6 04/15] mfd: rohm PMICs - use platform_device_id to
+ match MFD sub-devices
+Message-ID: <20191216164120.GB18955@dell>
+References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+ <e5998dff02b4e155059f38614191daf32a778a0a.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/XbepMN/1jKrHdjWF6aXCDE7"; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e5998dff02b4e155059f38614191daf32a778a0a.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---Sig_/XbepMN/1jKrHdjWF6aXCDE7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 11 Dec 2019, Matti Vaittinen wrote:
 
-On Mon, 16 Dec 2019 15:27:15 +0000
-Lee Jones <lee.jones@linaro.org> wrote:
+> Thanks to Stephen Boyd I today learned we can use platform_device_id
+> to do device and module matching for MFD sub-devices!
+> 
+> Do device matching using the platform_device_id instead of using
+> explicit module_aliases to load modules and custom parent-data field
+> to do module loading and sub-device matching.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+> 
+> No changes since v5
+> 
+>  drivers/clk/clk-bd718x7.c             | 12 ++++++++-
+>  drivers/regulator/bd718x7-regulator.c | 17 +++++++++---
 
-> On Wed, 11 Dec 2019, Andreas Kemnade wrote:
->=20
-> > This adds support for IRQ handling in the RC5T619 which is required
-> > for properly implementing subdevices like RTC.
-> > For now only definitions for the variant RC5T619 are included.
-> >=20
-> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > ---
-> > Changes in v4:
-> > merge rn5t618-irq.c into rn5t618.c
-> > use macros for IRQ table
-> >=20
-> > Changes in v3:
-> > alignment cleanup
-> >=20
-> > Changes in v2:
-> > - no dead code, did some more testing and thinking for that
-> > - remove extra empty lines
-> >  drivers/mfd/Kconfig         |  1 +
-> >  drivers/mfd/rn5t618.c       | 88 +++++++++++++++++++++++++++++++++++++=
-++++++++
-> >  include/linux/mfd/rn5t618.h | 15 ++++++++
-> >  3 files changed, 104 insertions(+)
-> >=20
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index ae24d3ea68ea..522e068d0082 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -1057,6 +1057,7 @@ config MFD_RN5T618
-> >  	depends on OF
-> >  	select MFD_CORE
-> >  	select REGMAP_I2C
-> > +	select REGMAP_IRQ
-> >  	help
-> >  	  Say yes here to add support for the Ricoh RN5T567,
-> >  	  RN5T618, RC5T619 PMIC.
-> > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
-> > index da5cd9c92a59..76d997c0cfe4 100644
-> > --- a/drivers/mfd/rn5t618.c
-> > +++ b/drivers/mfd/rn5t618.c
-> > @@ -8,6 +8,8 @@
-> > =20
-> >  #include <linux/delay.h>
-> >  #include <linux/i2c.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/irq.h>
-> >  #include <linux/mfd/core.h>
-> >  #include <linux/mfd/rn5t618.h>
-> >  #include <linux/module.h>
-> > @@ -45,9 +47,63 @@ static const struct regmap_config rn5t618_regmap_con=
-fig =3D {
-> >  	.cache_type	=3D REGCACHE_RBTREE,
-> >  };
-> > =20
-> > +static const struct regmap_irq rc5t619_irqs[] =3D {
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_SYS, 0, BIT(0)),
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_DCDC, 0, BIT(1)),
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_RTC, 0, BIT(2)),
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_ADC, 0, BIT(3)),
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_GPIO, 0, BIT(4)),
-> > +	REGMAP_IRQ_REG(RN5T618_IRQ_CHG, 0, BIT(6)),
-> > +};
-> > +
-> > +static const struct regmap_irq_chip rc5t619_irq_chip =3D {
-> > +	.name =3D "rc5t619",
-> > +	.irqs =3D rc5t619_irqs,
-> > +	.num_irqs =3D ARRAY_SIZE(rc5t619_irqs),
-> > +	.num_regs =3D 1,
-> > +	.status_base =3D RN5T618_INTMON,
-> > +	.mask_base =3D RN5T618_INTEN,
-> > +	.mask_invert =3D true,
-> > +};
-> > +
-> >  static struct rn5t618 *rn5t618_pm_power_off;
-> >  static struct notifier_block rn5t618_restart_handler;
-> > =20
-> > +int rn5t618_irq_init(struct rn5t618 *rn5t618) =20
->=20
-> Static?
->=20
-yes, it should be static since IRQ and core do live
-in the same file now.
+>  drivers/mfd/rohm-bd70528.c            |  3 +--
+>  drivers/mfd/rohm-bd718x7.c            | 39 ++++++++++++++++++++++-----
+>  include/linux/mfd/rohm-generic.h      |  3 +--
 
-Regards,
-Andreas
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
---Sig_/XbepMN/1jKrHdjWF6aXCDE7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl33qnAACgkQl4jFM1s/
-ye/HZg//az7XDNxeh0oR3qY1nTmAOtRxQEviyCIvDuStB2kAvGRFnrfBBm7ZnO3n
-js7yQjVP9rdLvQzKTnmBem8gwFCRfP+83lgQrW9nUenFbN0eqDlY6ManEHXqcWx4
-1PTQKZ6u8vNHDIYE9fwxkzK4WrJfKSmIxuc24fosCfVk14zA92eCM1dHn2VoQ/TJ
-dqMty9nrGsSEJXOdPNCAItQ7QGUDWhU2RBQnHltux4Con8YXlIT5fgjVyFOjMcSK
-1jFTiL1pTR/CT8rdm8fwVycCESoLxe55YPdy5j0Z19f3fCUdsIUH+OG1H3nLpqy6
-F9d70fvm3M00qcAGxnIerDB/w1QvG2CbzB49zcHPe2B14m4L+V4wAmnyyKCuuJL4
-Wzn7maA82ahCI5Oczr2hAWq8YSg3xC6Nb+1IE5KKTQC6gjYgBJwyRdOkx7xrL+Oz
-x9BHrn93nE6Iqv6w+FD5mYAsil+li/yTS/H8WocQATSv+efMQR+jxwKZe3NTMRrA
-imX/7Tu4arf9erPttL3GBVL6HDAemWtChWMdyUhr6K5bZH5LpAQeLionvQ1Chm2/
-GT0ovDs5IZ7+CwhFJxbZUqsmXVPrvBP+cQSt1AwEmkvO3YXoovYGgCBk9YaCH6sU
-Qj7YZtbMjYxmogsqc93Wk+aMFGytSdlTTOSYDJhdBcwsyzI3djw=
-=kwXw
------END PGP SIGNATURE-----
-
---Sig_/XbepMN/1jKrHdjWF6aXCDE7--
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
