@@ -2,100 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58097120988
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8FA1209A5
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728346AbfLPPVm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 10:21:42 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44511 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728221AbfLPPVl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:21:41 -0500
-Received: by mail-wr1-f67.google.com with SMTP id q10so7721194wrm.11
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:21:40 -0800 (PST)
+        id S1728259AbfLPP1U (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Dec 2019 10:27:20 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36277 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728391AbfLPP1U (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:27:20 -0500
+Received: by mail-wr1-f65.google.com with SMTP id z3so241825wru.3
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:27:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=qLW85+iCakysrIL3d9ahlxs/+0bq3c8q3dQkkBI+mAY=;
-        b=l9eRHG6cELj/1PPW5EMQL8KGSpML40lgI42oonoObgVkQJpwcUpAhOzugGJ1YzDVh/
-         Xn+g5HPMl+dLsYUrlg7312P/+FNbj9QEnm2kVtOKCQdPOD447fXhj6oyX5lGi6hArYGI
-         ORKa/zBvvQR/ijSqhhv+sdOOlpsJpm4PmFmwb3UgJplzSokAD8u8b9pQ7kaUsCXJ9f9m
-         Lv/bhO/Swr+5cFJ21U8uk/Jd33llMPn0xeTlVRk8bVjXZJZrg3/QC8m5DHrKlgB4M0QV
-         osHGkfb8Z2PSqzmCGeUX3qd3TpPIq2QDjMGPHvZoY2oInrkzLxNL6LEBL8zZzqTbZKg1
-         pYfA==
+        bh=q3MgqIM7Lebzkf8JO0ojhPzDqiRHLK5vJzUfeZMc1zU=;
+        b=zrI8kgBBoboagFSLXfmTf0mbONsvoKKFbRJjR42YqaEaWnlMrQyzcWb1XMd3mJDIDA
+         XEZRkQ8P8pAI2TuMYE0eBA7sLbLxsitGBmzo66TAenENXpkSFTIFTH0BiQJz45X9zJoE
+         H4pmwfVFQeaforibR4y0VCfdsHWTqBW+kukg7d1cOXYSeCS7D/lHY2Uhncb2P8QqzA70
+         QSUUf4iuWxxGW1iyZsIULB6RumULY/boFuV9T8RrnUAG3Ab1ce71ZAZH6Wte3H9d3TUM
+         oKjbW/zgqasVXHvbr6TC5orVS8GePjn2BhNh9z4+f09Xp+aUnWtHm6yqFLV/d/iNoCV9
+         h5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=qLW85+iCakysrIL3d9ahlxs/+0bq3c8q3dQkkBI+mAY=;
-        b=P8Ynvmxe/7ScMi5z0DuQY8aYhiMbOTaCGkbgT6GM0em2Xcl1j7uC4QV5AFeAUyfycw
-         x0A8FUSw4p1Na9Y4Fel55Wma/UTYSKejqOJ4lgQGYEgBe98XbsxwU84VsArTs8j1ItSY
-         DUhHVRmkuIGlGXRSYXnB/IlizQBErqEJ5aOe5NuVXTLHBbH2DUVjznEQXjp9OXRtPTsD
-         yY45eqt9wHwRgOvActxl5Yf0AbQHoqWxZH//kVOb17ooiSBOJ+i7e2aI986nkMpDMSkQ
-         sX73Hph9NtK/PdwM/C4/oYJJKjgv78MbKCtDVBVmQP4hKHnvkkLUoCG80epwDQNaMJyz
-         zAHg==
-X-Gm-Message-State: APjAAAWnCwSS+jx6J/fnt8XW0YGC5L4EvcPdGCY6YY2Shiw1NaKXzSyp
-        j5qCoDz4S3jyovp5zsH+hJIusQ==
-X-Google-Smtp-Source: APXvYqweC7S5MEqLKn13rfYs2+xIpXzL1Op8mNT8o+RON6KKvlXrllfQ92Cbjp2t7tj6nFBRu6VFaw==
-X-Received: by 2002:a5d:4b8f:: with SMTP id b15mr32672267wrt.100.1576509699617;
-        Mon, 16 Dec 2019 07:21:39 -0800 (PST)
+        bh=q3MgqIM7Lebzkf8JO0ojhPzDqiRHLK5vJzUfeZMc1zU=;
+        b=fKGFZAjhWVkzR9GqF22a2wSxHawNKJCEXs/Hx7TgahWaKD6yIUzMpiPpPfHeoCGs7u
+         vL4wahbYpoRFn3L+GEqphNfkfs70T8wwquBuPRY0dTIn/JR8X9dQme+lTh4r1te+R704
+         qim9oSBVzPaNVIEoCXns+cBr3hISaa2D/xFRVy7Ceet2+18B+FtfCLvImOkGRjlAHcYQ
+         l1yh227Re4U73pUwj9mal5MD0JdYXNykYVKO/qRFtCS/D2CzQLSWKCieJR1QhrS9Tag5
+         TY2+TWEzZIs4Rjbk7R/oWLk5PlUChL5zAyT5KCU4cpFxxBzFUxumvpCSwA/yrRvxdhpJ
+         wQIQ==
+X-Gm-Message-State: APjAAAUS+Uuo7N61bOqr8JXIxbegC4hdDkcac6sLBQtoSuAloPr2VNze
+        1+MWG2ND+Pz+clLWpHT81CySUg==
+X-Google-Smtp-Source: APXvYqzUTemS2PAuC/RnjCOMgKkGPqFGklDx/Gs//sa0fLFQ2EuYXh0JOOt4jLFQ6QC7CwPooTMy4g==
+X-Received: by 2002:a5d:6b82:: with SMTP id n2mr30708752wrx.153.1576510037406;
+        Mon, 16 Dec 2019 07:27:17 -0800 (PST)
 Received: from dell ([185.17.149.202])
-        by smtp.gmail.com with ESMTPSA id x10sm22076901wrv.60.2019.12.16.07.21.38
+        by smtp.gmail.com with ESMTPSA id o66sm17974890wmo.20.2019.12.16.07.27.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 07:21:39 -0800 (PST)
-Date:   Mon, 16 Dec 2019 15:21:38 +0000
+        Mon, 16 Dec 2019 07:27:16 -0800 (PST)
+Date:   Mon, 16 Dec 2019 15:27:15 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Ran Bi <ran.bi@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v7 6/6] rtc: Add support for the MediaTek MT6358 RTC
-Message-ID: <20191216152138.GF2369@dell>
-References: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1576057435-3561-7-git-send-email-hsin-hsiung.wang@mediatek.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v4 2/5] mfd: rn5t618: add IRQ support
+Message-ID: <20191216152715.GH2369@dell>
+References: <20191211215409.32764-1-andreas@kemnade.info>
+ <20191211215409.32764-3-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576057435-3561-7-git-send-email-hsin-hsiung.wang@mediatek.com>
+In-Reply-To: <20191211215409.32764-3-andreas@kemnade.info>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 11 Dec 2019, Hsin-Hsiung Wang wrote:
+On Wed, 11 Dec 2019, Andreas Kemnade wrote:
 
-> From: Ran Bi <ran.bi@mediatek.com>
+> This adds support for IRQ handling in the RC5T619 which is required
+> for properly implementing subdevices like RTC.
+> For now only definitions for the variant RC5T619 are included.
 > 
-> This add support for the MediaTek MT6358 RTC. Driver using
-> compatible data to store different RTC_WRTGR address offset.
-> 
-> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
->  drivers/rtc/rtc-mt6397.c       | 24 ++++++++++++++++--------
+> Changes in v4:
+> merge rn5t618-irq.c into rn5t618.c
+> use macros for IRQ table
+> 
+> Changes in v3:
+> alignment cleanup
+> 
+> Changes in v2:
+> - no dead code, did some more testing and thinking for that
+> - remove extra empty lines
+>  drivers/mfd/Kconfig         |  1 +
+>  drivers/mfd/rn5t618.c       | 88 +++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/rn5t618.h | 15 ++++++++
+>  3 files changed, 104 insertions(+)
+> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index ae24d3ea68ea..522e068d0082 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1057,6 +1057,7 @@ config MFD_RN5T618
+>  	depends on OF
+>  	select MFD_CORE
+>  	select REGMAP_I2C
+> +	select REGMAP_IRQ
+>  	help
+>  	  Say yes here to add support for the Ricoh RN5T567,
+>  	  RN5T618, RC5T619 PMIC.
+> diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
+> index da5cd9c92a59..76d997c0cfe4 100644
+> --- a/drivers/mfd/rn5t618.c
+> +++ b/drivers/mfd/rn5t618.c
+> @@ -8,6 +8,8 @@
+>  
+>  #include <linux/delay.h>
+>  #include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+>  #include <linux/mfd/core.h>
+>  #include <linux/mfd/rn5t618.h>
+>  #include <linux/module.h>
+> @@ -45,9 +47,63 @@ static const struct regmap_config rn5t618_regmap_config = {
+>  	.cache_type	= REGCACHE_RBTREE,
+>  };
+>  
+> +static const struct regmap_irq rc5t619_irqs[] = {
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_SYS, 0, BIT(0)),
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_DCDC, 0, BIT(1)),
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_RTC, 0, BIT(2)),
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_ADC, 0, BIT(3)),
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_GPIO, 0, BIT(4)),
+> +	REGMAP_IRQ_REG(RN5T618_IRQ_CHG, 0, BIT(6)),
+> +};
+> +
+> +static const struct regmap_irq_chip rc5t619_irq_chip = {
+> +	.name = "rc5t619",
+> +	.irqs = rc5t619_irqs,
+> +	.num_irqs = ARRAY_SIZE(rc5t619_irqs),
+> +	.num_regs = 1,
+> +	.status_base = RN5T618_INTMON,
+> +	.mask_base = RN5T618_INTEN,
+> +	.mask_invert = true,
+> +};
+> +
+>  static struct rn5t618 *rn5t618_pm_power_off;
+>  static struct notifier_block rn5t618_restart_handler;
+>  
+> +int rn5t618_irq_init(struct rn5t618 *rn5t618)
 
->  include/linux/mfd/mt6397/rtc.h | 16 +++++++++++++++-
-
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Static?
 
 -- 
 Lee Jones [李琼斯]
