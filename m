@@ -2,111 +2,134 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE7D11FFDB
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 09:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19546120079
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 10:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfLPIcc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 03:32:32 -0500
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:38377 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726852AbfLPIcc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 03:32:32 -0500
-Received: by mail-vs1-f68.google.com with SMTP id y195so3608734vsy.5
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 00:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JkgTe7RiiAq5QhSu2PZNU7m2RnEe6PES0VorJPFQMuI=;
-        b=YoxUQn0M3SuXi8l42WvhOcaLVs9FtT4yYaFQt1JnF7fyLfINtK8IH7LjURdGPX5cQ1
-         R8URrTHR/tj+puo4KBNXX1HKPhXcrqFlXy1ed8ZAsrUqVCXYWsnWJV0l7kex0g1yZoXR
-         ri9Oi04z+9x1kjq1esub91N9X6+vdJ8E7w/+ezYVaY537kG05SnQU8+6Xy8y7GSwZuMx
-         UEn5PjruDsQcgqx6ab95Q8EB3LntrQNSNE2lq25zQg8eSVkdAhtnJpNcOC53TKRZYFvy
-         YxYi/hR2QW9Fsb0DW3Xi9SGjCXGwlS7mHg66lIyjG/P95hwzr5KnTr73Eh/SyycJOIqa
-         3sDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JkgTe7RiiAq5QhSu2PZNU7m2RnEe6PES0VorJPFQMuI=;
-        b=P0tDdbeAk7KjQuWDZD45jnezCkGWP7XWQcDYDsDdwT3WKPfQcNB80BgPpNv6kDziwW
-         QqnddG6jkyJOZorQ/ygG65jB7oAEIbdjArS9XcAmENpcBwLQIEcHs3nV8PUZOVVdyh6T
-         bGyikfAp85fUlFH1FwmwzrfEAOzyAAMzH9CsWiGFM6YpMcbPum4JkJS35PM3OG4Krnpg
-         XtlgNB/Ru/sU5ZTlM01gW+sDN3fEoDFixWLCxZKLDlR+HuJe9OTijWLzor5CJwNqTz9i
-         KO4aUWYca2W12tZ9m4De9TJO6Y7Q+PIxmgEvsXp9+CDuG8duA/rVb9djeB1g+hVxITiZ
-         iwXg==
-X-Gm-Message-State: APjAAAUusRs4EV2H3rbqHf2dv5yGOtm7DE0x1SuCKkxQqr7unNbYTUHl
-        Hp5NomIh8wjt99euFdaHPLWpsSM8NpwjKzo+wFJFkA==
-X-Google-Smtp-Source: APXvYqy6s+VOmPyj3eK02h1e4bwZVh9q2OoyCiemRBTtBkO775i3aGAeU2EoW0Amob5gIdaXOUj0ObPrX0yIOlsfXQ0=
-X-Received: by 2002:a67:d592:: with SMTP id m18mr20661597vsj.85.1576485151530;
- Mon, 16 Dec 2019 00:32:31 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com> <e20e9a86677bdbd7f9ac889004a34731396d7a28.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <e20e9a86677bdbd7f9ac889004a34731396d7a28.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 16 Dec 2019 09:32:20 +0100
-Message-ID: <CACRpkdaVMS-1V+mRGzEeq-WcxWHjuHzj=5a09Egcxj_fHZhDmg@mail.gmail.com>
-Subject: Re: [PATCH v6 13/15] gpio: bd71828: Initial support for ROHM BD71828
- PMIC GPIOs
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        id S1726989AbfLPI73 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Dec 2019 03:59:29 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:53562 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbfLPI73 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 03:59:29 -0500
+X-AuditID: c0a8fbf4-199ff70000001fa6-1b-5df7476d9f32
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 5B.FD.08102.D6747FD5; Mon, 16 Dec 2019 09:59:26 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Mon, 16 Dec 2019 09:59:14 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "noralf@tronnes.org" <noralf@tronnes.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+Subject: Re: [PATCH v6 10/15] gpio: devres: Add devm_gpiod_get_parent_array
+Thread-Topic: [PATCH v6 10/15] gpio: devres: Add devm_gpiod_get_parent_array
+Thread-Index: AQHVsAgD2gnib6iDu0CtY9qHC9JPxqe8ZSSAgAAIPIA=
+Date:   Mon, 16 Dec 2019 08:59:14 +0000
+Message-ID: <812acba9df70c4bb6975580c7965b61e923a3a13.camel@fi.rohmeurope.com>
+References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+         <f34765b5cb4e949c2e85415ded3d0ee7736cc97b.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+         <CACRpkdbUS7WeQ7OoTtjGnB7L=uhYncwwcHxkJ1Uj6GqYCGNGJA@mail.gmail.com>
+In-Reply-To: <CACRpkdbUS7WeQ7OoTtjGnB7L=uhYncwwcHxkJ1Uj6GqYCGNGJA@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <43C53F21BE36E2478B2439D9C76E2F2B@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tb0wTZxzee3e9u4JnjoLruyrLvMQs4qhzW7J3izF8mHqLhrlooi4hcIwb
+        JcCVXFsn7MM6mSJgGGrVWQuIUiSCQjvYGNGNIP8sWwUVVtl060bIAAPBuRKR4e44FT69T37P
+        8/ye58PvpXGDlzLRWZJdlCUhhyOjiPa6x75EaetMyuvTlwGqGRikUNFkLYX+O9ZNoYcVAQKd
+        CI+QaKS9CKCqzqAOlfY161Dh+UYS/drSRKDf/+0CKHL7MIZccxcwNH3kng5VH6oh0DdVcwDd
+        avOQqOW+srm7/jaJvL8MYMjj7SXQ1INiDA0ENqMTgUkK3Q10kahwIISjg1c7KTQ/5CNQWXBr
+        UjzfUNkA+MezxwA/FTpI8ZUNn/Hfu+9SvP9iMcn/NnSF5H+saKD482XHdXzkp6MEP1rdSPA9
+        oe8w/lTlI4xvPNIJ+Lr6GYr/x//yDvaj6I3pgn3fzqxMaf2mtGjLz3PHybwDK/ef8spOUGcq
+        AXoasm/BUHktpmIDOwjgpdPWEhCl4F4AZ4ddCkHTJLsRltyhVE0c+w681ushVA3O9kbDs8Ew
+        UIlYdhu81TxLaKLt8GYoiGv4Xej0RxbMBLsGBvo8C3OGTYYTQx5SC5sAsOWPCZ1K6NkPYbP/
+        24VGgI2Hxc7JBYyzRugfndFprVlYc+UGruEVcOyv+adzDl59FCbU0ji7Fja2rdesSbC07x7Q
+        8GroKg1TWocYeP30CFEOXnQvSXAvut1L3O4lbvcS91mguwhgrpCVkynYxQ1mWXSYZaslV3k+
+        tub6gXZ2D1vBk473OwBGgw7wEo1xK5hddyIphuXp1ox8i2CzpMqOHNHWASCNc3FM6yszKQYm
+        Q8gvEGXrM2olTXBG5tXw0RQDq2Zli2KeKD9jV9E0B5n8LYoxRhYzxf2fZOXYF2mM1qvLo0xx
+        NlHKEGXBYbekqueRalPuQ6WWKbku1c7Y8oRcZapZA2AdXT5WcQ6nOyu853ADIVkl0WRkLm1W
+        pKwqtTik50HjwEgDLpYJqIuWKX/v+Z5xJQJTIt5IjqgRdmGRMjnBvvu6np6JdU0O7vPXajL7
+        h7/62ydVtvYXvrma/DL7vfiE9jM248ntadhgUpvxWqg+OHwgb9Aylrimu7Tgi9pNiVumpk17
+        fReuJ7bNv1Ck7/c8iPF98ENV+qg5ZPz0UFxC/dobrvyTyy/vPlxmHi8wJ++5Wf3nE33Xbpi9
+        I+3rt5uc22I5wmYRNiTgsk34H70bqoo4BAAA
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 10:49 AM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
-
-> ROHM BD71828 PMIC contains 4 pins which can be configured by OTP
-> to be used for general purposes. First 3 can be used as outputs
-> and 4.th pin can be used as input. Allow them to be controlled
-> via GPIO framework.
->
-> The driver assumes all of the pins are configured as GPIOs and
-> trusts that the reserved pins in other OTP configurations are
-> excluded from control using "gpio-reserved-ranges" device tree
-> property (or left untouched by GPIO users).
->
-> Typical use for 4.th pin (input) is to use it as HALL sensor
-> input so that this pin state is toggled when HALL sensor detects
-> LID position change (from close to open or open to close). PMIC
-> HW implements some extra logic which allows PMIC to power-up the
-> system when this pin is toggled. Please see the data sheet for
-> details of GPIO options which can be selected by OTP settings.
->
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+DQpIaSBkZWUgSG8gcGVlcHMhIChMaW51cyAmIExlZSArIG90aGVyIGludGVyZXN0ZWQpLA0KDQpP
+biBNb24sIDIwMTktMTItMTYgYXQgMDk6MjkgKzAxMDAsIExpbnVzIFdhbGxlaWogd3JvdGU6DQo+
+IE9uIFdlZCwgRGVjIDExLCAyMDE5IGF0IDEwOjQ3IEFNIE1hdHRpIFZhaXR0aW5lbg0KPiA8bWF0
+dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPiB3cm90ZToNCj4gDQo+ID4gQnVuY2ggb2Yg
+TUZEIHN1Yi1kZXZpY2VzIHdoaWNoIGFyZSBpbnN0YW50aWF0ZWQgYnkgTUZEIGRvIG5vdCBoYXZl
+DQo+ID4gb3duIGRldmljZS10cmVlIG5vZGVzIGJ1dCBoYXZlIChmb3IgZXhhbXBsZSkgdGhlIEdQ
+SU8gY29uc3VtZXINCj4gPiBpbmZvcm1hdGlvbiBpbiBwYXJlbnQgZGV2aWNlJ3MgRFQgbm9kZS4g
+QWRkIHJlc291cmNlIG1hbmFnZWQNCj4gPiBkZXZtX2dwaW9kX2dldF9hcnJheSgpIGZvciBzdWNo
+IGRldmljZXMgc28gdGhhdCB0aGV5IGNhbiBnZXQgdGhlDQo+ID4gY29uc3VtZXIgaW5mb3JtYXRp
+b24gZnJvbSBwYXJlbnQgRFQgd2hpbGUgc3RpbGwgYmluZGluZyB0aGUgR1BJTw0KPiA+IHJlc2Vy
+dmF0aW9uIGxpZmUtdGltZSB0byB0aGlzIHN1Yi1kZXZpY2UgbGlmZSB0aW1lLg0KPiA+IA0KPiA+
+IElmIGRldm1fZ3Bpb2RfZ2V0X2FycmF5IGlzIHVzZWQgYXMgc3VjaCAtIHRoZW4gdW5sb2FkaW5n
+IGFuZCB0aGVuDQo+ID4gcmUtbG9hZGluZyB0aGUgY2hpbGQgZGV2aWNlIGZhaWxzIGFzIHRoZSBH
+UElPcyByZXNlcnZlZCBkdXJpbmcNCj4gPiBmaXJzdA0KPiA+IGxvYWQgYXJlIG5vdCBmcmVlZCB3
+aGVuIGRyaXZlciBmb3Igc3ViLWRldmljZSBpcyB1bmxvYWQgKGlmIHBhcmVudA0KPiA+IHN0YXlz
+IHRoZXJlKS4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXR0aSBWYWl0dGluZW4gPG1hdHRp
+LnZhaXR0aW5lbkBmaS5yb2htZXVyb3BlLmNvbT4NCj4gPiAtLS0NCj4gPiANCj4gPiBDaGFuZ2Vz
+IHNpbmNlIHY1Og0KPiA+IC0gcmVuYW1lZCBpbnRlcm5hbCBmdW5jdGlvbiAobm8gX18gLSBwcmVm
+aXhlcyBmb3IgTGludXMgOl0gKQ0KPiANCj4gVGhhbmtzLCBhcyB0aGVyZSBhcmUgdGhpbmdzIGhh
+cHBlbmluZyBpbiB0aGUgR1BJTyBzdWJzeXN0ZW0gSQ0KPiBoYXZlIHB1dCB0aGlzIG9uZSBwYXRj
+aCBvbiBhbiBpbW11dGFibGUgYnJhbmNoIGhlcmU6DQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcv
+cHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2xpbnVzdy9saW51eC1ncGlvLmdpdC9sb2cvP2g9aWIt
+ZGV2bS1ncGlvZC1nZXQtcGFyZW50LWFycmF5DQo+IA0KPiBQbGVhc2UgYXNrIHRoZSBtYWludGFp
+bmVyIChJIGd1ZXNzIExlZT8pIHRvIHB1bGwgdGhpcyBpbnRvIHdoZXJldmVyDQo+IHRoZSByZXN0
+IG9mIHRoZSBwYXRjaGVzIHNob3VsZCBiZSBtZXJnZWQgaWYgeW91IHdhbnQgcGF0Y2hlcyBiZXlv
+bmQNCj4gdGhpcyBwb2ludCB0byBiZSBhcHBsaWVkIGZvciB0aGUgbmV4dCAodjUuNikgbWVyZ2Ug
+d2luZG93LCB0aGVuIHRoaXMNCj4gcGF0Y2ggaXMgbm90IG5lZWRlZCBpbiB0aGUgc2VyaWVzLg0K
+DQpJIGRyb3BwZWQgdGhlIHJ1bi1sZXZlbCBzdXBwb3J0IGZyb20gcmVndWxhdG9yIHBhdGNoIChm
+b3Igbm93IGF0DQpsZWFzdCkuIFRoaXMgbWVhbnMgdGhhdCBJIG5vIGxvbmdlciBoYXZlIEdQSU8g
+Y29uc3VtZXJzIG5lZWRpbmcgdGhpcw0KbmV3IEFQSSBpbiB0aGUgc2VyaWVzLiBXaGljaCBtZWFu
+cyB0d28gdGhpbmdzOg0KDQoxLiBUaGVyZSBpcyBubyBpbi10cmVlIHVzZXJzIG9mIHRoaXMgbmV3
+IEFQSSBhcyBvZiBub3cuIFRoaXMgQVBJIGhhcw0KdmFsaWQgdXNlLWNhc2UgaW1tZWRpYXRlbHkg
+d2hlbiBhbiBNRkQgc3ViLWRldmljZSB3aGljaCBoYXMgbm8gb3duDQooc3ViLWRldmljZSBzcGVj
+aWZpYykgY29tcGF0aWJsZSBpbiBEVCB3YW50cyB0byBnZXQgdGhlIEdQSU8gYXJyYXkgYW5kDQp1
+c2UgZGV2bSAtIGJ1dCBJIGFtIG5vdCBzdXJlIGlmIHdlIGhhdmUgYW55IGluLXRyZWUuIChJIGNo
+ZWNrZWQgY3VycmVudA0KZGV2bV9ncGlvZF9nZXRfYXJyYXkoKSB1c2VycyBhbmQgZGlkbid0IHNl
+ZSBhbnkgTUZEIHN1Yi1kZXZpY2VzIHdoaWNoDQp3b3VsZCBoYXZlIGVycm9ybmVvdXNseSB1c2Vk
+IHRoZSBwYXJlbnQgZGV2aWNlIGZvciBtYW5hZ2VtZW50IC0gYnV0IEkNCmRpZG4ndCBjaGVjayBp
+ZiB0aGVyZSBpcyBhbnkgbm9uLWRldm0gdmFyaWFudCB1c2VycyB0aGF0IG1pZ2h0IGJlbmVmaXQN
+CmZyb20gdGhpcyBBUEkpDQoNCjIuIFRoZXJlIGlzIG5vIGRlcGVuZGVuY3kgZnJvbSB0aGlzIHNl
+cmllcyB0byB0aGUgbmV3IEFQSS4NCg0KDQpTbywgdGhlcmUgaXMgdHdvIG90aGVyIG9wdGlvbnMg
+b25lIGNhbiBjb25zaWRlcjoNCjEuIERyb3AgdGhpcyBwYXRjaCBjb21wbGV0ZWx5IGZyb20gdGhl
+IHNlcmllcyBhbmQgR1BJTyB0cmVlLg0KMi4gQXBwbHkgaXQgdG8gR1BJTyB0cmVlIG9ubHkgYW5k
+IGRyb3AgaXQgZnJvbSB0aGlzIHNlcmllcyAoaWYgdGhpcyBpcw0Kc3RpbGwgc2VlbiB1c2VmdWwp
+Lg0KDQpCciwNCglNYXR0aQ0K
