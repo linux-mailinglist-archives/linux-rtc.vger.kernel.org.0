@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDC81209A7
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5C31209B2
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbfLPP1k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 10:27:40 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:35277 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728404AbfLPP1k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:27:40 -0500
-Received: by mail-wr1-f68.google.com with SMTP id g17so7784905wro.2
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:27:38 -0800 (PST)
+        id S1728248AbfLPP25 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Dec 2019 10:28:57 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37376 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728285AbfLPP24 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:28:56 -0500
+Received: by mail-wr1-f66.google.com with SMTP id w15so7799796wru.4
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:28:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=lXvZ8ghhfdZ8NPRfLssmgFau0MZh48KQ9J/EcIOsShU=;
-        b=dV9hywKHOeNRECRawCoW4x2oIy9lAJvgikf8eMTXx9eeRUUjqzGpP7gYaNfksX1bgX
-         KEauVfQJc7nQIUkH6Z4vnsa1InVhf0HSSN3M/obk75hWE0/bptv1MCCZGLI+Khom5DMT
-         v/nYFx0ZPLXCJLT8E/qdPT+PwVgz1LfdEHkyjnUKnYelwvlnY4EVrpTsDkdXEZXDRiXi
-         brajpgpe9hF4Pht1YjXfbJgJ4N78BU9E/3zwIa3jilB/4fdWMiPG3xi1qen42FonbXty
-         RyfkD9OI7JhBcl6fkkSu/OcYd1omHyrQGKDqumuqnKNaDyLwE6PR7VMMlVoZSgyuVL6g
-         V5EA==
+        bh=fAdhkG2e5jez4uCUP2cd8gWid6BcZh3e46uIq4uaFno=;
+        b=dfdrhxvLs+qkSYfGV25KfTDTG9pOec+MCOCWCfVxsU9Lt2vVQgPyPSq4L+q19dA3cs
+         /zqvASvK3n6Yu/cGiqhjKtFNVAtwflGUm4DK45R7rClCFgidL85k5SZzx5mkvHUPGKGM
+         CM1s+tVvZoVEP4aueikXRru3RO4gbq0arI7CWneBF4JfWcXtaK8vdDTZbcxXq/sfkhz9
+         V/pwJhdpsO+IJLegguMC/Lk9RhWmUKNKPWS14PV3ENMVkk31ftHIqmuZOwd/tcapC+LG
+         zqaMkh5NfDLFviy8pDMVehVN9zuw1yNqX1Rs7hEcbuH9FBz6Kz62im1BTZc3WOLhgdOz
+         JipA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=lXvZ8ghhfdZ8NPRfLssmgFau0MZh48KQ9J/EcIOsShU=;
-        b=F5quM5oP+1oMX4XwW+vU94HTUvUgUgTxD9d3D/bfSLGp3n1YjBXFt1dJvquaEheod7
-         4QqOW2eW0kLjGjjrClMK+xU7AEcF11XU/orTHuJOF+9Z07uKUjMipdz5cdBX5thyDyaY
-         IzTBrdc/e8eDEa0DrKHYlopHiuIyrmmb9bZnfsAWVfewKt+7rwF+rezF2mmHfvt5EHP+
-         x8r3O25Zxm5DsxO1u9IGbfooWB6BcMhqnXVJLJKw5MWHnvYET4CYxZZRX8fmezaTKYG8
-         2ilSiLz+nmnUtZMs682ymqFqL8fkHbRKBh/QVxze1HHBNh/4i5isqXHXThZ1pBHUbMtQ
-         dslw==
-X-Gm-Message-State: APjAAAXesDJlzXeHgHxPa8e41fiG1OTv8p2UX5yp9T9j3VOLYa4EbQN/
-        g6dbE3gczanBZphm4IFmnRwQ5A==
-X-Google-Smtp-Source: APXvYqwZqxKTkiP7jmfq8woFaWd+xxgjieGkt7i0/yk3u/GkdRltZGG2vJmEQh+Yxh8VpF9Sfhe43A==
-X-Received: by 2002:a5d:6b82:: with SMTP id n2mr30710283wrx.153.1576510058170;
-        Mon, 16 Dec 2019 07:27:38 -0800 (PST)
+        bh=fAdhkG2e5jez4uCUP2cd8gWid6BcZh3e46uIq4uaFno=;
+        b=tGHiVz/73gCg+v2GP/sduztOM2T2TBImiQHDoN8MOz+s8lxAHNlFqzf9AJZ+509Szo
+         qQ32gMdrYrAvX7WCyzyQ6gERP14QcgufrmuO/n5of3aruRW8hXu1xZ752jf70NVu+8A5
+         xRaYnkBZy6DGtzu7G+tjLpXE806jHZQeWZt8RuzrXuHprargwcqQNG5Ibh1g9RB4SYxg
+         sczoVQyAG1WYDZm3Cxrri8148SJu6gllG6R+ncdiZyHeVjvk/KzhF42jMg+ZuKX3uRdr
+         it+b7xyMIWHEmjDp1wGqMJV+oT237iJuSUCRriEFBVSziQQ6go6yUKUg6OZ6uJEKfgTS
+         bmFw==
+X-Gm-Message-State: APjAAAWd1GOziPwisgBABiu49nydX6HdvRTbT7gm3pBQTmKNH5sYXCw3
+        OEK016B/9oYgqjoCWvUa12E4vQ==
+X-Google-Smtp-Source: APXvYqz8QkLm1tBQdJ5TBnQi20sHKdJO2QnHprE3jkORnRm65QppibHKCSyO8Izjl2dcJjeKoRAuSA==
+X-Received: by 2002:adf:81e3:: with SMTP id 90mr30636842wra.23.1576510134854;
+        Mon, 16 Dec 2019 07:28:54 -0800 (PST)
 Received: from dell ([185.17.149.202])
-        by smtp.gmail.com with ESMTPSA id e8sm21849174wrt.7.2019.12.16.07.27.37
+        by smtp.gmail.com with ESMTPSA id 4sm20980480wmg.22.2019.12.16.07.28.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 07:27:37 -0800 (PST)
-Date:   Mon, 16 Dec 2019 15:27:37 +0000
+        Mon, 16 Dec 2019 07:28:54 -0800 (PST)
+Date:   Mon, 16 Dec 2019 15:28:53 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Andreas Kemnade <andreas@kemnade.info>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
@@ -54,16 +54,15 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
         letux-kernel@openphoenux.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: rn5t618: Document optional
- property interrupts
-Message-ID: <20191216152737.GI2369@dell>
+Subject: Re: [PATCH v4 3/5] mfd: rn5t618: add RTC related registers
+Message-ID: <20191216152853.GJ2369@dell>
 References: <20191211215409.32764-1-andreas@kemnade.info>
- <20191211215409.32764-2-andreas@kemnade.info>
+ <20191211215409.32764-4-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191211215409.32764-2-andreas@kemnade.info>
+In-Reply-To: <20191211215409.32764-4-andreas@kemnade.info>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -72,14 +71,15 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Wed, 11 Dec 2019, Andreas Kemnade wrote:
 
-> These chips use interrupts for various things like RTC alarm.
+> Defines for some RTC related registers were missing, also
+> they were not included in the volatile register list
 > 
 > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
-> Changes in v4: add refernce to interrupt binding
-> documentation
->  Documentation/devicetree/bindings/mfd/rn5t618.txt | 4 ++++
->  1 file changed, 4 insertions(+)
+> 
+>  drivers/mfd/rn5t618.c       |  2 ++
+>  include/linux/mfd/rn5t618.h | 11 +++++++++++
+>  2 files changed, 13 insertions(+)
 
 For my own reference:
   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
