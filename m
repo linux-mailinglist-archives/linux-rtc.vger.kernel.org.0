@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1804812097E
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58097120988
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Dec 2019 16:21:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbfLPPU0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 10:20:26 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:40565 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728109AbfLPPUX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:20:23 -0500
-Received: by mail-wr1-f68.google.com with SMTP id c14so7752672wrn.7
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:20:21 -0800 (PST)
+        id S1728346AbfLPPVm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Dec 2019 10:21:42 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44511 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728221AbfLPPVl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Dec 2019 10:21:41 -0500
+Received: by mail-wr1-f67.google.com with SMTP id q10so7721194wrm.11
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Dec 2019 07:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=yKFHERdNdPN6Ex8JOu2in3qBAjlasmuEZDq7sRDudK0=;
-        b=GW+qXcq4BZ5dkIThObt2lOqawmLIk3OWXTb/8HhvjYhT072tqZEPE5CZw2zJVCuca6
-         97PO7Bucb15eOo9VR5dF8osj4RSOlIeLX8dELi2xEhj+uiMZIrr8ldSDwNd26lrbapFG
-         U1/x43PLG29ouKCNZ63dCgsxfaGOPqSYNesWjbPMg/tsXCHHgFF/MvK7b8gFdVfJK0T6
-         qT3lq19j8new3QRUhZc03HP3qQq3iq4uRkcCSV+0ZY0/4+lYd+tXPuRysNY3gX2QKAG/
-         WVORCiSTVnvWKKlgh3q6OmERq1GOtnmorsvYfRGuN6kVfxIsC+TiIb91EkGIxzLdXHTM
-         aIIQ==
+        bh=qLW85+iCakysrIL3d9ahlxs/+0bq3c8q3dQkkBI+mAY=;
+        b=l9eRHG6cELj/1PPW5EMQL8KGSpML40lgI42oonoObgVkQJpwcUpAhOzugGJ1YzDVh/
+         Xn+g5HPMl+dLsYUrlg7312P/+FNbj9QEnm2kVtOKCQdPOD447fXhj6oyX5lGi6hArYGI
+         ORKa/zBvvQR/ijSqhhv+sdOOlpsJpm4PmFmwb3UgJplzSokAD8u8b9pQ7kaUsCXJ9f9m
+         Lv/bhO/Swr+5cFJ21U8uk/Jd33llMPn0xeTlVRk8bVjXZJZrg3/QC8m5DHrKlgB4M0QV
+         osHGkfb8Z2PSqzmCGeUX3qd3TpPIq2QDjMGPHvZoY2oInrkzLxNL6LEBL8zZzqTbZKg1
+         pYfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=yKFHERdNdPN6Ex8JOu2in3qBAjlasmuEZDq7sRDudK0=;
-        b=uHU4L7An2yz1d4JrzGFMCkdz4TW+W+jhAputRSf0UilpOesoo8QzxftjKpsgo71EeJ
-         m+0IIpwQGyNyIU5UimbFkC2VJooX5+Ir/S40JKcLZ9GVVpazmRfIgX9XcyZRgaYWBN6d
-         hAMP9ogybnD+xkTRhEKDP1KhOHwu8ncR2EIII8tfvcy4GUrz0hAgM/8topw93LimjJHg
-         MlKbU5NTO5wrIYZvtKaDLQuFLAZSdBXfwEbM6O/5fEoC44HAQ/1paiVYYmorEywp+00J
-         lm8UpFciUVJ/x6Qlv8E93zt5c/OISpNyb56gE5PI1ThKB/gDR+mlYFQ6ILHdNo24QjU5
-         eakw==
-X-Gm-Message-State: APjAAAV++K4ZTR/3Xpi97Xdqy9h3D4hoUywXn4dNYow87NwbNI4GiPcw
-        bBTsW3MYQjis1hskVq1Wd1Z9zg==
-X-Google-Smtp-Source: APXvYqy1jbVR7FkN0kaR1W+4ZJ9ENvko5dMwnYV5wp0d91OQNJTU1+OxRy+dD9MAF1z6WCEDFVuptw==
-X-Received: by 2002:a5d:6390:: with SMTP id p16mr31600584wru.170.1576509621307;
-        Mon, 16 Dec 2019 07:20:21 -0800 (PST)
+        bh=qLW85+iCakysrIL3d9ahlxs/+0bq3c8q3dQkkBI+mAY=;
+        b=P8Ynvmxe/7ScMi5z0DuQY8aYhiMbOTaCGkbgT6GM0em2Xcl1j7uC4QV5AFeAUyfycw
+         x0A8FUSw4p1Na9Y4Fel55Wma/UTYSKejqOJ4lgQGYEgBe98XbsxwU84VsArTs8j1ItSY
+         DUhHVRmkuIGlGXRSYXnB/IlizQBErqEJ5aOe5NuVXTLHBbH2DUVjznEQXjp9OXRtPTsD
+         yY45eqt9wHwRgOvActxl5Yf0AbQHoqWxZH//kVOb17ooiSBOJ+i7e2aI986nkMpDMSkQ
+         sX73Hph9NtK/PdwM/C4/oYJJKjgv78MbKCtDVBVmQP4hKHnvkkLUoCG80epwDQNaMJyz
+         zAHg==
+X-Gm-Message-State: APjAAAWnCwSS+jx6J/fnt8XW0YGC5L4EvcPdGCY6YY2Shiw1NaKXzSyp
+        j5qCoDz4S3jyovp5zsH+hJIusQ==
+X-Google-Smtp-Source: APXvYqweC7S5MEqLKn13rfYs2+xIpXzL1Op8mNT8o+RON6KKvlXrllfQ92Cbjp2t7tj6nFBRu6VFaw==
+X-Received: by 2002:a5d:4b8f:: with SMTP id b15mr32672267wrt.100.1576509699617;
+        Mon, 16 Dec 2019 07:21:39 -0800 (PST)
 Received: from dell ([185.17.149.202])
-        by smtp.gmail.com with ESMTPSA id l2sm20713536wmi.5.2019.12.16.07.20.19
+        by smtp.gmail.com with ESMTPSA id x10sm22076901wrv.60.2019.12.16.07.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 07:20:20 -0800 (PST)
-Date:   Mon, 16 Dec 2019 15:20:19 +0000
+        Mon, 16 Dec 2019 07:21:39 -0800 (PST)
+Date:   Mon, 16 Dec 2019 15:21:38 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -65,15 +65,15 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v7 1/6] mfd: mt6397: modify suspend/resume behavior
-Message-ID: <20191216152019.GE2369@dell>
+Subject: Re: [PATCH v7 6/6] rtc: Add support for the MediaTek MT6358 RTC
+Message-ID: <20191216152138.GF2369@dell>
 References: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1576057435-3561-2-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1576057435-3561-7-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576057435-3561-2-git-send-email-hsin-hsiung.wang@mediatek.com>
+In-Reply-To: <1576057435-3561-7-git-send-email-hsin-hsiung.wang@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -82,18 +82,20 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Wed, 11 Dec 2019, Hsin-Hsiung Wang wrote:
 
-> Some pmics don't need backup interrupt settings, so we change to use
-> pm notifier for the pmics which are necessary to store settings.
+> From: Ran Bi <ran.bi@mediatek.com>
 > 
+> This add support for the MediaTek MT6358 RTC. Driver using
+> compatible data to store different RTC_WRTGR address offset.
+> 
+> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
 > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->  drivers/mfd/mt6397-core.c       | 30 ------------------------------
->  drivers/mfd/mt6397-irq.c        | 33 +++++++++++++++++++++++++++++++++
->  include/linux/mfd/mt6397/core.h |  2 ++
->  3 files changed, 35 insertions(+), 30 deletions(-)
+>  drivers/rtc/rtc-mt6397.c       | 24 ++++++++++++++++--------
 
-For my own reference:
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+>  include/linux/mfd/mt6397/rtc.h | 16 +++++++++++++++-
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
 Lee Jones [李琼斯]
