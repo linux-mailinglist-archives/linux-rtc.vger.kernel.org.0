@@ -2,159 +2,141 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EE2122E9E
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 15:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D3812359F
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 20:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729027AbfLQOZk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Dec 2019 09:25:40 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53682 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729015AbfLQOZk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 09:25:40 -0500
-Received: by mail-wm1-f67.google.com with SMTP id m24so3117703wmc.3
-        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 06:25:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=6kERw8dQIBACWsW0c+lQf/JA1vmIIx6c9Yg7JLLE81M=;
-        b=nDOQqhZNRhoqSIT9ygYhf6sYksvjQo/V0MI0iG8xAI89/NE0iO63AgxOdrYKa917lh
-         cV57WmnloRdU8ZjuMMbUdWOmp2MgBXI2WEQ5WqGnLOoJOFyKMPsabxDfUcaNKPAPeiM2
-         zv4czVKjcJqiWovFGXwRRlP2dVy0h+1BS1p9/h4xdRTva3rVoO1B1OcPZ/XgmnA+sJ40
-         vWKeXt+JEwXo0VccppBW2PHy+gJw6MXFYRlbIzyrMoKTbuZ7A7Y74SobzBvgiX6bUQpV
-         WikCepIxqMQ9K/Ngfgj9jIUxHUgZNtMRIlArBYGinPF/qsIGu7SOJYhQd1ZXTxJwZQUR
-         5tkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=6kERw8dQIBACWsW0c+lQf/JA1vmIIx6c9Yg7JLLE81M=;
-        b=qnNqvAXmTd0GPsBoAEoT0RvcVwt+stCm41Vmpj9qK/fB/7gKjTOGUFwygTbo2WBSxO
-         qV4+7xtrOujpxyOfQJbXSKemnJ69ZBSJjZBbiu3g1f6A5sSteqwC7so9jJfnDffroVB5
-         /5c3WB98ucpCYMYUo1sYjzuxrtWB1qYhurQyX9gRL+qVJ7dP54q34Y/Q56OwkJoOhLCS
-         WaeHI6RzKIECCt9V6jgXotSmu5bx7aX16/wzN+7pbQu0odwPwRae0UQpCe0lJwRz6MIq
-         oZjEx6A4+VTfvq07otVHvVCcozS6cuIo771idBhwK4thUsZs3mtJiGQkRaJ0HWNpjRQY
-         Ym5w==
-X-Gm-Message-State: APjAAAU8pFNuBae6MBUhyKv2j/JyYRVQ85K86v+6EZVV9GXlOf55Oski
-        xTiMSTJ/xcg6lLHED34HMf+RHA==
-X-Google-Smtp-Source: APXvYqxwCwi38Wr5D9A/L2wvMeZPSaKLDoI2uWPVSQnU9lhUcxlxXv46EcbtmUS5uruundfigIgz8w==
-X-Received: by 2002:a05:600c:2207:: with SMTP id z7mr5654182wml.138.1576592738272;
-        Tue, 17 Dec 2019 06:25:38 -0800 (PST)
-Received: from dell ([2.27.35.132])
-        by smtp.gmail.com with ESMTPSA id s65sm3189680wmf.48.2019.12.17.06.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 06:25:37 -0800 (PST)
-Date:   Tue, 17 Dec 2019 14:25:37 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v6 05/15] mfd: bd71828: Support ROHM BD71828 PMIC - core
-Message-ID: <20191217142537.GN18955@dell>
-References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
- <252de5646fedfec7c575269843a47091fe199c79.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
- <20191216164641.GC18955@dell>
- <5593db6b3328c0a1a7069d839f5c777b4b3822b6.camel@fi.rohmeurope.com>
- <20191217135430.GM18955@dell>
- <20191217140810.GD3489463@kroah.com>
+        id S1727655AbfLQT1C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 14:27:02 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:38926 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726723AbfLQT1B (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 17 Dec 2019 14:27:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=juDIEOky79kDuq2dM/DLErf1rbGtF+b0wwD31rJ1yOU=; b=UrqjMgCt2lcEJusuM6qDBf22bp
+        45MrISVbkKqVw7LJ+6mEZvg2rqKRQ/LADFrT/Z3hzHIecxtvuH8+hs44715puJbxpniLmQuGF/RCu
+        L6Ki+fRitAiFCrLlGk9Va2PX8V80QApRkhMGuhBIW3NrzVmfXBlDeBHhokULOcqVTFCk=;
+Received: from p200300ccff162b001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff16:2b00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1ihIUY-0004BI-Tx; Tue, 17 Dec 2019 20:26:47 +0100
+Date:   Tue, 17 Dec 2019 20:26:45 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
+        mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan@agner.ch, b.galvani@gmail.com,
+        robh+dt@kernel.org, phh@phh.me, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 4/5] mfd: rn5t618: add more subdevices
+Message-ID: <20191217202645.362ea7d0@aktux>
+In-Reply-To: <20191217122526.7da85553@kemnade.info>
+References: <20191211215409.32764-1-andreas@kemnade.info>
+        <20191211215409.32764-5-andreas@kemnade.info>
+        <20191216153106.GK2369@dell>
+        <20191216170000.022a4c31@kemnade.info>
+        <20191217080146.GE18955@dell>
+        <20191217122526.7da85553@kemnade.info>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191217140810.GD3489463@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 17 Dec 2019, gregkh@linuxfoundation.org wrote:
-> On Tue, Dec 17, 2019 at 01:54:30PM +0000, Lee Jones wrote:
-> > On Tue, 17 Dec 2019, Vaittinen, Matti wrote:
-> > > On Mon, 2019-12-16 at 16:46 +0000, Lee Jones wrote:
-> > > > On Wed, 11 Dec 2019, Matti Vaittinen wrote:
-> > > > 
-> > > > > BD71828GW is a single-chip power management IC for battery-powered
-> > > > > portable
-> > > > > devices. The IC integrates 7 buck converters, 7 LDOs, and a 1500 mA
-> > > > > single-cell linear charger. Also included is a Coulomb counter, a
-> > > > > real-time
-> > > > > clock (RTC), 3 GPO/regulator control pins, HALL input and a 32.768
-> > > > > kHz
-> > > > > clock gate.
-> > > > > 
-> > > > > Add MFD core driver providing interrupt controller facilities and
-> > > > > i2c
-> > > > > access to sub device drivers.
-> > > > > 
-> > > > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > > > > ---
-> > > > > 
-> > > > > Changes since v5:
-> > > > > - No changes
-> > > > > 
-> > > > >  drivers/mfd/Kconfig              |  15 ++
-> > > > >  drivers/mfd/Makefile             |   2 +-
-> > > > >  drivers/mfd/rohm-bd71828.c       | 319 +++++++++++++++++++++++
-> > > > >  include/linux/mfd/rohm-bd71828.h | 425
-> > > > > +++++++++++++++++++++++++++++++
-> > > > >  include/linux/mfd/rohm-generic.h |   1 +
-> > > > >  5 files changed, 761 insertions(+), 1 deletion(-)
-> > > > >  create mode 100644 drivers/mfd/rohm-bd71828.c
-> > > > >  create mode 100644 include/linux/mfd/rohm-bd71828.h
+On Tue, 17 Dec 2019 12:25:26 +0100
+Andreas Kemnade <andreas@kemnade.info> wrote:
 
-[...]
-> > 
-> > If you have this in your header:
-> > 
-> >   GPL-2.0-only
-> > 
-> > Your MODULE tags should read:
-> > 
-> > MODULE_LICENSE("GPL v2");
+> On Tue, 17 Dec 2019 08:01:46 +0000
+> Lee Jones <lee.jones@linaro.org> wrote:
 > 
-> Nope, as per module.h, which is quoted here, either:
-> 	MODULE_LICENSE("GPL");
-> or:
-> 	MODULE_LICENSE("GPL v2");
-> mean the exact same thing.
+> > On Mon, 16 Dec 2019, Andreas Kemnade wrote:
+> >   
+> > > On Mon, 16 Dec 2019 15:31:06 +0000
+> > > Lee Jones <lee.jones@linaro.org> wrote:
+> > >     
+> > > > On Wed, 11 Dec 2019, Andreas Kemnade wrote:
+> > > >     
+> > > > > The RC5T619 has a RTC which is missing in the
+> > > > > RN5T618. Add it as subdevice to prepare for their implementation
+> > > > > 
+> > > > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > > > ---
+> > > > > Changes in v3:
+> > > > > - alignment cleanup
+> > > > >  drivers/mfd/rn5t618.c | 16 ++++++++++++++--
+> > > > >  1 file changed, 14 insertions(+), 2 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
+> > > > > index d78eb29b94a4..18d56a732b20 100644
+> > > > > --- a/drivers/mfd/rn5t618.c
+> > > > > +++ b/drivers/mfd/rn5t618.c
+> > > > > @@ -22,6 +22,12 @@ static const struct mfd_cell rn5t618_cells[] = {
+> > > > >  	{ .name = "rn5t618-wdt" },
+> > > > >  };
+> > > > >  
+> > > > > +static const struct mfd_cell rc5t619_cells[] = {
+> > > > > +	{ .name = "rn5t618-regulator" },
+> > > > > +	{ .name = "rc5t619-rtc" },
+> > > > > +	{ .name = "rn5t618-wdt" },
+> > > > > +};
+> > > > > +
+> > > > >  static bool rn5t618_volatile_reg(struct device *dev, unsigned int reg)
+> > > > >  {
+> > > > >  	switch (reg) {
+> > > > > @@ -173,8 +179,14 @@ static int rn5t618_i2c_probe(struct i2c_client *i2c,
+> > > > >  		return ret;
+> > > > >  	}
+> > > > >  
+> > > > > -	ret = devm_mfd_add_devices(&i2c->dev, -1, rn5t618_cells,
+> > > > > -				   ARRAY_SIZE(rn5t618_cells), NULL, 0, NULL);
+> > > > > +	if (priv->variant == RC5T619)
+> > > > > +		ret = devm_mfd_add_devices(&i2c->dev, -1, rc5t619_cells,      
+> > > > 
+> > > > Ref: The "-1", please use this as an opportunity to use the defines.
+> > > >     
+> BTW: of course I can clean that up.
+> 
+> > > > > +					   ARRAY_SIZE(rc5t619_cells),
+> > > > > +					   NULL, 0, NULL);
+> > > > > +	else      
+> > > > 
+> > > > Are you sure it's not possible for 'variant' to be an unsupported
+> > > > device?
+> > > >     
+> > > Well, does it change the behavior for devices other than the rc5t619?
+> > > I do not think so. If the mfd driver is bound to unsupported devices,
+> > > rn5t618_of_match is wrong.    
+> > 
+> > Right, and can you catch that?
+> >   
+> Well, maybe we don't get each other. RC5T619 has an RTC.
+> If I understand the code right, priv->variant is set to RC5T619.
+> if there is compatible = "ricoh,rc5t619" in the device tree.
+> So in that and only in that case I have an extended subdevice list,
+> which includes the RTC subdevice instead of only regulator and wdt.
+> For everything else I do not touch it.
+> 
+Hmm, if the driver might be probed without device tree node,
+there is:
+   of_id = of_match_device(rn5t618_of_match, &i2c->dev);
+        if (!of_id) {
+                dev_err(&i2c->dev, "Failed to find matching DT ID\n");
+                return -EINVAL;
+        }
 
-Interesting.  I always took a non-specified version to mean:
+so nothing will be registered at all. So the only reasons I see the
+driver might be bound to unsupported devices could be:
+- a bug in of_match_device() 
+- nonsense in rn5t618_of_match (I think that are well-thought entries)
 
-  "... and any other future version of the licence"
-
-Educated, thanks!
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Regards,
+Andreas
