@@ -2,104 +2,140 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1912251B
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 07:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E7D12261B
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 09:01:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbfLQG4e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Dec 2019 01:56:34 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:45098 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfLQG4d (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 01:56:33 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-5b-5df87c1ebcc5
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 31.34.08102.E1C78FD5; Tue, 17 Dec 2019 07:56:30 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Tue, 17 Dec 2019 07:56:26 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>
-Subject: Re: [PATCH v6 09/15] regulator: bd71828: Basic support for ROHM
- bd71828 PMIC regulators
-Thread-Topic: [PATCH v6 09/15] regulator: bd71828: Basic support for ROHM
- bd71828 PMIC regulators
-Thread-Index: AQHVsAfYI3uVDvKcOUypO4bwmJ45Qqe80OIAgAEMf4A=
-Date:   Tue, 17 Dec 2019 06:56:23 +0000
-Message-ID: <06f1f3529fc168daa513e0a6db7b4e0147f86358.camel@fi.rohmeurope.com>
-References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-         <5b1c4a22c7945e97ff2a7924abfeb3239043f8eb.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-         <20191216145528.GE4161@sirena.org.uk>
-In-Reply-To: <20191216145528.GE4161@sirena.org.uk>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <270552940107BB4D8F91F4EA5DFF4642@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1726072AbfLQIBx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 03:01:53 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37154 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726674AbfLQIBt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 03:01:49 -0500
+Received: by mail-wr1-f68.google.com with SMTP id w15so10220323wru.4
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 00:01:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=RYcPZBxNs0LR8aI9ut6hb3/+3nGM5FU0mpuZVJVKBqM=;
+        b=FXp9LRcrDVkA8WcZNt2DGB5je9rP0L5nXs3II0LD3mnz5nxHRMKsTZDw7Rh7CVsHnd
+         Trf/CAJzgiDWE9gsqQS8mcfLBVv/grKk5XvYMo1D0ZvTjsCRtgoJMWjYF/he3STC5esP
+         vuuF0AhTDWnNwTsVc0tSPOmJcXGvngA4IOnO3g35RrvgMZr4z9J05nYyAngrwSYYUmg7
+         Prk/Vzr8zNT27ztxarf9DrfMY7RCTX0H+lZsQ74pe1HPifj6EZlkhjt7lBFTj8cGuHcN
+         diJwgVe1gqW8cgZgNi2TQgIyfUNGpCBYiGOHNnJ4EIpvKuN6PdZM5Aawlms+ugwxNBnJ
+         2XhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=RYcPZBxNs0LR8aI9ut6hb3/+3nGM5FU0mpuZVJVKBqM=;
+        b=H8vE6InPAVQptdY+OiV2ho6ZXm2fElHIvDqv1qRc5Qn/x5YjfWlkWvrRV7pWt/Pnpd
+         max/dsoqqp5u8b2nV9HqRmrKv3LK6/1fwu86guM7BZZGsKMsmzHCFOC7AT+IzLPeAc5S
+         sTfvyk98Ye+0ww5VdpVtkYbYpuSn8r98EX+k0i5Yv361bEkBbfF1hrqTKusIDIKUHcdi
+         hCeHmMzD/ZSr1/+TP5TQGFHbxvnNa7tgsCEF0BJeTPjNvrUnevxK/hyK1h490qkvpQMO
+         xWaMsXhzrSgUSR1yffw8YFSlRGpMjQpccmdiegO/qzcJYjNXtNKvoT7iXofbu1iy+H3h
+         d11A==
+X-Gm-Message-State: APjAAAXCU35KLbpPQ8GhhowT5b5ScWmmx42tBzKk+8I3PiaJ9zUD5+dK
+        31AYVCgsmVCVb0e4/9hcubu1fg==
+X-Google-Smtp-Source: APXvYqxRCna04c3LCNHy/aOTiZ+ysA7HIsZXfmIuviSjkwuNxXEkaWZmYBaJ5/NmY97Bk79fZC35CA==
+X-Received: by 2002:a5d:4749:: with SMTP id o9mr34127834wrs.242.1576569706892;
+        Tue, 17 Dec 2019 00:01:46 -0800 (PST)
+Received: from dell (h185-20-99-142.host.redstation.co.uk. [185.20.99.142])
+        by smtp.gmail.com with ESMTPSA id p26sm2020498wmc.24.2019.12.17.00.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 00:01:46 -0800 (PST)
+Date:   Tue, 17 Dec 2019 08:01:46 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH v4 4/5] mfd: rn5t618: add more subdevices
+Message-ID: <20191217080146.GE18955@dell>
+References: <20191211215409.32764-1-andreas@kemnade.info>
+ <20191211215409.32764-5-andreas@kemnade.info>
+ <20191216153106.GK2369@dell>
+ <20191216170000.022a4c31@kemnade.info>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfVAUZRzHe3af23142WY9MR4prU6LMULAzHmmmIaZatxmimFqppnSkxbY
-        OCa4o72DEW2KSQVBYsTzZLoA5XiRt+nwitEIhhs6DA8ijxej0AhlGNQGswgUxdplVfjr+T7P
-        9/l+P88fvwfR+jo2AmWYbZJsFjMNTDD0Ntw5Fb3+k1vG2IOthNQGRlhSOFPPksUjZ1kyW+mH
-        xDExyZBJbyEgx30DOnKo71sd2VfjZshYWysk4//2ADI3fJAiR++epMjNkt91pLqgFpJvjt8F
-        ZKi9giFtf34NyNnmYYbU/RKgSEVdLyQ3/i6iSMD/OnH4Z1hyyd/DkH2BUZoc6PSx5N6FU5CU
-        DmxPWCe0VLUA4c7CESDcGD3AClUte4XvnJdYwdNUxAgXL3QwQldlCyvUlNp1wlx/GRSmqt1Q
-        +HH0NCWUV92mBHeJDwgNzfOs8I9nfRL/fkh8imjLfScj3Rzzygchps6TTUx2O7v7/GmvLh+c
-        YItBEML8Vlx2pUBXDIKRnh8BeOiYg9U2vQBPLQ7AYoAQw8fj4l+XAmF8NHYs1DCqpvnhEPzV
-        9ztUvZpPwe4fCijtTirumq65r1/CPdMuWtWQfwZ7S1qBWsnxibix6mMN1Q/w2LB9qTOI34Iv
-        X/dCVQN+HS7Kn6E0Vjj2TM3rtEfzuLbjZ1rTa/DVK/funxtw5+2JpSfT/Cbsbo/Rogn44uI4
-        q+mn8dFDE0ua41fhc19OwsPgMecKgnM57VyRdq5IO1ekTwBdE8BZYkZmumiT4jbLUs5m2WLK
-        UpZUS5YHaGM3ewb81/1GN6AQ6AZrEWVYw4Vuv2XUP5piScsziVZTspyTKVm7AUa0IYw789S8
-        Uc+liXl7JNnywHocQUM4FzlRZtTzKusjScqW5AfuEwgZMPf8XqV0lSylS7s/zMi0LdsUClLL
-        gyPCrJI5TZLFHJspWR2PZKsyH6oVqnCH9ihxzpotZimnWtQPotDhq5UuGvkq61y0HpotZiki
-        nBtUSbx61ZRjfgi6BsIRMKzm/lKLQpW/97DnmoKgFMSWxDkVYROXrYh8YHl7xwsksr/8XUeS
-        /VXX9bLCRFvnuY0JjfW+F7dF+zZugOPlztiBxvPUF6l0c8zgs0mbovqmu36L9dd2oG3vWXeW
-        VPsf2WoHFW2zazfs90Tt7Nv1x1j8k/vl+ZG83F2labk3IwOX7QsJg0b08k9xxtdSGno/k01v
-        1n8uBr0FPw11QQO0msS452jZKv4PHr7zGzgEAAA=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191216170000.022a4c31@kemnade.info>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-VGhhbmtzIE1hcmssDQoNCk9uIE1vbiwgMjAxOS0xMi0xNiBhdCAxNDo1NSArMDAwMCwgTWFyayBC
-cm93biB3cm90ZToNCj4gT24gV2VkLCBEZWMgMTEsIDIwMTkgYXQgMTE6NDY6MTFBTSArMDIwMCwg
-TWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiANCj4gPiArc3RhdGljIGludCBiZDcxODI4X2xkbzZf
-Z2V0X3ZvbHRhZ2Uoc3RydWN0IHJlZ3VsYXRvcl9kZXYgKnJkZXYpDQo+ID4gK3sNCj4gPiArCXJl
-dHVybiBCRDcxODI4X0xET182X1ZPTFRBR0U7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBj
-b25zdCBzdHJ1Y3QgcmVndWxhdG9yX29wcyBiZDcxODI4X2xkbzZfb3BzID0gew0KPiA+ICsJLmVu
-YWJsZSA9IHJlZ3VsYXRvcl9lbmFibGVfcmVnbWFwLA0KPiA+ICsJLmRpc2FibGUgPSByZWd1bGF0
-b3JfZGlzYWJsZV9yZWdtYXAsDQo+ID4gKwkuZ2V0X3ZvbHRhZ2UgPSBiZDcxODI4X2xkbzZfZ2V0
-X3ZvbHRhZ2UsDQo+IA0KPiBZb3UgY2FuIGp1c3Qgc2V0IGZpeGVkX3VWIGluIHRoZSByZWd1bGF0
-b3JfZGVzYywgeW91IGRvbid0IG5lZWQgYQ0KPiBnZXRfdm9sdGFnZSgpIG9wZXJhdGlvbiBoZXJl
-LiAgT3RoZXJ3aXNlIHRoaXMgbG9va3MgZ29vZCwgSSdsbCBhcHBseQ0KPiBpdA0KPiBhbmQgcGxl
-YXNlIHNlbmQgYW4gaW5jcmVtZW50YWwgZml4IGZvciB0aGlzLg0KDQpXaWxsIGRvIDopDQoNCkJy
-LA0KCU1hdHRpDQo=
+On Mon, 16 Dec 2019, Andreas Kemnade wrote:
+
+> On Mon, 16 Dec 2019 15:31:06 +0000
+> Lee Jones <lee.jones@linaro.org> wrote:
+> 
+> > On Wed, 11 Dec 2019, Andreas Kemnade wrote:
+> > 
+> > > The RC5T619 has a RTC which is missing in the
+> > > RN5T618. Add it as subdevice to prepare for their implementation
+> > > 
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > ---
+> > > Changes in v3:
+> > > - alignment cleanup
+> > >  drivers/mfd/rn5t618.c | 16 ++++++++++++++--
+> > >  1 file changed, 14 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
+> > > index d78eb29b94a4..18d56a732b20 100644
+> > > --- a/drivers/mfd/rn5t618.c
+> > > +++ b/drivers/mfd/rn5t618.c
+> > > @@ -22,6 +22,12 @@ static const struct mfd_cell rn5t618_cells[] = {
+> > >  	{ .name = "rn5t618-wdt" },
+> > >  };
+> > >  
+> > > +static const struct mfd_cell rc5t619_cells[] = {
+> > > +	{ .name = "rn5t618-regulator" },
+> > > +	{ .name = "rc5t619-rtc" },
+> > > +	{ .name = "rn5t618-wdt" },
+> > > +};
+> > > +
+> > >  static bool rn5t618_volatile_reg(struct device *dev, unsigned int reg)
+> > >  {
+> > >  	switch (reg) {
+> > > @@ -173,8 +179,14 @@ static int rn5t618_i2c_probe(struct i2c_client *i2c,
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	ret = devm_mfd_add_devices(&i2c->dev, -1, rn5t618_cells,
+> > > -				   ARRAY_SIZE(rn5t618_cells), NULL, 0, NULL);
+> > > +	if (priv->variant == RC5T619)
+> > > +		ret = devm_mfd_add_devices(&i2c->dev, -1, rc5t619_cells,  
+> > 
+> > Ref: The "-1", please use this as an opportunity to use the defines.
+> > 
+> > > +					   ARRAY_SIZE(rc5t619_cells),
+> > > +					   NULL, 0, NULL);
+> > > +	else  
+> > 
+> > Are you sure it's not possible for 'variant' to be an unsupported
+> > device?
+> > 
+> Well, does it change the behavior for devices other than the rc5t619?
+> I do not think so. If the mfd driver is bound to unsupported devices,
+> rn5t618_of_match is wrong.
+
+Right, and can you catch that?
+
+> Or do you want separate cell arrays for each of the three variant now to
+> ease future extensions?
+
+No need for that, thank you.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
