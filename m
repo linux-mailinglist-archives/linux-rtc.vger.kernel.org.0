@@ -2,81 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C09F121EB0
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 00:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FE91224C4
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 07:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfLPXEt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Dec 2019 18:04:49 -0500
-Received: from mga05.intel.com ([192.55.52.43]:60127 "EHLO mga05.intel.com"
+        id S1726736AbfLQGhp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 01:37:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48674 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726487AbfLPXEt (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 16 Dec 2019 18:04:49 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 15:04:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,323,1571727600"; 
-   d="scan'208";a="212374411"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Dec 2019 15:04:48 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1igzPz-000G7L-Mx; Tue, 17 Dec 2019 07:04:47 +0800
-Date:   Tue, 17 Dec 2019 07:04:21 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: pcf8523: fix ptr_ret.cocci warnings
-Message-ID: <20191216230421.swtokuadkid666sd@4978f4969bb8>
-References: <201912170716.3GlRTKMw%lkp@intel.com>
+        id S1725812AbfLQGhp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 17 Dec 2019 01:37:45 -0500
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE804206B7;
+        Tue, 17 Dec 2019 06:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576564665;
+        bh=zfgZpyYTrpEBik1kM3Kdi8UuauyCHDxYWQ0Iu8vP57g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CeR0fyXDDV2+gqgU6xdDY5uj/hCrAmfudQISdYzd2xYGHt0xn1NB6DHrGNcE767tb
+         2+R6ihhKKGDWSf/WP2TEse+ewZYp8+9C3eB4hGtXdVYoMPmZpW5mau+wDZrTGogDJp
+         TZyQzixHdfTACgulc0RPlMBrmy/9S/ZqsVfUX0yM=
+Received: by mail-wr1-f54.google.com with SMTP id z7so9945973wrl.13;
+        Mon, 16 Dec 2019 22:37:44 -0800 (PST)
+X-Gm-Message-State: APjAAAWGISrmO3xD6T6hq8/9g5SqhB/9xsaZdmSOcWzUVdFBTR6eNSEv
+        VwVtJ//HlhPLttauSlLAgkaWGxVME984+xoAcJI=
+X-Google-Smtp-Source: APXvYqwOzeYFksshtl8cKEZvNg6R+lSFFmbarnDLhVj5qjGMkKvO227EBiMcR74GFbwtbrGWX9VLvGzShqB+eojMorQ=
+X-Received: by 2002:adf:ef4e:: with SMTP id c14mr21010657wrp.142.1576564663477;
+ Mon, 16 Dec 2019 22:37:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201912170716.3GlRTKMw%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20191205085054.6049-1-wens@kernel.org> <20191211163647.2F34C214D8@mail.kernel.org>
+In-Reply-To: <20191211163647.2F34C214D8@mail.kernel.org>
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Tue, 17 Dec 2019 14:37:32 +0800
+X-Gmail-Original-Message-ID: <CAGb2v66jRHQw+ZFtxeNXkOXGfDyXbQ3k26KcHQrEawdZWyv0_Q@mail.gmail.com>
+Message-ID: <CAGb2v66jRHQw+ZFtxeNXkOXGfDyXbQ3k26KcHQrEawdZWyv0_Q@mail.gmail.com>
+Subject: Re: [PATCH] rtc: sun6i: Add support for RTC clocks on R40
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Chen-Yu Tsai <wens@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: kbuild test robot <lkp@intel.com>
+Hi,
 
-drivers/rtc/rtc-pcf8523.c:361:1-3: WARNING: PTR_ERR_OR_ZERO can be used
+On Thu, Dec 12, 2019 at 12:36 AM Sasha Levin <sashal@kernel.org> wrote:
+>
+> Hi,
+>
+> [This is an automated email]
+>
+> This commit has been processed because it contains a "Fixes:" tag,
+> fixing commit: d6624cc75021 ("rtc: sun6i: Add R40 compatible").
+>
+> The bot has tested the following trees: v5.4.2, v5.3.15.
+>
+> v5.4.2: Build OK!
+> v5.3.15: Failed to apply! Possible dependencies:
+>     b60ff2cfb598 ("rtc: sun6i: Add support for H6 RTC")
+>
+>
+> NOTE: The patch will not be queued to stable trees until it is upstream.
+>
+> How should we proceed with this patch?
 
+This can be queued for v5.4.
 
- Use PTR_ERR_OR_ZERO rather than if(IS_ERR(...)) + PTR_ERR
+I'll send a separate backport for v5.3.
 
-Generated by: scripts/coccinelle/api/ptr_ret.cocci
-
-Fixes: 93966243cf90 ("rtc: pcf8523: Remove struct pcf8523")
-CC: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d1eef1c619749b2a57e514a3fa67d9a516ffa919
-commit: 93966243cf90c055d89b5ebfbb8dee0f9ac6b0a2 rtc: pcf8523: Remove struct pcf8523
-
- rtc-pcf8523.c |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -358,10 +358,7 @@ static int pcf8523_probe(struct i2c_clie
- 
- 	rtc = devm_rtc_device_register(&client->dev, DRIVER_NAME,
- 				       &pcf8523_rtc_ops, THIS_MODULE);
--	if (IS_ERR(rtc))
--		return PTR_ERR(rtc);
--
--	return 0;
-+	return PTR_ERR_OR_ZERO(rtc);
- }
- 
- static const struct i2c_device_id pcf8523_id[] = {
+ChenYu
