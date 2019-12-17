@@ -2,137 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E7D12261B
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 09:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D43A122621
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 09:03:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbfLQIBx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Dec 2019 03:01:53 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37154 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbfLQIBt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 03:01:49 -0500
-Received: by mail-wr1-f68.google.com with SMTP id w15so10220323wru.4
-        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 00:01:47 -0800 (PST)
+        id S1726382AbfLQIDD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 03:03:03 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54699 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726674AbfLQIDD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 03:03:03 -0500
+Received: by mail-wm1-f67.google.com with SMTP id b19so1887435wmj.4
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 00:03:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=RYcPZBxNs0LR8aI9ut6hb3/+3nGM5FU0mpuZVJVKBqM=;
-        b=FXp9LRcrDVkA8WcZNt2DGB5je9rP0L5nXs3II0LD3mnz5nxHRMKsTZDw7Rh7CVsHnd
-         Trf/CAJzgiDWE9gsqQS8mcfLBVv/grKk5XvYMo1D0ZvTjsCRtgoJMWjYF/he3STC5esP
-         vuuF0AhTDWnNwTsVc0tSPOmJcXGvngA4IOnO3g35RrvgMZr4z9J05nYyAngrwSYYUmg7
-         Prk/Vzr8zNT27ztxarf9DrfMY7RCTX0H+lZsQ74pe1HPifj6EZlkhjt7lBFTj8cGuHcN
-         diJwgVe1gqW8cgZgNi2TQgIyfUNGpCBYiGOHNnJ4EIpvKuN6PdZM5Aawlms+ugwxNBnJ
-         2XhQ==
+        bh=GxAFSM9qrfBqACDVyobZG3sgGdlMNsybGzr6qpdZuFY=;
+        b=sneGlw/w17D4z5M6a5bR6Y0d/z3VSpK4ImjvIeXZaztzsV4sKewPmhnDCtmQYaTmlV
+         YEqBwbCUZFtj5uIFQsJ21OzjN/E//jv2SfHJwUy/0NR42KPymWIdC/xmAgzf+8A++Yn4
+         eEVZOAYagbwnNN9NzZKIXw3wbBs8XCEwEdOFXZ/gi5Rl4atj3f719kXLCGWPV9c7Sacg
+         NG3EKXamr8YyxcBkbngr9KLoE066VzOQNwr8QGF5kFyuwBtD9zqKm9xslgq0mwKFt3L3
+         gkHo2nde5j/rsRY0YIN9JVN/ebNuqhinr5Ltkp3zVYpUw/SxUBGq1K36V3C2++3LFK2I
+         BJMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=RYcPZBxNs0LR8aI9ut6hb3/+3nGM5FU0mpuZVJVKBqM=;
-        b=H8vE6InPAVQptdY+OiV2ho6ZXm2fElHIvDqv1qRc5Qn/x5YjfWlkWvrRV7pWt/Pnpd
-         max/dsoqqp5u8b2nV9HqRmrKv3LK6/1fwu86guM7BZZGsKMsmzHCFOC7AT+IzLPeAc5S
-         sTfvyk98Ye+0ww5VdpVtkYbYpuSn8r98EX+k0i5Yv361bEkBbfF1hrqTKusIDIKUHcdi
-         hCeHmMzD/ZSr1/+TP5TQGFHbxvnNa7tgsCEF0BJeTPjNvrUnevxK/hyK1h490qkvpQMO
-         xWaMsXhzrSgUSR1yffw8YFSlRGpMjQpccmdiegO/qzcJYjNXtNKvoT7iXofbu1iy+H3h
-         d11A==
-X-Gm-Message-State: APjAAAXCU35KLbpPQ8GhhowT5b5ScWmmx42tBzKk+8I3PiaJ9zUD5+dK
-        31AYVCgsmVCVb0e4/9hcubu1fg==
-X-Google-Smtp-Source: APXvYqxRCna04c3LCNHy/aOTiZ+ysA7HIsZXfmIuviSjkwuNxXEkaWZmYBaJ5/NmY97Bk79fZC35CA==
-X-Received: by 2002:a5d:4749:: with SMTP id o9mr34127834wrs.242.1576569706892;
-        Tue, 17 Dec 2019 00:01:46 -0800 (PST)
+        bh=GxAFSM9qrfBqACDVyobZG3sgGdlMNsybGzr6qpdZuFY=;
+        b=O7AKXTP3ZKp8sTrv3VwJFGgcCsXTc+sdKzqWruKxCXZe0nXU9hSwpxSP52iVp0Rajt
+         VcM4Raug/h3rD5IlubZ5Wi2hxaXjsryDFITMMNMj2jLFEV3s7iS3Drx58EA5PD5Xtdml
+         8goAplRKFlXyiuWzAJTyChskYjLrdhWiJkRQD8w2sGp5ZuHMcnKh5vKCi/YLyeLMdzWC
+         MnN8KTSGiV7n8+7l+CuUrlXpfmutaezTdnb3k9D1o0buG8cP4fdEQbuUP3UaJ/rROrY9
+         Hnbku2e9bAryixjmctrsKkK8lyICozipt8EAuTv/w69gRBK69KSIh7J8gfyMEL7Yds4R
+         ZVyw==
+X-Gm-Message-State: APjAAAUyHLiBfuXJAs/B56s7RUrw8vR0Zn6uP8KbRQeN0r8+rkNVkl+H
+        4AZX5NKb39OSVMQ0/4TsVniPcQ==
+X-Google-Smtp-Source: APXvYqzMTCBlFqbqARJevmlw9QY8QwE36fi/Ore5Eu5RwK95seTip0NwxVQTJa/pqHoFIqktYKfywA==
+X-Received: by 2002:a05:600c:d7:: with SMTP id u23mr3568868wmm.145.1576569781740;
+        Tue, 17 Dec 2019 00:03:01 -0800 (PST)
 Received: from dell (h185-20-99-142.host.redstation.co.uk. [185.20.99.142])
-        by smtp.gmail.com with ESMTPSA id p26sm2020498wmc.24.2019.12.17.00.01.45
+        by smtp.gmail.com with ESMTPSA id c9sm2020290wmc.47.2019.12.17.00.02.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 00:01:46 -0800 (PST)
-Date:   Tue, 17 Dec 2019 08:01:46 +0000
+        Tue, 17 Dec 2019 00:03:00 -0800 (PST)
+Date:   Tue, 17 Dec 2019 08:02:55 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v4 4/5] mfd: rn5t618: add more subdevices
-Message-ID: <20191217080146.GE18955@dell>
-References: <20191211215409.32764-1-andreas@kemnade.info>
- <20191211215409.32764-5-andreas@kemnade.info>
- <20191216153106.GK2369@dell>
- <20191216170000.022a4c31@kemnade.info>
+To:     Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Cc:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paulburton@kernel.org>,
+        James Hogan <jhogan@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v11 net-next 2/2] mfd: ioc3: Add driver for SGI IOC3 chip
+Message-ID: <20191217080255.GF18955@dell>
+References: <20191213124221.25775-1-tbogendoerfer@suse.de>
+ <20191213124221.25775-3-tbogendoerfer@suse.de>
+ <20191215122745.219fa951@cakuba.netronome.com>
+ <20191216170005.afdbbb3845a87dc835165250@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191216170000.022a4c31@kemnade.info>
+In-Reply-To: <20191216170005.afdbbb3845a87dc835165250@suse.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 16 Dec 2019, Andreas Kemnade wrote:
+On Mon, 16 Dec 2019, Thomas Bogendoerfer wrote:
 
-> On Mon, 16 Dec 2019 15:31:06 +0000
-> Lee Jones <lee.jones@linaro.org> wrote:
+> On Sun, 15 Dec 2019 12:27:45 -0800
+> Jakub Kicinski <jakub.kicinski@netronome.com> wrote:
 > 
-> > On Wed, 11 Dec 2019, Andreas Kemnade wrote:
-> > 
-> > > The RC5T619 has a RTC which is missing in the
-> > > RN5T618. Add it as subdevice to prepare for their implementation
+> > On Fri, 13 Dec 2019 13:42:20 +0100, Thomas Bogendoerfer wrote:
+> > > SGI IOC3 chip has integrated ethernet, keyboard and mouse interface.
+> > > It also supports connecting a SuperIO chip for serial and parallel
+> > > interfaces. IOC3 is used inside various SGI systemboards and add-on
+> > > cards with different equipped external interfaces.
 > > > 
-> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > > ---
-> > > Changes in v3:
-> > > - alignment cleanup
-> > >  drivers/mfd/rn5t618.c | 16 ++++++++++++++--
-> > >  1 file changed, 14 insertions(+), 2 deletions(-)
+> > > Support for ethernet and serial interfaces were implemented inside
+> > > the network driver. This patchset moves out the not network related
+> > > parts to a new MFD driver, which takes care of card detection,
+> > > setup of platform devices and interrupt distribution for the subdevices.
 > > > 
-> > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
-> > > index d78eb29b94a4..18d56a732b20 100644
-> > > --- a/drivers/mfd/rn5t618.c
-> > > +++ b/drivers/mfd/rn5t618.c
-> > > @@ -22,6 +22,12 @@ static const struct mfd_cell rn5t618_cells[] = {
-> > >  	{ .name = "rn5t618-wdt" },
-> > >  };
-> > >  
-> > > +static const struct mfd_cell rc5t619_cells[] = {
-> > > +	{ .name = "rn5t618-regulator" },
-> > > +	{ .name = "rc5t619-rtc" },
-> > > +	{ .name = "rn5t618-wdt" },
-> > > +};
-> > > +
-> > >  static bool rn5t618_volatile_reg(struct device *dev, unsigned int reg)
-> > >  {
-> > >  	switch (reg) {
-> > > @@ -173,8 +179,14 @@ static int rn5t618_i2c_probe(struct i2c_client *i2c,
-> > >  		return ret;
-> > >  	}
-> > >  
-> > > -	ret = devm_mfd_add_devices(&i2c->dev, -1, rn5t618_cells,
-> > > -				   ARRAY_SIZE(rn5t618_cells), NULL, 0, NULL);
-> > > +	if (priv->variant == RC5T619)
-> > > +		ret = devm_mfd_add_devices(&i2c->dev, -1, rc5t619_cells,  
+> > > Serial portion: Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > > 
+> > > Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 > > 
-> > Ref: The "-1", please use this as an opportunity to use the defines.
+> > For networking:
 > > 
-> > > +					   ARRAY_SIZE(rc5t619_cells),
-> > > +					   NULL, 0, NULL);
-> > > +	else  
+> > Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 > > 
-> > Are you sure it's not possible for 'variant' to be an unsupported
-> > device?
-> > 
-> Well, does it change the behavior for devices other than the rc5t619?
-> I do not think so. If the mfd driver is bound to unsupported devices,
-> rn5t618_of_match is wrong.
+> > I think you wanted this to go via the MIPS tree, so consider this an
+> > ack.
+> 
+> well, it can go to net-next as well. Paul, what's your preference ?
 
-Right, and can you catch that?
-
-> Or do you want separate cell arrays for each of the three variant now to
-> ease future extensions?
-
-No need for that, thank you.
+Whomever takes it should send out a pull-request to an immutable
+branch for everyone else to pull from (if they so desire).
 
 -- 
 Lee Jones [李琼斯]
