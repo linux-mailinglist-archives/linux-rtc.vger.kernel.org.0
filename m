@@ -2,163 +2,288 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3EE1229D6
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 12:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC573122B00
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 13:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727465AbfLQL0w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Dec 2019 06:26:52 -0500
-Received: from mail.andi.de1.cc ([85.214.55.253]:33838 "EHLO mail.andi.de1.cc"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726487AbfLQL0w (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 17 Dec 2019 06:26:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=/wfbz1AV7kpzq1k5a+twp8p7YU9BRi32n2mrSQtAFC0=; b=b1/EpmkcGl18jMSXshd7kdkGx
-        Qvo0SjjcRJcNtAqAgRtOrvridnm2QMIQ4bOkVLY1KUgfM/bC4PieQ1bIO9t38ZcU43q4+Fvk0S0xf
-        HwGonddVj1xOIqLMiz51EKQd1FqAEEH/hRcQdw4z6k5fAmdU7AKIABl1sPhuoMTzcG2Hg=;
-Received: from [2a02:790:ff:919:7ee9:d3ff:fe1f:a246] (helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1ihAzz-0007Ji-BQ; Tue, 17 Dec 2019 12:26:44 +0100
-Received: from [::1] (helo=localhost)
-        by eeepc with esmtp (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1ihAys-0001qH-56; Tue, 17 Dec 2019 12:25:34 +0100
-Date:   Tue, 17 Dec 2019 12:25:26 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH v4 4/5] mfd: rn5t618: add more subdevices
-Message-ID: <20191217122526.7da85553@kemnade.info>
-In-Reply-To: <20191217080146.GE18955@dell>
-References: <20191211215409.32764-1-andreas@kemnade.info>
-        <20191211215409.32764-5-andreas@kemnade.info>
-        <20191216153106.GK2369@dell>
-        <20191216170000.022a4c31@kemnade.info>
-        <20191217080146.GE18955@dell>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; i686-pc-linux-gnu)
+        id S1727804AbfLQMM6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 07:12:58 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44050 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726383AbfLQMM6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 07:12:58 -0500
+Received: by mail-pg1-f193.google.com with SMTP id x7so5558944pgl.11
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 04:12:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mJdcluQXxj5OtwQqfsjIczjKo/yaeQ8i3VSRCA7I7Bo=;
+        b=IwJkQVuIWbwYi9mwzy7RJdC8A4/37MFu5MhRJ/7VJ9nLGy9oKdlQOB6bQo8a8V//Oa
+         kl9qTBsrNiqcLDWT9Dx5egS/9tSMrkQkjVHVNUDUlsjc6ss8iw2mZvqiT/EJot+krKjw
+         Wt3CwIHg433nc1oTdqMMbyeGeYIiQ97MSG1VdIEbsuvwP36a0nTjUKsz/x0V96pD5R4x
+         31mWjYOaC+O47PJdTyeon2WG36vr4peahcUqXd4y7SAWh5S2BNeAXtOGXpfZCYy5XYtg
+         +lBVAxGUDKNJ/xJh4St0cJDfp/ELGdsMqMp/ITm78/oDlvfbgvndstq1tWjQjDtNbzrt
+         2DBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mJdcluQXxj5OtwQqfsjIczjKo/yaeQ8i3VSRCA7I7Bo=;
+        b=F0f1JUGYhh/eJKjIRQ4aTXa4VEsIIWDeQKNSw5Fkuhkc5HQ0jOCA2ed50cpURyFBgm
+         6iO6FvftmA0+v/qwPkNtiC4tJSRW7eV5kjGGhFzVefho//T96luQSYtvyzgAU56I4nSu
+         jX8pVSjC8A5zbOWH/PRjVzr8ndY/wmXwbSj/JKMM6n49WsLhPf+5xzSTGs96A60h8GCK
+         /cJYEk8WrnyXbCdnMNRIOH344BkbHwnyX7Fgs8//b/JEJ4scTEpOcmurfwSzmSp7+mHR
+         F+KRmQmJgI+oGeMe6E65bOxe9cvGwkfb6enncU0wCrdlYsi1V6dav48G9uYTpDHHkmk2
+         bjOQ==
+X-Gm-Message-State: APjAAAXytycSwG4NPTYitfhwxPjJscTpxH3sptazQsSHbN9IQVjAKGMQ
+        t8SCRZmCrbiiLisM1f2zQO9heRhk4w==
+X-Google-Smtp-Source: APXvYqwH6Rqgy+ffukN554tVPE+jnnZjoT1ZaEBAxHL5oJUKlzFxMTZ+opXm21Sl01f8Mwlf9cMzkQ==
+X-Received: by 2002:a63:fa50:: with SMTP id g16mr18083497pgk.202.1576584776900;
+        Tue, 17 Dec 2019 04:12:56 -0800 (PST)
+Received: from localhost ([2405:6581:5360:1800:49ba:c4f5:5ab9:da22])
+        by smtp.gmail.com with ESMTPSA id j22sm3169106pji.16.2019.12.17.04.12.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 04:12:56 -0800 (PST)
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+To:     linux-rtc@vger.kernel.org
+Cc:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Akshay Bhat <akshay.bhat@timesys.com>
+Subject: [PATCH] rtc: rx8010: Remove struct i2c_client from struct rx8010_data
+Date:   Tue, 17 Dec 2019 21:12:30 +0900
+Message-Id: <20191217121231.2698817-1-iwamatsu@nigauri.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/N9qDnK+quarkvTFp.jEyjS="; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---Sig_/N9qDnK+quarkvTFp.jEyjS=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The struct i2c_client can be obtained using to_i2c_client with struct
+device. This driver does not need to have it in struct rx8010_data.
 
-On Tue, 17 Dec 2019 08:01:46 +0000
-Lee Jones <lee.jones@linaro.org> wrote:
+CC: Alessandro Zummo <a.zummo@towertech.it>
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: Akshay Bhat <akshay.bhat@timesys.com>
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ drivers/rtc/rtc-rx8010.c | 48 +++++++++++++++++++---------------------
+ 1 file changed, 23 insertions(+), 25 deletions(-)
 
-> On Mon, 16 Dec 2019, Andreas Kemnade wrote:
->=20
-> > On Mon, 16 Dec 2019 15:31:06 +0000
-> > Lee Jones <lee.jones@linaro.org> wrote:
-> >  =20
-> > > On Wed, 11 Dec 2019, Andreas Kemnade wrote:
-> > >  =20
-> > > > The RC5T619 has a RTC which is missing in the
-> > > > RN5T618. Add it as subdevice to prepare for their implementation
-> > > >=20
-> > > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> > > > ---
-> > > > Changes in v3:
-> > > > - alignment cleanup
-> > > >  drivers/mfd/rn5t618.c | 16 ++++++++++++++--
-> > > >  1 file changed, 14 insertions(+), 2 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
-> > > > index d78eb29b94a4..18d56a732b20 100644
-> > > > --- a/drivers/mfd/rn5t618.c
-> > > > +++ b/drivers/mfd/rn5t618.c
-> > > > @@ -22,6 +22,12 @@ static const struct mfd_cell rn5t618_cells[] =3D=
+diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+index 8102469e27c05..c5d3ad2163475 100644
+--- a/drivers/rtc/rtc-rx8010.c
++++ b/drivers/rtc/rtc-rx8010.c
+@@ -61,7 +61,6 @@ static const struct of_device_id rx8010_of_match[] = {
+ MODULE_DEVICE_TABLE(of, rx8010_of_match);
+ 
+ struct rx8010_data {
+-	struct i2c_client *client;
+ 	struct rtc_device *rtc;
+ 	u8 ctrlreg;
+ };
+@@ -107,12 +106,12 @@ static irqreturn_t rx8010_irq_1_handler(int irq, void *dev_id)
+ 
+ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
  {
-> > > >  	{ .name =3D "rn5t618-wdt" },
-> > > >  };
-> > > > =20
-> > > > +static const struct mfd_cell rc5t619_cells[] =3D {
-> > > > +	{ .name =3D "rn5t618-regulator" },
-> > > > +	{ .name =3D "rc5t619-rtc" },
-> > > > +	{ .name =3D "rn5t618-wdt" },
-> > > > +};
-> > > > +
-> > > >  static bool rn5t618_volatile_reg(struct device *dev, unsigned int =
-reg)
-> > > >  {
-> > > >  	switch (reg) {
-> > > > @@ -173,8 +179,14 @@ static int rn5t618_i2c_probe(struct i2c_client=
- *i2c,
-> > > >  		return ret;
-> > > >  	}
-> > > > =20
-> > > > -	ret =3D devm_mfd_add_devices(&i2c->dev, -1, rn5t618_cells,
-> > > > -				   ARRAY_SIZE(rn5t618_cells), NULL, 0, NULL);
-> > > > +	if (priv->variant =3D=3D RC5T619)
-> > > > +		ret =3D devm_mfd_add_devices(&i2c->dev, -1, rc5t619_cells,   =20
-> > >=20
-> > > Ref: The "-1", please use this as an opportunity to use the defines.
-> > >  =20
-BTW: of course I can clean that up.
+-	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
++	struct i2c_client *client = to_i2c_client(dev);
+ 	u8 date[7];
+ 	int flagreg;
+ 	int err;
+ 
+-	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
++	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
+ 	if (flagreg < 0)
+ 		return flagreg;
+ 
+@@ -121,7 +120,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
+ 		return -EINVAL;
+ 	}
+ 
+-	err = i2c_smbus_read_i2c_block_data(rx8010->client, RX8010_SEC,
++	err = i2c_smbus_read_i2c_block_data(client, RX8010_SEC,
+ 					    7, date);
+ 	if (err != 7)
+ 		return err < 0 ? err : -EIO;
+@@ -139,6 +138,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
+ 
+ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	u8 date[7];
+ 	int ctrl, flagreg;
+@@ -148,11 +148,11 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
+ 		return -EINVAL;
+ 
+ 	/* set STOP bit before changing clock/calendar */
+-	ctrl = i2c_smbus_read_byte_data(rx8010->client, RX8010_CTRL);
++	ctrl = i2c_smbus_read_byte_data(client, RX8010_CTRL);
+ 	if (ctrl < 0)
+ 		return ctrl;
+ 	rx8010->ctrlreg = ctrl | RX8010_CTRL_STOP;
+-	ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
++	ret = i2c_smbus_write_byte_data(client, RX8010_CTRL,
+ 					rx8010->ctrlreg);
+ 	if (ret < 0)
+ 		return ret;
+@@ -165,28 +165,28 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
+ 	date[RX8010_YEAR - RX8010_SEC] = bin2bcd(dt->tm_year - 100);
+ 	date[RX8010_WDAY - RX8010_SEC] = bin2bcd(1 << dt->tm_wday);
+ 
+-	ret = i2c_smbus_write_i2c_block_data(rx8010->client,
++	ret = i2c_smbus_write_i2c_block_data(client,
+ 					     RX8010_SEC, 7, date);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	/* clear STOP bit after changing clock/calendar */
+-	ctrl = i2c_smbus_read_byte_data(rx8010->client, RX8010_CTRL);
++	ctrl = i2c_smbus_read_byte_data(client, RX8010_CTRL);
+ 	if (ctrl < 0)
+ 		return ctrl;
+ 	rx8010->ctrlreg = ctrl & ~RX8010_CTRL_STOP;
+-	ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
++	ret = i2c_smbus_write_byte_data(client, RX8010_CTRL,
+ 					rx8010->ctrlreg);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
++	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
+ 	if (flagreg < 0) {
+ 		return flagreg;
+ 	}
+ 
+ 	if (flagreg & RX8010_FLAG_VLF)
+-		ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG,
++		ret = i2c_smbus_write_byte_data(client, RX8010_FLAG,
+ 						flagreg & ~RX8010_FLAG_VLF);
+ 
+ 	return 0;
+@@ -215,7 +215,7 @@ static int rx8010_init_client(struct i2c_client *client)
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = i2c_smbus_read_i2c_block_data(rx8010->client, RX8010_FLAG,
++	err = i2c_smbus_read_i2c_block_data(client, RX8010_FLAG,
+ 					    2, ctrl);
+ 	if (err != 2)
+ 		return err < 0 ? err : -EIO;
+@@ -248,8 +248,8 @@ static int rx8010_init_client(struct i2c_client *client)
+ 
+ static int rx8010_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+-	struct i2c_client *client = rx8010->client;
+ 	u8 alarmvals[3];
+ 	int flagreg;
+ 	int err;
+@@ -290,7 +290,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 
+ 	if (rx8010->ctrlreg & (RX8010_CTRL_AIE | RX8010_CTRL_UIE)) {
+ 		rx8010->ctrlreg &= ~(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
+-		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
++		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
+ 						rx8010->ctrlreg);
+ 		if (err < 0) {
+ 			return err;
+@@ -298,7 +298,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	}
+ 
+ 	flagreg &= ~RX8010_FLAG_AF;
+-	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG, flagreg);
++	err = i2c_smbus_write_byte_data(client, RX8010_FLAG, flagreg);
+ 	if (err < 0)
+ 		return err;
+ 
+@@ -306,7 +306,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	alarmvals[1] = bin2bcd(t->time.tm_hour);
+ 	alarmvals[2] = bin2bcd(t->time.tm_mday);
+ 
+-	err = i2c_smbus_write_i2c_block_data(rx8010->client, RX8010_ALMIN,
++	err = i2c_smbus_write_i2c_block_data(client, RX8010_ALMIN,
+ 					     2, alarmvals);
+ 	if (err < 0)
+ 		return err;
+@@ -316,14 +316,14 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 		return extreg;
+ 
+ 	extreg |= RX8010_EXT_WADA;
+-	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_EXT, extreg);
++	err = i2c_smbus_write_byte_data(client, RX8010_EXT, extreg);
+ 	if (err < 0)
+ 		return err;
+ 
+ 	if (alarmvals[2] == 0)
+ 		alarmvals[2] |= RX8010_ALARM_AE;
+ 
+-	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_ALWDAY,
++	err = i2c_smbus_write_byte_data(client, RX8010_ALWDAY,
+ 					alarmvals[2]);
+ 	if (err < 0)
+ 		return err;
+@@ -335,7 +335,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 			rx8010->ctrlreg |=
+ 				(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
+ 
+-		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
++		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
+ 						rx8010->ctrlreg);
+ 		if (err < 0)
+ 			return err;
+@@ -372,13 +372,13 @@ static int rx8010_alarm_irq_enable(struct device *dev,
+ 		return flagreg;
+ 
+ 	flagreg &= ~RX8010_FLAG_AF;
+-	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG, flagreg);
++	err = i2c_smbus_write_byte_data(client, RX8010_FLAG, flagreg);
+ 	if (err < 0)
+ 		return err;
+ 
+ 	if (ctrl != rx8010->ctrlreg) {
+ 		rx8010->ctrlreg = ctrl;
+-		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
++		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
+ 						rx8010->ctrlreg);
+ 		if (err < 0)
+ 			return err;
+@@ -390,13 +390,12 @@ static int rx8010_alarm_irq_enable(struct device *dev,
+ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+-	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	int ret, tmp;
+ 	int flagreg;
+ 
+ 	switch (cmd) {
+ 	case RTC_VL_READ:
+-		flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
++		flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
+ 		if (flagreg < 0)
+ 			return flagreg;
+ 
+@@ -407,7 +406,7 @@ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ 		return 0;
+ 
+ 	case RTC_VL_CLR:
+-		flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
++		flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
+ 		if (flagreg < 0) {
+ 			return flagreg;
+ 		}
+@@ -448,7 +447,6 @@ static int rx8010_probe(struct i2c_client *client,
+ 	if (!rx8010)
+ 		return -ENOMEM;
+ 
+-	rx8010->client = client;
+ 	i2c_set_clientdata(client, rx8010);
+ 
+ 	err = rx8010_init_client(client);
+-- 
+2.24.0
 
-> > > > +					   ARRAY_SIZE(rc5t619_cells),
-> > > > +					   NULL, 0, NULL);
-> > > > +	else   =20
-> > >=20
-> > > Are you sure it's not possible for 'variant' to be an unsupported
-> > > device?
-> > >  =20
-> > Well, does it change the behavior for devices other than the rc5t619?
-> > I do not think so. If the mfd driver is bound to unsupported devices,
-> > rn5t618_of_match is wrong. =20
->=20
-> Right, and can you catch that?
->=20
-Well, maybe we don't get each other. RC5T619 has an RTC.
-If I understand the code right, priv->variant is set to RC5T619.
-if there is compatible =3D "ricoh,rc5t619" in the device tree.
-So in that and only in that case I have an extended subdevice list,
-which includes the RTC subdevice instead of only regulator and wdt.
-For everything else I do not touch it.
-
-So now you have doubts wether the existing regulator and watchdog subdevice
-drivers (which I do not touch) works with the other two variants (RN5T618=20
-and RN5T567) and want me to check that again as part of my work to get
-RTC support for RC5T619 in?=20
-
-Regards,
-Andreas
-
---Sig_/N9qDnK+quarkvTFp.jEyjS=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl34uyYACgkQl4jFM1s/
-ye+6kQ//Y2nQnAR5//z75aAA5b+jYm0Axk1msKCd9ScF1cndhaTE2V8I4yRLG3ox
-jhvRoxk9N5wWGV3Db4vR6DJlUJPmqNpwuLndyJiiBYbTxU2nuY2EthwPmyYh0xf9
-ByzDyU7nrUabU5dSPNVpm+nGj4iwAQZZbNUtDpbhAe7v47REgLkMPUs4Y7oQk+S/
-nRoZRcrZfArQvxu2sbqSvghDuakESjMXLO8suMROxH5JaJuM0X8JhpHbY+AhcPYb
-eTHLs0nVA8zHqYCDfKgTJYg1DztHzg1nz1M+XVysVvz0U4CGkBnatBqkSb/LFtcl
-DsW9jCX2p0km162vsbEEcV0MAaFGHhNOlsiIm4VjIcPgIg7iT+poy0EXf/2vmwPl
-qeaTCb6aPtWjnRiAGn34i9RmoSauz/a2TlBLlgRY/bS4ivu79GpfgU3+uA4C1Rqo
-puyOsgKkk8nZsRLtNrkLLScbrg91bkL56BpDERhOn8CWqPL/9ygh+OEwpGYYhNeM
-wpVbUD/2iK6qF3hXQPk/k7Ljxn2PibJJ7iYOavTFCHT06f8mDgodUYm6zhbm4t8S
-QgJ2mrS5Uw7322cQyMFJe1F2VeEMjuU2wV3I8z/1dy9gBoDVt/oWpGZf6KzBiXvV
-BvQ0fJHirPfYXKiM0PHrlFMt2dgYxM++MdVIEZ5DB5jzGcyBomQ=
-=Aicg
------END PGP SIGNATURE-----
-
---Sig_/N9qDnK+quarkvTFp.jEyjS=--
