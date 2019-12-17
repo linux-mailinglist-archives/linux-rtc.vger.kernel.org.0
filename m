@@ -2,215 +2,302 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D33122BDE
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 13:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1249A122D8C
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Dec 2019 14:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbfLQMja (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Dec 2019 07:39:30 -0500
-Received: from foss.arm.com ([217.140.110.172]:35638 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728051AbfLQMj3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 17 Dec 2019 07:39:29 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CBD6328;
-        Tue, 17 Dec 2019 04:39:28 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98D8C3F718;
-        Tue, 17 Dec 2019 04:39:27 -0800 (PST)
-Date:   Tue, 17 Dec 2019 12:39:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Dan Murphy <dmurphy@ti.com>, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        matti.vaittinen@fi.rohmeurope.com,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        mazziesaccount@gmail.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Applied "dt-bindings: regulator: Document ROHM BD71282 regulator bindings" to the regulator tree
-In-Reply-To: <0985fec1cce98b1db66e5df2d9bcf2dfd9c224a7.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-Message-Id: <applied-0985fec1cce98b1db66e5df2d9bcf2dfd9c224a7.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-X-Patchwork-Hint: ignore
+        id S1728647AbfLQNye (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Dec 2019 08:54:34 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38061 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728309AbfLQNye (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Dec 2019 08:54:34 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y17so11394350wrh.5
+        for <linux-rtc@vger.kernel.org>; Tue, 17 Dec 2019 05:54:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=oA8lLtw5+Ki0rvk2E5DHDZT8Xzrj3ly5MFjUCZJfvp4=;
+        b=lTG+PpfFsBwem7LWNxasDI84APR3q/FRpiSMZtA97AEzPrTw2ZyGUJQg/2FxOcmzPj
+         mR8fMTv8VyALWzwIWUVsBn08FAh1PZukJmgC3lBgktyX0rejOrHDGoS+brxtqiakPnkw
+         +Lp5ryB6ZwG4GA7LfhEGedR1eicJaEWe+LMu4udE1xyaJyW9uUIpiZsMoP6UMmVWXSTX
+         pa5+4HCL7T03BoJ5cUrNB0Dol/uKTrsHHawoIZQSQ9Tgj1fhu8JpdmCFKDMsIeTjeWop
+         bSBopk1rH/KXWuS/YL9zR1B30nDVAx0UFUfY375pnL/CKYQhEI+hIlOXnU5xyuBlv5uz
+         bVfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=oA8lLtw5+Ki0rvk2E5DHDZT8Xzrj3ly5MFjUCZJfvp4=;
+        b=P6FZoWF6+K4vCXOACZtA6jYUDa6TXSjGZum9addHmsibZDbEeHPEkrxih6lVnWA90u
+         yOmAB8XFeReVaTBnxlfU7zCuFbVPWZKvSsA/UFmLACEd7G++KCH61F4BXv1ASfCVk8qK
+         6luvCkX6fRrlDMFyDFoysiSSjTX7c9GRYTBN4lrH8OGpgG2ZYdKGnKmLYYNkyTlS3hjU
+         NyKmyO51cXNvYvVIgTzTF6iin8r9VQJRo5fQwePl05L5oVyQ+bffNPhPL2xBxznUrtMM
+         NnQjY67d5PzOkjkHy/Hh+wLF0oScCy+ZKCm8yvtINvTCbPt31bZ/Mj/c55hkL7Z/29l7
+         8P9w==
+X-Gm-Message-State: APjAAAUAOJEqnZaxFdjGxR3rR6pGHsNWm5mpn3ufdUcPDLcPAtiJNeio
+        IPo3ZRDixhOxv2JaF8NHxYWoQw==
+X-Google-Smtp-Source: APXvYqwHiX7Jsxay7dET6g2LF2XE9E9hwjKYARcptPGb5BljEooR+jLCasy9A33y/rTtfMlkvAcXww==
+X-Received: by 2002:adf:f80c:: with SMTP id s12mr36904115wrp.1.1576590871292;
+        Tue, 17 Dec 2019 05:54:31 -0800 (PST)
+Received: from dell ([2.27.35.132])
+        by smtp.gmail.com with ESMTPSA id x10sm25415862wrp.58.2019.12.17.05.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 05:54:30 -0800 (PST)
+Date:   Tue, 17 Dec 2019 13:54:30 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "noralf@tronnes.org" <noralf@tronnes.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v6 05/15] mfd: bd71828: Support ROHM BD71828 PMIC - core
+Message-ID: <20191217135430.GM18955@dell>
+References: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+ <252de5646fedfec7c575269843a47091fe199c79.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+ <20191216164641.GC18955@dell>
+ <5593db6b3328c0a1a7069d839f5c777b4b3822b6.camel@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5593db6b3328c0a1a7069d839f5c777b4b3822b6.camel@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The patch
+On Tue, 17 Dec 2019, Vaittinen, Matti wrote:
 
-   dt-bindings: regulator: Document ROHM BD71282 regulator bindings
+> Hello Lee,
+> 
+> On Mon, 2019-12-16 at 16:46 +0000, Lee Jones wrote:
+> > On Wed, 11 Dec 2019, Matti Vaittinen wrote:
+> > 
+> > > BD71828GW is a single-chip power management IC for battery-powered
+> > > portable
+> > > devices. The IC integrates 7 buck converters, 7 LDOs, and a 1500 mA
+> > > single-cell linear charger. Also included is a Coulomb counter, a
+> > > real-time
+> > > clock (RTC), 3 GPO/regulator control pins, HALL input and a 32.768
+> > > kHz
+> > > clock gate.
+> > > 
+> > > Add MFD core driver providing interrupt controller facilities and
+> > > i2c
+> > > access to sub device drivers.
+> > > 
+> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > ---
+> > > 
+> > > Changes since v5:
+> > > - No changes
+> > > 
+> > >  drivers/mfd/Kconfig              |  15 ++
+> > >  drivers/mfd/Makefile             |   2 +-
+> > >  drivers/mfd/rohm-bd71828.c       | 319 +++++++++++++++++++++++
+> > >  include/linux/mfd/rohm-bd71828.h | 425
+> > > +++++++++++++++++++++++++++++++
+> > >  include/linux/mfd/rohm-generic.h |   1 +
+> > >  5 files changed, 761 insertions(+), 1 deletion(-)
+> > >  create mode 100644 drivers/mfd/rohm-bd71828.c
+> > >  create mode 100644 include/linux/mfd/rohm-bd71828.h
+> > 
+> > Couple of small nits.  Once fixed, please apply my:
+> > 
+> > For my own reference:
+> >   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> > 
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 420900852166..c3c9432ef51c 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -1906,6 +1906,21 @@ config MFD_ROHM_BD70528
+> > >  	  10 bits SAR ADC for battery temperature monitor and 1S
+> > > battery
+> > >  	  charger.
+> > >  
+> > > +config MFD_ROHM_BD71828
+> > > +	tristate "ROHM BD71828 Power Management IC"
+> > > +	depends on I2C=y
+> > > +	depends on OF
+> > > +	select REGMAP_I2C
+> > > +	select REGMAP_IRQ
+> > > +	select MFD_CORE
+> > > +	help
+> > > +	  Select this option to get support for the ROHM BD71828 Power
+> > > +	  Management IC. BD71828GW is a single-chip power management IC
+> > > for
+> > > +	  battery-powered portable devices. The IC integrates 7 buck
+> > > +	  converters, 7 LDOs, and a 1500 mA single-cell linear charger.
+> > > +	  Also included is a Coulomb counter, a real-time clock (RTC),
+> > > and
+> > > +	  a 32.768 kHz clock gate.
+> > > +
+> > >  config MFD_STM32_LPTIMER
+> > >  	tristate "Support for STM32 Low-Power Timer"
+> > >  	depends on (ARCH_STM32 && OF) || COMPILE_TEST
+> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > > index aed99f08739f..ca2d55c679c5 100644
+> > > --- a/drivers/mfd/Makefile
+> > > +++ b/drivers/mfd/Makefile
+> > > @@ -252,6 +252,6 @@ obj-$(CONFIG_MFD_MXS_LRADC)     += mxs-lradc.o
+> > >  obj-$(CONFIG_MFD_SC27XX_PMIC)	+= sprd-sc27xx-spi.o
+> > >  obj-$(CONFIG_RAVE_SP_CORE)	+= rave-sp.o
+> > >  obj-$(CONFIG_MFD_ROHM_BD70528)	+= rohm-bd70528.o
+> > > +obj-$(CONFIG_MFD_ROHM_BD71828)	+= rohm-bd71828.o
+> > >  obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
+> > >  obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
+> > > -
+> > 
+> > Nit: This is an unrelated change and should not really be in this
+> > patch.
+> 
+> Ok. Will get rid of it.
+> 
+> > 
+> > > diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-
+> > > bd71828.c
+> > > new file mode 100644
+> > > index 000000000000..7f445d699fd9
+> > > --- /dev/null
+> > > +++ b/drivers/mfd/rohm-bd71828.c
+> > > @@ -0,0 +1,319 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +//
+> > > +// Copyright (C) 2019 ROHM Semiconductors
+> > > +//
+> > > +// ROHM BD71828 PMIC driver
+> > > +
+> 
+> //snip
+> 
+> > > +
+> > > +static struct i2c_driver bd71828_drv = {
+> > > +	.driver = {
+> > > +		.name = "rohm-bd71828",
+> > > +		.of_match_table = bd71828_of_match,
+> > > +	},
+> > > +	.probe_new = &bd71828_i2c_probe,
+> > > +};
+> > > +
+> > 
+> > Nit: You can remove this line.
+> 
+> Will do.
+> 
+> > 
+> > > +module_i2c_driver(bd71828_drv);
+> > > +
+> > > +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > ");
+> > > +MODULE_DESCRIPTION("ROHM BD71828 Power Management IC driver");
+> > > +MODULE_LICENSE("GPL");
+> > 
+> > This does not match the header.
+> 
+> How is that? This is what is stated in module.h for the 
+> MODULE_LICENSE:
+> 
+> /*
+>  * The following license idents are currently accepted as indicating
+> free
+>  * software modules
+>  *
+>  *	"GPL"				[GNU Public License v2]
+>  *	"GPL v2"			[GNU Public License v2]
+>  *	"GPL and additional rights"	[GNU Public License v2 rights
+> and more]
+>  *	"Dual BSD/GPL"			[GNU Public License v2
+>  *					 or BSD license choice]
+>  *	"Dual MIT/GPL"			[GNU Public License v2
+>  *					 or MIT license choice]
+>  *	"Dual MPL/GPL"			[GNU Public License v2
+>  *					 or Mozilla license choice]
+>  *
+>  * The following other idents are available
+>  *
+>  *	"Proprietary"			[Non free products]
+>  *
+>  * Both "GPL v2" and "GPL" (the latter also in dual licensed strings)
+> are
+>  * merely stating that the module is licensed under the GPL v2, but are
+> not
+>  * telling whether "GPL v2 only" or "GPL v2 or later". The reason why
+> there
+>  * are two variants is a historic and failed attempt to convey more
+>  * information in the MODULE_LICENSE string. For module loading the
+>  * "only/or later" distinction is completely irrelevant and does
+> neither
+>  * replace the proper license identifiers in the corresponding source
+> file
+>  * nor amends them in any way. The sole purpose is to make the
+>  * 'Proprietary' flagging work and to refuse to bind symbols which are
+>  * exported with EXPORT_SYMBOL_GPL when a non free module is loaded.
+>  *
+>  * In the same way "BSD" is not a clear license information. It merely
+>  * states, that the module is licensed under one of the compatible BSD
+>  * license variants. The detailed and correct license information is
+> again
+>  * to be found in the corresponding source files.
+>  *
+>  * There are dual licensed components, but when running with Linux it
+> is the
+>  * GPL that is relevant so this is a non issue. Similarly LGPL linked
+> with GPL
+>  * is a GPL combined work.
+>  *
+>  * This exists for several reasons
+>  * 1.	So modinfo can show license info for users wanting to vet their
+> setup
+>  *	is free
+>  * 2.	So the community can ignore bug reports including proprietary
+> modules
+>  * 3.	So vendors can do likewise based on their own policies
+>  */
+> #define MODULE_LICENSE(_license) MODULE_INFO(license, _license)
+> 
+> I have no objections on changing the license if needed but can you
+> please tell me what is Ok combos then - I am having hard time when
+> trying to select licenses which are acceptable for all.
 
-has been applied to the regulator tree at
+If you have this in your header:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-5.6
+  GPL-2.0-only
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+Your MODULE tags should read:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+MODULE_LICENSE("GPL v2");
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
-From 84a867c078136887dea64fa6e336333b657bc6a1 Mon Sep 17 00:00:00 2001
-From: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Date: Wed, 11 Dec 2019 11:35:57 +0200
-Subject: [PATCH] dt-bindings: regulator: Document ROHM BD71282 regulator
- bindings
-
-Document ROHM BD71828 PMIC regulator device tree bindings.
-
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Link: https://lore.kernel.org/r/0985fec1cce98b1db66e5df2d9bcf2dfd9c224a7.1576054779.git.matti.vaittinen@fi.rohmeurope.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- .../regulator/rohm,bd71828-regulator.yaml     | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
-
-diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
-new file mode 100644
-index 000000000000..71ce032b8cf8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/rohm,bd71828-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ROHM BD71828 Power Management Integrated Circuit regulators
-+
-+maintainers:
-+  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-+
-+description: |
-+  This module is part of the ROHM BD71828 MFD device. For more details
-+  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
-+
-+  The regulator controller is represented as a sub-node of the PMIC node
-+  on the device tree.
-+
-+  Regulator nodes should be named to BUCK_<number> and LDO_<number>.
-+  The valid names for BD71828 regulator nodes are
-+  BUCK1, BUCK2, BUCK3, BUCK4, BUCK5, BUCK6, BUCK7
-+  LDO1, LDO2, LDO3, LDO4, LDO5, LDO6, LDO7
-+
-+patternProperties:
-+  "^LDO[1-7]$":
-+    type: object
-+    allOf:
-+      - $ref: regulator.yaml#
-+    description:
-+      Properties for single LDO regulator.
-+
-+    properties:
-+      regulator-name:
-+        pattern: "^ldo[1-7]$"
-+        description:
-+          should be "ldo1", ..., "ldo7"
-+
-+  "^BUCK[1-7]$":
-+    type: object
-+    allOf:
-+      - $ref: regulator.yaml#
-+    description:
-+      Properties for single BUCK regulator.
-+
-+    properties:
-+      regulator-name:
-+        pattern: "^buck[1-7]$"
-+        description:
-+          should be "buck1", ..., "buck7"
-+
-+      rohm,dvs-run-voltage:
-+        allOf:
-+          - $ref: "/schemas/types.yaml#/definitions/uint32"
-+          - minimum: 0
-+            maximum: 3300000
-+        description:
-+          PMIC default "RUN" state voltage in uV. See below table for
-+          bucks which support this. 0 means disabled.
-+
-+      rohm,dvs-idle-voltage:
-+        allOf:
-+          - $ref: "/schemas/types.yaml#/definitions/uint32"
-+          - minimum: 0
-+            maximum: 3300000
-+        description:
-+          PMIC default "IDLE" state voltage in uV. See below table for
-+          bucks which support this. 0 means disabled.
-+
-+      rohm,dvs-suspend-voltage:
-+        allOf:
-+          - $ref: "/schemas/types.yaml#/definitions/uint32"
-+          - minimum: 0
-+            maximum: 3300000
-+        description:
-+          PMIC default "SUSPEND" state voltage in uV. See below table for
-+          bucks which support this. 0 means disabled.
-+
-+      rohm,dvs-lpsr-voltage:
-+        allOf:
-+          - $ref: "/schemas/types.yaml#/definitions/uint32"
-+          - minimum: 0
-+            maximum: 3300000
-+        description:
-+          PMIC default "LPSR" state voltage in uV. See below table for
-+          bucks which support this. 0 means disabled.
-+
-+        # Supported default DVS states:
-+        #     buck       |    run     |   idle    | suspend  | lpsr
-+        #--------------------------------------------------------------
-+        # 1, 2, 6, and 7 | supported  | supported | supported (*)
-+        #--------------------------------------------------------------
-+        # 3, 4, and 5    |                    supported (**)
-+        #--------------------------------------------------------------
-+        #
-+        #(*)  LPSR and SUSPEND states use same voltage but both states have own
-+        #     enable /
-+        #     disable settings. Voltage 0 can be specified for a state to make
-+        #     regulator disabled on that state.
-+        #
-+        #(**) All states use same voltage but have own enable / disable
-+        #     settings. Voltage 0 can be specified for a state to make
-+        #     regulator disabled on that state.
-+
-+    required:
-+      - regulator-name
-+  additionalProperties: false
-+additionalProperties: false
 -- 
-2.20.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
