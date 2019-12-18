@@ -2,70 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 394C91253EF
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Dec 2019 21:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A69125753
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2019 00:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbfLRUzA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Dec 2019 15:55:00 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:37930 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726454AbfLRUzA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 15:55:00 -0500
-Received: by mail-oi1-f196.google.com with SMTP id b8so1896820oiy.5;
-        Wed, 18 Dec 2019 12:54:59 -0800 (PST)
+        id S1726569AbfLRXDa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 18 Dec 2019 18:03:30 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43290 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbfLRXDa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 18:03:30 -0500
+Received: by mail-oi1-f195.google.com with SMTP id x14so2085939oic.10
+        for <linux-rtc@vger.kernel.org>; Wed, 18 Dec 2019 15:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=GUm34jx16buWRyV3svW3C32Bv9uGnUFX/okiYBlIAk4=;
+        b=sz2qn7j6Ev2BHuVjbBUQV/UcR8qOYoimd8eK3XgQ4D92XB60ZAy8X5SW9GXluwCsJH
+         ffFfeUAKxUpDYHDMioXVMiLOP60tIefWYbJuqCoN42xVSLajfjwUQlvUHYRzCNaLMczG
+         ni5AWAoaFRMzWfFYwL7KSwHerHpiwvX6p5+mhQPm0ZcDOv1zxFUiFYcBgFZ81UMbEc8e
+         MS/lSKGAHVMTX8tHNy0/hCL67CBaSn49xBEiRE0B1Bjwc9Va8ziBEK6f0J5GhYAV/qRe
+         HUPVRzyjq/UuXc3FTvf4i9PfP1KB9+zfLcZFmMxD5YuQioKvYjb6ywN4dscil2DYWKMp
+         8aGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3WrEt8H51i2MAiopdANXZZmd/Mt74MDOWginm3lANHg=;
-        b=EM2o9qt0xXohUO5n1u8Y6M/WlBPaY3f647W1nTn2Xup/A3K7Hw/qFxmqJjBVLXmFqa
-         IszjN+jGjvIPj/8U3BtCKZVjDe3sx3hOdjVr/tFyEzJJC9FGBkZvW4ZJZUWcR26kS6Vr
-         eLG7TBJk/svj5Dd16W5E6PMbZH6z9yE5vgT33N+zffOvMCUMyHgcwN0jL4c98HJs72cV
-         l4d3QatbUu6tQCG6UqA8WfqAE2DoT/eSaVCtxP6IIxyGtBNELI/780X4OFpyNl8UxpMQ
-         qL0MHZ2cYPQKiNb3Mfd8CJVXfTKuD9lmxnAWWVO2hmquH+gGrlh/xf3LGcT0zTFRh8uZ
-         fNhg==
-X-Gm-Message-State: APjAAAWYnuB/ZzwB1ikxt/LE2RQH2KA5nyPxZ/VgXhjZ1bNsZApW+Z+K
-        I/8xK9kmmC2nAbLeb+dH8Q==
-X-Google-Smtp-Source: APXvYqz5U1NOEkDz/LnoLUN5AC8nqzd+VCSzJ3WpZFmtuajw9UW7Pw7roEW/gUclQlpON5eZlxoBUw==
-X-Received: by 2002:aca:cf11:: with SMTP id f17mr1457488oig.40.1576702499075;
-        Wed, 18 Dec 2019 12:54:59 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w12sm1196571otk.75.2019.12.18.12.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 12:54:58 -0800 (PST)
-Date:   Wed, 18 Dec 2019 14:54:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, stefan@agner.ch, b.galvani@gmail.com,
-        phh@phh.me, letux-kernel@openphoenux.org,
-        Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH v4 1/5] dt-bindings: mfd: rn5t618: Document optional
- property interrupts
-Message-ID: <20191218205457.GA4963@bogus>
-References: <20191211215409.32764-1-andreas@kemnade.info>
- <20191211215409.32764-2-andreas@kemnade.info>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=GUm34jx16buWRyV3svW3C32Bv9uGnUFX/okiYBlIAk4=;
+        b=ievNJ6zF5LvngEds6vMu+Spczwm3+cJtbemoFJBZBFo+jK23fpdbUFZNnIAlA0asOx
+         qN5dVoouFKSCzatUlk1SIrj5QhZS6JE5e0dzbwmdYWqTE8HGWXOC/c5KAj/DVPUIvio4
+         fytBxh8gq3APe46YoaSUncXqxGN5HU+RfMmtHUHwNTCBfXEFHLmWtUYRmDx7XHHR7F1+
+         MXKPpy95d3rKOo5wrHgL+CFmTJMZKRD8PPFrXcwGYIwQwhMKHnm3csMd8a8maxAkpe/l
+         STf+p5wRWZk3mstBwf1hRbcZFrr0DZpoNgNx+DYgDzMNJ+z2sg/GHIBF62ChxYECfSbz
+         LBiQ==
+X-Gm-Message-State: APjAAAUfp3NImEAYl/RbQZl3z3ZLTe1lEAVN88YCw3pspenbhQqK/5k7
+        IgQFj9ljt9P58XNeVRXs8s0TELqvzxa8l1JnF2nI
+X-Google-Smtp-Source: APXvYqzweX03urkXowNACnsWIp55n3aMVeuRU/FTkbIXToumpyKGXCe3Fl63k1tU70eHfIDV1Ak3+JBj40Q86EV+WWA=
+X-Received: by 2002:a54:4716:: with SMTP id k22mr1579664oik.36.1576710209917;
+ Wed, 18 Dec 2019 15:03:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191211215409.32764-2-andreas@kemnade.info>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191218082604.3309606-1-iwamatsu@nigauri.org> <20191218091508.GH695889@piout.net>
+In-Reply-To: <20191218091508.GH695889@piout.net>
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Date:   Thu, 19 Dec 2019 08:03:02 +0900
+Message-ID: <CABMQnV+n2jeWpfp7nu6HNtDGDh1m2o4wGEhwh-dFD=w3xboF7Q@mail.gmail.com>
+Subject: Re: [PATCH] rtc: pcf8563: Replace i2c functions for smbus ones
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 11 Dec 2019 22:54:05 +0100, Andreas Kemnade wrote:
-> These chips use interrupts for various things like RTC alarm.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> Changes in v4: add refernce to interrupt binding
-> documentation
->  Documentation/devicetree/bindings/mfd/rn5t618.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+Hi,
 
-Acked-by: Rob Herring <robh@kernel.org>
+2019=E5=B9=B412=E6=9C=8818=E6=97=A5(=E6=B0=B4) 18:15 Alexandre Belloni <ale=
+xandre.belloni@bootlin.com>:
+>
+> Hi,
+>
+> On 18/12/2019 17:26:04+0900, Nobuhiro Iwamatsu wrote:
+> > From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> >
+> > The driver used i2c_transfer methods to read and set date/time. The smb=
+us
+> > methods should be used.
+> > This commit replaces i2c_transfer functions by i2c_smbus_read/write_xxx
+> > for reading and setting the datetime.
+> >
+>
+> Could you instead use regmap?
+
+Yes, I will resend patch using regmap.
+
+Best regards,
+  Nobuhiro
