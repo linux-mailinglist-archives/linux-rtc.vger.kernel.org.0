@@ -2,108 +2,218 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0FB1248E2
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Dec 2019 15:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8A8124D21
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Dec 2019 17:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727166AbfLROBi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Dec 2019 09:01:38 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:59018 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbfLROBg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 09:01:36 -0500
-X-AuditID: c0a8fbf4-199ff70000001fa6-87-5dfa313d1e2b
-Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id DE.4F.08102.D313AFD5; Wed, 18 Dec 2019 15:01:33 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
- 14.03.0439.000; Wed, 18 Dec 2019 15:01:27 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>
-Subject: Re: Applied "regulator: bd71828: Basic support for ROHM bd71828
- PMIC regulators" to the regulator tree
-Thread-Topic: Applied "regulator: bd71828: Basic support for ROHM bd71828
- PMIC regulators" to the regulator tree
-Thread-Index: AQHVtNcCPO+Kt0OMfE2l+CzrBWADfqe/eY8AgABW2wCAAAxsgA==
-Date:   Wed, 18 Dec 2019 14:01:27 +0000
-Message-ID: <b72cd22df0bbbb159cda08e556037f1ccf490b3d.camel@fi.rohmeurope.com>
-References: <applied-5b1c4a22c7945e97ff2a7924abfeb3239043f8eb.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-         <de7424126e285d9bbd21a70945415d78203c2ba7.camel@fi.rohmeurope.com>
-         <20191218131700.GB42175@sirena.org.uk>
-In-Reply-To: <20191218131700.GB42175@sirena.org.uk>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
+        id S1727124AbfLRQYC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 18 Dec 2019 11:24:02 -0500
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:32906 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726985AbfLRQYC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 11:24:02 -0500
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa5.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: Pj4dhcNBKEnadabKBkLJr6CQTYxW7OjkSOB1cANzjHJsAmlKJ9Qpl88AoCoae1+piF1VYbw+0X
+ Y4Sf+mm81IdiJyAHK2PhBPQ0N2hZCX2Rs2t1EMtI8k6PWA/IaqcD79ries6v8Knu6eSdMvybm1
+ 2+4EXdqc+hZpEqWqnXByMR3PGDoC+L5LrCpcHTes2cVQO4jmEcCMEhOwIvv/YYHa1mss21kxsC
+ i7NEYtCwznZo11l6rUF5kJjCQCg1LExMY64ewX5wuoAZniwqFAvalTMZ5YAAa5djiUW6xvr5px
+ xB0=
+X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
+   d="scan'208";a="59426779"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Dec 2019 09:24:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 18 Dec 2019 09:23:58 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Wed, 18 Dec 2019 09:23:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RP/A+6l5W3Si9Lm4L+KmNhsrAiSJXA+PT0Z8jcibzEp4djtcW5QrovElkDbX6V9GM3VCHbxWnmHgAk1HKMevCNKB6rH31L/S57KIYtEAG6IbGKh1mytEXEe/NBn1jEJ1HvsSbg3WifV/2UPR2ewn+M+WLOkUJFA4OTgw3ao5lNm/ZMkKoodJ70Y01SUvPjmbQXOuwM1in1PKdZExyjmJiA44vlol1P9bTHt6uAeDnP6N6jTDDfNeShgpYJEo4S3eGwSJ4i2y14JP26sxDC0X1OH9DWloFZS6RPJ/PHIfeUlf3NJiPabjkkL/+J6wIl28kJ5tw62C69pPffB7IVZ78g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nkbxb1EvYc7ZEC/RY7x0LhCxXUt8pumOzfafB8ahW5s=;
+ b=dGc1194ZqhltYd2KaGUyBmQDF0XeAV/R8A78XHcVWes0zFS69Si1ZEBD7qMke5cMHyyMdhF29y23DJM/x8bClqwchvhYzgYB4rwESiLW60UmSGOkPutQkj8CC/+Sli3HqQz+b+ERL00z50jHVRMR6i1BVveD08AzzAFBwZyElc6fGXG61e1vloxHszNvy9zoCK2QwBpxkJ5bnrQR0yyD3gaCAL6PDpamRdTKamuSfihXpDTiSEafmkQjlakbLdtUhmJi6yY/6KoyE0DZZTNujEL5AEJodNhCw6nnBYVB4GouuCbTIMl4ubDiAjUtr30KTt8xksqPW665J4ePhud8TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nkbxb1EvYc7ZEC/RY7x0LhCxXUt8pumOzfafB8ahW5s=;
+ b=qjM3J37Kkb62vMVODHhSHORGb1h9sckkp+O/puCV4dOd7WO6/ISJrO5QB+kPiI5aVyjhQPuktrW1R5bhIir8CKFfA15RExTFlG2WuI2BP36Qy0XgtVlLGKDVTMMnErgyrf8f2ARfQKiImkMN/07BOmEsJr8V6IvESGhDzsVmJAs=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1913.namprd11.prod.outlook.com (10.175.87.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2559.14; Wed, 18 Dec 2019 16:23:58 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::9039:e0e8:9032:20c1%12]) with mapi id 15.20.2559.012; Wed, 18 Dec
+ 2019 16:23:58 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <alexandre.belloni@bootlin.com>
+CC:     <Nicolas.Ferre@microchip.com>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <a.zummo@towertech.it>, <Ludovic.Desroches@microchip.com>,
+        <Eugen.Hristev@microchip.com>
+Subject: [PATCH 00/10] Enhancements to at91-sama5d2_adc and rtc trigger
+Thread-Topic: [PATCH 00/10] Enhancements to at91-sama5d2_adc and rtc trigger
+Thread-Index: AQHVtb+MrR5owibMB0+1LePacD8d5g==
+Date:   Wed, 18 Dec 2019 16:23:57 +0000
+Message-ID: <1576686157-11939-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0EC2AB5390333649B5FA8FB87510E416@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+x-mailer: git-send-email 2.7.4
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 80a705b2-8144-4f9d-da0c-08d783d6af27
+x-ms-traffictypediagnostic: DM5PR11MB1913:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB1913D99BDE223D6267EBE2A1E8530@DM5PR11MB1913.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0255DF69B9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(346002)(376002)(136003)(396003)(199004)(189003)(2616005)(66556008)(316002)(107886003)(8676002)(71200400001)(8936002)(66476007)(26005)(6506007)(2906002)(64756008)(66446008)(66946007)(81156014)(76116006)(81166006)(5660300002)(478600001)(36756003)(54906003)(186003)(4326008)(86362001)(6512007)(110136005)(91956017)(6486002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1913;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kMd3B5gmnN3fqJ49NdX1qCNxxpFCfRvTH3vsBDAA/WJ5z1sPhFvaE3/tCGahu8HSlHRvkchL0BU7x8YeqVNSsGBGd3+U6b63590fTylC5TYLlI/jEsU0GWZ6IbISKy8R115RX3Mb1d8bJn742UD6BlB14vqS1rutCrA8i/O8Wj+T0rUkuMKVfXAbYDCCzsQTc0T+eGBdspDlta0sKoE4hkBJb7rvWXK8OvVM/jzM0Gm8SLWr4WmAlXI0wpRJMc1sElDpgh8oUuvB1z5MQqm0jBEISCgTLSChI2oAJZSUn0do6esVxWrx0F/9WKXc3OmPyJeuZBDyFL1NXY1sE5G4nVvkmw7Y3wcx6e8kkXXpvETL4C13MThm4TMQwEeCE7R9aOoA70XELPtaqI4SuykZ/ZsZ4S5qA5euXUoHsB9ZTfhFZdhdzxvAgCpxAYu46g1M
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0wUVxTGc2dmZy7gNOMK3du1mjhtbWzDK5p4E221bYhDjMTEtCaNhI7u
-        lCHCLs4uKjVGjAFlwdcCtW5dWHnVCBVZBBUhpRsW7NZCiKAoPrKWkoBmadVKAB+dYarw1/3u
-        +c7vfuePcyFprGXMMMPqkBSrmMnTkVTHmenG2E8Sp1ITvv9jFa7uG2DwwXAtg1+4uhj81BOk
-        cFlomMbDHQcBrujsMeCi3y8Y8IGqBhoPNZ+n8P1/AwA/6z9E4NLnPxH4n+J7Bny6oJrCTRXP
-        Ab7eeorGzY/OAdxV10/jmpt9BD5Vc5XC448LCdwXTMJlwTCD7wYDND7QN0ji/PZOBr+80Ujh
-        Iz3r1i4S6svrgTA95QLC+GA+I5TX7xEuu+8ygu9sIS3cudFGC7946hmh6kiJQXh27TgljJxu
-        oITuwYuEcKJ8khAaijuBcKZughGe+BZv5L6OWr1VdOzclJFujf/0myi5IJyQ7Yrc3dLiA3ng
-        7wgniICIW4HyTnTTThAJjdwAQOdK7hn0y1WAwj/UASeAkOZWI+ctRgOiuVhUNlU1A5BcfxSq
-        7C8hNWMBtwMdbgqSepOCbr8YpXT9OSryjczUKe4DVPRXKdA0y6Wgh12XgB52HyBP6yODZkRw
-        y9HtWtdMGuAWocK8MKFpkjMh38iEQR+bQ9VtvaSuY9Dony//r/OofTJEaUOT3DLU0Bqvo2tR
-        S8kgqeslqLQoxOgzzEe/nRymjoG33XMS3LO0ew7tnkO759BeYDgLUJaYkZkuOqTEOEXKiVNs
-        cpZ6bLNl+YC+d08vgVf+ZD8gIPCDdyDBx7C8PJlqfGurzZIri3Y5TcnJlOx+gCDJR7NDh1SP
-        tYi530mK7bW1EFK8if0wdDzVyGlZ2yUpW1Jeu+9CyCO2LXYq1ThfkdKl3d9mZDpmbQJGaI9H
-        mqPtktUiKWKOQ07T9iPNri6IZs1Tcy3xKs7as8UstaqjQfAxPDbqqSRhp6emkjRSVptVMptY
-        dqnaymmtco71TdAYMEHAL2D3J6juPPXzvXlnTI0g1Ai4bCbCIc5a5jwQPz6R25HUIl45umFs
-        DdW78uTi5PdSVvUcnf7isEJXVMlG/2Pf5t73cSDmq33XU27+6vU++PLVBdeuQNM+rxFZNz+J
-        cbvOr9gY8rLFS4RmJm6vybS/wBy482P79oWNQ9tqNjUnr3FeLF0/kFQ3vOXyuh3lll74cLzr
-        s4H8K065+9rPPGWXxcSPSMUu/gfQRcVfOQQAAA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80a705b2-8144-4f9d-da0c-08d783d6af27
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 16:23:57.9030
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lxzwzGRzhd5qNdDoHeVBwY42NsFXqV+qYWTyiux1yXFaof4+LjpdIqkE+/SbGLLECTcfTW7rk1XzoufHgkHvDQB5GnpPGwWpN1jVjPbaTFw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1913
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBXZWQsIDIwMTktMTItMTggYXQgMTM6MTcgKzAwMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo+
-IE9uIFdlZCwgRGVjIDE4LCAyMDE5IGF0IDA4OjA2OjA0QU0gKzAwMDAsIFZhaXR0aW5lbiwgTWF0
-dGkgd3JvdGU6DQo+IA0KPiA+IEkgdGhpbmsgeW91IG1pc3NlZCB0aGUgW1BBVENIIHY2IDA4LzE1
-XSByZWd1bGF0b3I6IGJkNzE4eDc6IFNwbGl0DQo+ID4gZHJpdmVyIHRvIGNvbW1vbiBhbmQgYmQ3
-MTh4NyBzcGVjaWZpYyBwYXJ0cw0KPiANCj4gSSBkaWRuJ3QgbWlzcyBpdCwgaXQgd2FzIHF1ZXVl
-ZCBidXQgaXQgZG9lc24ndCBhcHBseS4NClJpZ2h0LiBUaGUgcm9obS1nZW5lcmljLmggaXMgY2hh
-bmdlZCBieQ0KW1BBVENIIHY2IDA0LzE1XSBtZmQ6IHJvaG0gUE1JQ3MgLSB1c2UgcGxhdGZvcm1f
-ZGV2aWNlX2lkIHRvIG1hdGNoIE1GRA0Kc3ViLWRldmljZXMNCg0KZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvbGludXgvbWZkL3JvaG0tZ2VuZXJpYy5oIGIvaW5jbHVkZS9saW51eC9tZmQvcm9obS0NCmdl
-bmVyaWMuaA0KaW5kZXggYmZmMTVhYzI2ZjJjLi45MjJmODgwMDgyMzIgMTAwNjQ0DQotLS0gYS9p
-bmNsdWRlL2xpbnV4L21mZC9yb2htLWdlbmVyaWMuaA0KKysrIGIvaW5jbHVkZS9saW51eC9tZmQv
-cm9obS1nZW5lcmljLmgNCkBAIC00LDcgKzQsNyBAQA0KICNpZm5kZWYgX19MSU5VWF9NRkRfUk9I
-TV9IX18NCiAjZGVmaW5lIF9fTElOVVhfTUZEX1JPSE1fSF9fDQogDQotZW51bSB7DQorZW51bSBy
-b2htX2NoaXBfdHlwZSB7DQoNCg0KSSB0aGluayB0aGlzIGlzIHRoZSByb290IG9mIHRoZSBjb25m
-bGljdCBoZXJlIGFzIFtQQVRDSCB2NiAwNC8xNV0gaXMNCm5vdCBpbiByZWd1bGF0b3IgdHJlZS4g
-SG93IHNob3VsZCBJIGhhbmRsZSB0aGlzIHNvIHRoYXQgaXQgd29uJ3QNCmNvbmZsaWN0IGluIHlv
-dXIgYW5kIExlZSdzIHRyZWVzPw0KDQpCciwNCglNYXR0aQ0K
+From: Eugen Hristev <eugen.hristev@microchip.com>
+
+This series includes support for having the Real Time Clock trigger
+capability for the Analog to Digital Converter in sama5d2-based SoCs
+(RTC ADC Trigger)
+
+The first patch of the series has been already submitted on the iio mailing=
+ list
+as
+[PATCH] iio: adc: at91-sama5d2_adc: update for other trigger usage
+But I also include here for reference since the other commits on the driver
+use this as a base commit.
+
+In short, the RTC block can trigger the ADC block to perform a conversion.
+To solve this, I created a driver named rtc-adc-trigger that shares the
+register map with the RTC. It's done in devicetree as a subnode.
+This driver will register a separate trigger inside the iio subsystem.
+This trigger can then be associated to the ADC driver (sysfs current_trigge=
+r).
+However, this is not enough. The ADC has to be aware that it;s being
+triggered by the RTC (TRGMOD and TRGSEL). So, this hardware link between
+the two IPs has been described as a phandle reference in the ADC node to th=
+e
+RTC trigger node.
+At runtime (trigger selection), the ADC will check if the assigned trigger
+is the RTC one given by the phandle link. If so, it will configure
+accordingly.
+The RTC trigger driver will also register to sysfs two attributes for
+selecting the desired trigger frequency.
+One attribute is RO : list of possible frequencies.
+Another attribute is RW: current set frequency.
+
+To achieve all this, had to make a small patch on the RTC to populate
+child nodes platform data to probe them.
+
+Fixed other issues with the adc driver: unfinished conversions on IRQ in
+triggered mode, and differential channels missing configurations in
+triggered mode.
+
+For exercising this, created DT patches for sama5d2/sama5d2_xplained.
+
+Here is a sample of how it works in sysfs:
+
+ # cat /sys/bus/iio/devices/trigger0/trigger_frequency_hz
+ 1
+ # echo 1 > /sys/bus/iio/devices/iio:device0/scan_elements/in_voltage4_en
+ # cat /sys/bus/iio/devices/
+ iio:device0/        iio_sysfs_trigger/  trigger0/           trigger1/
+ # cat /sys/bus/iio/devices/trigger0/name
+ f80480b0.at91_rtc_adc
+ # iio_generic_buffer -n fc030000.adc -t f80480b0.at91_rtc_adc -c 5
+ iio device number being used is 0
+ iio trigger number being used is 0
+ /sys/bus/iio/devices/iio:device0 f80480b0.at91_rtc_adc
+ 3298.388672
+ 3294.360352
+ 3291.943359
+ 3294.360352
+ 3291.943359
+
+
+Future work:
+In the future the node would have to be enabled for other sama5d2 based
+boards as well, and MAINTAINERS to be updated if this driver is accepted.
+
+
+Eugen Hristev (10):
+  iio: adc: at91-sama5d2_adc: update for other trigger usage
+  dt-bindings: iio: adc: at91-sama5d2: add rtc-trigger optional property
+  dt-bindings: iio: trigger: at91-rtc-trigger: add bindings
+  rtc: at91rm9200: use of_platform_populate as return value
+  iio: trigger: at91-rtc-trigger: introduce at91 rtc adc trigger driver
+  iio: adc: at91-sama5d2_adc: handle unfinished conversions
+  iio: adc: at91-sama5d2_adc: fix differential channels in triggered
+    mode
+  iio: adc: at91-sama5d2_adc: implement RTC triggering
+  ARM: dts: at91: sama5d2: add rtc_adc_trigger node
+  ARM: dts: at91: sama5d2_xplained: enable rtc_adc_trigger
+
+ .../bindings/iio/adc/at91-sama5d2_adc.txt          |   4 +
+ .../bindings/iio/trigger/at91-rtc-trigger.yaml     |  44 +++
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts        |   4 +
+ arch/arm/boot/dts/sama5d2.dtsi                     |  11 +
+ drivers/iio/adc/at91-sama5d2_adc.c                 | 336 ++++++++++++++++-=
+----
+ drivers/iio/trigger/Kconfig                        |  10 +
+ drivers/iio/trigger/Makefile                       |   1 +
+ drivers/iio/trigger/at91-rtc-trigger.c             | 213 +++++++++++++
+ drivers/rtc/rtc-at91rm9200.c                       |   2 +-
+ 9 files changed, 543 insertions(+), 82 deletions(-)
+ create mode 040000 Documentation/devicetree/bindings/iio/trigger
+ create mode 100644 Documentation/devicetree/bindings/iio/trigger/at91-rtc-=
+trigger.yaml
+ create mode 100644 drivers/iio/trigger/at91-rtc-trigger.c
+
+--=20
+2.7.4
