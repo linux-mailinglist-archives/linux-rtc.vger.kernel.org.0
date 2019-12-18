@@ -2,126 +2,207 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8B4124107
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Dec 2019 09:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2A812416D
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Dec 2019 09:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbfLRIGN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Dec 2019 03:06:13 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:45684 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbfLRIGM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 03:06:12 -0500
-X-AuditID: c0a8fbf4-199ff70000001fa6-bb-5df9ddf133de
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 9E.8C.08102.1FDD9FD5; Wed, 18 Dec 2019 09:06:09 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Wed, 18 Dec 2019 09:06:05 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "mchehab+samsung@kernel.org" <mchehab+samsung@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
-        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>
-Subject: Re: Applied "regulator: bd71828: Basic support for ROHM bd71828
- PMIC regulators" to the regulator tree
-Thread-Topic: Applied "regulator: bd71828: Basic support for ROHM bd71828
- PMIC regulators" to the regulator tree
-Thread-Index: AQHVtNcCPO+Kt0OMfE2l+CzrBWADfqe/eY8A
-Date:   Wed, 18 Dec 2019 08:06:04 +0000
-Message-ID: <de7424126e285d9bbd21a70945415d78203c2ba7.camel@fi.rohmeurope.com>
-References: <applied-5b1c4a22c7945e97ff2a7924abfeb3239043f8eb.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <applied-5b1c4a22c7945e97ff2a7924abfeb3239043f8eb.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9AFCB8A8827600419DE3AEDCAF90D462@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1725799AbfLRIQi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 18 Dec 2019 03:16:38 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41734 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbfLRIQh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 Dec 2019 03:16:37 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w62so786297pfw.8
+        for <linux-rtc@vger.kernel.org>; Wed, 18 Dec 2019 00:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/LZCELMK6pDMafofa6y/tuZCT7qg8lsOMPE/fk8gL0=;
+        b=ZKCb7rNHDRglFa3hX/9uYWW99vIeqokOsfIsOtBlk+0ByU/DC9hRx570jDkiUdHBR5
+         fyqSTFMhZT66OS1Ne1eUYq+l3pe+t2sZSwadoqHhwwiYBH2s2pWHniFWrFbLfZvk1pub
+         T5SnSLQwg9ffcPb4BSWKrX206nQ8wRDAshuyGociG+JteXXuJIAloPisvZFwHh21zeF6
+         atpT2Gk1pszL/0ncuqk6xOI+msagNIi0DzK2dWGEefjHcSTqYhpAcjjExKZrABDyY4lE
+         cjX/228VucL6BuFkp1AAJzFReWf9vm98fQbbrqJ2zjIepcbLJGK5ZAA/P3Xcei3L3kgs
+         /Fng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V/LZCELMK6pDMafofa6y/tuZCT7qg8lsOMPE/fk8gL0=;
+        b=JLWWw0u5fLEptXS0wmOui3Oq27ozDw/fSTClOUpZEjpMR/149DEKBEdASrfeYbomyH
+         2q43PWNv5PM8xNvUPHYrCXsdbUicT9jIZWxZQKDrlao9YsdeyRCDbx3eFdfs4vOu8vTd
+         /2C93o+MoAoSqPieQ4zlrSBl/G+AtECXbv7satRh5eCu31tL2sY0NMW6GqPpFmd5Nsz1
+         g+HdqJd49n1WFOVDYONdF1Iq0d7ikNmf0xL/JkqxolNY3may2tV10YHMGwVuKu1zXv/C
+         Bk+yqG9MpywZ1p2vCj0YENlqmDPlUC0BocHu1GjY8HLpauDxlUeDitrOM1VHDGgrJBS6
+         tNrg==
+X-Gm-Message-State: APjAAAXzyjX0TxqKXdG9XER7CBpDuI3WgORUuBDg8cd/jCnSlgAC+0TE
+        c0eJAV71FZ/Cy4jrGkiEgh3F5d8ypw==
+X-Google-Smtp-Source: APXvYqwWsWlBhGhlvfRUC3ayjbsrWbx0ktln+8Oeau3C2jU2mNMLf7VUCrCyyWw/CGO1Gtq1ZYZvZw==
+X-Received: by 2002:a63:774a:: with SMTP id s71mr1645492pgc.57.1576656996719;
+        Wed, 18 Dec 2019 00:16:36 -0800 (PST)
+Received: from localhost (om126208136186.22.openmobile.ne.jp. [126.208.136.186])
+        by smtp.gmail.com with ESMTPSA id o10sm1846987pgq.68.2019.12.18.00.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 00:16:36 -0800 (PST)
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+To:     linux-rtc@vger.kernel.org
+Cc:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: [PATCH] rtc: rx8025: Remove struct i2c_client from struct rx8025_data
+Date:   Wed, 18 Dec 2019 17:16:24 +0900
+Message-Id: <20191218081624.3307752-1-iwamatsu@nigauri.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf2wTZRzGfe+ud7dupy9ls68dE20kZBpACIkvBA3/oGdMFgkxUZM6buxY
-        q/0xr51haOLMZGzjh4yuQes62NaNCg0d7VCYMMcsEwvBNLZzMIYum0s2tXP82FIYw7udsP11
-        z73P87yf7x/flyV1rYyBtdhdomQXrEZaS3UH7oVXTA6mTS/G/8jD/niSwbtTbQy+f7CXwbd9
-        MQp7hkZoPNK9G+DD0SsavOdShwZXtoRoPHCqncK/37kA8FSimsD1M0cJPLn3hgY3VfkpHDk8
-        A/CvnQ00PvX3CYB7jydo3PpbnMANrRcpPHGzhsDx2CbsiaUYPBi7QOPKeD+Jd52LMni27ySF
-        9195bWMeH2wMAv7e3YOAn+jfxfCNwY/5M95Bhg8fq6H5631naf4HX5DhW/a7NfzU5TqKH20K
-        UfxP/d8R/KHGNMGH9kYBHzg+zfC3wk+/Cd/N3FAkuD7aYimxr3pla6b5s8hJTelszo7zo89V
-        gI6cWpDBIrgWfRGoI2qBltXBJECXOxKU+nMRIO/pCKgFLEvDDaj2KqMUsuEK5LnbQisZEiYy
-        UVtLFVCMxfBDtC8SI9WQhK7dH6NUvQYFKofnNAWXoSPp1JzmYAGa7uqiFa2DDtTUeWYOkAFL
-        0dXuSULRAOahmorUnCahHoVHpzXq1BD5z/5CqjoHjQ3P/n9uROfSQ5QyMwnzUahzlVrdiIIR
-        NULCZ1H9niFGHWER+vmrEeoAeNK7gOCdb3sXtL0L2t4F7SNAcwwgm2CxlggucfVKSSxbKTnM
-        NvmzzWELA3Xtbp8GD3pe7wEEC3rAUyxhzOGM5rRJ93iRo7jcLDjNhVKZVXT2AMSSxmxuoFr2
-        uGKhfKcoOR5auSxl1HPLh+pMOqiwPhDFUlF66C5hWSPifkzKxUWSWCLu2G6xuuZtgs1QLtca
-        sp2ivViUhDKXuVBZj0KnvB+KlSVz1w8qXGepYJNP1WoMvMAeGPM1k2zU19pM6ii7wy4a9Byt
-        RKESNZfZH4HGgZ4FxsXct9dlN0t+e4/uGZcRhIxYUzClIFzCvGWoANufYMpP/MMn1rqzDDuD
-        pnVb4lLxJ83awET/1rf8BZuWtQdTyJcxcykW9j/40qbn1r/9qfS1qcbgrrAe2pcf7xuv6q0e
-        zj1qec/S9epEvZsEnhu3QunN7S+VfPNGvufzxxLX3m8Y+D761/msd3KTd5Y6/yxvE90v31xX
-        pF3C9P77TNJIOc3C6udJySn8B2u2+V44BAAA
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gTWFyaywNCg0KT24gVHVlLCAyMDE5LTEyLTE3IGF0IDEyOjM5ICswMDAwLCBNYXJrIEJy
-b3duIHdyb3RlOg0KPiBUaGUgcGF0Y2gNCj4gDQo+ICAgIHJlZ3VsYXRvcjogYmQ3MTgyODogQmFz
-aWMgc3VwcG9ydCBmb3IgUk9ITSBiZDcxODI4IFBNSUMgcmVndWxhdG9ycw0KPiANCj4gaGFzIGJl
-ZW4gYXBwbGllZCB0byB0aGUgcmVndWxhdG9yIHRyZWUgYXQNCg0KSSB0aGluayB5b3UgbWlzc2Vk
-IHRoZSBbUEFUQ0ggdjYgMDgvMTVdIHJlZ3VsYXRvcjogYmQ3MTh4NzogU3BsaXQNCmRyaXZlciB0
-byBjb21tb24gYW5kIGJkNzE4eDcgc3BlY2lmaWMgcGFydHMNCg0Kd2hpY2ggdG9vayB0aGUgZnVu
-Y3Rpb25zIHBhcnNpbmcgZmV3IHJvaG0gc3BlY2lmaWMgRFQgZW50cmllcyBvdXQgb2YNCmJkNzE4
-eDcgZHJpdmVyIGFuZCBleHBvcnRlZCB0aGVtIGZvciBzaGFyZWQgdXNlLiAoRWcsIGN1cnJlbnRs
-eSB0aGUNCmJkNzE4eDcgYW5kIHRoaXMgYmQ3MTgyOCBkcml2ZXIgdXNlIHNhbWUgcHJvcGVydGll
-cyBhbmQgc2hhcmluZyB0aGUNCnByb3BlcnR5IHBhcnNpbmcgY29kZSBzZWVtcyBiZXR0ZXIgdGhh
-biBkdWJsaWNhdGluZyBpdCkuDQoNCkFueXdheXMsIHRoaXMgcGF0Y2ggYnJlYWtzIHRoZSBjb21w
-aWxhdGlvbiB3L28gUEFUQ0ggdjYgMDgvMTUuDQoNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3JlZ3VsYXRvci9LY29uZmlnIGIvZHJpdmVycy9yZWd1bGF0b3IvS2NvbmZpZw0KPiBpbmRleCA3
-NGViNWFmNzI5NWYuLjU2NTEyNzQ4YTQ3ZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9yZWd1bGF0
-b3IvS2NvbmZpZw0KPiArKysgYi9kcml2ZXJzL3JlZ3VsYXRvci9LY29uZmlnDQo+IEBAIC0xOTQs
-NiArMTk0LDE4IEBAIGNvbmZpZyBSRUdVTEFUT1JfQkQ3MDUyOA0KPiAgCSAgVGhpcyBkcml2ZXIg
-Y2FuIGFsc28gYmUgYnVpbHQgYXMgYSBtb2R1bGUuIElmIHNvLCB0aGUgbW9kdWxlDQo+ICAJICB3
-aWxsIGJlIGNhbGxlZCBiZDcwNTI4LXJlZ3VsYXRvci4NCj4gIA0KPiArY29uZmlnIFJFR1VMQVRP
-Ul9CRDcxODI4DQo+ICsJdHJpc3RhdGUgIlJPSE0gQkQ3MTgyOCBQb3dlciBSZWd1bGF0b3IiDQo+
-ICsJZGVwZW5kcyBvbiBNRkRfUk9ITV9CRDcxODI4DQo+ICsJc2VsZWN0IFJFR1VMQVRPUl9ST0hN
-DQoNCkkgdGhpbmsgdGhpcyB3YXMgaW50cm9kdWNlZCBpbiBbUEFUQ0ggdjYgMDgvMTVdDQoNCj4g
-KwloZWxwDQo+ICsJICBUaGlzIGRyaXZlciBzdXBwb3J0cyB2b2x0YWdlIHJlZ3VsYXRvcnMgb24g
-Uk9ITSBCRDcxODI4IFBNSUMuDQo+ICsJICBUaGlzIHdpbGwgZW5hYmxlIHN1cHBvcnQgZm9yIHRo
-ZSBzb2Z0d2FyZSBjb250cm9sbGFibGUgYnVjaw0KPiArCSAgYW5kIExETyByZWd1bGF0b3JzLg0K
-DQovL3NuaXANCg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9yZWd1bGF0b3IvYmQ3MTgyOC1yZWd1
-bGF0b3IuYw0KPiBiL2RyaXZlcnMvcmVndWxhdG9yL2JkNzE4MjgtcmVndWxhdG9yLmMNCg0KLy9z
-bmlwDQoNCj4gKw0KPiArc3RhdGljIGludCBidWNrX3NldF9od19kdnNfbGV2ZWxzKHN0cnVjdCBk
-ZXZpY2Vfbm9kZSAqbnAsDQo+ICsJCQkJICBjb25zdCBzdHJ1Y3QgcmVndWxhdG9yX2Rlc2MgKmRl
-c2MsDQo+ICsJCQkJICBzdHJ1Y3QgcmVndWxhdG9yX2NvbmZpZyAqY2ZnKQ0KPiArew0KPiArCXN0
-cnVjdCBiZDcxODI4X3JlZ3VsYXRvcl9kYXRhICpkYXRhOw0KPiArDQo+ICsJZGF0YSA9IGNvbnRh
-aW5lcl9vZihkZXNjLCBzdHJ1Y3QgYmQ3MTgyOF9yZWd1bGF0b3JfZGF0YSwgZGVzYyk7DQo+ICsN
-Cj4gKwlyZXR1cm4gcm9obV9yZWd1bGF0b3Jfc2V0X2R2c19sZXZlbHMoJmRhdGEtPmR2cywgbnAs
-IGRlc2MsIGNmZy0NCj4gPnJlZ21hcCk7DQoNClNvIHdhcyB0aGlzLg0KDQpEbyB5b3UgdGhpbmsg
-eW91IGNvdWxkIGFsc28gYXBwbHkgdGhlIFtQQVRDSCB2NiAwOC8xNV0gb3IgcGVyaGFwcyBkcm9w
-DQp0aGlzIG9uZSB0byBhdm9pZCBicmVha2luZyB0aGUgY29tcGlsYXRpb24gd2hlbiBNRkRfUk9I
-TV9CRDcxODI4IGNvbmZpZw0Kb3B0aW9uIGlzIGludHJvZHVjZWQ/DQoNCg0KQnIsDQoJTWF0dGkN
-Cg==
+struct i2c_client can be referenced from the device structure, so this
+doesn't need to have it in struct rx8025_data.
+Remove struct i2c_client from struct rx8025_data.
+
+CC: Alessandro Zummo <a.zummo@towertech.it>
+CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC: Wolfgang Grandegger <wg@grandegger.com>
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ drivers/rtc/rtc-rx8025.c | 27 ++++++++++++++-------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
+index b9bda10589e0d..a24f85893f90a 100644
+--- a/drivers/rtc/rtc-rx8025.c
++++ b/drivers/rtc/rtc-rx8025.c
+@@ -67,7 +67,6 @@ static const struct i2c_device_id rx8025_id[] = {
+ MODULE_DEVICE_TABLE(i2c, rx8025_id);
+ 
+ struct rx8025_data {
+-	struct i2c_client *client;
+ 	struct rtc_device *rtc;
+ 	u8 ctrl1;
+ };
+@@ -103,10 +102,10 @@ static s32 rx8025_write_regs(const struct i2c_client *client,
+ 
+ static int rx8025_check_validity(struct device *dev)
+ {
+-	struct rx8025_data *rx8025 = dev_get_drvdata(dev);
++	struct i2c_client *client = to_i2c_client(dev);
+ 	int ctrl2;
+ 
+-	ctrl2 = rx8025_read_reg(rx8025->client, RX8025_REG_CTRL2);
++	ctrl2 = rx8025_read_reg(client, RX8025_REG_CTRL2);
+ 	if (ctrl2 < 0)
+ 		return ctrl2;
+ 
+@@ -178,6 +177,7 @@ static irqreturn_t rx8025_handle_irq(int irq, void *dev_id)
+ 
+ static int rx8025_get_time(struct device *dev, struct rtc_time *dt)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8025_data *rx8025 = dev_get_drvdata(dev);
+ 	u8 date[7];
+ 	int err;
+@@ -186,7 +186,7 @@ static int rx8025_get_time(struct device *dev, struct rtc_time *dt)
+ 	if (err)
+ 		return err;
+ 
+-	err = rx8025_read_regs(rx8025->client, RX8025_REG_SEC, 7, date);
++	err = rx8025_read_regs(client, RX8025_REG_SEC, 7, date);
+ 	if (err)
+ 		return err;
+ 
+@@ -211,6 +211,7 @@ static int rx8025_get_time(struct device *dev, struct rtc_time *dt)
+ 
+ static int rx8025_set_time(struct device *dev, struct rtc_time *dt)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8025_data *rx8025 = dev_get_drvdata(dev);
+ 	u8 date[7];
+ 	int ret;
+@@ -237,11 +238,11 @@ static int rx8025_set_time(struct device *dev, struct rtc_time *dt)
+ 
+ 	dev_dbg(dev, "%s: write %7ph\n", __func__, date);
+ 
+-	ret = rx8025_write_regs(rx8025->client, RX8025_REG_SEC, 7, date);
++	ret = rx8025_write_regs(client, RX8025_REG_SEC, 7, date);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return rx8025_reset_validity(rx8025->client);
++	return rx8025_reset_validity(client);
+ }
+ 
+ static int rx8025_init_client(struct i2c_client *client)
+@@ -251,7 +252,7 @@ static int rx8025_init_client(struct i2c_client *client)
+ 	int need_clear = 0;
+ 	int err;
+ 
+-	err = rx8025_read_regs(rx8025->client, RX8025_REG_CTRL1, 2, ctrl);
++	err = rx8025_read_regs(client, RX8025_REG_CTRL1, 2, ctrl);
+ 	if (err)
+ 		goto out;
+ 
+@@ -280,8 +281,8 @@ static int rx8025_init_client(struct i2c_client *client)
+ /* Alarm support */
+ static int rx8025_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8025_data *rx8025 = dev_get_drvdata(dev);
+-	struct i2c_client *client = rx8025->client;
+ 	u8 ald[2];
+ 	int ctrl2, err;
+ 
+@@ -347,18 +348,18 @@ static int rx8025_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 
+ 	if (rx8025->ctrl1 & RX8025_BIT_CTRL1_DALE) {
+ 		rx8025->ctrl1 &= ~RX8025_BIT_CTRL1_DALE;
+-		err = rx8025_write_reg(rx8025->client, RX8025_REG_CTRL1,
++		err = rx8025_write_reg(client, RX8025_REG_CTRL1,
+ 				       rx8025->ctrl1);
+ 		if (err)
+ 			return err;
+ 	}
+-	err = rx8025_write_regs(rx8025->client, RX8025_REG_ALDMIN, 2, ald);
++	err = rx8025_write_regs(client, RX8025_REG_ALDMIN, 2, ald);
+ 	if (err)
+ 		return err;
+ 
+ 	if (t->enabled) {
+ 		rx8025->ctrl1 |= RX8025_BIT_CTRL1_DALE;
+-		err = rx8025_write_reg(rx8025->client, RX8025_REG_CTRL1,
++		err = rx8025_write_reg(client, RX8025_REG_CTRL1,
+ 				       rx8025->ctrl1);
+ 		if (err)
+ 			return err;
+@@ -369,6 +370,7 @@ static int rx8025_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 
+ static int rx8025_alarm_irq_enable(struct device *dev, unsigned int enabled)
+ {
++	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8025_data *rx8025 = dev_get_drvdata(dev);
+ 	u8 ctrl1;
+ 	int err;
+@@ -381,7 +383,7 @@ static int rx8025_alarm_irq_enable(struct device *dev, unsigned int enabled)
+ 
+ 	if (ctrl1 != rx8025->ctrl1) {
+ 		rx8025->ctrl1 = ctrl1;
+-		err = rx8025_write_reg(rx8025->client, RX8025_REG_CTRL1,
++		err = rx8025_write_reg(client, RX8025_REG_CTRL1,
+ 				       rx8025->ctrl1);
+ 		if (err)
+ 			return err;
+@@ -516,7 +518,6 @@ static int rx8025_probe(struct i2c_client *client,
+ 	if (!rx8025)
+ 		return -ENOMEM;
+ 
+-	rx8025->client = client;
+ 	i2c_set_clientdata(client, rx8025);
+ 
+ 	err = rx8025_init_client(client);
+-- 
+2.24.0
+
