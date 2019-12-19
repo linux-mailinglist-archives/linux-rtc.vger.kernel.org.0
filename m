@@ -2,113 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42502125ECA
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2019 11:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4D31264F0
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Dec 2019 15:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbfLSKXZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Dec 2019 05:23:25 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:50759 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726664AbfLSKXZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Dec 2019 05:23:25 -0500
-X-Originating-IP: 90.65.102.129
-Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id B198020010;
-        Thu, 19 Dec 2019 10:23:21 +0000 (UTC)
-Date:   Thu, 19 Dec 2019 11:23:21 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Eugen.Hristev@microchip.com
-Cc:     jic23@kernel.org, robh+dt@kernel.org, Nicolas.Ferre@microchip.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, a.zummo@towertech.it,
-        Ludovic.Desroches@microchip.com
-Subject: Re: [PATCH 04/10] rtc: at91rm9200: use of_platform_populate as
- return value
-Message-ID: <20191219102321.GR695889@piout.net>
-References: <1576686157-11939-1-git-send-email-eugen.hristev@microchip.com>
- <1576686157-11939-5-git-send-email-eugen.hristev@microchip.com>
- <20191218164348.GN695889@piout.net>
- <04264cb0-61a9-aba3-82ad-e7d12fd8441e@microchip.com>
- <20191218165831.GO695889@piout.net>
- <91cc67e1-7e14-f7b9-da77-b16d9e158f20@microchip.com>
+        id S1726830AbfLSOgu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Dec 2019 09:36:50 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:39946 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726751AbfLSOgu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Dec 2019 09:36:50 -0500
+Received: by mail-wm1-f68.google.com with SMTP id t14so5837488wmi.5
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Dec 2019 06:36:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=AoW0ANcjhnWhVQy1nVWVlNehespmk84ZLnrhmIANeDA=;
+        b=YK7LdqaacIifpKR43grXurOLS6lstMbGSX6yh9BiZsQbKGNAobIumTzzfI0vzVab3R
+         BkL1DaoAW+buzNT46GZR1VAyTxwQHfe6Iqdri+qpsLkTm1jLnks+ua7+UCV5dwzRWpBr
+         zHE1KRA4Iy2WKEJFJsjuikO4s1AxpUw2M4/JDE9e80qW+IzcNdabq4wW2jwE6Xy00jH5
+         8JUp76OYneB+zZAZuHdXWgdWHsHIhMW2gicqtOp+PQxuKbTk7uEprMzGXTs55KHJtezM
+         aAawLm+qXV4CRlSmp8cS3SguI+nL2u/3rdPi/AuPaXieEK/Qv5k6q+UklgBSCRaqY02x
+         TROw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=AoW0ANcjhnWhVQy1nVWVlNehespmk84ZLnrhmIANeDA=;
+        b=Rel6xTZ/7lTxk80M05bymP2rCLDI09+QEdt4XdFe8RqmQ9rodoaDjyygLsxm4b0xIs
+         GnfXYFqrYn1wfq7IkxPSVaQh1iO2CNM0FQV9o/g81u/OyC57At3O4OJHvLTxLM2kxZ8z
+         UuhMCGaxx8oBU8FS/B7lLllwCLgcBE2txMQ2mo72ARJnw5T2//tM9vYs8a86FynDU+GD
+         IiQpbIdEtVzWVQ5UYS/NJL08qbCrvh1JJYRn0R9X+ggxiuMGPcb3EN29V+JC2eV1sm/T
+         toMS9v6Eo/MHJUvElVIk0I7Y7aERiAdeHFTRB3zwaYCDES/znwFghi9FfuAduN5sX0tR
+         QNuA==
+X-Gm-Message-State: APjAAAXZ055wvrvIo4j2/xGmkge5XOqFsMdJ75DeXX5+uzDYobZJPQVY
+        w4kd7S+IPde7hLDGQhAQbl5wgQ==
+X-Google-Smtp-Source: APXvYqzWCOPBrg4orgmeiuAAjBbDOGoPenNVv75ndLEhJ5dP0c89acYNuswyk6Faok6Xlh/8ZdFv0Q==
+X-Received: by 2002:a7b:ce81:: with SMTP id q1mr10589381wmj.47.1576766208594;
+        Thu, 19 Dec 2019 06:36:48 -0800 (PST)
+Received: from dell ([2.27.35.132])
+        by smtp.gmail.com with ESMTPSA id 188sm6700579wmd.1.2019.12.19.06.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 06:36:47 -0800 (PST)
+Date:   Thu, 19 Dec 2019 14:36:47 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>
+Subject: Re: [PATCH v7 02/12] dt-bindings: mfd: Document ROHM BD71828 bindings
+Message-ID: <20191219143647.GQ18955@dell>
+References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+ <702daeb9d8604e2feddd5f6f92b067a2d60d81ad.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+ <f9b0fbb7b898691d09ed8954e8df67cf3706aa96.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <91cc67e1-7e14-f7b9-da77-b16d9e158f20@microchip.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f9b0fbb7b898691d09ed8954e8df67cf3706aa96.camel@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/12/2019 09:15:02+0000, Eugen.Hristev@microchip.com wrote:
+On Thu, 19 Dec 2019, Vaittinen, Matti wrote:
+
+> Hello Mark, Lee, Rob
 > 
+> I just noticed we have a dependency here. This binding is referring to
+> regulator binding - which was applied by Mark and is thus missing from
+> the series. What's the best way forward?
 > 
-> On 18.12.2019 18:58, Alexandre Belloni wrote:
-> > On 18/12/2019 16:52:21+0000, Eugen.Hristev@microchip.com wrote:
-> >>
-> >>
-> >> On 18.12.2019 18:43, Alexandre Belloni wrote:
-> >>
-> >>> Hi,
-> >>>
-> >>> On 18/12/2019 16:24:00+0000, Eugen.Hristev@microchip.com wrote:
-> >>>> From: Eugen Hristev <eugen.hristev@microchip.com>
-> >>>>
-> >>>> This allows the RTC node to have child nodes in DT.
-> >>>> This allows subnodes to be probed.
-> >>>>
-> >>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> >>>> ---
-> >>>>    drivers/rtc/rtc-at91rm9200.c | 2 +-
-> >>>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-> >>>> index 3b833e0..f1b5b3d 100644
-> >>>> --- a/drivers/rtc/rtc-at91rm9200.c
-> >>>> +++ b/drivers/rtc/rtc-at91rm9200.c
-> >>>> @@ -421,7 +421,7 @@ static int __init at91_rtc_probe(struct platform_device *pdev)
-> >>>>         at91_rtc_write_ier(AT91_RTC_SECEV);
-> >>>>
-> >>>>         dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
-> >>>> -     return 0;
-> >>>> +     return of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
-> >>>>
-> >>>
-> >>> You can avoid the DT binding change and DT parsing by using
-> >>> platform_add_device here. I don't think there is any point describing
-> >>> the trigger as a child node (a watchdog functionality wouldn't be
-> >>> described for example).
-> >>>
-> >>
-> >> Hi,
-> >>
-> >> It's needed because the ADC needs a link to the trigger device. This is
-> >> a hardware link inside the SoC, so I thought the best way is to describe
-> >> this hardware is in the Device Tree.
-> >> Otherwise the ADC node is unaware of the RTC triggering possibility.
-> >> If we just assign the RTC trigger device to the ADC through the sysfs,
-> >> the ADC cannot distinguish between the RTC trigger and other various
-> >> triggers which can be attached.
-> >>
+> On Thu, 2019-12-19 at 11:46 +0200, Matti Vaittinen wrote:
+> > ROHM BD71828 Power management IC integrates 7 buck converters, 7
+> > LDOs,
+> > a real-time clock (RTC), 3 GPO/regulator control pins, HALL input
+> > and a 32.768 kHz clock gate.
 > > 
-> > I'm not sure this links is required but I will let Jonathan review. Even
-> > if it is needed, you can still use the rtc node to describe that link.
+> > Document the dt bindings drivers are using.
+> > 
+> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> > 
+> > No changes since v6
 > 
-> Actually, the RTC node could potentially have two different ADC 
-> triggers. There is another OUT1 field that can do a second trigger for 
-> the ADC only for the last channel. Future development might add this 
-> trigger, so, with that in mind, I think it's best to link the exact 
-> trigger and not the RTC node.
+> //snip
+> 
+> > +  regulators:
+> > +    $ref: ../regulator/rohm,bd71828-regulator.yaml
+> 
+> This file is missing from the series and is applied to Mark's tree.
 
-Nothing prevents you from using an index with the phandle (and I would
-add a type in that case then). Having subnodes in the DT is not really a
-good idea. The IP is the RTC, it just happens to have some outputs.
-See what has been done for the PMC.
-
+Shouldn't matter.  I guess they're all heading for he same release.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
