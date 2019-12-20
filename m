@@ -2,24 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1543A1275D0
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2019 07:33:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591531279AC
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2019 11:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbfLTGdT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Dec 2019 01:33:19 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:57220 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbfLTGdT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Dec 2019 01:33:19 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-5e-5dfc6b2c7575
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 32.E9.08102.C2B6CFD5; Fri, 20 Dec 2019 07:33:16 +0100 (CET)
-Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Fri, 20 Dec 2019 07:33:12 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "dmurphy@ti.com" <dmurphy@ti.com>,
+        id S1727216AbfLTKzH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Dec 2019 05:55:07 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36726 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbfLTKzH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Dec 2019 05:55:07 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z3so8994274wru.3
+        for <linux-rtc@vger.kernel.org>; Fri, 20 Dec 2019 02:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=a9C14P9lsGAuh8F6Rdx7vHrUThQ9aonGy2O3DOUo7Ds=;
+        b=lnsxrNECjkBnFDoUoh4Zk3vI7gih7BdHS5VDD/ljXCsq9ilLRKOZ8GzzX7sx/6q8XK
+         zXuAKwefaAx9xOCMJiNWqqF/21CHWenY5X0UiZceAAACBFFJpSOR2/UekgYy3Alhn+7K
+         ieZJlFRB2hooAr36DkhTxOLH/VBGWvH3v/mySwaI6BcLANoApcE8RhKRUozqUqqmupM9
+         pRRKHrcSYVWSErKLI8B7XsVpW7oGvA9qLZMI7MVHFPZ7zG0gSaC9VyAIgYXmv8TF26Ih
+         fDVRzS4kElTzBv5ztckoj5PvaMpdOldZIi3GMchS7cYL/6H8DBkQYaUkNyrvhqkZXB72
+         YaSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=a9C14P9lsGAuh8F6Rdx7vHrUThQ9aonGy2O3DOUo7Ds=;
+        b=HBeZi/WY82Rjp56hFc4C9LDLaGDt4lrrfEvsOtnZvQApAzdM4XwFfXhQn6naTNoYez
+         KZo+EnQSEmPDhCx6nKow8blZqCc4BNARBXKaYo8DFcIVGQnffIlgfVRk7+OsqY6Ae2kh
+         W39q4g8cZsRYfQGxM1JK5KdUb0M8+EjfhhKtqTGn3MQDd2gQxfBwIVxyH5EpIqBWG5wj
+         4UwtmuE+lRH2VjyBjMuCcX2uvIagiWcQGdDuxV/64vnncilvWiLJlmlpAYG0HdZlRREU
+         e0OH/vizn3KBQWi4/OH5ife1rKddJ5CL+EME1nfkGT1hFFjYrDXdINWYnm8XYMaoBG97
+         7oeg==
+X-Gm-Message-State: APjAAAWToBjUwOKVZRUqOb+mqAfLOCOPHP8tP3xax+yZEgfwvUK+jybI
+        f42PA+qO4o5yaq680BCZ+rdWmQ==
+X-Google-Smtp-Source: APXvYqyicvSFzhHzxpljiw/uidTI78NGorAjjg+bi/J4O8iYxkHUB7TVkQ+2LhBMrPCHOQeS/2zn7Q==
+X-Received: by 2002:adf:f052:: with SMTP id t18mr14250816wro.192.1576839304724;
+        Fri, 20 Dec 2019 02:55:04 -0800 (PST)
+Received: from dell ([2.27.35.132])
+        by smtp.gmail.com with ESMTPSA id f17sm9339549wmc.8.2019.12.20.02.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 02:55:04 -0800 (PST)
+Date:   Fri, 20 Dec 2019 10:55:05 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "dmurphy@ti.com" <dmurphy@ti.com>,
         "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
@@ -39,76 +69,75 @@ CC:     "dmurphy@ti.com" <dmurphy@ti.com>,
         "sboyd@kernel.org" <sboyd@kernel.org>,
         "pavel@ucw.cz" <pavel@ucw.cz>,
         "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v7 02/12] dt-bindings: mfd: Document ROHM BD71828
- bindings
-Thread-Topic: [PATCH v7 02/12] dt-bindings: mfd: Document ROHM BD71828
- bindings
-Thread-Index: AQHVtlEjPJdYWhzff0OqIDcPrX4s7KfBKG6AgABNp4CAAQs1gA==
-Date:   Fri, 20 Dec 2019 06:33:11 +0000
-Message-ID: <e734a11ed158814119256a3fac253a8574c90837.camel@fi.rohmeurope.com>
+Subject: Re: [PATCH v7 02/12] dt-bindings: mfd: Document ROHM BD71828 bindings
+Message-ID: <20191220105505.GS18955@dell>
 References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
-         <702daeb9d8604e2feddd5f6f92b067a2d60d81ad.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
-         <f9b0fbb7b898691d09ed8954e8df67cf3706aa96.camel@fi.rohmeurope.com>
-         <20191219143647.GQ18955@dell>
-In-Reply-To: <20191219143647.GQ18955@dell>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1C16384D061ADF49AF9CC3E5ACD4B484@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+ <702daeb9d8604e2feddd5f6f92b067a2d60d81ad.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+ <f9b0fbb7b898691d09ed8954e8df67cf3706aa96.camel@fi.rohmeurope.com>
+ <20191219143647.GQ18955@dell>
+ <e734a11ed158814119256a3fac253a8574c90837.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TW0wUVxjumZmdOaCDwwJy3GpTpxgDKojh4ZhSNRp0+lCLaXxRNzjIyG5g
-        d8nsYqFGgzFaXazBlIZ25VLpgrig4iIoCK0hYLeoXKIgqKCrSINVCRFLEIKdYarwNN/83+1/
-        +A8k9QO0AZqtDkm2iuk8HUhdr5j0rlqZNmVc3Z+/DLu7uhn8/atyBo8VtVH4J/8gjUta2nU4
-        9+ZlHX5QW03hR29aAf737jEC50+dJfDoiQEdrimZAvhOQyGNa19cAPhG5V0al93rInBhmY/C
-        XW0JuL+tlcZHmloYPN1zidoQJlQVVwFhpPcIIxRX7RfqXf2M4PUcp4WHPY208GfvFUIoKJ4g
-        hIrKcUZ47f0kMXDHvPhk0bHvG3OqNWbd7nmmk6fPMxljwVm9nUE54GqwEwRAxMWhC2NvgRME
-        Qj3XDdD0HwWM9uMD6NaQk3YCCGkuHjn7GNUQysUit+8ZpWpIrhyiU4f7Z4gQLhH1dPopTbQN
-        +T0/Ag1vRG9uFc7MKW4Z+v3iDzoVs9xWdN7pmvHqOSeB7tfFqTiAi0KjnWWEigG3BB3PeTWD
-        SS4ceYfGddrWHHI3dpAaDkPDT6f/n/OoaULdASr6SHSxIUaDG1DH4EYtZSnKz/Uz2gbB6K9f
-        Bqk8sNA1p8A1a3bNml1zzK455l+BzgOQRTSnp4oOKTZaljKjZZvJonz22CxeoN3L2FXwrvnL
-        ZkBA0AwWQYIPY5O/njLqg5JtKdkm0W5KkjPTJXszQJDkQ9kHxyaMejZFzP5Okm3vqY8hxYez
-        y/2njHpO7UqTpAxJfs8uhpBH7JBJCQ2WpVQpa6853TFLEzBADQ80hNola4oki5kOU5J6HEl2
-        5TpUar7SK5kVO2vPEC3KVLO2gRUwb7iolIQtRWWlpJ6y2qySIZyNUJs4VWrKtH4oeg7CIeBD
-        2KNq0Hzl0XzIea5UEEoFjHyrVjjEWcqQA6oN69ZGnl7DX8t78vKsr71+nPzoN+u5Gsu72uVF
-        B7ulyd7Xa2tLeE/fePzCiIT1PuO9AgcTtylockdfVuWh7d/68OaBUnuE+0CKf9dX1WcqPv1i
-        ODtxm4cKe1nxz4JN23fGfFa35fM85ucRqWlJ4f3J1oTbNx+PYPeC8twtEVzr35uf8ZTdJMZG
-        kbJd/A/V97ob8QMAAA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e734a11ed158814119256a3fac253a8574c90837.camel@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBUaHUsIDIwMTktMTItMTkgYXQgMTQ6MzYgKzAwMDAsIExlZSBKb25lcyB3cm90ZToNCj4g
-T24gVGh1LCAxOSBEZWMgMjAxOSwgVmFpdHRpbmVuLCBNYXR0aSB3cm90ZToNCj4gDQo+ID4gSGVs
-bG8gTWFyaywgTGVlLCBSb2INCj4gPiANCj4gPiBJIGp1c3Qgbm90aWNlZCB3ZSBoYXZlIGEgZGVw
-ZW5kZW5jeSBoZXJlLiBUaGlzIGJpbmRpbmcgaXMgcmVmZXJyaW5nDQo+ID4gdG8NCj4gPiByZWd1
-bGF0b3IgYmluZGluZyAtIHdoaWNoIHdhcyBhcHBsaWVkIGJ5IE1hcmsgYW5kIGlzIHRodXMgbWlz
-c2luZw0KPiA+IGZyb20NCj4gPiB0aGUgc2VyaWVzLiBXaGF0J3MgdGhlIGJlc3Qgd2F5IGZvcndh
-cmQ/DQo+ID4gDQo+ID4gT24gVGh1LCAyMDE5LTEyLTE5IGF0IDExOjQ2ICswMjAwLCBNYXR0aSBW
-YWl0dGluZW4gd3JvdGU6DQo+ID4gPiBST0hNIEJENzE4MjggUG93ZXIgbWFuYWdlbWVudCBJQyBp
-bnRlZ3JhdGVzIDcgYnVjayBjb252ZXJ0ZXJzLCA3DQo+ID4gPiBMRE9zLA0KPiA+ID4gYSByZWFs
-LXRpbWUgY2xvY2sgKFJUQyksIDMgR1BPL3JlZ3VsYXRvciBjb250cm9sIHBpbnMsIEhBTEwgaW5w
-dXQNCj4gPiA+IGFuZCBhIDMyLjc2OCBrSHogY2xvY2sgZ2F0ZS4NCj4gPiA+IA0KPiA+ID4gRG9j
-dW1lbnQgdGhlIGR0IGJpbmRpbmdzIGRyaXZlcnMgYXJlIHVzaW5nLg0KPiA+ID4gDQo+ID4gPiBT
-aWduZWQtb2ZmLWJ5OiBNYXR0aSBWYWl0dGluZW4gPG1hdHRpLnZhaXR0aW5lbkBmaS5yb2htZXVy
-b3BlLmNvbQ0KPiA+ID4gPg0KPiA+ID4gUmV2aWV3ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtl
-cm5lbC5vcmc+DQo+ID4gPiAtLS0NCj4gPiA+IA0KPiA+ID4gTm8gY2hhbmdlcyBzaW5jZSB2Ng0K
-PiA+IA0KPiA+IC8vc25pcA0KPiA+IA0KPiA+ID4gKyAgcmVndWxhdG9yczoNCj4gPiA+ICsgICAg
-JHJlZjogLi4vcmVndWxhdG9yL3JvaG0sYmQ3MTgyOC1yZWd1bGF0b3IueWFtbA0KPiA+IA0KPiA+
-IFRoaXMgZmlsZSBpcyBtaXNzaW5nIGZyb20gdGhlIHNlcmllcyBhbmQgaXMgYXBwbGllZCB0byBN
-YXJrJ3MgdHJlZS4NCj4gDQo+IFNob3VsZG4ndCBtYXR0ZXIuICBJIGd1ZXNzIHRoZXkncmUgYWxs
-IGhlYWRpbmcgZm9yIGhlIHNhbWUgcmVsZWFzZS4NCj4gDQpPay4gVGhhbmtzIGZvciBjbGFyaWZp
-Y2F0aW9uLiBJIHdhcyBhc2tpbmcgdGhpcyBiZWNhdXNlIFJvYiBhc2tlZCBtZSB0bw0KcmVvcmRl
-ciB0aGUgcGF0Y2hlcyBhIGZldyB2ZXJzaW9ucyBhZ28gc28gdGhhdCB0aGUgZHRfYmluZGluZ19j
-aGVjaw0KTWFrZSB0YXJnZXQgd291bGQgbm90IGJlIGJyb2tlbiBiZXR3ZWVuIGNvbW1pdHMuIEhl
-IGFza2VkIG1lIHRvIHN1Ym1pdA0KdGhlIHJlZ3VsYXRvciBhbmQgTEVEIGJpbmRpbmdzIGZpcnN0
-IGFuZCBNRkQgKHdoaWNoIHJlZmVycyB0byB0aG9zZSkNCm9ubHkgYWZ0ZXIgdGhlbS4gVGh1cyBJ
-IHdhcyB3b25kZXJpbmcgaWYgdGhlIGZpbmFsIG1lcmdlIG9yZGVyIG9mIE1GRA0KYW5kIHJlZ3Vs
-YXRvciB0cmVlcyBpcyBzdWNoIHRoYXQgaXQgY2FuIHJlc3VsdCB0aGUgYnJlYWthZ2UgUm9iIGhv
-cGVkDQp0byBhdm9pZC4gQnV0IEkgYW0gbW9yZSB0aGFuIGdsYWQgaWYgdGhlIHNlcmllcyBjYW4g
-Z28gaW4gbGlrZSB0aGlzIDopDQoNClRoYW5rcyBhZ2FpbiBmb3IgYWxsIHRoZSBoZWxwIGd1eXMg
-OikNCg0KQnIsDQoJTWF0dGkgDQo=
+On Fri, 20 Dec 2019, Vaittinen, Matti wrote:
+
+> 
+> On Thu, 2019-12-19 at 14:36 +0000, Lee Jones wrote:
+> > On Thu, 19 Dec 2019, Vaittinen, Matti wrote:
+> > 
+> > > Hello Mark, Lee, Rob
+> > > 
+> > > I just noticed we have a dependency here. This binding is referring
+> > > to
+> > > regulator binding - which was applied by Mark and is thus missing
+> > > from
+> > > the series. What's the best way forward?
+> > > 
+> > > On Thu, 2019-12-19 at 11:46 +0200, Matti Vaittinen wrote:
+> > > > ROHM BD71828 Power management IC integrates 7 buck converters, 7
+> > > > LDOs,
+> > > > a real-time clock (RTC), 3 GPO/regulator control pins, HALL input
+> > > > and a 32.768 kHz clock gate.
+> > > > 
+> > > > Document the dt bindings drivers are using.
+> > > > 
+> > > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com
+> > > > >
+> > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > ---
+> > > > 
+> > > > No changes since v6
+> > > 
+> > > //snip
+> > > 
+> > > > +  regulators:
+> > > > +    $ref: ../regulator/rohm,bd71828-regulator.yaml
+> > > 
+> > > This file is missing from the series and is applied to Mark's tree.
+> > 
+> > Shouldn't matter.  I guess they're all heading for he same release.
+> > 
+> Ok. Thanks for clarification. I was asking this because Rob asked me to
+> reorder the patches a few versions ago so that the dt_binding_check
+> Make target would not be broken between commits. He asked me to submit
+> the regulator and LED bindings first and MFD (which refers to those)
+> only after them. Thus I was wondering if the final merge order of MFD
+> and regulator trees is such that it can result the breakage Rob hoped
+> to avoid. But I am more than glad if the series can go in like this :)
+
+It's not something that concerns me personally.  I only care about
+*build* breakages.  Rob might be more upset about it however.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
