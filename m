@@ -2,142 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 591531279AC
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2019 11:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DEB127B03
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Dec 2019 13:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfLTKzH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Dec 2019 05:55:07 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36726 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727185AbfLTKzH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Dec 2019 05:55:07 -0500
-Received: by mail-wr1-f67.google.com with SMTP id z3so8994274wru.3
-        for <linux-rtc@vger.kernel.org>; Fri, 20 Dec 2019 02:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=a9C14P9lsGAuh8F6Rdx7vHrUThQ9aonGy2O3DOUo7Ds=;
-        b=lnsxrNECjkBnFDoUoh4Zk3vI7gih7BdHS5VDD/ljXCsq9ilLRKOZ8GzzX7sx/6q8XK
-         zXuAKwefaAx9xOCMJiNWqqF/21CHWenY5X0UiZceAAACBFFJpSOR2/UekgYy3Alhn+7K
-         ieZJlFRB2hooAr36DkhTxOLH/VBGWvH3v/mySwaI6BcLANoApcE8RhKRUozqUqqmupM9
-         pRRKHrcSYVWSErKLI8B7XsVpW7oGvA9qLZMI7MVHFPZ7zG0gSaC9VyAIgYXmv8TF26Ih
-         fDVRzS4kElTzBv5ztckoj5PvaMpdOldZIi3GMchS7cYL/6H8DBkQYaUkNyrvhqkZXB72
-         YaSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=a9C14P9lsGAuh8F6Rdx7vHrUThQ9aonGy2O3DOUo7Ds=;
-        b=HBeZi/WY82Rjp56hFc4C9LDLaGDt4lrrfEvsOtnZvQApAzdM4XwFfXhQn6naTNoYez
-         KZo+EnQSEmPDhCx6nKow8blZqCc4BNARBXKaYo8DFcIVGQnffIlgfVRk7+OsqY6Ae2kh
-         W39q4g8cZsRYfQGxM1JK5KdUb0M8+EjfhhKtqTGn3MQDd2gQxfBwIVxyH5EpIqBWG5wj
-         4UwtmuE+lRH2VjyBjMuCcX2uvIagiWcQGdDuxV/64vnncilvWiLJlmlpAYG0HdZlRREU
-         e0OH/vizn3KBQWi4/OH5ife1rKddJ5CL+EME1nfkGT1hFFjYrDXdINWYnm8XYMaoBG97
-         7oeg==
-X-Gm-Message-State: APjAAAWToBjUwOKVZRUqOb+mqAfLOCOPHP8tP3xax+yZEgfwvUK+jybI
-        f42PA+qO4o5yaq680BCZ+rdWmQ==
-X-Google-Smtp-Source: APXvYqyicvSFzhHzxpljiw/uidTI78NGorAjjg+bi/J4O8iYxkHUB7TVkQ+2LhBMrPCHOQeS/2zn7Q==
-X-Received: by 2002:adf:f052:: with SMTP id t18mr14250816wro.192.1576839304724;
-        Fri, 20 Dec 2019 02:55:04 -0800 (PST)
-Received: from dell ([2.27.35.132])
-        by smtp.gmail.com with ESMTPSA id f17sm9339549wmc.8.2019.12.20.02.55.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2019 02:55:04 -0800 (PST)
-Date:   Fri, 20 Dec 2019 10:55:05 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v7 02/12] dt-bindings: mfd: Document ROHM BD71828 bindings
-Message-ID: <20191220105505.GS18955@dell>
-References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
- <702daeb9d8604e2feddd5f6f92b067a2d60d81ad.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
- <f9b0fbb7b898691d09ed8954e8df67cf3706aa96.camel@fi.rohmeurope.com>
- <20191219143647.GQ18955@dell>
- <e734a11ed158814119256a3fac253a8574c90837.camel@fi.rohmeurope.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e734a11ed158814119256a3fac253a8574c90837.camel@fi.rohmeurope.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727394AbfLTMY4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Dec 2019 07:24:56 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:48358 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727347AbfLTMY4 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 20 Dec 2019 07:24:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Message-Id:Date:Subject:Cc:To:From:Sender:
+        Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RBosA1WXv7+ZQ+18j+VhmhTjKGR8E8xllD/Rd9oJey4=; b=Tk2mRZKAgHCqxHXhZkJZCaXkcz
+        ziDMUULEv7GANWvFA+/U0sKpZscZo/do24A4Pg4/5KH64P9F78UefievcccXdBj7+1VGNHClW4MJH
+        sQ8WBEu8GuWD8jbx+pvJ5dSFsJRXwj3nz+iPQwVArFVRU+VN/V3EgD/ointGEBkabTOM=;
+Received: from [2a02:790:ff:1019:7ee9:d3ff:fe1f:a246] (helo=localhost)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1iiHKn-0001zJ-6K; Fri, 20 Dec 2019 13:24:45 +0100
+Received: from andi by localhost with local (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1iiHKj-0008TW-Ni; Fri, 20 Dec 2019 13:24:42 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, stefan@agner.ch, b.galvani@gmail.com,
+        phh@phh.me, letux-kernel@openphoenux.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v5 0/5] Add rtc support for rn5t618 mfd
+Date:   Fri, 20 Dec 2019 13:24:11 +0100
+Message-Id: <20191220122416.31881-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Score: -1.0 (-)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 20 Dec 2019, Vaittinen, Matti wrote:
+In the variant RC5T619 the mfd has an RTC. This patchset adds
+support for it. To do so it adds the missing register defines in 
+rn5t618.h and general irq handling for that.
+It seems that the irq definitions are the same except missing RTC
+but due to missing ability to test that I do not add them here.
 
-> 
-> On Thu, 2019-12-19 at 14:36 +0000, Lee Jones wrote:
-> > On Thu, 19 Dec 2019, Vaittinen, Matti wrote:
-> > 
-> > > Hello Mark, Lee, Rob
-> > > 
-> > > I just noticed we have a dependency here. This binding is referring
-> > > to
-> > > regulator binding - which was applied by Mark and is thus missing
-> > > from
-> > > the series. What's the best way forward?
-> > > 
-> > > On Thu, 2019-12-19 at 11:46 +0200, Matti Vaittinen wrote:
-> > > > ROHM BD71828 Power management IC integrates 7 buck converters, 7
-> > > > LDOs,
-> > > > a real-time clock (RTC), 3 GPO/regulator control pins, HALL input
-> > > > and a 32.768 kHz clock gate.
-> > > > 
-> > > > Document the dt bindings drivers are using.
-> > > > 
-> > > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com
-> > > > >
-> > > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > > ---
-> > > > 
-> > > > No changes since v6
-> > > 
-> > > //snip
-> > > 
-> > > > +  regulators:
-> > > > +    $ref: ../regulator/rohm,bd71828-regulator.yaml
-> > > 
-> > > This file is missing from the series and is applied to Mark's tree.
-> > 
-> > Shouldn't matter.  I guess they're all heading for he same release.
-> > 
-> Ok. Thanks for clarification. I was asking this because Rob asked me to
-> reorder the patches a few versions ago so that the dt_binding_check
-> Make target would not be broken between commits. He asked me to submit
-> the regulator and LED bindings first and MFD (which refers to those)
-> only after them. Thus I was wondering if the final merge order of MFD
-> and regulator trees is such that it can result the breakage Rob hoped
-> to avoid. But I am more than glad if the series can go in like this :)
+The rtc driver itself is based on 
+https://github.com/kobolabs/Kobo-Reader/blob/master/hw/imx6sll-clara/kernel.tar.bz2
+but heavily reworked.
 
-It's not something that concerns me personally.  I only care about
-*build* breakages.  Rob might be more upset about it however.
+It was tested on the Kobo Clara HD.
+
+For cleaning up there is a separate off-topic patch:
+mfd: rn5t618: cleanup i2c_device_id
+
+Changes in v5:
+- static rn5t618_irq_init
+- PLATFORM_DEVID_NONE
+- added some Acked-Bys
+
+Changes in v4:
+- use macros for IRQ definitions
+- merge rn5t618-core.c and rn5t618-irq.c
+
+Changes in v3:
+- alignment cleanup
+- output cleanup, remove useless toggling of alarm flag in rtc probe
+- updated bindings description, so patch 1/5 becomes 2/6 and so on
+
+Changes in v2:
+- no dead code in irq code
+- various improvements and cleanups in rtc driver itself
+
+Andreas Kemnade (5):
+  dt-bindings: mfd: rn5t618: Document optional property interrupts
+  mfd: rn5t618: add IRQ support
+  mfd: rn5t618: add RTC related registers
+  mfd: rn5t618: add more subdevices
+  rtc: rc5t619: add ricoh rc5t619 RTC driver
+
+ Documentation/devicetree/bindings/mfd/rn5t618.txt |   4 +
+ drivers/mfd/Kconfig                               |   1 +
+ drivers/mfd/rn5t618.c                             | 109 +++++-
+ drivers/rtc/Kconfig                               |  10 +
+ drivers/rtc/Makefile                              |   1 +
+ drivers/rtc/rtc-rc5t619.c                         | 444 ++++++++++++++++++++++
+ include/linux/mfd/rn5t618.h                       |  26 ++
+ 7 files changed, 593 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/rtc/rtc-rc5t619.c
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.11.0
+
