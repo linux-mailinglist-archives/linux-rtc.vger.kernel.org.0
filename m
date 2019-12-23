@@ -2,123 +2,130 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 228EB128BA2
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Dec 2019 22:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3947B1293E8
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2019 11:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbfLUVHt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 21 Dec 2019 16:07:49 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34610 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726763AbfLUVHt (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 21 Dec 2019 16:07:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 2E76FACEC;
-        Sat, 21 Dec 2019 21:07:46 +0000 (UTC)
-Subject: Re: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement
- TM1628/FD628/AiP1618 LED controllers
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-realtek-soc@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Dan Murphy <dmurphy@ti.com>,
-        linux-leds@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>
-References: <20191212033952.5967-1-afaerber@suse.de>
- <20191221182057.GA32732@amd>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-Message-ID: <e26f985b-ceca-ca2c-a709-e7dc40c7fdd1@suse.de>
-Date:   Sat, 21 Dec 2019 22:07:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726666AbfLWKBP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Dec 2019 05:01:15 -0500
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:43469 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726233AbfLWKBP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Dec 2019 05:01:15 -0500
+X-Originating-IP: 176.184.22.51
+Received: from localhost (did75-h03-176-184-22-51.dsl.sta.abo.bbox.fr [176.184.22.51])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id AEEF1C000F;
+        Mon, 23 Dec 2019 10:01:12 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v2] rtc: rv3029: remove useless error messages
+Date:   Mon, 23 Dec 2019 11:01:08 +0100
+Message-Id: <20191223100108.1083078-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191221182057.GA32732@amd>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Pavel,
+Remove redundant messages or messages that would not add any value because
+the information is already conveyed properly using errno.
 
-[- Roc He, - chipset vendors]
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-rv3029c2.c | 35 +++++++++--------------------------
+ 1 file changed, 9 insertions(+), 26 deletions(-)
 
-Am 21.12.19 um 19:20 schrieb Pavel Machek:
->> It goes on to add a "text" attribute to the driver that enables DT-configured
->> seven-segment displays; I was expecting to find precedence in auxdisplay
->> subsystem but came up empty. So my driver currently integrates its own
->> generic (but incomplete) character-to-8-segments mapping, as well as in a
->> second step a combined-characters-to-8-segments mapping, which then gets
->> mapped to the chipset's available output lines. Doing this as sysfs
->> device
-> 
-> I did not investigate this in great detail; but if it is displaying
-> characters, auxdisplay is probably right subsystem to handle that.
-
-ausdisplay does not have any common API AFAICS. Most of them are 
-high-level displays with some parallel interface to set text and 
-metadata. Half of them hardcode the text to Linux or maybe offer a 
-Kconfig option to override it; the other half implements their own 
-character device file with ABI specific to that driver.
-
-> I
-> guess LEDs can still take the low-level parts...
-
-I'd hope so, but I believe we're missing multiple things there:
-
-1) A bulk-update API for setting multiple LEDs at once. 
-.brightness_set[_blocking]() is all we have on the device side, which 
-here results in two SPI commands. led_set_brightness[_sync]() is all I 
-see on the API side. We'd need an API that takes an array of LEDs and 
-brightness values and allows a common driver rather than individual 
-devices to update the Display RAM via SPI from an internal buffer.
-
-2) DT is currently limited to one node per LED device. We'd need 
-#led-cells, with current LED nodes defaulting to zero. That way we could 
-address LEDs from an external, e.g., auxdisplay driver via a two-cell 
-index for these LED controllers, without needing to have DT nodes for 
-each and every display segment.
-
-3) Better LED device names. More "function" values, or a reversal of the 
-label deprecation. Or an alternative API to register LEDs with manual name.
-
-4) LED triggers controlling more than one LED. linux,default-trigger 
-seems to assign one per LED, so that two heartbeats are quickly out of 
-sync. Doing it from code would probably be simpler than finding a way to 
-model this in DT, but I don't yet see how.
-
-Alternatively we could expose those LED output lines as a gpiochip, 
-which we can already index in DT, and consider the display GPIO-based, 
-but then we're in the situation again that GregKH was telling people to 
-either go screw themselves in userspace or move things into leds, which 
-now you're against.
-
-Also, if you don't allow displays in leds, then we can't have LED 
-triggers for them either.
-
-> 
-> Oh, and common dimming for many LEDs is seen on other hardware, too
-> (Turris routers). Not sure how to handle that, either :-(.
-
-That part I have indeed successfully solved with a backlight device.
-
-My current problem (WIP blocking a push) is the key input handling - not 
-sure how to model both LEDs and keys as DT child nodes - do we need a 
-compatible to distinguish between them? Unit addresses and reg values 
-would be in different ranges, making this awkward, not to mention the 
-problem of naming a compatible, given the incredible diverse chipsets.
-
-Regards,
-Andreas
-
+diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
+index 6f1c7790a6a2..483faa4f66d4 100644
+--- a/drivers/rtc/rtc-rv3029c2.c
++++ b/drivers/rtc/rtc-rv3029c2.c
+@@ -318,10 +318,8 @@ static int rv3029_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	ret = regmap_bulk_read(rv3029->regmap, RV3029_W_SEC, regs,
+ 			       RV3029_WATCH_SECTION_LEN);
+-	if (ret < 0) {
+-		dev_err(dev, "%s: reading RTC section failed\n", __func__);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	tm->tm_sec = bcd2bin(regs[RV3029_W_SEC - RV3029_W_SEC]);
+ 	tm->tm_min = bcd2bin(regs[RV3029_W_MINUTES - RV3029_W_SEC]);
+@@ -357,21 +355,16 @@ static int rv3029_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 
+ 	ret = regmap_bulk_read(rv3029->regmap, RV3029_A_SC, regs,
+ 			       RV3029_ALARM_SECTION_LEN);
+-	if (ret < 0) {
+-		dev_err(dev, "%s: reading alarm section failed\n", __func__);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	ret = regmap_read(rv3029->regmap, RV3029_IRQ_CTRL, &controls);
+-	if (ret) {
+-		dev_err(dev, "Read IRQ Control Register error %d\n", ret);
++	if (ret)
+ 		return ret;
+-	}
++
+ 	ret = regmap_read(rv3029->regmap, RV3029_IRQ_FLAGS, &flags);
+-	if (ret < 0) {
+-		dev_err(dev, "Read IRQ Flags Register error %d\n", ret);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	tm->tm_sec = bcd2bin(regs[RV3029_A_SC - RV3029_A_SC] & 0x7f);
+ 	tm->tm_min = bcd2bin(regs[RV3029_A_MN - RV3029_A_SC] & 0x7f);
+@@ -802,11 +795,8 @@ static int rv3029_i2c_probe(struct i2c_client *client,
+ 	}
+ 
+ 	regmap = devm_regmap_init_i2c(client, &config);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&client->dev, "%s: regmap allocation failed: %ld\n",
+-			__func__, PTR_ERR(regmap));
++	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
+-	}
+ 
+ 	return rv3029_probe(&client->dev, regmap, client->irq, client->name);
+ }
+@@ -863,11 +853,8 @@ static int rv3049_probe(struct spi_device *spi)
+ 	struct regmap *regmap;
+ 
+ 	regmap = devm_regmap_init_spi(spi, &config);
+-	if (IS_ERR(regmap)) {
+-		dev_err(&spi->dev, "%s: regmap allocation failed: %ld\n",
+-			__func__, PTR_ERR(regmap));
++	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
+-	}
+ 
+ 	return rv3029_probe(&spi->dev, regmap, spi->irq, "rv3049");
+ }
+@@ -907,16 +894,12 @@ static int __init rv30x9_init(void)
+ 	int ret;
+ 
+ 	ret = rv3029_register_driver();
+-	if (ret) {
+-		pr_err("Failed to register rv3029 driver: %d\n", ret);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	ret = rv3049_register_driver();
+-	if (ret) {
+-		pr_err("Failed to register rv3049 driver: %d\n", ret);
++	if (ret)
+ 		rv3029_unregister_driver();
+-	}
+ 
+ 	return ret;
+ }
 -- 
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 Nürnberg, Germany
-GF: Felix Imendörffer
-HRB 36809 (AG Nürnberg)
+2.23.0
+
