@@ -2,272 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9E8129428
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2019 11:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738F0129443
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2019 11:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbfLWKZ2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Dec 2019 05:25:28 -0500
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:57277 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726679AbfLWKZ1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Dec 2019 05:25:27 -0500
-X-Originating-IP: 176.184.22.51
-Received: from localhost (did75-h03-176-184-22-51.dsl.sta.abo.bbox.fr [176.184.22.51])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id D2195C0008;
-        Mon, 23 Dec 2019 10:25:24 +0000 (UTC)
-Date:   Mon, 23 Dec 2019 11:25:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Akshay Bhat <akshay.bhat@timesys.com>
-Subject: Re: [PATCH] rtc: rx8010: Remove struct i2c_client from struct
- rx8010_data
-Message-ID: <20191223102523.GJ1054858@piout.net>
-References: <20191217121231.2698817-1-iwamatsu@nigauri.org>
+        id S1726861AbfLWKgG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Dec 2019 05:36:06 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:53894 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbfLWKgG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Dec 2019 05:36:06 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-f0-5e009893a6a7
+Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 48.78.08102.398900E5; Mon, 23 Dec 2019 11:36:03 +0100 (CET)
+Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
+ WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
+ 14.03.0439.000; Mon, 23 Dec 2019 11:35:51 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "pavel@ucw.cz" <pavel@ucw.cz>
+CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>
+Subject: Re: [PATCH v7 11/12] leds: Add common LED binding parsing support
+ to LED class/core
+Thread-Topic: [PATCH v7 11/12] leds: Add common LED binding parsing support
+ to LED class/core
+Thread-Index: AQHVtlJMyatI9ieot0i0jk0Qmtw3YKfE7uMAgAKNQAA=
+Date:   Mon, 23 Dec 2019 10:35:51 +0000
+Message-ID: <c5988a961ede536114d1f9eff449fd8f91edb49b.camel@fi.rohmeurope.com>
+References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+         <c7abf8d15ea54fee504fbec5666d013c26d3b62a.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+         <20191221193758.GJ32732@amd>
+In-Reply-To: <20191221193758.GJ32732@amd>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [82.203.188.194]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B2B81C7D1190894B9384DB2CDA3B1ED2@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217121231.2698817-1-iwamatsu@nigauri.org>
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0gUURjFuzOzs1drYtw0b9uDHHrQy5KMLiFR0GOC6EEIIeU25uRauisz
+        a1hSSCW1JmVUZIuuZlpharVluWmPNbds7SWlFdlDEkuLJDKlLG1mp9J/Zs7c8/3OmYFvIGlo
+        pY0w0WITJYuQxNGB1O1zfa5ZR3OHxc45dXcmLm5s0uP9X87ocXe+j8LHW9toXFD3SIcPNlzR
+        4VeVFyn89rsX4J5nBwh87NdZAn/NfqPDlwt+Afz0eh6NKz9XAHz3/DMalzxvJHBeST2FG31L
+        8Wufl8aZN+r0uL/5ErUohC9zlgG+60WmnneWpfNux2s97yq103xLcw3N33txjeBPOH8Q/Lnz
+        vXr+m2vCmsCY4VFxgm37usQEy+yFm4abPZkxKS1BadWePl0GKAzKAgEQsZHI+/kBmQUCoYFt
+        AuhWz6G/D/UADeT6qCwAIc1GoayXehUIZsPQ5Ww7rc6Q7FWI3O1NhDozio1F185O0mZMqOJj
+        AaHpBSi/q8gfQ7GTUce7Zapk2FWoYv96rekOQM7sNv94ADsN3XG3+KsAOx7ZM774z0k2FLna
+        e3XaO7OouOYxqekQ1PG+X6dmIpZDNwciVUkqMReuz9bkIuSuMmohYejYwVZ/OMMGofsn26gc
+        MNoxJN8xCDsGYccQ2DEELgS6UoCShcSkBMEmRoRLYmq4ZDUnK7fN1mQX0JaluwoM1K6oBQQE
+        tWAMJLgQhlsyLNYwMs4av8MsyGaTlJokyrUAQZILZqp3/d5oYOKFHTtFyfrPGgspLpSZ2npk
+        o4FVu7aJYooo/XPHQcghJu2EEhokiQli2pbEJNugTcAANTzQGCyLlnhRElJtZpO6GSZZWQ3V
+        GqH0HlFxRk4RkpVTDfWBCJjTkV9Ewrr8EuWac7TrNGmgLFaLaAxl5qoAqwLmVMv/uk4QCgE3
+        ipmnuiOU/+Z/WqdSRChFD8f3Kx8o24RBy5gBFnSXi1s7PUUR375+aonyVs03Rds9OWRae2TV
+        WtqT/qS5ptf9YfHbyac/Oqr3pe9p3At326yHV+yTtl8omvFg4KcMY35XVhDLnWvzttrbN/Ty
+        fZ6esIsNxQnZE6I355aejDZPqo+eNuPS05UPG8oXR3rdDEl3H189pXhX+PS4ibico2SzEDGd
+        lGThD86Ow1b0AwAA
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 17/12/2019 21:12:30+0900, Nobuhiro Iwamatsu wrote:
-> The struct i2c_client can be obtained using to_i2c_client with struct
-> device. This driver does not need to have it in struct rx8010_data.
-> 
-> CC: Alessandro Zummo <a.zummo@towertech.it>
-> CC: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> CC: Akshay Bhat <akshay.bhat@timesys.com>
-> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-> ---
->  drivers/rtc/rtc-rx8010.c | 48 +++++++++++++++++++---------------------
->  1 file changed, 23 insertions(+), 25 deletions(-)
-> 
-
-This patch doesn't apply cleanly on rtc-next, can you rebase?
-
-> diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-> index 8102469e27c05..c5d3ad2163475 100644
-> --- a/drivers/rtc/rtc-rx8010.c
-> +++ b/drivers/rtc/rtc-rx8010.c
-> @@ -61,7 +61,6 @@ static const struct of_device_id rx8010_of_match[] = {
->  MODULE_DEVICE_TABLE(of, rx8010_of_match);
->  
->  struct rx8010_data {
-> -	struct i2c_client *client;
->  	struct rtc_device *rtc;
->  	u8 ctrlreg;
->  };
-> @@ -107,12 +106,12 @@ static irqreturn_t rx8010_irq_1_handler(int irq, void *dev_id)
->  
->  static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
->  {
-> -	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	u8 date[7];
->  	int flagreg;
->  	int err;
->  
-> -	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
-> +	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
->  	if (flagreg < 0)
->  		return flagreg;
->  
-> @@ -121,7 +120,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
->  		return -EINVAL;
->  	}
->  
-> -	err = i2c_smbus_read_i2c_block_data(rx8010->client, RX8010_SEC,
-> +	err = i2c_smbus_read_i2c_block_data(client, RX8010_SEC,
->  					    7, date);
->  	if (err != 7)
->  		return err < 0 ? err : -EIO;
-> @@ -139,6 +138,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
->  
->  static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
->  {
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
->  	u8 date[7];
->  	int ctrl, flagreg;
-> @@ -148,11 +148,11 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
->  		return -EINVAL;
->  
->  	/* set STOP bit before changing clock/calendar */
-> -	ctrl = i2c_smbus_read_byte_data(rx8010->client, RX8010_CTRL);
-> +	ctrl = i2c_smbus_read_byte_data(client, RX8010_CTRL);
->  	if (ctrl < 0)
->  		return ctrl;
->  	rx8010->ctrlreg = ctrl | RX8010_CTRL_STOP;
-> -	ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
-> +	ret = i2c_smbus_write_byte_data(client, RX8010_CTRL,
->  					rx8010->ctrlreg);
->  	if (ret < 0)
->  		return ret;
-> @@ -165,28 +165,28 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
->  	date[RX8010_YEAR - RX8010_SEC] = bin2bcd(dt->tm_year - 100);
->  	date[RX8010_WDAY - RX8010_SEC] = bin2bcd(1 << dt->tm_wday);
->  
-> -	ret = i2c_smbus_write_i2c_block_data(rx8010->client,
-> +	ret = i2c_smbus_write_i2c_block_data(client,
->  					     RX8010_SEC, 7, date);
->  	if (ret < 0)
->  		return ret;
->  
->  	/* clear STOP bit after changing clock/calendar */
-> -	ctrl = i2c_smbus_read_byte_data(rx8010->client, RX8010_CTRL);
-> +	ctrl = i2c_smbus_read_byte_data(client, RX8010_CTRL);
->  	if (ctrl < 0)
->  		return ctrl;
->  	rx8010->ctrlreg = ctrl & ~RX8010_CTRL_STOP;
-> -	ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
-> +	ret = i2c_smbus_write_byte_data(client, RX8010_CTRL,
->  					rx8010->ctrlreg);
->  	if (ret < 0)
->  		return ret;
->  
-> -	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
-> +	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
->  	if (flagreg < 0) {
->  		return flagreg;
->  	}
->  
->  	if (flagreg & RX8010_FLAG_VLF)
-> -		ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG,
-> +		ret = i2c_smbus_write_byte_data(client, RX8010_FLAG,
->  						flagreg & ~RX8010_FLAG_VLF);
->  
->  	return 0;
-> @@ -215,7 +215,7 @@ static int rx8010_init_client(struct i2c_client *client)
->  	if (err < 0)
->  		return err;
->  
-> -	err = i2c_smbus_read_i2c_block_data(rx8010->client, RX8010_FLAG,
-> +	err = i2c_smbus_read_i2c_block_data(client, RX8010_FLAG,
->  					    2, ctrl);
->  	if (err != 2)
->  		return err < 0 ? err : -EIO;
-> @@ -248,8 +248,8 @@ static int rx8010_init_client(struct i2c_client *client)
->  
->  static int rx8010_read_alarm(struct device *dev, struct rtc_wkalrm *t)
->  {
-> +	struct i2c_client *client = to_i2c_client(dev);
->  	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
-> -	struct i2c_client *client = rx8010->client;
->  	u8 alarmvals[3];
->  	int flagreg;
->  	int err;
-> @@ -290,7 +290,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
->  
->  	if (rx8010->ctrlreg & (RX8010_CTRL_AIE | RX8010_CTRL_UIE)) {
->  		rx8010->ctrlreg &= ~(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
-> -		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
-> +		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
->  						rx8010->ctrlreg);
->  		if (err < 0) {
->  			return err;
-> @@ -298,7 +298,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
->  	}
->  
->  	flagreg &= ~RX8010_FLAG_AF;
-> -	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG, flagreg);
-> +	err = i2c_smbus_write_byte_data(client, RX8010_FLAG, flagreg);
->  	if (err < 0)
->  		return err;
->  
-> @@ -306,7 +306,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
->  	alarmvals[1] = bin2bcd(t->time.tm_hour);
->  	alarmvals[2] = bin2bcd(t->time.tm_mday);
->  
-> -	err = i2c_smbus_write_i2c_block_data(rx8010->client, RX8010_ALMIN,
-> +	err = i2c_smbus_write_i2c_block_data(client, RX8010_ALMIN,
->  					     2, alarmvals);
->  	if (err < 0)
->  		return err;
-> @@ -316,14 +316,14 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
->  		return extreg;
->  
->  	extreg |= RX8010_EXT_WADA;
-> -	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_EXT, extreg);
-> +	err = i2c_smbus_write_byte_data(client, RX8010_EXT, extreg);
->  	if (err < 0)
->  		return err;
->  
->  	if (alarmvals[2] == 0)
->  		alarmvals[2] |= RX8010_ALARM_AE;
->  
-> -	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_ALWDAY,
-> +	err = i2c_smbus_write_byte_data(client, RX8010_ALWDAY,
->  					alarmvals[2]);
->  	if (err < 0)
->  		return err;
-> @@ -335,7 +335,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
->  			rx8010->ctrlreg |=
->  				(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
->  
-> -		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
-> +		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
->  						rx8010->ctrlreg);
->  		if (err < 0)
->  			return err;
-> @@ -372,13 +372,13 @@ static int rx8010_alarm_irq_enable(struct device *dev,
->  		return flagreg;
->  
->  	flagreg &= ~RX8010_FLAG_AF;
-> -	err = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG, flagreg);
-> +	err = i2c_smbus_write_byte_data(client, RX8010_FLAG, flagreg);
->  	if (err < 0)
->  		return err;
->  
->  	if (ctrl != rx8010->ctrlreg) {
->  		rx8010->ctrlreg = ctrl;
-> -		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
-> +		err = i2c_smbus_write_byte_data(client, RX8010_CTRL,
->  						rx8010->ctrlreg);
->  		if (err < 0)
->  			return err;
-> @@ -390,13 +390,12 @@ static int rx8010_alarm_irq_enable(struct device *dev,
->  static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> -	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
->  	int ret, tmp;
->  	int flagreg;
->  
->  	switch (cmd) {
->  	case RTC_VL_READ:
-> -		flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
-> +		flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
->  		if (flagreg < 0)
->  			return flagreg;
->  
-> @@ -407,7 +406,7 @@ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
->  		return 0;
->  
->  	case RTC_VL_CLR:
-> -		flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
-> +		flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
->  		if (flagreg < 0) {
->  			return flagreg;
->  		}
-> @@ -448,7 +447,6 @@ static int rx8010_probe(struct i2c_client *client,
->  	if (!rx8010)
->  		return -ENOMEM;
->  
-> -	rx8010->client = client;
->  	i2c_set_clientdata(client, rx8010);
->  
->  	err = rx8010_init_client(client);
-> -- 
-> 2.24.0
-> 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+SGVsbG8gUGF2ZWwsDQoNCk9uIFNhdCwgMjAxOS0xMi0yMSBhdCAyMDozNyArMDEwMCwgUGF2ZWwg
+TWFjaGVrIHdyb3RlOg0KPiBIaSENCj4gDQo+ID4gUXVjaWsgZ3JlcCBmb3IgJ2Zvcl9lYWNoJyBv
+ciAnbGludXgsZGVmYXVsdC10cmlnZ2VyJyBvcg0KPiANCj4gcXVpY2suDQo+IA0KPiA+IElmIGlu
+aXRfZGF0YSBpcyBnb3ZlbiBidXQgbm8gc3RhcnRpbmcgcG9pbnQgZm9yIG5vZGUgbG9va3VwIC0g
+dGhlbg0KPiANCj4gaXMgZ2l2ZW4uDQo+IA0KPiA+IChwYXJlbnQpIGRldmljZSdzIG93biBEVCBu
+b2RlIGlzIHVzZWQuIElmIG5vIGxlZC1jb21wYXRpYmxlIGlzDQo+ID4gZ2l2ZW4sDQo+ID4gdGhl
+biBvZl9tYXRjaCBpcyBzZWFyY2hlZCBmb3IuIElmIG5laXRoZXIgbGVkLWNvbXBhdGlibGUgbm90
+DQo+ID4gb2ZfbWF0Y2gNCj4gDQo+IG5vciBvZl9tYXRjaC4NCj4gDQo+ID4gaXMgZ2l2ZW4gdGhl
+biBkZXZpY2UncyBvd24gbm9kZSBvciBwYXNzZWQgc3RhcnRpbmcgcG9pbnQgYXJlIHVzZWQNCj4g
+PiBhcw0KPiA+IHN1Y2guDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVu
+IDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ID4gLS0tDQo+ID4gDQo+ID4g
+Tm8gY2hhbmdlcyBzaW5jZSB2Ng0KPiA+IA0KPiA+ICBkcml2ZXJzL2xlZHMvbGVkLWNsYXNzLmMg
+fCAgOTkgKysrKysrKysrKysrKy0tDQo+ID4gIGRyaXZlcnMvbGVkcy9sZWQtY29yZS5jICB8IDI1
+OCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLQ0KPiA+IC0tLS0NCj4gPiAgaW5j
+bHVkZS9saW51eC9sZWRzLmggICAgIHwgIDk0ICsrKysrKysrKysrKy0tDQo+ID4gIDMgZmlsZXMg
+Y2hhbmdlZCwgMzg1IGluc2VydGlvbnMoKyksIDY2IGRlbGV0aW9ucygtKQ0KPiANCj4gUXVpdGUg
+YSBsb3Qgb2YgY29kZSBhZGRlZCBoZXJlLiBDYW4gSSB0cnVzdCB5b3UgdGhhdCB3ZSB3ZSdsbCBk
+ZWxldGUNCj4gMzIwIGxpbmVzIGJ5IGNvbnZlcnRpbmcgZHJpdmVyIG9yIHR3bz8NCg0KSSBiZWxp
+ZXZlIHdlIGRvLiBCZXNpZGVzIGJ1bmNoIG9mIHRoZSBsaW5lcyBhcmUgY29tbWVudHMuIEkgZG9u
+J3QgdGhpbmsNCkkgYWN0dWFsbHkgYWRkZWQgbXVjaCBvZiBuZXcgdGhpbmdzIGhlcmUuIEFuZCBv
+bmUgdGhpbmcgd2Ugc2hvdWxkIG5vdA0Kb3Zlcmxvb2sgaXMgdGhlIGRyaXZlcnMgdG8gY29tZS4g
+SSBiZWxpZXZlIGFtb3VudCBvZiBMRUQgZGV2aWNlcyB3ZQ0Kd2lsbCBiZSBnZXR0aW5nIGRyaXZl
+cnMgZm9yIHdpbGwgaW5jcmVhc2UuIDMyMCBsaW5lcyBpcyBwZWFudXRzIGlmIHdlDQpnZXQgNSBu
+ZXcgZHJpdmVycyBhbGwgaW1wbGVtZW50aW5nIHRoZSBzYW1lIERUIHBhcnNpbmcgbG9vcC4NCg0K
+QW55d2F5cywgSSB3aWxsIGxvb2sgYWxsIG9mIHRoZSBjb21tZW50cyB0aG9yb3VnaGx5IGR1cmlu
+ZyBuZXh0IEZyaWRheS4NCkkgYW0gY3VycmVudGx5IGhhdmluZyBhIHZhY2F0aW9uIGFuZCBJIG1p
+Z2h0IGdldCBzdHJhbmdsZWQgYnkgbXkgZmFtaWx5DQppZiBJIHNwZW5kIGl0IHN0YXJpbmcgYXQg
+dGhlIGNvbXB1dGVyIHhEDQoNClRoYW5rcyBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIGxvb2sgYXQg
+dGhpcyEgSSBkbyBhcHByZWNpYXRlIHRoZSBlZmZvcnQhDQoNCkJyLA0KCU1hdHRpIFZhaXR0aW5l
+bg0K
