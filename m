@@ -2,94 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE02B129413
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2019 11:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2B0129418
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Dec 2019 11:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfLWKOi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Dec 2019 05:14:38 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:50263 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726890AbfLWKOi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Dec 2019 05:14:38 -0500
+        id S1726638AbfLWKSj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Dec 2019 05:18:39 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:52965 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbfLWKSj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Dec 2019 05:18:39 -0500
 X-Originating-IP: 176.184.22.51
 Received: from localhost (did75-h03-176-184-22-51.dsl.sta.abo.bbox.fr [176.184.22.51])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 38ADD240003;
-        Mon, 23 Dec 2019 10:14:35 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 08E24E0008;
+        Mon, 23 Dec 2019 10:18:36 +0000 (UTC)
+Date:   Mon, 23 Dec 2019 11:18:36 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH v2] rtc: rv3029: annotate init and exit functions
-Date:   Mon, 23 Dec 2019 11:14:30 +0100
-Message-Id: <20191223101430.1091572-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.23.0
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH v2 1/2] rtc: hym8563: Return -EINVAL if the time is known
+ to be invalid
+Message-ID: <20191223101836.GC1054858@piout.net>
+References: <20191212153111.966923-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191212153111.966923-1-paul.kocialkowski@bootlin.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-rv30{2,4}9_register_driver and rv30{2,4}9_unregister_driver are only called
-from the init and exit functions of the module. Annotate them properly.
+On 12/12/2019 16:31:10+0100, Paul Kocialkowski wrote:
+> The current code returns -EPERM when the voltage loss bit is set.
+> Since the bit indicates that the time value is not valid, return
+> -EINVAL instead, which is the appropriate error code for this
+> situation.
+> 
+> Fixes: dcaf03849352 ("rtc: add hym8563 rtc-driver")
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+> Changes since v1:
+> - Addded Fixes tag.
+> 
+>  drivers/rtc/rtc-hym8563.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-rv3029c2.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index 220ea91bf86a..62718231731b 100644
---- a/drivers/rtc/rtc-rv3029c2.c
-+++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -823,7 +823,7 @@ static struct i2c_driver rv3029_driver = {
- 	.id_table	= rv3029_id,
- };
- 
--static int rv3029_register_driver(void)
-+static int __init rv3029_register_driver(void)
- {
- 	return i2c_add_driver(&rv3029_driver);
- }
-@@ -835,7 +835,7 @@ static void rv3029_unregister_driver(void)
- 
- #else
- 
--static int rv3029_register_driver(void)
-+static int __init rv3029_register_driver(void)
- {
- 	return 0;
- }
-@@ -866,24 +866,24 @@ static struct spi_driver rv3049_driver = {
- 	.probe   = rv3049_probe,
- };
- 
--static int rv3049_register_driver(void)
-+static int __init rv3049_register_driver(void)
- {
- 	return spi_register_driver(&rv3049_driver);
- }
- 
--static void rv3049_unregister_driver(void)
-+static void __exit rv3049_unregister_driver(void)
- {
- 	spi_unregister_driver(&rv3049_driver);
- }
- 
- #else
- 
--static int rv3049_register_driver(void)
-+static int __init rv3049_register_driver(void)
- {
- 	return 0;
- }
- 
--static void rv3049_unregister_driver(void)
-+static void __exit rv3049_unregister_driver(void)
- {
- }
- 
 -- 
-2.23.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
