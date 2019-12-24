@@ -2,69 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62612129E44
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Dec 2019 07:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E77129F69
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Dec 2019 09:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfLXGyQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Dec 2019 01:54:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38866 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbfLXGyP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 24 Dec 2019 01:54:15 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D09B620706;
-        Tue, 24 Dec 2019 06:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577170454;
-        bh=ZKiiDeIHEimT5RF49wdxk08CEo4aIHjAHjFkXzaey7Y=;
-        h=In-Reply-To:References:Cc:From:To:Subject:Date:From;
-        b=XD/RA8iIKhhmqKRAYapiwrONvPCq/s/0rct5T1yVgKpw15dEQr4ILYfgyPZaPBQ0N
-         w2MGva0yTs/pjiEyEbMOCYXAOeYP9ZSfev1N/rA9WOhHHH8pu1G0qouZQNUj/1P3n+
-         kW+SQz5bkTrNMQWF30Q6IHU4RMWGk3jkJcoRpSX8=
-Content-Type: text/plain; charset="utf-8"
+        id S1726261AbfLXIrN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Dec 2019 03:47:13 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:36178 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726244AbfLXIrN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Dec 2019 03:47:13 -0500
+Received: by mail-qv1-f66.google.com with SMTP id m14so7269160qvl.3
+        for <linux-rtc@vger.kernel.org>; Tue, 24 Dec 2019 00:47:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=PQC8SYLCXx+8aDuDCLCwJgk2oQh3fLzHmMXwhB5xY3bef3Vo9nrhk4Yg6HHmflz15A
+         odr7sEsXszk5IefLinD2h+1zq4e88FBObg36SZAuPRqSewet3Ta9S7nYrpgVd56Fd7Nn
+         pF4UOpFqHS/vFlCYHvNiKKET749oMuh6ba4SGm84XHPjlJH1jZ6bNkVeqECOxLVvUm4D
+         QLX5/qOjMF+sSc2kOy8uf2Xg/YtEl3CfJAdSFbQYNBLHe5VpSisBe2Vhsy7I7HtuscWQ
+         RrXf3skZb21QSlq2mtaYGqsirOIfAXY2wSc5lCy61V/R0NEOho5Faf+a1vRLR5TL05Tc
+         J2BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
+        b=bdU/Wg5wPsTMdpulROvYMUiR6joMk6xZtW238t/jnL2YgMlfAJcj0K6MG8+9LONQSj
+         +dpn5d+1TcojM1wPzduOLfBEe2o8AIZjcaNCT9Ormad109MFEV6Ubn2XcFI9DV2L5z7d
+         UAEDdQU/WDzU31HBA/KFkkxJ1QsDLvI3ajxiafqEUBrbrckTGCUqjmQSCDh/5syVM9m5
+         utt33wrUyIjBHMKUbEKVcNVfT6GhsG/yGAMFXpN438Hk9F8IEKmahiLJ9hKdMGNwSOTu
+         Y580N/KNpfNCNayvmV7cbwiI5dSedUpXlm4q8cEVJt9FCF58vf30at2qpeUxYlsydPNP
+         qDfA==
+X-Gm-Message-State: APjAAAV3hn33A5LiBuSTH6pYPC9t/7Wlerc3oix8vRgL4sreTkzEK/r2
+        PqaPi/urcjNTDfducS4zqxZj54MV1t0JL7Jzn9g=
+X-Google-Smtp-Source: APXvYqzaLbNYw7chXTk9TUUPs6B60DWqUF5k2s4P095bxLhv0swSj+2PMPeIkcEn8uNvF34hBR2yK95ka1103zSo7Q4=
+X-Received: by 2002:a0c:f24a:: with SMTP id z10mr28100861qvl.33.1577177231005;
+ Tue, 24 Dec 2019 00:47:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <4907f35240ae77bba4a27fd32f1e586e00cd434d.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com> <4907f35240ae77bba4a27fd32f1e586e00cd434d.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Subject: Re: [PATCH v7 07/12] clk: bd718x7: Support ROHM BD71828 clk block
-User-Agent: alot/0.8.1
-Date:   Mon, 23 Dec 2019 22:54:14 -0800
-Message-Id: <20191224065414.D09B620706@mail.kernel.org>
+Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:47:10
+ -0800 (PST)
+Reply-To: bethnatividad9@gmail.com
+From:   Beth Nat <anthonymoore105@gmail.com>
+Date:   Tue, 24 Dec 2019 08:47:10 +0000
+Message-ID: <CAKqrdYCjdg7tKr1Bgbtcoo-HGDCypDL8xnV8R2ZpiJxfRimm-A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Matti Vaittinen (2019-12-19 01:52:13)
-> BD71828GW is a single-chip power management IC for battery-powered portab=
-le
-> devices. Add support for controlling BD71828 clk using bd718x7 driver.
->=20
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
-> ---
-
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-
-I guess we can't win and break the build dependency on the "generic"
-header file :/
-
+How are you today my dear? i saw your profile and it interests me, i
+am a Military nurse from USA. Can we be friend? I want to know more
+about you.
