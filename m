@@ -2,97 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 935DD130163
-	for <lists+linux-rtc@lfdr.de>; Sat,  4 Jan 2020 09:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D569E130231
+	for <lists+linux-rtc@lfdr.de>; Sat,  4 Jan 2020 12:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbgADIZf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 4 Jan 2020 03:25:35 -0500
-Received: from mail-io1-f44.google.com ([209.85.166.44]:37051 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725970AbgADIZf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 4 Jan 2020 03:25:35 -0500
-Received: by mail-io1-f44.google.com with SMTP id k24so13330430ioc.4;
-        Sat, 04 Jan 2020 00:25:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IITNyuhRvFPFRzEQHBam4oqBhV4UL3sQSXHfLhzuc28=;
-        b=nawC8F4dkiL5w80TVV1YCRPySNjoCpsSggwJn3o6IQCNx5XzNk9Hpx/HVkJMEfo9pR
-         wQgDX1ye9j/J9KWmupq0RLHu1F+vjNswaELjonmCMqjRRkjOaQzI2JdNj+nqDFY5cBpY
-         nyoXMDX+yeGRSXp7yyMnIWH8iSYJSQ8g6Pi1LG/q5oS4vCWAPIudVcrnt1TWCQZGCfKg
-         iog1j4o8Lqtw2bGQBU+8oRPn+qfy1lmWAhvJIzhjpC4eemXEqzAMrspLSS5QvvoLiNKj
-         Avmk8S1K0/KngxOspnu0z6GbmiGZdrALd0y/S8o7HaddtmQWqtvp64JUOyljUKwp7OsA
-         St4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IITNyuhRvFPFRzEQHBam4oqBhV4UL3sQSXHfLhzuc28=;
-        b=kpYxsU7wlQw2Ht97O7DW5pITs852ozNaABcofcEZBcyoa64Olh5MY+xdPzinmXB3zr
-         uWS7ix7jmmF4tYtPo3i/NThRchv4L7MYv/XWvmV76b4tWmwAfBav4zxwZWm1uYIOBKJd
-         p17Vmto5Gzk4Mq4XOh+495aQOh9V9e5ZXiN8Jn4lyWrrPBiUTLitE87IKPVIZsj8sOA+
-         PQU6tsRT+oYlO98eIxpoACV7diS9ZcYFhDGgvWfjiDW7BGgJ/sC+DHSVn+pvIbBUJ4B9
-         IqVoNsyEIRGvTCXMGxkE2DWabrStrBIcsVB6svteyPYTIf9zT3fsgDgSMXe/xJnykrX4
-         JKyg==
-X-Gm-Message-State: APjAAAWmyNnzVwMaOfSIqF9PlNw3nvn2wQfxbzzzjGR/72RCJn+4HAch
-        UI8yJZK+cQiMcNA2Irl2hWVMGoPzVKGjNQV4W6g=
-X-Google-Smtp-Source: APXvYqyZhRcybOoIECFq8vx6FikF6Uav7qGPvLsgyLwzmeRicOnTtBZ+gjA/YUWXbUpG63B8a5eqq/nhfNs2s0Ffnbg=
-X-Received: by 2002:a6b:8e51:: with SMTP id q78mr58267435iod.179.1578126334398;
- Sat, 04 Jan 2020 00:25:34 -0800 (PST)
-MIME-Version: 1.0
-References: <CABXGCsOv26W6aqB5WPMe-mEynmwy55DTfTeL5Dg9vRq6+Y6WvA@mail.gmail.com>
- <CABXGCsNkzPrjqMRaWpssorxzhMLWBvLeSw9BpKYr_DW4LJQECQ@mail.gmail.com>
- <20200102110817.ahqaqidw3ztw3kax@10.255.255.10> <CABXGCsNkm3VuzO60WBCi4VJmDnO=DmprQ1P=dd0FcW2-+dGc0w@mail.gmail.com>
- <20200102131434.tky2hquki23laqqo@10.255.255.10> <CABXGCsMV1GRiqrXCQGHqvpBiendU3mG36h0YoG=4nw6spZHq=w@mail.gmail.com>
- <nycvar.YAK.7.76.2001021153220.1385@zhn.tzk.pbz> <CABXGCsMLfarquWnzV=e3Ta_HPac+DALfKEOaD3rp5n9MPqgyFw@mail.gmail.com>
- <20200103100232.GH3040@piout.net> <CABXGCsNv7G94TxaaKX8KXL5DEJiFgNcSu4+WShE_kQjVSa7zZA@mail.gmail.com>
- <20200103101935.GI3040@piout.net> <CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com>
- <7c015680-01b7-9c3e-c4c7-5d0b6e964781@hygon.cn>
-In-Reply-To: <7c015680-01b7-9c3e-c4c7-5d0b6e964781@hygon.cn>
-From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Date:   Sat, 4 Jan 2020 13:25:23 +0500
-Message-ID: <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
-Subject: Re: [bugreport] "hwclock -w" reset time instead of setting the right time
-To:     Jinke Fan <fanjinke@hygon.cn>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1725805AbgADLhp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 4 Jan 2020 06:37:45 -0500
+Received: from spam01.hygon.cn ([110.188.70.11]:32510 "EHLO spam2.hygon.cn"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725796AbgADLhp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 4 Jan 2020 06:37:45 -0500
+Received: from MK-DB.hygon.cn ([172.23.18.60])
+        by spam2.hygon.cn with ESMTP id 004BZbW0030090;
+        Sat, 4 Jan 2020 19:35:37 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex01.Hygon.cn ([172.23.18.10])
+        by MK-DB.hygon.cn with ESMTP id 004BZSkj086529;
+        Sat, 4 Jan 2020 19:35:29 +0800 (GMT-8)
+        (envelope-from fanjinke@hygon.cn)
+Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
+ (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Sat, 4 Jan 2020
+ 19:35:36 +0800
+Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
+ ([172.23.18.10]) with mapi id 15.01.1466.003; Sat, 4 Jan 2020 19:35:36 +0800
+From:   Jinke Fan <fanjinke@hygon.cn>
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         J William Piggott <elseifthen@gmx.com>,
         Karel Zak <kzak@redhat.com>,
         "util-linux@vger.kernel.org" <util-linux@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "Linux List Kernel Mailing" <linux-kernel@vger.kernel.org>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [bugreport] "hwclock -w" reset time instead of setting the right
+ time
+Thread-Topic: [bugreport] "hwclock -w" reset time instead of setting the right
+ time
+Thread-Index: AQHVwUPPCOndCXxy/kq06ofHR9RHFKfWsTqAgAANMwCAABYVAIAAHY0AgAAhJgCAAAUoAIABGNMAgAACcoCAAAJRgIAAQ/aAgAEBiwCAACzsgIAANSSA
+Date:   Sat, 4 Jan 2020 11:35:36 +0000
+Message-ID: <6ac1d65c-33ac-e3a4-799f-24279b677f90@hygon.cn>
+References: <CABXGCsOv26W6aqB5WPMe-mEynmwy55DTfTeL5Dg9vRq6+Y6WvA@mail.gmail.com>
+ <CABXGCsNkzPrjqMRaWpssorxzhMLWBvLeSw9BpKYr_DW4LJQECQ@mail.gmail.com>
+ <20200102110817.ahqaqidw3ztw3kax@10.255.255.10>
+ <CABXGCsNkm3VuzO60WBCi4VJmDnO=DmprQ1P=dd0FcW2-+dGc0w@mail.gmail.com>
+ <20200102131434.tky2hquki23laqqo@10.255.255.10>
+ <CABXGCsMV1GRiqrXCQGHqvpBiendU3mG36h0YoG=4nw6spZHq=w@mail.gmail.com>
+ <nycvar.YAK.7.76.2001021153220.1385@zhn.tzk.pbz>
+ <CABXGCsMLfarquWnzV=e3Ta_HPac+DALfKEOaD3rp5n9MPqgyFw@mail.gmail.com>
+ <20200103100232.GH3040@piout.net>
+ <CABXGCsNv7G94TxaaKX8KXL5DEJiFgNcSu4+WShE_kQjVSa7zZA@mail.gmail.com>
+ <20200103101935.GI3040@piout.net>
+ <CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com>
+ <7c015680-01b7-9c3e-c4c7-5d0b6e964781@hygon.cn>
+ <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
+In-Reply-To: <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.23.18.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <92D765153CD03C42949B4AC8A36A7A7A@Hygon.cn>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MAIL: spam2.hygon.cn 004BZbW0030090
+X-DNSRBL: 
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, 4 Jan 2020 at 10:46, Jinke Fan <fanjinke@hygon.cn> wrote:
->
-> Hi Mike,
-> The root cause of the bug you encountered is unclear.
->
-
-=3D=3D=3D cutted =3D=3D=3D
-
->
-> There is no date reset found in the bios after reboot.
-> The first time during OS startup get date from rtc_cmos is:
-> [    1.589157] rtc_cmos 00:03: setting system clock to
-> 2020-01-04T04:07:01 UTC (1578110821)
-
-> I watched the video on youtube. The date is reseted when startup into
-> bios at Mike's platform.
-> As we know that the bios will check the validity of rtc time, if not,
-> bios will reset the rtc time. RTC time reset may be done by the BIOS.
-
-Did you disable automatic time synchronization?
-By default Fedora GNOME doing automatic time synchronization.
-For this reason, it=E2=80=99s more correct to immediately go into the BIOS
-after a reboot and there check the time value or turn off automatic
-time synchronization
-
---
-Best Regards,
-Mike Gavrilov.
+SGkgTWlrZToNClllcywgV2UgZG8gY2hlY2sgdGhlIHRpbWUgaW4gQklPUyBNZW51IGFmdGVyIGZp
+cnN0IHJlYm9vdC4NCg0KV2UgZG8gc29tZSBmdXJ0aGVyIHRlc3RzIGluIG91ciBYNTcwIHBsYXRm
+b3JtOg0KKiAiQU1EIFJ5emVuIDcgMzcwMFgiIHdpdGggbWFpbmJvYXJkICJBU1VTIFJPRyBTVFJJ
+WCBYNTcwLUUgR0FNSU5HIi4NCiogT1MgaXMgRmVkb3JhIHJhd2hpZGUsIHdpdGggZGVmYXVsdCBL
+ZXJuZWwgdmVyc2lvbiB3aGljaCBpcyBzaG93biBhcyANCmZvbGxvd3M6DQokdW5hbWUgLWENCkxp
+bnV4IGJvZ29uIDUuNS4wLTAucmM0LmdpdDAuMS5mYzMyLng4Nl82NCAjMSBTTVAgTW9uIERlYyAz
+MCAwNjozMjozNiANClVUQyAyMDE5IHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eA0KDQpB
+bmQgd2UgdXBncmFkZS9kb3duZ3JhZGUgQklPUyB2ZXJzaW9uIGZyb20gMTAwNS8xMjAxLzE0MDQv
+MTQwNSwgYW5kIHdlIA0KZm91bmQgb3V0IHRoYXQgOg0KKiBPTEQgQklPUyB2ZXJzaW9uIDEwMDUv
+MTIwMSBkb2VzIG5vdCByZXNldCB0aGUgcnRjIHRpbWUgYW5kIGtlZXAgdGhlIA0Kc2V0dXAgcnRj
+IHRpbWUgYWZ0ZXIgcmVib290Lg0KKiBORVcgQklPUyB2ZXJzaW9uIDE0MDQvMTQwNSBETyByZXNl
+dCB0aGUgcnRjIHRpbWUgdG8gMjAxOS8wMS8wMSBhZnRlciANCnJlYm9vdC4NCg0KRGV0YWlsZWQg
+cGljdHVyZXMgb2YgdGhlIEJJT1MgdGltZSBhZnRlciByZWJvb3QgaXMgc2hvd24gaW4gWzJdLA0K
+DQpXZSBzdXNwZWN0IHRoZSBCSU9TIDEyMDEtPjE0MDQgdXBncmFkZSBtaWdodCBjYXVzZSB0aGlz
+IGlzc3VlLg0KIEZyb20geDU3MCBCSU9TIGNoYW5nZWxvZyBbMV0sIHdlIGZvdW5kIHRoYXQgdGhl
+IGJpZyBkaWZmZXJlbmNlIGJldHdlZW4gDQoxMjAxLzE0MDQgaXMgdGhlIEFNRCBBTTQgUEkgdXBn
+cmFkZSBmcm9tIEFHRVNBIDEuMC4wLjNBQkJBIHRvIEFNNCBjb21ibyANClBJIDEuMC4wLjQgcGF0
+Y2ggQiwNCg0KSWYgcG9zc2libGUsIHBsZWFzZSB0ZWxsIHVzIGFib3V0IHRoZSBCSU9TIHZlcnNp
+b24gYW5kIHlvdXIgaGFyZHdhcmUgDQpwbGF0Zm9ybSwNCndoaWNoIGNhbiBiZSBnZXQgZnJvbSBC
+SU9TIFVJIG9yIHVzaW5nICJkbWlkZWNvZGUiIGluIExpbnV4IGVudi4NCg0KUmVmZXJlbmNlOg0K
+WzFdOiANCmh0dHBzOi8vd3d3LmFzdXMuY29tL01vdGhlcmJvYXJkcy9ST0ctU3RyaXgtWDU3MC1F
+LUdhbWluZy9IZWxwRGVza19CSU9TLw0KWzJdOmh0dHBzOi8vZ2l0aHViLmNvbS9mamtiby9ydGMN
+Cmh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9mamtiby9ydGMvbWFzdGVyLzEwMDUu
+anBnDQpodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vZmprYm8vcnRjL21hc3Rlci8x
+MjAxLmpwZw0KaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Zqa2JvL3J0Yy9tYXN0
+ZXIvMTQwNC5qcGcNCmh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9mamtiby9ydGMv
+bWFzdGVyLzE0MDUuanBnDQoNCi0tIA0KQmVzdCBSZWdhcmRzLA0KSmlua2UgRmFuLg0KDQpPbiAy
+MDIwLzEvNCAxNjoyNSwgTWlraGFpbCBHYXZyaWxvdiB3cm90ZToNCj4gT24gU2F0LCA0IEphbiAy
+MDIwIGF0IDEwOjQ2LCBKaW5rZSBGYW4gPGZhbmppbmtlQGh5Z29uLmNuPiB3cm90ZToNCj4+DQo+
+PiBJIHdhdGNoZWQgdGhlIHZpZGVvIG9uIHlvdXR1YmUuIFRoZSBkYXRlIGlzIHJlc2V0ZWQgd2hl
+biBzdGFydHVwIGludG8NCj4+IGJpb3MgYXQgTWlrZSdzIHBsYXRmb3JtLg0KPj4gQXMgd2Uga25v
+dyB0aGF0IHRoZSBiaW9zIHdpbGwgY2hlY2sgdGhlIHZhbGlkaXR5IG9mIHJ0YyB0aW1lLCBpZiBu
+b3QsDQo+PiBiaW9zIHdpbGwgcmVzZXQgdGhlIHJ0YyB0aW1lLiBSVEMgdGltZSByZXNldCBtYXkg
+YmUgZG9uZSBieSB0aGUgQklPUy4NCj4gDQo+IERpZCB5b3UgZGlzYWJsZSBhdXRvbWF0aWMgdGlt
+ZSBzeW5jaHJvbml6YXRpb24/DQo+IEJ5IGRlZmF1bHQgRmVkb3JhIEdOT01FIGRvaW5nIGF1dG9t
+YXRpYyB0aW1lIHN5bmNocm9uaXphdGlvbi4NCj4gRm9yIHRoaXMgcmVhc29uLCBpdOKAmXMgbW9y
+ZSBjb3JyZWN0IHRvIGltbWVkaWF0ZWx5IGdvIGludG8gdGhlIEJJT1MNCj4gYWZ0ZXIgYSByZWJv
+b3QgYW5kIHRoZXJlIGNoZWNrIHRoZSB0aW1lIHZhbHVlIG9yIHR1cm4gb2ZmIGF1dG9tYXRpYw0K
+PiB0aW1lIHN5bmNocm9uaXphdGlvbg0KPiANCj4gLS0NCj4gQmVzdCBSZWdhcmRzLA0KPiBNaWtl
+IEdhdnJpbG92Lg0KPiANCg==
