@@ -2,112 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D569E130231
-	for <lists+linux-rtc@lfdr.de>; Sat,  4 Jan 2020 12:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB662130256
+	for <lists+linux-rtc@lfdr.de>; Sat,  4 Jan 2020 13:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgADLhp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 4 Jan 2020 06:37:45 -0500
-Received: from spam01.hygon.cn ([110.188.70.11]:32510 "EHLO spam2.hygon.cn"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725796AbgADLhp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 4 Jan 2020 06:37:45 -0500
-Received: from MK-DB.hygon.cn ([172.23.18.60])
-        by spam2.hygon.cn with ESMTP id 004BZbW0030090;
-        Sat, 4 Jan 2020 19:35:37 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn ([172.23.18.10])
-        by MK-DB.hygon.cn with ESMTP id 004BZSkj086529;
-        Sat, 4 Jan 2020 19:35:29 +0800 (GMT-8)
-        (envelope-from fanjinke@hygon.cn)
-Received: from cncheex01.Hygon.cn (172.23.18.10) by cncheex01.Hygon.cn
- (172.23.18.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1466.3; Sat, 4 Jan 2020
- 19:35:36 +0800
-Received: from cncheex01.Hygon.cn ([172.23.18.10]) by cncheex01.Hygon.cn
- ([172.23.18.10]) with mapi id 15.01.1466.003; Sat, 4 Jan 2020 19:35:36 +0800
-From:   Jinke Fan <fanjinke@hygon.cn>
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1725861AbgADMXV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 4 Jan 2020 07:23:21 -0500
+Received: from mail-il1-f177.google.com ([209.85.166.177]:44442 "EHLO
+        mail-il1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbgADMXU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 4 Jan 2020 07:23:20 -0500
+Received: by mail-il1-f177.google.com with SMTP id z12so2292751iln.11;
+        Sat, 04 Jan 2020 04:23:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LKQLDuUQyKEp3PqqNw3i4af+LyZvLM7Wyx7d36N1/7g=;
+        b=vAB0O4s6yBazbpmIEiJWWx9AHn68/D7fHgaqYwW8qVN6GEYn3Jd5FTODWftDaqvoWb
+         o0aR4RUJuL8WgEYjmE59nhe1op+jIQ0w3FEU8F2Bi0d9e604m0gXTi4CX4zqkFy5ESIE
+         a2/qY0xyBIhm3xiuremTqrk83EOHEEEnchWuG7ptss2XGcjOjGay+2Sv+5wQLTbIx8yS
+         R2G7Z3Iwgsi2X50VkDj0E/nti4kMIRlzm1pGnx63us7gEwBE21oQhbjm0TqZ0z+erHs5
+         GLPxLYuLwVAzytAc5/aPAGggMgctbiurMUgkkfO2ZZmympTiR4XIrAf0sYhiPEX9gH79
+         usLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LKQLDuUQyKEp3PqqNw3i4af+LyZvLM7Wyx7d36N1/7g=;
+        b=B240iv7WmWACD5yryV5Zfdep0qAXt7CEZrqq/hN8zAIr2UD9YoKMwlnilsOilS2GDX
+         c2eByEyrIBuHZDVXDF2xtTIWPGTHT1rrsKalZKOfhKH4XCrUJmnbWLraDztComNXLrbu
+         uKX8CZONYj7PoQ5TMxJvJLnpiD33aLsiTWQyVCDPDiQz5IkNxPP28dt+P5sfUXjDj7Ho
+         anabQkZlLtiL7j4jcIZptaeaqWAm5nI9DPjk6Ar1AmgbthxaQjV6bVEfgq+8i97uwGcd
+         ukP0gj2eU8xjzNkjnK+VMZmkh7xtHbdSVs/D92Wg/WTih4YlsMyeAxj32jkiaNPHGVsh
+         pALA==
+X-Gm-Message-State: APjAAAV57W51veMPDzYYaISUebeXMP+QtJ2tayzUM8TaK618bGftDqHI
+        cElf1++QeGuWfHm3KMqX0NGsdbdXuLrhwdmbLzRVLH0/5g8aRP0w
+X-Google-Smtp-Source: APXvYqxRGib/GBLbSGJvISDQygameAmB0qxfxm7Vznd0dHfFks8EvS8cx3KiThhlephAoOkZaLJzrXSeJ044Qstyhy0=
+X-Received: by 2002:a92:cc42:: with SMTP id t2mr79004310ilq.111.1578140599825;
+ Sat, 04 Jan 2020 04:23:19 -0800 (PST)
+MIME-Version: 1.0
+References: <CABXGCsOv26W6aqB5WPMe-mEynmwy55DTfTeL5Dg9vRq6+Y6WvA@mail.gmail.com>
+ <CABXGCsNkzPrjqMRaWpssorxzhMLWBvLeSw9BpKYr_DW4LJQECQ@mail.gmail.com>
+ <20200102110817.ahqaqidw3ztw3kax@10.255.255.10> <CABXGCsNkm3VuzO60WBCi4VJmDnO=DmprQ1P=dd0FcW2-+dGc0w@mail.gmail.com>
+ <20200102131434.tky2hquki23laqqo@10.255.255.10> <CABXGCsMV1GRiqrXCQGHqvpBiendU3mG36h0YoG=4nw6spZHq=w@mail.gmail.com>
+ <nycvar.YAK.7.76.2001021153220.1385@zhn.tzk.pbz> <CABXGCsMLfarquWnzV=e3Ta_HPac+DALfKEOaD3rp5n9MPqgyFw@mail.gmail.com>
+ <20200103100232.GH3040@piout.net> <CABXGCsNv7G94TxaaKX8KXL5DEJiFgNcSu4+WShE_kQjVSa7zZA@mail.gmail.com>
+ <20200103101935.GI3040@piout.net> <CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com>
+ <7c015680-01b7-9c3e-c4c7-5d0b6e964781@hygon.cn> <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
+ <6ac1d65c-33ac-e3a4-799f-24279b677f90@hygon.cn>
+In-Reply-To: <6ac1d65c-33ac-e3a4-799f-24279b677f90@hygon.cn>
+From:   Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date:   Sat, 4 Jan 2020 17:23:09 +0500
+Message-ID: <CABXGCsO25iq2tZMis3E-DF2ADz2Je45YfL11cgjFhmr+bz-6jg@mail.gmail.com>
+Subject: Re: [bugreport] "hwclock -w" reset time instead of setting the right time
+To:     Jinke Fan <fanjinke@hygon.cn>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         J William Piggott <elseifthen@gmx.com>,
         Karel Zak <kzak@redhat.com>,
         "util-linux@vger.kernel.org" <util-linux@vger.kernel.org>,
-        "Linux List Kernel Mailing" <linux-kernel@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-Subject: Re: [bugreport] "hwclock -w" reset time instead of setting the right
- time
-Thread-Topic: [bugreport] "hwclock -w" reset time instead of setting the right
- time
-Thread-Index: AQHVwUPPCOndCXxy/kq06ofHR9RHFKfWsTqAgAANMwCAABYVAIAAHY0AgAAhJgCAAAUoAIABGNMAgAACcoCAAAJRgIAAQ/aAgAEBiwCAACzsgIAANSSA
-Date:   Sat, 4 Jan 2020 11:35:36 +0000
-Message-ID: <6ac1d65c-33ac-e3a4-799f-24279b677f90@hygon.cn>
-References: <CABXGCsOv26W6aqB5WPMe-mEynmwy55DTfTeL5Dg9vRq6+Y6WvA@mail.gmail.com>
- <CABXGCsNkzPrjqMRaWpssorxzhMLWBvLeSw9BpKYr_DW4LJQECQ@mail.gmail.com>
- <20200102110817.ahqaqidw3ztw3kax@10.255.255.10>
- <CABXGCsNkm3VuzO60WBCi4VJmDnO=DmprQ1P=dd0FcW2-+dGc0w@mail.gmail.com>
- <20200102131434.tky2hquki23laqqo@10.255.255.10>
- <CABXGCsMV1GRiqrXCQGHqvpBiendU3mG36h0YoG=4nw6spZHq=w@mail.gmail.com>
- <nycvar.YAK.7.76.2001021153220.1385@zhn.tzk.pbz>
- <CABXGCsMLfarquWnzV=e3Ta_HPac+DALfKEOaD3rp5n9MPqgyFw@mail.gmail.com>
- <20200103100232.GH3040@piout.net>
- <CABXGCsNv7G94TxaaKX8KXL5DEJiFgNcSu4+WShE_kQjVSa7zZA@mail.gmail.com>
- <20200103101935.GI3040@piout.net>
- <CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com>
- <7c015680-01b7-9c3e-c4c7-5d0b6e964781@hygon.cn>
- <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
-In-Reply-To: <CABXGCsNpS+nCMZ9C89UQVEu_u+hJVtdxCvdnj2QNqQf-j7+DrA@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.23.18.44]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <92D765153CD03C42949B4AC8A36A7A7A@Hygon.cn>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MAIL: spam2.hygon.cn 004BZbW0030090
-X-DNSRBL: 
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGkgTWlrZToNClllcywgV2UgZG8gY2hlY2sgdGhlIHRpbWUgaW4gQklPUyBNZW51IGFmdGVyIGZp
-cnN0IHJlYm9vdC4NCg0KV2UgZG8gc29tZSBmdXJ0aGVyIHRlc3RzIGluIG91ciBYNTcwIHBsYXRm
-b3JtOg0KKiAiQU1EIFJ5emVuIDcgMzcwMFgiIHdpdGggbWFpbmJvYXJkICJBU1VTIFJPRyBTVFJJ
-WCBYNTcwLUUgR0FNSU5HIi4NCiogT1MgaXMgRmVkb3JhIHJhd2hpZGUsIHdpdGggZGVmYXVsdCBL
-ZXJuZWwgdmVyc2lvbiB3aGljaCBpcyBzaG93biBhcyANCmZvbGxvd3M6DQokdW5hbWUgLWENCkxp
-bnV4IGJvZ29uIDUuNS4wLTAucmM0LmdpdDAuMS5mYzMyLng4Nl82NCAjMSBTTVAgTW9uIERlYyAz
-MCAwNjozMjozNiANClVUQyAyMDE5IHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eA0KDQpB
-bmQgd2UgdXBncmFkZS9kb3duZ3JhZGUgQklPUyB2ZXJzaW9uIGZyb20gMTAwNS8xMjAxLzE0MDQv
-MTQwNSwgYW5kIHdlIA0KZm91bmQgb3V0IHRoYXQgOg0KKiBPTEQgQklPUyB2ZXJzaW9uIDEwMDUv
-MTIwMSBkb2VzIG5vdCByZXNldCB0aGUgcnRjIHRpbWUgYW5kIGtlZXAgdGhlIA0Kc2V0dXAgcnRj
-IHRpbWUgYWZ0ZXIgcmVib290Lg0KKiBORVcgQklPUyB2ZXJzaW9uIDE0MDQvMTQwNSBETyByZXNl
-dCB0aGUgcnRjIHRpbWUgdG8gMjAxOS8wMS8wMSBhZnRlciANCnJlYm9vdC4NCg0KRGV0YWlsZWQg
-cGljdHVyZXMgb2YgdGhlIEJJT1MgdGltZSBhZnRlciByZWJvb3QgaXMgc2hvd24gaW4gWzJdLA0K
-DQpXZSBzdXNwZWN0IHRoZSBCSU9TIDEyMDEtPjE0MDQgdXBncmFkZSBtaWdodCBjYXVzZSB0aGlz
-IGlzc3VlLg0KIEZyb20geDU3MCBCSU9TIGNoYW5nZWxvZyBbMV0sIHdlIGZvdW5kIHRoYXQgdGhl
-IGJpZyBkaWZmZXJlbmNlIGJldHdlZW4gDQoxMjAxLzE0MDQgaXMgdGhlIEFNRCBBTTQgUEkgdXBn
-cmFkZSBmcm9tIEFHRVNBIDEuMC4wLjNBQkJBIHRvIEFNNCBjb21ibyANClBJIDEuMC4wLjQgcGF0
-Y2ggQiwNCg0KSWYgcG9zc2libGUsIHBsZWFzZSB0ZWxsIHVzIGFib3V0IHRoZSBCSU9TIHZlcnNp
-b24gYW5kIHlvdXIgaGFyZHdhcmUgDQpwbGF0Zm9ybSwNCndoaWNoIGNhbiBiZSBnZXQgZnJvbSBC
-SU9TIFVJIG9yIHVzaW5nICJkbWlkZWNvZGUiIGluIExpbnV4IGVudi4NCg0KUmVmZXJlbmNlOg0K
-WzFdOiANCmh0dHBzOi8vd3d3LmFzdXMuY29tL01vdGhlcmJvYXJkcy9ST0ctU3RyaXgtWDU3MC1F
-LUdhbWluZy9IZWxwRGVza19CSU9TLw0KWzJdOmh0dHBzOi8vZ2l0aHViLmNvbS9mamtiby9ydGMN
-Cmh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9mamtiby9ydGMvbWFzdGVyLzEwMDUu
-anBnDQpodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vZmprYm8vcnRjL21hc3Rlci8x
-MjAxLmpwZw0KaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2Zqa2JvL3J0Yy9tYXN0
-ZXIvMTQwNC5qcGcNCmh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9mamtiby9ydGMv
-bWFzdGVyLzE0MDUuanBnDQoNCi0tIA0KQmVzdCBSZWdhcmRzLA0KSmlua2UgRmFuLg0KDQpPbiAy
-MDIwLzEvNCAxNjoyNSwgTWlraGFpbCBHYXZyaWxvdiB3cm90ZToNCj4gT24gU2F0LCA0IEphbiAy
-MDIwIGF0IDEwOjQ2LCBKaW5rZSBGYW4gPGZhbmppbmtlQGh5Z29uLmNuPiB3cm90ZToNCj4+DQo+
-PiBJIHdhdGNoZWQgdGhlIHZpZGVvIG9uIHlvdXR1YmUuIFRoZSBkYXRlIGlzIHJlc2V0ZWQgd2hl
-biBzdGFydHVwIGludG8NCj4+IGJpb3MgYXQgTWlrZSdzIHBsYXRmb3JtLg0KPj4gQXMgd2Uga25v
-dyB0aGF0IHRoZSBiaW9zIHdpbGwgY2hlY2sgdGhlIHZhbGlkaXR5IG9mIHJ0YyB0aW1lLCBpZiBu
-b3QsDQo+PiBiaW9zIHdpbGwgcmVzZXQgdGhlIHJ0YyB0aW1lLiBSVEMgdGltZSByZXNldCBtYXkg
-YmUgZG9uZSBieSB0aGUgQklPUy4NCj4gDQo+IERpZCB5b3UgZGlzYWJsZSBhdXRvbWF0aWMgdGlt
-ZSBzeW5jaHJvbml6YXRpb24/DQo+IEJ5IGRlZmF1bHQgRmVkb3JhIEdOT01FIGRvaW5nIGF1dG9t
-YXRpYyB0aW1lIHN5bmNocm9uaXphdGlvbi4NCj4gRm9yIHRoaXMgcmVhc29uLCBpdOKAmXMgbW9y
-ZSBjb3JyZWN0IHRvIGltbWVkaWF0ZWx5IGdvIGludG8gdGhlIEJJT1MNCj4gYWZ0ZXIgYSByZWJv
-b3QgYW5kIHRoZXJlIGNoZWNrIHRoZSB0aW1lIHZhbHVlIG9yIHR1cm4gb2ZmIGF1dG9tYXRpYw0K
-PiB0aW1lIHN5bmNocm9uaXphdGlvbg0KPiANCj4gLS0NCj4gQmVzdCBSZWdhcmRzLA0KPiBNaWtl
-IEdhdnJpbG92Lg0KPiANCg==
+On Sat, 4 Jan 2020 at 16:37, Jinke Fan <fanjinke@hygon.cn> wrote:
+>
+> Hi Mike:
+> Yes, We do check the time in BIOS Menu after first reboot.
+>
+> We do some further tests in our X570 platform:
+> * "AMD Ryzen 7 3700X" with mainboard "ASUS ROG STRIX X570-E GAMING".
+> * OS is Fedora rawhide, with default Kernel version which is shown as
+> follows:
+> $uname -a
+> Linux bogon 5.5.0-0.rc4.git0.1.fc32.x86_64 #1 SMP Mon Dec 30 06:32:36
+> UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+>
+> And we upgrade/downgrade BIOS version from 1005/1201/1404/1405, and we
+> found out that :
+> * OLD BIOS version 1005/1201 does not reset the rtc time and keep the
+> setup rtc time after reboot.
+> * NEW BIOS version 1404/1405 DO reset the rtc time to 2019/01/01 after
+> reboot.
+>
+> Detailed pictures of the BIOS time after reboot is shown in [2],
+>
+> We suspect the BIOS 1201->1404 upgrade might cause this issue.
+>  From x570 BIOS changelog, we found that the big difference between
+> 1201/1404 is the AMD AM4 PI upgrade from AGESA 1.0.0.3ABBA to AM4 combo
+> PI 1.0.0.4 patch B,
+
+The changelog for my BIOS are the same [1]. Unfortunately, I will not
+able downgrade to BIOS of 0404 ver for checking assumption because
+changelog description of ver 1404 contains warning "* You will not be
+able to downgrade your BIOS after updating to this BIOS version"
+
+> If possible, please tell us about the BIOS version and your hardware
+> platform, which can be get from BIOS UI or using "dmidecode"
+> in Linux env.
+
+The version of my BIOS is the latest. It is 1405 for my motherboard.
+Here is "dmidecode" paste: https://pastebin.com/akBPAvZJ
+
+[1] https://www.asus.com/Motherboards/ROG-Strix-X570-I-Gaming/HelpDesk_BIOS/
+
+--
+Best Regards,
+Mike Gavrilov.
