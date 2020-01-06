@@ -2,109 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CC0130AD3
-	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2020 01:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0309130BF4
+	for <lists+linux-rtc@lfdr.de>; Mon,  6 Jan 2020 02:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgAFAMI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 5 Jan 2020 19:12:08 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:41673 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726494AbgAFAMH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 5 Jan 2020 19:12:07 -0500
-X-Originating-IP: 90.65.92.102
-Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 5890DFF803;
-        Mon,  6 Jan 2020 00:12:04 +0000 (UTC)
-Date:   Mon, 6 Jan 2020 01:12:04 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC fixes for 5.5
-Message-ID: <20200106001204.GA776560@piout.net>
+        id S1727379AbgAFB4k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 5 Jan 2020 20:56:40 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40229 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727226AbgAFB4k (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 5 Jan 2020 20:56:40 -0500
+Received: by mail-lj1-f194.google.com with SMTP id u1so49318763ljk.7;
+        Sun, 05 Jan 2020 17:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4rvRIWvPPO3rgIXN9Qu/ANljbCFEmjfGVoQUvS+BrRQ=;
+        b=ARoVldjpnELYLXAJ7cCzkdlqzT4ncLTMjGveBhivQrZqSIbI2lWMrmOM0u7JorPLGA
+         CCSiNRIm0tRvFfvQLOqa18QhhjYinnWB+nUrwvQ3NKJa+n0C2h8eWhOeK7a2T9CnCDB/
+         Hoav1uW6/qqp0DdPR90DmPqTzc5LVbln4HxCjqNNnOAnuROWIshCYuEFUlqY6JGhY26G
+         TIGZ1JeWVCLMhM5AgREoleB0JlSUimr0BYLEgL1pcYVfa2J5c553xq2i08Y2ao4oN6V2
+         bWmEV+ua+YDPdUN8jHoCoRJvRLA1wysccMpweeWfoEvHufdQwUzOHfmrTfzGsV0QOox/
+         HYzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4rvRIWvPPO3rgIXN9Qu/ANljbCFEmjfGVoQUvS+BrRQ=;
+        b=TXTaluoQhcY53CLa2ovpMjtp51tJ24tn3A8mAWAwjurMkbArWkOYU734B7jvrB0jIE
+         dfPEDFKxfGbHbw02msTxtJ7iqO/RZHOsPYG5cWKc7OXQKMxvPSmgqTnrxsarusUP2cXt
+         kfMr3MgA9yW7c0NFgCXX8NaLY3dn1pFqAJy80QvRJHqV57GEbiZe8L/+HI53qnTyQNbR
+         dsggl6vLabkutBWEQRB0lE9uEBmlhRflHV0bw6PPv737yKQL2fqz8sWTxKOtvj0C9iun
+         OP977S0V1ibS9SOO2iMTgSQ3BYo/W91/yM608xbCLvQPAauWm/qeopiQvnAACOSACMMs
+         A7ug==
+X-Gm-Message-State: APjAAAXupfPK1pO3s3u4d8lBvg54qg+1AElS3mNp83dMEZEZ9OInoIj4
+        68tconS7DYr36yuhd5lH+tI=
+X-Google-Smtp-Source: APXvYqw4+wDYspdBn20/FIYRd/Zx8SwBF9egqxCzltwle7cFRuRQvj82k0BUzA7kePdHTqZkSWlPXw==
+X-Received: by 2002:a2e:7518:: with SMTP id q24mr59460256ljc.119.1578275798191;
+        Sun, 05 Jan 2020 17:56:38 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id d1sm27433458ljl.18.2020.01.05.17.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Jan 2020 17:56:37 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] rtc: tps6586x: Use IRQ_NOAUTOEN flag
+Date:   Mon,  6 Jan 2020 04:56:15 +0300
+Message-Id: <20200106015615.12602-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+The IRQ_NOAUTOEN flag tells interrupt core that interrupt shall not be
+auto-enabled at the time of requesting interrupt. This is a minor clean-up
+change that doesn't fix any problems.
 
---VbJkn9YxBvnuCH5J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/rtc/rtc-tps6586x.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Hello Linus,
+diff --git a/drivers/rtc/rtc-tps6586x.c b/drivers/rtc/rtc-tps6586x.c
+index 859d901fa6cb..e39af2d67051 100644
+--- a/drivers/rtc/rtc-tps6586x.c
++++ b/drivers/rtc/rtc-tps6586x.c
+@@ -23,6 +23,7 @@
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/init.h>
++#include <linux/irq.h>
+ #include <linux/kernel.h>
+ #include <linux/mfd/tps6586x.h>
+ #include <linux/module.h>
+@@ -267,6 +268,8 @@ static int tps6586x_rtc_probe(struct platform_device *pdev)
+ 	rtc->rtc->start_secs = mktime64(2009, 1, 1, 0, 0, 0);
+ 	rtc->rtc->set_start_time = true;
+ 
++	irq_set_status_flags(rtc->irq, IRQ_NOAUTOEN);
++
+ 	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
+ 				tps6586x_rtc_irq,
+ 				IRQF_ONESHOT,
+@@ -276,7 +279,6 @@ static int tps6586x_rtc_probe(struct platform_device *pdev)
+ 				rtc->irq, ret);
+ 		goto fail_rtc_register;
+ 	}
+-	disable_irq(rtc->irq);
+ 
+ 	ret = rtc_register_device(rtc->rtc);
+ 	if (ret)
+-- 
+2.24.0
 
-A few fixes for this cycle. The CMOS AltCentury support broke a few
-platforms with a recent BIOS so I reverted it. The mt6397 fix is not
-that critical but good to have. And finally, the sun6i fix repairs WiFi
-and BT on a few platforms.
-
-The following changes since commit e42617b825f8073569da76dc4510bfa019b1c35a:
-
-  Linux 5.5-rc1 (2019-12-08 14:57:55 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc=
--5.5-2
-
-for you to fetch changes up to f01f4ffdfb703694035870f94b10f6ef2523f8de:
-
-  rtc: cmos: Revert "rtc: Fix the AltCentury value on AMD/Hygon platform" (=
-2020-01-04 05:31:50 +0100)
-
-----------------------------------------------------------------
-RTC fixes for 5.5
-
- - cmos: revert AltCentury support on AMD/Hygon
- - mt6397: fix alarm register overwrite
- - sun6i: ensure clock is working on R40
-
-----------------------------------------------------------------
-Alexandre Belloni (1):
-      rtc: cmos: Revert "rtc: Fix the AltCentury value on AMD/Hygon platfor=
-m"
-
-Chen-Yu Tsai (1):
-      rtc: sun6i: Add support for RTC clocks on R40
-
-Ran Bi (1):
-      rtc: mt6397: fix alarm register overwrite
-
- drivers/rtc/rtc-mc146818-lib.c | 15 +--------------
- drivers/rtc/rtc-mt6397.c       | 39 +++++++++++++++++++++++++--------------
- drivers/rtc/rtc-sun6i.c        | 16 ++++++++++++++++
- include/linux/mfd/mt6397/rtc.h |  8 ++++++++
- 4 files changed, 50 insertions(+), 28 deletions(-)
-
---=20
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---VbJkn9YxBvnuCH5J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEycoQi/giopmpPgB12wIijOdRNOUFAl4Se0gACgkQ2wIijOdR
-NOUgtA//dDD+MymlwZbpnKcKDIN0CLfd8/lIqlhI9Tn9D+LBdob6S6HpY6apR9UC
-hjoh1jZORgtlvDaq8imw6z0pqI1E16l+JDjmIG/CxWDCQhYIJGSkUD2lvTHe5YZr
-WayszcaLdJqU/HYfBb1vOFCgcuw7MIuZaBMDPeMQ0U6wWY0y6tTc+rx77FArbeue
-rc7Rg+AZIuixxNjDce9a6NHFFpJzxBdy6jd7kws0jfhFIx7Ol/4BmPp4rKJgt7xb
-iUf78gkSKGUHPlO08wsQO9KOYsS6Km/EOu2pgoeJYK9ZYVi5H7ee84zdH/GSAk/8
-5yDLC4AMlnAMza6KKtcJ2pC74M5sZHk1GH+Sr6LqH1JQ+4obyZ9gcduojR7sA5fi
-GrVIIA2XQOeTtThXxdwpLQnqHZSbGF1w9fq46dP/sp/tS7i/B6cVx3ed6Cpso+Zi
-t7XrY+IC6FhaUf3ZL2ldc2cHS6a2Fh6LHwyFUXivdorR1Msbu9A+3QsTnSyeLDKI
-EKLGylK/vUCnX0RR5sCNLEACrXAZwjsoXlpu07gxDRks7rTL27xYYoUteGrHUQmH
-M7P76Vh2Qt5oHgRzyCf0cs2yQrUNRCOuE9GxvK4edAgntbf7AC0EGS0MpGyQDBZ8
-BtsF0O4RR/+fXqEq7H4SwtutecWMZ2zh6mQbZ0QcocpMO7fmADc=
-=sWEr
------END PGP SIGNATURE-----
-
---VbJkn9YxBvnuCH5J--
