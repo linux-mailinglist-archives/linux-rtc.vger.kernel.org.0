@@ -2,318 +2,135 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 482E71326D0
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Jan 2020 13:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F11133CB6
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Jan 2020 09:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbgAGM5l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Jan 2020 07:57:41 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46134 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbgAGM5l (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Jan 2020 07:57:41 -0500
-Received: by mail-wr1-f67.google.com with SMTP id z7so53730262wrl.13
-        for <linux-rtc@vger.kernel.org>; Tue, 07 Jan 2020 04:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=93QCy+6lfoPu6T2jeY2YuuqgksbRKDw7v2F+iiG2Jic=;
-        b=FyRzPZicMMxp+pAWuWqWtAdTwZ3vMQndL9HoJsAxXaC8Lui7wOPJsm0geFbfSDw6Dd
-         nrwfovxHI2u0lUEJ4C2RPqAfw31p0iI2xgo7ZzLfgOy5BYd9eo5LPjQ79nKmMn7uXpji
-         yWh0Qk1MIyP/EkWv1WHtqJrguSIy8bXZFWFL952IlOzXB095CADywjTfy7mVkmAFOXmP
-         n7n/QLfzytJQbbEyIFCceszQFyaNeJdQNyOoHKHwmieOTUvhyHgbxgncBq21oWX0Iq2n
-         tNujW6zoah5QZurnwEcCLBSJw9Tot2YZXDBpxsHvcBJ8DAk9hvV3t50r2/cmCEzOizS7
-         /1Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=93QCy+6lfoPu6T2jeY2YuuqgksbRKDw7v2F+iiG2Jic=;
-        b=N5QVSfAJ7FJ4dF8sK8akKI5SrhlPar9AKR8Fdo1wqI9bO7WVTMmQRguaokc6tEuQb8
-         tK4LIMFDFO2p7Op1PtSzoDufJ/5jrO8YJsX2Yh4RS5DZt1GQyZs1dfsSn0WidRY5GAdS
-         uV3VHamWxNghrCaS9immayVzR8vspnJ5g49wq+fdrLGC0sxRElwfY+3e3fQI9Mh08oBS
-         NFdWGwYb9aavqZDJ5e2Z7/hb2mZnybYlmanhrAvKJjzS+JGYdSZiZEKegEDg6Z0MK4eO
-         l+OVMn0sc/Ev5kbaYKjFdhliJa9whjCqWVuanMSfRynO20sQLngbG2Q6ig+TvkiFgMz8
-         qzHw==
-X-Gm-Message-State: APjAAAUzx2Rc6HNs+rtpk6lUuEkrKM0L09DdDthkzCHqGEgCUfkZ145K
-        6fe14GWt7dzMkJ4EmrKyi53RVw==
-X-Google-Smtp-Source: APXvYqwOseVEoEwqvKt/WKPStKBJ1FZIuG8u48y75PfT52y/SVxc8BBiYwOqw0EIng9E63iyfPitLw==
-X-Received: by 2002:adf:f80c:: with SMTP id s12mr108243229wrp.1.1578401858462;
-        Tue, 07 Jan 2020 04:57:38 -0800 (PST)
-Received: from dell ([2.27.35.135])
-        by smtp.gmail.com with ESMTPSA id m10sm77330092wrx.19.2020.01.07.04.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 04:57:37 -0800 (PST)
-Date:   Tue, 7 Jan 2020 12:57:51 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+        id S1727148AbgAHILz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Jan 2020 03:11:55 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:42848 "EHLO
+        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbgAHILy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Jan 2020 03:11:54 -0500
+X-AuditID: c0a8fbf4-199ff70000001fa6-90-5e158ec7cb52
+Received: from smtp.reu.rohmeu.com (will-cas001.reu.rohmeu.com [192.168.251.177])
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 57.51.08102.7CE851E5; Wed,  8 Jan 2020 09:11:51 +0100 (CET)
+Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
+ WILL-CAS001.REu.RohmEu.com ([fe80::d57e:33d0:7a5d:f0a6%16]) with mapi id
+ 14.03.0439.000; Wed, 8 Jan 2020 09:11:46 +0100
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
+CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "broonie@kernel.org" <broonie@kernel.org>
 Subject: Re: [PATCH v8 09/12] rtc: bd70528: add BD71828 support
-Message-ID: <20200107125751.GJ14821@dell>
+Thread-Topic: [PATCH v8 09/12] rtc: bd70528: add BD71828 support
+Thread-Index: AQHVvvUfLiH9Hhbf7Ey/lHSErlTbtKffJXWAgAFCZAA=
+Date:   Wed, 8 Jan 2020 08:11:45 +0000
+Message-ID: <539ae83e249d50a57f86df1b6855f420767de312.camel@fi.rohmeurope.com>
 References: <cover.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
- <b904fd485b61d3f3af3c100855f5100940916abf.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+         <b904fd485b61d3f3af3c100855f5100940916abf.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+         <20200107125751.GJ14821@dell>
+In-Reply-To: <20200107125751.GJ14821@dell>
+Accept-Language: en-US, de-DE
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [213.255.186.46]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <01721F7B6EFA90448CF1131A2008E980@de.rohmeurope.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b904fd485b61d3f3af3c100855f5100940916abf.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0xTVxz33Ht776Fy3aG0csRHsLotFqXWmOXEJ8lmco3b1OyDcYmwi1wp
+        Ci3eFqPuCzEjKAqBiFFrC1rLQ+lUqo2bAzXIQ2siooBPUBxMwQdZ8DHn816KwqfzO//f63z4
+        H0jr7rGxMN3mlGSbmGFktcz5qjc1s5oLDUmz/UEN8bW2cyTvWQVHnntCDNnT3cOSsoYrGrLz
+        8ikNuRM8wZB7LxoBedm2nSIlbysp8u+uLg05WfYWkOtn3CwJPjkGSFN1G0vKb7RSxF1+kSGt
+        oSWkM9TIkty6Bo6876hhEg2Cv9QPhIGbuZxQ6v9V+NPVyQmBoztY4W5HLSs03zxNCXtLX1NC
+        VfUrThgMTFmh/XnsghTRuemn9DSbedEvY62DHX2aLO/UzU//OwJywKm4fAAhRnPx1TouH2ih
+        DrUD/PvgIB2+NANc3PIYqCIWLcD5txRRBNQjC/Zd7GVUDY18EO8OdQGViEaL8Z5QmSYsSsQH
+        PC3DeB7Oq72rUXMYNB33BOLVMY9+xP6zZ4esOtQAcGF+nIojkAlXbbtNqRigyXhHzrMhTKMY
+        HPjn1VAkRgj7alvoMDbgvr/fD8+NuO51N6NW0WgGPn7GHLYm4opbL4ZjpuKSnd1c+AlR+NL+
+        HqYIjHeNanCNuF2j3K5Rbtco90GgOQpwppiekSY6JUuCLGUnyHZrpnKstWcGQHhhnv8BPtQv
+        rQcUBPVgAqSMBv76BX2SblyKPXWLVXRYk+XsDMlRDzCkjXreNFPh+FRxy1ZJtn+iJkLGGMN/
+        3V28RofUrg2SlCXJn9hJEBoxHywwJOmiZClN2rwuPcM5QlMwQg3Xxuodki1VksVspzVZ3Y5k
+        h7IeKhWp9BYoW63jHVlipjINW0MgHhb1ebw0bPCUe2kdY7PbpNgY3qJKkSq1Zts+F/WDGAiM
+        0fy1XQobqfyazzn9SgWlVGgfRakVTnGEis0BBctvuOej3r256Mmd5d+mTTM0Vn9xpNQ833v/
+        9NaB345N+GZFxYev6n4oq5xeeGj8wY0lfxU9mCMfiNQ3vWlb5TCbi7/kWNcJvy+p62Vt9EpD
+        wcP/EypN991r3Oc6e9fHrzaleAs9iNQctlxYeGV2kzkv92H7vmDo8Hdj+ot3f79s4N0UI+Ow
+        ihYTLTvEj2RUpOHyAwAA
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 30 Dec 2019, Matti Vaittinen wrote:
-
-> ROHM BD71828 PMIC RTC block is from many parts similar to one
-> on BD70528. Support BD71828 RTC using BD70528 RTC driver and
-> avoid re-inventing the wheel.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
-> 
-> Changes from v7 - no changes
-> 
->  drivers/rtc/Kconfig              |   3 +-
->  drivers/rtc/rtc-bd70528.c        | 168 ++++++++++++++++++++++++++++---
->  include/linux/mfd/rohm-bd70528.h |  13 +--
->  include/linux/mfd/rohm-bd71828.h |   4 +-
->  include/linux/mfd/rohm-shared.h  |  27 +++++
->  5 files changed, 186 insertions(+), 29 deletions(-)
->  create mode 100644 include/linux/mfd/rohm-shared.h
-> 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index d77515d8382c..df7a3843069d 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -498,12 +498,13 @@ config RTC_DRV_M41T80_WDT
->  	help
->  	  If you say Y here you will get support for the
->  	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
-> +
->  config RTC_DRV_BD70528
->  	tristate "ROHM BD70528 PMIC RTC"
->  	depends on MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
->  	help
->  	  If you say Y here you will get support for the RTC
-> -	  on ROHM BD70528 Power Management IC.
-> +	  block on ROHM BD70528 and BD71828 Power Management IC.
->  
->  	  This driver can also be built as a module. If so, the module
->  	  will be called rtc-bd70528.
-> diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-> index 627037aa66a8..2ce202040556 100644
-> --- a/drivers/rtc/rtc-bd70528.c
-> +++ b/drivers/rtc/rtc-bd70528.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/bcd.h>
->  #include <linux/mfd/rohm-bd70528.h>
-> +#include <linux/mfd/rohm-bd71828.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> @@ -15,7 +16,7 @@
->  /*
->   * We read regs RTC_SEC => RTC_YEAR
->   * this struct is ordered according to chip registers.
-> - * Keep it u8 only to avoid padding issues.
-> + * Keep it u8 only (or packed) to avoid padding issues.
->   */
->  struct bd70528_rtc_day {
->  	u8 sec;
-> @@ -36,6 +37,13 @@ struct bd70528_rtc_wake {
->  	u8 ctrl;
->  } __packed;
->  
-> +struct bd71828_rtc_alm {
-> +	struct bd70528_rtc_data alm0;
-> +	struct bd70528_rtc_data alm1;
-> +	u8 alm_mask;
-> +	u8 alm1_mask;
-> +} __packed;
-> +
->  struct bd70528_rtc_alm {
->  	struct bd70528_rtc_data data;
->  	u8 alm_mask;
-> @@ -45,6 +53,8 @@ struct bd70528_rtc_alm {
->  struct bd70528_rtc {
->  	struct rohm_regmap_dev *mfd;
-
-I think it would be better if you fixed this up be more forthcoming.
-It took some grepping to find out what this actually meant.  An MFD
-isn't really a thing, we made it up.  Here you are referring to this
-platform device's parent's device data.
-
-With that in mind I offer some suggestions:
-
-  'struct rohm_parent_ddata pddata'
-  'struct rohm_parent_ddata parent'
-
->  	struct device *dev;
-> +	u8 reg_time_start;
-> +	bool has_rtc_timers;
->  };
-
-[...]
-
-> +static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
-> +{
-> +	int ret;
-> +	struct bd71828_rtc_alm alm;
-> +	struct bd70528_rtc *r = dev_get_drvdata(dev);
-> +	struct rohm_regmap_dev *bd71828 = r->mfd;
-
-Then ...
-
-	struct rohm_parent_ddata *parent = r->parent;
-
-	ret = regmap_bulk_read(parent->regmap, BD71828_REG_RTC_ALM_START,
-			       &alm, sizeof(alm));
-	if (ret) {
-		dev_err(dev, "Failed to read alarm regs\n");
-		return ret;
-	}
-
-[...]
-
-> diff --git a/include/linux/mfd/rohm-bd70528.h b/include/linux/mfd/rohm-bd70528.h
-> index 2ad2320d0a96..a57af878fd0c 100644
-> --- a/include/linux/mfd/rohm-bd70528.h
-> +++ b/include/linux/mfd/rohm-bd70528.h
-> @@ -7,6 +7,7 @@
->  #include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/mfd/rohm-generic.h>
-> +#include <linux/mfd/rohm-shared.h>
->  #include <linux/regmap.h>
->  
->  enum {
-> @@ -307,17 +308,6 @@ enum {
->  
->  /* RTC masks to mask out reserved bits */
->  
-> -#define BD70528_MASK_RTC_SEC		0x7f
-> -#define BD70528_MASK_RTC_MINUTE		0x7f
-> -#define BD70528_MASK_RTC_HOUR_24H	0x80
-> -#define BD70528_MASK_RTC_HOUR_PM	0x20
-> -#define BD70528_MASK_RTC_HOUR		0x1f
-> -#define BD70528_MASK_RTC_DAY		0x3f
-> -#define BD70528_MASK_RTC_WEEK		0x07
-> -#define BD70528_MASK_RTC_MONTH		0x1f
-> -#define BD70528_MASK_RTC_YEAR		0xff
-> -#define BD70528_MASK_RTC_COUNT_L	0x7f
-> -
->  #define BD70528_MASK_ELAPSED_TIMER_EN	0x1
->  /* Mask second, min and hour fields
->   * HW would support ALM irq for over 24h
-> @@ -326,7 +316,6 @@ enum {
->   * wake-up we limit ALM to 24H and only
->   * unmask sec, min and hour
->   */
-> -#define BD70528_MASK_ALM_EN		0x7
->  #define BD70528_MASK_WAKE_EN		0x1
->  
->  /* WDT masks */
-> diff --git a/include/linux/mfd/rohm-bd71828.h b/include/linux/mfd/rohm-bd71828.h
-> index d013e03f742d..017a4c01cb31 100644
-> --- a/include/linux/mfd/rohm-bd71828.h
-> +++ b/include/linux/mfd/rohm-bd71828.h
-> @@ -5,6 +5,7 @@
->  #define __LINUX_MFD_BD71828_H__
->  
->  #include <linux/mfd/rohm-generic.h>
-> +#include <linux/mfd/rohm-shared.h>
-
-Isn't generic shared?
-
->  /* Regulator IDs */
->  enum {
-> @@ -160,6 +161,7 @@ enum {
->  #define BD71828_REG_RTC_YEAR		0x52
->  
->  #define BD71828_REG_RTC_ALM0_SEC	0x53
-> +#define BD71828_REG_RTC_ALM_START	BD71828_REG_RTC_ALM0_SEC
->  #define BD71828_REG_RTC_ALM0_MINUTE	0x54
->  #define BD71828_REG_RTC_ALM0_HOUR	0x55
->  #define BD71828_REG_RTC_ALM0_WEEK	0x56
-> @@ -178,6 +180,7 @@ enum {
->  #define BD71828_REG_RTC_ALM1_MASK	0x62
->  
->  #define BD71828_REG_RTC_ALM2		0x63
-> +#define BD71828_REG_RTC_START		BD71828_REG_RTC_SEC
->  
->  /* Charger/Battey */
->  #define BD71828_REG_CHG_STATE		0x65
-> @@ -204,7 +207,6 @@ enum {
->  #define BD71828_REG_INT_MASK_TEMP	0xdd
->  #define BD71828_REG_INT_MASK_RTC	0xde
->  
-> -
->  #define BD71828_REG_INT_MAIN		0xdf
->  #define BD71828_REG_INT_BUCK		0xe0
->  #define BD71828_REG_INT_DCIN1		0xe1
-> diff --git a/include/linux/mfd/rohm-shared.h b/include/linux/mfd/rohm-shared.h
-> new file mode 100644
-> index 000000000000..f16fc3b5000e
-> --- /dev/null
-> +++ b/include/linux/mfd/rohm-shared.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/* Copyright (C) 2018 ROHM Semiconductors */
-
-This is very out of data now!
-
-> +
-> +#ifndef __LINUX_MFD_ROHM_SHARED_H__
-> +#define __LINUX_MFD_ROHM_SHARED_H__
-> +
-> +/*
-> + * RTC definitions shared between
-> + *
-> + * BD70528
-> + * and BD71828
-
-This reads poorly.
-
-Either form a bullet pointed list, or just write it out.
-
-> + */
-> +
-> +
-> +#define BD70528_MASK_RTC_SEC		0x7f
-> +#define BD70528_MASK_RTC_MINUTE	0x7f
-> +#define BD70528_MASK_RTC_HOUR_24H	0x80
-> +#define BD70528_MASK_RTC_HOUR_PM	0x20
-> +#define BD70528_MASK_RTC_HOUR		0x3f
-> +#define BD70528_MASK_RTC_DAY		0x3f
-> +#define BD70528_MASK_RTC_WEEK		0x07
-> +#define BD70528_MASK_RTC_MONTH		0x1f
-> +#define BD70528_MASK_RTC_YEAR		0xff
-> +#define BD70528_MASK_ALM_EN		0x7
-> +
-> +#endif /* __LINUX_MFD_ROHM_SHARED_H__ */
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+SGVsbG8gTGVlLA0KDQpUaGFua3MgZm9yIHRha2luZyBhIGxvb2sgYXQgdGhpcy4NCg0KT24gVHVl
+LCAyMDIwLTAxLTA3IGF0IDEyOjU3ICswMDAwLCBMZWUgSm9uZXMgd3JvdGU6DQo+IE9uIE1vbiwg
+MzAgRGVjIDIwMTksIE1hdHRpIFZhaXR0aW5lbiB3cm90ZToNCj4gDQo+ID4gUk9ITSBCRDcxODI4
+IFBNSUMgUlRDIGJsb2NrIGlzIGZyb20gbWFueSBwYXJ0cyBzaW1pbGFyIHRvIG9uZQ0KPiA+IG9u
+IEJENzA1MjguIFN1cHBvcnQgQkQ3MTgyOCBSVEMgdXNpbmcgQkQ3MDUyOCBSVEMgZHJpdmVyIGFu
+ZA0KPiA+IGF2b2lkIHJlLWludmVudGluZyB0aGUgd2hlZWwuDQo+ID4gDQo+ID4gU2lnbmVkLW9m
+Zi1ieTogTWF0dGkgVmFpdHRpbmVuIDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+
+DQo+ID4gQWNrZWQtYnk6IEFsZXhhbmRyZSBCZWxsb25pIDxhbGV4YW5kcmUuYmVsbG9uaUBib290
+bGluLmNvbT4NCj4gPiAtLS0NCj4gPiArDQo+ID4gIHN0cnVjdCBiZDcwNTI4X3J0Y19hbG0gew0K
+PiA+ICAJc3RydWN0IGJkNzA1MjhfcnRjX2RhdGEgZGF0YTsNCj4gPiAgCXU4IGFsbV9tYXNrOw0K
+PiA+IEBAIC00NSw2ICs1Myw4IEBAIHN0cnVjdCBiZDcwNTI4X3J0Y19hbG0gew0KPiA+ICBzdHJ1
+Y3QgYmQ3MDUyOF9ydGMgew0KPiA+ICAJc3RydWN0IHJvaG1fcmVnbWFwX2RldiAqbWZkOw0KPiAN
+Cj4gSSB0aGluayBpdCB3b3VsZCBiZSBiZXR0ZXIgaWYgeW91IGZpeGVkIHRoaXMgdXAgYmUgbW9y
+ZSBmb3J0aGNvbWluZy4NCj4gSXQgdG9vayBzb21lIGdyZXBwaW5nIHRvIGZpbmQgb3V0IHdoYXQg
+dGhpcyBhY3R1YWxseSBtZWFudC4gIEFuIE1GRA0KPiBpc24ndCByZWFsbHkgYSB0aGluZywgd2Ug
+bWFkZSBpdCB1cC4gIEhlcmUgeW91IGFyZSByZWZlcnJpbmcgdG8gdGhpcw0KPiBwbGF0Zm9ybSBk
+ZXZpY2UncyBwYXJlbnQncyBkZXZpY2UgZGF0YS4NCg0KSSBsaWtlIE1GRC4gTXVsdGkgRnVuY3Rp
+b24gRGV2aWNlIGlzIGEgcmVhbCB0aGluZy4gRGV2aWNlIHdpdGggbXVsdGlwbGUNCmZ1bmN0aW9u
+YWxpdGllcyBtZWxkIGluLiBJdCBkZXNjcmliZXMgbWFueSBQTUlDcyBvciBGUEdBIGRlc2lnbnMN
+CnRlcnJpYmx5IHdlbGwuIEJ1dCB0aGUgbmFtaW5nIGlzIG5vdCBzb21ldGhpbmcgSSBsaWtlIGZp
+Z2h0aW5nIGZvciAtIGlmDQpNRkQgaXMgbm90IG5pY2UgdG8geW91ciBleWVzIHdlIGNhbiBjaGFu
+Z2UgaXQuIEJ1dCBsZXQncyBkbyBpdCBpbg0Kc2VwYXJhdGUgcGF0Y2ggc2V0IE9rPyBDaGFuZ2lu
+ZyB0aGUgInJvaG1fcmVnbWFwX2RldiIgd2lsbCBpbnZvbHZlDQpjaGFuZ2luZyBidW5jaCBvZiBl
+eGlzdGluZyBkcml2ZXJzIGFuZCBpcyBub3QgYnkgYW55IG1lYW5zIHJlbGF0ZWQgd2l0aA0KYWRk
+aW5nIHRoZSBzdXBwb3J0IGZvciBCRDcxODI4Lg0KDQo+IA0KPiBXaXRoIHRoYXQgaW4gbWluZCBJ
+IG9mZmVyIHNvbWUgc3VnZ2VzdGlvbnM6DQo+IA0KPiAgICdzdHJ1Y3Qgcm9obV9wYXJlbnRfZGRh
+dGEgcGRkYXRhJw0KPiAgICdzdHJ1Y3Qgcm9obV9wYXJlbnRfZGRhdGEgcGFyZW50Jw0KDQpCb3Ro
+IGFyZSBmaW5lIHdpdGggbWUgYnV0IHRoaXMgY2hhbmdlIGlzIHJlZmxlY3RlZCB0byBkcml2ZXJz
+IG5vdA0KcmVsYXRlZCB0byBCRDcxODI4IGxpa2U6DQpiZDcwNTI4LXJlZ3VsYXRvci5jDQpncGlv
+LWJkNzA1MjguYw0Kd2F0Y2hkb2cvYmQ3MDUyOF93ZHQuYw0KDQpJJ2QgcmF0aGVyIG5vdCBjaGFu
+Z2UgV0RUIHdpdGggdGhpcyBzZXJpZXMuIFNvIEknZCBwcmVmZXIgaW5jcmVtZW50YWwNCnBhdGNo
+IGZvciB0aGlzIGluIHRoZSByZWxlYXNlIGZvbGxvd2luZyB0aGlzIHNlcmllcy4NCiANCj4gPiAg
+LyogV0RUIG1hc2tzICovDQo+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvbWZkL3JvaG0t
+YmQ3MTgyOC5oDQo+ID4gYi9pbmNsdWRlL2xpbnV4L21mZC9yb2htLWJkNzE4MjguaA0KPiA+IGlu
+ZGV4IGQwMTNlMDNmNzQyZC4uMDE3YTRjMDFjYjMxIDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUv
+bGludXgvbWZkL3JvaG0tYmQ3MTgyOC5oDQo+ID4gKysrIGIvaW5jbHVkZS9saW51eC9tZmQvcm9o
+bS1iZDcxODI4LmgNCj4gPiBAQCAtNSw2ICs1LDcgQEANCj4gPiAgI2RlZmluZSBfX0xJTlVYX01G
+RF9CRDcxODI4X0hfXw0KPiA+ICANCj4gPiAgI2luY2x1ZGUgPGxpbnV4L21mZC9yb2htLWdlbmVy
+aWMuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L21mZC9yb2htLXNoYXJlZC5oPg0KPiANCj4gSXNu
+J3QgZ2VuZXJpYyBzaGFyZWQ/DQoNCkdvb2QgcG9pbnQuIFRoZSByb2htLXNoYXJlZCBjb250YWlu
+cyBzdHVmZiBjb21tb24gZm9yIG9ubHkgZmV3IG9mIHRoZQ0KUE1JQ3MgKGN1cnJlbnRseSBCRDcw
+NTI4IGFuZCBCRDcxODI4KSB3aGVyZSBhcyByb2htLWdlbmVyaWMgaXMgaW50ZW5kZWQNCnRvIGJl
+IHVzZWQgZm9yIHN0dWZmIHRoYXQgaXMgZ2VuZXJpYyB0byBtb3JlIG9yIGxlc3MgYWxsIG9mIHRo
+ZSBQTUlDcy4NCk9yIHRoYXQgd2FzIG15IGluaXRpYWwgaWRlYS4gQnV0IGFzIEkndmUgYmVlbiB0
+b2xkIC0gbmFtaW5nLWlzLWhhcmQgOikNClN1Z2dlc3Rpb25zPw0KDQo+IA0KPiA+IGIvaW5jbHVk
+ZS9saW51eC9tZmQvcm9obS1zaGFyZWQuaA0KPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+ID4g
+aW5kZXggMDAwMDAwMDAwMDAwLi5mMTZmYzNiNTAwMGUNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4g
+KysrIGIvaW5jbHVkZS9saW51eC9tZmQvcm9obS1zaGFyZWQuaA0KPiA+IEBAIC0wLDAgKzEsMjcg
+QEANCj4gPiArLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXIgKi8N
+Cj4gPiArLyogQ29weXJpZ2h0IChDKSAyMDE4IFJPSE0gU2VtaWNvbmR1Y3RvcnMgKi8NCj4gDQo+
+IFRoaXMgaXMgdmVyeSBvdXQgb2YgZGF0YSBub3chDQoNCk9rLg0KDQo+ID4gKy8qDQo+ID4gKyAq
+IFJUQyBkZWZpbml0aW9ucyBzaGFyZWQgYmV0d2Vlbg0KPiA+ICsgKg0KPiA+ICsgKiBCRDcwNTI4
+DQo+ID4gKyAqIGFuZCBCRDcxODI4DQo+IA0KPiBUaGlzIHJlYWRzIHBvb3JseS4NCj4gDQo+IEVp
+dGhlciBmb3JtIGEgYnVsbGV0IHBvaW50ZWQgbGlzdCwgb3IganVzdCB3cml0ZSBpdCBvdXQuDQoN
+Ck9rDQoNCg0KQmVzdCBSZWdhcmRzDQoJTWF0dGkNCg0K
