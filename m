@@ -2,132 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E03133D30
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Jan 2020 09:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A35C3134264
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Jan 2020 13:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726967AbgAHIeL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 8 Jan 2020 03:34:11 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:43788 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbgAHIeL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Jan 2020 03:34:11 -0500
-X-AuditID: c0a8fbf4-199ff70000001fa6-ca-5e15940082c1
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id FE.81.08102.004951E5; Wed,  8 Jan 2020 09:34:08 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Wed, 8 Jan 2020 09:34:03 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v8 08/12] regulator: bd718x7: Split driver to common and
- bd718x7 specific parts
-Thread-Topic: [PATCH v8 08/12] regulator: bd718x7: Split driver to common
- and bd718x7 specific parts
-Thread-Index: AQHVvvUCH6xbXbWt3UKhkzpPOHFEqKffIN0AgAFNNwA=
-Date:   Wed, 8 Jan 2020 08:34:03 +0000
-Message-ID: <32f8fa4201ae99df64e7a39c6a69be2bef179f7b.camel@fi.rohmeurope.com>
-References: <cover.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
-         <d247d71e183b388dd7f211aee1235965cff979b4.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200107124124.GI14821@dell>
-In-Reply-To: <20200107124124.GI14821@dell>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5BF30F43844DB441AED1208EBFECDE36@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1727567AbgAHM4F (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Jan 2020 07:56:05 -0500
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:31331 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726254AbgAHM4F (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Jan 2020 07:56:05 -0500
+Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
+  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="Claudiu.Beznea@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa4.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  envelope-from="Claudiu.Beznea@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: feLro1JNCFp1+UpYxfUe+bG2IPLSvnlmgEXzWgR/sW3uX4OwPBSjnIj8qhK2OnwOjjDOqzVpbt
+ g8bZUzYBbwpp+khpk6/ata/+DQPt9aBwtnPADf6kO2iqyJour8APSLqAWRCsC61k0Iv5val3AB
+ +w32RZ3p2/hGM7Abr6FCBcun5Lp4TmpY9srfoUiBepWiL5KArSMVzb6N8wh8mTDnlI4CxH7Kr6
+ OQwyP26353aBoemlTeFG5Bpj+fE3wiMJjSz0Au3d7cS/SPDHITUHuvh3QHOPTtmyV4EvzqeVnH
+ K3Q=
+X-IronPort-AV: E=Sophos;i="5.69,410,1571727600"; 
+   d="scan'208";a="60517506"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jan 2020 05:56:03 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 8 Jan 2020 05:56:02 -0700
+Received: from m18063-ThinkPad-T460p.microchip.com (10.10.85.251) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Wed, 8 Jan 2020 05:55:55 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
+        <eugen.hristev@microchip.com>, <jic23@kernel.org>,
+        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
+        <mchehab@kernel.org>, <lee.jones@linaro.org>,
+        <richard.genoud@gmail.com>, <radu_nicolae.pirea@upb.ro>,
+        <tudor.ambarus@microchip.com>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <wg@grandegger.com>,
+        <mkl@pengutronix.de>, <a.zummo@towertech.it>, <broonie@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 00/16] add device tree for SAM9X60 SoC and SAM9X60-EK board
+Date:   Wed, 8 Jan 2020 14:55:07 +0200
+Message-ID: <1578488123-26127-1-git-send-email-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TXUwTWRiGPTPT6aEwONRWjqBEJxoj/iBxI2cNMVysyRg3G40JF0TAQQZK
-        LC2ZFgPsDclCgLoXIKy7NrQYLEpqI1oxggHFWgSqYgj4FwRFQcUfNhtZCJGgM44KN2fe873f
-        c97v4htI6j/QMTDPYhcli2DmaB3V1fzJv3VZnTFj+72+zdgz8ECLK6bOavG0K0Thv8bGadwQ
-        7Nfg43daNXj4ykUKP/u/G+CZoUoC182fI/B/f45q8OWGeYAHr9XT+Mr7CwDfPj9E46ZHAwSu
-        b+ql8EBoDx4JddO4vDOoxQsPL1EpRt7n9gH+38flWt7t+51vd45oeb+3iuafPuyg+Z7HVwn+
-        b/ccwTefn9XyH/1x+3Vp4clZgv3YwbxcS8Luw+GmNvd9oqAtrqimq5YuBUNrHCAMIvYn5Au+
-        0ziADurZBwA9H7lFq5cegKrKbpMOACHNJiPHE60CGNhE5OmdoJQekvVAVBsaBUrPClZEwzM5
-        ak8Oqpy6Qat6F/K+CJGKptj16NnZ2q91hv0NVY4Pk2pWEKCZ6hZKMcLYeHT95ByhaMCuQVWl
-        U181yUYj/6tZjTo1izwd90lVG9Hky4VvdQ51zo1Ryjwkuwm1XEtQ0RQ0VTlNqnodqjs+plVn
-        iEJ9p8aparDSuSTBuUg7l9DOJbRzCX0aaLwA5Qt55lzBLiZuk8TCbZLVlC9/jljz/UBdmek2
-        8DmwNwAICAJgFSQ4IzN4y5Chj8yyZhebBJspUyo0i7YAQJDkDEz8FtljsoXiElGyfrdiIcVF
-        MxvHatL1rJJ1VBQLROm7uxpCDjFpNcYMfZQk5opFOXlm+6JNwDDlcV2MwSZaskVJKLSbMpX9
-        yLTJC6JYEXLusRMyztgKhHy5qqIhkASrJ12NJGzvdstnn9cjn0FXUyOppyxWixgTzUwoqayC
-        mQotP0LfgmgIuBXMllrZjZD/oR9vvpXjCDlO9yZKibMLi1ZMKSizZbgOtAwl+G5uv7v7Rarh
-        j9m+huS1rsFdSa3/RKSBidTl6RGG+Z3C6eTAqru5kWnpRURwdWp4vSF1+ZHGsI8jsVdju2r6
-        K16XNLUv64/dQVu65uP9rZELo2YuqyTuxIaKX0cdxWU9v1zvvbdvb+edkz93JHE7zxgn13vL
-        DzWn+AmOspmExHhSsglfAEuyw94ABAAA
+Content-Type: text/plain
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gTGVlLA0KDQpPbiBUdWUsIDIwMjAtMDEtMDcgYXQgMTI6NDEgKzAwMDAsIExlZSBKb25l
-cyB3cm90ZToNCj4gT24gTW9uLCAzMCBEZWMgMjAxOSwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0K
-PiANCj4gPiBGZXcgUk9ITSBQTUlDcyBhbGxvdyBzZXR0aW5nIHRoZSB2b2x0YWdlIHN0YXRlcyBm
-b3IgZGlmZmVyZW50DQo+ID4gc3lzdGVtIHN0YXRlcw0KPiA+IGxpa2UgUlVOLCBJRExFLCBTVVNQ
-RU5EIGFuZCBMUFNSLiBTdGF0ZXMgYXJlIHRoZW4gY2hhbmdlZCB2aWEgU29DDQo+ID4gc3BlY2lm
-aWMNCj4gPiBtZWNoYW5pc21zLiBiZDcxOHg3IGRyaXZlciBpbXBsZW1lbnRlZCBkZXZpY2UtdHJl
-ZSBwYXJzaW5nDQo+ID4gZnVuY3Rpb25zIGZvcg0KPiA+IHRoZXNlIHN0YXRlIHNwZWNpZmljIHZv
-bHRhZ2VzLiBUaGUgcGFyc2luZyBmdW5jdGlvbnMgY2FuIGJlIHJlLXVzZWQgDQo+ID4gYnkNCj4g
-PiBvdGhlciBST0hNIGNoaXAgZHJpdmVycyBsaWtlIGJkNzE4MjguIFNwbGl0IHRoZSBnZW5lcmlj
-IGZ1bmN0aW9ucw0KPiA+IGZyb20NCj4gPiBiZDcxOHg3LXJlZ3VsYXRvci5jIHRvIHJvaG0tcmVn
-dWxhdG9yLmMgYW5kIGV4cG9ydCB0aGVtIGZvciBvdGhlcg0KPiA+IG1vZHVsZXMNCj4gPiB0byB1
-c2UuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVuIDxtYXR0aS52YWl0
-dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ID4gQWNrZWQtYnk6IE1hcmsgQnJvd24gPGJyb29u
-aWVAa2VybmVsLm9yZz4NCj4gPiAtLS0NCj4gPiANCj4gPiArDQo+ID4gK3N0cnVjdCByb2htX2R2
-c19jb25maWcgew0KPiA+ICsJdWludDY0X3QgbGV2ZWxfbWFwOw0KPiA+ICsJdW5zaWduZWQgaW50
-IHJ1bl9yZWc7DQo+ID4gKwl1bnNpZ25lZCBpbnQgcnVuX21hc2s7DQo+ID4gKwl1bnNpZ25lZCBp
-bnQgcnVuX29uX21hc2s7DQo+ID4gKwl1bnNpZ25lZCBpbnQgaWRsZV9yZWc7DQo+ID4gKwl1bnNp
-Z25lZCBpbnQgaWRsZV9tYXNrOw0KPiA+ICsJdW5zaWduZWQgaW50IGlkbGVfb25fbWFzazsNCj4g
-PiArCXVuc2lnbmVkIGludCBzdXNwZW5kX3JlZzsNCj4gPiArCXVuc2lnbmVkIGludCBzdXNwZW5k
-X21hc2s7DQo+ID4gKwl1bnNpZ25lZCBpbnQgc3VzcGVuZF9vbl9tYXNrOw0KPiA+ICsJdW5zaWdu
-ZWQgaW50IGxwc3JfcmVnOw0KPiA+ICsJdW5zaWduZWQgaW50IGxwc3JfbWFzazsNCj4gPiArCXVu
-c2lnbmVkIGludCBscHNyX29uX21hc2s7DQo+ID4gK307DQo+IA0KPiBJIHRoaW5rIHRoaXMgZGVz
-ZXJ2ZXMgYSBrZXJuZWwtZG9jIGhlYWRlci4NCk9oLCB0aGUgc3RydWN0IGhlcmU/IEhtbS4gWW91
-IG1pZ2h0IGJlIGNvcnJlY3QuIEkgY2FuIGFkZCBzb21lLg0KDQo+IA0KPiA+ICsjaWYgSVNfRU5B
-QkxFRChDT05GSUdfUkVHVUxBVE9SX1JPSE0pDQo+ID4gK2ludCByb2htX3JlZ3VsYXRvcl9zZXRf
-ZHZzX2xldmVscyhjb25zdCBzdHJ1Y3Qgcm9obV9kdnNfY29uZmlnDQo+ID4gKmR2cywNCj4gPiAr
-CQkJCSAgc3RydWN0IGRldmljZV9ub2RlICpucCwNCj4gPiArCQkJCSAgY29uc3Qgc3RydWN0IHJl
-Z3VsYXRvcl9kZXNjICpkZXNjLA0KPiA+ICsJCQkJICBzdHJ1Y3QgcmVnbWFwICpyZWdtYXApOw0K
-PiANCj4gRG9lcyB0aGVzZSByZWFsbHkgbmVlZCB0byBsaXZlIGluIHRoZSBwYXJlbnQncyBoZWFk
-ZXIgZmlsZT8NCg0KSSBkb24ndCBrbm93IHdoYXQgd291bGQgYmUgYSBiZXR0ZXIgcGxhY2U/DQoN
-Cj4gV2hhdCBvdGhlciBjYWxsLXNpdGVzIGFyZSB0aGVyZT8NCg0KQWZ0ZXIgdGhpcyBzZXJpZXMg
-dGhlIGJkNzE4eDctcmVndWxhdG9yLmMgYW5kIGJkNzE4MjgtcmVndWxhdG9yLmMgYXJlDQp0aGUg
-aW4tdHJlZSBkcml2ZXJzIHVzaW5nIHRoZXNlLiByb2htLXJlZ3VsYXRvci5jIGlzIGltcGxlbWVu
-dGluZyB0aGVtLg0KQW5kIEkgaG9wZSB3ZSBzZWUgeWV0IGFub3RoZXIgZHJpdmVyIGxhbmRpbmcg
-aW4gbGF0ZXIgdGhpcyB5ZWFyLiANCg0KQW55d2F5cywgSSB3aWxsIGludmVzdGlnYXRlIGlmIEkg
-Y2FuIHN3aXRjaCB0aGlzIHRvIHNvbWUgY29tbW9uIChub3QNCnJvaG0gc3BlY2lmaWMpIERUIGJp
-bmRpbmdzIGF0IHNvbWUgcG9pbnQgKEkndmUgc2NoZWR1bGVkIHRoaXMgc3R1ZHkgdG8NCk1hcmNo
-KSAtIElmIEkgY2FuIHRoZW4gdGhleSBzaG91bGQgbGl2ZSBpbiByZWd1bGF0b3IgY29yZSBoZWFk
-ZXJzLg0KDQpCdXQgY2hhbmdpbmcgdGhlIGV4aXN0aW5nIHByb3BlcnRpZXMgc2hvdWxkIGFnYWlu
-IGJlIG93biBzZXQgb2YgcGF0Y2hlcw0KYW5kIEknZCBwcmVmZXIgZG9pbmcgdGhhdCB3b3JrIGlu
-ZGVwZW5kZW50bHkgb2YgdGhpcyBzZXJpZXMgYW5kIG5vdA0KZGVsYXlpbmcgdGhlIEJENzE4Mjgg
-ZHVlIHRvIG5vdC15ZXQtZXZhbHVhdGVkIGJkNzE4eDcgcHJvcGVydHkgY2hhbmdlcy4NCg0KPiAN
-Cj4gPiArI2Vsc2UNCj4gPiArc3RhdGljIGlubGluZSBpbnQgcm9obV9yZWd1bGF0b3Jfc2V0X2R2
-c19sZXZlbHMoY29uc3Qgc3RydWN0DQo+ID4gcm9obV9kdnNfY29uZmlnICpkdnMsDQo+ID4gKwkJ
-CQkJCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsDQo+ID4gKwkJCQkJCWNvbnN0IHN0cnVjdA0KPiA+
-IHJlZ3VsYXRvcl9kZXNjICpkZXNjLA0KPiA+ICsJCQkJCQlzdHJ1Y3QgcmVnbWFwICpyZWdtYXAp
-DQo+ID4gK3sNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKyNlbmRpZiAvL0lTX0VOQUJM
-RUQoQ09ORklHX1JFR1VMQVRPUl9ST0hNKQ0KPiANCj4gYSkgVGhpcyBjb21tZW50IGlzIG5vdCBy
-ZWFsbHkgcmVxdWlyZWQNCj4gYikgWW91IHNob3VsZG4ndCBiZSB1c2luZyBDKysgY29tbWVudHMN
-Cg0KVGhhbmtzLCBJJ2xsIHJlbW92ZSBpdC4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0dGkNCg==
+This series add device tree for SAM9X60 SoC and SAM9X60-EK board.
+Allong with these, there are patches that documents some compatibles
+for SAM9X60's IPs.
+
+Claudiu Beznea (15):
+  dt-bindings: at_xdmac: add entry for microchip compatibles
+  dt-bindings: atmel-can: add microchip,sam9x60-can
+  dt-bindings: atmel-tcb: add microchip,<chip>-tcb
+  dt-bindings: atmel-isi: add microchip,sam9x60-isi
+  dt-bindings: at91-sama5d2_adc: add microchip,sam9x60-adc
+  dt-bindings: atmel-matrix: add microchip,sam9x60-matrix
+  dt-bindings: atmel-nand: add microchip,sam9x60-pmecc
+  dt-bindings: atmel-sysreg: add microchip,sam9x60-ddramc
+  dt-bindings: atmel-smc: add microchip,sam9x60-smc
+  dt-bindings: atmel-gpbr: add microchip,sam9x60-gpbr
+  dt-bindings: atmel,at91rm9200-rtc: add microchip,sam9x60-rtc
+  dt-bindings: spi_atmel: add microchip,sam9x60-spi
+  dt-bindings: atmel-usart: add microchip,<chip>-usart
+  dt-bindings: arm: add sam9x60-ek board
+  ARM: at91/defconfig: enable MMC_SDHCI_OF_AT91 and MICROCHIP_PIT64B
+
+Sandeep Sheriker Mallikarjun (1):
+  ARM: dts: at91: sam9x60: add device tree for soc and board
+
+ .../devicetree/bindings/arm/atmel-at91.yaml        |   6 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt      |   1 +
+ .../devicetree/bindings/dma/atmel-xdma.txt         |   3 +-
+ .../bindings/iio/adc/at91-sama5d2_adc.txt          |   2 +-
+ .../devicetree/bindings/media/atmel-isi.txt        |   2 +-
+ .../devicetree/bindings/mfd/atmel-gpbr.txt         |   4 +-
+ .../devicetree/bindings/mfd/atmel-matrix.txt       |   1 +
+ .../devicetree/bindings/mfd/atmel-smc.txt          |   1 +
+ .../devicetree/bindings/mfd/atmel-tcb.txt          |   5 +-
+ .../devicetree/bindings/mfd/atmel-usart.txt        |   6 +-
+ .../devicetree/bindings/mtd/atmel-nand.txt         |   1 +
+ .../devicetree/bindings/net/can/atmel-can.txt      |   3 +-
+ .../bindings/rtc/atmel,at91rm9200-rtc.txt          |   3 +-
+ .../devicetree/bindings/spi/spi_atmel.txt          |   2 +-
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts               | 647 +++++++++++++++++++
+ arch/arm/boot/dts/sam9x60.dtsi                     | 691 +++++++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig                 |   4 +
+ 18 files changed, 1373 insertions(+), 11 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sam9x60ek.dts
+ create mode 100644 arch/arm/boot/dts/sam9x60.dtsi
+
+-- 
+2.7.4
+
