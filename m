@@ -2,123 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E66138CAB
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2020 09:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73759138FA3
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2020 11:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728766AbgAMINJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Jan 2020 03:13:09 -0500
-Received: from smtprelay0056.hostedemail.com ([216.40.44.56]:54500 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728680AbgAMINJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jan 2020 03:13:09 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id 4536F1801323F;
-        Mon, 13 Jan 2020 08:13:08 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1605:1711:1730:1747:1777:1792:2110:2393:2553:2559:2562:2828:2892:2909:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:4250:4321:4605:5007:6119:7903:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12555:12663:12740:12760:12895:12986:13095:13141:13230:13439:13870:14093:14096:14097:14181:14659:14721:21080:21433:21451:21627:21819:30003:30016:30022:30054:30060:30075:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:3,LUA_SUMMARY:none
-X-HE-Tag: egg05_1b3c562f00915
-X-Filterd-Recvd-Size: 4075
-Received: from XPS-9350.home (unknown [47.151.135.224])
-        (Authenticated sender: joe@perches.com)
-        by omf01.hostedemail.com (Postfix) with ESMTPA;
-        Mon, 13 Jan 2020 08:13:07 +0000 (UTC)
-Message-ID: <b72846874d5ee367bf86e787ca2152f90d814a34.camel@perches.com>
-Subject: Re: [PATCH] rtc: i2c/spi: Avoid inclusion of REGMAP support when
- not needed
-From:   Joe Perches <joe@perches.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Akinobu Mita <akinobu.mita@gmail.com>,
-        linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 13 Jan 2020 00:12:12 -0800
-In-Reply-To: <CAMuHMdVPFCiPtwuEhG9rd8c=aw=HnMBf+nCjftwux3m81W7igg@mail.gmail.com>
-References: <20200112171349.22268-1-geert@linux-m68k.org>
-         <9286d81a883f4795176182fdb9e69bc19a8232c7.camel@perches.com>
-         <CAMuHMdXRpKJNm6tFjccO67dQr=_Hc4rD1NmJzzrHPDEyja0R5w@mail.gmail.com>
-         <f35928f4e8f78be59617c0d49308001d92b314c7.camel@perches.com>
-         <CAMuHMdVPFCiPtwuEhG9rd8c=aw=HnMBf+nCjftwux3m81W7igg@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        id S1726480AbgAMKwn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Jan 2020 05:52:43 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38821 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbgAMKwn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jan 2020 05:52:43 -0500
+Received: by mail-wm1-f65.google.com with SMTP id u2so9069830wmc.3
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Jan 2020 02:52:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=ZgZbNBWe0oTcqdIBNdNvd74B3ro0WVKyi3/VTdqw3xE=;
+        b=woLsoFo8w6H55+I2zLR2KHGqFepzum+orJMMrLzKCgk1ZJK212giD75NsNz8DNfjlP
+         vodvnf5v+e7GXZsYfps9azChJyoplTYXHzTXHM6oJ8gDA7ltgi33YYzABGb6l8CIE9c5
+         hMv3K6ZPvkOFnsDgXeVZqXsNofOaN8AiM2PHq7+IHOIDZdKR7nbPDShmz6x3+Mf3CWix
+         bYGxSqk6ZFO9B7Icj1OsAaDdjqD8AaCjk+XeSlKSNfEIGojIYHc/p9hLrJ9fOIcRGaJF
+         i8L4nWE354nw10ZeJTDo5wwrjCjl7fJ905rU03Czk/VeCDLFgkEzPkWz1mCBWhND4DST
+         82BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=ZgZbNBWe0oTcqdIBNdNvd74B3ro0WVKyi3/VTdqw3xE=;
+        b=Lwnzlzt5u7rUDUxuOdUWfuRXJ33nxB9t0DmpRdc2TihF+IMqrR4LhPnG+cQ1ohl3CR
+         SN/8A0WEf1WD491ccNKS2VniU+k9L0k55qlQShV/tq2mVdw9n/Th8CqUzovKDvySM6fO
+         zYJWj9qur7SLcPRqpelgQgzOzQzjgct14j7a+UadPaRrn76je3yQFiDgPuLmKXoT54oV
+         DB3Bs4cx+YpfcZvHSUPWsH8xKAM+/fJKE/CQUZLxGasvDmiDz/rZl/pn2zlwdPjfKMQ2
+         Gyy1gaEL0cXRNoc3/OEMkXL5jtZqL9O0pUrQPeZ0rmX3GI74jgLWz06WtlaokFNGzxZJ
+         xVuA==
+X-Gm-Message-State: APjAAAW+49APwGkRUJgWZpbu322N4QwOeUxk+HS74Z6QukUj060HPoKk
+        KWUN6NudO8mRDgRTDK7Z79tDtg==
+X-Google-Smtp-Source: APXvYqx8Vm7CK6+Z+RiNNpP0t0i/mmfam2P7FFBzWOE/l3fKY62yfP75eVxj2Ys8ub0l0x8bGFfDQQ==
+X-Received: by 2002:a05:600c:2046:: with SMTP id p6mr19619532wmg.110.1578912761970;
+        Mon, 13 Jan 2020 02:52:41 -0800 (PST)
+Received: from dell ([95.147.198.95])
+        by smtp.gmail.com with ESMTPSA id x14sm13574924wmj.42.2020.01.13.02.52.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 02:52:41 -0800 (PST)
+Date:   Mon, 13 Jan 2020 10:53:01 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "broonie@kernel.org" <broonie@kernel.org>
+Subject: Re: [PATCH v8 08/12] regulator: bd718x7: Split driver to common and
+ bd718x7 specific parts
+Message-ID: <20200113105301.GF5414@dell>
+References: <cover.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+ <d247d71e183b388dd7f211aee1235965cff979b4.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200107124124.GI14821@dell>
+ <32f8fa4201ae99df64e7a39c6a69be2bef179f7b.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <32f8fa4201ae99df64e7a39c6a69be2bef179f7b.camel@fi.rohmeurope.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 2020-01-13 at 08:57 +0100, Geert Uytterhoeven wrote:
-> On Mon, Jan 13, 2020 at 8:41 AM Joe Perches <joe@perches.com> wrote:
-> > On Mon, 2020-01-13 at 08:25 +0100, Geert Uytterhoeven wrote:
-> > > On Mon, Jan 13, 2020 at 7:36 AM Joe Perches <joe@perches.com> wrote:
-> > > > On Sun, 2020-01-12 at 18:13 +0100, Geert Uytterhoeven wrote:
-> > > > > Merely enabling I2C and RTC selects REGMAP_I2C and REGMAP_SPI, even when
-> > > > > no driver needs it.  While the former can be moduler, the latter cannot,
-> > > > > and thus becomes built-in.
-> > > > > 
-> > > > > Fix this by moving the select statements for REGMAP_I2C and REGMAP_SPI
-> > > > > from the RTC_I2C_AND_SPI helper to the individual drivers that depend on
-> > > > > it.
-> > > > > 
-> > > > > Note that the comment for RTC_I2C_AND_SPI refers to SND_SOC_I2C_AND_SPI
-> > > > > for more information, but the latter does not select REGMAP_{I2C,SPI}
-> > > > > itself, and defers that to the individual drivers, too.
-> > > > > 
-> > > > > Fixes: 080481f54ef62121 ("rtc: merge ds3232 and ds3234")
-> > > > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > > ---
-> > > > > Joe: When merging addresses, scripts/get_maintainer.pl replaces
-> > > > >      Alexandre's authoritative email address from MAINTAINERS by the
-> > > > >      obsolete address in the SoB-line of the commit referred to by the
-> > > > >      Fixes-line.
-> > > > What are you doing to get this changed output?
-> > > 
-> > > scripts/get_maintainer.pl
-> > > 0001-rtc-i2c-spi-Avoid-inclusion-of-REGMAP-support-when-n.patch
-> > > 
-> > > > I get the same get_maintainer address output either way
-> > > > with only with the 'blamed_fixes:' content added.
-> > > 
-> > > Thanks, I can confirm it's fixed in next-20200110.
-> > > With v5.5-rc6, it still gives the old addresss.
+On Wed, 08 Jan 2020, Vaittinen, Matti wrote:
+
+> Hello Lee,
+> 
+> On Tue, 2020-01-07 at 12:41 +0000, Lee Jones wrote:
+> > On Mon, 30 Dec 2019, Matti Vaittinen wrote:
 > > 
-> > Well, OK, get_maintainer is the same but there is a
-> > different .mailmap in -next
+> > > Few ROHM PMICs allow setting the voltage states for different
+> > > system states
+> > > like RUN, IDLE, SUSPEND and LPSR. States are then changed via SoC
+> > > specific
+> > > mechanisms. bd718x7 driver implemented device-tree parsing
+> > > functions for
+> > > these state specific voltages. The parsing functions can be re-used 
+> > > by
+> > > other ROHM chip drivers like bd71828. Split the generic functions
+> > > from
+> > > bd718x7-regulator.c to rohm-regulator.c and export them for other
+> > > modules
+> > > to use.
+> > > 
+> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> > > Acked-by: Mark Brown <broonie@kernel.org>
+> > > ---
+
+[...]
+
+> > > +#if IS_ENABLED(CONFIG_REGULATOR_ROHM)
+> > > +int rohm_regulator_set_dvs_levels(const struct rohm_dvs_config
+> > > *dvs,
+> > > +				  struct device_node *np,
+> > > +				  const struct regulator_desc *desc,
+> > > +				  struct regmap *regmap);
+> > 
+> > Does these really need to live in the parent's header file?
 > 
-> Indeed.
+> I don't know what would be a better place?
+
+You don't have a regulator header file?
+
+It seems over-kill to create one for this, so leave it as is.
+
+> > What other call-sites are there?
 > 
-> However, I think the precedence should be
+> After this series the bd718x7-regulator.c and bd71828-regulator.c are
+> the in-tree drivers using these. rohm-regulator.c is implementing them.
+> And I hope we see yet another driver landing in later this year. 
 > 
->     MAINTAINERS > .mailmap > SoB in referenced commit
+> Anyways, I will investigate if I can switch this to some common (not
+> rohm specific) DT bindings at some point (I've scheduled this study to
+> March) - If I can then they should live in regulator core headers.
 > 
-> instead of
-> 
->     .mailmap > SoB in referenced commit > MAINTAINERS
-> 
-> Do you agree?
+> But changing the existing properties should again be own set of patches
+> and I'd prefer doing that work independently of this series and not
+> delaying the BD71828 due to not-yet-evaluated bd718x7 property changes.
 
-Well, not really.  Priority is:
+That's fine.
 
-	1 .mailmap address
-	2 SoB address in commit message
-	2 SoB
-address in referenced Fixes: commits
-	3 MAINTAINERS address
-
-MAINTAINER entries are sometimes stale and .mailmap
-is generally more current so perhaps it should be
-
-	1 .mailmap address
-	2 SoB address in commit message
-	3 MAINTAINERS address
-	4 SoB address in referenced Fixes: commits
-
-But it seems a restructuring of get_maintainer
-would be required to do that as the Fixes: line is
-parsed before any filenames in a patch and I'm not
-too bothered by the precedence and output right
-now to muck around in get_maintainer's internals.
-
-cheers, Joe
-
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
