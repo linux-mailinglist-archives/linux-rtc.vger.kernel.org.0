@@ -2,72 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B748138B35
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2020 06:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F7D138BEB
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jan 2020 07:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733299AbgAMFw1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:27 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:37259 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733204AbgAMFw0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jan 2020 00:52:26 -0500
-Received: by mail-oi1-f196.google.com with SMTP id z64so7228155oia.4
-        for <linux-rtc@vger.kernel.org>; Sun, 12 Jan 2020 21:52:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=tlTBKgQkFi54Q6VTtOWu6rl2rWJBOUmVpgB9DNqe/gMtUN9U9eGrmcIJu9EWqcCwO4
-         CgEydbBx8/QiytmFvVx7L04tnHAsvlyKjHizRNh7wiNvM/D0l9oAQll8j/nOE/7a0gyG
-         gX3xwqNYAUaoH1hNsKRGSJv8yY0a0KEpSFfiNYTMrczmCzyT7l0xqhhPx1Tn+Zsxpu0I
-         0ATYQIJtmLg+x0oEBoVfv/SxBdQdUfmafXDV5H/SBLsGPs+OsN3mMFoYK1Ymo183Cwcr
-         rI+0GTf/+SQ0iWkTuMLwK7O0Jpf4uCVqUfEBZQdcvbJ0ial4pyGU/dnmzbuf27nTRaVU
-         Mp8Q==
-X-Gm-Message-State: APjAAAUQdtIGZOryPVeD/JWjt4O0SyqedwBKOgbtfLPHK+V75XAUdccY
-        2fMIoXzprciuN8T1gPdAd4ip6UC+z2KrFoEZq4s=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        id S2387432AbgAMGmw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Jan 2020 01:42:52 -0500
+Received: from smtprelay0191.hostedemail.com ([216.40.44.191]:60821 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732311AbgAMGmq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jan 2020 01:42:46 -0500
+X-Greylist: delayed 349 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Jan 2020 01:42:46 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id A06851801D3EC
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Jan 2020 06:36:57 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 0DBB9100E7B43;
+        Mon, 13 Jan 2020 06:36:56 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1431:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2892:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3872:3873:3874:4250:4321:4552:4605:5007:6119:7514:7809:7903:9010:10004:10400:10848:11026:11232:11473:11658:11914:12043:12048:12296:12297:12555:12740:12760:12895:13019:13071:13163:13229:13439:13870:13891:14093:14097:14180:14181:14659:14721:21060:21080:21433:21451:21627:21819:30003:30022:30054:30075:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: sail11_3c6014f468a37
+X-Filterd-Recvd-Size: 2927
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf15.hostedemail.com (Postfix) with ESMTPA;
+        Mon, 13 Jan 2020 06:36:54 +0000 (UTC)
+Message-ID: <9286d81a883f4795176182fdb9e69bc19a8232c7.camel@perches.com>
+Subject: Re: [PATCH] rtc: i2c/spi: Avoid inclusion of REGMAP support when
+ not needed
+From:   Joe Perches <joe@perches.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 12 Jan 2020 22:36:00 -0800
+In-Reply-To: <20200112171349.22268-1-geert@linux-m68k.org>
+References: <20200112171349.22268-1-geert@linux-m68k.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+On Sun, 2020-01-12 at 18:13 +0100, Geert Uytterhoeven wrote:
+> Merely enabling I2C and RTC selects REGMAP_I2C and REGMAP_SPI, even when
+> no driver needs it.  While the former can be moduler, the latter cannot,
+> and thus becomes built-in.
+> 
+> Fix this by moving the select statements for REGMAP_I2C and REGMAP_SPI
+> from the RTC_I2C_AND_SPI helper to the individual drivers that depend on
+> it.
+> 
+> Note that the comment for RTC_I2C_AND_SPI refers to SND_SOC_I2C_AND_SPI
+> for more information, but the latter does not select REGMAP_{I2C,SPI}
+> itself, and defers that to the individual drivers, too.
+> 
+> Fixes: 080481f54ef62121 ("rtc: merge ds3232 and ds3234")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+> Joe: When merging addresses, scripts/get_maintainer.pl replaces
+>      Alexandre's authoritative email address from MAINTAINERS by the
+>      obsolete address in the SoB-line of the commit referred to by the
+>      Fixes-line.
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+Hi Geert
 
-Yours sincerely,
-Rick Schaech.
+What are you doing to get this changed output?
+
+I get the same get_maintainer address output either way
+with only with the 'blamed_fixes:' content added.
+
+Your email with 'Fixes:' line:
+
+$ ./scripts/get_maintainer.pl ~/geert_1.mbox 
+Alessandro Zummo <a.zummo@towertech.it> (maintainer:REAL TIME CLOCK (RTC) SUBSYSTEM)
+Alexandre Belloni <alexandre.belloni@bootlin.com> (maintainer:REAL TIME CLOCK (RTC) SUBSYSTEM,blamed_fixes:1/1=100%)
+Akinobu Mita <akinobu.mita@gmail.com> (blamed_fixes:1/1=100%)
+linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM)
+linux-kernel@vger.kernel.org (open list)
+
+Your email without 'Fixes:' line:
+
+$ ./scripts/get_maintainer.pl ~/geert_2.mbox 
+Alessandro Zummo <a.zummo@towertech.it> (maintainer:REAL TIME CLOCK (RTC) SUBSYSTEM)
+Alexandre Belloni <alexandre.belloni@bootlin.com> (maintainer:REAL TIME CLOCK (RTC) SUBSYSTEM)
+linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM)
+linux-kernel@vger.kernel.org (open list)
+
+
+
