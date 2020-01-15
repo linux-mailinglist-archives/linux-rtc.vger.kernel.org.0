@@ -2,96 +2,170 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9057E13BA9F
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 09:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA1A13BB0F
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 09:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgAOIAs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Jan 2020 03:00:48 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37499 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728894AbgAOIAn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Jan 2020 03:00:43 -0500
-Received: by mail-wm1-f67.google.com with SMTP id f129so16681254wmf.2
-        for <linux-rtc@vger.kernel.org>; Wed, 15 Jan 2020 00:00:42 -0800 (PST)
+        id S1729260AbgAOI31 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Jan 2020 03:29:27 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39212 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729266AbgAOI3V (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Jan 2020 03:29:21 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y11so14815531wrt.6
+        for <linux-rtc@vger.kernel.org>; Wed, 15 Jan 2020 00:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to
          :user-agent;
-        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
-        b=OSL13EnCr58+/Jy2CAY7JUMNaer6GjpBYGtcO8Lm6VXlpX7/sjRVrcEpHJrWt3MXao
-         sOMFij5RVNC/vB2rBhf2PpSRyBxSMMrVXFj/ZuClHUlB4zeP1xvKnpBMJjZC896upMDx
-         pdMzyIjLqI6TXr0D0N+3qK7bLO6rmMZMg3o2Ovle3wcyv6xSRPfnKDapqr2oaN79UNuR
-         lo15fKsiOQxDn8My+q+RIDFTY9EPZKyvD/DS6s2dTp5oREvoBEelzwmPJMimNa345pSS
-         C4ytCDLYb5xpLNle2SWtZzbMuemq3sDt77k7Y2QN63t/r5djh4IpdruTiVp5w58ZOp82
-         GX+Q==
+        bh=3GK5Djc6Es4Lf2bms5LobhRrB6cfPeA6TPSSmCtuW7o=;
+        b=pxINdBipIObKzAeju8UwLEZAh1c5Lz1AFYRX/gAiXp8HUgwfqjdIyb/QJQy8cq+DGJ
+         G1TfipKXPwr+RZM/eigUSHh5njYxyxJZKjJKCrRroT1Rn0/X8060NszcvuJnUWQ3pKq9
+         i9lA5p3Q1AUb8ZoVC/koPJs1YWYGrmRXX7YlokbI2szyEJ84euHOPRCiCyQGQEUfLhKF
+         lN/1qkVsQZSmhhBxica9csSceRRk4mUwyx3bsn93E4AuWl8gLuDD8fxO0lc5XB8QUORb
+         94ecpjrpXdaL3osYQWCL5R3SF0gGpKlUlb6qqYB9ywtCqBxyDGWk1lOqGWUu/kpCRtiy
+         Gn6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to:user-agent;
-        bh=GYF/DnlQgs0gWW5ovHy/i9c/eiB+rqjkrsxQJeg0VgE=;
-        b=ugcZyviLjyjg4ha/+V4DAqAc0J78vXscKxBLQKCZ9TetAR/BedMpaWwox0MTOm67Z7
-         TqW++jlrR3mVDCh8J2qObngWcMbSJpBi1bAD3X2x5pKpi0HyRMC++S6wMNTR9Rl5k803
-         s3UFKoUj/s0dxO64caITnbzIJrVN8HjVqQeQ3oil3RBdbOKx0zjaqzpI6UKSd2yJaVLv
-         FNLgNux+D2eE/08KiD4oxySGl8WCUtnZHmqvboWB+pcjMSBa7TIiX6iPrllUDU/f7xej
-         47iFxRoZD3ADidNW8+OhtLCorKkjLkJVRWx+b0CjWzPlT7H4HlouelqFgsBnNRD90+1I
-         jY5g==
-X-Gm-Message-State: APjAAAVuljhG8ccpgjkDPnwHjrW6QtGP3GGIYal+C+RvJhW1yqMgebAp
-        RTiGFfJgo4LZI0jCaxZ9WRTJDw==
-X-Google-Smtp-Source: APXvYqxVBHePDZFSLFy/b/HLtH4cLhZKLLeFdGF56PzZlj4pOAw+avsLwlunjnJ0XyKdMeObyl6u5A==
-X-Received: by 2002:a1c:3dd5:: with SMTP id k204mr31244611wma.92.1579075241550;
-        Wed, 15 Jan 2020 00:00:41 -0800 (PST)
+        bh=3GK5Djc6Es4Lf2bms5LobhRrB6cfPeA6TPSSmCtuW7o=;
+        b=CPfj8ZlwCMdvWU0ad01MpyVK6tFFq20kzZQ6jZ8sPRgJtqW807vvgJwlQxCmfwVg6Z
+         bQTm1GVHqelDHDUPx1TrVOHFRJNE9SIrplx7big1y+96zoUXr31wfaZn/MQiGdEsRHIC
+         6CGh7TY7TYkLRCw7+7ERmIsbSXmt0IA51mrhv9pbRA6f4yD3ouISUQe8FfnlbJW+ihDu
+         0RYG82dd6pp6tX3kp6G++ylm4lAF3ZzP0nskYq6BnunLMRadtnDResxhxhAT3iTgiUFW
+         8mBPcLv6AP5d5y3nSihFVbH683B8I/OddXlkfWKZP/GHblzk3/NFYfilYHDHxyGMVi0w
+         Rrrg==
+X-Gm-Message-State: APjAAAWQIm+gSpvGZlpBzbVCGVKtuak/gHvaxiYJZpukZIq0R9BANdEx
+        zbk00u7A2OgdwxTBtnswy18YMQ==
+X-Google-Smtp-Source: APXvYqxg5fYMbpzJkbMnE9bwu+VJEIcsdrHoYIUzhPAxEC31+lysJdWQxte1D3bkl5SWo9KJvHl4Nw==
+X-Received: by 2002:adf:dd51:: with SMTP id u17mr29019061wrm.290.1579076959924;
+        Wed, 15 Jan 2020 00:29:19 -0800 (PST)
 Received: from dell ([2.27.35.221])
-        by smtp.gmail.com with ESMTPSA id w13sm23148601wru.38.2020.01.15.00.00.38
+        by smtp.gmail.com with ESMTPSA id b16sm24408442wrj.23.2020.01.15.00.29.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 00:00:40 -0800 (PST)
-Date:   Wed, 15 Jan 2020 08:00:53 +0000
+        Wed, 15 Jan 2020 00:29:18 -0800 (PST)
+Date:   Wed, 15 Jan 2020 08:29:37 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, nicolas.ferre@microchip.com,
-        ludovic.desroches@microchip.com, vkoul@kernel.org,
-        eugen.hristev@microchip.com, jic23@kernel.org, knaack.h@gmx.de,
-        lars@metafoo.de, pmeerw@pmeerw.net, mchehab@kernel.org,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, wg@grandegger.com,
-        mkl@pengutronix.de, a.zummo@towertech.it,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 10/17] dt-bindings: atmel-smc: add
- microchip,sam9x60-smc
-Message-ID: <20200115080053.GC325@dell>
-References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
- <1578673089-3484-11-git-send-email-claudiu.beznea@microchip.com>
- <20200114095538.GJ3137@piout.net>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "dmurphy@ti.com" <dmurphy@ti.com>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+Subject: Re: [PATCH v8 08/12] regulator: bd718x7: Split driver to common and
+ bd718x7 specific parts
+Message-ID: <20200115082937.GD325@dell>
+References: <cover.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+ <d247d71e183b388dd7f211aee1235965cff979b4.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+ <20200107124124.GI14821@dell>
+ <32f8fa4201ae99df64e7a39c6a69be2bef179f7b.camel@fi.rohmeurope.com>
+ <20200113105301.GF5414@dell>
+ <ab72ce13d008a0d5e9cd753b87fe397953210f70.camel@fi.rohmeurope.com>
+ <20200113121109.GG5414@dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200114095538.GJ3137@piout.net>
+In-Reply-To: <20200113121109.GG5414@dell>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 14 Jan 2020, Alexandre Belloni wrote:
-
-> On 10/01/2020 18:18:02+0200, Claudiu Beznea wrote:
-> > Add microchip,sam9x60-smc to DT bindings documentation.
+On Mon, 13 Jan 2020, Lee Jones wrote:
+> On Mon, 13 Jan 2020, Vaittinen, Matti wrote:
+> > On Mon, 2020-01-13 at 10:53 +0000, Lee Jones wrote:
+> > > On Wed, 08 Jan 2020, Vaittinen, Matti wrote:
+> > > > On Tue, 2020-01-07 at 12:41 +0000, Lee Jones wrote:
+> > > > > On Mon, 30 Dec 2019, Matti Vaittinen wrote:
+> > > > > 
+> > > > > > Few ROHM PMICs allow setting the voltage states for different
+> > > > > > system states
+> > > > > > like RUN, IDLE, SUSPEND and LPSR. States are then changed via
+> > > > > > SoC
+> > > > > > specific
+> > > > > > mechanisms. bd718x7 driver implemented device-tree parsing
+> > > > > > functions for
+> > > > > > these state specific voltages. The parsing functions can be re-
+> > > > > > used 
+> > > > > > by
+> > > > > > other ROHM chip drivers like bd71828. Split the generic
+> > > > > > functions
+> > > > > > from
+> > > > > > bd718x7-regulator.c to rohm-regulator.c and export them for
+> > > > > > other
+> > > > > > modules
+> > > > > > to use.
+> > > > > > 
+> > > > > > Signed-off-by: Matti Vaittinen <
+> > > > > > matti.vaittinen@fi.rohmeurope.com>
+> > > > > > Acked-by: Mark Brown <broonie@kernel.org>
+> > > > > > ---
+> > > 
+> > > [...]
+> > > 
+> > > > > > +#if IS_ENABLED(CONFIG_REGULATOR_ROHM)
+> > > > > > +int rohm_regulator_set_dvs_levels(const struct rohm_dvs_config
+> > > > > > *dvs,
+> > > > > > +				  struct device_node *np,
+> > > > > > +				  const struct regulator_desc
+> > > > > > *desc,
+> > > > > > +				  struct regmap *regmap);
+> > > > > 
+> > > > > Does these really need to live in the parent's header file?
+> > > > 
+> > > > I don't know what would be a better place?
+> > > 
+> > > You don't have a regulator header file?
+> > > 
+> > > It seems over-kill to create one for this, so leave it as is.
+> > > 
+> > > > > What other call-sites are there?
+> > > > 
+> > > > After this series the bd718x7-regulator.c and bd71828-regulator.c
+> > > > are
+> > > > the in-tree drivers using these. rohm-regulator.c is implementing
+> > > > them.
+> > > > And I hope we see yet another driver landing in later this year. 
+> > > > 
+> > > > Anyways, I will investigate if I can switch this to some common
+> > > > (not
+> > > > rohm specific) DT bindings at some point (I've scheduled this study
+> > > > to
+> > > > March) - If I can then they should live in regulator core headers.
+> > > > 
+> > > > But changing the existing properties should again be own set of
+> > > > patches
+> > > > and I'd prefer doing that work independently of this series and not
+> > > > delaying the BD71828 due to not-yet-evaluated bd718x7 property
+> > > > changes.
+> > > 
+> > > That's fine.
 > > 
-> > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
-> >  1 file changed, 1 insertion(+)
-> Applied, thanks.
+> > Glad to hear :) By the way, I already sent the v9 ;)
+> 
+> It's in my queue.
 
-Remind me why you are applying this patch please?
+Although you didn't submit the whole set to me, so I only have a few
+of the patches.  Why did you choose to do that this time?
 
 -- 
 Lee Jones [李琼斯]
