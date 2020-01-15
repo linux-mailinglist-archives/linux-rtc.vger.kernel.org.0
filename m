@@ -2,109 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC4313BB4D
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 09:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBDA13BB64
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 09:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729073AbgAOIli (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Jan 2020 03:41:38 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:49080 "EHLO
-        mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbgAOIli (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Jan 2020 03:41:38 -0500
-X-AuditID: c0a8fbf4-199ff70000001fa6-4b-5e1ed03f6ebe
-Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id DB.3C.08102.F30DE1E5; Wed, 15 Jan 2020 09:41:35 +0100 (CET)
-Received: from WILL-MAIL002.REu.RohmEu.com ([fe80::e0c3:e88c:5f22:d174]) by
- WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Wed, 15 Jan 2020 09:41:31 +0100
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v9 02/12] dt-bindings: mfd: Document ROHM BD71828
- bindings
-Thread-Topic: [PATCH v9 02/12] dt-bindings: mfd: Document ROHM BD71828
- bindings
-Thread-Index: AQHVyGRfelgxjt7dUUiwtNLQXcjh4KfrW4mAgAACGQA=
-Date:   Wed, 15 Jan 2020 08:41:30 +0000
-Message-ID: <5fd2c53ed4943f47e1c38902c3e8782d25363773.camel@fi.rohmeurope.com>
-References: <cover.1578644144.git.matti.vaittinen@fi.rohmeurope.com>
-         <b58952aedd1cce08aa4d7f346007a24923bb2b64.1578644144.git.matti.vaittinen@fi.rohmeurope.com>
-         <20200115083403.GE325@dell>
-In-Reply-To: <20200115083403.GE325@dell>
-Accept-Language: en-US, de-DE
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.255.186.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5DF6E6B2751CBC468BB5D38AE91BB94F@de.rohmeurope.com>
-Content-Transfer-Encoding: base64
+        id S1729164AbgAOInG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Jan 2020 03:43:06 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56057 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728927AbgAOInG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Jan 2020 03:43:06 -0500
+X-Originating-IP: 90.65.102.129
+Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 71552E0008;
+        Wed, 15 Jan 2020 08:43:00 +0000 (UTC)
+Date:   Wed, 15 Jan 2020 09:43:00 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, nicolas.ferre@microchip.com,
+        ludovic.desroches@microchip.com, vkoul@kernel.org,
+        eugen.hristev@microchip.com, jic23@kernel.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, mchehab@kernel.org,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, wg@grandegger.com,
+        mkl@pengutronix.de, a.zummo@towertech.it,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 10/17] dt-bindings: atmel-smc: add
+ microchip,sam9x60-smc
+Message-ID: <20200115084300.GU3137@piout.net>
+References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
+ <1578673089-3484-11-git-send-email-claudiu.beznea@microchip.com>
+ <20200114095538.GJ3137@piout.net>
+ <20200115080053.GC325@dell>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0gTcRznd3e7naurX2u2X5qCI8mMfIDQj5CSIjghyugFQa4rL2fNTW6z
-        siiW0MMlZNlDh48emqHSYynVMDLTXFMySe1lj9EqXNmDXlhm3W2W/nUfvp/Xlx/fY0i1lw5j
-        skxWQTTxRh2toprP/3LOXXg/Mj2h9nsCruruVeIDH84p8ddyD4WPe300rmy9p8CHOhoU+Gnj
-        JQq/+NYG8PeegwQ+NlxD4M+FzxX4SuUwwA9cZTRufH8B4Dt1PTSufthN4LJqN4W7PUvwM08b
-        jffdaFXikb7LVEooV19RD7iPj/YpuYr6Xdx1xzMl56wtoLn+viaaa390leBOVgwR3Pm6H0ru
-        izMyTbVuQvJG3rptZVamKX7BhgkG/9thIicf7tj7pl9hA52T7SCEQTAJ9biclIzVsBeg4ltb
-        7EAlYTdAr5r/ADtgGBomI/tjpazRwERU5X5NyRoSVjGo2PMcyMRUmIYGS94TQdEK9Kng6Khh
-        PrL3nVXImILRyD9kD8xZuAzd/PmTCJa1ANRw8kmACIExyG/zBYIAjEAFtg8BTEItcr75oQhu
-        DVFVUxcZxKFo4NXI6FyHbgx5KXlpEs5GF13xQWsKah9+PRoThY4d8o7uMAXdLfVRRWCaY1yD
-        Y8ztGOd2jHM7xrlPAUUtQNl8ljGTtwqJcaKQGyeaDdnSZ5M52wmCJ/P1GvjTktoCCAa0gOkM
-        oQtlNU0R6epJG80ZeQbeYtCLuUbBIj0EQ+o07N0SiWMz+Lydgmj+R4UzlE7LzvIeWa+GctdW
-        QcgRxH/sDIbRITapKzJdPUUUMoUdm7OM1jGaYELkcFWYxiKYMgSRz7Ua9PJ96C3SgcjURKn3
-        imxnLTl8tjQNWj1gDlM0UH6GZFrLq8+QaspkNglhWvaSLIWy1JBr+l/kB1oG6Kay9nsSO1H6
-        b/7n+KUKQqooWhyosPJjVJgNZK5+F7fIq6JKo6NaRwZFOHDi4i9YfHtEn947ubDLx5YaO8u2
-        ry5sWHnZdvhlUvvyvhCnqc4d09aYH5V6AZ7e7Qpv8+dNm5Xmzj/euPSFJqUkddNM/mhlRy+0
-        LMhbNG9dbM27/t97Dq9xkdGRpWkrzOG+mOT7q9bu10cM1mhTKlQ6ymLgE2NJ0cL/BbbN66H0
-        AwAA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200115080053.GC325@dell>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8gTGVlLA0KDQpPbiBXZWQsIDIwMjAtMDEtMTUgYXQgMDg6MzQgKzAwMDAsIExlZSBKb25l
-cyB3cm90ZToNCj4gT24gU2F0LCAxMSBKYW4gMjAyMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0K
-PiANCj4gPiBST0hNIEJENzE4MjggUG93ZXIgbWFuYWdlbWVudCBJQyBpbnRlZ3JhdGVzIDcgYnVj
-ayBjb252ZXJ0ZXJzLCA3DQo+ID4gTERPcywNCj4gPiBhIHJlYWwtdGltZSBjbG9jayAoUlRDKSwg
-MyBHUE8vcmVndWxhdG9yIGNvbnRyb2wgcGlucywgSEFMTCBpbnB1dA0KPiA+IGFuZCBhIDMyLjc2
-OCBrSHogY2xvY2sgZ2F0ZS4NCj4gPiANCj4gPiBEb2N1bWVudCB0aGUgZHQgYmluZGluZ3MgZHJp
-dmVycyBhcmUgdXNpbmcuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVu
-IDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IFJv
-YiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+DQo+ID4gLS0tDQo+ID4gTm8gY2hhbmdlcyBzaW5j
-ZSB2OCAgDQo+ID4gDQo+ID4gIC4uLi9iaW5kaW5ncy9tZmQvcm9obSxiZDcxODI4LXBtaWMueWFt
-bCAgICAgICB8IDE5Mw0KPiA+ICsrKysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdl
-ZCwgMTkzIGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9yb2htLGJkNzE4MjgtcG1pYy55YW1sDQo+
-IA0KPiBJIG9ubHkgaGF2ZSBwYXRjaGVzIDItNiwgc28gSSBjYW5ub3QgaGVscCB3aXRoIG1lcmdp
-bmcuDQo+IA0KPiBNeSBndWVzcyBpcyB0aGF0IHNvbWUgb2YgdGhlIG90aGVyIHBhdGNoZXMgd2ls
-bCBoYXZlIGRlcGVuZGVuY2llcyBvcg0KPiBiZSBkZXBlbmRhbnRzIG9mIHRoZSBNRkQgY2hhbmdl
-cywgdGh1cyBzb21lb25lIGVsc2Ugd2lsbCBlaXRoZXIgaGF2ZQ0KPiB0byBtZXJnZSB0aGUgc2V0
-IGFuZCBzZW5kIG91dCBhIHB1bGwtcmVxdWVzdCBmb3IgdGhlIG90aGVyDQo+IG1haW50YWluZXJz
-DQo+IHRvIGNvbnN1bWUsIG9yIHlvdSB3aWxsIGhhdmUgdG8gc2VuZCB0aGUgd2hvbGUgc2V0IG91
-dCBhZ2Fpbi4gDQoNCkkgaGF2ZSB0aGUgcGF0Y2hlcy4gSSdsbCBqdXN0IHNlZSBJIGhhdmUgbm90
-IGFjY2lkZW50YWxseSBkcm9wcGVkIG91dA0KYW55IG90aGVyIHBlb3BsZSBhbmQgZG8gcmVzZW5k
-IHRoZSBzZXJpZXMuIFNob3VsZG4ndCB0YWtlIGxvbmcuDQoNCkkgaGF2ZW4ndCByZWNlaXZlZCBh
-Y2sgZnJvbSBQYXZlbCBmb3IgTEVEIGNoYW5nZXMgKHBhdGNoZXMgMTEgYW5kIDEyKSAtDQpzbyBw
-ZXJoYXBzIHRob3NlIHNob3VsZCBzdGlsbCBiZSBsZWZ0IG91dC4gSSBndWVzcyByZXN0IG9mIHRo
-ZSBwYXRjaGVzDQphcmUgT2sgdG8gZ28gaW4gLSB1bmxlc3MgeW91IHN0aWxsIGhhdmUgc29tZSBz
-dWdnZXN0aW9ucy4gTEVEIHBhcnQgY2FuDQpiZSBhZGRlZCBsYXRlci4NCg0KQnIsDQoJTWF0dGkg
-VmFpdHRpbmVuDQoNCg0K
+On 15/01/2020 08:00:53+0000, Lee Jones wrote:
+> On Tue, 14 Jan 2020, Alexandre Belloni wrote:
+> 
+> > On 10/01/2020 18:18:02+0200, Claudiu Beznea wrote:
+> > > Add microchip,sam9x60-smc to DT bindings documentation.
+> > > 
+> > > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/mfd/atmel-smc.txt | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > Applied, thanks.
+> 
+> Remind me why you are applying this patch please?
+> 
+
+Because the last patch of the series has a soft dependency on this
+patch. I can remove it from the at91 and let you apply it if you think
+this is necessary.
+
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
