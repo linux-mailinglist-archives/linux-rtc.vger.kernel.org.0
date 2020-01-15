@@ -2,55 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ED413BE3E
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 12:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB3E13C33F
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Jan 2020 14:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbgAOLOV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Jan 2020 06:14:21 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:35885 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbgAOLOV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Jan 2020 06:14:21 -0500
-X-Originating-IP: 90.65.102.129
-Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9C6A5240010;
-        Wed, 15 Jan 2020 11:14:13 +0000 (UTC)
-Date:   Wed, 15 Jan 2020 12:14:13 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     richard.genoud@gmail.com, radu_nicolae.pirea@upb.ro,
-        lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
-        a.zummo@towertech.it, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] dt-bindings: atmel,at91rm9200-rtc: add
- microchip,sam9x60-rtc
-Message-ID: <20200115111413.GE100374@piout.net>
-References: <1579085987-13976-1-git-send-email-claudiu.beznea@microchip.com>
- <1579085987-13976-2-git-send-email-claudiu.beznea@microchip.com>
+        id S1726554AbgAONeY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Jan 2020 08:34:24 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50300 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726085AbgAONeY (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 15 Jan 2020 08:34:24 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 974A7ABE7;
+        Wed, 15 Jan 2020 13:34:21 +0000 (UTC)
+Subject: Re: [RFC 00/25] arm64: realtek: Add Xnano X5 and implement
+ TM1628/FD628/AiP1618 LED controllers
+To:     linux-realtek-soc@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Dan Murphy <dmurphy@ti.com>
+References: <20191212033952.5967-1-afaerber@suse.de>
+From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
+Organization: SUSE Software Solutions Germany GmbH
+Message-ID: <eb075a5d-0db6-333b-cf26-64c9f7f1751e@suse.de>
+Date:   Wed, 15 Jan 2020 14:34:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579085987-13976-2-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <20191212033952.5967-1-afaerber@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/01/2020 12:59:43+0200, Claudiu Beznea wrote:
-> Add microchip,sam9x60-rtc to DT bindings documentation.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-Applied, thanks.
+Am 12.12.19 um 04:39 schrieb Andreas Färber:
+> Prepended is a new DT for Xnano X5 OTT TV Box, featuring an FD628 display.
+[...]
+> Andreas Färber (25):
+>    dt-bindings: vendor-prefixes: Add Xnano
+>    dt-bindings: arm: realtek: Add Xnano X5
+>    arm64: dts: realtek: rtd1295: Add Xnano X5
+[snip]
+
+Applied these three to linux-realtek.git v5.6/dt:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/afaerber/linux-realtek.git/log/?h=v5.6/dt
+
+Thanks,
+Andreas
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 Nürnberg, Germany
+GF: Felix Imendörffer
+HRB 36809 (AG Nürnberg)
