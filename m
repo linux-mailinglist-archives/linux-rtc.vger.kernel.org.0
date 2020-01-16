@@ -2,35 +2,35 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 955FC13EEFE
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 19:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F9F13EE00
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 19:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405313AbgAPRhK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jan 2020 12:37:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52254 "EHLO mail.kernel.org"
+        id S2390705AbgAPRjd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jan 2020 12:39:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404964AbgAPRhK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:37:10 -0500
+        id S1729305AbgAPRja (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:39:30 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F0E82468C;
-        Thu, 16 Jan 2020 17:37:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F15D246E7;
+        Thu, 16 Jan 2020 17:39:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196229;
-        bh=0rB/DCX0/vZqshYz2euc0r2r572R1otNYKQa2llh8N0=;
+        s=default; t=1579196370;
+        bh=lHXuV0qa75wCpT49eC7r/iGCt8nWqZ2GZb3K5lI8w4E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gVTTm8A8dnFQNHpxUdIu/72yooPbyHY+k89zGD+36eb2EDs7sZMGVCWIn1x+4eeor
-         HLMqnaCbTdYafqkcvuVFzQW8JejO+jA/AFp4vLkpZYT6V1PfQsnGZVWQ42VDqcPSL5
-         wZUgTJ8UsmyV+56zZ2BZ2Dl8+nAP15Vqgm1zKKVw=
+        b=fbIGvjP5WYydctzYxbuipySS7nzMoc0FkueqViIPy+/1YWXa7Z6hcrX9WEDqdhxIh
+         ui6aIDXdYjiqeJ3GeXttN0/0MXt3ZPJyae7iHuAZ9gwuTv5ElS5q5+/pSieoWjXYQR
+         /GVerJoK7bh31oWiHIC3uv2MuWziIbeEA81Sl6W8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.king@canonical.com>,
+Cc:     Chen-Yu Tsai <wens@csie.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 061/251] rtc: 88pm80x: fix unintended sign extension
-Date:   Thu, 16 Jan 2020 12:33:30 -0500
-Message-Id: <20200116173641.22137-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 157/251] rtc: pcf8563: Clear event flags and disable interrupts before requesting irq
+Date:   Thu, 16 Jan 2020 12:35:06 -0500
+Message-Id: <20200116173641.22137-117-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -43,91 +43,58 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Chen-Yu Tsai <wens@csie.org>
 
-[ Upstream commit fb0b322537a831b5b0cb948c56f8f958ce493d3a ]
+[ Upstream commit 3572e8aea3bf925dac1dbf86127657c39fe5c254 ]
 
-Shifting a u8 by 24 will cause the value to be promoted to an integer. If
-the top bit of the u8 is set then the following conversion to an unsigned
-long will sign extend the value causing the upper 32 bits to be set in
-the result.
+Besides the alarm, the PCF8563 also has a timer triggered interrupt.
+In cases where the previous system left the timer and interrupts on,
+or somehow the bits got enabled, the interrupt would keep triggering
+as the kernel doesn't know about it.
 
-Fix this by casting the u8 value to an unsigned long before the shift.
+Clear both the alarm and timer event flags, and disable the interrupts,
+before requesting the interrupt line.
 
-Detected by CoverityScan, CID#714646-714649 ("Unintended sign extension")
-
-Fixes: 2985c29c1964 ("rtc: Add rtc support to 88PM80X PMIC")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Fixes: ede3e9d47cca ("drivers/rtc/rtc-pcf8563.c: add alarm support")
+Fixes: a45d528aab8b ("rtc: pcf8563: clear expired alarm at boot time")
+Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-88pm80x.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/rtc/rtc-pcf8563.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/rtc/rtc-88pm80x.c b/drivers/rtc/rtc-88pm80x.c
-index 466bf7f9a285..7da2a1fb50f8 100644
---- a/drivers/rtc/rtc-88pm80x.c
-+++ b/drivers/rtc/rtc-88pm80x.c
-@@ -116,12 +116,14 @@ static int pm80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	unsigned char buf[4];
- 	unsigned long ticks, base, data;
- 	regmap_raw_read(info->map, PM800_RTC_EXPIRE2_1, buf, 4);
--	base = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	base = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	dev_dbg(info->dev, "%x-%x-%x-%x\n", buf[0], buf[1], buf[2], buf[3]);
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index a4b8b603c807..533fb7027f0c 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -563,7 +563,6 @@ static int pcf8563_probe(struct i2c_client *client,
+ 	struct pcf8563 *pcf8563;
+ 	int err;
+ 	unsigned char buf;
+-	unsigned char alm_pending;
  
- 	/* load 32-bit read-only counter */
- 	regmap_raw_read(info->map, PM800_RTC_COUNTER1, buf, 4);
--	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	ticks = base + data;
- 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
- 		base, data, ticks);
-@@ -144,7 +146,8 @@ static int pm80x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	dev_dbg(&client->dev, "%s\n", __func__);
  
- 	/* load 32-bit read-only counter */
- 	regmap_raw_read(info->map, PM800_RTC_COUNTER1, buf, 4);
--	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	base = ticks - data;
- 	dev_dbg(info->dev, "set base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
- 		base, data, ticks);
-@@ -165,11 +168,13 @@ static int pm80x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	int ret;
+@@ -587,13 +586,13 @@ static int pcf8563_probe(struct i2c_client *client,
+ 		return err;
+ 	}
  
- 	regmap_raw_read(info->map, PM800_RTC_EXPIRE2_1, buf, 4);
--	base = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	base = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	dev_dbg(info->dev, "%x-%x-%x-%x\n", buf[0], buf[1], buf[2], buf[3]);
+-	err = pcf8563_get_alarm_mode(client, NULL, &alm_pending);
+-	if (err) {
+-		dev_err(&client->dev, "%s: read error\n", __func__);
++	/* Clear flags and disable interrupts */
++	buf = 0;
++	err = pcf8563_write_block_data(client, PCF8563_REG_ST2, 1, &buf);
++	if (err < 0) {
++		dev_err(&client->dev, "%s: write error\n", __func__);
+ 		return err;
+ 	}
+-	if (alm_pending)
+-		pcf8563_set_alarm_mode(client, 0);
  
- 	regmap_raw_read(info->map, PM800_RTC_EXPIRE1_1, buf, 4);
--	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	ticks = base + data;
- 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
- 		base, data, ticks);
-@@ -192,12 +197,14 @@ static int pm80x_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	regmap_update_bits(info->map, PM800_RTC_CONTROL, PM800_ALARM1_EN, 0);
- 
- 	regmap_raw_read(info->map, PM800_RTC_EXPIRE2_1, buf, 4);
--	base = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	base = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	dev_dbg(info->dev, "%x-%x-%x-%x\n", buf[0], buf[1], buf[2], buf[3]);
- 
- 	/* load 32-bit read-only counter */
- 	regmap_raw_read(info->map, PM800_RTC_COUNTER1, buf, 4);
--	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
-+	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
-+		(buf[1] << 8) | buf[0];
- 	ticks = base + data;
- 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
- 		base, data, ticks);
+ 	pcf8563->rtc = devm_rtc_device_register(&client->dev,
+ 				pcf8563_driver.driver.name,
 -- 
 2.20.1
 
