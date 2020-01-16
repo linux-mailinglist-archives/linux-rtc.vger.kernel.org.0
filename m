@@ -2,39 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ECF13E82F
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2FD13E943
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404646AbgAPRa6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jan 2020 12:30:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43854 "EHLO mail.kernel.org"
+        id S2405211AbgAPRhJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jan 2020 12:37:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404642AbgAPRa6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:30:58 -0500
+        id S2405305AbgAPRhI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:37:08 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 913F5246AB;
-        Thu, 16 Jan 2020 17:30:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1F1E2246D0;
+        Thu, 16 Jan 2020 17:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195857;
-        bh=66Uh4hQFwl8UL/i/f+/bSnuAUf2QPxZlPm6iSXIho1Y=;
+        s=default; t=1579196227;
+        bh=/7Jt2WKsId0mWZYHVt27b4RtZaiSQACvRaQAiKA8aTM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fyZc1PkhSEsA8iNwFbCMu+4pGcprjVwYIiyXRIlYzM3CYDXxoq2K2ra3zOGYSGyCw
-         YsQaNyfvAtvUoOO/F9NmWo6e3dnjVxk1aDW85KqXdBUwE5EwgNZm9E40BnpMAM1/X7
-         dQTfWOwkCRczmqr4IdZSZ/diDqrwaI4BRjzagfy8=
+        b=kYqHpsovDYAry0AN9sgULWUHE7s5GMyMYE7kvZzTAbCRWLtg/DyVTf1NhmQvAib3a
+         o8ymc2a5tfSpoHdpq+9ix2udDBd/rWxBiFdjN5CEXKImbLYURwv3nwc4sS7frCKBJR
+         wkgmDK/VxPIPfCsye8YTURGYsGwBXCw/piPR6Okk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kars de Jong <jongk@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 356/371] rtc: msm6242: Fix reading of 10-hour digit
-Date:   Thu, 16 Jan 2020 12:23:48 -0500
-Message-Id: <20200116172403.18149-299-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 060/251] rtc: 88pm860x: fix unintended sign extension
+Date:   Thu, 16 Jan 2020 12:33:29 -0500
+Message-Id: <20200116173641.22137-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,42 +43,88 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Kars de Jong <jongk@linux-m68k.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit e34494c8df0cd96fc432efae121db3212c46ae48 ]
+[ Upstream commit dc9e47160626cdb58d5c39a4f43dcfdb27a5c004 ]
 
-The driver was reading the wrong register as the 10-hour digit due to
-a misplaced ')'. It was in fact reading the 1-second digit register due
-to this bug.
+Shifting a u8 by 24 will cause the value to be promoted to an integer. If
+the top bit of the u8 is set then the following conversion to an unsigned
+long will sign extend the value causing the upper 32 bits to be set in
+the result.
 
-Also remove the use of a magic number for the hour mask and use the define
-for it which was already present.
+Fix this by casting the u8 value to an unsigned long before the shift.
 
-Fixes: 4f9b9bba1dd1 ("rtc: Add an RTC driver for the Oki MSM6242")
-Tested-by: Kars de Jong <jongk@linux-m68k.org>
-Signed-off-by: Kars de Jong <jongk@linux-m68k.org>
-Link: https://lore.kernel.org/r/20191116110548.8562-1-jongk@linux-m68k.org
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Detected by CoverityScan, CID#144925-144928 ("Unintended sign extension")
+
+Fixes: 008b30408c40 ("mfd: Add rtc support to 88pm860x")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-msm6242.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-88pm860x.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/rtc/rtc-msm6242.c b/drivers/rtc/rtc-msm6242.c
-index c1c5c4e3b3b4..c981301efbe5 100644
---- a/drivers/rtc/rtc-msm6242.c
-+++ b/drivers/rtc/rtc-msm6242.c
-@@ -132,7 +132,8 @@ static int msm6242_read_time(struct device *dev, struct rtc_time *tm)
- 		      msm6242_read(priv, MSM6242_SECOND1);
- 	tm->tm_min  = msm6242_read(priv, MSM6242_MINUTE10) * 10 +
- 		      msm6242_read(priv, MSM6242_MINUTE1);
--	tm->tm_hour = (msm6242_read(priv, MSM6242_HOUR10 & 3)) * 10 +
-+	tm->tm_hour = (msm6242_read(priv, MSM6242_HOUR10) &
-+		       MSM6242_HOUR10_HR_MASK) * 10 +
- 		      msm6242_read(priv, MSM6242_HOUR1);
- 	tm->tm_mday = msm6242_read(priv, MSM6242_DAY10) * 10 +
- 		      msm6242_read(priv, MSM6242_DAY1);
+diff --git a/drivers/rtc/rtc-88pm860x.c b/drivers/rtc/rtc-88pm860x.c
+index 166faae3a59c..7d3e5168fcef 100644
+--- a/drivers/rtc/rtc-88pm860x.c
++++ b/drivers/rtc/rtc-88pm860x.c
+@@ -115,11 +115,13 @@ static int pm860x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	pm860x_page_bulk_read(info->i2c, REG0_ADDR, 8, buf);
+ 	dev_dbg(info->dev, "%x-%x-%x-%x-%x-%x-%x-%x\n", buf[0], buf[1],
+ 		buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+-	base = (buf[1] << 24) | (buf[3] << 16) | (buf[5] << 8) | buf[7];
++	base = ((unsigned long)buf[1] << 24) | (buf[3] << 16) |
++		(buf[5] << 8) | buf[7];
+ 
+ 	/* load 32-bit read-only counter */
+ 	pm860x_bulk_read(info->i2c, PM8607_RTC_COUNTER1, 4, buf);
+-	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
++	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
++		(buf[1] << 8) | buf[0];
+ 	ticks = base + data;
+ 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
+ 		base, data, ticks);
+@@ -145,7 +147,8 @@ static int pm860x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	/* load 32-bit read-only counter */
+ 	pm860x_bulk_read(info->i2c, PM8607_RTC_COUNTER1, 4, buf);
+-	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
++	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
++		(buf[1] << 8) | buf[0];
+ 	base = ticks - data;
+ 	dev_dbg(info->dev, "set base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
+ 		base, data, ticks);
+@@ -170,10 +173,12 @@ static int pm860x_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	pm860x_page_bulk_read(info->i2c, REG0_ADDR, 8, buf);
+ 	dev_dbg(info->dev, "%x-%x-%x-%x-%x-%x-%x-%x\n", buf[0], buf[1],
+ 		buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+-	base = (buf[1] << 24) | (buf[3] << 16) | (buf[5] << 8) | buf[7];
++	base = ((unsigned long)buf[1] << 24) | (buf[3] << 16) |
++		(buf[5] << 8) | buf[7];
+ 
+ 	pm860x_bulk_read(info->i2c, PM8607_RTC_EXPIRE1, 4, buf);
+-	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
++	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
++		(buf[1] << 8) | buf[0];
+ 	ticks = base + data;
+ 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
+ 		base, data, ticks);
+@@ -198,11 +203,13 @@ static int pm860x_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 	pm860x_page_bulk_read(info->i2c, REG0_ADDR, 8, buf);
+ 	dev_dbg(info->dev, "%x-%x-%x-%x-%x-%x-%x-%x\n", buf[0], buf[1],
+ 		buf[2], buf[3], buf[4], buf[5], buf[6], buf[7]);
+-	base = (buf[1] << 24) | (buf[3] << 16) | (buf[5] << 8) | buf[7];
++	base = ((unsigned long)buf[1] << 24) | (buf[3] << 16) |
++		(buf[5] << 8) | buf[7];
+ 
+ 	/* load 32-bit read-only counter */
+ 	pm860x_bulk_read(info->i2c, PM8607_RTC_COUNTER1, 4, buf);
+-	data = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
++	data = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
++		(buf[1] << 8) | buf[0];
+ 	ticks = base + data;
+ 	dev_dbg(info->dev, "get base:0x%lx, RO count:0x%lx, ticks:0x%lx\n",
+ 		base, data, ticks);
 -- 
 2.20.1
 
