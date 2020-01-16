@@ -2,38 +2,35 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A5013F296
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 19:36:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBD213F24D
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 19:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405079AbgAPSgX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jan 2020 13:36:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58384 "EHLO mail.kernel.org"
+        id S2390739AbgAPSeZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jan 2020 13:34:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391701AbgAPRYP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:24:15 -0500
+        id S2391788AbgAPRYh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:24:37 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C286724690;
-        Thu, 16 Jan 2020 17:24:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3CB1A24692;
+        Thu, 16 Jan 2020 17:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195454;
-        bh=DD5b3OtEOuYFjYuUz0V1Ew0UTKdSxEIPHB7MzvFpuk4=;
+        s=default; t=1579195476;
+        bh=4KwJYEY4NLAQPKKbonyJb+ZFRqThbJv4RYUN1FP+KZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DpqtVad4Nv93wAgq8gyksdsvlmz0G/HFyVRwxiowH32zAFfv8VY/rPt1WjwGgydYj
-         1iVTeuE5NQ4GQpvDCeAfyR64DN8lpUtr5hYez3OFzJBt2VEkHFoxaPoNp/Dyl+Iwtf
-         uFs+fsmNffchnUmtYFdHAoBynFAgfWmRIEdal0e0=
+        b=vMW+fLDkOYWCA3vxstjUZP5sVsEoDMuoqREuIoccfdAmx14z+VAzgQJDRDmJ2m6Cn
+         YbidRyEZT5tvOWU6Djpew6nCABPDvK5BXI2Kx6YfEOO2g4d+AgyY9cBlELjwecUUVd
+         ELUL+Fau4TeQYKkKbnQnRAYcAR4Giyzeq0WixJk0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eric Wong <e@80x24.org>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Sylvain Chouleur <sylvain.chouleur@intel.com>,
-        Patrick McDermott <patrick.mcdermott@libiquity.com>,
-        linux-rtc@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 064/371] rtc: cmos: ignore bogus century byte
-Date:   Thu, 16 Jan 2020 12:18:56 -0500
-Message-Id: <20200116172403.18149-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 082/371] rtc: ds1672: fix unintended sign extension
+Date:   Thu, 16 Jan 2020 12:19:14 -0500
+Message-Id: <20200116172403.18149-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -46,43 +43,41 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Eric Wong <e@80x24.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit 2a4daadd4d3e507138f8937926e6a4df49c6bfdc ]
+[ Upstream commit f0c04c276739ed8acbb41b4868e942a55b128dca ]
 
-Older versions of Libreboot and Coreboot had an invalid value
-(`3' in my case) in the century byte affecting the GM45 in
-the Thinkpad X200.  Not everybody's updated their firmwares,
-and Linux <= 4.2 was able to read the RTC without problems,
-so workaround this by ignoring invalid values.
+Shifting a u8 by 24 will cause the value to be promoted to an integer. If
+the top bit of the u8 is set then the following conversion to an unsigned
+long will sign extend the value causing the upper 32 bits to be set in
+the result.
 
-Fixes: 3c217e51d8a272b9 ("rtc: cmos: century support")
+Fix this by casting the u8 value to an unsigned long before the shift.
 
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Sylvain Chouleur <sylvain.chouleur@intel.com>
-Cc: Patrick McDermott <patrick.mcdermott@libiquity.com>
-Cc: linux-rtc@vger.kernel.org
-Signed-off-by: Eric Wong <e@80x24.org>
+Detected by CoverityScan, CID#138801 ("Unintended sign extension")
+
+Fixes: edf1aaa31fc5 ("[PATCH] RTC subsystem: DS1672 driver")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-ds1672.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2f1772a358ca..18a6f15e313d 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -82,7 +82,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
- 	time->tm_year += real_year - 72;
- #endif
+diff --git a/drivers/rtc/rtc-ds1672.c b/drivers/rtc/rtc-ds1672.c
+index 9caaccccaa57..b1ebca099b0d 100644
+--- a/drivers/rtc/rtc-ds1672.c
++++ b/drivers/rtc/rtc-ds1672.c
+@@ -58,7 +58,8 @@ static int ds1672_get_datetime(struct i2c_client *client, struct rtc_time *tm)
+ 		"%s: raw read data - counters=%02x,%02x,%02x,%02x\n",
+ 		__func__, buf[0], buf[1], buf[2], buf[3]);
  
--	if (century)
-+	if (century > 20)
- 		time->tm_year += (century - 19) * 100;
+-	time = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
++	time = ((unsigned long)buf[3] << 24) | (buf[2] << 16) |
++	       (buf[1] << 8) | buf[0];
  
- 	/*
+ 	rtc_time_to_tm(time, tm);
+ 
 -- 
 2.20.1
 
