@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB5513E556
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7ECF13E82F
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390193AbgAPROP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jan 2020 12:14:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32902 "EHLO mail.kernel.org"
+        id S2404646AbgAPRa6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jan 2020 12:30:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43854 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390946AbgAPROP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:14:15 -0500
+        id S2404642AbgAPRa6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:30:58 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 99A6F246B8;
-        Thu, 16 Jan 2020 17:14:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 913F5246AB;
+        Thu, 16 Jan 2020 17:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194854;
-        bh=8cY0lhb2As8j2MTW3fqxxsG0Os5auK3r8F7h9ClHNOc=;
+        s=default; t=1579195857;
+        bh=66Uh4hQFwl8UL/i/f+/bSnuAUf2QPxZlPm6iSXIho1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YTDvVBnBky/HvFMcSv/2o7snmRb0Y5cWpkjzpIvRvaf0PRdZtCFMKdzGjNSJrmV+a
-         18QbiJHN2KuD6glXTPmO6z7AKnwlB6+bsTBkE+M6gPVP56iZRo9SeoB1j9mpiy0J/d
-         8hrBih4nPZtETMa+2LWUPgc7t9LnBoSMk047UEXw=
+        b=fyZc1PkhSEsA8iNwFbCMu+4pGcprjVwYIiyXRIlYzM3CYDXxoq2K2ra3zOGYSGyCw
+         YsQaNyfvAtvUoOO/F9NmWo6e3dnjVxk1aDW85KqXdBUwE5EwgNZm9E40BnpMAM1/X7
+         dQTfWOwkCRczmqr4IdZSZ/diDqrwaI4BRjzagfy8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kars de Jong <jongk@linux-m68k.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 650/671] rtc: msm6242: Fix reading of 10-hour digit
-Date:   Thu, 16 Jan 2020 12:04:48 -0500
-Message-Id: <20200116170509.12787-387-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 356/371] rtc: msm6242: Fix reading of 10-hour digit
+Date:   Thu, 16 Jan 2020 12:23:48 -0500
+Message-Id: <20200116172403.18149-299-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
-References: <20200116170509.12787-1-sashal@kernel.org>
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,7 +67,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-msm6242.c b/drivers/rtc/rtc-msm6242.c
-index 0c72a2e8ec67..6aace9319fe9 100644
+index c1c5c4e3b3b4..c981301efbe5 100644
 --- a/drivers/rtc/rtc-msm6242.c
 +++ b/drivers/rtc/rtc-msm6242.c
 @@ -132,7 +132,8 @@ static int msm6242_read_time(struct device *dev, struct rtc_time *tm)
