@@ -2,37 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A5C13E5E8
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB5513E556
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jan 2020 18:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388476AbgAPRQx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jan 2020 12:16:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60438 "EHLO mail.kernel.org"
+        id S2390193AbgAPROP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jan 2020 12:14:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390904AbgAPROB (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:14:01 -0500
+        id S2390946AbgAPROP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:14:15 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F1522469F;
-        Thu, 16 Jan 2020 17:14:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 99A6F246B8;
+        Thu, 16 Jan 2020 17:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194841;
-        bh=QFwPIGYW7jqbTdUHd0X1/G46FyHGNJE8eX12vRwYplU=;
+        s=default; t=1579194854;
+        bh=8cY0lhb2As8j2MTW3fqxxsG0Os5auK3r8F7h9ClHNOc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lMxqmjVU/4EW5t0dMOS2Vs5ovOoFPMKs93vNP7afFqQ8gziQvn7oT84Xz9o/pww+t
-         WbmuQobw+zxTlusflu7ZkIET7aDqh2MQiQPUZ9TH+JAq+GXCOkfwW0G5Pojr76/LSI
-         u1RZ0I6TcdlZSKmiBKQ69Rwi6eYXWjV29PPHuYFg=
+        b=YTDvVBnBky/HvFMcSv/2o7snmRb0Y5cWpkjzpIvRvaf0PRdZtCFMKdzGjNSJrmV+a
+         18QbiJHN2KuD6glXTPmO6z7AKnwlB6+bsTBkE+M6gPVP56iZRo9SeoB1j9mpiy0J/d
+         8hrBih4nPZtETMa+2LWUPgc7t9LnBoSMk047UEXw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chuhong Yuan <hslester96@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+Cc:     Kars de Jong <jongk@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 640/671] rtc: brcmstb-waketimer: add missed clk_disable_unprepare
-Date:   Thu, 16 Jan 2020 12:04:38 -0500
-Message-Id: <20200116170509.12787-377-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 650/671] rtc: msm6242: Fix reading of 10-hour digit
+Date:   Thu, 16 Jan 2020 12:04:48 -0500
+Message-Id: <20200116170509.12787-387-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -45,35 +44,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Chuhong Yuan <hslester96@gmail.com>
+From: Kars de Jong <jongk@linux-m68k.org>
 
-[ Upstream commit 94303f8930ed78aea0f189b703c9d79fff9555d7 ]
+[ Upstream commit e34494c8df0cd96fc432efae121db3212c46ae48 ]
 
-This driver forgets to disable and unprepare clock when remove.
-Add a call to clk_disable_unprepare to fix it.
+The driver was reading the wrong register as the 10-hour digit due to
+a misplaced ')'. It was in fact reading the 1-second digit register due
+to this bug.
 
-Fixes: c4f07ecee22e ("rtc: brcmstb-waketimer: Add Broadcom STB wake-timer")
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20191105160043.20018-1-hslester96@gmail.com
+Also remove the use of a magic number for the hour mask and use the define
+for it which was already present.
+
+Fixes: 4f9b9bba1dd1 ("rtc: Add an RTC driver for the Oki MSM6242")
+Tested-by: Kars de Jong <jongk@linux-m68k.org>
+Signed-off-by: Kars de Jong <jongk@linux-m68k.org>
+Link: https://lore.kernel.org/r/20191116110548.8562-1-jongk@linux-m68k.org
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-brcmstb-waketimer.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rtc/rtc-msm6242.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-brcmstb-waketimer.c b/drivers/rtc/rtc-brcmstb-waketimer.c
-index f4010a75f2be..1abc8397850a 100644
---- a/drivers/rtc/rtc-brcmstb-waketimer.c
-+++ b/drivers/rtc/rtc-brcmstb-waketimer.c
-@@ -287,6 +287,7 @@ static int brcmstb_waketmr_remove(struct platform_device *pdev)
- 	struct brcmstb_waketmr *timer = dev_get_drvdata(&pdev->dev);
- 
- 	unregister_reboot_notifier(&timer->reboot_notifier);
-+	clk_disable_unprepare(timer->clk);
- 
- 	return 0;
- }
+diff --git a/drivers/rtc/rtc-msm6242.c b/drivers/rtc/rtc-msm6242.c
+index 0c72a2e8ec67..6aace9319fe9 100644
+--- a/drivers/rtc/rtc-msm6242.c
++++ b/drivers/rtc/rtc-msm6242.c
+@@ -132,7 +132,8 @@ static int msm6242_read_time(struct device *dev, struct rtc_time *tm)
+ 		      msm6242_read(priv, MSM6242_SECOND1);
+ 	tm->tm_min  = msm6242_read(priv, MSM6242_MINUTE10) * 10 +
+ 		      msm6242_read(priv, MSM6242_MINUTE1);
+-	tm->tm_hour = (msm6242_read(priv, MSM6242_HOUR10 & 3)) * 10 +
++	tm->tm_hour = (msm6242_read(priv, MSM6242_HOUR10) &
++		       MSM6242_HOUR10_HR_MASK) * 10 +
+ 		      msm6242_read(priv, MSM6242_HOUR1);
+ 	tm->tm_mday = msm6242_read(priv, MSM6242_DAY10) * 10 +
+ 		      msm6242_read(priv, MSM6242_DAY1);
 -- 
 2.20.1
 
