@@ -2,153 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D70140B4E
-	for <lists+linux-rtc@lfdr.de>; Fri, 17 Jan 2020 14:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42384140CDA
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 Jan 2020 15:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgAQNoQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 17 Jan 2020 08:44:16 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39050 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbgAQNoQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 17 Jan 2020 08:44:16 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y11so22762457wrt.6
-        for <linux-rtc@vger.kernel.org>; Fri, 17 Jan 2020 05:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=LhpCR5vDcuxmC13Hf7ge2eVs5JUiFOiL0U5Ba9egRMw=;
-        b=zceCobLh0fkMReC9xfFdXwldcPtVuv28toduajHElpblXk9BO8nsAonZJU4d4ZYwys
-         /jAk1UpPld0R+1uL1xkA85I5lfqc60s0ccLfjIWBz8kZUMUxTDfcOATaEzJmNElqL6uZ
-         PdGim4iiP/O9ixXknzFJu8o2V5T3elLHj0HTdovMQi1TLRvHYUZdYLN4QjvJKz8tHgyR
-         rl0n3Qu6eat1AqcvapQfUbpu9jgvixKlq99w26Q3cl57QLclNJbC7ON4reh1enfe6VGE
-         ZiE4TP+DXXMHrOBpwjdNTY/QELGcU9jHKkyyIXyj9X64yyjD2CSiqjFYDmDKCQpA3Sa6
-         elUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=LhpCR5vDcuxmC13Hf7ge2eVs5JUiFOiL0U5Ba9egRMw=;
-        b=icimiimK7rYucoksbefZWBK8QRNm4eZqQa6JsG8aDz5N+jrjpbYR3XNcMBw0M2r50N
-         544cAt+nHACat46l0dP6nzQb2yrBSoFR8YRqcrOnfSUqSne5cHZpjUQW8KaP6FjMYENG
-         51SHMTUtaoVuotG4AbEY6SSgp1/EgJohP2v4MxULa8eBnbLRZMkhv0BT03uZp69nn4f3
-         OFlXCuA6EbFczTaz28gF/r8y+kGtx2ezZbq1cmHDX6jNOk0gq4n5EwBThDKdJOcto8rx
-         NZjOzirs05vzoEqXkO/HyADjWvNDwk4KLz3g3E2keQWMJShbyO5zzpquz++GV9HyA6B+
-         wGXw==
-X-Gm-Message-State: APjAAAXCx0JJhcmZoGSksN7uQtnAQDgJ7QJBBZ0/5usF13VEGUzyUvEk
-        rtnYJcR3V4f88681anhzKezyPQ==
-X-Google-Smtp-Source: APXvYqyTu5Tky5NAfYjiXymO2Th58H5BnDHWlmZTL0ub+zBth+sD7V3P+A22iVD9kpySPXrScKf+VA==
-X-Received: by 2002:adf:ee88:: with SMTP id b8mr3261159wro.249.1579268654624;
-        Fri, 17 Jan 2020 05:44:14 -0800 (PST)
-Received: from dell ([2.27.35.221])
-        by smtp.gmail.com with ESMTPSA id t1sm9338897wma.43.2020.01.17.05.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 05:44:14 -0800 (PST)
-Date:   Fri, 17 Jan 2020 13:44:32 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [PATCH v10 00/13] Support ROHM BD71828 PMIC
-Message-ID: <20200117134432.GO15507@dell>
-References: <cover.1579249511.git.matti.vaittinen@fi.rohmeurope.com>
- <20200117103000.GG15507@dell>
- <9785531484b32da487a6016f5c32bf2e9bc45985.camel@fi.rohmeurope.com>
+        id S1728884AbgAQOmW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 17 Jan 2020 09:42:22 -0500
+Received: from mga05.intel.com ([192.55.52.43]:47075 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728852AbgAQOmW (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 17 Jan 2020 09:42:22 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jan 2020 06:42:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,330,1574150400"; 
+   d="scan'208";a="249268243"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jan 2020 06:42:20 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1isSpI-0004yh-Tt; Fri, 17 Jan 2020 16:42:20 +0200
+Date:   Fri, 17 Jan 2020 16:42:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@canonical.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        kernel@gpiccoli.net
+Subject: Re: [PATCH] rtc: cmos: Don't enable shared interrupts if using
+ HPET-based IRQ handler
+Message-ID: <20200117144220.GU32742@smile.fi.intel.com>
+References: <20200103140240.6507-1-gpiccoli@canonical.com>
+ <20200108174111.GD32742@smile.fi.intel.com>
+ <87h815ybxo.fsf@nanos.tec.linutronix.de>
+ <4882eca9-c5dd-a37c-bc13-14108300fd92@canonical.com>
+ <9b04b099-0495-d188-7002-cad1147b61d0@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9785531484b32da487a6016f5c32bf2e9bc45985.camel@fi.rohmeurope.com>
+In-Reply-To: <9b04b099-0495-d188-7002-cad1147b61d0@canonical.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 17 Jan 2020, Vaittinen, Matti wrote:
+On Fri, Jan 17, 2020 at 07:09:13AM -0300, Guilherme G. Piccoli wrote:
+> Hi all, do we have any news about this one?
+> Thanks in advance,
 
-> 
-> On Fri, 2020-01-17 at 10:30 +0000, Lee Jones wrote:
-> > On Fri, 17 Jan 2020, Matti Vaittinen wrote:
-> > 
-> > > Patch series introducing support for ROHM BD71828 PMIC
-> > > 
-> > > ROHM BD71828 is a power management IC containing 7 bucks and 7
-> > > LDOs. All
-> > > regulators can be controlled individually via I2C. Bucks 1,2,6 and
-> > > 7 can also be assigned to a "regulator group" controlled by run-
-> > > levels.
-> > > Eg. Run level specific voltages and enable/disable statuses for
-> > > each of
-> > > these bucks can be set via register interface. The buck run-level
-> > > group
-> > > assignment (selection if buck is to be controlled individually or
-> > > via
-> > > run-levels) can be changed at run-time via I2C.
-> > > 
-> > > This patch series brings only the basic support for controlling
-> > > regulators individually via I2C.
-> > > 
-> > > In addition to the bucks and LDOs there are:
-> > > 
-> > > - The usual clk gate
-> > > - 4 IO pins (mostly usable as GPO or tied to specific purpose)
-> > > - power button support
-> > > - RTC
-> > > - two LEDs
-> > > - battery charger
-> > > - HALL sensor input
-> > > 
-> > > This patch series adds support to regulators, clk, RTC, GPIOs and
-> > > LEDs.
-> > > 
-> > > Power-supply driver for charger is not included in this series.
-> > > 
-> > > The series also adds LED DT-node lookup based on node name or given
-> > > property name/value pair in LED core. It also adds generic default-
-> > > state
-> > > and default-trigger property handling to LED core. Follow-up
-> > > patches
-> > > simplifying few other LED drivers should follow.
-> > > 
-> > > Changelog v10:
-> > >   - Split RTC patch to a BD70528 fix (which hopefully goes to 5.4)
-> > > and to
-> > >     BD71828 support
-> > 
-> > Still missing LED Acks.
-> > 
-> 
-> Yep. I know. I haven't heard from Pavel recently and the patch 12
-> definitely requires his ack. Can you take the other patches in and
-> leave 12 and 13 out for now? I can continue work on LEDs with Pavel but
-> I would really like to have the regulators working and BD70528 RTC
-> fixed in next release...
-
-Sure.  Give me a few days though.
+Let me come out with something such as Thomas suggested.
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+With Best Regards,
+Andy Shevchenko
+
+
