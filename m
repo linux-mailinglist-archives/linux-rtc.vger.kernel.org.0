@@ -2,21 +2,21 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46137142B0B
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2020 13:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14125142C62
+	for <lists+linux-rtc@lfdr.de>; Mon, 20 Jan 2020 14:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbgATMla (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 20 Jan 2020 07:41:30 -0500
-Received: from mailgate1.rohmeurope.com ([178.15.145.194]:43708 "EHLO
+        id S1727011AbgATNl6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 20 Jan 2020 08:41:58 -0500
+Received: from mailgate1.rohmeurope.com ([178.15.145.194]:45730 "EHLO
         mailgate1.rohmeurope.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgATMla (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Jan 2020 07:41:30 -0500
-X-AuditID: c0a8fbf4-183ff70000001fa6-ca-5e259ff60110
+        with ESMTP id S1726626AbgATNl6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Jan 2020 08:41:58 -0500
+X-AuditID: c0a8fbf4-183ff70000001fa6-81-5e25ae239d7c
 Received: from smtp.reu.rohmeu.com (will-cas002.reu.rohmeu.com [192.168.251.178])
-        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 0A.AA.08102.6FF952E5; Mon, 20 Jan 2020 13:41:26 +0100 (CET)
+        by mailgate1.rohmeurope.com (Symantec Messaging Gateway) with SMTP id 5F.FA.08102.32EA52E5; Mon, 20 Jan 2020 14:41:55 +0100 (CET)
 Received: from WILL-MAIL001.REu.RohmEu.com ([fe80::2915:304f:d22c:c6ba]) by
  WILL-CAS002.REu.RohmEu.com ([fe80::fc24:4cbc:e287:8659%12]) with mapi id
- 14.03.0439.000; Mon, 20 Jan 2020 13:41:14 +0100
+ 14.03.0439.000; Mon, 20 Jan 2020 14:41:42 +0100
 From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
 To:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>
 CC:     "corbet@lwn.net" <corbet@lwn.net>,
@@ -49,62 +49,69 @@ CC:     "corbet@lwn.net" <corbet@lwn.net>,
         "sboyd@kernel.org" <sboyd@kernel.org>
 Subject: Re: [PATCH v12 00/10] Support ROHM BD71828 PMIC
 Thread-Topic: [PATCH v12 00/10] Support ROHM BD71828 PMIC
-Thread-Index: AQHVz3GxRarqEI+FJkC62zSkifitkKfzbi0A
-Date:   Mon, 20 Jan 2020 12:41:14 +0000
-Message-ID: <ecc8ab43dfdb78c7bcab82311f608f6d4e12dc5c.camel@fi.rohmeurope.com>
+Thread-Index: AQHVz3GxRarqEI+FJkC62zSkifitkKfzbi0AgAAQ5QA=
+Date:   Mon, 20 Jan 2020 13:41:41 +0000
+Message-ID: <bf1ad63605a11f7d6a4e89233fbd478cb9114650.camel@fi.rohmeurope.com>
 References: <cover.1579511114.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <cover.1579511114.git.matti.vaittinen@fi.rohmeurope.com>
+         <ecc8ab43dfdb78c7bcab82311f608f6d4e12dc5c.camel@fi.rohmeurope.com>
+In-Reply-To: <ecc8ab43dfdb78c7bcab82311f608f6d4e12dc5c.camel@fi.rohmeurope.com>
 Accept-Language: en-US, de-DE
 Content-Language: de-DE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [213.255.186.46]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <1A3D109FBE7D05489C91039926E23B72@de.rohmeurope.com>
+Content-ID: <065C929F2988BA4DAC7FE848157AFD1B@de.rohmeurope.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf1AUZRjH593d211+bPNygryRNrUjUo1CNEav5TQ2Sb415Thj9YcVuMbK
-        kcfdzd7RgNZEMGicDAr4A0/uTpJTwPPQC4b4NTGEhKdjHYLglDAow4yMgoXiGGrtcir88+73
-        fZ7n8/3uH8/L0/p6Lo7PMtlkxSQZRTac6ayd9a+cccenvTpctxrXBAc4vHvyOIcflvdw+I4z
-        wOADo2MsHuvcDbC7+6IO7znfqMOFxxpY/GfTaQaP3D0L8Ez/DxTe/+AEhf8uGdbh6l01DP7J
-        /QDgS61VLG666QO452Q/iz2DQQpXeXoZPPVPMYWDgVR8IDDJ4auBsywuDA7RuKijm8OPLp9h
-        cOnF9WuXEq/LC8jsv+WATA0VccTl3UlaHFc54q8vZslfl9tZ8ovTy5FjpRU6MnOhjCHj1Q0M
-        +W2omSKHXPcp0lDSDUjtyXscmfY/vxFujlizVbJ9vSkr05T09pYIw/G+vZylUsi9Nn2LzQc3
-        I+0gjEdwFbpV8StlB+G8Hg4A1FjeyoQuvQD11p9m7YDnWbgG2a9wmoyGq9GZYJQ2QsNABHLV
-        lnCa0SKI0aFL93Sa1mb+OFhFhfRraLjaSWssA+NRUbNFKwtwA5qqu05rWg/Xoba+ibnxMJiK
-        2tsCcxrApag4f3JO0zAW+cdD9ghCVNP+Ox3SMejG9UeP6yLquD/KaFE0fBk1tCaF0LWoxd34
-        2OZFtH/PKBf6hSh07vAYsw8sdixIcMzTjgW0YwHtWEAfBbp6gLKlLGOmZJOTExU5J1ExG7LV
-        z5fmbD8Ibd2dn8F/Xe93AYoHXeBZnhJjBO4rMU3/zFZzRp5BshrSlRyjbO0CiKfFaOFoQXya
-        XsiQ8nbIivlJ6zmeEWOFhNGyL/RQy9ouyxZZedJdwvMiEh5WqWCUImfKuduyjLb5NsWHaebh
-        cdFW2ZQhK1KOzZCubUe6VV0PrRWp5h5xablWi5StVkNoACTz+244f6T5bqdHPQenOjy0njGZ
-        TXJcrIDfVAGoAYYc09O4CRDLA3GRoGh2keoDfOo2oQZRatDAG6IWZJPmW3H5YPHns4c/u3Aq
-        pfluQeLrlh353m+b6FP2IwWZ68Dg8iUp7/R/2PlCwvrAyJaVm26/+1EeO1KTK99mIs5t3vVB
-        4rLKl86n9u28EvQVruK2rYjXfeLbnlrstV8rrfv4LdDigx6j8N7y8aS9ZfwKQ8KyysH2PvJd
-        64m2b3qmY6Yrv3f7Pk2pEBmrQUp+hVas0v+4eIqdPQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxTVxjeuff23sPHXQ612GOdy1aHc8uGI1nimTGLyWZ2SZZp4qZxQdkV
+        7igbbclta9QtocE5B3QMHPjRlK9JBaWCVBmTiJKmgNbFrZEC82vrJCyYpWwOLYrT3Uun8Oec
+        532f8zzP++M9kNYe5Qyw0GKXZItYZGSTmb7WGf+rS9sztr4WDehJczjCkb2xIxz5d98AR6bq
+        QgypjY6xZKxvLyANwUsaUnHxlIbsPtzBkqtdJxjy651+QO4OfUWRmgctFPnbdUNDmr5sZsjJ
+        hgeAXO7xsKTrz3ZABtqGWOIdCVPE4z3PkMnbZRQJh9aS2lCMI9dD/SzZHR6lyZ7eIEceDncy
+        pPLSO2uWCL56HxBm7u8DwuToHk6o930mnHZf5wT/sTJWuDZ8hhXO1fk44XDltxrh7o/VjDDe
+        1MEIg6PdlHCg/h4ldLiCQGhti3PCP/5n16MPU1ZvE+3bNxQWWFa8+VGK6dA3MU1xEO1wNg9S
+        TuBC5SAJYvQ6Pni6iy4HyVCLIgDHZmrZRHEe4Mo77UoBIYtW4/JfOBXq0Bu4M5ymPqFRKAXX
+        t7o41WgBIvjA5bhGxeqbn/d7qARehWu+P8uomEEZ+GysilYxj97DnbGrs32tMgpu25+n4iS0
+        Dt+PVsz2AVqCy5yxWR8a6bF/POGPEcLNZ36iEzgdT9x8+H/fiHvvRRl1Thq9hDt6ViTgGuz8
+        7YWEy/O4piLKJSZIwxcOjTFVYKF7XoB7TuyeE7vnid3zxI1Acwxgs1hYVCDapaxMWXJkylaT
+        WbnyrGY/SCzd1A/gUSA7ACgIAmARpIzpvO5Ixlbt09us+TtNos2UKzuKJFsAYEgbdXxjqcLx
+        +eLOXZJsfUwthoxRz78Yrd6iRWrWp5JULMmP2WcgNGLe4VOEabJUIO34uLDIPkdTMEk1Tzbo
+        bJIlX5JFh92Uqy5Hrk3ZDpVKVXKfO67m2opFs9JNSEMgC1ZN1H1Hw2CdVzlHJnu9tJaxWC2S
+        Qc+XqAKkCkwOy5O4W0APgXEB39+msKnK/3vidksJopSgyEqjGmQX5yiDE5x69+Smpve3V7Rc
+        KElv2Lz2Ke+1/OWRsoVL418s3nVl6sSi8cFAtmFYN7kMlgqffH3j0dt/TQ98cBHEe7I3Nqbk
+        bFx2PN6aanCs+n0dP+EQ0ofoP6ZHzDc9EILIWzmkr2X9tKvk87SVSSxffXtLliFzec4rV8zn
+        NhR7jnb3lua5unOMjM0kZr1MyzbxPzRZ5II8BAAA
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGVsbG8sDQoNCkRvIHlvdSBrbm93IHRob3NlIGRheXMgd2hlbiBub3RoaW5nLCBfbm90aGluZ18g
-anVzdCB3b3JrcyBvdXQgYXMNCmludGVuZGVkPyBUb2RheSBpcyBvbmUgb2YgdGhvc2UuDQoNCk9u
-IE1vbiwgMjAyMC0wMS0yMCBhdCAxMToxMiArMDIwMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0K
-PiBQYXRjaCBzZXJpZXMgaW50cm9kdWNpbmcgc3VwcG9ydCBmb3IgUk9ITSBCRDcxODI4IFBNSUMN
-Cj4gDQo+IFJPSE0gQkQ3MTgyOCBpcyBhIHBvd2VyIG1hbmFnZW1lbnQgSUMgY29udGFpbmluZyA3
-IGJ1Y2tzIGFuZCA3IExET3MuDQo+IEFsbA0KPiByZWd1bGF0b3JzIGNhbiBiZSBjb250cm9sbGVk
-IGluZGl2aWR1YWxseSB2aWEgSTJDLiBCdWNrcyAxLDIsNiBhbmQNCj4gNyBjYW4gYWxzbyBiZSBh
-c3NpZ25lZCB0byBhICJyZWd1bGF0b3IgZ3JvdXAiIGNvbnRyb2xsZWQgYnkgcnVuLQ0KPiBsZXZl
-bHMuDQo+IEVnLiBSdW4gbGV2ZWwgc3BlY2lmaWMgdm9sdGFnZXMgYW5kIGVuYWJsZS9kaXNhYmxl
-IHN0YXR1c2VzIGZvciBlYWNoDQo+IG9mDQo+IHRoZXNlIGJ1Y2tzIGNhbiBiZSBzZXQgdmlhIHJl
-Z2lzdGVyIGludGVyZmFjZS4gVGhlIGJ1Y2sgcnVuLWxldmVsDQo+IGdyb3VwDQo+IGFzc2lnbm1l
-bnQgKHNlbGVjdGlvbiBpZiBidWNrIGlzIHRvIGJlIGNvbnRyb2xsZWQgaW5kaXZpZHVhbGx5IG9y
-IHZpYQ0KPiBydW4tbGV2ZWxzKSBjYW4gYmUgY2hhbmdlZCBhdCBydW4tdGltZSB2aWEgSTJDLg0K
-PiANCj4gVGhpcyBwYXRjaCBzZXJpZXMgYnJpbmdzIG9ubHkgdGhlIGJhc2ljIHN1cHBvcnQgZm9y
-IGNvbnRyb2xsaW5nDQo+IHJlZ3VsYXRvcnMgaW5kaXZpZHVhbGx5IHZpYSBJMkMuDQoNCi8vc25p
-cA0KDQo+IFBhdGNoIDExOg0KPiAgICAgICAgIEFsbG93IGNvbnRyb2wgb2YgR1AoSSlPIHBpbnMg
-b24gQkQ3MTgyOCB2aWEgR1BJTyBzdWJzeXN0ZW0NCj4gDQoNCkkgYWNjaWRlbnRhbGx5IHJlYmFz
-ZWQgdG8gd3JvbmcgY29tbWl0IGFuZCBjcm9wcGVkIHRoZSBHUElPIHBhdGNoIG91dA0Kb2YgdGhl
-IHNlcmllcy4gTGVlIC0gY2FuIHlvdSB0YWtlIHRoZSBHUElPIHBhcnQgZnJvbSB2MTEgKHBhdGNo
-IDExLzEzDQp0aGVyZSkuIEl0IHNob3VsZCBhcHBseSBjbGVhbmx5IGFuZCBJIGhhdmUgbm8gY2hh
-bmdlcyB0byBpdC4gT3Igc2hvdWxkDQpJIGp1c3QgcmVzZW5kIHRoZSB3aG9sZSBzZXJpZXMgKGFn
-YWluKT8NCg0KQnIsDQogICAgTWF0dGkgVmFpdHRpbmVuDQo=
+DQpPbiBNb24sIDIwMjAtMDEtMjAgYXQgMTQ6NDEgKzAyMDAsIE1hdHRpIFZhaXR0aW5lbiB3cm90
+ZToNCj4gSGVsbG8sDQo+IA0KPiBEbyB5b3Uga25vdyB0aG9zZSBkYXlzIHdoZW4gbm90aGluZywg
+X25vdGhpbmdfIGp1c3Qgd29ya3Mgb3V0IGFzDQo+IGludGVuZGVkPyBUb2RheSBpcyBvbmUgb2Yg
+dGhvc2UuDQo+IA0KPiBPbiBNb24sIDIwMjAtMDEtMjAgYXQgMTE6MTIgKzAyMDAsIE1hdHRpIFZh
+aXR0aW5lbiB3cm90ZToNCj4gPiBQYXRjaCBzZXJpZXMgaW50cm9kdWNpbmcgc3VwcG9ydCBmb3Ig
+Uk9ITSBCRDcxODI4IFBNSUMNCj4gPiANCj4gPiBST0hNIEJENzE4MjggaXMgYSBwb3dlciBtYW5h
+Z2VtZW50IElDIGNvbnRhaW5pbmcgNyBidWNrcyBhbmQgNw0KPiA+IExET3MuDQo+ID4gQWxsDQo+
+ID4gcmVndWxhdG9ycyBjYW4gYmUgY29udHJvbGxlZCBpbmRpdmlkdWFsbHkgdmlhIEkyQy4gQnVj
+a3MgMSwyLDYgYW5kDQo+ID4gNyBjYW4gYWxzbyBiZSBhc3NpZ25lZCB0byBhICJyZWd1bGF0b3Ig
+Z3JvdXAiIGNvbnRyb2xsZWQgYnkgcnVuLQ0KPiA+IGxldmVscy4NCj4gPiBFZy4gUnVuIGxldmVs
+IHNwZWNpZmljIHZvbHRhZ2VzIGFuZCBlbmFibGUvZGlzYWJsZSBzdGF0dXNlcyBmb3INCj4gPiBl
+YWNoDQo+ID4gb2YNCj4gPiB0aGVzZSBidWNrcyBjYW4gYmUgc2V0IHZpYSByZWdpc3RlciBpbnRl
+cmZhY2UuIFRoZSBidWNrIHJ1bi1sZXZlbA0KPiA+IGdyb3VwDQo+ID4gYXNzaWdubWVudCAoc2Vs
+ZWN0aW9uIGlmIGJ1Y2sgaXMgdG8gYmUgY29udHJvbGxlZCBpbmRpdmlkdWFsbHkgb3INCj4gPiB2
+aWENCj4gPiBydW4tbGV2ZWxzKSBjYW4gYmUgY2hhbmdlZCBhdCBydW4tdGltZSB2aWEgSTJDLg0K
+PiA+IA0KPiA+IFRoaXMgcGF0Y2ggc2VyaWVzIGJyaW5ncyBvbmx5IHRoZSBiYXNpYyBzdXBwb3J0
+IGZvciBjb250cm9sbGluZw0KPiA+IHJlZ3VsYXRvcnMgaW5kaXZpZHVhbGx5IHZpYSBJMkMuDQo+
+IA0KPiAvL3NuaXANCj4gDQo+ID4gUGF0Y2ggMTE6DQo+ID4gICAgICAgICBBbGxvdyBjb250cm9s
+IG9mIEdQKEkpTyBwaW5zIG9uIEJENzE4MjggdmlhIEdQSU8gc3Vic3lzdGVtDQo+ID4gDQo+IA0K
+PiBJIGFjY2lkZW50YWxseSByZWJhc2VkIHRvIHdyb25nIGNvbW1pdCBhbmQgY3JvcHBlZCB0aGUg
+R1BJTyBwYXRjaCBvdXQNCj4gb2YgdGhlIHNlcmllcy4gTGVlIC0gY2FuIHlvdSB0YWtlIHRoZSBH
+UElPIHBhcnQgZnJvbSB2MTEgKHBhdGNoIDExLzEzDQo+IHRoZXJlKS4gSXQgc2hvdWxkIGFwcGx5
+IGNsZWFubHkgYW5kIEkgaGF2ZSBubyBjaGFuZ2VzIHRvIGl0LiBPcg0KPiBzaG91bGQNCj4gSSBq
+dXN0IHJlc2VuZCB0aGUgd2hvbGUgc2VyaWVzIChhZ2Fpbik/DQoNCk1heWJlIGl0IGlzIGNsZWFy
+ZXN0IGlmIEkganVzdCBkbyByZXNlbmQuLi4gdjEzIGlzIG9uIGl0J3Mgd2F5IGJ1dCBJDQpkcm9w
+cGVkIG1vc3Qgb2YgdGhlIHJlY2lwaWVudHMuIFBsZWFzZSBsZXQgbWUga25vdyBpZiBzb21lIG9m
+IHlvdSB3YW50DQp0byBnZXQgaXQuDQoNCj4gDQo+IEJyLA0KPiAgICAgTWF0dGkgVmFpdHRpbmVu
+DQoNCg==
