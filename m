@@ -2,77 +2,110 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A318414573C
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Jan 2020 14:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6759145815
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Jan 2020 15:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgAVNxn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Jan 2020 08:53:43 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:41139 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726004AbgAVNxn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Jan 2020 08:53:43 -0500
-Received: from mail-wm1-f69.google.com ([209.85.128.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <guilherme.piccoli@canonical.com>)
-        id 1iuGRw-0002s2-Tu
-        for linux-rtc@vger.kernel.org; Wed, 22 Jan 2020 13:53:40 +0000
-Received: by mail-wm1-f69.google.com with SMTP id c4so2122800wmb.8
-        for <linux-rtc@vger.kernel.org>; Wed, 22 Jan 2020 05:53:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y5yptEkyrRbLvaccFMnqXZIPixdorHXoMP06yHQ05yU=;
-        b=Sjc1mOgpC7Ww2psbF10ZA9VCBZJ2QpsXORSXl9uDgPTtOZKNDgepBLUa6lGCvYrgYZ
-         pkMc+nSIhDktcNG8noKybwkBgb52FhSIp/iovCPoTFpSpxEhQyBaub707LiB6Ni1rowP
-         Ndej7EKCjwNnswXxKdWhz0q2y+zpaL3seIKK28J8tlHplwFClxZ/IxQAlhEDVKvBys65
-         3pig+bkcpRfTpC9X8MP2xYylWtVFNKVtaKW2YJt8U4NUOnZcOnTuKFdownuo4GGe4MKB
-         w4zH6K2FptsBrKAiXQfHgjrYluie7254jPOcc6/vKsRbfew11I7jlPL7wpKsXUWrSWwx
-         mxyQ==
-X-Gm-Message-State: APjAAAW/E6WWXcv2G4huDLGaQcep5tF9LQDHjkBW8ycjvEcsxRYEnDRf
-        8GxClAVqAcfSA98cdgcR9TJzOGgvuY2kLHi8iRgH2g0R+5mXGOZUn7/QKXYhwc3XRVCu50of85u
-        tzWTDgR/W5q+XA27Qh8yrkSbulYtfCoXv0VPkaDHnN2LfL7lLiQsSEg==
-X-Received: by 2002:adf:dd52:: with SMTP id u18mr11211157wrm.131.1579701220684;
-        Wed, 22 Jan 2020 05:53:40 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxUz0jEsW9sXwSOEu5jc3NKfKm1f1tvIJ9U/ntW4xNZK1uUAUiFRkDLwRNPZVtygguuP3RUeVsEGMygtLGzUH8=
-X-Received: by 2002:adf:dd52:: with SMTP id u18mr11211144wrm.131.1579701220513;
- Wed, 22 Jan 2020 05:53:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20200117175626.56358-1-andriy.shevchenko@linux.intel.com>
- <a4a30d2e-b7eb-0f2e-933d-97f5bb006428@canonical.com> <20200122133850.GK32742@smile.fi.intel.com>
-In-Reply-To: <20200122133850.GK32742@smile.fi.intel.com>
-From:   Guilherme Piccoli <gpiccoli@canonical.com>
-Date:   Wed, 22 Jan 2020 10:53:04 -0300
-Message-ID: <CAHD1Q_z73kxvBM_Es7NJj+5j6DMYbh-tr6PJRv6Z7DDAzd7g8w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/8] rtc: cmos: Use shared IRQ only for Microsoft
- Surface 3
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-rtc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1727893AbgAVOpf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 Jan 2020 09:45:35 -0500
+Received: from mga14.intel.com ([192.55.52.115]:48556 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725802AbgAVOpe (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 22 Jan 2020 09:45:34 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 06:45:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,350,1574150400"; 
+   d="scan'208";a="250636267"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Jan 2020 06:45:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 15CBC29B; Wed, 22 Jan 2020 16:45:30 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-rtc@vger.kernel.org,
+        "Guilherme G. Piccoli" <gpiccoli@canonical.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH v1 1/3] rtc: cmos: Stop using shared IRQ
+Date:   Wed, 22 Jan 2020 16:45:27 +0200
+Message-Id: <20200122144529.30307-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jan 22, 2020 at 10:39 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> [...]
-> Thank you for testing!
->
-> (Un)fortunately I dug a bit into the history of the patches and into the ACPI
-> tables of MS Surface 3. I have another (better) solution which I will send
-> separately from this series.
->
+As reported by Guilherme G. Piccoli:
 
-OK, if possible, loop me in and I can test that too.
-Appreciate your effort on this!
-Thanks,
+--- 8< --- 8< ---
 
+The rtc-cmos interrupt setting was changed in the commit 079062b28fb4
+("rtc: cmos: prevent kernel warning on IRQ flags mismatch") in order
+to allow shared interrupts; according to that commit's description,
+some machine got kernel warnings due to the interrupt line being shared
+between rtc-cmos and other hardware, and rtc-cmos didn't allow IRQ sharing
+that time.
 
-Guilherme
+After the aforementioned commit though it was observed a huge increase
+in lost HPET interrupts in some systems, observed through the following
+kernel message:
+
+[...] hpet1: lost 35 rtc interrupts
+
+After investigation, it was narrowed down to the shared interrupts
+usage when having the kernel option "irqpoll" enabled. In this case,
+all IRQ handlers are called for non-timer interrupts, if such handlers
+are setup in shared IRQ lines. The rtc-cmos IRQ handler could be set to
+hpet_rtc_interrupt(), which will produce the kernel "lost interrupts"
+message after doing work - lots of readl/writel to HPET registers, which
+are known to be slow.
+
+Although "irqpoll" is not a default kernel option, it's used in some contexts,
+one being the kdump kernel (which is an already "impaired" kernel usually
+running with 1 CPU available), so the performance burden could be considerable.
+Also, the same issue would happen (in a shorter extent though) when using
+"irqfixup" kernel option.
+
+In a quick experiment, a virtual machine with uptime of 2 minutes produced
+>300 calls to hpet_rtc_interrupt() when "irqpoll" was set, whereas without
+sharing interrupts this number reduced to 1 interrupt. Machines with more
+hardware than a VM should generate even more unnecessary HPET interrupts
+in this scenario.
+
+--- 8< --- 8< ---
+
+After looking into the rtc-cmos driver history and DSDT table from
+the Microsoft Surface 3, we may notice that Hans de Goede submitted
+a correct fix (see dependency below). Thus, we simply revert
+the culprit commit.
+
+Fixes: 079062b28fb4 ("rtc: cmos: prevent kernel warning on IRQ flags mismatch")
+Depends-on: a1e23a42f1bd ("rtc: cmos: Do not assume irq 8 for rtc when there are no legacy irqs")
+Reported-by: Guilherme G. Piccoli <gpiccoli@canonical.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/rtc/rtc-cmos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 033303708c8b..cb28bbdc9e17 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -850,7 +850,7 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+ 			rtc_cmos_int_handler = cmos_interrupt;
+ 
+ 		retval = request_irq(rtc_irq, rtc_cmos_int_handler,
+-				IRQF_SHARED, dev_name(&cmos_rtc.rtc->dev),
++				0, dev_name(&cmos_rtc.rtc->dev),
+ 				cmos_rtc.rtc);
+ 		if (retval < 0) {
+ 			dev_dbg(dev, "IRQ %d is already in use\n", rtc_irq);
+-- 
+2.24.1
+
