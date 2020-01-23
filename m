@@ -2,115 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E690145E5F
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Jan 2020 23:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57537146309
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Jan 2020 09:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgAVWHS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Jan 2020 17:07:18 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:58607 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgAVWHS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Jan 2020 17:07:18 -0500
-X-Originating-IP: 90.65.92.102
-Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 084E2FF806;
-        Wed, 22 Jan 2020 22:07:15 +0000 (UTC)
-Date:   Wed, 22 Jan 2020 23:07:15 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Michael McCormick <michael.mccormick@enatel.net>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf85063: Add pcf85063 clkout control to common
- clock framework
-Message-ID: <20200122220715.GB3392@piout.net>
-References: <20190902043727.GA24684@michael-Latitude-5590>
+        id S1725955AbgAWIIZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 Jan 2020 03:08:25 -0500
+Received: from mga04.intel.com ([192.55.52.120]:62893 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbgAWIIY (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 23 Jan 2020 03:08:24 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jan 2020 00:08:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,353,1574150400"; 
+   d="scan'208";a="250888691"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jan 2020 00:08:23 -0800
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1iuXXM-0008V2-CB; Thu, 23 Jan 2020 10:08:24 +0200
+Date:   Thu, 23 Jan 2020 10:08:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Guilherme Piccoli <gpiccoli@canonical.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v1 1/3] rtc: cmos: Stop using shared IRQ
+Message-ID: <20200123080824.GT32742@smile.fi.intel.com>
+References: <20200122144529.30307-1-andriy.shevchenko@linux.intel.com>
+ <CAHD1Q_y2+DVPmqVLuSSqi6NQg8cTa2sbOWSQxGA_eqU6gQM5Bg@mail.gmail.com>
+ <20200122195849.GS32742@smile.fi.intel.com>
+ <CAHD1Q_yjtJAd1KMGKD9Oh3BWSM4OzAA8TkBcs7r1ci4FZW+tQg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190902043727.GA24684@michael-Latitude-5590>
+In-Reply-To: <CAHD1Q_yjtJAd1KMGKD9Oh3BWSM4OzAA8TkBcs7r1ci4FZW+tQg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-I'm sorry for the very late review, please Cc me on RTC patches.
-
-It seems the patch has been mangled and tabs became spaces. Also, a few
-alignments are off.
-
-On 02/09/2019 16:37:27+1200, Michael McCormick wrote:
-> Signed-off-by: Michael McCormick <michael.mccormick@enatel.net>
-> ---
->  drivers/rtc/rtc-pcf85063.c | 153 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 153 insertions(+)
+On Wed, Jan 22, 2020 at 05:05:15PM -0300, Guilherme Piccoli wrote:
+> On Wed, Jan 22, 2020 at 4:58 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > [...]
+> > > The only oddity here is about the scissors, I'm not sure how it is
+> > > supposed to work on git, but when I git am'ed the patch, the commit
+> > > message was only "As reported by Guilherme G. Piccoli:", everything
+> > > else was dropped.
+> >
+> > I didn't read any RFC or document about '--- ' line. But seems either bug in
+> > git-am, or I have to put something else at the beginning of those lines.
+> >
 > 
-> diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-> index 1afa6d9fa9fb..f47d3a6b997d 100644
-> --- a/drivers/rtc/rtc-pcf85063.c
-> +++ b/drivers/rtc/rtc-pcf85063.c
-> @@ -9,6 +9,7 @@
->   * Copyright (C) 2019 Micro Crystal AG
->   * Author: Alexandre Belloni <alexandre.belloni@bootlin.com>
->   */
-> +#include <linux/clk-provider.h>
->  #include <linux/i2c.h>
->  #include <linux/bcd.h>
->  #include <linux/rtc.h>
-> @@ -44,6 +45,16 @@
->  #define PCF85063_OFFSET_STEP0          4340
->  #define PCF85063_OFFSET_STEP1          4069
-> 
-> +#define PCF85063_REG_CLKO_F_MASK       0x07 /* frequency mask */
-> +#define PCF85063_REG_CLKO_F_32768HZ    0x00
-> +#define PCF85063_REG_CLKO_F_16384HZ    0x01
-> +#define PCF85063_REG_CLKO_F_8192HZ     0x02
-> +#define PCF85063_REG_CLKO_F_4096HZ     0x03
-> +#define PCF85063_REG_CLKO_F_2048HZ     0x04
-> +#define PCF85063_REG_CLKO_F_1024HZ     0x05
-> +#define PCF85063_REG_CLKO_F_1HZ                0x06
+> Interesting! What I usually do is to add comments
+> to-be-disregarded-on-merge right below "---", before the diff starts.
+> Git will discard this full block. I guess probably having the "---" on
+> top makes Git discard everything below it until the diff.
 
-Most of those defines are not used, I don't think they are necessary.
+For the record it's '--- ' (mind the whitespace at the end).
 
-> +static int pcf85063_clkout_control(struct clk_hw *hw, bool enable)
-> +{
-> +       struct pcf85063 *pcf85063 = clkout_hw_to_pcf85063(hw);
-> +       unsigned char buf;
-> +
-> +       if (enable)
-> +               buf = PCF85063_REG_CLKO_F_32768HZ;
+> Anyway, hope your commit message don't get messed in the merge heh
 
-This doesn't work properly if the clock was already enabled and had a
-proper rate already set. I think you need to read out the currently set
-rate and update PCF85063_REG_CTRL2 only if PCF85063_REG_CLKO_F_OFF is
-set.
-
-> +       else
-> +               buf = PCF85063_REG_CLKO_F_OFF;
-> +
-> +       return regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL2,
-> +                                 PCF85063_REG_CLKO_F_MASK, buf);
-> +}
-> +
-> +static struct clk *pcf85063_clkout_register_clk(struct pcf85063 *pcf85063)
-> +{
-> +       struct clk *clk;
-> +       struct clk_init_data init;
-> +       int ret;
-> +
-> +       /* disable the clkout output */
-> +       ret = regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL2,
-> +                                PCF85063_REG_CLKO_F_MASK, PCF85063_REG_CLKO_F_OFF);
-
-This has to be left to the common clock framework to figure that nothing
-is using this clock and disable it. I guess this is the whole point of
-this patch but you can't hardcode it here because this will introduce a
-glitch for all the actual users of the clock.
-
+I'll send a new version.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+With Best Regards,
+Andy Shevchenko
+
+
