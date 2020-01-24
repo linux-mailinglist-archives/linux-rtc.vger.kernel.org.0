@@ -2,23 +2,23 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40FAE1476CE
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2020 02:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B32941476DA
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jan 2020 02:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729927AbgAXBq1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 23 Jan 2020 20:46:27 -0500
-Received: from mail-eopbgr1360120.outbound.protection.outlook.com ([40.107.136.120]:31552
-        "EHLO AUS01-ME1-obe.outbound.protection.outlook.com"
+        id S1730100AbgAXBxQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 Jan 2020 20:53:16 -0500
+Received: from mail-eopbgr1370112.outbound.protection.outlook.com ([40.107.137.112]:38627
+        "EHLO AUS01-SY3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728665AbgAXBq1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 23 Jan 2020 20:46:27 -0500
+        id S1728665AbgAXBxP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 23 Jan 2020 20:53:15 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cJ8x058YVIAQtyvGkgh+jKp6mcTyB/RXK3ekM6Bd8TUUs4LB4U4S1fVrjJdpk4Ld/i+NIexwp8gQfY+zFGSWF5d5V1qYMF04i7/4+shTaqR/lSucQnlpLIY+BQGZ0To85gUqn2YtzJxsBybJZxVrRzQYUVTsr+7FNlCUiPUeV2MWDuBeLja932vJ6iOCaeRK8jQuOz8sutqHZyBfqVTd+WWF9s51zPtUq6JwoIWD6XHFbWVsmZKIsvcuiMRWaYP2L8EGzC+cD9rjDC/gxN6eiIm88fbYhQ8BdoQu7TDhNQzFV1cRm95MmnpMzYk3+dNxzno2egiS+T5r0U/wXYzhdQ==
+ b=OeCWEhx7zGBxWmDVos+AWI1ZUZUGekWt+9k2FJ8NtdpSvnpizas5JFJIZfKlqBKzmOSbstwDCykk19/v8zaFEO7QuPsC9eSqCi498iK67A13FvJswWy/xX+YB4O9ejEyhZPnKSkgF50CB1W5d1QbOPyCd6LC8xPwRKaBuPOVfhj22uxF6dE8/4/llw24kRuu4LrIS9aTfCAX6iTy79lSEWXou1yDH8erkLLr6WrylPFC25b4wXtfqnYPWyUHWD2S6Nl+Mh3LPhY6DD9golZfePMqwln14EozpsL+YxcFhNYT3XUAwX52UotJZT8OFnTI3d2Mwk/eJ7Ix94JHP7hN1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UXkL3NSR5uC0SO1BgxkgEZnGbkpxTrKGzDQAi2gkcqs=;
- b=DMpWSDHaEMV2kCvE17bu85nMowbbwxAXWWwGVti8rSr4aq7griqGgbJWP2MOcJfwDsB/j/5X1oYX1Dbzt7SIzJsZFmqtSWbg5KPupFyA7pdHzyLEnn2eN9xFZ/v96TACwgojDyO3szM5TmBqIWu0Hss9kdS3sRjOtwpWt2Sai08KstWdslp2uaO4lPLz6qHUt/fkvSrd8BC/0T6tHua77xazO6pbWL4r+A/LBHHDCNF22lxH9TZESYm5xK6NEKsO3eqj1wO+lGN/7TnQB1IwmwQI0BWmBbDOvbV/lzTqLVGj+8jR8qYSBqScRktWn4lb0bnJHAITB2l6+ZMSnRfRcg==
+ bh=xPKVhGTbTdPOxt+VsxeOOzrumk6vhDid2ttPTj232ig=;
+ b=hCQib0Al+Srl6liUWBJKYl9DhNGSDuLhR7SzSXwblMap2q5UXfOKEohOQ6dzsCWXqBoIxNt3CDXCOkT9/uZ+EE7LxUIN9u5/qy9lWwcYVsEveHXFEL5F0Zy/PPIwf6DmFMU+uVhebek+H2yimF5/M5DU83pqXxZ0yau8Sk0Cgz0Yfa24fuXLipKzftG9+7bmhDY/fv+k81haEWGQQQvwPojSHpZMJWUwl1aFTfrk7Gk+NbWsPHmUaQA3rRlIQSUrtgRckWdJBq5WPn7fY8mZxsITWUUXOb1dT9d6GCTFMSg8T9JPgJBg+0K8i+oNQ5nNZT5KgaaZIjBa59FQF4EDmQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  111.69.51.18) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=enatel.net;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=enatel.net;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=enatel.net;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UXkL3NSR5uC0SO1BgxkgEZnGbkpxTrKGzDQAi2gkcqs=;
- b=PbSsrZ2+l38w0LJLs6ypKSBLDM7yx1JJo0v9pqIHYle9V2KmIKnOn4wsbhkhah/DbIzHMQi/NbemSVP3TUU73MdkbD/tnL7oCWdBNARcIX3nwGQ8LtTcR/TOOltxT/l+9u4lQshe8hAFMpqB7zHugn+D8CYPcbtpfqtw9Cwcha8=
-Received: from ME2PR01CA0129.ausprd01.prod.outlook.com (2603:10c6:201:2e::21)
- by ME1PR01MB1667.ausprd01.prod.outlook.com (2603:10c6:200:1e::13) with
+ bh=xPKVhGTbTdPOxt+VsxeOOzrumk6vhDid2ttPTj232ig=;
+ b=GrKvaIGy2pM0kjhyk8XXizGBbF8AcJshpr6wmdf13m1BYcjGDuJX9k3p1VTvuvOBL2EdrQ5xnc+So2qg7g60O39B/K5wlM09mzp/mDQU/8UopJFUK5QOMOD1nfBXfb9+tDLqL8TYbCFhUjveBcc3SOlfrv/t8Iv2gk2eGXHf6Q0=
+Received: from MEXPR01CA0111.ausprd01.prod.outlook.com (2603:10c6:200:2c::20)
+ by ME1PR01MB1346.ausprd01.prod.outlook.com (2603:10c6:200:26::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.21; Fri, 24 Jan
- 2020 01:46:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.19; Fri, 24 Jan
+ 2020 01:53:10 +0000
 Received: from SY3AUS01FT017.eop-AUS01.prod.protection.outlook.com
- (2a01:111:f400:7eb5::201) by ME2PR01CA0129.outlook.office365.com
- (2603:10c6:201:2e::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.20 via Frontend
- Transport; Fri, 24 Jan 2020 01:46:21 +0000
+ (2a01:111:f400:7eb5::205) by MEXPR01CA0111.outlook.office365.com
+ (2603:10c6:200:2c::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.21 via Frontend
+ Transport; Fri, 24 Jan 2020 01:53:10 +0000
 Authentication-Results: spf=pass (sender IP is 111.69.51.18)
  smtp.mailfrom=enatel.net; vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=pass action=none header.from=enatel.net;
@@ -47,42 +47,42 @@ Received-SPF: Pass (protection.outlook.com: domain of enatel.net designates
 Received: from mail.enatel.co.nz (111.69.51.18) by
  SY3AUS01FT017.mail.protection.outlook.com (10.152.234.64) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2665.18 via Frontend Transport; Fri, 24 Jan 2020 01:46:20 +0000
+ 15.20.2665.18 via Frontend Transport; Fri, 24 Jan 2020 01:53:09 +0000
 Received: from localhost.localdomain (172.26.6.16) by mail.enatel.co.nz
  (192.168.1.8) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 24 Jan
- 2020 14:46:16 +1300
+ 2020 14:53:06 +1300
 From:   Michael McCormick <michael.mccormick@enatel.net>
 CC:     Michael McCormick <michael.mccormick@enatel.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] rtc: pcf85063: Add pcf85063 clkout control to common clock framework
-Date:   Fri, 24 Jan 2020 14:46:00 +1300
-Message-ID: <20200124014600.5283-1-michael.mccormick@enatel.net>
+Subject: [PATCH v3] rtc: pcf85063: Add pcf85063 clkout control to common clock framework
+Date:   Fri, 24 Jan 2020 14:52:38 +1300
+Message-ID: <20200124015239.24662-1-michael.mccormick@enatel.net>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [172.26.6.16]
 X-EOPAttributedMessage: 0
-X-Forefront-Antispam-Report: CIP:111.69.51.18;IPV:CAL;SCL:-1;CTRY:NZ;EFV:NLI;SFV:NSPM;SFS:(10019020)(4636009)(376002)(346002)(39830400003)(396003)(136003)(189003)(199004)(36756003)(5660300002)(186003)(4326008)(2906002)(26005)(336012)(2616005)(109986005)(356004)(16526019)(6666004)(1076003)(26826003)(478600001)(70206006)(86362001)(316002)(8676002)(70586007)(81166006)(8936002)(54906003)(81156014)(266003);DIR:OUT;SFP:1102;SCL:1;SRVR:ME1PR01MB1667;H:mail.enatel.co.nz;FPR:;SPF:Pass;LANG:en;PTR:18.51.69.111.static.snap.net.nz;MX:1;A:1;
+X-Forefront-Antispam-Report: CIP:111.69.51.18;IPV:CAL;SCL:-1;CTRY:NZ;EFV:NLI;SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(39840400004)(396003)(199004)(189003)(336012)(54906003)(70586007)(70206006)(2616005)(109986005)(356004)(4326008)(81166006)(2906002)(6666004)(8936002)(81156014)(1076003)(86362001)(36756003)(8676002)(26826003)(186003)(16526019)(5660300002)(478600001)(26005)(316002)(266003);DIR:OUT;SFP:1102;SCL:1;SRVR:ME1PR01MB1346;H:mail.enatel.co.nz;FPR:;SPF:Pass;LANG:en;PTR:18.51.69.111.static.snap.net.nz;A:1;MX:1;
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3ae946ec-876f-4004-1b9e-08d7a06f3646
-X-MS-TrafficTypeDiagnostic: ME1PR01MB1667:
-X-Microsoft-Antispam-PRVS: <ME1PR01MB1667389C0C97AB5A5A21F494890E0@ME1PR01MB1667.ausprd01.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: b75c402c-f25c-479b-882f-08d7a0702a1c
+X-MS-TrafficTypeDiagnostic: ME1PR01MB1346:
+X-Microsoft-Antispam-PRVS: <ME1PR01MB134691214D02D9B82825A6A2890E0@ME1PR01MB1346.ausprd01.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 X-MS-Oob-TLC-OOBClassifiers: OLM:608;
 X-Forefront-PRVS: 02929ECF07
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sILJJHJQCT5kX4SGPprSrLTwG08lkFo8Q2k4gWUq8/edOUeS/jEGpF+oDCTWbsvPETqSSTm1OTVTES4ZjgkxC4XhyVivR+4IZzADmP4KedQvuawlMR7N1XEpJKYVlKJwwgOkDksWx6Uznunw/rK9fVM+XR9/+0rOGY/vUjE81SixrTqeFLOsqB9KmvfPRnrktLBLSv5wKOUUfs+KuaMLxQr0i67SD+p0dfx1hO6JpsSyrAJc/SygGBrGAYGT5vm47p1aA7PY6TUib+L/I/hFUdFSky+m+4q0Wup4l1HkLiBD9l2PG1/PC52iwsBHHJkhH64cWAOkReKSKokoXRbc7ev65MYCxuYC4D63ktQ2ZzqBpmC/8s/+B27F71dy0mgxT2hxBeL5oUaFylqVj6v/xCT9QK0YF1m7Du5ra+Y2v5W9h7j8ALY5LH80TbPOaYXEh1louzanOntDMHu0NzfjHAlbqaIZhW2/sAzk5ISBD5U=
+X-Microsoft-Antispam-Message-Info: WAjNoURodwAdJcKxC5g6bkYLBO1x7uFBrus0j9g5/992DVkDVqmIiRxH2oiWcadRkXcsCMGH3h2Z4gAqpMFujfyJXuP+FEQ6IFAGbOfXGAJ7PHJIgphbLUuR6UKVt6fMBSLhZBt6hL/Eh/yN6w/1Irlx5S3+fjEkySVGa+FMkBpCoXCjH/IahNqiTKI15FCbhAVjoEbRWoiH3Ra4DwgemE3GwK2AJVm4BVTWndULZZEJNV+M8MD+hFN6rpYdQzffbcMmYKTnFe9yBrH/pIxlCgPMvaRCPn4WctK5/4WalGkfXa1ill+G50gpwKc8VlePTJk0HzhQsgge9hQA0Eg5bPyoHSYd8XRlKscM57oc4RVotqtFdWccX15xQg+t6LYPeTGl4XTxHQOGeR0uCZuEIFMteEZ4wxaFI5GEFHyVl04dWUnhKZZQJbA/JASByRnVV2aQIYMNTo3707ZgBGeNZmGjYAhNZl/F1Ydp6l6mxZ4=
 X-OriginatorOrg: enatel.net
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2020 01:46:20.5580
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2020 01:53:09.6606
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ae946ec-876f-4004-1b9e-08d7a06f3646
+X-MS-Exchange-CrossTenant-Network-Message-Id: b75c402c-f25c-479b-882f-08d7a0702a1c
 X-MS-Exchange-CrossTenant-Id: 60c5af6b-3b0c-4e87-85d7-9a81b4eb7f32
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=60c5af6b-3b0c-4e87-85d7-9a81b4eb7f32;Ip=[111.69.51.18];Helo=[mail.enatel.co.nz]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME1PR01MB1667
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME1PR01MB1346
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
@@ -91,11 +91,11 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 Signed-off-by: Michael McCormick <michael.mccormick@enatel.net>
 ---
- drivers/rtc/rtc-pcf85063.c | 158 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 158 insertions(+)
+ drivers/rtc/rtc-pcf85063.c | 157 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 157 insertions(+)
 
 diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index 1afa6d9fa9fb..782207289e29 100644
+index 1afa6d9fa9fb..62dcd5a8435f 100644
 --- a/drivers/rtc/rtc-pcf85063.c
 +++ b/drivers/rtc/rtc-pcf85063.c
 @@ -9,6 +9,7 @@
@@ -127,7 +127,7 @@ index 1afa6d9fa9fb..782207289e29 100644
  };
 
  static int pcf85063_rtc_read_time(struct device *dev, struct rtc_time *tm)
-@@ -369,6 +377,151 @@ static int pcf85063_load_capacitance(struct pcf85063 =
+@@ -369,6 +377,150 @@ static int pcf85063_load_capacitance(struct pcf85063 =
 *pcf85063,
                                   PCF85063_REG_CTRL1_CAP_SEL, reg);
  }
@@ -258,7 +258,6 @@ F;
 +{
 +       struct clk *clk;
 +       struct clk_init_data init;
-+       int ret;
 +
 +       init.name =3D "pcf85063-clkout";
 +       init.ops =3D &pcf85063_clkout_ops;
@@ -286,7 +285,7 @@ F;
  static const struct pcf85063_config pcf85063a_config =3D {
         .regmap =3D {
                 .reg_bits =3D 8,
-@@ -469,6 +622,11 @@ static int pcf85063_probe(struct i2c_client *client)
+@@ -469,6 +621,11 @@ static int pcf85063_probe(struct i2c_client *client)
         nvmem_cfg.priv =3D pcf85063->regmap;
         rtc_nvmem_register(pcf85063->rtc, &nvmem_cfg);
 
