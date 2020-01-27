@@ -2,58 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F731497DD
-	for <lists+linux-rtc@lfdr.de>; Sat, 25 Jan 2020 21:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA5714ABF4
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Jan 2020 23:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbgAYU5J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 25 Jan 2020 15:57:09 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:57843 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbgAYU5J (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 25 Jan 2020 15:57:09 -0500
+        id S1726443AbgA0WRb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 Jan 2020 17:17:31 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42255 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726101AbgA0WRb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Jan 2020 17:17:31 -0500
 X-Originating-IP: 90.65.92.102
 Received: from localhost (lfbn-lyo-1-1913-102.w90-65.abo.wanadoo.fr [90.65.92.102])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 5AF03FF802;
-        Sat, 25 Jan 2020 20:57:07 +0000 (UTC)
-Date:   Sat, 25 Jan 2020 21:57:06 +0100
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 0E9351C0004;
+        Mon, 27 Jan 2020 22:17:29 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Guilherme G . Piccoli" <gpiccoli@canonical.com>
-Subject: Re: [PATCH v2 3/3] rtc: cmos: Refactor code by using the new
- dmi_get_bios_year() helper
-Message-ID: <20200125205706.GD2952@piout.net>
-References: <20200123131437.28157-1-andriy.shevchenko@linux.intel.com>
- <20200123131437.28157-3-andriy.shevchenko@linux.intel.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 1/2] rtc: Kconfig: properly indent sd3078 entry
+Date:   Mon, 27 Jan 2020 23:17:23 +0100
+Message-Id: <20200127221724.10160-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200123131437.28157-3-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 23/01/2020 15:14:37+0200, Andy Shevchenko wrote:
-> Refactor code by using the new dmi_get_bios_year() helper instead of
-> open coding its functionality. This also makes logic slightly clearer.
-> 
-> No changes intended.
-> 
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Tested-by: Guilherme G. Piccoli <gpiccoli@canonical.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> v2: Added tags
->  drivers/rtc/rtc-cmos.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-Applied, thanks.
+The RTC_DRV_SD3078 is indented using spaces, use tabs instead.
 
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/Kconfig | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 5cba01a0b356..01af948a7fc2 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -676,13 +676,13 @@ config RTC_DRV_S5M
+ 	  will be called rtc-s5m.
+ 
+ config RTC_DRV_SD3078
+-    tristate "ZXW Shenzhen whwave SD3078"
+-    help
+-      If you say yes here you get support for the ZXW Shenzhen whwave
+-      SD3078 RTC chips.
++	tristate "ZXW Shenzhen whwave SD3078"
++	help
++	  If you say yes here you get support for the ZXW Shenzhen whwave
++	  SD3078 RTC chips.
+ 
+-      This driver can also be built as a module. If so, the module
+-      will be called rtc-sd3078
++	  This driver can also be built as a module. If so, the module
++	  will be called rtc-sd3078
+ 
+ endif # I2C
+ 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.24.1
+
