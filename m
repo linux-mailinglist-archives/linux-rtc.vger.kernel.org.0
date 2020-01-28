@@ -2,91 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F52814BA8E
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Jan 2020 15:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895F114B97A
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Jan 2020 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730334AbgA1OQf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Jan 2020 09:16:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40042 "EHLO mail.kernel.org"
+        id S1727095AbgA1Ocq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Jan 2020 09:32:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34028 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730329AbgA1OQf (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:16:35 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727837AbgA1Ocp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 28 Jan 2020 09:32:45 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 866F024688;
-        Tue, 28 Jan 2020 14:16:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D073324685;
+        Tue, 28 Jan 2020 14:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580220995;
-        bh=RsZ49+HuVXrU/JY3Ejeo3KXvJigAnXjCknahaYv5sjA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qUFvqiX4+824isnkeXGsvg0T+ks1DZMmOUr5+SN5hRqyYIBMHF44+vMrKz1xescOh
-         9Irv8WIbu1CpzUalPlUy04OjH/n21+0lUTOvdvXx8jT+ZKYUtXkrAEmb47WCN+NaiG
-         5niMs7VJURxxyaDzhBSNQWGhOUd+7uFFgWKPqauc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Sylvain Chouleur <sylvain.chouleur@intel.com>,
-        Patrick McDermott <patrick.mcdermott@libiquity.com>,
-        linux-rtc@vger.kernel.org, Eric Wong <e@80x24.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 047/271] rtc: cmos: ignore bogus century byte
-Date:   Tue, 28 Jan 2020 15:03:16 +0100
-Message-Id: <20200128135856.145846743@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200128135852.449088278@linuxfoundation.org>
-References: <20200128135852.449088278@linuxfoundation.org>
-User-Agent: quilt/0.66
+        s=default; t=1580221965;
+        bh=fA/B9G2d55+a4zcXyCidgiM1scGvdikipkUh8OpG4sQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aPc+8DJ44URecMpBKGA6Krd3ddBfgQoZQELTra5XX16oVB7gKPIPj22Dgxj7CBf5+
+         rpbV5ocO+1J1Jqo8qz3lO1l5WRi3Q7YuuN8Pki1c8JryD3JLjWYaJkH0WjhOWyA8Wp
+         ZnFz0sndRQgZ6zjI5/XVlCDCnk3CLh39+RLlbn3A=
+Received: by mail-qt1-f182.google.com with SMTP id h12so10398693qtu.1;
+        Tue, 28 Jan 2020 06:32:44 -0800 (PST)
+X-Gm-Message-State: APjAAAXcCl0cBqxAbZ3M1+xVS11dVuHk1GzgmjWiObYKYEX6tzLK2mWw
+        27PWbFyYcHC9b5CggRe2gPEc5xLWeJt80hVk8Q==
+X-Google-Smtp-Source: APXvYqzxJnZDHkxRQDe9t+Eah8Fx57BBszoCD+dphD/GZrMOT/aXuj/TVsyJGpZsYv/1fLKoBTwELyq9kDRKgm/tJlU=
+X-Received: by 2002:aed:2344:: with SMTP id i4mr21770697qtc.136.1580221963861;
+ Tue, 28 Jan 2020 06:32:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20191229204421.337612-1-alexandre.belloni@bootlin.com> <20191229204421.337612-2-alexandre.belloni@bootlin.com>
+In-Reply-To: <20191229204421.337612-2-alexandre.belloni@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 28 Jan 2020 08:32:32 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+nQbZkY_oDhCCTGr02xWxUXvCVaWZ8KZHkDhsgawM_wA@mail.gmail.com>
+Message-ID: <CAL_Jsq+nQbZkY_oDhCCTGr02xWxUXvCVaWZ8KZHkDhsgawM_wA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: rtc: at91rm9200: convert bindings to json-schema
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Eugen Hristev <Eugen.Hristev@microchip.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Eric Wong <e@80x24.org>
+On Sun, Dec 29, 2019 at 2:45 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> Convert Real Time Clock for Atmel/Microchip SoCs bindings documentation
+> to json-schema.
+>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  .../bindings/rtc/atmel,at91rm9200-rtc.txt     | 17 --------
+>  .../bindings/rtc/atmel,at91rm9200-rtc.yaml    | 42 +++++++++++++++++++
+>  2 files changed, 42 insertions(+), 17 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
+> deleted file mode 100644
+> index 5d3791e789c6..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.txt
+> +++ /dev/null
+> @@ -1,17 +0,0 @@
+> -Atmel AT91RM9200 Real Time Clock
+> -
+> -Required properties:
+> -- compatible: should be: "atmel,at91rm9200-rtc" or "atmel,at91sam9x5-rtc"
+> -- reg: physical base address of the controller and length of memory mapped
+> -  region.
+> -- interrupts: rtc alarm/event interrupt
+> -- clocks: phandle to input clock.
+> -
+> -Example:
+> -
+> -rtc@fffffe00 {
+> -       compatible = "atmel,at91rm9200-rtc";
+> -       reg = <0xfffffe00 0x100>;
+> -       interrupts = <1 4 7>;
+> -       clocks = <&clk32k>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+> new file mode 100644
+> index 000000000000..55bd87e884d3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+> @@ -0,0 +1,42 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/atmel,at91rm9200-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel AT91 RTC Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: "rtc.yaml#"
+> +
+> +maintainers:
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,at91rm9200-rtc
+> +      - atmel,at91sam9x5-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    rtc@fffffe00 {
+> +        compatible = "atmel,at91rm9200-rtc";
+> +        reg = <0xfffffe00 0x100>;
+> +        interrupts = <1 4 7>;
+> +        clocks = <&clk32k>;
 
-[ Upstream commit 2a4daadd4d3e507138f8937926e6a4df49c6bfdc ]
+clocks is not documented.
 
-Older versions of Libreboot and Coreboot had an invalid value
-(`3' in my case) in the century byte affecting the GM45 in
-the Thinkpad X200.  Not everybody's updated their firmwares,
-and Linux <= 4.2 was able to read the RTC without problems,
-so workaround this by ignoring invalid values.
+Looks like this landed in linux-next now and breaks 'make dt_binding_check':
 
-Fixes: 3c217e51d8a272b9 ("rtc: cmos: century support")
+/builds/robherring/linux-dt-bindings/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.example.dt.yaml:
+rtc@fffffe00: 'clocks' does not match any of the regexes:
+'pinctrl-[0-9]+'
 
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Sylvain Chouleur <sylvain.chouleur@intel.com>
-Cc: Patrick McDermott <patrick.mcdermott@libiquity.com>
-Cc: linux-rtc@vger.kernel.org
-Signed-off-by: Eric Wong <e@80x24.org>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/rtc/rtc-mc146818-lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2f1772a358ca5..18a6f15e313d8 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -82,7 +82,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
- 	time->tm_year += real_year - 72;
- #endif
- 
--	if (century)
-+	if (century > 20)
- 		time->tm_year += (century - 19) * 100;
- 
- 	/*
--- 
-2.20.1
-
-
-
+Rob
