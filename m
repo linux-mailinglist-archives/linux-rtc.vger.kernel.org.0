@@ -2,83 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7041B14E3F6
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2020 21:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A21414E416
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2020 21:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbgA3Ubv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Jan 2020 15:31:51 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45050 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbgA3Ubv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Jan 2020 15:31:51 -0500
-Received: by mail-pl1-f196.google.com with SMTP id d9so1774717plo.11
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Jan 2020 12:31:51 -0800 (PST)
+        id S1727708AbgA3Ufp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Jan 2020 15:35:45 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:46836 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727277AbgA3Ufp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Jan 2020 15:35:45 -0500
+Received: by mail-pl1-f195.google.com with SMTP id y8so1772089pll.13
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Jan 2020 12:35:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P+0rKLDNQs9w1hNYJYZaKwLvj6vZBP5mJnYXqFucuhM=;
-        b=iq8U0whKUir6BtwA+hkEPrARPnboBH0L4GdBB8V5rfVP4JY5aMnYgRrZmiShSuPqvX
-         BHaonQ7Zj54ppZIG+cuxcjKa9ODjO6MWeiX4jm9xrda4Qvl33AM7moaTllpENFnGWuzV
-         GGY+6lpgCAlmgbbvHnGLrBVN/7YWMNLNTKE2Q=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ldqIZ6sPhq//haR6JhuLeaz+UARJkR4FJ67lvvC/A2Y=;
+        b=Ulucti+2qvuFC3vI4rNTAN/cJDWhE7oBYsz4wXAMUl1LItbzBv7fsrsGX97hK4cjlP
+         jYF7i3PPDJGArgokJjNswcH0qJr1MP1VmFGswBvgu5ET7ZVobicNE6+rqyDjlpc/KnO6
+         VEcuNXxY6M2OFVJIOY5pgCc8dPZuLRjEAd1Pg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P+0rKLDNQs9w1hNYJYZaKwLvj6vZBP5mJnYXqFucuhM=;
-        b=euhus/i/lfj5pfRc27D6NqZobzydO28YVa2Tj7a+s6z/LpWwa6FofIJPKm51Ezgrmr
-         wxOi+O+z6lARJlHdCy1PMIvc+eOVu0uLduvHNRG8TK2qsQFH+Q3ljsUrt2Wb+eaIAKVW
-         DFxzU3x5L02KMZzy7sm8Yx7A2LVhxYy/fpJhrlvz4O+42UXJukyveFdxOpSgRygmP2Bw
-         vddnaveyRrzwNHddZelUO2CAq5s0oEpYz+hRB+fLLES6hivuOC0+Vx2J7pZnvRFPaNe2
-         28FHVgjVyLzFQ2z6HtJKLQmVvLJbFLsEgdgP5tDgetKr9FjT1g7OcplinlygXi2wID17
-         Vq2w==
-X-Gm-Message-State: APjAAAVjPbQ24YVYo6/9RQe+vj3eMiG//PbBIhUyMVjvAtM3DJdYE99c
-        VzSss3VCGrzH1ioByPqW+k+flg==
-X-Google-Smtp-Source: APXvYqywzkMhkKxlKfSDU6MFr6XCU75z4SAPc7PY0WLGJOKTg2UN9bOXzElPAjE3XEpsIBbIRtv9zg==
-X-Received: by 2002:a17:902:6508:: with SMTP id b8mr6423357plk.201.1580416310690;
-        Thu, 30 Jan 2020 12:31:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ldqIZ6sPhq//haR6JhuLeaz+UARJkR4FJ67lvvC/A2Y=;
+        b=dJYKxf7Xl76Zk5FGs8awFubqxwJ5iQvCFLnTLmZzDflgZ/sjOfQF89sV43eEh6ai81
+         7iY3vrmSS1788S9/MFhLXGdaQ/ovFQTgGBAWKuRnJARIvr2CTHznFdHYBf4HyFfnfsAw
+         KyA17ZPsfEETUVRFuJ7nnBziXKcuowS7m3zFDejuYcbt5Xd86XSGfw24rrUj/6fsTtkK
+         kbflYjCNFeJy6fB8ROaNrifLMbr3axVMRQjPQLSMMycKSarKkay4AoOeV2U4Yq7IhVvr
+         QBhq1/ahzBFg6R265f0XgxzQ5Z0+DG7tmEN9NsHbaVfQl2dlpuRcwFKa9L8dBdFQDMz1
+         9gCQ==
+X-Gm-Message-State: APjAAAXIWHzZaAWJmrmW19dPbWSG+9NCLQooZIP4JO1rnqAolvXbV3D1
+        oqTH/Zu736K1KSj5SfoS9Gp6fw==
+X-Google-Smtp-Source: APXvYqzsUims1gTPplV0R4QmmovDkeLvsAFQ+78ErasQirqavgYKt4DVmq4UrEpBdDxO7aO/jwEGgQ==
+X-Received: by 2002:a17:90b:3109:: with SMTP id gc9mr8021528pjb.30.1580416544193;
+        Thu, 30 Jan 2020 12:35:44 -0800 (PST)
 Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:172e:4646:c089:ce59])
-        by smtp.gmail.com with ESMTPSA id q12sm7469321pfh.158.2020.01.30.12.31.48
+        by smtp.gmail.com with ESMTPSA id q12sm7469321pfh.158.2020.01.30.12.35.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 12:31:49 -0800 (PST)
+        Thu, 30 Jan 2020 12:35:43 -0800 (PST)
 From:   Prashant Malani <pmalani@chromium.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Prashant Malani <pmalani@chromium.org>,
-        Akshu Agrawal <akshu.agrawal@amd.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND - SOC LAYER / DYNAMIC
-        AUDIO POWER MANAGEM...),
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Evan Green <evgreen@chromium.org>,
-        Fabien Lahoudere <fabien.lahoudere@collabora.com>,
         Guenter Roeck <groeck@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
-        linux-iio@vger.kernel.org (open list:IIO SUBSYSTEM AND DRIVERS),
-        linux-input@vger.kernel.org (open list:HID CORE LAYER),
-        linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
-        (V4L/DVB)),
-        linux-pm@vger.kernel.org (open list:POWER SUPPLY CLASS/SUBSYSTEM and
-        DRIVERS), linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Nick Vaccaro <nvaccaro@chromium.org>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Raul E Rangel <rrangel@chromium.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@the-dreams.de>
-Subject: [PATCH 00/17] platform/chrome: Replace cros_ec_cmd_xfer_status
-Date:   Thu, 30 Jan 2020 12:30:31 -0800
-Message-Id: <20200130203106.201894-1-pmalani@chromium.org>
+        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM)
+Subject: [PATCH 14/17] rtc: cros-ec: Use cros_ec_send_cmd_msg()
+Date:   Thu, 30 Jan 2020 12:31:03 -0800
+Message-Id: <20200130203106.201894-15-pmalani@chromium.org>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
+In-Reply-To: <20200130203106.201894-1-pmalani@chromium.org>
+References: <20200130203106.201894-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -86,53 +63,69 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Many callers of cros_ec_cmd_xfer_status() use similar setup and cleanup
-code, including setting up the cros_ec_command message struct and
-copying the received buffer.
+Replace cros_ec_cmd_xfer_status() with cros_ec_send_cmd_msg() which does
+the message buffer setup and cleanup.
 
-This series introduces a replacement function cros_ec_send_cmd_msg() that
-performs this setup and teardown, and then updates all call sites that
-used xfer_status() to use the new function instead.
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/rtc/rtc-cros-ec.c | 27 ++++++++-------------------
+ 1 file changed, 8 insertions(+), 19 deletions(-)
 
-The final patch in the series drops cros_ec_cmd_xfer_status() altogether.
-
-Prashant Malani (17):
-  platform/chrome: Add EC command msg wrapper
-  platform/chrome: chardev: Use send_cmd_msg()
-  platform/chrome: proto: Use send_cmd_msg
-  platform/chrome: usbpd_logger: Use cmd_send_msg()
-  platform/chrome: sensorhub: Use send_cmd_msg()
-  platform/chrome: debugfs: Use send_cmd_msg()
-  platform/chrome: sysfs: Use send_cmd_msg()
-  extcon: cros_ec: Use cros_ec_send_cmd_msg()
-  hid: google-hammer: Use cros_ec_send_cmd_msg()
-  iio: cros_ec: Use cros_ec_send_cmd_msg()
-  ASoC: cros_ec_codec: Use cros_ec_send_cmd_msg()
-  power: supply: cros: Use cros_ec_send_cmd_msg()
-  pwm: cros-ec: Remove cros_ec_cmd_xfer_status()
-  rtc: cros-ec: Use cros_ec_send_cmd_msg()
-  media: cros-ec-cec: Use cros_ec_send_cmd_msg()
-  i2c: cros-ec-tunnel: Use cros_ec_send_cmd_msg()
-  platform/chrome: Drop cros_ec_cmd_xfer_status()
-
- drivers/extcon/extcon-usbc-cros-ec.c          |  62 ++------
- drivers/hid/hid-google-hammer.c               |  23 +--
- drivers/i2c/busses/i2c-cros-ec-tunnel.c       |  23 ++-
- .../cros_ec_sensors/cros_ec_sensors_core.c    |  43 +++---
- .../media/platform/cros-ec-cec/cros-ec-cec.c  |  39 ++---
- drivers/platform/chrome/cros_ec_chardev.c     |  18 +--
- drivers/platform/chrome/cros_ec_debugfs.c     | 135 ++++++------------
- drivers/platform/chrome/cros_ec_proto.c       |  75 ++++++----
- drivers/platform/chrome/cros_ec_sensorhub.c   |  29 ++--
- drivers/platform/chrome/cros_ec_sysfs.c       | 106 ++++++--------
- drivers/platform/chrome/cros_usbpd_logger.c   |  13 +-
- drivers/power/supply/cros_usbpd-charger.c     |  63 ++------
- drivers/pwm/pwm-cros-ec.c                     |  27 ++--
- drivers/rtc/rtc-cros-ec.c                     |  27 ++--
- include/linux/platform_data/cros_ec_proto.h   |   6 +-
- sound/soc/codecs/cros_ec_codec.c              |  71 +++------
- 16 files changed, 276 insertions(+), 484 deletions(-)
-
+diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+index d043d30f05bc1d..113638a82e2c0c 100644
+--- a/drivers/rtc/rtc-cros-ec.c
++++ b/drivers/rtc/rtc-cros-ec.c
+@@ -34,16 +34,11 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ 			   u32 *response)
+ {
+ 	int ret;
+-	struct {
+-		struct cros_ec_command msg;
+-		struct ec_response_rtc data;
+-	} __packed msg;
+ 
+-	memset(&msg, 0, sizeof(msg));
+-	msg.msg.command = command;
+-	msg.msg.insize = sizeof(msg.data);
++	struct ec_response_rtc data = {0};
+ 
+-	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
++	ret = cros_ec_send_cmd_msg(cros_ec, 0, command, NULL, 0,
++				   &data, sizeof(data));
+ 	if (ret < 0) {
+ 		dev_err(cros_ec->dev,
+ 			"error getting %s from EC: %d\n",
+@@ -52,7 +47,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ 		return ret;
+ 	}
+ 
+-	*response = msg.data.time;
++	*response = data.time;
+ 
+ 	return 0;
+ }
+@@ -61,17 +56,11 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+ 			   u32 param)
+ {
+ 	int ret = 0;
+-	struct {
+-		struct cros_ec_command msg;
+-		struct ec_response_rtc data;
+-	} __packed msg;
++	struct ec_response_rtc  data;
+ 
+-	memset(&msg, 0, sizeof(msg));
+-	msg.msg.command = command;
+-	msg.msg.outsize = sizeof(msg.data);
+-	msg.data.time = param;
+-
+-	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
++	data.time = param;
++	ret = cros_ec_send_cmd_msg(cros_ec, 0, command, &data, sizeof(data),
++				   NULL, 0);
+ 	if (ret < 0) {
+ 		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
+ 			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
 -- 
 2.25.0.341.g760bfbb309-goog
 
