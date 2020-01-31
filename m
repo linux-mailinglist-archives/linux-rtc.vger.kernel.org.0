@@ -2,130 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A21414E416
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Jan 2020 21:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9114E864
+	for <lists+linux-rtc@lfdr.de>; Fri, 31 Jan 2020 06:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbgA3Ufp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Jan 2020 15:35:45 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46836 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727277AbgA3Ufp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Jan 2020 15:35:45 -0500
-Received: by mail-pl1-f195.google.com with SMTP id y8so1772089pll.13
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Jan 2020 12:35:44 -0800 (PST)
+        id S1726134AbgAaF1S (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 31 Jan 2020 00:27:18 -0500
+Received: from mail-il1-f169.google.com ([209.85.166.169]:39317 "EHLO
+        mail-il1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbgAaF1R (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 31 Jan 2020 00:27:17 -0500
+Received: by mail-il1-f169.google.com with SMTP id f70so5148837ill.6
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Jan 2020 21:27:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ldqIZ6sPhq//haR6JhuLeaz+UARJkR4FJ67lvvC/A2Y=;
-        b=Ulucti+2qvuFC3vI4rNTAN/cJDWhE7oBYsz4wXAMUl1LItbzBv7fsrsGX97hK4cjlP
-         jYF7i3PPDJGArgokJjNswcH0qJr1MP1VmFGswBvgu5ET7ZVobicNE6+rqyDjlpc/KnO6
-         VEcuNXxY6M2OFVJIOY5pgCc8dPZuLRjEAd1Pg=
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=ayw2oXnrwzMC3d7v6ir2DBd5/HsFCESUxe1lINCb1uw=;
+        b=ejwAnemiPab89371ob3uWPWOiKHFFp0huJyxh0U5C+5U1wpKtSaS+ZGgG0DDyWPKhr
+         I0FF4t9Q3/GIsLzllbzzLVqqvHyie5VH5rDwF+l+/0sX39e6a69GofgnR+wxHjWN8ur3
+         B7A5cH+s9qaPJO4Suhrz1UduBEYa+XJYagAahIm+w6SHmxWJrn6RK6lzs0gglTuhC0M4
+         ckLDx9efVu+slXPECqJH+JnIHxstEVGLsYnmNxCAJ1v+mlQjPltG8kZ+XSWHygL/GyrI
+         w1EB2AedSJxO/jWvmeDPSIlSQ+a8cjqaNtUM6fSBuuM0nMEmSK3lu/zTrizXrc7SzZrY
+         5QYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ldqIZ6sPhq//haR6JhuLeaz+UARJkR4FJ67lvvC/A2Y=;
-        b=dJYKxf7Xl76Zk5FGs8awFubqxwJ5iQvCFLnTLmZzDflgZ/sjOfQF89sV43eEh6ai81
-         7iY3vrmSS1788S9/MFhLXGdaQ/ovFQTgGBAWKuRnJARIvr2CTHznFdHYBf4HyFfnfsAw
-         KyA17ZPsfEETUVRFuJ7nnBziXKcuowS7m3zFDejuYcbt5Xd86XSGfw24rrUj/6fsTtkK
-         kbflYjCNFeJy6fB8ROaNrifLMbr3axVMRQjPQLSMMycKSarKkay4AoOeV2U4Yq7IhVvr
-         QBhq1/ahzBFg6R265f0XgxzQ5Z0+DG7tmEN9NsHbaVfQl2dlpuRcwFKa9L8dBdFQDMz1
-         9gCQ==
-X-Gm-Message-State: APjAAAXIWHzZaAWJmrmW19dPbWSG+9NCLQooZIP4JO1rnqAolvXbV3D1
-        oqTH/Zu736K1KSj5SfoS9Gp6fw==
-X-Google-Smtp-Source: APXvYqzsUims1gTPplV0R4QmmovDkeLvsAFQ+78ErasQirqavgYKt4DVmq4UrEpBdDxO7aO/jwEGgQ==
-X-Received: by 2002:a17:90b:3109:: with SMTP id gc9mr8021528pjb.30.1580416544193;
-        Thu, 30 Jan 2020 12:35:44 -0800 (PST)
-Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:172e:4646:c089:ce59])
-        by smtp.gmail.com with ESMTPSA id q12sm7469321pfh.158.2020.01.30.12.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 12:35:43 -0800 (PST)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM)
-Subject: [PATCH 14/17] rtc: cros-ec: Use cros_ec_send_cmd_msg()
-Date:   Thu, 30 Jan 2020 12:31:03 -0800
-Message-Id: <20200130203106.201894-15-pmalani@chromium.org>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-In-Reply-To: <20200130203106.201894-1-pmalani@chromium.org>
-References: <20200130203106.201894-1-pmalani@chromium.org>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=ayw2oXnrwzMC3d7v6ir2DBd5/HsFCESUxe1lINCb1uw=;
+        b=h8Lct9IEh1H69wOeGen6GoM+kb9g3T2s8zaLBIFrpuRiVvg4Hj+bvYujAIYbs07gFm
+         0d7AwVcvXEBgVdn5FCUsxfDpTfXg8ZFBaMU3eC6TtJXEbmWpEkdqvy8fkeEfFmZBDThJ
+         JkiFeXoKUTfuSF7xrniit2nlg//wbUy1TyyU/O4nWP9EAmIEnHCQalhsLf/eRB2rDPIa
+         d5VEkf/YX+pS2wmjZ25aOUSyEQnu7NPwxRdiSGJLrCSW803p72XNZKsH5sbVh6R2wcNJ
+         LrD5XSOeE02dIfx3IxJAbf29KQwGgvq0axqyUERiw6a8otDiDZsQxG6EYlZfnFZIRpPw
+         BUPQ==
+X-Gm-Message-State: APjAAAW2A8eyNOsBuBRPI9lOXmUxiAjO28vlKIHlO1xjRvPyl+rcWxJw
+        W93hEQ1DaeOwZFEaP7P6WxRciizDuozTYgpABCJzKfSZ
+X-Google-Smtp-Source: APXvYqxtcPUHTi7OtpI4M9FqaGpT84DLqJzG73GfkZamRD643NZxsAGslk087NZAhqUQHMH8cw8if8Ab3wBOqCKpr+E=
+X-Received: by 2002:a92:d5cf:: with SMTP id d15mr1052013ilq.306.1580448435790;
+ Thu, 30 Jan 2020 21:27:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ad5:5d0d:0:0:0:0:0 with HTTP; Thu, 30 Jan 2020 21:27:15
+ -0800 (PST)
+In-Reply-To: <20200130144044.GG3583@piout.net>
+References: <CAA=hcWQcVi79AW9aOSGQSzEwL-sPwvt=4zR+_25mJKvbkBON1w@mail.gmail.com>
+ <20200112110353.GC1253990@piout.net> <CAA=hcWQoY95oPbLYyD306_wxmj=GU57t8m-m_kWwyy5-7Quj=Q@mail.gmail.com>
+ <20200130104756.GC3583@piout.net> <CAA=hcWQaDrAHnLJXjcfvbL_+HkZraqfbCA70rfsD4i5kqXOqOw@mail.gmail.com>
+ <20200130144044.GG3583@piout.net>
+From:   JH <jupiter.hce@gmail.com>
+Date:   Fri, 31 Jan 2020 16:27:15 +1100
+Message-ID: <CAA=hcWQoacmPsi-VH3B1BGFHJhHi1a-tLaJXBiwAn03E7BiTiQ@mail.gmail.com>
+Subject: Re: rtc rtc0: Timeout trying to get valid LPSRT Counter read
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Replace cros_ec_cmd_xfer_status() with cros_ec_send_cmd_msg() which does
-the message buffer setup and cleanup.
+Hi Alexandre,
 
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/rtc/rtc-cros-ec.c | 27 ++++++++-------------------
- 1 file changed, 8 insertions(+), 19 deletions(-)
+On 1/31/20, Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+>> So it was already included in 4.19, I don't need to patch it, that is
+>> good :-). Sorry I am still not clear how to stop that error message of
+>> "rtc rtc0: Timeout trying to get valid LPSRT Counter read", the
+>> message says "To avoid kernel hangs, put in timeouts", I am running
+>> kernel 4.19.75 on iMX6, where should I put in timeouts?
+>>
+>
+> The patch is adding the timeouts, without them, your kernel would be
+> freezing. I'd say your issue is the 32k clock.
 
-diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-index d043d30f05bc1d..113638a82e2c0c 100644
---- a/drivers/rtc/rtc-cros-ec.c
-+++ b/drivers/rtc/rtc-cros-ec.c
-@@ -34,16 +34,11 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
- 			   u32 *response)
- {
- 	int ret;
--	struct {
--		struct cros_ec_command msg;
--		struct ec_response_rtc data;
--	} __packed msg;
- 
--	memset(&msg, 0, sizeof(msg));
--	msg.msg.command = command;
--	msg.msg.insize = sizeof(msg.data);
-+	struct ec_response_rtc data = {0};
- 
--	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-+	ret = cros_ec_send_cmd_msg(cros_ec, 0, command, NULL, 0,
-+				   &data, sizeof(data));
- 	if (ret < 0) {
- 		dev_err(cros_ec->dev,
- 			"error getting %s from EC: %d\n",
-@@ -52,7 +47,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
- 		return ret;
- 	}
- 
--	*response = msg.data.time;
-+	*response = data.time;
- 
- 	return 0;
- }
-@@ -61,17 +56,11 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
- 			   u32 param)
- {
- 	int ret = 0;
--	struct {
--		struct cros_ec_command msg;
--		struct ec_response_rtc data;
--	} __packed msg;
-+	struct ec_response_rtc  data;
- 
--	memset(&msg, 0, sizeof(msg));
--	msg.msg.command = command;
--	msg.msg.outsize = sizeof(msg.data);
--	msg.data.time = param;
--
--	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-+	data.time = param;
-+	ret = cros_ec_send_cmd_msg(cros_ec, 0, command, &data, sizeof(data),
-+				   NULL, 0);
- 	if (ret < 0) {
- 		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
- 			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
--- 
-2.25.0.341.g760bfbb309-goog
+Did you mean that is the issue of the hardware setup IMX6ULL for 32k
+RTC_XTALI? That is nominal frequency 32.768 kHz for IMX6ULL EVK and
+customized devices. Change to which frequency (64k?) can fix the
+problem and remove the error message?
 
+Thank you very much Alexandre,
+
+Kind regards,
+
+- jupiter
+
+>
+> --
+> Alexandre Belloni, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
