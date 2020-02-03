@@ -2,152 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B4215020A
-	for <lists+linux-rtc@lfdr.de>; Mon,  3 Feb 2020 08:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169FD1503C3
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Feb 2020 11:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727602AbgBCHqO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 3 Feb 2020 02:46:14 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44792 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727502AbgBCHqO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 3 Feb 2020 02:46:14 -0500
-Received: by mail-wr1-f65.google.com with SMTP id m16so16571095wrx.11
-        for <linux-rtc@vger.kernel.org>; Sun, 02 Feb 2020 23:46:13 -0800 (PST)
+        id S1727499AbgBCKBK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 3 Feb 2020 05:01:10 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33785 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgBCKBH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 3 Feb 2020 05:01:07 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 6so7561874pgk.0
+        for <linux-rtc@vger.kernel.org>; Mon, 03 Feb 2020 02:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=3nucfqlZlbS9OuDGzb3kixq1Br5Ct5yP/xRIMcpGX3I=;
-        b=mBsWaIqgxBm8aCgBacUzTG7hSSBWgBjHas+8ae87Zzr33BdDyOswJQPMH3FbJ0eOhD
-         kCtZzepzkXSgXl+4F+CLOPlJ2CvCSbzSqx6sjQkzOq07TkagOaHfhR+5rwpkRwIaqwId
-         NP6ltWCKqca7ky9ktf/JB9p3Hk1x+Ose9hDG1Xj1/MSitC77bKNotLaD8fVh0j4eFcS5
-         DkJ8biOJMNn0LjxriM/OkD9IKdQVbi1l8TpOLPLF9LRFHPSvk6Cn1ueXhjy5n5Rcm996
-         1c2z9DchENiRTvTIUJwHx6nLH8QULbKfTRr/dIGYh5UjzbVJFs+TN4awtfXJuOGZ+p9Y
-         969g==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
+        b=C8IJ3DD/gA7N2tWcI7cVIzv4xHS7PN57131IkW4XEmMiKfoqL76qpJ0nwTr8ZO9mGH
+         71QCsxjlrjwfwmzP48fHozkpOD5z3lUzvPN/ArLnTj1FVvCiH1HS1R670y9ieZGMtCg9
+         EbgVuU6QuSZgweSBvXMURFNbgeqYICOL3eTvD4xWvUsm9N4+Na1tyOM3SupTvCyYLNF+
+         WJ7XvBuGYMLa201CnYYU8MO9SwC4Akb1Oyd8qkCa6o13c7wrxWcE1l0uJAgRwJ8yx459
+         L1iLTkkSpaBxEyEEgNCkU4cbNezOGUD48uXpVFIJcsbDN3BXmaduFzOExxx3T15wy6qy
+         sSKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3nucfqlZlbS9OuDGzb3kixq1Br5Ct5yP/xRIMcpGX3I=;
-        b=hlL1c7CFW/RCEhDtLQ01w6LL0/Xeftdt1w25542AvG4b63758Ch4jNMkz1Bo95UTUi
-         lRj46/Tsn+IFV+tSHElItCM0Elfdgzjtf8TBhvUdHjAw2gl/uE5NKZuWtF9WpcZ+qLZu
-         WaeG1Isp0lPrrgeSKGd99GyIsEx7MAJ1wTP2NxAq5QwVAFeLxOVcOrIaUvBgYbJ2kno8
-         WcQwfyDZF3+ci2ti58LyZrrriHJi8bXk1zjzynlbkNOJ9p1LsPVKcpKKH8BBJuP0oa33
-         umSEewltQTjLu/Z3Q4FCQ1xfx3QS5vmH1PZ+qSIv+JFnYLEiQ61aG0l5JOLlXw++7JHW
-         iTFg==
-X-Gm-Message-State: APjAAAXHAxqVIqsDExiMLhAwN0CYExzJcAUhYul+AvTuohmbUChxNbte
-        lDQ8yAT2eiWvdK60OxoydPUREQ==
-X-Google-Smtp-Source: APXvYqwUM3eHfQyl0jYk2jMIm1HD6qhbHIGYlpCQN5vKCDU4ZGIkG0S0TmUkq8oDkZb8nAkfD69J1A==
-X-Received: by 2002:adf:ffc7:: with SMTP id x7mr13424029wrs.159.1580715972793;
-        Sun, 02 Feb 2020 23:46:12 -0800 (PST)
-Received: from dell ([2.27.35.227])
-        by smtp.gmail.com with ESMTPSA id r15sm21991157wmh.21.2020.02.02.23.46.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2020 23:46:12 -0800 (PST)
-Date:   Mon, 3 Feb 2020 07:46:21 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Ran Bi <ran.bi@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
-Subject: Re: [PATCH v7 3/6] mfd: Add support for the MediaTek MT6358 PMIC
-Message-ID: <20200203074621.GB13919@dell>
-References: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1576057435-3561-4-git-send-email-hsin-hsiung.wang@mediatek.com>
- <20191216151735.GD2369@dell>
- <1579664886.6399.24.camel@mtksdaap41>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=52LKly4I/06lXfcJFtdMnMF93D7j0fEQtz6/eHGU+Gs=;
+        b=s1tCrGJSQjwZkDO/XHPZr3IBBEOVAUNmDUwc+5B+AfurOF+cv3ZnxUKwEIRuh4VK2e
+         tmaon/1kr6+l6/G44+s6RpLOWaluw5N+WRNdZXMVlsf+2cQpEw8ch5olt3ofsnEDysdB
+         T+rAa6C0/fNuu26Q7K80fBqJQ419Gar4fsgQLIgdpgHxSlnq4sm9W2xOdfRlcyjHuRyi
+         WSmDdOOUDOTtQx/d+29pN+eNF3wC2enb5oUJBx+W34BQCejrUfsDadIfFR41K6iOp1NM
+         HvwR1PaexlF9noVb9Ob8X6bzotXSo4Pk5A3+RtotL4oMQc8nuKRaGL06S5THzgRAcmny
+         viqg==
+X-Gm-Message-State: APjAAAUvqfvC98P9XNtcXg1wgi5gbZCjDSg352J5hqSNVxBafgugyqja
+        lPTNEonvopgG/POucbY0XILLQrGAC/+7DV9Cnto=
+X-Google-Smtp-Source: APXvYqyztN6vBapb8zTq3vRMhbXWkQ+Vq64UK9aTOlrPKB9EbT+BC0nhIFt4ooB6fZZ6WNhv0G501Joby+TeCyk5LVM=
+X-Received: by 2002:a63:515d:: with SMTP id r29mr16565423pgl.265.1580724065863;
+ Mon, 03 Feb 2020 02:01:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1579664886.6399.24.camel@mtksdaap41>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a17:90b:34e:0:0:0:0 with HTTP; Mon, 3 Feb 2020 02:01:05
+ -0800 (PST)
+Reply-To: suleman1945mohammed@gmail.com
+From:   "Mr.Suleman Mohammed" <djamiladoro@gmail.com>
+Date:   Mon, 3 Feb 2020 02:01:05 -0800
+Message-ID: <CAO34-w-Lx9+LXUYYkVKNKb7ZN9WXwzXT3D6DguQpOGw3ws5rKA@mail.gmail.com>
+Subject: I am Mr.Suleman Mohammed
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 22 Jan 2020, Hsin-hsiung Wang wrote:
+--=20
+Hello Dear,
 
-> Hi,
-> 
-> On Mon, 2019-12-16 at 15:17 +0000, Lee Jones wrote:
-> > On Wed, 11 Dec 2019, Hsin-Hsiung Wang wrote:
-> > 
-> > > This adds support for the MediaTek MT6358 PMIC. This is a
-> > > multifunction device with the following sub modules:
-> > > 
-> > > - Regulator
-> > > - RTC
-> > > - Codec
-> > > - Interrupt
-> > > 
-> > > It is interfaced to the host controller using SPI interface
-> > > by a proprietary hardware called PMIC wrapper or pwrap.
-> > > MT6358 MFD is a child device of the pwrap.
-> > > 
-> > > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> > > ---
-> > >  drivers/mfd/Makefile                 |   2 +-
-> > >  drivers/mfd/mt6358-irq.c             | 224 ++++++++++++++++++++++++++++
-> > >  drivers/mfd/mt6397-core.c            |  45 +++++-
-> > >  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
-> > >  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/mt6397/core.h      |   3 +
-> > >  6 files changed, 712 insertions(+), 2 deletions(-)
-> > >  create mode 100644 drivers/mfd/mt6358-irq.c
-> > >  create mode 100644 include/linux/mfd/mt6358/core.h
-> > >  create mode 100644 include/linux/mfd/mt6358/registers.h
+I am Mr.Suleman Mohammed and I work with UNITED BANK OF AFRICA. Please
+Can you use ATM Visa card to withdraw money at ATM cash machine in
+your country? I want to transfer money to you from my country; it=E2=80=99s
+part of money taken by some old politician that was forced out of
+power.
 
-[...]
+I will change the account details to yours, and apply for a visa card
+with your details in our bank, they will send the visa card to you and
+you will be withdrawing money with it and always send my own
+percentage of the money, and the money we are talking about is
+$6.5Million us dollars.
 
-> > > +int mt6358_irq_init(struct mt6397_chip *chip)
-> > > +{
-> > > +	int i, j, ret;
-> > > +	struct pmic_irq_data *irqd;
-> > > +
-> > > +	irqd = devm_kzalloc(chip->dev, sizeof(struct pmic_irq_data *),
-> > > +			    GFP_KERNEL);
-> > > +	if (!irqd)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	chip->irq_data = irqd;
-> > > +
-> > > +	mutex_init(&chip->irqlock);
-> > > +	irqd->top_int_status_reg = MT6358_TOP_INT_STATUS0;
-> > > +	irqd->num_pmic_irqs = MT6358_IRQ_NR;
-> > > +	irqd->num_top = ARRAY_SIZE(mt6358_ints);
-> > > +
-> > > +	irqd->enable_hwirq = devm_kcalloc(chip->dev,
-> > > +					  irqd->num_pmic_irqs,
-> > > +					  sizeof(bool),
-> > 
-> > This is fragile.  What if the type changes elsewhere?
-> > 
-> 
-> Thanks for your comment.
-> Do you mean using 'sizeof(*irqd->enable_hwirq)' instead of
-> 'sizeof(bool)'?
+Whatever amount you withdraw daily, you will send 50% to me and you
+will take 50%, the visa card and the bank account will be on your
+name, I will be waiting for your information as soon as possible.
+Your name...........................................
 
-Yes please.
+Age.................................................
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Sex.................................................
+
+Country.............................................
+
+Occupation..........................................
+
+Phone number........................................
+
+
+Best Regards.
+
+Mr.Suleman Mohammed
+
+MAIL.....suleman1945mohammed@gmail.com
