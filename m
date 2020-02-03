@@ -2,102 +2,152 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F5E14F53D
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Feb 2020 00:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B4215020A
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Feb 2020 08:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgAaXgf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 31 Jan 2020 18:36:35 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:46010 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726239AbgAaXge (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 31 Jan 2020 18:36:34 -0500
-Received: by mail-il1-f195.google.com with SMTP id p8so7692129iln.12
-        for <linux-rtc@vger.kernel.org>; Fri, 31 Jan 2020 15:36:34 -0800 (PST)
+        id S1727602AbgBCHqO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 3 Feb 2020 02:46:14 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:44792 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727502AbgBCHqO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 3 Feb 2020 02:46:14 -0500
+Received: by mail-wr1-f65.google.com with SMTP id m16so16571095wrx.11
+        for <linux-rtc@vger.kernel.org>; Sun, 02 Feb 2020 23:46:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=wDLL4My23eSWC54SIryC2WamEFIBzKCY7R0WEz6+vZk=;
-        b=dxbvuU9B+a6tqYbnM1Oy2U0EYOov/lcFBUp6z46xcc1euWUKhaodp53ITD2sMM7nt3
-         Kas1wtSIc5+ennA0HxH2umvtybrrZoiNfxkqayyqdRCOhxtnEmFDTfEHogMe/1mDH3BF
-         f7lFtmqyqTP6Wv2jwIWBmiMIdelwymbZiQWg1ZQet0bRdlwHGgDRQew60fl6cuNN2dsN
-         Cookmet5xmY8R80NdlOm4xDJalUifwEcnL4pVUJbfEX5CrIR/ew253wtTSxWrDBbIGSw
-         uhzfy7PNY77KEJOmegUHR6iyloXyvVwqVFpeuNjZLbNnPYNp9kt4DdYs1E/fuo6Tkm6e
-         FcDQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=3nucfqlZlbS9OuDGzb3kixq1Br5Ct5yP/xRIMcpGX3I=;
+        b=mBsWaIqgxBm8aCgBacUzTG7hSSBWgBjHas+8ae87Zzr33BdDyOswJQPMH3FbJ0eOhD
+         kCtZzepzkXSgXl+4F+CLOPlJ2CvCSbzSqx6sjQkzOq07TkagOaHfhR+5rwpkRwIaqwId
+         NP6ltWCKqca7ky9ktf/JB9p3Hk1x+Ose9hDG1Xj1/MSitC77bKNotLaD8fVh0j4eFcS5
+         DkJ8biOJMNn0LjxriM/OkD9IKdQVbi1l8TpOLPLF9LRFHPSvk6Cn1ueXhjy5n5Rcm996
+         1c2z9DchENiRTvTIUJwHx6nLH8QULbKfTRr/dIGYh5UjzbVJFs+TN4awtfXJuOGZ+p9Y
+         969g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=wDLL4My23eSWC54SIryC2WamEFIBzKCY7R0WEz6+vZk=;
-        b=YWSkESdkpdhlDm5/38PFZFv5J5F19p1g59rdj45MWlvEFv2xvxV7GYlaELmRkyq6XU
-         hfOcZJ+4EgOfq8SIMisKYgXlW1gwPNRqVYTQzeI23GyBSo0i85eUy2lNbXzv7kh7yl74
-         rD/wxyuaCxC7orti3kRQhCKFE42RZactdypCACVEa/2kL2VG6GjslP4XxNrXX79ho4ui
-         8zjDeqv3+ceqnZ1LhcSRqDABtfimN8cDzqO960VBoVBCAOcSaFC5OYN4ZYUWuzpZSiYG
-         Xry+/gphI9KAIgGRo8YbDPJJsF3Gzxuhk12TAl9tHJmXfm5V+U1IYyf+Q1qVmjV/XxmK
-         GMJw==
-X-Gm-Message-State: APjAAAV7vIje4lHmWm2GORj9SRKQac9TVAdlTrLD2ltdxbuZD2jk40Qc
-        2eMvM4nWz2ui5cvUT/Mdn0kL2mE5yFug8ZvTE6ZtRTu8
-X-Google-Smtp-Source: APXvYqzHxGpZfYVVowpF4duQaa+G0oJS7cpSA9YGStKNPRZWSa+fyHQ2ceJz7pgX2VIJtjUlVxfV5frCgH6IL+Exbjg=
-X-Received: by 2002:a92:d5cf:: with SMTP id d15mr4890036ilq.306.1580513794338;
- Fri, 31 Jan 2020 15:36:34 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=3nucfqlZlbS9OuDGzb3kixq1Br5Ct5yP/xRIMcpGX3I=;
+        b=hlL1c7CFW/RCEhDtLQ01w6LL0/Xeftdt1w25542AvG4b63758Ch4jNMkz1Bo95UTUi
+         lRj46/Tsn+IFV+tSHElItCM0Elfdgzjtf8TBhvUdHjAw2gl/uE5NKZuWtF9WpcZ+qLZu
+         WaeG1Isp0lPrrgeSKGd99GyIsEx7MAJ1wTP2NxAq5QwVAFeLxOVcOrIaUvBgYbJ2kno8
+         WcQwfyDZF3+ci2ti58LyZrrriHJi8bXk1zjzynlbkNOJ9p1LsPVKcpKKH8BBJuP0oa33
+         umSEewltQTjLu/Z3Q4FCQ1xfx3QS5vmH1PZ+qSIv+JFnYLEiQ61aG0l5JOLlXw++7JHW
+         iTFg==
+X-Gm-Message-State: APjAAAXHAxqVIqsDExiMLhAwN0CYExzJcAUhYul+AvTuohmbUChxNbte
+        lDQ8yAT2eiWvdK60OxoydPUREQ==
+X-Google-Smtp-Source: APXvYqwUM3eHfQyl0jYk2jMIm1HD6qhbHIGYlpCQN5vKCDU4ZGIkG0S0TmUkq8oDkZb8nAkfD69J1A==
+X-Received: by 2002:adf:ffc7:: with SMTP id x7mr13424029wrs.159.1580715972793;
+        Sun, 02 Feb 2020 23:46:12 -0800 (PST)
+Received: from dell ([2.27.35.227])
+        by smtp.gmail.com with ESMTPSA id r15sm21991157wmh.21.2020.02.02.23.46.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Feb 2020 23:46:12 -0800 (PST)
+Date:   Mon, 3 Feb 2020 07:46:21 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@free-electrons.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Ran Bi <ran.bi@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
+Subject: Re: [PATCH v7 3/6] mfd: Add support for the MediaTek MT6358 PMIC
+Message-ID: <20200203074621.GB13919@dell>
+References: <1576057435-3561-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1576057435-3561-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <20191216151735.GD2369@dell>
+ <1579664886.6399.24.camel@mtksdaap41>
 MIME-Version: 1.0
-Received: by 2002:ad5:5d0d:0:0:0:0:0 with HTTP; Fri, 31 Jan 2020 15:36:33
- -0800 (PST)
-In-Reply-To: <20200131141324.GD3515@piout.net>
-References: <CAA=hcWQcVi79AW9aOSGQSzEwL-sPwvt=4zR+_25mJKvbkBON1w@mail.gmail.com>
- <20200112110353.GC1253990@piout.net> <CAA=hcWQoY95oPbLYyD306_wxmj=GU57t8m-m_kWwyy5-7Quj=Q@mail.gmail.com>
- <20200130104756.GC3583@piout.net> <CAA=hcWQaDrAHnLJXjcfvbL_+HkZraqfbCA70rfsD4i5kqXOqOw@mail.gmail.com>
- <20200130144044.GG3583@piout.net> <CAA=hcWQoacmPsi-VH3B1BGFHJhHi1a-tLaJXBiwAn03E7BiTiQ@mail.gmail.com>
- <20200131141324.GD3515@piout.net>
-From:   JH <jupiter.hce@gmail.com>
-Date:   Sat, 1 Feb 2020 10:36:33 +1100
-Message-ID: <CAA=hcWS3+eACAL5NHUX=Dc1DgbUor=g6mCNGFPK0Qc9-4u9uZQ@mail.gmail.com>
-Subject: Re: rtc rtc0: Timeout trying to get valid LPSRT Counter read
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1579664886.6399.24.camel@mtksdaap41>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre,
+On Wed, 22 Jan 2020, Hsin-hsiung Wang wrote:
 
-On 2/1/20, Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> On 31/01/2020 16:27:15+1100, JH wrote:
->> Hi Alexandre,
->>
->> On 1/31/20, Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
->> >> So it was already included in 4.19, I don't need to patch it, that is
->> >> good :-). Sorry I am still not clear how to stop that error message of
->> >> "rtc rtc0: Timeout trying to get valid LPSRT Counter read", the
->> >> message says "To avoid kernel hangs, put in timeouts", I am running
->> >> kernel 4.19.75 on iMX6, where should I put in timeouts?
->> >>
->> >
->> > The patch is adding the timeouts, without them, your kernel would be
->> > freezing. I'd say your issue is the 32k clock.
->>
->> Did you mean that is the issue of the hardware setup IMX6ULL for 32k
->> RTC_XTALI? That is nominal frequency 32.768 kHz for IMX6ULL EVK and
->> customized devices. Change to which frequency (64k?) can fix the
->> problem and remove the error message?
->>
->
-> I can't help much more without seeing the schematics of your particular
-> board. 32k is the correct frequency but are your sure it is going to the
-> RTC? Are you sure you have power on VDD_SNVS_IN? Was there a security
-> violation detected?
+> Hi,
+> 
+> On Mon, 2019-12-16 at 15:17 +0000, Lee Jones wrote:
+> > On Wed, 11 Dec 2019, Hsin-Hsiung Wang wrote:
+> > 
+> > > This adds support for the MediaTek MT6358 PMIC. This is a
+> > > multifunction device with the following sub modules:
+> > > 
+> > > - Regulator
+> > > - RTC
+> > > - Codec
+> > > - Interrupt
+> > > 
+> > > It is interfaced to the host controller using SPI interface
+> > > by a proprietary hardware called PMIC wrapper or pwrap.
+> > > MT6358 MFD is a child device of the pwrap.
+> > > 
+> > > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> > > ---
+> > >  drivers/mfd/Makefile                 |   2 +-
+> > >  drivers/mfd/mt6358-irq.c             | 224 ++++++++++++++++++++++++++++
+> > >  drivers/mfd/mt6397-core.c            |  45 +++++-
+> > >  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
+> > >  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
+> > >  include/linux/mfd/mt6397/core.h      |   3 +
+> > >  6 files changed, 712 insertions(+), 2 deletions(-)
+> > >  create mode 100644 drivers/mfd/mt6358-irq.c
+> > >  create mode 100644 include/linux/mfd/mt6358/core.h
+> > >  create mode 100644 include/linux/mfd/mt6358/registers.h
 
-The XTALI and XTALO is connected to 24 MHz Y501 XTALI Oscillator, the
-RTC_XTALI and RTC_XTALO is connected to Y502 32.768KHZ crystal. Don't
-know about VDD_SNVS_IN,  The hardware was designed by an experienced
-hardware engineers, I am not sure if they could make any silly
-mistakes.
+[...]
 
+> > > +int mt6358_irq_init(struct mt6397_chip *chip)
+> > > +{
+> > > +	int i, j, ret;
+> > > +	struct pmic_irq_data *irqd;
+> > > +
+> > > +	irqd = devm_kzalloc(chip->dev, sizeof(struct pmic_irq_data *),
+> > > +			    GFP_KERNEL);
+> > > +	if (!irqd)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	chip->irq_data = irqd;
+> > > +
+> > > +	mutex_init(&chip->irqlock);
+> > > +	irqd->top_int_status_reg = MT6358_TOP_INT_STATUS0;
+> > > +	irqd->num_pmic_irqs = MT6358_IRQ_NR;
+> > > +	irqd->num_top = ARRAY_SIZE(mt6358_ints);
+> > > +
+> > > +	irqd->enable_hwirq = devm_kcalloc(chip->dev,
+> > > +					  irqd->num_pmic_irqs,
+> > > +					  sizeof(bool),
+> > 
+> > This is fragile.  What if the type changes elsewhere?
+> > 
+> 
+> Thanks for your comment.
+> Do you mean using 'sizeof(*irqd->enable_hwirq)' instead of
+> 'sizeof(bool)'?
 
-Thank you Alexandre,
+Yes please.
 
-Kind regards,
-
-- jh
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
