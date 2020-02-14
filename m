@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C0D15E73B
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2020 17:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B0315E544
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Feb 2020 17:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392778AbgBNQTL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 14 Feb 2020 11:19:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52186 "EHLO mail.kernel.org"
+        id S2393308AbgBNQkc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Feb 2020 11:40:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58764 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392773AbgBNQTK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:19:10 -0500
+        id S2393263AbgBNQWx (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:22:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE14C24702;
-        Fri, 14 Feb 2020 16:19:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0340D24762;
+        Fri, 14 Feb 2020 16:22:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697150;
+        s=default; t=1581697372;
         bh=dE5/nvNLJI0zjMewiymZtePjfK0j8kzyC/D2KWwxLCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4NOACL/zmUfV9Bvxdjlwrqu2XcSPz1qRouBHQ3Ybf1DnDi47wrFbox/q7i6ii2ve
-         bTLuFRhNfhhkWeQkzz6TScJIy2bBd/KaaHVmadpsgT6OJfNMwqLLGXVUdYBIh1OxgS
-         mvliyYdTLA1GUw5at+hW41YFd5nXNYoc64YvdNPc=
+        b=qjCRc6qYUnA+U1NUGnDbkaINSIeWrQzCsmicjFT9SLDaDH/8wDZrEj1+ECi3Loo5K
+         4C7BwkesRCSb91y2JNgY5yqnuZrgL5xS5LdaAu3LIv6M7CGXFYuwwhwRStLeMsuIxL
+         wNnbSEazBYghHqADuwC1nklnbE1N+rzIG6oQuzO4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 089/186] rtc: hym8563: Return -EINVAL if the time is known to be invalid
-Date:   Fri, 14 Feb 2020 11:15:38 -0500
-Message-Id: <20200214161715.18113-89-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 071/141] rtc: hym8563: Return -EINVAL if the time is known to be invalid
+Date:   Fri, 14 Feb 2020 11:20:11 -0500
+Message-Id: <20200214162122.19794-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
