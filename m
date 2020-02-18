@@ -2,244 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EBA1623F0
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Feb 2020 10:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A594162D60
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Feb 2020 18:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726327AbgBRJwu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 18 Feb 2020 04:52:50 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:58459 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726264AbgBRJwu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Feb 2020 04:52:50 -0500
-X-Originating-IP: 90.65.102.129
-Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 0D59FE0002;
-        Tue, 18 Feb 2020 09:52:46 +0000 (UTC)
-Date:   Tue, 18 Feb 2020 10:52:46 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
+        id S1726634AbgBRRs4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 18 Feb 2020 12:48:56 -0500
+Received: from mail-eopbgr20053.outbound.protection.outlook.com ([40.107.2.53]:6917
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726411AbgBRRs4 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 18 Feb 2020 12:48:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D9QaAI+omociSr3ChtBl26TVZnCoi/Tvv0QatzpFrk8gIdH1VY2Hw1377OxnxMIOvehFoiL4LURradRPUWsZ5dBccXpBkKFhCWjNJh4voDGA1PxmerTIseKcCY8GKhaEac7XmpkM4qt1K+PQDDWRNJhaSdcCh+GMx3sySqK9o6+9ohcEen2JfLt+I7ypznB0HOdOQRRn4raBVY75oaZhNUJoxEdJwJ4wD/JKSLGHvtainjdhwjcbtKEmHAu3dNrwIX/eTyKJVP4/eFSQgnEEdkfN6siCYqpZerImQlEytmyr+WsUQmXMVBpPSDvm+tAyZjvUKVa5jdTef8t0SmmEmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yz0kYFuv82HKWo/vr8c/lofCgWDiBaeUg061wNbgyAc=;
+ b=MfTawPV1ZLbXWHv4u5yz2cwJ5Wl4VucRatdaJ/42RgsqbhWOF/QNWycvfX0nxO1P3KJwc3w3u6bRauchdFsWKLUX2bm1SDWM1qQfYfrs/bgoCmb5lLqDyFozYjSPWBBsPbaK7wjsu1LIQvihz2bLf2p86RPCOsYrqUZjjsJfsAxZTBa6uk14jxi7S8SmsjE2m3P5z9Jery4nvrOvm/dORDGLZprMqh97v+I1biY1LdwYh8C5aDk4TFt/8/1iDBM4xNjlUTDRWKhcv4z9qTCdZ5dU17nxl//Uwq+KxmwY/fzrBKcRjSyJI11Jt5L0aJkLTjTO/Qm2optHHWSS1sSoKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yz0kYFuv82HKWo/vr8c/lofCgWDiBaeUg061wNbgyAc=;
+ b=aiZ0YFN1jwJUhXvmCl+s4CkGvua9fJAbO1Ht1mQqKS1/Pi7V9+e1QlhaEKYnyt/QJ9Qi84aCVagnxhbX8dT756gW0BQc5Wx/eEKVh/kdL8i4Iz6CCXCyJBhw75q5BoiVZGDumPDdugih4WVRtRNrOSkCuDjXKKdQHC2wr8yrhsU=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB2990.eurprd04.prod.outlook.com (10.170.227.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.29; Tue, 18 Feb 2020 17:48:50 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::58c5:f02f:2211:4953]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::58c5:f02f:2211:4953%7]) with mapi id 15.20.2729.032; Tue, 18 Feb 2020
+ 17:48:50 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>, Sasha Levin <sashal@kernel.org>
+CC:     Aisheng Dong <aisheng.dong@nxp.com>,
         Fabio Estevam <fabio.estevam@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Stefan Agner <stefan@agner.ch>,
         Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Anson Huang <anson.huang@nxp.com>,
         Abel Vesa <abel.vesa@nxp.com>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
         "open list:PIN CONTROLLER - FREESCALE" <linux-gpio@vger.kernel.org>,
         "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
         <linux-rtc@vger.kernel.org>
 Subject: Re: [PATCH] firmware: imx: Align imx SC msg structs to 4
-Message-ID: <20200218095246.GA3385@piout.net>
+Thread-Topic: [PATCH] firmware: imx: Align imx SC msg structs to 4
+Thread-Index: AQHV4SGqSL+k7/w06UOL1nyEN5GYug==
+Date:   Tue, 18 Feb 2020 17:48:50 +0000
+Message-ID: <VI1PR04MB7023C1C536805130D9429E11EE110@VI1PR04MB7023.eurprd04.prod.outlook.com>
 References: <3a8b6772a1edffdd7cdb54d6d50030b03ba0bebb.1581455751.git.leonard.crestez@nxp.com>
+ <20200217062129.GB6790@dragon>
+ <VI1PR04MB7023CDE9E4AD086F2E926495EE160@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <20200218091831.GB6075@dragon>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [89.37.124.34]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7ba8ee1f-efb6-4296-5133-08d7b49ad049
+x-ms-traffictypediagnostic: VI1PR04MB2990:|VI1PR04MB2990:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB299084688AF8A783DDD2E122EE110@VI1PR04MB2990.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 031763BCAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(39860400002)(366004)(136003)(376002)(189003)(199004)(64756008)(66556008)(66446008)(71200400001)(66946007)(91956017)(66476007)(76116006)(5660300002)(8676002)(186003)(4326008)(8936002)(53546011)(6506007)(81156014)(81166006)(52536014)(54906003)(2906002)(9686003)(55016002)(478600001)(44832011)(316002)(7416002)(110136005)(86362001)(33656002)(7696005)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB2990;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WVc9fxQq0pl+JrAmh5hTaBssm/tHBO7aS2m4iQMF0g5Xh3r2+Q+pCPVICTBsxtRDd0W9rmq7cJQ8q3vaxMJl2+rOHfZzXvTKwZWI00KPdWsjcPq9A6rLMfOCb1SO8dKELIBK1JXZk6SGUbDjtu45QMBL/l8gDS1922cmu/RdJ+rEomsM70OW+b6paR/GxwVyi1Q/WXXJS4EqCK4g66TclZvb5qO1eCkLQJV+WjMb59Q2JkG6p65OxPFs+XDayr3Yz2r1WX6a7+0YaBPUnIvKFxCX74TNiEzonaQ1S8po3rE2fz1vuiF2MH2zFNQzq8Ee5v6G64h2EckRtzc/u/3QMwZme5JRcniGioUne7EYw908MV64zmqlVPndTQnSb6XOBoNR6c6jSu3KBgFmtOUvxOQQyLlxYDFhhcjWh5d+sa1KBbYWkwa4GklA2K4+gDa2
+x-ms-exchange-antispam-messagedata: VLY1Yd3N5w8Rzyg+E8T6q6K4CNq7YSgNND+PGw2iEF389IqRTEYqVGrgdWluDH2bre9WtF8ss5j0232nquxZhD8A5VaX7GKR83MnahZAtJVO2zJ3a5JJwTIrux87UIT7rszswB3zdnUDq/tzWi3FCg==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3a8b6772a1edffdd7cdb54d6d50030b03ba0bebb.1581455751.git.leonard.crestez@nxp.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ba8ee1f-efb6-4296-5133-08d7b49ad049
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2020 17:48:50.7787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h/i72ZIVcUjXCbdcvDeuOsH3O+B2b5CMNXBRG+d24zhTN2uC9Svc9WJnm35A45CtDMxJNQ9mdOC8iiLhNMFwKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB2990
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/02/2020 23:24:33+0200, Leonard Crestez wrote:
-> The imx SC api strongly assumes that messages are composed out of
-> 4-bytes words but some of our message structs have sizeof "6" and "7".
-> 
-> This produces many oopses with CONFIG_KASAN=y:
-> 
-> 	BUG: KASAN: stack-out-of-bounds in imx_mu_send_data+0x108/0x1f0
-> 
-> It shouldn't cause an issues in normal use because these structs are
-> always allocated on the stack.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-> Reported-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-> ---
->  drivers/clk/imx/clk-scu.c               | 8 ++++----
->  drivers/firmware/imx/misc.c             | 8 ++++----
->  drivers/firmware/imx/scu-pd.c           | 2 +-
->  drivers/pinctrl/freescale/pinctrl-scu.c | 4 ++--
->  drivers/rtc/rtc-imx-sc.c                | 2 +-
->  drivers/soc/imx/soc-imx-scu.c           | 2 +-
->  6 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-> index fbef740704d0..b8b2072742a5 100644
-> --- a/drivers/clk/imx/clk-scu.c
-> +++ b/drivers/clk/imx/clk-scu.c
-> @@ -41,16 +41,16 @@ struct clk_scu {
->  struct imx_sc_msg_req_set_clock_rate {
->  	struct imx_sc_rpc_msg hdr;
->  	__le32 rate;
->  	__le16 resource;
->  	u8 clk;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct req_get_clock_rate {
->  	__le16 resource;
->  	u8 clk;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct resp_get_clock_rate {
->  	__le32 rate;
->  };
->  
-> @@ -82,11 +82,11 @@ struct imx_sc_msg_get_clock_parent {
->  	struct imx_sc_rpc_msg hdr;
->  	union {
->  		struct req_get_clock_parent {
->  			__le16 resource;
->  			u8 clk;
-> -		} __packed req;
-> +		} __packed __aligned(4) req;
->  		struct resp_get_clock_parent {
->  			u8 parent;
->  		} resp;
->  	} data;
->  };
-> @@ -119,11 +119,11 @@ struct imx_sc_msg_req_clock_enable {
->  	struct imx_sc_rpc_msg hdr;
->  	__le16 resource;
->  	u8 clk;
->  	u8 enable;
->  	u8 autog;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  static inline struct clk_scu *to_clk_scu(struct clk_hw *hw)
->  {
->  	return container_of(hw, struct clk_scu, hw);
->  }
-> diff --git a/drivers/firmware/imx/misc.c b/drivers/firmware/imx/misc.c
-> index 4b56a587dacd..d073cb3ce699 100644
-> --- a/drivers/firmware/imx/misc.c
-> +++ b/drivers/firmware/imx/misc.c
-> @@ -14,30 +14,30 @@
->  struct imx_sc_msg_req_misc_set_ctrl {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 ctrl;
->  	u32 val;
->  	u16 resource;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_req_cpu_start {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 address_hi;
->  	u32 address_lo;
->  	u16 resource;
->  	u8 enable;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_req_misc_get_ctrl {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 ctrl;
->  	u16 resource;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_resp_misc_get_ctrl {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 val;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  /*
->   * This function sets a miscellaneous control value.
->   *
->   * @param[in]     ipc         IPC handle
-> diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
-> index b556612207e5..af3ae0087de4 100644
-> --- a/drivers/firmware/imx/scu-pd.c
-> +++ b/drivers/firmware/imx/scu-pd.c
-> @@ -59,11 +59,11 @@
->  /* SCU Power Mode Protocol definition */
->  struct imx_sc_msg_req_set_resource_power_mode {
->  	struct imx_sc_rpc_msg hdr;
->  	u16 resource;
->  	u8 mode;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  #define IMX_SCU_PD_NAME_SIZE 20
->  struct imx_sc_pm_domain {
->  	struct generic_pm_domain pd;
->  	char name[IMX_SCU_PD_NAME_SIZE];
-> diff --git a/drivers/pinctrl/freescale/pinctrl-scu.c b/drivers/pinctrl/freescale/pinctrl-scu.c
-> index 73bf1d9f9cc6..23cf04bdfc55 100644
-> --- a/drivers/pinctrl/freescale/pinctrl-scu.c
-> +++ b/drivers/pinctrl/freescale/pinctrl-scu.c
-> @@ -21,16 +21,16 @@ enum pad_func_e {
->  
->  struct imx_sc_msg_req_pad_set {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 val;
->  	u16 pad;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_req_pad_get {
->  	struct imx_sc_rpc_msg hdr;
->  	u16 pad;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_resp_pad_get {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 val;
->  } __packed;
-> diff --git a/drivers/rtc/rtc-imx-sc.c b/drivers/rtc/rtc-imx-sc.c
-> index cf2c12107f2b..a5f59e6f862e 100644
-> --- a/drivers/rtc/rtc-imx-sc.c
-> +++ b/drivers/rtc/rtc-imx-sc.c
-> @@ -35,11 +35,11 @@ struct imx_sc_msg_timer_rtc_set_alarm {
->  	u8 mon;
->  	u8 day;
->  	u8 hour;
->  	u8 min;
->  	u8 sec;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  static int imx_sc_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  {
->  	struct imx_sc_msg_timer_get_rtc_time msg;
->  	struct imx_sc_rpc_msg *hdr = &msg.hdr;
-> diff --git a/drivers/soc/imx/soc-imx-scu.c b/drivers/soc/imx/soc-imx-scu.c
-> index fb70b8a3f7c5..20d37eaeb5f2 100644
-> --- a/drivers/soc/imx/soc-imx-scu.c
-> +++ b/drivers/soc/imx/soc-imx-scu.c
-> @@ -23,11 +23,11 @@ struct imx_sc_msg_misc_get_soc_id {
->  		} __packed req;
->  		struct {
->  			u32 id;
->  		} resp;
->  	} data;
-> -} __packed;
-> +} __packed __aligned(4);
->  
->  struct imx_sc_msg_misc_get_soc_uid {
->  	struct imx_sc_rpc_msg hdr;
->  	u32 uid_low;
->  	u32 uid_high;
-> -- 
-> 2.17.1
-> 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 18.02.2020 11:18, Shawn Guo wrote:=0A=
+> On Mon, Feb 17, 2020 at 08:37:45PM +0000, Leonard Crestez wrote:=0A=
+>> On 17.02.2020 08:21, Shawn Guo wrote:=0A=
+>>> On Tue, Feb 11, 2020 at 11:24:33PM +0200, Leonard Crestez wrote:=0A=
+>>>> The imx SC api strongly assumes that messages are composed out of=0A=
+>>>> 4-bytes words but some of our message structs have sizeof "6" and "7".=
+=0A=
+>>>>=0A=
+>>>> This produces many oopses with CONFIG_KASAN=3Dy:=0A=
+>>>>=0A=
+>>>> 	BUG: KASAN: stack-out-of-bounds in imx_mu_send_data+0x108/0x1f0=0A=
+>>>>=0A=
+>>>> It shouldn't cause an issues in normal use because these structs are=
+=0A=
+>>>> always allocated on the stack.=0A=
+>>>>=0A=
+>>>> Cc: stable@vger.kernel.org=0A=
+>>>=0A=
+>>> Should we have a fixes tag and send it for -rc?=0A=
+>>=0A=
+>> I haven't check but this would probably have to be split into multiple=
+=0A=
+>> patches because the structs were not added all at once.=0A=
+> =0A=
+> Or maybe we can just drop the stable tag, as it addresses a corner=0A=
+> case issue which could concern very few people?=0A=
+=0A=
+I think that "kernel does not boot with KASAN=3Dy" is an issue worth fixing=
+.=0A=
+=0A=
+I will split and resend with appropriate Fixes: tags.=0A=
+=0A=
+It seems likely that this will be picked up for -stable anyway via =0A=
+Sasha's automation scripts and those scripts benefit from Fixes: tags.=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
+=0A=
