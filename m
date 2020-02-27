@@ -2,161 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C64BC171638
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2020 12:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6BF17279F
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Feb 2020 19:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728893AbgB0Lp6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Feb 2020 06:45:58 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:49603 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728888AbgB0Lp6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Feb 2020 06:45:58 -0500
-X-Originating-IP: 86.202.111.97
-Received: from localhost (lfbn-lyo-1-16-97.w86-202.abo.wanadoo.fr [86.202.111.97])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 821602000A;
-        Thu, 27 Feb 2020 11:45:54 +0000 (UTC)
-Date:   Thu, 27 Feb 2020 12:45:54 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     a.zummo@towertech.it, michal.simek@xilinx.com, sgoud@xilinx.com,
-        shubhraj@xilinx.com, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, Srinivas Goud <srinivas.goud@xilinx.com>
-Subject: Re: [PATCH] rtc: zynqmp: Add calibration set and get support
-Message-ID: <20200227114554.GA3436@piout.net>
-References: <1582191106-30431-1-git-send-email-srinivas.neeli@xilinx.com>
+        id S1730240AbgB0Sbq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 Feb 2020 13:31:46 -0500
+Received: from mail.andi.de1.cc ([85.214.55.253]:51280 "EHLO mail.andi.de1.cc"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729580AbgB0Sbp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 27 Feb 2020 13:31:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yQkfOLNuqw0s/C4iIr73jm/g+t03fJKekg1eS9M/yZg=; b=M4ms9jty0MbPPPh6W6xA8Nd0NJ
+        psoAwSI57Rqlb3yCjZaXgUWWjaL+EvmG9cAC+S8dL6WegGFydhncHyitGhusrelfjv4+oKdbJH2EJ
+        3VREg3rcOCg67Bdfi0jbA4nHyKNyOr9nAYmQ9C/SwZh5Czv0gwdkSeqNVD2ii5amwDBU=;
+Received: from p200300ccff13fd00e2cec3fffe93fc31.dip0.t-ipconnect.de ([2003:cc:ff13:fd00:e2ce:c3ff:fe93:fc31] helo=eeepc)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j7NwX-0006yB-Kh; Thu, 27 Feb 2020 19:31:29 +0100
+Received: from andi by eeepc with local (Exim 4.92)
+        (envelope-from <andreas@kemnade.info>)
+        id 1j7NwW-0003oO-WB; Thu, 27 Feb 2020 19:31:29 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     lee.jones@linaro.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, stefan@agner.ch, b.galvani@gmail.com,
+        phh@phh.me, letux-kernel@openphoenux.org, knaack.h@gmx.de,
+        lars@metafoo.de, pmeerw@pmeerw.net, linux-iio@vger.kernel.org,
+        jic23@kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v6 0/7] mfd: rn5t618: Add RTC/ADC support
+Date:   Thu, 27 Feb 2020 19:31:05 +0100
+Message-Id: <20200227183112.14512-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1582191106-30431-1-git-send-email-srinivas.neeli@xilinx.com>
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+In the variant RC5T619 the mfd has an RTC. This patchset adds
+support for it. To do so it adds the missing register defines in 
+rn5t618.h and general irq handling for that.
+It seems that the IRQ definitions are the same except missing RTC
+for the RN5T618 but due to missing ability to test that they are
+not added here.
+It also adds support for the ADC, it is available in both the
+RN5T618 and RC5T619 but due to missing ability to test that,
+the subdevice is only added for the RN5T618.
 
-On 20/02/2020 15:01:46+0530, Srinivas Neeli wrote:
-> diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-> index 4b1077e2f826..b4118e9e4fcc 100644
-> --- a/drivers/rtc/rtc-zynqmp.c
-> +++ b/drivers/rtc/rtc-zynqmp.c
-> @@ -40,6 +40,12 @@
->  #define RTC_CALIB_MASK		0x1FFFFF
->  #define RTC_ALRM_MASK          BIT(1)
->  #define RTC_MSEC               1000
-> +#define RTC_FR_MASK             0xF0000
-> +#define RTC_SEC_MAX_VAL         0xFFFFFFFF
+It was tested on the Kobo Clara HD.
 
-This value is not used
+Changes in v6:
+- put together with ADC series
+- also added cleanup i2_device_id patch to avoid merge
+  conflicts
 
-> +#define RTC_FR_MAX_TICKS        16
-> +#define RTC_OFFSET_MAX          150000
-> +#define RTC_OFFSET_MIN          -150000
-> +#define RTC_PPB                 1000000000LL
->  
->  struct xlnx_rtc_dev {
->  	struct rtc_device	*rtc;
-> @@ -184,12 +190,84 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev *xrtcdev)
->  	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
->  }
->  
-> +static int xlnx_rtc_read_offset(struct device *dev, long *offset)
-> +{
-> +	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-> +	long offset_val;
-> +	unsigned int reg;
-> +	unsigned int tick_mult = RTC_PPB / xrtcdev->calibval;
-> +
+Changes in v5:
+- static rn5t618_irq_init
+- PLATFORM_DEVID_NONE
+- added some Acked-Bys
 
-I don't get why you are not simply reusing xrtcdev->calibval. Using
-.set_offset has to take precedence on any value that would have been set
-using DT. Ideally, the DT binding should be removed too.
+Changes in v4:
+- use macros for IRQ definitions
+- merge rn5t618-core.c and rn5t618-irq.c
 
-Currently, the calibration value is overwritten using the DT value
-every time .set_time is called because xrtcdev->calibval is never
-updated.
+Changes in v3:
+- alignment cleanup
+- output cleanup, remove useless toggling of alarm flag in rtc probe
+- updated bindings description, so patch 1/5 becomes 2/6 and so on
 
-> +	reg = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-> +
-> +	/* Offset with seconds ticks */
-> +	offset_val = reg & RTC_TICK_MASK;
-> +	offset_val = offset_val - xrtcdev->calibval;
-> +	offset_val = offset_val * tick_mult;
-> +
-> +	/* Offset with fractional ticks */
-> +	if (reg & RTC_FR_EN)
-> +		offset_val += ((reg & RTC_FR_MASK) >> RTC_FR_DATSHIFT)
-> +			* (tick_mult / RTC_FR_MAX_TICKS);
-> +	*offset = offset_val;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xlnx_rtc_set_offset(struct device *dev, long offset)
-> +{
-> +	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-> +	short int  max_tick;
-> +	unsigned char fract_tick = 0;
-> +	unsigned int  calibval;
-> +	int fract_offset;
-> +	unsigned int tick_mult = RTC_PPB / xrtcdev->calibval;
-> +
-> +	/* Make sure offset value is within supported range */
-> +	if (offset < RTC_OFFSET_MIN || offset > RTC_OFFSET_MAX)
-> +		return -ERANGE;
-> +
-> +	/* Number ticks for given offset */
-> +	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
-> +
-> +	/* Number fractional ticks for given offset */
-> +	if (fract_offset) {
-> +		if (fract_offset < 0) {
-> +			fract_offset = fract_offset + tick_mult;
-> +			max_tick--;
-> +		}
-> +		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-> +			for (fract_tick = 1; fract_tick < 16; fract_tick++) {
-> +				if (fract_offset <=
-> +				    (fract_tick *
-> +				     (tick_mult / RTC_FR_MAX_TICKS)))
-> +					break;
-> +			}
-> +		}
-> +	}
-> +
-> +	/* Zynqmp RTC uses second and fractional tick
-> +	 * counters for compensation
-> +	 */
-> +	calibval = max_tick + xrtcdev->calibval;
-> +
-> +	if (fract_tick)
-> +		calibval |= RTC_FR_EN;
-> +
-> +	calibval |= (fract_tick <<  RTC_FR_DATSHIFT);
-> +
-> +	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-> +
-> +	return 0;
-> +}
-> +
->  static const struct rtc_class_ops xlnx_rtc_ops = {
->  	.set_time	  = xlnx_rtc_set_time,
->  	.read_time	  = xlnx_rtc_read_time,
->  	.read_alarm	  = xlnx_rtc_read_alarm,
->  	.set_alarm	  = xlnx_rtc_set_alarm,
->  	.alarm_irq_enable = xlnx_rtc_alarm_irq_enable,
-> +	.read_offset    = xlnx_rtc_read_offset,
-> +	.set_offset     = xlnx_rtc_set_offset,
->  };
->  
->  static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
-> -- 
-> 2.7.4
-> 
+Changes in v2:
+- no dead code in irq code
+- various improvements and cleanups in rtc driver itself
+ 
+Andreas Kemnade (7):
+  dt-bindings: mfd: rn5t618: Document optional property interrupts
+  mfd: rn5t618: add IRQ support
+  mfd: rn5t618: add RTC related registers
+  mfd: rn5t618: add more subdevices
+  rtc: rc5t619: add Ricoh RC5T619 RTC driver
+  iio: adc: rn5t618: Add ADC driver for RN5T618/RC5T619
+  mfd: rn5t618: cleanup i2c_device_id
+
+ .../devicetree/bindings/mfd/rn5t618.txt       |   4 +
+ drivers/iio/adc/Kconfig                       |  10 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/rn5t618-adc.c                 | 256 ++++++++++
+ drivers/mfd/Kconfig                           |   1 +
+ drivers/mfd/rn5t618.c                         | 119 ++++-
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-rc5t619.c                     | 444 ++++++++++++++++++
+ include/linux/mfd/rn5t618.h                   |  26 +
+ 10 files changed, 862 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/iio/adc/rn5t618-adc.c
+ create mode 100644 drivers/rtc/rtc-rc5t619.c
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
+
