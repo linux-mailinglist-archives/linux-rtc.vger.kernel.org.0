@@ -2,29 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B33217B357
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 02:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A75F17B358
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 02:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgCFBAM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Mar 2020 20:00:12 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:34877 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726565AbgCFBAM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Mar 2020 20:00:12 -0500
+        id S1726209AbgCFBBI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Mar 2020 20:01:08 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:38271 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgCFBBI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Mar 2020 20:01:08 -0500
+X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 29E60240004;
-        Fri,  6 Mar 2020 01:00:10 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id E03C420005;
+        Fri,  6 Mar 2020 01:01:05 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] rtc: au1xxx: switch to rtc_time64_to_tm/rtc_tm_to_time64
-Date:   Fri,  6 Mar 2020 01:59:58 +0100
-Message-Id: <20200306005958.39203-4-alexandre.belloni@bootlin.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: ab8500: switch to rtc_time64_to_tm/rtc_tm_to_time64
+Date:   Fri,  6 Mar 2020 02:01:01 +0100
+Message-Id: <20200306010101.39517-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200306005958.39203-1-alexandre.belloni@bootlin.com>
-References: <20200306005958.39203-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -36,31 +37,58 @@ Call the 64bit versions of rtc_tm time conversion.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-au1xxx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-ab8500.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/rtc/rtc-au1xxx.c b/drivers/rtc/rtc-au1xxx.c
-index e186fb5cfffd..791bebcb6f47 100644
---- a/drivers/rtc/rtc-au1xxx.c
-+++ b/drivers/rtc/rtc-au1xxx.c
-@@ -34,7 +34,7 @@ static int au1xtoy_rtc_read_time(struct device *dev, struct rtc_time *tm)
+diff --git a/drivers/rtc/rtc-ab8500.c b/drivers/rtc/rtc-ab8500.c
+index 8492ffed4ca6..3d60f3283f11 100644
+--- a/drivers/rtc/rtc-ab8500.c
++++ b/drivers/rtc/rtc-ab8500.c
+@@ -100,7 +100,7 @@ static int ab8500_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	secs =	secs / COUNTS_PER_SEC;
+ 	secs =	secs + (mins * 60);
  
- 	t = alchemy_rdsys(AU1000_SYS_TOYREAD);
+-	rtc_time_to_tm(secs, tm);
++	rtc_time64_to_tm(secs, tm);
+ 	return 0;
+ }
  
--	rtc_time_to_tm(t, tm);
-+	rtc_time64_to_tm(t, tm);
+@@ -110,7 +110,7 @@ static int ab8500_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	unsigned char buf[ARRAY_SIZE(ab8500_rtc_time_regs)];
+ 	unsigned long no_secs, no_mins, secs = 0;
+ 
+-	rtc_tm_to_time(tm, &secs);
++	secs = rtc_tm_to_time64(tm);
+ 
+ 	no_mins = secs / 60;
+ 
+@@ -168,7 +168,7 @@ static int ab8500_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	mins = (buf[0] << 16) | (buf[1] << 8) | (buf[2]);
+ 	secs = mins * 60;
+ 
+-	rtc_time_to_tm(secs, &alarm->time);
++	rtc_time64_to_tm(secs, &alarm->time);
  
  	return 0;
  }
-@@ -43,7 +43,7 @@ static int au1xtoy_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
- 	unsigned long t;
+@@ -188,7 +188,7 @@ static int ab8500_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	struct rtc_time curtm;
  
--	rtc_tm_to_time(tm, &t);
-+	t = rtc_tm_to_time64(tm);
+ 	/* Get the number of seconds since 1970 */
+-	rtc_tm_to_time(&alarm->time, &secs);
++	secs = rtc_tm_to_time64(&alarm->time);
  
- 	alchemy_wrsys(t, AU1000_SYS_TOYWRITE);
- 
+ 	/*
+ 	 * Check whether alarm is set less than 1min.
+@@ -196,7 +196,7 @@ static int ab8500_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	 * return -EINVAL, so UIE EMUL can take it up, incase of UIE_ON
+ 	 */
+ 	ab8500_rtc_read_time(dev, &curtm); /* Read current time */
+-	rtc_tm_to_time(&curtm, &cursec);
++	cursec = rtc_tm_to_time64(&curtm);
+ 	if ((secs - cursec) < 59) {
+ 		dev_dbg(dev, "Alarm less than 1 minute not supported\r\n");
+ 		return -EINVAL;
 -- 
 2.24.1
 
