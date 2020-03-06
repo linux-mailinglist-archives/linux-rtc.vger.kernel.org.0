@@ -2,26 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 377E817B7AB
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FE517B7A8
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726185AbgCFHoL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S1726237AbgCFHoL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Fri, 6 Mar 2020 02:44:11 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:46619 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726129AbgCFHoK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:44:10 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:60681 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725853AbgCFHoL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:44:11 -0500
+X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 84633200004;
-        Fri,  6 Mar 2020 07:44:07 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 8E280E0004;
+        Fri,  6 Mar 2020 07:44:09 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] rtc: mpc5121: set range
-Date:   Fri,  6 Mar 2020 08:44:02 +0100
-Message-Id: <20200306074404.58909-3-alexandre.belloni@bootlin.com>
+Subject: [PATCH 4/4] rtc: mpc5121: switch to rtc_time64_to_tm/rtc_tm_to_time64
+Date:   Fri,  6 Mar 2020 08:44:03 +0100
+Message-Id: <20200306074404.58909-4-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200306074404.58909-1-alexandre.belloni@bootlin.com>
 References: <20200306074404.58909-1-alexandre.belloni@bootlin.com>
@@ -36,42 +37,45 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The datasheet states that 4052 is the maximum value for year. However, the
-mpc5121 read_time and set_time function abuse the target time register
-instead of using the broken down time so it is limited to 2106.
+Call the 64bit versions of rtc_tm time conversion.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-mpc5121.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/rtc/rtc-mpc5121.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/rtc/rtc-mpc5121.c b/drivers/rtc/rtc-mpc5121.c
-index 845212fd1e33..5507f1847f7c 100644
+index 5507f1847f7c..3040844129ce 100644
 --- a/drivers/rtc/rtc-mpc5121.c
 +++ b/drivers/rtc/rtc-mpc5121.c
-@@ -352,6 +352,8 @@ static int mpc5121_rtc_probe(struct platform_device *op)
+@@ -111,7 +111,7 @@ static int mpc5121_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	 */
+ 	now = in_be32(&regs->actual_time) + in_be32(&regs->target_time);
  
- 	rtc->rtc->ops = &mpc5200_rtc_ops;
- 	rtc->rtc->uie_unsupported = 1;
-+	rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
-+	rtc->rtc->range_max = 65733206399ULL; /* 4052-12-31 23:59:59 */
+-	rtc_time_to_tm(now, tm);
++	rtc_time64_to_tm(now, tm);
  
- 	if (of_device_is_compatible(op->dev.of_node, "fsl,mpc5121-rtc")) {
- 		u32 ka;
-@@ -362,6 +364,13 @@ static int mpc5121_rtc_probe(struct platform_device *op)
- 			out_be32(&rtc->regs->keep_alive, ka);
- 		}
- 		rtc->rtc->ops = &mpc5121_rtc_ops;
-+		/*
-+		 * This is a limitation of the driver that abuses the target
-+		 * time register, the actual maximum year for the mpc5121 is
-+		 * also 4052.
-+		 */
-+		rtc->rtc->range_min = 0;
-+		rtc->rtc->range_max = U32_MAX;
- 	}
+ 	/*
+ 	 * update second minute hour registers
+@@ -126,16 +126,14 @@ static int mpc5121_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct mpc5121_rtc_data *rtc = dev_get_drvdata(dev);
+ 	struct mpc5121_rtc_regs __iomem *regs = rtc->regs;
+-	int ret;
+ 	unsigned long now;
  
- 	err = rtc_register_device(rtc->rtc);
+ 	/*
+ 	 * The actual_time register is read only so we write the offset
+ 	 * between it and linux time to the target_time register.
+ 	 */
+-	ret = rtc_tm_to_time(tm, &now);
+-	if (ret == 0)
+-		out_be32(&regs->target_time, now - in_be32(&regs->actual_time));
++	now = rtc_tm_to_time64(tm);
++	out_be32(&regs->target_time, now - in_be32(&regs->actual_time));
+ 
+ 	/*
+ 	 * update second minute hour registers
 -- 
 2.24.1
 
