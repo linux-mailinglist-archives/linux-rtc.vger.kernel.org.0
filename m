@@ -2,80 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FE517B7A8
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12C817B7C4
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726237AbgCFHoL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Mar 2020 02:44:11 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:60681 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbgCFHoL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:44:11 -0500
-X-Originating-IP: 86.202.105.35
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 8E280E0004;
-        Fri,  6 Mar 2020 07:44:09 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] rtc: mpc5121: switch to rtc_time64_to_tm/rtc_tm_to_time64
-Date:   Fri,  6 Mar 2020 08:44:03 +0100
-Message-Id: <20200306074404.58909-4-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200306074404.58909-1-alexandre.belloni@bootlin.com>
-References: <20200306074404.58909-1-alexandre.belloni@bootlin.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: yes
-X-Spam-Level: **************************
-X-GND-Spam-Score: 400
-X-GND-Status: SPAM
+        id S1725923AbgCFHxK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Mar 2020 02:53:10 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51490 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725908AbgCFHxJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:53:09 -0500
+Received: by mail-wm1-f65.google.com with SMTP id a132so1256614wme.1
+        for <linux-rtc@vger.kernel.org>; Thu, 05 Mar 2020 23:53:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=M2N76HSdO2AKrxhSY/D4yXqAwmp+7xWxrk33JmiX+pc=;
+        b=xfpoa28lJrSVhMdRpBko/Y5nceCuKhbj5I/+bAxre7oBTCfeMonRyQv6uvUvhbjEP1
+         FhPNqoKb8pOCbMYux6/Qmed72a3e/UCzQzyAMz1ucd3fcEhlo0A+d3XiKJmBuYDJqM6U
+         hUOJRBs6rchDz5xCdOh5hA6J1i1ThU31flFC/o0vxqXEMJbAxYVQOh6wXfCYROnMbXU7
+         tdsmUtgCvfEjQKLiVLGKBkv52u3f6EjtvJ5tvIqpp0vhd7WS4Y2YtihewAgzn9pm9miL
+         rojEEcCC5ScIjugqoLc3wAemTYA64NlO4NJzyupetKy4ix6mxXBEiH1eBKr1bSwZsiwB
+         3e3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=M2N76HSdO2AKrxhSY/D4yXqAwmp+7xWxrk33JmiX+pc=;
+        b=hzHQebJl+dEJuUoCmnYbuV1/PfiI7/41O5fkfDe9OGwi54PpMgZZksbp/OVwMGztuG
+         QS6MmOH+5JaCcqi2iD4u+fM9eT3hMdoN9irXs8TbqunLoNPaU+1i+R/qvei9oYMUZTxD
+         HVx2mUxoKGa6x0mecyqDpb9ThbMIz0WsC55dxKHDygKcyt1dRQlMYzbIuSjnw4eTSirq
+         6H6L/LbHp7gTob0fnpzzC8xCMb4CpflFBNRsIpLnJut8DQJKb+gwBE3f50lKT6shYoZB
+         wauL5IN4RvkZpAMveYe0G1UEUl802oIlvNCciSSe5874oufue1uSIWGM6u1qgzosgtbo
+         LPDw==
+X-Gm-Message-State: ANhLgQ1sjsWEhxG4jojWWVg5QYMOSrA5On13xFJjyWbyjBJYqdcIelHc
+        Tx/pWIdMCjjea/4QT+omjyTHOQ==
+X-Google-Smtp-Source: ADFU+vthxeXljgB8Lwz7dXuVcROQRPl46OEPlESn2K/Hne5Kko6Kt92tt8v3fQXREFIZb3sinU+X/w==
+X-Received: by 2002:a1c:a908:: with SMTP id s8mr2602908wme.133.1583481188039;
+        Thu, 05 Mar 2020 23:53:08 -0800 (PST)
+Received: from localhost.localdomain ([51.15.160.169])
+        by smtp.googlemail.com with ESMTPSA id f17sm27152245wrm.3.2020.03.05.23.53.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 05 Mar 2020 23:53:07 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        rafael.j.wysocki@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 1/2] PNP: constify driver name
+Date:   Fri,  6 Mar 2020 07:53:00 +0000
+Message-Id: <1583481181-22972-1-git-send-email-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Call the 64bit versions of rtc_tm time conversion.
+struct pnp_driver has name set as char* instead of const char* like platform_driver, pci_driver, usb_driver, etc...
+Let's unify a bit by setting name as const char*.
+Furthermore, all users of this structures set name from already const
+data.
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/rtc/rtc-mpc5121.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ include/linux/pnp.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-mpc5121.c b/drivers/rtc/rtc-mpc5121.c
-index 5507f1847f7c..3040844129ce 100644
---- a/drivers/rtc/rtc-mpc5121.c
-+++ b/drivers/rtc/rtc-mpc5121.c
-@@ -111,7 +111,7 @@ static int mpc5121_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	 */
- 	now = in_be32(&regs->actual_time) + in_be32(&regs->target_time);
+diff --git a/include/linux/pnp.h b/include/linux/pnp.h
+index 3b12fd28af78..b18dca67253d 100644
+--- a/include/linux/pnp.h
++++ b/include/linux/pnp.h
+@@ -379,7 +379,7 @@ struct pnp_id {
+ };
  
--	rtc_time_to_tm(now, tm);
-+	rtc_time64_to_tm(now, tm);
- 
- 	/*
- 	 * update second minute hour registers
-@@ -126,16 +126,14 @@ static int mpc5121_rtc_set_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct mpc5121_rtc_data *rtc = dev_get_drvdata(dev);
- 	struct mpc5121_rtc_regs __iomem *regs = rtc->regs;
--	int ret;
- 	unsigned long now;
- 
- 	/*
- 	 * The actual_time register is read only so we write the offset
- 	 * between it and linux time to the target_time register.
- 	 */
--	ret = rtc_tm_to_time(tm, &now);
--	if (ret == 0)
--		out_be32(&regs->target_time, now - in_be32(&regs->actual_time));
-+	now = rtc_tm_to_time64(tm);
-+	out_be32(&regs->target_time, now - in_be32(&regs->actual_time));
- 
- 	/*
- 	 * update second minute hour registers
+ struct pnp_driver {
+-	char *name;
++	const char *name;
+ 	const struct pnp_device_id *id_table;
+ 	unsigned int flags;
+ 	int (*probe) (struct pnp_dev *dev, const struct pnp_device_id *dev_id);
 -- 
 2.24.1
 
