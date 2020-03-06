@@ -2,28 +2,29 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1D817B342
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 01:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E4C17B344
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 01:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgCFA6Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Mar 2020 19:58:16 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:57303 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgCFA6Q (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Mar 2020 19:58:16 -0500
+        id S1726178AbgCFA6U (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Mar 2020 19:58:20 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41449 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726958AbgCFA6S (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Mar 2020 19:58:18 -0500
+X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 96059200003;
-        Fri,  6 Mar 2020 00:58:14 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id B2565E0004;
+        Fri,  6 Mar 2020 00:58:15 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] rtc: pl031: set range
-Date:   Fri,  6 Mar 2020 01:58:08 +0100
-Message-Id: <20200306005809.38530-2-alexandre.belloni@bootlin.com>
+Subject: [PATCH 3/3] rtc: pl031: switch to rtc_time64_to_tm/rtc_tm_to_time64
+Date:   Fri,  6 Mar 2020 01:58:09 +0100
+Message-Id: <20200306005809.38530-3-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200306005809.38530-1-alexandre.belloni@bootlin.com>
 References: <20200306005809.38530-1-alexandre.belloni@bootlin.com>
@@ -34,62 +35,85 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The PL031 and ST v1 RTC are 32bit seconds counters. STv2 is a BCD RTC
-apparently going from 0000 to 9999, hopefully handling the leap days
-properly until then.
+Call the 64bit versions of rtc_tm time conversion to allow extending
+support after 2106 and properly supporting the STv2 range.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pl031.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/rtc/rtc-pl031.c | 27 +++++++--------------------
+ 1 file changed, 7 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pl031.c b/drivers/rtc/rtc-pl031.c
-index 2e8e019a6e4c..07dc0f264100 100644
+index 07dc0f264100..40d7450a1ce4 100644
 --- a/drivers/rtc/rtc-pl031.c
 +++ b/drivers/rtc/rtc-pl031.c
-@@ -80,6 +80,8 @@ struct pl031_vendor_data {
- 	bool clockwatch;
- 	bool st_weekday;
- 	unsigned long irqflags;
-+	time64_t range_min;
-+	timeu64_t range_max;
- };
+@@ -125,11 +125,9 @@ static int pl031_stv2_tm_to_time(struct device *dev,
+ 		return -EINVAL;
+ 	} else if (wday == -1) {
+ 		/* wday is not provided, calculate it here */
+-		unsigned long time;
+ 		struct rtc_time calc_tm;
  
- struct pl031_local {
-@@ -375,6 +377,8 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
- 		return PTR_ERR(ldata->rtc);
+-		rtc_tm_to_time(tm, &time);
+-		rtc_time_to_tm(time, &calc_tm);
++		rtc_time64_to_tm(rtc_tm_to_time64(tm), &calc_tm);
+ 		wday = calc_tm.tm_wday;
+ 	}
  
- 	ldata->rtc->ops = ops;
-+	ldata->rtc->range_min = vendor->range_min;
-+	ldata->rtc->range_max = vendor->range_max;
+@@ -246,30 +244,25 @@ static int pl031_read_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct pl031_local *ldata = dev_get_drvdata(dev);
  
- 	ret = rtc_register_device(ldata->rtc);
- 	if (ret)
-@@ -405,6 +409,7 @@ static struct pl031_vendor_data arm_pl031 = {
- 		.set_alarm = pl031_set_alarm,
- 		.alarm_irq_enable = pl031_alarm_irq_enable,
- 	},
-+	.range_max = U32_MAX,
- };
+-	rtc_time_to_tm(readl(ldata->base + RTC_DR), tm);
++	rtc_time64_to_tm(readl(ldata->base + RTC_DR), tm);
  
- /* The First ST derivative */
-@@ -418,6 +423,7 @@ static struct pl031_vendor_data stv1_pl031 = {
- 	},
- 	.clockwatch = true,
- 	.st_weekday = true,
-+	.range_max = U32_MAX,
- };
+ 	return 0;
+ }
  
- /* And the second ST derivative */
-@@ -438,6 +444,8 @@ static struct pl031_vendor_data stv2_pl031 = {
- 	 * remove IRQF_COND_SUSPEND
- 	 */
- 	.irqflags = IRQF_SHARED | IRQF_COND_SUSPEND,
-+	.range_min = RTC_TIMESTAMP_BEGIN_0000,
-+	.range_max = RTC_TIMESTAMP_END_9999,
- };
+ static int pl031_set_time(struct device *dev, struct rtc_time *tm)
+ {
+-	unsigned long time;
+ 	struct pl031_local *ldata = dev_get_drvdata(dev);
+-	int ret;
  
- static const struct amba_id pl031_ids[] = {
+-	ret = rtc_tm_to_time(tm, &time);
+-
+-	if (ret == 0)
+-		writel(time, ldata->base + RTC_LR);
++	writel(rtc_tm_to_time64(tm), ldata->base + RTC_LR);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int pl031_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ {
+ 	struct pl031_local *ldata = dev_get_drvdata(dev);
+ 
+-	rtc_time_to_tm(readl(ldata->base + RTC_MR), &alarm->time);
++	rtc_time64_to_tm(readl(ldata->base + RTC_MR), &alarm->time);
+ 
+ 	alarm->pending = readl(ldata->base + RTC_RIS) & RTC_BIT_AI;
+ 	alarm->enabled = readl(ldata->base + RTC_IMSC) & RTC_BIT_AI;
+@@ -280,16 +273,10 @@ static int pl031_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ static int pl031_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ {
+ 	struct pl031_local *ldata = dev_get_drvdata(dev);
+-	unsigned long time;
+-	int ret;
+ 
+-	ret = rtc_tm_to_time(&alarm->time, &time);
+-	if (ret == 0) {
+-		writel(time, ldata->base + RTC_MR);
+-		pl031_alarm_irq_enable(dev, alarm->enabled);
+-	}
++	writel(rtc_tm_to_time64(&alarm->time), ldata->base + RTC_MR);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static int pl031_remove(struct amba_device *adev)
 -- 
 2.24.1
 
