@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EB217B77B
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BAE17B77D
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Mar 2020 08:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgCFHfi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Mar 2020 02:35:38 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:57235 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgCFHfh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:35:37 -0500
+        id S1725941AbgCFHfz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Mar 2020 02:35:55 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:48947 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725869AbgCFHfz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Mar 2020 02:35:55 -0500
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 1918D20000C;
-        Fri,  6 Mar 2020 07:35:36 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 04A8A240002;
+        Fri,  6 Mar 2020 07:35:52 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Support Opensource <support.opensource@diasemi.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH 1/3] rtc: da9052: convert to devm_rtc_allocate_device
-Date:   Fri,  6 Mar 2020 08:35:33 +0100
-Message-Id: <20200306073535.57424-1-alexandre.belloni@bootlin.com>
+Date:   Fri,  6 Mar 2020 08:35:45 +0100
+Message-Id: <20200306073548.57579-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
