@@ -2,104 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEAB17E359
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Mar 2020 16:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE34B17E4FC
+	for <lists+linux-rtc@lfdr.de>; Mon,  9 Mar 2020 17:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727095AbgCIPSK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Mar 2020 11:18:10 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:40943 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726922AbgCIPSJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Mar 2020 11:18:09 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id BB9E322050;
-        Mon,  9 Mar 2020 11:18:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 09 Mar 2020 11:18:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=FzkSUNOJXK4eu8BOSDV7DOU/ZSv
-        0p8/ceeRaBi0OHNk=; b=mZjuohJ0nrVUq8Ue73mun2mtyARxgeJ/pndzyv8JVoq
-        LLGkv8gIoDpQWf9UIDMKntzoe4ZexFB43zTNvXtGLioHPhijF3FPUtaDAmnnf3UX
-        WAVwsMaH2V5m24509WN/OKYNSfSKDKu8GVzG2drbWNUpc04mnzOaSq2lj2J7XMge
-        8Y/UaH0ccDs6oC+xFPI2n491EXkRpEshZUij3YU/X12ZWlLFP2F3MWoM/IG2vcIG
-        b2qPqafr1n25DTUD6H8sYwqBpwFhR+CqDhOQubwHgY6oWOBtJuCcGMgeKlTGLcIo
-        p2iBrjXVZr6ZAOJP2xm35t3EyApvzDvhWoKkqfj2hqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=FzkSUN
-        OJXK4eu8BOSDV7DOU/ZSv0p8/ceeRaBi0OHNk=; b=A/PofnUFdfVssU2mni2W9H
-        7mnoSAT49qAooyCQVmUz+Cl42YTZU1JZERaZCdIqodYkLsdMS8IoLAAlFvZSASyj
-        9bDTSlonWFG2Q56WfNxysMbi1aR21Iza2m69qbsvi91RtIOLZxdP/RFmj3w9Hbr7
-        ApPni+iJY5xds7FKSWErx5YyVPRkEor+HpXgBXWTfSUF5Bx1trrFJQZFuIK1Q5YV
-        eSpGIpRUGXssK4crjdQHu2szfcVnKoo5ewBwh2Jtteilq4VV73ZEoD+/El77ZAtE
-        Qcv1DwI2BBw7keImgiSz4BIdiXPzy5iVoz2izn0oaERaozRlSZS0UJ2/6F5pq7+A
-        ==
-X-ME-Sender: <xms:MF5mXr180yGr00Kr_31--sZ11gGHmIwUmROBtRXaV9Yr-SRyuqnDQQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddukedgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltd
-    drkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghi
-    lhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:MF5mXkWdGVq1UT1bBxS1jkvlAh__HZ4myBbz4np9x0C676ie2lrZYA>
-    <xmx:MF5mXhWQ-M6iLmYQXobJM0O8J3Z-dlhsr5XUXP-8mX_YV3qTAMUSdA>
-    <xmx:MF5mXnFWQ8WVdg27LQrhLc17QJJ6oNnFrU-OnznAdkQTZvqaFeKOCA>
-    <xmx:MF5mXgUrUSNa6IpyrNAGFYeYHfV5k2i-0hwIypr3y7mqm3vIdqKdvQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EFFB4328005D;
-        Mon,  9 Mar 2020 11:18:07 -0400 (EDT)
-Date:   Mon, 9 Mar 2020 16:18:06 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     wens@csie.org, robh+dt@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: allwinner: h6: Move ext. oscillator
- to board DTs
-Message-ID: <20200309151806.7sxgis4akb6zdmuv@gilmour.lan>
-References: <20200308135849.106333-1-jernej.skrabec@siol.net>
- <20200308135849.106333-3-jernej.skrabec@siol.net>
+        id S1727180AbgCIQrQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 9 Mar 2020 12:47:16 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:34731 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727083AbgCIQrQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Mar 2020 12:47:16 -0400
+X-Originating-IP: 86.202.105.35
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9AEAFE0002;
+        Mon,  9 Mar 2020 16:47:05 +0000 (UTC)
+Date:   Mon, 9 Mar 2020 17:47:05 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Anson Huang <Anson.Huang@nxp.com>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        dmitry.torokhov@gmail.com, a.zummo@towertech.it,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, wim@linux-watchdog.org,
+        daniel.baluta@nxp.com, gregkh@linuxfoundation.org,
+        linux@rempel-privat.de, tglx@linutronix.de,
+        m.felsch@pengutronix.de, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, ronald@innovation.ch, krzk@kernel.org,
+        robh@kernel.org, leonard.crestez@nxp.com, aisheng.dong@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Message-ID: <20200309164705.GG3563@piout.net>
+References: <1583714300-19085-1-git-send-email-Anson.Huang@nxp.com>
+ <20200309110609.GE3563@piout.net>
+ <1ad38cdb-bf0d-1c19-b233-15a5857bd6fa@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="elcgw7ieqvmk4fns"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200308135849.106333-3-jernej.skrabec@siol.net>
+In-Reply-To: <1ad38cdb-bf0d-1c19-b233-15a5857bd6fa@roeck-us.net>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 09/03/2020 06:27:06-0700, Guenter Roeck wrote:
+> On 3/9/20 4:06 AM, Alexandre Belloni wrote:
+> > On 09/03/2020 08:38:14+0800, Anson Huang wrote:
+> >> Add stubs for those i.MX SCU APIs to make those modules depending
+> >> on IMX_SCU can pass build when COMPILE_TEST is enabled.
+> >>
+> >> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> >> ---
+> >> Changes since V2:
+> >> 	- return error for stubs.
+> > 
+> > I'm not sure why you are sending v3 with the stubs as we determined that
+> > 2/7 is enough to compile all the drivers with COMPILE_TEST.
+> > 
+> > 
+> 2/7 alone is not sufficient. With only 2/7, one can explicitly configure
+> IMX_SCU=n, COMPILE_TEST=y, and get lots of compile failures. Granted,
+> one should not do that, but 0day does (I don't know if that is the result
+> of RANDCONFIG), and I am not looking forward having to deal with the
+> fallout.
+> 
 
---elcgw7ieqvmk4fns
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+How would that be possible if the drivers all depend on IMX_SCU?
 
-On Sun, Mar 08, 2020 at 02:58:49PM +0100, Jernej Skrabec wrote:
-> It turns out that not all H6 boards have external 32kHz oscillator.
-> Currently the only one known such H6 board is Tanix TX6.
->
-> Move external oscillator node from common H6 dtsi to board specific dts
-> files where present.
->
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 
-Applied, thanks
-
-Maxime
-
---elcgw7ieqvmk4fns
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXmZeLgAKCRDj7w1vZxhR
-xellAP97yFvv1suUpEeMYtlmRBIx/T+Noww6myEv6ikcflh4ZwD9E0I1jVOnDbbP
-S3hbh1vdMREygEhT05r0c3C4QcQ26A0=
-=+m/H
------END PGP SIGNATURE-----
-
---elcgw7ieqvmk4fns--
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
