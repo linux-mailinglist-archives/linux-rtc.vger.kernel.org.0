@@ -2,271 +2,220 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A3417F482
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Mar 2020 11:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E3F1808F2
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Mar 2020 21:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726199AbgCJKLB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Mar 2020 06:11:01 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:39143 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726445AbgCJKK4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Mar 2020 06:10:56 -0400
-X-UUID: 1efd6bfaf6fa45bc82737a5b96f885fd-20200310
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=bMAGFYIyebf4WTfeSqrPodJzjUX1SU+zN1FTUaXXPlA=;
-        b=FMRfHMwLTLELlAhsiT7xaK5UdncjIHyKji8FYLkfZyqcegn+rMbDB8ze5Y6hHPiAu9WadfCL7n2UiNmtepnjM3uKAcey3ZY83uUshDEdC2w1nBclIZ/UIo4z+TggCNJ00aZN6roNAz/7rMvX3R6UN7Nq4doI9v89o/C5cryxXnA=;
-X-UUID: 1efd6bfaf6fa45bc82737a5b96f885fd-20200310
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 818341364; Tue, 10 Mar 2020 18:10:46 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 10 Mar 2020 18:06:19 +0800
-Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 10 Mar 2020 18:07:59 +0800
-From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        id S1726265AbgCJURK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Mar 2020 16:17:10 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40370 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgCJURJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Mar 2020 16:17:09 -0400
+Received: by mail-oi1-f195.google.com with SMTP id y71so9900942oia.7;
+        Tue, 10 Mar 2020 13:17:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TepfMU12ngaZGfWbNFvmwR9hVezQFj2Now5HdZrqyu4=;
+        b=MAlWxbQMNLWWC9P8QMAlwbnTXeUHr+B8wCFlherpg0AzyPeN+KOnhJlFLYMpkDPpOU
+         58T7gWcw9ypogPyHrBYXjZCain/0ZsoVdDVzemMyVMfvNjsoUFdk1ubHFad3oH+9DHyH
+         ahXD5IdaUIPjhGrST2jJMsq0SxbjBE6iibughMY8QBW9fOWvCldrHzReRZB5qypmXwyI
+         MSH14uSKsvs+Qg9s7gZjxfWkrVsQC0S617QkHwP6aRMvw6UxaOZDNwpF3gpD5+RkEKRI
+         d3v47nyrllbqkDHqMBY3V++WclDcrt77o/K/AP4PQ57IvE+GL2aZRRF1MD3mvdNjYnK+
+         wn3A==
+X-Gm-Message-State: ANhLgQ16CTog/bVzNBgs/vhXaMg1iSrYK/BM2Ifqu1c00UJC5nXpq1Sl
+        PyL6TFpezpsZOd0y0PktWw==
+X-Google-Smtp-Source: ADFU+vvZi3Wc3khoMI8YsXkDStp3Ap7La8yZEb6cDvR9LqlLDGYFEkbj63tHb9TF0rmn3zaaorK9tQ==
+X-Received: by 2002:aca:ac46:: with SMTP id v67mr2512370oie.62.1583871428243;
+        Tue, 10 Mar 2020 13:17:08 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id h6sm7762867otq.63.2020.03.10.13.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2020 13:17:07 -0700 (PDT)
+Received: (nullmailer pid 30625 invoked by uid 1000);
+        Tue, 10 Mar 2020 20:17:06 -0000
+Date:   Tue, 10 Mar 2020 15:17:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>
-Subject: [PATCH v9 5/5] arm64: dts: mt6358: add PMIC MT6358 related nodes
-Date:   Tue, 10 Mar 2020 18:10:40 +0800
-Message-ID: <1583835040-19157-6-git-send-email-hsin-hsiung.wang@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1583835040-19157-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-References: <1583835040-19157-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
+        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: rtc: Convert and update jz4740-rtc doc
+ to YAML
+Message-ID: <20200310201706.GA25562@bogus>
+References: <20200302213953.28834-1-paul@crapouillou.net>
+ <20200302213953.28834-3-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: D523D2E0CC1E0FBDA5C60ADE27BC0F776544FA7F16E14F6FD80B782FBD412CAF2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302213953.28834-3-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-YWRkIFBNSUMgTVQ2MzU4IHJlbGF0ZWQgbm9kZXMgd2hpY2ggaXMgZm9yIE1UODE4MyBwbGF0Zm9y
-bQ0KDQpTaWduZWQtb2ZmLWJ5OiBIc2luLUhzaXVuZyBXYW5nIDxoc2luLWhzaXVuZy53YW5nQG1l
-ZGlhdGVrLmNvbT4NCi0tLQ0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU4LmR0
-c2kgICAgfCAzNTggKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KIGFyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTgzLWV2Yi5kdHMgfCAgIDEgKw0KIDIgZmlsZXMgY2hhbmdlZCwg
-MzU5IGluc2VydGlvbnMoKykNCiBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDYzNTguZHRzaQ0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDYzNTguZHRzaSBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2
-MzU4LmR0c2kNCm5ldyBmaWxlIG1vZGUgMTAwNjQ0DQppbmRleCAwMDAwMDAwLi4yYWZlYmQ3DQot
-LS0gL2Rldi9udWxsDQorKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NjM1OC5k
-dHNpDQpAQCAtMCwwICsxLDM1OCBAQA0KKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BM
-LTIuMCBPUiBNSVQpDQorLyoNCisgKiBDb3B5cmlnaHQgKGMpIDIwMTkgTWVkaWFUZWsgSW5jLg0K
-KyAqLw0KKw0KKyZwd3JhcCB7DQorCXBtaWM6IG10NjM1OCB7DQorCQljb21wYXRpYmxlID0gIm1l
-ZGlhdGVrLG10NjM1OCI7DQorCQlpbnRlcnJ1cHQtY29udHJvbGxlcjsNCisJCWludGVycnVwdC1w
-YXJlbnQgPSA8JnBpbz47DQorCQlpbnRlcnJ1cHRzID0gPDE4MiBJUlFfVFlQRV9MRVZFTF9ISUdI
-PjsNCisJCSNpbnRlcnJ1cHQtY2VsbHMgPSA8Mj47DQorDQorCQltdDYzNThjb2RlYzogbXQ2MzU4
-Y29kZWMgew0KKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2MzU4LXNvdW5kIjsNCisJCX07
-DQorDQorCQltdDYzNThyZWd1bGF0b3I6IG10NjM1OHJlZ3VsYXRvciB7DQorCQkJbXQ2MzU4X3Zk
-cmFtMV9yZWc6IGJ1Y2tfdmRyYW0xIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidmRyYW0xIjsN
-CisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LW1heC1taWNyb3ZvbHQgPSA8MjA4NzUwMD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0g
-PDEyNTAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCQlyZWd1bGF0b3ItYWxsb3dlZC1tb2RlcyA9IDwwIDE+
-Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Zjb3JlX3JlZzogYnVja192Y29yZSB7DQorCQkJCXJl
-Z3VsYXRvci1uYW1lID0gInZjb3JlIjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8
-NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJ
-CXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJh
-bXAtZGVsYXkgPSA8MjAwPjsNCisJCQkJcmVndWxhdG9yLWFsd2F5cy1vbjsNCisJCQkJcmVndWxh
-dG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92cGFfcmVn
-OiBidWNrX3ZwYSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZwYSI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDUwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0
-ID0gPDM2NTAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw1MDAwMD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItYWxs
-b3dlZC1tb2RlcyA9IDwwIDE+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Zwcm9jMTFfcmVnOiBi
-dWNrX3Zwcm9jMTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2cHJvYzExIjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNy
-b3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0K
-KwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjAwPjsNCisJCQkJcmVndWxhdG9y
-LWFsd2F5cy1vbjsNCisJCQkJcmVndWxhdG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9
-Ow0KKw0KKwkJCW10NjM1OF92cHJvYzEyX3JlZzogYnVja192cHJvYzEyIHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidnByb2MxMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDUw
-MDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KKwkJCQly
-ZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw2MjUwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1w
-LWRlbGF5ID0gPDIwMD47DQorCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQorCQkJCXJlZ3VsYXRv
-ci1hbGxvd2VkLW1vZGVzID0gPDAgMT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmdwdV9yZWc6
-IGJ1Y2tfdmdwdSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZncHUiOw0KKwkJCQlyZWd1bGF0
-b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwxMjkzNzUwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NjI1MD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyMDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWxs
-b3dlZC1tb2RlcyA9IDwwIDE+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzMl9yZWc6IGJ1Y2tf
-dnMyIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnMyIjsNCisJCQkJcmVndWxhdG9yLW1pbi1t
-aWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MjA4
-NzUwMD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDEyNTAwPjsNCisJCQkJcmVndWxh
-dG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0K
-KwkJCX07DQorDQorCQkJbXQ2MzU4X3Ztb2RlbV9yZWc6IGJ1Y2tfdm1vZGVtIHsNCisJCQkJcmVn
-dWxhdG9yLW5hbWUgPSAidm1vZGVtIjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8
-NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJ
-CXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJh
-bXAtZGVsYXkgPSA8OTAwPjsNCisJCQkJcmVndWxhdG9yLWFsd2F5cy1vbjsNCisJCQkJcmVndWxh
-dG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92czFfcmVn
-OiBidWNrX3ZzMSB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZzMSI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDEwMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwyNTg3NTAwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8MTI1MDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MD47DQorCQkJCXJlZ3VsYXRvci1hbHdh
-eXMtb247DQorCQkJfTsNCisNCisJCQltdDYzNThfdmRyYW0yX3JlZzogbGRvX3ZkcmFtMiB7DQor
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZkcmFtMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92
-b2x0ID0gPDYwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE4MDAwMDA+
-Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MzMwMD47DQorCQkJfTsNCisN
-CisJCQltdDYzNThfdnNpbTFfcmVnOiBsZG9fdnNpbTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9
-ICJ2c2ltMSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE3MDAwMDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVu
-YWJsZS1yYW1wLWRlbGF5ID0gPDU0MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmlicl9yZWc6
-IGxkb192aWJyIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidmliciI7DQorCQkJCXJlZ3VsYXRv
-ci1taW4tbWljcm92b2x0ID0gPDEyMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9s
-dCA9IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYwPjsN
-CisJCQl9Ow0KKw0KKwkJCW10NjM1OF92cmYxMl9yZWc6IGxkb192cmYxMiB7DQorCQkJCWNvbXBh
-dGlibGUgPSAicmVndWxhdG9yLWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnJmMTIi
-Ow0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxMjAwMDAwPjsNCisJCQkJcmVndWxh
-dG9yLW1heC1taWNyb3ZvbHQgPSA8MTIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFt
-cC1kZWxheSA9IDwxMjA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZpbzE4X3JlZzogbGRvX3Zp
-bzE4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0
-b3ItbmFtZSA9ICJ2aW8xOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAw
-MDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVn
-dWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MDA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlz
-LW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3Z1c2JfcmVnOiBsZG9fdnVzYiB7DQorCQkJCXJl
-Z3VsYXRvci1uYW1lID0gInZ1c2IiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwz
-MDAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzEwMDAwMD47DQorCQkJ
-CXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3
-YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZjYW1pb19yZWc6IGxkb192Y2FtaW8gew0K
-KwkJCQljb21wYXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZjYW1pbyI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0K
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LWVuYWJsZS1yYW1wLWRlbGF5ID0gPDMyNT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmNhbWRf
-cmVnOiBsZG9fdmNhbWQgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y2FtZCI7DQorCQkJCXJl
-Z3VsYXRvci1taW4tbWljcm92b2x0ID0gPDkwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWlj
-cm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8
-MzI1PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92Y24xOF9yZWc6IGxkb192Y24xOCB7DQorCQkJ
-CWNvbXBhdGlibGUgPSAicmVndWxhdG9yLWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAi
-dmNuMTgiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJ
-cmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFi
-bGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZmZTI4X3JlZzog
-bGRvX3ZmZTI4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQly
-ZWd1bGF0b3ItbmFtZSA9ICJ2ZmUyOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJ
-CQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJCQlt
-dDYzNThfdnNyYW1fcHJvYzExX3JlZzogbGRvX3ZzcmFtX3Byb2MxMSB7DQorCQkJCXJlZ3VsYXRv
-ci1uYW1lID0gInZzcmFtX3Byb2MxMSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0g
-PDUwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItcmFtcC1kZWxheSA9IDw2MjUwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1y
-YW1wLWRlbGF5ID0gPDI0MD47DQorCQkJCXJlZ3VsYXRvci1hbHdheXMtb247DQorCQkJfTsNCisN
-CisJCQltdDYzNThfdmNuMjhfcmVnOiBsZG9fdmNuMjggew0KKwkJCQljb21wYXRpYmxlID0gInJl
-Z3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZjbjI4IjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWlj
-cm92b2x0ID0gPDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8
-MjcwPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92c3JhbV9vdGhlcnNfcmVnOiBsZG9fdnNyYW1f
-b3RoZXJzIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnNyYW1fb3RoZXJzIjsNCisJCQkJcmVn
-dWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNy
-b3ZvbHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0K
-KwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCisJCQkJcmVndWxhdG9y
-LWFsd2F5cy1vbjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92c3JhbV9ncHVfcmVnOiBsZG9fdnNy
-YW1fZ3B1IHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnNyYW1fZ3B1IjsNCisJCQkJcmVndWxh
-dG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3Zv
-bHQgPSA8MTI5Mzc1MD47DQorCQkJCXJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDYyNTA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCisJCQl9Ow0KKw0KKwkJCW10
-NjM1OF92eG8yMl9yZWc6IGxkb192eG8yMiB7DQorCQkJCWNvbXBhdGlibGUgPSAicmVndWxhdG9y
-LWZpeGVkIjsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidnhvMjIiOw0KKwkJCQlyZWd1bGF0b3It
-bWluLW1pY3Jvdm9sdCA9IDwyMjAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQg
-PSA8MjIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwxMjA+Ow0K
-KwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZlZnVzZV9y
-ZWc6IGxkb192ZWZ1c2Ugew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2ZWZ1c2UiOw0KKwkJCQly
-ZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1t
-aWNyb3ZvbHQgPSA8MTkwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9
-IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZhdXgxOF9yZWc6IGxkb192YXV4MTggew0K
-KwkJCQljb21wYXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1l
-ID0gInZhdXgxOCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0K
-KwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9y
-LWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdm1jaF9y
-ZWc6IGxkb192bWNoIHsNCisJCQkJcmVndWxhdG9yLW5hbWUgPSAidm1jaCI7DQorCQkJCXJlZ3Vs
-YXRvci1taW4tbWljcm92b2x0ID0gPDI5MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jv
-dm9sdCA9IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYw
-PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92YmlmMjhfcmVnOiBsZG9fdmJpZjI4IHsNCisJCQkJ
-Y29tcGF0aWJsZSA9ICJyZWd1bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2
-YmlmMjgiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJCQkJ
-cmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFi
-bGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzcmFtX3Byb2Mx
-Ml9yZWc6IGxkb192c3JhbV9wcm9jMTIgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2c3JhbV9w
-cm9jMTIiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw1MDAwMDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxMjkzNzUwPjsNCisJCQkJcmVndWxhdG9yLXJhbXAt
-ZGVsYXkgPSA8NjI1MD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+
-Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZjYW1h
-MV9yZWc6IGxkb192Y2FtYTEgew0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y2FtYTEiOw0KKwkJ
-CQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1h
-eC1taWNyb3ZvbHQgPSA8MzAwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxh
-eSA9IDwzMjU+Ow0KKwkJCX07DQorDQorCQkJbXQ2MzU4X3ZlbWNfcmVnOiBsZG9fdmVtYyB7DQor
-CQkJCXJlZ3VsYXRvci1uYW1lID0gInZlbWMiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9s
-dCA9IDwyOTAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzMwMDAwMD47
-DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw2MD47DQorCQkJfTsNCisNCisJ
-CQltdDYzNThfdmlvMjhfcmVnOiBsZG9fdmlvMjggew0KKwkJCQljb21wYXRpYmxlID0gInJlZ3Vs
-YXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZpbzI4IjsNCisJCQkJcmVndWxh
-dG9yLW1pbi1taWNyb3ZvbHQgPSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92
-b2x0ID0gPDI4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8Mjcw
-PjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1OF92YTEyX3JlZzogbGRvX3ZhMTIgew0KKwkJCQljb21w
-YXRpYmxlID0gInJlZ3VsYXRvci1maXhlZCI7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZhMTIi
-Ow0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxMjAwMDAwPjsNCisJCQkJcmVndWxh
-dG9yLW1heC1taWNyb3ZvbHQgPSA8MTIwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFt
-cC1kZWxheSA9IDwyNzA+Ow0KKwkJCQlyZWd1bGF0b3ItYWx3YXlzLW9uOw0KKwkJCX07DQorDQor
-CQkJbXQ2MzU4X3ZyZjE4X3JlZzogbGRvX3ZyZjE4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1
-bGF0b3ItZml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2cmYxOCI7DQorCQkJCXJlZ3Vs
-YXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jv
-dm9sdCA9IDwxODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDEy
-MD47DQorCQkJfTsNCisNCisJCQltdDYzNThfdmNuMzNfYnRfcmVnOiBsZG9fdmNuMzNfYnQgew0K
-KwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2Y24zM19idCI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWlj
-cm92b2x0ID0gPDMzMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAw
-MDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsN
-CisNCisJCQltdDYzNThfdmNuMzNfd2lmaV9yZWc6IGxkb192Y24zM193aWZpIHsNCisJCQkJcmVn
-dWxhdG9yLW5hbWUgPSAidmNuMzNfd2lmaSI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0
-ID0gPDMzMDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzNTAwMDAwPjsN
-CisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI3MD47DQorCQkJfTsNCisNCisJ
-CQltdDYzNThfdmNhbWEyX3JlZzogbGRvX3ZjYW1hMiB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0g
-InZjYW1hMiI7DQorCQkJCXJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJ
-CQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMDAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVu
-YWJsZS1yYW1wLWRlbGF5ID0gPDMyNT47DQorCQkJfTsNCisNCisJCQltdDYzNThfdm1jX3JlZzog
-bGRvX3ZtYyB7DQorCQkJCXJlZ3VsYXRvci1uYW1lID0gInZtYyI7DQorCQkJCXJlZ3VsYXRvci1t
-aW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KKwkJCQlyZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9
-IDwzMzAwMDAwPjsNCisJCQkJcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDYwPjsNCisJ
-CQl9Ow0KKw0KKwkJCW10NjM1OF92bGRvMjhfcmVnOiBsZG9fdmxkbzI4IHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidmxkbzI4IjsNCisJCQkJcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8Mjgw
-MDAwMD47DQorCQkJCXJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDMwMDAwMDA+Ow0KKwkJCQly
-ZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjcwPjsNCisJCQl9Ow0KKw0KKwkJCW10NjM1
-OF92YXVkMjhfcmVnOiBsZG9fdmF1ZDI4IHsNCisJCQkJY29tcGF0aWJsZSA9ICJyZWd1bGF0b3It
-Zml4ZWQiOw0KKwkJCQlyZWd1bGF0b3ItbmFtZSA9ICJ2YXVkMjgiOw0KKwkJCQlyZWd1bGF0b3It
-bWluLW1pY3Jvdm9sdCA9IDwyODAwMDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQg
-PSA8MjgwMDAwMD47DQorCQkJCXJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNzA+Ow0K
-KwkJCX07DQorDQorCQkJbXQ2MzU4X3ZzaW0yX3JlZzogbGRvX3ZzaW0yIHsNCisJCQkJcmVndWxh
-dG9yLW5hbWUgPSAidnNpbTIiOw0KKwkJCQlyZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAw
-MDAwPjsNCisJCQkJcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MzEwMDAwMD47DQorCQkJCXJl
-Z3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw1NDA+Ow0KKwkJCX07DQorCQl9Ow0KKw0KKwkJ
-bXQ2MzU4cnRjOiBtdDYzNThydGMgew0KKwkJCWNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ2MzU4
-LXJ0YyI7DQorCQl9Ow0KKwl9Ow0KK307DQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9ib290L2R0
-cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0cyBiL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
-bXQ4MTgzLWV2Yi5kdHMNCmluZGV4IDFmYjE5NWMuLjllYjg0ZDcgMTAwNjQ0DQotLS0gYS9hcmNo
-L2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1ldmIuZHRzDQorKysgYi9hcmNoL2FybTY0
-L2Jvb3QvZHRzL21lZGlhdGVrL210ODE4My1ldmIuZHRzDQpAQCAtNyw2ICs3LDcgQEANCiANCiAv
-ZHRzLXYxLzsNCiAjaW5jbHVkZSAibXQ4MTgzLmR0c2kiDQorI2luY2x1ZGUgIm10NjM1OC5kdHNp
-Ig0KIA0KIC8gew0KIAltb2RlbCA9ICJNZWRpYVRlayBNVDgxODMgZXZhbHVhdGlvbiBib2FyZCI7
-DQotLSANCjIuNi40DQo=
+On Mon, Mar 02, 2020 at 06:39:53PM -0300, Paul Cercueil wrote:
+> Convert the jz4740-rtc doc to YAML, and update it to reflect the new
+> changes in the driver:
+> - More compatible strings are specified, with fallbacks if needed,
+> - The vendor-specific properties are now properly prefixed with the
+>   'ingenic,' prefix.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  .../bindings/rtc/ingenic,jz4740-rtc.txt       | 37 --------
+>  .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 87 +++++++++++++++++++
+>  2 files changed, 87 insertions(+), 37 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt b/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
+> deleted file mode 100644
+> index 41c7ae18fd7b..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
+> +++ /dev/null
+> @@ -1,37 +0,0 @@
+> -JZ4740 and similar SoCs real-time clock driver
+> -
+> -Required properties:
+> -
+> -- compatible: One of:
+> -  - "ingenic,jz4740-rtc" - for use with the JZ4740 SoC
+> -  - "ingenic,jz4780-rtc" - for use with the JZ4780 SoC
+> -- reg: Address range of rtc register set
+> -- interrupts: IRQ number for the alarm interrupt
+> -- clocks: phandle to the "rtc" clock
+> -- clock-names: must be "rtc"
+> -
+> -Optional properties:
+> -- system-power-controller: To use this component as the
+> -  system power controller
+> -- reset-pin-assert-time-ms: Reset pin low-level assertion
+> -  time after wakeup (default 60ms; range 0-125ms if RTC clock
+> -  at 32 kHz)
+> -- min-wakeup-pin-assert-time-ms: Minimum wakeup pin assertion
+> -  time (default 100ms; range 0-2s if RTC clock at 32 kHz)
+> -
+> -Example:
+> -
+> -rtc@10003000 {
+> -	compatible = "ingenic,jz4740-rtc";
+> -	reg = <0x10003000 0x40>;
+> -
+> -	interrupt-parent = <&intc>;
+> -	interrupts = <32>;
+> -
+> -	clocks = <&rtc_clock>;
+> -	clock-names = "rtc";
+> -
+> -	system-power-controller;
+> -	reset-pin-assert-time-ms = <60>;
+> -	min-wakeup-pin-assert-time-ms = <100>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> new file mode 100644
+> index 000000000000..c18ed8ac263f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+> @@ -0,0 +1,87 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/ingenic,rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ingenic SoCs Real-Time Clock DT bindings
+> +
+> +maintainers:
+> +  - Paul Cercueil <paul@crapouillou.net>
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +        - ingenic,jz4740-rtc
+> +        - ingenic,jz4760-rtc
+> +      - items:
+> +        - const: ingenic,jz4725b-rtc
+> +        - const: ingenic,jz4740-rtc
+> +      - items:
+> +        - enum:
+> +          - ingenic,jz4770-rtc
+> +          - ingenic,jz4780-rtc
+> +        - const: ingenic,jz4760-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: rtc
+> +
+> +  system-power-controller:
+> +    description: |
+> +      Indicates that the RTC is responsible for powering OFF
+> +      the system.
+> +    type: boolean
+> +
+> +  ingenic,reset-pin-assert-time-ms:
+> +    description: |
+> +      Reset pin low-level assertion time after wakeup
+> +      (assuming RTC clock at 32 kHz)
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
 
+You can drop this because standard units have a type already.
+
+> +      - minimum: 0
+> +      - maximum: 125
+> +      - default: 60
+
+And then move all there out of allOf.
+
+> +
+> +  ingenic,min-wakeup-pin-assert-time-ms:
+> +    description: |
+> +      Minimum wakeup pin assertion time
+> +      (assuming RTC clock at 32 kHz)
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+> +      - minimum: 0
+> +      - maximum: 2000
+> +      - default: 100
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/jz4740-cgu.h>
+> +    rtc_dev: rtc@10003000 {
+> +      compatible = "ingenic,jz4740-rtc";
+> +      reg = <0x10003000 0x40>;
+> +
+> +      interrupt-parent = <&intc>;
+> +      interrupts = <15>;
+> +
+> +      clocks = <&cgu JZ4740_CLK_RTC>;
+> +      clock-names = "rtc";
+> +    };
+> -- 
+> 2.25.1
+> 
