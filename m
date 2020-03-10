@@ -2,220 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E3F1808F2
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Mar 2020 21:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF11180CA5
+	for <lists+linux-rtc@lfdr.de>; Wed, 11 Mar 2020 00:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbgCJURK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 Mar 2020 16:17:10 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40370 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbgCJURJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Mar 2020 16:17:09 -0400
-Received: by mail-oi1-f195.google.com with SMTP id y71so9900942oia.7;
-        Tue, 10 Mar 2020 13:17:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TepfMU12ngaZGfWbNFvmwR9hVezQFj2Now5HdZrqyu4=;
-        b=MAlWxbQMNLWWC9P8QMAlwbnTXeUHr+B8wCFlherpg0AzyPeN+KOnhJlFLYMpkDPpOU
-         58T7gWcw9ypogPyHrBYXjZCain/0ZsoVdDVzemMyVMfvNjsoUFdk1ubHFad3oH+9DHyH
-         ahXD5IdaUIPjhGrST2jJMsq0SxbjBE6iibughMY8QBW9fOWvCldrHzReRZB5qypmXwyI
-         MSH14uSKsvs+Qg9s7gZjxfWkrVsQC0S617QkHwP6aRMvw6UxaOZDNwpF3gpD5+RkEKRI
-         d3v47nyrllbqkDHqMBY3V++WclDcrt77o/K/AP4PQ57IvE+GL2aZRRF1MD3mvdNjYnK+
-         wn3A==
-X-Gm-Message-State: ANhLgQ16CTog/bVzNBgs/vhXaMg1iSrYK/BM2Ifqu1c00UJC5nXpq1Sl
-        PyL6TFpezpsZOd0y0PktWw==
-X-Google-Smtp-Source: ADFU+vvZi3Wc3khoMI8YsXkDStp3Ap7La8yZEb6cDvR9LqlLDGYFEkbj63tHb9TF0rmn3zaaorK9tQ==
-X-Received: by 2002:aca:ac46:: with SMTP id v67mr2512370oie.62.1583871428243;
-        Tue, 10 Mar 2020 13:17:08 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h6sm7762867otq.63.2020.03.10.13.17.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 13:17:07 -0700 (PDT)
-Received: (nullmailer pid 30625 invoked by uid 1000);
-        Tue, 10 Mar 2020 20:17:06 -0000
-Date:   Tue, 10 Mar 2020 15:17:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
-        =?utf-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: rtc: Convert and update jz4740-rtc doc
- to YAML
-Message-ID: <20200310201706.GA25562@bogus>
-References: <20200302213953.28834-1-paul@crapouillou.net>
- <20200302213953.28834-3-paul@crapouillou.net>
+        id S1727828AbgCJX43 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Mar 2020 19:56:29 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:59680 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727695AbgCJX43 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Mar 2020 19:56:29 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6EF7D891AD;
+        Wed, 11 Mar 2020 12:56:25 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1583884585;
+        bh=i6spy7H0mnXxSX3RJVNtY/uVM5eELBp7aQ01gNjYRBA=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=vyVom9i2s5Hx6a8/yeIyu80h7zFZuCeObPvCLW0IQy5HQ5qf8KzfUcgZJbSo1sHt5
+         76k5uwRIa/GrO8y7si75oSiILH5cRnRo2+9eQdpXTBouOHURrk/V5SCS8U33i1CQAR
+         Bva4SXT9J/bjbWKMC/u++fCOI8lEWQCkfRUr23Ep2f+owo2Jhvfed5SjRR8qywNos5
+         hsFDKkdaU+qMIt32RPy39hfNyTq/nO3uKrMDHQQ9/nixP+jX/ZgWLi0zqJwytXJ3Os
+         3Cy9aJrDN/drOS8fzJr3bbdIzI3KHCPAvE7DdkYZldOmQB9TL34kUKAJZEHxJb17Jo
+         shd2tNXqKJX9w==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5e68292a0000>; Wed, 11 Mar 2020 12:56:26 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 11 Mar 2020 12:56:25 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.006; Wed, 11 Mar 2020 12:56:25 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 0/2] rtc: update ds1388 support
+Thread-Topic: [PATCH v1 0/2] rtc: update ds1388 support
+Thread-Index: AQHV3WU+H1/zGGoZhUuiU3BVBeOj3ahB2kkA
+Date:   Tue, 10 Mar 2020 23:56:24 +0000
+Message-ID: <7a6941c28e4ccf8711b9511902c44c78d93caca0.camel@alliedtelesis.co.nz>
+References: <20200207031812.14424-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20200207031812.14424-1-chris.packham@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:22:65a9:299a:2e71:839f]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8478A953076ED943AFE8BE15B99E5ACD@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200302213953.28834-3-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 06:39:53PM -0300, Paul Cercueil wrote:
-> Convert the jz4740-rtc doc to YAML, and update it to reflect the new
-> changes in the driver:
-> - More compatible strings are specified, with fallbacks if needed,
-> - The vendor-specific properties are now properly prefixed with the
->   'ingenic,' prefix.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  .../bindings/rtc/ingenic,jz4740-rtc.txt       | 37 --------
->  .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 87 +++++++++++++++++++
->  2 files changed, 87 insertions(+), 37 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt b/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
-> deleted file mode 100644
-> index 41c7ae18fd7b..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,jz4740-rtc.txt
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -JZ4740 and similar SoCs real-time clock driver
-> -
-> -Required properties:
-> -
-> -- compatible: One of:
-> -  - "ingenic,jz4740-rtc" - for use with the JZ4740 SoC
-> -  - "ingenic,jz4780-rtc" - for use with the JZ4780 SoC
-> -- reg: Address range of rtc register set
-> -- interrupts: IRQ number for the alarm interrupt
-> -- clocks: phandle to the "rtc" clock
-> -- clock-names: must be "rtc"
-> -
-> -Optional properties:
-> -- system-power-controller: To use this component as the
-> -  system power controller
-> -- reset-pin-assert-time-ms: Reset pin low-level assertion
-> -  time after wakeup (default 60ms; range 0-125ms if RTC clock
-> -  at 32 kHz)
-> -- min-wakeup-pin-assert-time-ms: Minimum wakeup pin assertion
-> -  time (default 100ms; range 0-2s if RTC clock at 32 kHz)
-> -
-> -Example:
-> -
-> -rtc@10003000 {
-> -	compatible = "ingenic,jz4740-rtc";
-> -	reg = <0x10003000 0x40>;
-> -
-> -	interrupt-parent = <&intc>;
-> -	interrupts = <32>;
-> -
-> -	clocks = <&rtc_clock>;
-> -	clock-names = "rtc";
-> -
-> -	system-power-controller;
-> -	reset-pin-assert-time-ms = <60>;
-> -	min-wakeup-pin-assert-time-ms = <100>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> new file mode 100644
-> index 000000000000..c18ed8ac263f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/ingenic,rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ingenic SoCs Real-Time Clock DT bindings
-> +
-> +maintainers:
-> +  - Paul Cercueil <paul@crapouillou.net>
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +        - ingenic,jz4740-rtc
-> +        - ingenic,jz4760-rtc
-> +      - items:
-> +        - const: ingenic,jz4725b-rtc
-> +        - const: ingenic,jz4740-rtc
-> +      - items:
-> +        - enum:
-> +          - ingenic,jz4770-rtc
-> +          - ingenic,jz4780-rtc
-> +        - const: ingenic,jz4760-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: rtc
-> +
-> +  system-power-controller:
-> +    description: |
-> +      Indicates that the RTC is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
-> +  ingenic,reset-pin-assert-time-ms:
-> +    description: |
-> +      Reset pin low-level assertion time after wakeup
-> +      (assuming RTC clock at 32 kHz)
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-
-You can drop this because standard units have a type already.
-
-> +      - minimum: 0
-> +      - maximum: 125
-> +      - default: 60
-
-And then move all there out of allOf.
-
-> +
-> +  ingenic,min-wakeup-pin-assert-time-ms:
-> +    description: |
-> +      Minimum wakeup pin assertion time
-> +      (assuming RTC clock at 32 kHz)
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#/definitions/uint32
-> +      - minimum: 0
-> +      - maximum: 2000
-> +      - default: 100
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/jz4740-cgu.h>
-> +    rtc_dev: rtc@10003000 {
-> +      compatible = "ingenic,jz4740-rtc";
-> +      reg = <0x10003000 0x40>;
-> +
-> +      interrupt-parent = <&intc>;
-> +      interrupts = <15>;
-> +
-> +      clocks = <&cgu JZ4740_CLK_RTC>;
-> +      clock-names = "rtc";
-> +    };
-> -- 
-> 2.25.1
-> 
+SGkgQWxsLA0KDQpPbiBGcmksIDIwMjAtMDItMDcgYXQgMTY6MTggKzEzMDAsIENocmlzIFBhY2to
+YW0gd3JvdGU6DQo+IFRoZSBkczEzODggYXMgYSBzbGlnaHRseSBkaWZmZXJlbnQgcmVnaXN0ZXIg
+bGF5b3V0IGFuZCB3YXRjaGRvZyB0aW1lcg0KPiBjYXBhYmlsaXRpZXMuIEFkZCBzdXBwb3J0IGZv
+ciBib3RoIG9mIHRoZXNlLg0KPiANCj4gQ2hyaXMgUGFja2hhbSAoMik6DQo+ICAgcnRjOiBkczEz
+MDc6IGhhbmRsZSBvc2NpbGxhdG9yIGZhaWx1cmUgZmxhZ3MgZm9yIGRzMTM4OCB2YXJpYW50DQo+
+ICAgcnRjOiBkczEzMDc6IGFkZCBzdXBwb3J0IGZvciB3YXRjaGRvZyB0aW1lciBvbiBkczEzODgN
+Cj4gDQo+ICBkcml2ZXJzL3J0Yy9ydGMtZHMxMzA3LmMgfCAxMTQgKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTE0IGluc2VydGlvbnMo
+KykNCj4gDQoNCkJlZW4gYSB3aGlsZSB3aXRoIG5vIHJlc3BvbnNlIG9uIHRoaXMuIEZyaWVuZGx5
+IHBpbmcuDQo=
