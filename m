@@ -2,56 +2,44 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51C183D36
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2020 00:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 568A5183D40
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Mar 2020 00:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbgCLXUt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 12 Mar 2020 19:20:49 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:36793 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbgCLXUt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 Mar 2020 19:20:49 -0400
+        id S1726794AbgCLXVk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 12 Mar 2020 19:21:40 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:47771 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726710AbgCLXVk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 Mar 2020 19:21:40 -0400
+X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 9EE54240002;
-        Thu, 12 Mar 2020 23:20:46 +0000 (UTC)
-Date:   Fri, 13 Mar 2020 00:20:46 +0100
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id BAB64C0002;
+        Thu, 12 Mar 2020 23:21:38 +0000 (UTC)
+Date:   Fri, 13 Mar 2020 00:21:38 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     mripard@kernel.org, wens@csie.org, robh+dt@kernel.org,
-        a.zummo@towertech.it, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rtc: sun6i: Make external 32k oscillator optional
-Message-ID: <20200312232046.GB3384@piout.net>
-References: <20200308135849.106333-1-jernej.skrabec@siol.net>
- <20200308135849.106333-2-jernej.skrabec@siol.net>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: m48t35: remove SGI-IP27 kludge
+Message-ID: <20200312232138.GC3384@piout.net>
+References: <20200309123514.15543-1-tsbogend@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200308135849.106333-2-jernej.skrabec@siol.net>
+In-Reply-To: <20200309123514.15543-1-tsbogend@alpha.franken.de>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 08/03/2020 14:58:48+0100, Jernej Skrabec wrote:
-> Some boards, like OrangePi PC2 (H5), OrangePi Plus 2E (H3) and Tanix TX6
-> (H6) don't have external 32kHz oscillator. Till H6, it didn't really
-> matter if external oscillator was enabled because HW detected error and
-> fall back to internal one. H6 has same functionality but it's the first
-> SoC which have "auto switch bypass" bit documented and always enabled in
-> driver. This prevents RTC to work correctly if external crystal is not
-> present on board. There are other side effects - all peripherals which
-> depends on this clock also don't work (HDMI CEC for example).
+On 09/03/2020 13:35:14+0100, Thomas Bogendoerfer wrote:
+> With the IOC3 MFD driver it's no longer necessary to special case SGI-IP27.
 > 
-> Make clocks property optional. If it is present, select external
-> oscillator. If not, stay on internal.
-> 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > ---
->  drivers/rtc/rtc-sun6i.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  drivers/rtc/rtc-m48t35.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
 > 
 Applied, thanks.
 
