@@ -2,146 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C9018679E
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2020 10:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8291867C2
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2020 10:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730076AbgCPJQ2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Mar 2020 05:16:28 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:42698 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730056AbgCPJQ2 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 16 Mar 2020 05:16:28 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 310F91A094F;
-        Mon, 16 Mar 2020 10:16:26 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 349B51A0945;
-        Mon, 16 Mar 2020 10:16:23 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 3CAD2402C4;
-        Mon, 16 Mar 2020 17:16:19 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH] rtc: mxc: Use devm_add_action_or_reset() for calls to clk_disable_unprepare()
-Date:   Mon, 16 Mar 2020 17:09:45 +0800
-Message-Id: <1584349785-27042-1-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1730360AbgCPJWY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Mar 2020 05:22:24 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:46819 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730152AbgCPJWX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Mar 2020 05:22:23 -0400
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id F1229240035;
+        Mon, 16 Mar 2020 09:15:41 +0000 (UTC)
+Date:   Mon, 16 Mar 2020 10:15:41 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@rempel-privat.de" <linux@rempel-privat.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ronald@innovation.ch" <ronald@innovation.ch>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V3 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Message-ID: <20200316091541.GI4518@piout.net>
+References: <20200316005219.GD17221@dragon>
+ <AM0PR04MB44819E4A9E027F1555C33D0B88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
+ <20200316030744.GC17221@dragon>
+ <AM0PR04MB44817A48746601EADA4E06BC88F90@AM0PR04MB4481.eurprd04.prod.outlook.com>
+ <20200316033447.GE17221@dragon>
+ <DB3PR0402MB3916DA9F0F175B9D2E9E684FF5F90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <20200316084056.GG4518@piout.net>
+ <DB3PR0402MB391663DB37A8D241092AD708F5F90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <20200316090053.GH4518@piout.net>
+ <DB3PR0402MB391683A05820920158DFDA77F5F90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB3PR0402MB391683A05820920158DFDA77F5F90@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use devm_add_action_or_reset() for calls to clk_disable_unprepare(),
-which can simplify the error handling, and .remove callback can be dropped.
+On 16/03/2020 09:08:53+0000, Anson Huang wrote:
+> > Why do you absolutely need to compile them independently? From a code
+> > coverage point of view, having:
+> > 
+> > COMPILE_TEST=y
+> > CONFIG_IMX_SCU=y
+> > 
+> > is enough to select and compile the remaining drivers.
+> 
+> What I meant is for below case, like using other arch config which does NOT have
+> CONFIG_IMX_SCU selected, ONLY with COMPILE_TEST selected, adding stubs for
+> IMX_SCU APIs can fix such scenario.
+> 
+> COMPILE_TEST=y
+> CONFIG_IMX_SCU=n
+> 
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- drivers/rtc/rtc-mxc.c | 46 +++++++++++++++++++---------------------------
- 1 file changed, 19 insertions(+), 27 deletions(-)
+Why is that an issue? If they don't have IMX_SCU selected, then the
+other SCU driver are not selected either, having stubs doesn't change
+that you will have to select at least one option. Please explain what is
+the issue that is not solved here.
 
-diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
-index 902d57d..a8cfbde 100644
---- a/drivers/rtc/rtc-mxc.c
-+++ b/drivers/rtc/rtc-mxc.c
-@@ -307,6 +307,14 @@ static const struct rtc_class_ops mxc_rtc_ops = {
- 	.alarm_irq_enable	= mxc_rtc_alarm_irq_enable,
- };
- 
-+static void mxc_rtc_action(void *p)
-+{
-+	struct rtc_plat_data *pdata = p;
-+
-+	clk_disable_unprepare(pdata->clk_ref);
-+	clk_disable_unprepare(pdata->clk_ipg);
-+}
-+
- static int mxc_rtc_probe(struct platform_device *pdev)
- {
- 	struct rtc_device *rtc;
-@@ -366,14 +374,20 @@ static int mxc_rtc_probe(struct platform_device *pdev)
- 
- 	pdata->clk_ref = devm_clk_get(&pdev->dev, "ref");
- 	if (IS_ERR(pdata->clk_ref)) {
-+		clk_disable_unprepare(pdata->clk_ipg);
- 		dev_err(&pdev->dev, "unable to get ref clock!\n");
--		ret = PTR_ERR(pdata->clk_ref);
--		goto exit_put_clk_ipg;
-+		return PTR_ERR(pdata->clk_ref);
- 	}
- 
- 	ret = clk_prepare_enable(pdata->clk_ref);
-+	if (ret) {
-+		clk_disable_unprepare(pdata->clk_ipg);
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(&pdev->dev, mxc_rtc_action, pdata);
- 	if (ret)
--		goto exit_put_clk_ipg;
-+		return ret;
- 
- 	rate = clk_get_rate(pdata->clk_ref);
- 
-@@ -385,16 +399,14 @@ static int mxc_rtc_probe(struct platform_device *pdev)
- 		reg = RTC_INPUT_CLK_38400HZ;
- 	else {
- 		dev_err(&pdev->dev, "rtc clock is not valid (%lu)\n", rate);
--		ret = -EINVAL;
--		goto exit_put_clk_ref;
-+		return -EINVAL;
- 	}
- 
- 	reg |= RTC_ENABLE_BIT;
- 	writew(reg, (pdata->ioaddr + RTC_RTCCTL));
- 	if (((readw(pdata->ioaddr + RTC_RTCCTL)) & RTC_ENABLE_BIT) == 0) {
- 		dev_err(&pdev->dev, "hardware module can't be enabled!\n");
--		ret = -EIO;
--		goto exit_put_clk_ref;
-+		return -EIO;
- 	}
- 
- 	platform_set_drvdata(pdev, pdata);
-@@ -417,29 +429,10 @@ static int mxc_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = rtc_register_device(rtc);
--	if (ret)
--		goto exit_put_clk_ref;
--
--	return 0;
--
--exit_put_clk_ref:
--	clk_disable_unprepare(pdata->clk_ref);
--exit_put_clk_ipg:
--	clk_disable_unprepare(pdata->clk_ipg);
- 
- 	return ret;
- }
- 
--static int mxc_rtc_remove(struct platform_device *pdev)
--{
--	struct rtc_plat_data *pdata = platform_get_drvdata(pdev);
--
--	clk_disable_unprepare(pdata->clk_ref);
--	clk_disable_unprepare(pdata->clk_ipg);
--
--	return 0;
--}
--
- static struct platform_driver mxc_rtc_driver = {
- 	.driver = {
- 		   .name	= "mxc_rtc",
-@@ -447,7 +440,6 @@ static struct platform_driver mxc_rtc_driver = {
- 	},
- 	.id_table = imx_rtc_devtype,
- 	.probe = mxc_rtc_probe,
--	.remove = mxc_rtc_remove,
- };
- 
- module_platform_driver(mxc_rtc_driver)
+
 -- 
-2.7.4
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
