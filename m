@@ -2,73 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6341860C1
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2020 01:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135221860C8
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Mar 2020 01:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729228AbgCPAZk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 15 Mar 2020 20:25:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49278 "EHLO mail.kernel.org"
+        id S1729291AbgCPA2V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 15 Mar 2020 20:28:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729156AbgCPAZk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 15 Mar 2020 20:25:40 -0400
+        id S1729245AbgCPA2U (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 15 Mar 2020 20:28:20 -0400
 Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 09175205ED;
-        Mon, 16 Mar 2020 00:25:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E12C7205ED;
+        Mon, 16 Mar 2020 00:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584318339;
-        bh=oIh/Sa6m0Gp0EyqnU/CsJD/QSJgd+E76JL1QkHOvR9k=;
+        s=default; t=1584318499;
+        bh=7mS3ixlj3Z2fEufutJZBKCVTlxROm0o1iSECfEWYPus=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZJcAzHSVaZrvJYM4TA2p2uEOIm1WoujFL/C/rw4vVBtUJ6HBnWyiiD5VbBP3YOf2h
-         5vErhIKKbcJSk5eBuywr7xipCIQqdexTZ3GbBBRTBiuKUdJ6uuqMN4Tfiv29LackQW
-         TxLwGMLJFnyrtw021IcjH64c4tlvEHgw0cXMwbOA=
-Date:   Mon, 16 Mar 2020 08:25:29 +0800
+        b=Kj2QyDQgDqMp3oWKZVS49hoxbhcJ/SEABJVxKM04nCqfSe2w+BJ2BWY1e/kiIKZam
+         lgwtJEsQ5HS4dobQ+gsyXayKxneTQBPsR2s3Gcpcgj8Ifb+0HH4JdYJvF8O1X5JWpv
+         UgJ8cXyz6Sj8Ns5lqRnIEQ3sEeNlDYXgvvb2OlSk=
+Date:   Mon, 16 Mar 2020 08:28:04 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Leonard Crestez <leonard.crestez@nxp.com>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stefan Agner <stefan@agner.ch>, linux-clk@vger.kernel.org,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, Fabio Estevam <fabio.estevam@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] clk: imx: Align imx sc clock msg structs to 4
-Message-ID: <20200316002527.GA16155@dragon>
-References: <cover.1582216144.git.leonard.crestez@nxp.com>
- <10e97a04980d933b2cfecb6b124bf9046b6e4f16.1582216144.git.leonard.crestez@nxp.com>
- <20200224072210.GR27688@dragon>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        dmitry.torokhov@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        wim@linux-watchdog.org, linux@roeck-us.net, daniel.baluta@nxp.com,
+        linux@rempel-privat.de, gregkh@linuxfoundation.org,
+        tglx@linutronix.de, m.felsch@pengutronix.de,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, robh@kernel.org,
+        yuehaibing@huawei.com, ronald@innovation.ch, krzk@kernel.org,
+        leonard.crestez@nxp.com, aisheng.dong@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Linux-imx@nxp.com
+Subject: Re: [PATCH V2 1/7] firmware: imx: Add stubs for !CONFIG_IMX_SCU case
+Message-ID: <20200316002803.GL29269@dragon>
+References: <1583544359-515-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200224072210.GR27688@dragon>
+In-Reply-To: <1583544359-515-1-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 03:22:18PM +0800, Shawn Guo wrote:
-> On Thu, Feb 20, 2020 at 06:29:32PM +0200, Leonard Crestez wrote:
-> > The imx SC api strongly assumes that messages are composed out of
-> > 4-bytes words but some of our message structs have odd sizeofs.
-> > 
-> > This produces many oopses with CONFIG_KASAN=y.
-> > 
-> > Fix by marking with __aligned(4).
-> > 
-> > Fixes: fe37b4820417 ("clk: imx: add scu clock common part")
-> > Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+On Sat, Mar 07, 2020 at 09:25:53AM +0800, Anson Huang wrote:
+> Add stubs for those i.MX SCU APIs to make those modules depending
+> on IMX_SCU can pass build when COMPILE_TEST is enabled.
 > 
-> Applied, thanks.
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-Patch #1 and #2 were dropped from my clk queue, as Stephen hasn't been
-convinced by this change.
+Already had such a patch from Peng Fan.
 
 Shawn
+
+> ---
+> new patch.
+> ---
+>  include/linux/firmware/imx/ipc.h | 11 +++++++++++
+>  include/linux/firmware/imx/sci.h | 19 +++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+> 
+> diff --git a/include/linux/firmware/imx/ipc.h b/include/linux/firmware/imx/ipc.h
+> index 8910574..3fff0e2 100644
+> --- a/include/linux/firmware/imx/ipc.h
+> +++ b/include/linux/firmware/imx/ipc.h
+> @@ -34,6 +34,7 @@ struct imx_sc_rpc_msg {
+>  	uint8_t func;
+>  };
+>  
+> +#ifdef CONFIG_IMX_SCU
+>  /*
+>   * This is an function to send an RPC message over an IPC channel.
+>   * It is called by client-side SCFW API function shims.
+> @@ -55,4 +56,14 @@ int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp);
+>   * @return Returns an error code (0 = success, failed if < 0)
+>   */
+>  int imx_scu_get_handle(struct imx_sc_ipc **ipc);
+> +#else
+> +static inline int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp)
+> +{
+> +	return 0;
+> +}
+> +static inline int imx_scu_get_handle(struct imx_sc_ipc **ipc)
+> +{
+> +	return 0;
+> +}
+> +#endif
+>  #endif /* _SC_IPC_H */
+> diff --git a/include/linux/firmware/imx/sci.h b/include/linux/firmware/imx/sci.h
+> index 17ba4e4..4688b60 100644
+> --- a/include/linux/firmware/imx/sci.h
+> +++ b/include/linux/firmware/imx/sci.h
+> @@ -16,8 +16,27 @@
+>  #include <linux/firmware/imx/svc/misc.h>
+>  #include <linux/firmware/imx/svc/pm.h>
+>  
+> +#ifdef CONFIG_IMX_SCU
+>  int imx_scu_enable_general_irq_channel(struct device *dev);
+>  int imx_scu_irq_register_notifier(struct notifier_block *nb);
+>  int imx_scu_irq_unregister_notifier(struct notifier_block *nb);
+>  int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable);
+> +#else
+> +static inline int imx_scu_enable_general_irq_channel(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +static inline int imx_scu_irq_register_notifier(struct notifier_block *nb)
+> +{
+> +	return 0;
+> +}
+> +static inline int imx_scu_irq_unregister_notifier(struct notifier_block *nb)
+> +{
+> +	return 0;
+> +}
+> +static inline int imx_scu_irq_group_enable(u8 group, u32 mask, u8 enable)
+> +{
+> +	return 0;
+> +}
+> +#endif
+>  #endif /* _SC_SCI_H */
+> -- 
+> 2.7.4
+> 
