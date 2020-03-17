@@ -2,130 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE3C18829E
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 12:55:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D5E18831C
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 13:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgCQLz0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Mar 2020 07:55:26 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:48139 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725794AbgCQLz0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Mar 2020 07:55:26 -0400
-X-Originating-IP: 86.202.105.35
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3BBF820003;
-        Tue, 17 Mar 2020 11:55:24 +0000 (UTC)
-Date:   Tue, 17 Mar 2020 12:55:23 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     maggarwa@codeaurora.org
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc-pm8xxx: Clear Alarm register on resume
-Message-ID: <20200317115523.GB3448@piout.net>
-References: <1584342688-14035-1-git-send-email-maggarwa@codeaurora.org>
- <20200316102905.GN4518@piout.net>
- <000001d5fc17$9c327ee0$d4977ca0$@codeaurora.org>
+        id S1726947AbgCQMJx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Mar 2020 08:09:53 -0400
+Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:46864
+        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726634AbgCQMJx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Mar 2020 08:09:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584446992; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=R2hxu2RQ8hOyhS7sTKSo4jdv8WKwY6BR3khPfDSFYvuuuAfycY9D3AVw95K7tnHBux7FY/hdMiwfl5jLAj+Ktj/ZiHW7nTZFT6UErMO7c7e0KiE4kQRQc111ifcQnl/C56ASe/K2jhelpwQs0+PIbRd0clWII8pqRHHIOeZ0YpMiWIr4Ltr2zCsqzONK39bcZ0s0hAc3ll4QdDxc46ptRQ/Ti7W7pRVV4l3nKFY43httbQeO9QESXxEHmGGu6N66RUELyo6Zrt0h3knrgycG2gcmAhW16M0mshHoYVqeB+nstqnZ01ecbgjKhV/ldzX68I9rcShGbzAtSRxpBqn0Kw==
+X-YMail-OSG: qdCr2PsVM1nIwIx1AKy.e0FCS.rAd5ac4MxA9hTyV2WuoJ1XEsqzJcIb9i4xyJa
+ JzIp.EWFG0G7AGEzQCj.2mq4TQWDNbguQgmjs7p9k6O5aFvfST.A.ssV88.k_2ER1CE08MXbWGq9
+ cjSA_M19ZjX17gMVCIHzAhMg0XsT0nWMAju52QIT1uf6m8UOb75.tfWWPupeOMaXV2Fjfy3t6N9Y
+ ABBVwXHy7Kpl0yEREGRbWZ2NUdvI_DO.cFlzQ7Xwfc2V0SGhHNjGjRqZLi5CekKLnnc1HOyRG7sI
+ g7Zblgddn8N9zQgkTr6G2T3uu1aBQMXiGWCsw_z6zY7LfbPlxliLCk7skpP5BhJEwWSBnoy38u6S
+ fBCCylvXr5Ou56L2cqtFEEVb6aSFfrzxZGkAZ6wxPu5ntI__tL8QYiLet6.I0ZWVgGJbuQqQ8zU9
+ 9B7UH4zgBSdBexTtLk3Wn8QprmcYHgJ_Aplmr2.TokMfdTXynEnU2SiocvUnFDC9sZrVG_unO2gn
+ YMOwlpa9d9WbmsswieS6PR6OEWjhGTZrj_6DP0iWnE5lq5gXt1Qu0ztD6H75TDjZY6ckR.3y3TcR
+ 4mpdwDsehReD2BkyjQcYarsuNZNY92.2XQesOMmPaQGmR9lMp.z8PXHe8l02GeCcycyNfPISpwil
+ QcM6PX0Fe8_4CDS3Cj7_zzcL3LnmvqTJLSntRRcKfzNuAGd4p.ri3Yk_usTs8ykC7bjtZLoCa1TB
+ NwcYhq70JpJ5IRRuQLKsEpITWLCSYr5eDjCin8iUW4dCYntT1nwjl5p.bigHYbRR4W5sCE6rd9nz
+ aMcqagDJHNc5waXavXbVsy27ncfi8giW9ZIwXFSiDDoiWvHNRR3H5ArSEOjFeX6modl2ks.JWeXv
+ JxquImzCsr1WmJc8fOuu9yBsQVaPVfutUZjGLfZVRFVYCgXCgeBsoQdVq04sxTnzgsrZ5CXxLf8u
+ RIjT5xqD9W88z6.MCDM7rcQUsmJwA8UKINsVHGA9K2fFetL1D0VODMZOqAx5IUc0rwsYaB3G13Yv
+ X6G.hWRHbOiH546X7ZjP_Xli7EMoLYAGVJoC_a0U3F2mXOWhA1NyAGt0SpmG72VTDX6N.z1PkK.K
+ ifEt0nunX8cHgTPVIlJ8G8owOLFlZuQTCGGmzi5etW9pZBNckyKcXi5VEi5dHd_7Vs0m4mPEVgfV
+ RrrvmAJ.Sf_X23bhvIKllBqqkrYSslD5HB9LzuCEp_aZek9qb6ulxCwVi99neD.Ho2Au4Nk9E8FS
+ K4SWvuaPKNb7.avL9W0mtC1ExSW4YKs5aCPbnmIWeSZVBynhRZQfulD9YFVngEP2J2plifXjqzVz
+ LF0Cs3pMJQ7QIj9YuNX3M8pLxtOWKycpa
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:09:52 +0000
+Date:   Tue, 17 Mar 2020 12:07:51 +0000 (UTC)
+From:   Stephen Li <stenn7@gabg.net>
+Reply-To: stephli947701@gmail.com
+Message-ID: <442828441.1833677.1584446871712@mail.yahoo.com>
+Subject: REF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000001d5fc17$9c327ee0$d4977ca0$@codeaurora.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <442828441.1833677.1584446871712.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/03/2020 10:20:36+0530, maggarwa@codeaurora.org wrote:
-> Hi,
-> 
-> Comments inline.
-> 
-> 
-> Thanks & Regards,
-> Mohit
-> 
-> -----Original Message-----
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com> 
-> Sent: Monday, March 16, 2020 3:59 PM
-> To: Mohit Aggarwal <maggarwa@codeaurora.org>
-> Cc: a.zummo@towertech.it; linux-rtc@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] rtc-pm8xxx: Clear Alarm register on resume
-> 
-> Hi,
-> 
-> On 16/03/2020 12:41:28+0530, Mohit Aggarwal wrote:
-> > Currently, alarm register is not cleared on resume leading to reboot 
-> > during power off charging mode.
-> > 
-> > Change-Id: Ie2e6bbab8aa46e4e9b9cc984181ffab557cbbdae
-> 
-> No Change-Id upstream please.
-> [Mohit]: Will fix in next patch.
-> 
-> > Signed-off-by: Mohit Aggarwal <maggarwa@codeaurora.org>
-> > ---
-> >  drivers/rtc/rtc-pm8xxx.c | 13 ++++++++++++-
-> >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c index 
-> > bbe013f..96e7985 100644
-> > --- a/drivers/rtc/rtc-pm8xxx.c
-> > +++ b/drivers/rtc/rtc-pm8xxx.c
-> > @@ -1,5 +1,5 @@
-> >  // SPDX-License-Identifier: GPL-2.0-only
-> > -/* Copyright (c) 2010-2011, 2019, The Linux Foundation. All rights 
-> > reserved. */
-> > +/* Copyright (c) 2010-2011, 2019-2020, The Linux Foundation. All 
-> > +rights reserved. */
-> >  
-> >  #include <linux/of.h>
-> >  #include <linux/module.h>
-> > @@ -301,6 +301,7 @@ static int pm8xxx_rtc_alarm_irq_enable(struct device
-> *dev, unsigned int enable)
-> >  	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
-> >  	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-> >  	unsigned int ctrl_reg;
-> > +	u8 value[NUM_8_BIT_RTC_REGS] = {0};
-> >  
-> >  	spin_lock_irqsave(&rtc_dd->ctrl_reg_lock, irq_flags);
-> >  
-> > @@ -319,6 +320,16 @@ static int pm8xxx_rtc_alarm_irq_enable(struct device
-> *dev, unsigned int enable)
-> >  		goto rtc_rw_fail;
-> >  	}
-> >  
-> > +	/* Clear Alarm register */
-> > +	if (!enable) {
-> > +		rc = regmap_bulk_write(rtc_dd->regmap, regs->alarm_rw,
-> value,
-> > +					sizeof(value));
-> 
-> This is not properly aligned.
-> [Mohit]: I don't see any alignment issue at my end. I can see proper tabs
-> are present.
-> 
-
-The alignment should match the opening parenthesis.
-
-> > +		if (rc) {
-> > +			dev_err(dev, "Write to RTC ALARM register
-> failed\n");
-> 
-> Is that error message necessary? What would be the user action after seeing
-> that in the logs? Will the logs actually be seen?
-> [Mohit]: In case issue in question reproduces even after this change then
-> for debugging purposes user can look out for this error log in kernel logs
-> which can help to triage the issue.
-> 
-
-Who in the field on the final product will see this error message? For
-debugging purposes, regmap already provides plenty of tracing
-facilities.
 
 
-
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Greetings,
+I was searching through a local business directory when I found your
+profile. I am Soliciting On-Behalf of my private client who is
+interested in having a serious business investment in your country. If
+you have a valid business, investment or project he can invest
+back to me for more details. Your swift response is highly needed.
+Sincerely
+Stephen Li
+Please response back to me with is my private email below for more details
+stephli947701@gmail.com
