@@ -2,85 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFEB1886B8
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 15:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DB218878E
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 15:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgCQOAM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Mar 2020 10:00:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:40808 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgCQOAL (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 17 Mar 2020 10:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=FrLx3+zGH3oU0Jo8/lq72eF8fifQc3xB2bQg8gY6tl8=; b=cGnLnBuVsp6fkYfQcJ+N0lP7Zi
-        1CQ0257uMP73Zssq480GqtOsiT6dtz3j4jFY4auOWYouzd6Noyy4GBuZ2grQ+9xBQnBkb7o8JyQgO
-        LYVpPM0bbhZnw1Ygcjk+w5hK1jV6VmA0mj+VI2m8UsxHjo1atAFpbrGsSPzlUpACujao=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
-        (envelope-from <andrew@lunn.ch>)
-        id 1jEClA-0006j0-3H; Tue, 17 Mar 2020 14:59:56 +0100
-Date:   Tue, 17 Mar 2020 14:59:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1726222AbgCQOec (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Mar 2020 10:34:32 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:47153 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726189AbgCQOec (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Mar 2020 10:34:32 -0400
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id C5F1324000A;
+        Tue, 17 Mar 2020 14:34:28 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/28] DT: Improve validation for Marvell SoCs
-Message-ID: <20200317135956.GQ24270@lunn.ch>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317134609.GN24270@lunn.ch>
- <20200317135551.GE3448@piout.net>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] rtc: mt2712: fix build without PM_SLEEP
+Date:   Tue, 17 Mar 2020 15:34:21 +0100
+Message-Id: <20200317143421.9551-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317135551.GE3448@piout.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 02:55:59PM +0100, Alexandre Belloni wrote:
-> On 17/03/2020 14:46:09+0100, Andrew Lunn wrote:
-> > On Tue, Mar 17, 2020 at 10:38:54AM +0100, Lubomir Rintel wrote:
-> > > Hello World,
-> > 
-> > Yah, that is an issue here. Marvell have a few different SoC families,
-> > each with there own maintainers. Gregory and I tend to look after
-> > 'mvebu', aka orion5x, kirkwood, dove, berlin and a few others. All the
-> > others are 'Somebody elses' problem'.
-> > 
-> 
-> Hum, berlin is not mvebu, it was the same BU as the MMP and it has been
-> sold to synopsys a while ago.
+Fix this build error when PM_SLEEP is not selected:
 
-Yes, the boundaries are a bit fluffy. At least the early work by
-Sebastian was merged via the mvebu maintainers, even if it is not
-technically part of mvebu.
+drivers/rtc/rtc-mt2712.c:412:10: error: ‘mt2712_pm_ops’ undeclared here (not in a function); did you mean ‘mt2712_rtc_ops’?
+  412 |   .pm = &mt2712_pm_ops,
+      |          ^~~~~~~~~~~~~
 
-This is also part of the discussion about how this lot actually gets
-merged.
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-mt2712.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-	   Andrew
+diff --git a/drivers/rtc/rtc-mt2712.c b/drivers/rtc/rtc-mt2712.c
+index 62c20241426d..581b8731fb8a 100644
+--- a/drivers/rtc/rtc-mt2712.c
++++ b/drivers/rtc/rtc-mt2712.c
+@@ -409,7 +409,9 @@ static struct platform_driver mt2712_rtc_driver = {
+ 	.driver = {
+ 		.name = "mt2712-rtc",
+ 		.of_match_table = mt2712_rtc_of_match,
++#ifdef CONFIG_PM_SLEEP
+ 		.pm = &mt2712_pm_ops,
++#endif
+ 	},
+ 	.probe  = mt2712_rtc_probe,
+ };
+-- 
+2.24.1
+
