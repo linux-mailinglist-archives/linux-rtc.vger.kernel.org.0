@@ -2,61 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D5E18831C
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 13:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D8218842D
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Mar 2020 13:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgCQMJx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Mar 2020 08:09:53 -0400
-Received: from sonic316-53.consmr.mail.ne1.yahoo.com ([66.163.187.179]:46864
-        "EHLO sonic316-53.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726634AbgCQMJx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Mar 2020 08:09:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584446992; bh=kcevCRoll2+Bsa3FDERpIV72LVcB1A4YV1b5N2AWYBk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=R2hxu2RQ8hOyhS7sTKSo4jdv8WKwY6BR3khPfDSFYvuuuAfycY9D3AVw95K7tnHBux7FY/hdMiwfl5jLAj+Ktj/ZiHW7nTZFT6UErMO7c7e0KiE4kQRQc111ifcQnl/C56ASe/K2jhelpwQs0+PIbRd0clWII8pqRHHIOeZ0YpMiWIr4Ltr2zCsqzONK39bcZ0s0hAc3ll4QdDxc46ptRQ/Ti7W7pRVV4l3nKFY43httbQeO9QESXxEHmGGu6N66RUELyo6Zrt0h3knrgycG2gcmAhW16M0mshHoYVqeB+nstqnZ01ecbgjKhV/ldzX68I9rcShGbzAtSRxpBqn0Kw==
-X-YMail-OSG: qdCr2PsVM1nIwIx1AKy.e0FCS.rAd5ac4MxA9hTyV2WuoJ1XEsqzJcIb9i4xyJa
- JzIp.EWFG0G7AGEzQCj.2mq4TQWDNbguQgmjs7p9k6O5aFvfST.A.ssV88.k_2ER1CE08MXbWGq9
- cjSA_M19ZjX17gMVCIHzAhMg0XsT0nWMAju52QIT1uf6m8UOb75.tfWWPupeOMaXV2Fjfy3t6N9Y
- ABBVwXHy7Kpl0yEREGRbWZ2NUdvI_DO.cFlzQ7Xwfc2V0SGhHNjGjRqZLi5CekKLnnc1HOyRG7sI
- g7Zblgddn8N9zQgkTr6G2T3uu1aBQMXiGWCsw_z6zY7LfbPlxliLCk7skpP5BhJEwWSBnoy38u6S
- fBCCylvXr5Ou56L2cqtFEEVb6aSFfrzxZGkAZ6wxPu5ntI__tL8QYiLet6.I0ZWVgGJbuQqQ8zU9
- 9B7UH4zgBSdBexTtLk3Wn8QprmcYHgJ_Aplmr2.TokMfdTXynEnU2SiocvUnFDC9sZrVG_unO2gn
- YMOwlpa9d9WbmsswieS6PR6OEWjhGTZrj_6DP0iWnE5lq5gXt1Qu0ztD6H75TDjZY6ckR.3y3TcR
- 4mpdwDsehReD2BkyjQcYarsuNZNY92.2XQesOMmPaQGmR9lMp.z8PXHe8l02GeCcycyNfPISpwil
- QcM6PX0Fe8_4CDS3Cj7_zzcL3LnmvqTJLSntRRcKfzNuAGd4p.ri3Yk_usTs8ykC7bjtZLoCa1TB
- NwcYhq70JpJ5IRRuQLKsEpITWLCSYr5eDjCin8iUW4dCYntT1nwjl5p.bigHYbRR4W5sCE6rd9nz
- aMcqagDJHNc5waXavXbVsy27ncfi8giW9ZIwXFSiDDoiWvHNRR3H5ArSEOjFeX6modl2ks.JWeXv
- JxquImzCsr1WmJc8fOuu9yBsQVaPVfutUZjGLfZVRFVYCgXCgeBsoQdVq04sxTnzgsrZ5CXxLf8u
- RIjT5xqD9W88z6.MCDM7rcQUsmJwA8UKINsVHGA9K2fFetL1D0VODMZOqAx5IUc0rwsYaB3G13Yv
- X6G.hWRHbOiH546X7ZjP_Xli7EMoLYAGVJoC_a0U3F2mXOWhA1NyAGt0SpmG72VTDX6N.z1PkK.K
- ifEt0nunX8cHgTPVIlJ8G8owOLFlZuQTCGGmzi5etW9pZBNckyKcXi5VEi5dHd_7Vs0m4mPEVgfV
- RrrvmAJ.Sf_X23bhvIKllBqqkrYSslD5HB9LzuCEp_aZek9qb6ulxCwVi99neD.Ho2Au4Nk9E8FS
- K4SWvuaPKNb7.avL9W0mtC1ExSW4YKs5aCPbnmIWeSZVBynhRZQfulD9YFVngEP2J2plifXjqzVz
- LF0Cs3pMJQ7QIj9YuNX3M8pLxtOWKycpa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 17 Mar 2020 12:09:52 +0000
-Date:   Tue, 17 Mar 2020 12:07:51 +0000 (UTC)
-From:   Stephen Li <stenn7@gabg.net>
-Reply-To: stephli947701@gmail.com
-Message-ID: <442828441.1833677.1584446871712@mail.yahoo.com>
-Subject: REF
+        id S1725906AbgCQMaX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Mar 2020 08:30:23 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44853 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbgCQMaX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Mar 2020 08:30:23 -0400
+Received: by mail-oi1-f196.google.com with SMTP id d62so21417106oia.11;
+        Tue, 17 Mar 2020 05:30:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7bWIGrmJckT1m6t9quae5+JZV9bgbsoWOVuE/IRPIaU=;
+        b=GbK3DPScJAztlhsnTjBPGHhza6bHTGDnv99/0V6wI+g3w1wQV6KUZrDT4ggMpnhFdJ
+         38L9n2iotYDN64hsGap7TdRdixmE5Bm8CIrRVhPPdtCM0H5aoXMptalrV5dgHnovVTRn
+         YsQe5qqEduSFiw2qDc114VTKUUhp4a+6cx1+TYvTSKkqHuzPUbbVlU+aV6xRO5x6foDH
+         JGzygqPRCNPyVAGqAux3yR6qrwVf384cVSne3yZAKz0sHo+J9sjn2vGl1GwwjpsfUaHf
+         ssATK+G/6Xy0XEegiwG+ITC8GuuFnfD2PwB5Xa5To/Vah+ctDUxtB/6M6/u8TLz1Iocx
+         9epQ==
+X-Gm-Message-State: ANhLgQ3oCh7WizCCcM+QcxarEUWhSxx6jLElvLiJzNFZSHzN3N9IW3KD
+        QV4+PeCopOWXli2EBW5YNn3b5+C+EcSPV/d8JiQ=
+X-Google-Smtp-Source: ADFU+vuNAHmuooiafUqKBUMfEczzYmFc/BAx7C+JWZfkPiA2MFSi8dPCdNgJmpF13jUW4ASUOw2odywHhSz6CZpai2U=
+X-Received: by 2002:aca:cdd1:: with SMTP id d200mr3061324oig.153.1584448221150;
+ Tue, 17 Mar 2020 05:30:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <442828441.1833677.1584446871712.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15342 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200316104701.209293-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20200316104701.209293-1-alexandre.belloni@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 Mar 2020 13:30:10 +0100
+Message-ID: <CAMuHMdVy6J1G5P6BQ14D65=pRu-q=+kcN3RV8mjtaZcwBooZyw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rtc: mt2712: fix build without PM_SLEEP
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Hi Alexandre,
 
+On Mon, Mar 16, 2020 at 11:48 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+> Move SIMPLE_DEV_PM_OPS out of #ifdef to fix build issues when PM_SLEEP is
+> not selected.
+>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  drivers/rtc/rtc-mt2712.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/rtc-mt2712.c b/drivers/rtc/rtc-mt2712.c
+> index 432df9b0a3ac..c2709c1602f0 100644
+> --- a/drivers/rtc/rtc-mt2712.c
+> +++ b/drivers/rtc/rtc-mt2712.c
+> @@ -394,10 +394,10 @@ static int mt2712_rtc_resume(struct device *dev)
+>
+>         return 0;
+>  }
+> +#endif
+>
+>  static SIMPLE_DEV_PM_OPS(mt2712_pm_ops, mt2712_rtc_suspend,
+>                          mt2712_rtc_resume);
 
-Greetings,
-I was searching through a local business directory when I found your
-profile. I am Soliciting On-Behalf of my private client who is
-interested in having a serious business investment in your country. If
-you have a valid business, investment or project he can invest
-back to me for more details. Your swift response is highly needed.
-Sincerely
-Stephen Li
-Please response back to me with is my private email below for more details
-stephli947701@gmail.com
+That's 23 more unused pointers in your kernel image.
+
+> -#endif
+>
+>  static const struct of_device_id mt2712_rtc_of_match[] = {
+>         { .compatible = "mediatek,mt2712-rtc", },
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
