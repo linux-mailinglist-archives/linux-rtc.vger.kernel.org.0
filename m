@@ -2,44 +2,47 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 868DB18A850
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Mar 2020 23:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FED718BBEC
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Mar 2020 17:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726975AbgCRWiJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 Mar 2020 18:38:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52118 "EHLO mail.kernel.org"
+        id S1727885AbgCSQJc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Mar 2020 12:09:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47630 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726619AbgCRWiJ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 18 Mar 2020 18:38:09 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        id S1727064AbgCSQJb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 19 Mar 2020 12:09:31 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F0A3208D6;
-        Wed, 18 Mar 2020 22:38:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F9DF208C3;
+        Thu, 19 Mar 2020 16:09:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584571087;
-        bh=h2tPbIwaFRFhQaSi75kDBvH4/tYSSRHaaEn6nhZmdr0=;
+        s=default; t=1584634170;
+        bh=QFuqHMWKkiEerMDTcpgGsWBChtJHP2dAeiJte+5yHtU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kRfNA+9TdnyBzO10nx07GysVFZDKOEyZXyN8sBPtBgPClUs4D1pLwH1u86QGHRVLI
-         VhUv0WyTisoDnDbPIwbBadfuS+0br3IgNJYuxEyNep50K1HIzxTFFk4DSvdoP4Cc0a
-         lMfsOmO1OAURjbaxeaLs+C5fAoANSbhjfQwAzweA=
-Received: by mail-qt1-f171.google.com with SMTP id i26so154650qtq.8;
-        Wed, 18 Mar 2020 15:38:07 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1e37ELRDgpPS1nBHSGnpkzOYv2pzVidmM0gJBYMfBJOmpFX0W0
-        pDr4IxegCI+qzH9NqQ7O6GthVxvMxUIq/IuRoA==
-X-Google-Smtp-Source: ADFU+vvinsamjh03SlRMcAjEI9q54HjLWIwQqxaVLevloh2bB0C7//yNJi1GoxR+dLv32cxF/ysQBxwkILHfmpn8xBI=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr5558qtg.110.1584571086256; Wed,
- 18 Mar 2020 15:38:06 -0700 (PDT)
+        b=uY30D1IJVRcRBK2B9fm6ObzhPw1OcuQ6AjL1Sbl31AkMpnQyITbcQo67FqiBml04n
+         ibIaY5ScnLxTd3j3uqWZYBnmfqYfvFQNbrvf2Ku1MgINv6t9TSCaWhmGH+SljjA7zU
+         Y/UF4llCpGOqqW8nybbfwI3nev70L/DomHyFsJ0M=
+Received: by mail-yb1-f172.google.com with SMTP id s17so562687ybk.9;
+        Thu, 19 Mar 2020 09:09:30 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3pB5DuU3+sucltyszQDUEMVz4erO9PddeaLwyTLmU0xTtKcE94
+        +jGsbQShz/3WOTdGhLhvx0bUTZszLuMFM2Bu0w==
+X-Google-Smtp-Source: ADFU+vvOh/l0kOoyAZeUv7XIEUUFdmB7bmrN34m9amh/dorM5bjQaVRBAARghBCDWKGdHkkLJf9QnHfG/DHcWYa2/hI=
+X-Received: by 2002:a25:b5c3:: with SMTP id d3mr5901077ybg.358.1584634169779;
+ Thu, 19 Mar 2020 09:09:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-20-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-20-lkundrak@v3.sk>
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-14-lkundrak@v3.sk>
+ <20200317134805.GO24270@lunn.ch>
+In-Reply-To: <20200317134805.GO24270@lunn.ch>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 18 Mar 2020 16:37:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Subject: Re: [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+Date:   Thu, 19 Mar 2020 10:09:18 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
+Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
+Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible string
+ to 8250 binding doc
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Lubomir Rintel <lkundrak@v3.sk>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jason Cooper <jason@lakedaemon.net>,
@@ -52,7 +55,6 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mark Brown <broonie@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
@@ -74,205 +76,23 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+On Tue, Mar 17, 2020 at 7:48 AM Andrew Lunn <andrew@lunn.ch> wrote:
 >
-> Convert the sdhci-pxa binding to DT schema format using json-schema.
-
-Ignore what my bot said, I see you addressed that earlier in the series.
-
-> At the same time, fix a couple of issues with the examples discovered by
-> the validation tool -- a semicolon instead of a comma and wrong node names.
+> On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
+> > These ports are compatible with NS8250 and handled by the same driver.
+> > Get rid of the extra document that fails to document the properties that
+> > are actually supported.
 >
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  .../devicetree/bindings/mmc/sdhci-pxa.txt     |  50 ---------
->  .../devicetree/bindings/mmc/sdhci-pxa.yaml    | 101 ++++++++++++++++++
->  2 files changed, 101 insertions(+), 50 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
->  create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> Hi Lubmir
 >
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt b/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> deleted file mode 100644
-> index 3d1b449d6097d..0000000000000
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -* Marvell sdhci-pxa v2/v3 controller
-> -
-> -This file documents differences between the core properties in mmc.txt
-> -and the properties used by the sdhci-pxav2 and sdhci-pxav3 drivers.
-> -
-> -Required properties:
-> -- compatible: Should be "mrvl,pxav2-mmc", "mrvl,pxav3-mmc" or
-> -  "marvell,armada-380-sdhci".
-> -- reg:
-> -  * for "mrvl,pxav2-mmc" and "mrvl,pxav3-mmc", one register area for
-> -    the SDHCI registers.
-> -
-> -  * for "marvell,armada-380-sdhci", three register areas. The first
-> -    one for the SDHCI registers themselves, the second one for the
-> -    AXI/Mbus bridge registers of the SDHCI unit, the third one for the
-> -    SDIO3 Configuration register
-> -- reg names: should be "sdhci", "mbus", "conf-sdio3". only mandatory
-> -  for "marvell,armada-380-sdhci"
-> -- clocks: Array of clocks required for SDHCI; requires at least one for
-> -    I/O clock.
-> -- clock-names: Array of names corresponding to clocks property; shall be
-> -    "io" for I/O clock and "core" for optional core clock.
-> -
-> -Optional properties:
-> -- mrvl,clk-delay-cycles: Specify a number of cycles to delay for tuning.
-> -
-> -Example:
-> -
-> -sdhci@d4280800 {
-> -       compatible = "mrvl,pxav3-mmc";
-> -       reg = <0xd4280800 0x800>;
-> -       bus-width = <8>;
-> -       interrupts = <27>;
-> -       clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> -       clock-names = "io", "core";
-> -       non-removable;
-> -       mrvl,clk-delay-cycles = <31>;
-> -};
-> -
-> -sdhci@d8000 {
-> -       compatible = "marvell,armada-380-sdhci";
-> -       reg-names = "sdhci", "mbus", "conf-sdio3";
-> -       reg = <0xd8000 0x1000>,
-> -               <0xdc000 0x100>;
-> -               <0x18454 0x4>;
-> -       interrupts = <0 25 0x4>;
-> -       clocks = <&gateclk 17>;
-> -       clock-names = "io";
-> -       mrvl,clk-delay-cycles = <0x1F>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> new file mode 100644
-> index 0000000000000..4ae0926ac294f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> @@ -0,0 +1,101 @@
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/sdhci-pxa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell PXA SDHCI v2/v3 bindings
-> +
-> +maintainers:
-> +  - devicetree@vger.kernel.org
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,armada-380-sdhci
-> +    then:
-> +      properties:
-> +        regs:
-> +          minItems: 3
-> +          maxItems: 3
+> This is needs a bit closer examination. By the PXA maintainers. It
+> appears there are two serial drivers, the 8250 and a PXA specific
+> driver.
 
-Here, you just need minItems.
+Yes, but that is independent of the binding.
 
-> +        reg-names:
-> +          items:
-> +            - const: sdhci
-> +            - const: mbus
-> +            - const: conf-sdio3
+The PXA driver (serial/pxa.c) is already deprecated in favor of
+8250_pxa.c. That was 3.5 years ago now, so maybe time to remove the
+old one.
 
-This should be under the main definition of 'reg-names' and then just
-'minItems: 3' here.
-
-> +      required:
-> +        - reg-names
-> +    else:
-> +      properties:
-> +        regs:
-> +          minItems: 1
-> +          maxItems: 1
-
-Just 'maxItems' is sufficient.
-
-> +        reg-names:
-> +          minItems: 1
-> +          maxItems: 1
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mrvl,pxav2-mmc
-> +      - mrvl,pxav3-mmc
-> +      - marvell,armada-380-sdhci
-> +
-> +  reg: true
-
-Here you should have:
-
-minItems: 1
-maxItems: 3
-
-> +
-> +  reg-names: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: io
-> +      - const: core
-> +
-> +  mrvl,clk-delay-cycles:
-> +    description: Specify a number of cycles to delay for tuning.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-No range of valid values?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/berlin2.h>
-> +    mmc@d4280800 {
-> +        compatible = "mrvl,pxav3-mmc";
-> +        reg = <0xd4280800 0x800>;
-> +        bus-width = <8>;
-> +        interrupts = <27>;
-> +        clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> +        clock-names = "io", "core";
-> +        non-removable;
-> +        mrvl,clk-delay-cycles = <31>;
-> +    };
-> +  - |
-> +    mmc@d8000 {
-> +        compatible = "marvell,armada-380-sdhci";
-> +        reg-names = "sdhci", "mbus", "conf-sdio3";
-> +        reg = <0xd8000 0x1000>,
-> +              <0xdc000 0x100>,
-> +              <0x18454 0x4>;
-> +        interrupts = <0 25 0x4>;
-> +        clocks = <&gateclk 17>;
-> +        clock-names = "io";
-> +        mrvl,clk-delay-cycles = <0x1F>;
-> +    };
-> +
-> +...
-> --
-> 2.25.1
->
+Rob
