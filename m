@@ -2,78 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D5218CCC1
-	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2020 12:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A3118D664
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Mar 2020 18:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbgCTLWU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 20 Mar 2020 07:22:20 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35704 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbgCTLWT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Mar 2020 07:22:19 -0400
-Received: by mail-ot1-f68.google.com with SMTP id k26so5616599otr.2
-        for <linux-rtc@vger.kernel.org>; Fri, 20 Mar 2020 04:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=Pf/weUAfOIiJrSxirpBihZi6rDPdhyQPdqV31VjwvFYCZrXzvBkOQEdBeDD+fX+N79
-         qt9tmCm3FjbnRdoqGWpCa20Uk5e1bhGZ/0wJS+wlw72uJad71tcUBjcoeSwEUuruvXcA
-         84tRSqCB2Tph2tBoxOjpJV1x/Ea/J8W5HzqXPv65IQxNfJKY1At/wswC5dSURMa29aoD
-         8zo4+xruOlzLz3L4vwtTRqRx9ghKaKGisLI9y4mD1Sh4zDOfgU90m4NEBHVFFDUWfnA4
-         NQH6UOJvtwAQlpwMApniIE8f8/D2Yc9OrACifoz9y0lKr31XZXe0ZPRAGdpIASeffTj+
-         mh1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=dK/GVyaPAq7OqgP8DJdyX/lSYliSDDAlGJo5FX4BiHvnryuWJbEWCiOj03qGFpKzHd
-         +LLBhTaGgNV/W/OMGYYmJBMB4knfaZNHO9gNfLAB+dZcDAylcSp2N6dbz5Q4/rpnkLSt
-         +nt+aX///FbslBadT4gB30qId9dwK5cQgRiUUfIxAO9BCo44rToLyhYzLS6Er0fMoF3v
-         mhVwIbkTI8r4TfutnjjqSOXaGnw+S49ekozKHCDngocU3ahmqGk06GoWHDHyxaD1TUVZ
-         K2b/FQznXBC6PLE5wgXYLd3lUpNzE0aQiWj/XhNT+DtUNBxTxS0F8obCcs7ENXrqhF0r
-         w/tA==
-X-Gm-Message-State: ANhLgQ12s3odhcI7wzJRB+PiV3SzXw8Jy0TPzR0JJaaytFCziRg+0wZJ
-        IxcDMufrcXYj8FQEra89cMbu1Jxf71D3Pzf+1GI=
-X-Google-Smtp-Source: ADFU+vsduRj3hrCf9DhK2bNvKDpHo5/uVyU9cffULt+Uh+xPEULP1CtCYadaVmwGXRoaldTKMt0qeMlG0eCXLSlrUpo=
-X-Received: by 2002:a05:6830:3151:: with SMTP id c17mr6555852ots.310.1584703339020;
- Fri, 20 Mar 2020 04:22:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:22:18
- -0700 (PDT)
-From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
-Date:   Fri, 20 Mar 2020 11:22:18 +0000
-Message-ID: <CAHHubrYe0Tme3z6y4=35rwkeKtHK_aNvGc957sh9eWYyPOf1Vg@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726801AbgCTR7r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Mar 2020 13:59:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57202 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727303AbgCTR7r (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 20 Mar 2020 13:59:47 -0400
+Received: from localhost (unknown [137.135.114.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8B76420773;
+        Fri, 20 Mar 2020 17:59:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584727186;
+        bh=DGeijnOIn12ma/KFVaPMSvVX+s9rvjhEG+Ur0PAtiuI=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=ONzJ0ZJ6nw3PrFfrdSoYaE8wT4mwKndSAPADBXc+39M1wul0Y2nVV2/xIgfhFkTno
+         Lxu1FQbP2065765hwrMvNfCwQe3JlFIdcnNio/gpTrJ4BJCTS/lL+PP23IN25vwn3W
+         ZcaqvudhiGxL3xUHgjRv3udAl6zCfims03R+UzHg=
+Date:   Fri, 20 Mar 2020 17:59:45 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc:     stable <stable@vger.kernel.org>
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH] rtc: max8907: add missing select REGMAP_IRQ
+In-Reply-To: <1584545209-20433-1-git-send-email-clabbe@baylibre.com>
+References: <1584545209-20433-1-git-send-email-clabbe@baylibre.com>
+Message-Id: <20200320175946.8B76420773@mail.kernel.org>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Sir/Madam
+Hi
 
-HAPPY SURVIVAL OF CORONAVIRUS
+[This is an automated email]
 
-We the West African Monitoring Committee of the West African Economic
-Community(ECOWAS)are contacting you for a business transaction which
-we feel will be of great interest to you.
+This commit has been processed because it contains a "Fixes:" tag
+fixing commit: 94c01ab6d754 ("rtc: add MAX8907 RTC driver").
 
-Our duty is to see to the coming in and out of funds into this sub
-region.There is a fund which we confiscated worth of $12.5 million
-dollars.We will like you to receive this fund on your name in your
-account and as well helping us in the investment.
+The bot has tested the following trees: v5.5.10, v5.4.26, v4.19.111, v4.14.173, v4.9.216, v4.4.216.
 
-You are advised to contact us as soon as you get this message for
-details of the transaction if you find it interesting.
+v5.5.10: Build OK!
+v5.4.26: Build OK!
+v4.19.111: Build OK!
+v4.14.173: Build OK!
+v4.9.216: Failed to apply! Possible dependencies:
+    959df7778bbd ("rtc: Enable compile testing for Maxim and Samsung drivers")
 
-Best Regards,
+v4.4.216: Failed to apply! Possible dependencies:
+    01ea01b35120 ("rtc: max77686: Use a driver data struct instead hard-coded values")
+    0b4f8b085b5d ("rtc: max77686: fix checkpatch error")
+    5981804b8365 ("rtc: max77686: Use usleep_range() instead of msleep()")
+    69be249ab4bc ("rtc: max77686: use rtc regmap to access RTC registers")
+    726fe738bd5c ("rtc: max77686: Add support for MAX20024/MAX77620 RTC IP")
+    862f9453bd14 ("rtc: max77686: Use ARRAY_SIZE() instead of current array length")
+    90a5698a86ba ("rtc: max77686: Add an indirection level to access RTC registers")
+    959df7778bbd ("rtc: Enable compile testing for Maxim and Samsung drivers")
+    bf035f42344a ("rtc: max77686: Cleanup and reduce dmesg output")
+    f3937549a975 ("rtc: max77686: move initialisation of rtc regmap, irq chip locally")
+    f604c48849a5 ("rtc: max77686: avoid reference of parent device info multiple places")
+    f903129b8607 ("rtc: max77686: Add max77802 support")
 
-Mr John Aka
 
-Chairman
-ECOWAS
-West African Monitoring Committee
-Tel 00225 6716 6756
-Abidjan Cote D'Ivoire
+NOTE: The patch will not be queued to stable trees until it is upstream.
+
+How should we proceed with this patch?
+
+-- 
+Thanks
+Sasha
