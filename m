@@ -2,54 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1123E18E47F
-	for <lists+linux-rtc@lfdr.de>; Sat, 21 Mar 2020 21:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6330E18EC30
+	for <lists+linux-rtc@lfdr.de>; Sun, 22 Mar 2020 21:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbgCUUho (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 21 Mar 2020 16:37:44 -0400
-Received: from antares.kleine-koenig.org ([94.130.110.236]:58676 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgCUUho (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 21 Mar 2020 16:37:44 -0400
-Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
-        id 7A7A1939DA9; Sat, 21 Mar 2020 21:37:42 +0100 (CET)
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: omap: drop unused dt-bindings header
-Date:   Sat, 21 Mar 2020 21:37:37 +0100
-Message-Id: <20200321203737.29850-1-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.25.0
+        id S1726756AbgCVUkU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 22 Mar 2020 16:40:20 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:50549 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbgCVUkT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 22 Mar 2020 16:40:19 -0400
+X-Originating-IP: 86.202.105.35
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id EB994FF804;
+        Sun, 22 Mar 2020 20:40:17 +0000 (UTC)
+Date:   Sun, 22 Mar 2020 21:40:16 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] rtc: ds1307: handle oscillator failure flags for
+ ds1388 variant
+Message-ID: <20200322204016.GA221863@piout.net>
+References: <20200207031812.14424-1-chris.packham@alliedtelesis.co.nz>
+ <20200207031812.14424-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200207031812.14424-2-chris.packham@alliedtelesis.co.nz>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The definitons in the dt-binding's gpio header only contains some
-constants to be used in device trees. It is not relevant for rtc-omap
-(as the gpio API hides the details) and in fact unused so it can just be
-dropped.
+On 07/02/2020 16:18:11+1300, Chris Packham wrote:
+> The FLAG register is at a different location to the other supported RTCs
+> so this requires an extra case in the existing switch statement.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  drivers/rtc/rtc-ds1307.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+Applied, thanks.
 
-Signed-off-by: Uwe Kleine-König <uwe@kleine-koenig.org>
----
- drivers/rtc/rtc-omap.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-omap.c b/drivers/rtc/rtc-omap.c
-index d4ed20fb3194..c20fc7937dfa 100644
---- a/drivers/rtc/rtc-omap.c
-+++ b/drivers/rtc/rtc-omap.c
-@@ -9,7 +9,6 @@
-  * Copyright (C) 2014 Johan Hovold <johan@kernel.org>
-  */
- 
--#include <dt-bindings/gpio/gpio.h>
- #include <linux/bcd.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
 -- 
-2.25.0
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
