@@ -2,88 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A63E418FAC1
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 Mar 2020 18:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB9F18FE6F
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 Mar 2020 21:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727278AbgCWRD2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 23 Mar 2020 13:03:28 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:51375 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727067AbgCWRD1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Mar 2020 13:03:27 -0400
-Received: by mail-pj1-f67.google.com with SMTP id hg10so111662pjb.1;
-        Mon, 23 Mar 2020 10:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r44Yp9/fYImLy99hsOf6+RWpCmYIpfxp429+aFH1H4A=;
-        b=vb7hJxbw4mlMzCJAwOKjdYjz+0OjfSGZPZRHTTkhj9ot5JSGvJ6s6qFhsb9HUsdWPp
-         Cx8y+0L/GwYe9bMNfVP3RmCAf4u57XY42Sh4UzhPR4sMRqzIFowPyNtgiBn0ITUmw9i1
-         8o0XNz3ARd5TJdbXfj81ynKOTLb1vR+NJ+jAvlG16lndyo63NAOBA6TLkYj+i5xvCLMA
-         KtS6G7NnXIhNRpS7YE7TUVFULJPZ4xKe+oAGhVkQb4b5x27qHJA1drXX8XzLa0fd9OnK
-         NR3mkGMAnuYtJRN3b2HMD9IcOSw0gxP85rxFRqxhKsvU9WcxZtlob4aJ8ZVjNQ8B/3hj
-         d9vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=r44Yp9/fYImLy99hsOf6+RWpCmYIpfxp429+aFH1H4A=;
-        b=AhgQgqxKOIfaAx7AiLD0GyyKq4SwESlLYeZOUiLIFwzKb/Zgm0YRxA/Eca71GxoCAh
-         rODAeBaqv1kftD5g7PN/WFtE0BFX7eIi87R8LJiF/3uAeHSvfOcgTGYbuyqV90PHX5cr
-         lgysdjsaAkRvCEZy+k2oidsJWeMOxsUA5iHUMBx6JztHF3VCxny/0AewtTIkeUDHtOai
-         X8x3zIlQ5Shs7jPOb5O4tLFL3il7gPh1mLaI8mM2kCzPjGOX9O3m/MQGoCoCwwL3V35c
-         Huw7OXNq2fFjUaR6wYtkWQbwBlkslblTEW89L7fvtTjfZIMTCStP/uCegjIMlvE9oMCp
-         Lflw==
-X-Gm-Message-State: ANhLgQ1LwGoRzZS+ngt20k/PT3k3n/yrGxrTn3GmOzFMfHe7lHRE7dV0
-        XstgvqejJ4hGJUu7tNoPAdeh+wGL26Q=
-X-Google-Smtp-Source: ADFU+vtaZLPu8EuPuVwIfwduBGMWSxG6ryhdS9R7LgDLAg8ZldY1Kx+vIc3HdobmpSjWqQEbDQVu/A==
-X-Received: by 2002:a17:90a:252b:: with SMTP id j40mr266848pje.189.1584983006597;
-        Mon, 23 Mar 2020 10:03:26 -0700 (PDT)
-Received: from VM_0_35_centos.localdomain ([150.109.62.251])
-        by smtp.gmail.com with ESMTPSA id o65sm7386680pfg.187.2020.03.23.10.03.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Mar 2020 10:03:26 -0700 (PDT)
-From:   Qiujun Huang <hqjagain@gmail.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qiujun Huang <hqjagain@gmail.com>
-Subject: [PATCH RESEND -next] rtc: remove set but not used variable 'np'
-Date:   Tue, 24 Mar 2020 01:03:18 +0800
-Message-Id: <1584982998-1341-1-git-send-email-hqjagain@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1725839AbgCWUGP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 Mar 2020 16:06:15 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:54683 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgCWUGP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 Mar 2020 16:06:15 -0400
+X-Originating-IP: 86.202.105.35
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id B1FB8C0004;
+        Mon, 23 Mar 2020 20:06:13 +0000 (UTC)
+Date:   Mon, 23 Mar 2020 21:06:13 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Steve Muckle <smuckle@google.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        LKML <linux-kernel@vger.kernel.org>, linux-rtc@vger.kernel.org,
+        "Cc: Android Kernel" <kernel-team@android.com>
+Subject: Re: [PATCH] rtc: class: support hctosys from modular RTC drivers
+Message-ID: <20200323200508.GA16405@piout.net>
+References: <20191106194625.116692-1-smuckle@google.com>
+ <20191106231923.GK8309@piout.net>
+ <b96f085b-8a0c-7c71-4fde-8af83d49823a@google.com>
+ <20191115133627.GT3572@piout.net>
+ <CAL21Ktd3JmRbkwPCCb77knXg4AWi0vWdU147sVaDaoWeEMauDQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL21Ktd3JmRbkwPCCb77knXg4AWi0vWdU147sVaDaoWeEMauDQ@mail.gmail.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-drivers/rtc/rtc-fsl-ftm-alarm.c: In function ‘ftm_rtc_probe’:
-drivers/rtc/rtc-fsl-ftm-alarm.c:246:22: warning: unused variable ‘np’ [-Wunused-variable]
-	struct device_node *np = pdev->dev.of_node;
+On 27/12/2019 12:23:23-0800, Steve Muckle wrote:
+> On Fri, Nov 15, 2019 at 5:36 AM Alexandre Belloni <
+> alexandre.belloni@bootlin.com> wrote:
+> 
+> > On 06/11/2019 15:37:49-0800, Steve Muckle wrote:
+> > > On 11/6/19 3:19 PM, Alexandre Belloni wrote:
+> > > > On 06/11/2019 11:46:25-0800, Steve Muckle wrote:
+> > > > > Due to distribution constraints it may not be possible to statically
+> > > > > compile the required RTC driver into the kernel.
+> > > > >
+> > > > > Expand RTC_HCTOSYS support to cover all RTC devices (statically
+> > compiled
+> > > > > or not) by checking at the end of RTC device registration whether the
+> > > > > time should be synced.
+> > > > >
+> > > >
+> > > > This does not really help distributions because most of them will still
+> > > > have "rtc0" hardcoded and rtc0 is often the rtc that shouldn't be used.
+> > >
+> > > Just for my own edification, why is that? Is rtc0 normally useless on PC
+> > for
+> > > some reason?
+> > >
+> >
+> > On PC, rtc0 is probably fine which is not the case for other
+> > architectures where rtc0 is the SoC RTC and is often not battery backed.
+> >
+> > > On the platforms I'm working with I believe it can be assured that rtc0
+> > will
+> > > be the correct rtc. That doesn't help typical distributions though.
+> > >
+> > > What about a kernel parameter to optionally override the rtc hctosys
+> > device
+> > > at runtime?
+> > >
+> >
+> > What about keeping that in userspace instead which is way easier than
+> > messing with kernel parameters?
+> >
+> 
+> This should ideally happen before file systems are mounted so I don't see
+> many alternatives for communicating which RTC should be used. Android uses
+> the kernel command line for userspace parameters as well and that's an
+> option but that defeats part of the value of doing it in userspace IMO.
+> There's also device tree but I'm not sure this belongs there.
+> 
+> Hctosys is also saving and restoring the system time on suspend/resume. It
+> seems more efficient to me to do this (which happens very frequently on an
+> Android device) in the kernel as opposed to in userspace.
+> 
+> If I set the initial system time from the rtc in userspace but continue to
+> rely on the hctosys suspend/resume code, as it stands there will be a
+> window after the rtc driver is loaded but before the system time is set
+> where if suspend is entered, the correct time in the rtc will be lost.
+> 
+> > > Can't you move away from HCTOSYS and do the correct thing in userspace
+> > > > instead of the crap hctosys is doing?
+> > >
+> > > Yes, I just figured it's a small change, and if hctosys can be made to
+> > work
+> > > might as well use that.
+> >
+> > The fact is that hctosys is more related to time keeping than it is to
+> > the RTC subsytem. It also does a very poor job setting the system time
+> > because adding 0.5s is not the smartest thing to do. The rtc granularity
+> > is indeed 1 second but is can be very precisely set.
+> >
+> 
+> No argument with that, but millions of devices successfully rely on it
+> today. AFAICT this simple patch doesn't make anything worse. Together with
+> a change to support a kernel parameter for runtime rtc selection, it should
+> allow RTC drivers to be modularized on many systems. Can it be adopted as a
+> stopgap measure?
 
-commit cd49b579e705 ("rtc: fsl-ftm-alarm: enable acpi support")
-involved this unused variable, remove it.
-
-Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
----
- drivers/rtc/rtc-fsl-ftm-alarm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-index c572044..0f4142b 100644
---- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-+++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-@@ -243,7 +243,6 @@ static int ftm_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
- 
- static int ftm_rtc_probe(struct platform_device *pdev)
- {
--	struct device_node *np = pdev->dev.of_node;
- 	int irq;
- 	int ret;
- 	struct ftm_rtc *rtc;
--- 
-1.8.3.1
-
+I've applied this patch for 5.7 after removing the unnecessary
+reformatting of the kconfig help.
