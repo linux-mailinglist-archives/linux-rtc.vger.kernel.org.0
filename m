@@ -2,50 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 372C0190B97
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 11:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DBE190B99
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 11:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727201AbgCXK5N (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Mar 2020 06:57:13 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:36342 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727112AbgCXK5N (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 06:57:13 -0400
-Received: by mail-wr1-f68.google.com with SMTP id 31so14801651wrs.3
-        for <linux-rtc@vger.kernel.org>; Tue, 24 Mar 2020 03:57:11 -0700 (PDT)
+        id S1727112AbgCXK5s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Mar 2020 06:57:48 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36408 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbgCXK5s (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 06:57:48 -0400
+Received: by mail-wr1-f67.google.com with SMTP id 31so14803749wrs.3
+        for <linux-rtc@vger.kernel.org>; Tue, 24 Mar 2020 03:57:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=rxfBoUcTAjy/KXQNUn7YUvrT2t4HIupwqUhZ33S66ss=;
-        b=c1xTKH3BAJuomeNyz2i+suC7oboh1pmfXLPPnrnJtADS55zxZadAuhFVqWZpQflV4E
-         WACXYT7z9kMKrZBJ9a3O20E2Q8OYBg9NX2uWhKaXIdiqKRUFmzpSQum6gsv5bWN2TLai
-         8Blo1IYYk0myZ+R16jwLesrB2gmLQA3KEsK75uXPhFgGSsg4Xx8WUHm24wbmetV3EGMq
-         kN8UbbcflEF6GQ3GoiZ65hJugQur6GrLDD9bYIljFPFMJrq21t2mFJ50X1EoWwLs8zlx
-         yUtePUy9qDaN70PuJdDARuGl3K04koFAvgEkDaYKmCXUnxmMDyNTZUmkVPPH044AcQgT
-         7sEA==
+        bh=DOA10CRKFJGu8b5wtBJ2yLDJfOkq/sBVSQmhdUC4ypY=;
+        b=XzPL8rmmIVLxiwmtlWoRSXM0V5GpXguC00V1OiwP6D+VNJxQu2ndjNH1DMpUjS28PQ
+         95d55nIqF92A5FJDVtQG8Jzb05LrNkZmBvwRk7n8ylcgjn2PXRej0umf85yg4FJtwRIf
+         1d6lguSarwuUd5qHDfnSxccZHHNay6tDtznC6eX6gJLk7WG884AyXPo8Re0uFBwUCYRa
+         EJvXYkjpEwuOQ+odcen6exRdljEbPs65kh1We93B8zHf7DKnQ9qYQGqCQip3Pr7KLhbt
+         MOAHL7oolr6K4tZz9zakUdiOTZZ68VaGyLG81OjlfADYwnOzGldnrkt5IBYVDJai8PZR
+         9zoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=rxfBoUcTAjy/KXQNUn7YUvrT2t4HIupwqUhZ33S66ss=;
-        b=lhoAHlFKY2fnIsZgSmVFPB+JzjWefEswRrXDbJWIatIJImI1euguoif1yfxePHWW21
-         M+RWFnI/7Hy11I1dYvCsldeJvPTqmKLir+R5QgFaD0J1prh96sPQqSgUBe1G0JXHa8Oq
-         u1Fq9tgZpJIj9aPlaMGcp3W3AMZCX4HuILEASu2h7Y3yujtjk6YkyRjcnDsFFT7xjSqv
-         0J+P6H7Q1Dn9zmExxZ7DfNxAnKvA8upg7D+K/oVT7tGJzGOzLzpnwgajdPFu157YB5sy
-         4kCpiDR6cWzGk8YefgUlFS3cmQGZhxx4+AKM6Oca1geQDaHcYLgeK4eQ0hAB4dwienb7
-         lwtQ==
-X-Gm-Message-State: ANhLgQ1QAxkY5LIklobR1VFTihR8VMksmOVdcHggY4iyZ8IiX7ZsaTLd
-        PFb0z2W8sfRsE+SsSLJhbwL1OQ==
-X-Google-Smtp-Source: ADFU+vu/Xqcc5SljHMAFXyLi9BXIlptXWFB94z0f4tJWF2QaBlwACgFlkmLPeyXxq4y2mK7N7ncepA==
-X-Received: by 2002:adf:b6a5:: with SMTP id j37mr35424592wre.412.1585047431070;
-        Tue, 24 Mar 2020 03:57:11 -0700 (PDT)
+        bh=DOA10CRKFJGu8b5wtBJ2yLDJfOkq/sBVSQmhdUC4ypY=;
+        b=OT7wbQ098kb7HoRuR5+YwqF79sqBStbeaAE/DPwAzerAR1aS/WmUZNq/EEMjxFbfxd
+         lKDNyxQQk1hLAoZqhAjZDKM5zAkCGCEWE0lIsOKNCwxwQhWYvktfCfGwmqt4QinjRjY2
+         r/GcF5xmflaWSZLSXB0yQM8b6NJaQTEjEm2GPmRZVpw/rPwPaY4IZEWRxcx8UMx9LHLQ
+         YOtQDire8HXm2a+ANlc+XGHni9dzx4/OeLicWOjmKf3w1Lrtgvu5cSEO/rL96NNwr4sK
+         KUR/PK8Nv2F3Hllvzx44XWskEM53fJpToxwcJ2LkB7Pt/eR2exJhFQCW51/NUtmKRNhD
+         V7vA==
+X-Gm-Message-State: ANhLgQ34Fj0NR7rNnrm+0FkvqnQcSKO2vdQjX22oNpLU0lQt1SZa208D
+        D/bFYcbmGWtMJncanBX7a8wsMQ==
+X-Google-Smtp-Source: ADFU+vt2lLYB0Tgp6XRl+Nd0We086rBZL2iX6nYLI5T5X83Rf+H43VbfRkFbjVqQgqGMEydvpBiXPQ==
+X-Received: by 2002:adf:ba48:: with SMTP id t8mr36017493wrg.329.1585047466432;
+        Tue, 24 Mar 2020 03:57:46 -0700 (PDT)
 Received: from dell ([2.27.35.213])
-        by smtp.gmail.com with ESMTPSA id h132sm2862295wmf.18.2020.03.24.03.57.09
+        by smtp.gmail.com with ESMTPSA id c7sm17274309wrn.49.2020.03.24.03.57.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 03:57:10 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 10:57:59 +0000
+        Tue, 24 Mar 2020 03:57:45 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 10:58:35 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Andreas Kemnade <andreas@kemnade.info>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
@@ -54,15 +54,15 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
         stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
         letux-kernel@openphoenux.org, knaack.h@gmx.de, lars@metafoo.de,
         pmeerw@pmeerw.net, linux-iio@vger.kernel.org, jic23@kernel.org
-Subject: Re: [PATCH v7 4/7] mfd: rn5t618: add more subdevices
-Message-ID: <20200324105759.GI5477@dell>
+Subject: Re: [PATCH v7 7/7] mfd: rn5t618: cleanup i2c_device_id
+Message-ID: <20200324105835.GJ5477@dell>
 References: <20200320081105.12026-1-andreas@kemnade.info>
- <20200320081105.12026-5-andreas@kemnade.info>
+ <20200320081105.12026-8-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200320081105.12026-5-andreas@kemnade.info>
+In-Reply-To: <20200320081105.12026-8-andreas@kemnade.info>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
@@ -70,20 +70,16 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Fri, 20 Mar 2020, Andreas Kemnade wrote:
 
-> Since the RC5T619 has a RTC, use a separate subdevice list for that.
-> The ADC should be the same as in the RN5T618, according to drivers
-> in the wild, but since it is not tested, the ADC is only added for
-> the RC5T619.
+> That list was just empty, so it can be removed if .probe_new
+> instead of .probe is used
 > 
+> Suggested-by: Lee Jones <lee.jones@linaro.org>
 > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
-> Changes in v6:
-> - squashed with patch from former ADC patchset
-> 
-> Changes in v3:
-> - alignment cleanup
->  drivers/mfd/rn5t618.c | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
+> Functional independent from the other patches, but since they are
+> touching similar areas, commit/merge conflicts would occur.
+>  drivers/mfd/rn5t618.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
 
 For my own reference:
   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
