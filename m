@@ -2,63 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD7B190600
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 08:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D0F1909BE
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 10:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbgCXHD5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Mar 2020 03:03:57 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:12184 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725951AbgCXHD5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 24 Mar 2020 03:03:57 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 47ECCC2AEB2ADCE16AD7;
-        Tue, 24 Mar 2020 15:03:49 +0800 (CST)
-Received: from localhost (10.173.223.234) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Tue, 24 Mar 2020
- 15:03:42 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peng.ma@nxp.com>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] rtc: fsl-ftm-alarm: remove set but not used variable 'np'
-Date:   Tue, 24 Mar 2020 15:03:36 +0800
-Message-ID: <20200324070336.59972-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1727366AbgCXJmM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Mar 2020 05:42:12 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:45807 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727223AbgCXJmM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 05:42:12 -0400
+X-Originating-IP: 86.202.105.35
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id DCD5FC000F;
+        Tue, 24 Mar 2020 09:42:10 +0000 (UTC)
+Date:   Tue, 24 Mar 2020 10:42:09 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     xiaolinkui <xiaolinkui@tj.kylinos.cn>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: Kconfig: change the tristate type to bool
+Message-ID: <20200324094209.GI5504@piout.net>
+References: <20200323124339.6520-1-xiaolinkui@tj.kylinos.cn>
+ <20200323134335.GC5504@piout.net>
+ <336f9aea-d28a-d114-9a0c-a893d9cb9af3@tj.kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.173.223.234]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <336f9aea-d28a-d114-9a0c-a893d9cb9af3@tj.kylinos.cn>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-drivers/rtc/rtc-fsl-ftm-alarm.c: In function 'ftm_rtc_probe':
-drivers/rtc/rtc-fsl-ftm-alarm.c:246:22: warning: unused variable 'np' [-Wunused-variable]
-  struct device_node *np = pdev->dev.of_node;
-                      ^~
-commit cd49b579e705 ("rtc: fsl-ftm-alarm: enable acpi support")
-left behind this, remove it.
+On 24/03/2020 17:33:00+0800, xiaolinkui wrote:
+> On 3/23/20 9:43 PM, Alexandre Belloni wrote:
+> > On 23/03/2020 20:43:39+0800, xiaolinkui wrote:
+> > > If the rtc driver is compiled into a module, hctosys can't
+> > > read the rtc clock during system startup.
+> > > The dmesg log will have the following information:
+> > > 
+> > > [    2.286512] hctosys: unable to open rtc device (rtc0)
+> > > 
+> > > So the rtc driver configuration we need cannot be set to m.
+> > > 
+> > Wow, you are not even trying, the solution is to not use hctosys.
+> > 
+> > 
+> Thank you for your reply. Yes, if we don't use hctosys, we won't have this
+> problem. But　without hctosys, we cannot get the clock from rtc during
+> system startup.  Is it wrong for the　system time each time the system is
+> started for a machine without Internet access?
+> 
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/rtc/rtc-fsl-ftm-alarm.c | 1 -
- 1 file changed, 1 deletion(-)
+Your userspace can read the RTC and set the system time properly.
 
-diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-index c572044ff06e..0f4142b35f38 100644
---- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-+++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-@@ -243,7 +243,6 @@ static const struct rtc_class_ops ftm_rtc_ops = {
- 
- static int ftm_rtc_probe(struct platform_device *pdev)
- {
--	struct device_node *np = pdev->dev.of_node;
- 	int irq;
- 	int ret;
- 	struct ftm_rtc *rtc;
+
 -- 
-2.17.1
-
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
