@@ -2,90 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DBE190B99
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 11:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48B819183B
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 18:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgCXK5s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Mar 2020 06:57:48 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36408 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727095AbgCXK5s (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 06:57:48 -0400
-Received: by mail-wr1-f67.google.com with SMTP id 31so14803749wrs.3
-        for <linux-rtc@vger.kernel.org>; Tue, 24 Mar 2020 03:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DOA10CRKFJGu8b5wtBJ2yLDJfOkq/sBVSQmhdUC4ypY=;
-        b=XzPL8rmmIVLxiwmtlWoRSXM0V5GpXguC00V1OiwP6D+VNJxQu2ndjNH1DMpUjS28PQ
-         95d55nIqF92A5FJDVtQG8Jzb05LrNkZmBvwRk7n8ylcgjn2PXRej0umf85yg4FJtwRIf
-         1d6lguSarwuUd5qHDfnSxccZHHNay6tDtznC6eX6gJLk7WG884AyXPo8Re0uFBwUCYRa
-         EJvXYkjpEwuOQ+odcen6exRdljEbPs65kh1We93B8zHf7DKnQ9qYQGqCQip3Pr7KLhbt
-         MOAHL7oolr6K4tZz9zakUdiOTZZ68VaGyLG81OjlfADYwnOzGldnrkt5IBYVDJai8PZR
-         9zoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=DOA10CRKFJGu8b5wtBJ2yLDJfOkq/sBVSQmhdUC4ypY=;
-        b=OT7wbQ098kb7HoRuR5+YwqF79sqBStbeaAE/DPwAzerAR1aS/WmUZNq/EEMjxFbfxd
-         lKDNyxQQk1hLAoZqhAjZDKM5zAkCGCEWE0lIsOKNCwxwQhWYvktfCfGwmqt4QinjRjY2
-         r/GcF5xmflaWSZLSXB0yQM8b6NJaQTEjEm2GPmRZVpw/rPwPaY4IZEWRxcx8UMx9LHLQ
-         YOtQDire8HXm2a+ANlc+XGHni9dzx4/OeLicWOjmKf3w1Lrtgvu5cSEO/rL96NNwr4sK
-         KUR/PK8Nv2F3Hllvzx44XWskEM53fJpToxwcJ2LkB7Pt/eR2exJhFQCW51/NUtmKRNhD
-         V7vA==
-X-Gm-Message-State: ANhLgQ34Fj0NR7rNnrm+0FkvqnQcSKO2vdQjX22oNpLU0lQt1SZa208D
-        D/bFYcbmGWtMJncanBX7a8wsMQ==
-X-Google-Smtp-Source: ADFU+vt2lLYB0Tgp6XRl+Nd0We086rBZL2iX6nYLI5T5X83Rf+H43VbfRkFbjVqQgqGMEydvpBiXPQ==
-X-Received: by 2002:adf:ba48:: with SMTP id t8mr36017493wrg.329.1585047466432;
-        Tue, 24 Mar 2020 03:57:46 -0700 (PDT)
-Received: from dell ([2.27.35.213])
-        by smtp.gmail.com with ESMTPSA id c7sm17274309wrn.49.2020.03.24.03.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 03:57:45 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 10:58:35 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, jic23@kernel.org
-Subject: Re: [PATCH v7 7/7] mfd: rn5t618: cleanup i2c_device_id
-Message-ID: <20200324105835.GJ5477@dell>
-References: <20200320081105.12026-1-andreas@kemnade.info>
- <20200320081105.12026-8-andreas@kemnade.info>
+        id S1727382AbgCXRx6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Mar 2020 13:53:58 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:43062 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727314AbgCXRx6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 13:53:58 -0400
+X-Greylist: delayed 540 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Mar 2020 13:53:56 EDT
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 7FE358030776;
+        Tue, 24 Mar 2020 17:44:50 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 882jLCueSa2y; Tue, 24 Mar 2020 20:44:48 +0300 (MSK)
+From:   <Sergey.Semin@baikalelectronics.ru>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paul.burton@imgtec.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <devicetree@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/6] clocksource: Fix MIPS GIC and DW APB Timer for Baikal-T1 SoC support
+Date:   Tue, 24 Mar 2020 20:43:19 +0300
+Message-ID: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200306125622.839ED80307C4@mail.baikalelectronics.ru>
+References: <20200306125622.839ED80307C4@mail.baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200320081105.12026-8-andreas@kemnade.info>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 20 Mar 2020, Andreas Kemnade wrote:
+From: Serge Semin <fancer.lancer@gmail.com>
 
-> That list was just empty, so it can be removed if .probe_new
-> instead of .probe is used
-> 
-> Suggested-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> Functional independent from the other patches, but since they are
-> touching similar areas, commit/merge conflicts would occur.
->  drivers/mfd/rn5t618.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+As for all Baikal-T1 SoC related patchsets, which need this, we replaced
+the DW APB Timer legacy plain text-based dt-binding file with DT schema.
+Similarly the MIPS GIC bindings file is also converted to DT schema seeing
+it also defines the MIPS GIC Timer binding.
 
-For my own reference:
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Aside from MIPS-specific r4k timer Baikal-T1 chip also provides a
+functionality of two another timers: embedded into the MIPS GIC timer and
+three external DW timers available over APB bus. But we can't use them
+before the corresponding drivers are properly fixed. First of all DW APB
+Timer shouldn't be bound to a single CPU, since as being accessible over
+APB they are external with respect to all possible CPUs. Secondly there
+might be more than just two DW APB Timers in the system (Baikal-T1 has
+three of them), so permit the driver to use one of them as a clocksource
+and the rest - for clockevents. Thirdly it's possible to use MIPS GIC
+timer as a clocksource so register it in the corresponding subsystem
+(the patch has been found in the Paul Burton MIPS repo so I left the
+original Signed-off-by attribute). Finally in the same way as r4k timer
+the MIPS GIC timer should be used with care when CPUFREQ config is enabled
+since in case of CM2 the timer counting depends on the CPU reference clock
+frequency while the clocksource subsystem currently doesn't support the
+timers with non-stable clock.
+
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+commit 98d54f81e36b ("Linux 5.6-rc4").
+
+Changelog v2:
+- Fix the SoB tags.
+- Our corporate email server doesn't change Message-Id anymore, so the
+  patchset is resubmitted being in the cover-letter-threaded format.
+- Convert the "snps,dw-apb-timer" binding to DT schema in a dedicated
+  patch.
+- Convert the "mti,gic" binding to DT schema in a dedicated patch.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paul.burton@imgtec.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: devicetree@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Paul Burton (1):
+  clocksource: mips-gic-timer: Register as sched_clock
+
+Serge Semin (5):
+  dt-bindings: rtc: Convert snps,dw-apb-timer to DT schema
+  dt-bindings: interrupt-controller: Convert mti,gic to DT schema
+  clocksource: dw_apb_timer: Set clockevent any-possible-CPU mask
+  clocksource: dw_apb_timer_of: Fix missing clockevent timers
+  clocksource: mips-gic-timer: Set limitations on
+    clocksource/sched-clocks usage
+
+ .../interrupt-controller/mips-gic.txt         |  67 --------
+ .../interrupt-controller/mti,gic.yaml         | 152 ++++++++++++++++++
+ .../devicetree/bindings/rtc/dw-apb.txt        |  32 ----
+ .../bindings/rtc/snps,dw-apb-timer.yaml       |  88 ++++++++++
+ drivers/clocksource/dw_apb_timer.c            |  18 +--
+ drivers/clocksource/dw_apb_timer_of.c         |   9 +-
+ drivers/clocksource/mips-gic-timer.c          |  30 +++-
+ include/linux/dw_apb_timer.h                  |   2 +-
+ 8 files changed, 276 insertions(+), 122 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/dw-apb.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/snps,dw-apb-timer.yaml
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+
