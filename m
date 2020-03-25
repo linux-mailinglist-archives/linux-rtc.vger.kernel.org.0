@@ -2,138 +2,115 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5C31918DF
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 Mar 2020 19:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC2C191EB7
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2020 02:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgCXSUx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Mar 2020 14:20:53 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46613 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728047AbgCXSUw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 Mar 2020 14:20:52 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q5so2203146lfb.13;
-        Tue, 24 Mar 2020 11:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vZ2grX9EdtsDCTdMZUk+KGs8dumK5Lsw3WmRUPsPmLQ=;
-        b=g9/9A+OyX8xJITb28HO9MKB6+cdg+n52KnynJT9xR6eCDDU3Xgg0ucNRZ6fgDnzsSf
-         LjC5k/hBDKSg6GWsUm+VdneNJMaVgFNOaGB/xKBKIVcQAmEB/xjZ/3M8YEkJeCUjmB9M
-         GzHm4Ctk5/9bkQt7bpe1K3Qdtn/ut2kVeTk48xb7qKCqo27MV7thqXYBmvDkm4KKHvcO
-         gC5L4Uq2D3dyC59Moj++lKKAHRqfj6o3WliVPfJ+jSG16H+L0SWaIqzGKlaBYeKcAI80
-         y8BGym5dGtclGStfcNoFa39gvxtFXj/Bks7ZG8EhJEZphRbld5Mf07Dy7Vz9+I35cMNF
-         nysw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vZ2grX9EdtsDCTdMZUk+KGs8dumK5Lsw3WmRUPsPmLQ=;
-        b=pehOLrjkfV53m51U+DQOZoYNoMeKeReKgJEjaB3t9jGoNxW3qZ8XP1Drm5VbhEXlhZ
-         rl7htfsT5RFtb4mrcCWWKoY6opCk5OEDW4Z1TSuV8fOqBG0ZAbTrwHPkQOOdyW+vz0ay
-         OcP6wg66DtzNbKDPjL4hpd+qtp19iWVWishhOOY7YyN/GAp02TTmwpeCjwmLfwJR33+g
-         rQ5gP4QvGdNbq9IpBiYEKgFVNMknlkZ+3YXHV3FkM4/6l7vqGpFk0e6BYHb8k2Ok/LUH
-         JN3cgaPjy9mvYlGN4Db91iFvH4Ci6Z5BOBKoCQbLIy/nossX/IyS1i63avvaLwLnM4xi
-         dPzg==
-X-Gm-Message-State: ANhLgQ0gHruR62C9u5uXnrbixVMW5HOAEKQ6jMI6CMBMbi+sof3M/wu3
-        DQIYwQ1i7hu9gn7VQyllpls=
-X-Google-Smtp-Source: ADFU+vtFvpq0POhOnkLU430bk6n5oSPRbp8Bisgt5nf1Ld/HAQp/Rad6pPPa6Xb4zIivCVN1cWWmVg==
-X-Received: by 2002:a19:6f07:: with SMTP id k7mr13886435lfc.79.1585074050889;
-        Tue, 24 Mar 2020 11:20:50 -0700 (PDT)
-Received: from mobilestation ([95.79.136.110])
-        by smtp.gmail.com with ESMTPSA id h10sm10603614ljg.38.2020.03.24.11.20.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 11:20:50 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 21:20:47 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Sergey.Semin@baikalelectronics.ru,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: rtc: Convert snps,dw-apb-timer to DT
- schema
-Message-ID: <20200324182047.iziujb7n7slqtzck@mobilestation>
-References: <20200306125622.839ED80307C4@mail.baikalelectronics.ru>
- <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
- <20200324174325.14213-2-Sergey.Semin@baikalelectronics.ru>
- <20200324180709.GO5504@piout.net>
+        id S1727277AbgCYBuk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 Mar 2020 21:50:40 -0400
+Received: from mail-eopbgr00049.outbound.protection.outlook.com ([40.107.0.49]:2117
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727211AbgCYBuj (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 24 Mar 2020 21:50:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WxTXALi/u9X4RQuI6mqvPERbbfZSCpVVc2fgZN0i3rHAsQLrBCt7lERPfOu55BPJb6drNlU4ecjUwwQGlPUGhNpgujwQ787CZeZQn6Q4zwmJRE9DkHho8LZPUgzUBTsyXkTSMUVTh4OKd6+Y+r83mJ0mU1sym56pxyIjhJnaXg1bE0zJhA0YysRqiVHHYIAtRYsyxXAL1SZ8NNB0PTCvZYkYqCYQrtEMjxIqpG+T10Yg4+5NGsWtDCFlStNJPX+pD/pu6cZ8SL1Rf28U8mFEpcKKVCNWWbLsJ7KTKKCJOFDHky9/+n1SXT0FdFF8JGco8kfCEClpbjPJv5azipF/BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tl1c+xg0kbTCKRfgL5ei0JQpgyHzUpAgE5DykBJr3d4=;
+ b=D+jqOlB1P1OW5iRLxc8TFMemNlreEvD9QqxgXL5/HCoZsLo+Q7oLvstySOm3DpojUrPEpjaW2sh6eutKeJvkaHJhrUD+u/UjDOfpASj57iCj0ahKyAJLldSwKrkYCTYjnzJXc12MeoiOHCXfoUmix17RCvi3qZYBKb3YiVDzeUkVkWpxlInMJV6l9zYr48+7yuZ3OkbbqwseZX7+4ZVyw68GaBQhYd3bjCxBV5Bh+9C9PdjeqJ7rQQ+T24oOqJZt5wC2uZX2Yf2S88pLf4AuvoRnfszu0PEQL1bbBulRk7cIXpB0Ygz/LGqa+Wgl1vDJnoARxB1te3cgS62oQqA9fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tl1c+xg0kbTCKRfgL5ei0JQpgyHzUpAgE5DykBJr3d4=;
+ b=KZdsbvwLZ0GVhvpChasplxwLnzQFI7EXzjhhaQ5W/yPbj7e9EbmUIsTyhK+rAiRD/RN/h+NfS1QL9HF4mtGZn1mmyPhHKRcvdv2CoH/i+iEQyFb76qX0HDUQctzzMtpeiV78tHTximzzmkpPm2Fnb3ikHWJsl7q2rg0dA0ieKA0=
+Received: from AM7PR04MB7016.eurprd04.prod.outlook.com (52.135.58.214) by
+ AM7PR04MB6997.eurprd04.prod.outlook.com (10.141.174.75) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.20; Wed, 25 Mar 2020 01:50:35 +0000
+Received: from AM7PR04MB7016.eurprd04.prod.outlook.com
+ ([fe80::14c2:8800:1248:ddfa]) by AM7PR04MB7016.eurprd04.prod.outlook.com
+ ([fe80::14c2:8800:1248:ddfa%7]) with mapi id 15.20.2835.023; Wed, 25 Mar 2020
+ 01:50:35 +0000
+From:   Peng Ma <peng.ma@nxp.com>
+To:     YueHaibing <yuehaibing@huawei.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH -next] rtc: fsl-ftm-alarm: remove set but not used
+ variable 'np'
+Thread-Topic: [PATCH -next] rtc: fsl-ftm-alarm: remove set but not used
+ variable 'np'
+Thread-Index: AQHWAaqGtBlhx83TwkW7jOFF9AzPUKhYi1LQ
+Date:   Wed, 25 Mar 2020 01:50:35 +0000
+Message-ID: <AM7PR04MB70165A5F952E4A3FE3A4EF8BEDCE0@AM7PR04MB7016.eurprd04.prod.outlook.com>
+References: <20200324070336.59972-1-yuehaibing@huawei.com>
+In-Reply-To: <20200324070336.59972-1-yuehaibing@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.ma@nxp.com; 
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 9a599c8b-49a5-455d-c83c-08d7d05ee961
+x-ms-traffictypediagnostic: AM7PR04MB6997:
+x-microsoft-antispam-prvs: <AM7PR04MB6997E15B8F2CD4164FD298A9EDCE0@AM7PR04MB6997.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:541;
+x-forefront-prvs: 0353563E2B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(376002)(136003)(346002)(39860400002)(86362001)(316002)(33656002)(478600001)(54906003)(44832011)(81166006)(9686003)(81156014)(55016002)(71200400001)(64756008)(8936002)(6506007)(2906002)(4326008)(5660300002)(66446008)(8676002)(110136005)(66946007)(66556008)(76116006)(186003)(7696005)(66476007)(52536014)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:AM7PR04MB6997;H:AM7PR04MB7016.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CbT+yuXzf6SP5m//PUiJKtgXf33hFfjqgohRX/E1ECaDyd2DY1iWKalJNp1h8LgL2msw+lpG8lDeMI0RRZlCvanKvkrly/9eG1+Rwkby0hV3vAC1fO1GcbVz74OVNDc2zsTMVd0/xvIghAk5REccisl/kGb2cSZLqaM9s/zTEm7JaFUTfVlnS03GtVL0bgXFXKVXCKtTgSAiG6aUwCD8P/YkzQfhPNtCn4Ghkw7LSxi+JL3Qt2PtC4sOketdu16CwLNnD9o4IBdr5ZOklM6wsDc/tdLST5axzCcgf5uH4peLVp0CMeumlgBHVLu3bYhOmTLYDSrUZWVURVvS7YlR7+/BxgazurunNxCJ7KaXJbF2B9VcclSUKCHRig7f9v0QE1zNI+n26g8Uk47HO7ybcveI9rmaNMnKj2GqYZsRizPWym5jhYThd3ejxQct4qbrxi+aQA/5nZ/7TGkVW/Ov4MCwXq971CrqgUilMAsa2fZGXoFP1dJif/pm9eJQC9Na80PKGBr4S1v+sg+f5pmrrQ==
+x-ms-exchange-antispam-messagedata: 6QNHlqSwtgr/DERw1O/gvoWCF1yY5RLz0x69tLZq+eLDhhnUSYMy9mJgpqDBpOTDIoAQsIYFnudBjYmqGNlGGT+k6j1Rl3RErT6Gi/MlATuC/QFD/gzjx/u031QlxSLeYiJWNFmyl4cJtdPAaiUd2Q==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324180709.GO5504@piout.net>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a599c8b-49a5-455d-c83c-08d7d05ee961
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2020 01:50:35.6331
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7YumK3meG4i0a68uQlN5RiANnmVysJS27eRBzwdGWVT8MYygVPpSlKWUZqzNIcl9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Alexandre
-
-On Tue, Mar 24, 2020 at 07:07:09PM +0100, Alexandre Belloni wrote:
-> Hi,
-> 
-> On 24/03/2020 20:43:20+0300, Sergey.Semin@baikalelectronics.ru wrote:
-> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Modern device tree bindings are supposed to be created as YAML-files
-> > in accordance with DT schema. This commit replaces Synopsys DW Timer
-> > legacy bare text binding with YAML file. As before the binding file
-> > states that the corresponding dts node is supposed to be compatible
-> > with generic DW APB Timer indicated by the "snps,dw-apb-timer"
-> > compatible string and to provide a mandatory registers memory range,
-> > one timer interrupt, either reference clock source or a fixed clock
-> > rate value. It may also have an optional APB bus reference clock
-> > phandle specified.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Paul Burton <paulburton@kernel.org>
-> > Cc: Ralf Baechle <ralf@linux-mips.org>
-> > Cc: Alessandro Zummo <a.zummo@towertech.it>
-> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-rtc@vger.kernel.org
-> > 
-> > ---
-> > 
-> > I have doubts that this binding file belongs to the bindings/rtc
-> > directory seeing it's a pure timer with no rtc facilities like
-> > days/months/years counting and alarms. What about moving it to the
-> > "Documentation/devicetree/bindings/timer/" directory?
-> > 
-> 
-> Exactly my reaction when seeing the patch, please move it out of
-> bindings/rtc/
-> 
-
-Agreed. I am pretty sure Rob find something to be fixed and the main part
-of the patchset still hasn't been reviewed. So v3 will be necessary for sure.
-I'll move this binding out of rtc in a dedicated patch then.
-
--Sergey
-
-P.S. For some reason your email still hasn't been delivered to my corporate
-email, so responding from the private one.
-
-> 
-> -- 
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IFl1ZUhhaWJpbmcgPHl1ZWhh
+aWJpbmdAaHVhd2VpLmNvbT4NCj5TZW50OiAyMDIwxOoz1MIyNMjVIDE1OjA0DQo+VG86IGEuenVt
+bW9AdG93ZXJ0ZWNoLml0OyBhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNvbQ0KPkNjOiBsaW51
+eC1ydGNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBQZW5n
+IE1hDQo+PHBlbmcubWFAbnhwLmNvbT47IFl1ZUhhaWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNv
+bT4NCj5TdWJqZWN0OiBbUEFUQ0ggLW5leHRdIHJ0YzogZnNsLWZ0bS1hbGFybTogcmVtb3ZlIHNl
+dCBidXQgbm90IHVzZWQgdmFyaWFibGUgJ25wJw0KPg0KPmRyaXZlcnMvcnRjL3J0Yy1mc2wtZnRt
+LWFsYXJtLmM6IEluIGZ1bmN0aW9uICdmdG1fcnRjX3Byb2JlJzoNCj5kcml2ZXJzL3J0Yy9ydGMt
+ZnNsLWZ0bS1hbGFybS5jOjI0NjoyMjogd2FybmluZzogdW51c2VkIHZhcmlhYmxlICducCcNCj5b
+LVd1bnVzZWQtdmFyaWFibGVdDQo+ICBzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wID0gcGRldi0+ZGV2
+Lm9mX25vZGU7DQo+ICAgICAgICAgICAgICAgICAgICAgIF5+DQo+Y29tbWl0IGNkNDliNTc5ZTcw
+NSAoInJ0YzogZnNsLWZ0bS1hbGFybTogZW5hYmxlIGFjcGkgc3VwcG9ydCIpIGxlZnQgYmVoaW5k
+DQo+dGhpcywgcmVtb3ZlIGl0Lg0KPg0KPlNpZ25lZC1vZmYtYnk6IFl1ZUhhaWJpbmcgPHl1ZWhh
+aWJpbmdAaHVhd2VpLmNvbT4NCj4tLS0NCj4gZHJpdmVycy9ydGMvcnRjLWZzbC1mdG0tYWxhcm0u
+YyB8IDEgLQ0KPiAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPg0KPmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3J0Yy9ydGMtZnNsLWZ0bS1hbGFybS5jIGIvZHJpdmVycy9ydGMvcnRjLWZzbC1m
+dG0tYWxhcm0uYyBpbmRleA0KPmM1NzIwNDRmZjA2ZS4uMGY0MTQyYjM1ZjM4IDEwMDY0NA0KPi0t
+LSBhL2RyaXZlcnMvcnRjL3J0Yy1mc2wtZnRtLWFsYXJtLmMNCj4rKysgYi9kcml2ZXJzL3J0Yy9y
+dGMtZnNsLWZ0bS1hbGFybS5jDQo+QEAgLTI0Myw3ICsyNDMsNiBAQCBzdGF0aWMgY29uc3Qgc3Ry
+dWN0IHJ0Y19jbGFzc19vcHMgZnRtX3J0Y19vcHMgPSB7DQo+DQo+IHN0YXRpYyBpbnQgZnRtX3J0
+Y19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSAgew0KPi0Jc3RydWN0IGRldmlj
+ZV9ub2RlICpucCA9IHBkZXYtPmRldi5vZl9ub2RlOw0KW1BlbmcgTWFdIEhpLCBIYWlCaW5nLA0K
+DQpUaGFua3MgZm9yIHlvdXIgcGF0Y2gsIHRoaXMgcGF0Y2ggaGFzIGFscmVhZHkgaW4gdXBzdHJl
+YW0oaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzEyMTQwMTQvKQ0KDQpC
+ZXN0IFJlZ2FyZHMsDQpQZW5nDQo+IAlpbnQgaXJxOw0KPiAJaW50IHJldDsNCj4gCXN0cnVjdCBm
+dG1fcnRjICpydGM7DQo+LS0NCj4yLjE3LjENCj4NCg0K
