@@ -2,115 +2,287 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC2C191EB7
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2020 02:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D4A192465
+	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2020 10:42:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727277AbgCYBuk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 Mar 2020 21:50:40 -0400
-Received: from mail-eopbgr00049.outbound.protection.outlook.com ([40.107.0.49]:2117
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727211AbgCYBuj (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 24 Mar 2020 21:50:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WxTXALi/u9X4RQuI6mqvPERbbfZSCpVVc2fgZN0i3rHAsQLrBCt7lERPfOu55BPJb6drNlU4ecjUwwQGlPUGhNpgujwQ787CZeZQn6Q4zwmJRE9DkHho8LZPUgzUBTsyXkTSMUVTh4OKd6+Y+r83mJ0mU1sym56pxyIjhJnaXg1bE0zJhA0YysRqiVHHYIAtRYsyxXAL1SZ8NNB0PTCvZYkYqCYQrtEMjxIqpG+T10Yg4+5NGsWtDCFlStNJPX+pD/pu6cZ8SL1Rf28U8mFEpcKKVCNWWbLsJ7KTKKCJOFDHky9/+n1SXT0FdFF8JGco8kfCEClpbjPJv5azipF/BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tl1c+xg0kbTCKRfgL5ei0JQpgyHzUpAgE5DykBJr3d4=;
- b=D+jqOlB1P1OW5iRLxc8TFMemNlreEvD9QqxgXL5/HCoZsLo+Q7oLvstySOm3DpojUrPEpjaW2sh6eutKeJvkaHJhrUD+u/UjDOfpASj57iCj0ahKyAJLldSwKrkYCTYjnzJXc12MeoiOHCXfoUmix17RCvi3qZYBKb3YiVDzeUkVkWpxlInMJV6l9zYr48+7yuZ3OkbbqwseZX7+4ZVyw68GaBQhYd3bjCxBV5Bh+9C9PdjeqJ7rQQ+T24oOqJZt5wC2uZX2Yf2S88pLf4AuvoRnfszu0PEQL1bbBulRk7cIXpB0Ygz/LGqa+Wgl1vDJnoARxB1te3cgS62oQqA9fQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tl1c+xg0kbTCKRfgL5ei0JQpgyHzUpAgE5DykBJr3d4=;
- b=KZdsbvwLZ0GVhvpChasplxwLnzQFI7EXzjhhaQ5W/yPbj7e9EbmUIsTyhK+rAiRD/RN/h+NfS1QL9HF4mtGZn1mmyPhHKRcvdv2CoH/i+iEQyFb76qX0HDUQctzzMtpeiV78tHTximzzmkpPm2Fnb3ikHWJsl7q2rg0dA0ieKA0=
-Received: from AM7PR04MB7016.eurprd04.prod.outlook.com (52.135.58.214) by
- AM7PR04MB6997.eurprd04.prod.outlook.com (10.141.174.75) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.20; Wed, 25 Mar 2020 01:50:35 +0000
-Received: from AM7PR04MB7016.eurprd04.prod.outlook.com
- ([fe80::14c2:8800:1248:ddfa]) by AM7PR04MB7016.eurprd04.prod.outlook.com
- ([fe80::14c2:8800:1248:ddfa%7]) with mapi id 15.20.2835.023; Wed, 25 Mar 2020
- 01:50:35 +0000
-From:   Peng Ma <peng.ma@nxp.com>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH -next] rtc: fsl-ftm-alarm: remove set but not used
- variable 'np'
-Thread-Topic: [PATCH -next] rtc: fsl-ftm-alarm: remove set but not used
- variable 'np'
-Thread-Index: AQHWAaqGtBlhx83TwkW7jOFF9AzPUKhYi1LQ
-Date:   Wed, 25 Mar 2020 01:50:35 +0000
-Message-ID: <AM7PR04MB70165A5F952E4A3FE3A4EF8BEDCE0@AM7PR04MB7016.eurprd04.prod.outlook.com>
-References: <20200324070336.59972-1-yuehaibing@huawei.com>
-In-Reply-To: <20200324070336.59972-1-yuehaibing@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.ma@nxp.com; 
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9a599c8b-49a5-455d-c83c-08d7d05ee961
-x-ms-traffictypediagnostic: AM7PR04MB6997:
-x-microsoft-antispam-prvs: <AM7PR04MB6997E15B8F2CD4164FD298A9EDCE0@AM7PR04MB6997.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:541;
-x-forefront-prvs: 0353563E2B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(376002)(136003)(346002)(39860400002)(86362001)(316002)(33656002)(478600001)(54906003)(44832011)(81166006)(9686003)(81156014)(55016002)(71200400001)(64756008)(8936002)(6506007)(2906002)(4326008)(5660300002)(66446008)(8676002)(110136005)(66946007)(66556008)(76116006)(186003)(7696005)(66476007)(52536014)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:AM7PR04MB6997;H:AM7PR04MB7016.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CbT+yuXzf6SP5m//PUiJKtgXf33hFfjqgohRX/E1ECaDyd2DY1iWKalJNp1h8LgL2msw+lpG8lDeMI0RRZlCvanKvkrly/9eG1+Rwkby0hV3vAC1fO1GcbVz74OVNDc2zsTMVd0/xvIghAk5REccisl/kGb2cSZLqaM9s/zTEm7JaFUTfVlnS03GtVL0bgXFXKVXCKtTgSAiG6aUwCD8P/YkzQfhPNtCn4Ghkw7LSxi+JL3Qt2PtC4sOketdu16CwLNnD9o4IBdr5ZOklM6wsDc/tdLST5axzCcgf5uH4peLVp0CMeumlgBHVLu3bYhOmTLYDSrUZWVURVvS7YlR7+/BxgazurunNxCJ7KaXJbF2B9VcclSUKCHRig7f9v0QE1zNI+n26g8Uk47HO7ybcveI9rmaNMnKj2GqYZsRizPWym5jhYThd3ejxQct4qbrxi+aQA/5nZ/7TGkVW/Ov4MCwXq971CrqgUilMAsa2fZGXoFP1dJif/pm9eJQC9Na80PKGBr4S1v+sg+f5pmrrQ==
-x-ms-exchange-antispam-messagedata: 6QNHlqSwtgr/DERw1O/gvoWCF1yY5RLz0x69tLZq+eLDhhnUSYMy9mJgpqDBpOTDIoAQsIYFnudBjYmqGNlGGT+k6j1Rl3RErT6Gi/MlATuC/QFD/gzjx/u031QlxSLeYiJWNFmyl4cJtdPAaiUd2Q==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1727459AbgCYJmm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 25 Mar 2020 05:42:42 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35531 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727301AbgCYJml (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 Mar 2020 05:42:41 -0400
+Received: by mail-wr1-f65.google.com with SMTP id d5so2077487wrn.2
+        for <linux-rtc@vger.kernel.org>; Wed, 25 Mar 2020 02:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=vRDeYiMCG4XXoUnQTgsGkl8d/lvzN+sIbey00XaX5XM=;
+        b=QDwl2z2ZAKFLg9mCSI/yr6ImooOPb5Fbs+CphasVocI/0SI+R5F+v5p7dMsBsVu/sm
+         nj+rxcBs7M7oOB3To5sLYPfUhGzDtzeVXP9I08hkoRRQAkp32UihUKBCYgPVs1vtS3Qa
+         PbO0r02L+BfDBd7P4MzuC1Sn0jbIB5gVhiw43nLmKg98NPo4pxshHKRNPWtb3wumxT17
+         oFXTCCi/KZpHwm0F5Sph+oQIeujRyngu1j6ae4xUSS6A9TaRjEBRg3kxWAeWar/0cYej
+         he5RWQlC0Ib8sddoq57miNpslYhx9gGXdmjZHuLocgjCeR7MQWMSKw9nt5HCA9DMMftx
+         gBbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=vRDeYiMCG4XXoUnQTgsGkl8d/lvzN+sIbey00XaX5XM=;
+        b=kXp8ZDBO6YvzOf2IKV+9AOWm/4mXI78ZIBRX6YtHSf6NSiT5ODx1fsjEVP+k9q0QV1
+         g+1ftdPxODQa0ow3urYa0Qe6EnNOskRg15pKhfBqFNC2n/bqQqegeke/8PlSvfG7Q2SR
+         +Nu166TSlENZCt8eHPekc2xZ8EctL8Ul2B3U720HG5ko+H8usy2wAMKtST9GI5B0xAid
+         XMhP71WCA40/1XyNvPMsQoKAlLVgsUutI0/kBQ4+pLFQ5RQ0y/yCfQySnYrz9/w1JVJn
+         12SBb8fnrlmtmI35U1MZmAXcX6mgwy2csV4FF2Kh3b4EA0KIbmskF+weljbI3gnMKUta
+         J7og==
+X-Gm-Message-State: ANhLgQ2R/duyf0r1tC54jFqmSEJWY92NCGFZxVLSd3U6nizpJ8nFjalG
+        RkAbGN8azipCN4siRpCgHuevlg==
+X-Google-Smtp-Source: ADFU+vur7iuRbEAFb8kp1fAHSb42z9lGv7s7JibA/ubrGXmJU2SV6uYfUAdsdWWve6Y7oB1Tmo891A==
+X-Received: by 2002:adf:9ccb:: with SMTP id h11mr2382792wre.22.1585129358113;
+        Wed, 25 Mar 2020 02:42:38 -0700 (PDT)
+Received: from dell ([2.27.35.213])
+        by smtp.gmail.com with ESMTPSA id h26sm8323017wmb.19.2020.03.25.02.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 02:42:37 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 09:43:26 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH v10 3/5] mfd: Add support for the MediaTek MT6358 PMIC
+Message-ID: <20200325094326.GH442973@dell>
+References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a599c8b-49a5-455d-c83c-08d7d05ee961
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Mar 2020 01:50:35.6331
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7YumK3meG4i0a68uQlN5RiANnmVysJS27eRBzwdGWVT8MYygVPpSlKWUZqzNIcl9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6997
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQoNCj4tLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPkZyb206IFl1ZUhhaWJpbmcgPHl1ZWhh
-aWJpbmdAaHVhd2VpLmNvbT4NCj5TZW50OiAyMDIwxOoz1MIyNMjVIDE1OjA0DQo+VG86IGEuenVt
-bW9AdG93ZXJ0ZWNoLml0OyBhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNvbQ0KPkNjOiBsaW51
-eC1ydGNAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBQZW5n
-IE1hDQo+PHBlbmcubWFAbnhwLmNvbT47IFl1ZUhhaWJpbmcgPHl1ZWhhaWJpbmdAaHVhd2VpLmNv
-bT4NCj5TdWJqZWN0OiBbUEFUQ0ggLW5leHRdIHJ0YzogZnNsLWZ0bS1hbGFybTogcmVtb3ZlIHNl
-dCBidXQgbm90IHVzZWQgdmFyaWFibGUgJ25wJw0KPg0KPmRyaXZlcnMvcnRjL3J0Yy1mc2wtZnRt
-LWFsYXJtLmM6IEluIGZ1bmN0aW9uICdmdG1fcnRjX3Byb2JlJzoNCj5kcml2ZXJzL3J0Yy9ydGMt
-ZnNsLWZ0bS1hbGFybS5jOjI0NjoyMjogd2FybmluZzogdW51c2VkIHZhcmlhYmxlICducCcNCj5b
-LVd1bnVzZWQtdmFyaWFibGVdDQo+ICBzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wID0gcGRldi0+ZGV2
-Lm9mX25vZGU7DQo+ICAgICAgICAgICAgICAgICAgICAgIF5+DQo+Y29tbWl0IGNkNDliNTc5ZTcw
-NSAoInJ0YzogZnNsLWZ0bS1hbGFybTogZW5hYmxlIGFjcGkgc3VwcG9ydCIpIGxlZnQgYmVoaW5k
-DQo+dGhpcywgcmVtb3ZlIGl0Lg0KPg0KPlNpZ25lZC1vZmYtYnk6IFl1ZUhhaWJpbmcgPHl1ZWhh
-aWJpbmdAaHVhd2VpLmNvbT4NCj4tLS0NCj4gZHJpdmVycy9ydGMvcnRjLWZzbC1mdG0tYWxhcm0u
-YyB8IDEgLQ0KPiAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPg0KPmRpZmYgLS1naXQg
-YS9kcml2ZXJzL3J0Yy9ydGMtZnNsLWZ0bS1hbGFybS5jIGIvZHJpdmVycy9ydGMvcnRjLWZzbC1m
-dG0tYWxhcm0uYyBpbmRleA0KPmM1NzIwNDRmZjA2ZS4uMGY0MTQyYjM1ZjM4IDEwMDY0NA0KPi0t
-LSBhL2RyaXZlcnMvcnRjL3J0Yy1mc2wtZnRtLWFsYXJtLmMNCj4rKysgYi9kcml2ZXJzL3J0Yy9y
-dGMtZnNsLWZ0bS1hbGFybS5jDQo+QEAgLTI0Myw3ICsyNDMsNiBAQCBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IHJ0Y19jbGFzc19vcHMgZnRtX3J0Y19vcHMgPSB7DQo+DQo+IHN0YXRpYyBpbnQgZnRtX3J0
-Y19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KSAgew0KPi0Jc3RydWN0IGRldmlj
-ZV9ub2RlICpucCA9IHBkZXYtPmRldi5vZl9ub2RlOw0KW1BlbmcgTWFdIEhpLCBIYWlCaW5nLA0K
-DQpUaGFua3MgZm9yIHlvdXIgcGF0Y2gsIHRoaXMgcGF0Y2ggaGFzIGFscmVhZHkgaW4gdXBzdHJl
-YW0oaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzEyMTQwMTQvKQ0KDQpC
-ZXN0IFJlZ2FyZHMsDQpQZW5nDQo+IAlpbnQgaXJxOw0KPiAJaW50IHJldDsNCj4gCXN0cnVjdCBm
-dG1fcnRjICpydGM7DQo+LS0NCj4yLjE3LjENCj4NCg0K
+On Wed, 11 Mar 2020, Hsin-Hsiung Wang wrote:
+
+> This adds support for the MediaTek MT6358 PMIC. This is a
+> multifunction device with the following sub modules:
+> 
+> - Regulator
+> - RTC
+> - Codec
+> - Interrupt
+> 
+> It is interfaced to the host controller using SPI interface
+> by a proprietary hardware called PMIC wrapper or pwrap.
+> MT6358 MFD is a child device of the pwrap.
+> 
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  drivers/mfd/Makefile                 |   2 +-
+>  drivers/mfd/mt6358-irq.c             | 236 +++++++++++++++++++++++++++++
+>  drivers/mfd/mt6397-core.c            |  55 ++++++-
+>  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
+>  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/mt6397/core.h      |   3 +
+>  6 files changed, 731 insertions(+), 5 deletions(-)
+>  create mode 100644 drivers/mfd/mt6358-irq.c
+>  create mode 100644 include/linux/mfd/mt6358/core.h
+>  create mode 100644 include/linux/mfd/mt6358/registers.h
+> 
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index b83f172..9af1414 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -238,7 +238,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC)	+= intel-soc-pmic.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)	+= intel_soc_pmic_bxtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)	+= intel_soc_pmic_chtwc.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)	+= intel_soc_pmic_chtdc_ti.o
+> -mt6397-objs	:= mt6397-core.o mt6397-irq.o
+> +mt6397-objs			:= mt6397-core.o mt6397-irq.o mt6358-irq.o
+>  obj-$(CONFIG_MFD_MT6397)	+= mt6397.o
+>  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)	+= intel_soc_pmic_mrfld.o
+>  
+> diff --git a/drivers/mfd/mt6358-irq.c b/drivers/mfd/mt6358-irq.c
+> new file mode 100644
+> index 0000000..022e5f5
+> --- /dev/null
+> +++ b/drivers/mfd/mt6358-irq.c
+> @@ -0,0 +1,236 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +//
+> +// Copyright (c) 2019 MediaTek Inc.
+
+This is out of date.
+
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/mt6358/core.h>
+> +#include <linux/mfd/mt6358/registers.h>
+> +#include <linux/mfd/mt6397/core.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +static struct irq_top_t mt6358_ints[] = {
+> +	MT6358_TOP_GEN(BUCK),
+> +	MT6358_TOP_GEN(LDO),
+> +	MT6358_TOP_GEN(PSC),
+> +	MT6358_TOP_GEN(SCK),
+> +	MT6358_TOP_GEN(BM),
+> +	MT6358_TOP_GEN(HK),
+> +	MT6358_TOP_GEN(AUD),
+> +	MT6358_TOP_GEN(MISC),
+> +};
+> +
+> +static void pmic_irq_enable(struct irq_data *data)
+> +{
+> +	unsigned int hwirq = irqd_to_hwirq(data);
+> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
+
+6397?
+
+This does make me wonder how different this file is to the existing
+support for the MT6397.  What is the justification for not extending
+that instead of creating a brand new file?
+
+> +	struct pmic_irq_data *irqd = chip->irq_data;
+> +
+> +	irqd->enable_hwirq[hwirq] = true;
+> +}
+> +
+> +static void pmic_irq_disable(struct irq_data *data)
+> +{
+> +	unsigned int hwirq = irqd_to_hwirq(data);
+> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
+> +	struct pmic_irq_data *irqd = chip->irq_data;
+> +
+> +	irqd->enable_hwirq[hwirq] = false;
+> +}
+> +
+> +static void pmic_irq_lock(struct irq_data *data)
+> +{
+> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
+> +
+> +	mutex_lock(&chip->irqlock);
+> +}
+> +
+> +static void pmic_irq_sync_unlock(struct irq_data *data)
+> +{
+> +	unsigned int i, top_gp, gp_offset, en_reg, int_regs, shift;
+> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
+> +	struct pmic_irq_data *irqd = chip->irq_data;
+> +
+> +	for (i = 0; i < irqd->num_pmic_irqs; i++) {
+> +		if (irqd->enable_hwirq[i] == irqd->cache_hwirq[i])
+> +			continue;
+> +
+> +		/* Find out the IRQ group */
+> +		top_gp = 0;
+> +		while ((top_gp + 1) < irqd->num_top &&
+> +		       i >= mt6358_ints[top_gp + 1].hwirq_base)
+> +			top_gp++;
+> +
+> +		/* Find the irq registers */
+
+Nit: "IRQ"
+
+> +		gp_offset = i - mt6358_ints[top_gp].hwirq_base;
+> +		int_regs = gp_offset / MT6358_REG_WIDTH;
+> +		shift = gp_offset % MT6358_REG_WIDTH;
+> +		en_reg = mt6358_ints[top_gp].en_reg +
+> +			 (mt6358_ints[top_gp].en_reg_shift * int_regs);
+> +
+> +		regmap_update_bits(chip->regmap, en_reg, BIT(shift),
+> +				   irqd->enable_hwirq[i] << shift);
+> +
+> +		irqd->cache_hwirq[i] = irqd->enable_hwirq[i];
+> +	}
+> +	mutex_unlock(&chip->irqlock);
+> +}
+
+[...]
+
+> +int mt6358_irq_init(struct mt6397_chip *chip)
+> +{
+> +	int i, j, ret;
+> +	struct pmic_irq_data *irqd;
+> +
+> +	irqd = devm_kzalloc(chip->dev, sizeof(struct pmic_irq_data *),
+
+sizeof(*irqd)
+
+[...]
+
+>  static const struct chip_data mt6397_core = {
+>  	.cid_addr = MT6397_CID,
+>  	.cid_shift = 0,
+> @@ -154,19 +184,33 @@ static int mt6397_probe(struct platform_device *pdev)
+>  	if (pmic->irq <= 0)
+>  		return pmic->irq;
+>  
+> -	ret = mt6397_irq_init(pmic);
+> -	if (ret)
+> -		return ret;
+> -
+>  	switch (pmic->chip_id) {
+>  	case MT6323_CHIP_ID:
+> +		ret = mt6397_irq_init(pmic);
+> +		if (ret)
+> +			return ret;
+> +
+>  		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
+>  					   mt6323_devs, ARRAY_SIZE(mt6323_devs),
+>  					   NULL, 0, pmic->irq_domain);
+>  		break;
+>  
+> +	case MT6358_CHIP_ID:
+> +		ret = mt6358_irq_init(pmic);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
+> +					   mt6358_devs, ARRAY_SIZE(mt6358_devs),
+> +					   NULL, 0, pmic->irq_domain);
+
+In a subsequent patch you can choose the correct mtXXXX_devs structure
+to pass and call devm_mfd_add_devices() only once below the switch().
+
+> +		break;
+> +
+>  	case MT6391_CHIP_ID:
+>  	case MT6397_CHIP_ID:
+> +		ret = mt6397_irq_init(pmic);
+> +		if (ret)
+> +			return ret;
+> +
+>  		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
+>  					   mt6397_devs, ARRAY_SIZE(mt6397_devs),
+>  					   NULL, 0, pmic->irq_domain);
+
+[...]
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
