@@ -2,287 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D4A192465
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Mar 2020 10:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06938194169
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 Mar 2020 15:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727459AbgCYJmm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 25 Mar 2020 05:42:42 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35531 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbgCYJml (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 Mar 2020 05:42:41 -0400
-Received: by mail-wr1-f65.google.com with SMTP id d5so2077487wrn.2
-        for <linux-rtc@vger.kernel.org>; Wed, 25 Mar 2020 02:42:38 -0700 (PDT)
+        id S1728329AbgCZO25 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 26 Mar 2020 10:28:57 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:41454 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728309AbgCZO2y (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 26 Mar 2020 10:28:54 -0400
+Received: by mail-vs1-f65.google.com with SMTP id a63so3933302vsa.8
+        for <linux-rtc@vger.kernel.org>; Thu, 26 Mar 2020 07:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vRDeYiMCG4XXoUnQTgsGkl8d/lvzN+sIbey00XaX5XM=;
-        b=QDwl2z2ZAKFLg9mCSI/yr6ImooOPb5Fbs+CphasVocI/0SI+R5F+v5p7dMsBsVu/sm
-         nj+rxcBs7M7oOB3To5sLYPfUhGzDtzeVXP9I08hkoRRQAkp32UihUKBCYgPVs1vtS3Qa
-         PbO0r02L+BfDBd7P4MzuC1Sn0jbIB5gVhiw43nLmKg98NPo4pxshHKRNPWtb3wumxT17
-         oFXTCCi/KZpHwm0F5Sph+oQIeujRyngu1j6ae4xUSS6A9TaRjEBRg3kxWAeWar/0cYej
-         he5RWQlC0Ib8sddoq57miNpslYhx9gGXdmjZHuLocgjCeR7MQWMSKw9nt5HCA9DMMftx
-         gBbg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m96cR6V03dd7lbjAOl6gquDvXkdRzHGRSDXkk0VydMg=;
+        b=d0GbhldybAe0gmG8ZlfyrlQwNBKzrfy5JDwFDaOsHBBgGdMkw0TJb3XjhMtRqSbv7U
+         raadlG2wUvxjwaK8JQEXjXpEDrxdok4PtGhzk8vlvcx6tqX50JoBJjW9oeCcSufljH6d
+         zXUOtYr9xOurSTFj6t0Jo5XxpR4v0b0dQlHfJkM50DxfClQkvWEwr0+ZVMW14u+Ih3zr
+         bXT7WivtSYOhdHJnSZYPl0aXpH0+RKcAZCDkMR+fTMFW7uZMY/N5YrpJM+980D1BsBA0
+         B429AUyrl4jmmVgGSaDLzpQR41VY8fCcxS1hN7EuVUp7OYsa1cZg42gDGUtJY7L1P3No
+         T3ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vRDeYiMCG4XXoUnQTgsGkl8d/lvzN+sIbey00XaX5XM=;
-        b=kXp8ZDBO6YvzOf2IKV+9AOWm/4mXI78ZIBRX6YtHSf6NSiT5ODx1fsjEVP+k9q0QV1
-         g+1ftdPxODQa0ow3urYa0Qe6EnNOskRg15pKhfBqFNC2n/bqQqegeke/8PlSvfG7Q2SR
-         +Nu166TSlENZCt8eHPekc2xZ8EctL8Ul2B3U720HG5ko+H8usy2wAMKtST9GI5B0xAid
-         XMhP71WCA40/1XyNvPMsQoKAlLVgsUutI0/kBQ4+pLFQ5RQ0y/yCfQySnYrz9/w1JVJn
-         12SBb8fnrlmtmI35U1MZmAXcX6mgwy2csV4FF2Kh3b4EA0KIbmskF+weljbI3gnMKUta
-         J7og==
-X-Gm-Message-State: ANhLgQ2R/duyf0r1tC54jFqmSEJWY92NCGFZxVLSd3U6nizpJ8nFjalG
-        RkAbGN8azipCN4siRpCgHuevlg==
-X-Google-Smtp-Source: ADFU+vur7iuRbEAFb8kp1fAHSb42z9lGv7s7JibA/ubrGXmJU2SV6uYfUAdsdWWve6Y7oB1Tmo891A==
-X-Received: by 2002:adf:9ccb:: with SMTP id h11mr2382792wre.22.1585129358113;
-        Wed, 25 Mar 2020 02:42:38 -0700 (PDT)
-Received: from dell ([2.27.35.213])
-        by smtp.gmail.com with ESMTPSA id h26sm8323017wmb.19.2020.03.25.02.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 02:42:37 -0700 (PDT)
-Date:   Wed, 25 Mar 2020 09:43:26 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH v10 3/5] mfd: Add support for the MediaTek MT6358 PMIC
-Message-ID: <20200325094326.GH442973@dell>
-References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m96cR6V03dd7lbjAOl6gquDvXkdRzHGRSDXkk0VydMg=;
+        b=LjRQa1/7uNEZq2LZYdNiDcYpcBpR5uMWW99z2g4WnmNzk0plM+LtCFjrYTH6E7+pTY
+         BOAcjlvpozItr+f2M2TZ3NM+ktY7t/f8qs5k99u8uPJOl5U5EOWyWBPq+wWlcbx2EoVS
+         SxFEtL515bZcc27C4g7Gq9uVKfEp5dgvVLjZzRmECoAsvZ+eH39MK19l9lCEWVw3GUpv
+         f2TPBxPHNncCQLHfSMjl/CXFmqiQkov3exDpE6H+U87JtRb1YJqSQB/LWSv4gSQOOSRX
+         m6tvRhDLTc5EyZ7r6hniDudDvPGtp/bghH8wlSZ3IYxK4/6tqhl9NoHdRws1AveiJYBc
+         c/hA==
+X-Gm-Message-State: ANhLgQ28VzHVs0jLQvq0dS0aK0UoqQCyh7+42sCd+HY13uK4PhI3JWge
+        O0fAR0Ju6lB1RDwkb66eT+fhJHuRk5IjpUuBW+FNVg==
+X-Google-Smtp-Source: ADFU+vuWH5zQui20lK3L0xhEESoh9O6oNICswpYudGihwgeVkXw9INd4a0Qcv2xNvGUAEUT8yqdnif+9yZAdCYPExLo=
+X-Received: by 2002:a67:646:: with SMTP id 67mr6606515vsg.34.1585232933632;
+ Thu, 26 Mar 2020 07:28:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-19-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-19-lkundrak@v3.sk>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 26 Mar 2020 15:28:17 +0100
+Message-ID: <CAPDyKFrcrgMrd9Nv425XuzssBhd+GvSUu29hXoVShwS0GNyjtQ@mail.gmail.com>
+Subject: Re: [PATCH 18/28] dt-bindings: mmc: Fix node name in an example
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 11 Mar 2020, Hsin-Hsiung Wang wrote:
+On Tue, 17 Mar 2020 at 10:40, Lubomir Rintel <lkundrak@v3.sk> wrote:
+>
+> The $nodename allows only "mmc@*" whereas the example node is named
+> "sdhci".
+>
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
-> This adds support for the MediaTek MT6358 PMIC. This is a
-> multifunction device with the following sub modules:
-> 
-> - Regulator
-> - RTC
-> - Codec
-> - Interrupt
-> 
-> It is interfaced to the host controller using SPI interface
-> by a proprietary hardware called PMIC wrapper or pwrap.
-> MT6358 MFD is a child device of the pwrap.
-> 
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Applied for next, thanks!
+
+Kind regards
+Uffe
+
+
 > ---
->  drivers/mfd/Makefile                 |   2 +-
->  drivers/mfd/mt6358-irq.c             | 236 +++++++++++++++++++++++++++++
->  drivers/mfd/mt6397-core.c            |  55 ++++++-
->  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
->  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/mt6397/core.h      |   3 +
->  6 files changed, 731 insertions(+), 5 deletions(-)
->  create mode 100644 drivers/mfd/mt6358-irq.c
->  create mode 100644 include/linux/mfd/mt6358/core.h
->  create mode 100644 include/linux/mfd/mt6358/registers.h
-> 
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index b83f172..9af1414 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -238,7 +238,7 @@ obj-$(CONFIG_INTEL_SOC_PMIC)	+= intel-soc-pmic.o
->  obj-$(CONFIG_INTEL_SOC_PMIC_BXTWC)	+= intel_soc_pmic_bxtwc.o
->  obj-$(CONFIG_INTEL_SOC_PMIC_CHTWC)	+= intel_soc_pmic_chtwc.o
->  obj-$(CONFIG_INTEL_SOC_PMIC_CHTDC_TI)	+= intel_soc_pmic_chtdc_ti.o
-> -mt6397-objs	:= mt6397-core.o mt6397-irq.o
-> +mt6397-objs			:= mt6397-core.o mt6397-irq.o mt6358-irq.o
->  obj-$(CONFIG_MFD_MT6397)	+= mt6397.o
->  obj-$(CONFIG_INTEL_SOC_PMIC_MRFLD)	+= intel_soc_pmic_mrfld.o
->  
-> diff --git a/drivers/mfd/mt6358-irq.c b/drivers/mfd/mt6358-irq.c
-> new file mode 100644
-> index 0000000..022e5f5
-> --- /dev/null
-> +++ b/drivers/mfd/mt6358-irq.c
-> @@ -0,0 +1,236 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +//
-> +// Copyright (c) 2019 MediaTek Inc.
-
-This is out of date.
-
-> +#include <linux/interrupt.h>
-> +#include <linux/mfd/mt6358/core.h>
-> +#include <linux/mfd/mt6358/registers.h>
-> +#include <linux/mfd/mt6397/core.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +static struct irq_top_t mt6358_ints[] = {
-> +	MT6358_TOP_GEN(BUCK),
-> +	MT6358_TOP_GEN(LDO),
-> +	MT6358_TOP_GEN(PSC),
-> +	MT6358_TOP_GEN(SCK),
-> +	MT6358_TOP_GEN(BM),
-> +	MT6358_TOP_GEN(HK),
-> +	MT6358_TOP_GEN(AUD),
-> +	MT6358_TOP_GEN(MISC),
-> +};
-> +
-> +static void pmic_irq_enable(struct irq_data *data)
-> +{
-> +	unsigned int hwirq = irqd_to_hwirq(data);
-> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
-
-6397?
-
-This does make me wonder how different this file is to the existing
-support for the MT6397.  What is the justification for not extending
-that instead of creating a brand new file?
-
-> +	struct pmic_irq_data *irqd = chip->irq_data;
-> +
-> +	irqd->enable_hwirq[hwirq] = true;
-> +}
-> +
-> +static void pmic_irq_disable(struct irq_data *data)
-> +{
-> +	unsigned int hwirq = irqd_to_hwirq(data);
-> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
-> +	struct pmic_irq_data *irqd = chip->irq_data;
-> +
-> +	irqd->enable_hwirq[hwirq] = false;
-> +}
-> +
-> +static void pmic_irq_lock(struct irq_data *data)
-> +{
-> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
-> +
-> +	mutex_lock(&chip->irqlock);
-> +}
-> +
-> +static void pmic_irq_sync_unlock(struct irq_data *data)
-> +{
-> +	unsigned int i, top_gp, gp_offset, en_reg, int_regs, shift;
-> +	struct mt6397_chip *chip = irq_data_get_irq_chip_data(data);
-> +	struct pmic_irq_data *irqd = chip->irq_data;
-> +
-> +	for (i = 0; i < irqd->num_pmic_irqs; i++) {
-> +		if (irqd->enable_hwirq[i] == irqd->cache_hwirq[i])
-> +			continue;
-> +
-> +		/* Find out the IRQ group */
-> +		top_gp = 0;
-> +		while ((top_gp + 1) < irqd->num_top &&
-> +		       i >= mt6358_ints[top_gp + 1].hwirq_base)
-> +			top_gp++;
-> +
-> +		/* Find the irq registers */
-
-Nit: "IRQ"
-
-> +		gp_offset = i - mt6358_ints[top_gp].hwirq_base;
-> +		int_regs = gp_offset / MT6358_REG_WIDTH;
-> +		shift = gp_offset % MT6358_REG_WIDTH;
-> +		en_reg = mt6358_ints[top_gp].en_reg +
-> +			 (mt6358_ints[top_gp].en_reg_shift * int_regs);
-> +
-> +		regmap_update_bits(chip->regmap, en_reg, BIT(shift),
-> +				   irqd->enable_hwirq[i] << shift);
-> +
-> +		irqd->cache_hwirq[i] = irqd->enable_hwirq[i];
-> +	}
-> +	mutex_unlock(&chip->irqlock);
-> +}
-
-[...]
-
-> +int mt6358_irq_init(struct mt6397_chip *chip)
-> +{
-> +	int i, j, ret;
-> +	struct pmic_irq_data *irqd;
-> +
-> +	irqd = devm_kzalloc(chip->dev, sizeof(struct pmic_irq_data *),
-
-sizeof(*irqd)
-
-[...]
-
->  static const struct chip_data mt6397_core = {
->  	.cid_addr = MT6397_CID,
->  	.cid_shift = 0,
-> @@ -154,19 +184,33 @@ static int mt6397_probe(struct platform_device *pdev)
->  	if (pmic->irq <= 0)
->  		return pmic->irq;
->  
-> -	ret = mt6397_irq_init(pmic);
-> -	if (ret)
-> -		return ret;
-> -
->  	switch (pmic->chip_id) {
->  	case MT6323_CHIP_ID:
-> +		ret = mt6397_irq_init(pmic);
-> +		if (ret)
-> +			return ret;
-> +
->  		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
->  					   mt6323_devs, ARRAY_SIZE(mt6323_devs),
->  					   NULL, 0, pmic->irq_domain);
->  		break;
->  
-> +	case MT6358_CHIP_ID:
-> +		ret = mt6358_irq_init(pmic);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
-> +					   mt6358_devs, ARRAY_SIZE(mt6358_devs),
-> +					   NULL, 0, pmic->irq_domain);
-
-In a subsequent patch you can choose the correct mtXXXX_devs structure
-to pass and call devm_mfd_add_devices() only once below the switch().
-
-> +		break;
-> +
->  	case MT6391_CHIP_ID:
->  	case MT6397_CHIP_ID:
-> +		ret = mt6397_irq_init(pmic);
-> +		if (ret)
-> +			return ret;
-> +
->  		ret = devm_mfd_add_devices(&pdev->dev, PLATFORM_DEVID_NONE,
->  					   mt6397_devs, ARRAY_SIZE(mt6397_devs),
->  					   NULL, 0, pmic->irq_domain);
-
-[...]
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index c9384ed685b8f..c03fe268c29a0 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -351,7 +351,7 @@ dependencies:
+>
+>  examples:
+>    - |
+> -    sdhci@ab000000 {
+> +    mmc@ab000000 {
+>          compatible = "sdhci";
+>          reg = <0xab000000 0x200>;
+>          interrupts = <23>;
+> --
+> 2.25.1
+>
