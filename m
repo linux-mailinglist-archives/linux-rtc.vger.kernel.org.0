@@ -2,109 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 316C81954C4
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 Mar 2020 11:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E0219556F
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Mar 2020 11:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgC0KEN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 Mar 2020 06:04:13 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34682 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgC0KEN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Mar 2020 06:04:13 -0400
-Received: by mail-lj1-f193.google.com with SMTP id p10so9339126ljn.1
-        for <linux-rtc@vger.kernel.org>; Fri, 27 Mar 2020 03:04:12 -0700 (PDT)
+        id S1726454AbgC0KkB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Mar 2020 06:40:01 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:32996 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726450AbgC0KkA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Mar 2020 06:40:00 -0400
+Received: by mail-wr1-f65.google.com with SMTP id a25so10845170wrd.0
+        for <linux-rtc@vger.kernel.org>; Fri, 27 Mar 2020 03:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
-        b=fm1BGbXw3YbyFJAFmqHvsEnrwOu7+/+ujtJ86z5Orejx852KLJeCDtQq+soYhGzfCj
-         2rAfF7PxQg2H2Sgjn2JBjFbILfIVHBT7QxDFDZh2R3HOuTeyVGc0fKnVbnrXO43QCj8x
-         cXlH+JS+Jobqck2T5KLCJ/QxbIlZUnxiWcd/WFLXFPVgiIHA/VQnYBo2xwwlOuCaoBNf
-         PV01d4t1H3eQqxbYRIT2/sc/hXgoikPd8X3chF1TEDLMvJhtp9ZecGoNxVyrMZXDYddu
-         VUti7wxKuFzjCVhJlxMkwTw2df/O1qZUfem6Ydt42/5xj5qm4D1YHiUkYri/dNaN3Cn1
-         sdLQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=hUy8CSxiwxtlSvFdhJfOQOxn+8kEeA3/QOE0g86x3DY=;
+        b=LMxxjnWHsVPWoK+YealyJ9Y8VXYAU9t0UsEYeUXuUR6Kew3uePNv32seA9fjNqon+b
+         uKpgsUP3PLmbQwwhR2nGysLvWXcqVaYGhAvXiI15N8rxlWciMQWG/KcpXGRlWQpXvMbD
+         RVtEo241nEUUlqhor80ruIxUeVG3aaorxDTsvOsB9vIFYbqkiJl1Pqqd+D0Yy7eMMI9N
+         Qg3fNLmNm7A/O55vwlpdITkGRbG7ojljbzonQ4My13PQK/K3+3D+YmKSL0S4/AbMzliq
+         qioniwV77ZESN3EwdzImhbFexw5sbgGBNGrFPYs18SKLkJTQpHsVMFSvYh0qVZmZxkT5
+         CIIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
-        b=BBGDzm9EepiFcPc9v04xMH3MTxvl4fU6/sb71IyulA5Ff7YlDvJgxb+YVetaV7lhou
-         Cz6OVyNT5aP5XLkGmjxKWVXb3p4IZe+AcQ5OVopLupiQQjgwnoh1DHnWOHFo+X8ut+cB
-         s4UTvTW0IDi/m7NmJn+UXMeV7DvAn7CgTJtYVHqkQvkUF66DIzBUDMYuLrdOA1R8fSx2
-         dlaHOt0HTBWLDCIJeZvQR9RllnDhdzHUVEnu2u56lxY322Syn5utGeTpKpUzNy5XJXNi
-         dvSQxuPTiOtGW9idaNKJ2h7oPtF6DRKV7ONjjkEDMxmF/O78vuIISnn5B3kkTozBS23c
-         z/fQ==
-X-Gm-Message-State: AGi0PuZMKokaThOlfk4unFjsVzFNOmaL8cJPhToHaFLXnG5OcbzOLIzW
-        2HfkA4tpGPEGCcLC2Cw1CEVJ+xRB7IlpGji89keWPg==
-X-Google-Smtp-Source: ADFU+vsLFzRSaI0mp4F0YlxEk/ZWtLbeZk2X0x8rIBWVbKHsUZE12xxYtPOS4x7TLee1muHrdP/vfqhKQcCaKg9I0tI=
-X-Received: by 2002:a2e:9605:: with SMTP id v5mr7696484ljh.258.1585303451336;
- Fri, 27 Mar 2020 03:04:11 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=hUy8CSxiwxtlSvFdhJfOQOxn+8kEeA3/QOE0g86x3DY=;
+        b=dYdNRtWKxPOwtJxm2wlgD0sLfoRJd+q5Vw3Ir4Q85al8oZnJr58epkjU+lhrr9mB4A
+         3vRbUADC2C5beD0MnmdXtPgqV3bjCvS4TAsc8CswsML6X+nu0u5EffXo2O/LLJDr6cBt
+         k1efLITwhaItk2hyV9cE/FWzZLgI1+KJMeLfeFZofGFnIVz7SjAVZ2DpjbZBIg8gytL3
+         9uJTctF11VTkh8GHLOfJH2afwNxIKMN29Ng5+RTyCqp1oZR+oJJgLINH+cKZNLw4R+0/
+         aY/al8lswwCH2E7dF1tfY3BeiLkL/B0mMUbX0+5ejSXKSqU8NgetUzLGtMLQzkKnLqA4
+         XPuw==
+X-Gm-Message-State: ANhLgQ3fTZE0xtOXNpWpo0sI0OuMfMEp8yKCOuzclfMGgD4bdkRj5JZD
+        0+psrcrRyygpJqQNKh7qyuJEyQ==
+X-Google-Smtp-Source: ADFU+vu2K+4IxFs7+VvXvZAHHpSGTr0Ruak97rimwwt4gOR55rJ8O0ACPtX5CuXxCIq/LRKi6XwULw==
+X-Received: by 2002:adf:f0c5:: with SMTP id x5mr14511489wro.415.1585305598986;
+        Fri, 27 Mar 2020 03:39:58 -0700 (PDT)
+Received: from dell ([95.149.164.95])
+        by smtp.gmail.com with ESMTPSA id x206sm7522623wmg.17.2020.03.27.03.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 03:39:58 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 10:40:49 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org, knaack.h@gmx.de, lars@metafoo.de,
+        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, jic23@kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, IIO and RTC due for the
+ v5.7 merge window
+Message-ID: <20200327104049.GB3383@dell>
+References: <20200320081105.12026-1-andreas@kemnade.info>
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-22-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-22-lkundrak@v3.sk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Mar 2020 11:04:00 +0100
-Message-ID: <CACRpkdaEnODObC7emg2M7Ayn_JkeLuc3HpV4VhJcwaZ+=sDLcg@mail.gmail.com>
-Subject: Re: [PATCH 21/28] dt-bindings: gpio: Convert mrvl-gpio to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        linux-media@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200320081105.12026-1-andreas@kemnade.info>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Lubomir!
+Enjoy!
 
-Excellent work! Just nitpicks:
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 
-On Tue, Mar 17, 2020 at 10:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
 
-> +++ b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
-> @@ -0,0 +1,173 @@
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/mrvl-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell PXA GPIO controller
+are available in the Git repository at:
 
-This binding is lacking a license. Please use the dual GPL+BSD license
-tag.
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-iio-rtc-5.7
 
-> +maintainers:
-> +  - devicetree@vger.kernel.org
+for you to fetch changes up to 7858658cdcab7ca8057444b1d24c6a28ddaa8589:
 
-I don't know if Robert Jarzmik is in on maintaining this, would you accept
-it Robert?
+  mfd: rn5t618: Cleanup i2c_device_id (2020-03-27 09:42:44 +0000)
 
-Yours,
-Linus Walleij
+----------------------------------------------------------------
+Andreas Kemnade (7):
+      dt-bindings: mfd: rn5t618: Document optional property interrupts
+      mfd: rn5t618: Add IRQ support
+      mfd: rn5t618: Add RTC related registers
+      mfd: rn5t618: Add more subdevices
+      rtc: rc5t619: Add Ricoh RC5T619 RTC driver
+      iio: adc: rn5t618: Add ADC driver for RN5T618/RC5T619
+      mfd: rn5t618: Cleanup i2c_device_id
+
+ Documentation/devicetree/bindings/mfd/rn5t618.txt |   4 +
+ drivers/iio/adc/Kconfig                           |  10 +
+ drivers/iio/adc/Makefile                          |   1 +
+ drivers/iio/adc/rn5t618-adc.c                     | 256 +++++++++++++
+ drivers/mfd/Kconfig                               |   1 +
+ drivers/mfd/rn5t618.c                             | 109 +++++-
+ drivers/rtc/Kconfig                               |  10 +
+ drivers/rtc/Makefile                              |   1 +
+ drivers/rtc/rtc-rc5t619.c                         | 444 ++++++++++++++++++++++
+ include/linux/mfd/rn5t618.h                       |  26 ++
+ 10 files changed, 851 insertions(+), 11 deletions(-)
+ create mode 100644 drivers/iio/adc/rn5t618-adc.c
+ create mode 100644 drivers/rtc/rtc-rc5t619.c
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
