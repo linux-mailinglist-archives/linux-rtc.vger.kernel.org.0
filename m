@@ -2,112 +2,155 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E0219556F
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 Mar 2020 11:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB43195E18
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Mar 2020 20:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbgC0KkB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 Mar 2020 06:40:01 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:32996 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726450AbgC0KkA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Mar 2020 06:40:00 -0400
-Received: by mail-wr1-f65.google.com with SMTP id a25so10845170wrd.0
-        for <linux-rtc@vger.kernel.org>; Fri, 27 Mar 2020 03:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hUy8CSxiwxtlSvFdhJfOQOxn+8kEeA3/QOE0g86x3DY=;
-        b=LMxxjnWHsVPWoK+YealyJ9Y8VXYAU9t0UsEYeUXuUR6Kew3uePNv32seA9fjNqon+b
-         uKpgsUP3PLmbQwwhR2nGysLvWXcqVaYGhAvXiI15N8rxlWciMQWG/KcpXGRlWQpXvMbD
-         RVtEo241nEUUlqhor80ruIxUeVG3aaorxDTsvOsB9vIFYbqkiJl1Pqqd+D0Yy7eMMI9N
-         Qg3fNLmNm7A/O55vwlpdITkGRbG7ojljbzonQ4My13PQK/K3+3D+YmKSL0S4/AbMzliq
-         qioniwV77ZESN3EwdzImhbFexw5sbgGBNGrFPYs18SKLkJTQpHsVMFSvYh0qVZmZxkT5
-         CIIQ==
+        id S1727699AbgC0TDK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 Mar 2020 15:03:10 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42399 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbgC0TDJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 Mar 2020 15:03:09 -0400
+Received: by mail-io1-f65.google.com with SMTP id q128so10926611iof.9;
+        Fri, 27 Mar 2020 12:03:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hUy8CSxiwxtlSvFdhJfOQOxn+8kEeA3/QOE0g86x3DY=;
-        b=dYdNRtWKxPOwtJxm2wlgD0sLfoRJd+q5Vw3Ir4Q85al8oZnJr58epkjU+lhrr9mB4A
-         3vRbUADC2C5beD0MnmdXtPgqV3bjCvS4TAsc8CswsML6X+nu0u5EffXo2O/LLJDr6cBt
-         k1efLITwhaItk2hyV9cE/FWzZLgI1+KJMeLfeFZofGFnIVz7SjAVZ2DpjbZBIg8gytL3
-         9uJTctF11VTkh8GHLOfJH2afwNxIKMN29Ng5+RTyCqp1oZR+oJJgLINH+cKZNLw4R+0/
-         aY/al8lswwCH2E7dF1tfY3BeiLkL/B0mMUbX0+5ejSXKSqU8NgetUzLGtMLQzkKnLqA4
-         XPuw==
-X-Gm-Message-State: ANhLgQ3fTZE0xtOXNpWpo0sI0OuMfMEp8yKCOuzclfMGgD4bdkRj5JZD
-        0+psrcrRyygpJqQNKh7qyuJEyQ==
-X-Google-Smtp-Source: ADFU+vu2K+4IxFs7+VvXvZAHHpSGTr0Ruak97rimwwt4gOR55rJ8O0ACPtX5CuXxCIq/LRKi6XwULw==
-X-Received: by 2002:adf:f0c5:: with SMTP id x5mr14511489wro.415.1585305598986;
-        Fri, 27 Mar 2020 03:39:58 -0700 (PDT)
-Received: from dell ([95.149.164.95])
-        by smtp.gmail.com with ESMTPSA id x206sm7522623wmg.17.2020.03.27.03.39.57
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3ITt8Qtkvl5bWhH2ykH+DLle23U//GmXww0cEqt/CIY=;
+        b=CvCynFAZS4dMybHvxtHUziRZ36RAQk8WsTg4Ahx/3PxcK3bFi5w2lnQkx3VUN9YrFD
+         NWQenPDqZBOM5mkJYDucIeRM5V2OaOI3DHXIbEw3EqmyDYcnze9hV3grG+HNG8ihdTJ4
+         vLBA1VfDFT9jswcrsvdXzHC6XOzRDzDyarqB8BI8h0gq5ebWwO2TjGFWXMl0NBtan+Az
+         SDlQh0JUDAZIZHhJRfyd11UmluOC8HfS9ivtQxZobhH9gdrx6yu9gUMLkgAcw1ZR76U/
+         lcOEkM3MBqKiGMPLT5Ehl6ipFxWMrGSn/tFYMobRjGKSme0gTj/l2uZfsjAwOLvYgIyO
+         DiGg==
+X-Gm-Message-State: ANhLgQ0xuctvJK0voy9vg05a09pNYesrfPKo9u4fU6zWuT7J7AFZcraO
+        MX1q7B09Rd91iEY/IFQpsg==
+X-Google-Smtp-Source: ADFU+vsunpeTEtU3sJ3oVNdeonBxmAUzgtdZqJZ/EoRBD2F6QkitYdNkClMiUGGxNjFjEiNEshg0VQ==
+X-Received: by 2002:a6b:c8d4:: with SMTP id y203mr72705iof.111.1585335787129;
+        Fri, 27 Mar 2020 12:03:07 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i6sm2148350ila.20.2020.03.27.12.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 03:39:58 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 10:40:49 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        stefan@agner.ch, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org, knaack.h@gmx.de, lars@metafoo.de,
-        pmeerw@pmeerw.net, linux-iio@vger.kernel.org, jic23@kernel.org
-Subject: [GIT PULL] Immutable branch between MFD, IIO and RTC due for the
- v5.7 merge window
-Message-ID: <20200327104049.GB3383@dell>
-References: <20200320081105.12026-1-andreas@kemnade.info>
+        Fri, 27 Mar 2020 12:03:06 -0700 (PDT)
+Received: (nullmailer pid 28795 invoked by uid 1000);
+        Fri, 27 Mar 2020 19:03:04 -0000
+Date:   Fri, 27 Mar 2020 13:03:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 14/28] dt-bindings: arm: l2x0: Tauros 3 is PL310
+ compatible
+Message-ID: <20200327190304.GA27639@bogus>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+ <20200317093922.20785-15-lkundrak@v3.sk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200320081105.12026-1-andreas@kemnade.info>
+In-Reply-To: <20200317093922.20785-15-lkundrak@v3.sk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Enjoy!
+On Tue, Mar 17, 2020 at 10:39:08AM +0100, Lubomir Rintel wrote:
+> The validation is unhappy about mmp3-dell-ariel declaring its
+> marvell,tauros3-cache node to be compatible with arm,pl310-cache:
+> 
+>   mmp3-dell-ariel.dt.yaml: cache-controller@d0020000: compatible:
+>        Additional items are not allowed ('arm,pl310-cache' was unexpected)
+>   mmp3-dell-ariel.dt.yaml: cache-controller@d0020000: compatible:
+>        ['marvell,tauros3-cache', 'arm,pl310-cache'] is too long
+> 
+> Let's allow this -- Tauros 3 is designed to be compatible with PL310.
+> 
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> ---
+>  .../devicetree/bindings/arm/l2c2x0.yaml       | 45 ++++++++++---------
+>  1 file changed, 24 insertions(+), 21 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/l2c2x0.yaml b/Documentation/devicetree/bindings/arm/l2c2x0.yaml
+> index 913a8cd8b2c00..7e39088a9bed2 100644
+> --- a/Documentation/devicetree/bindings/arm/l2c2x0.yaml
+> +++ b/Documentation/devicetree/bindings/arm/l2c2x0.yaml
+> @@ -29,27 +29,30 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    enum:
+> -      - arm,pl310-cache
+> -      - arm,l220-cache
+> -      - arm,l210-cache
+> -        # DEPRECATED by "brcm,bcm11351-a2-pl310-cache"
+> -      - bcm,bcm11351-a2-pl310-cache
+> -        # For Broadcom bcm11351 chipset where an
+> -        # offset needs to be added to the address before passing down to the L2
+> -        # cache controller
+> -      - brcm,bcm11351-a2-pl310-cache
+> -        # Marvell Controller designed to be
+> -        # compatible with the ARM one, with system cache mode (meaning
+> -        # maintenance operations on L1 are broadcasted to the L2 and L2
+> -        # performs the same operation).
+> -      - marvell,aurora-system-cache
+> -        # Marvell Controller designed to be
+> -        # compatible with the ARM one with outer cache mode.
+> -      - marvell,aurora-outer-cache
+> -        # Marvell Tauros3 cache controller, compatible
+> -        # with arm,pl310-cache controller.
+> -      - marvell,tauros3-cache
+> +    oneOf:
+> +      - enum:
+> +        - arm,pl310-cache
 
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+The list should be indented 2 more spaces. I'll fixup when applying.
 
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-iio-rtc-5.7
-
-for you to fetch changes up to 7858658cdcab7ca8057444b1d24c6a28ddaa8589:
-
-  mfd: rn5t618: Cleanup i2c_device_id (2020-03-27 09:42:44 +0000)
-
-----------------------------------------------------------------
-Andreas Kemnade (7):
-      dt-bindings: mfd: rn5t618: Document optional property interrupts
-      mfd: rn5t618: Add IRQ support
-      mfd: rn5t618: Add RTC related registers
-      mfd: rn5t618: Add more subdevices
-      rtc: rc5t619: Add Ricoh RC5T619 RTC driver
-      iio: adc: rn5t618: Add ADC driver for RN5T618/RC5T619
-      mfd: rn5t618: Cleanup i2c_device_id
-
- Documentation/devicetree/bindings/mfd/rn5t618.txt |   4 +
- drivers/iio/adc/Kconfig                           |  10 +
- drivers/iio/adc/Makefile                          |   1 +
- drivers/iio/adc/rn5t618-adc.c                     | 256 +++++++++++++
- drivers/mfd/Kconfig                               |   1 +
- drivers/mfd/rn5t618.c                             | 109 +++++-
- drivers/rtc/Kconfig                               |  10 +
- drivers/rtc/Makefile                              |   1 +
- drivers/rtc/rtc-rc5t619.c                         | 444 ++++++++++++++++++++++
- include/linux/mfd/rn5t618.h                       |  26 ++
- 10 files changed, 851 insertions(+), 11 deletions(-)
- create mode 100644 drivers/iio/adc/rn5t618-adc.c
- create mode 100644 drivers/rtc/rtc-rc5t619.c
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+> +        - arm,l220-cache
+> +        - arm,l210-cache
+> +          # DEPRECATED by "brcm,bcm11351-a2-pl310-cache"
+> +        - bcm,bcm11351-a2-pl310-cache
+> +          # For Broadcom bcm11351 chipset where an
+> +          # offset needs to be added to the address before passing down to the L2
+> +          # cache controller
+> +        - brcm,bcm11351-a2-pl310-cache
+> +          # Marvell Controller designed to be
+> +          # compatible with the ARM one, with system cache mode (meaning
+> +          # maintenance operations on L1 are broadcasted to the L2 and L2
+> +          # performs the same operation).
+> +        - marvell,aurora-system-cache
+> +          # Marvell Controller designed to be
+> +          # compatible with the ARM one with outer cache mode.
+> +        - marvell,aurora-outer-cache
+> +      - items:
+> +         # Marvell Tauros3 cache controller, compatible
+> +         # with arm,pl310-cache controller.
+> +        - const: marvell,tauros3-cache
+> +        - const: arm,pl310-cache
+>  
+>    cache-level:
+>      const: 2
+> -- 
+> 2.25.1
+> 
