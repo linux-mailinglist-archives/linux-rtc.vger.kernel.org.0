@@ -2,33 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 831FE19852A
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Mar 2020 22:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD52198538
+	for <lists+linux-rtc@lfdr.de>; Mon, 30 Mar 2020 22:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728517AbgC3UMm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Mar 2020 16:12:42 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:21645 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgC3UMm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Mar 2020 16:12:42 -0400
+        id S1727437AbgC3UPe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 30 Mar 2020 16:15:34 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:59817 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727170AbgC3UPd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Mar 2020 16:15:33 -0400
 X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 2F36824000A;
-        Mon, 30 Mar 2020 20:12:40 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id BE3E0FF808;
+        Mon, 30 Mar 2020 20:15:31 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] rtc: sun6i: switch to rtc_time64_to_tm/rtc_tm_to_time64
-Date:   Mon, 30 Mar 2020 22:12:26 +0200
-Message-Id: <20200330201226.860967-2-alexandre.belloni@bootlin.com>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: remove rtc_time_to_tm and rtc_tm_to_time
+Date:   Mon, 30 Mar 2020 22:15:08 +0200
+Message-Id: <20200330201510.861217-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200330201226.860967-1-alexandre.belloni@bootlin.com>
-References: <20200330201226.860967-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -36,37 +31,37 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Call the 64bit versions of rtc_tm time conversion.
+There are no callers of the 32bit versions of rtc_time conversion
+functions, drop them.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-sun6i.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/rtc.h | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 446ce38c1592..e2b8b150bcb4 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -498,7 +498,7 @@ static int sun6i_rtc_getalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 
- 	wkalrm->enabled = !!(alrm_en & SUN6I_ALRM_EN_CNT_EN);
- 	wkalrm->pending = !!(alrm_st & SUN6I_ALRM_EN_CNT_EN);
--	rtc_time_to_tm(chip->alarm, &wkalrm->time);
-+	rtc_time64_to_tm(chip->alarm, &wkalrm->time);
- 
- 	return 0;
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 23990bd29040..bba3db3f7efa 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -34,18 +34,6 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+ 	return rtc_tm_to_time64(lhs) - rtc_tm_to_time64(rhs);
  }
-@@ -519,8 +519,8 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 		return -EINVAL;
- 	}
  
--	rtc_tm_to_time(alrm_tm, &time_set);
--	rtc_tm_to_time(&tm_now, &time_now);
-+	time_set = rtc_tm_to_time64(alrm_tm);
-+	time_now = rtc_tm_to_time64(&tm_now);
- 	if (time_set <= time_now) {
- 		dev_err(dev, "Date to set in the past\n");
- 		return -EINVAL;
+-static inline void rtc_time_to_tm(unsigned long time, struct rtc_time *tm)
+-{
+-	rtc_time64_to_tm(time, tm);
+-}
+-
+-static inline int rtc_tm_to_time(struct rtc_time *tm, unsigned long *time)
+-{
+-	*time = rtc_tm_to_time64(tm);
+-
+-	return 0;
+-}
+-
+ #include <linux/device.h>
+ #include <linux/seq_file.h>
+ #include <linux/cdev.h>
 -- 
 2.25.1
 
