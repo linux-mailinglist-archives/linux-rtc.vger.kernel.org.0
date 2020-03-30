@@ -2,58 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7618E198385
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Mar 2020 20:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CCF198527
+	for <lists+linux-rtc@lfdr.de>; Mon, 30 Mar 2020 22:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728031AbgC3SjV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Mar 2020 14:39:21 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:35533 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgC3SjV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Mar 2020 14:39:21 -0400
+        id S1728317AbgC3UMm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 30 Mar 2020 16:12:42 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:51267 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726923AbgC3UMl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Mar 2020 16:12:41 -0400
+X-Originating-IP: 86.202.105.35
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 49809200002;
-        Mon, 30 Mar 2020 18:39:17 +0000 (UTC)
-Date:   Mon, 30 Mar 2020 20:39:17 +0200
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id AA282C0006;
+        Mon, 30 Mar 2020 20:12:36 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     a.zummo@towertech.it, wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] rtc: ds1307: add support for watchdog timer on ds1388
-Message-ID: <20200330183917.GG846876@piout.net>
-References: <20200330025500.6991-1-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 1/2] rtc: sun6i: let the core handle rtc range
+Date:   Mon, 30 Mar 2020 22:12:25 +0200
+Message-Id: <20200330201226.860967-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200330025500.6991-1-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 30/03/2020 15:55:00+1300, Chris Packham wrote:
-> The DS1388 variant has watchdog timer capabilities. When using a DS1388
-> and having enabled CONFIG_WATCHDOG_CORE register a watchdog device for
-> the DS1388.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> Changes in v3:
-> - Address review comments from Guenter. Add select WATCHDOG_CORE, remove
->   unnecessary wdt member, add set_timeout op, use devm_watchdog_register
-> Changes in v2:
-> - Address review comments from Alexandre, the only functional change is setting
->   the hundredths of seconds to 0 instead of 99.
-> 
->  drivers/rtc/Kconfig      |   1 +
->  drivers/rtc/rtc-ds1307.c | 115 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 116 insertions(+)
-> 
-Applied, thanks.
+Let the rtc core check the date/time against the RTC range.
 
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-sun6i.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index 415a20a936e4..446ce38c1592 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -108,7 +108,6 @@
+  * driver, even though it is somewhat limited.
+  */
+ #define SUN6I_YEAR_MIN				1970
+-#define SUN6I_YEAR_MAX				2033
+ #define SUN6I_YEAR_OFF				(SUN6I_YEAR_MIN - 1900)
+ 
+ /*
+@@ -569,14 +568,6 @@ static int sun6i_rtc_settime(struct device *dev, struct rtc_time *rtc_tm)
+ 	struct sun6i_rtc_dev *chip = dev_get_drvdata(dev);
+ 	u32 date = 0;
+ 	u32 time = 0;
+-	int year;
+-
+-	year = rtc_tm->tm_year + 1900;
+-	if (year < SUN6I_YEAR_MIN || year > SUN6I_YEAR_MAX) {
+-		dev_err(dev, "rtc only supports year in range %d - %d\n",
+-			SUN6I_YEAR_MIN, SUN6I_YEAR_MAX);
+-		return -EINVAL;
+-	}
+ 
+ 	rtc_tm->tm_year -= SUN6I_YEAR_OFF;
+ 	rtc_tm->tm_mon += 1;
+@@ -585,7 +576,7 @@ static int sun6i_rtc_settime(struct device *dev, struct rtc_time *rtc_tm)
+ 		SUN6I_DATE_SET_MON_VALUE(rtc_tm->tm_mon)  |
+ 		SUN6I_DATE_SET_YEAR_VALUE(rtc_tm->tm_year);
+ 
+-	if (is_leap_year(year))
++	if (is_leap_year(rtc_tm->tm_year + SUN6I_YEAR_MIN))
+ 		date |= SUN6I_LEAP_SET_VALUE(1);
+ 
+ 	time = SUN6I_TIME_SET_SEC_VALUE(rtc_tm->tm_sec)  |
+@@ -726,12 +717,16 @@ static int sun6i_rtc_probe(struct platform_device *pdev)
+ 
+ 	device_init_wakeup(&pdev->dev, 1);
+ 
+-	chip->rtc = devm_rtc_device_register(&pdev->dev, "rtc-sun6i",
+-					     &sun6i_rtc_ops, THIS_MODULE);
+-	if (IS_ERR(chip->rtc)) {
+-		dev_err(&pdev->dev, "unable to register device\n");
++	chip->rtc = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(chip->rtc))
+ 		return PTR_ERR(chip->rtc);
+-	}
++
++	chip->rtc->ops = &sun6i_rtc_ops;
++	chip->rtc->range_max = 2019686399LL; /* 2033-12-31 23:59:59 */
++
++	ret = rtc_register_device(chip->rtc);
++	if (ret)
++		return ret;
+ 
+ 	dev_info(&pdev->dev, "RTC enabled\n");
+ 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
