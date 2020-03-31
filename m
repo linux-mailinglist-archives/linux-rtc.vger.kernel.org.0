@@ -2,207 +2,149 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B987198E68
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Mar 2020 10:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AC5199FD6
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Mar 2020 22:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730278AbgCaI2w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 31 Mar 2020 04:28:52 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:21491 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729425AbgCaI2w (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Mar 2020 04:28:52 -0400
-X-UUID: 584be1c871564c06a9d56d07a69b8b36-20200331
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lct8ONGAtomUDA235lfpqdPWwE+ccWyMYtlhfefuNEw=;
-        b=fhgoRdVA04IHF6lAAK9IgHpqMIzX5IRTPw7acBwTeZCsft327eHia5QKroqFECPoCyOWXfCdfxL0KUejX8kDvRJmpVzV819cWmgY3iJDAb1+DzOnrQvRQJu2Ho6ChKPyiKsDFIkLPHdwhYYMsny77AWdDtK4C0A8SQCxrE93qEo=;
-X-UUID: 584be1c871564c06a9d56d07a69b8b36-20200331
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 561797964; Tue, 31 Mar 2020 16:28:46 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 31 Mar 2020 16:28:41 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 31 Mar 2020 16:28:40 +0800
-Message-ID: <1585643322.27082.3.camel@mtksdaap41>
-Subject: Re: [PATCH v11 3/5] mfd: Add support for the MediaTek MT6358 PMIC
-From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Nicolas Boichat <drinkcat@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S1728187AbgCaUOJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 Mar 2020 16:14:09 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:34462 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727937AbgCaUOI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Mar 2020 16:14:08 -0400
+Received: by mail-il1-f195.google.com with SMTP id t11so20782533ils.1;
+        Tue, 31 Mar 2020 13:14:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mi0F7xescdi5BUfbFSsgV16XAWuv/drpgItNLfvWHRA=;
+        b=bIiV8y6nD7Kk6mmI2r8GzsegbsSlevbGDTZPxQfB9j2vVVDzlOiCmTNrhnDB903JiM
+         +sRS/FDmFQIO4voniEVGCmwwkpgHM1hDf9S4ws5l7KVQww/JeibnzKqret+KNVo4yzbi
+         PocnJGWzf6cYt9WIhljVo3JnyiDtUAtTX8TP/oDa/cdoIw9k78MpI/s4uvALj6sVSYMW
+         6CQuuIFESL5S2XECfgzSjZ7EauqVP0S46su50ZEFxE4/8RgOJwutHlHbGIZQyeyfgSV+
+         h/1LMBXBtucchbxkYjmMJHFwrQrA7RtJMkuOV5Q1AvxETOxcZPr+Y9R4QRDbqjO0mLI1
+         o5jA==
+X-Gm-Message-State: ANhLgQ3bdqRzpjU527hYqkiL1SWoyJN7TvpQZnKmN24TVBOILlsGbf+a
+        wYKCCNK7Ab8To3XC2YfSNQ==
+X-Google-Smtp-Source: ADFU+vsTyKde0ZJ+1HPBmeWqBwGUvGZ/RjDMO+08xxGhivNmr8zoJ1fODw6Mvfil941467xCRAilOg==
+X-Received: by 2002:a92:8548:: with SMTP id f69mr18179772ilh.20.1585685647795;
+        Tue, 31 Mar 2020 13:14:07 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id m129sm372341ioa.2.2020.03.31.13.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 13:14:06 -0700 (PDT)
+Received: (nullmailer pid 24173 invoked by uid 1000);
+        Tue, 31 Mar 2020 20:14:02 -0000
+Date:   Tue, 31 Mar 2020 14:14:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sergey.Semin@baikalelectronics.ru
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        "Sean Wang" <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        "Eddie Huang" <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Richard Fontana <rfontana@redhat.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        "Josef Friedl" <josef.friedl@speed.at>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "Ran Bi" <ran.bi@mediatek.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>
-Date:   Tue, 31 Mar 2020 16:28:42 +0800
-In-Reply-To: <CANMq1KBqeUHj0gKcknPDvgzRzGMt26pq-_rt_ZM89phCHO9jqQ@mail.gmail.com>
-References: <1585627657-3265-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1585627657-3265-4-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <CANMq1KBqeUHj0gKcknPDvgzRzGMt26pq-_rt_ZM89phCHO9jqQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] dt-bindings: rtc: Convert snps,dw-apb-timer to DT
+ schema
+Message-ID: <20200331201402.GA13587@bogus>
+References: <20200306125622.839ED80307C4@mail.baikalelectronics.ru>
+ <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
+ <20200324174325.14213-2-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 66156411AC7C6987A565DE837C979D90C593ABB3BD713E9063DE777D8BE22B722000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200324174325.14213-2-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGksIFNpcnMNCg0KT24gVHVlLCAyMDIwLTAzLTMxIGF0IDE1OjM2ICswODAwLCBOaWNvbGFzIEJv
-aWNoYXQgd3JvdGU6DQo+IE9uIFR1ZSwgTWFyIDMxLCAyMDIwIGF0IDEyOjA3IFBNIEhzaW4tSHNp
-dW5nIFdhbmcNCj4gPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPg0K
-PiA+IFRoaXMgYWRkcyBzdXBwb3J0IGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFBNSUMuIFRoaXMg
-aXMgYQ0KPiA+IG11bHRpZnVuY3Rpb24gZGV2aWNlIHdpdGggdGhlIGZvbGxvd2luZyBzdWIgbW9k
-dWxlczoNCj4gPg0KPiA+IC0gUmVndWxhdG9yDQo+ID4gLSBSVEMNCj4gPiAtIENvZGVjDQo+ID4g
-LSBJbnRlcnJ1cHQNCj4gPg0KPiA+IEl0IGlzIGludGVyZmFjZWQgdG8gdGhlIGhvc3QgY29udHJv
-bGxlciB1c2luZyBTUEkgaW50ZXJmYWNlDQo+ID4gYnkgYSBwcm9wcmlldGFyeSBoYXJkd2FyZSBj
-YWxsZWQgUE1JQyB3cmFwcGVyIG9yIHB3cmFwLg0KPiA+IE1UNjM1OCBNRkQgaXMgYSBjaGlsZCBk
-ZXZpY2Ugb2YgdGhlIHB3cmFwLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogSHNpbi1Ic2l1bmcg
-V2FuZyA8aHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6IE5p
-Y29sYXMgQm9pY2hhdCA8ZHJpbmtjYXRAY2hyb21pdW0ub3JnPg0KPiANCj4gVGhpcyBpcyBtaXNz
-aW5nIGEgZmV3IGNvbW1lbnRzIGZyb20gTGVlIEpvbmVzIG9uIHYxMCwgYWN0dWFsbHksIHJlcGVh
-dGVkIGJlbG93Og0KPiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExNDMxMjM5
-LyMyMzI0NDA0MQ0KPiANCg0KU28gc29ycnkgZm9yIG1pc3NpbmcgdGhpcyBjb21tZW50Lkkgd2ls
-bCByZXBseSBpdCBsYXRlci4NClRoYW5rcyBhIGxvdC4NCg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJz
-L21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gPiAgZHJpdmVycy9tZmQv
-bXQ2MzU4LWlycS5jICAgICAgICAgICAgIHwgMjM2ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrDQo+ID4gIGRyaXZlcnMvbWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICB8ICA1NSArKysr
-KystDQo+ID4gIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICB8IDE1OCArKysr
-KysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJz
-LmggfCAyODIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgaW5jbHVk
-ZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUuaCAgICAgIHwgICAzICsNCj4gPiAgNiBmaWxlcyBjaGFu
-Z2VkLCA3MzEgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1vZGUg
-MTAwNjQ0IGRyaXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQg
-aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9tZmQvTWFrZWZpbGUgYi9kcml2ZXJzL21mZC9NYWtlZmlsZQ0KPiA+IGluZGV4
-IGI4M2YxNzIuLjlhZjE0MTQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9tZmQvTWFrZWZpbGUN
-Cj4gPiArKysgYi9kcml2ZXJzL21mZC9NYWtlZmlsZQ0KPiA+IEBAIC0yMzgsNyArMjM4LDcgQEAg
-b2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDKSAgICAgICAgKz0gaW50ZWwtc29jLXBtaWMubw0K
-PiA+ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfQlhUV0MpICAgICArPSBpbnRlbF9zb2Nf
-cG1pY19ieHR3Yy5vDQo+ID4gIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQ19DSFRXQykgICAg
-ICs9IGludGVsX3NvY19wbWljX2NodHdjLm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19Q
-TUlDX0NIVERDX1RJKSAgKz0gaW50ZWxfc29jX3BtaWNfY2h0ZGNfdGkubw0KPiA+IC1tdDYzOTct
-b2JqcyAgICA6PSBtdDYzOTctY29yZS5vIG10NjM5Ny1pcnEubw0KPiA+ICttdDYzOTctb2JqcyAg
-ICAgICAgICAgICAgICAgICAgOj0gbXQ2Mzk3LWNvcmUubyBtdDYzOTctaXJxLm8gbXQ2MzU4LWly
-cS5vDQo+ID4gIG9iai0kKENPTkZJR19NRkRfTVQ2Mzk3KSAgICAgICArPSBtdDYzOTcubw0KPiA+
-ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfTVJGTEQpICAgICArPSBpbnRlbF9zb2NfcG1p
-Y19tcmZsZC5vDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5j
-IGIvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5jDQo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4g
-PiBpbmRleCAwMDAwMDAwLi4wMjJlNWY1DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL2Ry
-aXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+IEBAIC0wLDAgKzEsMjM2IEBADQo+ID4gKy8vIFNQ
-RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ID4gKy8vDQo+ID4gKy8vIENvcHlyaWdo
-dCAoYykgMjAxOSBNZWRpYVRlayBJbmMuDQo+IA0KPiAyMDIwDQo+IA0KPiA+ICsNCj4gPiArI2lu
-Y2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM1
-OC9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oPg0K
-PiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM5Ny9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxs
-aW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29mLmg+DQo+ID4gKyNpbmNsdWRl
-IDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29mX2lycS5oPg0KPiA+
-ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
-eC9yZWdtYXAuaD4NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgaXJxX3RvcF90IG10NjM1OF9p
-bnRzW10gPSB7DQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihCVUNLKSwNCj4gPiArICAgICAg
-IE1UNjM1OF9UT1BfR0VOKExETyksDQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihQU0MpLA0K
-PiA+ICsgICAgICAgTVQ2MzU4X1RPUF9HRU4oU0NLKSwNCj4gPiArICAgICAgIE1UNjM1OF9UT1Bf
-R0VOKEJNKSwNCj4gPiArICAgICAgIE1UNjM1OF9UT1BfR0VOKEhLKSwNCj4gPiArICAgICAgIE1U
-NjM1OF9UT1BfR0VOKEFVRCksDQo+ID4gKyAgICAgICBNVDYzNThfVE9QX0dFTihNSVNDKSwNCj4g
-PiArfTsNCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lkIHBtaWNfaXJxX2VuYWJsZShzdHJ1Y3QgaXJx
-X2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHVuc2lnbmVkIGludCBod2lycSA9IGly
-cWRfdG9faHdpcnEoZGF0YSk7DQo+ID4gKyAgICAgICBzdHJ1Y3QgbXQ2Mzk3X2NoaXAgKmNoaXAg
-PSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArICAgICAgIHN0cnVjdCBw
-bWljX2lycV9kYXRhICppcnFkID0gY2hpcC0+aXJxX2RhdGE7DQo+ID4gKw0KPiA+ICsgICAgICAg
-aXJxZC0+ZW5hYmxlX2h3aXJxW2h3aXJxXSA9IHRydWU7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0
-YXRpYyB2b2lkIHBtaWNfaXJxX2Rpc2FibGUoc3RydWN0IGlycV9kYXRhICpkYXRhKQ0KPiA+ICt7
-DQo+ID4gKyAgICAgICB1bnNpZ25lZCBpbnQgaHdpcnEgPSBpcnFkX3RvX2h3aXJxKGRhdGEpOw0K
-PiA+ICsgICAgICAgc3RydWN0IG10NjM5N19jaGlwICpjaGlwID0gaXJxX2RhdGFfZ2V0X2lycV9j
-aGlwX2RhdGEoZGF0YSk7DQo+ID4gKyAgICAgICBzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9
-IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsNCj4gPiArICAgICAgIGlycWQtPmVuYWJsZV9od2lycVto
-d2lycV0gPSBmYWxzZTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgcG1pY19pcnFf
-bG9jayhzdHJ1Y3QgaXJxX2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHN0cnVjdCBt
-dDYzOTdfY2hpcCAqY2hpcCA9IGlycV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGRhdGEpOw0KPiA+
-ICsNCj4gPiArICAgICAgIG11dGV4X2xvY2soJmNoaXAtPmlycWxvY2spOw0KPiA+ICt9DQo+ID4g
-Kw0KPiA+ICtzdGF0aWMgdm9pZCBwbWljX2lycV9zeW5jX3VubG9jayhzdHJ1Y3QgaXJxX2RhdGEg
-KmRhdGEpDQo+ID4gK3sNCj4gPiArICAgICAgIHVuc2lnbmVkIGludCBpLCB0b3BfZ3AsIGdwX29m
-ZnNldCwgZW5fcmVnLCBpbnRfcmVncywgc2hpZnQ7DQo+ID4gKyAgICAgICBzdHJ1Y3QgbXQ2Mzk3
-X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArICAg
-ICAgIHN0cnVjdCBwbWljX2lycV9kYXRhICppcnFkID0gY2hpcC0+aXJxX2RhdGE7DQo+ID4gKw0K
-PiA+ICsgICAgICAgZm9yIChpID0gMDsgaSA8IGlycWQtPm51bV9wbWljX2lycXM7IGkrKykgew0K
-PiA+ICsgICAgICAgICAgICAgICBpZiAoaXJxZC0+ZW5hYmxlX2h3aXJxW2ldID09IGlycWQtPmNh
-Y2hlX2h3aXJxW2ldKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KPiA+
-ICsNCj4gPiArICAgICAgICAgICAgICAgLyogRmluZCBvdXQgdGhlIElSUSBncm91cCAqLw0KPiA+
-ICsgICAgICAgICAgICAgICB0b3BfZ3AgPSAwOw0KPiA+ICsgICAgICAgICAgICAgICB3aGlsZSAo
-KHRvcF9ncCArIDEpIDwgaXJxZC0+bnVtX3RvcCAmJg0KPiA+ICsgICAgICAgICAgICAgICAgICAg
-ICAgaSA+PSBtdDYzNThfaW50c1t0b3BfZ3AgKyAxXS5od2lycV9iYXNlKQ0KPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIHRvcF9ncCsrOw0KPiA+ICsNCj4gPiArICAgICAgICAgICAgICAgLyog
-RmluZCB0aGUgaXJxIHJlZ2lzdGVycyAqLw0KPiANCj4gRnJvbSBMZWUgSm9uZXM6ICdOaXQ6ICJJ
-UlEiJw0KPiANCj4gPiArICAgICAgICAgICAgICAgZ3Bfb2Zmc2V0ID0gaSAtIG10NjM1OF9pbnRz
-W3RvcF9ncF0uaHdpcnFfYmFzZTsNCj4gPiArICAgICAgICAgICAgICAgaW50X3JlZ3MgPSBncF9v
-ZmZzZXQgLyBNVDYzNThfUkVHX1dJRFRIOw0KPiA+ICsgICAgICAgICAgICAgICBzaGlmdCA9IGdw
-X29mZnNldCAlIE1UNjM1OF9SRUdfV0lEVEg7DQo+ID4gKyAgICAgICAgICAgICAgIGVuX3JlZyA9
-IG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnICsNCj4gPiArICAgICAgICAgICAgICAgICAgICAg
-ICAgKG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnX3NoaWZ0ICogaW50X3JlZ3MpOw0KPiA+ICsN
-Cj4gWy4uLl0NCj4gPiArc3RhdGljIGNvbnN0IHN0cnVjdCBpcnFfZG9tYWluX29wcyBtdDYzNThf
-aXJxX2RvbWFpbl9vcHMgPSB7DQo+ID4gKyAgICAgICAubWFwID0gcG1pY19pcnFfZG9tYWluX21h
-cCwNCj4gPiArICAgICAgIC54bGF0ZSA9IGlycV9kb21haW5feGxhdGVfdHdvY2VsbCwNCj4gPiAr
-fTsNCj4gPiArDQo+ID4gK2ludCBtdDYzNThfaXJxX2luaXQoc3RydWN0IG10NjM5N19jaGlwICpj
-aGlwKQ0KPiA+ICt7DQo+ID4gKyAgICAgICBpbnQgaSwgaiwgcmV0Ow0KPiA+ICsgICAgICAgc3Ry
-dWN0IHBtaWNfaXJxX2RhdGEgKmlycWQ7DQo+ID4gKw0KPiA+ICsgICAgICAgaXJxZCA9IGRldm1f
-a3phbGxvYyhjaGlwLT5kZXYsIHNpemVvZihzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqKSwNCj4gDQo+
-IEZyb20gTGVlIEpvbmVzOiAnc2l6ZW9mKCppcnFkKScNCj4gDQo+ID4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIEdGUF9LRVJORUwpOw0KPiA+ICsgICAgICAgaWYgKCFpcnFkKQ0KPiA+ICsg
-ICAgICAgICAgICAgICByZXR1cm4gLUVOT01FTTsNCj4gPiArDQo+ID4gKyAgICAgICBjaGlwLT5p
-cnFfZGF0YSA9IGlycWQ7DQo+ID4gKw0KPiBbLi4uXQ0KPiA+IEBAIC0xNTQsMTkgKzE4NCwzMyBA
-QCBzdGF0aWMgaW50IG10NjM5N19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-PiA+ICAgICAgICAgaWYgKHBtaWMtPmlycSA8PSAwKQ0KPiA+ICAgICAgICAgICAgICAgICByZXR1
-cm4gcG1pYy0+aXJxOw0KPiA+DQo+ID4gLSAgICAgICByZXQgPSBtdDYzOTdfaXJxX2luaXQocG1p
-Yyk7DQo+ID4gLSAgICAgICBpZiAocmV0KQ0KPiA+IC0gICAgICAgICAgICAgICByZXR1cm4gcmV0
-Ow0KPiA+IC0NCj4gPiAgICAgICAgIHN3aXRjaCAocG1pYy0+Y2hpcF9pZCkgew0KPiA+ICAgICAg
-ICAgY2FzZSBNVDYzMjNfQ0hJUF9JRDoNCj4gPiArICAgICAgICAgICAgICAgcmV0ID0gbXQ2Mzk3
-X2lycV9pbml0KHBtaWMpOw0KPiA+ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAg
-ICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICAgICAgICAgICAgICAg
-ICByZXQgPSBkZXZtX21mZF9hZGRfZGV2aWNlcygmcGRldi0+ZGV2LCBQTEFURk9STV9ERVZJRF9O
-T05FLA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtdDYz
-MjNfZGV2cywgQVJSQVlfU0laRShtdDYzMjNfZGV2cyksDQo+ID4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiA+
-ICAgICAgICAgICAgICAgICBicmVhazsNCj4gPg0KPiA+ICsgICAgICAgY2FzZSBNVDYzNThfQ0hJ
-UF9JRDoNCj4gPiArICAgICAgICAgICAgICAgcmV0ID0gbXQ2MzU4X2lycV9pbml0KHBtaWMpOw0K
-PiA+ICsgICAgICAgICAgICAgICBpZiAocmV0KQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IHJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsgICAgICAgICAgICAgICByZXQgPSBkZXZtX21mZF9h
-ZGRfZGV2aWNlcygmcGRldi0+ZGV2LCBQTEFURk9STV9ERVZJRF9OT05FLA0KPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtdDYzNThfZGV2cywgQVJSQVlfU0la
-RShtdDYzNThfZGV2cyksDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiA+ICsgICAgICAgICAgICAgICBi
-cmVhazsNCj4gDQo+IEZyb20gTGVlIEpvbmVzOiAiSW4gYSBzdWJzZXF1ZW50IHBhdGNoIHlvdSBj
-YW4gY2hvb3NlIHRoZSBjb3JyZWN0DQo+IG10WFhYWF9kZXZzIHN0cnVjdHVyZSB0byBwYXNzIGFu
-ZCBjYWxsIGRldm1fbWZkX2FkZF9kZXZpY2VzKCkgb25seQ0KPiBvbmNlIGJlbG93IHRoZSBzd2l0
-Y2goKS4iDQo+IA0KPiBDYW4geW91IGxvb2sgaW50byB0aGF0IGFzIGEgZm9sbG93LXVwIHBhdGNo
-Pw0KPiANCj4gDQo+ID4gKw0KPiA+ICAgICAgICAgY2FzZSBNVDYzOTFfQ0hJUF9JRDoNCj4gPiAg
-ICAgICAgIGNhc2UgTVQ2Mzk3X0NISVBfSUQ6DQo+ID4gKyAgICAgICAgICAgICAgIHJldCA9IG10
-NjM5N19pcnFfaW5pdChwbWljKTsNCj4gPiArICAgICAgICAgICAgICAgaWYgKHJldCkNCj4gPiAr
-ICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICsNCj4gPiAgICAgICAgICAg
-ICAgICAgcmV0ID0gZGV2bV9tZmRfYWRkX2RldmljZXMoJnBkZXYtPmRldiwgUExBVEZPUk1fREVW
-SURfTk9ORSwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-bXQ2Mzk3X2RldnMsIEFSUkFZX1NJWkUobXQ2Mzk3X2RldnMpLA0KPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOVUxMLCAwLCBwbWljLT5pcnFfZG9tYWluKTsN
-Cj4gDQo+IFtzbmlwXQ0KDQo=
+On Tue, Mar 24, 2020 at 08:43:20PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> Modern device tree bindings are supposed to be created as YAML-files
+> in accordance with DT schema. This commit replaces Synopsys DW Timer
+> legacy bare text binding with YAML file. As before the binding file
+> states that the corresponding dts node is supposed to be compatible
+> with generic DW APB Timer indicated by the "snps,dw-apb-timer"
+> compatible string and to provide a mandatory registers memory range,
+> one timer interrupt, either reference clock source or a fixed clock
+> rate value. It may also have an optional APB bus reference clock
+> phandle specified.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> 
+> ---
+> 
+> I have doubts that this binding file belongs to the bindings/rtc
+> directory seeing it's a pure timer with no rtc facilities like
+> days/months/years counting and alarms. What about moving it to the
+> "Documentation/devicetree/bindings/timer/" directory?
 
++1
+
+> I also don't know who is the corresponding driver maintainer, so I added
+> Daniel Lezcano to the maintainers schema. Any idea what email should be
+> specified there instead?
+> 
+> Please also note, that "oneOf: - required: ..." pattern isn't working
+> here. So if you omit any of the clock-related property the
+> dt_binding_check procedure won't fail. Seeing the anyOf schema is working
+> I suppose this happens due to the dtschema/lib.py script, which replaces
+> the global oneOf with a fixup for the interrupts/interrupts-extended
+> properties:
+> 
+> > def fixup_interrupts(schema):
+> >    # Supporting 'interrupts' implies 'interrupts-extended' is also supported.
+> >    if not 'interrupts' in schema['properties'].keys():
+> >        return
+> >
+> >    # Any node with 'interrupts' can have 'interrupt-parent'
+> >    schema['properties']['interrupt-parent'] = True
+> >
+> >    schema['properties']['interrupts-extended'] = { "$ref": "#/properties/interrupts" };
+> >
+> >    if not ('required' in schema.keys() and 'interrupts' in schema['required']):
+> >        return
+> >
+> !>    # Currently no better way to express either 'interrupts' or 'interrupts-extended'
+> !>    # is required. If this fails validation, the error reporting is the whole
+> !>    # schema file fails validation
+> !>    schema['oneOf'] = [ {'required': ['interrupts']}, {'required': ['interrupts-extended']} ]
+
+I'll fix this. I'll have to check for 'oneOf' and if it exists then put 
+it under an 'allOf'.
+
+> ---
+>  .../devicetree/bindings/rtc/dw-apb.txt        | 32 -------
+>  .../bindings/rtc/snps,dw-apb-timer.yaml       | 88 +++++++++++++++++++
+>  2 files changed, 88 insertions(+), 32 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/dw-apb.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/snps,dw-apb-timer.yaml
+
+Otherwise, looks good.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
