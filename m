@@ -2,191 +2,368 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 453FF19A73C
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Apr 2020 10:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B4E19A964
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Apr 2020 12:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731608AbgDAI0a (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Apr 2020 04:26:30 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:21958 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726197AbgDAI0a (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Apr 2020 04:26:30 -0400
-X-UUID: ae987413d5424ad39b5efb26be6d5138-20200401
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=KAc2JVwQuKcaNBn24f4yGzswCmaLnRG+W1Uvy/qyynU=;
-        b=VghYf4mcfYRptzIJ5bf80ffxk+6Wyxc101JWAJ5potRTS6/IiC9Jb211RXWLY/VF+tCdN0LlN8Bskd+6W0qKtVxdrHpmGdWukUdfx+kQLcUR6/4hBELv7j6onzL3i0UcUJDB07CXPttHNwhpCg26mXNSu/164P9e2ydyVfij2ds=;
-X-UUID: ae987413d5424ad39b5efb26be6d5138-20200401
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 423719410; Wed, 01 Apr 2020 16:26:23 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 1 Apr 2020 16:26:19 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 1 Apr 2020 16:26:20 +0800
-Message-ID: <1585729581.2029.2.camel@mtksdaap41>
-Subject: Re: [PATCH v10 3/5] mfd: Add support for the MediaTek MT6358 PMIC
-From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S1728434AbgDAKTo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Apr 2020 06:19:44 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:56124 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727308AbgDAKTo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Apr 2020 06:19:44 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 6F0808030776;
+        Wed,  1 Apr 2020 10:19:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id j0jbirOyuJqB; Wed,  1 Apr 2020 13:19:38 +0300 (MSK)
+Date:   Wed, 1 Apr 2020 13:19:31 +0300
+From:   Sergey Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Rob Herring <robh@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        "Frank Wunderlich" <frank-w@public-files.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Fontana <rfontana@redhat.com>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        <srv_heupstream@mediatek.com>
-Date:   Wed, 1 Apr 2020 16:26:21 +0800
-In-Reply-To: <20200325094326.GH442973@dell>
-References: <1583918223-22506-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1583918223-22506-4-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <20200325094326.GH442973@dell>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] dt-bindings: interrupt-controller: Convert
+ mti,gic to DT schema
+Message-ID: <20200401101930.3lk4t6wk6j5ne6ay@ubsrv2.baikal.int>
+References: <20200306125622.839ED80307C4@mail.baikalelectronics.ru>
+ <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
+ <20200324174325.14213-3-Sergey.Semin@baikalelectronics.ru>
+ <20200331210248.GA27684@bogus>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200331210248.GA27684@bogus>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGksDQoNCk9uIFdlZCwgMjAyMC0wMy0yNSBhdCAwOTo0MyArMDAwMCwgTGVlIEpvbmVzIHdyb3Rl
-Og0KPiBPbiBXZWQsIDExIE1hciAyMDIwLCBIc2luLUhzaXVuZyBXYW5nIHdyb3RlOg0KPiANCj4g
-PiBUaGlzIGFkZHMgc3VwcG9ydCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDLiBUaGlzIGlz
-IGENCj4gPiBtdWx0aWZ1bmN0aW9uIGRldmljZSB3aXRoIHRoZSBmb2xsb3dpbmcgc3ViIG1vZHVs
-ZXM6DQo+ID4gDQo+ID4gLSBSZWd1bGF0b3INCj4gPiAtIFJUQw0KPiA+IC0gQ29kZWMNCj4gPiAt
-IEludGVycnVwdA0KPiA+IA0KPiA+IEl0IGlzIGludGVyZmFjZWQgdG8gdGhlIGhvc3QgY29udHJv
-bGxlciB1c2luZyBTUEkgaW50ZXJmYWNlDQo+ID4gYnkgYSBwcm9wcmlldGFyeSBoYXJkd2FyZSBj
-YWxsZWQgUE1JQyB3cmFwcGVyIG9yIHB3cmFwLg0KPiA+IE1UNjM1OCBNRkQgaXMgYSBjaGlsZCBk
-ZXZpY2Ugb2YgdGhlIHB3cmFwLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEhzaW4tSHNpdW5n
-IFdhbmcgPGhzaW4taHNpdW5nLndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2
-ZXJzL21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gPiAgZHJpdmVycy9t
-ZmQvbXQ2MzU4LWlycS5jICAgICAgICAgICAgIHwgMjM2ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrDQo+ID4gIGRyaXZlcnMvbWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICB8ICA1NSAr
-KysrKystDQo+ID4gIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICB8IDE1OCAr
-KysrKysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0
-ZXJzLmggfCAyODIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gPiAgaW5j
-bHVkZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUuaCAgICAgIHwgICAzICsNCj4gPiAgNiBmaWxlcyBj
-aGFuZ2VkLCA3MzEgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPiAgY3JlYXRlIG1v
-ZGUgMTAwNjQ0IGRyaXZlcnMvbWZkL210NjM1OC1pcnEuYw0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5oDQo+ID4gDQo+ID4gZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvbWZkL01ha2VmaWxlIGIvZHJpdmVycy9tZmQvTWFrZWZpbGUNCj4gPiBp
-bmRleCBiODNmMTcyLi45YWYxNDE0IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvbWZkL01ha2Vm
-aWxlDQo+ID4gKysrIGIvZHJpdmVycy9tZmQvTWFrZWZpbGUNCj4gPiBAQCAtMjM4LDcgKzIzOCw3
-IEBAIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQykJKz0gaW50ZWwtc29jLXBtaWMubw0KPiA+
-ICBvYmotJChDT05GSUdfSU5URUxfU09DX1BNSUNfQlhUV0MpCSs9IGludGVsX3NvY19wbWljX2J4
-dHdjLm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDX0NIVFdDKQkrPSBpbnRlbF9z
-b2NfcG1pY19jaHR3Yy5vDQo+ID4gIG9iai0kKENPTkZJR19JTlRFTF9TT0NfUE1JQ19DSFREQ19U
-SSkJKz0gaW50ZWxfc29jX3BtaWNfY2h0ZGNfdGkubw0KPiA+IC1tdDYzOTctb2Jqcwk6PSBtdDYz
-OTctY29yZS5vIG10NjM5Ny1pcnEubw0KPiA+ICttdDYzOTctb2JqcwkJCTo9IG10NjM5Ny1jb3Jl
-Lm8gbXQ2Mzk3LWlycS5vIG10NjM1OC1pcnEubw0KPiA+ICBvYmotJChDT05GSUdfTUZEX01UNjM5
-NykJKz0gbXQ2Mzk3Lm8NCj4gPiAgb2JqLSQoQ09ORklHX0lOVEVMX1NPQ19QTUlDX01SRkxEKQkr
-PSBpbnRlbF9zb2NfcG1pY19tcmZsZC5vDQo+ID4gIA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L21mZC9tdDYzNTgtaXJxLmMgYi9kcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMNCj4gPiBuZXcgZmls
-ZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAuLjAyMmU1ZjUNCj4gPiAtLS0gL2Rldi9u
-dWxsDQo+ID4gKysrIGIvZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5jDQo+ID4gQEAgLTAsMCArMSwy
-MzYgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLy8N
-Cj4gPiArLy8gQ29weXJpZ2h0IChjKSAyMDE5IE1lZGlhVGVrIEluYy4NCj4gDQo+IFRoaXMgaXMg
-b3V0IG9mIGRhdGUuDQo+IA0KDQpUaGFua3MuIEkgd2lsbCB1cGRhdGUgaXQgaW4gdGhlIG5leHQg
-cGF0Y2guDQoNCj4gPiArI2luY2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPg0KPiA+ICsjaW5jbHVk
-ZSA8bGludXgvbWZkL210NjM1OC9jb3JlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tZmQvbXQ2
-MzU4L3JlZ2lzdGVycy5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvbWZkL210NjM5Ny9jb3JlLmg+
-DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L29m
-Lmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9vZl9kZXZpY2UuaD4NCj4gPiArI2luY2x1ZGUgPGxp
-bnV4L29mX2lycS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+
-ID4gKyNpbmNsdWRlIDxsaW51eC9yZWdtYXAuaD4NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3Qg
-aXJxX3RvcF90IG10NjM1OF9pbnRzW10gPSB7DQo+ID4gKwlNVDYzNThfVE9QX0dFTihCVUNLKSwN
-Cj4gPiArCU1UNjM1OF9UT1BfR0VOKExETyksDQo+ID4gKwlNVDYzNThfVE9QX0dFTihQU0MpLA0K
-PiA+ICsJTVQ2MzU4X1RPUF9HRU4oU0NLKSwNCj4gPiArCU1UNjM1OF9UT1BfR0VOKEJNKSwNCj4g
-PiArCU1UNjM1OF9UT1BfR0VOKEhLKSwNCj4gPiArCU1UNjM1OF9UT1BfR0VOKEFVRCksDQo+ID4g
-KwlNVDYzNThfVE9QX0dFTihNSVNDKSwNCj4gPiArfTsNCj4gPiArDQo+ID4gK3N0YXRpYyB2b2lk
-IHBtaWNfaXJxX2VuYWJsZShzdHJ1Y3QgaXJxX2RhdGEgKmRhdGEpDQo+ID4gK3sNCj4gPiArCXVu
-c2lnbmVkIGludCBod2lycSA9IGlycWRfdG9faHdpcnEoZGF0YSk7DQo+ID4gKwlzdHJ1Y3QgbXQ2
-Mzk3X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRfaXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gDQo+
-IDYzOTc/DQo+IA0KPiBUaGlzIGRvZXMgbWFrZSBtZSB3b25kZXIgaG93IGRpZmZlcmVudCB0aGlz
-IGZpbGUgaXMgdG8gdGhlIGV4aXN0aW5nDQo+IHN1cHBvcnQgZm9yIHRoZSBNVDYzOTcuICBXaGF0
-IGlzIHRoZSBqdXN0aWZpY2F0aW9uIGZvciBub3QgZXh0ZW5kaW5nDQo+IHRoYXQgaW5zdGVhZCBv
-ZiBjcmVhdGluZyBhIGJyYW5kIG5ldyBmaWxlPw0KPiANCg0KTVQ2MzU4IGlzIHNpbWlsYXIgdG8g
-TVQ2Mzk3IGZvciBtZmQgZHJpdmVyIGV4Y2VwdCB0aGUgaGFyZHdhcmUgZGVzaWduIG9mDQppbnRl
-cnJ1cHQgd2hpY2ggcHJvdmlkZXMgbW9yZSBpbnRlcnJ1cHRzIHRoYW4gTVQ2Mzk3Lg0KSSB0aGlu
-ayBNVDYzNTggY2FuIHJldXNlIHRoZSBvdGhlciBwYXJ0IG9mIE1UNjM5NyBtZmQgZHJpdmVyLCBz
-byBJIG9ubHkNCmFkZCB0aGUgaW50ZXJydXB0IHBhcnQgb2YgTVQ2MzU4Lg0KDQo+ID4gKwlzdHJ1
-Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsNCj4gPiArCWly
-cWQtPmVuYWJsZV9od2lycVtod2lycV0gPSB0cnVlOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0
-aWMgdm9pZCBwbWljX2lycV9kaXNhYmxlKHN0cnVjdCBpcnFfZGF0YSAqZGF0YSkNCj4gPiArew0K
-PiA+ICsJdW5zaWduZWQgaW50IGh3aXJxID0gaXJxZF90b19od2lycShkYXRhKTsNCj4gPiArCXN0
-cnVjdCBtdDYzOTdfY2hpcCAqY2hpcCA9IGlycV9kYXRhX2dldF9pcnFfY2hpcF9kYXRhKGRhdGEp
-Ow0KPiA+ICsJc3RydWN0IHBtaWNfaXJxX2RhdGEgKmlycWQgPSBjaGlwLT5pcnFfZGF0YTsNCj4g
-PiArDQo+ID4gKwlpcnFkLT5lbmFibGVfaHdpcnFbaHdpcnFdID0gZmFsc2U7DQo+ID4gK30NCj4g
-PiArDQo+ID4gK3N0YXRpYyB2b2lkIHBtaWNfaXJxX2xvY2soc3RydWN0IGlycV9kYXRhICpkYXRh
-KQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3QgbXQ2Mzk3X2NoaXAgKmNoaXAgPSBpcnFfZGF0YV9nZXRf
-aXJxX2NoaXBfZGF0YShkYXRhKTsNCj4gPiArDQo+ID4gKwltdXRleF9sb2NrKCZjaGlwLT5pcnFs
-b2NrKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgcG1pY19pcnFfc3luY191bmxv
-Y2soc3RydWN0IGlycV9kYXRhICpkYXRhKQ0KPiA+ICt7DQo+ID4gKwl1bnNpZ25lZCBpbnQgaSwg
-dG9wX2dwLCBncF9vZmZzZXQsIGVuX3JlZywgaW50X3JlZ3MsIHNoaWZ0Ow0KPiA+ICsJc3RydWN0
-IG10NjM5N19jaGlwICpjaGlwID0gaXJxX2RhdGFfZ2V0X2lycV9jaGlwX2RhdGEoZGF0YSk7DQo+
-ID4gKwlzdHJ1Y3QgcG1pY19pcnFfZGF0YSAqaXJxZCA9IGNoaXAtPmlycV9kYXRhOw0KPiA+ICsN
-Cj4gPiArCWZvciAoaSA9IDA7IGkgPCBpcnFkLT5udW1fcG1pY19pcnFzOyBpKyspIHsNCj4gPiAr
-CQlpZiAoaXJxZC0+ZW5hYmxlX2h3aXJxW2ldID09IGlycWQtPmNhY2hlX2h3aXJxW2ldKQ0KPiA+
-ICsJCQljb250aW51ZTsNCj4gPiArDQo+ID4gKwkJLyogRmluZCBvdXQgdGhlIElSUSBncm91cCAq
-Lw0KPiA+ICsJCXRvcF9ncCA9IDA7DQo+ID4gKwkJd2hpbGUgKCh0b3BfZ3AgKyAxKSA8IGlycWQt
-Pm51bV90b3AgJiYNCj4gPiArCQkgICAgICAgaSA+PSBtdDYzNThfaW50c1t0b3BfZ3AgKyAxXS5o
-d2lycV9iYXNlKQ0KPiA+ICsJCQl0b3BfZ3ArKzsNCj4gPiArDQo+ID4gKwkJLyogRmluZCB0aGUg
-aXJxIHJlZ2lzdGVycyAqLw0KPiANCj4gTml0OiAiSVJRIg0KPiANCg0KVGhhbmtzLiBJIHdpbGwg
-dXBkYXRlIGl0IGluIHRoZSBuZXh0IHBhdGNoLg0KDQo+ID4gKwkJZ3Bfb2Zmc2V0ID0gaSAtIG10
-NjM1OF9pbnRzW3RvcF9ncF0uaHdpcnFfYmFzZTsNCj4gPiArCQlpbnRfcmVncyA9IGdwX29mZnNl
-dCAvIE1UNjM1OF9SRUdfV0lEVEg7DQo+ID4gKwkJc2hpZnQgPSBncF9vZmZzZXQgJSBNVDYzNThf
-UkVHX1dJRFRIOw0KPiA+ICsJCWVuX3JlZyA9IG10NjM1OF9pbnRzW3RvcF9ncF0uZW5fcmVnICsN
-Cj4gPiArCQkJIChtdDYzNThfaW50c1t0b3BfZ3BdLmVuX3JlZ19zaGlmdCAqIGludF9yZWdzKTsN
-Cj4gPiArDQo+ID4gKwkJcmVnbWFwX3VwZGF0ZV9iaXRzKGNoaXAtPnJlZ21hcCwgZW5fcmVnLCBC
-SVQoc2hpZnQpLA0KPiA+ICsJCQkJICAgaXJxZC0+ZW5hYmxlX2h3aXJxW2ldIDw8IHNoaWZ0KTsN
-Cj4gPiArDQo+ID4gKwkJaXJxZC0+Y2FjaGVfaHdpcnFbaV0gPSBpcnFkLT5lbmFibGVfaHdpcnFb
-aV07DQo+ID4gKwl9DQo+ID4gKwltdXRleF91bmxvY2soJmNoaXAtPmlycWxvY2spOw0KPiA+ICt9
-DQo+IA0KPiBbLi4uXQ0KPiANCj4gPiAraW50IG10NjM1OF9pcnFfaW5pdChzdHJ1Y3QgbXQ2Mzk3
-X2NoaXAgKmNoaXApDQo+ID4gK3sNCj4gPiArCWludCBpLCBqLCByZXQ7DQo+ID4gKwlzdHJ1Y3Qg
-cG1pY19pcnFfZGF0YSAqaXJxZDsNCj4gPiArDQo+ID4gKwlpcnFkID0gZGV2bV9remFsbG9jKGNo
-aXAtPmRldiwgc2l6ZW9mKHN0cnVjdCBwbWljX2lycV9kYXRhICopLA0KPiANCj4gc2l6ZW9mKCpp
-cnFkKQ0KPiANCg0KVGhhbmtzLiBJIHdpbGwgdXBkYXRlIGl0IGluIHRoZSBuZXh0IHBhdGNoLg0K
-DQo+IFsuLi5dDQo+IA0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGNoaXBfZGF0YSBtdDYzOTdf
-Y29yZSA9IHsNCj4gPiAgCS5jaWRfYWRkciA9IE1UNjM5N19DSUQsDQo+ID4gIAkuY2lkX3NoaWZ0
-ID0gMCwNCj4gPiBAQCAtMTU0LDE5ICsxODQsMzMgQEAgc3RhdGljIGludCBtdDYzOTdfcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPiAgCWlmIChwbWljLT5pcnEgPD0gMCkN
-Cj4gPiAgCQlyZXR1cm4gcG1pYy0+aXJxOw0KPiA+ICANCj4gPiAtCXJldCA9IG10NjM5N19pcnFf
-aW5pdChwbWljKTsNCj4gPiAtCWlmIChyZXQpDQo+ID4gLQkJcmV0dXJuIHJldDsNCj4gPiAtDQo+
-ID4gIAlzd2l0Y2ggKHBtaWMtPmNoaXBfaWQpIHsNCj4gPiAgCWNhc2UgTVQ2MzIzX0NISVBfSUQ6
-DQo+ID4gKwkJcmV0ID0gbXQ2Mzk3X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlmIChyZXQpDQo+
-ID4gKwkJCXJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICAJCXJldCA9IGRldm1fbWZkX2FkZF9kZXZp
-Y2VzKCZwZGV2LT5kZXYsIFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gIAkJCQkJICAgbXQ2MzIz
-X2RldnMsIEFSUkFZX1NJWkUobXQ2MzIzX2RldnMpLA0KPiA+ICAJCQkJCSAgIE5VTEwsIDAsIHBt
-aWMtPmlycV9kb21haW4pOw0KPiA+ICAJCWJyZWFrOw0KPiA+ICANCj4gPiArCWNhc2UgTVQ2MzU4
-X0NISVBfSUQ6DQo+ID4gKwkJcmV0ID0gbXQ2MzU4X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlm
-IChyZXQpDQo+ID4gKwkJCXJldHVybiByZXQ7DQo+ID4gKw0KPiA+ICsJCXJldCA9IGRldm1fbWZk
-X2FkZF9kZXZpY2VzKCZwZGV2LT5kZXYsIFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gKwkJCQkJ
-ICAgbXQ2MzU4X2RldnMsIEFSUkFZX1NJWkUobXQ2MzU4X2RldnMpLA0KPiA+ICsJCQkJCSAgIE5V
-TEwsIDAsIHBtaWMtPmlycV9kb21haW4pOw0KPiANCj4gSW4gYSBzdWJzZXF1ZW50IHBhdGNoIHlv
-dSBjYW4gY2hvb3NlIHRoZSBjb3JyZWN0IG10WFhYWF9kZXZzIHN0cnVjdHVyZQ0KPiB0byBwYXNz
-IGFuZCBjYWxsIGRldm1fbWZkX2FkZF9kZXZpY2VzKCkgb25seSBvbmNlIGJlbG93IHRoZSBzd2l0
-Y2goKS4NCj4gDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50LiBJIHdpbGwgcmV3cml0ZSB0aGlz
-IGluIHRoZSBuZXh0IHBhdGNoLg0KDQo+ID4gKwkJYnJlYWs7DQo+ID4gKw0KPiA+ICAJY2FzZSBN
-VDYzOTFfQ0hJUF9JRDoNCj4gPiAgCWNhc2UgTVQ2Mzk3X0NISVBfSUQ6DQo+ID4gKwkJcmV0ID0g
-bXQ2Mzk3X2lycV9pbml0KHBtaWMpOw0KPiA+ICsJCWlmIChyZXQpDQo+ID4gKwkJCXJldHVybiBy
-ZXQ7DQo+ID4gKw0KPiA+ICAJCXJldCA9IGRldm1fbWZkX2FkZF9kZXZpY2VzKCZwZGV2LT5kZXYs
-IFBMQVRGT1JNX0RFVklEX05PTkUsDQo+ID4gIAkJCQkJICAgbXQ2Mzk3X2RldnMsIEFSUkFZX1NJ
-WkUobXQ2Mzk3X2RldnMpLA0KPiA+ICAJCQkJCSAgIE5VTEwsIDAsIHBtaWMtPmlycV9kb21haW4p
-Ow0KPiANCj4gWy4uLl0NCj4gDQoNCg==
+On Tue, Mar 31, 2020 at 03:02:48PM -0600, Rob Herring wrote:
+> On Tue, Mar 24, 2020 at 08:43:21PM +0300, Sergey.Semin@baikalelectronics.ru wrote:
+> > From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > 
+> > Modern device tree bindings are supposed to be created as YAML-files
+> > in accordance with DT schema. This commit replaces MIPS GIC legacy bare
+> > text binding with YAML file. As before the binding file states that the
+> > corresponding dts node is supposed to be compatible with MIPS Global
+> > Interrupt Controller indicated by the "mti,gic" compatible string and
+> > to provide a mandatory interrupt-controller and '#interrupt-cells'
+> > properties. There might be optional registers memory range,
+> > "mti,reserved-cpu-vectors" and "mti,reserved-ipi-vectors" properties
+> > specified.
+> > 
+> > MIPS GIC also includes a free-running global timer, per-CPU count/compare
+> > timers, and a watchdog. Since currently the GIC Timer is only supported the
+> > DT schema expects an IRQ and clock-phandler charged timer sub-node with
+> > "mti,mips-gic-timer" compatible string.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: devicetree@vger.kernel.org
+> > Cc: linux-rtc@vger.kernel.org
+> > 
+> > ---
+> > 
+> > I don't really know who is the corresponding driver maintainer, so I
+> > added to the maintainers schema Paul since he used to be looking for the
+> > MIPS arch and Thomas looking after it now. Any idea what email should be
+> > specified there instead?
+> > 
+> > Similarly to the previous patch the "oneOf: - required: ..." pattern isn't
+> > working here. Supposedly due to the script' dtschema/lib.py
+> > interrupts/interrupts-extended fixup.
+> > ---
+> >  .../interrupt-controller/mips-gic.txt         |  67 --------
+> >  .../interrupt-controller/mti,gic.yaml         | 152 ++++++++++++++++++
+> >  2 files changed, 152 insertions(+), 67 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt b/Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+> > deleted file mode 100644
+> > index 173595305e26..000000000000
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+> > +++ /dev/null
+> > @@ -1,67 +0,0 @@
+> > -MIPS Global Interrupt Controller (GIC)
+> > -
+> > -The MIPS GIC routes external interrupts to individual VPEs and IRQ pins.
+> > -It also supports local (per-processor) interrupts and software-generated
+> > -interrupts which can be used as IPIs.  The GIC also includes a free-running
+> > -global timer, per-CPU count/compare timers, and a watchdog.
+> > -
+> > -Required properties:
+> > -- compatible : Should be "mti,gic".
+> > -- interrupt-controller : Identifies the node as an interrupt controller
+> > -- #interrupt-cells : Specifies the number of cells needed to encode an
+> > -  interrupt specifier.  Should be 3.
+> > -  - The first cell is the type of interrupt, local or shared.
+> > -    See <include/dt-bindings/interrupt-controller/mips-gic.h>.
+> > -  - The second cell is the GIC interrupt number.
+> > -  - The third cell encodes the interrupt flags.
+> > -    See <include/dt-bindings/interrupt-controller/irq.h> for a list of valid
+> > -    flags.
+> > -
+> > -Optional properties:
+> > -- reg : Base address and length of the GIC registers.  If not present,
+> > -  the base address reported by the hardware GCR_GIC_BASE will be used.
+> > -- mti,reserved-cpu-vectors : Specifies the list of CPU interrupt vectors
+> > -  to which the GIC may not route interrupts.  Valid values are 2 - 7.
+> > -  This property is ignored if the CPU is started in EIC mode.
+> > -- mti,reserved-ipi-vectors : Specifies the range of GIC interrupts that are
+> > -  reserved for IPIs.
+> > -  It accepts 2 values, the 1st is the starting interrupt and the 2nd is the size
+> > -  of the reserved range.
+> > -  If not specified, the driver will allocate the last 2 * number of VPEs in the
+> > -  system.
+> > -
+> > -Required properties for timer sub-node:
+> > -- compatible : Should be "mti,gic-timer".
+> > -- interrupts : Interrupt for the GIC local timer.
+> > -
+> > -Optional properties for timer sub-node:
+> > -- clocks : GIC timer operating clock.
+> > -- clock-frequency : Clock frequency at which the GIC timers operate.
+> > -
+> > -Note that one of clocks or clock-frequency must be specified.
+> > -
+> > -Example:
+> > -
+> > -	gic: interrupt-controller@1bdc0000 {
+> > -		compatible = "mti,gic";
+> > -		reg = <0x1bdc0000 0x20000>;
+> > -
+> > -		interrupt-controller;
+> > -		#interrupt-cells = <3>;
+> > -
+> > -		mti,reserved-cpu-vectors = <7>;
+> > -		mti,reserved-ipi-vectors = <40 8>;
+> > -
+> > -		timer {
+> > -			compatible = "mti,gic-timer";
+> > -			interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
+> > -			clock-frequency = <50000000>;
+> > -		};
+> > -	};
+> > -
+> > -	uart@18101400 {
+> > -		...
+> > -		interrupt-parent = <&gic>;
+> > -		interrupts = <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>;
+> > -		...
+> > -	};
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml b/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+> > new file mode 100644
+> > index 000000000000..1e47c0cdc231
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+> > @@ -0,0 +1,152 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> 
+> Do you have rights to add BSD?
+> 
 
+My manager said we can submitted the DT schema bindings under both GPL and
+BSD licenses. Though I don't know what license was of the legacy binding file.
+
+BTW Rob, you ask about the license very often whether I set pure GPL-2.0
+or dual-license header. Just wondering is it some kind of protocol to make
+sure a submitter has got proper rights to submit the binding?
+
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/interrupt-controller/mti,gic.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MIPS Global Interrupt Controller
+> > +
+> > +maintainers:
+> > +  - Paul Burton <paulburton@kernel.org>
+> > +  - Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > +
+> > +description: |
+> > +  The MIPS GIC routes external interrupts to individual VPEs and IRQ pins.
+> > +  It also supports local (per-processor) interrupts and software-generated
+> > +  interrupts which can be used as IPIs. The GIC also includes a free-running
+> > +  global timer, per-CPU count/compare timers, and a watchdog.
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/interrupt-controller.yaml#
+> 
+> Drop this.
+> 
+
+Ok.
+
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mti,gic
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 3
+> > +    description: |
+> > +      The 1st cell is the type of interrupt: local or shared defined in the
+> > +      file 'dt-bindings/interrupt-controller/mips-gic.h'. The 2nd cell is the
+> > +      GIC interrupt number. The 3d cell encodes the interrupt flags setting up
+> > +      the IRQ trigger modes, which are defined in the file
+> > +      'dt-bindings/interrupt-controller/irq.h'.
+> > +
+> > +  reg:
+> > +    description: |
+> > +      Base address and length of the GIC registers space. If not present,
+> > +      the base address reported by the hardware GCR_GIC_BASE will be used.
+> > +    maxItems: 1
+> > +
+> > +  interrupt-controller: true
+> > +
+> > +  mti,reserved-cpu-vectors:
+> > +    description: |
+> > +      Specifies the list of CPU interrupt vectors to which the GIC may not
+> > +      route interrupts. This property is ignored if the CPU is started in EIC
+> > +      mode.
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#definitions/uint32-array
+> > +      - minItems: 1
+> > +        maxItems: 6
+> > +        uniqueItems: true
+> > +        items:
+> > +          minimum: 2
+> > +          maximum: 7
+> > +
+> > +  mti,reserved-ipi-vectors:
+> > +    description: |
+> > +      Specifies the range of GIC interrupts that are reserved for IPIs.
+> > +      It accepts two values: the 1st is the starting interrupt and the 2nd is
+> > +      the size of the reserved range. If not specified, the driver will
+> > +      allocate the last (2 * number of VPEs in the system).
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#definitions/uint32-array
+> > +      - items:
+> > +          - minimum: 0
+> > +            maximum: 254
+> > +          - minimum: 2
+> > +            maximum: 254
+> > +
+> > +patternProperties:
+> > +  "^timer(@[0-9a-f]+)?$":
+> 
+> If you have an unit-address, then there should be a 'reg' property.
+> 
+> Seems like this can be just 'timer'?
+> 
+
+Ok. reg property isn't supported by the timer sub-node. So I'll make it to
+be just "timer" node with no unit-address number.
+
+-Sergey
+
+> > +    type: object
+> > +    description: |
+> > +      MIPS GIC includes a free-running global timer, per-CPU count/compare
+> > +      timers, and a watchdog. Currently only the GIC Timer is supported.
+> > +    properties:
+> > +      compatible:
+> > +        const: mti,gic-timer
+> > +
+> > +      interrupts:
+> > +        description: |
+> > +          Interrupt for the GIC local timer, so normally it's suppose to be of
+> > +          <GIC_LOCAL X IRQ_TYPE_NONE> format.
+> > +        maxItems: 1
+> > +
+> > +      clocks:
+> > +        maxItems: 1
+> > +
+> > +      clock-frequency: true
+> > +
+> > +    required:
+> > +      - compatible
+> > +      - interrupts
+> > +
+> > +    oneOf:
+> > +      - required:
+> > +          - clocks
+> > +      - required:
+> > +          - clock-frequency
+> > +
+> > +    additionalProperties: false
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - "#interrupt-cells"
+> > +  - interrupt-controller
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/mips-gic.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    interrupt-controller@1bdc0000 {
+> > +      compatible = "mti,gic";
+> > +      reg = <0x1bdc0000 0x20000>;
+> > +      interrupt-controller;
+> > +      #interrupt-cells = <3>;
+> > +      mti,reserved-cpu-vectors = <7>;
+> > +      mti,reserved-ipi-vectors = <40 8>;
+> > +
+> > +      timer {
+> > +        compatible = "mti,gic-timer";
+> > +        interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
+> > +        clock-frequency = <50000000>;
+> > +      };
+> > +    };
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/mips-gic.h>
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    interrupt-controller@1bdc0000 {
+> > +      compatible = "mti,gic";
+> > +      reg = <0x1bdc0000 0x20000>;
+> > +      interrupt-controller;
+> > +      #interrupt-cells = <3>;
+> > +
+> > +      timer {
+> > +        compatible = "mti,gic-timer";
+> > +        interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
+> > +        clocks = <&cpu_pll>;
+> > +      };
+> > +    };
+> > +  - |
+> > +    interrupt-controller {
+> > +      compatible = "mti,gic";
+> > +      interrupt-controller;
+> > +      #interrupt-cells = <3>;
+> > +    };
+> > +...
+> > -- 
+> > 2.25.1
+> > 
