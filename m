@@ -2,50 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7D719C474
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2020 16:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F2F19C49B
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2020 16:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732006AbgDBOj6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Apr 2020 10:39:58 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35791 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726927AbgDBOj5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Apr 2020 10:39:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id a13so1855703pfa.2;
-        Thu, 02 Apr 2020 07:39:54 -0700 (PDT)
+        id S2388689AbgDBOos (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Apr 2020 10:44:48 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:35148 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388668AbgDBOos (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Apr 2020 10:44:48 -0400
+Received: by mail-pj1-f68.google.com with SMTP id g9so1602443pjp.0;
+        Thu, 02 Apr 2020 07:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iBStpTqnLq83tdRxsCcG08HtlBz3MvCrC3OwLZuM250=;
-        b=Iilhn4fFZS/tCzMj9J4qmn/6+xg+houCYBF0pehjSHOditnxMTeWjCOdtq1RESedVY
-         jlPCWAhkbHck4sydbWlsfh++sVCP/DJfhjoMq5kO1oevwUSD3UIfKMREm+KzkBQlcco0
-         en5czMPkUmzrg78VzEREOzWz7ABtUuhmGwySKmQYKgdlU579NjxW0cNy9uYkLQ9mBhod
-         ds6U/8TnJFpL97IMSfvzX4OIY4V9RkZRtSVw2dqE5NH9YqSnD0tyu7+orPyzr55eYHby
-         pT1JsHQqpIoMy24MymuwTivT+JyXVbddCxkK4kEvc5jQ4rBDtbXIeDiaI0dPtqxr9xnx
-         qRng==
+        bh=a2bK05qLK+63qvi83o6srQxudDFCP37I+nPrw30dRKw=;
+        b=gQaUQvaJsvSOk390RF6XFpFQmqT5tQjQ0pDRkqxxTnbhs7uIOksO3hKT1y5/ghZ/2w
+         VJ1ZcFcJGPOpIJR9TldyzMknV+KH3cgm58zaOsgrFWt6CnsniatJei3Fsg3zdfxzlrvJ
+         jEauhBh79ePy3WvV91gg96H9YbjbtCWxO/NR4wKeYCLPJI6y8RyzK2lKWjqDoXnvuvRt
+         +37VfREoQ8Y3ICZRS77qaH/l8AhQe1/xJhe0BHf/R4Ek84RhFE6DlRQfMh1cM6cwkKly
+         oOLTNJVrZhB7ICH85H27qBlONHfU29S+ikGTCS2nOe2C6T4BKr1i9/rD6z1OXRAaYVs0
+         BPXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=iBStpTqnLq83tdRxsCcG08HtlBz3MvCrC3OwLZuM250=;
-        b=F6u9ZSBy9rhbrhcUecr4RCNOlHLLk41dLZH4satZr8W+wRDjoP/lfFIjtoyMYeQSmW
-         e5K4V/LijRBZoAXnAMWg9Wnj+FpLm3Gst8J0gTGUB23jKFajch5a7zRg0AWRgxKcTWBt
-         y+pIY/pS64KYGMgaS6K1M533mOgDNr/OlpG/x9ifzerDCMM9+TyDel2vmxRCHfeST2eS
-         czaefNfC/BqjLgUtZh3lYoxA+zPgvleVvc9CMpa7HfS22aqQ7r8t36gV2vZN4jjHAl1S
-         dobFBBW8P7isqtJx2Ql7GC1Ssr06pdNV0RYzApj/7hIrojrFRI6QlUNYxspkgM+gUi8l
-         17dQ==
-X-Gm-Message-State: AGi0Pua+d2ox4tt1Ev4otXaju2uWHJ2coY/pWCou7LZjjju83/ROz/I8
-        mMPEwXgm1+lKezW4XvV76PKhkUt0
-X-Google-Smtp-Source: APiQypI2HB3icThuUI8hHObPx2W2+f5STIKI9gr4F3wl6wEVAZq7BdYAsJ/OyWZZeLudwVHYLnIe2A==
-X-Received: by 2002:a65:4b8d:: with SMTP id t13mr3515452pgq.243.1585838394093;
-        Thu, 02 Apr 2020 07:39:54 -0700 (PDT)
+        bh=a2bK05qLK+63qvi83o6srQxudDFCP37I+nPrw30dRKw=;
+        b=W7xA6S6XLNJdagDOkPZaspjqlrWVe7KaYaaWhQuQNOfZTKEA5RHaaARYqLQ3agxU8j
+         Dz3c6g3uXz+mdSe2nY5KoTN3hW4hROguMoyBZLzooNvJTOUUsf+BsGtfITr7PnrRt6UE
+         esctfFlxQoBccKRQRELwG7n6oV1qG5nVjb1/LKVHxF7RWwEuRjml3oGO4zKsV7UzA39P
+         rtrVME093siQqzpz8KJMo5QOcUUNm3HvI5S0yBfyv9fAiV05WCUtkO/kvFVQhpsXvzdy
+         3OudVuswWomgjidipdg8kwLLZZhBxN9AUMTks0fZfIVCrKrmRNjmxMTqvPynV6IfUaL4
+         dutA==
+X-Gm-Message-State: AGi0PubPb5mYhaChv48BV07xbe8F3v0272/JWHivf+1uqFXtn94mK+P7
+        KUfrUzg7nd40Gz6Xu9qM3gXVuaED
+X-Google-Smtp-Source: APiQypKOghLR6X0+iaVDSLmvhUb8sEC01IYZm62C1ZwgVod2w0xxkROlCPnimAxSfgv/G1gghxOy5A==
+X-Received: by 2002:a17:90a:af8e:: with SMTP id w14mr4105378pjq.164.1585838686046;
+        Thu, 02 Apr 2020 07:44:46 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w138sm3942062pff.145.2020.04.02.07.39.52
+        by smtp.gmail.com with ESMTPSA id s76sm3548943pgc.64.2020.04.02.07.44.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2020 07:39:53 -0700 (PDT)
+        Thu, 02 Apr 2020 07:44:45 -0700 (PDT)
 Subject: Re: [PATCH][V2][next] rtc: ds1307: check for failed memory allocation
  on wdt
 To:     Colin King <colin.king@canonical.com>,
@@ -99,8 +99,8 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <15e369be-847a-f480-988d-7d119d1f5bf3@roeck-us.net>
-Date:   Thu, 2 Apr 2020 07:39:51 -0700
+Message-ID: <c6fe9db8-3e27-b6fc-fff7-131cecad3f88@roeck-us.net>
+Date:   Thu, 2 Apr 2020 07:44:44 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
@@ -142,11 +142,6 @@ On 4/2/20 6:52 AM, Colin King wrote:
 >  
 > -static void ds1307_wdt_register(struct ds1307 *ds1307)
 > +static int ds1307_wdt_register(struct ds1307 *ds1307)
-
-What exactly is the point of returning an error just to ignore it ?
-
-Guenter
-
 >  {
 >  	struct watchdog_device	*wdt;
 >  
@@ -184,6 +179,14 @@ Guenter
 > -	return 0;
 > -
 > +	err = ds1307_wdt_register(ds1307);
+
+Ah, sorry, missed this one. The original idea was to ignore errors on purpose.
+Same as with hwmon. If you want to change this, fine with me. Note though
+that rtc_nvmem_register() now leaks a sysfs file if I understand the code
+correctly.
+
+Guenter
+
 >  exit:
 >  	return err;
 >  }
