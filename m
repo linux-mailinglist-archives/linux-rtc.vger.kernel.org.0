@@ -2,112 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 155D219CA97
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Apr 2020 21:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AFD19D271
+	for <lists+linux-rtc@lfdr.de>; Fri,  3 Apr 2020 10:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731874AbgDBTvZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 2 Apr 2020 15:51:25 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:36011 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731689AbgDBTvZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 2 Apr 2020 15:51:25 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 249BA891AF;
-        Fri,  3 Apr 2020 08:51:21 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1585857081;
-        bh=GYF+qTQ5apownH2wCYLqdmYSX61dKA9g3mLOv6smh58=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=jNB2shBEsmBQgyzKYr8xan4WxmBikEPN1S7U02teZ21PcPJOhJDavBdIkEG5b+YN+
-         zVS0OZPnrzTK0SNp3NNLViU7RlHyjlmyrnpjMSXvqKwDb2gjkFwkY9DW4t737d72+Q
-         qKyUxpxoETzHPUXxDSV0q9Iq/SQspvNqA+9vo+kmPcNDJ/UEqALtzDdyeR8/5VedSL
-         cLCtx3ITHNt/wYvLRVr8jJOSH/i3hf3dwSstRA5lNUD0tygnSJQcdYDgMi5Obc2zJV
-         up9G1Ygr7LGSxXOejnbZTM+gnJ6yjvVOwBvwf+fkbDbXSHuxzIBZxFHxRRWuqgaEVY
-         g+c5Rs/lr2LxA==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[10.32.16.77]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5e8642380001>; Fri, 03 Apr 2020 08:51:20 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Apr 2020 08:51:20 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.006; Fri, 3 Apr 2020 08:51:20 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH][V2][next] rtc: ds1307: check for failed memory allocation
- on wdt
-Thread-Topic: [PATCH][V2][next] rtc: ds1307: check for failed memory
- allocation on wdt
-Thread-Index: AQHWCPY59kiziJYDL0uIkIAkuSeLCqhlZE2A
-Date:   Thu, 2 Apr 2020 19:51:20 +0000
-Message-ID: <671ce0fe788c6f9ad5bb830905df21df13ba3017.camel@alliedtelesis.co.nz>
-References: <20200402135201.548313-1-colin.king@canonical.com>
-In-Reply-To: <20200402135201.548313-1-colin.king@canonical.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.14.96]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8FD27E1088831F469645522F6A70C1A4@atlnz.lc>
-Content-Transfer-Encoding: base64
+        id S2390426AbgDCIlL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 3 Apr 2020 04:41:11 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:37528 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389015AbgDCIlL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 3 Apr 2020 04:41:11 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0338ddlC171976;
+        Fri, 3 Apr 2020 08:40:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=zI0SLLXDZwbYmFdbXl+AztfRWd//R25ljLaNr0Nk3+U=;
+ b=F/rqNLZSBmDwmHrYbczhj3Pnvpau7ON5KSEPH1C3P/TuKsJbx7uoCerji4d7PU/7JXH9
+ ZtYS+pCio2g6g0NAdS579RBKrInsa8kzpx41yqWa73UO0Gbj/6eWSpzxAKJlEk9ed60p
+ tR6xLGsl4xy5twPWa9WeDe29K7oPTTXUlI3/XMNaxOydPtZqH/VOk/Vf1eK94IBtJA91
+ WGgOQlsZxwmqtiipSq1MEkJrN494SaWTNa9o00GF/EIqodHpeRPw7WqOH0Rq8dPhrGBm
+ sN7rMOhLxRKqtt8JDfH3pneGmhO3NKIF71DVVeNyw6vwPweQ2aUIOZCiYBkQToFfi6Hq TQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 303yunjbh9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Apr 2020 08:40:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0338b9rg184363;
+        Fri, 3 Apr 2020 08:40:29 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 302g2md36s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 03 Apr 2020 08:40:29 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0338eLEf008678;
+        Fri, 3 Apr 2020 08:40:21 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 03 Apr 2020 01:40:20 -0700
+Date:   Fri, 3 Apr 2020 11:40:13 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] rtc: ds1307: check for failed memory allocation on
+ wdt
+Message-ID: <20200403084013.GY2001@kadam>
+References: <20200402131441.539088-1-colin.king@canonical.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402131441.539088-1-colin.king@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9579 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
+ adultscore=0 phishscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004030073
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9579 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 impostorscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004030073
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA0LTAyIGF0IDE0OjUyICswMTAwLCBDb2xpbiBLaW5nIHdyb3RlOg0KPiBG
-cm9tOiBDb2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KPiANCj4gQ3Vy
-cmVudGx5IGEgZmFpbGVkIG1lbW9yeSBhbGxvY2F0aW9uIHdpbGwgbGVhZCB0byBhIG51bGwgcG9p
-bnRlcg0KPiBkZXJlZmVyZW5jZSBvbiBwb2ludCB3ZHQuICBGaXggdGhpcyBieSBjaGVja2luZyBm
-b3IgYSBmYWlsZWQNCj4gYWxsb2NhdGlvbg0KPiBhbmQgYWRkaW5nIGVycm9yIHJldHVybiBoYW5k
-bGluZyB0byBmdW5jdGlvbiBkczEzMDdfd2R0X3JlZ2lzdGVyLg0KPiBBbHNvIG1vdmUgdGhlIGVy
-cm9yIGV4aXQgbGFiZWwgImV4aXQiIHRvIGFsbG93IGEgcmV0dXJuIHN0YXRlbWVudCB0bw0KPiBi
-ZSByZW1vdmVkLg0KPiANCj4gQWRkcmVzc2VzLUNvdmVyaXR5OiAoIkRlcmVmZXJlbmNlIG51bGwg
-cmV0dXJuIikNCj4gRml4ZXM6IGZkOTBkNDhkYjAzNyAoInJ0YzogZHMxMzA3OiBhZGQgc3VwcG9y
-dCBmb3Igd2F0Y2hkb2cgdGltZXIgb24NCj4gZHMxMzg4IikNCj4gU2lnbmVkLW9mZi1ieTogQ29s
-aW4gSWFuIEtpbmcgPGNvbGluLmtpbmdAY2Fub25pY2FsLmNvbT4NCj4gLS0tDQo+IFYyOiBtb3Zl
-IGVycm9yIGV4aXQgbGFiZWwgYW5kIHJlbW92ZSBhIHJldHVybiBzdGF0ZW1lbnQsIHRoYW5rcyB0
-byANCj4gICAgIFdhbHRlciBIYXJtcyBmb3Igc3BvdHRpbmcgdGhpcyBjbGVhbiB1cC4NCj4gLS0t
-DQo+ICBkcml2ZXJzL3J0Yy9ydGMtZHMxMzA3LmMgfCAxNiArKysrKysrKystLS0tLS0tDQo+ICAx
-IGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvcnRjL3J0Yy1kczEzMDcuYyBiL2RyaXZlcnMvcnRjL3J0Yy1kczEz
-MDcuYw0KPiBpbmRleCBmYWQwNDIxMTg4NjIuLmMwNThiMDJlZmI0ZCAxMDA2NDQNCj4gLS0tIGEv
-ZHJpdmVycy9ydGMvcnRjLWRzMTMwNy5jDQo+ICsrKyBiL2RyaXZlcnMvcnRjL3J0Yy1kczEzMDcu
-Yw0KPiBAQCAtMTY2NSwxNCArMTY2NSwxNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9n
-X29wcw0KPiBkczEzODhfd2R0X29wcyA9IHsNCj4gIA0KPiAgfTsNCj4gIA0KPiAtc3RhdGljIHZv
-aWQgZHMxMzA3X3dkdF9yZWdpc3RlcihzdHJ1Y3QgZHMxMzA3ICpkczEzMDcpDQo+ICtzdGF0aWMg
-aW50IGRzMTMwN193ZHRfcmVnaXN0ZXIoc3RydWN0IGRzMTMwNyAqZHMxMzA3KQ0KPiAgew0KPiAg
-CXN0cnVjdCB3YXRjaGRvZ19kZXZpY2UJKndkdDsNCj4gIA0KPiAgCWlmIChkczEzMDctPnR5cGUg
-IT0gZHNfMTM4OCkNCj4gLQkJcmV0dXJuOw0KPiArCQlyZXR1cm4gMDsNCj4gIA0KPiAgCXdkdCA9
-IGRldm1fa3phbGxvYyhkczEzMDctPmRldiwgc2l6ZW9mKCp3ZHQpLCBHRlBfS0VSTkVMKTsNCj4g
-KwlpZiAoIXdkdCkNCj4gKwkJcmV0dXJuIC1FTk9NRU07DQoNCk15IG9yaWdpbmFsIGludGVudGlv
-biB3YXMgdGhhdCB0aGUgd2R0IHN1cHBvcnQgd2FzIG9wdGlvbmFsLiBJJ2QNCnN1Z2dlc3QganVz
-dA0KDQorCWlmICghd2R0KQ0KKwkJcmV0dXJuOw0KDQpXaGljaCBzaG91bGQga2VlcCBDb3Zlcml0
-eSBoYXBweS4NCg0KPiAgCXdkdC0+aW5mbyA9ICZkczEzODhfd2R0X2luZm87DQo+ICAJd2R0LT5v
-cHMgPSAmZHMxMzg4X3dkdF9vcHM7DQo+IEBAIC0xNjgzLDEwICsxNjg1LDEzIEBAIHN0YXRpYyB2
-b2lkIGRzMTMwN193ZHRfcmVnaXN0ZXIoc3RydWN0IGRzMTMwNw0KPiAqZHMxMzA3KQ0KPiAgCXdh
-dGNoZG9nX2luaXRfdGltZW91dCh3ZHQsIDAsIGRzMTMwNy0+ZGV2KTsNCj4gIAl3YXRjaGRvZ19z
-ZXRfZHJ2ZGF0YSh3ZHQsIGRzMTMwNyk7DQo+ICAJZGV2bV93YXRjaGRvZ19yZWdpc3Rlcl9kZXZp
-Y2UoZHMxMzA3LT5kZXYsIHdkdCk7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gIH0NCj4gICNlbHNl
-DQo+IC1zdGF0aWMgdm9pZCBkczEzMDdfd2R0X3JlZ2lzdGVyKHN0cnVjdCBkczEzMDcgKmRzMTMw
-NykNCj4gK3N0YXRpYyBpbnQgZHMxMzA3X3dkdF9yZWdpc3RlcihzdHJ1Y3QgZHMxMzA3ICpkczEz
-MDcpDQo+ICB7DQo+ICsJcmV0dXJuIDA7DQo+ICB9DQo+ICAjZW5kaWYgLyogQ09ORklHX1dBVENI
-RE9HX0NPUkUgKi8NCj4gIA0KPiBAQCAtMTk3OSwxMCArMTk4NCw3IEBAIHN0YXRpYyBpbnQgZHMx
-MzA3X3Byb2JlKHN0cnVjdCBpMmNfY2xpZW50DQo+ICpjbGllbnQsDQo+ICANCj4gIAlkczEzMDdf
-aHdtb25fcmVnaXN0ZXIoZHMxMzA3KTsNCj4gIAlkczEzMDdfY2xrc19yZWdpc3RlcihkczEzMDcp
-Ow0KPiAtCWRzMTMwN193ZHRfcmVnaXN0ZXIoZHMxMzA3KTsNCj4gLQ0KPiAtCXJldHVybiAwOw0K
-PiAtDQo+ICsJZXJyID0gZHMxMzA3X3dkdF9yZWdpc3RlcihkczEzMDcpOw0KPiAgZXhpdDoNCj4g
-IAlyZXR1cm4gZXJyOw0KPiAgfQ0K
+On Thu, Apr 02, 2020 at 02:14:41PM +0100, Colin King wrote:
+> @@ -1979,9 +1984,9 @@ static int ds1307_probe(struct i2c_client *client,
+>  
+>  	ds1307_hwmon_register(ds1307);
+>  	ds1307_clks_register(ds1307);
+> -	ds1307_wdt_register(ds1307);
+> +	err = ds1307_wdt_register(ds1307);
+>  
+> -	return 0;
+> +	return err;
+>  
+>  exit:
+>  	return err;
+
+This bit is weird.  I guess just delete the "return 0;" without
+introducing a new "return err;".
+
+regards,
+dan carpenter
+
