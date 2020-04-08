@@ -2,97 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD841A0A26
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Apr 2020 11:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44DA1A1D31
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Apr 2020 10:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbgDGJb2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Apr 2020 05:31:28 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:51544 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgDGJb2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Apr 2020 05:31:28 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0379RkfL037022;
-        Tue, 7 Apr 2020 09:31:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=absFtblFlPxOF3hmormLh9Zp7rTAbuEhM/1Okv4DNkc=;
- b=B4AHxfdB4XCwggGOwicCWkDRSpQ/eJmZNEUDVnvi7StE4ML+S9DCig55Hb/DlYHYgNQ4
- KcEe8BDeRFL5z1zX8wp5ki9zujmPhuoGbpI+qcnkiEAfZt5Hfr7jUcnrALrI1U2NuTq+
- wkIOkVdAbNuJxdZDWyZnEkyFQcghyXqyHP0HYDu/IKDBajL2AWFqhIh/mnccNQJPhI0z
- LYqoLf14WM3aPVO8yr1Sey7Mg5rlUpSIExaKT0AXGSuZvpdeb4IZuiU0sHPBrYhVwfXs
- DSZHG71TEY7EaFOGzTy3Y02eK+7+Ak7qZOyv018dklwbMCls9ybtARQEViripbfY2+8C oA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 306j6mbr52-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Apr 2020 09:31:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0379Qdqi144575;
-        Tue, 7 Apr 2020 09:29:03 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 3073srqu15-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Apr 2020 09:29:03 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0379SxpX027473;
-        Tue, 7 Apr 2020 09:29:00 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 07 Apr 2020 02:28:59 -0700
-Date:   Tue, 7 Apr 2020 12:28:52 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Andreas Kemnade <andreas@kemnade.info>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] rtc: rc5t619: Fix an ERR_PTR vs NULL check
-Message-ID: <20200407092852.GI68494@mwanda>
+        id S1727009AbgDHINB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 8 Apr 2020 04:13:01 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46511 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726525AbgDHINB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Apr 2020 04:13:01 -0400
+X-UUID: 53ee3fd8b8cf4e5594616ccf0ae4b40b-20200408
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ReQScgLFJ9/68fAYgC7XYU0D88RS9Ej3AolLMr7k38s=;
+        b=R+9pES03dreXenkf2EvtHb+0JMmK/wRdQ+RFzG+pRO+PU8DU96knKnXBHTPLamVrSTruGb86aiKo/V6DEtAO0SjglFw4NdODeqYkwkh4iw7SlOqGzyoBcEGo+t0qYc2qM+6pBKZ+hlNjI+clsOYSGF+rPE3paPPnqDdVjhsZQ5M=;
+X-UUID: 53ee3fd8b8cf4e5594616ccf0ae4b40b-20200408
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 2085188719; Wed, 08 Apr 2020 16:12:53 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 8 Apr 2020 16:12:49 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 8 Apr 2020 16:12:49 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Nicolas Boichat <drinkcat@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH v12 0/6] Add Support for MediaTek PMIC MT6358
+Date:   Wed, 8 Apr 2020 16:12:05 +0800
+Message-ID: <1586333531-21641-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9583 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
- malwarescore=0 suspectscore=0 adultscore=0 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004070080
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9583 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 phishscore=0 adultscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004070080
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 1D8F51BD4EA362DB9AFC00BF572DE7769CFAA3A7B3B2B4FA91B9CCF20772BA492000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The devm_kzalloc() function returns NULL on error, it doesn't return
-error pointers so this check doesn't work.
-
-Fixes: 540d1e15393d ("rtc: rc5t619: Add Ricoh RC5T619 RTC driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/rtc/rtc-rc5t619.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/rtc/rtc-rc5t619.c b/drivers/rtc/rtc-rc5t619.c
-index 24e386ecbc7e..dd1a20977478 100644
---- a/drivers/rtc/rtc-rc5t619.c
-+++ b/drivers/rtc/rtc-rc5t619.c
-@@ -356,10 +356,8 @@ static int rc5t619_rtc_probe(struct platform_device *pdev)
- 	int err;
- 
- 	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
--	if (IS_ERR(rtc)) {
--		err = PTR_ERR(rtc);
-+	if (!rtc)
- 		return -ENOMEM;
--	}
- 
- 	rtc->rn5t618 = rn5t618;
- 
--- 
-2.25.1
+VGhpcyBwYXRjaHNldCBpbmNsdWRpbmcgbW9kaWZ5aW5nIHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9y
+IGFuZCB0cmltbWluZyBwcm9iZSBmdW5jdGlvbiBhZGQgc3VwcG9ydCB0byBNVDYzNTggUE1JQy4N
+Ck1UNjM1OCBpcyB0aGUgcHJpbWFyeSBQTUlDIGZvciBNVDgxODMgcGxhdGZvcm0uDQoNCmNoYW5n
+ZXMgc2luY2UgdjExOg0KLSBhZGQgYSBuZXcgcGF0Y2ggdG8gdHJpbSBwcm9iZSBmdW5jdGlvbiBt
+b3JlIGNsZWFubHkuDQotIGZpeCBzb21lIGNvdmVyaXR5IGRlZmVjdHMuDQotIHVwZGF0ZSBzb21l
+IGNvbW1lbnQgbWVzc2FnZXMuDQotIGZpeCB3cm9uZyBzaXplb2YgYXJndW1lbnQuDQoNCkhzaW4t
+SHNpdW5nIFdhbmcgKDUpOg0KICBtZmQ6IG10NjM5NzogTW9kaWZ5IHN1c3BlbmQvcmVzdW1lIGJl
+aGF2aW9yDQogIG1mZDogbXQ2Mzk3OiBUcmltIHByb2JlIGZ1bmN0aW9uIHRvIHN1cHBvcnQgZGlm
+ZmVyZW50IGNoaXBzIG1vcmUNCiAgICBjbGVhbmx5DQogIGR0LWJpbmRpbmdzOiBtZmQ6IEFkZCBj
+b21wYXRpYmxlIGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFBNSUMNCiAgbWZkOiBBZGQgc3VwcG9y
+dCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDDQogIGFybTY0OiBkdHM6IG10NjM1ODogYWRk
+IFBNSUMgTVQ2MzU4IHJlbGF0ZWQgbm9kZXMNCg0KUmFuIEJpICgxKToNCiAgcnRjOiBtdDYzOTc6
+IEFkZCBzdXBwb3J0IGZvciB0aGUgTWVkaWFUZWsgTVQ2MzU4IFJUQw0KDQogRG9jdW1lbnRhdGlv
+bi9kZXZpY2V0cmVlL2JpbmRpbmdzL21mZC9tdDYzOTcudHh0IHwgIDE0ICstDQogYXJjaC9hcm02
+NC9ib290L2R0cy9tZWRpYXRlay9tdDYzNTguZHRzaSAgICAgICAgIHwgMzU4ICsrKysrKysrKysr
+KysrKysrKysrKysrDQogYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDgxODMtZXZiLmR0
+cyAgICAgIHwgICAxICsNCiBkcml2ZXJzL21mZC9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgIDIgKy0NCiBkcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMgICAgICAgICAgICAg
+ICAgICAgICAgICAgfCAyMzUgKysrKysrKysrKysrKysrDQogZHJpdmVycy9tZmQvbXQ2Mzk3LWNv
+cmUuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgMTAxICsrKystLS0NCiBkcml2ZXJzL21mZC9t
+dDYzOTctaXJxLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzUgKystDQogZHJpdmVycy9w
+b3dlci9yZXNldC9tdDYzMjMtcG93ZXJvZmYuYyAgICAgICAgICAgIHwgICAyICstDQogZHJpdmVy
+cy9ydGMvcnRjLW10NjM5Ny5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE4ICstDQogaW5j
+bHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaCAgICAgICAgICAgICAgICAgIHwgMTU4ICsrKysr
+KysrKysNCiBpbmNsdWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJzLmggICAgICAgICAgICAg
+fCAyODIgKysrKysrKysrKysrKysrKysrDQogaW5jbHVkZS9saW51eC9tZmQvbXQ2Mzk3L2NvcmUu
+aCAgICAgICAgICAgICAgICAgIHwgICA1ICsNCiBpbmNsdWRlL2xpbnV4L21mZC9tdDYzOTcvcnRj
+LmggICAgICAgICAgICAgICAgICAgfCAgIDkgKy0NCiAxMyBmaWxlcyBjaGFuZ2VkLCAxMTU4IGlu
+c2VydGlvbnMoKyksIDYyIGRlbGV0aW9ucygtKQ0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2Fy
+bTY0L2Jvb3QvZHRzL21lZGlhdGVrL210NjM1OC5kdHNpDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRy
+aXZlcnMvbWZkL210NjM1OC1pcnEuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2xpbnV4
+L21mZC9tdDYzNTgvY29yZS5oDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvbGludXgvbWZk
+L210NjM1OC9yZWdpc3RlcnMuaA0KDQotLSANCjIuNi40DQo=
 
