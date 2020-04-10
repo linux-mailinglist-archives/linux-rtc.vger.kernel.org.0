@@ -2,44 +2,44 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D2D1A4872
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2020 18:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0D61A4875
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2020 18:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgDJQ1r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Apr 2020 12:27:47 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:32844 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726712AbgDJQ1r (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Apr 2020 12:27:47 -0400
+        id S1726779AbgDJQ1w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Apr 2020 12:27:52 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:8228 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726638AbgDJQ1v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Apr 2020 12:27:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1586536067; x=1618072067;
+  t=1586536071; x=1618072071;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=js0FbCmxEhjJKEduX+K6uBUvUMXaYmimYj7qA6nb3f8=;
-  b=VBY6t6bWebIuYzkb36RpDqayJeLixAiuKqWekHnQtjVC1pT8BtexbnQq
-   kIoCtKI9xI82L6J2haAaH+UVyfBOR/ysXI3Le2WgJP+2fydy0wUkW5a4Z
-   RGQKsEjvjgyQUWHOP3ycTsdJe0kzaqfwHP497UFz8z5wAIaqG7c8WwzZt
-   1m83hyFqbHmDQfargXz9lv+9ZQMohjfVenVRk+BsMCdoIY7Qwri6Qim4/
-   46L+5pw7QOeigRtEuFugk7X/9kPPOhkKz9Q39Tspnjy/S6sIqnGxjlgAl
-   Jysj1ZY+uokAFMzSyuNaVJKrikQCP4U3Lx1YCgnFUQEUMCtxTDBBwu7kq
-   w==;
-IronPort-SDR: sVe3P91x0uf4YCbN8jYnZ34Zv2l0xLcA0W9UcwgbqYBPyJUEw3w51NmDWz/gP1MkjQKzq5o75L
- ZpCo+ifBM9mD7TsSIc11+x+prct/yUbBxuAMkL7rk5gzVlca5U/P3R54mZd3Tz5/E4IEnyVQ7M
- baW85UdaHo5JrevESOMwfaMiWFMNdHHMUY+TZmVm/3L/FrovjmBzqDThMmU9zXrDJymtTe3ryn
- x2XRyP4MQz9+xcZ9/+B7zrUGKM4abSHcx2kJNLT3bVOJa7vAsI0O/+6hDiljOdun6tJKDGbmwC
- M5g=
+  bh=Eo6p7pz7SWCokkfrt5eRPXSs0G7FQfJNhTJCV7p33Xs=;
+  b=vWMNP9Ddq56yCpl3iP08c6qMbrwpY+FR/l/sOcMzJS62+xQyyzv3GQxf
+   cGQmAF7tYLvjEm4H6tG/tJea8B2laadKcsGMlRx/hSapdlKzESCA1qGMA
+   CUBH7RND0P0uG6oXxtFGkb5RzV1AaTdI79QtBIvc4Up4z5eHThJ56NN5y
+   h3asfbpsKV5GShefpaDnF55YuQXemkrrEsnOZ6q/VWpUZYwudL9ztcEiI
+   0IpEWZORYmuH/t8iN5ylmMkiFQ++LkKgH+zxvgHTk6lnMeJ86ulJFaNkj
+   9ElOQtzhJGQXGwmzwVb0anxbA5tPLRauegm40UqyyYFTbqelN/5WaIcZd
+   Q==;
+IronPort-SDR: 6AjG0RliC4W9S/dyMTnwaFK7Z5jnQrNDSajrnRVi9WQ8FDMQwgDLEfEQyQfYdt/XDsiKYVDPX2
+ PCJ+pboexCDMyPhDPUk+mzAWX/KPZgyYzRBRRJwRiQM0dziGw9l8Y5BRXWUfkMTqf9FIXsGHNJ
+ A+VmcUd5+RTxtIK21lubyhRLqL4HkweQmOtAv+pA4ojIWulof504n7U9yuerGxH+Z6+xJfiXzA
+ P42OQnNy2pPHlp4j/yO3rqGBZBMHt7gLBUAOmgeBSu1nrD5optfq6bsrhxk5plyq3d84ibci03
+ 89E=
 X-IronPort-AV: E=Sophos;i="5.72,367,1580799600"; 
-   d="scan'208";a="71870960"
+   d="scan'208";a="75498407"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Apr 2020 09:27:47 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Apr 2020 09:27:51 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 10 Apr 2020 09:27:46 -0700
+ 15.1.1713.5; Fri, 10 Apr 2020 09:27:51 -0700
 Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Fri, 10 Apr 2020 09:27:37 -0700
+ 15.1.1713.5 via Frontend Transport; Fri, 10 Apr 2020 09:27:42 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
         <robh+dt@kernel.org>, <mark.rutland@arm.com>,
@@ -49,9 +49,9 @@ CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 4/5] ARM: dts: sam9x60: add rtt
-Date:   Fri, 10 Apr 2020 19:26:58 +0300
-Message-ID: <1586536019-12348-5-git-send-email-claudiu.beznea@microchip.com>
+Subject: [PATCH 5/5] rtc: at91sam9: add microchip,sam9x60-rtt
+Date:   Fri, 10 Apr 2020 19:26:59 +0300
+Message-ID: <1586536019-12348-6-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1586536019-12348-1-git-send-email-claudiu.beznea@microchip.com>
 References: <1586536019-12348-1-git-send-email-claudiu.beznea@microchip.com>
@@ -62,48 +62,26 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add RTT.
+Add microchip,sam9x60-rtt to compatible list.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/at91-sam9x60ek.dts | 5 +++++
- arch/arm/boot/dts/sam9x60.dtsi       | 7 +++++++
- 2 files changed, 12 insertions(+)
+ Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index ab3d2d9a420a..4020e79a958e 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -617,6 +617,11 @@
- 	};
- };
+diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
+index 6ae79d1843f3..b2f913ff6c69 100644
+--- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
++++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
+@@ -1,7 +1,7 @@
+ Atmel AT91SAM9260 Real Time Timer
  
-+&rtt {
-+	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-+	status = "okay";
-+};
-+
- &shutdown_controller {
- 	atmel,shdwc-debouncer = <976>;
- 	status = "okay";
-diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-index 326b39328b58..e1d8e3a4cb0b 100644
---- a/arch/arm/boot/dts/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/sam9x60.dtsi
-@@ -661,6 +661,13 @@
- 				status = "disabled";
- 			};
- 
-+			rtt: rtt@fffffe20 {
-+				compatible = "microchip,sam9x60-rtt";
-+				reg = <0xfffffe20 0x20>;
-+				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-+				clocks = <&clk32k 0>;
-+			};
-+
- 			pit: timer@fffffe40 {
- 				compatible = "atmel,at91sam9260-pit";
- 				reg = <0xfffffe40 0x10>;
+ Required properties:
+-- compatible: should be: "atmel,at91sam9260-rtt"
++- compatible: should be: "atmel,at91sam9260-rtt" or "microchip,sam9x60-rtt"
+ - reg: should encode the memory region of the RTT controller
+ - interrupts: rtt alarm/event interrupt
+ - clocks: should contain the 32 KHz slow clk that will drive the RTT block.
 -- 
 2.7.4
 
