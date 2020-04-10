@@ -2,44 +2,44 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AD11A486D
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2020 18:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF05B1A4871
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Apr 2020 18:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbgDJQ1i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Apr 2020 12:27:38 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:32816 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726712AbgDJQ1i (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Apr 2020 12:27:38 -0400
+        id S1726683AbgDJQ1n (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Apr 2020 12:27:43 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:22267 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726712AbgDJQ1m (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Apr 2020 12:27:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1586536058; x=1618072058;
+  t=1586536062; x=1618072062;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=kx75iRvDXLZZ7RnWClLIBFKi8jslmQjHPxpu6/ocCjE=;
-  b=rrtOUWdzWmwuT1l3fXvpUk9CXwa2b7GnQ6DBXst37rMtSvBOcsdVf9cS
-   J6gJbieEV5p0UVFihI/igiGLrWOfN3h/oQQSuw6pLaNfYi0+9LaSjV2DI
-   c6nm+FW4w8v2spx8oEIKWCfj06aGECnECJ0vsLL2znpu8O3TUJZCFH08r
-   Hbo4rD4IF4QFTt0LC4cYKRBNKZeOYPDqXaRXw4u7+bWopGhx4TPl5/CZw
-   xj/dRSqaW6sWhHZHjFrSiVnm3SuQP0CJtvgnvnKxfemsrhB2alPSVPhMY
-   s99DF84NqRFivgl8Lc8OPjvsiefRtYvF+4g6LQpYbHWm68zjUEH45gZ+f
-   Q==;
-IronPort-SDR: jqiqMXLojVGL5cI4ia8zCf/yYim18pgHzQB/iiiFP2Y5KUHJ84XGClzAUxjq23sTjVdt5UaPxe
- F4jwGqvsb7njT0873SD0AfZdC/ALOyFB+iQo9XQLmgmbfcFq2aqN3V2x9eQl/fMo17yCN3m4X7
- SXl8ChBoC9+EObz4hq5cf0igY7Tx9RGp4fivzichSqeCdRhcB7RULRFn25hLDmW+HKOO5y039N
- EovJV4YYeqM9PlF1cTE6Ft67pQnXf7XyJGvy1bpky1WCrtf/uZi8V37wa9o1tH/Lk476VzgQ2Y
- 5cM=
+  bh=4fUL9yUbl3HkQSaoUyLLEtE2zx2uKNsuNY5LbHGoncU=;
+  b=PmcTyZYpzuKlwNB+qPnThLeKD797Cg4/DzRBl0iGI7kcFtwCUsvXRnTP
+   DCPQL8z8o0CyRNDAAlAYz+QvDu5Ir04dv8phHkp8LWZIqsEPny2AGqQFC
+   d9kQSbEjtQY0uOpp3zIi4Y3hLkbrt/Zg5ppxjSFG128HMIXS6hH3K9gca
+   jlx7iL2bwkTJZb6IA4sUvxFP5b2WNnIr8aEYT2N7YnC9RKpeOcIao+ZnP
+   00dKOAR0elsYaHq9Au5RaEdS/XbScZAlamR/ehPc2mf0g888dNjZEw3vH
+   anpFDWmB1yYSx26JM937OpFceOTTW3MGJnzC3536094tU++7siS9KBk/O
+   g==;
+IronPort-SDR: yU0rYU+Y7AXIRsg31MF3hdZXUtjt2xaU54vxF1Bwmor9o4+uRWryQ+YRSioAzLcYlRzCG2RTsi
+ W+bv6aP05q8GbkytoyjOyFWQDPq1bNZyvhzw8VJ0Mos6O8hpK9Se8R3zvTyX6fQZgfKRCgsxCZ
+ 6c0f5tEc9XE/X/pmTxQ5VDud96jyZBw/2OhhVBLXWk4asGNpDQtbkgytJJ0Ff9OIhopcdUL5GU
+ h/wAi5+aM3X4XMPCS+/pcGvhiWPALXIZCiLV/i3+ldH8aIhWM4yJvjjlx1jjRoMB00yS4o2nhZ
+ JJI=
 X-IronPort-AV: E=Sophos;i="5.72,367,1580799600"; 
-   d="scan'208";a="71870918"
+   d="scan'208";a="8791236"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Apr 2020 09:27:37 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Apr 2020 09:27:42 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 10 Apr 2020 09:27:48 -0700
+ 15.1.1713.5; Fri, 10 Apr 2020 09:27:53 -0700
 Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Fri, 10 Apr 2020 09:27:28 -0700
+ 15.1.1713.5 via Frontend Transport; Fri, 10 Apr 2020 09:27:32 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
         <robh+dt@kernel.org>, <mark.rutland@arm.com>,
@@ -49,9 +49,9 @@ CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 2/5] rtc: at91sam9: enable driver for sam9x60
-Date:   Fri, 10 Apr 2020 19:26:56 +0300
-Message-ID: <1586536019-12348-3-git-send-email-claudiu.beznea@microchip.com>
+Subject: [PATCH 3/5] ARM: dts: sam9x60ek: enable gpbr
+Date:   Fri, 10 Apr 2020 19:26:57 +0300
+Message-ID: <1586536019-12348-4-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1586536019-12348-1-git-send-email-claudiu.beznea@microchip.com>
 References: <1586536019-12348-1-git-send-email-claudiu.beznea@microchip.com>
@@ -62,25 +62,28 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Enable driver for SAM9X60.
+Enable gpbr.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/rtc/rtc-at91sam9.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index e39e89867d29..cb0a8f4a73a4 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -525,6 +525,7 @@ static SIMPLE_DEV_PM_OPS(at91_rtc_pm_ops, at91_rtc_suspend, at91_rtc_resume);
- 
- static const struct of_device_id at91_rtc_dt_ids[] = {
- 	{ .compatible = "atmel,at91sam9260-rtt" },
-+	{ .compatible = "microchip,sam9x60-rtt" },
- 	{ /* sentinel */ }
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 9f30132d7d7b..ab3d2d9a420a 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -309,6 +309,10 @@
+ 	};
  };
- MODULE_DEVICE_TABLE(of, at91_rtc_dt_ids);
+ 
++&gpbr {
++	status = "okay";
++};
++
+ &i2s {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_i2s_default>;
 -- 
 2.7.4
 
