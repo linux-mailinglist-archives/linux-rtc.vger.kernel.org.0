@@ -2,40 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D765E1A57E2
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Apr 2020 01:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626661A5764
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Apr 2020 01:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730375AbgDKX0E (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Apr 2020 19:26:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51808 "EHLO mail.kernel.org"
+        id S1730389AbgDKXNS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Apr 2020 19:13:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729962AbgDKXL4 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:11:56 -0400
+        id S1730054AbgDKXNS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:13:18 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3CF1C21835;
-        Sat, 11 Apr 2020 23:11:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B0B2E20708;
+        Sat, 11 Apr 2020 23:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646717;
-        bh=rjytP4Nsb3o8SYY72ku2H/NNEttzxHpHq53ChREMXFI=;
+        s=default; t=1586646798;
+        bh=EWXMfcj2AErFXZpY0Y+BNQHUB3PSxEtKAiTtFrekj4Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGyMAfESLYeyEWoyA7XoWvGv5OUOCekdres2u8MH7fPX44i3N681Dz1hpTAs7uU/A
-         VXSTqIVeW7tj42spnFqJFjWclHewqFudnV77zUtxHAdL/Xsbr0chxH3XxmoaLotoMc
-         evDOcd6Cotj6ojUfsJFdkcAw5OTvv9E7hoqSaYfU=
+        b=tIsQDPutreA5a6DqvHPNnNzjZduQawkgjm6J99dQecOrURiRf8V/1mZHyrCzyrW77
+         J5A3DH1fjSa7hAtk4srpaUdCesdGf/TI4rhBVUrxy0Mhu2+P0bbnIXOwbvYgY+mABf
+         lCsjsTmk/eY8MlN4F1Smf5VUklcA5/Uo1GUH3si8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Leonard Crestez <leonard.crestez@nxp.com>,
+Cc:     =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 107/108] rtc: imx-sc: Align imx sc msg structs to 4
-Date:   Sat, 11 Apr 2020 19:09:42 -0400
-Message-Id: <20200411230943.24951-107-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 61/66] rtc: cmos: Use spin_lock_irqsave() in cmos_interrupt()
+Date:   Sat, 11 Apr 2020 19:11:58 -0400
+Message-Id: <20200411231203.25933-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
-References: <20200411230943.24951-1-sashal@kernel.org>
+In-Reply-To: <20200411231203.25933-1-sashal@kernel.org>
+References: <20200411231203.25933-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,39 +45,142 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Leonard Crestez <leonard.crestez@nxp.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-[ Upstream commit a29de86521d8a80cb0b426638d4e38707cafa2e2 ]
+[ Upstream commit 66e4f4a9cc389b277e187c115a285fad2cba5485 ]
 
-The imx SC api strongly assumes that messages are composed out of
-4-bytes words but some of our message structs have odd sizeofs.
+cmos_interrupt() isn't always called from hardirq context, so
+we must use spin_lock_irqsave() & co.
 
-This produces many oopses with CONFIG_KASAN=y.
+================================
+WARNING: inconsistent lock state
+5.6.0-rc2-CI-CI_DRM_7981+ #1 Tainted: G     U
+--------------------------------
+inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+rtcwake/4315 [HC0[0]:SC0[0]:HE1:SE1] takes:
+ffffffff82635198 (rtc_lock){?...}, at: cmos_interrupt+0x18/0x100
+{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0xa7/0x1c0
+  _raw_spin_lock+0x2a/0x40
+  cmos_interrupt+0x18/0x100
+  rtc_handler+0x75/0xc0
+  acpi_ev_fixed_event_detect+0xf9/0x132
+  acpi_ev_sci_xrupt_handler+0xb/0x28
+  acpi_irq+0x13/0x30
+  __handle_irq_event_percpu+0x41/0x2c0
+  handle_irq_event_percpu+0x2b/0x70
+  handle_irq_event+0x2f/0x50
+  handle_fasteoi_irq+0x8e/0x150
+  do_IRQ+0x7e/0x160
+  ret_from_intr+0x0/0x35
+  mwait_idle+0x7e/0x200
+  do_idle+0x1bb/0x260
+  cpu_startup_entry+0x14/0x20
+  start_secondary+0x15f/0x1b0
+  secondary_startup_64+0xa4/0xb0
+irq event stamp: 42003
+hardirqs last  enabled at (42003): [<ffffffff81a36567>] _raw_spin_unlock_irqrestore+0x47/0x60
+hardirqs last disabled at (42002): [<ffffffff81a362ed>] _raw_spin_lock_irqsave+0xd/0x50
+softirqs last  enabled at (41848): [<ffffffff81e00385>] __do_softirq+0x385/0x47f
+softirqs last disabled at (41841): [<ffffffff810bab3a>] irq_exit+0xba/0xc0
 
-Fix by marking with __aligned(4).
+other info that might help us debug this:
+ Possible unsafe locking scenario:
 
-Fixes: a3094fc1a15e ("rtc: imx-sc: add rtc alarm support")
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
-Link: https://lore.kernel.org/r/13404bac8360852d86c61fad5ae5f0c91ffc4cb6.1582216144.git.leonard.crestez@nxp.com
+       CPU0
+       ----
+  lock(rtc_lock);
+  <Interrupt>
+    lock(rtc_lock);
+
+ *** DEADLOCK ***
+
+6 locks held by rtcwake/4315:
+ #0: ffff888175dc9408 (sb_writers#5){.+.+}, at: vfs_write+0x1a4/0x1d0
+ #1: ffff88817406ca80 (&of->mutex){+.+.}, at: kernfs_fop_write+0xdd/0x1b0
+ #2: ffff888179be85e0 (kn->count#236){.+.+}, at: kernfs_fop_write+0xe6/0x1b0
+ #3: ffffffff82641e00 (system_transition_mutex){+.+.}, at: pm_suspend+0xb3/0x3b0
+ #4: ffffffff826b3ee0 (acpi_scan_lock){+.+.}, at: acpi_suspend_begin+0x47/0x80
+ #5: ffff888178fc3960 (&dev->mutex){....}, at: device_resume+0x92/0x1c0
+
+stack backtrace:
+CPU: 3 PID: 4315 Comm: rtcwake Tainted: G     U            5.6.0-rc2-CI-CI_DRM_7981+ #1
+Hardware name: Google Soraka/Soraka, BIOS MrChromebox-4.10 08/25/2019
+Call Trace:
+ dump_stack+0x71/0x9b
+ mark_lock+0x49a/0x500
+ ? print_shortest_lock_dependencies+0x200/0x200
+ __lock_acquire+0x6d4/0x15d0
+ ? __lock_acquire+0x460/0x15d0
+ lock_acquire+0xa7/0x1c0
+ ? cmos_interrupt+0x18/0x100
+ _raw_spin_lock+0x2a/0x40
+ ? cmos_interrupt+0x18/0x100
+ cmos_interrupt+0x18/0x100
+ cmos_resume+0x1fd/0x290
+ ? __acpi_pm_set_device_wakeup+0x24/0x100
+ pnp_bus_resume+0x5e/0x90
+ ? pnp_bus_suspend+0x10/0x10
+ dpm_run_callback+0x64/0x280
+ device_resume+0xd4/0x1c0
+ ? dpm_watchdog_set+0x60/0x60
+ dpm_resume+0x106/0x410
+ ? dpm_resume_early+0x38c/0x3e0
+ dpm_resume_end+0x8/0x10
+ suspend_devices_and_enter+0x16f/0xbe0
+ ? rcu_read_lock_sched_held+0x4d/0x80
+ pm_suspend+0x344/0x3b0
+ state_store+0x78/0xe0
+ kernfs_fop_write+0x112/0x1b0
+ vfs_write+0xb9/0x1d0
+ ksys_write+0x9f/0xe0
+ do_syscall_64+0x4f/0x220
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7ff934307154
+Code: 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8d 05 b1 07 2e 00 8b 00 85 c0 75 13 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 54 f3 c3 66 90 41 54 55 49 89 d4 53 48 89 f5
+RSP: 002b:00007ffe2647c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ff934307154
+RDX: 0000000000000004 RSI: 000055de3ec4e5a0 RDI: 000000000000000a
+RBP: 000055de3ec4e5a0 R08: 000055de3ec4c5e0 R09: 00007ff9349f3740
+R10: 000055de3ec4a010 R11: 0000000000000246 R12: 000055de3ec4c500
+R13: 0000000000000004 R14: 00007ff9345df2a0 R15: 00007ff9345de760
+
+Fixes: c6d3a278cc12 ("rtc: cmos: acknowledge ACPI driven wake alarms upon resume")
+Fixes: 311ee9c151ad ("rtc: cmos: allow using ACPI for RTC alarm instead of HPET")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://lore.kernel.org/r/20200221144739.11746-1-ville.syrjala@linux.intel.com
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-imx-sc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-cmos.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-imx-sc.c b/drivers/rtc/rtc-imx-sc.c
-index cf2c12107f2b8..a5f59e6f862e0 100644
---- a/drivers/rtc/rtc-imx-sc.c
-+++ b/drivers/rtc/rtc-imx-sc.c
-@@ -37,7 +37,7 @@ struct imx_sc_msg_timer_rtc_set_alarm {
- 	u8 hour;
- 	u8 min;
- 	u8 sec;
--} __packed;
-+} __packed __aligned(4);
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 0fa94d9e8d44d..3c3ee2b92b413 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -653,10 +653,11 @@ static struct cmos_rtc	cmos_rtc;
  
- static int imx_sc_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ static irqreturn_t cmos_interrupt(int irq, void *p)
  {
++	unsigned long	flags;
+ 	u8		irqstat;
+ 	u8		rtc_control;
+ 
+-	spin_lock(&rtc_lock);
++	spin_lock_irqsave(&rtc_lock, flags);
+ 
+ 	/* When the HPET interrupt handler calls us, the interrupt
+ 	 * status is passed as arg1 instead of the irq number.  But
+@@ -690,7 +691,7 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
+ 			hpet_mask_rtc_irq_bit(RTC_AIE);
+ 		CMOS_READ(RTC_INTR_FLAGS);
+ 	}
+-	spin_unlock(&rtc_lock);
++	spin_unlock_irqrestore(&rtc_lock, flags);
+ 
+ 	if (is_intr(irqstat)) {
+ 		rtc_update_irq(p, 1, irqstat);
 -- 
 2.20.1
 
