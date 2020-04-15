@@ -2,37 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEBDF1AA204
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 14:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB6A1AA092
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 14:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370320AbgDOMtC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Apr 2020 08:49:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34552 "EHLO mail.kernel.org"
+        id S369368AbgDOM2y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Apr 2020 08:28:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405984AbgDOLm5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:42:57 -0400
+        id S2409119AbgDOLpC (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:45:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7002D2166E;
-        Wed, 15 Apr 2020 11:42:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 764AE20775;
+        Wed, 15 Apr 2020 11:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950977;
+        s=default; t=1586951101;
         bh=0rcL6w+U3QxTPUxJYsUdrnHmbxHPVlcjvRNL/c8lbPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hx/7ppnsbJ2suDiTnTDNEsJeMb8F2YAn0U61PHeYji3N02RjWJCWVZWfG6kdxkoIB
-         NPYdM2/8+13z1Z3wpBehymsgqBXkox9es31OlVyVH+gzMQaStBhZC5xv5j2uz4CdbJ
-         LVTa3Fa8HlevfIWxlgcT/oDKa6jkgsmGKvvN4FFE=
+        b=lzVUNWGqa6nxWznGCYJkSW3V90OO15gGSYqAZm+MoGym+Ig3Cd+jmIGWmIRZyMAPn
+         t+Eo8yOgw7GxJXGSJity72gzHpE//y9MrOrve9pMXncVpCaVeWGGjHcJHYklVmsiCM
+         AtuXAFweGFwk+IQ/mYKbfXEllbz467ESGCL7i/7Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 025/106] rtc: 88pm860x: fix possible race condition
-Date:   Wed, 15 Apr 2020 07:41:05 -0400
-Message-Id: <20200415114226.13103-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 16/84] rtc: 88pm860x: fix possible race condition
+Date:   Wed, 15 Apr 2020 07:43:33 -0400
+Message-Id: <20200415114442.14166-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
-References: <20200415114226.13103-1-sashal@kernel.org>
+In-Reply-To: <20200415114442.14166-1-sashal@kernel.org>
+References: <20200415114442.14166-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
