@@ -2,55 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7D41AAE8F
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 18:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC701AB105
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 21:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404596AbgDOQoL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Apr 2020 12:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404537AbgDOQoK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Apr 2020 12:44:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45326C061A0C
-        for <linux-rtc@vger.kernel.org>; Wed, 15 Apr 2020 09:44:10 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jOl8x-0000F4-PX; Wed, 15 Apr 2020 18:44:07 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jOl8x-0004xT-0R; Wed, 15 Apr 2020 18:44:07 +0200
-Date:   Wed, 15 Apr 2020 18:44:06 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
+        id S2441538AbgDOTIb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Apr 2020 15:08:31 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:44107 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1416887AbgDOS4M (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Apr 2020 14:56:12 -0400
+Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 0D37E200002;
+        Wed, 15 Apr 2020 18:56:09 +0000 (UTC)
+Date:   Wed, 15 Apr 2020 20:56:09 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Bastian Krause <bst@pengutronix.de>
-Cc:     linux-rtc@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, Arnaud Ebalard <arno@natisbad.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
 Subject: Re: [PATCH 2/3] dt-bindings: rtc: add chargeable flag for rx8130
-Message-ID: <20200415164406.s755z5byq5f4fkv7@pengutronix.de>
+Message-ID: <20200415185609.GP34509@piout.net>
 References: <20200415163701.21989-1-bst@pengutronix.de>
  <20200415163701.21989-2-bst@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20200415163701.21989-2-bst@pengutronix.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 06:37:00PM +0200, Bastian Krause wrote:
+On 15/04/2020 18:37:00+0200, Bastian Krause wrote:
 > Signed-off-by: Bastian Krause <bst@pengutronix.de>
 > ---
 >  Documentation/devicetree/bindings/rtc/rtc-ds1307.txt | 3 +++
@@ -66,12 +52,14 @@ On Wed, Apr 15, 2020 at 06:37:00PM +0200, Bastian Krause wrote:
 >  	Should be given if internal trickle charger diode should be disabled
 > +- aux-voltage-chargeable: rx8130 only
 > +	Epsons's rx8130 supports a backup battery/supercap.
+> +	This flag tells	whether the battery/supercap is chargeable or not.
+>  
 
-s/Epsons's/Epson's/
-
-Best regards
-Uwe
+I think we should make that a generic property and this should supersede
+trickle-diode-disable which is a bit wonky as I would prefer the default
+to be disabled instead of enabled with the current semantics.
 
 -- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
