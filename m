@@ -2,64 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC701AB105
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 21:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EDF1AB233
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Apr 2020 22:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441538AbgDOTIb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Apr 2020 15:08:31 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:44107 "EHLO
+        id S2436786AbgDOUAp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Apr 2020 16:00:45 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:42851 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1416887AbgDOS4M (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Apr 2020 14:56:12 -0400
+        with ESMTP id S2406322AbgDOUAo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Apr 2020 16:00:44 -0400
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 0D37E200002;
-        Wed, 15 Apr 2020 18:56:09 +0000 (UTC)
-Date:   Wed, 15 Apr 2020 20:56:09 +0200
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id ABAFC200009;
+        Wed, 15 Apr 2020 20:00:41 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bastian Krause <bst@pengutronix.de>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: add chargeable flag for rx8130
-Message-ID: <20200415185609.GP34509@piout.net>
-References: <20200415163701.21989-1-bst@pengutronix.de>
- <20200415163701.21989-2-bst@pengutronix.de>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 1/2] rtc: mt2712: remove unnecessary error string
+Date:   Wed, 15 Apr 2020 22:00:20 +0200
+Message-Id: <20200415200021.157118-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200415163701.21989-2-bst@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/04/2020 18:37:00+0200, Bastian Krause wrote:
-> Signed-off-by: Bastian Krause <bst@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/rtc/rtc-ds1307.txt | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-> index 66f0a31ae9ce..987a0c9e0cd7 100644
-> --- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-> +++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-> @@ -34,6 +34,9 @@ Optional properties:
->  - trickle-diode-disable : ds1339, ds1340 and ds 1388 only
->  	Do not use internal trickle charger diode
->  	Should be given if internal trickle charger diode should be disabled
-> +- aux-voltage-chargeable: rx8130 only
-> +	Epsons's rx8130 supports a backup battery/supercap.
-> +	This flag tells	whether the battery/supercap is chargeable or not.
->  
+Remove the unnecessary error string as the core will already display error
+messages when registration fails (i.e. never).
 
-I think we should make that a generic property and this should supersede
-trickle-diode-disable which is a bit wonky as I would prefer the default
-to be disabled instead of enabled with the current semantics.
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-mt2712.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
+diff --git a/drivers/rtc/rtc-mt2712.c b/drivers/rtc/rtc-mt2712.c
+index f6bdbabd7202..9868d98f397c 100644
+--- a/drivers/rtc/rtc-mt2712.c
++++ b/drivers/rtc/rtc-mt2712.c
+@@ -354,13 +354,7 @@ static int mt2712_rtc_probe(struct platform_device *pdev)
+ 	mt2712_rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	mt2712_rtc->rtc->range_max = MT2712_RTC_TIMESTAMP_END_2127;
+ 
+-	ret = rtc_register_device(mt2712_rtc->rtc);
+-	if (ret) {
+-		dev_err(&pdev->dev, "register rtc device failed\n");
+-		return ret;
+-	}
+-
+-	return 0;
++	return rtc_register_device(mt2712_rtc->rtc);
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.2
+
