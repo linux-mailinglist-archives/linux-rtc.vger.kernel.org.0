@@ -2,53 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B111ABC48
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2020 11:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB001ABC7F
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2020 11:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503287AbgDPJKo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Apr 2020 05:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S2441405AbgDPJOE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Apr 2020 05:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2503420AbgDPJJ7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Apr 2020 05:09:59 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB2CC061A10
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 02:09:56 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id x4so3764123wmj.1
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 02:09:56 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2503691AbgDPJNl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Apr 2020 05:13:41 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779FC061A0C
+        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 02:13:40 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id a25so3983677wrd.0
+        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 02:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=AkzX3Dcs3nD4u98CC4pQCRsVTQrys7ElI/8/pjZK+Ts=;
-        b=wb/ou2IL7ZL03YQ8OAV+Os2euU0E17M9a0KwoQ3V3isxo7+xI1+LSfhg5vSw6QDiT5
-         PsrEZIKgjxOmO31HznVmbOHJL0WiBxEdRrUVX8PGl+6aFMMKj+Ok3aE5PJnZLvTAR7uI
-         vGLCAgXDlm9SWpL6LlhpelL2R0kMbpm8ccCFbNZs9pJWVok28OUT2dVDc0jLwk1ecNu2
-         F3LojeUezoSXKQKiaoF94+HsBfCLyTeSTcf13SDqUTYKpELlLnEGHIWeaFAXVEXVx9Ze
-         VdpFDYBagqARwZ2Txck/ZqK5qn1jwast8Gxgr8rEKOIaDNo6PJlLDAZamY6dNhxapVdn
-         0hAQ==
+        bh=AyKKf2vu9ets5qQ05mKeEx+H3HJdeMhyf7LDU6EPmvg=;
+        b=h79u+RID/Tw8EjEr7PzOeW67I5riBs6/JV027laFW3VtXjta4zpbT4owqSzSYadzXI
+         UooqVXoXGL1A8oAByZdeXkLIJKTO01hEePh4C5fzehOrUdnbfQ1pEs9kiyqYoA/KX+JH
+         1qMRtfcJSHijAK2OGm7YZmCKbHczogdEeoL22Pw+vKfPbVBWs4ymX9eJohxZQNiYHrt4
+         ev6JtRiaXOHosoQtEI6ZEvp9wcTaGhtxQIVftu4d8viJsibPKXtJvkzZsh+8sFdMla2G
+         mZm9iRn+HrGu+Q6eydYFxopmA1r46j4zcJCjdDXVsTQRSFhEB8VLG7f5460IgaYT+mVk
+         jnYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=AkzX3Dcs3nD4u98CC4pQCRsVTQrys7ElI/8/pjZK+Ts=;
-        b=AZwQB8GPykWqL37mZist97OaAExk1mNl7cdco6cjQAYaWy7QGaN5Exj4f9r8n1t5zX
-         cNm6bh1Z+PWEgsUsFw/cjlP4qdZwzKubVAQSVZMOFQY/Tb0jaC5c/wX92hGGaY3PVg5P
-         fV/Ep1KHFVZg52B3PfY8pF7AC7no1T9ucysvSpr04wHyZaVsP3eo69JU95NqFUUyKgKB
-         fdqNg3IeNF26a1TPlr1U1DQYgJFSb5mJ+aBwW7WxWIK0gTJmt8edRAQYSmREp2xifOpP
-         cm8i7V0VjmG6ZxM9obFvPL2yAJP/3VzUr9r8gJu8rMPQYKq+/G46I3l8pGAUFqGpK7uv
-         V1uA==
-X-Gm-Message-State: AGi0Pua3VF8qGB621G3AqqEoCC4wvsqdFmelj79w7/1K//ByxD7bTTSU
-        nouJRp7RQniCzBiGgcU3AdlV+w==
-X-Google-Smtp-Source: APiQypJvFDcKODT9CxRfCRMCE4sQZDVimgniJ+YY4tbASMLPFOZ6+nm+DuXIWSzcnSgUjCRLXlPPcw==
-X-Received: by 2002:a1c:99d3:: with SMTP id b202mr3989576wme.126.1587028194753;
-        Thu, 16 Apr 2020 02:09:54 -0700 (PDT)
+        bh=AyKKf2vu9ets5qQ05mKeEx+H3HJdeMhyf7LDU6EPmvg=;
+        b=U915G9cFq4bMbCq8efwZJJ8xwW5DFNA0HBAabWNbKNpeYlmZKxQdRDmuMPx6lAoyqa
+         apC13Jt+3SjVnsEb1MN+GxE+OCpO7nutlHXt30KgclrEEHLzd1w6MmTtEhJP4slhXz9I
+         xIqYC1iIHtt8TksoGB+X9UycowevkdyFmxSGOSiis8bEsbK5DvMpo0iXli7iNQlZ7+sA
+         BQXH9ZB12liIsMJkQy5JkWrvDEEMdBuh2NyhGxfmWBI88iGFrVGTZ3DgBjMiumMX6Vij
+         tndaiK2cYEQroBT3EUDNhe05ZdqV9t4VlVojb7MHcMbiVcuHjjdp+6tOKfrnoiM71OPx
+         sX9A==
+X-Gm-Message-State: AGi0PuYuTnbwuPLUYcDP1GG8HF6jNnENSz9GLyVKeW+VtsrdGHPng+/d
+        uktBCmXPW7SWqqLZAsNNf3O0Jg==
+X-Google-Smtp-Source: APiQypL6P5SXhhJYLq4NR+TEKXmQzYaSqAHnJaTlLyokBRKxP3wo+p/iZ1+/LSCv7ZJBVaCmcdxoSg==
+X-Received: by 2002:a5d:68cf:: with SMTP id p15mr4801408wrw.139.1587028418328;
+        Thu, 16 Apr 2020 02:13:38 -0700 (PDT)
 Received: from dell ([95.149.164.124])
-        by smtp.gmail.com with ESMTPSA id h5sm7933704wrp.97.2020.04.16.02.09.53
+        by smtp.gmail.com with ESMTPSA id b4sm21818100wrv.42.2020.04.16.02.13.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 02:09:54 -0700 (PDT)
-Date:   Thu, 16 Apr 2020 10:10:54 +0100
+        Thu, 16 Apr 2020 02:13:37 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 10:14:38 +0100
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -70,15 +70,16 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
         srv_heupstream@mediatek.com
-Subject: Re: [PATCH v12 4/6] mfd: Add support for the MediaTek MT6358 PMIC
-Message-ID: <20200416091054.GZ2167633@dell>
+Subject: Re: [PATCH v12 5/6] rtc: mt6397: Add support for the MediaTek MT6358
+ RTC
+Message-ID: <20200416091438.GA2167633@dell>
 References: <1586333531-21641-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1586333531-21641-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1586333531-21641-6-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1586333531-21641-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+In-Reply-To: <1586333531-21641-6-git-send-email-hsin-hsiung.wang@mediatek.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
@@ -86,50 +87,73 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Wed, 08 Apr 2020, Hsin-Hsiung Wang wrote:
 
-> This adds support for the MediaTek MT6358 PMIC. This is a
-> multifunction device with the following sub modules:
+> From: Ran Bi <ran.bi@mediatek.com>
 > 
-> - Regulator
-> - RTC
-> - Codec
-> - Interrupt
+> This add support for the MediaTek MT6358 RTC. Driver using
+> compatible data to store different RTC_WRTGR address offset.
+> This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
+> driver which only needed by armv7 CPU without ATF.
 > 
-> It is interfaced to the host controller using SPI interface
-> by a proprietary hardware called PMIC wrapper or pwrap.
-> MT6358 MFD is a child device of the pwrap.
-> 
+> Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
+> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
 > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+
+Please place these in chronological order.  They should provide some
+history, rather than a unordered slab list of random sign-offs.
+
 > ---
->  drivers/mfd/Makefile                 |   2 +-
->  drivers/mfd/mt6358-irq.c             | 235 +++++++++++++++++++++++++++++
->  drivers/mfd/mt6397-core.c            |  36 +++++
->  include/linux/mfd/mt6358/core.h      | 158 ++++++++++++++++++++
->  include/linux/mfd/mt6358/registers.h | 282 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/mt6397/core.h      |   3 +
->  6 files changed, 715 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/mfd/mt6358-irq.c
->  create mode 100644 include/linux/mfd/mt6358/core.h
->  create mode 100644 include/linux/mfd/mt6358/registers.h
+>  drivers/power/reset/mt6323-poweroff.c |  2 +-
+>  drivers/rtc/rtc-mt6397.c              | 18 +++++++++++++++---
+>  include/linux/mfd/mt6397/rtc.h        |  9 ++++++++-
+>  3 files changed, 24 insertions(+), 5 deletions(-)
 
 [...]
 
-> diff --git a/include/linux/mfd/mt6358/core.h b/include/linux/mfd/mt6358/core.h
-> new file mode 100644
-> index 0000000..a304aae
-> --- /dev/null
-> +++ b/include/linux/mfd/mt6358/core.h
-> @@ -0,0 +1,158 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2019 MediaTek Inc.
+> diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc.h
+> index 7dfb63b..6200f3b 100644
+> --- a/include/linux/mfd/mt6397/rtc.h
+> +++ b/include/linux/mfd/mt6397/rtc.h
+> @@ -18,7 +18,9 @@
+>  #define RTC_BBPU_CBUSY         BIT(6)
+>  #define RTC_BBPU_KEY            (0x43 << 8)
+>  
+> -#define RTC_WRTGR              0x003c
+> +#define RTC_WRTGR_MT6358       0x3a
+> +#define RTC_WRTGR_MT6397       0x3c
 
-Nit: This needs updating.
+Why remove the leading 00's?
 
-Once updated, please apply my:
+These are now different to the other regs defined in this header.
 
-For my own reference (apply this as-is to your sign-off block):
+> +#define RTC_WRTGR_MT6323       RTC_WRTGR_MT6397
+>  
+>  #define RTC_IRQ_STA            0x0002
 
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Like here for instance  --^
+
+>  #define RTC_IRQ_STA_AL         BIT(0)
+> @@ -65,6 +67,10 @@
+>  #define MTK_RTC_POLL_DELAY_US  10
+>  #define MTK_RTC_POLL_TIMEOUT   (jiffies_to_usecs(HZ))
+>  
+> +struct mtk_rtc_data {
+> +	u32                     wrtgr;
+> +};
+> +
+>  struct mt6397_rtc {
+>  	struct device           *dev;
+>  	struct rtc_device       *rtc_dev;
+> @@ -74,6 +80,7 @@ struct mt6397_rtc {
+>  	struct regmap           *regmap;
+>  	int                     irq;
+>  	u32                     addr_base;
+> +	const struct mtk_rtc_data *data;
+>  };
+>  
+>  #endif /* _LINUX_MFD_MT6397_RTC_H_ */
 
 -- 
 Lee Jones [李琼斯]
