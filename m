@@ -2,109 +2,183 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 518811ABB3B
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2020 10:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30D51ABBB2
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Apr 2020 10:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502155AbgDPIac (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Apr 2020 04:30:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439552AbgDPILF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:11:05 -0400
-Received: from localhost (unknown [223.235.195.235])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D38A206B9;
-        Thu, 16 Apr 2020 08:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587024458;
-        bh=+AtB2qrsVxt1QWCAagtuBV0iMzA+FqM4hoS9ArXVBXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2SDVAHMhpWjl2KgmMtDeMa4mCSN5E7syFhtD6nl+7e+uOtdm92iHSJh7of/HWeSKy
-         HDPx9eDy3/ziMPBERearhYxolH1rzEwouN2J1vLT/RYfJAdCvbbfyQVciDd7LjXhj3
-         Rm7XEVuyXLSwCmFC9enIFNjzAhrkqZPWIGTVc9wk=
-Date:   Thu, 16 Apr 2020 13:37:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S2502754AbgDPIvB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Apr 2020 04:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502926AbgDPIsR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Apr 2020 04:48:17 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475DDC0610D5
+        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 01:48:12 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id d27so3886617wra.1
+        for <linux-rtc@vger.kernel.org>; Thu, 16 Apr 2020 01:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gCC6rxpfNBHEEJoswTl2+v3GlY13e+wv1Apu4C5uUJ0=;
+        b=qMyY08os0xXarDJEQ8j9nJU1G/4i1ajvSN1547JGWNAU4kptYy+l0ETyItzmwelvLC
+         nCDep5Cl1t95mbiIhlCDcowJNJGFakofRU/UeiPQv049DorrDQDyvOhQ0iXlohLp8hin
+         3bAdw+39EFnaQiFiejH+534QfsSXNhMyYx4ZtJs1O8APzJpuT9KiZORIU2xx8m9me3GJ
+         nRCzeSz6fhZnRuGUV65gJOj0k8DMrASVs1ffDMfO5wQ+4MKhMzyo1Hf7xWdNJii/ENzy
+         uOrTcZOmWLeo1D6phvtKajqfSbjF0JkyzG19tN5chV4GtOZYui9witk4RNmc7L0KIuBW
+         GEOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gCC6rxpfNBHEEJoswTl2+v3GlY13e+wv1Apu4C5uUJ0=;
+        b=fIIXgbuF8Ex9+p+FLDe5dNk8yx7PhMvFToMRqNTyPzT3/ETXdwK25+R3PZx963c3Zt
+         lh9g5utZtA3tznaJNFEEjYrrbjDixV73q3FMunuIjpGGIYacTlF9gTTYZ17WuwzWXjx2
+         jkP6OtCFp+lmyZwCee5fH7YDXqgJs1hBrFr8BbChrj2/YX/Iana4Gm95ADWyYnYFLuIo
+         P2yis8tNTtdKvRCESFBO3KQXA4TWCERl6FZOPMny0Q9unFmlUNTr2Ob3wceUasAXTOnV
+         7tT3qZshdZkS70tyv/PJSA3WAOg/SGfZRo18WiqyRW11kQjHOJKIbEZrf3QTP6t9wMW3
+         X+Xw==
+X-Gm-Message-State: AGi0PuYuUzmn69e4yZcQakpu9ExIOEsoJx5g4An46oGnVEVrLICjUOrp
+        ivkOosAMkKya/F2hFWmGZOXo2Q==
+X-Google-Smtp-Source: APiQypLyhDVW4E+VOlBHWErivAdlGrtxixDqwonOAkbRNQamJnKVsV0vJKLtvSLryabLtX0HhH0tLg==
+X-Received: by 2002:a5d:4286:: with SMTP id k6mr21252278wrq.222.1587026890846;
+        Thu, 16 Apr 2020 01:48:10 -0700 (PDT)
+Received: from dell ([95.149.164.124])
+        by smtp.gmail.com with ESMTPSA id z15sm14429845wrs.47.2020.04.16.01.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2020 01:48:10 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 09:49:10 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a
- '$ref'
-Message-ID: <20200416080734.GJ72691@vkoul-mobl>
-References: <20200416005549.9683-1-robh@kernel.org>
- <20200416005549.9683-2-robh@kernel.org>
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH v12 1/6] mfd: mt6397: Modify suspend/resume behavior
+Message-ID: <20200416084910.GX2167633@dell>
+References: <1586333531-21641-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1586333531-21641-2-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1586333531-21641-2-git-send-email-hsin-hsiung.wang@mediatek.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15-04-20, 19:55, Rob Herring wrote:
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords. The json-schema library doesn't yet support this, but the
-> tooling now does a fixup for this and either way works.
-> 
-> This has been a constant source of review comments, so let's change this
-> treewide so everyone copies the simpler syntax.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/arm/cpus.yaml         |  81 +++---
->  .../devicetree/bindings/arm/l2c2x0.yaml       |  87 +++---
->  .../devicetree/bindings/arm/psci.yaml         |  15 +-
->  .../bindings/arm/samsung/exynos-chipid.yaml   |   5 +-
->  .../bus/allwinner,sun50i-a64-de2.yaml         |   5 +-
->  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
->  .../bindings/connector/usb-connector.yaml     |  28 +-
->  .../bindings/crypto/st,stm32-hash.yaml        |   9 +-
->  .../allwinner,sun4i-a10-display-engine.yaml   |   7 +-
->  .../display/allwinner,sun4i-a10-tcon.yaml     |   5 +-
->  .../bindings/display/panel/panel-common.yaml  |   5 +-
->  .../devicetree/bindings/dma/dma-common.yaml   |   3 +-
->  .../devicetree/bindings/dma/ti/k3-udma.yaml   |  18 +-
+On Wed, 08 Apr 2020, Hsin-Hsiung Wang wrote:
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+> Some pmics don't need backup interrupt settings, so we change to use
+> pm notifier for the pmics which are necessary to store settings.
+> 
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+>  drivers/mfd/mt6397-core.c       | 30 ------------------------------
+>  drivers/mfd/mt6397-irq.c        | 35 ++++++++++++++++++++++++++++++++++-
+>  include/linux/mfd/mt6397/core.h |  2 ++
+>  3 files changed, 36 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+> index 0437c85..d2e70d8 100644
+> --- a/drivers/mfd/mt6397-core.c
+> +++ b/drivers/mfd/mt6397-core.c
+> @@ -100,35 +100,6 @@ static const struct mfd_cell mt6397_devs[] = {
+>  	}
+>  };
+>  
+> -#ifdef CONFIG_PM_SLEEP
+> -static int mt6397_irq_suspend(struct device *dev)
+> -{
+> -	struct mt6397_chip *chip = dev_get_drvdata(dev);
+> -
+> -	regmap_write(chip->regmap, chip->int_con[0], chip->wake_mask[0]);
+> -	regmap_write(chip->regmap, chip->int_con[1], chip->wake_mask[1]);
+> -
+> -	enable_irq_wake(chip->irq);
+> -
+> -	return 0;
+> -}
+> -
+> -static int mt6397_irq_resume(struct device *dev)
+> -{
+> -	struct mt6397_chip *chip = dev_get_drvdata(dev);
+> -
+> -	regmap_write(chip->regmap, chip->int_con[0], chip->irq_masks_cur[0]);
+> -	regmap_write(chip->regmap, chip->int_con[1], chip->irq_masks_cur[1]);
+> -
+> -	disable_irq_wake(chip->irq);
+> -
+> -	return 0;
+> -}
+> -#endif
+> -
+> -static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_irq_suspend,
+> -			mt6397_irq_resume);
+> -
+>  struct chip_data {
+>  	u32 cid_addr;
+>  	u32 cid_shift;
+> @@ -238,7 +209,6 @@ static struct platform_driver mt6397_driver = {
+>  	.driver = {
+>  		.name = "mt6397",
+>  		.of_match_table = of_match_ptr(mt6397_of_match),
+> -		.pm = &mt6397_pm_ops,
+>  	},
+>  	.id_table = mt6397_id,
+>  };
+> diff --git a/drivers/mfd/mt6397-irq.c b/drivers/mfd/mt6397-irq.c
+> index b2d3ce1..2924919 100644
+> --- a/drivers/mfd/mt6397-irq.c
+> +++ b/drivers/mfd/mt6397-irq.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/of_irq.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> +#include <linux/suspend.h>
+>  #include <linux/mfd/mt6323/core.h>
+>  #include <linux/mfd/mt6323/registers.h>
+>  #include <linux/mfd/mt6397/core.h>
+> @@ -81,7 +82,7 @@ static struct irq_chip mt6397_irq_chip = {
+>  static void mt6397_irq_handle_reg(struct mt6397_chip *mt6397, int reg,
+>  				  int irqbase)
+>  {
+> -	unsigned int status;
+> +	unsigned int status = 0;
+
+This looks like an unrelated change, no?
+
+>  	int i, irq, ret;
+>  
+>  	ret = regmap_read(mt6397->regmap, reg, &status);
+> @@ -128,6 +129,36 @@ static const struct irq_domain_ops mt6397_irq_domain_ops = {
+>  	.map = mt6397_irq_domain_map,
+>  };
+
+Other than that.
+
+For my own reference:
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
-~Vinod
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
