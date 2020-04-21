@@ -2,156 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1191B0EC0
-	for <lists+linux-rtc@lfdr.de>; Mon, 20 Apr 2020 16:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ED71B1C42
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Apr 2020 05:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbgDTOnL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 20 Apr 2020 10:43:11 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:7930 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbgDTOnK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Apr 2020 10:43:10 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e9db4c10000>; Mon, 20 Apr 2020 07:42:09 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 20 Apr 2020 07:43:10 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 20 Apr 2020 07:43:10 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
- 2020 14:43:10 +0000
-Received: from [10.26.73.5] (172.20.13.39) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 20 Apr
- 2020 14:43:08 +0000
-Subject: Re: [PATCH 3/3] rtc: max77686: Use single-byte writes on MAX77620
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1727915AbgDUDA0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 20 Apr 2020 23:00:26 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:3503 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727889AbgDUDAZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Apr 2020 23:00:25 -0400
+X-UUID: 74d6c1ec07f543caacbecb519939d4c8-20200421
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ZLGMpeA19u1Wima9wc0S7lbHcEYXik+4JHiV+qyzH4U=;
+        b=lhc693EKaBy0XHE9FarKqckLUwKiTZ2x5Qsw2rU4P/Ok+SP7Uvz5OzupMeTAxya+csS6N9NU/LKGsnqONlAnJJyM8UsRWvdBibiUymqZuGSsUsMRaRkpEkDvFMI2ji/VfoLmPZJMjhfsp4a86IVQOUCGVE3ljA3Z8GnuVSJJlyg=;
+X-UUID: 74d6c1ec07f543caacbecb519939d4c8-20200421
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 610182586; Tue, 21 Apr 2020 11:00:15 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 21 Apr 2020 11:00:13 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 21 Apr 2020 11:00:12 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <devicetree@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200417170825.2551367-1-thierry.reding@gmail.com>
- <20200417170825.2551367-3-thierry.reding@gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <6331768f-5d4a-aefb-03f2-5b04d0193440@nvidia.com>
-Date:   Mon, 20 Apr 2020 15:43:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+CC:     <drinkcat@chromium.org>, Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Richard Fontana <rfontana@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ran Bi <ran.bi@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <srv_heupstream@mediatek.com>
+Subject: [PATCH v13 0/6] Add Support for MediaTek PMIC MT6358
+Date:   Tue, 21 Apr 2020 11:00:06 +0800
+Message-ID: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-In-Reply-To: <20200417170825.2551367-3-thierry.reding@gmail.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587393729; bh=rkEWzk13vJOdCYuBxdqwzU8DwSEAOs3BX62D8zlHGDc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=WUHWcWTIwQ0h2TZPImSD6rnmHrAejDzENhytJdfrzOhwlVCEkhzQY8wnP4mTAm+Qv
-         iUXc7fAOb+n/GGM3uSpgMF45tWMeOUMDJMlg2HCg+t4Pa1b7jTtdaxjVQ5UGD6Fq37
-         g39DY1u44FytXyhJnwjov9iWgJmQCoA5MyqfQ/j7T21ZWjhqREEc/2zhl5ahDkG3Tg
-         CuSNyHqJGHZvQurmbK2tWSkLDKpiHq7BcPmqJ4RIzXDKgcCdJ316A5I40oAjhmkKbJ
-         gwBFD8hQfOc1g1kGsN0/IO24Q1TMA1uneKiiMM1ApFIx98bWLaCPWl72I3ok/dr0n+
-         aRPcgzB6f7XSQ==
+Content-Type: text/plain
+X-TM-SNTS-SMTP: F7DE3C45707E7BC4C1C7A2764009051DD0C524407E750491ADB5A3F3C0033AAC2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+VGhpcyBwYXRjaHNldCBpbmNsdWRpbmcgbW9kaWZ5aW5nIHN1c3BlbmQvcmVzdW1lIGJlaGF2aW9y
+IGFuZCB0cmltbWluZyBwcm9iZSBmdW5jdGlvbiBhZGQgc3VwcG9ydCB0byBNVDYzNTggUE1JQy4N
+Ck1UNjM1OCBpcyB0aGUgcHJpbWFyeSBQTUlDIGZvciBNVDgxODMgcGxhdGZvcm0uDQoNCmNoYW5n
+ZXMgc2luY2UgdjEyOg0KLSB1cGRhdGUgZmlsZSBkYXRlLg0KLSBtb2RpZnkgcGF0Y2ggc2lnbi1v
+ZmZzIGJsb2NrIGFjY29yZGluZyB0byBjaHJvbm9sb2dpY2FsIG9yZGVyLg0KLSBtb2RpZnkgcmVn
+aXN0ZXIgZGVmaW5pdGlvbiBpbiBoZWFkZXIgZmlsZS4NCi0gcmViYXNlIHNlcmllcyBvbiA1Ljct
+cmMxLg0KDQpIc2luLUhzaXVuZyBXYW5nICg1KToNCiAgbWZkOiBtdDYzOTc6IE1vZGlmeSBzdXNw
+ZW5kL3Jlc3VtZSBiZWhhdmlvcg0KICBtZmQ6IG10NjM5NzogVHJpbSBwcm9iZSBmdW5jdGlvbiB0
+byBzdXBwb3J0IGRpZmZlcmVudCBjaGlwcyBtb3JlDQogICAgY2xlYW5seQ0KICBkdC1iaW5kaW5n
+czogbWZkOiBBZGQgY29tcGF0aWJsZSBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBQTUlDDQogIG1m
+ZDogQWRkIHN1cHBvcnQgZm9yIHRoZSBNZWRpYVRlayBNVDYzNTggUE1JQw0KICBhcm02NDogZHRz
+OiBtdDYzNTg6IGFkZCBQTUlDIE1UNjM1OCByZWxhdGVkIG5vZGVzDQoNClJhbiBCaSAoMSk6DQog
+IHJ0YzogbXQ2Mzk3OiBBZGQgc3VwcG9ydCBmb3IgdGhlIE1lZGlhVGVrIE1UNjM1OCBSVEMNCg0K
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvbXQ2Mzk3LnR4dCB8ICAxNCAr
+LQ0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsvbXQ2MzU4LmR0c2kgICAgICAgICB8IDM1
+OCArKysrKysrKysrKysrKysrKysrKysrKw0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0ZWsv
+bXQ4MTgzLWV2Yi5kdHMgICAgICB8ICAgMSArDQogZHJpdmVycy9tZmQvTWFrZWZpbGUgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstDQogZHJpdmVycy9tZmQvbXQ2MzU4LWlycS5j
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMjM1ICsrKysrKysrKysrKysrKw0KIGRyaXZlcnMv
+bWZkL210NjM5Ny1jb3JlLmMgICAgICAgICAgICAgICAgICAgICAgICB8IDEwMSArKysrLS0tDQog
+ZHJpdmVycy9tZmQvbXQ2Mzk3LWlycS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDM1ICsr
+LQ0KIGRyaXZlcnMvcG93ZXIvcmVzZXQvbXQ2MzIzLXBvd2Vyb2ZmLmMgICAgICAgICAgICB8ICAg
+MiArLQ0KIGRyaXZlcnMvcnRjL3J0Yy1tdDYzOTcuYyAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAxOCArLQ0KIGluY2x1ZGUvbGludXgvbWZkL210NjM1OC9jb3JlLmggICAgICAgICAgICAgICAg
+ICB8IDE1OCArKysrKysrKysrDQogaW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L3JlZ2lzdGVycy5o
+ICAgICAgICAgICAgIHwgMjgyICsrKysrKysrKysrKysrKysrKw0KIGluY2x1ZGUvbGludXgvbWZk
+L210NjM5Ny9jb3JlLmggICAgICAgICAgICAgICAgICB8ICAgNSArDQogaW5jbHVkZS9saW51eC9t
+ZmQvbXQ2Mzk3L3J0Yy5oICAgICAgICAgICAgICAgICAgIHwgICA5ICstDQogMTMgZmlsZXMgY2hh
+bmdlZCwgMTE1OCBpbnNlcnRpb25zKCspLCA2MiBkZWxldGlvbnMoLSkNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgYXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDYzNTguZHRzaQ0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBkcml2ZXJzL21mZC9tdDYzNTgtaXJxLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQg
+aW5jbHVkZS9saW51eC9tZmQvbXQ2MzU4L2NvcmUuaA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNs
+dWRlL2xpbnV4L21mZC9tdDYzNTgvcmVnaXN0ZXJzLmgNCg0KLS0gDQoyLjYuNA0K
 
-On 17/04/2020 18:08, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> The MAX77620 doesn't support bulk writes, so make sure the regmap code
-> breaks bulk writes into multiple single-byte writes.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/rtc/rtc-max77686.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-> index 35fd74b83626..f53db4d6bead 100644
-> --- a/drivers/rtc/rtc-max77686.c
-> +++ b/drivers/rtc/rtc-max77686.c
-> @@ -78,6 +78,8 @@ struct max77686_rtc_driver_data {
->  	int			alarm_pending_status_reg;
->  	/* RTC IRQ CHIP for regmap */
->  	const struct regmap_irq_chip *rtc_irq_chip;
-> +	/* regmap configuration for the chip */
-> +	const struct regmap_config *regmap_config;
->  };
->  
->  struct max77686_rtc_info {
-> @@ -182,6 +184,11 @@ static const struct regmap_irq_chip max77686_rtc_irq_chip = {
->  	.num_irqs	= ARRAY_SIZE(max77686_rtc_irqs),
->  };
->  
-> +static const struct regmap_config max77686_rtc_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +};
-> +
->  static const struct max77686_rtc_driver_data max77686_drv_data = {
->  	.delay = 16000,
->  	.mask  = 0x7f,
-> @@ -191,6 +198,13 @@ static const struct max77686_rtc_driver_data max77686_drv_data = {
->  	.alarm_pending_status_reg = MAX77686_REG_STATUS2,
->  	.rtc_i2c_addr = MAX77686_I2C_ADDR_RTC,
->  	.rtc_irq_chip = &max77686_rtc_irq_chip,
-> +	.regmap_config = &max77686_rtc_regmap_config,
-> +};
-> +
-> +static const struct regmap_config max77620_rtc_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.use_single_write = true,
->  };
->  
->  static const struct max77686_rtc_driver_data max77620_drv_data = {
-> @@ -202,6 +216,7 @@ static const struct max77686_rtc_driver_data max77620_drv_data = {
->  	.alarm_pending_status_reg = MAX77686_INVALID_REG,
->  	.rtc_i2c_addr = MAX77620_I2C_ADDR_RTC,
->  	.rtc_irq_chip = &max77686_rtc_irq_chip,
-> +	.regmap_config = &max77620_rtc_regmap_config,
->  };
->  
->  static const unsigned int max77802_map[REG_RTC_END] = {
-> @@ -658,11 +673,6 @@ static int max77686_rtc_init_reg(struct max77686_rtc_info *info)
->  	return ret;
->  }
->  
-> -static const struct regmap_config max77686_rtc_regmap_config = {
-> -	.reg_bits = 8,
-> -	.val_bits = 8,
-> -};
-> -
->  static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
->  {
->  	struct device *parent = info->dev->parent;
-> @@ -698,7 +708,7 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
->  	}
->  
->  	info->rtc_regmap = devm_regmap_init_i2c(info->rtc,
-> -						&max77686_rtc_regmap_config);
-> +						info->drv_data->regmap_config);
->  	if (IS_ERR(info->rtc_regmap)) {
->  		ret = PTR_ERR(info->rtc_regmap);
->  		dev_err(info->dev, "Failed to allocate RTC regmap: %d\n", ret);
-> 
-
-
-Acked-by: Jon Hunter <jonathanh@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Cheers
-Jon
-
--- 
-nvpublic
