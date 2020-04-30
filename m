@@ -2,98 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 144321B369A
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Apr 2020 06:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319481BFCA4
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Apr 2020 16:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgDVEv6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Apr 2020 00:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726077AbgDVEv5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Apr 2020 00:51:57 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376B1C03C1A8
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y24so750702wma.4
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Apr 2020 21:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=rbRuIjvtduoe5rDmx04RZeGHXBKwqWRmrOmSv68i/zh0G7dxA9cd5BhZoNzJ9N6B2q
-         5eB51NESGTz0lJfH+OoJDDpVTo+qxXxhbnSi124B4kpTazwydRIeem0V0Rn2Gpx5AgR0
-         91NEqcfa3WVqIpxag75NoGWW8q+uGkZGsCXD6y7KSAZw3zwUWhfcRtU5JwJdpyeFBvpu
-         I/eS/Go/9Ngzu8uFpI6/iAFe+GNKuK94+IhnnbCYE3ObU/zUMmMxc5hbM6bTP89gbhB1
-         2q5YYLgiH1QtRPLQDAJanaf5afhK9Zv47Sl7DZd7niBJkxSc7pNbN0D3ID5H+5HRDiKJ
-         B/CA==
+        id S1728689AbgD3OHF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Apr 2020 10:07:05 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:41977 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728945AbgD3OHE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Apr 2020 10:07:04 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 19so5285305oiy.8;
+        Thu, 30 Apr 2020 07:07:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=CZczKNtikqVKsyl54pHn8vKDRrOQqUrGtKCJeauM+kAyW5Z5s7y2Y4ToAGf+bZfXnt
-         qeC2mBG0qjcjtlhdNlsXwkI3qRzE9EYOScn+ccILvEOWxOWrtNn5UnNRW7aQtVF3BN3Y
-         UfZu5YP9DsK8zWZ70UbPlSLPHaDnEBEmTwH5MUv5FrIEcHyK/BPRpej4E42Q7Znm3xjk
-         EXcY1PtSXFoBSJEkUIrHG6cR9VRfVkfK7eselJBTqZcwTVnpcAihrBrfUSGQuFG1l/2e
-         L+QpIEaoTF0e6Z+M3okhw1B0m9O/sF4zjBp1/Y3DK0fR9NNDDlOUK1iq+9HJWCANDybd
-         UyZw==
-X-Gm-Message-State: AGi0Pub0BXL/Rfjr9ldiz0ZT4DsA1iaQhunxdzBJKOpWUK/4m/Ebs5Tx
-        hvq6QN/9iwI7URHjYn17dSRRV6ZahtPTQ+8enZs=
-X-Google-Smtp-Source: APiQypL/2Y40sQ9V2EzHiDRLKrhgwszpYu1a0Q6bQA5MqdrYj1kOd9PP/XC5k6D0HMy42i7zfiwBpsCi7b09DZy6BRw=
-X-Received: by 2002:a1c:8106:: with SMTP id c6mr8259513wmd.88.1587531115600;
- Tue, 21 Apr 2020 21:51:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ypl3TMqHlEyc54S03DtZTNB+eyp6v+vQ5hgOUzmHpUg=;
+        b=SFkYlMRXJa1HQ07Vm9xq+/fUHRF/zrLe5DI+io2D0hUv09irfHHaC3/1RovhELkLl/
+         7M/FtKN16USdyv/qXLMP3gFaobhgra6wepDNXH5YSwnn3Vayon2M0rX0KLs2GZ0vi754
+         Kk9+waZK4mBk35uSo5yYfQWGn0zxsBUsjptk3KoHbsjxzS5k1QBok9S8tk/FkvAvqGjo
+         o//Gv7RHgyqWLfaV+L71c17+USRbGnfwV7QJ1yHrspRHkEIrPQdqKWh+CJl4wTldTOFz
+         oUjn1xw/5p/yS6r0cn8frVkNqxU9/9B/QjORlDM5RcqElLdX5w0tqbAnc3GxdLKBoeB3
+         hPAg==
+X-Gm-Message-State: AGi0PubHnws3Z0Lxpeu4bHQk2Nj8omKENfKHBug8zRvWa3g9ffiy7Bxt
+        1Wh+jeMjG2BeVjWOFaqKUA==
+X-Google-Smtp-Source: APiQypIP8LI9E0STiYnne0hBy5N7yLlgo3kcsx6yXCtmZ7uE9MOuR1kv9WPAh62YT3wAZ4XcJhqUuQ==
+X-Received: by 2002:aca:1709:: with SMTP id j9mr1847601oii.59.1588255622600;
+        Thu, 30 Apr 2020 07:07:02 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j42sm1327968ooi.5.2020.04.30.07.07.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2020 07:07:01 -0700 (PDT)
+Received: (nullmailer pid 31546 invoked by uid 1000);
+        Thu, 30 Apr 2020 14:07:01 -0000
+Date:   Thu, 30 Apr 2020 09:07:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: mfd: Document the RTC present on
+ MAX77620
+Message-ID: <20200430140701.GA21776@bogus>
+References: <20200417170825.2551367-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:4f89:0:0:0:0:0 with HTTP; Tue, 21 Apr 2020 21:51:55
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <ayishagadafi1@gmail.com>
-Date:   Tue, 21 Apr 2020 21:51:55 -0700
-Message-ID: <CAKmdXwuFimH8EYAQwUEKONYSYPzAwag3nAxBnPDHNjfMK3VCwg@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200417170825.2551367-1-thierry.reding@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
+On Fri, Apr 17, 2020 at 07:08:23PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> The RTC present on MAX77620 can be used to generate an alarm at a given
+> time, which in turn can be used as a wakeup source for the system if it
+> is properly wired up.
+> 
+> Document how to enable the RTC to act as a wakeup source.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../devicetree/bindings/mfd/max77620.txt          | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/max77620.txt b/Documentation/devicetree/bindings/mfd/max77620.txt
+> index 5a642a51d58e..f05005b0993e 100644
+> --- a/Documentation/devicetree/bindings/mfd/max77620.txt
+> +++ b/Documentation/devicetree/bindings/mfd/max77620.txt
+> @@ -125,6 +125,17 @@ MAX77663 supports 20, 40, 80, 160, 320, 640, 1280 and 2540 microseconds.
+>  			control) then, GPIO1/nRST_IO goes LOW.
+>  			this property is valid for max20024 only.
+>  
+> +Realtime Clock
+> +--------------
+> +The MAX77620 family of power management ICs contain a realtime clock block
+> +that can be used to keep track of time even when the system is powered off.
+> +
+> +The realtime clock can also be programmed to trigger alerts, which can be
+> +used to wake the system up from sleep. In order to configure the RTC to act
+> +as a wakeup source, add an "rtc" child node and add the "wakeup-source"
+> +property.
+> +
+> +
+>  For DT binding details of different sub modules like GPIO, pincontrol,
+>  regulator, power, please refer respective device-tree binding document
+>  under their respective sub-system directories.
+> @@ -159,4 +170,8 @@ max77620@3c {
+>  			maxim,fps-event-source = <MAX77620_FPS_EVENT_SRC_SW>;
+>  		};
+>  	};
+> +
+> +	rtc {
+> +		wakeup-source;
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+Is the RTC really the only thing that could wake the system in this 
+PMIC?
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+I don't think it's really valid to have 'wakeup-source' without 
+'interrupts' unless the wakeup mechanism is somehow not an interrupt. So 
+I think this belongs in the parent node.
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
-
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
-
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+Rob
