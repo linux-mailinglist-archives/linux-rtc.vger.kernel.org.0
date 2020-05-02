@@ -2,67 +2,105 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 739301C2621
-	for <lists+linux-rtc@lfdr.de>; Sat,  2 May 2020 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174521C2841
+	for <lists+linux-rtc@lfdr.de>; Sat,  2 May 2020 22:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728302AbgEBO1I (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 2 May 2020 10:27:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58306 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728020AbgEBO1H (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 2 May 2020 10:27:07 -0400
-Received: from localhost (p5486C608.dip0.t-ipconnect.de [84.134.198.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728499AbgEBUfE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 2 May 2020 16:35:04 -0400
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:58108 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728495AbgEBUfE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 2 May 2020 16:35:04 -0400
+X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Sat, 02 May 2020 16:35:03 EDT
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 49F11C5m3Xz9vCGw
+        for <linux-rtc@vger.kernel.org>; Sat,  2 May 2020 20:29:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id gbuwZI-WmkId for <linux-rtc@vger.kernel.org>;
+        Sat,  2 May 2020 15:29:03 -0500 (CDT)
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7ABDA2496B;
-        Sat,  2 May 2020 14:27:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588429627;
-        bh=SWAgqFjQtH+44KzNB37D3YGOf7TBc55dGtMgscD5tck=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R/cAwhPZR5OcZx2udyqGygLoioE2/RPOjZzU81BkV1Bbxd4/Xsd3lQuOESkBKbeoe
-         284fPMtqJeVoN8K6AWgWiNHhxmLhAuQG1B0cV/WN4jip15NVyRez4zUmHvLg+t3SwX
-         M6zp+ufgHWECupQ8pCJWfoVhieunt71VFxl4tBPI=
-From:   Wolfram Sang <wsa@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel@pengutronix.de, Wolfram Sang <wsa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] rtc: stmp3xxx: update contact email
-Date:   Sat,  2 May 2020 16:27:04 +0200
-Message-Id: <20200502142704.19308-1-wsa@kernel.org>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 49F11C4P6Jz9vCGK
+        for <linux-rtc@vger.kernel.org>; Sat,  2 May 2020 15:29:03 -0500 (CDT)
+Received: by mail-qt1-f199.google.com with SMTP id q43so15593039qtj.11
+        for <linux-rtc@vger.kernel.org>; Sat, 02 May 2020 13:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=XhfKgI9d6Gl57N2Xx+fFhl6LTDCxp0mSoTy+rfsye04=;
+        b=NACOQcAGJGH5sXKDxAh57PTNyXO4NzVhdP3BU6XhZ8epwS8RJ2Gqems+ZANNqkshZd
+         uPmytVOkdjETi8P8i2eKnEHpqKFYxRjRz4DLDAUKX1yFEso52g+05AeYgtl3lQbo9jtP
+         41rPj+JygDd+3H9lSBqf3YICiBsKsXCb6Un+deoHXK5b3fqpLFSec/bXI80jNkd390eQ
+         F/THkSvUvEafMhaTHgCDfWWBlUXwvFKDSjrdUpNw2vrkz66/z9v4iT1KQy5PuQRZ28ij
+         Oq1zZAT4pKxi6OBksgnXzISTvdEsOoyEuSBdpSQPSmkRQGsa/pW3SvHc4+jVGklQxCOg
+         ddGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XhfKgI9d6Gl57N2Xx+fFhl6LTDCxp0mSoTy+rfsye04=;
+        b=Rby5fgM3AdfVvfKcdmeY+ey6yT0yODwHV8SILZfhnzpQlDfsRnGhDzUmzMFBrnELML
+         CIErLaIISCWk1/htW84vWlj8l32Pz535W9LVjr59TiglsQ/EeDPLqkoGuXUnSTVq4QOr
+         RhX9zy0rV4Him/tro9Ofd8dRK8R20/a2sD+kJiqozTg1B5ZQFFNIJ7mhE0JR4ao0eHkK
+         WzivyioBqOr93OMhytD8oaGjpKBckrbyf0H48Q7Hqoel+0vXFX4GeBZdl+WB0fc7TDkX
+         /Pdurvkb+5WAZc0OMWfKaViMN8x01BqSx+2d4jjzg12BWC31La4DWcUpNkT18PitIkgK
+         TQdw==
+X-Gm-Message-State: AGi0PuYsn+1NS3Pp4czPQWPKMIy4HsTeuY6278jxg1C8cVJ4QESjrgBl
+        RxpnP7vjZvX6mw7vurnXSU0HVFBJGF/A13EtdVDZ0XcXJBUFHk7mETJ0fH24r6gPICH0uyx29px
+        oWEvbFI9IreFMwVh8UGnwzxhy
+X-Received: by 2002:a37:ac14:: with SMTP id e20mr8576893qkm.23.1588451342941;
+        Sat, 02 May 2020 13:29:02 -0700 (PDT)
+X-Google-Smtp-Source: APiQypLnqqSKaOgG4dqiXXVM5Q4flAZk4SPm0seeBmN6KTYxyCVHWkAQKRlXcl69Z44LbuBMXv4Xkw==
+X-Received: by 2002:a37:ac14:: with SMTP id e20mr8576878qkm.23.1588451342498;
+        Sat, 02 May 2020 13:29:02 -0700 (PDT)
+Received: from qiushi.dtc.umn.edu (cs-kh5248-02-umh.cs.umn.edu. [128.101.106.4])
+        by smtp.gmail.com with ESMTPSA id b10sm6023306qtj.30.2020.05.02.13.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 May 2020 13:29:01 -0700 (PDT)
+From:   wu000273@umn.edu
+To:     a.zummo@towertech.it
+Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kjlu@umn.edu, wu000273@umn.edu
+Subject: [PATCH] rtc: mc13xxx: fix a double-unlock issue
+Date:   Sat,  2 May 2020 15:28:52 -0500
+Message-Id: <20200502202852.13731-1-wu000273@umn.edu>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The 'pengutronix' address is defunct for years. Use the proper contact
-address.
+From: Qiushi Wu <wu000273@umn.edu>
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+In function mc13xxx_rtc_probe, the mc13xxx_unlock() is called
+before rtc_register_device(). But in the error path of
+rtc_register_device(), the mc13xxx_unlock() is called again,
+which causes a double-unlock problem. To fix this problem, we
+need to call mc13xxx_lock() again in this error path.
+
+Signed-off-by: Qiushi Wu <wu000273@umn.edu>
 ---
- drivers/rtc/rtc-stmp3xxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-mc13xxx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
-index ff6488be385f..c9bc3d4a1e66 100644
---- a/drivers/rtc/rtc-stmp3xxx.c
-+++ b/drivers/rtc/rtc-stmp3xxx.c
-@@ -416,5 +416,5 @@ module_platform_driver(stmp3xxx_rtcdrv);
+diff --git a/drivers/rtc/rtc-mc13xxx.c b/drivers/rtc/rtc-mc13xxx.c
+index afce2c0b4bd6..d6802e6191cb 100644
+--- a/drivers/rtc/rtc-mc13xxx.c
++++ b/drivers/rtc/rtc-mc13xxx.c
+@@ -308,8 +308,10 @@ static int __init mc13xxx_rtc_probe(struct platform_device *pdev)
+ 	mc13xxx_unlock(mc13xxx);
  
- MODULE_DESCRIPTION("STMP3xxx RTC Driver");
- MODULE_AUTHOR("dmitry pervushin <dpervushin@embeddedalley.com> and "
--		"Wolfram Sang <w.sang@pengutronix.de>");
-+		"Wolfram Sang <kernel@pengutronix.de>");
- MODULE_LICENSE("GPL");
+ 	ret = rtc_register_device(priv->rtc);
+-	if (ret)
++	if (ret) {
++		mc13xxx_lock(mc13xxx);
+ 		goto err_irq_request;
++	}
+ 
+ 	return 0;
+ 
 -- 
-2.20.1
+2.17.1
 
