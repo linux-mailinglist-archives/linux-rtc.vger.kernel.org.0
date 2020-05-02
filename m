@@ -2,70 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F78F1C16CF
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 May 2020 16:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739301C2621
+	for <lists+linux-rtc@lfdr.de>; Sat,  2 May 2020 16:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731447AbgEANxR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 1 May 2020 09:53:17 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:60231 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729727AbgEANxN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 May 2020 09:53:13 -0400
-X-Originating-IP: 86.202.105.35
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 3553820003;
-        Fri,  1 May 2020 13:53:10 +0000 (UTC)
-Date:   Fri, 1 May 2020 15:53:09 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
+        id S1728302AbgEBO1I (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 2 May 2020 10:27:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58306 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728020AbgEBO1H (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 2 May 2020 10:27:07 -0400
+Received: from localhost (p5486C608.dip0.t-ipconnect.de [84.134.198.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7ABDA2496B;
+        Sat,  2 May 2020 14:27:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588429627;
+        bh=SWAgqFjQtH+44KzNB37D3YGOf7TBc55dGtMgscD5tck=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R/cAwhPZR5OcZx2udyqGygLoioE2/RPOjZzU81BkV1Bbxd4/Xsd3lQuOESkBKbeoe
+         284fPMtqJeVoN8K6AWgWiNHhxmLhAuQG1B0cV/WN4jip15NVyRez4zUmHvLg+t3SwX
+         M6zp+ufgHWECupQ8pCJWfoVhieunt71VFxl4tBPI=
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de, Wolfram Sang <wsa@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: mfd: Document the RTC present on
- MAX77620
-Message-ID: <20200501135309.GC51277@piout.net>
-References: <20200417170825.2551367-1-thierry.reding@gmail.com>
- <20200430140701.GA21776@bogus>
- <20200430141520.GA101194@piout.net>
- <CAL_Jsq+HzG8QT+kHUjqC8joDxfm1WM+N_F1ZwYXg7cL5faGxVA@mail.gmail.com>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] rtc: stmp3xxx: update contact email
+Date:   Sat,  2 May 2020 16:27:04 +0200
+Message-Id: <20200502142704.19308-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+HzG8QT+kHUjqC8joDxfm1WM+N_F1ZwYXg7cL5faGxVA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 01/05/2020 08:00:11-0500, Rob Herring wrote:
-> > I don't think this is true because in the case of a discrete RTC, its
-> > interrupt pin can be connected directly to a PMIC to power up a board
-> > instead of being connected to the SoC. In that case we don't have an
-> > interrupt property but the RTC is still a wakeup source. This is the
-> > usual use case for wakeup-source in the RTC subsystem. Else, if there is
-> > an interrupt, then we assume the RTC is a wakeup source and there is no
-> > need to have the wakeup-source property.
-> 
-> Yes, that would be an example of "unless the wakeup mechanism is
-> somehow not an interrupt". I guess I should add not an interrupt from
-> the perspective of the OS.
-> 
-> So if the wakeup is self contained within the PMIC, why do we need a
-> DT property? The capability is always there and enabling/disabling
-> wakeup from it is userspace policy.
-> 
+The 'pengutronix' address is defunct for years. Use the proper contact
+address.
 
-Yes, for this particular case, I'm not sure wakeup-source is actually
-necessary. If the interrupt line is used to wakeup the SoC, then the
-presence of the interrupts property is enough to enable wakeup.
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
+ drivers/rtc/rtc-stmp3xxx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
+index ff6488be385f..c9bc3d4a1e66 100644
+--- a/drivers/rtc/rtc-stmp3xxx.c
++++ b/drivers/rtc/rtc-stmp3xxx.c
+@@ -416,5 +416,5 @@ module_platform_driver(stmp3xxx_rtcdrv);
+ 
+ MODULE_DESCRIPTION("STMP3xxx RTC Driver");
+ MODULE_AUTHOR("dmitry pervushin <dpervushin@embeddedalley.com> and "
+-		"Wolfram Sang <w.sang@pengutronix.de>");
++		"Wolfram Sang <kernel@pengutronix.de>");
+ MODULE_LICENSE("GPL");
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
+
