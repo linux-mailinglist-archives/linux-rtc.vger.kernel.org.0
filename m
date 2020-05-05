@@ -2,28 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D9E1C61BC
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 May 2020 22:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B00C1C61C0
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 May 2020 22:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728076AbgEEUNr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 May 2020 16:13:47 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:36333 "EHLO
+        id S1728512AbgEEUOA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 May 2020 16:14:00 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:60273 "EHLO
         relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727785AbgEEUNr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 16:13:47 -0400
+        with ESMTP id S1727785AbgEEUOA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 16:14:00 -0400
 Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 656A9200003;
-        Tue,  5 May 2020 20:13:19 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 72AAE200003;
+        Tue,  5 May 2020 20:13:45 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org
 Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
         =?UTF-8?q?Per=20N=C3=B8rgaard=20Christensen?= 
         <per.christensen@prevas.dk>, linux-kernel@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 2/5] rtc: pcf2127: let the core handle rtc range
-Date:   Tue,  5 May 2020 22:13:07 +0200
-Message-Id: <20200505201310.255145-2-alexandre.belloni@bootlin.com>
+Subject: [PATCH 3/5] rtc: pcf2127: remove unnecessary #ifdef
+Date:   Tue,  5 May 2020 22:13:08 +0200
+Message-Id: <20200505201310.255145-3-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200505201310.255145-1-alexandre.belloni@bootlin.com>
 References: <20200505201310.255145-1-alexandre.belloni@bootlin.com>
@@ -34,46 +34,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Let the core handle offsetting and windowing the RTC range.
+There is not point in setting .ioctl to NULL when CONFIG_RTC_INTF_DEV is
+not defined because it would not be called anyway.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-pcf2127.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-pcf2127.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 4e50d6768f13..136709baaa88 100644
+index 136709baaa88..5ac996578523 100644
 --- a/drivers/rtc/rtc-pcf2127.c
 +++ b/drivers/rtc/rtc-pcf2127.c
-@@ -137,8 +137,7 @@ static int pcf2127_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	tm->tm_wday = buf[PCF2127_REG_DW] & 0x07;
- 	tm->tm_mon = bcd2bin(buf[PCF2127_REG_MO] & 0x1F) - 1; /* rtc mn 1-12 */
- 	tm->tm_year = bcd2bin(buf[PCF2127_REG_YR]);
--	if (tm->tm_year < 70)
--		tm->tm_year += 100;	/* assume we are in 1970...2069 */
-+	tm->tm_year += 100;
+@@ -184,7 +184,6 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	return 0;
+ }
  
- 	dev_dbg(dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
- 		"mday=%d, mon=%d, year=%d, wday=%d\n",
-@@ -172,7 +171,7 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	buf[i++] = bin2bcd(tm->tm_mon + 1);
+-#ifdef CONFIG_RTC_INTF_DEV
+ static int pcf2127_rtc_ioctl(struct device *dev,
+ 				unsigned int cmd, unsigned long arg)
+ {
+@@ -205,9 +204,6 @@ static int pcf2127_rtc_ioctl(struct device *dev,
+ 		return -ENOIOCTLCMD;
+ 	}
+ }
+-#else
+-#define pcf2127_rtc_ioctl NULL
+-#endif
  
- 	/* year */
--	buf[i++] = bin2bcd(tm->tm_year % 100);
-+	buf[i++] = bin2bcd(tm->tm_year - 100);
- 
- 	/* write register's data */
- 	err = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_SC, buf, i);
-@@ -433,6 +432,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return PTR_ERR(pcf2127->rtc);
- 
- 	pcf2127->rtc->ops = &pcf2127_rtc_ops;
-+	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
- 
- 	pcf2127->wdd.parent = dev;
- 	pcf2127->wdd.info = &pcf2127_wdt_info;
+ static const struct rtc_class_ops pcf2127_rtc_ops = {
+ 	.ioctl		= pcf2127_rtc_ioctl,
 -- 
 2.26.2
 
