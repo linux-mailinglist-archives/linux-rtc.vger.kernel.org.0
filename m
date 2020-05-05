@@ -2,91 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A081C63A8
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2020 00:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CE61C63B8
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2020 00:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728076AbgEEWJO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 May 2020 18:09:14 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:56265 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbgEEWJO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 18:09:14 -0400
-X-Originating-IP: 86.202.105.35
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 2C875C0003;
-        Tue,  5 May 2020 22:09:12 +0000 (UTC)
-Date:   Wed, 6 May 2020 00:09:11 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     linux-rtc@vger.kernel.org,
-        Per =?iso-8859-1?Q?N=F8rgaard?= Christensen 
-        <per.christensen@prevas.dk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] rtc: pcf2127: report battery switch over
-Message-ID: <20200505220911.GW34497@piout.net>
-References: <20200505201310.255145-1-alexandre.belloni@bootlin.com>
- <20200505201310.255145-5-alexandre.belloni@bootlin.com>
- <e4910679-4453-f753-2c3e-4c93fd755b39@prevas.dk>
+        id S1728853AbgEEWNp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 May 2020 18:13:45 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:32932 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727089AbgEEWNo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 18:13:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1588716821; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=B7AW81mUri4IKELUm8+zf4lFXbt6nY0kP/M2sSO0lDk=;
+        b=GWhZXVFY0FF2zp29kFOhmdr1wgKTrZSA/InL/LR+4DKKEvIj6E2cPFty8aVzImQ1p/kdHd
+        Y7SQsKfFrxtHPAjgD8mUafveqAScP9YlA+Sc630ElXKuo2SKyTo41DKxYm+jE923rdVKZb
+        DHQzG4+xEHsrOBFFQg/VbzPMh0x1yyI=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     od@zcrc.me, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/7] rtc: ingenic: Only support probing from devicetree
+Date:   Wed,  6 May 2020 00:13:30 +0200
+Message-Id: <20200505221336.222313-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4910679-4453-f753-2c3e-4c93fd755b39@prevas.dk>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/05/2020 23:30:18+0200, Rasmus Villemoes wrote:
-> On 05/05/2020 22.13, Alexandre Belloni wrote:
-> > Add support for the RTC_VL_BACKUP_SWITCH flag to report battery switch over
-> > events.
-> > 
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > ---
-> >  drivers/rtc/rtc-pcf2127.c | 16 ++++++++++++----
-> >  1 file changed, 12 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > index 039078029bd4..967de68e1b03 100644
-> > --- a/drivers/rtc/rtc-pcf2127.c
-> > +++ b/drivers/rtc/rtc-pcf2127.c
-> > @@ -188,18 +188,27 @@ static int pcf2127_rtc_ioctl(struct device *dev,
-> >  				unsigned int cmd, unsigned long arg)
-> >  {
-> >  	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> > -	int touser;
-> > +	int val, touser = 0;
-> >  	int ret;
-> >  
-> >  	switch (cmd) {
-> >  	case RTC_VL_READ:
-> > -		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &touser);
-> > +		ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL3, &val);
-> >  		if (ret)
-> >  			return ret;
-> >  
-> > -		touser = touser & PCF2127_BIT_CTRL3_BLF ? RTC_VL_BACKUP_LOW : 0;
-> > +		if (val & PCF2127_BIT_CTRL3_BLF)
-> > +			touser = RTC_VL_BACKUP_LOW;
-> > +
-> > +		if (val & PCF2127_BIT_CTRL3_BF)
-> > +			touser |= RTC_VL_BACKUP_SWITCH;
-> 
-> I think it's a bit easier to read if you use |= in both cases.
-> 
-> Re patch 3, one saves a little .text by eliding the ioctl function when,
-> as you say, it cannot be called anyway. No strong opinion either way, I
-> don't think anybody actually builds without CONFIG_RTC_INTF_DEV, but
-> those that do are probably the ones that care about having a tiny vmlinux.
-> 
+With the recent work on supporting Device Tree on Ingenic SoCs, no
+driver ever probes from platform code anymore, so we can clean a bit
+this driver by removing the non-devicetree paths.
 
-Honestly, I don't think it is worth doing that. On armv7, this only
-removes 248 bytes. Also, compiling without CONFIG_RTC_INTF_DEV simply
-makes the RTC unusable. There are no tools actually using the sysfs
-interface instead of the char device interface. I prefer keeping
-CONFIG_RTC_INTF_DEV private to the core.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/rtc/Kconfig      |  1 +
+ drivers/rtc/rtc-jz4740.c | 20 +++-----------------
+ 2 files changed, 4 insertions(+), 17 deletions(-)
 
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index ec873f09c763..82a210920c1d 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1680,6 +1680,7 @@ config RTC_DRV_MPC5121
+ config RTC_DRV_JZ4740
+ 	tristate "Ingenic JZ4740 SoC"
+ 	depends on MIPS || COMPILE_TEST
++	depends on OF
+ 	help
+ 	  If you say yes here you get support for the Ingenic JZ47xx SoCs RTC
+ 	  controllers.
+diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
+index e4c719085c31..949d395066e2 100644
+--- a/drivers/rtc/rtc-jz4740.c
++++ b/drivers/rtc/rtc-jz4740.c
+@@ -309,19 +309,13 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ {
+ 	int ret;
+ 	struct jz4740_rtc *rtc;
+-	const struct platform_device_id *id = platform_get_device_id(pdev);
+-	const struct of_device_id *of_id = of_match_device(
+-			jz4740_rtc_of_match, &pdev->dev);
+ 	struct device_node *np = pdev->dev.of_node;
+ 
+ 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+ 	if (!rtc)
+ 		return -ENOMEM;
+ 
+-	if (of_id)
+-		rtc->type = (enum jz4740_rtc_type)of_id->data;
+-	else
+-		rtc->type = id->driver_data;
++	rtc->type = (enum jz4740_rtc_type)device_get_match_data(dev);
+ 
+ 	rtc->irq = platform_get_irq(pdev, 0);
+ 	if (rtc->irq < 0)
+@@ -370,7 +364,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	if (np && of_device_is_system_power_controller(np)) {
++	if (of_device_is_system_power_controller(np)) {
+ 		if (!pm_power_off) {
+ 			/* Default: 60ms */
+ 			rtc->reset_pin_assert_time = 60;
+@@ -395,20 +389,12 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static const struct platform_device_id jz4740_rtc_ids[] = {
+-	{ "jz4740-rtc", ID_JZ4740 },
+-	{ "jz4780-rtc", ID_JZ4780 },
+-	{}
+-};
+-MODULE_DEVICE_TABLE(platform, jz4740_rtc_ids);
+-
+ static struct platform_driver jz4740_rtc_driver = {
+ 	.probe	 = jz4740_rtc_probe,
+ 	.driver	 = {
+ 		.name  = "jz4740-rtc",
+-		.of_match_table = of_match_ptr(jz4740_rtc_of_match),
++		.of_match_table = jz4740_rtc_of_match,
+ 	},
+-	.id_table = jz4740_rtc_ids,
+ };
+ 
+ module_platform_driver(jz4740_rtc_driver);
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
+
