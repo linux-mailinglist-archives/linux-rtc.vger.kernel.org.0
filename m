@@ -2,31 +2,34 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CE61C63B8
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2020 00:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B872C1C63BA
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2020 00:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgEEWNp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 May 2020 18:13:45 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:32932 "EHLO
+        id S1729336AbgEEWNx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 May 2020 18:13:53 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:33004 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbgEEWNo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 18:13:44 -0400
+        with ESMTP id S1727089AbgEEWNw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 May 2020 18:13:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1588716821; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1588716822; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=B7AW81mUri4IKELUm8+zf4lFXbt6nY0kP/M2sSO0lDk=;
-        b=GWhZXVFY0FF2zp29kFOhmdr1wgKTrZSA/InL/LR+4DKKEvIj6E2cPFty8aVzImQ1p/kdHd
-        Y7SQsKfFrxtHPAjgD8mUafveqAScP9YlA+Sc630ElXKuo2SKyTo41DKxYm+jE923rdVKZb
-        DHQzG4+xEHsrOBFFQg/VbzPMh0x1yyI=
+         in-reply-to:in-reply-to:references:references;
+        bh=PNrCYVLQEOQt4/20kwBchqnMdnfToz6u3rGuZz+NRq0=;
+        b=Mu8iPDL+iLoUwuHldn8XwkVyEFo8QZA7BZslDeXMU7sQW4qu8O77vzgF+JaBMzG7AOrvRT
+        lJhQq98SSaCBSR3zejcafUqk2S+x4H0NFpPEr73tyWpzGIjniuYclfXfSvQsj8JV2thwfQ
+        G26Bj0S6KdRvvYdSb+0XP/YwUHD734w=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     od@zcrc.me, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 1/7] rtc: ingenic: Only support probing from devicetree
-Date:   Wed,  6 May 2020 00:13:30 +0200
-Message-Id: <20200505221336.222313-1-paul@crapouillou.net>
+Subject: [PATCH 2/7] rtc: ingenic: Use local 'dev' variable in probe
+Date:   Wed,  6 May 2020 00:13:31 +0200
+Message-Id: <20200505221336.222313-2-paul@crapouillou.net>
+In-Reply-To: <20200505221336.222313-1-paul@crapouillou.net>
+References: <20200505221336.222313-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -34,84 +37,97 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-With the recent work on supporting Device Tree on Ingenic SoCs, no
-driver ever probes from platform code anymore, so we can clean a bit
-this driver by removing the non-devicetree paths.
+Clean a bit the probe function by adding a local struct device *dev
+variable.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/rtc/Kconfig      |  1 +
- drivers/rtc/rtc-jz4740.c | 20 +++-----------------
- 2 files changed, 4 insertions(+), 17 deletions(-)
+ drivers/rtc/rtc-jz4740.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index ec873f09c763..82a210920c1d 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1680,6 +1680,7 @@ config RTC_DRV_MPC5121
- config RTC_DRV_JZ4740
- 	tristate "Ingenic JZ4740 SoC"
- 	depends on MIPS || COMPILE_TEST
-+	depends on OF
- 	help
- 	  If you say yes here you get support for the Ingenic JZ47xx SoCs RTC
- 	  controllers.
 diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index e4c719085c31..949d395066e2 100644
+index 949d395066e2..06ee08089815 100644
 --- a/drivers/rtc/rtc-jz4740.c
 +++ b/drivers/rtc/rtc-jz4740.c
-@@ -309,19 +309,13 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+@@ -307,11 +307,12 @@ MODULE_DEVICE_TABLE(of, jz4740_rtc_of_match);
+ 
+ static int jz4740_rtc_probe(struct platform_device *pdev)
  {
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
  	int ret;
  	struct jz4740_rtc *rtc;
--	const struct platform_device_id *id = platform_get_device_id(pdev);
--	const struct of_device_id *of_id = of_match_device(
--			jz4740_rtc_of_match, &pdev->dev);
- 	struct device_node *np = pdev->dev.of_node;
+-	struct device_node *np = pdev->dev.of_node;
  
- 	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+-	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
++	rtc = devm_kzalloc(dev, sizeof(*rtc), GFP_KERNEL);
  	if (!rtc)
  		return -ENOMEM;
  
--	if (of_id)
--		rtc->type = (enum jz4740_rtc_type)of_id->data;
--	else
--		rtc->type = id->driver_data;
-+	rtc->type = (enum jz4740_rtc_type)device_get_match_data(dev);
+@@ -325,9 +326,9 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(rtc->base))
+ 		return PTR_ERR(rtc->base);
  
- 	rtc->irq = platform_get_irq(pdev, 0);
- 	if (rtc->irq < 0)
-@@ -370,7 +364,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+-	rtc->clk = devm_clk_get(&pdev->dev, "rtc");
++	rtc->clk = devm_clk_get(dev, "rtc");
+ 	if (IS_ERR(rtc->clk)) {
+-		dev_err(&pdev->dev, "Failed to get RTC clock\n");
++		dev_err(dev, "Failed to get RTC clock\n");
+ 		return PTR_ERR(rtc->clk);
+ 	}
+ 
+@@ -335,18 +336,18 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, rtc);
+ 
+-	device_init_wakeup(&pdev->dev, 1);
++	device_init_wakeup(dev, 1);
+ 
+-	ret = dev_pm_set_wake_irq(&pdev->dev, rtc->irq);
++	ret = dev_pm_set_wake_irq(dev, rtc->irq);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "Failed to set wake irq: %d\n", ret);
++		dev_err(dev, "Failed to set wake irq: %d\n", ret);
  		return ret;
  	}
  
--	if (np && of_device_is_system_power_controller(np)) {
-+	if (of_device_is_system_power_controller(np)) {
- 		if (!pm_power_off) {
- 			/* Default: 60ms */
- 			rtc->reset_pin_assert_time = 60;
-@@ -395,20 +389,12 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 	return 0;
- }
+-	rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
++	rtc->rtc = devm_rtc_allocate_device(dev);
+ 	if (IS_ERR(rtc->rtc)) {
+ 		ret = PTR_ERR(rtc->rtc);
+-		dev_err(&pdev->dev, "Failed to allocate rtc device: %d\n", ret);
++		dev_err(dev, "Failed to allocate rtc device: %d\n", ret);
+ 		return ret;
+ 	}
  
--static const struct platform_device_id jz4740_rtc_ids[] = {
--	{ "jz4740-rtc", ID_JZ4740 },
--	{ "jz4780-rtc", ID_JZ4780 },
--	{}
--};
--MODULE_DEVICE_TABLE(platform, jz4740_rtc_ids);
--
- static struct platform_driver jz4740_rtc_driver = {
- 	.probe	 = jz4740_rtc_probe,
- 	.driver	 = {
- 		.name  = "jz4740-rtc",
--		.of_match_table = of_match_ptr(jz4740_rtc_of_match),
-+		.of_match_table = jz4740_rtc_of_match,
- 	},
--	.id_table = jz4740_rtc_ids,
- };
+@@ -357,10 +358,10 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
- module_platform_driver(jz4740_rtc_driver);
+-	ret = devm_request_irq(&pdev->dev, rtc->irq, jz4740_rtc_irq, 0,
+-				pdev->name, rtc);
++	ret = devm_request_irq(dev, rtc->irq, jz4740_rtc_irq, 0,
++			       pdev->name, rtc);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "Failed to request rtc irq: %d\n", ret);
++		dev_err(dev, "Failed to request rtc irq: %d\n", ret);
+ 		return ret;
+ 	}
+ 
+@@ -378,11 +379,10 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 					     "ingenic,min-wakeup-pin-assert-time-ms",
+ 					     &rtc->min_wakeup_pin_assert_time);
+ 
+-			dev_for_power_off = &pdev->dev;
++			dev_for_power_off = dev;
+ 			pm_power_off = jz4740_rtc_power_off;
+ 		} else {
+-			dev_warn(&pdev->dev,
+-				 "Poweroff handler already present!\n");
++			dev_warn(dev, "Poweroff handler already present!\n");
+ 		}
+ 	}
+ 
 -- 
 2.26.2
 
