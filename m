@@ -2,116 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E5E1C7CB8
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 May 2020 23:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB87A1C8453
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 May 2020 10:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729600AbgEFVlz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 May 2020 17:41:55 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:34040 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730206AbgEFVlt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 May 2020 17:41:49 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 473318030790;
-        Wed,  6 May 2020 21:41:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 055dqCR3uwT0; Thu,  7 May 2020 00:41:44 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/7] clocksource: mips-gic-timer: Set limitations on clocksource/sched-clocks usage
-Date:   Thu, 7 May 2020 00:41:07 +0300
-Message-ID: <20200506214107.25956-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
- <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
+        id S1726572AbgEGIGm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 7 May 2020 04:06:42 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:29870 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725923AbgEGIGl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 May 2020 04:06:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588838799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0pq3sPmnPLWktWKmL9trmUErhIVrOceVLU8JpOR9zNw=;
+        b=i0TqevemABguKj7CoD8P8XJQXhcj8xtB+utITI/TUwNkrHwM6qJoh+hPCbjATON/dL09+H
+        ohCefUnWZd3Dsw9Aif8XT0UTTpwLrpgOTaAZhc3Inrey6jWeUS9Bd4Dka7dtt9Zo0qi6PH
+        8OcR0X6IPhA3mklXlrMETjcknpGkUyQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-202-zfNgLzaTMruc6IiFlrlqpA-1; Thu, 07 May 2020 04:06:34 -0400
+X-MC-Unique: zfNgLzaTMruc6IiFlrlqpA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 696E21005510;
+        Thu,  7 May 2020 08:06:32 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2FFB55D9C5;
+        Thu,  7 May 2020 08:06:32 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 04786VCA005131;
+        Thu, 7 May 2020 04:06:31 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 04786Vmt005127;
+        Thu, 7 May 2020 04:06:31 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Thu, 7 May 2020 04:06:31 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Sinan Kaya <okaya@codeaurora.org>,
+        linux-serial@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH 1/2 v3] alpha: add a delay to inb_p, inb_w and inb_l
+In-Reply-To: <alpine.LRH.2.02.2005061308220.18599@file01.intranet.prod.int.rdu2.redhat.com>
+Message-ID: <alpine.LRH.2.02.2005070404420.5006@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2005060713390.25338@file01.intranet.prod.int.rdu2.redhat.com> <CAK8P3a2W=foRQ1mX8Gds1GCo+qTRqATV59LyDG5_bNyEKjZybA@mail.gmail.com> <alpine.LRH.2.02.2005061308220.18599@file01.intranet.prod.int.rdu2.redhat.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Currently neither clocksource nor scheduler clock kernel framework
-support the clocks with variable frequency. Needless to say how many
-problems may cause the sudden base clocks frequency change. In a
-simplest case the system time will either slow down or speed up.
-Since on CM2.5 and earlier MIPS GIC timer is synchronously clocked
-with CPU we must set some limitations on using it for these frameworks
-if CPU frequency may change. First of all it's not safe to have the
-MIPS GIC used for scheduler timings. So we shouldn't proceed with
-the clocks registration in the sched-subsystem. Secondly we must
-significantly decrease the MIPS GIC clocksource rating. This will let
-the system to use it only as a last resort.
 
-Note CM3.x-based systems may also experience the problems with MIPS GIC
-if the CPU-frequency change is activated for the whole CPU cluster
-instead of using the individual CPC core clocks divider.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+On Wed, 6 May 2020, Mikulas Patocka wrote:
+
+> 
+> 
+> On Wed, 6 May 2020, Arnd Bergmann wrote:
+> 
+> > On Wed, May 6, 2020 at 1:21 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> > 
+> > >  /*
+> > >   * The yet supported machines all access the RTC index register via
+> > >   * an ISA port access but the way to access the date register differs ...
+> > > + *
+> > > + * The ISA bus on Alpha Avanti doesn't like back-to-back accesses,
+> > > + * we need to add a small delay.
+> > >   */
+> > >  #define CMOS_READ(addr) ({ \
+> > >  outb_p((addr),RTC_PORT(0)); \
+> > > +udelay(2); \
+> > >  inb_p(RTC_PORT(1)); \
+> > 
+> > 
+> > The inb_p() / outb_p() functions are meant to already have a delay in them,
+> > maybe we should just add it there for alpha?
+> > 
+> >      Arnd
+> 
+> Yes, that is possible too - it fixes the real time clock hang for me.
+> 
+> 
+> -#define inb_p		inb
+> -#define inw_p		inw
+> -#define inl_p		inl
+> +#define inb_p(x)	(ndelay(300), inb(x))
+> +#define inw_p(x)	(ndelay(300), inw(x))
+> +#define inl_p(x)	(ndelay(300), inl(x))
+>  #define outb_p		outb
+>  #define outw_p		outw
+>  #define outl_p		outl
+
+300ns was too low. We need at least 1400ns to fix the hang reliably.
+
+Mikulas
+
+
+From: Mikulas Patocka <mpatocka@redhat.com>
+
+The patch 92d7223a74235054f2aa7227d207d9c57f84dca0 ("alpha: io: reorder
+barriers to guarantee writeX() and iowriteX() ordering #2") broke boot on
+the Alpha Avanti platform.
+
+The patch changes timing between accesses to the ISA bus, in particular,
+it reduces the time between "write" access and a subsequent "read" access.
+
+This causes lock-up when accessing the real time clock and serial ports.
+
+This patch fixes the real time clock by adding a small delay to the inb_p,
+inw_p and inl_p macros.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Fixes: 92d7223a7423 ("alpha: io: reorder barriers to guarantee writeX() and iowriteX() ordering #2")
+Cc: stable@vger.kernel.org	# v4.17+
+
 ---
- drivers/clocksource/mips-gic-timer.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ arch/alpha/include/asm/io.h |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index 802b93fe3ae7..095d65b48920 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -185,7 +185,10 @@ static int __init __gic_clocksource_init(void)
- 	gic_clocksource.mask = CLOCKSOURCE_MASK(count_width);
+Index: linux-stable/arch/alpha/include/asm/io.h
+===================================================================
+--- linux-stable.orig/arch/alpha/include/asm/io.h	2020-05-07 09:54:52.000000000 +0200
++++ linux-stable/arch/alpha/include/asm/io.h	2020-05-07 09:54:52.000000000 +0200
+@@ -6,6 +6,7 @@
  
- 	/* Calculate a somewhat reasonable rating value. */
--	gic_clocksource.rating = 200 + gic_frequency / 10000000;
-+	if (mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ))
-+		gic_clocksource.rating = 200 + gic_frequency / 10000000;
-+	else
-+		gic_clocksource.rating = 99;
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
++#include <linux/delay.h>
+ #include <asm/compiler.h>
+ #include <asm/pgtable.h>
+ #include <asm/machvec.h>
+@@ -481,9 +482,9 @@ extern inline void writeq(u64 b, volatil
+ #define iowrite16be(v,p) iowrite16(cpu_to_be16(v), (p))
+ #define iowrite32be(v,p) iowrite32(cpu_to_be32(v), (p))
  
- 	ret = clocksource_register_hz(&gic_clocksource, gic_frequency);
- 	if (ret < 0)
-@@ -239,9 +242,11 @@ static int __init gic_clocksource_of_init(struct device_node *node)
- 	/* And finally start the counter */
- 	clear_gic_config(GIC_CONFIG_COUNTSTOP);
- 
--	sched_clock_register(mips_cm_is64 ?
--			     gic_read_count_64 : gic_read_count_2x32,
--			     64, gic_frequency);
-+	if (mips_cm_revision() >= CM_REV_CM3 || !IS_ENABLED(CONFIG_CPU_FREQ)) {
-+		sched_clock_register(mips_cm_is64 ?
-+				     gic_read_count_64 : gic_read_count_2x32,
-+				     64, gic_frequency);
-+	}
- 
- 	return 0;
- }
--- 
-2.25.1
+-#define inb_p		inb
+-#define inw_p		inw
+-#define inl_p		inl
++#define inb_p(x)	(ndelay(1400), inb(x))
++#define inw_p(x)	(ndelay(1400), inw(x))
++#define inl_p(x)	(ndelay(1400), inl(x))
+ #define outb_p		outb
+ #define outw_p		outw
+ #define outl_p		outl
 
