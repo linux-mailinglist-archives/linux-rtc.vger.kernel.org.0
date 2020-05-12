@@ -2,75 +2,105 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DF81CF81D
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 May 2020 16:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24111CFE66
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 May 2020 21:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730441AbgELO5j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 May 2020 10:57:39 -0400
-Received: from sonic312-20.consmr.mail.bf2.yahoo.com ([74.6.128.82]:36775 "EHLO
-        sonic312-20.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730429AbgELO5j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 May 2020 10:57:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1589295457; bh=KB5k1+sCGpSRd9pTKc0P9/4ZGPy9ZVtmix5g8Hf7Eac=; h=Date:From:Reply-To:Subject:References:From:Subject; b=FT0WlNnNXkt0IqX6UPVz/7iqN4CLw3hgXjPFebC8i/gum420HtavgzRh7JKe9j92iCmsyN2TcjaYqz5Z2xgJX8HZn3y/TSHohxrQMdR0yUhEL16M77oDy3BFHm1M8Ml/+OI+cp1hHG0MbIgPNxNpbV9q2IUAxzAWt24fjZZ3WO7c+RQyy++xhzM48BvzQyv20nDbrVYjx9JxuYxachHdwYg080cM+FQMfFqwrlmA6uGl+98hcfKl55R+bp1YWsrpNeVyAvFUl4boawWFY43+J2PvpDfUjuZ/+VFun0V0t//BXAHuTbY9qCth6tvbggsKK5XRueEqOdiwPRkvtLKRRA==
-X-YMail-OSG: XC7dt5MVM1kpMfVoviaDuxET1q5buyQkYmY6L2HleHBzBRw8NThlJ5Rq53XoUYw
- JQZMp6FjZU1YtnxjJHg.61g4Sjhkz26MbNzCJT2g7OLG6xldQcm1FRAVCpfuIB3NU8c8tccTJN3Y
- 0sKez6HgzIV36EFA0iMUt0VE5C8jKJaO6p65TQZhIcdcxjlVrd8MTif5aYMJs3phBDpz2gGPtn00
- 3z32JxRaOKpyAn04VN337XR4vVQOxDNq_HYW25mEvKyAsqCKraaMQHUOOEEby6.HYrlf3PgY.vfU
- boYsuY5u7KPA5HFWgZLFGYMOZTIsKdJoQisXue9v0IpthSjlf3H2VL3rOAJSQ_ZUlUVaRC8QChtr
- svTikRlCjMy25GQDWa802SzrlbV5goSb1B8PT9LW3omgEYgtog1H7uQihMq1dIBhtE5xvclpx0jT
- VMt6vLFnYpzdgFE8l2e4vEHsZKVQvp49W4YGBwpcAV2.ygUw1bD2m3XpBl_13fIg7WfXpmnf.XHG
- xLQ3Q5DL5zcbJsIAgewE6L5jJ0bKccG5d5BY1TeqM5lHK3Pey4cSeCukcgGIB8DWXJMTR11rcQWl
- eihXCyBnWXfVLmFFDxadMmrFN0xfXBsMjJLH0jC616k7h5PygjyLKF3BPyRPQ3z6COyCHvYOyBSs
- ugXsfWKNt9EzsfwZIoC5U0dMY6_apRGl42Wx8IVlYnsuPqNhToT6Qt16ZiHzfNMkgy6li1yVT8wH
- s3UuTcwxpAZmwnxS0nMUGRbPakJy91OVRLyVA4pJtascgICuuf_LjX3clQ4.WJy3pVltjzE_Bw6n
- zqXp_GwSvEgUDmnOS03nBc1evtDf3EgcQqbVESbnFElMXOC2XMMAfo6ANQSLFRYavHVHakfRBV7M
- k0.Di9_ersmOz11fzBD__R0vHtLqqF2cba9Hg.7n2NmxiAxJ1Go3InVV0paDmIjuW2QfToAp8fiw
- aGGHOqZJwgb3w9yqe6XYFXXchOi0pnCL8zzvHM0sV9IpBz1WvKWk1NjU_CiMwVmHSorVDQRjKsdK
- e.EkI._6nQmOceZZM_uuFUs6OXIBwbdhRC6fla4QOf7dQD726q7fC61Y4.4uf5Kwn0B4vCkckGDs
- zYHi1rYZUg3XOp67rtzv6s.4n6a_fTv624qcBW2sSIj3CXD0LAcaGOJWkjGvw1dJW2.g28ydUMyS
- kY0.cM_7BY9zLXlaA8WNRdfG04aOfp78A2qdPGBDCz9d4UpYUYOIz5WjUgDTHirSGFFoRhHS9rca
- uYBwZxm1m06RZst8tkxOiakUoGupNI31BnYFqOeyUg.FOU_rIt883pAxmFMH4mFLKuB8X2n.b
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.bf2.yahoo.com with HTTP; Tue, 12 May 2020 14:57:37 +0000
-Date:   Tue, 12 May 2020 14:57:36 +0000 (UTC)
-From:   jerom Njitap <jerome.njitap@aol.com>
-Reply-To: jeromenjitap100@gmail.com
-Message-ID: <1246117271.1049125.1589295456036@mail.yahoo.com>
-Subject: SESAME SEED SUPPLY BURKINA FASO
+        id S1731004AbgELTf3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 May 2020 15:35:29 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43532 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730950AbgELTf2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 May 2020 15:35:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589312127;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H5pxUSbLWxNQVZt3chJU6aQ+MxFijTrdJFOgatW5PJM=;
+        b=FCRJx0YGfOyJFnV8FqbaYpk2jVd6iwrDVN3dyPl3LIPwYfOWZ7b4Ml9Ai/Oc1OThRoEzKC
+        51GeuI7p1PJNI4U3tvz5F2Ylhm89ybQvDxEbGhxgcjgzDcwNveUxGSwqaCQOk/4tRhWtw7
+        mMDKEdiX5wd8g4zEHoVma0cVms5nFnU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-189-Cs80k05zNKOHzuw-ckzSlg-1; Tue, 12 May 2020 15:35:25 -0400
+X-MC-Unique: Cs80k05zNKOHzuw-ckzSlg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C474F100A623;
+        Tue, 12 May 2020 19:35:23 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3394839D;
+        Tue, 12 May 2020 19:35:22 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 04CJZMnE032376;
+        Tue, 12 May 2020 15:35:22 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 04CJZLMo032373;
+        Tue, 12 May 2020 15:35:21 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 12 May 2020 15:35:21 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     "Maciej W. Rozycki" <macro@linux-mips.org>
+cc:     Arnd Bergmann <arnd@arndb.de>, Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-serial@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/2 v3] alpha: add a delay to inb_p, inb_w and inb_l
+In-Reply-To: <alpine.LFD.2.21.2005111320220.677301@eddie.linux-mips.org>
+Message-ID: <alpine.LRH.2.02.2005121525500.31782@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2005060713390.25338@file01.intranet.prod.int.rdu2.redhat.com> <CAK8P3a2W=foRQ1mX8Gds1GCo+qTRqATV59LyDG5_bNyEKjZybA@mail.gmail.com> <alpine.LRH.2.02.2005061308220.18599@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2005070404420.5006@file01.intranet.prod.int.rdu2.redhat.com> <CAK8P3a1qN-cpzkcdtNhtMfSwWwxqcOYg9x6DEzt7PWazwr8V=Q@mail.gmail.com> <alpine.LRH.2.02.2005070931280.1718@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAK8P3a3UdCJL6C07_W7pkipT1Xmr_0G9hOy1S+YXbB4_tKt+gg@mail.gmail.com> <alpine.LFD.2.21.2005100209340.487915@eddie.linux-mips.org> <alpine.LRH.2.02.2005101443290.15420@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LFD.2.21.2005111320220.677301@eddie.linux-mips.org>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1246117271.1049125.1589295456036.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15904 YMailNodin Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Sir,
-
-This is to bring to your notice that we can supply your needs for
-quality Sesame seeds and other products listed below :
 
 
-Cashew nut
-Raw cotton
-Sesame seed
-Copper cathode
-Copper wire scraps
-Mazut 100 oil,D6
-Used rails
-HMS 1/2
+On Mon, 11 May 2020, Maciej W. Rozycki wrote:
 
+>  And if timing is indeed the culprit, then I think it will be best fixed 
+> in the 82378IB southbridge, i.e.[1]:
+> 
+> "The I/O recovery mechanism in the SIO is used to add additional recovery 
+> delay between PCI originated 8-bit and 16-bit I/O cycles to the ISA Bus.  
+> The SIO automatically forces a minimum delay of four SYSCLKs between 
+> back-to-back 8 and 16 bit I/O cycles to the ISA Bus.  The delay is 
+> measured from the rising edge of the I/O command (IOR# or IOW#) to the 
+> falling edge of the next BALE.  If a delay of greater than four SYSCLKs is 
+> required, the ISA I/O Recovery Time Register can be programmed to increase 
+> the delay in increments of SYSCLKs.  Note that no additional delay is 
+> inserted for back-to-back I/O "sub cycles" generated as a result of byte 
+> assembly or disassembly.  This register defaults to 8 and 16-bit recovery 
+> enabled with two clocks added to the standard I/O recovery."
+> 
+> where it won't be causing unnecessary overhead for native PCI devices or 
+> indeed excessive one for ISA devices.  It might be interesting to note 
+> that later SIO versions like the 82378ZB increased the minimum to five 
+> SYSCLKs, so maybe a missing SYSCLK (that can still be inserted by suitably
+> programming the ICRT) is the source of the problem?
+> 
+> References:
+> 
+> [1] "82378IB System I/O (SIO)", April 1993, Intel Corporation, Order 
+>     Number: 290473-002, Section 4.1.17 "ICRT -- ISA Controller Recovery 
+>     Timer Register"
+> 
+>   Maciej
 
-We offer the best quality at reasonable prices both on CIF and FOB,
-depending on the nature of your offer. Our company has been in this
-line of business for over a decade so you you can expect nothing but a
-top-notch professional touch and guarantee when you deal or trade with
-us.all communication should be through this email address for
-confidencial purpose(jeromenjitap100@gmail.com)and your whatsaap number.
+I tried to modify this register (I wrote 0x44 to it - it should correspond 
+to the maximum delay) and it had no effect on the serial port and rtc 
+lock-ups.
 
-Look forward to your response.
+Mikulas
 
-Regards
-Mr Jerome
