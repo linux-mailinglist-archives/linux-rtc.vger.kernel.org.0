@@ -2,127 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 697D11D27A1
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2020 08:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4531D3BAE
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2020 21:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbgENGXb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 May 2020 02:23:31 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:36940 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726098AbgENGXA (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 14 May 2020 02:23:00 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B758620022F;
-        Thu, 14 May 2020 08:22:57 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E6986200247;
-        Thu, 14 May 2020 08:22:53 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8178D402B4;
-        Thu, 14 May 2020 14:22:48 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, tremyfr@gmail.com, p.bruenn@beckhoff.com,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 2/2] dt-bindings: rtc: Convert MXC RTC V2 to json-schema
-Date:   Thu, 14 May 2020 14:13:25 +0800
-Message-Id: <1589436805-22923-2-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1589436805-22923-1-git-send-email-Anson.Huang@nxp.com>
-References: <1589436805-22923-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729056AbgENTEf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 14 May 2020 15:04:35 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:34641 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728890AbgENTEe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 May 2020 15:04:34 -0400
+Received: by mail-oi1-f193.google.com with SMTP id c12so16157oic.1;
+        Thu, 14 May 2020 12:04:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2wP+XM3Aov1bJkyBy7HnnvUXG3tbJVLAv2ge5XF7T+c=;
+        b=faxcvlgwUQibnpoL+dKLuipk6cSDryXN6AkmbgdEmusYId3gGpEVX5Q+PaU4Ih12x0
+         Ls1k8w6t8hLH6CkiE0ZtwwFYQ0RHLK8n0bZ0DuI5zQ0La7a8udDCpGtK+EujcJci0ElL
+         5mYztB9RE5mGApFWiVl8M4PmLF9onJuaE2oKSIh/NXQdrvxq8AQx/kPgbWCRhSZv47kW
+         XLgD8hH8bJ6Be2uADBKaLL6oAhUjdV0ytM3UeBd8zGnxMk9/BzUjv2L0B8NViykP6MyI
+         G2raD1UYA/x8DFGS//OVCXKoPX92mntBfdnXmYQEcRBXVB6Ec7CJ/fHkOxlJy/Tno4do
+         ZP+g==
+X-Gm-Message-State: AOAM533yi00qD80ClJlgykchHgeyndAcSDX53Y263tQgTJf6aRGgVWNs
+        V74OJ+TDmLHrmKAUslFlZw==
+X-Google-Smtp-Source: ABdhPJzg7GDOldcvgZzJQS6ZeGgBC1ebIOzmAOdEuhqsKev8xcTta1lwZc2MiilTX0y99+1J1dhElw==
+X-Received: by 2002:aca:ebc5:: with SMTP id j188mr2653350oih.70.1589483073243;
+        Thu, 14 May 2020 12:04:33 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n2sm6881235oie.46.2020.05.14.12.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 12:04:32 -0700 (PDT)
+Received: (nullmailer pid 7214 invoked by uid 1000);
+        Thu, 14 May 2020 19:04:31 -0000
+Date:   Thu, 14 May 2020 14:04:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        linux-mips@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-rtc@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 2/7] dt-bindings: timer: Move snps,dw-apb-timer DT
+ schema from rtc
+Message-ID: <20200514190431.GA7149@bogus>
+References: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
+ <20200506214107.25956-3-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200506214107.25956-3-Sergey.Semin@baikalelectronics.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert the MXC RTC V2 binding to DT schema format using json-schema.
+On Thu, 7 May 2020 00:41:02 +0300, Serge Semin wrote:
+> This binding file doesn't belong to the rtc seeing it's a pure timer
+> with no rtc facilities like days/months/years counting and alarms.
+> So move the YAML-file to the Documentation/devicetree/bindings/timer/
+> directory.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Paul Burton <paulburton@kernel.org>
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  .../devicetree/bindings/{rtc => timer}/snps,dw-apb-timer.yaml   | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>  rename Documentation/devicetree/bindings/{rtc => timer}/snps,dw-apb-timer.yaml (96%)
+> 
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- .../devicetree/bindings/rtc/rtc-mxc_v2.txt         | 17 --------
- .../devicetree/bindings/rtc/rtc-mxc_v2.yaml        | 46 ++++++++++++++++++++++
- 2 files changed, 46 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-mxc_v2.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/rtc-mxc_v2.yaml
-
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.txt b/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.txt
-deleted file mode 100644
-index 79d7e87..0000000
---- a/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--* i.MX53 Secure Real Time Clock (SRTC)
--
--Required properties:
--- compatible: should be: "fsl,imx53-rtc"
--- reg: physical base address of the controller and length of memory mapped
--  region.
--- clocks: should contain the phandle for the rtc clock
--- interrupts: rtc alarm interrupt
--
--Example:
--
--rtc@53fa4000 {
--	compatible = "fsl,imx53-rtc";
--	reg = <0x53fa4000 0x4000>;
--	interrupts = <24>;
--	clocks = <&clks IMX5_CLK_SRTC_GATE>;
--};
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.yaml b/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.yaml
-new file mode 100644
-index 0000000..2d1a306
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/rtc-mxc_v2.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/rtc-mxc_v2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: i.MX53 Secure Real Time Clock (SRTC)
-+
-+allOf:
-+  - $ref: "rtc.yaml#"
-+
-+maintainers:
-+  - Patrick Bruenn <p.bruenn@beckhoff.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - fsl,imx53-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx5-clock.h>
-+
-+    rtc@53fa4000 {
-+        compatible = "fsl,imx53-rtc";
-+        reg = <0x53fa4000 0x4000>;
-+        interrupts = <24>;
-+        clocks = <&clks IMX5_CLK_SRTC_GATE>;
-+    };
--- 
-2.7.4
-
+Acked-by: Rob Herring <robh@kernel.org>
