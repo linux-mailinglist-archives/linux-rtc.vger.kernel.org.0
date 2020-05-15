@@ -2,118 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E351D3BFE
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 May 2020 21:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209D21D570C
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 May 2020 19:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729539AbgENTGj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 May 2020 15:06:39 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:39394 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728840AbgENTGg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 May 2020 15:06:36 -0400
-Received: by mail-oi1-f196.google.com with SMTP id s198so1674769oie.6;
-        Thu, 14 May 2020 12:06:35 -0700 (PDT)
+        id S1726170AbgEORKK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 May 2020 13:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726023AbgEORKJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 May 2020 13:10:09 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853F8C061A0C
+        for <linux-rtc@vger.kernel.org>; Fri, 15 May 2020 10:10:09 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id z4so1876774wmi.2
+        for <linux-rtc@vger.kernel.org>; Fri, 15 May 2020 10:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=K7Aj7pm0vIiZdtyu0H96D9hYnSt0UJrHRYiSk0qWGzY=;
+        b=Lr3oxQ7a/Pj3O9fRDIrp4D6/zqj6Zra5xA4pHYa1RBLvoaiwIjAY/pgD9HR8ZwYIP2
+         z2F38jPejUH4dw4c/TT846IL1ICaITGG+kNOBFw0MPYZScjBP42rR6zyNvzlQoxyjc2C
+         9xxIBD6ASRQ+ELXcYOck4zGZcf000lTT//hSGCSyRlrIBHBNTkiJcScmbT+arSCdWJnG
+         if1ZlHhY2x4lz4VJBNy9DTZ+cO0eY10AEBmvy0wo9797AtFtiU0jkRZzirp1G4zR8/4p
+         BSnXTGCJtlM8MDQvZD8gcHk96H5kvyU0mB3qvkJpg2QpyMFZkMe1myw7UcpUgKCRovFH
+         RC/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DpxmqheKh5hWBkROUkM/LZbskUu+jI9OekkxfEH2TJU=;
-        b=jKy7Tet+7kDtJP9R6aI+d8Svebs+UjREUdZ4tc2TdAvfvztTuKXHjAmyRSN0CBV1Q/
-         dxvG/6SUt6irrsNnl6a0dPCzvcj4TdC5IMnDOtDFVUJadbHI68V2GPc/9f05cZniOtzK
-         r9C+YtaerxaUcO9+HPJlpz4nIAPTWxRRCcG4zaicP583zNnhEq7PXGRURF1C3vEMx4mi
-         hgO0UABInDxKiWNjWhBYll3gpmk/LJv70q5UuGcPnC5tHfGGYPzuu2DR2bI6P1sBxkNt
-         E8YRkhn/S554bIy5Z6oAdajQqlzO3/aGo24ltCKJg7mCc5yBgKMGMa11x9bgNBkD9eth
-         1jIQ==
-X-Gm-Message-State: AGi0PuY1Gl5VTAaxaKzDUO2jOMhYMI2HC5m9TVwbAco1zgpzuVr8zFSy
-        kuocz8Wlg9I/fG8v2+Igug==
-X-Google-Smtp-Source: APiQypIbLInN8eILN1YNFZkdZUWzlrI5ZKISbq/8Sj2LCEhqvwhh/jfweZsVFtDXqGRZI3Q/OW8ccg==
-X-Received: by 2002:aca:3254:: with SMTP id y81mr11673521oiy.172.1589483194829;
-        Thu, 14 May 2020 12:06:34 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 130sm3531979oid.43.2020.05.14.12.06.32
+         :mime-version:content-disposition:in-reply-to;
+        bh=K7Aj7pm0vIiZdtyu0H96D9hYnSt0UJrHRYiSk0qWGzY=;
+        b=Cm+sKlwi/17WYsEP9a8lNtmRIJZ2UOAaJixF54ROm5LSjCyRA6yqJjForUak3z4CNT
+         L3z8c3zovmP0acHv3uIfxQTlmjFsOVwJCCvc6oTPW3o6lJAy1QFUFfVv/mISblFZCPQd
+         xvtEJoEYj6BERfXqrAwc9Wb5ZUrXRdhPLLCc2wqby9RlJitHeEYf40eo42c31e+aTw0X
+         Psld+VZt/TIKhypXnbvLWU6OZJcoZcfi3i/e2caXMFR5Sf4fIU5Bp9zLotjoNqHE8UVc
+         Ff09pBo2uw9PxuqjYZ2g30gE9TByhVyIgvt1RTUGRCM3ATE7y/zRGx9VPR8Mri1wXtQa
+         TXQQ==
+X-Gm-Message-State: AOAM531v0TnoGLHrcYGosPL8rWZZkEKY11d0iL67uILsi7dAT8qlbyAO
+        29io9O5Y8jGOKYqaJC7sY6OtuA==
+X-Google-Smtp-Source: ABdhPJz6lBYmKIWA9SC3OBG4L5ZlSmxA4dHZtdJw/MjyFZyCRehRhjAJYuQi5z57mb8sP4wzsBQsLg==
+X-Received: by 2002:a1c:dd8b:: with SMTP id u133mr4851573wmg.108.1589562607152;
+        Fri, 15 May 2020 10:10:07 -0700 (PDT)
+Received: from linaro.org ([2a01:e34:ed2f:f020:5450:281:8a7d:dd9a])
+        by smtp.gmail.com with ESMTPSA id q2sm3800278wmq.23.2020.05.15.10.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 12:06:33 -0700 (PDT)
-Received: (nullmailer pid 10001 invoked by uid 1000);
-        Thu, 14 May 2020 19:06:32 -0000
-Date:   Thu, 14 May 2020 14:06:32 -0500
-From:   Rob Herring <robh@kernel.org>
+        Fri, 15 May 2020 10:10:06 -0700 (PDT)
+Date:   Fri, 15 May 2020 19:10:04 +0200
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Serge Semin <fancer.lancer@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-rtc@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
         Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, Jason Cooper <jason@lakedaemon.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: [PATCH v3 3/7] dt-bindings: interrupt-controller: Convert
- mti,gic to DT schema
-Message-ID: <20200514190632.GA9943@bogus>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-mips@vger.kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] clocksource: mips-gic-timer: Set limitations on
+ clocksource/sched-clocks usage
+Message-ID: <20200515171004.GA760381@linaro.org>
 References: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
  <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
- <20200506214107.25956-4-Sergey.Semin@baikalelectronics.ru>
+ <20200506214107.25956-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200506214107.25956-4-Sergey.Semin@baikalelectronics.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200506214107.25956-8-Sergey.Semin@baikalelectronics.ru>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 7 May 2020 00:41:03 +0300, Serge Semin wrote:
-> Modern device tree bindings are supposed to be created as YAML-files
-> in accordance with DT schema. This commit replaces MIPS GIC legacy bare
-> text binding with YAML file. As before the binding file states that the
-> corresponding dts node is supposed to be compatible with MIPS Global
-> Interrupt Controller indicated by the "mti,gic" compatible string and
-> to provide a mandatory interrupt-controller and '#interrupt-cells'
-> properties. There might be optional registers memory range,
-> "mti,reserved-cpu-vectors" and "mti,reserved-ipi-vectors" properties
-> specified.
-> 
-> MIPS GIC also includes a free-running global timer, per-CPU count/compare
-> timers, and a watchdog. Since currently the GIC Timer is only supported the
-> DT schema expects an IRQ and clock-phandler charged timer sub-node with
-> "mti,mips-gic-timer" compatible string.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Paul Burton <paulburton@kernel.org>
-> Cc: Ralf Baechle <ralf@linux-mips.org>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-rtc@vger.kernel.org
-> 
-> ---
-> 
-> I don't really know who is the corresponding driver maintainer, so I
-> added Paul to the maintainers property since he used to be looking for the
-> MIPS arch and Thomas looking after it now. Any idea what email should be
-> specified there instead?
-> 
-> Changelog v3:
-> - Since timer sub-node has no unit-address, the node shouldn't be named
->   with one. So alter the MIPS GIC bindings to have a pure "timer"
->   sub-node.
-> - Discard allOf: [ $ref: /schemas/interrupt-controller.yaml# ].
-> - Since it's a conversion patch use GPL-2.0-only SPDX header.
-> ---
->  .../interrupt-controller/mips-gic.txt         |  67 --------
->  .../interrupt-controller/mti,gic.yaml         | 148 ++++++++++++++++++
->  2 files changed, 148 insertions(+), 67 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
-> 
+On Thu, May 07, 2020 at 12:41:07AM +0300, Serge Semin wrote:
+> Currently neither clocksource nor scheduler clock kernel framework
+> support the clocks with variable frequency. Needless to say how many
+> problems may cause the sudden base clocks frequency change. In a
+> simplest case the system time will either slow down or speed up.
+> Since on CM2.5 and earlier MIPS GIC timer is synchronously clocked
+> with CPU we must set some limitations on using it for these frameworks
+> if CPU frequency may change. First of all it's not safe to have the
+> MIPS GIC used for scheduler timings. So we shouldn't proceed with
+> the clocks registration in the sched-subsystem. Secondly we must
+> significantly decrease the MIPS GIC clocksource rating. This will let
+> the system to use it only as a last resort.
+>
+> Note CM3.x-based systems may also experience the problems with MIPS GIC
+> if the CPU-frequency change is activated for the whole CPU cluster
+> instead of using the individual CPC core clocks divider.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+May be there is no alternative but the code looks a bit hacksih. Isn't possible
+to do something with the sched_mark_unstable?
+
+Or just not use the timer at all ?
