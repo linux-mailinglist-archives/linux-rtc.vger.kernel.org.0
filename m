@@ -2,291 +2,234 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEC31D61FB
-	for <lists+linux-rtc@lfdr.de>; Sat, 16 May 2020 17:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF44B1D6BC0
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 May 2020 20:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbgEPPZe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 16 May 2020 11:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbgEPPZe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 16 May 2020 11:25:34 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6408C061A0C;
-        Sat, 16 May 2020 08:25:32 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id k110so4429069otc.2;
-        Sat, 16 May 2020 08:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VcTJY7PqKkXIKUmEOIoaFR4YEtji8JLpj560KQIawUY=;
-        b=djN4We9VD58Bz/NKe+EBtJcVgnExvg71GNlaOtXzYLPx5T9UzMv8f75PHpOExI43Hd
-         vpYH35Epj2qQikFd9jidsB1fWAJ+5pamZUAF3KAqGIGRyd+jrWiI5NsXIDsmiR22JgIO
-         uKTmaVSptM4AfDRgYSSOwGtrPU0JaU2wRAMH8TvioL6VSs3TuefCD8+1LjbYgnQQx6aJ
-         ul3t61mpbegbJtX9TCFylGgE4toh5Wohx7mCeZzgJEHitOjA8J1Ohb2XVSljbfV8kqh/
-         zKrD4H/IDRfOpzvXCEeszOMyv1xBgh05HP/l36AoHTAN4MOBOdC3Vyf2XQaLWVhmbWSb
-         HmGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=VcTJY7PqKkXIKUmEOIoaFR4YEtji8JLpj560KQIawUY=;
-        b=PxtdSQS0Zov4anxw14BXO/51A4l1JbaMi/wkkyLvi7ocXuUT0VzY+xbHba+adJUKGe
-         KRAyRMWB72+E9sxLUSOTv1Vk5V+flMOfHTX0co8KCHUD7kbU++F13mjsXeOOMa5DsgLo
-         aFqOivevMWRGkHKNuzIaUisSktAJqIUJtJyKlg0VKnPqJQOHirIvRkz7EK38bGzE+Dp2
-         9CQ9XlFWi4/z9NEX46+xtUWnNeaAsDdNgN5jWhqKZXAV1x53evq7ZxZJoIZZcxT6hH6h
-         d/TFOQBXwTQMFJ6cUJ3hOprt+/JDdQyDbM+h4NWpRZbTayIeVEuSLcmpn0eQEuRMXFSK
-         Zdug==
-X-Gm-Message-State: AOAM532DShraH08CFF3/OZNgVD9jOwoyKc1uwwSTb/Ow1rNNia3amohp
-        NBQW+naHS/t+fB6OTiT6FdU=
-X-Google-Smtp-Source: ABdhPJz3N6FNNOmkQp4aAoNyx4CExb3IccdADUvGm7NRJL78JWAwpVbpvI3vx+cN7wi9MCL9t6Gj3w==
-X-Received: by 2002:a9d:4a1:: with SMTP id 30mr3322864otm.319.1589642731996;
-        Sat, 16 May 2020 08:25:31 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.113.243])
-        by smtp.gmail.com with ESMTPSA id a6sm1232426oia.19.2020.05.16.08.25.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2020 08:25:31 -0700 (PDT)
-Subject: Re: [PATCH v13 5/6] rtc: mt6397: Add support for the MediaTek MT6358
- RTC
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     drinkcat@chromium.org, Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Richard Fontana <rfontana@redhat.com>,
+        id S1726362AbgEQSfs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 17 May 2020 14:35:48 -0400
+Received: from v6.sk ([167.172.42.174]:56754 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726259AbgEQSfr (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 17 May 2020 14:35:47 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id BAE55610A8;
+        Sun, 17 May 2020 18:35:43 +0000 (UTC)
+Date:   Sun, 17 May 2020 20:35:41 +0200
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        srv_heupstream@mediatek.com
-References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1587438012-24832-6-git-send-email-hsin-hsiung.wang@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
-Date:   Sat, 16 May 2020 17:25:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
+Message-ID: <20200517183541.GA1695525@furthur.local>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+ <20200317093922.20785-20-lkundrak@v3.sk>
+ <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1587438012-24832-6-git-send-email-hsin-hsiung.wang@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Lee,
-
-On 21/04/2020 05:00, Hsin-Hsiung Wang wrote:
-> From: Ran Bi <ran.bi@mediatek.com>
+On Wed, Mar 18, 2020 at 04:37:55PM -0600, Rob Herring wrote:
+> On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+> >
+> > Convert the sdhci-pxa binding to DT schema format using json-schema.
 > 
-> This add support for the MediaTek MT6358 RTC. Driver using
-> compatible data to store different RTC_WRTGR address offset.
-> This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
-> driver which only needed by armv7 CPU without ATF.
+> Ignore what my bot said, I see you addressed that earlier in the series.
 > 
-> Signed-off-by: Ran Bi <ran.bi@mediatek.com>
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
-
-We have Acked-by from rtc and reset drivers maintainers. Are you OK to take them
-through your mfd branch?
-
-Are you planning to queue them for v5.8?
-
-Just asking because if so I'd queue patch 6 through my tree.
-
-Regards,
-Matthias
-
-> ---
->  drivers/power/reset/mt6323-poweroff.c |  2 +-
->  drivers/rtc/rtc-mt6397.c              | 18 +++++++++++++++---
->  include/linux/mfd/mt6397/rtc.h        |  9 ++++++++-
->  3 files changed, 24 insertions(+), 5 deletions(-)
+> > At the same time, fix a couple of issues with the examples discovered by
+> > the validation tool -- a semicolon instead of a comma and wrong node names.
+> >
+> > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> > ---
+> >  .../devicetree/bindings/mmc/sdhci-pxa.txt     |  50 ---------
+> >  .../devicetree/bindings/mmc/sdhci-pxa.yaml    | 101 ++++++++++++++++++
+> >  2 files changed, 101 insertions(+), 50 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+> >  create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt b/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+> > deleted file mode 100644
+> > index 3d1b449d6097d..0000000000000
+> > --- a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+> > +++ /dev/null
+> > @@ -1,50 +0,0 @@
+> > -* Marvell sdhci-pxa v2/v3 controller
+> > -
+> > -This file documents differences between the core properties in mmc.txt
+> > -and the properties used by the sdhci-pxav2 and sdhci-pxav3 drivers.
+> > -
+> > -Required properties:
+> > -- compatible: Should be "mrvl,pxav2-mmc", "mrvl,pxav3-mmc" or
+> > -  "marvell,armada-380-sdhci".
+> > -- reg:
+> > -  * for "mrvl,pxav2-mmc" and "mrvl,pxav3-mmc", one register area for
+> > -    the SDHCI registers.
+> > -
+> > -  * for "marvell,armada-380-sdhci", three register areas. The first
+> > -    one for the SDHCI registers themselves, the second one for the
+> > -    AXI/Mbus bridge registers of the SDHCI unit, the third one for the
+> > -    SDIO3 Configuration register
+> > -- reg names: should be "sdhci", "mbus", "conf-sdio3". only mandatory
+> > -  for "marvell,armada-380-sdhci"
+> > -- clocks: Array of clocks required for SDHCI; requires at least one for
+> > -    I/O clock.
+> > -- clock-names: Array of names corresponding to clocks property; shall be
+> > -    "io" for I/O clock and "core" for optional core clock.
+> > -
+> > -Optional properties:
+> > -- mrvl,clk-delay-cycles: Specify a number of cycles to delay for tuning.
+> > -
+> > -Example:
+> > -
+> > -sdhci@d4280800 {
+> > -       compatible = "mrvl,pxav3-mmc";
+> > -       reg = <0xd4280800 0x800>;
+> > -       bus-width = <8>;
+> > -       interrupts = <27>;
+> > -       clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
+> > -       clock-names = "io", "core";
+> > -       non-removable;
+> > -       mrvl,clk-delay-cycles = <31>;
+> > -};
+> > -
+> > -sdhci@d8000 {
+> > -       compatible = "marvell,armada-380-sdhci";
+> > -       reg-names = "sdhci", "mbus", "conf-sdio3";
+> > -       reg = <0xd8000 0x1000>,
+> > -               <0xdc000 0x100>;
+> > -               <0x18454 0x4>;
+> > -       interrupts = <0 25 0x4>;
+> > -       clocks = <&gateclk 17>;
+> > -       clock-names = "io";
+> > -       mrvl,clk-delay-cycles = <0x1F>;
+> > -};
+> > diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> > new file mode 100644
+> > index 0000000000000..4ae0926ac294f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> > @@ -0,0 +1,101 @@
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mmc/sdhci-pxa.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Marvell PXA SDHCI v2/v3 bindings
+> > +
+> > +maintainers:
+> > +  - devicetree@vger.kernel.org
+> > +
+> > +allOf:
+> > +  - $ref: mmc-controller.yaml#
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: marvell,armada-380-sdhci
+> > +    then:
+> > +      properties:
+> > +        regs:
+> > +          minItems: 3
+> > +          maxItems: 3
 > 
-> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
-> index 1caf43d..0532803 100644
-> --- a/drivers/power/reset/mt6323-poweroff.c
-> +++ b/drivers/power/reset/mt6323-poweroff.c
-> @@ -30,7 +30,7 @@ static void mt6323_do_pwroff(void)
->  	int ret;
->  
->  	regmap_write(pwrc->regmap, pwrc->base + RTC_BBPU, RTC_BBPU_KEY);
-> -	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR, 1);
-> +	regmap_write(pwrc->regmap, pwrc->base + RTC_WRTGR_MT6323, 1);
->  
->  	ret = regmap_read_poll_timeout(pwrc->regmap,
->  					pwrc->base + RTC_BBPU, val,
-> diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-> index cda238d..f8b1353 100644
-> --- a/drivers/rtc/rtc-mt6397.c
-> +++ b/drivers/rtc/rtc-mt6397.c
-> @@ -9,6 +9,7 @@
->  #include <linux/mfd/mt6397/core.h>
->  #include <linux/module.h>
->  #include <linux/mutex.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/rtc.h>
-> @@ -20,7 +21,7 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
->  	int ret;
->  	u32 data;
->  
-> -	ret = regmap_write(rtc->regmap, rtc->addr_base + RTC_WRTGR, 1);
-> +	ret = regmap_write(rtc->regmap, rtc->addr_base + rtc->data->wrtgr, 1);
->  	if (ret < 0)
->  		return ret;
->  
-> @@ -269,6 +270,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	rtc->addr_base = res->start;
->  
-> +	rtc->data = of_device_get_match_data(&pdev->dev);
-> +
->  	rtc->irq = platform_get_irq(pdev, 0);
->  	if (rtc->irq < 0)
->  		return rtc->irq;
-> @@ -325,9 +328,18 @@ static int mt6397_rtc_resume(struct device *dev)
->  static SIMPLE_DEV_PM_OPS(mt6397_pm_ops, mt6397_rtc_suspend,
->  			mt6397_rtc_resume);
->  
-> +static const struct mtk_rtc_data mt6358_rtc_data = {
-> +	.wrtgr = RTC_WRTGR_MT6358,
-> +};
-> +
-> +static const struct mtk_rtc_data mt6397_rtc_data = {
-> +	.wrtgr = RTC_WRTGR_MT6397,
-> +};
-> +
->  static const struct of_device_id mt6397_rtc_of_match[] = {
-> -	{ .compatible = "mediatek,mt6323-rtc", },
-> -	{ .compatible = "mediatek,mt6397-rtc", },
-> +	{ .compatible = "mediatek,mt6323-rtc", .data = &mt6397_rtc_data },
-> +	{ .compatible = "mediatek,mt6358-rtc", .data = &mt6358_rtc_data },
-> +	{ .compatible = "mediatek,mt6397-rtc", .data = &mt6397_rtc_data },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, mt6397_rtc_of_match);
-> diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc.h
-> index 7dfb63b..66989a1 100644
-> --- a/include/linux/mfd/mt6397/rtc.h
-> +++ b/include/linux/mfd/mt6397/rtc.h
-> @@ -18,7 +18,9 @@
->  #define RTC_BBPU_CBUSY         BIT(6)
->  #define RTC_BBPU_KEY            (0x43 << 8)
->  
-> -#define RTC_WRTGR              0x003c
-> +#define RTC_WRTGR_MT6358       0x003a
-> +#define RTC_WRTGR_MT6397       0x003c
-> +#define RTC_WRTGR_MT6323       RTC_WRTGR_MT6397
->  
->  #define RTC_IRQ_STA            0x0002
->  #define RTC_IRQ_STA_AL         BIT(0)
-> @@ -65,6 +67,10 @@
->  #define MTK_RTC_POLL_DELAY_US  10
->  #define MTK_RTC_POLL_TIMEOUT   (jiffies_to_usecs(HZ))
->  
-> +struct mtk_rtc_data {
-> +	u32                     wrtgr;
-> +};
-> +
->  struct mt6397_rtc {
->  	struct device           *dev;
->  	struct rtc_device       *rtc_dev;
-> @@ -74,6 +80,7 @@ struct mt6397_rtc {
->  	struct regmap           *regmap;
->  	int                     irq;
->  	u32                     addr_base;
-> +	const struct mtk_rtc_data *data;
->  };
->  
->  #endif /* _LINUX_MFD_MT6397_RTC_H_ */
+> Here, you just need minItems.
 > 
+> > +        reg-names:
+> > +          items:
+> > +            - const: sdhci
+> > +            - const: mbus
+> > +            - const: conf-sdio3
+> 
+> This should be under the main definition of 'reg-names' and then just
+> 'minItems: 3' here.
+> 
+> > +      required:
+> > +        - reg-names
+> > +    else:
+> > +      properties:
+> > +        regs:
+> > +          minItems: 1
+> > +          maxItems: 1
+> 
+> Just 'maxItems' is sufficient.
+> 
+> > +        reg-names:
+> > +          minItems: 1
+> > +          maxItems: 1
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mrvl,pxav2-mmc
+> > +      - mrvl,pxav3-mmc
+> > +      - marvell,armada-380-sdhci
+> > +
+> > +  reg: true
+> 
+> Here you should have:
+> 
+> minItems: 1
+> maxItems: 3
+> 
+> > +
+> > +  reg-names: true
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  clock-names:
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +    items:
+> > +      - const: io
+> > +      - const: core
+> > +
+> > +  mrvl,clk-delay-cycles:
+> > +    description: Specify a number of cycles to delay for tuning.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> No range of valid values?
+
+No. The document I'm converting didn't specify a range. For some of the
+hardware supported Marvell doesn't provide documentation, and the
+drivers that use this seem to accept any u32 number.
+
+If this needs a range, then I need to make something up. I can do that,
+but it will be difficult to defend that number if anyone asks.
+
+Lubo
