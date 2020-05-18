@@ -2,131 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 194F11D7BA4
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 May 2020 16:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4397F1D7BDA
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 May 2020 16:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgEROp6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 18 May 2020 10:45:58 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:48416 "EHLO
+        id S1727007AbgEROvS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 May 2020 10:51:18 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:48492 "EHLO
         mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726989AbgEROp6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 May 2020 10:45:58 -0400
+        with ESMTP id S1726918AbgEROvS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 May 2020 10:51:18 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id A64258030875;
-        Mon, 18 May 2020 14:45:54 +0000 (UTC)
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 127628030875;
+        Mon, 18 May 2020 14:51:15 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at baikalelectronics.ru
 Received: from mail.baikalelectronics.ru ([127.0.0.1])
         by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CMo5xIvaMlt2; Mon, 18 May 2020 17:45:53 +0300 (MSK)
-Date:   Mon, 18 May 2020 17:45:52 +0300
+        with ESMTP id h93v5wIYCrJM; Mon, 18 May 2020 17:51:14 +0300 (MSK)
+Date:   Mon, 18 May 2020 17:51:13 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-mips@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-rtc@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 7/7] clocksource: mips-gic-timer: Set limitations on
- clocksource/sched-clocks usage
-Message-ID: <20200518144552.bjlddhuospgmer4j@mobilestation>
+        <linux-kernel@vger.kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Paul Burton <paulburton@kernel.org>
+Subject: Re: [PATCH v3 3/7] dt-bindings: interrupt-controller: Convert
+ mti,gic to DT schema
+Message-ID: <20200518145113.2ndiinqkjculiqmx@mobilestation>
 References: <20200324174325.14213-1-Sergey.Semin@baikalelectronics.ru>
  <20200506214107.25956-1-Sergey.Semin@baikalelectronics.ru>
- <20200506214107.25956-8-Sergey.Semin@baikalelectronics.ru>
- <20200515171004.GA760381@linaro.org>
- <20200516121647.g6jua35kkihmw5r6@mobilestation>
- <4c723219-62f8-be6a-47ea-a586859d832d@linaro.org>
- <20200518144045.v56fajrhbnnrzbpf@mobilestation>
+ <20200506214107.25956-4-Sergey.Semin@baikalelectronics.ru>
+ <20200514190632.GA9943@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200518144045.v56fajrhbnnrzbpf@mobilestation>
+In-Reply-To: <20200514190632.GA9943@bogus>
 X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, May 18, 2020 at 05:40:46PM +0300, Serge Semin wrote:
-> Daniel,
-> 
-> On Mon, May 18, 2020 at 03:59:16PM +0200, Daniel Lezcano wrote:
-> > On 16/05/2020 14:16, Serge Semin wrote:
-> > > Hello Daniel,
-> > > 
-> > > Thanks for your comment. My response is below.
-> > > 
-> > > On Fri, May 15, 2020 at 07:10:04PM +0200, Daniel Lezcano wrote:
-> > >> On Thu, May 07, 2020 at 12:41:07AM +0300, Serge Semin wrote:
-> > >>> Currently neither clocksource nor scheduler clock kernel framework
-> > >>> support the clocks with variable frequency. Needless to say how many
-> > >>> problems may cause the sudden base clocks frequency change. In a
-> > >>> simplest case the system time will either slow down or speed up.
-> > >>> Since on CM2.5 and earlier MIPS GIC timer is synchronously clocked
-> > >>> with CPU we must set some limitations on using it for these frameworks
-> > >>> if CPU frequency may change. First of all it's not safe to have the
-> > >>> MIPS GIC used for scheduler timings. So we shouldn't proceed with
-> > >>> the clocks registration in the sched-subsystem. Secondly we must
-> > >>> significantly decrease the MIPS GIC clocksource rating. This will let
-> > >>> the system to use it only as a last resort.
-> > >>>
-> > >>> Note CM3.x-based systems may also experience the problems with MIPS GIC
-> > >>> if the CPU-frequency change is activated for the whole CPU cluster
-> > >>> instead of using the individual CPC core clocks divider.
-> > >>
-> > >> May be there is no alternative but the code looks a bit hacksih. Isn't possible
-> > >> to do something with the sched_mark_unstable?
-> > >>
-> > >> Or just not use the timer at all ?
-> > > 
-> > > Not using the timer might be better, but not that good alternative either
-> > > especially in our case due to very slow external timer. Me and Thomas
-> > > Bogendoerfer discussed the similar commit I've provided to the csrc-r4k driver
-> > > available on MIPS:
-> > > https://lkml.org/lkml/2020/5/11/576
-> > > 
-> > > To cut it short, you are right. The solution with using clocksource_mark_unstable()
-> > > is better alternative spied up in x86 tsc implementation. I'll use a similar
-> > > approach here and submit the updated patch in v3.
-> > > 
-> > > Could you please proceed with the rest of the series review? I'd like to send
-> > > the next version with as many comments taken into account as possible. The
-> > > patchset has been submitted a while ago, but except Rob noone have had any
-> > > comments.(
-> > 
-> > For me other patches are ok.
-> > 
-> > I can apply patches 1, 2, 4, 5, 6
-> > 
-> > Will remain patches 3 et 7
-> 
-> That's be great! Thanks. Is patch 3 supposed to be merged in by Rob or by you?
-> I don't see one being in the Rob's repo. He might be waiting for you
-> acknowledgment or something.
+Thomas, Jason, Marc
+Could you take a look at this patch and merge it in if you are ok with its
+content. We've got Rob's Reviewed-by tag here, so it's only waiting for your
+acceptance.
 
-Ah, it's about the MIPS GIC IRQchip bindings conversion. No questions tabout
-patch 3then. I'll ask Thomas about that patch status.
+-Sergey
 
--Sergey 
-
-> 
-> I'll send the updated patch 3 shortly today.
-> 
-> -Sergey
-> 
+On Thu, May 14, 2020 at 02:06:32PM -0500, Rob Herring wrote:
+> On Thu, 7 May 2020 00:41:03 +0300, Serge Semin wrote:
+> > Modern device tree bindings are supposed to be created as YAML-files
+> > in accordance with DT schema. This commit replaces MIPS GIC legacy bare
+> > text binding with YAML file. As before the binding file states that the
+> > corresponding dts node is supposed to be compatible with MIPS Global
+> > Interrupt Controller indicated by the "mti,gic" compatible string and
+> > to provide a mandatory interrupt-controller and '#interrupt-cells'
+> > properties. There might be optional registers memory range,
+> > "mti,reserved-cpu-vectors" and "mti,reserved-ipi-vectors" properties
+> > specified.
 > > 
+> > MIPS GIC also includes a free-running global timer, per-CPU count/compare
+> > timers, and a watchdog. Since currently the GIC Timer is only supported the
+> > DT schema expects an IRQ and clock-phandler charged timer sub-node with
+> > "mti,mips-gic-timer" compatible string.
 > > 
-> > -- 
-> > <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Paul Burton <paulburton@kernel.org>
+> > Cc: Ralf Baechle <ralf@linux-mips.org>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-rtc@vger.kernel.org
 > > 
-> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> > <http://twitter.com/#!/linaroorg> Twitter |
-> > <http://www.linaro.org/linaro-blog/> Blog
+> > ---
+> > 
+> > I don't really know who is the corresponding driver maintainer, so I
+> > added Paul to the maintainers property since he used to be looking for the
+> > MIPS arch and Thomas looking after it now. Any idea what email should be
+> > specified there instead?
+> > 
+> > Changelog v3:
+> > - Since timer sub-node has no unit-address, the node shouldn't be named
+> >   with one. So alter the MIPS GIC bindings to have a pure "timer"
+> >   sub-node.
+> > - Discard allOf: [ $ref: /schemas/interrupt-controller.yaml# ].
+> > - Since it's a conversion patch use GPL-2.0-only SPDX header.
+> > ---
+> >  .../interrupt-controller/mips-gic.txt         |  67 --------
+> >  .../interrupt-controller/mti,gic.yaml         | 148 ++++++++++++++++++
+> >  2 files changed, 148 insertions(+), 67 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mips-gic.txt
+> >  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mti,gic.yaml
+> > 
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
