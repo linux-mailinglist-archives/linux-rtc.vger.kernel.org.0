@@ -2,130 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188701DC84F
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2020 10:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960891DC977
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2020 11:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbgEUIQS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 May 2020 04:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727867AbgEUIQR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 May 2020 04:16:17 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCC0C061A0F
-        for <linux-rtc@vger.kernel.org>; Thu, 21 May 2020 01:16:17 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id e16so5748403wra.7
-        for <linux-rtc@vger.kernel.org>; Thu, 21 May 2020 01:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=KPDqb+DCYxxpSLeq6U5D/jKybkhAzjGZ8QLA5YedgMg=;
-        b=fGuo2D4qqxs0LddmHxyYtVQK3DJjuNDPbTrhoeOfUGD4FH/OI2BX/z8FrTVVetWfeL
-         yxSdMCpaMuE0CT59NPSdKGWvlF/wEwwbQIo/ENQXqs6MPPqzlC/hfUJ3ybypKqgN2S5M
-         o/mvlR8mPiBPU+NJuQj2pwYDEzhalaTyOIGNdYlQJhhErXNjxuG9Jr41mL5qO2wLTlAk
-         8jKD8MUO2AnEnULwDQ+r5sELmzj3LIdAlcvGtV/Ye4p5M8rstCcL499Gc/SDCczcfnCn
-         U27GrGfii48SZIS+mbiHKcAl19InSZu9c9q8PSO1K6Rmk6MnZfOSiC2DrSOTeJm/M082
-         QFKw==
+        id S1728551AbgEUJKC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 May 2020 05:10:02 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:41068 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728545AbgEUJKC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 May 2020 05:10:02 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 63so4957827oto.8;
+        Thu, 21 May 2020 02:10:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=KPDqb+DCYxxpSLeq6U5D/jKybkhAzjGZ8QLA5YedgMg=;
-        b=sWt/THikzYZB/Kd9PaiT4LqDbdDRrLVqgzpJnYoA121cueXRgp21F/tNlr2Pg0h9Nr
-         NzSBMaz+g3puN0RGxecwM5eL7uQHVFsJj0wmKOtHsF/hAJGYQ0EXAPevk/DdN9mA3dep
-         e8H0LFIcQs+sD0r2YpZhEmPlZIb3Y9A5Y4zIa8PgOvzWHgeX9Ud//oIlkDzwpihz0Bkf
-         3vKpS/W10/G3pkVuPuBAb0BOJo3hNWmS5/3g4cD1TEgoapxoN4H2UmEp8i37hYxNM2ph
-         dZgvRKqabOIFAYJ8SV8WZApnwgL+7xfbcexi21NmgGW7yRv92NK7JYLhQc3EeYGZai8U
-         aDmA==
-X-Gm-Message-State: AOAM5318rynZfxbRW/Wj6tSRuGnROVj0zuG0HipQv7p/qVHCKWKD+C9L
-        6jy7eLp5OcGcbwYdyvaeT4VRMg==
-X-Google-Smtp-Source: ABdhPJxUykPWBMpDxCLK97UyXMlHnRBvfRJh1k/pbvLfDpfppBXa1QMSqiirA7kcWucM6FnWvj4LJA==
-X-Received: by 2002:adf:dcc8:: with SMTP id x8mr7439168wrm.404.1590048975850;
-        Thu, 21 May 2020 01:16:15 -0700 (PDT)
-Received: from dell ([95.149.164.102])
-        by smtp.gmail.com with ESMTPSA id j190sm5848242wmb.33.2020.05.21.01.16.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 May 2020 01:16:15 -0700 (PDT)
-Date:   Thu, 21 May 2020 09:16:12 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        drinkcat@chromium.org, Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Josef Friedl <josef.friedl@speed.at>,
-        Richard Fontana <rfontana@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: [GIT PULL] Immutable branch between MFD, Power and RTC due for the
- v5.8 merge window
-Message-ID: <20200521081612.GO271301@dell>
-References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zsv1Lh0K7M59VV4w388XD6WcsG+ryCs8PrcoBNRfD4M=;
+        b=X7r2YGNSu7W81D5sXhBazL0VT8ZKFlbTBI5lYTFrUHKc4adJZt52e+hI8ctQE+4pvT
+         dWsZl4gfDgcDFBbm5m6YzDrZEQa50dyzmPxJi2cQFG+61Aaw0hBGvuCejr2EYYSCAhct
+         Fa9ZC/mDu21gz0w+C1KOI7PjAtG0ZeVh8TdJ+baD0yxUT2Nzcqo//qxCKcVzDTGYLqFl
+         CSI/OfvaVweBgHmxg6n0iwwj/k/h+oFwVjHIX85Oucl8Ew5B5IyALgmOeKh9j4DmY4DN
+         JAji6Cy8EPa6MJ0YPtO9J+YYmuk+2G5NkBMLa+DMG24gFUvk/AFGqJ2XTTWxm7/ubdUs
+         4jbQ==
+X-Gm-Message-State: AOAM5313VpUr7UzPdLeZeFzBexmmGL7Gusbj9yngE+omFoPRnyKnNkt9
+        jeqi1wU/RYyHpOBC9WUZFErG+4h/0cUR1rGKWWQ=
+X-Google-Smtp-Source: ABdhPJwm5hpnt7eWP1EGK7Mtgxjgzq8Xk87gNuPRLtNpSmjQNXuMv1lV/nvEbiXSLKYWEk/r7B5rKl5rIAchj2hnwqo=
+X-Received: by 2002:a9d:7e92:: with SMTP id m18mr6210653otp.145.1590052201359;
+ Thu, 21 May 2020 02:10:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru> <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 May 2020 11:09:50 +0200
+Message-ID: <CAMuHMdW5TqfDTZZCscXCK-Fkd7Gq1Ciyu1_sDzzR0B+_W-2hfg@mail.gmail.com>
+Subject: Re: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as
+ unstable if ref clock changes
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Maarten ter Huurne <maarten@treewalker.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Enjoy!
+Hi Serge,
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+On Thu, May 21, 2020 at 2:54 AM Serge Semin
+<Sergey.Semin@baikalelectronics.ru> wrote:
+> Currently clocksource framework doesn't support the clocks with variable
+> frequency. Since MIPS GIC timer ticks rate might be unstable on some
+> platforms, we must make sure that it justifies the clocksource
+> requirements. MIPS GIC timer is incremented with the CPU cluster reference
+> clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
+> changes synchronously. Due to this the clocksource subsystem can't rely on
+> the timer to measure system clocks anymore. This commit marks the MIPS GIC
+> based clocksource as unstable if reference clock (normally it's a CPU
+> reference clocks) rate changes. The clocksource will execute a watchdog
+> thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
+> new stable one.
+>
+> Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
+> GIC clocksource since normally the timer is stable. The only reason why
+> it gets unstable is due to the ref clock rate change, which event we
+> detect here in the driver by means of the clocks event notifier.
+>
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+Thanks for your patch!
 
-are available in the Git repository at:
+> --- a/drivers/clocksource/mips-gic-timer.c
+> +++ b/drivers/clocksource/mips-gic-timer.c
+> @@ -24,6 +24,9 @@
+>  static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
+>  static int gic_timer_irq;
+>  static unsigned int gic_frequency;
+> +static bool __read_mostly gic_clock_unstable;
+> +
+> +static void git_clocksource_unstable(char *reason);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-power-rtc-v5.8
+gic_clocksource_unstable? (everywhere)
 
-for you to fetch changes up to 29ee40091e27615530c0ba7773a2879d8266381e:
+Gr{oetje,eeting}s,
 
-  rtc: mt6397: Add support for the MediaTek MT6358 RTC (2020-05-21 08:55:48 +0100)
-
-----------------------------------------------------------------
-Immutable branch between MFD, Power and RTC due for the v5.8 merge window
-
-----------------------------------------------------------------
-Hsin-Hsiung Wang (4):
-      mfd: mt6397: Modify suspend/resume behavior
-      mfd: mt6397: Trim probe function to support different chips more cleanly
-      dt-bindings: mfd: Add compatible for the MediaTek MT6358 PMIC
-      mfd: Add support for the MediaTek MT6358 PMIC
-
-Ran Bi (1):
-      rtc: mt6397: Add support for the MediaTek MT6358 RTC
-
- Documentation/devicetree/bindings/mfd/mt6397.txt |  14 +-
- drivers/mfd/Makefile                             |   2 +-
- drivers/mfd/mt6358-irq.c                         | 235 +++++++++++++++++++
- drivers/mfd/mt6397-core.c                        | 101 ++++----
- drivers/mfd/mt6397-irq.c                         |  35 ++-
- drivers/power/reset/mt6323-poweroff.c            |   2 +-
- drivers/rtc/rtc-mt6397.c                         |  18 +-
- include/linux/mfd/mt6358/core.h                  | 158 +++++++++++++
- include/linux/mfd/mt6358/registers.h             | 282 +++++++++++++++++++++++
- include/linux/mfd/mt6397/core.h                  |   5 +
- include/linux/mfd/mt6397/rtc.h                   |   9 +-
- 11 files changed, 799 insertions(+), 62 deletions(-)
- create mode 100644 drivers/mfd/mt6358-irq.c
- create mode 100644 include/linux/mfd/mt6358/core.h
- create mode 100644 include/linux/mfd/mt6358/registers.h
+                        Geert
 
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
