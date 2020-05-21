@@ -2,154 +2,117 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F35E1DC453
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2020 02:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1AD1DC7EE
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2020 09:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727997AbgEUAyV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 May 2020 20:54:21 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:33612 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgEUAyQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 May 2020 20:54:16 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 2E08C80005E8;
-        Thu, 21 May 2020 00:54:11 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id B5585joA7vdh; Thu, 21 May 2020 03:54:10 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1728478AbgEUHrX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 May 2020 03:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728463AbgEUHrW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 May 2020 03:47:22 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833E3C061A0F
+        for <linux-rtc@vger.kernel.org>; Thu, 21 May 2020 00:47:22 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id l17so5698766wrr.4
+        for <linux-rtc@vger.kernel.org>; Thu, 21 May 2020 00:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=scVYFjBGBAzKQ/hMy8PhK3pElGqsrP2y83QVfuiAxH4=;
+        b=vqpwnjz86M45u3Gnp4IxKufT5KEo7fxf+vl36qzM3nHslyhDCEJIEgQAXKyrOkPOzr
+         sxkJdaadCkojgsCryJFV/NsqAGAwrjmBPRNvm9KBnA7Rh2O1j/zY5DwTpPhcFG/rXfkM
+         6S23fM0SLLJ7TiHNbL0XWiLK7+upJ5+t62Ye2cO2Wkc0mHW9D9DAJ/WC/rz68M4FmrLX
+         k27QqVbp3qP4CmlFWSn5xCNh4GWwvUfMdUElIrpD+rHd5Pa/4AMCOHm/zmAtjuENvG0C
+         TUv6XE2S4gfjQ9slqcNHl1ztwdytcQWprTsMRJNpfjLkzetO4LLbY5K/5RpxkGAy8lfS
+         nK7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=scVYFjBGBAzKQ/hMy8PhK3pElGqsrP2y83QVfuiAxH4=;
+        b=SuWcGA0B1wedHuwQrAEvYmMF/xgXkGOeesNO7HvNdwCpjMIa2kkoJN0ndzpyYN2hdc
+         xVHnhFJOa+tLETzLK2qk4eijuFEHSnaZ7oQaBFyIPS4EfE+JhQTPlM/XfjhcgKhnYbnH
+         yXamnyWaQj6Ov4Ab8QWORF2zQ32Abe6rnm/Yn10eXSNnkww2F/v+LrWlv3V70j4hTYi1
+         jHljv7qrE3kO9N3ysZM9QGSb4Mb64y3Mj3ra1A0u1Z2wY5lMhPsK9OaFMX6ZSJj/mFzl
+         kMywN52fuf/0s5c9Kx57DelcVEdW3PmiI/+XnB9BabBM6V9ufECz/PkEr4gnjnaTTM1K
+         zAsg==
+X-Gm-Message-State: AOAM531Y2fR6cox5ZgRcFHjOEOV+dYfJ6bxfyAYfU/2a2EPSodfg6NMN
+        xUl6LjkEkv+31lzzkx81Bzm8Fw==
+X-Google-Smtp-Source: ABdhPJxcZ6ZWteBLNFuVjrXs9CMtGph22AZeEwlyAM3AdFye7vHS83vjlNDUgEYM0NT1woW4CXf4Zg==
+X-Received: by 2002:adf:9010:: with SMTP id h16mr7329094wrh.412.1590047241123;
+        Thu, 21 May 2020 00:47:21 -0700 (PDT)
+Received: from dell ([95.149.164.102])
+        by smtp.gmail.com with ESMTPSA id h20sm5542798wma.6.2020.05.21.00.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2020 00:47:20 -0700 (PDT)
+Date:   Thu, 21 May 2020 08:47:18 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] clocksource: mips-gic-timer: Mark GIC timer as unstable if ref clock changes
-Date:   Thu, 21 May 2020 03:53:20 +0300
-Message-ID: <20200521005321.12129-8-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200521005321.12129-1-Sergey.Semin@baikalelectronics.ru>
+        drinkcat@chromium.org, Sean Wang <sean.wang@mediatek.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Josef Friedl <josef.friedl@speed.at>,
+        Richard Fontana <rfontana@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH v13 5/6] rtc: mt6397: Add support for the MediaTek MT6358
+ RTC
+Message-ID: <20200521074718.GN271301@dell>
+References: <1587438012-24832-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1587438012-24832-6-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <27c107b3-6ea8-e6f9-697c-7c3c4479008c@gmail.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Currently clocksource framework doesn't support the clocks with variable
-frequency. Since MIPS GIC timer ticks rate might be unstable on some
-platforms, we must make sure that it justifies the clocksource
-requirements. MIPS GIC timer is incremented with the CPU cluster reference
-clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
-changes synchronously. Due to this the clocksource subsystem can't rely on
-the timer to measure system clocks anymore. This commit marks the MIPS GIC
-based clocksource as unstable if reference clock (normally it's a CPU
-reference clocks) rate changes. The clocksource will execute a watchdog
-thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
-new stable one.
+On Sat, 16 May 2020, Matthias Brugger wrote:
 
-Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
-GIC clocksource since normally the timer is stable. The only reason why
-it gets unstable is due to the ref clock rate change, which event we
-detect here in the driver by means of the clocks event notifier.
+> Hi Lee,
+> 
+> On 21/04/2020 05:00, Hsin-Hsiung Wang wrote:
+> > From: Ran Bi <ran.bi@mediatek.com>
+> > 
+> > This add support for the MediaTek MT6358 RTC. Driver using
+> > compatible data to store different RTC_WRTGR address offset.
+> > This replace RTC_WRTGR to RTC_WRTGR_MT6323 in mt6323-poweroff
+> > driver which only needed by armv7 CPU without ATF.
+> > 
+> > Signed-off-by: Ran Bi <ran.bi@mediatek.com>
+> > Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> > Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
+> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Acked-by: Sebastian Reichel <sre@kernel.org>
+> > Reviewed-by: Yingjoe Chen <yingjoe.chen@mediatek.com>
+> 
+> We have Acked-by from rtc and reset drivers maintainers. Are you OK to take them
+> through your mfd branch?
+> 
+> Are you planning to queue them for v5.8?
+> 
+> Just asking because if so I'd queue patch 6 through my tree.
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
+Yes, please take patch 6.
 
----
-
-Changelog v3:
-- Mark clocksource as unstable instead of lowering its rating.
----
- drivers/clocksource/Kconfig          |  1 +
- drivers/clocksource/mips-gic-timer.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index f2142e6bbea3..37a745f3ca91 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -572,6 +572,7 @@ config CLKSRC_VERSATILE
- config CLKSRC_MIPS_GIC
- 	bool
- 	depends on MIPS_GIC
-+	select CLOCKSOURCE_WATCHDOG
- 	select TIMER_OF
- 
- config CLKSRC_TANGO_XTAL
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index ef12c12c2432..d78ad7b60cdc 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -24,6 +24,9 @@
- static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
- static int gic_timer_irq;
- static unsigned int gic_frequency;
-+static bool __read_mostly gic_clock_unstable;
-+
-+static void git_clocksource_unstable(char *reason);
- 
- static u64 notrace gic_read_count_2x32(void)
- {
-@@ -125,8 +128,10 @@ static int gic_clk_notifier(struct notifier_block *nb, unsigned long action,
- {
- 	struct clk_notifier_data *cnd = data;
- 
--	if (action == POST_RATE_CHANGE)
-+	if (action == POST_RATE_CHANGE) {
-+		git_clocksource_unstable("ref clock rate change");
- 		on_each_cpu(gic_update_frequency, (void *)cnd->new_rate, 1);
-+	}
- 
- 	return NOTIFY_OK;
- }
-@@ -172,6 +177,18 @@ static struct clocksource gic_clocksource = {
- 	.vdso_clock_mode	= VDSO_CLOCKMODE_GIC,
- };
- 
-+static void git_clocksource_unstable(char *reason)
-+{
-+	if (gic_clock_unstable)
-+		return;
-+
-+	gic_clock_unstable = true;
-+
-+	pr_info("GIC timer is unstable due to %s\n", reason);
-+
-+	clocksource_mark_unstable(&gic_clocksource);
-+}
-+
- static int __init __gic_clocksource_init(void)
- {
- 	unsigned int count_width;
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
