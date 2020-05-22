@@ -2,157 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED931DD8CA
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 May 2020 22:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51761DDD23
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 May 2020 04:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730402AbgEUUtU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 May 2020 16:49:20 -0400
-Received: from mail.baikalelectronics.com ([87.245.175.226]:40628 "EHLO
-        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730352AbgEUUtS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 May 2020 16:49:18 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id E46B2803078F;
-        Thu, 21 May 2020 20:49:14 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at baikalelectronics.ru
-Received: from mail.baikalelectronics.ru ([127.0.0.1])
-        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9Eyehe4cTvph; Thu, 21 May 2020 23:49:14 +0300 (MSK)
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maarten ter Huurne <maarten@treewalker.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 8/8] clocksource: mips-gic-timer: Mark GIC timer as unstable if ref clock changes
-Date:   Thu, 21 May 2020 23:48:17 +0300
-Message-ID: <20200521204818.25436-9-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
-References: <20200521204818.25436-1-Sergey.Semin@baikalelectronics.ru>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+        id S1726988AbgEVC3s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 May 2020 22:29:48 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:59230 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726886AbgEVC3s (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 21 May 2020 22:29:48 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C74BD1A090D;
+        Fri, 22 May 2020 04:29:46 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 662951A08FB;
+        Fri, 22 May 2020 04:29:44 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 0E0CF402AD;
+        Fri, 22 May 2020 10:29:40 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/2] rtc: snvs: Make SNVS clock always prepared
+Date:   Fri, 22 May 2020 10:19:55 +0800
+Message-Id: <1590113996-31845-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Currently clocksource framework doesn't support the clocks with variable
-frequency. Since MIPS GIC timer ticks rate might be unstable on some
-platforms, we must make sure that it justifies the clocksource
-requirements. MIPS GIC timer is incremented with the CPU cluster reference
-clocks rate. So in case if CPU frequency changes, the MIPS GIC tick rate
-changes synchronously. Due to this the clocksource subsystem can't rely on
-the timer to measure system clocks anymore. This commit marks the MIPS GIC
-based clocksource as unstable if reference clock (normally it's a CPU
-reference clocks) rate changes. The clocksource will execute a watchdog
-thread, which lowers the MIPS GIC timer rating to zero and fallbacks to a
-new stable one.
+In IRQ handler, ONLY clock enable/disable is called due to
+clock prepare can NOT be called in interrupt context, but
+clock enable/disable will return failure if prepare count
+is 0, to fix this issue, just make SNVS clock always prepared
+there, the SNVS clock has no prepare function implemented,
+so it won't impact anything.
 
-Note we don't need to set the CLOCK_SOURCE_MUST_VERIFY flag to the MIPS
-GIC clocksource since normally the timer is stable. The only reason why
-it gets unstable is due to the ref clock rate change, which event we
-detect here in the driver by means of the clocks event notifier.
-
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-mips@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
+ drivers/rtc/rtc-snvs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changelog v4:
-- Mark clocksource as unstable instead of lowering its rating.
-
-Changelog v5:
-- Fix mistakenly added "git_" prefix.
----
- drivers/clocksource/Kconfig          |  1 +
- drivers/clocksource/mips-gic-timer.c | 19 ++++++++++++++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index f2142e6bbea3..37a745f3ca91 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -572,6 +572,7 @@ config CLKSRC_VERSATILE
- config CLKSRC_MIPS_GIC
- 	bool
- 	depends on MIPS_GIC
-+	select CLOCKSOURCE_WATCHDOG
- 	select TIMER_OF
+diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
+index 35ee08a..b9371f4 100644
+--- a/drivers/rtc/rtc-snvs.c
++++ b/drivers/rtc/rtc-snvs.c
+@@ -362,7 +362,7 @@ static int __maybe_unused snvs_rtc_suspend_noirq(struct device *dev)
+ 	struct snvs_rtc_data *data = dev_get_drvdata(dev);
  
- config CLKSRC_TANGO_XTAL
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index ef12c12c2432..be4175f415ba 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -24,6 +24,9 @@
- static DEFINE_PER_CPU(struct clock_event_device, gic_clockevent_device);
- static int gic_timer_irq;
- static unsigned int gic_frequency;
-+static bool __read_mostly gic_clock_unstable;
-+
-+static void gic_clocksource_unstable(char *reason);
+ 	if (data->clk)
+-		clk_disable_unprepare(data->clk);
++		clk_disable(data->clk);
  
- static u64 notrace gic_read_count_2x32(void)
- {
-@@ -125,8 +128,10 @@ static int gic_clk_notifier(struct notifier_block *nb, unsigned long action,
- {
- 	struct clk_notifier_data *cnd = data;
- 
--	if (action == POST_RATE_CHANGE)
-+	if (action == POST_RATE_CHANGE) {
-+		gic_clocksource_unstable("ref clock rate change");
- 		on_each_cpu(gic_update_frequency, (void *)cnd->new_rate, 1);
-+	}
- 
- 	return NOTIFY_OK;
+ 	return 0;
  }
-@@ -172,6 +177,18 @@ static struct clocksource gic_clocksource = {
- 	.vdso_clock_mode	= VDSO_CLOCKMODE_GIC,
- };
+@@ -372,7 +372,7 @@ static int __maybe_unused snvs_rtc_resume_noirq(struct device *dev)
+ 	struct snvs_rtc_data *data = dev_get_drvdata(dev);
  
-+static void gic_clocksource_unstable(char *reason)
-+{
-+	if (gic_clock_unstable)
-+		return;
-+
-+	gic_clock_unstable = true;
-+
-+	pr_info("GIC timer is unstable due to %s\n", reason);
-+
-+	clocksource_mark_unstable(&gic_clocksource);
-+}
-+
- static int __init __gic_clocksource_init(void)
- {
- 	unsigned int count_width;
+ 	if (data->clk)
+-		return clk_prepare_enable(data->clk);
++		return clk_enable(data->clk);
+ 
+ 	return 0;
+ }
 -- 
-2.25.1
+2.7.4
 
