@@ -2,95 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 002981DF876
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 May 2020 19:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB311DF9FD
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 May 2020 20:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388022AbgEWRJY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 23 May 2020 13:09:24 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:53649 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388050AbgEWRJX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 May 2020 13:09:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590253760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pt1Iu4wzJS7HbC6OHxqO6Iyg6x2zTpH3ashaPREeSXw=;
-        b=aUBXILtJSc1qI15zr4uuNi6PnS/2C+m7jwb48qKII7NlBDXej8ZdRy5UTC4/IXtuzL751Q
-        QweRIg87I7uifJ0AIml/2mLasqPzwPTr8Ispijic3iJDGUVLtn/PC5WdHJ06PdIp7uzoD3
-        SXVhlgUwGMscRwmsujfWWHQEZJsTvaA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-392-yo8jGxvDO4ayp8WASBaLDg-1; Sat, 23 May 2020 13:09:15 -0400
-X-MC-Unique: yo8jGxvDO4ayp8WASBaLDg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C0AD6835B8B;
-        Sat, 23 May 2020 17:09:13 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 57DA25EE0C;
-        Sat, 23 May 2020 17:09:13 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 04NH9C9m018382;
-        Sat, 23 May 2020 13:09:12 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 04NH9BXu018374;
-        Sat, 23 May 2020 13:09:11 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sat, 23 May 2020 13:09:11 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     "Maciej W. Rozycki" <macro@wdc.com>
-cc:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "Maciej W. Rozycki" <macro@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Matt Turner <mattst88@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-serial@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4] alpha: fix memory barriers so that they conform to
- the specification
-In-Reply-To: <alpine.LFD.2.21.2005231739440.21168@redsun52.ssa.fujisawa.hgst.com>
-Message-ID: <alpine.LRH.2.02.2005231307470.18038@file01.intranet.prod.int.rdu2.redhat.com>
-References: <CAK8P3a1qN-cpzkcdtNhtMfSwWwxqcOYg9x6DEzt7PWazwr8V=Q@mail.gmail.com> <alpine.LRH.2.02.2005070931280.1718@file01.intranet.prod.int.rdu2.redhat.com> <CAK8P3a3UdCJL6C07_W7pkipT1Xmr_0G9hOy1S+YXbB4_tKt+gg@mail.gmail.com>
- <alpine.LFD.2.21.2005100209340.487915@eddie.linux-mips.org> <alpine.LRH.2.02.2005101443290.15420@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005111320220.677301@eddie.linux-mips.org> <20200513144128.GA16995@mail.rc.ru>
- <alpine.LRH.2.02.2005220920020.20970@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2005221344530.11126@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2005230623410.22664@file01.intranet.prod.int.rdu2.redhat.com> <20200523151027.GA10128@mail.rc.ru>
- <alpine.LRH.2.02.2005231131480.10727@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005231739440.21168@redsun52.ssa.fujisawa.hgst.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        id S2387909AbgEWSAv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 23 May 2020 14:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728590AbgEWSAo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 May 2020 14:00:44 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A65C008716
+        for <linux-rtc@vger.kernel.org>; Sat, 23 May 2020 11:00:40 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id g185so13960136qke.7
+        for <linux-rtc@vger.kernel.org>; Sat, 23 May 2020 11:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=vhvRG4iP0p/cCM0/gHqK0xx0MaMNF3/azTtn5P0fCT1b4XLjGRAoR85FXgvwYtowP6
+         J1ev3dPiedOMtPyOzUYmKFEqsj6BkIi2lR8s0YRNLylOZ8MbeWQpwNTWDXPX57LUrKeO
+         FLL54WToKnc9WyFCTQNZdn8yjuqVF61dsdwJrbIWn1f8+mXNgwQXd1Xox425XdFJLCTr
+         UNYtD5Mkr7J8HytQpl125rrGiBWdOVTtdeDic18s2v1Ex5H4EMrCDseWe8z8QJUA2DPl
+         pMcmWf9nM5lni1dYRbVMyTKtLHSFCzrJM5oRvB7Hp9K31CMWsqtaG47ZQbJG6ZEre6uU
+         kwNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=lnde9fMh+4iphQV5QsaDBhMLy/lRFRL+SoPBHD3Th9CJ2IoWoaC0ZzVbBcuOZRyE+R
+         D5xeFZWy3fHIpXzMn+6iUKSOBQ7eILNDHh0zQKbgBpw7LEtZTcz67yfNDwAEqRjGYMpt
+         SE4xfk3t036zJTKw4kdA2DfXFlLRUGZZZB1q7ud80YB94rW+ILO7CFLQgKxGfuUmyJXM
+         0+JwOPCKQz4+/yqvzzde9vSI1gMeyUA+qxOo+6HStgc3+dg4KBp6B8K+TSkMuwH+nEgi
+         WYRgm4+PSr4owPKZ4bFjY7qammrXFe0F8jdQ2MMGrY2aPtwpo8mfh7RggW5mWSGcL87K
+         D4IA==
+X-Gm-Message-State: AOAM530BsxOkRIBt+qRjmVg9YPn+4a3lPRUD9XpN0MBH3PY4Oq0XKXkc
+        vulhR/HqZNHQh0dJfOXCa0aAW5BQE4HmjsQP1aVyqndL
+X-Google-Smtp-Source: ABdhPJw4JSLl4s8hKmdikxPHOZTjp7LuShJQWo5DKJXfhdyHNpRWrWLXX1iWw/azZwGF2Nz0kU5bTrWvyq5YmK6naS0=
+X-Received: by 2002:ac8:1e16:: with SMTP id n22mr21502226qtl.78.1590256838401;
+ Sat, 23 May 2020 11:00:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Received: by 2002:a37:9fd3:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:37
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantalas1@gmail.com>
+Date:   Sat, 23 May 2020 18:00:37 +0000
+Message-ID: <CAMdkyyDY_0O7YgysHCjgRTJ=8-B7XurK7o1razRHDVOjgr2V2g@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
-
-On Sat, 23 May 2020, Maciej W. Rozycki wrote:
-
-> On Sat, 23 May 2020, Mikulas Patocka wrote:
-> 
-> > ... and I also broke the *_relaxed macros and didn't notice it, because 
-> > they are unused in my config. This won't compile, because mb() is a 
-> > statement, not a function.
-> > 
-> > > > +#define readb_relaxed(addr)        (mb(), __raw_readb(addr))
-> 
->  A statement expression would do though, e.g.:
-> 
-> #define readb_relaxed(addr)	({ mb(); __raw_readb(addr); })
-> 
-> and might be preferable for code brevity to adding a zillion of inline 
-> functions.
-> 
->   Maciej
-
-I know, but that file uses inline functions everywhere else, so I wanted 
-to make it consistent.
-
-Mikulas
-
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
