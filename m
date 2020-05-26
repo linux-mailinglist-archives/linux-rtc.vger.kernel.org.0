@@ -2,49 +2,47 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F04181E12D2
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 May 2020 18:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB971E2470
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 May 2020 16:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731404AbgEYQjV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 25 May 2020 12:39:21 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:38488 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbgEYQjV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 25 May 2020 12:39:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1590424760; x=1621960760;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=HjJ4fGKEInmzonc7zQeX2eEbQNJ3W01PKn/mnbplM8o=;
-  b=VWjWo/Z2Fy56/QEiit5MK2l2mrSsYsOFw0HZVVTAQ6qC3Xe93AXye9D2
-   i0vfoZOgBoRPpNXfjAz9lIUOzZQSF9vBLmvJF5XvqBKvZGsAcd1pGxyYw
-   0eNZsaAIvMWJjVud/Z99AhT5wc+Qg9sSX0ZXo8CFhVpK7pAX/vJNek2CM
-   rhkBNVSeGI6Je0IAWgnl+AYlk8s5g0HPQbEAXT5NzIL/r7r2A/Jtm14HU
-   3zSYfAMH7xJsEb+yGgRofrK5nSTeDa/C+60HTOyvX4N417UyPPIFMxd0y
-   CpNGbLTpZhoaApc8brIVDH20doQxXgQoW60IdeT7NqbOA5v/9yN76LdmH
-   Q==;
-IronPort-SDR: nMAhItbKPzsGT7R1xqIWjS66sMna08hJjvv0Ge+rZqIx5d02yITyFXC2+AwwSKu9+wS4O83z+5
- FHv7rA/63KfPEM+zwMsdAYZIhe3qcBZvSX4KCzO0TkGd8S0x1XPHPxbWnaB6v2JBP9Al46wqS4
- Cj5XB+Itt6ZIoaUnVQrTTg1mH1NJjilWlMkTryn7MUgm96uuDHYg3740LEwNI/vddZGjDXFz6v
- C7fOce6/0oZDoTjtqyoFttw+Uad6a+elrwWtUyDtk0lPOAMUy5azDzv6ZTdxkw1R8hD3ZpLyXt
- cYM=
-X-IronPort-AV: E=Sophos;i="5.73,434,1583164800"; 
-   d="scan'208";a="138792852"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 26 May 2020 00:39:20 +0800
-IronPort-SDR: kdf1EtpkbUW+wedxlxDcIiZ3CDrKAbVRaxzF+lTv6e3wPBbP5irBwDkkz/VzUJ3ZJ7lroljtiW
- zoe/sa/dd3icH3vBKF0qVrC1jwj/JMq+A=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2020 09:29:14 -0700
-IronPort-SDR: bf0q3x4MbLY/3guTDJvLc8c+Zhu6WJ+c86jfkFDKK1LqYwmU9+Uk6oi7jBNAcb2V6e8PXWdA+6
- yFUa6Xc240Jw==
-WDCIronportException: Internal
-Received: from unknown (HELO redsun52) ([10.149.66.28])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2020 09:39:17 -0700
-Date:   Mon, 25 May 2020 17:39:14 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@wdc.com>
-To:     Mikulas Patocka <mpatocka@redhat.com>
+        id S1729368AbgEZOsA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 May 2020 10:48:00 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46162 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726437AbgEZOr7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 May 2020 10:47:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590504477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TNt1qIRjOvxnk9uqs5A6RKpcqvm3e8HU7eVs+WN+34s=;
+        b=IiAznQ/sq/XUnG36XQ8jwHgFw+d2iiIQCFyUyBNHMw7cCRWr628Rr3jrRfiwaGOFvTj7g6
+        VucTLirU21LNQPvYHEFR2/bteu662FUppESO7cWlYIcxvrOOxnvqP/KMxedae5QHTsfR8P
+        kl7dMOagzty/fneZCPcGAFIcHBKjwFs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-200-8RDhbpLVPYu7Z6ZyffdLXg-1; Tue, 26 May 2020 10:47:54 -0400
+X-MC-Unique: 8RDhbpLVPYu7Z6ZyffdLXg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 98991464;
+        Tue, 26 May 2020 14:47:52 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C324E5C1BB;
+        Tue, 26 May 2020 14:47:51 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 04QElpqr029368;
+        Tue, 26 May 2020 10:47:51 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 04QElnTF029364;
+        Tue, 26 May 2020 10:47:49 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 26 May 2020 10:47:49 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     "Maciej W. Rozycki" <macro@wdc.com>
 cc:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         "Maciej W. Rozycki" <macro@linux-mips.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -53,46 +51,295 @@ cc:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         alpha <linux-alpha@vger.kernel.org>,
         linux-serial@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v5] alpha: fix memory barriers so that they conform to
- the specification
-In-Reply-To: <alpine.LRH.2.02.2005251149540.4135@file01.intranet.prod.int.rdu2.redhat.com>
-Message-ID: <alpine.LFD.2.21.2005251729110.21168@redsun52.ssa.fujisawa.hgst.com>
+Subject: [PATCH v7] alpha: fix memory barriers so that they conform to the
+ specification
+In-Reply-To: <alpine.LRH.2.02.2005251151550.4135@file01.intranet.prod.int.rdu2.redhat.com>
+Message-ID: <alpine.LRH.2.02.2005261046340.29117@file01.intranet.prod.int.rdu2.redhat.com>
 References: <CAK8P3a1qN-cpzkcdtNhtMfSwWwxqcOYg9x6DEzt7PWazwr8V=Q@mail.gmail.com> <alpine.LRH.2.02.2005101443290.15420@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005111320220.677301@eddie.linux-mips.org> <20200513144128.GA16995@mail.rc.ru>
  <alpine.LRH.2.02.2005220920020.20970@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2005221344530.11126@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2005230623410.22664@file01.intranet.prod.int.rdu2.redhat.com> <20200523151027.GA10128@mail.rc.ru>
  <alpine.LRH.2.02.2005231131480.10727@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2005231134590.10727@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005241500230.21168@redsun52.ssa.fujisawa.hgst.com>
- <alpine.LRH.2.02.2005250944210.26265@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005251500420.21168@redsun52.ssa.fujisawa.hgst.com> <alpine.LRH.2.02.2005251149540.4135@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+ <alpine.LRH.2.02.2005250944210.26265@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LFD.2.21.2005251500420.21168@redsun52.ssa.fujisawa.hgst.com> <alpine.LRH.2.02.2005251151550.4135@file01.intranet.prod.int.rdu2.redhat.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 25 May 2020, Mikulas Patocka wrote:
+The commits cd0e00c10672 and 92d7223a7423 broke boot on the Alpha Avanti
+platform. The patches move memory barriers after a write before the write.
+The result is that if there's iowrite followed by ioread, there is no
+barrier between them.
 
-> > > The functions __raw_read* are already extern inline, so the compiler will 
-> > > inline/noinline them depending on the macros trivial_io_bw and 
-> > > trivial_io_lq - so we can just call them from read*_relaxed without 
-> > > repeating the extern inline pattern.
-> > 
-> >  The whole point of this peculiar arrangement for cooked accessors is to 
-> > avoid having barriers inserted inline around out-of-line calls to raw 
-> > accessors,
-> 
-> I see, but why do we want to avoid that? Linux kernel has no binary 
-> compatibility, so it doesn't matter if the barriers are inlined in the 
-> drivers or not.
+The Alpha architecture allows reordering of the accesses to the I/O space,
+and the missing barrier between write and read causes hang with serial
+port and real time clock.
 
- It does matter as it expands code unnecessarily (at all call sites), as I 
-noted in the original review.  This has nothing to do with compatibility.
+This patch makes barriers confiorm to the specification.
 
-> Anyway, I've sent a next version of the patch that makes read*_relaxed 
-> extern inline.
+1. We add mb() before readX_relaxed and writeX_relaxed -
+   memory-barriers.txt claims that these functions must be ordered w.r.t.
+   each other. Alpha doesn't order them, so we need an explicit barrier.
+2. We add mb() before reads from the I/O space - so that if there's a
+   write followed by a read, there should be a barrier between them.
 
- Thanks, I'll have a look.  And now that you have this update, please run 
-`size' on ALPHA_GENERIC `vmlinux', preferably monolithic, to see what the 
-difference is between `read*_relaxed' handlers `static inline' and keyed 
-with `*trivial_rw_*'.
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Fixes: cd0e00c10672 ("alpha: io: reorder barriers to guarantee writeX() and iowriteX() ordering")
+Fixes: 92d7223a7423 ("alpha: io: reorder barriers to guarantee writeX() and iowriteX() ordering #2")
+Cc: stable@vger.kernel.org      # v4.17+
+Acked-by: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
 
-  Maciej
+---
+ arch/alpha/include/asm/io.h |   74 +++++++++++++++++++++++++++++++++++---------
+ arch/alpha/kernel/io.c      |   60 +++++++++++++++++++++++++++++++----
+ 2 files changed, 112 insertions(+), 22 deletions(-)
+
+Index: linux-stable/arch/alpha/include/asm/io.h
+===================================================================
+--- linux-stable.orig/arch/alpha/include/asm/io.h	2020-05-25 15:36:16.000000000 +0200
++++ linux-stable/arch/alpha/include/asm/io.h	2020-05-26 16:32:42.000000000 +0200
+@@ -310,14 +310,18 @@ static inline int __is_mmio(const volati
+ #if IO_CONCAT(__IO_PREFIX,trivial_io_bw)
+ extern inline unsigned int ioread8(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread8)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread8)(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ extern inline unsigned int ioread16(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread16)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread16)(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -358,7 +362,9 @@ extern inline void outw(u16 b, unsigned
+ #if IO_CONCAT(__IO_PREFIX,trivial_io_lq)
+ extern inline unsigned int ioread32(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread32)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread32)(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -403,14 +409,18 @@ extern inline void __raw_writew(u16 b, v
+ 
+ extern inline u8 readb(const volatile void __iomem *addr)
+ {
+-	u8 ret = __raw_readb(addr);
++	u8 ret;
++	mb();
++	ret = __raw_readb(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ extern inline u16 readw(const volatile void __iomem *addr)
+ {
+-	u16 ret = __raw_readw(addr);
++	u16 ret;
++	mb();
++	ret = __raw_readw(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -451,14 +461,18 @@ extern inline void __raw_writeq(u64 b, v
+ 
+ extern inline u32 readl(const volatile void __iomem *addr)
+ {
+-	u32 ret = __raw_readl(addr);
++	u32 ret;
++	mb();
++	ret = __raw_readl(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ extern inline u64 readq(const volatile void __iomem *addr)
+ {
+-	u64 ret = __raw_readq(addr);
++	u64 ret;
++	mb();
++	ret = __raw_readq(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -487,14 +501,44 @@ extern inline void writeq(u64 b, volatil
+ #define outb_p		outb
+ #define outw_p		outw
+ #define outl_p		outl
+-#define readb_relaxed(addr)	__raw_readb(addr)
+-#define readw_relaxed(addr)	__raw_readw(addr)
+-#define readl_relaxed(addr)	__raw_readl(addr)
+-#define readq_relaxed(addr)	__raw_readq(addr)
+-#define writeb_relaxed(b, addr)	__raw_writeb(b, addr)
+-#define writew_relaxed(b, addr)	__raw_writew(b, addr)
+-#define writel_relaxed(b, addr)	__raw_writel(b, addr)
+-#define writeq_relaxed(b, addr)	__raw_writeq(b, addr)
++
++extern u8 readb_relaxed(const volatile void __iomem *addr);
++extern u16 readw_relaxed(const volatile void __iomem *addr);
++extern u32 readl_relaxed(const volatile void __iomem *addr);
++extern u64 readq_relaxed(const volatile void __iomem *addr);
++
++#if IO_CONCAT(__IO_PREFIX,trivial_io_bw)
++extern inline u8 readb_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readb(addr);
++}
++
++extern inline u16 readw_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readw(addr);
++}
++#endif
++
++#if IO_CONCAT(__IO_PREFIX,trivial_io_lq)
++extern inline u32 readl_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readl(addr);
++}
++
++extern inline u64 readq_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readq(addr);
++}
++#endif
++
++#define writeb_relaxed	writeb
++#define writew_relaxed	writew
++#define writel_relaxed	writel
++#define writeq_relaxed	writeq
+ 
+ /*
+  * String version of IO memory access ops:
+Index: linux-stable/arch/alpha/kernel/io.c
+===================================================================
+--- linux-stable.orig/arch/alpha/kernel/io.c	2020-05-25 15:36:16.000000000 +0200
++++ linux-stable/arch/alpha/kernel/io.c	2020-05-25 17:47:02.000000000 +0200
+@@ -16,21 +16,27 @@
+ unsigned int
+ ioread8(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread8)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread8)(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ unsigned int ioread16(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread16)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread16)(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ unsigned int ioread32(void __iomem *addr)
+ {
+-	unsigned int ret = IO_CONCAT(__IO_PREFIX,ioread32)(addr);
++	unsigned int ret;
++	mb();
++	ret = IO_CONCAT(__IO_PREFIX,ioread32)(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -148,28 +154,36 @@ EXPORT_SYMBOL(__raw_writeq);
+ 
+ u8 readb(const volatile void __iomem *addr)
+ {
+-	u8 ret = __raw_readb(addr);
++	u8 ret;
++	mb();
++	ret = __raw_readb(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ u16 readw(const volatile void __iomem *addr)
+ {
+-	u16 ret = __raw_readw(addr);
++	u16 ret;
++	mb();
++	ret = __raw_readw(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ u32 readl(const volatile void __iomem *addr)
+ {
+-	u32 ret = __raw_readl(addr);
++	u32 ret;
++	mb();
++	ret = __raw_readl(addr);
+ 	mb();
+ 	return ret;
+ }
+ 
+ u64 readq(const volatile void __iomem *addr)
+ {
+-	u64 ret = __raw_readq(addr);
++	u64 ret;
++	mb();
++	ret = __raw_readq(addr);
+ 	mb();
+ 	return ret;
+ }
+@@ -207,6 +221,38 @@ EXPORT_SYMBOL(writew);
+ EXPORT_SYMBOL(writel);
+ EXPORT_SYMBOL(writeq);
+ 
++/*
++ * The _relaxed functions must be ordered w.r.t. each other, but they don't
++ * have to be ordered w.r.t. other memory accesses.
++ */
++u8 readb_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readb(addr);
++}
++
++u16 readw_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readw(addr);
++}
++
++u32 readl_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readl(addr);
++}
++
++u64 readq_relaxed(const volatile void __iomem *addr)
++{
++	mb();
++	return __raw_readq(addr);
++}
++
++EXPORT_SYMBOL(readb_relaxed);
++EXPORT_SYMBOL(readw_relaxed);
++EXPORT_SYMBOL(readl_relaxed);
++EXPORT_SYMBOL(readq_relaxed);
+ 
+ /*
+  * Read COUNT 8-bit bytes from port PORT into memory starting at SRC.
+
