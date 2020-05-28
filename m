@@ -2,90 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FE31E5D0D
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2020 12:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625BF1E5D4A
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 May 2020 12:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387838AbgE1KXC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 May 2020 06:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S2387969AbgE1KkR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 May 2020 06:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387740AbgE1KVx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 May 2020 06:21:53 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBBBC05BD1E;
-        Thu, 28 May 2020 03:21:42 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id x1so31454894ejd.8;
-        Thu, 28 May 2020 03:21:42 -0700 (PDT)
+        with ESMTP id S2387924AbgE1KkL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 May 2020 06:40:11 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA070C05BD1E;
+        Thu, 28 May 2020 03:40:10 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id r10so13287451pgv.8;
+        Thu, 28 May 2020 03:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=U2BQABIsN/qZ72MOIKzLoMwJCMZeE1Anp7gIBpJ0H5M=;
-        b=ZZT7998LLTuQxgzeX88wb9Z7L/SJ9scvbg3A5IpE5SrktemWkB0fTAPwKySx/5lmZt
-         XFDhn560/jWQSWPJtlEsjV8ld9QPap8lBgnN2Ivq4AbmwBnYtyNu30gXMwFGJ0xMNtzM
-         Ku5HF+/HlF2Q63OUjuxFwikkK8FVHGi9crrGAWyGibM5kTBfjf23JPUMKH63SDMfdSM5
-         x1CvlsLvu0s52Mo+lvlVwwz7uq/5G6jIYlPdM3ENW1tdyFBZjXLpwlMKNGTvBEOtmA93
-         6IJdXvHUNhBA8VCI9zkLsI70XSYlU1FNRUJ7b6e3Z4lR73Zgu8rjB5g4PN88lkBCH3qo
-         lg2Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PccFhNjS4hhr30qgJVviBgbheq+JeXNwdy/AbmdcXhg=;
+        b=GJ/O7P976gM9R4fCiCYxrVEz8ja0koSDzYE92U/6XQJLCvTE6/pZyP73revZl0frc/
+         tLXaU22Nw3nMpojTGdjGipJ7K8Jo0cSApT9L119zjuduyjbfbGY56IzPjOAt4ATuC8g7
+         KvTFXg419z5JXuqS4LHgL4y8vauJU7K93iIhHPEL7eYuP9aHKhsD7+yXHwBfMY5z8Ppr
+         D3U6qLKhAVlp3boPM/mrylqkgAl+v+OAHxrgDRykbhP5e+YrpCXxyI6eg7XEfboayHhE
+         uaSd7/hvgr6dRW6qDa3mc9Scj5mX4+HxL7YLL85OgmK+Is0H/q954zTaamamBBHj+FSF
+         t2RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=U2BQABIsN/qZ72MOIKzLoMwJCMZeE1Anp7gIBpJ0H5M=;
-        b=Uzbjj90qfdZ+Y6E3Xh/jbudDQrHHc8vd4OV/V85wyKBW/5/jTZhMjLIUzCWxUTyCcB
-         QRi6nviQs3W+lmqEcL3k1L612G8H/9yO62lkyYIeYKJLtioliZceC/y3txv3YMaAYyv/
-         XWMxDEds6gvB8Glv7/3upzHMqn+buLDGjzlfE7pXKNnbYXly3//VZrI8ZF59wOj+nsAV
-         0NbGntOJBi/rqHSPSADdbW/bSCFIQaQaQc15ORpXOQvmUt6qKs6i2A3aU5ONq1tUnh+q
-         P/0MkkHY32zgvdboPxvgjfqsp6sASgFZYuwSJaHiOtJYeOoth3uph2iEGqX+CXH5cMmk
-         vEFg==
-X-Gm-Message-State: AOAM533mitUMxC90QS2kI3cxafAU104tv85XQzfz5NopCg89W3iM4hQ9
-        DfPV3YrCiRb5PQJ1S0WilROHr4WHK6uSA0xVlg2EBozn
-X-Google-Smtp-Source: ABdhPJyJqNR0xdjogdnmD0Yo+4tawSd3wbiPkROxrgMatbEobKp5Pn7gpYH2oXVj9GINRBsA/sOsmsiGTv2KQLbSq+0=
-X-Received: by 2002:a17:906:1c94:: with SMTP id g20mr2219697ejh.319.1590661301320;
- Thu, 28 May 2020 03:21:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <6eb98232-bc84-0854-243a-e54b91f2bda6@web.de>
-In-Reply-To: <6eb98232-bc84-0854-243a-e54b91f2bda6@web.de>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PccFhNjS4hhr30qgJVviBgbheq+JeXNwdy/AbmdcXhg=;
+        b=pMZPZ+FnPKYYVyYlzwdWzzS6L5j5B7OlXmKM71LPtqPL4bxiG8d/Sfbdc9DTXGlXQg
+         W2XiGAuI1pHR8T+cDN9hqAL7GBSWqu4CJZY+nLiDjDvS5CArjHRPZGfR2WNmwg1sMdO5
+         48rEh9zkyUo/QPbp6214+VEcdaMV4EWcJM1BCgu2954n814jufp4V2m0t0Iv99V87FIx
+         O3ZuXBlcHsvXIKrDNjXyFnI/4mCxf1J/5PTvXBMK5eywCbaqd3Xn1OldfTSP9DOvV5fC
+         +N313r58wdkWFZWerXPJq4lymsxzOostdx97AMCGeaY1Wp28XmqG2rzQ/EKunu8vuFU5
+         e73g==
+X-Gm-Message-State: AOAM531GJ+AmuaU5knOeoIpPd0YtGqB90yGkcjU/B9/DdbI8Ca2yNNcM
+        uYXJs+PgylrszBSFbgt72yqXNQlsi3E=
+X-Google-Smtp-Source: ABdhPJyGfKrKva7e96GB3sLA2msk21C5TMjfObeCKF6EFrMIgMQGMwSTLus4hhMyANeb+Jzrjr9jxg==
+X-Received: by 2002:a62:6404:: with SMTP id y4mr2354759pfb.64.1590662410555;
+        Thu, 28 May 2020 03:40:10 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id mn19sm5115152pjb.8.2020.05.28.03.40.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 03:40:09 -0700 (PDT)
 From:   Chuhong Yuan <hslester96@gmail.com>
-Date:   Thu, 28 May 2020 18:21:29 +0800
-Message-ID: <CANhBUQ0_do+=MZsj0NKEfAAVeuWy8V+hvQuVBBB2o+u+H9s1qA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: rv3028: Add missed check for devm_regmap_init_i2c()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH v2] rtc: rv3028: Add missed check for devm_regmap_init_i2c()
+Date:   Thu, 28 May 2020 18:39:50 +0800
+Message-Id: <20200528103950.912353-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, May 28, 2020 at 5:17 PM Markus Elfring <Markus.Elfring@web.de> wrot=
-e:
->
-> > rv3028_probe() misses a check for devm_regmap_init_i2c().
->
-> Such information is helpful.
->
->
-> > Add the missed check
->
-> Thanks for another completion of the exception handling.
->
->
-> >                      to fix it.
->
-> I suggest to replace this wording by the tag =E2=80=9CFixes=E2=80=9D for =
-the commit message.
-> How do you think about to take this possibility into account
-> for any more patches?
->
+rv3028_probe() misses a check for devm_regmap_init_i2c().
+Add the missed check to fix it.
 
-I got it. I have added fixes tags in my newly sent patches.
+Fixes: e6e7376cfd7b ("rtc: rv3028: add new driver")
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
+Changes in v2:
+  - Add fixes tag.
 
-Regards,
-Chuhong
+ drivers/rtc/rtc-rv3028.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Regards,
-> Markus
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index a0ddc86c975a..ec84db0b3d7a 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -755,6 +755,8 @@ static int rv3028_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 
+ 	rv3028->regmap = devm_regmap_init_i2c(client, &regmap_config);
++	if (IS_ERR(rv3028->regmap))
++		return PTR_ERR(rv3028->regmap);
+ 
+ 	i2c_set_clientdata(client, rv3028);
+ 
+-- 
+2.26.2
+
