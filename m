@@ -2,115 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A531E7833
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2020 10:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B691E78D1
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2020 10:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725562AbgE2IXh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 29 May 2020 04:23:37 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:42059 "EHLO
+        id S1725795AbgE2Iyz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 29 May 2020 04:54:55 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:40043 "EHLO
         relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgE2IXh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 May 2020 04:23:37 -0400
+        with ESMTP id S1725306AbgE2Iyy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 May 2020 04:54:54 -0400
 X-Originating-IP: 86.202.110.81
 Received: from localhost (lfbn-lyo-1-15-81.w86-202.abo.wanadoo.fr [86.202.110.81])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 0556FFF819;
-        Fri, 29 May 2020 08:23:34 +0000 (UTC)
-Date:   Fri, 29 May 2020 10:23:34 +0200
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 912D4FF815;
+        Fri, 29 May 2020 08:54:52 +0000 (UTC)
+Date:   Fri, 29 May 2020 10:54:52 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ran Wang <ran.wang_1@nxp.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>, Li Biwen <biwen.li@nxp.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] rtc: fsl-ftm-alarm: fix freeze(s2idle) doesnot wake
-Message-ID: <20200529082334.GY3972@piout.net>
-References: <20200529061035.18912-1-ran.wang_1@nxp.com>
- <20200529061035.18912-2-ran.wang_1@nxp.com>
+To:     "Kevin P. Fleming" <kevin+linux@km6g.us>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: abx80x: Provide feedback for invalid dt properties
+Message-ID: <20200529085452.GZ3972@piout.net>
+References: <20200529001203.235304-1-kevin+linux@km6g.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529061035.18912-2-ran.wang_1@nxp.com>
+In-Reply-To: <20200529001203.235304-1-kevin+linux@km6g.us>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 29/05/2020 14:10:35+0800, Ran Wang wrote:
-> Use dev_pm_set_wake_irq() instead of flag IRQF_NO_SUSPEND to enable
-> wakeup system feature for both freeze(s2idle) and mem(deep).
+Hi,
+
+
+On 28/05/2020 20:12:03-0400, Kevin P. Fleming wrote:
+> When the user provides an invalid value for tc-diode or
+> tc-resistor generate an error message instead of silently
+> ignoring it.
 > 
-> Use property 'wakeup-source' to control this feature.
-> 
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
 > ---
->  drivers/rtc/rtc-fsl-ftm-alarm.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  drivers/rtc/rtc-abx80x.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/rtc/rtc-fsl-ftm-alarm.c b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> index 756af62..c6945d84 100644
-> --- a/drivers/rtc/rtc-fsl-ftm-alarm.c
-> +++ b/drivers/rtc/rtc-fsl-ftm-alarm.c
-> @@ -21,6 +21,7 @@
->  #include <linux/rtc.h>
->  #include <linux/time.h>
->  #include <linux/acpi.h>
-> +#include <linux/pm_wakeirq.h>
->  
->  #define FTM_SC_CLK(c)		((c) << FTM_SC_CLK_MASK_SHIFT)
->  
-> @@ -41,6 +42,7 @@ struct ftm_rtc {
->  	struct rtc_device *rtc_dev;
->  	void __iomem *base;
->  	bool big_endian;
-> +	bool wakeup;
->  	u32 alarm_freq;
+> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> index 3521d8e8dc38..dae046e3484a 100644
+> --- a/drivers/rtc/rtc-abx80x.c
+> +++ b/drivers/rtc/rtc-abx80x.c
+> @@ -554,7 +554,8 @@ static const struct rtc_class_ops abx80x_rtc_ops = {
+>  	.ioctl		= abx80x_ioctl,
 >  };
 >  
-> @@ -267,6 +269,9 @@ static int ftm_rtc_probe(struct platform_device *pdev)
->  		return PTR_ERR(rtc->base);
->  	}
->  
-> +	rtc->wakeup =
-> +		device_property_read_bool(&pdev->dev, "wakeup-source");
-> +
->  	irq = platform_get_irq(pdev, 0);
->  	if (irq < 0) {
->  		dev_err(&pdev->dev, "can't get irq number\n");
-> @@ -274,7 +279,7 @@ static int ftm_rtc_probe(struct platform_device *pdev)
->  	}
->  
->  	ret = devm_request_irq(&pdev->dev, irq, ftm_rtc_alarm_interrupt,
-> -			       IRQF_NO_SUSPEND, dev_name(&pdev->dev), rtc);
-> +			       0, dev_name(&pdev->dev), rtc);
->  	if (ret < 0) {
->  		dev_err(&pdev->dev, "failed to request irq\n");
+> -static int abx80x_dt_trickle_cfg(struct device_node *np)
+> +static int abx80x_dt_trickle_cfg(struct i2c_client *client,
+> +				 struct device_node *np)
+
+I would remove np from the parameters and use
+struct device_node *np = client->dev.of_node;
+in the function.
+>  {
+>  	const char *diode;
+>  	int trickle_cfg = 0;
+> @@ -565,12 +566,14 @@ static int abx80x_dt_trickle_cfg(struct device_node *np)
+>  	if (ret)
 >  		return ret;
-> @@ -286,7 +291,10 @@ static int ftm_rtc_probe(struct platform_device *pdev)
->  	rtc->alarm_freq = (u32)FIXED_FREQ_CLK / (u32)MAX_FREQ_DIV;
->  	rtc->rtc_dev->ops = &ftm_rtc_ops;
 >  
-> -	device_init_wakeup(&pdev->dev, true);
-> +	device_init_wakeup(&pdev->dev, rtc->wakeup);
+> -	if (!strcmp(diode, "standard"))
+> +	if (!strcmp(diode, "standard")) {
+>  		trickle_cfg |= ABX8XX_TRICKLE_STANDARD_DIODE;
+> -	else if (!strcmp(diode, "schottky"))
+> +	} else if (!strcmp(diode, "schottky")) {
+>  		trickle_cfg |= ABX8XX_TRICKLE_SCHOTTKY_DIODE;
+> -	else
+> +	} else {
+> +		dev_err(&client->dev, "Invalid tc-diode value: %s\n", diode);
 
-As long as you have an irq, you should be able to wakeup, do you really
-need the wakeup-source property?
+Can you make that dev_dbg? This is only ever needed at board bring up/
+development time, so it is not necessary to bloat the kernel with more
+strings.
 
-Usually, wakeup-source is used when the RTC interrupt line is not
-connected directly to the SoC but is still able to wake it up.
-
-In your case, is it to cover the  case of the flex timers that can't
-wake the CPU? If so, then please be more explicit in your commit
-message.
-
-> +	ret = dev_pm_set_wake_irq(&pdev->dev, irq);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "irq wake enable failed.\n");
+>  		return -EINVAL;
+> +	}
 >  
->  	ret = rtc_register_device(rtc->rtc_dev);
->  	if (ret) {
+>  	ret = of_property_read_u32(np, "abracon,tc-resistor", &tmp);
+>  	if (ret)
+> @@ -580,8 +583,10 @@ static int abx80x_dt_trickle_cfg(struct device_node *np)
+>  		if (trickle_resistors[i] == tmp)
+>  			break;
+>  
+> -	if (i == sizeof(trickle_resistors))
+> +	if (i == sizeof(trickle_resistors)) {
+> +		dev_err(&client->dev, "Invalid tc-resistor value: %u\n", tmp);
+>  		return -EINVAL;
+> +	}
+>  
+>  	return (trickle_cfg | i);
+>  }
+> @@ -793,7 +798,7 @@ static int abx80x_probe(struct i2c_client *client,
+>  	}
+>  
+>  	if (np && abx80x_caps[part].has_tc)
+> -		trickle_cfg = abx80x_dt_trickle_cfg(np);
+> +		trickle_cfg = abx80x_dt_trickle_cfg(client, np);
+>  
+>  	if (trickle_cfg > 0) {
+>  		dev_info(&client->dev, "Enabling trickle charger: %02x\n",
 > -- 
-> 2.7.4
+> 2.26.2
 > 
 
 -- 
