@@ -2,100 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB3C1E712D
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2020 02:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8DC1E75CC
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 May 2020 08:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437961AbgE2AML (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 May 2020 20:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437753AbgE2AMJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 May 2020 20:12:09 -0400
-Received: from mail.net18.km6g.us (mail.net18.km6g.us [IPv6:2607:5300:203:24b0:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E356FC08C5C6
-        for <linux-rtc@vger.kernel.org>; Thu, 28 May 2020 17:12:08 -0700 (PDT)
-Received: from [2001:470:8afe:60:716b:c9b9:d55a:f6f1] (helo=balrog20.km6g.us)
-        by mail.net18.km6g.us with esmtp (Exim 4.93.0.4 (FreeBSD))
-        (envelope-from <kevin+linux@km6g.us>)
-        id 1jeSd3-000GDz-Nm; Thu, 28 May 2020 20:12:05 -0400
-From:   "Kevin P. Fleming" <kevin+linux@km6g.us>
+        id S1725777AbgE2GP7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 29 May 2020 02:15:59 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:53154 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725833AbgE2GP5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 29 May 2020 02:15:57 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 805D61A0FC1;
+        Fri, 29 May 2020 08:15:54 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 004DE1A00BE;
+        Fri, 29 May 2020 08:15:50 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6767D402A7;
+        Fri, 29 May 2020 14:15:44 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     "Kevin P. Fleming" <kevin+linux@km6g.us>
-Subject: [PATCH] rtc: abx80x: Provide feedback for invalid dt properties
-Date:   Thu, 28 May 2020 20:12:03 -0400
-Message-Id: <20200529001203.235304-1-kevin+linux@km6g.us>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>, Li Biwen <biwen.li@nxp.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ran Wang <ran.wang_1@nxp.com>
+Subject: [PATCH 1/2] dt-bindings: rtc: add wakeup-source for FlexTimer
+Date:   Fri, 29 May 2020 14:10:34 +0800
+Message-Id: <20200529061035.18912-1-ran.wang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When the user provides an invalid value for tc-diode or
-tc-resistor generate an error message instead of silently
-ignoring it.
-
-Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
 ---
- drivers/rtc/rtc-abx80x.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-index 3521d8e8dc38..dae046e3484a 100644
---- a/drivers/rtc/rtc-abx80x.c
-+++ b/drivers/rtc/rtc-abx80x.c
-@@ -554,7 +554,8 @@ static const struct rtc_class_ops abx80x_rtc_ops = {
- 	.ioctl		= abx80x_ioctl,
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
+index fffac74..d7c482c 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
++++ b/Documentation/devicetree/bindings/rtc/rtc-fsl-ftm-alarm.txt
+@@ -20,6 +20,7 @@ Required properties:
+ Optional properties:
+ - big-endian: If the host controller is big-endian mode, specify this property.
+   The default endian mode is little-endian.
++- wakeup-source: Enable it as a wakeup source
+ 
+ Example:
+ rcpm: rcpm@1e34040 {
+@@ -32,5 +33,6 @@ ftm_alarm0: timer@2800000 {
+ 	compatible = "fsl,ls1088a-ftm-alarm";
+ 	reg = <0x0 0x2800000 0x0 0x10000>;
+ 	fsl,rcpm-wakeup = <&rcpm 0x0 0x0 0x0 0x0 0x4000 0x0>;
++	wakeup-source;
+ 	interrupts = <0 44 4>;
  };
- 
--static int abx80x_dt_trickle_cfg(struct device_node *np)
-+static int abx80x_dt_trickle_cfg(struct i2c_client *client,
-+				 struct device_node *np)
- {
- 	const char *diode;
- 	int trickle_cfg = 0;
-@@ -565,12 +566,14 @@ static int abx80x_dt_trickle_cfg(struct device_node *np)
- 	if (ret)
- 		return ret;
- 
--	if (!strcmp(diode, "standard"))
-+	if (!strcmp(diode, "standard")) {
- 		trickle_cfg |= ABX8XX_TRICKLE_STANDARD_DIODE;
--	else if (!strcmp(diode, "schottky"))
-+	} else if (!strcmp(diode, "schottky")) {
- 		trickle_cfg |= ABX8XX_TRICKLE_SCHOTTKY_DIODE;
--	else
-+	} else {
-+		dev_err(&client->dev, "Invalid tc-diode value: %s\n", diode);
- 		return -EINVAL;
-+	}
- 
- 	ret = of_property_read_u32(np, "abracon,tc-resistor", &tmp);
- 	if (ret)
-@@ -580,8 +583,10 @@ static int abx80x_dt_trickle_cfg(struct device_node *np)
- 		if (trickle_resistors[i] == tmp)
- 			break;
- 
--	if (i == sizeof(trickle_resistors))
-+	if (i == sizeof(trickle_resistors)) {
-+		dev_err(&client->dev, "Invalid tc-resistor value: %u\n", tmp);
- 		return -EINVAL;
-+	}
- 
- 	return (trickle_cfg | i);
- }
-@@ -793,7 +798,7 @@ static int abx80x_probe(struct i2c_client *client,
- 	}
- 
- 	if (np && abx80x_caps[part].has_tc)
--		trickle_cfg = abx80x_dt_trickle_cfg(np);
-+		trickle_cfg = abx80x_dt_trickle_cfg(client, np);
- 
- 	if (trickle_cfg > 0) {
- 		dev_info(&client->dev, "Enabling trickle charger: %02x\n",
 -- 
-2.26.2
+2.7.4
 
