@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9C51F27F2
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 01:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CE31F2749
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 01:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731794AbgFHXZ0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jun 2020 19:25:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51870 "EHLO mail.kernel.org"
+        id S1731273AbgFHXo2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jun 2020 19:44:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731121AbgFHXZZ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:25:25 -0400
+        id S1732075AbgFHX0y (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:26:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DDEF420812;
-        Mon,  8 Jun 2020 23:25:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ACA6A20801;
+        Mon,  8 Jun 2020 23:26:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658722;
-        bh=ve5sv8gFv7HyvXD4yB6SaZpZw1HlQaywAYRES+51m3s=;
+        s=default; t=1591658814;
+        bh=f1V455MIpPmgMu8VkJ6CW9z6ZykWPwkYorbzYRpxZvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=08bRUReXIhXiiWpQrjkMACpp4ERlPtMyUGuWGNb3qUHbxaMYzUUYsN6kucnNYtxY4
-         NrhQ7yA09kng0fnE5sYFo6UUHOIg5xvgpzEXOQ2fCiJi1JTvUaxQsDAMckbnpezyku
-         RPkusjX+XeH/MllNAe0Uc+0+8TOplMDpSdieJ5b0=
+        b=1gfuf/6CDdnX1OcH5bEelNRwGjVEuDLvYBcVIAeviTK/ph8UdLz2eGdenWG8YjnEU
+         uV3pyGHQKK3RvDKfl46Ew36anzbGQ53ziNQ/BfMj6ES4QAJIv3YFpDPfElejkgti/n
+         vXtCS7Ap9b5Z+5u1ADnsAxe99fa2BqHIRYFdZ8xs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -37,12 +37,12 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 16/72] clocksource: dw_apb_timer_of: Fix missing clockevent timers
-Date:   Mon,  8 Jun 2020 19:24:04 -0400
-Message-Id: <20200608232500.3369581-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 10/50] clocksource: dw_apb_timer_of: Fix missing clockevent timers
+Date:   Mon,  8 Jun 2020 19:26:00 -0400
+Message-Id: <20200608232640.3370262-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232500.3369581-1-sashal@kernel.org>
-References: <20200608232500.3369581-1-sashal@kernel.org>
+In-Reply-To: <20200608232640.3370262-1-sashal@kernel.org>
+References: <20200608232640.3370262-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -95,7 +95,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
-index 69866cd8f4bb..3e4d0e5733d3 100644
+index aee6c0d39a7c..024e6cc5025b 100644
 --- a/drivers/clocksource/dw_apb_timer_of.c
 +++ b/drivers/clocksource/dw_apb_timer_of.c
 @@ -146,10 +146,6 @@ static int num_called;
