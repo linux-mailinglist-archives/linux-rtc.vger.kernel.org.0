@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ADE1F24DA
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 01:25:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B75B1F283F
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 01:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731444AbgFHXXI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jun 2020 19:23:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48132 "EHLO mail.kernel.org"
+        id S1732603AbgFHXuQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jun 2020 19:50:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731433AbgFHXXG (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:23:06 -0400
+        id S2387537AbgFHXZV (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:25:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47E93208A7;
-        Mon,  8 Jun 2020 23:23:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F1FF220775;
+        Mon,  8 Jun 2020 23:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658585;
+        s=default; t=1591658720;
         bh=stJzp+0uDkiYIjALJsrQp9bsVu0wkK33koz/CtwL74o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e9DOwnzxAeV/2TlWNj3IGX7uI+JUgjJmRQqZfJo1pTroYapBZ2vjVZY3uYMrQA6Mq
-         XzQUrO7CXQLxwolFbUxWcqiYzPvu9kHmT1PkYYnCglob9OxZTjm6TlUccB8zh2OOLJ
-         zXjq3s1/Inb95r6iFl3cVxknzsFP+Kq2UiNbEIoI=
+        b=s7nkxxFhHXbsAvavUsRListJI/GULYBNxZu8gPxs4wR/8HkTWfEt93AVHvVhy/R2+
+         TzezvvIiMPPy1zk9uVboqjyqR1vDJS/bCRIInAsD8a8VxquVMaMA+8gkMTguSFhKau
+         DrK8OPbUa7p5M3haNp0C2vKk4eOMXofhKS5rmcvo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -37,12 +37,12 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 021/106] clocksource: dw_apb_timer: Make CPU-affiliation being optional
-Date:   Mon,  8 Jun 2020 19:21:13 -0400
-Message-Id: <20200608232238.3368589-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 15/72] clocksource: dw_apb_timer: Make CPU-affiliation being optional
+Date:   Mon,  8 Jun 2020 19:24:03 -0400
+Message-Id: <20200608232500.3369581-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
-References: <20200608232238.3368589-1-sashal@kernel.org>
+In-Reply-To: <20200608232500.3369581-1-sashal@kernel.org>
+References: <20200608232500.3369581-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
