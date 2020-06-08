@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A9B1F2AC6
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 02:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1CD1F2953
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Jun 2020 02:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732093AbgFIAME (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Jun 2020 20:12:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42948 "EHLO mail.kernel.org"
+        id S1729849AbgFHX6s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Jun 2020 19:58:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730855AbgFHXTs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:19:48 -0400
+        id S1731438AbgFHXXI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:23:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6FAD2086A;
-        Mon,  8 Jun 2020 23:19:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49442208B8;
+        Mon,  8 Jun 2020 23:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658388;
-        bh=/wDY0J7ZCbV+kbdSd0PMHEoJW6LCkYfxvOWL2ZHCfxE=;
+        s=default; t=1591658587;
+        bh=ve5sv8gFv7HyvXD4yB6SaZpZw1HlQaywAYRES+51m3s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GctC28Jd2Uf0yh03Bx3Xqrn2xWHy4f9AsemsPry2nuRHUrU9gWcIU6pUUaSWbufen
-         3utFycbBceqotjksCHEDuiYPeYhxrWHaap+ji4vMv9i9UFvNi80yST++4Taqa0xffB
-         B1DDpLPnDDuy/9hCEQFll72QAM/UIkiNBfxQbAKs=
+        b=udj6tN0WC8mn1HJ9TPIAfcqWtRr9ZcPWueoplTIARy9Psc9h9rJWkUNBpFHx95OYw
+         MPB76o0sS0IViXghVfWJHsFDQfdbw/DdpmK7NPkJokZYsxQTxe+zE4c8amasF31yhG
+         4kmsyO1vEiTNMkn1oY6gtn/WTFSkXtExNFgKDFtM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -37,12 +37,12 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 046/175] clocksource: dw_apb_timer_of: Fix missing clockevent timers
-Date:   Mon,  8 Jun 2020 19:16:39 -0400
-Message-Id: <20200608231848.3366970-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 022/106] clocksource: dw_apb_timer_of: Fix missing clockevent timers
+Date:   Mon,  8 Jun 2020 19:21:14 -0400
+Message-Id: <20200608232238.3368589-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231848.3366970-1-sashal@kernel.org>
-References: <20200608231848.3366970-1-sashal@kernel.org>
+In-Reply-To: <20200608232238.3368589-1-sashal@kernel.org>
+References: <20200608232238.3368589-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -95,10 +95,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clocksource/dw_apb_timer_of.c b/drivers/clocksource/dw_apb_timer_of.c
-index 8c28b127759f..6921b91b61ef 100644
+index 69866cd8f4bb..3e4d0e5733d3 100644
 --- a/drivers/clocksource/dw_apb_timer_of.c
 +++ b/drivers/clocksource/dw_apb_timer_of.c
-@@ -147,10 +147,6 @@ static int num_called;
+@@ -146,10 +146,6 @@ static int num_called;
  static int __init dw_apb_timer_init(struct device_node *timer)
  {
  	switch (num_called) {
@@ -109,7 +109,7 @@ index 8c28b127759f..6921b91b61ef 100644
  	case 1:
  		pr_debug("%s: found clocksource timer\n", __func__);
  		add_clocksource(timer);
-@@ -161,6 +157,8 @@ static int __init dw_apb_timer_init(struct device_node *timer)
+@@ -160,6 +156,8 @@ static int __init dw_apb_timer_init(struct device_node *timer)
  #endif
  		break;
  	default:
