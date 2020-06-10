@@ -2,86 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B191F5784
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jun 2020 17:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502891F57A9
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Jun 2020 17:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728266AbgFJPQW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Jun 2020 11:16:22 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:31157 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726979AbgFJPQW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Jun 2020 11:16:22 -0400
-X-Originating-IP: 86.202.110.81
+        id S1730131AbgFJPWI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Jun 2020 11:22:08 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:38813 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728424AbgFJPWI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Jun 2020 11:22:08 -0400
 Received: from localhost (lfbn-lyo-1-15-81.w86-202.abo.wanadoo.fr [86.202.110.81])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 01A2324000F;
-        Wed, 10 Jun 2020 15:16:19 +0000 (UTC)
-Date:   Wed, 10 Jun 2020 17:16:19 +0200
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 81AD5240007;
+        Wed, 10 Jun 2020 15:22:04 +0000 (UTC)
+Date:   Wed, 10 Jun 2020 17:22:04 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     "Kevin P. Fleming" <kevin+linux@km6g.us>
-Cc:     Rob Herring <robh@kernel.org>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH] rtc: abx80x: Add support for autocalibration filter
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 2/2] rtc: abx80x: Add support for autocalibration filter
  capacitor
-Message-ID: <20200610151619.GW3720@piout.net>
-References: <20200530123222.361104-1-kevin+linux@km6g.us>
- <20200609221401.GA1492918@bogus>
- <CAE+UdorjD+2GORj3M6abgqTb8QnRZNFiyCX9PJAJc09xUBACqA@mail.gmail.com>
+Message-ID: <20200610152204.GX3720@piout.net>
+References: <20200530124900.363399-1-kevin+linux@km6g.us>
+ <20200530124900.363399-2-kevin+linux@km6g.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAE+UdorjD+2GORj3M6abgqTb8QnRZNFiyCX9PJAJc09xUBACqA@mail.gmail.com>
+In-Reply-To: <20200530124900.363399-2-kevin+linux@km6g.us>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 09/06/2020 18:23:48-0400, Kevin P. Fleming wrote:
-> On Tue, Jun 9, 2020 at 6:14 PM Rob Herring <robh@kernel.org> wrote:
-> > > ---
-> > >  .../bindings/rtc/abracon,abx80x.txt           |  6 ++++
-> > >  drivers/rtc/rtc-abx80x.c                      | 34 +++++++++++++++++++
-> > >  2 files changed, 40 insertions(+)
-> >
-> > Binding should be a separate patch?
+On 30/05/2020 08:49:00-0400, Kevin P. Fleming wrote:
+> All of the parts supported by this driver can make use of a
+> small capacitor to improve the accuracy of the autocalibration
+> process for their RC oscillators. If a capacitor is connected,
+> a configuration register must be set to enable its use, so a
+> new Device Tree property has been added for that purpose.
 > 
-> Indeed, it was re-sent with the patches separated.
+> Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> To: linux-rtc@vger.kernel.org
+> To: devicetree@vger.kernel.org
+> ---
+>  drivers/rtc/rtc-abx80x.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 > 
-> > > +All of the devices can have a 47pf capacitor attached to increase the
-> > > +autocalibration accuracy of their RC oscillators. To enable usage of the
-> > > +capacitor the following property has to be defined:
-> > > +
-> > > + - "abracon,autocal-filter"
-> >
-> > Can't the standard 'quartz-load-femtofarads' property be used here? You
-> > might not need to know the value, but presence of the property can
-> > enable the feature.
+> diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> index 3521d8e8dc38..be5a814e8c0b 100644
+> --- a/drivers/rtc/rtc-abx80x.c
+> +++ b/drivers/rtc/rtc-abx80x.c
+> @@ -76,6 +76,9 @@
+>  #define ABX8XX_CFG_KEY_OSC	0xa1
+>  #define ABX8XX_CFG_KEY_MISC	0x9d
+>  
+> +#define ABX8XX_REG_AFCTRL	0x26
+> +#define ABX8XX_AUTOCAL_FILTER_ENABLE	0xa0
+> +
+>  #define ABX8XX_REG_ID0		0x28
+>  
+>  #define ABX8XX_REG_OUT_CTRL	0x30
+> @@ -130,6 +133,31 @@ static int abx80x_is_rc_mode(struct i2c_client *client)
+>  	return (flags & ABX8XX_OSS_OMODE) ? 1 : 0;
+>  }
+>  
+> +static int abx80x_enable_autocal_filter(struct i2c_client *client)
+> +{
+> +	int err;
+> +
+> +	/*
+> +	 * Write the configuration key register to enable access to the AFCTRL
+> +	 * register
+> +	 */
+> +	err = i2c_smbus_write_byte_data(client, ABX8XX_REG_CFG_KEY,
+> +					ABX8XX_CFG_KEY_MISC);
+> +	if (err < 0) {
+> +		dev_err(&client->dev, "Unable to write configuration key\n");
+> +		return -EIO;
+> +	}
+
+I'd like to avoid having more error messages in the driver (and whole
+subsystem). Can you move the ABX8XX_REG_CFG_KEY setting earlier in
+abx80x_probe so you don't have to do it here and avoid duplication the
+error message?
+
+This would also make the separate function superfluous.
+
+> +
+> +	err = i2c_smbus_write_byte_data(client, ABX8XX_REG_AFCTRL,
+> +					ABX8XX_AUTOCAL_FILTER_ENABLE);
+> +	if (err < 0) {
+> +		dev_err(&client->dev, "Unable to write autocal filter register\n");
+> +		return -EIO;
+
+The RTC can still work if this fails and the rror is transient, maybe
+just warn and continue. It will be set on the next probe.
+
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int abx80x_enable_trickle_charger(struct i2c_client *client,
+>  					 u8 trickle_cfg)
+>  {
+> @@ -825,6 +853,12 @@ static int abx80x_probe(struct i2c_client *client,
+>  			return err;
+>  	}
+>  
+> +	if (of_property_read_bool(np, "abracon,autocal_filter")) {
+> +		err = abx80x_enable_autocal_filter(client);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	if (client->irq > 0) {
+>  		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
+>  		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+> -- 
+> 2.26.2
 > 
-> On these devices the capacitor is connected to the RC oscillator, not
-> the crystal oscillator, so this property is controlling a different
-> function. I'm certainly open to suggestions for different names for
-> the property if that is desired.
-
-I agree that this is something different, quartz-load-femtofarads is
-about asking the RTC to put the correct load depending on the crystal
-populated on the board. Here, you want to indicate the presence or
-absence of a filter capacitor.
-
-When working with RTCs, there is one issue though: boolean properties
-are not working well because there is no way to express the 3 different
-conditions:
- 1/ the capacitor is present, set the register
- 2/ the capacitor is absent, clear the register
- 3/ the device tree didn't have this property until not and the register
-   may have been set or cleared using another mean, don't touch it.
-
-As your patch is written, it only handles 1 and 3 which is probably the
-safest option but then we will never have a way to clear it from the
-driver. I'd say that this is not an issue but it is also something we
-will never be able to change without breaking some setups.
-
 
 -- 
 Alexandre Belloni, Bootlin
