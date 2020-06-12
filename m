@@ -2,69 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E881F7BA2
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Jun 2020 18:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02371F7EF7
+	for <lists+linux-rtc@lfdr.de>; Sat, 13 Jun 2020 00:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgFLQb3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 12 Jun 2020 12:31:29 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:60213 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgFLQb2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Jun 2020 12:31:28 -0400
-X-Originating-IP: 86.202.110.81
-Received: from localhost (lfbn-lyo-1-15-81.w86-202.abo.wanadoo.fr [86.202.110.81])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 90C37C0005;
-        Fri, 12 Jun 2020 16:31:26 +0000 (UTC)
-Date:   Fri, 12 Jun 2020 18:31:26 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Kevin P. Fleming" <kevin+linux@km6g.us>
-Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        id S1726361AbgFLWgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 12 Jun 2020 18:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbgFLWgU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Jun 2020 18:36:20 -0400
+Received: from mail.net18.km6g.us (mail.net18.km6g.us [IPv6:2607:5300:203:24b0:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9D1C03E96F;
+        Fri, 12 Jun 2020 15:36:20 -0700 (PDT)
+Received: from [2001:470:8afe:60:716b:c9b9:d55a:f6f1] (helo=balrog20.km6g.us)
+        by mail.net18.km6g.us with esmtp (Exim 4.93.0.4 (FreeBSD))
+        (envelope-from <kevin+linux@km6g.us>)
+        id 1jjsHV-0006C6-Hj; Fri, 12 Jun 2020 18:36:13 -0400
+From:   "Kevin P. Fleming" <kevin+linux@km6g.us>
+To:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     "Kevin P. Fleming" <kevin+linux@km6g.us>,
         Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/2] rtc: abx80x: Add support for autocalibration filter
- capacitor
-Message-ID: <20200612163126.GC4232@piout.net>
-References: <20200530124900.363399-1-kevin+linux@km6g.us>
- <20200530124900.363399-2-kevin+linux@km6g.us>
- <20200610152204.GX3720@piout.net>
- <CAE+UdoqR1iPaYxT4aMCNkq0z8duy6abJcuojDz=wKCe7ZMtD5Q@mail.gmail.com>
+Subject: [PATCH 1/3 v2] dt-bindings: abx80x: Add autocal-filter property
+Date:   Fri, 12 Jun 2020 18:35:49 -0400
+Message-Id: <20200612223551.282113-1-kevin+linux@km6g.us>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE+UdoqR1iPaYxT4aMCNkq0z8duy6abJcuojDz=wKCe7ZMtD5Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/06/2020 07:55:53-0400, Kevin P. Fleming wrote:
-> On Wed, Jun 10, 2020 at 11:22 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> > I'd like to avoid having more error messages in the driver (and whole
-> > subsystem). Can you move the ABX8XX_REG_CFG_KEY setting earlier in
-> > abx80x_probe so you don't have to do it here and avoid duplication the
-> > error message?
-> >
-> 
-> Based on my reading of the app manual this won't work properly, as
-> setting the configuration key only allows writing to one register, and
-> then the key is reset. It has to be set to allow enabling the trickle
-> charger, and also to allow enabling the autocalibration filter
-> capacitor.
-> 
+Add a property to allow control of the autocalibration filter
+capacitor.
 
-That is correct and I forgot about that. Can you move just setting the
-key to a function as a preliminary patch?
+Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+To: linux-rtc@vger.kernel.org
+To: devicetree@vger.kernel.org
+---
+v2: Change property to an integer value, and describe possible values
+ Documentation/devicetree/bindings/rtc/abracon,abx80x.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> > The RTC can still work if this fails and the rror is transient, maybe
-> > just warn and continue. It will be set on the next probe.
-> 
-> Will fix in the next version of the patch.
-> 
-> Thanks for the review!
-
+diff --git a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+index 2405e35a1bc0f..18210627b8470 100644
+--- a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
++++ b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+@@ -29,3 +29,11 @@ and valid to enable charging:
+  - "abracon,tc-diode": should be "standard" (0.6V) or "schottky" (0.3V)
+  - "abracon,tc-resistor": should be <0>, <3>, <6> or <11>. 0 disables the output
+                           resistor, the other values are in kOhm.
++
++All of the devices can have a 47pf capacitor attached to increase the
++autocalibration accuracy of their RC oscillators. To enable or disable usage
++of the capacitor the following property can be defined:
++
++ - "abracon,autocal-filter": should be <0> or <1>. 0 indicates that there
++                             is no capacitor attached, 1 indicates that there
++			     is a capacitor attached.
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
+
