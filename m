@@ -2,316 +2,276 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D27B81FABC9
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2020 11:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC0A1FAF6A
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Jun 2020 13:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbgFPJC5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Jun 2020 05:02:57 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:59061 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbgFPJC5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Jun 2020 05:02:57 -0400
-X-Originating-IP: 86.202.110.81
-Received: from localhost (lfbn-lyo-1-15-81.w86-202.abo.wanadoo.fr [86.202.110.81])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id D3B3E20015;
-        Tue, 16 Jun 2020 09:02:54 +0000 (UTC)
-Date:   Tue, 16 Jun 2020 11:02:54 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     bruno.thomsen@gmail.com, a.zummo@towertech.it,
+        id S1728365AbgFPLmG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Jun 2020 07:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgFPLmG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Jun 2020 07:42:06 -0400
+Received: from mail.net18.km6g.us (mail.net18.km6g.us [IPv6:2607:5300:203:24b0:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2994C08C5C2
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Jun 2020 04:42:04 -0700 (PDT)
+Received: from [2001:470:8afe:60:716b:c9b9:d55a:f6f1] (helo=balrog20.km6g.us)
+        by mail.net18.km6g.us with esmtp (Exim 4.94 (FreeBSD))
+        (envelope-from <kevin+linux@km6g.us>)
+        id 1jl9yZ-0002Az-Sl; Tue, 16 Jun 2020 07:41:59 -0400
+From:   "Kevin P. Fleming" <kevin+linux@km6g.us>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] rtc: pcf2127: add alarm support
-Message-ID: <20200616090254.GH241261@piout.net>
-References: <20200614040409.30302-1-liambeguin@gmail.com>
- <20200614040409.30302-3-liambeguin@gmail.com>
+Cc:     "Kevin P. Fleming" <kevin+linux@km6g.us>
+Subject: [PATCH RFC] rtc: abx80x: Add attributes to control oscillator switching modes
+Date:   Tue, 16 Jun 2020 07:41:50 -0400
+Message-Id: <20200616114150.95673-1-kevin+linux@km6g.us>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200614040409.30302-3-liambeguin@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+The devices supported by this driver have two oscillator switching
+modes available which can switch from the crystal oscillator to
+the RC oscillator when triggered by an event.
 
-On 14/06/2020 00:04:09-0400, Liam Beguin wrote:
-> From: Liam Beguin <lvb@xiphos.com>
-> 
-> Add alarm support for the pcf2127 RTC chip family.
-> Tested on pca2129.
-> 
-> Signed-off-by: Liam Beguin <lvb@xiphos.com>
-> ---
-> Changes since v1:
-> - Add calls to pcf2127_wdt_active_ping after accessing CTRL2
-> - Cleanup calls to regmap_{read,write,update_bits}
-> - Cleanup debug trace
-> - Add interrupt handler, untested because of hardware limitations
-> - Add wakeup-source devicetree option
-> 
->  drivers/rtc/rtc-pcf2127.c | 169 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 166 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 396a1144a213..87ecb29247c6 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -20,6 +20,7 @@
->  #include <linux/slab.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_irq.h>
->  #include <linux/regmap.h>
->  #include <linux/watchdog.h>
->  
-> @@ -28,7 +29,9 @@
->  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
->  /* Control register 2 */
->  #define PCF2127_REG_CTRL2		0x01
-> +#define PCF2127_BIT_CTRL2_AIE			BIT(1)
->  #define PCF2127_BIT_CTRL2_TSIE			BIT(2)
-> +#define PCF2127_BIT_CTRL2_AF			BIT(4)
->  #define PCF2127_BIT_CTRL2_TSF2			BIT(5)
->  /* Control register 3 */
->  #define PCF2127_REG_CTRL3		0x02
-> @@ -46,6 +49,12 @@
->  #define PCF2127_REG_DW			0x07
->  #define PCF2127_REG_MO			0x08
->  #define PCF2127_REG_YR			0x09
-> +/* Alarm registers */
-> +#define PCF2127_REG_ALARM_SC		0x0A
-> +#define PCF2127_REG_ALARM_MN		0x0B
-> +#define PCF2127_REG_ALARM_HR		0x0C
-> +#define PCF2127_REG_ALARM_DM		0x0D
-> +#define PCF2127_REG_ALARM_DW		0x0E
->  /* Watchdog registers */
->  #define PCF2127_REG_WD_CTL		0x10
->  #define PCF2127_BIT_WD_CTL_TF0			BIT(0)
-> @@ -79,6 +88,8 @@
->  #define PCF2127_WD_VAL_MAX		255
->  #define PCF2127_WD_VAL_DEFAULT		60
->  
-> +static int pcf2127_wdt_active_ping(struct watchdog_device *wdd);
-> +
+The 'AOS' mode switches to the RC oscillator when the primary power
+supply is lost, and the device is operating on backup power. A boolean
+device attribute named 'auto_osc_switch' controls this mode.
 
-This forward declaration should be avoided.
+The 'FOS' mode switches to the RC oscillator when a failure of the
+crystal oscillator has been detected by the device. A boolean device
+attribute named 'fail_osc_switch' controls this mode.
 
->  struct pcf2127 {
->  	struct rtc_device *rtc;
->  	struct watchdog_device wdd;
-> @@ -185,6 +196,140 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	return 0;
->  }
->  
-> +static int pcf2127_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +	unsigned int buf[5], ctrl2;
-> +	int ret;
-> +
-> +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
-> +	if (ret) {
-> +		dev_err(dev, "%s: ctrl2 read error\n", __func__);
+Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+---
+ drivers/rtc/rtc-abx80x.c | 163 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 151 insertions(+), 12 deletions(-)
 
-Honestly, I would prefer avoiding adding so many strings in the driver.
-The reality is that nobody will look into dmesg to know what was the
-issue and even if somebody does, the solution would simply be to start
-the operation again. Something that can already be deducted when
-returning a simple error code. (This is valid for the subsequent
-dev_err).
-
-> +		return ret;
-> +	}
-> +
-> +	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_ALARM_SC, buf,
-> +			       sizeof(buf));
-> +	if (ret) {
-> +		dev_err(dev, "%s: alarm read error\n", __func__);
-> +		return ret;
-> +	}
-> +
-> +	alrm->enabled = ctrl2 & PCF2127_BIT_CTRL2_AIE;
-> +	alrm->pending = ctrl2 & PCF2127_BIT_CTRL2_AF;
-> +
-> +	alrm->time.tm_sec = bcd2bin(buf[0] & 0x7F);
-> +	alrm->time.tm_min = bcd2bin(buf[1] & 0x7F);
-> +	alrm->time.tm_hour = bcd2bin(buf[2] & 0x3F);
-> +	alrm->time.tm_mday = bcd2bin(buf[3] & 0x3F);
-> +	alrm->time.tm_wday = buf[4] & 0x07;
-> +
-> +	dev_dbg(dev, "%s: alarm is %d:%d:%d, mday=%d, wday=%d\n", __func__,
-> +		alrm->time.tm_hour, alrm->time.tm_min, alrm->time.tm_sec,
-> +		alrm->time.tm_mday, alrm->time.tm_wday);
-> +
-
-It is generally not useful to have those debug strings anymore because
-the core already provides tracepoints at the correct locations.
-
-If you really want to keep it, then please use %ptR.
-
-This is also valid for the other dev_dbg.
-
-> +	return 0;
-> +}
-> +
-> +static int pcf2127_rtc_alarm_irq_enable(struct device *dev, u32 enable)
-> +{
-> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-> +				 PCF2127_BIT_CTRL2_AIE,
-> +				 enable ? PCF2127_BIT_CTRL2_AIE : 0);
-> +	if (ret) {
-> +		dev_err(dev, "%s: failed to %s alarm (%d)\n", __func__,
-> +			enable ? "enable" : "disable",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +	uint8_t buf[5];
-> +	int ret;
-> +
-> +	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-> +				 PCF2127_BIT_CTRL2_AF, 0);
-> +	if (ret) {
-> +		dev_err(dev, "%s: failed to clear alarm interrupt flag (%d)",
-> +			__func__, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	buf[0] = bin2bcd(alrm->time.tm_sec);
-> +	buf[1] = bin2bcd(alrm->time.tm_min);
-> +	buf[2] = bin2bcd(alrm->time.tm_hour);
-> +	buf[3] = bin2bcd(alrm->time.tm_mday);
-> +	buf[4] = (alrm->time.tm_wday & 0x07);
-> +
-> +	dev_dbg(dev, "%s: alarm set for: %d:%d:%d, mday=%d, wday=%d\n",
-> +		__func__, alrm->time.tm_hour, alrm->time.tm_min,
-> +		alrm->time.tm_sec, alrm->time.tm_mday, alrm->time.tm_wday);
-> +
-> +	ret = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_ALARM_SC, buf,
-> +				sizeof(buf));
-> +	if (ret) {
-> +		dev_err(dev, "%s: failed to write alarm registers (%d)",
-> +			__func__, ret);
-> +		return ret;
-> +	}
-> +
-> +	pcf2127_rtc_alarm_irq_enable(dev, alrm->enabled);
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
-> +{
-> +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-> +	unsigned int ctrl2 = 0;
-> +	int ret = 0;
-> +
-> +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
-> +	if (ret) {
-> +		dev_err(dev, "%s: ctrl2 read error (%d)\n", __func__, ret);
-> +		goto irq_err;
-> +	}
-> +
-> +	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> +	if (ret)
-> +		goto irq_err;
-> +
-> +	if (ctrl2 & PCF2127_BIT_CTRL2_AF) {
-> +		regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-> +				   PCF2127_BIT_CTRL2_AF, 0);
-
-In that case, I think it makes more sense to use regmap_write as this
-would avoid another read of ctrl2.
-
-> +
-> +		ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-> +		if (ret)
-> +			goto irq_err;
-> +
-> +		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +irq_err:
-> +	return IRQ_NONE;
-> +}
-> +
->  #ifdef CONFIG_RTC_INTF_DEV
->  static int pcf2127_rtc_ioctl(struct device *dev,
->  				unsigned int cmd, unsigned long arg)
-> @@ -211,9 +356,12 @@ static int pcf2127_rtc_ioctl(struct device *dev,
->  #endif
->  
->  static const struct rtc_class_ops pcf2127_rtc_ops = {
-> -	.ioctl		= pcf2127_rtc_ioctl,
-> -	.read_time	= pcf2127_rtc_read_time,
-> -	.set_time	= pcf2127_rtc_set_time,
-> +	.ioctl            = pcf2127_rtc_ioctl,
-> +	.read_time        = pcf2127_rtc_read_time,
-> +	.set_time         = pcf2127_rtc_set_time,
-> +	.read_alarm       = pcf2127_rtc_read_alarm,
-> +	.set_alarm        = pcf2127_rtc_set_alarm,
-> +	.alarm_irq_enable = pcf2127_rtc_alarm_irq_enable,
->  };
->  
->  static int pcf2127_nvmem_read(void *priv, unsigned int offset,
-> @@ -415,6 +563,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  			const char *name, bool has_nvmem)
->  {
->  	struct pcf2127 *pcf2127;
-> +	int alarm_irq = 0;
->  	u32 wdd_timeout;
->  	int ret = 0;
->  
-> @@ -434,6 +583,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  
->  	pcf2127->rtc->ops = &pcf2127_rtc_ops;
->  
-> +	alarm_irq = of_irq_get_byname(dev->of_node, "alarm");
-> +	if (alarm_irq >= 0) {
-> +		ret = devm_request_irq(dev, alarm_irq, pcf2127_rtc_irq,
-> +				       IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> +				       dev_name(dev), dev);
-> +		if (ret) {
-> +			dev_err(dev, "failed to request alarm irq\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	if (alarm_irq >= 0 || device_property_read_bool(dev, "wakeup-source"))
-> +		device_init_wakeup(dev, true);
-
-The last thing here is that you should have two different rtc_class_ops
-struct, one with alarm and the other one without. at this point, you
-know which one you should use. I know this is not convenient but I'm
-working on a series to make things better. Until this is ready, this is
-what we will have to live with.
-
-
+diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+index 1b428fe2029ef..3a92015395417 100644
+--- a/drivers/rtc/rtc-abx80x.c
++++ b/drivers/rtc/rtc-abx80x.c
+@@ -55,10 +55,9 @@
+ 
+ #define ABX8XX_REG_OSC		0x1c
+ #define ABX8XX_OSC_FOS		BIT(3)
+-#define ABX8XX_OSC_BOS		BIT(4)
++#define ABX8XX_OSC_AOS		BIT(4)
+ #define ABX8XX_OSC_ACAL_512	BIT(5)
+ #define ABX8XX_OSC_ACAL_1024	BIT(6)
+-
+ #define ABX8XX_OSC_OSEL		BIT(7)
+ 
+ #define ABX8XX_REG_OSS		0x1d
+@@ -136,15 +135,34 @@ static int abx80x_is_rc_mode(struct i2c_client *client)
+ 	int flags = 0;
+ 
+ 	flags =  i2c_smbus_read_byte_data(client, ABX8XX_REG_OSS);
+-	if (flags < 0) {
+-		dev_err(&client->dev,
+-			"Failed to read autocalibration attribute\n");
++	if (flags < 0)
+ 		return flags;
+-	}
+ 
+ 	return (flags & ABX8XX_OSS_OMODE) ? 1 : 0;
+ }
+ 
++static int abx80x_is_auto_osc_switch_mode(struct i2c_client *client)
++{
++	int flags = 0;
++
++	flags =  i2c_smbus_read_byte_data(client, ABX8XX_REG_OSC);
++	if (flags < 0)
++		return flags;
++
++	return (flags & ABX8XX_OSC_AOS) ? 1 : 0;
++}
++
++static int abx80x_is_fail_osc_switch_mode(struct i2c_client *client)
++{
++	int flags = 0;
++
++	flags =  i2c_smbus_read_byte_data(client, ABX8XX_REG_OSC);
++	if (flags < 0)
++		return flags;
++
++	return (flags & ABX8XX_OSC_FOS) ? 1 : 0;
++}
++
+ static int abx80x_set_autocal_filter(struct i2c_client *client, u8 filter_cfg)
+ {
+ 	int err;
+@@ -196,8 +214,11 @@ static int abx80x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	/* Read the Oscillator Failure only in XT mode */
+ 	rc_mode = abx80x_is_rc_mode(client);
+-	if (rc_mode < 0)
++	if (rc_mode < 0) {
++		dev_err(&client->dev,
++			"Failed to read oscillator mode\n");
+ 		return rc_mode;
++	}
+ 
+ 	if (!rc_mode) {
+ 		flags = i2c_smbus_read_byte_data(client, ABX8XX_REG_OSS);
+@@ -497,7 +518,7 @@ static ssize_t oscillator_show(struct device *dev,
+ 	rc_mode = abx80x_is_rc_mode(client);
+ 
+ 	if (rc_mode < 0) {
+-		dev_err(dev, "Failed to read RTC oscillator selection\n");
++		dev_err(dev, "Failed to read oscillator mode\n");
+ 		sprintf(buf, "\n");
+ 		return rc_mode;
+ 	}
+@@ -510,14 +531,132 @@ static ssize_t oscillator_show(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(oscillator);
+ 
+-static struct attribute *rtc_calib_attrs[] = {
++static ssize_t auto_osc_switch_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	int retval, flags;
++	bool auto_osc_switch = false;
++
++	retval = kstrtobool(buf,  &auto_osc_switch);
++	if (retval < 0) {
++		dev_err(dev, "Failed to parse auto_osc_switch attribute\n");
++		return -EINVAL;
++	}
++
++	flags =  i2c_smbus_read_byte_data(client, ABX8XX_REG_OSC);
++	if (flags < 0)
++		return flags;
++
++	if (auto_osc_switch)
++		flags |= (ABX8XX_OSC_AOS);
++	else
++		flags &= ~(ABX8XX_OSC_AOS);
++
++	/* Unlock write access on Oscillator Control register */
++	if (abx80x_write_config_key(client, ABX8XX_CFG_KEY_OSC) < 0)
++		return -EIO;
++
++	retval = i2c_smbus_write_byte_data(client, ABX8XX_REG_OSC, flags);
++	if (retval < 0) {
++		dev_err(dev, "Failed to write Oscillator Control register\n");
++		return retval;
++	}
++
++	return retval ? retval : count;
++}
++
++static ssize_t auto_osc_switch_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	int aos_mode = 0;
++	struct i2c_client *client = to_i2c_client(dev->parent);
++
++	aos_mode = abx80x_is_auto_osc_switch_mode(client);
++
++	if (aos_mode < 0) {
++		dev_err(dev, "Failed to read RTC oscillator control register\n");
++		sprintf(buf, "\n");
++		return aos_mode;
++	}
++
++	if (aos_mode)
++		return sprintf(buf, "on\n");
++	else
++		return sprintf(buf, "off\n");
++}
++
++static DEVICE_ATTR_RW(auto_osc_switch);
++
++static ssize_t fail_osc_switch_store(struct device *dev,
++				     struct device_attribute *attr,
++				     const char *buf, size_t count)
++{
++	struct i2c_client *client = to_i2c_client(dev->parent);
++	int retval, flags;
++	bool fail_osc_switch = false;
++
++	retval = kstrtobool(buf,  &fail_osc_switch);
++	if (retval < 0) {
++		dev_err(dev, "Failed to parse fail_osc_switch attribute\n");
++		return -EINVAL;
++	}
++
++	flags =  i2c_smbus_read_byte_data(client, ABX8XX_REG_OSC);
++	if (flags < 0)
++		return flags;
++
++	if (fail_osc_switch)
++		flags |= (ABX8XX_OSC_FOS);
++	else
++		flags &= ~(ABX8XX_OSC_FOS);
++
++	/* Unlock write access on Oscillator Control register */
++	if (abx80x_write_config_key(client, ABX8XX_CFG_KEY_OSC) < 0)
++		return -EIO;
++
++	retval = i2c_smbus_write_byte_data(client, ABX8XX_REG_OSC, flags);
++	if (retval < 0) {
++		dev_err(dev, "Failed to write Oscillator Control register\n");
++		return retval;
++	}
++
++	return retval ? retval : count;
++}
++
++static ssize_t fail_osc_switch_show(struct device *dev,
++				    struct device_attribute *attr, char *buf)
++{
++	int aos_mode = 0;
++	struct i2c_client *client = to_i2c_client(dev->parent);
++
++	aos_mode = abx80x_is_fail_osc_switch_mode(client);
++
++	if (aos_mode < 0) {
++		dev_err(dev, "Failed to read RTC oscillator control register\n");
++		sprintf(buf, "\n");
++		return aos_mode;
++	}
++
++	if (aos_mode)
++		return sprintf(buf, "on\n");
++	else
++		return sprintf(buf, "off\n");
++}
++
++static DEVICE_ATTR_RW(fail_osc_switch);
++
++static struct attribute *rtc_osc_ctrl_attrs[] = {
+ 	&dev_attr_autocalibration.attr,
+ 	&dev_attr_oscillator.attr,
++	&dev_attr_auto_osc_switch.attr,
++	&dev_attr_fail_osc_switch.attr,
+ 	NULL,
+ };
+ 
+-static const struct attribute_group rtc_calib_attr_group = {
+-	.attrs		= rtc_calib_attrs,
++static const struct attribute_group rtc_osc_ctrl_attr_group = {
++	.attrs		= rtc_osc_ctrl_attrs,
+ };
+ 
+ static int abx80x_alarm_irq_enable(struct device *dev, unsigned int enabled)
+@@ -871,7 +1010,7 @@ static int abx80x_probe(struct i2c_client *client,
+ 		}
+ 	}
+ 
+-	err = rtc_add_group(priv->rtc, &rtc_calib_attr_group);
++	err = rtc_add_group(priv->rtc, &rtc_osc_ctrl_attr_group);
+ 	if (err) {
+ 		dev_err(&client->dev, "Failed to create sysfs group: %d\n",
+ 			err);
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
+
