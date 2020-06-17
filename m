@@ -2,135 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D33E1FC1B4
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Jun 2020 00:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480EF1FD89D
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jun 2020 00:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgFPWeo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Jun 2020 18:34:44 -0400
-Received: from v6.sk ([167.172.42.174]:48650 "EHLO v6.sk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726594AbgFPWek (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 16 Jun 2020 18:34:40 -0400
-Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 1D83D61639;
-        Tue, 16 Jun 2020 22:34:08 +0000 (UTC)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH v3 5/5] dt-bindings: timer: Convert mrvl,mmp-timer to json-schema
-Date:   Wed, 17 Jun 2020 00:33:53 +0200
-Message-Id: <20200616223353.993567-6-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200616223353.993567-1-lkundrak@v3.sk>
-References: <20200616223353.993567-1-lkundrak@v3.sk>
+        id S1726909AbgFQWWy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 17 Jun 2020 18:22:54 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:36200 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726864AbgFQWWx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 Jun 2020 18:22:53 -0400
+Received: by mail-io1-f66.google.com with SMTP id r77so4845765ior.3;
+        Wed, 17 Jun 2020 15:22:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cZs4DMmV9+4KYcd4h6vQwLKgeDMHogArG6hcyQ007uM=;
+        b=gVpbsZdEhDysjWmMMcZ4tiUNZtAM3zl10CcYwhLlqY5hGMcf2B6+s0hGcjlelrYQCZ
+         YO8jpRlpvN5ABhgYIW0AUo4rhIT6wqSxZYKPXUrcpUbBXDCZIeVjM7Umw9LsYkujXRu+
+         4R/SzzQ7Dvd5MP5smw8JbwOywzng5X7EAhJVV6Jb61Ojsv//cGMdPHjAJZ5+DKihlQtH
+         ukV8h3eM/PdZD/GORy7dCUmFpmzQAuSQsa+2bLG4BNEa35q9bqb98jCNXyXR7ztC70pW
+         HXzDT/5HisCyfdLT9o+N25AQfpRGnFbgpyVZdMGfC2yEFAdg7pWykaW/5zX3aTrFTft0
+         X19A==
+X-Gm-Message-State: AOAM530Vw36zdgWdGqHhW7pb8tQ+X1NylqBkMXSKgo182Rtelffe8BIx
+        i7cf7hAIbceK4fnWQ+eTEg==
+X-Google-Smtp-Source: ABdhPJwVLzRisP+uIxnL1NbxlXTfqVaPm1HmkXIu0ChWO56rldgx6wkKleV2KmMwEts15aMvaS5Bcw==
+X-Received: by 2002:a6b:8d44:: with SMTP id p65mr1805887iod.24.1592432571789;
+        Wed, 17 Jun 2020 15:22:51 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id p25sm630019iog.47.2020.06.17.15.22.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 15:22:51 -0700 (PDT)
+Received: (nullmailer pid 2941342 invoked by uid 1000);
+        Wed, 17 Jun 2020 22:22:48 -0000
+Date:   Wed, 17 Jun 2020 16:22:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        ludovic.desroches@microchip.com, maz@kernel.org,
+        jason@lakedaemon.net, nicolas.ferre@microchip.com,
+        linux-rtc@vger.kernel.org, tglx@linutronix.de,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: rtc: add microchip,sam9x60-rtt
+Message-ID: <20200617222248.GA2941290@bogus>
+References: <1591779936-18577-1-git-send-email-claudiu.beznea@microchip.com>
+ <1591779936-18577-3-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1591779936-18577-3-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-A straightforward conversion of the mrvl,mmp-timer binding to DT schema
-format using json-schema.
+On Wed, 10 Jun 2020 12:05:35 +0300, Claudiu Beznea wrote:
+> Add microchip,sam9x60-rtt to compatible list.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-
----
-Changes since v1:
-- Add default GPL-2.0-only license tag
-- Fill in maintainers from MAINTAINERS file
-
- .../bindings/timer/mrvl,mmp-timer.txt         | 17 -------
- .../bindings/timer/mrvl,mmp-timer.yaml        | 46 +++++++++++++++++++
- 2 files changed, 46 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
-deleted file mode 100644
-index b8f02c6635219..0000000000000
---- a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--* Marvell MMP Timer controller
--
--Required properties:
--- compatible : Should be "mrvl,mmp-timer".
--- reg : Address and length of the register set of timer controller.
--- interrupts : Should be the interrupt number.
--
--Optional properties:
--- clocks : Should contain a single entry describing the clock input.
--
--Example:
--	timer0: timer@d4014000 {
--		compatible = "mrvl,mmp-timer";
--		reg = <0xd4014000 0x100>;
--		interrupts = <13>;
--		clocks = <&coreclk 2>;
--	};
-diff --git a/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-new file mode 100644
-index 0000000000000..1fbc260a0cbdf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/mrvl,mmp-timer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell MMP Timer bindings
-+
-+maintainers:
-+  - Daniel Lezcano <daniel.lezcano@linaro.org>
-+  - Thomas Gleixner <tglx@linutronix.de>
-+  - Rob Herring <robh+dt@kernel.org>
-+
-+properties:
-+  $nodename:
-+    pattern: '^timer@[a-f0-9]+$'
-+
-+  compatible:
-+    const: mrvl,mmp-timer
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timer@d4014000 {
-+        compatible = "mrvl,mmp-timer";
-+        reg = <0xd4014000 0x100>;
-+        interrupts = <13>;
-+        clocks = <&coreclk 2>;
-+    };
-+
-+...
--- 
-2.26.2
-
+Acked-by: Rob Herring <robh@kernel.org>
