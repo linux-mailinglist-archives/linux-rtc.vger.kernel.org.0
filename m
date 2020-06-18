@@ -2,117 +2,209 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0355F1FEEFE
-	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jun 2020 11:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34191FF2FA
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Jun 2020 15:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729302AbgFRJvq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 18 Jun 2020 05:51:46 -0400
-Received: from mail-db8eur05on2083.outbound.protection.outlook.com ([40.107.20.83]:43617
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729060AbgFRJvn (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 18 Jun 2020 05:51:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UVaGjuwvKzzkc7H7coRjiV9rP6vHgzXjHpwa+wsxkowwdBsWJt7f1g0QDh6T+lBVacBwr+WfuNcX1H514pcz5melt9p/RNR/hw8VjJYtvBAfUEKQsCfMTUPgibQV3Ngr2UyxVQMsOVwoMLloOcXoZ89C5G4rMLzpfDCH26iCpjP/AChLa08OjENDgguH+wFzrqhPKI+uJvD+vh8nlnIlbd2EcVpJT0mN9N8HhaKoChrmok+iccSVRfZA9iRpN0rVX+PHGfFGeetKo9j8rn9tIjBkTNtBalsLxFj+1L+lw3jvA/rEsmSnEFWSciHAus+4yd7t9zMbqThBEl6Wqdhd9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CR/FsfpBP+eZ4NXwBmOqZSdme6qd+i3dDZTwvy/nYAE=;
- b=S4+ab2/S5qK4VvTYXueEINUOW6Q/hbf91jPif9HobdQ+/o6/hhndIQy/UmxBk+/aY7FFD6kbqqYxE7OKPFUGtdEcIv+vU8002fl/csKroT2oImh/yBc0hSo+vDcob3ORFIAkbqurOJcLbrok2UitqbSyPRmCNAXMyD6ZODt8/QRez4KtHvNvQeJQjNOyZpp5IxWFDHhShE9AdMwZ7MRmdAeH5Y5eU3BTsIvtd3wXcOahGWd989kqD8AbfncFQobHgjBRx2MGayqyMTCOKHRySBrUfZiD3RRF5jg+TYN6JjGLMhUpahinZys6f+jIQyjpLG2MUtmxNRmHGA1nf84iEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+        id S1728677AbgFRN0h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 18 Jun 2020 09:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728049AbgFRN0g (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 Jun 2020 09:26:36 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AE0C06174E;
+        Thu, 18 Jun 2020 06:26:36 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id jz3so2551085pjb.0;
+        Thu, 18 Jun 2020 06:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CR/FsfpBP+eZ4NXwBmOqZSdme6qd+i3dDZTwvy/nYAE=;
- b=lScC9AtpGRliMOVezxatk1uCyKhcSmdTPoDkIYTdgrT6nA5SWtptBcEqWzl7Kr5sicf2WLpQeqGXcfbLCJhiEvNHYwFt6QaC46nc0eKwujpRh5n+JXyQz1Gjm2dQKhkx3NAE5AYyDKIam6zXnp38vDPlNqGikrHk5fJett0V5ys=
-Received: from DB6PR03MB3032.eurprd03.prod.outlook.com (2603:10a6:6:38::32) by
- DB6PR03MB2869.eurprd03.prod.outlook.com (2603:10a6:6:34::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3088.18; Thu, 18 Jun 2020 09:51:38 +0000
-Received: from DB6PR03MB3032.eurprd03.prod.outlook.com
- ([fe80::945f:bfb0:7d94:2865]) by DB6PR03MB3032.eurprd03.prod.outlook.com
- ([fe80::945f:bfb0:7d94:2865%6]) with mapi id 15.20.3109.021; Thu, 18 Jun 2020
- 09:51:38 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+szEYaTJUjqC8loVVwSE856UEXD76jmesRo7buRlzFI=;
+        b=pdNkg3J1XNvAD4zAR8T/4wJK8hM25e5co4VBSu8tRGcmUGf636jXpwHeRSZtKtAyj9
+         /w19KdMo1kcbbx2x+I+490vk428OIlunWq357f6c+O2GpAEq1C5+5HiUvSeCrjLW8vaX
+         qOl7NrmHk+s5akpM/Cix8tWPN5mkO74GA6CI/Mqs/OkliMljny0YxNS/MvR/0uMHBrpf
+         qIE1O03Gq4hrRsWoKtZeNqCIpF9KonjLVXLeL6fNC2cXEZtU1UhmSHbXfptXY9w2aqpi
+         9TNMIwUEjCAtS3lSUGOKqDZIMAMQxfai0CWfbWsL+knr52U+aGmv92qr4PIeb9KD3DDd
+         jqGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=+szEYaTJUjqC8loVVwSE856UEXD76jmesRo7buRlzFI=;
+        b=gctU/upa9SEagovsNTRkuuiBryNugsJObzaDRSPCUPFTM4cjSrOcdFFqbyT+SgNa8+
+         dmQRgodCiTVuyyindzeQhlNSH+S2oS8iZc8e1lU9QRyFNnG2XMaisKnQIgtwS44SwwuY
+         lkYdqdsSuO2pnRILyGGs2LsbOOndPT2GNShmY8h+dmMfkqwuAUjyndBaPJLtJ1LcfVX0
+         87upo5bbxA+Zk6mBy6ajHv0R60E/3jvVIfvEiPOwBvYBHQ82gwIY0qP9w0uqzd/kd0tU
+         bpkuGnK3/wj359gliXRcd67gSL1YZeJsPMIb6K4XrmwduqXhEaad0irR44/jL/KXLFIC
+         J/cA==
+X-Gm-Message-State: AOAM533BEdDTCRpZ3s0yJOyS2tU7R/frdt2kjWv5TTjI3soHiBdCu3BO
+        yY+c4F3zHkShroiXPfsyAkYEJpR+
+X-Google-Smtp-Source: ABdhPJxx0aOJE95AR6h2n8AR4eAeG+hd8HMeeUfuRhW7wf/wSrKkB9J4UccpYXK0oqW/7yReWoFJFQ==
+X-Received: by 2002:a17:902:7c13:: with SMTP id x19mr3640505pll.74.1592486795129;
+        Thu, 18 Jun 2020 06:26:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m15sm2650868pgv.45.2020.06.18.06.26.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jun 2020 06:26:34 -0700 (PDT)
 Subject: Re: [PATCH v2] MAINTAINERS: Add entry for ROHM power management ICs
-Thread-Topic: [PATCH v2] MAINTAINERS: Add entry for ROHM power management ICs
-Thread-Index: AQHWRULLCylAWLl8vUS+dOeTyuJSw6jeBRIAgAAchYA=
-Date:   Thu, 18 Jun 2020 09:51:38 +0000
-Message-ID: <989997fc90b9e90b17f3a9f2bf600595bd6ee3cf.camel@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        mazziesaccount@gmail.com
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-power@fi.rohmeurope.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
 References: <20200618073331.GA9403@localhost.localdomain>
-         <20200618080932.GZ2608702@dell>
-In-Reply-To: <20200618080932.GZ2608702@dell>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [213.255.186.46]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b353fb32-335d-4a0e-430f-08d8136d3230
-x-ms-traffictypediagnostic: DB6PR03MB2869:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR03MB2869A9A1DE9A26DF202135C7AD9B0@DB6PR03MB2869.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2803;
-x-forefront-prvs: 0438F90F17
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: z3tt0kiQtTpbhpNUIe33ykTQoAHDYddHicvlVCC4pLFdZu1WwX/d1pAQBPrq50SpKgeCNf7xSC+DwiBl9ouZ+sORpkCIEEvzyXXAloGj4edpe4Go4HiZeu+NVKjNIOkXWGLziZIgapamLbChiXdVA+xXoLrRd8fOvWTp+JXvwZtT1PhWLDNjkQzQ4Zrs+lIJNsBt6bbsBSve1BDnjY+5/24b5ci31ML3cOAUSKzv5Q76Vqm5ajw8jKb9XQ1wBdlxYTIxQ++KVU588XRu4+XD7VZRRMph7U/SxPYdWZVPGRurK2XzWAe+ZxiH1Z+mp3c89azZZiJV6x9yekYE8uFj2w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3032.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(396003)(39850400004)(136003)(346002)(366004)(6506007)(316002)(2906002)(64756008)(66476007)(91956017)(66946007)(6916009)(76116006)(66446008)(66556008)(26005)(3450700001)(6486002)(4326008)(186003)(86362001)(2616005)(6512007)(478600001)(5660300002)(4744005)(8676002)(54906003)(7416002)(71200400001)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: pzDFKP6s8m9mWhySlk66l13LHlU8Bzo13j2d82oIY75AjXipcHP0aEFmX6wAcXAYNWxsAFsE8u4YgHxrgrzPQMqbscAV5QEcHAEyhljlu0/ty6V143L9FrXsN6hnBECC2oXINou4R1JvoqeqFcWYDDqnOBo5AO1XBvh2zPc/7yZU9IwFdoLuZ4aEzta9c/nXn3J8R3+GXuIPAj7dJfDCm1O/j7XuY2lkBg8Wjrx6hzCHfT+UGGmHWwCRIkMmPVRl+Sfkr/XTiQRVdctcggn0beI+dzzwXtQUuYXt287M9ZyVOvJ7wxTrI4lB25frE5bTSB6jGlKNsSgHgcWYYca0rt+3wUCSVAMRRVPorItMraZsK9838ks1yRY/La6Tx7NRnjBHZtkBdNwtZdBXlROpRgyEK7rYNPUveeasUmhSlFn8g7d2IfGHyMbpNcutbJh8UtkQuwn/cPpQJhKS8wgPreWxr+YkJbpSpIoeOpc3SSnoVVsVkCwZECqv4PTQ9l8b
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <73E5041237464244A5307169A4A1FCFD@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <dde84271-d093-e18b-962d-18b8d8eaecb8@roeck-us.net>
+Date:   Thu, 18 Jun 2020 06:26:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b353fb32-335d-4a0e-430f-08d8136d3230
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2020 09:51:38.5083
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SkHC1/Vf5wQgXE8+XabdB1wBlypH2cllEz3YMdiBFSZo5vEaGjZFmJ6Fl8KnNXUd0WraMLhWR6ODRkchMTl5v8nUxsnFEn0Mfn8cPGKMV8uOc4EbZok6nsmkediDP/wu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR03MB2869
+In-Reply-To: <20200618073331.GA9403@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBUaHUsIDIwMjAtMDYtMTggYXQgMDk6MDkgKzAxMDAsIExlZSBKb25lcyB3cm90ZToNCj4g
-T24gVGh1LCAxOCBKdW4gMjAyMCwgTWF0dGkgVmFpdHRpbmVuIHdyb3RlOg0KPiANCj4gPiBBZGQg
-ZW50cnkgZm9yIG1haW50YWluaW5nIHBvd2VyIG1hbmFnZW1lbnQgSUMgZHJpdmVycyBmb3IgUk9I
-TQ0KPiA+IEJENzE4MzcsIEJENzE4NDcsIEJENzE4NTAsIEJENzE4MjgsIEJENzE4NzgsIEJENzA1
-MjggYW5kIEJEOTk5NTQuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogTWF0dGkgVmFpdHRpbmVu
-IDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1cm9wZS5jb20+DQo+ID4gQWNrZWQtYnk6IFNlYmFz
-dGlhbiBSZWljaGVsIDxzcmVAa2VybmVsLm9yZz4NCj4gPiAtLS0NCj4gPiBNb3JuaW5nIExlZSAt
-IGNvdWxkIHlvdSB0YWtlIHRoaXMgaW4gTUZEPyBUaGlzIGlzIHNjYXR0ZXJlZCBhbGwNCj4gPiBh
-cm91bmQNCj4gPiBkaWZmZXJlbnQgc3Vic3lzdGVtcyBhbnl3YXlzLi4uIEkgZ3Vlc3MgY3JhZnRp
-bmcgYnVuY2ggb2YgcGF0Y2hlcw0KPiA+IHRvDQo+ID4gZWFjaCBpbmRpdmlkdWFsIHN1YnN5c3Rl
-bXMgd291bGQganVzdCBlbmQgdXAgd2l0aCBsb3RzIG9mIG1lcmdlDQo+ID4gY29uZmxpY3RzLg0K
-PiANCj4gWWVzLCBubyBwcm9ibGVtLiAgTGV0J3MgbGV0IGl0IHNpdCBhcm91bmQgZm9yIGEgd2Vl
-ayBvciBzby4gIElmIGl0DQo+IGRvZXNuJ3QgZ2FpbiBhbnkgbmVnYXRpdmUgYXR0ZW50aW9uLCBJ
-J2xsIGFwcGx5IGl0Lg0KDQpUaGFua3MhDQoNCi0tTWF0dGkNCg==
+On 6/18/20 12:33 AM, Matti Vaittinen wrote:
+> Add entry for maintaining power management IC drivers for ROHM
+> BD71837, BD71847, BD71850, BD71828, BD71878, BD70528 and BD99954.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> ---
+> Morning Lee - could you take this in MFD? This is scattered all around
+> different subsystems anyways... I guess crafting bunch of patches to
+> each individual subsystems would just end up with lots of merge
+> conflicts.
+> 
+> Changes from v1:
+> - Dropped patch 2/2 (linear-ranges maintainer) which was already applied by Mark
+> - Added shiny new ROHM linux-power list so that I am no longer the lonely
+>   poor sod watching these at ROHM side :)
+> - sort few files to alphabethical order as checkpatch now nagged about
+>   that.
+> 
+> v1 was here:
+> https://lore.kernel.org/lkml/e11366fd280736844ae63791b6193bb84d6205bf.1589866138.git.matti.vaittinen@fi.rohmeurope.com/
+> 
+> 
+>  MAINTAINERS | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 68f21d46614c..ce08617f63f5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14704,6 +14704,13 @@ L:	linux-serial@vger.kernel.org
+>  S:	Odd Fixes
+>  F:	drivers/tty/serial/rp2.*
+>  
+> +ROHM BD99954 CHARGER IC
+> +R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +L:	linux-power@fi.rohmeurope.com
+> +S:	Supported
+> +F:	drivers/power/supply/bd99954-charger.c
+> +F:	drivers/power/supply/bd99954-charger.h
+> +
+>  ROHM BH1750 AMBIENT LIGHT SENSOR DRIVER
+>  M:	Tomasz Duszynski <tduszyns@gmail.com>
+>  S:	Maintained
+> @@ -14721,6 +14728,31 @@ F:	drivers/mfd/bd9571mwv.c
+>  F:	drivers/regulator/bd9571mwv-regulator.c
+>  F:	include/linux/mfd/bd9571mwv.h
+>  
+> +ROHM POWER MANAGEMENT IC DEVICE DRIVERS
+> +R:	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +L:	linux-power@fi.rohmeurope.com
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic.txt
+> +F:	Documentation/devicetree/bindings/regulator/rohm,bd70528-regulator.txt
+> +F:	drivers/clk/clk-bd718x7.c
+> +F:	drivers/gpio/gpio-bd70528.c
+> +F:	drivers/gpio/gpio-bd71828.c
+> +F:	drivers/mfd/rohm-bd70528.c
+> +F:	drivers/mfd/rohm-bd71828.c
+> +F:	drivers/mfd/rohm-bd718x7.c
+> +F:	drivers/power/supply/bd70528-charger.c
+> +F:	drivers/regulator/bd70528-regulator.c
+> +F:	drivers/regulator/bd71828-regulator.c
+> +F:	drivers/regulator/bd718x7-regulator.c
+> +F:	drivers/regulator/rohm-regulator.c
+> +F:	drivers/rtc/rtc-bd70528.c
+> +F:	drivers/watchdog/bd70528_wdt.c
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+> +F:	include/linux/mfd/rohm-bd70528.h
+> +F:	include/linux/mfd/rohm-bd71828.h
+> +F:	include/linux/mfd/rohm-bd718x7.h
+> +F:	include/linux/mfd/rohm-generic.h
+> +F:	include/linux/mfd/rohm-shared.h
+> +
+>  ROSE NETWORK LAYER
+>  M:	Ralf Baechle <ralf@linux-mips.org>
+>  L:	linux-hams@vger.kernel.org
+> 
+> base-commit: b3a9e3b9622ae10064826dccb4f7a52bd88c7407
+> 
+
