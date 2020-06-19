@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158C8200CB3
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2020 16:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6C8200F83
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2020 17:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389104AbgFSOsh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 19 Jun 2020 10:48:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40996 "EHLO mail.kernel.org"
+        id S2392607AbgFSPTW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 19 Jun 2020 11:19:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389093AbgFSOsg (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:48:36 -0400
+        id S2392598AbgFSPS4 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 19 Jun 2020 11:18:56 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2FCA021852;
-        Fri, 19 Jun 2020 14:48:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B9A52158C;
+        Fri, 19 Jun 2020 15:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578115;
-        bh=stJzp+0uDkiYIjALJsrQp9bsVu0wkK33koz/CtwL74o=;
+        s=default; t=1592579934;
+        bh=Kjt7P2a4tbw5TuKZhyerlZXQZ4Y6YzQHMoiX4ctDvCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G05ZgQRD+QaMzRXQtgqam/hViDX3oQd20RfKOwErndx+KV7FLxbRvUTsNaaNwsIqH
-         rQux/BFbm/1R+nYKLt3HncCzVcxwwiP0ViITUF6/5RMDVbdK0rLFgSR7R9ppipY+fT
-         U7AFXvICrW+h6Kyabcq8cIVM8qBXwdiU/U5BtAgE=
+        b=JhCxhHjZV3hBKJbljR/erFnDBxkl75WPxnGtOZw9oWb+KODHjO+0x/Ccr/UuNa8kC
+         AusmEXFTS6qEEFOdlehOO2ELSEas2MBRVBZS1U8lq1IZ5pGXx3izuFhx8L4B2f9NT8
+         u13SW0KCYo8m5/5amZAOsVu2c2fDJiYmd1xbBIsQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 088/190] clocksource: dw_apb_timer: Make CPU-affiliation being optional
-Date:   Fri, 19 Jun 2020 16:32:13 +0200
-Message-Id: <20200619141637.985696388@linuxfoundation.org>
+Subject: [PATCH 5.7 060/376] clocksource: dw_apb_timer: Make CPU-affiliation being optional
+Date:   Fri, 19 Jun 2020 16:29:38 +0200
+Message-Id: <20200619141713.194570064@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200619141633.446429600@linuxfoundation.org>
-References: <20200619141633.446429600@linuxfoundation.org>
+In-Reply-To: <20200619141710.350494719@linuxfoundation.org>
+References: <20200619141710.350494719@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -101,10 +101,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clocksource/dw_apb_timer.c b/drivers/clocksource/dw_apb_timer.c
-index 1f5f734e4919..a018199575e3 100644
+index b207a77b0831..f5f24a95ee82 100644
 --- a/drivers/clocksource/dw_apb_timer.c
 +++ b/drivers/clocksource/dw_apb_timer.c
-@@ -225,7 +225,8 @@ static int apbt_next_event(unsigned long delta,
+@@ -222,7 +222,8 @@ static int apbt_next_event(unsigned long delta,
  /**
   * dw_apb_clockevent_init() - use an APB timer as a clock_event_device
   *
@@ -114,7 +114,7 @@ index 1f5f734e4919..a018199575e3 100644
   * @name:	The name used for the timer and the IRQ for it.
   * @rating:	The rating to give the timer.
   * @base:	I/O base for the timer registers.
-@@ -260,7 +261,7 @@ dw_apb_clockevent_init(int cpu, const char *name, unsigned rating,
+@@ -257,7 +258,7 @@ dw_apb_clockevent_init(int cpu, const char *name, unsigned rating,
  	dw_ced->ced.max_delta_ticks = 0x7fffffff;
  	dw_ced->ced.min_delta_ns = clockevent_delta2ns(5000, &dw_ced->ced);
  	dw_ced->ced.min_delta_ticks = 5000;
