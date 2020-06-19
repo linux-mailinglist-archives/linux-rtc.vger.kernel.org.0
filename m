@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CE62015F5
-	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2020 18:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AEE20175A
+	for <lists+linux-rtc@lfdr.de>; Fri, 19 Jun 2020 18:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394704AbgFSQYt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 19 Jun 2020 12:24:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53362 "EHLO mail.kernel.org"
+        id S2395171AbgFSQhU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 19 Jun 2020 12:37:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390305AbgFSO5x (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:57:53 -0400
+        id S2389114AbgFSOsl (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 19 Jun 2020 10:48:41 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD88D21919;
-        Fri, 19 Jun 2020 14:57:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DD9320DD4;
+        Fri, 19 Jun 2020 14:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578673;
+        s=default; t=1592578121;
         bh=ve5sv8gFv7HyvXD4yB6SaZpZw1HlQaywAYRES+51m3s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zzzE6BxAGGHD56qfiMtmFr4lvCw3dqeUSDYOD2mmhPVGpTHIhQKY/54WdcVJFn2cC
-         G468WgLvJnW9T7O3dX5HqcRwzMg3c4dC0wd2Q8gcvwwEs2w1sisj0xsbFSosW3Lm0r
-         2ls1vMbKoPu0RMxRoxuji2/Vxpd7Vs1eMU5HAGbY=
+        b=uasq3+i10zLuwbruq54uDa7MlQR45RsLcu0xPnaCDbJtneAg/76y7kfK3RTpV2hYw
+         WLSBdpN1Dgf2DEe1ucNiD7E2R8NTG9xTktYPqtY2lFGrheh5F8Nxt8fDDvzNtkSJLY
+         JF2ankGp7G8gsNiCw4dziYOvhSsWZVTqzN8ZszK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 112/267] clocksource: dw_apb_timer_of: Fix missing clockevent timers
-Date:   Fri, 19 Jun 2020 16:31:37 +0200
-Message-Id: <20200619141654.221930691@linuxfoundation.org>
+Subject: [PATCH 4.14 089/190] clocksource: dw_apb_timer_of: Fix missing clockevent timers
+Date:   Fri, 19 Jun 2020 16:32:14 +0200
+Message-Id: <20200619141638.035550445@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200619141648.840376470@linuxfoundation.org>
-References: <20200619141648.840376470@linuxfoundation.org>
+In-Reply-To: <20200619141633.446429600@linuxfoundation.org>
+References: <20200619141633.446429600@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
