@@ -2,80 +2,160 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0B32026ED
-	for <lists+linux-rtc@lfdr.de>; Sat, 20 Jun 2020 23:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6A420270D
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Jun 2020 00:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgFTVk3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 20 Jun 2020 17:40:29 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40838 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729032AbgFTVk1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 20 Jun 2020 17:40:27 -0400
-Received: by mail-lj1-f196.google.com with SMTP id n23so15286589ljh.7
-        for <linux-rtc@vger.kernel.org>; Sat, 20 Jun 2020 14:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qDGZJrN+zxg9kIEWpfiOHaUMYjaY018dhr2ry8AoDSo=;
-        b=CzdGRb37kVsYau41jwtDVNhfyYBgY3d0+7sNN0OqWFwk0qEouWLrm4IA+xwhjI1UQt
-         QGiP+tYVl4+4RNuPXkMCSXXvX+Zp3DCziRbHJrxIOY18WRXSmZRnMQ6j93S/oYkoF4US
-         c0Qsv1YND4xPcwn5Kb8kcQd8rZYZir9ce6KCsivlD069ARvPvTBajld3H9xjfI1FCllX
-         3ZXAgdc/3xu2k/pKzKhzR6NT6Rd/oPi4UlH+aacp/fM2yx7nWO5+wvdHGY5cRyRmNa8I
-         /yZkt+FBE7pWfHh2aBeORIAx0yu0x3x3cN5ULDhChdnMWRATlQk8xOPvG1v6bjD9WlLB
-         tmrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qDGZJrN+zxg9kIEWpfiOHaUMYjaY018dhr2ry8AoDSo=;
-        b=AC/h5MWBFiZQO5gH+FfMBgiPzK8Ef2p9A50nfCQsHGW4cXwHVwXk2U/6AUM5h6mczI
-         ZzRpBB+GxuCIHtbnbK8dqYBMnlrhF2FTpU/9dBQiTWIFzDoaaZpzsFn2q3TUxKJ3ZZv+
-         qyv6ZSWflCOu3cTTPpILqI874PkGgDRvzrIQMpde4WitV7DjJpwAUJz/I4tM6K88a6Fq
-         msVAFzJdXbQBxkTgj2EgC0pyc/rDK7ef8YXH6wgVWTmJuoyqg3jGUiAnaVE522VAh7np
-         aD+7sX2EoL8K9mH2JIROUF+cr6tXmGq3SqiOxTxiY1L23//VPYXtbPIbgi+spJLN+AR7
-         HhsA==
-X-Gm-Message-State: AOAM533c1RvgdSWuyPjpDmL7zqIhLo0bxO+ftJb1BISG3WeXf/fQM6pv
-        +jqiyTaDcA6uWrDVQpGcMO6kNIgeaWBWGgxyH1flyw==
-X-Google-Smtp-Source: ABdhPJxAa1VzCVlzrh0h7Fjw2j+ZkUnwO3O+sZYxyg7hx+dcgKgbw8afJXNyQtB4JkQJJZ827jwqG3BbejMYNSUh+Ac=
-X-Received: by 2002:a2e:7303:: with SMTP id o3mr5249034ljc.100.1592689165295;
- Sat, 20 Jun 2020 14:39:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200616223353.993567-1-lkundrak@v3.sk> <20200616223353.993567-2-lkundrak@v3.sk>
-In-Reply-To: <20200616223353.993567-2-lkundrak@v3.sk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 20 Jun 2020 23:39:14 +0200
-Message-ID: <CACRpkdZ4_cRPMyA6=-qqWX-GpJ0DQXdj=EbFEkoFqi8w6AahXg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] dt-bindings: gpio: Convert mrvl-gpio to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
+        id S1728113AbgFTWku (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 20 Jun 2020 18:40:50 -0400
+Received: from mout.gmx.net ([212.227.15.15]:54137 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728501AbgFTWkt (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 20 Jun 2020 18:40:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1592692778;
+        bh=RAGt25AVvKDJqw+9yrZ6l9R/dNd3yaSsWc/0KCEdEok=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=kH7Ei4ieh2JUrr/ROU7TdjAoSKb+n28ITwkBr9SAprIfWshyAfYhOJNu6oYRcAngU
+         40sLYvte81TXLuxXRbH3mLQM7TObUZdEM9VF4h9jg5ctm424S4ime1otN9Nh0Phs0v
+         cAHzgEHuGLfDyaPRSYvJdUdLaF1XR7EnaHDlRpJk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.186]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N79yQ-1ioF2D3RyW-017Qzr; Sun, 21
+ Jun 2020 00:39:37 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: [RFC PATCH 00/10] Netronix embedded controller driver for Kobo and Tolino ebook readers
+Date:   Sun, 21 Jun 2020 00:39:04 +0200
+Message-Id: <20200620223915.1311485-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:dB3zkFm6Dp37mtCsRvQnO4dmzEkVo0+p+QNR4wonzzE+gE8OPo7
+ a/51mlxEjTz9/maj1H88yYo34qY3L1M/CIyNDHBBzdIb/9rkmSm1TdnWS2/gK3n6uLuM9xj
+ vcykaFX5b7WmGtn4RyPj7JEtQyzIkf7LfRByhtJc1hj2ux0ztZimykMSIrlkanH0q3MZm/V
+ L6WuFVU+gAYKtFYZFod/Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:e7qQ6lwVSYM=:97UP3ASFO3a8AXrXwwpeVd
+ KopbwNa1a1hucFz8HTDIO9Qzq/NcOHCCkhxyGCLWZN+5MsNrJ10BYCoKd2MYRxvEyr/VBfD3P
+ Hyb4neb64b730uhOC8/iH0W16QsTYFmy6ZJ0OEp/bzFdpbkNvAw/khtdLXhzFN+2gqi/u00aj
+ 8hr+1WHq7TWmMy7HXgMufbOBIhxemUC4/FSceeFgTg7hUEa6Cz4xu3Yc6Fzu92d2iDBZbZ4MO
+ DGLXX8yVtwciFUE2oBf1VrsSDHf5CpB/SWdBqfYGKGLVjSXgtKbhO17cp26BShwZ97WtlUGTo
+ z9GeoyO7Hl2PmMyOt+TLZ0z7c6BxXLl7YK+HsdAj0gSk7bO/lRwh4QLESNin1UpKYeHMQx225
+ h07qL05/jMS5+HiLVNCwrK5qc3nbdVi9fJyNDdt0p4ilaZTy0pBKMfumQmFcDTaJct6TbEvUa
+ UXq7dP2w9MN+Mak/bEa/vlDBEmNswH/lmM41FghkhpXxjKEqLprfVjuY4W1fWO6UeLws8ZSqY
+ u2vP9TLTg+3CeeoFnMbYfNKzCwcStQ6Jp99u7GA5qYPjgOQUxgJOkuY9DxCvaz1evFNicWZDf
+ PEBMN1jQ5nyUZw28JMl/SgwC6WOCeucySG7UAXKgOdSkpm5aUXrzRwHWEpqpe1xNNnrVIgsSQ
+ n1b360e1sT8+kaS3U4O/w8C0hwjIEnYOP6/XURX+2caOGGio+a6+8ccVIpi63udwXnllVbaIN
+ 8GbMaYPH0AqCKlQeBaQDZpE2URJdHvARFrrlfp3fwjaSt9jYMiXSl8kxfq7Lkmv79NeXK4mct
+ s2cjDkM+BWTgOkW2/lCxESXkm24ucyTGZlW8jOi8TyXlL3eZ6DO8uu2xLQpNDZYgeokYj6gMW
+ VDH1fnwKv1yVw/jEWD8Cklv40M9SLmKrbOBxYsqqtbU/fSLygXAGxAp+k2odCrxmLYxBmDbJi
+ LPZz5x//lgtcWHcTtXZYkd5JghBHjdtlFNm/0QRMrZwQaUWnR66ZUXBBl9kfFNFZ4YAi/uwqW
+ J6Cup1je6gVahK5xbtHWOIYeDWFe5AGt0IiefzW4tGEkDBmn7Qb4SBG4ZANfZoctXwHut81Zv
+ /7rc6sdWkEJYcbXVpWqeXG7Uv3zdq0TRRjKZtepINKWOXz0PIsW872W67v8rWhD7I9rJePT3L
+ C/lnyDVWj8vLZdfbXlRN0zYlukiaJYGd7X+ynCeNzWOkT52sZgaP4V8KALz4KijDNdt2EA2Ft
+ Mnhcu4IDQHqEPh8Hi
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 12:33 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+Hi,
 
-> This converts the mrvl-gpio binding to DT schema format using json-schema.
+This patchset adds basic support for the embedded controller found on
+older ebook reader boards designed by/with the ODM Netronix Inc.[1] and
+sold by Kobo or Tolino, for example the Kobo Aura and the Tolino Shine.
+These drivers are based on the vendor kernel sources, but in order to
+all information in a single place, I documented the register interface
+of the EC on GitHub[4].
 
-This looks about right to me:
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+A few things still needs to be ironed out, hence the RFC tag:
+ - The reboot/reset handler in patch 3/10 calls into I2C code, which may
+   sleep, but reboot handlers are apparently not allowed to sleep.
+ - I'm not sure I got the YAML DT bindings right. I have also included
+   the plain text DT bindings for reference.
 
-I expect Rob will apply it when he's happy with it, else poke me once
-he ACKs it.
 
-Yours,
-Linus Walleij
+Jonathan
+
+[1]: http://www.netronixinc.com/products.aspx?ID=3D1
+[2]: https://github.com/neuschaefer/linux/wiki/Netronix-MSP430-embedded-co=
+ntroller
+
+Jonathan Neusch=C3=A4fer (10):
+  DT bindings in plain text format
+  dt-bindings: Add vendor prefix for Netronix, Inc.
+  dt-bindings: mfd: Add binding for Netronix's embedded controller
+  mfd: Add base driver for Netronix embedded controller
+  dt-bindings: pwm: Add bindings for PWM function in Netronix EC
+  pwm: ntxec: Add driver for PWM function in Netronix EC
+  dt-bindings: rtc: Add bindings for Netronix embedded controller RTC
+  rtc: New driver for RTC in Netronix embedded controller
+  MAINTAINERS: Add entry for Netronix embedded controller
+  ARM: dts: imx50-kobo-aura: Add Netronix embedded controller
+
+ .../bindings/mfd/netronix,ntxec.txt           |  58 ++++++
+ .../bindings/mfd/netronix,ntxec.yaml          |  77 +++++++
+ .../bindings/pwm/netronix,ntxec-pwm.txt       |  27 +++
+ .../bindings/pwm/netronix,ntxec-pwm.yaml      |  33 +++
+ .../bindings/rtc/netronix,ntxec-rtc.txt       |  17 ++
+ .../bindings/rtc/netronix,ntxec-rtc.yaml      |  27 +++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  11 +
+ arch/arm/boot/dts/imx50-kobo-aura.dts         |  27 ++-
+ drivers/mfd/Kconfig                           |   7 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ntxec.c                           | 188 ++++++++++++++++++
+ drivers/pwm/Kconfig                           |   4 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-ntxec.c                       | 148 ++++++++++++++
+ drivers/rtc/Kconfig                           |   4 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ntxec.c                       | 115 +++++++++++
+ include/linux/mfd/ntxec.h                     |  30 +++
+ 19 files changed, 777 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/netronix,ntxec.t=
+xt
+ create mode 100644 Documentation/devicetree/bindings/mfd/netronix,ntxec.y=
+aml
+ create mode 100644 Documentation/devicetree/bindings/pwm/netronix,ntxec-p=
+wm.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/netronix,ntxec-p=
+wm.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/netronix,ntxec-r=
+tc.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/netronix,ntxec-r=
+tc.yaml
+ create mode 100644 drivers/mfd/ntxec.c
+ create mode 100644 drivers/pwm/pwm-ntxec.c
+ create mode 100644 drivers/rtc/rtc-ntxec.c
+ create mode 100644 include/linux/mfd/ntxec.h
+
+=2D-
+2.27.0
+
