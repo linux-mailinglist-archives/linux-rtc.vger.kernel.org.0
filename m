@@ -2,237 +2,108 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9A22031EB
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jun 2020 10:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C957203468
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Jun 2020 12:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgFVIS3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Jun 2020 04:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgFVIS2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Jun 2020 04:18:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32825C061794
-        for <linux-rtc@vger.kernel.org>; Mon, 22 Jun 2020 01:18:28 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jnHel-0004I1-8V; Mon, 22 Jun 2020 10:18:19 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jnHeU-0003pu-F0; Mon, 22 Jun 2020 10:18:02 +0200
-Date:   Mon, 22 Jun 2020 10:18:02 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        allen <allen.chen@ite.com.tw>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
+        id S1727012AbgFVKD3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Jun 2020 06:03:29 -0400
+Received: from mail-eopbgr1320044.outbound.protection.outlook.com ([40.107.132.44]:38144
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726898AbgFVKD3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 22 Jun 2020 06:03:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mxPe+bnmlo/3jsHCYeH6KNti5x+NajJwC0kTC0gasQDp+Ob0uFs8UCXcJ9PXEHkq5XpPFJfg/lIUIe2/n7on+rVsbo3Q32yEfBEJedW1U/ssHBPsjgQ2to3VStsNf2vivaV3ez411Ng3dq7w+jUSGakr848YrDWoDxdQyjq7SI22+vka71sKY4vGrlOf4zU4a3Djf+c7kJ3umlMHF9rB9C1tbYitkJwl3haro4KjkcDDggGth8c93MP3Ljem7kMkFH2IkrGR/0TAI71hJIvrXLA7gzyCaNJfISGlo/i3XAXnGI7eWepeExER0nFFy+YrC7Jtt3ijpYrV0DP3qx56CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=52apssC4otua/CVCCdZPkxtkXa4DFoOmbThtVqQRDT0=;
+ b=gSMiRJa2Pz8tJ9MuiAIU7H5qnNg6GRBoCYOd6UV0A54xL/pHC9sKv4mcDWyrfMzEbEpHjgnLgOvrRu5MTm1QUvD2c+pXdJDmQc0ymiUu6l60Nz7U7SbP/Y53IKn0TVT8bdIWNioWvvzXIyfuRVO0Ta6o13HrRs/7CeYsrqfo8pxIfImqKvyuWX86fZKvekkGImH5MG1MX/u53RogSe6H8myqIgP97Xnge0FQRhr1BMBc2wI9X2zm+uOVtBZa+XAl7NiNw3jCmeTaX/txYPTwll0uziEx2lPEbnfXgb04N/cDLGQ3mioZC3Dn3UX8QOJeJA41DiIctOrpiMNyMJ6xGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
+ dkim=pass header.d=moxa.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=52apssC4otua/CVCCdZPkxtkXa4DFoOmbThtVqQRDT0=;
+ b=f0rnTYI3CfemgBt7CCNNLvnS+9Br9apjeIZGyxEtSZPXdGVn+OqcGUuLrhu2Q8RKR/95Yqc5+14/rKRD1p8N4WDlkHCydPHc0DdeMqA5eWDXwEl3LeUxtpuyLdoYepO8hx8I/ulzW8mtkSVKKniL3/ieu5pxbmpOvAePimAWxHo=
+Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ (2603:1096:202:22::12) by HK2PR01MB3217.apcprd01.prod.exchangelabs.com
+ (2603:1096:202:24::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Mon, 22 Jun
+ 2020 10:03:25 +0000
+Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ ([fe80::712b:170d:f873:68a3]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
+ ([fe80::712b:170d:f873:68a3%6]) with mapi id 15.20.3109.027; Mon, 22 Jun 2020
+ 10:03:25 +0000
+From:   =?big5?B?Sm9obnNvbiBDSCBDaGVuICizr6xMvrEp?= 
+        <JohnsonCH.Chen@moxa.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH 06/10] pwm: ntxec: Add driver for PWM function in
- Netronix EC
-Message-ID: <20200622081802.pv4xmb7vn4te5r5t@taurus.defre.kleine-koenig.org>
-References: <20200620224222.1312520-1-j.neuschaefer@gmx.net>
- <20200620224222.1312520-5-j.neuschaefer@gmx.net>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 0/3] Use MFD for Dallas/Maxim DS1374 driver series
+Thread-Topic: [PATCH 0/3] Use MFD for Dallas/Maxim DS1374 driver series
+Thread-Index: AQHWSHk8vS8zWbAau0uFznOwrrAykg==
+Date:   Mon, 22 Jun 2020 10:03:25 +0000
+Message-ID: <HK2PR01MB3281DAE412911621A7F8963BFA970@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=moxa.com;
+x-originating-ip: [123.51.145.16]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e4c19f4d-e555-4032-51a8-08d81693810e
+x-ms-traffictypediagnostic: HK2PR01MB3217:
+x-microsoft-antispam-prvs: <HK2PR01MB3217E5E4447606484BFE6290FA970@HK2PR01MB3217.apcprd01.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0442E569BC
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /GTnCBOCZhBySj3o9jMS4AOp8c9mEY8JW44mBK69qR1Kc7PimZq8r5EQNU4hTxn4VYefgDZDXztH16FMz2fnGHfMb63BH+nujNy9zTaxXWwy9sHKPaJQVETe2JElGNSsR8VxCyZsOF1giajnruPlxyv1Eji8s5NMcJoCLxBxMYiugUkVB+CKrNvONSSfpGLhmzYvABX8tJxNACS0us6LsmKYzNg3g14yMcNB9irxqrqUabALaIpzRNIvRwOZwKItMbLV6pcBq2F/NODl1ed7vbjIdwzGozdNUIqfXPo2e/x7KERl03FkN7dyZbDk5PxJ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(346002)(396003)(376002)(39850400004)(186003)(85182001)(6506007)(26005)(8936002)(6916009)(7696005)(8676002)(71200400001)(4326008)(83380400001)(316002)(2906002)(86362001)(33656002)(52536014)(9686003)(66946007)(76116006)(64756008)(55016002)(54906003)(5660300002)(478600001)(66446008)(66556008)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: qRSYRA6nsRTxSGrfkkOnblq+oiatP2z3Sw55j0kulse61ELmdpKpaGOj5dn2KWRRdiBJPAUYfhu/PgX+0osSXhThIZApS3JCXp05vmI+UQnQpxo7F2QrWFKcPycV2UBPm7pUDghEs3EYwUf1V5gdV/UQk2kIbcZVypp9ATpSGBR/A8xg3gAuTTw47pqwdE07LHSJdQ7e3Cnlmt3GFpDv6fQ9P+U+Edw96r/XTWOcnXRQKm1MdxpxpZjZ1mWJ4gT9NqRC7guHbZKQvr6sUZeTOb8pSlp/flf8a6PqfZ/yXWZiT89Gr/BLK/JLi3vzrczRnpfBx3Y0/OSmGL1q43a9ioCzCDxCsJRx6Hq6gp0cxvOQRJWbvivtvX+FR0mqxaoWKplmFyc1Y3B6CUfpl2p3zbXxYTnAVmJ7sV78PxHf1L94N3MLPQNZSc1LnaCtiSy2pA2zqn3myB6J9dEbCP+Sbmc++y4yKEn4LBGkFYkpqVI=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7tfyuhyp2zipmowo"
-Content-Disposition: inline
-In-Reply-To: <20200620224222.1312520-5-j.neuschaefer@gmx.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-OriginatorOrg: moxa.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4c19f4d-e555-4032-51a8-08d81693810e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2020 10:03:25.2169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 30lVuhDVs8Jb2Tayv78PSjLJHB52zVWCX1eA4RTRuG0v4kXjsC4E1Lq5lGYmSPvTqY0ikrURGHLPXrobE6Pw6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR01MB3217
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---7tfyuhyp2zipmowo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Sun, Jun 21, 2020 at 12:42:17AM +0200, Jonathan Neusch=E4fer wrote:
-> The Netronix EC provides a PWM output, which is used for the backlight
-
-s/,//
-
-> on ebook readers. This patches adds a driver for the PWM output.
-
-on *some* ebook readers
-
-
-> +#define NTXEC_UNK_A		0xa1
-> +#define NTXEC_UNK_B		0xa2
-> +#define NTXEC_ENABLE		0xa3
-> +#define NTXEC_PERIOD_LOW	0xa4
-> +#define NTXEC_PERIOD_HIGH	0xa5
-> +#define NTXEC_DUTY_LOW		0xa6
-> +#define NTXEC_DUTY_HIGH		0xa7
-> +
-> +/*
-> + * The time base used in the EC is 8MHz, or 125ns. Period and duty cycle=
- are
-> + * measured in this unit.
-> + */
-> +static int ntxec_pwm_config(struct pwm_chip *chip, struct pwm_device *pw=
-m_dev,
-> +				 int duty_ns, int period_ns)
-> +{
-> +	struct ntxec_pwm *pwm =3D pwmchip_to_pwm(chip);
-> +	uint64_t duty =3D duty_ns;
-> +	uint64_t period =3D period_ns;
-
-As you cannot use values bigger than 8191999 anyhow, I wonder why you
-use a 64 bit type here.
-
-> +	int res =3D 0;
-> +
-> +	do_div(period, 125);
-
-Please use a define instead of plain 125.
-
-> +	if (period > 0xffff) {
-> +		dev_warn(pwm->dev,
-> +			 "Period is not representable in 16 bits: %llu\n", period);
-> +		return -ERANGE;
-> +	}
-> +
-> +	do_div(duty, 125);
-> +	if (duty > 0xffff) {
-> +		dev_warn(pwm->dev, "Duty cycle is not representable in 16 bits: %llu\n=
-",
-> +			duty);
-> +		return -ERANGE;
-> +	}
-
-This check isn't necessary as the pwm core ensures that duty <=3D period.
-
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_PERIOD_HIGH, period >> 8);
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_PERIOD_LOW, period);
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_DUTY_HIGH, duty >> 8);
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_DUTY_LOW, duty);
-
-Does this complete the currently running period? Can it happen that a
-new period starts between the first and the last write and so a mixed
-period can be seen at the output?
-
-> +
-> +	return (res < 0) ? -EIO : 0;
-> +}
-> +
-> +static int ntxec_pwm_enable(struct pwm_chip *chip,
-> +				 struct pwm_device *pwm_dev)
-> +{
-> +	struct ntxec_pwm *pwm =3D pwmchip_to_pwm(chip);
-> +
-> +	return ntxec_write8(pwm->ec, NTXEC_ENABLE, 1);
-> +}
-> +
-> +static void ntxec_pwm_disable(struct pwm_chip *chip,
-> +				   struct pwm_device *pwm_dev)
-> +{
-> +	struct ntxec_pwm *pwm =3D pwmchip_to_pwm(chip);
-> +
-> +	ntxec_write8(pwm->ec, NTXEC_ENABLE, 0);
-> +}
-> +
-> +static struct pwm_ops ntxec_pwm_ops =3D {
-> +	.config		=3D ntxec_pwm_config,
-> +	.enable		=3D ntxec_pwm_enable,
-> +	.disable	=3D ntxec_pwm_disable,
-> +	.owner		=3D THIS_MODULE,
-
-Please don't align the =3D, just a single space before them is fine.
-More important: Please implement .apply() (and .get_state()) instead of
-the old API. Also please enable PWM_DEBUG which might save us a review
-iteration.
-
-> +};
-> +
-> +static int ntxec_pwm_probe(struct platform_device *pdev)
-> +{
-> +	struct ntxec *ec =3D dev_get_drvdata(pdev->dev.parent);
-> +	struct ntxec_pwm *pwm;
-> +	struct pwm_chip *chip;
-> +	int res;
-> +
-> +	pwm =3D devm_kzalloc(&pdev->dev, sizeof(*pwm), GFP_KERNEL);
-> +	if (!pwm)
-> +		return -ENOMEM;
-> +
-> +	pwm->ec =3D ec;
-> +	pwm->dev =3D &pdev->dev;
-> +
-> +	chip =3D &pwm->chip;
-> +	chip->dev =3D &pdev->dev;
-> +	chip->ops =3D &ntxec_pwm_ops;
-> +	chip->base =3D -1;
-> +	chip->npwm =3D 1;
-> +
-> +	res =3D pwmchip_add(chip);
-> +	if (res < 0)
-> +		return res;
-> +
-> +	platform_set_drvdata(pdev, pwm);
-> +
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_ENABLE, 0);
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_UNK_A, 0xff);
-> +	res |=3D ntxec_write8(pwm->ec, NTXEC_UNK_B, 0xff);
-> +
-> +	return (res < 0) ? -EIO : 0;
-
-This is broken for several reasons:
-
- - You're not supposed to modify the output in .probe
- - if ntxec_write8 results in an error you keep the pwm registered.
- - From the moment on pwmchip_add returns the callbacks can be called.
-   The calls to ntxec_write8 probably interfere here.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7tfyuhyp2zipmowo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl7waTcACgkQwfwUeK3K
-7Alz9gf8C+9A/FPfdyoWF4DcZ7zjNKarHze44XtL4sUIkJfLYl9xqKr+/YjB9EYr
-6Z/sukeRDw5Gn0DZo0kgntYx5TcLztsQxB7TFVhO6cj25+uzwnJwumN4DQxJlOqY
-u30aZH1IyFoG2PTDKyCnOrxrWGnK2VsUqV5t5g8RgIUIJysGaMtUgiwvyggtXvKv
-jMLcjm5QBnrsU56rkZYJGiXtcz+L6lGF7rd1cXWPR3nfgXngWPEBe/NjnqChsfsy
-VRF8nb6G46xF7c58IARrMRiH43wLcHLhtKvIStC17t5on0FbfuL3jFMT1wylV+E5
-lZ9Y/VFroSxQX6EARBDDa2E/J38PSg==
-=eoxM
------END PGP SIGNATURE-----
-
---7tfyuhyp2zipmowo--
+SGVsbG8gYWxsLAoKVGhpcyBwYXRjaCBzZXQgdXNlcyBNRkQgc3RydWN0dXJlIGZvciBEUzEzNzQg
+c28gdGhhdCBSVEMgYW5kIFdhdGNoZG9nCmZ1bmN0aW9ucyBjYW4gYmUgc2VwYXJhdGVseS4gVGhl
+cmVmb3JlLCB3ZSBjYW4gYWRkIG1vcmUgV2F0Y2hkb2cgCnN1YmZ1bmN0aW9ucyBoZXJlLgoKQSBE
+UzEzNzQgTUZEIGNvcmUgZHJpdmVyIHN1cHBvcnRzIHRoZSBJMkMgY29tbXVuaWNhdGlvbiB0byBS
+VEMgYW5kCldhdGNoZG9nIGRldmljZXMuCgoxLiBBZGQgRFMxMzc0IE1GRCBjb3JlIGRyaXZlciB3
+aXRoIEkyQyBidXMuCjIuIExldCBEUzEzNzQgUlRDIGRyaXZlciBoYXMgUlRDIGFuZCBBbGFybSBm
+dW5jdGlvbnMgb25seS4KMy4gQWRkIERTMTM3NCBXYXRjaGRvZyBkcml2ZXIuCgpUaGFua3MsCkpv
+aG5zb24KCkpvaG5zb24gQ2hlbiAoMyk6CiAgbWZkOiBkczEzNzQ6IEludHJvZHVjZSBEYWxsYXMv
+TWF4aW0gRFMxMzc0IE1GRCBjb3JlIGRyaXZlcgogIHJ0YzogcnRjLWRzMTM3NDogTW92ZSBvdXQg
+V2F0Y2hkb2cgZnVuY3Rpb24gYW5kIEkyQyBjbGllbnQKICB3YXRjaGRvZzogZHMxMzc0X3dkdDog
+SW50cm9kdWNlIERhbGxhcy9NYXhpbSBEUzEzNzQgV2F0Y2hkb2cgZHJpdmVyCgogZHJpdmVycy9t
+ZmQvS2NvbmZpZyAgICAgICAgICAgfCAgMTEgKwogZHJpdmVycy9tZmQvTWFrZWZpbGUgICAgICAg
+ICAgfCAgIDIgKwogZHJpdmVycy9tZmQvZHMxMzc0LmMgICAgICAgICAgfCAxMDEgKysrKysrKysK
+IGRyaXZlcnMvcnRjL0tjb25maWcgICAgICAgICAgIHwgICA5ICstCiBkcml2ZXJzL3J0Yy9ydGMt
+ZHMxMzc0LmMgICAgICB8IDQ1OCArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiBk
+cml2ZXJzL3dhdGNoZG9nL0tjb25maWcgICAgICB8ICAxMSArCiBkcml2ZXJzL3dhdGNoZG9nL01h
+a2VmaWxlICAgICB8ICAgMSArCiBkcml2ZXJzL3dhdGNoZG9nL2RzMTM3NF93ZHQuYyB8IDMzMCAr
+KysrKysrKysrKysrKysrKysrKysrKysKIDggZmlsZXMgY2hhbmdlZCwgNTMyIGluc2VydGlvbnMo
+KyksIDM5MSBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL21mZC9kczEz
+NzQuYwogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvd2F0Y2hkb2cvZHMxMzc0X3dkdC5jCgot
+LSAKMi4yMC4xCg==
