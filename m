@@ -2,141 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 685EA204ABE
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2020 09:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F1A205074
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Jun 2020 13:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731158AbgFWHMs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Jun 2020 03:12:48 -0400
-Received: from mail-eopbgr1320058.outbound.protection.outlook.com ([40.107.132.58]:38042
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730977AbgFWHMs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 23 Jun 2020 03:12:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M/3dXRMyqNWs/h5uum39tyJNLkXLIjkn7oDmVb44TLeXGqxxA+X9ssOmuT8UKnRmxiJUC3NrWXqca5em9jUbZOiEnrFCC2JD3+jNPP7maPm4vCTZvqMdovDMtdDozUFxF817S9Ovm/1y9pswjgAwkwvI/waSQV097A4m44vunRWc5GYgoSWi+ehG6XOkfbQpqgBIRIv14D7rtWXSG/c+QYHxN/b5Ic+jlVtZ+roAZsQuaBNHSEGnFEAz4IyC1uVHV614DDPkpoN0aOA+p6jNupAaDEU/UC84VrrPps/K/SP/3lynSJ+CIZyk1vadMQnnwvWK+ch7sV2L0gqDAq7QOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tpV3/WmrnvrJHFotmIPAMfu4pGKMX8/DIi9e4kqjaF0=;
- b=L0KO5dfegIUL038q5RgfPuvTtHcL80cuUqpQn1pftAY+PaD57qZdzxLEcdtUuRXJG2sfGG6ZBvWnV/+ZZc3/myWGwUDZTG29JLVjP9xd0YGcw9GXJg1mSbqty7rtsLGbVkuVsdFOopOCuSfVyq93ALCaeK1i2iAlUY4Y+WKXD3dY1wK5rj/rt9v7snZWz4qDiA42mij8YgvKkqkqSInEaVRM+jFxqZK5URp/azw97cXTtVztBJN4vhehMpT7xx+G7inbmXwzBNCxkq+M4LZbXaQ3d4ISfF22lkzmfvKMcG5/DDDTjoWd8TyUVAn/JqAKfSqn+0qZg9kQbWOs/6njtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
- dkim=pass header.d=moxa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tpV3/WmrnvrJHFotmIPAMfu4pGKMX8/DIi9e4kqjaF0=;
- b=GwgZrDLo4fNTK87+ZqFpLRIjqcJATz9KGnBIZZQNtG+l/hnorbBCux5mtW/B644K+29E09KsGWA1yEQQE+3OtHk9l81XlKLImj1gB8/kr5S/yNwDXXfjmwh1XOJ1PtyHUCeHB5eIEu5+2cpH8r+JtJQ0/4mDaytAT9OqoNoIrms=
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- (2603:1096:202:22::12) by HK2PR01MB3364.apcprd01.prod.exchangelabs.com
- (2603:1096:202:1a::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.21; Tue, 23 Jun
- 2020 07:12:42 +0000
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::712b:170d:f873:68a3]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::712b:170d:f873:68a3%6]) with mapi id 15.20.3109.027; Tue, 23 Jun 2020
- 07:12:42 +0000
-From:   =?utf-8?B?Sm9obnNvbiBDSCBDaGVuICjpmbPmmK3li7Mp?= 
-        <JohnsonCH.Chen@moxa.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: RE: [PATCH 1/3] mfd: ds1374: Introduce Dallas/Maxim DS1374 MFD core
- driver
-Thread-Topic: [PATCH 1/3] mfd: ds1374: Introduce Dallas/Maxim DS1374 MFD core
- driver
-Thread-Index: AQHWSIZGE1OKIScqKk+eBYxI6L8uSqjksVAAgAAJowCAAQbiIA==
-Date:   Tue, 23 Jun 2020 07:12:42 +0000
-Message-ID: <HK2PR01MB3281B2BC29C32315759B7ED2FA940@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
-References: <HK2PR01MB328111AB2520315A7D4A1172FA970@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
- <20200622111413.GV954398@dell> <20200622142656.GA102380@roeck-us.net>
- <20200622150126.GJ131826@piout.net>
-In-Reply-To: <20200622150126.GJ131826@piout.net>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: bootlin.com; dkim=none (message not signed)
- header.d=none;bootlin.com; dmarc=none action=none header.from=moxa.com;
-x-originating-ip: [123.51.145.16]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: da28ad35-f916-45e9-126a-08d81744d209
-x-ms-traffictypediagnostic: HK2PR01MB3364:
-x-microsoft-antispam-prvs: <HK2PR01MB33646607A40E83F007B33E70FA940@HK2PR01MB3364.apcprd01.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 04433051BF
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BWIWBJlacEKRwaloRl36IOla5Iy4F4AK0aucFFFRKry4/L1nG4NqOzPKLUEum9lhuTMq5YtSenrNL1sdpf7SvOIiuNuGZONQx5/lqIIOTUIZKlZZMetqzsTk0JEXXXigYaaTm1C9/aGgVLwGzM3e5YabfxXoh9U/Bhdj2QL5payao7KMl8DMLQgsxReFLHWaAnU3uxpWzP/yVZFndv8IDG364oqsmD8Z7WW1oZx/7lvVYk9pGgmMmlM5yD3JTS+HZ9v8KRpitNJ92ipDabu4cvqOI79VMRGupKc05QSRmOhrLoH/umLGPY6eqHNxTIGbsw66uPp6HHuvbFRkoUZEYmYqGgPz65tZbt2HuOLAIufzDViBVMCj745p00cPvDNhySJyViAMXwXBEUk7GfEiBA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(396003)(346002)(39850400004)(376002)(85182001)(110136005)(54906003)(966005)(55016002)(7696005)(9686003)(478600001)(186003)(6506007)(33656002)(316002)(26005)(2906002)(86362001)(66446008)(66476007)(66946007)(83380400001)(5660300002)(52536014)(4326008)(8936002)(8676002)(76116006)(71200400001)(66556008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 0dO5B1nc2JIrWk1Wf6kJTyEExTd+XhjvvM41pq93Vpcdbjj/7gKWCam9CMK0UW2g7G2HiDWFlFH5zLLpjsJrGGXsV2ucv/XJVtTtNfoo5H6/zbY0f9WP7cMAdik0THhHkT1efDCnHtGvD7enbfcK+fPHN1QL4/04pahJi+sTb62OEkrMxQNkotKBsrKt6GicSWHgX6ZGdFkUuTdZp1zyp9oUbcwke7nVonxhw7I+xig82pnzNvWorcD/elndAzwcQF9adEuFJ4E7sDdy54GlOPtMsDYimR9kjDu5xn+g+lKta3GHXTsWgE1fIhPbSCVP3GeYPv3WXk9dPdu3GZ66i9ocgJ4RYcf5kxD9+ZLULvWYaeKz/gB6zTH4WjwXdq9qsef0hh2BeQuVH7Tc90GnuzVven0l1s7vuDEqbFjET8frK4Qgu+UHmKTIIzcCWXI0fjixB0sDeIatBrdw5LWo2cJ507zlkjvCVqewlz7PSIE7L1cM85nuToAwD4WPlY1q
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1732479AbgFWLQx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Jun 2020 07:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732484AbgFWLQv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Jun 2020 07:16:51 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22029C061573
+        for <linux-rtc@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id h5so20116256wrc.7
+        for <linux-rtc@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=E6E/hlNpiM6PnoAOVZ+7voPc9wpxPmWA12rEiYoj/bAUsYe0AJbyTzI9pZwPUUDdPP
+         2sshPYcb9oIsA99JTikTl0u76qfHNPIW2jIbz6C+DLselDK71HuKa++SqaGTSZ4p4+te
+         gTQ9UTEVmk4+r2eFXVbrvBf8ptXVBuknudxlYS3vrFAv18ZetPr28ECYav3lG+E2L5JM
+         St9yzES6OGBMLQpZbQAQLmSOp9Akg+wflxGB71dvTLo/TJoexQV6LE+g+JoBlfC2QAg7
+         b+ja973yyVQOwbfrTF90BaaIQGUXchEhek4sdIUmlBpL8Ak1D79EOMoTbcuGCplWvTHT
+         W4hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=ais/R0ZakiVzFRTBEkDeGylXJnVZFrsVcAZzFn2UwGSfGYWgz4W95tuVo3drCAvpxz
+         pWVI7A1XT+9O/3Pnhf1S67sJ0KqFlvznSaQfHPQ3U6aZ4jOQeUzCVgiPqk4vATPA5Zkd
+         z3KbnagV/ftkNAr6zfIsL6eqvtYh2S6+j4GKdLDfUlYNbCZhjJkWTFrJpBrWhwMQKpXP
+         Dlt1dUObLJGZty9lNbqpv+1es3eXzpgalsc6f/SIeiLqzC7Sxs81ghZsZgYd90wHFHkj
+         /sJyCIeCF/oWtABxjqkTq+TBqPfWOGDp+03TVt9fJvQTlMGFC/yrfz/OSzABvxK3ZdeU
+         0AIw==
+X-Gm-Message-State: AOAM531+tiZfdnbK/kpUKeKTYmT+piCdNoR/f4fYiPP1S9Jwn5c9m5A+
+        pN1a4O4C/VAyTxZcvYe4pLlqoAqXUvkU6EWHcqPrNoyO
+X-Google-Smtp-Source: ABdhPJzZ1QWBbLEVEJDiR8ozgNL3BKht/bHhiiCQZFbEUfR5i8VLBKqhwlX7a4NXmF6FqxDOEk5UW9nntOQTLpvDlps=
+X-Received: by 2002:a5d:62d1:: with SMTP id o17mr24071305wrv.162.1592911009833;
+ Tue, 23 Jun 2020 04:16:49 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da28ad35-f916-45e9-126a-08d81744d209
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2020 07:12:42.0360
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rIN9JKXj6E8aBST9XvsrxqsVPboz8FNXCh8Z2Qyirek66Z65juozUmFkO2P2y0XQvkms4AJiZiJgvuqUJFwbVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR01MB3364
+Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:16:49
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <paulwiliam782@gmail.com>
+Date:   Tue, 23 Jun 2020 12:16:49 +0100
+Message-ID: <CAHqcnY16ZzcoYpU31SEco0sXeb2W5Dq2VVpzQr8ZENW9eKiFTA@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGksDQogDQo+IE9uIDIyLzA2LzIwMjAgMDc6MjY6NTYtMDcwMCwgR3VlbnRlciBSb2VjayB3cm90
-ZToNCj4gPiBPbiBNb24sIEp1biAyMiwgMjAyMCBhdCAxMjoxNDoxM1BNICswMTAwLCBMZWUgSm9u
-ZXMgd3JvdGU6DQo+ID4gPiBPbiBNb24sIDIyIEp1biAyMDIwLCBKb2huc29uIENIIENoZW4gKOmZ
-s+aYreWLsykgd3JvdGU6DQo+ID4gPg0KPiA+ID4gPiBEYWxsYXMvTWF4aW0gRFMxMzc0IGlzIGEg
-Y291bnRlciBkZXNpZ25lZCB0byBjb250aW51b3VzbHkgY291bnQNCj4gPiA+ID4gdGltZSBpbiBz
-ZWNvbmRzLiBJdCBwcm92aWRlcyBhbiBJMkMgaW50ZXJmYWNlIHRvIHRoZSBob3N0IHRvDQo+ID4g
-PiA+IGFjY2VzcyBSVEMgY2xvY2sgb3IgQWxhcm0vV2F0Y2hkb2cgdGltZXIuDQo+ID4gPiA+DQo+
-ID4gPiA+IEFkZCBNRkQgQ29yZSBkcml2ZXIsIHN1cHBvcnRpbmcgdGhlIEkyQyBjb21tdW5pY2F0
-aW9uIHRvIFJUQyBhbmQNCj4gPiA+ID4gV2F0Y2hkb2cgZGV2aWNlcy4NCj4gPiA+ID4NCj4gPiA+
-ID4gU2lnbmVkLW9mZi1ieTogSm9obnNvbiBDaGVuIDxqb2huc29uY2guY2hlbkBtb3hhLmNvbT4N
-Cj4gPiA+ID4gLS0tDQo+ID4gPiA+ICBkcml2ZXJzL21mZC9LY29uZmlnICB8ICAxMSArKysrKw0K
-PiA+ID4gPiAgZHJpdmVycy9tZmQvTWFrZWZpbGUgfCAgIDIgKw0KPiA+ID4gPiAgZHJpdmVycy9t
-ZmQvZHMxMzc0LmMgfCAxMDENCj4gPiA+ID4gKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKw0KPiA+ID4gPiAgMyBmaWxlcyBjaGFuZ2VkLCAxMTQgaW5zZXJ0aW9ucygr
-KSAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gPiA+IGRyaXZlcnMvbWZkL2RzMTM3NC5jDQo+ID4g
-Pg0KPiA+ID4gTm90IHN1cmUgSSBzZWUgdGhlIHBvaW50IG9mIHRoaXMgZHJpdmVyLg0KPiA+ID4N
-Cj4gPg0KPiA+IE5vdCBlbnRpcmVseSBzdXJlIGVpdGhlci4gU2VlbXMgdG8gbWUgdGhlIGlkZWEg
-aXMgdG8gdXNlIHRoZSB3YXRjaGRvZw0KPiA+IHN1YnN5c3RlbSBmb3Igd2F0Y2hkb2cgZnVuY3Rp
-b25hbGl0eSwgYnV0IHRoYXQgaXMganVzdCBhIGd1ZXNzIGFuZCBub3QNCj4gPiByZWFsbHkgbmVj
-ZXNzYXJ5ICh0aGUgY29udmVyc2lvbiBjb3VsZCBiZSBkb25lIGluIHRoZSBydGMgZHJpdmVyKS4N
-Cj4gPiBJIGRvbid0IHRoaW5rIHRoZSBjb2RlIGFzIHdyaXR0ZW4gd29ya3MgLSB0aGUgcnRjIGNv
-ZGUgdXNlcyBhIG11dGV4DQo+ID4gd2hpY2ggdGhlIHdhdGNoZG9nIGRyaXZlciBvYnZpb3VzbHkg
-aXNuJ3QgYXdhcmUgb2YuIFRoZSBtdXRleCB3b3VsZA0KPiA+IGhhdmUgdG8gYmUgbW92ZWQgaW50
-byB0aGUgbWZkIGNvZGUsIHdpdGggcmVzcGVjdGl2ZSBhY2Nlc3MgZnVuY3Rpb25zLg0KPiA+DQo+
-ID4gT3ZlcmFsbCB0aGlzIGFkZHMgYSBsb3Qgb2YgY29tcGxleGl0eSwgYW5kIGl0IHNlZW1zIHRo
-ZQ0KPiA+IGludGVyZGVwZW5kZW5jaWVzIGJldHdlZW4gcnRjIGFuZCB3YXRjaGRvZyBmdW5jdGlv
-bmFsaXR5IGFyZSBub3Qgd2VsbA0KPiA+IHVuZGVyc3Rvb2QuIFBsdXMsIG90aGVyIHdhdGNoZG9n
-IGRyaXZlcnMgaGF2ZSByZWNlbnRseSBiZWVuIGFkZGVkIHRvDQo+ID4gb3RoZXIgcnRjIGNsb2Nr
-IGNoaXBzLCBzbyB0aGlzIGFkZHMgc29tZSBpbmNvbnNpc3RlbmNpZXMgaW4gdGhlIHJ0Yw0KPiA+
-IHN1YnN5c3RlbS4gQXJlIHdlIGdvaW5nIHRvIHNlZSB0aGlzIGNoYW5nZSBmb3IgYWxsIHRob3Nl
-IGNvbWJpbmVkDQo+IHJ0Yy93YXRjaGRvZyBkcml2ZXJzID8NCj4gPiBJZiBzbywgaXQgbWlnaHQg
-bWFrZSBzZW5zZSB0byBjb21tdW5pY2F0ZSB0aGF0IG5vdyB0byBlbnN1cmUgY29uc2lzdGVuY3ku
-DQo+ID4NCj4gDQo+IEkgcmVhZCB0aGUgZGF0YXNoZWV0IGFnYWluIGFuZCBJIGFncmVlIHRoZSB3
-YXRjaGRvZyBwYXJ0IGNhbiBsaXZlIGluIHRoZSBydGMNCj4gZHJpdmVyLiBBcyBvbmx5IHRoZSBS
-VEMgYWxhcm0gYW5kIHRoZSB3YXRjaGRvZyBhcmUgbXV0dWFsbHkgZXhjbHVzaXZlLiBJIGRvbid0
-DQo+IHRoaW5rIGFuIE1GRCBkcml2ZXIgaXMgbmVjZXNzYXJ5LiBDb252ZXJ0aW5nIHRoZSBjdXJy
-ZW50IGRyaXZlciB0byB0aGUNCj4gd2F0Y2hkb2cgc3Vic3lzdGVtIHNlZW1zIHRvIGJlIHRoZSBj
-b3JyZWN0IHdheSBmb3J3YXJkLg0KPiANClRoYW5rcyBmb3IgeW91ciBnb29kIHRoaW5raW5nLiBJ
-ZiB3ZSB3YW50IHRvIGFkZCB3YXRjaGRvZyBmdW5jdGlvbiBzdWNoIGFzIA0KIm5vd2F5b3V0IiB0
-byB0aGUgZHJpdmVyLCBpdCdzIGdvb2QgdG8gdHJ5IHRvIHVwc3RyZWFtIHRoaXMgaW4gcnRjLWRz
-MTM3NC5jIGluIA0KcnRjIHN1YnN5c3RlbT8NCg0KSXQgc2VlbXMgbGlrZSBtb3JlIGNvbXBsZXhp
-dHkgaWYgd2Ugd2FudCB0byBzZXBhcmF0ZSBydGMgYW5kIHdhdGNoZG9nIGZvciBvbmUgDQpjaGlw
-IHN1cHBvcnRzLiBGb3Igb25lIGNoaXAgd2hpY2ggc3VwcG9ydHMgcnRjL2FsYXJtIGFuZCB3YXRj
-aGRvZywgY2FuIHdlIA0KdXBzdHJlYW0gcnRjL2FsYXJtIGFuZCB3YXRjaGRvZyBmdW5jdGlvbnMg
-dG8gdGhlc2UgZHJpdmVyIG5vIG1hdHRlciB3aGVyZSBpdCdzIA0KaW4gcnRjIG9yIHdhdGNoZG9n
-IHN1YnN5c3RlbT8NCg0KDQo+IC0tDQo+IEFsZXhhbmRyZSBCZWxsb25pLCBCb290bGluDQo+IEVt
-YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcNCj4gaHR0cHM6Ly9ib290bGluLmNv
-bQ0KDQpCZXN0IHJlZ2FyZHMsDQpKb2huc29uDQo=
+Greetings From Mrs. Sarah Koffi
+
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
+
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
+
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
