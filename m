@@ -2,78 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F520BA69
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jun 2020 22:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57A420BA78
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Jun 2020 22:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725823AbgFZUis (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 26 Jun 2020 16:38:48 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:15237 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgFZUir (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 Jun 2020 16:38:47 -0400
+        id S1725823AbgFZUoI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 26 Jun 2020 16:44:08 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:52375 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbgFZUoI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 Jun 2020 16:44:08 -0400
 X-Originating-IP: 86.202.110.81
 Received: from localhost (lfbn-lyo-1-15-81.w86-202.abo.wanadoo.fr [86.202.110.81])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 66364240005;
-        Fri, 26 Jun 2020 20:38:45 +0000 (UTC)
-Date:   Fri, 26 Jun 2020 22:38:44 +0200
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id F23A3E0005;
+        Fri, 26 Jun 2020 20:44:02 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
-        tglx@linutronix.de, jason@lakedaemon.net, maz@kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] irqchip/atmel-aic5: add support for sam9x60 rtt
- fixup
-Message-ID: <20200626203844.GT131826@piout.net>
+To:     a.zummo@towertech.it, ludovic.desroches@microchip.com,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        nicolas.ferre@microchip.com, robh+dt@kernel.org,
+        jason@lakedaemon.net, maz@kernel.org, tglx@linutronix.de
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] add RTT support for SAM9X60
+Date:   Fri, 26 Jun 2020 22:44:01 +0200
+Message-Id: <159320404890.1517140.1473221944024605941.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <1591779936-18577-1-git-send-email-claudiu.beznea@microchip.com>
 References: <1591779936-18577-1-git-send-email-claudiu.beznea@microchip.com>
- <1591779936-18577-2-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1591779936-18577-2-git-send-email-claudiu.beznea@microchip.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/06/2020 12:05:34+0300, Claudiu Beznea wrote:
-> Add support for SAM9X60 RTT fixup.
+On Wed, 10 Jun 2020 12:05:33 +0300, Claudiu Beznea wrote:
+> This series adds RTT support for SAM9X60.
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Changes in v2:
+> - use "atmel,at91sam9260-rtt" as fallback for compatible
+> - in patch 1 keep only the addition of sam9x60_aic_irq_fixup
+> - get rid of patches 2/5 from v1
+> - squash patches 4/5, 5/5 from v1
+> - change commit title for patch "rtc: at91sam9: add microchip,sam9x60-rtt"
+>   from v1 into "dt-bindings: rtc: add microchip,sam9x60-rtt" and
+>   place it before device tree patch
+> 
+> [...]
 
-Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Applied 2 and 3, thanks!
 
-> ---
->  drivers/irqchip/irq-atmel-aic5.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-atmel-aic5.c b/drivers/irqchip/irq-atmel-aic5.c
-> index fc1b3a9cdafc..fb4ad2aaa727 100644
-> --- a/drivers/irqchip/irq-atmel-aic5.c
-> +++ b/drivers/irqchip/irq-atmel-aic5.c
-> @@ -310,10 +310,16 @@ static void __init sama5d3_aic_irq_fixup(void)
->  	aic_common_rtc_irq_fixup();
->  }
->  
-> +static void __init sam9x60_aic_irq_fixup(void)
-> +{
-> +	aic_common_rtc_irq_fixup();
-> +	aic_common_rtt_irq_fixup();
-> +}
-> +
->  static const struct of_device_id aic5_irq_fixups[] __initconst = {
->  	{ .compatible = "atmel,sama5d3", .data = sama5d3_aic_irq_fixup },
->  	{ .compatible = "atmel,sama5d4", .data = sama5d3_aic_irq_fixup },
-> -	{ .compatible = "microchip,sam9x60", .data = sama5d3_aic_irq_fixup },
-> +	{ .compatible = "microchip,sam9x60", .data = sam9x60_aic_irq_fixup },
->  	{ /* sentinel */ },
->  };
->  
-> -- 
-> 2.7.4
-> 
+[2/3] dt-bindings: rtc: add microchip,sam9x60-rtt
+      commit: 73554069ded8fc6fa747423522c4295d5bbf6f52
+[3/3] ARM: dts: sam9x60: add rtt
+      commit: 5f6b33f463468b9595eebfed142756ba13ea2b60
+
+Best regards,
 
 -- 
 Alexandre Belloni, Bootlin
