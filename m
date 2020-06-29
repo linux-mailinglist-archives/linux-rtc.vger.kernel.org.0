@@ -2,72 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCFA20D54C
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2020 21:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8125520E010
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Jun 2020 23:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731723AbgF2TQP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Jun 2020 15:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44028 "EHLO
+        id S2389500AbgF2Umb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 29 Jun 2020 16:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731943AbgF2TQM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Jun 2020 15:16:12 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F91C08EAF7
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id w73so3636831ila.11
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
-         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
-         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
-         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
-         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
-         3NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=mI3b7Wqijz03z1SlZAmkEkg7uUoa+MBu2x5N0y4JHQdsyB9f//wHW8ylkK4tCiG3p6
-         et5NUbmRQpRUcRjdRtSHJKSubY+qMpxFEekUNIUEe+4e2UFOjOeEQCAA0L2GvDoUHXK5
-         BrHFKE/42czrJCrExeYliN5D6++dOrKlfqLP3cn61OZiMiyc5ySK4Nu2CTxFfYjc/XKg
-         ywM5O7ZWOuHtUUSTTkY1+kyCCplufWu6X3ot99BErZbwVry/7/y1DLiDDhvAO8zO8+Ba
-         19b2UAk2EhuoVq7qy9Yrs75x2sohP3S1WlQ+wBSqzw3vfYEg+VKvBTrnsknIMIK1OWYN
-         dntQ==
-X-Gm-Message-State: AOAM532hxUNYOmMC9rzH/QJcm7Vj/+DQPO0le943doKond4tJ1DV+uHF
-        7TVb/InInnb+nCLfyxc5K8FBSneOuPzh5KJSm9BN4Jz1sko=
-X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
-X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
- Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+        with ESMTP id S1731649AbgF2TOE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Jun 2020 15:14:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC09AC0068C6;
+        Mon, 29 Jun 2020 04:41:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 3B2052A22FB
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id F3F54480103; Mon, 29 Jun 2020 13:41:26 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dev Null <devnull@uvos.xyz>
+Cc:     Tony Lindgren <tony@atomide.com>, Pavel Machek <pavel@ucw.cz>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Sicelo A . Mhlongo" <absicsz@gmail.com>
+Subject: [PATCH] rtc: cpcap: fix range
+Date:   Mon, 29 Jun 2020 13:41:23 +0200
+Message-Id: <20200629114123.27956-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200629002917.0a2045380a0fe022f852e067@uvos.xyz>
+References: <20200629002917.0a2045380a0fe022f852e067@uvos.xyz>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
-Date:   Mon, 29 Jun 2020 12:15:58 -0700
-Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear friend,
+Unbreak CPCAP driver, which has one more bit in the day counter
+increasing the max. range from 2014 to 2058. The original commit
+introducing the range limit was obviously wrong, since the driver
+has only been written in 2017 (3 years after 14 bits would have
+run out).
 
+Reported-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+Reported-by: Dev Null <devnull@uvos.xyz>
+Fixes: d2377f8cc5a7 ("rtc: cpcap: set range")
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+---
+ drivers/rtc/rtc-cpcap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have a business container transaction what that some of( $13million dollars)
+diff --git a/drivers/rtc/rtc-cpcap.c b/drivers/rtc/rtc-cpcap.c
+index a603f1f21125..800667d73a6f 100644
+--- a/drivers/rtc/rtc-cpcap.c
++++ b/drivers/rtc/rtc-cpcap.c
+@@ -261,7 +261,7 @@ static int cpcap_rtc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(rtc->rtc_dev);
+ 
+ 	rtc->rtc_dev->ops = &cpcap_rtc_ops;
+-	rtc->rtc_dev->range_max = (1 << 14) * SECS_PER_DAY - 1;
++	rtc->rtc_dev->range_max = (timeu64_t) (DAY_MASK + 1) * SECS_PER_DAY - 1;
+ 
+ 	err = cpcap_get_vendor(dev, rtc->regmap, &rtc->vendor);
+ 	if (err)
+-- 
+2.27.0
 
- I would like to discuss with you. If you are interested, please
-contact my email
-
-address (mrs.victoria.alexander2@gmail.com)
-
-My WhatsApp number but only message (+19293737780)
-
-Please do not reply if you are not ready
-Thanks
