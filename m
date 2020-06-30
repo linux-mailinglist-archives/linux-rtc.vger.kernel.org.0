@@ -2,280 +2,195 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 716A720EB88
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 04:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E4220EE6C
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 08:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728634AbgF3Cm4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Jun 2020 22:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgF3Cm4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Jun 2020 22:42:56 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042E4C061755
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2020 19:42:56 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id v19so14495705qtq.10
-        for <linux-rtc@vger.kernel.org>; Mon, 29 Jun 2020 19:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hGU4pHFXZ7A+mVkdty66FwWa1uMudVTeioHLvhdTon4=;
-        b=hAZ5SA5J/hEbk58UTAWyV8VjIc/3j49JA83+hs4YDjcT6JlLt0JiryvI1788BNkwgP
-         +YVGRB/Jp34RwQTmLSxUva3HGizkAE5ER2a74GXM/9XQ2KgWSZLESxA9+lmLmsTkUj1j
-         MSDyTBkOBswTzjkkNPAK7Nw2oYwzI2tsvzztMfkaOCB/9s4k3sHdJmfRQuNeXkKI9XF6
-         JE31fG9CcULrjpHUfxHte8Q8mKhQmvg+H3ofRlzmK3+r051Y5AyoZIy/Xdu4Qzy6U6zm
-         RWI3/3XoiaVbbqjwn8CZENWhcVOrrAlJd5wa17zMEKPCCNC4DP+1+jUq+cx1RT9c6LLH
-         X41Q==
+        id S1730313AbgF3G2P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Jun 2020 02:28:15 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:35801 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730273AbgF3G2M (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Jun 2020 02:28:12 -0400
+Received: by mail-ej1-f66.google.com with SMTP id rk21so19301179ejb.2;
+        Mon, 29 Jun 2020 23:28:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hGU4pHFXZ7A+mVkdty66FwWa1uMudVTeioHLvhdTon4=;
-        b=mZIQwU+FB+uKJzuuoAETdlwasStCHhzvbhGqI/AdzrXUmk35Aa9e760Dgac1cHqR1/
-         m63Zdl73iItg3xH4N025+sBA3lM2WVdWDsfQdDef/pyNOHF9UkisEWK3+ylVaVvmRjzT
-         PUrU+MfG5Z25V7q/xsyYhvVS4D8UCKRvbvggFVQyletZ3r+f8jeSmetpbZenIXPQf21o
-         ulVFP8jHczqn/fHUJTCt9Xxw//V3gDVpC7wPoQoeDmW2nsjn7LrwIgII5CiQ6hE55JRd
-         6ehBtFG/6NwZ8tm9JZQ8CDtYvgG8AB5DjTAfQh+w5g5xLbqXFkBP6kspfaZ8o0RwjHYl
-         lW0Q==
-X-Gm-Message-State: AOAM533eXKTXogLjboBRwvPftpEXUgsQE8mDJ07aYGkUFcHdysfsWiWz
-        4Zrd9dBzqs8kpoDnThsobjU=
-X-Google-Smtp-Source: ABdhPJyUoLsq05PVSX9BaWo7qDxrbahVWJB49sPLdH/3NfCU64w2exiv6uYA4DSQMTTiEsjkayMLOA==
-X-Received: by 2002:ac8:36ad:: with SMTP id a42mr19462518qtc.21.1593484975205;
-        Mon, 29 Jun 2020 19:42:55 -0700 (PDT)
-Received: from localhost.localdomain (198-48-202-89.cpe.pppoe.ca. [198.48.202.89])
-        by smtp.gmail.com with ESMTPSA id p66sm1911185qkf.58.2020.06.29.19.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 19:42:54 -0700 (PDT)
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     bruno.thomsen@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org
-Subject: [PATCH v4 2/2] rtc: pcf2127: add alarm support
-Date:   Mon, 29 Jun 2020 22:42:11 -0400
-Message-Id: <20200630024211.12782-3-liambeguin@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200630024211.12782-1-liambeguin@gmail.com>
-References: <20200630024211.12782-1-liambeguin@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IBkBLpidCraeYaB8aHMjDRRIIiX4iWGeZXOZd0wY14o=;
+        b=B/eLdk6rbhR+Eb/sTI3RjUaz+aH/Ek6A2HyyHrtslWntPbI0wRzhjvzgBBnllw+hZx
+         7c/aQg/QaOFrc+kDBp6yVHdNZAEykRXJGkowz+CY0aI37UdWFBW8MiCEmLgyl+jTrJd7
+         gEm04pSpn35PI3RGyku5vg5EnN36o0hzIvBtFAFMlxPtLEyzp92hgkPFLubqkGbnq46y
+         K1wOKwi0cj1kex/FHwvoBvBHXFkGYQ0DlpLrxvu06kb5KPIjtog/ebE2kTi1KIGYBVg6
+         G7NrrzI8/K+J8HLJOvnClJrbWmX7fM5QWoFMAfTn0V2U4jjIhFdcK4ZN6ApRB57OE821
+         TvBA==
+X-Gm-Message-State: AOAM533z8340jhcQMAqti1sDBz8fWqTEyiK7RdLShrPd3jN7E/MNhR5s
+        id5XUw3LaJhM3ZP+kTCUOEIBoorg
+X-Google-Smtp-Source: ABdhPJxrnQJ8Sw8QlDZTRApQSzi8VhlGhavIsxexzeuYwAhLoHtisPXAuSYMS+fORpXHNKXE3Aj1Wg==
+X-Received: by 2002:a17:906:1998:: with SMTP id g24mr12481950ejd.11.1593498488710;
+        Mon, 29 Jun 2020 23:28:08 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.195])
+        by smtp.googlemail.com with ESMTPSA id a13sm1774702edk.58.2020.06.29.23.28.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Jun 2020 23:28:07 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 08:28:05 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH] rtc: max77686: Do not allow interrupt to fire before
+ system resume
+Message-ID: <20200630062805.GA12949@kozik-lap>
+References: <20200615161455.4420-1-krzk@kernel.org>
+ <20200629222353.GB3800@piout.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200629222353.GB3800@piout.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Liam Beguin <lvb@xiphos.com>
+On Tue, Jun 30, 2020 at 12:23:53AM +0200, Alexandre Belloni wrote:
+> Hi,
+> 
+> On 15/06/2020 18:14:55+0200, Krzysztof Kozlowski wrote:
+> > The rtc-max77686 device shares the main interrupt line with parent MFD
+> > device (max77686 driver).  During the system suspend, the parent MFD
+> > device disables this IRQ to prevent an early event happening before
+> > resuming I2C bus controller.
+> > 
+> > The same should be done by rtc-max77686 driver because otherwise the
+> > interrupt handler max77686_rtc_alarm_irq() will be called before its
+> > resume function (max77686_rtc_resume()).  Such issue is not fatal but
+> > disabling shared IRQ by all users ensures correct behavior.
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > 
+> > ---
+> > 
+> > If this looks ok, I guess all maxim RTC drivers should be updated?
+> 
+> But then, shouldn't that means that this affects all RTCs on an i2c bus?
+> 
+> I'm not completely proficient with PM but shouldn't using _noirq
+> propagate to the parents? Then you are sure that the resume is called
+> with interrupts disabled and this also means that the i2c driver has
+> resumed (hopefully with interrupts disabled).
 
-Add alarm support for the pcf2127 RTC chip family.
-Tested on pca2129.
+This won't work, at least for Exynos platforms now, because of ordering
+with other drivers.  The RTC and MFD enable wake up interrupt which goes
+through pinctrl... but pinctrl suspends with "late", so before "noirq".
+Therefore the wake does not work.
 
-Signed-off-by: Liam Beguin <lvb@xiphos.com>
-Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
----
-Changes since v1:
-- Add calls to pcf2127_wdt_active_ping after accessing CTRL2
-- Cleanup calls to regmap_{read,write,update_bits}
-- Cleanup debug trace
-- Add interrupt handler, untested because of hardware limitations
-- Add wakeup-source devicetree option
+In the same time, the enable_irq_wake() (I am not sure why) also uses
+I2C which goes to I2C bus driver... which suspends in "noirq" as well.
+This results in some I2C timeouts during suspend and resume:
 
-Changes since v2:
-- Avoid forward declaration of pcf2127_wdt_active_ping
-- Remove dev_err strings
-- Remove dev_dbg traces since they are now part of the core
-- Remove redundant if in pcf2127_rtc_alarm_irq_enable
-- Remove duplicate watchdog ping in pcf2127_rtc_irq
-- Avoid unnecessary read in pcf2127_rtc_irq with regmap_write
-- Add extra rtc_class_ops struct with alarm functions
+[   82.631344] wake enabled for irq 131
+[   82.632743] wake enabled for irq 132
+[   82.649868] samsung-pinctrl 11000000.pinctrl: Setting external wakeup interrupt mask: 0xfffbf7ff
+[   82.658367] max77686_rtc_suspend:811
+[   82.658488] max77686_rtc_suspend:815
+[   87.695000] s3c-i2c 13860000.i2c: timeout waiting for bus idle
+[   87.695574] dummy 0-0006: Failed to sync masks in 1
+[   87.700446] wake enabled for irq 127
+[   87.703883] max77686_rtc_suspend:818
+[   87.707408] max77686_rtc_suspend:829
+[   87.716862] max77686_suspend:236
+[   87.716972] max77686_suspend:240
+[   87.717714] max77686_suspend:252
+[   87.723173] Disabling non-boot CPUs ...
+[   87.745844] Enabling non-boot CPUs ...
+[   87.751164] CPU1 is up
+[   87.754842] CPU2 is up
+[   87.759008] CPU3 is up
+[   87.760598] s3c-i2c 13860000.i2c: slave address 0x00
+[   87.760709] s3c-i2c 13860000.i2c: bus frequency set to 390 KHz
+[   87.760851] s3c-i2c 13870000.i2c: slave address 0x00
+[   87.760951] s3c-i2c 13870000.i2c: bus frequency set to 97 KHz
+[   87.761085] s3c-i2c 13880000.i2c: slave address 0x00
+[   87.761185] s3c-i2c 13880000.i2c: bus frequency set to 97 KHz
+[   87.761319] s3c-i2c 138e0000.i2c: slave address 0x00
+[   87.761418] s3c-i2c 138e0000.i2c: bus frequency set to 97 KHz
+[   87.764159] max77686_resume:261
+[   87.764236] max77686_resume:265
+[   87.764303] max77686_resume:268
+[   87.768204] max77686_rtc_resume:837
+[   87.768283] max77686_rtc_resume:840
+[   87.768370] max77686_rtc_resume:844
+[   92.813964] s3c-i2c 13860000.i2c: timeout waiting for bus idle
+[   92.814105] dummy 0-0006: Failed to sync masks in 1
+[   92.814205] wake disabled for irq 127
 
-Changes since v3:
-- Replace "goto irq_err" with "return IRQ_NONE" in interrupt handler
-- Add Reviewed-by trailer
+In general, disabling and enabling this shared interrupt seems like a
+nice way to be able to suspend/resume driver in the "normal" time,
+without the need to order anything (noirq, late).
 
- drivers/rtc/rtc-pcf2127.c | 134 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 134 insertions(+)
+Best regards,
+Krzysztof
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 4accee09bfad..4e99c45a87d7 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -20,6 +20,7 @@
- #include <linux/slab.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_irq.h>
- #include <linux/regmap.h>
- #include <linux/watchdog.h>
- 
-@@ -28,7 +29,9 @@
- #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
- /* Control register 2 */
- #define PCF2127_REG_CTRL2		0x01
-+#define PCF2127_BIT_CTRL2_AIE			BIT(1)
- #define PCF2127_BIT_CTRL2_TSIE			BIT(2)
-+#define PCF2127_BIT_CTRL2_AF			BIT(4)
- #define PCF2127_BIT_CTRL2_TSF2			BIT(5)
- /* Control register 3 */
- #define PCF2127_REG_CTRL3		0x02
-@@ -46,6 +49,12 @@
- #define PCF2127_REG_DW			0x07
- #define PCF2127_REG_MO			0x08
- #define PCF2127_REG_YR			0x09
-+/* Alarm registers */
-+#define PCF2127_REG_ALARM_SC		0x0A
-+#define PCF2127_REG_ALARM_MN		0x0B
-+#define PCF2127_REG_ALARM_HR		0x0C
-+#define PCF2127_REG_ALARM_DM		0x0D
-+#define PCF2127_REG_ALARM_DW		0x0E
- /* Watchdog registers */
- #define PCF2127_REG_WD_CTL		0x10
- #define PCF2127_BIT_WD_CTL_TF0			BIT(0)
-@@ -324,6 +333,114 @@ static const struct watchdog_ops pcf2127_watchdog_ops = {
- 	.set_timeout = pcf2127_wdt_set_timeout,
- };
- 
-+/* Alarm */
-+static int pcf2127_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	unsigned int buf[5], ctrl2;
-+	int ret;
-+
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
-+	if (ret)
-+		return ret;
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_ALARM_SC, buf,
-+			       sizeof(buf));
-+	if (ret)
-+		return ret;
-+
-+	alrm->enabled = ctrl2 & PCF2127_BIT_CTRL2_AIE;
-+	alrm->pending = ctrl2 & PCF2127_BIT_CTRL2_AF;
-+
-+	alrm->time.tm_sec = bcd2bin(buf[0] & 0x7F);
-+	alrm->time.tm_min = bcd2bin(buf[1] & 0x7F);
-+	alrm->time.tm_hour = bcd2bin(buf[2] & 0x3F);
-+	alrm->time.tm_mday = bcd2bin(buf[3] & 0x3F);
-+	alrm->time.tm_wday = buf[4] & 0x07;
-+
-+	return 0;
-+}
-+
-+static int pcf2127_rtc_alarm_irq_enable(struct device *dev, u32 enable)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_AIE,
-+				 enable ? PCF2127_BIT_CTRL2_AIE : 0);
-+	if (ret)
-+		return ret;
-+
-+	return pcf2127_wdt_active_ping(&pcf2127->wdd);
-+}
-+
-+static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	uint8_t buf[5];
-+	int ret;
-+
-+	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
-+				 PCF2127_BIT_CTRL2_AF, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return ret;
-+
-+	buf[0] = bin2bcd(alrm->time.tm_sec);
-+	buf[1] = bin2bcd(alrm->time.tm_min);
-+	buf[2] = bin2bcd(alrm->time.tm_hour);
-+	buf[3] = bin2bcd(alrm->time.tm_mday);
-+	buf[4] = (alrm->time.tm_wday & 0x07);
-+
-+	ret = regmap_bulk_write(pcf2127->regmap, PCF2127_REG_ALARM_SC, buf,
-+				sizeof(buf));
-+	if (ret)
-+		return ret;
-+
-+	return pcf2127_rtc_alarm_irq_enable(dev, alrm->enabled);
-+}
-+
-+static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	unsigned int ctrl2 = 0;
-+	int ret = 0;
-+
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	if (ctrl2 & PCF2127_BIT_CTRL2_AF) {
-+		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
-+			     ctrl2 & ~PCF2127_BIT_CTRL2_AF);
-+
-+		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
-+	}
-+
-+	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static const struct rtc_class_ops pcf2127_rtc_alrm_ops = {
-+	.ioctl            = pcf2127_rtc_ioctl,
-+	.read_time        = pcf2127_rtc_read_time,
-+	.set_time         = pcf2127_rtc_set_time,
-+	.read_alarm       = pcf2127_rtc_read_alarm,
-+	.set_alarm        = pcf2127_rtc_set_alarm,
-+	.alarm_irq_enable = pcf2127_rtc_alarm_irq_enable,
-+};
-+
- /* sysfs interface */
- 
- static ssize_t timestamp0_store(struct device *dev,
-@@ -419,6 +536,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 			const char *name, bool has_nvmem)
- {
- 	struct pcf2127 *pcf2127;
-+	int alarm_irq = 0;
- 	u32 wdd_timeout;
- 	int ret = 0;
- 
-@@ -441,6 +559,22 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
- 	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
- 
-+	alarm_irq = of_irq_get_byname(dev->of_node, "alarm");
-+	if (alarm_irq >= 0) {
-+		ret = devm_request_irq(dev, alarm_irq, pcf2127_rtc_irq,
-+				       IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+				       dev_name(dev), dev);
-+		if (ret) {
-+			dev_err(dev, "failed to request alarm irq\n");
-+			return ret;
-+		}
-+	}
-+
-+	if (alarm_irq >= 0 || device_property_read_bool(dev, "wakeup-source")) {
-+		device_init_wakeup(dev, true);
-+		pcf2127->rtc->ops = &pcf2127_rtc_alrm_ops;
-+	}
-+
- 	pcf2127->wdd.parent = dev;
- 	pcf2127->wdd.info = &pcf2127_wdt_info;
- 	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
--- 
-2.27.0
 
+> 
+> I must admit that I don't know and I hope that the answer would also
+> answer whether moving all the RTC resume to resume_early is safe. (See
+> https://lore.kernel.org/linux-rtc/20200610132403.2539519-1-martin@geanix.com/#t)
+> 
+> > ---
+> >  drivers/rtc/rtc-max77686.c | 20 ++++++++++++++++++--
+> >  1 file changed, 18 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+> > index 03ebcf1c0f3d..645de5af707b 100644
+> > --- a/drivers/rtc/rtc-max77686.c
+> > +++ b/drivers/rtc/rtc-max77686.c
+> > @@ -805,17 +805,33 @@ static int max77686_rtc_remove(struct platform_device *pdev)
+> >  #ifdef CONFIG_PM_SLEEP
+> >  static int max77686_rtc_suspend(struct device *dev)
+> >  {
+> > +	struct max77686_rtc_info *info = dev_get_drvdata(dev);
+> > +	int ret = 0;
+> > +
+> >  	if (device_may_wakeup(dev)) {
+> >  		struct max77686_rtc_info *info = dev_get_drvdata(dev);
+> >  
+> > -		return enable_irq_wake(info->virq);
+> > +		ret = enable_irq_wake(info->virq);
+> >  	}
+> >  
+> > -	return 0;
+> > +	/*
+> > +	 * Main IRQ (not virtual) must be disabled during suspend because if it
+> > +	 * happens while suspended it will be handled before resuming I2C.
+> > +	 *
+> > +	 * Since Main IRQ is shared, all its users should disable it to be sure
+> > +	 * it won't fire while one of them is still suspended.
+> > +	 */
+> > +	disable_irq(info->rtc_irq);
+> > +
+> > +	return ret;
+> >  }
+> >  
+> >  static int max77686_rtc_resume(struct device *dev)
+> >  {
+> > +	struct max77686_rtc_info *info = dev_get_drvdata(dev);
+> > +
+> > +	enable_irq(info->rtc_irq);
+> > +
+> >  	if (device_may_wakeup(dev)) {
+> >  		struct max77686_rtc_info *info = dev_get_drvdata(dev);
+> >  
+> > -- 
+> > 2.17.1
+> > 
+> 
+> -- 
+> Alexandre Belloni, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
