@@ -2,138 +2,113 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D9420EEAD
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 08:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D89C20EF08
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 09:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730423AbgF3Gl1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Jun 2020 02:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S1730637AbgF3HLV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Jun 2020 03:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730190AbgF3Gl1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Jun 2020 02:41:27 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC320C061755;
-        Mon, 29 Jun 2020 23:41:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dqdqP9RRgNiXtHwuMESvsYqArYSjsXn6hYwLSXg9Z+E=; b=kMxKmpbGA6gEpK5aXTTnvAWOIn
-        aJE8zIQ54SyYGKsa11ofbBkJH+aaExjMqYDyRiaDklgGG2rE7Og+YI8cTnmEDr4LNXeDxyzaICYFe
-        Mx67qtcLaPRekFa4PhhKpSEIkrDkwNeHwhkGiVynpoKPdQUkr3nHf/bY9gBk84xwHseQ=;
-Received: from p200300ccff14dd001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff14:dd00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1jq9wq-0004vi-W6; Tue, 30 Jun 2020 08:40:53 +0200
-Date:   Tue, 30 Jun 2020 08:40:51 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
+        with ESMTP id S1730636AbgF3HLT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Jun 2020 03:11:19 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A4DC03E979
+        for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2020 00:11:19 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id a6so18986618wrm.4
+        for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2020 00:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=K64/PWzIdJHy6AMq0CI1QxWBigdrJv6e4jIUjK6qkD0=;
+        b=QwrOy5cCVRKI+Mspy8/CQFQQfjsIENqMArQcy6wu3W/FJtySPw8sfwnWO6wClLrdPR
+         0t7Oiq1odHqpiKZG0L2OYdCDBz/1WEJDhsvFhR//xeQ+2hO6Kr80/All8equ1NCLTOYN
+         2/Ydpyf3BWL3S6vyhCzZjGJZ4Qyn+y9NQfGiCgPf7TIoaIiHJQP4IiMFN8r/07C7ELzy
+         dLV8FWsyiBN80NWS+vmM6O+PaF6qF/lrtht7CavF0JYAIsmWriZykdA2mxyKPqUTEJDw
+         5WbXMJysulDXVFL02NFQ7frxgHN6CQpEVRjgjy+zybl6G0giruv4u8Qi6HcD/A3fcC2+
+         en8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=K64/PWzIdJHy6AMq0CI1QxWBigdrJv6e4jIUjK6qkD0=;
+        b=P557Xc9efyP7IJ6qZg1e6U+8PbfXrMKyfoJ+CEQh/3rQDizrFALn+ATLSFXIyc+CaJ
+         5kyZO+8R9G0rK4vadjEjYalVCs7QATosDCamvjA0tOA4HzDx7+PnHXe8E5ZYQQ0GCNPe
+         76TVZpDcGX5oOsK0L8DOf2cipwmbcg+m58qWyTCFA7kzrDGwxzKqkvlyefyUHQQc4Mfe
+         AmjyarT4B+6o0d/Pmziu+FfDeY2wNQciCZDjSBi6qf975tYy7AoXZvmNbk8Um8ZqLhQ5
+         KrLPsJxDYy9eVTEihrkyApHO3WlZhb/15AGuGWjT75qkf5dLadVu0uVFsiCBFZQKiAk7
+         Hd5g==
+X-Gm-Message-State: AOAM530ALWjRJ7qWcjSjrrRKJZMaCAtqL+picVAKWEWjG+w/jdAVJE5n
+        8FRRp0jEgTTj2LARwuN7NOYGLw==
+X-Google-Smtp-Source: ABdhPJwZssKxM2tBc6NCDnk4r2tWfyhz2turH5uFie+KVPTCYv0GHzeKD3NWkCZuHCFBkEVXD3Bc/Q==
+X-Received: by 2002:adf:f350:: with SMTP id e16mr19880821wrp.43.1593501077875;
+        Tue, 30 Jun 2020 00:11:17 -0700 (PDT)
+Received: from dell ([2.27.35.144])
+        by smtp.gmail.com with ESMTPSA id k20sm2459432wmi.27.2020.06.30.00.11.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 00:11:17 -0700 (PDT)
+Date:   Tue, 30 Jun 2020 08:11:15 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     mazziesaccount@gmail.com, Sebastian Reichel <sre@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>
-Subject: Re: [RFC PATCH 00/10] Netronix embedded controller driver for Kobo
- and Tolino ebook readers
-Message-ID: <20200630084051.66feadea@aktux>
-In-Reply-To: <20200620223915.1311485-1-j.neuschaefer@gmx.net>
-References: <20200620223915.1311485-1-j.neuschaefer@gmx.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        linux-power@fi.rohmeurope.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: Add entry for ROHM power management ICs
+Message-ID: <20200630071115.GG1179328@dell>
+References: <20200618073331.GA9403@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200618073331.GA9403@localhost.localdomain>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On Thu, 18 Jun 2020, Matti Vaittinen wrote:
 
-On Sun, 21 Jun 2020 00:39:04 +0200
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> wrote:
+> Add entry for maintaining power management IC drivers for ROHM
+> BD71837, BD71847, BD71850, BD71828, BD71878, BD70528 and BD99954.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> ---
+> Morning Lee - could you take this in MFD? This is scattered all around
+> different subsystems anyways... I guess crafting bunch of patches to
+> each individual subsystems would just end up with lots of merge
+> conflicts.
+> 
+> Changes from v1:
+> - Dropped patch 2/2 (linear-ranges maintainer) which was already applied by Mark
+> - Added shiny new ROHM linux-power list so that I am no longer the lonely
+>   poor sod watching these at ROHM side :)
+> - sort few files to alphabethical order as checkpatch now nagged about
+>   that.
+> 
+> v1 was here:
+> https://lore.kernel.org/lkml/e11366fd280736844ae63791b6193bb84d6205bf.1589866138.git.matti.vaittinen@fi.rohmeurope.com/
+> 
+> 
+>  MAINTAINERS | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
 
-> Hi,
->=20
-> This patchset adds basic support for the embedded controller found on
-> older ebook reader boards designed by/with the ODM Netronix Inc.[1] and
-> sold by Kobo or Tolino, for example the Kobo Aura and the Tolino Shine.
-> These drivers are based on the vendor kernel sources, but in order to
-> all information in a single place, I documented the register interface
-> of the EC on GitHub[4].
->=20
-> A few things still needs to be ironed out, hence the RFC tag:
->  - The reboot/reset handler in patch 3/10 calls into I2C code, which may
->    sleep, but reboot handlers are apparently not allowed to sleep.
->  - I'm not sure I got the YAML DT bindings right. I have also included
->    the plain text DT bindings for reference.
->=20
->=20
-got a chance to test it on a Tolino Shine 2 HD.
-It uses the RTC from the RC5T619 but backlight seems to go via MSP430
-EC.
+Applied, thanks.
 
-I got this.
-
-[    1.453603] ntxec 0-0043: Netronix embedded controller version f110 dete=
-cted.
-[   10.723638] ntxec-rtc 21a0000.i2c:embedded-controller@43:rtc: registered=
- as rtc0
-[   10.775276] ntxec-pwm: probe of 21a0000.i2c:embedded-controller@43:pwm f=
-ailed with error -5
-[   10.850597] ntxec-rtc 21a0000.i2c:embedded-controller@43:rtc: hctosys: u=
-nable to read the hardware clock
-
-version number matchess with what the vendor kernel reports. Maybe we
-should document which version is running on which devices?
-
-&i2c1 {
-        pinctrl-names =3D "default","sleep";
-        pinctrl-0 =3D <&pinctrl_i2c1>;
-        pinctrl-1 =3D <&pinctrl_i2c1_sleep>;
-        status =3D "okay";
-
-        embedded-controller@43 {
-//              pinctrl-names =3D "default";
-//              pinctrl-0 =3D <&pinctrl_ec>;
-                compatible =3D "netronix,ntxec";
-                reg =3D <0x43>;
-                interrupts-extended =3D <&gpio5 11 IRQ_TYPE_EDGE_FALLING>;
-                interrupt-controller;
-                #interrupt-cells =3D <1>;
-
-                ec_pwm: pwm {
-                        compatible =3D "netronix,ntxec-pwm";
-                        #pwm-cells =3D <2>;
-                };
-
-                rtc {
-                        compatible =3D "netronix,ntxec-rtc";
-                };
-        };
-};
-
-Regards,
-Andreas
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
