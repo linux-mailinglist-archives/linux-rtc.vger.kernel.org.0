@@ -2,113 +2,149 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D89C20EF08
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 09:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DE120EF20
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Jun 2020 09:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730637AbgF3HLV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Jun 2020 03:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730636AbgF3HLT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Jun 2020 03:11:19 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A4DC03E979
-        for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2020 00:11:19 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id a6so18986618wrm.4
-        for <linux-rtc@vger.kernel.org>; Tue, 30 Jun 2020 00:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=K64/PWzIdJHy6AMq0CI1QxWBigdrJv6e4jIUjK6qkD0=;
-        b=QwrOy5cCVRKI+Mspy8/CQFQQfjsIENqMArQcy6wu3W/FJtySPw8sfwnWO6wClLrdPR
-         0t7Oiq1odHqpiKZG0L2OYdCDBz/1WEJDhsvFhR//xeQ+2hO6Kr80/All8equ1NCLTOYN
-         2/Ydpyf3BWL3S6vyhCzZjGJZ4Qyn+y9NQfGiCgPf7TIoaIiHJQP4IiMFN8r/07C7ELzy
-         dLV8FWsyiBN80NWS+vmM6O+PaF6qF/lrtht7CavF0JYAIsmWriZykdA2mxyKPqUTEJDw
-         5WbXMJysulDXVFL02NFQ7frxgHN6CQpEVRjgjy+zybl6G0giruv4u8Qi6HcD/A3fcC2+
-         en8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=K64/PWzIdJHy6AMq0CI1QxWBigdrJv6e4jIUjK6qkD0=;
-        b=P557Xc9efyP7IJ6qZg1e6U+8PbfXrMKyfoJ+CEQh/3rQDizrFALn+ATLSFXIyc+CaJ
-         5kyZO+8R9G0rK4vadjEjYalVCs7QATosDCamvjA0tOA4HzDx7+PnHXe8E5ZYQQ0GCNPe
-         76TVZpDcGX5oOsK0L8DOf2cipwmbcg+m58qWyTCFA7kzrDGwxzKqkvlyefyUHQQc4Mfe
-         AmjyarT4B+6o0d/Pmziu+FfDeY2wNQciCZDjSBi6qf975tYy7AoXZvmNbk8Um8ZqLhQ5
-         KrLPsJxDYy9eVTEihrkyApHO3WlZhb/15AGuGWjT75qkf5dLadVu0uVFsiCBFZQKiAk7
-         Hd5g==
-X-Gm-Message-State: AOAM530ALWjRJ7qWcjSjrrRKJZMaCAtqL+picVAKWEWjG+w/jdAVJE5n
-        8FRRp0jEgTTj2LARwuN7NOYGLw==
-X-Google-Smtp-Source: ABdhPJwZssKxM2tBc6NCDnk4r2tWfyhz2turH5uFie+KVPTCYv0GHzeKD3NWkCZuHCFBkEVXD3Bc/Q==
-X-Received: by 2002:adf:f350:: with SMTP id e16mr19880821wrp.43.1593501077875;
-        Tue, 30 Jun 2020 00:11:17 -0700 (PDT)
-Received: from dell ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id k20sm2459432wmi.27.2020.06.30.00.11.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2020 00:11:17 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 08:11:15 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Sebastian Reichel <sre@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S1730772AbgF3HQg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Jun 2020 03:16:36 -0400
+Received: from mout.gmx.net ([212.227.15.19]:50185 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730638AbgF3HQd (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 30 Jun 2020 03:16:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1593501329;
+        bh=DMx+oQpNcXunG3rnxv/9UJLjUv+PeETp9dEOfqk1CC0=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=darJd5wZTWZIBy2/iRBMnjyoQJa5Lmpxme/6fnlyBAyVDJPsoTc+2Z2vrNGx9EX67
+         ovWQmZA3GBoMMdzCpCCrVtNXzoNJn9okgsG+yXFRiBMjnRicqW6t5dcs75gwP8ujup
+         xWiGO1eQ955HoOO07hp1kuwU4B0yV9sUMFKQMq/I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.186]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKKUv-1jX84U2Prb-00Lmdl; Tue, 30
+ Jun 2020 09:15:29 +0200
+Date:   Tue, 30 Jun 2020 09:15:23 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-power@fi.rohmeurope.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: Add entry for ROHM power management ICs
-Message-ID: <20200630071115.GG1179328@dell>
-References: <20200618073331.GA9403@localhost.localdomain>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>
+Subject: Re: [RFC PATCH 00/10] Netronix embedded controller driver for Kobo
+ and Tolino ebook readers
+Message-ID: <20200630071523.GA2983@latitude>
+References: <20200620223915.1311485-1-j.neuschaefer@gmx.net>
+ <20200630084051.66feadea@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X1bOJ3K7DJ5YkBrT"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200618073331.GA9403@localhost.localdomain>
+In-Reply-To: <20200630084051.66feadea@aktux>
+X-Provags-ID: V03:K1:EwmzfFLtGFe1eqxLKUj9sjr5ZZtJsSCdjqSaDB0tyhtqH7FwpJv
+ 7MVE1OKWKCnqZMPT6pGEvsz8akyhZYYCYnmiiZ5FwHG9d4xA0ltAhZvDqFSBwzYIfPpYbpF
+ waJrR9Qb9frn8+QOYWZ5ovmF+CDER4IR4D8JXq2qDvnNfR610NTJmCH1KerOwHKD4sGJLHz
+ 7IA8L3TobYxZZX5hae1KQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kT8thK8dv4Q=:LOf/PXUjfBAyMTShPsI3sJ
+ USZN/2Sg2cNPMZNyTgjv6qThDGkV6dbtgya5ouwRENdJNQbHQ/ktXYHSKzo4t7+ygHh8vLUl5
+ dGGXv4wGJdilkBvLhkq7Es4Lj5mP1LdbyRzbnWMHEqgSPlv+9pJpXIrp5tARsboyDISx9Gn+k
+ y8nbFJb6sT/s3MFFsO0sigKUf+StVofU/HvbSylz0+g2+pzouN6isCxPvLSFsj3VYPigVsOwP
+ DZubGR7ze1Mk8Df/xa3uL1WbXC1F5WbEUzh2HQZOk07x0b237tmzkh9Ivqcb/cGma2vQAK5sU
+ LqIjuZMlA/3/VGK+XZ7bTvNldMpxwGGgMNS5Uf5SJswBDyOUuIDQmAtIRiAoiFUMyaSm96x6v
+ 0nTGrXHZcQ3LYgnYtwxsbR3fbU/Cs8kKcx+XxLUr8N8AUT2xTlLbPen74BUHXZsEtw3a3SCYN
+ C2b1rvtTXiTQYSORmNDpP3xxS7cZz/ueeBmuDx91aQDTxluWWgc3Fd6Ud/ABinh0Kuq9g7FPF
+ 8wGoHa++MGBFFfpchAwO/FmZHQakfeURgR2wJd/3AwIHD8kGIdhgIaRbqkmuBQV3FEc6aA0b5
+ vtkaNGIGs+lhrB7s0LfVvtn/X7b1IiIQ14oJ0wXNtnmFsmExgH22pCHPNTFy1tmIYMiB+OJtG
+ x2zJnMaMQumCQIobGELdugFx27aMAo3Pe2RLDB4/BdUqIc/6M8BOQkOizBS+cm5Se/yK9DpXs
+ nRFeErXQRNSp0MKP65cKPkRfgSTnOlTpyRmVeKNXXorwOjjW+HA3ePNTJo8cy12vJGl1JqBPb
+ +xR+gJJ62DTnoJeJopctG/Iny4yr3+E50cqjAGjmNm8vtrVlI47SZERWFiOuRQv6/V34VNxbK
+ O8x9Tepaw+ybVLPhlAKwI+tFeWVYj+50tKycEJ8pA6xhSGAY9PxxOeI/06Twt6Va82A4WPTjI
+ EbiptFO8xCCXhEHhx8cnitCvxGJck6U9d1wTQojXZzlFKMEmiDDSweTa3q2xk0rjkxdobcLVV
+ kjttx8xH0DP+shj9pFMMH+7aJUfvjhTmXp14BLTrmzAoUP0mT1BeiICdO7kvgjZ22Sf6NWULx
+ 1rJNraibYPXAagc4e3ZZzWM9JWJsXztOdp5DMUDjnkCBc94K6NX1NEeUhbvRW+554y+058a/P
+ 2SauELZKxGhv+X79EkULbex1nXPLYXFlMTs9mZzfle35FqTtccaDACiT9/boQF62DMZWIFKsf
+ 2Jz7veqU9tVqKaVKu
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 18 Jun 2020, Matti Vaittinen wrote:
 
-> Add entry for maintaining power management IC drivers for ROHM
-> BD71837, BD71847, BD71850, BD71828, BD71878, BD70528 and BD99954.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> ---
-> Morning Lee - could you take this in MFD? This is scattered all around
-> different subsystems anyways... I guess crafting bunch of patches to
-> each individual subsystems would just end up with lots of merge
-> conflicts.
-> 
-> Changes from v1:
-> - Dropped patch 2/2 (linear-ranges maintainer) which was already applied by Mark
-> - Added shiny new ROHM linux-power list so that I am no longer the lonely
->   poor sod watching these at ROHM side :)
-> - sort few files to alphabethical order as checkpatch now nagged about
->   that.
-> 
-> v1 was here:
-> https://lore.kernel.org/lkml/e11366fd280736844ae63791b6193bb84d6205bf.1589866138.git.matti.vaittinen@fi.rohmeurope.com/
-> 
-> 
->  MAINTAINERS | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
+--X1bOJ3K7DJ5YkBrT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks.
+On Tue, Jun 30, 2020 at 08:40:51AM +0200, Andreas Kemnade wrote:
+[...]
+> got a chance to test it on a Tolino Shine 2 HD.
+> It uses the RTC from the RC5T619 but backlight seems to go via MSP430
+> EC.
+>=20
+> I got this.
+>=20
+> [    1.453603] ntxec 0-0043: Netronix embedded controller version f110 de=
+tected.
+> [   10.723638] ntxec-rtc 21a0000.i2c:embedded-controller@43:rtc: register=
+ed as rtc0
+> [   10.775276] ntxec-pwm: probe of 21a0000.i2c:embedded-controller@43:pwm=
+ failed with error -5
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Hmm, -EIO from the PWM driver.
+
+> [   10.850597] ntxec-rtc 21a0000.i2c:embedded-controller@43:rtc: hctosys:=
+ unable to read the hardware clock
+>=20
+> version number matchess with what the vendor kernel reports. Maybe we
+> should document which version is running on which devices?
+
+Good idea, I've added a table to the wiki page:
+
+  https://github.com/neuschaefer/linux/wiki/Netronix-MSP430-embedded-contro=
+ller
+
+
+
+Jonathan
+
+--X1bOJ3K7DJ5YkBrT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl765oMACgkQCDBEmo7z
+X9t4uQ//adw6WbhVY/ljNdI6evIOpehnVPm4JcX+Cq+FRgwzpcWAMvdXvmonOM86
+Gjy7liAoNDczuxg7kdDhCRwIVANhi3jHJeeeHqzUnki8TSvnWS1iu5xGWOx1RRWj
+YbwARZIU2L37uPys5ByF4RoqKp1tngfhL9B9o+e93x8RB16dxACG2qEb7Hdr55qI
+/lwk2zuuHwqdxOOGSVFrD40GA52Xc/nn3wr1orqxOIE0k8pOEslBiXq7MW+nKROZ
+Cdc1zGpqWnSlRc04jm1da1oJmmqZPCtiK7rMZcY98sbJgmdSflP2R5raXNggdBNQ
+jNmRTSsBIxYkdK6+3W3Fl/m8RMJe6gwKaQIqYu69gZbsrm8Ap826po3CkCve4kCJ
+w4mYJAxQfI34OrIga4mHru+qnFJEgMPkHwTI98LK7YHJT1ecWn8Ucblxd2dUQlGO
+TCcQL//WWRiD73DJ+vd0NstsmvgMSlnUGgmWcCGjEIR0sM3e7DquHbfeDoaSeV58
+ALjTBcTcoSyWKFMSO+3iws/kqmW3VlpHRqQrzRaiU9LqluBgK8PKXOopityTqG8K
+Mu7yTDOrFwJO2q1kNJP45cpl/2JBpK23MAMFo2U78IvhhjMeKe15m2P79z+fbUAZ
+ASFT4XWCVS+Ovv5HwrLoWdrTzNUYi50bl9vFimShNFr5qC9xCWM=
+=ozP0
+-----END PGP SIGNATURE-----
+
+--X1bOJ3K7DJ5YkBrT--
