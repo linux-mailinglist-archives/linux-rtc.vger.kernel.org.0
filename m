@@ -2,277 +2,547 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F652108F3
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2020 12:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EE3210D0D
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jul 2020 16:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729358AbgGAKJ7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Jul 2020 06:09:59 -0400
-Received: from mail-eopbgr1300071.outbound.protection.outlook.com ([40.107.130.71]:22944
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728941AbgGAKJ6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 1 Jul 2020 06:09:58 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KcKthpmryrw9h2QNaAx9AqiFz7V5arnjNBDO/w0jTOElZyS740VkSydlgDSSkh1fvWdafrp/d4SQ5asqy0OGtEC4YvljteDatp4Ofj5T0mH2c61eg0tp/rCXpPuI/mv9c9A6TSqN8Z+xg0ndf5I8UHQ7G77eFlDUyIMX2gNQLqWDlk8sJ66JekXbpFdxbnT16FBVmCWQp9qesAiaoFJSoJk/0y/QY17KJsWP5WqqHDSIYefzWWQQNcfdpuNx/thSwLRzqFVMcZe/sKFCBQTFS6A/rtP7BoSl94UBWqLnLU1HauqCRpbidNT+egiw0+AurKa/XD8ox0/4PqduCfRvcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bi6fLrFcA+Z2f96scn53qPMJ0qBFonzpmBXsA9QXAaU=;
- b=iaIXGCuvRzE30AhceEYoSFCMKiM4EfrVSDLESiwSGn/VudiTBL1iOMo+yl0wwVoBOy6hOawTWykdeQ3Pp9G31MhE/ejhL4v8Mo4h67xLfqZdAD6GTkovqRu1d8IokUi8a0DVXKsIV/9w4e2/WCM45+Z6Lg2Bag3yO61lsMVvIvTKcxFP3XbcYEZQfHovF8ZDqfdSPz7xXWDG2RJiMTuUV+/+WD8dMpSe8ylse3pMUu7Pdhbf50FDsgR0JVrGjkpHxkr5j+2gRl9Vfz10hOsJs8yynjJqUHVvQ+XfA2BNUv5vMk3vdYszlVvF/T6biL+oI4U1vO+MdSKUdlvbq/nsQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=moxa.com; dmarc=pass action=none header.from=moxa.com;
- dkim=pass header.d=moxa.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=moxa.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bi6fLrFcA+Z2f96scn53qPMJ0qBFonzpmBXsA9QXAaU=;
- b=ZI/9WaKtMe+7krd66cwXGzyjTV7Jc/FHIUIuwEXne8A8gDZ3XhE76/37wlz6iAOqE5bbycKaGs4GD0kLSvHG6xBQR2IPRUBI+BM0p2yvYDh3p4lcZrJ1w7UO3UnMqup4E9SpPzhkij0lfrltLBaFwxpmyKpItCEjJFMDEurrS5E=
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- (2603:1096:202:22::12) by HK0PR01MB1955.apcprd01.prod.exchangelabs.com
- (2603:1096:203:1c::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.21; Wed, 1 Jul
- 2020 10:09:49 +0000
-Received: from HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::712b:170d:f873:68a3]) by HK2PR01MB3281.apcprd01.prod.exchangelabs.com
- ([fe80::712b:170d:f873:68a3%6]) with mapi id 15.20.3131.028; Wed, 1 Jul 2020
- 10:09:48 +0000
-From:   =?big5?B?Sm9obnNvbiBDSCBDaGVuICizr6xMvrEp?= 
-        <JohnsonCH.Chen@moxa.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        id S1730245AbgGAOFk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Jul 2020 10:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729503AbgGAOFj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jul 2020 10:05:39 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E93C08C5C1;
+        Wed,  1 Jul 2020 07:05:39 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id a14so6481930pfi.2;
+        Wed, 01 Jul 2020 07:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=d7mNpyjBdNbPq08cUTTZ5TQaFmfSbdKaKV8+BkIO3Bc=;
+        b=Mi40lH9cIEyETUJG6k0h+bQrI+fmdP3kRWA/GgiJHD4FYFLl1NBVhqv1pS5/9gk7NG
+         oQcA0xZxNPnF28hGM4VF0xO3O9UmZn5PeyXcNqvUagzoIXoMm5Ymq1vEBWOF6BDsw6dv
+         G9Pb/NSseOOS8Gd375mYlNtkSEQ23uXX9v0h/CUdYQdkMDBol28K34tzge29HtVsd6N3
+         uk/ya/LhS2Ws/hLBujlfbxCAVOVEJWHw45Hj+VafRiSCxPf1xfh0zUaiNJWzoAj+4OtZ
+         hF+8AjLLMb8k/t/aqgK1r+pstao8ZM3TqDggud2KqYUi8pHbS8/msOEE6nYcNhCIo5EG
+         MvqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=d7mNpyjBdNbPq08cUTTZ5TQaFmfSbdKaKV8+BkIO3Bc=;
+        b=e1rfJD6XYA/vDjTnea7LfgGz7CzpJ/jqLHy/NEKOgz8KyEaN7xmCjC75VjCKiy+PSe
+         kg8X6GScmkmfG9PUPf+QO3u6pw6bKAVs4+x+DrmcFDBuW8nUhideeextGWubTagbP4pp
+         46LD6BhzK/Q7BBso6JzDfmmpFxbanSxKBhwMFI0v33okBIh+eR+ehHhg2U2A0OqhZkN2
+         hbjDLHtljjlIIzFMLRH2DZGyHapAUtLk5Fm9M2vZ7xwdIy3RfScyQDbRGoIbVkQoGjte
+         mYBzcF9fbPTOCbeaRW6bQmmE2yeZOIyZ6M6XbVw3IEIMsHEis2zgc4UcSj9e66fbp3yQ
+         keYQ==
+X-Gm-Message-State: AOAM531To5YVOk8fBIVwMkdaWu4cUpvKKzmjApoRwCbYXt3HThu/XXIi
+        lMGsPJKppCAqf2dpYH50Jcu74jEt
+X-Google-Smtp-Source: ABdhPJwO2atCrhTO+rMFMTIZGDvxw37I8cvFN5HcdkrjgXmDflcVQDJ3pP8OeXWyylfsia5DAhvGUg==
+X-Received: by 2002:a05:6a00:78a:: with SMTP id g10mr6588518pfu.0.1593612338658;
+        Wed, 01 Jul 2020 07:05:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r8sm6075308pfg.147.2020.07.01.07.05.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2020 07:05:37 -0700 (PDT)
+Subject: Re: [PATCH] rtc: ds1374: wdt: Use watchdog core for watchdog part
+To:     =?UTF-8?B?Sm9obnNvbiBDSCBDaGVuICjpmbPmmK3li7Mp?= 
+        <JohnsonCH.Chen@moxa.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH] rtc: ds1374: wdt: Use watchdog core for watchdog part
-Thread-Topic: [PATCH] rtc: ds1374: wdt: Use watchdog core for watchdog part
-Thread-Index: AQHWT46vOpykt28FdUy3wlV4O8FI6g==
-Date:   Wed, 1 Jul 2020 10:09:48 +0000
-Message-ID: <HK2PR01MB3281311E985BB6ED61B545FDFA6C0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=moxa.com;
-x-originating-ip: [123.51.145.16]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f484dc15-684d-401a-98c0-08d81da6e360
-x-ms-traffictypediagnostic: HK0PR01MB1955:
-x-microsoft-antispam-prvs: <HK0PR01MB19557B19ABE08F6CA65F869EFA6C0@HK0PR01MB1955.apcprd01.prod.exchangelabs.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 04519BA941
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s6aMr271Mni9BfoUcnyq09ti/pI11ZDX5zIr73iTgmZibUG5f4yzX34LA4bOzBMTDIYPfvoiQ8+l4HDJzOcXVfVbLpqaV4i7RZ1iE5UuGfM3IOlQucY/1jD7A1nmx4l+C+9AoJc31VtkG4SvbTutoRYBOjz6/TPXviHE8N9/isjlFHgA9YhY/wNWprw1PxEut7C/EjQY0XyTTW4u0qsbaz85HBTNZ8eKo9kR2x3U1o4WxV0B2wm9p8bJL4RSGXdYiftQEaV4NjXB80Q08gQCXUQs7CoU7iCvWULS3rUfbFhnhB5S5FmkamFVK2HKZ59veJ8CRRGpV6qF6k46cW2r9yvrcjs5yKiCVEyOSknmds8dKXnkEH6yEN7dHPh3owMVvPaAKz+RHFrJ8KqSuXSncw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR01MB3281.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(136003)(39850400004)(376002)(366004)(346002)(6916009)(55016002)(8676002)(4326008)(186003)(8936002)(9686003)(85182001)(83380400001)(316002)(52536014)(71200400001)(66946007)(66556008)(64756008)(66446008)(66476007)(76116006)(33656002)(6506007)(7696005)(5660300002)(478600001)(54906003)(30864003)(2906002)(86362001)(26005)(171213001)(6606295002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: WbTQxwk80XZGvPEkPoQNj/ZFWN1R/jg/yGxqIZt6FY2LYdQNXC5/JEmVRCtdBSCuQUh/I/0hsv5mC+CSGS7A0zjAuT1SJBRq+tOiizjXETq5+6A55G1Z1P8qwKZFblMMAAKd6HrDCNsI/XgJcfOPB+faf8SYRv19lClkftvdelMyEzdnSB5ZKyyOnsNLq56y5Lkam1JMf/+mJCl5gYYqZa6MVdz3G9BC9TEVYUflFMYqbYi3tlVfyAB2KyfRPnQ3YPBOVqT9Bwz56Bewjn/gtI/xmyK2mTlNbkkzWhYWw0Fn8mAzWjKgJQiPp60iHMF7debwlVJBSN2Mj+gx//LJAFQTV5D8zi7GmizxhmRlEzrO0gzLOWHk1vr+0zm6g0JQV9wWosyMnZrXZfWXjYymqxua/UQ9GjeHPnqLqy7u/x8ReFtd2T90whQkHBVKtSxlt9o185tUDxBw+dkk4NA2jx6kbiKWGHV/ohFM2FoUaqY=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <HK2PR01MB3281311E985BB6ED61B545FDFA6C0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <cde71ac3-2747-cb8e-6a25-15a3e182da4a@roeck-us.net>
+Date:   Wed, 1 Jul 2020 07:05:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: moxa.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK2PR01MB3281.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f484dc15-684d-401a-98c0-08d81da6e360
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2020 10:09:48.7691
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5571c7d4-286b-47f6-9dd5-0aa688773c8e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SnZ35o4dQ5gn6+m7gmQ58emO+sxn9nkQky4F75BR3iFmZQ9IMm1vg/HJs9AHkT7ygEpY0sdhh44Jqzlx7S1GVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR01MB1955
+In-Reply-To: <HK2PR01MB3281311E985BB6ED61B545FDFA6C0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=big5
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-TGV0IGRzMTM3NCB3YXRjaGRvZyB1c2Ugd2F0Y2hkb2cgY29yZS4gSXQgYWxzbyBpbmNsdWRlcwpp
-bXByb3Zpbmcgd2F0Y2hkb2cgdGltZXIgc2V0dGluZyBhbmQgbm93YXlvdXQsIGFuZCBqdXN0IHVz
-ZXMgaW9jdGwoKQpvZiB3YXRjaGRvZyBjb3JlLgoKU2lnbmVkLW9mZi1ieTogSm9obnNvbiBDaGVu
-IDxqb2huc29uY2guY2hlbkBtb3hhLmNvbT4KLS0tCiBkcml2ZXJzL3J0Yy9ydGMtZHMxMzc0LmMg
-fCAyNTcgKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hh
-bmdlZCwgNjcgaW5zZXJ0aW9ucygrKSwgMTkwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvcnRjL3J0Yy1kczEzNzQuYyBiL2RyaXZlcnMvcnRjL3J0Yy1kczEzNzQuYwppbmRleCA5
-YzUxYTEyY2Y3MGYuLjI1YjI4Zjc1NDZmZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9ydGMvcnRjLWRz
-MTM3NC5jCisrKyBiL2RyaXZlcnMvcnRjL3J0Yy1kczEzNzQuYwpAQCAtMSwzICsxLDQgQEAKKy8v
-IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCiAvKgogICogUlRDIGNsaWVudC9kcml2
-ZXIgZm9yIHRoZSBNYXhpbS9EYWxsYXMgRFMxMzc0IFJlYWwtVGltZSBDbG9jayBvdmVyIEkyQwog
-ICoKQEAgLTYsMTEgKzcsNyBAQAogICoKICAqIENvcHlyaWdodCAoQykgMjAxNCBSb3NlIFRlY2hu
-b2xvZ3kKICAqIENvcHlyaWdodCAoQykgMjAwNi0yMDA3IEZyZWVzY2FsZSBTZW1pY29uZHVjdG9y
-Ci0gKgotICogMjAwNSAoYykgTW9udGFWaXN0YSBTb2Z0d2FyZSwgSW5jLiBUaGlzIGZpbGUgaXMg
-bGljZW5zZWQgdW5kZXIKLSAqIHRoZSB0ZXJtcyBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExp
-Y2Vuc2UgdmVyc2lvbiAyLiBUaGlzIHByb2dyYW0KLSAqIGlzIGxpY2Vuc2VkICJhcyBpcyIgd2l0
-aG91dCBhbnkgd2FycmFudHkgb2YgYW55IGtpbmQsIHdoZXRoZXIgZXhwcmVzcwotICogb3IgaW1w
-bGllZC4KKyAqIENvcHlyaWdodCAoQykgMjAwNSAoYykgTW9udGFWaXN0YSBTb2Z0d2FyZSwgSW5j
-LgogICovCiAvKgogICogSXQgd291bGQgYmUgbW9yZSBlZmZpY2llbnQgdG8gdXNlIGkyYyBtc2dz
-L2kyY190cmFuc2ZlciBkaXJlY3RseSBidXQsIGFzCkBAIC00Niw2ICs0Myw3IEBACiAjZGVmaW5l
-IERTMTM3NF9SRUdfV0RBTE0yCTB4MDYKICNkZWZpbmUgRFMxMzc0X1JFR19DUgkJMHgwNyAvKiBD
-b250cm9sICovCiAjZGVmaW5lIERTMTM3NF9SRUdfQ1JfQUlFCTB4MDEgLyogQWxhcm0gSW50LiBF
-bmFibGUgKi8KKyNkZWZpbmUgRFMxMzc0X1JFR19DUl9XRFNUUgkweDA4IC8qIDE9SU5ULCAwPVJT
-VCAqLwogI2RlZmluZSBEUzEzNzRfUkVHX0NSX1dEQUxNCTB4MjAgLyogMT1XYXRjaGRvZywgMD1B
-bGFybSAqLwogI2RlZmluZSBEUzEzNzRfUkVHX0NSX1dBQ0UJMHg0MCAvKiBXRC9BbGFybSBjb3Vu
-dGVyIGVuYWJsZSAqLwogI2RlZmluZSBEUzEzNzRfUkVHX1NSCQkweDA4IC8qIFN0YXR1cyAqLwpA
-QCAtNzEsNyArNjksOSBAQCBzdHJ1Y3QgZHMxMzc0IHsKIAlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xp
-ZW50OwogCXN0cnVjdCBydGNfZGV2aWNlICpydGM7CiAJc3RydWN0IHdvcmtfc3RydWN0IHdvcms7
-Ci0KKyNpZmRlZiBDT05GSUdfUlRDX0RSVl9EUzEzNzRfV0RUCisJc3RydWN0IHdhdGNoZG9nX2Rl
-dmljZSB3ZHQ7CisjZW5kaWYKIAkvKiBUaGUgbXV0ZXggcHJvdGVjdHMgYWxhcm0gb3BlcmF0aW9u
-cywgYW5kIHByZXZlbnRzIGEgcmFjZQogCSAqIGJldHdlZW4gdGhlIGVuYWJsZV9pcnEoKSBpbiB0
-aGUgd29ya3F1ZXVlIGFuZCB0aGUgZnJlZV9pcnEoKQogCSAqIGluIHRoZSByZW1vdmUgZnVuY3Rp
-b24uCkBAIC0yNTcsNyArMjU3LDggQEAgc3RhdGljIGludCBkczEzNzRfc2V0X2FsYXJtKHN0cnVj
-dCBkZXZpY2UgKmRldiwgc3RydWN0IHJ0Y193a2Fscm0gKmFsYXJtKQogCQlnb3RvIG91dDsKIAog
-CS8qIERpc2FibGUgYW55IGV4aXN0aW5nIGFsYXJtIGJlZm9yZSBzZXR0aW5nIHRoZSBuZXcgb25l
-Ci0JICogKG9yIGxhY2sgdGhlcmVvZikuICovCisJICogKG9yIGxhY2sgdGhlcmVvZikuCisJICov
-CiAJY3IgJj0gfkRTMTM3NF9SRUdfQ1JfV0FDRTsKIAogCXJldCA9IGkyY19zbWJ1c193cml0ZV9i
-eXRlX2RhdGEoY2xpZW50LCBEUzEzNzRfUkVHX0NSLCBjcik7CkBAIC0zNzEsMTQgKzM3MiwyMSBA
-QCBzdGF0aWMgY29uc3Qgc3RydWN0IHJ0Y19jbGFzc19vcHMgZHMxMzc0X3J0Y19vcHMgPSB7CiAg
-Ki8KIHN0YXRpYyBzdHJ1Y3QgaTJjX2NsaWVudCAqc2F2ZV9jbGllbnQ7CiAvKiBEZWZhdWx0IG1h
-cmdpbiAqLwotI2RlZmluZSBXRF9USU1PIDEzMTc2MgorI2RlZmluZSBUSU1FUl9NQVJHSU5fREVG
-QVVMVCAgMzIKKyNkZWZpbmUgVElNRVJfTUFSR0lOX01JTgkxCisjZGVmaW5lIFRJTUVSX01BUkdJ
-Tl9NQVgJKDYwKjYwKjI0KSAvKiBvbmUgZGF5ICovCiAKICNkZWZpbmUgRFJWX05BTUUgIkRTMTM3
-NCBXYXRjaGRvZyIKIAotc3RhdGljIGludCB3ZHRfbWFyZ2luID0gV0RfVElNTzsKLXN0YXRpYyB1
-bnNpZ25lZCBsb25nIHdkdF9pc19vcGVuOwotbW9kdWxlX3BhcmFtKHdkdF9tYXJnaW4sIGludCwg
-MCk7Ci1NT0RVTEVfUEFSTV9ERVNDKHdkdF9tYXJnaW4sICJXYXRjaGRvZyB0aW1lb3V0IGluIHNl
-Y29uZHMgKGRlZmF1bHQgMzJzKSIpOworc3RhdGljIGludCB0aW1lb3V0ID0gVElNRVJfTUFSR0lO
-X0RFRkFVTFQ7Cittb2R1bGVfcGFyYW0odGltZW91dCwgaW50LCAwKTsKK01PRFVMRV9QQVJNX0RF
-U0ModGltZW91dCwgIldhdGNoZG9nIHRpbWVvdXQgaW4gc2Vjb25kcyAoZGVmYXVsdCAzMnMpIik7
-CisKK3N0YXRpYyBib29sIG5vd2F5b3V0ID0gV0FUQ0hET0dfTk9XQVlPVVQ7Cittb2R1bGVfcGFy
-YW0obm93YXlvdXQsIGJvb2wsIDApOworTU9EVUxFX1BBUk1fREVTQyhub3dheW91dCwgIldhdGNo
-ZG9nIGNhbm5vdCBiZSBzdG9wcGVkIG9uY2Ugc3RhcnRlZCAoZGVmYXVsdCA9IgorCQlfX01PRFVM
-RV9TVFJJTkcoV0FUQ0hET0dfTk9XQVlPVVQpIikiKTsKKwogCiBzdGF0aWMgY29uc3Qgc3RydWN0
-IHdhdGNoZG9nX2luZm8gZHMxMzc0X3dkdF9pbmZvID0gewogCS5pZGVudGl0eSAgICAgICA9ICJE
-UzEzNzQgV1REIiwKQEAgLTM4Niw1NyArMzk0LDYxIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0
-Y2hkb2dfaW5mbyBkczEzNzRfd2R0X2luZm8gPSB7CiAJCQkJCQlXRElPRl9NQUdJQ0NMT1NFLAog
-fTsKIAotc3RhdGljIGludCBkczEzNzRfd2R0X3NldHRpbWVvdXQodW5zaWduZWQgaW50IHRpbWVv
-dXQpCitzdGF0aWMgaW50IGRzMTM3NF93ZHRfc2V0dGltZW91dChzdHJ1Y3Qgd2F0Y2hkb2dfZGV2
-aWNlICp3ZHQsCisJCQkJCXVuc2lnbmVkIGludCB0aW1lb3V0KQogewotCWludCByZXQgPSAtRU5P
-SU9DVExDTUQ7Ci0JaW50IGNyOworCWludCByZXQsIGNyOworCisJd2R0LT50aW1lb3V0ID0gdGlt
-ZW91dDsKIAotCXJldCA9IGNyID0gaTJjX3NtYnVzX3JlYWRfYnl0ZV9kYXRhKHNhdmVfY2xpZW50
-LCBEUzEzNzRfUkVHX0NSKTsKKwljciA9IGkyY19zbWJ1c19yZWFkX2J5dGVfZGF0YShzYXZlX2Ns
-aWVudCwgRFMxMzc0X1JFR19DUik7CisJcmV0ID0gY3I7CiAJaWYgKHJldCA8IDApCi0JCWdvdG8g
-b3V0OworCQlyZXR1cm4gcmV0OwogCiAJLyogRGlzYWJsZSBhbnkgZXhpc3Rpbmcgd2F0Y2hkb2cv
-YWxhcm0gYmVmb3JlIHNldHRpbmcgdGhlIG5ldyBvbmUgKi8KIAljciAmPSB+RFMxMzc0X1JFR19D
-Ul9XQUNFOwogCiAJcmV0ID0gaTJjX3NtYnVzX3dyaXRlX2J5dGVfZGF0YShzYXZlX2NsaWVudCwg
-RFMxMzc0X1JFR19DUiwgY3IpOwogCWlmIChyZXQgPCAwKQotCQlnb3RvIG91dDsKKwkJcmV0dXJu
-IHJldDsKIAogCS8qIFNldCBuZXcgd2F0Y2hkb2cgdGltZSAqLworCXRpbWVvdXQgPSB0aW1lb3V0
-ICogNDA5NjsKIAlyZXQgPSBkczEzNzRfd3JpdGVfcnRjKHNhdmVfY2xpZW50LCB0aW1lb3V0LCBE
-UzEzNzRfUkVHX1dEQUxNMCwgMyk7CiAJaWYgKHJldCkgewogCQlwcl9pbmZvKCJjb3VsZG4ndCBz
-ZXQgbmV3IHdhdGNoZG9nIHRpbWVcbiIpOwotCQlnb3RvIG91dDsKKwkJcmV0dXJuIHJldDsKIAl9
-CiAKIAkvKiBFbmFibGUgd2F0Y2hkb2cgdGltZXIgKi8KIAljciB8PSBEUzEzNzRfUkVHX0NSX1dB
-Q0UgfCBEUzEzNzRfUkVHX0NSX1dEQUxNOworCWNyICY9IH5EUzEzNzRfUkVHX0NSX1dEU1RSOy8q
-IGZvciBSU1QgUElOICovCiAJY3IgJj0gfkRTMTM3NF9SRUdfQ1JfQUlFOwogCiAJcmV0ID0gaTJj
-X3NtYnVzX3dyaXRlX2J5dGVfZGF0YShzYXZlX2NsaWVudCwgRFMxMzc0X1JFR19DUiwgY3IpOwog
-CWlmIChyZXQgPCAwKQotCQlnb3RvIG91dDsKKwkJcmV0dXJuIHJldDsKIAogCXJldHVybiAwOwot
-b3V0OgotCXJldHVybiByZXQ7CiB9CiAKLQogLyoKICAqIFJlbG9hZCB0aGUgd2F0Y2hkb2cgdGlt
-ZXIuICAoaWUsIHBhdCB0aGUgd2F0Y2hkb2cpCiAgKi8KLXN0YXRpYyB2b2lkIGRzMTM3NF93ZHRf
-cGluZyh2b2lkKQorc3RhdGljIGludCBkczEzNzRfd2R0X3Bpbmcoc3RydWN0IHdhdGNoZG9nX2Rl
-dmljZSAqd2R0KQogewogCXUzMiB2YWw7Ci0JaW50IHJldCA9IDA7CiAKLQlyZXQgPSBkczEzNzRf
-cmVhZF9ydGMoc2F2ZV9jbGllbnQsICZ2YWwsIERTMTM3NF9SRUdfV0RBTE0wLCAzKTsKLQlpZiAo
-cmV0KQotCQlwcl9pbmZvKCJXRCBUSUNLIEZBSUwhISEhISEhISEhICVpXG4iLCByZXQpOworCXJl
-dHVybiBkczEzNzRfcmVhZF9ydGMoc2F2ZV9jbGllbnQsICZ2YWwsIERTMTM3NF9SRUdfV0RBTE0w
-LCAzKTsKK30KKworc3RhdGljIGludCBkczEzNzRfd2R0X3N0YXJ0KHN0cnVjdCB3YXRjaGRvZ19k
-ZXZpY2UgKndkdCkKK3sKKwlyZXR1cm4gZHMxMzc0X3dkdF9waW5nKHdkdCk7CiB9CiAKLXN0YXRp
-YyB2b2lkIGRzMTM3NF93ZHRfZGlzYWJsZSh2b2lkKQorc3RhdGljIGludCBkczEzNzRfd2R0X3N0
-b3Aoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2R0KQogewogCWludCBjcjsKIApAQCAtNDQ0LDE2
-MiArNDU2LDE3IEBAIHN0YXRpYyB2b2lkIGRzMTM3NF93ZHRfZGlzYWJsZSh2b2lkKQogCS8qIERp
-c2FibGUgd2F0Y2hkb2cgdGltZXIgKi8KIAljciAmPSB+RFMxMzc0X1JFR19DUl9XQUNFOwogCi0J
-aTJjX3NtYnVzX3dyaXRlX2J5dGVfZGF0YShzYXZlX2NsaWVudCwgRFMxMzc0X1JFR19DUiwgY3Ip
-OworCXJldHVybiBpMmNfc21idXNfd3JpdGVfYnl0ZV9kYXRhKHNhdmVfY2xpZW50LCBEUzEzNzRf
-UkVHX0NSLCBjcik7CiB9CiAKLS8qCi0gKiBXYXRjaGRvZyBkZXZpY2UgaXMgb3BlbmVkLCBhbmQg
-d2F0Y2hkb2cgc3RhcnRzIHJ1bm5pbmcuCi0gKi8KLXN0YXRpYyBpbnQgZHMxMzc0X3dkdF9vcGVu
-KHN0cnVjdCBpbm9kZSAqaW5vZGUsIHN0cnVjdCBmaWxlICpmaWxlKQotewotCXN0cnVjdCBkczEz
-NzQgKmRzMTM3NCA9IGkyY19nZXRfY2xpZW50ZGF0YShzYXZlX2NsaWVudCk7Ci0KLQlpZiAoTUlO
-T1IoaW5vZGUtPmlfcmRldikgPT0gV0FUQ0hET0dfTUlOT1IpIHsKLQkJbXV0ZXhfbG9jaygmZHMx
-Mzc0LT5tdXRleCk7Ci0JCWlmICh0ZXN0X2FuZF9zZXRfYml0KDAsICZ3ZHRfaXNfb3BlbikpIHsK
-LQkJCW11dGV4X3VubG9jaygmZHMxMzc0LT5tdXRleCk7Ci0JCQlyZXR1cm4gLUVCVVNZOwotCQl9
-Ci0JCS8qCi0JCSAqICAgICAgQWN0aXZhdGUKLQkJICovCi0JCXdkdF9pc19vcGVuID0gMTsKLQkJ
-bXV0ZXhfdW5sb2NrKCZkczEzNzQtPm11dGV4KTsKLQkJcmV0dXJuIHN0cmVhbV9vcGVuKGlub2Rl
-LCBmaWxlKTsKLQl9Ci0JcmV0dXJuIC1FTk9ERVY7Ci19Ci0KLS8qCi0gKiBDbG9zZSB0aGUgd2F0
-Y2hkb2cgZGV2aWNlLgotICovCi1zdGF0aWMgaW50IGRzMTM3NF93ZHRfcmVsZWFzZShzdHJ1Y3Qg
-aW5vZGUgKmlub2RlLCBzdHJ1Y3QgZmlsZSAqZmlsZSkKLXsKLQlpZiAoTUlOT1IoaW5vZGUtPmlf
-cmRldikgPT0gV0FUQ0hET0dfTUlOT1IpCi0JCWNsZWFyX2JpdCgwLCAmd2R0X2lzX29wZW4pOwot
-Ci0JcmV0dXJuIDA7Ci19Ci0KLS8qCi0gKiBQYXQgdGhlIHdhdGNoZG9nIHdoZW5ldmVyIGRldmlj
-ZSBpcyB3cml0dGVuIHRvLgotICovCi1zdGF0aWMgc3NpemVfdCBkczEzNzRfd2R0X3dyaXRlKHN0
-cnVjdCBmaWxlICpmaWxlLCBjb25zdCBjaGFyIF9fdXNlciAqZGF0YSwKLQkJCQlzaXplX3QgbGVu
-LCBsb2ZmX3QgKnBwb3MpCi17Ci0JaWYgKGxlbikgewotCQlkczEzNzRfd2R0X3BpbmcoKTsKLQkJ
-cmV0dXJuIDE7Ci0JfQotCXJldHVybiAwOwotfQotCi1zdGF0aWMgc3NpemVfdCBkczEzNzRfd2R0
-X3JlYWQoc3RydWN0IGZpbGUgKmZpbGUsIGNoYXIgX191c2VyICpkYXRhLAotCQkJCXNpemVfdCBs
-ZW4sIGxvZmZfdCAqcHBvcykKLXsKLQlyZXR1cm4gMDsKLX0KLQotLyoKLSAqIEhhbmRsZSBjb21t
-YW5kcyBmcm9tIHVzZXItc3BhY2UuCi0gKi8KLXN0YXRpYyBsb25nIGRzMTM3NF93ZHRfaW9jdGwo
-c3RydWN0IGZpbGUgKmZpbGUsIHVuc2lnbmVkIGludCBjbWQsCi0JCQkJCQkJdW5zaWduZWQgbG9u
-ZyBhcmcpCi17Ci0JaW50IG5ld19tYXJnaW4sIG9wdGlvbnM7Ci0KLQlzd2l0Y2ggKGNtZCkgewot
-CWNhc2UgV0RJT0NfR0VUU1VQUE9SVDoKLQkJcmV0dXJuIGNvcHlfdG9fdXNlcigoc3RydWN0IHdh
-dGNoZG9nX2luZm8gX191c2VyICopYXJnLAotCQkmZHMxMzc0X3dkdF9pbmZvLCBzaXplb2YoZHMx
-Mzc0X3dkdF9pbmZvKSkgPyAtRUZBVUxUIDogMDsKLQotCWNhc2UgV0RJT0NfR0VUU1RBVFVTOgot
-CWNhc2UgV0RJT0NfR0VUQk9PVFNUQVRVUzoKLQkJcmV0dXJuIHB1dF91c2VyKDAsIChpbnQgX191
-c2VyICopYXJnKTsKLQljYXNlIFdESU9DX0tFRVBBTElWRToKLQkJZHMxMzc0X3dkdF9waW5nKCk7
-Ci0JCXJldHVybiAwOwotCWNhc2UgV0RJT0NfU0VUVElNRU9VVDoKLQkJaWYgKGdldF91c2VyKG5l
-d19tYXJnaW4sIChpbnQgX191c2VyICopYXJnKSkKLQkJCXJldHVybiAtRUZBVUxUOwotCi0JCS8q
-IHRoZSBoYXJkd2FyZSdzIHRpY2sgcmF0ZSBpcyA0MDk2IEh6LCBzbwotCQkgKiB0aGUgY291bnRl
-ciB2YWx1ZSBuZWVkcyB0byBiZSBzY2FsZWQgYWNjb3JkaW5nbHkKLQkJICovCi0JCW5ld19tYXJn
-aW4gPDw9IDEyOwotCQlpZiAobmV3X21hcmdpbiA8IDEgfHwgbmV3X21hcmdpbiA+IDE2Nzc3MjE2
-KQotCQkJcmV0dXJuIC1FSU5WQUw7Ci0KLQkJd2R0X21hcmdpbiA9IG5ld19tYXJnaW47Ci0JCWRz
-MTM3NF93ZHRfc2V0dGltZW91dChuZXdfbWFyZ2luKTsKLQkJZHMxMzc0X3dkdF9waW5nKCk7Ci0J
-CS8qIGZhbGx0aHJvdWdoICovCi0JY2FzZSBXRElPQ19HRVRUSU1FT1VUOgotCQkvKiB3aGVuIHJl
-dHVybmluZyAuLi4gaW52ZXJzZSBpcyB0cnVlICovCi0JCXJldHVybiBwdXRfdXNlcigod2R0X21h
-cmdpbiA+PiAxMiksIChpbnQgX191c2VyICopYXJnKTsKLQljYXNlIFdESU9DX1NFVE9QVElPTlM6
-Ci0JCWlmIChjb3B5X2Zyb21fdXNlcigmb3B0aW9ucywgKGludCBfX3VzZXIgKilhcmcsIHNpemVv
-ZihpbnQpKSkKLQkJCXJldHVybiAtRUZBVUxUOwotCi0JCWlmIChvcHRpb25zICYgV0RJT1NfRElT
-QUJMRUNBUkQpIHsKLQkJCXByX2luZm8oImRpc2FibGUgd2F0Y2hkb2dcbiIpOwotCQkJZHMxMzc0
-X3dkdF9kaXNhYmxlKCk7Ci0JCQlyZXR1cm4gMDsKLQkJfQotCi0JCWlmIChvcHRpb25zICYgV0RJ
-T1NfRU5BQkxFQ0FSRCkgewotCQkJcHJfaW5mbygiZW5hYmxlIHdhdGNoZG9nXG4iKTsKLQkJCWRz
-MTM3NF93ZHRfc2V0dGltZW91dCh3ZHRfbWFyZ2luKTsKLQkJCWRzMTM3NF93ZHRfcGluZygpOwot
-CQkJcmV0dXJuIDA7Ci0JCX0KLQkJcmV0dXJuIC1FSU5WQUw7Ci0JfQotCXJldHVybiAtRU5PVFRZ
-OwotfQotCi1zdGF0aWMgbG9uZyBkczEzNzRfd2R0X3VubG9ja2VkX2lvY3RsKHN0cnVjdCBmaWxl
-ICpmaWxlLCB1bnNpZ25lZCBpbnQgY21kLAotCQkJdW5zaWduZWQgbG9uZyBhcmcpCi17Ci0JaW50
-IHJldDsKLQlzdHJ1Y3QgZHMxMzc0ICpkczEzNzQgPSBpMmNfZ2V0X2NsaWVudGRhdGEoc2F2ZV9j
-bGllbnQpOwotCi0JbXV0ZXhfbG9jaygmZHMxMzc0LT5tdXRleCk7Ci0JcmV0ID0gZHMxMzc0X3dk
-dF9pb2N0bChmaWxlLCBjbWQsIGFyZyk7Ci0JbXV0ZXhfdW5sb2NrKCZkczEzNzQtPm11dGV4KTsK
-LQotCXJldHVybiByZXQ7Ci19Ci0KLXN0YXRpYyBpbnQgZHMxMzc0X3dkdF9ub3RpZnlfc3lzKHN0
-cnVjdCBub3RpZmllcl9ibG9jayAqdGhpcywKLQkJCXVuc2lnbmVkIGxvbmcgY29kZSwgdm9pZCAq
-dW51c2VkKQotewotCWlmIChjb2RlID09IFNZU19ET1dOIHx8IGNvZGUgPT0gU1lTX0hBTFQpCi0J
-CS8qIERpc2FibGUgV2F0Y2hkb2cgKi8KLQkJZHMxMzc0X3dkdF9kaXNhYmxlKCk7Ci0JcmV0dXJu
-IE5PVElGWV9ET05FOwotfQotCi1zdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBk
-czEzNzRfd2R0X2ZvcHMgPSB7Ci0JLm93bmVyCQkJPSBUSElTX01PRFVMRSwKLQkucmVhZAkJCT0g
-ZHMxMzc0X3dkdF9yZWFkLAotCS51bmxvY2tlZF9pb2N0bAkJPSBkczEzNzRfd2R0X3VubG9ja2Vk
-X2lvY3RsLAotCS5jb21wYXRfaW9jdGwJCT0gY29tcGF0X3B0cl9pb2N0bCwKLQkud3JpdGUJCQk9
-IGRzMTM3NF93ZHRfd3JpdGUsCi0JLm9wZW4gICAgICAgICAgICAgICAgICAgPSBkczEzNzRfd2R0
-X29wZW4sCi0JLnJlbGVhc2UgICAgICAgICAgICAgICAgPSBkczEzNzRfd2R0X3JlbGVhc2UsCi0J
-Lmxsc2VlawkJCT0gbm9fbGxzZWVrLAotfTsKLQotc3RhdGljIHN0cnVjdCBtaXNjZGV2aWNlIGRz
-MTM3NF9taXNjZGV2ID0gewotCS5taW5vciAgICAgICAgICA9IFdBVENIRE9HX01JTk9SLAotCS5u
-YW1lICAgICAgICAgICA9ICJ3YXRjaGRvZyIsCi0JLmZvcHMgICAgICAgICAgID0gJmRzMTM3NF93
-ZHRfZm9wcywKK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0Y2hkb2dfb3BzIGRzMTM3NF93ZHRfZm9w
-cyA9IHsKKwkub3duZXIgICAgICAgICAgPSBUSElTX01PRFVMRSwKKwkuc3RhcnQgICAgICAgICAg
-PSBkczEzNzRfd2R0X3N0YXJ0LAorCS5zdG9wICAgICAgICAgICA9IGRzMTM3NF93ZHRfc3RvcCwK
-KwkucGluZyAgICAgICAgICAgPSBkczEzNzRfd2R0X3BpbmcsCisJLnNldF90aW1lb3V0ICAgID0g
-ZHMxMzc0X3dkdF9zZXR0aW1lb3V0LAogfTsKIAotc3RhdGljIHN0cnVjdCBub3RpZmllcl9ibG9j
-ayBkczEzNzRfd2R0X25vdGlmaWVyID0gewotCS5ub3RpZmllcl9jYWxsID0gZHMxMzc0X3dkdF9u
-b3RpZnlfc3lzLAotfTsKIAogI2VuZGlmIC8qQ09ORklHX1JUQ19EUlZfRFMxMzc0X1dEVCovCiAv
-KgpAQCAtNjUzLDE1ICs1MjAsMjUgQEAgc3RhdGljIGludCBkczEzNzRfcHJvYmUoc3RydWN0IGky
-Y19jbGllbnQgKmNsaWVudCwKIAogI2lmZGVmIENPTkZJR19SVENfRFJWX0RTMTM3NF9XRFQKIAlz
-YXZlX2NsaWVudCA9IGNsaWVudDsKLQlyZXQgPSBtaXNjX3JlZ2lzdGVyKCZkczEzNzRfbWlzY2Rl
-dik7Ci0JaWYgKHJldCkKLQkJcmV0dXJuIHJldDsKLQlyZXQgPSByZWdpc3Rlcl9yZWJvb3Rfbm90
-aWZpZXIoJmRzMTM3NF93ZHRfbm90aWZpZXIpOworCWRzMTM3NC0+d2R0LmluZm8gPSAmZHMxMzc0
-X3dkdF9pbmZvOworCWRzMTM3NC0+d2R0Lm9wcyA9ICZkczEzNzRfd2R0X2ZvcHM7CisJZHMxMzc0
-LT53ZHQudGltZW91dCA9IFRJTUVSX01BUkdJTl9ERUZBVUxUOworCWRzMTM3NC0+d2R0Lm1pbl90
-aW1lb3V0ID0gVElNRVJfTUFSR0lOX01JTjsKKwlkczEzNzQtPndkdC5tYXhfdGltZW91dCA9IFRJ
-TUVSX01BUkdJTl9NQVg7CisKKwl3YXRjaGRvZ19pbml0X3RpbWVvdXQoJmRzMTM3NC0+d2R0LCB0
-aW1lb3V0LCAmY2xpZW50LT5kZXYpOworCXdhdGNoZG9nX3NldF9ub3dheW91dCgmZHMxMzc0LT53
-ZHQsIG5vd2F5b3V0KTsKKwl3YXRjaGRvZ19zdG9wX29uX3JlYm9vdCgmZHMxMzc0LT53ZHQpOwor
-CXdhdGNoZG9nX3N0b3Bfb25fdW5yZWdpc3RlcigmZHMxMzc0LT53ZHQpOworCisJcmV0ID0gZGV2
-bV93YXRjaGRvZ19yZWdpc3Rlcl9kZXZpY2UoJmNsaWVudC0+ZGV2LCAmZHMxMzc0LT53ZHQpOwog
-CWlmIChyZXQpIHsKLQkJbWlzY19kZXJlZ2lzdGVyKCZkczEzNzRfbWlzY2Rldik7CisJCWRldl9l
-cnIoJmNsaWVudC0+ZGV2LCAiZmFpbGVkIHRvIHJlZ2lzdGVyIERTMTM3NCB3YXRjaGRvZyBkZXZp
-Y2VcbiIpOwogCQlyZXR1cm4gcmV0OwogCX0KLQlkczEzNzRfd2R0X3NldHRpbWVvdXQoMTMxMDcy
-KTsKKworCWRzMTM3NF93ZHRfc2V0dGltZW91dCgmZHMxMzc0LT53ZHQsIHRpbWVvdXQpOworCWRl
-dl9pbmZvKCZjbGllbnQtPmRldiwgIkRTMTM3NCB3YXRjaGRvZyBkZXZpY2UgZW5hYmxlZFxuIik7
-CiAjZW5kaWYKIAogCXJldHVybiAwOwpAQCAtNjcwLDEwICs1NDcsMTAgQEAgc3RhdGljIGludCBk
-czEzNzRfcHJvYmUoc3RydWN0IGkyY19jbGllbnQgKmNsaWVudCwKIHN0YXRpYyBpbnQgZHMxMzc0
-X3JlbW92ZShzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50KQogewogCXN0cnVjdCBkczEzNzQgKmRz
-MTM3NCA9IGkyY19nZXRfY2xpZW50ZGF0YShjbGllbnQpOworCiAjaWZkZWYgQ09ORklHX1JUQ19E
-UlZfRFMxMzc0X1dEVAotCW1pc2NfZGVyZWdpc3RlcigmZHMxMzc0X21pc2NkZXYpOwotCWRzMTM3
-NF9taXNjZGV2LnBhcmVudCA9IE5VTEw7Ci0JdW5yZWdpc3Rlcl9yZWJvb3Rfbm90aWZpZXIoJmRz
-MTM3NF93ZHRfbm90aWZpZXIpOworCWRldl93YXJuKCZjbGllbnQtPmRldiwgIlVucmVnaXN0ZXIg
-RFMxMzc0IHdhdGNoZG9nIGRldmljZVxuIik7CisJd2F0Y2hkb2dfdW5yZWdpc3Rlcl9kZXZpY2Uo
-JmRzMTM3NC0+d2R0KTsKICNlbmRpZgogCiAJaWYgKGNsaWVudC0+aXJxID4gMCkgewotLSAKMi4y
-MC4xCg==
+On 7/1/20 3:09 AM, Johnson CH Chen (³¯¬L¾±) wrote:
+> Let ds1374 watchdog use watchdog core. It also includes
+> improving watchdog timer setting and nowayout, and just uses ioctl()
+> of watchdog core.
+> 
+> Signed-off-by: Johnson Chen <johnsonch.chen@moxa.com>
+> ---
+>  drivers/rtc/rtc-ds1374.c | 257 ++++++++++-----------------------------
+>  1 file changed, 67 insertions(+), 190 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
+> index 9c51a12cf70f..25b28f7546ff 100644
+> --- a/drivers/rtc/rtc-ds1374.c
+> +++ b/drivers/rtc/rtc-ds1374.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0
+>  /*
+>   * RTC client/driver for the Maxim/Dallas DS1374 Real-Time Clock over I2C
+>   *
+> @@ -6,11 +7,7 @@
+>   *
+>   * Copyright (C) 2014 Rose Technology
+>   * Copyright (C) 2006-2007 Freescale Semiconductor
+> - *
+> - * 2005 (c) MontaVista Software, Inc. This file is licensed under
+> - * the terms of the GNU General Public License version 2. This program
+> - * is licensed "as is" without any warranty of any kind, whether express
+> - * or implied.
+> + * Copyright (C) 2005 (c) MontaVista Software, Inc.
+>   */
+
+The above should be a separate patch.
+
+>  /*
+>   * It would be more efficient to use i2c msgs/i2c_transfer directly but, as
+> @@ -46,6 +43,7 @@
+>  #define DS1374_REG_WDALM2	0x06
+>  #define DS1374_REG_CR		0x07 /* Control */
+>  #define DS1374_REG_CR_AIE	0x01 /* Alarm Int. Enable */
+> +#define DS1374_REG_CR_WDSTR	0x08 /* 1=INT, 0=RST */
+>  #define DS1374_REG_CR_WDALM	0x20 /* 1=Watchdog, 0=Alarm */
+>  #define DS1374_REG_CR_WACE	0x40 /* WD/Alarm counter enable */
+>  #define DS1374_REG_SR		0x08 /* Status */
+> @@ -71,7 +69,9 @@ struct ds1374 {
+>  	struct i2c_client *client;
+>  	struct rtc_device *rtc;
+>  	struct work_struct work;
+> -
+> +#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> +	struct watchdog_device wdt;
+> +#endif
+>  	/* The mutex protects alarm operations, and prevents a race
+>  	 * between the enable_irq() in the workqueue and the free_irq()
+>  	 * in the remove function.
+> @@ -257,7 +257,8 @@ static int ds1374_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+>  		goto out;
+>  
+>  	/* Disable any existing alarm before setting the new one
+> -	 * (or lack thereof). */
+> +	 * (or lack thereof).
+> +	 */
+
+Unrelated (and cosmetic). Drop or separate patch.
+
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+>  	ret = i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+> @@ -371,14 +372,21 @@ static const struct rtc_class_ops ds1374_rtc_ops = {
+>   */
+>  static struct i2c_client *save_client;
+>  /* Default margin */
+> -#define WD_TIMO 131762
+> +#define TIMER_MARGIN_DEFAULT  32
+
+Parameter alignment is off. Please use tab after TIMER_MARGIN_DEFAULT.
+
+> +#define TIMER_MARGIN_MIN	1
+> +#define TIMER_MARGIN_MAX	(60*60*24) /* one day */
+
+Real limits are necessary. The old limit was 16777216/4096 = 4096 seconds.
+
+Ok, time to look up the datasheet. The counter is a 24-bit value.
+The maximum value is thus 0xffffff, or 16777215. 16777215 / 4096 = 4095,
+which should be the maximum timeout in seconds to set here.
+
+>  
+>  #define DRV_NAME "DS1374 Watchdog"
+>  
+> -static int wdt_margin = WD_TIMO;
+> -static unsigned long wdt_is_open;
+> -module_param(wdt_margin, int, 0);
+> -MODULE_PARM_DESC(wdt_margin, "Watchdog timeout in seconds (default 32s)");
+> +static int timeout = TIMER_MARGIN_DEFAULT;
+> +module_param(timeout, int, 0);
+> +MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default 32s)");
+
+This changes the module parameter which may be unexpected.
+I would suggest to keep using wdt_margin.
+
+> +
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default ="
+> +		__MODULE_STRING(WATCHDOG_NOWAYOUT)")");
+> +
+>  
+>  static const struct watchdog_info ds1374_wdt_info = {
+>  	.identity       = "DS1374 WTD",
+> @@ -386,57 +394,61 @@ static const struct watchdog_info ds1374_wdt_info = {
+>  						WDIOF_MAGICCLOSE,
+>  };
+>  
+> -static int ds1374_wdt_settimeout(unsigned int timeout)
+> +static int ds1374_wdt_settimeout(struct watchdog_device *wdt,
+> +					unsigned int timeout)
+
+This fits into one line (new line length limit)
+
+>  {
+> -	int ret = -ENOIOCTLCMD;
+> -	int cr;
+> +	int ret, cr;
+> +
+> +	wdt->timeout = timeout;
+>  
+> -	ret = cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> +	cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> +	ret = cr;
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+Assignment to ret is pointless. Just return cr if negative.
+
+>  	/* Disable any existing watchdog/alarm before setting the new one */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+>  	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	/* Set new watchdog time */
+> +	timeout = timeout * 4096;
+>  	ret = ds1374_write_rtc(save_client, timeout, DS1374_REG_WDALM0, 3);
+>  	if (ret) {
+>  		pr_info("couldn't set new watchdog time\n");
+> -		goto out;
+> +		return ret;
+>  	}
+>  
+>  	/* Enable watchdog timer */
+>  	cr |= DS1374_REG_CR_WACE | DS1374_REG_CR_WDALM;
+> +	cr &= ~DS1374_REG_CR_WDSTR;/* for RST PIN */
+>  	cr &= ~DS1374_REG_CR_AIE;
+>  
+>  	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	return 0;
+> -out:
+> -	return ret;
+>  }
+>  
+> -
+>  /*
+>   * Reload the watchdog timer.  (ie, pat the watchdog)
+>   */
+> -static void ds1374_wdt_ping(void)
+> +static int ds1374_wdt_ping(struct watchdog_device *wdt)
+>  {
+>  	u32 val;
+> -	int ret = 0;
+>  
+> -	ret = ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+> -	if (ret)
+> -		pr_info("WD TICK FAIL!!!!!!!!!! %i\n", ret);
+> +	return ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+> +}
+> +
+> +static int ds1374_wdt_start(struct watchdog_device *wdt)
+> +{
+> +	return ds1374_wdt_ping(wdt);
+
+Unnecessary. Just declare the start function and drop the ping function.
+See Documentation/watchdog/watchdog-kernel-api.rst
+
+>  }
+>  
+> -static void ds1374_wdt_disable(void)
+> +static int ds1374_wdt_stop(struct watchdog_device *wdt)
+>  {
+>  	int cr;
+>  
+> @@ -444,162 +456,17 @@ static void ds1374_wdt_disable(void)
+>  	/* Disable watchdog timer */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> +	return i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  }
+>  
+> -/*
+> - * Watchdog device is opened, and watchdog starts running.
+> - */
+> -static int ds1374_wdt_open(struct inode *inode, struct file *file)
+> -{
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
+> -		mutex_lock(&ds1374->mutex);
+> -		if (test_and_set_bit(0, &wdt_is_open)) {
+> -			mutex_unlock(&ds1374->mutex);
+> -			return -EBUSY;
+> -		}
+> -		/*
+> -		 *      Activate
+> -		 */
+> -		wdt_is_open = 1;
+> -		mutex_unlock(&ds1374->mutex);
+> -		return stream_open(inode, file);
+> -	}
+> -	return -ENODEV;
+> -}
+> -
+> -/*
+> - * Close the watchdog device.
+> - */
+> -static int ds1374_wdt_release(struct inode *inode, struct file *file)
+> -{
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR)
+> -		clear_bit(0, &wdt_is_open);
+> -
+> -	return 0;
+> -}
+> -
+> -/*
+> - * Pat the watchdog whenever device is written to.
+> - */
+> -static ssize_t ds1374_wdt_write(struct file *file, const char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	if (len) {
+> -		ds1374_wdt_ping();
+> -		return 1;
+> -	}
+> -	return 0;
+> -}
+> -
+> -static ssize_t ds1374_wdt_read(struct file *file, char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	return 0;
+> -}
+> -
+> -/*
+> - * Handle commands from user-space.
+> - */
+> -static long ds1374_wdt_ioctl(struct file *file, unsigned int cmd,
+> -							unsigned long arg)
+> -{
+> -	int new_margin, options;
+> -
+> -	switch (cmd) {
+> -	case WDIOC_GETSUPPORT:
+> -		return copy_to_user((struct watchdog_info __user *)arg,
+> -		&ds1374_wdt_info, sizeof(ds1374_wdt_info)) ? -EFAULT : 0;
+> -
+> -	case WDIOC_GETSTATUS:
+> -	case WDIOC_GETBOOTSTATUS:
+> -		return put_user(0, (int __user *)arg);
+> -	case WDIOC_KEEPALIVE:
+> -		ds1374_wdt_ping();
+> -		return 0;
+> -	case WDIOC_SETTIMEOUT:
+> -		if (get_user(new_margin, (int __user *)arg))
+> -			return -EFAULT;
+> -
+> -		/* the hardware's tick rate is 4096 Hz, so
+> -		 * the counter value needs to be scaled accordingly
+> -		 */
+> -		new_margin <<= 12;
+> -		if (new_margin < 1 || new_margin > 16777216)
+> -			return -EINVAL;
+> -
+> -		wdt_margin = new_margin;
+> -		ds1374_wdt_settimeout(new_margin);
+> -		ds1374_wdt_ping();
+> -		/* fallthrough */
+> -	case WDIOC_GETTIMEOUT:
+> -		/* when returning ... inverse is true */
+> -		return put_user((wdt_margin >> 12), (int __user *)arg);
+> -	case WDIOC_SETOPTIONS:
+> -		if (copy_from_user(&options, (int __user *)arg, sizeof(int)))
+> -			return -EFAULT;
+> -
+> -		if (options & WDIOS_DISABLECARD) {
+> -			pr_info("disable watchdog\n");
+> -			ds1374_wdt_disable();
+> -			return 0;
+> -		}
+> -
+> -		if (options & WDIOS_ENABLECARD) {
+> -			pr_info("enable watchdog\n");
+> -			ds1374_wdt_settimeout(wdt_margin);
+> -			ds1374_wdt_ping();
+> -			return 0;
+> -		}
+> -		return -EINVAL;
+> -	}
+> -	return -ENOTTY;
+> -}
+> -
+> -static long ds1374_wdt_unlocked_ioctl(struct file *file, unsigned int cmd,
+> -			unsigned long arg)
+> -{
+> -	int ret;
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	mutex_lock(&ds1374->mutex);
+> -	ret = ds1374_wdt_ioctl(file, cmd, arg);
+> -	mutex_unlock(&ds1374->mutex);
+> -
+> -	return ret;
+> -}
+> -
+> -static int ds1374_wdt_notify_sys(struct notifier_block *this,
+> -			unsigned long code, void *unused)
+> -{
+> -	if (code == SYS_DOWN || code == SYS_HALT)
+> -		/* Disable Watchdog */
+> -		ds1374_wdt_disable();
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static const struct file_operations ds1374_wdt_fops = {
+> -	.owner			= THIS_MODULE,
+> -	.read			= ds1374_wdt_read,
+> -	.unlocked_ioctl		= ds1374_wdt_unlocked_ioctl,
+> -	.compat_ioctl		= compat_ptr_ioctl,
+> -	.write			= ds1374_wdt_write,
+> -	.open                   = ds1374_wdt_open,
+> -	.release                = ds1374_wdt_release,
+> -	.llseek			= no_llseek,
+> -};
+> -
+> -static struct miscdevice ds1374_miscdev = {
+> -	.minor          = WATCHDOG_MINOR,
+> -	.name           = "watchdog",
+> -	.fops           = &ds1374_wdt_fops,
+> +static const struct watchdog_ops ds1374_wdt_fops = {
+
+s/fops/ops/
+
+Those are not file operations.
+
+> +	.owner          = THIS_MODULE,
+> +	.start          = ds1374_wdt_start,
+> +	.stop           = ds1374_wdt_stop,
+> +	.ping           = ds1374_wdt_ping,
+> +	.set_timeout    = ds1374_wdt_settimeout,
+>  };
+>  
+> -static struct notifier_block ds1374_wdt_notifier = {
+> -	.notifier_call = ds1374_wdt_notify_sys,
+> -};
+>  
+>  #endif /*CONFIG_RTC_DRV_DS1374_WDT*/
+>  /*
+> @@ -653,15 +520,25 @@ static int ds1374_probe(struct i2c_client *client,
+>  
+>  #ifdef CONFIG_RTC_DRV_DS1374_WDT
+>  	save_client = client;
+> -	ret = misc_register(&ds1374_miscdev);
+> -	if (ret)
+> -		return ret;
+> -	ret = register_reboot_notifier(&ds1374_wdt_notifier);
+> +	ds1374->wdt.info = &ds1374_wdt_info;
+> +	ds1374->wdt.ops = &ds1374_wdt_fops;
+> +	ds1374->wdt.timeout = TIMER_MARGIN_DEFAULT;
+> +	ds1374->wdt.min_timeout = TIMER_MARGIN_MIN;
+> +	ds1374->wdt.max_timeout = TIMER_MARGIN_MAX;
+> +
+> +	watchdog_init_timeout(&ds1374->wdt, timeout, &client->dev);
+> +	watchdog_set_nowayout(&ds1374->wdt, nowayout);
+> +	watchdog_stop_on_reboot(&ds1374->wdt);
+> +	watchdog_stop_on_unregister(&ds1374->wdt);
+> +
+> +	ret = devm_watchdog_register_device(&client->dev, &ds1374->wdt);
+>  	if (ret) {
+> -		misc_deregister(&ds1374_miscdev);
+> +		dev_err(&client->dev, "failed to register DS1374 watchdog device\n");
+>  		return ret;
+>  	}
+> -	ds1374_wdt_settimeout(131072);
+> +
+> +	ds1374_wdt_settimeout(&ds1374->wdt, timeout);
+
+You'll want to do that before registering the watchdog to avoid a
+race condition.
+
+> +	dev_info(&client->dev, "DS1374 watchdog device enabled\n");
+>  #endif
+>  
+>  	return 0;
+> @@ -670,10 +547,10 @@ static int ds1374_probe(struct i2c_client *client,
+>  static int ds1374_remove(struct i2c_client *client)
+>  {
+>  	struct ds1374 *ds1374 = i2c_get_clientdata(client);
+> +
+>  #ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	misc_deregister(&ds1374_miscdev);
+> -	ds1374_miscdev.parent = NULL;
+> -	unregister_reboot_notifier(&ds1374_wdt_notifier);
+> +	dev_warn(&client->dev, "Unregister DS1374 watchdog device\n");
+
+Noise.
+
+> +	watchdog_unregister_device(&ds1374->wdt);
+
+Drop: The watchdog was registered using devm_watchdog_register_device().
+
+>  #endif
+>  
+>  	if (client->irq > 0) {
+> 
+
