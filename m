@@ -2,170 +2,465 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8382148C4
-	for <lists+linux-rtc@lfdr.de>; Sat,  4 Jul 2020 22:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E86D214D9E
+	for <lists+linux-rtc@lfdr.de>; Sun,  5 Jul 2020 17:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbgGDU7H (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 4 Jul 2020 16:59:07 -0400
-Received: from mout.gmx.net ([212.227.15.19]:59715 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726953AbgGDU7H (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 4 Jul 2020 16:59:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1593896291;
-        bh=2oIii+dEa/rMktNI0QfrGboAftGZ7VgeERC+pMMVvCE=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ByrU0MPgzX7+FsB601UMpEA8PlbebAisHyU5yAukxRrqU+PS2Kha9xu89nXXvmhDk
-         FEsvGG9hanZlY4xWNVi0P+XqW8lqcWtp7/swGM//2UwkOwAdUx1jlgm1p+27rJdYw7
-         i3trPvNW+wUq2JZU/4r7A68uM6Gk2YndeQioCe1E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.26]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8hV5-1jwW4Q2HFx-004mOY; Sat, 04
- Jul 2020 22:58:11 +0200
-Date:   Sat, 4 Jul 2020 22:58:08 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        id S1727090AbgGEPYN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 5 Jul 2020 11:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbgGEPYM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 5 Jul 2020 11:24:12 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99368C061794;
+        Sun,  5 Jul 2020 08:24:12 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d10so2336957pll.3;
+        Sun, 05 Jul 2020 08:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=7u1sg5j+5edB6l/2AVnqIdXfLKuEI8ngZapb0c0h8SU=;
+        b=ASjFx/hA3ZIIqG7oFvAHlMFvECkbzVKegyQMhw53nXSc8vF3eusJZdBssOM3HeJM2k
+         ZxirZIOgQ2BWSK02eUNPFYu8qO1AOj1TC6Wq3qDLIj51e2mJz8DAQiIPvk4F2SVd3lTO
+         5WhRHEYgUtCMb/UZm2bS5AnyzNh3Pd51n8RytmXgt7c1ZuVjDAUEZmKU5vubGAQnDiym
+         Rg8+UOZTF4ZO6CSfNKleWKpq4Qbb2vbFszpKKDqRhOANFeKZItJ9WsfPOIuG2w9JZM0+
+         FAotI9Jzd63I4uDquAx8iO+CKvG/LsKbJi8010+2eFrVvrSQTXjmALg0MWrY0WrVvqkB
+         IMNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=7u1sg5j+5edB6l/2AVnqIdXfLKuEI8ngZapb0c0h8SU=;
+        b=bFtCinoEa7+KJmymuaD8bwLuvPGIIoLZiluLAiLUgvAc5JALVfH6zsA//cwaXOyycV
+         tfw1zvDiEC6oflF/uOeifDkZszOvNLzEYZp1VZyP3rfhZwb4WooviDnzgl/1xCMfXca3
+         bU/iY94R77zHPaRb5EL/FZ5gVouhgCbCw+ooeTBPle3mUe8CIoMvTbTmkXss+NP71LE+
+         oJ6FnIbf4ciNJKfFnp1e3FWR+6RcSxSYY0A5XcuMllO3F6Ys0y2HOogfLO12/yFeiGOi
+         jirQ9prXjz/PaXfy8jVfFEhyWYynCTYqMk6R+My4VXA6zk9GwwCVaaRma4DOxmmSpwiH
+         EdMw==
+X-Gm-Message-State: AOAM533MIueCPok+mB/CFOjJ5IFtfALG12fk+CwoyKKtUwO4i0oTl3JL
+        ejGG/MGGxgX6BEP0RkQayFyHF5FBxRg=
+X-Google-Smtp-Source: ABdhPJzV/4+WaSP/fP1+zFtkEOgocjBLj2Tj8g2JS07j9ru0DIzfeMgI7xk38yPRWvDKS3nIKmTNmw==
+X-Received: by 2002:a17:902:7008:: with SMTP id y8mr5817904plk.85.1593962651987;
+        Sun, 05 Jul 2020 08:24:11 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d37sm17121263pgd.18.2020.07.05.08.24.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 05 Jul 2020 08:24:11 -0700 (PDT)
+Date:   Sun, 5 Jul 2020 08:24:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Johnson CH Chen =?utf-8?B?KOmZs+aYreWLsyk=?= 
+        <JohnsonCH.Chen@moxa.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>
-Subject: Re: [RFC PATCH 00/10] Netronix embedded controller driver for Kobo
- and Tolino ebook readers
-Message-ID: <20200704205808.GD2578@latitude>
-References: <20200620223915.1311485-1-j.neuschaefer@gmx.net>
- <20200630084051.66feadea@aktux>
- <20200630071523.GA2983@latitude>
- <20200630221447.3e03ae28@aktux>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v2] rtc: rtc-ds1374: wdt: Use watchdog core for watchdog
+ part
+Message-ID: <20200705152410.GB5663@roeck-us.net>
+References: <HK2PR01MB3281245DE7A646BCB12D987DFA6A0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d01dLTUuW90fS44H"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200630221447.3e03ae28@aktux>
-X-Provags-ID: V03:K1:55puWQ+2GGyp7xcFFLkgMg7nkitQvyCSK5CCeExXNQutjzBzOIO
- vOWLHCUn89dwzlDLbv07iW8fG/Rzs6Y6iEj6IFAtgcy/ImnrcMnMPhm5BVSsrqc8fOv5zgU
- JLB+V6JL3G03CFL+MN9xGbxb3NBHFJ9S8wudrcml8m642V0u7SCEaLsS0IKObqSwkePjNsy
- VYCWd9xclZmIdnQaLD0FQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fSQkFQE/W9w=:ZWejvBXNg5xft6J5wnpJac
- VDhhL9IJ7Pin6I4EPyt1gURfyfbptpVJcGfHJdfws3PP2Jyccm94PKShpQgBIwjA/NBsu54xt
- YhBfVDRbdEWqsZs5tmiErelLJP9qmL9ZztVuTqUTpQy8BnnCohzL3KWpi7MDzhbWVSG9+RuQN
- PqFI1LvbbLgBXw54JBBkskfzvsqD9n2Svw4nzgUWNboHVwu30bPfHLW29eYWP430GNcf08xa3
- yKc7wwlwC2fzrQsa64dVYznbSfmFCUixkRnpsDAQ6GXVWW/8pbwlMlvKEoCxvmfgvCIzDrEQ5
- MZtKaO2FI87Xw4lxcX0y4/zbelglRjnsAZGMz8ImCuzgx9dNZ41PHUOm7ynay1mTpCJpLgzeZ
- NzFxZKapgWrUwZTqxfzrjEeSbgypVs44w7/bGujRrfbZFVSrqP8PQDqiSNIpN0HWYmudRY7z/
- HYhXKB8xx1OZQCl97TOpiDMzZhrTRk5UBT8oa/cWDQzWl38H8ZsAZ/fAtUgAhc/Cm2nR4Mlf0
- Hl1EUC4NYow2uUIO5lvFKmb3TJWlO+I0dATzjQJZ7yLjkic03hPMfhpZyMcISV7deBEBfatNf
- ly3ZPhdBs4LuNy0ZStO99FfBUnG0eUVBRRE1v3VBVnyC+HOsoU4rpXJR1qCTLTovicbHIT3nK
- U1/fwQxeka6vC39P5mHyQ6Z3kyhQBX3KQBZgogo9LEy+mvn+POmft4eUR/IX1vsCWvp6m0BlO
- pCso8pYTXi345NvykPwFu6BEEQ38ocXGaIRJ1Ou/1S430YBJl3OZ1Ts8YA5LRyRxIBxIgBIGn
- TOdlDpd2+jFChmJMrdj0MnGv0O7t8vzyohXpoUDnyiono1VDCB7yiGMsMCAkROdjO6H5j5tHL
- d/09xbzcBFKarDu0v0xeThRaaHDaUAuW+f3qnwqp5ecMaE30qOAbphcFyeOld6/aMI8TkAvNq
- ezZGGFofFUfaZ0amT0QnPnvT5RUvKZCGa7d9z4TbANXbGaM1Y6kcRnTpLgLbE9/FHMKBkL6en
- oLtdPfWDI6Xc6ofxpZoix6HK70UsmIe9mbLJeaTM5P3Ssy/+9hed5nBHkqGm4ajl65k8zZRoZ
- 2HMNo9iiloTmMj9GDRSoaMDfFxzyklcnwHaOVlk/6jL2h1p0ZMXreDrtDZlbqJzdkDaC5n5S4
- wOxfH5GDXLTFbHvJOF8waKgRVEAjVfFwjI+hodgmQyWB5orZtQNIDL3jYNiWC6eGe3uX8qz2A
- 6YY4cm2NYj+kA23uL
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <HK2PR01MB3281245DE7A646BCB12D987DFA6A0@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Fri, Jul 03, 2020 at 11:48:09AM +0000, Johnson CH Chen (陳昭勳) wrote:
+> Let ds1374 watchdog use watchdog core functions. It also includes
+> improving watchdog timer setting and nowayout, and just uses ioctl()
+> of watchdog core.
+> 
+> Signed-off-by: Johnson Chen <johnsonch.chen@moxa.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> v1->v2:
+> - Use ds1374_wdt_settimeout() before registering the watchdog
+> - Remove watchdog_unregister_device() because devm_watchdog_register_device() is used
+> - Remove ds1374_wdt_ping()
+> - TIMER_MARGIN_MAX to 4095 for 24-bit value
+> - Keep wdt_margin
+> - Fix coding styles
+> ---
+>  drivers/rtc/Kconfig      |   1 +
+>  drivers/rtc/rtc-ds1374.c | 236 +++++++++------------------------------
+>  2 files changed, 52 insertions(+), 185 deletions(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index b54d87d45c89..5e2444af5657 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -282,6 +282,7 @@ config RTC_DRV_DS1374
+>  config RTC_DRV_DS1374_WDT
+>  	bool "Dallas/Maxim DS1374 watchdog timer"
+>  	depends on RTC_DRV_DS1374
+> +	select WATCHDOG_CORE
 
---d01dLTUuW90fS44H
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This has to be
 
-On Tue, Jun 30, 2020 at 10:14:47PM +0200, Andreas Kemnade wrote:
-> On Tue, 30 Jun 2020 09:15:23 +0200
-> Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> wrote:
->=20
-> > On Tue, Jun 30, 2020 at 08:40:51AM +0200, Andreas Kemnade wrote:
-> > [...]
-> > > got a chance to test it on a Tolino Shine 2 HD.
-> > > It uses the RTC from the RC5T619 but backlight seems to go via MSP430
-> > > EC.
-> > >=20
-> > > I got this.
-> > >=20
-> > > [    1.453603] ntxec 0-0043: Netronix embedded controller version f11=
-0 detected.
-> > > [   10.723638] ntxec-rtc 21a0000.i2c:embedded-controller@43:rtc: regi=
-stered as rtc0
-> > > [   10.775276] ntxec-pwm: probe of 21a0000.i2c:embedded-controller@43=
-:pwm failed with error -5 =20
-> >=20
-> > Hmm, -EIO from the PWM driver.
-> >=20
-> turing debugging on:
+	select WATCHDOG_CORE if WATCHDOG
 
-(edited for compactness:)
-> [  330.332971] i2c i2c-0: write slave address: addr=3D0x86   ACK received
-> [  330.334420] i2c i2c-0: write byte: B0=3D0xA3              ACK received
-> [  330.334790] i2c i2c-0: write byte: B1=3D0x0               No ACK
+to fix the problem reported by 0-day.
 
-> [  330.352339] i2c i2c-0: write slave address: addr=3D0x86   ACK received
-> [  330.362208] i2c i2c-0: write byte: B0=3D0xA1              ACK received
-> [  330.362479] i2c i2c-0: write byte: B1=3D0xFF              No ACK
+>  	help
+>  	  If you say Y here you will get support for the
+>  	  watchdog timer in the Dallas Semiconductor DS1374
+> diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
+> index 9c51a12cf70f..57a4e503b34a 100644
+> --- a/drivers/rtc/rtc-ds1374.c
+> +++ b/drivers/rtc/rtc-ds1374.c
+> @@ -46,6 +46,7 @@
+>  #define DS1374_REG_WDALM2	0x06
+>  #define DS1374_REG_CR		0x07 /* Control */
+>  #define DS1374_REG_CR_AIE	0x01 /* Alarm Int. Enable */
+> +#define DS1374_REG_CR_WDSTR	0x08 /* 1=INT, 0=RST */
+>  #define DS1374_REG_CR_WDALM	0x20 /* 1=Watchdog, 0=Alarm */
+>  #define DS1374_REG_CR_WACE	0x40 /* WD/Alarm counter enable */
+>  #define DS1374_REG_SR		0x08 /* Status */
+> @@ -71,7 +72,9 @@ struct ds1374 {
+>  	struct i2c_client *client;
+>  	struct rtc_device *rtc;
+>  	struct work_struct work;
+> -
+> +#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> +	struct watchdog_device wdt;
+> +#endif
+>  	/* The mutex protects alarm operations, and prevents a race
+>  	 * between the enable_irq() in the workqueue and the free_irq()
+>  	 * in the remove function.
+> @@ -371,72 +374,76 @@ static const struct rtc_class_ops ds1374_rtc_ops = {
+>   */
+>  static struct i2c_client *save_client;
 
-> [  330.363112] i2c i2c-0: write slave address: addr=3D0x86   ACK received
-> [  330.363362] i2c i2c-0: write byte: B0=3D0xA2              ACK received
-> [  330.363608] i2c i2c-0: write byte: B1=3D0xFF              No ACK
+This is no longer necessary. struct watchdog_device is part of struct ds1374,
+so it is possible to derive the pointer to struct ds1374 from it and get the
+client pointer from there.
 
-Hmm, it doesn't ack the writes to 0xA3, 0xA1 and 0xA2, which should
-disable the PWM output and then disable the auto-off timer (according to
-the vendor kernel).
+>  /* Default margin */
+> -#define WD_TIMO 131762
+> +#define TIMER_MARGIN_DEFAULT	32
+> +#define TIMER_MARGIN_MIN	1
+> +#define TIMER_MARGIN_MAX	4095 /* 24-bit value */
+>  
+>  #define DRV_NAME "DS1374 Watchdog"
+>  
+> -static int wdt_margin = WD_TIMO;
+> -static unsigned long wdt_is_open;
+> +static int wdt_margin = TIMER_MARGIN_DEFAULT;
 
-And you said in your other mail that you can actually toggle the light
-with writes to 0xA3, so I suspect a bug in the EC firmware here (which
-may have gone unnoticed because the vendor kernel doesn't check if the
-i2c transfers succeed). :/
+Should be 0, not TIMER_MARGIN_DEFAULT.
 
-IMHO we should get this driver merged first, and perhaps add a quirk to
-deal with the missing ACKs later (unless a better solution is found).
+>  module_param(wdt_margin, int, 0);
+>  MODULE_PARM_DESC(wdt_margin, "Watchdog timeout in seconds (default 32s)");
+>  
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default ="
+> +		__MODULE_STRING(WATCHDOG_NOWAYOUT)")");
+> +
+> +
+>  static const struct watchdog_info ds1374_wdt_info = {
+>  	.identity       = "DS1374 WTD",
+>  	.options        = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+>  						WDIOF_MAGICCLOSE,
+>  };
+>  
+> -static int ds1374_wdt_settimeout(unsigned int timeout)
+> +static int ds1374_wdt_settimeout(struct watchdog_device *wdt, unsigned int timeout)
+>  {
+> -	int ret = -ENOIOCTLCMD;
+> -	int cr;
+> +	int ret, cr;
+>  
+> -	ret = cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> -	if (ret < 0)
+> -		goto out;
+> +	wdt->timeout = timeout;
+> +
+> +	cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> +	if (cr < 0)
+> +		return cr;
+>  
+>  	/* Disable any existing watchdog/alarm before setting the new one */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+>  	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	/* Set new watchdog time */
+> +	timeout = timeout * 4096;
+>  	ret = ds1374_write_rtc(save_client, timeout, DS1374_REG_WDALM0, 3);
+>  	if (ret) {
+>  		pr_info("couldn't set new watchdog time\n");
 
+dev_info() can now be used since we have a device. _info seems to be wrong,
+though, since this is an error.
 
-Jonathan
+> -		goto out;
+> +		return ret;
+>  	}
+>  
+>  	/* Enable watchdog timer */
+>  	cr |= DS1374_REG_CR_WACE | DS1374_REG_CR_WDALM;
+> +	cr &= ~DS1374_REG_CR_WDSTR;/* for RST PIN */
+>  	cr &= ~DS1374_REG_CR_AIE;
+>  
+>  	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	return 0;
+> -out:
+> -	return ret;
+>  }
+>  
+> -
+>  /*
+>   * Reload the watchdog timer.  (ie, pat the watchdog)
+>   */
+> -static void ds1374_wdt_ping(void)
+> +static int ds1374_wdt_start(struct watchdog_device *wdt)
+>  {
+>  	u32 val;
+> -	int ret = 0;
+>  
+> -	ret = ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+> -	if (ret)
+> -		pr_info("WD TICK FAIL!!!!!!!!!! %i\n", ret);
+> +	return ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+>  }
+>  
+> -static void ds1374_wdt_disable(void)
+> +static int ds1374_wdt_stop(struct watchdog_device *wdt)
+>  {
+>  	int cr;
+>  
+> @@ -444,162 +451,16 @@ static void ds1374_wdt_disable(void)
+>  	/* Disable watchdog timer */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> -}
+> -
+> -/*
+> - * Watchdog device is opened, and watchdog starts running.
+> - */
+> -static int ds1374_wdt_open(struct inode *inode, struct file *file)
+> -{
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
+> -		mutex_lock(&ds1374->mutex);
+> -		if (test_and_set_bit(0, &wdt_is_open)) {
+> -			mutex_unlock(&ds1374->mutex);
+> -			return -EBUSY;
+> -		}
+> -		/*
+> -		 *      Activate
+> -		 */
+> -		wdt_is_open = 1;
+> -		mutex_unlock(&ds1374->mutex);
+> -		return stream_open(inode, file);
+> -	}
+> -	return -ENODEV;
+> -}
+> -
+> -/*
+> - * Close the watchdog device.
+> - */
+> -static int ds1374_wdt_release(struct inode *inode, struct file *file)
+> -{
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR)
+> -		clear_bit(0, &wdt_is_open);
+> -
+> -	return 0;
+> +	return i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+>  }
+>  
+> -/*
+> - * Pat the watchdog whenever device is written to.
+> - */
+> -static ssize_t ds1374_wdt_write(struct file *file, const char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	if (len) {
+> -		ds1374_wdt_ping();
+> -		return 1;
+> -	}
+> -	return 0;
+> -}
+> -
+> -static ssize_t ds1374_wdt_read(struct file *file, char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	return 0;
+> -}
+> -
+> -/*
+> - * Handle commands from user-space.
+> - */
+> -static long ds1374_wdt_ioctl(struct file *file, unsigned int cmd,
+> -							unsigned long arg)
+> -{
+> -	int new_margin, options;
+> -
+> -	switch (cmd) {
+> -	case WDIOC_GETSUPPORT:
+> -		return copy_to_user((struct watchdog_info __user *)arg,
+> -		&ds1374_wdt_info, sizeof(ds1374_wdt_info)) ? -EFAULT : 0;
+> -
+> -	case WDIOC_GETSTATUS:
+> -	case WDIOC_GETBOOTSTATUS:
+> -		return put_user(0, (int __user *)arg);
+> -	case WDIOC_KEEPALIVE:
+> -		ds1374_wdt_ping();
+> -		return 0;
+> -	case WDIOC_SETTIMEOUT:
+> -		if (get_user(new_margin, (int __user *)arg))
+> -			return -EFAULT;
+> -
+> -		/* the hardware's tick rate is 4096 Hz, so
+> -		 * the counter value needs to be scaled accordingly
+> -		 */
+> -		new_margin <<= 12;
+> -		if (new_margin < 1 || new_margin > 16777216)
+> -			return -EINVAL;
+> -
+> -		wdt_margin = new_margin;
+> -		ds1374_wdt_settimeout(new_margin);
+> -		ds1374_wdt_ping();
+> -		/* fallthrough */
+> -	case WDIOC_GETTIMEOUT:
+> -		/* when returning ... inverse is true */
+> -		return put_user((wdt_margin >> 12), (int __user *)arg);
+> -	case WDIOC_SETOPTIONS:
+> -		if (copy_from_user(&options, (int __user *)arg, sizeof(int)))
+> -			return -EFAULT;
+> -
+> -		if (options & WDIOS_DISABLECARD) {
+> -			pr_info("disable watchdog\n");
+> -			ds1374_wdt_disable();
+> -			return 0;
+> -		}
+> -
+> -		if (options & WDIOS_ENABLECARD) {
+> -			pr_info("enable watchdog\n");
+> -			ds1374_wdt_settimeout(wdt_margin);
+> -			ds1374_wdt_ping();
+> -			return 0;
+> -		}
+> -		return -EINVAL;
+> -	}
+> -	return -ENOTTY;
+> -}
+> -
+> -static long ds1374_wdt_unlocked_ioctl(struct file *file, unsigned int cmd,
+> -			unsigned long arg)
+> -{
+> -	int ret;
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	mutex_lock(&ds1374->mutex);
+> -	ret = ds1374_wdt_ioctl(file, cmd, arg);
+> -	mutex_unlock(&ds1374->mutex);
+> -
+> -	return ret;
+> -}
+> -
+> -static int ds1374_wdt_notify_sys(struct notifier_block *this,
+> -			unsigned long code, void *unused)
+> -{
+> -	if (code == SYS_DOWN || code == SYS_HALT)
+> -		/* Disable Watchdog */
+> -		ds1374_wdt_disable();
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static const struct file_operations ds1374_wdt_fops = {
+> -	.owner			= THIS_MODULE,
+> -	.read			= ds1374_wdt_read,
+> -	.unlocked_ioctl		= ds1374_wdt_unlocked_ioctl,
+> -	.compat_ioctl		= compat_ptr_ioctl,
+> -	.write			= ds1374_wdt_write,
+> -	.open                   = ds1374_wdt_open,
+> -	.release                = ds1374_wdt_release,
+> -	.llseek			= no_llseek,
+> +static const struct watchdog_ops ds1374_wdt_ops = {
+> +	.owner          = THIS_MODULE,
+> +	.start          = ds1374_wdt_start,
+> +	.stop           = ds1374_wdt_stop,
+> +	.set_timeout    = ds1374_wdt_settimeout,
+>  };
+>  
+> -static struct miscdevice ds1374_miscdev = {
+> -	.minor          = WATCHDOG_MINOR,
+> -	.name           = "watchdog",
+> -	.fops           = &ds1374_wdt_fops,
+> -};
+> -
+> -static struct notifier_block ds1374_wdt_notifier = {
+> -	.notifier_call = ds1374_wdt_notify_sys,
+> -};
+>  
+>  #endif /*CONFIG_RTC_DRV_DS1374_WDT*/
+>  /*
+> @@ -653,15 +514,25 @@ static int ds1374_probe(struct i2c_client *client,
+>  
+>  #ifdef CONFIG_RTC_DRV_DS1374_WDT
+>  	save_client = client;
+> -	ret = misc_register(&ds1374_miscdev);
+> -	if (ret)
+> -		return ret;
+> -	ret = register_reboot_notifier(&ds1374_wdt_notifier);
+> +	ds1374->wdt.info = &ds1374_wdt_info;
+> +	ds1374->wdt.ops = &ds1374_wdt_ops;
+> +	ds1374->wdt.timeout = TIMER_MARGIN_DEFAULT;
+> +	ds1374->wdt.min_timeout = TIMER_MARGIN_MIN;
+> +	ds1374->wdt.max_timeout = TIMER_MARGIN_MAX;
+> +
+> +	watchdog_init_timeout(&ds1374->wdt, wdt_margin, &client->dev);
+> +	watchdog_set_nowayout(&ds1374->wdt, nowayout);
+> +	watchdog_stop_on_reboot(&ds1374->wdt);
+> +	watchdog_stop_on_unregister(&ds1374->wdt);
+> +	ds1374_wdt_settimeout(&ds1374->wdt, wdt_margin);
+> +
+> +	ret = devm_watchdog_register_device(&client->dev, &ds1374->wdt);
+>  	if (ret) {
+> -		misc_deregister(&ds1374_miscdev);
+> +		dev_err(&client->dev, "failed to register DS1374 watchdog device\n");
+>  		return ret;
+>  	}
+> -	ds1374_wdt_settimeout(131072);
+> +
+> +	dev_info(&client->dev, "DS1374 watchdog device enabled\n");
 
---d01dLTUuW90fS44H
-Content-Type: application/pgp-signature; name="signature.asc"
+Is that necessary ?
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl8A7VcACgkQCDBEmo7z
-X9vtUBAApZaMG6edUQzNMvP9gVMXHNm96Rk1KQowxkW4xF6zOnil/x4PcUwgqfKV
-tA1xaZMavflayrHqj1wKuLPWnrJ1xdulK/PnULdnXalCJSVqGHjwyKf3/+onibzr
-o6rS+U9ToxbkTeTdV8DjcGz2qmNeJjpaExuZTlvXHQxH7a6SUwK23JVuiChwe2M3
-ycD3RQp/jvAOEW4+e/y6iGat1skMV+dUglcitX6pYBoYu8u4FoSfZ3v/O6JTqqS3
-IeLfBc0IMjGuYbEn+RRkHbnLTNidHt+ptsNl6Q+p7eaRGCeGXIaCeeFPbBp1LXMf
-C559niYKdWD+MQV6diLUHGMO5s4WrQiQ/qP4K+R9qQHKXyD84XYPXJX+QO+up2qb
-jDyutjtILNt5YFUKNbvimcWy/rlDa1sdVaFK8Dt9o0zdkT25FATE8SU0eRFwf396
-vqwWeGF2b9mNRPzWzbpQYhEDvIR+OCuDfi085F0sYtBuPBY1vcy4mbVDjDGU0ulT
-T90dH/DU7C7DJwA7w6sxeb+8MZ5VGTHLsGZ+tB84pMaKJOlvTdRLD7J1+aUpqBmh
-BiSTJlIZeiiR04ip4vNYgsuHM79LlEapJuhJbYLMk3oBWtRAkrToyZEjWTDfp3Ik
-JzLHmXz38TYOeGG7A2vWQTIQb1eAw9Alh4Gu2OdzWW0fmR8NWCI=
-=5RFu
------END PGP SIGNATURE-----
-
---d01dLTUuW90fS44H--
+>  #endif
+>  
+>  	return 0;
+> @@ -670,11 +541,6 @@ static int ds1374_probe(struct i2c_client *client,
+>  static int ds1374_remove(struct i2c_client *client)
+>  {
+>  	struct ds1374 *ds1374 = i2c_get_clientdata(client);
+> -#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	misc_deregister(&ds1374_miscdev);
+> -	ds1374_miscdev.parent = NULL;
+> -	unregister_reboot_notifier(&ds1374_wdt_notifier);
+> -#endif
+>  
+>  	if (client->irq > 0) {
+>  		mutex_lock(&ds1374->mutex);
+> -- 
+> 2.20.1
