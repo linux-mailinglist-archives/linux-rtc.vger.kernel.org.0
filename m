@@ -2,141 +2,515 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE3E219DD8
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jul 2020 12:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B2221A3B7
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jul 2020 17:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbgGIKal (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Jul 2020 06:30:41 -0400
-Received: from mail-eopbgr80129.outbound.protection.outlook.com ([40.107.8.129]:11150
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726298AbgGIKal (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 9 Jul 2020 06:30:41 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I70mPRcncgx6Rlj43ae4tGEFDbTf7+bbDhNzogjovYX3zEhTTAMtTnAfFL6vuHHI5BOzTRXR5gbDDNYsP/xuvPuUlq/JhqlFEh6addONXxCYEnYN4Gu6fL1uUioI7pQuns1H+Vx02w6eYY+F/SLTFfjujRJf8uVS1lm6OZOU8dS3khNktmfBStYCMsp7gM1IDOA7UPl3CTMeG0jX7TkNzQZTCfGjHrIGxb3Sn5E6DEibHnaFA97NH9ihgZ0RPmuV/k+L4ieMLQ3lUyfzlZyyniA+ZwJm552QNuxsWLBMQLJozqRZbpmGumwsmhGwN0ZcX5M/R2gJpFJ8nQjFPQ+S8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kv8KBjF2TTBKG6gOQRUIAPt9RSXPJ/9hmazBPV/R4kI=;
- b=aDtIZut/p6pDv7Uk/vOyMsWhv3vZaVtItdFJkXd4n0lPjxtnIeDSkozQ0DZOj/c5sTMCfTPdcabRLgFiuG8JGjLW3jQrcm2G/HNTfhhelEzHmb9JTp2ZB5tfEr2YczmsSJ/v6rvXJNvXdljGq6GTkSeigqURlU9dJ2t6M7Vm0Otc7sms4DxlGTQ3wsoRKKg10DJK2ZVlly26PnLfd3tLO+BlZcdNcf+k4/l/R5RuAiWKcK4e/9Xv7RpUzZPaySurSTe31V8P6brG/pCQQlwlJC1fINZ9joHsh/bYty06quvoCXGLpZSKW6+Bh4ivK7Os7zzxok310JHdUjMaZiapIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
- dkim=pass header.d=syrmia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kv8KBjF2TTBKG6gOQRUIAPt9RSXPJ/9hmazBPV/R4kI=;
- b=LzHi/1LVMbSc/8MwFbFjSTf0pHq/6Zrky4E/3x7Wy67iWSSFFmtdFAXAmrI5tpdB83u5cj1c0IISjewFvRU4Nld0AQm6Wd64YqOySADcans8jYHEYt2Uym27p7VtJl4A3q+bBwdnwIn9F8Tpj7eSJulDvHQ38sr9SolL750rnuY=
-Received: from VI1PR0301MB6655.eurprd03.prod.outlook.com
- (2603:10a6:800:19c::8) by VE1PR03MB5728.eurprd03.prod.outlook.com
- (2603:10a6:803:124::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Thu, 9 Jul
- 2020 10:30:36 +0000
-Received: from VI1PR0301MB6655.eurprd03.prod.outlook.com
- ([fe80::499e:ff42:c812:83e3]) by VI1PR0301MB6655.eurprd03.prod.outlook.com
- ([fe80::499e:ff42:c812:83e3%5]) with mapi id 15.20.3174.022; Thu, 9 Jul 2020
- 10:30:36 +0000
-From:   Miodrag Dinic <Miodrag.Dinic@syrmia.com>
-To:     Huacai Chen <chenhuacai@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Fuxin Zhang <zhangfx@lemote.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Aleksandar Markovic <Aleksandar.Markovic@syrmia.com>,
-        Petar Jovanovic <petar.jovanovic@syrmia.com>
-Subject: RE: [PATCH] rtc: goldfish: Enable interrupt in set_alarm() when
- necessary
-Thread-Topic: [PATCH] rtc: goldfish: Enable interrupt in set_alarm() when
- necessary
-Thread-Index: AQHWVdTl+C+Ab2AD5USBB3RbAbOSa6j/CH6w
-Date:   Thu, 9 Jul 2020 10:30:36 +0000
-Message-ID: <VI1PR0301MB6655A9BB3411D384F045A5FE94640@VI1PR0301MB6655.eurprd03.prod.outlook.com>
-References: <1592654683-31314-1-git-send-email-chenhc@lemote.com>
- <CAAhV-H4iaAdxQD8GYYAZAusS+-dD6APy=jUMXm0QpdOXNS_N_Q@mail.gmail.com>
- <CAAhV-H77Qm91qhvLiTTMYkEZd7NLFZa5KD0mDrHsiSrtxT7wpQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H77Qm91qhvLiTTMYkEZd7NLFZa5KD0mDrHsiSrtxT7wpQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=syrmia.com;
-x-originating-ip: [178.148.222.9]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 90c50c74-8ce8-4db2-4686-08d823f31e33
-x-ms-traffictypediagnostic: VE1PR03MB5728:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VE1PR03MB572892CAC9684E13856233BF94640@VE1PR03MB5728.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OvFirCWdXjNNkNiME6UhvpBQomwee3LRutPg2kSD0pFKXEqq8L9/2PIaOITyZw49spnplB+A+eo+E4QtKAJsDDWTDUrXKbPWNE3fn4QZCnZAFs/j5icRhKMwh/zLJenorCdjpQIp9b2HdC7SMd6DqM7KYx3MghJKXbH6IUqnctGDmtOzErUjzr+uklL5qqJyY+7rAANpeM8gjR1HGzzETcN6VWuI3FewBI7TVWNZeoB7FhJMR2NTOkIET6I7q7gTnFGQX2ih9YTnpbv398RsHaAJtF9SbXxJO1wB+P3SORjJhGHh6lsMIgSS5GjkxBrTgULWU9O8cdgcx7ThY8PqFB8qod2jAtXe8/E5JmZicFvuRBYfDZUmrBB7h92vGzBkc5A/lre/jSfbHxFLslYyLg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0301MB6655.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(39830400003)(396003)(376002)(346002)(136003)(33656002)(107886003)(52536014)(9686003)(8676002)(110136005)(55016002)(8936002)(6506007)(71200400001)(53546011)(54906003)(2906002)(508600001)(26005)(66556008)(86362001)(5660300002)(66946007)(66476007)(4326008)(64756008)(83380400001)(186003)(76116006)(7696005)(966005)(66446008)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 2+NC/50jM0nJZ6BfMIAm+MkLIRL82YiXlp2ctvTrPqTdCehCduC6baEB/jFoh4Fh82f5Pare5Jzg4hbd9e0QlYlJUHEavFwdRIl0JQitOa1at0o2qyUm8WtniKeFwK4VL/8qF50w4m9jTNEpz/1vcLyeApg2PT8kfohVpJBVJpacKiDQChdLm4tB2qhuNUnfZ1KyzwjXqAQmXUr8ZGUL+mEEOSZF+DePWUvDPO5EYOm4Nxh73nxDoT04jZIpeDrW2aRxGaI4Wt9j+zXR3yi4UdjsAGqYjIdw65k1z69+2EU+nUBCgzr8ZyMBtrF2mI2rkzUbF+Bbyngi0ZyQzAIbXOTaz1UPATPn4iOwNXRx/FKjVOuSOrK0XAP9YJqtNI93X1sA+0qaj8Vw4pwKqm7ACgeajPkhSBCPr3pqSUEWaxaYx2g5AHzN5e+XLFWHka80xZz7juPWokKwnZZXVXrmdY0dspDiDc/XBpS6C0ywAkc=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726600AbgGIP2L (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Jul 2020 11:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbgGIP2L (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Jul 2020 11:28:11 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57090C08C5CE;
+        Thu,  9 Jul 2020 08:28:11 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g67so1117474pgc.8;
+        Thu, 09 Jul 2020 08:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WylchBfGGLMzx3ZzERebZby/QP/QB8eRJGUJW1Q7JZ8=;
+        b=p5spxUWFsNi5HwqwxSCvJuoRlkLMCVExTlXY8K3oNmOE5xgU4elb6WgeMbN5qWpXVY
+         +uVduHvrRFitgzgql5fGcEyThXi56X0YbWmcJ0EILbpDykX5bEEEvqM3C6fW9aZe6P6G
+         XS2shukMZhNTe31DkvV6mzEUO8OtEMWgUjpbUCvEOAnZjLRB6jt+NnkcZ9v8Lkph5H2N
+         Hn2GEDRg2Uhw5ov3IDIEVhOGjLk/U5iMUWN+cFYqBkJ/YR1Xq1mhPEqymJpf9+C5FaGl
+         WhnXhyoojaMQcNHL0Ffpv1WnYEaZnUahz6N4uldRqwzZDH6rFs9/K9Es8DVCFrp7VCB/
+         gahw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=WylchBfGGLMzx3ZzERebZby/QP/QB8eRJGUJW1Q7JZ8=;
+        b=phcNRpIzOcKjlfC7NtazK1vvTYMvPlbZ/nMwbVsET2S0QwNbLCQolNWJDg26HZJC6y
+         UvsQ/4zvDx1Q+rvT4X4KvX8NK8bST7YxnXrDqgiFRw0ZJkeKiRNDeMxABHWPCCuHBVCo
+         Fv3JoGgSEZ1noTOnZKXUym3xqQPxGrAHvKnj2t1Aa9VMzjCvIUTqE4eB+VTNIHaQ64Xk
+         hqKlgVbslmWAllSAU1kwvbfbOada/wsWsWee63zUDs5QdXgxmWdodjALL5jiXuFzEQi6
+         Is10snbstWFmMVpqADCqzQs0BXCy+BP8b698jeN/VZ5WdS7BB4P1zenVjWye96Qq16N1
+         CaGw==
+X-Gm-Message-State: AOAM531bC3cxUQO7i2ffbssfd1dbwXXLzn/iF2tZEG9hWfkcEdd2wkc9
+        uY87YJddQgVj8WBVToJZmwMwRv+f3h0=
+X-Google-Smtp-Source: ABdhPJwkE6R1r6f9kxqbCDr8RYFhE2F4eWjoWE8o1bChozVjjDkAxha8/Y73jw4XM4iwl14zv0Zxag==
+X-Received: by 2002:a65:64c5:: with SMTP id t5mr49606615pgv.28.1594308490556;
+        Thu, 09 Jul 2020 08:28:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c187sm3103864pfc.146.2020.07.09.08.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jul 2020 08:28:10 -0700 (PDT)
+Subject: Re: [PATCH v4] rtc: rtc-ds1374: wdt: Use watchdog core for watchdog
+ part
+To:     =?UTF-8?B?Sm9obnNvbiBDSCBDaGVuICjpmbPmmK3li7Mp?= 
+        <JohnsonCH.Chen@moxa.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+References: <HK2PR01MB328182D5A54BFAA8A22E448AFA640@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <9643e71a-0819-eff6-80b2-04dd7d879d16@roeck-us.net>
+Date:   Thu, 9 Jul 2020 08:28:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: syrmia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0301MB6655.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90c50c74-8ce8-4db2-4686-08d823f31e33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2020 10:30:36.3109
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FUilMLcQ1D8ygiHY7fuk0nUxPsYcAABtkALB9hcY+9+tGPJW9SQgxn5PMmWGRlo36EWukurmBf2x1oScPniv3Ed0ygtcPY9ei4OfM7Vr1mw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR03MB5728
+In-Reply-To: <HK2PR01MB328182D5A54BFAA8A22E448AFA640@HK2PR01MB3281.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=big5
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGkgSHVhY2FpLA0KDQpZZXMsIHRoaXMgaXMgbXkgbmV3IGFkZHJlc3MuIEhvd2V2ZXIgSSBoYXZl
-bid0IGJlZW4gaW52b2x2ZWQgaW4ga2VybmVsL1FFTVUgY29tbXVuaXR5IGZvciBhIHdoaWxlIG5v
-dy4NClRoZSBwYXRjaCBpdHNlbGYgbG9va3MgT0sgdG8gbWUsIGlmIHlvdSBtYWRlIHN1cmUgdGhl
-IFJUQyBkZXZpY2UgZW11bGF0aW9uIG9uIHRoZSBRRU1VIHNpZGUgaXMgbm93IGFsc28gaW5zcGVj
-dGluZyB0aGUgVElNRVJfSVJRX0VOQUJMRUQgc2V0dGluZy4NCg0KT0sgSSBzZWUgbm93IHRoYXQg
-eW91IGhhdmUgY29tbWl0dGVkIHVwc3RyZWFtIHRvIFFFTVUgdGhlIEdvbGRmaXNoIFJUQyBkZXZp
-Y2UsIGdvb2Qgam9iIHdpdGggdGhhdC4NCmh0dHBzOi8vZ2l0aHViLmNvbS9xZW11L3FlbXUvYmxh
-bWUvOTcxYjJhMWU1YjFhOGNjOGY1OTdhYzVkNzAxNjkwOGY5ZmE4ODBkZS9ody9ydGMvZ29sZGZp
-c2hfcnRjLmMNCg0KWW91IGNhbiBhZGQgbXkgInJldmlld2VkLWJ5Ii4NCg0KR2xhZCB0byBzZWUg
-dGhhdCB0aGUgImdvbGRmaXNoIiBwcm9qZWN0IGlzIHN0aWxsIGFsaXZlIG91dCB0aGVyZS4NCg0K
-S2luZCByZWdhcmRzLA0KTWlvZHJhZw0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJv
-bTogSHVhY2FpIENoZW4gPGNoZW5odWFjYWlAZ21haWwuY29tPiANClNlbnQ6IFRodXJzZGF5LCBK
-dWx5IDksIDIwMjAgMTE6NDAgQU0NClRvOiBBbGVzc2FuZHJvIFp1bW1vIDxhLnp1bW1vQHRvd2Vy
-dGVjaC5pdD47IEFsZXhhbmRyZSBCZWxsb25pIDxhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNv
-bT47IE1pb2RyYWcgRGluaWMgPE1pb2RyYWcuRGluaWNAc3lybWlhLmNvbT4NCkNjOiBsaW51eC1y
-dGNAdmdlci5rZXJuZWwub3JnOyBGdXhpbiBaaGFuZyA8emhhbmdmeEBsZW1vdGUuY29tPjsgSmlh
-eHVuIFlhbmcgPGppYXh1bi55YW5nQGZseWdvYXQuY29tPg0KU3ViamVjdDogUmU6IFtQQVRDSF0g
-cnRjOiBnb2xkZmlzaDogRW5hYmxlIGludGVycnVwdCBpbiBzZXRfYWxhcm0oKSB3aGVuIG5lY2Vz
-c2FyeQ0KDQpIaSwgTWlkb3JhZywNCg0KTWF5YmUgbWlvZHJhZy5kaW5pY0BzeXJtaWEuY29tIGlz
-IHlvdXIgbmV3IGVtYWlsIGFkZHJlc3M/IFBsZWFzZSByZXZpZXcgdGhpcyBwYXRjaC4NCkFuZCBB
-bGVzc2FuZHJvLCBBbGV4YW5kcmUsIGNvdWxkIHlvdSBwbGVhc2UgaGVscCB0byByZXZpZXcgdGhp
-cyBwYXRjaD8NCg0KSHVhY2FpDQoNCk9uIEZyaSwgSnVsIDMsIDIwMjAgYXQgMTE6MDAgQU0gSHVh
-Y2FpIENoZW4gPGNoZW5odWFjYWlAZ21haWwuY29tPiB3cm90ZToNCj4NCj4gUGluZz8NCj4NCj4g
-T24gU2F0LCBKdW4gMjAsIDIwMjAgYXQgODowMyBQTSBIdWFjYWkgQ2hlbiA8Y2hlbmhjQGxlbW90
-ZS5jb20+IHdyb3RlOg0KPiA+DQo+ID4gV2hlbiB1c2UgZ29sZGZpc2ggcnRjLCB0aGUgImh3Y2xv
-Y2siIGNvbW1hbmQgZmFpbHMgd2l0aCAic2VsZWN0KCkgdG8gDQo+ID4gL2Rldi9ydGMgdG8gd2Fp
-dCBmb3IgY2xvY2sgdGljayB0aW1lZCBvdXQiLiBUaGlzIGlzIGJlY2F1c2UgImh3Y2xvY2siDQo+
-ID4gbmVlZCB0aGUgc2V0X2FsYXJtKCkgaG9vayB0byBlbmFibGUgaW50ZXJydXB0IHdoZW4gYWxy
-bS0+ZW5hYmxlZCBpcyANCj4gPiB0cnVlLiBUaGlzIG9wZXJhdGlvbiBpcyBtaXNzaW5nIGluIGdv
-bGRmaXNoIHJ0YyAoYnV0IG90aGVyIHJ0YyANCj4gPiBkcml2ZXJzLCBzdWNoIGFzIGNtb3MgcnRj
-LCBlbmFibGUgaW50ZXJydXB0IGhlcmUpLCBzbyBhZGQgaXQuDQo+ID4NCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBIdWFjYWkgQ2hlbiA8Y2hlbmhjQGxlbW90ZS5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTog
-SmlheHVuIFlhbmcgPGppYXh1bi55YW5nQGZseWdvYXQuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2
-ZXJzL3J0Yy9ydGMtZ29sZGZpc2guYyB8IDEgKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3J0Yy9ydGMtZ29sZGZpc2gu
-YyBiL2RyaXZlcnMvcnRjL3J0Yy1nb2xkZmlzaC5jIA0KPiA+IGluZGV4IDFhMzQyMGUuLmQ1MDgz
-YjAgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9ydGMvcnRjLWdvbGRmaXNoLmMNCj4gPiArKysg
-Yi9kcml2ZXJzL3J0Yy9ydGMtZ29sZGZpc2guYw0KPiA+IEBAIC03Myw2ICs3Myw3IEBAIHN0YXRp
-YyBpbnQgZ29sZGZpc2hfcnRjX3NldF9hbGFybShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ID4gICAg
-ICAgICAgICAgICAgIHJ0Y19hbGFybTY0ID0gcnRjX3RtX3RvX3RpbWU2NCgmYWxybS0+dGltZSkg
-KiBOU0VDX1BFUl9TRUM7DQo+ID4gICAgICAgICAgICAgICAgIHdyaXRlbCgocnRjX2FsYXJtNjQg
-Pj4gMzIpLCBiYXNlICsgVElNRVJfQUxBUk1fSElHSCk7DQo+ID4gICAgICAgICAgICAgICAgIHdy
-aXRlbChydGNfYWxhcm02NCwgYmFzZSArIFRJTUVSX0FMQVJNX0xPVyk7DQo+ID4gKyAgICAgICAg
-ICAgICAgIHdyaXRlbCgxLCBiYXNlICsgVElNRVJfSVJRX0VOQUJMRUQpOw0KPiA+ICAgICAgICAg
-fSBlbHNlIHsNCj4gPiAgICAgICAgICAgICAgICAgLyoNCj4gPiAgICAgICAgICAgICAgICAgICog
-aWYgdGhpcyBmdW5jdGlvbiB3YXMgY2FsbGVkIHdpdGggZW5hYmxlZD0wDQo+ID4gLS0NCj4gPiAy
-LjcuMA0KPiA+DQo=
+On 7/8/20 11:34 PM, Johnson CH Chen (³¯¬L¾±) wrote:
+> Let ds1374 watchdog use watchdog core functions. It also includes
+> improving watchdog timer setting and nowayout, and just uses ioctl()
+> of watchdog core.
+> 
+> Signed-off-by: Johnson Chen <johnsonch.chen@moxa.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> v3->v4:
+> - Fix coding styles 
+> - Remove dev_info() in ds1374_wdt_settimeout()
+> - Fix missing error check
+> 
+> v2->v3:
+> - Fix a problem reported by WATCHDOG_CORE if WATCHDOG
+> - Remove save_client
+> - Let wdt_margin be 0 for watchdog_init_timeout()
+> - Use dev_info() rather than pr_info()
+> - Avoid more strings in this driver
+> 
+> v1->v2:
+> - Use ds1374_wdt_settimeout() before registering the watchdog
+> - Remove watchdog_unregister_device() because devm_watchdog_register_device() is used
+> - Remove ds1374_wdt_ping()
+> - TIMER_MARGIN_MAX to 4095 for 24-bit value
+> - Keep wdt_margin
+> - Fix coding styles
+> 
+>  drivers/rtc/Kconfig      |   1 +
+>  drivers/rtc/rtc-ds1374.c | 258 +++++++++------------------------------
+>  2 files changed, 62 insertions(+), 197 deletions(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index b54d87d45c89..c25d51f35f0c 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -282,6 +282,7 @@ config RTC_DRV_DS1374
+>  config RTC_DRV_DS1374_WDT
+>  	bool "Dallas/Maxim DS1374 watchdog timer"
+>  	depends on RTC_DRV_DS1374
+> +	select WATCHDOG_CORE if WATCHDOG
+>  	help
+>  	  If you say Y here you will get support for the
+>  	  watchdog timer in the Dallas Semiconductor DS1374
+> diff --git a/drivers/rtc/rtc-ds1374.c b/drivers/rtc/rtc-ds1374.c
+> index 9c51a12cf70f..c71065d26cd2 100644
+> --- a/drivers/rtc/rtc-ds1374.c
+> +++ b/drivers/rtc/rtc-ds1374.c
+> @@ -46,6 +46,7 @@
+>  #define DS1374_REG_WDALM2	0x06
+>  #define DS1374_REG_CR		0x07 /* Control */
+>  #define DS1374_REG_CR_AIE	0x01 /* Alarm Int. Enable */
+> +#define DS1374_REG_CR_WDSTR	0x08 /* 1=INT, 0=RST */
+>  #define DS1374_REG_CR_WDALM	0x20 /* 1=Watchdog, 0=Alarm */
+>  #define DS1374_REG_CR_WACE	0x40 /* WD/Alarm counter enable */
+>  #define DS1374_REG_SR		0x08 /* Status */
+> @@ -71,7 +72,9 @@ struct ds1374 {
+>  	struct i2c_client *client;
+>  	struct rtc_device *rtc;
+>  	struct work_struct work;
+> -
+> +#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> +	struct watchdog_device wdt;
+> +#endif
+>  	/* The mutex protects alarm operations, and prevents a race
+>  	 * between the enable_irq() in the workqueue and the free_irq()
+>  	 * in the remove function.
+> @@ -369,238 +372,98 @@ static const struct rtc_class_ops ds1374_rtc_ops = {
+>   *
+>   *****************************************************************************
+>   */
+> -static struct i2c_client *save_client;
+>  /* Default margin */
+> -#define WD_TIMO 131762
+> +#define TIMER_MARGIN_DEFAULT	32
+> +#define TIMER_MARGIN_MIN	1
+> +#define TIMER_MARGIN_MAX	4095 /* 24-bit value */
+>  
+>  #define DRV_NAME "DS1374 Watchdog"
+>  
+> -static int wdt_margin = WD_TIMO;
+> -static unsigned long wdt_is_open;
+> +static int wdt_margin;
+>  module_param(wdt_margin, int, 0);
+>  MODULE_PARM_DESC(wdt_margin, "Watchdog timeout in seconds (default 32s)");
+>  
+> +static bool nowayout = WATCHDOG_NOWAYOUT;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default ="
+> +		__MODULE_STRING(WATCHDOG_NOWAYOUT)")");
+> +
+>  static const struct watchdog_info ds1374_wdt_info = {
+>  	.identity       = "DS1374 WTD",
+>  	.options        = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+>  						WDIOF_MAGICCLOSE,
+>  };
+>  
+> -static int ds1374_wdt_settimeout(unsigned int timeout)
+> +static int ds1374_wdt_settimeout(struct watchdog_device *wdt, unsigned int timeout)
+>  {
+> -	int ret = -ENOIOCTLCMD;
+> -	int cr;
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+> +	struct i2c_client *client = ds1374->client;
+> +	int ret, cr;
+>  
+> -	ret = cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> -	if (ret < 0)
+> -		goto out;
+> +	wdt->timeout = timeout;
+> +
+> +	cr = i2c_smbus_read_byte_data(client, DS1374_REG_CR);
+> +	if (cr < 0)
+> +		return cr;
+>  
+>  	/* Disable any existing watchdog/alarm before setting the new one */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> +	ret = i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	/* Set new watchdog time */
+> -	ret = ds1374_write_rtc(save_client, timeout, DS1374_REG_WDALM0, 3);
+> -	if (ret) {
+> -		pr_info("couldn't set new watchdog time\n");
+> -		goto out;
+> -	}
+> +	timeout = timeout * 4096;
+> +	ret = ds1374_write_rtc(client, timeout, DS1374_REG_WDALM0, 3);
+> +	if (ret)
+> +		return ret;
+>  
+>  	/* Enable watchdog timer */
+>  	cr |= DS1374_REG_CR_WACE | DS1374_REG_CR_WDALM;
+> +	cr &= ~DS1374_REG_CR_WDSTR;/* for RST PIN */
+>  	cr &= ~DS1374_REG_CR_AIE;
+>  
+> -	ret = i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> +	ret = i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  	if (ret < 0)
+> -		goto out;
+> +		return ret;
+>  
+>  	return 0;
+> -out:
+> -	return ret;
+>  }
+>  
+> -
+>  /*
+>   * Reload the watchdog timer.  (ie, pat the watchdog)
+>   */
+> -static void ds1374_wdt_ping(void)
+> +static int ds1374_wdt_start(struct watchdog_device *wdt)
+>  {
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+>  	u32 val;
+> -	int ret = 0;
+>  
+> -	ret = ds1374_read_rtc(save_client, &val, DS1374_REG_WDALM0, 3);
+> -	if (ret)
+> -		pr_info("WD TICK FAIL!!!!!!!!!! %i\n", ret);
+> +	return ds1374_read_rtc(ds1374->client, &val, DS1374_REG_WDALM0, 3);
+>  }
+>  
+> -static void ds1374_wdt_disable(void)
+> +static int ds1374_wdt_stop(struct watchdog_device *wdt)
+>  {
+> +	struct ds1374 *ds1374 = watchdog_get_drvdata(wdt);
+> +	struct i2c_client *client = ds1374->client;
+>  	int cr;
+>  
+> -	cr = i2c_smbus_read_byte_data(save_client, DS1374_REG_CR);
+> +	cr = i2c_smbus_read_byte_data(client, DS1374_REG_CR);
+> +	if (cr < 0)
+> +		return cr;
+> +
+>  	/* Disable watchdog timer */
+>  	cr &= ~DS1374_REG_CR_WACE;
+>  
+> -	i2c_smbus_write_byte_data(save_client, DS1374_REG_CR, cr);
+> -}
+> -
+> -/*
+> - * Watchdog device is opened, and watchdog starts running.
+> - */
+> -static int ds1374_wdt_open(struct inode *inode, struct file *file)
+> -{
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
+> -		mutex_lock(&ds1374->mutex);
+> -		if (test_and_set_bit(0, &wdt_is_open)) {
+> -			mutex_unlock(&ds1374->mutex);
+> -			return -EBUSY;
+> -		}
+> -		/*
+> -		 *      Activate
+> -		 */
+> -		wdt_is_open = 1;
+> -		mutex_unlock(&ds1374->mutex);
+> -		return stream_open(inode, file);
+> -	}
+> -	return -ENODEV;
+> -}
+> -
+> -/*
+> - * Close the watchdog device.
+> - */
+> -static int ds1374_wdt_release(struct inode *inode, struct file *file)
+> -{
+> -	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR)
+> -		clear_bit(0, &wdt_is_open);
+> -
+> -	return 0;
+> +	return i2c_smbus_write_byte_data(client, DS1374_REG_CR, cr);
+>  }
+>  
+> -/*
+> - * Pat the watchdog whenever device is written to.
+> - */
+> -static ssize_t ds1374_wdt_write(struct file *file, const char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	if (len) {
+> -		ds1374_wdt_ping();
+> -		return 1;
+> -	}
+> -	return 0;
+> -}
+> -
+> -static ssize_t ds1374_wdt_read(struct file *file, char __user *data,
+> -				size_t len, loff_t *ppos)
+> -{
+> -	return 0;
+> -}
+> -
+> -/*
+> - * Handle commands from user-space.
+> - */
+> -static long ds1374_wdt_ioctl(struct file *file, unsigned int cmd,
+> -							unsigned long arg)
+> -{
+> -	int new_margin, options;
+> -
+> -	switch (cmd) {
+> -	case WDIOC_GETSUPPORT:
+> -		return copy_to_user((struct watchdog_info __user *)arg,
+> -		&ds1374_wdt_info, sizeof(ds1374_wdt_info)) ? -EFAULT : 0;
+> -
+> -	case WDIOC_GETSTATUS:
+> -	case WDIOC_GETBOOTSTATUS:
+> -		return put_user(0, (int __user *)arg);
+> -	case WDIOC_KEEPALIVE:
+> -		ds1374_wdt_ping();
+> -		return 0;
+> -	case WDIOC_SETTIMEOUT:
+> -		if (get_user(new_margin, (int __user *)arg))
+> -			return -EFAULT;
+> -
+> -		/* the hardware's tick rate is 4096 Hz, so
+> -		 * the counter value needs to be scaled accordingly
+> -		 */
+> -		new_margin <<= 12;
+> -		if (new_margin < 1 || new_margin > 16777216)
+> -			return -EINVAL;
+> -
+> -		wdt_margin = new_margin;
+> -		ds1374_wdt_settimeout(new_margin);
+> -		ds1374_wdt_ping();
+> -		/* fallthrough */
+> -	case WDIOC_GETTIMEOUT:
+> -		/* when returning ... inverse is true */
+> -		return put_user((wdt_margin >> 12), (int __user *)arg);
+> -	case WDIOC_SETOPTIONS:
+> -		if (copy_from_user(&options, (int __user *)arg, sizeof(int)))
+> -			return -EFAULT;
+> -
+> -		if (options & WDIOS_DISABLECARD) {
+> -			pr_info("disable watchdog\n");
+> -			ds1374_wdt_disable();
+> -			return 0;
+> -		}
+> -
+> -		if (options & WDIOS_ENABLECARD) {
+> -			pr_info("enable watchdog\n");
+> -			ds1374_wdt_settimeout(wdt_margin);
+> -			ds1374_wdt_ping();
+> -			return 0;
+> -		}
+> -		return -EINVAL;
+> -	}
+> -	return -ENOTTY;
+> -}
+> -
+> -static long ds1374_wdt_unlocked_ioctl(struct file *file, unsigned int cmd,
+> -			unsigned long arg)
+> -{
+> -	int ret;
+> -	struct ds1374 *ds1374 = i2c_get_clientdata(save_client);
+> -
+> -	mutex_lock(&ds1374->mutex);
+> -	ret = ds1374_wdt_ioctl(file, cmd, arg);
+> -	mutex_unlock(&ds1374->mutex);
+> -
+> -	return ret;
+> -}
+> -
+> -static int ds1374_wdt_notify_sys(struct notifier_block *this,
+> -			unsigned long code, void *unused)
+> -{
+> -	if (code == SYS_DOWN || code == SYS_HALT)
+> -		/* Disable Watchdog */
+> -		ds1374_wdt_disable();
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static const struct file_operations ds1374_wdt_fops = {
+> -	.owner			= THIS_MODULE,
+> -	.read			= ds1374_wdt_read,
+> -	.unlocked_ioctl		= ds1374_wdt_unlocked_ioctl,
+> -	.compat_ioctl		= compat_ptr_ioctl,
+> -	.write			= ds1374_wdt_write,
+> -	.open                   = ds1374_wdt_open,
+> -	.release                = ds1374_wdt_release,
+> -	.llseek			= no_llseek,
+> -};
+> -
+> -static struct miscdevice ds1374_miscdev = {
+> -	.minor          = WATCHDOG_MINOR,
+> -	.name           = "watchdog",
+> -	.fops           = &ds1374_wdt_fops,
+> -};
+> -
+> -static struct notifier_block ds1374_wdt_notifier = {
+> -	.notifier_call = ds1374_wdt_notify_sys,
+> +static const struct watchdog_ops ds1374_wdt_ops = {
+> +	.owner          = THIS_MODULE,
+> +	.start          = ds1374_wdt_start,
+> +	.stop           = ds1374_wdt_stop,
+> +	.set_timeout    = ds1374_wdt_settimeout,
+>  };
+> -
+>  #endif /*CONFIG_RTC_DRV_DS1374_WDT*/
+>  /*
+>   *****************************************************************************
+> @@ -652,16 +515,22 @@ static int ds1374_probe(struct i2c_client *client,
+>  		return ret;
+>  
+>  #ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	save_client = client;
+> -	ret = misc_register(&ds1374_miscdev);
+> +	ds1374->wdt.info = &ds1374_wdt_info;
+> +	ds1374->wdt.ops = &ds1374_wdt_ops;
+> +	ds1374->wdt.timeout = TIMER_MARGIN_DEFAULT;
+> +	ds1374->wdt.min_timeout = TIMER_MARGIN_MIN;
+> +	ds1374->wdt.max_timeout = TIMER_MARGIN_MAX;
+> +
+> +	watchdog_init_timeout(&ds1374->wdt, wdt_margin, &client->dev);
+> +	watchdog_set_nowayout(&ds1374->wdt, nowayout);
+> +	watchdog_stop_on_reboot(&ds1374->wdt);
+> +	watchdog_stop_on_unregister(&ds1374->wdt);
+> +	watchdog_set_drvdata(&ds1374->wdt, ds1374);
+> +	ds1374_wdt_settimeout(&ds1374->wdt, ds1374->wdt.timeout);
+> +
+> +	ret = devm_watchdog_register_device(&client->dev, &ds1374->wdt);
+>  	if (ret)
+>  		return ret;
+> -	ret = register_reboot_notifier(&ds1374_wdt_notifier);
+> -	if (ret) {
+> -		misc_deregister(&ds1374_miscdev);
+> -		return ret;
+> -	}
+> -	ds1374_wdt_settimeout(131072);
+>  #endif
+>  
+>  	return 0;
+> @@ -670,11 +539,6 @@ static int ds1374_probe(struct i2c_client *client,
+>  static int ds1374_remove(struct i2c_client *client)
+>  {
+>  	struct ds1374 *ds1374 = i2c_get_clientdata(client);
+> -#ifdef CONFIG_RTC_DRV_DS1374_WDT
+> -	misc_deregister(&ds1374_miscdev);
+> -	ds1374_miscdev.parent = NULL;
+> -	unregister_reboot_notifier(&ds1374_wdt_notifier);
+> -#endif
+>  
+>  	if (client->irq > 0) {
+>  		mutex_lock(&ds1374->mutex);
+> 
+
