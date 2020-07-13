@@ -2,84 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2207A21E027
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Jul 2020 20:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063D321E2D2
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Jul 2020 00:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgGMSuV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Jul 2020 14:50:21 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:46367 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgGMSuV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jul 2020 14:50:21 -0400
-Received: by mail-io1-f67.google.com with SMTP id a12so14581516ion.13;
-        Mon, 13 Jul 2020 11:50:20 -0700 (PDT)
+        id S1726364AbgGMWFs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Jul 2020 18:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgGMWFs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Jul 2020 18:05:48 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED36C061755
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Jul 2020 15:05:47 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id s9so19946197ljm.11
+        for <linux-rtc@vger.kernel.org>; Mon, 13 Jul 2020 15:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=km6g.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MrfB/pA/Fr6Xo5LXYVH5LAjhEbtvsj6IDDuB28ZiKvw=;
+        b=Q6jm1Eqnds68xEvFex8jExGynudXIanqrGMXzUrm52hsyVCE27b65dgV5ABqG9Ev8V
+         khXsrMN+dKGer+R1ZQcwf+Tv7wfNbkl+cnJ6M8uBG+rlzaeMjetqvu4O3Sgu94paGqpD
+         f6bkwE6e6bDYGdYfZyh3OiO7Z2LskfdgMvQrMBGBaCY6JHNT35wzbpUZdgolAVSD0jWA
+         pdVACE0zL+3HxgGb/g+w8uiJM1N7WpjN7uqLDhk6yFAxLnqtGkkzW4UTxqbd2+BV7V6s
+         vTClrW3osPTRMKUcli7ZLDy0/518en6Ds8ZbYYI1q4DEJ0D8WvVRzXNjNkP7f8bPS3+0
+         m+Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dxSIKalG5pmPJrENOgt+knqfr40NsiQacbub2rb1U8U=;
-        b=NRfIHj68tz946k/pbpdCXaHeNf5JZ7yvvlne8Eb41Eh/vvnFiNaaHSGARzlGV0zAWP
-         QpTFMRh8zuAmYyBZMQxDl026wIs0mmxKzi733qvt9qhp3Ury2FkVgDH8m6vESyHtmS2M
-         HQNortKZLOPb3IwdmUpkF12WhFhTZhUrY0Q1R8jWeKnNK/zjwWV0HD/cuo2FtSnPFNWX
-         oY/NG35NPyY1W04WIsmM5m+ityx7m+oyRU8GtJ5mttByQ8Bp6hGlLkFxsyVkFtMXHiFk
-         su8YwHCex36z3OKmCcgl9u7OvvVzmG2of7bry4c/jgqDne4Qq1tmimYa9keRJPQGz6aO
-         d7jw==
-X-Gm-Message-State: AOAM533gUmGu3bO13r7fgUqJeYiNLi8BSGGTGJtN4ae1OARBI14g+CJ0
-        7w+O4zqjxjnTCyG/vgdyKw==
-X-Google-Smtp-Source: ABdhPJyLkZZwvj61ZNsHMThlgpkJfwv9jMCmBiY9npdnk2nVKArKeRCDOvgu1OZdIoirrAR4n2N+qg==
-X-Received: by 2002:a05:6602:21c3:: with SMTP id c3mr1065368ioc.93.1594666219953;
-        Mon, 13 Jul 2020 11:50:19 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id d77sm8967211ill.67.2020.07.13.11.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 11:50:19 -0700 (PDT)
-Received: (nullmailer pid 530111 invoked by uid 1000);
-        Mon, 13 Jul 2020 18:50:18 -0000
-Date:   Mon, 13 Jul 2020 12:50:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] dt-bindings: timer: Convert mrvl,mmp-timer to
- json-schema
-Message-ID: <20200713185018.GA529968@bogus>
-References: <20200616223353.993567-1-lkundrak@v3.sk>
- <20200616223353.993567-6-lkundrak@v3.sk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MrfB/pA/Fr6Xo5LXYVH5LAjhEbtvsj6IDDuB28ZiKvw=;
+        b=Y3FpT6T4oNb2UDIZ+BhKTDS04Z+lxQSWJAu4gV9tbVnqy/e6WAiJk5lP4BK3YZpJz/
+         UNhc+Chpz5u6ht1yuUSTu+xTg51A73GLweWxWfZEsht1ZJgDORgSq3HNoAxBQWtJ+yfk
+         uw2gia9BGG+SgfzuNz6XDyjPjuCPy+CVVygs+Hb87KycrlRr9q6akK5Cf8CjxYgjIknA
+         PKEA4dtP91fyXJDYiOyT2gZmwRYAf59jiRXnGAkZ5KxAasgkoIZp1J/ksV/HZ+SgYWZ/
+         wOGR104naPIK1TGSIIkq9Fz76JZtQpjR7FOXAI3g9iwuA3SuCYqpfc6brbn7aZqQwfyj
+         FJvQ==
+X-Gm-Message-State: AOAM530ePFETTiQsaxcvj/s23GHLWzo5TH06PWOaGjHwqX1doMz6lI05
+        zbJGKgaSL/OxOlFUCcVOjr/lFu+/AbPQHhmyfinwXiJW
+X-Google-Smtp-Source: ABdhPJxncUkI0jhKFHmH324O5+b5tL6H39vtRTsw3hLk37cgRNP5BL+z1JdJSm5SnoA3riPw3p60nobrH6cw8kRbV4I=
+X-Received: by 2002:a2e:b175:: with SMTP id a21mr817840ljm.10.1594677946151;
+ Mon, 13 Jul 2020 15:05:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616223353.993567-6-lkundrak@v3.sk>
+References: <20200615105113.57770-1-kevin+linux@km6g.us> <20200713183906.GA510880@bogus>
+In-Reply-To: <20200713183906.GA510880@bogus>
+From:   "Kevin P. Fleming" <kevin+linux@km6g.us>
+Date:   Mon, 13 Jul 2020 18:05:34 -0400
+Message-ID: <CAE+UdorYGJrxjcBY8KtoUtpsEmWFkv4DsWtcdhCt9dcfDyCVHg@mail.gmail.com>
+Subject: Re: [PATCH 1/3 v3] dt-bindings: abx80x: Add autocal-filter property
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Kevin P. Fleming" <kevin+linux@km6g.us>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 17 Jun 2020 00:33:53 +0200, Lubomir Rintel wrote:
-> A straightforward conversion of the mrvl,mmp-timer binding to DT schema
-> format using json-schema.
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> 
-> ---
-> Changes since v1:
-> - Add default GPL-2.0-only license tag
-> - Fill in maintainers from MAINTAINERS file
-> 
->  .../bindings/timer/mrvl,mmp-timer.txt         | 17 -------
->  .../bindings/timer/mrvl,mmp-timer.yaml        | 46 +++++++++++++++++++
->  2 files changed, 46 insertions(+), 17 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.txt
->  create mode 100644 Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml
-> 
+On Mon, Jul 13, 2020 at 2:39 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Jun 15, 2020 at 06:51:11AM -0400, Kevin P. Fleming wrote:
+> > Add a property to allow control of the autocalibration filter
+> > capacitor.
+> >
+> > Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > To: linux-rtc@vger.kernel.org
+> > To: devicetree@vger.kernel.org
+> > ---
+> > v3: corrected whitespace
+> >  Documentation/devicetree/bindings/rtc/abracon,abx80x.txt | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > index 2405e35a1bc0f..1b606e33d1a83 100644
+> > --- a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > +++ b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > @@ -29,3 +29,11 @@ and valid to enable charging:
+> >   - "abracon,tc-diode": should be "standard" (0.6V) or "schottky" (0.3V)
+> >   - "abracon,tc-resistor": should be <0>, <3>, <6> or <11>. 0 disables the output
+> >                            resistor, the other values are in kOhm.
+> > +
+> > +All of the devices can have a 47pf capacitor attached to increase the
+> > +autocalibration accuracy of their RC oscillators. To enable or disable usage
+> > +of the capacitor the following property can be defined:
+> > +
+> > + - "abracon,autocal-filter": should be <0> or <1>. 0 indicates that there
+> > +                             is no capacitor attached, 1 indicates that there
+> > +                             is a capacitor attached.
+>
+> What does not present mean? If you don't have a defined meaning (such
+> as maintain the default/bootloader initialized setting), then make this
+> boolean.
 
-Applied, thanks!
+That is the intended meaning (leave the current setting unmodified). I
+can add that to the documentation so it is clear.
