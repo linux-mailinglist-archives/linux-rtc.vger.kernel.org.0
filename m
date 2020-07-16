@@ -2,68 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB6C221F65
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jul 2020 11:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6FD221F86
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Jul 2020 11:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbgGPJHA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Jul 2020 05:07:00 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35620 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbgGPJHA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Jul 2020 05:07:00 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q4so6341975lji.2;
-        Thu, 16 Jul 2020 02:06:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OBEQGPTChpp2rgfOeM1kSlSWAgJYyyqDBB2eHOFChvg=;
-        b=E3WGiQii4LSgSwQD1wK61QMPu1byZy4EaIJ5eFfCeE01Q2L4FTjQmvV7W0f4hrxcSA
-         36V2Kh3nnTexA6Km5cqGc7fsFPCStRMb5kyFJ5CXvzksAHZa9QNU7uESMHqXXX5Q2CNe
-         L/w2ijxPJSakpFWYWrJosDlboAPRjl4Cf2E5TnbVBqUMF7brV/jYAzwZwb8upw4wNTiO
-         KlIltQIontVYk/lRA6Ks3R8IHTEwCMuqbaEcK3ieTQcxiRa7ICicjVmF/pWZFZ3SCVEb
-         OsP8MM7hH3R2t5lucWqbHD5DKv+o28mTHvWvdWonK8hVrMC4Q2DXR2u3dqdhf4tqnr2a
-         /gsA==
-X-Gm-Message-State: AOAM530UIwgvZjaP2H7+4Ts5Q7EbtLs4glcdLbgAUU+mpY+47NuOQO2G
-        6a48DhRfXee0rbzYJ5IXbcGjouyr0XHmpnjkqlA=
-X-Google-Smtp-Source: ABdhPJzY4AtdWyo0zU9lTfnS590Gsucs///uO2eLVmlTpmxBUsgFn3PU56CccKqZUhFsj1MTJh4QVTSCc2tt6OsY5EQ=
-X-Received: by 2002:a05:651c:3c2:: with SMTP id f2mr1584485ljp.37.1594890418508;
- Thu, 16 Jul 2020 02:06:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <CGME20200716053452eucas1p24dedd4565b90817c244724b1c52a8329@eucas1p2.samsung.com>
- <20200716053438.3498-1-m.szyprowski@samsung.com>
-In-Reply-To: <20200716053438.3498-1-m.szyprowski@samsung.com>
-From:   Sudeep Holla <sudeep.holla@arm.com>
-Date:   Thu, 16 Jul 2020 10:06:46 +0100
-Message-ID: <CAPKp9uYCKBpWazGCV8gw8U0ZBB-X5UkeSw4+_5m6awZ8W=azFA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: pl031: fix alarm support
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1726075AbgGPJP1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Jul 2020 05:15:27 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:9461 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbgGPJP1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Jul 2020 05:15:27 -0400
+X-Originating-IP: 90.65.108.121
+Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 57FAA240004;
+        Thu, 16 Jul 2020 09:15:24 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH] rtc: max77686: Do not allow interrupt to fire before system resume
+Date:   Thu, 16 Jul 2020 11:15:24 +0200
+Message-Id: <159489082551.8339.14774575575042463785.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200615161455.4420-1-krzk@kernel.org>
+References: <20200615161455.4420-1-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 6:37 AM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Commit 75a472845196 ("rtc: pl031: switch to rtc_time64_to_tm/rtc_tm_to_time64")
-> adjusted driver to the new API, but during the conversion a call to enable
-> alarm irq in set_alarm() was lost. Restore it, what fixes alarm support in
-> the PL031 RTC driver.
->
+On Mon, 15 Jun 2020 18:14:55 +0200, Krzysztof Kozlowski wrote:
+> The rtc-max77686 device shares the main interrupt line with parent MFD
+> device (max77686 driver).  During the system suspend, the parent MFD
+> device disables this IRQ to prevent an early event happening before
+> resuming I2C bus controller.
+> 
+> The same should be done by rtc-max77686 driver because otherwise the
+> interrupt handler max77686_rtc_alarm_irq() will be called before its
+> resume function (max77686_rtc_resume()).  Such issue is not fatal but
+> disabling shared IRQ by all users ensures correct behavior.
 
-I posted exact same fix couple of days back[1]
+Applied, thanks!
 
---
-Regards,
-Sudeep
+[1/1] rtc: max77686: Do not allow interrupt to fire before system resume
+      commit: d8f090dbeafdcc3d30761aa0062f19d1adf9ef08
 
-[1] http://lore.kernel.org/r/20200714124556.20294-1-sudeep.holla@arm.com
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>
