@@ -2,142 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAE52240C8
-	for <lists+linux-rtc@lfdr.de>; Fri, 17 Jul 2020 18:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D420D2247CF
+	for <lists+linux-rtc@lfdr.de>; Sat, 18 Jul 2020 03:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgGQQtP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 17 Jul 2020 12:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S1728386AbgGRBi4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 17 Jul 2020 21:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726221AbgGQQtP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 17 Jul 2020 12:49:15 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B98C0619D2;
-        Fri, 17 Jul 2020 09:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=u0JM6c08RReApxGswkP2r77YhwJHKkc2EjdJzkbnHXQ=; b=PYmVXrd42CrpgcWrj/QV0Y8W9l
-        Lkohjch9CFGyMhjEMptbgC9m9JrcRkK7fBu48xqCS0dAClLeLwWCRUR1ACgtaRbvRWftg19e0rVi6
-        dEU7TiYrdL2FL57rtThihxKSVgSRJdGNKCumUwKexTHzme02lSzYyA8CiEk1JnDDiUfpD7DgIxMs9
-        nbvHLH62K7v8Ma6ibkurMeO/X71qUFiRz2iY89380cqL4xVd97H9EJPRVzyGZgqjlC+FyAszRrA3U
-        c9rqLZC9E+aOONJ0p4uQk83/2RfXeiA+5wB0OElMbYGHl2fFqmjItphGSTYkHTqluxszY1UpJS/40
-        dN5YQS1Q==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwTXp-0008Qz-V4; Fri, 17 Jul 2020 16:49:10 +0000
-Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1726710AbgGRBi4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 17 Jul 2020 21:38:56 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE31C0619D2;
+        Fri, 17 Jul 2020 18:38:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B7rHf0sfDz9sSt;
+        Sat, 18 Jul 2020 11:38:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1595036334;
+        bh=KwdV0zFfsed7iFUlolMU4dmFArtNxfTQjE+hDf9oNT0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vo2plUFogRNZIrfmPHCaSGtuSvm5g+P2grDJmJCiEHtNaoMa5Zu+GaFdNw7WmE3Fd
+         SGtqh6b/9lahSClv/zFNTBrLmMH8rO7Kwn19o9zUxD82NoHF9sIC0jMTtQJbNq8zjr
+         bqNyse9mrq+UqwNkWsLTh2VPamKUjGO+8gxSKFFLK2NuyAzw9/d+MRDU+IHwLGr22f
+         HhDeSXZ/8CWEq6n56vqgeVLqTtDPCxX1XG94yD/RPMQvliR4OmLsB2gslL4l0fcg4K
+         CcdR2VMZBGq40DixURuGme6ZeiDJXIr8ATPOWV3twj7h3/N0+WMesDnqOzVCdMmkqM
+         WxA2nUa58Lq7Q==
+Date:   Sat, 18 Jul 2020 11:38:53 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Scott Wood <scottwood@freescale.com>
+        Scott Wood <scottwood@freescale.com>,
+        "Johnson CH Chen (=?UTF-8?B?6Zmz5pit5Yuz?=)" 
+        <JohnsonCH.Chen@moxa.com>
+Subject: Re: linux-next: Tree for Jul 17 (drivers/rtc/rtc-ds1374.o)
+Message-ID: <20200718113853.6bd63897@canb.auug.org.au>
+In-Reply-To: <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
 References: <20200717214036.67fa5379@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
-Date:   Fri, 17 Jul 2020 09:49:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        <d36fac01-2a7b-c3f1-84ef-3a1560d18790@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20200717214036.67fa5379@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 7/17/20 4:40 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20200716:
-> 
-> New tree: init
-> Changed tree: dmi (from quilt to git)
-> 
-> My fixes tree contains:
-> 
->   dbf24e30ce2e ("device_cgroup: Fix RCU list debugging warning")
-> 
-> I revreted 3 commits from the powerpc tree due to reported run time
-> problems.
-> 
-> The sound tree gained a semantic conflict against the dma-mapping tree.
-> 
-> The security tree still had its build failure for which I applied a patch.
-> 
-> The tip tree still had one build failure for which I reverted a commit.
-> It also gained a conflict against the crypto tree
-> 
-> The kvm tree gained a conflict and a semantic conflict against the
-> tip tree.
-> 
-> The dmaengine tree gained conflicts against the wireless-drivers-next
-> and Linus' trees.
-> 
-> The pinctrl tree gained a build failure so I used the version from
-> next-20200716.
-> 
-> The set_fs tree gained a conflict against the powerpc tree.
-> 
-> The init tree gained a conflict against the block tre.
-> 
-> The akpm-current tree gained conflicts against the crypto and tip trees.
-> It also gained a build failure for which I applied a patch.
-> 
-> Non-merge commits (relative to Linus' tree): 8001
->  8717 files changed, 441636 insertions(+), 169176 deletions(-)
-> 
-> ----------------------------------------------------------------------------
-> 
-> I have created today's linux-next tree at
-> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> are tracking the linux-next tree using git, you should not use "git pull"
-> to do so as that will try to merge the new linux-next release with the
-> old one.  You should use "git fetch" and checkout or reset to the new
-> master.
-> 
-> You can see which trees have been included by looking in the Next/Trees
-> file in the source.  There are also quilt-import.log and merge.log
-> files in the Next directory.  Between each merge, the tree was built
-> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> multi_v7_defconfig for arm and a native build of tools/perf. After
-> the final fixups (if any), I do an x86_64 modules_install followed by
-> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> kvm enabled).
-> 
-> Below is a summary of the state of the merge.
-> 
-> I am currently merging 325 trees (counting Linus' and 83 trees of bug
-> fix patches pending for the current merge release).
-> 
-> Stats about the size of the tree over time can be seen at
-> http://neuling.org/linux-next-size.html .
-> 
-> Status of my local build tests will be at
-> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> advice about cross compilers/configs that work, we are always open to add
-> more builds.
-> 
-> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> Gortmaker for triage and bug fixes.
-> 
+--Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on x86_64:
-# CONFIG_WATCHDOG is not set
+Hi Randy,
 
-ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
-rtc-ds1374.c:(.text+0x736): undefined reference to `watchdog_init_timeout'
-ld: rtc-ds1374.c:(.text+0x77e): undefined reference to `devm_watchdog_register_device'
+[Please trim your emails a bit more, thanks]
 
+On Fri, 17 Jul 2020 09:49:05 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
+> on x86_64:
+> # CONFIG_WATCHDOG is not set
+>=20
+> ld: drivers/rtc/rtc-ds1374.o: in function `ds1374_probe':
+> rtc-ds1374.c:(.text+0x736): undefined reference to `watchdog_init_timeout'
+> ld: rtc-ds1374.c:(.text+0x77e): undefined reference to `devm_watchdog_reg=
+ister_device'
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Caused by commit
+
+  d3de4beb14a8 ("rtc: ds1374: wdt: Use watchdog core for watchdog part")
+
+from the rtc tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8SUq0ACgkQAVBC80lX
+0GwmYQf/b9MIx545+4QiU0BgJ3WpM57kY2Ui95nGJ56BI82/pKDGVZA1N4GX+Bze
+TOR+tDoPr1HKOp5R+7dgkLbOMHGbFWpy5AEREjlEjauZHNH+TSvYcnb6F9evHSIX
+8V1SvbtGv1vNwDXkWgvqjwf63fV4fY6e5cs6Ppe/30a/PhOFepdf/ou6vmp0eIDL
+5wvFqhRDY7ovZCgSIRHJYiToCHd07K9CsvnsWQWITweReVC/Xs1Ri0cpTxbtXiQn
+3oHJCUC3s7WbH71RZMWiP4IhXOQ8p9BGyOyEIsck0FD305FwRR4ZMnNEjdHan3qX
+7Edp8erFhl/N7RpzXYj5l2BBDVP+dw==
+=fykx
+-----END PGP SIGNATURE-----
+
+--Sig_/k2IUwGeBI7c=_Pi1cUnbtWZ--
