@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 120AF235733
-	for <lists+linux-rtc@lfdr.de>; Sun,  2 Aug 2020 15:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B95239DDE
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Aug 2020 05:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgHBNvA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 2 Aug 2020 09:51:00 -0400
-Received: from m12-15.163.com ([220.181.12.15]:34301 "EHLO m12-15.163.com"
+        id S1726150AbgHCDjl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 2 Aug 2020 23:39:41 -0400
+Received: from m12-12.163.com ([220.181.12.12]:52209 "EHLO m12-12.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727108AbgHBNu7 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 2 Aug 2020 09:50:59 -0400
-X-Greylist: delayed 922 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Aug 2020 09:50:53 EDT
+        id S1725820AbgHCDjk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 2 Aug 2020 23:39:40 -0400
+X-Greylist: delayed 935 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Aug 2020 23:39:37 EDT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=+ShfK
-        DomNN2s+qqsQ0CQGRdmi9HK6wq+fW2+8HB1wYY=; b=k2eykX5ug1a9am0J+1pBE
-        lTtuS8X+4ZBWYOLf86Nf+Djbwa118Gw3qdHKavcqssbdU+Uq2xT5lVVutiU1naAV
-        3sEhXK4CVAYvmE9g61mzIzv0fvVnBP8SnMBeEYUTS2Tpotce60c5Y6Xcotnp3bEY
-        Q4PBEDH2i7UPrDjNgvdaqM=
-Received: from [192.168.1.6] (unknown [120.204.166.56])
-        by smtp11 (Coremail) with SMTP id D8CowAA3K6MMwSZfDXulDw--.55911S2;
-        Sun, 02 Aug 2020 21:35:09 +0800 (CST)
+        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=RXW0q
+        5HGAPL9lZFOmE/uLbJyaSyjIysQKTRjLLWzOa0=; b=f9laFjhFtK1GNqCQuih0G
+        Y9yLyP57akR1wnh4lv2gaatp2fGjcGRBOG4uz1KI2yWGXTF3dHty+EmUxM0O4rKj
+        HuLHYZk0q7KAJMb1XX6F1ytPlTGxyPLFtTR7Sfm1dJ6SVTto2rIQrImfHcd1DqST
+        w9jmViDIrtoOXJ6vXhdlD4=
+Received: from [192.168.1.166] (unknown [58.33.79.51])
+        by smtp8 (Coremail) with SMTP id DMCowABXX8N4fydfGnHyGw--.7231S2;
+        Mon, 03 Aug 2020 11:07:37 +0800 (CST)
 Subject: Re: [PATCH] rtc: interface^ 1969-12-31T23:59:59 is set as rtc_time if
  rtc_time is invalid in __rtc_read_time
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -30,27 +30,52 @@ References: <20200801112007.2148-1-von81@163.com>
  <a83510fa-54be-8dc1-8ec1-b2957346e402@163.com>
  <20200802130439.GF3679@piout.net>
 From:   Grant Feng <von81@163.com>
-Message-ID: <6775e458-d563-5e2a-91ee-9b6e96ab965c@163.com>
-Date:   Sun, 2 Aug 2020 21:35:07 +0800
+Message-ID: <cafe8292-4ed6-6839-b5ea-20ae98bb70f9@163.com>
+Date:   Mon, 3 Aug 2020 11:07:34 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.1.0
 MIME-Version: 1.0
 In-Reply-To: <20200802130439.GF3679@piout.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowAA3K6MMwSZfDXulDw--.55911S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF18Ary7Xr4fAF1fZF13urg_yoW8uw1rp3
-        yUKanFvFWDt3y8ZFnrtw18Xa4rK347W3Z8Ar9Yy3sFyryDXryxGFZ3WrsIg3yDJw1fAwn0
-        v3ykWF4fAFyDuaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j_jjgUUUUU=
-X-Originating-IP: [120.204.166.56]
-X-CM-SenderInfo: xyrqmii6rwjhhfrp/xtbBLQx0OlziY7htqgAAsN
+X-CM-TRANSID: DMCowABXX8N4fydfGnHyGw--.7231S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4xWw4kAFW7Jw1UtFW5KFg_yoW5Ww1rpa
+        y5KanFvFyDt3y8Zrnrtr1kXa4Fg347Wa15Ar95t3y2yr1UXryxGFZ3WrnrW34kA3s3AwnI
+        yw4kWF4fAFyDuaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bT1vsUUUUU=
+X-Originating-IP: [58.33.79.51]
+X-CM-SenderInfo: xyrqmii6rwjhhfrp/1tbiRBl1OlSIgYma5AAAs4
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Thank you for explaining that.
+Thank you again for your patience to explain.
+I get the log and now I get it.
+
+commit 812318a094d0715194d9f686b22ee67e7dc59d93
+Author: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Date:   Wed Feb 21 11:44:26 2018 +0100
+
+     rtc: cmos: let the core handle invalid time
+
+     Setting the rtc to a valid time when the time is invalid is a bad 
+practice,
+     because then userspace doesn't know it shouldn't trust the RTC.
+
+     Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
+then you removed the following code fragment in "drivers/rtc/rtc-cmos.c":
+
+-       cmos_read_time(&pdev->dev, &time);
+-       ret = rtc_valid_tm(&time);
+-       if (ret) {
+-               struct rtc_time def_time = {
+-                       .tm_year = 1,
+-                       .tm_mday = 1,
+-               };
+-               cmos_set_time(&pdev->dev, &def_time);
+-       }
 
 
 On 2020-08-02 21:04, Alexandre Belloni wrote:
