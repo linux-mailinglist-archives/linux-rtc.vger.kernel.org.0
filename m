@@ -2,124 +2,178 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B95239DDE
-	for <lists+linux-rtc@lfdr.de>; Mon,  3 Aug 2020 05:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F328923B45B
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Aug 2020 07:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbgHCDjl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 2 Aug 2020 23:39:41 -0400
-Received: from m12-12.163.com ([220.181.12.12]:52209 "EHLO m12-12.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgHCDjk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 2 Aug 2020 23:39:40 -0400
-X-Greylist: delayed 935 seconds by postgrey-1.27 at vger.kernel.org; Sun, 02 Aug 2020 23:39:37 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Subject:From:Message-ID:Date:MIME-Version; bh=RXW0q
-        5HGAPL9lZFOmE/uLbJyaSyjIysQKTRjLLWzOa0=; b=f9laFjhFtK1GNqCQuih0G
-        Y9yLyP57akR1wnh4lv2gaatp2fGjcGRBOG4uz1KI2yWGXTF3dHty+EmUxM0O4rKj
-        HuLHYZk0q7KAJMb1XX6F1ytPlTGxyPLFtTR7Sfm1dJ6SVTto2rIQrImfHcd1DqST
-        w9jmViDIrtoOXJ6vXhdlD4=
-Received: from [192.168.1.166] (unknown [58.33.79.51])
-        by smtp8 (Coremail) with SMTP id DMCowABXX8N4fydfGnHyGw--.7231S2;
-        Mon, 03 Aug 2020 11:07:37 +0800 (CST)
-Subject: Re: [PATCH] rtc: interface^ 1969-12-31T23:59:59 is set as rtc_time if
- rtc_time is invalid in __rtc_read_time
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org
-References: <20200801112007.2148-1-von81@163.com>
- <20200801132813.GE3679@piout.net>
- <a83510fa-54be-8dc1-8ec1-b2957346e402@163.com>
- <20200802130439.GF3679@piout.net>
-From:   Grant Feng <von81@163.com>
-Message-ID: <cafe8292-4ed6-6839-b5ea-20ae98bb70f9@163.com>
-Date:   Mon, 3 Aug 2020 11:07:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.1.0
+        id S1729067AbgHDFSK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 4 Aug 2020 01:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726000AbgHDFSI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Aug 2020 01:18:08 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A56BC06174A
+        for <linux-rtc@vger.kernel.org>; Mon,  3 Aug 2020 22:18:07 -0700 (PDT)
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id D31DB891B1;
+        Tue,  4 Aug 2020 17:18:02 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1596518282;
+        bh=zfP6/sULj//NkhxeKY3miXAqSNhqQ7vcIbwQEGAnxsI=;
+        h=From:To:Cc:Subject:Date;
+        b=P7CesnaAw5GuaaeryCdRqBDPv30qaqyxUihnGTchvgetugrC0eL3ZuDhy6+L0A2/d
+         nOYJaVOz7ZuSvUWtf30cDb2ijbF8P9cCX5bOENx1iH+4YvrxEWBH8uT6Tickwe0URJ
+         W6vonvs3HefW1y0VkkdX+plBqC9CnaPIpvJwAD2jBtq61EpnT57U4UE7yb0YpJ4W7r
+         1XIUnZSwQ0jWzn/eyjU6VB1W4NaxpIbU9KM3tFDE33V+Q7/4/mTQ3VZa5NrNyk/REc
+         eFAH+NOOhTjfjdcHByf6qzz6G5dspEAqM7nzLsOt+3Ro6nsWrP4kIcugqYGSYHp/0q
+         dD5uR3tbLFMgQ==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f28ef860000>; Tue, 04 Aug 2020 17:18:03 +1200
+Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
+        by smtp (Postfix) with ESMTP id 4CFB313EEBA;
+        Tue,  4 Aug 2020 17:17:57 +1200 (NZST)
+Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
+        id 9416434108A; Tue,  4 Aug 2020 17:17:57 +1200 (NZST)
+From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Subject: [PATCH] RTC: Implement pretimeout watchdog for DS1307
+Date:   Tue,  4 Aug 2020 17:17:43 +1200
+Message-Id: <20200804051743.19115-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200802130439.GF3679@piout.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMCowABXX8N4fydfGnHyGw--.7231S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4xWw4kAFW7Jw1UtFW5KFg_yoW5Ww1rpa
-        y5KanFvFyDt3y8Zrnrtr1kXa4Fg347Wa15Ar95t3y2yr1UXryxGFZ3WrnrW34kA3s3AwnI
-        yw4kWF4fAFyDuaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bT1vsUUUUU=
-X-Originating-IP: [58.33.79.51]
-X-CM-SenderInfo: xyrqmii6rwjhhfrp/1tbiRBl1OlSIgYma5AAAs4
+Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Thank you again for your patience to explain.
-I get the log and now I get it.
+If the hardware watchdog in the clock chip simply pulls the reset line
+of the CPU, then there is no chance to write a stack trace to help
+determine what may have been blocking the CPU.
 
-commit 812318a094d0715194d9f686b22ee67e7dc59d93
-Author: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date:   Wed Feb 21 11:44:26 2018 +0100
+This patch adds a pretimeout to the watchdog, which, if enabled, sets
+a timer to go off before the hardware watchdog kicks in, and calls
+the standard pretimeout function, which can (for example) call panic.
 
-     rtc: cmos: let the core handle invalid time
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+---
+ drivers/rtc/rtc-ds1307.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-     Setting the rtc to a valid time when the time is invalid is a bad 
-practice,
-     because then userspace doesn't know it shouldn't trust the RTC.
-
-     Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-then you removed the following code fragment in "drivers/rtc/rtc-cmos.c":
-
--       cmos_read_time(&pdev->dev, &time);
--       ret = rtc_valid_tm(&time);
--       if (ret) {
--               struct rtc_time def_time = {
--                       .tm_year = 1,
--                       .tm_mday = 1,
--               };
--               cmos_set_time(&pdev->dev, &def_time);
--       }
-
-
-On 2020-08-02 21:04, Alexandre Belloni wrote:
-> On 02/08/2020 14:51:41+0800, Grant Feng wrote:
->> On 2020-08-01 21:28, Alexandre Belloni wrote:
->>> On 01/08/2020 19:20:07+0800, Grant Feng wrote:
->>>> 1969-12-31T23:59:59 is an error more clear than Invalid argument
->>> Definitively not, 1969-12-31T23:59:59 is a valid date and should not be
->>> returned when it is known the current date is not set in the RTC.
->> 'rtc_valid_tm' is used to check rtc_time and 1969-12-31T23:59:59 is invalid.
->> when the RTC clock is not set, some rtc devices always return '0' or almost
->> random data, and different rtc devices may give different return data.
->> so, I think, it's usful to return a default date when the current date is
->> not set in the RTC.
-> You are not solving the issue you mention here. If the RTC doesn't know
-> whether the date/time is invalid and the core think it is valid, then
-> your code will not run.
->
->>>> For example, when the RTC clock is not set, it will print a kernel
->>>> error log every time someone tries to read the clock:
->>>>           ~ # hwclock -r
->>>>           hwclock: RTC_RD_TIME: Invalid argument
->>>>
->>>> It's clear and easy to understand what happened if print
->>>> 1969-12-31T23:59:59 in this situation：
->>>>           ~ # hwclock -r
->>>>           Wed Dec 31 23:59:59 1969  0.000000 seconds
->>>>
->>> How do you know this is an error an not what is actually set on the RTC?
->> 'rtc_valid_tm' will check rtc_time when someone set the RTC, the time
->> should not be earlier than 1970-1-1T00:00:00. so 1969-12-31T23:59:59
->> can not be actually set on the RTC.
->>      When someone get
->> ~ # hwclock -r
->> Wed Dec 31 23:59:59 1969  0.000000 seconds
->>      he knows: the RTC time doesn't match my watch, change it now.
->> but still lots of people don't know what happened if they see
->> ~ # hwclock -r
->> hwclock: RTC_RD_TIME: Invalid argument
->>
-> This makes userspace checking for errors way worse. Think about it, first
-> userspace will need to check for an error when calling the ioctl then it
-> will have to check the time and consider a vlid date invalid. Seriously,
-> if hwclock doesn't do what you want, you can either patch it or use
-> another tool.
->
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 49702942bb08..647f8659d0bd 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -23,6 +23,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+ #include <linux/watchdog.h>
++#include <linux/timer.h>
+=20
+ /*
+  * We can't determine type by probing, but if we expect pre-Linux code
+@@ -174,6 +175,10 @@ struct ds1307 {
+ #ifdef CONFIG_COMMON_CLK
+ 	struct clk_hw		clks[2];
+ #endif
++#ifdef CONFIG_WATCHDOG_CORE
++	struct timer_list	soft_timer;
++	struct watchdog_device	*wdt;
++#endif
+ };
+=20
+ struct chip_desc {
+@@ -863,12 +868,34 @@ static int m41txx_rtc_set_offset(struct device *dev=
+, long offset)
+ }
+=20
+ #ifdef CONFIG_WATCHDOG_CORE
++static void ds1388_soft_wdt_expire(struct timer_list *soft_timer)
++{
++	struct ds1307 *ds1307 =3D container_of(soft_timer, struct ds1307, soft_=
+timer);
++
++	watchdog_notify_pretimeout(ds1307->wdt);
++}
++
++static void ds1388_soft_timer_set(struct watchdog_device *wdt_dev)
++{
++	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
++	int soft_timeout;
++
++	if (wdt_dev->pretimeout > 0) {
++		soft_timeout =3D wdt_dev->timeout - wdt_dev->pretimeout;
++		mod_timer(&ds1307->soft_timer, jiffies + soft_timeout * HZ);
++	} else {
++		del_timer(&ds1307->soft_timer);
++	}
++}
++
+ static int ds1388_wdt_start(struct watchdog_device *wdt_dev)
+ {
+ 	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
+ 	u8 regs[2];
+ 	int ret;
+=20
++	ds1388_soft_timer_set(wdt_dev);
++
+ 	ret =3D regmap_update_bits(ds1307->regmap, DS1388_REG_FLAG,
+ 				 DS1388_BIT_WF, 0);
+ 	if (ret)
+@@ -900,6 +927,7 @@ static int ds1388_wdt_stop(struct watchdog_device *wd=
+t_dev)
+ {
+ 	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
+=20
++	del_timer(&ds1307->soft_timer);
+ 	return regmap_update_bits(ds1307->regmap, DS1388_REG_CONTROL,
+ 				  DS1388_BIT_WDE | DS1388_BIT_RST, 0);
+ }
+@@ -909,6 +937,7 @@ static int ds1388_wdt_ping(struct watchdog_device *wd=
+t_dev)
+ 	struct ds1307 *ds1307 =3D watchdog_get_drvdata(wdt_dev);
+ 	u8 regs[2];
+=20
++	ds1388_soft_timer_set(wdt_dev);
+ 	return regmap_bulk_read(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, regs,
+ 				sizeof(regs));
+ }
+@@ -923,6 +952,7 @@ static int ds1388_wdt_set_timeout(struct watchdog_dev=
+ice *wdt_dev,
+ 	regs[0] =3D 0;
+ 	regs[1] =3D bin2bcd(wdt_dev->timeout);
+=20
++	ds1388_soft_timer_set(wdt_dev);
+ 	return regmap_bulk_write(ds1307->regmap, DS1388_REG_WDOG_HUN_SECS, regs=
+,
+ 				 sizeof(regs));
+ }
+@@ -1652,7 +1682,8 @@ static void ds1307_clks_register(struct ds1307 *ds1=
+307)
+=20
+ #ifdef CONFIG_WATCHDOG_CORE
+ static const struct watchdog_info ds1388_wdt_info =3D {
+-	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
++	.options =3D WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
++		   WDIOF_MAGICCLOSE | WDIOF_PRETIMEOUT,
+ 	.identity =3D "DS1388 watchdog",
+ };
+=20
+@@ -1681,6 +1712,8 @@ static void ds1307_wdt_register(struct ds1307 *ds13=
+07)
+ 	wdt->timeout =3D 99;
+ 	wdt->max_timeout =3D 99;
+ 	wdt->min_timeout =3D 1;
++	ds1307->wdt =3D wdt;
++	timer_setup(&ds1307->soft_timer, ds1388_soft_wdt_expire, 0);
+=20
+ 	watchdog_init_timeout(wdt, 0, ds1307->dev);
+ 	watchdog_set_drvdata(wdt, ds1307);
+--=20
+2.28.0
 
