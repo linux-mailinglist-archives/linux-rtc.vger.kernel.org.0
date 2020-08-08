@@ -2,56 +2,40 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865C123F642
-	for <lists+linux-rtc@lfdr.de>; Sat,  8 Aug 2020 06:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F2E23F6D5
+	for <lists+linux-rtc@lfdr.de>; Sat,  8 Aug 2020 09:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbgHHEHP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 8 Aug 2020 00:07:15 -0400
-Received: from [125.140.134.231] ([125.140.134.231]:50104 "EHLO
+        id S1725853AbgHHH3z convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Sat, 8 Aug 2020 03:29:55 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:58336 "EHLO
         WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725267AbgHHEHP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 8 Aug 2020 00:07:15 -0400
-Received: from User ([185.191.231.247]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
-         Sat, 8 Aug 2020 13:02:22 +0900
-Reply-To: <williiamrichard2999@yahoo.com>
-From:   "williams richard" <richardwilliamsrichard355@gmail.com>
-Subject: INVESTMENT PARTNER
-Date:   Fri, 7 Aug 2020 21:02:29 -0700
+        with ESMTP id S1725764AbgHHH3z (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 8 Aug 2020 03:29:55 -0400
+Received: from [185.191.231.247] ([185.191.231.247]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Sat, 8 Aug 2020 16:29:44 +0900
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <WIN-DAONO245HJFTRhl00aec379@WIN-DAONO245HJF>
-X-OriginalArrivalTime: 08 Aug 2020 04:02:22.0806 (UTC) FILETIME=[B8161760:01D66D38]
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: INVESTMENT
+To:     linux-rtc@vger.kernel.org
+From:   campbellclark016@gmail.com
+Date:   Sat, 08 Aug 2020 00:29:50 -0700
+Reply-To: campbell.clark24@yahoo.com
+Message-ID: <WIN-DAONO245HJFK5Ph00af18f5@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 08 Aug 2020 07:29:44.0945 (UTC) FILETIME=[B02DD610:01D66D55]
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Sir/Madam
+
+Good day,
+
+ You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client. The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days. The total value of the bond is 100 million pounds sterling, in a million pound denominations. If you can handle this, do contact me at your earliest convenience via my email campbell.clark24@yahoo.com So we can discuss the finer details
 
 
-I work as an agent to some Investors. Do you need a business loan or
-funds for a business idea or want to expand but need huge funding? We
-are expanding our investment presence by granting debt loan to fund
-viable and lucrative projects. If you have any project that needs
-funding, kindly revert to me with your business plan and if we find
-your business to be worthy of investment, you will be promptly
-contacted and both parties will meet face to face and have a
-round-table meeting together.
-
-Good documentation will be carried out between you and the Investor
-before putting down his funds.
-
-Regards
+Thank you
 
 
-
-williams richard 
-
-via  williiamrichard2999@yahoo.com
+Mr Campbell Clark
