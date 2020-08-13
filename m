@@ -2,138 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD7F243890
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Aug 2020 12:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC57243935
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Aug 2020 13:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbgHMKbg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 13 Aug 2020 06:31:36 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Aug 2020 06:31:35 -0400
-Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20200812203618.2656699-1-robh@kernel.org>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
-Date:   Thu, 13 Aug 2020 12:31:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+        id S1726249AbgHMLQk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 13 Aug 2020 07:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbgHMLQk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Aug 2020 07:16:40 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF52C061757
+        for <linux-rtc@vger.kernel.org>; Thu, 13 Aug 2020 04:16:39 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id k13so2470797plk.13
+        for <linux-rtc@vger.kernel.org>; Thu, 13 Aug 2020 04:16:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=LyVunrfnEItB+vDQ3FaJOfAC5LEvc4r9beaYcx2gG0w=;
+        b=ey719sZnGwm8SdppzE8aE97WOqSouKD+bRw9ir4kW5jLHESXaV7x2WLVyWfK/FCMnl
+         I6elWCfkxvwddWk14nJz867E/uNi5tPtNJZzHNW3g8MYrL2mVN5n9RuJtq2rsTgjOm5r
+         uGdxSoDRNz325gCC7+rYLCfHo2d9XbR2whFISvfONTeX3ij7c9kzGOuEcBsvbV7rXUt6
+         NvfEZLkyYglTlJ46gJVmJLW2vBKzAF+rlnSH/udd5/7pyS4iJP1HJ+s/OOrKaKRUZQwN
+         jm1fpTYEXqZWoSKtNHH0p3XTYVK+3P+QsyZqtgjQfLEJtJxiOEdonsFdIhrEOzep7ixo
+         51cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LyVunrfnEItB+vDQ3FaJOfAC5LEvc4r9beaYcx2gG0w=;
+        b=tuNqmKal3dNZRwjdFdOVU91ep0knK1Bt5bYwTaDiR6lCZ2b3WRKUHzpzORwx+uhTPk
+         proB/Th9e9Kt0uzps4jEVKgDf0cf+i02bIT8z93gzOazLUxR1rCTFhZWSg8K5KnQ/SbY
+         kIoC0xXYijx4aVXaTciRqL8edxF3U2G8T9A9wNfnkqSCuVEOU0b/0vRWY1ArNxjy2mpA
+         gFH5QUZbZo/H+lPgdZSTu2g6rpYrP4O27IoEkL7FItmD9yb8IsWi7Ra8cc7k2OdDH+S+
+         ZiRaZO653BI+7yReS1VqJ+VjW85swmvrdRCWeppqJ2b9am7OcBA7IVqaEzrpnyS4aNG+
+         RTYA==
+X-Gm-Message-State: AOAM533N/ZmHBB7nvXP4xItpG9g/lMV0s1YNyokt/mUA//P6qIW8Dd/E
+        SNNiT68OR7qwdWcNSIURodY=
+X-Google-Smtp-Source: ABdhPJycmYirrdd958Nwtaow7mof0XVqcJK9vnmdCnc4T5qUHFlDLRq/LCyi5moVn7e3Gkx3oRELiw==
+X-Received: by 2002:a17:90a:8589:: with SMTP id m9mr4664652pjn.109.1597317399003;
+        Thu, 13 Aug 2020 04:16:39 -0700 (PDT)
+Received: from localhost.localdomain ([223.190.42.244])
+        by smtp.gmail.com with ESMTPSA id e29sm5689965pfj.92.2020.08.13.04.16.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Aug 2020 04:16:38 -0700 (PDT)
+From:   Amit Singh Tomar <amittomer25@gmail.com>
+To:     andre.przywara@arm.com, linus.walleij@linaro.org,
+        alexandre.belloni@bootlin.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Amit Singh Tomar <amittomer25@gmail.com>
+Subject: [PATCH] rtc: pl031: enable rtc alarm interrupt again
+Date:   Thu, 13 Aug 2020 16:44:28 +0530
+Message-Id: <1597317268-19537-1-git-send-email-amittomer25@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Rob,
+After commit c8ff5841a90b ("rtc: pl031: switch to rtc_time64_to_tm/
+rtc_tm_to_time64"), it has been observed the rtc alarm interrupt is
+no more registered, and due to this waking up the system
+(using rtc alarm interrupt) from suspend state is no longer possible.
 
-On 12/08/20 22:36, Rob Herring wrote:
-> Clean-up incorrect indentation, extra spaces, long lines, and missing
-> EOF newline in schema files. Most of the clean-ups are for list
-> indentation which should always be 2 spaces more than the preceding
-> keyword.
-> 
-> Found with yamllint (which I plan to integrate into the checks).
+Besides this, we get broken output from "hwclock".
 
-[...]
+root@localhost:~# hwclock
+hwclock: select() to /dev/rtc to wait for clock tick timed out: No such file or directory
 
-> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> index 3d4e1685cc55..28c6461b9a9a 100644
-> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> @@ -95,10 +95,10 @@ allOf:
->        # Devices without builtin crystal
->        properties:
->          clock-names:
-> -            minItems: 1
-> -            maxItems: 2
-> -            items:
-> -              enum: [ xin, clkin ]
-> +          minItems: 1
-> +          maxItems: 2
-> +          items:
-> +            enum: [ xin, clkin ]
->          clocks:
->            minItems: 1
->            maxItems: 2
+This is due to the fact that call to pl031_alarm_irq_enable(dev, alarm->enabled)
+is removed (from pl031_set_alarm()) in commit c8ff5841a90b, and alarm interrupt
+never gets enabled.
 
-Thanks for noticing, LGTM.
+This commit fixes it by re-introduces the missing
+pl031_alarm_irq_enable(dev, alarm->enabled).
 
-[...]
+Fixes: c8ff5841a90b ("rtc: pl031: switch to rtc_time64_to_tm/rtc_tm_to_time64")
 
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> index d7dac16a3960..36dc7b56a453 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> @@ -33,8 +33,8 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->  
->    touchscreen-min-pressure:
-> -    description: minimum pressure on the touchscreen to be achieved in order for the
-> -                 touchscreen driver to report a touch event.
-> +    description: minimum pressure on the touchscreen to be achieved in order
-> +      for the touchscreen driver to report a touch event.
+Signed-off-by: Amit Singh Tomar <amittomer25@gmail.com>
+---
+This patch is tested on QEMU ARM64 TCG guest
 
-Out of personal taste, I find the original layout more pleasant and
-readable. This third option is also good, especially for long descriptions:
+Without this patch:
+root@localhost:~# echo +10 > /sys/class/rtc/rtc0/wakealarm && sleep 10 && cat /proc/interrupts | grep pl031
+39:          0          0     GICv2  34 Level     rtc-pl031
 
-  description:
-    minimum pressure on the touchscreen to be achieved in order for the
-    touchscreen driver to report a touch event.
+With this patch:
+root@localhost:~# echo +10 > /sys/class/rtc/rtc0/wakealarm && sleep 10 && cat /proc/interrupts | grep pl031
+39:          1          0     GICv2  34 Level     rtc-pl031
 
-At first glance yamllint seems to support exactly these two by default:
+root@localhost:~# hwclock 
+Thu Aug 13 11:00:06 2020  -1.009351 seconds
 
-> With indentation: {spaces: 4, check-multi-line-strings: true}
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal:
->     Je vous écris une longue lettre parce que
->     je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->                je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would FAIL:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->   je n'ai pas le temps d'en écrire une courte.
-> 
-(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
+root@localhost:~# echo +30 > /sys/class/rtc/rtc0/wakealarm
+root@localhost:~# echo -n mem > /sys/power/state
+root@localhost:~# hwclock -r
+Thu Aug 13 08:59:14 2020  -1.010357 seconds
 
+---
+ drivers/rtc/rtc-pl031.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/rtc/rtc-pl031.c b/drivers/rtc/rtc-pl031.c
+index 40d7450a1ce4..c6b89273feba 100644
+--- a/drivers/rtc/rtc-pl031.c
++++ b/drivers/rtc/rtc-pl031.c
+@@ -275,6 +275,7 @@ static int pl031_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	struct pl031_local *ldata = dev_get_drvdata(dev);
+ 
+ 	writel(rtc_tm_to_time64(&alarm->time), ldata->base + RTC_MR);
++	pl031_alarm_irq_enable(dev, alarm->enabled);
+ 
+ 	return 0;
+ }
 -- 
-Luca
+2.7.4
 
