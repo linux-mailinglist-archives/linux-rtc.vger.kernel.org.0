@@ -2,96 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A60245823
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Aug 2020 16:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAF9245A27
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Aug 2020 01:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729487AbgHPOcC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 16 Aug 2020 10:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgHPObJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 16 Aug 2020 10:31:09 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FBC0612EC
-        for <linux-rtc@vger.kernel.org>; Sun, 16 Aug 2020 07:28:40 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id k8so11872609wma.2
-        for <linux-rtc@vger.kernel.org>; Sun, 16 Aug 2020 07:28:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=NAKDDu3zYGlp6/1rTFA3zLXzfLNUWElMFpld1DGXTqZ3f2C1G5vMMGgQBtzYdv61gR
-         j0gW2VjYzcAEQEK9JcrA+yGSHFEXNhE9RNkaz3uxkanP37gacJrIVytgT7/c7zGkA2Dy
-         XJB3L8ToVDoWAD9Rvm7U849RIrxncLk9xI9S/Uu5ZGT/cXsim2IUQmYeZsKFSBsv6kJT
-         3kDR9KLYjND6JPpx0YTAndrQaTelzP3558OkivI4ykhj79/nak1F6z80uX1/EQIXmTKV
-         I+kUa6Zt2XAbNuMItIuLndMdaWWyo32PYvWKoOywYCMLUV2UDlYdbpJ66arhF+MiPCa0
-         yMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=glnJfXeQcG/CUZzIZ/750XD4JiPWYSXn1uC2CMC4sX8X8oecIZnVjsxhG/7QSflwpe
-         IBHDGXzUBik8n+2NAHeI6qcsULZQ6BEifAgtixz9OsYhWZWP402jmK1SrK8f4AL6FwAn
-         5XBe59FB6RqM8e8Jjg+og72pdcIfbOX8Wm8AM1gMymhRrf1iGwx7W7P5SCzWg8gSqboG
-         vYOvI/4vJEIHw2RaUVssMHeKNpPKCRlPQ0LunQpw3vrTyCcr2mwBOxAXsdf3XezkfXcR
-         1/7zq0lUbuuapH8xH9dIdP+3z2CtNrWilwA7Gkj6X2R0zJvM+a8BlBVBRVLpXk/hgS+C
-         21zw==
-X-Gm-Message-State: AOAM5318T+fhEJU3hpduKryyNAAvXot4MCb4uoN/+9Gs1kYK4k9gE8kk
-        fXz/LxIMqFJ+wOJcGCt1cpER76X+dOf5b4+PUkzQmKy7wYM=
-X-Google-Smtp-Source: ABdhPJydZZ8FQlFGmrB/EDLy0Z8gH5X03F6EFXypW4K1vf8iv94WhLhI3iwPKgeJEaRZZocHWED4lUmYPOBkTFPeX+4=
-X-Received: by 2002:a1c:a1c7:: with SMTP id k190mr10461870wme.1.1597588111746;
- Sun, 16 Aug 2020 07:28:31 -0700 (PDT)
+        id S1726417AbgHPX5k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 16 Aug 2020 19:57:40 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:47188 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgHPX5j (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 16 Aug 2020 19:57:39 -0400
+Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2D25F806B6;
+        Mon, 17 Aug 2020 11:57:34 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1597622254;
+        bh=JhXIFBqKeT7URz6eflkuIZsdIt3uBksb0ispn1x1xTk=;
+        h=From:To:Cc:Subject:Date;
+        b=ZTmL/jg0TgMZmwa2D+p6g4e6h/9m7a7rOGt0jct1upuAZyQURrFJgRiPyyo1+gkR2
+         swwr67p3h6sPYiKKxzdYccDtFw6QRWxe6scq2YDg0gfHvqMEo4QKvK8mCJ0+FzPMpM
+         r4Xl5CgQtIr83Hu2/4eHLTBtZzO29/dfm3sPKRzWHqcbE0QBh7bD18GuW88O+kZVqO
+         pajI+oy0cJvjkbBAW/8CyNBV3ctIKAKqHa0jO8c3AssVwuR03f3PhaMnrQCGXZKqfI
+         IUgndDi7x0goUm8ybo6tbmeL0D6D3+zMYTLV/j4OYU90UmPt9DHubeQfyVTM1wgBDN
+         1SDBODP89HZ6Q==
+Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
+        id <B5f39c7ee0000>; Mon, 17 Aug 2020 11:57:34 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.20])
+        by smtp (Postfix) with ESMTP id 6959113ED33;
+        Mon, 17 Aug 2020 11:57:33 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id F365A28005D; Mon, 17 Aug 2020 11:57:33 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH] rtc: ds1307: Ensure oscillator is enabled for DS1388
+Date:   Mon, 17 Aug 2020 11:57:31 +1200
+Message-Id: <20200816235731.21071-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Received: by 2002:a5d:6cd3:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:28:30
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <confianzayrentabilidad@gmail.com>
-Date:   Sun, 16 Aug 2020 07:28:30 -0700
-Message-ID: <CANrrfX7wwL97G=jb--8nb9jH8oRO8T90L6NGSfg1HfnzMyyHcw@mail.gmail.com>
-Subject: Hello, Please
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+x-atlnz-ls: pat
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Similar to the other variants the DS1388 has a bit to stop the
+oscillator to reduce the power consumption from VBAT. Ensure that the
+oscillator is enabled when the system is up.
+
+Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+ drivers/rtc/rtc-ds1307.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 54c85cdd019d..2182f4e97c0a 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -153,6 +153,7 @@ enum ds_type {
+ #define DS1388_REG_CONTROL		0x0c
+ #	define DS1388_BIT_RST		BIT(0)
+ #	define DS1388_BIT_WDE		BIT(1)
++#	define DS1388_BIT_nEOSC		BIT(7)
+=20
+ /* negative offset step is -2.034ppm */
+ #define M41TXX_NEG_OFFSET_STEP_PPB	2034
+@@ -1881,6 +1882,19 @@ static int ds1307_probe(struct i2c_client *client,
+ 				     DS1307_REG_HOUR << 4 | 0x08, hour);
+ 		}
+ 		break;
++	case ds_1388:
++		err =3D regmap_read(ds1307->regmap, DS1388_REG_CONTROL, &tmp);
++		if (err) {
++			dev_dbg(ds1307->dev, "read error %d\n", err);
++			goto exit;
++		}
++
++		/* oscillator off?  turn it on, so clock can tick. */
++		if (tmp & DS1388_BIT_nEOSC) {
++			tmp &=3D ~DS1388_BIT_nEOSC;
++			regmap_write(ds1307->regmap, DS1388_REG_CONTROL, tmp);
++		}
++		break;
+ 	default:
+ 		break;
+ 	}
 --=20
-Dear Friend,
+2.28.0
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
-
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
-
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
-
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
-
-My Regards.
-
-Mr. Scott Donald
-CEO
