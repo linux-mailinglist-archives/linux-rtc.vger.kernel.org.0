@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D59124ABE8
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Aug 2020 02:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C53F24ABA1
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Aug 2020 02:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbgHTAOR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Aug 2020 20:14:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57520 "EHLO mail.kernel.org"
+        id S1727772AbgHTACF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Aug 2020 20:02:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726840AbgHTABZ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:01:25 -0400
+        id S1727125AbgHTACD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:02:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1693208E4;
-        Thu, 20 Aug 2020 00:01:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61070207FB;
+        Thu, 20 Aug 2020 00:02:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881685;
-        bh=YDZpUwQqgrjca26/YxEEBcLteZJTIimiUUrp879M/e0=;
+        s=default; t=1597881723;
+        bh=2OGik1si2CQz73pb1R1EN1XL5l9NZWL7GYoRLCxjPrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JL3CbH34S5mnEJxV5QkfL/YJYBRLJvbtRqU0NUvtBkCL8MmjTctb+m7c8r20raEgm
-         S5/ZZf1PCMDPV5Jee5A+94DQ2eJc0OAMHlgHSNDIve/rCjmvojWUDAjBVjSm4XKPIT
-         CFdqS44yzy7eXNsWFGV+fK+KNOdg2AM80qigAs0U=
+        b=P0jd1aZ3ABMFlW1eOThTfdZhxvfRCQauZTIGAx4Y1SjgdW/YQKd00iYBZ0xvsdjZ+
+         LEy0GVp1dpV39+yaDGfCjBmvCVYBFIhoVw53TEnERBwHZPF3djENWKQxN7zumuC9Xl
+         FIG7Ro4BoWNvKEO9DNASCT4PjJhNN2B9jgKBlM/I=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Huacai Chen <chenhc@lemote.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 06/27] rtc: goldfish: Enable interrupt in set_alarm() when necessary
-Date:   Wed, 19 Aug 2020 20:00:55 -0400
-Message-Id: <20200820000116.214821-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 05/24] rtc: goldfish: Enable interrupt in set_alarm() when necessary
+Date:   Wed, 19 Aug 2020 20:01:36 -0400
+Message-Id: <20200820000155.215089-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000116.214821-1-sashal@kernel.org>
-References: <20200820000116.214821-1-sashal@kernel.org>
+In-Reply-To: <20200820000155.215089-1-sashal@kernel.org>
+References: <20200820000155.215089-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,7 +64,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
-index 27797157fcb3f..6349d2cd36805 100644
+index cb6b0ad7ec3f2..5dd92147f1680 100644
 --- a/drivers/rtc/rtc-goldfish.c
 +++ b/drivers/rtc/rtc-goldfish.c
 @@ -73,6 +73,7 @@ static int goldfish_rtc_set_alarm(struct device *dev,
