@@ -2,113 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3546224FEF8
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Aug 2020 15:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E7E2512B9
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 Aug 2020 09:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbgHXNdr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 Aug 2020 09:33:47 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52849 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727772AbgHXNci (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Aug 2020 09:32:38 -0400
-Received: from [2001:67c:670:201:5054:ff:fe8d:eefb] (helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <bst@pengutronix.de>)
-        id 1kACaF-00085w-Uz; Mon, 24 Aug 2020 15:32:24 +0200
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: add chargeable flag for rx8130
-From:   Bastian Krause <bst@pengutronix.de>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de
-References: <20200415163701.21989-1-bst@pengutronix.de>
- <20200415163701.21989-2-bst@pengutronix.de>
- <20200415185609.GP34509@piout.net>
- <3d1ecd35-fe37-02e7-74d8-3f37c2197173@pengutronix.de>
-Message-ID: <a492b6a0-b41c-a088-3ba1-f1448a074b34@pengutronix.de>
-Date:   Mon, 24 Aug 2020 15:32:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1729391AbgHYHKk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 25 Aug 2020 03:10:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729362AbgHYHKh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:10:37 -0400
+Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C35662074D;
+        Tue, 25 Aug 2020 07:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598339436;
+        bh=FWfgAaWELOpnq9T2ZqffNJ7A9qnO3QfKuIy+OMg+Nkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3Wq0A6wK+XyCx0NdyaVbiOp2OMrI3KPwj1V3RQ/NOii/Sv8XJMYsbLmiBZPZxHLr
+         0oPOxmO4ZW2uxwUXqLpZCKZIApP5fRkbLXbO9bWzKlL5g/hG5Vx0qfVAI9CAKfOqMV
+         tmM358uBo/FCFQE7cpCl+yIXbi94y/ptPbOUqIoI=
+Date:   Tue, 25 Aug 2020 09:10:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+Message-ID: <20200825071033.GB1861@ninjato>
+References: <20200812203618.2656699-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <3d1ecd35-fe37-02e7-74d8-3f37c2197173@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: bst@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JYK4vJDZwFMowpUq"
+Content-Disposition: inline
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 8/24/20 1:31 PM, Bastian Krause wrote:
-> 
-> On 4/15/20 8:56 PM, Alexandre Belloni wrote:
->> On 15/04/2020 18:37:00+0200, Bastian Krause wrote:
->>> Signed-off-by: Bastian Krause <bst@pengutronix.de>
->>> ---
->>>  Documentation/devicetree/bindings/rtc/rtc-ds1307.txt | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
->>> index 66f0a31ae9ce..987a0c9e0cd7 100644
->>> --- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
->>> +++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
->>> @@ -34,6 +34,9 @@ Optional properties:
->>>  - trickle-diode-disable : ds1339, ds1340 and ds 1388 only
->>>  	Do not use internal trickle charger diode
->>>  	Should be given if internal trickle charger diode should be disabled
->>> +- aux-voltage-chargeable: rx8130 only
->>> +	Epsons's rx8130 supports a backup battery/supercap.
->>> +	This flag tells	whether the battery/supercap is chargeable or not.
->>>  
->>
->> I think we should make that a generic property and this should supersede
->> trickle-diode-disable which is a bit wonky as I would prefer the default
->> to be disabled instead of enabled with the current semantics.
-> 
-> Alright, I think I know how to transform the RTC drivers.
-> 
-> One question about the DTs though:
-> 
-> This means we should remove "trickle-diode-disable" from all upstream
-> DTs and add "aux-voltage-chargeable" to all upstream DTs that use a RTC
-> compatible whose driver care in their probe function for
-> "trickle-diode-disable", right?
 
-Sorry, forget that.
+--JYK4vJDZwFMowpUq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Here's the situation:
+On Wed, Aug 12, 2020 at 02:36:18PM -0600, Rob Herring wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
+>=20
+> Found with yamllint (which I plan to integrate into the checks).
+>=20
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Currently there is a switch to explicitly disable charging, so the
-default is to charge. We cannot introduce another boolean switch to turn
-that the other way around, because that would change the default and
-break backwards compatibility.
+I trust you guys in figuring out the details, so for touching I2C:
 
-The only way I can think of is to introduce "aux-voltage-chargeable" not
-as a boolean switch but as an integer, without any default. If this
-property is not available, the drivers should simply do what they did
-prior to this change (look for the legacy trickle-diode-disable, use the
-default they used before).
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
-Are you okay with that?
 
-Some more context:
+--JYK4vJDZwFMowpUq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I originally tried to add a chargeable flag for rx8130. Prior to this
-patch, there was no need to set "trickle-diode-disable" for this,
-because the driver did not pass the chargeable flag to the RTC. With the
-patch the default would have been to charge as long as
-"trickle-diode-disable" is not there. So there's a change in behavior.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Bastian
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9EuWkACgkQFA3kzBSg
+KbZbPA/+MqNMzGTVXT++2afD+v/Qkum1LRbeldro+e0ewQSps4tnW/eHg9RaemYr
+BwxfsOZA+EJp0lGOnRM5/vhPMoInlSEwJSBlxtjratUScfPiR7D4ljKXGaUQv4IV
+l9cXBZuOeLnSerxdYsuGrs8M0uqe4rAc3jt/FGD4rSgawNTN1HieFaQ0vq/0I5Gi
+pyJv09alaosBuqNYc37Gqm9Ddk6xEJb8lvwrVqeS2ZGMFmfJuFlsuLKhwdgen/og
+Wik6VZEjyUHJbyZgkcwMn6rTVTnopK7E0RYmdap35Bh6MAZ3auQ4eQU2tktY3L0G
++NL/ah9FAvmPH1RAR7KmXzZxVYX2ZoWm3AJVpCIvlc9toZI5NdOwdruT+KlTLHIY
+T0vs7B3wqsrD4pHputHdDtf9iSZDB0FiTi44yJjReI72Yb47gDXXK7tOcewvq33Y
+J9dv/HeT85ER8dZ3fCssLdOsIVSE5ZGaDGjP9M4hPo5ZqM5WlMcqW13gmBsEaY3W
+quFFx4pgOXFmnO+7fCb0OIoySeTtgCMNqSwekaNsrbK8dBsFhMx62IzUwwCwL8ST
+clLrMsK81BA4v5hiU1SXC5zAJJG1W0FEpGvIuQRa5YxW8goqwIJrEuvy8jWLhg1x
+kB4BNFdQdBMg8xw0GSHGDhOZhIxgC5t/fvrbiLmqazzmbfCE1i8=
+=71f2
+-----END PGP SIGNATURE-----
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--JYK4vJDZwFMowpUq--
