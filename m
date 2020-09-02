@@ -2,66 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3034259BA2
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Sep 2020 19:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9528525B456
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Sep 2020 21:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgIARFN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Sep 2020 13:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728354AbgIAREo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Sep 2020 13:04:44 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D91C061244
-        for <linux-rtc@vger.kernel.org>; Tue,  1 Sep 2020 10:04:43 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id z25so2033266iol.10
-        for <linux-rtc@vger.kernel.org>; Tue, 01 Sep 2020 10:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=content-transfer-encoding:from:mime-version:date:subject:message-id
-         :to;
-        bh=4ht9G50SlYlr7BPTCuy+KjNotHQlLEXbSKghIYlF3TI=;
-        b=oORaDJmQPxHiuYFgNBxK2kTEoAFb+FdSxsBw5+rCWsIBm82Sq2Pdb0pvVChG0+ORAG
-         nsEFMabBfS8q+2E00bywXhzTfan0Qz8gwvys9mY2m4LFTpEuWAgT+qI75HxdbAYji5MA
-         rRR7HKJiO2BX6Sf9vFbdHox+aInog5LXNMf3wVvEgfRjJPXyRieK559Id/vw/TqRcqFc
-         4nI31qfWT8tioC+x1rULlNA3QSretq8vfZiojmIObaiFeJ7EFEw6NOxTSfArpYcrAs1R
-         xQtYjJXqFKssHm8VvcLdyoQ7j0/MpqcXOQhRQzP+k0U+CyWpR1MhDUbM9x/ANG6Vgd0P
-         5C5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version:date
-         :subject:message-id:to;
-        bh=4ht9G50SlYlr7BPTCuy+KjNotHQlLEXbSKghIYlF3TI=;
-        b=Wbf4i63YAufhXzPaJwv/rGQkaNccfpgaDa/Xhc9cdpq+dQIr5LREN9zgW6iXUI9Eh0
-         qUtEYCPRNz6I6oOmegsdC5uq3eqEDnvs3uC1VmPvYntG79NQnAjbI3iuO1xep39T3F2z
-         e11IjwQV/RUA5lq073NIM0FWEYAzriw4cKbQ+qh7g2gd3TxBG33icok7PqB6pC9+PLlo
-         RsJwU5SJvBF+3Mzkw1iT64RtBA5e8m+E21jTVncXuqaQKb06HC3dxasWJIcrVR5tL+XH
-         +9OkXkFxVIIPPCnZtyOP21igQjn1TS4FCHJuWfvnDeE66RvtK+3uN7d7vy/SKResX2Jc
-         ErmQ==
-X-Gm-Message-State: AOAM533qwt9pSI1ZS1V2ze3i1tQZahDfe0i8lOX6XOdIB4QcEKsG+qLh
-        SbTNza/+HFhcMdZldcLs6nFOiQlkCxr+Nw==
-X-Google-Smtp-Source: ABdhPJxkAafVkdV+Ap/HucMD6Q9HY3vUlHCDSBvtUz6JHCzMgoEDix7GElM1EoQiOZadY6unzUJ2Yg==
-X-Received: by 2002:a02:93ca:: with SMTP id z68mr2236272jah.3.1598979882700;
-        Tue, 01 Sep 2020 10:04:42 -0700 (PDT)
-Received: from localhost (46.sub-174-255-2.myvzw.com. [174.255.2.46])
-        by smtp.gmail.com with ESMTPSA id c7sm794578ilk.49.2020.09.01.10.04.41
-        for <linux-rtc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2020 10:04:42 -0700 (PDT)
+        id S1728181AbgIBTSl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Sep 2020 15:18:41 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:45801 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgIBTSj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Sep 2020 15:18:39 -0400
+X-Originating-IP: 90.66.108.79
+Received: from localhost (lfbn-lyo-1-1932-79.w90-66.abo.wanadoo.fr [90.66.108.79])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 187FA1C0002;
+        Wed,  2 Sep 2020 19:18:36 +0000 (UTC)
+Date:   Wed, 2 Sep 2020 21:18:36 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Bastian Krause <bst@pengutronix.de>
+Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: add chargeable flag for rx8130
+Message-ID: <20200902191836.GP3204668@piout.net>
+References: <20200415163701.21989-1-bst@pengutronix.de>
+ <20200415163701.21989-2-bst@pengutronix.de>
+ <20200415185609.GP34509@piout.net>
+ <3d1ecd35-fe37-02e7-74d8-3f37c2197173@pengutronix.de>
+ <a492b6a0-b41c-a088-3ba1-f1448a074b34@pengutronix.de>
+ <20200825153248.GH2389103@piout.net>
+ <98fa7181-3ebe-d7c3-cfac-fee841c81e15@pengutronix.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-From:   offline mix <colehargrove081803@gmail.com>
-Mime-Version: 1.0 (1.0)
-Date:   Tue, 1 Sep 2020 12:04:40 -0500
-Subject: colehargrove081803@gmail.com
-Message-Id: <1E25E227-448E-40AE-9FA7-E432C874F094@gmail.com>
-To:     linux-rtc@vger.kernel.org
-X-Mailer: iPhone Mail (18A5342e)
+Content-Disposition: inline
+In-Reply-To: <98fa7181-3ebe-d7c3-cfac-fee841c81e15@pengutronix.de>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 26/08/2020 10:13:04+0200, Bastian Krause wrote:
+> >> Are you okay with that?
+> >>
+> > 
+> > I agree boolean should be avoided in RTC drivers because we need a way
+> > to express "don't change this value".
+> 
+> Alright.
+> 
+> >> Some more context:
+> >>
+> >> I originally tried to add a chargeable flag for rx8130. Prior to this
+> >> patch, there was no need to set "trickle-diode-disable" for this,
+> >> because the driver did not pass the chargeable flag to the RTC. With the
+> >> patch the default would have been to charge as long as
+> >> "trickle-diode-disable" is not there. So there's a change in behavior.
+> >>
+> > 
+> > Yes, IIRC, my point was simply to move the documentation for
+> > aux-voltage-chargeable to the generice rtc binding documentation,
+> > Documentation/devicetree/bindings/rtc/rtc.yaml
+> > 
+> > For now, you sould keep support for trickle-diode-disable but it has to be
+> > superseded by aux-voltage-chargeable if present. Is that more clear?
+> 
+> Yes, thanks for the clarification.
+> 
+> Should I set the deprecated flag for trickle-diode-disable in the
+> dt-binding yaml?
+> 
+
+That's a good idea, yes.
 
 
-Sent from my iPhone
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
