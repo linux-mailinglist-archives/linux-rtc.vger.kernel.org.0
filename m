@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6653925DD13
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Sep 2020 17:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FE825DD20
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Sep 2020 17:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730300AbgIDPVn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 4 Sep 2020 11:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S1730898AbgIDPWg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Sep 2020 11:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730237AbgIDPVY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Sep 2020 11:21:24 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D6C061246
-        for <linux-rtc@vger.kernel.org>; Fri,  4 Sep 2020 08:21:23 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id g4so7137753wrs.5
-        for <linux-rtc@vger.kernel.org>; Fri, 04 Sep 2020 08:21:23 -0700 (PDT)
+        with ESMTP id S1730301AbgIDPV0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Sep 2020 11:21:26 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053EC061249
+        for <linux-rtc@vger.kernel.org>; Fri,  4 Sep 2020 08:21:25 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id z9so6452273wmk.1
+        for <linux-rtc@vger.kernel.org>; Fri, 04 Sep 2020 08:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=stUHoXBLhmGzCwZtEJAUKXLxs5aOWuJj0Ee8wOeFjkw=;
-        b=R5Dqco5Vp40iB/h46/HNZAv1XlB31sJ1uLGZz0PIHiNSuFyPEIvqOG0s3JiYF+lh3u
-         DurSlxoDn/IFY+Fbf5xSfktwwY5BC84nKcYoiG8OR5b1/efxzcT2XWjZAPsadyfJskzF
-         oHaVA+C2KEV7MKjlE0XUBbHp3MXCuih647KUKkedt85whqODx3C2FEopKhUim+AOuB0U
-         E5GPclZWVElCYYr+ofk7B9yjyHzhgWjKrwfgx63n+Eq18kgjNg95pQarqWmU6Xl2gCSX
-         +HnJE8kCQ4VctMsImFS8lFPAD00bcCs2JXlkAM3c5Zeqld1EIAshT8hcndkPjtrZz3TM
-         lzMg==
+        bh=4PF6iUUI6SI+SJ6z3aC7j/JhZxFAycexdCgWf22To5o=;
+        b=hG22uCLiFR7asAwpfTFSwQU1iT/gHSJGscx3xXml/kyxE1JnDfx2MImY/2H1R8hLKJ
+         KfCjg6MZKknAkIKZotyKG6V6+B4nonb97c3ZWtPawkNO8Jkk2A4zk1b4rjfuNlZFAIMP
+         7Nengc5DlafgZ1S+i4Vx+EqWWER+cB9wNIsVMWDs8lbGwmw97s+ZL173l3s2Obdzotar
+         ayKP7cRX4JqUx2ALb/DjcNiWn377sT5SR3DGB9Laa8iyUktr0lOizPQHLFHIvu6DI1kx
+         i/crp9Xnio/Y+MqlzSjqheLANh0YjRxvrEgBrOsSZkzu7pWuJiKCVnHyQ9qzaIcp66vt
+         JHtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=stUHoXBLhmGzCwZtEJAUKXLxs5aOWuJj0Ee8wOeFjkw=;
-        b=h1Y4k2rXaVu7QfLKkLopeoN46IIeHtVaCqBrJvA5YYs2WrThfCQB2qtW0DDaUiODrw
-         OVxHBKZz3jdIWkoQPmPXGVk849cwpHcS9blv+srcg0x2VRzG15aUaAA+0wEFRDtOIg8e
-         OxaaThyvnQd8BdITma0u2xBjbKLQ8TFNkiAJfD/IPDc2Jo+NBKrycJOB+EONgvIFJr8R
-         6a7TLsHEfriUHP6R2P1/KoaORKZ9kSmmvHO1XCgwg3xpwZBqyVJmiknkyqWGm/EC944r
-         MT5DW2pn+bIWXY4HDg79CTX+D/23uxjGqwp58Q+A6LtdqqcStAh1brjly1Z8eDDxnCjJ
-         0Mug==
-X-Gm-Message-State: AOAM533peq7hW0OTLcMl5/uHJnxoaeGjKUqpslhXBW61z+mlIKMYLQyt
-        +ZN21h+OuR3xHAeMkYQxEAJ/LA==
-X-Google-Smtp-Source: ABdhPJwl7Nn/2R7VILQzKg8oX0n4CU6PnnWJQYviy0/NYR2eE/0FgjwSs2ONiVU4fkwPEDEObs/jPA==
-X-Received: by 2002:adf:94c1:: with SMTP id 59mr8817819wrr.29.1599232882017;
-        Fri, 04 Sep 2020 08:21:22 -0700 (PDT)
+        bh=4PF6iUUI6SI+SJ6z3aC7j/JhZxFAycexdCgWf22To5o=;
+        b=eMLSaUZB4DuhTxfvbjk8hHLBoruMdZwNKPJf375fAyWGg0hre4SRuntsiqv6oBph9M
+         q5rZOMh0WMmjWZCu7Eqas6sfzlsycFKTQ+eOCt1vgZt/BTyyR7fpAGoJZhOfVedi6891
+         EJvEt1ATI13rzjoHC/dPoMpHs8Ol7GvGpMLCu1gRv7V8Reo2aJWAHbBZCOovS2wpYJzI
+         Zq+sRDR8yw6zauau2HnFlhRnFCt4NG8XIrkupACj1H2Dac+DixMH/rEKjdpIwKoqGI12
+         uIscGZx9sCbpNbdDOqz1ENLEymWUuHVll1EO6J6fj1bo73ZVct0OrIJ0hLd1sR974jMt
+         2YhQ==
+X-Gm-Message-State: AOAM533RoufCw5TQck6zEhZ+mh5Z4e0fVLhnlt4Si4yOSjgAFgv3L5Tk
+        HAbBu+/sps1hUX+gcGu4nSGoYQ==
+X-Google-Smtp-Source: ABdhPJzwZNrCv4oELX+wCyr/BptjE1Vzk+IEHthZyONGkq5f0OG68w9UJLc9TtP8XmHM+y68jgRZMQ==
+X-Received: by 2002:a1c:7d4d:: with SMTP id y74mr8082237wmc.73.1599232883838;
+        Fri, 04 Sep 2020 08:21:23 -0700 (PDT)
 Received: from debian-brgl.home (lfbn-nic-1-68-20.w2-15.abo.wanadoo.fr. [2.15.159.20])
-        by smtp.gmail.com with ESMTPSA id a11sm7789534wmm.18.2020.09.04.08.21.20
+        by smtp.gmail.com with ESMTPSA id a11sm7789534wmm.18.2020.09.04.08.21.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 08:21:21 -0700 (PDT)
+        Fri, 04 Sep 2020 08:21:23 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 1/8] rtc: rx8010: remove unnecessary parentheses
-Date:   Fri,  4 Sep 2020 17:21:09 +0200
-Message-Id: <20200904152116.2157-2-brgl@bgdev.pl>
+Subject: [PATCH 2/8] rtc: rx8010: consolidate local variables of the same type
+Date:   Fri,  4 Sep 2020 17:21:10 +0200
+Message-Id: <20200904152116.2157-3-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20200904152116.2157-1-brgl@bgdev.pl>
 References: <20200904152116.2157-1-brgl@bgdev.pl>
@@ -67,48 +67,79 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Remove parentheses whenever they guard a single line.
+Move local variables of the same type into a single line for better
+readability.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/rtc/rtc-rx8010.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/rtc/rtc-rx8010.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-index fe010151ec8f..2faf5357a3a5 100644
+index 2faf5357a3a5..4c790d33f589 100644
 --- a/drivers/rtc/rtc-rx8010.c
 +++ b/drivers/rtc/rtc-rx8010.c
-@@ -181,9 +181,8 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
- 		return ret;
+@@ -109,8 +109,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
+ {
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	u8 date[7];
+-	int flagreg;
+-	int err;
++	int flagreg, err;
  
  	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
--	if (flagreg < 0) {
-+	if (flagreg < 0)
- 		return flagreg;
--	}
+ 	if (flagreg < 0)
+@@ -141,8 +140,7 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
+ {
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	u8 date[7];
+-	int ctrl, flagreg;
+-	int ret;
++	int ctrl, flagreg, ret;
  
- 	if (flagreg & RX8010_FLAG_VLF)
- 		ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG,
-@@ -284,17 +283,15 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	int err;
+ 	if ((dt->tm_year < 100) || (dt->tm_year > 199))
+ 		return -EINVAL;
+@@ -250,8 +248,7 @@ static int rx8010_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	struct i2c_client *client = rx8010->client;
+ 	u8 alarmvals[3];
+-	int flagreg;
+-	int err;
++	int flagreg, err;
+ 
+ 	err = i2c_smbus_read_i2c_block_data(client, RX8010_ALMIN, 3, alarmvals);
+ 	if (err != 3)
+@@ -279,8 +276,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+ 	u8 alarmvals[3];
+-	int extreg, flagreg;
+-	int err;
++	int extreg, flagreg, err;
  
  	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
--	if (flagreg < 0) {
-+	if (flagreg < 0)
- 		return flagreg;
--	}
+ 	if (flagreg < 0)
+@@ -346,9 +342,8 @@ static int rx8010_alarm_irq_enable(struct device *dev,
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+-	int flagreg;
++	int flagreg, err;
+ 	u8 ctrl;
+-	int err;
  
- 	if (rx8010->ctrlreg & (RX8010_CTRL_AIE | RX8010_CTRL_UIE)) {
- 		rx8010->ctrlreg &= ~(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
- 		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
- 						rx8010->ctrlreg);
--		if (err < 0) {
-+		if (err < 0)
- 			return err;
--		}
- 	}
+ 	ctrl = rx8010->ctrlreg;
  
- 	flagreg &= ~RX8010_FLAG_AF;
+@@ -387,8 +382,7 @@ static int rx8010_alarm_irq_enable(struct device *dev,
+ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
+-	int tmp;
+-	int flagreg;
++	int tmp, flagreg;
+ 
+ 	switch (cmd) {
+ 	case RTC_VL_READ:
 -- 
 2.26.1
 
