@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C43A25FF40
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 18:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF80225FF48
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 18:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729868AbgIGQ34 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Sep 2020 12:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S1729873AbgIGQaI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Sep 2020 12:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729870AbgIGO2h (ORCPT
+        with ESMTP id S1729875AbgIGO2h (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Sep 2020 10:28:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421EFC061798
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6561DC06179E
         for <linux-rtc@vger.kernel.org>; Mon,  7 Sep 2020 07:27:45 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <bst@pengutronix.de>)
-        id 1kFI7U-0003nx-42; Mon, 07 Sep 2020 16:27:44 +0200
+        id 1kFI7U-0003nx-5F; Mon, 07 Sep 2020 16:27:44 +0200
 From:   Bastian Krause <bst@pengutronix.de>
 To:     linux-rtc@vger.kernel.org
 Cc:     devicetree@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     devicetree@vger.kernel.org,
         Arnaud Ebalard <arno@natisbad.org>,
         Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
         Bastian Krause <bst@pengutronix.de>
-Subject: [PATCH 4/8] rtc: ds1307: apply DS13XX_TRICKLE_CHARGER_MAGIC only conditionally
-Date:   Mon,  7 Sep 2020 16:27:23 +0200
-Message-Id: <20200907142727.26472-5-bst@pengutronix.de>
+Subject: [PATCH 5/8] rtc: ds1307: introduce requires_trickle_resistor per chip
+Date:   Mon,  7 Sep 2020 16:27:24 +0200
+Message-Id: <20200907142727.26472-6-bst@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200907142727.26472-1-bst@pengutronix.de>
 References: <20200907142727.26472-1-bst@pengutronix.de>
@@ -44,55 +44,58 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DS13XX_TRICKLE_CHARGER_MAGIC sets the trickle-charge select (TCS) bits
-(7..4). The datasheet of Maxim Integrated's DS1339 [1] for instance
-reads:
-
-"To prevent accidental enabling, only a pattern on 1010 enables the
-trickle charger. All other patterns disable the trickle charger."
-
-Since not all RTCs connected to a backup battery or supercap use these
-bits DS13XX_TRICKLE_CHARGER_MAGIC should not get applied for all charger
-setups unconditionally.
-Epson's RX8130 is such an example: Instead of TCS bits "SMPTSEL1",
-"SMPTSEL0",  "CHGEN" and "INIEN" are expected as bit 7..4.
-
-DS1339 and DS1340 are currently the only RTCs in the ds1307 driver that
-apply DS13XX_TRICKLE_CHARGER_MAGIC to their setup register value. So
-apply DS13XX_TRICKLE_CHARGER_MAGIC in do_trickle_setup_ds1339() which
-is used by both RTCs.
-
-[1] https://datasheets.maximintegrated.com/en/ds/DS1339-DS1339U.pdf
-[2] https://support.epson.biz/td/api/doc_check.php?dl=app_RX8130CE
+Make trickle-resistor-ohms optional for charging setups that do not
+require specifying ROUT bits (specifying the resistor value between Vcc
+and Vbackup). In order to allow specifying that, introduce
+requires_trickle_resistor per chip.
 
 Signed-off-by: Bastian Krause <bst@pengutronix.de>
 ---
 No previous version.
 ---
- drivers/rtc/rtc-ds1307.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-ds1307.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 54c85cdd019d..ff5242d10b21 100644
+index ff5242d10b21..7983438b677a 100644
 --- a/drivers/rtc/rtc-ds1307.c
 +++ b/drivers/rtc/rtc-ds1307.c
-@@ -507,6 +507,8 @@ static u8 do_trickle_setup_ds1339(struct ds1307 *ds1307, u32 ohms, bool diode)
- 	u8 setup = (diode) ? DS1307_TRICKLE_CHARGER_DIODE :
- 		DS1307_TRICKLE_CHARGER_NO_DIODE;
+@@ -190,6 +190,10 @@ struct chip_desc {
+ 	u16			trickle_charger_reg;
+ 	u8			(*do_trickle_setup)(struct ds1307 *, u32,
+ 						    bool);
++	/* Does the RTC require trickle-resistor-ohms to select the value of
++	 * the resistor between Vcc and Vbackup?
++	 */
++	bool			requires_trickle_resistor;
+ };
  
-+	setup |= DS13XX_TRICKLE_CHARGER_MAGIC;
-+
- 	switch (ohms) {
- 	case 250:
- 		setup |= DS1307_TRICKLE_CHARGER_250_OHM;
-@@ -1758,7 +1760,6 @@ static int ds1307_probe(struct i2c_client *client,
- 		trickle_charger_setup = pdata->trickle_charger_setup;
+ static const struct chip_desc chips[last_ds_type];
+@@ -981,6 +985,7 @@ static const struct chip_desc chips[last_ds_type] = {
+ 		.bbsqi_bit	= DS1339_BIT_BBSQI,
+ 		.trickle_charger_reg = 0x10,
+ 		.do_trickle_setup = &do_trickle_setup_ds1339,
++		.requires_trickle_resistor = true,
+ 	},
+ 	[ds_1340] = {
+ 		.century_reg	= DS1307_REG_HOUR,
+@@ -988,6 +993,7 @@ static const struct chip_desc chips[last_ds_type] = {
+ 		.century_bit	= DS1340_BIT_CENTURY,
+ 		.do_trickle_setup = &do_trickle_setup_ds1339,
+ 		.trickle_charger_reg = 0x08,
++		.requires_trickle_resistor = true,
+ 	},
+ 	[ds_1341] = {
+ 		.century_reg	= DS1307_REG_MONTH,
+@@ -1302,7 +1308,7 @@ static u8 ds1307_trickle_init(struct ds1307 *ds1307,
+ 		return 0;
  
- 	if (trickle_charger_setup && chip->trickle_charger_reg) {
--		trickle_charger_setup |= DS13XX_TRICKLE_CHARGER_MAGIC;
- 		dev_dbg(ds1307->dev,
- 			"writing trickle charger info 0x%x to 0x%x\n",
- 			trickle_charger_setup, chip->trickle_charger_reg);
+ 	if (device_property_read_u32(ds1307->dev, "trickle-resistor-ohms",
+-				     &ohms))
++				     &ohms) && chip->requires_trickle_resistor)
+ 		return 0;
+ 
+ 	if (device_property_read_bool(ds1307->dev, "trickle-diode-disable"))
 -- 
 2.28.0
 
