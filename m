@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA4625FF42
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 18:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C43A25FF40
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 18:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729878AbgIGQaF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Sep 2020 12:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S1729868AbgIGQ34 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Sep 2020 12:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729837AbgIGO2h (ORCPT
+        with ESMTP id S1729870AbgIGO2h (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Sep 2020 10:28:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A9C06179B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421EFC061798
         for <linux-rtc@vger.kernel.org>; Mon,  7 Sep 2020 07:27:45 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <bst@pengutronix.de>)
-        id 1kFI7U-0003nx-32; Mon, 07 Sep 2020 16:27:44 +0200
+        id 1kFI7U-0003nx-42; Mon, 07 Sep 2020 16:27:44 +0200
 From:   Bastian Krause <bst@pengutronix.de>
 To:     linux-rtc@vger.kernel.org
 Cc:     devicetree@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     devicetree@vger.kernel.org,
         Arnaud Ebalard <arno@natisbad.org>,
         Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
         Bastian Krause <bst@pengutronix.de>
-Subject: [PATCH 3/8] dt-bindings: rtc: ds1307: add rx8130 aux-voltage-chargeable support
-Date:   Mon,  7 Sep 2020 16:27:22 +0200
-Message-Id: <20200907142727.26472-4-bst@pengutronix.de>
+Subject: [PATCH 4/8] rtc: ds1307: apply DS13XX_TRICKLE_CHARGER_MAGIC only conditionally
+Date:   Mon,  7 Sep 2020 16:27:23 +0200
+Message-Id: <20200907142727.26472-5-bst@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200907142727.26472-1-bst@pengutronix.de>
 References: <20200907142727.26472-1-bst@pengutronix.de>
@@ -44,30 +44,55 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Epson's RX8130 was not charged before. A related patch will allow
-optional charging.
+DS13XX_TRICKLE_CHARGER_MAGIC sets the trickle-charge select (TCS) bits
+(7..4). The datasheet of Maxim Integrated's DS1339 [1] for instance
+reads:
+
+"To prevent accidental enabling, only a pattern on 1010 enables the
+trickle charger. All other patterns disable the trickle charger."
+
+Since not all RTCs connected to a backup battery or supercap use these
+bits DS13XX_TRICKLE_CHARGER_MAGIC should not get applied for all charger
+setups unconditionally.
+Epson's RX8130 is such an example: Instead of TCS bits "SMPTSEL1",
+"SMPTSEL0",  "CHGEN" and "INIEN" are expected as bit 7..4.
+
+DS1339 and DS1340 are currently the only RTCs in the ds1307 driver that
+apply DS13XX_TRICKLE_CHARGER_MAGIC to their setup register value. So
+apply DS13XX_TRICKLE_CHARGER_MAGIC in do_trickle_setup_ds1339() which
+is used by both RTCs.
+
+[1] https://datasheets.maximintegrated.com/en/ds/DS1339-DS1339U.pdf
+[2] https://support.epson.biz/td/api/doc_check.php?dl=app_RX8130CE
 
 Signed-off-by: Bastian Krause <bst@pengutronix.de>
 ---
-Previous version:
-https://lore.kernel.org/linux-rtc/20200415163701.21989-2-bst@pengutronix.de/
+No previous version.
 ---
- Documentation/devicetree/bindings/rtc/rtc-ds1307.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-ds1307.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-index 08ea9734da80..36f610bb051e 100644
---- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-+++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-@@ -31,7 +31,7 @@ Optional properties:
- 	Selected resistor for trickle charger
- 	Possible values are 250, 2000, 4000
- 	Should be given if trickle charger should be enabled
--- aux-voltage-chargeable: ds1339, ds1340 and ds1388 only
-+- aux-voltage-chargeable: ds1339, ds1340, ds1388 and rx8130 only
- 	Tells whether the battery/supercap of the RTC (if any) is
- 	chargeable or not.
- 	Possible values are 0 (not chargeable), 1 (chargeable)
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 54c85cdd019d..ff5242d10b21 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -507,6 +507,8 @@ static u8 do_trickle_setup_ds1339(struct ds1307 *ds1307, u32 ohms, bool diode)
+ 	u8 setup = (diode) ? DS1307_TRICKLE_CHARGER_DIODE :
+ 		DS1307_TRICKLE_CHARGER_NO_DIODE;
+ 
++	setup |= DS13XX_TRICKLE_CHARGER_MAGIC;
++
+ 	switch (ohms) {
+ 	case 250:
+ 		setup |= DS1307_TRICKLE_CHARGER_250_OHM;
+@@ -1758,7 +1760,6 @@ static int ds1307_probe(struct i2c_client *client,
+ 		trickle_charger_setup = pdata->trickle_charger_setup;
+ 
+ 	if (trickle_charger_setup && chip->trickle_charger_reg) {
+-		trickle_charger_setup |= DS13XX_TRICKLE_CHARGER_MAGIC;
+ 		dev_dbg(ds1307->dev,
+ 			"writing trickle charger info 0x%x to 0x%x\n",
+ 			trickle_charger_setup, chip->trickle_charger_reg);
 -- 
 2.28.0
 
