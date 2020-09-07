@@ -2,159 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7795A25E883
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Sep 2020 16:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C140625F68E
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 11:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbgIEOtg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 5 Sep 2020 10:49:36 -0400
-Received: from mout.gmx.net ([212.227.17.20]:42887 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727875AbgIEOtf (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 5 Sep 2020 10:49:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1599317302;
-        bh=IEqH3VoTRXkoCSwxpZXBM0ZvuxmxgH/x3EDZy/MG2ug=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=W0utoWUmqvO2Wd2qTBiiYg1KT/7DFNZCaZ1br1LTG0jedm7h24I8c6dIUsOPf8h/Z
-         5l3ZfMKmOEcNRy/RRKhdWWZGnSPnyuHRIlk+gMmU/W1Ai5VQRXPZc4MnF4slMpb5w9
-         GbKMrXyhMc4SiLKLFqLpwzbSAcmraVYT2440Ycvg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.151]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MxDkm-1kTvby1Z5U-00xYm9; Sat, 05
- Sep 2020 16:48:22 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
-Subject: [PATCH v2 10/10] ARM: dts: imx50-kobo-aura: Add Netronix embedded controller
-Date:   Sat,  5 Sep 2020 16:45:02 +0200
-Message-Id: <20200905144503.1067124-3-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
-References: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
+        id S1728243AbgIGJfN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Sep 2020 05:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728217AbgIGJfM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Sep 2020 05:35:12 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3E4C061574
+        for <linux-rtc@vger.kernel.org>; Mon,  7 Sep 2020 02:35:11 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id lo4so17354776ejb.8
+        for <linux-rtc@vger.kernel.org>; Mon, 07 Sep 2020 02:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zWiBkyNR4NmqF6Xi+QYxcrwWHaTtKTEGdcAvhHWhr24=;
+        b=M3VlSuGCT37L6/cEDxf/7m3TmmdEvvMXM4a1lpqs0rwejcga965t8vdzNH14IDItqh
+         Ir7QEpJVci43ovtMBpX3ZXM6m7UVmyZd/v80fFkFTbgAIrn/YagNY+pEtY+PWC2rZNfo
+         2kqc8y5qSRjdmcKl0aP1NU4rBTNy7ls3n+oqwuiSbjx1i8KLyRnwo4GesrFoQfwJCGad
+         1XN2MSLE7ETYfqeHGyJFHbSrKlJho9ay+kMalDSPl2qdFM6kDhl9Ja4+tw37SiZyMA0Y
+         OxTuOKLkz5DNaCsk36KqoxqONHJ8ebHSd3ii1c130bTueA03IJ4VXtUkR7saklfQFa/G
+         n/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zWiBkyNR4NmqF6Xi+QYxcrwWHaTtKTEGdcAvhHWhr24=;
+        b=pmeEme50SEs1oYpMFYwdf1ERG3/3XC44dHGLbgEHRbLlP7JKqSjQ9voEPEMJ3JOR9S
+         HlDuMVPYgxb8bfolIVEFpRWG/H5GOn+ZHPkySa4d06i3znDlHc8v7yJcNuyNHk8y06uu
+         j0XxIkGxfaLKUA0JVK5njB3ctv1fz+y3B1AAmatf6MRzUlEqjkmVU7YNskn8cxVWmnSh
+         3wTocQ9WZaGcv4obpl7LiVX0VcFuQkbuZi/OXUn8xWPVn9Tge8MkfC5J/D8rGDkhHeD+
+         br3kLcC1rHHAVb0Wfev4Jxv5ECMotzXfpoQYyvn5wm7nknWc+RQOB9bcvE5V3GOTLu/p
+         kAow==
+X-Gm-Message-State: AOAM531CbiHpScaujNi6KkFd7IUeo4E0AtG/AdKp4wPxmqQWnAXpncLE
+        COHTc+SPKFGqAoarTvi4ISmt0zJU3CVH5E54C3nUzQ==
+X-Google-Smtp-Source: ABdhPJxC+wnC4RcIh0+9NGS3tVoJg77zPEi+RwFplg2OzDxLBNbLBDbGW/xRDfjZzqMO3gnCI2ZQzzPWhHuWCNVU0K0=
+X-Received: by 2002:a17:907:20d9:: with SMTP id qq25mr15641325ejb.382.1599471309917;
+ Mon, 07 Sep 2020 02:35:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:vd9WOJrL43K7tgXIjq+fdw9XpujdDSKHb/13PJSlNAFTkIecV3o
- YX60zXdJjQ7qrZGkVCx1QVkyHK577opkAkZxYApe/pLtMTeHNJdsZBVrxxltqp8R826PARL
- YT8qR1GI4TmQgraabm+q2Jo32c+tsVXi91TIHEnv5RGm3QIjbzxvXecgaroLZC4XJTqqpdO
- nUWXhlV+LNhWwUkEfiCzQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:U1k4lbRWrSE=:kW2LDdSUqFSDmkB9xbWR4m
- wDNaXCZB0NWQdgtEuiPwP3ZYwh6M4FN0JbvRQfRMjfqiIDsl3g6vah7ukL3aXCRxfh/Jiuowu
- +vhJ1xFxvhrEOlTyPVJn3ozg94YY1L7NYBQ9Jm5LncQHjf/VekSvkgFSA1JhFXqOoTQ3f9mpb
- biihceeKyndJsAOtgJGGzxbplyE9Jsuc+p9vOnBdtl7PTRs9La7TLZqbyiYaJAaU8RmPbxBEn
- gdzGAuJ4sWA+5DkWodqXLOAQYS9W7/InG1mEQ1A2pcCqmqSahIPiA72B3Bhy0wIsjte1o2z3n
- OaM4xOlmoyfLO5urSaKLPpiveHzyjDOE4M0z0exteSeeN+PYJ+2gbafpEp7Hr2EAwVs534sgq
- DH9aP2/QIRo0cwYIQFQrU8GC3Vfpbobo6e7oxolfaIQZvYpcSpAZIuJI9/AAjsvrVaI18tl7N
- F7f8Xx2fA+LStWZYYUlWpAZEx8bljyK8RoxoGu/1s8ggU/0myLny/AOjmw3wjmHvEzsDEJ7Vp
- TZLaYbqEaDgkY271WWe4snF0/hDIPrZDnn4BRm+4BDjJRYq7eYXEZSb+fEW95CuXhF5ig9xzW
- MoO9n2+0gX6zA4RCBw/cQQgmjV2JskpaAr1Bqmfh1E7QPiKViuPdh3SHiVP5O+yeInsti7y0P
- O268Rve+4x4jxXYUVPa90bS45F4jn2sIonIzF9WGS05bN4zbtzVNbXODMXTkfc81oz7WWnXkr
- igVcOtmVrn7NZ+EiHZW2D4NcAATzQAg+l4kGW8CVuLXio5txNmg5XVZN7ujryaiZTUTsiow9W
- gta1dBmrXPIq6MZtRykxi/lkFBTpUo6GUtyjqAJCCsbFV9tRBAGMsJb7dmvau5zV2TJly0TVm
- qyBaM/nuew9hqvB2gJZhk86sBnUVLWEl8rVa1m/ExI1pnCp0k9jnBTzaOjxacHDZf/TueqfxT
- S5zu8IgrNZgLxpS6mA8vG0pExVmUbd48DkMkAuzfbNj2UT0VJ3H5zZIDWSEu/cipqjR8WQSln
- Kx/+ueTNRIZHqcZEI2bSHdKIV1yDPySIVTgTSGLLYs8T85zpTB7UGy4uZ68LOPXBEFFAFFJpd
- PU9uAzWLYvlvlPrrYZR/dZXne7MDTNM/59YFoDYou8mhjNqzORK09d/JWucccI8DMmy+kFxKY
- Ue0LoqLnyPRPe3F8Z4Ls1dHGwLd+31wlwlbQhjaIiEeRQmI1EpXDcHUV+V/FgsYFowN5COD+m
- XqerjoYe32hvo49OC70pAwbeklHL10pJRjmzZLQ==
+References: <20200904152116.2157-1-brgl@bgdev.pl> <20200904152116.2157-8-brgl@bgdev.pl>
+ <20200904154144.GL230586@piout.net>
+In-Reply-To: <20200904154144.GL230586@piout.net>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 7 Sep 2020 11:34:59 +0200
+Message-ID: <CAMpxmJWwNfLvpuB_1ba037UzVX9UEz7SzDEJuft0jv3txGRJQg@mail.gmail.com>
+Subject: Re: [PATCH 7/8] rtc: rx8010: fix indentation in probe()
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Enable the Netronix EC on the Kobo Aura ebook reader.
+On Fri, Sep 4, 2020 at 5:41 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 04/09/2020 17:21:15+0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > Align the arguments passed to devm_rtc_device_register() with the upper
+> > line.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > ---
+> >  drivers/rtc/rtc-rx8010.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+> > index 181fc21cefa8..ed8ba38b4991 100644
+> > --- a/drivers/rtc/rtc-rx8010.c
+> > +++ b/drivers/rtc/rtc-rx8010.c
+> > @@ -450,7 +450,7 @@ static int rx8010_probe(struct i2c_client *client,
+> >       }
+> >
+> >       rx8010->rtc = devm_rtc_device_register(&client->dev, client->name,
+> > -             &rx8010_rtc_ops, THIS_MODULE);
+> > +                                            &rx8010_rtc_ops, THIS_MODULE);
+> >
+>
+> You have bonus points if you replace that patch by switching from
+> devm_rtc_device_register to devm_rtc_allocate_device and
+> rtc_register_device.
+>
+> More bonus points if you also set range_min and range_max and then get
+> rid of the range checking in set_time.
+>
 
-Several features are still missing:
- - Frontlight/backlight. The vendor kernel drives the frontlight LED
-   using the PWM output of the EC and an additional boost pin that
-   increases the brightness.
- - Battery monitoring
- - Interrupts for RTC alarm and low-battery events
+Hi Alexandre!
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+I've just looked at the code and wondered why there's no devm
+counterpart for rtc_register_device(). Then I noticed that the release
+callback for devm_rtc_allocate_device() takes care of unregistering
+the device. This looks like serious devres abuse to me. In general the
+idea is for the release callback to only undo whatever the devres
+function did and this should be opaque to the concerned resources.
 
-v2:
-- Fix pwm-cells property (should be 2, not 1)
-=2D--
- arch/arm/boot/dts/imx50-kobo-aura.dts | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+In this case I believe there's no need for the 'registered' field in
+struct rtc_device - this structure should *not* care about this - and
+there should be devm_rtc_register_device() whose release callback
+would take care of the unregistering. Since this function would be
+called after devm_rtc_allocate_device(), it would be released before
+so the ordering should be fine.
 
-diff --git a/arch/arm/boot/dts/imx50-kobo-aura.dts b/arch/arm/boot/dts/imx=
-50-kobo-aura.dts
-index a0eaf869b9135..003a7d894902c 100644
-=2D-- a/arch/arm/boot/dts/imx50-kobo-aura.dts
-+++ b/arch/arm/boot/dts/imx50-kobo-aura.dts
-@@ -6,6 +6,7 @@
- /dts-v1/;
- #include "imx50.dtsi"
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
+Let me know your thoughts.
 
- / {
- 	model =3D "Kobo Aura (N514)";
-@@ -135,10 +136,34 @@ &i2c3 {
- 	pinctrl-0 =3D <&pinctrl_i2c3>;
- 	status =3D "okay";
-
--	/* TODO: embedded controller at 0x43 */
-+	embedded-controller@43 {
-+		pinctrl-names =3D "default";
-+		pinctrl-0 =3D <&pinctrl_ec>;
-+		compatible =3D "netronix,ntxec";
-+		reg =3D <0x43>;
-+		system-power-controller;
-+		interrupts-extended =3D <&gpio4 11 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-controller;
-+		#interrupt-cells =3D <1>;
-+
-+		ec_pwm: pwm {
-+			compatible =3D "netronix,ntxec-pwm";
-+			#pwm-cells =3D <2>;
-+		};
-+
-+		rtc {
-+			compatible =3D "netronix,ntxec-rtc";
-+		};
-+	};
- };
-
- &iomuxc {
-+	pinctrl_ec: ec {
-+		fsl,pins =3D <
-+			MX50_PAD_CSPI_SS0__GPIO4_11		0x0	/* INT */
-+		>;
-+	};
-+
- 	pinctrl_gpiokeys: gpiokeys {
- 		fsl,pins =3D <
- 			MX50_PAD_CSPI_MISO__GPIO4_10		0x0
-=2D-
-2.28.0
-
+Best regards,
+Bartosz Golaszewski
