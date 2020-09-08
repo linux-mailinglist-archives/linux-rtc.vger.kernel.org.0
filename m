@@ -2,113 +2,156 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CFB25FF37
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Sep 2020 18:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9689C260D30
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Sep 2020 10:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729886AbgIGQ34 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Sep 2020 12:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S1729365AbgIHIOy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Sep 2020 04:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729849AbgIGO2k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Sep 2020 10:28:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F42C0617A5
-        for <linux-rtc@vger.kernel.org>; Mon,  7 Sep 2020 07:27:46 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <bst@pengutronix.de>)
-        id 1kFI7U-0003nx-8Y; Mon, 07 Sep 2020 16:27:44 +0200
-From:   Bastian Krause <bst@pengutronix.de>
-To:     linux-rtc@vger.kernel.org
-Cc:     devicetree@vger.kernel.org,
+        with ESMTP id S1729597AbgIHIOu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Sep 2020 04:14:50 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34676C061755
+        for <linux-rtc@vger.kernel.org>; Tue,  8 Sep 2020 01:14:50 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l9so16208788wme.3
+        for <linux-rtc@vger.kernel.org>; Tue, 08 Sep 2020 01:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2l4ulTfYjNlFeRN+9AmUPudn6kXgV7e1zXVy9nKbsRk=;
+        b=e4CeBE11o3dS4jh5WtgwHvX/aVsAUVjNuZFptYv0FYAuqO1K98mRcanGrEOjNjYNFj
+         1B9gH057PfWPjo2QcMRrEZMg90NcPkJMcKVMvyDqhWkGR3PSfvFiGsld3X9Wck4HNBUv
+         Uz1InBHYi4s1FbO7LIIYnsOElzCrPVjFJnvoARcO7gCqxYsS4kSDssOgt6yv3aOgFqUh
+         bAQIDjH0Yi92yGMBsA0dpqV4vMOLuZy0WHY0SVfEuPK2ENzhsTbwoTlvongp9Gi2vvGK
+         TEH1KHEHxZnKwqCzYbY46VsbpquCRbEqwMWCV9Z/tnC6T4PkLE5+QXW4TOkCDzT1t9Jr
+         kDvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2l4ulTfYjNlFeRN+9AmUPudn6kXgV7e1zXVy9nKbsRk=;
+        b=a5iUHQqoLJ0zPcBAVh42+es0uf0ABX5nilnX71KPX5wLHDiylsFRFNfNyYozfoAI3s
+         gCg1ZtF4bGhm38lQeMpwzI84lyjFLS9HfcDV7OBl13m4ZFKB/feM6G0tgOznAa7Yr9IL
+         qrQ7qTYspmsYOd+9eLCRf8K0O6/UsjkztJi1FhkP+RJQYEXknAxlUGVWNTbKWy3w77W2
+         H9z0cFUfPP1HJfLAosHy7ECKSxDHN/leOlYC18wgVtqBfujetpH/GYkEP66cSIz8wZaa
+         /JZBRIcQoHvwQT91aFe2t9GBG/3O6Rtuvnuorse52wvUp5ruwo94rz5SNHsDPtx8QCzD
+         j3OA==
+X-Gm-Message-State: AOAM532JYHQC2Zd1XUvfzAoeXQ+ZZZdcqalGW5lBDSxT8ot3R1XF/Yfq
+        /xlDDaAzlIjkQs8dkA54vgyRUQ==
+X-Google-Smtp-Source: ABdhPJxaRvhQRn53vo1Vi/7ljVTSvQijQ2hYfTSSvgSycwVb16Ba3bhMyPCw6FZ7G3YrfyGiH7odlg==
+X-Received: by 2002:a1c:5641:: with SMTP id k62mr3330505wmb.13.1599552888802;
+        Tue, 08 Sep 2020 01:14:48 -0700 (PDT)
+Received: from dell ([91.110.221.204])
+        by smtp.gmail.com with ESMTPSA id 71sm33594957wrm.23.2020.09.08.01.14.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 01:14:48 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 09:14:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
-        Bastian Krause <bst@pengutronix.de>
-Subject: [PATCH 8/8] rtc: ds1307: enable rx8130's backup battery, make it chargeable optionally
-Date:   Mon,  7 Sep 2020 16:27:27 +0200
-Message-Id: <20200907142727.26472-9-bst@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200907142727.26472-1-bst@pengutronix.de>
-References: <20200907142727.26472-1-bst@pengutronix.de>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
+Subject: Re: [PATCH v2 05/10] pwm: ntxec: Add driver for PWM function in
+ Netronix EC
+Message-ID: <20200908081445.GC4400@dell>
+References: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
+ <20200905133230.1014581-6-j.neuschaefer@gmx.net>
+ <CAHp75VdUHoOyM3bObzhdfiqpne0AmSK_UakteTZxnjqJVrNV9A@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: bst@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+In-Reply-To: <CAHp75VdUHoOyM3bObzhdfiqpne0AmSK_UakteTZxnjqJVrNV9A@mail.gmail.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The ds1307 charger infrastructure now allows to add a rx8130 charger
-setup that..
+On Sat, 05 Sep 2020, Andy Shevchenko wrote:
 
-- does not depend on trickle-resistor-ohms
-- does not use DS13XX_TRICKLE_CHARGER_MAGIC trickle-charge select (TCS)
-  bits
-- keeps previous no-charge behavior for device trees without
-  aux-voltage-chargeable
+> On Saturday, September 5, 2020, Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> wrote:
+> 
+> > The Netronix EC provides a PWM output which is used for the backlight
+> > on some ebook readers. This patches adds a driver for the PWM output.
+> >
+> > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> > ---
+> >
+> > v2:
+> > - Various grammar and style improvements, as suggested by Uwe Kleine-König,
+> >   Lee Jones, and Alexandre Belloni
+> > - Switch to regmap
+> > - Prefix registers with NTXEC_REG_
+> > - Add help text to the Kconfig option
+> > - Use the .apply callback instead of the old API
+> > - Add a #define for the time base (125ns)
+> > - Don't change device state in .probe; this avoids multiple problems
+> > - Rework division and overflow check logic to perform divisions in 32 bits
+> > - Avoid setting duty cycle to zero, to work around a hardware quirk
+> > ---
+> >  drivers/pwm/Kconfig     |   8 ++
+> >  drivers/pwm/Makefile    |   1 +
+> >  drivers/pwm/pwm-ntxec.c | 160 ++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 169 insertions(+)
+> >  create mode 100644 drivers/pwm/pwm-ntxec.c
+> >
+> > diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+> > index 7dbcf6973d335..7fd17c6cda95e 100644
+> > --- a/drivers/pwm/Kconfig
+> > +++ b/drivers/pwm/Kconfig
+> > @@ -350,6 +350,14 @@ config PWM_MXS
+> >           To compile this driver as a module, choose M here: the module
+> >           will be called pwm-mxs.
+> >
+> > +config PWM_NTXEC
+> > +       tristate "Netronix embedded controller PWM support"
+> 
+> 
+> 
+> 
+> > +       depends on MFD_NTXEC && OF
+> 
+> 
+> I don’t see need to reduce test coverage and use of the driver by sticking
+> with OF. Actually it’s not used.
 
-Make that happen.
+If the device is only known to boot with OF, then it's pointless
+building it when !OF.  If you want to increase test coverage enable
+COMPILE_TEST instead.
 
-Signed-off-by: Bastian Krause <bst@pengutronix.de>
----
-Based on:
-- https://lore.kernel.org/linux-rtc/20200415163701.21989-1-bst@pengutronix.de/
-- https://lore.kernel.org/linux-rtc/20200415163701.21989-3-bst@pengutronix.de/
-
-Changes since then:
-- use chager_reg (called trickle_charger_reg before patch 4/8)
-- use charger setup function to set backup battery enable bit, charge
-  bit optionally (introduced by patch 5/8)
----
- drivers/rtc/rtc-ds1307.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 9bf1822a989f..1fe0c2df2578 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -122,6 +122,9 @@ enum ds_type {
- #define RX8130_REG_FLAG_AF		BIT(3)
- #define RX8130_REG_CONTROL0		0x1e
- #define RX8130_REG_CONTROL0_AIE		BIT(3)
-+#define RX8130_REG_CONTROL1		0x1f
-+#define RX8130_REG_CONTROL1_INIEN	BIT(4)
-+#define RX8130_REG_CONTROL1_CHGEN	BIT(5)
- 
- #define MCP794XX_REG_CONTROL		0x07
- #	define MCP794XX_BIT_ALM0_EN	0x10
-@@ -536,6 +539,16 @@ static u8 do_trickle_setup_ds1339(struct ds1307 *ds1307, u32 ohms, bool diode)
- 	return setup;
- }
- 
-+static u8 do_trickle_setup_rx8130(struct ds1307 *ds1307, u32 ohms, bool diode)
-+{
-+	/* make sure that the backup battery is enabled */
-+	u8 setup = RX8130_REG_CONTROL1_INIEN;
-+	if (diode)
-+		setup |= RX8130_REG_CONTROL1_CHGEN;
-+
-+	return setup;
-+}
-+
- static irqreturn_t rx8130_irq(int irq, void *dev_id)
- {
- 	struct ds1307           *ds1307 = dev_id;
-@@ -1024,6 +1037,8 @@ static const struct chip_desc chips[last_ds_type] = {
- 		.offset		= 0x10,
- 		.irq_handler = rx8130_irq,
- 		.rtc_ops = &rx8130_rtc_ops,
-+		.trickle_charger_reg = RX8130_REG_CONTROL1,
-+		.do_trickle_setup = &do_trickle_setup_rx8130,
- 	},
- 	[m41t0] = {
- 		.rtc_ops	= &m41txx_rtc_ops,
 -- 
-2.28.0
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
