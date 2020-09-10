@@ -2,60 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D20C26468E
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Sep 2020 15:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CA7264689
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Sep 2020 15:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730204AbgIJNGX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Sep 2020 09:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S1730233AbgIJNFj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Sep 2020 09:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727055AbgIJNFE (ORCPT
+        with ESMTP id S1726059AbgIJNFE (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Sep 2020 09:05:04 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DCEC061573
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:00 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id a9so5746301wmm.2
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DD9C0613ED
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:01 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id e17so5572234wme.0
         for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G6p9nmKGbXBOFJlaJm/m/zH8eOM0IPKfdB5t8Uf7UlA=;
-        b=Z7QXKq9+cHr0Hks+8HPVYqsE/2qjY4vG5NUdQy0VUBicPBaiRpl5FUAEbS1iV3wL0k
-         17b7N6D5Ruc2Lnq+9prTTsLtyI90nWrkDqMqgJYjImEJL3bQvlHFuuGlykf6UlZd510O
-         iiuebXsi1TJA0unp0mjhcr2o/+DcrEd+K/eHfId7OQnBHnitNJ93oaL3KP21NlTj+n2+
-         nQTNPWbKRL2NUKULEbkQki7B8CmoMq30uJKdAPYfvR3KcjUY87PXwLDiBGmw9HVH/e2F
-         PXYRWcm0ml7UGEbJTvP3Jt6N2WaF0Ou5vkFr7eAvrzc7ILRDNn0lCaD9cyHiljNpI0n4
-         zfCA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QD4+/zp80KYG7+QlHWRWXdVVYXAehdvYKldSIelaUaw=;
+        b=CQYbnIbSD26YR0Rot7mifqg+cBHViUddg7JwHyo/tXjL7FDc3L3E0Px8Qk34E1WtDc
+         yFRPBve7pSGnToCwxzEjeXneObv1XyPPrQ71bANgQOaKCKmqyTpisaEEnUyb0fiuyhfB
+         eviCALOu0ZoiGWodg5c71WVWdzfQMwht5gzh/mwbPSF9LAlH5ntsb2YkjQ+W95f8iFfp
+         vLwcmf66YI9xGG5Pkid9W1C6E2E9vqF2kzdknAteqfsNNto5XgMykoe6nJIi8XAqRcfn
+         W1Mta4aVPJEHft+D0xTr9CcclB0msG9bmnaSvc603HSUAR06RyMYldIUvJPLzASHEDnb
+         jvrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=G6p9nmKGbXBOFJlaJm/m/zH8eOM0IPKfdB5t8Uf7UlA=;
-        b=RMr4cOT/4h0mnbSV/Hz4YluCTU5svpXS0oXgHAri2Y6of38xd4xRK/T8ZV9+o1fA7u
-         w11fb0O5BYePQS1SPGxwDq+TflfA0WLUnGj13zyNCRoNT+DCNeQhpVc69pta/auupJ2S
-         IRr/Y/32eZ8c9LPPAf3/fKsTqqkymS59hy3u21oCBB/Zj3PaSlWR6+DVQq4D7zUqxY9Z
-         EJbbZNxzEiLpp+woO5im6B2uRKbyBwTcjxNp6k2rHA5aIcpWjBm9J/O9HrgJDf105sak
-         +JBx+fwKe4ngHteLGk+MBRyr5VuAYzYT01eJEzhAfmzj5Hp51fVAvGs86EvgYkxRQT3R
-         QMfw==
-X-Gm-Message-State: AOAM533NdrhFYUa3eJ1IKosI0rnTAxGyxBJSsClF9OfsFDxhyYPKn6Rf
-        W+W0xAijSyRIt4nH8aw0sF0ecA==
-X-Google-Smtp-Source: ABdhPJxUi3e922pita34aArm+ddFZanF95uA8l8B2eYmWmzgwphxpz+co7frH1pXAcbUOaASGZfL1A==
-X-Received: by 2002:a1c:408a:: with SMTP id n132mr7974517wma.45.1599743097333;
-        Thu, 10 Sep 2020 06:04:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QD4+/zp80KYG7+QlHWRWXdVVYXAehdvYKldSIelaUaw=;
+        b=EH4+VBERy09A1RzXEuhxkrhWXUc4cszp+hz4Nfyd9gt49ySJSgM/PbOUqY2HO8gLtO
+         zt2UJ1GzvxI8Pu5EPY+F/Dxn4CdgqZ5rv1KdAe8SnHbnqCWPuWGnOTai6fpfhR11A0ha
+         TUZYMRrI9vkjwYa78LvydzQBO1OmIO7NVWoylvLz6sqxyfo0UlqeKDGVXOX8Px5PcdaQ
+         QJlFmcrMafVK4Ot8yOAd+/F1UuTQPV5qfn1BsKAvI7+pwU3zwcnTdRH9QNyV3N7vskvB
+         ahwhmPLey57vEF2oWzOuKhwbmNSAutnBtJVk8qouwk/Me8C+KJMCNT2qqWkJjJ9wOcT1
+         MLJw==
+X-Gm-Message-State: AOAM5325Jimw0FL/B3cW1QJ2sd7OlpUH9ReaAcDetH5otqgRL4LmlqNs
+        v3f3/3eTel1SjzAu7DI5Q3My3A==
+X-Google-Smtp-Source: ABdhPJyQsgitJHjVQRLFHvNm0QyVkVrkhwOMOMP7nDl1jGSAcTayJaNDjKqgeto4lHEEdqJHg9IJ2Q==
+X-Received: by 2002:a05:600c:2:: with SMTP id g2mr8763036wmc.85.1599743098541;
+        Thu, 10 Sep 2020 06:04:58 -0700 (PDT)
 Received: from debian-brgl.home (lfbn-nic-1-68-20.w2-15.abo.wanadoo.fr. [2.15.159.20])
-        by smtp.gmail.com with ESMTPSA id p16sm9321988wro.71.2020.09.10.06.04.56
+        by smtp.gmail.com with ESMTPSA id p16sm9321988wro.71.2020.09.10.06.04.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:04:56 -0700 (PDT)
+        Thu, 10 Sep 2020 06:04:58 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v2 00/11] rtc: rx8010: use regmap instead of i2c smbus API
-Date:   Thu, 10 Sep 2020 15:04:35 +0200
-Message-Id: <20200910130446.5689-1-brgl@bgdev.pl>
+Subject: [PATCH v2 01/11] rtc: rx8010: remove unnecessary brackets
+Date:   Thu, 10 Sep 2020 15:04:36 +0200
+Message-Id: <20200910130446.5689-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200910130446.5689-1-brgl@bgdev.pl>
+References: <20200910130446.5689-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
@@ -65,43 +67,48 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-I want to use this driver on a platform where the i2c controller doesn't
-speak SMBUS. This series converts the driver to i2c regmap which can
-figure out the correct protocol to use.
+Remove brackets wherever they guard a single line.
 
-The actual conversion happens in patch 10, the rest are just cleanups and
-refactoring.
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ drivers/rtc/rtc-rx8010.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-v1 -> v2:
-- s/parentheses/brackets/g
-- add a patch switching the driver to using the preferred RTC API
-- rework the patch removing magic values
-- use range_max and range_min instead of manual range checks
-- add a patch adding a helper variable in probe() for client->dev
-- add a patch using sizeof(*rx8010) instead of sizeof(struct rx8010_data)
-
---
-
-Alexandre: I believe that the implementation of devm_rtc_allocate_device()
-and rtc_register_device() is wrong as I explained under the previous
-version of this series. I'll send an RFC that reworks this part soon.
-
-Bartosz Golaszewski (11):
-  rtc: rx8010: remove unnecessary brackets
-  rtc: rx8010: consolidate local variables of the same type
-  rtc: rx8010: use tabs instead of spaces for code formatting
-  rtc: rx8010: rename ret to err in rx8010_set_time()
-  rtc: rx8010: don't use magic values for time buffer length
-  rtc: rx8010: drop unnecessary initialization
-  rtc: rx8010: use a helper variable for client->dev in probe()
-  rtc: rx8010: prefer sizeof(*val) over sizeof(struct type_of_val)
-  rtc: rx8010: switch to using the preferred RTC API
-  rtc: rx8010: convert to using regmap
-  rtc: rx8010: use range checking provided by core RTC code
-
- drivers/rtc/rtc-rx8010.c | 306 +++++++++++++++++----------------------
- 1 file changed, 131 insertions(+), 175 deletions(-)
-
+diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+index fe010151ec8f..2faf5357a3a5 100644
+--- a/drivers/rtc/rtc-rx8010.c
++++ b/drivers/rtc/rtc-rx8010.c
+@@ -181,9 +181,8 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
+ 		return ret;
+ 
+ 	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
+-	if (flagreg < 0) {
++	if (flagreg < 0)
+ 		return flagreg;
+-	}
+ 
+ 	if (flagreg & RX8010_FLAG_VLF)
+ 		ret = i2c_smbus_write_byte_data(rx8010->client, RX8010_FLAG,
+@@ -284,17 +283,15 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	int err;
+ 
+ 	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
+-	if (flagreg < 0) {
++	if (flagreg < 0)
+ 		return flagreg;
+-	}
+ 
+ 	if (rx8010->ctrlreg & (RX8010_CTRL_AIE | RX8010_CTRL_UIE)) {
+ 		rx8010->ctrlreg &= ~(RX8010_CTRL_AIE | RX8010_CTRL_UIE);
+ 		err = i2c_smbus_write_byte_data(rx8010->client, RX8010_CTRL,
+ 						rx8010->ctrlreg);
+-		if (err < 0) {
++		if (err < 0)
+ 			return err;
+-		}
+ 	}
+ 
+ 	flagreg &= ~RX8010_FLAG_AF;
 -- 
 2.26.1
 
