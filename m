@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5772653D7
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Sep 2020 23:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259472653D6
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Sep 2020 23:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbgIJVlU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Sep 2020 17:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42768 "EHLO
+        id S1728093AbgIJVlT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Sep 2020 17:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729479AbgIJNFZ (ORCPT
+        with ESMTP id S1729161AbgIJNFZ (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Sep 2020 09:05:25 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2585BC061795
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:01 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id w5so6601917wrp.8
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:01 -0700 (PDT)
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B00DC061796
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:02 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id c18so6606453wrm.9
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Sep 2020 06:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4PF6iUUI6SI+SJ6z3aC7j/JhZxFAycexdCgWf22To5o=;
-        b=AiUoZAkXZa6DzILy730HrrK0W+sMBIXOXnSJSj1YNkV18zd+woSsRLc5tQyiO9hyua
-         OyDDAJU+rJFIru3zGYePqcVsmV088eF+dGOIbk43G5PSkObyu8ASTHkMQT3xBge/EFRG
-         cjJ1oaFDFU9abjWWG2+dYoIAVs8OWXZ+Jo7AoOIZjVigXgJ3pCTa8zpuiemS4JGAGd6R
-         arybGGlLq67U2ijjr400/z0o15sKbpvr8fd+4v9T922e5K6Hg+I16ba6a70pnbFeFb//
-         AhiCi58BSROJcZ8JaCUqhjVTIod55onVCYGreqGVJTDaAFOiv3fhCdhippfoD+xMwE7O
-         r5rg==
+        bh=41Qpf9U4SrfFhPD50QAUNJfCt0M/GeyQmwAlMT5vSWE=;
+        b=l4NjfMb++5EhmU+ddqjntiOo6Mxg1QeAS1hNO17T4UxCaryj+60CJMFbO45FHq2JlM
+         ZVYLs9M/TzTdU/Hr6Hmu7pq7Lum3ydkkF4gW7f9qiQ8pztH4JfIlkmhM0k85PpIh0uhl
+         Uhq6NYhfyz/hMQfpaa2cpAcKIVxzdcKmqGmm+mYTgmtBrsYjeX1g73Nkf489TyPBvQpn
+         L0JFNnKDAsHIxbMg5qnRL4byAOSEctNjMXJmeWa/LpPgUqLFqshoKrMudGctxpIDgkiq
+         VBYFap1vRRyUPCqcLuLYcRqCSPLGg/kECDQEAu03eOD4/fzl9JtenwTmyxZ09uToJ9Gd
+         kl5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4PF6iUUI6SI+SJ6z3aC7j/JhZxFAycexdCgWf22To5o=;
-        b=k1D+prf2AwKlyWD3jwyf7YFJ2cTYtTUOGTBsgFSK923l59oPdWuEWr/HURsolQBcE1
-         psfKSj5J/9gXkX2be6RtrZ1j1wN/ZAPEWk8xzEMlyO0dV0MaGl2lnXXIC2ghFMgLpQQd
-         YJxOqc0w7xmcfI3PNCd5acOrtQzencqvysrl7qW70nLLJDd5L/UpckdbsoWAYmgRzL5S
-         YZvAf/DzrTwlYmnuXXMw2gYhj9/L3GkFjdGzp//2QLYc+4mt+uVMVQhQeGh6xEZsMmx2
-         LThEiDt3cWojnVU/ghUoo/AXbyxfFwka4tcZAW1ZyO5tpW22mRD10yGI46YmY0H3x+Ri
-         m9oA==
-X-Gm-Message-State: AOAM5325APpnY7ya0DTi2haRvikNjQhraBtUGCqzL6MYQ+gdJVQQylR7
-        Gi/RbreTht+3OG0TnXoujbcfsA==
-X-Google-Smtp-Source: ABdhPJy2+TmxrCBV+QcXYzez3I3qTcnaBkMR3Gj258SX0dnjEo2hibzzWJ3Y3Pcwno+Pp1lquCnj2g==
-X-Received: by 2002:a5d:4e02:: with SMTP id p2mr9850115wrt.276.1599743099638;
-        Thu, 10 Sep 2020 06:04:59 -0700 (PDT)
+        bh=41Qpf9U4SrfFhPD50QAUNJfCt0M/GeyQmwAlMT5vSWE=;
+        b=IDOBpvJn0ARqSH8+NoItLpzMCv/1FzfBDhBWIBBA74zTIMNkY+AlZgXv/5TQZZq3bm
+         9reCK4so7dIbk1UETrrVAXL7mk3XoHyjwoOIg3x/MBL2NBUGy98RBhmX/sok3M1ziRRv
+         XB+rTWee2ng5dg4igALRPiQGhUSIU6T6HG2vxWpjtDGFXJ/2d9zOKxxMfcdLWTOIDAJm
+         8HwRwpfYDlyrXl38qxkrN1zbThCadbBu4bhOg+mINsDipcSxxpKASY9EiIEg3dO68Jya
+         /a5X3jz8uqfgkGjTLTSJx+xNnC7BJZekXEJdTZHW8idae7Jk3eac1oyl8IEa2kx8ZC4C
+         f+lQ==
+X-Gm-Message-State: AOAM533Z/6hp0xo5tm+KtsDiEl983tNd1d6+jFoJH5ibK90v35A5hLNB
+        8u7dYNb0AuwVTTujYBDRzlBdDA==
+X-Google-Smtp-Source: ABdhPJzL3YlrjpcmsxEB7n/Pv9j6SWBA7DI0VDlwxl9zrHhyGEvdyBVu6xoXFllHtccBs5Nhxd6BWA==
+X-Received: by 2002:a5d:4a49:: with SMTP id v9mr4866601wrs.153.1599743100798;
+        Thu, 10 Sep 2020 06:05:00 -0700 (PDT)
 Received: from debian-brgl.home (lfbn-nic-1-68-20.w2-15.abo.wanadoo.fr. [2.15.159.20])
-        by smtp.gmail.com with ESMTPSA id p16sm9321988wro.71.2020.09.10.06.04.58
+        by smtp.gmail.com with ESMTPSA id p16sm9321988wro.71.2020.09.10.06.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:04:59 -0700 (PDT)
+        Thu, 10 Sep 2020 06:05:00 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v2 02/11] rtc: rx8010: consolidate local variables of the same type
-Date:   Thu, 10 Sep 2020 15:04:37 +0200
-Message-Id: <20200910130446.5689-3-brgl@bgdev.pl>
+Subject: [PATCH v2 03/11] rtc: rx8010: use tabs instead of spaces for code formatting
+Date:   Thu, 10 Sep 2020 15:04:38 +0200
+Message-Id: <20200910130446.5689-4-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20200910130446.5689-1-brgl@bgdev.pl>
 References: <20200910130446.5689-1-brgl@bgdev.pl>
@@ -67,79 +67,88 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Move local variables of the same type into a single line for better
-readability.
+The define values in this driver are close to their names and they are
+separated by spaces. Use tabs instead and align all defines.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/rtc/rtc-rx8010.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/rtc/rtc-rx8010.c | 58 ++++++++++++++++++++--------------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-index 2faf5357a3a5..4c790d33f589 100644
+index 4c790d33f589..2038700a3e8e 100644
 --- a/drivers/rtc/rtc-rx8010.c
 +++ b/drivers/rtc/rtc-rx8010.c
-@@ -109,8 +109,7 @@ static int rx8010_get_time(struct device *dev, struct rtc_time *dt)
- {
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
- 	u8 date[7];
--	int flagreg;
--	int err;
-+	int flagreg, err;
+@@ -13,40 +13,40 @@
+ #include <linux/module.h>
+ #include <linux/rtc.h>
  
- 	flagreg = i2c_smbus_read_byte_data(rx8010->client, RX8010_FLAG);
- 	if (flagreg < 0)
-@@ -141,8 +140,7 @@ static int rx8010_set_time(struct device *dev, struct rtc_time *dt)
- {
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
- 	u8 date[7];
--	int ctrl, flagreg;
--	int ret;
-+	int ctrl, flagreg, ret;
+-#define RX8010_SEC     0x10
+-#define RX8010_MIN     0x11
+-#define RX8010_HOUR    0x12
+-#define RX8010_WDAY    0x13
+-#define RX8010_MDAY    0x14
+-#define RX8010_MONTH   0x15
+-#define RX8010_YEAR    0x16
+-#define RX8010_RESV17  0x17
+-#define RX8010_ALMIN   0x18
+-#define RX8010_ALHOUR  0x19
+-#define RX8010_ALWDAY  0x1A
+-#define RX8010_TCOUNT0 0x1B
+-#define RX8010_TCOUNT1 0x1C
+-#define RX8010_EXT     0x1D
+-#define RX8010_FLAG    0x1E
+-#define RX8010_CTRL    0x1F
++#define RX8010_SEC		0x10
++#define RX8010_MIN		0x11
++#define RX8010_HOUR		0x12
++#define RX8010_WDAY		0x13
++#define RX8010_MDAY		0x14
++#define RX8010_MONTH		0x15
++#define RX8010_YEAR		0x16
++#define RX8010_RESV17		0x17
++#define RX8010_ALMIN		0x18
++#define RX8010_ALHOUR		0x19
++#define RX8010_ALWDAY		0x1A
++#define RX8010_TCOUNT0		0x1B
++#define RX8010_TCOUNT1		0x1C
++#define RX8010_EXT		0x1D
++#define RX8010_FLAG		0x1E
++#define RX8010_CTRL		0x1F
+ /* 0x20 to 0x2F are user registers */
+-#define RX8010_RESV30  0x30
+-#define RX8010_RESV31  0x31
+-#define RX8010_IRQ     0x32
++#define RX8010_RESV30		0x30
++#define RX8010_RESV31		0x31
++#define RX8010_IRQ		0x32
  
- 	if ((dt->tm_year < 100) || (dt->tm_year > 199))
- 		return -EINVAL;
-@@ -250,8 +248,7 @@ static int rx8010_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
- 	struct i2c_client *client = rx8010->client;
- 	u8 alarmvals[3];
--	int flagreg;
--	int err;
-+	int flagreg, err;
+-#define RX8010_EXT_WADA  BIT(3)
++#define RX8010_EXT_WADA		BIT(3)
  
- 	err = i2c_smbus_read_i2c_block_data(client, RX8010_ALMIN, 3, alarmvals);
- 	if (err != 3)
-@@ -279,8 +276,7 @@ static int rx8010_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
- 	u8 alarmvals[3];
--	int extreg, flagreg;
--	int err;
-+	int extreg, flagreg, err;
+-#define RX8010_FLAG_VLF  BIT(1)
+-#define RX8010_FLAG_AF   BIT(3)
+-#define RX8010_FLAG_TF   BIT(4)
+-#define RX8010_FLAG_UF   BIT(5)
++#define RX8010_FLAG_VLF		BIT(1)
++#define RX8010_FLAG_AF		BIT(3)
++#define RX8010_FLAG_TF		BIT(4)
++#define RX8010_FLAG_UF		BIT(5)
  
- 	flagreg = i2c_smbus_read_byte_data(client, RX8010_FLAG);
- 	if (flagreg < 0)
-@@ -346,9 +342,8 @@ static int rx8010_alarm_irq_enable(struct device *dev,
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
--	int flagreg;
-+	int flagreg, err;
- 	u8 ctrl;
--	int err;
+-#define RX8010_CTRL_AIE  BIT(3)
+-#define RX8010_CTRL_UIE  BIT(5)
+-#define RX8010_CTRL_STOP BIT(6)
+-#define RX8010_CTRL_TEST BIT(7)
++#define RX8010_CTRL_AIE		BIT(3)
++#define RX8010_CTRL_UIE		BIT(5)
++#define RX8010_CTRL_STOP	BIT(6)
++#define RX8010_CTRL_TEST	BIT(7)
  
- 	ctrl = rx8010->ctrlreg;
+-#define RX8010_ALARM_AE  BIT(7)
++#define RX8010_ALARM_AE		BIT(7)
  
-@@ -387,8 +382,7 @@ static int rx8010_alarm_irq_enable(struct device *dev,
- static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
- {
- 	struct rx8010_data *rx8010 = dev_get_drvdata(dev);
--	int tmp;
--	int flagreg;
-+	int tmp, flagreg;
- 
- 	switch (cmd) {
- 	case RTC_VL_READ:
+ static const struct i2c_device_id rx8010_id[] = {
+ 	{ "rx8010", 0 },
 -- 
 2.26.1
 
