@@ -2,99 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C9A265F8D
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Sep 2020 14:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9BA26639F
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Sep 2020 18:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725887AbgIKM3v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Sep 2020 08:29:51 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:36723 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725916AbgIKM2s (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Sep 2020 08:28:48 -0400
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 445B910000B;
-        Fri, 11 Sep 2020 12:28:38 +0000 (UTC)
-Date:   Fri, 11 Sep 2020 14:28:37 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 7/8] rtc: rx8010: fix indentation in probe()
-Message-ID: <20200911122837.GC230586@piout.net>
-References: <20200904152116.2157-1-brgl@bgdev.pl>
- <20200904152116.2157-8-brgl@bgdev.pl>
- <20200904154144.GL230586@piout.net>
- <CAMpxmJWwNfLvpuB_1ba037UzVX9UEz7SzDEJuft0jv3txGRJQg@mail.gmail.com>
+        id S1726547AbgIKQVI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Sep 2020 12:21:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726518AbgIKPaa (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:30:30 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D6E321D7E;
+        Fri, 11 Sep 2020 14:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599833002;
+        bh=FVUBrBUew4OrNTC+wXrBugVz5+Ee1tqB5139mrISZUs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZP4GPYsL0ABFoO/JQ1fpmbTARh9KmtMzHIuPGGVVrz7JTuRAdD95eeTqVsQ1OqEoA
+         wr70uCma1J+ZPVrGIxnMulGcN82OdAB+Gck3toLSpKZIoZFTJgJRbtVLsHRjCzGlVk
+         1bGvfXw76IYgyJzOsEqq656cqaM9N+d0eT1Xfko4=
+Received: by mail-oo1-f41.google.com with SMTP id g26so2298414ooa.9;
+        Fri, 11 Sep 2020 07:03:22 -0700 (PDT)
+X-Gm-Message-State: AOAM5327qMydCgKVIL1kap2fymFutjb1K49lJrZodsK76SjkFDe0fKMT
+        Knd4h7/jjVerV/rqWL6zEGRxFsGxWG4QutTAmA==
+X-Google-Smtp-Source: ABdhPJxTuUQpAZ7VBRAgyuwv+5Jv+wLNqLOBvyESpzDLE3KgVTieiFkjstfCsDTOYHpY06twVE/mYAqaxnPss6ZklvY=
+X-Received: by 2002:a4a:9d48:: with SMTP id f8mr1722615ook.50.1599833001875;
+ Fri, 11 Sep 2020 07:03:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMpxmJWwNfLvpuB_1ba037UzVX9UEz7SzDEJuft0jv3txGRJQg@mail.gmail.com>
+References: <20200827091441.12972-1-qiang.zhao@nxp.com> <20200909202456.GA3019412@bogus>
+ <VE1PR04MB676899EEA79D59061FE91BF691270@VE1PR04MB6768.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB676899EEA79D59061FE91BF691270@VE1PR04MB6768.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 11 Sep 2020 08:03:10 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJx=7npNYNe4MybNvdNRxBj_XjvEOJsSm+gNGEkvbh2VA@mail.gmail.com>
+Message-ID: <CAL_JsqJx=7npNYNe4MybNvdNRxBj_XjvEOJsSm+gNGEkvbh2VA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: rtc-2127: Add bindings for nxp,rtc-2127.txt
+To:     Qiang Zhao <qiang.zhao@nxp.com>
+Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 07/09/2020 11:34:59+0200, Bartosz Golaszewski wrote:
-> On Fri, Sep 4, 2020 at 5:41 PM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
+On Wed, Sep 9, 2020 at 9:16 PM Qiang Zhao <qiang.zhao@nxp.com> wrote:
+>
+> On Thu, Sep 10, 2020 at 04:25AM, Rob Herring <robh@kernel.org> wrote:
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: 2020=E5=B9=B49=E6=9C=8810=E6=97=A5 4:25
+> > To: Qiang Zhao <qiang.zhao@nxp.com>
+> > Cc: a.zummo@towertech.it; alexandre.belloni@bootlin.com;
+> > linux-rtc@vger.kernel.org; devicetree@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH 1/3] dt-bindings: rtc-2127: Add bindings for
+> > nxp,rtc-2127.txt
 > >
-> > On 04/09/2020 17:21:15+0200, Bartosz Golaszewski wrote:
-> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > On Thu, Aug 27, 2020 at 05:14:39PM +0800, Qiang Zhao wrote:
+> > > From: Zhao Qiang <qiang.zhao@nxp.com>
 > > >
-> > > Align the arguments passed to devm_rtc_device_register() with the upper
-> > > line.
+> > > Add bindings for nxp,rtc-2127
 > > >
-> > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > > Signed-off-by: Zhao Qiang <qiang.zhao@nxp.com>
 > > > ---
-> > >  drivers/rtc/rtc-rx8010.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
-> > > index 181fc21cefa8..ed8ba38b4991 100644
-> > > --- a/drivers/rtc/rtc-rx8010.c
-> > > +++ b/drivers/rtc/rtc-rx8010.c
-> > > @@ -450,7 +450,7 @@ static int rx8010_probe(struct i2c_client *client,
-> > >       }
-> > >
-> > >       rx8010->rtc = devm_rtc_device_register(&client->dev, client->name,
-> > > -             &rx8010_rtc_ops, THIS_MODULE);
-> > > +                                            &rx8010_rtc_ops, THIS_MODULE);
-> > >
+> > >  Documentation/devicetree/bindings/rtc/nxp,rtc-2127.txt | 18
+> > ++++++++++++++++++
+> > >  1 file changed, 18 insertions(+)
+> > >  create mode 100644
+> > Documentation/devicetree/bindings/rtc/nxp,rtc-2127.txt
 > >
-> > You have bonus points if you replace that patch by switching from
-> > devm_rtc_device_register to devm_rtc_allocate_device and
-> > rtc_register_device.
-> >
-> > More bonus points if you also set range_min and range_max and then get
-> > rid of the range checking in set_time.
-> >
-> 
-> Hi Alexandre!
-> 
-> I've just looked at the code and wondered why there's no devm
-> counterpart for rtc_register_device(). Then I noticed that the release
-> callback for devm_rtc_allocate_device() takes care of unregistering
-> the device. This looks like serious devres abuse to me. In general the
-> idea is for the release callback to only undo whatever the devres
-> function did and this should be opaque to the concerned resources.
-> 
-> In this case I believe there's no need for the 'registered' field in
-> struct rtc_device - this structure should *not* care about this - and
-> there should be devm_rtc_register_device() whose release callback
-> would take care of the unregistering. Since this function would be
-> called after devm_rtc_allocate_device(), it would be released before
-> so the ordering should be fine.
-> 
+> > Bindings should be in DT schema format now.
+>
+> Is there any doc description for DT schema format or example
+> So that I can take as a reference. Thank you!
 
-Note that the input subsystem is also doing it that way which is
-probably not a good reason alone to do it like that. But, IIRC, there
-was an actual reason this was done this way and it was the ordering of
-the rtc_nvmem_register/rtc_nvmem_unregister with rtc_device_unregister.
-I'm not sure this is still necessary though.
+Documentation/devicetree/writing-schema.rst and about 1000 examples in
+the kernel tree.
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Rob
