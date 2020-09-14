@@ -2,149 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD4E268DDF
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Sep 2020 16:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307AD26908A
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Sep 2020 17:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgINOgh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Sep 2020 10:36:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47676 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726769AbgINOgU (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 14 Sep 2020 10:36:20 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1816620829;
-        Mon, 14 Sep 2020 14:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600094179;
-        bh=ZLRfrIrY0GfgAj/UjPD18JtlgPZAUOTDBn5blkcgKCI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o8ww2aGI5lF9+RriclIoS+lIahsQ8WBpPem5tRhK0NQogekW/29hPdpKpz5plK+dP
-         a7heM5e5GuUHuAyXwemtcGgNJ9bJMCghvLrM3I5GE3OHhzxMYKzZVDdFsSBLLsGrhM
-         PvQfQLnQQN0YNuxX7S4SCu4yWem1Zem9nnIzcG6s=
-Received: by mail-ot1-f49.google.com with SMTP id h17so144802otr.1;
-        Mon, 14 Sep 2020 07:36:19 -0700 (PDT)
-X-Gm-Message-State: AOAM533VM/nnscOTTXYQM0s4l5Q46waiLyYe9oK3lf6ERnYmGPbbudE7
-        NgRqYMmnfFx9p90sWezhW7thpYoIEInmYzAEzQ==
-X-Google-Smtp-Source: ABdhPJzP4FgOtLW9o0tUTR6mni3ZlrLEG1YAY2KfJnpjqKCRIT/Nr0E9RbL0WFPOHxQQqjfv4+JnV3yBO2D2ZnAn24E=
-X-Received: by 2002:a05:6830:1008:: with SMTP id a8mr8766689otp.107.1600094178370;
- Mon, 14 Sep 2020 07:36:18 -0700 (PDT)
+        id S1726537AbgINPqe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Sep 2020 11:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726306AbgINPq1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Sep 2020 11:46:27 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32123C061351
+        for <linux-rtc@vger.kernel.org>; Mon, 14 Sep 2020 08:46:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id y15so564749wmi.0
+        for <linux-rtc@vger.kernel.org>; Mon, 14 Sep 2020 08:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qUo9FGy3DJ1HIJTn23pZSHLPlWdvQkOdenBVqoTjpIg=;
+        b=K3ZPLBWVRVTSIxU+c7mMndyVpQPPXct3b6XnpbxZZ+1OsV5CZ86Cdyb2PBnxowJ/Y+
+         VbsblkgEKxUK0gyyj+jkmXOT+qkmI35yeO6gFXV/Xh/n/hUOrUkqWRVvhP8qrvopD30l
+         2gf7eKf8JiTl9yuqyI/lFQ2Y5bRkP1RQzbxJcaemkk9ouzBSwebxvDqwuj8Y0JIQq5MK
+         Ay+yw5QRt955hKqyzVsax67gqvEQmEx1z6ndBDh7DVxn2x19NxR+IcfBkYNavx4fHBt3
+         e3lJF5pqze78diidk4IGPwJL5iEybfP75JFs1Za6RSWgNwaWuoWCxhyYeYR0WppXJiJO
+         sO4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qUo9FGy3DJ1HIJTn23pZSHLPlWdvQkOdenBVqoTjpIg=;
+        b=Rwzh69xB/5WrwQXQ+J4qdwNNmQQwkXxQv4+2aRrmiHHood8u+99x6e/ImAuTelkG9n
+         4y11xwoSEPaZRdNueK/0mkibliymkpphMglSxUsvGLkb6wdkt4qXabSSv4bsWTfLTyfb
+         McT84Ep/GicnFedeU77k3VtpCi13XoshZ/mAjSLfuDyi8c+VYU12r4JJtwdbvr+ZWW4y
+         jJ2aGGqxpQT5HdbLqnKhEI+IpxsJiJUhmj0zPCLVfQz5mizArncLEnYJZQxKlUgPxiHY
+         HF+P95nESX0XWU6Ntyt2j25gTzjJ9+yRGDUv67ZHP7quD/4smV+74t1shPWQ8LX+MxhG
+         L6yw==
+X-Gm-Message-State: AOAM532XrZxRg8NyeDPOhl9b2cjbrtASeeqiWYV1wtuqgo3M2hi+ufsM
+        L4i2yiQulSt5GiVyqZq+ZN3fWA==
+X-Google-Smtp-Source: ABdhPJxxxKyyRa5aJn/A7LZ7NnBJdKU5wwFQ5c5WzMjAF0Dqio7hlGKF8IpL9IFW0tJ+Ci2qpZY35g==
+X-Received: by 2002:a05:600c:204e:: with SMTP id p14mr20196wmg.182.1600098365916;
+        Mon, 14 Sep 2020 08:46:05 -0700 (PDT)
+Received: from debian-brgl.home (lfbn-nic-1-68-20.w2-15.abo.wanadoo.fr. [2.15.159.20])
+        by smtp.gmail.com with ESMTPSA id l19sm19510448wmi.8.2020.09.14.08.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 08:46:05 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH v3 02/14] rtc: rx8010: remove a stray newline
+Date:   Mon, 14 Sep 2020 17:45:49 +0200
+Message-Id: <20200914154601.32245-3-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200914154601.32245-1-brgl@bgdev.pl>
+References: <20200914154601.32245-1-brgl@bgdev.pl>
 MIME-Version: 1.0
-References: <20200827091441.12972-1-qiang.zhao@nxp.com> <20200909202456.GA3019412@bogus>
- <VE1PR04MB676899EEA79D59061FE91BF691270@VE1PR04MB6768.eurprd04.prod.outlook.com>
- <CAL_JsqJx=7npNYNe4MybNvdNRxBj_XjvEOJsSm+gNGEkvbh2VA@mail.gmail.com> <VE1PR04MB6768F9352B510CB6E873515A91230@VE1PR04MB6768.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6768F9352B510CB6E873515A91230@VE1PR04MB6768.eurprd04.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 14 Sep 2020 08:36:07 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJMnkt0=AKh36bCpsmkACHMoQbVyuh65NL4PXrvt4A+ag@mail.gmail.com>
-Message-ID: <CAL_JsqJMnkt0=AKh36bCpsmkACHMoQbVyuh65NL4PXrvt4A+ag@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc-2127: Add bindings for nxp,rtc-2127.txt
-To:     Qiang Zhao <qiang.zhao@nxp.com>
-Cc:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 1:08 AM Qiang Zhao <qiang.zhao@nxp.com> wrote:
->
-> On Fri, Sep 11, 2020 at 22:03, Rob Herring <robh@kernel.org> wrote:
->
-> > -----Original Message-----
-> > From: Rob Herring <robh@kernel.org>
-> > Sent: 2020=E5=B9=B49=E6=9C=8811=E6=97=A5 22:03
-> > To: Qiang Zhao <qiang.zhao@nxp.com>
-> > Cc: a.zummo@towertech.it; alexandre.belloni@bootlin.com;
-> > linux-rtc@vger.kernel.org; devicetree@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH 1/3] dt-bindings: rtc-2127: Add bindings for
-> > nxp,rtc-2127.txt
-> >
-> > On Wed, Sep 9, 2020 at 9:16 PM Qiang Zhao <qiang.zhao@nxp.com> wrote:
-> > >
-> > > On Thu, Sep 10, 2020 at 04:25AM, Rob Herring <robh@kernel.org> wrote:
-> > > > -----Original Message-----
-> > > > From: Rob Herring <robh@kernel.org>
-> > > > Sent: 2020=E5=B9=B49=E6=9C=8810=E6=97=A5 4:25
-> > > > To: Qiang Zhao <qiang.zhao@nxp.com>
-> > > > Cc: a.zummo@towertech.it; alexandre.belloni@bootlin.com;
-> > > > linux-rtc@vger.kernel.org; devicetree@vger.kernel.org;
-> > > > linux-kernel@vger.kernel.org
-> > > > Subject: Re: [PATCH 1/3] dt-bindings: rtc-2127: Add bindings for
-> > > > nxp,rtc-2127.txt
-> > > >
-> > > > On Thu, Aug 27, 2020 at 05:14:39PM +0800, Qiang Zhao wrote:
-> > > > > From: Zhao Qiang <qiang.zhao@nxp.com>
-> > > > >
->
-> Please help to review as below, if it is ok, I will send the new version =
-patch. Thank you!
->
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Doc=
-umentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> new file mode 100644
-> index 0000000..809dd59
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: GPL-2.0
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Dual license new bindings please:
+Remove an unnecessary newline after requesting the interrupt.
 
-(GPL-2.0-only OR BSD-2-Clause)
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ drivers/rtc/rtc-rx8010.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/nxp,pcf2127.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PCF RTCs
-> +
-> +maintainers:
-> +  - Qiang Zhao <qiang.zhao@nxp.com>
-> +
-> +allOf:
-> +  - $ref: "rtc.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,pcf2127
-> +      - nxp,pcf2129
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  no-watchdog:
-> +    maxItems: 1
+diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+index 08c93d492494..c6797ec0aba1 100644
+--- a/drivers/rtc/rtc-rx8010.c
++++ b/drivers/rtc/rtc-rx8010.c
+@@ -454,7 +454,6 @@ static int rx8010_probe(struct i2c_client *client,
+ 						rx8010_irq_1_handler,
+ 						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+ 						"rx8010", client);
+-
+ 		if (err) {
+ 			dev_err(&client->dev, "unable to request IRQ\n");
+ 			return err;
+-- 
+2.26.1
 
-maxItems is for arrays. What's the type here? It should have a description =
-too.
-
-> +
-> +  start-year: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +...
->
-> >
-> > Documentation/devicetree/writing-schema.rst and about 1000 examples in =
-the
-> > kernel tree.
-> >
-> > Rob
