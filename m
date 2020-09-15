@@ -2,88 +2,230 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF60D26B188
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Sep 2020 00:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A4626B3A5
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Sep 2020 01:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727593AbgIOWbq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Sep 2020 18:31:46 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:48507 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727618AbgIOQRS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Sep 2020 12:17:18 -0400
-X-Originating-IP: 90.65.88.165
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 876D8FF80D;
-        Tue, 15 Sep 2020 16:16:26 +0000 (UTC)
-Date:   Tue, 15 Sep 2020 18:16:26 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Kevin P. Fleming" <kevin+linux@km6g.us>
-Cc:     Rob Herring <robh@kernel.org>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH 1/3 v3] dt-bindings: abx80x: Add autocal-filter property
-Message-ID: <20200915161626.GF9675@piout.net>
-References: <20200615105113.57770-1-kevin+linux@km6g.us>
- <20200713183906.GA510880@bogus>
- <CAE+UdorYGJrxjcBY8KtoUtpsEmWFkv4DsWtcdhCt9dcfDyCVHg@mail.gmail.com>
+        id S1727376AbgIOXHQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Sep 2020 19:07:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48810 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727278AbgIOOlk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 15 Sep 2020 10:41:40 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 23F7922265;
+        Tue, 15 Sep 2020 14:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600180327;
+        bh=utJVhgwJTrunVJwtarb0ds5g2F08QaKajk/8z09HS/I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TFk0KmOgqkxPnPhwCUKPEH/u1GObeQ1s3DyU/vyGg9+rqkrmmgXCM3vQPAlVv4IwE
+         N5R1qn5EJsfYcQSTp9mJ2R9ouUzUzDtnj4xZzOJjrAcbaMdhsCpd+crPPqi8zQ+DIG
+         dari9jShrtKauwrggJ+jY94Hw+p1UL8pw3YCmTGQ=
+Received: by mail-ot1-f47.google.com with SMTP id o8so3440225otl.4;
+        Tue, 15 Sep 2020 07:32:07 -0700 (PDT)
+X-Gm-Message-State: AOAM530xGpfA2Y6dQwR6fFQ9riHJ3Om6cS6iW9j3uKlJknlZofW5VRFI
+        aAJlTzcW9FF34f/MA0B8/OWbAA6LzlkoYzn2Cw==
+X-Google-Smtp-Source: ABdhPJxotHRWZRWMUoSLoNeE7xePoRIjifT/7QqjsQ5ljfN00watvkgScFQsGBTpsE8eUJBLvPaa5rChQkwszRGChsw=
+X-Received: by 2002:a9d:411:: with SMTP id 17mr13481301otc.192.1600180326428;
+ Tue, 15 Sep 2020 07:32:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE+UdorYGJrxjcBY8KtoUtpsEmWFkv4DsWtcdhCt9dcfDyCVHg@mail.gmail.com>
+References: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
+ <20200905133230.1014581-5-j.neuschaefer@gmx.net> <20200915005443.GA604385@bogus>
+ <20200915082348.2f6fff7a@aktux>
+In-Reply-To: <20200915082348.2f6fff7a@aktux>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 15 Sep 2020 08:31:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL=gQxiU5uK-AEJtG3daOy83aS_D6G2Jo8_-dzKH70NkQ@mail.gmail.com>
+Message-ID: <CAL_JsqL=gQxiU5uK-AEJtG3daOy83aS_D6G2Jo8_-dzKH70NkQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/10] dt-bindings: pwm: Add bindings for PWM function
+ in Netronix EC
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Kevin,
-
-nitpick, the subject prefix should be dt-bindings: prefix: abx80x:
-
-On 13/07/2020 18:05:34-0400, Kevin P. Fleming wrote:
-> On Mon, Jul 13, 2020 at 2:39 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Mon, Jun 15, 2020 at 06:51:11AM -0400, Kevin P. Fleming wrote:
-> > > Add a property to allow control of the autocalibration filter
-> > > capacitor.
+On Tue, Sep 15, 2020 at 12:24 AM Andreas Kemnade <andreas@kemnade.info> wro=
+te:
+>
+> Hi,
+>
+> On Mon, 14 Sep 2020 18:54:43 -0600
+> Rob Herring <robh@kernel.org> wrote:
+>
+> > On Sat, Sep 05, 2020 at 03:32:24PM +0200, Jonathan Neusch=C3=A4fer wrot=
+e:
+> > > The Netronix embedded controller as found in Kobo Aura and Tolino Shi=
+ne
+> > > supports one PWM channel, which is used to control the frontlight
+> > > brightness on these devices.
 > > >
-> > > Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
-> > > Cc: Alessandro Zummo <a.zummo@towertech.it>
-> > > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > To: linux-rtc@vger.kernel.org
-> > > To: devicetree@vger.kernel.org
+> > > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 > > > ---
-> > > v3: corrected whitespace
-> > >  Documentation/devicetree/bindings/rtc/abracon,abx80x.txt | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
 > > >
-> > > diff --git a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
-> > > index 2405e35a1bc0f..1b606e33d1a83 100644
-> > > --- a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
-> > > +++ b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
-> > > @@ -29,3 +29,11 @@ and valid to enable charging:
-> > >   - "abracon,tc-diode": should be "standard" (0.6V) or "schottky" (0.3V)
-> > >   - "abracon,tc-resistor": should be <0>, <3>, <6> or <11>. 0 disables the output
-> > >                            resistor, the other values are in kOhm.
+> > > v2:
+> > > - Add plaintext binding to patch description, for comparison
+> > > - Fix pwm-cells property (should be 2, not 1)
+> > > - Add dummy regulator to example, because the pwm-backlight binding r=
+equires a
+> > >   power supply
+> > >
+> > >
+> > > For reference, here is the binding in text form:
+> > >
+> > >
+> > >   PWM functionality in Netronix Embedded Controller
+> > >
+> > >   Required properties:
+> > >   - compatible: should be "netronix,ntxec-pwm"
+> > >   - #pwm-cells: should be 2.
+> > >
+> > >   Available PWM channels:
+> > >   - 0: The PWM channel controlled by registers 0xa1-0xa7
+> > >
+> > >   Example:
+> > >
+> > >     embedded-controller@43 {
+> > >             compatible =3D "netronix,ntxec";
+> > >             ...
+> > >
+> > >             ec_pwm: pwm {
+> > >                     compatible =3D "netronix,ntxec-pwm";
+> > >                     #pwm-cells =3D <1>;
+> > >             };
+> > >     };
+> > >
+> > >     ...
+> > >
+> > >     backlight {
+> > >             compatible =3D "pwm-backlight";
+> > >             pwms =3D <&ec_pwm 0 50000>;
+> > >     };
+> > > ---
+> > >  .../bindings/mfd/netronix,ntxec.yaml          | 19 +++++++++++
+> > >  .../bindings/pwm/netronix,ntxec-pwm.yaml      | 33 +++++++++++++++++=
+++
+> > >  2 files changed, 52 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/pwm/netronix,nt=
+xec-pwm.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yam=
+l b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+> > > index 596df460f98eb..73c873dda3e70 100644
+> > > --- a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+> > > +++ b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+> > > @@ -31,6 +31,9 @@ properties:
+> > >      description:
+> > >        The EC can signal interrupts via a GPIO line
+> > >
+> > > +  pwm:
+> > > +    $ref: ../pwm/netronix,ntxec-pwm.yaml
 > > > +
-> > > +All of the devices can have a 47pf capacitor attached to increase the
-> > > +autocalibration accuracy of their RC oscillators. To enable or disable usage
-> > > +of the capacitor the following property can be defined:
+> > >  required:
+> > >    - compatible
+> > >    - reg
+> > > @@ -53,5 +56,21 @@ examples:
+> > >                      interrupts =3D <11 IRQ_TYPE_EDGE_FALLING>;
+> > >                      interrupt-controller;
+> > >                      #interrupt-cells =3D <1>;
 > > > +
-> > > + - "abracon,autocal-filter": should be <0> or <1>. 0 indicates that there
-> > > +                             is no capacitor attached, 1 indicates that there
-> > > +                             is a capacitor attached.
+> > > +                    ec_pwm: pwm {
+> > > +                            compatible =3D "netronix,ntxec-pwm";
+> > > +                            #pwm-cells =3D <2>;
+> > > +                    };
+> > >              };
+> > >      };
+> > > +
+> > > +    backlight {
+> > > +            compatible =3D "pwm-backlight";
+> > > +            pwms =3D <&ec_pwm 0 50000>;
+> > > +            power-supply =3D <&backlight_regulator>;
+> > > +    };
+> > > +
+> > > +    backlight_regulator: regulator-dummy {
+> > > +            compatible =3D "regulator-fixed";
+> > > +            regulator-name =3D "backlight";
+> > > +    };
+> > > diff --git a/Documentation/devicetree/bindings/pwm/netronix,ntxec-pwm=
+.yaml b/Documentation/devicetree/bindings/pwm/netronix,ntxec-pwm.yaml
+> > > new file mode 100644
+> > > index 0000000000000..0c9d2801b8de1
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/pwm/netronix,ntxec-pwm.yaml
+> > > @@ -0,0 +1,33 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/pwm/netronix,ntxec-pwm.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: PWM functionality in Netronix embedded controller
+> > > +
+> > > +maintainers:
+> > > +  - Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > > +
+> > > +description: |
+> > > +  See also Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+> > > +
+> > > +  The Netronix EC contains PWM functionality, which is usually used =
+to drive
+> > > +  the backlight LED.
+> > > +
+> > > +  The following PWM channels are supported:
+> > > +    - 0: The PWM channel controlled by registers 0xa1-0xa7
+> > > +
+> > > +allOf:
+> > > +  - $ref: pwm.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: netronix,ntxec-pwm
+> > > +
+> > > +  "#pwm-cells":
+> > > +    const: 2
 > >
-> > What does not present mean? If you don't have a defined meaning (such
-> > as maintain the default/bootloader initialized setting), then make this
-> > boolean.
-> 
-> That is the intended meaning (leave the current setting unmodified). I
-> can add that to the documentation so it is clear.
+> > Just move this to the parent and make the parent a pwm provider. There'=
+s
+> > no need for child nodes for this or the rtc.
+> >
+> hmm, there are apparently devices without rtc. If there is a child node
+> for the rtc, the corresponding devicetrees could disable rtc by not
+> having that node.
+> But maybe using the controller version is also feasible for that task.
 
-Can you do that and send v4 please?
+If not probeable, then the compatible string should distinguish that.
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Rob
