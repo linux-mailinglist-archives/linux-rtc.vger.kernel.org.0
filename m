@@ -2,73 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6128226B0A4
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Sep 2020 00:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF60D26B188
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Sep 2020 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727741AbgIOWQw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Sep 2020 18:16:52 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38894 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727738AbgIOQep (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Sep 2020 12:34:45 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l191so2271553pgd.5;
-        Tue, 15 Sep 2020 09:34:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D8Xp4X70lCVnbikPD4IS/Q9qvm//e/pK0MIg9WYPoV4=;
-        b=c6QDuPRItwT9XF0PxYSvQDgXUkNx9iwVjfts2njsIoo1uDejvjxuwHg3eT2Nu15OFf
-         d35pZD111+eEQdj7IJhyWUWc4LB6HDBVF9boYy6wdWOEMynu04WpjIXn6mLrQtLceD68
-         7sE/M7EKy4blTTMpicnX2svtnokgj6d7bzmMZ3IxRIryKgGIeN662/4IrZ4XE7dLFxdF
-         ewUYGC32W6FIHAtk1aNfTyuevZ79CxIv3ohatX2Bkkgl/EKYwhAQwYcsloYlF5J47xsD
-         OAFe/MfvsVgG3M///0FsPVZa0iDAea62xLHjDywdzGbR1TxGfvWdlGmVuVqcUxw/UDcB
-         Rp/Q==
-X-Gm-Message-State: AOAM532PuMJpf7TcRXZ/H+Yb/YK54isM9r4Y2QDHPl9Jpb1T02rNmB/7
-        suHRQOs76SjeVN9jHKL1oBslH43nviQVsT0=
-X-Google-Smtp-Source: ABdhPJwIpZq4Nfltr6nwrfhRg0vZRtEYrplJotNegBqzmwiLLQRUQ2+/+8lZ9CfHi9dPkQVJROfPEQ==
-X-Received: by 2002:a92:9a92:: with SMTP id c18mr17195402ill.293.1600185658609;
-        Tue, 15 Sep 2020 09:00:58 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id y19sm8793490ili.47.2020.09.15.09.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 09:00:57 -0700 (PDT)
-Received: (nullmailer pid 2029356 invoked by uid 1000);
-        Tue, 15 Sep 2020 16:00:55 -0000
-Date:   Tue, 15 Sep 2020 10:00:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bastian Krause <bst@pengutronix.de>
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de, Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 3/8] dt-bindings: rtc: ds1307: add rx8130
- aux-voltage-chargeable support
-Message-ID: <20200915160055.GA2029301@bogus>
-References: <20200907142727.26472-1-bst@pengutronix.de>
- <20200907142727.26472-4-bst@pengutronix.de>
+        id S1727593AbgIOWbq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Sep 2020 18:31:46 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:48507 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727618AbgIOQRS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Sep 2020 12:17:18 -0400
+X-Originating-IP: 90.65.88.165
+Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 876D8FF80D;
+        Tue, 15 Sep 2020 16:16:26 +0000 (UTC)
+Date:   Tue, 15 Sep 2020 18:16:26 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "Kevin P. Fleming" <kevin+linux@km6g.us>
+Cc:     Rob Herring <robh@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: [PATCH 1/3 v3] dt-bindings: abx80x: Add autocal-filter property
+Message-ID: <20200915161626.GF9675@piout.net>
+References: <20200615105113.57770-1-kevin+linux@km6g.us>
+ <20200713183906.GA510880@bogus>
+ <CAE+UdorYGJrxjcBY8KtoUtpsEmWFkv4DsWtcdhCt9dcfDyCVHg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200907142727.26472-4-bst@pengutronix.de>
+In-Reply-To: <CAE+UdorYGJrxjcBY8KtoUtpsEmWFkv4DsWtcdhCt9dcfDyCVHg@mail.gmail.com>
 Sender: linux-rtc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 07 Sep 2020 16:27:22 +0200, Bastian Krause wrote:
-> Epson's RX8130 was not charged before. A related patch will allow
-> optional charging.
-> 
-> Signed-off-by: Bastian Krause <bst@pengutronix.de>
-> ---
-> Previous version:
-> https://lore.kernel.org/linux-rtc/20200415163701.21989-2-bst@pengutronix.de/
-> ---
->  Documentation/devicetree/bindings/rtc/rtc-ds1307.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Hi Kevin,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+nitpick, the subject prefix should be dt-bindings: prefix: abx80x:
+
+On 13/07/2020 18:05:34-0400, Kevin P. Fleming wrote:
+> On Mon, Jul 13, 2020 at 2:39 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Mon, Jun 15, 2020 at 06:51:11AM -0400, Kevin P. Fleming wrote:
+> > > Add a property to allow control of the autocalibration filter
+> > > capacitor.
+> > >
+> > > Signed-off-by: Kevin P. Fleming <kevin+linux@km6g.us>
+> > > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > To: linux-rtc@vger.kernel.org
+> > > To: devicetree@vger.kernel.org
+> > > ---
+> > > v3: corrected whitespace
+> > >  Documentation/devicetree/bindings/rtc/abracon,abx80x.txt | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > > index 2405e35a1bc0f..1b606e33d1a83 100644
+> > > --- a/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > > +++ b/Documentation/devicetree/bindings/rtc/abracon,abx80x.txt
+> > > @@ -29,3 +29,11 @@ and valid to enable charging:
+> > >   - "abracon,tc-diode": should be "standard" (0.6V) or "schottky" (0.3V)
+> > >   - "abracon,tc-resistor": should be <0>, <3>, <6> or <11>. 0 disables the output
+> > >                            resistor, the other values are in kOhm.
+> > > +
+> > > +All of the devices can have a 47pf capacitor attached to increase the
+> > > +autocalibration accuracy of their RC oscillators. To enable or disable usage
+> > > +of the capacitor the following property can be defined:
+> > > +
+> > > + - "abracon,autocal-filter": should be <0> or <1>. 0 indicates that there
+> > > +                             is no capacitor attached, 1 indicates that there
+> > > +                             is a capacitor attached.
+> >
+> > What does not present mean? If you don't have a defined meaning (such
+> > as maintain the default/bootloader initialized setting), then make this
+> > boolean.
+> 
+> That is the intended meaning (leave the current setting unmodified). I
+> can add that to the documentation so it is clear.
+
+Can you do that and send v4 please?
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
