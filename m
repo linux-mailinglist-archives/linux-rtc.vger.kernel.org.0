@@ -2,70 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0896B26E4AE
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 20:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E0026E3C2
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 20:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgIQSyh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Sep 2020 14:54:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728428AbgIQQU3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 17 Sep 2020 12:20:29 -0400
-Received: from localhost (unknown [70.37.104.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 23ECD221E3;
-        Thu, 17 Sep 2020 15:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600358016;
-        bh=DJoY4SjCm0Aq9Cv3Amd8XdYF2qxkng+cNtLI1j/5DaE=;
-        h=Date:From:To:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:
-         From;
-        b=XM/wX/1lFyQ5ceU5E5oLA5UfhCfGPVZm/15Ci0O+oyUl/yBmYnTJP6/1Gqpc9lsBz
-         KGkNbYMbDK/v4zbKw3s0l1BJtByZyg00MIlhjW+lJAJJH96Pbj6OBa3j0/uNlegCjc
-         4HlA3IDOkkWVbmCqzHABbWVDZu+dFSoqOGukoNXY=
-Date:   Thu, 17 Sep 2020 15:53:35 +0000
-From:   Sasha Levin <sashal@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH v3 01/14] rtc: rx8010: don't modify the global rtc ops
-In-Reply-To: <20200914154601.32245-2-brgl@bgdev.pl>
-References: <20200914154601.32245-2-brgl@bgdev.pl>
-Message-Id: <20200917155336.23ECD221E3@mail.kernel.org>
+        id S1726502AbgIQSew (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Sep 2020 14:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726338AbgIQSc5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 14:32:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E80C061756
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 11:32:56 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <bst@pengutronix.de>)
+        id 1kIyiE-0004GR-MP; Thu, 17 Sep 2020 20:32:54 +0200
+From:   Bastian Krause <bst@pengutronix.de>
+To:     linux-rtc@vger.kernel.org
+Cc:     devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
+        Bastian Krause <bst@pengutronix.de>
+Subject: [PATCH v2 0/8] rtc: expand charge support, implement rx8130 charging
+Date:   Thu, 17 Sep 2020 20:32:38 +0200
+Message-Id: <20200917183246.19446-1-bst@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: bst@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi
+In order to preserve previous RTC charging behavior while allowing to
+add new charging configurations this series adds the dt property
+aux-voltage-chargeable as a uint enum. It supersedes the
+trickle-diode-disable flag.
 
-[This is an automated email]
+Then the ds1307 driver's charging infrastructure is generalized:
 
-This commit has been processed because it contains a "Fixes:" tag
-fixing commit: ed13d89b08e3 ("rtc: Add Epson RX8010SJ RTC driver").
+- support charging on 'aux-voltage-chargeable = <1>'
+- keep the previous charge default per chip
+- make trickle-resistor-ohms optional for charging
+- apply DS13XX_TRICKLE_CHARGER_MAGIC only conditionally
 
-The bot has tested the following trees: v5.8.9, v5.4.65, v4.19.145, v4.14.198, v4.9.236.
+This preparatory work allows to enable Epson's RX8130 backup
+battery and make it chargeable when 'aux-voltage-chargeable = <1>' is
+given.
 
-v5.8.9: Build OK!
-v5.4.65: Build OK!
-v4.19.145: Failed to apply! Possible dependencies:
-    9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
+Regards,
+Bastian
 
-v4.14.198: Failed to apply! Possible dependencies:
-    9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
+Bastian Krause (8):
+  dt-bindings: rtc: let aux-voltage-chargeable supersede
+    trickle-diode-disable
+  dt-bindings: rtc: ds1307: let aux-voltage-chargeable supersede
+    trickle-diode-disable
+  dt-bindings: rtc: ds1307: add rx8130 aux-voltage-chargeable support
+  rtc: ds1307: apply DS13XX_TRICKLE_CHARGER_MAGIC only conditionally
+  rtc: ds1307: introduce requires_trickle_resistor per chip
+  rtc: ds1307: store previous charge default per chip
+  rtc: ds1307: consider aux-voltage-chargeable
+  rtc: ds1307: enable rx8130's backup battery, make it chargeable
+    optionally
 
-v4.9.236: Failed to apply! Possible dependencies:
-    9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
-
-
-NOTE: The patch will not be queued to stable trees until it is upstream.
-
-How should we proceed with this patch?
+ .../devicetree/bindings/rtc/rtc-ds1307.txt    |  9 ++-
+ .../devicetree/bindings/rtc/rtc.yaml          | 10 ++++
+ drivers/rtc/rtc-ds1307.c                      | 58 +++++++++++++++++--
+ 3 files changed, 71 insertions(+), 6 deletions(-)
 
 -- 
-Thanks
-Sasha
+2.28.0
+
