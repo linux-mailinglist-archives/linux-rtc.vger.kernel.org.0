@@ -2,153 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7AD26DB24
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 14:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DE526E06D
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 18:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgIQMIh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Sep 2020 08:08:37 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42977 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726605AbgIQMIY (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:08:24 -0400
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:07:32 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1600344418;
-        bh=24JQ5sxy5SnOel0/HBCrFVsyOI5NmS1/SQy2+UMuASk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Tsn7Ag+JDQLQHP3Yw0GyVvjd2Ak07hzc2HG9ouWHP4pe6O3MkIJgyAfjj+vt+4jkH
-         Rj5wCv651IyssEkildCv6XRtEgCcnkhxMgEYrVMTBsV1Bsb+22G+I6c77GTQfikN1v
-         YY+g81M2IDdyRwIP0Lr56Ynx+++NGrrUszsb4M5E=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.151]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MHoRK-1kF4f53zks-00EveU; Thu, 17
- Sep 2020 13:58:54 +0200
-Date:   Thu, 17 Sep 2020 13:58:48 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S1728163AbgIQQPz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Sep 2020 12:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728347AbgIQQPs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 12:15:48 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C874BC0611C0
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 09:15:14 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id c18so2692733wrm.9
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 09:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=275Kff5bHk1Ql5YO6/JaQK06TKyHT815Kx3MTAHc/Pc=;
+        b=fODSaQgZLrr21eV0w+GBt0dO3x4xiprG2fqgMHnqiHHKONha29s5e0HqdUS3qkGGsQ
+         JHF57zQ0w40IjfKKbdBoEPF2XmHOWM327glWkIdmJqRPzUcKvn9N5SoO91Mpkzvgx+Rg
+         hXXxJA896kg+vdLkxoqKTcnG1oXFpZHXPouNhNpDka9OvnVl+kBfshNDbqnrjmlsQ+ws
+         yVZlej+1H4QYrKSMPibaqONZcS9vy3BaTnLO2E4HeU3F8URMQNdeZ/ZBHA/7fVG4EIq9
+         xT95EciGcg+K94U3/J02IBggo0qZ/dVa4ch0H9mqwNFHJrn8qLqXF0OCXIb2j6l7qPmV
+         eusQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=275Kff5bHk1Ql5YO6/JaQK06TKyHT815Kx3MTAHc/Pc=;
+        b=np06rQHvKi9kSORKxDjbZL7QB+oGuAnF+L8vq/tKbxfKyYBrJfbNxlp5oexlJxd6op
+         eObZGXrhP7P7etG1d1WNgaBJ9T4zKCKwdL5afAisCVZH9FYC3KoAcv0rAiJhdfsS3C/P
+         YQ7kYkulQdKq6lLiuSGqotXPKZTCPj1zqsrzCVO+06+dtBdW4oiDulrF4WOjdLHCPGyz
+         nZAlFAUVvusp1ok54wvWvwboZyrhT4Ah6WYxWhAtaNqGeWNj/3wmqyvezffKOYe+xl+3
+         19sgUrfXIlSxhHzhae+kH9ufes+wzmZNszCE0qD7wzllua5m/D5We40yemC+/a+czW2h
+         dyKQ==
+X-Gm-Message-State: AOAM530RMomCkKmSpyZ5UPnNXawJqjphu426ZszKNaE+PGDrEiy25xlB
+        DyMclGR7MZpsZ32cItFeSalaDg==
+X-Google-Smtp-Source: ABdhPJzTCx8JkQaPwINA5jVa2slX7fHpeL6wBTFTwGXtkFGZTm/zNeb7EiAGX56bZdO3lpf7dDVjHw==
+X-Received: by 2002:adf:d845:: with SMTP id k5mr30825072wrl.285.1600359313106;
+        Thu, 17 Sep 2020 09:15:13 -0700 (PDT)
+Received: from debian-brgl.home (lfbn-nic-1-68-20.w2-15.abo.wanadoo.fr. [2.15.159.20])
+        by smtp.gmail.com with ESMTPSA id u126sm47649wmu.9.2020.09.17.09.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 09:15:12 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
-Subject: Re: [PATCH v2 04/10] dt-bindings: pwm: Add bindings for PWM function
- in Netronix EC
-Message-ID: <20200917115848.GH3306@latitude>
-References: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
- <20200905133230.1014581-5-j.neuschaefer@gmx.net>
- <20200915005443.GA604385@bogus>
- <20200915082348.2f6fff7a@aktux>
- <CAL_JsqL=gQxiU5uK-AEJtG3daOy83aS_D6G2Jo8_-dzKH70NkQ@mail.gmail.com>
+        Sasha Levin <sashal@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH v4.19 v4.14 v4.9] rtc: rx8010: don't modify the global rtc ops
+Date:   Thu, 17 Sep 2020 18:15:05 +0200
+Message-Id: <20200917161505.8958-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y9PDtDHaFrXNoMPU"
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqL=gQxiU5uK-AEJtG3daOy83aS_D6G2Jo8_-dzKH70NkQ@mail.gmail.com>
-X-Provags-ID: V03:K1:S3H4EVtrAYZRUhJu6GbZc4OedPCD0Db2PTcKwit2EczWfGIux+C
- fTnPE7kzejg+V1Ln6NYce3Qz27+0vjAlwAKzArlfdi+JOqUrdrGoHbM60fLIEEnAsSIuc7G
- 9G2E8kq7hBv1tPd+NjSvK3XdLv+WdFAf+bTWSsLRNnMvsXH524bMTTDY+239ZCG4urdVZ39
- wq8FHBknn1r/1vALX3caA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:anzz6x+VGXU=:Ap6qLk1j90q8pQl02qYR5i
- RjFjf/5JGBjybFfd3oWBX4AjvHxZkaiqBSwgSFzvXHeN6lv9iEAFILvAMnCCBfFnNBGIm1rGb
- 5HTwKkd8wdg/v27bPLjxGeHJ/OR21IVpwEOXqGspfEeefGXhkCuisAuugrzjpJQBbWcE4sEAF
- Mc+ZN7ZfXfhjrTw/bneDlhCf+TEktmMQDlVeFr/1t6hS3eqLu3cxLqSGfJkCoL02uR37kjrkE
- swXjocwdW0S+du67yhzr/txD9hEXAfYshMa7z1Lc0kPV0wj2nZWxk2qda858lJB7kjfyHWB39
- vsRLlLpGGkPg/qEngb0bSlspKXdngRWztXON3tyGhFdfbwCyhAjTHxrD8aeN8qsyG+jmL4R3M
- Xe+m3sXo5A/lk296Xa04fBbTz03lpFxxONzgywCI1Aw7xw77KAUW234ROsO3/Rz8lyeiInLDP
- GmL0/neEusFOb9m2XFs5asBIFoLwSJ55m7BNBXObZ1y/EAcaYHMRHdMK7O5be3nEp4O2z1sUb
- hjnIcbBb3X3xPo8PPTobND58arzzXyqmq4vQzAvDEJ7YIc9ftLt2OOAQFiRzCYzxfFGBSotzY
- HMD8mIAm2eGBHUvdsPC2qjYg/DZ254sPfRtud2VSPMSP9v6RfY+vW1A6JNyCqKEa6mgHPkdno
- MFKYw3BxuT6cR3vvVDP3iczVuXSPmBEdXSaZpDHZWeMW75AI3L6CdA4GKxHDP8mOEXg8XrP0y
- H7Y1rdjGJ2FakIXZJJZpv2z1nf01Jm6G/SvBg6//kkYSQHZQmLhRdWou9mfpI9cePfVdMDNEm
- ODW6GOKERPX89bqpmnNoyVFn0yl72WPg0VD9orra6Aln05J7t0YEaMGJ02gr8WL0eUZK3lb6q
- iMk25gsbHN42ycJh2CBvfiSS3/5JU+BmQkBK9IrWOV9jB9A+nswjPQuoqI5KnDbBAChoYeqgu
- 5OvDFo8pLOLVEkWqSXPSLzmCl34/mLkmTCpGCXnvJqNBFBUOSe//eySqUb1GKeO+kzYoUamO2
- IfUDzITGZnXjqnZh5Gg3tXh080Rd4noyEOQlkHxNvhEviq5HjHKy5/L+npJ+iQUoORdf212CB
- ubocYvOrvN6dlsEGDdW0IgqFDDa+6klXpr+SJobRvUceAQG80j58f12Aimpqy5h0isf3kQiHg
- WYv8uI3ta1Pse8UxtLcLUu4a7Zwru4YhrWM3BxCI45z/n23SE8KRzxyab0m3u4OzcIjuhY+mD
- nbwgcPGl8dyisQqePhkvJjBmo5ybYwKHc5AGg8g==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
---y9PDtDHaFrXNoMPU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The way the driver is implemented is buggy for the (admittedly unlikely)
+use case where there are two RTCs with one having an interrupt configured
+and the second not. This is caused by the fact that we use a global
+rtc_class_ops struct which we modify depending on whether the irq number
+is present or not.
 
-On Tue, Sep 15, 2020 at 08:31:55AM -0600, Rob Herring wrote:
-> On Tue, Sep 15, 2020 at 12:24 AM Andreas Kemnade <andreas@kemnade.info> w=
-rote:
-> > On Mon, 14 Sep 2020 18:54:43 -0600 Rob Herring <robh@kernel.org> wrote:
-[...]
-> > > Just move this to the parent and make the parent a pwm provider. Ther=
-e's
-> > > no need for child nodes for this or the rtc.
-> > >
-> > hmm, there are apparently devices without rtc. If there is a child node
-> > for the rtc, the corresponding devicetrees could disable rtc by not
-> > having that node.
-> > But maybe using the controller version is also feasible for that task.
->=20
-> If not probeable, then the compatible string should distinguish that.
+Fix it by using two const ops structs with and without alarm operations.
+While at it: not being able to request a configured interrupt is an error
+so don't ignore it and bail out of probe().
 
-Okay.
+Fixes: ed13d89b08e3 ("rtc: Add Epson RX8010SJ RTC driver")
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20200914154601.32245-2-brgl@bgdev.pl
+---
+Hi!
 
-It's even simpler in some cases: The firmware version reported by the EC
-should tell us if it's one that is known to have no RTC.
+This is a backport that applies to the following stable branches:
 
-That said, I don't have a good overview of the different variants of
-this device.
+    v4.19, v4.14, v4.9
 
+ drivers/rtc/rtc-rx8010.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-Thanks,
-Jonathan Neusch=C3=A4fer
+diff --git a/drivers/rtc/rtc-rx8010.c b/drivers/rtc/rtc-rx8010.c
+index d08da371912c..93b1d8d9d2e9 100644
+--- a/drivers/rtc/rtc-rx8010.c
++++ b/drivers/rtc/rtc-rx8010.c
+@@ -423,16 +423,26 @@ static int rx8010_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ 	}
+ }
+ 
+-static struct rtc_class_ops rx8010_rtc_ops = {
++static const struct rtc_class_ops rx8010_rtc_ops_default = {
+ 	.read_time = rx8010_get_time,
+ 	.set_time = rx8010_set_time,
+ 	.ioctl = rx8010_ioctl,
+ };
+ 
++static const struct rtc_class_ops rx8010_rtc_ops_alarm = {
++	.read_time = rx8010_get_time,
++	.set_time = rx8010_set_time,
++	.ioctl = rx8010_ioctl,
++	.read_alarm = rx8010_read_alarm,
++	.set_alarm = rx8010_set_alarm,
++	.alarm_irq_enable = rx8010_alarm_irq_enable,
++};
++
+ static int rx8010_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+ {
+ 	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
++	const struct rtc_class_ops *rtc_ops;
+ 	struct rx8010_data *rx8010;
+ 	int err = 0;
+ 
+@@ -463,16 +473,16 @@ static int rx8010_probe(struct i2c_client *client,
+ 
+ 		if (err) {
+ 			dev_err(&client->dev, "unable to request IRQ\n");
+-			client->irq = 0;
+-		} else {
+-			rx8010_rtc_ops.read_alarm = rx8010_read_alarm;
+-			rx8010_rtc_ops.set_alarm = rx8010_set_alarm;
+-			rx8010_rtc_ops.alarm_irq_enable = rx8010_alarm_irq_enable;
++			return err;
+ 		}
++
++		rtc_ops = &rx8010_rtc_ops_alarm;
++	} else {
++		rtc_ops = &rx8010_rtc_ops_default;
+ 	}
+ 
+ 	rx8010->rtc = devm_rtc_device_register(&client->dev, client->name,
+-		&rx8010_rtc_ops, THIS_MODULE);
++					       rtc_ops, THIS_MODULE);
+ 
+ 	if (IS_ERR(rx8010->rtc)) {
+ 		dev_err(&client->dev, "unable to register the class device\n");
+-- 
+2.26.1
 
---y9PDtDHaFrXNoMPU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl9jT3EACgkQCDBEmo7z
-X9vUoxAAkyn46+EvI774tTF2xzkOECPy08b3dfWCKmdc1jT0+XgT9cP5TeB1mEE0
-tX+cVVE9+yTFYno3cT8NwFY134Qzusin/+xBWUP07weUIt+ov6X3mFWjAV20ye9+
-8+UcnwaLEXDXCbrt5hG+eexwlXVQuxjiHdjIdiRL7FyRfbedLGG9q2LQWUWom3Sm
-Y3jGhzeEt60nIZTZ5iFcPT8P87tpT65YArmuO11ryUEoodzgO2mYsGR1ovZcN8vN
-DvEvDWuWxnPwNY5AAsFCyF2vzgif9aWwixCKskED8L33IC6HscmusmaEQNF1XpRk
-/khi5dhGqpsuSP9BkMC9HTPwVxmKZBX7BM7MpQYvQiAQCgKbqUPXiRYdHRNjCPCl
-OQg0/7FBlq7hVeZQeM92eEqiHaxtq7MjLpctM19vBwMlkJ4bX82qzsC/E7RtRyNu
-Il9eY7xG61gcyCLV0na7C+Cnwfva6u951d2pUI8N4KH/GsEbDY7FZiD07qBKv1Ur
-BAbDSOGryF/aRL/AJ1FyZrm9VxSSxoEkHeeTsuEn7OhhrRff4FCb/jfLZLnMv3KK
-tDCic9mPL1nsiOHU32qmzYkfpQRpVEBCN2/SwDNtqfl82TLA+6bLtPnWsXcCWWdi
-BTWzBgu+dvJa46LUBFKjRVliAHA/t9hyD7Vd0pZXt21rAoDXSmM=
-=YAep
------END PGP SIGNATURE-----
-
---y9PDtDHaFrXNoMPU--
