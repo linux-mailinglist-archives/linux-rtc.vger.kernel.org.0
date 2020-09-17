@@ -2,115 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 375F426E3B4
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 20:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA6426E57D
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 21:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgIQSek (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Sep 2020 14:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S1726234AbgIQTmx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Sep 2020 15:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726462AbgIQSdj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 14:33:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E1FC06121D
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 11:32:56 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <bst@pengutronix.de>)
-        id 1kIyiE-0004GR-Vd; Thu, 17 Sep 2020 20:32:54 +0200
-From:   Bastian Krause <bst@pengutronix.de>
-To:     linux-rtc@vger.kernel.org
-Cc:     devicetree@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
-        Bastian Krause <bst@pengutronix.de>
-Subject: [PATCH v2 8/8] rtc: ds1307: enable rx8130's backup battery, make it chargeable optionally
-Date:   Thu, 17 Sep 2020 20:32:46 +0200
-Message-Id: <20200917183246.19446-9-bst@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200917183246.19446-1-bst@pengutronix.de>
-References: <20200917183246.19446-1-bst@pengutronix.de>
+        with ESMTP id S1728355AbgIQQQ2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 12:16:28 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A53C061225
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 09:16:14 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id n22so3130358edt.4
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 09:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XXtED6WfkK75LMSgQ8vQsHgOI0yBBTxcCbphfrryf6M=;
+        b=pxXpcpXnfAa9lQiUbT1N7VNoozm1D6PgfhboSOd3HXlWtPP7dYn2AhERiYfxBWj37j
+         jsduSgKo3fSswcu5jj7rT8R/p1UoiktZNMLCBziOtWuDhQCPfVIjzVBeazVgnC7kRgvb
+         cGOIN9WJf/fdeKcuLTS4+4caBpl9TCTVBd0AvPoYPAUTCm0L5Eu+6tCTUkWqTzKAN6Sg
+         6hVKODArf8j6huwlEWsNCAN0SmhEWJP+z7xiTEXP/xs+c+C93cyj03dm9fgx6GGdgbZP
+         L1l6cPnrFPnghuoXMbTxtMYD3X5cX0CpEDPNPU8W+/vBUg07fEYXXi8zmHuICCNykgYh
+         Ljsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XXtED6WfkK75LMSgQ8vQsHgOI0yBBTxcCbphfrryf6M=;
+        b=gZKMswrzu7be585PV0ZEva9YjLkgqnpbtEkfQAbluqW8gnPzDJAsG0ev/knxQKBXo9
+         NJz9tLqxce0hQJdxVX9mEQvdv7F5X+tFXGKZSmHQ9JGEsBnXMogXFr/on0ufrNNOGr5M
+         /oPj1fQAnYZcslU9bBduoEU+535JXtMWT9Ib4hFWDiw7Eit7PzyrElCHAhIFF+r8HgAB
+         M1k1I92Dxcek27Z2i5qMRtTR1qQPZJjlpBhSuK9Xv9fC9yewutwucCS2aCtH+PQyieMR
+         2hzAI9dqVXKed6G1/KyJjYfhfDFi3CSQu5T6CVo87Uvw3qRvXFQhhGNa7IGVOeQaNP6U
+         tByw==
+X-Gm-Message-State: AOAM533K/rh+ocBhjNFxYlIeTgQy0R98ugh3lOT1QBn7CGDSMwN/ohbM
+        yUOtBBFCHB5XAXh76LL4XsPOxuz42rixjTFIsm3lUfCs+lc=
+X-Google-Smtp-Source: ABdhPJwfOaudC9vLJAbRhRYhSHh7q4n3U/sNpTA5Q1/lxT2SwoFxppQHiVyye1h5POHhmPDl/bW1IEH53reBheDklw4=
+X-Received: by 2002:a50:9b44:: with SMTP id a4mr32910561edj.12.1600359373655;
+ Thu, 17 Sep 2020 09:16:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: bst@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+References: <20200914154601.32245-2-brgl@bgdev.pl> <20200917155336.23ECD221E3@mail.kernel.org>
+In-Reply-To: <20200917155336.23ECD221E3@mail.kernel.org>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Thu, 17 Sep 2020 18:16:02 +0200
+Message-ID: <CAMpxmJVhfVZLmepERHSVg9qnuWUJj+BwiOKc_7QopREbHvAZpQ@mail.gmail.com>
+Subject: Re: [PATCH v3 01/14] rtc: rx8010: don't modify the global rtc ops
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "Stable # 4 . 20+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The ds1307 charger infrastructure now allows to add a rx8130 charger
-setup that..
+On Thu, Sep 17, 2020 at 5:53 PM Sasha Levin <sashal@kernel.org> wrote:
+>
+> Hi
+>
+> [This is an automated email]
+>
+> This commit has been processed because it contains a "Fixes:" tag
+> fixing commit: ed13d89b08e3 ("rtc: Add Epson RX8010SJ RTC driver").
+>
+> The bot has tested the following trees: v5.8.9, v5.4.65, v4.19.145, v4.14.198, v4.9.236.
+>
+> v5.8.9: Build OK!
+> v5.4.65: Build OK!
+> v4.19.145: Failed to apply! Possible dependencies:
+>     9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
+>
+> v4.14.198: Failed to apply! Possible dependencies:
+>     9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
+>
+> v4.9.236: Failed to apply! Possible dependencies:
+>     9d085c54202d ("rtc: rx8010: simplify getting the adapter of a client")
+>
+>
+> NOTE: The patch will not be queued to stable trees until it is upstream.
+>
+> How should we proceed with this patch?
+>
+> --
+> Thanks
+> Sasha
 
-- does not depend on trickle-resistor-ohms
-- does not use DS13XX_TRICKLE_CHARGER_MAGIC trickle-charge select (TCS)
-  bits
-- keeps previous no-charge behavior for device trees without
-  aux-voltage-chargeable
+I sent out a backport for v4.X branches.
 
-Make that happen.
-
-Signed-off-by: Bastian Krause <bst@pengutronix.de>
----
-No changes since v1.
-
-v1 notes:
-Based on:
-- https://lore.kernel.org/linux-rtc/20200415163701.21989-1-bst@pengutronix.de/
-- https://lore.kernel.org/linux-rtc/20200415163701.21989-3-bst@pengutronix.de/
-
-Changes since then:
-- use chager_reg (called trickle_charger_reg before patch 4/8)
-- use charger setup function to set backup battery enable bit, charge
-  bit optionally (introduced by patch 5/8)
----
- drivers/rtc/rtc-ds1307.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 9bf1822a989f..1fe0c2df2578 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -122,6 +122,9 @@ enum ds_type {
- #define RX8130_REG_FLAG_AF		BIT(3)
- #define RX8130_REG_CONTROL0		0x1e
- #define RX8130_REG_CONTROL0_AIE		BIT(3)
-+#define RX8130_REG_CONTROL1		0x1f
-+#define RX8130_REG_CONTROL1_INIEN	BIT(4)
-+#define RX8130_REG_CONTROL1_CHGEN	BIT(5)
- 
- #define MCP794XX_REG_CONTROL		0x07
- #	define MCP794XX_BIT_ALM0_EN	0x10
-@@ -536,6 +539,16 @@ static u8 do_trickle_setup_ds1339(struct ds1307 *ds1307, u32 ohms, bool diode)
- 	return setup;
- }
- 
-+static u8 do_trickle_setup_rx8130(struct ds1307 *ds1307, u32 ohms, bool diode)
-+{
-+	/* make sure that the backup battery is enabled */
-+	u8 setup = RX8130_REG_CONTROL1_INIEN;
-+	if (diode)
-+		setup |= RX8130_REG_CONTROL1_CHGEN;
-+
-+	return setup;
-+}
-+
- static irqreturn_t rx8130_irq(int irq, void *dev_id)
- {
- 	struct ds1307           *ds1307 = dev_id;
-@@ -1024,6 +1037,8 @@ static const struct chip_desc chips[last_ds_type] = {
- 		.offset		= 0x10,
- 		.irq_handler = rx8130_irq,
- 		.rtc_ops = &rx8130_rtc_ops,
-+		.trickle_charger_reg = RX8130_REG_CONTROL1,
-+		.do_trickle_setup = &do_trickle_setup_rx8130,
- 	},
- 	[m41t0] = {
- 		.rtc_ops	= &m41txx_rtc_ops,
--- 
-2.28.0
-
+Bartosz
