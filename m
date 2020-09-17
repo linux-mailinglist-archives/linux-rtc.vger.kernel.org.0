@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 456F326E3B0
+	by mail.lfdr.de (Postfix) with ESMTP id C4B4726E3B3
 	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 20:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgIQSej (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Sep 2020 14:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S1726597AbgIQSel (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Sep 2020 14:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbgIQSdk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 14:33:40 -0400
+        with ESMTP id S1726594AbgIQSdh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 14:33:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797A2C06121F
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 11:32:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B20C0612F2
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 11:32:56 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7] helo=dude.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <bst@pengutronix.de>)
-        id 1kIyiE-0004GR-TQ; Thu, 17 Sep 2020 20:32:54 +0200
+        id 1kIyiE-0004GR-UV; Thu, 17 Sep 2020 20:32:54 +0200
 From:   Bastian Krause <bst@pengutronix.de>
 To:     linux-rtc@vger.kernel.org
 Cc:     devicetree@vger.kernel.org,
@@ -27,9 +27,9 @@ Cc:     devicetree@vger.kernel.org,
         Arnaud Ebalard <arno@natisbad.org>,
         Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
         Bastian Krause <bst@pengutronix.de>
-Subject: [PATCH v2 6/8] rtc: ds1307: store previous charge default per chip
-Date:   Thu, 17 Sep 2020 20:32:44 +0200
-Message-Id: <20200917183246.19446-7-bst@pengutronix.de>
+Subject: [PATCH v2 7/8] rtc: ds1307: consider aux-voltage-chargeable
+Date:   Thu, 17 Sep 2020 20:32:45 +0200
+Message-Id: <20200917183246.19446-8-bst@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200917183246.19446-1-bst@pengutronix.de>
 References: <20200917183246.19446-1-bst@pengutronix.de>
@@ -43,64 +43,63 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Some RTC's batteries and supercaps were charged by default until now.
-In contrast other RTCs allow charging but the driver did not configure
-them to do so until now. These must not be charged by default to stay
-backwards compatible.
-
-In order to do that, store the charge default per chip.
+Prefer aux-voltage-chargeable over trickle-diode-disable and set diode
+accordingly. This is then passed to the chip's appropriate charge setup
+function.
 
 Signed-off-by: Bastian Krause <bst@pengutronix.de>
 ---
 No changes since v1.
 
 v1 notes:
-No previous version.
+This is the discussion that lead to this patch:
+https://lore.kernel.org/linux-rtc/a492b6a0-b41c-a088-3ba1-f1448a074b34@pengutronix.de/
 ---
- drivers/rtc/rtc-ds1307.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/rtc/rtc-ds1307.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index 7983438b677a..270621e1c9cf 100644
+index 270621e1c9cf..9bf1822a989f 100644
 --- a/drivers/rtc/rtc-ds1307.c
 +++ b/drivers/rtc/rtc-ds1307.c
-@@ -194,6 +194,11 @@ struct chip_desc {
- 	 * the resistor between Vcc and Vbackup?
- 	 */
- 	bool			requires_trickle_resistor;
-+	/* Some RTC's batteries and supercaps were charged by default, others
-+	 * allow charging but were not configured previously to do so.
-+	 * Remember this behavior to stay backwards compatible.
-+	 */
-+	bool			charge_default;
- };
- 
- static const struct chip_desc chips[last_ds_type];
-@@ -986,6 +991,7 @@ static const struct chip_desc chips[last_ds_type] = {
- 		.trickle_charger_reg = 0x10,
- 		.do_trickle_setup = &do_trickle_setup_ds1339,
- 		.requires_trickle_resistor = true,
-+		.charge_default = true,
- 	},
- 	[ds_1340] = {
- 		.century_reg	= DS1307_REG_HOUR,
-@@ -994,6 +1000,7 @@ static const struct chip_desc chips[last_ds_type] = {
- 		.do_trickle_setup = &do_trickle_setup_ds1339,
- 		.trickle_charger_reg = 0x08,
- 		.requires_trickle_resistor = true,
-+		.charge_default = true,
- 	},
- 	[ds_1341] = {
- 		.century_reg	= DS1307_REG_MONTH,
-@@ -1302,7 +1309,7 @@ static u8 ds1307_trickle_init(struct ds1307 *ds1307,
+@@ -1308,7 +1308,7 @@ static int ds1307_nvram_write(void *priv, unsigned int offset, void *val,
+ static u8 ds1307_trickle_init(struct ds1307 *ds1307,
  			      const struct chip_desc *chip)
  {
- 	u32 ohms;
--	bool diode = true;
-+	bool diode = chip->charge_default;
+-	u32 ohms;
++	u32 ohms, chargeable;
+ 	bool diode = chip->charge_default;
  
  	if (!chip->do_trickle_setup)
+@@ -1318,8 +1318,27 @@ static u8 ds1307_trickle_init(struct ds1307 *ds1307,
+ 				     &ohms) && chip->requires_trickle_resistor)
  		return 0;
+ 
+-	if (device_property_read_bool(ds1307->dev, "trickle-diode-disable"))
++	/* aux-voltage-chargeable takes precedence over the deprecated
++	 * trickle-diode-disable
++	 */
++	if (!device_property_read_u32(ds1307->dev, "aux-voltage-chargeable",
++				     &chargeable)) {
++		switch (chargeable) {
++		case 0:
++			diode = false;
++			break;
++		case 1:
++			diode = true;
++			break;
++		default:
++			dev_warn(ds1307->dev,
++				 "unsupported aux-voltage-chargeable value\n");
++			break;
++		}
++	} else if (device_property_read_bool(ds1307->dev,
++					     "trickle-diode-disable")) {
+ 		diode = false;
++	}
+ 
+ 	return chip->do_trickle_setup(ds1307, ohms, diode);
+ }
 -- 
 2.28.0
 
