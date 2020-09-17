@@ -2,127 +2,152 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC97A26D5E8
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 10:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CB526DA0A
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Sep 2020 13:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbgIQIKv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Sep 2020 04:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbgIQIFJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Sep 2020 04:05:09 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45925C061220
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 01:03:40 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id k18so1037649wmj.5
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Sep 2020 01:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
-        b=Xm9muXpLMfdw+3JTaQ5+6nxJDSneO0K8th2wgQ0VLh2VI2BmK+XWoQ9cDtIn8+KaRJ
-         B45Xbntr5JjNU8mF7nIZd8VP+CTHviEtF1Um5VazOhr6GEQCgh9bbRNIM6C+XWioNjmk
-         ImuOo8Gi8eD0FtSQ7hHZ1yPAo82BLFHJwGGg0UxKCYs0oMSSpMWIe45dJUN+DzUELaKQ
-         JzvvcS8KVPQMZJTfgm/lLBewbBl9UGKGHM3XV6hYGQwunOqgCSfJKO8sQaLl1M6X9BRD
-         K+XM2hJttDJQqNZl5Xftk9yd2fnhmTZR2ol6vfSH0itoQkT2+o/FcX7saxpuLl0f47l5
-         EzpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TUShtxADeMIRUv08jDyFnIdO2h4AVdi1g89uLOtrWXw=;
-        b=pouOoTvw87aY0+4SZFEWTPIEuNg5rHMPugdRErSLGN86fs1afOsBlpkiiC5B0/vvRz
-         uI+eouIDrKAZiU0fR24aHGPXp3JRX7fElv5+1lpqmX5v8gum5kqBZmHPfs43o4IZWLS1
-         am0qM5odWAmQrZX5zLwe8yCJygfSh34ChW+O3Rs1VLtRwfpArPZUVIM/ikFDS7rT94Bu
-         Z5SZtOMKwOPV6Rin3uA0Z1tG3bXwaP1NH9scrpmYZdTWtdsHC8EoRTmzZJ/8NlSr9wR5
-         sL3xecJgiOj6/D2jkkwgZiR2y6WrBqL7x+zDAKuZ2B8hI7F70BCJumrx+7cn2ValR945
-         TNvA==
-X-Gm-Message-State: AOAM533sVZHOP5JG6VJOk1ao+nZuEzlywokqQ4JkWk+wOqVTN7Hzc7VS
-        9iLYVBlt8iFhxuZv9qVb5lTwLw==
-X-Google-Smtp-Source: ABdhPJzTwzfeJOnCQh65prZummqH9JR09Yxja+zvv2OTSAZpPcom4k7xuvXSyH3Yv50qn/8+2aIWyQ==
-X-Received: by 2002:a1c:e256:: with SMTP id z83mr8793930wmg.33.1600329817598;
-        Thu, 17 Sep 2020 01:03:37 -0700 (PDT)
-Received: from netronome.com ([2001:982:756:703:d63d:7eff:fe99:ac9d])
-        by smtp.gmail.com with ESMTPSA id a13sm9836030wme.26.2020.09.17.01.03.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 01:03:36 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 10:03:35 +0200
-From:   Simon Horman <simon.horman@netronome.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [oss-drivers] [trivial PATCH] treewide: Convert switch/case
- fallthrough; to break;
-Message-ID: <20200917080334.GB5769@netronome.com>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+        id S1726767AbgIQLW3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Sep 2020 07:22:29 -0400
+Received: from mout.gmx.net ([212.227.15.15]:36151 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726737AbgIQLWG (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 17 Sep 2020 07:22:06 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 07:21:46 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1600341671;
+        bh=kcQG8LFPG8ZdF1tJX2ReXp1ymOvCchPakQITfwi7wsY=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=dwDxmHHn/PKRczTzXf++7gZFDephWUFI/02G4b6e5ZI3/Kb+Vo7BLISTM4OdgIR7f
+         pYt5zlSOw4slvmQoqBH2qv4ey+sj1pytORKTeCpaqcONBKrRejvHXzPbIHzd5rO+P3
+         UBUJKkpfhf5cWGtipmaaQDH8OGk6eHbU9l4N5E64=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.151]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbAh0-1kuPW53Tk8-00bYPT; Thu, 17
+ Sep 2020 13:12:33 +0200
+Date:   Thu, 17 Sep 2020 13:12:27 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
+Subject: Re: [PATCH v2 02/10] dt-bindings: mfd: Add binding for Netronix's
+ embedded controller
+Message-ID: <20200917111227.GG3306@latitude>
+References: <20200905133230.1014581-1-j.neuschaefer@gmx.net>
+ <20200905133230.1014581-3-j.neuschaefer@gmx.net>
+ <20200915005034.GA593718@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Qf1oXS95uex85X0R"
 Content-Disposition: inline
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200915005034.GA593718@bogus>
+X-Provags-ID: V03:K1:ev2u5S77GN0uZkDCjBOntRbHT8/sSZ8XUQEayhtkySNmP8+bRfn
+ aDiBBQGrJse0BLqsSGvKr5UIq13EnWQMgp3+BrzC0A6nE5NV93CereLlHSYFWSaxwAWVTff
+ 3u5cMb9C+fDculSIeXHokBZWKitnyLBgvzrskB5K4vJFJUaxMpF6MqCdAS/wpHr5Ejecq63
+ WXGDMG79gAVqrYk1oO96Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6qVPALzKyCM=:RhrAj3SWrfW3i9PouFl01A
+ R9WzOIJMuX8H8tzOxK9voLMh5RpjSFc4C86Z3aIXms5kT0T2Vmu7aI9nb8eb0VapY57VzsBht
+ WPVjOYQt9fFLPvlsFvnF2SUIbwk5mujtM24GqqJLsei/a1+ZCPn60WuGP/IXxz8iyugNjd5oG
+ 7U+cPamn5RnPl0p3zYuyPsmpAe6c3Qae0MEUyd68qrTzaNPKMu9ZYRIPHk7NzT7RdzVy0PzWt
+ wSSc0hiPRXADSC0opaZAzOaP78jFFuXVV9VWkNgzOeB/oyBRJmxSX1BwTWv/UmhvuBnz79ozJ
+ Bq55hon8URzTMUDq4cncUH2wUMsFY4FMkyEYmv2comfjhhh9WnE8t1byeBTrSys5iC1Et3Puk
+ NK7f4kcRHRcH+9/q7rPR9Pk8WXLTlVMzI6xIL4RTntwWEdeiWA5UDEiNjXKspJnqrj/xCgexR
+ 1QT6eAhO25pb/6aJfapdcqcUeHPsaMaH61CX9lP104Ltq2nErsub5XRrAEz+dABZpPvzRPgu/
+ XWZj/04MZxsj7PZC1wFIlBeeOVvIG2OPf+n9xqFIlmH6Hp+y0OqG9t4NRbLJfnQjMaNFktxvn
+ WnNI1KBU/GeF9tJMbqGo5ptsr3opd/AxftNz5dTFSG1dvyCpdvHQPwaj9SYSAx+8FaSjnd+K0
+ CFdq0b4JTUn3YulKzjckJSAmjKj9GUsJkUdW2RtTwucAXHPMvOc6kv852Yxmz4VhpjcbW1qDE
+ PoBUaSZXVVJj0GRwylq9yQ8ZgkiMOfEiT9qaWU8JWXhOIm3M6RNsX2614/WWwR4bZ3PwTaj32
+ gAbTTe2HfsCC//AUT9gvzYSMIJqEjSJYfnHGrY+E+G4FS/QaRhkJNkvZHovp47Mvvv/SirzYo
+ rZ5Kh+O4V2TOL1bu+T89sh+kst8hPS7UWDxTnwlakPcY7BrS+VCl2JptodaZnogq8pbN7Kavg
+ jy7IKRItl/18Yzq6++1FI2NGLEhjNgCv3ZTm1Ct6CvoHcYl1NtXRgkoRStwdJ+GnHVzIq/flD
+ guz6mvvEf1reJ/LspfmRKeIDJgIU99ETHBSNUxMsODCUkRQB5sqmoNFHUBTn1JFgI7qR7mMFX
+ cAaLgWxUkDn6sqjb+IojZvXo6pma8/u2CviQcD8ONJKQLn4ddSPrF2zBbVHzrQuJ3pCid+NNK
+ mjXrrf0CrUUkG26ZvLF6OwEDeL3zALdx79PeH7TBdLRkR24cldRRFYycs17tI4CHAeypJZHDE
+ a2V8wGNJClZT6Lezqf/dRulgrFuvj6SCmYRUamA==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
-> fallthrough to a separate case/default label break; isn't very readable.
-> 
-> Convert pseudo-keyword fallthrough; statements to a simple break; when
-> the next label is case or default and the only statement in the next
-> label block is break;
-> 
-> Found using:
-> 
-> $ grep-2.5.4 -rP --include=*.[ch] -n "fallthrough;(\s*(case\s+\w+|default)\s*:\s*){1,7}break;" *
-> 
-> Miscellanea:
-> 
-> o Move or coalesce a couple label blocks above a default: block.
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
 
-...
+--Qf1oXS95uex85X0R
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> index 252fe06f58aa..1d5b87079104 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c
-> @@ -345,7 +345,7 @@ static int matching_bar(struct nfp_bar *bar, u32 tgt, u32 act, u32 tok,
->  		baract = NFP_CPP_ACTION_RW;
->  		if (act == 0)
->  			act = NFP_CPP_ACTION_RW;
-> -		fallthrough;
-> +		break;
->  	case NFP_PCIE_BAR_PCIE2CPP_MapType_FIXED:
->  		break;
->  	default:
+On Mon, Sep 14, 2020 at 06:50:34PM -0600, Rob Herring wrote:
+> On Sat, Sep 05, 2020 at 03:32:22PM +0200, Jonathan Neusch=C3=A4fer wrote:
+> > This EC is found in e-book readers of multiple brands (e.g. Kobo,
+> > Tolino), and is typically implemented as a TI MSP430 microcontroller.
+[...]
 
-This is a cascading fall-through handling all map types.
-I don't think this change improves readability.
+> > +required:
+> > +  - compatible
+> > +  - reg
+>=20
+> additionalProperties: false
 
-...
+Ok, I'll add that.
+
+> > +                    interrupt-controller;
+> > +                    #interrupt-cells =3D <1>;
+>=20
+> These need to be documented too.
+
+Interrupt support is something I haven't really worked out yet for this
+(set of) binding(s). My idea here was to have the embedded-controller
+node act as an interrupt controller, and the subnodes use specific
+interrupts that are relevant for their functionality.
+
+I think I'll rather omit the interrupt-controller and #interrupt-cells
+properties now, and add them later if they become necessary. If the pwm
+and rtc nodes are merged into the main node, I don't think they will
+become necessary.
+
+
+Thanks,
+Jonathan Neusch=C3=A4fer
+
+--Qf1oXS95uex85X0R
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl9jRJQACgkQCDBEmo7z
+X9u8KRAAq5gEP5j/6Hqan0bWxs+pnmxfLfJWotg/zYwxGSXKbNeJs5wWVQ1A+Pni
+DZFAl1Ai4HcClf/OEA4dU4goQrfPUwunWBXZtzRWtjyssikgRn/Ppkt/Xw8p1zZ/
+xxJqR4GD1N3jaP8G1/w8TbTLNSCXuYXh3mV8bfM8PHvBf8R5rGqDLeCP2qdUQKNu
+LrO7CNsUNwBwbT+/9H8i9/DLuZCiiFk3RrY9/hTS2dkIYuuJUWnzjB7TLapSNvAS
+hN/58HFgjheT7YpmicfOCyGjPCV2o407QDsQN4sEiFn83dk/E1Uz9kizLuvPzzF3
+ZUbmlWSGpejZWHM9RBPf9ZRwDtQFu7h7vutQ9U+2Drk+jpVD72fOgBCraAq7wndy
+riFBUSvFm+jtFjZ7Z597JuMMuU1pUYv7lUxt/0D0svNGq/tTMU8mYZAxKq9XAvOb
+uA9bMxXUjj/wIMK444K8gBtmMZnK/XZhUiqffKm0xuiEUzKPJIVok/5sTLroil10
+vNzVBrjQb3fO/sKeB5jLbr7QJ426aYHF+nI1mGC44FM0LiAo3F/+B4VwGgDhhRAh
+zrRVgrXDe/YO+yjR1+1E1NmU0CZ6C2dbdLJr3mf+T7RxHsmZ99JCZb9TFSThGP6U
+gKdiSgi+T11HDeQXw559Uhf+mLivOh+20AAj+RSOg+F2NDYQS/Y=
+=Luic
+-----END PGP SIGNATURE-----
+
+--Qf1oXS95uex85X0R--
