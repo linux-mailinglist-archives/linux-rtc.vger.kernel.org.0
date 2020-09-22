@@ -2,95 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D17273658
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Sep 2020 01:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F8927390B
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Sep 2020 05:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728812AbgIUXLc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Sep 2020 19:11:32 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:57383 "EHLO mail.rusoil.net"
+        id S1726467AbgIVDCP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Sep 2020 23:02:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726457AbgIUXLb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:11:31 -0400
-X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:11:22 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 3CFBD40D5B;
-        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EV4tl_rVLSS7; Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 2C0DD40CEA;
-        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 2C0DD40CEA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729693;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
-         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
-         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K7O08Fi_YWVd; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
-        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
+        id S1726395AbgIVDCP (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 21 Sep 2020 23:02:15 -0400
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E7702239D4;
+        Tue, 22 Sep 2020 03:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600743734;
+        bh=iSsbqsE+K08ClzQ23JTW3tOKG+dOLxF59xwrecN2L0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b0MSu19ywyBkA13I5FwiMk4wxPb4y1r2mkPorEJF9+xc5MDdnQ5R/EB6DloUO4/dY
+         7zmi8WFfDgiWfyb+yh/xKgF4+5RwiSkgaqqof3K5oZRtEDHbbBK2GnFLso+IWYFCSh
+         9USx1VUbdGX90mmG1ZZxVrn6lp8OP6XTxsOKIRtY=
+Date:   Tue, 22 Sep 2020 11:02:09 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Biwen Li <biwen.li@oss.nxp.com>
+Cc:     alexandre.belloni@bootlin.com, leoyang.li@nxp.com,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiafei.pan@nxp.com, linux-rtc@vger.kernel.org,
+        Biwen Li <biwen.li@nxp.com>
+Subject: Re: [PATCH 2/5] arm64: dts: lx2160a-rdb: remove useless property of
+ rtc
+Message-ID: <20200922030208.GY25109@dragon>
+References: <20200915073213.12779-1-biwen.li@oss.nxp.com>
+ <20200915073213.12779-2-biwen.li@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200915073213.12779-2-biwen.li@oss.nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, Sep 15, 2020 at 03:32:10PM +0800, Biwen Li wrote:
+> From: Biwen Li <biwen.li@nxp.com>
+> 
+> Remove useless property interrupts of rtc
+> 
+> Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts
+> index dce79018d397..e9e982176e07 100644
+> --- a/arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts
+> +++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a-rdb.dts
+> @@ -171,8 +171,6 @@
+>  	rtc@51 {
+>  		compatible = "nxp,pcf2129";
+>  		reg = <0x51>;
+> -		// IRQ10_B
+> -		interrupts = <0 150 0x4>;
 
+If it's a correct description of hardware, I do not see why we would
+need to remove it.
 
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+Shawn
 
-
-Eine kurze Einf=C3=BChrung.
-
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
-
-
-Darlehensverfahren
-
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
-
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
-
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
-
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
-
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
-
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
+>  	};
+>  };
+>  
+> -- 
+> 2.17.1
+> 
