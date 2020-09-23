@@ -2,121 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD35E275938
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Sep 2020 15:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5D1275A11
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Sep 2020 16:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbgIWN6T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Sep 2020 09:58:19 -0400
-Received: from relay-us1.mymailcheap.com ([51.81.35.219]:59450 "EHLO
-        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbgIWN6S (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Sep 2020 09:58:18 -0400
-X-Greylist: delayed 340 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 09:58:17 EDT
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 7E16120EA6;
-        Wed, 23 Sep 2020 13:52:36 +0000 (UTC)
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id B98AC200FE;
-        Wed, 23 Sep 2020 13:52:31 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id E32623F201;
-        Wed, 23 Sep 2020 13:52:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id C65E22A3E1;
-        Wed, 23 Sep 2020 09:52:29 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1600869149;
-        bh=a1LfviR3VbyZh4Nk0FS3MktFMmLYUmJVZmOzx2yNj4I=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=bzb85VRtpR5KbG3Hle892IR0MymCtj/orGQBUvKdBkfZ6CSEmgH2Y0msmjpeRA9EI
-         7lZQqvXFua3mciZjyIDRBszrqGdZ7G2VLqqy6++w/hiBpvG5uPZxw3wmyvOoBkNZyq
-         DYEQV3M4CAZLBKfuT227757MMIBIAoPjDK7bZ1hw=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ONeU5LxvPo8z; Wed, 23 Sep 2020 09:52:28 -0400 (EDT)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Wed, 23 Sep 2020 09:52:28 -0400 (EDT)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 1892340FE5;
-        Wed, 23 Sep 2020 13:52:27 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=flygoat.com header.i=@flygoat.com header.b="mK0J2bVT";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (li1197-90.members.linode.com [45.79.98.90])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id BE6A040FE5;
-        Wed, 23 Sep 2020 13:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=flygoat.com;
-        s=default; t=1600869059;
-        bh=a1LfviR3VbyZh4Nk0FS3MktFMmLYUmJVZmOzx2yNj4I=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mK0J2bVTzX8X3SgzueDarkdVc/Yx6n7wd8GQNjfT8bPuqTkAWu4+/L+HY5v/rsPce
-         fv7YINuAGlcsOC69s6yMRB50o83iEj3ZUiJJAJKd9VoOMruucM3LvI7lW87qzy4hb4
-         ZUA0Mz2/iqv3NWdcL4IcD+ss0pxwYSM8kIsyCoY4=
-Subject: Re: [PATCH 1/4] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
-To:     WANG Xuerui <git@xen0n.name>, linux-rtc@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1726587AbgIWOcH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Sep 2020 10:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWOcH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Sep 2020 10:32:07 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284C0C0613CE;
+        Wed, 23 Sep 2020 07:32:07 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id f1so6924688plo.13;
+        Wed, 23 Sep 2020 07:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OGwdlXDnTAZD2Zb516ICMPvsFM+7oJAWzX58TFEAviI=;
+        b=hGcdUm8KJY2qyuDh/7NjLkugpqRvn9BlJ4x+za48n2cxs43uMqE6FwgqkB2PFfo/sE
+         bfnPJ99PEM014jz8w454GQt/DdOh4xj98sjsXJyds71Pdhu/pHGS4KRs60vdqPgun4+5
+         MzbYW24A9Ze6SaK+3Ng+aSdNFT2zdyhpM4JgRVXXs/L2uX3M9D9fKTcCFCzsoUJnfOBJ
+         Kqw67kaVZ3KWnWwewwVbm1QcXsRfB6047LJsr0Y1l7UlWto/I3IztHf0Vu/jFK1j0GhZ
+         qMxH0Jq433yrKue3ajx+CfyNowCkU1D2CpMSAu+uVbbZ/Rkibd8QHheJ8eem5rzI5PA6
+         ma8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OGwdlXDnTAZD2Zb516ICMPvsFM+7oJAWzX58TFEAviI=;
+        b=pHfhB1v/OIzVmlLe/22FfRDECRrCcYyazTFt/G2VhrYYMeooQGHyFPYc0pOZaXIqmg
+         uwdbmux6LQpFq2V0WBpfcFdY3mWwY/CaRBUpHrx2YLYk07PvrTYoKxU135Z3NNWDjqF/
+         9A552hIG099JBoJKxz0OsqehjGpYP7KsQLRWT63pTxi9isHaem1VK3dFlg2W9C1ZonQJ
+         450DQldxEecdyfKz6AlsR8AXESgUpcZnbZIJW38Yxu7N4/5P5O3hh7P9vOesMqg2lt9O
+         FhqO9a0csKcvzW+grdGf9iJTuRDXsPCmrckPHRcedz/6xAgOTQ2F3GNBibGX424C62+l
+         tMzQ==
+X-Gm-Message-State: AOAM533Ut13PJIklGlglTjrVqrs6aJAFaurIiAlcGdHnlAYZelNhnJ9p
+        8edNUPYFnf9xnnnD/OrZvZjjf5pZoUk=
+X-Google-Smtp-Source: ABdhPJzTArcqV/mAFMrTD+Ke6/qZHIHV/RfqDOBzdR/B4sKGVRghDOLeU2gDVVzrk1zqIqJpDXZDyg==
+X-Received: by 2002:a17:90a:1b62:: with SMTP id q89mr8657518pjq.74.1600871526680;
+        Wed, 23 Sep 2020 07:32:06 -0700 (PDT)
+Received: from tkernel.org ([103.209.252.252])
+        by smtp.gmail.com with ESMTPSA id b4sm5272692pjz.22.2020.09.23.07.31.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Sep 2020 07:32:06 -0700 (PDT)
+Date:   Wed, 23 Sep 2020 22:31:52 +0800
+From:   Du Huanpeng <u74147@gmail.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <git@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         Huacai Chen <chenhc@lemote.com>
+Subject: Re: [PATCH 1/4] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Message-ID: <20200923143149.GA11566@tkernel.org>
 References: <20200923075845.360974-1-git@xen0n.name>
  <20200923075845.360974-2-git@xen0n.name>
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-Message-ID: <100edde4-c9cf-75bd-d8e5-727ed6dc4cc0@flygoat.com>
-Date:   Wed, 23 Sep 2020 21:50:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.2
+ <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <20200923075845.360974-2-git@xen0n.name>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1892340FE5
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[flygoat.com:s=default];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         DKIM_TRACE(0.00)[flygoat.com:+];
-         DMARC_POLICY_ALLOW(0.00)[flygoat.com,none];
-         DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
+> rtc-ls2x --> rtc-ls2x-ls7a
+> RTC_DRV_LS2X --> RTC_DRV_LS2X_LS7A
+> Loongson LS2X RTC --> Loongson LS2X/LS7A RTC
+> 
+> Maybe the related names include ls7a or LS7A is better to
+> reflect the reality?
 
-ÔÚ 2020/9/23 15:58, WANG Xuerui Ð´µÀ:
-> This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> bridge chip. This version is almost entirely rewritten to make use of
-> current kernel API.
->
-> Signed-off-by: Huacai Chen <chenhc@lemote.com>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
+Is there any difference with the rtc IP in loongson 1* SoCs?
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-This driver have been out of tree for around 10yrs,
-thanks for shaping it to mainline quality!
-
-- Jiaxun
-
-> ---
+Regards,
+Du Huanpeng
