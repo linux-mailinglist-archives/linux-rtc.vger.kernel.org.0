@@ -2,164 +2,352 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D895276AB1
-	for <lists+linux-rtc@lfdr.de>; Thu, 24 Sep 2020 09:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F88276ACC
+	for <lists+linux-rtc@lfdr.de>; Thu, 24 Sep 2020 09:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbgIXHX0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 24 Sep 2020 03:23:26 -0400
-Received: from mail-eopbgr10085.outbound.protection.outlook.com ([40.107.1.85]:23942
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726993AbgIXHX0 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 24 Sep 2020 03:23:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cms/ec9cEfdhB0SIOeKbtQ0n8kQuFA+TZR6G24Ta/m2YXY0HknRqPKoCyWjXY7zULELMT6/qvh8GJetSUUmAFajpsd8kH2q73LVys3CFEWPghWROhyo6cOSXYWQqNgtr1MwZ9glBg6EfXls7wWXBedGIOmJZXVdoqmyGXX/o3T6jnBq+w/lppfyzcYlMohmAUtk/UM2gxwi4bwLBfmUJ64w6uFJTGMLgulf43niXgPMN0RkI3N4zUhsfdr46ato7OpgWyR2u6mPjYB0rJaX96VUc2Ow2MGcZqKpqflT5c3G+UNb6kv00MT30IEc46UoAW0u17ODZIIhXjmdfuaUiYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZREFUneW/MgzohLmb3zE5TVJl7BtcXNttDKVRjrIzDw=;
- b=Q+TG7m2bkpsvmv3yblSqoeM4DH+WLQg1F6oQF0xPj4nsiDhumaUbvQT6wdV2Lj7E8h7B/1s5mkWk4uiDLwdrCHsweKvDH0CxKUs+5rL+sppdgLg2hQdw+BymssHXMOOx7fSlYqIlkErIpoCwvTaWK3Oo4jyuVg7JQv0kWy6EZS+OXnK4/uMbWEoOtcd6ZUH+fxFzyi3XE38bysyHxbUUJbIS62ixGcqJMfRZ41EPc0O9OZDXtVL3sV/lecHH6RV27EYMgQFywTXn2uJktGa8/nn8nd6rLaV6fZ5f9VGz/hbqLSzD+xNkOR0sUc+Hq7xmxmbicMv+dV1KzjEVOPpiZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZREFUneW/MgzohLmb3zE5TVJl7BtcXNttDKVRjrIzDw=;
- b=cUARNIRRiL9iRDuNecpgbI8q64sEfJBy01hYR1LWMxLNyVvk84clkwOAw2ClY9+8E/HPOlyYFTkD/ry7E4RZVgWhSPiGBWnOewRMHF1HyLKZtUvKKEYPef0i/wqcpa94uKmKJrN0vkWPmtwY8UALfSfgpxCUhILBsBDLrgsdxqE=
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com (2603:10a6:803:129::26)
- by VI1PR0402MB2720.eurprd04.prod.outlook.com (2603:10a6:800:b3::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Thu, 24 Sep
- 2020 07:23:20 +0000
-Received: from VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::f16e:a79:2203:5d35]) by VE1PR04MB6768.eurprd04.prod.outlook.com
- ([fe80::f16e:a79:2203:5d35%6]) with mapi id 15.20.3412.022; Thu, 24 Sep 2020
- 07:23:18 +0000
-From:   Qiang Zhao <qiang.zhao@nxp.com>
-To:     =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: RE: [Patch v2 1/3] dt-bindings: rtc: pcf2127: Add bindings for
- nxp,pcf2127
-Thread-Topic: [Patch v2 1/3] dt-bindings: rtc: pcf2127: Add bindings for
- nxp,pcf2127
-Thread-Index: AQHWj9v8ujWDbe4KQkWWGAO9y9OzgKl1/KOAgAEbugCAAEnvAIAAAGkg
-Date:   Thu, 24 Sep 2020 07:23:18 +0000
-Message-ID: <VE1PR04MB6768783CAE7CA611365661AF91390@VE1PR04MB6768.eurprd04.prod.outlook.com>
-References: <20200921054821.26071-1-qiang.zhao@nxp.com>
- <20200923094449.GP9675@piout.net>
- <DB8PR04MB67635518BE38EEF5292C8D0991390@DB8PR04MB6763.eurprd04.prod.outlook.com>
- <20200924070456.rovgp6n5q25s53vc@pengutronix.de>
-In-Reply-To: <20200924070456.rovgp6n5q25s53vc@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.73]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: da3c2ed1-1e91-403c-9d28-08d8605ab5e7
-x-ms-traffictypediagnostic: VI1PR0402MB2720:
-x-microsoft-antispam-prvs: <VI1PR0402MB27204BDCEE004EFC0E8DB1EC91390@VI1PR0402MB2720.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R2Gk/DebX7TM1DZfg9AF/j86yQNplMlQGhdMcXYJixS2CviaUxj71mRbgE7XITy0T5o4Kxz5tJyUG0Qd+6nethFa3/UjC5QurgsvYkZqSrgjeMVCI6jxmYJInv0RK7l65mLkjb86CDm3FPIdl0XzNNRW9hsBoL8K0fYCg/mNzfVMXlX7XrTUpcsh09NxUplUTSECopYLz/0ut1DjlOtzLhH+r1v4Otew3jGarWXzJ+UnBXnjBStnXD3QEFIK4EeYH/usGsXsQqx0MueirwQVCBInCDQti2wb0M5NPxYRdLamreVzeuamM5RFhbOfIYnXN1DGXl17x7UbaMZNkiY7u2cpfrlD1xgpssYQTcFle+UxC4pf8X6hsMklj0AtUOqpBIXuZOkNEOKUWj/R9mj6V48Ds0bS7alf9I7z2g54MdrVTAoeH8ndT+v63NisrqO1qqutc9Lr6FI0GrnalYhqTja+oX9X57PydABrR+Qs1PDj+pa9bX8F6cAJacbslhza
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6768.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39850400004)(376002)(366004)(136003)(396003)(45080400002)(54906003)(33656002)(6916009)(66446008)(316002)(64756008)(186003)(8936002)(5660300002)(7416002)(52536014)(71200400001)(4326008)(478600001)(7696005)(9686003)(86362001)(66476007)(66556008)(76116006)(2906002)(8676002)(66574015)(966005)(66946007)(53546011)(6506007)(83380400001)(83080400001)(44832011)(26005)(55016002)(142933001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 05DrYEBIlU7qBL3zpuzNoPfjfgE0jDwrfeIw1grCSKM2fdBdAKVZeXuCwZYe5SrvxAoQBqam87YqQBSbKe4nFvR+98zSl7C7a928nbIICuxIMEgWSUqrCHdHoelV4RRlEtvy1J6NTle8uygSd/b43ycpiHFNn6q64oI1ztnTDrYR6bp7pgmHHZt1YJ7I/cAMhsyOvQDFhMfVLWCKxK079IhE5lBciyR7/0/zadZph+9bE68GoN+REshreqPyXCIEzDjdHgndtASy/ioebhhFw/vsEqMekR7ZsXIXmoLE8kVKFu2OuOtrMNuNiNJJwpD5kSpiB3e1JfJLSelYRorJibMyaZmLjCcwS79wVeOxzD5KP534KdUZ0Z5hH39fZ1eo0hfLd+dmEXYURYug/ZDsZSZenGEmHUqaCeukdY8AW0q8E/1LCrlM5IOVcYBwPC9IdzRigj1WBj/bDRvsdnMC9bN2KzpGnC2taCkiVHxW7mhJFpsqlc/8Sfih2WRge5yE/mY/uQBmev1Jd/2jmairB79Kd53Gv2clLFUjps56okXn4B9nQ0UVUNqcrE1ToSHDnhC0iJwI0tRm1KhWjO13JR+N4OdG9mXruCgx9DmjRAXKqRVBH+PxkWBVw11bD+P/EPbSc9glNMe89r/C5tA39g==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727024AbgIXHco (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 24 Sep 2020 03:32:44 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:39872 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726655AbgIXHco (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 24 Sep 2020 03:32:44 -0400
+Received: from hanazono.local (unknown [58.33.27.210])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 6F03660090;
+        Thu, 24 Sep 2020 15:32:36 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1600932756; bh=yN4lxYvNVpNDsKyNAWMjybDrx6s8B5Opnx7pACIhyew=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=iaXPRuyKbSQWzO5ut6E+GrNHXRgOxRC4Nz9vHyB5ZTS0l1Q8bcqZqCQgehnGJf95y
+         sUog3LT2zXYwylUlNGry9lUwx0Y8nP25kUFglQbSA8sXy+eTeG30sIFJT/cdxD+z5l
+         vIbidJpnaTdhv7HOw1uRiU2Yh0IrnezNeigpqrFw=
+Subject: Re: [PATCH 1/4] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>, linux-rtc@vger.kernel.org
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Huacai Chen <chenhc@lemote.com>
+References: <20200923075845.360974-1-git@xen0n.name>
+ <20200923075845.360974-2-git@xen0n.name>
+ <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+Message-ID: <ddb88eca-3754-ef27-55ea-d136a6bc0d70@xen0n.name>
+Date:   Thu, 24 Sep 2020 15:32:35 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:83.0)
+ Gecko/20100101 Thunderbird/83.0a1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6768.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da3c2ed1-1e91-403c-9d28-08d8605ab5e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2020 07:23:18.7054
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yHCt3FJvom1R+d6tbpyyAzoFRQ8CKnK197cCK8/vd8EzBLCxZULAOeBm75ZaGz6GDdabV/l8MmnGwTpBgrfPPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2720
+In-Reply-To: <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-T24gVGh1LCBTZXAgMjQsIDIwMjAgYXQgMTU6MDVBTSArMDAwMCwgVXdlIEtsZWluZS1Lw7ZuaWcg
-PHUua2xlaW5lLWtvZW5pZ0BwZW5ndXRyb25peC5kZT4gd3JvdGU6DQoNCj4gLS0tLS1PcmlnaW5h
-bCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVXdlIEtsZWluZS1Lw7ZuaWcgPHUua2xlaW5lLWtvZW5p
-Z0BwZW5ndXRyb25peC5kZT4NCj4gU2VudDogMjAyMOW5tDnmnIgyNOaXpSAxNTowNQ0KPiBUbzog
-UWlhbmcgWmhhbyA8cWlhbmcuemhhb0BueHAuY29tPg0KPiBDYzogQWxleGFuZHJlIEJlbGxvbmkg
-PGFsZXhhbmRyZS5iZWxsb25pQGJvb3RsaW4uY29tPjsgV2ltIFZhbiBTZWJyb2Vjaw0KPiA8d2lt
-QGxpbnV4LXdhdGNoZG9nLm9yZz47IEd1ZW50ZXIgUm9lY2sgPGxpbnV4QHJvZWNrLXVzLm5ldD47
-DQo+IGxpbnV4LXdhdGNoZG9nQHZnZXIua2VybmVsLm9yZzsgYS56dW1tb0B0b3dlcnRlY2guaXQ7
-IHJvYmgrZHRAa2VybmVsLm9yZzsNCj4gbGludXgtcnRjQHZnZXIua2VybmVsLm9yZzsgZGV2aWNl
-dHJlZUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IGtl
-cm5lbEBwZW5ndXRyb25peC5kZQ0KPiBTdWJqZWN0OiBSZTogW1BhdGNoIHYyIDEvM10gZHQtYmlu
-ZGluZ3M6IHJ0YzogcGNmMjEyNzogQWRkIGJpbmRpbmdzIGZvcg0KPiBueHAscGNmMjEyNw0KPiAN
-Cj4gSGVsbG8sDQo+IA0KPiBPbiBUaHUsIFNlcCAyNCwgMjAyMCBhdCAwMzoyMDozM0FNICswMDAw
-LCBRaWFuZyBaaGFvIHdyb3RlOg0KPiA+IE9uIDIxLzA5LzIwMjAgMTM6NDg6MTkrMDgwMCwgUWlh
-bmcgWmhhbyB3cm90ZToNCj4gPg0KPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4g
-PiA+IEZyb206IEFsZXhhbmRyZSBCZWxsb25pIDxhbGV4YW5kcmUuYmVsbG9uaUBib290bGluLmNv
-bT4NCj4gPiA+IFNlbnQ6IDIwMjDlubQ55pyIMjPml6UgMTc6NDUNCj4gPiA+IFRvOiBRaWFuZyBa
-aGFvIDxxaWFuZy56aGFvQG54cC5jb20+DQo+ID4gPiBDYzogV2ltIFZhbiBTZWJyb2VjayA8d2lt
-QGxpbnV4LXdhdGNoZG9nLm9yZz47IEd1ZW50ZXIgUm9lY2sNCj4gPiA+IDxsaW51eEByb2Vjay11
-cy5uZXQ+OyBsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmc7DQo+ID4gPiBhLnp1bW1vQHRv
-d2VydGVjaC5pdDsgcm9iaCtkdEBrZXJuZWwub3JnOyBsaW51eC1ydGNAdmdlci5rZXJuZWwub3Jn
-Ow0KPiA+ID4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IFV3ZQ0KPiA+ID4gS2xlaW5lLUvDtm5pZyA8dS5rbGVpbmUta29lbmlnQHBlbmd1
-dHJvbml4LmRlPg0KPiA+ID4gU3ViamVjdDogUmU6IFtQYXRjaCB2MiAxLzNdIGR0LWJpbmRpbmdz
-OiBydGM6IHBjZjIxMjc6IEFkZCBiaW5kaW5ncw0KPiA+ID4gZm9yDQo+ID4gPiBueHAscGNmMjEy
-Nw0KPiA+ID4NCj4gPiA+IEhpLA0KPiA+ID4NCj4gPiA+IFlvdSBmb3Jnb3QgdG8gY29weSB0aGUg
-d2F0Y2hkb2cgbWFpbnRhaW5lcnMsIEkgdGhpbmsgc3VjaCBhIHByb3BlcnR5DQo+ID4gPiBzaG91
-bGQgYmUgZGlzY3Vzc2VkIHdpdGggdGhlbS4NCj4gPiA+DQo+ID4gPiBOb3RlIHRoYXQgSSdtIHN0
-aWxsIGNvbnZpbmNlZCB0aGlzIGlzIG5vdCBhIGNvbXBsZXRlIHNvbHV0aW9uLCBzZWU6DQo+ID4g
-PiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0
-cHMlM0ElMkYlMkZsbw0KPiA+ID4gcmUua2Vybg0KPiA+ID4NCj4gZWwub3JnJTJGbGludXgtcnRj
-JTJGMjAyMDA3MTYxODE4MTYuR0YzNDI4JTQwcGlvdXQubmV0JTJGJmFtcDtkYXRhPQ0KPiA+ID4N
-Cj4gMDIlN0MwMSU3Q3FpYW5nLnpoYW8lNDBueHAuY29tJTdDYjcxZjc5YTA0NGIwNDkzZDZkNGYw
-OGQ4NWZhNTUxYw0KPiA+ID4NCj4gYiU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1
-JTdDMCU3QzElN0M2MzczNjQ1MTA5MzExNzQNCj4gPiA+DQo+IDM1NSZhbXA7c2RhdGE9JTJCT3hy
-ekI4Ukl1eE05TGV0NXNsaGZDVm1NbTZQTU5vRVJEZUhDOSUyRmR4bmcNCj4gPiA+ICUzRCZhbXA7
-cmVzZXJ2ZWQ9MA0KPiANCj4gaGFoYQ0KPiANCj4gPiBZZXMsIHlvdSBhcmUgcmlnaHQsIFRoZXJl
-IGlzIG5vdCBhIGZ1bmRhbWVudGFsIHNvbHV0aW9uLg0KPiA+IEhvd2V2ZXIgaXQgc29tZXdoYXQg
-YXZvaWQgdGhpcyBzaXR1YXRpb24gYXQgbGVhc3QuDQo+ID4NCj4gPiBBbmQgaWYgd2l0aG91dCB0
-aGlzIGlzc3VlLA0KPiA+IGlzIGl0IGNvcnJlY3QgdG8gcmVnaXN0ZXIgYSBydGMgZGV2aWNlIGFz
-IHdhdGNoZG9nIG5vIG1hdHRlciBpdCBpcyB1c2VkIGFzDQo+IHdhdGNoZG9nIG9uIHRoZSBib2Fy
-ZD8NCj4gPiBFdmVyeSB0aW1lIExpbnV4IGFyZSBib290ZWQgdXAsIHdhdGNoZG9nIGRldmljZSBz
-aG91bGQgYmUgY29uZmlndXJlZCB0byB0aGUNCj4gcmlnaHQgb25lIG1hbnVhbGx5Lg0KPiA+IFNv
-IHRoZSBwYXRjaCBhcmUgdXNlZnVsLCBldmVuIHRob3VnaCBpdCBpcyBub3QgZm9yIHRoZSBpc3N1
-ZS4NCj4gPg0KPiA+IFdoYXQgc2hvdWxkIHdlIGRvIHRvIHJlYWxseSByZXNvbHZlIHRoaXMgaXNz
-dWU/DQo+IA0KPiBJIHN0aWxsIHRoaW5rIHdlIG5lZWQgYSBrZXJuZWwgc29sdXRpb24gaGVyZS4g
-SSB3b3VsZCBleHBlY3QgdGhhdCBtb3N0IGFzc2VtYmxlZA0KPiBwY2YyMTI3IGNoaXBzIGFyZSB1
-bmFibGUgdG8gYWN0IGFzIGEgd2F0Y2hkb2cgKGkuZS4gZG9uJ3QgaGF2ZSB0aGUgUlNUIG91dHB1
-dA0KPiBjb25uZWN0ZWQgdG8gc29tZXRoaW5nIHRoYXQgcmVzZXRzIHRoZSBtYWNoaW5lKS4NCj4g
-DQo+IFNvIG15IGZhdm91cmVkIHNvbHV0aW9uIHdvdWxkIGJlIGEgcG9zaXRpdmUgcHJvcGVydHkg
-bGlrZToNCj4gDQo+IAloYXMtd2F0Y2hkb2c7DQo+IA0KPiBvciBzb21ldGhpbmcgc2ltaWxhci4g
-SW4gbXkgZXllcyB0aGlzIGlzIGRlZmluaXRlbHkgc29tZXRoaW5nIHdlIHdhbnQgdG8gc3BlY2lm
-eQ0KPiBpbiB0aGUgZGV2aWNlIHRyZWUgYmVjYXVzZSBpdCBpcyBhIHJlbGV2YW50IGhhcmR3YXJl
-IHByb3BlcnR5Lg0KPiBJIGNvbnNpZGVyIGl0IGEgYnVnIHRvIGdpdmUgYSB3YXRjaGRvZyBkZXZp
-Y2UgdG8gdXNlcnNwYWNlIHRoYXQgaXNuJ3QgZnVuY3Rpb25hbC4NCj4gDQo+IEJlc3QgcmVnYXJk
-cw0KPiBVd2UNCiANCkkgc3Ryb25nbHkgYWdyZWUgd2l0aCB5b3UhIEl0IHNob3VsZCBiZSBwb3Np
-dGl2ZSBwcm9wZXJ0eS4NCkhvd2V2ZXIsIHdlIGNvdWxkbid0IGlkZW50aWZ5IHdoaWNoIGJvYXJk
-IGFyZSB1c2luZyBwY2YyMTI3IGFzIHdhdGNoZG9nLA0KU28gd2UgYXJlIHVuYWJsZSB0byBtb2Rp
-ZnkgdGhlIGJvYXJkcycgZHRzIHRvIGNvcnJlY3QgKHdhdGNoZG9nIG9yIG5vdCkgaW4gdGhpcyBw
-YXRjaHNldC4NCg0KSSBub3RpY2VkIHRoYXQgb25seSBMUyBzZXJpZXMgcGxhdGZvcm1zIGFuZCBp
-bXg2IGhhdmUgcGNmMjEyNyBub2RlLCBhcyBmYXIgYXMgSSBrbm93LCB0aGUgTFMgcGxhdGZvcm1z
-IGRvbid0IHVzZSBpdCBhcyB3YXRjaGRvZywNCkJ1dCBJIGFtIG5vdCBzdXJlIGFib3V0IGlteDYN
-Cg0KPiANCj4gLS0NCj4gUGVuZ3V0cm9uaXggZS5LLiAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgVXdlIEtsZWluZS1Lw7ZuaWcNCj4gfA0KPiBJbmR1c3RyaWFsIExpbnV4IFNvbHV0aW9ucyAg
-ICAgICAgICAgICAgICAgfCBodHRwczovL3d3dy5wZW5ndXRyb25peC5kZS8gfA0KQmVzdCBSZWdh
-cmRzDQpRaWFuZyBaaGFvDQo=
+Hi Tiezhu,
+
+On 2020/9/23 17:54, Tiezhu Yang wrote:
+> On 09/23/2020 03:58 PM, WANG Xuerui wrote:
+>> This RTC module is integrated into the Loongson-2K SoC and the LS7A
+>> bridge chip. This version is almost entirely rewritten to make use of
+>> current kernel API.
+>>
+>> Signed-off-by: Huacai Chen <chenhc@lemote.com>
+>> Signed-off-by: WANG Xuerui <git@xen0n.name>
+>> ---
+>>   drivers/rtc/Kconfig    |  11 ++
+>>   drivers/rtc/Makefile   |   1 +
+>>   drivers/rtc/rtc-ls2x.c | 225 +++++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 237 insertions(+)
+>>   create mode 100644 drivers/rtc/rtc-ls2x.c
+>>
+>> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+>> index 48c536acd777..41b96633abf3 100644
+>> --- a/drivers/rtc/Kconfig
+>> +++ b/drivers/rtc/Kconfig
+>> @@ -1301,6 +1301,17 @@ config RTC_DRV_CROS_EC
+>>         This driver can also be built as a module. If so, the module
+>>         will be called rtc-cros-ec.
+>>   +config RTC_DRV_LS2X
+>> +    tristate "Loongson LS2X RTC"
+>> +    depends on MACH_LOONGSON64 || COMPILE_TEST
+>> +    select REGMAP_MMIO
+>> +    help
+>> +      If you say yes here you get support for the RTC on the
+>> Loongson-2K
+>> +      SoC and LS7A bridge, which first appeared on the Loongson-2H.
+>> +
+>> +      This driver can also be built as a module. If so, the module
+>> +      will be called rtc-ls2x.
+>> +
+>
+> Hi Xuerui,
+>
+> rtc-ls2x --> rtc-ls2x-ls7a
+> RTC_DRV_LS2X --> RTC_DRV_LS2X_LS7A
+> Loongson LS2X RTC --> Loongson LS2X/LS7A RTC
+>
+> Maybe the related names include ls7a or LS7A is better to
+> reflect the reality?
+>
+The RTC hardware blocks on Loongson 2H, 2K and LS7A all behave the same,
+from every public documentation I can find. It is entirely reasonable
+for a chip to behave like another, so I don't think the naming is a
+problem on its own.
+
+That said, if Loongson could start properly naming and versioning the
+various peripheral blocks (of which there are already many revisions
+with different quirks added/fixed), that would be a better way forward.
+I remember seeing things along the line of "probe PRId" or even "see the
+identification string on the chip package" in some Loongson FAQ docs,
+just to probe some quirks, and that surely is not desirable...
+
+> Thanks,
+> Tiezhu
+>
+>>   comment "on-CPU RTC drivers"
+>>     config RTC_DRV_ASM9260
+>> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+>> index 880e08a409c3..ade72f6a2435 100644
+>> --- a/drivers/rtc/Makefile
+>> +++ b/drivers/rtc/Makefile
+>> @@ -84,6 +84,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)    += rtc-ls1x.o
+>>   obj-$(CONFIG_RTC_DRV_LP8788)    += rtc-lp8788.o
+>>   obj-$(CONFIG_RTC_DRV_LPC24XX)    += rtc-lpc24xx.o
+>>   obj-$(CONFIG_RTC_DRV_LPC32XX)    += rtc-lpc32xx.o
+>> +obj-$(CONFIG_RTC_DRV_LS2X)    += rtc-ls2x.o
+>>   obj-$(CONFIG_RTC_DRV_M41T80)    += rtc-m41t80.o
+>>   obj-$(CONFIG_RTC_DRV_M41T93)    += rtc-m41t93.o
+>>   obj-$(CONFIG_RTC_DRV_M41T94)    += rtc-m41t94.o
+>> diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
+>> new file mode 100644
+>> index 000000000000..e49cbaceccc2
+>> --- /dev/null
+>> +++ b/drivers/rtc/rtc-ls2x.c
+>> @@ -0,0 +1,225 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Loongson-2K/7A RTC driver
+>> + *
+>> + * Based on the out-of-tree Loongson-2H RTC driver for Linux 2.6.32, by
+>> + * Shaozong Liu <liushaozong@loongson.cn>.
+>> + *
+>> + * Maintained out-of-tree by Huacai Chen <chenhc@lemote.com>.
+>> + *
+>> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
+>> + */
+>> +
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/rtc.h>
+>> +#include <linux/spinlock.h>
+>> +
+>> +#define TOY_TRIM_REG   0x20
+>> +#define TOY_WRITE0_REG 0x24
+>> +#define TOY_WRITE1_REG 0x28
+>> +#define TOY_READ0_REG  0x2c
+>> +#define TOY_READ1_REG  0x30
+>> +#define TOY_MATCH0_REG 0x34
+>> +#define TOY_MATCH1_REG 0x38
+>> +#define TOY_MATCH2_REG 0x3c
+>> +#define RTC_CTRL_REG   0x40
+>> +#define RTC_TRIM_REG   0x60
+>> +#define RTC_WRITE0_REG 0x64
+>> +#define RTC_READ0_REG  0x68
+>> +#define RTC_MATCH0_REG 0x6c
+>> +#define RTC_MATCH1_REG 0x70
+>> +#define RTC_MATCH2_REG 0x74
+>> +
+>> +#define TOY_MON        GENMASK(31, 26)
+>> +#define TOY_MON_SHIFT  26
+>> +#define TOY_DAY        GENMASK(25, 21)
+>> +#define TOY_DAY_SHIFT  21
+>> +#define TOY_HOUR       GENMASK(20, 16)
+>> +#define TOY_HOUR_SHIFT 16
+>> +#define TOY_MIN        GENMASK(15, 10)
+>> +#define TOY_MIN_SHIFT  10
+>> +#define TOY_SEC        GENMASK(9, 4)
+>> +#define TOY_SEC_SHIFT  4
+>> +#define TOY_MSEC       GENMASK(3, 0)
+>> +#define TOY_MSEC_SHIFT 0
+>> +
+>> +struct ls2x_rtc_priv {
+>> +    struct regmap *regmap;
+>> +    spinlock_t lock;
+>> +};
+>> +
+>> +static const struct regmap_config ls2x_rtc_regmap_config = {
+>> +    .reg_bits = 32,
+>> +    .val_bits = 32,
+>> +    .reg_stride = 4,
+>> +};
+>> +
+>> +struct ls2x_rtc_regs {
+>> +    u32 reg0;
+>> +    u32 reg1;
+>> +};
+>> +
+>> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
+>> +                     struct rtc_time *tm)
+>> +{
+>> +    tm->tm_year = regs->reg1;
+>> +    tm->tm_sec = (regs->reg0 & TOY_SEC) >> TOY_SEC_SHIFT;
+>> +    tm->tm_min = (regs->reg0 & TOY_MIN) >> TOY_MIN_SHIFT;
+>> +    tm->tm_hour = (regs->reg0 & TOY_HOUR) >> TOY_HOUR_SHIFT;
+>> +    tm->tm_mday = (regs->reg0 & TOY_DAY) >> TOY_DAY_SHIFT;
+>> +    tm->tm_mon = ((regs->reg0 & TOY_MON) >> TOY_MON_SHIFT) - 1;
+>> +}
+>> +
+>> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
+>> +                     struct ls2x_rtc_regs *regs)
+>> +{
+>> +    regs->reg0 = (tm->tm_sec << TOY_SEC_SHIFT) & TOY_SEC;
+>> +    regs->reg0 |= (tm->tm_min << TOY_MIN_SHIFT) & TOY_MIN;
+>> +    regs->reg0 |= (tm->tm_hour << TOY_HOUR_SHIFT) & TOY_HOUR;
+>> +    regs->reg0 |= (tm->tm_mday << TOY_DAY_SHIFT) & TOY_DAY;
+>> +    regs->reg0 |= ((tm->tm_mon + 1) << TOY_MON_SHIFT) & TOY_MON;
+>> +    regs->reg1 = tm->tm_year;
+>> +}
+>> +
+>> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>> +{
+>> +    struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
+>> +    struct ls2x_rtc_regs regs;
+>> +    int ret;
+>> +
+>> +    spin_lock_irq(&priv->lock);
+>> +
+>> +    ret = regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
+>> +    if (unlikely(ret)) {
+>> +        dev_err(dev, "Failed to read time: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    ret = regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
+>> +    if (unlikely(ret)) {
+>> +        dev_err(dev, "Failed to read time: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    spin_unlock_irq(&priv->lock);
+>> +
+>> +    ls2x_rtc_regs_to_time(&regs, tm);
+>> +
+>> +    return 0;
+>> +
+>> +fail:
+>> +    spin_unlock_irq(&priv->lock);
+>> +    return ret;
+>> +}
+>> +
+>> +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>> +{
+>> +    struct ls2x_rtc_priv *priv = dev_get_drvdata(dev);
+>> +    struct ls2x_rtc_regs regs;
+>> +    int ret;
+>> +
+>> +    ls2x_rtc_time_to_regs(tm, &regs);
+>> +
+>> +    spin_lock_irq(&priv->lock);
+>> +
+>> +    ret = regmap_write(priv->regmap, TOY_WRITE0_REG, regs.reg0);
+>> +    if (unlikely(ret)) {
+>> +        dev_err(dev, "Failed to set time: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    ret = regmap_write(priv->regmap, TOY_WRITE1_REG, regs.reg1);
+>> +    if (unlikely(ret)) {
+>> +        dev_err(dev, "Failed to set time: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    spin_unlock_irq(&priv->lock);
+>> +
+>> +    return 0;
+>> +
+>> +fail:
+>> +    spin_unlock_irq(&priv->lock);
+>> +    return ret;
+>> +}
+>> +
+>> +static struct rtc_class_ops ls2x_rtc_ops = {
+>> +    .read_time = ls2x_rtc_read_time,
+>> +    .set_time = ls2x_rtc_set_time,
+>> +};
+>> +
+>> +static int ls2x_rtc_probe(struct platform_device *pdev)
+>> +{
+>> +    struct device *dev = &pdev->dev;
+>> +    struct rtc_device *rtc;
+>> +    struct ls2x_rtc_priv *priv;
+>> +    void __iomem *regs;
+>> +    int ret;
+>> +
+>> +    priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +    if (unlikely(!priv))
+>> +        return -ENOMEM;
+>> +
+>> +    spin_lock_init(&priv->lock);
+>> +    platform_set_drvdata(pdev, priv);
+>> +
+>> +    regs = devm_platform_ioremap_resource(pdev, 0);
+>> +    if (IS_ERR(regs)) {
+>> +        ret = PTR_ERR(regs);
+>> +        dev_err(dev, "Failed to map rtc registers: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    priv->regmap = devm_regmap_init_mmio(dev, regs,
+>> +                         &ls2x_rtc_regmap_config);
+>> +    if (IS_ERR(priv->regmap)) {
+>> +        ret = PTR_ERR(priv->regmap);
+>> +        dev_err(dev, "Failed to init regmap: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    rtc = devm_rtc_allocate_device(dev);
+>> +    if (IS_ERR(rtc)) {
+>> +        ret = PTR_ERR(rtc);
+>> +        dev_err(dev, "Failed to allocate rtc device: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    rtc->ops = &ls2x_rtc_ops;
+>> +
+>> +    /* Due to hardware erratum, all years multiple of 4 are considered
+>> +     * leap year, so only years 2000 through 2099 are usable.
+>> +     *
+>> +     * Previous out-of-tree versions of this driver wrote tm_year
+>> directly
+>> +     * into the year register, so epoch 2000 must be used to preserve
+>> +     * semantics on shipped systems.
+>> +     */
+>> +    rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>> +    rtc->range_max = RTC_TIMESTAMP_END_2099;
+>> +
+>> +    return rtc_register_device(rtc);
+>> +}
+>> +
+>> +static const struct of_device_id ls2x_rtc_of_match[] = {
+>> +    { .compatible = "loongson,ls2x-rtc" },
+>> +    { /* sentinel */ },
+>> +};
+>> +MODULE_DEVICE_TABLE(of, ls2x_rtc_of_match);
+>> +
+>> +static struct platform_driver ls2x_rtc_driver = {
+>> +    .probe        = ls2x_rtc_probe,
+>> +    .driver        = {
+>> +        .name    = "ls2x-rtc",
+>> +        .of_match_table = of_match_ptr(ls2x_rtc_of_match),
+>> +    },
+>> +};
+>> +
+>> +module_platform_driver(ls2x_rtc_driver);
+>> +
+>> +MODULE_DESCRIPTION("LS2X RTC driver");
+>> +MODULE_AUTHOR("WANG Xuerui");
+>> +MODULE_AUTHOR("Huacai Chen");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:ls2x-rtc");
+>
