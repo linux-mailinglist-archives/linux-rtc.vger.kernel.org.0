@@ -2,206 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 590E7278004
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Sep 2020 07:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A857F27807D
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Sep 2020 08:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727143AbgIYFox (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Sep 2020 01:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726925AbgIYFou (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Sep 2020 01:44:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7978DC0613CE
-        for <linux-rtc@vger.kernel.org>; Thu, 24 Sep 2020 22:44:50 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kLgXC-0006gp-Hj; Fri, 25 Sep 2020 07:44:42 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kLgWu-00035h-Ql; Fri, 25 Sep 2020 07:44:24 +0200
-Date:   Fri, 25 Sep 2020 07:44:24 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        allen <allen.chen@ite.com.tw>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 5/7] rtc: New driver for RTC in Netronix embedded
- controller
-Message-ID: <20200925054424.snlr3lggnsv575wu@pengutronix.de>
-References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
- <20200924192455.2484005-6-j.neuschaefer@gmx.net>
+        id S1727137AbgIYGV4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Sep 2020 02:21:56 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:52128 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S1726980AbgIYGV4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Sep 2020 02:21:56 -0400
+X-Greylist: delayed 517 seconds by postgrey-1.27 at vger.kernel.org; Fri, 25 Sep 2020 02:21:55 EDT
+Received: from hanazono.local (unknown [58.33.27.210])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id BFB5A60090;
+        Fri, 25 Sep 2020 14:13:13 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1601014393; bh=V0Ygvtf4vpO0JeazKdMA+3ySfJW8HmZ2bFd4D+BjQJk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=vdaCtn200P8bDkWt7a59PRBQDkd9IZmysThDky7awGnLrIQKrLZzElqmxYpU/hlgj
+         OJSjSACCATrLc7bzVcQS5lMOfIjkRwekLMrlX/m80wJnOg5vnKg12ZNFQ9vxcqFcLV
+         u8oUWgzg8w7VHKoenQ9h+E+RGEx47eeOIFelVgos=
+Subject: Re: [PATCH 1/4] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+To:     Du Huanpeng <u74147@gmail.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <git@xen0n.name>, linux-rtc@vger.kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        Huacai Chen <chenhc@lemote.com>
+References: <20200923075845.360974-1-git@xen0n.name>
+ <20200923075845.360974-2-git@xen0n.name>
+ <2a478254-c4de-49dd-d598-c7553f4672bf@loongson.cn>
+ <20200923143149.GA11566@tkernel.org>
+From:   WANG Xuerui <i@xen0n.name>
+Message-ID: <3b35cd8d-012a-18b5-50c3-8dae19cc53b1@xen0n.name>
+Date:   Fri, 25 Sep 2020 14:13:13 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:83.0)
+ Gecko/20100101 Thunderbird/83.0a1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b55wkovfqn6iyquo"
-Content-Disposition: inline
-In-Reply-To: <20200924192455.2484005-6-j.neuschaefer@gmx.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+In-Reply-To: <20200923143149.GA11566@tkernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+(Re-sending, as the original reply inadvertently contained an HTML part
+and has been blocked by all of the mailing lists.)
 
---b55wkovfqn6iyquo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Huanpeng,
 
-Hello Jonathan,
+On 2020/9/23 22:31, Du Huanpeng wrote:
 
-On Thu, Sep 24, 2020 at 09:24:53PM +0200, Jonathan Neusch=E4fer wrote:
-> +#define NTXEC_REG_WRITE_YEAR	0x10
-> +#define NTXEC_REG_WRITE_MONTH	0x11
-> +#define NTXEC_REG_WRITE_DAY	0x12
-> +#define NTXEC_REG_WRITE_HOUR	0x13
-> +#define NTXEC_REG_WRITE_MINUTE	0x14
-> +#define NTXEC_REG_WRITE_SECOND	0x15
-> +
-> +#define NTXEC_REG_READ_YM	0x20
-> +#define NTXEC_REG_READ_DH	0x21
-> +#define NTXEC_REG_READ_MS	0x23
+>> rtc-ls2x --> rtc-ls2x-ls7a
+>> RTC_DRV_LS2X --> RTC_DRV_LS2X_LS7A
+>> Loongson LS2X RTC --> Loongson LS2X/LS7A RTC
+>>
+>> Maybe the related names include ls7a or LS7A is better to
+>> reflect the reality?
+> Is there any difference with the rtc IP in loongson 1* SoCs?
 
-Is this an official naming? I think at least ..._MS is a poor name.
-Maybe consider ..._MINSEC instead and make the other two names a bit longer
-for consistency?
+From a cursory look at 1A and 7A manuals the registers seem to have the
+same layout. Some registers are marked as "reserved" on the 7A manual
+while having real meaning on 1A, like the sys_toytrim and sys_rtctrim
+registers.
 
-> +static int ntxec_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct ntxec_rtc *rtc =3D dev_get_drvdata(dev);
-> +	unsigned int value;
-> +	int res;
-> +
-> +	res =3D regmap_read(rtc->ec->regmap, NTXEC_REG_READ_YM, &value);
-> +	if (res < 0)
-> +		return res;
-> +
-> +	tm->tm_year =3D (value >> 8) + 100;
-> +	tm->tm_mon =3D (value & 0xff) - 1;
-> +
-> +	res =3D regmap_read(rtc->ec->regmap, NTXEC_REG_READ_DH, &value);
-> +	if (res < 0)
-> +		return res;
-> +
-> +	tm->tm_mday =3D value >> 8;
-> +	tm->tm_hour =3D value & 0xff;
-> +
-> +	res =3D regmap_read(rtc->ec->regmap, NTXEC_REG_READ_MS, &value);
-> +	if (res < 0)
-> +		return res;
-> +
-> +	tm->tm_min =3D value >> 8;
-> +	tm->tm_sec =3D value & 0xff;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ntxec_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct ntxec_rtc *rtc =3D dev_get_drvdata(dev);
-> +	int res =3D 0;
-> +
-> +	res =3D regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_YEAR, ntxec_reg8(=
-tm->tm_year - 100));
-> +	if (res)
-> +		return res;
-> +
-> +	res =3D regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_MONTH, ntxec_reg8=
-(tm->tm_mon + 1));
-> +	if (res)
-> +		return res;
-> +
-> +	res =3D regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_DAY, ntxec_reg8(t=
-m->tm_mday));
-> +	if (res)
-> +		return res;
-> +
-> +	res =3D regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_HOUR, ntxec_reg8(=
-tm->tm_hour));
-> +	if (res)
-> +		return res;
-> +
-> +	res =3D regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_MINUTE, ntxec_reg=
-8(tm->tm_min));
-> +	if (res)
-> +		return res;
-> +
-> +	return regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_SECOND, ntxec_reg8=
-(tm->tm_sec));
+I am investigating whether the rtc_ls1x driver could be worked to
+support DT configuration, along with the hardcoded addresses when
+compiled for Loongson 1A. If so, adding a separate rtc_ls2x may not be
+necessary, rtc_ls1x would be turned into something like rtc_loongson
+instead.
 
-I wonder: Is this racy? If you write minute, does the seconds reset to
-zero or something like that? Or can it happen, that after writing the
-minute register and before writing the second register the seconds
-overflow and you end up with the time set to a minute later than
-intended? If so it might be worth to set the seconds to 0 at the start
-of the function (with an explaining comment).
-
-=2Eread_time has a similar race. What happens if minutes overflow between
-reading NTXEC_REG_READ_DH and NTXEC_REG_READ_MS?
-
-> +static struct platform_driver ntxec_rtc_driver =3D {
-> +	.driver =3D {
-> +		.name =3D "ntxec-rtc",
-> +	},
-> +	.probe =3D ntxec_rtc_probe,
-
-No .remove function?
-
-> +};
-> +module_platform_driver(ntxec_rtc_driver);
-> +
-> +MODULE_AUTHOR("Jonathan Neusch=E4fer <j.neuschaefer@gmx.net>");
-> +MODULE_DESCRIPTION("RTC driver for Netronix EC");
-> +MODULE_LICENSE("GPL");
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---b55wkovfqn6iyquo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9tg7UACgkQwfwUeK3K
-7AlEBAf/RcD3gHide1qc5EijimG6s9s/zjWGhHAO0leLwogNaMyb6GdjoIjrvRHf
-ETLl9BUqziVi69LGA+Ub9K0+LgKyN024FRYZ/U/RqSo8PfRSw40ehnJibb+fdWjL
-W0zTK31qxkj+YBnqWd32Z27hpPCZe0uk6yqaguK9aIPy7XAiwu0gah2e13tD2Bk1
-6Cxr82gYMQw8iHO7EjWkQ9D3Yzwcy9ihTCxL8GJtTRif93ZchKTwoLq4wbmf8tc1
-5fU0cYWXZ97+4+48/dGfqUQ6fQ2yHZXZR69MNmwFnAIaVleVXMc1B6pYIbmHhnoq
-rbAZQzSE6gvnqI203rqDXBH6YXRZCw==
-=tcyy
------END PGP SIGNATURE-----
-
---b55wkovfqn6iyquo--
+>
+> Regards,
+> Du Huanpeng
