@@ -2,184 +2,310 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C111927A1B2
-	for <lists+linux-rtc@lfdr.de>; Sun, 27 Sep 2020 17:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431E927A42F
+	for <lists+linux-rtc@lfdr.de>; Sun, 27 Sep 2020 23:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgI0Pyv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 27 Sep 2020 11:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgI0Pyv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 27 Sep 2020 11:54:51 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED77C0613CE;
-        Sun, 27 Sep 2020 08:54:51 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id o20so1996622ook.1;
-        Sun, 27 Sep 2020 08:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l43udJj6BMkh1bntbdah89/MCcdkDNQy9ZlcMtLP+/8=;
-        b=LCVPlOE3jgZh5tMLZvnmvOL1VK1EwvbJpMSWgWgRUtsUrqOBPOq5ULHPi8jPYs5e9A
-         e0j1WGxwR/5c8zhYfMZ8jZH12IPkTKerU8aUeflquWTtxNDv+u4y9TBDQB4qTG80CUlu
-         H+NBl/UbP1usr+fcnPs4U8O2K2vKdI+q/3oy71TjJYUnganFDLJg+BbbGt5jP/Or6PWF
-         x3naR+jdrJVEiOX1tGsqoRw6lyR2xyZL6MdM2WJRSbYqBTWJ6X3VLQwb6TOtjen03qKT
-         lyDT1xfPWTG4ytMAltAI2tk8I44snwnj0b4AAh2jTeqCpyX8CgHChpvjYLa3M62EbTtJ
-         m38w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=l43udJj6BMkh1bntbdah89/MCcdkDNQy9ZlcMtLP+/8=;
-        b=JAbxhq3yHVM2wrqwKZy5xHCMl9MOoyMMezDSTiVOui8RW7Z8U5CCuaCHMDZvQpqhi4
-         h9iA8B0HcsJO5/IysK9YYdJDBE7CC1EboyIk5NLxXGOILpsdgJHOOXyDHWpAnw2xx8/R
-         ovcv5zRKzpIe/laF0oJb3o33ewpSnwoYLqURpRAFWPoCTe+/kW3Q5zqOVrnkB2dhmuV2
-         +yuxXUnJJKASOCY8cHK8a8O9/PhKZbKjkoNGWO/lRal91DYeo7zm5U9RTKZ/83kuUDJZ
-         jcW9o0IfpYMpSU/TJd3WJrEiT/DzSD4+7y5sz6qzD6CdkF0tLvMbwJ5RyPxEJUlP46r2
-         r9oA==
-X-Gm-Message-State: AOAM530qQoKm+dmY3zB5EE8RWXgx65wGf/MbJSvVopkhcO2DvBP1IiNZ
-        pt8kl5hexdgMyjg29ocPDtU=
-X-Google-Smtp-Source: ABdhPJyB0p0OpuafGvBEWMUW5bpThggEEGNJc4mPPEieavIQRpDnhIo/QGZTQzdjiGd7aLZZqA4rxQ==
-X-Received: by 2002:a4a:da4e:: with SMTP id f14mr6917046oou.40.1601222090829;
-        Sun, 27 Sep 2020 08:54:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e19sm2202879ote.37.2020.09.27.08.54.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Sep 2020 08:54:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH 2/2] [RFC] rtc: pcf2127: only use watchdog when explicitly
- available
-To:     Bruno Thomsen <bruno.thomsen@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>, linux-rtc@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-watchdog@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
+        id S1726396AbgI0VLs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 27 Sep 2020 17:11:48 -0400
+Received: from mout.gmx.net ([212.227.15.19]:49497 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726309AbgI0VLs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 27 Sep 2020 17:11:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1601241051;
+        bh=qVd4IBNRV8DN0dMqUdGypqqYYu8vUZdLxNcc0dQl9qg=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=IJhFE/modoHQ2WBVha3Qbx9Tcua6m5oQF+vINcmuu1zuJy4tVwpZw96xFN2v3xvt7
+         +TWVIiJYeFXTYzvhSlR5d7tyP5PDr02c67gg3U4DjxFYvnt9TvSKWVE2QK+2f6s4B7
+         1UbmFgbzhW2ttX15Ay3a2KEplh8HllCWDjOj1E48=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.151]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mz9Yv-1kaRKa1AmJ-00wDva; Sun, 27
+ Sep 2020 23:10:51 +0200
+Date:   Sun, 27 Sep 2020 23:10:44 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        allen <allen.chen@ite.com.tw>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lubomir Rintel <lkundrak@v3.sk>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20200924074715.GT9675@piout.net>
- <20200924105256.18162-1-u.kleine-koenig@pengutronix.de>
- <20200924105256.18162-3-u.kleine-koenig@pengutronix.de>
- <CAH+2xPAVvMpTgT3W=0AsKy=9jkS8qd6eB65Qebw51YKRQshaGQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <8f88f2a2-4a6d-021f-4404-f05518b0477d@roeck-us.net>
-Date:   Sun, 27 Sep 2020 08:54:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mark Brown <broonie@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 4/7] pwm: ntxec: Add driver for PWM function in
+ Netronix EC
+Message-ID: <20200927211044.GC2510@latitude>
+References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
+ <20200924192455.2484005-5-j.neuschaefer@gmx.net>
+ <20200925063037.fcrmqvpe5noi3ef4@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAH+2xPAVvMpTgT3W=0AsKy=9jkS8qd6eB65Qebw51YKRQshaGQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YD3LsXFS42OYHhNZ"
+Content-Disposition: inline
+In-Reply-To: <20200925063037.fcrmqvpe5noi3ef4@pengutronix.de>
+X-Provags-ID: V03:K1:00nuOkNowTQRCrCjdFKk5tV+lSRXoRV3Xt6XUa2nST9IL4fgThc
+ VXjBJj3m1VTD0qkkgAo1TOFXZE6pQQ1qjelvnnGKZq1EP9dOhpcD7v7h5cjtEo2sFdYYIdc
+ 5UL6G9nI0REvXhr2+qv2LrhmebYL3yKlApm6xX3ljX9dD0FDVtAMKMbLVN8bynoRFV7GQBQ
+ dZkxKsNepdzAkm6wlYjgg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SQoj+zePzdM=:Z5VssEvwXj1u0kDjfgKFtE
+ AgRhljRygNTYhIUAHhgWuzeRK6v0WtyxrtvzkYWHbGjL9AUT2axQ8eikiLPUrnoL33O5OoYl9
+ iwn7V8YNKetV6OzGErHDY8E4/5KdPLhXIWV7xlJ6N1cePyboHpkDxSllH4vU5ujQddaDjpF25
+ aCkZxhKFmXXdBXWQwB5V9jrnUobgaAdGBXs1LjKrSQdX03faxl/1LHGZCUxfbKbbuMSi2Uv1P
+ yQmlKtTvEnKgnsiA0+akZJAD+rUKMg39GyU6vvF7Feqtj8w8eBSVHgN1LNyb46TJeGkx8tFAA
+ 6IRVk/wH7adyWP7n6vMgQig4OvmMmsLtfcBQsQRrhOFq/MejYKHhRNTgWz0IiUMFqTMgg4wJ9
+ FestkvYe5BC7anktuvti3SCrUbHTWgBSLOfk/zola7xxWFFF6TxveGFmyi2YnTkq0f8T+Yojr
+ utTpM0hEF5RIiezSnmC68clKkxsI3PuVfKfAmAUudCTOQV+Ttqf/tPxI4KWMUZehu9AXLusxy
+ 3rQSkq8yTFnH0pLdoCjtXH3R1aoqfp6MF1TVDuK1E3dW7lMT5x2X4lWi13ZOvXijVZquW2KEn
+ K5hs3AHAyIE4DhLLIEfsViKnMMOBV+aKqzou1qUSsAePgJHwr8lZychaR7jh72ZKzCdppnnG3
+ EpgjEDTJllF3qEUsF/Zt++kFU4umPWx8URmnakSVJDSIFMpGjuHgLf1l6RZnm6tHYPVh8OU8j
+ VHRLzOGkwBs+lAzO4OtSJbseJQjCxZUhYPTZw8z2pMzjv8OzUefXe56aJUB9lZWVtX3xP19ez
+ ArSRg1t5MsgD1FunvGTRUGaQXZNfKmHfYAoKi/9h7vdDNCM/se9wgmiKbwqSLXGKs/Jg2d31G
+ j0KNLjZvFAcSGcKS/JFg8XqEMrzHWGxYfmQmf7m1wjr1nDE5C6XbaZiA5RgdmwUCvxgOzYH1/
+ nqwHWmuJNXX0ar5NXsaIKLeJEPPmMEmpmygtjFHLJ4osdLSOl1Beikj55CxUGLCLwmk0jAASF
+ ZpgsaEnFp+ggd2kAuBB8+5jjfv6AJL+UpBi0QuGSoY7rcehju9qA8hk+rqJEBc24guAcROU+b
+ /LTJkEURNjH+jLDBu6sQ9deam2dpuHJq/WG1BWlKl+qpjRQqDC40fEB4WdL8JUKrFOjptFEDu
+ nYXjZ5r5Z1wTH6ci15/BC2PWVkEZyxMSngTYfGq7FmYMRllgC4z0tytU7F9LF6dw6WGMMT/pD
+ UzduXX708P8t6fiYqAK9qghVzGmrS0Gqx85Zwgw==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 9/27/20 1:09 AM, Bruno Thomsen wrote:
-> Den tor. 24. sep. 2020 kl. 12.53 skrev Uwe Kleine-König
-> <u.kleine-koenig@pengutronix.de>:
->>
->> Most boards using the pcf2127 chip (in my bubble) don't make use of the
->> watchdog functionality and the respective output is not connected. The
->> effect on such a board is that there is a watchdog device provided that
->> doesn't work.
->>
->> So only register the watchdog if the device tree has a "has-watchdog"
->> property.
->>
->> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->> ---
->>  drivers/rtc/rtc-pcf2127.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
->> index 5b1f1949b5e5..8bd89d641578 100644
->> --- a/drivers/rtc/rtc-pcf2127.c
->> +++ b/drivers/rtc/rtc-pcf2127.c
->> @@ -340,7 +340,8 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
->>         u32 wdd_timeout;
->>         int ret;
->>
->> -       if (!IS_ENABLED(CONFIG_WATCHDOG))
->> +       if (!IS_ENABLED(CONFIG_WATCHDOG) ||
->> +           !device_property_read_bool(dev, "has-watchdog"))
->>                 return 0;
-> 
-> I don't think the compiler can remove the function if
-> CONFIG_WATCHDOG is disabled due to the device tree
-> value check. Maybe it can if split into 2 conditions.
-> 
 
-If the first part of the expression is always false, the second
-part should not even be evaluated. Either case, the code now
-hard depends on the compiler optimizing the code away.
-It calls devm_watchdog_register_device() which doesn't exist
-if CONFIG_WATCHDOG is not enabled. I didn't know that this is safe,
-and I would personally not want to rely on it, but we live and
-learn.
+--YD3LsXFS42OYHhNZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Guenter
+On Fri, Sep 25, 2020 at 08:30:37AM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> Hello Jonathan,
+[...]
+> > +config PWM_NTXEC
+> > +	tristate "Netronix embedded controller PWM support"
+> > +	depends on MFD_NTXEC
+> > +	help
+> > +	  Say yes here if you want to support the PWM output of the embedded
+> > +	  controller found in certain e-book readers designed by the ODM
+> > +	  Netronix.
+>=20
+> Is it only me who had to look up what ODM means? If not, maybe spell it
+> out?
 
-> if (!IS_ENABLED(CONFIG_WATCHDOG))
->         return 0;
-> if (!device_property_read_bool(dev, "has-watchdog"))
->         return 0;
-> 
-> /Bruno
-> 
->>
->>         pcf2127->wdd.parent = dev;
->> --
->> 2.28.0
->>
+I'm sure other readers will have the same problem. I'll spell it out.
 
+> > +/*
+> > + * The maximum input value (in nanoseconds) is determined by the time =
+base and
+> > + * the range of the hardware registers that hold the converted value.
+> > + * It fits into 32 bits, so we can do our calculations in 32 bits as w=
+ell.
+> > + */
+> > +#define MAX_PERIOD_NS (TIME_BASE_NS * 0x10000 - 1)
+>=20
+> The maximal configurable period length is 0xffff, so I would have
+> expected MAX_PERIOD_NS to be 0xffff * TIME_BASE_NS?
+
+Due to the division rounding down, TIME_BASE_NS * 0x10000 - 1 would be
+the highest input that results in a representable value after the
+division, but I'm not sure it otherwise makes sense.
+
+>=20
+> > +static int ntxec_pwm_apply(struct pwm_chip *chip, struct pwm_device *p=
+wm_dev,
+> > +			   const struct pwm_state *state)
+> > +{
+> > +	struct ntxec_pwm *pwm =3D pwmchip_to_pwm(pwm_dev->chip);
+> > +	unsigned int duty =3D state->duty_cycle;
+> > +	unsigned int period =3D state->period;
+> > +	int res =3D 0;
+> > +
+>=20
+> I assume your device only supports normal polarity? If so, please check
+> for it here and point out this limitation in the header (in the format
+> that is for example used in pwm-sifive.c to make it easy to grep for
+> that).
+
+I haven't seen any indication that it supports inverted polarity. I'll
+point it out in the header comment, and add a check.
+
+>=20
+> > +	if (period > MAX_PERIOD_NS) {
+> > +		dev_warn(pwm->dev,
+> > +			 "Period is not representable in 16 bits after division by %u: %u\n=
+",
+> > +			 TIME_BASE_NS, period);
+>=20
+> No error messages in .apply() please; this might spam the kernel log.
+>
+> Also the expectation when a too big period is requested is to configure
+> for the biggest possible period. So just do:
+>=20
+> 	if (period > MAX_PERIOD_NS) {
+> 		period =3D MAX_PERIOD_NS;
+>=20
+> 		if (duty > period)
+> 			duty =3D period;
+> 	}
+>=20
+> (or something equivalent).
+
+Okay, I'll adjust it.
+
+> > +	/*
+> > +	 * Writing a duty cycle of zone puts the device into a state where
+>=20
+> What is "zone"? A mixture of zero and one and so approximately 0.5?
+
+Oops, that's a typo. I just meant "zero".
+
+> > +	 * writing a higher duty cycle doesn't result in the brightness that =
+it
+> > +	 * usually results in. This can be fixed by cycling the ENABLE regist=
+er.
+> > +	 *
+> > +	 * As a workaround, write ENABLE=3D0 when the duty cycle is zero.
+> > +	 */
+> > +	if (state->enabled && duty !=3D 0) {
+> > +		res =3D regmap_write(pwm->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(1=
+));
+> > +		if (res)
+> > +			return res;
+> > +
+> > +		/* Disable the auto-off timer */
+> > +		res =3D regmap_write(pwm->ec->regmap, NTXEC_REG_AUTO_OFF_HI, ntxec_r=
+eg8(0xff));
+> > +		if (res)
+> > +			return res;
+> > +
+> > +		return regmap_write(pwm->ec->regmap, NTXEC_REG_AUTO_OFF_LO, ntxec_re=
+g8(0xff));
+> > +	} else {
+> > +		return regmap_write(pwm->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(0)=
+);
+> > +	}
+>=20
+> This code is wrong for state->enabled =3D false.
+
+Why?
+
+> How does the PWM behave when .apply is called? Does it complete the
+> currently running period? Can it happen that when you switch from say
+>=20
+> 	.duty_cycle =3D 900 * TIME_BASE_NS (0x384)
+> 	.period =3D 1800 * TIME_BASE_NS (0x708)
+>=20
+> to
+>=20
+> 	.duty_cycle =3D 300 * TIME_BASE_NS (0x12c)
+> 	.period =3D 600 * TIME_BASE_NS (0x258)
+>=20
+> that a period with
+>=20
+> 	.duty_cycle =3D 388 * TIME_BASE_NS (0x184)
+> 	.period =3D 1800 * TIME_BASE_NS (0x708)
+> =09
+> (because only NTXEC_REG_PERIOD_HIGH was written when the new period
+> started) or something similar is emitted?
+
+Changes take effect after the low byte is written, so a result like 0x184
+in the above example should not happen.
+
+When the period and duty cycle are both changed, it temporarily results
+in an inconsistent state:
+
+ - period =3D 1800ns, duty cycle =3D 900ns
+ - period =3D  600ns, duty cycle =3D 900ns (!)
+ - period =3D  600ns, duty cycle =3D 300ns
+
+The inconsistent state of duty cycle > period is handled gracefully by
+the EC and it outputs a 100% duty cycle, as far as I can tell.
+
+I currently don't have a logic analyzer / oscilloscope to measure
+whether we get full PWM periods, or some kind of glitch when the new
+period starts in the middle of the last one.
+
+> > +}
+> > +
+> > +static struct pwm_ops ntxec_pwm_ops =3D {
+> > +	.apply =3D ntxec_pwm_apply,
+>=20
+> Please implement a .get_state() callback. And enable PWM_DEBUG during
+> your tests.
+
+The device doesn't support reading back the PWM state. What should a
+driver do in this case?
+
+> > +	.owner =3D THIS_MODULE,
+> > +};
+> > +
+> > +static int ntxec_pwm_probe(struct platform_device *pdev)
+> > +{
+> > +	struct ntxec *ec =3D dev_get_drvdata(pdev->dev.parent);
+> > +	struct ntxec_pwm *pwm;
+>=20
+> Please don't call this variable pwm. I would expect that a variable with
+> this name is of type pwm_device. I would have called it "ddata" (and the
+> type would be named ntxec_pwm_ddata for me); another usual name is "priv".
+
+Ok, I'll rename it.
+
+> > +	chip->npwm =3D 1;
+> > +
+> > +	res =3D pwmchip_add(chip);
+> > +	if (res < 0)
+> > +		return res;
+> > +
+> > +	platform_set_drvdata(pdev, pwm);
+>=20
+> If you do the platform_set_drvdata earlier you can just do
+>=20
+> 	return pwmchip_add(chip);
+
+Good idea, I'll do that.
+
+
+Thanks,
+Jonathan Neusch=C3=A4fer
+
+--YD3LsXFS42OYHhNZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl9w/8UACgkQCDBEmo7z
+X9v+uBAAn25NpiHhNJtO6YKlwketM5qW1G37xao76/fwdBuKMc11FECDeyH6jd7/
+G/OSggdKa5hom2VNhTVMQ1UvRcTdZxuoJi9a/UMBFZo1HHfP/zWejuWZw5TeA2X9
+ubB+5qJTVbTTAoxzf8gu8nx4tYUBUqFhSGsKI+lqlJyGgHMD73P9/VBT4JobxjOA
+w4dKyUYcjfN2eVNqnuiSa/hYO11uugv+hqOjgiWAGcafBVUUzcWgpn6QG406v/1X
+MCm5tTLwkUOEPNsJmPQsbNmVXVIRJjppNq/jlPHIeGsm+JofkxQymk7VlzquGW64
+adnPIhAo/A0RrrKDV18p7/twuRVHvvxIoAPSIrOWZRE7vNQ9TqN2kwebvS/qSLbO
+/6RAwZW8bgPepQq0HSVjwOTwaP1XGutcSI/yNCF2VoAjEsKPWP7Qk9M8BZEnpz7D
++bfM1Yfyeo8s0BFZ/MZIx+sfi1PeCpXKk2l7RV+E3W0hfdWIBoqjvonxth2kjU2T
+zvtv9kRXJA9yz2UEXo0jQWwO4AifcX6HK/xsmIiPXlI90cerAAKYeYV3atyTqjvr
+t5+/9IZxfQfspdOQBZ8k81OI/X2f2fiUXrsWfzMjTUjTRNkeNAm8MI8ARIf5QvPW
+pUtEJWd5PBGgn6QbG0dnGlNEQIV+YGZv0BlpOZ/xfPg1+VHWuaw=
+=IRtw
+-----END PGP SIGNATURE-----
+
+--YD3LsXFS42OYHhNZ--
