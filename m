@@ -2,133 +2,198 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2885B2793E0
-	for <lists+linux-rtc@lfdr.de>; Sat, 26 Sep 2020 00:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A57A279F6A
+	for <lists+linux-rtc@lfdr.de>; Sun, 27 Sep 2020 09:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728465AbgIYWBv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Sep 2020 18:01:51 -0400
-Received: from mout.gmx.net ([212.227.17.20]:54995 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726744AbgIYWBu (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 25 Sep 2020 18:01:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1601071245;
-        bh=ztxbMcMpavSGlbVmgt0d84+xXgIqro2ItnQZq/Y9qY0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=PCdaXY5rnW1fTrNQ00KUO709FxO/s324Z9VSduWfHoJDbDNDkUmH/t/Miypu034nB
-         SubvKInVRtSQlFKA79001MT8i5IYKm4w5ceScoFniGLFJcx+MZ64TATpcIX9jn3dkh
-         db/NUAdwpEQKiKKcHi377XHMuycs7RutNNjGU/SA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.151]) by mail.gmx.com (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mi2O1-1kzxUL45RJ-00e22R; Sat, 26
- Sep 2020 00:00:45 +0200
-Date:   Sat, 26 Sep 2020 00:00:33 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v3 5/7] rtc: New driver for RTC in Netronix embedded
- controller
-Message-ID: <20200925220033.GB2510@latitude>
-References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
- <20200924192455.2484005-6-j.neuschaefer@gmx.net>
- <20200925093614.GZ9675@piout.net>
+        id S1730544AbgI0HvN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 27 Sep 2020 03:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730439AbgI0HvG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 27 Sep 2020 03:51:06 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C97C0613CE;
+        Sun, 27 Sep 2020 00:51:06 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id p15so4103735ejm.7;
+        Sun, 27 Sep 2020 00:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xiszwSzHIPu42VE8ycq9IrzTJRg5eh3Qelq5ghdg0ls=;
+        b=F36JFRR2gw4ZLJ4VQJsJYSQOIEhyhd+ZMKXffeDvfDTakEIRy3DWcaZVJOhPcmAzes
+         zl+fh9At5nHsvyvnr+1/xp1hsTpvH9AWkxilc+L+7uTryxgc5mDNl9THb9Y02yR+wy0h
+         fEepZ2B7QS370fdsvaPwvPmQ9qJ1sLReeD7uUOqtBmm0ixp7WwuPiCm0SyJ56K/BI6VF
+         gyiD8h4zDX0u8mgWQ1iYRvkksiKIDcqejWKWKu5PWse/Xj8YhhCeZCsQxAHT0pl/RSeh
+         sInY2x52eF+F5nsyneFvZNAQuJk57IqGjueS6wUZpndYlSwGh3LMSRTnlIRqxpuSkEsy
+         HwnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xiszwSzHIPu42VE8ycq9IrzTJRg5eh3Qelq5ghdg0ls=;
+        b=QbR0JczV6fdCrho3+cH9LWWwhlL2cFUHbiuCul7BObpkinTJG4x09rA/+KrWMJ06PJ
+         5TH2Joov65fXmv1wC1VQ07hHnalaId2rIJZAWcoq4Vq5S7S3hyKwvVw4rP6lGbDyKiCU
+         NorWM9vO35XNldf1q6eNa8WCFEL2tB2E7mWhZkPTuuD/nh2zHZD+SOe2V7IEjeQfj8Sr
+         tE0nTpL5hXoRdDfLarWTHviwSvJk07zqaoChs5utGj5J5cvYv5E2bt2+6UpYF7hjrdc4
+         Z/WeY11ZeJ6tcdaHTM1p6HHRlWKhrYSk4BLmpSLtmsVjeE8NKW1RsxCQDMOQsVhlr3Hb
+         tUEg==
+X-Gm-Message-State: AOAM533/V1eQZuvG4pd8GndOZkEauJxr3su6T0l75XbsYGtwbNatcIvw
+        ANiK+NlxnHS2wR3zoW4YgfHPGO0uZY3LIwnrKAM=
+X-Google-Smtp-Source: ABdhPJz41zBp2OpzRbMdSMYtk4jLfBUVlcPRmTXMA3XHmsB0S2AVtLhCH0GA3dxF12sVaxehPFbqBjP/5eRI1bbLbUo=
+X-Received: by 2002:a17:906:8682:: with SMTP id g2mr10436779ejx.110.1601193064793;
+ Sun, 27 Sep 2020 00:51:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ADZbWkCsHQ7r3kzd"
-Content-Disposition: inline
-In-Reply-To: <20200925093614.GZ9675@piout.net>
-X-Provags-ID: V03:K1:VQy9eNdUYXIIZDE382DMLCtuHkN2mfcSziIHnQhqgWJZIR+IF0X
- oZhufLqAmhdf8JvnJff9j9IqPGiz9cf8tqjk3smwk2hfOwj4xlYuutjQP6sOQJwRIsQLKbe
- WkKgrjJM5KOEhtqqhHo9t3YKj1MOmWB9rFcC97NWGwmD5ODxrzgiguui+brDl94yGXk+cXu
- LDdstcfVJMzW2LypUFIZw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:q80hw9ErrqA=:MR3z7DEezfZXHgjrczDTGr
- KcFIZm59Yy0hP65r2xcCIEN6M8cVfBz5hdhmymgQcKPEuB+CqVbGl8ezwmKPeBFbmjwXxmhbA
- bQrs2l0SvzB4QeHOAJeuy9ZZq7LI2NWQ4WYk858Zn4vVgZhDl37EXpITMKMpZWvwouWpYrmY1
- iZV+igo4Yyinsy/W/u0pFCrUf64MAlcQnL0ZH10a9P4qR4MVnMIHMTR5p6idA+nRJW8QjyT0I
- wk/HAKvBDGdBBBysCS0KquuzBTZktyTbpvCtFc8+Hf/Z+M+izS9xMZVGiFrtaHZAh+dHaoVru
- ogsnZQciXudhL2+SMQOKKIxb9oyJnjfnVpMTG4ocBxSAfI0MYoctUCiW1HAQ1n/Nhu+LvV0Pj
- mPC3niwDJAZJ8UMLCpIXE55tCDIW79TLyxKh6X3kkdx0QGgMnh00xt/M1dK1csTYUvQChRkhk
- rwZ7KOZK0jdyoaCMY98RxtjQErZxsgGpm1vg+YDULfwtJDOwuuRhZaJjJhx87e814nS+1rQ1H
- un0W8wVNWY7xQIWVFPRUMflcbrjQgoaRlfqToRMYu8WwDvtG8KdDj9YNv+f2Q8lsmrXMy/7xg
- T4G8sne8eVyAPdgv948dF3ew+sLFw1c3d+yHxUo0xxol9AoXtekiqv+yJJ46AFt5wsSQ739fI
- eM3XAFQ91JT2EqRdz0hlurw7nMKtFJLAqdysbuf/3lgAeEFXgpxrmk6zZ+jBLVCkY27cmkpyJ
- ixr2InTWnWvfVuGR6GLFTBApzAO5GjxFxo3asIFpyr58DNYILiaUeJkNZPNYio1UGuLSCT3kb
- r8YgWEG84Kkb/24/7aB7eZnkzxOZX6lLF2HXzQKLMAE1M3590HcbvTZ2x1gxrkHXkPFfC9ZQ0
- ThZZbOGaW6qNF/Ohj4Wbevy1hErmMW66ApFySPa4acN2ZJnY4MDTC1UNEesVfKCJmQD/K/VkU
- KQZuwPPMtm/V4qW6g1zOPnIZ9R1VOr61Exfdbal0sgULdUetQv3FU1O+XWwUtIzxYcYi9FEw3
- oA6nUWQc40bkggbIxtXwi2lioJx/U02eiJ3n9IHRKXVMBUmDJi/OG4i69zXphevsd8Nkfld2F
- TYGsK3B9xodL6Usi1lfQKlD0Bv9i/m8dvDnMwJeJw30nlPWEtNdE70k6R7SGWS8yOjy0HwMB/
- w6MGSOKe5Mre8/E3DF76ZueZX6A8S267qJTj7muvdHtXCr3KgJzx2Ya76r+9uzxgjWoBGAdpd
- 140ZgP+oUr2fpGMm7cnoHzD5jG/gKKhSRva2Eig==
+References: <20200924074715.GT9675@piout.net> <20200924105256.18162-1-u.kleine-koenig@pengutronix.de>
+ <20200924105256.18162-2-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20200924105256.18162-2-u.kleine-koenig@pengutronix.de>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Sun, 27 Sep 2020 09:50:48 +0200
+Message-ID: <CAH+2xPBu3k53XdLzzak7HP_4W16DkfE9NHXCsjaULRbNctzOuQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rtc: pcf2127: move watchdog initialisation to a
+ separate function
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>, linux-rtc@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-watchdog@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Den tor. 24. sep. 2020 kl. 12.53 skrev Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de>:
+>
+> The obvious advantages are:
+>
+>  - The linker can drop the watchdog functions if CONFIG_WATCHDOG is off.
+>  - All watchdog stuff grouped together with only a single function call
+>    left in generic code.
+>  - Watchdog register is only read when it is actually used.
+>  - Less #ifdefery
+>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 56 ++++++++++++++++++++++-----------------
+>  1 file changed, 31 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index ed6316992cbb..5b1f1949b5e5 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -335,6 +335,36 @@ static const struct watchdog_ops pcf2127_watchdog_op=
+s =3D {
+>         .set_timeout =3D pcf2127_wdt_set_timeout,
+>  };
+>
+> +static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf=
+2127)
+> +{
+> +       u32 wdd_timeout;
+> +       int ret;
+> +
+> +       if (!IS_ENABLED(CONFIG_WATCHDOG))
+> +               return 0;
+> +
+> +       pcf2127->wdd.parent =3D dev;
+> +       pcf2127->wdd.info =3D &pcf2127_wdt_info;
+> +       pcf2127->wdd.ops =3D &pcf2127_watchdog_ops;
+> +       pcf2127->wdd.min_timeout =3D PCF2127_WD_VAL_MIN;
+> +       pcf2127->wdd.max_timeout =3D PCF2127_WD_VAL_MAX;
+> +       pcf2127->wdd.timeout =3D PCF2127_WD_VAL_DEFAULT;
+> +       pcf2127->wdd.min_hw_heartbeat_ms =3D 500;
+> +       pcf2127->wdd.status =3D WATCHDOG_NOWAYOUT_INIT_STATUS;
+> +
+> +       watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
+> +
+> +       /* Test if watchdog timer is started by bootloader */
+> +       ret =3D regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_tim=
+eout);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (wdd_timeout)
+> +               set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+> +
+> +       return devm_watchdog_register_device(dev, &pcf2127->wdd);
+> +}
+> +
+>  /* Alarm */
+>  static int pcf2127_rtc_read_alarm(struct device *dev, struct rtc_wkalrm =
+*alrm)
+>  {
+> @@ -536,7 +566,6 @@ static int pcf2127_probe(struct device *dev, struct r=
+egmap *regmap,
+>                          int alarm_irq, const char *name, bool has_nvmem)
+>  {
+>         struct pcf2127 *pcf2127;
+> -       u32 wdd_timeout;
+>         int ret =3D 0;
+>
+>         dev_dbg(dev, "%s\n", __func__);
+> @@ -575,17 +604,6 @@ static int pcf2127_probe(struct device *dev, struct =
+regmap *regmap,
+>                 pcf2127->rtc->ops =3D &pcf2127_rtc_alrm_ops;
+>         }
+>
+> -       pcf2127->wdd.parent =3D dev;
+> -       pcf2127->wdd.info =3D &pcf2127_wdt_info;
+> -       pcf2127->wdd.ops =3D &pcf2127_watchdog_ops;
+> -       pcf2127->wdd.min_timeout =3D PCF2127_WD_VAL_MIN;
+> -       pcf2127->wdd.max_timeout =3D PCF2127_WD_VAL_MAX;
+> -       pcf2127->wdd.timeout =3D PCF2127_WD_VAL_DEFAULT;
+> -       pcf2127->wdd.min_hw_heartbeat_ms =3D 500;
+> -       pcf2127->wdd.status =3D WATCHDOG_NOWAYOUT_INIT_STATUS;
+> -
+> -       watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
+> -
+>         if (has_nvmem) {
+>                 struct nvmem_config nvmem_cfg =3D {
+>                         .priv =3D pcf2127,
+> @@ -615,19 +633,7 @@ static int pcf2127_probe(struct device *dev, struct =
+regmap *regmap,
+>                 return ret;
+>         }
+>
+> -       /* Test if watchdog timer is started by bootloader */
+> -       ret =3D regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_tim=
+eout);
+> -       if (ret)
+> -               return ret;
+> -
+> -       if (wdd_timeout)
+> -               set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
+> -
+> -#ifdef CONFIG_WATCHDOG
+> -       ret =3D devm_watchdog_register_device(dev, &pcf2127->wdd);
+> -       if (ret)
+> -               return ret;
+> -#endif /* CONFIG_WATCHDOG */
+> +       pcf2127_watchdog_init(dev, pcf2127);
 
---ADZbWkCsHQ7r3kzd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The code refactoring seems like a good idea Uwe, but the new
+pcf2127_watchdog_init() is not a void function. If the return
+value is not handled, it will change driver behavior. Correct
+handling should look like this:
 
-On Fri, Sep 25, 2020 at 11:36:14AM +0200, Alexandre Belloni wrote:
-> Hi,
->=20
-> On 24/09/2020 21:24:53+0200, Jonathan Neusch=C3=A4fer wrote:
-=2E..
-> > v3:
-=2E..
-> > - Relicense as GPLv2 or later
->=20
-> I don't think you had to relicense. The kernel is GPL 2 only, you are
-> free to license your code under GPL 2 only if that is what you desire.
+ret =3D pcf2127_watchdog_init(dev, pcf2127);
+if (ret)
+        return ret;
 
-I don't mind in this case.
+/Bruno
 
---ADZbWkCsHQ7r3kzd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl9uaHAACgkQCDBEmo7z
-X9vzphAAoCYGjLQdcxjaBh9Jk+4k/cEK567Nzrk68QQMIyXemvEY15Rvd+Hmtuw4
-6Kz+TfyxGKQT+kapBiKmMUAmezz5c376BNN6yc330IAZ76mK+Zt3JtUut2vDC3m3
-/uk2xriYBB/vbwGeUCBmjzvmhN330o8ZqqEShJHNnnRZHCp66ACtyw7Vrius/Dyz
-dqzbJZ50EktrNkTXQO/oqumv82L0UO4IwThJTWLl1/+XWd6M1FG9OkBNuGlJs1kH
-PPn4lMdZ+QP/+G7ZSM2E12eFXojqD9Y8mpclnGmbfC0plNFK8z5fxnVKYO0vSrl8
-nyNuqyc2LnTQaUw9d/8Dgg1K9S8XdU8ImtYz4GJG4WqMJx5tHsLzdocvIh9/bSjP
-WU2RgRUt6TPc8eeRibBgiKqDGCFhLy/yj532rRrSwNOetNwEEMWd597YyCusWMbY
-kDJxDpKivTP3dd9iqTMMJIyYQjGOr8JH013kFkr0bSOdIaBPybgqvALxzZnLJ7AB
-axnS1Ev8HBJ9zlM7EReT8VZqdfY4BnjsDGLZoVUBCU9iikV9RwVNfD+g5G44zurG
-9XfmWBTcjwwN/3Esf//WDtjHTwYCJaIyk6eh15hrSxG+uxg+yW4nbX0EZwDbIMhi
-IDGN4OuZkCF/kNo2vX383ynU4CS6mzkaOECfsWbvISi7m3ffldc=
-=IVvh
------END PGP SIGNATURE-----
-
---ADZbWkCsHQ7r3kzd--
+>         /*
+>          * Disable battery low/switch-over timestamp and interrupts.
+> --
+> 2.28.0
+>
