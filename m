@@ -2,67 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D0827A9A6
-	for <lists+linux-rtc@lfdr.de>; Mon, 28 Sep 2020 10:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07ABB27A9CE
+	for <lists+linux-rtc@lfdr.de>; Mon, 28 Sep 2020 10:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbgI1IgY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 28 Sep 2020 04:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41742 "EHLO
+        id S1726500AbgI1Inz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 28 Sep 2020 04:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726534AbgI1IgU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 28 Sep 2020 04:36:20 -0400
+        with ESMTP id S1726461AbgI1Inz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 28 Sep 2020 04:43:55 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF03C0613CE
-        for <linux-rtc@vger.kernel.org>; Mon, 28 Sep 2020 01:36:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE9DC0613CE
+        for <linux-rtc@vger.kernel.org>; Mon, 28 Sep 2020 01:43:55 -0700 (PDT)
 Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1kModa-000084-2t; Mon, 28 Sep 2020 10:35:58 +0200
+        id 1kMol7-0001Mn-GS; Mon, 28 Sep 2020 10:43:45 +0200
 Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
         (envelope-from <ukl@pengutronix.de>)
-        id 1kModO-0005Wh-8W; Mon, 28 Sep 2020 10:35:46 +0200
-Date:   Mon, 28 Sep 2020 10:35:46 +0200
+        id 1kMol5-0006Ul-T2; Mon, 28 Sep 2020 10:43:43 +0200
+Date:   Mon, 28 Sep 2020 10:43:43 +0200
 From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, linux-rtc@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-pwm@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        allen <allen.chen@ite.com.tw>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Bruno Thomsen <bruno.thomsen@gmail.com>, linux-rtc@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 4/7] pwm: ntxec: Add driver for PWM function in
- Netronix EC
-Message-ID: <20200928083546.gwu7ucx7os5yc5bn@pengutronix.de>
-References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
- <20200924192455.2484005-5-j.neuschaefer@gmx.net>
- <20200925063037.fcrmqvpe5noi3ef4@pengutronix.de>
- <20200927211044.GC2510@latitude>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-watchdog@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Qiang Zhao <qiang.zhao@nxp.com>
+Subject: Re: [PATCH 2/2] [RFC] rtc: pcf2127: only use watchdog when
+ explicitly available
+Message-ID: <20200928084343.cl42lxsiionvq7tg@pengutronix.de>
+References: <20200924074715.GT9675@piout.net>
+ <20200924105256.18162-1-u.kleine-koenig@pengutronix.de>
+ <20200924105256.18162-3-u.kleine-koenig@pengutronix.de>
+ <CAH+2xPAVvMpTgT3W=0AsKy=9jkS8qd6eB65Qebw51YKRQshaGQ@mail.gmail.com>
+ <8f88f2a2-4a6d-021f-4404-f05518b0477d@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ydya4zilwk3y3dfw"
+        protocol="application/pgp-signature"; boundary="374kthn377ofw35y"
 Content-Disposition: inline
-In-Reply-To: <20200927211044.GC2510@latitude>
+In-Reply-To: <8f88f2a2-4a6d-021f-4404-f05518b0477d@roeck-us.net>
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -72,139 +58,66 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---ydya4zilwk3y3dfw
+--374kthn377ofw35y
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Jonathan,
-
-On Sun, Sep 27, 2020 at 11:10:44PM +0200, Jonathan Neusch=E4fer wrote:
-> On Fri, Sep 25, 2020 at 08:30:37AM +0200, Uwe Kleine-K=F6nig wrote:
-> > > +	if (period > MAX_PERIOD_NS) {
-> > > +		dev_warn(pwm->dev,
-> > > +			 "Period is not representable in 16 bits after division by %u: %u=
-\n",
-> > > +			 TIME_BASE_NS, period);
+On Sun, Sep 27, 2020 at 08:54:47AM -0700, Guenter Roeck wrote:
+> On 9/27/20 1:09 AM, Bruno Thomsen wrote:
+> > Den tor. 24. sep. 2020 kl. 12.53 skrev Uwe Kleine-K=F6nig
+> > <u.kleine-koenig@pengutronix.de>:
+> >>
+> >> Most boards using the pcf2127 chip (in my bubble) don't make use of the
+> >> watchdog functionality and the respective output is not connected. The
+> >> effect on such a board is that there is a watchdog device provided that
+> >> doesn't work.
+> >>
+> >> So only register the watchdog if the device tree has a "has-watchdog"
+> >> property.
+> >>
+> >> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >> ---
+> >>  drivers/rtc/rtc-pcf2127.c | 3 ++-
+> >>  1 file changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> >> index 5b1f1949b5e5..8bd89d641578 100644
+> >> --- a/drivers/rtc/rtc-pcf2127.c
+> >> +++ b/drivers/rtc/rtc-pcf2127.c
+> >> @@ -340,7 +340,8 @@ static int pcf2127_watchdog_init(struct device *de=
+v, struct pcf2127 *pcf2127)
+> >>         u32 wdd_timeout;
+> >>         int ret;
+> >>
+> >> -       if (!IS_ENABLED(CONFIG_WATCHDOG))
+> >> +       if (!IS_ENABLED(CONFIG_WATCHDOG) ||
+> >> +           !device_property_read_bool(dev, "has-watchdog"))
+> >>                 return 0;
 > >=20
-> > No error messages in .apply() please; this might spam the kernel log.
-> >
-> > Also the expectation when a too big period is requested is to configure
-> > for the biggest possible period. So just do:
+> > I don't think the compiler can remove the function if
+> > CONFIG_WATCHDOG is disabled due to the device tree
+> > value check. Maybe it can if split into 2 conditions.
 > >=20
-> > 	if (period > MAX_PERIOD_NS) {
-> > 		period =3D MAX_PERIOD_NS;
-> >=20
-> > 		if (duty > period)
-> > 			duty =3D period;
-> > 	}
-> >=20
-> > (or something equivalent).
 >=20
-> Okay, I'll adjust it.
+> If the first part of the expression is always false, the second
+> part should not even be evaluated.
+
+This is wrong. For || the second expression isn't evaluated if the first
+evaluates to true (and the whole expression becomes true). This is the
+intended behaviour: If CONFIG_WATCHDOG is off, we don't need to check
+for the dt property and just skip the watchdog part.
+
+> Either case, the code now hard depends on the compiler optimizing the
+> code away.
 >=20
-> > > +	/*
-> > > +	 * Writing a duty cycle of zone puts the device into a state where
-> >=20
-> > What is "zone"? A mixture of zero and one and so approximately 0.5?
->=20
-> Oops, that's a typo. I just meant "zero".
->=20
-> > > +	 * writing a higher duty cycle doesn't result in the brightness tha=
-t it
-> > > +	 * usually results in. This can be fixed by cycling the ENABLE regi=
-ster.
-> > > +	 *
-> > > +	 * As a workaround, write ENABLE=3D0 when the duty cycle is zero.
-> > > +	 */
-> > > +	if (state->enabled && duty !=3D 0) {
-> > > +		res =3D regmap_write(pwm->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8=
-(1));
-> > > +		if (res)
-> > > +			return res;
-> > > +
-> > > +		/* Disable the auto-off timer */
-> > > +		res =3D regmap_write(pwm->ec->regmap, NTXEC_REG_AUTO_OFF_HI, ntxec=
-_reg8(0xff));
-> > > +		if (res)
-> > > +			return res;
-> > > +
-> > > +		return regmap_write(pwm->ec->regmap, NTXEC_REG_AUTO_OFF_LO, ntxec_=
-reg8(0xff));
-> > > +	} else {
-> > > +		return regmap_write(pwm->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(=
-0));
-> > > +	}
-> >=20
-> > This code is wrong for state->enabled =3D false.
->=20
-> Why?
+> It calls devm_watchdog_register_device() which doesn't exist
+> if CONFIG_WATCHDOG is not enabled. I didn't know that this is safe,
+> and I would personally not want to rely on it, but we live and
+> learn.
 
-Hm, I wonder the same. Probably I just misunderstood the code, sorry :-\
-
-> > How does the PWM behave when .apply is called? Does it complete the
-> > currently running period? Can it happen that when you switch from say
-> >=20
-> > 	.duty_cycle =3D 900 * TIME_BASE_NS (0x384)
-> > 	.period =3D 1800 * TIME_BASE_NS (0x708)
-> >=20
-> > to
-> >=20
-> > 	.duty_cycle =3D 300 * TIME_BASE_NS (0x12c)
-> > 	.period =3D 600 * TIME_BASE_NS (0x258)
-> >=20
-> > that a period with
-> >=20
-> > 	.duty_cycle =3D 388 * TIME_BASE_NS (0x184)
-> > 	.period =3D 1800 * TIME_BASE_NS (0x708)
-> > =09
-> > (because only NTXEC_REG_PERIOD_HIGH was written when the new period
-> > started) or something similar is emitted?
->=20
-> Changes take effect after the low byte is written, so a result like 0x184
-> in the above example should not happen.
->=20
-> When the period and duty cycle are both changed, it temporarily results
-> in an inconsistent state:
->=20
->  - period =3D 1800ns, duty cycle =3D 900ns
->  - period =3D  600ns, duty cycle =3D 900ns (!)
->  - period =3D  600ns, duty cycle =3D 300ns
-
-Does this always happen, or only if a new cycle starts at an unlucky
-moment?
-
-> The inconsistent state of duty cycle > period is handled gracefully by
-> the EC and it outputs a 100% duty cycle, as far as I can tell.
-
-OK.
-
-> I currently don't have a logic analyzer / oscilloscope to measure
-> whether we get full PWM periods, or some kind of glitch when the new
-> period starts in the middle of the last one.
-
-You can even check this with an LED using something like:
-
-	pwm_apply(mypwm, {.enabled =3D true, .duty_cycle =3D $big, .period =3D $bi=
-g});
-	pwm_apply(mypwm, {.enabled =3D false, ... });
-
-=2E If the period is completed the LED is on for $big ns, if not the LED
-is on for a timespan that is probably hardly noticable with the human
-eye.
-
-> > > +}
-> > > +
-> > > +static struct pwm_ops ntxec_pwm_ops =3D {
-> > > +	.apply =3D ntxec_pwm_apply,
-> >=20
-> > Please implement a .get_state() callback. And enable PWM_DEBUG during
-> > your tests.
->=20
-> The device doesn't support reading back the PWM state. What should a
-> driver do in this case?
-
-Document it as a limitation, please.
+AFAICT this is save and used in other places in the kernel, too.  This
+is one of the reasons why you cannot compile the kernel with -O0.
 
 Best regards
 Uwe
@@ -213,19 +126,19 @@ Uwe
 Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
 Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---ydya4zilwk3y3dfw
+--374kthn377ofw35y
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9xoF8ACgkQwfwUeK3K
-7Am4PAf/d6jJ0rLJJBKslZzKA1ulRj6vzQKAWN3OQRe0DAiKrHOk9rREZywu8qab
-ij5usrKGU9lnrCsUDqOskvJW8F9zTfl9R9stEmw6yFvXsx/PbcsJ7u5zQtdTwlgu
-o5VSEJr9Ym/lRzeptOLVUnrO0s4DmLQEkf9Xe/9buxLDg97sFVeyurLLiHyblf7M
-YzROKhF66NGleiw41Xe0NNeM3iEPwV8FoDUYYQSWiwG9B3ENVGEpp2jnvPArUC1x
-E90X9u6xKIk2bxbmcE8pd+bDtdWpuL1DIyI4NjyePdN1JHcGsyJwNsg4dcY1uV8e
-h+t4gHpfpZPaA+us9ukQsDxpX0iUxA==
-=xFyB
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl9xoj0ACgkQwfwUeK3K
+7AloGQgAmT9jAsBE55nkCiQIvfTONeRIQHfU/NnP8IE+OO7uaKe+rs00xj0rIerX
+vLQyiWvIbRKkYDNvb/sbsp6OdhBh0o8C7d9wXPe7gzIgdU0VUI6aUfPv+SrpuArL
+75ye2ADjrI7fOAtdEI3FLgQPUvqlEmGBtqNqP2D6ub4KFSvKJr29X2+8QMO4aHpJ
+KZI/3e/3CSmg0C7a3mnPu0ghHUZUBFd7eOuiZbNrlVuaOc2cBMEdwQrtLm/dTZto
+IhWtwplF4GWZaDo84GsEA7MU8v38tN2g3KnEdzlOwqdU+/pqGYv4uNm1vrRq2NMG
+68zaImE+9OUEnlS364NiBvRoV8zeLQ==
+=x1uh
 -----END PGP SIGNATURE-----
 
---ydya4zilwk3y3dfw--
+--374kthn377ofw35y--
