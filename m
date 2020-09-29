@@ -2,177 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 255B327D3BB
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Sep 2020 18:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2419227D4D3
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Sep 2020 19:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbgI2Qhl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Sep 2020 12:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728184AbgI2Qhl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Sep 2020 12:37:41 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA7FC061755;
-        Tue, 29 Sep 2020 09:37:40 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id jw11so2950412pjb.0;
-        Tue, 29 Sep 2020 09:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tg5f8r5u/C7h4zTCABx8TCIEL7vsD7cEWgNSNx1Mhuo=;
-        b=mMzxQvjL29Mh9yG57bCHo7dUr7BOU1mi5S7nRbttYY7qjpEtgyB3th6JKvs04eLZpD
-         bh1InFSWp/G9PLsIwwV7KNWy/n6UOR1S07EU87EwmcT8rJ+fyEQfQC0pvCCMmtBTmLHG
-         UrA0dz164V3sVMRVinQXq3o7e0+3WYj5EEePB6e9WimQJ7sZd2WBOdPrAGcIiVT+OtC5
-         QGf7hXTxUyc5W2F2kMvrCl5PrnByNb+GrZLatlCcQbQI4NeohOxJy6Mou4s5orbOWctl
-         hU2+4OJ1CZf+APEJEIGwP8F7MxU2ILjNVscUd9h2NsS9+8csPUh2ANMVEPYXb8NKHenx
-         +ovg==
+        id S1729350AbgI2RrV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Sep 2020 13:47:21 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34120 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728386AbgI2RrV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Sep 2020 13:47:21 -0400
+Received: by mail-oi1-f195.google.com with SMTP id n2so6406822oij.1;
+        Tue, 29 Sep 2020 10:47:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tg5f8r5u/C7h4zTCABx8TCIEL7vsD7cEWgNSNx1Mhuo=;
-        b=YYtisWy8rzkYuF9VdIg4yAR9SivXQ4p7mWENJspVud4FtTUuMfRwpsakr7SqR+ocPz
-         4lmYnkwTj7exc+xOS6DnIebbv6F2jt/HCDM9CmYzlxCxoD9mHB/q6zSbmLbCLVMP1/+f
-         mdh4gAf323ImNVotNPF3xKea2AgTzgAMWlq/a73fpihshDDhxCaLQnIH6q/woaArsxDB
-         0oKIDnW5zZKwHhNxnq6jyXmIOWepbfnBUuuRvKp4J3cuBtkxpbYybI7BrD/Vbn+MK6nM
-         FspfhXG6AKicEgqiLvH7JiE4QENJOaAHU7n4f8ERspCowDi2fodXCC0s/MpZOd0xyEP9
-         buug==
-X-Gm-Message-State: AOAM531FiQlPaSE6aaSSfq21YgLmoX/LfVK0/S7XtFQ1Um0BmlgFIS+U
-        qWhhwaLqFxP7kD6gsJZ//ugeP98tYmPtMagX00Y=
-X-Google-Smtp-Source: ABdhPJzZ2MWu7BgoxsmDjhQpS0GWZbywEzkmOKzpwIhLoaMANgTMAtb9GN0oR97r5Kd5jzUPLjGd6xvp9GBlEWkoC5E=
-X-Received: by 2002:a17:90b:fc4:: with SMTP id gd4mr4713204pjb.129.1601397460322;
- Tue, 29 Sep 2020 09:37:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KZRMr4mdPoTh1ehZPsE7EnlMD2nYYqtZbdCYkxjagbE=;
+        b=dB8Npl7BrpwBuK1lmIXghK6uDGdDcqf6um8q4ZbG4hor2kAKfL7xTs1n39do8M0isp
+         FPy1PAa8FA9pBmAos3pZO+ZVLPSSGvdchtcX3GNI0Y4K803nkfODxaBinNngm1Fi4ynn
+         sATs1drrpj5Jy/r45W8iIhxQeMwW1g41cTCeYkaTBixnpk/+49Odp+a0UZ4HW+HFDDJ2
+         uCfAPMp8ZjUgRYopN+IDePOptRNZHKC8sfq6JccFsHmfqZQ0JsDuqlUXABrpFpjSx+gw
+         dtl3SiqVgCylJtwSVAZafpuT4RpBXQz3eHWjn7AJgL6EyK7iK3pUwi1s0ueG48M2NFP5
+         HT1g==
+X-Gm-Message-State: AOAM533HzM4aogua7dqLzphrjBkBddYlyl5dV9Nu5ZsIUNUEZ2skv1JI
+        YDFPPtn8pTWI4ptosvygfqSco+f55ehN
+X-Google-Smtp-Source: ABdhPJx3wYtz1WxeOXO3Dnbowx1BLv+z7vIPqs4+VSQ7rQkYVfJD1gS7+GWYeJddpk/hnScGZjG13A==
+X-Received: by 2002:aca:3655:: with SMTP id d82mr3433472oia.75.1601401640217;
+        Tue, 29 Sep 2020 10:47:20 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l23sm1146271otk.79.2020.09.29.10.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 10:47:19 -0700 (PDT)
+Received: (nullmailer pid 849102 invoked by uid 1000);
+        Tue, 29 Sep 2020 17:47:19 -0000
+Date:   Tue, 29 Sep 2020 12:47:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: rtc: add trickle-voltage-mV
+Message-ID: <20200929174719.GA847795@bogus>
+References: <20200921171735.1191342-1-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
-References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
- <20200924192455.2484005-4-j.neuschaefer@gmx.net> <CAHp75VdUHPsuvDPLnfP9sM2p1FDiCsjkCf1SSM-y02ZsQxSDWQ@mail.gmail.com>
- <20200925213207.GA2510@latitude>
-In-Reply-To: <20200925213207.GA2510@latitude>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 29 Sep 2020 19:37:21 +0300
-Message-ID: <CAHp75VchfQ-djkK6u+fLjq6kfqpzb0nqSLJOe76cb5S3J_F9GQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/7] mfd: Add base driver for Netronix embedded controller
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-pwm@vger.kernel.org,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200921171735.1191342-1-alexandre.belloni@bootlin.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 12:32 AM Jonathan Neusch=C3=A4fer
-<j.neuschaefer@gmx.net> wrote:
-> On Fri, Sep 25, 2020 at 12:29:45PM +0300, Andy Shevchenko wrote:
-> > On Thu, Sep 24, 2020 at 10:26 PM Jonathan Neusch=C3=A4fer
-> > <j.neuschaefer@gmx.net> wrote:
+On Mon, Sep 21, 2020 at 07:17:32PM +0200, Alexandre Belloni wrote:
+> Some RTCs have a trickle charge that is able to output different voltages
+> depending on the type of the connected auxiliary power (battery, supercap,
+> ...). Add a property allowing to specify the necessary voltage.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/rtc.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> index ee237b2ed66a..93f04d5e5307 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> @@ -42,6 +42,13 @@ properties:
+>        Selected resistor for trickle charger. Should be given
+>        if trickle charger should be enabled.
+>  
+> +  trickle-voltage-mV:
 
-...
+Use standard unit suffix.
 
-> > > +               dev_alert(&poweroff_restart_client->dev,
-> > > +                         "Failed to power off (err =3D %d)\n", res);
-> >
-> > alert? This needs to be explained.
->
-> I copied the dev_alert from drivers/mfd/rn5t618.c.
->
-> Upon reconsideration, I'm not sure what the correct log level would be,
-> but _warn seems enough, or maybe _err is better
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-It's up to you to decide, but crit/alert and similar has to be
-justified (commit message / comment in the code).
+And then you don't need a type.
 
-...
-
-> > > +       /*
-> > > +        * NOTE: The lower half of the reset value is not sent, becau=
-se sending
-> > > +        * it causes an error
-> >
-> > Why? Any root cause? Perhaps you need to send 0xffff ?
->
-> Unknown, because I don't have the EC firmware for analysis. The vendor
-> kernel sends 0xff00 and gets an error.
->
-> Sending 0xffff doesn't help.
-
-Maybe a slightly elaborated comment that it's copied from the vendor
-kernel (which is?).
-
-> > > +        */
-
-...
-
-> > > +       dev_info(ec->dev,
-> > > +                "Netronix embedded controller version %04x detected.=
-\n",
-> > > +                version);
-> >
-> > This info level may confuse users if followed by an error path.
->
-> Right. I suppose printing incompatible versions is still useful, so how
-> about something like the following?
->
->
->        /* Bail out if we encounter an unknown firmware version */
->        switch (version) {
->        case 0xd726: /* found in Kobo Aura */
->                dev_info(ec->dev,
->                         "Netronix embedded controller version %04x detect=
-ed.\n",
->                         version);
->                break;
->        default:
->                dev_err(ec->dev,
->                         "Netronix embedded controller version %04x is not=
- supported.\n",
->                         version);
->                return -ENODEV;
->        }
-
-This is better.
-
-...
-
-> > > +               WARN_ON(poweroff_restart_client);
-> >
-> > WARN_ON? All these alerts, WARNs, BUGs must be explained. Screaming to
-> > the user is not good if it wasn't justified.
->
-> poweroff_restart_client being already set is not a situation that should
-> happen (and would indicate a bug in this driver, AFAICT), but I guess
-> the log message could be better in that case...
-
-As per above.
-
---=20
-With Best Regards,
-Andy Shevchenko
+> +    description:
+> +      Selected voltage for trickle charger. Should be given
+> +      if trickle charger should be enabled and the trickle voltage is different
+> +      from the RTC main power supply.
+> +
+>    wakeup-source:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+> -- 
+> 2.26.2
+> 
