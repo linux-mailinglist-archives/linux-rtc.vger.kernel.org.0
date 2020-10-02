@@ -2,50 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A13A280DB6
-	for <lists+linux-rtc@lfdr.de>; Fri,  2 Oct 2020 08:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C2B281BFE
+	for <lists+linux-rtc@lfdr.de>; Fri,  2 Oct 2020 21:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725968AbgJBG4A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 2 Oct 2020 02:56:00 -0400
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:62584 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbgJBGz7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 2 Oct 2020 02:55:59 -0400
-X-Greylist: delayed 1201 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 02:55:59 EDT
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1601620558;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=5/a5SIUjFnCD4xF0krtndkpdots=;
-        b=OTBddEBXT8lIHYMp88g+5odU15WSU98bB97s14DYKcQEqbmwefzA6w2PBlFdbzfu
-        F1LJsgoQpv/JrMQWShcLFo5PMSmuhLknnlkZsoZ7uMcgKQSqwmwRVB5swPtXAkdK
-        Z4FUDbxWxOtI11OJDZbD5RFAw+gQCFsUo9IzsSYxKiycBPlGBJ/qwxZM6gEVIpvU
-        iNh/VjqdrHAeb9MVND+F1rHiFL9SV20NSLdIAHeDE/P1n4QS3h5JlKkV26fZkBzr
-        w/OqDJxfUUWiWMMV+RxFE/m0OriTP6mOKtsPqw47saBLEvZQDyQtibuSbngDPfQR
-        lNrxQbt/TopXtAFxBFdtmg==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=Xt+ExmN9 c=1 sm=1 tr=0 a=4yk97B3yQiU+fkK3asfMng==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=tpDgMMMYm1AA:10 a=phVmyOwPPhYA:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10 a=afefHYAZSVUA:10 a=4CenI3Xi3vkA:10 a=mi7wRjcmMTYA:10 a=3yzQafdIafhLKNqTyM4A:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=mCudX5j5sKG__ihiSL84:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: Y2hhcmxpZS5rcm9sbEB3aWxkYmx1ZS5uZXQ=
-Received: from [10.80.118.1] ([10.80.118.1:52972] helo=md04.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <charlie.kroll@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id E0/09-32012-D4AC67F5; Fri, 02 Oct 2020 02:35:57 -0400
-Date:   Fri, 2 Oct 2020 02:35:57 -0400 (EDT)
-From:   George Worden <charlie.kroll@wildblue.net>
-Reply-To: geow77361@gmail.com
-Message-ID: <1249753226.80949307.1601620557010.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S2387806AbgJBT1f convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 2 Oct 2020 15:27:35 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:62996 "EHLO mx.metalurgs.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387692AbgJBT1f (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:27:35 -0400
+X-Greylist: delayed 587 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:27:34 EDT
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 2AAEA60E4A
+        for <linux-rtc@vger.kernel.org>; Fri,  2 Oct 2020 22:16:57 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id D9F8A60DC5
+        for <linux-rtc@vger.kernel.org>; Fri,  2 Oct 2020 22:16:56 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id E188C608DE; Fri,  2 Oct 2020 22:16:55 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.50])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 0EDE65D3DD;
+        Fri,  2 Oct 2020 22:16:48 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [186.220.241.160]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: jctkR8LAuUrwz+4kA59rkmXT2u8Emg==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Fri, 02 Oct 2020 16:16:42 -0300
+Reply-To: binmurrah@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201002191655.E188C608DE@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan.
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201002 notchecked
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Did you get my last message
+Hello Dear,
+
+We are Investment Company offering Corporate and Personal
+Loan at 3% Interest Rate for a duration of 10Years.
+
+We also pay 1% commission to brokers, who introduce project
+owners for finance or other opportunities.
+
+Please get back to me if you are interested for more
+details.
+
+Yours faithfully,
+Hashim Bin 
