@@ -2,39 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54ECE2829B6
-	for <lists+linux-rtc@lfdr.de>; Sun,  4 Oct 2020 10:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF292830EB
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Oct 2020 09:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725856AbgJDIwJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 4 Oct 2020 04:52:09 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:39918 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbgJDIwJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 4 Oct 2020 04:52:09 -0400
-Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 850BA3A59E9;
-        Sun,  4 Oct 2020 08:42:38 +0000 (UTC)
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 88518200002;
-        Sun,  4 Oct 2020 08:42:09 +0000 (UTC)
-Date:   Sun, 4 Oct 2020 10:42:09 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
+        id S1725870AbgJEHgL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Oct 2020 03:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbgJEHgK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Oct 2020 03:36:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13D6C0613CE
+        for <linux-rtc@vger.kernel.org>; Mon,  5 Oct 2020 00:36:10 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kPL2F-0004xR-10; Mon, 05 Oct 2020 09:35:51 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kPL23-0001St-3I; Mon, 05 Oct 2020 09:35:39 +0200
+Date:   Mon, 5 Oct 2020 09:35:38 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
+        Sam Ravnborg <sam@ravnborg.org>, linux-rtc@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
+        Fabio Estevam <festevam@gmail.com>,
         Daniel Palmer <daniel@0x0f.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Andreas Kemnade <andreas@kemnade.info>,
         NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        linux-pwm@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
         allen <allen.chen@ite.com.tw>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Lubomir Rintel <lkundrak@v3.sk>,
@@ -42,7 +45,7 @@ Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?=
         Lee Jones <lee.jones@linaro.org>,
         linux-arm-kernel@lists.infradead.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
         Josua Mayer <josua.mayer@jm0.eu>,
@@ -50,106 +53,70 @@ Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?=
         "David S. Miller" <davem@davemloft.net>
 Subject: Re: [PATCH v3 5/7] rtc: New driver for RTC in Netronix embedded
  controller
-Message-ID: <20201004084209.GV2804081@piout.net>
+Message-ID: <20201005073538.g37j3tfc7q4gifdz@pengutronix.de>
 References: <20200924192455.2484005-1-j.neuschaefer@gmx.net>
  <20200924192455.2484005-6-j.neuschaefer@gmx.net>
  <20200925054424.snlr3lggnsv575wu@pengutronix.de>
  <20201004014323.GD500800@latitude>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ve23n3n3k4nkv36h"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20201004014323.GD500800@latitude>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/10/2020 03:43:23+0200, Jonathan Neuschäfer wrote:
-> > > +static int ntxec_set_time(struct device *dev, struct rtc_time *tm)
-> > > +{
-> > > +	struct ntxec_rtc *rtc = dev_get_drvdata(dev);
-> > > +	int res = 0;
-> > > +
-> > > +	res = regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_YEAR, ntxec_reg8(tm->tm_year - 100));
-> > > +	if (res)
-> > > +		return res;
-> > > +
-> > > +	res = regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_MONTH, ntxec_reg8(tm->tm_mon + 1));
-> > > +	if (res)
-> > > +		return res;
-> > > +
-> > > +	res = regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_DAY, ntxec_reg8(tm->tm_mday));
-> > > +	if (res)
-> > > +		return res;
-> > > +
-> > > +	res = regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_HOUR, ntxec_reg8(tm->tm_hour));
-> > > +	if (res)
-> > > +		return res;
-> > > +
-> > > +	res = regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_MINUTE, ntxec_reg8(tm->tm_min));
-> > > +	if (res)
-> > > +		return res;
-> > > +
-> > > +	return regmap_write(rtc->ec->regmap, NTXEC_REG_WRITE_SECOND, ntxec_reg8(tm->tm_sec));
-> > 
-> > I wonder: Is this racy? If you write minute, does the seconds reset to
-> > zero or something like that? Or can it happen, that after writing the
-> > minute register and before writing the second register the seconds
-> > overflow and you end up with the time set to a minute later than
-> > intended? If so it might be worth to set the seconds to 0 at the start
-> > of the function (with an explaining comment).
-> 
-> The setting the minutes does not reset the seconds, so I think this race
-> condition is possible. I'll add the workaround.
-> 
 
-Are you sure this happens? Usually, the seconds are not reset but the
-internal 32768kHz counter is so you have a full second to write all the
-registers.
+--ve23n3n3k4nkv36h
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > .read_time has a similar race. What happens if minutes overflow between
-> > reading NTXEC_REG_READ_DH and NTXEC_REG_READ_MS?
-> 
-> Yes, we get read tearing in that case. It could even propagate all the
-> way to the year/month field, for example when the following time rolls
-> over:
-> 	   A   |  B  |  C
-> 	2020-10-31 23:59:59
-> 	2020-11-01 00:00:00
-> 
-> - If the increment happens after reading C, we get         2020-10-31 23:59:59
-> - If the increment happens between reading B and C, we get 2020-10-31 23:00:00
-> - If the increment happens between reading A and B, we get 2020-10-01 00:00:00
-> - If the increment happens before reading A, we get        2020-11-01 00:00:00
-> 
-> ... both of which are far from correct.
-> 
-> To mitigate this issue, I think something like the following is needed:
-> 
-> - Read year/month
-> - Read day/hour
-> - Read minute/second
-> - Read day/hour, compare with previously read value, restart on mismatch
-> - Read year/month, compare with previously read value, restart on mismatch
-> 
-> The order of the last two steps doesn't matter, as far as I can see, but
-> if I remove one of them, I can't catch all cases of read tearing.
-> 
+Hello Jonathan,
 
-Are you also sure this happens?
+On Sun, Oct 04, 2020 at 03:43:23AM +0200, Jonathan Neusch=E4fer wrote:
+> On Fri, Sep 25, 2020 at 07:44:24AM +0200, Uwe Kleine-K=F6nig wrote:
+> > > +static struct platform_driver ntxec_rtc_driver =3D {
+> > > +	.driver =3D {
+> > > +		.name =3D "ntxec-rtc",
+> > > +	},
+> > > +	.probe =3D ntxec_rtc_probe,
+> >=20
+> > No .remove function?
+>=20
+> I don't think it would serve a purpose in this driver. There are no
+> device-specific resources to release (no clocks to unprepare, for
+> example).
 
-Only one comparison is necessary, the correct order would be:
+I had in mind that without a .remove callback the driver cannot detach.
+but looking in the code (drivers/base/platform.c) this seems wrong.
+So my concern can be considered void.
 
- - Read minute/second
- - Read day/hour
- - Read year/month
- - Read minute/second, compare
+Best regards
+Uwe
 
-If day/hour changes but not minute/second, it would mean that it took at
-least an hour to read all the registers. At this point, I think you have
-other problems and the exact time doesn't matter anymore.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--ve23n3n3k4nkv36h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl96zMcACgkQwfwUeK3K
+7AkG8wf+MDL1PUfowGS0UkWxYzb50CA1v9Z1Bx0aEmXSf9HVA6T8xsjxQwsDQXS5
+Q3pzcQbjH1uGtttynGQPFMlc78UfIAktFUQmL2CjGTpNtbo/V0ljUJPWDt71Y2L1
+ZMOfiC1KwjRgIdlNz3DHDbNcwZ9i3BcQ26Ua2vfPqL4cxnBuSmTxMerScJcio7bq
+PH2zr2+7B3c03j1hdXhpnsbegbN8nc6ktjyDh/yOmPyz34wdBHExMkITFIf4IXX1
+Qrez1zwcPayzDzE25VR6w1rdyvHhg1Zh9hz8tU+ixJmuIXyoUql+nTeepAd8uJZk
+wowaWSYgMq53Vg02xGLMUHGVzFCc1g==
+=0UxN
+-----END PGP SIGNATURE-----
+
+--ve23n3n3k4nkv36h--
