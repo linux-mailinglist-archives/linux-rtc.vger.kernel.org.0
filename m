@@ -2,1006 +2,959 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B9E286AAD
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Oct 2020 00:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0489286AFA
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Oct 2020 00:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbgJGWFU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Oct 2020 18:05:20 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:54363 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728818AbgJGWFR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Oct 2020 18:05:17 -0400
+        id S1728877AbgJGWkV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Oct 2020 18:40:21 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:47475 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728339AbgJGWkV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Oct 2020 18:40:21 -0400
+X-Greylist: delayed 142575 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 18:40:16 EDT
+X-Originating-IP: 90.65.88.165
 Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id AC876200002;
-        Wed,  7 Oct 2020 22:05:11 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0DF9E1BF205;
+        Wed,  7 Oct 2020 22:40:02 +0000 (UTC)
+Date:   Thu, 8 Oct 2020 00:40:02 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2 3/3] rtc: rv3032: Add a driver for Microcrystal RV-3032
-Date:   Thu,  8 Oct 2020 00:05:06 +0200
-Message-Id: <20201007220506.360469-3-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201007220506.360469-1-alexandre.belloni@bootlin.com>
-References: <20201007220506.360469-1-alexandre.belloni@bootlin.com>
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Richard Weinberger <richard@nod.at>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 4/4] dt-bindings: Explicitly allow additional properties
+ in common schemas
+Message-ID: <20201007224002.GJ2804081@piout.net>
+References: <20201005183830.486085-1-robh@kernel.org>
+ <20201005183830.486085-5-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201005183830.486085-5-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-New driver for the Microcrystal RV-3032, including support for:
- - Date/time
- - Alarms
- - Low voltage detection
- - Trickle charge
- - Trimming
- - Clkout
- - RAM
- - EEPROM
- - Temperature sensor
+On 05/10/2020 13:38:30-0500, Rob Herring wrote:
+> In order to add meta-schema checks for additional/unevaluatedProperties
+> being present, all schema need to make this explicit. As common/shared
+> schema are included by other schemas, they should always allow for
+> additionalProperties.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
+> ---
+>  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 ++
+>  .../devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml      | 2 ++
+>  Documentation/devicetree/bindings/ata/pata-common.yaml       | 2 ++
+>  Documentation/devicetree/bindings/ata/sata-common.yaml       | 2 ++
+>  Documentation/devicetree/bindings/bus/simple-pm-bus.yaml     | 2 ++
+>  .../devicetree/bindings/chrome/google,cros-ec-typec.yaml     | 2 ++
+>  .../devicetree/bindings/connector/usb-connector.yaml         | 2 ++
+>  .../devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml | 2 ++
+>  .../devicetree/bindings/display/dsi-controller.yaml          | 2 ++
+>  Documentation/devicetree/bindings/display/panel/lvds.yaml    | 2 ++
+>  .../devicetree/bindings/display/panel/panel-common.yaml      | 2 ++
+>  Documentation/devicetree/bindings/dma/dma-common.yaml        | 2 ++
+>  Documentation/devicetree/bindings/dma/dma-controller.yaml    | 2 ++
+>  Documentation/devicetree/bindings/dma/dma-router.yaml        | 2 ++
+>  Documentation/devicetree/bindings/extcon/wlf,arizona.yaml    | 2 ++
+>  .../devicetree/bindings/iio/adc/samsung,exynos-adc.yaml      | 5 ++++-
+>  Documentation/devicetree/bindings/iio/common.yaml            | 2 ++
+>  Documentation/devicetree/bindings/input/input.yaml           | 2 ++
+>  Documentation/devicetree/bindings/input/matrix-keymap.yaml   | 2 ++
+>  .../devicetree/bindings/input/touchscreen/touchscreen.yaml   | 2 ++
+>  Documentation/devicetree/bindings/leds/common.yaml           | 2 ++
+>  .../devicetree/bindings/leds/leds-class-multicolor.yaml      | 3 +++
+>  Documentation/devicetree/bindings/leds/trigger-source.yaml   | 2 ++
+>  Documentation/devicetree/bindings/media/rc.yaml              | 2 ++
+>  Documentation/devicetree/bindings/mfd/syscon.yaml            | 2 +-
+>  Documentation/devicetree/bindings/mmc/mmc-controller.yaml    | 2 ++
+>  .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml     | 2 ++
+>  Documentation/devicetree/bindings/mtd/nand-controller.yaml   | 2 ++
+>  .../devicetree/bindings/net/can/can-transceiver.yaml         | 2 ++
+>  Documentation/devicetree/bindings/net/dsa/dsa.yaml           | 2 ++
+>  .../devicetree/bindings/net/ethernet-controller.yaml         | 2 ++
+>  Documentation/devicetree/bindings/net/ethernet-phy.yaml      | 2 ++
+>  Documentation/devicetree/bindings/net/mdio.yaml              | 2 ++
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml        | 2 ++
+>  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 ++
+>  Documentation/devicetree/bindings/nvmem/nvmem.yaml           | 2 ++
+>  Documentation/devicetree/bindings/pci/cdns-pcie-ep.yaml      | 2 ++
+>  Documentation/devicetree/bindings/pci/cdns-pcie-host.yaml    | 2 ++
+>  Documentation/devicetree/bindings/pci/cdns-pcie.yaml         | 2 ++
+>  Documentation/devicetree/bindings/pci/pci-ep.yaml            | 2 ++
+>  Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml | 2 ++
+>  Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml   | 2 ++
+>  Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml   | 2 ++
+>  Documentation/devicetree/bindings/power/power-domain.yaml    | 2 ++
+>  .../devicetree/bindings/power/supply/power-supply.yaml       | 2 ++
+>  Documentation/devicetree/bindings/pwm/pwm.yaml               | 2 ++
+>  Documentation/devicetree/bindings/regulator/regulator.yaml   | 2 ++
+>  Documentation/devicetree/bindings/regulator/wlf,arizona.yaml | 2 ++
+>  Documentation/devicetree/bindings/riscv/cpus.yaml            | 2 ++
+>  Documentation/devicetree/bindings/rtc/rtc.yaml               | 2 ++
+>  Documentation/devicetree/bindings/serial/rs485.yaml          | 3 +++
+>  Documentation/devicetree/bindings/serial/serial.yaml         | 2 ++
+>  Documentation/devicetree/bindings/soc/imx/fsl,aips-bus.yaml  | 2 ++
+>  Documentation/devicetree/bindings/sound/amlogic,aiu.yaml     | 2 ++
+>  Documentation/devicetree/bindings/sound/cirrus,madera.yaml   | 2 ++
+>  .../devicetree/bindings/sound/nvidia,tegra210-ahub.yaml      | 3 +++
+>  Documentation/devicetree/bindings/sound/wlf,arizona.yaml     | 2 ++
+>  .../devicetree/bindings/soundwire/soundwire-controller.yaml  | 2 ++
+>  Documentation/devicetree/bindings/spi/spi-controller.yaml    | 2 ++
+>  Documentation/devicetree/bindings/spmi/spmi.yaml             | 2 ++
+>  .../devicetree/bindings/thermal/thermal-cooling-devices.yaml | 2 ++
+>  .../devicetree/bindings/thermal/thermal-sensor.yaml          | 2 ++
+>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml       | 2 ++
+>  Documentation/devicetree/bindings/usb/usb-hcd.yaml           | 2 ++
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml     | 2 ++
+>  65 files changed, 134 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+> index 1222bf1831fa..14cd727d3c4b 100644
+> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+> @@ -341,6 +341,8 @@ required:
+>  dependencies:
+>    rockchip,pmu: [enable-method]
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      cpus {
+> diff --git a/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+> index 1043e4be4fca..c9675c4cdc1b 100644
+> --- a/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+> +++ b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+> @@ -30,6 +30,8 @@ properties:
+>        Specifies the bpmp node that needs to be queried to get
+>        operating point data for all CPUs.
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      cpus {
+> diff --git a/Documentation/devicetree/bindings/ata/pata-common.yaml b/Documentation/devicetree/bindings/ata/pata-common.yaml
+> index fc5ebbe7108d..2412894a255d 100644
+> --- a/Documentation/devicetree/bindings/ata/pata-common.yaml
+> +++ b/Documentation/devicetree/bindings/ata/pata-common.yaml
+> @@ -47,4 +47,6 @@ patternProperties:
+>            The ID number of the drive port, 0 for the master port and 1 for the
+>            slave port.
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/ata/sata-common.yaml b/Documentation/devicetree/bindings/ata/sata-common.yaml
+> index 6783a4dec6b5..7ac77b1c5850 100644
+> --- a/Documentation/devicetree/bindings/ata/sata-common.yaml
+> +++ b/Documentation/devicetree/bindings/ata/sata-common.yaml
+> @@ -47,4 +47,6 @@ patternProperties:
+>            multiplier making it possible to connect up to 15 disks to a single
+>            SATA port.
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/bus/simple-pm-bus.yaml b/Documentation/devicetree/bindings/bus/simple-pm-bus.yaml
+> index 33326ffdb266..182134d7a6a3 100644
+> --- a/Documentation/devicetree/bindings/bus/simple-pm-bus.yaml
+> +++ b/Documentation/devicetree/bindings/bus/simple-pm-bus.yaml
+> @@ -61,6 +61,8 @@ anyOf:
+>    - required:
+>        - power-domains
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/qcom,gcc-msm8996.h>
+> diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> index 6d7396ab8bee..2d98f7c4d3bc 100644
+> --- a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> +++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+> @@ -26,6 +26,8 @@ properties:
+>  required:
+>    - compatible
+>  
+> +additionalProperties: true #fixme
+> +
+>  examples:
+>    - |+
+>      spi0 {
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index dc6ff64422d4..f037d65b018e 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -172,6 +172,8 @@ allOf:
+>          type:
+>            const: micro
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    # Micro-USB connector with HS lines routed via controller (MUIC).
+>    - |
+> diff --git a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+> index 012aa8e7cb8c..e42cb610f545 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml
+> @@ -66,3 +66,5 @@ required:
+>    - clocks
+>    - ports
+>    - reg
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/display/dsi-controller.yaml b/Documentation/devicetree/bindings/display/dsi-controller.yaml
+> index a02039e3aca0..ca21671f6bdd 100644
+> --- a/Documentation/devicetree/bindings/display/dsi-controller.yaml
+> +++ b/Documentation/devicetree/bindings/display/dsi-controller.yaml
+> @@ -73,6 +73,8 @@ patternProperties:
+>      required:
+>        - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> diff --git a/Documentation/devicetree/bindings/display/panel/lvds.yaml b/Documentation/devicetree/bindings/display/panel/lvds.yaml
+> index 946dd354256c..31164608ba1d 100644
+> --- a/Documentation/devicetree/bindings/display/panel/lvds.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/lvds.yaml
+> @@ -112,4 +112,6 @@ oneOf:
+>    - required:
+>        - ports
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/display/panel/panel-common.yaml b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> index 45fe8fe5faba..cd6dc5461721 100644
+> --- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
+> @@ -163,4 +163,6 @@ dependencies:
+>    width-mm: [ height-mm ]
+>    height-mm: [ width-mm ]
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/dma/dma-common.yaml b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> index c36592683340..307b499e8968 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-common.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-common.yaml
+> @@ -49,3 +49,5 @@ properties:
+>  
+>  required:
+>    - "#dma-cells"
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/dma/dma-controller.yaml b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> index c39f6de76670..0043b91da95e 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-controller.yaml
+> @@ -17,6 +17,8 @@ properties:
+>    $nodename:
+>      pattern: "^dma-controller(@.*)?$"
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      dma: dma-controller@48000000 {
+> diff --git a/Documentation/devicetree/bindings/dma/dma-router.yaml b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> index 5b5f07393135..4cee5667b8a8 100644
+> --- a/Documentation/devicetree/bindings/dma/dma-router.yaml
+> +++ b/Documentation/devicetree/bindings/dma/dma-router.yaml
+> @@ -36,6 +36,8 @@ required:
+>    - "#dma-cells"
+>    - dma-masters
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      sdma_xbar: dma-router@4a002b78 {
+> diff --git a/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml b/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> index f9845dc2f5ae..5fe784f487c5 100644
+> --- a/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> +++ b/Documentation/devicetree/bindings/extcon/wlf,arizona.yaml
+> @@ -123,3 +123,5 @@ properties:
+>      $ref: "/schemas/types.yaml#/definitions/uint32"
+>      minimum: 0
+>      maximum: 3
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> index 16d76482b4ff..cfb66ba45ee8 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/samsung,exynos-adc.yaml
+> @@ -46,6 +46,8 @@ properties:
+>    "#io-channel-cells":
+>      const: 1
+>  
+> +  io-channel-ranges: true
+> +
+>    vdd-supply: true
+>  
+>    samsung,syscon-phandle:
+> @@ -107,7 +109,8 @@ allOf:
+>            items:
+>              - const: adc
+>  
+> -additionalProperties: false
+> +additionalProperties:
+> +  type: object
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/iio/common.yaml b/Documentation/devicetree/bindings/iio/common.yaml
+> index 97ffcb77043d..f845b41d74c4 100644
+> --- a/Documentation/devicetree/bindings/iio/common.yaml
+> +++ b/Documentation/devicetree/bindings/iio/common.yaml
+> @@ -32,4 +32,6 @@ properties:
+>        considered 'near' to the device (an object is near to the
+>        sensor).
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/input/input.yaml b/Documentation/devicetree/bindings/input/input.yaml
+> index 8edcb3c31270..ab407f266bef 100644
+> --- a/Documentation/devicetree/bindings/input/input.yaml
+> +++ b/Documentation/devicetree/bindings/input/input.yaml
+> @@ -33,3 +33,5 @@ properties:
+>        power off automatically. Device with key pressed shutdown feature can
+>        specify this property.
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> index c3bf09156783..6699d5e32dca 100644
+> --- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> +++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
+> @@ -35,6 +35,8 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: Number of column lines connected to the keypad controller.
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      keypad {
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> index 36dc7b56a453..a771a15f053f 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> @@ -81,3 +81,5 @@ dependencies:
+>    touchscreen-size-y: [ touchscreen-size-x ]
+>    touchscreen-x-mm: [ touchscreen-y-mm ]
+>    touchscreen-y-mm: [ touchscreen-x-mm ]
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
+> index a2a541bca73c..08b6700ca61e 100644
+> --- a/Documentation/devicetree/bindings/leds/common.yaml
+> +++ b/Documentation/devicetree/bindings/leds/common.yaml
+> @@ -156,6 +156,8 @@ properties:
+>        Maximum timeout in microseconds after which the flash LED is turned off.
+>        Required for flash LED nodes with configurable timeout.
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/gpio/gpio.h>
+> diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> index b55e1f1308a4..b1a53f054b89 100644
+> --- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> +++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
+> @@ -34,4 +34,7 @@ patternProperties:
+>  
+>      required:
+>        - color
+> +
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/leds/trigger-source.yaml b/Documentation/devicetree/bindings/leds/trigger-source.yaml
+> index 0618003e40bd..89a1cde2b8aa 100644
+> --- a/Documentation/devicetree/bindings/leds/trigger-source.yaml
+> +++ b/Documentation/devicetree/bindings/leds/trigger-source.yaml
+> @@ -21,4 +21,6 @@ properties:
+>        trigger sources (e.g. a specific USB port).
+>      enum: [ 0, 1 ]
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
+> index ded2ac43237d..8ad2cba5f61f 100644
+> --- a/Documentation/devicetree/bindings/media/rc.yaml
+> +++ b/Documentation/devicetree/bindings/media/rc.yaml
+> @@ -150,3 +150,5 @@ properties:
+>        - rc-x96max
+>        - rc-xbox-dvd
+>        - rc-zx-irdec
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> index 844ee2a6ce05..5317a7d69aa5 100644
+> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+> @@ -71,7 +71,7 @@ required:
+>    - compatible
+>    - reg
+>  
+> -unevaluatedProperties: false
+> +additionalProperties: true
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> index b96da0c7f819..57319b425eaa 100644
+> --- a/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/mmc-controller.yaml
+> @@ -349,6 +349,8 @@ dependencies:
+>    cd-debounce-delay-ms: [ cd-gpios ]
+>    fixed-emmc-driver-type: [ non-removable ]
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      mmc@ab000000 {
+> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> index 85bd528e9a14..8dfad89c78a7 100644
+> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> @@ -62,3 +62,5 @@ properties:
+>  
+>    dma-names:
+>      const: rx-tx
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/mtd/nand-controller.yaml b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 40fc5b0b2b8c..274bbe6a365e 100644
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@ -128,6 +128,8 @@ required:
+>    - "#address-cells"
+>    - "#size-cells"
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      nand-controller {
+> diff --git a/Documentation/devicetree/bindings/net/can/can-transceiver.yaml b/Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> index 6396977d29e5..d1ef1fe6ab29 100644
+> --- a/Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> @@ -16,3 +16,5 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: a positive non 0 value that determines the max speed that CAN/CAN-FD can run.
+>      minimum: 1
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> index 6a1ec50ad4fd..a765ceba28c6 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+> @@ -89,4 +89,6 @@ oneOf:
+>    - required:
+>        - ethernet-ports
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index fa2baca8c726..3fd85ce37e9c 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -205,4 +205,6 @@ properties:
+>            required:
+>              - speed
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index a9e547ac7905..6dd72faebd89 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -177,6 +177,8 @@ properties:
+>  required:
+>    - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      ethernet {
+> diff --git a/Documentation/devicetree/bindings/net/mdio.yaml b/Documentation/devicetree/bindings/net/mdio.yaml
+> index 26afb556dfae..e811e0fd851c 100644
+> --- a/Documentation/devicetree/bindings/net/mdio.yaml
+> +++ b/Documentation/devicetree/bindings/net/mdio.yaml
+> @@ -100,6 +100,8 @@ patternProperties:
+>      required:
+>        - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      davinci_mdio: mdio@5c030000 {
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index 30a1efd26626..11a6fdb657c9 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -356,6 +356,8 @@ allOf:
+>              Enables the TSO feature otherwise it will be managed by
+>              MAC HW capability register.
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      stmmac_axi_setup: stmmac-axi-config {
+> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> index b7c00ed31085..d5d7f113bade 100644
+> --- a/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml
+> @@ -36,6 +36,8 @@ dependencies:
+>    nvmem-names: [ nvmem ]
+>    nvmem-cell-names: [ nvmem-cells ]
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      tsens {
+> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> index b459f9dba6c9..7481a9e48f19 100644
+> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> @@ -67,6 +67,8 @@ patternProperties:
+>      required:
+>        - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>        #include <dt-bindings/gpio/gpio.h>
+> diff --git a/Documentation/devicetree/bindings/pci/cdns-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/cdns-pcie-ep.yaml
+> index 016a5f61592d..60b8baf299bb 100644
+> --- a/Documentation/devicetree/bindings/pci/cdns-pcie-ep.yaml
+> +++ b/Documentation/devicetree/bindings/pci/cdns-pcie-ep.yaml
+> @@ -22,3 +22,5 @@ properties:
+>  
+>  required:
+>    - cdns,max-outbound-regions
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pci/cdns-pcie-host.yaml b/Documentation/devicetree/bindings/pci/cdns-pcie-host.yaml
+> index 303078a7b7a8..a944f9bfffff 100644
+> --- a/Documentation/devicetree/bindings/pci/cdns-pcie-host.yaml
+> +++ b/Documentation/devicetree/bindings/pci/cdns-pcie-host.yaml
+> @@ -33,3 +33,5 @@ properties:
+>      deprecated: true
+>  
+>    msi-parent: true
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pci/cdns-pcie.yaml b/Documentation/devicetree/bindings/pci/cdns-pcie.yaml
+> index 02553d5e6c51..df4fe28222b0 100644
+> --- a/Documentation/devicetree/bindings/pci/cdns-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/cdns-pcie.yaml
+> @@ -21,3 +21,5 @@ properties:
+>      items:
+>        - const: pcie-phy
+>      # FIXME: names when more than 1
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pci/pci-ep.yaml b/Documentation/devicetree/bindings/pci/pci-ep.yaml
+> index 0f8e575ac01a..7847bbcd4a03 100644
+> --- a/Documentation/devicetree/bindings/pci/pci-ep.yaml
+> +++ b/Documentation/devicetree/bindings/pci/pci-ep.yaml
+> @@ -36,3 +36,5 @@ properties:
+>  
+>  required:
+>    - compatible
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+> index 6bfc25d0e1b3..4cb174bf31ff 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+> @@ -120,3 +120,5 @@ properties:
+>  required:
+>    - pinctrl-0
+>    - pinctrl-names
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+> index 13b7ab9dd6d5..71ed0a9def84 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+> @@ -138,3 +138,5 @@ properties:
+>        and the delay before latching a value to an output
+>        pin. Typically indicates how many double-inverters are
+>        used to delay the signal.
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml b/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
+> index ef8877ddb1eb..551df3d9b809 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
+> @@ -129,3 +129,5 @@ properties:
+>  
+>    pinctrl-pin-array:
+>      $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
+> index dd564349aa53..aed51e9dcb11 100644
+> --- a/Documentation/devicetree/bindings/power/power-domain.yaml
+> +++ b/Documentation/devicetree/bindings/power/power-domain.yaml
+> @@ -69,6 +69,8 @@ properties:
+>  required:
+>    - "#power-domain-cells"
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      power: power-controller@12340000 {
+> diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+> index 3bb02bb3a2d8..c5c55f627251 100644
+> --- a/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+> @@ -16,6 +16,8 @@ properties:
+>        This property is added to a supply in order to list the devices which
+>        supply it power, referenced by their phandles.
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      power {
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
+> index fa4f9de92090..7d1f687cee9c 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
+> @@ -20,6 +20,8 @@ properties:
+>  required:
+>    - "#pwm-cells"
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      pwm: pwm@7000a000 {
+> diff --git a/Documentation/devicetree/bindings/regulator/regulator.yaml b/Documentation/devicetree/bindings/regulator/regulator.yaml
+> index ec505dbbf87c..6d0bc9cd4040 100644
+> --- a/Documentation/devicetree/bindings/regulator/regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/regulator.yaml
+> @@ -188,6 +188,8 @@ patternProperties:
+>  
+>      additionalProperties: false
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      xyzreg: regulator {
+> diff --git a/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml b/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
+> index a0aea73bf412..7b4ae5d23351 100644
+> --- a/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/wlf,arizona.yaml
+> @@ -35,3 +35,5 @@ properties:
+>        Initial data for the MICVDD regulator.
+>      $ref: "regulator.yaml#"
+>      type: object
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index f80ba2c66f71..c6925e0b16e4 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -91,6 +91,8 @@ required:
+>    - riscv,isa
+>    - interrupt-controller
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      // Example 1: SiFive Freedom U540G Development Kit
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> index ee237b2ed66a..2d055e37e6f7 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+> @@ -47,4 +47,6 @@ properties:
+>      description:
+>        Enables wake up of host system on alarm.
+>  
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
+> index fe90569475e1..0c9fa694f85c 100644
+> --- a/Documentation/devicetree/bindings/serial/rs485.yaml
+> +++ b/Documentation/devicetree/bindings/serial/rs485.yaml
+> @@ -45,4 +45,7 @@ properties:
+>    rs485-term-gpios:
+>      description: GPIO pin to enable RS485 bus termination.
+>      maxItems: 1
+> +
+> +additionalProperties: true
+> +
+>  ...
+> diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
+> index 8645d0e526b4..65e75d040521 100644
+> --- a/Documentation/devicetree/bindings/serial/serial.yaml
+> +++ b/Documentation/devicetree/bindings/serial/serial.yaml
+> @@ -124,6 +124,8 @@ patternProperties:
+>        required:
+>          - compatible
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      serial@1234 {
+> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,aips-bus.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,aips-bus.yaml
+> index 3cbf2d28a188..80d99861fec5 100644
+> --- a/Documentation/devicetree/bindings/soc/imx/fsl,aips-bus.yaml
+> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,aips-bus.yaml
+> @@ -35,6 +35,8 @@ required:
+>    - compatible
+>    - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      bus@30000000 {
+> diff --git a/Documentation/devicetree/bindings/sound/amlogic,aiu.yaml b/Documentation/devicetree/bindings/sound/amlogic,aiu.yaml
+> index 7a7f28469624..f50558ed914f 100644
+> --- a/Documentation/devicetree/bindings/sound/amlogic,aiu.yaml
+> +++ b/Documentation/devicetree/bindings/sound/amlogic,aiu.yaml
+> @@ -75,6 +75,8 @@ required:
+>    - reg
+>    - resets
+>  
+> +additionalProperties: false
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/gxbb-clkc.h>
+> diff --git a/Documentation/devicetree/bindings/sound/cirrus,madera.yaml b/Documentation/devicetree/bindings/sound/cirrus,madera.yaml
+> index c4cd58b5acd4..23138ddcb62d 100644
+> --- a/Documentation/devicetree/bindings/sound/cirrus,madera.yaml
+> +++ b/Documentation/devicetree/bindings/sound/cirrus,madera.yaml
+> @@ -111,3 +111,5 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32-array
+>      minItems: 2
+>      maxItems: 2
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> index 44ee9d844ae0..d77219727768 100644
+> --- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> @@ -67,6 +67,9 @@ required:
+>    - "#size-cells"
+>    - ranges
+>  
+> +additionalProperties:
+> +  type: object
+> +
+>  examples:
+>    - |
+>      #include<dt-bindings/clock/tegra210-car.h>
+> diff --git a/Documentation/devicetree/bindings/sound/wlf,arizona.yaml b/Documentation/devicetree/bindings/sound/wlf,arizona.yaml
+> index 22d54be7900a..1627c0bb69be 100644
+> --- a/Documentation/devicetree/bindings/sound/wlf,arizona.yaml
+> +++ b/Documentation/devicetree/bindings/sound/wlf,arizona.yaml
+> @@ -112,3 +112,5 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32-array
+>      minItems: 1
+>      maxItems: 12
+> +
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> index 330924b8618e..4aad121eff3f 100644
+> --- a/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> +++ b/Documentation/devicetree/bindings/soundwire/soundwire-controller.yaml
+> @@ -57,6 +57,8 @@ required:
+>    - "#address-cells"
+>    - "#size-cells"
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      soundwire@c2d0000 {
+> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> index c6a2f543648b..2b154803b181 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+> @@ -140,6 +140,8 @@ patternProperties:
+>        - compatible
+>        - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      spi@f00 {
+> diff --git a/Documentation/devicetree/bindings/spmi/spmi.yaml b/Documentation/devicetree/bindings/spmi/spmi.yaml
+> index 0cfbf56ba825..173940930719 100644
+> --- a/Documentation/devicetree/bindings/spmi/spmi.yaml
+> +++ b/Documentation/devicetree/bindings/spmi/spmi.yaml
+> @@ -55,6 +55,8 @@ patternProperties:
+>  required:
+>    - reg
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/spmi/spmi.h>
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> index ad4beaf02842..f004779ba9b3 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+> @@ -49,6 +49,8 @@ properties:
+>        and the second cell is the maximum cooling state requested.
+>      const: 2
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+> index 727d04550324..9f747921e851 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-sensor.yaml
+> @@ -36,6 +36,8 @@ properties:
+>        containing several internal sensors.
+>      enum: [0, 1]
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> index 8eaf4b6c4735..f6819bf2a3b5 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> @@ -32,6 +32,8 @@ required:
+>    - interrupts
+>    - interrupt-names
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/interrupt-controller/irq.h>
+> diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> index 7263b7f2b510..b545b087b342 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+> @@ -22,6 +22,8 @@ properties:
+>      description:
+>        Name specifier for the USB PHY
+>  
+> +additionalProperties: true
+> +
+>  examples:
+>    - |
+>      usb {
+> diff --git a/Documentation/devicetree/bindings/watchdog/watchdog.yaml b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> index 187bf6cb62bf..4e2c26cd981d 100644
+> --- a/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/watchdog.yaml
+> @@ -23,4 +23,6 @@ properties:
+>      description:
+>        Contains the watchdog timeout in seconds.
+>  
+> +additionalProperties: true
+> +
+>  ...
+> -- 
+> 2.25.1
+> 
 
-Changes in v2:
- - Improve user EEPROM handling
- - Handle configuration properly and update EEPROM
- - Fix trickle charger configuration
- - Add temperature sensor support
-
- drivers/rtc/Kconfig      |  10 +
- drivers/rtc/Makefile     |   1 +
- drivers/rtc/rtc-rv3032.c | 905 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 916 insertions(+)
- create mode 100644 drivers/rtc/rtc-rv3032.c
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index b54d87d45c89..91faf74e188c 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -668,6 +668,16 @@ config RTC_DRV_RV3028
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-rv3028.
- 
-+config RTC_DRV_RV3032
-+	tristate "Micro Crystal RV3032"
-+	select REGMAP_I2C
-+	help
-+	  If you say yes here you get support for the Micro Crystal
-+	  RV3032.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-rv3032.
-+
- config RTC_DRV_RV8803
- 	tristate "Micro Crystal RV8803, Epson RX8900"
- 	help
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 0721752c6ed4..7bb8367538db 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -142,6 +142,7 @@ obj-$(CONFIG_RTC_DRV_RS5C372)	+= rtc-rs5c372.o
- obj-$(CONFIG_RTC_DRV_RTD119X)	+= rtc-rtd119x.o
- obj-$(CONFIG_RTC_DRV_RV3028)	+= rtc-rv3028.o
- obj-$(CONFIG_RTC_DRV_RV3029C2)	+= rtc-rv3029c2.o
-+obj-$(CONFIG_RTC_DRV_RV3032)	+= rtc-rv3032.o
- obj-$(CONFIG_RTC_DRV_RV8803)	+= rtc-rv8803.o
- obj-$(CONFIG_RTC_DRV_RX4581)	+= rtc-rx4581.o
- obj-$(CONFIG_RTC_DRV_RX6110)	+= rtc-rx6110.o
-diff --git a/drivers/rtc/rtc-rv3032.c b/drivers/rtc/rtc-rv3032.c
-new file mode 100644
-index 000000000000..f802a7e2dc8f
---- /dev/null
-+++ b/drivers/rtc/rtc-rv3032.c
-@@ -0,0 +1,905 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * RTC driver for the Micro Crystal RV3032
-+ *
-+ * Copyright (C) 2020 Micro Crystal SA
-+ *
-+ * Alexandre Belloni <alexandre.belloni@bootlin.com>
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/bcd.h>
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/hwmon.h>
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/log2.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/rtc.h>
-+
-+#define RV3032_SEC			0x01
-+#define RV3032_MIN			0x02
-+#define RV3032_HOUR			0x03
-+#define RV3032_WDAY			0x04
-+#define RV3032_DAY			0x05
-+#define RV3032_MONTH			0x06
-+#define RV3032_YEAR			0x07
-+#define RV3032_ALARM_MIN		0x08
-+#define RV3032_ALARM_HOUR		0x09
-+#define RV3032_ALARM_DAY		0x0A
-+#define RV3032_STATUS			0x0D
-+#define RV3032_TLSB			0x0E
-+#define RV3032_TMSB			0x0F
-+#define RV3032_CTRL1			0x10
-+#define RV3032_CTRL2			0x11
-+#define RV3032_CTRL3			0x12
-+#define RV3032_TS_CTRL			0x13
-+#define RV3032_CLK_IRQ			0x14
-+#define RV3032_EEPROM_ADDR		0x3D
-+#define RV3032_EEPROM_DATA		0x3E
-+#define RV3032_EEPROM_CMD		0x3F
-+#define RV3032_RAM1			0x40
-+#define RV3032_PMU			0xC0
-+#define RV3032_OFFSET			0xC1
-+#define RV3032_CLKOUT1			0xC2
-+#define RV3032_CLKOUT2			0xC3
-+#define RV3032_TREF0			0xC4
-+#define RV3032_TREF1			0xC5
-+
-+#define RV3032_STATUS_VLF		BIT(0)
-+#define RV3032_STATUS_PORF		BIT(1)
-+#define RV3032_STATUS_EVF		BIT(2)
-+#define RV3032_STATUS_AF		BIT(3)
-+#define RV3032_STATUS_TF		BIT(4)
-+#define RV3032_STATUS_UF		BIT(5)
-+#define RV3032_STATUS_TLF		BIT(6)
-+#define RV3032_STATUS_THF		BIT(7)
-+
-+#define RV3032_TLSB_CLKF		BIT(1)
-+#define RV3032_TLSB_EEBUSY		BIT(2)
-+#define RV3032_TLSB_TEMP		GENMASK(7, 4)
-+
-+#define RV3032_CLKOUT2_HFD_MSK		GENMASK(4, 0)
-+#define RV3032_CLKOUT2_FD_MSK		GENMASK(6, 5)
-+#define RV3032_CLKOUT2_OS		BIT(7)
-+
-+#define RV3032_CTRL1_EERD		BIT(3)
-+#define RV3032_CTRL1_WADA		BIT(5)
-+
-+#define RV3032_CTRL2_STOP		BIT(0)
-+#define RV3032_CTRL2_EIE		BIT(2)
-+#define RV3032_CTRL2_AIE		BIT(3)
-+#define RV3032_CTRL2_TIE		BIT(4)
-+#define RV3032_CTRL2_UIE		BIT(5)
-+#define RV3032_CTRL2_CLKIE		BIT(6)
-+#define RV3032_CTRL2_TSE		BIT(7)
-+
-+#define RV3032_PMU_TCM			GENMASK(1, 0)
-+#define RV3032_PMU_TCR			GENMASK(3, 2)
-+#define RV3032_PMU_BSM			GENMASK(5, 4)
-+#define RV3032_PMU_NCLKE		BIT(6)
-+
-+#define RV3032_PMU_BSM_DSM		1
-+#define RV3032_PMU_BSM_LSM		2
-+
-+#define RV3032_OFFSET_MSK		GENMASK(5, 0)
-+
-+#define RV3032_EVT_CTRL_TSR		BIT(2)
-+
-+#define RV3032_EEPROM_CMD_UPDATE	0x11
-+#define RV3032_EEPROM_CMD_WRITE		0x21
-+#define RV3032_EEPROM_CMD_READ		0x22
-+
-+#define RV3032_EEPROM_USER		0xCB
-+
-+#define RV3032_EEBUSY_POLL		10000
-+#define RV3032_EEBUSY_TIMEOUT		100000
-+
-+#define OFFSET_STEP_PPT			238419
-+
-+struct rv3032_data {
-+	struct regmap *regmap;
-+	struct rtc_device *rtc;
-+#ifdef CONFIG_COMMON_CLK
-+	struct clk_hw clkout_hw;
-+#endif
-+};
-+
-+static u16 rv3032_trickle_resistors[] = {1000, 2000, 7000, 11000};
-+static u16 rv3032_trickle_voltages[] = {0, 1750, 3000, 4400};
-+
-+static int rv3032_exit_eerd(struct rv3032_data *rv3032, u32 eerd)
-+{
-+	if (eerd)
-+		return 0;
-+
-+	return regmap_update_bits(rv3032->regmap, RV3032_CTRL1, RV3032_CTRL1_EERD, 0);
-+}
-+
-+static int rv3032_enter_eerd(struct rv3032_data *rv3032, u32 *eerd)
-+{
-+	u32 ctrl1, status;
-+	int ret;
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_CTRL1, &ctrl1);
-+	if (ret)
-+		return ret;
-+
-+	*eerd = ctrl1 & RV3032_CTRL1_EERD;
-+	if (*eerd)
-+		return 0;
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL1,
-+				 RV3032_CTRL1_EERD, RV3032_CTRL1_EERD);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read_poll_timeout(rv3032->regmap, RV3032_TLSB, status,
-+				       !(status & RV3032_TLSB_EEBUSY),
-+				       RV3032_EEBUSY_POLL, RV3032_EEBUSY_TIMEOUT);
-+	if (ret) {
-+		rv3032_exit_eerd(rv3032, *eerd);
-+
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rv3032_update_cfg(struct rv3032_data *rv3032, unsigned int reg,
-+			     unsigned int mask, unsigned int val)
-+{
-+	u32 status, eerd;
-+	int ret;
-+
-+	ret = rv3032_enter_eerd(rv3032, &eerd);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3032->regmap, reg, mask, val);
-+	if (ret)
-+		goto exit_eerd;
-+
-+	ret = regmap_write(rv3032->regmap, RV3032_EEPROM_CMD, RV3032_EEPROM_CMD_UPDATE);
-+	if (ret)
-+		goto exit_eerd;
-+
-+	usleep_range(46000, RV3032_EEBUSY_TIMEOUT);
-+
-+	ret = regmap_read_poll_timeout(rv3032->regmap, RV3032_TLSB, status,
-+				       !(status & RV3032_TLSB_EEBUSY),
-+				       RV3032_EEBUSY_POLL, RV3032_EEBUSY_TIMEOUT);
-+
-+exit_eerd:
-+	rv3032_exit_eerd(rv3032, eerd);
-+
-+	return ret;
-+}
-+
-+static irqreturn_t rv3032_handle_irq(int irq, void *dev_id)
-+{
-+	struct rv3032_data *rv3032 = dev_id;
-+	unsigned long events = 0;
-+	u32 status = 0, ctrl = 0;
-+
-+	if (regmap_read(rv3032->regmap, RV3032_STATUS, &status) < 0 ||
-+	    status == 0) {
-+		return IRQ_NONE;
-+	}
-+
-+	if (status & RV3032_STATUS_TF) {
-+		status |= RV3032_STATUS_TF;
-+		ctrl |= RV3032_CTRL2_TIE;
-+		events |= RTC_PF;
-+	}
-+
-+	if (status & RV3032_STATUS_AF) {
-+		status |= RV3032_STATUS_AF;
-+		ctrl |= RV3032_CTRL2_AIE;
-+		events |= RTC_AF;
-+	}
-+
-+	if (status & RV3032_STATUS_UF) {
-+		status |= RV3032_STATUS_UF;
-+		ctrl |= RV3032_CTRL2_UIE;
-+		events |= RTC_UF;
-+	}
-+
-+	if (events) {
-+		rtc_update_irq(rv3032->rtc, 1, events);
-+		regmap_update_bits(rv3032->regmap, RV3032_STATUS, status, 0);
-+		regmap_update_bits(rv3032->regmap, RV3032_CTRL2, ctrl, 0);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int rv3032_get_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	u8 date[7];
-+	int ret, status;
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_STATUS, &status);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (status & (RV3032_STATUS_PORF | RV3032_STATUS_VLF))
-+		return -EINVAL;
-+
-+	ret = regmap_bulk_read(rv3032->regmap, RV3032_SEC, date, sizeof(date));
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec  = bcd2bin(date[0] & 0x7f);
-+	tm->tm_min  = bcd2bin(date[1] & 0x7f);
-+	tm->tm_hour = bcd2bin(date[2] & 0x3f);
-+	tm->tm_wday = date[3] & 0x7;
-+	tm->tm_mday = bcd2bin(date[4] & 0x3f);
-+	tm->tm_mon  = bcd2bin(date[5] & 0x1f) - 1;
-+	tm->tm_year = bcd2bin(date[6]) + 100;
-+
-+	return 0;
-+}
-+
-+static int rv3032_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	u8 date[7];
-+	int ret;
-+
-+	date[0] = bin2bcd(tm->tm_sec);
-+	date[1] = bin2bcd(tm->tm_min);
-+	date[2] = bin2bcd(tm->tm_hour);
-+	date[3] = tm->tm_wday;
-+	date[4] = bin2bcd(tm->tm_mday);
-+	date[5] = bin2bcd(tm->tm_mon + 1);
-+	date[6] = bin2bcd(tm->tm_year - 100);
-+
-+	ret = regmap_bulk_write(rv3032->regmap, RV3032_SEC, date,
-+				sizeof(date));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_STATUS,
-+				 RV3032_STATUS_PORF | RV3032_STATUS_VLF, 0);
-+
-+	return ret;
-+}
-+
-+static int rv3032_get_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	u8 alarmvals[3];
-+	int status, ctrl, ret;
-+
-+	ret = regmap_bulk_read(rv3032->regmap, RV3032_ALARM_MIN, alarmvals,
-+			       sizeof(alarmvals));
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_STATUS, &status);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_CTRL2, &ctrl);
-+	if (ret < 0)
-+		return ret;
-+
-+	alrm->time.tm_sec  = 0;
-+	alrm->time.tm_min  = bcd2bin(alarmvals[0] & 0x7f);
-+	alrm->time.tm_hour = bcd2bin(alarmvals[1] & 0x3f);
-+	alrm->time.tm_mday = bcd2bin(alarmvals[2] & 0x3f);
-+
-+	alrm->enabled = !!(ctrl & RV3032_CTRL2_AIE);
-+	alrm->pending = (status & RV3032_STATUS_AF) && alrm->enabled;
-+
-+	return 0;
-+}
-+
-+static int rv3032_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	u8 alarmvals[3];
-+	u8 ctrl = 0;
-+	int ret;
-+
-+	/* The alarm has no seconds, round up to nearest minute */
-+	if (alrm->time.tm_sec) {
-+		time64_t alarm_time = rtc_tm_to_time64(&alrm->time);
-+
-+		alarm_time += 60 - alrm->time.tm_sec;
-+		rtc_time64_to_tm(alarm_time, &alrm->time);
-+	}
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL2,
-+				 RV3032_CTRL2_AIE | RV3032_CTRL2_UIE, 0);
-+	if (ret)
-+		return ret;
-+
-+	alarmvals[0] = bin2bcd(alrm->time.tm_min);
-+	alarmvals[1] = bin2bcd(alrm->time.tm_hour);
-+	alarmvals[2] = bin2bcd(alrm->time.tm_mday);
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_STATUS,
-+				 RV3032_STATUS_AF, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_write(rv3032->regmap, RV3032_ALARM_MIN, alarmvals,
-+				sizeof(alarmvals));
-+	if (ret)
-+		return ret;
-+
-+	if (alrm->enabled) {
-+		if (rv3032->rtc->uie_rtctimer.enabled)
-+			ctrl |= RV3032_CTRL2_UIE;
-+		if (rv3032->rtc->aie_timer.enabled)
-+			ctrl |= RV3032_CTRL2_AIE;
-+	}
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL2,
-+				 RV3032_CTRL2_UIE | RV3032_CTRL2_AIE, ctrl);
-+
-+	return ret;
-+}
-+
-+static int rv3032_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	int ctrl = 0, ret;
-+
-+	if (enabled) {
-+		if (rv3032->rtc->uie_rtctimer.enabled)
-+			ctrl |= RV3032_CTRL2_UIE;
-+		if (rv3032->rtc->aie_timer.enabled)
-+			ctrl |= RV3032_CTRL2_AIE;
-+	}
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_STATUS,
-+				 RV3032_STATUS_AF | RV3032_STATUS_UF, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL2,
-+				 RV3032_CTRL2_UIE | RV3032_CTRL2_AIE, ctrl);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int rv3032_read_offset(struct device *dev, long *offset)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	int ret, value, steps;
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_OFFSET, &value);
-+	if (ret < 0)
-+		return ret;
-+
-+	steps = sign_extend32(FIELD_GET(RV3032_OFFSET_MSK, value), 5);
-+
-+	*offset = DIV_ROUND_CLOSEST(steps * OFFSET_STEP_PPT, 1000);
-+
-+	return 0;
-+}
-+
-+static int rv3032_set_offset(struct device *dev, long offset)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+
-+	offset = clamp(offset, -7629L, 7391L) * 1000;
-+	offset = DIV_ROUND_CLOSEST(offset, OFFSET_STEP_PPT);
-+
-+	return rv3032_update_cfg(rv3032, RV3032_OFFSET, RV3032_OFFSET_MSK,
-+				 FIELD_PREP(RV3032_OFFSET_MSK, offset));
-+}
-+
-+static int rv3032_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	int status, val = 0, ret = 0;
-+
-+	switch (cmd) {
-+	case RTC_VL_READ:
-+		ret = regmap_read(rv3032->regmap, RV3032_STATUS, &status);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (status & (RV3032_STATUS_PORF | RV3032_STATUS_VLF))
-+			val = RTC_VL_DATA_INVALID;
-+		return put_user(val, (unsigned int __user *)arg);
-+
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+}
-+
-+static int rv3032_nvram_write(void *priv, unsigned int offset, void *val, size_t bytes)
-+{
-+	return regmap_bulk_write(priv, RV3032_RAM1 + offset, val, bytes);
-+}
-+
-+static int rv3032_nvram_read(void *priv, unsigned int offset, void *val, size_t bytes)
-+{
-+	return regmap_bulk_read(priv, RV3032_RAM1 + offset, val, bytes);
-+}
-+
-+static int rv3032_eeprom_write(void *priv, unsigned int offset, void *val, size_t bytes)
-+{
-+	struct rv3032_data *rv3032 = priv;
-+	u32 status, eerd;
-+	int i, ret;
-+	u8 *buf = val;
-+
-+	ret = rv3032_enter_eerd(rv3032, &eerd);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < bytes; i++) {
-+		ret = regmap_write(rv3032->regmap, RV3032_EEPROM_ADDR,
-+				   RV3032_EEPROM_USER + offset + i);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		ret = regmap_write(rv3032->regmap, RV3032_EEPROM_DATA, buf[i]);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		ret = regmap_write(rv3032->regmap, RV3032_EEPROM_CMD,
-+				   RV3032_EEPROM_CMD_WRITE);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		usleep_range(RV3032_EEBUSY_POLL, RV3032_EEBUSY_TIMEOUT);
-+
-+		ret = regmap_read_poll_timeout(rv3032->regmap, RV3032_TLSB, status,
-+					       !(status & RV3032_TLSB_EEBUSY),
-+					       RV3032_EEBUSY_POLL, RV3032_EEBUSY_TIMEOUT);
-+		if (ret)
-+			goto exit_eerd;
-+	}
-+
-+exit_eerd:
-+	rv3032_exit_eerd(rv3032, eerd);
-+
-+	return ret;
-+}
-+
-+static int rv3032_eeprom_read(void *priv, unsigned int offset, void *val, size_t bytes)
-+{
-+	struct rv3032_data *rv3032 = priv;
-+	u32 status, eerd, data;
-+	int i, ret;
-+	u8 *buf = val;
-+
-+	ret = rv3032_enter_eerd(rv3032, &eerd);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < bytes; i++) {
-+		ret = regmap_write(rv3032->regmap, RV3032_EEPROM_ADDR,
-+				   RV3032_EEPROM_USER + offset + i);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		ret = regmap_write(rv3032->regmap, RV3032_EEPROM_CMD,
-+				   RV3032_EEPROM_CMD_READ);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		ret = regmap_read_poll_timeout(rv3032->regmap, RV3032_TLSB, status,
-+					       !(status & RV3032_TLSB_EEBUSY),
-+					       RV3032_EEBUSY_POLL, RV3032_EEBUSY_TIMEOUT);
-+		if (ret)
-+			goto exit_eerd;
-+
-+		ret = regmap_read(rv3032->regmap, RV3032_EEPROM_DATA, &data);
-+		if (ret)
-+			goto exit_eerd;
-+		buf[i] = data;
-+	}
-+
-+exit_eerd:
-+	rv3032_exit_eerd(rv3032, eerd);
-+
-+	return ret;
-+}
-+
-+static int rv3032_trickle_charger_setup(struct device *dev, struct rv3032_data *rv3032)
-+{
-+	u32 val, ohms, voltage;
-+	int i;
-+
-+	val = FIELD_PREP(RV3032_PMU_TCM, 1) | FIELD_PREP(RV3032_PMU_BSM, RV3032_PMU_BSM_DSM);
-+	if (!device_property_read_u32(dev, "trickle-voltage-millivolt", &voltage)) {
-+		for (i = 0; i < ARRAY_SIZE(rv3032_trickle_voltages); i++)
-+			if (voltage == rv3032_trickle_voltages[i])
-+				break;
-+		if (i < ARRAY_SIZE(rv3032_trickle_voltages))
-+			val = FIELD_PREP(RV3032_PMU_TCM, i) |
-+			      FIELD_PREP(RV3032_PMU_BSM, RV3032_PMU_BSM_LSM);
-+	}
-+
-+	if (device_property_read_u32(dev, "trickle-resistor-ohms", &ohms))
-+		return 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(rv3032_trickle_resistors); i++)
-+		if (ohms == rv3032_trickle_resistors[i])
-+			break;
-+
-+	if (i >= ARRAY_SIZE(rv3032_trickle_resistors)) {
-+		dev_warn(dev, "invalid trickle resistor value\n");
-+
-+		return 0;
-+	}
-+
-+	return rv3032_update_cfg(rv3032, RV3032_PMU,
-+				 RV3032_PMU_TCR | RV3032_PMU_TCM | RV3032_PMU_BSM,
-+				 val | FIELD_PREP(RV3032_PMU_TCR, i));
-+}
-+
-+#ifdef CONFIG_COMMON_CLK
-+#define clkout_hw_to_rv3032(hw) container_of(hw, struct rv3032_data, clkout_hw)
-+
-+static int clkout_xtal_rates[] = {
-+	32768,
-+	1024,
-+	64,
-+	1,
-+};
-+
-+#define RV3032_HFD_STEP 8192
-+
-+static unsigned long rv3032_clkout_recalc_rate(struct clk_hw *hw,
-+					       unsigned long parent_rate)
-+{
-+	int clkout, ret;
-+	struct rv3032_data *rv3032 = clkout_hw_to_rv3032(hw);
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_CLKOUT2, &clkout);
-+	if (ret < 0)
-+		return 0;
-+
-+	if (clkout & RV3032_CLKOUT2_OS) {
-+		unsigned long rate = FIELD_GET(RV3032_CLKOUT2_HFD_MSK, clkout) << 8;
-+
-+		ret = regmap_read(rv3032->regmap, RV3032_CLKOUT1, &clkout);
-+		if (ret < 0)
-+			return 0;
-+
-+		rate += clkout + 1;
-+
-+		return rate * RV3032_HFD_STEP;
-+	}
-+
-+	return clkout_xtal_rates[FIELD_GET(RV3032_CLKOUT2_FD_MSK, clkout)];
-+}
-+
-+static long rv3032_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
-+				     unsigned long *prate)
-+{
-+	int i, hfd;
-+
-+	if (rate < RV3032_HFD_STEP)
-+		for (i = 0; i < ARRAY_SIZE(clkout_xtal_rates); i++)
-+			if (clkout_xtal_rates[i] <= rate)
-+				return clkout_xtal_rates[i];
-+
-+	hfd = DIV_ROUND_CLOSEST(rate, RV3032_HFD_STEP);
-+
-+	return RV3032_HFD_STEP * clamp(hfd, 0, 8192);
-+}
-+
-+static int rv3032_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-+				  unsigned long parent_rate)
-+{
-+	struct rv3032_data *rv3032 = clkout_hw_to_rv3032(hw);
-+	int i, hfd, ret;
-+
-+	for (i = 0; i < ARRAY_SIZE(clkout_xtal_rates); i++) {
-+		if (clkout_xtal_rates[i] == rate) {
-+			return regmap_write(rv3032->regmap, RV3032_CLKOUT2,
-+					    FIELD_PREP(RV3032_CLKOUT2_FD_MSK, i));
-+		}
-+	}
-+
-+	hfd = DIV_ROUND_CLOSEST(rate, RV3032_HFD_STEP);
-+	hfd = clamp(hfd, 1, 8192) - 1;
-+
-+	ret = regmap_write(rv3032->regmap, RV3032_CLKOUT1, hfd & 0xff);
-+	if (ret < 0)
-+		return ret;
-+
-+	return regmap_write(rv3032->regmap, RV3032_CLKOUT2, RV3032_CLKOUT2_OS |
-+			    FIELD_PREP(RV3032_CLKOUT2_HFD_MSK, hfd >> 8));
-+}
-+
-+static int rv3032_clkout_prepare(struct clk_hw *hw)
-+{
-+	struct rv3032_data *rv3032 = clkout_hw_to_rv3032(hw);
-+
-+	return regmap_update_bits(rv3032->regmap, RV3032_PMU,
-+				  RV3032_PMU_NCLKE, 0);
-+}
-+
-+static void rv3032_clkout_unprepare(struct clk_hw *hw)
-+{
-+	struct rv3032_data *rv3032 = clkout_hw_to_rv3032(hw);
-+
-+	regmap_update_bits(rv3032->regmap, RV3032_PMU,
-+			   RV3032_PMU_NCLKE, RV3032_PMU_NCLKE);
-+}
-+
-+static int rv3032_clkout_is_prepared(struct clk_hw *hw)
-+{
-+	int val, ret;
-+	struct rv3032_data *rv3032 = clkout_hw_to_rv3032(hw);
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_PMU, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return !(val & RV3032_PMU_NCLKE);
-+}
-+
-+static const struct clk_ops rv3032_clkout_ops = {
-+	.prepare = rv3032_clkout_prepare,
-+	.unprepare = rv3032_clkout_unprepare,
-+	.is_prepared = rv3032_clkout_is_prepared,
-+	.recalc_rate = rv3032_clkout_recalc_rate,
-+	.round_rate = rv3032_clkout_round_rate,
-+	.set_rate = rv3032_clkout_set_rate,
-+};
-+
-+static int rv3032_clkout_register_clk(struct rv3032_data *rv3032,
-+				      struct i2c_client *client)
-+{
-+	int ret;
-+	struct clk *clk;
-+	struct clk_init_data init;
-+	struct device_node *node = client->dev.of_node;
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_TLSB, RV3032_TLSB_CLKF, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL2, RV3032_CTRL2_CLKIE, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_write(rv3032->regmap, RV3032_CLK_IRQ, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	init.name = "rv3032-clkout";
-+	init.ops = &rv3032_clkout_ops;
-+	init.flags = 0;
-+	init.parent_names = NULL;
-+	init.num_parents = 0;
-+	rv3032->clkout_hw.init = &init;
-+
-+	of_property_read_string(node, "clock-output-names", &init.name);
-+
-+	clk = devm_clk_register(&client->dev, &rv3032->clkout_hw);
-+	if (!IS_ERR(clk))
-+		of_clk_add_provider(node, of_clk_src_simple_get, clk);
-+
-+	return 0;
-+}
-+#endif
-+
-+static int rv3032_hwmon_read_temp(struct device *dev, long *mC)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+	u8 buf[2];
-+	int temp, prev = 0;
-+	int ret;
-+
-+	ret = regmap_bulk_read(rv3032->regmap, RV3032_TLSB, buf, sizeof(buf));
-+	if (ret)
-+		return ret;
-+
-+	temp = sign_extend32(buf[1], 7) << 4;
-+	temp |= FIELD_GET(RV3032_TLSB_TEMP, buf[0]);
-+
-+	/* No blocking or shadowing on RV3032_TLSB and RV3032_TMSB */
-+	do {
-+		prev = temp;
-+
-+		ret = regmap_bulk_read(rv3032->regmap, RV3032_TLSB, buf, sizeof(buf));
-+		if (ret)
-+			return ret;
-+
-+		temp = sign_extend32(buf[1], 7) << 4;
-+		temp |= FIELD_GET(RV3032_TLSB_TEMP, buf[0]);
-+	} while (temp != prev);
-+
-+	*mC = (temp * 1000) / 16;
-+
-+	return 0;
-+}
-+
-+static umode_t rv3032_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
-+				       u32 attr, int channel)
-+{
-+	if (type != hwmon_temp)
-+		return 0;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		return 0444;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static int rv3032_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-+			     u32 attr, int channel, long *temp)
-+{
-+	int err;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		err = rv3032_hwmon_read_temp(dev, temp);
-+		break;
-+	default:
-+		err = -EOPNOTSUPP;
-+		break;
-+	}
-+
-+	return err;
-+}
-+
-+static const struct hwmon_channel_info *rv3032_hwmon_info[] = {
-+	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST),
-+	NULL
-+};
-+
-+static const struct hwmon_ops rv3032_hwmon_hwmon_ops = {
-+	.is_visible = rv3032_hwmon_is_visible,
-+	.read = rv3032_hwmon_read,
-+};
-+
-+static const struct hwmon_chip_info rv3032_hwmon_chip_info = {
-+	.ops = &rv3032_hwmon_hwmon_ops,
-+	.info = rv3032_hwmon_info,
-+};
-+
-+static void rv3032_hwmon_register(struct device *dev)
-+{
-+	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
-+
-+	if (!IS_REACHABLE(CONFIG_HWMON))
-+		return;
-+
-+	devm_hwmon_device_register_with_info(dev, "rv3032", rv3032, &rv3032_hwmon_chip_info, NULL);
-+}
-+
-+static struct rtc_class_ops rv3032_rtc_ops = {
-+	.read_time = rv3032_get_time,
-+	.set_time = rv3032_set_time,
-+	.read_offset = rv3032_read_offset,
-+	.set_offset = rv3032_set_offset,
-+	.ioctl = rv3032_ioctl,
-+};
-+
-+static const struct regmap_config regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0xCA,
-+};
-+
-+static int rv3032_probe(struct i2c_client *client)
-+{
-+	struct rv3032_data *rv3032;
-+	int ret, status;
-+	struct nvmem_config nvmem_cfg = {
-+		.name = "rv3032_nvram",
-+		.word_size = 1,
-+		.stride = 1,
-+		.size = 16,
-+		.type = NVMEM_TYPE_BATTERY_BACKED,
-+		.reg_read = rv3032_nvram_read,
-+		.reg_write = rv3032_nvram_write,
-+	};
-+	struct nvmem_config eeprom_cfg = {
-+		.name = "rv3032_eeprom",
-+		.word_size = 1,
-+		.stride = 1,
-+		.size = 32,
-+		.type = NVMEM_TYPE_EEPROM,
-+		.reg_read = rv3032_eeprom_read,
-+		.reg_write = rv3032_eeprom_write,
-+	};
-+
-+	rv3032 = devm_kzalloc(&client->dev, sizeof(struct rv3032_data),
-+			      GFP_KERNEL);
-+	if (!rv3032)
-+		return -ENOMEM;
-+
-+	rv3032->regmap = devm_regmap_init_i2c(client, &regmap_config);
-+	if (IS_ERR(rv3032->regmap))
-+		return PTR_ERR(rv3032->regmap);
-+
-+	i2c_set_clientdata(client, rv3032);
-+
-+	ret = regmap_read(rv3032->regmap, RV3032_STATUS, &status);
-+	if (ret < 0)
-+		return ret;
-+
-+	rv3032->rtc = devm_rtc_allocate_device(&client->dev);
-+	if (IS_ERR(rv3032->rtc))
-+		return PTR_ERR(rv3032->rtc);
-+
-+	if (client->irq > 0) {
-+		ret = devm_request_threaded_irq(&client->dev, client->irq,
-+						NULL, rv3032_handle_irq,
-+						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-+						"rv3032", rv3032);
-+		if (ret) {
-+			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
-+			client->irq = 0;
-+		} else {
-+			rv3032_rtc_ops.read_alarm = rv3032_get_alarm;
-+			rv3032_rtc_ops.set_alarm = rv3032_set_alarm;
-+			rv3032_rtc_ops.alarm_irq_enable = rv3032_alarm_irq_enable;
-+		}
-+	}
-+
-+	ret = regmap_update_bits(rv3032->regmap, RV3032_CTRL1,
-+				 RV3032_CTRL1_WADA, RV3032_CTRL1_WADA);
-+	if (ret)
-+		return ret;
-+
-+	rv3032_trickle_charger_setup(&client->dev, rv3032);
-+
-+	rv3032->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	rv3032->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+	rv3032->rtc->ops = &rv3032_rtc_ops;
-+	ret = rtc_register_device(rv3032->rtc);
-+	if (ret)
-+		return ret;
-+
-+	nvmem_cfg.priv = rv3032;
-+	rtc_nvmem_register(rv3032->rtc, &nvmem_cfg);
-+	eeprom_cfg.priv = rv3032;
-+	rtc_nvmem_register(rv3032->rtc, &eeprom_cfg);
-+
-+	rv3032->rtc->max_user_freq = 1;
-+
-+#ifdef CONFIG_COMMON_CLK
-+	rv3032_clkout_register_clk(rv3032, client);
-+#endif
-+
-+	rv3032_hwmon_register(&client->dev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rv3032_of_match[] = {
-+	{ .compatible = "microcrystal,rv3032", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, rv3032_of_match);
-+
-+static struct i2c_driver rv3032_driver = {
-+	.driver = {
-+		.name = "rtc-rv3032",
-+		.of_match_table = of_match_ptr(rv3032_of_match),
-+	},
-+	.probe_new	= rv3032_probe,
-+};
-+module_i2c_driver(rv3032_driver);
-+
-+MODULE_AUTHOR("Alexandre Belloni <alexandre.belloni@bootlin.com>");
-+MODULE_DESCRIPTION("Micro Crystal RV3032 RTC driver");
-+MODULE_LICENSE("GPL v2");
 -- 
-2.26.2
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
