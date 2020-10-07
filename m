@@ -2,78 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D31286493
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Oct 2020 18:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6EA286AA6
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Oct 2020 00:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726702AbgJGQfm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Oct 2020 12:35:42 -0400
-Received: from sonic315-20.consmr.mail.ne1.yahoo.com ([66.163.190.146]:40711
-        "EHLO sonic315-20.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726504AbgJGQfm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Oct 2020 12:35:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1602088541; bh=PxMwWzXvs+dqOoH0/FHvFmQpYH2JguaCUHYAVLLmaiw=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Byj+ch3K+Lj2QarDKUX4lxV4FpaoraZ3ND5GcvTrGsbhZFBQ/hxFsXB7WWXk4y6jJ6xteYUYfGdd4j43wnzA4WWrDqAz+lciscm8jrt5yCbiCTvnViQ2bE4PSVyM4KSIhWHN0M2isM3dw9DoDEXVG7soiCEXBLkb6/kNRVfp4W2LYTpaIIrQOp6X2+1gV3goIroP4DDpusEq0QpwpkL8YgxFq+GpewFp8MkG1qEnVrHytbPJjm/zBT/8npkRtU0fRa5BYvl0s+GL76EyW2fdr2kaqhGgoiusB+2t+1Ozh4o10B1XzA7Ce8L6sMN6LfJWa4vpmj4qgDVYhETvWWsTug==
-X-YMail-OSG: leIMLj4VM1mHX9gld3RoaTaMFn27xpuLX_YPmOuBohU91tkI1lMhONlkMyiqmJy
- pKCFm2iwvQ1LFyJFAtwB1LBp.p.UaPEi8f1cWU8FvN8pVaR3DayEDOXVq2PG3vO10.2TYD5gfY5C
- W9pz2teGgWiKye1ZuFOQhcTuWIOYSvPBuqjfr2JBR1PF3oKhJBs7w7z9Lp_ozY.qyrI6vFEpHIdb
- nUTeC45TieeqmudL3uzrzmYTjJsIzTt.dch7ODww8AT9F0a4l3CLELqiKYZE4iXeZPSMdECiMcFi
- FcEIqbk5qqT48vGGlbTb2Bg06mEhui8LtZBCmUrfR2pvW5EKODKvv7fas4p63wvn5eBMvcJ5fHio
- XGkJZhVrq7YL4Lekmao7CUHiRXElWn03wKGZGBPm5KUsf21xSRulBedIL6numrbzTbAJUNxap6hF
- xmdAvh1YRPs8oEEzwMiRRZWe5fdtBUZ8HFEcdRfaLjGucJPUR7JgNG8yWuXwC_DLTyIjTXBz8Gu.
- 8I7yEjaHLovR8aXl8FvZoWOz7AIaTTisQNA_yA3k3zaJCmtNFVYK6UQhTRzhBfXDhuBJ0RpDzP3W
- ozgNIvGQs0zAXQ7YxNXNieI0wkMn7xcHd8LSi3itEnkLCqGVLWgNSJ0eGX3jzPheyRbtybtsGISC
- TSnpiV9GuOc4j0qVIx7_Jaz23hGbO4TfnUJCDLzImSk3GycsyFZVyyyLB7Nc1djiZ_ZIsoPi_S0Y
- 4UJji1RydUdwftogl7kd9ckefSPy8a9kQuirTwNPpv5KAu2h2xARUmGfLH95UWp7JQkw37.jzsVq
- W_bB2eJVJEGiE_QMfrH1wBRBa83z.UFTsjWIRiIzCXOjMlSDmmPh6SarsrRQcnafW8JTQQuxA7jy
- xcvFgLwbIyYssIKZjRxVRTmPySxqSJy43e2g1GqBc30bIkZjGnlGfCJrSreJpTQ9tmZXTBHuwqdN
- FYNI7x8ZPsVC7oo4xeED1n2zc89zU._IT1uWM9SAsrCQGPx.PTeId7ZJDBglXe8flskcA5xqe5M7
- MK1nxt39MZmEYgMWr0sLXEqUoZrsBHzzdkCSXHAe0Mm7diIpUbUE8APS9UfJHQ0wvFjHejKbvLgN
- UI52oqHRkDlNK8JTU7UAHn0VSztiBP7bB_Ef6iTqJRyP5iz9ci12iequJBk8gel.gSCuLTHJXQJ1
- 4uVHIlRUg.IX8KYa5djwc20wQD_f5l8gsoroNH6MDQ86LyrdgViGVtwGRCGc8PxtI.a9K6dvUKNK
- vu6PMENnaPO0JilffF_NDqv7zparOV1NV1TodYORryg1ZUk9KeN0QpvLfzetnZx_mJsdaeiJI9D3
- eDcoTSDeJTCeAUT6bW_JvkJg5sxbQ7LwQdUGoDCfssxA_3k_GELx0ca9G1pkNKGVMAwopYhDLxts
- BxEGIg11TZIbD5Soym7lamrAfn57DYHcA.zGlbRGR3zMX
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Oct 2020 16:35:41 +0000
-Date:   Wed, 7 Oct 2020 16:35:37 +0000 (UTC)
-From:   Marilyn Robert <fredodinga22@gmail.com>
-Reply-To: marilyobert@gmail.com
-Message-ID: <1518142575.296245.1602088537142@mail.yahoo.com>
-Subject: =?UTF-8?B?0J3QsNGY0LzQuNC70LAg0LrQsNGYINCz0L7RgdC/0L7QtNCw0YDQvtGC?=
+        id S1728782AbgJGWFL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Oct 2020 18:05:11 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:41941 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728575AbgJGWFL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Oct 2020 18:05:11 -0400
+X-Originating-IP: 90.65.88.165
+Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id DCF1620005;
+        Wed,  7 Oct 2020 22:05:08 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: rtc: add trickle-voltage-millivolt
+Date:   Thu,  8 Oct 2020 00:05:04 +0200
+Message-Id: <20201007220506.360469-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-References: <1518142575.296245.1602088537142.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16795 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQoNCtCd0LDRmNC80LjQu9CwINC60LDRmCDQs9C+0YHQv9C+0LTQsNGA0L7Rgg0KDQrQiNCw0YEg
-0YHRg9C8IDY4LdCz0L7QtNC40YjQvdCwINC20LXQvdCwLCDQutC+0ZjQsCDRgdGC0YDQsNC00LAg
-0L7QtCDQv9GA0L7QtNC+0LvQttC10L0g0LrQsNGA0YbQuNC90L7QvCDQvdCwINC00L7RmNC60LAs
-INC+0LQg0YHQuNGC0LUg0LzQtdC00LjRhtC40L3RgdC60Lgg0LjQvdC00LjQutCw0YbQuNC4LCDQ
-vNC+0ZjQsNGC0LAg0YHQvtGB0YLQvtGY0LHQsCDQvdCw0LLQuNGB0YLQuNC90LAg0YHQtSDQstC7
-0L7RiNC4INC4INC+0YfQuNCz0LvQtdC00L3QviDQtSDQtNC10LrQsCDQvNC+0LbQtdCx0Lgg0L3Q
-tdC80LAg0LTQsCDQttC40LLQtdCw0Lwg0L/QvtCy0LXRnNC1INC+0LQg0YjQtdGB0YIg0LzQtdGB
-0LXRhtC4INC60LDQutC+INGA0LXQt9GD0LvRgtCw0YIg0L3QsCDQsdGA0LfQuNC+0YIg0YDQsNGB
-0YIg0Lgg0LHQvtC70LrQsNGC0LAg0YjRgtC+INGB0LUg0ZjQsNCy0YPQstCwINC60LDRmCDQvdC1
-0LAuINCc0L7RmNC+0YIg0YHQvtC/0YDRg9CzINC/0L7Rh9C40L3QsCDQvdC10LrQvtC70LrRgyDQ
-s9C+0LTQuNC90Lgg0L3QsNC90LDQt9Cw0LQg0Lgg0L3QsNGI0LjRgtC1INC00L7Qu9Cz0Lgg0LPQ
-vtC00LjQvdC4INCx0YDQsNC6INC90LUg0LHQtdCwINCx0LvQsNCz0L7RgdC70L7QstC10L3QuCDR
-gdC+INC90LjRgtGDINC10LTQvdC+INC00LXRgtC1LCDQv9C+INC90LXQs9C+0LLQsNGC0LAg0YHQ
-vNGA0YIg0LPQviDQvdCw0YHQu9C10LTQuNCyINGG0LXQu9C+0YLQviDQvdC10LPQvtCy0L4g0LHQ
-vtCz0LDRgtGB0YLQstC+Lg0KDQrQlNC+0LDRk9Cw0Lwg0LrQsNGYINCy0LDRgSDQvtGC0LrQsNC6
-0L4g0YHQtSDQv9C+0LzQvtC70LjQsiDQt9CwINGC0L7QsCwg0L/QvtC00LPQvtGC0LLQtdC9INGB
-0YPQvCDQtNCwINC00L7QvdC40YDQsNC8INGB0YPQvNCwINC+0LQgMiwgMzAwLCAwMDAg0LXQstGA
-0LAg0LfQsCDQv9C+0LzQvtGIINC90LAg0YHQuNGA0L7QvNCw0YjQvdC40YLQtSwg0YHQuNGA0L7Q
-vNCw0YjQvdC40YLQtSDQuCDQv9C+0LzQsNC70LrRgyDQv9GA0LjQstC40LvQtdCz0LjRgNCw0L3Q
-uNGC0LUg0LzQtdGT0YMg0LLQsNGI0LjRgtC1INGB0L7QsdGA0LDQvdC40ZjQsCAvINC+0L/RiNGC
-0LXRgdGC0LLQvi4g0JfQsNCx0LXQu9C10LbQtdGC0LUg0LTQtdC60LAg0L7QstC+0Zgg0YTQvtC9
-0LQg0LUg0LTQtdC/0L7QvdC40YDQsNC9INCy0L4g0LHQsNC90LrQsCDQutCw0LTQtSDRiNGC0L4g
-0YDQsNCx0L7RgtC10YjQtSDQvNC+0ZjQvtGCINGB0L7Qv9GA0YPQsy4gQXBwcmVjaWF0ZdC1INGG
-0LXQvdCw0Lwg0LDQutC+INC+0LHRgNC90LXRgtC1INCy0L3QuNC80LDQvdC40LUg0L3QsCDQvNC+
-0LXRgtC+INCx0LDRgNCw0ZrQtSDQt9CwINC/0YDQvtC/0LDQs9C40YDQsNGa0LUg0L3QsCDQvNCw
-0YHQsNC20LDRgtCwINC90LAg0LrRgNCw0LvRgdGC0LLQvtGC0L4sINGc0LUg0LLQuCDQtNCw0LTQ
-sNC8INC/0L7QstC10ZzQtSDQtNC10YLQsNC70Lgg0LfQsCDRgtC+0LAg0LrQsNC60L4g0LTQsCDQ
-v9C+0YHRgtCw0L/QuNGC0LUuDQoNCtCR0LvQsNCz0L7QtNCw0YDQsNC8DQrQky3Rk9CwINCc0LXR
-gNC40LvQuNC9INCg0L7QsdC10YDRgg==
+Some RTCs have a trickle charge that is able to output different voltages
+depending on the type of the connected auxiliary power (battery, supercap,
+...). Add a property allowing to specify the necessary voltage.
+
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+
+Changes in v2:
+ - use millivolt suffix instead of mV
+
+ Documentation/devicetree/bindings/rtc/rtc.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+index ee237b2ed66a..93f04d5e5307 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+@@ -42,6 +42,13 @@ properties:
+       Selected resistor for trickle charger. Should be given
+       if trickle charger should be enabled.
+ 
++  trickle-voltage-mV:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Selected voltage for trickle charger. Should be given
++      if trickle charger should be enabled and the trickle voltage is different
++      from the RTC main power supply.
++
+   wakeup-source:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description:
+-- 
+2.26.2
+
