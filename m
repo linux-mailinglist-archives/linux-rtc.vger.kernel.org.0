@@ -2,130 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8484286B30
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Oct 2020 00:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3284228719A
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Oct 2020 11:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728936AbgJGWsk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Oct 2020 18:48:40 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38265 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727353AbgJGWsi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Oct 2020 18:48:38 -0400
-X-Greylist: delayed 500 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 18:48:33 EDT
-X-Originating-IP: 90.65.88.165
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id D577D1BF203;
-        Wed,  7 Oct 2020 22:48:27 +0000 (UTC)
-Date:   Thu, 8 Oct 2020 00:48:27 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
+        id S1729009AbgJHJeX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 8 Oct 2020 05:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbgJHJeX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Oct 2020 05:34:23 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF053C0613D2
+        for <linux-rtc@vger.kernel.org>; Thu,  8 Oct 2020 02:34:22 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n14so3517931pff.6
+        for <linux-rtc@vger.kernel.org>; Thu, 08 Oct 2020 02:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ky6B9tzxN97erkw+L3nihgRW4OC9vjJOPwyhfBdbivM=;
+        b=hJ6kgqwbkmiF+RvoAlO+KDFQRiWTJWGEZCGcib6sEFkrkP/9ioxTPU/3+Ump8jnpMH
+         R+54SWbf0ge46G0SySQ5qFrvzhoUXIgnEixyPrhOrCyIuZWPOtMtsxEcf2r6sijAtoS6
+         6Ope6x8XjIt+Unfrf/47HdTxoQjqg+KP8fgA8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Ky6B9tzxN97erkw+L3nihgRW4OC9vjJOPwyhfBdbivM=;
+        b=nnAkzCQqfbrx9ABkSyU6VixkxIv2+1u530fwrxVWYoyhfVSfmUoVGk5tNqd5+ZmgMB
+         4E4r60LuoaG1bu5mXAC852jiOnTFu6DZuHF1gZnKaIQCTYGhv96wNrE/CSFmQoEUhqBz
+         sjRjsk5w+X/lwPJmJqmoTgVbiHaM/BHsL9NyXvJ948iSNorV8wTqYP3m1ZVPawkaN6g3
+         MflilPut8w7ib3MeA2GU8QhFBKrXxGv4N8+j+tBU9NLrTS2/C883FK53or3En01EMXsq
+         /j24cmgTkJLggqs2/wjfdtlBFJihDEO4B4MheSp7BxeJ3EIut9dlW4GEytiJJHgy1Xk9
+         ty3w==
+X-Gm-Message-State: AOAM531uHbyg7nuNWFVP00kMdpv/z6w/syv6YASYWPq2hTjzsHsIjwYH
+        6CLiV1B1b8wgvxUnxAJe5mK39w==
+X-Google-Smtp-Source: ABdhPJxNmMQ5cqAp68AMAOr14GG/lN71/+I/Wr47wnEu0lH1ZnbSJkmDEQSjhjshVstu8ZSZpzI7jQ==
+X-Received: by 2002:a62:5382:0:b029:155:6333:ce4f with SMTP id h124-20020a6253820000b02901556333ce4fmr1061372pfb.28.1602149662342;
+        Thu, 08 Oct 2020 02:34:22 -0700 (PDT)
+Received: from fshao-glinux.tpe.corp.google.com ([2401:fa00:1:b:1a60:24ff:fe90:ea5a])
+        by smtp.gmail.com with ESMTPSA id q7sm6113711pfj.38.2020.10.08.02.34.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 02:34:21 -0700 (PDT)
+From:   Fei Shao <fshao@chromium.org>
+To:     Eddie Huang <eddie.huang@mediatek.com>
+Cc:     Fei Shao <fshao@chromium.org>, linux-rtc@vger.kernel.org,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
-Message-ID: <20201007224827.GK2804081@piout.net>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-2-robh@kernel.org>
+        Sean Wang <sean.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org, Josef Friedl <josef.friedl@speed.at>,
+        Ran Bi <ran.bi@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] rtc: mt6397: Remove unused member dev
+Date:   Thu,  8 Oct 2020 17:34:14 +0800
+Message-Id: <20201008093414.1911699-1-fshao@chromium.org>
+X-Mailer: git-send-email 2.28.0.806.g8561365e88-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+Removing the struct member "dev" in mt6397 RTC driver because it's not
+initialized and the only usage is for one debugging message.
 
-On 05/10/2020 13:38:27-0500, Rob Herring wrote:
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index bc2c7e53a28e..60e93e86ad9d 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -68,6 +68,8 @@ required:
->    - clocks
->    - clock-names
->  
-> +unevaluatedProperties: false
+Also fixed a typo in the error message.
 
-This one could be additionalProperties: false after adding start-year to
-the properties
+Signed-off-by: Fei Shao <fshao@chromium.org>
+---
 
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/jz4740-cgu.h>
-> diff --git a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> index 76bbf8b7555b..d51b236939bf 100644
-> --- a/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-> @@ -74,6 +74,8 @@ allOf:
->            items:
->              - const: rtc
->  
-> +unevaluatedProperties: false
+ drivers/rtc/rtc-mt6397.c       | 3 ++-
+ include/linux/mfd/mt6397/rtc.h | 1 -
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This one can be simply additionalProperties: false
-
-
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index f8b1353777ba..1894aded4c85 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -31,7 +31,8 @@ static int mtk_rtc_write_trigger(struct mt6397_rtc *rtc)
+ 					MTK_RTC_POLL_DELAY_US,
+ 					MTK_RTC_POLL_TIMEOUT);
+ 	if (ret < 0)
+-		dev_err(rtc->dev, "failed to write WRTGE: %d\n", ret);
++		dev_err(rtc->rtc_dev->dev.parent,
++			"failed to write WRTGR: %d\n", ret);
+ 
+ 	return ret;
+ }
+diff --git a/include/linux/mfd/mt6397/rtc.h b/include/linux/mfd/mt6397/rtc.h
+index 66989a16221a..c3748b53bf7d 100644
+--- a/include/linux/mfd/mt6397/rtc.h
++++ b/include/linux/mfd/mt6397/rtc.h
+@@ -72,7 +72,6 @@ struct mtk_rtc_data {
+ };
+ 
+ struct mt6397_rtc {
+-	struct device           *dev;
+ 	struct rtc_device       *rtc_dev;
+ 
+ 	/* Protect register access from multiple tasks */
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.28.0.806.g8561365e88-goog
+
