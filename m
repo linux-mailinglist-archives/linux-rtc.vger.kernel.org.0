@@ -2,52 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774B628F3E4
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Oct 2020 15:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277C028F7B2
+	for <lists+linux-rtc@lfdr.de>; Thu, 15 Oct 2020 19:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387867AbgJONx7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Oct 2020 09:53:59 -0400
-Received: from edge.kilargo.pl ([77.252.52.110]:24065 "EHLO edge.kilargo.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729735AbgJONx6 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:53:58 -0400
-X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 09:53:22 EDT
-Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
- (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
- 2020 15:41:40 +0200
-Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 14:54:55 +0200
-Reply-To: <kim.leang2011@yahoo.com>
-From:   Kim Leang <mechanik@kilargo.pl>
-Subject: Greeting! !!
-Date:   Thu, 15 Oct 2020 15:54:58 +0300
+        id S1731290AbgJORil (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 15 Oct 2020 13:38:41 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:49005 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731233AbgJORil (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Oct 2020 13:38:41 -0400
+X-Originating-IP: 90.65.88.165
+Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0DB4A1BF20A;
+        Thu, 15 Oct 2020 17:38:38 +0000 (UTC)
+Date:   Thu, 15 Oct 2020 19:38:38 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org
+Subject: Re: [bug report] [PATCH] RTC subsystem: class
+Message-ID: <20201015173838.GF134622@piout.net>
+References: <20201015095851.GA3042688@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <b8fd632900dc4ad4a113512e7781e06f@mail.kilargo.pl>
-To:     Undisclosed recipients:;
-X-Originating-IP: [185.248.12.71]
-X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
- (172.22.0.36)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A295AAB9B6B647163
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201015095851.GA3042688@mwanda>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Greeting!
+On 15/10/2020 12:58:51+0300, Dan Carpenter wrote:
+> Hello Alessandro Zummo,
+> 
+> The patch 0c86edc0d497: "[PATCH] RTC subsystem: class" from Mar 27,
+> 2006, leads to the following static checker warning:
+> 
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+Wow, 14 years ago :)
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+> 	drivers/rtc/rtc-r9701.c:109 r9701_set_datetime()
+> 	error: undefined (user controlled) shift '1 << dt->tm_wday'
+> 
+> drivers/rtc/rtc-r9701.c
+>     95  static int r9701_set_datetime(struct device *dev, struct rtc_time *dt)
+>     96  {
+>     97          int ret, year;
+>     98  
+>     99          year = dt->tm_year + 1900;
+>    100          if (year >= 2100 || year < 2000)
+>    101                  return -EINVAL;
+>    102  
+>    103          ret = write_reg(dev, RHRCNT, bin2bcd(dt->tm_hour));
+>    104          ret = ret ? ret : write_reg(dev, RMINCNT, bin2bcd(dt->tm_min));
+>    105          ret = ret ? ret : write_reg(dev, RSECCNT, bin2bcd(dt->tm_sec));
+>    106          ret = ret ? ret : write_reg(dev, RDAYCNT, bin2bcd(dt->tm_mday));
+>    107          ret = ret ? ret : write_reg(dev, RMONCNT, bin2bcd(dt->tm_mon + 1));
+>    108          ret = ret ? ret : write_reg(dev, RYRCNT, bin2bcd(dt->tm_year - 100));
+>    109          ret = ret ? ret : write_reg(dev, RWKCNT, 1 << dt->tm_wday);
+> 
+> I would have expected that rtc_valid_tm() would check that dt->tm_wday
+> as valid but it doesn't.  As far as I can see dt->tm_wday can be set to
+> any int value in the rtc_dev_ioctl(). 
+> 
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
+Nobody cares about tm_wday and userspace usually passes 0. For now, it
+is left to individual rtc drivers to check and correct tm_wday when they
+care in order to avoid having more calculations is the path for all the
+other RTCs that don't care.
 
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+Honestly, for this RTC, this doesn't matter much because the value
+isn't even read back.
 
-Thanks and have a nice day,
-Mr. Kim Leang.
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
