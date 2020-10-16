@@ -2,69 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 008E8290A97
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Oct 2020 19:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E97290A9C
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Oct 2020 19:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391539AbgJPRXV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Oct 2020 13:23:21 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35714 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391280AbgJPRXV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Oct 2020 13:23:21 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w141so3251130oia.2;
-        Fri, 16 Oct 2020 10:23:19 -0700 (PDT)
+        id S2390226AbgJPRXo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Oct 2020 13:23:44 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:38208 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390207AbgJPRXo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Oct 2020 13:23:44 -0400
+Received: by mail-oi1-f196.google.com with SMTP id h10so3257777oie.5;
+        Fri, 16 Oct 2020 10:23:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vR3ghSOELOYTJTOfaVyDLWbF1zqc1bqRhAnEnKY/Ykw=;
-        b=r3teT3OZCgaPKtCj00Iq6mMdF1N5xU5Q4FaTWF9f3JAr1fqAuq1ou50cP1vROuGW84
-         hLL1o+iEjSiTz/NVv1rhDq9tulZocqzan9oprCIng52Q7jr5U341JT8eC9FgiwHibFCG
-         iRHrkfNnJGVjWdHcbs+SI8V1ZsNpGGODwOWv2pTd+rvoUSO2abwujcQqV2jTV5EqWLNy
-         0fNfzdl1XqL8LWzjDFZRfjNrbMl4bVkZjcIbzOhv86NNaO+8uIxvy87xwTxg8p8ldfdb
-         qivzK/8Xjvnpg1npuyGRHDNnYbKG2dXDGgz0kWF+Np5VakXfapxB4qiu8p8Yw7JWXW9U
-         yx2w==
-X-Gm-Message-State: AOAM530YihofuKmiZrxj0MQ+KmDLMSny5w5SjkpA11dYAoSS9s86A8Ko
-        f9MJowmsUR8VwFGOMGPeGQ==
-X-Google-Smtp-Source: ABdhPJyA1guI+ypVqv9vrMlMKT8av3CawqFG7YW8V/YF29snJA01/0AARn84sJVwRsiBnBakduyPUQ==
-X-Received: by 2002:aca:fc89:: with SMTP id a131mr3199481oii.163.1602868998945;
-        Fri, 16 Oct 2020 10:23:18 -0700 (PDT)
+        bh=ua8FkzLPTPiTQmIFCi30OGWGpxSTgeegBJkVH2CYeUg=;
+        b=lrBwoLLNz5PzMtOgTGtgwiTrLdUOJcgOFlZOKqAoyfAOZiHp8RCj3yFJDTRgIhmFgZ
+         gU0khAAFGWNXUDN2L1iiaffpJ4tbyWLHnOCWWhegOlWqqiepdAzPl/Rr+LNZsbolwtHz
+         P7WxwrKXS67hMIvOCyJE3OXC4Coaw/J923zsaVDcOuL14LJrEkRgzQp5k9hbKmJB8Tv1
+         2QQTsaaX5BqTqIixL0tLrpvObqfrba0Hq/XALchM1I/cf06/foKDDNu+weW4vGpBrYbl
+         gjVZUXu8gqaf4Kimfv9T/Id2dhKEyMy+ffbDWjLhiOwzgEE2LYlNhOmdgpM/w0N2t4SA
+         S84g==
+X-Gm-Message-State: AOAM531QCtIUol9Eg4G3wcUaxDwlPihcMvTcoobBd4749Co+1uFU1SKm
+        X2hmwliww5vyHRKevlq7kg==
+X-Google-Smtp-Source: ABdhPJw/N+caGqICZsgwqLMcqM9AmHGILM0oe+4860KsHX6WqNrMJ30UWJpKrLbijQZlE6ve8r531Q==
+X-Received: by 2002:aca:5c0b:: with SMTP id q11mr3318708oib.103.1602869022044;
+        Fri, 16 Oct 2020 10:23:42 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t65sm1202250oib.50.2020.10.16.10.23.18
+        by smtp.gmail.com with ESMTPSA id z126sm1198034oia.57.2020.10.16.10.23.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 10:23:18 -0700 (PDT)
-Received: (nullmailer pid 1605378 invoked by uid 1000);
-        Fri, 16 Oct 2020 17:23:17 -0000
-Date:   Fri, 16 Oct 2020 12:23:17 -0500
+        Fri, 16 Oct 2020 10:23:41 -0700 (PDT)
+Received: (nullmailer pid 1605992 invoked by uid 1000);
+        Fri, 16 Oct 2020 17:23:40 -0000
+Date:   Fri, 16 Oct 2020 12:23:40 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: rtc: add trickle-voltage-millivolt
-Message-ID: <20201016172317.GA1605329@bogus>
+Cc:     linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: rtc: rv3032: add RV-3032 bindings
+Message-ID: <20201016172340.GA1605947@bogus>
 References: <20201013144110.1942218-1-alexandre.belloni@bootlin.com>
+ <20201013144110.1942218-2-alexandre.belloni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201013144110.1942218-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20201013144110.1942218-2-alexandre.belloni@bootlin.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 13 Oct 2020 16:41:08 +0200, Alexandre Belloni wrote:
-> Some RTCs have a trickle charge that is able to output different voltages
-> depending on the type of the connected auxiliary power (battery, supercap,
-> ...). Add a property allowing to specify the necessary voltage.
+On Tue, 13 Oct 2020 16:41:09 +0200, Alexandre Belloni wrote:
+> Document the Microcrystal RV-3032 device tree bindings
 > 
 > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
-> 
 > changes in v3:
->  - actually use -millivolt instead of -mV
+>  - remove rtc.yaml change
 > 
->  Documentation/devicetree/bindings/rtc/rtc.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+> 
+>  .../bindings/rtc/microcrystal,rv3032.yaml     | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
