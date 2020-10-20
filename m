@@ -2,49 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F00293186
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Oct 2020 00:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BF0293472
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Oct 2020 07:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgJSWyi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 19 Oct 2020 18:54:38 -0400
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:45768 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbgJSWyi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Oct 2020 18:54:38 -0400
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1603148077;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=5/a5SIUjFnCD4xF0krtndkpdots=;
-        b=VcqFOSfJWD/JLRPVEXDbBJVDLc58rKsP0krcEeQZUMJXU1lruERfUP7u6xaNaVj4
-        d+w0xpKV8bcg6oi9HzW7VygOTgn26yYKjDaVrO3KEBsUGeQzaHSpOTLfDQHRMCgr
-        kcFp2G9wr49uMZYQt3zI39V1sLrO6vZzuYdxzJ7TWFay6ha1dkALIrjORsyJUQvC
-        Wn0mAGAtuNdqHhAzU0YSd/76TnOGmF/b8uvEHl9IDkk0U4DC9djmUsCmiPEPb5ZD
-        QWFXWp5/8NS7A+4poNpjVyIJP6TDprg4QWvO4BvCRrqnrLY+qqse2hAEM8BQKBXc
-        Jld0fXqSWfPwqNF89srhnQ==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=CNNUoijD c=1 sm=1 tr=0 cx=a_idp_x a=5P7mokhpKkQ94VAPLxu12w==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=Kcfauafa1a0A:10 a=bcMK0N68KKcA:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10 a=afefHYAZSVUA:10 a=-EC6j6z80A8A:10 a=xp8wKWT6O3QA:10 a=3yzQafdIafhLKNqTyM4A:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=l_GcZgtXKDyNJJqLGAY8:22 a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: amsuam9yZGFuQHdpbGRibHVlLm5ldA==
-Received: from [10.80.118.5] ([10.80.118.5:48002] helo=md05.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <jk.jordan@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 84/4A-03224-B291E8F5; Mon, 19 Oct 2020 18:54:36 -0400
-Date:   Mon, 19 Oct 2020 18:54:35 -0400 (EDT)
-From:   George Worden <jk.jordan@wildblue.net>
-Reply-To: gworden321@gmail.com
-Message-ID: <2071757726.86364637.1603148075836.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S2391764AbgJTFy1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Oct 2020 01:54:27 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:54258 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2391765AbgJTFy1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 20 Oct 2020 01:54:27 -0400
+Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 20 Oct 2020 13:53:59
+ +0800 (GMT+08:00)
+X-Originating-IP: [210.32.148.79]
+Date:   Tue, 20 Oct 2020 13:53:59 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   dinghao.liu@zju.edu.cn
+To:     "Maxime Ripard" <maxime@cerno.tech>
+Cc:     kjlu@umn.edu, "Alessandro Zummo" <a.zummo@towertech.it>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
+        "Chen-Yu Tsai" <wens@csie.org>, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] [v2] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.12 build 20200616(0f5d8152)
+ Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
+In-Reply-To: <20201019080202.kgjoksz27dgyov7q@gilmour.lan>
+References: <20201018072810.4249-1-dinghao.liu@zju.edu.cn>
+ <20201019080202.kgjoksz27dgyov7q@gilmour.lan>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [124.168.60.247]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: ZyfePbQK86bsle8wzY6vx3ZAuSyDAw==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Message-ID: <7821f744.b49c.17544924954.Coremail.dinghao.liu@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgAHPxR3e45fLn05AA--.7567W
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgATBlZdtQf4pwAAsx
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbGCS07vEb7Iv0x
+        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
+        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
+        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWlV2xY628EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1lV2xY628EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wCS07vEe2I262IYc4CY6c8I
+        j28IcVAaY2xG8wCS07vE5I8CrVACY4xI64kE6c02F40Ex7xfMIAIbVAv7VC0I7IYx2IY67
+        AKxVWUJVWUGwCS07vEYx0Ex4A2jsIE14v26r1j6r4UMIAIbVAm72CE4IkC6x0Yz7v_Jr0_
+        Gr1lV2xY6x02cVAKzwCS07vEc2xSY4AK67AK6r4rMIAIbVCY0x0Ix7I2Y4AK64vIr41lV2
+        xY6xAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCS07vE4x8a6x804xWlV2xY6xC20s026xCa
+        FVCjc4AY6r1j6r4UMIAIbVC20s026c02F40E14v26r1j6r18MIAIbVC20s026x8GjcxK67
+        AKxVWUGVWUWwCS07vEx4CE17CEb7AF67AKxVWUtVW8ZwCS07vEIxAIcVC0I7IYx2IY67AK
+        xVWUJVWUCwCS07vEIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIAIbVCI42IY6xAIw2
+        0EY4v20xvaj40_WFyUJVCq3wCS07vEIxAIcVC2z280aVAFwI0_Jr0_Gr1lV2xY6IIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Did you get my last message
+PiBIaSwKPiAKPiBPbiBTdW4sIE9jdCAxOCwgMjAyMCBhdCAwMzoyODoxMFBNICswODAwLCBEaW5n
+aGFvIExpdSB3cm90ZToKPiA+IFdoZW4gY2xrX2h3X3JlZ2lzdGVyX2ZpeGVkX3JhdGVfd2l0aF9h
+Y2N1cmFjeSgpIGZhaWxzLAo+ID4gY2xrX2RhdGEgc2hvdWxkIGJlIGZyZWVkLiBJdCdzIHRoZSBz
+YW1lIGZvciB0aGUgc3Vic2VxdWVudAo+ID4gdHdvIGVycm9yIHBhdGhzLCBidXQgd2Ugc2hvdWxk
+IGFsc28gdW5yZWdpc3RlciB0aGUgYWxyZWFkeQo+ID4gcmVnaXN0ZXJlZCBjbG9ja3MgaW4gdGhl
+bS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogRGluZ2hhbyBMaXUgPGRpbmdoYW8ubGl1QHpqdS5l
+ZHUuY24+Cj4gPiAtLS0KPiA+IAo+ID4gQ2hhbmdlbG9nOgo+ID4gCj4gPiB2MjogLSBVbnJlZ2lz
+dGVyIHRoZSBhbHJlYWR5IHJlZ2lzdGVyZWQgY2xvY2tzIG9uIGZhaWx1cmUuCj4gPiAtLS0KPiA+
+ICBkcml2ZXJzL3J0Yy9ydGMtc3VuNmkuYyB8IDggKysrKystLS0KPiA+ICAxIGZpbGUgY2hhbmdl
+ZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9ydGMvcnRjLXN1bjZpLmMgYi9kcml2ZXJzL3J0Yy9ydGMtc3VuNmkuYwo+ID4gaW5k
+ZXggZTJiOGIxNTBiY2I0Li42ZGUwZDNhZDczNmEgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3J0
+Yy9ydGMtc3VuNmkuYwo+ID4gKysrIGIvZHJpdmVycy9ydGMvcnRjLXN1bjZpLmMKPiA+IEBAIC0y
+NzIsNyArMjcyLDcgQEAgc3RhdGljIHZvaWQgX19pbml0IHN1bjZpX3J0Y19jbGtfaW5pdChzdHJ1
+Y3QgZGV2aWNlX25vZGUgKm5vZGUsCj4gPiAgCQkJCQkJCQkzMDAwMDAwMDApOwo+ID4gIAlpZiAo
+SVNfRVJSKHJ0Yy0+aW50X29zYykpIHsKPiA+ICAJCXByX2NyaXQoIkNvdWxkbid0IHJlZ2lzdGVy
+IHRoZSBpbnRlcm5hbCBvc2NpbGxhdG9yXG4iKTsKPiA+IC0JCXJldHVybjsKPiA+ICsJCWdvdG8g
+ZXJyOwo+ID4gIAl9Cj4gPiAgCj4gPiAgCXBhcmVudHNbMF0gPSBjbGtfaHdfZ2V0X25hbWUocnRj
+LT5pbnRfb3NjKTsKPiA+IEBAIC0yOTAsNyArMjkwLDggQEAgc3RhdGljIHZvaWQgX19pbml0IHN1
+bjZpX3J0Y19jbGtfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGUsCj4gPiAgCXJ0Yy0+bG9z
+YyA9IGNsa19yZWdpc3RlcihOVUxMLCAmcnRjLT5odyk7Cj4gPiAgCWlmIChJU19FUlIocnRjLT5s
+b3NjKSkgewo+ID4gIAkJcHJfY3JpdCgiQ291bGRuJ3QgcmVnaXN0ZXIgdGhlIExPU0MgY2xvY2tc
+biIpOwo+ID4gLQkJcmV0dXJuOwo+ID4gKwkJY2xrX2h3X3VucmVnaXN0ZXJfZml4ZWRfcmF0ZShy
+dGMtPmludF9vc2MpOwo+ID4gKwkJZ290byBlcnI7Cj4gPiAgCX0KPiAKPiBUaGUgcG9pbnQgb2Yg
+aGF2aW5nIGxhYmVscyBmb3IgdGhlIGVycm9yIHNlcXVlbmNlIGlzIHRvIGF2b2lkIHRvCj4gZHVw
+bGljYXRlIHRoZSBlcnJvciBoYW5kbGluZyBjb2RlIGluIGVhY2ggYW5kIGV2ZXJ5IGVycm9yIGNv
+ZGUgcGF0aC4KPiAKPiBZb3Ugc2hvdWxkIGFkZCBhbm90aGVyIGxhYmVsIGZvciB0aGUgZml4ZWQg
+cmF0ZSBjbG9jayB1bnJlZ2lzdHJhdGlvbgo+IAoKRmluZSwgSSB3aWxsIGZpeCB0aGlzIHNvb24u
+CgpSZWdhcmRzLApEaW5naGFvCg==
