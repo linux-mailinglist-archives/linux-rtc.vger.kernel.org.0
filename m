@@ -2,85 +2,108 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BF0293472
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Oct 2020 07:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7149429349A
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Oct 2020 08:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391764AbgJTFy1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Oct 2020 01:54:27 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:54258 "EHLO zju.edu.cn"
+        id S2391952AbgJTGMs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Oct 2020 02:12:48 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:56354 "EHLO zju.edu.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391765AbgJTFy1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 20 Oct 2020 01:54:27 -0400
-Received: by ajax-webmail-mail-app3 (Coremail) ; Tue, 20 Oct 2020 13:53:59
- +0800 (GMT+08:00)
-X-Originating-IP: [210.32.148.79]
-Date:   Tue, 20 Oct 2020 13:53:59 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   dinghao.liu@zju.edu.cn
-To:     "Maxime Ripard" <maxime@cerno.tech>
-Cc:     kjlu@umn.edu, "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        "Chen-Yu Tsai" <wens@csie.org>, linux-rtc@vger.kernel.org,
+        id S2391951AbgJTGMs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 20 Oct 2020 02:12:48 -0400
+Received: from localhost.localdomain (unknown [210.32.148.79])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCXOZjLf45ft7M5AA--.20850S4;
+        Tue, 20 Oct 2020 14:12:31 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] [v2] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.12 build 20200616(0f5d8152)
- Copyright (c) 2002-2020 www.mailtech.cn zju.edu.cn
-In-Reply-To: <20201019080202.kgjoksz27dgyov7q@gilmour.lan>
-References: <20201018072810.4249-1-dinghao.liu@zju.edu.cn>
- <20201019080202.kgjoksz27dgyov7q@gilmour.lan>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
-MIME-Version: 1.0
-Message-ID: <7821f744.b49c.17544924954.Coremail.dinghao.liu@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgAHPxR3e45fLn05AA--.7567W
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgATBlZdtQf4pwAAsx
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJTRUUUbGCS07vEb7Iv0x
-        C_Cr1lV2xY67kC6x804xWlV2xY67CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DMIAI
-        bVAFxVCF77xC64kEw24lV2xY67C26IkvcIIF6IxKo4kEV4ylV2xY628lY4IE4IxF12IF4w
-        CS07vE84x0c7CEj48ve4kI8wCS07vE84ACjcxK6xIIjxv20xvE14v26w1j6s0DMIAIbVA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWlV2xY628EF7xvwVC2z280aVAFwI0_Gc
-        CE3s1lV2xY628EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wCS07vEe2I262IYc4CY6c8I
-        j28IcVAaY2xG8wCS07vE5I8CrVACY4xI64kE6c02F40Ex7xfMIAIbVAv7VC0I7IYx2IY67
-        AKxVWUJVWUGwCS07vEYx0Ex4A2jsIE14v26r1j6r4UMIAIbVAm72CE4IkC6x0Yz7v_Jr0_
-        Gr1lV2xY6x02cVAKzwCS07vEc2xSY4AK67AK6r4rMIAIbVCY0x0Ix7I2Y4AK64vIr41lV2
-        xY6xAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCS07vE4x8a6x804xWlV2xY6xC20s026xCa
-        FVCjc4AY6r1j6r4UMIAIbVC20s026c02F40E14v26r1j6r18MIAIbVC20s026x8GjcxK67
-        AKxVWUGVWUWwCS07vEx4CE17CEb7AF67AKxVWUtVW8ZwCS07vEIxAIcVC0I7IYx2IY67AK
-        xVWUJVWUCwCS07vEIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIAIbVCI42IY6xAIw2
-        0EY4v20xvaj40_WFyUJVCq3wCS07vEIxAIcVC2z280aVAFwI0_Jr0_Gr1lV2xY6IIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUU==
+Subject: [PATCH] [v3] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
+Date:   Tue, 20 Oct 2020 14:12:26 +0800
+Message-Id: <20201020061226.6572-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCXOZjLf45ft7M5AA--.20850S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF1rGw18Kr47uFW7Jw1UJrb_yoW8AFWrp3
+        4rJ3y5Krs7tan7u3yktFyUAF98G3WxKFWxury5Cwna9rn5CFyrGr47Ga40yF1UZr4xZ3ya
+        vF40y3y5uF4UZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7VUjHUDJUUUUU==
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgATBlZdtQf4pwABsw
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-PiBIaSwKPiAKPiBPbiBTdW4sIE9jdCAxOCwgMjAyMCBhdCAwMzoyODoxMFBNICswODAwLCBEaW5n
-aGFvIExpdSB3cm90ZToKPiA+IFdoZW4gY2xrX2h3X3JlZ2lzdGVyX2ZpeGVkX3JhdGVfd2l0aF9h
-Y2N1cmFjeSgpIGZhaWxzLAo+ID4gY2xrX2RhdGEgc2hvdWxkIGJlIGZyZWVkLiBJdCdzIHRoZSBz
-YW1lIGZvciB0aGUgc3Vic2VxdWVudAo+ID4gdHdvIGVycm9yIHBhdGhzLCBidXQgd2Ugc2hvdWxk
-IGFsc28gdW5yZWdpc3RlciB0aGUgYWxyZWFkeQo+ID4gcmVnaXN0ZXJlZCBjbG9ja3MgaW4gdGhl
-bS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogRGluZ2hhbyBMaXUgPGRpbmdoYW8ubGl1QHpqdS5l
-ZHUuY24+Cj4gPiAtLS0KPiA+IAo+ID4gQ2hhbmdlbG9nOgo+ID4gCj4gPiB2MjogLSBVbnJlZ2lz
-dGVyIHRoZSBhbHJlYWR5IHJlZ2lzdGVyZWQgY2xvY2tzIG9uIGZhaWx1cmUuCj4gPiAtLS0KPiA+
-ICBkcml2ZXJzL3J0Yy9ydGMtc3VuNmkuYyB8IDggKysrKystLS0KPiA+ICAxIGZpbGUgY2hhbmdl
-ZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9ydGMvcnRjLXN1bjZpLmMgYi9kcml2ZXJzL3J0Yy9ydGMtc3VuNmkuYwo+ID4gaW5k
-ZXggZTJiOGIxNTBiY2I0Li42ZGUwZDNhZDczNmEgMTAwNjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL3J0
-Yy9ydGMtc3VuNmkuYwo+ID4gKysrIGIvZHJpdmVycy9ydGMvcnRjLXN1bjZpLmMKPiA+IEBAIC0y
-NzIsNyArMjcyLDcgQEAgc3RhdGljIHZvaWQgX19pbml0IHN1bjZpX3J0Y19jbGtfaW5pdChzdHJ1
-Y3QgZGV2aWNlX25vZGUgKm5vZGUsCj4gPiAgCQkJCQkJCQkzMDAwMDAwMDApOwo+ID4gIAlpZiAo
-SVNfRVJSKHJ0Yy0+aW50X29zYykpIHsKPiA+ICAJCXByX2NyaXQoIkNvdWxkbid0IHJlZ2lzdGVy
-IHRoZSBpbnRlcm5hbCBvc2NpbGxhdG9yXG4iKTsKPiA+IC0JCXJldHVybjsKPiA+ICsJCWdvdG8g
-ZXJyOwo+ID4gIAl9Cj4gPiAgCj4gPiAgCXBhcmVudHNbMF0gPSBjbGtfaHdfZ2V0X25hbWUocnRj
-LT5pbnRfb3NjKTsKPiA+IEBAIC0yOTAsNyArMjkwLDggQEAgc3RhdGljIHZvaWQgX19pbml0IHN1
-bjZpX3J0Y19jbGtfaW5pdChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGUsCj4gPiAgCXJ0Yy0+bG9z
-YyA9IGNsa19yZWdpc3RlcihOVUxMLCAmcnRjLT5odyk7Cj4gPiAgCWlmIChJU19FUlIocnRjLT5s
-b3NjKSkgewo+ID4gIAkJcHJfY3JpdCgiQ291bGRuJ3QgcmVnaXN0ZXIgdGhlIExPU0MgY2xvY2tc
-biIpOwo+ID4gLQkJcmV0dXJuOwo+ID4gKwkJY2xrX2h3X3VucmVnaXN0ZXJfZml4ZWRfcmF0ZShy
-dGMtPmludF9vc2MpOwo+ID4gKwkJZ290byBlcnI7Cj4gPiAgCX0KPiAKPiBUaGUgcG9pbnQgb2Yg
-aGF2aW5nIGxhYmVscyBmb3IgdGhlIGVycm9yIHNlcXVlbmNlIGlzIHRvIGF2b2lkIHRvCj4gZHVw
-bGljYXRlIHRoZSBlcnJvciBoYW5kbGluZyBjb2RlIGluIGVhY2ggYW5kIGV2ZXJ5IGVycm9yIGNv
-ZGUgcGF0aC4KPiAKPiBZb3Ugc2hvdWxkIGFkZCBhbm90aGVyIGxhYmVsIGZvciB0aGUgZml4ZWQg
-cmF0ZSBjbG9jayB1bnJlZ2lzdHJhdGlvbgo+IAoKRmluZSwgSSB3aWxsIGZpeCB0aGlzIHNvb24u
-CgpSZWdhcmRzLApEaW5naGFvCg==
+When clk_hw_register_fixed_rate_with_accuracy() fails,
+clk_data should be freed. It's the same for the subsequent
+two error paths, but we should also unregister the already
+registered clocks in them.
+
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+
+Changelog:
+
+v2: - Unregister the already registered clocks on failure.
+
+v3: - Add a new label 'err_register' to unify code style.
+---
+ drivers/rtc/rtc-sun6i.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index e2b8b150bcb4..f2818cdd11d8 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -272,7 +272,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 								300000000);
+ 	if (IS_ERR(rtc->int_osc)) {
+ 		pr_crit("Couldn't register the internal oscillator\n");
+-		return;
++		goto err;
+ 	}
+ 
+ 	parents[0] = clk_hw_get_name(rtc->int_osc);
+@@ -290,7 +290,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 	rtc->losc = clk_register(NULL, &rtc->hw);
+ 	if (IS_ERR(rtc->losc)) {
+ 		pr_crit("Couldn't register the LOSC clock\n");
+-		return;
++		goto err_register;
+ 	}
+ 
+ 	of_property_read_string_index(node, "clock-output-names", 1,
+@@ -301,7 +301,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 					  &rtc->lock);
+ 	if (IS_ERR(rtc->ext_losc)) {
+ 		pr_crit("Couldn't register the LOSC external gate\n");
+-		return;
++		goto err_register;
+ 	}
+ 
+ 	clk_data->num = 2;
+@@ -314,6 +314,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
+ 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+ 	return;
+ 
++err_register:
++	clk_hw_unregister_fixed_rate(rtc->int_osc);
+ err:
+ 	kfree(clk_data);
+ }
+-- 
+2.17.1
+
