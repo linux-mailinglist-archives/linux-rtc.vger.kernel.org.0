@@ -2,108 +2,169 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7149429349A
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Oct 2020 08:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DFB29494E
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Oct 2020 10:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391952AbgJTGMs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Oct 2020 02:12:48 -0400
-Received: from spam.zju.edu.cn ([61.164.42.155]:56354 "EHLO zju.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391951AbgJTGMs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 20 Oct 2020 02:12:48 -0400
-Received: from localhost.localdomain (unknown [210.32.148.79])
-        by mail-app3 (Coremail) with SMTP id cC_KCgCXOZjLf45ft7M5AA--.20850S4;
-        Tue, 20 Oct 2020 14:12:31 +0800 (CST)
-From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
-To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v3] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
-Date:   Tue, 20 Oct 2020 14:12:26 +0800
-Message-Id: <20201020061226.6572-1-dinghao.liu@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgCXOZjLf45ft7M5AA--.20850S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1rGw18Kr47uFW7Jw1UJrb_yoW8AFWrp3
-        4rJ3y5Krs7tan7u3yktFyUAF98G3WxKFWxury5Cwna9rn5CFyrGr47Ga40yF1UZr4xZ3ya
-        vF40y3y5uF4UZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF1l42xK82IYc2Ij64vIr41l
-        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7VUjHUDJUUUUU==
-X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgATBlZdtQf4pwABsw
+        id S1731198AbgJUIXY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Oct 2020 04:23:24 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:50319 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730685AbgJUIXX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Oct 2020 04:23:23 -0400
+X-Originating-IP: 90.65.88.165
+Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 6125D1C000C;
+        Wed, 21 Oct 2020 08:23:21 +0000 (UTC)
+Date:   Wed, 21 Oct 2020 10:23:20 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 5.10
+Message-ID: <20201021082320.GA1457765@piout.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-When clk_hw_register_fixed_rate_with_accuracy() fails,
-clk_data should be freed. It's the same for the subsequent
-two error paths, but we should also unregister the already
-registered clocks in them.
+Hello Linus,
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
----
+Here is the RTC pull request for 5.10. A new driver this cycle is making
+the bulk of the changes and the rx8010 driver has been rework to use the
+modern APIs.
 
-Changelog:
+The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
 
-v2: - Unregister the already registered clocks on failure.
+  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
 
-v3: - Add a new label 'err_register' to unify code style.
----
- drivers/rtc/rtc-sun6i.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index e2b8b150bcb4..f2818cdd11d8 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -272,7 +272,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 								300000000);
- 	if (IS_ERR(rtc->int_osc)) {
- 		pr_crit("Couldn't register the internal oscillator\n");
--		return;
-+		goto err;
- 	}
- 
- 	parents[0] = clk_hw_get_name(rtc->int_osc);
-@@ -290,7 +290,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 	rtc->losc = clk_register(NULL, &rtc->hw);
- 	if (IS_ERR(rtc->losc)) {
- 		pr_crit("Couldn't register the LOSC clock\n");
--		return;
-+		goto err_register;
- 	}
- 
- 	of_property_read_string_index(node, "clock-output-names", 1,
-@@ -301,7 +301,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 					  &rtc->lock);
- 	if (IS_ERR(rtc->ext_losc)) {
- 		pr_crit("Couldn't register the LOSC external gate\n");
--		return;
-+		goto err_register;
- 	}
- 
- 	clk_data->num = 2;
-@@ -314,6 +314,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	return;
- 
-+err_register:
-+	clk_hw_unregister_fixed_rate(rtc->int_osc);
- err:
- 	kfree(clk_data);
- }
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.10
+
+for you to fetch changes up to 35331b506f6c67a0b4042fac1ae2785cef9ac8c3:
+
+  rtc: r9701: set range (2020-10-19 22:48:55 +0200)
+
+----------------------------------------------------------------
+RTC for 5.10
+
+Subsystem:
+ - new generic DT properties: aux-voltage-chargeable, trickle-voltage-millivolt
+
+New driver:
+ - Microcrystal RV-3032
+
+Drivers:
+ - ds1307: use aux-voltage-chargeable
+ - r9701, rx8010: modernization of the driver
+ - rv3028: fix clock output, trickle resistor values, RAM configuration
+   registers
+
+----------------------------------------------------------------
+Alexandre Belloni (13):
+      rtc: rv3028: fix clock output support
+      rtc: rv3028: fix trickle resistor values
+      rtc: rv3028: factorize EERD bit handling
+      rtc: rv3028: ensure ram configuration registers are saved
+      dt-bindings: rtc: add trickle-voltage-millivolt
+      dt-bindings: rtc: rv3032: add RV-3032 bindings
+      rtc: rv3032: Add a driver for Microcrystal RV-3032
+      rtc: r9701: remove leftover comment
+      rtc: r9701: stop setting a default time
+      rtc: r9701: remove useless memset
+      rtc: r9701: stop setting RWKCNT
+      rtc: r9701: convert to devm_rtc_allocate_device
+      rtc: r9701: set range
+
+Bartosz Golaszewski (15):
+      rtc: rx8010: don't modify the global rtc ops
+      rtc: rx8010: remove a stray newline
+      rtc: rx8010: remove unnecessary brackets
+      rtc: rx8010: consolidate local variables of the same type
+      rtc: rx8010: use tabs instead of spaces for code formatting
+      rtc: rx8010: rename ret to err in rx8010_set_time()
+      rtc: rx8010: don't use magic values for time buffer length
+      rtc: rx8010: drop unnecessary initialization
+      rtc: rx8010: use a helper variable for client->dev in probe()
+      rtc: rx8010: prefer sizeof(*val) over sizeof(struct type_of_val)
+      rtc: rx8010: switch to using the preferred RTC API
+      rtc: rx8010: switch to using the preferred i2c API
+      rtc: rx8010: convert to using regmap
+      rtc: rx8010: use range checking provided by core RTC code
+      rtc: rx8010: rename rx8010_init_client() to rx8010_init()
+
+Bastian Krause (8):
+      dt-bindings: rtc: let aux-voltage-chargeable supersede trickle-diode-disable
+      dt-bindings: rtc: ds1307: let aux-voltage-chargeable supersede trickle-diode-disable
+      dt-bindings: rtc: ds1307: add rx8130 aux-voltage-chargeable support
+      rtc: ds1307: apply DS13XX_TRICKLE_CHARGER_MAGIC only conditionally
+      rtc: ds1307: introduce requires_trickle_resistor per chip
+      rtc: ds1307: store previous charge default per chip
+      rtc: ds1307: consider aux-voltage-chargeable
+      rtc: ds1307: enable rx8130's backup battery, make it chargeable optionally
+
+Biwen Li (1):
+      rtc: pcf2127: fix a bug when not specify interrupts property
+
+Chris Packham (2):
+      rtc: ds1307: Ensure oscillator is enabled for DS1388
+      rtc: ds1307: Clear OSF flag on DS1388 when setting time
+
+Fei Shao (1):
+      rtc: mt6397: Remove unused member dev
+
+Geert Uytterhoeven (3):
+      rtc: rtc-rs5c313: Drop obsolete platform_set_drvdata() call
+      rtc: rtc-rs5c313: Fix late hardware init
+      rtc: rtc-rs5c313: Convert to module_platform_driver()
+
+Krzysztof Kozlowski (1):
+      rtc: s3c: Simplify with dev_err_probe()
+
+Liu Shixin (2):
+      rtc: meson: simplify the return expression of meson_vrtc_probe
+      rtc: rv8803: simplify the return expression of rv8803_nvram_write
+
+Peng Ma (1):
+      rtc: fsl-ftm-alarm: update acpi device id
+
+Rikard Falkeborn (1):
+      rtc: st-lpc: Constify st_rtc_ops
+
+Thomas Bogendoerfer (1):
+      rtc: ds1685: Fix bank switching to avoid endless loop
+
+Victor Ding (1):
+      rtc: cmos: zero-init wkalrm when reading from CMOS
+
+ .../bindings/rtc/microcrystal,rv3032.yaml          |  64 ++
+ .../devicetree/bindings/rtc/rtc-ds1307.txt         |   9 +-
+ Documentation/devicetree/bindings/rtc/rtc.yaml     |  16 +
+ drivers/rtc/Kconfig                                |  10 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-cmos.c                             |   2 +
+ drivers/rtc/rtc-ds1307.c                           |  76 +-
+ drivers/rtc/rtc-ds1685.c                           |   8 +-
+ drivers/rtc/rtc-fsl-ftm-alarm.c                    |   4 +-
+ drivers/rtc/rtc-meson-vrtc.c                       |   7 +-
+ drivers/rtc/rtc-mt6397.c                           |   3 +-
+ drivers/rtc/rtc-pcf2127.c                          |   4 +-
+ drivers/rtc/rtc-r9701.c                            |  43 +-
+ drivers/rtc/rtc-rs5c313.c                          |  34 +-
+ drivers/rtc/rtc-rv3028.c                           | 213 +++--
+ drivers/rtc/rtc-rv3032.c                           | 925 +++++++++++++++++++++
+ drivers/rtc/rtc-rv8803.c                           |   8 +-
+ drivers/rtc/rtc-rx8010.c                           | 332 ++++----
+ drivers/rtc/rtc-s3c.c                              |   9 +-
+ drivers/rtc/rtc-st-lpc.c                           |   2 +-
+ include/linux/mfd/mt6397/rtc.h                     |   1 -
+ 21 files changed, 1403 insertions(+), 368 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+ create mode 100644 drivers/rtc/rtc-rv3032.c
+
 -- 
-2.17.1
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
