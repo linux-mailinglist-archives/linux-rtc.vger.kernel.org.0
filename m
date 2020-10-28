@@ -2,76 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9941429D67B
-	for <lists+linux-rtc@lfdr.de>; Wed, 28 Oct 2020 23:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D55B29DFB8
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Oct 2020 02:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731320AbgJ1WPT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 28 Oct 2020 18:15:19 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:51986 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731268AbgJ1WPG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 28 Oct 2020 18:15:06 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id A654929A58;
-        Tue, 27 Oct 2020 23:26:19 -0400 (EDT)
-Date:   Wed, 28 Oct 2020 14:26:12 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Tom Rix <trix@redhat.com>
-cc:     linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [RFC] clang tooling cleanups
-In-Reply-To: <20201027164255.1573301-1-trix@redhat.com>
-Message-ID: <alpine.LNX.2.23.453.2010281344120.31@nippy.intranet>
-References: <20201027164255.1573301-1-trix@redhat.com>
+        id S2404045AbgJ2BEU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 28 Oct 2020 21:04:20 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:34674 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729564AbgJ1WGk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 28 Oct 2020 18:06:40 -0400
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id E58A23B0C1A;
+        Wed, 28 Oct 2020 17:52:32 +0000 (UTC)
+X-Originating-IP: 86.194.74.19
+Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 8E359240004;
+        Wed, 28 Oct 2020 17:52:06 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     kjlu@umn.edu, Dinghao Liu <dinghao.liu@zju.edu.cn>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH] [v3] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
+Date:   Wed, 28 Oct 2020 18:52:05 +0100
+Message-Id: <160390751694.374708.7173123437808246701.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20201020061226.6572-1-dinghao.liu@zju.edu.cn>
+References: <20201020061226.6572-1-dinghao.liu@zju.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, 20 Oct 2020 14:12:26 +0800, Dinghao Liu wrote:
+> When clk_hw_register_fixed_rate_with_accuracy() fails,
+> clk_data should be freed. It's the same for the subsequent
+> two error paths, but we should also unregister the already
+> registered clocks in them.
 
-On Tue, 27 Oct 2020, trix@redhat.com wrote:
+Applied, thanks!
 
-> This rfc will describe
-> An upcoming treewide cleanup.
-> How clang tooling was used to programatically do the clean up.
-> Solicit opinions on how to generally use clang tooling.
-> 
+[1/1] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
+      commit: 28d211919e422f58c1e6c900e5810eee4f1ce4c8
 
-This tooling is very impressive. It makes possible an idea that I had a 
-while ago, to help make code review more efficient. It works like this. 
-
-Suppose a patch, p, is the difference between the new tree, n, and the old 
-tree, o. That is, p = n - o.
-
-Now let clang-tidy be the transformation 't'. This gets you a much more 
-readable patch submission, P = t(n) - t(o).
-
-The only difficulty is that, if I submit P intead of p then 'git am' will 
-probably reject it. This is solved by a little tooling around git, such 
-that, should a patch P fail to apply, the relevant files are automatically 
-reformatted with the officially endorsed transformation t, to generate a 
-minimal cleanup patch, such that P can be automatically applied on top.
-
-If the patch submission process required* that every patch submission was 
-generated like P and not like p, it would immediately eliminate all 
-clean-up patches from the workload of all reviewers, and also make the 
-reviewers' job easier because all submissions are now formatted correctly, 
-and also avoid time lost to round-trips, such as, "you can have a 
-reviewed-by if you respin to fix some minor style issues".
-
-* Enforcing this, e.g. with checkpatch, is slightly more complicated, but 
-it works the same way: generate a minimal cleanup patch for the relevant 
-files, apply the patch-to-be-submitted, and finally confirm that the 
-modified files are unchanged under t.
+Best regards,
+-- 
+Alexandre Belloni <alexandre.belloni@bootlin.com>
