@@ -2,99 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF0F2A6189
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 Nov 2020 11:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5032A781D
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Nov 2020 08:40:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgKDK2J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 4 Nov 2020 05:28:09 -0500
-Received: from mail-out.m-online.net ([212.18.0.9]:35578 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729355AbgKDK1M (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 4 Nov 2020 05:27:12 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4CR2rt1vTJz1qsbH;
-        Wed,  4 Nov 2020 11:27:10 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4CR2rt1ZYsz1qql3;
-        Wed,  4 Nov 2020 11:27:10 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id mcAhrJmBi-zI; Wed,  4 Nov 2020 11:27:09 +0100 (CET)
-X-Auth-Info: D2vvoz9vVkfffy9KUCy26P96tW4BgJZlOXPCIBtSv7A=
-Received: from localhost (dslb-088-074-220-167.088.074.pools.vodafone-ip.de [88.74.220.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Wed,  4 Nov 2020 11:27:09 +0100 (CET)
-From:   Claudius Heine <ch@denx.de>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Johannes Hahn <johannes-hahn@siemens.com>,
-        Claudius Heine <ch@denx.de>
-Subject: [PATCH 2/2] rtc: rx6110: add ACPI bindings to I2C
-Date:   Wed,  4 Nov 2020 11:26:29 +0100
-Message-Id: <20201104102629.3422048-3-ch@denx.de>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201104102629.3422048-1-ch@denx.de>
-References: <20201104102629.3422048-1-ch@denx.de>
+        id S1729240AbgKEHkU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Nov 2020 02:40:20 -0500
+Received: from mail2.directv.syn-alias.com ([69.168.106.50]:50202 "EHLO
+        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728048AbgKEHkT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Nov 2020 02:40:19 -0500
+DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
+        q=dns/txt; i=@wildblue.net; t=1604562017;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=+/gMcM2JLBRroFSmmYDV09lAd+8=;
+        b=sT4AtNP4+kLF2Imj8mkCocTf8T/l7BQ8xBJcXHfzotA0RB5yre0nNk+wY1dEQlp6
+        Q7M0a7iizFmSO9nHDFLhUeQ6MVm2XbH6c6UH5aO2pyHxYz4LfyQxLOKW36/hSIvS
+        raXsuvr+PjnxeGrMPYvC34rBMOBZqrrasrNloiSACoFjV8N1q4hqFDNd+yygZ/eq
+        NCWuf0t25+tQbi57CwuzXIaFM3X5TlP52xRjw0KDFJjNr/rWjS/XDZXiX3wMeeuN
+        vhTNF2ESQQx6a5XQJYOGSsN1JI7nYT5PGFmRRXpMpum2ES+yIXbp3kPd9BeCL2US
+        jo33i7RPHb1e1Rrp0YVc4Q==;
+X_CMAE_Category: , ,
+X-CNFS-Analysis: v=2.3 cv=CNNUoijD c=1 sm=1 tr=0 cx=a_idp_x a=aaWq5Auxi1bdK84WNCmqgw==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=VKrxT_Ub3w4A:10 a=3drOeRgJqewA:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10 a=nNwsprhYR40A:10 a=dLNWoSYkOVIA:10 a=7N77gAWQIoEA:10 a=NS_hirdgIVpAgKS1k8AA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=eHfO2oLuMM_iG-JZHUti:22 a=pHzHmUro8NiASowvMSCR:22 a=nt3jZW36AmriUCFCBwmW:22
+X-CM-Score: 0
+X-Scanned-by: Cloudmark Authority Engine
+X-Authed-Username: am9zYm9ybmVAd2lsZGJsdWUubmV0
+Received: from [10.80.118.28] ([10.80.118.28:48930] helo=md05.jasper.bos.sync.lan)
+        by mail2.directv.syn-alias.com (envelope-from <josborne@wildblue.net>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 58/68-03224-06CA3AF5; Thu, 05 Nov 2020 02:40:16 -0500
+Date:   Thu, 5 Nov 2020 02:40:16 -0500 (EST)
+From:   George <josborne@wildblue.net>
+Reply-To: geow0147@gmail.com
+Message-ID: <1306978903.95308827.1604562016283.JavaMail.zimbra@wildblue.net>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [175.37.246.231]
+X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
+Thread-Index: Nnv3p2s+nLfHYS19b0IxD0PbazqHlA==
+Thread-Topic: 
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Johannes Hahn <johannes-hahn@siemens.com>
-
-This allows the RX6110 driver to be automatically assigned to the right
-device on the I2C bus.
-
-Signed-off-by: Johannes Hahn <johannes-hahn@siemens.com>
-Signed-off-by: Claudius Heine <ch@denx.de>
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
----
- drivers/rtc/rtc-rx6110.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
-index ca9f486236d4..6c0c7e5a7065 100644
---- a/drivers/rtc/rtc-rx6110.c
-+++ b/drivers/rtc/rtc-rx6110.c
-@@ -13,6 +13,7 @@
- #include <linux/of_gpio.h>
- #include <linux/regmap.h>
- #include <linux/rtc.h>
-+#include <linux/acpi.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/spi/spi.h>
-@@ -455,6 +456,14 @@ static int rx6110_i2c_probe(struct i2c_client *client,
- 	return 0;
- }
- 
-+#ifdef CONFIG_ACPI
-+static const struct acpi_device_id rx6110_i2c_acpi_match[] = {
-+	{ "RX6110SA", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(acpi, rx6110_i2c_acpi_match);
-+#endif
-+
- static const struct i2c_device_id rx6110_i2c_id[] = {
- 	{ "rx6110", 0 },
- 	{ }
-@@ -464,6 +473,9 @@ MODULE_DEVICE_TABLE(i2c, rx6110_i2c_id);
- static struct i2c_driver rx6110_i2c_driver = {
- 	.driver = {
- 		.name = RX6110_DRIVER_NAME,
-+#ifdef CONFIG_ACPI
-+		.acpi_match_table = ACPI_PTR(rx6110_i2c_acpi_match),
-+#endif
- 	},
- 	.probe		= rx6110_i2c_probe,
- 	.id_table	= rx6110_i2c_id,
--- 
-2.20.1
-
+Do you get my last mail
