@@ -2,86 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6C42A899D
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Nov 2020 23:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2AE2A89CA
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 Nov 2020 23:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732527AbgKEWT1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Nov 2020 17:19:27 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:46807 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731508AbgKEWT1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Nov 2020 17:19:27 -0500
-Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 2ECAA240005;
-        Thu,  5 Nov 2020 22:19:25 +0000 (UTC)
-Date:   Thu, 5 Nov 2020 23:19:24 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudius Heine <ch@denx.de>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Henning Schild <henning.schild@siemens.com>,
-        Johannes Hahn <johannes-hahn@siemens.com>
-Subject: Re: [PATCH 1/2] rtc: rx6110: add i2c support
-Message-ID: <20201105221924.GI1034841@piout.net>
-References: <20201104102629.3422048-1-ch@denx.de>
- <20201104102629.3422048-2-ch@denx.de>
+        id S1732370AbgKEW2f (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 Nov 2020 17:28:35 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53136 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732434AbgKEW2a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Nov 2020 17:28:30 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 6A5451F46655
+Subject: Re: [PATCH] rtc: hym8563: enable wakeup by default
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <4a52fe66b327fd1974f86b7deb7e2c06d74fe64f.1604613067.git.guillaume.tucker@collabora.com>
+ <20201105220938.GG1034841@piout.net>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <03f589d0-9c6f-4a3b-4d42-8d3f66b13436@collabora.com>
+Date:   Thu, 5 Nov 2020 22:28:20 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201104102629.3422048-2-ch@denx.de>
+In-Reply-To: <20201105220938.GG1034841@piout.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/11/2020 11:26:28+0100, Claudius Heine wrote:
-> +static int rx6110_i2c_probe(struct i2c_client *client,
-> +			    const struct i2c_device_id *id)
-> +{
-> +	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
-> +	struct rx6110_data *rx6110;
-> +	int err;
-> +
-> +	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA
-> +				| I2C_FUNC_SMBUS_I2C_BLOCK)) {
-> +		dev_err(&adapter->dev,
-> +			"doesn't support required functionality\n");
-> +		return -EIO;
-> +	}
-> +
-> +	rx6110 = devm_kzalloc(&client->dev, sizeof(*rx6110), GFP_KERNEL);
-> +	if (!rx6110)
-> +		return -ENOMEM;
-> +
-> +	rx6110->regmap = devm_regmap_init_i2c(client, &regmap_i2c_config);
-> +	if (IS_ERR(rx6110->regmap)) {
-> +		dev_err(&client->dev, "regmap init failed for rtc rx6110\n");
-> +		return PTR_ERR(rx6110->regmap);
-> +	}
-> +
-> +	i2c_set_clientdata(client, rx6110);
-> +
-> +	rx6110->rtc = devm_rtc_device_register(&client->dev,
-> +					       client->name,
-> +					       &rx6110_rtc_ops, THIS_MODULE);
-> +
-> +	if (IS_ERR(rx6110->rtc))
-> +		return PTR_ERR(rx6110->rtc);
-> +
-> +	err = rx6110_init(rx6110);
-> +	if (err)
-> +		return err;
-> +
-> +	rx6110->rtc->max_user_freq = 1;
-> +
+On 05/11/2020 22:09, Alexandre Belloni wrote:
+> On 05/11/2020 22:01:10+0000, Guillaume Tucker wrote:
+>> Enable wakeup by default in the hym8563 driver to match the behaviour
+>> implemented by the majority of RTC drivers.  As per the description of
+>> device_init_wakeup(), it should be enabled for "devices that everyone
+>> expects to be wakeup sources".  One would expect this to be the case
+>> with a real-time clock.
+>>
+> 
+> Actually, the proper way of doing it for a discrete RTC is to only
+> enable wakeup if the irq request is successful or when the wakeup-source
+> property is present on the node.
 
-I would prefer if you could have a common function doing the RTC
-registration and init for both i2c and spi. It wouldn't do much yet but
-ideally, it would set the RTC range too and it would be better to not
-have to duplicate that.
+Thanks for the quick reply.  I see, I'll send a v2 accordingly.
 
+Guillaume
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>> Fixes: dcaf03849352 ("rtc: add hym8563 rtc-driver")
+>> Reported-by: kernelci.org bot <bot@kernelci.org>
+>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+>> ---
+>>  drivers/rtc/rtc-hym8563.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+>> index 0fb79c4afb46..6fccfe634d57 100644
+>> --- a/drivers/rtc/rtc-hym8563.c
+>> +++ b/drivers/rtc/rtc-hym8563.c
+>> @@ -527,7 +527,7 @@ static int hym8563_probe(struct i2c_client *client,
+>>  	hym8563->client = client;
+>>  	i2c_set_clientdata(client, hym8563);
+>>  
+>> -	device_set_wakeup_capable(&client->dev, true);
+>> +	device_init_wakeup(&client->dev, true);
+>>  
+>>  	ret = hym8563_init_device(client);
+>>  	if (ret) {
+>> -- 
+>> 2.20.1
+>>
+> 
+
