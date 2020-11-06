@@ -2,88 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4032A9058
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Nov 2020 08:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E062A90C2
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Nov 2020 08:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgKFHbA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Nov 2020 02:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgKFHbA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Nov 2020 02:31:00 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0C8C0613CF;
-        Thu,  5 Nov 2020 23:30:59 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id e7so499074pfn.12;
-        Thu, 05 Nov 2020 23:30:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=PjmfGm4EXurKjtMQzJKg85PMtWxg6au6fvWpF4KZFQ0=;
-        b=k4JMvlIFGEdDNueJ49Y+2ob3zUipwp/qt9WNR78Oe/B51Jn1xMOPEQNfpx9mtrAsJv
-         xqOU+OfapRBwkkpwbF6wnrROHmyP6SC0T5CEMxCcOuogL3qaji63QJBNilt2LOuhEASO
-         5CNP4W5GA+JiY5K8kFoZHIIx5+1NRz+Fl3p+ByHMyN49PdTJgcTme721qlmiOBuEozmY
-         Drv3OBfUhxXuW+lMJSuNyJiytCPzTpH1FKgrpZa3moSyr2DB0MSs13r7ansesTEhlLJv
-         9WrzCKCCD9QNNoml0e0WFrDwKhD4dF4zNOx11yT3oGw2Hw0pTwhNeworsUZ+6USSBDa8
-         YwhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=PjmfGm4EXurKjtMQzJKg85PMtWxg6au6fvWpF4KZFQ0=;
-        b=izZW6hbdFUWDIKWFGc0uiQB6kEu/TWetK7vDykcOmFBbq2n6ybytdltFD0aOM0iLtb
-         eif5WitJg+c3nbxMRJ4BjbCeV+PeuK/a4blzZd4RKvyXA4OXgxq0RkEJCIdWo2ilq2Nr
-         rmeMmlJxC1d6LAn/WHjoZE2nUPgL46ZleI45RwyxKaLnnCg5VqGPdm8SDUqjQDvepU6O
-         xeepaB1TyM/OdEtMdloSgJhtg8yMBoSE+Avc9MAcSpXG7LJo52UacgsesFZMEgJGmWS6
-         js8w/Cfio5KSuSoEuuvn9vYqvTxTUwYIBfGVrkW3zQ6MHQBJ+7BipdP0q8atSD6GAmUp
-         4OzA==
-X-Gm-Message-State: AOAM530CDXhc6CsJbc0oqRK1HAYTd6cx1mKMaPUqqBfRH7hoGMCmYKlJ
-        BM0KO7hHKrXisCh37ifydppmL5UDro4R
-X-Google-Smtp-Source: ABdhPJzSyINIgRGoei5f7v8jixOWwh21HKdF3nGUmlNuqGJSOxo3tZ/+OsAcY0fcIbQs0ndJkiPCog==
-X-Received: by 2002:a17:90a:1596:: with SMTP id m22mr1066156pja.189.1604647859498;
-        Thu, 05 Nov 2020 23:30:59 -0800 (PST)
-Received: from he-cluster.localdomain (67.216.221.250.16clouds.com. [67.216.221.250])
-        by smtp.gmail.com with ESMTPSA id d7sm722973pgh.17.2020.11.05.23.30.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Nov 2020 23:30:58 -0800 (PST)
-From:   xiakaixu1987@gmail.com
-X-Google-Original-From: kaixuxia@tencent.com
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: [PATCH] rtc: sc27xx: Remove unnecessary conversion to bool
-Date:   Fri,  6 Nov 2020 15:30:54 +0800
-Message-Id: <1604647854-876-1-git-send-email-kaixuxia@tencent.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1726198AbgKFHwC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Nov 2020 02:52:02 -0500
+Received: from mail-out.m-online.net ([212.18.0.9]:54953 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgKFHwB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Nov 2020 02:52:01 -0500
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4CSCJv5f2nz1qs40;
+        Fri,  6 Nov 2020 08:51:59 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4CSCJv4tXcz1qsXK;
+        Fri,  6 Nov 2020 08:51:59 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id Ybuveroolus7; Fri,  6 Nov 2020 08:51:58 +0100 (CET)
+X-Auth-Info: BY844SkXa5gUbu0GGaOIMAyfkZxy2x9HqQ7e/5kNlZ0=
+Received: from [10.88.0.186] (dslb-088-074-220-167.088.074.pools.vodafone-ip.de [88.74.220.167])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Fri,  6 Nov 2020 08:51:58 +0100 (CET)
+Subject: Re: [PATCH 0/2] Adding I2C support to RX6110 RTC
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Henning Schild <henning.schild@siemens.com>,
+        Johannes Hahn <johannes-hahn@siemens.com>
+References: <20201104102629.3422048-1-ch@denx.de>
+ <20201105221451.GH1034841@piout.net>
+From:   Claudius Heine <ch@denx.de>
+Organization: Denx Software Engineering
+Message-ID: <69f2396b-c81d-fe65-eb91-3c7a86c8d769@denx.de>
+Date:   Fri, 6 Nov 2020 08:51:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
+MIME-Version: 1.0
+In-Reply-To: <20201105221451.GH1034841@piout.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Kaixu Xia <kaixuxia@tencent.com>
+Hi Alex,
 
-Here we could use the '!=' expression to fix the following coccicheck
-warning:
+On 2020-11-05 23:14, Alexandre Belloni wrote:
+> Hello Claudius!
+> 
+> It has been a while ;)
 
-./drivers/rtc/rtc-sc27xx.c:566:50-55: WARNING: conversion to bool not needed here
+yeah, lots of downstream stuff for me :/
 
-Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
-Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
----
- drivers/rtc/rtc-sc27xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> On 04/11/2020 11:26:27+0100, Claudius Heine wrote:
+>> Hi,
+>>
+>> this patch introduces I2C support to the RX6110 RTC driver and also adds
+>> an ACPI identifier to it.
+>>
+>> Since we are also pushing the coreboot changes for the ACPI table
+>> upstream in parallel, we are free to name this ACPI entry however we
+>> like it seems. So any feedback on that would be welcome ;)
+>>
+> 
+> I don't care too much about ACPI so if you are really looking for advice
+> there, I guess you should ask seom of the ACPI guys (but I guess you are
+> free to choose whatever you want).
 
-diff --git a/drivers/rtc/rtc-sc27xx.c b/drivers/rtc/rtc-sc27xx.c
-index 36810dd40cd3..6e65f68ea86d 100644
---- a/drivers/rtc/rtc-sc27xx.c
-+++ b/drivers/rtc/rtc-sc27xx.c
-@@ -563,7 +563,7 @@ static int sprd_rtc_check_power_down(struct sprd_rtc *rtc)
- 	 * means the RTC has been powered down, so the RTC time values are
- 	 * invalid.
- 	 */
--	rtc->valid = val == SPRD_RTC_POWER_RESET_VALUE ? false : true;
-+	rtc->valid = val != SPRD_RTC_POWER_RESET_VALUE;
- 	return 0;
- }
- 
--- 
-2.20.0
+As Henning said, we are also getting feedback from the coreboot people.
 
+See you hopefully soon again, when all this sitting at home is over.
+
+regards,
+Claudius
