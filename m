@@ -2,80 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2AE2A89CA
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 Nov 2020 23:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4032A9058
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Nov 2020 08:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732370AbgKEW2f (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Nov 2020 17:28:35 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53136 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732434AbgKEW2a (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 Nov 2020 17:28:30 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id 6A5451F46655
-Subject: Re: [PATCH] rtc: hym8563: enable wakeup by default
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <4a52fe66b327fd1974f86b7deb7e2c06d74fe64f.1604613067.git.guillaume.tucker@collabora.com>
- <20201105220938.GG1034841@piout.net>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-Message-ID: <03f589d0-9c6f-4a3b-4d42-8d3f66b13436@collabora.com>
-Date:   Thu, 5 Nov 2020 22:28:20 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
-MIME-Version: 1.0
-In-Reply-To: <20201105220938.GG1034841@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725848AbgKFHbA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Nov 2020 02:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbgKFHbA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Nov 2020 02:31:00 -0500
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0C8C0613CF;
+        Thu,  5 Nov 2020 23:30:59 -0800 (PST)
+Received: by mail-pf1-x441.google.com with SMTP id e7so499074pfn.12;
+        Thu, 05 Nov 2020 23:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=PjmfGm4EXurKjtMQzJKg85PMtWxg6au6fvWpF4KZFQ0=;
+        b=k4JMvlIFGEdDNueJ49Y+2ob3zUipwp/qt9WNR78Oe/B51Jn1xMOPEQNfpx9mtrAsJv
+         xqOU+OfapRBwkkpwbF6wnrROHmyP6SC0T5CEMxCcOuogL3qaji63QJBNilt2LOuhEASO
+         5CNP4W5GA+JiY5K8kFoZHIIx5+1NRz+Fl3p+ByHMyN49PdTJgcTme721qlmiOBuEozmY
+         Drv3OBfUhxXuW+lMJSuNyJiytCPzTpH1FKgrpZa3moSyr2DB0MSs13r7ansesTEhlLJv
+         9WrzCKCCD9QNNoml0e0WFrDwKhD4dF4zNOx11yT3oGw2Hw0pTwhNeworsUZ+6USSBDa8
+         YwhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=PjmfGm4EXurKjtMQzJKg85PMtWxg6au6fvWpF4KZFQ0=;
+        b=izZW6hbdFUWDIKWFGc0uiQB6kEu/TWetK7vDykcOmFBbq2n6ybytdltFD0aOM0iLtb
+         eif5WitJg+c3nbxMRJ4BjbCeV+PeuK/a4blzZd4RKvyXA4OXgxq0RkEJCIdWo2ilq2Nr
+         rmeMmlJxC1d6LAn/WHjoZE2nUPgL46ZleI45RwyxKaLnnCg5VqGPdm8SDUqjQDvepU6O
+         xeepaB1TyM/OdEtMdloSgJhtg8yMBoSE+Avc9MAcSpXG7LJo52UacgsesFZMEgJGmWS6
+         js8w/Cfio5KSuSoEuuvn9vYqvTxTUwYIBfGVrkW3zQ6MHQBJ+7BipdP0q8atSD6GAmUp
+         4OzA==
+X-Gm-Message-State: AOAM530CDXhc6CsJbc0oqRK1HAYTd6cx1mKMaPUqqBfRH7hoGMCmYKlJ
+        BM0KO7hHKrXisCh37ifydppmL5UDro4R
+X-Google-Smtp-Source: ABdhPJzSyINIgRGoei5f7v8jixOWwh21HKdF3nGUmlNuqGJSOxo3tZ/+OsAcY0fcIbQs0ndJkiPCog==
+X-Received: by 2002:a17:90a:1596:: with SMTP id m22mr1066156pja.189.1604647859498;
+        Thu, 05 Nov 2020 23:30:59 -0800 (PST)
+Received: from he-cluster.localdomain (67.216.221.250.16clouds.com. [67.216.221.250])
+        by smtp.gmail.com with ESMTPSA id d7sm722973pgh.17.2020.11.05.23.30.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Nov 2020 23:30:58 -0800 (PST)
+From:   xiakaixu1987@gmail.com
+X-Google-Original-From: kaixuxia@tencent.com
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kaixu Xia <kaixuxia@tencent.com>
+Subject: [PATCH] rtc: sc27xx: Remove unnecessary conversion to bool
+Date:   Fri,  6 Nov 2020 15:30:54 +0800
+Message-Id: <1604647854-876-1-git-send-email-kaixuxia@tencent.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/11/2020 22:09, Alexandre Belloni wrote:
-> On 05/11/2020 22:01:10+0000, Guillaume Tucker wrote:
->> Enable wakeup by default in the hym8563 driver to match the behaviour
->> implemented by the majority of RTC drivers.  As per the description of
->> device_init_wakeup(), it should be enabled for "devices that everyone
->> expects to be wakeup sources".  One would expect this to be the case
->> with a real-time clock.
->>
-> 
-> Actually, the proper way of doing it for a discrete RTC is to only
-> enable wakeup if the irq request is successful or when the wakeup-source
-> property is present on the node.
+From: Kaixu Xia <kaixuxia@tencent.com>
 
-Thanks for the quick reply.  I see, I'll send a v2 accordingly.
+Here we could use the '!=' expression to fix the following coccicheck
+warning:
 
-Guillaume
+./drivers/rtc/rtc-sc27xx.c:566:50-55: WARNING: conversion to bool not needed here
 
->> Fixes: dcaf03849352 ("rtc: add hym8563 rtc-driver")
->> Reported-by: kernelci.org bot <bot@kernelci.org>
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
->>  drivers/rtc/rtc-hym8563.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
->> index 0fb79c4afb46..6fccfe634d57 100644
->> --- a/drivers/rtc/rtc-hym8563.c
->> +++ b/drivers/rtc/rtc-hym8563.c
->> @@ -527,7 +527,7 @@ static int hym8563_probe(struct i2c_client *client,
->>  	hym8563->client = client;
->>  	i2c_set_clientdata(client, hym8563);
->>  
->> -	device_set_wakeup_capable(&client->dev, true);
->> +	device_init_wakeup(&client->dev, true);
->>  
->>  	ret = hym8563_init_device(client);
->>  	if (ret) {
->> -- 
->> 2.20.1
->>
-> 
+Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
+Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+---
+ drivers/rtc/rtc-sc27xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-sc27xx.c b/drivers/rtc/rtc-sc27xx.c
+index 36810dd40cd3..6e65f68ea86d 100644
+--- a/drivers/rtc/rtc-sc27xx.c
++++ b/drivers/rtc/rtc-sc27xx.c
+@@ -563,7 +563,7 @@ static int sprd_rtc_check_power_down(struct sprd_rtc *rtc)
+ 	 * means the RTC has been powered down, so the RTC time values are
+ 	 * invalid.
+ 	 */
+-	rtc->valid = val == SPRD_RTC_POWER_RESET_VALUE ? false : true;
++	rtc->valid = val != SPRD_RTC_POWER_RESET_VALUE;
+ 	return 0;
+ }
+ 
+-- 
+2.20.0
 
