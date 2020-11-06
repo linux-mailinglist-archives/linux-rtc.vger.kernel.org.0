@@ -2,90 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C961B2A91DE
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Nov 2020 09:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D58A2A9219
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Nov 2020 10:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgKFI6J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Nov 2020 03:58:09 -0500
-Received: from thoth.sbs.de ([192.35.17.2]:46365 "EHLO thoth.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbgKFI6J (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 6 Nov 2020 03:58:09 -0500
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by thoth.sbs.de (8.15.2/8.15.2) with ESMTPS id 0A68vwGM012450
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 6 Nov 2020 09:57:58 +0100
-Received: from md1za8fc.ad001.siemens.net ([139.22.116.104])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 0A68vvBR001908;
-        Fri, 6 Nov 2020 09:57:58 +0100
-Date:   Fri, 6 Nov 2020 09:57:56 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Claudius Heine <ch@denx.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Johannes Hahn <johannes-hahn@siemens.com>,
-        <werner.zeh@siemens.com>
-Subject: Re: [PATCH 0/2]  Adding I2C support to RX6110 RTC
-Message-ID: <20201106095756.0dd8f267@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20201106075908.GJ1034841@piout.net>
-References: <20201104102629.3422048-1-ch@denx.de>
-        <20201105221451.GH1034841@piout.net>
-        <20201106084034.0ea09ea3@md1za8fc.ad001.siemens.net>
-        <20201106075908.GJ1034841@piout.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726028AbgKFJGl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Nov 2020 04:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgKFJGk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Nov 2020 04:06:40 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77674C0613CF;
+        Fri,  6 Nov 2020 01:06:40 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id 7CFBB1F467A1
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Guillaume Tucker <guillaume.tucker@collabora.com>
+Subject: [PATCH v2] rtc: hym8563: enable wakeup when applicable
+Date:   Fri,  6 Nov 2020 09:06:31 +0000
+Message-Id: <1ea023e2ba50a4dab6e39be93d7de3146af71a60.1604653374.git.guillaume.tucker@collabora.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Am Fri, 6 Nov 2020 08:59:08 +0100
-schrieb Alexandre Belloni <alexandre.belloni@bootlin.com>:
+Enable wakeup in the hym8563 driver if the IRQ was successfully
+requested or if wakeup-source is set in the devicetree.
 
-> On 06/11/2020 08:40:34+0100, Henning Schild wrote:
-> > Hi,
-> > 
-> > Am Thu, 5 Nov 2020 23:14:51 +0100
-> > schrieb Alexandre Belloni <alexandre.belloni@bootlin.com>:
-> >   
-> > > Hello Claudius!
-> > > 
-> > > It has been a while ;)
-> > > 
-> > > On 04/11/2020 11:26:27+0100, Claudius Heine wrote:  
-> > > > Hi,
-> > > > 
-> > > > this patch introduces I2C support to the RX6110 RTC driver and
-> > > > also adds an ACPI identifier to it.
-> > > > 
-> > > > Since we are also pushing the coreboot changes for the ACPI
-> > > > table upstream in parallel, we are free to name this ACPI entry
-> > > > however we like it seems. So any feedback on that would be
-> > > > welcome ;) 
-> > > 
-> > > I don't care too much about ACPI so if you are really looking for
-> > > advice there, I guess you should ask seom of the ACPI guys (but I
-> > > guess you are free to choose whatever you want).
-> > >   
-> > 
-> > This is the coreboot stuff currently under review.
-> > 
-> > https://review.coreboot.org/c/coreboot/+/47235
-> >   
-> 
-> I can't really comment on the patch, however another part is worrying:
-> if VLF is set, coreboot is resetting the time to a valid value (user
-> defined or the build date). This is nasty because this hides the event
-> from the kernel and ulimately, userspace has no way of knowing whether
-> the RTC date is the real date or just a dummy date.
+As per the description of device_init_wakeup(), it should be enabled
+for "devices that everyone expects to be wakeup sources".  One would
+expect this to be the case with a real-time clock.
 
-Is that worrying problem part of the patch, or just a general
-observation looking at their driver?
+Tested on rk3288-rock2-square, which has an IRQ configured for the
+RTC.  As a result, wakeup was enabled during driver initialisation.
 
-I think in the patches we should focus on whether I2C and ACPI support
-should be added, and how.
+Fixes: dcaf03849352 ("rtc: add hym8563 rtc-driver")
+Reported-by: kernelci.org bot <bot@kernelci.org>
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+---
 
-Henning
+Notes:
+    v2: enable wakeup if irq or wakeup-source
+
+ drivers/rtc/rtc-hym8563.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
+index 0fb79c4afb46..24e0095be058 100644
+--- a/drivers/rtc/rtc-hym8563.c
++++ b/drivers/rtc/rtc-hym8563.c
+@@ -527,8 +527,6 @@ static int hym8563_probe(struct i2c_client *client,
+ 	hym8563->client = client;
+ 	i2c_set_clientdata(client, hym8563);
+ 
+-	device_set_wakeup_capable(&client->dev, true);
+-
+ 	ret = hym8563_init_device(client);
+ 	if (ret) {
+ 		dev_err(&client->dev, "could not init device, %d\n", ret);
+@@ -547,6 +545,11 @@ static int hym8563_probe(struct i2c_client *client,
+ 		}
+ 	}
+ 
++	if (client->irq > 0 ||
++	    device_property_read_bool(&client->dev, "wakeup-source")) {
++		device_init_wakeup(&client->dev, true);
++	}
++
+ 	/* check state of calendar information */
+ 	ret = i2c_smbus_read_byte_data(client, HYM8563_SEC);
+ 	if (ret < 0)
+-- 
+2.20.1
 
