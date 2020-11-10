@@ -2,85 +2,71 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F34362ACB70
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 Nov 2020 04:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E5E2AD28E
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Nov 2020 10:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729706AbgKJDAw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Nov 2020 22:00:52 -0500
-Received: from smtprelay0240.hostedemail.com ([216.40.44.240]:39336 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729243AbgKJDAv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Nov 2020 22:00:51 -0500
-X-Greylist: delayed 517 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 22:00:51 EST
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id E3D6C812416B;
-        Tue, 10 Nov 2020 02:52:18 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id F008012CB;
-        Tue, 10 Nov 2020 02:52:13 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:4321:4605:5007:6117:6119:6742:6743:7652:7875:7903:8660:10004:10400:10848:11232:11658:11783:11914:12043:12048:12297:12679:12740:12895:13019:13069:13148:13230:13311:13357:13439:13894:14181:14659:14721:21080:21451:21627:21939:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: ink22_1714ef1272f1
-X-Filterd-Recvd-Size: 2439
-Received: from [192.168.0.160] (cpe-72-134-80-165.natsow.res.rr.com [72.134.80.165])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 10 Nov 2020 02:52:09 +0000 (UTC)
-Message-ID: <3c39c363690d0b46069afddc3ad09213011e5cd4.camel@perches.com>
-Subject: Re: Subject: [RFC] clang tooling cleanups
-From:   Joe Perches <joe@perches.com>
-To:     trix@redhat.com, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com, cocci <cocci@systeme.lip6.fr>
-Cc:     linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
-        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
-Date:   Mon, 09 Nov 2020 18:52:08 -0800
-In-Reply-To: <20201027164255.1573301-1-trix@redhat.com>
-References: <20201027164255.1573301-1-trix@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1726213AbgKJJfW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 Nov 2020 04:35:22 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7166 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbgKJJfV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 Nov 2020 04:35:21 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CVjQ75Sjwz15Sl2;
+        Tue, 10 Nov 2020 17:35:11 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 10 Nov 2020 17:35:16 +0800
+From:   Tian Tao <tiantao6@hisilicon.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] rtc: cpcap: Fix missing IRQF_ONESHOT as only threaded handler
+Date:   Tue, 10 Nov 2020 17:35:47 +0800
+Message-ID: <1605000947-32882-1-git-send-email-tiantao6@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2020-10-27 at 09:42 -0700, trix@redhat.com wrote:
-> This rfc will describe
-> An upcoming treewide cleanup.
-> How clang tooling was used to programatically do the clean up.
-> Solicit opinions on how to generally use clang tooling.
-> 
-> The clang warning -Wextra-semi-stmt produces about 10k warnings.
-> Reviewing these, a subset of semicolon after a switch looks safe to
-> fix all the time.  An example problem
-> 
-> void foo(int a) {
->      switch(a) {
->      	       case 1:
-> 	       ...
->      }; <--- extra semicolon
-> }
-> 
-> Treewide, there are about 100 problems in 50 files for x86_64 allyesconfig.
-> These fixes will be the upcoming cleanup.
+Coccinelle noticed:
+drivers/rtc/rtc-cpcap.c:271:7-32: ERROR: Threaded IRQ with no
+primary handler requested without IRQF_ONESHOT
+drivers/rtc/rtc-cpcap.c:287:7-32: ERROR: Threaded IRQ with no
+primary handler requested without IRQF_ONESHOT
 
-coccinelle already does some of these.
+Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
+---
+ drivers/rtc/rtc-cpcap.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-For instance: scripts/coccinelle/misc/semicolon.cocci
-
-Perhaps some tool coordination can be done here as
-coccinelle/checkpatch/clang/Lindent call all be used
-to do some facet or another of these cleanup issues.
-
-
+diff --git a/drivers/rtc/rtc-cpcap.c b/drivers/rtc/rtc-cpcap.c
+index 800667d..38d576b 100644
+--- a/drivers/rtc/rtc-cpcap.c
++++ b/drivers/rtc/rtc-cpcap.c
+@@ -269,7 +269,8 @@ static int cpcap_rtc_probe(struct platform_device *pdev)
+ 
+ 	rtc->alarm_irq = platform_get_irq(pdev, 0);
+ 	err = devm_request_threaded_irq(dev, rtc->alarm_irq, NULL,
+-					cpcap_rtc_alarm_irq, IRQF_TRIGGER_NONE,
++					cpcap_rtc_alarm_irq,
++					IRQF_TRIGGER_NONE | IRQF_ONESHOT,
+ 					"rtc_alarm", rtc);
+ 	if (err) {
+ 		dev_err(dev, "Could not request alarm irq: %d\n", err);
+@@ -285,7 +286,8 @@ static int cpcap_rtc_probe(struct platform_device *pdev)
+ 	 */
+ 	rtc->update_irq = platform_get_irq(pdev, 1);
+ 	err = devm_request_threaded_irq(dev, rtc->update_irq, NULL,
+-					cpcap_rtc_update_irq, IRQF_TRIGGER_NONE,
++					cpcap_rtc_update_irq,
++					IRQF_TRIGGER_NONE | IRQF_ONESHOT,
+ 					"rtc_1hz", rtc);
+ 	if (err) {
+ 		dev_err(dev, "Could not request update irq: %d\n", err);
+-- 
+2.7.4
 
