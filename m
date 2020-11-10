@@ -2,142 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB742AC0F8
-	for <lists+linux-rtc@lfdr.de>; Mon,  9 Nov 2020 17:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34362ACB70
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 Nov 2020 04:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730480AbgKIQem (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 9 Nov 2020 11:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730502AbgKIQe3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Nov 2020 11:34:29 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B3EC0613D6
-        for <linux-rtc@vger.kernel.org>; Mon,  9 Nov 2020 08:34:29 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id p22so8546806wmg.3
-        for <linux-rtc@vger.kernel.org>; Mon, 09 Nov 2020 08:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VBKmNaU6GzDEF2v8GsYhoQiOn0zT7fReWvIysKZmWgI=;
-        b=N0W8LFoNVa0dpGQmQ48le1Ab9L5UxXqxtwU/lI1MyEUXNapCeCNSLhmx/lljZ2lzY9
-         t9Zn4gqpIaNiEmz3pJl1Gm1JgqBqlkCrFQYzE7QwFjXAeWrs9sGGnkR2kSfCJcr5ZkOY
-         xO0PZ2TGnYtIG/Kor9NEhLfJZavYKGhwKEXjS4pE03DOVNsDgwuyY/WIcylnJ3WifmBx
-         RCSSZNuuGDYrtQpDTmqVDOoZXf2uxh8I8PnxRYfeO4HO/Xd+41Zbiy1tQZx2CEhsRoIQ
-         8mJn9DlCY955T6RRm27tcVJeen+5s+P7wHSsQ+vf3qoaWc5ZpV2mCNLg8oMdLF9RNMtH
-         CnkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VBKmNaU6GzDEF2v8GsYhoQiOn0zT7fReWvIysKZmWgI=;
-        b=ap52s/EyBBat50mwO8scPnY6my7r6p8d1P/mpyYxjxsCAAE4cqTOfYgXQsroPnbEU+
-         JlALrIiK0C90ZvMWtZ3azlE+HEG5PvyCWXuHJ6/CXx7RZxBLBYbXaiQN/b7q+u3r7isN
-         u+P2SMPAYtvxXz3jUkyUcjGLjiPUhEnV2Vez1yQDBEx2iDYlIfGloR5lOdm9jrcGK3PH
-         UN7rp6p228D8ktlrTslqWgpIGWT1RYuyqjBQl2I7RJTA031VH+WiTcmlzSH09lYotpzl
-         h3oppt9xDj0wgGO9hK2iVNmdcHSK3yAaxZnMPTAY/bCYDw72w9K7me1kJwzLslJXyTVY
-         3rPw==
-X-Gm-Message-State: AOAM5339mMch3LfILkTgI1YRtMc/k0BN9JHGrANqRI87Koz6HqI5OHgS
-        6TyH5rAl3bst4x3LOJk4T8Vs/w==
-X-Google-Smtp-Source: ABdhPJwcyJzgDmPBmOFmreWEJzPWVt2t1FRZO6tgAevOrfZzo3hvImiL7px5w9jYTtd2fyhXInIe8A==
-X-Received: by 2002:a1c:a90e:: with SMTP id s14mr11578wme.46.1604939668010;
-        Mon, 09 Nov 2020 08:34:28 -0800 (PST)
-Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id 89sm15072542wrp.58.2020.11.09.08.34.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Nov 2020 08:34:27 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 8/8] rtc: shrink devm_rtc_allocate_device()
-Date:   Mon,  9 Nov 2020 17:34:09 +0100
-Message-Id: <20201109163409.24301-9-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201109163409.24301-1-brgl@bgdev.pl>
-References: <20201109163409.24301-1-brgl@bgdev.pl>
+        id S1729706AbgKJDAw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 9 Nov 2020 22:00:52 -0500
+Received: from smtprelay0240.hostedemail.com ([216.40.44.240]:39336 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729243AbgKJDAv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 9 Nov 2020 22:00:51 -0500
+X-Greylist: delayed 517 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 22:00:51 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id E3D6C812416B;
+        Tue, 10 Nov 2020 02:52:18 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id F008012CB;
+        Tue, 10 Nov 2020 02:52:13 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:982:988:989:1260:1261:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:4321:4605:5007:6117:6119:6742:6743:7652:7875:7903:8660:10004:10400:10848:11232:11658:11783:11914:12043:12048:12297:12679:12740:12895:13019:13069:13148:13230:13311:13357:13439:13894:14181:14659:14721:21080:21451:21627:21939:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: ink22_1714ef1272f1
+X-Filterd-Recvd-Size: 2439
+Received: from [192.168.0.160] (cpe-72-134-80-165.natsow.res.rr.com [72.134.80.165])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 10 Nov 2020 02:52:09 +0000 (UTC)
+Message-ID: <3c39c363690d0b46069afddc3ad09213011e5cd4.camel@perches.com>
+Subject: Re: Subject: [RFC] clang tooling cleanups
+From:   Joe Perches <joe@perches.com>
+To:     trix@redhat.com, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com, cocci <cocci@systeme.lip6.fr>
+Cc:     linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qat-linux@intel.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-samsung-soc@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Date:   Mon, 09 Nov 2020 18:52:08 -0800
+In-Reply-To: <20201027164255.1573301-1-trix@redhat.com>
+References: <20201027164255.1573301-1-trix@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Tue, 2020-10-27 at 09:42 -0700, trix@redhat.com wrote:
+> This rfc will describe
+> An upcoming treewide cleanup.
+> How clang tooling was used to programatically do the clean up.
+> Solicit opinions on how to generally use clang tooling.
+> 
+> The clang warning -Wextra-semi-stmt produces about 10k warnings.
+> Reviewing these, a subset of semicolon after a switch looks safe to
+> fix all the time.  An example problem
+> 
+> void foo(int a) {
+>      switch(a) {
+>      	       case 1:
+> 	       ...
+>      }; <--- extra semicolon
+> }
+> 
+> Treewide, there are about 100 problems in 50 files for x86_64 allyesconfig.
+> These fixes will be the upcoming cleanup.
 
-We don't need to use devres_alloc() & devres_add() manually if all we
-want to manage is a single pointer. We can shrink the code by using
-devm_add_action_or_reset() instead. The number of allocations stays
-the same.
+coccinelle already does some of these.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- drivers/rtc/class.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+For instance: scripts/coccinelle/misc/semicolon.cocci
 
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index b8a34ee039ad..a1b3711aaf01 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -337,48 +337,37 @@ static void devm_rtc_unregister_device(void *data)
- 	put_device(&rtc->dev);
- }
- 
--static void devm_rtc_release_device(struct device *dev, void *res)
-+static void devm_rtc_release_device(void *res)
- {
--	struct rtc_device *rtc = *(struct rtc_device **)res;
-+	struct rtc_device *rtc = res;
- 
- 	put_device(&rtc->dev);
- }
- 
- struct rtc_device *devm_rtc_allocate_device(struct device *dev)
- {
--	struct rtc_device **ptr, *rtc;
-+	struct rtc_device *rtc;
- 	int id, err;
- 
- 	id = rtc_device_get_id(dev);
- 	if (id < 0)
- 		return ERR_PTR(id);
- 
--	ptr = devres_alloc(devm_rtc_release_device, sizeof(*ptr), GFP_KERNEL);
--	if (!ptr) {
--		err = -ENOMEM;
--		goto exit_ida;
--	}
--
- 	rtc = rtc_allocate_device();
- 	if (!rtc) {
--		err = -ENOMEM;
--		goto exit_devres;
-+		ida_simple_remove(&rtc_ida, id);
-+		return ERR_PTR(-ENOMEM);
- 	}
- 
--	*ptr = rtc;
--	devres_add(dev, ptr);
--
- 	rtc->id = id;
- 	rtc->dev.parent = dev;
- 	dev_set_name(&rtc->dev, "rtc%d", id);
- 
--	return rtc;
-+	err = devm_add_action_or_reset(dev, devm_rtc_release_device, rtc);
-+	if (err)
-+		return ERR_PTR(err);
- 
--exit_devres:
--	devres_free(ptr);
--exit_ida:
--	ida_simple_remove(&rtc_ida, id);
--	return ERR_PTR(err);
-+	return rtc;
- }
- EXPORT_SYMBOL_GPL(devm_rtc_allocate_device);
- 
--- 
-2.29.1
+Perhaps some tool coordination can be done here as
+coccinelle/checkpatch/clang/Lindent call all be used
+to do some facet or another of these cleanup issues.
+
+
 
