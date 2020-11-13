@@ -2,52 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF40A2B179A
-	for <lists+linux-rtc@lfdr.de>; Fri, 13 Nov 2020 09:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2993A2B1CEB
+	for <lists+linux-rtc@lfdr.de>; Fri, 13 Nov 2020 15:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbgKMI4g (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 13 Nov 2020 03:56:36 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44084 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbgKMI4f (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 13 Nov 2020 03:56:35 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id B89A21F4680B
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     Benson Leung <bleung@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     kernel@collabora.com, Alessandro Zummo <a.zummo@towertech.it>,
-        Guenter Roeck <groeck@chromium.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] platform/chrome: Don't treat RTC events as wakeup sources
-Date:   Fri, 13 Nov 2020 09:56:25 +0100
-Message-Id: <160521341449.487210.11292541473208275402.b4-ty@collabora.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201030232523.2654478-1-swboyd@chromium.org>
-References: <20201030232523.2654478-1-swboyd@chromium.org>
+        id S1726324AbgKMOKh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 13 Nov 2020 09:10:37 -0500
+Received: from mga12.intel.com ([192.55.52.136]:10875 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726278AbgKMOKh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 13 Nov 2020 09:10:37 -0500
+IronPort-SDR: FOU0VfpkOoG885ABBCVCRqJrr+fqZDj/GHRQk1o3wN5rShsAOrBdPUpW11pEIfvQBdSPgHsvWM
+ qLokGGdp7sjw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9803"; a="149744757"
+X-IronPort-AV: E=Sophos;i="5.77,475,1596524400"; 
+   d="scan'208";a="149744757"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2020 06:10:37 -0800
+IronPort-SDR: 4UJhCmPrxvYp9nMv9XR0Vicnv7PKmSfXgX2gyxuUDqOdPjwfcurt4zTGbCnupiS/JhZc926P1/
+ Nmpxy5a3yelQ==
+X-IronPort-AV: E=Sophos;i="5.77,475,1596524400"; 
+   d="scan'208";a="474672813"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2020 06:10:35 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1kdZnd-006SvZ-95; Fri, 13 Nov 2020 16:11:37 +0200
+Date:   Fri, 13 Nov 2020 16:11:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v1 1/3] rtc: ds1307: Remove non-valid ACPI IDs
+Message-ID: <20201113141137.GO4077@smile.fi.intel.com>
+References: <20201112155753.36834-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0hNBguxETML2rjweXEp6=iyxRyMNBcTYaLpwjO+ZposRw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hNBguxETML2rjweXEp6=iyxRyMNBcTYaLpwjO+ZposRw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 30 Oct 2020 16:25:23 -0700, Stephen Boyd wrote:
-> The EC sends an RTC host event when the RTC fires, but we don't need to
-> treat that as a wakeup event here. The RTC class already properly
-> handles activating and deactivating a wakeup source in rtc_update_irq()
-> by calling pm_stay_awake() at the start of processing and pm_relax()
-> once all expired RTC timers have been processed. This reduces one wakeup
-> increment but not much else. I noticed this while debugging RTC wakeups
-> and how they always incremented the wakeup count by two instead of one
-> because this is duplicated.
+On Thu, Nov 12, 2020 at 08:01:37PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 12, 2020 at 4:58 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > The commit 9c19b8930d2c ("rtc: ds1307: Add ACPI support") added non-valid
+> 
+> s/non-valid/invalid/ ?
+> 
+> > ACPI IDs (all of them abusing ACPI specification). Moreover there is
+> > no even a single evidence that vendor registered any of such device.
+> 
+> "not even" and "devices".
+> 
+> > Remove broken ACPI IDs from the driver. For prototyping one may use PRP0001
+> > with device tree defined bindings.
+> 
+> "with device properties adhering to a DT binding". ?
+> 
+> > The following patches will add support of that to the driver.
 
-Applied, thanks!
+Rafael, thanks for review, I will address them all in v2.
 
-[1/1] platform/chrome: Don't treat RTC events as wakeup sources
-      commit: 853c1a789f5fe8e783586a5c2dcc2ad1b57ac20f
-
-Best regards,
 -- 
-Enric Balletbo i Serra <enric.balletbo@collabora.com>
+With Best Regards,
+Andy Shevchenko
+
+
