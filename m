@@ -2,103 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1722B49AD
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 16:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF6F2B4A42
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 17:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730490AbgKPPnO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Nov 2020 10:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730454AbgKPPnN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Nov 2020 10:43:13 -0500
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E713C0613CF
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 07:43:13 -0800 (PST)
-Received: by mail-qv1-xf41.google.com with SMTP id q7so8925308qvt.12
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 07:43:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=IQokPdFEZfluC4ijyBw8XznizMKctgFn2XHTZjld/Hc=;
-        b=CO3tgbD5dc7CSfnFvzvN/c0PQBY8gt5CwbauNJfpbrxHUJpOLzowfVBxV1LEaDpXu9
-         rosuKuUzFdbNMTf2IipU/DF0d7PJWUpLj1ou3Mg0z8kNMxTtTguAeiD3x9NkO0eDefHE
-         azGuuCoWretqF2WBjt3ua79tueb+Em5P+zBpptsG95ZfT/wAF5p6hv0N+uybHGZOts3V
-         jA8Mc0bsQEqXBLKHB8Uf/u7FvTbBvOBdisvS+5fqtP8LsiTiG9cgX2/0UWamtC5K674Y
-         OGrawicUwC77js4Zp7Imq+uwtC1HISrZrwffI9hF+KbicX+WWuacXQyNFVViUhysvZLL
-         CcKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IQokPdFEZfluC4ijyBw8XznizMKctgFn2XHTZjld/Hc=;
-        b=oepUNQTXIpOeMaAiyg2kszPHP5GKPufQBCDyeEc5tU+IoSPbNqMyvGKWrBa3mqLQlK
-         OhpCeoVJo1MSbyMtjFK94XRVat9Zo3/1WEUvBZ1/eNMWRaAQ1zMjlFvz9NPsqS24N6Jm
-         lYrH11eLelrrl4zfEXbuCqADtvXZSThYXuk/7zpclKowdV91umB1Nif6ti4Rs6h8gCDf
-         EXmyGO5rWyJTGnsqEhTsY3kiZWBaWXr3uytpBiAnapprwHBKbH9kH8EsWQKl7MK9Tkv3
-         f1qIwGuVKoXzEYJGNUQGvjl6Iz8uWBG8OmtsULZLwFiqQM8wB3u/51prE4E4QSfwAtgm
-         2xYg==
-X-Gm-Message-State: AOAM533nV+6eSjMnpjpRK4vHQ2j29dxKGroyUP1tLNF8/xXts12yYrG1
-        qWsI0l+R40+hkpYbLxZp4n4=
-X-Google-Smtp-Source: ABdhPJwQhamC2aeq6ZkH94NzcBfvlaF5z4/0ojpaWNXPh9Zj0MNMa8NBFBScGKZYiNo9BB18NZq0tA==
-X-Received: by 2002:a0c:f9c8:: with SMTP id j8mr16581048qvo.17.1605541392272;
-        Mon, 16 Nov 2020 07:43:12 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:482:997:213a:a240:fc07:36c8])
-        by smtp.gmail.com with ESMTPSA id x5sm12873960qtx.61.2020.11.16.07.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 07:43:11 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] rtc: mxc: Remove unused .id_table support
-Date:   Mon, 16 Nov 2020 12:43:03 -0300
-Message-Id: <20201116154303.15055-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728858AbgKPQEb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Nov 2020 11:04:31 -0500
+Received: from mga17.intel.com ([192.55.52.151]:53685 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727260AbgKPQEa (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 16 Nov 2020 11:04:30 -0500
+IronPort-SDR: VaTaO+QCHqM9x/dkS1k/eum4zpEBNnk7wmxgcJbVaDZKjgwY4NR2Nl6mRU9UYt1PF+9HQh9KbT
+ eWuR9sACTwOw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="150616085"
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="150616085"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 08:04:09 -0800
+IronPort-SDR: 0unAbwK+HMCIwNV5k3wvnwAz+sq+OYHg/xWnydUE2CNVwt2vw5xVUvqwWyMqeujn8XzeN8ssFP
+ nfhtasxvaLAQ==
+X-IronPort-AV: E=Sophos;i="5.77,483,1596524400"; 
+   d="scan'208";a="533461977"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2020 08:04:07 -0800
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1keh09-0076En-Rd; Mon, 16 Nov 2020 18:05:09 +0200
+Date:   Mon, 16 Nov 2020 18:05:09 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Claudius Heine <ch@denx.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johannes Hahn <johannes-hahn@siemens.com>,
+        "Zeh, Werner" <werner.zeh@siemens.com>
+Subject: Re: [PATCH v2 2/3] rtc: rx6110: add ACPI bindings to I2C
+Message-ID: <20201116160509.GA4077@smile.fi.intel.com>
+References: <20201112130734.331094-1-ch@denx.de>
+ <20201112130734.331094-3-ch@denx.de>
+ <20201116144631.GB1689012@smile.fi.intel.com>
+ <20201116163024.74c767b6@md1za8fc.ad001.siemens.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201116163024.74c767b6@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
-.id_table support in this driver was only useful for old non-devicetree
-platforms.
+On Mon, Nov 16, 2020 at 04:30:24PM +0100, Henning Schild wrote:
+> Am Mon, 16 Nov 2020 16:46:31 +0200
+> schrieb Andy Shevchenko <andriy.shevchenko@intel.com>:
+> 
+> > On Thu, Nov 12, 2020 at 02:07:33PM +0100, Claudius Heine wrote:
+> > > From: Johannes Hahn <johannes-hahn@siemens.com>
+> > > 
+> > > This allows the RX6110 driver to be automatically assigned to the
+> > > right device on the I2C bus.  
+> > 
+> > Before adding new ACPI ID, can you provide an evidence (either from
+> > vendor of the component, or a real snapshot of DSDT from device on
+> > market) that this is real ID?
+> > 
+> > Before that happens, NAK.
+> > 
+> > P.S. Seems to me that this is kinda cargo cult patch because proposed
+> > ID is against ACPI and PNP registry and ACPI specification.
+> 
+> In fact we pushed it in coreboot and Linux at the same time.
+> 
+> https://review.coreboot.org/c/coreboot/+/47235
+> 
+> That is the evidence. But in case this is wrong we can probably still
+> change coreboot, even though the patches have been merged there already.
 
-Get rid of the .id_table since it is no longer used.
+Yes, first of all you must follow ACPI and PNP registry. You may use your
+Google vendor ID for that (IIRC you have two of them). Ideally you need to
+convince Seiko Epson to do the right thing.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/rtc/rtc-mxc.c | 14 --------------
- 1 file changed, 14 deletions(-)
+> Maybe you can go into detail where you see the violations and maybe
+> even suggest fixes that come to mind.
 
-diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
-index a8cfbde048f4..78d7fba00895 100644
---- a/drivers/rtc/rtc-mxc.c
-+++ b/drivers/rtc/rtc-mxc.c
-@@ -70,19 +70,6 @@ struct rtc_plat_data {
- 	enum imx_rtc_type devtype;
- };
- 
--static const struct platform_device_id imx_rtc_devtype[] = {
--	{
--		.name = "imx1-rtc",
--		.driver_data = IMX1_RTC,
--	}, {
--		.name = "imx21-rtc",
--		.driver_data = IMX21_RTC,
--	}, {
--		/* sentinel */
--	}
--};
--MODULE_DEVICE_TABLE(platform, imx_rtc_devtype);
--
- #ifdef CONFIG_OF
- static const struct of_device_id imx_rtc_dt_ids[] = {
- 	{ .compatible = "fsl,imx1-rtc", .data = (const void *)IMX1_RTC },
-@@ -438,7 +425,6 @@ static struct platform_driver mxc_rtc_driver = {
- 		   .name	= "mxc_rtc",
- 		   .of_match_table = of_match_ptr(imx_rtc_dt_ids),
- 	},
--	.id_table = imx_rtc_devtype,
- 	.probe = mxc_rtc_probe,
- };
- 
+Please, read ACPI specification. In particular chapters 6.1.2 "_CID
+(Compatible ID)", 6.1.5 "_HID (Hardware ID)". The latter clarifies
+the rules used to define an ID. Note, chapter 6.1.2 uses in particular
+"A valid HID value".
+
+I hope you are using as latest as possible ACPICA compiler (or at least
+the one which follows the latest changes in it).
+
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
