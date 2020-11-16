@@ -2,86 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2843C2B4CB9
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 18:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28752B4D55
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 18:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731203AbgKPR0z (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Nov 2020 12:26:55 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:48401 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731195AbgKPR0z (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Nov 2020 12:26:55 -0500
-X-Originating-IP: 86.194.74.19
+        id S1732968AbgKPRgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Nov 2020 12:36:21 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:37031 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731590AbgKPRgU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Nov 2020 12:36:20 -0500
 Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 5A424240002;
-        Mon, 16 Nov 2020 17:26:53 +0000 (UTC)
-Date:   Mon, 16 Nov 2020 18:26:53 +0100
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 9B3BF100043;
+        Mon, 16 Nov 2020 17:36:18 +0000 (UTC)
+Date:   Mon, 16 Nov 2020 18:36:17 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: mxc: Remove unused .id_table support
-Message-ID: <20201116172653.GU4556@piout.net>
-References: <20201116154303.15055-1-festevam@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Claudius Heine <ch@denx.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Henning Schild <henning.schild@siemens.com>,
+        Johannes Hahn <johannes-hahn@siemens.com>
+Subject: Re: [PATCH v2 1/3] rtc: rx6110: add i2c support
+Message-ID: <20201116173617.GV4556@piout.net>
+References: <20201112130734.331094-1-ch@denx.de>
+ <20201112130734.331094-2-ch@denx.de>
+ <20201116144343.GA1689012@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201116154303.15055-1-festevam@gmail.com>
+In-Reply-To: <20201116144343.GA1689012@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 16/11/2020 12:43:03-0300, Fabio Estevam wrote:
-> Since 5.10-rc1 i.MX is a devicetree-only platform and the existing
-> .id_table support in this driver was only useful for old non-devicetree
-> platforms.
+On 16/11/2020 16:43:43+0200, Andy Shevchenko wrote:
+> On Thu, Nov 12, 2020 at 02:07:32PM +0100, Claudius Heine wrote:
+> > The RX6110 also supports I2C, so this patch adds support for it to the
+> > driver.
+> > 
+> > This also renames the SPI specific functions and variables to include
+> > `_spi_` in their names.
 > 
-> Get rid of the .id_table since it is no longer used.
+> As practice shows this is not the best approach. Can you ratqer split it to
+> three modules: core, spi, i2c like it's done in many other cases (esp. IIO)?
 > 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  drivers/rtc/rtc-mxc.c | 14 --------------
->  1 file changed, 14 deletions(-)
+
+Actually, I'm fine with having everytihn in the same file because
+separating everything out means having 3 more files per rtc supporting
+both busses in an already very crowded folder. And I don't think being
+able to remove support for one or the other holds any actual value.
+
+> In Kconfig you just leave same option with two additional ones like
 > 
-> diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
-> index a8cfbde048f4..78d7fba00895 100644
-> --- a/drivers/rtc/rtc-mxc.c
-> +++ b/drivers/rtc/rtc-mxc.c
-> @@ -70,19 +70,6 @@ struct rtc_plat_data {
->  	enum imx_rtc_type devtype;
->  };
->  
-> -static const struct platform_device_id imx_rtc_devtype[] = {
-> -	{
-> -		.name = "imx1-rtc",
-> -		.driver_data = IMX1_RTC,
-> -	}, {
-> -		.name = "imx21-rtc",
-> -		.driver_data = IMX21_RTC,
-> -	}, {
-> -		/* sentinel */
-> -	}
-> -};
-> -MODULE_DEVICE_TABLE(platform, imx_rtc_devtype);
-> -
->  #ifdef CONFIG_OF
-
-Is this #ifdef still necessary?
-
->  static const struct of_device_id imx_rtc_dt_ids[] = {
->  	{ .compatible = "fsl,imx1-rtc", .data = (const void *)IMX1_RTC },
-> @@ -438,7 +425,6 @@ static struct platform_driver mxc_rtc_driver = {
->  		   .name	= "mxc_rtc",
->  		   .of_match_table = of_match_ptr(imx_rtc_dt_ids),
->  	},
-> -	.id_table = imx_rtc_devtype,
->  	.probe = mxc_rtc_probe,
->  };
->  
+> config ..._SPI
+> 	tristate
+> 	default SPI_MASTER
+> 	depends on SPI_MASTER
+> 
+> config ..._I2C
+> 	tristate
+> 	default I2C
+> 	depends on I2C
+> 
 > -- 
-> 2.17.1
+> With Best Regards,
+> Andy Shevchenko
+> 
 > 
 
 -- 
