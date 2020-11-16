@@ -2,93 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 906AD2B4EB1
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 18:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835D42B4ECE
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 Nov 2020 19:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387723AbgKPR5x (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 Nov 2020 12:57:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+        id S1731235AbgKPSDh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 Nov 2020 13:03:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730857AbgKPR5x (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Nov 2020 12:57:53 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE583C0613CF;
-        Mon, 16 Nov 2020 09:57:51 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id t18so8790050plo.0;
-        Mon, 16 Nov 2020 09:57:51 -0800 (PST)
+        with ESMTP id S1731246AbgKPSDg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 Nov 2020 13:03:36 -0500
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3DCC0613CF
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 10:03:36 -0800 (PST)
+Received: by mail-qt1-x841.google.com with SMTP id z3so9938553qtw.9
+        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 10:03:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7uMqsrJx2g4zNTohVFMIH9gH5XdsIvDi/J9ZISmamSE=;
-        b=fi+vh4UaWRI46reqGvWvDUNpMkeZo5TubfVqfsYVhWLvZVK1rJZRtfOEPDEQM02ID6
-         Tl8nQhkTaNGXZDbmdgzIV2skDricGR813z+5XfzGNAaH3yyZ8Cz0lwp59RSOmpoBcTQ/
-         6Kr/VdvcsP0bJFYtHgVEFw4hwvjkfXUVCgNBBDGw9mZLtWwRAACw4iKQeC2y4SpQbqe7
-         VdUSe52EpEeQzlnIn/E1xzOxX/F+pS9CIn7uvZfLrZX9wKAlUUtKzdMsGSZVaDHNTp8Z
-         uxflY0YlF+5K8p+tkFghMgWTYOul0YX7EeoZSEa+rL/AVfunRzTtB1ko0D9uWEMpY6/k
-         zaVQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=uhhjskNczt6EXJpCT6nl1R8+GBTmS7Y+GAifabQrLTM=;
+        b=LvZfRF8PLDGQQ8xnrYGPJ2UfRFGvy2IC8FwZQXLccMOdC0We4Bc/tpjIjHQuy761l4
+         ysVdLW1AbgJEjyz8NA8leYheMRV42FtG7kJcBE6r4qsxGnNEGKUQGJUpPHFFRX7Xa3Jj
+         k9BHQjf98aFKf8rOkYtqFD7C/6dHcaA10Rrl8YbZeA7d6cgegz3h6UqzZfI4gYnTsXPW
+         kzQmmVh98/y8bGZzeoDSpxEMC74+63Nsmpo3Cv0N2NluRGRwTUhld0bBhEsaKnBWicI/
+         lL1dOGKvkjhDHU6ZPLtMNx32d0dhuK12LRoNXfmDS0ZANM86LT0+I3B2/O6eCLdWhGIc
+         eMSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7uMqsrJx2g4zNTohVFMIH9gH5XdsIvDi/J9ZISmamSE=;
-        b=VpfRndQbroWc0yCQTkaObUhXXOpHoph2Ia1KmaP+JvqVzF34aoyv5ixqnF12cIAL05
-         jL4PIZxsK8HMgBCscdP2abvVQL8NPE/uvhNYfkf0qYYRKBtlQS0MsZ1d6/LuEFm+Q8z6
-         FH6TszB6WGqi6o/cXJxlQW/n/n5vRPc4LcHd6cTMstt9j1+qKdDxiQW2qE+HN1kKFJgl
-         joS3HkHumTswKzvhvZIbsWrGQvbvlXI+vu7PfA6Fb0sX/hA95L55VOxlmf1aTQg/ZKzU
-         rOAKhjENIB2sSMjAhcXbfzNp6WzcIS24VsEyPFbIu+ZiPDZ06kVNTOa+hml3zCC42oCG
-         /BxA==
-X-Gm-Message-State: AOAM532JjPXFKVlwEHgVwW0+BIZbIyF95bg4VoTyr7whZ3NqKhXuy8LH
-        3WFVT+wu0EhVrS84W1SDab8pi8Sw/lHTL4t+4nE=
-X-Google-Smtp-Source: ABdhPJzCA6ZRtF6o1tpWN2AGCUoAW9JqkYONViS50iC9xNeLwbXHKZir6+94+GCm5noz/q0QI4fMOhq4AGizL+WU+PQ=
-X-Received: by 2002:a17:902:aa8a:b029:d3:c9dd:77d1 with SMTP id
- d10-20020a170902aa8ab02900d3c9dd77d1mr13760767plr.0.1605549471233; Mon, 16
- Nov 2020 09:57:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20201112130734.331094-1-ch@denx.de> <20201112130734.331094-2-ch@denx.de>
- <20201116144343.GA1689012@smile.fi.intel.com> <20201116173617.GV4556@piout.net>
-In-Reply-To: <20201116173617.GV4556@piout.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 16 Nov 2020 19:58:40 +0200
-Message-ID: <CAHp75Vehwi8xzSBn_9Qa_SHF3ZCVGTBnsDmv6vix49vGt1wQhQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] rtc: rx6110: add i2c support
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Claudius Heine <ch@denx.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Henning Schild <henning.schild@siemens.com>,
-        Johannes Hahn <johannes-hahn@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=uhhjskNczt6EXJpCT6nl1R8+GBTmS7Y+GAifabQrLTM=;
+        b=dGbpn8Esj686k+R3lZMppGAHs4yGy+m1Qp5LymJnTTqjny5p+oA4fhUdQMRkW4jam6
+         Kt9xeul04BZLFZDLho+yjwXk85mvVKZmZESw8HUaMffGF/H4f7k8SJg5PEZV0fe0ucm6
+         xPWFfzoaYWfIGRSoj1VG8jmySowcpFmZ6UnOObyXOGkfWeutC2XR3KxsTuCQ6MMJhZMV
+         naiada36c3hNaJvn8q/HpZAqhzHB75atwJNdr+u+NRyO3LIefCb0mm6ootkH63N/wCDk
+         RdKVbRkuv9FA+UrLCvrdYGZY0RkqnTaJI/yTsAjKZLGbgsjnvdJplD2PdFaYaI/Tn2AM
+         nyYQ==
+X-Gm-Message-State: AOAM532M6EE29E7/rOWorcBv92wTWPYHXYb2WJjH9sRIC2tV4FzvwICH
+        6mo04Qsgg/v1umnXOoKCWYI=
+X-Google-Smtp-Source: ABdhPJw2D2rpc1+YfQxak0dRSVg0ypOLuOStSbpDXeai4Zxq6JM5CodFkk/PqELqVCDqqHkS6ZnM6w==
+X-Received: by 2002:ac8:5ccc:: with SMTP id s12mr15043721qta.309.1605549815787;
+        Mon, 16 Nov 2020 10:03:35 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:482:997:213a:a240:fc07:36c8])
+        by smtp.gmail.com with ESMTPSA id e18sm13227697qtc.39.2020.11.16.10.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 10:03:35 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH v2] rtc: mxc: Convert the driver to DT-only
+Date:   Mon, 16 Nov 2020 15:03:26 -0300
+Message-Id: <20201116180326.5199-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 7:38 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
-> On 16/11/2020 16:43:43+0200, Andy Shevchenko wrote:
-> > On Thu, Nov 12, 2020 at 02:07:32PM +0100, Claudius Heine wrote:
-> > > The RX6110 also supports I2C, so this patch adds support for it to the
-> > > driver.
-> > >
-> > > This also renames the SPI specific functions and variables to include
-> > > `_spi_` in their names.
-> >
-> > As practice shows this is not the best approach. Can you ratqer split it to
-> > three modules: core, spi, i2c like it's done in many other cases (esp. IIO)?
-> >
->
-> Actually, I'm fine with having everytihn in the same file because
-> separating everything out means having 3 more files per rtc supporting
-> both busses in an already very crowded folder. And I don't think being
-> able to remove support for one or the other holds any actual value.
+Since 5.10-rc1 i.MX is a devicetree-only platform, so simplify the code
+by removing the unused non-DT support.
 
-Good to know your opinion!
-Since you are one who is looking after RTC stuff I'm not insisting on
-my proposal.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v1:
+- Remove CONFIG_OF ifdefery - Alexandre
+- Remove pdev->id_entry->driver_data non-DT assignment
 
+ drivers/rtc/rtc-mxc.c | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
+
+diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
+index a8cfbde048f4..018bfa952d66 100644
+--- a/drivers/rtc/rtc-mxc.c
++++ b/drivers/rtc/rtc-mxc.c
+@@ -70,27 +70,12 @@ struct rtc_plat_data {
+ 	enum imx_rtc_type devtype;
+ };
+ 
+-static const struct platform_device_id imx_rtc_devtype[] = {
+-	{
+-		.name = "imx1-rtc",
+-		.driver_data = IMX1_RTC,
+-	}, {
+-		.name = "imx21-rtc",
+-		.driver_data = IMX21_RTC,
+-	}, {
+-		/* sentinel */
+-	}
+-};
+-MODULE_DEVICE_TABLE(platform, imx_rtc_devtype);
+-
+-#ifdef CONFIG_OF
+ static const struct of_device_id imx_rtc_dt_ids[] = {
+ 	{ .compatible = "fsl,imx1-rtc", .data = (const void *)IMX1_RTC },
+ 	{ .compatible = "fsl,imx21-rtc", .data = (const void *)IMX21_RTC },
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, imx_rtc_dt_ids);
+-#endif
+ 
+ static inline int is_imx1_rtc(struct rtc_plat_data *data)
+ {
+@@ -329,10 +314,7 @@ static int mxc_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	of_id = of_match_device(imx_rtc_dt_ids, &pdev->dev);
+-	if (of_id)
+-		pdata->devtype = (enum imx_rtc_type)of_id->data;
+-	else
+-		pdata->devtype = pdev->id_entry->driver_data;
++	pdata->devtype = (enum imx_rtc_type)of_id->data;
+ 
+ 	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(pdata->ioaddr))
+@@ -438,7 +420,6 @@ static struct platform_driver mxc_rtc_driver = {
+ 		   .name	= "mxc_rtc",
+ 		   .of_match_table = of_match_ptr(imx_rtc_dt_ids),
+ 	},
+-	.id_table = imx_rtc_devtype,
+ 	.probe = mxc_rtc_probe,
+ };
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
