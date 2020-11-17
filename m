@@ -2,61 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 057632B7011
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 21:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF0E2B7055
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 21:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgKQUaz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Nov 2020 15:30:55 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:52377 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgKQUar (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 15:30:47 -0500
-Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 4C663240005;
-        Tue, 17 Nov 2020 20:30:45 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: mxc: use of_device_get_match_data
-Date:   Tue, 17 Nov 2020 21:30:35 +0100
-Message-Id: <20201117203035.1280099-1-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.28.0
+        id S1728578AbgKQUmF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Nov 2020 15:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726278AbgKQUmF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 15:42:05 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CC2C0613CF;
+        Tue, 17 Nov 2020 12:42:04 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id y16so25865881ljh.0;
+        Tue, 17 Nov 2020 12:42:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1mvK1rTvNHp8OWuHweKbclrnF4kBdtJK7w3CO0oFJlY=;
+        b=rPZwRpYb9MU1nhJy5IC2GPvYfEyAfBT84/HDKZoLOZxAlhueAJgBJ9DirB9RfJX+lr
+         kapGxDCwpXbqNur/AmtMjlqH4Bd1T0U2hwpuef9HPvBapnIM96GQXtJfJlRTY7+11fSE
+         OnNH1Ln3IREIfGmC+r1kKIZ+BHbfobS/cNQ74BxcFiO/IQN31xSp5YOe0nlAX6jyc1Z/
+         674sZVn2/XwUC66u+mnphGK0pixY+bPV64fa0A5aBMPwjt+9uN9rkjb0gCyFBmjEC6sA
+         CAd+n5LjVSdLI2Aj+2DDsezlEndo41qWmpQVL02bhkGEdAAikCbD1ecP5QRIliT/jdbX
+         y+FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1mvK1rTvNHp8OWuHweKbclrnF4kBdtJK7w3CO0oFJlY=;
+        b=JmaPwSLKHKudaneivXaFdnjpI5i89Ig9vLBuiUo0ks9LeLZwEqSxRZU1N4g/RKq+G4
+         b4Pnu3hcqvMP9iyy4FdM7Km/VOuJUf7xG5iQo4xq2W3i5x1dcHhWoWB9S5gmuVBkhaSa
+         mLuaa7PdCXQ90Up69DzahaTm13y2uV/Of5nXRuITsS0vteRaTo9m/yAkLwAHfnIUDBLe
+         lzHh/qAsN58bOgPXDC/ZtaSmqI/LdyIRfnul3lqaJY9eSbKRpdyuNSvDqDqbkAB+JFyE
+         fNlxf4RfoMso4I2YpScsIshYWG9pTePRd4libIi5xCV+wZZysPV55Da/7Wv+Z2hCC9pM
+         2XOA==
+X-Gm-Message-State: AOAM530ltmTBQ49bYD65TkVuf/TmQLg13ZKgsZf7tyT4XpOfj6hw1DFX
+        BwTKWSzBd4rjwbZ1V0W6eqBJ49b154Ai30nuCdZIZOnGJuU=
+X-Google-Smtp-Source: ABdhPJwsZCkcG1uH9yX5c8JF6jyWYTclASxwaiShDuyQLWO4hd216fz9a6sXNkJEPGdGtMIKhtnJgh5HB9ldvckWYpc=
+X-Received: by 2002:a2e:9450:: with SMTP id o16mr2341461ljh.178.1605645723187;
+ Tue, 17 Nov 2020 12:42:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201117203035.1280099-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20201117203035.1280099-1-alexandre.belloni@bootlin.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 17 Nov 2020 17:41:51 -0300
+Message-ID: <CAOMZO5C08wfqgpFNLZzZFJyWjELPXj5rp2SZ9qXGzeX6d28xgg@mail.gmail.com>
+Subject: Re: [PATCH] rtc: mxc: use of_device_get_match_data
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use of_device_get_match_data to simplify mxc_rtc_probe.
+On Tue, Nov 17, 2020 at 5:30 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> Use of_device_get_match_data to simplify mxc_rtc_probe.
+>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-mxc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
-index 018bfa952d66..0d253ce3a8f5 100644
---- a/drivers/rtc/rtc-mxc.c
-+++ b/drivers/rtc/rtc-mxc.c
-@@ -307,14 +307,12 @@ static int mxc_rtc_probe(struct platform_device *pdev)
- 	u32 reg;
- 	unsigned long rate;
- 	int ret;
--	const struct of_device_id *of_id;
- 
- 	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
- 	if (!pdata)
- 		return -ENOMEM;
- 
--	of_id = of_match_device(imx_rtc_dt_ids, &pdev->dev);
--	pdata->devtype = (enum imx_rtc_type)of_id->data;
-+	pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
- 
- 	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(pdata->ioaddr))
--- 
-2.28.0
-
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
