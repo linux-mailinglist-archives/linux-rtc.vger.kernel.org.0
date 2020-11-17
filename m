@@ -2,44 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF82B6EBA
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 20:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 057632B7011
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 21:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbgKQTeQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Nov 2020 14:34:16 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:47157 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725613AbgKQTeP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 14:34:15 -0500
+        id S1726158AbgKQUaz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Nov 2020 15:30:55 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:52377 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbgKQUar (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 15:30:47 -0500
 Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 2CF2B10000D;
-        Tue, 17 Nov 2020 19:34:03 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 4C663240005;
+        Tue, 17 Nov 2020 20:30:45 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: mxc: Convert the driver to DT-only
-Date:   Tue, 17 Nov 2020 20:34:02 +0100
-Message-Id: <160564162911.1268149.16831656983384027051.b4-ty@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: mxc: use of_device_get_match_data
+Date:   Tue, 17 Nov 2020 21:30:35 +0100
+Message-Id: <20201117203035.1280099-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201116180326.5199-1-festevam@gmail.com>
-References: <20201116180326.5199-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 16 Nov 2020 15:03:26 -0300, Fabio Estevam wrote:
-> Since 5.10-rc1 i.MX is a devicetree-only platform, so simplify the code
-> by removing the unused non-DT support.
+Use of_device_get_match_data to simplify mxc_rtc_probe.
 
-Applied, thanks!
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-mxc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-[1/1] rtc: mxc: Convert the driver to DT-only
-      commit: 42882a8a22a86513c8c8c6bc7e0822bb14791999
-
-Best regards,
+diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
+index 018bfa952d66..0d253ce3a8f5 100644
+--- a/drivers/rtc/rtc-mxc.c
++++ b/drivers/rtc/rtc-mxc.c
+@@ -307,14 +307,12 @@ static int mxc_rtc_probe(struct platform_device *pdev)
+ 	u32 reg;
+ 	unsigned long rate;
+ 	int ret;
+-	const struct of_device_id *of_id;
+ 
+ 	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+ 	if (!pdata)
+ 		return -ENOMEM;
+ 
+-	of_id = of_match_device(imx_rtc_dt_ids, &pdev->dev);
+-	pdata->devtype = (enum imx_rtc_type)of_id->data;
++	pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
+ 
+ 	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(pdata->ioaddr))
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+2.28.0
+
