@@ -2,97 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE2A2B6907
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 16:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4782B6EA1
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 20:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbgKQPsd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Nov 2020 10:48:33 -0500
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:56398 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbgKQPsd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 10:48:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1605628112; x=1637164112;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=vt6n/uRSEqn2qkGSaMpqYP02CGx9gVYSoDzaLJ0GRuo=;
-  b=feDAmP4y+ZYOnB1VHWIUanSw5+DAAtsERDGyYV4W3SOkxEF7p8XGCieN
-   xnOoqekoOpu1pcXV/bhpXQCfmdNwtgTVS+3oP2nSzzteDrzHDQpvZNhq/
-   cvxM/s9QVzIH9iedoULsTjf0XAuc57TNXzGYBOP5Uns62Pv7rpCk2O4mT
-   STydKsdAgaaiwVbuW8jWVMC3i16kl0cwRldKyZkx/jUwB4KQNfCIzvBHH
-   Y1kvQjugdXSj5EE6r/KoFhl02008aV4UNzyewgZEgs1TykaX+Ef25CPBv
-   6PJnERk3u60VtYSavTwjMXVZo4A17I2EMulAUwV7lyXh16D6mBD6bmV+1
-   A==;
-IronPort-SDR: TRHlD71kxqV8Xiu1ior8khpmqv5NCwMBdz9m/rmlEHlKBUvG1q8J98MYt9+YL19L2/cL+muXyr
- ytmKGY5Bv45HxLMf16JK5emoZ2Bh+afPePhVsIYalVqDCV2s4gmGRn16t/yzdmB42dfFmbuJtM
- W3/0GO1DkXtMv9gayamf0ZcB+mfQ4F+53Y6JOw39Wv2wStrpkhTKpoTFKtbqan/Nu7G66SiD0x
- 7Ecod1NCbn2wo94egG2ktDVzrk8YSZW6IXKimxpcg62QskEmcidNOSicK6WE8o3YcrPpoQ6gQX
- k/w=
-X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
-   d="scan'208";a="98769453"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 Nov 2020 08:48:32 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 17 Nov 2020 08:48:31 -0700
-Received: from [10.171.246.83] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Tue, 17 Nov 2020 08:48:29 -0700
-Subject: Re: [PATCH] rtc: at91rm9200: Add sam9x60 compatible
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1728060AbgKQT3H (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Nov 2020 14:29:07 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:26793 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726035AbgKQT3G (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 14:29:06 -0500
+X-Originating-IP: 86.194.74.19
+Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 49026240007;
+        Tue, 17 Nov 2020 19:29:03 +0000 (UTC)
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     linux-acpi@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-CC:     <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20201117133920.1229679-1-alexandre.belloni@bootlin.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <1c5f0d70-93f5-0285-66df-43a9f3611e90@microchip.com>
-Date:   Tue, 17 Nov 2020 16:48:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Tin Huynh <tnhuynh@apm.com>
+Subject: Re: [PATCH v2 1/3] rtc: ds1307: Remove non-valid ACPI IDs
+Date:   Tue, 17 Nov 2020 20:29:02 +0100
+Message-Id: <160564099645.1265721.9852311675923504898.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201116142859.31257-1-andriy.shevchenko@linux.intel.com>
+References: <20201116142859.31257-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20201117133920.1229679-1-alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/11/2020 at 14:39, Alexandre Belloni wrote:
-> Handle the sam9x60 RTC. While it can work with the at91sam9x5 fallback, it
-> has crystal correction support and doesn't need to shadow IMR.
+On Mon, 16 Nov 2020 16:28:57 +0200, Andy Shevchenko wrote:
+> The commit 9c19b8930d2c ("rtc: ds1307: Add ACPI support") added invalid
+> ACPI IDs (all of them are abusing ACPI specification). Moreover there is
+> not even a single evidence that vendor registered any of such devices.
 > 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Remove broken ACPI IDs from the driver. For prototyping one may use PRP0001
+> with device properties adhering to a DT binding. The following patches
+> will add support of that to the driver.
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Applied, thanks!
 
-> ---
->   drivers/rtc/rtc-at91rm9200.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-> index 1eea187d9850..da24e68adcca 100644
-> --- a/drivers/rtc/rtc-at91rm9200.c
-> +++ b/drivers/rtc/rtc-at91rm9200.c
-> @@ -437,6 +437,9 @@ static const struct of_device_id at91_rtc_dt_ids[] = {
->          }, {
->                  .compatible = "atmel,sama5d2-rtc",
->                  .data = &sama5d4_config,
-> +       }, {
-> +               .compatible = "microchip,sam9x60-rtc",
-> +               .data = &sama5d4_config,
->          }, {
->                  /* sentinel */
->          }
-> --
-> 2.28.0
-> 
+[1/3] rtc: ds1307: Remove non-valid ACPI IDs
+      commit: a31111189bb1160f84cf4cf9f910aa2ba7553d18
+[2/3] rtc: ds1307: Make use of device properties
+      commit: 227ec129ad7b035ee2ae2e57e9567a8126ad93f3
+[3/3] rtc: ds1307: Drop of_match_ptr and CONFIG_OF protections
+      commit: 698fffc2705cc48804cc31021cdb2ae4290927be
 
-
+Best regards,
 -- 
-Nicolas Ferre
+Alexandre Belloni <alexandre.belloni@bootlin.com>
