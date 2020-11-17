@@ -2,105 +2,163 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3E32B5911
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 06:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD4C2B5A56
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 Nov 2020 08:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725355AbgKQFT4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Nov 2020 00:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725779AbgKQFT4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Nov 2020 00:19:56 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3503EC0617A6
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 21:19:56 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id e139so8946835lfd.1
-        for <linux-rtc@vger.kernel.org>; Mon, 16 Nov 2020 21:19:56 -0800 (PST)
+        id S1725730AbgKQHhG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Nov 2020 02:37:06 -0500
+Received: from mail-eopbgr80072.outbound.protection.outlook.com ([40.107.8.72]:14402
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725771AbgKQHhG (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 17 Nov 2020 02:37:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CLhyh87Cue9PcKOxjJGyhN5xyMnQNw0Gb7W2QFMBucexDAulqZObPUciDAc66jjvimzTD+iRqkMhhfpl3wEeMlurShBPbdqd4mSz+oyNJ9GAelLLQQikD7owrvls0Z0uIje+5oBaSQxJrFChygE6lRWS9QBmoBY/eqlsysT+QSBFlxKUjHBOPbUVcqtCkE3ABT4M3d64qBCdN58UuOK75AdUMRw9KBASb6wDAYEKsjEnAkiypjzorx+8ccq4t6p9ys8EjkCzSJwqUKzzf0YY93ABKuzOm4TCDzHqMW7a0JGRq7pvKPOOLQkpSzmo9c4ihdS3nKTYVAHhn65oj0iBPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tiTVIHmcgu7YFZ+t/WmGsQhbTjL9n+uDAo1+wB4S+xo=;
+ b=C73Bbl04EfEoZ2N7kzfKUpGVI4BF+6+e8eNW4SYrt00IOErBVwuwfXcFyxenzUkobooNfE3S6ffRx7fkWFrT6Ns8q2zG2COtBvDHcMWkiR7AbBaLPbIf4WVrT1bZ0/Ue0KlQfrxb5zd5Ajv//V2XBD07MyN4+nFJaV99kiepUFv7zYj6NFKOMTa0/dxNM/p+20pBeVZqzzBc+Mk4GgM/MCDKgWrtMImCb1irQvnmdG6lF+bkrgpisooJ9kXuFF5jW8A+wPnh4ps7NQdz/dMLwQfDZmcfmmtmUHffHf2R5tEJu8Apj15ZbG4ClWBAyj5LDHFgNho0SM0R/bJVPKz/qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uJFy+3A3C/ymk3cSUV9e3v1lv0Tpv8T9SnAJu61qQJs=;
-        b=eJZH3+li4VP5TBoQMiCWyf1+Aq9TABw31SIHNEIZch9GBI7RTBZpTLArwclZEYJ1PT
-         HjYk7C29n0w02s7XWdOeqxM5wEJ/Jqg8h3jhdWw/Gx5a9C607oX5+VjoCpQTy/9xXX0y
-         jaLy9wi6AD7KtiA2lapf/vVeVk3hx5pdu8I1/GgMviK7uOXTWlBoC/CfH+O0pdvQ8x3W
-         APitfEs6syjYp6rzgtC7ql3S0sppCRQvJXE9V2AIdX0VkH1oPV7x+F2e3qoaG1ubWl8/
-         prlsZnG2u10uoJ5NsfziIhKKQpvRzfFOcnZyBdyWM5T8V7SrECHIyJpqSSXh0oiqCEkQ
-         xUaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=uJFy+3A3C/ymk3cSUV9e3v1lv0Tpv8T9SnAJu61qQJs=;
-        b=lh6kU2WSlekYnJHl3I7Yg0+3tFP/DeNKLs+McNLms513HkL2/+3QzOKaC2n7wli8Of
-         nxge5pSBhQ6WgugVy7jBr5HiOqaOU51GzDSTS5SOeHn5bdJHKv9hclx0M1k99+Og4j3B
-         EoqXMC6z4nBkludopni857ruhhC4hN9aaeBNbn0IxN+ub6CqVbbB/w2vwIrSdaQpK9eo
-         ZmqdtOYMdURBUZEMZ6Jc9fzLPA8Pl+/KKjannrM6rXkvbPlhKodD6Ygjc97XtEhjDL+K
-         FPhY268OZIk2uy6Yic6aVMomXlAUtLTzqVevAXSVDWpVbiLrmKO7LINDQ4Ts71wF/xPN
-         rYEA==
-X-Gm-Message-State: AOAM5318By8S1Zy4CY75ma0fz7GFgK88bqtPEj47Eyg3OR+wZ25E7PX1
-        zknk1x0zKpsn0yL7trHYZO2zCjWIbj277eB6PXg=
-X-Google-Smtp-Source: ABdhPJxMN6TQipbvX/kBteSCB0gBmYTpbHXOgPpoMcyLsTxnaCmQCPNVJEdy3xc2X6q20p67uebwJrKdC+0F0R1TaOo=
-X-Received: by 2002:ac2:5235:: with SMTP id i21mr1186465lfl.473.1605590394454;
- Mon, 16 Nov 2020 21:19:54 -0800 (PST)
-MIME-Version: 1.0
-Sender: yesminesamih111@gmail.com
-Received: by 2002:a2e:3c07:0:0:0:0:0 with HTTP; Mon, 16 Nov 2020 21:19:54
- -0800 (PST)
-From:   Juliette Morgan <juliettemorgan21@gmail.com>
-Date:   Tue, 17 Nov 2020 06:19:54 +0100
-X-Google-Sender-Auth: FWbKCdsNyHky3p81SEXuHq4Jj-g
-Message-ID: <CAC+tdQh6za-3rND9fqpRY4-QSb7FePQSFitPKanLkDsNFH892w@mail.gmail.com>
-Subject: READ AND REPLY URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+ d=siemens.onmicrosoft.com; s=selector1-siemens-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tiTVIHmcgu7YFZ+t/WmGsQhbTjL9n+uDAo1+wB4S+xo=;
+ b=SV8av0zhxie267nGNOcNvEihsjjqXzq4MYeSm2YJPFMoFhr5ixW6y+rs70CHam/oZbtZmmSAyN7Ce8xomF2GV5kuHW+4k+KbrE46WbCRtlbajWluFUwHsYPrS8ZyVvDlVa05j6mPy7Ezvsmiptk3u+ooDVjmIb9//5CKRBNSb+I=
+Received: from AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:18b::8)
+ by AM9PR10MB4200.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1f1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.25; Tue, 17 Nov
+ 2020 07:37:01 +0000
+Received: from AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7dc9:c50b:240a:969b]) by AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7dc9:c50b:240a:969b%7]) with mapi id 15.20.3564.028; Tue, 17 Nov 2020
+ 07:37:01 +0000
+From:   "johannes-hahn@siemens.com" <johannes-hahn@siemens.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+CC:     Claudius Heine <ch@denx.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "werner.zeh@siemens.com" <werner.zeh@siemens.com>,
+        "henning.schild@siemens.com" <henning.schild@siemens.com>
+Subject: AW: [PATCH v2 2/3] rtc: rx6110: add ACPI bindings to I2C
+Thread-Topic: [PATCH v2 2/3] rtc: rx6110: add ACPI bindings to I2C
+Thread-Index: AQHWuPTkrrRdrk6ovkKnOm35yMg2kqnK3KGAgAAMQwCAAQk1kA==
+Date:   Tue, 17 Nov 2020 07:37:01 +0000
+Message-ID: <AM0PR10MB316964C5127D27DC9D7C3DCCE7E20@AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM>
+References: <20201112130734.331094-1-ch@denx.de>
+        <20201112130734.331094-3-ch@denx.de>
+        <20201116144631.GB1689012@smile.fi.intel.com>
+ <20201116163024.74c767b6@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20201116163024.74c767b6@md1za8fc.ad001.siemens.net>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Enabled=true;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SetDate=2020-11-17T07:36:57Z;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Method=Standard;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_Name=restricted-default;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ActionId=a252ff8e-45bb-49e2-9a1b-b90427399ea7;
+ MSIP_Label_a59b6cd5-d141-4a33-8bf1-0ca04484304f_ContentBits=0
+document_confidentiality: Restricted
+authentication-results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=siemens.com;
+x-originating-ip: [165.225.26.250]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4857c2f1-ac5d-43c8-311b-08d88acb92cb
+x-ms-traffictypediagnostic: AM9PR10MB4200:
+x-ld-processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM9PR10MB420035FE336F574EEA067875E7E20@AM9PR10MB4200.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xK3zPx8rRYZaceAZBkU7+S9emo8//ZMwZpVE0xXGH+0JrQpb4LRPjLGE1zrmnZbf8aiKXigk+pP2GxbGzetSJmUy/tDLM9QvzJveyHU/3HiyN1MbzqgDYW2YqimiXw/Xxs4cRMWwgTBgYXUb8FlRH9oJqE3PAhZBTA3vAgixWqrS1d1j5MD/giTTf9G+f73Wq97FR9tCk+R18tPFq/Txt/wk0/W7ERhNQg8hVGCJd+tKnQiV4yPnK2rYcuGHwkN6c+YTAq86tD3dn+4F6Kj+p6LrKu9M6DTy4szvHfA4Qj4AuusHBrfpbCHO25WDQER9DY8xeFPlAgKSVH23Ja4Ip9GjcggVE1JcGGd9N7u0glyHkkpO505CD+yLcvIw4fT31SrjvymDNpIbAtTykudX7g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(39860400002)(376002)(346002)(396003)(66946007)(26005)(66556008)(186003)(66446008)(66476007)(316002)(64756008)(7696005)(76116006)(55016002)(5660300002)(6916009)(6506007)(9686003)(8676002)(4326008)(52536014)(71200400001)(86362001)(8936002)(55236004)(478600001)(45080400002)(33656002)(107886003)(54906003)(966005)(2906002)(66574015);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: fNDOAsDztaL7YARBl0FaMbzX/QpbxJePotkt33BpQWtcAlmagQ4AADQgbZ+zwEmtBtGvARHU16aM+XEMI+MvxiCVDgYFnz1/thay0N6HZLTJQqy5wevcH7xsZCS9WiNYoivlQcOsyD1xjKj8CqEQzDsLiOjc8036Z3QzZQm5RAxfIq45mQlsGJlpy2fZcmkGRu6X7WS2qRsZOSHe3lY2leI3WkZw1wqEGRuwmIoP/F32KQJWr0L025AT/u4b9pnGyrIPX7BDOGPlBNkPvmf8HvngSb7FluHCqfN/81iP0CIZZbD2EP0tuzdGi9oDb3am7HaIILVrjPDErO69VByhy0qk7NY5XWYafeZpheyiWr7anp5PfQ8BIYa8ocN7zOmWaVC5kUZUMjZTVjpU9q0Jrgvx9y+QqdUNcwamlQISkQ+BejejVuq2H610RYzNjheoR/ZfFXfwSYCIZ/jcdbSQRzyKTvURpKJFZ6uU8lfkGxj9pzZpewusGhUfQmq3a0i1dFk08GAPjHNPrRJbtF6KH8+kg6zVWVlkXw1ckUsGlhKTyWXR71nGyxKbgA8nuV7MDDr33+BA+rODlvBW1W5IZTO55WswebYeysuGkRxBBWoihkDLDx66r8IOkLGxqReBewxM9F3v5xdRPd+18FMyyEMmSPFd03mAhnpMW9iIJ0J0mrIq+pg6iHyFVUAEal9j80l2eIqG3F+aO9OZdQe59ow5hB+7b5GOkLJtmi61f5L8mMf+XLe9sqxQW07iQbaEWfc9/+z91wDF+oXa4OwODDQQx8RHFxtUZ5fbHd8vOiOOYinu4IP1MmsGw8mkUU6RZkIHlesjZ76MIY0054UTqicfQblicjSqMXCQlB7BmiD7cY/+WKTCUGBoI2/FN0LgbbeXGuuKj5+XnyX1GlxKjA==
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB3169.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4857c2f1-ac5d-43c8-311b-08d88acb92cb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2020 07:37:01.7872
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4fxT4c+iO2vqGK8IcPY2y/hnxSD4NRdN4pu8vYR8smZeEKWlz9RREC80qqVfWSV51YGf02mXh6e3bbbkBM3iUeUBcp6cdN8tBQBsAqnAw9I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4200
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Dear God,s Select Good Day,
+Hello Andy,
 
-I apologized, If this mail find's you disturbing, It might not be the
-best way to approach you as we have not met before, but due to the
-urgency of my present situation i decided  to communicate this way, so
-please pardon my manna, I am writing this mail to you with heavy tears
-In my eyes and great sorrow in my heart, My Name is Mrs.Juliette
-Morgan, and I am contacting you from my country Norway, I want to tell
-you this because I don't have any other option than to tell you as I
-was touched to open up to you,
+when comparing the ACPI IDs used in rtc-ds1307.c, which is already on mainl=
+ine=20
 
-I married to Mr.sami Morgan. Who worked with Norway embassy in Burkina
-Faso for nine years before he died in the year 2011.We were married
-for eleven years without a child He died after a brief illness that
-lasted for only five days. Since his death I decided not to remarry,
-When my late husband was alive he deposited the sum of =E2=82=AC 8.5 Millio=
-n
-Euro (Eight million, Five hundred thousand Euros) in a bank in
-Ouagadougou the capital city of Burkina Faso in west Africa Presently
-this money is still in bank. He made this money available for
-exportation of Gold from Burkina Faso mining.
+https://elixir.bootlin.com/linux/latest/source/drivers/rtc/rtc-ds1307.c#L11=
+41
 
-Recently, My Doctor told me that I would not last for the period of
-seven months due to cancer problem. The one that disturbs me most is
-my stroke sickness.Having known my condition I decided to hand you
-over this money to take care of the less-privileged people, you will
-utilize this money the way I am going to instruct herein.
+for example. Every ID listed there is also not formatted the ACPI ID , PNP =
+ID way defined in the ACPI spec.
 
-I want you to take 30 Percent of the total money for your personal use
-While 70% of the money will go to charity, people in the street and
-helping the orphanage. I grew up as an Orphan and I don't have any
-body as my family member, just to endeavour that the house of God is
-maintained. Am doing this so that God will forgive my sins and accept
-my soul because these sicknesses have suffered me so much.
+How about that ?
 
-As soon as I receive your reply I shall give you the contact of the
-bank in Burkina Faso and I will also instruct the Bank Manager to
-issue you an authority letter that will prove you the present
-beneficiary of the money in the bank that is if you assure me that you
-will act accordingly as I Stated herein.
+Best Regards,
+Johannes
 
-Always reply to my alternative for security purposes
+-----Urspr=FCngliche Nachricht-----
+Von: Henning Schild <henning.schild@siemens.com>=20
+Gesendet: Montag, 16. November 2020 16:30
+An: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Claudius Heine <ch@denx.de>; Alessandro Zummo <a.zummo@towertech.it>; A=
+lexandre Belloni <alexandre.belloni@bootlin.com>; linux-rtc@vger.kernel.org=
+; linux-kernel@vger.kernel.org; Hahn, Johannes (DI FA CTR PLC PRC3) <johann=
+es-hahn@siemens.com>; Zeh, Werner (DI MC MTS R&D HW 1) <werner.zeh@siemens.=
+com>
+Betreff: Re: [PATCH v2 2/3] rtc: rx6110: add ACPI bindings to I2C
 
-Hoping to receive your reply:
-From Mrs.Juliette Morgan,
+Am Mon, 16 Nov 2020 16:46:31 +0200
+schrieb Andy Shevchenko <andriy.shevchenko@intel.com>:
+
+> On Thu, Nov 12, 2020 at 02:07:33PM +0100, Claudius Heine wrote:
+> > From: Johannes Hahn <johannes-hahn@siemens.com>
+> >=20
+> > This allows the RX6110 driver to be automatically assigned to the=20
+> > right device on the I2C bus.
+>=20
+> Before adding new ACPI ID, can you provide an evidence (either from=20
+> vendor of the component, or a real snapshot of DSDT from device on
+> market) that this is real ID?
+>=20
+> Before that happens, NAK.
+>=20
+> P.S. Seems to me that this is kinda cargo cult patch because proposed=20
+> ID is against ACPI and PNP registry and ACPI specification.
+
+In fact we pushed it in coreboot and Linux at the same time.
+
+https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Freview.=
+coreboot.org%2Fc%2Fcoreboot%2F%2B%2F47235&amp;data=3D04%7C01%7Cjohannes-hah=
+n%40siemens.com%7C21c9e1fe99274df7951a08d88a448af5%7C38ae3bcd95794fd4addab4=
+2e1495d55a%7C1%7C0%7C637411374276831534%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4=
+wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=3D=
+7EVdO%2F77LNyvux0y3m9nEf2HZO%2BDm2WkWMfxzaJUoto%3D&amp;reserved=3D0
+
+That is the evidence. But in case this is wrong we can probably still chang=
+e coreboot, even though the patches have been merged there already.
+
+Maybe you can go into detail where you see the violations and maybe even su=
+ggest fixes that come to mind.
+
+Henning
