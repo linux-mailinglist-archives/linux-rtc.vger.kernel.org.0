@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ABF52B91AF
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4CC2B91AE
 	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 12:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgKSLqT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S1727122AbgKSLqT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Thu, 19 Nov 2020 06:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbgKSLmc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:42:32 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA295C061A52
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:31 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id l1so6059849wrb.9
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:31 -0800 (PST)
+        with ESMTP id S1727269AbgKSLmd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:42:33 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CD2C061A51
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:33 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id d12so6025993wrr.13
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7VHrAKcjAJZgRpVeG2JaXpIwP+wAPdW+wpeYWDjggGQ=;
-        b=jDW5blOMKdukJmZOjIFW4bmh+fXJUgWaK6udKmLl1UJMtRZbRqUAAcrRGG6E08NU7Z
-         RmUnnIqcvVPKEWhvFU3Md/Rsr7i1kvIGTD+fo2VXq1807b+k89b4pG7aEEoEYURB3Ggf
-         wHy4ZudRRk3lqYM9m6dl9C7EzF9XAL5d6Xwq7zzl8nxSHN4MQAXFl/Z9+Lpf6iaifqbN
-         sLov24IoqKcf2UJCOtzeHyNRXwLCqSxd9Ea6KwjQs7AmjqpVacDeitPHauuXLLLdRUCz
-         W167878fdJ0nOgqP9mvaHjWV2qwzVzmpBqDnwCiLO5s+zuHFQsmz4rkO9C7KYCdPL9mM
-         si3w==
+        bh=oOdMgmRPW212YndSnPHiJLqW5WhErPY60YEPYmAU1R8=;
+        b=tTUdt8EFr9An4ob7ERIoDtjN5Al+81KQZR1em0r2duWW83htffHiamhPXrr4SNtw0e
+         gyz2G/ZOvDRF5Ae3xt7pvDCiCc+i1WQUxegf+2cQWBn1CU28D/whpu2QtwQrnkkq7+J5
+         Wpsep/E/t80Ua1cqxB+S0G+B7SXKJJ1srCNlOcrDeoOfaCGdA8OUH33MixbAcqtl3fQ0
+         Fod1RJOKpk1wYhp+kwt7X5h/l1QWZipbO0oy/YxxiB58K0+utw/kpr31cPccWXH9dcU2
+         V2YtK6b5CIT9koJpOQg/RI5sZadM39PSMTtHpZDl+lTAm9VwFJUhjRpIp7UeeXbKYr8X
+         i9kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7VHrAKcjAJZgRpVeG2JaXpIwP+wAPdW+wpeYWDjggGQ=;
-        b=Y1RXFWqfx3Vu5EgVvoTlryJRK8aOtwDAkJqOu8Qd/0akXDa24c2+AplVgzKiSnhkHl
-         9XSA3ptc9SWJ5TcBhVerxnTlmiCuWc8cLbh3ayBb+wNheF3PSK4VH5X3bZhlfWsLMuA2
-         iP+e3yQSWHvP8LxRpe0D5ij1Rcn/Lwm3LfMCCV0z3PiCQVt1kZC5ixQqqLVt0l2BsmOM
-         eImkjOMXHcAay9Hv9KwJ0V7D7YQyPWYVa1ELs+g9jf4bnnFrnUIf4HW4O4bFSiu956kt
-         gSTC6zgpINZPzPveiKD3uhM8FG1vmWltyZ8vt/h6UQQBlWpEg2+gIN4Yp85fLKo/sFCU
-         /yEg==
-X-Gm-Message-State: AOAM531lgJz1YJkqqF0UYBLwq/5Kk3bl2ZV4djB4YT4cBRicV/dxSaxH
-        HTtL1e/vHSjC8T0Q2SBWzjK6BA==
-X-Google-Smtp-Source: ABdhPJzcLzORLsiEDSo4DDxDjMTRo/UMmAaW7xxUWwcI6yQd3+sywxHWBSh00wNkZfILpKkIhPIe2g==
-X-Received: by 2002:adf:f7ce:: with SMTP id a14mr9726671wrq.294.1605786150760;
-        Thu, 19 Nov 2020 03:42:30 -0800 (PST)
+        bh=oOdMgmRPW212YndSnPHiJLqW5WhErPY60YEPYmAU1R8=;
+        b=XsdU0duYUl8T051OFdxVYHu6rL9bcpnaioxZDaVbI9TOo73O7vKt+KQFT64oHZ3pTH
+         0VR6MLMn3nzxpNbZzmo82Af3aYr//d/73+NalrIfJPWZI8/tjVctfLxGELvNuA/1b7/1
+         mkC6cmJWrEmi+gUeeyGfZr1Zev80X9qUPFYtXXmZ9Eu/W5U3hNSMJ49HlfZPRaZ8dpop
+         7B6hyBCQ/TAvECGSMKPXLwKts09HNdC9OlJriMQd8N5x5CYYygAj3qyNAVls3fUYlAeW
+         ViEkH2U2xaPoizO4IjYy4q3GWA26h14Md819Y8hnpPpoUZ31KESbFAeJ3rJzo8P6MsMY
+         b59g==
+X-Gm-Message-State: AOAM5301pLTzJ/FgTZ0cN3m8a/uneQwikmTWDWcc9Hmp4mBjuIYv4KyH
+        /VR5cAPREYKlRzazp/v7U8u89Q==
+X-Google-Smtp-Source: ABdhPJxYBxFqvHwIGZioiB4EDGQhqYkun71ps5kot9PHtNbUwzmar4rJEiMG3gxAWQmY7ZpjylwYUg==
+X-Received: by 2002:adf:8169:: with SMTP id 96mr9535932wrm.418.1605786151735;
+        Thu, 19 Nov 2020 03:42:31 -0800 (PST)
 Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.42.29
+        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.42.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 03:42:30 -0800 (PST)
+        Thu, 19 Nov 2020 03:42:31 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 25/59] rtc: lpc24xx: stop using deprecated RTC API
-Date:   Thu, 19 Nov 2020 12:41:15 +0100
-Message-Id: <20201119114149.4117-26-brgl@bgdev.pl>
+Subject: [PATCH 26/59] rtc: spear: stop using deprecated RTC API
+Date:   Thu, 19 Nov 2020 12:41:16 +0100
+Message-Id: <20201119114149.4117-27-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119114149.4117-1-brgl@bgdev.pl>
 References: <20201119114149.4117-1-brgl@bgdev.pl>
@@ -71,35 +71,37 @@ and devm_rtc_register_device() pair instead.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/rtc/rtc-lpc24xx.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-spear.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/rtc/rtc-lpc24xx.c b/drivers/rtc/rtc-lpc24xx.c
-index eec881a81067..e28a00be2c0d 100644
---- a/drivers/rtc/rtc-lpc24xx.c
-+++ b/drivers/rtc/rtc-lpc24xx.c
-@@ -247,14 +247,18 @@ static int lpc24xx_rtc_probe(struct platform_device *pdev)
- 		goto disable_clks;
+diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
+index 833daeb7b60e..acdb37b98cc5 100644
+--- a/drivers/rtc/rtc-spear.c
++++ b/drivers/rtc/rtc-spear.c
+@@ -383,17 +383,19 @@ static int spear_rtc_probe(struct platform_device *pdev)
+ 	spin_lock_init(&config->lock);
+ 	platform_set_drvdata(pdev, config);
+ 
+-	config->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
+-					&spear_rtc_ops, THIS_MODULE);
++	config->rtc = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(config->rtc)) {
+-		dev_err(&pdev->dev, "can't register RTC device, err %ld\n",
+-				PTR_ERR(config->rtc));
+ 		status = PTR_ERR(config->rtc);
+ 		goto err_disable_clock;
  	}
  
--	rtc->rtc = devm_rtc_device_register(&pdev->dev, "lpc24xx-rtc",
--					    &lpc24xx_rtc_ops, THIS_MODULE);
-+	rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtc)) {
--		dev_err(&pdev->dev, "can't register rtc device\n");
- 		ret = PTR_ERR(rtc->rtc);
- 		goto disable_clks;
- 	}
++	config->rtc->ops = &spear_rtc_ops;
+ 	config->rtc->uie_unsupported = 1;
  
-+	rtc->rtc->ops = &lpc24xx_rtc_ops;
++	status = devm_rtc_register_device(config->rtc);
++	if (status)
++		goto err_disable_clock;
 +
-+	ret = devm_rtc_register_device(rtc->rtc);
-+	if (ret)
-+		goto disable_clks;
-+
- 	return 0;
+ 	if (!device_can_wakeup(&pdev->dev))
+ 		device_init_wakeup(&pdev->dev, 1);
  
- disable_clks:
 -- 
 2.29.1
 
