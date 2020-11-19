@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AE42B9176
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 12:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AADDE2B9175
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 12:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727412AbgKSLn7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Nov 2020 06:43:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
+        id S1727409AbgKSLn6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Nov 2020 06:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727408AbgKSLnE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:43:04 -0500
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CFAC061A51
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:43:02 -0800 (PST)
-Received: by mail-wr1-x442.google.com with SMTP id m6so6076932wrg.7
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:43:02 -0800 (PST)
+        with ESMTP id S1727412AbgKSLnF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:43:05 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4909FC061A53
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:43:04 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id p1so6040966wrf.12
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:43:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fh0/ML4VFEC9H+vJV6RWtrAyOJTOn4EWW2FuW2aJX+M=;
-        b=nq65fEuUWFAN2kxughIowzyAZ/KF07TGDU25+nWq5Ozvi3zX/4NET3JTnu5AY2jinR
-         sO8BV3xKwShEab9KXxfgzdqgH2yDwwnAxZDC6lxPnwkgVNLO0PdaUxdifqrE/VdgBfYL
-         YV6RMEDfUIO7DIHIKUMXzStk8zE4O77ONRqv820PEe1TdcVg4ws7a5xe3k3E0O86q9fl
-         N87P2pVpYmnb96oy8tdIo90aQ4jToQkVyPD3vCa2AxvaeExsgC1W3+QSRWsDvMUoz981
-         KriMbNJa3OTiqcFM8u4nozwrAcd1xQUl0Rk4V64FLZLIJKEZqteE3TxtMvDeiDDjfTMi
-         UHLg==
+        bh=Kj1XFCNYXRV/njfVjs4Ag/WpgjQdsavMbI7mVJToB1A=;
+        b=u5YkmIui8TBX84E4s9zs9lIfaV4McIitjL2qgwQDyEUusXOmQ5iRJ7zufbqR/D270d
+         E2KlJmesqjo8seQvnd/JWUEuGBFOz8Ysp/4LBlEBmyJbZXSDGda7u4aqFVeSjJ9xAdXM
+         opxD6g4fzlpUPJqTmtWU5wShQdqr+gGDGRGJKQC0Gik1CHaUr2Hilorv6Zymb6L19JHU
+         4Z4dVL+QZFET2dgIaULQFif0NZbvPb6IFLi9Fh0UpucLlzMb6qC/jj2PhyJYoYISvZMM
+         iqMtBiLFo+VzyRRMuSCcpYXJHAtrzR5Ie/z8/+iEL0GQXELlp7p9Z7/AO5a5U7AzJ+ui
+         U8zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fh0/ML4VFEC9H+vJV6RWtrAyOJTOn4EWW2FuW2aJX+M=;
-        b=eJwS/ebiRmXKWyCCHvzctUsAsmuFXQ8pOTFFZp5f88FBNqHy9/CA5BuCk9++T0Pw9n
-         Oej2v8NYoD++UdJYph0ef7zcM9ZUOTLNz0IK4i4yU6eS/kpiCpLEIfpF/egVS6YyYvI4
-         SZwWhpW155yOonW9ZGrwKbLknf71vva9QhjHzYDVyZOD3TxdQeUA4JdP9xX6zORv+86Q
-         0T1bulm+Q5NCwm5cpWQQntrQk7bGCE9r6viLiRhfFXNK2dr065lxvlQvT9mki9VGbpQT
-         jfSR1w1IAcHJUXYLn9kIwgfJjkifjinMDE1h+U7J/BunT+TDqsWj71OSu9IKCtKUi7DC
-         MKQA==
-X-Gm-Message-State: AOAM533D8fx6YYFoci//SZMclcVHqj2ricC07dnMzrZaacdGOTOY0j7O
-        nmtbh/zCduaef+1S2XSrmQQElA==
-X-Google-Smtp-Source: ABdhPJw5aOIENoQLUC/qJB8iVUJ1V/qfxtDoSsIzTGV/yXFjyqiqquHGS1w4nkL0SnTdS4d0nct+BA==
-X-Received: by 2002:adf:bb92:: with SMTP id q18mr9500032wrg.315.1605786181762;
-        Thu, 19 Nov 2020 03:43:01 -0800 (PST)
+        bh=Kj1XFCNYXRV/njfVjs4Ag/WpgjQdsavMbI7mVJToB1A=;
+        b=GZ6phsIFMBzqfJLrPYFVBTy8pj3xZJK2LFnwdjHVNN6Wlh23fZR7/9vQR/KGdZTmZ5
+         WkJ2DCX3HIsvy6yysBBbFY2seFMbs5LSh2RQfN0g2K6kdE4TVJeDaJkIlofX6vfI8cHl
+         5zuHxwYza0yu7USrQhjjHmHmjvwsF4ZiloqxpD4AhBz9WOf3V1phyyMoIErXh+YPMMjH
+         KzwZ0lntGcJO/yw4HzfAXFy2VpLWYYmXE2OaW7YqfY+nDnv7Ot6uqL/xBTJ/oWgEGNzz
+         KUeoKrLPpvMnEHE/kIDk+gr0SNEyvrXQ1QUucC8PWJsiSjp+dVCbfbNAAwNqpDrYz8KY
+         4oAQ==
+X-Gm-Message-State: AOAM533WyWra+nuvkh766ogiGySGM/9yA4n9/5Uh98nWTcTAcqOqQSAz
+        2a1bXfGgxzH4cK94//6uUQurjg==
+X-Google-Smtp-Source: ABdhPJymR6wIpmdhr2puj0GgaV9PCpn+UpYgKNv7hGqyrNRWRVBxnz7uhg25EYpNFI/bQZtuoCLd0g==
+X-Received: by 2002:adf:ce07:: with SMTP id p7mr10472174wrn.39.1605786182868;
+        Thu, 19 Nov 2020 03:43:02 -0800 (PST)
 Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.43.00
+        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 03:43:00 -0800 (PST)
+        Thu, 19 Nov 2020 03:43:02 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 53/59] rtc: m41t93: stop using deprecated RTC API
-Date:   Thu, 19 Nov 2020 12:41:43 +0100
-Message-Id: <20201119114149.4117-54-brgl@bgdev.pl>
+Subject: [PATCH 54/59] rtc: fm3130: stop using deprecated RTC API
+Date:   Thu, 19 Nov 2020 12:41:44 +0100
+Message-Id: <20201119114149.4117-55-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119114149.4117-1-brgl@bgdev.pl>
 References: <20201119114149.4117-1-brgl@bgdev.pl>
@@ -69,33 +69,60 @@ From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 devm_rtc_device_register() is deprecated. Use devm_rtc_allocate_device()
 and devm_rtc_register_device() pair instead.
 
+While at it: remove unnecessary goto label.
+
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/rtc/rtc-m41t93.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-fm3130.c | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/rtc/rtc-m41t93.c b/drivers/rtc/rtc-m41t93.c
-index 9444cb5f5190..7faa8a4f0032 100644
---- a/drivers/rtc/rtc-m41t93.c
-+++ b/drivers/rtc/rtc-m41t93.c
-@@ -181,14 +181,14 @@ static int m41t93_probe(struct spi_device *spi)
- 		return -ENODEV;
+diff --git a/drivers/rtc/rtc-fm3130.c b/drivers/rtc/rtc-fm3130.c
+index 677ec2da13d8..29e296f2faab 100644
+--- a/drivers/rtc/rtc-fm3130.c
++++ b/drivers/rtc/rtc-fm3130.c
+@@ -344,7 +344,6 @@ static int fm3130_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+ {
+ 	struct fm3130		*fm3130;
+-	int			err = -ENODEV;
+ 	int			tmp;
+ 	struct i2c_adapter	*adapter = client->adapter;
+ 
+@@ -390,8 +389,7 @@ static int fm3130_probe(struct i2c_client *client,
+ 	tmp = i2c_transfer(adapter, fm3130->msg, 4);
+ 	if (tmp != 4) {
+ 		dev_dbg(&client->dev, "read error %d\n", tmp);
+-		err = -EIO;
+-		goto exit_free;
++		return -EIO;
  	}
  
--	rtc = devm_rtc_device_register(&spi->dev, m41t93_driver.driver.name,
--					&m41t93_rtc_ops, THIS_MODULE);
-+	rtc = devm_rtc_allocate_device(&spi->dev);
- 	if (IS_ERR(rtc))
- 		return PTR_ERR(rtc);
+ 	fm3130->regs[FM3130_RTC_CONTROL] =
+@@ -501,17 +499,13 @@ static int fm3130_probe(struct i2c_client *client,
  
-+	rtc->ops = &m41t93_rtc_ops;
- 	spi_set_drvdata(spi, rtc);
- 
+ 	/* We won't bail out here because we just got invalid data.
+ 	   Time setting from u-boot doesn't work anyway */
+-	fm3130->rtc = devm_rtc_device_register(&client->dev, client->name,
+-				&fm3130_rtc_ops, THIS_MODULE);
+-	if (IS_ERR(fm3130->rtc)) {
+-		err = PTR_ERR(fm3130->rtc);
+-		dev_err(&client->dev,
+-			"unable to register the class device\n");
+-		goto exit_free;
+-	}
 -	return 0;
-+	return devm_rtc_register_device(rtc);
+-exit_free:
+-	return err;
++	fm3130->rtc = devm_rtc_allocate_device(&client->dev);
++	if (IS_ERR(fm3130->rtc))
++		return PTR_ERR(fm3130->rtc);
++
++	fm3130->rtc->ops = &fm3130_rtc_ops;
++
++	return devm_rtc_register_device(fm3130->rtc);
  }
  
- static struct spi_driver m41t93_driver = {
+ static struct i2c_driver fm3130_driver = {
 -- 
 2.29.1
 
