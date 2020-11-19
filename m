@@ -2,49 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE942B9193
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 12:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0178B2B918C
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 12:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgKSLpG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Nov 2020 06:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S1727350AbgKSLoi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Nov 2020 06:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727343AbgKSLmr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:42:47 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA03C061A4F
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:46 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id o15so6110022wru.6
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:46 -0800 (PST)
+        with ESMTP id S1727347AbgKSLms (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 06:42:48 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEEDC061A52
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:47 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id s13so6451765wmh.4
+        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 03:42:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LUz4VOPtCQ6MofHdGqqmUJWFE2OL4Z8r4lVtOSIvBIY=;
-        b=cKKwxIc/ulcFNHzwHV96lh8zjQJ9fG6tRReWRE/sRareusRGjRNtFQSUGSzhkYaGC9
-         KEVjmDalYMVM9b6SHhlT6FmZ8t709qH+aNASbpM08D9ToTZSAGeZDFqGDFUeWfnlnyN0
-         py30BJ9yqnz5Aa9xU16iD2Ft30YT70Mv6rYpLoaNJ5/c4TpSZO/bq8SKrOB4iT3YwC5b
-         I4NTGaR+1qX0QtQHbxA3qURHPs8EyCZjLvLJo+6fUepyXZuuTGInlGoaLB6u/6OPrBQo
-         v9ALga+6aV9B4T1pgqbRx7Kv0pDjFiM0rz2mSRtyumyNoEdYnKJlXul9yM4rRlVtgIMR
-         qIoA==
+        bh=wzKNqJHF/k+BxyxnqhMmFe/hNlc7WNmTxpYu93YpGLI=;
+        b=CZhYx6N768QPB9ef5sqVZFQu+0t/M29cnuTLJuHbRzFb8MBP/VaINu1lZGHy7RHkDM
+         9y8hu+zAh+Q7pQGaBf2yiUl/o3qsbSGyXRO4EnqDZIeCAHAvxu4OI1m8v1sfdfzqaOl6
+         ceehsAPbxFu0YKpu5YfUDl1RkPAhm1X/2KyXJzlkjpqK6EDrbhEsSm8cZvdrlfX1oXbZ
+         rE5LaIa4YwDpO3MqiGe75bFUevD9LdMbc0NEYCgRVyPZDt5Jfoebx+Q/dCjnOoMgyBfM
+         oMJdTN6QYwUh5KRuagn7RWOHQh/DDbtijqPx0qa0ES5O5jyjUY23dheL6/OudHWQBwp1
+         JIrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LUz4VOPtCQ6MofHdGqqmUJWFE2OL4Z8r4lVtOSIvBIY=;
-        b=BXdlcEFiBdnqmBG32MaKrOc95RTWR+o4N4TzQCtnW6uwg2vPsFIJPasdwGuF0Qo1hK
-         S16KKzoSCNx7N+6zN01jO9ktnPnTOFG1dRKYsJNizmYjJ+Bbh48ZSOQ/x1RBCff8S98N
-         v5xD3BdA4XGjRl1DYbFfb0IvxY2F9D7RqnsWgRWn/27l9pjeko+7Vxk+1oNZ5PGP14vT
-         /4SkbC/FWae84vnAhNJYRgLjK8sUuYp9telZMX0IKIqItn1hZ2IeWuLGxuMaQomQpUBG
-         RhU15tBLknaZ5g8kasL50X43fz4Y09ZQlbDnqxLI0IuYWtkU1ojDRBk5iB8ARaW7zcGP
-         WaUg==
-X-Gm-Message-State: AOAM533dCnRfU+bD0m0YPmiwwZAX619EzyzUUPvCCJowdrLG72GZ4y+S
-        Sn4+zDPpzBIb113D7dO2+sXZsg==
-X-Google-Smtp-Source: ABdhPJwZ8AQRAieNo8lotHexkwASuvzYY/5oQ/DCdwd8jIGE/+6rl6f6ykuNrGHAAB4nY81zFwCB+g==
-X-Received: by 2002:adf:de85:: with SMTP id w5mr10120007wrl.90.1605786165516;
-        Thu, 19 Nov 2020 03:42:45 -0800 (PST)
+        bh=wzKNqJHF/k+BxyxnqhMmFe/hNlc7WNmTxpYu93YpGLI=;
+        b=lW12wkgdMHK/nZKkDas6coh3yhnZoMEm+tj9AFb3HbsRhjFx5bhHyTJOqdXBXjikYW
+         kFLe8Hn6FxNUxzZGuGFVjcT/ShGbr/hDL+Gx/J3C+nueLG//xndNb5EtshiOv28m6UFj
+         8Gr3vX2drq47/un1sekEDHs6sEzCFkm1WTfKazf2t5p7k2hlffbSPOPw3TKatFiq1JuS
+         KHByuVO/gw+OytljQWJxkFy1FDL1AdJxQBVlv9hzBOzlBCg7f13nEGmfj1PwrgYwMu8T
+         cJCZBMQOevg4D9+kOMdZWdOihMDUiunMApJcROStT28ltbGKOlyqxwPMdA0m6pwHSNJ7
+         e/xw==
+X-Gm-Message-State: AOAM533CTWN6JWLL2TEO6JqQbACj6id7T/7m82eQBszar0KzL80mZ4bi
+        ISfgL4ugWmSRGMEqIhxszUR86g==
+X-Google-Smtp-Source: ABdhPJwX1mLV1BSAwWv73kg8fb4Ma3+Ri656b0A6+ueMFnTfwgzcFGCJKEepfUjmvUnpzPt9LK/4fQ==
+X-Received: by 2002:a1c:6002:: with SMTP id u2mr3831585wmb.29.1605786166507;
+        Thu, 19 Nov 2020 03:42:46 -0800 (PST)
 Received: from localhost.localdomain (lfbn-nic-1-190-206.w2-15.abo.wanadoo.fr. [2.15.39.206])
-        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.42.44
+        by smtp.gmail.com with ESMTPSA id u23sm9745178wmc.32.2020.11.19.03.42.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 19 Nov 2020 03:42:45 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
@@ -52,9 +52,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 39/59] rtc: wm8350: stop using deprecated RTC API
-Date:   Thu, 19 Nov 2020 12:41:29 +0100
-Message-Id: <20201119114149.4117-40-brgl@bgdev.pl>
+Subject: [PATCH 40/59] rtc: r7301: stop using deprecated RTC API
+Date:   Thu, 19 Nov 2020 12:41:30 +0100
+Message-Id: <20201119114149.4117-41-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201119114149.4117-1-brgl@bgdev.pl>
 References: <20201119114149.4117-1-brgl@bgdev.pl>
@@ -71,41 +71,37 @@ and devm_rtc_register_device() pair instead.
 
 Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- drivers/rtc/rtc-wm8350.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/rtc/rtc-r7301.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-wm8350.c b/drivers/rtc/rtc-wm8350.c
-index 2018614f258f..140efe601c88 100644
---- a/drivers/rtc/rtc-wm8350.c
-+++ b/drivers/rtc/rtc-wm8350.c
-@@ -424,13 +424,11 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
+diff --git a/drivers/rtc/rtc-r7301.c b/drivers/rtc/rtc-r7301.c
+index aaf1b95e3990..a879313dbb05 100644
+--- a/drivers/rtc/rtc-r7301.c
++++ b/drivers/rtc/rtc-r7301.c
+@@ -381,11 +381,12 @@ static int __init rtc7301_rtc_probe(struct platform_device *dev)
  
- 	device_init_wakeup(&pdev->dev, 1);
+ 	platform_set_drvdata(dev, priv);
  
--	wm_rtc->rtc = devm_rtc_device_register(&pdev->dev, "wm8350",
--					&wm8350_rtc_ops, THIS_MODULE);
--	if (IS_ERR(wm_rtc->rtc)) {
--		ret = PTR_ERR(wm_rtc->rtc);
--		dev_err(&pdev->dev, "failed to register RTC: %d\n", ret);
--		return ret;
--	}
-+	wm_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(wm_rtc->rtc))
-+		return PTR_ERR(wm_rtc->rtc);
+-	rtc = devm_rtc_device_register(&dev->dev, DRV_NAME, &rtc7301_rtc_ops,
+-				       THIS_MODULE);
++	rtc = devm_rtc_allocate_device(&dev->dev);
+ 	if (IS_ERR(rtc))
+ 		return PTR_ERR(rtc);
+ 
++	rtc->ops = &rtc7301_rtc_ops;
 +
-+	wm_rtc->rtc->ops = &wm8350_rtc_ops;
- 
- 	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
- 			    wm8350_rtc_update_handler, 0,
-@@ -441,7 +439,7 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
- 			    wm8350_rtc_alarm_handler, 0,
- 			    "RTC Alarm", wm8350);
+ 	if (priv->irq > 0) {
+ 		ret = devm_request_irq(&dev->dev, priv->irq,
+ 				       rtc7301_irq_handler, IRQF_SHARED,
+@@ -398,7 +399,7 @@ static int __init rtc7301_rtc_probe(struct platform_device *dev)
+ 		}
+ 	}
  
 -	return 0;
-+	return devm_rtc_register_device(wm_rtc->rtc);
++	return devm_rtc_register_device(rtc);
  }
  
- static int wm8350_rtc_remove(struct platform_device *pdev)
+ #ifdef CONFIG_PM_SLEEP
 -- 
 2.29.1
 
