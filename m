@@ -2,82 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E742B9270
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Nov 2020 13:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7742BB649
+	for <lists+linux-rtc@lfdr.de>; Fri, 20 Nov 2020 21:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727261AbgKSMPt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Nov 2020 07:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S1728891AbgKTULT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 20 Nov 2020 15:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgKSMPq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Nov 2020 07:15:46 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB80C0613CF
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 04:15:46 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id q3so5554638edr.12
-        for <linux-rtc@vger.kernel.org>; Thu, 19 Nov 2020 04:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D5s9bbkRbansoqRWidTzLpWZYFdCdII2aFHWDapQgIg=;
-        b=iotwngR15/MvNh34vaGg47omxkqq21H2TUiKi4CgNhJabPPQzTim91jykiEhpzXFuu
-         KUZlAYLKwJshfDf9rAJbGOQ3kP7h4IvoPtXXOs9RZ/eHWmLOvQtS7vCb/+/WU7fvCQjj
-         yCKWLigviRiG32h/mYRA7mSUEc41FToHkgjSakcknIoBFmUl+ZjFQt8OKSOQHPxXKcmw
-         Mgl5QBO66jdIJhHD9VbgDtyPWyDoEvWRgw9dGvsmVSg5d0QMa8IMYuhobUSKYL6CdbUe
-         MCZ/N4iuIw7N7MWJsesR6Fg1tyWkg1tUM3GC6zhslIF4SWT6hnaz/aCLgIsnDAzqqMO5
-         7eLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D5s9bbkRbansoqRWidTzLpWZYFdCdII2aFHWDapQgIg=;
-        b=ocS3pqwy2pE1COC3A/0MSsic+Cg9gWYy4aFMv3dITB5M8n/Tq3OilXRw0AysrPgg9N
-         eVsM65U9WT8/i4IOt3ojgDrcpOez4q0EWUg0ZOTFlN0QQDwIiXiIkp+6YKL320OZ5LtQ
-         frYDdj0UsrThniOtYBg2bMthanRZPqJh/FrbR0TXltKS8+aGLflIBOB8c4z3Nm3cJqRh
-         UhjaCHWULj2gVnukqV+Q61slBfmH7o3kwRo3bHi3yVtfg/L6mCY+hsiKKHNMI5xHT0+2
-         Zhsu3Ho1eZfkcV/a9hhl/+841kq+2YEiOPDgZzjB0rMxvHusK45mM0R2ATJXfoS42KWr
-         XdrQ==
-X-Gm-Message-State: AOAM5303IUF0ZAk36s9H7CfEJFRjUp2Khk16QYDeTxNRljNPBqmxp7Y9
-        /8Z3URZdpOhdfrCz9OGt9CO9vbjOT7/vk6JUjl40Dw==
-X-Google-Smtp-Source: ABdhPJwJ0rC+sNdIFhaYH3Qqb6/pUOvAf2unlOJzIyWzNwBln7z5oKUQIBP0mjIrJS3CKSzJtLcPIHjCEudLZBnHxY8=
-X-Received: by 2002:a50:ab15:: with SMTP id s21mr30086261edc.88.1605788144878;
- Thu, 19 Nov 2020 04:15:44 -0800 (PST)
+        with ESMTP id S1728395AbgKTULT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 20 Nov 2020 15:11:19 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A8CC0613CF
+        for <linux-rtc@vger.kernel.org>; Fri, 20 Nov 2020 12:11:18 -0800 (PST)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1kgCkV-00BZyG-I1; Fri, 20 Nov 2020 21:11:15 +0100
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-rtc@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-um@lists.infradead.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH] rtc: enable RTC framework on ARCH=um
+Date:   Fri, 20 Nov 2020 21:11:06 +0100
+Message-Id: <20201120211103.6895ac740d11.Ic19a9926e8e4c70c03329e55f9e5b1d45095b904@changeid>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20201119114149.4117-1-brgl@bgdev.pl> <20201119114814.GA165507@piout.net>
-In-Reply-To: <20201119114814.GA165507@piout.net>
-From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Date:   Thu, 19 Nov 2020 13:15:33 +0100
-Message-ID: <CAMpxmJXJd5CgRC9Dm7WfP06bffbmA0VNapkg1c8UBoGx19p6Pg@mail.gmail.com>
-Subject: Re: [PATCH 00/59] rtc: remove all uses of devm_rtc_device_register()
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 12:48 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 19/11/2020 12:40:50+0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > So we now have two functions whose names are easy to confuse. I spent some
-> > time and simply converted all RTC drivers to using the preferred interface.
-> >
-> > Obviously these have only been compile-tested. I hope I didn't broke too
-> > many drivers in the process. Most of the conversions was easy, sometime
-> > it required removing unnecessary goto labels. There's also one patch
-> > using a different devres helpers in here.
-> >
->
-> I'm not going to apply this series as this is not how I wanted to
-> proceed (else this would have been done a while ago).
->
+From: Johannes Berg <johannes.berg@intel.com>
 
-What's the plan then?
+There's no real reason it should be disabled, and at least we can
+use it for development & testing with the RTC test driver.
 
-Bartosz
+However, two devices are missing a HAS_IOMEM dependency, so add
+that to avoid build failures from e.g. allyesconfig.
+
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+Would there be objection to taking this through the linux-um tree?
+I have a couple of patches that depend on it as well, to add
+suspend/resume support with a pseudo-RTC to wake up from it.
+---
+ drivers/rtc/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 48c536acd777..de187b563989 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -13,7 +13,7 @@ config RTC_MC146818_LIB
+ menuconfig RTC_CLASS
+ 	bool "Real Time Clock"
+ 	default n
+-	depends on !S390 && !UML
++	depends on !S390
+ 	select RTC_LIB
+ 	help
+ 	  Generic RTC class support. If you say yes here, you will
+@@ -1007,6 +1007,7 @@ config RTC_DRV_DS1553
+ 
+ config RTC_DRV_DS1685_FAMILY
+ 	tristate "Dallas/Maxim DS1685 Family"
++	depends on HAS_IOMEM
+ 	help
+ 	  If you say yes here you get support for the Dallas/Maxim DS1685
+ 	  family of real time chips.  This family includes the DS1685/DS1687,
+@@ -1140,6 +1141,7 @@ config RTC_DRV_STK17TA8
+ 
+ config RTC_DRV_M48T86
+ 	tristate "ST M48T86/Dallas DS12887"
++	depends on HAS_IOMEM
+ 	help
+ 	  If you say Y here you will get support for the
+ 	  ST M48T86 and Dallas DS12887 RTC chips.
+-- 
+2.26.2
+
