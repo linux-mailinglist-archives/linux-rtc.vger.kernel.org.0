@@ -2,68 +2,298 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD2F2C489D
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 Nov 2020 20:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4854F2C5E17
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 Nov 2020 00:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgKYTmK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 25 Nov 2020 14:42:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbgKYTmK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 Nov 2020 14:42:10 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5D2C0613D4;
-        Wed, 25 Nov 2020 11:42:09 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id 64so3053774wra.11;
-        Wed, 25 Nov 2020 11:42:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
-        b=NHP3RYHyvA7GFeJZWJegepQ0udAcjT7TYkzgyXSA+M46wImWLoYWAMrpYgochsLahA
-         BfVrqQAQNJOJECBUel9wp7fyANnP7GW+0kb67oWD7np5E4ELuKNznH/oCp9ccGVFUmvn
-         EDk55CQKIqoH2Z8bLVAmL61LUdpj4zi+jqNsc/jRJ8+WZo/YFZsyivGRkYfX76nHtBw7
-         2Q2vp2uMO8yoa+pj4xLBFziql3ENXTE1A9UGOsKLuZ7ZcK8sGDReuZxpYCJY5m8ycnXU
-         afiAJlAsJTAbA5Zb+BOdEjEAdL5KUkeDyO7lvSYT4f33W+fXNsJD9rO/+bOw9WE2aTVD
-         /cuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=MT4M9SX2NqdNuOObXhIV8Gtkw+yoDX+gRyJnh+feBwM=;
-        b=XabmP7i1CNXmxCKll8qvoM6E5Stso2pLBV5z1S/iAt9bCSDGvO0kY378xROfxcsnq2
-         sbHBp6hcYZQwygNhpGDR1R+6rtq5C48zIcKuCr9QwfWak0iyI30jpz9ycMTH0RcTfJJU
-         KkcyrolafDQE8KrkqD9nwXGRzO2/kH4T2ZO5NHtEZQ52tmh6H5iGaL0xhAZUkDdYrGt9
-         tGrNM/xfQoe/rhVvAO0yEX6lDR8/aw4QEsf2NkI9l0PjORiNKjwWA8VMUqTJ/vaUqQRb
-         2MGEMe5MKSXNlJUGKTUmWhz3m/wQ05FXS1JeB0RY5EHr5qzZsHNvJD77cSSaVL8SKYQU
-         gPuw==
-X-Gm-Message-State: AOAM530s6AEpbPfOPLAVioD9OnLAFO13Qn/nS0huNVFXaWV555ATK5qp
-        bt6UzGjVL5ygfDb6H6cOoUo=
-X-Google-Smtp-Source: ABdhPJxpYVTyKnn2VXztxVZssWCuavXSKMcV7OeDT654vU0RtiV8GSDP/WTyw9f0fxmrjDm1nExorQ==
-X-Received: by 2002:a5d:4a07:: with SMTP id m7mr5790947wrq.316.1606333328541;
-        Wed, 25 Nov 2020 11:42:08 -0800 (PST)
-Received: from [192.168.1.152] ([102.64.149.89])
-        by smtp.gmail.com with ESMTPSA id u129sm5090970wme.9.2020.11.25.11.42.04
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 25 Nov 2020 11:42:07 -0800 (PST)
-Message-ID: <5fbeb38f.1c69fb81.a9b8d.bcc2@mx.google.com>
-From:   "Dailborh R." <ritundailb333@gmail.com>
-X-Google-Original-From: Dailborh R.
-Content-Type: text/plain; charset="iso-8859-1"
+        id S2388531AbgKZXUv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 26 Nov 2020 18:20:51 -0500
+Received: from mout.gmx.net ([212.227.17.22]:46377 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388513AbgKZXUv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 26 Nov 2020 18:20:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1606432783;
+        bh=aahldzhXYRM/u5SxDDCGJhhv6lvuCoEtZATJFGAyWa0=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=EuJHSWL4ApzfPaymwZvTarishmG9H1b7hYjQF7iJMnHBIPYgyPkr8FqFJgQR7uW0U
+         u22oI52vQDAg+28teYGzisUIo0bJIo3EHn2An4bkZ38PMmydaujv21Yq1EeSZMP3kB
+         360RxXucWKVGcwvfJFv7llPf2UPOEWduSmaUZ2i0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.214.162]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3KTy-1k19fZ1nk2-010PUi; Fri, 27
+ Nov 2020 00:19:43 +0100
+Date:   Fri, 27 Nov 2020 00:19:31 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
+        allen <allen.chen@ite.com.tw>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mark Brown <broonie@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v4 4/7] pwm: ntxec: Add driver for PWM function in
+ Netronix EC
+Message-ID: <20201126231931.GE456020@latitude>
+References: <20201122222739.1455132-1-j.neuschaefer@gmx.net>
+ <20201122222739.1455132-5-j.neuschaefer@gmx.net>
+ <20201124082019.vpkr3xnp55arjpnp@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Please reply to me
-To:     Recipients <Dailborh@vger.kernel.org>
-Date:   Wed, 25 Nov 2020 19:41:59 +0000
-Reply-To: dailrrob.83@gmail.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5p8PegU4iirBW1oA"
+Content-Disposition: inline
+In-Reply-To: <20201124082019.vpkr3xnp55arjpnp@pengutronix.de>
+X-Provags-ID: V03:K1:7uuNql546Xcj+FmeEawv7Fy/oxIA22FnVQTJX/dZFCPZxk8tmL+
+ tGUHxeL1WfXWPkE76uUF/GXjYCqrO9fQzkKzVsVmE1RUyWrG5AdsTFr1aO0v0StGSDsvgXg
+ QgxO0Ig8aF2C1jYzwyePIcHGxc9jS07wrmJvrl2AAasxjRvZ/wVRjfVCXD00pNq9Ip9iXJR
+ lJ/peJ2ZFLa0GZu9UYuiQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2JV/9Ub+Jh8=:h/PPorApj6PW3vMSVe+n/n
+ VzzVCiwZ6oVAW8bRi644c2sGQ/LTg3Ek8BuHQyjixFZVSqI9kCMqJc15EMCr8G6ubBChCn3vr
+ sjhHyAgIz1RDH1gCxqDiwPpwQFNjfddVHvVH9lDGJGnkbK9W7p6/69QCENQyguFHTiZN5sQkn
+ l3mTvHg/U4o7/EqvWHL0Bnws4/wDfa69a7fLRxceyo1ZiJyOFhMsJ8HvHv0puCvjMXx1lbmfa
+ 2SMnFOS2a3yWumHN0Y/8FXrQcn7PtirjsjMmmjhBWz0Z3fSxzdtGDDXUQke3WIrGl/mxrshHI
+ AG5M0uzf4XTu+FpR3wVs04gy1q10rI2HyCLR5Ej9LxGqklHcwTseUpyNrUSeGlU807ep8d8OC
+ ZjaMBRRTKas9ezf9+BNk9bYzOJ4SxwzRBw64E3vK/f61xrJaGr/g38IA7zNNEBU1eIaLfJ8PO
+ aqacRWD2cfcGsuqKY0icMQ0aKQ6OHqYuneCMacrE6r25QNag9tUZfU7l2fZHDUEEISJJ7uY5q
+ ++0vZGmG1q/MaxkkQToeo/Um5IUvp7OdtKFNym0zFh21mhTBYfxTeJiOzuGjnZKc7o7oVq7Rl
+ PoXXYiI/i3N48gwMOYciufhadZb56x4E8Aku/jkHXGKlEU773ewO6e9W63VKLd+/T71fdg/01
+ jAw3HKhWLZwnis09OayrlbqSg+JRco51yWPOdN+SlPwjnzrcWpNPq43LGGurSOfHspdQrMuR2
+ fbu6KzW/eBVKMkNRaKQPHovpyBzZcFcJysUH9o67DG3aeBxNJajbjmvnItjRTv0q53mbySpYI
+ F7h4eTs5HQWDNt9DNUB9y7KwXnPxM1fuLHCoKfAmtS602nNd8OKD95BAKtRqezV/hsG4jsbe7
+ QL6FXys40HWHSsa3N9QQ==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-I'm Dailborh R. from US. I picked interest in you and I would like to know
-more about you and establish relationship with you. i will wait for
-your response. thank you.
 
+--5p8PegU4iirBW1oA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Nov 24, 2020 at 09:20:19AM +0100, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>=20
+> On Sun, Nov 22, 2020 at 11:27:36PM +0100, Jonathan Neusch=C3=A4fer wrote:
+[...]
+> > +/*
+> > + * The time base used in the EC is 8MHz, or 125ns. Period and duty cyc=
+le are
+> > + * measured in this unit.
+> > + */
+> > +#define TIME_BASE_NS 125
+> > +
+> > +/*
+> > + * The maximum input value (in nanoseconds) is determined by the time =
+base and
+> > + * the range of the hardware registers that hold the converted value.
+> > + * It fits into 32 bits, so we can do our calculations in 32 bits as w=
+ell.
+> > + */
+> > +#define MAX_PERIOD_NS (TIME_BASE_NS * 0xffff)
+> > +
+> > +static int ntxec_pwm_apply(struct pwm_chip *chip, struct pwm_device *p=
+wm_dev,
+> > +			   const struct pwm_state *state)
+> > +{
+> > +	struct ntxec_pwm *priv =3D pwmchip_to_priv(pwm_dev->chip);
+> > +	unsigned int duty =3D state->duty_cycle;
+> > +	unsigned int period =3D state->period;
+>=20
+> state->duty_cycle and state->period are u64, so you're losing
+> information here. Consider state->duty_cycle =3D 0x100000001 and
+> state->period =3D 0x200000001.
+
+Oh, good point, I didn't notice the truncation.
+
+The reason I picked unsigned int was to avoid a 64-bit division;
+I suppose I can do something like this:
+
+    period =3D (u32)period / TIME_BASE_NS;
+    duty =3D (u32)duty / TIME_BASE_NS;
+
+> > +	int res =3D 0;
+> > +
+> > +	if (state->polarity !=3D PWM_POLARITY_NORMAL)
+> > +		return -EINVAL;
+> > +
+> > +	if (period > MAX_PERIOD_NS) {
+> > +		period =3D MAX_PERIOD_NS;
+> > +
+> > +		if (duty > period)
+> > +			duty =3D period;
+> > +	}
+> > +
+> > +	period /=3D TIME_BASE_NS;
+> > +	duty /=3D TIME_BASE_NS;
+> > +
+> > +	res =3D regmap_write(priv->ec->regmap, NTXEC_REG_PERIOD_HIGH, ntxec_r=
+eg8(period >> 8));
+> > +	if (res)
+> > +		return res;
+>=20
+> I wonder if you can add some logic to the regmap in the mfd driver such
+> that ntxec_reg8 isn't necessary for all users.
+
+I think that would involve:
+
+1. adding custom register access functions to the regmap, which decide
+   based on the register number whether a register needs 8-bit or 16-bit
+   access. So far I have avoided information about registers into the
+   main driver, when the registers are only used in the sub-drivers.
+
+or
+
+2. switching the regmap configuration to little endian, which would be
+   advantageous for 8-bit registers, inconsequential for 16-bit
+   registers that consist of independent high and low halves, and wrong
+   for the 16-bit registers 0x41, which reads the battery voltage ADC
+   value. It is also different from how the vendor kernel treats 16-bit
+   registers.
+
+Perhaps there is another option that I haven't considered yet.
+
+>=20
+> > +	res =3D regmap_write(priv->ec->regmap, NTXEC_REG_PERIOD_LOW, ntxec_re=
+g8(period));
+> > +	if (res)
+> > +		return res;
+> > +
+> > +	res =3D regmap_write(priv->ec->regmap, NTXEC_REG_DUTY_HIGH, ntxec_reg=
+8(duty >> 8));
+> > +	if (res)
+> > +		return res;
+> > +
+> > +	res =3D regmap_write(priv->ec->regmap, NTXEC_REG_DUTY_LOW, ntxec_reg8=
+(duty));
+> > +	if (res)
+> > +		return res;
+>=20
+> I think I already asked, but I don't remember the reply: What happens to
+> the output between these writes? A comment here about this would be
+> suitable.
+
+I will add something like the following:
+
+/*
+ * Changes to the period and duty cycle take effect as soon as the
+ * corresponding low byte is written, so the hardware may be configured
+ * to an inconsistent state after the period is written and before the
+ * duty cycle is fully written. If, in such a case, the old duty cycle
+ * is longer than the new period, the EC will output 100% for a moment.
+ */
+
+>=20
+> > +
+> > +	/*
+> > +	 * Writing a duty cycle of zero puts the device into a state where
+> > +	 * writing a higher duty cycle doesn't result in the brightness that =
+it
+> > +	 * usually results in. This can be fixed by cycling the ENABLE regist=
+er.
+> > +	 *
+> > +	 * As a workaround, write ENABLE=3D0 when the duty cycle is zero.
+> > +	 */
+> > +	if (state->enabled && duty !=3D 0) {
+> > +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(=
+1));
+> > +		if (res)
+> > +			return res;
+> > +
+> > +		/* Disable the auto-off timer */
+> > +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_HI, ntxec_=
+reg8(0xff));
+> > +		if (res)
+> > +			return res;
+> > +
+> > +		return regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_LO, ntxec_r=
+eg8(0xff));
+> > +	} else {
+> > +		return regmap_write(priv->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(0=
+));
+> > +	}
+> > +}
+> > +
+> > +static struct pwm_ops ntxec_pwm_ops =3D {
+>=20
+> This can be const.
+
+Indeed, I'll change it.
+
+> > +	.apply =3D ntxec_pwm_apply,
+>=20
+> /*
+>  * The current state cannot be read out, so there is no .get_state
+>  * callback.
+>  */
+>=20
+> Hmm, at least you could provice a .get_state() callback that reports the
+> setting that was actually implemented for in the last call to .apply()?
+
+Yes... I see two options:
+
+1. Caching the state in the driver's private struct. I'm not completely
+   convinced of the value, given that the information is mostly
+   available in the PWM core already (except for the adjustments that
+   the driver makes).
+
+2. Writing the adjusted state back into pwm_dev->state (via pwm_set_*).
+   This seems a bit dirty.
+
+> @Thierry: Do you have concerns here? Actually it would be more effective
+> to have a callback (like .apply()) that modfies its pwm_state
+> accordingly. (Some drivers did that in the past, but I changed that to
+> get an uniform behaviour in 71523d1812aca61e32e742e87ec064e3d8c615e1.)
+> The downside is that people have to understand that concept to properly
+> use it. I'm torn about the right approach.
+
+General guidance for such cases when the state can't be read back from
+the hardware would be appreciated.
+
+
+Thanks,
+Jonathan Neusch=C3=A4fer
+
+--5p8PegU4iirBW1oA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl/AN/QACgkQCDBEmo7z
+X9soyg/+Pla45ai7+kPvin4dWvIl1bD+Jhj1hthtr+7jq/aVPYDTE2OT2bSD9WZt
+z4AZvfsNfWvulm90Okuer4jru4bLudbEIcMeAJa7J0S+m1uCFOrtDr+hk6BF3bb3
+y7IJQpLxfbf476cwss7i+QmG+jupHo6LJeQWi9N3bJ3kh6uoqSyZr6rw3eg2Vvnv
+I/2yW3B4yrKS/6Sx5n6VtpFRhSHZ9TwaOnHqXcAAHYAGsuoTM7iOkWXRWoE6zk9a
+cfuxxdERLspDlrEjNFs8MsNDjRhXLDwYyJzyHFdcu8QVpEWzBEVUfWxV8MQ2N/Qb
+P2knWpdreU/zOax3n/Q8lUDHNolc6UK5A/Ny5KGX/JXpMCRCWPsRt2qKIiFTVAmD
+jjP0rMEVSWInIaQUFSpBcVet4dw9RiSXX6266eeVZ51NzBi0BlGfIf+e+/GSvQ/v
+t1Qfyu2pMJO655dcytuo9Bp9oMTMe7iwpd/Sv2klG2/n7qfWHmSmwzMMh0NLeeOR
+GdAETDxXS4Zb5eHrwuRS7TPSpAI7lDkZu7NiA9DRqGF4tmwEwPFE+w4wO9Z/frgp
+njYCZqqyvcFcPkrJSoQYUIs3SP7pVEeAZVPsIwRY1F9zjpgu2StA9gcnS3CVMAYh
+seTEQcD1eSz5C3x8PDaLE+UgAapgdEZbXoBA5HEtssw58abKFrc=
+=QwrY
+-----END PGP SIGNATURE-----
+
+--5p8PegU4iirBW1oA--
