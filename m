@@ -2,33 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3552CBEF2
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Dec 2020 15:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0593E2CC066
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Dec 2020 16:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727359AbgLBOCs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Dec 2020 09:02:48 -0500
-Received: from mout.gmx.net ([212.227.15.19]:55089 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726828AbgLBOCs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 2 Dec 2020 09:02:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1606917621;
-        bh=mkPrbK+yJuzfAhf/sO1iUgkIQXheUrt7++KNxongoyM=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=O32K6VLkxNtdhWIzbLII3haODtWzmGPALzgvgG9EWa47XBK49a5QvVytI9xRaWmAw
-         O7vlr7xahai/2MAWQXpevfuRpbbsAq0arW4vxkpVpjP/+FVnXOQqQbqicQ9ABvN93T
-         wVY2GxYwgZArm4K7ZgCHP5Q2KyjmkJSYRRri2yWE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.214.162]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEV3I-1kzJyZ0cuI-00Fyd1; Wed, 02
- Dec 2020 15:00:21 +0100
-Date:   Wed, 2 Dec 2020 15:00:14 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        id S1726037AbgLBPK2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Dec 2020 10:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730388AbgLBPK2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Dec 2020 10:10:28 -0500
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059CEC0613D6
+        for <linux-rtc@vger.kernel.org>; Wed,  2 Dec 2020 07:09:47 -0800 (PST)
+Received: by mail-wm1-x344.google.com with SMTP id a6so8121223wmc.2
+        for <linux-rtc@vger.kernel.org>; Wed, 02 Dec 2020 07:09:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=oOSicCWhNpoN2Xb8hfcdhiDNzylSo2X/NngolxOC8vQ=;
+        b=VDelKcaY4dVlNWOPXMkFf5mSXUkNLpgLiq61inVRo15dob72+uGh1D9f5e4VkqWOzI
+         u0EHXHU0xohcCj4fmAeQeKP3TXa+vjSI8eNdR74HCDe+UHd9U/DGkrpts1l5adsgcqRQ
+         nfawWVLe5huBvNv3/DutS9t31Sr2Xr9Z01YLLlIxupe+KJnOZK9uRi4CROMt46bfcEYk
+         lqZD+9hDlvOIJs67RAEup4JAo8+NuIgARwg97o7VFnRkSVnMbiXA/FV7aVvtTp2ielGk
+         6kScFx954N9zYr98z5jyAfvmvdp4VwaaaudFbytw/6KBilM4p6zn/3BR8b/mdXllr5Sa
+         2png==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=oOSicCWhNpoN2Xb8hfcdhiDNzylSo2X/NngolxOC8vQ=;
+        b=s27gE6KxeJiiIZQRpyaSeJhxM3QdQkdVSLJPEqPAjdlds4uOhnlyiujNTpsxd5r7It
+         +P4ejxiPTEeseBmLTFQHaMGkIFLtWDpU/uXuOJHHaaMesbYXdOvxY2o5ag77cBmcb7lc
+         N/Mo1oulw3dxCu1Mf89DOef+/9DWasm4TpgkWABlKfKwCqhvL5iChK1cInAmtGbmn1dM
+         w3D/xxyss02rRrYI5qXEJ6x9oFLLDBIsXnNkebvZpRAYDeBfv0JJ2IIeFw9EuHHNIcgl
+         mUi43feDcoD8D5gVaqvQsHh/6qoZ6Q9AN5Y7vzJj0eYjn5DTuLMuDWgvWFumPJ34yloO
+         y6rQ==
+X-Gm-Message-State: AOAM530//Y1WKajPhARiFI6DMIdCIijc/GgxEWxRkBSTfqUaVrXWJ4Eg
+        DTzPwVjTLyVMlK8k4HfXfJKhIQ==
+X-Google-Smtp-Source: ABdhPJyY6iTjOclycbgMdZR1BJM/NQs428i4F9BST8rtkZMQKzAhUor3EpfauPJw0gENxlNhnY3zKw==
+X-Received: by 2002:a7b:c19a:: with SMTP id y26mr2548794wmi.20.1606921786422;
+        Wed, 02 Dec 2020 07:09:46 -0800 (PST)
+Received: from dell ([91.110.221.235])
+        by smtp.gmail.com with ESMTPSA id s4sm2676916wra.91.2020.12.02.07.09.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 07:09:45 -0800 (PST)
+Date:   Wed, 2 Dec 2020 15:09:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -54,85 +79,49 @@ Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
 Subject: Re: [PATCH v4 3/7] mfd: Add base driver for Netronix embedded
  controller
-Message-ID: <X8ed7stMOGhnZ18T@latitude>
+Message-ID: <20201202150943.GN4801@dell>
 References: <20201122222739.1455132-1-j.neuschaefer@gmx.net>
  <20201122222739.1455132-4-j.neuschaefer@gmx.net>
  <20201202130520.GL4801@dell>
+ <X8ed7stMOGhnZ18T@latitude>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d33nqVJ+uUfH4DYP"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201202130520.GL4801@dell>
-X-Provags-ID: V03:K1:UpPvUQU7gK2MH8B05AwoyfhmqHQRzgHJFYfvGagPawWdg2hpRjX
- PBQ/nFild+nxLnXQVu78bet9XlT8AGxzvTRfGsdjMI28jB4b3opLJn/q4LE/Adpu1XHsdjH
- K89YJzYN96uuKFAsePp4LHacMPYzW1orC1lAyrHw2gIYT+65e+h4hmYWB2F7HVi5j864TBF
- 2KN8K/ECir9vCid9Y7C3Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NKoJD/ARNdY=:ZfjNf85eZFRrYVNC4Ne9nV
- TaG+UkHF466XjOkyqjjIkUNs6fquI9tE0VVnNJodWoasIvubrA6r4FtIzOk5AM+ZAcPJIkx6e
- gAnCCN6EtKRVTDcVQeSEpQ1t7ccNyrvIDykgoPPx1Os9mr0wanSHHePTUS2JtLtqKV9UG5aoy
- ZpC7vWI/yXumM/yFWsX3nntEeImwVK1b/NnzIVBi/vXdHAEgsDf0hpZWJWgCwvXyEeyfKCimA
- khssUUaTdHFK8ZtwaeF1NdLlcP2J8Jqygmrxbs3vqGNqGZur//u1prwMD6no5HPJYYSkf97sl
- +zwfApdwV7GSen9v0S3LuO3bdX8IaStCC9R2q34+gM1kp2BDRbGI1l3WzF6N3Pa5Hfk/nK+UG
- xz2Yx4PgfxfdnS0UrXs5iW0K/s8QHNarummmNHZWuIn1po/vYe5/24e6mg+wg8mAEiY5yrM0L
- yt2YWaomwXlwv0iBHQd+ihmkTD9gDEg9cEXD7up2bqAEmDbjyjMbb5grBRkf/GxP3IbZplj1/
- dW4Gw23nH9vAVVSAPkxmLhFTiUYO/C8tPVJR9lLQ/D2xEeH2rpOqgnlx4ZV4hz1tP3ITPyFEY
- Llt9FvTcaFkgZbWQ2R39Pu0xJynibpyxxY6PLuCsyd/5W6mUg2wI9yP0E53FLiAv9aSMdtLKm
- 7VKMeEgUPSbvCEOrdohIaoqXhf3js3MpMfKSIlglvR7w78akaDZBhUrm+RZLkPKe9WGVz4Quz
- /ww8au5AwXi6N/QGICRBLxcX0+iizjnTli2hBVk94GCgkp5lYdGU2CjO+paHSFHxZ0ky6RNFp
- KTVt9tGow8ddJl1zW9h+nRP2jrvhH57r9o3K3GG++mnS3z/fcZ6+K5tfdM8NM6e+0if+LDUAH
- JyDmB7xlhHdV+wVscI+Q==
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <X8ed7stMOGhnZ18T@latitude>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Wed, 02 Dec 2020, Jonathan Neuschäfer wrote:
 
---d33nqVJ+uUfH4DYP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Dec 02, 2020 at 01:05:20PM +0000, Lee Jones wrote:
+> > On Sun, 22 Nov 2020, Jonathan Neuschäfer wrote:
+> [...]
+> > > +	/* Bail out if we encounter an unknown firmware version */
+> > > +	switch (version) {
+> > > +	case 0xd726: /* found in Kobo Aura */
+> > 
+> > No magic numbers.
+> > 
+> > Please submit a subsequent patch to define this.
+> 
+> Will do.
+> 
+> But I don't think I'll be able to give it a more meaningful name than
+> NTXEC_VERSION_D726. I don't have a good overview of which versions
+> appear in which devices. "0xd726 found in Kobo Aura" only means that;
+> I don't know if it's the only version used in the Kobo Aura, and I don't
+> know if the Kobo Aura is the only device where it is used.
 
-On Wed, Dec 02, 2020 at 01:05:20PM +0000, Lee Jones wrote:
-> On Sun, 22 Nov 2020, Jonathan Neusch=C3=A4fer wrote:
-[...]
-> > +	/* Bail out if we encounter an unknown firmware version */
-> > +	switch (version) {
-> > +	case 0xd726: /* found in Kobo Aura */
->=20
-> No magic numbers.
->=20
-> Please submit a subsequent patch to define this.
+Defines are not set in stone.
 
-Will do.
+They can evolve over time as more is known.
 
-But I don't think I'll be able to give it a more meaningful name than
-NTXEC_VERSION_D726. I don't have a good overview of which versions
-appear in which devices. "0xd726 found in Kobo Aura" only means that;
-I don't know if it's the only version used in the Kobo Aura, and I don't
-know if the Kobo Aura is the only device where it is used.
+NTXEC_KOBO_AURA would be fine for now.
 
-
-Thanks,
-Jonathan Neusch=C3=A4fer
-
---d33nqVJ+uUfH4DYP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl/HneQACgkQCDBEmo7z
-X9tuSBAAqQPKxupxCAWq0KfRYS2QxQ7YnxsgIaSBtW7vVeY+rxYN4B2GFSoME5kb
-SzwLz53agojMGPA71ArROS+dkWmS2fT9TIxMjEtgSrRcEDQ0hN6psPIbWGBaij92
-HMi80iG/yDlNqVa7zklcuRkxLXtEroWwb0Lzr7jVyRcoJhETcuARefmQo4hsQ7gz
-Kxnto0Ol4FRzJxgrKg1n2BJKAwEz5ntiaRCKfcferj44BNBch7smeUCtittku9eS
-6Ij/6Ao7pZcU1Tupabj1yRhcP5KNcixvDCo79DlE5+9aDFkjOiXvJm8AKrSjES02
-thOgBfGugqWu7/c/0flCEfQEKlH+BlHfzsZO7k+Zk2ehvDgy+clXO0jVGTT7joC8
-uMaGhm1v0O78kDXnL1Dl4lbPljCIBOcKAWti2dXmvSsrXYY6Cfyd1ZnYIRK8iOwr
-pE/G0pcwVD9XXLSwgN5Cqvr3wN5g5O/YO4fUqTPz6zRXzEUOYQrD+p0womDZzdaD
-IWbGGwZbVQjr7trWsX3p8VR9YPXQnT+3U69O+1AetWnID8e/hhQ1rVe/4o+cqhen
-rQLHB4VLFYU0hAO2FtnXc1/ew6xA7ejv58Nasq3swhgQKnRs4zqSZnYCQJaA7lU/
-74vnuH3haXYM1K6QBYr78NOHXANOCnJBrS6GggnG5gS57SF/gsE=
-=o2/u
------END PGP SIGNATURE-----
-
---d33nqVJ+uUfH4DYP--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
