@@ -2,246 +2,198 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F722CA3BF
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Dec 2020 14:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 206732CB2B5
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Dec 2020 03:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730509AbgLANYv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Dec 2020 08:24:51 -0500
-Received: from mout.gmx.net ([212.227.15.15]:39937 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726630AbgLANYu (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 1 Dec 2020 08:24:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1606828950;
-        bh=i99VwzJVGDFj3yDrUcbTJd0SNy2PldxWlO3kTHGKLXw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Zwd0VIYYnGXiDuOA6FLSux2St/gVHc1ZCYSj+oXFYP+92QdH/VOHnd2luK+POgYee
-         I7P1tEsKF4VIfntD3Synfo54JVpV7XV5EBDlFZa5T+R9LtTfRudySMYUIWvjdIQlGY
-         N/D6qOQeCOso+G9rZSALz8OvtwQyRuCIOYF/Njrg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.214.162]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVNAr-1kZslF2XSh-00SSVC; Tue, 01
- Dec 2020 14:22:30 +0100
-Date:   Tue, 1 Dec 2020 14:22:14 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        allen <allen.chen@ite.com.tw>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 4/7] pwm: ntxec: Add driver for PWM function in
- Netronix EC
-Message-ID: <20201201132214.GI456020@latitude>
-References: <20201201011513.1627028-1-j.neuschaefer@gmx.net>
- <20201201011513.1627028-5-j.neuschaefer@gmx.net>
- <20201201072026.a736ikf3k4udpvfv@pengutronix.de>
+        id S1727177AbgLBCPi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 1 Dec 2020 21:15:38 -0500
+Received: from mail-eopbgr70077.outbound.protection.outlook.com ([40.107.7.77]:39813
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726860AbgLBCPi (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 1 Dec 2020 21:15:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gX89SbKxZwlgG11fqTrRrxQdZaTL3J5l4NQ2JTcbJhL8IkR2LSTJG2ksFNOm1Qyniv679SIFBBmqsLB6MwYim9nSu6K2d47q11OXVonKWvVRf1E35tNzeyEfG39mAOkUV7kudT4zTAz3dTajH+0fSn8cItHpV4eQN5fS/kihyAzgvpqLZnbeBxM8qFeY6s+kMXG0Ea/9LEfY+7X5N1KKekdaG9ztQ/FwYScc9RmSJjjR721VkZ310JoZ03l96M0x66iQhO6yDkx+kTqyWTXbv3k4tHgQli4cyuSqThZft5VPmghpOMLmXKKvWcD7zRrEfcrCod/9oAqrrsK3oMWkMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6w1JJ20URHH6Ils9TsgaW/F/Ke5E7EkECOJJBST0qsU=;
+ b=VomUywV4VwCT1nMK/DOeAd1FqVg6tRzDoqk3GX+aw1FEMl1fnovcO9sSj3GgPDEXhDXzWaG5Aiq1O7PXqQ8x+b9pQDUiB57lk5i69fItrPbywV6d74jUD2GqmDPpf/SLeJU0dPPpOySn62ODVNWPrA/ICTGKxIUsN1dqprPBaliL9F8tfkOMS8FOPV1xkD1jtnBY3ZkvT0GEYWivdlKIFdo0GZ38hLyXajuuiOAnEScyImkmRkppT/HQ0pOI0KAx5eo23jCPBQbCAXTvkEC4UdUuYKNMVQpiMQSJ2qHjC62gQP8IiS2qee+KlkXm3bY3raF9RIqY8l4082qkTQ85rQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6w1JJ20URHH6Ils9TsgaW/F/Ke5E7EkECOJJBST0qsU=;
+ b=byIstjtLuYfDGrTiqF6mBXMMvfHRbPSXY5Z14vfch4fNPxOBsB3WPKfr+w4cJoQf2e3stQ7avPrQVQUBco1YnkzwvAQrGmFw1HRsnaekip9pMXF00AtfEraKu0WHGdt3YKLbdZw0AbtkBa+Eyk7xd37xepQzd2ELiQrYNMkwMtc=
+Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com (2603:10a6:4:33::14)
+ by DB6PR0401MB2437.eurprd04.prod.outlook.com (2603:10a6:4:35::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17; Wed, 2 Dec
+ 2020 02:14:47 +0000
+Received: from DB6PR0401MB2438.eurprd04.prod.outlook.com
+ ([fe80::f0c9:fd48:c8d1:5c22]) by DB6PR0401MB2438.eurprd04.prod.outlook.com
+ ([fe80::f0c9:fd48:c8d1:5c22%11]) with mapi id 15.20.3632.017; Wed, 2 Dec 2020
+ 02:14:46 +0000
+From:   "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Biwen Li (OSS)" <biwen.li@oss.nxp.com>
+CC:     Leo Li <leoyang.li@nxp.com>, Anson Huang <anson.huang@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jiafei Pan <jiafei.pan@nxp.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
+Subject: RE: [PATCH] rtc: pcf2127: clear the flag TSF1 before enabling
+ interrupt generation
+Thread-Topic: [PATCH] rtc: pcf2127: clear the flag TSF1 before enabling
+ interrupt generation
+Thread-Index: AQHWyFDncqYUlom5fUmrNxFSLMkDiQ==
+Date:   Wed, 2 Dec 2020 02:14:46 +0000
+Message-ID: <DB6PR0401MB2438C8601E14BBD7F2C4DAE78FF30@DB6PR0401MB2438.eurprd04.prod.outlook.com>
+References: <20201201084746.20135-1-biwen.li@oss.nxp.com>
+ <20201201110235.GC2401593@piout.net>
+In-Reply-To: <20201201110235.GC2401593@piout.net>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: bootlin.com; dkim=none (message not signed)
+ header.d=none;bootlin.com; dmarc=none action=none header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.73]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ac96aae3-2373-462a-32fe-08d896680a78
+x-ms-traffictypediagnostic: DB6PR0401MB2437:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB6PR0401MB2437C528471F867BBCF7B68ECEF30@DB6PR0401MB2437.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ewXB/TkTb/z7rAFIkF4l+IoVDZwHOy4UvrEKMCYzpEwiaxzHb8tVNuizlYFD2xZ7P70oxRbA2zEFLKepTqmpF7x6V42zlhJZ+pRm4HaHP/83Xxue1v5sLbzhvSlnm4QgK0HbWKL6/yCFmEmXx6z+/6z2VudyFl6ZaWf3rc5yMqJPfWEQLSMIVXo1dyXW0hnxYbyMfYj8BxyU2Bdk3zfmJlPq4I/iUdB/aGHmSVnAT0/roHAtpvEnls7lEJyO4C5fiOqLAEkZ+PQDPfgE2EpQ8s/WstDx1vSuOgg3VBp/ZsyuoYek2jQN9mh/VSk9BpFkdIw4IeH7ryMd3cFqs44tN28pN1/d4u7jZFmGu9Rk6SC2XT4BnyIUcOzCAcNOu2qGj1ERILq8HogKY4d14BvECQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0401MB2438.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(346002)(376002)(366004)(39860400002)(8936002)(186003)(26005)(8676002)(6506007)(83380400001)(478600001)(110136005)(966005)(316002)(54906003)(86362001)(7696005)(55016002)(76116006)(5660300002)(66946007)(9686003)(33656002)(71200400001)(66476007)(4326008)(66556008)(64756008)(2906002)(52536014)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?83tadS/qBvGmhC3D2gADBXhW9u5k6SXDnmaY0bcTwNpO45m2/FFy+bDIQWjL?=
+ =?us-ascii?Q?rLBemPEbJnQbE3wBZqdlj+MyDnCKuoo3rnx3GyCDyuNCGBcLDFC+xGY7894/?=
+ =?us-ascii?Q?uycv/O0HCXyIBuk3KSqAhraxzF8WhyylZE4L8qqt8aMP0EJwF122WZBI9fj6?=
+ =?us-ascii?Q?zIXTAUygkmwMdilu1UtK/8i0JDhN2STkoVb6wiYCDo2CikaNvOtSuAOESXZv?=
+ =?us-ascii?Q?QfNPNON+wVcmti3lwuC6KDLc6pKYsme5zz990pC8i0Q0kLhmX0LOXlMookhj?=
+ =?us-ascii?Q?jGzcTwbosjcPPD17gsxXFJ+700kcE7qMayn5FvmKeLYwDf+MGWrjVEhRiL6r?=
+ =?us-ascii?Q?cMUa/BBkRDelQt/2GopdazlHJTRpJ3Mjf0KkfBRkq+C3InkUQpEXpgjgZfq7?=
+ =?us-ascii?Q?XNmtlFW3Y53zi2H/eFHjkGTDjaRkf3q6W//u9f+THviaHT4IKD5y6y+ckjul?=
+ =?us-ascii?Q?xogm1PKfNURSEOAVm9ewffAPruDt9rLsIw2Ayq9J532sPCMPckLVbZ0N67p1?=
+ =?us-ascii?Q?8tYodDdXESE9qx+Nmu7jeJuPBmzOEB0NXdT7zH7AAR9D5eiXB0Fq+bgXn08D?=
+ =?us-ascii?Q?OxM5Q3h/6YFp+jmXHvj5GtdkbdP7FbD53vgPhCwDonyFvUZfrF8pOfyCclH2?=
+ =?us-ascii?Q?/3X05+gd/QOKm7J2SFTg236J4r9+YTkuyC2G+V3+oSXVoSx4iDTNRL/lpqjs?=
+ =?us-ascii?Q?0RTFceZ96Y/3O0KSXb1SakOK9DvsCMVLPMp6GKEecvghvt3eY+306d+cohXV?=
+ =?us-ascii?Q?tUGKuPpFYHAI98ePvwFpOUOXimC0/FHy2XHsgF7q9j7yxU91zu1QfjDcOmd/?=
+ =?us-ascii?Q?sqWf+7J6ebDwY8N70y6M9KFptjnOQ2JWJJGP1Zr0d6LyQFe6/LEJoPkSt9Rh?=
+ =?us-ascii?Q?NAfLW61AFP2BjeDKkz2zl7kJSqD4XMz336yiv+ko9GOeGHno79s+aQCsLf3L?=
+ =?us-ascii?Q?gTj0yDgUkGtShfSFHCXrPatxNmmZu14CCxj5hcCk450=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tT3UgwmDxwvOMqfu"
-Content-Disposition: inline
-In-Reply-To: <20201201072026.a736ikf3k4udpvfv@pengutronix.de>
-X-Provags-ID: V03:K1:3pVRVbCHusToiK9w2c2SDTiGjXj/Tj+6gQjSAUb5JekWayHQDXA
- wcasTbzJCVBBO6njymdHIgFtmDPU9chbDh/Fk4bLj603l8LoqWDSRe0YcVWwsO+jOukabGF
- SPAFK4ww4JnVLbrgbngHLgOghkISvExEATUY812ilwdf2Sjob/lVTbr4wuPg7f4mdT+gHrH
- WW/jExP5U7+1QU/m8xRyg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ytFrjKioSvE=:Fjb5K17JJr1g923oMgTnwP
- A1lRewsRZFpkZjcrv8VFhEWOLp6I0HiUNB4sKlaY7LMB58CWwYViIzm0K7Xd7UgQto6d/lpiS
- TqVCNKBWOXIEPQP5dzh+xptE2+DAmLZY0tgMt+MEx93EpxZnQV+gBpS01ynwf7WxU0muW6VlJ
- HqqixcFNMx24hPcST4jjQE1EPdVqEle8j2iZo5j/acZLbdJOt3lNCLfoYPO6fJe+AqhapxSFE
- fS2giEKcPSMqm7W22ToJJ4rLTJVMdLIQcRGRQQPGn85ZSDgr2hv8PebQXGv6PHNgCS+ZXtR73
- qYI1seXN+BzOHIMqqFzXYjVwwMAmbT34y8uVYYMQdrywBS2fwHXyg7Xyl+QVDdN8hrq5YHkTi
- UgUvGVDPlLMOloJ2/9GmnBdkTHTPgHwcXyiY9Cn5xwVUKaY/GnNoS+kNVXT7whknGXtYXbh4Y
- hcI5lGP/UzqnmhDFn4uz6MNohvaQMv8owXUxPWJeHy5N5BVxba63UemBBUp4g19skMYVKj8k7
- rhUodmxLhXyoBTBBmqy8VElxbnOGJyTAj5XIk6aJqU5JKx14sA15tVDUg9I8mkgvvLnL7aPvc
- x9GdQTwhrK6TPeYWEx2j0IFegHGMwFZZCkpl4KgxUWU+veFyFms/BMZy8UtMCNGeCEN0hAzp6
- bmboyAlV8RmSK0pYEiPg0ujdzfPyNjl0+4BTAPVwERqPhm5r9uMNrNMubDsw7KmmV8DCtbQG3
- p7qqQjPJoWrxfyDjdmMsqOnSXhhdexPO61lb9gsuamLArYZLX3awTuzZiq1z7vB2eSu6tlkg6
- f4OBUamJNYwrBEU6ezr61I9ez2fFhqj6eRk0C6S5h5fe8ZAARXS+9Tf3hdVi2RcRDLbJLrZYw
- bp31UxZ6+nFm5SjOBOzw==
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0401MB2438.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac96aae3-2373-462a-32fe-08d896680a78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2020 02:14:46.7590
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n8U1jo5XrXoEUPCl8kEbLST1EgGQmi0E4kjQh8iIRpQtdAV+bJxTlwFk+Zpn4ncFg+py5TgAkx2cD7GZwK5yXQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2437
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---tT3UgwmDxwvOMqfu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Dec 01, 2020 at 08:20:26AM +0100, Uwe Kleine-K=C3=B6nig wrote:
-> Hello Jonathan,
 >=20
-> very nice driver, just a few minor comments below.
+> Hi,
 >=20
-> On Tue, Dec 01, 2020 at 02:15:10AM +0100, Jonathan Neusch=C3=A4fer wrote:
-> > +static struct ntxec_pwm *pwmchip_to_priv(struct pwm_chip *chip)
+> On 01/12/2020 16:47:46+0800, Biwen Li wrote:
+> > From: Biwen Li <biwen.li@nxp.com>
+> >
+> > - clear the flag TSF1 before enabling interrupt generation
+> > - properly set flag WD_CD for rtc chips(pcf2129, pca2129)
+> >
 >=20
-> a function prefix would be great here, I'd pick ntxec_pwm_from_chip as
-> name.
-
-Good point, will do.
-
+> This change has to be a separate patch.
+Sure, np. Will separate the patch in v2.
 >=20
-> > +{
-> > +	return container_of(chip, struct ntxec_pwm, chip);
-> > +}
-> > +
-> > +[...]
-> > +static int ntxec_pwm_apply(struct pwm_chip *chip, struct pwm_device *p=
-wm_dev,
-> > +			   const struct pwm_state *state)
-> > +{
-> > +	struct ntxec_pwm *priv =3D pwmchip_to_priv(pwm_dev->chip);
-> > +	unsigned int period, duty;
-> > +	struct reg_sequence regs[] =3D {
-> > +		{ NTXEC_REG_PERIOD_HIGH },
-> > +		{ NTXEC_REG_PERIOD_LOW },
-> > +		{ NTXEC_REG_DUTY_HIGH },
-> > +		{ NTXEC_REG_DUTY_LOW }
-> > +	};
-> > +	int res;
-> > +
-> > +	if (state->polarity !=3D PWM_POLARITY_NORMAL)
-> > +		return -EINVAL;
-> > +
-> > +	period =3D min_t(u64, state->period, MAX_PERIOD_NS);
-> > +	duty   =3D min_t(u64, state->duty_cycle, period);
+> > Signed-off-by: Biwen Li <biwen.li@nxp.com>
+> > ---
+> >  drivers/rtc/rtc-pcf2127.c | 21 ++++++++++++++++++++-
+> >  1 file changed, 20 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > index 07a5630ec841..0a45e2512258 100644
+> > --- a/drivers/rtc/rtc-pcf2127.c
+> > +++ b/drivers/rtc/rtc-pcf2127.c
+> > @@ -601,6 +601,10 @@ static int pcf2127_probe(struct device *dev, struc=
+t
+> regmap *regmap,
+> >  	 * Watchdog timer enabled and reset pin /RST activated when timed out=
+.
+> >  	 * Select 1Hz clock source for watchdog timer.
+> >  	 * Note: Countdown timer disabled and not available.
+> > +	 * For pca2129, pcf2129, only bit[7] is for Symbol WD_CD
+> > +	 * of register watchdg_tim_ctl. The bit[6] is labeled
+> > +	 * as T. Bits labeled as T must always be written with
+> > +	 * logic 0.
+> >  	 */
+> >  	ret =3D regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
+> >  				 PCF2127_BIT_WD_CTL_CD1 |
+> > @@ -608,7 +612,7 @@ static int pcf2127_probe(struct device *dev, struct
+> regmap *regmap,
+> >  				 PCF2127_BIT_WD_CTL_TF1 |
+> >  				 PCF2127_BIT_WD_CTL_TF0,
+> >  				 PCF2127_BIT_WD_CTL_CD1 |
+> > -				 PCF2127_BIT_WD_CTL_CD0 |
+> > +				 has_nvmem ? (PCF2127_BIT_WD_CTL_CD0) : (0) |
 >=20
-> I'm not a big fan of aligning =3D. (As if you have to add a longer
-> variable you have to realign all otherwise unrelated lines.) But that's
-> subjective and it's up to you if you want to change this.
-
-In this case, I thought it helps the readability, because the lines are
-quite similar.
-
-> > +	period /=3D TIME_BASE_NS;
-> > +	duty   /=3D TIME_BASE_NS;
-
-Here, I did it because I had already aligned the previous two lines.
-
-> > +
+> I don't like that because has_nvmem has nothing to do with
+> PCF2127_BIT_WD_CTL_CD0 and nothing guarantees that we won't ever get an
+> RTC without RST but with NVRAM and that willprobbly be overlooked.
+Okay, got it. Will correct it in v2.
+>=20
+> >  				 PCF2127_BIT_WD_CTL_TF1);
+> >  	if (ret) {
+> >  		dev_err(dev, "%s: watchdog config (wd_ctl) failed\n", __func__); @@
+> > -659,6 +663,21 @@ static int pcf2127_probe(struct device *dev, struct
+> regmap *regmap,
+> >  		return ret;
+> >  	}
+> >
 > > +	/*
-> > +	 * Changes to the period and duty cycle take effect as soon as the
-> > +	 * corresponding low byte is written, so the hardware may be configur=
-ed
-> > +	 * to an inconsistent state after the period is written and before the
-> > +	 * duty cycle is fully written. If, in such a case, the old duty cycle
-> > +	 * is longer than the new period, the EC may output 100% for a moment.
+> > +	 * Clear TSF1 field of ctrl1 register to clear interrupt
+> > +	 * before enabling interrupt generation when
+> > +	 * timestamp flag set. Unless the flag TSF1 won't
+> > +	 * be cleared and the interrupt(INT pin) is
+> > +	 * triggered continueously.
 > > +	 */
-> > +
-> > +	regs[0].def =3D ntxec_reg8(period >> 8);
-> > +	regs[1].def =3D ntxec_reg8(period);
-> > +	regs[2].def =3D ntxec_reg8(duty >> 8);
-> > +	regs[3].def =3D ntxec_reg8(duty);
+> > +	ret =3D regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> > +				 PCF2127_BIT_CTRL1_TSF1,
+> > +				 0);
+> > +	if (ret) {
+> > +		dev_err(dev, "%s:  control and status register 1 (ctrl1) failed, ret=
+ =3D
+> 0x%x\n",
+> > +			__func__, ret);
+> > +		return ret;
+> > +	}
 >=20
-> You could even minimize the window by changing the order here to
+> Doing that means ignoring timestamps taken while the system is offline.
+> It also doesn't fully solve the issue because you are not clearing TSF2 h=
+ere and
+> also it never gets cleared by the driver later on so I guess you will get=
+ the
+> interrupt storm once a timestamp is taken.
+Okay, got it. Thanks. Will clear TSF2 flag in v2.
 >=20
-> 	NTXEC_REG_PERIOD_HIGH
-> 	NTXEC_REG_DUTY_HIGH
-> 	NTXEC_REG_PERIOD_LOW
-> 	NTXEC_REG_DUTY_LOW
-
-Good idea, but I'm not sure if the EC handles this kind of interleaving
-correctly.
-
-> but it gets less readable. Maybe move that to a function to have the
-> reg_sequence and the actual write nearer together?
-
-Indeed, a separate function would keep register names and values
-together (without resorting to declarations-after-statements).
-
-> Or somehow name the indexes to make it more obvious?
-
-Too much unnecessary complexity, IMHO.
-
-> > +	res =3D regmap_multi_reg_write(priv->ec->regmap, regs, ARRAY_SIZE(reg=
-s));
-> > +	if (res)
-> > +		return res;
-> > +
-> > +	/*
-> > +	 * Writing a duty cycle of zero puts the device into a state where
-> > +	 * writing a higher duty cycle doesn't result in the brightness that =
-it
-> > +	 * usually results in. This can be fixed by cycling the ENABLE regist=
-er.
-> > +	 *
-> > +	 * As a workaround, write ENABLE=3D0 when the duty cycle is zero.
 >=20
-> If the device already has duty_cycle =3D 0 but ENABLE =3D 1, you might get
-> a failure. But I guess this doesn't need addressing in the code. But
-> maybe point it out in a comment?
-
-Good point. I'll add something to the comment.
-
-> > +	 */
-> > +	if (state->enabled && duty !=3D 0) {
-> > +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(=
-1));
-> > +		if (res)
-> > +			return res;
-> > +
-> > +		/* Disable the auto-off timer */
-> > +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_HI, ntxec_=
-reg8(0xff));
-> > +		if (res)
-> > +			return res;
-> > +
-> > +		return regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_LO, ntxec_r=
-eg8(0xff));
->=20
-> Given that you cannot read back period and duty anyhow: Does it make
-> sense to write these only if (state->enabled && duty !=3D 0)?
-
-I think it does.
-
-
-Thanks,
-Jonathan
-
---tT3UgwmDxwvOMqfu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl/GQ3EACgkQCDBEmo7z
-X9usHg/9FsmfCpoU+cy2Zt6dY0RcesbvapgYo5C8a/EuXIF22fNiiOlU+ONMCdjG
-FDKzKhXmkstFv2VaBM41mUYHPiic4Yf58OS96UJdb7r+fhrFsQajX4h96ILbUkhH
-bhGOzgHwwc3HRKb2YYlTGLcVhT6a5BFLIZW5bjfgs5x+ucKjD5VjInHU56WNHzO2
-1QH3Qrg/essPZ5+ftewe0aFDKinyby4b1sd3gEA6n4NlUIi2COH84Mn5C8vJY6cG
-uts9NJD80+DqpKyaLNh9a0IDwNWRX1cueizPLF9OghbyFhR7pFNxCDPkC5PkxkvW
-0namUmrwk/SyZ5KM77xGCKwqZql6KvIBHtPtszuHXiaqd89tNM/CpxEoF9VQkY5g
-BZdo0lCR1tEVBzy5ZsM6bQ/0uUB5+0N2hmkjcZ/W08HYUKa47jqNBCtV2dbYsF4m
-3O4spfB6F7jM5+UBIfeslyXDnixDhegAAblkCYs8k9AQ/VlMVHtHaXikbi+Dx3d3
-i+7AT+lfODFxSmvqWoYK6r0fjoLClTHDgoYC3huLFomaAKDeG1LAxDWosESJz5Lx
-FGRjFN2kSCI/26KJ6FcLzF6viBC2yd/W7ht0x8+pMMU+L16mGB3bJGZSIAHvSPPh
-CsVIC2HZIlMdpt57QCMq2Ocw0at9xwbhyFP3xr9kWKKMLjpQSxc=
-=qsyh
------END PGP SIGNATURE-----
-
---tT3UgwmDxwvOMqfu--
+> --
+> Alexandre Belloni, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
