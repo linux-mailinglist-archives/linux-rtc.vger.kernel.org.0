@@ -2,150 +2,350 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD692CC32C
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Dec 2020 18:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168822CCB79
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Dec 2020 02:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgLBROA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Dec 2020 12:14:00 -0500
-Received: from mout.gmx.net ([212.227.15.18]:39967 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726276AbgLBROA (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 2 Dec 2020 12:14:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1606929099;
-        bh=pQC+UTEB5yU7IDsAP8sscDmvQ/csugMq2wi4Lt2jCMA=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=A0lCja33qclyOmZ7pNpDKQShzqbo23g+otRjsFG0Jw0PPfURqItluSbaPQ3YKyUF2
-         /RK3dxDCkrc6NHp/8TeNxUMBqOOaiDFcE+v4Bu9XbMWvwVZsYkk8zr5SUo46fApa9v
-         Pu91t1T++C4moITBAUkKhFYpVavUc6ELNLTrtAgc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.214.162]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MyKDe-1jz1Db2IqC-00yhlw; Wed, 02
- Dec 2020 18:11:39 +0100
-Date:   Wed, 2 Dec 2020 18:11:33 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        id S1727153AbgLCBO4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Dec 2020 20:14:56 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37234 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727128AbgLCBO4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Dec 2020 20:14:56 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1606958053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JqogfsSDrzDV4HnHO2KejkVImIk7dhZjvubsW6587GU=;
+        b=41HA9V/NhaK7QpsX20YMf2PPUQcjL80wFwpZztv08SwBPqZ3sw07H2L6ZWT5L47YDpigDd
+        Gt614hkznVF6lsvcmoo0FrYQnmxrHke0o8ZhruJe+6UK2kxRvDAr6Gb2s/GeDvHx/pPPsr
+        Tnc/dwKfKjqoLMygNwSj3KnZ0DOWMFmZo8YC82gDRPaa66w4pibgJ+UCZsxCMhOMLoEhkZ
+        Jtfe2keZKlP5kCVjQBUAvNX+4jPB8Ou7mRYIsbIa18nrJwJ9AaHwrjH4C2HEU0dhR3huqv
+        WsMfPQ0uM6x6s4SpeAmfk8pyP8tStWAJFkJO077jfw8DWy0C+GWtC7it5SV8Vw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1606958053;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JqogfsSDrzDV4HnHO2KejkVImIk7dhZjvubsW6587GU=;
+        b=LzO0N+YsfAIM5OzywDD6affMFnWMMK9nqq/ur2o2tlsRqsQGSMilgsHailVjT2U14ET0Rc
+        8aDN274QzNCezKBA==
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Miroslav Lichvar <mlichvar@redhat.com>,
+        linux-kernel@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v4 3/7] mfd: Add base driver for Netronix embedded
- controller
-Message-ID: <X8fKxdIqCbHtx38Q@latitude>
-References: <20201122222739.1455132-1-j.neuschaefer@gmx.net>
- <20201122222739.1455132-4-j.neuschaefer@gmx.net>
- <20201202130520.GL4801@dell>
- <X8ed7stMOGhnZ18T@latitude>
- <20201202150943.GN4801@dell>
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] rtc: adapt allowed RTC update error
+In-Reply-To: <874kl3eu8p.fsf@nanos.tec.linutronix.de>
+References: <20201201143835.2054508-1-mlichvar@redhat.com> <20201201161224.GF5487@ziepe.ca> <20201201171420.GN1900232@localhost> <20201201173540.GH5487@ziepe.ca> <87mtywe2zu.fsf@nanos.tec.linutronix.de> <20201202162723.GJ5487@ziepe.ca> <87a6uwdnfn.fsf@nanos.tec.linutronix.de> <20201202205418.GN5487@ziepe.ca> <874kl3eu8p.fsf@nanos.tec.linutronix.de>
+Date:   Thu, 03 Dec 2020 02:14:12 +0100
+Message-ID: <87zh2vd72z.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CjPGjgSPWBKyBoQi"
-Content-Disposition: inline
-In-Reply-To: <20201202150943.GN4801@dell>
-X-Provags-ID: V03:K1:pby5GaQCe/HvbnOvEPJyjfFrmN1ZR4ZMPcfMTgZaH6QQIMsS9Kk
- 4X7RFptBlMUrsOi/IIHFOdGz6JOATLTuLKB+sNi0sga4tNzYQZnvZYKpySbykNt/qhlpN9m
- 2GhhtQC00i2p8m4LQZtIchq7CW5lOPahB2AIqYhkP2inWc46iGs+vRKE07MafwuO4RGt9gy
- 0RI3dJrCYEJYrXML1pzIA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TNBPRIlwunk=:Nsl6q2hLwYL/UQGmoy/mDT
- nJeEY3anUdcnRMg89CcfnQn78e6G0Gyc0oVud99TyvgqFlcXd6k4FNsiO4B35wvTAOFKOwSbF
- j9XMa3HTtStNcWOtJ8DUtja29Hl2V/cLObQAka/FWDxFpyJpS6pLc+TmmaTH2Fnpwwq032ktD
- DpxadmmYTOh5J8sxT5O4qDNDw/kUVan8bxlIvJsS0PBtDJpmhhxdBaEail1revilANxYSDsGv
- co8wnWFiZSFKL2K8rFDqmnt4Nw3r/dz6vqxIThJhYno2HR5PSKxjWsHAk8MGk/btb9h7xz6z+
- Dg5J7rm4dDhdvm4LdVxf3JOWpQbgjN+ju4qNlRPTRn0aB+zauWeQ2cAiea48st9hoZYtchwwU
- zobmBt0lksLNGetBv5g+S2tJX1e5fF6NuE1P02PAysh19jJ9V817wRFS6bzcDj/+fSOHk6/Ry
- ngmiSJD0cAD7lcYiUDhe7VURl68v3n6KAWqCiVuBra9bMP2/EhxnP9xIZG5U4kGAEAXufzzXm
- VBaAow2uTDxd5GVswv9/2fDh26MTtmGkikNEhkXzA8oXrykeLUmmFFeIMxgsRZvP5eTrj3Utm
- HsTRlXQz6AdN7mmavpGPHNOHs2Q8WFlVTECfnBY70ri0LEzrgqYXDJ/cjlFrW7GTd9qhnAjjf
- tuIeuWrNQeo2/PApJ8l+stvGPZfYcSkEf87UPXYMFYDvtOfZtrkPAsV4oz7diaOmu2RNCiyfk
- jrGR58sioE3IWAfT9PFH0f/b+JobE9C6xXwMtmq6cfNw1vtqEV2bBGM3xDwtwOshPISSCxaEn
- kIbtFEA7j4EAyvMpq+s6NsLg+cZ8XAx/LUsbR5SWvdMEZEBrGwyvEXeG402lbtNQ1l66Ok951
- koPkNlYD/HEYykIASRyQ==
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---CjPGjgSPWBKyBoQi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc+ RTC folks.
 
-On Wed, Dec 02, 2020 at 03:09:43PM +0000, Lee Jones wrote:
-> On Wed, 02 Dec 2020, Jonathan Neusch=C3=A4fer wrote:
->=20
-> > On Wed, Dec 02, 2020 at 01:05:20PM +0000, Lee Jones wrote:
-> > > On Sun, 22 Nov 2020, Jonathan Neusch=C3=A4fer wrote:
-> > [...]
-> > > > +	/* Bail out if we encounter an unknown firmware version */
-> > > > +	switch (version) {
-> > > > +	case 0xd726: /* found in Kobo Aura */
-> > >=20
-> > > No magic numbers.
-> > >=20
-> > > Please submit a subsequent patch to define this.
-> >=20
-> > Will do.
-> >=20
-> > But I don't think I'll be able to give it a more meaningful name than
-> > NTXEC_VERSION_D726. I don't have a good overview of which versions
-> > appear in which devices. "0xd726 found in Kobo Aura" only means that;
-> > I don't know if it's the only version used in the Kobo Aura, and I don't
-> > know if the Kobo Aura is the only device where it is used.
->=20
-> Defines are not set in stone.
->=20
-> They can evolve over time as more is known.
->=20
-> NTXEC_KOBO_AURA would be fine for now.
+On Wed, Dec 02 2020 at 23:08, Thomas Gleixner wrote:
+> On Wed, Dec 02 2020 at 16:54, Jason Gunthorpe wrote:
+>>> I don't think the timer should be canceled if the ntp_synced() state did
+>>> not change. Otherwise every do_adtimex() call will cancel/restart
+>>> it, which does not make sense. Lemme stare at it some more.
+>>
+>> That makes sense, being conditional on the STA_UNSYNC prior to doing
+>> any hrtimer_start seems OK?
+>
+> Yeah.
 
-Alright.
+And I was staring at it some more. TBH, rtc_tv_nsec_ok() is pretty much
+voodoo and wishful thinking.
 
+The point is that the original MC146818 has an update cycle once per
+second. That's what mc146818_is_updating() is checking.
+
+Lets start right here. mc146818_get_time() is bonkers to begin with. It
+does:
+
+        if (mc146818_is_updating())
+        	mdelay(20);
+
+        lock(&rtc_lock);
+        read_stuff();
+        unlock(&rtc_lock);
+
+That's crap, really.
+
+The MC146818 does a periodic update of the time data once per second and
+it advertises it via the UIP bit in Register A. The UIP bit is set 244us
+_before_ the update starts and depending on the time base is takes
+either 248us or 1984us (32kHz) until the bit goes low again.
+
+So let's look at the time line assuming a 32kHz time base:
+
+Time 0.000s           ~0.998s  1.0s
+                         |     | 
+                          _____
+UIP  ____________________|     |_______
+
+Let's look at the code again and annotate it with time stamps:
+
+0.997  read()
+          if (mc146818_is_updating())
+             lock(rtc);
+             read(regA);
+             unlock(rtc);
+             return regA & UIP;         <- Lets assume FALSE
+
+0.998 -> whatever happens (SMI, NMI, interrupt, preemption ...)
+
+0.999    lock(rtc)
+         read_data()                    <- Result is undefined
+                                           because RTC is in the
+                                           middle of the update
+         unlock(rtc);
+
+Seriously...
+
+The comment above the if(...updating()) is full of wishful thinking:
+
+       /*
+        * read RTC once any update in progress is done. The update
+        * can take just over 2ms. We wait 20ms. There is no need to
+        * to poll-wait (up to 1s - eeccch) for the falling edge of RTC_UIP.
+        * If you need to know *exactly* when a second has started, enable
+        * periodic update complete interrupts, (via ioctl) and then
+        * immediately read /dev/rtc which will block until you get the IRQ.
+        * Once the read clears, read the RTC time (again via ioctl). Easy.
+        */
+
+ - The update can take exactly up to 1984us, which is not just over 2ms.
+   Also the update starts 248us _after_ UIP goes high.
+
+ - Wait 20ms? What for? To make sure that the RTC has advanced by 2ms?
+
+ - Poll wait for the falling edge of UIP takes up to 1s?
+
+   I must have missed something in basic math. If UIP is high then
+   waiting for the falling edge takes at max 2ms.
+   
+   I know what the comment tries to say, but on the first read I had one
+   of those forbidden-by-CoC moments.
+
+ - The need to know *exactly* part of the comment is even more amazing.
+
+   Q: Which system guarantees that the interrupt:
+
+     - will not happen _before_ read(/dev/rtc) after the ioctl() enabled
+       it?
+
+     - will be delivered without delay ?
+
+     - will make sure that the task in the blocking read will be
+       scheduled immediately and then do the ioctl based readout ?
+
+   A: None
+
+   Q: What is *exact* about this?
+
+   A: Nothing at all.
+
+So the right thing to do here is:
+
+read()
+  do {
+       lock(rtc)
+       start = ktime_get();
+       if (read(regA) & UIP) {
+          unlock(rtc);
+          wait(2ms);
+          continue;
+       }
+       read_data();
+       end = ktime_get();
+       unlock(rtc);
+  while (end - start > 2ms);
+
+and return _all_ three values (start, end, rtcdata) so clueful userspace
+can make sense of it. Returning nonsense as pointed off above is a non
+option.
+
+Hmm?
+
+Now to the write side. That's really wishful thinking. Let's look at the
+code:
+
+write()
+
+   lock(rtc);
+   write(regB, read(reagB) | SET);
+   write_data();
+   write(regB, read(reagB) & ~SET);
+   unlock(rtc);
+
+lock/unlock are irrelevant as they just serialize concurrent access to
+the RTC.
+
+The magic comment in ntp.c says that RTC will update the written value
+0.5 seconds after writing it. That's pure fiction...
+
+I have no idea where this comes from, but any spec out there says about
+this:
+
+  SET - When the SET bit is a "0", the update cycle functions normally
+  by advancing the counts once-per-second. When the SET bit is written
+  to a "1", any update cycle in progress is aborted and the program may
+  initialize the time and calendar bytes without an update occuring in
+  the midst of initializing. .....
+
+So yes, the comment is partially correct _if_ and only _if_ the time
+base which schedules the update is exactly the same time base as the RTC
+time base and the time on which the update is scheduled is perfectly in
+sync with the RTC time base.
+
+Plus the update must be completed _before_ then next update cycle of the
+RTC starts which is what the 0.5 sec offset is trying to solve. Emphasis
+on _trying_.
+
+But with NTP that's not the case at all. The clocksource which is
+adjusted by NTP (usually TSC on x86, but that does not matter) is not at
+all guaranteed to run from the same crystal as the RTC.  On most systems
+the RTC has a seperate crystal which feeds it across poweroff.
+
+Even if it _is_ using the same crystal, then the NTP adjustments are
+going to skew the clocksource frequency against the underlying crystal
+which feeds the RTC and the clocksource.
+
+Q: So how can any assumption about update cycle correlatation between NTP
+   synced CLOCK_REALTIME and the RTC notion of clock realtime be correct?
+
+A: Not at all.
+
+Aside of that the magic correction of the time which is written to the
+RTC is completely bogus. Lets start with the interface and the two
+callers of it:
+
+static inline bool rtc_tv_nsec_ok(s64 set_offset_nsec,
+                                  struct timespec64 *to_set,
+                                  const struct timespec64 *now)
+
+The callers are:
+
+  sync_cmos_clock()   /* The legacy RTC cruft */
+    struct timespec64 now;
+    struct timespec64 adjust;
+    long target_nsec = NSEC_PER_SEC / 2;
+
+    ktime_get_real_ts64(&now);
+    if (rtc_tv_nsec_ok(-1 * target_nsec, &adjust, &now)) {
+       if (persistent_clock_is_local)
+	  adjust.tv_sec -= (sys_tz.tz_minuteswest * 60);
+       rc = update_persistent_clock64(adjust);
+    } 
+       
+  sync_rtc_clock()
+    unsigned long target_nsec;          <- Signed unsigned ....
+    struct timespec64 adjust, now;
+
+    ktime_get_real_ts64(&now);
+
+    adjust = now;                       <- Why the difference to the above?
+
+    if (persistent_clock_is_local)      <- Again, why is the ordering different?
+	adjust.tv_sec -= (sys_tz.tz_minuteswest * 60);
+    
+    rc = rtc_set_ntp_time(adjust, &target_nsec)
+       // int rtc_set_ntp_time(struct timespec64 now, unsigned long *target_nsec)
+
+         struct timespec64 to_set;
+
+	 set_normalized_timespec64(&to_set, 0, -rtc->set_offset_nsec);
+	 *target_nsec = to_set.tv_nsec;      <- target_nsec = rtc->set_offset_nsec
+                                                because the timespec is normalized
+                                                ergo == rtc->set_offset_nsec
+                                                unless the set_offset_nsec would
+                                                be negative which makes at all.
+
+         if (rtc_tv_nsec_ok(rtc->set_offset_nsec, &to_set, &now))
+         	update_rtc(...);
+
+So sync_cmos_clock hands in -(NSEC_PER_SEC/2) and the rtc cruft hands in
+NSEC_PER_SEC/2 by default. The comment in drivers/rtc/class.c says:
+
+drivers/rtc/class.c-    /* Drivers can revise this default after allocating the device. */
+drivers/rtc/class.c:    rtc->set_offset_nsec =  NSEC_PER_SEC / 2;
+
+but no driver ever bothered to change that value. Also the idea of
+having this offset as type s64 is beyond my understanding. Why the heck
+would any RTC require to set an offset which is _after_ the second
+transition.
+
+That aside. Looking at the above two variants let's go into
+rtc_tv_nsec_ok()
+
+static inline bool rtc_tv_nsec_ok(s64 set_offset_nsec,
+				  struct timespec64 *to_set,
+				  const struct timespec64 *now)
+
+	/* Allowed error in tv_nsec, arbitarily set to 5 jiffies in ns. */
+	const unsigned long TIME_SET_NSEC_FUZZ = TICK_NSEC * 5;
+	struct timespec64 delay = {.tv_sec = 0,
+				   .tv_nsec = set_offset_nsec};
+
+	*to_set = timespec64_add(*now, delay);
+
+The scheduled point for both legacy CMOS and RTC modern is at the point
+of the second minus 0.5 seconds (lets ignore that set_offset_nsec might
+be different for this).
+
+So let's assume the update was scheduled at 659s 500ms independent of
+legacy or modern.
+
+Now legacy does the following:
+
+    struct timespec64 delay = { .tv_sec = 0, tv_nsec = -5e8 }
+
+which is an not normalized timespec to begin with but
+
+    *to_set = timespec64_add(*now , delay);
+
+can deal with that. So the result of this computation is:
+
+    now - delay
+
+IOW, 0.5 seconds before now: 659s 0ms
+
+Now the same magic for the 'modern' RTC will do:
+
+    struct timespec64 delay = { .tv_sec = 0, tv_nsec = 5e8 }
+
+so the result of the add is:
+
+   now + delay
+
+IOW, 0.5 seconds _after_ now: 700s 0ms
+
+Can you spot the subtle difference?
+
+That said, can somebody answer the one million dollar question which
+problem is solved by all of this magic nonsense?
+
+If anyone involved seriously believes that any of this solves a real
+world problem, then please come forth an make your case.
+
+If not, all of this illusionary attempts to be "correct" can be removed
+for good and the whole thing reduced to a
+
+    update_rtc_plus_minus_a_second()
+
+mechanism, which is exactly what we have today just without the code
+which pretends to be *exact* or whatever.
 
 Thanks,
-Jonathan Neusch=C3=A4fer
 
---CjPGjgSPWBKyBoQi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl/HyrUACgkQCDBEmo7z
-X9ujoRAAiSfqDRe/Gtnw9hmQ5U6LeACNBPYHEExRWA9+KkwWBO6oVYGD06v1QLp/
-7M9dBhcudCM7OXobAwKgZWlnDOTgTct1TNehCOzq7ZyCUbz1oe5+QN+KY98RQNgK
-2ZxEIJFrCoyWSBrPRH6qAiFDb3E28xIYJmZmX/EoHYOiVUfeo9DaaiLTZrIOapRg
-jjUZ5SDM99aB7z2TGjdjpSyRee+t0jSNgvrdb+z+oJ0ODiKJmWYVvCtHWtiZ+30J
-h5z31aKESIm2BaAxM6Xdv2m4OvWURx61gVCx51KVELcwGDtza2nz9osBrcLWqiWm
-OVBszstZwniWDNHqEGx5D4jnYdzLE6YG2ll5O9E3fPzrx3Vr28xmabea8bLiw6gF
-v1jDpZIy/Vx9vxz5+baXfPFLHBqLqNmsXHW0r4EAcNDyBy3B97Qq1R64nCBPKt7c
-3wV+5ja9hykCjQLXAoH9TuATnTP7d5Ya4+njW6KP2p9p6PocSrG9mkKHlgucZGNZ
-ZYGOndbFNw16IOyHhu5Vr8LnvND7qZiYbP1i16L3CVduulbnJGVdWF3v1iH8IHHD
-yb67MJGHa+qDRI1AAsRt0KgM8Pd9sRmrqIxFDlOp0LOscg45FifdV8k5WjQ79hkT
-s5oiVIYAZ0bHyKLggR/Q3yvBFG695uXZucUUZMKj9WyBTYZOsfQ=
-=OnND
------END PGP SIGNATURE-----
-
---CjPGjgSPWBKyBoQi--
+        tglx
