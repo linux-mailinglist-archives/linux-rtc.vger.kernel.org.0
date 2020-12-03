@@ -2,65 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECC02CDAFC
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Dec 2020 17:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930532CDC61
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Dec 2020 18:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389355AbgLCQRL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Dec 2020 11:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389290AbgLCQRL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Dec 2020 11:17:11 -0500
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF58C061A52
-        for <linux-rtc@vger.kernel.org>; Thu,  3 Dec 2020 08:16:25 -0800 (PST)
-Received: by mail-qk1-x744.google.com with SMTP id h20so2578856qkk.4
-        for <linux-rtc@vger.kernel.org>; Thu, 03 Dec 2020 08:16:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nqxHEehCvii0bTM+IyLO2PbX9ekRddRQu8/eqzIhyOU=;
-        b=GAc8adqNopO2UxLM7/fwMnNg6vA9r6i6BetSSJLPScfhjerYyAldA1uJoM98PM7vBL
-         rXIA6MDX/RpJeevg7cZAsDi+k9chPnnh2L0yLbbwWR23vi6WMn5gcloKgSKLfJTYmfrW
-         gm0zSZzz/hea6375hJiQmOoDpMLSL19wkPQbxFDZ5ybJaS23c3MJ02FJoasFOEoRSlEK
-         Nba7Nt4ZrY+Cdd1ESLexMNkeyAxOe15Iqb7BFqOr5S62iloLJ0rhPaqqfl91FCfDJ+d7
-         rS9Qcj/Q6s4lLHJOaQxW5Rx/IgB5jBb6YowRC415Rr174bB20CV9MU2jQiPug/cDYbrJ
-         UL8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nqxHEehCvii0bTM+IyLO2PbX9ekRddRQu8/eqzIhyOU=;
-        b=HJ3kS018RhzMjMOmb72F+FLYTml3hoSGZZCx5rv3RzWD5wCRRh4272RisFrUm6AMeL
-         om8VQsiRgrZWKENvBmGk1uD5Udht97OkYbW5Uf2unAJX16Zan2DiZtEZtV3GizoXes7v
-         ys7OdCG7OBMLSaKCo8jvRmrHIYpDF6QsJsYVbIlNQkCxdaeAYFAZSKEqqGCmgUMXkJRA
-         FvZ0tO/5ciMfahuo32OQCP0KDtTKeO29w10EOKccyWx/9Klg3znSm3Paz2jqeArmBdQv
-         vBdwK5x8nuvWHrhqlg9zudxh//ykNRyBS2n3JptFfV5raAnXCv7c70MxNM7nViJVJUI7
-         MrOA==
-X-Gm-Message-State: AOAM532CIOfTRSiwb+tnCnNhAJVxltl1SebJO6y4AMZxcOyadIjvInrV
-        ovoEdAP0tVCHvECx3mFoTOu8GA==
-X-Google-Smtp-Source: ABdhPJwpjzIsghB/Lb8L62BvOMvgFhNcU8/Mos3ye1OZbzKmjc7jOvhPfUtV9uBxJENPrsPTbTgrSA==
-X-Received: by 2002:a37:5185:: with SMTP id f127mr3594869qkb.225.1607012184500;
-        Thu, 03 Dec 2020 08:16:24 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id j21sm1524129qtp.10.2020.12.03.08.16.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 08:16:23 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1kkrHK-005XLH-RZ; Thu, 03 Dec 2020 12:16:22 -0400
-Date:   Thu, 3 Dec 2020 12:16:22 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
+        id S1726730AbgLCRaF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Dec 2020 12:30:05 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:14789 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726066AbgLCRaF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Dec 2020 12:30:05 -0500
+X-Originating-IP: 86.194.74.19
+Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 4D4C624000D;
+        Thu,  3 Dec 2020 17:29:20 +0000 (UTC)
+Date:   Thu, 3 Dec 2020 18:29:19 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Miroslav Lichvar <mlichvar@redhat.com>,
         linux-kernel@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
         Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [PATCH] rtc: adapt allowed RTC update error
-Message-ID: <20201203161622.GA1317829@ziepe.ca>
+Message-ID: <20201203172919.GC7535@piout.net>
 References: <20201201171420.GN1900232@localhost>
  <20201201173540.GH5487@ziepe.ca>
  <87mtywe2zu.fsf@nanos.tec.linutronix.de>
@@ -79,25 +45,68 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 04:39:21PM +0100, Thomas Gleixner wrote:
-
+On 03/12/2020 16:39:21+0100, Thomas Gleixner wrote:
+> Alexandre,
+> 
+> On Thu, Dec 03 2020 at 03:10, Alexandre Belloni wrote:
+> > On 03/12/2020 02:14:12+0100, Thomas Gleixner wrote:
+> >> That said, can somebody answer the one million dollar question which
+> >> problem is solved by all of this magic nonsense?
+> >> 
+> > The goal was to remove the 500ms offset for all the RTCs but the
+> > MC146818 because there are RTC that will reset properly their counter
+> > when setting the time, meaning they can be set very precisely.
+> 
+> The MC setting is halfways precise. The write resets the divider chain
+> and when the reset is removed then the next UIP will happen after the
+> magic 0.5 seconds. So yes, writing it 500ms _before_ the next second is
+> halfways correct assumed that there is no interference between
+> ktime_get_real() and the actual write which is a silly assumption as the
+> code is fully preemptible.
+> 
+> > IIRC, used in conjunction with rtc_hctosys which also adds
+> > inconditionnaly 500ms this can ends up with the system time
+> > being one second away from the wall clock time which NTP will take quite
+> > some time to remove.
+> 
+> The rtc_cmos() driver has a fun comment in cmos_set_time()....
+> 
 > The logic in sync_cmos_clock() and rtc_set_ntp_time() is different as I
 > pointed out: sync_cmos_clock() hands -500ms to rtc_tv_nsec_ok() and
 > rtc_set_ntp_time() uses +500ms, IOW exactly ONE second difference in
 > behaviour.
+> 
+> > Coincidentally, I was going to revert those patches for v5.11.
+> 
+> Which will break the rtc_cmos() driver in a different way. We should
+> really fix that proper and just have the 500ms offset for rtc_cmos,
+> aka. MC146818. When other drivers want a different offset, then they
+> still can do so.
+> 
 
-I understood this is because the two APIs work differently, rmk
-explained this as:
+My point was to get back to the previous situation where only
+rtc_cmos was supposed to work properly by removing rtc_tv_nsec_ok and
+set_offset_nsec.
 
-> 1. kernel/time/ntp.c assumes that all RTCs want to be told to set the
->    time at around 500ms into the second.
->
-> 2. drivers/rtc/systohc.c assumes that if the time being set is >= 500ms,
->    then we want to set the _next_ second.
+> The direct /dev/rtc settime ioctl is not using that logic anyway. Thats
+> the business of the user space application to get that straight which is
+> scheduling lottery as well.
 
-ie one path is supposed to round down and one path is supposed to
-round up, so you get to that 1s difference..
+I still don't see how userspace is worse than systohc in that regard and
+why we need to do that in the kernel. Especially since hctosys is doing
+a very bad job trying to read the time from the RTC. You may as well not
+bother with the 500ms and just set the time to the current or next
+second.
 
-IIRC this is also connected to why the offset is signed..
+And what about the non configurable 659 period, isn't that policy that
+should be left to userspace configuration?
 
-Jason
+I'm still convinced that set_offset_nsec is not needed to set the time
+accurately and I still want to remove it. Also, this may be a good time
+to move systohc.c to kernel/time/ntp.c as this is definitively some NTP
+specific code being an RTC consumer, very much like alarmtimer.c
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
