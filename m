@@ -2,55 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEB62D1B4E
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Dec 2020 21:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD072D1B59
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Dec 2020 21:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbgLGUvB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Dec 2020 15:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S1726044AbgLGU4O (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Dec 2020 15:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727422AbgLGUvA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Dec 2020 15:51:00 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB870C03BFC2
-        for <linux-rtc@vger.kernel.org>; Mon,  7 Dec 2020 12:50:22 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id z188so14028761qke.9
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Dec 2020 12:50:22 -0800 (PST)
+        with ESMTP id S1725933AbgLGU4O (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Dec 2020 15:56:14 -0500
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B01C061793
+        for <linux-rtc@vger.kernel.org>; Mon,  7 Dec 2020 12:55:34 -0800 (PST)
+Received: by mail-qt1-x842.google.com with SMTP id l7so10453772qtp.8
+        for <linux-rtc@vger.kernel.org>; Mon, 07 Dec 2020 12:55:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TsfXgtrn8tOSIu4C3FhT12T57wxAoUaXVJp8A3HkEE0=;
-        b=Naz2Y8dP5U2JeBjVSb7/qd38qh7tgLMKy2XToR9d5d28djhnh3kU2GGSPz4gRHVWdk
-         TmHb3zYIukNYfLjk/oyiv7lT1HUByNms7tXcoTjlM7qrMAQJ3o08rxv+4edplfxtCo+i
-         nwHrvGOXYtM96KeBXO3AG/QuLvvInH6dMp2VR4R4Bo7IH7AZ09qC8JdfAZewEWGMNvUO
-         qGJuPH9tvawRuNvWChRgJSiT1CWD76wgIW8DnBQo70qOKNh4uibgPetItnRp33nNneil
-         V913Hwi0LqF9FgqW9QcFJdq5m8BQIPPENnLk9cSUeja+QXOMJCHJ61a25Obji+vLw0Q4
-         zi7A==
+        bh=8YG17SSVuJgwGIpcMzN3dn+GzIecfAXIsWVzJqr65Eo=;
+        b=bx3a+7hnV5LT/kqYVdT/TYircF3A/nA6pobjdaX4CXPT71sS2M93+H8cYoE6NRq6nH
+         dbDaA+ipjTXrMvbdOKldYE6u2IP2g1UFYHdInsXPkJkdZspLGr1BBViziQOQ8vh4d1Au
+         WzYlv0B/WATw0N7iLClEkCdZEEY8CtaH+vnF302zpZjthE27WyJGlJrel1OQT9j5goqS
+         ph5UqukiK0DmRvBFW1Zrn3tZQOTFt+ck/1GGKwP3H5QNi7f3p+Brc9Ev70bpJ20oQh3d
+         bKzauvvdfKl1IverjIvLAIhXIqTLFBBRrfJgka5QmvsH37rncm3b/1k0YIlv5Ehoas9R
+         zF0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=TsfXgtrn8tOSIu4C3FhT12T57wxAoUaXVJp8A3HkEE0=;
-        b=ATwgKNeuQ9+0d0XQ38TxuAXAsTJgUwACbyhKgXDye8aajQOmxOPSBVogTcaWKQ0dqm
-         ctlzxVC1gzZe0LSrCJMw0Hdz1nmKBl+zGNOXYnFFerZV6llaDboUKn1GTCdM8JAA4y9Z
-         4UcLeI7CF+GLnV7k6vOMKFK7mIEVztDRd88DSMEeGcjzDPqaEZqTDIA0EqUHzGiTSw+h
-         qkWPLJxu8k0ZU4+r5su7XlDyNXdoN8Lt5X6P0yd/iTtkpr+VYPn2JJi83HzmUH0MJSLs
-         hE+O9soeAfhEOS7n/xNpWwdkrGp5YRKY+Xu4iHgXOcNbFc1Q8rPAqRHjXIiAqvdURKlr
-         zYTw==
-X-Gm-Message-State: AOAM533T5Tcg13MeYa+MdpsLT/JejbeE4D0htL0+5JbblFgy3tZLxCdf
-        TsAHM1LJ/2K0txg5d2R491j9XQ==
-X-Google-Smtp-Source: ABdhPJxdDVsRI4y//C7+Svq+MoJr8/3pNSk7/nQH2vJzLytNbyIpmSLQiR3lConUWGiA0YkRtUDNTQ==
-X-Received: by 2002:a37:8c03:: with SMTP id o3mr17332052qkd.114.1607374222125;
-        Mon, 07 Dec 2020 12:50:22 -0800 (PST)
+        bh=8YG17SSVuJgwGIpcMzN3dn+GzIecfAXIsWVzJqr65Eo=;
+        b=p17mddbcxjQjlhyONZT8va3EXvZwJqdARHKubeePBc4s9XQ9ljP4P6f3hVy7iFg4JY
+         dqwiXJeZ+kXEYNiNLhjgp1cbvoObO1+HVuybsLwPHUq5ioJTQp0q2Exx75/k0V0ahZsU
+         9xgiHxGHVorqipqMCnpy7ZZrwIFMPOsTpeLDkbNg2ERtTb/gHQzYCaoTJvWjt02odcl3
+         x2492KM6Z4hUvJuuV04545Gxi3EPTTYbun2EUTphDWiA12mFTK+KjJcGc2rzvZlVTB+Z
+         JKNixDuCmWjF7lIxc1YTWjgIuUzq0oC0aLHiir58D18UjEmlJcpywMAW1fuKP3SSuMjC
+         fZBA==
+X-Gm-Message-State: AOAM5300woy6MH1/7tpClPFKkosTK6WeL8tY0bWQ+LIY3QNyKzZhKm53
+        TfquCBfyVIw1zrreibO7RSKCdQ==
+X-Google-Smtp-Source: ABdhPJxOcXpXlDcawq9tZgp+iCVWNpOhONjyCg6buQCyscdYrGLh8Fiwu6M5+4B9lu3uq9sCquUVhg==
+X-Received: by 2002:a05:622a:182:: with SMTP id s2mr25463960qtw.147.1607374533698;
+        Mon, 07 Dec 2020 12:55:33 -0800 (PST)
 Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id 199sm13025813qkj.61.2020.12.07.12.50.21
+        by smtp.gmail.com with ESMTPSA id w7sm12573425qkd.92.2020.12.07.12.55.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 12:50:21 -0800 (PST)
+        Mon, 07 Dec 2020 12:55:32 -0800 (PST)
 Received: from jgg by mlx with local (Exim 4.94)
         (envelope-from <jgg@ziepe.ca>)
-        id 1kmNSe-007fQ6-P0; Mon, 07 Dec 2020 16:50:20 -0400
-Date:   Mon, 7 Dec 2020 16:50:20 -0400
+        id 1kmNXg-007fV6-3E; Mon, 07 Dec 2020 16:55:32 -0400
+Date:   Mon, 7 Dec 2020 16:55:32 -0400
 From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -60,52 +60,62 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch 3/8] rtc: cmos: Make rtc_cmos sync offset correct
-Message-ID: <20201207205020.GI5487@ziepe.ca>
+Subject: Re: [patch 4/8] rtc: core: Make the sync offset default more
+ realistic
+Message-ID: <20201207205532.GJ5487@ziepe.ca>
 References: <20201206214613.444124194@linutronix.de>
- <20201206220541.830517160@linutronix.de>
+ <20201206220541.960333166@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201206220541.830517160@linutronix.de>
+In-Reply-To: <20201206220541.960333166@linutronix.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Dec 06, 2020 at 10:46:16PM +0100, Thomas Gleixner wrote:
-> The offset for rtc_cmos must be -500ms to work correctly with the current
-> implementation of rtc_set_ntp_time() due to the following:
+On Sun, Dec 06, 2020 at 10:46:17PM +0100, Thomas Gleixner wrote:
+> The offset which is used to steer the start of an RTC synchronization
+> update via rtc_set_ntp_time() is huge. The math behind this is:
 > 
 >   tsched       twrite(t2.tv_sec - 1) 	 t2 (seconds increment)
 > 
-> twrite - tsched is the transport time for the write to hit the device,
-> which is negligible for this chip because it's accessed directly.
+> twrite - tsched is the transport time for the write to hit the device.
 > 
-> t2 - twrite = 500ms according to the datasheet.
+> t2 - twrite depends on the chip and is for most chips one second.
 > 
-> But rtc_set_ntp_time() calculation of tsched is:
+> The rtc_set_ntp_time() calculation of tsched is:
 > 
 >     tsched = t2 - 1sec - (t2 - twrite)
 > 
-> The default for the sync offset is 500ms which means that the write happens
-> at t2 - 1.5 seconds which is obviously off by a second for this device.
+> The default for the sync offset is 500ms which means that twrite - tsched
+> is 500ms assumed that t2 - twrite is one second.
 > 
-> Make the offset -500ms so it works correct.
+> This is 0.5 seconds off for RTCs which are directly accessible by IO writes
+> and probably for the majority of i2C/SPI based RTC off by an order of
+> magnitude. Set it to 10ms which should bring it closer to reality.
+> 
+> The default can be adjusted by drivers (rtc_cmos does so) and could be
+> adjusted further by a calibration method which is an orthogonal problem.
 > 
 > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  drivers/rtc/rtc-cmos.c |    3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/rtc/class.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> +++ b/drivers/rtc/class.c
+> @@ -201,7 +201,7 @@ static struct rtc_device *rtc_allocate_d
+>  	device_initialize(&rtc->dev);
+>  
+>  	/* Drivers can revise this default after allocating the device. */
+> -	rtc->set_offset_nsec =  NSEC_PER_SEC / 2;
+> +	rtc->set_offset_nsec =  10 * NSEC_PER_MSEC;
+
+So the old value is clearly wrong for CMOS, and I have a strong
+feeling this was an error and it should have been -NSEC_PER_SEC/2
+
+I have no idea if CMOS behavior or 0s behavior is more common in the
+rtclib drivers, but it seems since nobody noticed the huge offset
+mistake in 3 years it doesn't actually really matter.
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Matches what sync_cmos_clock() does at least.
-
-My recollection is this change was not supposed to change anything, so
-either I got things mixed up and this is wrong:
-
-drivers/rtc/class.c:    rtc->set_offset_nsec =  NSEC_PER_SEC / 2;
-
-Or it faithfully preserved some nonsense from before..
 
 Jason
