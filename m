@@ -2,55 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79382D1B90
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Dec 2020 22:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE742D1B9D
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Dec 2020 22:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgLGVAl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Dec 2020 16:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S1726718AbgLGVFy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Dec 2020 16:05:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgLGVAl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Dec 2020 16:00:41 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952E7C061794
-        for <linux-rtc@vger.kernel.org>; Mon,  7 Dec 2020 12:59:55 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id b144so14000860qkc.13
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Dec 2020 12:59:55 -0800 (PST)
+        with ESMTP id S1726269AbgLGVFy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Dec 2020 16:05:54 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0588C061794
+        for <linux-rtc@vger.kernel.org>; Mon,  7 Dec 2020 13:05:07 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id a6so8091315qtw.6
+        for <linux-rtc@vger.kernel.org>; Mon, 07 Dec 2020 13:05:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=SsoIYjBoSOJL9ZsEeEbVAcU4nkxuyAtiLgrYShov/wE=;
-        b=i1it63IPF7Tvk8uDkG0531W5MNt7LWyQnwaM2j4BTI/61OlhQiI+VJ+wpKpxZtDvPg
-         vEbdjngT0eARrKE1T1aDZ5DUhPlRd6VaejmMAMYVKthNBOHrPSsuBBQ1ZuENokzB6dtF
-         yhrP4xK+GkxHP/lT20KBd8CQD8v9ddhEUt4KyKzk90DAVyxhAhPv2/fOScXi86WtSoDS
-         pxFsfOu40Viw5B0+ZIGnOOGOs/6fZWDZT73kzeOZ+cW8r4ZP6WIiNfwcU4nfgYwCvIn9
-         HnuENOVvoflwLViv82Sro/eJNtOgTprMrJh9VG29iHH8wAWpwGeiaNDBl54i69ekJJuK
-         THvA==
+        bh=nKAI0S93ME7i51hseZ6+wmpHBdg0HI9aWCiEZunfjik=;
+        b=Soxx/3N87PGx3mb5h4nU9Y/1F8HFpxwJU3/MJ0CuDY+YN8OP9ACnbLtyxJ8Tb1X8IU
+         iQYU8f8pjcrD6PDHJKHkthDsupHcCsffWRG14SORf3yzaND07VUUJCr8elCDRf+RQh3K
+         FIei72MzqrbuDO0n+BkP/5R2H64pPI3IwWV9r0/XFeEIkJwupKsKnrxBVgedybjx92vk
+         ROyk2ju1mOewZF/mB/98rKMHu2KDDNnD4PbvV4RZQTfTopE/Jf7GEDq0l8ii8wFssBR7
+         XfSXbdl1azrnUgwDW4U43iXyGjoeYbnD7ymnTH4Oo27RxG0DE0MO1nWLfQdtpTSeCn/J
+         x5nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=SsoIYjBoSOJL9ZsEeEbVAcU4nkxuyAtiLgrYShov/wE=;
-        b=pYT/RIzplsGhYbWZ6H6m6s+wsiu80feVd2nfPYLoCRzXSWtGZLBc+33xbY7f97Lkbg
-         9FKeW14RvNQOXda/8I4hUeWwzHqRcizbyroh8EzMd1/Z8OlZw79v0Ioklr+UazHl++aq
-         NqswoLkyl9Moxbb98lNSqK6Df4R2SRhYqq6U8VfXYRRpLr8R6vFSJvIMcorrDzBTl3X8
-         iHDccBAreuMDWzSB5rBpLOGpwyENrMt2/8cy+ihqVgKW+TGApPDWlKu3SQl6Km9ObJ1R
-         uMc4Q8hntSLkyKXnsOewDmQqHRrQzVgnV+osx3zX10ZQuRPjQdT+bVPCtSRCUAzuWsR0
-         5/CQ==
-X-Gm-Message-State: AOAM5320TUdvlJQ/9XGpy6+OYLKgEE6wgHeOWomxHBwPS0/7vouth0sq
-        5WMBwxHwqSsyuADUbSd1V0pT1w==
-X-Google-Smtp-Source: ABdhPJy/AObM5SP970JiKVbzk0clsLDS7Pku3nuk+S/w0OWrxn3W3HE1Z7GvrEj0qJrW03GFHY7u/Q==
-X-Received: by 2002:a05:620a:138b:: with SMTP id k11mr25874513qki.323.1607374794219;
-        Mon, 07 Dec 2020 12:59:54 -0800 (PST)
+        bh=nKAI0S93ME7i51hseZ6+wmpHBdg0HI9aWCiEZunfjik=;
+        b=Q29o/oyhI9MM3s9slNrWyzZvY5PZLml4tIZEcpIK8S0jj+dQWNA+qlrbLv8vIbV7kG
+         NCrL1K2B5Z8wKjti117xAf0R3ItK2yG8jst+DOTRLXYHnMPEKdeKMD0UZpx78T+Y8knl
+         cLXEp2OW7eHjpCn7jwxDj8WWfvXIbLt9VzQIHyigRyTB15fA3OATu/veO11m4VGzPbwx
+         NRkGV5DmShi3QhWILGX2CUa3Alq6D1olNDpCBgIv96Pb//aK/jpQ/IWJveTKciTYoPae
+         BnhFlRbcaekc6DLeTG2EwIKJQosJiOa8QmSvOncWNH78IlkLQTynyYABjQkibULMBrOX
+         rBMw==
+X-Gm-Message-State: AOAM530maYPN+jakET4ZOCzvu7QJzW5GmRZ4iqwnJRa9VcbxF9+lHEPu
+        aXVsoFCGiwuDsa7dRz2XiK5ZOQ==
+X-Google-Smtp-Source: ABdhPJxj04RcFkKycBCmmM8xlj5X137EFzrpVhlQXfFhcfVDinY9DvcLduWOoOwwCNTtmiIK5wSaAw==
+X-Received: by 2002:ac8:5450:: with SMTP id d16mr25669307qtq.33.1607375107115;
+        Mon, 07 Dec 2020 13:05:07 -0800 (PST)
 Received: from ziepe.ca (hlfxns017vw-142-162-115-133.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.115.133])
-        by smtp.gmail.com with ESMTPSA id s8sm11621645qtw.61.2020.12.07.12.59.53
+        by smtp.gmail.com with ESMTPSA id h16sm13760997qko.135.2020.12.07.13.05.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 12:59:53 -0800 (PST)
+        Mon, 07 Dec 2020 13:05:06 -0800 (PST)
 Received: from jgg by mlx with local (Exim 4.94)
         (envelope-from <jgg@ziepe.ca>)
-        id 1kmNbs-007fZb-Sn; Mon, 07 Dec 2020 16:59:52 -0400
-Date:   Mon, 7 Dec 2020 16:59:52 -0400
+        id 1kmNgv-007fdg-Qh; Mon, 07 Dec 2020 17:05:05 -0400
+Date:   Mon, 7 Dec 2020 17:05:05 -0400
 From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -60,33 +60,36 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch 6/8] ntp, rtc: Move rtc_set_ntp_time() to ntp code
-Message-ID: <20201207205952.GL5487@ziepe.ca>
+Subject: Re: [patch 8/8] ntp: Consolidate the RTC update implementation
+Message-ID: <20201207210505.GM5487@ziepe.ca>
 References: <20201206214613.444124194@linutronix.de>
- <20201206220542.166871172@linutronix.de>
+ <20201206220542.355743355@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201206220542.166871172@linutronix.de>
+In-Reply-To: <20201206220542.355743355@linutronix.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Dec 06, 2020 at 10:46:19PM +0100, Thomas Gleixner wrote:
-> rtc_set_ntp_time() is not really RTC functionality as the code is just a
-> user of RTC. Move it into the NTP code which allows further cleanups.
-> 
-> Requested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  drivers/rtc/Makefile  |    1 
->  drivers/rtc/systohc.c |   61 ----------------------------------
->  include/linux/rtc.h   |   34 -------------------
->  kernel/time/ntp.c     |   88 ++++++++++++++++++++++++++++++++++++++++++++++++--
->  4 files changed, 85 insertions(+), 99 deletions(-)
+On Sun, Dec 06, 2020 at 10:46:21PM +0100, Thomas Gleixner wrote:
+>  /*
+>   * If we have an externally synchronized Linux clock, then update RTC clock
+>   * accordingly every ~11 minutes. Generally RTCs can only store second
+> @@ -686,6 +621,10 @@ static bool sync_cmos_clock(void)
+>   */
+>  static void sync_hw_clock(struct work_struct *work)
+>  {
+> +	static unsigned long offset_nsec = NSEC_PER_SEC / 2;
 
-Fair enough, it is asymmetric with how HCTOSYS works, but not a big
-deal
+A comment here explaining this is the default: because the platform is
+assumed to use CMOS, and by the way, this whole thing is obsolete
+don't use it, seems appropriate..
+
+The time split is clearer if you think of it from a bus/datasheet
+perspective, less clear if you try to measure the system directly, eg
+from an alarm. But, I think this  has a better chance of some rtclib
+driver authors to fill in the datasheet value at least.
 
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
