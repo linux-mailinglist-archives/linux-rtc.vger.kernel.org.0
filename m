@@ -2,15 +2,15 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46D72D6A35
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Dec 2020 22:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54BE52D6A18
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Dec 2020 22:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405079AbgLJVlw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Dec 2020 16:41:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38696 "EHLO mail.kernel.org"
+        id S2404964AbgLJV2E (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Dec 2020 16:28:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404896AbgLJV1b (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 10 Dec 2020 16:27:31 -0500
+        id S2404942AbgLJV1k (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 10 Dec 2020 16:27:40 -0500
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
@@ -37,9 +37,9 @@ Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Angus Ainslie <angus@akkea.ca>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC 14/18] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
-Date:   Thu, 10 Dec 2020 22:25:30 +0100
-Message-Id: <20201210212534.216197-14-krzk@kernel.org>
+Subject: [RFC 16/18] power: supply: max17042: Do not enforce (incorrect) interrupt trigger type
+Date:   Thu, 10 Dec 2020 22:25:32 +0100
+Message-Id: <20201210212534.216197-16-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
 References: <20201210212534.216197-1-krzk@kernel.org>
@@ -53,8 +53,8 @@ Interrupt line can be configured on different hardware in different way,
 even inverted.  Therefore driver should not enforce specific trigger
 type - edge falling - but instead rely on Devicetree to configure it.
 
-The Maxim 77686 datasheet describes the interrupt line as active low
-with a requirement of acknowledge from the CPU therefore the edge
+The Maxim 17047/77693 datasheets describe the interrupt line as active
+low with a requirement of acknowledge from the CPU therefore the edge
 falling is not correct.
 
 The interrupt line is shared between PMIC and RTC driver, so using level
@@ -70,24 +70,22 @@ Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 This patch should wait till DTS changes are merged, as it relies on
 proper Devicetree.
 ---
- drivers/rtc/rtc-max77686.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/max17042_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index d51cc12114cb..eae7cb9faf1e 100644
---- a/drivers/rtc/rtc-max77686.c
-+++ b/drivers/rtc/rtc-max77686.c
-@@ -717,8 +717,8 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 79d4b5988360..8117ecabe31c 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -1104,7 +1104,7 @@ static int max17042_probe(struct i2c_client *client,
+ 	}
  
- add_rtc_irq:
- 	ret = regmap_add_irq_chip(info->rtc_regmap, info->rtc_irq,
--				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				  IRQF_SHARED, 0, info->drv_data->rtc_irq_chip,
-+				  IRQF_ONESHOT | IRQF_SHARED,
-+				  0, info->drv_data->rtc_irq_chip,
- 				  &info->rtc_irq_data);
- 	if (ret < 0) {
- 		dev_err(info->dev, "Failed to add RTC irq chip: %d\n", ret);
+ 	if (client->irq) {
+-		unsigned int flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
++		unsigned int flags = IRQF_ONESHOT;
+ 
+ 		/*
+ 		 * On ACPI systems the IRQ may be handled by ACPI-event code,
 -- 
 2.25.1
 
