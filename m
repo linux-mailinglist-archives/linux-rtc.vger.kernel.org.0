@@ -2,100 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662AF2D4286
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Dec 2020 14:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809AE2D69BF
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Dec 2020 22:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731702AbgLIM6l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Dec 2020 07:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728441AbgLIM6l (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Dec 2020 07:58:41 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D475AC0613CF
-        for <linux-rtc@vger.kernel.org>; Wed,  9 Dec 2020 04:58:00 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id t8so968793pfg.8
-        for <linux-rtc@vger.kernel.org>; Wed, 09 Dec 2020 04:58:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=KUmO9g2uJV3vTl1xqMWJDNxu097BI/EU/TfQ3Q5vAfo=;
-        b=J+lBbC2OCqq6xScfTLgzEXifZX7QHmA/oh9ugf78V7mrXSCyi3aZRCKKkRwA9OzNoR
-         TQxOT1DsM9+0krJWWoEwEa9V/fAnSDzJUwUQDupYWH9kb3vZxuuv+Ldsyry4qdpDOhIM
-         5uUvwSP4IN/OaIV99+cu9t1cyPNZkNH+GmZ2lkkdQk3Rc9IJ7/e/97BtHHof50rqj/9X
-         kGvLwGKloJ1UwcoEtwnPHYJLCl322rOhP9NGGGR20NLMdmasfs4rQZZzIdDUqd3IWKLk
-         xf7DXkFGdQFyyBqsqBZAeCQndUkAEDHUG7ZeJno9yHDkeHgal4L/MHpeX4dxVSG39mRz
-         sd7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=KUmO9g2uJV3vTl1xqMWJDNxu097BI/EU/TfQ3Q5vAfo=;
-        b=PpRvfFpX9H9HSD5QqBSk9OJ+6jeG7VuHpPTPxLwNn8AtNCunrJAMTUNkMswK7ilQtC
-         VvgahetIWppxbOR2Goh5RNejcLvCNGexteYImnqO/gJVivnn42OqDscGr/baL4DKRyj0
-         ZKoc5UHhjZnwyLakGq+JWHhlJcsoVaI0vuDZC3xOyALyg7jcwfetP2jBXNjh72/bdL7x
-         8xmIj1YZ4sbH6YK08ccc6gYyPGX5o1Rt+hYovAGXd0ozkDswN+SGj2lp6ElLlngTWXLo
-         VEt9lbeL5iiQhrqUxHQLxl0aliB802p55X3kpmhiY7dMdUmXAE5IoOKuR8wjouKLPrv+
-         zkuw==
-X-Gm-Message-State: AOAM533v3eVpWHFvh/nmj0d48gRXZShd9a0WEHFXshL0AJMmstyAXRWh
-        Lvdzaj8eq/m4pUyoh/vO3JNKiQEZBTiz8nJkSkM=
-X-Google-Smtp-Source: ABdhPJyNnkploELH0UHfjoIhQtI/W0l3Mq3YNE7ZthwdMOTEntnlipTLdYQ2giOXQoOfOgqWYvoalRhOyu+MuBXRVVo=
-X-Received: by 2002:a05:6a00:80b:b029:198:124a:d58a with SMTP id
- m11-20020a056a00080bb0290198124ad58amr1963366pfk.56.1607518680380; Wed, 09
- Dec 2020 04:58:00 -0800 (PST)
+        id S2404862AbgLJV0l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Dec 2020 16:26:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393978AbgLJV0b (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 10 Dec 2020 16:26:31 -0500
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 02/18] ARM: dts: exynos: correct fuel gauge interrupt trigger level on P4 Note family
+Date:   Thu, 10 Dec 2020 22:25:18 +0100
+Message-Id: <20201210212534.216197-2-krzk@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
+References: <20201210212534.216197-1-krzk@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:394c:0:0:0:0 with HTTP; Wed, 9 Dec 2020 04:57:59
- -0800 (PST)
-Reply-To: claraedward496@gmail.com
-From:   "Mrs. Clara Edward" <merilynpendon@gmail.com>
-Date:   Wed, 9 Dec 2020 13:57:59 +0100
-Message-ID: <CAO-WuY=Hq_b0KerqQ36JVuUJ3ezFRk41=uVCFHYXByMnirGYOg@mail.gmail.com>
-Subject: MY DEAR ARE YOU WILLING TO HANDLE THIS CHARITY WORK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Good day Dear God's Chosen,
+The Maxim fuel gauge datasheets describe the interrupt line as active
+low with a requirement of acknowledge from the CPU.  The falling edge
+interrupt will mostly work but it's not correct.
 
-Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
-CHRIST the giver of every good thing. Good day, i know this letter
-will definitely come to you as a huge surprise, but I implore you to
-take the time to go through it carefully as the decision you make will
-go off a long way to determine my future and continued existence. I am
-Mrs. Clara Edward aging widow of 79 years old suffering from long time
-illness Cancer. I have some funds I inherited from my late husband,
-The sum of (US$8.5 Million Dollars) and I needed a very honest and God
-fearing who can withdraw this money then use the funds for Charity
-works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
-your contact after a honest prayers to the LORD to bring me a helper
-and i decided to contact you if you may be willing and interested to
-handle these trust funds in good faith before anything happens to me.
+Fixes: f48b5050c301 ("ARM: dts: exynos: add Samsung's Exynos4412-based P4 Note boards")
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ arch/arm/boot/dts/exynos4412-p4note.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I accept this decision because I do not have any child who will
-inherit this money after I die. I want your urgent reply to me so that
-I will give you the deposit receipt which the COMPANY issued to me as
-next of king for immediate transfer of the money to your account in
-your country, to start the good work of God, I want you to use the
-40/percent of the total amount to help yourself in doing the project.
+diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+index b2f9d5448a18..5fe371543cbb 100644
+--- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
++++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+@@ -146,7 +146,7 @@ fuel-gauge@36 {
+ 			pinctrl-0 = <&fuel_alert_irq>;
+ 			pinctrl-names = "default";
+ 			interrupt-parent = <&gpx2>;
+-			interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+ 			maxim,rsns-microohm = <10000>;
+ 			maxim,over-heat-temp = <600>;
+ 			maxim,over-volt = <4300>;
+-- 
+2.25.1
 
-I am desperately in keen need of assistance and I have summoned up
-courage to contact you for this task, you must not fail me and the
-millions of the poor people in our today=E2=80=99s WORLD. This is not stole=
-n
-money and there are no dangers involved,100% RISK FREE with full legal
-proof. Please if you would be able to use the funds for the Charity
-works kindly let me know immediately. I will appreciate your utmost
-confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish. I
-want you to take 40 percent of the total money for your personal use
-while 60% of the money will go to charity. I will appreciate your
-utmost confidentiality and trust in this matter to accomplish my heart
-desire, as I don't want anything that will jeopardize my last wish.
-
-Thanks and God bless you.
-
-Mrs. Clara Edward
