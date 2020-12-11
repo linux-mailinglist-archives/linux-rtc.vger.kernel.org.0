@@ -2,150 +2,128 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BF92D6D58
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 02:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C20B2D710E
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 08:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404601AbgLKBWf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Dec 2020 20:22:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:49880 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394792AbgLKBWW (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 10 Dec 2020 20:22:22 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554C21534;
-        Thu, 10 Dec 2020 17:20:39 -0800 (PST)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0DC3F66B;
-        Thu, 10 Dec 2020 17:20:36 -0800 (PST)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     Icenowy Zheng <icenowy@aosc.xyz>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S2436815AbgLKHsn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Dec 2020 02:48:43 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39435 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388543AbgLKHsl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 02:48:41 -0500
+Received: by mail-ed1-f67.google.com with SMTP id c7so8343856edv.6;
+        Thu, 10 Dec 2020 23:48:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P0wPTNnTMMvMYQoXIJsxDc+GGcUdhHlmPr5EHW78xzw=;
+        b=mezpfFhm+fgbJylmhl7dWQ9OmYRZESoDJ6ZeK8aBYf9ayecJqbKvJ3KzeAY1eoHDN9
+         3wokP5Gb+LqU/vOAlClr861ILhKDcptK9Rg9mdZ9Cfmj1gWf5ZfluFILH7KDXCu76unI
+         12PN3urktFUhOTcFcEh9y2m/6TSbg/TwNH/NHjjt0WayzJt1ypXHQ/K0vCGg2MS2bVmU
+         u1SQh9Tn58bNzsT7f+MNG7oeQcxgnBKa4mdQqdNvIIm2Vw632yiQjX3tMgwjwbCrc8Xl
+         FOCM5fiRJGUogkcv+l7fz51Y0nTKultUqOipAjchhntwKrSw1jBJlpyORy6WzEAzulSg
+         UUlw==
+X-Gm-Message-State: AOAM532wnUX8gR25rqGgdkAUPJEw8hP6MXLoF/ho9VfVqcwXuTQlcBpW
+        SlL4BI/4yGxTinAPfDuWI9cj9OTMbDXxGg==
+X-Google-Smtp-Source: ABdhPJx/k/HGToQvr22UR3Xq7vPsj2TvNmpm8kE7Hr4dtKfaS9AYncLFODFCgjOBi92luTKLln+RDw==
+X-Received: by 2002:a50:e688:: with SMTP id z8mr10777681edm.129.1607672878059;
+        Thu, 10 Dec 2020 23:47:58 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id qn4sm6333309ejb.50.2020.12.10.23.47.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 23:47:57 -0800 (PST)
+Date:   Fri, 11 Dec 2020 08:47:55 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible strings
-Date:   Fri, 11 Dec 2020 01:19:31 +0000
-Message-Id: <20201211011934.6171-19-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20201211011934.6171-1-andre.przywara@arm.com>
-References: <20201211011934.6171-1-andre.przywara@arm.com>
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [RFC 18/18] power: supply: max17040: Do not enforce (incorrect)
+ interrupt trigger type
+Message-ID: <20201211074755.GA4346@kozik-lap>
+References: <20201210212534.216197-1-krzk@kernel.org>
+ <20201210212534.216197-18-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201210212534.216197-18-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-bindings, and pair them with an existing fallback compatible string,
-as the devices are compatible.
-This covers I2C, infrared, RTC and SPI.
+On Thu, Dec 10, 2020 at 10:25:34PM +0100, Krzysztof Kozlowski wrote:
+> Interrupt line can be configured on different hardware in different way,
+> even inverted.  Therefore driver should not enforce specific trigger
+> type - edge falling - but instead rely on Devicetree to configure it.
+> 
+> The Maxim 14577/77836 datasheets describe the interrupt line as active
+> low with a requirement of acknowledge from the CPU therefore the edge
+> falling is not correct.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> ---
+> 
+> This patch should wait till DTS changes are merged, as it relies on
+> proper Devicetree.
+> ---
+>  .../devicetree/bindings/power/supply/max17040_battery.txt       | 2 +-
+>  drivers/power/supply/max17040_battery.c                         | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> index c802f664b508..194eb9fe574d 100644
+> --- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> @@ -39,7 +39,7 @@ Example:
+>  		reg = <0x36>;
+>  		maxim,alert-low-soc-level = <10>;
+>  		interrupt-parent = <&gpio7>;
+> -		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+> +		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
+>  		wakeup-source;
+>  	};
+>  
+> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+> index d956c67d5155..f737de0470de 100644
+> --- a/drivers/power/supply/max17040_battery.c
+> +++ b/drivers/power/supply/max17040_battery.c
+> @@ -367,7 +367,7 @@ static int max17040_enable_alert_irq(struct max17040_chip *chip)
+>  
+>  	flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
 
-Use enums to group all compatible devices together.
+This has to be removed. I will fix it in v2.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
- .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
- .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
- 4 files changed, 17 insertions(+), 24 deletions(-)
+Best regards,
+Krzysztof
 
-diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-index 5b5ae402f97a..eb72dd571def 100644
---- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-+++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-@@ -18,21 +18,14 @@ properties:
-           - const: allwinner,sun4i-a10-i2c
-       - const: allwinner,sun6i-a31-i2c
-       - items:
--          - const: allwinner,sun8i-a23-i2c
-+          - enum:
-+              - allwinner,sun8i-a23-i2c
-+              - allwinner,sun8i-a83t-i2c
-+              - allwinner,sun50i-a64-i2c
-+              - allwinner,sun50i-a100-i2c
-+              - allwinner,sun50i-h6-i2c
-+              - allwinner,sun50i-h616-i2c
-           - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun8i-a83t-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-a64-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-a100-i2c
--          - const: allwinner,sun6i-a31-i2c
--      - items:
--          - const: allwinner,sun50i-h6-i2c
--          - const: allwinner,sun6i-a31-i2c
--
-       - const: marvell,mv64xxx-i2c
-       - const: marvell,mv78230-i2c
-       - const: marvell,mv78230-a0-i2c
-diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-index 5fa19d4aeaf3..6d8395d6bca0 100644
---- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-+++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
-@@ -20,16 +20,12 @@ properties:
-       - const: allwinner,sun5i-a13-ir
-       - const: allwinner,sun6i-a31-ir
-       - items:
--          - const: allwinner,sun8i-a83t-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun8i-r40-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-a64-ir
--          - const: allwinner,sun6i-a31-ir
--      - items:
--          - const: allwinner,sun50i-h6-ir
-+          - enum:
-+              - allwinner,sun8i-a83t-ir
-+              - allwinner,sun8i-r40-ir
-+              - allwinner,sun50i-a64-ir
-+              - allwinner,sun50i-h6-ir
-+              - allwinner,sun50i-h616-ir
-           - const: allwinner,sun6i-a31-ir
- 
-   reg:
-diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-index 37c2a601c3fa..97928efd2bc9 100644
---- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-@@ -26,6 +26,9 @@ properties:
-           - const: allwinner,sun50i-a64-rtc
-           - const: allwinner,sun8i-h3-rtc
-       - const: allwinner,sun50i-h6-rtc
-+      - items:
-+          - const: allwinner,sun50i-h616-rtc
-+          - const: allwinner,sun50i-h6-rtc
- 
-   reg:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-index 7866a655d81c..908248260afa 100644
---- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-@@ -25,6 +25,7 @@ properties:
-           - enum:
-               - allwinner,sun8i-r40-spi
-               - allwinner,sun50i-h6-spi
-+              - allwinner,sun50i-h616-spi
-           - const: allwinner,sun8i-h3-spi
- 
-   reg:
--- 
-2.17.5
 
+>  	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+> -					max17040_thread_handler, flags,
+> +					max17040_thread_handler, IRQF_ONESHOT,
+>  					chip->battery->desc->name, chip);
+>  
+>  	return ret;
+> -- 
+> 2.25.1
+> 
