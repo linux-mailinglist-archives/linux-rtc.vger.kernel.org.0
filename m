@@ -2,71 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E84C2D6C98
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 01:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BF92D6D58
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 02:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403974AbgLKAaQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Dec 2020 19:30:16 -0500
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:36653 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393615AbgLKA3l (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Dec 2020 19:29:41 -0500
-X-Originating-IP: 86.194.74.19
-Received: from localhost (lfbn-lyo-1-997-19.w86-194.abo.wanadoo.fr [86.194.74.19])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 0E0F8FF803;
-        Fri, 11 Dec 2020 00:28:51 +0000 (UTC)
-Date:   Fri, 11 Dec 2020 01:28:51 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Prarit Bhargava <prarit@redhat.com>,
+        id S2404601AbgLKBWf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Dec 2020 20:22:35 -0500
+Received: from foss.arm.com ([217.140.110.172]:49880 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394792AbgLKBWW (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 10 Dec 2020 20:22:22 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 554C21534;
+        Thu, 10 Dec 2020 17:20:39 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0DC3F66B;
+        Thu, 10 Dec 2020 17:20:36 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Icenowy Zheng <icenowy@aosc.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch 4/8] rtc: core: Make the sync offset default more
- realistic
-Message-ID: <20201211002851.GB1781038@piout.net>
-References: <20201206214613.444124194@linutronix.de>
- <20201206220541.960333166@linutronix.de>
- <20201210235908.GA1781038@piout.net>
- <87czzhi40y.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czzhi40y.fsf@nanos.tec.linutronix.de>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible strings
+Date:   Fri, 11 Dec 2020 01:19:31 +0000
+Message-Id: <20201211011934.6171-19-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20201211011934.6171-1-andre.przywara@arm.com>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/12/2020 01:23:57+0100, Thomas Gleixner wrote:
-> Alexandre,
-> 
-> On Fri, Dec 11 2020 at 00:59, Alexandre Belloni wrote:
-> > On 06/12/2020 22:46:17+0100, Thomas Gleixner wrote:
-> >>  	/* Drivers can revise this default after allocating the device. */
-> >> -	rtc->set_offset_nsec =  NSEC_PER_SEC / 2;
-> >> +	rtc->set_offset_nsec =  10 * NSEC_PER_MSEC;
-> >
-> > I did retest, on a slow 100kHz i2c bus, with a fairly inconvenient RTC,
-> > The maximum offset to set the RTC was 4845533ns so I'd say 10ms is too
-> > large. Should we make that 5ms ?
-> 
-> Sure. As I said I pulled the 10 out of thin air.
-> 
-> > Apart from that, on the series, you can add my
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> 
-> I'll amend the s/10/5/ throughout the series while queueing the whole
-> pile in the timers/core branch unless you want it to be handled
-> differently.
-> 
+Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
+bindings, and pair them with an existing fallback compatible string,
+as the devices are compatible.
+This covers I2C, infrared, RTC and SPI.
 
-That's fine for me.
+Use enums to group all compatible devices together.
 
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+---
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
+ .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
+ 4 files changed, 17 insertions(+), 24 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+index 5b5ae402f97a..eb72dd571def 100644
+--- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
++++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+@@ -18,21 +18,14 @@ properties:
+           - const: allwinner,sun4i-a10-i2c
+       - const: allwinner,sun6i-a31-i2c
+       - items:
+-          - const: allwinner,sun8i-a23-i2c
++          - enum:
++              - allwinner,sun8i-a23-i2c
++              - allwinner,sun8i-a83t-i2c
++              - allwinner,sun50i-a64-i2c
++              - allwinner,sun50i-a100-i2c
++              - allwinner,sun50i-h6-i2c
++              - allwinner,sun50i-h616-i2c
+           - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun8i-a83t-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a64-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-a100-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-      - items:
+-          - const: allwinner,sun50i-h6-i2c
+-          - const: allwinner,sun6i-a31-i2c
+-
+       - const: marvell,mv64xxx-i2c
+       - const: marvell,mv78230-i2c
+       - const: marvell,mv78230-a0-i2c
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+index 5fa19d4aeaf3..6d8395d6bca0 100644
+--- a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+@@ -20,16 +20,12 @@ properties:
+       - const: allwinner,sun5i-a13-ir
+       - const: allwinner,sun6i-a31-ir
+       - items:
+-          - const: allwinner,sun8i-a83t-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun8i-r40-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-a64-ir
+-          - const: allwinner,sun6i-a31-ir
+-      - items:
+-          - const: allwinner,sun50i-h6-ir
++          - enum:
++              - allwinner,sun8i-a83t-ir
++              - allwinner,sun8i-r40-ir
++              - allwinner,sun50i-a64-ir
++              - allwinner,sun50i-h6-ir
++              - allwinner,sun50i-h616-ir
+           - const: allwinner,sun6i-a31-ir
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+index 37c2a601c3fa..97928efd2bc9 100644
+--- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+@@ -26,6 +26,9 @@ properties:
+           - const: allwinner,sun50i-a64-rtc
+           - const: allwinner,sun8i-h3-rtc
+       - const: allwinner,sun50i-h6-rtc
++      - items:
++          - const: allwinner,sun50i-h616-rtc
++          - const: allwinner,sun50i-h6-rtc
+ 
+   reg:
+     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index 7866a655d81c..908248260afa 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -25,6 +25,7 @@ properties:
+           - enum:
+               - allwinner,sun8i-r40-spi
+               - allwinner,sun50i-h6-spi
++              - allwinner,sun50i-h616-spi
+           - const: allwinner,sun8i-h3-spi
+ 
+   reg:
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.5
+
