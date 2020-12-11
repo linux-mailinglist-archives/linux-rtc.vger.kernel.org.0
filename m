@@ -2,77 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551402D72C4
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 10:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67622D792A
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 16:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405596AbgLKJYT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Dec 2020 04:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S2437891AbgLKP0B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Dec 2020 10:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404401AbgLKJYM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 04:24:12 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD096C0613CF;
-        Fri, 11 Dec 2020 01:23:31 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1607678610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/64yfk/f7iWtTjLUC4NhqoHGM4ucIwe7KEQDNM7rmxQ=;
-        b=BFXK24VpgfEg9bCn3Yd+M/huO0MTAeHWg5wAr6dEpsgJVi2Ot7fxcxVs51AYQTlOvH6ld4
-        XwS3uK8FTXl8ZIHvdtBOmIwWNF1iT+WwiRZeIO6QHKc+nBLE1HXeIW/4GNAWj4ehrtz5l4
-        WVuRJPm/Tkj80uqJkrceCbcQFGvx/1wfbeDm02Zei738yVkYhNePs7Sfc+M/X4nYl5oBOF
-        GaJL3LBmujpZ14IDewiy88Bacf8AbHeROrd3tgkXSeaqtzHIsRdxyFXDiHwAuyx4u24cWD
-        6YG9jcGjYJMLEKpGhh+XrIdIAwb72qAcnGCdFF93gJxf3FzH0uL+gDZnUbvaNg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1607678610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/64yfk/f7iWtTjLUC4NhqoHGM4ucIwe7KEQDNM7rmxQ=;
-        b=+aEWTKLPXJldoSe6edlC3FByXn5fdyrTXTK/3FgBy4hs32EwD4wB0A4O5GMzkH6FxD6fIZ
-        ilFI6ge3FVTI6YCw==
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Prarit Bhargava <prarit@redhat.com>,
+        with ESMTP id S2437886AbgLKPZx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 10:25:53 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC564C0613CF;
+        Fri, 11 Dec 2020 07:25:12 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id 3so8939154wmg.4;
+        Fri, 11 Dec 2020 07:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=my0v3tsRd/Mz4EIypIj37zNMuhiMI5SF6h5TpgmxpB4=;
+        b=UrzvvXJ0cz0zGNOSqpro4dW33KOVtYPq4hM2Aw+imIHgxrPqJSXTEIZSc8GjmEZ6Cl
+         9ikTpG7cWdOnKFpctkZDvJbLYS13DDwDC4/Rar1X/To9YrL4IfK0q+UQpvTv6HklUzIz
+         fiRD3G772ooaDOM2lnJ8LdsAT9gF3DcWZMPrwT2b1cZgCG3vpzQiuVs7cX7NrRnjDMEt
+         9aPhBfxpqJ/D3DmxnJbBBH+ynO61KPPpZjRx+D99HTic9fG8e5v+KmQMrYNXdATGmArc
+         5FgPiAZhUOtPK6xTTWmsB2zrqZnhL9sJL6eVj6cIqgDM4evCIOmvqkgo7neeZK92bIze
+         bBsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=my0v3tsRd/Mz4EIypIj37zNMuhiMI5SF6h5TpgmxpB4=;
+        b=DDtwJ2cwffE70QgpDP7+qBaZQUYfQSzDp2twg587gSMqH9/cah7tftmvxLp96Fhtl4
+         9SMiPGApIP3HRqlzrM1wlOBMmZxah4hFu2X1RyRUWQFSmAkpJilbikfo9JXF+50XA7gW
+         WW8FBS0VhO/BswrIY74vfSa9D3CMrdm0IuHVGe9/xUMNmMSXK19uAh65meVO1WYsAbG3
+         bYoFBLw/T0mQw/8UaAFPGPHET9fetXvAm8OPsaVFwPPhckd+f70/7zV8vvvHAX9oFQLZ
+         +pbYEUtmR4HCbViTaVfHl1XKZk/s9OEWvyo4Ar0ecplkq6M6GF8vNldXjdpOwfapFvHs
+         3fGw==
+X-Gm-Message-State: AOAM531URbv4WN7p0ZHusto26W6O80IlWVcZBY3k6ah3uOTpVYrG1AuF
+        2PzWoFRj6dN1IvipPvkMqq8=
+X-Google-Smtp-Source: ABdhPJxfnTaSUGMt3qD4TxCyZ9BhVYl6DKFHubfh7itAEtAANKosHG7tXoFwD4N88bBatphcZVq9qw==
+X-Received: by 2002:a1c:a344:: with SMTP id m65mr13965395wme.108.1607700311561;
+        Fri, 11 Dec 2020 07:25:11 -0800 (PST)
+Received: from [192.168.74.106] (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
+        by smtp.gmail.com with ESMTPSA id b14sm15403083wrx.77.2020.12.11.07.25.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Dec 2020 07:25:10 -0800 (PST)
+Subject: Re: [PATCH 12/18] ARM: dts: qcom: msm8974-samsung-klte: correct fuel
+ gauge interrupt trigger level
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch 8/8] ntp: Consolidate the RTC update implementation
-In-Reply-To: <20201207210505.GM5487@ziepe.ca>
-References: <20201206214613.444124194@linutronix.de> <20201206220542.355743355@linutronix.de> <20201207210505.GM5487@ziepe.ca>
-Date:   Fri, 11 Dec 2020 10:23:29 +0100
-Message-ID: <877dpoitm6.fsf@nanos.tec.linutronix.de>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hans de Goede <hdegoede@redhat.com>
+References: <20201210212534.216197-1-krzk@kernel.org>
+ <20201210212534.216197-12-krzk@kernel.org>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+Message-ID: <9a896342-cc0b-5cdf-aefd-6fe13c540c69@gmail.com>
+Date:   Fri, 11 Dec 2020 17:25:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20201210212534.216197-12-krzk@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Dec 07 2020 at 17:05, Jason Gunthorpe wrote:
-> On Sun, Dec 06, 2020 at 10:46:21PM +0100, Thomas Gleixner wrote:
->>  static void sync_hw_clock(struct work_struct *work)
->>  {
->> +	static unsigned long offset_nsec = NSEC_PER_SEC / 2;
->
-> A comment here explaining this is the default: because the platform is
-> assumed to use CMOS, and by the way, this whole thing is obsolete
-> don't use it, seems appropriate..
 
-Will add something like that.
+On 12/10/20 11:25 PM, Krzysztof Kozlowski wrote:
+ > The Maxim fuel gauge datasheets describe the interrupt line as active
+ > low with a requirement of acknowledge from the CPU.  The falling edge
+ > interrupt will mostly work but it's not correct.
+ >
+ > Fixes: da8d46992e67 ("ARM: dts: qcom: msm8974-klte: Add fuel gauge")
+ > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+ > ---
+ >  arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+ >
+ > diff --git a/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts 
+b/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
+ > index 97352de91314..64a3fdb79539 100644
+ > --- a/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
+ > +++ b/arch/arm/boot/dts/qcom-msm8974-samsung-klte.dts
+ > @@ -691,7 +691,7 @@ fuelgauge@36 {
+ >              maxim,rcomp = /bits/ 8 <0x56>;
+ >
+ >              interrupt-parent = <&pma8084_gpios>;
+ > -            interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
+ > +            interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
+ >
+ >              pinctrl-names = "default";
+ >              pinctrl-0 = <&fuelgauge_pin>;
 
-> The time split is clearer if you think of it from a bus/datasheet
-> perspective, less clear if you try to measure the system directly, eg
-> from an alarm. But, I think this  has a better chance of some rtclib
-> driver authors to fill in the datasheet value at least.
+After testing this patch + the rfc modifying 17040 driver I can confirm it
+works on the klte. Also, according to the max17048 datasheet, the ALRT pin
+is active low, so everything is in order.
 
-That's the hope. You know hope dies last...
-
-Thanks,
-
-        tglx
+Acked-By: Iskren Chernev <iskren.chernev@gmail.com>
+Tested-By: Iskren Chernev <iskren.chernev@gmail.com>
 
