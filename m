@@ -2,31 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EAA2D8165
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 22:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4B52D8167
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 22:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394256AbgLKV6I (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Dec 2020 16:58:08 -0500
+        id S2403955AbgLKV6J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Dec 2020 16:58:09 -0500
 Received: from mail-am6eur05on2117.outbound.protection.outlook.com ([40.107.22.117]:12449
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390189AbgLKV5e (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 11 Dec 2020 16:57:34 -0500
+        id S2394236AbgLKV6A (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 11 Dec 2020 16:58:00 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j+sQE03W3dR/Bav+No9Hk/OPevPPewxYnRUdK6c2TH85+GIQSOXge1K4Ec3GyFJKgRDk5Z612s+KqnzQKJQtMCP8w3gSN7rFDbPSVNhSv+LyjLyOKZbnoa+DyCR8+mZmJQgUFhJU2tNaZm5Jg2G6ev9nV+xRLOfJfNQDkgPerGAJBdzGT8JUXKn8E4HPm0WlpIpfsruqcJEiKPV6d+qCcBJk2fRKhIlNpbGRvDU/scTdUeDE6G4/ES3dYBqdt6aFDBSSux2Qutn4tMiW+VWgUVtuuYXXfeom19gcKyCWRII5H2Sdgw9mQafNGVhvDdMgR9K+Cmz0XsBRLkF9TLmtOw==
+ b=fKucJOXkB+6syn5jKl6em2QhN+4sJlCov+Q0x6D+5hUIcWLDntDx04NCzFy0UDspTCT1+1DVzCorLR/ruueUYpu5IopZGDn5r9NJKI+zwJRsKiedb77e+W9OjTmyR7PYPSsiFwFytRQWgIyPe5W54xeRE8gtZUsp8E7coTxMAUFOS0fcXQu9NWLSYI0sob8f3Po8mWo4mAiX1+g1epSFWkTLM1B6SOLtGdHEjJvoFSFBNgV7xOOVbsF3zF1I86Rb/9+hHX33fCuWKhl7IGL89LCRokpjew74PSTtbizGxw530g/v2VPFdjvy8BouSy3HXWjysCv2m8/usRj9AqbjkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KZm0ht9+0DdJoglToXQCIrWlB0TOSWsxWqZGUi5vOro=;
- b=Y33WeTL6AMUIcyyNGGy7nrSKgWPC6YkOUX8sfW94p881WmYbKL/5FeUqI8+eyrPvvXxuK3F2WBLsoiicBzAGombRTnoe/edIYYxMvrpOKk/TwMV/B9XRcN6rDvfcT6Wbl9HYW4+gVTT8Dt/CtlSHycFpqF67QqmXAdYueTsR3L8KXjjh+qfRDUHgoCZWrjNhHEGlZxj40knFM+hsBwS4JJVXRPrislH2o/jFJH+DBhuoc3d4OAA1gyYWOIa4BZpuffexfJzOem9SjWqcwkCMLCqHYre41hQzILuymk8pkFemHv/85e2NWSWuSM0Byp53PFOWLd2xu5ANJbME/vE5ag==
+ bh=3IuQls83uksmdqSHXulflSP/+yulhVT2K5WCFA4WO4A=;
+ b=e/P0WySE5hV9cf3Ohxthivh1jImXFYbjDRxyKZraVekNfX49XEYuEoadNCuE8c+ps9WjNnp4MBcbI3dF/JpCvIXWzHyMYjMvQfkvDg4HNZxDPNFiI35U/VGIsRnDAOxbYpDqPnhW1oogkg9LEPof7Pfvhh/CJY/KzBIUu3E5OvawsDNIkua8dFnDpjyP0lciKLl6d8Kq6VRxi1rXns1eqr42uUhYnCz9pT9DKeUpelNxVrGqFRrPfBmFMNTRNHsP9Z9OdOjV1I4uF9QfMDLaAzphMz2VW1HZ1jxx2d5wwtX+4m3uozuoHnimtAjfzkb09eNVzyLVdHj2LAS1Nv/Jtg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
  dkim=pass header.d=prevas.dk; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KZm0ht9+0DdJoglToXQCIrWlB0TOSWsxWqZGUi5vOro=;
- b=aPOYuPrv41LrKDloA/MXu13R5xUCEKHfa2yKtTdHh9eBcti9Z4mMRRiZmd9vmIBTnWCVeogC71ZFnyMMxlYR+pUyzVyRlsZqPmpQ9aGoALSOMHhqRa89lPdEVXOwt3YWr59gEHyrnvJpPasUv4ojHFmIjJTR4/Gko1RyVZIk0MM=
+ bh=3IuQls83uksmdqSHXulflSP/+yulhVT2K5WCFA4WO4A=;
+ b=aCNknbCo26GPqYgFIsf3ySL9GGHg0bvXuv6QoKzE6p+pM+TTQhjUYc8O0CtFPw25T8cNarh+akR4Pz50xhJ0QN2zNctjsYn2LfSKUc49yddEnWE1ooF1DMW4LZvhM1gKB/9zcK1YlmEHwli+AzYh0+d4pC3l5T1AN/EcfO2MjsY=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=prevas.dk;
 Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:3f::10)
@@ -46,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         <u.kleine-koenig@pengutronix.de>, Qiang Zhao <qiang.zhao@nxp.com>,
         Bruno Thomsen <bruno.thomsen@gmail.com>,
         Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: [PATCH v2 2/3] rtc: pcf2127: move watchdog initialisation to a separate function
-Date:   Fri, 11 Dec 2020 22:56:10 +0100
-Message-Id: <20201211215611.24392-3-rasmus.villemoes@prevas.dk>
+Subject: [PATCH v2 3/3] rtc: pcf2127: only use watchdog when explicitly available
+Date:   Fri, 11 Dec 2020 22:56:11 +0100
+Message-Id: <20201211215611.24392-4-rasmus.villemoes@prevas.dk>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20201211215611.24392-1-rasmus.villemoes@prevas.dk>
 References: <20201204092752.GE74177@piout.net>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: AM6P192CA0068.EURP192.PROD.OUTLOOK.COM
  (2603:10a6:208:3f::10)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from prevas-ravi.prevas.se (5.186.115.188) by AM6P192CA0068.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::45) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Fri, 11 Dec 2020 21:56:21 +0000
+Received: from prevas-ravi.prevas.se (5.186.115.188) by AM6P192CA0068.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:82::45) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Fri, 11 Dec 2020 21:56:22 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 50163c0e-bbaa-48c7-8c40-08d89e1f9904
+X-MS-Office365-Filtering-Correlation-Id: eaf30c89-bf9f-4f35-3b1c-08d89e1f996e
 X-MS-TrafficTypeDiagnostic: AM0PR10MB2867:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR10MB2867605C5AD594160FA9BE4B93CA0@AM0PR10MB2867.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:390;
+X-Microsoft-Antispam-PRVS: <AM0PR10MB28672381D19A0924F433FB2A93CA0@AM0PR10MB2867.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1303;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aGktfFSZ5gBr1AyHT8KfHOBS/UVwtYTQTD/9LDQ28ZkJhL6sh2I7p3nQS9WSKFtOpFP19sr9GwIGeso5c1+OqhGphzrC/rGnoB0Zi6Gkbu3edjJeYTMtIR89yh4+PGQv8xSRUUCJQ98PlQbqwbONljiS90pskwqs+wC/IR6sGKl3yjvRCpz9WVkj/ryMxQI7ClAMiwppUOKsaWgOsY1oh+5PqswT9q88kbcDhMEWvZIkbNrnW8FppBF8vQRkFCCXgvZ9GCovqs5iw517cPCk3J2PGOpNWCJV4nenpK0J+vLIMhdBsagRhrb25HOlRm3odPKTLiYl9IvUthYRogcqFQ3Vp+BvoyMxOVchf9yXIzLuPadFXcUsjZioxo+xzj+a
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(366004)(346002)(136003)(376002)(39840400004)(6666004)(83380400001)(8976002)(66556008)(6916009)(2616005)(4326008)(186003)(107886003)(8936002)(52116002)(66476007)(36756003)(6506007)(54906003)(16526019)(8676002)(478600001)(5660300002)(86362001)(66946007)(44832011)(2906002)(6486002)(6512007)(26005)(956004)(1076003)(316002)(6606295002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?cnpqNWhBMzVTZGFKcGkvclJGd3h0OG84TEZVem5JNDZwZU1XU2o1emdjYzRs?=
- =?utf-8?B?TSt1Mm4vcElVVTFJRlYzcmlpOUtRalNCUHhJRUtXVzczaHB0UlI3TDVyTmpV?=
- =?utf-8?B?QWQwL1FaeWdYVkFIQXVpaXJaeVU4eXEvTGdNZmF3QjJFRzFPL3AwdTladFE3?=
- =?utf-8?B?Qm9zb0lnZzNKVjhudnlGSm5yWmJtUVhKazU0OGF3MTY5eVFvM0gyUUJwZVdV?=
- =?utf-8?B?Q0EzejNkb1o2ek1MeThhT1BRMUdGbGZtZVV0Q0RDdDZHbmQwcElYNUxRNk0x?=
- =?utf-8?B?U3VMU3FCMFFtTTl4RDY2RUNvYy85eDZyMndNbEZ3cmZScEtka0lBTTl6UDl6?=
- =?utf-8?B?NUNSSUJqSmZJOGNucDZ1M2wzL0pMQXVuVnJJUFc1MnFyTmRzeXkyT2FpcWZr?=
- =?utf-8?B?cnVmV1JWUk1qbUI4UTl6T3lEeEpmQm53N09QOFpoc1JHZTZlRko5VDQ5dzUy?=
- =?utf-8?B?SXNURzd5YVFaVjdLMnJmdEEyYnBHWGo4Sk1KRDljcGRyMy9uRkpCZ245NjdE?=
- =?utf-8?B?OHp5MXluT2l1SGc0Rml3QlQ1RmhsTFY3dFJGd0VMbFVQWjhWcnN2ZEJtcG5z?=
- =?utf-8?B?TkpmRWlIY291cjJFWm9vcSs5R2w0aHVsMFI4V2JndnRoQUZWOVloclZvWnNw?=
- =?utf-8?B?Z1AyVGtmVlhRYTY5TVN6dFUxVzlKU0ZzUWVLcjZaY0JMaWNLY2hSUmM2N2tV?=
- =?utf-8?B?YUZQQkw1NnUvQUJOaHhXYU9HYVNsMk9EZ2lacDRSQ3B2aUJGV1RqUE94eDkz?=
- =?utf-8?B?WmIrdFpNQjVNVGRhWkR3Y2E0bUdNRG1QbC9pZFJ4ZUJlTVQrQ05MZjI5SHl5?=
- =?utf-8?B?VWZ6VXhYaWdxSHRyaS9iaE9DZVRWY21tMExwblFwZGlOdW5JNWNvcmE5LzJy?=
- =?utf-8?B?b0Z1REhBV1NzbnNTaGp6SnJjMmxyQjNNM2dsUWMrTjBXUXZ6L1AzN2NGZFVG?=
- =?utf-8?B?Q3NMY3d0bk9sSkFoc2ltQmVPOGdKZFBSMnZpZURtb29XNUlzWExrbVVKbVR6?=
- =?utf-8?B?UUt3SW1UdkNaSE95dnBIUlJwazF0akU4S1BUaGhrejhvUmhwdjhBMXpYMDVL?=
- =?utf-8?B?Vnp1NURhcjQ5MExWSHFad1pBV0cwVnVBc2NnV2Vwdm9xTHFHWk0ybmhLV1U5?=
- =?utf-8?B?UFU2NEFtQVNqN1oxdVBqSE16ZFhRWFZVVlRHcDBvYlV3RWtsTEdtcnROa1ND?=
- =?utf-8?B?MDJxOW5GY0VFblg2N2tadTZPWTBiZG5yeVpnbUZSSDRTVSt6czZHdXhNRlBz?=
- =?utf-8?B?Mis5anNFQ3JnZVJ0cXMwYUZ4VTBQMWUrZVNOelV4VGpYbS9HbUlvOWUrUE1I?=
- =?utf-8?Q?bXWFLZ2BqybAtpkWk+cSXrhg4VNyNT0sbK?=
+X-Microsoft-Antispam-Message-Info: /4A4AGJcmP0EqyB8PxYgJESK8RTskBVvp6ji7sBt1mjkgdifN4kd7IDSeLoluljsKRajE47a13klQRySpmYCfFVamgbWy8jCtu8ZZFCdvEqMdrFqxgb+tIqR2z9PROkOvRSa6UBoBULi4xrQVexaFBlDe1dDrGw0WBa/+B2Sj8QzfE8+mW41DBmCTEMaB1yMpiIDcpjp+SDqXsh1YOJkRwU5OUIeEKtHAM/Rk09t30KIoQ1XNmQDbZqKQzl0ZFx6Kh/KViI0n33hjQCT7apkPqKqkRckplvIdk4+e+NFJFni+Bjf4u7T8m0+Z4WwYUhx8yTNDc76HE8NQalOo1mDiQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(366004)(346002)(136003)(376002)(39840400004)(6666004)(83380400001)(8976002)(66556008)(6916009)(2616005)(4326008)(186003)(107886003)(8936002)(52116002)(66476007)(36756003)(6506007)(54906003)(16526019)(66574015)(8676002)(478600001)(5660300002)(86362001)(66946007)(44832011)(2906002)(6486002)(6512007)(26005)(956004)(1076003)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?a2JVU3R4a21zYUZZMDRna0VERzdld2xDSlAzK2dGSFlSSEIyMUFZR3BCNDdS?=
+ =?utf-8?B?UThRR1lUU3Y1b0piZWFMSkx4VlVmZ2pOaWhScXRxb05CTDlDZ3NtOFBjTkQw?=
+ =?utf-8?B?NWpONmFucFdrZGtOQ0x1YU0xZE53TU1rc0VwVE43N3VFcS9yTTlLSkFCeVVV?=
+ =?utf-8?B?cStYZGVyeER3WUQvV2tQNXhjd0JXeGlYRHpWSFN4aUhqQzNkeHdPU3M4dGZz?=
+ =?utf-8?B?YlZPMkFsdkY3TFA3c1hRNlErMTVNY1VUK0RzL3p2cE5pdzU3Zjl5SHhvRkFm?=
+ =?utf-8?B?THJacTg5SGNKZXBKMmMrTjg1bkNrZ1RLYm5kWWsydnI1OGxublFvY2pYQ3NO?=
+ =?utf-8?B?T1c3RGJzeXJ2dVFsRjJiYzQvelZta3dFRDRrclIzS0h6aVBBZ3prVHRmdnRv?=
+ =?utf-8?B?MEltL0t2TTFKRHpkd2JEMWhTU3dUZWNJZ2hmZ2Y5RDFidmtGUEswZHp1QkJz?=
+ =?utf-8?B?cENUaDhFUWkvbEt2ZEVqSFlNV3RZV0srQlpidEhwYkR1VmpXZmVKUzNLUWhS?=
+ =?utf-8?B?R29CaTUzVFFQSm12Y2tZZlZrcFlxNlh2SXU3alpPeXF5dk9ZdXZEYytVQkxP?=
+ =?utf-8?B?R25jbUg3bSttWDN3ait3WEJnL2t0U3Ewd0czcmtXK2lDeDZ5cHRZdGgyeWF4?=
+ =?utf-8?B?OWRYRFM0bkk2LzJOVDlZR1pqeEVRMWNVZlBtSFduZmxKUVFWKytuTFgrYjNj?=
+ =?utf-8?B?MytSWTU0UHAzYjhKMXB6eTBySmgwVjBSOThhcVBUSUZmbjM1eVBXNFE5OHBu?=
+ =?utf-8?B?cVhBNVdiZkNMNTVSalhuZ21PT3RpWmJpSDdYZVd0WFRtZEhGMXRzS3FvN3Fu?=
+ =?utf-8?B?QktqRi94eUFWbFFGeml0ZDRmcWNYZzhSdDd6YUg1OXY0Vmc5d2Q5L3hSTVpY?=
+ =?utf-8?B?WjYrWmk1SVNwSXJUbFo1QzdDdkg1T2ZpZ01TRnA2ejc0QUt1YUphUlQ2a3hq?=
+ =?utf-8?B?dkxRTXNYQjgwSWN4VGJrYXBab0xqUWxaYi9DNTNkeGpjeUNXMU10Yy9FeVRy?=
+ =?utf-8?B?cHRlR1dMQnFMM0U2cmx6TnpLT1doWFYwSXhuRVhoczZBMnkyVGxQaTQ4cXRI?=
+ =?utf-8?B?U0VRR0VQZFNLNWg1RUZ4bFNtRk45cUZJRDNBdjZJaFczcmJTQVFjWUVYbloz?=
+ =?utf-8?B?U3IyTC9LaXNBMXo0RlRRWXhpTkRUcTB3eGM1MmxXYjk3cEZ3MCtPV2hMTC96?=
+ =?utf-8?B?YXBXbTF3dm96ZDlPekhscWdUSWYzU2Z2N2xUZmIySHJlWm4zRmpPdWNXYUtq?=
+ =?utf-8?B?R2pvTXE0eUhlWGc5UFRGZ2N0VGlPY0t1b2wxa0swc3pLYmN1K2hnTkhCVjNa?=
+ =?utf-8?Q?6D5wnbQSxa+EYAF2ACHRxzOutgNrEgm2Ax?=
 X-OriginatorOrg: prevas.dk
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2020 21:56:22.0452
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2020 21:56:22.7078
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50163c0e-bbaa-48c7-8c40-08d89e1f9904
+X-MS-Exchange-CrossTenant-Network-Message-Id: eaf30c89-bf9f-4f35-3b1c-08d89e1f996e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2+ZueDOJIaHW6tePYr5iMx5tVHRCOOoo8L2dNfH2YG+oBNr8mxEVARrsM4Kis6M+Y80NUjoTRHfYltN5Jzvvt2honbJn5A5a75sMDuhrjBU=
+X-MS-Exchange-CrossTenant-UserPrincipalName: YMGQPeAedDzmBXFeoUmKvc2DtNAQ8JiRs8mepgSo7EyQTR9g8N1PYdV2vvwkfblax53LEKj2XX/NCjdTS0LZU8+Zv9ni+UEle14QEyotBYQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2867
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
@@ -112,109 +112,35 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-The obvious advantages are:
+Most boards using the pcf2127 chip (in my bubble) don't make use of the
+watchdog functionality and the respective output is not connected. The
+effect on such a board is that there is a watchdog device provided that
+doesn't work.
 
- - The compiler can drop the watchdog functions if CONFIG_WATCHDOG is off.
- - All watchdog stuff grouped together with only a single function call
-   left in generic code.
- - Watchdog register is only read when it is actually used.
- - Less #ifdefery
+So only register the watchdog if the device tree has a "reset-source"
+property.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-[RV: check return value of pcf2127_watchdog_init(), per Bruno]
+[RV: s/has-watchdog/reset-source/]
 Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 ---
- drivers/rtc/rtc-pcf2127.c | 54 ++++++++++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 23 deletions(-)
+ drivers/rtc/rtc-pcf2127.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 07a5630ec841..aebf85fcc328 100644
+index aebf85fcc328..f3d4eac4f230 100644
 --- a/drivers/rtc/rtc-pcf2127.c
 +++ b/drivers/rtc/rtc-pcf2127.c
-@@ -335,6 +335,36 @@ static const struct watchdog_ops pcf2127_watchdog_ops = {
- 	.set_timeout = pcf2127_wdt_set_timeout,
- };
+@@ -340,7 +340,8 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
+ 	u32 wdd_timeout;
+ 	int ret;
  
-+static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
-+{
-+	u32 wdd_timeout;
-+	int ret;
-+
-+	if (!IS_ENABLED(CONFIG_WATCHDOG))
-+		return 0;
-+
-+	pcf2127->wdd.parent = dev;
-+	pcf2127->wdd.info = &pcf2127_wdt_info;
-+	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
-+	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
-+	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
-+	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
-+	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-+	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
-+
-+	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
-+
-+	/* Test if watchdog timer is started by bootloader */
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
-+	if (ret)
-+		return ret;
-+
-+	if (wdd_timeout)
-+		set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
-+
-+	return devm_watchdog_register_device(dev, &pcf2127->wdd);
-+}
-+
- /* Alarm */
- static int pcf2127_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- {
-@@ -536,7 +566,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 			 int alarm_irq, const char *name, bool has_nvmem)
- {
- 	struct pcf2127 *pcf2127;
--	u32 wdd_timeout;
- 	int ret = 0;
+-	if (!IS_ENABLED(CONFIG_WATCHDOG))
++	if (!IS_ENABLED(CONFIG_WATCHDOG) ||
++	    !device_property_read_bool(dev, "reset-source"))
+ 		return 0;
  
- 	dev_dbg(dev, "%s\n", __func__);
-@@ -575,17 +604,6 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		pcf2127->rtc->ops = &pcf2127_rtc_alrm_ops;
- 	}
- 
--	pcf2127->wdd.parent = dev;
--	pcf2127->wdd.info = &pcf2127_wdt_info;
--	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
--	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
--	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
--	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
--	pcf2127->wdd.min_hw_heartbeat_ms = 500;
--	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
--
--	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
--
- 	if (has_nvmem) {
- 		struct nvmem_config nvmem_cfg = {
- 			.priv = pcf2127,
-@@ -615,19 +633,9 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 		return ret;
- 	}
- 
--	/* Test if watchdog timer is started by bootloader */
--	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
--	if (ret)
--		return ret;
--
--	if (wdd_timeout)
--		set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
--
--#ifdef CONFIG_WATCHDOG
--	ret = devm_watchdog_register_device(dev, &pcf2127->wdd);
-+	ret = pcf2127_watchdog_init(dev, pcf2127);
- 	if (ret)
- 		return ret;
--#endif /* CONFIG_WATCHDOG */
- 
- 	/*
- 	 * Disable battery low/switch-over timestamp and interrupts.
+ 	pcf2127->wdd.parent = dev;
 -- 
 2.23.0
 
