@@ -2,128 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C20B2D710E
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 08:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551402D72C4
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Dec 2020 10:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436815AbgLKHsn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Dec 2020 02:48:43 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39435 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388543AbgLKHsl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 02:48:41 -0500
-Received: by mail-ed1-f67.google.com with SMTP id c7so8343856edv.6;
-        Thu, 10 Dec 2020 23:48:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P0wPTNnTMMvMYQoXIJsxDc+GGcUdhHlmPr5EHW78xzw=;
-        b=mezpfFhm+fgbJylmhl7dWQ9OmYRZESoDJ6ZeK8aBYf9ayecJqbKvJ3KzeAY1eoHDN9
-         3wokP5Gb+LqU/vOAlClr861ILhKDcptK9Rg9mdZ9Cfmj1gWf5ZfluFILH7KDXCu76unI
-         12PN3urktFUhOTcFcEh9y2m/6TSbg/TwNH/NHjjt0WayzJt1ypXHQ/K0vCGg2MS2bVmU
-         u1SQh9Tn58bNzsT7f+MNG7oeQcxgnBKa4mdQqdNvIIm2Vw632yiQjX3tMgwjwbCrc8Xl
-         FOCM5fiRJGUogkcv+l7fz51Y0nTKultUqOipAjchhntwKrSw1jBJlpyORy6WzEAzulSg
-         UUlw==
-X-Gm-Message-State: AOAM532wnUX8gR25rqGgdkAUPJEw8hP6MXLoF/ho9VfVqcwXuTQlcBpW
-        SlL4BI/4yGxTinAPfDuWI9cj9OTMbDXxGg==
-X-Google-Smtp-Source: ABdhPJx/k/HGToQvr22UR3Xq7vPsj2TvNmpm8kE7Hr4dtKfaS9AYncLFODFCgjOBi92luTKLln+RDw==
-X-Received: by 2002:a50:e688:: with SMTP id z8mr10777681edm.129.1607672878059;
-        Thu, 10 Dec 2020 23:47:58 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id qn4sm6333309ejb.50.2020.12.10.23.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Dec 2020 23:47:57 -0800 (PST)
-Date:   Fri, 11 Dec 2020 08:47:55 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S2405596AbgLKJYT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Dec 2020 04:24:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404401AbgLKJYM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 04:24:12 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD096C0613CF;
+        Fri, 11 Dec 2020 01:23:31 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1607678610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/64yfk/f7iWtTjLUC4NhqoHGM4ucIwe7KEQDNM7rmxQ=;
+        b=BFXK24VpgfEg9bCn3Yd+M/huO0MTAeHWg5wAr6dEpsgJVi2Ot7fxcxVs51AYQTlOvH6ld4
+        XwS3uK8FTXl8ZIHvdtBOmIwWNF1iT+WwiRZeIO6QHKc+nBLE1HXeIW/4GNAWj4ehrtz5l4
+        WVuRJPm/Tkj80uqJkrceCbcQFGvx/1wfbeDm02Zei738yVkYhNePs7Sfc+M/X4nYl5oBOF
+        GaJL3LBmujpZ14IDewiy88Bacf8AbHeROrd3tgkXSeaqtzHIsRdxyFXDiHwAuyx4u24cWD
+        6YG9jcGjYJMLEKpGhh+XrIdIAwb72qAcnGCdFF93gJxf3FzH0uL+gDZnUbvaNg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1607678610;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/64yfk/f7iWtTjLUC4NhqoHGM4ucIwe7KEQDNM7rmxQ=;
+        b=+aEWTKLPXJldoSe6edlC3FByXn5fdyrTXTK/3FgBy4hs32EwD4wB0A4O5GMzkH6FxD6fIZ
+        ilFI6ge3FVTI6YCw==
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [RFC 18/18] power: supply: max17040: Do not enforce (incorrect)
- interrupt trigger type
-Message-ID: <20201211074755.GA4346@kozik-lap>
-References: <20201210212534.216197-1-krzk@kernel.org>
- <20201210212534.216197-18-krzk@kernel.org>
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [patch 8/8] ntp: Consolidate the RTC update implementation
+In-Reply-To: <20201207210505.GM5487@ziepe.ca>
+References: <20201206214613.444124194@linutronix.de> <20201206220542.355743355@linutronix.de> <20201207210505.GM5487@ziepe.ca>
+Date:   Fri, 11 Dec 2020 10:23:29 +0100
+Message-ID: <877dpoitm6.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201210212534.216197-18-krzk@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 10:25:34PM +0100, Krzysztof Kozlowski wrote:
-> Interrupt line can be configured on different hardware in different way,
-> even inverted.  Therefore driver should not enforce specific trigger
-> type - edge falling - but instead rely on Devicetree to configure it.
-> 
-> The Maxim 14577/77836 datasheets describe the interrupt line as active
-> low with a requirement of acknowledge from the CPU therefore the edge
-> falling is not correct.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
-> 
-> This patch should wait till DTS changes are merged, as it relies on
-> proper Devicetree.
-> ---
->  .../devicetree/bindings/power/supply/max17040_battery.txt       | 2 +-
->  drivers/power/supply/max17040_battery.c                         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> index c802f664b508..194eb9fe574d 100644
-> --- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-> @@ -39,7 +39,7 @@ Example:
->  		reg = <0x36>;
->  		maxim,alert-low-soc-level = <10>;
->  		interrupt-parent = <&gpio7>;
-> -		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-> +		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
->  		wakeup-source;
->  	};
->  
-> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-> index d956c67d5155..f737de0470de 100644
-> --- a/drivers/power/supply/max17040_battery.c
-> +++ b/drivers/power/supply/max17040_battery.c
-> @@ -367,7 +367,7 @@ static int max17040_enable_alert_irq(struct max17040_chip *chip)
->  
->  	flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
+On Mon, Dec 07 2020 at 17:05, Jason Gunthorpe wrote:
+> On Sun, Dec 06, 2020 at 10:46:21PM +0100, Thomas Gleixner wrote:
+>>  static void sync_hw_clock(struct work_struct *work)
+>>  {
+>> +	static unsigned long offset_nsec = NSEC_PER_SEC / 2;
+>
+> A comment here explaining this is the default: because the platform is
+> assumed to use CMOS, and by the way, this whole thing is obsolete
+> don't use it, seems appropriate..
 
-This has to be removed. I will fix it in v2.
+Will add something like that.
 
-Best regards,
-Krzysztof
+> The time split is clearer if you think of it from a bus/datasheet
+> perspective, less clear if you try to measure the system directly, eg
+> from an alarm. But, I think this  has a better chance of some rtclib
+> driver authors to fill in the datasheet value at least.
 
+That's the hope. You know hope dies last...
 
->  	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-> -					max17040_thread_handler, flags,
-> +					max17040_thread_handler, IRQF_ONESHOT,
->  					chip->battery->desc->name, chip);
->  
->  	return ret;
-> -- 
-> 2.25.1
-> 
+Thanks,
+
+        tglx
+
