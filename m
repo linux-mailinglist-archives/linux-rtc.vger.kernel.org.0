@@ -2,144 +2,145 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 143BB2D829E
-	for <lists+linux-rtc@lfdr.de>; Sat, 12 Dec 2020 00:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6F32D8446
+	for <lists+linux-rtc@lfdr.de>; Sat, 12 Dec 2020 05:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407064AbgLKXLT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Dec 2020 18:11:19 -0500
-Received: from mail-db8eur05on2137.outbound.protection.outlook.com ([40.107.20.137]:39008
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403763AbgLKXLC (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 11 Dec 2020 18:11:02 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S2TZbM0e238kcG7TTJHmKFvg6krhwAbIbRieaB6UnyvOM0WhIphNk8CaIf7NN2byGGArBjHIYZ1+9qFIqK9URkJ/IT5BgsMId05ducoNuit+gq3qkifmJvqIXeNiqONnGLE9mxcqtV1aj9aCn/9EGqP2Rj7LVG/R/DZfOfXnFh5PGteJaU1okq+BOeaSIawk8eNs35qgPUfiORNkTXTVzQa0MM3+80ztSIlplwz+gtD6RXRuTD5UN9UFPfW2FFVlROfIIJGxyJp3A2FOFkyviYqwyZSTgz5gY5FLaHh2n6MtlqY8J8p8McQ2H0/Z1hmg0GpVRgag6WgpK6vpTkarfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+O4WtPhDMctkJXG8rs8q+JzJa7xuRMlH0NaZMYU2Acc=;
- b=fnmQGQXUSupNvgfXvAghawSh0uVDDeErQRfSEvSlEQ25CjC8NhOD+yoxWjGiTNetcyU+RFa6b5ZUb6zEw7HrK2Iop6lddZloJ8h+2KsR132GEB8n2l1VIF0FC2O6dV20ba9QHr8BRR+YXVrnwd/xlI7yQ9kFHsuu8e8tPnEJ8z+BShPb6zywWTjTQdyiaIrN+hCfxkpsaXiYoXJRAPK9fXiMTvBO1NLv0NyOc7YP2+QZPv9c3efT++QnWrxYGaiJVB542R5I1g/RbvGqEUXXu7kUcyOqAK1Fb9zIkrmOqL30ikyllhZiOOnM3maSzf1ZbApNLMd7Kt0eSK12AHGqig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
- dkim=pass header.d=prevas.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+O4WtPhDMctkJXG8rs8q+JzJa7xuRMlH0NaZMYU2Acc=;
- b=Ce2qsk2ECmxjBUOT/kQH7HwsTMtvtnnloOzYOHtjHFZfLurRXPvRKpyGlhRd5072vgucDwX1CQY8+VDUu9qpb3hBcyzOmBQwbvsnqbr/NGcoS5J9hvM/PwnO4/1YNIjD3uWhydr8Hi5KXMqJgVGi/lLXG9AniEBRbnp+oqQe/AU=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=prevas.dk;
-Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:3f::10)
- by AM9PR10MB4135.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1f7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.13; Fri, 11 Dec
- 2020 23:10:12 +0000
-Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::9068:c899:48f:a8e3]) by AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::9068:c899:48f:a8e3%6]) with mapi id 15.20.3632.026; Fri, 11 Dec 2020
- 23:10:12 +0000
-Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: add reset-source property
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
+        id S2388168AbgLLEKt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Dec 2020 23:10:49 -0500
+Received: from relay-us1.mymailcheap.com ([51.81.35.219]:42122 "EHLO
+        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729605AbgLLEK0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Dec 2020 23:10:26 -0500
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
+        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 3F18020CCD
+        for <linux-rtc@vger.kernel.org>; Sat, 12 Dec 2020 04:09:45 +0000 (UTC)
+Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.66.162])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id 46EA52008F;
+        Sat, 12 Dec 2020 04:08:50 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay2.mymailcheap.com (Postfix) with ESMTPS id A6A793EDEC;
+        Sat, 12 Dec 2020 05:07:12 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id CE8622A379;
+        Fri, 11 Dec 2020 23:07:11 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1607746031;
+        bh=gDO5k6b18EjcbaZ2hywXumGArL1RdQqigFycWfjiF58=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AbbbDWNn6hc+2MCzliGgTRmWF4tr1FOr28crGs7rsC8z6jYJAPcQxD7nxFYRJKaHx
+         p8eM57eFgDzoRT4SsxHiWn+ZLxBon1mPK43ok2JGXtpyttkNw96iNh7jZqiiyJI8ci
+         RAWBs1fCoJlAV2L0+YPrw3Bn/mKzENcntIDcVMp8=
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 6Z5x-mb0Xop7; Fri, 11 Dec 2020 23:07:10 -0500 (EST)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Fri, 11 Dec 2020 23:07:10 -0500 (EST)
+Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id E03E242F57;
+        Sat, 12 Dec 2020 04:07:09 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="gBZ8Fsve";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from ice-e5v2.lan (unknown [59.41.161.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 2FE1F42F46;
+        Sat, 12 Dec 2020 04:06:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1607746019; bh=gDO5k6b18EjcbaZ2hywXumGArL1RdQqigFycWfjiF58=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gBZ8FsveqqsxVLM11AParQhAvpse0YB9weUknRlUs9jOv+WynSIySSvb+DjekNxkZ
+         qBtOj4UjSJFL0R8LGfqmX3JKOXSI7c1PMLPw/vx/FBZsoYgqc2vIUEkQtdkAaNPDpv
+         0GYP3IXO5i7iBjNjMxfauALnMEN+/tzW0b635dr0=
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Bruno Thomsen <bruno.thomsen@gmail.com>
-References: <20201204092752.GE74177@piout.net>
- <20201211215611.24392-1-rasmus.villemoes@prevas.dk>
- <20201211215611.24392-2-rasmus.villemoes@prevas.dk>
- <CAL_JsqJ-5gwycTRQCdX=ZsefEJ=F1GyTjjDW6QB1PBynibFzLg@mail.gmail.com>
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Message-ID: <b3c05d29-3ed6-d5f5-d1dd-0ddec1f89276@prevas.dk>
-Date:   Sat, 12 Dec 2020 00:10:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <CAL_JsqJ-5gwycTRQCdX=ZsefEJ=F1GyTjjDW6QB1PBynibFzLg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [5.186.115.188]
-X-ClientProxiedBy: AM5PR0502CA0015.eurprd05.prod.outlook.com
- (2603:10a6:203:91::25) To AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:3f::10)
+        linux-rtc@vger.kernel.org
+Subject: [RFC PATCH 06/12] dt-bindings: rtc: sun6i: add compatible string for V831/V833 RTC
+Date:   Sat, 12 Dec 2020 12:06:35 +0800
+Message-Id: <20201212040641.3640916-1-icenowy@aosc.io>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201212040157.3639864-1-icenowy@aosc.io>
+References: <20201212040157.3639864-1-icenowy@aosc.io>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.149] (5.186.115.188) by AM5PR0502CA0015.eurprd05.prod.outlook.com (2603:10a6:203:91::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.12 via Frontend Transport; Fri, 11 Dec 2020 23:10:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 377c082a-d4bf-406d-f743-08d89e29e9d7
-X-MS-TrafficTypeDiagnostic: AM9PR10MB4135:
-X-Microsoft-Antispam-PRVS: <AM9PR10MB413513795E1D030653C5666393CA0@AM9PR10MB4135.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1QWOQITLnRAVyy/tEdYV6HLJRqlEXohvAA82cbQfP6Z9dSFCBuUbHrr5kjI885/ytxVnsweurTEgQn71LzlXK5agXeKrWiLZObATs+aOTGG16DUzyK1B1YfX5ZZaic/GW3p3MFGhGHVP9ORwCyuSTksrOzICCFx3Dsb1zfthjUj0/qlr7WCW1UYjzjAC2AocsJn5N4VLwDPYYXK45so55uCHGnvYNnbBeTb2fCpQF+fQe+z0E8ki+PAVBiP29E13npdDwvDNwYwk8fEfs+OfelLHuMeazXySi4KV2gXSn8Va+KVSSJLFiJrdzymHLlHRbPe6zVrB5D6nIE9/bCmZxpCyIpqnpspIDFcjslA3XHbPDJc8r98v9sLoJwi3X6l4VXWBqPeKROyN3F/7PQhthpsNIzBhMCZLeGHxZdrKDOw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(396003)(136003)(376002)(366004)(39840400004)(16526019)(53546011)(16576012)(36756003)(54906003)(316002)(4326008)(2616005)(44832011)(956004)(66946007)(8976002)(66556008)(26005)(6486002)(66476007)(5660300002)(2906002)(8936002)(31696002)(31686004)(8676002)(478600001)(86362001)(52116002)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZFRON01CcENSbjduM0cycXVvZlQ5N09ERFZGbzBzWjc1QkRlWkxlS0w4MXFk?=
- =?utf-8?B?MWs0THRRWXlDT0hJUmdKYlNmZWhkdnFwUVFCVnhOaEQ2SHZ3Vi9lbDlkV1gz?=
- =?utf-8?B?TU52alhOTUpvdllSbEtzZ0xUeCtibGhGbXE3Q200OUptNGtrdGRuWFV0Q3hn?=
- =?utf-8?B?dmErZDMwSnBMUDRGVkdTR3gzakhtaWFKMVR3a2laZW90cGxObldVMWo3RlVo?=
- =?utf-8?B?Y0FGcUhscC90WmU5MzVKa0QraU1KTWNyOXd1c0lKWlc4bDdpdHhpWHVVTE5J?=
- =?utf-8?B?WVJHSmYwa2xvdzRLc0hSMzJkSmFPTHIrREh5QnRjeklJVDV0eTZsQkRGaHVS?=
- =?utf-8?B?WU93ZGdDV1B2SXZIYmViL1NRbS9xOUdqUG02dEdwMSsrc2grelpYRlB2Z21q?=
- =?utf-8?B?aVhyMnVIWHJ5TkM5R2JTeW94N000cnZnUjhqTU5DRExxc0srd1JRaFJRTWdF?=
- =?utf-8?B?ZmUyd0F3eUd5L0o3VGFyVkNaYm96TzA5R1RzWkdGSGg0aDEwYi9FUWFMbWFv?=
- =?utf-8?B?aVF4YkE5bEhiZlBFMG82WnFVRjZLejlEV3pKRUx6cWJLSDlIZjNWdVh1WFBx?=
- =?utf-8?B?ck4xeXF2dlV1QldnVnpINjRGT3pFMGtpS3Bpc1NDTTF6ZEcxdWVrNnp3bTZx?=
- =?utf-8?B?b3h5SE1qRVQ3NTBIcXdwME1WS1RqZVo0U1RkR0pXWkdRQ3hnOTR1WEVleCt0?=
- =?utf-8?B?YkpSQ2ptNlltYTlER25XdG1ldzhMbkk2bkRoVG5ZcXlzZ01TYU00RW5jK1VV?=
- =?utf-8?B?ZnFCTDVmSEs1TUVxditYSzRFSlR3Vk9WcllYRDQ2eFRtZSs4MlM3Ull4Ly9B?=
- =?utf-8?B?em52aVhlRnlMeDRsYURIQ3d3SEg5ejM2NzNpdkNjZDFDcE84MndWeDZZNlRw?=
- =?utf-8?B?ZHNUVVYxTHM4SGF1WEdZV2RLQVcwWFNMeFViaWFPU09LSVgyd3h5Y3hiNURL?=
- =?utf-8?B?Y1puODJJa0s2N1RYMGM2V1Y4TWhFVkd0Qzl0TmhNL0YxdnBDN3pzTlRIRFNV?=
- =?utf-8?B?dzV4ZVZjaHJBUFpXMHVId3FXN0dnbnFudGxwUHlhWmZ2OEc3aWMxenExbGFu?=
- =?utf-8?B?SUlwOEJLTjVtWTd6K1ROVDYvbFVhaXZZbzNuU0d1cWJIZll6NUFkNVF6T0dR?=
- =?utf-8?B?S2oxVFM1b0h4T09LVmM2Q042QnQ0bUc5S1d6S2o5cjFBYlY3ODFKeUE5UHRx?=
- =?utf-8?B?V0hJeGlDQkxRSXhGOG9pdXNFeGhDcmV0TCtmeVBjMzZBZkliSGZIN09SanJt?=
- =?utf-8?B?eWYybWRpalU0aEdzY1hvRGhjaXhNa1BZUVB6OW9jNE9XcGR6Sys0NVhEMFl3?=
- =?utf-8?Q?OVf6aVy2KnY8B0Wk1MKd5tep4gCpfu5j9E?=
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2020 23:10:12.5848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-Network-Message-Id: 377c082a-d4bf-406d-f743-08d89e29e9d7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +KnbMUnTHCMZRompVyS+NwGbia1DdZutQlFvVZJ48949xwbctsha+LLHoXrsyExjeQC4d2oLCVm+4bBMwRSwjXIR32gdZ41M4u5dBlTwXow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4135
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: mail20.mymailcheap.com
+X-Spamd-Result: default: False [6.40 / 20.00];
+         ARC_NA(0.00)[];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
+         RECEIVED_SPAMHAUS_PBL(0.00)[59.41.161.2:received];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         R_MISSING_CHARSET(2.50)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         TAGGED_RCPT(0.00)[dt];
+         MIME_GOOD(-0.10)[text/plain];
+         BROKEN_CONTENT_TYPE(1.50)[];
+         R_SPF_SOFTFAIL(0.00)[~all:c];
+         DMARC_NA(0.00)[aosc.io];
+         ML_SERVERS(-3.10)[213.133.102.83];
+         DKIM_TRACE(0.00)[aosc.io:+];
+         RCPT_COUNT_SEVEN(0.00)[11];
+         MID_CONTAINS_FROM(1.00)[];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
+         RCVD_COUNT_TWO(0.00)[2];
+         SUSPICIOUS_RECIPS(1.50)[];
+         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
+X-Rspamd-Queue-Id: E03E242F57
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/12/2020 23.30, Rob Herring wrote:
-> On Fri, Dec 11, 2020 at 3:56 PM Rasmus Villemoes
-> <rasmus.villemoes@prevas.dk> wrote:
->>
->> Some RTCs, e.g. the pcf2127, can be used as a hardware watchdog. But
->> if the reset pin is not actually wired up, the driver exposes a
->> watchdog device that doesn't actually work.
->>
->> Provide a standard binding that can be used to indicate that a given
->> RTC can perform a reset of the machine, similar to wakeup-source.
-> 
-> Why not use the watchdog 'timeout-sec' property?
+V831/V833 SoCs (the same die) have a RTC block similar to the one in H6,
+but allow to generate the osc32k clock from osc24M.
 
-Wouldn't that be overloading that property? AFAIU, that is used to ask
-the kernel to program an initial timeout value into the watchdog device.
-But what if one doesn't want to start the watchdog device at kernel
-boot, but just indicate that the RTC has that capability?
+Add a new compatible string for that.
 
-It's quite possible that if it can act as a watchdog device (and
-has-watchdog was also suggested), one would also want timeout-sec and
-other watchdog bindings to apply. But that can be added later, by those
-who actually want that.
+The functionality of dividing osc24M to generate osc32k is still TODO.
 
-For now, I'd really like to get my board booting again (or rather, not
-get reset by the real watchdog just because the pcf2127 driver now
-exposes something as /dev/wathdog0, pushing the real one to
-/dev/wathcdog1 which doesn't get pinged from userspace).
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+---
+ .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml        | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Rasmus
+diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+index 37c2a601c3fa..6e3a3b14db7b 100644
+--- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+@@ -21,6 +21,7 @@ properties:
+       - const: allwinner,sun8i-h3-rtc
+       - const: allwinner,sun8i-r40-rtc
+       - const: allwinner,sun8i-v3-rtc
++      - const: allwinner,sun8i-v831-rtc
+       - const: allwinner,sun50i-h5-rtc
+       - items:
+           - const: allwinner,sun50i-a64-rtc
+@@ -97,6 +98,7 @@ allOf:
+       properties:
+         compatible:
+           contains:
++            const: allwinner,sun8i-v831-rtc
+             const: allwinner,sun50i-h6-rtc
+ 
+     then:
+-- 
+2.28.0
