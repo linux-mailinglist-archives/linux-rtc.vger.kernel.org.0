@@ -2,51 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7162D9BE3
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Dec 2020 17:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA1D2DA3C5
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Dec 2020 23:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440033AbgLNQFm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Dec 2020 11:05:42 -0500
-Received: from server.kenspensetc.com ([185.148.128.76]:48008 "EHLO
-        server.kenspensetc.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439358AbgLNQFj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Dec 2020 11:05:39 -0500
-Received: from localhost ([127.0.0.1]:47936 helo=server.kenspensetc.com)
-        by server.kenspensetc.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <sender@ridecals.com>)
-        id 1knLn0-00029V-6J; Thu, 10 Dec 2020 08:15:22 -0500
-Received: from [70.32.0.46] ([70.32.0.46]) by ridecals.com (Horde Framework)
- with HTTPS; Thu, 10 Dec 2020 08:15:22 -0500
-Date:   Thu, 10 Dec 2020 08:15:22 -0500
-Message-ID: <20201210081522.Horde.GEA1j18D53oi4VTUxYWD_87@ridecals.com>
-From:   Russell Branting <sender@ridecals.com>
-Subject: Vital
-Reply-to: Goodagent01@gmail.com
-User-Agent: Horde Application Framework 5
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S2441324AbgLNW5C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Dec 2020 17:57:02 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34485 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2441315AbgLNW44 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Dec 2020 17:56:56 -0500
+Received: by mail-ot1-f65.google.com with SMTP id a109so17486403otc.1;
+        Mon, 14 Dec 2020 14:56:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6eV+/H1+wuql5Xj175B7CxNiRq52AmncCnPannTivxU=;
+        b=n3W4VjXTlZqubB9cX6CaLRjRvKNvwDkeqODi6O2W5sgAyiunW5ufkPn2UNhK1B6vB+
+         uzRrh2Y44HMqPdKkzPaaXVVms8nLXjsvyhxgJ2hpYH1Bj/1wCg/9f5L6r4/iMEDU9NH3
+         9MXZ/W18UXJG4MImvnqHGXgbm7Uqw0+h3j2N8gJptb+EvSVd+1QszMFrcfjPHnDWUTl4
+         A0m96F3SboloSzencuzWvF858q4y/jyNSymlvWQdljC9IvPJt/xOqVVoYuN/8wkyxWOL
+         SIQnp7irm44iosmy2wFjIebeTNu7PIUCfTdJh5qGzqTvwy7SPLL7mQPHHKI4zPbZ+Zov
+         nXtQ==
+X-Gm-Message-State: AOAM533qpBFBQe+443otamBeX+Cqs3NabILLTvTzkUzD+zB0199bWgO3
+        +FwRDyWSGnHxQkAgZY6nDA==
+X-Google-Smtp-Source: ABdhPJwDM6U4udpEYiXAy2gSlbztGdngQOcnWX4uPjrYbFwopnc0V36ZUTQRqWQ5M1hiz15LkX+/Lw==
+X-Received: by 2002:a05:6830:4b9:: with SMTP id l25mr20777707otd.218.1607986575094;
+        Mon, 14 Dec 2020 14:56:15 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a18sm4611657oia.29.2020.12.14.14.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 14:56:14 -0800 (PST)
+Received: (nullmailer pid 2536446 invoked by uid 1000);
+        Mon, 14 Dec 2020 22:56:12 -0000
+Date:   Mon, 14 Dec 2020 16:56:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-sunxi@googlegroups.com, Chen-Yu Tsai <wens@csie.org>,
+        Icenowy Zheng <icenowy@aosc.xyz>, linux-i2c@vger.kernel.org,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-arm-kernel@lists.infradead.org,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        linux-spi@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v2 18/21] dt-bindings: allwinner: Add H616 compatible
+ strings
+Message-ID: <20201214225612.GA2536414@robh.at.kernel.org>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
+ <20201211011934.6171-19-andre.przywara@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.kenspensetc.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - ridecals.com
-X-Get-Message-Sender-Via: server.kenspensetc.com: authenticated_id: sender9@ridecals.com
-X-Authenticated-Sender: server.kenspensetc.com: sender9@ridecals.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20201211011934.6171-19-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Fri, 11 Dec 2020 01:19:31 +0000, Andre Przywara wrote:
+> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
+> bindings, and pair them with an existing fallback compatible string,
+> as the devices are compatible.
+> This covers I2C, infrared, RTC and SPI.
+> 
+> Use enums to group all compatible devices together.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../bindings/i2c/marvell,mv64xxx-i2c.yaml     | 21 +++++++------------
+>  .../media/allwinner,sun4i-a10-ir.yaml         | 16 ++++++--------
+>  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  3 +++
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  1 +
+>  4 files changed, 17 insertions(+), 24 deletions(-)
+> 
 
-I am instructed to inform you of your appointment as the next of kin  
-to your deceased relative estate. Kindly indicate your acceptance by  
-reconfirming your Full Name, Address & Phone Number for immediate  
-processing of the funds release to your control OR the deceased  
-deposited funds will be declared unclaimed.
-
-
+Acked-by: Rob Herring <robh@kernel.org>
