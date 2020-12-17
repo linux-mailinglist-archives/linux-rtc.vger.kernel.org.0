@@ -2,83 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7482DD953
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Dec 2020 20:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0067C2DD9E9
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Dec 2020 21:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728163AbgLQT3C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Dec 2020 14:29:02 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:46877 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727368AbgLQT3C (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Dec 2020 14:29:02 -0500
-Received: by mail-oi1-f177.google.com with SMTP id q205so80613oig.13;
-        Thu, 17 Dec 2020 11:28:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OIqxJlEr6qhscRY9Nj69alb23UGeDiYW09DXVg3bkF4=;
-        b=ewxWi9CV7yLkhkmeXyjasmN4l/6tAAVlyKA9mGjbgwhU/w+KVP9YygSciECpWS8OHK
-         9p1T++e/G+vSi4v9k0jYIP2Ecvht/MFleOS8lX1euh1EtGU1EB342kIUSoqJvXwBDvjg
-         ao2kXCLYc0FN7dW8B49LCa0XTIqoH3Y/DMc6pZacT9V+DKAFh0AZ94OUuL0G1z4u2MJr
-         UPOE9Dv2ZOqr94hEzLnT+j0c9xiPSh+qXD2oPwxwLAR5Ibv9EI3WXG5RC94hKuU9xEw6
-         PAiI8Brxec+Vb62k+4jIu+HnfWAx8bqitO7S4kwk6OasnMsMqcLE0BiC3Lgem0nTcbdf
-         26ug==
-X-Gm-Message-State: AOAM533CICczxAKIJ1Gs+5CtQvmcD9zaITt5zNg1PXdoDOYMOBZrGDTu
-        FFxsNkM3pzqGra/3W2Ut7g==
-X-Google-Smtp-Source: ABdhPJw3bvC0XYf+pKjCMi2TrfV+zkB/AwPcr+ycvAdNFlDT5V1e88wLbTciwmx3HwL9jGOPY4nPEQ==
-X-Received: by 2002:aca:3257:: with SMTP id y84mr518377oiy.132.1608233301052;
-        Thu, 17 Dec 2020 11:28:21 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b25sm1497885ooe.18.2020.12.17.11.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 11:28:20 -0800 (PST)
-Received: (nullmailer pid 101991 invoked by uid 1000);
-        Thu, 17 Dec 2020 19:28:18 -0000
-Date:   Thu, 17 Dec 2020 13:28:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org,
+        id S1730265AbgLQU31 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Dec 2020 15:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726798AbgLQU31 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Dec 2020 15:29:27 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EE5C061794
+        for <linux-rtc@vger.kernel.org>; Thu, 17 Dec 2020 12:28:47 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kpztC-0003Wk-Nj; Thu, 17 Dec 2020 21:28:42 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1kpztB-0004Ur-TG; Thu, 17 Dec 2020 21:28:41 +0100
+Date:   Thu, 17 Dec 2020 21:28:41 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, Ran Bi <ran.bi@mediatek.com>,
-        srv_heupstream@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        Yuchen Huang <yuchen.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Lee Jones <lee.jones@linaro.org>,
-        Fei Shao <fshao@chromium.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v4 3/9] dt-bindings: mfd: Add compatible for the MediaTek
- MT6359 PMIC
-Message-ID: <20201217192818.GA101889@robh.at.kernel.org>
-References: <1608104827-7937-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1608104827-7937-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Bruno Thomsen <bruno.thomsen@gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: add reset-source property
+Message-ID: <20201217202841.gcr5bxlaqpupiuu2@pengutronix.de>
+References: <20201204092752.GE74177@piout.net>
+ <20201211215611.24392-1-rasmus.villemoes@prevas.dk>
+ <20201211215611.24392-2-rasmus.villemoes@prevas.dk>
+ <CAL_JsqJ-5gwycTRQCdX=ZsefEJ=F1GyTjjDW6QB1PBynibFzLg@mail.gmail.com>
+ <b3c05d29-3ed6-d5f5-d1dd-0ddec1f89276@prevas.dk>
+ <CAL_Jsq+HeeFUR1Yv37X4OnkEPvSiAc2B86=Nshxz7tmvpKk+zw@mail.gmail.com>
+ <20201217181209.sibyhlfvlpjaewrv@pengutronix.de>
+ <CAL_Jsq+z10xMig6HgOBK4bEK9_-MMv_ootBaBZeLuJ7TWEYm=g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="didtc42d7qrszfpa"
 Content-Disposition: inline
-In-Reply-To: <1608104827-7937-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+In-Reply-To: <CAL_Jsq+z10xMig6HgOBK4bEK9_-MMv_ootBaBZeLuJ7TWEYm=g@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 16 Dec 2020 15:47:01 +0800, Hsin-Hsiung Wang wrote:
-> This adds compatible for the MediaTek MT6359 PMIC.
-> 
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
 
+--didtc42d7qrszfpa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+On Thu, Dec 17, 2020 at 01:02:32PM -0600, Rob Herring wrote:
+> On Thu, Dec 17, 2020 at 12:12 PM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > On Thu, Dec 17, 2020 at 10:51:08AM -0600, Rob Herring wrote:
+> > > On Fri, Dec 11, 2020 at 5:10 PM Rasmus Villemoes
+> > > <rasmus.villemoes@prevas.dk> wrote:
+> > > >
+> > > > On 11/12/2020 23.30, Rob Herring wrote:
+> > > > > On Fri, Dec 11, 2020 at 3:56 PM Rasmus Villemoes
+> > > > > <rasmus.villemoes@prevas.dk> wrote:
+> > > > >>
+> > > > >> Some RTCs, e.g. the pcf2127, can be used as a hardware watchdog.=
+ But
+> > > > >> if the reset pin is not actually wired up, the driver exposes a
+> > > > >> watchdog device that doesn't actually work.
+> > > > >>
+> > > > >> Provide a standard binding that can be used to indicate that a g=
+iven
+> > > > >> RTC can perform a reset of the machine, similar to wakeup-source.
+> > > > >
+> > > > > Why not use the watchdog 'timeout-sec' property?
+> > > >
+> > > > Wouldn't that be overloading that property? AFAIU, that is used to =
+ask
+> > > > the kernel to program an initial timeout value into the watchdog de=
+vice.
+> > > > But what if one doesn't want to start the watchdog device at kernel
+> > > > boot, but just indicate that the RTC has that capability?
+> > >
+> > > Yeah, I guess you're right.
+> >
+> > I agree, too. The initial suggestion looks fine.
+> >
+> > > > It's quite possible that if it can act as a watchdog device (and
+> > > > has-watchdog was also suggested), one would also want timeout-sec a=
+nd
+> > > > other watchdog bindings to apply. But that can be added later, by t=
+hose
+> > > > who actually want that.
+> > > >
+> > > > For now, I'd really like to get my board booting again (or rather, =
+not
+> > > > get reset by the real watchdog just because the pcf2127 driver now
+> > > > exposes something as /dev/wathdog0, pushing the real one to
+> > > > /dev/wathcdog1 which doesn't get pinged from userspace).
+> > >
+> > > I'm wondering how you solve which wdog to ping when there are multiple
+> > > without relying on numbering. I guess 'reset-source' will solve that
+> > > even if that's not your current fix. So I guess I'm fine with this.
+> >
+> > I guess you'd need some udev magic that ensures that the right watchdog
+> > always gets the same number.
+>=20
+> Why involve udev and keep the magic numbering important? Provide
+> enough details on watchdogs' features so an intelligent decision can
+> be made. It's the same thing every time folks try to number things in
+> DT.
 
-If a tag was not added on purpose, please state why and what changed.
+Note that it was you wanted to solve the more complicated problem about
+selecting the right watchdog from a set of several working watchdogs.
+The problem here is easier: We have machines with two watchdog devices
+and only one of them is actually working. So the straight forward thing
+to do is to not provide the watchdog device for the rtc chip that cannot
+reset the system.
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--didtc42d7qrszfpa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/bv3YACgkQwfwUeK3K
+7AnImgf9Fw73318x4WDmojLr4RhZjDZhjfvA6Gq6JqEHpz0ZbId8iNX6TO/DoUTn
+nHBQVUIGab9KfGzaLwkRoxPUw7x2H3CFCrXtOxfbetHLSh6w4nOuQDHhmsbakfN5
+03ryeRsa00FuDjWbH/+jMSnGipfWrxJjPJ2jEkvH8ZE5TMo0DEP8dwZXkJcKlA4/
+QMuNq0MjbhbyHwIuOCLGPOjkYan8dGflQfV/CbJUxEPaAFoqMv8tjFGW4u2FWdiq
+GZVVPnYGSp5OaOObox3XPPPqIOhRWvlV9w0W4cG7h5lEbdXT93VGWNsW68fr1FwY
+bAqy2R0tWm1JeACw8YgALQ7IsJ08Ag==
+=vFOg
+-----END PGP SIGNATURE-----
+
+--didtc42d7qrszfpa--
