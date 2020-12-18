@@ -2,42 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF4B2DE0C9
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Dec 2020 11:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673C42DE0C1
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Dec 2020 11:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388929AbgLRKMY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Dec 2020 05:12:24 -0500
-Received: from mail-eopbgr70124.outbound.protection.outlook.com ([40.107.7.124]:52144
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        id S1732951AbgLRKLx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Dec 2020 05:11:53 -0500
+Received: from mail-vi1eur05on2127.outbound.protection.outlook.com ([40.107.21.127]:55858
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732938AbgLRKMX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 18 Dec 2020 05:12:23 -0500
+        id S1726798AbgLRKLw (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 18 Dec 2020 05:11:52 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kKgYE4AaxxbnXPG8A9ADVQmGQ99IKOkJumoptbVY5QdkX/NGRpSYLgWIHCEADXIKrDAtFOJ0ylySIaeZ9DlEBcF6DIoGz3P3wDRHU2hzdoLozBTVdsboCvT3AYu2SxIDigBJ1NkhiVT8RSd4Sjqoe33+dv9gVcbs4nnUxWUSm5/EUr3wVDB/wG11S98Tu0xgCd9l7jyAUXE44tcItqjSMNd/pPZOBRdx2xSM+bl5+EbLJ9W/Hx/CKU+P+op6UhjxTJK48WOHBoAOyBWCnTFuQzCgbwXnoQgA2Q2MZKLq1bE+M6s0qr26aFVn/LaiT+rDfodHTybAVU6gWxaw95dXxQ==
+ b=IerM9axUCvUevXbtYYPWSb6+GLKPXjJVABzKDQg2BnpU8JRUz5YALUvYnZTuvOLow74O2SK1iyWUCgta4tUexI7+nzUEDICqUl+20+eksbyuSoQ1eDoVDcuK4AdYGk951AIrNh8HUBF3vK9GqzbVzKmSc94FofWKQCAFO9YgR4pbXDfD/cYywGWgH/rm+nxT7oSZKuDTcddtkTkljRzErMMVTOSRXDXnDQFzlYVBtJHvpoZ4TmR5ry4FPBGwQ1bajPprXoGRScWTrrNKLU+Ws9DXHehW3RMyw6vTyMfmUnUjwP2uV9QB+gB0gSX6mdFUmf6Wjjd8Yleu2ix733ykBA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=66mXcxKXLpveR0yfpCGe+ojxzzaTuzgN5W2EFpvBKvg=;
- b=BLo4gS/lSJAYGwJjCwVl48Whk9sfKW/UeIP8kDNQaowTW4uwb7KayTwE5koy4tmwiECSrir6MLb3e9EYV+Zck/RB4vVNqEPbinhP5QrUlAi33ur9ecF8BF95Pb1e9Xl/nUB+EIYqEVWqjIRLX3yalhOpjk3Tak4uR+Ko7ZM+Iqs3YsLXvVNvuVLhQdLAke1vj+Vlr0CLz9BtQXPjYTI3Y4v6FB4b9iHyw9dvSYhk9PqreDi9qBwY6AQfAY/uGNzKCcnBwuQ3Fmo8qX9RYWJ/1LEt5YmLd6oNxwT4zVVkxFpOi0QHyHPxgkQXrv02E296lT4m64N9M2juVUyHeC/mxg==
+ bh=GgEOJG5SCzA8zVaaRe2Fkjm5PIdVV07oafGjgsiuvNQ=;
+ b=ahXofLpyI0zJgmj+4zRaatePp8lw3OGz9XZ/K+n0Butv9A5cQcdtjKIo/DYfKhLXqKENq0t6tmABz3d1rIKCyScbGVHdHXcsdpVdp9PAiKnz8VTnyb6hrDJ+uV7hRbT/8sku2NDUID4atf+PX02Ho8aworxp3yJgjny9fAmmGntkntS9vCH/RAh5NerkSbKt9p/GvLj10SI8GrGZjompps459P7rbORavOr6VBX728wfrbCwVVTq2oMkJQ3HQQsMUzQM2Ozx18Uh8CsvRqbI+tAlBiffo6BrYuPWm0z8k6licu32C2GGBsiQhNQM2bHoFtnH8p0HZv4iLbcPsV2uIQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
  dkim=pass header.d=prevas.dk; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=66mXcxKXLpveR0yfpCGe+ojxzzaTuzgN5W2EFpvBKvg=;
- b=bJH1NV0qQSFJ1nmMDD8+x/Yfbql5jqJlelt4Bjdyxe+oiVBt1Jugw5WznnzPpMyXz8oW69jxRNBx8NxPH0DcjmK7y+oGeBRZNQsnAAWNGtWeHcPgGq00uwPgfn5HaO3alytQoeZekG4LWqNw3HBytvXbavixSduQPCES9n7aQ60=
+ bh=GgEOJG5SCzA8zVaaRe2Fkjm5PIdVV07oafGjgsiuvNQ=;
+ b=jJfka1gSmSHKXVdc4wfvTr1Buv06BI5FwQWQlSkpZTy0FJQ1+1+5BbpAh3Oyvt3sjYGQ6AG+w9SzqV8K7xQtBmEx4tnFilIG9w9htQGLJ/lGJ9+nwkc4kOBQyEr+JTx8+8AP0eNr1vn3PZxP+Fjbny3+g7X4rOJ24XtV2H8AArk=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=prevas.dk;
 Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:3f::10)
  by AM4PR1001MB1346.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:200:99::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.25; Fri, 18 Dec
- 2020 10:11:02 +0000
+ 2020 10:11:03 +0000
 Received: from AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::9068:c899:48f:a8e3]) by AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::9068:c899:48f:a8e3%6]) with mapi id 15.20.3654.025; Fri, 18 Dec 2020
- 10:11:02 +0000
+ 10:11:03 +0000
 From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 To:     linux-rtc@vger.kernel.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -47,91 +47,94 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         <u.kleine-koenig@pengutronix.de>, Qiang Zhao <qiang.zhao@nxp.com>,
         Bruno Thomsen <bruno.thomsen@gmail.com>,
         Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: [PATCH v3 0/2] add reset-source RTC binding, update pcf2127 driver
-Date:   Fri, 18 Dec 2020 11:10:52 +0100
-Message-Id: <20201218101054.25416-1-rasmus.villemoes@prevas.dk>
+Subject: [PATCH v3 1/2] dt-bindings: rtc: add reset-source property
+Date:   Fri, 18 Dec 2020 11:10:53 +0100
+Message-Id: <20201218101054.25416-2-rasmus.villemoes@prevas.dk>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20201211215611.24392-1-rasmus.villemoes@prevas.dk>
+In-Reply-To: <20201218101054.25416-1-rasmus.villemoes@prevas.dk>
 References: <20201211215611.24392-1-rasmus.villemoes@prevas.dk>
-Content-Type: text/plain; charset=UTF-8
+ <20201218101054.25416-1-rasmus.villemoes@prevas.dk>
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [5.186.115.188]
 X-ClientProxiedBy: AM6PR02CA0007.eurprd02.prod.outlook.com
  (2603:10a6:20b:6e::20) To AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:208:3f::10)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from prevas-ravi.prevas.se (5.186.115.188) by AM6PR02CA0007.eurprd02.prod.outlook.com (2603:10a6:20b:6e::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.28 via Frontend Transport; Fri, 18 Dec 2020 10:11:01 +0000
+Received: from prevas-ravi.prevas.se (5.186.115.188) by AM6PR02CA0007.eurprd02.prod.outlook.com (2603:10a6:20b:6e::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3676.28 via Frontend Transport; Fri, 18 Dec 2020 10:11:02 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 04820316-e231-4c6a-7da5-08d8a33d3964
+X-MS-Office365-Filtering-Correlation-Id: bcbe1c04-10d0-495e-2d36-08d8a33d39c5
 X-MS-TrafficTypeDiagnostic: AM4PR1001MB1346:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM4PR1001MB1346F4A4BCEC608957B9D8FA93C30@AM4PR1001MB1346.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <AM4PR1001MB1346FCE95C9C9B8CFFAF583693C30@AM4PR1001MB1346.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7hV1c7peXpxLVd3uEhhKPQd09oIgUPnG074P2wHh66g0+IbMKzH5Gmxvray4xKbqacJwNe+763MEexszNu+DfVPuXhEkG62q4yAMfwHwNhEJm81mZ2QCYWh10SHg7B1V0wb9tC6cDbkU8ngYAaT5hksP6/zOGsUiyGayP0HK8EB21jchY3/JeI8FQd8GUyOPjRNUa7to6KkDikcr20EEQPg9JS6PT1qnAD9Ko2yQyqkEsrS8hCoYiqI4w9WAmdpWeLtLQhNlrLTYSAHKIA5x817HJhUjgaNWD9om2+zLcKkFPryGrMJyS8XDk7//HW811tC8YQ8dS86kvb4/s0CSbps/AfGVbN45byfc08rYeEiZjBlKq8+VeNMX2ehztKBBhVnWy0RExOMiF6aube/6pw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(136003)(39840400004)(396003)(366004)(346002)(376002)(5660300002)(4744005)(1076003)(956004)(86362001)(44832011)(2616005)(6506007)(8936002)(478600001)(16526019)(66556008)(66946007)(52116002)(6666004)(107886003)(4326008)(6916009)(6486002)(186003)(26005)(36756003)(66476007)(6512007)(83380400001)(66574015)(54906003)(8676002)(2906002)(8976002)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?bVBCcFhwZ0tsVFdwSVc4cWpoTUZzK3d4YzJkaURFZm9ET2NDcnZkdDFOZG5Z?=
- =?utf-8?B?R2VVWXBmOTNzT29Lb1BvVGg1MWNKRWVHUStPM0lnekt5NURRdkdaRUNyMmZn?=
- =?utf-8?B?QjVLVzZFRWg0QXFzU0htWHhlcjZhMjRoRFhDc09uNXUrdUNNRGxXdkVSQk9Q?=
- =?utf-8?B?VmdNS2JtSUZsekVUbmJaWWlvKzV3M1N1ZmRNU01Hbi9LRndzQWtmWk9mcS9C?=
- =?utf-8?B?UWU3Qzh6V2pFdmxNWnQ5QTBSYWx4RTJWOVlwUkRYczB5MWFvQUVPTEtEZTcr?=
- =?utf-8?B?Wmc4WXVRMDEyWGFFMGZDVjlRdGlLSTB5WWM1SDl6SzJBdzFudGpER3hNSkdR?=
- =?utf-8?B?UXdkSnN1UGFBTWVNUnk3SGZsZ2ZJMUc4Q2RTdndBNkpjenZFTzJBT2hIZ05D?=
- =?utf-8?B?Z05yQ0ZNQUltQ2k4dkNieGdWOGxTUVpuV01nM1BuSDJqOU55Ly8wVExnY1RY?=
- =?utf-8?B?U2pTR2ZwNlUvY3JiaWhqQ2JvM3JmbjVQRVBWaE1oVnFla0I4aUZDR2owTkRT?=
- =?utf-8?B?RDc1RjRSM0tCblljc0dWWGZLZDdmTGZhdnJrNlRnNmg3OHMyMWw3azJ2UGd3?=
- =?utf-8?B?ZmlFNzQ2dmcxTmRNZktib0xyKzVNTGpxdFEvQ2pTV2dpb1JZY3B6V1gxSUpC?=
- =?utf-8?B?dGY4YXFUN2lhYU9HQlNUdU56RmxPckdMbkErdVlGM2NOQU5ENzVoQkdJdnU5?=
- =?utf-8?B?YjBwaFFzWC9uMjdIMDJxMG9IRWtlQnZTTi81cVVXTktLdWs2ck01QTlEV2NJ?=
- =?utf-8?B?YktjUkZVUVhuUzh4M1B3UnN2TXdaSWRQWGhSMXUxYlAxSE5JTysxOEF0RG5T?=
- =?utf-8?B?RmFTUDIzckZmSWZVZDR6QkJIeWVrSmZjQUJ0MWUvUXdDWXNaLzV0NStSQ2lZ?=
- =?utf-8?B?T2VRTkFiZHJyVVBWRkRYWkFIZGtFWjhDN1pTYkZBSnU3RFV2NW9hRmhtVWhE?=
- =?utf-8?B?QURMTmQrTlhvT25yenJnVzd5NGFyd0g0aVlPaWkramZ4SWxXTVcreUJxeDFa?=
- =?utf-8?B?YXMzUHF5RGNnSUZWbytvTnNKQVdYYU9MZE9aL0RrVXZ1ZFdPdVZSU002NUdm?=
- =?utf-8?B?NTFERVArQlJWdi84UnZseXNJd0ErYjh3YS94L0VXQlhIWnBZUzFPcmNNdmNt?=
- =?utf-8?B?WENWb2k5cnMvUmJmSVVzK0hUbDIvdm92c1BKTDFVa1liK3cwR0FIa0svRDI3?=
- =?utf-8?B?RXVOQ0p1Ri96S0c0VmcwWkRFRWJpVlRxM3pKdmVqWnNaK2hIOWViMjNDMjNq?=
- =?utf-8?B?dFVjWWhGd1RINklseDJMeTdFWlZMVHBHZlh3ZWE3RGk4VGZ4d256LzVzZnU1?=
- =?utf-8?Q?nT5xgS1qwj167mQLCHZhvX6bls006rhZf0?=
+X-Microsoft-Antispam-Message-Info: rd+MWdAtS5Y0m0k29AdcuH/YJHxQekfK+Bq9AUx0cIHKVx0ncTfY2+5wxVQ3LX0Qu4m4M1SpxfNJa/F2QXofV4SMpU8G6Y/v1KHRXoLyQsYTViteNY0u08sUJNZIlFbdQ7hdRUjfxDe0mKhMH3sAE7/lSxsa9M4ea3c1ESORe52K7zK4pGXqNX/1vLmuNjPS3dMd6+uFh7vzc9lZsBYG40Puo9fpzWlzhbARWm17eC89amg9gBWp9iFiAd2ICkhOr+cVAMJ16lw7cLD1FnPw+syyMZ/nxH8r5vZoTV1U2yW/3J+WgwVXw3VJDX2h2D8+sLnW2ltxyLZO/OYY2GePTdKUU2aKK6/qKBML6UVn5da5NZ1RUJp+ecbw1t3TCkyabBUFnycQ0QgrFCneswimGQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(136003)(39840400004)(396003)(366004)(346002)(376002)(5660300002)(1076003)(956004)(86362001)(44832011)(2616005)(6506007)(8936002)(478600001)(16526019)(66556008)(66946007)(52116002)(6666004)(107886003)(4326008)(6916009)(6486002)(186003)(26005)(36756003)(66476007)(6512007)(54906003)(8676002)(2906002)(8976002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?NhCe8hGfHKJmGEHWRij43/bwJb0cH/IBWUy30wAiG6A69PB6wY05kIP3tXVu?=
+ =?us-ascii?Q?pK58ZUqRy+Hcz0DLHSxIIgnW/EA9gd+MyZq8YKN+a1PbYbtEwT79LqLNS3GA?=
+ =?us-ascii?Q?qxH42ng7IVzbJ9daSxgPphKJGrMWkiDApl47nmvMljYohjPo2ntSKVXp3ss3?=
+ =?us-ascii?Q?r+1TkvBd4CZHW+7ZdSkcP33JxSSWR0l5zzTbKOcXELvZQPU0l6UDBCAOOSTR?=
+ =?us-ascii?Q?I8DEU8XtEoGSy0vEUwNsVPNOywv3wPQ4WMQw0THSu/oK5BQbgCIrsDdkCXGz?=
+ =?us-ascii?Q?XYaVi3v+XzML5e7LLjVAyN+6ZfHe2HOZ4g/YYixjRk7XkxSm3cMxSv9ke/Xz?=
+ =?us-ascii?Q?rHz+dWbRS3hsCYtGNMRe9vzJDlUcXmhjv8kva6bcQZfFy4P1i6MsXgRA0wrR?=
+ =?us-ascii?Q?GiRxU07YH7tjj/BgaG267Ro2j2KWah5Y8taK1YoOdW2w9CqWzQl0KJVrK8Y3?=
+ =?us-ascii?Q?YgECx+QTtvO/jjyQSG1jrCZAc2h6tqpx8tQIpJEeR6koP1ruhsciEsDeMfXx?=
+ =?us-ascii?Q?cg7PkBkkoeodP6P5DsBRfh4I8u4TkN+QXQ/J5EDP5rvyiPCjJc2cbDwD709g?=
+ =?us-ascii?Q?nGWGbFdMRNtCu+doVLAwUmS9QSGhP+qWml6lCuJ3pOdvftjEkQXOtDWjkkYx?=
+ =?us-ascii?Q?Nt9ha22w6izT8zoNpVW7p7ja55BdemNWUkEt/fn3wymjpHXhjwcY86e6vrUo?=
+ =?us-ascii?Q?tePFrpFLc21+XLcqY3dVSvp1dSRRQMNxGvnyQUnJy+E4FG6NtK5Z7F9NzKGf?=
+ =?us-ascii?Q?78UULgadc8TNmb/QjHqnpadxgIbkFs8t0Fe3ISJbt3EwKzzy7eMbL7v4eJXX?=
+ =?us-ascii?Q?523tnNTZ7DIUJpr6S1b8lgrxJmgHPcTf6oWZaAYklReJld+z9MlIHtZSiWW1?=
+ =?us-ascii?Q?xiIboyMVUmGaFxISexwSI4fGjfakm8Pe98P+X7biyKUBsHYx0T0C9xv2OHpY?=
+ =?us-ascii?Q?LTvbuqmEnG8sd3X4qPtMuEfztieb+bXUerEzNL0sqn0PxjbKS5CxytnQWfLY?=
+ =?us-ascii?Q?0cxx?=
 X-OriginatorOrg: prevas.dk
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB1874.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2020 10:11:02.3475
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2020 10:11:02.9741
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04820316-e231-4c6a-7da5-08d8a33d3964
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcbe1c04-10d0-495e-2d36-08d8a33d39c5
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gpBOuBh3XOyXdhZkos3tuxfnQzwjC/oHnyDqzCOk+ZhrjR7qFJw7RG/DegQcs1qSNOmBjvYzNaOUzENYCYNToXP/sB2WnLjUDBQB/6bjwTE=
+X-MS-Exchange-CrossTenant-UserPrincipalName: AmnCeMHyCdeJbyZ/Unh8/q+WcoLx6d9JD6hI9x95D7IuSClaqsVHE1pIHYz0d6LzxYbDc8iwr9iVc8+hBObxX/BsMd2EE15oBm+vj5f/ciA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR1001MB1346
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This adds a reset-source RTC DT binding, as suggested by Alexandre,
-and resends Uwe's patch making use of that property in pcf2127 driver
-to avoid the driver exposing a watchdog that doesn't work (and
-potentially shuffling the enumeration of the existing devices that do
-work).
+Some RTCs, e.g. the pcf2127, can be used as a hardware watchdog. But
+if the reset pin is not actually wired up, the driver exposes a
+watchdog device that doesn't actually work.
 
-v3: elide the refactoring patch already in -next (5d78533a0c53 - rtc:
-pcf2127: move watchdog initialisation to a separate function), make
-sure to cc the DT binding list.
+Provide a standard binding that can be used to indicate that a given
+RTC can perform a reset of the machine, similar to wakeup-source.
 
-Applies on top of next-20201218.
-
-Rasmus Villemoes (1):
-  dt-bindings: rtc: add reset-source property
-
-Uwe Kleine-König (1):
-  rtc: pcf2127: only use watchdog when explicitly available
-
+Suggested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+---
  Documentation/devicetree/bindings/rtc/rtc.yaml | 5 +++++
- drivers/rtc/rtc-pcf2127.c                      | 3 ++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ 1 file changed, 5 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
+index 8acd2de3de3a..d30dc045aac6 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
+@@ -63,6 +63,11 @@ properties:
+     description:
+       Enables wake up of host system on alarm.
+ 
++  reset-source:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      The RTC is able to reset the machine.
++
+ additionalProperties: true
+ 
+ ...
 -- 
 2.23.0
 
