@@ -2,102 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1347B2E7920
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Dec 2020 14:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 040762E7A26
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Dec 2020 16:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgL3NGr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Dec 2020 08:06:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53734 "EHLO mail.kernel.org"
+        id S1726333AbgL3PAX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 30 Dec 2020 10:00:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727454AbgL3NF3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 30 Dec 2020 08:05:29 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBFF4225AB;
-        Wed, 30 Dec 2020 13:04:37 +0000 (UTC)
+        id S1726462AbgL3PAX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 30 Dec 2020 10:00:23 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 45FC321973;
+        Wed, 30 Dec 2020 14:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609333478;
-        bh=pzRhHs59aiMH3Yt9MNi2DX7MUHYsbgwMmFKqAuHKQ34=;
+        s=k20201202; t=1609340382;
+        bh=8Tm4+r/3ULTX6/AYNnKQLnmE6Ug4OE8sLY/1YXNk9Fo=;
         h=From:To:Cc:Subject:Date:From;
-        b=Fu/f2YlI9K87nEAHK6rTUrGsp813jIlzGz8uf/2guzzncWOZzMrvnmDTZ1I3y0Lv+
-         kqO8VAMGwyuBGb2Ynrsw8V7Wt5qsRgmwChODcwpknSfEnNBXmZuRuSSfRaOEcmIYRK
-         1ntM6KkvITyYsZJ7Sh/E+lZjBA34Qnh3gs7esQJGl1ZUzhsFbPaQf8XtQjKrBXNokS
-         xIo9tnvd+eYs9EQgoVb+syiq+cLikokA6J3nDZO9AD84F9mTXLN+GiSW0LzWaNP0cj
-         m+18YEBIIHly2aHPApUYSaPVJtAMwA7xluJKt2Oo1J2p5PpeE54D/kl0JfxyEV+Vii
-         xJu/gKCWSy/XA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        b=r1eaIpye85I9oYl9j4jcg5w1PG2Pq5vaLmQWyP76febiteJEr/N8UDXZk42xQlk0/
+         fba+VfZ07fQQdPLuupJeCkuguA7LfpXzunIsozVhemt2GhrbIn8QR5KSVc1fYx+PnV
+         irZCc1VTA8kTGfFSWh3eydpVCb4hXuInETjWvUCDOLksW6kGYVT5t4yleJDwH9HmyG
+         OBjueBpEAHnlAkCoV7IUU+27u+omtHzDIdjrrzXIW5XT9OsOoKMmAFFYDhkpKZKsX5
+         LZJQPTbgA7X8M7WmK7P9mgzR6xI0bFzKjrUEZrVXZTDpftLVMYGC0V7TwcobKI/wnd
+         hmbbGRElHGLZw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.14 1/8] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
-Date:   Wed, 30 Dec 2020 08:04:29 -0500
-Message-Id: <20201230130436.3637579-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
+        Henning Schild <henning.schild@siemens.com>,
+        Claudius Heine <ch@denx.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: rx6110: fix build against modular I2C
+Date:   Wed, 30 Dec 2020 15:59:11 +0100
+Message-Id: <20201230145938.3254459-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 28d211919e422f58c1e6c900e5810eee4f1ce4c8 ]
+With CONFIG_I2C=m, the #ifdef section is disabled, as shown
+by this warning:
 
-When clk_hw_register_fixed_rate_with_accuracy() fails,
-clk_data should be freed. It's the same for the subsequent
-two error paths, but we should also unregister the already
-registered clocks in them.
+drivers/rtc/rtc-rx6110.c:314:12: error: unused function 'rx6110_probe' [-Werror,-Wunused-function]
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20201020061226.6572-1-dinghao.liu@zju.edu.cn
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Change the driver to use IS_ENABLED() instead, which works
+for both module and built-in subsystems.
+
+Fixes: afa819c2c6bf ("rtc: rx6110: add i2c support")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/rtc/rtc-sun6i.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-rx6110.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 8eb2b6dd36fea..1d0d9c8d0085d 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -230,7 +230,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node)
- 								300000000);
- 	if (IS_ERR(rtc->int_osc)) {
- 		pr_crit("Couldn't register the internal oscillator\n");
--		return;
-+		goto err;
- 	}
- 
- 	parents[0] = clk_hw_get_name(rtc->int_osc);
-@@ -246,7 +246,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node)
- 	rtc->losc = clk_register(NULL, &rtc->hw);
- 	if (IS_ERR(rtc->losc)) {
- 		pr_crit("Couldn't register the LOSC clock\n");
--		return;
-+		goto err_register;
- 	}
- 
- 	of_property_read_string_index(node, "clock-output-names", 1,
-@@ -257,7 +257,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node)
- 					  &rtc->lock);
- 	if (IS_ERR(rtc->ext_losc)) {
- 		pr_crit("Couldn't register the LOSC external gate\n");
--		return;
-+		goto err_register;
- 	}
- 
- 	clk_data->num = 2;
-@@ -266,6 +266,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node)
- 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	return;
- 
-+err_register:
-+	clk_hw_unregister_fixed_rate(rtc->int_osc);
- err:
- 	kfree(clk_data);
+diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
+index a7b671a21022..79161d4c6ce4 100644
+--- a/drivers/rtc/rtc-rx6110.c
++++ b/drivers/rtc/rtc-rx6110.c
+@@ -331,7 +331,7 @@ static int rx6110_probe(struct rx6110_data *rx6110, struct device *dev)
+ 	return 0;
  }
+ 
+-#ifdef CONFIG_SPI_MASTER
++#if IS_ENABLED(CONFIG_SPI_MASTER)
+ static struct regmap_config regmap_spi_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+@@ -411,7 +411,7 @@ static void rx6110_spi_unregister(void)
+ }
+ #endif /* CONFIG_SPI_MASTER */
+ 
+-#ifdef CONFIG_I2C
++#if IS_ENABLED(CONFIG_I2C)
+ static struct regmap_config regmap_i2c_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
 -- 
-2.27.0
+2.29.2
 
