@@ -2,36 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8C12E78F6
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Dec 2020 14:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35702E797D
+	for <lists+linux-rtc@lfdr.de>; Wed, 30 Dec 2020 14:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727230AbgL3NE6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Dec 2020 08:04:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53770 "EHLO mail.kernel.org"
+        id S1727494AbgL3NKT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 30 Dec 2020 08:10:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727219AbgL3NE5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        id S1727223AbgL3NE5 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
         Wed, 30 Dec 2020 08:04:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1793922510;
-        Wed, 30 Dec 2020 13:04:01 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 938EB224D3;
+        Wed, 30 Dec 2020 13:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609333441;
-        bh=QMig4D2jPBkUluzd4M+6Fs134IaQzEEL6Jg+SoE6CxU=;
+        s=k20201202; t=1609333445;
+        bh=V2Imo5LZn+YxBF+aA2Bqs5WS4RaXje0uYI8KxcWqzjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SdHE8yyFlBzyLblMUHcEp+DTf57aVFnC9FDtyGs0aaVsfjuQkt0fVML0qn5/4QNas
-         1eq/8RSMVqheLXdfCs0DXd+V9hls6dWEzOwF8krx7AtjZeRbDr/v1jIHA360TiMyMc
-         QxgZWrKeClpVAQxVtmLOAIIL7XF/p5aIw8y0UWU7ojwbpZiPnrWAK1hrjAWMkwmaCz
-         PVBWrXiVsv4o3togth9EdZEVO7TDBWgZk1VNZjYmb+Y7M8DbT3EmCu6G3JZzbIEEvu
-         IWqcfuL+gAv4P6AI671aYfrK97utpC9ih7UARFgq2GoXkc7sfI1E21Gqzh8mayDFrP
-         eXN6K1gJynBfw==
+        b=fM5Z9jO2E0ANrEVy0Z/6KFPFb+AHa/kXzbHkIxcIkFTxm4HaEW4/1vcrcwq98no68
+         Z0UVxRD7TeAHmIoqfbLkX7KbUg2FJZx+0bCHdL+W84eGEz6yLjFFV5j9Lgo0xgnZJV
+         yV3lKNcwb56gMXbBEdxNx7wmmALYdgk9ea9D6cbtaLE0E5OxZPsnPE7FB32X7fnr4P
+         iE8MVpe7edPUcQx5o17mVA8mSSIo1phOYUrBkuvkn1DuEKr1oVKxGERRMWDTj4NgH2
+         mm1Zz/iIjsubi+zJs05HzYkCocLv6LLuw8U4ugLDoW+OMb8ISys7SlLTD37hcd+MP6
+         ztGTLx/9bMA8g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+Cc:     Zheng Liang <zhengliang6@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 02/17] rtc: sun6i: Fix memleak in sun6i_rtc_clk_init
-Date:   Wed, 30 Dec 2020 08:03:42 -0500
-Message-Id: <20201230130357.3637261-2-sashal@kernel.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 05/17] rtc: pl031: fix resource leak in pl031_probe
+Date:   Wed, 30 Dec 2020 08:03:45 -0500
+Message-Id: <20201230130357.3637261-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201230130357.3637261-1-sashal@kernel.org>
 References: <20201230130357.3637261-1-sashal@kernel.org>
@@ -43,63 +45,40 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Dinghao Liu <dinghao.liu@zju.edu.cn>
+From: Zheng Liang <zhengliang6@huawei.com>
 
-[ Upstream commit 28d211919e422f58c1e6c900e5810eee4f1ce4c8 ]
+[ Upstream commit 1eab0fea2514b269e384c117f5b5772b882761f0 ]
 
-When clk_hw_register_fixed_rate_with_accuracy() fails,
-clk_data should be freed. It's the same for the subsequent
-two error paths, but we should also unregister the already
-registered clocks in them.
+When devm_rtc_allocate_device is failed in pl031_probe, it should release
+mem regions with device.
 
-Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zheng Liang <zhengliang6@huawei.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20201020061226.6572-1-dinghao.liu@zju.edu.cn
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20201112093139.32566-1-zhengliang6@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-sun6i.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-pl031.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index fc32be687606c..c41bc8084d7cc 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -276,7 +276,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 								300000000);
- 	if (IS_ERR(rtc->int_osc)) {
- 		pr_crit("Couldn't register the internal oscillator\n");
--		return;
-+		goto err;
- 	}
+diff --git a/drivers/rtc/rtc-pl031.c b/drivers/rtc/rtc-pl031.c
+index 180caebbd3552..9566958476dfc 100644
+--- a/drivers/rtc/rtc-pl031.c
++++ b/drivers/rtc/rtc-pl031.c
+@@ -379,8 +379,10 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
  
- 	parents[0] = clk_hw_get_name(rtc->int_osc);
-@@ -292,7 +292,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 	rtc->losc = clk_register(NULL, &rtc->hw);
- 	if (IS_ERR(rtc->losc)) {
- 		pr_crit("Couldn't register the LOSC clock\n");
--		return;
-+		goto err_register;
- 	}
+ 	device_init_wakeup(&adev->dev, true);
+ 	ldata->rtc = devm_rtc_allocate_device(&adev->dev);
+-	if (IS_ERR(ldata->rtc))
+-		return PTR_ERR(ldata->rtc);
++	if (IS_ERR(ldata->rtc)) {
++		ret = PTR_ERR(ldata->rtc);
++		goto out;
++	}
  
- 	of_property_read_string_index(node, "clock-output-names", 1,
-@@ -303,7 +303,7 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 					  &rtc->lock);
- 	if (IS_ERR(rtc->ext_losc)) {
- 		pr_crit("Couldn't register the LOSC external gate\n");
--		return;
-+		goto err_register;
- 	}
+ 	ldata->rtc->ops = ops;
  
- 	clk_data->num = 2;
-@@ -316,6 +316,8 @@ static void __init sun6i_rtc_clk_init(struct device_node *node,
- 	of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	return;
- 
-+err_register:
-+	clk_hw_unregister_fixed_rate(rtc->int_osc);
- err:
- 	kfree(clk_data);
- }
 -- 
 2.27.0
 
