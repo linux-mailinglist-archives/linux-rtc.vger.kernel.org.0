@@ -2,82 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 040762E7A26
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Dec 2020 16:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DEE2E95FD
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Jan 2021 14:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgL3PAX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Dec 2020 10:00:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726462AbgL3PAX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 30 Dec 2020 10:00:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 45FC321973;
-        Wed, 30 Dec 2020 14:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609340382;
-        bh=8Tm4+r/3ULTX6/AYNnKQLnmE6Ug4OE8sLY/1YXNk9Fo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=r1eaIpye85I9oYl9j4jcg5w1PG2Pq5vaLmQWyP76febiteJEr/N8UDXZk42xQlk0/
-         fba+VfZ07fQQdPLuupJeCkuguA7LfpXzunIsozVhemt2GhrbIn8QR5KSVc1fYx+PnV
-         irZCc1VTA8kTGfFSWh3eydpVCb4hXuInETjWvUCDOLksW6kGYVT5t4yleJDwH9HmyG
-         OBjueBpEAHnlAkCoV7IUU+27u+omtHzDIdjrrzXIW5XT9OsOoKMmAFFYDhkpKZKsX5
-         LZJQPTbgA7X8M7WmK7P9mgzR6xI0bFzKjrUEZrVXZTDpftLVMYGC0V7TwcobKI/wnd
-         hmbbGRElHGLZw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Claudius Heine <ch@denx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: rx6110: fix build against modular I2C
-Date:   Wed, 30 Dec 2020 15:59:11 +0100
-Message-Id: <20201230145938.3254459-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S1727247AbhADN3S (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 4 Jan 2021 08:29:18 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:36877 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbhADN3S (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Jan 2021 08:29:18 -0500
+Received: by mail-oi1-f178.google.com with SMTP id l207so32092168oib.4;
+        Mon, 04 Jan 2021 05:29:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6T4y+ecTYYYZDM41o/baqi/IkEVhIrJtoe7kFNSajtM=;
+        b=d3OGSDBlUP+1Sam+7Ckl/TZT0pxQessM5UYQUViK865476rnSsL8VurbISEPWHI7/W
+         0VUkpaYPHekOxwJblhnII79QH6Xhcs2/6T8+Z6w66Q0nCzqKGsPa6ip/2IIQVLbZEykK
+         GVGzd1BWFFVExTDjil38HZqyrvkcxpxk2Y6eXXXpIcgsUcSY0NqrpiZORSisTdodRf2x
+         cQwB8UVx6ihQ3OCmNeW2albV5HcFieI+QtrgIV8HWNIyHDYr2TMG2DRvL0lT2f9ge0XB
+         a8/r1i3RzLf+dEMSBFtCX/8i8CTFG43Vh56Nu7J5N1aWGe4jEzikvMNgNIJGXKWZ+9uh
+         i9aw==
+X-Gm-Message-State: AOAM530Hsefis+SNcCAl2C7LWQWLdCVbQP7tkZpL5sg/76NZvGnm45uu
+        5JLTsb9Fl65fHFng0a+Mj0qNEnxAWQ9L1P40S9gyL9gzjv0=
+X-Google-Smtp-Source: ABdhPJzWxDoDdBzpXC3HBt74lcMfT4hgBAR6jPj17GX1lTVdRegfSw2xQy1X8CwJYbTueBtkN9J6R9g7hLcyiq5h49g=
+X-Received: by 2002:aca:4b16:: with SMTP id y22mr17758048oia.148.1609766917308;
+ Mon, 04 Jan 2021 05:28:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201114130921.651882-1-jiaxun.yang@flygoat.com> <20201114130921.651882-2-jiaxun.yang@flygoat.com>
+In-Reply-To: <20201114130921.651882-2-jiaxun.yang@flygoat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Jan 2021 14:28:26 +0100
+Message-ID: <CAMuHMdXo9o9af-YBt5g53QHRhuLxdSy_C9n4wdEEh7yzDidr-w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rtc: goldfish: Remove GOLDFISH dependency
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Jiaxun,
 
-With CONFIG_I2C=m, the #ifdef section is disabled, as shown
-by this warning:
+On Sat, Nov 14, 2020 at 2:20 PM Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
+> Goldfish platform is covered with dust.
+> However the goldfish-rtc had been used as virtualized RTC
+> in QEMU for RISC-V virt hw and MIPS loongson3-virt hw, thus
+> we can drop other parts of goldfish but leave goldfish-rtc here.
+>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-drivers/rtc/rtc-rx6110.c:314:12: error: unused function 'rx6110_probe' [-Werror,-Wunused-function]
+Thanks for your patch!
 
-Change the driver to use IS_ENABLED() instead, which works
-for both module and built-in subsystems.
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1935,7 +1935,6 @@ config RTC_DRV_HID_SENSOR_TIME
+>  config RTC_DRV_GOLDFISH
+>         tristate "Goldfish Real Time Clock"
+>         depends on OF && HAS_IOMEM
+> -       depends on GOLDFISH || COMPILE_TEST
+>         help
+>           Say yes to enable RTC driver for the Goldfish based virtual platform.
 
-Fixes: afa819c2c6bf ("rtc: rx6110: add i2c support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/rtc/rtc-rx6110.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I was just looking to see if someone had already sent a patch to add
+"depends on GOLDFISH || COMPILE_TEST", before sending one myself, when I
+noticed your patch had removed it...
 
-diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
-index a7b671a21022..79161d4c6ce4 100644
---- a/drivers/rtc/rtc-rx6110.c
-+++ b/drivers/rtc/rtc-rx6110.c
-@@ -331,7 +331,7 @@ static int rx6110_probe(struct rx6110_data *rx6110, struct device *dev)
- 	return 0;
- }
- 
--#ifdef CONFIG_SPI_MASTER
-+#if IS_ENABLED(CONFIG_SPI_MASTER)
- static struct regmap_config regmap_spi_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -411,7 +411,7 @@ static void rx6110_spi_unregister(void)
- }
- #endif /* CONFIG_SPI_MASTER */
- 
--#ifdef CONFIG_I2C
-+#if IS_ENABLED(CONFIG_I2C)
- static struct regmap_config regmap_i2c_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
+What about
+
+    depends on CPU_LOONGSON64 || GOLDFISH || RISCV || COMPILE_TEST
+
+instead?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.29.2
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
