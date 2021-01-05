@@ -2,51 +2,148 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796A92EA6DE
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Jan 2021 10:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE57E2EAC35
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Jan 2021 14:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725800AbhAEJER (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Jan 2021 04:04:17 -0500
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:44947 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbhAEJER (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Jan 2021 04:04:17 -0500
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1609837415;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=0wWFRklhGCwNmcwiM0NlDhYK3rc=;
-        b=RS3zeIcCEmhb8FKh848RMdF3F45aY0etJUBDuXW4DeVmbs7VYOvjvvFA4MuuHPfK
-        F5RGQPnyXfI596tc2e2+eSKcxxcPUzI4kc/jBFyaIjcc6UPKwBfRHoiZ8wn4Hqa5
-        kEDCRRKNQ7FpEWBspKVAQNlibC229V8yiUpYYql+OVDVtSAEq6MtvvVnDtILEQ0B
-        +hoWqclHFUS0CWDloyHdGoUQXfgJTsLwwiBlEWGnusyipM2Fj1hvGEXPMeGuuTvI
-        +Lq31Plpzq3em+2k9hawRONLoask9bffFIzB+LDAuGkVbC+10NEcdnJYcFIxtR8+
-        JfLMnRGnXN39/w8LvFrq7A==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=a7tOCnaF c=1 sm=1 tr=0 cx=a_idp_x a=CtYk4amyIN86gY48oS+/5g==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=pTz6eDbWlxwA:10 a=Ome6LeNZiNEA:10 a=IkcTkHD0fZMA:10 a=EmqxpYm9HcoA:10 a=0FMr-s9UgaIA:10 a=25oUfEzRQMIA:10 a=x7bEGLp0ZPQA:10 a=iRUk6Lete0CG9YA07IAA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=9afDMuuuZj7VoIJXVRjH:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: bWlkZGxlY3JlZWtAd2lsZGJsdWUubmV0
-Received: from [10.80.118.16] ([10.80.118.16:33710] helo=md01.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <middlecreek@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 4A/0A-05577-66B24FF5; Tue, 05 Jan 2021 04:03:35 -0500
-Date:   Tue, 5 Jan 2021 04:03:34 -0500 (EST)
-From:   Rowell Habrick <middlecreek@wildblue.net>
-Reply-To: rowellhabrick@gmail.com
-Message-ID: <1610419030.152253640.1609837414758.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S1730481AbhAENpc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Jan 2021 08:45:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730431AbhAENpc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Jan 2021 08:45:32 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30791C06179F
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Jan 2021 05:44:30 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id w5so36188934wrm.11
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Jan 2021 05:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MXWwO3xQMpsZXQIjSZeQSg/sLrhlY0LSBGkxq2KXeMs=;
+        b=qghb7Qegw2BRCYZjH32sXzyp9c3+eJc0vVu8Js8hrvKyMj2PjLP+g10K9+8yx8nP1J
+         y/JWW/8u4HaIo5N6CpWEUBYHRfCX9jEL2Se+HKIdl5XV+iwRXcgkcaJ/KBXWud3iA10q
+         mcRVC8dw03LVbdO1DM2L7nmIe301zmu8AEhE7s+brBqFS/2YfT4XI5j9/YAOz2H5JTwJ
+         sM+E9rmONSyRN7rjXRAh9JP2ImmMQjE2rxm0g3fpLCnhZSsMi5LwPtuCExZmp/0Yg5VQ
+         FN0V0OZiJciQTxKBZrQCufNgIBqHWwL4wE1f+kh9ETvn5qjoBI5pyV09kSA754eN9h+6
+         P+KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MXWwO3xQMpsZXQIjSZeQSg/sLrhlY0LSBGkxq2KXeMs=;
+        b=V+vE84zNfieXOSLvQEvllRPdH8dJxM/GmJbqzM2UmUdeF/mKWIwXYVkhn3jCq2mipf
+         k3jizfu7Fi6oTL1bF8tdhTuDEUeZCPrkyYUMBH85c45znjGgsbVoasOFQKCGkn9deVtD
+         puezGRz9B12BysAgQiGR0+4jIUHCnyQqk4XMjJJM826DupYQYQkmUWR2D2r7eHa4S+gL
+         uQw4ASuKjZjMhiBRzzweo7WOcbaMqsTV31yXR1pvLjh1Nu/4yWlHqbm4M0sd5lf7nb3B
+         WX2A+reZANqV28IdxHQT3RMojBn3fSahgKx4KyxPrIOTZvzoNrD352vH//nAuJSwBTvu
+         bfGg==
+X-Gm-Message-State: AOAM531MWr7IsGCBrN1nfUYvMaMKI76GhSk9oL5psagDnVng9LpsjjcL
+        4L2e+6Lkz43zxfXyXlLFazh30A==
+X-Google-Smtp-Source: ABdhPJybClqZS9KiB1ynCk/1tI9yl/cX6elGdTHsSDJ5TqLRsPoeYtviJgcO2KLU+PiVPw3GoOxVhw==
+X-Received: by 2002:a5d:4307:: with SMTP id h7mr85638796wrq.353.1609854268850;
+        Tue, 05 Jan 2021 05:44:28 -0800 (PST)
+Received: from localhost.localdomain (pop.92-184-112-247.mobile.abo.orange.fr. [92.184.112.247])
+        by smtp.gmail.com with ESMTPSA id h9sm93873772wre.24.2021.01.05.05.44.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 05:44:28 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH] rtc: s5m: use devm_i2c_new_dummy_device()
+Date:   Tue,  5 Jan 2021 14:44:24 +0100
+Message-Id: <20210105134424.30632-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [67.201.33.41]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: k+sbSq+spXdJYx57hEsF6eWgsFyhiw==
-Thread-Topic: 
-X-Vade-Verditct: spam:high
-X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgedujedrvdefgedguddvhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfujgfpteevqfftnfgvrghrnhhinhhgpdggkfetufetvfdpqfgfvfenuceurghilhhouhhtmecufedtudenucgohfhorhgsihguuggvnhfjughrucdlhedttddmnecujfgurhepfffhrhfkufggtgfgihfothesthejtgdtredtjeenucfhrhhomheptfhofigvlhhlucfjrggsrhhitghkuceomhhiuggulhgvtghrvggvkhesfihilhgusghluhgvrdhnvghtqeenucggtffrrghtthgvrhhnpeekhedtgeejieekgedvteelffevffejjedvkeeufedvieeklefftefguddvgfelteenucfkphepuddtrdektddruddukedrudeipdeijedrvddtuddrfeefrdegudenucfhohhrsghiugguvghnjfgurhepfffhrhfkufggtgfgihfothesthejtgdtredtjeenucevlhhushhtvghrufhiiigvpedugeenucfrrghrrghmpehinhgvthepuddtrdektddruddukedrudeinedpmhgrihhlfhhrohhmpehmihguughlvggtrhgvvghkseifihhluggslhhuvgdrnhgvthenpdhrtghpthhtoheplhhiphhinhhghhhurgejudekseduieefrdgtohhmne
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Did you get my previous mail 
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+
+Use the managed variant of i2c_new_dummy_device() to shrink code and
+remove the goto label.
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ drivers/rtc/rtc-s5m.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
+index eb9dde4095a9..3432c6213b4c 100644
+--- a/drivers/rtc/rtc-s5m.c
++++ b/drivers/rtc/rtc-s5m.c
+@@ -760,7 +760,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	info->i2c = i2c_new_dummy_device(s5m87xx->i2c->adapter, RTC_I2C_ADDR);
++	info->i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
++					      RTC_I2C_ADDR);
+ 	if (IS_ERR(info->i2c)) {
+ 		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
+ 		return PTR_ERR(info->i2c);
+@@ -768,10 +769,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 
+ 	info->regmap = devm_regmap_init_i2c(info->i2c, regmap_cfg);
+ 	if (IS_ERR(info->regmap)) {
+-		ret = PTR_ERR(info->regmap);
+ 		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
+-				ret);
+-		goto err;
++			ret);
++		return PTR_ERR(info->regmap);
+ 	}
+ 
+ 	info->dev = &pdev->dev;
+@@ -781,10 +781,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 	if (s5m87xx->irq_data) {
+ 		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
+ 		if (info->irq <= 0) {
+-			ret = -EINVAL;
+ 			dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
+ 				alarm_irq);
+-			goto err;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -797,10 +796,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 	info->rtc_dev = devm_rtc_device_register(&pdev->dev, "s5m-rtc",
+ 						 &s5m_rtc_ops, THIS_MODULE);
+ 
+-	if (IS_ERR(info->rtc_dev)) {
+-		ret = PTR_ERR(info->rtc_dev);
+-		goto err;
+-	}
++	if (IS_ERR(info->rtc_dev))
++		return PTR_ERR(info->rtc_dev);
+ 
+ 	if (!info->irq) {
+ 		dev_info(&pdev->dev, "Alarm IRQ not available\n");
+@@ -813,15 +810,10 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
+ 			info->irq, ret);
+-		goto err;
++		return ret;
+ 	}
+ 
+ 	return 0;
+-
+-err:
+-	i2c_unregister_device(info->i2c);
+-
+-	return ret;
+ }
+ 
+ static int s5m_rtc_remove(struct platform_device *pdev)
+-- 
+2.29.1
+
