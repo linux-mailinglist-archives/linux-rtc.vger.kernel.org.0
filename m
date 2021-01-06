@@ -2,164 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F40C2EBA30
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Jan 2021 07:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE23E2EBA39
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Jan 2021 07:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbhAFGrr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Jan 2021 01:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
+        id S1726237AbhAFGxj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Jan 2021 01:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726225AbhAFGrr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Jan 2021 01:47:47 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CFEC061357
-        for <linux-rtc@vger.kernel.org>; Tue,  5 Jan 2021 22:47:06 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n16so2565960wmc.0
-        for <linux-rtc@vger.kernel.org>; Tue, 05 Jan 2021 22:47:06 -0800 (PST)
+        with ESMTP id S1726098AbhAFGxj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Jan 2021 01:53:39 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FC7C06134C
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Jan 2021 22:52:58 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id x16so3704688ejj.7
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Jan 2021 22:52:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xMHBCUZGG9sUTUF6+G1UEasXPArhsLjoOzd5gYYQRUI=;
-        b=sdXysKMM4mjqWkND1TXIygHeROQWUW/dxNQBncIe4Xp/Bripdpg73iPzwYzjNd4g+j
-         8NrTjeB3sTSKIwhq4m1UZ5oe5LbOSWzsjCmMNWxwW+5tb5bDE7P3B0QrkyaKFCXsqgiV
-         kbbQv2mwb/nQuiruKcS/CNXRdXRQLNK5tcdJ09w8V96uIZPDh+19fA65L4l4PLUFW8xz
-         8lWwzPt6HVPopC2wJfAQvChqwnU2kQ3aaspIaPy6ofTzWKYi1mBqEVsszLH5rdCqE0uo
-         Scp/1gbh+DlFxE7003hSW6pkgtyUc5avVzx2+CV6rZIlOXd/Q6S0bMyp5Go9E+OzhtDU
-         TLdw==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oZy7Sz3n8S2tjruUbeBIOImdiAfddQyS0bUKqfEICmE=;
+        b=0/uMMMlT9Lx/HzqYctXAj/Uxouwkgdk3F/F4OzQtqUaoOgrTiIDJe5GgPjJ2xgYN/c
+         4joRS04ju2a4w0/C/AA25vChYFrJ7zbJH0H395SowwwCpIqJTrvKKtFu0COtttHqCz39
+         BoHtBJsXde9ak0/BRF6emuWGs4llvyZrFTKI9rSm1LYKAnYGTZcaPG9lzTL5snyQAL0j
+         ldKIepsLcmv024Q8/vuy04pxKJQ17tz922AmzcGr1H1a0nboBKIfK0LLpVF4+NDFq5fI
+         CCYOAZuea04kxgfWaZNaIlIsxg7+I4moxxZaxAy1q2IrXgiSMpfsu8oEfOeDCLGYdSdQ
+         SLAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xMHBCUZGG9sUTUF6+G1UEasXPArhsLjoOzd5gYYQRUI=;
-        b=mNso9OMDmToka1GRIOr0a0MOd7Vdiz2wAift8SIAMQMDjtcfUDioKyllV5zmUT8aAq
-         i5U1m0JctV9fJ40CY3LsqLrTQLNG/efyIut+RaBs4WWBZDRBxyj0s9U6u9gKBI4XI3YH
-         ENXUMSAIto5iJNxHYb/qr4B/JQKlJ6PwxKGinvXz5s4r91qxbaq4s1a2J5vOLz8f9mkh
-         SmoRTcwXwnBwGt/J7v7Om94XY6s4uQkxfK4flQcoNuh5xPyxbCkv8P/sl7zWj95vcGGM
-         +9PJ3+g/uJs9Y+Ez/u0R8DNaloN+o5LtCkmRxlwBPzIYkIasagpM/4Dp5WwVag+l15Ny
-         VOWw==
-X-Gm-Message-State: AOAM530ttDFBoRM/BkVtBCty3Ab5yACBiAt4UZm7LrweFyQGqTLd8KK1
-        4Y2QchpX9rGr0zhQDM+gwCCzGw==
-X-Google-Smtp-Source: ABdhPJyI4V1Ge1LuIAFDBvNl6oGstBIhrAMnzxrD0v1JtGvfnA6kdxD6TGg90cczxECyNH2bh4AyCg==
-X-Received: by 2002:a1c:9ac6:: with SMTP id c189mr2277464wme.137.1609915625531;
-        Tue, 05 Jan 2021 22:47:05 -0800 (PST)
-Received: from localhost.localdomain (pop.92-184-112-11.mobile.abo.orange.fr. [92.184.112.11])
-        by smtp.gmail.com with ESMTPSA id i11sm1729980wmd.47.2021.01.05.22.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 22:47:05 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oZy7Sz3n8S2tjruUbeBIOImdiAfddQyS0bUKqfEICmE=;
+        b=XHM87SqHbUElgDgad+byp8Ix5F0xXWdylGnO7UNRvgNdghbjhB2AUbX0UjnznHRQT7
+         JHCtiO1c3xlgoQM36/TI3TunoTCHuyhBrWMPRia78kFb9LJ9265dL1nqpN16RrEgzPEe
+         2gvGKBPrd8ve9ipwtYUYdkZPah76emNflR1+ZNuG163LiUh2W9++ddEjAIX9/tcs0gdo
+         7ZvADeHCjGykBikEPETH1ruYgS5+o+qO0Q8OLu0YQmQB5lk8/ORQZleAQUxCPpPeIefm
+         BLwwov/fyc58cwC57o8DarJV/sA7RkEiYD9bo0luRx5Fh1qRc+Kr0ZCajBHoL5mbwNdm
+         9U2A==
+X-Gm-Message-State: AOAM530muUEAyDe6emmgOicrUM8gF0S/ZQfyvl6C3hwzNv5Aq2mCo8o9
+        LHNEDh6DyD1/ZVhOdVbQSBFtWuEYe2tKFKm/TyIyMg==
+X-Google-Smtp-Source: ABdhPJxhuEdFiLL8OlB/BKiBZF2UBI0qZrNJKksEz3v3W/m4HgQMMVhdmLyoeNxuQhx7G1/99BvqJYCE7ZyNSs997yU=
+X-Received: by 2002:a17:907:b09:: with SMTP id h9mr1967943ejl.155.1609915977620;
+ Tue, 05 Jan 2021 22:52:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20210105134424.30632-1-brgl@bgdev.pl> <202101061453.E7YDzBDz-lkp@intel.com>
+In-Reply-To: <202101061453.E7YDzBDz-lkp@intel.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Wed, 6 Jan 2021 07:52:46 +0100
+Message-ID: <CAMpxmJUxKD9-J+MESZMxMePZX4WO_QFj6FudrAKS=Tp_kW8iOQ@mail.gmail.com>
+Subject: Re: [PATCH] rtc: s5m: use devm_i2c_new_dummy_device()
+To:     kernel test robot <lkp@intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH] rtc: s5m: use devm_i2c_new_dummy_device()
-Date:   Wed,  6 Jan 2021 07:47:01 +0100
-Message-Id: <20210106064701.30682-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kbuild-all@lists.01.org, clang-built-linux@googlegroups.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Wed, Jan 6, 2021 at 7:47 AM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Bartosz,
+>
+> I love your patch! Perhaps something to improve:
+>
+> [auto build test WARNING on abelloni/rtc-next]
+> [also build test WARNING on v5.11-rc2 next-20210104]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/0day-ci/linux/commits/Bartosz-Golaszewski/rtc-s5m-use-devm_i2c_new_dummy_device/20210105-214736
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+> config: x86_64-randconfig-a004-20210105 (attached as .config)
+> compiler: clang version 12.0.0 (https://github.com/llvm/llvm-project 5c951623bc8965fa1e89660f2f5f4a2944e4981a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install x86_64 cross compiling tool for clang build
+>         # apt-get install binutils-x86-64-linux-gnu
+>         # https://github.com/0day-ci/linux/commit/21651184178d1001f3bbc858c9161f1b7fd65321
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Bartosz-Golaszewski/rtc-s5m-use-devm_i2c_new_dummy_device/20210105-214736
+>         git checkout 21651184178d1001f3bbc858c9161f1b7fd65321
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/rtc/rtc-s5m.c:773:4: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>                            ret);
+>                            ^~~
+>    include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
+>            _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                          ^~~~~~~~~~~
+>    drivers/rtc/rtc-s5m.c:719:9: note: initialize the variable 'ret' to silence this warning
+>            int ret, alarm_irq;
+>                   ^
+>                    = 0
+>    1 warning generated.
+>
+>
+> vim +/ret +773 drivers/rtc/rtc-s5m.c
+>
 
-Use the managed variant of i2c_new_dummy_device() to shrink code and
-remove the goto label. We can drop the remove callback now too.
+This isn't caused by this patch, it seems to be an older bug. I can
+try to fix it while at it.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- drivers/rtc/rtc-s5m.c | 34 ++++++++--------------------------
- 1 file changed, 8 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index eb9dde4095a9..8d42592bc58e 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -760,7 +760,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	info->i2c = i2c_new_dummy_device(s5m87xx->i2c->adapter, RTC_I2C_ADDR);
-+	info->i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
-+					      RTC_I2C_ADDR);
- 	if (IS_ERR(info->i2c)) {
- 		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
- 		return PTR_ERR(info->i2c);
-@@ -768,10 +769,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 
- 	info->regmap = devm_regmap_init_i2c(info->i2c, regmap_cfg);
- 	if (IS_ERR(info->regmap)) {
--		ret = PTR_ERR(info->regmap);
- 		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
--				ret);
--		goto err;
-+			ret);
-+		return PTR_ERR(info->regmap);
- 	}
- 
- 	info->dev = &pdev->dev;
-@@ -781,10 +781,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (s5m87xx->irq_data) {
- 		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
- 		if (info->irq <= 0) {
--			ret = -EINVAL;
- 			dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
- 				alarm_irq);
--			goto err;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -797,10 +796,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	info->rtc_dev = devm_rtc_device_register(&pdev->dev, "s5m-rtc",
- 						 &s5m_rtc_ops, THIS_MODULE);
- 
--	if (IS_ERR(info->rtc_dev)) {
--		ret = PTR_ERR(info->rtc_dev);
--		goto err;
--	}
-+	if (IS_ERR(info->rtc_dev))
-+		return PTR_ERR(info->rtc_dev);
- 
- 	if (!info->irq) {
- 		dev_info(&pdev->dev, "Alarm IRQ not available\n");
-@@ -813,23 +810,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			info->irq, ret);
--		goto err;
-+		return ret;
- 	}
- 
--	return 0;
--
--err:
--	i2c_unregister_device(info->i2c);
--
--	return ret;
--}
--
--static int s5m_rtc_remove(struct platform_device *pdev)
--{
--	struct s5m_rtc_info *info = platform_get_drvdata(pdev);
--
--	i2c_unregister_device(info->i2c);
--
- 	return 0;
- }
- 
-@@ -874,7 +857,6 @@ static struct platform_driver s5m_rtc_driver = {
- 		.pm	= &s5m_rtc_pm_ops,
- 	},
- 	.probe		= s5m_rtc_probe,
--	.remove		= s5m_rtc_remove,
- 	.id_table	= s5m_rtc_id,
- };
- 
--- 
-2.29.1
-
+Bart
