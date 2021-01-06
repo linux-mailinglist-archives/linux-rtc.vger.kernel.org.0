@@ -2,107 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 633E22EBB2E
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Jan 2021 09:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 387292EBE9B
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Jan 2021 14:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbhAFIiF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Jan 2021 03:38:05 -0500
-Received: from mail-oo1-f48.google.com ([209.85.161.48]:42963 "EHLO
-        mail-oo1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbhAFIiE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Jan 2021 03:38:04 -0500
-Received: by mail-oo1-f48.google.com with SMTP id x203so586896ooa.9;
-        Wed, 06 Jan 2021 00:37:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7OzcDXMwatEtiJomNBi1fhi3zuuxEWhyROAP2OwThNY=;
-        b=EQ71xKWn6jEzk16xLKPw5tpURAioSNiH1WBf7m9kaDOShUYzWqDQ2s2wBGAg4P9H3J
-         Mn4cea36V3yDJZZrvHcNzPWnFPRSJt/NLvTmeFnFgsH0whYPMW6IM5yqwm8jTr01KMl9
-         ZZEi8CE6gy5fRn7AkvD+pvWO05miEnxQilI78QQh7PLj6v+I+0jCuNrUcUv+dhGZEZiv
-         v0c6RD3T94Qw07f4jhO5ADNuzjlIEToYcUiiqj4wivYB6ei9N9PpupqdcyyFF4eRsE0X
-         6gjpUPUB00Jm1SxknefDlc66XhPGX55zcpbDjCYhJR+gAdb4eHo6ri1rjep5ilymjGKm
-         mnxQ==
-X-Gm-Message-State: AOAM530lsAiSTA+Tt8ZbOkvKTVNeR7z6UzFGVNcIKOS+9jJv/Yr6Dj3n
-        xMVsCDhZjaRef2yEGQJb1xW7zzukJ5CfJtulSPc=
-X-Google-Smtp-Source: ABdhPJz+riLQ42T+q9EFB1XsbUqjCK7bS2nCYCFI4IXj5lNnjzpQBlfNrLzEuiXe37snmeLQrap5l7udgxcoLsEDH3o=
-X-Received: by 2002:a4a:8353:: with SMTP id q19mr2071403oog.40.1609922242555;
- Wed, 06 Jan 2021 00:37:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 6 Jan 2021 09:37:11 +0100
-Message-ID: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
+        id S1726216AbhAFN1q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Jan 2021 08:27:46 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:36957 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbhAFN1p (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Jan 2021 08:27:45 -0500
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 75C5420000C;
+        Wed,  6 Jan 2021 13:27:03 +0000 (UTC)
+Date:   Wed, 6 Jan 2021 14:27:03 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/2] rtc: goldfish: Remove GOLDFISH dependency
+Message-ID: <20210106132703.GM122615@piout.net>
+References: <20201114130921.651882-1-jiaxun.yang@flygoat.com>
+ <20201114130921.651882-2-jiaxun.yang@flygoat.com>
+ <CAMuHMdXo9o9af-YBt5g53QHRhuLxdSy_C9n4wdEEh7yzDidr-w@mail.gmail.com>
+ <20210104144841.GC3313@piout.net>
+ <CAMuHMdWGnBcYvXLnydSnkxcmG6GksZLfq1aWADuWg8ibZ3V8Lg@mail.gmail.com>
+ <20210104154303.GD3313@piout.net>
+ <CAMuHMdW2nDwJGmOtoDgOEMgEDaD9nMMCv=Y4nZaDqCM1UNadvQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdW2nDwJGmOtoDgOEMgEDaD9nMMCv=Y4nZaDqCM1UNadvQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Thomas,
+On 04/01/2021 16:51:40+0100, Geert Uytterhoeven wrote:
+> > > Is it used on ARM platforms?
+> > > qemu:hw/riscv/Kconfig selects GOLDFISH_RTC, but that's it?
+> >
+> > My understanding is that this was used on the original ARM based goldfish
+> > android emulator but I don't think this was ever upstreamed.
+> 
+> Upstream indeed only has GOLDFISH support in arch/x86/Kconfig.
+> Still, that would be handled by the dependency on GOLDFISH.
+> 
+> Or do you mean upstream QEMU Goldfish support?
+> 
 
-CC Nemoto-san (de-facto TX49XX maintainer)
+Yes, I meant upstream in QEMU. If I refer to the doc from google:
 
-On Tue, Jan 5, 2021 at 3:03 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
+'goldfish' is the name of a family of similar virtual hardware platforms, that
+mostly differ in the virtual CPU they support. 'goldfish' started as an
+ARM-specific platform, but has now been ported to x86 and MIPS virtual CPUs.
 
-I have an RBTX4927 development board in my board farm, boot-test every
-bi-weekly renesas-drivers release on it, and fix kernel issues when they
-appear.
-
-Is that sufficient to keep it?
-
-TX49xx SoCs were used in Sony LocationFree base stations, running
-VxWorks. You can no longer buy them.
-I'm not aware of anyone ever porting Linux to them.
-https://en.wikipedia.org/wiki/LocationFree_Player
-
->   spi: txx9: Remove driver
-
-I only noticed the planned removal when I saw the SPI patch was applied.
-Doesn't matter for me, as SPI is only present on TX4938, not on TX4927 ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Goldfish was based on QEMU 0.8.2, they then moved to ranchu, this time
+on a more upstream QEMU but I don't think this is upstream either.
 
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
