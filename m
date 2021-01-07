@@ -2,117 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0842ECB6E
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 09:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272A72ECE1B
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 11:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbhAGIFg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 7 Jan 2021 03:05:36 -0500
-Received: from mail-ot1-f41.google.com ([209.85.210.41]:37857 "EHLO
-        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbhAGIFf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jan 2021 03:05:35 -0500
-Received: by mail-ot1-f41.google.com with SMTP id o11so5559124ote.4;
-        Thu, 07 Jan 2021 00:05:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0TPseVwGCXsOzziJOFXy0csIKxTAA1WaNx2ZI4idEKY=;
-        b=qYDm+V2g02amIBsejIlly/kxYZMeLMqAAWMKA2EUK5gv1L7jnv2NLfzICoHEdxUnP1
-         r2WOSvBfObTNpVann5meU4MrT14hGOru7v7n8piZWymfFYs22t2ibczE5g+JFwGnUdbP
-         5DdqseVimErO1P9Uv1Sh/EiDxVEMc0sewoLephTM465UtNZK+l5JTgsyK8TK8PZxVsNB
-         dBYpjLA2CRfJzvCEeswplZPcO7EwuZMbOi6jfHaMkpVLi/mJ1owEz0vly0C6vaL1uKzQ
-         29lgEfZPlIA1++r5fyuMfztUKA/BLpAYKkje993mcrMUTl0WD+jRImySMYxaJAz31Rb2
-         gMrw==
-X-Gm-Message-State: AOAM5333ii966ffPw5pRYuEBflSltJ4dtnAZIgRo9B4CoiQelLxc+dpi
-        J5T4y9B0rc8VrA02km+5hxviglCYU0gLa9flWQZ3K5io
-X-Google-Smtp-Source: ABdhPJzVAPf8/NQQQzT3zzrkoDzUv+P+SG+XgCFUWTKsU/u1ByX8ezoz8GuB2nVGz7LNk3BFgEKDp8LcWHb42uaO/Sc=
-X-Received: by 2002:a05:6830:1f5a:: with SMTP id u26mr5905584oth.250.1610006693990;
- Thu, 07 Jan 2021 00:04:53 -0800 (PST)
+        id S1727423AbhAGKrf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 7 Jan 2021 05:47:35 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:11639 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726326AbhAGKrf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jan 2021 05:47:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1610016455; x=1641552455;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=yHSXn6PNaIM5VUt6eMTv9SHPBhxQB6kktLgSWl4aL3g=;
+  b=HeN2JZ7n5VIffX3yOY3npFLjkxV/o9IYMk7fp5bnL60wlyrzJzufiV4d
+   rhS5TJJEgEB1c9BfQ8ImZ7wUnbU8QWt9kUFdzKmbiBasFADfTQIHcv0Zw
+   TsJu+9QuJvVlTeXyIpFLyNRkS4V4qEtANmIaSt4OQZ5yzd08jCU9p4sFC
+   vSZKN+umCjlQ07HCK+VNOuw8awkFZiXgNOtbtFWqrE4Q2XJyM8EZbLY1W
+   WBHKWK0OdNTMnSY602YAHHodoep2DhqbTvZtLLwPjcpinqPdWAOkZ7bS3
+   coSmrZeuNYbHWuvyYAFk4sf+VrZMQrvX8vuibRd/Wx7QkHCil5li8VvT+
+   w==;
+IronPort-SDR: Lafo0b6nQZ9shAR+tKcmHkRIMxFsKrM/bE0rLbdP03aiYdSI1Nk74HUIhar3XWYuHLKPUFrQ/n
+ j07pw1WeQ/5ksxfOjfW0FgAv/VrwTkyLokpKqx+t4vLtar4XU6oI9GsLnxZTQa8Gq0EVlt/O6m
+ YGVKxnVcj0KyaBmDu/CnN/XQ8qvlFnS0s0DriO/G7yaRh5vCGff075xQu+918CY4TNY/kA6gB7
+ /d2JYFyJn/aATrUPjTd3VM5QUCNhILkUeWC2rO3PTNsjiLduzlqElt7+/bTC8CjTBt++I32HdV
+ wIw=
+X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
+   d="scan'208";a="110118444"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jan 2021 03:46:19 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 7 Jan 2021 03:46:19 -0700
+Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Thu, 7 Jan 2021 03:46:14 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <nicolas.ferre@microchip.com>, <ludovic.desroches@microchip.com>
+CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] dt-bindings: rtc: at91rm9200: add sama7g5 compatible
+Date:   Thu, 7 Jan 2021 12:46:12 +0200
+Message-ID: <1610016372-31784-1-git-send-email-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <CAMuHMdX=trGqj8RzV7r1iTneqDjWOc4e1T-X+R_B34rxxhJpbg@mail.gmail.com>
- <20210106184839.GA7773@alpha.franken.de> <CAMuHMdV86BES7dmWr-7j1jbtoSy0bH1J0e5W41p8evagi0Nqcw@mail.gmail.com>
- <20210107.101729.1936921832901251107.anemo@mba.ocn.ne.jp>
-In-Reply-To: <20210107.101729.1936921832901251107.anemo@mba.ocn.ne.jp>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 7 Jan 2021 09:04:43 +0100
-Message-ID: <CAMuHMdX6ptaO3r=b55zqwrrK8ADfSRWdunwHA5DYD08PMCAPaA@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Remove support for TX49xx
-To:     Atsushi Nemoto <anemo@mba.ocn.ne.jp>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "R, Vignesh" <vigneshr@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.com>, linux-ide@vger.kernel.org,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-spi <linux-spi@vger.kernel.org>, linux-rtc@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Richard Weinberger <richard@nod.at>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vinod <vkoul@kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Nemoto-san,
+Add compatible for SAMA7G5 RTC. At the moment the driver is falling
+back on SAM9X60's compatible but SAMA7G5 doesn't have the tamper mode
+register and tamper debounce period register thus the need for a new
+compatible to differentiate b/w these two in case tamper feature will
+be implemented in future.
 
-On Thu, Jan 7, 2021 at 2:18 AM Atsushi Nemoto <anemo@mba.ocn.ne.jp> wrote:
-> On Wed, 6 Jan 2021 21:41:24 +0100, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >> > Is that sufficient to keep it?
-> >>
-> >> for me it is. But now we probaly need some reverts then...
-> >
-> > Indeed. Fortunately not all of it, as some removals were TX4938-only.
->
-> These patches should not break RBTX4927:
->
->   net: tc35815: Drop support for TX49XX boards
->   spi: txx9: Remove driver
->   mtd: Remove drivers used by TX49xx
->   char: hw_random: Remove tx4939 driver
->   rtc: tx4939: Remove driver
->   ide: tx4938ide: Remove driver
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Indeed.
-
-> And these patches just break audio-support only.
->
->   dma: tx49 removal
->   ASoC: txx9: Remove driver
->
-> I think dma and ASoC drivers are hard to maintain now, and can be
-> dropped for basic support for RBTX4927.
-> (TX39 boards does not have audio-support, so dma txx9 driver can be
-> dropped too)
-
-Agreed, I don't test audio anyway, but I know it used to work (I had
-intended to use the board as an MPD media server, but never got beyond
-the prototyping phase).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+index 02bbfe726c62..994de43d17fa 100644
+--- a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
+@@ -20,6 +20,7 @@ properties:
+       - atmel,sama5d4-rtc
+       - atmel,sama5d2-rtc
+       - microchip,sam9x60-rtc
++      - microchip,sama7g5-rtc
+ 
+   reg:
+     maxItems: 1
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.7.4
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
