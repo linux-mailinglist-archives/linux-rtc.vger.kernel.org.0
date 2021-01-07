@@ -2,172 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EC02ED111
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 14:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1512ED141
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 15:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728762AbhAGNmw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 7 Jan 2021 08:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728736AbhAGNmu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jan 2021 08:42:50 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334EEC0612F8
-        for <linux-rtc@vger.kernel.org>; Thu,  7 Jan 2021 05:42:10 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id i9so5701281wrc.4
-        for <linux-rtc@vger.kernel.org>; Thu, 07 Jan 2021 05:42:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IJJO5LSRqwbf8XDwJHkWx390vk3Q5Ggb8kvvqef+rMI=;
-        b=dX+vbyPKWR8RNhLFFIbBiSru05sQDU+e9a57ZFF6LiDoL81FlcFXLa8NJit1Qm6KKA
-         Qosp5wnMKtuQJoUpZYVTV9GHDsMiMbcRRmflRBtL2OcHvqfTMYeXcPLK6Md0dCne8BKw
-         4h44t7upRd9VwgoB2JEO6fC+EnG+KXbngas15z5mwtju21qbzsW18SaGlkcFZ6eJnsT+
-         na0AomIjCGE/3V4zbNbA7vwW8GxFENeK8aFWy0LztiKLROLSJ9HXtJHdVDHjcVcTeCqq
-         TGIx2P7EHO9BtlE2xlSlVPW5rXqbYFJTaRzMsdFsCYXdbMKfq7ps07OYm3pDCtacWJab
-         Kx2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IJJO5LSRqwbf8XDwJHkWx390vk3Q5Ggb8kvvqef+rMI=;
-        b=EF4CesPfGxTRkTiR4yIBHpm5SD35uxOo5P+Bz3lAObyA+dBOnu63cgcb7YK2r2wrUZ
-         Da1n9MnX/mWT9Se5xxfqxy+kgS/FsLSzJD/g1ogKfpvJzGy6DeH65WedeoQg2WgE1HF/
-         kEzs48fHGgJ0eExVk587GHFKacThMtzd/IPza6LHlyBOIXtr88XtfdONYKsrzPzYvK+d
-         AvMSkx8RrKGC3WB6fCz74BOsGlb55UpFvkiYKwkc+ZI89x+SO7TlhgJDjT+86BJ8gzvT
-         AnABfSlYFITNp6xmEiDXc3UDdHGCWPR/j53dVYnoBZ8nM6/oB4IzOqk9ezRcuNKI1JT+
-         IAAw==
-X-Gm-Message-State: AOAM530/+CW3tt9z36NlcQw88R3b49ntO/RM2IZDNNjX33BY3gW63Mp8
-        X1lZsCocdq0kvzKvVb9dIqFLAt8UPS9+oQ==
-X-Google-Smtp-Source: ABdhPJwuAyQKURaBKiPXvoLrzSLaHsIXX9sVzhwQ4s04puXoUHiDAw70gHHWZ2k4zQTW1P8s+ChtvA==
-X-Received: by 2002:a5d:6852:: with SMTP id o18mr8808119wrw.371.1610026928953;
-        Thu, 07 Jan 2021 05:42:08 -0800 (PST)
-Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id g184sm7852710wma.16.2021.01.07.05.42.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jan 2021 05:42:08 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S1728026AbhAGOBO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 7 Jan 2021 09:01:14 -0500
+Received: from mout.gmx.net ([212.227.17.20]:33799 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725835AbhAGOBN (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 7 Jan 2021 09:01:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1610027932;
+        bh=6KXvHFS8hjQxWet0mQrTitxB9mKD6lKq0Lt0NXoM9Lg=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Fv1GeYCQhSu8Gk+NvxEmHyo5N62BNUEHSJep6q0+8P9KpA+Frw6CjTmRriCsRaYKG
+         o+zyJWyY+ncxGuVHI8XOJD4/Cd1b+5wrxMvKLEOXGweFQY3FwUoWmDLH3mnM78Xawd
+         sC7Y5OLx1i1SrvVDtFpVJoFv+ZQQ1XnamtUjsT58=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.57]) by mail.gmx.com (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvY8-1kSngS11lI-00UoHB; Thu, 07
+ Jan 2021 14:58:52 +0100
+Date:   Thu, 7 Jan 2021 14:58:47 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v3 2/2] rtc: s5m: use devm_i2c_new_dummy_device()
-Date:   Thu,  7 Jan 2021 14:42:03 +0100
-Message-Id: <20210107134203.9388-2-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20210107134203.9388-1-brgl@bgdev.pl>
-References: <20210107134203.9388-1-brgl@bgdev.pl>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v6 5/7] rtc: New driver for RTC in Netronix embedded
+ controller
+Message-ID: <X/cTlwKdCfxACNNu@latitude>
+References: <20201208011000.3060239-1-j.neuschaefer@gmx.net>
+ <20201208011000.3060239-6-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zzyZ2qKAXKy5e0zx"
+Content-Disposition: inline
+In-Reply-To: <20201208011000.3060239-6-j.neuschaefer@gmx.net>
+X-Provags-ID: V03:K1:UzPsK+dffc9afKCvS0F9+Hgj9JGWVZOPCSnrUgq9ozQMGwBrOn1
+ WpvWYWzAMBorKL9zzEgCb5IoWtqOzmQarM8aXJl7ONkaYKxJnxMGaINMLTqfkztZZFjHHGf
+ G7uj1LzDxwKbVNXSqsL+vEXoiOHffRuz/jW/ittEr9b/gxsSoXJu6L4O4wDd9Es0lbplasv
+ SPVjkESPUz2ZJA32ai6sw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HiAjBn2kIT8=:6XgsBIHMs1aXbi3nmJSBWb
+ 9xhs9idVrnn/CDpuIA3t3IJB7A6hI9b1k1+w7e7IgZ3IPaWkYUgLkNk7/FGd1wKb6rXNoUJvr
+ Q0uM4nJvsIatHSI4tRYZ3aNSa98nmEOx5PbLnF4CBF7QkmnyrVmbZGv38hoIulGNxkjZZVzWr
+ /ZJIROMNcIjuvgxzmf0lUZxV58yab5WxKk3KbHH+qOM0dcWl3g2Es+2pHxonVeIztW1IJggAs
+ hKiy3fwGh5Gfjh99jS9T1NE5HYXoMxE38q5Z/pcmGlOxXJ+7s2VGfx8JUHCUoW8KboanGytFr
+ Q01dumxcWnDU+6Eu44Z1VhDervoMa+C8SiuqK49SIygHB1NwEJ0NeAAnigUS/8L2UhjZoRn4B
+ GBhkeonIkjPT7MylGqmSesS7Hat6FXEgDtG8kgTHTL7C/uMwiBBCKm6qztkgW96St7xhz6w/k
+ WQvfk0b7WRu1cE3Pt+rfmk6JWfkmkUt5Gt4+1csKqPBIl4Bfo4yD/dqVS7qdtAD2x7qrCL1Xl
+ 0oNNohAVxByzz/KuOmQ5RuCkpyp8MPXjywj6DwkNdtHGagUnCKtstpNUTqLxdiZlq/WAwC6n8
+ hHQd/9inTiQjwC3xYB88qELKlcBZkIWMQS975cE2kIRh3vrAmoBLKAiBGf2DZY6Ad+1MwcwiT
+ SXmiRQWIMIb8pZZ1WlxO7Vg/9531gNIeb8oQrViBcT0tRFkIXXsY7tVD/cEw2W48H+GszD9yn
+ 1RCINyUfKOGVBdPAtnb7BrqY8cAMK0MC7WBU55+/+gEWFqO3FOA/Xdo+aLmMLUP3R8E/HMUc9
+ U9WCczp85cJoOpVlZaAB7spZov6fHXft9mG1XEmRMboap7W5Mnu2cr6tU85YHxAHqwgqv8xYO
+ uGMHsrt7/CerOCOlkd/w==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Use the managed variant of i2c_new_dummy_device() to shrink code and
-remove the goto label. We can drop the remove callback now too.
+--zzyZ2qKAXKy5e0zx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
-v1 -> v2:
-- remove the remove() callback
+On Tue, Dec 08, 2020 at 02:09:58AM +0100, Jonathan Neusch=C3=A4fer wrote:
+> With this driver, mainline Linux can keep its time and date in sync with
+> the vendor kernel.
+>=20
+> Advanced functionality like alarm and automatic power-on is not yet
+> supported.
+>=20
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+[...]
+> +	return rtc_register_device(dev);
 
-v2 -> v3:
-- fix an error pointed out by the build robot
+This needs a respin due to the RTC API change (devm_ prefixed was added).
+Unless someone objects, I'll respin the whole series in a few days.
 
- drivers/rtc/rtc-s5m.c | 34 ++++++++--------------------------
- 1 file changed, 8 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index e0011d3cf61b..b492070afe6a 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -760,7 +760,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	info->i2c = i2c_new_dummy_device(s5m87xx->i2c->adapter, RTC_I2C_ADDR);
-+	info->i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
-+					      RTC_I2C_ADDR);
- 	if (IS_ERR(info->i2c)) {
- 		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
- 		return PTR_ERR(info->i2c);
-@@ -768,10 +769,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 
- 	info->regmap = devm_regmap_init_i2c(info->i2c, regmap_cfg);
- 	if (IS_ERR(info->regmap)) {
--		ret = PTR_ERR(info->regmap);
- 		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
--				ret);
--		goto err;
-+			PTR_ERR(info->regmap));
-+		return PTR_ERR(info->regmap);
- 	}
- 
- 	info->dev = &pdev->dev;
-@@ -781,10 +781,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (s5m87xx->irq_data) {
- 		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
- 		if (info->irq <= 0) {
--			ret = -EINVAL;
- 			dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
- 				alarm_irq);
--			goto err;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -799,10 +798,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	info->rtc_dev = devm_rtc_device_register(&pdev->dev, "s5m-rtc",
- 						 &s5m_rtc_ops, THIS_MODULE);
- 
--	if (IS_ERR(info->rtc_dev)) {
--		ret = PTR_ERR(info->rtc_dev);
--		goto err;
--	}
-+	if (IS_ERR(info->rtc_dev))
-+		return PTR_ERR(info->rtc_dev);
- 
- 	if (!info->irq) {
- 		dev_info(&pdev->dev, "Alarm IRQ not available\n");
-@@ -815,23 +812,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			info->irq, ret);
--		goto err;
-+		return ret;
- 	}
- 
--	return 0;
--
--err:
--	i2c_unregister_device(info->i2c);
--
--	return ret;
--}
--
--static int s5m_rtc_remove(struct platform_device *pdev)
--{
--	struct s5m_rtc_info *info = platform_get_drvdata(pdev);
--
--	i2c_unregister_device(info->i2c);
--
- 	return 0;
- }
- 
-@@ -876,7 +859,6 @@ static struct platform_driver s5m_rtc_driver = {
- 		.pm	= &s5m_rtc_pm_ops,
- 	},
- 	.probe		= s5m_rtc_probe,
--	.remove		= s5m_rtc_remove,
- 	.id_table	= s5m_rtc_id,
- };
- 
--- 
-2.29.1
+Best regards,
+Jonathan Neusch=C3=A4fer
 
+--zzyZ2qKAXKy5e0zx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl/3E4oACgkQCDBEmo7z
+X9vCCxAAnyHyLRWimfwTpump145Yv/rZQxqVkc0KK1+bi2EhJddi3IC/n3VWoog0
+XgXDYKkxINCn/uUb3JSOJ41GTVEcOdgXhNh5Sz1J8Xu4Xavr2qvWHhuh5Uobo6A9
+Ursp17xJxIedZnSZeYJZhLI1+uDASZoEp55FSZpdr/dBE/duI62r7A7xKC7NGuQ5
+FfVuGlSvsJpgEZqVo1mw3A0R2uOhHu20t8zZmXVnirXHs7PoZuIirnPys2Q2YvPX
+j71Xy27WvGJGXfKa8GhN3FRzqcYTQ8D5dWqvCyb9RYuYDFFjQmFC9aDRellR6oKV
+QZQqS6mDzwa6CsQ7WTQtzNE/oDSEaB1JRrhsyfUDdHDnMg6DRVyzNELjMsq0fzbQ
+b4SNv82HjK1OSTNk7nYWEFr8zFh8dHYaydXqw9ok5iAxpjol9FJDeiz3ee/jMr2+
+LlwUGHdptjSh6XubB1jlBCJITWKsoZKKQz8MMzGt5vgJBLQ7g8FoUXfIfJ1SyDuh
+QgsrxpPgdDTRxVFG1V5V6YliJNzm7BEUffrtBeFCgCVQCq8RAzzyMXZ4UlEoazqK
+22LrEAkfadOWJFbwGTcTvgbvpCmFSJr6e7E61dP/WLhh5RGcB8EndK85rFskaOqX
+KUAYnvYDbth0rRZcdy0L+QF2Awe0FRnXCCSQ+Qe7FBzsWQRX32Q=
+=v+1m
+-----END PGP SIGNATURE-----
+
+--zzyZ2qKAXKy5e0zx--
