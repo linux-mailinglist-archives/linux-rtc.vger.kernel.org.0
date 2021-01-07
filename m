@@ -2,84 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 272A72ECE1B
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 11:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DE02ED10E
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jan 2021 14:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727423AbhAGKrf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 7 Jan 2021 05:47:35 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:11639 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbhAGKrf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jan 2021 05:47:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1610016455; x=1641552455;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=yHSXn6PNaIM5VUt6eMTv9SHPBhxQB6kktLgSWl4aL3g=;
-  b=HeN2JZ7n5VIffX3yOY3npFLjkxV/o9IYMk7fp5bnL60wlyrzJzufiV4d
-   rhS5TJJEgEB1c9BfQ8ImZ7wUnbU8QWt9kUFdzKmbiBasFADfTQIHcv0Zw
-   TsJu+9QuJvVlTeXyIpFLyNRkS4V4qEtANmIaSt4OQZ5yzd08jCU9p4sFC
-   vSZKN+umCjlQ07HCK+VNOuw8awkFZiXgNOtbtFWqrE4Q2XJyM8EZbLY1W
-   WBHKWK0OdNTMnSY602YAHHodoep2DhqbTvZtLLwPjcpinqPdWAOkZ7bS3
-   coSmrZeuNYbHWuvyYAFk4sf+VrZMQrvX8vuibRd/Wx7QkHCil5li8VvT+
-   w==;
-IronPort-SDR: Lafo0b6nQZ9shAR+tKcmHkRIMxFsKrM/bE0rLbdP03aiYdSI1Nk74HUIhar3XWYuHLKPUFrQ/n
- j07pw1WeQ/5ksxfOjfW0FgAv/VrwTkyLokpKqx+t4vLtar4XU6oI9GsLnxZTQa8Gq0EVlt/O6m
- YGVKxnVcj0KyaBmDu/CnN/XQ8qvlFnS0s0DriO/G7yaRh5vCGff075xQu+918CY4TNY/kA6gB7
- /d2JYFyJn/aATrUPjTd3VM5QUCNhILkUeWC2rO3PTNsjiLduzlqElt7+/bTC8CjTBt++I32HdV
- wIw=
-X-IronPort-AV: E=Sophos;i="5.79,329,1602572400"; 
-   d="scan'208";a="110118444"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jan 2021 03:46:19 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 7 Jan 2021 03:46:19 -0700
-Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Thu, 7 Jan 2021 03:46:14 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <nicolas.ferre@microchip.com>, <ludovic.desroches@microchip.com>
-CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] dt-bindings: rtc: at91rm9200: add sama7g5 compatible
-Date:   Thu, 7 Jan 2021 12:46:12 +0200
-Message-ID: <1610016372-31784-1-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
+        id S1728745AbhAGNmt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 7 Jan 2021 08:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728737AbhAGNms (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jan 2021 08:42:48 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC83C0612F6
+        for <linux-rtc@vger.kernel.org>; Thu,  7 Jan 2021 05:42:08 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d26so5648252wrb.12
+        for <linux-rtc@vger.kernel.org>; Thu, 07 Jan 2021 05:42:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v3qbp3ZMuwuzWhmCass4IRAk8ZAQ/ACJDj2q433vAbg=;
+        b=rZXJ+p7nRYeGl9SWPfS1whanzVkdZoIbBxEWvnNvDx/P/T0FRcoy/6H3OM1Frz/1nx
+         FGRs5WxCLAFOz+d3ap5a+xHiHJQD2cWlqY4yVKXYrNzLqpg3RnnIJt6LT8ApD8Az3bQj
+         u2besmmV3asVZJMii9cWrsryRvCpxgytlYSBlxswLNANwutC01QhPpzXGitSwWh/SjPU
+         TZJIcYYqyWT35SBhhjUnFOInUGdeiQ312TAL/EM6cwWnyOLROZxRXoQtLHqCSCymLyG6
+         zcYVQ83WNbjUOk1j2HifRpdEzc4SKVFMrBfOsWF0yCzIquI0NwYUyKHcS4q7zK6AFU+O
+         oxzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v3qbp3ZMuwuzWhmCass4IRAk8ZAQ/ACJDj2q433vAbg=;
+        b=gaFTdCLrvhGO4L/mMtdJKIAJxU/ZF+Y/+tGc1Al9mdOoeVZg6SLmxKnEb6yvnV2jdc
+         BqyHSlYetCnOoidaa/AI/1NKW+QSMPL4CCctXlc+59y+4vGms+alnz/kydHj9aCFpkY6
+         I+nun8gX515KOWMSANq19QTP1ZSocztJJAZd/f3uIYeT8TS5subH2BkFTi2vxaDahGRl
+         DO02uCDh0GcKU2wJe1cqbVUqcj1ybD9kpnWEiCJIMBqt1l0SZHcEsSB6l20upYm6bwk1
+         dDakW5327g1pmAuJJ6W5GS5lCWj/kC1IPf9xfTTBcvKkFP1WWY6Aj4RfkB/ybF/k6p8p
+         Jbew==
+X-Gm-Message-State: AOAM532sxyQZUdqr9Tj5Hjx9iHdHCQnoCEP1r5eZ+IwwLft440bZi0Ua
+        BPHe+t+02eX0YEzt6zMOar4Q3w==
+X-Google-Smtp-Source: ABdhPJyoOYIbXOl7BaXgxmBR2MYncdd+LZgqtPeWdOiP64bRsHmgX+TEX8fh5IC7i0elOaJDb61gew==
+X-Received: by 2002:a5d:4dc6:: with SMTP id f6mr9216369wru.336.1610026926883;
+        Thu, 07 Jan 2021 05:42:06 -0800 (PST)
+Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
+        by smtp.gmail.com with ESMTPSA id g184sm7852710wma.16.2021.01.07.05.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 05:42:06 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 1/2] rtc: s5m: check the return value of s5m8767_rtc_init_reg()
+Date:   Thu,  7 Jan 2021 14:42:02 +0100
+Message-Id: <20210107134203.9388-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add compatible for SAMA7G5 RTC. At the moment the driver is falling
-back on SAM9X60's compatible but SAMA7G5 doesn't have the tamper mode
-register and tamper debounce period register thus the need for a new
-compatible to differentiate b/w these two in case tamper feature will
-be implemented in future.
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+This function can fail if regmap operations fail so check its return
+value in probe().
+
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 ---
- Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rtc/rtc-s5m.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
-index 02bbfe726c62..994de43d17fa 100644
---- a/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml
-@@ -20,6 +20,7 @@ properties:
-       - atmel,sama5d4-rtc
-       - atmel,sama5d2-rtc
-       - microchip,sam9x60-rtc
-+      - microchip,sama7g5-rtc
+diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
+index eb9dde4095a9..e0011d3cf61b 100644
+--- a/drivers/rtc/rtc-s5m.c
++++ b/drivers/rtc/rtc-s5m.c
+@@ -791,6 +791,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, info);
  
-   reg:
-     maxItems: 1
+ 	ret = s5m8767_rtc_init_reg(info);
++	if (ret)
++		return ret;
+ 
+ 	device_init_wakeup(&pdev->dev, 1);
+ 
 -- 
-2.7.4
+2.29.1
 
