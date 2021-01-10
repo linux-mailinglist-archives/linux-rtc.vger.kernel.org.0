@@ -2,28 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6452F0A49
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 00:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 267A12F0A4B
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 00:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbhAJXTA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 10 Jan 2021 18:19:00 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:60811 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727127AbhAJXS7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 10 Jan 2021 18:18:59 -0500
+        id S1727127AbhAJXTB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 10 Jan 2021 18:19:01 -0500
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:40851 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727137AbhAJXTA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 10 Jan 2021 18:19:00 -0500
 X-Originating-IP: 86.202.109.140
 Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 8745260006;
-        Sun, 10 Jan 2021 23:18:17 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 79E4F20003;
+        Sun, 10 Jan 2021 23:18:18 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 06/17] rtc: m48t59: remove m48t02_rtc_ops
-Date:   Mon, 11 Jan 2021 00:17:41 +0100
-Message-Id: <20210110231752.1418816-7-alexandre.belloni@bootlin.com>
+Subject: [PATCH 07/17] rtc: pcf2127: remove pcf2127_rtc_alrm_ops
+Date:   Mon, 11 Jan 2021 00:17:42 +0100
+Message-Id: <20210110231752.1418816-8-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210110231752.1418816-1-alexandre.belloni@bootlin.com>
 References: <20210110231752.1418816-1-alexandre.belloni@bootlin.com>
@@ -33,76 +33,58 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Clear RTC_FEATURE_ALARM to signal that alarms are not available instead of
-having a supplementary struct rtc_class_ops without alarm callbacks.
+Move the alarm callbacks in pcf2127_rtc_ops and use RTC_FEATURE_ALARM to
+signal to the core whether alarms are available instead of having a
+supplementary struct rtc_class_ops without alarm callbacks.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-m48t59.c | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+ drivers/rtc/rtc-pcf2127.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/rtc/rtc-m48t59.c b/drivers/rtc/rtc-m48t59.c
-index 5f5898d3b055..1d2e99a70fce 100644
---- a/drivers/rtc/rtc-m48t59.c
-+++ b/drivers/rtc/rtc-m48t59.c
-@@ -313,11 +313,6 @@ static const struct rtc_class_ops m48t59_rtc_ops = {
- 	.alarm_irq_enable = m48t59_rtc_alarm_irq_enable,
- };
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 39a7b5116aa4..68160d857ac1 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -225,12 +225,6 @@ static int pcf2127_rtc_ioctl(struct device *dev,
+ 	}
+ }
  
--static const struct rtc_class_ops m48t02_rtc_ops = {
--	.read_time	= m48t59_rtc_read_time,
--	.set_time	= m48t59_rtc_set_time,
+-static const struct rtc_class_ops pcf2127_rtc_ops = {
+-	.ioctl		= pcf2127_rtc_ioctl,
+-	.read_time	= pcf2127_rtc_read_time,
+-	.set_time	= pcf2127_rtc_set_time,
 -};
 -
- static int m48t59_nvram_read(void *priv, unsigned int offset, void *val,
- 			     size_t size)
+ static int pcf2127_nvmem_read(void *priv, unsigned int offset,
+ 			      void *val, size_t bytes)
  {
-@@ -366,7 +361,6 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
- 	struct m48t59_private *m48t59 = NULL;
- 	struct resource *res;
- 	int ret = -ENOMEM;
--	const struct rtc_class_ops *ops;
- 	struct nvmem_config nvmem_cfg = {
- 		.name = "m48t59-",
- 		.word_size = 1,
-@@ -438,17 +432,21 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
- 		if (ret)
- 			return ret;
+@@ -459,7 +453,7 @@ static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static const struct rtc_class_ops pcf2127_rtc_alrm_ops = {
++static const struct rtc_class_ops pcf2127_rtc_ops = {
+ 	.ioctl            = pcf2127_rtc_ioctl,
+ 	.read_time        = pcf2127_rtc_read_time,
+ 	.set_time         = pcf2127_rtc_set_time,
+@@ -584,6 +578,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
+ 	pcf2127->rtc->uie_unsupported = 1;
++	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+ 
+ 	if (alarm_irq > 0) {
+ 		ret = devm_request_threaded_irq(dev, alarm_irq, NULL,
+@@ -598,7 +593,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 
+ 	if (alarm_irq > 0 || device_property_read_bool(dev, "wakeup-source")) {
+ 		device_init_wakeup(dev, true);
+-		pcf2127->rtc->ops = &pcf2127_rtc_alrm_ops;
++		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
  	}
-+
-+	m48t59->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(m48t59->rtc))
-+		return PTR_ERR(m48t59->rtc);
-+
- 	switch (pdata->type) {
- 	case M48T59RTC_TYPE_M48T59:
--		ops = &m48t59_rtc_ops;
- 		pdata->offset = 0x1ff0;
- 		break;
- 	case M48T59RTC_TYPE_M48T02:
--		ops = &m48t02_rtc_ops;
-+		clear_bit(RTC_FEATURE_ALARM, m48t59->rtc->features);
- 		pdata->offset = 0x7f0;
- 		break;
- 	case M48T59RTC_TYPE_M48T08:
--		ops = &m48t02_rtc_ops;
-+		clear_bit(RTC_FEATURE_ALARM, m48t59->rtc->features);
- 		pdata->offset = 0x1ff0;
- 		break;
- 	default:
-@@ -459,11 +457,7 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
- 	spin_lock_init(&m48t59->lock);
- 	platform_set_drvdata(pdev, m48t59);
  
--	m48t59->rtc = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(m48t59->rtc))
--		return PTR_ERR(m48t59->rtc);
--
--	m48t59->rtc->ops = ops;
-+	m48t59->rtc->ops = &m48t59_rtc_ops;
- 
- 	nvmem_cfg.size = pdata->offset;
- 	ret = devm_rtc_nvmem_register(m48t59->rtc, &nvmem_cfg);
+ 	if (has_nvmem) {
 -- 
 2.29.2
 
