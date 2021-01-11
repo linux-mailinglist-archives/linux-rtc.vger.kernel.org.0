@@ -2,95 +2,181 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411DB2F17C5
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 15:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9C22F1B46
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 17:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728084AbhAKONc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Jan 2021 09:13:32 -0500
-Received: from mail-ej1-f53.google.com ([209.85.218.53]:33351 "EHLO
-        mail-ej1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728002AbhAKON0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 09:13:26 -0500
-Received: by mail-ej1-f53.google.com with SMTP id b9so25057996ejy.0;
-        Mon, 11 Jan 2021 06:13:09 -0800 (PST)
+        id S2389063AbhAKQnU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Jan 2021 11:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389061AbhAKQnR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 11:43:17 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9F4C061795
+        for <linux-rtc@vger.kernel.org>; Mon, 11 Jan 2021 08:42:37 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id y23so499480wmi.1
+        for <linux-rtc@vger.kernel.org>; Mon, 11 Jan 2021 08:42:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pnjD2UilASpN7loOYOlKYs+Pbcte4indWOVKi/fCTJg=;
+        b=jZPGYifKJXu2wyCXuOOqiam6bYFwnCgZIld3hfdNBNiId3bEdbMCzQkxliyHesCEmS
+         x6cu7r3uREiid7Hb1dctzIY7498SE+zMrR8HPJDsEgnQILuGz6BIgIgvnrXyuJ0QUoq5
+         104uS8DvTxQ8Y4KlApoJiuN2YTQfJTFv1Ef1TZsjopplyIqu1lmKCV0yLutNAtD/+79D
+         RQT1/AUVzII+CqjH3dw0cPsE33XX2ktNEHM1jVNreiTO9MfHIKusni1KNxKGlAL8g40T
+         rWR6RXsOyXsTbJ7hyZV09aXGOaYCq/Be+Sl97sP7jLbTGEL55i2/RL3N2caecholkxQa
+         w1kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PQX6JSrchxeSIcws95/Px/lb+7q2acGOY2HvUqsnqJY=;
-        b=DV7ms29sQ1I9IKE4G0yDP5Erd3IGfEk6ZlZKDN9nmmkk0l4apg8k5X289CkN3qdcWP
-         pZeUhzThCqHqKjoxezGBqS/t6JpEWbyXruKzz9mA1vP98hrWJCuDl/QvrK71hladIidd
-         offIuVprUEd10ZWSRMBhlhPOeYavd3NBffrsThSBMsrewDaP3rmzsi+QKQMWX6XCZNXw
-         nLtCrs/amyC2xwlmmKl/tkPnLmXXEDvp1hfiIh0BQwdaiGz5bj5EuGZc2fqn62x1Vb4I
-         vJbPog8vqtp1z+3tI0DJswVPRkC6C/75jWIMz5ze8Nj0IGAzOjRgRW0MC1r3ReYjVAh1
-         4KTA==
-X-Gm-Message-State: AOAM532FnicH3V/SwieAAWr2WIyQHko023G0Js2smjpXzR8yJrlXO5xd
-        PUR1EujyKl/I2IsxTLupqzPTIEuHKjM=
-X-Google-Smtp-Source: ABdhPJyFDyrzwy7vnnZVjdHgkuH/8muxvlW4pg8QElFZTdnWYL9bQlKscnF+61+l1gajpxCnOg923w==
-X-Received: by 2002:a17:906:ae41:: with SMTP id lf1mr11254078ejb.369.1610374363866;
-        Mon, 11 Jan 2021 06:12:43 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id gb14sm6410106ejc.61.2021.01.11.06.12.42
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pnjD2UilASpN7loOYOlKYs+Pbcte4indWOVKi/fCTJg=;
+        b=LCZ2fMUc4R9I+ihz6+9qG0Upw2ECSj2VZgMl2OEKOwoNzpH6ILV8yTAEsAAiy+9CJT
+         cz6iJEAE1DoA5X8zr50SYLUh4aMu5oAvl1ZDfWFfKQGJ8NrIoPvoparhBmdVThrvu9aB
+         a6Qp1NK88JVVcJE52OqJxiZTexG8A1KBfGj+AfgWIQJM5T8ZIuU4+d2pGGsHmPFyEp3y
+         Y0T74wkPK09+Qj19HO5XBmGUMk1ro+PUBLGn871rdUyXfwCAr4xVKcOIyuhj1LKn0z1s
+         gAwp+Lo4sgQR0wjxgSHwzzh2dpyJ3yt1CQyVks8/GutySYhAe184hHWg4tAJHGg1e0FY
+         Zffw==
+X-Gm-Message-State: AOAM5337BXZJl8cXmn3Xcoj1uxV4ruf4hozNLV3g/t/cLmoWwjBKOIpC
+        /W5dQSz2qyx48rVGYm/a+sePyg==
+X-Google-Smtp-Source: ABdhPJzApE1wVaNIEk7OP7bPmtcjgsSpWlYwuKYrzBqby7CnQK7nLd4dwQgxpqSjJJiQ2SKJafc7Mw==
+X-Received: by 2002:a7b:c145:: with SMTP id z5mr509718wmi.164.1610383356061;
+        Mon, 11 Jan 2021 08:42:36 -0800 (PST)
+Received: from dell ([91.110.221.229])
+        by smtp.gmail.com with ESMTPSA id v1sm196393wrr.48.2021.01.11.08.42.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 06:12:42 -0800 (PST)
-Date:   Mon, 11 Jan 2021 15:12:41 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Mon, 11 Jan 2021 08:42:35 -0800 (PST)
+Date:   Mon, 11 Jan 2021 16:42:28 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v4 2/3] rtc: s5m: check the return value of
- s5m8767_rtc_init_reg()
-Message-ID: <20210111141241.GA38402@kozik-lap>
-References: <20210111124027.21586-1-brgl@bgdev.pl>
- <20210111124027.21586-3-brgl@bgdev.pl>
- <20210111133521.GB34341@kozik-lap>
- <CAMRc=MdLAupcMkSEpdVJiBTogbN6G2aqr=kC+0GT6s-igSSL0g@mail.gmail.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 4/7] pwm: ntxec: Add driver for PWM function in
+ Netronix EC
+Message-ID: <20210111164228.GB3575260@dell>
+References: <20210109180220.121511-1-j.neuschaefer@gmx.net>
+ <20210109180220.121511-5-j.neuschaefer@gmx.net>
+ <X/xKZI04ipiQCUjd@ulmo>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMRc=MdLAupcMkSEpdVJiBTogbN6G2aqr=kC+0GT6s-igSSL0g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <X/xKZI04ipiQCUjd@ulmo>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 03:11:24PM +0100, Bartosz Golaszewski wrote:
-> On Mon, Jan 11, 2021 at 2:35 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > On Mon, Jan 11, 2021 at 01:40:26PM +0100, Bartosz Golaszewski wrote:
-> > > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > >
-> > > This function can fail if regmap operations fail so check its return
-> > > value in probe().
-> > >
-> > > Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> > > ---
-> > >  drivers/rtc/rtc-s5m.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-> > > index eb9dde4095a9..e0011d3cf61b 100644
-> > > --- a/drivers/rtc/rtc-s5m.c
-> > > +++ b/drivers/rtc/rtc-s5m.c
-> > > @@ -791,6 +791,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
-> > >       platform_set_drvdata(pdev, info);
-> > >
-> > >       ret = s5m8767_rtc_init_reg(info);
-> > > +     if (ret)
-> > > +             return ret;
-> >
-> > You leak I2C device.
-> >
+On Mon, 11 Jan 2021, Thierry Reding wrote:
+
+> On Sat, Jan 09, 2021 at 07:02:17PM +0100, Jonathan Neuschäfer wrote:
+> > The Netronix EC provides a PWM output which is used for the backlight
+> > on some ebook readers. This patches adds a driver for the PWM output.
+> > 
+> > The .get_state callback is not implemented, because the PWM state can't
+> > be read back from the hardware.
+> > 
+> > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> > ---
+> > v7:
+> > - no changes
+> > 
+> > v6:
+> > - https://lore.kernel.org/lkml/20201208011000.3060239-5-j.neuschaefer@gmx.net/
+> > - Move period / duty cycle setting code to a function
+> > - Rename pwmchip_to_priv to ntxec_pwm_from_chip
+> > - Set period and duty cycle only before enabling the output
+> > - Mention that duty=0, enable=1 is assumed not to happen
+> > - Interleave writes to the period and duty cycle registers, to minimize the
+> >   window of time that an inconsistent state is configured
+> > 
+> > v5:
+> > - https://lore.kernel.org/lkml/20201201011513.1627028-5-j.neuschaefer@gmx.net/
+> > - Avoid truncation of period and duty cycle to 32 bits
+> > - Make ntxec_pwm_ops const
+> > - Use regmap_multi_reg_write
+> > - Add comment about get_state to ntxec_pwm_ops
+> > - Add comments about non-atomicity of (period, duty cycle) update
+> > 
+> > v4:
+> > - https://lore.kernel.org/lkml/20201122222739.1455132-5-j.neuschaefer@gmx.net/
+> > - Document hardware/driver limitations
+> > - Only accept normal polarity
+> > - Fix a typo ("zone" -> "zero")
+> > - change MAX_PERIOD_NS to 0xffff * 125
+> > - Clamp period to the maximum rather than returning an error
+> > - Rename private struct pointer to priv
+> > - Rearrage control flow in _probe to save a few lines and a temporary variable
+> > - Add missing MODULE_ALIAS line
+> > - Spell out ODM
+> > 
+> > v3:
+> > - https://lore.kernel.org/lkml/20200924192455.2484005-5-j.neuschaefer@gmx.net/
+> > - Relicense as GPLv2 or later
+> > - Add email address to copyright line
+> > - Remove OF compatible string and don't include linux/of_device.h
+> > - Fix bogus ?: in return line
+> > - Don't use a comma after sentinels
+> > - Avoid ret |= ... pattern
+> > - Move 8-bit register conversion to ntxec.h
+> > 
+> > v2:
+> > - https://lore.kernel.org/lkml/20200905133230.1014581-6-j.neuschaefer@gmx.net/
+> > - Various grammar and style improvements, as suggested by Uwe Kleine-König,
+> >   Lee Jones, and Alexandre Belloni
+> > - Switch to regmap
+> > - Prefix registers with NTXEC_REG_
+> > - Add help text to the Kconfig option
+> > - Use the .apply callback instead of the old API
+> > - Add a #define for the time base (125ns)
+> > - Don't change device state in .probe; this avoids multiple problems
+> > - Rework division and overflow check logic to perform divisions in 32 bits
+> > - Avoid setting duty cycle to zero, to work around a hardware quirk
+> > ---
+> >  drivers/pwm/Kconfig     |   8 ++
+> >  drivers/pwm/Makefile    |   1 +
+> >  drivers/pwm/pwm-ntxec.c | 182 ++++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 191 insertions(+)
+> >  create mode 100644 drivers/pwm/pwm-ntxec.c
 > 
-> Yes, the next patch fixes it but I changed the order. Actually this
-> can be moved after 3/3 with no conflicts when applying.
+> Lee, I assume you'll want to pick the whole set up into the MFD tree? If
+> so:
 
-Yes, but for bisecting and any backporting (e.g. with autosel) the order
-is quite important. Please resend with new order.
+Yes, I'll pick this up once we have all the Acks.
 
-Best regards,
-Krzysztof
+The Arm parts usually go in separately.
 
+> Acked-by: Thierry Reding <thierry.reding@gmail.com>
+
+Thanks.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
