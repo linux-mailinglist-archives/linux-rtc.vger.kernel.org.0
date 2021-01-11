@@ -2,162 +2,202 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9372F1277
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 13:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553382F1298
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 13:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbhAKMl7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Jan 2021 07:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S1727308AbhAKMyl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Jan 2021 07:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727074AbhAKMl6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 07:41:58 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52E7C0617AA
-        for <linux-rtc@vger.kernel.org>; Mon, 11 Jan 2021 04:40:39 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 3so14916958wmg.4
-        for <linux-rtc@vger.kernel.org>; Mon, 11 Jan 2021 04:40:39 -0800 (PST)
+        with ESMTP id S1726686AbhAKMyl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 07:54:41 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73436C061794;
+        Mon, 11 Jan 2021 04:54:00 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id a6so13731867wmc.2;
+        Mon, 11 Jan 2021 04:54:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iLQSMu4kyOWwZDRuRCxs8aoK2DhXG2sbIHqKebgLZs8=;
-        b=YtHZifkBaY0OPg54db/1GEuBl6VpUDZZNAf4YQVSyEgPjRg25raahc/YvwMJ0nvVnx
-         6V/vWalce3AnXvu7lqT5zQ8X+tW8TmHheC1EpP/njLVKre8dGO2rzPdBuva5n3CYaU9v
-         m3xKBt7F68+9mV4hDNyqj10kkiZUPJLMVv3ImgU73RtgzfYCf4LUwYL2ChS2HOy/1UX0
-         6qJ3KhL0F0DpStRKvMXxFdW5BtfqZ4lCW1nOxcsQpeiKV0DCPZpfNWJgaoWkU4w5IqGn
-         zIIBf/HHj/7r6aZLpYOAMV1dsuFnM2b7g5Uz8d4mXxQ0b2lAYDywqQ7MScdjzsvfPGff
-         pMfg==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jDh7bR5KL1i+zrcnAe+RgQgH4cW7c4bLFBL7OnmiPNg=;
+        b=NlLdCIglQue47msebGNg1KLuPv6LZbFfyxII8Slx8pBwyqBPa6ls5HoEi70qPLQNhO
+         m2xDgGfL0Ftld8qKSac48KG0MOYTfqa94Ix4DPTyl7LrTKTDQiwR4i9RJAVd3vVOownF
+         Ofg9RGCRZWDtUaXXb+sTyN4d7Nh8PAnw1oqadWXBj5gGdPDbNeJZy+LlIaJuuQpGvUci
+         ZUNq0g/+XjwYLjWZB0gKxTEwWFnDuWdghk5mxWeDAEXqawf1/7zwObw2DGRRtHk1HDR0
+         lTTJ8zgk+hKBLK1gbFxfVZ3MNzmXJwZSKz7Hb5u3c4EzcDtre+MoDZq63sPJvL47Ne0I
+         uX/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iLQSMu4kyOWwZDRuRCxs8aoK2DhXG2sbIHqKebgLZs8=;
-        b=AxM0q8arQpa1M0NCICB2EKrwDU/b4tOuswuu2s7qsyZ0zQTTVJjR8O/LUMYBNkbnVk
-         uUG6Gtqb4kuH0Ezp43AfM0cRpRNrX2Hm7FyQ90yCifJsiLSU+a9vXguVnChWmbAZwXNd
-         lQ43PVb5SZgSa2cKFbY3foM89gAZPyXxfeLJr+Gb9GAq84SVY6nflGcGRT1/507ZJgB4
-         wllDwGwLD2bSva3wbefFsfGn+ALee1GpwREl1tGmY/NVVHb5ZpM4GBqV6Q3/LyCGHe7A
-         ughrUAMgIi4PaCjznrok7E7O333QDzwgvPRxIU9FRH+TN/OO0f9IZIImAQ5dCYX3KH8g
-         TKsQ==
-X-Gm-Message-State: AOAM533M/IQ9s5ecwDKzXNZIGDBBVLI3puA5L2z4vUiZE5ogyqrLeYfY
-        jw2AiEigkhqFnfZgIw4N6dPwZUPdMBckUg==
-X-Google-Smtp-Source: ABdhPJy7IwW7rqicRJkE+1lyoV7lllzeWL26215H1ry1DCRVDrmCZu4Y2vJ0uDYfSxjfCx2mNGo6Lw==
-X-Received: by 2002:a1c:6208:: with SMTP id w8mr14496011wmb.96.1610368838524;
-        Mon, 11 Jan 2021 04:40:38 -0800 (PST)
-Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id l8sm26492362wrb.73.2021.01.11.04.40.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jDh7bR5KL1i+zrcnAe+RgQgH4cW7c4bLFBL7OnmiPNg=;
+        b=l35ww8JNfsLXhc7xkGqNn+rZEZOj8mU3si9e+QyO+fcXI+QSYdCihVTFtAo2F6oanj
+         o++2pECcsNplF8iHPi2dpwWjSnbFJ2sc/DxpLxQk4vMo75bfQHSmf87Afm9Osk0uEvop
+         Jp8fGXmOWRw0HrBCFEKP0e5qdNXg9nyfFNrVkjhDNa36fXH1vxJcEV9iiRrsImCixnYl
+         8wJlN/t8XgIAnEhvkuyDDnrEkScXbHJwuhGCnBasoFOhHQ1YR+U+kVkL2K2GFAoJtULU
+         qcLdN/zZLmnKnwJvUkYRv3xQNYgmbC6OOOXclSnstfhPtTcEhKzdHmtXzB/euqtgCuOV
+         i0Xg==
+X-Gm-Message-State: AOAM531wy2wzvHWESrdgJdIGzDr/51PT8z8Fu+qFj9k493LPEt4o3Ahq
+        I1rbX2fJGhGMW5EvNqOO5rE=
+X-Google-Smtp-Source: ABdhPJyQ5vYl+NC8F2jQ3VqSj2hFvYa4apLxrSS90IaASq+Z7CKZ8HXEd4QpYqawDmN5A9Sxx93vRg==
+X-Received: by 2002:a1c:2605:: with SMTP id m5mr14595416wmm.111.1610369639184;
+        Mon, 11 Jan 2021 04:53:59 -0800 (PST)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id y2sm21195511wma.6.2021.01.11.04.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 04:40:38 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Mon, 11 Jan 2021 04:53:57 -0800 (PST)
+Date:   Mon, 11 Jan 2021 13:53:56 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v4 3/3] rtc: s5m: use devm_i2c_new_dummy_device()
-Date:   Mon, 11 Jan 2021 13:40:27 +0100
-Message-Id: <20210111124027.21586-4-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20210111124027.21586-1-brgl@bgdev.pl>
-References: <20210111124027.21586-1-brgl@bgdev.pl>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 4/7] pwm: ntxec: Add driver for PWM function in
+ Netronix EC
+Message-ID: <X/xKZI04ipiQCUjd@ulmo>
+References: <20210109180220.121511-1-j.neuschaefer@gmx.net>
+ <20210109180220.121511-5-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="z0ToN2/Ipg8oub5U"
+Content-Disposition: inline
+In-Reply-To: <20210109180220.121511-5-j.neuschaefer@gmx.net>
+User-Agent: Mutt/2.0.3 (a51f058f) (2020-12-04)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Use the managed variant of i2c_new_dummy_device() to shrink code and
-remove the goto label. We can drop the remove callback now too.
+--z0ToN2/Ipg8oub5U
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- drivers/rtc/rtc-s5m.c | 31 +++++++------------------------
- 1 file changed, 7 insertions(+), 24 deletions(-)
+On Sat, Jan 09, 2021 at 07:02:17PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> The Netronix EC provides a PWM output which is used for the backlight
+> on some ebook readers. This patches adds a driver for the PWM output.
+>=20
+> The .get_state callback is not implemented, because the PWM state can't
+> be read back from the hardware.
+>=20
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> ---
+> v7:
+> - no changes
+>=20
+> v6:
+> - https://lore.kernel.org/lkml/20201208011000.3060239-5-j.neuschaefer@gmx=
+=2Enet/
+> - Move period / duty cycle setting code to a function
+> - Rename pwmchip_to_priv to ntxec_pwm_from_chip
+> - Set period and duty cycle only before enabling the output
+> - Mention that duty=3D0, enable=3D1 is assumed not to happen
+> - Interleave writes to the period and duty cycle registers, to minimize t=
+he
+>   window of time that an inconsistent state is configured
+>=20
+> v5:
+> - https://lore.kernel.org/lkml/20201201011513.1627028-5-j.neuschaefer@gmx=
+=2Enet/
+> - Avoid truncation of period and duty cycle to 32 bits
+> - Make ntxec_pwm_ops const
+> - Use regmap_multi_reg_write
+> - Add comment about get_state to ntxec_pwm_ops
+> - Add comments about non-atomicity of (period, duty cycle) update
+>=20
+> v4:
+> - https://lore.kernel.org/lkml/20201122222739.1455132-5-j.neuschaefer@gmx=
+=2Enet/
+> - Document hardware/driver limitations
+> - Only accept normal polarity
+> - Fix a typo ("zone" -> "zero")
+> - change MAX_PERIOD_NS to 0xffff * 125
+> - Clamp period to the maximum rather than returning an error
+> - Rename private struct pointer to priv
+> - Rearrage control flow in _probe to save a few lines and a temporary var=
+iable
+> - Add missing MODULE_ALIAS line
+> - Spell out ODM
+>=20
+> v3:
+> - https://lore.kernel.org/lkml/20200924192455.2484005-5-j.neuschaefer@gmx=
+=2Enet/
+> - Relicense as GPLv2 or later
+> - Add email address to copyright line
+> - Remove OF compatible string and don't include linux/of_device.h
+> - Fix bogus ?: in return line
+> - Don't use a comma after sentinels
+> - Avoid ret |=3D ... pattern
+> - Move 8-bit register conversion to ntxec.h
+>=20
+> v2:
+> - https://lore.kernel.org/lkml/20200905133230.1014581-6-j.neuschaefer@gmx=
+=2Enet/
+> - Various grammar and style improvements, as suggested by Uwe Kleine-K=C3=
+=B6nig,
+>   Lee Jones, and Alexandre Belloni
+> - Switch to regmap
+> - Prefix registers with NTXEC_REG_
+> - Add help text to the Kconfig option
+> - Use the .apply callback instead of the old API
+> - Add a #define for the time base (125ns)
+> - Don't change device state in .probe; this avoids multiple problems
+> - Rework division and overflow check logic to perform divisions in 32 bits
+> - Avoid setting duty cycle to zero, to work around a hardware quirk
+> ---
+>  drivers/pwm/Kconfig     |   8 ++
+>  drivers/pwm/Makefile    |   1 +
+>  drivers/pwm/pwm-ntxec.c | 182 ++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 191 insertions(+)
+>  create mode 100644 drivers/pwm/pwm-ntxec.c
 
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index e0011d3cf61b..80b66f16db89 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -760,7 +760,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	info->i2c = i2c_new_dummy_device(s5m87xx->i2c->adapter, RTC_I2C_ADDR);
-+	info->i2c = devm_i2c_new_dummy_device(&pdev->dev, s5m87xx->i2c->adapter,
-+					      RTC_I2C_ADDR);
- 	if (IS_ERR(info->i2c)) {
- 		dev_err(&pdev->dev, "Failed to allocate I2C for RTC\n");
- 		return PTR_ERR(info->i2c);
-@@ -771,7 +772,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 		ret = PTR_ERR(info->regmap);
- 		dev_err(&pdev->dev, "Failed to allocate RTC register map: %d\n",
- 				ret);
--		goto err;
-+		return ret;
- 	}
- 
- 	info->dev = &pdev->dev;
-@@ -781,10 +782,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (s5m87xx->irq_data) {
- 		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
- 		if (info->irq <= 0) {
--			ret = -EINVAL;
- 			dev_err(&pdev->dev, "Failed to get virtual IRQ %d\n",
- 				alarm_irq);
--			goto err;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -799,10 +799,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	info->rtc_dev = devm_rtc_device_register(&pdev->dev, "s5m-rtc",
- 						 &s5m_rtc_ops, THIS_MODULE);
- 
--	if (IS_ERR(info->rtc_dev)) {
--		ret = PTR_ERR(info->rtc_dev);
--		goto err;
--	}
-+	if (IS_ERR(info->rtc_dev))
-+		return PTR_ERR(info->rtc_dev);
- 
- 	if (!info->irq) {
- 		dev_info(&pdev->dev, "Alarm IRQ not available\n");
-@@ -815,23 +813,9 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			info->irq, ret);
--		goto err;
-+		return ret;
- 	}
- 
--	return 0;
--
--err:
--	i2c_unregister_device(info->i2c);
--
--	return ret;
--}
--
--static int s5m_rtc_remove(struct platform_device *pdev)
--{
--	struct s5m_rtc_info *info = platform_get_drvdata(pdev);
--
--	i2c_unregister_device(info->i2c);
--
- 	return 0;
- }
- 
-@@ -876,7 +860,6 @@ static struct platform_driver s5m_rtc_driver = {
- 		.pm	= &s5m_rtc_pm_ops,
- 	},
- 	.probe		= s5m_rtc_probe,
--	.remove		= s5m_rtc_remove,
- 	.id_table	= s5m_rtc_id,
- };
- 
--- 
-2.29.1
+Lee, I assume you'll want to pick the whole set up into the MFD tree? If
+so:
 
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
+
+--z0ToN2/Ipg8oub5U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl/8SmEACgkQ3SOs138+
+s6F/3A//SWDNFJM/BhmTosI1HQsrkThdPJ11VkCRyPXOQS4HAWN4ks5Lkds6b0yo
+90Pv/UecjXvliFivSNcUeXNUOLeVIm3Wy37/H9D3obOayyvssEaPpv5HYYQ2HkUW
+4km3iHOvxG2hD3s0K6FoCPcTIzp3BgVSn8D3TZr+xXlVPEijevLwAtd7h9SYQDLy
+f7Eie32+fGLfM/hxDKIfz6gBhL5b1DlWP33RjOtMVVjUvLao1z7rOZGw3BU0Y6MP
+z+jDt4b8YKyJ0npSpCOD6ZzOQiynWYmi6+cCbza6C43/o6B9nW+loFBtUcNBg75J
+ft++3twZkMXGmdGWoaPMZdxYE/kiO1jmfxICWdJHEeRC4+VUJylNqpkZHhApsd2y
+IQBECMBXfdOVVv6xDTM7wyYlGlbHWeDyK4ak21HkLEWucyKx0q74DKujCtONJFCQ
+0YRiGVSa1/8tSLOmq3slq6qlx8O30l6yPXyvrHXHozZRqeAjBSGowAIjYfzJX0KC
+ik4nyuMOnLqV2Up0hjYForCaQkVyKd1RRDR7iG32ujuaje3v7jOiKHC6+PNbLRmt
+iL0nhcROYuTlIA4ubZIusiA8Tky2HadiG6mK56RR6eFA3FDY6OdWqxOPZskhbfzZ
+RL66muGfOuKGuNZNHjawwUhozK8Nopkp74nYDxIesQU1dfn/1kA=
+=XjN2
+-----END PGP SIGNATURE-----
+
+--z0ToN2/Ipg8oub5U--
