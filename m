@@ -2,114 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54D2F0EC9
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 10:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC912F0FC7
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Jan 2021 11:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728299AbhAKJON (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Jan 2021 04:14:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728315AbhAKJON (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 04:14:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E26C061795
-        for <linux-rtc@vger.kernel.org>; Mon, 11 Jan 2021 01:13:32 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kytGM-00014x-H7; Mon, 11 Jan 2021 10:13:22 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1kytGC-00032c-GA; Mon, 11 Jan 2021 10:13:12 +0100
-Date:   Mon, 11 Jan 2021 10:13:10 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org,
+        id S1728912AbhAKKNc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Jan 2021 05:13:32 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:37678 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728862AbhAKKNc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Jan 2021 05:13:32 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1610359970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ELTMBG/piRAicwVwlOp7eFBbH/3LfbXixUnmMHwZ0aU=;
+        b=HZ46lrmNU50/Ja+TXetTWLzIGyNL3iCTC+111NZ66zJcLdRR+VvPrdeicua+9JryMz/xHF
+        vVCyry0uZFyq/sen8wJbQFwNyz8FNfaRdkmbYc00YI0L8O/VmPWMCnGjIsw2jLJLoQSgLe
+        fcGuKEW9ooraOxoGoADUILWsp6u7ccqDGV4FxhBurS7scQJQhVLWZXpNruScnSK021gAOx
+        EGFCbyEPYKIr6TFuNOcZAw07STaKNrDXgiob747cvPznPEGmb+faHkceFyirf58Pz4bmoD
+        Qoi6cNxy+XSwFmcGI8cF7WIvlbq9k7CiZisiqLTSR5OmEyur7ftE3v6EdHRmww==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1610359970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ELTMBG/piRAicwVwlOp7eFBbH/3LfbXixUnmMHwZ0aU=;
+        b=36FA3kIrpGPfrJHjkJusvwimGZcvZLrNY8NvUZvKJGO8tl2GxvJBc8x9sjJWa8AT60h7mP
+        2mFYFVj+1kv4iUCg==
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pwm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>,
-        allen <allen.chen@ite.com.tw>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v7 4/7] pwm: ntxec: Add driver for PWM function in
- Netronix EC
-Message-ID: <20210111091310.ok47s7yvk5ngs4q7@pengutronix.de>
-References: <20210109180220.121511-1-j.neuschaefer@gmx.net>
- <20210109180220.121511-5-j.neuschaefer@gmx.net>
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [patch 5/8] ntp: Make the RTC synchronization more reliable
+In-Reply-To: <CAMuHMdVB9XMAaMDnKrRzkqvhFugrDGmj=00Vh5sDQT-idnA7DA@mail.gmail.com>
+References: <20201206214613.444124194@linutronix.de> <20201206220542.062910520@linutronix.de> <CAMuHMdVB9XMAaMDnKrRzkqvhFugrDGmj=00Vh5sDQT-idnA7DA@mail.gmail.com>
+Date:   Mon, 11 Jan 2021 11:12:49 +0100
+Message-ID: <87lfcz7pem.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yaagkpiwccmvofgv"
-Content-Disposition: inline
-In-Reply-To: <20210109180220.121511-5-j.neuschaefer@gmx.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, Dec 29 2020 at 20:41, Geert Uytterhoeven wrote:
+> Hi Thomas,
+>> Reported-by: Miroslav Lichvar <mlichvar@redhat.com>
+>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>
+> Thanks for your patch, which is now commit c9e6189fb03123a7 ("ntp: Make
+> the RTC synchronization more reliable").
+>
+> Since this commit, the I2C RTC on the R-Car M2-W Koelsch development
+> board is accessed every two seconds.  Sticking a WARN() in the I2C
+> activation path gives e.g.
 
---yaagkpiwccmvofgv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Huch? Every two seconds? The timer is armed with 11 * 60 * NSEC_PER_SEC,
+which is 11 minutes. Confused....
 
-Hello,
+Thanks,
 
-On Sat, Jan 09, 2021 at 07:02:17PM +0100, Jonathan Neusch=E4fer wrote:
-> The Netronix EC provides a PWM output which is used for the backlight
-> on some ebook readers. This patches adds a driver for the PWM output.
->=20
-> The .get_state callback is not implemented, because the PWM state can't
-> be read back from the hardware.
-
-There is only very little I would have done differently (only indention
-which is too minor to make a fuss), so:
-
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-=20
-Thanks for your work
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---yaagkpiwccmvofgv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl/8FqQACgkQwfwUeK3K
-7AkfOgf+Im2rZmWnsNL7mT4lJlbUjot+WGBgUG+cZ7HYEr0wbqbO82FpAgY+K/6D
-cW6W1txTfWkr/4LbJW0rBQUkXkbeUa9hIpSMoOjpFnhmI/exEixKaY5FRnoueCb6
-vKOwoH66j+vYuzTIm1oDLEUHFCNqk34FaHj8g+VpvtDxVwdnQq7DrRkVVmrzYv5I
-QHdXsj4T4Bi/NKvGhepJI3k8t5tZWPMp81Lw61lqKJe63t2GAC+1TGH6YXxD4B+D
-pQe0gvV0MTJVRC5JC6umyF3EUPPRMyR6krgEQeE7YSpvredGWssJ24wGxuB+ZAMS
-XtLVJujpqo9QJtzrId8kXSBRR1L5wg==
-=H+zc
------END PGP SIGNATURE-----
-
---yaagkpiwccmvofgv--
+        tglx
