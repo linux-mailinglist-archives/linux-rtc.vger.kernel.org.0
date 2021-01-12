@@ -2,190 +2,303 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E42F2844
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jan 2021 07:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8932F2994
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jan 2021 08:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731775AbhALGPP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Jan 2021 01:15:15 -0500
-Received: from mail-eopbgr00043.outbound.protection.outlook.com ([40.107.0.43]:57855
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726478AbhALGPK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 12 Jan 2021 01:15:10 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cU7AzlCId0pbOdEzGsVb3F0Ix3+YYCtdDNsuMjcvvl9OraOsh8pWvWbAgOYZV+gyYymO0+OwCv2oD/DGJFafgAy5WKsSWuHA4u+7Mo5BSs9BQjcS2cIFrNxfh3KqRdxU4sZG6vXuCVWbuqYIYpZjrQIwuXeg8Pbicm92AyDTYMAEnbutjWKa5vb6c9rFAXy/9lHOFsrz89ZgqZyG0Ci3L6EoiS5xul+Nco1ezGIjLP/pb1+V2SqNVM9a3/I7cUeqyIsnYg7nNPXKKpElvQdj/dYv7MQS3lX+G4JsvYjMcMpFxh+eK4xUw73CvaZlmqurtEB+eL4FT3S3r2hHoGj5TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=goBAPrB0rBSWiFds7LvpXkqAvencYSMqvTXFKWi+wME=;
- b=hYMNqeOBEDvbTc4zrwFUUGVXHIO5Of3a2OF4MQzgDn3q4CSpYZ8WWGSZJv+A+u3UwuS7WnI4t2h1gwMXWYBSsmYZ58Yk9owoYViUV5ZRwg6m3l1qCkD6XQSfc2U2vvz2YdHPQDv+A/SyGiA1E1MtG1lPccHyStiW1pQ7tMrIPYajQ6R3II7i4x8G5eazq4KxBk6dEYmhPXyy/qlelzQPMJpDM5HDYF5o7huH36sUdhLsjCwG2qAIbNsRrnzXi+H3/wVx1m/K4ySIMcWzVGTGoQYz2z/cYWl12GY/dnT1WymEquwjdCTOHvqx3tDGG7YKQ3To6Jf4yqHrOF22w5OEXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+        id S2387960AbhALH6w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Jan 2021 02:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731074AbhALH6v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jan 2021 02:58:51 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA95C061575;
+        Mon, 11 Jan 2021 23:58:10 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id h205so1967640lfd.5;
+        Mon, 11 Jan 2021 23:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=goBAPrB0rBSWiFds7LvpXkqAvencYSMqvTXFKWi+wME=;
- b=s0Zwy7YmuWk+E+YWDI1270uuQcvV3rQDErMqIteG2kwVqlsKOhQpDeFDFe/K9SKkMCAF920Rjg+i7ja4onMX8hZR8YZjKqdKc1p8fi4AuS8/bZ+ZQLsuXizPRUtgVsgM+0MR1U02CNDybx0yHaAwfJc8czgsavYe/JFkvwH0MIY=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR0301MB2315.eurprd03.prod.outlook.com (2603:10a6:3:23::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3763.9; Tue, 12 Jan 2021 06:14:21 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::6558:57bb:5293:f3d3]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::6558:57bb:5293:f3d3%3]) with mapi id 15.20.3742.012; Tue, 12 Jan 2021
- 06:14:21 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "robh@kernel.org" <robh@kernel.org>
-CC:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 05/15] dt_bindings: mfd: Add ROHM BD71815 PMIC
-Thread-Topic: [PATCH 05/15] dt_bindings: mfd: Add ROHM BD71815 PMIC
-Thread-Index: AQHW5cMSW/wZL3Vm9UCNrh7KPrXJ5qoizlKAgAC6ewA=
-Date:   Tue, 12 Jan 2021 06:14:21 +0000
-Message-ID: <e1cfcc1222c9c78f3e5bff5059ad7ad3ee6f3c09.camel@fi.rohmeurope.com>
-References: <cover.1610110144.git.matti.vaittinen@fi.rohmeurope.com>
-         <4b3a868c07312d630de32e85d31dee7501627b73.1610110144.git.matti.vaittinen@fi.rohmeurope.com>
-         <20210111190653.GA2890911@robh.at.kernel.org>
-In-Reply-To: <20210111190653.GA2890911@robh.at.kernel.org>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [62.78.225.252]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cf3850e5-a774-4d20-0fce-08d8b6c14d2e
-x-ms-traffictypediagnostic: HE1PR0301MB2315:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <HE1PR0301MB2315E5359D0737DBCC40092CADAA0@HE1PR0301MB2315.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yEleUNJbnBYLoyVUrITR+gGozulItbXL+Qm2t2a08h3514/UpcHX5vOAI02yjFKvwC8tHp28VP9VQ+8MNHXteZIkw9p5IniRiYmbPBr6ic83TMZCoMtXVVm4ZAL5g0WZahET4hFWoiAhhwb1er/SRphjdBf91cu+Ijt5Gx/Tboa0/PO4VGZBtHJUkj1Z8Yqe7Wa0IuZWS//txDVW+tkUm5lSCyHE6vLGxcnG8C0VJpyc6kDHbNBpy9H3WPYo9Db+DdFc+5B1bXHb4wMSWX+U4ZQy7XePOoal97aoNIjJGLH8lCEOFfrpdhVgHGxJRPKTnim3bWtofii9fMiYm3fUEQREefh+Frb+AiJbM395CwTvoLjUFX/prgHM4iWklpgKYH4MTz7yLJ9M7oX/wWT09ZXMgDsV4foDMQNEe87bTKSE9WFPkE2/suzjTyE1TdxCKIGWjsKXzy9jUnyIqBlEtA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(396003)(366004)(136003)(376002)(346002)(54906003)(316002)(2616005)(7416002)(2906002)(478600001)(3450700001)(86362001)(4326008)(966005)(76116006)(66476007)(66556008)(64756008)(66446008)(66946007)(6486002)(6506007)(71200400001)(186003)(26005)(8936002)(6512007)(8676002)(6916009)(5660300002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?ak9vaHROR2R5RkV5QjN2OG9pMEptRkQwSnhrUk5xWDV4U2FSYWRsbUh2YWRG?=
- =?utf-8?B?Um1NbnN3dTZVQXVTMkRSVm9iajRXS0tSUU1oYjRTdmpxWnkra0NUa05CcktS?=
- =?utf-8?B?MU9rNDlvejV3ZzlFbWxXalNCRis1MGhCb2hRdkMxQTRrVmJzNk5YU1lkM1pm?=
- =?utf-8?B?MDczTklrcUhEUldpSGhncG9NVmlWbzJ6YWdIeTgramppb0sxSHZoWUFsVGxC?=
- =?utf-8?B?ZUtVeURER0Y5VWE4OGx1U04rT0d6alRmMUxaZ0lCdzRaRldtb2Q2ekpJRitB?=
- =?utf-8?B?Z0dwUmxQZzRsa1ZnTmhvc0NiSG5YU0d4cXJaRzl5Y25QY2JzSDBxYlI1c1I0?=
- =?utf-8?B?UUd1ZEo2cU9iMzZEME9IVVBKRm5rT2l3QjBYSVVDK0pXUm5IUUErc0luRnhk?=
- =?utf-8?B?bVRiUHFWcEZtQ3I5Uk9BaTd5eVJXRjVEcElSL2lpeGM3R3FXNGxPQUpBR05o?=
- =?utf-8?B?VkVrb0VVOWZjUlRCVlNWU0NEMWVBVUw2UlVUeTNGL0ZtNFQ4MmhVeTFmb1NP?=
- =?utf-8?B?T2dOSEJUQldtQzI3MEFxbVAvVEtmVnBZRFdobnprNkt2WmxFR0F3NmJCK0cv?=
- =?utf-8?B?QVROMkxNRjc2ZzM4R3FQTHdtOWJaWHNsZ3FLQ251UCtDa2d5OU5UZFB6d3d0?=
- =?utf-8?B?MU9zQXhNODNYc0pUL0JzcHp3Y3JCaDJqZWVLQ29XZHk2T1RRK1NWOTVpS01i?=
- =?utf-8?B?UEd0Uy9obStLNXpQbVRsSTJOeGFhb1dCUHZsdEEvOWw3bGJSZ0kzL0taa1Z3?=
- =?utf-8?B?Y2xLV3hzTGlIZ2ZzMEN4OERSZmttRElETkszQTJHTEo2OFphaTRrVWNESlkw?=
- =?utf-8?B?dnY4WU14NTFRcVZ6TDZzZ2cvZmx2d2diOExha1RPRlhiL1dwZ3Npa0dSWWpK?=
- =?utf-8?B?VWhUczdTZnE1TWdDalR0RFczSU9OeUZUVk1HbEdCbEZQdVlQNnc2aHJ4NjRS?=
- =?utf-8?B?a3R1UDdsRnk1N055RDhZOEZhcTN1QnVvaTlPZHBIODNWUGZBTit5NXBMeGwv?=
- =?utf-8?B?SVg4cllzVDFYUTB5c28vUG05N3B5UmM0c1ZmR3doQno1clhKdGlsQkZVRHF4?=
- =?utf-8?B?L1lnWmR4K0VVNmtSVVlwZW9zeE8zYjNDOXRqOXpWaFBGY1BHZWlmeWJYU3dT?=
- =?utf-8?B?T0ZDcStmRXovQkg5c3U1S1k1WFZta1dMK0lYbFZ5RVBRZG9qUlZiV1lsOGY3?=
- =?utf-8?B?azVudE83UWVwS1l2YUhlVXFmOFI3cnh4WU5EMStBTlBuM1UrMmR4UFhkbUNn?=
- =?utf-8?B?dGNZdVdkV1NveXNkbC9GZ0pwc0lSUkZtVkZCaDdwNTlQbEkwMmxMOWRPTUNK?=
- =?utf-8?Q?XcchF5YR8ITzJWMlzulPP8p1p1eCPswB0s?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <59E20D8DD3F7FF4FBC0D7979E00091D3@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=QCMX1+voWix2aEUUMxBI0vb1Z2MOzm71hosLTvV49ac=;
+        b=EwX2qaRBT1g7pWk4ZPe70gkwuLAiosP9ga4BMR6Ay978ZRRyvVCZqg3+yC6smpdnmV
+         ik4TWUQW7f0+1m+PmuyTGPYCzExDukSA4+YD5989PzFmyvyEG0pE+IJrMc0P27SnFnnZ
+         giHU9IbkzdSyq6LpXbiwBFc73GES6acf5rKobFE9j3F3C+sHFcVVrwMnqadweu+G60uM
+         TkRJD1XY2lVHzFmBIJ+/fPyFZ5xGW+LB23X27Ejtz5gfEg+uIYhialVqSmarCCBdGyjD
+         NofKX9c7k1fHEzPPTT3ihWJ+9162ktSo2ERPLSAGDNE7zrLWlra2GUd8J6a1Kl+GS8Fv
+         5ZTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=QCMX1+voWix2aEUUMxBI0vb1Z2MOzm71hosLTvV49ac=;
+        b=reHQeorp0UZW22CjbB6YDZ41uF9mETXNFHpK1tFlsjeVYxN4epAsRFAtsNuocB6/uj
+         hPi7gpcm3wkQs0RK5rtPTPzPZxmwPg8q7hk9kJ7ZIpaC8D7U1z5tv5ZgTohbcFVF3IWg
+         UVJjPkqUQ6Zm3uM9wuZXfnhcalbjmG+WLl2zEff2I6tNgwl57ac5goRAsJkvDtEvQklP
+         Bb21QuQ0NJb6y06JevHR+eDLU5xzByGMy9IFcqvIiUf19oNg7bvDSA+DBoPny3pfgnVG
+         WQZcFUx09MpYOSw8GAvPzd907O214LYeW1VLmBZvAF+2UF2CIH33ZYM3keky40E244AP
+         iFXg==
+X-Gm-Message-State: AOAM5339QZoPRuRlEGSuGNa/oAgEtHkWJbxKWtzoJFzHeyXhA8/D7qBQ
+        Hr8RxN+yeU8Y+FoEp6Nah/vxuJDRdvs=
+X-Google-Smtp-Source: ABdhPJwf2R08ozyC10p9HWW+PEAlXBF1i7kUNC/zE0xGkvBgfb5Yaf6feA11+qxjmbZkIb5E11djdA==
+X-Received: by 2002:ac2:4259:: with SMTP id m25mr1710531lfl.372.1610438289012;
+        Mon, 11 Jan 2021 23:58:09 -0800 (PST)
+Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
+        by smtp.googlemail.com with ESMTPSA id y10sm257554ljk.10.2021.01.11.23.58.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Jan 2021 23:58:08 -0800 (PST)
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Subject: [bug] RTC alarm vs system suspend race condition
+Message-ID: <0a82c37e-ba83-a853-1db8-ba267f7728d7@gmail.com>
+Date:   Tue, 12 Jan 2021 10:58:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.2
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf3850e5-a774-4d20-0fce-08d8b6c14d2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2021 06:14:21.2013
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W0VO1I9fN36kqFd83F1qtTj+czxIncLdUX3tYPhFGQsqbEXiXNPa5OBwZUbJ6KOEP5IY4Aorc9WyRt61A8+EEJl47nQ9MtaQJHE+TL2qtsjAsd1sU82gpS1Yz/1/eGa7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0301MB2315
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBNb24sIDIwMjEtMDEtMTEgYXQgMTM6MDYgLTA2MDAsIFJvYiBIZXJyaW5nIHdyb3RlOg0K
-PiBPbiBGcmksIEphbiAwOCwgMjAyMSBhdCAwMzozNDo1MlBNICswMjAwLCBNYXR0aSBWYWl0dGlu
-ZW4gd3JvdGU6DQo+ID4gRG9jdW1lbnQgRFQgYmluZGluZ3MgZm9yIFJPSE0gQkQ3MTgxNS4NCj4g
-PiANCj4gPiBCRDcxODE1IGlzIGEgc2luZ2xlLWNoaXAgcG93ZXIgbWFuYWdlbWVudCBJQyBtYWlu
-bHkgZm9yIGJhdHRlcnktDQo+ID4gcG93ZXJlZA0KPiA+IHBvcnRhYmxlIGRldmljZXMuIFRoZSBJ
-QyBpbnRlZ3JhdGVzIDUgYnVja3MsIDcgTERPcywgYSBib29zdCBkcml2ZXINCj4gPiBmb3INCj4g
-PiBMRUQsIGEgYmF0dGVyeSBjaGFyZ2VyIHdpdGggYSBDb3Vsb21iIGNvdW50ZXIsIGEgcmVhbC10
-aW1lIGNsb2NrLCBhDQo+ID4gMzJrSHoNCj4gPiBjbG9jayBhbmQgdHdvIGdlbmVyYWwtcHVycG9z
-ZSBvdXRwdXRzIGFsdGhvdWdoIG9ubHkgb25lIGlzDQo+ID4gZG9jdW1lbnRlZCBieQ0KPiA+IHRo
-ZSBkYXRhLXNoZWV0Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZhaXR0aW5lbiA8
-bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPg0KPiA+IC0tLQ0KPiA+ICAuLi4vYmlu
-ZGluZ3MvbWZkL3JvaG0sYmQ3MTgxNS1wbWljLnlhbWwgICAgICAgfCAxOTgNCj4gPiArKysrKysr
-KysrKysrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDE5OCBpbnNlcnRpb25zKCspDQo+ID4g
-IGNyZWF0ZSBtb2RlIDEwMDY0NA0KPiA+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy9tZmQvcm9obSxiZDcxODE1LXBtaWMueWFtbA0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL3JvaG0sYmQ3MTgxNS0NCj4gPiBwbWlj
-LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbWZkL3JvaG0sYmQ3MTgx
-NS0NCj4gPiBwbWljLnlhbWwNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAw
-MDAwMDAwMDAwMC4uMjIwNmIyMDA4YWNkDQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tZmQvcm9obSxiZDcxODE1LXBtaWMueWFt
-bA0KPiA+IEBAIC0wLDAgKzEsMTk4IEBADQo+ID4gKyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6
-IEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UNCj4gPiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0K
-PiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFzL21mZC9yb2htLGJkNzE4MTUt
-cG1pYy55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hl
-bWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBST0hNIEJENzE4MTUgUG93ZXIgTWFu
-YWdlbWVudCBJbnRlZ3JhdGVkIENpcmN1aXQgYmluZGluZ3MNCj4gPiArDQo+ID4gK21haW50YWlu
-ZXJzOg0KPiA+ICsgIC0gTWF0dGkgVmFpdHRpbmVuIDxtYXR0aS52YWl0dGluZW5AZmkucm9obWV1
-cm9wZS5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlwdGlvbjogfA0KPiA+ICsgIEJENzE4MTVBR1cg
-aXMgYSBzaW5nbGUtY2hpcCBwb3dlciBtYW5hZ2VtZW50IElDcyBmb3IgYmF0dGVyeS0NCj4gPiBw
-b3dlcmVkDQo+ID4gKyAgcG9ydGFibGUgZGV2aWNlcy4gSXQgaW50ZWdyYXRlcyA1IGJ1Y2sgY29u
-dmVydGVycywgOCBMRE9zLCBhDQo+ID4gYm9vc3QgZHJpdmVyDQo+ID4gKyAgZm9yIExFRCBhbmQg
-YSA1MDAgbUEgc2luZ2xlLWNlbGwgbGluZWFyIGNoYXJnZXIuIEFsc28gaW5jbHVkZWQNCj4gPiBp
-cyBhIENvdWxvbWINCj4gPiArICBjb3VudGVyLCBhIHJlYWwtdGltZSBjbG9jayAoUlRDKSwgYW5k
-IGEgMzIuNzY4IGtIeiBjbG9jayBnYXRlDQo+ID4gYW5kIHR3byBHUE9zLg0KPiA+ICsNCj4gPiAr
-cHJvcGVydGllczoNCj4gPiArICBjb21wYXRpYmxlOg0KPiA+ICsgICAgY29uc3Q6IHJvaG0sYmQ3
-MTgxNQ0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAg
-ICAgSTJDIHNsYXZlIGFkZHJlc3MuDQo+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsNCj4gPiAr
-ICBpbnRlcnJ1cHRzOg0KPiA+ICsgICAgbWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgZ3Bpby1j
-b250cm9sbGVyOiB0cnVlDQo+IA0KPiBBZGQgYSBibGFuayBsaW5lIGhlcmUuDQo+IA0KPiA+ICsg
-ICIjZ3Bpby1jZWxscyI6DQo+ID4gKyAgICBjb25zdDogMg0KPiA+ICsgICAgZGVzY3JpcHRpb246
-IHwNCj4gPiArICAgICAgVGhlIGZpcnN0IGNlbGwgaXMgdGhlIHBpbiBudW1iZXIgYW5kIHRoZSBz
-ZWNvbmQgY2VsbCBpcyB1c2VkDQo+ID4gdG8gc3BlY2lmeQ0KPiA+ICsgICAgICBmbGFncy4gU2Vl
-IC4uL2dwaW8vZ3Bpby50eHQgZm9yIG1vcmUgaW5mb3JtYXRpb24uDQo+ID4gKw0KPiA+ICsgIGNs
-b2NrczoNCj4gPiArICAgIG1heEl0ZW1zOiAxDQo+IA0KPiBBbmQgaGVyZS4NCj4gDQo+ID4gKyAg
-IiNjbG9jay1jZWxscyI6DQo+ID4gKyAgICBjb25zdDogMA0KPiANCj4gQW5kIGhlcmUuDQo+IA0K
-PiA+ICsgIGNsb2NrLW91dHB1dC1uYW1lczoNCj4gPiArICAgIGNvbnN0OiBiZDcxODE1LTMyay1v
-dXQNCj4gPiArDQo+ID4gKyAgcm9obSxjbGtvdXQtbW9kZToNCj4gPiArICAgIGRlc2NyaXB0aW9u
-OiBjbGszMmtvdXQgbW9kZS4gQ2FuIGJlIHNldCB0byAib3Blbi1kcmFpbiIgb3INCj4gPiAiY21v
-cyIuDQo+ID4gKyAgICAkcmVmOiAiL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvc3Ry
-aW5nIg0KPiA+ICsgICAgZW51bToNCj4gPiArICAgICAgLSBvcGVuLWRyYWluDQo+ID4gKyAgICAg
-IC0gY21vcw0KPiA+ICsNCj4gPiArICByb2htLGNoYXJnZXItc2Vuc2UtcmVzaXN0b3Itb2htczoN
-Cj4gPiArICAgIG1pbmltdW06IDEwMDAwMDAwDQo+ID4gKyAgICBtYXhpbXVtOiA1MDAwMDAwMA0K
-PiA+ICsgICAgZGVzY3JpcHRpb246IHwNCj4gPiArICAgICAgQkQ3MTgyNyBhbmQgQkQ3MTgyOCBo
-YXZlIFNBUiBBREMgZm9yIG1lYXN1cmluZyBjaGFyZ2luZw0KPiA+IGN1cnJlbnRzLg0KPiA+ICsg
-ICAgICBFeHRlcm5hbCBzZW5zZSByZXNpc3RvciAoUlNFTlNFIGluIGRhdGEgc2hlZXQpIHNob3Vs
-ZCBiZQ0KPiA+IHVzZWQuIElmIHNvbWUNCj4gPiArICAgICAgb3RoZXIgYnV0IDMwTU9obSByZXNp
-c3RvciBpcyB1c2VkIHRoZSByZXNpc3RhbmNlIHZhbHVlDQo+ID4gc2hvdWxkIGJlIGdpdmVuDQo+
-IA0KPiAnc29tZXRoaW5nIG90aGVyJw0KPiANCj4gVGhvdWdoIHRoaXMgY2FuIGJlIGV4cHJlc3Nl
-ZCBhcyAnZGVmYXVsdDogMzAwMDAwMDAnDQoNCkkgZ3Vlc3MgSSdsbCB1c2UgYm90aCAnc29tZXRo
-aW5nIG90aGVyJyBhbmQgJ2RlZmF1bHQ6IDMwMDAwMDAwJyBpbiBuZXh0DQp2ZXJzaW9uLiAnZGVm
-YXVsdDogMzAwMDAwMDAnIGlzIG5pY2UgZm9yIG1hY2hpbmUgcGFyc2VyIC0gYnV0IGZvciBodW1h
-bg0KcmVhZGVyIHRoZSAnc29tZXRoaW5nIG90aGVyJyBpcyBsaWtlbHkgdG8gYmUgc3VwZXJpb3Iu
-IChObyBzY2llbnRpZmljDQp0ZXN0IGNvbmR1Y3RlZCB0byBiYWNrIG9mZiB0aGlzIHN0YXRlbWVu
-dCB0aG91Z2gpLg0KDQpUaGFua3MgUm9iIQ0KDQpCZXN0IFJlZ2FyZHMNCglNYXR0aSBWYWl0dGlu
-ZW4NCg==
+Hello RTC maintainers,
+
+A day ago we were testing RTC alarm on NVIDIA Tegra devices and noticed that there is a problem in the RTC core where it schedules __rtc_set_alarm work when alarm is set, but this work isn't flushed before RTC drivers are suspended. In general RTC devices can't be accessed once driver's suspend is invoked, creating the problem.
+
+Please see this example:
+
+# rtcwake -s15 -mmem
+
+On Ouya board:
+
+PM: suspend entry (deep)
+Filesystems sync: 0.001 seconds
+Freezing user space processes ... (elapsed 0.002 seconds) done.
+OOM killer disabled.
+Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+smsc95xx 1-1:1.0 enxb85af7003b21: entering SUSPEND2 mode
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1337 at drivers/i2c/i2c-core.h:54 __i2c_transfer+0x6d0/0x6ec
+i2c i2c-1: Transfer while suspended
+Modules linked in: brcmfmac brcmutil
+CPU: 1 PID: 1337 Comm: kworker/1:3 Not tainted 5.11.0-rc2-next-20210108-15881-g0baf1450b32d #196
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c0110fd8>] (unwind_backtrace) from [<c010b90c>] (show_stack+0x10/0x14)
+[<c010b90c>] (show_stack) from [<c0c5ca44>] (dump_stack+0xc4/0xd8)
+[<c0c5ca44>] (dump_stack) from [<c0124c94>] (__warn+0xec/0x104)
+[<c0124c94>] (__warn) from [<c0c5a06c>] (warn_slowpath_fmt+0x98/0xc8)
+[<c0c5a06c>] (warn_slowpath_fmt) from [<c082e850>] (__i2c_transfer+0x6d0/0x6ec)
+[<c082e850>] (__i2c_transfer) from [<c082e908>] (i2c_transfer+0x9c/0x108)
+[<c082e908>] (i2c_transfer) from [<c06f43a4>] (regmap_i2c_read+0x60/0x9c)
+[<c06f43a4>] (regmap_i2c_read) from [<c06ef848>] (_regmap_raw_read+0x104/0x314)
+[<c06ef848>] (_regmap_raw_read) from [<c06efa9c>] (_regmap_bus_read+0x44/0x70)
+Disabling non-boot CPUs ...
+[<c06efa9c>] (_regmap_bus_read) from [<c06ee3a8>] (_regmap_read+0x60/0x180)
+[<c06ee3a8>] (_regmap_read) from [<c06eea38>] (_regmap_update_bits+0xbc/0xf8)
+[<c06eea38>] (_regmap_update_bits) from [<c06f004c>] (regmap_update_bits_base+0x4c/0x70)
+[<c06f004c>] (regmap_update_bits_base) from [<c082c2b8>] (tps65910_rtc_read_time+0x50/0x134)
+[<c082c2b8>] (tps65910_rtc_read_time) from [<c0822c94>] (__rtc_read_time+0x48/0x94)
+[<c0822c94>] (__rtc_read_time) from [<c0822ed8>] (__rtc_set_alarm+0x80/0x1dc)
+[<c0822ed8>] (__rtc_set_alarm) from [<c0824cf4>] (rtc_timer_do_work+0x254/0x448)
+[<c0824cf4>] (rtc_timer_do_work) from [<c0140b9c>] (process_one_work+0x1dc/0x5a0)
+[<c0140b9c>] (process_one_work) from [<c0140fac>] (worker_thread+0x4c/0x520)
+[<c0140fac>] (worker_thread) from [<c0148618>] (kthread+0x18c/0x190)
+[<c0148618>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc5709fb0 to 0xc5709ff8)
+9fa0:                                     00000000 00000000 00000000 00000000
+9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace 2df194007d41e38b ]---
+tps65910-rtc tps65910-rtc: RTC CTRL reg update failed with err:-108
+tps65910-rtc tps65910-rtc: RTC CTRL reg update failed with err:-108
+tps65910-rtc tps65910-rtc: RTC CTRL reg update failed with err:-108
+tps65910-rtc tps65910-rtc: RTC CTRL reg update failed with err:-108
+rtc rtc0: __rtc_set_alarm: err=-108
+tps65910-rtc tps65910-rtc: RTC CTRL reg update failed with err:-108
+IRQ 26: no longer affine to CPU1
+IRQ 27: no longer affine to CPU2
+IRQ 28: no longer affine to CPU3
+Entering suspend state LP1
+Enabling non-boot CPUs ...
+CPU1 is up
+
+On PAZ00 board:
+
+PM: suspend entry (deep)
+Filesystems sync: 0.697 seconds
+Freezing user space processes ... (elapsed 0.002 seconds) done.
+OOM killer disabled.
+Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+printk: Suspending console(s) (use no_console_suspend to debug)
+Disabling non-boot CPUs ...
+IRQ 26: no longer affine to CPU1
+Entering suspend state LP1
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/i2c/i2c-core.h:54 __i2c_transfer+0x400/0x458
+i2c i2c-2: Transfer while suspended
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Not tainted 5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events_power_efficient sync_hw_clock
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83cb4>] (warn_slowpath_fmt+0x98/0xc0)
+[<c0a83cb4>] (warn_slowpath_fmt) from [<c071a990>] (__i2c_transfer+0x400/0x458)
+[<c071a990>] (__i2c_transfer) from [<c071aa84>] (i2c_transfer+0x9c/0x108)
+[<c071aa84>] (i2c_transfer) from [<c05d66f4>] (regmap_i2c_read+0x60/0x90)
+[<c05d66f4>] (regmap_i2c_read) from [<c05d2060>] (_regmap_raw_read+0xe0/0x160)
+[<c05d2060>] (_regmap_raw_read) from [<c05d2124>] (_regmap_bus_read+0x44/0x70)
+[<c05d2124>] (_regmap_bus_read) from [<c05d1144>] (_regmap_read+0x60/0xb8)
+[<c05d1144>] (_regmap_read) from [<c05d160c>] (_regmap_update_bits+0xb0/0xec)
+[<c05d160c>] (_regmap_update_bits) from [<c05d2740>] (regmap_update_bits_base+0x50/0x74)
+[<c05d2740>] (regmap_update_bits_base) from [<c05e5b80>] (tps6586x_clr_bits+0x24/0x2c)
+[<c05e5b80>] (tps6586x_clr_bits) from [<c0718138>] (tps6586x_rtc_set_time+0x68/0x104)
+[<c0718138>] (tps6586x_rtc_set_time) from [<c071120c>] (rtc_set_time+0xcc/0x178)
+[<c071120c>] (rtc_set_time) from [<c01a3078>] (sync_hw_clock+0x1d0/0x250)
+[<c01a3078>] (sync_hw_clock) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea228 ]---
+tps6586x-rtc tps6586x-rtc: failed to clear RTC_ENABLE
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+rtc rtc0: __rtc_set_alarm: err=-108
+tps6586x-rtc tps6586x-rtc: read counter failed with err -108
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/mfd/tps6586x.c:266 tps6586x_irq_sync_unlock+0x6c/0x70
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Tainted: G        W         5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83c80>] (warn_slowpath_fmt+0x64/0xc0)
+[<c0a83c80>] (warn_slowpath_fmt) from [<c05e5d6c>] (tps6586x_irq_sync_unlock+0x6c/0x70)
+[<c05e5d6c>] (tps6586x_irq_sync_unlock) from [<c0182cb0>] (__disable_irq_nosync+0x58/0x88)
+[<c0182cb0>] (__disable_irq_nosync) from [<c01854b0>] (disable_irq+0xc/0x20)
+[<c01854b0>] (disable_irq) from [<c0717e2c>] (tps6586x_rtc_alarm_irq_enable+0x4c/0x58)
+[<c0717e2c>] (tps6586x_rtc_alarm_irq_enable) from [<c0711b38>] (rtc_timer_do_work+0xfc/0x1dc)
+[<c0711b38>] (rtc_timer_do_work) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea229 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/mfd/tps6586x.c:266 tps6586x_irq_sync_unlock+0x6c/0x70
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Tainted: G        W         5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83c80>] (warn_slowpath_fmt+0x64/0xc0)
+[<c0a83c80>] (warn_slowpath_fmt) from [<c05e5d6c>] (tps6586x_irq_sync_unlock+0x6c/0x70)
+[<c05e5d6c>] (tps6586x_irq_sync_unlock) from [<c0182cb0>] (__disable_irq_nosync+0x58/0x88)
+[<c0182cb0>] (__disable_irq_nosync) from [<c01854b0>] (disable_irq+0xc/0x20)
+[<c01854b0>] (disable_irq) from [<c0717e2c>] (tps6586x_rtc_alarm_irq_enable+0x4c/0x58)
+[<c0717e2c>] (tps6586x_rtc_alarm_irq_enable) from [<c0711b38>] (rtc_timer_do_work+0xfc/0x1dc)
+[<c0711b38>] (rtc_timer_do_work) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea22a ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/mfd/tps6586x.c:266 tps6586x_irq_sync_unlock+0x6c/0x70
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Tainted: G        W         5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83c80>] (warn_slowpath_fmt+0x64/0xc0)
+[<c0a83c80>] (warn_slowpath_fmt) from [<c05e5d6c>] (tps6586x_irq_sync_unlock+0x6c/0x70)
+[<c05e5d6c>] (tps6586x_irq_sync_unlock) from [<c0182cb0>] (__disable_irq_nosync+0x58/0x88)
+[<c0182cb0>] (__disable_irq_nosync) from [<c01854b0>] (disable_irq+0xc/0x20)
+[<c01854b0>] (disable_irq) from [<c0717e2c>] (tps6586x_rtc_alarm_irq_enable+0x4c/0x58)
+[<c0717e2c>] (tps6586x_rtc_alarm_irq_enable) from [<c0711b38>] (rtc_timer_do_work+0xfc/0x1dc)
+[<c0711b38>] (rtc_timer_do_work) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea22b ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/mfd/tps6586x.c:266 tps6586x_irq_sync_unlock+0x6c/0x70
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Tainted: G        W         5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83c80>] (warn_slowpath_fmt+0x64/0xc0)
+[<c0a83c80>] (warn_slowpath_fmt) from [<c05e5d6c>] (tps6586x_irq_sync_unlock+0x6c/0x70)
+[<c05e5d6c>] (tps6586x_irq_sync_unlock) from [<c0182cb0>] (__disable_irq_nosync+0x58/0x88)
+[<c0182cb0>] (__disable_irq_nosync) from [<c01854b0>] (disable_irq+0xc/0x20)
+[<c01854b0>] (disable_irq) from [<c0717e2c>] (tps6586x_rtc_alarm_irq_enable+0x4c/0x58)
+[<c0717e2c>] (tps6586x_rtc_alarm_irq_enable) from [<c0711b38>] (rtc_timer_do_work+0xfc/0x1dc)
+[<c0711b38>] (rtc_timer_do_work) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea22c ]---
+Enabling non-boot CPUs ...
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 83 at drivers/mfd/tps6586x.c:266 tps6586x_irq_sync_unlock+0x6c/0x70
+Modules linked in: rt2800usb rt2x00usb rt2800lib rt2x00lib xfs libcrc32c fuse crc32_generic f2fs tegra_drm gpu_sched panel_simple tegra20_emc ci_hdrc_tegra host1x_drv iova
+CPU: 0 PID: 83 Comm: kworker/0:2 Tainted: G        W         5.11.0-rc2-next-20210106-tegra+ #181
+Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+Workqueue: events rtc_timer_do_work
+[<c010ec60>] (unwind_backtrace) from [<c010a1f8>] (show_stack+0x10/0x14)
+[<c010a1f8>] (show_stack) from [<c0a86fe4>] (dump_stack+0xc0/0xd4)
+[<c0a86fe4>] (dump_stack) from [<c0a83bc0>] (__warn+0xc0/0x11c)
+[<c0a83bc0>] (__warn) from [<c0a83c80>] (warn_slowpath_fmt+0x64/0xc0)
+[<c0a83c80>] (warn_slowpath_fmt) from [<c05e5d6c>] (tps6586x_irq_sync_unlock+0x6c/0x70)
+[<c05e5d6c>] (tps6586x_irq_sync_unlock) from [<c0182cb0>] (__disable_irq_nosync+0x58/0x88)
+[<c0182cb0>] (__disable_irq_nosync) from [<c01854b0>] (disable_irq+0xc/0x20)
+[<c01854b0>] (disable_irq) from [<c0717e2c>] (tps6586x_rtc_alarm_irq_enable+0x4c/0x58)
+[<c0717e2c>] (tps6586x_rtc_alarm_irq_enable) from [<c0711b38>] (rtc_timer_do_work+0xfc/0x1dc)
+[<c0711b38>] (rtc_timer_do_work) from [<c013e080>] (process_one_work+0x1e8/0x44c)
+[<c013e080>] (process_one_work) from [<c013e348>] (worker_thread+0x64/0x5a8)
+[<c013e348>] (worker_thread) from [<c014402c>] (kthread+0x148/0x14c)
+[<c014402c>] (kthread) from [<c01001b0>] (ret_from_fork+0x14/0x24)
+Exception stack(0xc59d5fb0 to 0xc59d5ff8)
+5fa0:                                     00000000 00000000 00000000 00000000
+5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+---[ end trace f97d91a3f84ea22d ]---
