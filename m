@@ -2,363 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED242F3ABF
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jan 2021 20:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6822F3E84
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Jan 2021 01:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392936AbhALTj4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Jan 2021 14:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392926AbhALTj4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jan 2021 14:39:56 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90099C061575;
-        Tue, 12 Jan 2021 11:39:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cS9C/2XYzsbjYTZ0aJ7zWNeNcxrmFX1E76BcBqiBK3c=; b=INxkXnT9LshF4+KSR5QhbpCd6w
-        lqtWX/XifPwQgxQuq2fAMh21xFNLj76YmfvJsRsFYZ4DyFI3WpdSfakUWFPqDMegLbF4l65eYcaoR
-        qpjCYCDtYybCUDwovkPsot+MueW/Ujjb59crkFGeS7GlicyC5fv/JPzuM1eKZXRIrXHY=;
-Received: from p200300ccff1586001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff15:8600:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kzPVP-0003kv-Hc; Tue, 12 Jan 2021 20:39:03 +0100
-Date:   Tue, 12 Jan 2021 20:39:02 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v7 4/7] pwm: ntxec: Add driver for PWM function in
- Netronix EC
-Message-ID: <20210112203902.4e196d11@aktux>
-In-Reply-To: <20210109180220.121511-5-j.neuschaefer@gmx.net>
-References: <20210109180220.121511-1-j.neuschaefer@gmx.net>
-        <20210109180220.121511-5-j.neuschaefer@gmx.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S2394323AbhALWI6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Jan 2021 17:08:58 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:58471 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394322AbhALWI6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jan 2021 17:08:58 -0500
+X-Originating-IP: 86.202.109.140
+Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E295FE0006;
+        Tue, 12 Jan 2021 22:08:15 +0000 (UTC)
+Date:   Tue, 12 Jan 2021 23:08:15 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Daniel =?iso-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 1/2] rtc: rs5c372: support alarms up to 1 week
+Message-ID: <20210112220815.GK3654@piout.net>
+References: <2876529.n6mMd1HPca@tool>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2876529.n6mMd1HPca@tool>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat,  9 Jan 2021 19:02:17 +0100
-Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> wrote:
+Hello,
 
-> The Netronix EC provides a PWM output which is used for the backlight
-> on some ebook readers. This patches adds a driver for the PWM output.
->=20
-> The .get_state callback is not implemented, because the PWM state can't
-> be read back from the hardware.
->=20
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+On 23/11/2020 11:38:44+0100, Daniel González Cabanelas wrote:
+> The Ricoh R2221x, R2223x, RS5C372, RV5C387A chips can handle 1 week
+> alarms.
+> 
+> Read the "wday" alarm register and convert it to a date to support up 1
+> week in our driver.
+> 
+> Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
 > ---
-> v7:
-> - no changes
->=20
-> v6:
-> - https://lore.kernel.org/lkml/20201208011000.3060239-5-j.neuschaefer@gmx=
-.net/
-> - Move period / duty cycle setting code to a function
-> - Rename pwmchip_to_priv to ntxec_pwm_from_chip
-> - Set period and duty cycle only before enabling the output
-> - Mention that duty=3D0, enable=3D1 is assumed not to happen
-> - Interleave writes to the period and duty cycle registers, to minimize t=
-he
->   window of time that an inconsistent state is configured
->=20
-> v5:
-> - https://lore.kernel.org/lkml/20201201011513.1627028-5-j.neuschaefer@gmx=
-.net/
-> - Avoid truncation of period and duty cycle to 32 bits
-> - Make ntxec_pwm_ops const
-> - Use regmap_multi_reg_write
-> - Add comment about get_state to ntxec_pwm_ops
-> - Add comments about non-atomicity of (period, duty cycle) update
->=20
-> v4:
-> - https://lore.kernel.org/lkml/20201122222739.1455132-5-j.neuschaefer@gmx=
-.net/
-> - Document hardware/driver limitations
-> - Only accept normal polarity
-> - Fix a typo ("zone" -> "zero")
-> - change MAX_PERIOD_NS to 0xffff * 125
-> - Clamp period to the maximum rather than returning an error
-> - Rename private struct pointer to priv
-> - Rearrage control flow in _probe to save a few lines and a temporary var=
-iable
-> - Add missing MODULE_ALIAS line
-> - Spell out ODM
->=20
-> v3:
-> - https://lore.kernel.org/lkml/20200924192455.2484005-5-j.neuschaefer@gmx=
-.net/
-> - Relicense as GPLv2 or later
-> - Add email address to copyright line
-> - Remove OF compatible string and don't include linux/of_device.h
-> - Fix bogus ?: in return line
-> - Don't use a comma after sentinels
-> - Avoid ret |=3D ... pattern
-> - Move 8-bit register conversion to ntxec.h
->=20
-> v2:
-> - https://lore.kernel.org/lkml/20200905133230.1014581-6-j.neuschaefer@gmx=
-.net/
-> - Various grammar and style improvements, as suggested by Uwe Kleine-K=C3=
-=B6nig,
->   Lee Jones, and Alexandre Belloni
-> - Switch to regmap
-> - Prefix registers with NTXEC_REG_
-> - Add help text to the Kconfig option
-> - Use the .apply callback instead of the old API
-> - Add a #define for the time base (125ns)
-> - Don't change device state in .probe; this avoids multiple problems
-> - Rework division and overflow check logic to perform divisions in 32 bits
-> - Avoid setting duty cycle to zero, to work around a hardware quirk
-> ---
->  drivers/pwm/Kconfig     |   8 ++
->  drivers/pwm/Makefile    |   1 +
->  drivers/pwm/pwm-ntxec.c | 182 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 191 insertions(+)
->  create mode 100644 drivers/pwm/pwm-ntxec.c
->=20
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index 0937e1c047acb..a2830b8832b97 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -393,6 +393,14 @@ config PWM_MXS
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called pwm-mxs.
->=20
-> +config PWM_NTXEC
-> +	tristate "Netronix embedded controller PWM support"
-> +	depends on MFD_NTXEC
-> +	help
-> +	  Say yes here if you want to support the PWM output of the embedded
-> +	  controller found in certain e-book readers designed by the original
-> +	  design manufacturer Netronix.
+>  drivers/rtc/rtc-rs5c372.c | 48 ++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 42 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+> index 3bd6eaa0d..94b778c6e 100644
+> --- a/drivers/rtc/rtc-rs5c372.c
+> +++ b/drivers/rtc/rtc-rs5c372.c
+> @@ -393,7 +393,9 @@ static int rs5c_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+>  {
+>  	struct i2c_client	*client = to_i2c_client(dev);
+>  	struct rs5c372		*rs5c = i2c_get_clientdata(client);
+> -	int			status;
+> +	int			status, wday_offs;
+> +	struct rtc_time 	rtc;
+
+You have a few spaces before tabs, please fix them.
+
+> +	unsigned long 		alarm_secs;
+>  
+>  	status = rs5c_get_regs(rs5c);
+>  	if (status < 0)
+> @@ -403,6 +405,30 @@ static int rs5c_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+>  	t->time.tm_sec = 0;
+>  	t->time.tm_min = bcd2bin(rs5c->regs[RS5C_REG_ALARM_A_MIN] & 0x7f);
+>  	t->time.tm_hour = rs5c_reg2hr(rs5c, rs5c->regs[RS5C_REG_ALARM_A_HOURS]);
+> +	t->time.tm_wday = ffs(rs5c->regs[RS5C_REG_ALARM_A_WDAY] & 0x7f) - 1;
 > +
->  config PWM_OMAP_DMTIMER
->  	tristate "OMAP Dual-Mode Timer PWM support"
->  	depends on OF
-> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> index 18b89d7fd092a..7d97eb595bbef 100644
-> --- a/drivers/pwm/Makefile
-> +++ b/drivers/pwm/Makefile
-> @@ -35,6 +35,7 @@ obj-$(CONFIG_PWM_MESON)		+=3D pwm-meson.o
->  obj-$(CONFIG_PWM_MEDIATEK)	+=3D pwm-mediatek.o
->  obj-$(CONFIG_PWM_MTK_DISP)	+=3D pwm-mtk-disp.o
->  obj-$(CONFIG_PWM_MXS)		+=3D pwm-mxs.o
-> +obj-$(CONFIG_PWM_NTXEC)		+=3D pwm-ntxec.o
->  obj-$(CONFIG_PWM_OMAP_DMTIMER)	+=3D pwm-omap-dmtimer.o
->  obj-$(CONFIG_PWM_PCA9685)	+=3D pwm-pca9685.o
->  obj-$(CONFIG_PWM_PXA)		+=3D pwm-pxa.o
-> diff --git a/drivers/pwm/pwm-ntxec.c b/drivers/pwm/pwm-ntxec.c
-> new file mode 100644
-> index 0000000000000..1db30a6caa3ad
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-ntxec.c
-> @@ -0,0 +1,182 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * The Netronix embedded controller is a microcontroller found in some
-> + * e-book readers designed by the original design manufacturer Netronix,=
- Inc.
-> + * It contains RTC, battery monitoring, system power management, and PWM
-> + * functionality.
-> + *
-> + * This driver implements PWM output.
-> + *
-> + * Copyright 2020 Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> + *
-> + * Limitations:
-> + * - The get_state callback is not implemented, because the current stat=
-e of
-> + *   the PWM output can't be read back from the hardware.
-> + * - The hardware can only generate normal polarity output.
-> + * - The period and duty cycle can't be changed together in one atomic a=
-ction.
-> + */
-> +
-> +#include <linux/mfd/ntxec.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pwm.h>
-> +#include <linux/regmap.h>
-> +#include <linux/types.h>
-> +
-> +struct ntxec_pwm {
-> +	struct device *dev;
-> +	struct ntxec *ec;
-> +	struct pwm_chip chip;
-> +};
-> +
-> +static struct ntxec_pwm *ntxec_pwm_from_chip(struct pwm_chip *chip)
-> +{
-> +	return container_of(chip, struct ntxec_pwm, chip);
-> +}
-> +
-> +#define NTXEC_REG_AUTO_OFF_HI	0xa1
-> +#define NTXEC_REG_AUTO_OFF_LO	0xa2
-> +#define NTXEC_REG_ENABLE	0xa3
-> +#define NTXEC_REG_PERIOD_LOW	0xa4
-> +#define NTXEC_REG_PERIOD_HIGH	0xa5
-> +#define NTXEC_REG_DUTY_LOW	0xa6
-> +#define NTXEC_REG_DUTY_HIGH	0xa7
-> +
-> +/*
-> + * The time base used in the EC is 8MHz, or 125ns. Period and duty cycle=
- are
-> + * measured in this unit.
-> + */
-> +#define TIME_BASE_NS 125
-> +
-> +/*
-> + * The maximum input value (in nanoseconds) is determined by the time ba=
-se and
-> + * the range of the hardware registers that hold the converted value.
-> + * It fits into 32 bits, so we can do our calculations in 32 bits as wel=
-l.
-> + */
-> +#define MAX_PERIOD_NS (TIME_BASE_NS * 0xffff)
-> +
-> +static int ntxec_pwm_set_raw_period_and_duty_cycle(struct pwm_chip *chip,
-> +						   int period, int duty)
-> +{
-> +	struct ntxec_pwm *priv =3D ntxec_pwm_from_chip(chip);
-> +
-> +	/*
-> +	 * Changes to the period and duty cycle take effect as soon as the
-> +	 * corresponding low byte is written, so the hardware may be configured
-> +	 * to an inconsistent state after the period is written and before the
-> +	 * duty cycle is fully written. If, in such a case, the old duty cycle
-> +	 * is longer than the new period, the EC may output 100% for a moment.
-> +	 *
-> +	 * To minimize the time between the changes to period and duty cycle
-> +	 * taking effect, the writes are interleaved.
+> +	/* determine the day, month and year based on alarm wday, taking as a
+> +	 * reference the current time from the rtc
 > +	 */
+> +	status = rs5c372_rtc_read_time(dev, &rtc);
+> +	if (status < 0)
+> +		return status;
 > +
-> +	struct reg_sequence regs[] =3D {
-> +		{ NTXEC_REG_PERIOD_HIGH, ntxec_reg8(period >> 8) },
-> +		{ NTXEC_REG_DUTY_HIGH, ntxec_reg8(duty >> 8) },
-> +		{ NTXEC_REG_PERIOD_LOW, ntxec_reg8(period) },
-> +		{ NTXEC_REG_DUTY_LOW, ntxec_reg8(duty) },
-> +	};
+> +	wday_offs = t->time.tm_wday - rtc.tm_wday;
+
+Note that you can not rely on tm_wday being set correctly. The core will
+not (currently) enforce that and most tools jut pass a bogus value or 0.
+So you need to calculate wday in rs5c372_rtc_set_time.
+I'm currently working on a way for the drivers to ask the core to ensure
+wday is correct.
+
+> +	alarm_secs = mktime64(rtc.tm_year + 1900,
+> +			      rtc.tm_mon + 1,
+> +			      rtc.tm_mday + wday_offs,
+> +			      t->time.tm_hour,
+> +			      t->time.tm_min,
+> +			      t->time.tm_sec);
 > +
-> +	return regmap_multi_reg_write(priv->ec->regmap, regs, ARRAY_SIZE(regs));
-> +}
+> +	if (wday_offs < 0 || (wday_offs == 0 &&
+> +			      (t->time.tm_hour < rtc.tm_hour ||
+> +			       (t->time.tm_hour == rtc.tm_hour &&
+> +				t->time.tm_min <= rtc.tm_min))))
+> +		alarm_secs += 7 * 86400;
 > +
-> +static int ntxec_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm=
-_dev,
-> +			   const struct pwm_state *state)
-> +{
-> +	struct ntxec_pwm *priv =3D ntxec_pwm_from_chip(chip);
-> +	unsigned int period, duty;
-> +	int res;
-> +
-> +	if (state->polarity !=3D PWM_POLARITY_NORMAL)
-> +		return -EINVAL;
-> +
-> +	period =3D min_t(u64, state->period, MAX_PERIOD_NS);
-> +	duty   =3D min_t(u64, state->duty_cycle, period);
-> +
-> +	period /=3D TIME_BASE_NS;
-> +	duty   /=3D TIME_BASE_NS;
-> +
-> +	/*
-> +	 * Writing a duty cycle of zero puts the device into a state where
-> +	 * writing a higher duty cycle doesn't result in the brightness that it
-> +	 * usually results in. This can be fixed by cycling the ENABLE register.
-> +	 *
-> +	 * As a workaround, write ENABLE=3D0 when the duty cycle is zero.
-> +	 * The case that something has previously set the duty cycle to zero
-> +	 * but ENABLE=3D1, is not handled.
-> +	 */
-> +	if (state->enabled && duty !=3D 0) {
-> +		res =3D ntxec_pwm_set_raw_period_and_duty_cycle(chip, period, duty);
-> +		if (res)
-> +			return res;
-> +
-> +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(1)=
-);
-> +		if (res)
-> +			return res;
-> +
-> +		/* Disable the auto-off timer */
-> +		res =3D regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_HI, ntxec_re=
-g8(0xff));
-> +		if (res)
-> +			return res;
-> +
-> +		return regmap_write(priv->ec->regmap, NTXEC_REG_AUTO_OFF_LO, ntxec_reg=
-8(0xff));
-> +	} else {
-> +		return regmap_write(priv->ec->regmap, NTXEC_REG_ENABLE, ntxec_reg8(0));
+> +	rtc_time64_to_tm(alarm_secs, &t->time);
+>  
+>  	/* ... and status */
+>  	t->enabled = !!(rs5c->regs[RS5C_REG_CTRL1] & RS5C_CTRL1_AALE);
+> @@ -417,12 +443,20 @@ static int rs5c_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+>  	struct rs5c372		*rs5c = i2c_get_clientdata(client);
+>  	int			status, addr, i;
+>  	unsigned char		buf[3];
+> +	struct rtc_time 	rtc_tm;
+> +	unsigned long 		rtc_secs, alarm_secs;
+>  
+> -	/* only handle up to 24 hours in the future, like RTC_ALM_SET */
+> -	if (t->time.tm_mday != -1
+> -			|| t->time.tm_mon != -1
+> -			|| t->time.tm_year != -1)
+> +	/* chip only can handle alarms up to one week in the future*/
+> +	status = rs5c372_rtc_read_time(dev, &rtc_tm);
+> +	if (status)
+> +		return status;
+> +	rtc_secs = rtc_tm_to_time64(&rtc_tm);
+> +	alarm_secs = rtc_tm_to_time64(&t->time);
+> +	if (alarm_secs >= rtc_secs + 7 * 86400) {
+> +		dev_err(dev, "%s: alarm maximum is one week in the future (%d)\n",
+> +			__func__, status);
+
+Please avoid adding an error message. It will not be read anyway.
+
+>  		return -EINVAL;
+
+Maybe it is a good opportunity to change to -ERANGE?
+
 > +	}
-> +}
-> +
-> +static const struct pwm_ops ntxec_pwm_ops =3D {
-> +	.owner =3D THIS_MODULE,
-> +	.apply =3D ntxec_pwm_apply,
-> +	/*
-> +	 * No .get_state callback, because the current state cannot be read
-> +	 * back from the hardware.
-> +	 */
-> +};
-> +
-> +static int ntxec_pwm_probe(struct platform_device *pdev)
-> +{
-> +	struct ntxec *ec =3D dev_get_drvdata(pdev->dev.parent);
-> +	struct ntxec_pwm *priv;
-> +	struct pwm_chip *chip;
-> +
-> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->ec =3D ec;
-> +	priv->dev =3D &pdev->dev;
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	chip =3D &priv->chip;
-> +	chip->dev =3D &pdev->dev;
+>  
+>  	/* REVISIT: round up tm_sec */
+>  
+> @@ -443,7 +477,9 @@ static int rs5c_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+>  	/* set alarm */
+>  	buf[0] = bin2bcd(t->time.tm_min);
+>  	buf[1] = rs5c_hr2reg(rs5c, t->time.tm_hour);
+> -	buf[2] = 0x7f;	/* any/all days */
+> +	/* each bit is the day of the week, 0x7f means all days */
+> +	buf[2] = (t->time.tm_wday >= 0 && t->time.tm_wday < 7) ?
+> +		  BIT(t->time.tm_wday) : 0x7f;
 
-Hmm, I needed
-chip->dev =3D &pdev->dev.parent to use the backlight example
-in patch 2/7.
-Not sure what the correct solution is. Maybe the pwm deserves its own
-devicetree node.
+Here, you also need to calculate buf[2] from t->time.tm_mday instead of
+relying on t->time.tm_wday.
 
-Regards,
-Andreas
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
