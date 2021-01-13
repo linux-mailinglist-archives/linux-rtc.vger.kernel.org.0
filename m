@@ -2,73 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CDE2F4057
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Jan 2021 01:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D212F45AE
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Jan 2021 09:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387609AbhALXe3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Jan 2021 18:34:29 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:36775 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733047AbhALXe2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jan 2021 18:34:28 -0500
-X-Originating-IP: 86.202.109.140
-Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A8AE81BF20B;
-        Tue, 12 Jan 2021 23:33:41 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Matt Mackall <mpm@selenic.com>,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Richard Weinberger <richard@nod.at>,
+        id S1726571AbhAMIEM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Jan 2021 03:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbhAMIEL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Jan 2021 03:04:11 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2B0C061575
+        for <linux-rtc@vger.kernel.org>; Wed, 13 Jan 2021 00:03:31 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id c124so670348wma.5
+        for <linux-rtc@vger.kernel.org>; Wed, 13 Jan 2021 00:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=x/0jlx5sSaKGGvb82wT8NsfZQdjIWktlt2hn75IM74U=;
+        b=UOSU3aE4iuyQkGOW+qRrl9/F6PrWS+AL3kvnJ6uiz+kv99SwWb/xGubQERauz2hPwy
+         G3j5vLn3i4ZU1FME8RQHcOH8vsT235Xq5WVVsOUj5H8jQSnawcM+w4sWsDBKgRaBMRRZ
+         wjHmeBk0IP1np7qyCxkcTMJ8so2OLtf+KJ1YVebD6A+Va6GkpO55SqyL9FW0XBidcd7H
+         H/QYGlcEd3L6nFQalTRd3ZwO4cx1uXbENOO4bS4oKG+NcUztO89pQ8z3veYXCDQigzY0
+         477bwjCXj6xfANnOv9MrPvNQ+3OXFXrJ0ae1lz9MuRdscRW9DgKfuSF8+q1UZEHrSqIQ
+         qwNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=x/0jlx5sSaKGGvb82wT8NsfZQdjIWktlt2hn75IM74U=;
+        b=Cla7e2lReb7rmZuqhFUnYmGWV2TSzlmkp43NFaLjwq7kFT/Rgjzyzy3rFzPSeRFrM2
+         +FGcE7Q8QSXqHoVtotrSbKw/Z3Kz8YsQXS0i99RybfLTQ1/0cE4Of+VpPbjszSxt8jr2
+         y+PcuQWUJV4T3OPo+xhdEAIBOwZaeA7lyciPVQyNJVgo0AB5VmwAzPtFFoIgigdk3+S/
+         kFy/7ah0nJsU6sq+TZWsENjN5ieVSSMYOs185tVFJtWH8W57E6zJRICEQO8362/n6jIe
+         VLU7kRk2D6JJyVIsTHaCBQDa6p3MU3p0vdOr22vDzdmsL8Pxf4PZjlWOt1P873BGJ42y
+         XCTA==
+X-Gm-Message-State: AOAM530DCvfoIQxMfdTC5jHlwRT6lzSXvXFfiXMRCXmtBH8Zlp5Mud3K
+        MA+qSFWMOilrlNI48qwe2xqOBw==
+X-Google-Smtp-Source: ABdhPJxpCDBiFWnjkppzs22ouEjB8n2LOdUBFP8RAquah+kSxU4xDjx22C+43u1cMHh/poxxgAVVpg==
+X-Received: by 2002:a7b:cb09:: with SMTP id u9mr944114wmj.61.1610525010138;
+        Wed, 13 Jan 2021 00:03:30 -0800 (PST)
+Received: from dell ([91.110.221.229])
+        by smtp.gmail.com with ESMTPSA id y68sm1844813wmc.0.2021.01.13.00.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Jan 2021 00:03:29 -0800 (PST)
+Date:   Wed, 13 Jan 2021 08:03:27 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Mark Brown <broonie@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-crypto@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-ide@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: (subset) [PATCH 00/10] Remove support for TX49xx
-Date:   Wed, 13 Jan 2021 00:33:30 +0100
-Message-Id: <161049432258.352381.2804715824942772218.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210105140305.141401-1-tsbogend@alpha.franken.de>
-References: <20210105140305.141401-1-tsbogend@alpha.franken.de>
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 3/7] mfd: Add base driver for Netronix embedded
+ controller
+Message-ID: <20210113080327.GB3975472@dell>
+References: <20210109180220.121511-1-j.neuschaefer@gmx.net>
+ <20210109180220.121511-4-j.neuschaefer@gmx.net>
+ <20210112203649.67f66996@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210112203649.67f66996@aktux>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 5 Jan 2021 15:02:45 +0100, Thomas Bogendoerfer wrote:
-> I couldn't find any buyable product other than reference boards using
-> TX49xx CPUs. And since nobody showed interest in keeping support for
-> it, it's time to remove it.
+On Tue, 12 Jan 2021, Andreas Kemnade wrote:
+
+> On Sat,  9 Jan 2021 19:02:16 +0100
+> Jonathan Neuschäfer <j.neuschaefer@gmx.net> wrote:
 > 
-> I've split up the removal into seperate parts for different maintainers.
-> So if the patch fits your needs, please take it via your tree or
-> give me an ack so I can apply them  the mips-next tree.
+> > The Netronix embedded controller is a microcontroller found in some
+> > e-book readers designed by the original design manufacturer Netronix,
+> > Inc. It contains RTC, battery monitoring, system power management, and
+> > PWM functionality.
+> > 
+> > This driver implements register access and version detection.
+> > 
+> > Third-party hardware documentation is available at:
+> > 
+> >   https://github.com/neuschaefer/linux/wiki/Netronix-MSP430-embedded-controller
+> > 
+> > The EC supports interrupts, but the driver doesn't make use of them so
+> > far.
+> > 
+> > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> > Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+
+[...]
+
+> > +static const struct of_device_id of_ntxec_match_table[] = {
+> > +	{ .compatible = "netronix,ntxec", },
+> > +	{}
+> > +};
+> > +
+> MODULE_DEVICE_TABLE?
 > 
-> [...]
+> > +static struct i2c_driver ntxec_driver = {
+> > +	.driver = {
+> > +		.name = "ntxec",
+> > +		.of_match_table = of_ntxec_match_table,
+> > +	},
+> > +	.probe_new = ntxec_probe,
+> > +	.remove = ntxec_remove,
+> > +};
+> > +module_i2c_driver(ntxec_driver);
+> 
+> MODULE_LICENSE()?
+> 
+> modpost moans about that here.
 
-Applied, thanks!
+Andreas, would you be kind enough to snip/trim your replies in future
+please.  It would save a *lot* of people a little bit of time (which
+adds up fast).  TIA.
 
-[08/10] rtc: tx4939: Remove driver
-        commit: 446667df283002fdda0530523347ffd1cf053373
-
-Best regards,
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
