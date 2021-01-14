@@ -2,90 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2532F5E0F
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 10:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0AB2F5EA3
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 11:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbhANJun (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 Jan 2021 04:50:43 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:54303 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726822AbhANJum (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 04:50:42 -0500
-X-Originating-IP: 86.202.109.140
-Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id DD4F4E0013;
-        Thu, 14 Jan 2021 09:50:08 +0000 (UTC)
-Date:   Thu, 14 Jan 2021 10:50:08 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
-Cc:     dan.carpenter@oracle.com, u.kleine-koenig@pengutronix.de,
-        biwen.li@nxp.com, lvb@xiphos.com, bruno.thomsen@gmail.com,
-        l.sanfilippo@kunbus.com, Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] rtc: pcf2127: Run a OTP refresh if not done before
-Message-ID: <20210114095008.GV3654@piout.net>
-References: <20210113112742.7354-1-p.rosenberger@kunbus.com>
- <20210113112742.7354-3-p.rosenberger@kunbus.com>
+        id S1727792AbhANKXK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 14 Jan 2021 05:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbhANKXJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 05:23:09 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A52C061574
+        for <linux-rtc@vger.kernel.org>; Thu, 14 Jan 2021 02:22:24 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id e25so4199197wme.0
+        for <linux-rtc@vger.kernel.org>; Thu, 14 Jan 2021 02:22:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TDBOHLIzbUobbB/H8vBPt1OXjZemmTv6BVFzaBtUnnA=;
+        b=vkadCAqk5+2FVW0RSnQ2RReuN+Ncfp0p3LHyEsMIxgG1AG6L38MculRERwD8h1JBXq
+         x4bL1kIScSX0vyT8Slp72d2Up1UezdewatH4h5bYtmii6h1FIJR0RwgNjm27m2EK/JC+
+         QsiMYxXBYsv6QEgjr2vdw0ffmjkm6eWNU5Aksn7Kv9bLQChG3/RfphR3ygJr8+1ovFiC
+         nFPpOTyZY7u755QXnvn8FlX3GwDnvZ1Q5YnJisOcPF4l2FceSPNabB/7JK9lSJrjj+aC
+         cLFBlp86yVyvSY2v3s9cjKpj/vkPe96/Tw198/KM2CLax+6ICjmFL3fJ3LX8sEd9BRE2
+         ba6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TDBOHLIzbUobbB/H8vBPt1OXjZemmTv6BVFzaBtUnnA=;
+        b=YhuGTNJI+djMSHt54pAPD0D5QrGWqf+7lmovxn4IjxqLTsdKob0966XjNXNuFWJkDt
+         CHdmO590MChgnzRXLLb/YcsVduDV69rjzctp6DtnPhizfoaeSik+Zw2DfDsOwwtYm5Tb
+         xYetYTaD2pbQA8qkwEccQ/uTrabhQCrDJmij3O/AqYN+OlIbE+lnjss1HrDkp6jzHF8F
+         u3SGlRDOqoUXylPmIDJCI76Tt8IBzK10oUxqwrZDMImiu+fvfPvucCPm+Y37SADvUQyk
+         0vLGqp4OGAYNkNhm7XmvMtGDSdhThM1qzmCvWm53F6SVTmRWl9q2+391CZ6qohh1cLx/
+         jM/g==
+X-Gm-Message-State: AOAM531lm4+zk8H30rsTvEuyZECJ0X+FqPr/Crle229xceSXWpAKpvBq
+        3onRcvI4Y6KAeZgfE7BYvLWVNQ==
+X-Google-Smtp-Source: ABdhPJz/Us+lTCzL6I6kTkiPk48eVv4ZkplclXvz1XWx01j9qMAig1MBrV4LTxMJ0NefnEK47i24QQ==
+X-Received: by 2002:a7b:c85a:: with SMTP id c26mr3152510wml.160.1610619742692;
+        Thu, 14 Jan 2021 02:22:22 -0800 (PST)
+Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
+        by smtp.gmail.com with ESMTPSA id l7sm2468467wmg.41.2021.01.14.02.22.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Jan 2021 02:22:22 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH v5 0/3] rtc: s5m: driver improvements
+Date:   Thu, 14 Jan 2021 11:22:16 +0100
+Message-Id: <20210114102219.23682-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.29.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210113112742.7354-3-p.rosenberger@kunbus.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 13/01/2021 12:27:42+0100, Philipp Rosenberger wrote:
-> The datasheet of the PCF2127 states,it is recommended to process an OTP
-> refresh once the power is up and the oscillator is operating stable. The
-> OTP refresh takes less than 100 ms to complete.
-> 
-> Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
-> ---
->  drivers/rtc/rtc-pcf2127.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> index 378b1ce812d6..ca56dba64e79 100644
-> --- a/drivers/rtc/rtc-pcf2127.c
-> +++ b/drivers/rtc/rtc-pcf2127.c
-> @@ -58,6 +58,9 @@
->  #define PCF2127_REG_ALARM_DM		0x0D
->  #define PCF2127_REG_ALARM_DW		0x0E
->  #define PCF2127_BIT_ALARM_AE			BIT(7)
-> +/* CLKOUT control register */
-> +#define PCF2127_REG_CLKOUT		0x0f
-> +#define PCF2127_BIT_CLKOUT_OTPR			BIT(5)
->  /* Watchdog registers */
->  #define PCF2127_REG_WD_CTL		0x10
->  #define PCF2127_BIT_WD_CTL_TF0			BIT(0)
-> @@ -630,6 +633,19 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
->  		dev_warn(dev, "Watchdog and alarm functions might not work properly\n");
->  	}
->  
-> +	/*
-> +	 * Set the OTP refresh bit unconditionally. If an OTP refresh was
-> +	 * already done the bit is already set and will not rerun the refresh
-> +	 * operation.
-> +	 */
-> +	ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
-> +			      PCF2127_BIT_CLKOUT_OTPR);
-> +	if (ret < 0) {
-> +		dev_err(dev, "%s: OTP refresh (clkout_ctrl) failed.\n", __func__);
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Please drop this error message.
+This is a set of improvements for the rtc-s5m driver. The first patch
+is new in v4: I noticed the I2C regmap is not selected by this driver's
+Kconfig. Two subsequent patches were already submitted separately.
 
-> +		return ret;
-> +	}
-> +	msleep(100);
+v1 -> v2:
+- remove the remove() callback
 
-Maybe this should be done just before setting the time. Or if you want
-to keep it in probe, then you could optimise by not waiting but ensuring
-the time between pcf2127_probe and the first pcf2127_rtc_set_time is
-more than 100ms.
+v2 -> v3:
+- fix an error pointed out by the build robot
 
+v3 -> v4:
+- add patch 1/3: ("rtc: s5m: select REGMAP_I2C")
+- fix issues raised by the kernel bot
+
+v4 -> v5:
+- change the order of the patches to keep them bisectable
+
+Bartosz Golaszewski (3):
+  rtc: s5m: select REGMAP_I2C
+  rtc: s5m: use devm_i2c_new_dummy_device()
+  rtc: s5m: check the return value of s5m8767_rtc_init_reg()
+
+ drivers/rtc/Kconfig   |  1 +
+ drivers/rtc/rtc-s5m.c | 33 +++++++++------------------------
+ 2 files changed, 10 insertions(+), 24 deletions(-)
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.1
+
