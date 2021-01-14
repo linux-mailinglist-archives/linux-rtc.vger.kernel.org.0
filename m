@@ -2,133 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17032F5DB5
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 10:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2532F5E0F
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 10:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728393AbhANJeY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 Jan 2021 04:34:24 -0500
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:37323 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728096AbhANJeK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 04:34:10 -0500
+        id S1726901AbhANJun (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 14 Jan 2021 04:50:43 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:54303 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726822AbhANJum (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 04:50:42 -0500
 X-Originating-IP: 86.202.109.140
 Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 7FBAE20012;
-        Thu, 14 Jan 2021 09:33:25 +0000 (UTC)
-Date:   Thu, 14 Jan 2021 10:33:25 +0100
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id DD4F4E0013;
+        Thu, 14 Jan 2021 09:50:08 +0000 (UTC)
+Date:   Thu, 14 Jan 2021 10:50:08 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Philipp Rosenberger <p.rosenberger@kunbus.com>
-Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, dan.carpenter@oracle.com,
+Cc:     dan.carpenter@oracle.com, u.kleine-koenig@pengutronix.de,
         biwen.li@nxp.com, lvb@xiphos.com, bruno.thomsen@gmail.com,
         l.sanfilippo@kunbus.com, Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] rtc: pcf2127: Disable Power-On Reset Override
-Message-ID: <20210114093325.GU3654@piout.net>
+Subject: Re: [PATCH v2 2/2] rtc: pcf2127: Run a OTP refresh if not done before
+Message-ID: <20210114095008.GV3654@piout.net>
 References: <20210113112742.7354-1-p.rosenberger@kunbus.com>
- <20210113112742.7354-2-p.rosenberger@kunbus.com>
- <20210114080533.tnipsnqfxeqotvlg@pengutronix.de>
- <39a69676-83f2-07f4-99ae-ce4f89d5314c@kunbus.com>
+ <20210113112742.7354-3-p.rosenberger@kunbus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <39a69676-83f2-07f4-99ae-ce4f89d5314c@kunbus.com>
+In-Reply-To: <20210113112742.7354-3-p.rosenberger@kunbus.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On 13/01/2021 12:27:42+0100, Philipp Rosenberger wrote:
+> The datasheet of the PCF2127 states,it is recommended to process an OTP
+> refresh once the power is up and the oscillator is operating stable. The
+> OTP refresh takes less than 100 ms to complete.
+> 
+> Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 378b1ce812d6..ca56dba64e79 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -58,6 +58,9 @@
+>  #define PCF2127_REG_ALARM_DM		0x0D
+>  #define PCF2127_REG_ALARM_DW		0x0E
+>  #define PCF2127_BIT_ALARM_AE			BIT(7)
+> +/* CLKOUT control register */
+> +#define PCF2127_REG_CLKOUT		0x0f
+> +#define PCF2127_BIT_CLKOUT_OTPR			BIT(5)
+>  /* Watchdog registers */
+>  #define PCF2127_REG_WD_CTL		0x10
+>  #define PCF2127_BIT_WD_CTL_TF0			BIT(0)
+> @@ -630,6 +633,19 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  		dev_warn(dev, "Watchdog and alarm functions might not work properly\n");
+>  	}
+>  
+> +	/*
+> +	 * Set the OTP refresh bit unconditionally. If an OTP refresh was
+> +	 * already done the bit is already set and will not rerun the refresh
+> +	 * operation.
+> +	 */
+> +	ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
+> +			      PCF2127_BIT_CLKOUT_OTPR);
+> +	if (ret < 0) {
+> +		dev_err(dev, "%s: OTP refresh (clkout_ctrl) failed.\n", __func__);
 
-On 14/01/2021 10:10:32+0100, Philipp Rosenberger wrote:
-> 
-> 
-> On 14.01.21 09:05, Uwe Kleine-König wrote:
-> > On Wed, Jan 13, 2021 at 12:27:41PM +0100, Philipp Rosenberger wrote:
-> > > To resume normal operation after a total power loss (no or empty
-> > > battery) the "Power-On Reset Override (PORO)" facility needs to be
-> > > disabled.
-> > > 
-> > > As the oscillator may take a long time (200 ms to 2 s) to resume normal
-> > > operation. The default behaviour is to use the PORO facility.
-> > 
-> > I'd write instead: The register reset value sets PORO enabled and the
-> > data sheet recommends setting it to disabled for normal operation.
-> 
-> Sounds good, I will rephrase it.
-> 
-> > In my eyes having a reset default value that is unsuitable for
-> > production use is just another bad design choice of this chip. At least
-> > now this is known and can be somewhat fixed in software. :-\
-> 
-> Yes, had my fair share of WTF moments with this chip.
-> 
-> > > But with the PORO active no interrupts are generated on the interrupt
-> > > pin (INT).
-> > 
-> > This sentence about no interrupts is your observation, or does this base
-> > on some authoritative source (datasheet, FAE or similar)?
-> > 
-> 
-> Yes this is only may observation. I tested this with the OM13513 demoboard
-> with PCF2127 and pcf2129. So I should rephrase it to something like this:
-> 
-> Some testes suggests that no interrupts are generated on the interrupt pin
-> if the PORP is active.
-> 
-> > > Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
-> > > ---
-> > >   drivers/rtc/rtc-pcf2127.c | 18 ++++++++++++++++++
-> > >   1 file changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > index 39a7b5116aa4..378b1ce812d6 100644
-> > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > @@ -26,6 +26,7 @@
-> > >   /* Control register 1 */
-> > >   #define PCF2127_REG_CTRL1		0x00
-> > > +#define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
-> > >   #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
-> > >   /* Control register 2 */
-> > >   #define PCF2127_REG_CTRL2		0x01
-> > > @@ -612,6 +613,23 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > >   		ret = devm_rtc_nvmem_register(pcf2127->rtc, &nvmem_cfg);
-> > >   	}
-> > > +	/*
-> > > +	 * The "Power-On Reset Override" facility prevents the RTC to do a reset
-> > > +	 * after power on. For normal operation the PORO must be disabled.
-> > > +	 */
-> > > +	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > > +				PCF2127_BIT_CTRL1_POR_OVRD);
-> > > +	/*
-> > > +	 * If the PORO can't be disabled, just move on. The RTC should
-> > > +	 * work fine, but functions like watchdog and alarm interrupts might
-> > > +	 * not work. There will be no interrupt generated on the interrupt pin.
-> > > +	 */
-> > > +	ret = regmap_test_bits(pcf2127->regmap, PCF2127_REG_CTRL1, PCF2127_BIT_CTRL1_POR_OVRD);
-> > > +	if (ret <= 0) {
-> > > +		dev_err(dev, "%s: can't disable PORO (ctrl1).\n", __func__);
-> > > +		dev_warn(dev, "Watchdog and alarm functions might not work properly\n");
-> > 
-> > I would not emit two messages here. Also including __func__ isn't so
-> > nice IMHO. (Great for debugging, but not in production code IMHO.)
-> 
-> Yes, I dislike the style of the messages in this module. I just thought to
-> keep it consistent.
+Please drop this error message.
 
-No one will ever read the message, the whole test is useless.
+> +		return ret;
+> +	}
+> +	msleep(100);
 
-> 
-> I'm thinking of rewriting this driver as MFD driver. We use the CLKOUT for
-> some products. So maybe a RTC, watchdog and clock driver on top of an MFD.
-> But I'm not sure if it is really a good idea. The behavior of the chip to
-> disable the watchdog when reading ctrl2 (i think it was) giving me a
-> headache.
-
-Don't, this is not an MFD. There is no issue with having the RTC driver
-being a clock provider.
+Maybe this should be done just before setting the time. Or if you want
+to keep it in probe, then you could optimise by not waiting but ensuring
+the time between pcf2127_probe and the first pcf2127_rtc_set_time is
+more than 100ms.
 
 
 -- 
