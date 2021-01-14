@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0AB2F5EA3
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 11:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218832F5EA8
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jan 2021 11:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbhANKXK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 Jan 2021 05:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S1728410AbhANKXv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 14 Jan 2021 05:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbhANKXJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 05:23:09 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A52C061574
+        with ESMTP id S1726809AbhANKXu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jan 2021 05:23:50 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06F1C0613CF
         for <linux-rtc@vger.kernel.org>; Thu, 14 Jan 2021 02:22:24 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id e25so4199197wme.0
-        for <linux-rtc@vger.kernel.org>; Thu, 14 Jan 2021 02:22:23 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id a12so5153569wrv.8
+        for <linux-rtc@vger.kernel.org>; Thu, 14 Jan 2021 02:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TDBOHLIzbUobbB/H8vBPt1OXjZemmTv6BVFzaBtUnnA=;
-        b=vkadCAqk5+2FVW0RSnQ2RReuN+Ncfp0p3LHyEsMIxgG1AG6L38MculRERwD8h1JBXq
-         x4bL1kIScSX0vyT8Slp72d2Up1UezdewatH4h5bYtmii6h1FIJR0RwgNjm27m2EK/JC+
-         QsiMYxXBYsv6QEgjr2vdw0ffmjkm6eWNU5Aksn7Kv9bLQChG3/RfphR3ygJr8+1ovFiC
-         nFPpOTyZY7u755QXnvn8FlX3GwDnvZ1Q5YnJisOcPF4l2FceSPNabB/7JK9lSJrjj+aC
-         cLFBlp86yVyvSY2v3s9cjKpj/vkPe96/Tw198/KM2CLax+6ICjmFL3fJ3LX8sEd9BRE2
-         ba6A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=hXpzk7OffqSrHKLaiatk3ajUz4KlXJ/8J4lT5+GFR1I=;
+        b=cWyvmtck+Ru9tLEC4AUdUbsEbLrYRwRdybsVkqPeCM2TUIIjtN3OHHDW3IdyMudlYj
+         5f2VFMwVgFP6SSaYv5z1jl2LZaiRZjVJ2k8DtX6P3hdDyKjFVK6q8hu379tYgf021QB5
+         kswXTpkzhVU3ZKCbX0+krkA9oAiiAxEnDg7iPptBxcEROkJrpxV21vZnLH9Pje/eOUKB
+         CT8SzZftfVBQi2Mo3LCIekP9hfjc1D2UDeafyPA2/pVp7zIjGU0ITBMaJ60RG2AoowoB
+         lbrqpKeHqvhIvOfwMlV8Ph8uFput3brC3y6nCOAMFQWfryZl9PYBfU5qcXvGTD+Kt864
+         V0Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TDBOHLIzbUobbB/H8vBPt1OXjZemmTv6BVFzaBtUnnA=;
-        b=YhuGTNJI+djMSHt54pAPD0D5QrGWqf+7lmovxn4IjxqLTsdKob0966XjNXNuFWJkDt
-         CHdmO590MChgnzRXLLb/YcsVduDV69rjzctp6DtnPhizfoaeSik+Zw2DfDsOwwtYm5Tb
-         xYetYTaD2pbQA8qkwEccQ/uTrabhQCrDJmij3O/AqYN+OlIbE+lnjss1HrDkp6jzHF8F
-         u3SGlRDOqoUXylPmIDJCI76Tt8IBzK10oUxqwrZDMImiu+fvfPvucCPm+Y37SADvUQyk
-         0vLGqp4OGAYNkNhm7XmvMtGDSdhThM1qzmCvWm53F6SVTmRWl9q2+391CZ6qohh1cLx/
-         jM/g==
-X-Gm-Message-State: AOAM531lm4+zk8H30rsTvEuyZECJ0X+FqPr/Crle229xceSXWpAKpvBq
-        3onRcvI4Y6KAeZgfE7BYvLWVNQ==
-X-Google-Smtp-Source: ABdhPJz/Us+lTCzL6I6kTkiPk48eVv4ZkplclXvz1XWx01j9qMAig1MBrV4LTxMJ0NefnEK47i24QQ==
-X-Received: by 2002:a7b:c85a:: with SMTP id c26mr3152510wml.160.1610619742692;
-        Thu, 14 Jan 2021 02:22:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=hXpzk7OffqSrHKLaiatk3ajUz4KlXJ/8J4lT5+GFR1I=;
+        b=JHBPccVz/9F2n88IxCP3+woHBYH6ME1bEABotBia2mvSVqF50hLBxk9bIADGdsApvZ
+         B2LfJ88xsAymPRNshLY7Aw/ojmdRyC1fY63FMXp6xaGGXieh+++qoKIXvHi25iFzAuh3
+         ZpwQZ2C/2mWdsalGRMAXk6sG7SPwATJ4+ObJWfeGidGDOlZFIwVTw+pCZCD3gHb1HAYW
+         pODiBJ1ZWuy/DlxVTeARH8BJzEs0iIFGNoSVDFGr3QUs0yFCDI9+DQLVZhDEpre0ofNZ
+         LfZSB6WnZMaNcKooUZ2DQHDIf4E/MB8v9Ge889CZht34G6nHJC8qm9Gr4Zf39RjJsUNN
+         Ms4Q==
+X-Gm-Message-State: AOAM532BxJzE6g3ytCX/aOK33alLBXUOdLew9z4rAJugVYMje5EDafS8
+        wMTpeE3mFOIuc4eoGnBHZnKACg==
+X-Google-Smtp-Source: ABdhPJy9v8GD2EuiKN4Wxze5S5VeDveDx+zR3Z0+C06KqZtUssyCPZ/2SPqRiLUhxyOD++aqmszTDA==
+X-Received: by 2002:a5d:6045:: with SMTP id j5mr6863125wrt.223.1610619743596;
+        Thu, 14 Jan 2021 02:22:23 -0800 (PST)
 Received: from debian-brgl.home (amarseille-656-1-4-167.w90-8.abo.wanadoo.fr. [90.8.158.167])
-        by smtp.gmail.com with ESMTPSA id l7sm2468467wmg.41.2021.01.14.02.22.21
+        by smtp.gmail.com with ESMTPSA id l7sm2468467wmg.41.2021.01.14.02.22.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jan 2021 02:22:22 -0800 (PST)
+        Thu, 14 Jan 2021 02:22:23 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Krzysztof Kozlowski <krzk@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
@@ -55,10 +55,12 @@ To:     Krzysztof Kozlowski <krzk@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-rtc@vger.kernel.org,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH v5 0/3] rtc: s5m: driver improvements
-Date:   Thu, 14 Jan 2021 11:22:16 +0100
-Message-Id: <20210114102219.23682-1-brgl@bgdev.pl>
+Subject: [PATCH v5 1/3] rtc: s5m: select REGMAP_I2C
+Date:   Thu, 14 Jan 2021 11:22:17 +0100
+Message-Id: <20210114102219.23682-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.29.1
+In-Reply-To: <20210114102219.23682-1-brgl@bgdev.pl>
+References: <20210114102219.23682-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -67,32 +69,28 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-This is a set of improvements for the rtc-s5m driver. The first patch
-is new in v4: I noticed the I2C regmap is not selected by this driver's
-Kconfig. Two subsequent patches were already submitted separately.
+The rtc-s5m uses the I2C regmap but doesn't select it in Kconfig so
+depending on the configuration the build may fail. Fix it.
 
-v1 -> v2:
-- remove the remove() callback
+Fixes: 959df7778bbd ("rtc: Enable compile testing for Maxim and Samsung drivers")
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/rtc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-v2 -> v3:
-- fix an error pointed out by the build robot
-
-v3 -> v4:
-- add patch 1/3: ("rtc: s5m: select REGMAP_I2C")
-- fix issues raised by the kernel bot
-
-v4 -> v5:
-- change the order of the patches to keep them bisectable
-
-Bartosz Golaszewski (3):
-  rtc: s5m: select REGMAP_I2C
-  rtc: s5m: use devm_i2c_new_dummy_device()
-  rtc: s5m: check the return value of s5m8767_rtc_init_reg()
-
- drivers/rtc/Kconfig   |  1 +
- drivers/rtc/rtc-s5m.c | 33 +++++++++------------------------
- 2 files changed, 10 insertions(+), 24 deletions(-)
-
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 6123f9f4fbc9..e4bef40831c7 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -692,6 +692,7 @@ config RTC_DRV_S5M
+ 	tristate "Samsung S2M/S5M series"
+ 	depends on MFD_SEC_CORE || COMPILE_TEST
+ 	select REGMAP_IRQ
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you will get support for the
+ 	  RTC of Samsung S2MPS14 and S5M PMIC series.
 -- 
 2.29.1
 
