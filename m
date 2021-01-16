@@ -2,71 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 983EC2F7F64
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Jan 2021 16:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B592F8EFC
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Jan 2021 20:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbhAOPVr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Jan 2021 10:21:47 -0500
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:37150 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbhAOPVr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Jan 2021 10:21:47 -0500
-Received: by mail-wm1-f47.google.com with SMTP id g10so7917913wmh.2;
-        Fri, 15 Jan 2021 07:21:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3uR+I0h5etCdkQ5pxMl4CzHqVZjl3PDrBNz6MGPKJ9c=;
-        b=Ty/Z3Dyj0Z5ylylvNvbdFedWlQU2H+eFjLzp50bF0JDHLQmLUN/ztZzjeLVKPVGR7G
-         6mzHx+lzhNFMDS7jvjq848R+i0lNMqva5Q0UrLsC29vytDmYorornhuAWrXqxCKapu62
-         7bQ9F4VkB1Y5FxILWlEPpsJn/GLcIadredNBdfwEtHd8ZF6Chxm/74dyS70wQS4rV+0Y
-         CToRH2HCkYVX52AfCRsHFZNPwBbPhMNqZWIKWb5oHcmyQEwW3IPRwT3ysuCl2IVfFMeT
-         j4YmQHOYpgQ3hAXf57vWf3QZQPIh7jVirdvCk29SQTpQtrb/Dp/ytknsT9y+CTESD3nI
-         bkdw==
-X-Gm-Message-State: AOAM530e5VSQ2dQIg0aqYP9+DB/RlUwQH5Fil1UqNlTVqyLutzK8lc+V
-        22UYp0TSz+0X+Fb0APC6oLw=
-X-Google-Smtp-Source: ABdhPJynzWkOvAzy/5TJgCVbNYondgjXc+qBmzPgNDJIqw21EEi1gfQGFc/fz5xg97fnwA9cw9P74g==
-X-Received: by 2002:a7b:c31a:: with SMTP id k26mr9072341wmj.72.1610724064898;
-        Fri, 15 Jan 2021 07:21:04 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id v6sm2531535wrx.32.2021.01.15.07.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 07:21:03 -0800 (PST)
-Date:   Fri, 15 Jan 2021 16:21:02 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S1726862AbhAPTzv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Jan 2021 14:55:51 -0500
+Received: from mout.gmx.net ([212.227.17.21]:42255 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726201AbhAPTzu (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 16 Jan 2021 14:55:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1610826805;
+        bh=GPwpLT1TZGAzF9ivuj9lbpm+O/HMOu8CWT/rfk2UPaI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=fPnVDEZbfIuTXMJ71Pznz87GMcBuTYxG4YfvJuIAbiCqmZYJNNasKw97HBsu/j7aa
+         s74AuQiR+tfT+FL+0Kq/UoEf2XP8AmTndHJrEdt4vIs21OLaJ7co2qiRix5tOa/blg
+         yWC6EwfTJqAztzu9Svitjewh/zay/jC50m6yyDA8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([37.201.215.209]) by mail.gmx.com (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPGVx-1lPqEj3vAb-00PdJO; Sat, 16
+ Jan 2021 20:53:25 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH v5 3/3] rtc: s5m: check the return value of
- s5m8767_rtc_init_reg()
-Message-ID: <20210115152102.GA43368@kozik-lap>
-References: <20210114102219.23682-1-brgl@bgdev.pl>
- <20210114102219.23682-4-brgl@bgdev.pl>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Josua Mayer <josua.mayer@jm0.eu>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v8 0/7] Netronix embedded controller driver for Kobo and Tolino ebook readers
+Date:   Sat, 16 Jan 2021 20:48:19 +0100
+Message-Id: <20210116194826.3866540-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210114102219.23682-4-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:8Sq8EerqbjWZ15AShxTA3L88ejasz3s3OzWxE+MUqIpHQ9CoCyE
+ cD+Li5754+zHG5nK0ThbmZbGA7QFTMPQ2j8VuQbvXM+EwXWf/amX6hEQGOZssK6RdZgB4Ay
+ BIjsrVBGx43irdhetOuYmcfKk53XaB2/tuONPuDF47RQDbRlOkp38qVHzEGWHFYKCs0Xbay
+ 9670XgHJtoRPvFt04G0Gg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CTmruEhhFgQ=:VTtaFXP2BB9L51574srDOO
+ MA+6yYIS2+1cJbiRvjdimPEGfoH8WTG+GjZIfpIJmhhOskZyfw9Ri3VfG44TDYd7zfI2MKIfZ
+ tw2D/BTShNnZPosWKS/eArbekW2PJ2f2Widz7uWjDIqyAvX2jGerWdLL+DSNMHqvpeW2nU/9z
+ 8wG8S+a8U+9myVwykzr71c1tjwLXjZzG8FU4eGwgZRE8fpValUnD7GUPHscUHXzAJ+s39hyw6
+ Rg8bLK65nWciEFM54cZ0EQOT0vdPZYn+l1eNjb62RNjcd+czYX1SN5qyHvBZX9t8cgmgxVtE9
+ HqTnBWyZaaY4Gr1PFM/Hlr+WpYbGqpsT1+JbJZXCWJPheL3ar1OXOcR8a7VhAlAj3Qkq+FjJE
+ MOkJRViDS0OwFE8++i+j87oyafsgtFjBatbs8ODh8SMjj59MCfvvuXcOyRTZPJCSw5aP2zNEn
+ krSSQ94WMUDXLfz8qG5mCByc/wmNdLnxnf4Kj8jx2KN6hsDlIWBqMATS7L2ews/FZzCPFX9gx
+ T9CYeETWEuinIfDZ/rfffw+nIA8v7q9gDIY5cmOWaGtpqVmNZkbRcOoQH7/eDN1IOmh2syq8s
+ A8V99GdlcBDjquDSOeWLfQ+r5Xxa+A7gO8iGbFNefB6aF7rPTW+JlDKLsvdKluzrWeMmXcUMi
+ C2xzB0vP0DZeq+tHq8h1RjFsWNUSJGS7H1L/z/4e9QSRppX7FxJhOKaGQEAkbvBGR1VSUc5E1
+ bBtRNhHYZEL04S5TUKb2m4pB1eTWq6f5Ks3luorhPpz5sj+WnZIgyVxof8FdaxhosLQciULgu
+ EVCGqyXCzsafc9Grz+PmyWr+XHNwI0sucvNnfALAS9RwTLcprZ997XQSS+eJynL+0TXwAoC5A
+ ftKmmuv2D4m4W8n/jR6w==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jan 14, 2021 at 11:22:19AM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> 
-> This function can fail if regmap operations fail so check its return
-> value in probe().
-> 
-> Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> ---
->  drivers/rtc/rtc-s5m.c | 2 ++
->  1 file changed, 2 insertions(+)
+This patchset adds basic support for the embedded controller found on
+older ebook reader boards designed by/with the ODM Netronix Inc.[1] and
+sold by Kobo or Tolino, for example the Kobo Aura and the Tolino Shine.
+These drivers are based on information contained in the vendor kernel
+sources, but in order to all information in a single place, I documented
+the register interface of the EC on GitHub[2].
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+[1]: http://www.netronixinc.com/products.aspx?ID=3D1
+[2]: https://github.com/neuschaefer/linux/wiki/Netronix-MSP430-embedded-co=
+ntroller
 
-Best regards,
-Krzysztof
+v8:
+- MFD: Add missing module metadata to the core driver
+- PWM/RTC: Copy dev.of_node from the parent device, to ensure that these
+  devices are linked to the devicetree node
+
+v7:
+- https://lore.kernel.org/lkml/20210109180220.121511-1-j.neuschaefer@gmx.n=
+et/
+- Adjust the RTC patch to a change in the RTC API:
+  rtc_register_device is now devm_rtc_register_device.
+- Add a #define for the known firmware version (0xd726).
+  Lee Jones suggested doing this in a follow-up patch, but since I'm
+  respinning the series anyway, I'm doing it here.
+
+
+Jonathan Neusch=C3=A4fer (7):
+  dt-bindings: Add vendor prefix for Netronix, Inc.
+  dt-bindings: mfd: Add binding for Netronix embedded controller
+  mfd: Add base driver for Netronix embedded controller
+  pwm: ntxec: Add driver for PWM function in Netronix EC
+  rtc: New driver for RTC in Netronix embedded controller
+  MAINTAINERS: Add entry for Netronix embedded controller
+  ARM: dts: imx50-kobo-aura: Add Netronix embedded controller
+
+ .../bindings/mfd/netronix,ntxec.yaml          |  76 ++++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   9 +
+ arch/arm/boot/dts/imx50-kobo-aura.dts         |  16 +-
+ drivers/mfd/Kconfig                           |  11 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/ntxec.c                           | 221 ++++++++++++++++++
+ drivers/pwm/Kconfig                           |   8 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-ntxec.c                       | 184 +++++++++++++++
+ drivers/rtc/Kconfig                           |   8 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ntxec.c                       | 145 ++++++++++++
+ include/linux/mfd/ntxec.h                     |  37 +++
+ 14 files changed, 719 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/netronix,ntxec.y=
+aml
+ create mode 100644 drivers/mfd/ntxec.c
+ create mode 100644 drivers/pwm/pwm-ntxec.c
+ create mode 100644 drivers/rtc/rtc-ntxec.c
+ create mode 100644 include/linux/mfd/ntxec.h
+
+=2D-
+2.29.2
+
