@@ -2,54 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08ED22F9BAE
+	by mail.lfdr.de (Postfix) with ESMTP id 75DE52F9BAF
 	for <lists+linux-rtc@lfdr.de>; Mon, 18 Jan 2021 10:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388219AbhARJCQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 18 Jan 2021 04:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39948 "EHLO
+        id S2388211AbhARJCg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 Jan 2021 04:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388201AbhARJBx (ORCPT
+        with ESMTP id S2388202AbhARJBx (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Jan 2021 04:01:53 -0500
 Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF6CC061573;
-        Mon, 18 Jan 2021 01:01:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F15BC061574;
+        Mon, 18 Jan 2021 01:01:06 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XrKNrMEeCPqa5HUIsNGEMJo0FYyzW5T2Qdd+ppy2xza6iww4r+pHMhmnJr56CzfhLwBDVJcjJGpvz4hmgtO57h8F0i58c62Qu86qqYLRZCTvA9fVf/wCWDPCs8erNVRfkBkJ7q8uwANJDQo3ghnUDyNko2B7q2FtvaHO1VBj7Ejs3xqRxTLLZX//0OeI0Xfw//Gn/4ZYfoIb+jQB+KQWZL/729OOsJ4N75BVxoC5l0S8QAN7ESChCNnWiHsWmI4RvFcRlXW+Cr8nBf92l24JW3bxbR5CIl9ozlV9GRFe6twUPaXjI514O2YM8yayoDlIK90UWI72JP5FnrVEORxEcQ==
+ b=lEk4sPuE3rySn8tOBL65uGQIlwW04zOpAQ0eOvUuccLc2E1JC2liK0BvnvqkYNdIDCxPFuzQ4xaCkPEpwrk4L+Qw/CpoZzWrR8hPs3XeJ8fHAmuxPk1kWaHHCrir6Pd6ZK3XSZCcRrPC6EnicMubZTdZQ7Px9A8cR9bMVasH9Mq5iBfbpfL69DX4opAP3Og34Tnhxma5+EY8ZblrdZ/n81fWV8gtdZQp/ydPZboGL0KeAfFw6w+50FDgmJDtyz3/3t2JXEdn1y/C7lVIEbfApZ7qTximBZRG47JKFPo3lH31wHsJcSYkToWIvuV9p+VDYdLep29ATMMbZmGVpOJZZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kUoCtIlnBp2LZWIMg7uzBnElBWTIv8KAvfPzG0dlROE=;
- b=lFlUuYK9CCWZyQYa6DghaZvuvKl7lAeGdHtYsBQC3c+593sycEzifgvo1EOQ8Ey6rzCs1wb3eI4Zuuj94p2+VCcLiZjn7zaKZvi0hfwJdrgfAY9Q9dGhwre1UMeZhODByqKbQP7pYUecpBH+LV1oN4fJ5mq2lP2ai151V3wU/uYBykJYMznDphBmSXgUk8fKbnP7K/OmsWdFCo8xMsP8/F7tdAa74PMKihkE16CD/c7H3gxQHH+QmjjidTrSCMjxuTjjkl6HOiNT68QnqfmeG+Bgg4gyyJ+yluC9cxxN7MDHzh+vsy+dC1TDcDDC/6TU0UZwPuAmx7guOTt43V8t7w==
+ bh=ayV8tHh0DBw9U25QATcrsRzsrZnpGrhGxVzlrkXFweU=;
+ b=QbB2VkphFLI8/U0xppjTwmxhqm6Hu3ODPtE87WSAPcCiYSnRlobMJnKVpVD3hRxLvzZTE9b28h6xzKrvrYk0ES6K8u3/1cPSLH57nJ3Pmb/74BhgrIKpD7LXwCy1mNK0NTUuewArTJpbOXHsjdXZlF+5GAq1WT1sE+tKL0hQa3UO6oKB07cSg3SXu/ULQaYNQ5Zpsr2kacIemhQMwuvR/qab1aLB6ZrA9vacFqXE8xaCvvrOfcN54sU1prg+73SGqzfO+7JSKWnB/5uTaGoaKSkNXzX+IaSxPmZlQnsByjiX9n1fzfB0dclDivhj8kA9SxA24VFn05LBClTkDCgsOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
  dkim=pass header.d=kunbus.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kunbusgmbh.onmicrosoft.com; s=selector2-kunbusgmbh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kUoCtIlnBp2LZWIMg7uzBnElBWTIv8KAvfPzG0dlROE=;
- b=yOFUoXZkZ0+bteXu6OxGFZa+VbgGxquTJkVU9g0rexISbPmYkDHvdRsTh4UmJu10pgiJqQjPJC0mHj3cfzmJLT1Zoahdkr48+s0BDXUCLWRdAaUFz3TBis7rqiP7FFUuXukuMmJNek2/kr716J1Av0g2yiY6WFQgpLnYL7OWLhs=
+ bh=ayV8tHh0DBw9U25QATcrsRzsrZnpGrhGxVzlrkXFweU=;
+ b=JtwznjJbG56GMdIuII1xtSyMovhIc3x6Rg/aAYxGwcK1lnD9Ey3Eyf609HesbIcCEgLPRwr8+MtqhdQaje/T14oj5atPWzGNv8JEdOMp4CYXPAM69oK3CphCuXVtyR+BmixEfjpYUi3xYtXSex8YBR4ORB1fSuwjeHWEyGVQEN8=
 Authentication-Results: towertech.it; dkim=none (message not signed)
  header.d=none;towertech.it; dmarc=none action=none header.from=kunbus.com;
 Received: from AM9P193MB0968.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:1fd::8)
  by AM8P193MB1172.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:367::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Mon, 18 Jan
- 2021 09:00:49 +0000
+ 2021 09:00:54 +0000
 Received: from AM9P193MB0968.EURP193.PROD.OUTLOOK.COM
  ([fe80::70fd:5050:f682:bb8]) by AM9P193MB0968.EURP193.PROD.OUTLOOK.COM
  ([fe80::70fd:5050:f682:bb8%7]) with mapi id 15.20.3763.014; Mon, 18 Jan 2021
- 09:00:49 +0000
+ 09:00:54 +0000
 From:   Philipp Rosenberger <p.rosenberger@kunbus.com>
 To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
 Cc:     p.rosenberger@kunbus.com, dan.carpenter@oracle.com,
         u.kleine-koenig@pengutronix.de, biwen.li@nxp.com, lvb@xiphos.com,
         bruno.thomsen@gmail.com, l.sanfilippo@kunbus.com,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] rtc: pcf2127: proper initialization after power loss
-Date:   Mon, 18 Jan 2021 09:57:50 +0100
-Message-Id: <20210118085752.5759-1-p.rosenberger@kunbus.com>
+Subject: [PATCH v3 1/2] rtc: pcf2127: Disable Power-On Reset Override
+Date:   Mon, 18 Jan 2021 09:57:51 +0100
+Message-Id: <20210118085752.5759-2-p.rosenberger@kunbus.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210118085752.5759-1-p.rosenberger@kunbus.com>
+References: <20210118085752.5759-1-p.rosenberger@kunbus.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [87.130.101.138]
@@ -58,122 +60,92 @@ X-ClientProxiedBy: AM0PR10CA0096.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:20b:1fd::8)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kun-nb-112.kunbus.com (87.130.101.138) by AM0PR10CA0096.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:15::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10 via Frontend Transport; Mon, 18 Jan 2021 09:00:48 +0000
+Received: from kun-nb-112.kunbus.com (87.130.101.138) by AM0PR10CA0096.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:15::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10 via Frontend Transport; Mon, 18 Jan 2021 09:00:52 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c8ce0f46-f58c-446f-ea77-08d8bb8f8ccd
+X-MS-Office365-Filtering-Correlation-Id: 52174f97-4680-4354-5abd-08d8bb8f900f
 X-MS-TrafficTypeDiagnostic: AM8P193MB1172:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM8P193MB1172E23614711E260C4937229FA40@AM8P193MB1172.EURP193.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:265;
+X-Microsoft-Antispam-PRVS: <AM8P193MB11727C8CEB2C48519A27D4F89FA40@AM8P193MB1172.EURP193.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f7VR3MEViFeKz/jR6mGQ0HGx+XKcfYymjb2crJiJ7p/WX1aPIYuuBy90ZZ9S6OnuonoVUkWbJSuYr6QWERpJcESoNrIVEJlraN1bhXVi77aWB/5ea4ffXBCO7Jvt3eKt+ECydMOSlrSpWgFiqARS3iduCU3Daoa+U/S1jvxmGav3FqKsOlU7/jxOBBtJLX1JFL/jy+vm594INhQIrczv/sCAKg0EQjFdZJxQDshReTDBnkeJebTWu7A/DWglTnROegZqN+0ES8YBXHg5MNUlxvf7Pf/WSUV5Do0m5Jy3hPHRu4TBuir7bnDu51jxd5VVVI4ZlqLbxdeKuHLkw7bOYaI1HiRzeh6cuOUhrpB5kF6ROfAnVr7rB8YvtZU71Kjfaz7zWp169nRJYv77xS3wlg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB0968.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(136003)(376002)(346002)(396003)(366004)(66946007)(6666004)(5660300002)(316002)(2906002)(1076003)(66556008)(8936002)(6486002)(86362001)(2616005)(36756003)(52116002)(7696005)(66476007)(4326008)(956004)(83380400001)(478600001)(8676002)(16526019)(26005)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?yGQ4hQVV9jx+AHNpBa+tW6Y4H8STidTjhu9jmWMczKheRmP1iijFH8ut2LCr?=
- =?us-ascii?Q?xPY/efE0VHl08r2ebMcu91m0ICFcGJgqpoMjDb+x4K3nqikVgIzlcxvN6YaI?=
- =?us-ascii?Q?9/8UKXbJEIVVuHOXM1/AuIQXH72LNlg4DLa/wALhLqhOJ9W5pJ5iDsvdA4uk?=
- =?us-ascii?Q?MIuZKdnzA7rUsOg320hq10OKFgiIUayXTN9pnjdke7RVgliG8dTobUpoqyFC?=
- =?us-ascii?Q?ctyzsBnMWfUfdtBdbb05zg67pHN9Cb+VU6vA4pCneOSuH6cPKIjMKIS10UIO?=
- =?us-ascii?Q?w/Z0eCT4homYlop1mdNLjQq6PjUnPxFJI02Jv/pp8Nu9lvLxx0WhQt3dPgP9?=
- =?us-ascii?Q?pqko66OVfasJ3wE9F71ItA49iIOONCkqFuAJspOQRStiMdhkbaFaM0jZd5ZW?=
- =?us-ascii?Q?UGJcyxEo0G4MaWG58HYD/DYxXLNucm4FIaAPy5/ziZD1SpfQjStPdDmqO5y0?=
- =?us-ascii?Q?U6vh6W2NXSZSjQvVfy4T4QyoW7qw56sW+vKM7mdIgIhkRLQXcTzUR15r0GBq?=
- =?us-ascii?Q?avIKbQVV7Oqz8JMl56ldoGFwXtURoypkhXmkpttoEekVQXaLaqKp57o8p7Am?=
- =?us-ascii?Q?Ky/P8r9zw8zcFj3jWs2ewxtU78mU/f5Ek5QqzXMDBZR1Qjx0LLJTmm5ymonS?=
- =?us-ascii?Q?xgfSOiBk0JP76uiGDQfYhXjETwcKYwVln1iBoMFoRAFgaqODn0UdYm1htEpk?=
- =?us-ascii?Q?GQeaUZuv6EgMXawG9HXQOFpRCQAJs4Kr57osgDXSN41KOT/G9mLj49Vzti3c?=
- =?us-ascii?Q?IxGO8IhWkKbMIh7DnTJWXkofEq3p2C9v0SsWREB1dHh7pZfZ9cTVOiNgksyc?=
- =?us-ascii?Q?IG1LC3yeZFnhYmvkp1ckX/0NxTPbsc0Nd4hmHuc470lFTu387hqZKaoAgMln?=
- =?us-ascii?Q?+NymgxcgZ/lAeOf/PTEAB4Ye5ccAhBz0lv0bkUFuGJf7nftCkI0QvUy5XI93?=
- =?us-ascii?Q?kIfXv802FVQNr5T+O59kCcfyfaF3cjw761786k9g02QFQwe99zy/5QVJW4Ek?=
- =?us-ascii?Q?6Uvr?=
+X-Microsoft-Antispam-Message-Info: zFkKO846FZn1hK1kPw2QIgdLODvEjRv0A3I0KUGWXcdx5hwW4zxIl6EI5Iz2YfL9lI3DFqwZ310sfnrj6yHKVBBUGGVI7bz3eGNUcG+EiE2ilp0axVSLQO+s0FkSn9sEU4lgNJfCOZS1e54yVpApTLJfJuleqlIzLbhiuY7UkfrTAn7AW9bTthdnFBggWKiKW8JGfOjYRtabSvjGVW4PVF4Bxlc1jSLTlUWpB2fJwnDEq/hRMc1YDtlTpSHjhoGkjl7sV+BJj1huInDrSt5IKD+W954Ue1nsacPpz3Bmzck5S+eZeL5Msix5fivbPQX5cVZSdpuxN6VI2wwvMIEKJPogVvx8sL1qvS2Iuo/dAtciOTXMQIgNisecH5DkAXlADpUChc7O9hfxFCon/YSD7g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB0968.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(39830400003)(136003)(376002)(346002)(396003)(366004)(66946007)(5660300002)(316002)(2906002)(1076003)(66556008)(8936002)(6486002)(86362001)(2616005)(36756003)(52116002)(7696005)(66476007)(4326008)(956004)(83380400001)(478600001)(8676002)(16526019)(26005)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?HaGhNLqwTq+fNmcapTQR+GQCygyfSKRvn29n1t0VCxunTsPNn9dAqGB4eVyi?=
+ =?us-ascii?Q?jCJLlgpQQXoRKzBfi/l2wM8Zh9vCX4Yx0yg1lXi9KsmEWcUSFyPtC1HSfHZc?=
+ =?us-ascii?Q?rMUs2HPiRYxrHA6Hpe8d+u269Yhq97lnz7mlb2DOtI7YkhF9+4mWua/5CDvk?=
+ =?us-ascii?Q?dGJ/9Z9ND9jCKehkyb/kX5ozwXdoUQmVKO403/1ArPuycr4aAsCEAgmSU//L?=
+ =?us-ascii?Q?rzJU+kuF7MKOaICbkpH6a5il9hQml6cR54u1RZaO7OwUZ8cyIL0GG3kCTa4n?=
+ =?us-ascii?Q?IBSXm3shyo7r5Y0pY9pVXkRl3JWyQ8FivbjZu9jAcOnhWCp9s7yMQbFsk5tH?=
+ =?us-ascii?Q?dKuJEtTdPIkB6c+TYk7GB2uieF2MxjxAUyN1istWyNZvCj0w/LJdsrt4Id+V?=
+ =?us-ascii?Q?JgQY6NW4o50kDKQ2/toDEIG6tGhLEoHTRklNnHa9WKpzb/oBT8EQ0/TBYlwa?=
+ =?us-ascii?Q?bUwzchrMNmYlVvsH3etuKArLamlgjAReIza39sGBjCD9reZzKnEAVN8KtgxC?=
+ =?us-ascii?Q?vLZRwpiGEu2tjeVLtw7NyozxaRlTfNHHZM4Zd3D+X6TTh50eKopZopqj3NdM?=
+ =?us-ascii?Q?6G6LaiLVvxy2I78PwoSUbFysT+jnmhhFWeOvGV3/y3CIDLpSIptpv0QfABe2?=
+ =?us-ascii?Q?LtxK9weYqW+4WGW6wF0GEU1DbF9UWuPLBjjKEP7ZEMYXiuoVnaV1z47Iq3RU?=
+ =?us-ascii?Q?+6WTWy/VpjG3VQcZSzq35jedb/ivxgLSHIT+0eOzOW0tPpZnVkYdZgmol0Hx?=
+ =?us-ascii?Q?SeCulqHmfiYRRfYswcvQiRRDLlHb81r9dTku6vSe8CAx9CFNuoNYltRv9Bxj?=
+ =?us-ascii?Q?nBoZddeJFZ/H4X22lumO6bdNunTjef8RbW7Nj4UANFiZ1WpcZCFk5HpVznce?=
+ =?us-ascii?Q?UtK7OQOvC4U1tolzcjJ8N0wRU+ue5niQJqLsHEDN0O8yER1oRlvB/m2Sdw0E?=
+ =?us-ascii?Q?98q/7Q0ylzdezpSXrZRFRJuXuKMCA8/vkvfEUSpBx5nhLi/pF3CsYfRVHl8r?=
+ =?us-ascii?Q?G3dH?=
 X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8ce0f46-f58c-446f-ea77-08d8bb8f8ccd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52174f97-4680-4354-5abd-08d8bb8f900f
 X-MS-Exchange-CrossTenant-AuthSource: AM9P193MB0968.EURP193.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 09:00:49.1281
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 09:00:54.7315
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w+fuut5igpleRDxA1sPFMjId/Yj8IeYW3Hv1ESFj9fSozoFNTccbp7VPRNs5kdW6bN+pPtaJOLrRTw0/MB/QQKLWd+a9l9qowNPKxH8dZcA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: sWAKEId4tg0uUQCpGXqFiIIkLrbWQKBIVYBjdnRcjSMbw5+VmCZfWEKTL7GTnpbX+DQ66E0myBOuPI0yR2R8WJC4hOc0vFAaJoQH9n6aYBI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P193MB1172
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-If the PCF2127/2129 loses power it needs some initialization to work
-correctly. A bootloader/firmware might do this. If not we should do this
-in the driver.
+To resume normal operation after a total power loss (no or empty
+battery) the "Power-On Reset Override (PORO)" facility needs to be
+disabled.
 
-Changes for v3:
-- drop the test if clearing PORO was successful
-- only run OTP refresh if OTPR bit is not already set
+The register reset value sets the PORO enabled and the data sheet
+recommends setting it to disabled for normal operation.
 
-Changes for v2:
-- make commit log and comments more clear
-- check if PORO was really disabled
+From what I've seen on the PCF2127 and PCF2129 there is not
+interrupted gernerated at the interrupt pin (INT), as long the PORO bit
+is set. This behavior is not documented in the manual.
 
-Philipp Rosenberger (2):
-  rtc: pcf2127: Disable Power-On Reset Override
-  rtc: pcf2127: Run a OTP refresh if not done before
+Signed-off-by: Philipp Rosenberger <p.rosenberger@kunbus.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- drivers/rtc/rtc-pcf2127.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-Interdiff against v2:
 diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index ca56dba64e79..b48fa27cf093 100644
+index 39a7b5116aa4..0e06907d3ddc 100644
 --- a/drivers/rtc/rtc-pcf2127.c
 +++ b/drivers/rtc/rtc-pcf2127.c
-@@ -568,6 +568,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- {
- 	struct pcf2127 *pcf2127;
- 	int ret = 0;
-+	unsigned int val;
+@@ -26,6 +26,7 @@
  
- 	dev_dbg(dev, "%s\n", __func__);
- 
-@@ -622,29 +623,19 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	 */
- 	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
- 				PCF2127_BIT_CTRL1_POR_OVRD);
--	/*
--	 * If the PORO can't be disabled, just move on. The RTC should
--	 * work fine, but functions like watchdog and alarm interrupts might
--	 * not work. There will be no interrupt generated on the interrupt pin.
--	 */
--	ret = regmap_test_bits(pcf2127->regmap, PCF2127_REG_CTRL1, PCF2127_BIT_CTRL1_POR_OVRD);
--	if (ret <= 0) {
--		dev_err(dev, "%s: can't disable PORO (ctrl1).\n", __func__);
--		dev_warn(dev, "Watchdog and alarm functions might not work properly\n");
--	}
- 
--	/*
--	 * Set the OTP refresh bit unconditionally. If an OTP refresh was
--	 * already done the bit is already set and will not rerun the refresh
--	 * operation.
--	 */
--	ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
--			      PCF2127_BIT_CLKOUT_OTPR);
--	if (ret < 0) {
--		dev_err(dev, "%s: OTP refresh (clkout_ctrl) failed.\n", __func__);
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CLKOUT, &val);
-+	if (ret < 0)
- 		return ret;
-+
-+	if (!(val & PCF2127_BIT_CLKOUT_OTPR)) {
-+		ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
-+				      PCF2127_BIT_CLKOUT_OTPR);
-+		if (ret < 0)
-+			return ret;
-+
-+		msleep(100);
+ /* Control register 1 */
+ #define PCF2127_REG_CTRL1		0x00
++#define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
+ #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
+ /* Control register 2 */
+ #define PCF2127_REG_CTRL2		0x01
+@@ -612,6 +613,13 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 		ret = devm_rtc_nvmem_register(pcf2127->rtc, &nvmem_cfg);
  	}
--	msleep(100);
  
++	/*
++	 * The "Power-On Reset Override" facility prevents the RTC to do a reset
++	 * after power on. For normal operation the PORO must be disabled.
++	 */
++	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
++				PCF2127_BIT_CTRL1_POR_OVRD);
++
  	/*
  	 * Watchdog timer enabled and reset pin /RST activated when timed out.
+ 	 * Select 1Hz clock source for watchdog timer.
 -- 
 2.29.2
 
