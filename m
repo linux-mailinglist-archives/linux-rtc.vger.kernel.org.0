@@ -2,58 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE75E2F9F1F
-	for <lists+linux-rtc@lfdr.de>; Mon, 18 Jan 2021 13:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F00B2FA117
+	for <lists+linux-rtc@lfdr.de>; Mon, 18 Jan 2021 14:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389608AbhARMHV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 18 Jan 2021 07:07:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45286 "EHLO mail.kernel.org"
+        id S2390510AbhARNQY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 Jan 2021 08:16:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389047AbhARMHR (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 18 Jan 2021 07:07:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C933222BB;
-        Mon, 18 Jan 2021 12:06:35 +0000 (UTC)
+        id S2404457AbhARNQD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 18 Jan 2021 08:16:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 191D522B49;
+        Mon, 18 Jan 2021 13:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610971596;
-        bh=q/FYT+FiLtSjL+KOgS20Z7N04SjGI/P+GlPMtd2nG60=;
+        s=k20201202; t=1610975722;
+        bh=N0+tVAiwuF8I6w8LmM9DR4Db2xUJ2qKlqrmMh5l6bZg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XFh0dYiGpx4oVbGvJ+staJ5LrwgAf5GdKJDUFEjr5UDoxNnGQBI8y8J8NlsPIufoO
-         M6q1bBYN2LC5/GD6yVc681THbRJs0DoxBjd/Njx/vV4N1MidSMwgT4x+Cx4UaHMx0U
-         iZLUKrXKNgLVV4Zg0WdTUyFWfhvA+OWu4kGLmWEkvSuDUT2vSBrToEL+k/NpcEG7hp
-         W9yM1oYm1p2zy5KlUxDxHKikDgScSt86a27jsK0/fb2aLOYhE6mU+lpaFlfV9UZkgj
-         CjRUGr4mF8pKErGOTyGEW8Sko6KzP134rX2uR5rKKvIlhLw0pTAr85K4TgB2cikoRc
-         yO/Ye2ELoD7MQ==
-Date:   Mon, 18 Jan 2021 12:05:58 +0000
+        b=HvQe3qQl9Q+qTHfN3YaUZnuuPso0FQLFGiDF3YrKlx9Ul8tV24pynj6CKUT6G2u67
+         4vg5xFUoKmyUNjcxSaTGq8+gDf362cuBSr3gJzljNRhjO38yghrqWs5rM0CcooDLCX
+         /oEiEcTfYcUteOJ0GSiQGH4qhPADCYIl99s0vmKg8wZS0GriSw5/ZaWpTWs8EAX+z+
+         l0WcUkFxoc5ZyxAXN3cQVSasV9dU9eBXDijiz51BUlB8M9q7zKeH+FGMMwm/WJN2ip
+         dgPk5c9CbKpbMSW7NdjfZaP1ycp2FYqLB18D6HXDxVzrkEemFgh6mnmYr+UhSudepK
+         kDLw6j+3yMq+A==
+Date:   Mon, 18 Jan 2021 13:14:45 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
+To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fei Shao <fshao@chromium.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 18/21] dt-bindings: allwinner: Add H616 compatible
- strings
-Message-ID: <20210118120558.GD4455@sirena.org.uk>
-References: <20210118020848.11721-1-andre.przywara@arm.com>
- <20210118020848.11721-19-andre.przywara@arm.com>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Yuchen Huang <yuchen.huang@mediatek.com>,
+        Ran Bi <ran.bi@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com
+Subject: Re: [PATCH v4 7/9] regulator: mt6359: Set the enable time for LDOs
+Message-ID: <20210118131445.GK4455@sirena.org.uk>
+References: <1608104827-7937-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+ <1608104827-7937-8-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jL2BoiuKMElzg3CS"
+        protocol="application/pgp-signature"; boundary="M9kwpIYUMbI/2cCx"
 Content-Disposition: inline
-In-Reply-To: <20210118020848.11721-19-andre.przywara@arm.com>
+In-Reply-To: <1608104827-7937-8-git-send-email-hsin-hsiung.wang@mediatek.com>
 X-Cookie: Huh?
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
@@ -61,34 +55,30 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---jL2BoiuKMElzg3CS
+--M9kwpIYUMbI/2cCx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 18, 2021 at 02:08:45AM +0000, Andre Przywara wrote:
-> Add simple "allwinner,sun50i-h616-xxx" compatible names to existing
-> bindings, and pair them with an existing fallback compatible string,
-> as the devices are compatible.
-> This covers I2C, infrared, RTC and SPI.
->=20
-> Use enums to group all compatible devices together.
+On Wed, Dec 16, 2020 at 03:47:05PM +0800, Hsin-Hsiung Wang wrote:
+> Add the enable time for LDOs.
+> This patch is preparing for adding mt6359p regulator support.
 
-Please submit normal, per subsystem patches for things like this.
+Just squash this into the previous patch, you're only just adding the
+driver and it's not a complex change that needs separate review.
 
---jL2BoiuKMElzg3CS
+--M9kwpIYUMbI/2cCx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAFeaUACgkQJNaLcl1U
-h9A+Fwf+LAkNmQitmzhglYIYHsNeibirBy6k8yPJ2w1+MZulWEhOeDJvaqgbS3ct
-4Q3qFxVZGkgzzsypXzU0iEB03Vzxy33H6J3QPfNqMhNQPQOZOXQho3xTuKgar9P+
-qQEQDJFYL1qpMKz3+CqO4SQotdjIFEJYNd/O44cnTCU98AnHARvi32ajvs7+VzNu
-HHKAsqKmQT4a4nPA31joiWxp2XAC7rA1q+KZ7iL5rWIKuJkp4pfkXK58QiBegXhz
-CCCrggzrjimyFakw4WA6IWyTF2pE6maY0UyLrP9n6AHPC/DDIvalzos5xjC7KWj8
-KsITNqrGnlImwAjQ5fSm/X1uTyqipw==
-=MpJn
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAFicQACgkQJNaLcl1U
+h9CSTQf+MLJVFfQZUGnoHLl3SN5QXQPjtmsJepqX3sgPg8KHO/d1P4mBOMVyHZfe
+/CRnecyY0Lc0We/d2WkY6FM0cC3sY3JC6juVUdfdxNlmZVxVWReKF7VHLXf/8OWQ
+P3aMNUX6uZIHcGJi57fPs7rEamcT94jUFeMQIsi/nRtPY9YgjpUOj0EVY6U92Dsx
+DfG2W64Jc3Fd+AZD4hRLxinGcMwMPm6RckTAQmFO9R5KfXs/Qt1vHWo1l9XgZmdh
+Hqcp4AGAMs3joVHP+bbbSqZHqmEhfi/kTBRftcum3eXnf1lh3bn3BTTCYD0y46aF
+O+MkY4JW53ScIreKEOgqkdrl/xSa/w==
+=svi+
 -----END PGP SIGNATURE-----
 
---jL2BoiuKMElzg3CS--
+--M9kwpIYUMbI/2cCx--
