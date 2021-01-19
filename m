@@ -2,27 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BCB2FC303
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 23:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461F22FC31F
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 23:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729576AbhASWIR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Jan 2021 17:08:17 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:48775 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729502AbhASWIN (ORCPT
+        id S1729515AbhASWIQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Jan 2021 17:08:16 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:40277 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729509AbhASWIN (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Jan 2021 17:08:13 -0500
 X-Originating-IP: 86.202.109.140
 Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4ECF6E0002;
-        Tue, 19 Jan 2021 22:07:06 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 1082F1C0007;
+        Tue, 19 Jan 2021 22:07:07 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/14] rtc: rx8025: use rtc_lock/rtc_unlock
-Date:   Tue, 19 Jan 2021 23:06:51 +0100
-Message-Id: <20210119220653.677750-13-alexandre.belloni@bootlin.com>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     linux-rtc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 14/14] rtc: stm32: use rtc_lock/rtc_unlock
+Date:   Tue, 19 Jan 2021 23:06:52 +0100
+Message-Id: <20210119220653.677750-14-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210119220653.677750-1-alexandre.belloni@bootlin.com>
 References: <20210119220653.677750-1-alexandre.belloni@bootlin.com>
@@ -36,31 +40,28 @@ Avoid accessing directly rtc->ops_lock and use the RTC core helpers.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rx8025.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-stm32.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-index a24f85893f90..c914091819ba 100644
---- a/drivers/rtc/rtc-rx8025.c
-+++ b/drivers/rtc/rtc-rx8025.c
-@@ -142,10 +142,9 @@ static irqreturn_t rx8025_handle_irq(int irq, void *dev_id)
- {
- 	struct i2c_client *client = dev_id;
- 	struct rx8025_data *rx8025 = i2c_get_clientdata(client);
--	struct mutex *lock = &rx8025->rtc->ops_lock;
- 	int status;
+diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
+index d774aa18f57a..75a8924ba12b 100644
+--- a/drivers/rtc/rtc-stm32.c
++++ b/drivers/rtc/rtc-stm32.c
+@@ -209,7 +209,7 @@ static irqreturn_t stm32_rtc_alarm_irq(int irq, void *dev_id)
+ 	const struct stm32_rtc_events *evts = &rtc->data->events;
+ 	unsigned int status, cr;
  
--	mutex_lock(lock);
-+	rtc_lock(rx8025->rtc);
- 	status = rx8025_read_reg(client, RX8025_REG_CTRL2);
- 	if (status < 0)
- 		goto out;
-@@ -170,7 +169,7 @@ static irqreturn_t rx8025_handle_irq(int irq, void *dev_id)
+-	mutex_lock(&rtc->rtc_dev->ops_lock);
++	rtc_lock(rtc->rtc_dev);
+ 
+ 	status = readl_relaxed(rtc->base + regs->sr);
+ 	cr = readl_relaxed(rtc->base + regs->cr);
+@@ -226,7 +226,7 @@ static irqreturn_t stm32_rtc_alarm_irq(int irq, void *dev_id)
+ 		stm32_rtc_clear_event_flags(rtc, evts->alra);
  	}
  
- out:
--	mutex_unlock(lock);
-+	rtc_unlock(rx8025->rtc);
+-	mutex_unlock(&rtc->rtc_dev->ops_lock);
++	rtc_unlock(rtc->rtc_dev);
  
  	return IRQ_HANDLED;
  }
