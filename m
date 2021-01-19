@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3913F2FB2EC
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 08:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0742FB30F
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 08:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729991AbhASHY4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Jan 2021 02:24:56 -0500
-Received: from mail-lj1-f178.google.com ([209.85.208.178]:35575 "EHLO
-        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726601AbhASHX6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Jan 2021 02:23:58 -0500
-Received: by mail-lj1-f178.google.com with SMTP id p13so20816443ljg.2;
-        Mon, 18 Jan 2021 23:23:41 -0800 (PST)
+        id S1730703AbhASHWj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Jan 2021 02:22:39 -0500
+Received: from mail-lf1-f47.google.com ([209.85.167.47]:33451 "EHLO
+        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730597AbhASHWV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Jan 2021 02:22:21 -0500
+Received: by mail-lf1-f47.google.com with SMTP id v67so27666645lfa.0;
+        Mon, 18 Jan 2021 23:21:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ShiG8ncvQqYw1SDkHGr+rcvPNVAuPLpZAxLBK/z6p+4=;
-        b=jKuaIvvhF7F5Id7Fbm/tDF9tu4FrJsYJK2lzzL6UyjRwRDRSNHvLIurIjHSLcfkzG5
-         9i/u+4nova0v9ysjS1hUAXIEJaFZZ3ctv+V610ojfTyAbp++YSEMnA2q44y4KZ8VcGMB
-         eWQ43XtjJOBAkH/xb2mAVhpWxReyVYdZ4EKIwuEkHkvrejVkKfheQvcBF7jFHQsmrE7g
-         NvCRYrdeuOQlUk8GSJ04LkRd1BzUbB8BHan4QJQriZctN44ze5QIRsFZZM0LOyAX6Qp3
-         wfNNq0YrPj3bJ95SIopUAELXWnacwabz44Nw2uUKAHOr5rMyBFwEd/k0I161xvxFJs+N
-         EfWg==
-X-Gm-Message-State: AOAM530PGn+5ZKpolUfRozquXSa/0ayk/9gZQgAPOVhm7fjCj90aaFWI
-        FAPGF8SiKhdPHLVZPEMVpaQ=
-X-Google-Smtp-Source: ABdhPJxNf1kTyWJ8dhSflagljSf/R6XPWSMvBRrv9RBYDoQNkJiMXeqPUYkQA5PELCyIFPhs1KW1Mg==
-X-Received: by 2002:a05:651c:1356:: with SMTP id j22mr1351691ljb.237.1611040995391;
-        Mon, 18 Jan 2021 23:23:15 -0800 (PST)
+        bh=yuol3XCJ+uJshcSsbfW6MAHHBCYuOW9vHmPszs5r2uE=;
+        b=rGxBxQ7LXXkK8lzItN3KOdLaPLNCUc/T78n1VJ7bZo3pNILl8DA9muWiMvrKc7Kicu
+         XfMX1qEMUhdH6S83aNQq4gzUmjeT6xV7+d+LHkEqhWQbRxH7EA/HvjcmUOJoG9E+HIK1
+         +IIDbwqgiJajqGrSNGgbQ5r3rOlnQYKV049gTzG1g0tb3Tc0SMIHU1Aeq/6gqVDcPxzv
+         tCUHmQDaw/cEab17SLz11qTCjktGR2wNlLKG9ls788Xp3eDwvcdUE0/4v8NN0zS08xuy
+         STUkFNjfCur2CzRLvR/SPuikZnsY892/acViTvOFnsl3eeljozLR1bGkjozNoVnpVpoK
+         HfOg==
+X-Gm-Message-State: AOAM533h3oF8jae9t4ZSngtv8NvMS/iBlvoQitCSS8YUG39lQaRHiZ4M
+        74JiSweFaicrKkQJZqzBXs8=
+X-Google-Smtp-Source: ABdhPJwDDsr2dFWaDyEIXAFjRUepvFCDCV637htUh0CXr7GctVRcWaGSH+/U4uu3MEBdAj75hHalFA==
+X-Received: by 2002:ac2:5234:: with SMTP id i20mr1240210lfl.71.1611040891700;
+        Mon, 18 Jan 2021 23:21:31 -0800 (PST)
 Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id d6sm2187479lfl.175.2021.01.18.23.23.14
+        by smtp.gmail.com with ESMTPSA id o14sm2186188lfi.92.2021.01.18.23.21.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 23:23:14 -0800 (PST)
-Date:   Tue, 19 Jan 2021 09:23:08 +0200
+        Mon, 18 Jan 2021 23:21:31 -0800 (PST)
+Date:   Tue, 19 Jan 2021 09:21:23 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -49,8 +49,8 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v2 10/17] gpio: support ROHM BD71815 GPOs
-Message-ID: <50f72f1f7f28e969a1e0353712fcc530bce9dd06.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+Subject: [PATCH v2 07/17] dt_bindings: mfd: Add ROHM BD71815 PMIC
+Message-ID: <5e58cc041572d8540b4f1fbeea7bde955d6b2ea6.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -60,238 +60,235 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Support GPO(s) found from ROHM BD71815 power management IC. The IC has two
-GPO pins but only one is properly documented in data-sheet. The driver
-exposes by default only the documented GPO. The second GPO is connected to
-E5 pin and is marked as GND in data-sheet. Control for this undocumented
-pin can be enabled using a special DT property.
+Document DT bindings for ROHM BD71815.
 
-This driver is derived from work by Peter Yang <yanglsh@embest-tech.com>
-although not so much of original is left.
+BD71815 is a single-chip power management IC mainly for battery-powered
+portable devices. The IC integrates 5 bucks, 7 LDOs, a boost driver for
+LED, a battery charger with a Coulomb counter, a real-time clock, a 32kHz
+clock and two general-purpose outputs although only one is documented by
+the data-sheet.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 ---
+
 Changes since v1:
-  - removed unneeded headers
-  - clarified dev/parent->dev usage
-  - removed forgotten #define DEBUG
+  - fixed patch ordering to meet ref dependencies
+  - added missing blank lines
+  - clkout-mode changed from string to tristated (uint)
+  - added default for rsense resistor
 
- drivers/gpio/Kconfig        |  10 +++
- drivers/gpio/Makefile       |   1 +
- drivers/gpio/gpio-bd71815.c | 171 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 182 insertions(+)
- create mode 100644 drivers/gpio/gpio-bd71815.c
+ .../bindings/mfd/rohm,bd71815-pmic.yaml       | 202 ++++++++++++++++++
+ 1 file changed, 202 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index c70f46e80a3b..fd7283af858d 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1096,6 +1096,16 @@ config GPIO_BD70528
- 	  This driver can also be built as a module. If so, the module
- 	  will be called gpio-bd70528.
- 
-+config GPIO_BD71815
-+	tristate "ROHM BD71815 PMIC GPIO support"
-+	depends on MFD_ROHM_BD71828
-+	help
-+	  Support for GPO(s) on ROHM BD71815 PMIC. There are two GPOs
-+	  available on the ROHM PMIC.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called gpio-bd71815.
-+
- config GPIO_BD71828
- 	tristate "ROHM BD71828 GPIO support"
- 	depends on MFD_ROHM_BD71828
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 35e3b6026665..86bb680522a6 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -39,6 +39,7 @@ obj-$(CONFIG_GPIO_ATH79)		+= gpio-ath79.o
- obj-$(CONFIG_GPIO_BCM_KONA)		+= gpio-bcm-kona.o
- obj-$(CONFIG_GPIO_BCM_XGS_IPROC)	+= gpio-xgs-iproc.o
- obj-$(CONFIG_GPIO_BD70528)		+= gpio-bd70528.o
-+obj-$(CONFIG_GPIO_BD71815)		+= gpio-bd71815.o
- obj-$(CONFIG_GPIO_BD71828)		+= gpio-bd71828.o
- obj-$(CONFIG_GPIO_BD9571MWV)		+= gpio-bd9571mwv.o
- obj-$(CONFIG_GPIO_BRCMSTB)		+= gpio-brcmstb.o
-diff --git a/drivers/gpio/gpio-bd71815.c b/drivers/gpio/gpio-bd71815.c
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
 new file mode 100644
-index 000000000000..664de5f69bf1
+index 000000000000..b52b8585d48d
 --- /dev/null
-+++ b/drivers/gpio/gpio-bd71815.c
-@@ -0,0 +1,171 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Support to GPOs on ROHM BD71815
-+ */
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+/* For the BD71815 register definitions */
-+#include <linux/mfd/rohm-bd71815.h>
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+@@ -0,0 +1,202 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/rohm,bd71815-pmic.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+struct bd71815_gpio {
-+	struct gpio_chip chip;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	/*
-+	 * Sigh. The BD71815 and BD71817 were originally designed to support two
-+	 * GPO pins. At some point it was noticed the second GPO pin which is
-+	 * the E5 pin located at the center of IC is hard to use on PCB (due to
-+	 * the location). It was decided to not promote this second GPO and pin
-+	 * is marked as GND on the data-sheet. The functionality is still there
-+	 * though! I guess driving GPO connected to ground is a bad idea. Thus
-+	 * we do not support it by default. OTOH - the original driver written
-+	 * by colleagues at Embest did support controlling this second GPO. It
-+	 * is thus possible this is used in some of the products.
-+	 *
-+	 * This driver does not by default support configuring this second GPO
-+	 * but allows using it by providing the DT property
-+	 * "rohm,enable-hidden-gpo".
-+	 */
-+	bool e5_pin_is_gpo;
-+};
++title: ROHM BD71815 Power Management Integrated Circuit bindings
 +
-+static int bd71815gpo_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct bd71815_gpio *bd71815 = gpiochip_get_data(chip);
-+	int ret = 0;
-+	int val;
++maintainers:
++  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 +
-+	ret = regmap_read(bd71815->regmap, BD71815_REG_GPO, &val);
-+	if (ret)
-+		return ret;
++description: |
++  BD71815AGW is a single-chip power management ICs for battery-powered
++  portable devices. It integrates 5 buck converters, 8 LDOs, a boost driver
++  for LED and a 500 mA single-cell linear charger. Also included is a Coulomb
++  counter, a real-time clock (RTC), and a 32.768 kHz clock gate and two GPOs.
 +
-+	return (val >> offset) & 1;
-+}
++properties:
++  compatible:
++    const: rohm,bd71815
 +
-+static void bd71815gpo_set(struct gpio_chip *chip, unsigned int offset,
-+			   int value)
-+{
-+	struct bd71815_gpio *bd71815 = gpiochip_get_data(chip);
-+	int ret, val, mask;
++  reg:
++    description:
++      I2C slave address.
++    maxItems: 1
 +
-+	if (!bd71815->e5_pin_is_gpo && offset)
-+		return;
++  interrupts:
++    maxItems: 1
 +
-+	mask = BIT(offset);
-+	val = value ? mask : 0;
-+	ret = regmap_update_bits(bd71815->regmap, BD71815_REG_GPO, mask, val);
-+	if (ret)
-+		dev_warn(bd71815->dev, "failed to toggle GPO\n");
-+}
++  gpio-controller: true
 +
-+static int bd71815_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
-+				   unsigned long config)
-+{
-+	struct bd71815_gpio *bdgpio = gpiochip_get_data(chip);
++  "#gpio-cells":
++    const: 2
++    description: |
++      The first cell is the pin number and the second cell is used to specify
++      flags. See ../gpio/gpio.txt for more information.
 +
-+	if (!bdgpio->e5_pin_is_gpo && offset)
-+		return -EOPNOTSUPP;
++  clocks:
++    maxItems: 1
 +
-+	switch (pinconf_to_config_param(config)) {
-+	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
-+		return regmap_update_bits(bdgpio->regmap,
-+					  BD71815_REG_GPO,
-+					  BD71815_GPIO_DRIVE_MASK << offset,
-+					  BD71815_GPIO_OPEN_DRAIN << offset);
-+	case PIN_CONFIG_DRIVE_PUSH_PULL:
-+		return regmap_update_bits(bdgpio->regmap,
-+					  BD71815_REG_GPO,
-+					  BD71815_GPIO_DRIVE_MASK << offset,
-+					  BD71815_GPIO_CMOS << offset);
-+	default:
-+		break;
-+	}
-+	return -EOPNOTSUPP;
-+}
++  "#clock-cells":
++    const: 0
 +
-+/* BD71815 GPIO is actually GPO */
-+static int bd71815gpo_direction_get(struct gpio_chip *gc, unsigned int offset)
-+{
-+	return GPIO_LINE_DIRECTION_OUT;
-+}
++  clock-output-names:
++    const: bd71815-32k-out
 +
-+/* Template for GPIO chip */
-+static struct gpio_chip bd71815gpo_chip = {
-+	.label			= "bd71815",
-+	.owner			= THIS_MODULE,
-+	.get			= bd71815gpo_get,
-+	.get_direction		= bd71815gpo_direction_get,
-+	.set			= bd71815gpo_set,
-+	.set_config		= bd71815_gpio_set_config,
-+	.can_sleep		= 1,
-+};
++  rohm,clkout-open-drain:
++    description: clk32kout mode. Set to 1 for "open-drain" or 0 for "cmos".
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 1
 +
-+static int gpo_bd71815_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	struct bd71815_gpio *g;
-+	struct device *dev;
-+	struct device *parent;
++  rohm,charger-sense-resistor-ohms:
++    minimum: 10000000
++    maximum: 50000000
++    description: |
++      BD71827 and BD71828 have SAR ADC for measuring charging currents.
++      External sense resistor (RSENSE in data sheet) should be used. If
++      something other but 30MOhm resistor is used the resistance value
++      should be given
++      here in Ohms.
++    default: 30000000
 +
-+	/*
-+	 * Bind devm lifetime to this platform device => use dev for devm.
-+	 * also the prints should originate from this device.
-+	 */
-+	dev = &pdev->dev;
-+	/* The device-tree and regmap come from MFD => use parent for that */
-+	parent = dev->parent;
++  regulators:
++    $ref: ../regulator/rohm,bd71815-regulator.yaml
++    description:
++      List of child nodes that specify the regulators.
 +
-+	g = devm_kzalloc(dev, sizeof(*g), GFP_KERNEL);
-+	if (!g)
-+		return -ENOMEM;
++  gpio-reserved-ranges:
++    description: |
++      Usage of BD71828 GPIO pins can be changed via OTP. This property can be
++      used to mark the pins which should not be configured for GPIO. Please see
++      the ../gpio/gpio.txt for more information.
 +
-+	g->e5_pin_is_gpo = of_property_read_bool(parent->of_node,
-+						 "rohm,enable-hidden-gpo");
-+	g->chip = bd71815gpo_chip;
-+	g->chip.base = -1;
++  rohm,enable-hidden-gpo:
++    description: |
++      The BD71815 has undocumented GPO at pin E5. Pin is marked as GND at the
++      data-sheet as it's location in the middle of GND pins makes it hard to
++      use on PCB. If your board has managed to use this pin you can enable the
++      second GPO by defining this property. Dont enable this if you are unsure
++      about how the E5 pin is connected on your board.
++    type: boolean
 +
-+	if (g->e5_pin_is_gpo)
-+		g->chip.ngpio = 2;
-+	else
-+		g->chip.ngpio = 1;
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - "#clock-cells"
++  - regulators
++  - gpio-controller
++  - "#gpio-cells"
 +
-+	g->chip.parent = parent;
-+	g->chip.of_node = parent->of_node;
-+	g->regmap = dev_get_regmap(parent, NULL);
-+	g->dev = dev;
++additionalProperties: false
 +
-+	ret = devm_gpiochip_add_data(dev, &g->chip, g);
-+	if (ret < 0) {
-+		dev_err(dev, "could not register gpiochip, %d\n", ret);
-+		return ret;
-+	}
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/leds/common.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        pmic: pmic@4b {
++            compatible = "rohm,bd71815";
++            reg = <0x4b>;
 +
-+	return ret;
-+}
-+static const struct platform_device_id bd7181x_gpo_id[] = {
-+	{ "bd71815-gpo" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(platform, bd7181x_gpo_id);
++            interrupt-parent = <&gpio1>;
++            interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
 +
-+static struct platform_driver gpo_bd71815_driver = {
-+	.driver = {
-+		.name	= "bd71815-gpo",
-+		.owner	= THIS_MODULE,
-+	},
-+	.probe		= gpo_bd71815_probe,
-+	.id_table	= bd7181x_gpo_id,
-+};
++            clocks = <&osc 0>;
++            #clock-cells = <0>;
++            clock-output-names = "bd71815-32k-out";
 +
-+module_platform_driver(gpo_bd71815_driver);
++            gpio-controller;
++            #gpio-cells = <2>;
 +
-+/* Note:  this hardware lives inside an I2C-based multi-function device. */
-+MODULE_ALIAS("platform:bd71815-gpo");
++            rohm,charger-sense-resistor-ohms = <10000000>;
 +
-+MODULE_AUTHOR("Peter Yang <yanglsh@embest-tech.com>");
-+MODULE_DESCRIPTION("GPO interface for BD71815");
-+MODULE_LICENSE("GPL");
++            regulators {
++                buck1: buck1 {
++                    regulator-name = "buck1";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <2000000>;
++                    regulator-always-on;
++                    regulator-ramp-delay = <1250>;
++                    rohm,dvs-run-voltage = <1150000>;
++                    rohm,dvs-suspend-voltage = <950000>;
++                };
++                buck2: buck2 {
++                    regulator-name = "buck2";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <2000000>;
++                    regulator-always-on;
++                    regulator-ramp-delay = <1250>;
++                    rohm,dvs-run-voltage = <1150000>;
++                    rohm,dvs-suspend-voltage = <950000>;
++                };
++                buck3: buck3 {
++                    regulator-name = "buck3";
++                    regulator-min-microvolt = <1200000>;
++                    regulator-max-microvolt = <2700000>;
++                    regulator-always-on;
++                };
++                buck4: buck4 {
++                    regulator-name = "buck4";
++                    regulator-min-microvolt = <1100000>;
++                    regulator-max-microvolt = <1850000>;
++                    regulator-always-on;
++                };
++                buck5: buck5 {
++                    regulator-name = "buck5";
++                    regulator-min-microvolt = <1800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo1: ldo1 {
++                    regulator-name = "ldo1";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo2: ldo2 {
++                    regulator-name = "ldo2";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo3: ldo3 {
++                    regulator-name = "ldo3";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo4: ldo4 {
++                    regulator-name = "ldo4";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo5: ldo5 {
++                    regulator-name = "ldo5";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-always-on;
++                };
++                ldo6: ldodvref {
++                    regulator-name = "ldodvref";
++                    regulator-always-on;
++                };
++                ldo7: ldolpsr {
++                    regulator-name = "ldolpsr";
++                    regulator-always-on;
++                };
++
++                boost: wled {
++                    regulator-name = "wled";
++                    regulator-min-microamp = <10>;
++                    regulator-max-microamp = <25000>;
++                };
++            };
++        };
++    };
 -- 
 2.25.4
 
