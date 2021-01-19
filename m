@@ -2,214 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 170292FB307
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 08:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCA42FBA5E
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Jan 2021 15:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725983AbhASHcg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Jan 2021 02:32:36 -0500
-Received: from mail-lj1-f179.google.com ([209.85.208.179]:37473 "EHLO
-        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726134AbhASHc1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Jan 2021 02:32:27 -0500
-Received: by mail-lj1-f179.google.com with SMTP id 3so594185ljc.4;
-        Mon, 18 Jan 2021 23:32:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B9vutluOsSaMSuMzne2uyF2R7I89oSuj6O6DZ914Uf0=;
-        b=ebBHjnADG8UNxfY8tgvfWc3gbKsMQAVr8ZuHJpxrmAbUne4RzCAD8VsnbcYMeTh+A9
-         nXCO3NuyXaA/1UHujuB73U/dkg+S9hj34fL4U8zhFFzdZ7yyw2b9MipAl8qBkUZNKr+S
-         OhS+v5qXf4wGWnBaJSSAJ/T6KGcpwRZ2w8Ci4kQCFDcA/GzUw7i2LWt6tFaDHv69WDa9
-         yEX2NOR6RLh0758en2eqtxHk5QBIHhwhm6o5tKpu7uvcVYRnqvvL3Id7D/ysb3BYKy7S
-         NXANxnn+rjo9HpsFzdn0qA50B3ns6gMz9bXezaq/U/JsJuiDZWKFXmdVvY8T6mHEHxm0
-         07Aw==
-X-Gm-Message-State: AOAM531ZehuJXOaCN82mUh+ea+GhL6ZA5vv2NBbmr8D43uqDSllw/rqE
-        9P5Jbg8aZwc/SidUrxEExSE=
-X-Google-Smtp-Source: ABdhPJz3cl1HWkCcoY8J/T7kR9RbSAay/Q092nTZbrf7yp1pFBF2a4O2Vl8MUIz5VbqbQvRSllss+w==
-X-Received: by 2002:a2e:9812:: with SMTP id a18mr1296886ljj.73.1611041502509;
-        Mon, 18 Jan 2021 23:31:42 -0800 (PST)
-Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id d10sm2194900lfj.281.2021.01.18.23.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jan 2021 23:31:41 -0800 (PST)
-Date:   Tue, 19 Jan 2021 09:31:36 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v2 16/17] rtc: bd70528: Support RTC on ROHM BD71815
-Message-ID: <948164eb1c3053c3dc31c9b46de92b1c9b7224ae.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+        id S1731777AbhASOxe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Jan 2021 09:53:34 -0500
+Received: from mail-eopbgr70088.outbound.protection.outlook.com ([40.107.7.88]:15332
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728716AbhASNC3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 19 Jan 2021 08:02:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bgmgvos5xcSZ9sV+SaR0v4CsmmR4p8cvnz7vdPK8e3/8YeVMleXrqmT9f4Hx0NJRLaF/Mb1d+H1HsPnOk+ceCLG5KgXXxZ7GssPRFD36yHQ+pwZYZ9qkPAwJeUsk9Z9/XMTR4kuVLMbU6K3//FV9If8p9+fHhL6yFyz6Iwj7ujqLiC/kyZPxveMIk3nS8gJRn4rTDntEU5c35fQqLzN/2vIkQKQLzCMYkMaPt4uJwRwDDVLrvXWSKOchsBPyBLQwsDTaNDj1Nuvw55Csavdmor8xyCFiCO7aXHQcL9OPXjrluwSgK6WGgWDCSGAZZEH98akk2g3VGaUhBlkEZ5BsUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JKqVj/fp4WM3UMFkqjbW8Lbih9Ry8GprkE13tckiM8U=;
+ b=VxZXifRawpD5yrRVKMAFim4ZwKnUN3ysQHDJwRIKIBSiWZXQVdmAcDJnWhmLVXuXE6EauGWjLcmADZY121C/ktNuPqZW4UVY+o5H6n722fP+IT0Ev6ottOiRIWmofbYwKTQVDbJLHQD0p3X1mM31q/C/brBiO1cBSuiKSSsUJhu9lITccB//F7QV1FW4L1LcIEsgV0eAy527FOduQseNuKwnkc1Xv+TmpaWuKUQ6m2Yd7Sv+lEtxQ4rP1/SL04E2iQLxQtSICpNQSyimHeh5YQFyVv5pvys6UxjEXt4sYEfDti/nPebqhwBEmrKMkE0Qmp95EqzwkhN04JTxwH3m8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductoreurope.onmicrosoft.com;
+ s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JKqVj/fp4WM3UMFkqjbW8Lbih9Ry8GprkE13tckiM8U=;
+ b=A7uGSl6E7UHV16hmkoIdN2Lip/gvx3wPOPHEaYXWlxxNpJIPtD5tsvH7ctM6htBk0TNkFWVu0D3NGmUpg41G35rgRfamR2aDkNVFYEbqCQsGHUkuyImjExKgSAPUS5gN9YlwwKOk5ogay7uG8zDTWImC1WlAOBOfWQK7iQETt58=
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
+ HE1PR0302MB2668.eurprd03.prod.outlook.com (2603:10a6:3:f1::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3763.13; Tue, 19 Jan 2021 13:01:38 +0000
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::cd6c:2eae:c885:c9d]) by HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::cd6c:2eae:c885:c9d%6]) with mapi id 15.20.3763.014; Tue, 19 Jan 2021
+ 13:01:38 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>
+CC:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 10/17] gpio: support ROHM BD71815 GPOs
+Thread-Topic: [PATCH v2 10/17] gpio: support ROHM BD71815 GPOs
+Thread-Index: AQHW7jP1aCOdIjy6aUiaKgV7fuUEzqouyhYAgAAf8oA=
+Date:   Tue, 19 Jan 2021 13:01:37 +0000
+Message-ID: <8bd5d95df1daaee0d7b3fee33e5c5cad679759a6.camel@fi.rohmeurope.com>
 References: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+         <50f72f1f7f28e969a1e0353712fcc530bce9dd06.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+         <CAMpxmJVjnAMig16qWkjpaHwQ+4Ld9yEc-gg-CGv28QQYBB6gNg@mail.gmail.com>
+In-Reply-To: <CAMpxmJVjnAMig16qWkjpaHwQ+4Ld9yEc-gg-CGv28QQYBB6gNg@mail.gmail.com>
+Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Accept-Language: fi-FI, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+authentication-results: baylibre.com; dkim=none (message not signed)
+ header.d=none;baylibre.com; dmarc=none action=none
+ header.from=fi.rohmeurope.com;
+x-originating-ip: [62.78.225.252]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 546ec45e-95e8-44f3-0a86-08d8bc7a5bb4
+x-ms-traffictypediagnostic: HE1PR0302MB2668:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <HE1PR0302MB2668BC326B779F97B9729536ADA30@HE1PR0302MB2668.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nP9aklN01nCJ7c8JXVAFSY9n6JiJWslsVISTvxLCi8QFyHJ0jpWaqVttd7Mrcd1V157zcO29L7xHlXDZqcd46xKa0CXJdmAG2b6/TiqCtV4Im46gWucYcnVqRjsH2e23AULQhIGHHeyiBLJkf73u/vQL1RfGogMKnvKfRyWbqGynJ2/iHEVCfWaibkIDMu9Ds1hycT9fJWiVK9JbBDhf6iMOLU4IKbFMcrPE5a9kUQ1D5dgJxWXasLfbiwR3nprOP9B28pxGuO93uKU/Rwvttlk96QDuybteDoa+uk19o900L9A6wIJGRq8VDZerPUEx0Kw9T2MUCGLEtQ4rv05YRjQq94NTd1kPFeNQMl8WIlj+fTjpXFvNy9jNP9ljdHYCBo6G2znDRDfg8xpZpS3kuQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(366004)(346002)(396003)(39850400004)(83380400001)(86362001)(26005)(186003)(6486002)(316002)(4326008)(53546011)(2616005)(6506007)(71200400001)(7416002)(66556008)(3450700001)(64756008)(66476007)(8936002)(66446008)(6512007)(54906003)(66946007)(76116006)(6916009)(478600001)(2906002)(5660300002)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?eDFjWWJaSVI5NEdlUU1CbWtqRjBacEN5eVZDRjVYWEpsdUprTW1YVDM3SUls?=
+ =?utf-8?B?U3RwbDNueVV2TGd5bHQzZGxKQXpiaUVYS2tZVU45R0lNbUZWMHRUdHdyZEZa?=
+ =?utf-8?B?SUw0bG45THlwWVpBNUFUdzMzSTRvNmZDZWlDbTJaMndIY2JkSWgycUgzVU1H?=
+ =?utf-8?B?ei9HQThLSlhNak42YjRpdWJ5NkhaNFhmZEthMG5pQ3dOVERySzljcEtROGFQ?=
+ =?utf-8?B?UUl1YnQ5R3oydXZIRTFlYzZERE9keGQ3RGkzaldJUGxFRXV0aDNZdmtZckZP?=
+ =?utf-8?B?M0xuUXdKSGFvb09hM0ZDTUwvbE5oeHgyVnRzcU15blc3bkJrVExuMWRMVzkv?=
+ =?utf-8?B?a2tFVzBvNEUrQThiNU5kUjY4S1VHek1keW1jZUVmaGprOU9HYWFDSmNwdktk?=
+ =?utf-8?B?cXV0eFV2TEZvV2hudDE4NzAvdUQrenA4V2p6ZmMycVBzbEhvcEVQSUxDQ0JC?=
+ =?utf-8?B?RWhWL1psOVdQbkpSVVp3S1l2YjlYeXZyVnBBQ0R3dE8xeFllWUVJaDZhM2VT?=
+ =?utf-8?B?UXB3emtDazFJQWpXUno3SHVGVW1iWWJLM3BGc3lYRVdHSWo5RHRmdTJUL2JW?=
+ =?utf-8?B?SXpMZnpkaFVrZUNheUxabVBicERoZGpBbitrVVdBRHIvcmdqRVlzZUpxdGVl?=
+ =?utf-8?B?V00rRGxXS29GR1NNbWJvblFLS1JqQUNzZzQ3UFBncjlDdDJTWXFON2hkL1lv?=
+ =?utf-8?B?MVR4dXRKRWdvQzh5cFp5WmxnWnh1Z2RxdzVTRis4S3NLRU0zKy95L1VyaE9Q?=
+ =?utf-8?B?dHNDZDNCTjI1dG1xUElMZER3cVlIU3FOMjkwMHJRaDhVaUdMMzBRSlp4RDZh?=
+ =?utf-8?B?QkZWWG9VQkdrMzdMaEczcXY3NlBIN21hZ29ZUitkWUpvTDFKTlUrMUl0bHlm?=
+ =?utf-8?B?THFiM1NXQ1FvcFowNTJkbjNVVzNuOG5mOUd1VklzTUxvU0ZqVldnd0ZCcDFW?=
+ =?utf-8?B?d2UrazExZTZBcEE3akV1dXhrOUpESHhUOFdNRzFrRFI3cmJlNDR0MFRIaVF6?=
+ =?utf-8?B?NUZEd29CTlFFNHUxSVRHRktpdExibEc4V1FnaTBmL3lVRFM1RGxoNWFabGlx?=
+ =?utf-8?B?YWlReW9wM2I1SmUzN2hWOGE2ck9iVm5EUjUxc1hXTUwwSngzSlE1T3BoOUJ0?=
+ =?utf-8?B?d3lNUXJOYW82Ymd4Z3BSYUdKOHpTM1JEeERCODdXS3hQcWVSbGpVcEZSQ3pp?=
+ =?utf-8?B?SkpuR25xT0VyeWppWDI3cFduRW90YVZoV1E2emhFUnAyZmZGcnJIUE9WUlhT?=
+ =?utf-8?B?S3JzQkJMdVNHTzUzN09zSXQ0UG9sVkFFS2poRmFISVdPZ2REaHp5WmFOc1Qz?=
+ =?utf-8?B?YnJDRXBxRFdTZm5sTStVcUxkN0N6dkZXRld0bzJwRkdQc3IrbVZTem92MUp4?=
+ =?utf-8?B?cGZDUHpIMjB1NFYvaFJ6Q3JFWlNFeW9QZE9NdFBQeDExUU45dlRmL3V2ZU1M?=
+ =?utf-8?B?aERiYlRGN0VVcHloK1FKbHF5cC9aaDN1Nmp5Ym1RPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FEB28E79FDFD0648825D54FE989BAFE0@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 546ec45e-95e8-44f3-0a86-08d8bc7a5bb4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2021 13:01:38.2153
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: A3kbTi+TmNaU2SfEWPoLlKzqcnJrBqDBv7hk04kne4sexhj66/joxn7ahlthVPOOIIaPaKHjNCNd1VeEPKChKKoD2Ca89dtrLcTiuEO0T2UoUwVX9W9Sa3DX9pS5QQia
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0302MB2668
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-BD71815 contains similar RTC block as BD71828. Only the address offsets
-seem different. Support also BD71815 RTC using rtc-bd70528.
-
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-No changes since v1
-
- drivers/rtc/Kconfig       |  6 +++---
- drivers/rtc/rtc-bd70528.c | 45 ++++++++++++++++++++++++++++++++-------
- 2 files changed, 40 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 6123f9f4fbc9..1e48424a4729 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -501,11 +501,11 @@ config RTC_DRV_M41T80_WDT
- 	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
- 
- config RTC_DRV_BD70528
--	tristate "ROHM BD70528 PMIC RTC"
--	depends on MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
-+	tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
-+	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
- 	help
- 	  If you say Y here you will get support for the RTC
--	  block on ROHM BD70528 and BD71828 Power Management IC.
-+	  block on ROHM BD70528, BD71815 and BD71828 Power Management IC.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-bd70528.
-diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-index fb4476bb5ab6..6454afca02a6 100644
---- a/drivers/rtc/rtc-bd70528.c
-+++ b/drivers/rtc/rtc-bd70528.c
-@@ -6,6 +6,7 @@
- 
- #include <linux/bcd.h>
- #include <linux/mfd/rohm-bd70528.h>
-+#include <linux/mfd/rohm-bd71815.h>
- #include <linux/mfd/rohm-bd71828.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -13,6 +14,12 @@
- #include <linux/regmap.h>
- #include <linux/rtc.h>
- 
-+/*
-+ * On BD71828 and BD71815 the ALM0 MASK is 14 bytes after the ALM0
-+ * block start
-+ */
-+#define BD718XX_ALM_EN_OFFSET 14
-+
- /*
-  * We read regs RTC_SEC => RTC_YEAR
-  * this struct is ordered according to chip registers.
-@@ -55,6 +62,7 @@ struct bd70528_rtc {
- 	struct regmap *regmap;
- 	struct device *dev;
- 	u8 reg_time_start;
-+	u8 bd718xx_alm_block_start;
- 	bool has_rtc_timers;
- };
- 
-@@ -236,8 +244,8 @@ static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	struct bd71828_rtc_alm alm;
- 	struct bd70528_rtc *r = dev_get_drvdata(dev);
- 
--	ret = regmap_bulk_read(r->regmap, BD71828_REG_RTC_ALM_START,
--			       &alm, sizeof(alm));
-+	ret = regmap_bulk_read(r->regmap, r->bd718xx_alm_block_start, &alm,
-+			       sizeof(alm));
- 	if (ret) {
- 		dev_err(dev, "Failed to read alarm regs\n");
- 		return ret;
-@@ -250,8 +258,8 @@ static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	else
- 		alm.alm_mask |= BD70528_MASK_ALM_EN;
- 
--	ret = regmap_bulk_write(r->regmap, BD71828_REG_RTC_ALM_START,
--				&alm, sizeof(alm));
-+	ret = regmap_bulk_write(r->regmap, r->bd718xx_alm_block_start, &alm,
-+				sizeof(alm));
- 	if (ret)
- 		dev_err(dev, "Failed to set alarm time\n");
- 
-@@ -311,8 +319,8 @@ static int bd71828_read_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	struct bd71828_rtc_alm alm;
- 	struct bd70528_rtc *r = dev_get_drvdata(dev);
- 
--	ret = regmap_bulk_read(r->regmap, BD71828_REG_RTC_ALM_START,
--			       &alm, sizeof(alm));
-+	ret = regmap_bulk_read(r->regmap, r->bd718xx_alm_block_start, &alm,
-+			       sizeof(alm));
- 	if (ret) {
- 		dev_err(dev, "Failed to read alarm regs\n");
- 		return ret;
-@@ -453,8 +461,9 @@ static int bd71828_alm_enable(struct device *dev, unsigned int enabled)
- 	if (!enabled)
- 		enableval = 0;
- 
--	ret = regmap_update_bits(r->regmap, BD71828_REG_RTC_ALM0_MASK,
--				 BD70528_MASK_ALM_EN, enableval);
-+	ret = regmap_update_bits(r->regmap, r->bd718xx_alm_block_start +
-+				 BD718XX_ALM_EN_OFFSET, BD70528_MASK_ALM_EN,
-+				 enableval);
- 	if (ret)
- 		dev_err(dev, "Failed to change alarm state\n");
- 
-@@ -524,9 +533,28 @@ static int bd70528_probe(struct platform_device *pdev)
- 		enable_main_irq = true;
- 		rtc_ops = &bd70528_rtc_ops;
- 		break;
-+	case ROHM_CHIP_TYPE_BD71815:
-+		irq_name = "bd71815-rtc-alm-0";
-+		bd_rtc->reg_time_start = BD71815_REG_RTC_START;
-+
-+		/*
-+		 * See also BD718XX_ALM_EN_OFFSET:
-+		 * This works for BD71828 and BD71815 as they have same offset
-+		 * between ALM0 start and ALM0_MASK. If new ICs are to be
-+		 * added this requires proper check as ALM0_MASK is not located
-+		 * at the end of ALM0 block - but after all ALM blocks so if
-+		 * amount of ALMs differ the offset to enable/disable is likely
-+		 * to be incorrect and enable/disable must be given as own
-+		 * reg address here.
-+		 */
-+		bd_rtc->bd718xx_alm_block_start = BD71815_REG_RTC_ALM_START;
-+		hour_reg = BD71815_REG_HOUR;
-+		rtc_ops = &bd71828_rtc_ops;
-+		break;
- 	case ROHM_CHIP_TYPE_BD71828:
- 		irq_name = "bd71828-rtc-alm-0";
- 		bd_rtc->reg_time_start = BD71828_REG_RTC_START;
-+		bd_rtc->bd718xx_alm_block_start = BD71828_REG_RTC_ALM_START;
- 		hour_reg = BD71828_REG_RTC_HOUR;
- 		rtc_ops = &bd71828_rtc_ops;
- 		break;
-@@ -605,6 +633,7 @@ static int bd70528_probe(struct platform_device *pdev)
- static const struct platform_device_id bd718x7_rtc_id[] = {
- 	{ "bd70528-rtc", ROHM_CHIP_TYPE_BD70528 },
- 	{ "bd71828-rtc", ROHM_CHIP_TYPE_BD71828 },
-+	{ "bd71815-rtc", ROHM_CHIP_TYPE_BD71815 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(platform, bd718x7_rtc_id);
--- 
-2.25.4
-
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+SGkgQmFydG9zeiwNCg0KT24gVHVlLCAyMDIxLTAxLTE5IGF0IDEyOjA3ICswMTAwLCBCYXJ0b3N6
+IEdvbGFzemV3c2tpIHdyb3RlOg0KPiBPbiBUdWUsIEphbiAxOSwgMjAyMSBhdCA4OjIzIEFNIE1h
+dHRpIFZhaXR0aW5lbg0KPiA8bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPiB3cm90
+ZToNCj4gPiBTdXBwb3J0IEdQTyhzKSBmb3VuZCBmcm9tIFJPSE0gQkQ3MTgxNSBwb3dlciBtYW5h
+Z2VtZW50IElDLiBUaGUgSUMNCj4gPiBoYXMgdHdvDQo+ID4gR1BPIHBpbnMgYnV0IG9ubHkgb25l
+IGlzIHByb3Blcmx5IGRvY3VtZW50ZWQgaW4gZGF0YS1zaGVldC4gVGhlDQo+ID4gZHJpdmVyDQo+
+ID4gZXhwb3NlcyBieSBkZWZhdWx0IG9ubHkgdGhlIGRvY3VtZW50ZWQgR1BPLiBUaGUgc2Vjb25k
+IEdQTyBpcw0KPiA+IGNvbm5lY3RlZCB0bw0KPiA+IEU1IHBpbiBhbmQgaXMgbWFya2VkIGFzIEdO
+RCBpbiBkYXRhLXNoZWV0LiBDb250cm9sIGZvciB0aGlzDQo+ID4gdW5kb2N1bWVudGVkDQo+ID4g
+cGluIGNhbiBiZSBlbmFibGVkIHVzaW5nIGEgc3BlY2lhbCBEVCBwcm9wZXJ0eS4NCj4gPiANCj4g
+PiBUaGlzIGRyaXZlciBpcyBkZXJpdmVkIGZyb20gd29yayBieSBQZXRlciBZYW5nIDwNCj4gPiB5
+YW5nbHNoQGVtYmVzdC10ZWNoLmNvbT4NCj4gPiBhbHRob3VnaCBub3Qgc28gbXVjaCBvZiBvcmln
+aW5hbCBpcyBsZWZ0Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hdHRpIFZhaXR0aW5lbiA8
+bWF0dGkudmFpdHRpbmVuQGZpLnJvaG1ldXJvcGUuY29tPg0KPiANCj4gSGkgTWF0dGksDQo+IA0K
+PiBsb29rcyBncmVhdCwganVzdCBhIGNvdXBsZSBuaXRzLg0KPiANCg0KVGhhbmtzIGZvciB0aGUg
+cmV2aWV3ISBJJ2xsIHN0b3JlIHlvdXIgZmluc2luZ3MgYW5kIGZpeCB0aGVtIHdoZW4gSQ0KcmVz
+cGluIHRoaXMuIEkgdGhpbmsgYWxsIG9mIHlvdXIgcG9pbnRzIHdlcmUgdmFsaWQuIEFzIEkga25v
+dyB0aGlzIGlzDQpsYXJnaXNoIHNlcmllcyAoYW5kIGFzIEkga25vdyBJIGFjY2lkZW50YWxseSBz
+ZW50IGZpcnN0IDEwIHYyIHBhdGNoZXMNCnRvIGFsbCByZWNpcGllbnRzIG5vIG1hdHRlciB3aGF0
+IHN1YnN5c3RlbSB3YXMgaW1wYWN0ZWQpIEknbGwgd2FpdCBmb3INCmEgd2hpbGUgYmVmb3JlIHJl
+c2VuZGluZyAoYXQgbGVhc3QgYSB3ZWVrKS4gQmVzaWRlcyBJIGRvbid0IGV4cGVjdCB0aGUNCmRl
+cGVuZGVuY2llcyB0byBiZSBtZXJnZWQgYmVmb3JlIG5leHQga2VybmVsIHJlbGVhc2Ugc28gdGhp
+cyBpcyBub3QNCnVyZ2VudCA6KQ0KDQotIGJ1dCB0aGFua3MhDQoNCkJyLA0KCU1hdHRpDQoNCg==
