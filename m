@@ -2,27 +2,27 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8AC2FD470
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Jan 2021 16:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E162FD46B
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Jan 2021 16:48:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728981AbhATPqd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Jan 2021 10:46:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57696 "EHLO mail.kernel.org"
+        id S1729111AbhATPpE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Jan 2021 10:45:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57718 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733042AbhATPmv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 20 Jan 2021 10:42:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 80FC823382;
-        Wed, 20 Jan 2021 15:42:08 +0000 (UTC)
+        id S1733093AbhATPmw (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 20 Jan 2021 10:42:52 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5106B23381;
+        Wed, 20 Jan 2021 15:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611157329;
-        bh=T9xyOgUhu1xz0Ggrk+3PTqE768OmzsjXmHEzzGIrhpw=;
+        s=k20201202; t=1611157331;
+        bh=9S8vgYWiSKG9ifXODcOOQ3l8wTWBhuN2g84JbrEqlp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FqWNkBFb06L2Dz3SSmCpMpLQNh4DJvDxiCp0gAC7Q2D1nMpNgd/7jgsjY+8tIqny/
-         mI1JPrlwzzQOqmlt0/RkrIGWlU2pSneDjmmNCPTzhc3UDmXnA13tPMwtmQOwi5dESa
-         /FFZ72hqAAdrq9t+slnz/JjwZvwVeD6JrHgPjSIIvjrORVXQ+NCisNY/k3ZZI32wy4
-         rchFksPfS3R+CrSIpxX2ug1AgCb45LduSWZN4cUXXi3dTcKB+W4K/Z1YU9z9rF5j9p
-         SfFB4rkjDjun//8xFikfDRDs9Y8mPJ0Edvw70wA+yvrj0j7BqYTFGsD4CS/ULL8sEq
-         7he6wt4bujPuA==
+        b=MIFtIN5s2WyZ26ER2qx0zrFYKjyqz3CAi1LBTwe1Tb0Yapeai7Ng4tWCMZQ7qGmBl
+         h+u9wYNQckmZWoUEa0sTHdZvbRFhobNMVN2nP99qxYnApGqHsXgxIiYbZPmh+vgLEY
+         KDSNs2JdorgvVaVG+UIp/SjsoJ2Eg+G5vjJCIiYDLVWzw8XHmcYrMh6NJHXfXD43mW
+         Qrrf+eUuDS7mFM0qig1nbjpYJTjXnBmhXS/s7BuM3gCbkh9kENZAVgZumPNMxkfC1k
+         XBSlW2So+41fGvHEmOq2ZI7O0X35XtB7/gWnFFvCAXIBLleZHY6AzEEX5wW0ccEL53
+         HLrRmsggg742g==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org,
@@ -30,9 +30,9 @@ To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 2/3] rtc: remove ste coh901 driver
-Date:   Wed, 20 Jan 2021 16:41:57 +0100
-Message-Id: <20210120154158.1860736-3-arnd@kernel.org>
+Subject: [PATCH 3/3] rtc: remove ste ab3100 driver
+Date:   Wed, 20 Jan 2021 16:41:58 +0100
+Message-Id: <20210120154158.1860736-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210120154158.1860736-1-arnd@kernel.org>
 References: <20210120154158.1860736-1-arnd@kernel.org>
@@ -50,366 +50,302 @@ longer needed.
 Cc: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- .../bindings/rtc/stericsson,coh901331.txt     |  16 -
- drivers/rtc/Kconfig                           |  12 -
- drivers/rtc/Makefile                          |   1 -
- drivers/rtc/rtc-coh901331.c                   | 290 ------------------
- 4 files changed, 319 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/stericsson,coh901331.txt
- delete mode 100644 drivers/rtc/rtc-coh901331.c
+ drivers/rtc/Kconfig      |   8 --
+ drivers/rtc/Makefile     |   1 -
+ drivers/rtc/rtc-ab3100.c | 254 ---------------------------------------
+ 3 files changed, 263 deletions(-)
+ delete mode 100644 drivers/rtc/rtc-ab3100.c
 
-diff --git a/Documentation/devicetree/bindings/rtc/stericsson,coh901331.txt b/Documentation/devicetree/bindings/rtc/stericsson,coh901331.txt
-deleted file mode 100644
-index e615a897b20e..000000000000
---- a/Documentation/devicetree/bindings/rtc/stericsson,coh901331.txt
-+++ /dev/null
-@@ -1,16 +0,0 @@
--ST-Ericsson COH 901 331 Real Time Clock
--
--Required properties:
--- compatible: must be "stericsson,coh901331"
--- reg: address range of rtc register set.
--- interrupts: rtc alarm interrupt.
--- clocks: phandle to the rtc clock source
--
--Example:
--	rtc: rtc@c0017000 {
--		compatible = "stericsson,coh901331";
--		reg = <0xc0017000 0x1000>;
--		interrupt-parent = <&vicb>;
--		interrupts = <10>;
--		clocks = <&rtc_clk>;
--	};
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 8fb9aa55ace1..ff583d6a2870 100644
+index ff583d6a2870..a608a8ef78fd 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -1645,18 +1645,6 @@ config RTC_DRV_PS3
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-ps3.
+@@ -1270,14 +1270,6 @@ config RTC_DRV_PCF50633
+ 	  If you say yes here you get support for the RTC subsystem of the
+ 	  NXP PCF50633 used in embedded systems.
  
--config RTC_DRV_COH901331
--	tristate "ST-Ericsson COH 901 331 RTC"
--	depends on ARCH_U300 || COMPILE_TEST
+-config RTC_DRV_AB3100
+-	tristate "ST-Ericsson AB3100 RTC"
+-	depends on AB3100_CORE
+-	default y if AB3100_CORE
 -	help
--	  If you say Y here you will get access to ST-Ericsson
--	  COH 901 331 RTC clock found in some ST-Ericsson Mobile
--	  Platforms.
+-	  Select this to enable the ST-Ericsson AB3100 Mixed Signal IC RTC
+-	  support. This chip contains a battery- and capacitor-backed RTC.
 -
--	  This driver can also be built as a module. If so, the module
--	  will be called "rtc-coh901331".
--
--
- config RTC_DRV_STMP
- 	tristate "Freescale STMP3xxx/i.MX23/i.MX28 RTC"
- 	depends on ARCH_MXS || COMPILE_TEST
+ config RTC_DRV_AB8500
+ 	tristate "ST-Ericsson AB8500 RTC"
+ 	depends on AB8500_CORE
 diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 1f00896db507..8585cd159979 100644
+index 8585cd159979..55f8a2a5b89d 100644
 --- a/drivers/rtc/Makefile
 +++ b/drivers/rtc/Makefile
-@@ -38,7 +38,6 @@ obj-$(CONFIG_RTC_DRV_BQ4802)	+= rtc-bq4802.o
- obj-$(CONFIG_RTC_DRV_BRCMSTB)	+= rtc-brcmstb-waketimer.o
- obj-$(CONFIG_RTC_DRV_CADENCE)	+= rtc-cadence.o
- obj-$(CONFIG_RTC_DRV_CMOS)	+= rtc-cmos.o
--obj-$(CONFIG_RTC_DRV_COH901331)	+= rtc-coh901331.o
- obj-$(CONFIG_RTC_DRV_CPCAP)	+= rtc-cpcap.o
- obj-$(CONFIG_RTC_DRV_CROS_EC)	+= rtc-cros-ec.o
- obj-$(CONFIG_RTC_DRV_DA9052)	+= rtc-da9052.o
-diff --git a/drivers/rtc/rtc-coh901331.c b/drivers/rtc/rtc-coh901331.c
+@@ -19,7 +19,6 @@ rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
+ 
+ obj-$(CONFIG_RTC_DRV_88PM80X)	+= rtc-88pm80x.o
+ obj-$(CONFIG_RTC_DRV_88PM860X)	+= rtc-88pm860x.o
+-obj-$(CONFIG_RTC_DRV_AB3100)	+= rtc-ab3100.o
+ obj-$(CONFIG_RTC_DRV_AB8500)	+= rtc-ab8500.o
+ obj-$(CONFIG_RTC_DRV_ABB5ZES3)	+= rtc-ab-b5ze-s3.o
+ obj-$(CONFIG_RTC_DRV_ABEOZ9)	+= rtc-ab-eoz9.o
+diff --git a/drivers/rtc/rtc-ab3100.c b/drivers/rtc/rtc-ab3100.c
 deleted file mode 100644
-index 168ced87d93a..000000000000
---- a/drivers/rtc/rtc-coh901331.c
+index e4fd961e8bf6..000000000000
+--- a/drivers/rtc/rtc-ab3100.c
 +++ /dev/null
-@@ -1,290 +0,0 @@
+@@ -1,254 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
 -/*
 - * Copyright (C) 2007-2009 ST-Ericsson AB
-- * Real Time Clock interface for ST-Ericsson AB COH 901 331 RTC.
+- * RTC clock driver for the AB3100 Analog Baseband Chip
 - * Author: Linus Walleij <linus.walleij@stericsson.com>
-- * Based on rtc-pl031.c by Deepak Saxena <dsaxena@plexity.net>
-- * Copyright 2006 (c) MontaVista Software, Inc.
 - */
--#include <linux/init.h>
 -#include <linux/module.h>
--#include <linux/mod_devicetable.h>
--#include <linux/rtc.h>
--#include <linux/clk.h>
--#include <linux/interrupt.h>
--#include <linux/pm.h>
+-#include <linux/kernel.h>
+-#include <linux/init.h>
 -#include <linux/platform_device.h>
--#include <linux/io.h>
--#include <linux/slab.h>
+-#include <linux/rtc.h>
+-#include <linux/mfd/abx500.h>
+-
+-/* Clock rate in Hz */
+-#define AB3100_RTC_CLOCK_RATE	32768
 -
 -/*
-- * Registers in the COH 901 331
+- * The AB3100 RTC registers. These are the same for
+- * AB3000 and AB3100.
+- * Control register:
+- * Bit 0: RTC Monitor cleared=0, active=1, if you set it
+- *        to 1 it remains active until RTC power is lost.
+- * Bit 1: 32 kHz Oscillator, 0 = on, 1 = bypass
+- * Bit 2: Alarm on, 0 = off, 1 = on
+- * Bit 3: 32 kHz buffer disabling, 0 = enabled, 1 = disabled
 - */
--/* Alarm value 32bit (R/W) */
--#define COH901331_ALARM		0x00U
--/* Used to set current time 32bit (R/W) */
--#define COH901331_SET_TIME	0x04U
--/* Indication if current time is valid 32bit (R/-) */
--#define COH901331_VALID		0x08U
--/* Read the current time 32bit (R/-) */
--#define COH901331_CUR_TIME	0x0cU
--/* Event register for the "alarm" interrupt */
--#define COH901331_IRQ_EVENT	0x10U
--/* Mask register for the "alarm" interrupt */
--#define COH901331_IRQ_MASK	0x14U
--/* Force register for the "alarm" interrupt */
--#define COH901331_IRQ_FORCE	0x18U
+-#define AB3100_RTC		0x53
+-/* default setting, buffer disabled, alarm on */
+-#define RTC_SETTING		0x30
+-/* Alarm when AL0-AL3 == TI0-TI3  */
+-#define AB3100_AL0		0x56
+-#define AB3100_AL1		0x57
+-#define AB3100_AL2		0x58
+-#define AB3100_AL3		0x59
+-/* This 48-bit register that counts up at 32768 Hz */
+-#define AB3100_TI0		0x5a
+-#define AB3100_TI1		0x5b
+-#define AB3100_TI2		0x5c
+-#define AB3100_TI3		0x5d
+-#define AB3100_TI4		0x5e
+-#define AB3100_TI5		0x5f
 -
 -/*
-- * Reference to RTC block clock
-- * Notice that the frequent clk_enable()/clk_disable() on this
-- * clock is mainly to be able to turn on/off other clocks in the
-- * hierarchy as needed, the RTC clock is always on anyway.
+- * RTC clock functions and device struct declaration
 - */
--struct coh901331_port {
--	struct rtc_device *rtc;
--	struct clk *clk;
--	void __iomem *virtbase;
--	int irq;
--#ifdef CONFIG_PM_SLEEP
--	u32 irqmaskstore;
--#endif
--};
--
--static irqreturn_t coh901331_interrupt(int irq, void *data)
+-static int ab3100_rtc_set_time(struct device *dev, struct rtc_time *tm)
 -{
--	struct coh901331_port *rtap = data;
+-	u8 regs[] = {AB3100_TI0, AB3100_TI1, AB3100_TI2,
+-		     AB3100_TI3, AB3100_TI4, AB3100_TI5};
+-	unsigned char buf[6];
+-	u64 hw_counter = rtc_tm_to_time64(tm) * AB3100_RTC_CLOCK_RATE * 2;
+-	int err = 0;
+-	int i;
 -
--	clk_enable(rtap->clk);
--	/* Ack IRQ */
--	writel(1, rtap->virtbase + COH901331_IRQ_EVENT);
--	/*
--	 * Disable the interrupt. This is necessary because
--	 * the RTC lives on a lower-clocked line and will
--	 * not release the IRQ line until after a few (slower)
--	 * clock cycles. The interrupt will be re-enabled when
--	 * a new alarm is set anyway.
--	 */
--	writel(0, rtap->virtbase + COH901331_IRQ_MASK);
--	clk_disable(rtap->clk);
+-	buf[0] = (hw_counter) & 0xFF;
+-	buf[1] = (hw_counter >> 8) & 0xFF;
+-	buf[2] = (hw_counter >> 16) & 0xFF;
+-	buf[3] = (hw_counter >> 24) & 0xFF;
+-	buf[4] = (hw_counter >> 32) & 0xFF;
+-	buf[5] = (hw_counter >> 40) & 0xFF;
 -
--	/* Set alarm flag */
--	rtc_update_irq(rtap->rtc, 1, RTC_AF);
+-	for (i = 0; i < 6; i++) {
+-		err = abx500_set_register_interruptible(dev, 0,
+-							regs[i], buf[i]);
+-		if (err)
+-			return err;
+-	}
 -
--	return IRQ_HANDLED;
+-	/* Set the flag to mark that the clock is now set */
+-	return abx500_mask_and_set_register_interruptible(dev, 0,
+-							  AB3100_RTC,
+-							  0x01, 0x01);
+-
 -}
 -
--static int coh901331_read_time(struct device *dev, struct rtc_time *tm)
+-static int ab3100_rtc_read_time(struct device *dev, struct rtc_time *tm)
 -{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
+-	time64_t time;
+-	u8 rtcval;
+-	int err;
 -
--	clk_enable(rtap->clk);
--	/* Check if the time is valid */
--	if (!readl(rtap->virtbase + COH901331_VALID)) {
--		clk_disable(rtap->clk);
+-	err = abx500_get_register_interruptible(dev, 0,
+-						AB3100_RTC, &rtcval);
+-	if (err)
+-		return err;
+-
+-	if (!(rtcval & 0x01)) {
+-		dev_info(dev, "clock not set (lost power)");
 -		return -EINVAL;
+-	} else {
+-		u64 hw_counter;
+-		u8 buf[6];
+-
+-		/* Read out time registers */
+-		err = abx500_get_register_page_interruptible(dev, 0,
+-							     AB3100_TI0,
+-							     buf, 6);
+-		if (err != 0)
+-			return err;
+-
+-		hw_counter = ((u64) buf[5] << 40) | ((u64) buf[4] << 32) |
+-			((u64) buf[3] << 24) | ((u64) buf[2] << 16) |
+-			((u64) buf[1] << 8) | (u64) buf[0];
+-		time = hw_counter / (u64) (AB3100_RTC_CLOCK_RATE * 2);
 -	}
 -
--	rtc_time64_to_tm(readl(rtap->virtbase + COH901331_CUR_TIME), tm);
--	clk_disable(rtap->clk);
--	return 0;
--}
--
--static int coh901331_set_time(struct device *dev, struct rtc_time *tm)
--{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
--
--	clk_enable(rtap->clk);
--	writel(rtc_tm_to_time64(tm), rtap->virtbase + COH901331_SET_TIME);
--	clk_disable(rtap->clk);
+-	rtc_time64_to_tm(time, tm);
 -
 -	return 0;
 -}
 -
--static int coh901331_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+-static int ab3100_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 -{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
+-	time64_t time;
+-	u64 hw_counter;
+-	u8 buf[6];
+-	u8 rtcval;
+-	int err;
 -
--	clk_enable(rtap->clk);
--	rtc_time64_to_tm(readl(rtap->virtbase + COH901331_ALARM), &alarm->time);
--	alarm->pending = readl(rtap->virtbase + COH901331_IRQ_EVENT) & 1U;
--	alarm->enabled = readl(rtap->virtbase + COH901331_IRQ_MASK) & 1U;
--	clk_disable(rtap->clk);
--
--	return 0;
--}
--
--static int coh901331_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
--{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
--	unsigned long time =  rtc_tm_to_time64(&alarm->time);
--
--	clk_enable(rtap->clk);
--	writel(time, rtap->virtbase + COH901331_ALARM);
--	writel(alarm->enabled, rtap->virtbase + COH901331_IRQ_MASK);
--	clk_disable(rtap->clk);
--
--	return 0;
--}
--
--static int coh901331_alarm_irq_enable(struct device *dev, unsigned int enabled)
--{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
--
--	clk_enable(rtap->clk);
--	if (enabled)
--		writel(1, rtap->virtbase + COH901331_IRQ_MASK);
+-	/* Figure out if alarm is enabled or not */
+-	err = abx500_get_register_interruptible(dev, 0,
+-						AB3100_RTC, &rtcval);
+-	if (err)
+-		return err;
+-	if (rtcval & 0x04)
+-		alarm->enabled = 1;
 -	else
--		writel(0, rtap->virtbase + COH901331_IRQ_MASK);
--	clk_disable(rtap->clk);
+-		alarm->enabled = 0;
+-	/* No idea how this could be represented */
+-	alarm->pending = 0;
+-	/* Read out alarm registers, only 4 bytes */
+-	err = abx500_get_register_page_interruptible(dev, 0,
+-						     AB3100_AL0, buf, 4);
+-	if (err)
+-		return err;
+-	hw_counter = ((u64) buf[3] << 40) | ((u64) buf[2] << 32) |
+-		((u64) buf[1] << 24) | ((u64) buf[0] << 16);
+-	time = hw_counter / (u64) (AB3100_RTC_CLOCK_RATE * 2);
 -
--	return 0;
+-	rtc_time64_to_tm(time, &alarm->time);
+-
+-	return rtc_valid_tm(&alarm->time);
 -}
 -
--static const struct rtc_class_ops coh901331_ops = {
--	.read_time = coh901331_read_time,
--	.set_time = coh901331_set_time,
--	.read_alarm = coh901331_read_alarm,
--	.set_alarm = coh901331_set_alarm,
--	.alarm_irq_enable = coh901331_alarm_irq_enable,
--};
--
--static int __exit coh901331_remove(struct platform_device *pdev)
+-static int ab3100_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
 -{
--	struct coh901331_port *rtap = platform_get_drvdata(pdev);
+-	u8 regs[] = {AB3100_AL0, AB3100_AL1, AB3100_AL2, AB3100_AL3};
+-	unsigned char buf[4];
+-	time64_t secs;
+-	u64 hw_counter;
+-	int err;
+-	int i;
 -
--	if (rtap)
--		clk_unprepare(rtap->clk);
+-	secs = rtc_tm_to_time64(&alarm->time);
+-	hw_counter = secs * AB3100_RTC_CLOCK_RATE * 2;
+-	buf[0] = (hw_counter >> 16) & 0xFF;
+-	buf[1] = (hw_counter >> 24) & 0xFF;
+-	buf[2] = (hw_counter >> 32) & 0xFF;
+-	buf[3] = (hw_counter >> 40) & 0xFF;
 -
--	return 0;
--}
--
--
--static int __init coh901331_probe(struct platform_device *pdev)
--{
--	int ret;
--	struct coh901331_port *rtap;
--
--	rtap = devm_kzalloc(&pdev->dev,
--			    sizeof(struct coh901331_port), GFP_KERNEL);
--	if (!rtap)
--		return -ENOMEM;
--
--	rtap->virtbase  = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(rtap->virtbase))
--		return PTR_ERR(rtap->virtbase);
--
--	rtap->irq = platform_get_irq(pdev, 0);
--	if (devm_request_irq(&pdev->dev, rtap->irq, coh901331_interrupt, 0,
--			     "RTC COH 901 331 Alarm", rtap))
--		return -EIO;
--
--	rtap->clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(rtap->clk)) {
--		ret = PTR_ERR(rtap->clk);
--		dev_err(&pdev->dev, "could not get clock\n");
--		return ret;
+-	/* Set the alarm */
+-	for (i = 0; i < 4; i++) {
+-		err = abx500_set_register_interruptible(dev, 0,
+-							regs[i], buf[i]);
+-		if (err)
+-			return err;
 -	}
--
--	rtap->rtc = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(rtap->rtc))
--		return PTR_ERR(rtap->rtc);
--
--	rtap->rtc->ops = &coh901331_ops;
--	rtap->rtc->range_max = U32_MAX;
--
--	/* We enable/disable the clock only to assure it works */
--	ret = clk_prepare_enable(rtap->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "could not enable clock\n");
--		return ret;
--	}
--	clk_disable(rtap->clk);
--
--	platform_set_drvdata(pdev, rtap);
--
--	ret = devm_rtc_register_device(rtap->rtc);
--	if (ret)
--		goto out_no_rtc;
--
--	return 0;
--
-- out_no_rtc:
--	clk_unprepare(rtap->clk);
--	return ret;
+-	/* Then enable the alarm */
+-	return abx500_mask_and_set_register_interruptible(dev, 0,
+-							  AB3100_RTC, (1 << 2),
+-							  alarm->enabled << 2);
 -}
 -
--#ifdef CONFIG_PM_SLEEP
--static int coh901331_suspend(struct device *dev)
+-static int ab3100_rtc_irq_enable(struct device *dev, unsigned int enabled)
 -{
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
--
 -	/*
--	 * If this RTC alarm will be used for waking the system up,
--	 * don't disable it of course. Else we just disable the alarm
--	 * and await suspension.
+-	 * It's not possible to enable/disable the alarm IRQ for this RTC.
+-	 * It does not actually trigger any IRQ: instead its only function is
+-	 * to power up the system, if it wasn't on. This will manifest as
+-	 * a "power up cause" in the AB3100 power driver (battery charging etc)
+-	 * and need to be handled there instead.
 -	 */
--	if (device_may_wakeup(dev)) {
--		enable_irq_wake(rtap->irq);
--	} else {
--		clk_enable(rtap->clk);
--		rtap->irqmaskstore = readl(rtap->virtbase + COH901331_IRQ_MASK);
--		writel(0, rtap->virtbase + COH901331_IRQ_MASK);
--		clk_disable(rtap->clk);
--	}
--	clk_unprepare(rtap->clk);
--	return 0;
+-	if (enabled)
+-		return abx500_mask_and_set_register_interruptible(dev, 0,
+-						    AB3100_RTC, (1 << 2),
+-						    1 << 2);
+-	else
+-		return abx500_mask_and_set_register_interruptible(dev, 0,
+-						    AB3100_RTC, (1 << 2),
+-						    0);
 -}
 -
--static int coh901331_resume(struct device *dev)
--{
--	int ret;
--	struct coh901331_port *rtap = dev_get_drvdata(dev);
--
--	ret = clk_prepare(rtap->clk);
--	if (ret)
--		return ret;
--
--	if (device_may_wakeup(dev)) {
--		disable_irq_wake(rtap->irq);
--	} else {
--		clk_enable(rtap->clk);
--		writel(rtap->irqmaskstore, rtap->virtbase + COH901331_IRQ_MASK);
--		clk_disable(rtap->clk);
--	}
--	return 0;
--}
--#endif
--
--static SIMPLE_DEV_PM_OPS(coh901331_pm_ops, coh901331_suspend, coh901331_resume);
--
--static void coh901331_shutdown(struct platform_device *pdev)
--{
--	struct coh901331_port *rtap = platform_get_drvdata(pdev);
--
--	clk_enable(rtap->clk);
--	writel(0, rtap->virtbase + COH901331_IRQ_MASK);
--	clk_disable_unprepare(rtap->clk);
--}
--
--static const struct of_device_id coh901331_dt_match[] = {
--	{ .compatible = "stericsson,coh901331" },
--	{},
+-static const struct rtc_class_ops ab3100_rtc_ops = {
+-	.read_time	= ab3100_rtc_read_time,
+-	.set_time	= ab3100_rtc_set_time,
+-	.read_alarm	= ab3100_rtc_read_alarm,
+-	.set_alarm	= ab3100_rtc_set_alarm,
+-	.alarm_irq_enable = ab3100_rtc_irq_enable,
 -};
--MODULE_DEVICE_TABLE(of, coh901331_dt_match);
 -
--static struct platform_driver coh901331_driver = {
+-static int __init ab3100_rtc_probe(struct platform_device *pdev)
+-{
+-	int err;
+-	u8 regval;
+-	struct rtc_device *rtc;
+-
+-	/* The first RTC register needs special treatment */
+-	err = abx500_get_register_interruptible(&pdev->dev, 0,
+-						AB3100_RTC, &regval);
+-	if (err) {
+-		dev_err(&pdev->dev, "unable to read RTC register\n");
+-		return -ENODEV;
+-	}
+-
+-	if ((regval & 0xFE) != RTC_SETTING) {
+-		dev_warn(&pdev->dev, "not default value in RTC reg 0x%x\n",
+-			 regval);
+-	}
+-
+-	if ((regval & 1) == 0) {
+-		/*
+-		 * Set bit to detect power loss.
+-		 * This bit remains until RTC power is lost.
+-		 */
+-		regval = 1 | RTC_SETTING;
+-		err = abx500_set_register_interruptible(&pdev->dev, 0,
+-							AB3100_RTC, regval);
+-		/* Ignore any error on this write */
+-	}
+-
+-	rtc = devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(rtc))
+-		return PTR_ERR(rtc);
+-
+-	rtc->ops = &ab3100_rtc_ops;
+-	/* 48bit counter at (AB3100_RTC_CLOCK_RATE * 2) */
+-	rtc->range_max = U32_MAX;
+-
+-	platform_set_drvdata(pdev, rtc);
+-
+-	return devm_rtc_register_device(rtc);
+-}
+-
+-static struct platform_driver ab3100_rtc_driver = {
 -	.driver = {
--		.name = "rtc-coh901331",
--		.pm = &coh901331_pm_ops,
--		.of_match_table = coh901331_dt_match,
+-		.name = "ab3100-rtc",
 -	},
--	.remove = __exit_p(coh901331_remove),
--	.shutdown = coh901331_shutdown,
 -};
 -
--module_platform_driver_probe(coh901331_driver, coh901331_probe);
+-module_platform_driver_probe(ab3100_rtc_driver, ab3100_rtc_probe);
 -
 -MODULE_AUTHOR("Linus Walleij <linus.walleij@stericsson.com>");
--MODULE_DESCRIPTION("ST-Ericsson AB COH 901 331 RTC Driver");
+-MODULE_DESCRIPTION("AB3100 RTC Driver");
 -MODULE_LICENSE("GPL");
 -- 
 2.29.2
