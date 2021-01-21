@@ -2,54 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D21182FE9EC
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Jan 2021 13:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5032FE9F9
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Jan 2021 13:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730963AbhAUMYc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Jan 2021 07:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S1729886AbhAUM0L (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Jan 2021 07:26:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730084AbhAUMYH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Jan 2021 07:24:07 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B89C0613D3
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:23:26 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id v67so2252500lfa.0
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:23:26 -0800 (PST)
+        with ESMTP id S1730722AbhAUMYs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Jan 2021 07:24:48 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE3C061575
+        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:24:02 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id q8so2213209lfm.10
+        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:24:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
         bh=5fcGiD7OwR1/jKyiV2ZSUx3opsk7q8xBXMeaqlhO/Z0=;
-        b=VCfb+xDMRVyqrMJlzKVRriQ7XncA/ZJvY01+z0RJ0M/9cEUbd+GV10httUkReMk81o
-         6i1fR2lVm7rCPBgPPDYwV2QSxTTpsFCUi8X/mgmT5HMUQ74mh0x3GbTuj/tEGW8altsW
-         E9vSZ4frIMrRDopfC0eGQDXuXq5QquXGkvjUmqrM+f/1eF23OWBVEjg14T+fzSzDT9yL
-         WVjUBAxHOt8Q3AMoM4tghFwbLywfivk584kyQ3Ntn+4BdOD8u1+xeRMa/VCN33N9Ypok
-         aMwY10h6RiJr4pGhXqJjECtsx/cVZvQSYqMnBkqFDRs+LaQdM4pC9id5XbGi+/EoLDSF
-         1ovA==
+        b=PVlGTUCv2alBxI/JOalSnfTFcb4Dzn8EOj1UJL731dSslOU5wPg4r/KEJCQq3KLEOZ
+         Sto/vWHLdrxicM2ll37EPJf7CUOiJMr6Pox71kBlfEUmIBSGSx5xg/LbCjUKU8jNCkt5
+         Lm6j65B6nkAN1WbD0E5TZkZR73GbxwnTj1XufAZU7JT6KOlAhFOOV0kg2fWMfTaKIkSK
+         mP8T/xlVGTChQotfDfIzKsIOhwj2A9rjXHZ7mmZyS4Dn+zrfsqAdOv8GB6kv/PxtpOSV
+         nx4Je8jRFyArfUzYDlFxynn7YO4zy7Uk446uzFVD8ttN+Uv/g2THRdEOimsB8oU33XD2
+         /y3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=5fcGiD7OwR1/jKyiV2ZSUx3opsk7q8xBXMeaqlhO/Z0=;
-        b=BJiAjM9eoo0RbAKMgHMojZ/ubzIS0pXYkhziBINPkL4ipRlmIYXFDIzDlMSn7+h9Om
-         8rYN3CtWQChrhkeu2pcJxz+x6AcRwZcY6O/U+LjmvwUr+oo5paPviraZnSaXQMdU6Mpe
-         iCHTVer9SPdCLoVPC/jq06blPOUJRR020nWyL6H/hejzlitwxRcM6mZxhUyAAkI+Br4F
-         aWzg0hJ/Z27OGIBncy4tz4C07Pa0GrMIl8p46lZaZhXDPGetBoIudozVWpZYUHlH3T01
-         U2wiDQ+XlgYPX33x4ASrAWtP94jPjcfA5TF7V416JEeeM38EjUk2nrM6fw2WKk4Ud0Ai
-         Bzew==
-X-Gm-Message-State: AOAM532XaBZPOPnKx/yXVY3ovtS7LYzloDftfXOkRS+fSF17aCsSJ10U
-        1oIHTVOELGDN4Kf4lZa672+p9tX5C9R2/4Da+PWTxN45aTHz8A==
-X-Google-Smtp-Source: ABdhPJyVkr58ajloKJ5wJplZwsXm0JgXkDYNE2LbP4m5olsHGtdSAnryYXTR/OLfKzwabv0Y5/p0tjh07D+mo5oE6V4=
-X-Received: by 2002:a05:6512:74e:: with SMTP id c14mr6668456lfs.529.1611231803244;
- Thu, 21 Jan 2021 04:23:23 -0800 (PST)
+        b=n7tPL8FNb/0PqlXX+tgzE4FnEt5miazY+xHl6wuM7nMwHpelXdzkBUqIyieBX4y2u7
+         b2U88PtS9yzvO62wzxmx21KyupWghtaP1F1qqd94yBu7oHyhe4wYhqdimdieynF9TcMA
+         DZi9XQM7Xys4EK0bt+JgJRehK3tiH8FaUxjnMsNWZNEWaf6iOkGZ9AraOrW/1P3CVpV5
+         U+Ur0K4EMcRZlpOEKmhH5GYsHSA0fONliTbNUfgZYxX0c7Nd7uqESxBC3dlBPqV19Jaj
+         mmy9SeMA/6K/dEJ1d0lW89LTnnSlRM/GgKT2il3IOw+mWS4L4cRXz5rZbzJdN+yeA1mQ
+         yUwA==
+X-Gm-Message-State: AOAM531G0POVHXHojWsNs04qCyb+3HBkMzrkVF4DkF0HdkgZzpYtGQBJ
+        LoAb/dT3NQ2xyh0hBMjEKAelIiH63llSeWRtDzTv8Q==
+X-Google-Smtp-Source: ABdhPJxGXnl8ByIfSzaEFxWnZM44EtU5FWnXKcITgR1rQdU6CvzXy3G+PyC3djO1tmBtaztm8DIUeQ3d9IZ8KrBum9g=
+X-Received: by 2002:a19:6557:: with SMTP id c23mr6068215lfj.157.1611231839384;
+ Thu, 21 Jan 2021 04:23:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20210120154158.1860736-1-arnd@kernel.org> <20210120154158.1860736-3-arnd@kernel.org>
-In-Reply-To: <20210120154158.1860736-3-arnd@kernel.org>
+References: <20210120154158.1860736-1-arnd@kernel.org> <20210120154158.1860736-4-arnd@kernel.org>
+In-Reply-To: <20210120154158.1860736-4-arnd@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Jan 2021 13:23:12 +0100
-Message-ID: <CACRpkdYqijxwE8=441+i4t7A7WuCiQocCy5Q4sOrJKrg-S6fbg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] rtc: remove ste coh901 driver
+Date:   Thu, 21 Jan 2021 13:23:48 +0100
+Message-ID: <CACRpkdYKT=LnCw2qakPYx+uZq4aD8NXXfV6seqt_wF84kTXrfQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rtc: remove ste ab3100 driver
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
