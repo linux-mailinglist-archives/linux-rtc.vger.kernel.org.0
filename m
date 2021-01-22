@@ -2,77 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5032FE9F9
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Jan 2021 13:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5FB4300180
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Jan 2021 12:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729886AbhAUM0L (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Jan 2021 07:26:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730722AbhAUMYs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Jan 2021 07:24:48 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CE3C061575
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:24:02 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id q8so2213209lfm.10
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jan 2021 04:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5fcGiD7OwR1/jKyiV2ZSUx3opsk7q8xBXMeaqlhO/Z0=;
-        b=PVlGTUCv2alBxI/JOalSnfTFcb4Dzn8EOj1UJL731dSslOU5wPg4r/KEJCQq3KLEOZ
-         Sto/vWHLdrxicM2ll37EPJf7CUOiJMr6Pox71kBlfEUmIBSGSx5xg/LbCjUKU8jNCkt5
-         Lm6j65B6nkAN1WbD0E5TZkZR73GbxwnTj1XufAZU7JT6KOlAhFOOV0kg2fWMfTaKIkSK
-         mP8T/xlVGTChQotfDfIzKsIOhwj2A9rjXHZ7mmZyS4Dn+zrfsqAdOv8GB6kv/PxtpOSV
-         nx4Je8jRFyArfUzYDlFxynn7YO4zy7Uk446uzFVD8ttN+Uv/g2THRdEOimsB8oU33XD2
-         /y3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5fcGiD7OwR1/jKyiV2ZSUx3opsk7q8xBXMeaqlhO/Z0=;
-        b=n7tPL8FNb/0PqlXX+tgzE4FnEt5miazY+xHl6wuM7nMwHpelXdzkBUqIyieBX4y2u7
-         b2U88PtS9yzvO62wzxmx21KyupWghtaP1F1qqd94yBu7oHyhe4wYhqdimdieynF9TcMA
-         DZi9XQM7Xys4EK0bt+JgJRehK3tiH8FaUxjnMsNWZNEWaf6iOkGZ9AraOrW/1P3CVpV5
-         U+Ur0K4EMcRZlpOEKmhH5GYsHSA0fONliTbNUfgZYxX0c7Nd7uqESxBC3dlBPqV19Jaj
-         mmy9SeMA/6K/dEJ1d0lW89LTnnSlRM/GgKT2il3IOw+mWS4L4cRXz5rZbzJdN+yeA1mQ
-         yUwA==
-X-Gm-Message-State: AOAM531G0POVHXHojWsNs04qCyb+3HBkMzrkVF4DkF0HdkgZzpYtGQBJ
-        LoAb/dT3NQ2xyh0hBMjEKAelIiH63llSeWRtDzTv8Q==
-X-Google-Smtp-Source: ABdhPJxGXnl8ByIfSzaEFxWnZM44EtU5FWnXKcITgR1rQdU6CvzXy3G+PyC3djO1tmBtaztm8DIUeQ3d9IZ8KrBum9g=
-X-Received: by 2002:a19:6557:: with SMTP id c23mr6068215lfj.157.1611231839384;
- Thu, 21 Jan 2021 04:23:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20210120154158.1860736-1-arnd@kernel.org> <20210120154158.1860736-4-arnd@kernel.org>
-In-Reply-To: <20210120154158.1860736-4-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 21 Jan 2021 13:23:48 +0100
-Message-ID: <CACRpkdYKT=LnCw2qakPYx+uZq4aD8NXXfV6seqt_wF84kTXrfQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rtc: remove ste ab3100 driver
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1728072AbhAVL1C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 22 Jan 2021 06:27:02 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:35117 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728048AbhAVLV5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Jan 2021 06:21:57 -0500
+X-UUID: a03df52d909c42729b107e477ea4e8ba-20210122
+X-UUID: a03df52d909c42729b107e477ea4e8ba-20210122
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1913097264; Fri, 22 Jan 2021 19:19:44 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 Jan 2021 19:19:42 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Jan 2021 19:19:42 +0800
+From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Fei Shao <fshao@chromium.org>
+CC:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        Yuchen Huang <yuchen.huang@mediatek.com>,
+        Ran Bi <ran.bi@mediatek.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5 0/8] Add Support for MediaTek PMIC MT6359
+Date:   Fri, 22 Jan 2021 19:19:33 +0800
+Message-ID: <1611314381-19517-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+X-Mailer: git-send-email 2.6.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 9B3B14E8725B026A335FF13643ED848CFCC793FF1CA556C859B7CBF5EB4720E62000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 4:42 PM Arnd Bergmann <arnd@kernel.org> wrote:
+This patchset includes refactoring interrupt and adding support to MT6359 PMIC.
+MT6359 is the primary PMIC for MT6779 and probably other SOCs.
+The series[1] sent by Wen will continue to upstream in this patchset afterwards.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The ST-Ericsson U300 platform is getting removed, so this driver is no
-> longer needed.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+[1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=306579
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+changes since v4:
+- fix yamllint errors in dt-binding document.
+- remove unused compatible name of mt6359-regulator in mfd driver.
+- update the name of regulator node in the dts.
+- merge the patch about enable time of ldo into the mt6359 regulator patch.
+- use the device of mfd driver for the regulator_config.
+- add the regulators_node support.
+- add pmic MT6359 support in the MT8192 evb dts.
 
-Yours,
-Linus Walleij
+Hsin-Hsiung Wang (6):
+  mfd: mt6358: refine interrupt code
+  rtc: mt6397: refine RTC_TC_MTH
+  dt-bindings: mfd: Add compatible for the MediaTek MT6359 PMIC
+  dt-bindings: regulator: Add document for MT6359 regulator
+  mfd: Add support for the MediaTek MT6359 PMIC
+  regulator: mt6359: Add support for MT6359P regulator
+
+Wen Su (2):
+  regulator: mt6359: Add support for MT6359 regulator
+  arm64: dts: mt6359: add PMIC MT6359 related nodes
+
+ .../devicetree/bindings/mfd/mt6397.txt        |    1 +
+ .../bindings/regulator/mt6359-regulator.yaml  |  169 +++
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi      |  298 +++++
+ arch/arm64/boot/dts/mediatek/mt8192-evb.dts   |    1 +
+ drivers/mfd/mt6358-irq.c                      |   89 +-
+ drivers/mfd/mt6397-core.c                     |   26 +
+ drivers/regulator/Kconfig                     |    9 +
+ drivers/regulator/Makefile                    |    1 +
+ drivers/regulator/mt6359-regulator.c          | 1036 +++++++++++++++++
+ drivers/rtc/rtc-mt6397.c                      |    2 +-
+ include/linux/mfd/mt6358/core.h               |    8 +-
+ include/linux/mfd/mt6359/core.h               |  133 +++
+ include/linux/mfd/mt6359/registers.h          |  529 +++++++++
+ include/linux/mfd/mt6359p/registers.h         |  249 ++++
+ include/linux/mfd/mt6397/core.h               |    1 +
+ include/linux/mfd/mt6397/rtc.h                |    1 +
+ include/linux/regulator/mt6359-regulator.h    |   59 +
+ 17 files changed, 2579 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+ create mode 100644 drivers/regulator/mt6359-regulator.c
+ create mode 100644 include/linux/mfd/mt6359/core.h
+ create mode 100644 include/linux/mfd/mt6359/registers.h
+ create mode 100644 include/linux/mfd/mt6359p/registers.h
+ create mode 100644 include/linux/regulator/mt6359-regulator.h
+
+-- 
+2.18.0
+
