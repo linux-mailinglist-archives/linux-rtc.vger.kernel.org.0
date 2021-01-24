@@ -2,63 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 479B8301595
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Jan 2021 14:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F1A301CA0
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Jan 2021 15:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbhAWN62 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 23 Jan 2021 08:58:28 -0500
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:53229 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbhAWN62 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 Jan 2021 08:58:28 -0500
-X-Originating-IP: 86.202.109.140
-Received: from localhost (lfbn-lyo-1-13-140.w86-202.abo.wanadoo.fr [86.202.109.140])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id A1BAFC0004;
-        Sat, 23 Jan 2021 13:57:44 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH 0/3] rtc: remove obsolete drivers
-Date:   Sat, 23 Jan 2021 14:57:44 +0100
-Message-Id: <161141025561.1573837.15965671549699329228.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210120154158.1860736-1-arnd@kernel.org>
-References: <20210120154158.1860736-1-arnd@kernel.org>
+        id S1725860AbhAXOOT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Sun, 24 Jan 2021 09:14:19 -0500
+Received: from mail.eclipso.de ([217.69.254.104]:55422 "EHLO mail.eclipso.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725290AbhAXOOS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 24 Jan 2021 09:14:18 -0500
+X-Greylist: delayed 344 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Jan 2021 09:14:18 EST
+Received: from mail.eclipso.de (www1.eclipso.de [217.69.254.102])
+        by mail.eclipso.de with ESMTP id 255BA008
+        for <linux-rtc@vger.kernel.org>; Sun, 24 Jan 2021 15:07:52 +0100 (CET)
+Date:   Sun, 24 Jan 2021 15:07:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Message-ID: <721fdcefb1cb3932cd0b715b2f689c8d@mail.eclipso.de>
+X-Mailer: eclipso / 7.4.0
+From:   " " <Cedric.dewijs@eclipso.eu>
+Subject: out of tree rtc driver RX8900CE, has anybody updated it to the new v5
+        kernel interface?
+Reply-To: " " <Cedric.dewijs@eclipso.eu>
+To:     <linux-rtc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 20 Jan 2021 16:41:55 +0100, Arnd Bergmann wrote:
-> A few Arm platforms are getting removed in v5.12, this removes
-> the corresponding rtc drivers.
-> 
-> Link: https://lore.kernel.org/linux-arm-kernel/20210120124812.2800027-1-arnd@kernel.org/T/
-> 
-> 
-> Arnd Bergmann (3):
->   rtc: remove sirfsoc driver
->   rtc: remove ste coh901 driver
->   rtc: remove ste ab3100 driver
-> 
-> [...]
+­Hi All,
 
-Applied, thanks!
+I have a RX8900CE rtc, connected to the i2c bus of a raspberry pi. I've gotten a kernel module from the manufacturer of the chip [1][2], it's based on the kernel module for the RX-8025 [3]. I've compiled it with this makefile [4]:
 
-[1/3] rtc: remove sirfsoc driver
-      commit: 9d0735519f99948c5b5c22426b682ced7f7af9be
-[2/3] rtc: remove ste coh901 driver
-      commit: dd2d3b40039d0278f25a21aa3e50955a01a92a62
-[3/3] rtc: remove ste ab3100 driver
-      commit: 2f58f5eea8c60052100ff325688f2d987bde572b
+This all worked without any problem, in kernel 4.19.76 but in newer kernels the structure of the rtc drivers has changed.
 
-Best regards,
--- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Has anybody already converted the RX8900CE driver to the new kernel interface?
+After I update the kernel module, what steps do I have to take so it can be included in the mainline kernel?
+
+Cheers,
+Cedric
+
+
+[1] https://www5.epsondevice.com/en/information/support/linux_rtc/down_load.html
+[2] https://www5.epsondevice.com/en/information/support/soft/rx8900_k3.8-v1.0.zip
+[3] https://github.com/torvalds/linux/blob/master/drivers/rtc/rtc-rx8025.c
+[4] 
+RX8900_DIR = $(shell pwd)
+KSRC = /lib/modules/$(KVER)/build
+KVER = $(shell uname -r)
+MODDESTDIR = /lib/modules/$(KVER)/kernel/drivers/rtc
+
+CROSS_COMPILE	=
+
+AS              = $(CROSS_COMPILE)as
+LD              = $(CROSS_COMPILE)ld
+CC              = $(CROSS_COMPILE)gcc
+CPP             = $(CC) -E
+AR              = $(CROSS_COMPILE)ar
+NM              = $(CROSS_COMPILE)nm
+STRIP           = $(CROSS_COMPILE)strip
+OBJCOPY         = $(CROSS_COMPILE)objcopy
+OBJDUMP         = $(CROSS_COMPILE)objdump
+DEPMOD          = /sbin/depmod
+INSTALL			= /usr/bin/install
+GREP			= /bin/grep
+
+obj-m += rtc-rx8900.o
+
+all:
+	modules
+
+modules:
+	$(MAKE) -C $(KSRC) M=$(RX8900_DIR) CC=$(CC) modules
+
+install: modules
+	@$(GREP) rtc-rx8900.ko /lib/modules/$(shell uname -r)/modules.dep && rm -fr $(MODDESTDIR)/rtc-rx8900.ko || echo "No system rtc-rx8900.ko file found. Install the new rtc-rx8900.ko driver into the system"
+	$(INSTALL) -p -m 644 rtc-rx8900.ko $(MODDESTDIR)
+	@$(DEPMOD) -a
+	
+uninstall:
+	@$(GREP) rtc-rx8900.ko /lib/modules/$(shell uname -r)/modules.dep && rm -fr $(MODDESTDIR)/rtc-rx8900.ko || echo "Remove the rtc-rx8900.ko driver from the system"
+	@$(DEPMOD) -a
+	
+clean:
+	$(MAKE) -C $(KSRC) M=$(RX8900_DIR) CC=$(CC) clean
+
+
+---
+
+Take your mailboxes with you. Free, fast and secure Mail &amp; Cloud: https://www.eclipso.eu - Time to change!
+
+
