@@ -2,271 +2,221 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDF2304B6A
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 22:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB4E304B65
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 22:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727279AbhAZEqX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 25 Jan 2021 23:46:23 -0500
-Received: from mail-lf1-f46.google.com ([209.85.167.46]:45546 "EHLO
-        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729697AbhAYOt2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 25 Jan 2021 09:49:28 -0500
-Received: by mail-lf1-f46.google.com with SMTP id q12so18086575lfo.12;
-        Mon, 25 Jan 2021 06:49:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:reply-to:to:cc
-         :in-reply-to:references:mime-version:date:user-agent
-         :content-transfer-encoding;
-        bh=oPSrp6GTXszof/dNN0q+//X3RVS3y6bDNp6+3lvklGQ=;
-        b=jtTS7e/3x1/mpInMILVwubXIwLgaHHcMUvtktA4EA2yowmYpz/NaoGI0xcO9r2/hJG
-         2LKW9FFMaPZfUre9lYxHU/e3UWm12/YuBzRGMLW4G/nOSylNzf93Wq/oAhKS3LbpBwWC
-         EQniVSuP59cWS0mV3r+iMQXS7eqeroHk2kznI3na7PALPp/M6Yne70YleLRiwdpwULZj
-         2ir41JYX9uEmZsF2pl6qJ977AjHLXW1FNUH/9XU2UE8Emz/huGR+q7AK5kaHr/Bghofi
-         NpehEplSbsnPkRPbHJNHjtHAEGqikQHXub9HpHQsEILjIpoXHzYkRAIZPq+diddj1Kmz
-         lb5w==
-X-Gm-Message-State: AOAM5336oVRs/R4oreF0gYCIfMt0sTe6pE1F3TGYe6HaEWUPazevvZgo
-        Lw+ovWz7EjJ0VfycND6WD9I=
-X-Google-Smtp-Source: ABdhPJxOjRvLElV4WAr8IXb2gJhiSVLKwvCwYVqcrseNfOeAj1QsN/9i/cFCsdPeje6SLk7QEAbtoA==
-X-Received: by 2002:a19:3f87:: with SMTP id m129mr424730lfa.560.1611586123211;
-        Mon, 25 Jan 2021 06:48:43 -0800 (PST)
-Received: from localhost.localdomain (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id b11sm1958382lfi.174.2021.01.25.06.48.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jan 2021 06:48:42 -0800 (PST)
-Message-ID: <7a3d897d6af9f4310e5cc98ca74123192da49e27.camel@fi.rohmeurope.com>
-Subject: Re: [PATCH v2 09/17] mfd: Support for ROHM BD71815 PMIC core
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Reply-To: matti.vaittinen@fi.rohmeurope.com
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        id S1727420AbhAZEqc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 25 Jan 2021 23:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731183AbhAYSwy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 25 Jan 2021 13:52:54 -0500
+X-Greylist: delayed 691 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Jan 2021 10:52:07 PST
+Received: from smtp-42a8.mail.infomaniak.ch (smtp-42a8.mail.infomaniak.ch [IPv6:2001:1600:4:17::42a8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97588C061573
+        for <linux-rtc@vger.kernel.org>; Mon, 25 Jan 2021 10:52:07 -0800 (PST)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4DPdwJ6l5dzMq1qY;
+        Mon, 25 Jan 2021 19:40:32 +0100 (CET)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4DPdwJ0g8hzlppyn;
+        Mon, 25 Jan 2021 19:40:31 +0100 (CET)
+Subject: Re: [patch 1/8] rtc: mc146818: Prevent reading garbage - bug
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-In-Reply-To: <20210125141044.GZ4903@dell>
-References: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
-         <14480ca837005aecd7053202c2347e36ad29faee.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
-         <20210125141044.GZ4903@dell>
-Content-Type: text/plain; charset="UTF-8"
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+References: <20201206214613.444124194@linutronix.de>
+ <20201206220541.594826678@linutronix.de>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Message-ID: <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net>
+Date:   Mon, 25 Jan 2021 19:40:31 +0100
+User-Agent: 
 MIME-Version: 1.0
-Date:   Mon, 25 Jan 2021 16:48:36 +0200
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20201206220541.594826678@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Lee,
+Hi,
 
-Thanks again for the review!
+After some bisecting, I found that commit 05a0302c3548 ("rtc: mc146818:
+Prevent reading garbage", this patch, introduced since v5.11-rc1) makes
+my VM hang at boot. Before this commit, I got this (and didn't notice)
+at every boot:
+rtc_cmos rtc_cmos: registered as rtc0
+rtc_cmos rtc_cmos: hctosys: unable to read the hardware clock
+rtc_cmos rtc_cmos: alarms up to one day, 114 bytes nvram
 
-On Mon, 2021-01-25 at 14:10 +0000, Lee Jones wrote:
-> On Tue, 19 Jan 2021, Matti Vaittinen wrote:
+I notice that this patch creates infinite loops, which my VM falls into
+(cf. below).
+
+I didn't succeed to properly fix this without a revert. I tried to set a
+maximum number of jumps, but I got pvqspinlock warnings.
+
+Regards,
+ Mickaël
+
+
+On 06/12/2020 22:46, Thomas Gleixner wrote:
+> The MC146818 driver is prone to read garbage from the RTC. There are
+> several issues all related to the update cycle of the MC146818. The chip
+> increments seconds obviously once per second and indicates that by a bit in
+> a register. The bit goes high 244us before the actual update starts. During
+> the update the readout of the time values is undefined.
 > 
-> > Add core support for ROHM BD71815 Power Management IC.
-> > 
-> > The IC integrates regulators, a battery charger with a coulomb
-> > counter,
-> > a real-time clock (RTC), clock gate and general-purpose outputs
-> > (GPO).
-> > 
-> > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > ---
-> > Changes since v1:
-> >   - Used BIT() for better readability
-> >   - removed some unused definitions
-> > 
-> >  drivers/mfd/Kconfig              |  15 +-
-> >  drivers/mfd/rohm-bd71828.c       | 416 +++++++++++++++++++++--
-> >  include/linux/mfd/rohm-bd71815.h | 561
-> > +++++++++++++++++++++++++++++++
-> >  include/linux/mfd/rohm-bd71828.h |   3 +
-> >  4 files changed, 952 insertions(+), 43 deletions(-)
-> >  create mode 100644 include/linux/mfd/rohm-bd71815.h
-> > 
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index bdfce7b15621..59bfacb91898 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -1984,19 +1984,20 @@ config MFD_ROHM_BD70528
-> >  	  charger.
-> >  
-> >  config MFD_ROHM_BD71828
-> > -	tristate "ROHM BD71828 Power Management IC"
-> > +	tristate "ROHM BD71828 and BD71815 Power Management IC"
-> >  	depends on I2C=y
-> >  	depends on OF
-> >  	select REGMAP_I2C
-> >  	select REGMAP_IRQ
-> >  	select MFD_CORE
-> >  	help
-> > -	  Select this option to get support for the ROHM BD71828 Power
-> > -	  Management IC. BD71828GW is a single-chip power management IC
-> > for
-> > -	  battery-powered portable devices. The IC integrates 7 buck
-> > -	  converters, 7 LDOs, and a 1500 mA single-cell linear charger.
-> > -	  Also included is a Coulomb counter, a real-time clock (RTC),
-> > and
-> > -	  a 32.768 kHz clock gate.
-> > +	  Select this option to get support for the ROHM BD71828 and
-> > BD71815
-> > +	  Power Management ICs. BD71828GW and BD71815AGW are single-
-> > chip power
-> > +	  management ICs mainly for battery-powered portable devices.
-> > +	  The BD71828 integrates 7 buck converters and 7 LDOs. The
-> > BD71815
-> > +	  has 5 bucks, 7 LDOs, and a boost for driving LEDs. Both ICs
-> > provide
-> > +	  also a single-cell linear charger, a Coulomb counter, a real-
-> > time
-> > +	  clock (RTC), GPIOs and a 32.768 kHz clock gate.
-> >  
-> >  config MFD_STM32_LPTIMER
-> >  	tristate "Support for STM32 Low-Power Timer"
-> > diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-
-> > bd71828.c
-> > index 210261d026f2..28b82477ce4c 100644
-> > --- a/drivers/mfd/rohm-bd71828.c
-> > +++ b/drivers/mfd/rohm-bd71828.c
-> > @@ -2,7 +2,7 @@
-> >  //
-> >  // Copyright (C) 2019 ROHM Semiconductors
-> >  //
-> > -// ROHM BD71828 PMIC driver
-> > +// ROHM BD71828/BD71815 PMIC driver
-> >  
-> >  #include <linux/gpio_keys.h>
-> >  #include <linux/i2c.h>
-> > @@ -11,7 +11,9 @@
-> >  #include <linux/ioport.h>
-> >  #include <linux/irq.h>
-> >  #include <linux/mfd/core.h>
-> > +#include <linux/mfd/rohm-bd71815.h>
-> >  #include <linux/mfd/rohm-bd71828.h>
-> > +#include <linux/mfd/rohm-generic.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/regmap.h>
-> > @@ -29,12 +31,102 @@ static struct gpio_keys_platform_data
-> > bd71828_powerkey_data = {
-> >  	.name = "bd71828-pwrkey",
-> >  };
-> >  
-> > -static const struct resource rtc_irqs[] = {
-> > +static const struct resource bd71815_rtc_irqs[] = {
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_RTC0, "bd71815-rtc-alm-0"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_RTC1, "bd71815-rtc-alm-1"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_RTC2, "bd71815-rtc-alm-2"),
-> > +};
-> > +
-> > +static const struct resource bd71828_rtc_irqs[] = {
-> >  	DEFINE_RES_IRQ_NAMED(BD71828_INT_RTC0, "bd71828-rtc-alm-0"),
-> >  	DEFINE_RES_IRQ_NAMED(BD71828_INT_RTC1, "bd71828-rtc-alm-1"),
-> >  	DEFINE_RES_IRQ_NAMED(BD71828_INT_RTC2, "bd71828-rtc-alm-2"),
-> >  };
-> >  
-> > +static struct resource bd71815_power_irqs[] = {
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_RMV, "bd71815-dcin-rmv"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_OUT, "bd71815-clps-out"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CLPS_IN, "bd71815-clps-in"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_OVP_RES, "bd71815-dcin-
-> > ovp-res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_OVP_DET, "bd71815-dcin-
-> > ovp-det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_MON_RES, "bd71815-dcin-
-> > mon-res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_DCIN_MON_DET, "bd71815-dcin-
-> > mon-det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_UV_RES, "bd71815-vsys-uv-
-> > res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_UV_DET, "bd71815-vsys-uv-
-> > det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_LOW_RES, "bd71815-vsys-
-> > low-res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_LOW_DET, "bd71815-vsys-
-> > low-det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_MON_RES, "bd71815-vsys-
-> > mon-res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_VSYS_MON_RES, "bd71815-vsys-
-> > mon-det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_WDG_TEMP, "bd71815-chg-
-> > wdg-temp"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_WDG_TIME, "bd71815-chg-
-> > wdg"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_RECHARGE_RES, "bd71815-
-> > rechg-res"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_RECHARGE_DET, "bd71815-
-> > rechg-det"),
-> > +	DEFINE_RES_IRQ_NAMED(BD71815_INT_CHG_RANGED_TEMP_TRANSITION,
-> > +			     "bd71815-ranged-temp-transit"),
+> The code just checks whether the update in progress bit (UIP) is set before
+> reading the clock. If it's set it waits arbitrary 20ms before retrying,
+> which is ample because the maximum update time is ~2ms.
 > 
-> The new line limit is 100.  Feel free to run these out.
-
-I learn new things every day it seems. This change is more than
-welcome!
-
-> > +	if (!strncmp(mode, "open-drain", 10)) {
-> > +		dev_dbg(dev, "configuring clk32kout as open-drain");
+> But this check does not guarantee that the UIP bit goes high and the actual
+> update happens during the readout. So the following can happen
 > 
-> Do you *really* need these?
-
-No. development leftover. Thanks for pointing that.
-
-> > 
-> > +		button_irq = 0;
-> > +		dev_info(&i2c->dev, "BD71815 found\n");
+>  0.997 	       UIP = False
+>    -> Interrupt/NMI/preemption
+>  0.998	       UIP -> True
+>  0.999	       Readout	<- Undefined
 > 
-> Again, are these *really* useful to you and/or your users?
+> To prevent this rework the code so it checks UIP before and after the
+> readout and if set after the readout try again.
 > 
-> Besides, this device not *found* i.e. scanned/read and instantiated,
-> it has simply been matched from the local DTB.  It can still be
-> wrong.  You can probably omit them.
-
-You're right. One can check the DT contents from /proc if he wants to
-check what IC compatible was used. Thanks.
+> But that's not enough to cover the following:
 > 
-> [...]
+>  0.997 	       UIP = False
+>  	       Readout seconds
+>    -> NMI (or vCPU scheduled out)
+>  0.998	       UIP -> True
+>  	       update completes
+> 	       UIP -> False
+>  1.000	       Readout	minutes,....
+>  	       UIP check succeeds
 > 
-> > diff --git a/include/linux/mfd/rohm-bd71815.h
-> > b/include/linux/mfd/rohm-bd71815.h
-> > new file mode 100644
-> > index 000000000000..8ee5874a5b73
-> > --- /dev/null
-> > +++ b/include/linux/mfd/rohm-bd71815.h
-> > @@ -0,0 +1,561 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> > +/*
-> > + * Copyright 2014 Embest Technology Co. Ltd. Inc.
+> That can make the readout wrong up to 59 seconds.
 > 
-> Jeeze!  Is this for the Amiga?
-
-Nah. Long live NXP SOCs! ;) I think BD71815 was _originally_ developed
-for i.MX6.
-
+> To prevent this, read the seconds value before the first UIP check,
+> validate it after checking UIP and after reading out the rest.
 > 
-> > + * Author: yanglsh@embest-tech.com
-> > + *
-> > + * 2020, 2021 Heavily modified by:
+> It's amazing that the original i386 code had this actually correct and
+> the generic implementation of the MC146818 driver got it wrong in 2002 and
+> it stayed that way until today.
 > 
-> You should probably add a proper copyright.
-Ok. I guess I can do so. Thanks!
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  drivers/rtc/rtc-mc146818-lib.c |   64 ++++++++++++++++++++++++-----------------
+>  1 file changed, 39 insertions(+), 25 deletions(-)
+> 
+> --- a/drivers/rtc/rtc-mc146818-lib.c
+> +++ b/drivers/rtc/rtc-mc146818-lib.c
+> @@ -8,41 +8,41 @@
+>  #include <linux/acpi.h>
+>  #endif
+>  
+> -/*
+> - * Returns true if a clock update is in progress
+> - */
+> -static inline unsigned char mc146818_is_updating(void)
+> -{
+> -	unsigned char uip;
+> -	unsigned long flags;
+> -
+> -	spin_lock_irqsave(&rtc_lock, flags);
+> -	uip = (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP);
+> -	spin_unlock_irqrestore(&rtc_lock, flags);
+> -	return uip;
+> -}
+> -
+>  unsigned int mc146818_get_time(struct rtc_time *time)
+>  {
+>  	unsigned char ctrl;
+>  	unsigned long flags;
+>  	unsigned char century = 0;
+> +	bool retry;
+>  
+>  #ifdef CONFIG_MACH_DECSTATION
+>  	unsigned int real_year;
+>  #endif
+>  
+> +again:
+> +	spin_lock_irqsave(&rtc_lock, flags);
+>  	/*
+> -	 * read RTC once any update in progress is done. The update
+> -	 * can take just over 2ms. We wait 20ms. There is no need to
+> -	 * to poll-wait (up to 1s - eeccch) for the falling edge of RTC_UIP.
+> -	 * If you need to know *exactly* when a second has started, enable
+> -	 * periodic update complete interrupts, (via ioctl) and then
+> -	 * immediately read /dev/rtc which will block until you get the IRQ.
+> -	 * Once the read clears, read the RTC time (again via ioctl). Easy.
+> +	 * Check whether there is an update in progress during which the
+> +	 * readout is unspecified. The maximum update time is ~2ms. Poll
+> +	 * every msec for completion.
+> +	 *
+> +	 * Store the second value before checking UIP so a long lasting NMI
+> +	 * which happens to hit after the UIP check cannot make an update
+> +	 * cycle invisible.
+>  	 */
+> -	if (mc146818_is_updating())
+> -		mdelay(20);
+> +	time->tm_sec = CMOS_READ(RTC_SECONDS);
+> +
+> +	if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
+> +		spin_unlock_irqrestore(&rtc_lock, flags);
+> +		mdelay(1);
 
-> > + *	 Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > + */
-> > +
-> > +#ifndef _MFD_BD71815_H
-> > +#define _MFD_BD71815_H
-> > +
-> > +#include <linux/regmap.h>
+My VM loops here.
+time->tm_sec is always 255.
 
-Best Regards
--- Matti Vaittinen
-
+> +		goto again;
+> +	}
+> +
+> +	/* Revalidate the above readout */
+> +	if (time->tm_sec != CMOS_READ(RTC_SECONDS)) {
+> +		spin_unlock_irqrestore(&rtc_lock, flags);
+> +		goto again;
+> +	}
+>  
+>  	/*
+>  	 * Only the values that we read from the RTC are set. We leave
+> @@ -50,8 +50,6 @@ unsigned int mc146818_get_time(struct rt
+>  	 * RTC has RTC_DAY_OF_WEEK, we ignore it, as it is only updated
+>  	 * by the RTC when initially set to a non-zero value.
+>  	 */
+> -	spin_lock_irqsave(&rtc_lock, flags);
+> -	time->tm_sec = CMOS_READ(RTC_SECONDS);
+>  	time->tm_min = CMOS_READ(RTC_MINUTES);
+>  	time->tm_hour = CMOS_READ(RTC_HOURS);
+>  	time->tm_mday = CMOS_READ(RTC_DAY_OF_MONTH);
+> @@ -66,8 +64,24 @@ unsigned int mc146818_get_time(struct rt
+>  		century = CMOS_READ(acpi_gbl_FADT.century);
+>  #endif
+>  	ctrl = CMOS_READ(RTC_CONTROL);
+> +	/*
+> +	 * Check for the UIP bit again. If it is set now then
+> +	 * the above values may contain garbage.
+> +	 */
+> +	retry = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
+> +	/*
+> +	 * A NMI might have interrupted the above sequence so check whether
+> +	 * the seconds value has changed which indicates that the NMI took
+> +	 * longer than the UIP bit was set. Unlikely, but possible and
+> +	 * there is also virt...
+> +	 */
+> +	retry |= time->tm_sec != CMOS_READ(RTC_SECONDS);
+> +
+>  	spin_unlock_irqrestore(&rtc_lock, flags);
+>  
+> +	if (retry)
+> +		goto again;
+> +
+>  	if (!(ctrl & RTC_DM_BINARY) || RTC_ALWAYS_BCD)
+>  	{
+>  		time->tm_sec = bcd2bin(time->tm_sec);
+> 
+> 
