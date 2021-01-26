@@ -2,110 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03182305CEC
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2246305CE6
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S313256AbhAZWjK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 17:39:10 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50596 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729311AbhAZRC6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 12:02:58 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1611680531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HrMDZ4yyjVd0WEX5TShN5hNg9g3vf27cMToBCTxUBfA=;
-        b=Xvv8yMUp0L+Ni2uJDRs1EOwTOFmGwFvW1GAYHuGK9l0NAUM7BS+PWnQDllxhB7A37j8sOf
-        cVYrXy2JZwp6mMtIqOMA9p8Y1rZ/7MpmylCPL6jXYNJwF8qEukbx5rG0YmMKZFYw/esBGs
-        6Ait0iIUv8oGt2Y8YIv6j14lv6/XgyDB8pM7injs/YWZONNKUNkCxv46y4EHvnmmGvEYbC
-        Ktn+td6fJUiB2a8oWoRt7fjIobYPvgFZHzKH/v277HbCek9FMIpJYfPA8YoPy/G34m9Cuz
-        yiNRzYQs+mJMYalybSzgeBoR3fnA7ThcHoAHLCO74u+sp8PqESzirJBbkce+eA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1611680531;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HrMDZ4yyjVd0WEX5TShN5hNg9g3vf27cMToBCTxUBfA=;
-        b=ZBFLUZmQbDVKmkgAybOjKtWIDN4MtZBPVL3cJfnwEt7UP5gRQfuKs0S0nsmRojG9fHzN67
-        M8BryvH1KzMG2/Cw==
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH V2] rtc: mc146818: Detect and handle broken RTCs
-In-Reply-To: <87y2gfg18p.fsf@nanos.tec.linutronix.de>
-References: <20201206214613.444124194@linutronix.de> <20201206220541.594826678@linutronix.de> <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net> <871re7hlsg.fsf@nanos.tec.linutronix.de> <98cb59e8-ecb4-e29d-0b8f-73683ef2bee7@digikod.net> <87y2gfg18p.fsf@nanos.tec.linutronix.de>
-Date:   Tue, 26 Jan 2021 18:02:11 +0100
-Message-ID: <87tur3fx7w.fsf@nanos.tec.linutronix.de>
+        id S313630AbhAZWja (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 17:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389310AbhAZRO3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 12:14:29 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385BC061756;
+        Tue, 26 Jan 2021 09:13:46 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b17so3586383plz.6;
+        Tue, 26 Jan 2021 09:13:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t5TtFJJmGGXnlkPzRkZI964XfU9tnGtrVx8sJ+nhhgg=;
+        b=C3EzaIXBST8Cm9Ao23YPKGZNoi53AvO8DVjjAwPROAIXUYs1VE82+8vfqjXNnqjdzD
+         liqtV8Y1DERtPWo1nyvHfJ0dIM/8zl2g2OV+IH1gVcjgZEzRSEwCDurFQdLYTY8HnEN1
+         0fEepFjeJDCr3qWqSlfUjxky/XAISoB3hBYR8DzKKdH2NMCPGUGAbfnSuwrsbFq96NSW
+         FlpZ22yilEbZ4sX0iNjxessv0r3jc76/3YCmf9c62Vft0I82Rgw+V8YLURrimjjWJIAj
+         1uTnO8ujuLiPhWVT8RByXB8RRIBu5vPkxq1srzRNiDQBiGg7xvbsiV//h51SSHrX+7L6
+         Zmsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t5TtFJJmGGXnlkPzRkZI964XfU9tnGtrVx8sJ+nhhgg=;
+        b=EQrAyz7uNWIbMzrEI9XTa5+pomvQxKZvOQa7VRXe44hgs5/UndIzIfk5kvkqviTlWK
+         qmLKsw2P/2ssZ/MGfHEYt9wI30OD2IStIk5GOLKhhkaDSqz7XmlVUUkpOi/lTxzgtu8Z
+         /JvqU27ePZTbIvkf8YPG6rmd+Tl/PNlN4jqd0+EKNRu9q2L+eTqE8abG4JWLhR1Mf6O3
+         ZjW9GYZKq5cmWDctzwSoIUsWPdUG3l5mhUGetQi+0D0ewpWhAyEwHQG5M63A3IfV2SNe
+         GuURoDjupeexct32qOffijaHoY2XKygZ3TwEFMMGUoiLuiZTQckLB3v8ylyk5izLL5tl
+         DJag==
+X-Gm-Message-State: AOAM530yVKCo8yzmsb9sYwXHfNI+bec0ZLEc1dwXFh6sgomRRfYT7YKg
+        13ZRYhSh2wgHH13KGNnskb7G94yAFlSGunmaJFM=
+X-Google-Smtp-Source: ABdhPJx92R0qs5/XdlRo/afRbr8RCC/r8mWGIZcmtX5Tb/02Z6ZBjPok93oodD57c37HChymbSyI5sp/7oQ9C8Xpisw=
+X-Received: by 2002:a17:90a:644a:: with SMTP id y10mr797421pjm.129.1611681226049;
+ Tue, 26 Jan 2021 09:13:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+ <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com> <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
+In-Reply-To: <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jan 2021 19:14:35 +0200
+Message-ID: <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The recent fix for handling the UIP bit unearthed another issue in the RTC
-code. If the RTC is advertised but the readout is straight 0xFF because
-it's not available, the old code just proceeded with crappy values, but the
-new code hangs because it waits for the UIP bit to become low.
+On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
+<patrik.r.jakobsson@gmail.com> wrote:
+> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+> > <patrik.r.jakobsson@gmail.com> wrote:
+> > > On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > >
+> > > > Hi guys,
+> > > >
+> > > > This is first part of Intel MID outdated platforms removal. It's collected into
+> > > > immutable branch with a given tag, please pull to yours subsystems.
+> > >
+> > > Hi Andy,
+> > > Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> > > then I should probably start looking at removing the corresponding
+> > > parts in GMA500.
+> >
+> > Nope. It is related to only Medfield / Clovertrail platforms.
+> >
+> > There are other (MID) platforms that may / might utilize this driver
+> > in the future.
+>
+> Right, there's still Oaktrail / Moorestown with hardware in the wild.
 
-Add a sanity check in the RTC CMOS probe function which reads the RTC_VALID
-register (Register D) which should have bit 0-6 cleared. If that's not the
-case then fail to register the CMOS.
+Actually Moorestown had to be removed a few years ago (kernel won't
+boot on them anyway from that date when Alan removed support under
+arch/x86 for it).
 
-Add the same check to mc146818_get_time(), warn once when the condition
-is true and invalidate the rtc_time data.
+I'm talking about Merrifield and Moorefield that can utilize it and
+also some other platforms that are not SFI based (Cedar something...
+IIRC).
 
-Reported-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
----
-V2: Fixed the sizeof() as spotted by Micka=C3=ABl
----
- drivers/rtc/rtc-cmos.c         |    8 ++++++++
- drivers/rtc/rtc-mc146818-lib.c |    7 +++++++
- 2 files changed, 15 insertions(+)
+> > I.o.w. we probably can remove the oldest stuff in the driver WRT above
+> > mentioned platforms, but leave the driver for the rest.
+> > I wouldn't be in a hurry with this though, display drivers are easy to
+> > remove, but really hard to get back on velocity after that.
+>
+> Ok, I'll have a look at removing Medfield. That code should have been
+> removed a long time ago.
 
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -805,6 +805,14 @@ cmos_do_probe(struct device *dev, struct
-=20
- 	spin_lock_irq(&rtc_lock);
-=20
-+	/* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
-+	if ((CMOS_READ(RTC_VALID) & 0x7f) !=3D 0) {
-+		spin_unlock_irq(&rtc_lock);
-+		dev_warn(dev, "not accessible\n");
-+		retval =3D -ENXIO;
-+		goto cleanup1;
-+	}
-+
- 	if (!(flags & CMOS_RTC_FLAGS_NOFREQ)) {
- 		/* force periodic irq to CMOS reset default of 1024Hz;
- 		 *
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -21,6 +21,13 @@ unsigned int mc146818_get_time(struct rt
-=20
- again:
- 	spin_lock_irqsave(&rtc_lock, flags);
-+	/* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
-+	if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x7f) !=3D 0)) {
-+		spin_unlock_irqrestore(&rtc_lock, flags);
-+		memset(time, 0xff, sizeof(*time));
-+		return 0;
-+	}
-+
- 	/*
- 	 * Check whether there is an update in progress during which the
- 	 * readout is unspecified. The maximum update time is ~2ms. Poll
+-- 
+With Best Regards,
+Andy Shevchenko
