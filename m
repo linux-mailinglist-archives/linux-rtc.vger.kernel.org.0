@@ -2,67 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 344E7304046
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 15:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E193304254
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 16:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391691AbhAZO23 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 09:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S2390121AbhAZPXl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 10:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404318AbhAZO0l (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 09:26:41 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE277C061A29;
-        Tue, 26 Jan 2021 06:25:53 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id n25so11554477pgb.0;
-        Tue, 26 Jan 2021 06:25:53 -0800 (PST)
+        with ESMTP id S2392729AbhAZPXf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 10:23:35 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56435C061D7F;
+        Tue, 26 Jan 2021 07:22:53 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id a12so15080201lfb.1;
+        Tue, 26 Jan 2021 07:22:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NPSOH8Y62ukMN0OaTHNJQcHEYySsxlPH5TqLsLYLoQg=;
-        b=SkFBEQRuNzx7oNacOenVNqjxOYIRojAVRIrMayGeOAl0djFSeR8oH6C199qfpE2FEG
-         Ol9dnrqkN29SpK2qgA9Lc27eNLNVTDTm7wsLeBGrfoVgQ2mPQOESMbwkojG+H87p6Sw+
-         BBNjxJCkN1b5aIBYXTRaAgzHHgotUpU/LQ1qqf89ihNcqH6MbBn3ldQ50AhAgf4dhF6+
-         atpiPndRtmVrHzUhY2rYPoKph+N3GpQeKnyUkd12t7jHWKQ5EEXm4x+FI8XR25U++nrh
-         PKtAVBXkOOA8UF5YNs/k0QMDaIqaK+nEN/YZVzewMomb4Wf/OSidoT1ppzR1f8U1d2Es
-         evZw==
+        bh=4+mBnR3VXkaRy9N4OGkkdcyJa4ZmDlJBBt01ZGkJAXs=;
+        b=AfwqIi885h0UWkW29YOZV5Lde+xpkHcW9kNV2bCWZOTzbUWT/sbstMW4AA2/xl3kfk
+         0efaE9AMlSPbt16b0+3qPIbzOLjmiiKU/bGGgIPkLnTdHFf2st+6I3CPYhzoKvVKKfYF
+         3Oopufis/JRKY11nnrUQdYQ8CKyfQaQKhSKbhKnM6rSS/1g9kNu8Fe0Kd3sfoEDDCtI9
+         rFvSd/Y/ghtLUXIX7TB5gm1b5yzHpiPhWP8FEckt3U6OMu0ZZGMdslPtWIpDi/5/FtLp
+         U72I7i/Wc2BpALP11ajlxoe5/p/QipOqqaVtp0B6+B/JXRgPHVlz0niF0kIfDAwcz73I
+         WnvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NPSOH8Y62ukMN0OaTHNJQcHEYySsxlPH5TqLsLYLoQg=;
-        b=C57kn80VWt6clqJomRSg38pYOUpv1u9EcvU2sXfX7HG5ghD5bmifBY6o8erP5WYwC7
-         iKrgENjjvSp9HcaQ5L5QXidYq2Szd6QRVsv6yRgSAAKNCfq0QAjh63RhjfqQ/SPzlCwn
-         vkRAKoh0xzv9AzqD7EA8Uu2En261yMv0SejtqJU4gCs1B9w8/oHOQKSFS9VHYoi8IXpf
-         14iRv2LJPTrc4ulMxPR9cSoSh4T+DGUi7f80ftCwqeO5JUi+Ja9Dbs+93v9rSyZas2Ql
-         +omUbnN/96WlI832LCvbOj/f+ywVTiIm6N/5tjYl8DDd8k/V5MRiFtB30KZ5w2V0hYGU
-         nkwg==
-X-Gm-Message-State: AOAM530df4mDJsIhse+ZDvMPEGEv3BK4c/J+WJYAu27RlrrmhJTbBLfL
-        L7fm2DxuSX7DDf4jsUyHSHFjcRbotviS4QMXbUw=
-X-Google-Smtp-Source: ABdhPJyqWaX+Pth+W5prJc8n9EUN7utWiThsOSD+IU9DjuKJij5MhYt+nVXG/9mfOEsVcVWVJZY13r0DrIoqdfte8f8=
-X-Received: by 2002:a63:e50:: with SMTP id 16mr5867228pgo.74.1611671153433;
- Tue, 26 Jan 2021 06:25:53 -0800 (PST)
+        bh=4+mBnR3VXkaRy9N4OGkkdcyJa4ZmDlJBBt01ZGkJAXs=;
+        b=BFkSrltMgt1Za8AWPlCUNk1Y0Qz9mfNsk/PrOTZfdWIoLlybIqaIkmSXvS60Kwbg9T
+         88dig5jffd5GXzJD+6lBlmjE29G6JvzQoM4M6TAPeuhdiP8Ggxp8UN/qrFOho2BNgeKD
+         m8fS/awVCo09IBD3Mc9lXlrSIMMSJn1o8q2h23/BbVCh/85Rw0JsK1vzjDn1/Ffyhf6z
+         seNsAFiJ5DoTnQ81393S4NB7wICJbpCKxEwqjhkFevQNpp7XCHWXSkuFPbuQb2JXVNTw
+         eZ29wLFXDYHpsAKM1i4/UPNTp/Gcn0Ijku0YJzaK64xost8x0zWqunh1cMLcr1ZSthor
+         NhuQ==
+X-Gm-Message-State: AOAM530Rp3B1IltF61qiVGOBOVGyl1tJP4k95YnT1iOMv5iWj9griskT
+        1D/djOVzYhFn3QAgFq7p/TM28ubo62FTAy3XzMM=
+X-Google-Smtp-Source: ABdhPJxmhAGVYKyYPou5zTitgoNIUKx4ylZWLEkZUUua5BVLo1gqz/4FfNng1wXXktSOawRGZGtUoRVXKmh3ahMaRO8=
+X-Received: by 2002:a19:7ecf:: with SMTP id z198mr2752766lfc.650.1611674571883;
+ Tue, 26 Jan 2021 07:22:51 -0800 (PST)
 MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <886bbdc0-3391-2140-a2d4-1688b262966f@redhat.com>
-In-Reply-To: <886bbdc0-3391-2140-a2d4-1688b262966f@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Jan 2021 16:26:42 +0200
-Message-ID: <CAHp75Vde=dN-9dj2d9pxNeg1ODzp6tV0truHPtHJycbjWA=akQ@mail.gmail.com>
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com>
+In-Reply-To: <YBANNJ8XtoRf7SuW@smile.fi.intel.com>
+From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Date:   Tue, 26 Jan 2021 16:22:40 +0100
+Message-ID: <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
 Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     platform-driver-x86@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <mgross@linux.intel.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -70,42 +67,18 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 4:23 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Hi,
+> Hi guys,
 >
-> On 1/26/21 1:38 PM, Andy Shevchenko wrote:
-> > Hi guys,
-> >
-> > This is first part of Intel MID outdated platforms removal. It's collected into
-> > immutable branch with a given tag, please pull to yours subsystems.
-> >
-> > (All changes are tagged by the respective maintainers)
+> This is first part of Intel MID outdated platforms removal. It's collected into
+> immutable branch with a given tag, please pull to yours subsystems.
 
-...
+Hi Andy,
+Do you plan on eventually removing X86_INTEL_MID completely? If so,
+then I should probably start looking at removing the corresponding
+parts in GMA500.
 
-> >       platform/x86: intel_mid_thermal: Remove driver for deprecated platform
-> >       platform/x86: intel_mid_powerbtn: Remove driver for deprecated platform
->
-> Erm, I already have this 2 in platform-drivers-x86/for-next since you said that
-> these 2 could be merged independently.
-
-Yes, you may merge this on top, shouldn't be any conflicts.
-But this mail originally was sent a couple of days ago, I had a
-problem with my email setup.
-
-> Anyways I just did a test-merge and there is no conflict, so everything is ok.
-
-Yep. That's how it works :)
-
-> From my pov this looks good and I plan to merge this into platform-drivers-x86/for-next
-> before the merge-window.
->
-> I'm going to hold off on doing that for a bit for now in case one of the other
-> subsys maintainers has any objections.
-
-Noted and thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks
+Patrik
