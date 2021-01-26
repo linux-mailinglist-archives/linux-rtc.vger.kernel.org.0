@@ -2,166 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E62303D20
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 13:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CEC303EC5
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 14:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391402AbhAZMjQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 07:39:16 -0500
-Received: from mga03.intel.com ([134.134.136.65]:47772 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728794AbhAZMjK (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 26 Jan 2021 07:39:10 -0500
-IronPort-SDR: 9X/Ujf1+/mzqowE9kLrSbGllICZ+bsFK+UmSudcujWdy65SYiJ58dYBWdpxhS+6bN3/EV7Lu4Y
- HUOjJ3rU1nVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="179973781"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="179973781"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 04:37:14 -0800
-IronPort-SDR: xtjAOkynaLHfXe5zpBV18SvsRxeKacFBYCOy6xM8lMumXM5JOU1r74QRBgpcyA2Zh5et8mJjjw
- QBmmY7umAlQw==
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="406691221"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 04:37:10 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1l4Nbo-00EOdg-F6; Tue, 26 Jan 2021 14:38:12 +0200
-Date:   Tue, 26 Jan 2021 14:38:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     platform-driver-x86@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        dri-devel@lists.freedesktop.org,
+        id S2403966AbhAZNc3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 08:32:29 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:49478 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392317AbhAZN1A (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 08:27:00 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1611667568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=38wr1OUdVY5qa4csrS5j+bDtc+hqgakuki0CQK0ebIE=;
+        b=OMw7J3LS5c7ufuqTDutW78aIq/jluzUTnTyEadi3wJVvQ1zF4X7N935cSoFLJBrBC17W5M
+        nAVdZj99JGIzIIWNMjrkDxVAsDxJFHbTyqtbfoz6Nzu7H4+Zw2vUKgTsNj3mYHUT8CEyEz
+        pY6cWJ+jpB9Wtm/jo4d+iaZDKRF8fPzWR/jfh9ZIlOxHuJTD+uusUeHK3/hIsEq/EFkI4q
+        eqCUVxJe7ay5QmLhtKxwxT76l6kRg4Sq7Yu4EaHDMamNJSjk4v3kGf+dkaJ5rb0GI/pJd5
+        MQqweICAPjPjUVS4JyR0iXlMQKcCpQgWjzmrnqwdCzTnRM9VkV9roVmV7S34sA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1611667568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=38wr1OUdVY5qa4csrS5j+bDtc+hqgakuki0CQK0ebIE=;
+        b=1s14p9ZbXqlhNGgFhIRtMky00sdei5PWhNAwc7c5wJzVNQSJkRdP92RedGcWuZc2YmJwsQ
+        BuAUFYKVdhAllOCA==
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-Message-ID: <YBANNJ8XtoRf7SuW@smile.fi.intel.com>
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [patch 1/8] rtc: mc146818: Prevent reading garbage - bug
+In-Reply-To: <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net>
+References: <20201206214613.444124194@linutronix.de> <20201206220541.594826678@linutronix.de> <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net>
+Date:   Tue, 26 Jan 2021 14:26:07 +0100
+Message-ID: <871re7hlsg.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi guys,
+On Mon, Jan 25 2021 at 19:40, Micka=C3=ABl Sala=C3=BCn wrote:
+> After some bisecting, I found that commit 05a0302c3548 ("rtc: mc146818:
+> Prevent reading garbage", this patch, introduced since v5.11-rc1) makes
+> my VM hang at boot. Before this commit, I got this (and didn't notice)
+> at every boot:
+> rtc_cmos rtc_cmos: registered as rtc0
+> rtc_cmos rtc_cmos: hctosys: unable to read the hardware clock
+> rtc_cmos rtc_cmos: alarms up to one day, 114 bytes nvram
+>
+> I notice that this patch creates infinite loops, which my VM falls into
+> (cf. below).
+>> +	time->tm_sec =3D CMOS_READ(RTC_SECONDS);
+>> +
+>> +	if (CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) {
+>> +		spin_unlock_irqrestore(&rtc_lock, flags);
+>> +		mdelay(1);
+>
+> My VM loops here.
+> time->tm_sec is always 255.
 
-This is first part of Intel MID outdated platforms removal. It's collected into
-immutable branch with a given tag, please pull to yours subsystems.
+That means there is no RTC and therefore the CMOS_READ($REG) returns
+0xFF which makes the loop stuck because RTC_UIP is always set.
 
-(All changes are tagged by the respective maintainers)
+Yet another proof that VIRT creates more problems than it solves.
+
+Fix below.
 
 Thanks,
 
-With Best Regards,
-Andy Shevchenko
+        tglx
+---
+Subject: rtc: mc146818: Detect and handle broken RTCs
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Tue, 26 Jan 2021 11:38:40 +0100
 
-The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
+The recent fix for handling the UIP bit unearthed another issue in the RTC
+code. If the RTC is advertised but the readout is straight 0xFF because
+it's not available, the old code just proceeded with crappy values, but the
+new code hangs because it waits for the UIP bit to become low.
 
-  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
+Add a sanity check in the RTC CMOS probe function which reads the RTC_VALID
+register (Register D) which should have bit 0-6 cleared. If that's not the
+case then fail to register the CMOS.
 
-are available in the Git repository at:
+Add the same check to mc146818_get_time(), warn once when the condition
+is true and invalidate the rtc_time data.
 
-  git://git.infradead.org/linux-platform-drivers-x86.git tags/ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+Reported-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ drivers/rtc/rtc-cmos.c         |    8 ++++++++
+ drivers/rtc/rtc-mc146818-lib.c |    7 +++++++
+ 2 files changed, 15 insertions(+)
 
-for you to fetch changes up to a507e5d90f3d6846a02d9c2c79e6f6395982db92:
-
-  platform/x86: intel_scu_wdt: Get rid of custom x86 model comparison (2021-01-25 20:05:32 +0200)
-
-----------------------------------------------------------------
-ib-drm-gpio-pdx86-rtc-wdt for v5.12-1
-
-First part of Intel MID outdated platforms removal.
-
-The following is an automated git shortlog grouped by driver:
-
-drm/gma500:
- -  Get rid of duplicate NULL checks
- -  Convert to use new SCU IPC API
-
-gpio:
- -  msic: Remove driver for deprecated platform
- -  intel-mid: Remove driver for deprecated platform
-
-intel_mid_powerbtn:
- -  Remove driver for deprecated platform
-
-intel_mid_thermal:
- -  Remove driver for deprecated platform
-
-intel_scu_wdt:
- -  Get rid of custom x86 model comparison
- -  Drop SCU notification
- -  Move driver from arch/x86
-
-rtc:
- -  mrst: Remove driver for deprecated platform
-
-watchdog:
- -  intel-mid_wdt: Postpone IRQ handler registration till SCU is ready
- -  intel_scu_watchdog: Remove driver for deprecated platform
-
-----------------------------------------------------------------
-Andy Shevchenko (12):
-      drm/gma500: Convert to use new SCU IPC API
-      drm/gma500: Get rid of duplicate NULL checks
-      gpio: intel-mid: Remove driver for deprecated platform
-      gpio: msic: Remove driver for deprecated platform
-      platform/x86: intel_mid_thermal: Remove driver for deprecated platform
-      platform/x86: intel_mid_powerbtn: Remove driver for deprecated platform
-      rtc: mrst: Remove driver for deprecated platform
-      watchdog: intel_scu_watchdog: Remove driver for deprecated platform
-      watchdog: intel-mid_wdt: Postpone IRQ handler registration till SCU is ready
-      platform/x86: intel_scu_wdt: Move driver from arch/x86
-      platform/x86: intel_scu_wdt: Drop SCU notification
-      platform/x86: intel_scu_wdt: Get rid of custom x86 model comparison
-
- MAINTAINERS                                        |   2 -
- arch/x86/platform/intel-mid/device_libs/Makefile   |   1 -
- drivers/gpio/Kconfig                               |  14 -
- drivers/gpio/Makefile                              |   1 -
- drivers/gpio/TODO                                  |   2 +-
- drivers/gpio/gpio-intel-mid.c                      | 414 ---------------
- drivers/gpio/gpio-msic.c                           | 314 ------------
- drivers/gpu/drm/gma500/Kconfig                     |   1 +
- drivers/gpu/drm/gma500/mdfld_device.c              |   2 -
- drivers/gpu/drm/gma500/mdfld_dsi_output.c          |   2 -
- drivers/gpu/drm/gma500/mdfld_output.c              |   8 +-
- drivers/gpu/drm/gma500/oaktrail_device.c           |   3 -
- drivers/gpu/drm/gma500/psb_drv.h                   |   3 +
- drivers/gpu/drm/gma500/tc35876x-dsi-lvds.c         |  30 +-
- drivers/platform/x86/Kconfig                       |  23 +-
- drivers/platform/x86/Makefile                      |   3 +-
- drivers/platform/x86/intel_mid_powerbtn.c          | 233 ---------
- drivers/platform/x86/intel_mid_thermal.c           | 560 ---------------------
- .../platform/x86/intel_scu_wdt.c                   |  41 +-
- drivers/rtc/Kconfig                                |  12 -
- drivers/rtc/Makefile                               |   1 -
- drivers/rtc/rtc-mrst.c                             | 521 -------------------
- drivers/watchdog/Kconfig                           |   9 -
- drivers/watchdog/Makefile                          |   1 -
- drivers/watchdog/intel-mid_wdt.c                   |   8 +-
- drivers/watchdog/intel_scu_watchdog.c              | 533 --------------------
- drivers/watchdog/intel_scu_watchdog.h              |  50 --
- 27 files changed, 54 insertions(+), 2738 deletions(-)
- delete mode 100644 drivers/gpio/gpio-intel-mid.c
- delete mode 100644 drivers/gpio/gpio-msic.c
- delete mode 100644 drivers/platform/x86/intel_mid_powerbtn.c
- delete mode 100644 drivers/platform/x86/intel_mid_thermal.c
- rename arch/x86/platform/intel-mid/device_libs/platform_mrfld_wdt.c => drivers/platform/x86/intel_scu_wdt.c (69%)
- delete mode 100644 drivers/rtc/rtc-mrst.c
- delete mode 100644 drivers/watchdog/intel_scu_watchdog.c
- delete mode 100644 drivers/watchdog/intel_scu_watchdog.h
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -805,6 +805,14 @@ cmos_do_probe(struct device *dev, struct
+=20
+ 	spin_lock_irq(&rtc_lock);
+=20
++	/* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
++	if ((CMOS_READ(RTC_VALID) & 0x7f) !=3D 0) {
++		spin_unlock_irq(&rtc_lock);
++		dev_warn(dev, "not accessible\n");
++		retval =3D -ENXIO;
++		goto cleanup1;
++	}
++
+ 	if (!(flags & CMOS_RTC_FLAGS_NOFREQ)) {
+ 		/* force periodic irq to CMOS reset default of 1024Hz;
+ 		 *
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -21,6 +21,13 @@ unsigned int mc146818_get_time(struct rt
+=20
+ again:
+ 	spin_lock_irqsave(&rtc_lock, flags);
++	/* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
++	if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x7f) !=3D 0)) {
++		spin_unlock_irqrestore(&rtc_lock, flags);
++		memset(time, 0xff, sizeof(time));
++		return 0;
++	}
++
+ 	/*
+ 	 * Check whether there is an update in progress during which the
+ 	 * readout is unspecified. The maximum update time is ~2ms. Poll
