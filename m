@@ -2,77 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59823042B8
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 16:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87172304301
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jan 2021 16:52:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731528AbhAZPhl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 10:37:41 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:50182 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391524AbhAZPgF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 10:36:05 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1611675318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hh9LYnfvfOc2Nbg2V1UNBmKMfmRSaeXdcAU2V70HUNI=;
-        b=YR9XzAkZv5I5BtGuoaerm5zNmwFZWEMXzcyRPfP8FI5X+yi8+yMrmoKr0XZjCzl82fMMaP
-        p/Bu8JqXkJBNkF0ns09ZxcljDcV6LdXGsEATp9dWfFrqcMkVdw+Mk1rvyO2xsuOiQ3F2zx
-        CNmhOjyZQsDZJC35HovErGz59734dM66LNkFkK7H3R/fw32/yJNkp8mqgQb+QhhzReRD7N
-        Di6nrp66hcx804a2DPt11mG35/W8gEpYKBVLMhaqAkK2ADQ2qwyks0Ict8HWmuo0lKxBJJ
-        pwEPBHL1ZD+7eScJ8jW3XIeFNjpWHebbqDbg01h1Nr9IbalPFZDDvZecsCFCVw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1611675318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hh9LYnfvfOc2Nbg2V1UNBmKMfmRSaeXdcAU2V70HUNI=;
-        b=dQQioqVwhhDkpZC7ZwjRyKuRi765/waHxrDDe1fMHLChPsGwjrTe9yArRH2dYUjcYq3DwC
-        f37z5jcfgKGeOpAw==
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [patch 1/8] rtc: mc146818: Prevent reading garbage - bug
-In-Reply-To: <98cb59e8-ecb4-e29d-0b8f-73683ef2bee7@digikod.net>
-References: <20201206214613.444124194@linutronix.de> <20201206220541.594826678@linutronix.de> <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net> <871re7hlsg.fsf@nanos.tec.linutronix.de> <98cb59e8-ecb4-e29d-0b8f-73683ef2bee7@digikod.net>
-Date:   Tue, 26 Jan 2021 16:35:18 +0100
-Message-ID: <87y2gfg18p.fsf@nanos.tec.linutronix.de>
+        id S2392793AbhAZPv5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 10:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392031AbhAZPvn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 10:51:43 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB4DC061D73;
+        Tue, 26 Jan 2021 07:51:02 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id j21so5383821pls.7;
+        Tue, 26 Jan 2021 07:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=e1wIxfZ2pa94U6ERVc2TBu1sPL7/ZYPSJAmu9tbJ7iw=;
+        b=fInUUBW/u2yZkKQ9i4u1tJ4c+stOkTJCJtSFcDLZ7m/xs9cZT542Eb2J5XlAOl8xPv
+         DtHadV5tMMfxNK6aBMVjHNggIwvNKjBxXQJORTHKRarKVjBMRj4aZ2ZFbdCSu6m/QBiJ
+         8WEOou3Sj7ixxzifYtQN/LX5gb98Of28SIfvk8keig14TyEK02m0ZM9sX5KjF+raFYRX
+         i9zNWhK5pY/8Qa/Ywd0D5gQzpd6FaQMM6bM69oPwHXiDxOmf7yaNaO9ibFdCQIUWeb70
+         PLaqHLpZ9cFYa9GvvdBBgHTZw2e6bySE0pNTApwJTaDkDEd/egu/gBGsb12p/44eYqRY
+         gXxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e1wIxfZ2pa94U6ERVc2TBu1sPL7/ZYPSJAmu9tbJ7iw=;
+        b=aSwpLjMzOaZSydQoU2DoupjjU74RYSVy1ktDdvMSO1Sfs1NI/X1Z3TFIg9Erx24gm7
+         zdbtfXkgSBvn3I3lKzhnzEyjPkVj52y3byefejl7966VcU4vc+QXeqdH+hi6fZQNr7fK
+         nXwfRfYSFsejYhBMcnuVLQpi/L66W2iRlr5mKnOeTgeGFbPcxgVO4pcWP9euL1xC6kRt
+         GOT1SAIwTuAcwB+G1njOvgIKmkGty2wOHJFlyZcD8YnhUw4kpfEc+9eE0zVZ6ECqXKHY
+         3hDjArDs2EWPUmpdjdSEk97mwyH3QGIjfKc6ZH/F3oAPcFKeZ/u8t6CIWX380J0CDy8e
+         K4Lw==
+X-Gm-Message-State: AOAM5301zX7du/pS4/x3rKYYBd38IsiR+09z88mJoG9zQdXLIXymw84A
+        D4ANM0429pG6NS33Rh+iL+pvTae+vb9tPKDZyyg=
+X-Google-Smtp-Source: ABdhPJx5glss0sqleRtDBlXmNqPnxXWh5zBE4ZdTKEjL+tUMNHRV8Ts7oKcmyySbHPNP8WfNZVvgavGou2cpAroNDx4=
+X-Received: by 2002:a17:90a:c84:: with SMTP id v4mr423673pja.228.1611676262312;
+ Tue, 26 Jan 2021 07:51:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+In-Reply-To: <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jan 2021 17:51:51 +0200
+Message-ID: <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jan 26 2021 at 15:17, Micka=C3=ABl Sala=C3=BCn wrote:
-> Thanks for the fix! It boots now with a new message:
-> rtc_cmos rtc_cmos: not accessible
->>  	spin_lock_irqsave(&rtc_lock, flags);
->> +	/* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
->> +	if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x7f) !=3D 0)) {
->> +		spin_unlock_irqrestore(&rtc_lock, flags);
->> +		memset(time, 0xff, sizeof(time));
+On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+<patrik.r.jakobsson@gmail.com> wrote:
+> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Hi guys,
+> >
+> > This is first part of Intel MID outdated platforms removal. It's collected into
+> > immutable branch with a given tag, please pull to yours subsystems.
 >
-> This should be: sizeof(*time)
+> Hi Andy,
+> Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> then I should probably start looking at removing the corresponding
+> parts in GMA500.
 
-Of course ....
+Nope. It is related to only Medfield / Clovertrail platforms.
 
->> +		return 0;
->> +	}
->> +
->>  	/*
->>  	 * Check whether there is an update in progress during which the
->>  	 * readout is unspecified. The maximum update time is ~2ms. Poll
->>=20
->
-> Tested-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+There are other (MID) platforms that may / might utilize this driver
+in the future.
+
+I.o.w. we probably can remove the oldest stuff in the driver WRT above
+mentioned platforms, but leave the driver for the rest.
+I wouldn't be in a hurry with this though, display drivers are easy to
+remove, but really hard to get back on velocity after that.
+
+-- 
+With Best Regards,
+Andy Shevchenko
