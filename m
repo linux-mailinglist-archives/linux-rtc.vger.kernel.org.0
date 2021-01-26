@@ -2,196 +2,127 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A62D305CD0
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6431D305CD2
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S313691AbhAZWku (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 17:40:50 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:32883 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393933AbhAZSCJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 13:02:09 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l4SaJ-00032e-0a; Tue, 26 Jan 2021 18:56:59 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l4SaD-0007NA-AL; Tue, 26 Jan 2021 18:56:53 +0100
-Date:   Tue, 26 Jan 2021 18:56:52 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        id S313703AbhAZWlB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 17:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405684AbhAZUyF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 15:54:05 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9475DC0613D6;
+        Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id l18so2978569pji.3;
+        Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rbiGPK10hMkVPDroKMLJ5oV5M7XFgnNXGS2BK8hWuOo=;
+        b=rn/iGPtlK1tCt3ZcyGP0CCdw67MmANd7aV9K8V8aeKMW0OCHolf5rM2iIe3r4DjsNZ
+         F2fnJ6AdLLZDovpjn78dQoAwggG434OjHr5DX8MOMH7+Vl/IPf5JiUKCtosaapLQlE5Y
+         woQ/JsbLBBtAD/Q5HH6Xv3+NbWnByvdyZYrTsvi3vOD9YvZpTS7ffThCt9h0I79+HV+r
+         b/uEZSTH2DnvGIsEOObtjToqzcJZUUYNqmjR4Yt0w2cR9OdaBdi4O9fNBq7dohr/2tLW
+         zM6jUprpc/hFKn6hHnZiyRKWcD6SprVWgRYGxGKRTAmGJxOlkCdfcAsr1j89x+5wiViQ
+         Khcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rbiGPK10hMkVPDroKMLJ5oV5M7XFgnNXGS2BK8hWuOo=;
+        b=i6tyKPLyzcFEQCADGpTP9onWXOFToxJdTnaqtSz9UgDACTI/uSGuOgihOY3/uvlaCq
+         C6WY9TrSwzFPPPTKq2et4Cwn10qsN8v6JySdq/7+7D/GcpL/t1qMIxUmzDNYXXBQaJAD
+         BLvi6x7bGtwrvLdbHkCbDU98XV3ucxlf/KeIPNuaY1zWO9QPjOPxdllLZHNIS7eqlC+y
+         zXhZ9Csn97v6cUC8XBfBdgnzm5aXxuxxZ8fJlpNLbZsNg13S2ErYN2zwngnHMYFfuh50
+         Yvudm/L78JCSkXmHaUJRebJGWjoaUL6DAAI5ztXkAYOcfbNwAxWKG8ExxSWnfOO9kFd2
+         iZpg==
+X-Gm-Message-State: AOAM533WckD9vDEuUTFdCPObqFgRL9IA8vNrWmdLy6u0ws8DJGvJQZyA
+        m+LBVMdmypfB+W4WvYOiUK3aUmlmwxSk///yLDc=
+X-Google-Smtp-Source: ABdhPJwJydNn/+NYM8T4H1FZKTUZv+sFSaTn9sxHcmr1VIRqWPJz3yxipJEpIX89bzwIqva5/GylV4FLSr9ScI9Y40k=
+X-Received: by 2002:a17:90a:ca98:: with SMTP id y24mr1713563pjt.181.1611694405124;
+ Tue, 26 Jan 2021 12:53:25 -0800 (PST)
+MIME-Version: 1.0
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+ <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
+ <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
+ <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com> <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com>
+In-Reply-To: <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 26 Jan 2021 22:54:14 +0200
+Message-ID: <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-rtc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, coresight@lists.linaro.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, Leo Yan <leo.yan@linaro.org>,
-        dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Mike Leach <mike.leach@linaro.org>
-Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
-Message-ID: <20210126175652.3caoqfnsky2es42f@pengutronix.de>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
- <3e42b2ea-c713-31b2-9c86-c49a70d8e1f4@arm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2x4mwcdrgqmlamtu"
-Content-Disposition: inline
-In-Reply-To: <3e42b2ea-c713-31b2-9c86-c49a70d8e1f4@arm.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, Jan 26, 2021 at 8:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 1/26/21 6:14 PM, Andy Shevchenko wrote:
+> > On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
+> > <patrik.r.jakobsson@gmail.com> wrote:
+> >> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
+> >> <andy.shevchenko@gmail.com> wrote:
+> >>> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+> >>> <patrik.r.jakobsson@gmail.com> wrote:
+> >>>> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> >>>> <andriy.shevchenko@linux.intel.com> wrote:
+> >>>>>
+> >>>>> Hi guys,
+> >>>>>
+> >>>>> This is first part of Intel MID outdated platforms removal. It's collected into
+> >>>>> immutable branch with a given tag, please pull to yours subsystems.
+> >>>>
+> >>>> Hi Andy,
+> >>>> Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> >>>> then I should probably start looking at removing the corresponding
+> >>>> parts in GMA500.
+> >>>
+> >>> Nope. It is related to only Medfield / Clovertrail platforms.
+> >>>
+> >>> There are other (MID) platforms that may / might utilize this driver
+> >>> in the future.
+> >>
+> >> Right, there's still Oaktrail / Moorestown with hardware in the wild.
+> >
+> > Actually Moorestown had to be removed a few years ago (kernel won't
+> > boot on them anyway from that date when Alan removed support under
+> > arch/x86 for it).
+> >
+> > I'm talking about Merrifield and Moorefield that can utilize it and
+> > also some other platforms that are not SFI based (Cedar something...
+> > IIRC).
+>
+> Yes at least there are some 64 bit capable SoCs with GMA500 which were
+> used in NAS like devices. These NAS-es actually have a VGA output
+> (and maybe also DVI?) which is attached to the GMA500.
 
---2x4mwcdrgqmlamtu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since you are talking about 64-bit, definitely they are *not*
+Moorestown, Medfield, Clovertrail since the mentioned never were
+64-bit. But it would be nice to see the CPU model number to be sure.
 
-Hello,
+> I know people are running Fedora on these, so we should at least keep
+> these supported.
 
-On Tue, Jan 26, 2021 at 05:08:40PM +0000, Suzuki K Poulose wrote:
-> On 1/26/21 4:58 PM, Uwe Kleine-K=F6nig wrote:
-> > All amba drivers return 0 in their remove callback. Together with the
-> > driver core ignoring the return value anyhow, it doesn't make sense to
-> > return a value here.
-> >=20
-> > Change the remove prototype to return void, which makes it explicit that
-> > returning an error value doesn't work as expected. This simplifies chan=
-ging
-> > the core remove callback to return void, too.
-> >=20
-> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
-> > Acked-by: Mark Brown <broonie@kernel.org>
->  > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
->=20
-> >   drivers/hwtracing/coresight/coresight-etm4x-core.c | 4 +---
->=20
-> You are most likely to have a conflict for the above file, with what is
-> in coresight/next. It should be easy to resolve.
+Is it possible to gather the CPU model number from them? (Or at least
+the exact device/box name)
 
-I'm surprised to see that the remove callback introduced in 2952ecf5df33
-("coresight: etm4x: Refactor probing routine") has an __exit annotation.
-
-With .suppress_bind_attrs =3D true you don't need a remove callback at
-all. (And without .suppress_bind_attrs =3D true the remove callback must
-have no __exit annotation.)
-
-This make me looking at commit 45fe7befe0db ("coresight: remove broken
-__exit annotations") by Arnd. Unless I miss something the better change
-would have been to remove the unused remove callbacks instead of dropping
-their __exit annotation?!
-
-Anyhow, my conflict resolution looks as follows:
-
-diff --cc drivers/hwtracing/coresight/coresight-etm4x-core.c
-index 82787cba537d,473ab7480a36..000000000000
---- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-@@@ -1703,6 -1903,28 +1903,27 @@@ static int __exit etm4_remove_dev(struc
-  	cpus_read_unlock();
- =20
-  	coresight_unregister(drvdata->csdev);
-+=20
-+ 	return 0;
-+ }
-+=20
- -static int __exit etm4_remove_amba(struct amba_device *adev)
-++static void __exit etm4_remove_amba(struct amba_device *adev)
-+ {
-+ 	struct etmv4_drvdata *drvdata =3D dev_get_drvdata(&adev->dev);
-+=20
-+ 	if (drvdata)
- -		return etm4_remove_dev(drvdata);
- -	return 0;
-++		etm4_remove_dev(drvdata);
-+ }
-+=20
-+ static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
-+ {
-+ 	int ret =3D 0;
-+ 	struct etmv4_drvdata *drvdata =3D dev_get_drvdata(&pdev->dev);
-+=20
-+ 	if (drvdata)
-+ 		ret =3D etm4_remove_dev(drvdata);
-+ 	pm_runtime_disable(&pdev->dev);
-+ 	return ret;
-  }
- =20
-  static const struct amba_id etm4_ids[] =3D {
-
-If this series should make it in for 5.12 we probably need an immutable
-branch between hwtracing and amba.
-
-> Otherwise, the changes look good for the drivers/hwtracing/coresight/*
->=20
-> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---2x4mwcdrgqmlamtu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmAQV+EACgkQwfwUeK3K
-7AmVuQf6AtGutKPgbsyG3MlTDGKL2CFRBxCLR4sxog0b3QoNLrxr97ZAm+29XP+R
-/C9AgAEdBYZEp/2H2BkQe8cuBFS4UgHD/WEPZ5cI+JN475DZiqoF6T0qdSyCMF8m
-zEDDLZljJzggeci88eRuo1WxD4fyaD//srG7TdZYqXjasRvJ7uKPN4yTi7TrbMtU
-ECXScjnQQcZQPBSaUSqOzJfFs5iGDejv5lIG/emf+7QYEDD+AftUvKNVv/FyQYmL
-2jPJY9rLusZQGMxlZWQMyo5AzhkjmMkXv3GJVOiLzAUiEZ6WfU0kdtrZuzScshOW
-IRo6dRIxQLZOE4k2D+rDx3M/+KGaZQ==
-=Ozgm
------END PGP SIGNATURE-----
-
---2x4mwcdrgqmlamtu--
+-- 
+With Best Regards,
+Andy Shevchenko
