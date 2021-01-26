@@ -2,118 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2246305CE6
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F767305CE3
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 14:19:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S313630AbhAZWja (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 17:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389310AbhAZRO3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 12:14:29 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9385BC061756;
-        Tue, 26 Jan 2021 09:13:46 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b17so3586383plz.6;
-        Tue, 26 Jan 2021 09:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t5TtFJJmGGXnlkPzRkZI964XfU9tnGtrVx8sJ+nhhgg=;
-        b=C3EzaIXBST8Cm9Ao23YPKGZNoi53AvO8DVjjAwPROAIXUYs1VE82+8vfqjXNnqjdzD
-         liqtV8Y1DERtPWo1nyvHfJ0dIM/8zl2g2OV+IH1gVcjgZEzRSEwCDurFQdLYTY8HnEN1
-         0fEepFjeJDCr3qWqSlfUjxky/XAISoB3hBYR8DzKKdH2NMCPGUGAbfnSuwrsbFq96NSW
-         FlpZ22yilEbZ4sX0iNjxessv0r3jc76/3YCmf9c62Vft0I82Rgw+V8YLURrimjjWJIAj
-         1uTnO8ujuLiPhWVT8RByXB8RRIBu5vPkxq1srzRNiDQBiGg7xvbsiV//h51SSHrX+7L6
-         Zmsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t5TtFJJmGGXnlkPzRkZI964XfU9tnGtrVx8sJ+nhhgg=;
-        b=EQrAyz7uNWIbMzrEI9XTa5+pomvQxKZvOQa7VRXe44hgs5/UndIzIfk5kvkqviTlWK
-         qmLKsw2P/2ssZ/MGfHEYt9wI30OD2IStIk5GOLKhhkaDSqz7XmlVUUkpOi/lTxzgtu8Z
-         /JvqU27ePZTbIvkf8YPG6rmd+Tl/PNlN4jqd0+EKNRu9q2L+eTqE8abG4JWLhR1Mf6O3
-         ZjW9GYZKq5cmWDctzwSoIUsWPdUG3l5mhUGetQi+0D0ewpWhAyEwHQG5M63A3IfV2SNe
-         GuURoDjupeexct32qOffijaHoY2XKygZ3TwEFMMGUoiLuiZTQckLB3v8ylyk5izLL5tl
-         DJag==
-X-Gm-Message-State: AOAM530yVKCo8yzmsb9sYwXHfNI+bec0ZLEc1dwXFh6sgomRRfYT7YKg
-        13ZRYhSh2wgHH13KGNnskb7G94yAFlSGunmaJFM=
-X-Google-Smtp-Source: ABdhPJx92R0qs5/XdlRo/afRbr8RCC/r8mWGIZcmtX5Tb/02Z6ZBjPok93oodD57c37HChymbSyI5sp/7oQ9C8Xpisw=
-X-Received: by 2002:a17:90a:644a:: with SMTP id y10mr797421pjm.129.1611681226049;
- Tue, 26 Jan 2021 09:13:46 -0800 (PST)
-MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
- <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com> <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
-In-Reply-To: <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 26 Jan 2021 19:14:35 +0200
-Message-ID: <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        id S313098AbhAZWjy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jan 2021 17:39:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388864AbhAZRbZ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 26 Jan 2021 12:31:25 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D541121919;
+        Tue, 26 Jan 2021 17:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611682245;
+        bh=p9tGPF9ccd/d++aM4n9LyAfYAIV1RaM4Dz9iiSI4D3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=upI/kMhl7eE4+5uUph8S2tnMemQz5UbOopsKlNTDclqyTUBBILQcZKMXkwORHX8Yq
+         cJWujimFLxD3PUXP3Q6R5vs2zcoQMtooqvBAs2SfrBJr86tAjNEuPYdfB5MvusQjhA
+         rfnXzeJTXEVfQT42qqoxlu/1tgXRz2T+JTiZP73bnjiQwVao3xvBwc5M7G4UXf469U
+         VF6liyETyFxIuLw+hAqs6DjITpSX4hILsnFHO/EYiFxk0F2hgX4ucJit2xkGTa6SJ/
+         LEzImN7uvO2sCqNSCL4qH0V6E+R6lLaPerEq4KlBRAb7BizMVwvcu+25e7achCvt2Z
+         DlVP64TyyHfRA==
+Date:   Tue, 26 Jan 2021 23:00:40 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
+Message-ID: <20210126173040.GY2771@vkoul-mobl>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+ <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
-<patrik.r.jakobsson@gmail.com> wrote:
-> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
-> > <patrik.r.jakobsson@gmail.com> wrote:
-> > > On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > >
-> > > > Hi guys,
-> > > >
-> > > > This is first part of Intel MID outdated platforms removal. It's collected into
-> > > > immutable branch with a given tag, please pull to yours subsystems.
-> > >
-> > > Hi Andy,
-> > > Do you plan on eventually removing X86_INTEL_MID completely? If so,
-> > > then I should probably start looking at removing the corresponding
-> > > parts in GMA500.
-> >
-> > Nope. It is related to only Medfield / Clovertrail platforms.
-> >
-> > There are other (MID) platforms that may / might utilize this driver
-> > in the future.
->
-> Right, there's still Oaktrail / Moorestown with hardware in the wild.
+On 26-01-21, 17:58, Uwe Kleine-König wrote:
+> All amba drivers return 0 in their remove callback. Together with the
+> driver core ignoring the return value anyhow, it doesn't make sense to
+> return a value here.
+> 
+> Change the remove prototype to return void, which makes it explicit that
+> returning an error value doesn't work as expected. This simplifies changing
+> the core remove callback to return void, too.
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org> # for drivers/memory
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/amba/bus.c                                 | 5 ++---
+>  drivers/char/hw_random/nomadik-rng.c               | 3 +--
+>  drivers/dma/pl330.c                                | 3 +--
 
-Actually Moorestown had to be removed a few years ago (kernel won't
-boot on them anyway from that date when Alan removed support under
-arch/x86 for it).
+For dmaengine:
 
-I'm talking about Merrifield and Moorefield that can utilize it and
-also some other platforms that are not SFI based (Cedar something...
-IIRC).
-
-> > I.o.w. we probably can remove the oldest stuff in the driver WRT above
-> > mentioned platforms, but leave the driver for the rest.
-> > I wouldn't be in a hurry with this though, display drivers are easy to
-> > remove, but really hard to get back on velocity after that.
->
-> Ok, I'll have a look at removing Medfield. That code should have been
-> removed a long time ago.
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
 -- 
-With Best Regards,
-Andy Shevchenko
+~Vinod
