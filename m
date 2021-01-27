@@ -2,144 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FB130518E
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 05:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA313052EE
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 07:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbhA0E5P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jan 2021 23:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S231419AbhA0GBt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 27 Jan 2021 01:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388200AbhAZXUo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 18:20:44 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C016EC06174A;
-        Tue, 26 Jan 2021 15:19:32 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id v200so249984ybe.1;
-        Tue, 26 Jan 2021 15:19:32 -0800 (PST)
+        with ESMTP id S237418AbhA0Dw5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jan 2021 22:52:57 -0500
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF86DC061574
+        for <linux-rtc@vger.kernel.org>; Tue, 26 Jan 2021 19:52:16 -0800 (PST)
+Received: by mail-qk1-x74a.google.com with SMTP id v190so514936qkc.15
+        for <linux-rtc@vger.kernel.org>; Tue, 26 Jan 2021 19:52:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yG8TN3kSOy/r5C1fLciwDAgyrhAMN8G3ZSfNxn4LKwI=;
-        b=JGn9UVd1WL6oLaAIgsVyZFefcVBcfaNKnNmOKOUyzbrJVYPNvDflHiTqTCWbm08KKm
-         cHN3UA9Qctcy/zocpr/AYU08cR4RovIIz4JlaEWXZxBMFL7ThTcs/Xw7vAn5YKV9F6bS
-         Ovrxi5Oqb0xAcSldXg7BPjJ7e8IrIwVj7lashPMbLmBoH+ir0sIVOOgNZRTTXJMWihA5
-         aBH8+0LeIHQz5MZkI5ksYuuMbyMEKaAIyhlG64IipkZUPMFKbeYo+0C5IyD9IBsL+mgu
-         NXmYmPsFaDDfqufP8ivVnzJswuQdVImtIfytTHJaKUTtTMsOam8GbSNJKsqKsz3Wlfh9
-         WIpg==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=5VPUeByKd/x9PZw0CSCTNgL+h32Hi7mgbgca394+vo0=;
+        b=JxB+HvBGYuQqW6HIGlYpTJ4RO/MLHRodFVPXzQmPP1wZKnUZ5txgtWQM4S7+/MeoBr
+         80GFHSro0RVzltbpf671RXyUxdCVdBUDCJxLYIADUsWS8TX1QBbtExU0tQdjDpfEcSqk
+         bZn9q2pyQygyBZiiFJtarfDdEmRGmn+HUu1y6L3k2It5wXfle/rvFD9M2R8O1gvjqIKW
+         7i+ir4S2OMTUoc4Yh+eXNnSLGhvsdhDsbHpR4hYg16xtdNGSD3mT5+bpGjpF6eouMErn
+         AsmTIVIVAQKSkqQQOLckPTP9etYcB+KG4G9A8+mowKctH6nAB5UhmctvhmttUVV+2c7V
+         aG2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yG8TN3kSOy/r5C1fLciwDAgyrhAMN8G3ZSfNxn4LKwI=;
-        b=VQzjlGnjwwKXGtmg6M3zPDHX9hCe0FvY+1Msdl0oVJ5vHLuE+4qGmnWBI57mXUva7y
-         o2zvi+FzAv5LA0fyQ2mFNkirTYcUWFu6rtB7y5CuUU4H9/r/LFnGD1Sv3W3ipeMUgpVn
-         gVl90qg9KKqVNQ3arWXLYJUM0cKycEa4WSavMk0jeUuAKupGWS1KEmrQ4RVJQ2jClT8h
-         GGRhhVet7wd2XwpYaDkDGNHSiZYxluzuJ0AglniaJcwBGjTUoxFClli+Ka4hndHpGl1T
-         u2kRQ3x+sNihGyWuJLyVokibcXkad+Y98a+yijURkntQVA/ThsgygVbv2L34g6aImJ/a
-         FnWA==
-X-Gm-Message-State: AOAM533BgN2PQxauxeOIdYNK6Ug0jpmGKfmcMDPWlukyubKw8RusOpJ5
-        JvyaszjypAx1sHDpQ/44uzA0VLDYSZaaDdIuolM=
-X-Google-Smtp-Source: ABdhPJzBIh/uw8fHMxIPrq4i5pm0L5Jnoe2iN2FtZdlZzW9R7RDH1coLX0c8arxTOhBav4i1zaEHR/zAQGpitgryc7o=
-X-Received: by 2002:a25:9b81:: with SMTP id v1mr10594112ybo.168.1611703172052;
- Tue, 26 Jan 2021 15:19:32 -0800 (PST)
-MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
- <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
- <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
- <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com>
- <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com> <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-In-Reply-To: <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Wed, 27 Jan 2021 00:19:17 +0100
-Message-ID: <CAMeQTsZMK9E4=qB-Kxnt9i4RGDFRkVMAgyYSck_tmk7C7yTH2A@mail.gmail.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=5VPUeByKd/x9PZw0CSCTNgL+h32Hi7mgbgca394+vo0=;
+        b=WeCWcVxnw74ktirvQtYVJkTfAb1+XCTl+2LH8BRH+3su1t4OOmnPmSpjPPicOWzKFC
+         OcYS/oDfalNAOMBqM9+Tqvgihmyvc415x8zj8IsADzcpDG/ZPJ0VQvrs6KM/YPzBP1Rm
+         fQInMB1D1EB7+5JUem+QctR4RDslwAePGqR+zPYYmEj5HP5Z7MXgRCRr0428hYpHd4Kt
+         oSi/abQxtuTIYOpad40fUvXRELUrjuHzzU8UpVEMhNBXgB9rKiOfsqAdvxjMPcRr8O7W
+         gLaM4/oezp40uudC6/tx50EoFNA+pBaevgYP1+v3nV28KWP6nCBF7Lj8Qg8bX7uBZg0q
+         Jmlg==
+X-Gm-Message-State: AOAM533XWqTTKazH+c16PxpaV8tDd3Rxqvn/z9VXAw2FHb1fmv4XNw9N
+        szDhDfe92irr+eEVGCEigcuYwFe7e2RjLA==
+X-Google-Smtp-Source: ABdhPJzs3mW0fP0yOL0zl7e2jbCHBKc8t1d39J1OXYWMBuUg6hRuKy5Jv1UtE/6otLrY0pHAhmNV26Afd489DQ==
+Sender: "davidgow via sendgmr" <davidgow@spirogrip.svl.corp.google.com>
+X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:7000:2f04:a262:7158])
+ (user=davidgow job=sendgmr) by 2002:a05:6214:1348:: with SMTP id
+ b8mr1991075qvw.26.1611719535980; Tue, 26 Jan 2021 19:52:15 -0800 (PST)
+Date:   Tue, 26 Jan 2021 19:51:47 -0800
+Message-Id: <20210127035146.1523286-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
+Subject: [PATCH] drivers: rtc: Make xilinx zynqmp driver depend on HAS_IOMEM
+From:   David Gow <davidgow@google.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+        YueHaibing <yuehaibing@huawei.com>
+Cc:     David Gow <davidgow@google.com>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 9:53 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jan 26, 2021 at 8:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > On 1/26/21 6:14 PM, Andy Shevchenko wrote:
-> > > On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
-> > > <patrik.r.jakobsson@gmail.com> wrote:
-> > >> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
-> > >> <andy.shevchenko@gmail.com> wrote:
-> > >>> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
-> > >>> <patrik.r.jakobsson@gmail.com> wrote:
-> > >>>> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
-> > >>>> <andriy.shevchenko@linux.intel.com> wrote:
-> > >>>>>
-> > >>>>> Hi guys,
-> > >>>>>
-> > >>>>> This is first part of Intel MID outdated platforms removal. It's collected into
-> > >>>>> immutable branch with a given tag, please pull to yours subsystems.
-> > >>>>
-> > >>>> Hi Andy,
-> > >>>> Do you plan on eventually removing X86_INTEL_MID completely? If so,
-> > >>>> then I should probably start looking at removing the corresponding
-> > >>>> parts in GMA500.
-> > >>>
-> > >>> Nope. It is related to only Medfield / Clovertrail platforms.
-> > >>>
-> > >>> There are other (MID) platforms that may / might utilize this driver
-> > >>> in the future.
-> > >>
-> > >> Right, there's still Oaktrail / Moorestown with hardware in the wild.
-> > >
-> > > Actually Moorestown had to be removed a few years ago (kernel won't
-> > > boot on them anyway from that date when Alan removed support under
-> > > arch/x86 for it).
+The Xilinx zynqmp RTC driver makes use of IOMEM functions like
+devm_platform_ioremap_resource(), which are only available if
+CONFIG_HAS_IOMEM is defined.
 
-Ok. I lump Moorestown and Oaktrail together since they have the same
-Z6xx series CPU/GPU (GMA600). I still have a working Oaktrail device
-so that support should stay in gma500.
+This causes the driver not to be enable under make ARCH=um allyesconfig,
+even though it won't build.
 
-> > >
-> > > I'm talking about Merrifield and Moorefield that can utilize it and
-> > > also some other platforms that are not SFI based (Cedar something...
-> > > IIRC).
-> >
-> > Yes at least there are some 64 bit capable SoCs with GMA500 which were
-> > used in NAS like devices. These NAS-es actually have a VGA output
-> > (and maybe also DVI?) which is attached to the GMA500.
+By adding a dependency on HAS_IOMEM, the driver will not be enabled on
+architectures which don't support it.
 
-Yes these should be Cedarview/Cedartrail. Some of them are 64-bit and
-some are 32-bit. I think it came down to if bios enabled it or not.
-Cedarview comes with VGA, DVI and eDP/DP. Quite a few Cedarview
-devices exist in the wild.
+Fixes: 09ef18bcd5ac ("rtc: use devm_platform_ioremap_resource() to simplify code")
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ drivers/rtc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> Since you are talking about 64-bit, definitely they are *not*
-> Moorestown, Medfield, Clovertrail since the mentioned never were
-> 64-bit. But it would be nice to see the CPU model number to be sure.
->
-> > I know people are running Fedora on these, so we should at least keep
-> > these supported.
->
-> Is it possible to gather the CPU model number from them? (Or at least
-> the exact device/box name)
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 6123f9f4fbc9..474d95184f20 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1300,7 +1300,7 @@ config RTC_DRV_OPAL
+ 
+ config RTC_DRV_ZYNQMP
+ 	tristate "Xilinx Zynq Ultrascale+ MPSoC RTC"
+-	depends on OF
++	depends on OF && HAS_IOMEM
+ 	help
+ 	  If you say yes here you get support for the RTC controller found on
+ 	  Xilinx Zynq Ultrascale+ MPSoC.
+-- 
+2.30.0.280.ga3ce27912f-goog
 
-Yes, it would be interesting to know more about Clovertrail. gma500
-only supports up to the Cedarview GPUs but Clovertrail might also use
-a Cedarview GPU.
-
--Patrik
