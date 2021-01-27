@@ -2,20 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427193055A7
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 09:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E51F305ACD
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 13:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbhA0I3o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 27 Jan 2021 03:29:44 -0500
-Received: from mleia.com ([178.79.152.223]:33394 "EHLO mail.mleia.com"
+        id S237602AbhA0MGf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 27 Jan 2021 07:06:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41492 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232643AbhA0IZI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 27 Jan 2021 03:25:08 -0500
-Received: from mail.mleia.com (localhost [127.0.0.1])
-        by mail.mleia.com (Postfix) with ESMTP id 9227042EB56;
-        Wed, 27 Jan 2021 08:12:58 +0000 (UTC)
-Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+        id S237582AbhA0MDx (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 27 Jan 2021 07:03:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1227220773;
+        Wed, 27 Jan 2021 12:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1611748991;
+        bh=s9FyWRqQBYLlzUUdBkv3FZQxudbP70KKsuwRkeHWHEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8giB4ORvL3mx55LaDcj1/tIi+BhFJb4mO4m9pyBQqvZIwgP2vqkgkDOQ4I1vn8HH
+         U8aP648RT1pUgCmU92gSCKiLyN0XGWtBCyfjACVz8RiJzgpFsPQ6OWW77wlJfo28NM
+         bwp9LYhhA6QMhnElnHGF3hN0OdPBasyFUrm9T7kg=
+Date:   Wed, 27 Jan 2021 13:03:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 Cc:     Russell King <linux@armlinux.org.uk>,
         Matt Mackall <mpm@selenic.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
@@ -30,12 +38,12 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Alexandre Torgue <alexandre.torgue@st.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         Eric Auger <eric.auger@redhat.com>,
         Alex Williamson <alex.williamson@redhat.com>,
@@ -55,26 +63,20 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
         kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 4/5] amba: Make the remove callback return void
+Message-ID: <YBFWfOmndoPckN1A@kroah.com>
 References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
  <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
-From:   Vladimir Zapolskiy <vz@mleia.com>
-Message-ID: <b9bfa80b-ed5f-50f9-de50-76090007556c@mleia.com>
-Date:   Wed, 27 Jan 2021 10:12:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20210127_081258_639999_D23EB9E2 
-X-CRM114-Status: GOOD (  14.44  )
+In-Reply-To: <20210126165835.687514-5-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 1/26/21 6:58 PM, Uwe Kleine-KÃ¶nig wrote:
+On Tue, Jan 26, 2021 at 05:58:34PM +0100, Uwe Kleine-König wrote:
 > All amba drivers return 0 in their remove callback. Together with the
 > driver core ignoring the return value anyhow, it doesn't make sense to
 > return a value here.
@@ -91,12 +93,6 @@ On 1/26/21 6:58 PM, Uwe Kleine-KÃ¶nig wrote:
 > Acked-by: Mark Brown <broonie@kernel.org>
 > Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-For drivers/memory/pl172.c:
-
-Acked-by: Vladimir Zapolskiy <vz@mleia.com>
-
---
-Best wishes,
-Vladimir
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
