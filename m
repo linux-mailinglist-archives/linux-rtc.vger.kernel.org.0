@@ -2,145 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 601833064AC
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Jan 2021 21:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993E8307396
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Jan 2021 11:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232007AbhA0UBp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 27 Jan 2021 15:01:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33480 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232546AbhA0UAl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 27 Jan 2021 15:00:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611777551;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h/UsaQpy9owGSAnCeo3VsEu5JuZEkF1vXo3NykuqkpE=;
-        b=jBfqrtFFCRBvQYRSW3aqtsSGZ0XyO5lHAFTQXaBzhieGM8EFJmVeQm3hLcsa4EraLjm6Mz
-        pBFFeeVnISU9Mpt5ciRNMFQzYh1qe2KvPhM5nR+NA3KncTcT0SuM8kJXx7X3+hBdpfPfvs
-        o1VIv/8SQGtQAXYGmG0pLqP8nblnpzs=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-49-SwPnw5MTM1G2_6fDT5bmvQ-1; Wed, 27 Jan 2021 14:59:09 -0500
-X-MC-Unique: SwPnw5MTM1G2_6fDT5bmvQ-1
-Received: by mail-ed1-f70.google.com with SMTP id y6so1951747edc.17
-        for <linux-rtc@vger.kernel.org>; Wed, 27 Jan 2021 11:59:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=h/UsaQpy9owGSAnCeo3VsEu5JuZEkF1vXo3NykuqkpE=;
-        b=dmlbXwd96ZS2Io1k84JIO8McVW2Z/fg0nIQd4fVT5xYg0P96IFUZRcMzSPgKibCesq
-         b+A5nGeXsGnkv8ki+U2xZo9xXTSBduEd/nOln0xRVLPDX1KAD/cttklSFudUwuy81tRd
-         H8uu3ZWBpoKSO1qnkWiT9RFwgB1v8eiVdtHrt7KvXCUcsWZhPv10oZPDeTSx548pYxem
-         jcFpEO2PZ9zIt3DM/y6ywfoH83PCnh20rWJebCBRoYYu7l3P6A+tvKhH2bAhku84voK5
-         MW1cdKoLZFKyWcsqk1UKRvkK/dF4FMPIEJjcSm/aZOXnjngl5SGd/WaTQ+KM2VnDDDL+
-         5psg==
-X-Gm-Message-State: AOAM531kQdsJOLzSeNjUrpfMG0mT21u4SU0UnHSAkP+YI6Qy1ZxbTCZl
-        2S6rPVaBPx/SfDK0LzVBiKqQMCPoFEJE69hYGXrooVNXXj3iJZDROEalsIGKgeuYMypj/Wecfsr
-        h+mUCexbu8aRqgnXNraVl
-X-Received: by 2002:a17:906:708f:: with SMTP id b15mr8139586ejk.267.1611777548267;
-        Wed, 27 Jan 2021 11:59:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwlaO5BzU++0K+fbZ4fszfnZHOzoIQSWZSqrmuYdsQcWzs897KjBJMn22JCj/RJRaVwvpFeVw==
-X-Received: by 2002:a17:906:708f:: with SMTP id b15mr8139580ejk.267.1611777548103;
-        Wed, 27 Jan 2021 11:59:08 -0800 (PST)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-37a3-353b-be90-1238.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:37a3:353b:be90:1238])
-        by smtp.gmail.com with ESMTPSA id v9sm1275522ejd.92.2021.01.27.11.59.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Jan 2021 11:59:07 -0800 (PST)
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        id S232126AbhA1KVw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Jan 2021 05:21:52 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:44671 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231467AbhA1KVp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Jan 2021 05:21:45 -0500
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 0508358078E;
+        Thu, 28 Jan 2021 05:20:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 28 Jan 2021 05:20:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=CRTbXfYqvKWX3kel+Vs7SqRwF7f
+        OlDjsuYHVRUyeCgk=; b=GIIdik2Osy/HhZsywf3vX/nRSBZJWHTnGGcXaQMLe1y
+        cnrLgPq511VVzDgPONvt11VyiaK4fIOc8AvYiAm0qFKNhjbCbgVkq6JDYdUTjZ6B
+        B2KxIP7IF1+0YaP8EACI+GeXwQ9cwFJlt0HtTfYGknD2zHRd6VU2G3CldkYl97hJ
+        y0Akm19earaH7fzAmMSafryq8v/ZNdh/KKy3B51L41U952jKXnX6a57gIqqiKaRR
+        1rwhZxnAQ2+tqljOtVa3+qAneetYMsLsDE/BL0z8dGfencleCdISDnp3/WCzyZfo
+        ALgPuHrJ/uB92gKR4ZWLz8e6rnxU5IFd3nkuyVtglCA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=CRTbXf
+        YqvKWX3kel+Vs7SqRwF7fOlDjsuYHVRUyeCgk=; b=HuxbcbrFVRexXJigy/yQuG
+        4cPx3liYHAUmEr4DmbzTnCDmIjweRrWkMpWmFLaauPK9qGxv84l16wTpkjq4rQRF
+        T7RVLgQML6iRrAgPss60mojJMwaILM6GHMGSY2Phri67X6Re531BEeOqxrMIOkte
+        vaHTpFqABWMaCIMix/lj3zmwrbnO0PahrMvCYzUnSXAJVRHaQbIj0V/EfH6PGXuT
+        zGHrO3u1LDOVwKOawUPFs6VHmtmQ2EwmqcXcWKw55mTKjgbaz1INPhlVBITr4VfM
+        bvgrC0kFXaVSvAi3CVLTm3hTak8ggRgcTtQPLf/EXFZbGHbZAjxKspyuZwNIbopw
+        ==
+X-ME-Sender: <xms:CZASYLxwR9Ix6N83sXoZyTNmJZUB4VHb57c5LJuU1nIewspx52mGgQ>
+    <xme:CZASYDfeTOFzy9RL_N-egyeQ-tSdK0OXZ1lCaIblNUJ2ztnvjVoTlbnG6fNcN3pPx
+    AUDNzy6PAuRBwBGo6w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedtgddufecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:CZASYHJQ7rHU0WzX1AczKxK5MbLwPAsEwj2TL2l4m3DS_tTOovaHDQ>
+    <xmx:CZASYEEqnc3f4cW4mAQTx0alIV-Q2a-IWiCCpmrccXder6qWNZdCdA>
+    <xmx:CZASYBpPZa8iD8GZ6qZahS036Rtgn8Kt5vhExlXkry0nIh3IImSGWA>
+    <xmx:CpASYMn8l25_GBW84wzcQFIaNTbozh3kyuBxvjq_47rGWK3pfsbSXw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 57826108005F;
+        Thu, 28 Jan 2021 05:20:57 -0500 (EST)
+Date:   Thu, 28 Jan 2021 11:20:56 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Samuel Holland <samuel@sholland.org>,
+        Icenowy Zheng <icenowy@aosc.io>, Rob Herring <robh@kernel.org>,
+        =?utf-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com>
- <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
- <CAHp75Vc9RAHvTDAw1ryHq_CPRMtjqkzg9081nw0+RPY_yWPJgA@mail.gmail.com>
- <CAMeQTsY6k64LUg3DYbi67W6-Gx6znOeJbDfKUhzGt-BxF2BgKA@mail.gmail.com>
- <CAHp75VdKxARQAyyTd=ZcaoER1iF6Mk4AS1Dn6U9VCjt_D_+q8A@mail.gmail.com>
- <3b4c2f63-14e6-5041-3c15-c2d65b229269@redhat.com>
- <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <1c860f9a-f007-e7c6-6142-dbeed10c40ba@redhat.com>
-Date:   Wed, 27 Jan 2021 20:59:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 12/20] dt-bindings: rtc: sun6i: Add H616 compatible
+ string
+Message-ID: <20210128102056.x4c2uaxcwsrvoytx@gilmour>
+References: <20210127172500.13356-1-andre.przywara@arm.com>
+ <20210127172500.13356-13-andre.przywara@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VcEq4thOub+k5rDR61KZX4jCZj2zJr2OqsdedmpSB64KA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="curbrw5osjzzvr6w"
+Content-Disposition: inline
+In-Reply-To: <20210127172500.13356-13-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
 
-On 1/26/21 9:54 PM, Andy Shevchenko wrote:
-> On Tue, Jan 26, 2021 at 8:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 1/26/21 6:14 PM, Andy Shevchenko wrote:
->>> On Tue, Jan 26, 2021 at 6:55 PM Patrik Jakobsson
->>> <patrik.r.jakobsson@gmail.com> wrote:
->>>> On Tue, Jan 26, 2021 at 4:51 PM Andy Shevchenko
->>>> <andy.shevchenko@gmail.com> wrote:
->>>>> On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
->>>>> <patrik.r.jakobsson@gmail.com> wrote:
->>>>>> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
->>>>>> <andriy.shevchenko@linux.intel.com> wrote:
->>>>>>>
->>>>>>> Hi guys,
->>>>>>>
->>>>>>> This is first part of Intel MID outdated platforms removal. It's collected into
->>>>>>> immutable branch with a given tag, please pull to yours subsystems.
->>>>>>
->>>>>> Hi Andy,
->>>>>> Do you plan on eventually removing X86_INTEL_MID completely? If so,
->>>>>> then I should probably start looking at removing the corresponding
->>>>>> parts in GMA500.
->>>>>
->>>>> Nope. It is related to only Medfield / Clovertrail platforms.
->>>>>
->>>>> There are other (MID) platforms that may / might utilize this driver
->>>>> in the future.
->>>>
->>>> Right, there's still Oaktrail / Moorestown with hardware in the wild.
->>>
->>> Actually Moorestown had to be removed a few years ago (kernel won't
->>> boot on them anyway from that date when Alan removed support under
->>> arch/x86 for it).
->>>
->>> I'm talking about Merrifield and Moorefield that can utilize it and
->>> also some other platforms that are not SFI based (Cedar something...
->>> IIRC).
->>
->> Yes at least there are some 64 bit capable SoCs with GMA500 which were
->> used in NAS like devices. These NAS-es actually have a VGA output
->> (and maybe also DVI?) which is attached to the GMA500.
-> 
-> Since you are talking about 64-bit, definitely they are *not*
-> Moorestown, Medfield, Clovertrail since the mentioned never were
-> 64-bit. But it would be nice to see the CPU model number to be sure.
+--curbrw5osjzzvr6w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My info on this comes from this bugreport:
-https://bugzilla.redhat.com/show_bug.cgi?id=1665766
+On Wed, Jan 27, 2021 at 05:24:52PM +0000, Andre Przywara wrote:
+> Add the obvious compatible name to the existing RTC binding, and pair
+> it with the existing H6 fallback compatible string, as the devices are
+> compatible.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-And the machine that bugreport is about is a "Thecus N5550 NAS box (Intel Atom D2550/Cedarview platform)"
+Acked-by: Maxime Ripard <mripard@kernel.org>
 
-Regards,
+maxime
 
-Hans
+--curbrw5osjzzvr6w
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYBKQBwAKCRDj7w1vZxhR
+xaHIAP9KN+jjyAubOGQwD7yj/7RXCjNlFSCjG7LtNiWtYNPkBgD+Oitnci5gG2Gm
+t/e0gXDcs9EM0zfZajBtr83FXHZwqwk=
+=7H6K
+-----END PGP SIGNATURE-----
+
+--curbrw5osjzzvr6w--
