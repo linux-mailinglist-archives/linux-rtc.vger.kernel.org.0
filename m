@@ -2,118 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F2830B671
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Feb 2021 05:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A58430BC69
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Feb 2021 11:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbhBBEXr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 1 Feb 2021 23:23:47 -0500
-Received: from mail-ed1-f52.google.com ([209.85.208.52]:36591 "EHLO
-        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbhBBEXo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Feb 2021 23:23:44 -0500
-Received: by mail-ed1-f52.google.com with SMTP id d2so21425704edz.3;
-        Mon, 01 Feb 2021 20:23:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TiS9Bb48tzkbdlH/rNiDagt6bFiH7mad+u4GBGYV4aE=;
-        b=br6ns9iW0owoKF6avcvPSYjqDY9Qfq3lhhVVz/UpIJNRBLXxmGG2oT/EoMjCO5+YKq
-         vuKA9bqXwHuIw0wAhQCvLQKnwzbMvWM9aWQ0wSu93djhPt05WXWmy8krWCMTidSkdOWA
-         ito9UD4iio30cppCAkMkKJ9suH45UWnNNfbfbXeyFQY+KZyzLhObYzX3NbUuENfYuPv0
-         xCS6gcy5MghSEC/VyT++Mv6qHKP7tUTblz8YyBFfHMKH7JRb+8gKcBVc41w69xlpViBI
-         st1kS6g898t2I9sGmm3f+cdave74JhGG3Lja/ERGKyWS0CZWUHOHRjVUzgtK6LkN2m/+
-         +BNA==
-X-Gm-Message-State: AOAM532HRJ0C1dt6wsCaMOJmO1qVp/8rUgHO5vxvF5UzckitQaYISVt/
-        5EdIjvCGpP5u7uR2UUybqiVn67cF/YNQCjraBFQRc2Wp
-X-Google-Smtp-Source: ABdhPJw3T7W4aL2oifIILWsa7+b6BttYz8h88vRDEB+JbjPxw5FRx5LcCFuSSmtfr1rrRXiXuyBraC9ZazEiXbFtD+E=
-X-Received: by 2002:a05:6402:3494:: with SMTP id v20mr14015815edc.146.1612239781967;
- Mon, 01 Feb 2021 20:23:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20201206214613.444124194@linutronix.de> <20201206220541.594826678@linutronix.de>
- <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net> <871re7hlsg.fsf@nanos.tec.linutronix.de>
- <98cb59e8-ecb4-e29d-0b8f-73683ef2bee7@digikod.net> <87y2gfg18p.fsf@nanos.tec.linutronix.de>
- <87tur3fx7w.fsf@nanos.tec.linutronix.de> <ghft2hwevu.fsf@gouders.net>
- <877dnrc2sv.fsf@depni.sinp.msu.ru> <8735yfd2q4.fsf@nanos.tec.linutronix.de> <87zh0nbnha.fsf@nanos.tec.linutronix.de>
-In-Reply-To: <87zh0nbnha.fsf@nanos.tec.linutronix.de>
-From:   Len Brown <lenb@kernel.org>
-Date:   Mon, 1 Feb 2021 23:22:50 -0500
-Message-ID: <CAJvTdK=S+FTMUWyFgHMcZ2xKJKDrjE_9a-cb5hHcBT4MvoyJxg@mail.gmail.com>
-Subject: Re: [PATCH V2] rtc: mc146818: Dont test for bit 0-5 in Register D
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Serge Belyshev <belyshev@depni.sinp.msu.ru>,
-        Dirk Gouders <dirk@gouders.net>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Miroslav Lichvar <mlichvar@redhat.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Prarit Bhargava <prarit@redhat.com>,
+        id S229808AbhBBKvl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 2 Feb 2021 05:51:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhBBKvj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 2 Feb 2021 05:51:39 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DB0C061573;
+        Tue,  2 Feb 2021 02:50:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=QUFoL1M4pevTeMyLwnDogHEMlQrHMZssskb6wG1LFcA=; b=wg2o6QP/gHbhqBuIhn1RZoUGj
+        2iHotGU7ufXkLAWPw4UwYFPNHzUu8ddsLF6ZH7DAZK9ibPxZPao37pY3QUiSj2kNvPg18QoU3RIbp
+        SB9YdTsgzRp09KPTWE899TVtBN6b7+9uCVpM084z3RB+393ttTKlzy9IbXmuACxRaE7AQP1axErmx
+        9bdLyqL5Tzp+2AR1s8H8Ra8HKPn+VaEgvK7MKLCh/WvBYIcLxWRrMqhYn6+wAR7lOhqYiExSBYnla
+        2ZSGKUuSlOCD0mvUg9A5mz9A1bzzWPt0jeQ/XhpyrV3IGp6JHZ9fsbmIMsvJ8Mev9a6w8QLTZD9/a
+        CRpSMItzA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38176)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1l6tFN-0004FH-LS; Tue, 02 Feb 2021 10:49:25 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1l6tFE-0002yZ-0J; Tue, 02 Feb 2021 10:49:16 +0000
+Date:   Tue, 2 Feb 2021 10:49:15 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig.org@pengutronix.de>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 0/5] amba: minor fix and various cleanups
+Message-ID: <20210202104915.GK1463@shell.armlinux.org.uk>
+References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Thanks for the update, Thomas.
+On Tue, Jan 26, 2021 at 05:58:30PM +0100, Uwe Kleine-König wrote:
+> From: Uwe Kleine-König <u.kleine-koenig.org@pengutronix.de
+> 
+> Hello,
+> 
+> Changes since v2 sent with Message-Id:
+> 20201124133139.3072124-1-uwe@kleine-koenig.org:
+> 
+>  - Rebase to v5.11-rc1 (which resulted in a few conflicts in
+>    drivers/hwtracing).
+>  - Add various Acks.
+>  - Send to more maintainers directly (which I think is one of the
+>    reasons why there are so few Acks).
+> 
+> For my taste patch 4 needs some more acks (drivers/char/hw_random,
+> drivers/dma, drivers/gpu/drm/pl111, drivers/i2c, drivers/mmc,
+> drivers/vfio, drivers/watchdog and sound/arm have no maintainer feedback
+> yet).
+> 
+> My suggestion is to let this series go in via Russell King (who cares
+> for amba). Once enough Acks are there I can also provide a tag for
+> merging into different trees. Just tell me if you prefer this solution.
+> 
+> Would be great if this could make it for v5.12, but I'm aware it's
+> already late in the v5.11 cycle so it might have to wait for v5.13.
 
-V1 prevented rc6 automated suspend/resume testing on all 13 of my
-local machines.
-V2 applied, and they are back in business.
+I think you need to have a 6th patch which moves the
+probe/remove/shutdown methods into the bus_type - if you're setting
+them for every struct device_driver, then there's no point doing that
+and they may as well be in the bus_type.
 
-tested-by: Len Brown <len.brown@intel.com>
-
-On Mon, Feb 1, 2021 at 2:25 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> The recent change to validate the RTC turned out to be overly tight.
->
-> While it cures the problem on the reporters machine it breaks machines
-> with Intel chipsets which use bit 0-5 of the D register. So check only
-> for bit 6 being 0 which is the case on these Intel machines as well.
->
-> Fixes: 211e5db19d15 ("rtc: mc146818: Detect and handle broken RTCs")
-> Reported-by: Serge Belyshev <belyshev@depni.sinp.msu.ru>
-> Reported-by: Dirk Gouders <dirk@gouders.net>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-> V2: Provide the actual delta patch. Should have stayed away from
->     computers today....
-> ---
->  drivers/rtc/rtc-cmos.c         |    4 ++--
->  drivers/rtc/rtc-mc146818-lib.c |    4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> --- a/drivers/rtc/rtc-cmos.c
-> +++ b/drivers/rtc/rtc-cmos.c
-> @@ -805,8 +805,8 @@ cmos_do_probe(struct device *dev, struct
->
->         spin_lock_irq(&rtc_lock);
->
-> -       /* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
-> -       if ((CMOS_READ(RTC_VALID) & 0x7f) != 0) {
-> +       /* Ensure that the RTC is accessible. Bit 6 must be 0! */
-> +       if ((CMOS_READ(RTC_VALID) & 0x40) != 0) {
->                 spin_unlock_irq(&rtc_lock);
->                 dev_warn(dev, "not accessible\n");
->                 retval = -ENXIO;
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -21,8 +21,8 @@ unsigned int mc146818_get_time(struct rt
->
->  again:
->         spin_lock_irqsave(&rtc_lock, flags);
-> -       /* Ensure that the RTC is accessible. Bit 0-6 must be 0! */
-> -       if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x7f) != 0)) {
-> +       /* Ensure that the RTC is accessible. Bit 6 must be 0! */
-> +       if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x40) != 0)) {
->                 spin_unlock_irqrestore(&rtc_lock, flags);
->                 memset(time, 0xff, sizeof(*time));
->                 return 0;
-
-
+Apart from that, it looks good.
 
 -- 
-Len Brown, Intel Open Source Technology Center
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
