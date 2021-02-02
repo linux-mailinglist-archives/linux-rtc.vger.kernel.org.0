@@ -2,154 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8330C154
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Feb 2021 15:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C1930C737
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Feb 2021 18:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbhBBOUJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 2 Feb 2021 09:20:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231624AbhBBORv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 2 Feb 2021 09:17:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2821F64DD5;
-        Tue,  2 Feb 2021 14:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1612274769;
-        bh=ucOE/Mmv9i2CWEnQ7wz77HidV63/GBxg2zd12rEmpdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtk8Q3WRW8e4rAGIMqVSBpBvOYwFo0HFhgAeLGXuNjXjEG35zPmakj7dmP3Hp3Xxb
-         nLQvz66M8T/SeJkpoklGcHv/kplvfAQlGnleUXc+nPaJbcAYzR2bE146XmrkoL8bC8
-         WACPjj7XeQXWdVU5Y4Gh/La16odwgfVrinCkNWdA=
-Date:   Tue, 2 Feb 2021 15:06:05 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Russell King <linux+pull@armlinux.org.uk>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        alsa-devel@alsa-project.org, dri-devel@lists.freedesktop.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, Mike Leach <mike.leach@linaro.org>,
-        linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        kernel@pengutronix.de, Leo Yan <leo.yan@linaro.org>,
-        dmaengine@vger.kernel.org, Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Anholt <eric@anholt.net>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S236972AbhBBRNh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 2 Feb 2021 12:13:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236258AbhBBQ1S (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 2 Feb 2021 11:27:18 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D0DC061794
+        for <linux-rtc@vger.kernel.org>; Tue,  2 Feb 2021 08:26:37 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id y205so14669885pfc.5
+        for <linux-rtc@vger.kernel.org>; Tue, 02 Feb 2021 08:26:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=l4h6Ivu7DxeeLevJc1wQ+Ze6BVBDNOqfFBaVlOOvfD0=;
+        b=Prj01pdPh3i/44KjbGbWaacJo35qLM4VarOzw/eGcQFhdfXnRipH1JT6n5AVVzqyBB
+         ElkQT02SXpzSxXEy/04+RB50ZxAsJ7bfObZzNTc//m4oD5tL75/ltzjotxdcTRWkt2Kx
+         rYR4RwqyrT6K3Hi2lJuJ4rzgoZhlwAbidDy3aOU8x7lhv0m/bd1mlqIDEGbKQ3nnZ7mK
+         711c/pTmQ5kjzjDkYniVLcjV4kVMa+Bv4pVgbwq1kZaHpxgvJcy2YM9G+B9WlYBIPTxU
+         JmvVCPC2OFaQ8I74JdqNI34TMPp1+GkN9FIFr2PjkpgjFhAmSdFlo28ayqjcOKiOrpkc
+         jrfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=l4h6Ivu7DxeeLevJc1wQ+Ze6BVBDNOqfFBaVlOOvfD0=;
+        b=HCNUBSibbgdHpjWhWdthkFp0tDSci3/XcWbgermxN/e+y7LY/MeqGaziuU6PqtNBb+
+         /HVMw3v5RjtMTyUq/PMtQxLewvPAM5AfDrPdTYjafXyqMfIAYnhUQfqQ2s6vVWIGr7/y
+         4c3O7By+VU/9enXZdubZ7gJk9AZJ4UU39RKsk9EaWhpQ68/0GGdXdi0ZRfN2a7Jg3CmU
+         Bh9U5mOOqvpM/nCH4ac7mqKQo9UG8n3qVCZBmpusfmi62n6L2hvJKIGY4zqVKif7wMeo
+         ANhsWXd/er+/Jx+fJ6a0XMIon/t8yAWThLzROyRUgFYzgb+a+TkPLQazsjlrXDqyi/Q5
+         0PhA==
+X-Gm-Message-State: AOAM533oOAI10qMHb5kejznpzTnTMnC7DEbN6j5RUxutln4afEvQv9uv
+        tVuO+4o4uBC6bX9+ywSTTaHi4Q==
+X-Google-Smtp-Source: ABdhPJz23hBGlWbblH5zl60/YjQ3RKwRUlZd50alKTD1+nw88ReAaT0M2kwABWE88CwZbsdwgcrgmw==
+X-Received: by 2002:a63:fe13:: with SMTP id p19mr22812940pgh.119.1612283196793;
+        Tue, 02 Feb 2021 08:26:36 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id o14sm24015155pgr.44.2021.02.02.08.26.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Feb 2021 08:26:35 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
-Message-ID: <YBlcTXlxemmC2lgr@kroah.com>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 10/21] rtc: meson: quiet maybe-unused variable warning
+In-Reply-To: <20210202112219.3610853-11-alexandre.belloni@bootlin.com>
+References: <20210202112219.3610853-1-alexandre.belloni@bootlin.com>
+ <20210202112219.3610853-11-alexandre.belloni@bootlin.com>
+Date:   Tue, 02 Feb 2021 08:26:35 -0800
+Message-ID: <7hsg6eh1vo.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 02:53:50PM +0100, Uwe Kleine-König wrote:
-> Hello,
-> 
-> the following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
-> 
->   Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
-> 
-> are available in the Git repository at:
-> 
->   https://git.pengutronix.de/git/ukl/linux tags/amba-make-remove-return-void
-> 
-> for you to fetch changes up to f170b59fedd733b92f58c4d7c8357fbf7601d623:
-> 
->   amba: Make use of bus_type functions (2021-02-02 14:26:02 +0100)
-> 
-> I expect this tag to be merged by Russell King as amba maintainer and by
-> Mathieu Poirier (or Greg Kroah-Hartman?) for coresight as there are some
-> pending conflicting changes. These are not hard to resolve but also
-> non-trivial. Tell me if you need assistance for resolving, also if it's only a
-> second pair of eyes to judge your resolution.
-> 
-> Best regards,
-> Uwe
-> 
-> ----------------------------------------------------------------
-> Tag for adaptions to struct amba_driver::remove changing prototype
-> 
-> ----------------------------------------------------------------
-> Uwe Kleine-König (5):
->       amba: Fix resource leak for drivers without .remove
->       amba: reorder functions
->       vfio: platform: simplify device removal
->       amba: Make the remove callback return void
->       amba: Make use of bus_type functions
-> 
->  drivers/amba/bus.c                                 | 234 +++++++++++++++++++++++++++++++++------------------------------
->  drivers/char/hw_random/nomadik-rng.c               |   3 +-
->  drivers/dma/pl330.c                                |   3 +-
->  drivers/gpu/drm/pl111/pl111_drv.c                  |   4 +-
->  drivers/hwtracing/coresight/coresight-catu.c       |   3 +-
->  drivers/hwtracing/coresight/coresight-cpu-debug.c  |   4 +-
->  drivers/hwtracing/coresight/coresight-cti-core.c   |   4 +-
->  drivers/hwtracing/coresight/coresight-etb10.c      |   4 +-
->  drivers/hwtracing/coresight/coresight-etm3x-core.c |   4 +-
->  drivers/hwtracing/coresight/coresight-etm4x-core.c |   4 +-
->  drivers/hwtracing/coresight/coresight-funnel.c     |   4 +-
->  drivers/hwtracing/coresight/coresight-replicator.c |   4 +-
->  drivers/hwtracing/coresight/coresight-stm.c        |   4 +-
->  drivers/hwtracing/coresight/coresight-tmc-core.c   |   4 +-
->  drivers/hwtracing/coresight/coresight-tpiu.c       |   4 +-
->  drivers/i2c/busses/i2c-nomadik.c                   |   4 +-
->  drivers/input/serio/ambakmi.c                      |   3 +-
->  drivers/memory/pl172.c                             |   4 +-
->  drivers/memory/pl353-smc.c                         |   4 +-
->  drivers/mmc/host/mmci.c                            |   4 +-
->  drivers/rtc/rtc-pl030.c                            |   4 +-
->  drivers/rtc/rtc-pl031.c                            |   4 +-
->  drivers/spi/spi-pl022.c                            |   5 +-
->  drivers/tty/serial/amba-pl010.c                    |   4 +-
->  drivers/tty/serial/amba-pl011.c                    |   3 +-
->  drivers/vfio/platform/vfio_amba.c                  |  15 ++--
->  drivers/video/fbdev/amba-clcd.c                    |   4 +-
->  drivers/watchdog/sp805_wdt.c                       |   4 +-
->  include/linux/amba/bus.h                           |   2 +-
->  sound/arm/aaci.c                                   |   4 +-
->  30 files changed, 157 insertions(+), 198 deletions(-)
-> 
-> 
+Alexandre Belloni <alexandre.belloni@bootlin.com> writes:
 
+> When CONFIG_OF is disabled then the matching table is not referenced.
+>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-I'm glad to take this through my char/misc tree, as that's where the
-other coresight changes flow through.  So if no one else objects, I will
-do so...
+Acked-by: Kevin Hilman <khilman@baylibre.com>
 
-thanks,
-
-greg k-h
+> ---
+>  drivers/rtc/rtc-meson.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/rtc-meson.c b/drivers/rtc/rtc-meson.c
+> index 8642c06565ea..44bdc8b4a90d 100644
+> --- a/drivers/rtc/rtc-meson.c
+> +++ b/drivers/rtc/rtc-meson.c
+> @@ -380,7 +380,7 @@ static int meson_rtc_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static const struct of_device_id meson_rtc_dt_match[] = {
+> +static const __maybe_unused struct of_device_id meson_rtc_dt_match[] = {
+>  	{ .compatible = "amlogic,meson6-rtc", },
+>  	{ .compatible = "amlogic,meson8-rtc", },
+>  	{ .compatible = "amlogic,meson8b-rtc", },
+> -- 
+> 2.29.2
