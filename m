@@ -2,37 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C28430D82E
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 12:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7EEC30D968
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 13:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbhBCLJE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 3 Feb 2021 06:09:04 -0500
-Received: from mga05.intel.com ([192.55.52.43]:11003 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233258AbhBCLJD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 3 Feb 2021 06:09:03 -0500
-IronPort-SDR: AY9yi9FagsWAuqgJrTNTvNKqUTEPKTVhGYq/eXQ0ZVQq0HmnHoqXeYrOlXvlvT/qynVrGL1Ofx
- im7v50m9I25g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="265856388"
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="scan'208";a="265856388"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 03:08:19 -0800
-IronPort-SDR: o134eirMFPeTUWOydEEw8aYttN75QcofTnGYMkGLqCpwZuyydYfYGmESVeFcTSWS2xu+NjzHnO
- eEoISbHn+T7w==
-X-IronPort-AV: E=Sophos;i="5.79,398,1602572400"; 
-   d="scan'208";a="433366277"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 03:08:15 -0800
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1l7G15-001c7c-VW; Wed, 03 Feb 2021 13:08:11 +0200
-Date:   Wed, 3 Feb 2021 13:08:11 +0200
+        id S234468AbhBCMBA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 3 Feb 2021 07:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234444AbhBCMAv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 Feb 2021 07:00:51 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F024EC061788;
+        Wed,  3 Feb 2021 04:00:10 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id y142so8510665pfb.3;
+        Wed, 03 Feb 2021 04:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8Q1P72jDkAiYrJpjzWAvpbntKoausolrxBiuy4JKYsU=;
+        b=fDrx5Or5VRpfg0J7QHIKpfwG6BvxR2ERJWWHPjDfAaUejJVu1+Lphwm60HsVkuikLe
+         e1sHT1hZMPRRZ3ovKgUGew1dkaqdw4pBNiPnmB8yen/BctrP7HnMPXz/SbdK+Dp9x7vW
+         uPEYy2kznc4sybpKeRDjxyxaQgKUyb1Th9jiUpN7xJz2FGsasLJTXsT/vwA1NLWNzLJ+
+         KAcSG8Q5GXuMvXhOcivvt2fglEyHG2Ld6dZ1ym2InitH+U9vX2IJhgtkpeBWVRZsOpOO
+         dIpO0eQT9n283bMo/cN/iky+WD/FJi9DKoYX4aVStwDqZBZGFD3PCKQU9hsDwSdU36Ya
+         L01g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Q1P72jDkAiYrJpjzWAvpbntKoausolrxBiuy4JKYsU=;
+        b=RXiZpETvF+DV8HNul5Vvj2oKjj5lxuWTjCAMuEONN9sj82hxwYVTp9YX8U06LfKh1U
+         1YFOFQgNpseRJgQ/x/3IQQj9pLVyLPxSfEyfPRNvJHYPUeSdTl06OjB0H/GkwCEhGJeb
+         XmELl/oNlnI6UCGBxj8UU7ubNgZHp4WNpk8kuUGUKzZbeIb7uwReIUSg2ApDT8X2/EvH
+         nwgCcR0tump+sJ3pevTngGo1xB2ipimACldNFZKgOv3AnpHL8ebIycpLEI5ups7tiV/5
+         l2XqpP5oKAmnpy2SkX+vb92cfHE6DFqKxsKxG/QiqiSvRQe3n80ewj8UXXpxM5uaFUFF
+         JxSw==
+X-Gm-Message-State: AOAM533qtcN2Lg3S5aMtTV/fp9lUJ8EDH2wmA0c51Qv/umfyVZ0WKAHI
+        9X2OMzw4Pn+3IH+kLuQqWGF18d71gukkHK2H+Ms=
+X-Google-Smtp-Source: ABdhPJwMYgHV+Be/xu9zUBwCMnm5ihAYrPPMqvnQFLvWfX6DEWf/Ni/nWT3r+LTx0J8aXQZzhafNyDhVWll2iLr9nUU=
+X-Received: by 2002:a62:5a86:0:b029:1ae:6b45:b6a9 with SMTP id
+ o128-20020a625a860000b02901ae6b45b6a9mr2753818pfb.7.1612353610466; Wed, 03
+ Feb 2021 04:00:10 -0800 (PST)
+MIME-Version: 1.0
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
+In-Reply-To: <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Platform Driver <platform-driver-x86@vger.kernel.org>,
+Date:   Wed, 3 Feb 2021 13:59:54 +0200
+Message-ID: <CAHp75VeYroY5uG38NrsqwbHnjT0j_LMMD3JmNmRED3OY5ff7xA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <mgross@linux.intel.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -43,69 +66,30 @@ Cc:     Platform Driver <platform-driver-x86@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-Message-ID: <YBqEG4GGXmfD6f0f@smile.fi.intel.com>
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com>
- <886bbdc0-3391-2140-a2d4-1688b262966f@redhat.com>
- <CAHp75VeFvwE64zX8Wu8XvMMJ6vgxAaoYpvH2rJ_FD3CCnFZNHA@mail.gmail.com>
- <8d350b8c-5f1d-256d-cdc5-8501af0c0cad@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d350b8c-5f1d-256d-cdc5-8501af0c0cad@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Feb 03, 2021 at 11:35:59AM +0100, Hans de Goede wrote:
-> On 2/3/21 10:54 AM, Andy Shevchenko wrote:
-> > On Tue, Jan 26, 2021 at 4:23 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >> On 1/26/21 1:38 PM, Andy Shevchenko wrote:
-> >>> Hi guys,
-> >>>
-> >>> This is first part of Intel MID outdated platforms removal. It's collected into
-> >>> immutable branch with a given tag, please pull to yours subsystems.
-> >>>
-> >>> (All changes are tagged by the respective maintainers)
-> > 
-> >> Erm, I already have this 2 in platform-drivers-x86/for-next since you said that
-> >> these 2 could be merged independently.
-> >>
-> >> Anyways I just did a test-merge and there is no conflict, so everything is ok.
-> >>
-> >> From my pov this looks good and I plan to merge this into platform-drivers-x86/for-next
-> >> before the merge-window.
-> >>
-> >> I'm going to hold off on doing that for a bit for now in case one of the other
-> >> subsys maintainers has any objections.
-> > 
-> > Any news on this? Have you pulled it somewhere (I don't see it in Linux next)?
-> 
-> I was going through all pending pdx86 stuff yesterday to prep for the upcoming
-> merge-window. I was doing so in FIFO order and I ran out of steam just as I got
-> to this pull-req.
-> 
-> So today is a new day and after sending out a fixes pull-req for 5.11 this is
-> (was) the first thing on my list.
-> 
-> I've merged this into my review-hans now (and I will push it to for-next soon).
-> 
-> I did one last check of all the commits after merging, and I found one small
-> issue.
-> 
-> The "gpio: msic: Remove driver for deprecated platform" commit forgets to
-> drop the Makefile line for the msic driver:
-> 
-> obj-$(CONFIG_GPIO_MSIC)                 += gpio-msic.o
-> 
-> This is not a reason to redo the entire branch, but it would be good if you
-> can do a follow up patch to fix this.
+On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
+<patrik.r.jakobsson@gmail.com> wrote:
+> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > Hi guys,
+> >
+> > This is first part of Intel MID outdated platforms removal. It's collected into
+> > immutable branch with a given tag, please pull to yours subsystems.
+>
+> Hi Andy,
+> Do you plan on eventually removing X86_INTEL_MID completely? If so,
+> then I should probably start looking at removing the corresponding
+> parts in GMA500.
 
-Indeed. Thanks for catching this, I'll fixed locally and will send it soon.
+I have noticed new commits in DRM against GMA500 and it seems now in a
+conflict with my immutable branch. Are you sure you don't forget to
+pull it?
 
 -- 
 With Best Regards,
 Andy Shevchenko
-
-
