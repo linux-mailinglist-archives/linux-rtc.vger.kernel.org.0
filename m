@@ -2,123 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F18430D460
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 08:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF7430D6C9
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 10:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbhBCHxT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 3 Feb 2021 02:53:19 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49415 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbhBCHxJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 Feb 2021 02:53:09 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7CrV-0000mf-2a; Wed, 03 Feb 2021 08:46:05 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7CrM-0005LW-0J; Wed, 03 Feb 2021 08:45:56 +0100
-Date:   Wed, 3 Feb 2021 08:45:55 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
-        Eric Anholt <eric@anholt.net>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mike Leach <mike.leach@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        coresight@lists.linaro.org, Vladimir Zapolskiy <vz@mleia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>, linux-fbdev@vger.kernel.org,
-        Matt Mackall <mpm@selenic.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-watchdog@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mmc@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 0/5] amba: minor fix and various cleanups
-Message-ID: <20210203074555.tusulu3iqg5wgxeb@pengutronix.de>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210202104915.GK1463@shell.armlinux.org.uk>
+        id S233448AbhBCJzw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 3 Feb 2021 04:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232665AbhBCJzu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 Feb 2021 04:55:50 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEF9C061573;
+        Wed,  3 Feb 2021 01:55:10 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id o7so16990157pgl.1;
+        Wed, 03 Feb 2021 01:55:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+bo/zgaVjQeP7++vzeOAe4Vhz68x/IDfWUtflXKD340=;
+        b=O6lYx4v2jphlo088w60X2hiEUW5E/zcyh633GTmFsfaT5i3JtT5bZGKEO+JmqgkcoR
+         x16/HDNdVq6+5Y/pMS+FThkXRWulfkixEV51at1SueD+vP2OC4Oxo+jaGxyUvtSThho2
+         0HkK4G3dYjHuD7wNvsRY7Fw9BNfgQvVfG/CsEhksnv0V4TmdpVZ/suKPOESKmapOxpFJ
+         zdhOD7IKpo2pLYKFX5sZtx5HxpmrPTXNqQjtPp63C8/GZlC/AWx9b+91cHf7ZcOiSlk+
+         pmqhd1YxamddduYVXrOogtItXuwa44siN0e2quXllFavSWH6bzIV/EaGKCvW3JkHg59k
+         OgWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+bo/zgaVjQeP7++vzeOAe4Vhz68x/IDfWUtflXKD340=;
+        b=dyS5quCFnNdlvvpzvAPe8tJweIsOiosjz/1fcNjtq1dBdtbRgeMrvL/kakfUJtapyt
+         Mj4bLJqI6m2wvb/UewLjRJJxK97lLjVNokRRNSXjtgS1QtDCNFNtTewX706fsbXltMT4
+         sEYua94IdFjImI3jk0iPYDFZhUi+oPTUIrxVOWGjHE6TQ80QgsgWws+q3GN5KjmO4pXr
+         K1mhhvUjccY5Vrksc/a/hw0SvJLznx7CfnZsZSiqx/o9od25joMVIYuExUSjkV17Mtq/
+         3Cov6D530VEeBC50TNQfZCz4B23BM17PPtPzxH5iT0BtBRchz15lmRgSSIpnM8I9V+2E
+         L7aw==
+X-Gm-Message-State: AOAM533UfwBwD7fx4Q1gK3a5WEalSgnPC66fX96/qD6x/nYfC1we8ihS
+        tMxbIMz4OW3TLYcZYlK33tS0iZpK2JSeDtqfBhc=
+X-Google-Smtp-Source: ABdhPJxELw6TjyxQIIVK+eBpxR00dR7Zy9TYfwhTJoq2bK39kzfeWtfoP5QIJmXXcm7/0q3ZJfdqsSfEpedo/Np5TNw=
+X-Received: by 2002:a63:e50:: with SMTP id 16mr2766950pgo.74.1612346109732;
+ Wed, 03 Feb 2021 01:55:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nnu6wqtgppbbywlf"
-Content-Disposition: inline
-In-Reply-To: <20210202104915.GK1463@shell.armlinux.org.uk>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <886bbdc0-3391-2140-a2d4-1688b262966f@redhat.com>
+In-Reply-To: <886bbdc0-3391-2140-a2d4-1688b262966f@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 3 Feb 2021 11:54:53 +0200
+Message-ID: <CAHp75VeFvwE64zX8Wu8XvMMJ6vgxAaoYpvH2rJ_FD3CCnFZNHA@mail.gmail.com>
+Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, Jan 26, 2021 at 4:23 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 1/26/21 1:38 PM, Andy Shevchenko wrote:
+> > Hi guys,
+> >
+> > This is first part of Intel MID outdated platforms removal. It's collected into
+> > immutable branch with a given tag, please pull to yours subsystems.
+> >
+> > (All changes are tagged by the respective maintainers)
 
---nnu6wqtgppbbywlf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Erm, I already have this 2 in platform-drivers-x86/for-next since you said that
+> these 2 could be merged independently.
+>
+> Anyways I just did a test-merge and there is no conflict, so everything is ok.
+>
+> From my pov this looks good and I plan to merge this into platform-drivers-x86/for-next
+> before the merge-window.
+>
+> I'm going to hold off on doing that for a bit for now in case one of the other
+> subsys maintainers has any objections.
 
-Hello,
+Any news on this? Have you pulled it somewhere (I don't see it in Linux next)?
 
-we already talked about this via irc, but for the record and the benefit
-of others:
-
-On Tue, Feb 02, 2021 at 10:49:15AM +0000, Russell King - ARM Linux admin wr=
-ote:
-> I think you need to have a 6th patch which moves the
-> probe/remove/shutdown methods into the bus_type - if you're setting
-> them for every struct device_driver, then there's no point doing that
-> and they may as well be in the bus_type.
-
-This is implemented in patch 5 already.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nnu6wqtgppbbywlf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmAaVLAACgkQwfwUeK3K
-7AlQLgf+P1DKYj6OELp8rvge2qlgjLziflPm/vmYKoER7GP62xMAt1jHBWvMgDLx
-SQfCWfc7aNauEmrPFy3TDOyu3SrNFjDVRf3DfOGZ+VpYmmtyUJihjezhbbhpysK5
-Pchia3IjZ0wVWPBC0mb8a1o5w1GQ7l49/QaVZ6buVR+RoNYiKGFdiKcEc8JB+c19
-s2ksv2HXH9eB66fQ+yNQY7W2lNiK98iTc0txk+lhP2wRnFXHPMgqQhFb3j2wt7Or
-ix27mqEX40GyAOv+Xmam2NtjLRM5WD4zflnasEKvxQoa0Qe0mpR6aSKIotUmM4yi
-oNcARpnSdJUwDrfHL0GDd9ksOomPMA==
-=r9/H
------END PGP SIGNATURE-----
-
---nnu6wqtgppbbywlf--
+-- 
+With Best Regards,
+Andy Shevchenko
