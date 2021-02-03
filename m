@@ -2,94 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EEC30D968
-	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 13:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FBF30DA03
+	for <lists+linux-rtc@lfdr.de>; Wed,  3 Feb 2021 13:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbhBCMBA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 3 Feb 2021 07:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbhBCMAv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 Feb 2021 07:00:51 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F024EC061788;
-        Wed,  3 Feb 2021 04:00:10 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id y142so8510665pfb.3;
-        Wed, 03 Feb 2021 04:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Q1P72jDkAiYrJpjzWAvpbntKoausolrxBiuy4JKYsU=;
-        b=fDrx5Or5VRpfg0J7QHIKpfwG6BvxR2ERJWWHPjDfAaUejJVu1+Lphwm60HsVkuikLe
-         e1sHT1hZMPRRZ3ovKgUGew1dkaqdw4pBNiPnmB8yen/BctrP7HnMPXz/SbdK+Dp9x7vW
-         uPEYy2kznc4sybpKeRDjxyxaQgKUyb1Th9jiUpN7xJz2FGsasLJTXsT/vwA1NLWNzLJ+
-         KAcSG8Q5GXuMvXhOcivvt2fglEyHG2Ld6dZ1ym2InitH+U9vX2IJhgtkpeBWVRZsOpOO
-         dIpO0eQT9n283bMo/cN/iky+WD/FJi9DKoYX4aVStwDqZBZGFD3PCKQU9hsDwSdU36Ya
-         L01g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Q1P72jDkAiYrJpjzWAvpbntKoausolrxBiuy4JKYsU=;
-        b=RXiZpETvF+DV8HNul5Vvj2oKjj5lxuWTjCAMuEONN9sj82hxwYVTp9YX8U06LfKh1U
-         1YFOFQgNpseRJgQ/x/3IQQj9pLVyLPxSfEyfPRNvJHYPUeSdTl06OjB0H/GkwCEhGJeb
-         XmELl/oNlnI6UCGBxj8UU7ubNgZHp4WNpk8kuUGUKzZbeIb7uwReIUSg2ApDT8X2/EvH
-         nwgCcR0tump+sJ3pevTngGo1xB2ipimACldNFZKgOv3AnpHL8ebIycpLEI5ups7tiV/5
-         l2XqpP5oKAmnpy2SkX+vb92cfHE6DFqKxsKxG/QiqiSvRQe3n80ewj8UXXpxM5uaFUFF
-         JxSw==
-X-Gm-Message-State: AOAM533qtcN2Lg3S5aMtTV/fp9lUJ8EDH2wmA0c51Qv/umfyVZ0WKAHI
-        9X2OMzw4Pn+3IH+kLuQqWGF18d71gukkHK2H+Ms=
-X-Google-Smtp-Source: ABdhPJwMYgHV+Be/xu9zUBwCMnm5ihAYrPPMqvnQFLvWfX6DEWf/Ni/nWT3r+LTx0J8aXQZzhafNyDhVWll2iLr9nUU=
-X-Received: by 2002:a62:5a86:0:b029:1ae:6b45:b6a9 with SMTP id
- o128-20020a625a860000b02901ae6b45b6a9mr2753818pfb.7.1612353610466; Wed, 03
- Feb 2021 04:00:10 -0800 (PST)
+        id S231393AbhBCMnp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 3 Feb 2021 07:43:45 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:12409 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229852AbhBCMnK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 3 Feb 2021 07:43:10 -0500
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4DW1Wh06gwzjHFL;
+        Wed,  3 Feb 2021 20:41:20 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.24) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 3 Feb 2021 20:42:17 +0800
+From:   Xiaofei Tan <tanxiaofei@huawei.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+CC:     Xiaofei Tan <tanxiaofei@huawei.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>
+Subject: [PATCH 0/6] spin lock usage optimization for RTC drivers
+Date:   Wed, 3 Feb 2021 20:39:35 +0800
+Message-ID: <1612355981-6764-1-git-send-email-tanxiaofei@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-References: <YBANNJ8XtoRf7SuW@smile.fi.intel.com> <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
-In-Reply-To: <CAMeQTsbGBrTvfkz6BStwL240Kz-dbrQVKtXbYkRtbD3OoUKCcg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 3 Feb 2021 13:59:54 +0200
-Message-ID: <CAHp75VeYroY5uG38NrsqwbHnjT0j_LMMD3JmNmRED3OY5ff7xA@mail.gmail.com>
-Subject: Re: [GIT PULL] ib-drm-gpio-pdx86-rtc-wdt-v5.12-1
-To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jan 26, 2021 at 5:25 PM Patrik Jakobsson
-<patrik.r.jakobsson@gmail.com> wrote:
-> On Tue, Jan 26, 2021 at 1:37 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > Hi guys,
-> >
-> > This is first part of Intel MID outdated platforms removal. It's collected into
-> > immutable branch with a given tag, please pull to yours subsystems.
->
-> Hi Andy,
-> Do you plan on eventually removing X86_INTEL_MID completely? If so,
-> then I should probably start looking at removing the corresponding
-> parts in GMA500.
+Replace spin_lock_irqsave with spin_lock in hard IRQ of RTC drivers.
+There is no function changes, but may speed up if interrupt happen
+too often.
 
-I have noticed new commits in DRM against GMA500 and it seems now in a
-conflict with my immutable branch. Are you sure you don't forget to
-pull it?
+Xiaofei Tan (6):
+  rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  rtc: pm8xxx: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  rtc: r7301: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  rtc: tegra: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  rtc: mxc: Replace spin_lock_irqsave with spin_lock in hard IRQ
+  rtc: mxc_v2: Replace spin_lock_irqsave with spin_lock in hard IRQ
+
+ drivers/rtc/rtc-cmos.c   | 5 ++---
+ drivers/rtc/rtc-mxc.c    | 5 ++---
+ drivers/rtc/rtc-mxc_v2.c | 7 +++----
+ drivers/rtc/rtc-pm8xxx.c | 9 ++++-----
+ drivers/rtc/rtc-r7301.c  | 5 ++---
+ drivers/rtc/rtc-tegra.c  | 6 +++---
+ 6 files changed, 16 insertions(+), 21 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.8.1
+
