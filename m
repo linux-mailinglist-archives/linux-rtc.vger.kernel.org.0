@@ -2,217 +2,127 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE84311655
-	for <lists+linux-rtc@lfdr.de>; Sat,  6 Feb 2021 00:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716A6311652
+	for <lists+linux-rtc@lfdr.de>; Sat,  6 Feb 2021 00:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhBEXB7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 5 Feb 2021 18:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbhBEK6v (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 Feb 2021 05:58:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350EFC0617AA
-        for <linux-rtc@vger.kernel.org>; Fri,  5 Feb 2021 02:58:10 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7ymj-00035C-2Q; Fri, 05 Feb 2021 11:56:21 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1l7ymd-0004Fb-NN; Fri, 05 Feb 2021 11:56:15 +0100
-Date:   Fri, 5 Feb 2021 11:56:15 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-fbdev@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
-        Eric Anholt <eric@anholt.net>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig.org@pengutronix.de>, linux-i2c@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-rtc@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mike Leach <mike.leach@linaro.org>,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-mmc@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-        linux-spi@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>, dmaengine@vger.kernel.org
-Subject: Re: [GIT PULL] immutable branch for amba changes targeting v5.12-rc1
-Message-ID: <20210205105615.qumu45huvntf2v4j@pengutronix.de>
-References: <20210126165835.687514-1-u.kleine-koenig@pengutronix.de>
- <20210202135350.36nj3dmcoq3t7gcf@pengutronix.de>
- <YBlcTXlxemmC2lgr@kroah.com>
- <20210204165224.GA1463@shell.armlinux.org.uk>
- <YBwnUrQqlAz2LDPI@kroah.com>
- <20210204165951.GB1463@shell.armlinux.org.uk>
- <20210204181551.ethtuzm65flujmwe@pengutronix.de>
- <20210205093744.kr4rc7yvfiq6wimq@pengutronix.de>
- <YB0baUzgvpd+EoO6@kroah.com>
+        id S231310AbhBEXBq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 5 Feb 2021 18:01:46 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:35871 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231822AbhBEMoY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 Feb 2021 07:44:24 -0500
+Received: by mail-ot1-f43.google.com with SMTP id 100so47649otg.3;
+        Fri, 05 Feb 2021 04:44:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kuINixcG/J94gESP0yyjqiYb/s22t0ZfSXhCYWQroxI=;
+        b=obWk6BQ5ZMOBvTVEwhhw2CV0CXPgp9UMDgh0DfNmhgjDix25Xr8d3Q0pas1o4AHB8o
+         WeSBMAom7Ycn4cu0bD85Y1zds+su3CFFnmyBEQYrMuuM8gBcf+JY43T88MY9nHUJoS/R
+         YKnAwMq4sspwJhgen28J/G6etP81X0ZjKat3Ou4Z1eUpZSEi/AI+pWtGrVD2AX9jrAPL
+         VwS0NwYQtXu4BuA2BVfP3RkC2TGIH0eqdEn6/RvaBxmDzb5cfk4kYuOkUgFm1CtwX9K/
+         TIXLanEK4hIhbA5yoDPhSFJTaRZyALznXAjRuT1RKG6IkP+rzDoYWfWxECGdxtJqpjV9
+         /7CA==
+X-Gm-Message-State: AOAM531d/KnSre7SqwXX2t9+aQcdpMb89KQt+P8ih0ZZaWwy+0XZ23Qa
+        NyqyFXYszsKns4yD8Yl2eGXqn024rzyD3kwfHjW1mvt5
+X-Google-Smtp-Source: ABdhPJxio/AsWQ4f32FDc+YpO+ird+n+TGH9eAOM0SWxPJMdUTuxRHQMc6kyV2+EPXg80cUrK697FvJtbMZ4n+v1EFY=
+X-Received: by 2002:a9d:7a4a:: with SMTP id z10mr3350757otm.206.1612529022635;
+ Fri, 05 Feb 2021 04:43:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vslstwmibba5nymi"
-Content-Disposition: inline
-In-Reply-To: <YB0baUzgvpd+EoO6@kroah.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+References: <20210125143039.1051912-1-geert+renesas@glider.be>
+In-Reply-To: <20210125143039.1051912-1-geert+renesas@glider.be>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 5 Feb 2021 13:43:28 +0100
+Message-ID: <CAJZ5v0geLBviVW_6LNe0BNymX=PSDfqoukkdz92RNZN5=h3BJg@mail.gmail.com>
+Subject: Re: [PATCH] ntp: Use freezable workqueue for RTC synchronization
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Viresh Kumar <vireshk@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, Jan 26, 2021 at 6:48 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> The bug fixed by commit e3fab2f3de081e98 ("ntp: Fix RTC synchronization
+> on 32-bit platforms") revealed an underlying issue: RTC synchronization
+> may happen anytime, even while the system is partially suspended.
+>
+> On systems where the RTC is connected to an I2C bus, the I2C bus
+> controller may already or still be suspended, triggering a WARNING
+> during suspend or resume from s2ram:
+>
+>     WARNING: CPU: 0 PID: 124 at drivers/i2c/i2c-core.h:54 __i2c_transfer+0x634/0x680
+>     i2c i2c-6: Transfer while suspended
+>     [...]
+>     Workqueue: events_power_efficient sync_hw_clock
+>     [...]
+>     [<c0738e08>] (__i2c_transfer) from [<c0738eac>] (i2c_transfer+0x58/0xf8)
+>     [<c0738eac>] (i2c_transfer) from [<c065202c>] (regmap_i2c_read+0x58/0x94)
+>     [<c065202c>] (regmap_i2c_read) from [<c064de40>] (_regmap_raw_read+0x19c/0x2f4)
+>     [<c064de40>] (_regmap_raw_read) from [<c064dfdc>] (_regmap_bus_read+0x44/0x68)
+>     [<c064dfdc>] (_regmap_bus_read) from [<c064ccb4>] (_regmap_read+0x84/0x1a4)
+>     [<c064ccb4>] (_regmap_read) from [<c064d334>] (_regmap_update_bits+0xa8/0xf4)
+>     [<c064d334>] (_regmap_update_bits) from [<c064d464>] (_regmap_select_page+0xe4/0x100)
+>     [<c064d464>] (_regmap_select_page) from [<c064d554>] (_regmap_raw_write_impl+0xd4/0x6c4)
+>     [<c064d554>] (_regmap_raw_write_impl) from [<c064ec10>] (_regmap_raw_write+0xd8/0x114)
+>     [<c064ec10>] (_regmap_raw_write) from [<c064eca4>] (regmap_raw_write+0x58/0x7c)
+>     [<c064eca4>] (regmap_raw_write) from [<c064ede0>] (regmap_bulk_write+0x118/0x13c)
+>     [<c064ede0>] (regmap_bulk_write) from [<c073660c>] (da9063_rtc_set_time+0x44/0x8c)
+>     [<c073660c>] (da9063_rtc_set_time) from [<c0734164>] (rtc_set_time+0xc8/0x228)
+>     [<c0734164>] (rtc_set_time) from [<c02abe78>] (sync_hw_clock+0x128/0x1fc)
+>     [<c02abe78>] (sync_hw_clock) from [<c023e6a0>] (process_one_work+0x330/0x550)
+>     [<c023e6a0>] (process_one_work) from [<c023f0a8>] (worker_thread+0x22c/0x2ec)
+>
+> Fix this race condition by using the freezable instead of the normal
+> power-efficient workqueue.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
---vslstwmibba5nymi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+LGTM
 
-On Fri, Feb 05, 2021 at 11:18:17AM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Feb 05, 2021 at 10:37:44AM +0100, Uwe Kleine-K=F6nig wrote:
-> > Hello Russell, hello Greg,
-> >=20
-> > On Thu, Feb 04, 2021 at 07:15:51PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Thu, Feb 04, 2021 at 04:59:51PM +0000, Russell King - ARM Linux ad=
-min wrote:
-> > > > On Thu, Feb 04, 2021 at 05:56:50PM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Thu, Feb 04, 2021 at 04:52:24PM +0000, Russell King - ARM Linu=
-x admin wrote:
-> > > > > > On Tue, Feb 02, 2021 at 03:06:05PM +0100, Greg Kroah-Hartman wr=
-ote:
-> > > > > > > I'm glad to take this through my char/misc tree, as that's wh=
-ere the
-> > > > > > > other coresight changes flow through.  So if no one else obje=
-cts, I will
-> > > > > > > do so...
-> > > > > >=20
-> > > > > > Greg, did you end up pulling this after all? If not, Uwe produc=
-ed a v2.
-> > > > > > I haven't merged v2 yet as I don't know what you've done.
-> > > > >=20
-> > > > > I thought you merged this?
-> > > >=20
-> > > > I took v1, and put it in a branch I've promised in the past not to
-> > > > rebase/rewind. Uwe is now asking for me to take a v2 or apply a pat=
-ch
-> > > > on top.
-> > > >=20
-> > > > The only reason to produce an "immutable" branch is if it's the bas=
-is
-> > > > for some dependent work and you need that branch merged into other
-> > > > people's trees... so the whole "lets produce a v2" is really odd
-> > > > workflow... I'm confused about what I should do, and who has to be
-> > > > informed which option I take.
-> > > >=20
-> > > > I'm rather lost here too.
-> > >=20
-> > > Sorry to have cause this confusion. After I saw that my initial tag
-> > > missed to adapt a driver I wanted to make it easy for you to fix the
-> > > situation.
-> > > So I created a patch to fix it and created a second tag with the patch
-> > > squashed in. Obviously only one of them have to be picked and I hoped
-> > > you (=3D Russell + Greg) would agree which option to pick.
-> > >=20
-> > > My preference would be if you both pick up v2 of the tag to yield a
-> > > history that is bisectable without build problems, but if Russell (who
-> > > already picked up the broken tag) considers his tree immutable and so
-> > > isn't willing to rebase, then picking up the patch is the way to go.
-> >=20
-> > OK, the current state is that Russell applied the patch fixing
-> > drivers/mailbox/arm_mhuv2.c on top of merging my first tag.
-> >=20
-> > So the way forward now is that Greg pulls
-> >=20
-> > 	git://git.armlinux.org.uk/~rmk/linux-arm.git devel-stable
-> >=20
-> > which currently points to=20
-> >=20
-> > 	860660fd829e ("ARM: 9055/1: mailbox: arm_mhuv2: make remove callback r=
-eturn void")
-> >=20
-> > , into his tree that contains the hwtracing changes that conflict with =
-my
-> > changes. @Greg: Is this good enough, or do you require a dedicated tag
-> > to pull that?
-> >=20
-> > I think these conflicting hwtracing changes are not yet in any of Greg's
-> > trees (at least they are not in next).
-> >=20
-> > When I pull
-> >=20
-> > 	https://git.kernel.org/pub/scm/linux/kernel/git/coresight/linux.git ne=
-xt
-> >=20
-> > (currently pointing to 4e73ff249184 ("coresight: etm4x: Handle accesses
-> > to TRCSTALLCTLR")) into 860660fd829e, I get a conflict in
-> > drivers/hwtracing/coresight/coresight-etm4x-core.c as expected. My
-> > resolution looks as follows:
->=20
-> Ok, my resolution looked a bit different.
->=20
-> Can you pull my char-misc-testing branch and verify I got this all
-> pulled in correctly?
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-minor side-note: mentioning the repo url would have simplified that test.
-
-I looked at
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git char-=
-misc-testing
-
-commit 0573d3fa48640f0fa6b105ff92dcb02b94d6c1ab now.
-
-I didn't compile test, but I'm willing to bet your resolution is wrong.
-You have no return statement in etm4_remove_dev() but its return type is
-int and etm4_remove_amba() still returns int but should return void.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---vslstwmibba5nymi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmAdJEwACgkQwfwUeK3K
-7AkhPggAk0ucNSGkkTWYbQF9BBYOZDKVlqvPHzvkMilvBGuAa1EXhuHHKu3esHxh
-NZf5xH5Lh7cnNyXodWF4Mp20NZfV0VFjzhbfNFexDfO2QfKJhJbATh9YiJ5onzsT
-cbMDvw+fQNUmooGN1gOW4OCiRvEPcYf8Z/TdrAkBXuRDaCYLiqJBPX1PCFTumEr3
-8Lxp3+k4zN9Wpkt17sqmgJxalvUHqNFOuL+1II2APrzMSZHB6T5fNtxEzMXUGXHx
-LzNGWjnnUKovRddHUyjFZu+rr6B/MUELKSYf9WH7lPI6osLnyjQf6vtczDdyZmlP
-PmCOMN9d1QJAKEMe6RJZvyfO22d11w==
-=kmsA
------END PGP SIGNATURE-----
-
---vslstwmibba5nymi--
+> ---
+>  kernel/time/ntp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
+> index 54d52fab201d283e..6310328fe398406a 100644
+> --- a/kernel/time/ntp.c
+> +++ b/kernel/time/ntp.c
+> @@ -502,7 +502,7 @@ static struct hrtimer sync_hrtimer;
+>
+>  static enum hrtimer_restart sync_timer_callback(struct hrtimer *timer)
+>  {
+> -       queue_work(system_power_efficient_wq, &sync_work);
+> +       queue_work(system_freezable_power_efficient_wq, &sync_work);
+>
+>         return HRTIMER_NORESTART;
+>  }
+> @@ -668,7 +668,7 @@ void ntp_notify_cmos_timer(void)
+>          * just a pointless work scheduled.
+>          */
+>         if (ntp_synced() && !hrtimer_is_queued(&sync_hrtimer))
+> -               queue_work(system_power_efficient_wq, &sync_work);
+> +               queue_work(system_freezable_power_efficient_wq, &sync_work);
+>  }
+>
+>  static void __init ntp_init_cmos_sync(void)
+> --
+> 2.25.1
+>
