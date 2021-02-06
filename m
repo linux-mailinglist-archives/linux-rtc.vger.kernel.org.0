@@ -2,80 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A053A311A3C
-	for <lists+linux-rtc@lfdr.de>; Sat,  6 Feb 2021 04:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659ED311E16
+	for <lists+linux-rtc@lfdr.de>; Sat,  6 Feb 2021 15:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbhBFDhP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 5 Feb 2021 22:37:15 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:35350 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbhBFDfJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 Feb 2021 22:35:09 -0500
-Received: by mail-oi1-f176.google.com with SMTP id w8so9720974oie.2;
-        Fri, 05 Feb 2021 19:34:43 -0800 (PST)
+        id S229529AbhBFO43 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 6 Feb 2021 09:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229876AbhBFO40 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 6 Feb 2021 09:56:26 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041BCC061786
+        for <linux-rtc@vger.kernel.org>; Sat,  6 Feb 2021 06:55:49 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id jj19so17668633ejc.4
+        for <linux-rtc@vger.kernel.org>; Sat, 06 Feb 2021 06:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=a4+4vyj22C/DEQrEuAF+XhR6YRUcSGIBop8elolrLMk23ittXiPyhFprfPldUGfJUu
+         2KPCRhKJt3ahNzmobmw920IaFG+hMy+Zh2WEjPe3zjcuiICPyAWoCrm0YPMeciOvHc6Y
+         duBcjgbPOxKyKoUNM1iLdcKcBEjv1250PSYPu180ALLnnWeTM1qH8H5fkXnfUr5fwF4Y
+         kftzl4B3yXcPFgmNoO7JBQvUDuARLPSZOT8sZeuWIm1VC3k1uYvVfwmJzPR6UgLpG04J
+         9Gvj6QU0S//a3JjgcsfCNPS6p425psy3OPW8xosDYPlClmw5kFMe7c94GMqOtZQLn7/u
+         sK7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oYX3STVGOutn/ODTJ1Chx6wd1ikGLIpdQAWlo27fcnA=;
-        b=P/tmvMNJuCuqeky6J0kl0Kj1FLXJrI6DbCiAoZ274C7A4WTyk2uLzxl+LKN7kDMYzp
-         fQdHe4ZHjIp/K4xG0g45oblqhLfZL9P/oQ9fnjDp4a02Y/5VnowiUiL18s/AAubCOZBP
-         QLj2aKwmq+meqg60tlD+/PajmOFUlN3Ns38A+WnIdQAJ5BRI0VMW0aTvpriLtUSEMZLj
-         o/kSf2iyTANckXVa15Z8WULqesTu2yQdTO3BSbVUuixzohYwxH76z5SHz4sWQMxupss0
-         9ArTEOdoSaTROnG9MNc2u3RxTryhDJWvB+WijT33vgP6z1mDiCQKFENC/naBSgeCOlAm
-         p49w==
-X-Gm-Message-State: AOAM530erH1pbtNZAgpnrFXgHOyb+/S0D9/b/X7SKVpNqimfbrrN3urP
-        BuczDvVF1VijgIm/jXqOMF9iuUWJWA==
-X-Google-Smtp-Source: ABdhPJx7yvm1O6oqJ0lLXbtfmYGfoeVWzvCVL9cCxLieYLbGmE6b1ddW84xEXKVGBDviVnEhIIsV6Q==
-X-Received: by 2002:a05:6808:918:: with SMTP id w24mr4534554oih.20.1612562677933;
-        Fri, 05 Feb 2021 14:04:37 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u15sm1970378oiu.28.2021.02.05.14.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 14:04:36 -0800 (PST)
-Received: (nullmailer pid 3833547 invoked by uid 1000);
-        Fri, 05 Feb 2021 22:04:34 -0000
-Date:   Fri, 5 Feb 2021 16:04:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, Ran Bi <ran.bi@mediatek.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        srv_heupstream@mediatek.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fei Shao <fshao@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Yuchen Huang <yuchen.huang@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH RESEND v5 3/8] dt-bindings: mfd: Add compatible for the
- MediaTek MT6359 PMIC
-Message-ID: <20210205220434.GA3833495@robh.at.kernel.org>
-References: <1611913781-23460-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1611913781-23460-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=OiNkdVA8W4P79mOYtn1t0cLSrUXNMim0d7l/gCfXuOyjsaNuWDiST6DmwYafsjz9ce
+         DRPUBAfYMjR4twbMYV4o/qBtxNmRpoHNw9Jns+CAdYmRbJ1pKerZciChrXgUdjSK8z7T
+         urQj6OC/2e/3yAno5Sakyv9r33XnQ0zTahjc3puRDzX7fzJ3vkcMbYWLBPF9+92wIV7E
+         uloGq3TFs36DJm8U6ELX8OozwouMlVrkX/3H/pwnP4HsW24uCz0DhEKxSL83DYyEwLbp
+         guCX1b76FBpi3lasqbxSkNuWDOqmgvli84BZP72otLKmY25y5mZSJvucIRJkCIgQW0F5
+         YPPw==
+X-Gm-Message-State: AOAM532Kggxpz8AfND3fEPd0WoLwe59pb8Ms7hYam3BsjE/ewMEESQW0
+        JqW4K0pFSDDEwpf2J5a/6Ya0oXg3w8M5um/BSkA=
+X-Google-Smtp-Source: ABdhPJw1yOHIS1DBaSUO32iPWAtI1XCQiXUlHAHL+HhxrGkPlYlqBmoieKA1MzkoTEXTc4hxq9SuD2thnVK4Vor2v+A=
+X-Received: by 2002:a17:906:c00a:: with SMTP id e10mr9355929ejz.501.1612623347778;
+ Sat, 06 Feb 2021 06:55:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611913781-23460-4-git-send-email-hsin-hsiung.wang@mediatek.com>
+Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:55:47
+ -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada9@gmail.com>
+Date:   Sat, 6 Feb 2021 15:55:47 +0100
+Message-ID: <CAGSHw-Dz=vJYeWqus3OLgqT8w1Di_nTEu4GvjwRM1ysUtgU_Eg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 29 Jan 2021 17:49:36 +0800, Hsin-Hsiung Wang wrote:
-> This adds compatible for the MediaTek MT6359 PMIC.
-> 
-> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> ---
-> changes since v4:
-> - remove unused compatible name.
-> ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-Acked-by: Rob Herring <robh@kernel.org>
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
