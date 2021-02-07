@@ -2,119 +2,121 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C10E3126F0
-	for <lists+linux-rtc@lfdr.de>; Sun,  7 Feb 2021 19:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE40312779
+	for <lists+linux-rtc@lfdr.de>; Sun,  7 Feb 2021 22:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbhBGStT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 7 Feb 2021 13:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhBGStS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Feb 2021 13:49:18 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6431C06174A;
-        Sun,  7 Feb 2021 10:48:37 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y18so15591661edw.13;
-        Sun, 07 Feb 2021 10:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=EGUleL2eUhQNkqgdSNGHaB4lMTeXgM8GYS8mqXoep18=;
-        b=ToR10LHsn60YUDp2DP0hDjaXCyVzc8zWU/NGOLWEgKHS6gMxtdfHAMZ6v3cS6X0/iY
-         aZwv5NRsuqKhCHL0rJMZX+249h0GhfVmma5wrykmnWvvGkZA1mHvIEORbNp5IKyPx1R7
-         47IGQ16ETe9b+F4QIb+C5P/JwoY+vv0K3Vzn1umWLIBVY+eKNZSTJIkzD89xhjqn+mF3
-         UeY+vdZsEvvSLhf5zMl3eweZVvJ8gQ/AZEVlLre/YN1LNTwHJE9ErIpyR1+rmASTrOnV
-         mDbZaSTdvK4AdIeqguB8QY/JDaKUe1YwXadFwDC0rB684zoN3pZTw5ABoJWssinMRv9Y
-         GUhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=EGUleL2eUhQNkqgdSNGHaB4lMTeXgM8GYS8mqXoep18=;
-        b=C/fSQjKc2o96F1ABaq29HFLMyyfPXdcp3dKy9as6e7Tp1QN+1rCqJh/F1lcj6lCJe/
-         8zViHCvyAWfQ0Gv2GrtCf8rMBdbVmtbcsGpq6bD0/imVryaY/sRdug5RxXzkgSIhNbYA
-         xEOzpANagMOtmOujIDv5cmPxStZUcGQru+eTeYFzxRBhfCQWsvyV7/geVqkcq8R6xZvz
-         ujdxbQacSBRCU7gtMAfNXWU0auUS5vHyw6NnKqW6xsHgTlp/Hm2LG1h6teWQC0XrvxP4
-         jaSZtBbF256Ln7L5Tmzg12QFnECartz+kmIGVyAvu6uoa+d4ugelJb316opnAuN1/fjS
-         X5OA==
-X-Gm-Message-State: AOAM533s8mX1FJr4G64XKNKQKyyHiyAIFEWa/Zj9GhZAwYZvH+bXfxMT
-        EJ/bWe/lFfa6iF4EwCIMEW89L28iij4X5w==
-X-Google-Smtp-Source: ABdhPJw0mfAfPKKjiEL+LasOhxLInAfCF/IyAaxDCVbPW22DiVvyPcta0oxPzyEwqia1eDWJFUublw==
-X-Received: by 2002:a50:d6c1:: with SMTP id l1mr13873785edj.336.1612723716670;
-        Sun, 07 Feb 2021 10:48:36 -0800 (PST)
-Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id bz20sm7383803ejc.38.2021.02.07.10.48.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Feb 2021 10:48:35 -0800 (PST)
-Subject: Re: [PATCH RESEND v5 8/8] arm64: dts: mt6359: add PMIC MT6359 related
- nodes
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fei Shao <fshao@chromium.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Yuchen Huang <yuchen.huang@mediatek.com>,
-        Ran Bi <ran.bi@mediatek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Wen Su <wen.su@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-References: <1611913781-23460-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1611913781-23460-9-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1cbf58f1-376c-fa93-98a2-53a41fa24273@gmail.com>
- <CA+Px+wXP2vrFbou+SCRZuXYr4XPPxYHZfk+oSM7_GPXZSD24UQ@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <f0ed6a53-d2ee-4699-10c9-e2d937f0ff60@gmail.com>
-Date:   Sun, 7 Feb 2021 19:48:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229506AbhBGVLl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 7 Feb 2021 16:11:41 -0500
+Received: from vulcan.kevinlocke.name ([107.191.43.88]:45740 "EHLO
+        vulcan.kevinlocke.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbhBGVLk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Feb 2021 16:11:40 -0500
+X-Greylist: delayed 584 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Feb 2021 16:11:40 EST
+Received: from kevinlocke.name (host-69-145-60-23.bln-mt.client.bresnan.net [69.145.60.23])
+        (Authenticated sender: kevin@kevinlocke.name)
+        by vulcan.kevinlocke.name (Postfix) with ESMTPSA id 414FB2037D4F;
+        Sun,  7 Feb 2021 21:01:07 +0000 (UTC)
+Received: by kevinlocke.name (Postfix, from userid 1000)
+        id 2398113054E8; Sun,  7 Feb 2021 14:01:06 -0700 (MST)
+Date:   Sun, 7 Feb 2021 14:01:06 -0700
+From:   Kevin Locke <kevin@kevinlocke.name>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-rtc@vger.kernel.org
+Subject: [v5.11-rc6 Regression] RTC_RD_TIME EINVAL after RTC_WKALM_SET
+Message-ID: <YCBVEp77/1BFL9E0@kevinlocke.name>
+Mail-Followup-To: Kevin Locke <kevin@kevinlocke.name>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-rtc@vger.kernel.org
 MIME-Version: 1.0
-In-Reply-To: <CA+Px+wXP2vrFbou+SCRZuXYr4XPPxYHZfk+oSM7_GPXZSD24UQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On a ThinkPad T430 (2342-CTO) using rtc_cmos, on v5.11-rc6 (and torvalds
+master, 825b5991a46e), ioctl(RTC_RD_TIME) returns EINVAL after a wake
+alarm is set using ioctl(RTC_WKALM_SET), as observed using rtcwake(8):
 
+# rtcwake --mode no --seconds 100
+rtcwake: wakeup using /dev/rtc0 at Sun Feb  7 12:50:28 2021
+# rtcwake --mode no --seconds 100
+rtcwake: read rtc time failed: Invalid argument
 
-On 02/02/2021 04:51, Tzung-Bi Shih wrote:
-> On Sun, Jan 31, 2021 at 7:06 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
->> On 29/01/2021 10:49, Hsin-Hsiung Wang wrote:
->>> +             mt6359codec: mt6359codec {
->>> +             };
->>
->> I understand that the dmic-mode and mic-type-X depends on the actual board on
->> which it is used. In that case I think we should add mt6359codec node in the dts
->> instead of dtsi file. I'd advise to set these properties as well as otherwise we
->> get a (slightly misleading) warning in the driver.
-> 
-> I feel it is better to include the node in dtsi to represent the whole
-> MT6359 PMIC.
-> 
-> We could either:
-> - Set default values of these properties in the dtsi to avoid the
-> warning message.
-> - Or https://patchwork.kernel.org/project/alsa-devel/patch/20210202033557.1621029-1-tzungbi@google.com/
-> 
+Any subsequent non-trivial invocations of rtcwake fail with the same
+error.  Relevant portion of strace(1):
 
-As this got accpeted upstream, you don't need to do anything about it.
+openat(AT_FDCWD, "/dev/rtc0", O_RDONLY|O_CLOEXEC) = 3
+ioctl(3, RTC_RD_TIME, 0x7ffd823c3020)   = -1 EINVAL (Invalid argument)
 
-Thanks for the pointer.
-Matthias
+This also causes a WARNING in dmesg:
+
+------------[ cut here ]------------
+WARNING: CPU: 3 PID: 2545 at drivers/rtc/rtc-mc146818-lib.c:25 mc146818_get_time+0x1c8/0x220
+Modules linked in: xt_CHECKSUM bridge stp llc blowfish_generic blowfish_x86_64 blowfish_common des_generic des3_ede_x86_64 libdes cast5_avx_x86_64 cast5_generic cast_common cbc aes_generic lrw gf128mul hid_generic usbhid hid ip6t_REJECT nf_reject_ipv6 nft_chain_nat ecb camellia_generic xt_MASQUERADE nf_nat nft_counter camellia_aesni_avx_x86_64 camellia_x86_64 ipt_REJECT nf_reject_ipv4 xt_tcpudp intel_rapl_msr twofish_generic xt_owner twofish_avx_x86_64 intel_rapl_common twofish_x86_64_3way xt_conntrack nf_conntrack twofish_x86_64 nf_defrag_ipv6 twofish_common nf_defrag_ipv4 nft_compat nf_tables libcrc32c x86_pkg_temp_thermal nfnetlink intel_powerclamp snd_hda_codec_realtek snd_hda_codec_generic coretemp binfmt_misc kvm_intel serpent_avx_x86_64 kvm snd_hda_intel snd_intel_dspcfg irqbypass soundwire_intel serpent_sse2_x86_64 serpent_generic soundwire_generic_allocation crc32_pclmul xts ghash_clmulni_intel snd_soc_core nls_ascii snd_compress at24 rapl mei_wdt algif_skcipher
+ nls_cp437 vfat fat intel_cstate wmi_bmof essiv authenc i915 af_alg soundwire_cadence iwldvm snd_hda_codec intel_uncore mac80211 snd_hda_core drm_kms_helper snd_hwdep pcspkr libarc4 sdhci_pci xhci_pci cec iwlwifi sr_mod cqhci i2c_i801 soundwire_bus cdrom joydev iTCO_wdt efi_pstore intel_pmc_bxt i2c_smbus i2c_algo_bit e1000e iTCO_vendor_support fb_sys_fops ehci_pci mei_me tpm_tis xhci_hcd sdhci snd_pcm ehci_hcd syscopyarea sg ptp cfg80211 pps_core mmc_core snd_timer sysfillrect thinkpad_acpi watchdog sysimgblt mei tpm_tis_core usbcore nvram wmi ledtrig_audio tpm snd soundcore rfkill battery rng_core ac video button drm loop fuse configfs efivarfs ip_tables x_tables autofs4 ext4 crc32c_generic crc16 mbcache jbd2 dm_crypt dm_mod sd_mod t10_pi crc_t10dif crct10dif_generic crct10dif_pclmul crct10dif_common crc32c_intel ahci libahci psmouse libata aesni_intel glue_helper libaes crypto_simd evdev cryptd scsi_mod serio_raw
+CPU: 3 PID: 2545 Comm: rtcwake Not tainted 5.11.0-rc6 #53
+Hardware name: LENOVO 2342CTO/2342CTO, BIOS G1ETC2WW (2.82 ) 08/07/2019
+RIP: 0010:mc146818_get_time+0x1c8/0x220
+Code: 89 6b 10 5b 5d 41 5c 41 5d 41 5e c3 48 89 ee 48 c7 c7 90 4e 94 ae e8 d7 f5 23 00 bf 58 89 41 00 e8 3d 13 e8 ff e9 4b fe ff ff <0f> 0b 48 c7 c7 90 4e 94 ae 48 89 ee e8 b7 f5 23 00 48 c7 03 ff ff
+RSP: 0018:ffff8cb30017cf08 EFLAGS: 00010002
+RAX: 0000000000000087 RBX: ffff8cb30017cf3c RCX: 00000000000369e9
+RDX: 0000000000000001 RSI: ffff891b44018800 RDI: 000000000000000d
+RBP: 0000000000000046 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff8cb30017cfbc R14: 0000000000000008 R15: ffff891b40183c00
+FS:  00007f475135a580(0000) GS:ffff891c562c0000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff2a6f2084 CR3: 0000000108058001 CR4: 00000000001706e0
+Call Trace:
+ <IRQ>
+ hpet_rtc_interrupt+0x255/0x320
+ __handle_irq_event_percpu+0x3d/0x150
+ handle_irq_event+0x49/0xb0
+ handle_edge_irq+0x82/0x220
+ asm_call_irq_on_stack+0x12/0x20
+ </IRQ>
+ common_interrupt+0xb0/0x130
+ asm_common_interrupt+0x1e/0x40
+RIP: 0010:cmos_set_alarm+0x123/0x1f0
+Code: f6 0f 85 b3 00 00 00 e8 6b 8a a4 ff 85 c0 74 09 80 3d b8 70 83 01 00 74 2b 80 3b 00 75 3c c6 05 52 21 74 01 00 fb 48 8d 7b 04 <e8> b8 a4 ff ff 48 89 45 20 31 c0 48 83 c4 08 5b 5d 41 5c 41 5d 41
+RSP: 0018:ffff8cb301d27ce0 EFLAGS: 00000246
+RAX: 0000000000000001 RBX: ffff8cb301d27de0 RCX: 0000000000000046
+RDX: ffff8cb300044000 RSI: 0000000000000022 RDI: ffff8cb301d27de4
+RBP: ffffffffaea39d80 R08: 000000000000001f R09: fffffff186b1bfb7
+R10: 00000000000b4014 R11: 0000000000000005 R12: 0000000000000010
+R13: 0000000000000031 R14: 0000000000000055 R15: 0000000000000007
+ __rtc_set_alarm+0xc7/0x160
+ rtc_timer_enqueue+0x191/0x220
+ ? rtc_set_alarm+0x139/0x170
+ rtc_set_alarm+0x139/0x170
+ rtc_dev_ioctl+0x222/0x480
+ ? ptrace_do_notify+0x82/0xb0
+ __x64_sys_ioctl+0x83/0xb0
+ do_syscall_64+0x33/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f4751288cc7
+Code: 00 00 00 48 8b 05 c9 91 0c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 99 91 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007fff2a6b9e48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4751288cc7
+RDX: 00007fff2a6b9e80 RSI: 000000004028700f RDI: 0000000000000003
+RBP: 00007fff2a6b9ef0 R08: 0000000000000007 R09: 0000000000000640
+R10: 00007fff2a6b9e70 R11: 0000000000000246 R12: 0000000000000001
+R13: 0000000000000003 R14: 0000565364fc104b R15: 00007fff2a6b9e80
+---[ end trace f1d78761a9f207bf ]---
+
+In case it is relevant, the only other reference to rtc in dmesg is:
+
+rtc_cmos 00:02: RTC can wake from S4
+rtc_cmos 00:02: registered as rtc0
+rtc_cmos 00:02: setting system clock to 2021-02-07T10:34:06 UTC (1612694046)
+rtc_cmos 00:02: alarms up to one month, y3k, 114 bytes nvram, hpet irqs
+
+I bisected the regression to:
+
+211e5db19d15a721b2953ea54b8f26c2963720eb ("rtc: mc146818: Detect and handle broken RTCs")
+
+Reverting this commit (on v5.11-rc6) avoids the issue on my system.
+Let me know if there's anything else I can do to assist.
+
+Thanks,
+Kevin
