@@ -2,90 +2,168 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 043F631463E
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Feb 2021 03:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE289314FD6
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Feb 2021 14:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbhBIC1W (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Feb 2021 21:27:22 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:37580 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbhBIC1V (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Feb 2021 21:27:21 -0500
-Received: by mail-oi1-f172.google.com with SMTP id y199so15881871oia.4;
-        Mon, 08 Feb 2021 18:27:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/zVsordftVZTWAI3YzzzkRIve/FqPFfsNUmOZe9rJqc=;
-        b=ExbqB9nsQnuXr5CMJdGjqR/BRsTbZ085teETmctFBoFiOgtqmDlszAb8+S+ogTnkd9
-         gzQpLUlFxBbqWoM4D8SugvhsbzJeGhpG2QPAbgAwvG3aVXsibhmtgACG51obZjtvHsln
-         mfIfXX7oJm1/mlJc6bWr/yb2OYg3IIflMCRgCbXFpCKKwQhON+Bwmhr+HW7BI0yBKyXs
-         6ru9UWI6emn/Tsd7csQO5uJ4XIhvSv9dc64eH9oJCqQ48JtxqnYFBgQalHwWci9kdoyn
-         JXccCKvWLLC8JEkLkNDyViprkG2S0ysR+IsIEx+3qrtWFXbqpgTds83VJKAsHA3ko5Sn
-         18dg==
-X-Gm-Message-State: AOAM5302BVddw4F7wYxWb33jQhA0Fri4KGj+wb1kem5fVVtPAoMx3N/6
-        JJVNsch9QmjWiTmhaipxksZq3iTuJg==
-X-Google-Smtp-Source: ABdhPJzQPON4jmKjw6SUDOl/dMLwFvPz18jUZKBs6P0IlGds5vnE9gviWS2mNEH81anW+KM2W1io6g==
-X-Received: by 2002:aca:f1d4:: with SMTP id p203mr1121288oih.46.1612837598414;
-        Mon, 08 Feb 2021 18:26:38 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w7sm3946443oor.27.2021.02.08.18.26.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Feb 2021 18:26:37 -0800 (PST)
-Received: (nullmailer pid 2551957 invoked by uid 1000);
-        Tue, 09 Feb 2021 02:26:36 -0000
-Date:   Mon, 8 Feb 2021 20:26:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-power@fi.rohmeurope.com, mazziesaccount@gmail.com,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 07/17] dt_bindings: mfd: Add ROHM BD71815 PMIC
-Message-ID: <20210209022636.GA2551904@robh.at.kernel.org>
+        id S231220AbhBINLI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 9 Feb 2021 08:11:08 -0500
+Received: from mail-am6eur05on2086.outbound.protection.outlook.com ([40.107.22.86]:20491
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230288AbhBINLA (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 9 Feb 2021 08:11:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D+1HH+yL7rrFs1Gu9ZWzzl56qheab9YEn+cjky3MKXvUlw2Abqt0ktJlu0vko3wvVVMtfb4NLFXotFJ/5CqmZHd2w3Geg4GNuxYlMUKvHYFSSSwobEDbg7F53nLEfOUCSfjS4M0J57MOlNA0THioIZYM7jaE3Q3aeBV1GVDDyRFrqYOqx0bB2qjootZe2JfNvFlD2LiIBU3SaAzkojgiv+ZnslEhouFsAgWM6O5o1GrU5YwVGMMi1fWIBOCHXdn8YPmDN95lE/m+JoD+Z9/hzZ3nVb+Ab71dH+cvD9CXulUW6n2mN/lQEdgldm6mQJhgPUVHGy7usTs20aAez9IEUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lyS/GpGrDokUteb7qG46CLvf55LgFg5YVbWziIIPFPc=;
+ b=iFKpA4zxxCLDBpDa3FqtEe9S+vxByJT+83mAA+h5RjfU0iCVSfBv4fiMNTlQL1CSA+//UZhYy4Y7voEgXOfBlwJaVUxmrmk9bTag8h2xvnwEsPgim25wlIPXJG9SuJwcFs7AQ/ou3j2oE4NvA4qQb6FlKWFxp62RD25QaxqZNE98huqb4Ap6OdUONKdjElto94fAyFBHbAu1/x4Nwa3s7as/gszp3sJIGjYGI6seWYVASYrcyW/fneQIyg6q1qJq7Ad0ADhhNHWdGE5mxpnm54tku1/7gmnNdzVOnLuGZkdcga1dUM8ysPMOitVle887sfBiLhQnRTxVhlrlfUGDnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductoreurope.onmicrosoft.com;
+ s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lyS/GpGrDokUteb7qG46CLvf55LgFg5YVbWziIIPFPc=;
+ b=A+moV+iDYoh5NH7Ubp60FrkziOe++f/r5dzQhFgfah0/HsHDAYVxYBWJcnGny0uq/zOfURTFD0gv5jVPXLSO4GEPwWyYtx+LHLzh37NBhx81tq1nGfwdXh6VU7akwS8dVNdZsdZ1MA0ZyVZo5DwyAe/0GEyr/xfpyTWCyN4KUwk=
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
+ HE1PR03MB3068.eurprd03.prod.outlook.com (2603:10a6:7:56::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3805.16; Tue, 9 Feb 2021 13:10:04 +0000
+Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::c18c:4a01:ca24:78c1]) by HE1PR03MB3162.eurprd03.prod.outlook.com
+ ([fe80::c18c:4a01:ca24:78c1%5]) with mapi id 15.20.3825.030; Tue, 9 Feb 2021
+ 13:10:04 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "robh@kernel.org" <robh@kernel.org>
+CC:     "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 06/17] dt_bindings: regulator: Add ROHM BD71815 PMIC
+ regulators
+Thread-Topic: [PATCH v2 06/17] dt_bindings: regulator: Add ROHM BD71815 PMIC
+ regulators
+Thread-Index: AQHW7jMhsE1r/M8dc0G9kkX6Nl3qp6pPORUAgAC0RoA=
+Date:   Tue, 9 Feb 2021 13:10:04 +0000
+Message-ID: <0534345fdba452baefed4ad740a51d394b2ac423.camel@fi.rohmeurope.com>
 References: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
- <5e58cc041572d8540b4f1fbeea7bde955d6b2ea6.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+         <950a87e680822ab6457ff95bba96730fed93e14d.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+         <20210209022450.GA2546257@robh.at.kernel.org>
+In-Reply-To: <20210209022450.GA2546257@robh.at.kernel.org>
+Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Accept-Language: fi-FI, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none
+ header.from=fi.rohmeurope.com;
+x-originating-ip: [62.78.225.252]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9048d7ee-c5e1-4eb3-7be0-08d8ccfc0427
+x-ms-traffictypediagnostic: HE1PR03MB3068:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <HE1PR03MB3068D0FA21CB8054559B49E1AD8E9@HE1PR03MB3068.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YDpPPWRZ2YixK07MVm5QHmZnCacmHDfah2wSEBraRBLWjAJqwW6g6jSOWpJKapk73pPBXh2vB2OaAentb4gSCbg+U8qUGA7Y1Y4Xkb7w7H4AOjFBbhpzu75MuEwEUqlSbXlr/71Jhb7kk0KPyB/czDe9atLoeOB40pgHhHh9wUELI1jcye4y55E5FMHRmS7QITFzJ21+PwRHcIicuXyyAemeoIz2qypwPU+zvxSuHNHZLsCZCjeYz+crl9XH96cRpCUrdQW4UJLfibhsuV8JOPRZs9oqzkFPWi/W8QYzFcH215QgbEpaSxGJgz4luoohD2haFkcsQoyvtsRZVeGuQESS4zMAhEXbFuQPZ+SPrG8/UIUmyxWvv8ofShDY+RFsgJPjr/Wo16hjB/iHu+qg+jVTuSSRG4KBU38ReO0Ps54TTOzw6WnQKXCzwhiexL3NhT75TrBZyeJi/W+xLifwWSfh56y2lKCan913PNIM3KsxJlPjDo6+S4SzjsPAWm95GsmCUMAw1X4ePW3uAjs0TQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(366004)(376002)(346002)(136003)(396003)(8936002)(186003)(26005)(6916009)(2616005)(6506007)(7416002)(86362001)(54906003)(3450700001)(66476007)(66556008)(66946007)(76116006)(64756008)(316002)(478600001)(66446008)(4326008)(83380400001)(5660300002)(6486002)(6512007)(8676002)(2906002)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?TlBZNDQzbnByUWJZY1JRbDNWVmhFVHgrWEsyc3pDb0NBRzQydmREZmtQamU4?=
+ =?utf-8?B?R1NLRStrOHBVeldiai8xSTFpRUlydlNxS3I3YVl1Z3FjRStOejFVZXFZNDgw?=
+ =?utf-8?B?MlNuMmgwaWhONzEzQzQ3aC9ORllYUmFGZkdJNmszMWdtNUhVcTVkWWRFbTEw?=
+ =?utf-8?B?dDFBS3U3cGhDS1IwWUo0WmJhQ3MxUUgvdmFaemRnWnU2WXhGQXBzR0dKdDRz?=
+ =?utf-8?B?bHRBNjdITEtPeDdUWjV0RGd3UkVrN3huZ3VibmlTY0k0aVphYktrOG4rbUFz?=
+ =?utf-8?B?ZTgvU29BUEQ5Z29YZTlkZXQ2dUZZczFsSERnVlNzUFRNVmFQS2JLOEh6VWMx?=
+ =?utf-8?B?RFZCemZRZjM5R0diQThtakZjcHMvc2pEb3g3clczY3B1Uk5MVkdPYlkzWTZq?=
+ =?utf-8?B?MzFneEhIcFBncVY1N2Q0WW1kM3N3ZXdMQzNLV2JoZnVLRDRqbG0wa01Cdmdm?=
+ =?utf-8?B?d1F5VTlDckJGZUtXenJYY085QWFkam82L1pVTGdjSlErbTB3S3NndmsrMWxy?=
+ =?utf-8?B?bHorVEVMd0RMQVhFSFM5OEdoUVYveEJud2JaYzEraUFJSktBMzREVEtxQkZI?=
+ =?utf-8?B?RVRaN0ZzdTd6ZU5KdjViTktnV2N2VVBPL0tSZEs2bDloVWxMMS95Vi9EYjRu?=
+ =?utf-8?B?RURwSEdOUmxXZWwvMVVHMWR0UzYzdjB0dGMxTitnLytBUHR6ckVoNzAwYytK?=
+ =?utf-8?B?eFNiaGZBNzI3SHhkOXFkRzVYU1A5cnpYUzVOWHQwbTljcmVGMFVuYy9za0pl?=
+ =?utf-8?B?c1dCVkw3Wk5DaFFMdk5INFRoTUdJV0ZkUzg4T2xXNVErMmt3RHhsUHhYM2c0?=
+ =?utf-8?B?U21lSTMreUM0TUhpa2dGaVQ4R2t2L3dkUWRNTURSTmhMNHpHWDgzWlA0N05C?=
+ =?utf-8?B?V3dlM3RtQnZHdWp1bGhjdTIvbEoyeE5MTGxSSWNKaFJha3FaYkd0UGwvWEl4?=
+ =?utf-8?B?N3lsc0p3c2JnNEFtTVJJZkRIaUFXOFlPNXJRcEJIakdiRHlKMVlkTmtBT1cv?=
+ =?utf-8?B?K2J6dDVSbFJRZ240R2pkb1lXSUZJS0pJeTYyeFpnN1NzaERuVUd6UElkTTBL?=
+ =?utf-8?B?WUZJYkM3NXovS3FoRUZpbDFtR1NkSjlydlhaUnM3NCtIRnIxTkoyc1NpRGVB?=
+ =?utf-8?B?ZEx4UTZUOUFSY2h1S2tiZE0wTXZPTjR2SVJzTytoajhOVlVBQlVUOFg5QktD?=
+ =?utf-8?B?aFhqZVQxcitDaTNHbHVwdFR5MVcxR3BSdWlwdUpHbk9SNlVXUTcrdEpUaFdy?=
+ =?utf-8?B?MFZHK1dqSkNySjR4dk9KNENXdTdaSmFIdCs1YUNKN29VeGRxekQwNE1KL3Ry?=
+ =?utf-8?B?LzVPTU9nT1ZwQVVWQUZhSzV6RFNlZmVNMXkrbUg5UzNBb0FUOHRLbWZjQitl?=
+ =?utf-8?B?cGxNdlYvV2lBczBnWVRHNGU1TGxlTG42S00xTGFxcStUVCsxQzZIUUNyK2JH?=
+ =?utf-8?B?dk13cEthY08wR1BUdEMybi9JYXRadDBSZDBTaUE2Z0szWEFxbUlGS2ovWC83?=
+ =?utf-8?B?UU9RcWZjTG1KVmd2aXZ4MjZ2OUY4Yk9PNkwyR3VHa05PWnUzTUNES0QvTmgx?=
+ =?utf-8?B?bzgzejRtU1h2UWpnV1pLb0RBbTFEMUIrQjkrd252TVdrSlVTMVFIM3NieXJn?=
+ =?utf-8?B?eDBuUWN5NTJFZFNOVldYdENXUzFNNGxZbUdRb05qelg1SHdSa3lHUnNwOE9q?=
+ =?utf-8?B?M2JRSDk0LzJKRmJjK09EZGdqd3lQRjczeCtUTlN1dWtPbHRqdWNudGwxU1M3?=
+ =?utf-8?Q?rcdu/zoAYd7hORx3yZNcZcEz+hyXUEL2exUA/dj?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <59CE0D73147729449FB44F472232E452@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e58cc041572d8540b4f1fbeea7bde955d6b2ea6.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9048d7ee-c5e1-4eb3-7be0-08d8ccfc0427
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2021 13:10:04.4917
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aoDNlREz9TBmaSfjjd8jzCNrAjB1cYYOEarjsyCmT0q33VVulQkY+Da2XGpW+RH4R82ddnL2Vc0EU4A3r+WDEbd2zaTpK/qxl3n0OBe9HjNY6DcrJK8pPYcpzoICkk95
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR03MB3068
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 19 Jan 2021 09:21:23 +0200, Matti Vaittinen wrote:
-> Document DT bindings for ROHM BD71815.
-> 
-> BD71815 is a single-chip power management IC mainly for battery-powered
-> portable devices. The IC integrates 5 bucks, 7 LDOs, a boost driver for
-> LED, a battery charger with a Coulomb counter, a real-time clock, a 32kHz
-> clock and two general-purpose outputs although only one is documented by
-> the data-sheet.
-> 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> ---
-> 
-> Changes since v1:
->   - fixed patch ordering to meet ref dependencies
->   - added missing blank lines
->   - clkout-mode changed from string to tristated (uint)
->   - added default for rsense resistor
-> 
->  .../bindings/mfd/rohm,bd71815-pmic.yaml       | 202 ++++++++++++++++++
->  1 file changed, 202 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+SGVsbG8gQWdhaW4gUm9iLA0KDQpBbmQgdGhhbmtzIGZvciByZXZpZXdpbmcgdGhlIGJpbmRpbmdz
+IQ0KDQpPbiBNb24sIDIwMjEtMDItMDggYXQgMjA6MjQgLTA2MDAsIFJvYiBIZXJyaW5nIHdyb3Rl
+Og0KPiBPbiBUdWUsIEphbiAxOSwgMjAyMSBhdCAwOToxNzowOUFNICswMjAwLCBNYXR0aSBWYWl0
+dGluZW4gd3JvdGU6DQo+ID4gQWRkIGJpbmRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgcmVndWxhdG9y
+cyBvbiBST0hNIEJENzE4MTUgUE1JQy4NCj4gPiA1IGJ1Y2tzLCA3IExET3MgYW5kIGEgYm9vc3Qg
+Zm9yIExFRC4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXR0aSBWYWl0dGluZW4gPG1hdHRp
+LnZhaXR0aW5lbkBmaS5yb2htZXVyb3BlLmNvbT4NCj4gPiAtLS0NCg0Kc25pcA0KDQo+ID4gKw0K
+PiA+ICsgICAgICByb2htLGR2cy1ydW4tdm9sdGFnZToNCj4gDQo+IFVzZSBzdGFuZGFyZCB1bml0
+IHN1ZmZpeC4NCj4gDQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246DQo+ID4gKyAgICAgICAgICBQ
+TUlDICJSVU4iIHN0YXRlIHZvbHRhZ2UgaW4gdVYgd2hlbiBQTUlDIEhXIHN0YXRlcyBhcmUNCj4g
+PiB1c2VkLiBTZWUNCj4gPiArICAgICAgICAgIGNvbW1lbnRzIGJlbG93IGZvciBidWNrcy9MRE9z
+IHdoaWNoIHN1cHBvcnQgdGhpcy4gMA0KPiA+IG1lYW5zDQo+ID4gKyAgICAgICAgICByZWd1bGF0
+b3Igc2hvdWxkIGJlIGRpc2FibGVkIGF0IFJVTiBzdGF0ZS4NCj4gPiArICAgICAgICAkcmVmOiAi
+L3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyIg0KPiANCj4gQW5kIHRoZW4g
+ZHJvcCB0aGlzLg0KDQpRdW90ZSBmcm9tIHYxIHJldmlldzoNCg0KPiA+ID4gPiA+ID4gKyAgICAg
+IHJvaG0sZHZzLXJ1bi12b2x0YWdlOg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gVGhlc2Ugc2hvdWxk
+IGhhdmUgYSB1bml0IHN1ZmZpeC4NCj4gPiA+ID4NCj4gPiA+ID4gSSBrbm93IGJ1dCB0aGVzZSBh
+cmUgZXhpc3RpbmcgcHJvcGVydGllcy4gSSdkIGxpa2UgdG8gcmUtdXNlDQp0aGVtDQo+ID4gPiA+
+IGFzDQo+ID4gPiA+IHRoZXkgaGF2ZSBleHBvcnRlZCBwYXJzZXIgaGVscGVycyAtIGFuZCBJIGFt
+IHVuc3VyZSB3aGF0IGtpbmQNCm9mDQo+ID4gPiA+IGJyZWFrYWdlcyBjaGFuZ2luZyB0aGVtIHdv
+dWxkIGNhdXNlLiAoVGhlIEJENzE4MzcvQkQ3MTg0NyB3aGljaA0KPiA+ID4gPiBpbnRyb2R1Y2Vk
+IHRoZXNlIHByb3BlcnRpZXMgYXJlIG9uZSBvZiB0aGUgUE1JQ3Mgd2hpY2ggYXJlDQpwcmV0dHkN
+Cj4gPiA+ID4gd2lkZWx5IHVzZWQuKQ0KPiA+ID4NCj4gPiA+IE9rYXkuIEhvcGVmdWxseSBJIHJl
+bWVtYmVyIG5leHQgdGltZSBJIHNlZSB0aGlzLi4uDQo+ID4NCj4gPiBBY3R1YWxseSwgSSB0aGlu
+ayBJIGNhbiBhZGQgc3VwcG9ydCBmb3Igcm9obSxkdnMtcnVuLW1pY3Jvdm9sdCBhbmQNCj4gPiBm
+ZWxsb3dzIHRvIHRoZXNlIHNhbWUgaGVscGVycyBzbyBuZXcgZGV2aWNlcyBjYW4gdXNlIGFwcHJv
+cHJpYXRlbHkNCj4gPiBuYW1lZCBwcm9wZXJ0aWVzLiBUaGF0IHdvdWxkIG1lYW4gdGhlcmUgaXMg
+ZHVwbGljYXRlIHByb3BlcnRpZXMgZm9yDQo+ID4gc2FtZSBwdXJwb3NlIC0gYnV0IG1heWJlIGl0
+IGFsbG93cyB1cyB0byBldmVudHVhbGx5IGRlcHJlY2F0ZSB0aGUNCm9sZA0KPiA+IG9uZXMuLi4g
+V2hpY2ggb2YgdGhlc2Ugb3B0aW9ucyB3b3VsZCB5b3UgcHJlZmVyPw0KPg0KPiBKdXN0IGtlZXAg
+dGhlIGV4aXN0aW5nIG9uZXMuDQoNClNlZW0geW91IHByZWRpY3RlZCB0aGlzIFhEIElmIHlvdSBz
+dGlsbCB0aGluayBpdCdzIE9rIHRvIGtlZXAgdGhlDQpleGlzdGluZyBvbmVzLCB0aGVuIEknbGwg
+dGFrZSB0aGlzIGFuIGFjaywgT2s/DQoNCkJlc3QgUmVnYXJkcw0KCU1hdHRpIFZhaXR0aW5lbg0K
+DQo=
