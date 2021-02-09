@@ -2,51 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702D2314541
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Feb 2021 02:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F27931462A
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Feb 2021 03:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbhBIBHY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Feb 2021 20:07:24 -0500
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:29832 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbhBIBHX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Feb 2021 20:07:23 -0500
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1612832801;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=e50BNIa8q6E9T9tu5BM00rccoE8=;
-        b=qpslmyh3JGZskvlw4QuxV0Eq0v0gxK9jbnRbnDyjflada2pjBPTJa5GBUi6leQJx
-        RoPGlCC5CN3YxKEnWljlRYXun5AGPUKzbffGivDzidHDUxYB/wrcfw/5kfpzbD/Y
-        a8kBM3qpy3fQB0RDWPVSu35mLIAThOM6K1A6yhUdlCP4cL4AhxyCbc+sXq68czW2
-        vzb2VWBwY1JZLJR1Tmk+I1jbr+wUPy/1ila7MOnf1YuHhqoGAd+wVboQMN2cy9nu
-        LxJ/N94If0YdAm41qq2gAlGhPYMS9JsxvWTSfzwkMRKH1hMzZvvK2aidn3IfDkeB
-        EH4qvCkV0eYDpSxms2tRZw==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.4 cv=LKuj/La9 c=1 sm=1 tr=0 ts=6021e020 cx=a_idp_x a=B6W95MITV0ByR2FQuuDIMQ==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=OGxnvhSY1EUA:10 a=r5oH8Fgm9fIA:10 a=IkcTkHD0fZMA:10 a=qa6Q16uM49sA:10 a=IbQgVbBq4bcA:10 a=4cdET6WwprQA:10 a=x7bEGLp0ZPQA:10 a=-xSE0sSnTIhhw0HgHx8A:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=kHmCYliWHlBROp4ktEDo:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: cG9tZXJveTI2QHdpbGRibHVlLm5ldA==
-Received: from [10.80.118.8] ([10.80.118.8:49932] helo=md05.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <pomeroy26@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 85/00-19783-020E1206; Mon, 08 Feb 2021 20:06:40 -0500
-Date:   Mon, 8 Feb 2021 20:06:40 -0500 (EST)
-From:   Rowell Hambrick <pomeroy26@wildblue.net>
-Reply-To: rowellhambrick1@gmail.com
-Message-ID: <449626739.15845919.1612832800410.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S230070AbhBICXe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Feb 2021 21:23:34 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:46480 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229704AbhBICXd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Feb 2021 21:23:33 -0500
+Received: by mail-oi1-f180.google.com with SMTP id k25so17861238oik.13;
+        Mon, 08 Feb 2021 18:23:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qpoTMVPQx46u6ds1cmgCXGFytcOWMms9eaHfYfbn+x8=;
+        b=lGfWHWQVqA9oD+BbQxlaQExg9r58dWlnlGVC20KU8qPjiqrMcx7Jjh8rMYm254+y9x
+         NnsQCdHcc1PCJTw/SAGByVNCbVkBVEi79Og7nOUX3gAPp3RAEvfwVF3cmwbJGRc1z6C1
+         eppUisa8ZpI7orRA5JzKenSBrXHJ/QzKN3KUTfjzP/MpXke0zGiM8J9y0+QkIDbN16Ho
+         vnx5OXbRDkX5icExg80xlNSc3JvXbERReqqWUDTsuAZfSTOQFLI8wAsdLbH35gGav21d
+         /esRUAN0D18i9Rugy1Gk8P9uqWsrG/k/kHA8a5xx+RYAPkApG/UwlqmIGbFx4Ckg9Xwa
+         Rx6w==
+X-Gm-Message-State: AOAM532cO6gZtBcR6dnJMKy6Zv8ogjUNGwzYTcKuhfpiz+r26W65siG+
+        W6T241KPfplb31tzGKQYgFXlwVa7cw==
+X-Google-Smtp-Source: ABdhPJzrw8HVjHkOjeRiJAgs80OtWHMXsFXkwysAA1QCum390/P0V7IoyxMWLOQ+JZEYBWe8BZyIIg==
+X-Received: by 2002:aca:4f55:: with SMTP id d82mr1064606oib.119.1612837372416;
+        Mon, 08 Feb 2021 18:22:52 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v17sm4028050ott.7.2021.02.08.18.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Feb 2021 18:22:51 -0800 (PST)
+Received: (nullmailer pid 2545977 invoked by uid 1000);
+        Tue, 09 Feb 2021 02:22:50 -0000
+Date:   Mon, 8 Feb 2021 20:22:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        mazziesaccount@gmail.com, devicetree@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>, linux-gpio@vger.kernel.org,
+        linux-power@fi.rohmeurope.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 05/17] dt_bindings: bd71828: Add clock output mode
+Message-ID: <20210209022250.GA2545922@robh.at.kernel.org>
+References: <cover.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
+ <1b6077ad08f7eacdac6604439d0921778d6046db.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [95.142.122.22]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: 2KaYM2TiZfXYCrUiV04r/1Gxp0vllA==
-Thread-Topic: 
-X-Vade-Verditct: spam:high
-X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrheeggdefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfujgfpteevqfftnfgvrghrnhhinhhgpdggkfetufetvfdpqfgfvfenuceurghilhhouhhtmecufedtudenucgohfhorhgsihguuggvnhfjughrucdlhedttddmnecujfgurhepfffhrhfkufggtgfgihfothesthejtgdtredtjeenucfhrhhomheptfhofigvlhhlucfjrghmsghrihgtkhcuoehpohhmvghrohihvdeiseifihhluggslhhuvgdrnhgvtheqnecuggftrfgrthhtvghrnhepueeuuefhieeuuefhjeejteejfeefueelueeuheeuvefhvdegfefhheelteegvdeknecukfhppedutddrkedtrdduudekrdekpdelhedrudegvddruddvvddrvddvnecuhfhorhgsihguuggvnhfjughrpeffhfhrkffugggtgfhiofhtsehtjegttdertdejnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehinhgvthepuddtrdektddruddukedrkeenpdhmrghilhhfrhhomhepphhomhgvrhhohidvieesfihilhgusghluhgvrdhnvghtnedprhgtphhtthhopehlihhujhhirghnthgrohesvhhiphdrudeifedrtghomhen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1b6077ad08f7eacdac6604439d0921778d6046db.1611037866.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Do you get my email
+On Tue, 19 Jan 2021 09:16:23 +0200, Matti Vaittinen wrote:
+> The BD71828 allows configuring the clk32kout pin mode to CMOS or
+> open-drain. Add device-tree property for specifying the preferred mode.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> ---
+> 
+> Changes from v1:
+> switched clk-mode property from string type to tristated one as
+> suggested by Rob.
+> 
+>  .../devicetree/bindings/mfd/rohm,bd71828-pmic.yaml          | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
