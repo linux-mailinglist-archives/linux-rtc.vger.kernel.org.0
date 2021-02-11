@@ -2,95 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A823172E5
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Feb 2021 23:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679EA319675
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Feb 2021 00:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbhBJWHZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Feb 2021 17:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbhBJWHT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Feb 2021 17:07:19 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50503C061756
-        for <linux-rtc@vger.kernel.org>; Wed, 10 Feb 2021 14:06:36 -0800 (PST)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4DbYkX2Q6vz1rwZx;
-        Wed, 10 Feb 2021 23:06:28 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4DbYkX13tgz1qqkT;
-        Wed, 10 Feb 2021 23:06:28 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id KvuQKcnvQp5J; Wed, 10 Feb 2021 23:06:27 +0100 (CET)
-X-Auth-Info: E9uQeQg0418rGlXKhcsGFMfdAEYWpcNYU2ZfMo9coDk=
-Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Wed, 10 Feb 2021 23:06:26 +0100 (CET)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-rtc@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
+        id S229564AbhBKXRm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Feb 2021 18:17:42 -0500
+Received: from angie.orcam.me.uk ([157.25.102.26]:47430 "EHLO
+        angie.orcam.me.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229562AbhBKXRm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Feb 2021 18:17:42 -0500
+X-Greylist: delayed 460 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Feb 2021 18:17:41 EST
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 2AC2B9200B4; Fri, 12 Feb 2021 00:09:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 242799200B3;
+        Fri, 12 Feb 2021 00:09:20 +0100 (CET)
+Date:   Fri, 12 Feb 2021 00:09:20 +0100 (CET)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Serge Belyshev <belyshev@depni.sinp.msu.ru>,
+        Dirk Gouders <dirk@gouders.net>,
+        =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Miroslav Lichvar <mlichvar@redhat.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Prarit Bhargava <prarit@redhat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc: pcf8563: Add NXP PCA8565 compatible
-Date:   Wed, 10 Feb 2021 23:06:23 +0100
-Message-Id: <20210210220623.23233-1-marex@denx.de>
-X-Mailer: git-send-email 2.30.0
+        linux-rtc@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH V2] rtc: mc146818: Dont test for bit 0-5 in Register D
+In-Reply-To: <87wnvrbmqx.fsf@nanos.tec.linutronix.de>
+Message-ID: <alpine.DEB.2.21.2102120001450.35623@angie.orcam.me.uk>
+References: <20201206214613.444124194@linutronix.de> <20201206220541.594826678@linutronix.de> <19a7753c-c492-42e4-241a-8a052b32bb63@digikod.net> <871re7hlsg.fsf@nanos.tec.linutronix.de> <98cb59e8-ecb4-e29d-0b8f-73683ef2bee7@digikod.net>
+ <87y2gfg18p.fsf@nanos.tec.linutronix.de> <87tur3fx7w.fsf@nanos.tec.linutronix.de> <ghft2hwevu.fsf@gouders.net> <877dnrc2sv.fsf@depni.sinp.msu.ru> <8735yfd2q4.fsf@nanos.tec.linutronix.de> <87zh0nbnha.fsf@nanos.tec.linutronix.de>
+ <CAHk-=wg_-_FP+B6ePabvj55_ok1YbYCsGHzYsZ064FpE4RqkTQ@mail.gmail.com> <87wnvrbmqx.fsf@nanos.tec.linutronix.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The NXP PCA8565 is software compatible with the NXP PCF8563,
-add DT and ACPI compatible entries.
+On Mon, 1 Feb 2021, Thomas Gleixner wrote:
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: linux-rtc@vger.kernel.org
----
- Documentation/devicetree/bindings/rtc/pcf8563.txt | 3 ++-
- drivers/rtc/rtc-pcf8563.c                         | 2 ++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+> >> While it cures the problem on the reporters machine it breaks machines
+> >> with Intel chipsets which use bit 0-5 of the D register. So check only
+> >> for bit 6 being 0 which is the case on these Intel machines as well.
+> >
+> > This looks fine, but it might also be worth it simply just checking
+> > for the only really special value: 0xff, and going "ok, that looks
+> > like missing hardware".
+> >
+> > That's what a few other drivers historically do in their probing
+> > routines, so it's not unheard of (ie you can find drivers doing that
+> > kind of
+> >
+> >         /* If we read 0xff from the LSR, there is no UART here. */
+> >         if (inb(.. port ..) == 0xff)
+> >
+> > in their init routines.
+> >
+> > Not a big deal either way, I just think it would be more in like with
+> > what other places do in similar situations
+> 
+> Yeah, we can do that as well. Either way is fine.
 
-diff --git a/Documentation/devicetree/bindings/rtc/pcf8563.txt b/Documentation/devicetree/bindings/rtc/pcf8563.txt
-index 6076fe76dbfa..0a900f7c8977 100644
---- a/Documentation/devicetree/bindings/rtc/pcf8563.txt
-+++ b/Documentation/devicetree/bindings/rtc/pcf8563.txt
-@@ -5,7 +5,8 @@ Philips PCF8563/Epson RTC8564 Real Time Clock
- Required properties:
- - compatible: Should contain "nxp,pcf8563",
- 	"epson,rtc8564" or
--	"microcrystal,rv8564"
-+	"microcrystal,rv8564" or
-+	"nxp,pca8565"
- - reg: I2C address for chip.
- 
- Optional property:
-diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
-index de3e6c355f2e..18f12f36eb2b 100644
---- a/drivers/rtc/rtc-pcf8563.c
-+++ b/drivers/rtc/rtc-pcf8563.c
-@@ -597,6 +597,7 @@ static int pcf8563_probe(struct i2c_client *client,
- static const struct i2c_device_id pcf8563_id[] = {
- 	{ "pcf8563", 0 },
- 	{ "rtc8564", 0 },
-+	{ "pca8565", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, pcf8563_id);
-@@ -606,6 +607,7 @@ static const struct of_device_id pcf8563_of_match[] = {
- 	{ .compatible = "nxp,pcf8563" },
- 	{ .compatible = "epson,rtc8564" },
- 	{ .compatible = "microcrystal,rv8564" },
-+	{ .compatible = "nxp,pca8565" },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, pcf8563_of_match);
--- 
-2.30.0
+ Given that evidently vendors appear to start playing with 146818 clones 
+it may be worth it to peek at the D and the C register and checking they 
+are not 0xff both at a time for robustness before concluding no RTC is 
+present.  The C register is supposed to hold zeros in bits 3:0.  A read of 
+the C register will drop interrupt bits, but I guess it does not matter at 
+the probe time.
 
+ FWIW,
+
+  Maciej
