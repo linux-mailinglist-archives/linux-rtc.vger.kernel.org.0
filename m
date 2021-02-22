@@ -2,115 +2,252 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F8B320669
-	for <lists+linux-rtc@lfdr.de>; Sat, 20 Feb 2021 18:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1542D320ECA
+	for <lists+linux-rtc@lfdr.de>; Mon, 22 Feb 2021 02:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhBTR2V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 20 Feb 2021 12:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbhBTR2V (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 20 Feb 2021 12:28:21 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD30C061574
-        for <linux-rtc@vger.kernel.org>; Sat, 20 Feb 2021 09:27:40 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id g24so6397995qts.2
-        for <linux-rtc@vger.kernel.org>; Sat, 20 Feb 2021 09:27:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=3cqKNH4/q2OHZhZVmiscwUYZe72W/KykEhyT7GXHaqo=;
-        b=sVi/PyaybT8goMRtFqCagI5Ri/YWtoKpP/dTgbUge35BFXRzTLeV+v3t01TetWIqDb
-         V+PlBunPEbNggaPq+eu0O2hYknCSXiuRxfHsDMVkN3iQjA80ckQtRUoBZ3TiizszJyD4
-         0q88JObh5SktzIccJz6mi3j4Bv3dt4TlEaq5IMrUMZSmwe36aGGojXLHZ/2VPHI1xSmu
-         GzW534p7OI3VIBcJrQWzU2N5CAwfJ/EycO7+3Qh9yI6FLp8dQ2px0HdQ2IpF4QcPGSfk
-         aulbRodxxUXnH3t35bRnMw0UiUc7McRqAxMpQpinyddDn3weykFkot8mT3XwKJ6xcYza
-         HcKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=3cqKNH4/q2OHZhZVmiscwUYZe72W/KykEhyT7GXHaqo=;
-        b=Uaf8Bk05EMTPlIKjnH7yqbCjyPY/F+Rv6ULGNxScSRF9fVgZmR2fQpQkx+ePteZY6M
-         Ot7tFYzh/RNYO0AhHzGYerLgdq1N8G5gGncfMagT72Yi/znGF6VIgrimf0CdUyGbjj/I
-         V+Fi7yIEOmCOiEEgw7c6KngRcZxsTzOsxvENEnaJ3e0AZLvXtRf42yc1CHh/Dku4Igsd
-         wXIQkB6n7i5Ncbx1ONLRlWenDC+9peWGJ8dffkH2OYM60IAwiA1sQfK23xnROTF7mQ1c
-         b2ooUhv7QYYgR42WVBjIYC9MHztzPLYvl8RVk5BuVAIjSSdjWw8zmqm8dDB5IdFS6UyG
-         obTQ==
-X-Gm-Message-State: AOAM530ujKUny+xptR1x1D3rU1YxC01z426C9Dslrh1ZOrFEGP7hHewK
-        L7oJ8J2RNxCIt9wjK8sKZ2UmFiaiRF5Rbw==
-X-Google-Smtp-Source: ABdhPJw40uix8gyXZdwHUzpewmwIb9Viri2T1doNWTWi1E++yUqU3ErkmRrOduwd0FMrgVO7R+vIhw==
-X-Received: by 2002:ac8:530f:: with SMTP id t15mr13595623qtn.167.1613842060042;
-        Sat, 20 Feb 2021 09:27:40 -0800 (PST)
-Received: from DESKTOPJC0RTV5 (pool-173-48-78-29.bstnma.fios.verizon.net. [173.48.78.29])
-        by smtp.gmail.com with ESMTPSA id a9sm1004636qtx.96.2021.02.20.09.27.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 20 Feb 2021 09:27:39 -0800 (PST)
-From:   <charley.ashbringer@gmail.com>
-To:     "'Alexandre Belloni'" <alexandre.belloni@bootlin.com>
-Cc:     <a.zummo@towertech.it>, <linux-rtc@vger.kernel.org>
-References: <000801d706f0$31f2c370$95d84a50$@gmail.com> <YDBZOMKQreMcCEXz@piout.net>
-In-Reply-To: <YDBZOMKQreMcCEXz@piout.net>
-Subject: RE: [bug report] out-of-bound array access in drivers/rtc/lib.c rtc_month_days
-Date:   Sat, 20 Feb 2021 12:27:36 -0500
-Message-ID: <000f01d707ad$aee32f60$0ca98e20$@gmail.com>
+        id S230000AbhBVA5q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 21 Feb 2021 19:57:46 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:56151 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229876AbhBVA5o (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 21 Feb 2021 19:57:44 -0500
+X-Originating-IP: 90.65.108.55
+Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E5FBE240002;
+        Mon, 22 Feb 2021 00:56:52 +0000 (UTC)
+Date:   Mon, 22 Feb 2021 01:56:52 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 5.12
+Message-ID: <YDMBVCTgavxdqkj6@piout.net>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJNV6U8H1Ym7EyydOwVWl3Qide36AFDVmtwqWqQGnA=
-Content-Language: en-us
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi!
+Hello Linus,
 
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Sent: Friday, February 19, 2021 7:35 PM
-> To: charley.ashbringer@gmail.com
-> Cc: a.zummo@towertech.it; linux-rtc@vger.kernel.org
-> Subject: Re: [bug report] out-of-bound array access in drivers/rtc/lib.c
-> rtc_month_days
-> 
-> Hello,
-> 
-> On 19/02/2021 13:51:12-0500, charley.ashbringer@gmail.com wrote:
-> > Hi Alessandro and Alexandre,
-> > Greetings, I'm a 2nd year PhD student who is interested in using UBSan
-> > to the kernel.
-> > Through some experiment, I found a out-of-bound array access in
-> > function rtc_month_days.
-> > More specifically, the through the call chain of
-> > davinci_rtc_set_time/davinci_rtc_set_alarm -> convert2days ->
-> > rtc_month_days, since davinci_rtc_set_time/davinci_rtc_set_alarm are
-> > ioctl functions, thus the 2nd parameter, struct rtc_time *tm, is
-> > passed in purely from user-space which can be any value.
-> 
-> This part is not true and is probably what you are missing, the userspace
-> input is sanitized by the core, see the rtc_valid_tm calls
-> here:
-> https://elixir.bootlin.com/linux/v5.11/source/drivers/rtc/interface.c#L130
-> and here:
-> https://elixir.bootlin.com/linux/v5.11/source/drivers/rtc/interface.c#L457
-> 
+Here is the RTC subsystem pull request for v5.12. Many cleanups and a
+few drivers removal this cycle.
 
-Thank you so much for pointing this out, 
-I didn't notice when probing each individual rtc device, 
-there is a devm_rtc_allocate_device which essentially 
-sanitized the ioctl input from the core.
-This broaden my understanding of how ioctl works a lot, 
-thank you so much!
+The following changes since commit 5c8fe583cce542aa0b84adc939ce85293de36e5e:
 
-Best regards,
-Changming
+  Linux 5.11-rc1 (2020-12-27 15:30:22 -0800)
 
-> --
-> Alexandre Belloni, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.12
+
+for you to fetch changes up to 49dfc1f16b03a6abc17721d4600f7a0bf3d3e4ed:
+
+  rtc: abx80x: Add utility function for writing configuration key (2021-02-13 23:03:26 +0100)
+
+----------------------------------------------------------------
+RTC for 5.12
+
+Subsystem:
+ - Introduce features bitfield and the first feature: RTC_FEATURE_ALARM
+
+Removed drivers:
+ - ab3100
+ - coh901331
+ - tx4939
+ - sirfsoc
+
+Drivers:
+ - use rtc_lock and rtc_unlock instead of opencoding
+ - constify all struct rtc_class_ops
+ - quiet maybe-unused variable warning
+ - replace spin_lock_irqsave with spin_lock in hard IRQ
+ - pcf2127: disable Power-On Reset Override and run OTP refresh
+
+----------------------------------------------------------------
+Alexandre Belloni (58):
+      rtc: opal: set range
+      rtc: introduce features bitfield
+      rtc: pl031: use RTC_FEATURE_ALARM
+      rtc: armada38x: remove armada38x_rtc_ops_noirq
+      rtc: cmos: remove cmos_rtc_ops_no_alarm
+      rtc: mv: remove mv_rtc_alarm_ops
+      rtc: m48t59: remove m48t02_rtc_ops
+      rtc: pcf2127: remove pcf2127_rtc_alrm_ops
+      rtc: pcf85063: remove pcf85063_rtc_ops_alarm
+      rtc: rx8010: drop a struct rtc_class_ops
+      rtc: pcf85363: drop a struct rtc_class_ops
+      rtc: m41t80: constify m41t80_rtc_ops
+      rtc: opal: constify opal_rtc_ops
+      rtc: rv3028: constify rv3028_rtc_ops
+      rtc: rv3029: constify rv3029_rtc_ops
+      rtc: rv3032: constify rv3032_rtc_ops
+      rtc: rv8803: constify rv8803_rtc_ops
+      rtc: tps65910: remove tps65910_rtc_ops_noirq
+      rtc: ac100: use rtc_lock/rtc_unlock
+      rtc: asm9260: use rtc_lock/rtc_unlock
+      rtc: ds1305: use rtc_lock/rtc_unlock
+      rtc: ds1307: use rtc_lock/rtc_unlock
+      rtc: ds1685: use rtc_lock/rtc_unlock
+      rtc: ds3232: use rtc_lock/rtc_unlock
+      rtc: hym8563: use rtc_lock/rtc_unlock
+      rtc: m41t80: use rtc_lock/rtc_unlock
+      rtc: mcp795: use rtc_lock/rtc_unlock
+      rtc: pcf2123: use rtc_lock/rtc_unlock
+      rtc: rv3029: use rtc_lock/rtc_unlock
+      rtc: rx8010: use rtc_lock/rtc_unlock
+      rtc: rx8025: use rtc_lock/rtc_unlock
+      rtc: stm32: use rtc_lock/rtc_unlock
+      rtc: rv3028: fix PORF handling
+      rtc: rv3028: remove useless warning messages
+      dt-bindings: rtc: pcf2127: update bindings
+      rtc: class: remove bogus documentation
+      rtc: armada38x: depend on OF
+      rtc: bq32k: quiet maybe-unused variable warning
+      rtc: brcmstb-waketimer: quiet maybe-unused variable warning
+      rtc: digicolor: quiet maybe-unused variable warning
+      rtc: ds1672: quiet maybe-unused variable warning
+      rtc: ds3232: quiet maybe-unused variable warning
+      rtc: isl1208: quiet maybe-unused variable warning
+      rtc: m41t80: quiet maybe-unused variable warning
+      rtc: meson: quiet maybe-unused variable warning
+      rtc: pcf85063: quiet maybe-unused variable warnings
+      rtc: pcf85363: quiet maybe-unused variable warning
+      rtc: rs5c372: quiet maybe-unused variable warning
+      rtc: rv3028: quiet maybe-unused variable warning
+      rtc: rv3029: quiet maybe-unused variable warning
+      rtc: rv3032: quiet maybe-unused variable warning
+      rtc: rv8803: quiet maybe-unused variable warning
+      rtc: rx8010: quiet maybe-unused variable warning
+      rtc: rx8581: quiet maybe-unused variable warning
+      rtc: s35390a: quiet maybe-unused variable warning
+      rtc: sd3078: quiet maybe-unused variable warning
+      rtc: s3c: stop setting bogus time
+      rtc: s3c: quiet maybe-unused variable warning
+
+Arnd Bergmann (4):
+      rtc: rx6110: fix build against modular I2C
+      rtc: remove sirfsoc driver
+      rtc: remove ste coh901 driver
+      rtc: remove ste ab3100 driver
+
+Bartosz Golaszewski (3):
+      rtc: s5m: select REGMAP_I2C
+      rtc: s5m: use devm_i2c_new_dummy_device()
+      rtc: s5m: check the return value of s5m8767_rtc_init_reg()
+
+Biwen Li (1):
+      rtc: pcf2127: properly set flag WD_CD for rtc chips(pcf2129, pca2129)
+
+Claudiu Beznea (1):
+      dt-bindings: rtc: at91rm9200: add sama7g5 compatible
+
+David Gow (1):
+      rtc: zynqmp: depend on HAS_IOMEM
+
+Dmitry Osipenko (1):
+      rtc: tps65910: Support wakeup-source property
+
+Guixiong Wei (1):
+      rtc: pm8xxx: Read ALARM_EN and update to alarm enabled status
+
+Kevin P. Fleming (1):
+      rtc: abx80x: Add utility function for writing configuration key
+
+Marek Vasut (1):
+      rtc: pcf8563: Add NXP PCA8565 compatible
+
+Philipp Rosenberger (2):
+      rtc: pcf2127: Disable Power-On Reset Override
+      rtc: pcf2127: Run a OTP refresh if not done before
+
+Thomas Bogendoerfer (1):
+      rtc: tx4939: Remove driver
+
+Xiaofei Tan (6):
+      rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ
+      rtc: pm8xxx: Replace spin_lock_irqsave with spin_lock in hard IRQ
+      rtc: r7301: Replace spin_lock_irqsave with spin_lock in hard IRQ
+      rtc: tegra: Replace spin_lock_irqsave with spin_lock in hard IRQ
+      rtc: mxc: Replace spin_lock_irqsave with spin_lock in hard IRQ
+      rtc: mxc_v2: Replace spin_lock_irqsave with spin_lock in hard IRQ
+
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml         |   1 +
+ .../devicetree/bindings/rtc/nxp,pcf2127.yaml       |  51 +++
+ Documentation/devicetree/bindings/rtc/pcf8563.txt  |   3 +-
+ .../devicetree/bindings/rtc/sirf,prima2-sysrtc.txt |  13 -
+ .../bindings/rtc/stericsson,coh901331.txt          |  16 -
+ .../devicetree/bindings/rtc/trivial-rtc.yaml       |   6 +-
+ drivers/rtc/Kconfig                                |  38 +-
+ drivers/rtc/Makefile                               |   4 -
+ drivers/rtc/class.c                                |  10 +-
+ drivers/rtc/interface.c                            |  12 +-
+ drivers/rtc/rtc-ab3100.c                           | 254 ------------
+ drivers/rtc/rtc-abx80x.c                           |  39 +-
+ drivers/rtc/rtc-ac100.c                            |   4 +-
+ drivers/rtc/rtc-armada38x.c                        |  21 +-
+ drivers/rtc/rtc-asm9260.c                          |   6 +-
+ drivers/rtc/rtc-bq32k.c                            |   2 +-
+ drivers/rtc/rtc-brcmstb-waketimer.c                |   2 +-
+ drivers/rtc/rtc-cmos.c                             |  17 +-
+ drivers/rtc/rtc-coh901331.c                        | 290 --------------
+ drivers/rtc/rtc-digicolor.c                        |   2 +-
+ drivers/rtc/rtc-ds1305.c                           |   5 +-
+ drivers/rtc/rtc-ds1307.c                           |   5 +-
+ drivers/rtc/rtc-ds1672.c                           |   2 +-
+ drivers/rtc/rtc-ds1685.c                           |   6 +-
+ drivers/rtc/rtc-ds3232.c                           |   7 +-
+ drivers/rtc/rtc-hym8563.c                          |   5 +-
+ drivers/rtc/rtc-isl1208.c                          |   2 +-
+ drivers/rtc/rtc-m41t80.c                           |  25 +-
+ drivers/rtc/rtc-m48t59.c                           |  22 +-
+ drivers/rtc/rtc-mcp795.c                           |   5 +-
+ drivers/rtc/rtc-meson.c                            |   2 +-
+ drivers/rtc/rtc-mv.c                               |  14 +-
+ drivers/rtc/rtc-mxc.c                              |   5 +-
+ drivers/rtc/rtc-mxc_v2.c                           |   7 +-
+ drivers/rtc/rtc-opal.c                             |  27 +-
+ drivers/rtc/rtc-pcf2123.c                          |   5 +-
+ drivers/rtc/rtc-pcf2127.c                          |  46 ++-
+ drivers/rtc/rtc-pcf85063.c                         |  49 +--
+ drivers/rtc/rtc-pcf85363.c                         |  10 +-
+ drivers/rtc/rtc-pcf8563.c                          |   2 +
+ drivers/rtc/rtc-pl031.c                            |   8 +-
+ drivers/rtc/rtc-pm8xxx.c                           |  18 +-
+ drivers/rtc/rtc-r7301.c                            |   5 +-
+ drivers/rtc/rtc-rs5c372.c                          |   2 +-
+ drivers/rtc/rtc-rv3028.c                           |  23 +-
+ drivers/rtc/rtc-rv3029c2.c                         |  22 +-
+ drivers/rtc/rtc-rv3032.c                           |  13 +-
+ drivers/rtc/rtc-rv8803.c                           |  13 +-
+ drivers/rtc/rtc-rx6110.c                           |   4 +-
+ drivers/rtc/rtc-rx8010.c                           |  21 +-
+ drivers/rtc/rtc-rx8025.c                           |   5 +-
+ drivers/rtc/rtc-rx8581.c                           |   2 +-
+ drivers/rtc/rtc-s35390a.c                          |   2 +-
+ drivers/rtc/rtc-s3c.c                              |  17 +-
+ drivers/rtc/rtc-s5m.c                              |  33 +-
+ drivers/rtc/rtc-sd3078.c                           |   2 +-
+ drivers/rtc/rtc-sirfsoc.c                          | 446 ---------------------
+ drivers/rtc/rtc-stm32.c                            |   4 +-
+ drivers/rtc/rtc-tegra.c                            |   6 +-
+ drivers/rtc/rtc-tps65910.c                         |  19 +-
+ drivers/rtc/rtc-tx4939.c                           | 303 --------------
+ include/linux/rtc.h                                |   2 +
+ include/linux/rtc/sirfsoc_rtciobrg.h               |  21 -
+ include/uapi/linux/rtc.h                           |   5 +
+ 64 files changed, 321 insertions(+), 1717 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/sirf,prima2-sysrtc.txt
+ delete mode 100644 Documentation/devicetree/bindings/rtc/stericsson,coh901331.txt
+ delete mode 100644 drivers/rtc/rtc-ab3100.c
+ delete mode 100644 drivers/rtc/rtc-coh901331.c
+ delete mode 100644 drivers/rtc/rtc-sirfsoc.c
+ delete mode 100644 drivers/rtc/rtc-tx4939.c
+ delete mode 100644 include/linux/rtc/sirfsoc_rtciobrg.h
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
