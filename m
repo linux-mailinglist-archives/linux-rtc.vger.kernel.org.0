@@ -2,140 +2,108 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A9E3223B2
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Feb 2021 02:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D543223BF
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Feb 2021 02:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbhBWB1w (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Feb 2021 20:27:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38924 "EHLO mail.kernel.org"
+        id S230019AbhBWBdo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Feb 2021 20:33:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230164AbhBWB1l (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 22 Feb 2021 20:27:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E53D64E57;
-        Tue, 23 Feb 2021 01:27:00 +0000 (UTC)
+        id S229967AbhBWBdn (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 22 Feb 2021 20:33:43 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D55B960233;
+        Tue, 23 Feb 2021 01:33:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614043620;
-        bh=+jNCruc+MkACHldsssuUZj1pB5jnc3ckCdEhn63aZ3o=;
+        s=k20201202; t=1614043983;
+        bh=SidThf39RHR584VvQ2PFUpvKbaI6ZS/1pOYS/H0qYgY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SCEbCJ1nJRIcMhV6qGtieEkrJRXyo6qpWJEqetyNU8mP5Jc4ErI09EYGq4fhMtmKH
-         e0FxPfE6asbauVfZ9+1UM1DWzJ74gTNHU31AKh8c4Sl8Z6gir2HzfOcNgBiWamoP/L
-         M/do1p+yoilcZtwY0asU0u0fQLhjtkfqiRTLNgqlL0NIh9LEjmnBgJzXvJeKAiokoo
-         EytYoy8OLcp5Ty/ZSlwErxv9blNXfbMGUH4OIt1Ryf8tMpleWWj/q/jmF5SL87Ahhw
-         vj4Y/oFpwohenyZuh7yjzld56y4gVcf30KNB8twNaB1gg57HoLfTY7ARQCgwXgPr5X
-         pQcFTm5SrcyDQ==
+        b=Kv5Rpg55CfBeqg69qrft4n/IYgjL4QVqpK7mb6WIgQDcaM0sTLPTOVfK5qxSzy70S
+         SGd/KiYm+SpyMohMIRc8d8ZHCWbIgEFhiI40yzd9TWIqqnVk0E86B0/eDFc/L0bwTs
+         5Seqoyxxmc0pp6tJVWCNuWpjhjpR5NFHrUsPY5rQ1PMcM4vvG7q+cGfjCeroXRf/gP
+         3XGGePnqCmqAvISX2PRCzIt+OJ7EuA8VxHIOag8ozHLIBZF5J3K7OytEh43cB5OIZw
+         PdVpClLlcKCSR8Y5YDfADTKacEd98t/cBj7k0ZYbpY5HEhJfNS2aeZDbUNjBYZXOC7
+         8Bzh19ZQDOkBg==
 Received: by earth.universe (Postfix, from userid 1000)
-        id 691493C0C96; Tue, 23 Feb 2021 02:26:57 +0100 (CET)
-Date:   Tue, 23 Feb 2021 02:26:57 +0100
+        id 9E1313C0C96; Tue, 23 Feb 2021 02:33:00 +0100 (CET)
+Date:   Tue, 23 Feb 2021 02:33:00 +0100
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mtd@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCHv1 1/6] rtc: m41t80: add support for protected clock
-Message-ID: <20210223012657.bbp5u65nw4tpcjgd@earth.universe>
+        Collabora Kernel ML <kernel@collabora.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCHv1 5/6] dt-bindings: mtd: jedec,spi-nor: add sst25vf032b
+Message-ID: <20210223013300.ouwilfkk5hyyhzdi@earth.universe>
 References: <20210222171247.97609-1-sebastian.reichel@collabora.com>
- <20210222171247.97609-2-sebastian.reichel@collabora.com>
- <YDQgLTPE0E+/1Cwv@piout.net>
- <YDQhgkftoW4J9AtY@piout.net>
+ <20210222171247.97609-6-sebastian.reichel@collabora.com>
+ <CAL_JsqLmcRqFW5ufy-zY9dfqpiwACxfOHrrGphTx2UGMBVj-7w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vkwv4tifbmgtzlgu"
+        protocol="application/pgp-signature"; boundary="peq7earpm2cetdte"
 Content-Disposition: inline
-In-Reply-To: <YDQhgkftoW4J9AtY@piout.net>
+In-Reply-To: <CAL_JsqLmcRqFW5ufy-zY9dfqpiwACxfOHrrGphTx2UGMBVj-7w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---vkwv4tifbmgtzlgu
+--peq7earpm2cetdte
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Feb 22, 2021 at 10:26:26PM +0100, Alexandre Belloni wrote:
-> On 22/02/2021 22:20:47+0100, Alexandre Belloni wrote:
-> > On 22/02/2021 18:12:42+0100, Sebastian Reichel wrote:
-> > > Congatec's QMX6 system on module (SoM) uses a m41t62 as RTC. The
-> > > modules SQW clock output defaults to 32768 Hz. This behaviour is
-> > > used to provide the i.MX6 CKIL clock. Once the RTC driver is probed,
-> > > the clock is disabled and all i.MX6 functionality depending on
-> > > the 32 KHz clock has undefined behaviour. On systems using hardware
-> > > watchdog it seems to likely trigger a lot earlier than configured.
-> > >=20
-> > > The proper solution would be to describe this dependency in DT,
-> > > but that will result in a deadlock. The kernel will see, that
-> > > i.MX6 system clock needs the RTC clock and do probe deferral.
-> > > But the i.MX6 I2C module never becomes usable without the i.MX6
-> > > CKIL clock and thus the RTC's clock will not be probed. So from
-> > > the kernel's perspective this is a chicken-and-egg problem.
-> > >=20
-> >=20
-> > Reading the previous paragraph, I was going to suggest describing the
-> > dependency and wondering whether this would cause a circular dependency.
-> > I guess this will keep being an issue for clocks on an I2C or SPI bus...
-
-Yes, it is a circular dependency on this particular system on
-module. It only works because the RTC enables the clock by
-default. The i.MX6 CKIL is expected to be always enabled.
-
-> > > Technically everything is fine by not touching anything, since
-> > > the RTC clock correctly enables the clock on reset (i.e. on
-> > > battery backup power loss) and also the bootloader enables it
-> > > in case a kernel without this support has been booted.
-> > >=20
-> > > The 'protected-clocks' property is already in use for some clocks
-> > > that may not be touched because of firmware limitations and is
-> > > described in Documentation/devicetree/bindings/clock/clock-bindings.t=
-xt.
-> > >=20
-> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Mon, Feb 22, 2021 at 06:15:11PM -0600, Rob Herring wrote:
+> On Mon, Feb 22, 2021 at 11:13 AM Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+> >
+> > The binding is already used by the driver. Update documentation
+> > accordingly.
+> >
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  Documentation/devicetree/bindings/mtd/jedec,spi-nor.txt | 1 +
+> >  1 file changed, 1 insertion(+)
 >=20
-> Or maybe you expected me to apply the patch, how are the following
-> patches dependent on this one?
+> This is now DT schema format. Landed in Linus' tree today.
 
-The last patch, which introduces a new board has a runtime
-dependency on this patch. Without this feature the board
-goes into a reboot loop because its bootloader enables the
-i.MX6 watchdog and without the CKIL its timing is messed up.
+Indeed and it already contains sst,sst25vf032b.
+This patch can be ignored.
 
-But it's a pure runtime dependency for a new board, so it should
-be fine to merge this via your tree. It basically means the board
-is only working once your tree and arm tree have been merged,
-which seems ok from my POV.
+Thanks,
 
 -- Sebastian
 
---vkwv4tifbmgtzlgu
+--peq7earpm2cetdte
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmA0WdQACgkQ2O7X88g7
-+prAbBAAkf1j4TWyAUwNGCEKZRb6+YySPrlQpkb3EBCE0zV+l99HVYKLfAz5CwCH
-mqVf4GgzAE64+byU2NfmMcXiLikzUlcVR0gN572ED/a5ZEyRkqm7euVnV7jzL6eG
-olAlqpcEy7d6y5R0pHDytFbPAN7C5LN8aTl6zcuroH9QcuFcezQpEd+01PkQMSNJ
-8gT6dXPdeKoy8AqTcwVBel4CS3oQc/mSQ3fuMBa6+UTz90lznin2vyl4arHMd+tv
-LLQvlrn6T2X+rgQ3UNyfEsuSo4WFIdreoWIobQgUmZIhXjno04PTNghc3mhHpHUE
-oL6DMhyB474mdGS3cFIgDnTwFQFKaLOKQiJDcgTBDU497SsTZxOf/DDvU6MEtkzT
-VeCOmfm9xjYxNa0yALMic/nSibePV/bdXiak/njl3KOd5ElQ9RcvlsKMAlK8k1YM
-kKr47aye0+n4hivy1vZR2Kh+wx3BrsGnsYF9gJVUqCkuwA1X58PU6Iq9QVxxMDe2
-SQ62Jz5Y/kg+c+eFas4AeT1NRFZhEvcfni8pHdF2TketdpM4VLQCAdYqkHhpz4Wx
-qmv9E/FU7qly5kOTjcIKhwk7MS4deNZaQoQt/MUs1LN0PBv162jneWsqjmRgLyMH
-cxEOJN/MZVgB5gKG+U5wmHksMAjIfLi3OOC668MhSh2loA48XvE=
-=Hawo
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmA0W0wACgkQ2O7X88g7
++ppMiBAAnBRRR4ntus9a9JePpyG2+61admQniYXmvTJtKohNBG1463YJj+URPhBv
+4EMUHj4Mkmo5SPrSyEcIpal00Hb0+LOP/KwTCvHNrbGRp4myzc15+l1fErFNh/ya
+81RWoUagWwhPeQZhkumO/69Hb+j/wj9iSQfl72VwzmQaQeJ0X/xh24ONlIL5M7xP
+Yk7P3j+YULsFM8ZZnpyAfxSnYS/okRrvOr70nrHGLrtfBd9mHV/JtOMXHWepInAc
+4Ar852HZQI2lbtz6dXZnIFsq5VfEw+pczi7YtnduHbz95idImndViMk982jx9zFz
+GkTx3MSxzM/xOZxzrJq8iPHdLIguV0DW5Q7p5hygjcox79ACQw+iTMHrbzf/rZPa
+QXAMRnb/Gr1Q48LOqgSmT9Qk/ALFg2Y3QjOlJYlC9/9f6S5S53FY/4XUatqmvz5/
+LbsgFHWceif6LL6m7KMoKgHvPiKcY3MP2LDkXSni8gxQLqNF6hWav70jJ9fXcEsZ
+3hgHuGBii0pX6MXl7jxu7qCD8OQ7cUCITJSD/gx6Jgr+CflDEYZWRDgu1x0RyqFI
+QQc2F1EcQ1EBmeC7JZfQAx3gf++BFVVW1WkaI9pHZwzKigBW8+UdEY9kEtJH3Fvt
+JIM7+72d80QDfWZvJpa81fltQfRwHWLDwkmaFZfEF4sWrqkOmq8=
+=+yJ9
 -----END PGP SIGNATURE-----
 
---vkwv4tifbmgtzlgu--
+--peq7earpm2cetdte--
