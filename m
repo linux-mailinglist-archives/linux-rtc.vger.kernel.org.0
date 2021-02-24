@@ -2,81 +2,125 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C7C322514
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Feb 2021 06:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C458324164
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Feb 2021 17:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbhBWFMm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Feb 2021 00:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S230386AbhBXPzg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Feb 2021 10:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbhBWFMl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Feb 2021 00:12:41 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E8DC061574;
-        Mon, 22 Feb 2021 21:12:00 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id g1so55709687ljj.13;
-        Mon, 22 Feb 2021 21:12:00 -0800 (PST)
+        with ESMTP id S235095AbhBXOz6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Feb 2021 09:55:58 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA79C061793;
+        Wed, 24 Feb 2021 06:55:18 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mm21so3263612ejb.12;
+        Wed, 24 Feb 2021 06:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MqKNcCWFmGpjZ57u9e3bWqEH/En69wSXNYW/psMEX2A=;
-        b=XBIU3ShVfEYVkEfsJoA0zfHk+Idyqi6d6Z7/C5x061wFD604LIHtE2G3rdjNtmRI6C
-         aoXib0vcLdPaLrUwEia9MaVe2NbvprPBnctkHWN03strp7uoWDb+pnS5SlynldbNDVPB
-         Jc6e+OOazOyAZic0DCJxMg8nWKnYb0uuwlfbPIOMcyE53QXmEstQrz67QU0CoU0gHEdb
-         pkmpWFAbHjNiFak7P7pjWGXdjHxn7uM0MwdtXuvfaNz2kaxTue+UMWqHxGWvVT9oK9En
-         ahEPGlsFDCkRjvsvYyvEb/I3PMlw2N9vFPGQWSQzFprBQXd7iBG02u0hd+2uXMTtvZtb
-         47iw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3j0lhpP6wl1sNXXGOjAgQjtmVdXg0Q4ttmyImYyylq8=;
+        b=Z9znUNeUXaL0Aza6POIYwbQm0Ntea6gy0q18rISzV7hBjNPJL+QJ2r5ObTKH9sye68
+         gA4acDuFif3/2wHSnCFGi+pHeGpk6Oq37ihYrxvQmH7Q3FSVtPUn+6Cu//XggjwvzaTd
+         KSwIDRdM4lvzrNlqqDBdAa8YsZxEEBYcDAflnDwPoXrxVDp9Zmd6eT74QJOIFGGDdHAC
+         IUepO1U7PdVDK99B+X4JG8SS6P7VJWr/dnU/+Q0UJWGNdPNz959zWON/ueozhPuiJUIe
+         cl+OmOI8m+Ua2EX8KnQeVS4un9nqruINYEL4OXRolKHfOHJ93b3LLVgDZfav+lZWzUSU
+         1ytw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MqKNcCWFmGpjZ57u9e3bWqEH/En69wSXNYW/psMEX2A=;
-        b=MgAssONdBlUL3YRBLL7VYKEFDe2eKEjEZYFcZwXKOc7Zg/6Z/geyfafpMvC6F1Bjza
-         InshzVf2vOZ+eNlIEfG9vO9I4u0GCRhrhJjqnN241x0He5lECWX/S8myoAExIsxapmt4
-         dshWR9Gmh4NoOIZTMTZZMgqwvuSjn5mRqFKCfTyV/M45kqncPaIsAIhgUjXAZzjCWq8W
-         AaJ8CdjMMPIoxga6ksl5g55G2X9p/QE0Z3BjPuecyvYbj0/kY9r/yrK166pDx41uZ9gr
-         U2GNUTIuZDR8n7fDjJH2E25IcpZm7+P4fPliTkahEVsIG8N63xs0sSK6Ca/RtDzXUraB
-         7Tnw==
-X-Gm-Message-State: AOAM533OIkpsSeHN1twfIm8HXEO5VObKTf0HwnYUvC907QP+NqO9Gn62
-        SGxCvV50FvYvOrmTXym6RqA=
-X-Google-Smtp-Source: ABdhPJyrVHXWEDuuAo5M4a3B67jAnmirbj+V3eqJCAz0dRDjZXUlzTZ5E5rz/CGQq1K0k5QoUiuv1Q==
-X-Received: by 2002:a05:651c:54a:: with SMTP id q10mr15763669ljp.454.1614057119252;
-        Mon, 22 Feb 2021 21:11:59 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id 124sm229007lfh.252.2021.02.22.21.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Feb 2021 21:11:58 -0800 (PST)
-Subject: Re: [bug] RTC alarm vs system suspend race condition
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>
-References: <0a82c37e-ba83-a853-1db8-ba267f7728d7@gmail.com>
- <YC7GVnhsOmQ3uCnL@piout.net>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6ca90632-c149-5f8e-28c5-1a2a78c3e42b@gmail.com>
-Date:   Tue, 23 Feb 2021 08:11:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3j0lhpP6wl1sNXXGOjAgQjtmVdXg0Q4ttmyImYyylq8=;
+        b=BFFCtHK4GX+Mxm7zAR2yllQinZW0RjcxrJqnJffGgJ/f9ZQMfHOc0HrGJzdqGs/PUA
+         F1+MkBGMNTNqpSL8VuMf6y3xqnRce5zKs285KQ328WwK8HR8QMd86btKBpexh4P8vXuK
+         VlZuBqxsvlQ0FHHJIk0uj3Z50ztuziMhZpON+SM2uKObm5UW6Ij2zycMIXbyVyUoyBNJ
+         T6BStDhQDHhsvtplSCaMM5hCOOIeAya49YlcfA/M/SaWhbU1Gxq4k5qugHHey2L+USje
+         lwZ8VoXpshUd1bScA2FuWW9aGns9E4mISXkG9YcU8KVntReImrNBLYObFUJRG9rkEdQL
+         x7Sg==
+X-Gm-Message-State: AOAM532PH0uqMfCo17mhIBsqfKXfHqRx7xCPYrPf30hD/wkjF9+EgQIX
+        LjbLxuWQuIf3MuVlExLeykRQz5KyGNMCqz3g6XRSsNIYz6W7jw==
+X-Google-Smtp-Source: ABdhPJwzoLFR9z8HNK5pzU4oY+7wvNKHChCFGqd02dOz+YXO9SlTW3G5S1oQ+8o+MJRmqkCSV39qF4IgIMYRc38PULI=
+X-Received: by 2002:a17:907:7291:: with SMTP id dt17mr5204181ejc.526.1614178516794;
+ Wed, 24 Feb 2021 06:55:16 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YC7GVnhsOmQ3uCnL@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAH+2xPDs8f=bR7y5QYCpYpJTE1KJPfuiML1og3S9TfSFtOFBHw@mail.gmail.com>
+ <20210222224325.GB177866@roeck-us.net>
+In-Reply-To: <20210222224325.GB177866@roeck-us.net>
+From:   Bruno Thomsen <bruno.thomsen@gmail.com>
+Date:   Wed, 24 Feb 2021 15:55:00 +0100
+Message-ID: <CAH+2xPDDiUxKk3Y3R=fj0cOU+7vJRSC5yUb_XmfOUXnqoe+2Zg@mail.gmail.com>
+Subject: Re: watchdog: pcf2127: systemd fails on 5.11
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-rtc@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Lars Alex Pedersen <laa@kamstrup.com>,
+        Bruno Thomsen <bth@kamstrup.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-18.02.2021 22:56, Alexandre Belloni пишет:
-> Hello,
-> 
-> I just wanted to thank you for reporting this issue. I didn't yet have
-> the time to work on that but this is on my radar. There is also another
-> issue when resuming and I'm not yet sure how we can solve it for all
-> platforms.
+Den man. 22. feb. 2021 kl. 23.43 skrev Guenter Roeck <linux@roeck-us.net>:
+>
+> On Thu, Feb 18, 2021 at 01:35:36PM +0100, Bruno Thomsen wrote:
+> > Hi,
+> >
+> > After updating the kernel from 5.8.17 to 5.11 systemd (246.6) is
+> > unable to init watchdog in pcf2127 during boot. Kernel option
+> > CONFIG_WATCHDOG_OPEN_TIMEOUT=300 is working as expected.
+> > It's possible to get watchdog from userspace working in
+> > the following 2 ways.
+> > 1) Disable watchdog in systemd and use busybox watchdog.
+> > 2) Restart systemd after boot with "kill 1".
+> >
+> > During boot setting the system clock from RTC is working.
+> > RTC read/write from userland with hwclock is also working.
+> >
+> > DTS: imx7d-flex-concentrator-mfg.dts
+> > SOC: NXP i.MX7D
+> > Drivers: rtc-pcf2127, spi-imx
+> > Communication: SPI
+> >
+> > There are no patches applied to the kernel.
+> >
+> > When systemd changes watchdog timeout it receives an
+> > error that to our best knowledge comes from spi-imx[1].
+> >
+> > We suspect it's a race condition between drivers or
+> > incompatible error handling.
+> >
+> > Any help in investigating the issue is appreciated.
+> >
+> Difficult to say without access to hardware. The code does have a
+> potential problem, though: It calls pcf2127_wdt_ping not only from
+> watchdog code but also from various rtc related functions, but there
+> is not access protection. This is even more concerning because the ping
+> function is called from an interrupt handler.  At the same time, the
+> watchdog initialization sets min_hw_heartbeat_ms to 500, which suggests
+> that there may be a minimum time between heartbeats (which is clearly
+> violated by the current code).
 
-No problems, please feel free to ping us if you'll have something to test.
+Hi Guenter
+
+Thanks for input.
+
+You could be right about that, I don't think the watchdog feature should
+be available for use if the alarm feature is enabled due to how CTRL2
+register behaves.
+
+The hardware I am testing on is a custom board, but it's actually
+possible to get a Raspberry Pi module called RasClock that has
+the chip.
+
+I will test some locking around WD_VAL register access as that is used
+in pcf2127_wdt_ping function.
+
+My initial test shows that spin_lock_irqsave around regmap calls are not
+a good idea as it result in:
+BUG: scheduling while atomic: watchdog/70/0x00000002
+BUG: scheduling while atomic: systemd/1/0x00000002
+
+/Bruno
