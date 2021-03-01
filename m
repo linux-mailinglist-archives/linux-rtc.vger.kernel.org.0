@@ -2,100 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB87326C31
-	for <lists+linux-rtc@lfdr.de>; Sat, 27 Feb 2021 09:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F923327587
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Mar 2021 01:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbhB0IJI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 27 Feb 2021 03:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhB0IJG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 27 Feb 2021 03:09:06 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2A3C06174A;
-        Sat, 27 Feb 2021 00:08:22 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id k12so4281983ljg.9;
-        Sat, 27 Feb 2021 00:08:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ml3mDD0xY/VjmOnKUym0KmbG6rdyhQ3p6qFu1Ts6+ss=;
-        b=kzVxjYPsxjFuHzRp7sCPtajEW8sPI6n46NLkyHoCEm6qA6lfO6w5Y+Ql7x/fcFZ5Vp
-         A9E82/aQxKz+Na17wdrVxUo1+IGCU3AFe1npmcTa5/yxHq5acaqit8fq4MKh2rtonmJl
-         NzBCF6lufw3SXvfHOefyaUCBpJcpbOIvhbnrpJwINPT3oBoZrKi2XnuAtFpeSSjf19cf
-         OjDof4HC63HCXoqyVeuLOw507kGLKanCS5PzwPtilEvzWn08n3KvUSrMuRicMiL0unVl
-         ihxhclsw7r/fM0o6O/JbYphB+VsOnv/95I66z8tFoVTHIoq4mBc//YfZpQSlZlLPO2U9
-         dW0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ml3mDD0xY/VjmOnKUym0KmbG6rdyhQ3p6qFu1Ts6+ss=;
-        b=POOPlQrhQ3OSqFROKZxN2Yo5Bf03pcOpxT4jn4res09RvMgjyu4JwI5698DtSI6oWY
-         bsHocbATHINYoz4edkiGagtt38IuJ6vEMVeraaeqXLh54vfHZuDLcD2FfZ76YpfQ6O5J
-         q0SGd+oW56yXICafyf7kk2mEWrGMHuhOVtlCqFROhmnAHVTEW5m70LsY5bWVB6M/OdyC
-         PmwVmghdfepg+6yP3/2FYCb+Kob4auG9xIzUN+oCGNzwkawOxSErzesDD6jh3XeLxEBL
-         KXOVa/K7FkQwD9LDnRVqpoqfzvwJkUB7kyUkqo5PY5nyem0fTRtytn8c6UwiQcCn2lWD
-         8IqQ==
-X-Gm-Message-State: AOAM533DCaYcnnOTrLimZQduwpHok5ogoGtD4NXGUAskiag2MizkS2jV
-        rQOHAF99DjV44tVkXYtRfsHBuTor+Pk=
-X-Google-Smtp-Source: ABdhPJzSWD9ri8pIU3PeN1AuuFpUfz2deqxrZ1wUhr+g4qJEQTcZa7SGuXcmTsUfK4gUmnI6z2hBQw==
-X-Received: by 2002:a2e:8157:: with SMTP id t23mr3780650ljg.214.1614413297661;
-        Sat, 27 Feb 2021 00:08:17 -0800 (PST)
-Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.googlemail.com with ESMTPSA id d1sm1626499lfq.156.2021.02.27.00.08.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Feb 2021 00:08:17 -0800 (PST)
-Subject: Re: [PATCH] rtc: tps65910: include linux/property.h
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210225134215.2263694-1-arnd@kernel.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b267c5da-a6ea-7d18-265c-7f63ed7e60f9@gmail.com>
-Date:   Sat, 27 Feb 2021 11:08:16 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S231246AbhCAARW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 28 Feb 2021 19:17:22 -0500
+Received: from mail2.directv.syn-alias.com ([69.168.106.50]:57157 "EHLO
+        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230426AbhCAARV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 28 Feb 2021 19:17:21 -0500
+DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
+        q=dns/txt; i=@wildblue.net; t=1614557800;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=7yYjwReveVoRzIq2Gybu70sAvDk=;
+        b=h00++U5jMKNPY7CiXYcLThVH+RsbV99SNFDlo/qeJIYQxA8EvEBWM5/Gy2kQLof4
+        R3VqPT5tVf8vL1/EBy/Z+prxtIVEH7jQDHjRsTeNaVFWkjRMTzma5XUvyd+MGias
+        BKXeHzU4YchMCMBG6GYe9Bm2+Tr24dEATxsP60TEhnwIW0X4FocM8QqhLFhoSieZ
+        4plJT8BhNI/tqrtFByo0Jfro3fvU0rF18moGOFhttOoYP0EH4yLd6gp+WdIx2YOa
+        DzoD/o2qlby4BOGEp0y6bRSFF2fzlQp52ABRMFqFALwef7paHQfFCVl3/MkE5dj1
+        X5I0eobY6g1AI8qD0C2xJA==;
+X_CMAE_Category: , ,
+X-CNFS-Analysis: v=2.4 cv=Nf0ja0P4 c=1 sm=1 tr=0 ts=603c3267 cx=a_idp_x a=4yk97B3yQiU+fkK3asfMng==:117 a=9cW_t1CCXrUA:10 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=DXKWVhTAvk4A:10 a=abzAvUUYLsoA:10 a=IkcTkHD0fZMA:10 a=qa6Q16uM49sA:10 a=A3tKBufkE8oA:10 a=_6YHSrkmuJwA:10 a=x7bEGLp0ZPQA:10 a=oTdODRIx186aHW-dcMcA:9 a=QEXdDO2ut3YA:10 a=xo5jKAKm-U-Zyk2_beg_:22 a=bp8DXupwIspzZ62Q3bmY:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+X-CM-Score: 0
+X-Scanned-by: Cloudmark Authority Engine
+X-Authed-Username: amFtZXNrbmlnaHRAd2lsZGJsdWUubmV0
+Received: from [10.80.118.1] ([10.80.118.1:44186] helo=md06.jasper.bos.sync.lan)
+        by mail2.directv.syn-alias.com (envelope-from <jamesknight@wildblue.net>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 64/9A-18220-6623C306; Sun, 28 Feb 2021 19:16:39 -0500
+Date:   Sun, 28 Feb 2021 19:16:38 -0500 (EST)
+From:   Rowell <jamesknight@wildblue.net>
+Reply-To: rowellhamb019@gmail.com
+Message-ID: <1357653431.27457886.1614557798788.JavaMail.zimbra@wildblue.net>
+Subject: 
 MIME-Version: 1.0
-In-Reply-To: <20210225134215.2263694-1-arnd@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [193.148.19.3]
+X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
+Thread-Index: r+qeZjfM3dj7LPUmxX/dDsRpqx3paw==
+Thread-Topic: 
+X-Vade-Verditct: spam:high
+X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrleejgddvudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfujgfpteevqfftpdggkfetufetvfdpqfgfvfenuceurghilhhouhhtmecufedtudenucgohfhorhgsihguuggvnhfjughrucdlhedttddmnecujfgurhepfffhrhfkufggtgfgihfothesthejtgdtredtjeenucfhrhhomheptfhofigvlhhluccuoehjrghmvghskhhnihhghhhtseifihhluggslhhuvgdrnhgvtheqnecuggftrfgrthhtvghrnhepvdeiudffveeggeeuueffieefudejgfefjeelhffgtdeuvddugfelfedvgefhtddunecukfhppedutddrkedtrdduudekrddupdduleefrddugeekrdduledrfeenucfhohhrsghiugguvghnjfgurhepfffhrhfkufggtgfgihfothesthejtgdtredtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutddrkedtrdduudekrddunedpmhgrihhlfhhrohhmpehjrghmvghskhhnihhghhhtseifihhluggslhhuvgdrnhgvthenpdhrtghpthhtoheplhhiphgvnhhglhgvihduleelgedtgedtudeshhhothhmrghilhdrtghomhen
+X-Vade-Client: VIASAT
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-25.02.2021 16:42, Arnd Bergmann пишет:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The added device_property_present() call causes a build
-> failure in some configurations because of the missing header:
-> 
-> drivers/rtc/rtc-tps65910.c:422:7: error: implicit declaration of function 'device_property_present' [-Werror,-Wimplicit-function-declaration]
-> 
-> Fixes: 454ba154a62c ("rtc: tps65910: Support wakeup-source property")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/rtc/rtc-tps65910.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/rtc/rtc-tps65910.c b/drivers/rtc/rtc-tps65910.c
-> index 288abb1abdb8..bc89c62ccb9b 100644
-> --- a/drivers/rtc/rtc-tps65910.c
-> +++ b/drivers/rtc/rtc-tps65910.c
-> @@ -18,6 +18,7 @@
->  #include <linux/rtc.h>
->  #include <linux/bcd.h>
->  #include <linux/math64.h>
-> +#include <linux/property.h>
->  #include <linux/platform_device.h>
->  #include <linux/interrupt.h>
->  #include <linux/mfd/tps65910.h>
-> 
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Do you get my previous mail.
