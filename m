@@ -2,150 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4994D332F91
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Mar 2021 21:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B9D333942
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Mar 2021 10:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbhCIUF4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 9 Mar 2021 15:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S229609AbhCJJx7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Mar 2021 04:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbhCIUF0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 9 Mar 2021 15:05:26 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4D3C06174A
-        for <linux-rtc@vger.kernel.org>; Tue,  9 Mar 2021 12:05:26 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id i9so3514047wml.0
-        for <linux-rtc@vger.kernel.org>; Tue, 09 Mar 2021 12:05:26 -0800 (PST)
+        with ESMTP id S230466AbhCJJxi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Mar 2021 04:53:38 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26179C06174A;
+        Wed, 10 Mar 2021 01:53:38 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id i9so6703062wml.0;
+        Wed, 10 Mar 2021 01:53:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=XGjP1IwYY9V5MTdu5gz2bGCMoHloL2HLzkBo8xqKCcU=;
-        b=xffYs7vzhK4DnRSpTaSp+Ec//mT5EfBuoIpR9TBygBXd4AVAxF82/Fgt0GRuFuiCkw
-         hCCxPhhv5u6IrdEV/DSl05apgw5Le+1xwYxkVYy7jMINaAo4S7lIKcnWmStllOApmD6n
-         IibsYpnUwstk3fEKwphtWzG5H+xHg/R+8cThq6k3biaiGf+/DKKIOLhlaTFsrVzKttzp
-         BNDdCaPRxzYad7e37L3WUDA3T12xWfzs61ENy2Xm2jbUP4xSUWMTGBkL98b5Wd8ZCLrH
-         tBKOowGx5stqetns4YSjuQ/reyAKDmaVxHe4Lg8qA+JWI3TUpGK5FTiKAfmqbc6rLhqS
-         JyAQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=w0U5hMkEPQ0LdddaxPHYRwfwYDqIwqmZHfEAmO3vAk0=;
+        b=SQmG6rWy2UTs1WF3luS2hAQ8gUh+sUo41HkJR3rjIVkAkhZSm2gOT771VWhgzFAcyn
+         mNK5u43j8ljmeUbzzudDTuQ9s8YcQ89XfmMW+HoGq8/dMBxCKGmDnhk+l5dz1bt6tk1j
+         mgPj4MnEWS5ET8JZQ2vH4f1Pc/sTjK6Wj9pEmp+6JJlKJa9kMeQek0fCDNIOypF9MSQl
+         5y73dv3hysZ5X2rvKzg3BsRjdYttn3IocscTFLKuZPJ/1os/rnMix8pl1gDKZNbIY8Z5
+         fwtbFlPgnMhl1DsMlFLSu63XrGkaepC6O/yVjLGuWbfH4uv4gOYx4LdPXFmi5jAeZwoG
+         +uzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XGjP1IwYY9V5MTdu5gz2bGCMoHloL2HLzkBo8xqKCcU=;
-        b=PFgzpWoGWswNtAQT1zzQZ1btDh0EDVce9xpJ0eSiGHH73h/0mr1xCwWx97JqZkwmed
-         pZPJgnFFXWymv3qBnkBny8r/53x/lV5hg7X9fMFyWDelNQvs98SO+ESfpXjd8fiAHAR+
-         2hrgW14u8mFCTVkeocgveEW9tCwyEqP4GEwe3BvtGGqm/je5kXCnb/2HUxgeOD7zOVpU
-         tR1GKEP/9iQq6RdrC0gLTPL0mju8fXx6vvWljwCxgl0t3KFHeeVeqEysxXPSZ8ALPFVL
-         aE+6ZbPQAy7Fwxa6yWkTKrwV/4xj/sfJKEH+JIy+s5X7l+npDyS/GdZfwA52pFWJMEq7
-         apkg==
-X-Gm-Message-State: AOAM531jz0agAS4b8pakgCNXdjFlcyf/FWFhHtoXm2i/mlWdDPNNJyzK
-        9YQ1CNbTqAWkwdU0MDQedw01Hw==
-X-Google-Smtp-Source: ABdhPJxlGaFCDMWbfFV5Pr/WWx8z0K7o5uAIGkLbbZ+Fg98b+aBlnMrftxj9+78TWRIlh0DueAOXyg==
-X-Received: by 2002:a05:600c:190a:: with SMTP id j10mr5821993wmq.140.1615320323081;
-        Tue, 09 Mar 2021 12:05:23 -0800 (PST)
-Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id p10sm26424631wrw.33.2021.03.09.12.05.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=w0U5hMkEPQ0LdddaxPHYRwfwYDqIwqmZHfEAmO3vAk0=;
+        b=KNGxMzxLFEbzdSuJrz8eL+c96MyK+yKdemaHmGofxfEndR3JgKI56C/hu0F7iowFPd
+         cH+R0nLiRcO7w6QgXLjRtA0uOmJ5mhUc5p61CpXxvpUCnQgehJPBKxR4MPkEROBLXM2u
+         damM8rb40Qv5outRaWbhnzIc2GXZhsFolKS7C97u14ycz5cBlee/YAB0YAUXzeoeHmNE
+         2aAb+jgvla0Wor5csO4GcuWQ7KKbYKWf045Nn27xLjRPCrInisne83gib1r2YOYIorJO
+         MxNb2EZaoz6TvkyZaaj/aKt1hucj0ppsLAeySZqN6cEv6WciB16mg0Moufa7gb0jeBDq
+         1bvA==
+X-Gm-Message-State: AOAM531hDYh84Ze8SE/c0MiQJb6PWgPWfq6RDMlKmoIwsoXGXZPZAnqY
+        9PY49KJ5fyKOmsBoQviAFOA1y7tMx70=
+X-Google-Smtp-Source: ABdhPJypGyz5Hhbmt6VvpOmx/6LZfrs61H+giJS+ne1VO5WxE4zCe7/mJAKu/zOfWbMlnhjIttpLTA==
+X-Received: by 2002:a1c:2b05:: with SMTP id r5mr2428301wmr.179.1615370016851;
+        Wed, 10 Mar 2021 01:53:36 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id l4sm21933661wrt.60.2021.03.10.01.53.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 12:05:22 -0800 (PST)
-Date:   Tue, 9 Mar 2021 20:05:20 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, allen <allen.chen@ite.com.tw>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Josua Mayer <josua.mayer@jm0.eu>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Palmer <daniel@0x0f.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [GIT PULL] Immutable branch between MFD, PWM and RTC due for the
- v5.13 merge window
-Message-ID: <20210309200520.GA4931@dell>
-References: <20210124214127.3631530-1-j.neuschaefer@gmx.net>
- <20210301102826.GK641347@dell>
+        Wed, 10 Mar 2021 01:53:36 -0800 (PST)
+Date:   Wed, 10 Mar 2021 10:53:34 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: rtc: rtc-m48t59: rtc-m48t59.0: IRQ index 0 not found
+Message-ID: <YEiXHjIrXfjkrv5U@Red>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210301102826.GK641347@dell>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 01 Mar 2021, Lee Jones wrote:
+Hello
 
-> Enjoy!
-> 
-> The following changes since commit fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8:
-> 
->   Linux 5.12-rc1 (2021-02-28 16:05:19 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-pwm-rtc-v5.13
-> 
-> for you to fetch changes up to 80629611215d1c5d52ed3cf723fd6d24a5872504:
-> 
->   MAINTAINERS: Add entry for Netronix embedded controller (2021-03-01 10:26:17 +0000)
-> 
-> ----------------------------------------------------------------
-> Immutable branch between MFD, PWM and RTC due for the v5.13 merge window
-> 
-> ----------------------------------------------------------------
-> Jonathan Neuschäfer (6):
->       dt-bindings: Add vendor prefix for Netronix, Inc.
->       dt-bindings: mfd: Add binding for Netronix embedded controller
->       mfd: Add base driver for Netronix embedded controller
->       pwm: ntxec: Add driver for PWM function in Netronix EC
->       rtc: New driver for RTC in Netronix embedded controller
->       MAINTAINERS: Add entry for Netronix embedded controller
-> 
->  .../devicetree/bindings/mfd/netronix,ntxec.yaml    |  76 +++++++
->  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
->  MAINTAINERS                                        |   9 +
->  drivers/mfd/Kconfig                                |  11 +
->  drivers/mfd/Makefile                               |   1 +
->  drivers/mfd/ntxec.c                                | 221 +++++++++++++++++++++
->  drivers/pwm/Kconfig                                |   8 +
->  drivers/pwm/Makefile                               |   1 +
->  drivers/pwm/pwm-ntxec.c                            | 184 +++++++++++++++++
->  drivers/rtc/Kconfig                                |   8 +
->  drivers/rtc/Makefile                               |   1 +
->  drivers/rtc/rtc-ntxec.c                            | 145 ++++++++++++++
->  include/linux/mfd/ntxec.h                          |  37 ++++
->  13 files changed, 704 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
->  create mode 100644 drivers/mfd/ntxec.c
->  create mode 100644 drivers/pwm/pwm-ntxec.c
->  create mode 100644 drivers/rtc/rtc-ntxec.c
->  create mode 100644 include/linux/mfd/ntxec.h
+On my SPARC sunblade 100, I got this:
+[   13.613727] rtc-m48t59 rtc-m48t59.0: IRQ index 0 not found
+[   13.805777] rtc-m48t59 rtc-m48t59.0: registered as rtc0
+[   14.385092] rtc-m48t59 rtc-m48t59.0: setting system clock to 2021-03-01T05:34:33 UTC (1614576873)
 
-FYI, if anyone has pulled this, they should probably rebase it onto
-v5.12-rc2 and delete the v5.12-rc1 tag from their tree:
+The IRQ index 0 message is found after 5.5
 
-  https://lwn.net/Articles/848431/
+Testing rtc via hwclock give:
+hwclock: ioctl(3, RTC_UIE_ON, 0) to /dev/rtc0 failed: Input/output error
+But this hwclock behavior is present also on earlier kernel (tested 4.9.260, 4.19.179 and 4.14.224).
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Does this Input/output error is normal ? (I think no)
+
+Regards
