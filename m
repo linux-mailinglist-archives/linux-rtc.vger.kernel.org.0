@@ -2,97 +2,117 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 189AA333A22
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Mar 2021 11:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A48333A36
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Mar 2021 11:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhCJKg5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Mar 2021 05:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S230266AbhCJKlS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Mar 2021 05:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbhCJKgo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Mar 2021 05:36:44 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD0AC06174A
-        for <linux-rtc@vger.kernel.org>; Wed, 10 Mar 2021 02:36:42 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id 7so22752531wrz.0
-        for <linux-rtc@vger.kernel.org>; Wed, 10 Mar 2021 02:36:42 -0800 (PST)
+        with ESMTP id S231828AbhCJKlE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Mar 2021 05:41:04 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A791C061763
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Mar 2021 02:41:03 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id j2so22727335wrx.9
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Mar 2021 02:41:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Jb7ZelfORH1QHJnFWCjShP1okoL5Fzbc3XNjssblVDM=;
-        b=Wtl+/BWmYdVQ1eCD7d/+zWRstywW8SSDLChG2No8Nt659lCdvZ1AH6TF9QhRKJfJfJ
-         elWDFxQJHuG/54mKawxKkPBWZdKweaH2UfMrGgDmWg5wsIRALmZbsWcI51/06wquWogj
-         1ikDFcfaOfCDthMi0nY9erfPIqnIDOMToHoakc2XbndZgaxBgvssewb0ZC/USXxJ+60E
-         rv3NyN8XbPueJGxjNsB3vi/SeKJCjFBlc4kOWZsnSjYgIGz8rGjVHlqDiCzQHYFfwxWa
-         p7aUw8ynGbHTXaEL8uHwJc/HX1f1Iu+QJJbKzOAI2WmatTLrls4wgrbNcd73tOLQes/f
-         yXow==
+        bh=WkEYLNZKWBGlnhJh5/km8rZ3DoQwSCNLt1pwHkgN/WY=;
+        b=mHQYTozuc0TTEvwola4UDXnujaWX5hjYQa9oyx2Km6taceH5yU6itTe3PHtZRoodFk
+         PcpDyrzEdhly/3+4FAgeUEG40pSos2nmuPn1KTn0DaKzmxXkOLlhaSMgX3xY0TP5yGho
+         XUAGxYyDak/7+4NtvRj+ZYLT5U1J2/9BlGZ3cDktu+mUvRsohm8uzz6kt2LvcNFTcmIJ
+         iLoeMXyTF9AvGdP4MtkZmWxddvxG8KX8rGFLE97/3fMt941pJ/GCNgLhf3sq73X85KMT
+         ZvEMyGQ06vuK16Gnxi7/pPa0ZujXMlI26tTXN4iq9PCwUotcEIAVxQcOPv9rOzFR0PW4
+         Q9ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=Jb7ZelfORH1QHJnFWCjShP1okoL5Fzbc3XNjssblVDM=;
-        b=jpevBOSa1vQ9B3EjeXIeqjMrvEvUawTfdBJZXsH1A+Pou/s1LVZ1n7/AEW7kLVniFV
-         0+NgDE0dc4gEIlEapF69Q29QBk7NUr6t1/Mw5W1zlubJfxwTTz5gkaeJZV4vxaTNEXfK
-         9Kz9UnAVgN+Y4tQy3zF+GbG6wo6KaMGzQjQ3sRN93AWz+PAzBtYBXr3xuBVdcZLd91cF
-         5DyJDyr10Z4SZJdYt5D3XYWbqm+8mBBPRHFuCwRlJY1K6VWBPN/DIQGn2gWJtgOlbDOO
-         oKddtibXj1R81bY4R+VPxz1VWzDDh6/FZGXhSzSbYUrjGcYSRVUhd9htiBZXe19TB8kq
-         LxUg==
-X-Gm-Message-State: AOAM533vjAMPDuQSAOvPB4SoxFv1hAtdMsa0L+HtUtf1WU+qfDwfZmSm
-        5dB2kgUGpYqQWqUZrQaaHx5cNQ==
-X-Google-Smtp-Source: ABdhPJwWYgVLki6B90CCw0UsfdKlqtXBlodzOFwgFzBQoo1El4DPbwMQZWGcm7Uz/h6ROKgdbsyCkA==
-X-Received: by 2002:adf:e482:: with SMTP id i2mr2787952wrm.392.1615372601570;
-        Wed, 10 Mar 2021 02:36:41 -0800 (PST)
+        bh=WkEYLNZKWBGlnhJh5/km8rZ3DoQwSCNLt1pwHkgN/WY=;
+        b=UBkU4AQ2Tvc5LhmY2gWyzIRtLfXekvAUBj6Md5+ESbxCCsL/7duuG6C4okhtH8Xv7z
+         vsH0kCiFG7cl0UEWKwmLSu68ValzJaFWK7Pn9EucbM8gY/+jQpWB0EbefNoLJyj3XN7L
+         Xc2wlb2xpBFuNqQHtK9OmOQdNwZL0so8WZbrx8Ub3+1XicWdfxzyEco8zfd2ZgrCEB1y
+         yntFFnYjYSX5Na1CqQIj2n3W3HckLKYiRxUvivn0UvrbQ5Xr66LvG/p5szkM+Xe4e3/N
+         67GaAuwyQj4SadaNV4EjghgaRosHRY/0mY0CzSvL8E7+CLCNE/WFXwdAK2GB1992A/Dc
+         biwA==
+X-Gm-Message-State: AOAM530zX4uoz1YVzgZpXuXZMcLvhSGofTnS+t2OyZISNoQ8DQeWsu3V
+        87nXzAirQSY0nK3BNypBTjAasw==
+X-Google-Smtp-Source: ABdhPJxwjavMwOHE+n1ODwYYFNhz44dTAKmAcPmhdGkziT2QVK5lAqeefbljMchSOuIx6t1sYrSA2w==
+X-Received: by 2002:adf:fecc:: with SMTP id q12mr2761099wrs.317.1615372862210;
+        Wed, 10 Mar 2021 02:41:02 -0800 (PST)
 Received: from dell ([91.110.221.204])
-        by smtp.gmail.com with ESMTPSA id u63sm8634794wmg.24.2021.03.10.02.36.40
+        by smtp.gmail.com with ESMTPSA id x11sm8453405wmi.3.2021.03.10.02.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 02:36:41 -0800 (PST)
-Date:   Wed, 10 Mar 2021 10:36:39 +0000
+        Wed, 10 Mar 2021 02:41:01 -0800 (PST)
+Date:   Wed, 10 Mar 2021 10:40:58 +0000
 From:   Lee Jones <lee.jones@linaro.org>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, linux-kernel@vger.kernel.org,
+Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 06/15] mfd: Add ROHM BD71815 ID
-Message-ID: <20210310103639.GG701493@dell>
+Subject: Re: [PATCH v3 07/15] mfd: Support for ROHM BD71815 PMIC core
+Message-ID: <20210310104058.GH701493@dell>
 References: <cover.1615198094.git.matti.vaittinen@fi.rohmeurope.com>
- <be0e8cd06ed75e799c942e5076ee7b56ad658467.1615198094.git.matti.vaittinen@fi.rohmeurope.com>
+ <aaec00c776c83d301cfe66685ca9c8e01cccc9d8.1615198094.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <be0e8cd06ed75e799c942e5076ee7b56ad658467.1615198094.git.matti.vaittinen@fi.rohmeurope.com>
+In-Reply-To: <aaec00c776c83d301cfe66685ca9c8e01cccc9d8.1615198094.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Mon, 08 Mar 2021, Matti Vaittinen wrote:
 
-> Add chip ID for ROHM BD71815 and PMIC so that drivers can identify
-> this IC.
+> Add core support for ROHM BD71815 Power Management IC.
+> 
+> The IC integrates regulators, a battery charger with a coulomb counter,
+> a real-time clock (RTC), clock gate and general-purpose outputs (GPO).
 > 
 > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  include/linux/mfd/rohm-generic.h | 1 +
->  1 file changed, 1 insertion(+)
+> Changes since v2:
+>   - styling / clean-ups suggested by Lee
+>   - corrected clk-mode dt property values to match changed bindings
 > 
-> diff --git a/include/linux/mfd/rohm-generic.h b/include/linux/mfd/rohm-generic.h
-> index 66f673c35303..e5392bcbc098 100644
-> --- a/include/linux/mfd/rohm-generic.h
-> +++ b/include/linux/mfd/rohm-generic.h
-> @@ -14,6 +14,7 @@ enum rohm_chip_type {
->  	ROHM_CHIP_TYPE_BD71828,
->  	ROHM_CHIP_TYPE_BD9571,
->  	ROHM_CHIP_TYPE_BD9574,
-> +	ROHM_CHIP_TYPE_BD71815,
+>  drivers/mfd/Kconfig              |  15 +-
+>  drivers/mfd/rohm-bd71828.c       | 486 +++++++++++++++++++-------
+>  include/linux/mfd/rohm-bd71815.h | 563 +++++++++++++++++++++++++++++++
+>  include/linux/mfd/rohm-bd71828.h |   3 +
+>  4 files changed, 934 insertions(+), 133 deletions(-)
+>  create mode 100644 include/linux/mfd/rohm-bd71815.h
 
-Is there a technical reason why these can't be re-ordered?
+[...]
 
->  	ROHM_CHIP_TYPE_AMOUNT
->  };
->  
+> diff --git a/include/linux/mfd/rohm-bd71815.h b/include/linux/mfd/rohm-bd71815.h
+> new file mode 100644
+> index 000000000000..9927aadac234
+> --- /dev/null
+> +++ b/include/linux/mfd/rohm-bd71815.h
+> @@ -0,0 +1,563 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + *
+
+Nit: If you rework this for any reason, please remove this line.
+
+For my own reference (apply this as-is to your sign-off block):
+
+  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 
 -- 
 Lee Jones [李琼斯]
