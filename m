@@ -2,48 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE8E3369D6
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 02:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D51336D17
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 08:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbhCKBle (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Mar 2021 20:41:34 -0500
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:56276 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbhCKBlW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Mar 2021 20:41:22 -0500
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1615426882;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=SYoRc8S8SDUVyZKqYCiGq8J4MxI=;
-        b=B/m9RaYTcN7YVs6OINp9LsVSo3ehvZLnYboeovgrIzB+U4jdiTeLywpSaAqK84tc
-        14q6080lw9/0Z6iYdHlepgKlZiqg9R3iAxT/Jhb3kwAc1Hh7aNcxCxH3fBz/NpOf
-        uWAhUCfnQDKYj/ch8170RDHf17rx2sRNBZ76KBo4vfYHNSiC/DZKM1mApaHKIoim
-        O8R6B0cTr9C1r4ihUFps48cb3YfyHErIruJ9x7A4fzMQ5hTnhBv45fW3Y/4UrhRw
-        pyQJfxA9yJa3BYkJq1vMqoVX44PPQMtdx3xMWY/deWcTXc8p6hUYpK6SZVLwMd+f
-        LyYpCBHEy2E2LAt1Tcn5lQ==;
-X-Authed-Username: c2hpcmxoOTEwQHdpbGRibHVlLm5ldA==
-Received: from [10.80.118.11] ([10.80.118.11:50664] helo=md04.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <shirlh910@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id D8/11-28646-14579406; Wed, 10 Mar 2021 20:41:21 -0500
-Date:   Wed, 10 Mar 2021 20:41:21 -0500 (EST)
-From:   Rowell Hambrick <shirlh910@wildblue.net>
-Reply-To: rowellhabrick@gmail.com
-To:     w@w.com
-Message-ID: <1101282248.45762154.1615426881489.JavaMail.zimbra@wildblue.net>
-Subject: re1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [91.132.137.228]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: abJdK1IJE49OZAuxTa+oU67HGMU3yQ==
-Thread-Topic: re1
-X-Vade-Verditct: clean
-X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrudduledgfeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtfdpggfktefutefvpdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhrhfvkffugggtgfhiofhtsehtjegttdertdejnecuhfhrohhmpeftohifvghllhcujfgrmhgsrhhitghkuceoshhhihhrlhhhledutdesfihilhgusghluhgvrdhnvghtqeenucggtffrrghtthgvrhhnpeevkeefgfehlefhjedvieelkeefvdehhfehueeujeejkeeliefgledugeejgedtueenucfkphepuddtrdektddruddukedruddupdeluddrudefvddrudefjedrvddvkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedutddrkedtrdduudekrdduudenpdhmrghilhhfrhhomhepshhhihhrlhhhledutdesfihilhgusghluhgvrdhnvghtnedprhgtphhtthhopegumhhinhgumhdusehhohhtmhgrihhlrdgtohhmne
-X-Vade-Client: VIASAT
+        id S231815AbhCKHax (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Mar 2021 02:30:53 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:60375 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231579AbhCKHaf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Mar 2021 02:30:35 -0500
+Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 10 Mar 2021 23:30:35 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 10 Mar 2021 23:30:32 -0800
+X-QCInternal: smtphost
+Received: from c-skakit-linux.ap.qualcomm.com (HELO c-skakit-linux.qualcomm.com) ([10.242.51.242])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Mar 2021 13:00:03 +0530
+Received: by c-skakit-linux.qualcomm.com (Postfix, from userid 2344709)
+        id 28B284107; Thu, 11 Mar 2021 13:00:02 +0530 (IST)
+From:   satya priya <skakit@codeaurora.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kgunda@codeaurora.org,
+        satya priya <skakit@codeaurora.org>
+Subject: [PATCH 0/3] Add RTC support for PMIC PMK8350
+Date:   Thu, 11 Mar 2021 12:59:55 +0530
+Message-Id: <1615447798-6959-1-git-send-email-skakit@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Did you get my last mail
+Convert pm8xxx bindings to yaml and add pmk8350 rtc binding.
+
+satya priya (3):
+  rtc: pm8xxx: Add RTC support for PMIC PMK8350
+  dt-bindings: mfd: Convert pm8xxx bindings to yaml
+  dt-bindings: mfd: Add compatible for pmk8350 rtc
+
+ .../devicetree/bindings/mfd/qcom-pm8xxx.txt        |  99 -------------------
+ .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 109 +++++++++++++++++++++
+ drivers/rtc/rtc-pm8xxx.c                           |  11 +++
+ 3 files changed, 120 insertions(+), 99 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
+ create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
+
