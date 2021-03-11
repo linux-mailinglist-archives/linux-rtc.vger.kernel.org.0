@@ -2,87 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CEB3379A2
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 17:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA592337A46
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 18:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbhCKQlS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 11 Mar 2021 11:41:18 -0500
-Received: from mail-io1-f45.google.com ([209.85.166.45]:36385 "EHLO
-        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbhCKQlR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Mar 2021 11:41:17 -0500
-Received: by mail-io1-f45.google.com with SMTP id n14so22623223iog.3;
-        Thu, 11 Mar 2021 08:41:17 -0800 (PST)
+        id S229468AbhCKRAd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Mar 2021 12:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229606AbhCKRAU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Mar 2021 12:00:20 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AECEC061574
+        for <linux-rtc@vger.kernel.org>; Thu, 11 Mar 2021 09:00:20 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id n23so2135988otq.1
+        for <linux-rtc@vger.kernel.org>; Thu, 11 Mar 2021 09:00:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=opGBE+10vyFaw9yXptg7nxWBvuTnyAQM8hdaMx9w63c=;
+        b=brsWF+hhAjGXFFBDF/+wE9hkQEfxCxVG9WwxUYGy0YrIruOCy/gpJr1OTPPPQp6TFX
+         pimPD/7tOSiiErUv0ZHaOzqZH7N17QLIqjEbQMh4YjgkVe7i4GfcXScqpisWEe51wGCe
+         szgDZvd8S2j6aEQ3W+xcFs9PlC0JkJtK0t0Geq/Y/lE0LVyzwrTtZwcs/uEwrwBXEYZn
+         awU/zYxTi79Hyp5BOftlNMELaOgbldq3DXkUuVd3wmUxmuAGyZFr2hXDw3S0rO0EWKFT
+         OPmXNgmIbZ2CTq0FjvRIRA47m7fmieCHb3QtXRy4le1tr0A78eyFwC2WArzrTwcdTx0N
+         2/3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=U7jzm/CFG4Ylm4v8voBfCMU+CxkY3bE8NKg4UeAuxbQ=;
-        b=CJuO0VNQHqSZfWQzgCHyrOHoPkj2utBJ2dA22/3cKyNU866g0/v3PqXAFxG4xH6LTh
-         /am0DTOgkfqpKFC+psKOIwzwp/cJsIIS7/ayJ1wqePdpHlLPQ0GokqFfYnsFafTH9mJn
-         sJ3UvNPpyJRE7oyHkSTgUJE66Fr0QIfiVcdfzUYkn4sb+nbPwCCg8jujOiR3jta2fImh
-         z6rWkmcbSVfoQQtkcpDrv3Jklntqh2L5+FozOIVazMeGV+ACQjS95M7thKkf76yl9K+B
-         i39NqR4OJRT3oUfEH4ptyhpjZRmPk82HdhGGBHb/n/Le+ENnJ7oyY3IHrO5zsUacZcAl
-         GJbA==
-X-Gm-Message-State: AOAM531o4Vseuk+ysRIkW6eLTbCtqYjOc0Di6rUhwkbTGQYVoRk3C51s
-        9/SatcmZZ39eTY8TZn3uPA==
-X-Google-Smtp-Source: ABdhPJxbaDM4XI8ZWhFC1q8ZH6bP9IzTuINR+19AO6I/yVBlCCKLU9oTvGO8Q+5z803ksGP47PsfAQ==
-X-Received: by 2002:a05:6602:228f:: with SMTP id d15mr6509757iod.141.1615480876875;
-        Thu, 11 Mar 2021 08:41:16 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id u14sm1471024ilv.0.2021.03.11.08.41.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=opGBE+10vyFaw9yXptg7nxWBvuTnyAQM8hdaMx9w63c=;
+        b=LrlNiHBV4T7buw+UvfeheJYiYoMdfOvBKYuobyYXaY2YGRdoiM7W6w2wACbj5Wn6VD
+         JvnbvmCTqhgmmDqmBqNauH7LeU7k9jhBROjqn9lTGawDIljCi5ym97ly6GCoRhvh6mGM
+         2C4Qroub1gcDfZOdixdyohHp6D0wK4CfV+QEdsr/d5G7NXUfJBUozLPiSqbdSqBCL6CH
+         XTl0fvt9jLR4Vn/ZbyAtn8QM5GmSErVl2has8tcXB2bHDczbQa3uEZsW4H/cZt214GLj
+         52+LPBd92AuIo9c38A++8ZT1NYvTMc4X1drRF8P0g7Rm1hWcGPCRPQlx+y56ekroTlTg
+         BdOQ==
+X-Gm-Message-State: AOAM5322WZ7wpuRwsgjJixRREBANLv4Kb2kdLsiV5dRvsK1lJ2vOBDOw
+        yysftPOdmMouuoAujUTT/bhvaw==
+X-Google-Smtp-Source: ABdhPJxb/Ex4VAjYa21hjLYf0d1Ge004JUzrWfI/sBuWi06jxYSkVf7WHk4QVjENxnVkm0u/bx0vZw==
+X-Received: by 2002:a9d:7f1a:: with SMTP id j26mr7543565otq.244.1615482019502;
+        Thu, 11 Mar 2021 09:00:19 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id k9sm757214ots.24.2021.03.11.09.00.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Mar 2021 08:41:14 -0800 (PST)
-Received: (nullmailer pid 841933 invoked by uid 1000);
-        Thu, 11 Mar 2021 16:41:02 -0000
-From:   Rob Herring <robh@kernel.org>
+        Thu, 11 Mar 2021 09:00:18 -0800 (PST)
+Date:   Thu, 11 Mar 2021 11:00:16 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     satya priya <skakit@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, kgunda@codeaurora.org,
-        Alessandro Zummo <a.zummo@towertech.it>
-In-Reply-To: <1615447798-6959-3-git-send-email-skakit@codeaurora.org>
-References: <1615447798-6959-1-git-send-email-skakit@codeaurora.org> <1615447798-6959-3-git-send-email-skakit@codeaurora.org>
-Subject: Re: [PATCH 2/3] dt-bindings: mfd: Convert pm8xxx bindings to yaml
-Date:   Thu, 11 Mar 2021 09:41:02 -0700
-Message-Id: <1615480862.528721.841932.nullmailer@robh.at.kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kgunda@codeaurora.org
+Subject: Re: [PATCH 1/3] rtc: pm8xxx: Add RTC support for PMIC PMK8350
+Message-ID: <YEpMoP5Efk19YJAA@builder.lan>
+References: <1615447798-6959-1-git-send-email-skakit@codeaurora.org>
+ <1615447798-6959-2-git-send-email-skakit@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1615447798-6959-2-git-send-email-skakit@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 11 Mar 2021 12:59:57 +0530, satya priya wrote:
-> Convert pm8xxx rtc bindings from .txt to .yaml format.
+On Thu 11 Mar 01:29 CST 2021, satya priya wrote:
+
+> Add the comaptible string for PMIC PMK8350.
 > 
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Regards,
+Bjorn
+
 > Signed-off-by: satya priya <skakit@codeaurora.org>
 > ---
->  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        |  99 -------------------
->  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 108 +++++++++++++++++++++
->  2 files changed, 108 insertions(+), 99 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+>  drivers/rtc/rtc-pm8xxx.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml:27:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
-./Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml:30:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
-
-dtschema/dtc warnings/errors:
-
-See https://patchwork.ozlabs.org/patch/1450975
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+> index eb20659..29a1c65 100644
+> --- a/drivers/rtc/rtc-pm8xxx.c
+> +++ b/drivers/rtc/rtc-pm8xxx.c
+> @@ -445,6 +445,16 @@ static const struct pm8xxx_rtc_regs pm8941_regs = {
+>  	.alarm_en	= BIT(7),
+>  };
+>  
+> +static const struct pm8xxx_rtc_regs pmk8350_regs = {
+> +	.ctrl		= 0x6146,
+> +	.write		= 0x6140,
+> +	.read		= 0x6148,
+> +	.alarm_rw	= 0x6240,
+> +	.alarm_ctrl	= 0x6246,
+> +	.alarm_ctrl2	= 0x6248,
+> +	.alarm_en	= BIT(7),
+> +};
+> +
+>  /*
+>   * Hardcoded RTC bases until IORESOURCE_REG mapping is figured out
+>   */
+> @@ -453,6 +463,7 @@ static const struct of_device_id pm8xxx_id_table[] = {
+>  	{ .compatible = "qcom,pm8018-rtc", .data = &pm8921_regs },
+>  	{ .compatible = "qcom,pm8058-rtc", .data = &pm8058_regs },
+>  	{ .compatible = "qcom,pm8941-rtc", .data = &pm8941_regs },
+> +	{ .compatible = "qcom,pmk8350-rtc", .data = &pmk8350_regs },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, pm8xxx_id_table);
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
