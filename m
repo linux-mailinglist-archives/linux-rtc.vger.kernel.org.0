@@ -2,88 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01808336E5B
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 09:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CEB3379A2
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Mar 2021 17:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbhCKI6T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 11 Mar 2021 03:58:19 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:44041 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhCKI57 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Mar 2021 03:57:59 -0500
-X-Originating-IP: 90.65.108.55
-Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 552F91BF21D;
-        Thu, 11 Mar 2021 08:57:57 +0000 (UTC)
-Date:   Thu, 11 Mar 2021 09:57:57 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: rtc: rtc-m48t59: rtc-m48t59.0: IRQ index 0 not found
-Message-ID: <YEnblWV1VWJJHtyv@piout.net>
-References: <YEiXHjIrXfjkrv5U@Red>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YEiXHjIrXfjkrv5U@Red>
+        id S229675AbhCKQlS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Mar 2021 11:41:18 -0500
+Received: from mail-io1-f45.google.com ([209.85.166.45]:36385 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229639AbhCKQlR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Mar 2021 11:41:17 -0500
+Received: by mail-io1-f45.google.com with SMTP id n14so22623223iog.3;
+        Thu, 11 Mar 2021 08:41:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=U7jzm/CFG4Ylm4v8voBfCMU+CxkY3bE8NKg4UeAuxbQ=;
+        b=CJuO0VNQHqSZfWQzgCHyrOHoPkj2utBJ2dA22/3cKyNU866g0/v3PqXAFxG4xH6LTh
+         /am0DTOgkfqpKFC+psKOIwzwp/cJsIIS7/ayJ1wqePdpHlLPQ0GokqFfYnsFafTH9mJn
+         sJ3UvNPpyJRE7oyHkSTgUJE66Fr0QIfiVcdfzUYkn4sb+nbPwCCg8jujOiR3jta2fImh
+         z6rWkmcbSVfoQQtkcpDrv3Jklntqh2L5+FozOIVazMeGV+ACQjS95M7thKkf76yl9K+B
+         i39NqR4OJRT3oUfEH4ptyhpjZRmPk82HdhGGBHb/n/Le+ENnJ7oyY3IHrO5zsUacZcAl
+         GJbA==
+X-Gm-Message-State: AOAM531o4Vseuk+ysRIkW6eLTbCtqYjOc0Di6rUhwkbTGQYVoRk3C51s
+        9/SatcmZZ39eTY8TZn3uPA==
+X-Google-Smtp-Source: ABdhPJxbaDM4XI8ZWhFC1q8ZH6bP9IzTuINR+19AO6I/yVBlCCKLU9oTvGO8Q+5z803ksGP47PsfAQ==
+X-Received: by 2002:a05:6602:228f:: with SMTP id d15mr6509757iod.141.1615480876875;
+        Thu, 11 Mar 2021 08:41:16 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id u14sm1471024ilv.0.2021.03.11.08.41.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 08:41:14 -0800 (PST)
+Received: (nullmailer pid 841933 invoked by uid 1000);
+        Thu, 11 Mar 2021 16:41:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     satya priya <skakit@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>, kgunda@codeaurora.org,
+        Alessandro Zummo <a.zummo@towertech.it>
+In-Reply-To: <1615447798-6959-3-git-send-email-skakit@codeaurora.org>
+References: <1615447798-6959-1-git-send-email-skakit@codeaurora.org> <1615447798-6959-3-git-send-email-skakit@codeaurora.org>
+Subject: Re: [PATCH 2/3] dt-bindings: mfd: Convert pm8xxx bindings to yaml
+Date:   Thu, 11 Mar 2021 09:41:02 -0700
+Message-Id: <1615480862.528721.841932.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 10/03/2021 10:53:34+0100, Corentin Labbe wrote:
-> Hello
+On Thu, 11 Mar 2021 12:59:57 +0530, satya priya wrote:
+> Convert pm8xxx rtc bindings from .txt to .yaml format.
 > 
-> On my SPARC sunblade 100, I got this:
-> [   13.613727] rtc-m48t59 rtc-m48t59.0: IRQ index 0 not found
-> [   13.805777] rtc-m48t59 rtc-m48t59.0: registered as rtc0
-> [   14.385092] rtc-m48t59 rtc-m48t59.0: setting system clock to 2021-03-01T05:34:33 UTC (1614576873)
+> Signed-off-by: satya priya <skakit@codeaurora.org>
+> ---
+>  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        |  99 -------------------
+>  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 108 +++++++++++++++++++++
+>  2 files changed, 108 insertions(+), 99 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
 > 
-> The IRQ index 0 message is found after 5.5
-> 
-> Testing rtc via hwclock give:
-> hwclock: ioctl(3, RTC_UIE_ON, 0) to /dev/rtc0 failed: Input/output error
-> But this hwclock behavior is present also on earlier kernel (tested 4.9.260, 4.19.179 and 4.14.224).
-> 
-> Does this Input/output error is normal ? (I think no)
 
-This is due to 7723f4c5ecdb8d832f049f8483beb0d1081cedf6
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Can you try that?
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml:27:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
+./Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml:30:6: [warning] wrong indentation: expected 4 but found 5 (indentation)
 
-From 55cc33fab5ac9f7e2a97aa7c564e8b35355886d5 Mon Sep 17 00:00:00 2001
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Date: Thu, 11 Mar 2021 09:48:09 +0100
-Subject: [PATCH] rtc: m48t59: use platform_get_irq_optional
+dtschema/dtc warnings/errors:
 
-The IRQ is optional, avoid the error message by using
-platform_get_irq_optional.
+See https://patchwork.ozlabs.org/patch/1450975
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-m48t59.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-diff --git a/drivers/rtc/rtc-m48t59.c b/drivers/rtc/rtc-m48t59.c
-index 1d2e99a70fce..f0f6b9b6daec 100644
---- a/drivers/rtc/rtc-m48t59.c
-+++ b/drivers/rtc/rtc-m48t59.c
-@@ -421,7 +421,7 @@ static int m48t59_rtc_probe(struct platform_device *pdev)
- 	/* Try to get irq number. We also can work in
- 	 * the mode without IRQ.
- 	 */
--	m48t59->irq = platform_get_irq(pdev, 0);
-+	m48t59->irq = platform_get_irq_optional(pdev, 0);
- 	if (m48t59->irq <= 0)
- 		m48t59->irq = NO_IRQ;
- 
--- 
-2.29.2
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
