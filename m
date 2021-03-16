@@ -2,84 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5857333DB73
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 18:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2179633DB8E
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 18:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234714AbhCPRwn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Mar 2021 13:52:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42924 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239353AbhCPRw2 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 16 Mar 2021 13:52:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B57765120;
-        Tue, 16 Mar 2021 17:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615917148;
-        bh=AzDNWIakpV6kbVyD7mjxNrEJxc3kYf5SEm43UCNUWF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rFYiJR/9X5zpZaiPy4Jjpf724cR4XAh94ugE3KkSc3qHUKTZWMJ8hMT67XayFNWpc
-         nJJaorFHkN8umklWYKxY0lppxEqqjTxb8aftsIldEvAVsWZyV5DNKeJTFUA8n14Hzo
-         2m7wmdBKNqOvfFt1hUIHMkotK26e2X4v4+2aMiL82hJWDa26DTZfLr4W2IhuHrdo+m
-         bBrvucRxFrUcuuy6ix1EcPLXXhTUr5KlxH0zAABC6dDp+S7Cm5V7X6i/7hZKTR6dET
-         uaIil5JMPAOVXnrXdYQZ34g2JJEcDEfV/Fge5AVj5zgSXw5DusSmK86zAgsD1OZxeU
-         AiF0uMtV1FfCg==
-Date:   Tue, 16 Mar 2021 17:52:25 +0000
-From:   Mark Brown <broonie@kernel.org>
+        id S239339AbhCPRys (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Mar 2021 13:54:48 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:40318 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239355AbhCPRyQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Mar 2021 13:54:16 -0400
+Received: by mail-io1-f48.google.com with SMTP id m7so19089735iow.7;
+        Tue, 16 Mar 2021 10:54:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=dLqrm0/ef81kahZ3V++ylIOaNZ5Ioc1N/ut1Pv4L6zY=;
+        b=oXZpZxn0wgFAGsArqo1T4A09w/luI2rY9rchZ/UPweUccx+tIbemMMFi3l45E1aTf4
+         elD+rq4JhBsMvysbLbU2/JdDTp2GwTm575Qha+lsxvz1UQYMCSxmIg8BtjvFZ0Rdx/Sl
+         W1RYBkZwXjQB3tv2cp56QRme6ffTsKew2PBflVNa+t8TvyUxiQVYouOpLsbD78KqYlIM
+         oykRO5gNt0D9/dJ76rG3CHaD0dArwvCS1huuWZiwE2GT5BI/D9YAuuwsK5yCKBdZ3Er5
+         uNVoHjPIfLI1gm6RbSTiYfGtlr2XdMu8rA0E79BnNaoRXKD8BCJ03S//xfPsXBXbaa9s
+         4Ncg==
+X-Gm-Message-State: AOAM533KpYzv453hwWHlejRtGBO4OfvX8xGOdULQyCDrZFaRibKMaAjf
+        qo44AZJR8njuQ/xlDk4d/Vcl22JgLA==
+X-Google-Smtp-Source: ABdhPJz58cXYFwH0LvTilPm7qZ6a5slbFtu1/fj+K0w3XsAGD6iFn2JuuIuNrYcXaGUAcy56rJF8Dg==
+X-Received: by 2002:a6b:da0f:: with SMTP id x15mr4245698iob.181.1615917256171;
+        Tue, 16 Mar 2021 10:54:16 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id k4sm8804062ion.29.2021.03.16.10.54.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Mar 2021 10:54:15 -0700 (PDT)
+Received: (nullmailer pid 3326123 invoked by uid 1000);
+        Tue, 16 Mar 2021 17:54:09 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Eddie Huang <eddie.huang@mediatek.com>,
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Nicolas Boichat <drinkcat@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, Fei Shao <fshao@chromium.org>,
+        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        srv_heupstream@mediatek.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Eddie Huang <eddie.huang@mediatek.com>,
         Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        Fei Shao <fshao@chromium.org>, Ran Bi <ran.bi@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, srv_heupstream@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 7/8] regulator: mt6359: Add support for MT6359P
- regulator
-Message-ID: <20210316175225.GD4309@sirena.org.uk>
-References: <1615829757-3223-1-git-send-email-hsin-hsiung.wang@mediatek.com>
- <1615829757-3223-8-git-send-email-hsin-hsiung.wang@mediatek.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SFyWQ0h3ruR435lw"
-Content-Disposition: inline
-In-Reply-To: <1615829757-3223-8-git-send-email-hsin-hsiung.wang@mediatek.com>
-X-Cookie: Results vary by individual.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-arm-kernel@lists.infradead.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, Ran Bi <ran.bi@mediatek.com>
+In-Reply-To: <1615829757-3223-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+References: <1615829757-3223-1-git-send-email-hsin-hsiung.wang@mediatek.com> <1615829757-3223-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+Subject: Re: [PATCH v6 4/8] dt-bindings: regulator: Add document for MT6359 regulator
+Date:   Tue, 16 Mar 2021 11:54:09 -0600
+Message-Id: <1615917249.235463.3326122.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Tue, 16 Mar 2021 01:35:53 +0800, Hsin-Hsiung Wang wrote:
+> add dt-binding document for MediaTek MT6359 PMIC
+> 
+> Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
+> ---
+> changes since v5:
+> - no change.
+> ---
+>  .../bindings/regulator/mt6359-regulator.yaml  | 169 ++++++++++++++++++
+>  1 file changed, 169 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+> 
 
---SFyWQ0h3ruR435lw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+My bot found errors running 'make dt_binding_check' on your patch:
 
-On Tue, Mar 16, 2021 at 01:35:56AM +0800, Hsin-Hsiung Wang wrote:
-> The MT6359P is a eco version for MT6359 regulator.
-> We add support based on MT6359 regulator driver.
+yamllint warnings/errors:
 
-Acked-by: Mark Brown <broonie@kernel.org>
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dt.yaml: pmic: 'adc', 'compatible' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/motorola,cpcap-adc.example.dt.yaml: pmic: '#address-cells', '#size-cells', 'adc' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.example.dt.yaml: pmic: '#address-cells', '#size-cells', 'adc@480' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/adc/qcom,pm8018-adc.example.dt.yaml: pmic: '#address-cells', '#size-cells', 'adc@197' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/regulator/mt6359-regulator.yaml
 
---SFyWQ0h3ruR435lw
-Content-Type: application/pgp-signature; name="signature.asc"
+See https://patchwork.ozlabs.org/patch/1453404
 
------BEGIN PGP SIGNATURE-----
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBQ8FgACgkQJNaLcl1U
-h9CdkAf9Hbz0m/xv65ZqrW8tLgUxjCTjcWpw/fLlr0NuMnmtYANHKy9Pjs76Vl2W
-2kyXSeAcDdKV4/j8aEK8fd8JOMZTqUuN5OmJDoUvIN7DSDd0E3BFeT5bvBvUTnWN
-BbP8WBJPBF9pIHsv9D2xT/QlaXVvGjohZHFG41XSfllNGw1DjPFAjkAhTOyXzT1t
-s+tuHrpLJxzxyvK07WJnt9LfFMz80mgKT7PEhalXP1KRbkLM2wXuSEBgoy4bm5ZZ
-XF7thh112bug+30SXTGVBzutbHJr3o4YSRNbHOysnpalWONxfVoZjrRoTgeW5SeK
-bbowgAEaY7/4sEMAKWFqF25+fW8QCA==
-=C2bz
------END PGP SIGNATURE-----
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
---SFyWQ0h3ruR435lw--
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
