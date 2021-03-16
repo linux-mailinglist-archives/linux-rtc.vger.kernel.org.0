@@ -2,131 +2,250 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E25F33D392
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 13:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D843733D391
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 13:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbhCPMNA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Mar 2021 08:13:00 -0400
-Received: from gecko.sbs.de ([194.138.37.40]:35590 "EHLO gecko.sbs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229524AbhCPMM1 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 16 Mar 2021 08:12:27 -0400
-X-Greylist: delayed 552 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Mar 2021 08:12:27 EDT
-Received: from mail2.sbs.de (mail2.sbs.de [192.129.41.66])
-        by gecko.sbs.de (8.15.2/8.15.2) with ESMTPS id 12GC2r5I026410
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Mar 2021 13:02:53 +0100
-Received: from md1za8fc.ad001.siemens.net ([139.25.68.191])
-        by mail2.sbs.de (8.15.2/8.15.2) with ESMTP id 12GBqqrv026921;
-        Tue, 16 Mar 2021 12:52:52 +0100
-Date:   Tue, 16 Mar 2021 12:52:51 +0100
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Claudius Heine <ch@denx.de>,
-        johannes hahn <johannes-hahn@siemens.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        werner zeh <werner.zeh@siemens.com>,
-        "martin mantel" <martin.mantel@siemens.com>,
-        val krutov <val.krutov@erd.epson.com>
-Subject: Re: [PATCH v3 1/1] rtc: rx6110: add ACPI bindings to I2C
-Message-ID: <20210316125251.64484b3a@md1za8fc.ad001.siemens.net>
-In-Reply-To: <YFCW3Kx9MPm0MT8H@smile.fi.intel.com>
-References: <AM0PR10MB25801B7DCB6C1856B5D4F2C09FE10@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
-        <20210316100805.2630481-2-ch@denx.de>
-        <YFCW3Kx9MPm0MT8H@smile.fi.intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S229698AbhCPMM5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Mar 2021 08:12:57 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:39743 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229491AbhCPMMY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Mar 2021 08:12:24 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210316121220euoutp01efade31ca33c5bb97e9ab71d87d0847d~s0YYWIjXu2498224982euoutp01G;
+        Tue, 16 Mar 2021 12:12:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210316121220euoutp01efade31ca33c5bb97e9ab71d87d0847d~s0YYWIjXu2498224982euoutp01G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1615896740;
+        bh=EKLZMJpZUDFUGt+KgmrSaCgYBKF2In0VViE9xA/khLI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eTEl8J/7mtZ1H+FuP/uCvQti7BxBs4fkEERfIhwOfpuQVcjg2+oh4x33Z4+q3b6hF
+         5WP4aYHOSghlcjNvPcxSxbl6L9Q7f8tmvPE9p4pJ+iyxmuzgihXf3yQD2WiwycFncC
+         HWTV24ozYbCatWy7W0JQXtMRu3k975bDq1E/33h4=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210316121219eucas1p2498f05b1a32b3648518a5319d2ba7356~s0YXuDEwz0705107051eucas1p2A;
+        Tue, 16 Mar 2021 12:12:19 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D6.79.09444.3A0A0506; Tue, 16
+        Mar 2021 12:12:19 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210316121218eucas1p1f74d6e6cec7fc897051902a7da478fd0~s0YXFIT_O2423624236eucas1p1i;
+        Tue, 16 Mar 2021 12:12:18 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210316121218eusmtrp271df07341d70ec3213152651a8c86420~s0YXEagHI2950929509eusmtrp2H;
+        Tue, 16 Mar 2021 12:12:18 +0000 (GMT)
+X-AuditID: cbfec7f4-dd5ff700000024e4-01-6050a0a39822
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 61.4A.08705.2A0A0506; Tue, 16
+        Mar 2021 12:12:18 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210316121218eusmtip2fb6f60efb598a44eca3937dffdce32e9~s0YW2xqWh2290822908eusmtip2e;
+        Tue, 16 Mar 2021 12:12:18 +0000 (GMT)
+From:   Lukasz Stelmach <l.stelmach@samsung.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        =?utf-8?Q?Bart=C5=82omiej_=C5=BBolnierkiewicz?= 
+        <b.zolnierkie@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: ds1307: set uie_unsupported if no interrupt is
+ available
+Date:   Tue, 16 Mar 2021 13:12:08 +0100
+In-Reply-To: <YE/ZLtdK0ZlVFOhp@piout.net> (Alexandre Belloni's message of
+        "Mon, 15 Mar 2021 23:01:18 +0100")
+Message-ID: <dleftj1rcfe1rb.fsf%l.stelmach@samsung.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
+        protocol="application/pgp-signature"
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsWy7djP87qLFwQkGLzvFbdYcvEqu0X7u2Xs
+        FhtnrGe1uLxrDpvFsdVX2CzWHrnL7sDmMW9NtUffllWMHtPn/WTy+LxJLoAlissmJTUnsyy1
+        SN8ugSvj0vwz7AWv1CoufJ7B1MD4XqGLkZNDQsBE4siUPtYuRi4OIYEVjBIXD0+Hcr4wSvw6
+        f4odwvnMKNH+u5MFpuXq161MEInlQC2T+qGqnjNKfJy8jq2LkYODTUBPYu3aCJAGEQFTidbG
+        XWwgNcwCjxgltr+7BjZJWCBEovfDYVYQm0VAVeLBzG2MIDanQJ7E25PbwWp4BcwlmtevAouL
+        ClhKbHlxnx0iLihxcuYTsBpmgVyJmeffMIIskBB4wSHxZMsDVohTXSQuNcyAOltY4tXxLewQ
+        tozE/53zmUAOlRCol5g8yQyit4dRYtucH1D11hJ3zv1ig7AdJbb0X2KBqOeTuPFWEGIvn8Sk
+        bdOZIcK8Eh1tQhDVKhLr+vdATZGS6H21ghGixENiw5cASFCtZZR49e0r0wRGhVlIvpmF5JtZ
+        QC3MApoS63fpQ4S1JZYtfM0MYdtKrFv3nmUBI+sqRvHU0uLc9NRio7zUcr3ixNzi0rx0veT8
+        3E2MwDR0+t/xLzsYl7/6qHeIkYmD8RCjCigKNqy+wCjFkpefl6okwmuaF5AgxJuSWFmVWpQf
+        X1Sak1p8iFGag0VJnDdpy5p4IYH0xJLU7NTUgtQimCwTB6dUA9OCgxkBnFtOlBUYRgWunyJ3
+        7JzynnOv2Mrce3xtgndsC+tm0jlyWuHNp8llk5ojZv6vVbRye9MuoPxy0ZKrLowvPu/9nL6K
+        fdfWOe/Y1gfuFX0tncVlGsm8fQfHN/XZctNN33y2Dtg9PfBWSF5xlOynDQdOmKWbld5cY9X6
+        y65137U/H3X0o5d3361dyO4478xBw8mrmj/EftCy5WZ4umSDTf7Oew7hk02fp0Rb/nYzmBg0
+        X/Hflu3/LxcruDQePGI+2/Clkp716/It/4T61kvX81l0JTfLXF6/N2DpvgV9fG5bJQpfGc/v
+        r5xy0idTc/W+qZsull8zMm3qKgjt3jd58Rs9+5I1nt4J4Qq+88uUWIozEg21mIuKEwEiStlg
+        vgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsVy+t/xe7qLFgQkGPzv0bZYcvEqu0X7u2Xs
+        FhtnrGe1uLxrDpvFsdVX2CzWHrnL7sDmMW9NtUffllWMHtPn/WTy+LxJLoAlSs+mKL+0JFUh
+        I7+4xFYp2tDCSM/Q0kLPyMRSz9DYPNbKyFRJ384mJTUnsyy1SN8uQS/j0vwz7AWv1CoufJ7B
+        1MD4XqGLkZNDQsBE4urXrUxdjFwcQgJLGSVWv21l7GLkAEpISaycmw5RIyzx51oXG0TNU0aJ
+        Z/PnsYDUsAnoSaxdGwFSIyJgKtHauAushlngGaPE8fnNrCAJYYEgia3vlzCD1AsJhEvsPxEE
+        EmYRUJV4MHMbI4jNKZAn8fbkdhYQm1fAXKJ5/SqwuKiApcSWF/fZIeKCEidnPgGrYRbIlvi6
+        +jnzBEaBWUhSs5CkZgFtYxbQlFi/Sx8irC2xbOFrZgjbVmLduvcsCxhZVzGKpJYW56bnFhvq
+        FSfmFpfmpesl5+duYgRG0LZjPzfvYJz36qPeIUYmDsZDjCpAnY82rL7AKMWSl5+XqiTCa5oX
+        kCDEm5JYWZValB9fVJqTWnyI0RTotYnMUqLJ+cDYziuJNzQzMDU0MbM0MLU0M1YS5906d028
+        kEB6YklqdmpqQWoRTB8TB6dUA1M539uXRnlvFAtvyN68n7VIWyTCa4513o4Vx4w3OdqHft92
+        4Me1I2Znl379d8KfaduJ152Mn4+LRpYtWH1ec0aC8eKVF/NzSh5Ezd31fd1cA2bXyFzn83Im
+        56Y1WOxrupto+Sih4fuBLTM2bJ4+a7rMvNj4485pLfUrjhsfmnd9ypd2+X1sCZrXgyKOF8ys
+        u7ldb8U6nlz3CV7JZzOK7n+7+vH9nUMTC09/SPn9l8Gy1CqZM0/o6IL/nz/V3dl+pk8sPbv4
+        nPmsZsujx/aEbWd/eOzlrsCH1yY6senPD9Q2rEg0qfHYzCVeXdq/7GHutX28uuf7rI/cM/82
+        Xaqn8tpCNuHsjycOi+6tT115qkNppRJLcUaioRZzUXEiAENHmag1AwAA
+X-CMS-MailID: 20210316121218eucas1p1f74d6e6cec7fc897051902a7da478fd0
+X-Msg-Generator: CA
+X-RootMTR: 20210316121218eucas1p1f74d6e6cec7fc897051902a7da478fd0
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20210316121218eucas1p1f74d6e6cec7fc897051902a7da478fd0
+References: <YE/ZLtdK0ZlVFOhp@piout.net>
+        <20210305174411.9657-1-l.stelmach@samsung.com>
+        <CGME20210316121218eucas1p1f74d6e6cec7fc897051902a7da478fd0@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Am Tue, 16 Mar 2021 13:30:36 +0200
-schrieb Andy Shevchenko <andriy.shevchenko@intel.com>:
+--=-=-=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Mar 16, 2021 at 11:08:05AM +0100, Claudius Heine wrote:
-> > From: Johannes Hahn <johannes-hahn@siemens.com>
-> > 
-> > This allows the RX6110 driver to be automatically assigned to the
-> > right device on the I2C bus.  
-> 
-> Thanks for all effort!
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> after addressing the below comments.
-> 
-> > Signed-off-by: Johannes Hahn <johannes-hahn@siemens.com>
-> > Signed-off-by: Claudius Heine <ch@denx.de>  
-> 
-> > Signed-off-by: Henning Schild <henning.schild@siemens.com>  
+It was <2021-03-15 pon 23:01>, when Alexandre Belloni wrote:
+> Hello,
+>
+> On 05/03/2021 18:44:11+0100, =C5=81ukasz Stelmach wrote:
+>> For an RTC without an IRQ assigned rtc_update_irq_enable() should
+>> return -EINVAL.  It will, when uie_unsupported is set.
+>>=20
+>
+> I'm surprised this is an issue because the current code seems to cover
+> all cases:
+>
+>  - no irq and not wakeup-source =3D> set_alarm should fail
+>  - no irq and wakeup-source =3D> uie_unsupported is set
+>  - irq =3D> UIE should work
+>
+> Can you elaborate on your failing use case?
 
-Claudius, just remove that. I guess just add yours and mention authors
-in the code if they should receive some recognition.
+I've got ds3231 which supports alarms[1] but is not connected to any
+interrupt line. Hence, client->irq is 0 as well as want_irq[2]. There
+is also no other indirect connection, so I don't set wakeup-source
+property and ds1307_can_wakeup_device remains[3] false. Under these
+conditions
 
-Henning
+    want_irq =3D 0
+    ds1307_can_wakeup_device =3D false
 
-> I think this is somehow confusing. Either you need to add
-> Co-developed-by of the corresponding people, or remove SoB (because
-> of From line), i.o.w seems like Co-dB tag is needed for Johannes or
-> you and something should be done with Henning's SoB.
-> 
-> > ---
-> >  drivers/rtc/rtc-rx6110.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
-> > index 79161d4c6ce4..29bd697f82cb 100644
-> > --- a/drivers/rtc/rtc-rx6110.c
-> > +++ b/drivers/rtc/rtc-rx6110.c
-> > @@ -13,6 +13,7 @@
-> >  #include <linux/of_gpio.h>
-> >  #include <linux/regmap.h>
-> >  #include <linux/rtc.h>  
-> 
-> > +#include <linux/acpi.h>  
-> 
-> Usually it's not needed if you leave IDs always to be compiled.
-> Instead mod_devicetable.h is used. But it's all up to you and
-> maintainer.
-> 
-> >  #include <linux/of.h>
-> >  #include <linux/of_device.h>
-> >  #include <linux/spi/spi.h>
-> > @@ -447,6 +448,14 @@ static int rx6110_i2c_probe(struct i2c_client
-> > *client, return rx6110_probe(rx6110, &client->dev);
-> >  }
-> >  
-> > +#ifdef CONFIG_ACPI
-> > +static const struct acpi_device_id rx6110_i2c_acpi_match[] = {
-> > +	{ "SECC6110", },
-> > +	{ },
-> > +};
-> > +MODULE_DEVICE_TABLE(acpi, rx6110_i2c_acpi_match);
-> > +#endif
-> > +
-> >  static const struct i2c_device_id rx6110_i2c_id[] = {
-> >  	{ "rx6110", 0 },
-> >  	{ }
-> > @@ -456,6 +465,9 @@ MODULE_DEVICE_TABLE(i2c, rx6110_i2c_id);
-> >  static struct i2c_driver rx6110_i2c_driver = {
-> >  	.driver = {
-> >  		.name = RX6110_DRIVER_NAME,
-> > +#ifdef CONFIG_ACPI  
-> 
-> This is implied by the stub ACPI_PTR() macro for ACPI=n case.
-> I.o.w drop this ugly and redundant ifdeffery.
-> 
-> > +		.acpi_match_table =
-> > ACPI_PTR(rx6110_i2c_acpi_match), +#endif
-> >  	},
-> >  	.probe		= rx6110_i2c_probe,
-> >  	.id_table	= rx6110_i2c_id,
-> > -- 
-> > 2.30.1
-> >   
-> 
+uie_unsupported remains[4] false. And this is the problem.
 
+hwclock(8) when setting system clock from rtc (--hctosys) calls
+synchronize_to_clock_tick_rtc()[5]. There goes
+
+    ioctl(rtc_fd, RTC_UIE_ON, 0);
+
+which leads us to
+
+    rtc_update_irq_enable(rtc, 1);
+
+and finally here [6]
+
+    if (rtc->uie_unsupported) {
+        err =3D -EINVAL;
+        goto out;
+    }
+
+and we keep going (uie_unsupported =3D 0). All the following operations
+succeed because chip supports alarms.
+
+We go back to hwclock(8) and we start waiting[7] for the update from
+interrupt which never arrives instead of calling
+busywiat_for_rtc_clock_tick()[8] (mind the invalid indentation) because
+of EINVAL returned from ioctl() (conf. [6])
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/rtc/rtc-ds1307.c?h=3Dv5.11#n1032
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/rtc/rtc-ds1307.c?h=3Dv5.11#n1779
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/rtc/rtc-ds1307.c?h=3Dv5.11#n1802
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/rtc/rtc-ds1307.c?h=3Dv5.11#n1977
+[5] https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/sys=
+-utils/hwclock-rtc.c?h=3Dv2.36.2#n252
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/rtc/interface.c?h=3Dv5.11#n564
+[7] https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/sys=
+-utils/hwclock-rtc.c?h=3Dv2.36.2#n283
+[8] https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/sys=
+-utils/hwclock-rtc.c?h=3Dv2.36.2#n297
+
+>> Signed-off-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
+>> ---
+>>  drivers/rtc/rtc-ds1307.c | 14 +++++++-------
+>>  1 file changed, 7 insertions(+), 7 deletions(-)
+>>=20
+>> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+>> index cd8e438bc9c4..b08a9736fa77 100644
+>> --- a/drivers/rtc/rtc-ds1307.c
+>> +++ b/drivers/rtc/rtc-ds1307.c
+>> @@ -1973,13 +1973,6 @@ static int ds1307_probe(struct i2c_client *client,
+>>  	if (IS_ERR(ds1307->rtc))
+>>  		return PTR_ERR(ds1307->rtc);
+>>=20=20
+>> -	if (ds1307_can_wakeup_device && !want_irq) {
+>> -		dev_info(ds1307->dev,
+>> -			 "'wakeup-source' is set, request for an IRQ is disabled!\n");
+>> -		/* We cannot support UIE mode if we do not have an IRQ line */
+>> -		ds1307->rtc->uie_unsupported =3D 1;
+>> -	}
+>> -
+>>  	if (want_irq) {
+>>  		err =3D devm_request_threaded_irq(ds1307->dev, client->irq, NULL,
+>>  						chip->irq_handler ?: ds1307_irq,
+>> @@ -1993,6 +1986,13 @@ static int ds1307_probe(struct i2c_client *client,
+>>  		} else {
+>>  			dev_dbg(ds1307->dev, "got IRQ %d\n", client->irq);
+>>  		}
+>> +	} else {
+>> +		if (ds1307_can_wakeup_device)
+>> +			dev_info(ds1307->dev,
+>> +				 "'wakeup-source' is set, request for an IRQ is disabled!\n");
+>> +
+>
+> Honestly, just drop this message, it should have been removed by 82e2d43f=
+6315
+>
+>
+
+Done.
+
+>> +		/* We cannot support UIE mode if we do not have an IRQ line */
+>> +		ds1307->rtc->uie_unsupported =3D 1;
+>>  	}
+>>=20=20
+>>  	ds1307->rtc->ops =3D chip->rtc_ops ?: &ds13xx_rtc_ops;
+>> --=20
+>> 2.26.2
+>>=20
+
+=2D-=20
+=C5=81ukasz Stelmach
+Samsung R&D Institute Poland
+Samsung Electronics
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmBQoJkACgkQsK4enJil
+gBDK3wf/RAOEvk8xZy90QMhxfRYU8XSE8UvPBaXXPOsJLFIcjbvUX5Q9s1rUrXT7
+LPbKuG3lJDNFthL/wqDj9RNx+bmDK5bf2LWZ0YgfUMuJJc/Ruc2wvr2l6DTXiKp9
+TmeTyC1e5j/VuiEsyJxQ7jss+l4Lp4QevUoVbLB+r6LAsxfbzfx4q77Ivispf+GX
+B45XoUEPzr7FE3UinHY0Zs+L0sOg9ePYd8uHYYFWMiCUTfKzc4TQNrH7WohbNOwB
+/8ocqA094cx0zTWJKnFjzwpIrFWtB/MYKAyvbMmrVlKic3tiHddB7alQWL7mOqn9
+fCm79ml5dWTFwXrkK9GP7zpJHcYxZw==
+=mr4q
+-----END PGP SIGNATURE-----
+--=-=-=--
