@@ -2,48 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB9F33CED6
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 08:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFE833D168
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 11:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbhCPHuB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Mar 2021 03:50:01 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:43495 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbhCPHtk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Mar 2021 03:49:40 -0400
-X-Originating-IP: 90.65.108.55
-Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 6D155FF811;
-        Tue, 16 Mar 2021 07:49:38 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: mxc: Remove unneeded of_match_ptr()
-Date:   Tue, 16 Mar 2021 08:49:37 +0100
-Message-Id: <161588092513.637717.7389096109095766465.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210315235800.200137-1-festevam@gmail.com>
-References: <20210315235800.200137-1-festevam@gmail.com>
+        id S234296AbhCPKJB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Mar 2021 06:09:01 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:56693 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236479AbhCPKIx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Mar 2021 06:08:53 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4F08Bn6X0bz1qsjw;
+        Tue, 16 Mar 2021 11:08:49 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4F08Bn5QFsz1qql0;
+        Tue, 16 Mar 2021 11:08:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id GvUvLZOwWlqc; Tue, 16 Mar 2021 11:08:48 +0100 (CET)
+X-Auth-Info: ek4xd34+s2zMDMLnUW4kGKckmm1ivZrBp4w+T/fwzZw=
+Received: from localhost (dslb-084-056-254-233.084.056.pools.vodafone-ip.de [84.56.254.233])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Tue, 16 Mar 2021 11:08:48 +0100 (CET)
+From:   Claudius Heine <ch@denx.de>
+To:     johannes hahn <johannes-hahn@siemens.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     werner zeh <werner.zeh@siemens.com>,
+        henning schild <henning.schild@siemens.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        martin mantel <martin.mantel@siemens.com>,
+        val krutov <val.krutov@erd.epson.com>,
+        Claudius Heine <ch@denx.de>
+Subject: [PATCH v3 0/1] add ACPI binding to RX6110 driver
+Date:   Tue, 16 Mar 2021 11:08:04 +0100
+Message-Id: <20210316100805.2630481-1-ch@denx.de>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <AM0PR10MB25801B7DCB6C1856B5D4F2C09FE10@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
+References: <AM0PR10MB25801B7DCB6C1856B5D4F2C09FE10@AM0PR10MB2580.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 15 Mar 2021 20:58:00 -0300, Fabio Estevam wrote:
-> i.MX is a DT-only platform, so of_match_ptr() can be safely
-> removed.
-> 
-> Remove the unneeded of_match_ptr().
+Hi,
 
-Applied, thanks!
+it took some time, but now we got the official ACPI id for the RX6110 RTC driver
+from Seiko Epson.
 
-[1/1] rtc: mxc: Remove unneeded of_match_ptr()
-      commit: 9346ff0bc6ff3c3a495d50a43b57df8fed7bc562
+regards,
+Claudius
 
-Best regards,
+Johannes Hahn (1):
+  rtc: rx6110: add ACPI bindings to I2C
+
+ drivers/rtc/rtc-rx6110.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+2.30.1
+
