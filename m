@@ -2,125 +2,153 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C77933EAD9
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Mar 2021 08:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E98B33EB48
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Mar 2021 09:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbhCQHxu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 17 Mar 2021 03:53:50 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:40522 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbhCQHxT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 Mar 2021 03:53:19 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4F0j7x3Y8Bz1qsjl;
-        Wed, 17 Mar 2021 08:53:17 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4F0j7x2gr3z1r1M0;
-        Wed, 17 Mar 2021 08:53:17 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id PLAnb7FrPttA; Wed, 17 Mar 2021 08:53:16 +0100 (CET)
-X-Auth-Info: Wzv/zhzV0VLGhNLvkk+gS0+i+ZnIIVv90jGCSWUxwHM=
-Received: from [10.88.0.186] (dslb-084-056-254-233.084.056.pools.vodafone-ip.de [84.56.254.233])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Wed, 17 Mar 2021 08:53:16 +0100 (CET)
-Subject: Re: [PATCH v4] rtc: rx6110: add ACPI bindings to I2C
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     johannes hahn <johannes-hahn@siemens.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        werner zeh <werner.zeh@siemens.com>,
-        henning schild <henning.schild@siemens.com>,
-        martin mantel <martin.mantel@siemens.com>,
-        val krutov <val.krutov@erd.epson.com>
-References: <20210316100805.2630481-1-ch@denx.de>
- <20210316144819.4130622-1-ch@denx.de> <YFDjDhsCikxtl5rw@smile.fi.intel.com>
-From:   Claudius Heine <ch@denx.de>
-Organization: Denx Software Engineering
-Message-ID: <5296791f-c432-d769-390a-27f86d4d1ae8@denx.de>
-Date:   Wed, 17 Mar 2021 08:53:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229519AbhCQIT4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 17 Mar 2021 04:19:56 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:11890 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229506AbhCQITs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 Mar 2021 04:19:48 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210317081945euoutp0173d6dccf2456cbd844de57e168268a2c~tE2mgWIFY1212812128euoutp01y
+        for <linux-rtc@vger.kernel.org>; Wed, 17 Mar 2021 08:19:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210317081945euoutp0173d6dccf2456cbd844de57e168268a2c~tE2mgWIFY1212812128euoutp01y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1615969185;
+        bh=hLfG1mLh/mmQm3ZtzhfOcgpbBnnOXvRKhCNQzWA7meA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nwLc/q3OM0PnROAP10E7jrli3uZrW8LP9J+9ul92w44umNQixXzFQo7rgLD4EvTr+
+         Je14c9jAoAZfKNDjfubYecPDZCa1x+/CLjHqMvgNSPIrTRl+PvSZweQW9lNp1LHqOQ
+         dPAGI3n2fszSSKWqrocxin9fHix8AEi05qf02WMg=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210317081944eucas1p2a8414c40a85ebb288eb330aa6ef073a6~tE2lvgm4r0565005650eucas1p2w;
+        Wed, 17 Mar 2021 08:19:44 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 29.56.09452.0ABB1506; Wed, 17
+        Mar 2021 08:19:44 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210317081944eucas1p123bd27f3203c937d2969a66fb06d6d9e~tE2laXpAt3196031960eucas1p1r;
+        Wed, 17 Mar 2021 08:19:44 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210317081944eusmtrp2cba4efe2928405d112d2361eeb95de27~tE2lZkuZn1423714237eusmtrp2h;
+        Wed, 17 Mar 2021 08:19:44 +0000 (GMT)
+X-AuditID: cbfec7f2-a9fff700000024ec-f1-6051bba0a4ef
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E3.B7.08696.0ABB1506; Wed, 17
+        Mar 2021 08:19:44 +0000 (GMT)
+Received: from localhost (unknown [106.120.51.46]) by eusmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20210317081944eusmtip2b2a2731d21436519728ef0f29878a5e1~tE2lOCMoe1399213992eusmtip2Z;
+        Wed, 17 Mar 2021 08:19:44 +0000 (GMT)
+From:   =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     l.stelmach@samsung.com, a.zummo@towertech.it,
+        b.zolnierkie@samsung.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, m.szyprowski@samsung.com
+Subject: [PATCH 1/2] WIP: Introduce has_alarm method for rtc devices
+Date:   Wed, 17 Mar 2021 09:19:35 +0100
+Message-Id: <20210317081936.26583-1-l.stelmach@samsung.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <dleftjblbjc6w1.fsf%l.stelmach@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <YFDjDhsCikxtl5rw@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Organization: Samsung R&D Institute Poland
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphleLIzCtJLcpLzFFi42LZduzned0FuwMTDL68MLBYcvEqu0X7u2Xs
+        FhtnrGe1uHloBaPF5V1z2CyOrb7CZrH2yF12B3aPeWuqPfq2rGL0mD7vJ5PH501yASxRXDYp
+        qTmZZalF+nYJXBmbztxmLJjBW/Gkq5e5gfEDVxcjJ4eEgInElK2PmbsYuTiEBFYwSjye3QTl
+        fGGUOHf4CRuE85lRYlbnO1aYlm3TbjJBJJYzShy6Pp8RwnnOKHFvazsTSBWbgKNE/9ITYB0i
+        AooSt/c9BJvLLLCQUeLBqnVgRcICLhKHD38Es1kEVCX+Ln/OAmLzClhLPH+/CWqdvET78u1s
+        IDangIXEpwlvmSFqBCVOznwCVs8voCWxpuk6mM0MVN+8dTbYMgmBCxwSj36/YIIY5CLRdBbm
+        B2GJV8e3sEPYMhL/d84HquEAsuslJk8yg+jtYZTYNucHC0SNtcSdc7/YQGqYBTQl1u/ShwgD
+        PfnlKyNEK5/EjbeCECfwSUzaNp0ZIswr0dEmBFGtIrGufw/UQCmJ3lcrGCcwKs1C8swsJA/M
+        Qti1gJF5FaN4amlxbnpqsWFearlecWJucWleul5yfu4mRmCCOf3v+KcdjHNffdQ7xMjEwXiI
+        UYKDWUmE1zQvIEGINyWxsiq1KD++qDQntfgQozQHi5I476rZa+KFBNITS1KzU1MLUotgskwc
+        nFINTHLPz+8Q3K3c0X3h7Ktk49wHnm3ymzP31/QvP6m1aauyVnXzezVtuc9nfqtetAmQfq79
+        iunTFla+O6vyjx1cc3z34oun9mYWOIjcy50wZU/j1o+lHF5HN64+9M7zjLqIaqdCwuPo1duu
+        mvqwsMw55xDzojx79VZGxn95V3ZzGl3oWajnVhcSM+vp0UtaE1kcdt95sc+n/6hjcVv5pk2W
+        fLsUD7e/uOdRv3uKPvtztW8LLM+JpDRMFtsQfa3EXOvPwhemT1kvTLqb2g103Ude1qMzJBP2
+        aXe1XYj9vfHy9b7Lx34s+CE36Z7ZSZP+N7ekfUM/hxbtElwuMmFr5uv6jJqSJQzVb+ZOjTu0
+        8Ntc/xlKLMUZiYZazEXFiQDz39CinwMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFIsWRmVeSWpSXmKPExsVy+t/xe7oLdgcmGKx+Lmmx5OJVdov2d8vY
+        LTbOWM9qcfPQCkaLy7vmsFkcW32FzWLtkbvsDuwe89ZUe/RtWcXoMX3eTyaPz5vkAlii9GyK
+        8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DI2nbnNWDCD
+        t+JJVy9zA+MHri5GTg4JAROJbdNuMoHYQgJLGSU+LPDoYuQAiktJrJybDlEiLPHnWhcbRMlT
+        RolfZ/hBbDYBR4n+pSdYQWwRAUWJ2/seMncxcnEwCyxnlHj49QRYg7CAi8Thwx/B5rMIqEr8
+        Xf6cBcTmFbCWeP5+EyvEAnmJ9uXbweo5BSwkPk14ywyxzFzixKtHTBD1ghInZz5hAbmNWUBd
+        Yv08IZAwv4CWxJqm62AjmYHGNG+dzTyBUWgWko5ZCB2zkFQtYGRexSiSWlqcm55bbKRXnJhb
+        XJqXrpecn7uJERhJ24793LKDceWrj3qHGJk4GA8xSnAwK4nwmuYFJAjxpiRWVqUW5ccXleak
+        Fh9iNAX6bCKzlGhyPjCW80riDc0MTA1NzCwNTC3NjJXEeU2OrIkXEkhPLEnNTk0tSC2C6WPi
+        4JRqYMqrea3NFybZ1tvwRmeyWNIJvXs8q45Om/OSWehn6aKFu69ei4h9uemPqp7we60PG+2C
+        Te/+sH0+6e7tC3cDXGvvNB5PUxV2ym3b3O7Fs6Rz1SGd2x93KFRznl4jd1zmulsqn9A0bbVc
+        hu6DrQuDf/dmutuuOdTd8DYru5Vz12vvsLnFU6u+3da/fU7511xD5YnhV7rs2Z//5Vrze1JE
+        pYp/Qt97GTeZn9WbUtatamniPBzumZG+WXxDwLLjPI7hhmpFovJ1F/8a3njzd0v3rF2/7hz5
+        VOWw5rez8Obpj2svTlEIML91TVzTYMGV/Cb+JtnXvi7Kky+2M7vs/6N7VLEqINc2qmtiaJyG
+        sfKJDiWW4oxEQy3mouJEAFznvEYtAwAA
+X-CMS-MailID: 20210317081944eucas1p123bd27f3203c937d2969a66fb06d6d9e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20210317081944eucas1p123bd27f3203c937d2969a66fb06d6d9e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20210317081944eucas1p123bd27f3203c937d2969a66fb06d6d9e
+References: <dleftjblbjc6w1.fsf%l.stelmach@samsung.com>
+        <CGME20210317081944eucas1p123bd27f3203c937d2969a66fb06d6d9e@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Andy,
+The method enables determining whether a device supports
+setting alarms or not before checking if the alarm to be
+set is in the past; thus, provides clear indication of
+support for alarms in a given configuration.
 
-On 2021-03-16 17:55, Andy Shevchenko wrote:
-> On Tue, Mar 16, 2021 at 03:48:18PM +0100, Claudius Heine wrote:
->> From: Johannes Hahn <johannes-hahn@siemens.com>
->>
->> This allows the RX6110 driver to be automatically assigned to the right
->> device on the I2C bus.
-> 
-> You missed given tag, when somebody sends you one, it's usually your
-> responsibility to pick it up. Hint: install b4 tool (likely in your distro, at
-> least Debian, Arch Linux have it) and run it against message ID of the version
-> in question. It will gather all tags. For example, for this case, run
-> 
->    % b4 am 20210316144819.4130622-1-ch@denx.de
-> 
-> It will download mailbox suitable for `git am ...` you will read on the screen.
-> 
-> Also, when send a new version, don't attach it to the old thread. It will
-> confuse people and maybe even tools (i.o.w. don't supply message ID to be put
-> to In-Reply-To header).
+Signed-off-by: Łukasz Stelmach <l.stelmach@samsung.com>
+---
+How about has_alarm() method. It can be checked at the beginning of
+__rtc_set_alarm() like RTC_HAS_ALARM flag I proposed above, but doesn't
+need to be introduced in all drivers at once.
 
-Ok.
+See the following message for the implementation in the ds1307 driver.
 
-> 
-> So, repeat again my tag and see one fix to be performed below.
-> Reviewed-by: From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+The first uie_unsupported patch should be kept regardless of these two.
 
-Ok, will take care about this in v5.
+ drivers/rtc/interface.c | 6 ++++++
+ include/linux/rtc.h     | 1 +
+ 2 files changed, 7 insertions(+)
 
-> 
->> Signed-off-by: Johannes Hahn <johannes-hahn@siemens.com>
->> Co-developed-by: Claudius Heine <ch@denx.de>
->> Signed-off-by: Claudius Heine <ch@denx.de>
->> ---
->>   drivers/rtc/rtc-rx6110.c | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/rtc/rtc-rx6110.c b/drivers/rtc/rtc-rx6110.c
->> index 79161d4c6ce4..2a06953c0a84 100644
->> --- a/drivers/rtc/rtc-rx6110.c
->> +++ b/drivers/rtc/rtc-rx6110.c
->> @@ -447,6 +447,12 @@ static int rx6110_i2c_probe(struct i2c_client *client,
->>   	return rx6110_probe(rx6110, &client->dev);
->>   }
->>   
->> +static const struct acpi_device_id rx6110_i2c_acpi_match[] = {
->> +	{ "SECC6110" },
->> +	{ }
->> +};
->> +MODULE_DEVICE_TABLE(acpi, rx6110_i2c_acpi_match);
->> +
->>   static const struct i2c_device_id rx6110_i2c_id[] = {
->>   	{ "rx6110", 0 },
->>   	{ }
->> @@ -456,6 +462,7 @@ MODULE_DEVICE_TABLE(i2c, rx6110_i2c_id);
->>   static struct i2c_driver rx6110_i2c_driver = {
->>   	.driver = {
->>   		.name = RX6110_DRIVER_NAME,
->> +		.acpi_match_table = ACPI_PTR(rx6110_i2c_acpi_match),
-> 
-> Since you drop ifdeffery above, you have to drop ACPI_PTR() (besides that
-> ACPI_PTR() requires acpi.h to be included).
-
-Ok, will do that as well.
-
-regards,
-Claudius
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 794a4f036b99..1eb180370d9b 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -412,6 +412,12 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ 	time64_t now, scheduled;
+ 	int err;
+ 
++	if (!rtc->ops)
++		err = -ENODEV;
++	else if (rtc->ops->has_alarm &&
++		 !rtc->ops->has_alarm(rtc->dev.parent))
++		return -EINVAL;
++
+ 	err = rtc_valid_tm(&alarm->time);
+ 	if (err)
+ 		return err;
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 22d1575e4991..ce9fc77ccd02 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -66,6 +66,7 @@ struct rtc_class_ops {
+ 	int (*alarm_irq_enable)(struct device *, unsigned int enabled);
+ 	int (*read_offset)(struct device *, long *offset);
+ 	int (*set_offset)(struct device *, long offset);
++	int (*has_alarm)(struct device *);
+ };
+ 
+ struct rtc_device;
+-- 
+2.26.2
