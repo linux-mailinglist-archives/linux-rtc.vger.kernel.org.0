@@ -2,168 +2,190 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3888833E0D5
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Mar 2021 22:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0006B33E97A
+	for <lists+linux-rtc@lfdr.de>; Wed, 17 Mar 2021 07:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbhCPVwE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Mar 2021 17:52:04 -0400
-Received: from mail-il1-f176.google.com ([209.85.166.176]:38380 "EHLO
-        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbhCPVv3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Mar 2021 17:51:29 -0400
-Received: by mail-il1-f176.google.com with SMTP id f10so14144011ilq.5;
-        Tue, 16 Mar 2021 14:51:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6sggz0cW6S5oWFTZs2rV+TqaEbdoBcz8RBGBjA8S3b8=;
-        b=q/hvRV7EQqFAOt1PPDQe/bguRF9xOeTJAM5u1B0mXtkEgcbnQjLs0PUB3YuQdS6AON
-         jtjIRnn8sRrO5VfGHwZ1hvFLw84Fj8ytMo/KrTi1yR0JtBazAFMgTKCUD9MqkC9DGYIS
-         wRZhyVbt1Z9TcInkI9reIfPELSFRlL8NVshOEtas4IGpENADmFrsUHqjk/xUcxPFe2Ky
-         9hEEfcZn9RNrjZHhbG+UNiMNKU4fPFkYlExhuA3YSkW+WvzQCVzHMqM6W3gvnPtEvJoU
-         vlMaT9uUVxj9xvPVmJU7XHhUq5oNAbdZNyKZ/VLa/HyFnhVagt8qg0lhbf0IgOuq1snI
-         i3gQ==
-X-Gm-Message-State: AOAM53346t2iWdbEmx014B5uGaHQHDo4U2MWvmV3UwDUy/gvCUhxCnVK
-        wzpRHTG9P1/z9HQabtpW3w==
-X-Google-Smtp-Source: ABdhPJwsSv9g0C0LxRsIhgTNLhkUz3c9irY8ZHBA/9wlz76whYv3hXMw4HFmiG/1sHtqi21CBxGXRw==
-X-Received: by 2002:a05:6e02:dce:: with SMTP id l14mr5298695ilj.102.1615931488394;
-        Tue, 16 Mar 2021 14:51:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id b12sm10054845ilr.55.2021.03.16.14.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 14:51:27 -0700 (PDT)
-Received: (nullmailer pid 3739030 invoked by uid 1000);
-        Tue, 16 Mar 2021 21:51:23 -0000
-Date:   Tue, 16 Mar 2021 15:51:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mtd@lists.infradead.org, NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Daniel Vetter <daniel@ffwll.ch>, kernel@collabora.com,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCHv1 1/6] rtc: m41t80: add support for protected clock
-Message-ID: <20210316215123.GA3712408@robh.at.kernel.org>
-References: <20210222171247.97609-1-sebastian.reichel@collabora.com>
- <20210222171247.97609-2-sebastian.reichel@collabora.com>
- <YDQgLTPE0E+/1Cwv@piout.net>
- <YDQhgkftoW4J9AtY@piout.net>
- <20210223012657.bbp5u65nw4tpcjgd@earth.universe>
- <20210306195645.GA1112592@robh.at.kernel.org>
- <20210308140358.diolcpbaq7gow3y4@earth.universe>
+        id S229712AbhCQGBl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 17 Mar 2021 02:01:41 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:48648 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229739AbhCQGBK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 Mar 2021 02:01:10 -0400
+X-UUID: 3bd86e3980894a73b38af9e980095994-20210317
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=flS4aAUkiDCFSAojI4O/EVU54VJW8Vir9tiLnZM7n50=;
+        b=dGIBrrkGP8cbwFtpRFZMlbn5Eaz2KX1DtHXJFMrOo/WRLowFNmwFCUiYXA5UUXSJrnrRItB2Tqaeq6hjfNTv4fpa9T94P/HeBAttfUFV7TqtfQ2ioxTHzHN2wuAKdOmN1UQZj8+Ha5h9UAT/xCrTFMP2HzUI4jheGYOOgrKgce8=;
+X-UUID: 3bd86e3980894a73b38af9e980095994-20210317
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <hsin-hsiung.wang@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 904840216; Wed, 17 Mar 2021 14:01:07 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 17 Mar 2021 14:01:05 +0800
+Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 17 Mar 2021 14:01:05 +0800
+Message-ID: <1615960865.28391.0.camel@mtksdaap41>
+Subject: Re: [PATCH v6 4/8] dt-bindings: regulator: Add document for MT6359
+ regulator
+From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>,
+        "Fei Shao" <fshao@chromium.org>, Ran Bi <ran.bi@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 17 Mar 2021 14:01:05 +0800
+In-Reply-To: <20210316212802.GA3670080@robh.at.kernel.org>
+References: <1615829757-3223-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <1615829757-3223-5-git-send-email-hsin-hsiung.wang@mediatek.com>
+         <20210316212802.GA3670080@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210308140358.diolcpbaq7gow3y4@earth.universe>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 03:03:58PM +0100, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Sat, Mar 06, 2021 at 11:56:45AM -0800, Rob Herring wrote:
-> > On Tue, Feb 23, 2021 at 02:26:57AM +0100, Sebastian Reichel wrote:
-> > > On Mon, Feb 22, 2021 at 10:26:26PM +0100, Alexandre Belloni wrote:
-> > > > On 22/02/2021 22:20:47+0100, Alexandre Belloni wrote:
-> > > > > On 22/02/2021 18:12:42+0100, Sebastian Reichel wrote:
-> > > > > > Congatec's QMX6 system on module (SoM) uses a m41t62 as RTC. The
-> > > > > > modules SQW clock output defaults to 32768 Hz. This behaviour is
-> > > > > > used to provide the i.MX6 CKIL clock. Once the RTC driver is probed,
-> > > > > > the clock is disabled and all i.MX6 functionality depending on
-> > > > > > the 32 KHz clock has undefined behaviour. On systems using hardware
-> > > > > > watchdog it seems to likely trigger a lot earlier than configured.
-> > > > > > 
-> > > > > > The proper solution would be to describe this dependency in DT,
-> > > > > > but that will result in a deadlock. The kernel will see, that
-> > > > > > i.MX6 system clock needs the RTC clock and do probe deferral.
-> > > > > > But the i.MX6 I2C module never becomes usable without the i.MX6
-> > > > > > CKIL clock and thus the RTC's clock will not be probed. So from
-> > > > > > the kernel's perspective this is a chicken-and-egg problem.
-> > > > > > 
-> > > > > 
-> > > > > Reading the previous paragraph, I was going to suggest describing the
-> > > > > dependency and wondering whether this would cause a circular dependency.
-> > > > > I guess this will keep being an issue for clocks on an I2C or SPI bus...
-> > > 
-> > > Yes, it is a circular dependency on this particular system on
-> > > module. It only works because the RTC enables the clock by
-> > > default. The i.MX6 CKIL is expected to be always enabled.
-> > 
-> > I think you should describe the circular clocking and then provide a way 
-> > to break the dependency.
-> 
-> This is very much not trivial. The clock is required during early
-> initialization of the i.MX. At this point we are far from probing
-> I2C drivers and without the I2C driver the clock is not registered.
-> The current i.MX code expects the system clocks to be fixed clocks,
-> since they must be enabled before any code is executed (incl.
-> bootloader) and must never be disabled. From a HW design point of
-> view it does not make sense to have a SW controllable clock for it,
-> since it just adds extra cost. I believe for QMX6 it is only SW
-> controllable, because that avoids the need for an extra crystal.
-> 
-> So how is the clock framework supposed to know, that it can ignore
-> the clock during registration? I see the following options:
-> 
-> 1. My solution is the simplest one. Keep i.MX clock code the same
->    (it assumes a fixed-clock being used for CKIL) and avoid
->    registering RTC clock. This basically means the RTC is considered
->    to be a fixed-clock on this system, which is what the HW designers
->    seemed to have in mind (vendor kernel for the QMX6 is old enough
->    (4.9.x) to not to have CLK feature in the RTC driver. Vendor
->    U-Boot also does not touch the RTC. Booting mainline kernel once
->    bricks QMX6 boards until RTC battery is removed, so one could
->    actually argue addition of the CLK feature in 1373e77b4f10 (4.13)
->    is a regression). Currently Qualcomm device uses "protected-clocks"
->    for FW controlled clocks where Linux would crash the system by
->    trying to access them. IMHO the RTC is similar, since disabling
->    or modifying its frequency on QMX6 results in undefined behaviour
->    and possibly system crash.
-> 
-> 2. Make i.MX clock code use the RTC as CKIL clock provider, but
->    ignore it somehow. I see three sub-options:
-> 
-> 2.1. Add a property 'boot-enabled' to the RTC node, so that the
->      clock framework is aware of clock being enabled. This can
->      be used to satisfy clock dependencies somehow.
-> 
-> 2.2. The RTC device is not probed without I2C bus, but the driver
->      could also register a fake clock purely based on DT
->      information by adding some early init hook and take over
->      the clock once the I2C part is being probed. I think this
->      is a bad idea regarding maintainability of the driver.
->      Also for systems not using the RTC clock, the early clock
->      registration is basically wrong: If the kernel disables
->      the RTC it will stay disabled across boots if the RTC has
->      a backup battery. Basically we cannot imply anything from
->      the RTC compatible value alone.
-> 
-> 2.3 The i.MX core code could request CKIL with some flag, that
->     it's fine to have an unresolvable clock and just expect it
->     to be boot-enabled. The rationale would be, that CKIL must
->     be always-enabled.
+SGksIFJvYg0KSSBhbSB2ZXJ5IGdyYXRlZnVsIGZvciB0aGUgcmV2aWV3aW5nIHdoaWNoIGFkZHJl
+c3NlZCBteSB5YW1sIGVycm9ycy4NCkkgd2lsbCBjaGVjayBteSBjb2RlYmFzZSBmaXJzdCBhbmQg
+Zml4IHRoZSBlcnJvciBpbiB0aGUgbmV4dCBwYXRjaC4NCg0KVGhhbmtzLg0KDQpPbiBUdWUsIDIw
+MjEtMDMtMTYgYXQgMTU6MjggLTA2MDAsIFJvYiBIZXJyaW5nIHdyb3RlOg0KPiBPbiBUdWUsIE1h
+ciAxNiwgMjAyMSBhdCAwMTozNTo1M0FNICswODAwLCBIc2luLUhzaXVuZyBXYW5nIHdyb3RlOg0K
+PiA+IGFkZCBkdC1iaW5kaW5nIGRvY3VtZW50IGZvciBNZWRpYVRlayBNVDYzNTkgUE1JQw0KPiA+
+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEhzaW4tSHNpdW5nIFdhbmcgPGhzaW4taHNpdW5nLndhbmdA
+bWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+IGNoYW5nZXMgc2luY2UgdjU6DQo+ID4gLSBubyBj
+aGFuZ2UuDQo+ID4gLS0tDQo+ID4gIC4uLi9iaW5kaW5ncy9yZWd1bGF0b3IvbXQ2MzU5LXJlZ3Vs
+YXRvci55YW1sICB8IDE2OSArKysrKysrKysrKysrKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQs
+IDE2OSBpbnNlcnRpb25zKCspDQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9u
+L2RldmljZXRyZWUvYmluZGluZ3MvcmVndWxhdG9yL210NjM1OS1yZWd1bGF0b3IueWFtbA0KPiA+
+IA0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcmVn
+dWxhdG9yL210NjM1OS1yZWd1bGF0b3IueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
+aW5kaW5ncy9yZWd1bGF0b3IvbXQ2MzU5LXJlZ3VsYXRvci55YW1sDQo+ID4gbmV3IGZpbGUgbW9k
+ZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLjYyZmY5M2VlZmQzOQ0KPiA+IC0tLSAv
+ZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcmVn
+dWxhdG9yL210NjM1OS1yZWd1bGF0b3IueWFtbA0KPiA+IEBAIC0wLDAgKzEsMTY5IEBADQo+ID4g
+KyMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChHUEwtMi4wIE9SIEJTRC0yLUNsYXVzZSkNCj4g
+PiArJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9z
+Y2hlbWFzL3JlZ3VsYXRvci9tdDYzNTktcmVndWxhdG9yLnlhbWwjDQo+ID4gKyRzY2hlbWE6IGh0
+dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ICsNCj4gPiAr
+dGl0bGU6IE1UNjM1OSBSZWd1bGF0b3IgZnJvbSBNZWRpYVRlayBJbnRlZ3JhdGVkDQo+ID4gKw0K
+PiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIEhzaW4tSHNpdW5nIFdhbmcgPGhzaW4taHNpdW5n
+LndhbmdAbWVkaWF0ZWsuY29tPg0KPiA+ICsNCj4gPiArZGVzY3JpcHRpb246IHwNCj4gPiArICBM
+aXN0IG9mIHJlZ3VsYXRvcnMgcHJvdmlkZWQgYnkgdGhpcyBjb250cm9sbGVyLiBJdCBpcyBuYW1l
+ZA0KPiA+ICsgIGFjY29yZGluZyB0byBpdHMgcmVndWxhdG9yIHR5cGUsIGJ1Y2tfPG5hbWU+IGFu
+ZCBsZG9fPG5hbWU+Lg0KPiA+ICsgIE1UNjM1OSByZWd1bGF0b3JzIG5vZGUgc2hvdWxkIGJlIHN1
+YiBub2RlIG9mIHRoZSBNVDYzOTcgTUZEIG5vZGUuDQo+ID4gKw0KPiA+ICtwcm9wZXJ0aWVzOg0K
+PiA+ICsgICRub2RlbmFtZToNCj4gPiArICAgIHBhdHRlcm46ICJecG1pYyQiDQo+IA0KPiBUaGUg
+ZXJyb3JzIGFyZSBiZWNhdXNlIHRoaXMgc2NoZW1hIHdpbGwgYmUgYXBwbGllZCB0byBldmVyeSAn
+cG1pYycgbm9kZS4NCj4gDQo+ID4gKw0KPiA+ICsgIG10NjM1OXJlZ3VsYXRvcjoNCj4gDQo+IFRo
+ZSBub2RlIG5hbWUgaGVyZSBzaG91bGQgYmUganVzdCAncmVndWxhdG9ycycsIGJ1dCB0aGF0IHNo
+b3VsZCBiZSBpbiANCj4gdGhlIE1GRCBzY2hlbWEgYW5kIHlvdSBzaG91bGQgcmVtb3ZlIHRoaXMg
+bGV2ZWwgaGVyZS4gU28gdGhlIE1GRCB3b3VsZCANCj4gaGF2ZToNCj4gDQo+IHByb3BlcnRpZXM6
+DQo+ICAgcmVndWxhdG9yczoNCj4gICAgIHR5cGU6IG9iamVjdA0KPiAgICAgJHJlZjogc2NoZW1h
+cy9yZWd1bGF0b3IvbXQ2MzU5LXJlZ3VsYXRvci55YW1sIw0KPiANCj4gPiArICAgIHR5cGU6IG9i
+amVjdA0KPiA+ICsgICAgZGVzY3JpcHRpb246DQo+ID4gKyAgICAgIGxpc3Qgb2YgcmVndWxhdG9y
+cyBwcm92aWRlZCBieSB0aGlzIGNvbnRyb2xsZXIuDQo+ID4gKw0KPiA+ICsgICAgcGF0dGVyblBy
+b3BlcnRpZXM6DQo+IA0KPiBBbmQgdGhpcyBzaG91bGQgYmUgYXQgdGhlIHRvcCBsZXZlbCBvZiB0
+aGlzIGRvYy4NCj4gDQo+ID4gKyAgICAgICJeYnVja192KHMxfGdwdTExfG1vZGVtfHB1fGNvcmV8
+czJ8cGF8cHJvYzJ8cHJvYzF8Y29yZV9zc2h1YikkIjoNCj4gPiArICAgICAgICB0eXBlOiBvYmpl
+Y3QNCj4gPiArICAgICAgICAkcmVmOiAicmVndWxhdG9yLnlhbWwjIg0KPiA+ICsNCj4gPiArICAg
+ICAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWU6DQo+ID4gKyAg
+ICAgICAgICAgIHBhdHRlcm46ICJedihzMXxncHUxMXxtb2RlbXxwdXxjb3JlfHMyfHBhfHByb2My
+fHByb2MxfGNvcmVfc3NodWIpJCINCj4gPiArDQo+ID4gKyAgICAgICAgdW5ldmFsdWF0ZWRQcm9w
+ZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArICAgICAgIl5sZG9fdihpYnJ8cmYxMnx1c2J8Y2Ft
+aW98ZWZ1c2V8eG8yMikkIjoNCj4gPiArICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICAg
+ICAkcmVmOiAicmVndWxhdG9yLnlhbWwjIg0KPiA+ICsNCj4gPiArICAgICAgICBwcm9wZXJ0aWVz
+Og0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAgIHBhdHRl
+cm46ICJedihpYnJ8cmYxMnx1c2J8Y2FtaW98ZWZ1c2V8eG8yMikkIg0KPiA+ICsNCj4gPiArICAg
+ICAgICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICsgICAgICAiXmxk
+b192KHJmY2t8ZW1jfGExMnxhMDl8dWZzfGJiY2spJCI6DQo+ID4gKyAgICAgICAgdHlwZTogb2Jq
+ZWN0DQo+ID4gKyAgICAgICAgJHJlZjogInJlZ3VsYXRvci55YW1sIyINCj4gPiArDQo+ID4gKyAg
+ICAgICAgcHJvcGVydGllczoNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lOg0KPiA+ICsg
+ICAgICAgICAgICBwYXR0ZXJuOiAiXnYocmZja3xlbWN8YTEyfGEwOXx1ZnN8YmJjaykkIg0KPiA+
+ICsNCj4gPiArICAgICAgICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+
+ICsgICAgICAiXmxkb192Y24oMTh8MTN8MzNfMV9idHwxM18xX3dpZml8MzNfMl9idHwzM18yX3dp
+ZmkpJCI6DQo+ID4gKyAgICAgICAgdHlwZTogb2JqZWN0DQo+ID4gKyAgICAgICAgJHJlZjogInJl
+Z3VsYXRvci55YW1sIyINCj4gPiArDQo+ID4gKyAgICAgICAgcHJvcGVydGllczoNCj4gPiArICAg
+ICAgICAgIHJlZ3VsYXRvci1uYW1lOg0KPiA+ICsgICAgICAgICAgICBwYXR0ZXJuOiAiXnZjbigx
+OHwxM3wzM18xX2J0fDEzXzFfd2lmaXwzM18yX2J0fDMzXzJfd2lmaSkkIg0KPiA+ICsNCj4gPiAr
+ICAgICAgICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICsgICAgICAi
+Xmxkb192c3JhbV8ocHJvYzJ8b3RoZXJzfG1kfHByb2MxfG90aGVyc19zc2h1YikkIjoNCj4gPiAr
+ICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICAgICAkcmVmOiAicmVndWxhdG9yLnlhbWwj
+Ig0KPiA+ICsNCj4gPiArICAgICAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICAgICAgcmVndWxh
+dG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAgIHBhdHRlcm46ICJednNyYW1fKHByb2MyfG90aGVy
+c3xtZHxwcm9jMXxvdGhlcnNfc3NodWIpJCINCj4gPiArDQo+ID4gKyAgICAgICAgdW5ldmFsdWF0
+ZWRQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArICAgICAgIl5sZG9fdihmZXxiaWZ8aW8p
+MjgkIjoNCj4gPiArICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICAgICAkcmVmOiAicmVn
+dWxhdG9yLnlhbWwjIg0KPiA+ICsNCj4gPiArICAgICAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAg
+ICAgICAgcmVndWxhdG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAgIHBhdHRlcm46ICJedihmZXxi
+aWZ8aW8pMjgkIg0KPiA+ICsNCj4gPiArICAgICAgICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZh
+bHNlDQo+ID4gKw0KPiA+ICsgICAgICAiXmxkb192KGF1ZHxpb3xhdXh8cmZ8bSkxOCQiOg0KPiA+
+ICsgICAgICAgIHR5cGU6IG9iamVjdA0KPiA+ICsgICAgICAgICRyZWY6ICJyZWd1bGF0b3IueWFt
+bCMiDQo+ID4gKw0KPiA+ICsgICAgICAgIHByb3BlcnRpZXM6DQo+ID4gKyAgICAgICAgICByZWd1
+bGF0b3ItbmFtZToNCj4gPiArICAgICAgICAgICAgcGF0dGVybjogIl52KGF1ZHxpb3xhdXh8cmZ8
+bSkxOCQiDQo+ID4gKw0KPiA+ICsgICAgICAgIHVuZXZhbHVhdGVkUHJvcGVydGllczogZmFsc2UN
+Cj4gPiArDQo+ID4gKyAgICAgICJebGRvX3ZzaW1bMTJdJCI6DQo+ID4gKyAgICAgICAgdHlwZTog
+b2JqZWN0DQo+ID4gKyAgICAgICAgJHJlZjogInJlZ3VsYXRvci55YW1sIyINCj4gPiArDQo+ID4g
+KyAgICAgICAgcHJvcGVydGllczoNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lOg0KPiA+
+ICsgICAgICAgICAgICBwYXR0ZXJuOiAiXnZzaW1bMTJdJCINCj4gPiArDQo+ID4gKyAgICAgICAg
+cmVxdWlyZWQ6DQo+ID4gKyAgICAgICAgICAtIHJlZ3VsYXRvci1uYW1lDQo+ID4gKw0KPiA+ICsg
+ICAgICAgIHVuZXZhbHVhdGVkUHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gK2FkZGl0aW9u
+YWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+ID4gKyAgLSB8DQo+
+ID4gKyAgICBwbWljIHsNCj4gPiArICAgICAgbXQ2MzU5cmVndWxhdG9yIHsNCj4gDQo+IEkgcHJl
+ZmVyIHRvIHNlZSBhIHNpbmdsZSBjb21wbGV0ZSBleGFtcGxlIGluIHRoZSBNRkQgc2NoZW1hIHJh
+dGhlciB0aGFuIA0KPiBwaWVjZW1lYWwgc2NoZW1hcyBpbiBlYWNoIHN1YiBzY2hlbWEuDQo+IA0K
+PiA+ICsgICAgICAgIG10NjM1OV92Z3B1MTFfYnVja19yZWc6IGJ1Y2tfdmdwdTExIHsNCj4gPiAr
+ICAgICAgICAgIHJlZ3VsYXRvci1uYW1lID0gInZncHUxMSI7DQo+ID4gKyAgICAgICAgICByZWd1
+bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDw0MDAwMDA+Ow0KPiA+ICsgICAgICAgICAgcmVndWxhdG9y
+LW1heC1taWNyb3ZvbHQgPSA8MTE5Mzc1MD47DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItZW5h
+YmxlLXJhbXAtZGVsYXkgPSA8MjAwPjsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1hbHdheXMt
+b247DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItYWxsb3dlZC1tb2RlcyA9IDwwIDEgMj47DQo+
+ID4gKyAgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgbXQ2MzU5X3ZjYW1pb19sZG9fcmVn
+OiBsZG9fdmNhbWlvIHsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lID0gInZjYW1pbyI7
+DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAwMDAwPjsNCj4g
+PiArICAgICAgICAgIHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE5MDAwMDA+Ow0KPiA+ICsg
+ICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIG10NjM1OV92Y24xOF9sZG9fcmVnOiBsZG9f
+dmNuMTggew0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWUgPSAidmNuMTgiOw0KPiA+ICsg
+ICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTgwMDAwMD47DQo+ID4gKyAgICAg
+ICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCj4gPiArICAgICAgICAg
+IHJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+Ow0KPiA+ICsgICAgICAgIH07DQo+
+ID4gKw0KPiA+ICsgICAgICAgIG10NjM1OV92c3JhbV9wcm9jMl9sZG9fcmVnOiBsZG9fdnNyYW1f
+cHJvYzIgew0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWUgPSAidnNyYW1fcHJvYzIiOw0K
+PiA+ICsgICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwPjsNCj4gPiAr
+ICAgICAgICAgIHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDEyOTM3NTA+Ow0KPiA+ICsgICAg
+ICAgICAgcmVndWxhdG9yLXJhbXAtZGVsYXkgPSA8NzUwMD47DQo+ID4gKyAgICAgICAgICByZWd1
+bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRv
+ci1hbHdheXMtb247DQo+ID4gKyAgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgbXQ2MzU5
+X3ZmZTI4X2xkb19yZWc6IGxkb192ZmUyOCB7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFt
+ZSA9ICJ2ZmUyOCI7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwy
+ODAwMDAwPjsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDI4MDAw
+MDA+Ow0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDEyMD47
+DQo+ID4gKyAgICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgbXQ2MzU5X3ZhdWQxOF9sZG9f
+cmVnOiBsZG9fdmF1ZDE4IHsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lID0gInZhdWQx
+OCI7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsN
+Cj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KPiA+
+ICsgICAgICAgICAgcmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI0MD47DQo+ID4gKyAg
+ICAgICAgfTsNCj4gPiArDQo+ID4gKyAgICAgICAgbXQ2MzU5X3ZzaW0xX2xkb19yZWc6IGxkb192
+c2ltMSB7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZSA9ICJ2c2ltMSI7DQo+ID4gKyAg
+ICAgICAgICByZWd1bGF0b3ItbWluLW1pY3Jvdm9sdCA9IDwxNzAwMDAwPjsNCj4gPiArICAgICAg
+ICAgIHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDMxMDAwMDA+Ow0KPiA+ICsgICAgICAgICAg
+cmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDQ4MD47DQo+ID4gKyAgICAgICAgfTsNCj4g
+PiArICAgICAgfTsNCj4gPiArICAgIH07DQo+ID4gKy4uLg0KPiA+IC0tIA0KPiA+IDIuMTguMA0K
+PiA+IA0KDQo=
 
-I think 2.1 or 2.3 is fine. It boils down to detecting a cycle and then 
-either you have a property or implicitly know to ignore a dependency.
-
-> > It's a somewhat common issue.
-> 
-> It is? This only works, because one can treat the RTC's clock
-> output like a fixed clock by not messing around with it.
-
-Well, it's not the first time I've heard of the issue. Audio clocks are 
-another example, but a bit different in that the clocks aren't needed 
-until later. It's also come up in context of fw_devlinks which I 
-think has some cycle breaking logic already.
-
-Rob
