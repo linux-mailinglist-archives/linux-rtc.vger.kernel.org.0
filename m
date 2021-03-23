@@ -2,82 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6F7346B17
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Mar 2021 22:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C842346BF1
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Mar 2021 23:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbhCWVa2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Mar 2021 17:30:28 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:58597 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbhCWVaA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Mar 2021 17:30:00 -0400
-X-Originating-IP: 90.65.108.55
-Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 68732E0002;
-        Tue, 23 Mar 2021 21:29:58 +0000 (UTC)
-Date:   Tue, 23 Mar 2021 22:29:58 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Claudius Heine <ch@denx.de>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        johannes hahn <johannes-hahn@siemens.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        werner zeh <werner.zeh@siemens.com>,
-        henning schild <henning.schild@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        martin mantel <martin.mantel@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v5] rtc: rx6110: add ACPI bindings to I2C
-Message-ID: <YFpd1hkyJcDZ9jVb@piout.net>
-References: <20210317075228.683184-1-ch@denx.de>
- <CAHp75VdRFqK6Tp+dFCHb_6ZBR32mNRLgyRKaMky43aoj1MOjcw@mail.gmail.com>
- <3215fc7e-ae1d-4e51-51d0-24ff386419bd@denx.de>
+        id S233870AbhCWWP2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Tue, 23 Mar 2021 18:15:28 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:38145 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233793AbhCWWOw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Mar 2021 18:14:52 -0400
+Received: from localhost.localdomain ([82.142.25.162]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MJEMt-1l4g6s3aWJ-00KkmU; Tue, 23 Mar 2021 23:14:34 +0100
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH 0/2] m68k: Add Virtual M68k Machine
+Date:   Tue, 23 Mar 2021 23:14:28 +0100
+Message-Id: <20210323221430.3735147-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.30.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3215fc7e-ae1d-4e51-51d0-24ff386419bd@denx.de>
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:j8CPgu/CLqP6+6iZqF5GKlyEcInJxjDbuDcQ1KDqVzrJjRIJ0Qs
+ OZBKydzC53HxbPRvKcCMNJQczqrpXbd9VOUPCjmlc83I2qXQpkiYXTc5Ukb+kUb9JmFZvxs
+ J0GvNZQo8mQzpc1glFv1Ri2bJl3vb/Yiz1hL+rnP7u106v78WmjL5sg+h6ygyuEKQcvuEph
+ n76E2q5f/j8ARjM4bT4Vw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UYqdyMaw7L0=:YjOZR8DQq4wWyPa53zBtew
+ nzc9yEl8ZBIY9jc1xT3sZQfBiRXNEuThEs3k1rj266bvIExHma5c+0A4FtwZiiHsG3DaMEtPa
+ hJBld2vj0XAyVoh+F9U0wwCXmhE1S2598COjaI23aISMEQ76C5mm5WN8q4l+4jKnQEqTvhtqu
+ 79IIpsf7ESDs4nywQaHbJCKR4EmVPODrJSAfM0yKoukihbfc53nm4ENaiJOV5jJfIyZp0AGWo
+ ptaVFL+yvvCiTqz/bKC1tUscnqP5Ge7a30qgNeYJN7oJ43XFdJkJnhGprDol0PZ1LIrDyP+vY
+ /HpGl65L7iy18on2ABcyeZi/6ZpMGtKy1Vd/URMBYMpDeP8Vwd5lrJjI3yvI0DXB9IiVFr8Ob
+ NA/cU09mmSwtUc8ccGHC5lckld0xxJqquqdUm7XCKgBVYfPpGX8Fp5Exn79LkwWTLsrooZr7I
+ 7+Szfeg1sg==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/03/2021 10:32:39+0100, Claudius Heine wrote:
-> Hi Andy,
-> 
-> On 2021-03-17 10:28, Andy Shevchenko wrote:
-> > On Wed, Mar 17, 2021 at 9:56 AM Claudius Heine <ch@denx.de> wrote:
-> > > 
-> > > From: Johannes Hahn <johannes-hahn@siemens.com>
-> > > 
-> > > This allows the RX6110 driver to be automatically assigned to the right
-> > > device on the I2C bus.
-> > 
-> > Thanks for an update!
-> > 
-> > > Signed-off-by: Johannes Hahn <johannes-hahn@siemens.com>
-> > > Co-developed-by: Claudius Heine <ch@denx.de>
-> > > Signed-off-by: Claudius Heine <ch@denx.de>
-> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > 
-> > This is usually for patches that do fix found problems, here it's a
-> > completely new item and the report was done in the middle of the
-> > development. That said, you may give credit to LKP by just mentioning
-> > it in the comments section (after the cutter '---' line). I'll leave
-> > this to Alexandre and Alessandro to decide if you need a resend or
-> > they may remove it when applying. (In my opinion resend is not needed
-> > right now)
-> Ok. Thanks a lot for your reviews and patience!
-> 
+The most powerful m68k machine emulated by QEMU is a Quadra 800,
+but this machine is very limited: only 1 GiB of memory and only some
+specific interfaces, with no DMA.
 
-I removed it when applying. Thanks for the work and the reviews!
+The Virtual M68k Machine is based on Goldfish interfaces defined by Google
+for Android simulator. It uses Goldfish-rtc (timer and RTC),
+Goldfish-pic (PIC) and Goldfish-tty (for early tty).
 
+The machine is created with 128 virtio-mmio buses, and they can
+be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The virtual m68k machine has been merged in QEMU and will be available
+with the release 6.0.
+
+This series introduces the support of this new machine in the linux kernel.
+
+If you want to try:
+
+- Configure and build latest QEMU with (or download qemu 6.0 binary):
+
+  .../configure --target-list=3Dm68k-softmmu --enable-virglrenderer
+  make
+
+- Configure and build linux with:
+
+  make virt_defconfig
+  make vmlinux
+
+A pre-installed qcow2 disk image is available at:
+
+http://vivier.eu/debian-10.0.qcow2
+
+You can run the machine with something like:
+
+qemu-system-m68k -M virt \
+  -m 3G \
+  -chardev stdio,signal=3Doff,mux=3Don,id=3Dchar0 \
+  -mon chardev=3Dchar0,mode=3Dreadline \
+  -kernel vmlinux \
+  -append "console=3Dhvc0 root=3D/dev/vda2" \
+  -blockdev node-name=3Dsystem,driver=3Dfile,filename=3Ddebian-10.0.qcow2 \
+  -blockdev node-name=3Ddrive0,driver=3Dqcow2,file=3Dsystem \
+  -device virtio-blk-device,drive=3Ddrive0 \
+  -serial chardev:char0 \
+  -device virtio-net-device,netdev=3Dhostnet0 \
+  -netdev bridge,id=3Dhostnet0,br=3Dvirbr0,helper=3D/usr/libexec/qemu-bridge-=
+helper \
+  -device virtio-serial-device \
+  -device virtio-gpu-device \
+  -device virtconsole,chardev=3Dchar0 \
+  -device virtio-keyboard-device \
+  -device virtio-mouse-device
+
+You can watch a presentation about the machine on the Planet m68k channel:
+
+    https://youtu.be/s_ve0bCC9q4
+    [Demo at 38:00]
+
+Thanks,
+Laurent
+
+Laurent Vivier (2):
+  rtc: goldfish: remove dependency to OF
+  m68k: introduce a virtual m68k machine
+
+ arch/m68k/Kbuild                           |   1 +
+ arch/m68k/Kconfig.machine                  |  17 +++
+ arch/m68k/configs/virt_defconfig           |  93 ++++++++++++++++
+ arch/m68k/include/asm/irq.h                |   3 +-
+ arch/m68k/include/asm/pgtable_mm.h         |   7 ++
+ arch/m68k/include/asm/setup.h              |  44 ++++++--
+ arch/m68k/include/asm/virt.h               |  26 +++++
+ arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
+ arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
+ arch/m68k/kernel/Makefile                  |   1 +
+ arch/m68k/kernel/head.S                    |  30 ++++++
+ arch/m68k/kernel/setup_mm.c                |   9 ++
+ arch/m68k/mm/kmap.c                        |  20 ++--
+ arch/m68k/virt/Makefile                    |   6 ++
+ arch/m68k/virt/config.c                    | 118 +++++++++++++++++++++
+ arch/m68k/virt/ints.c                      | 110 +++++++++++++++++++
+ arch/m68k/virt/platform.c                  |  80 ++++++++++++++
+ arch/m68k/virt/timer.c                     |  91 ++++++++++++++++
+ drivers/rtc/Kconfig                        |   2 +-
+ 19 files changed, 659 insertions(+), 18 deletions(-)
+ create mode 100644 arch/m68k/configs/virt_defconfig
+ create mode 100644 arch/m68k/include/asm/virt.h
+ create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
+ create mode 100644 arch/m68k/virt/Makefile
+ create mode 100644 arch/m68k/virt/config.c
+ create mode 100644 arch/m68k/virt/ints.c
+ create mode 100644 arch/m68k/virt/platform.c
+ create mode 100644 arch/m68k/virt/timer.c
+
+--=20
+2.30.2
+
