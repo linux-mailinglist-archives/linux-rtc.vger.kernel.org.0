@@ -2,113 +2,110 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99A33472B0
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 08:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00193347345
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 09:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbhCXHbz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 24 Mar 2021 03:31:55 -0400
-Received: from mail-lj1-f176.google.com ([209.85.208.176]:35784 "EHLO
-        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbhCXHbe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 03:31:34 -0400
-Received: by mail-lj1-f176.google.com with SMTP id a1so28964399ljp.2;
-        Wed, 24 Mar 2021 00:31:33 -0700 (PDT)
+        id S236055AbhCXIUL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Mar 2021 04:20:11 -0400
+Received: from mail-vs1-f41.google.com ([209.85.217.41]:45821 "EHLO
+        mail-vs1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236052AbhCXIUK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 04:20:10 -0400
+Received: by mail-vs1-f41.google.com with SMTP id 124so10890133vsg.12;
+        Wed, 24 Mar 2021 01:20:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=egthqhzn5ZpLM0FjZqjc5wIxAZteYh+EG3fvKfyV1Xo=;
-        b=EznT9iUM4wlaU53v6bN0lfpwk5vpPTny423iglllQzddjbtpUBSQR1O4LsAd/UfqGm
-         lqizPenc0jMDq9pcd2azJvy5LoAi1MYuLq8uufueNjcPwrIQqO9n92Ehw69SJuNapCaN
-         7Qhoo+Rm7NRkgKsfyyGsLWVoU4k/auKVFVPGRzeL2XOnMNSvddQ580i602CqPpy+5alw
-         PsyG7Ga9yrFdhf6giCGmuw9q9fpEZMdaIdVNp9y0f6RzrUB9y7HhwcLgCe5cYipMCQSl
-         QcNzM3bQJpvxQIYd5CmPl9ZMOtlT0wLCPvsuKIIRdkepjYHjztwuu4FPcK79bvamDjgC
-         Mojg==
-X-Gm-Message-State: AOAM532c31x1v5kpuaXoHXJedqZHUQvqhrCTd0a0r9ybmX9be3LCkO9l
-        efCu6BqXzpKF+vLPhEm970o=
-X-Google-Smtp-Source: ABdhPJz5K9P8nQJZ66vs1+1FB+uo5iOT3gHJVZTdAlkQGcCA1g+y5NbDWwjvWXJO7qZopt0ciN1MGw==
-X-Received: by 2002:a2e:b88e:: with SMTP id r14mr1222519ljp.450.1616571092979;
-        Wed, 24 Mar 2021 00:31:32 -0700 (PDT)
-Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id v10sm143682lfb.238.2021.03.24.00.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 00:31:32 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 09:31:26 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v4 16/16] MAINTAINERS: Add ROHM BD71815AGW
-Message-ID: <55471f9afe9ee89c8469323e92dbd88b7bfeb7ea.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b99vyQcaCpQD3pMXQougjwNkTLQcQ7H7qW0vVRZg68k=;
+        b=aJEHB6tfRRbMSsc6eWDmNQPjwEa5QQBZxqYg2zBEhniG7TJ+Fc5gDViUwai+DBLUTz
+         paTBJF+FNaa3YnWk+KPYlaHejZUiWnVlS7V3P0WpjSD7G1cwsusD9LFzZD0/OiqsO3/E
+         TXrTRHLeI558ifwSwjBFRXRXReg/Abs/ftqgtjE5lEz5ciH9LJV+BW654d6qhh7wLc3q
+         PTBIziRnd1mUSfHLi/piVP3QjVeq+7mEX94YqXUDnwrlXMi3ycHj51wflKqUgbOjQJ/K
+         GB+QnhiYlZ1wi8tURcgJ+slFVFuQaYti7U6QrTkqPGSqzXVKPB8ka5SbXNrK8VdT9O8A
+         xBSw==
+X-Gm-Message-State: AOAM532wW9DZLgSRIOt4yqSl6D+fAFU2zkmxue3KqqQk//3frn134ExA
+        +tKAREL/Plmkvb0CbumcaAbTInyjKo3QpDXpxmc=
+X-Google-Smtp-Source: ABdhPJyjNSyRygty85egDfQ+7ndwN29LWZNv+wRv4AgkR+qa6UdFybjZKqvGwrDgePDt/lvLzh/gWVwzhx66YKHThC4=
+X-Received: by 2002:a67:8883:: with SMTP id k125mr950544vsd.18.1616574009774;
+ Wed, 24 Mar 2021 01:20:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
+References: <20210323091257.90054-1-heying24@huawei.com> <YFppJkpZRHMJFay0@piout.net>
+In-Reply-To: <YFppJkpZRHMJFay0@piout.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 24 Mar 2021 09:19:58 +0100
+Message-ID: <CAMuHMdWfFtJOQQf0b-2QJRd1EMLSW7rDsjNYzjjZhg6=JNZ0AA@mail.gmail.com>
+Subject: Re: [PATCH v2 -next] powerpc: kernel/time.c - cleanup warnings
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     He Ying <heying24@huawei.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        kernelfans@gmail.com, frederic@kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add maintainer entries for ROHM BD71815AGW drivers.
-New regulator and GPIO drivers were introduced for these PMICs.
+Hi Alexandre,
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-Changes since v3:
- - No changes
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue, Mar 23, 2021 at 11:18 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+> On 23/03/2021 05:12:57-0400, He Ying wrote:
+> > We found these warnings in arch/powerpc/kernel/time.c as follows:
+> > warning: symbol 'decrementer_max' was not declared. Should it be static?
+> > warning: symbol 'rtc_lock' was not declared. Should it be static?
+> > warning: symbol 'dtl_consumer' was not declared. Should it be static?
+> >
+> > Declare 'decrementer_max' and 'rtc_lock' in powerpc asm/time.h.
+> > Rename 'rtc_lock' in drviers/rtc/rtc-vr41xx.c to 'vr41xx_rtc_lock' to
+> > avoid the conflict with the variable in powerpc asm/time.h.
+> > Move 'dtl_consumer' definition behind "include <asm/dtl.h>" because it
+> > is declared there.
+> >
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: He Ying <heying24@huawei.com>
+> > ---
+> > v2:
+> > - Instead of including linux/mc146818rtc.h in powerpc kernel/time.c, declare
+> >   rtc_lock in powerpc asm/time.h.
+> >
+>
+> V1 was actually the correct thing to do. rtc_lock is there exactly
+> because chrp and maple are using mc146818 compatible RTCs. This is then
+> useful because then drivers/char/nvram.c is enabled. The proper fix
+> would be to scrap all of that and use rtc-cmos for those platforms as
+> this drives the RTC properly and exposes the NVRAM for the mc146818.
+>
+> Or at least, if there are no users for the char/nvram driver on those
+> two platforms, remove the spinlock and stop enabling CONFIG_NVRAM or
+> more likely rename the symbol as it seems to be abused by both chrp and
+> powermac.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9e876927c60d..c251af6bfc03 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15452,18 +15452,21 @@ F:	Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic.txt
- F:	Documentation/devicetree/bindings/regulator/rohm,bd70528-regulator.txt
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd70528.c
-+F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd70528.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/power/supply/bd70528-charger.c
- F:	drivers/regulator/bd70528-regulator.c
-+F:	drivers/regulator/bd71815-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd70528_wdt.c
- F:	include/linux/mfd/rohm-bd70528.h
-+F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
- F:	include/linux/mfd/rohm-generic.h
+IIRC, on CHRP LongTrail, NVRAM was inherited from CHRP's Mac ancestry,
+not from CHRP's PC ancestry, and thus NVRAM is not the one in the
+mc146818-compatible RTC.
+
+http://users.telenet.be/geertu/Linux/PPC/DeviceTree.html confirms that,
+showing that nvram is a different device node than rtc.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
