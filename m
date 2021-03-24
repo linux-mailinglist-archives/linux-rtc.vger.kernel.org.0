@@ -2,49 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE1E3472AC
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 08:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99A33472B0
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 08:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbhCXHbV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 24 Mar 2021 03:31:21 -0400
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:43717 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhCXHbP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 03:31:15 -0400
-Received: by mail-lf1-f50.google.com with SMTP id m12so30475661lfq.10;
-        Wed, 24 Mar 2021 00:31:14 -0700 (PDT)
+        id S231175AbhCXHbz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Mar 2021 03:31:55 -0400
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:35784 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235585AbhCXHbe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 03:31:34 -0400
+Received: by mail-lj1-f176.google.com with SMTP id a1so28964399ljp.2;
+        Wed, 24 Mar 2021 00:31:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=U0CyRmeyleZ4lvEoqQtGqAf4e0MllNlG193uWSSjCXU=;
-        b=S/P+w8WcRS70xByZ9WyHlFIYODuuq7hs+zozwFOpOlyoV4HECO+A5tKBgU0SUgA8r4
-         Af5bb/B7Pa/gnYNUGK7n8t+MJ2nIRMMRVZeOZkzkj55pIH/WuUpw2MBgpqKD7KcmtXD1
-         OH8zQ9QxYrvKnr5+U0c2aygbugKtoWYZ7MHqMAdstcgy7hzo6uoS3h0W7MSk8AjTiJGH
-         SP4aPErYILixEc7m1sRqehURD1/pwqdZ3qciuo+ZAUskmSSNMJ89yOBL+kuSJog/mg1k
-         PZ3/bwOstLgUdKW9S6WngfJ11O8RzdoHvrGHYMl4DjURWSczOPw/IVTq9MyWthovBl3r
-         zblQ==
-X-Gm-Message-State: AOAM5302XEGL8QiZ7P6I0pgGQwSa8L/f8urorasAWQSEdXGyYq8t526R
-        oK994ZrRcX85tx2VpSZSrAGqPOYbnS4=
-X-Google-Smtp-Source: ABdhPJwvxDMe8D8N2y3r6m6dQvYOb/3Rmz/X32ZXx2e7IAic26x4fB5RN0doQU/QuAk8+atWEkoa3g==
-X-Received: by 2002:a19:9105:: with SMTP id t5mr1138586lfd.89.1616571074295;
-        Wed, 24 Mar 2021 00:31:14 -0700 (PDT)
+        bh=egthqhzn5ZpLM0FjZqjc5wIxAZteYh+EG3fvKfyV1Xo=;
+        b=EznT9iUM4wlaU53v6bN0lfpwk5vpPTny423iglllQzddjbtpUBSQR1O4LsAd/UfqGm
+         lqizPenc0jMDq9pcd2azJvy5LoAi1MYuLq8uufueNjcPwrIQqO9n92Ehw69SJuNapCaN
+         7Qhoo+Rm7NRkgKsfyyGsLWVoU4k/auKVFVPGRzeL2XOnMNSvddQ580i602CqPpy+5alw
+         PsyG7Ga9yrFdhf6giCGmuw9q9fpEZMdaIdVNp9y0f6RzrUB9y7HhwcLgCe5cYipMCQSl
+         QcNzM3bQJpvxQIYd5CmPl9ZMOtlT0wLCPvsuKIIRdkepjYHjztwuu4FPcK79bvamDjgC
+         Mojg==
+X-Gm-Message-State: AOAM532c31x1v5kpuaXoHXJedqZHUQvqhrCTd0a0r9ybmX9be3LCkO9l
+        efCu6BqXzpKF+vLPhEm970o=
+X-Google-Smtp-Source: ABdhPJz5K9P8nQJZ66vs1+1FB+uo5iOT3gHJVZTdAlkQGcCA1g+y5NbDWwjvWXJO7qZopt0ciN1MGw==
+X-Received: by 2002:a2e:b88e:: with SMTP id r14mr1222519ljp.450.1616571092979;
+        Wed, 24 Mar 2021 00:31:32 -0700 (PDT)
 Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
-        by smtp.gmail.com with ESMTPSA id d18sm200167ljo.51.2021.03.24.00.31.13
+        by smtp.gmail.com with ESMTPSA id v10sm143682lfb.238.2021.03.24.00.31.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Mar 2021 00:31:13 -0700 (PDT)
-Date:   Wed, 24 Mar 2021 09:31:07 +0200
+        Wed, 24 Mar 2021 00:31:32 -0700 (PDT)
+Date:   Wed, 24 Mar 2021 09:31:26 +0200
 From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v4 15/16] rtc: bd70528: Support RTC on ROHM BD71815
-Message-ID: <a4bdfc716b97a3b1ee7f430f9f1f42ca505425b3.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v4 16/16] MAINTAINERS: Add ROHM BD71815AGW
+Message-ID: <55471f9afe9ee89c8469323e92dbd88b7bfeb7ea.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
 References: <cover.1616566395.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -54,152 +61,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-BD71815 contains similar RTC block as BD71828. Only the address offsets
-seem different. Support also BD71815 RTC using rtc-bd70528.
+Add maintainer entries for ROHM BD71815AGW drivers.
+New regulator and GPIO drivers were introduced for these PMICs.
 
 Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
 Changes since v3:
  - No changes
- drivers/rtc/Kconfig       |  6 +++---
- drivers/rtc/rtc-bd70528.c | 45 ++++++++++++++++++++++++++++++++-------
- 2 files changed, 40 insertions(+), 11 deletions(-)
+ MAINTAINERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index ce723dc54aa4..622af1314ece 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -501,11 +501,11 @@ config RTC_DRV_M41T80_WDT
- 	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
- 
- config RTC_DRV_BD70528
--	tristate "ROHM BD70528 PMIC RTC"
--	depends on MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
-+	tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
-+	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
- 	help
- 	  If you say Y here you will get support for the RTC
--	  block on ROHM BD70528 and BD71828 Power Management IC.
-+	  block on ROHM BD70528, BD71815 and BD71828 Power Management IC.
- 
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-bd70528.
-diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-index fb4476bb5ab6..6454afca02a6 100644
---- a/drivers/rtc/rtc-bd70528.c
-+++ b/drivers/rtc/rtc-bd70528.c
-@@ -6,6 +6,7 @@
- 
- #include <linux/bcd.h>
- #include <linux/mfd/rohm-bd70528.h>
-+#include <linux/mfd/rohm-bd71815.h>
- #include <linux/mfd/rohm-bd71828.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -13,6 +14,12 @@
- #include <linux/regmap.h>
- #include <linux/rtc.h>
- 
-+/*
-+ * On BD71828 and BD71815 the ALM0 MASK is 14 bytes after the ALM0
-+ * block start
-+ */
-+#define BD718XX_ALM_EN_OFFSET 14
-+
- /*
-  * We read regs RTC_SEC => RTC_YEAR
-  * this struct is ordered according to chip registers.
-@@ -55,6 +62,7 @@ struct bd70528_rtc {
- 	struct regmap *regmap;
- 	struct device *dev;
- 	u8 reg_time_start;
-+	u8 bd718xx_alm_block_start;
- 	bool has_rtc_timers;
- };
- 
-@@ -236,8 +244,8 @@ static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	struct bd71828_rtc_alm alm;
- 	struct bd70528_rtc *r = dev_get_drvdata(dev);
- 
--	ret = regmap_bulk_read(r->regmap, BD71828_REG_RTC_ALM_START,
--			       &alm, sizeof(alm));
-+	ret = regmap_bulk_read(r->regmap, r->bd718xx_alm_block_start, &alm,
-+			       sizeof(alm));
- 	if (ret) {
- 		dev_err(dev, "Failed to read alarm regs\n");
- 		return ret;
-@@ -250,8 +258,8 @@ static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	else
- 		alm.alm_mask |= BD70528_MASK_ALM_EN;
- 
--	ret = regmap_bulk_write(r->regmap, BD71828_REG_RTC_ALM_START,
--				&alm, sizeof(alm));
-+	ret = regmap_bulk_write(r->regmap, r->bd718xx_alm_block_start, &alm,
-+				sizeof(alm));
- 	if (ret)
- 		dev_err(dev, "Failed to set alarm time\n");
- 
-@@ -311,8 +319,8 @@ static int bd71828_read_alarm(struct device *dev, struct rtc_wkalrm *a)
- 	struct bd71828_rtc_alm alm;
- 	struct bd70528_rtc *r = dev_get_drvdata(dev);
- 
--	ret = regmap_bulk_read(r->regmap, BD71828_REG_RTC_ALM_START,
--			       &alm, sizeof(alm));
-+	ret = regmap_bulk_read(r->regmap, r->bd718xx_alm_block_start, &alm,
-+			       sizeof(alm));
- 	if (ret) {
- 		dev_err(dev, "Failed to read alarm regs\n");
- 		return ret;
-@@ -453,8 +461,9 @@ static int bd71828_alm_enable(struct device *dev, unsigned int enabled)
- 	if (!enabled)
- 		enableval = 0;
- 
--	ret = regmap_update_bits(r->regmap, BD71828_REG_RTC_ALM0_MASK,
--				 BD70528_MASK_ALM_EN, enableval);
-+	ret = regmap_update_bits(r->regmap, r->bd718xx_alm_block_start +
-+				 BD718XX_ALM_EN_OFFSET, BD70528_MASK_ALM_EN,
-+				 enableval);
- 	if (ret)
- 		dev_err(dev, "Failed to change alarm state\n");
- 
-@@ -524,9 +533,28 @@ static int bd70528_probe(struct platform_device *pdev)
- 		enable_main_irq = true;
- 		rtc_ops = &bd70528_rtc_ops;
- 		break;
-+	case ROHM_CHIP_TYPE_BD71815:
-+		irq_name = "bd71815-rtc-alm-0";
-+		bd_rtc->reg_time_start = BD71815_REG_RTC_START;
-+
-+		/*
-+		 * See also BD718XX_ALM_EN_OFFSET:
-+		 * This works for BD71828 and BD71815 as they have same offset
-+		 * between ALM0 start and ALM0_MASK. If new ICs are to be
-+		 * added this requires proper check as ALM0_MASK is not located
-+		 * at the end of ALM0 block - but after all ALM blocks so if
-+		 * amount of ALMs differ the offset to enable/disable is likely
-+		 * to be incorrect and enable/disable must be given as own
-+		 * reg address here.
-+		 */
-+		bd_rtc->bd718xx_alm_block_start = BD71815_REG_RTC_ALM_START;
-+		hour_reg = BD71815_REG_HOUR;
-+		rtc_ops = &bd71828_rtc_ops;
-+		break;
- 	case ROHM_CHIP_TYPE_BD71828:
- 		irq_name = "bd71828-rtc-alm-0";
- 		bd_rtc->reg_time_start = BD71828_REG_RTC_START;
-+		bd_rtc->bd718xx_alm_block_start = BD71828_REG_RTC_ALM_START;
- 		hour_reg = BD71828_REG_RTC_HOUR;
- 		rtc_ops = &bd71828_rtc_ops;
- 		break;
-@@ -605,6 +633,7 @@ static int bd70528_probe(struct platform_device *pdev)
- static const struct platform_device_id bd718x7_rtc_id[] = {
- 	{ "bd70528-rtc", ROHM_CHIP_TYPE_BD70528 },
- 	{ "bd71828-rtc", ROHM_CHIP_TYPE_BD71828 },
-+	{ "bd71815-rtc", ROHM_CHIP_TYPE_BD71815 },
- 	{ },
- };
- MODULE_DEVICE_TABLE(platform, bd718x7_rtc_id);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9e876927c60d..c251af6bfc03 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15452,18 +15452,21 @@ F:	Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic.txt
+ F:	Documentation/devicetree/bindings/regulator/rohm,bd70528-regulator.txt
+ F:	drivers/clk/clk-bd718x7.c
+ F:	drivers/gpio/gpio-bd70528.c
++F:	drivers/gpio/gpio-bd71815.c
+ F:	drivers/gpio/gpio-bd71828.c
+ F:	drivers/mfd/rohm-bd70528.c
+ F:	drivers/mfd/rohm-bd71828.c
+ F:	drivers/mfd/rohm-bd718x7.c
+ F:	drivers/power/supply/bd70528-charger.c
+ F:	drivers/regulator/bd70528-regulator.c
++F:	drivers/regulator/bd71815-regulator.c
+ F:	drivers/regulator/bd71828-regulator.c
+ F:	drivers/regulator/bd718x7-regulator.c
+ F:	drivers/regulator/rohm-regulator.c
+ F:	drivers/rtc/rtc-bd70528.c
+ F:	drivers/watchdog/bd70528_wdt.c
+ F:	include/linux/mfd/rohm-bd70528.h
++F:	include/linux/mfd/rohm-bd71815.h
+ F:	include/linux/mfd/rohm-bd71828.h
+ F:	include/linux/mfd/rohm-bd718x7.h
+ F:	include/linux/mfd/rohm-generic.h
 -- 
 2.25.4
 
