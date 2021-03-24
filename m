@@ -2,120 +2,146 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0703474F9
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 10:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C97B3482E3
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Mar 2021 21:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbhCXJqa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 24 Mar 2021 05:46:30 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14521 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbhCXJqX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 05:46:23 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F53GF40qRzPll5;
-        Wed, 24 Mar 2021 17:43:49 +0800 (CST)
-Received: from [10.67.110.136] (10.67.110.136) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 24 Mar 2021 17:46:19 +0800
-Subject: Re: [PATCH V3 -next] powerpc: kernel/time.c - cleanup warnings
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <a.zummo@towertech.it>,
-        <christophe.leroy@csgroup.eu>, <npiggin@gmail.com>,
-        <msuchanek@suse.de>, <tglx@linutronix.de>, <peterz@infradead.org>,
-        <geert@linux-m68k.org>, <geert+renesas@glider.be>,
-        <kernelfans@gmail.com>, <frederic@kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>
-References: <20210324090939.143477-1-heying24@huawei.com>
- <YFsGYgdNH5HrlqDJ@piout.net>
-From:   "heying (H)" <heying24@huawei.com>
-Message-ID: <18a8d444-f1a5-61e0-b9f2-f85c03d71686@huawei.com>
-Date:   Wed, 24 Mar 2021 17:46:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S237892AbhCXU1h (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Mar 2021 16:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237868AbhCXU11 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Mar 2021 16:27:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543DFC061763
+        for <linux-rtc@vger.kernel.org>; Wed, 24 Mar 2021 13:27:26 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lPA5y-0002XA-LK; Wed, 24 Mar 2021 21:27:14 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lPA5x-00028P-BU; Wed, 24 Mar 2021 21:27:13 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] rtc: at91sma9: Simplify using devm_clk_get_enabled()
+Date:   Wed, 24 Mar 2021 21:27:11 +0100
+Message-Id: <20210324202711.76734-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
+References: <20210301135053.1462168-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YFsGYgdNH5HrlqDJ@piout.net>
-Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.136]
-X-CFilter-Loop: Reflected
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Alexandre,
+devm_clk_get_enabled() returns the clk already (prepared and) enabled
+and the automatically called cleanup cares for disabling (and
+unpreparing). So simplify .probe() and .remove() accordingly.
 
+Signed-off-by: Uwe Kleine-KÃ¶nig <u.kleine-koenig@pengutronix.de>
+---
+Hello,
 
-ÔÚ 2021/3/24 17:29, Alexandre Belloni Ð´µÀ:
-> On 24/03/2021 05:09:39-0400, He Ying wrote:
->> We found these warnings in arch/powerpc/kernel/time.c as follows:
->> warning: symbol 'decrementer_max' was not declared. Should it be static?
->> warning: symbol 'rtc_lock' was not declared. Should it be static?
->> warning: symbol 'dtl_consumer' was not declared. Should it be static?
->>
->> Declare 'decrementer_max' in powerpc asm/time.h.
->> Include linux/mc146818rtc.h in powerpc kernel/time.c where 'rtc_lock'
->> is declared. And remove duplicated declaration of 'rtc_lock' in powerpc
->> platforms/chrp/time.c because it has included linux/mc146818rtc.h.
->> Move 'dtl_consumer' definition behind "include <asm/dtl.h>" because it
->> is declared there.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: He Ying <heying24@huawei.com>
->> ---
->> V2:
->> - Instead of including linux/mc146818rtc.h in powerpc kernel/time.c, declare
->>    rtc_lock in powerpc asm/time.h.
->> V3:
->> - Recover to V1, that is including linux/mc146818rtc.h in powerpc
->>    kernel/time.c. And remove duplicated declaration of 'rtc_lock' in powerpc
->>    platforms/chrp/time.c because it has included linux/mc146818rtc.h.
->>
->>   arch/powerpc/include/asm/time.h    | 1 +
->>   arch/powerpc/kernel/time.c         | 9 ++++-----
->>   arch/powerpc/platforms/chrp/time.c | 2 --
->>   3 files changed, 5 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/powerpc/include/asm/time.h b/arch/powerpc/include/asm/time.h
->> index 8dd3cdb25338..2cd2b50bedda 100644
->> --- a/arch/powerpc/include/asm/time.h
->> +++ b/arch/powerpc/include/asm/time.h
->> @@ -22,6 +22,7 @@ extern unsigned long tb_ticks_per_jiffy;
->>   extern unsigned long tb_ticks_per_usec;
->>   extern unsigned long tb_ticks_per_sec;
->>   extern struct clock_event_device decrementer_clockevent;
->> +extern u64 decrementer_max;
->>   
->>   
->>   extern void generic_calibrate_decr(void);
->> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
->> index b67d93a609a2..ac81f043bf49 100644
->> --- a/arch/powerpc/kernel/time.c
->> +++ b/arch/powerpc/kernel/time.c
->> @@ -55,8 +55,9 @@
->>   #include <linux/sched/cputime.h>
->>   #include <linux/sched/clock.h>
->>   #include <linux/processor.h>
->> -#include <asm/trace.h>
->> +#include <linux/mc146818rtc.h>
-> I'm fine with that but I really think my suggestion to make the rtc_lock
-> local to the platforms was better because it is only used to synchronize
-> between concurrent invocations of chrp_set_rtc_time or
-> maple_set_rtc_time. The rtc core will never do that and the only case
-> would be concurrent calls to rtc_ops.set_time and
-> update_persistent_clock64 (which should also be removed at some point).
+this simplification depends on a patch set that introduces
+devm_clk_get_prepared() and friends.
 
-Many thanks for your suggestion. As you suggest, rtc_lock should be 
-local to platforms.
+The most recent version of this patch set can be found at
 
-Does it mean not only powerpc but also all other platforms should adapt 
-this change?
+	https://lore.kernel.org/r/20210301135053.1462168-1-u.kleine-koenig@pengutronix.de
 
-It might be a big change. I have no idea if that's OK. What are other 
-maintainers' opinions?
+Unfortunately I didn't get any feedback at all from the clk maintainers
+on it, so I try to make other maintainers aware of it in the expectation
+that the simplifications are welcome and so lure the clk maintainers to
+share their thoughts.
 
+Best regards
+Uwe
 
-Thanks.
+ drivers/rtc/rtc-at91sam9.c | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
+diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
+index 2216be429ab7..b52e7bd26303 100644
+--- a/drivers/rtc/rtc-at91sam9.c
++++ b/drivers/rtc/rtc-at91sam9.c
+@@ -374,21 +374,14 @@ static int at91_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	}
+ 
+-	rtc->sclk = devm_clk_get(&pdev->dev, NULL);
++	rtc->sclk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(rtc->sclk))
+ 		return PTR_ERR(rtc->sclk);
+ 
+-	ret = clk_prepare_enable(rtc->sclk);
+-	if (ret) {
+-		dev_err(&pdev->dev, "Could not enable slow clock\n");
+-		return ret;
+-	}
+-
+ 	sclk_rate = clk_get_rate(rtc->sclk);
+ 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
+ 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
+-		ret = -EINVAL;
+-		goto err_clk;
++		return -EINVAL;
+ 	}
+ 
+ 	mr = rtt_readl(rtc, MR);
+@@ -406,7 +399,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
+ 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
+ 	if (IS_ERR(rtc->rtcdev)) {
+ 		ret = PTR_ERR(rtc->rtcdev);
+-		goto err_clk;
++		return ret;
+ 	}
+ 
+ 	rtc->rtcdev->ops = &at91_rtc_ops;
+@@ -418,7 +411,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
+ 			       dev_name(&rtc->rtcdev->dev), rtc);
+ 	if (ret) {
+ 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
+-		goto err_clk;
++		return ret;
+ 	}
+ 
+ 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
+@@ -432,11 +425,6 @@ static int at91_rtc_probe(struct platform_device *pdev)
+ 			 dev_name(&rtc->rtcdev->dev));
+ 
+ 	return devm_rtc_register_device(rtc->rtcdev);
+-
+-err_clk:
+-	clk_disable_unprepare(rtc->sclk);
+-
+-	return ret;
+ }
+ 
+ /*
+@@ -450,8 +438,6 @@ static int at91_rtc_remove(struct platform_device *pdev)
+ 	/* disable all interrupts */
+ 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
+ 
+-	clk_disable_unprepare(rtc->sclk);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
 
