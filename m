@@ -2,62 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DA234BE18
-	for <lists+linux-rtc@lfdr.de>; Sun, 28 Mar 2021 20:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290F634BF54
+	for <lists+linux-rtc@lfdr.de>; Sun, 28 Mar 2021 23:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbhC1SIB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 28 Mar 2021 14:08:01 -0400
-Received: from mail.hanoi.gov.vn ([113.160.32.33]:32049 "EHLO
-        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbhC1SHi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 28 Mar 2021 14:07:38 -0400
-X-Greylist: delayed 483 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:32 EDT
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4B597EC3DB;
-        Mon, 29 Mar 2021 00:58:07 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
-        s=default; t=1616954288;
-        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
-        b=MnJpubbCOoNzrGbdl4opA9pGiqD1qL1TzNpy60QO4II5VnNpsotVl818lYgRa6I3d
-         Omzy1cLH1+oH7hvhrvWFGEjWO4Du7emM//yWycfTmkwXhJBSFfgFLpRpJNgbPUcm37
-         IfeanaeGGyboioiPWx6i9EzzU+DQGarsjKQF0WLA=
-X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 713EBEC3DD;
-        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
-        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
-Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 7EB1F7F41B5D;
-        Mon, 29 Mar 2021 00:57:59 +0700 (+07)
+        id S231305AbhC1Va0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 28 Mar 2021 17:30:26 -0400
+Received: from clab.compulab.co.il ([66.147.238.35]:44346 "EHLO
+        clab.compulab.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231461AbhC1V3f (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 28 Mar 2021 17:29:35 -0400
+Received: from [37.142.126.90] (port=46454 helo=zimbra01.compulab.co.il)
+        by clab.compulab.co.il with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94)
+        (envelope-from <kirill.kapranov@compulab.co.il>)
+        id 1lQcYW-0033MI-Tp; Sun, 28 Mar 2021 17:02:45 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 9F9587F41B42;
-        Mon, 29 Mar 2021 00:57:56 +0700 (+07)
-Received: from mail.hanoi.gov.vn ([127.0.0.1])
-        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5aziPsZZzTJX; Mon, 29 Mar 2021 00:57:52 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 923357F41B59;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Date:   Mon, 29 Mar 2021 00:57:49 +0700 (ICT)
-From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
-Reply-To: Mackenzie Scott <propack@propck.net>
-Message-ID: <338153864.25920933.1616954269522.JavaMail.zimbra@hanoi.gov.vn>
-Subject: Congratulations ($ 100,800,000.00)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.107.80.217]
-X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
-Thread-Index: /8qcKB84H/IsUnGyWvfkptZHVH6P1Q==
-Thread-Topic: Congratulations ($ 100,800,000.00)
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
+        by zimbra01.compulab.co.il (Postfix) with ESMTP id 75C37E81CB001;
+        Mon, 29 Mar 2021 00:02:43 +0300 (IDT)
+Received: from zimbra01.compulab.co.il ([127.0.0.1])
+        by localhost (zimbra01.compulab.co.il [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id fw48-b84IdP6; Mon, 29 Mar 2021 00:02:43 +0300 (IDT)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra01.compulab.co.il (Postfix) with ESMTP id 036ACE81CB017;
+        Mon, 29 Mar 2021 00:02:43 +0300 (IDT)
+X-Virus-Scanned: amavisd-new at zimbra01.compulab.co.il
+Received: from zimbra01.compulab.co.il ([127.0.0.1])
+        by localhost (zimbra01.compulab.co.il [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kg7GTpoUk2uL; Mon, 29 Mar 2021 00:02:42 +0300 (IDT)
+Received: from kkk.compulab.local (lifshitz-linux.compulab.local [192.168.11.10])
+        by zimbra01.compulab.co.il (Postfix) with ESMTP id D137AE81CB001;
+        Mon, 29 Mar 2021 00:02:42 +0300 (IDT)
+From:   Kirill Kapranov <kirill.kapranov@compulab.co.il>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        phdm@macqel.be, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kirill Kapranov <kirill.kapranov@compulab.co.il>
+Subject: [PATCH 0/4] rtc:abx80x: Enable distributed digital calibration
+Date:   Mon, 29 Mar 2021 00:02:28 +0300
+Message-Id: <20210328210232.10395-1-kirill.kapranov@compulab.co.il>
+X-Mailer: git-send-email 2.11.0
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - clab.compulab.co.il
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - compulab.co.il
+X-Get-Message-Sender-Via: clab.compulab.co.il: mailgid no entry from get_recent_authed_mail_ips_entry
+X-Authenticated-Sender: clab.compulab.co.il: 
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+This patch series enables a Distributed Digital Calibration function for
+the RTC of the family. This feature allows to improve the RTC accuracy by
+means of compensation an XT oscillator drift. To learn more, see:
+AB08XX Series Ultra Low Power RTC IC User's Guide
+https://abracon.com/realtimeclock/AB08XX-Application-Manual.pdf
 
+The patches 1 and 2 enable SQW output, that is necessary for subsequent
+measurement and computation. However, this feature may be enabled and used
+independently, as is.
 
-Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
+The patches 3 and 4 enable the XT calibration feature per se. The SQW
+output must be enabled for usage of this feature.
+
+TIA!
+Kirill
+
+Kirill Kapranov (4):
+  dt-bindings: rtc: abracon,abx80x: Add sqw property
+  rtc:abx80x: Enable SQW output
+  dt-bindings: rtc: abracon,abx80x: Add xt-frequency property
+  rtc:abx80x: Enable xt digital calibration
+
+ .../devicetree/bindings/rtc/abracon,abx80x.txt |  25 ++
+ drivers/rtc/rtc-abx80x.c                       | 252 +++++++++++++++++++++
+ 2 files changed, 277 insertions(+)
+
+-- 
+2.11.0
+
