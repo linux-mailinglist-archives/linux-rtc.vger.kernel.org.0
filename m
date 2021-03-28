@@ -2,65 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C392134B8D0
-	for <lists+linux-rtc@lfdr.de>; Sat, 27 Mar 2021 19:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA234BE18
+	for <lists+linux-rtc@lfdr.de>; Sun, 28 Mar 2021 20:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbhC0SP2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 27 Mar 2021 14:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhC0SO6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 27 Mar 2021 14:14:58 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896C0C0613B1
-        for <linux-rtc@vger.kernel.org>; Sat, 27 Mar 2021 11:14:58 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id 12so2101910lfq.13
-        for <linux-rtc@vger.kernel.org>; Sat, 27 Mar 2021 11:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1BE9dnFeMlO87yw0Pb6LWjNYqQ7ZqkZnHENkJwfeBeE=;
-        b=sUf1GCKXgyAJ3v7LvphKNcp09i84h4TlojeKJ8xka3U2xiv7E84mwg1RlAqChYtO37
-         SqhUWtA2Rufs6QCOhA1NOFPQUtk6xdzHXYh1HI9GYATUASPtERhV+SF+HvXMSgRz/1xR
-         KYQhHjHb7BzD1rugb8PkJOAnJWlXvNLCQ6ruxc1dMMrwuaj+93U7NmMUxko3q2XVgkrJ
-         xFcHkrsw7Udv5bBbB+xIjuxknx4WglH+9iVFm0iZ60fcXzN1yKDGdHIdbXLJpHLsPmv7
-         5vTaE7+bKqFYSnGwtSzKFFZhvVtw1tkR+xJfvznU38f+y42C7iYYvzxVsjRiF+nD0pcV
-         plDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1BE9dnFeMlO87yw0Pb6LWjNYqQ7ZqkZnHENkJwfeBeE=;
-        b=AoNwaOtBqHDSb5YDInIwQoaFfX2S1jqjBNKiD7GSRGEFI4qBewiueddJO+2VkrriHO
-         sCESkHm6YWVcrBtVxobOJzPWgoc38UaplV1aQAq8xymVdF5YGuSZMRMjgr507x6+1dqT
-         LOS8VOrWOSpCGME9naGU7grUXxQ6bxEu8Ci5ewSTT8Umv52nlwfGcsR6eiip8EWBJLh2
-         apQBw5vGk91sus3CjAzjWp177bdoa+xYYImy1WTI3LDuaKiX3VS1sWpSjM4vF2kvoMor
-         AKn/Cky5PRDTgnz2t06vm6i6Pz1WCp/h9KWElFSzgieY34XJUT+xz7pNuxWz//nDsYsE
-         qJHg==
-X-Gm-Message-State: AOAM530mDZD89fHTTeGxpz7x5i40//mHUOzZq1Era2kTAnbF3IUT3N7s
-        rH2Z2e+PIgRI/RTyLxhtQX12BOWZD66Bta48lg==
-X-Google-Smtp-Source: ABdhPJz/BKX0aKtxHNBadWWD5c8OBVYXDz9XYeahTZ7jfZ9/kUgKpyfycxS2JIaeUKsdR9Tun2+kY/1BJmBBI9z6My8=
-X-Received: by 2002:a19:c54:: with SMTP id 81mr11278812lfm.401.1616868896554;
- Sat, 27 Mar 2021 11:14:56 -0700 (PDT)
+        id S229647AbhC1SIB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 28 Mar 2021 14:08:01 -0400
+Received: from mail.hanoi.gov.vn ([113.160.32.33]:32049 "EHLO
+        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231492AbhC1SHi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 28 Mar 2021 14:07:38 -0400
+X-Greylist: delayed 483 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:32 EDT
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B597EC3DB;
+        Mon, 29 Mar 2021 00:58:07 +0700 (+07)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
+        s=default; t=1616954288;
+        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
+        b=MnJpubbCOoNzrGbdl4opA9pGiqD1qL1TzNpy60QO4II5VnNpsotVl818lYgRa6I3d
+         Omzy1cLH1+oH7hvhrvWFGEjWO4Du7emM//yWycfTmkwXhJBSFfgFLpRpJNgbPUcm37
+         IfeanaeGGyboioiPWx6i9EzzU+DQGarsjKQF0WLA=
+X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
+Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 713EBEC3DD;
+        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
+        Mon, 29 Mar 2021 00:58:05 +0700 (+07)
+Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 7EB1F7F41B5D;
+        Mon, 29 Mar 2021 00:57:59 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 9F9587F41B42;
+        Mon, 29 Mar 2021 00:57:56 +0700 (+07)
+Received: from mail.hanoi.gov.vn ([127.0.0.1])
+        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5aziPsZZzTJX; Mon, 29 Mar 2021 00:57:52 +0700 (+07)
+Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
+        by mail.hanoi.gov.vn (Postfix) with ESMTP id 923357F41B59;
+        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
+Date:   Mon, 29 Mar 2021 00:57:49 +0700 (ICT)
+From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
+Reply-To: Mackenzie Scott <propack@propck.net>
+Message-ID: <338153864.25920933.1616954269522.JavaMail.zimbra@hanoi.gov.vn>
+Subject: Congratulations ($ 100,800,000.00)
 MIME-Version: 1.0
-Received: by 2002:a19:6d1b:0:0:0:0:0 with HTTP; Sat, 27 Mar 2021 11:14:55
- -0700 (PDT)
-Reply-To: mrkasimmohamed15@gmail.com
-From:   Mr Kasim Mohamed <ellaemiantor2@gmail.com>
-Date:   Sat, 27 Mar 2021 11:14:55 -0700
-Message-ID: <CAHRdPM57oThi4274XC0h-ZWuFOSEzp-CYtBm+6CWA9fJE4wS_Q@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [185.107.80.217]
+X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
+Thread-Index: /8qcKB84H/IsUnGyWvfkptZHVH6P1Q==
+Thread-Topic: Congratulations ($ 100,800,000.00)
 To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-TM-AS-GCONF: 00
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
--- 
-I am Mr Kasim Mohamed
 
-Hi Friend I am a bank director of the UBA Bank Plc bf .I want to
-transfer an abandoned sum of 27.5 millions USD  to you through ATM
-VISA CARD .50% will be for you. No risk involved. Contact me for more
-details. Kindly reply me back to my alternative email
-address(mrkasimmohamed15@gmail.com) Mr kasim mohamed
+
+Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
