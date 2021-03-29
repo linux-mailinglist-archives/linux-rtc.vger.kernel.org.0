@@ -2,191 +2,201 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF8034CE8E
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Mar 2021 13:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8FB34D077
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Mar 2021 14:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbhC2LOP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Mar 2021 07:14:15 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:51961 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231584AbhC2LNz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Mar 2021 07:13:55 -0400
-X-UUID: af5f7e916a054d958e140f1157c005bc-20210329
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=hFgBU9yLcCHCyobJXrDH3btoHx/jN6JEEmH0JPSgREg=;
-        b=VwbSU6dOtwWfcO6Xh4fRiI43G2aYtS2ogZXRXAwJl7vFV4fUtF147vFtkb3cRLZlrZq5vRs9gihGWp4zgz/Q+JlNi+0+ruaWLD4t8Ue6BX+xAvLwh/Ky+DwIZWBb2fCo4z5JUhhZTTZ3/DOypol+eeFDbl8PJ3IgXXq/YNtlJ8g=;
-X-UUID: af5f7e916a054d958e140f1157c005bc-20210329
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 719700478; Mon, 29 Mar 2021 19:13:50 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 29 Mar 2021 19:13:49 +0800
-Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 29 Mar 2021 19:13:49 +0800
-Message-ID: <1617016429.8590.3.camel@mtksdaap41>
-Subject: Re: [PATCH v6 4/8] dt-bindings: regulator: Add document for MT6359
- regulator
-From:   Hsin-hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S230472AbhC2MxI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 29 Mar 2021 08:53:08 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:39733 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230437AbhC2Mwr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Mar 2021 08:52:47 -0400
+Received: by mail-lj1-f178.google.com with SMTP id u4so15800394ljo.6;
+        Mon, 29 Mar 2021 05:52:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=LEWOJQo0ScWW9gMKS9BFT8XbagVRAoDPPfXmEAzKL2o=;
+        b=G/XE2UNdyaFRC3UMZBOt6GnTq/94ht7hLQ4CJrF5YR11d9WVyM261d+7UR2c7O/Zhu
+         S4iiF6vpSBkNTd//xIoRlfOdvi8/dHDeXBQO3MUqN7kjAc3ZvEdeNgGnGxcPLO5vbRXY
+         0rhY+58ivQ2nH7wSzHPKlqeGCqWKSIcN7giRbJHuc6oiVlLQzsK3inn890iHIRJwZh0C
+         ZcWQVuIok/TvqwuW20nOWS6dTVYGedx17l5Su77FlNUtTInElNRCE5X1ROzHCrDF0svy
+         xKG88GIqBGRV9mOJWmKRHh665ND9caMoj2drP73UHHTBuGsFWsvRAqcoKbr6FiW37wlx
+         YExw==
+X-Gm-Message-State: AOAM532vqjE3AB4dmYbRNj+ezcAbN8Cg31qjSHKcIKQupjmk2oEtowIJ
+        iEJzh4VYtX/HA+/1IYXKa6vJAyjvZEV8Bw==
+X-Google-Smtp-Source: ABdhPJxwYqWnOKoTHfOWNrGF8vHYrCaQfZ61QGiufXGr1JL9JEisUdhMSBl+yclZD00e7d5bOvUuHQ==
+X-Received: by 2002:a2e:508:: with SMTP id 8mr17906649ljf.207.1617022365549;
+        Mon, 29 Mar 2021 05:52:45 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::2])
+        by smtp.gmail.com with ESMTPSA id j15sm1822394lfm.138.2021.03.29.05.52.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Mar 2021 05:52:44 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 15:52:38 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Yingjoe Chen <yingjoe.chen@mediatek.com>,
-        "Fei Shao" <fshao@chromium.org>, Ran Bi <ran.bi@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 29 Mar 2021 19:13:49 +0800
-In-Reply-To: <20210316212802.GA3670080@robh.at.kernel.org>
-References: <1615829757-3223-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <1615829757-3223-5-git-send-email-hsin-hsiung.wang@mediatek.com>
-         <20210316212802.GA3670080@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v5 00/19] Support ROHM BD71815 PMIC
+Message-ID: <cover.1617020713.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-SGksDQoNCk9uIFR1ZSwgMjAyMS0wMy0xNiBhdCAxNToyOCAtMDYwMCwgUm9iIEhlcnJpbmcgd3Jv
-dGU6DQo+IE9uIFR1ZSwgTWFyIDE2LCAyMDIxIGF0IDAxOjM1OjUzQU0gKzA4MDAsIEhzaW4tSHNp
-dW5nIFdhbmcgd3JvdGU6DQo+ID4gYWRkIGR0LWJpbmRpbmcgZG9jdW1lbnQgZm9yIE1lZGlhVGVr
-IE1UNjM1OSBQTUlDDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogSHNpbi1Ic2l1bmcgV2FuZyA8
-aHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gY2hhbmdlcyBzaW5j
-ZSB2NToNCj4gPiAtIG5vIGNoYW5nZS4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRpbmdzL3JlZ3Vs
-YXRvci9tdDYzNTktcmVndWxhdG9yLnlhbWwgIHwgMTY5ICsrKysrKysrKysrKysrKysrKw0KPiA+
-ICAxIGZpbGUgY2hhbmdlZCwgMTY5IGluc2VydGlvbnMoKykNCj4gPiAgY3JlYXRlIG1vZGUgMTAw
-NjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9yZWd1bGF0b3IvbXQ2MzU5LXJl
-Z3VsYXRvci55YW1sDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9yZWd1bGF0b3IvbXQ2MzU5LXJlZ3VsYXRvci55YW1sIGIvRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3JlZ3VsYXRvci9tdDYzNTktcmVndWxhdG9yLnlhbWwN
-Cj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uNjJmZjkz
-ZWVmZDM5DQo+ID4gLS0tIC9kZXYvbnVsbA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNl
-dHJlZS9iaW5kaW5ncy9yZWd1bGF0b3IvbXQ2MzU5LXJlZ3VsYXRvci55YW1sDQo+ID4gQEAgLTAs
-MCArMSwxNjkgQEANCj4gPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAgT1Ig
-QlNELTItQ2xhdXNlKQ0KPiA+ICslWUFNTCAxLjINCj4gPiArLS0tDQo+ID4gKyRpZDogaHR0cDov
-L2RldmljZXRyZWUub3JnL3NjaGVtYXMvcmVndWxhdG9yL210NjM1OS1yZWd1bGF0b3IueWFtbCMN
-Cj4gPiArJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21ldGEtc2NoZW1hcy9jb3JlLnlh
-bWwjDQo+ID4gKw0KPiA+ICt0aXRsZTogTVQ2MzU5IFJlZ3VsYXRvciBmcm9tIE1lZGlhVGVrIElu
-dGVncmF0ZWQNCj4gPiArDQo+ID4gK21haW50YWluZXJzOg0KPiA+ICsgIC0gSHNpbi1Ic2l1bmcg
-V2FuZyA8aHNpbi1oc2l1bmcud2FuZ0BtZWRpYXRlay5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlw
-dGlvbjogfA0KPiA+ICsgIExpc3Qgb2YgcmVndWxhdG9ycyBwcm92aWRlZCBieSB0aGlzIGNvbnRy
-b2xsZXIuIEl0IGlzIG5hbWVkDQo+ID4gKyAgYWNjb3JkaW5nIHRvIGl0cyByZWd1bGF0b3IgdHlw
-ZSwgYnVja188bmFtZT4gYW5kIGxkb188bmFtZT4uDQo+ID4gKyAgTVQ2MzU5IHJlZ3VsYXRvcnMg
-bm9kZSBzaG91bGQgYmUgc3ViIG5vZGUgb2YgdGhlIE1UNjM5NyBNRkQgbm9kZS4NCj4gPiArDQo+
-ID4gK3Byb3BlcnRpZXM6DQo+ID4gKyAgJG5vZGVuYW1lOg0KPiA+ICsgICAgcGF0dGVybjogIl5w
-bWljJCINCj4gDQo+IFRoZSBlcnJvcnMgYXJlIGJlY2F1c2UgdGhpcyBzY2hlbWEgd2lsbCBiZSBh
-cHBsaWVkIHRvIGV2ZXJ5ICdwbWljJyBub2RlLg0KPiANCj4gPiArDQo+ID4gKyAgbXQ2MzU5cmVn
-dWxhdG9yOg0KPiANCj4gVGhlIG5vZGUgbmFtZSBoZXJlIHNob3VsZCBiZSBqdXN0ICdyZWd1bGF0
-b3JzJywgYnV0IHRoYXQgc2hvdWxkIGJlIGluIA0KPiB0aGUgTUZEIHNjaGVtYSBhbmQgeW91IHNo
-b3VsZCByZW1vdmUgdGhpcyBsZXZlbCBoZXJlLiBTbyB0aGUgTUZEIHdvdWxkIA0KPiBoYXZlOg0K
-PiANCj4gcHJvcGVydGllczoNCj4gICByZWd1bGF0b3JzOg0KPiAgICAgdHlwZTogb2JqZWN0DQo+
-ICAgICAkcmVmOiBzY2hlbWFzL3JlZ3VsYXRvci9tdDYzNTktcmVndWxhdG9yLnlhbWwjDQo+IA0K
-PiA+ICsgICAgdHlwZTogb2JqZWN0DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAg
-bGlzdCBvZiByZWd1bGF0b3JzIHByb3ZpZGVkIGJ5IHRoaXMgY29udHJvbGxlci4NCj4gPiArDQo+
-ID4gKyAgICBwYXR0ZXJuUHJvcGVydGllczoNCj4gDQo+IEFuZCB0aGlzIHNob3VsZCBiZSBhdCB0
-aGUgdG9wIGxldmVsIG9mIHRoaXMgZG9jLg0KPiANCj4gPiArICAgICAgIl5idWNrX3YoczF8Z3B1
-MTF8bW9kZW18cHV8Y29yZXxzMnxwYXxwcm9jMnxwcm9jMXxjb3JlX3NzaHViKSQiOg0KPiA+ICsg
-ICAgICAgIHR5cGU6IG9iamVjdA0KPiA+ICsgICAgICAgICRyZWY6ICJyZWd1bGF0b3IueWFtbCMi
-DQo+ID4gKw0KPiA+ICsgICAgICAgIHByb3BlcnRpZXM6DQo+ID4gKyAgICAgICAgICByZWd1bGF0
-b3ItbmFtZToNCj4gPiArICAgICAgICAgICAgcGF0dGVybjogIl52KHMxfGdwdTExfG1vZGVtfHB1
-fGNvcmV8czJ8cGF8cHJvYzJ8cHJvYzF8Y29yZV9zc2h1YikkIg0KPiA+ICsNCj4gPiArICAgICAg
-ICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICsgICAgICAiXmxkb192
-KGlicnxyZjEyfHVzYnxjYW1pb3xlZnVzZXx4bzIyKSQiOg0KPiA+ICsgICAgICAgIHR5cGU6IG9i
-amVjdA0KPiA+ICsgICAgICAgICRyZWY6ICJyZWd1bGF0b3IueWFtbCMiDQo+ID4gKw0KPiA+ICsg
-ICAgICAgIHByb3BlcnRpZXM6DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZToNCj4gPiAr
-ICAgICAgICAgICAgcGF0dGVybjogIl52KGlicnxyZjEyfHVzYnxjYW1pb3xlZnVzZXx4bzIyKSQi
-DQo+ID4gKw0KPiA+ICsgICAgICAgIHVuZXZhbHVhdGVkUHJvcGVydGllczogZmFsc2UNCj4gPiAr
-DQo+ID4gKyAgICAgICJebGRvX3YocmZja3xlbWN8YTEyfGEwOXx1ZnN8YmJjaykkIjoNCj4gPiAr
-ICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICAgICAkcmVmOiAicmVndWxhdG9yLnlhbWwj
-Ig0KPiA+ICsNCj4gPiArICAgICAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICAgICAgcmVndWxh
-dG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAgIHBhdHRlcm46ICJedihyZmNrfGVtY3xhMTJ8YTA5
-fHVmc3xiYmNrKSQiDQo+ID4gKw0KPiA+ICsgICAgICAgIHVuZXZhbHVhdGVkUHJvcGVydGllczog
-ZmFsc2UNCj4gPiArDQo+ID4gKyAgICAgICJebGRvX3ZjbigxOHwxM3wzM18xX2J0fDEzXzFfd2lm
-aXwzM18yX2J0fDMzXzJfd2lmaSkkIjoNCj4gPiArICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiAr
-ICAgICAgICAkcmVmOiAicmVndWxhdG9yLnlhbWwjIg0KPiA+ICsNCj4gPiArICAgICAgICBwcm9w
-ZXJ0aWVzOg0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAg
-IHBhdHRlcm46ICJedmNuKDE4fDEzfDMzXzFfYnR8MTNfMV93aWZpfDMzXzJfYnR8MzNfMl93aWZp
-KSQiDQo+ID4gKw0KPiA+ICsgICAgICAgIHVuZXZhbHVhdGVkUHJvcGVydGllczogZmFsc2UNCj4g
-PiArDQo+ID4gKyAgICAgICJebGRvX3ZzcmFtXyhwcm9jMnxvdGhlcnN8bWR8cHJvYzF8b3RoZXJz
-X3NzaHViKSQiOg0KPiA+ICsgICAgICAgIHR5cGU6IG9iamVjdA0KPiA+ICsgICAgICAgICRyZWY6
-ICJyZWd1bGF0b3IueWFtbCMiDQo+ID4gKw0KPiA+ICsgICAgICAgIHByb3BlcnRpZXM6DQo+ID4g
-KyAgICAgICAgICByZWd1bGF0b3ItbmFtZToNCj4gPiArICAgICAgICAgICAgcGF0dGVybjogIl52
-c3JhbV8ocHJvYzJ8b3RoZXJzfG1kfHByb2MxfG90aGVyc19zc2h1YikkIg0KPiA+ICsNCj4gPiAr
-ICAgICAgICB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICsgICAgICAi
-Xmxkb192KGZlfGJpZnxpbykyOCQiOg0KPiA+ICsgICAgICAgIHR5cGU6IG9iamVjdA0KPiA+ICsg
-ICAgICAgICRyZWY6ICJyZWd1bGF0b3IueWFtbCMiDQo+ID4gKw0KPiA+ICsgICAgICAgIHByb3Bl
-cnRpZXM6DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZToNCj4gPiArICAgICAgICAgICAg
-cGF0dGVybjogIl52KGZlfGJpZnxpbykyOCQiDQo+ID4gKw0KPiA+ICsgICAgICAgIHVuZXZhbHVh
-dGVkUHJvcGVydGllczogZmFsc2UNCj4gPiArDQo+ID4gKyAgICAgICJebGRvX3YoYXVkfGlvfGF1
-eHxyZnxtKTE4JCI6DQo+ID4gKyAgICAgICAgdHlwZTogb2JqZWN0DQo+ID4gKyAgICAgICAgJHJl
-ZjogInJlZ3VsYXRvci55YW1sIyINCj4gPiArDQo+ID4gKyAgICAgICAgcHJvcGVydGllczoNCj4g
-PiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lOg0KPiA+ICsgICAgICAgICAgICBwYXR0ZXJuOiAi
-XnYoYXVkfGlvfGF1eHxyZnxtKTE4JCINCj4gPiArDQo+ID4gKyAgICAgICAgdW5ldmFsdWF0ZWRQ
-cm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArICAgICAgIl5sZG9fdnNpbVsxMl0kIjoNCj4g
-PiArICAgICAgICB0eXBlOiBvYmplY3QNCj4gPiArICAgICAgICAkcmVmOiAicmVndWxhdG9yLnlh
-bWwjIg0KPiA+ICsNCj4gPiArICAgICAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICAgICAgcmVn
-dWxhdG9yLW5hbWU6DQo+ID4gKyAgICAgICAgICAgIHBhdHRlcm46ICJednNpbVsxMl0kIg0KPiA+
-ICsNCj4gPiArICAgICAgICByZXF1aXJlZDoNCj4gPiArICAgICAgICAgIC0gcmVndWxhdG9yLW5h
-bWUNCj4gPiArDQo+ID4gKyAgICAgICAgdW5ldmFsdWF0ZWRQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+
-ICsNCj4gPiArYWRkaXRpb25hbFByb3BlcnRpZXM6IGZhbHNlDQo+ID4gKw0KPiA+ICtleGFtcGxl
-czoNCj4gPiArICAtIHwNCj4gPiArICAgIHBtaWMgew0KPiA+ICsgICAgICBtdDYzNTlyZWd1bGF0
-b3Igew0KPiANCj4gSSBwcmVmZXIgdG8gc2VlIGEgc2luZ2xlIGNvbXBsZXRlIGV4YW1wbGUgaW4g
-dGhlIE1GRCBzY2hlbWEgcmF0aGVyIHRoYW4gDQo+IHBpZWNlbWVhbCBzY2hlbWFzIGluIGVhY2gg
-c3ViIHNjaGVtYS4NCj4gDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50Lg0KSG93ZXZlciwgTVQ2
-Mzk3IG1mZCBkcml2ZXIgc3VwcG9ydHMgc2V2ZXJhbCBtZWRpYXRlayBwbWljcyB3aGljaCBoYXZl
-DQpkaWZmZXJlbnQgcmVndWxhdG9yIGNhcGFiaWxpdHksIHNvIGl0IGlzIGhhcmQgdG8gbGlzdCBh
-bGwgcmVndWxhdG9ycyBvZg0KZWFjaCBwbWljIGluIHRoZSBNRkQgc2NoZW1hLg0KDQpUaGFua3Mu
-DQoNCj4gPiArICAgICAgICBtdDYzNTlfdmdwdTExX2J1Y2tfcmVnOiBidWNrX3ZncHUxMSB7DQo+
-ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZSA9ICJ2Z3B1MTEiOw0KPiA+ICsgICAgICAgICAg
-cmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NDAwMDAwPjsNCj4gPiArICAgICAgICAgIHJlZ3Vs
-YXRvci1tYXgtbWljcm92b2x0ID0gPDExOTM3NTA+Ow0KPiA+ICsgICAgICAgICAgcmVndWxhdG9y
-LWVuYWJsZS1yYW1wLWRlbGF5ID0gPDIwMD47DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItYWx3
-YXlzLW9uOw0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLWFsbG93ZWQtbW9kZXMgPSA8MCAxIDI+
-Ow0KPiA+ICsgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIG10NjM1OV92Y2FtaW9fbGRv
-X3JlZzogbGRvX3ZjYW1pbyB7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZSA9ICJ2Y2Ft
-aW8iOw0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTcwMDAwMD47
-DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxOTAwMDAwPjsNCj4g
-PiArICAgICAgICB9Ow0KPiA+ICsNCj4gPiArICAgICAgICBtdDYzNTlfdmNuMThfbGRvX3JlZzog
-bGRvX3ZjbjE4IHsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lID0gInZjbjE4IjsNCj4g
-PiArICAgICAgICAgIHJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDE4MDAwMDA+Ow0KPiA+ICsg
-ICAgICAgICAgcmVndWxhdG9yLW1heC1taWNyb3ZvbHQgPSA8MTgwMDAwMD47DQo+ID4gKyAgICAg
-ICAgICByZWd1bGF0b3ItZW5hYmxlLXJhbXAtZGVsYXkgPSA8MjQwPjsNCj4gPiArICAgICAgICB9
-Ow0KPiA+ICsNCj4gPiArICAgICAgICBtdDYzNTlfdnNyYW1fcHJvYzJfbGRvX3JlZzogbGRvX3Zz
-cmFtX3Byb2MyIHsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1uYW1lID0gInZzcmFtX3Byb2My
-IjsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1taW4tbWljcm92b2x0ID0gPDUwMDAwMD47DQo+
-ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxMjkzNzUwPjsNCj4gPiAr
-ICAgICAgICAgIHJlZ3VsYXRvci1yYW1wLWRlbGF5ID0gPDc1MDA+Ow0KPiA+ICsgICAgICAgICAg
-cmVndWxhdG9yLWVuYWJsZS1yYW1wLWRlbGF5ID0gPDI0MD47DQo+ID4gKyAgICAgICAgICByZWd1
-bGF0b3ItYWx3YXlzLW9uOw0KPiA+ICsgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIG10
-NjM1OV92ZmUyOF9sZG9fcmVnOiBsZG9fdmZlMjggew0KPiA+ICsgICAgICAgICAgcmVndWxhdG9y
-LW5hbWUgPSAidmZlMjgiOw0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQg
-PSA8MjgwMDAwMD47DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwy
-ODAwMDAwPjsNCj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwx
-MjA+Ow0KPiA+ICsgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIG10NjM1OV92YXVkMThf
-bGRvX3JlZzogbGRvX3ZhdWQxOCB7DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbmFtZSA9ICJ2
-YXVkMTgiOw0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTgwMDAw
-MD47DQo+ID4gKyAgICAgICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsN
-Cj4gPiArICAgICAgICAgIHJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDwyNDA+Ow0KPiA+
-ICsgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAgICAgIG10NjM1OV92c2ltMV9sZG9fcmVnOiBs
-ZG9fdnNpbTEgew0KPiA+ICsgICAgICAgICAgcmVndWxhdG9yLW5hbWUgPSAidnNpbTEiOw0KPiA+
-ICsgICAgICAgICAgcmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8MTcwMDAwMD47DQo+ID4gKyAg
-ICAgICAgICByZWd1bGF0b3ItbWF4LW1pY3Jvdm9sdCA9IDwzMTAwMDAwPjsNCj4gPiArICAgICAg
-ICAgIHJlZ3VsYXRvci1lbmFibGUtcmFtcC1kZWxheSA9IDw0ODA+Ow0KPiA+ICsgICAgICAgIH07
-DQo+ID4gKyAgICAgIH07DQo+ID4gKyAgICB9Ow0KPiA+ICsuLi4NCj4gPiAtLSANCj4gPiAyLjE4
-LjANCj4gPiANCg0K
+Patch series introducing support for ROHM BD71815 PMIC
 
+ROHM BD71815 is a power management IC used in some battery powered
+systems. It contains regulators, GPO(s), charger + coulomb counter, RTC
+and a clock gate.
+
+All regulators can be controlled via I2C. LDO4 can additionally be set to
+be enabled/disabled by a GPIO. LDO3 voltage could be selected from two
+voltages written into separate VSEL reisters using GPIO but this mode is
+not supported by driver. On top of that the PMIC has the typical HW
+state machine which is present also on many other ROHM PMICs.
+
+IC contains two GPOs - but one of the GPOs is marked as GND in
+data-sheet. Thus the driver by default only exposes one GPO. The second
+GPO can be enabled by special DT property.
+
+RTC is almost similar to what is on BD71828. For currently used features
+only the register address offset to RTC block differs.
+
+The charger driver is not included in this series. ROHM has a charger
+driver with some fuel-gauging logig written in but this is not included
+here. I am working on separating the logic from HW specific driver and
+supporting both BD71815 and BD71828 chargers in separate patch series.
+
+Changelog v5:
+  Regulator:
+  - Added regmap helper for regulator ramp-delay and taken it in use
+    (patches 13, 14, 16 - they can be just dropped if ramp-delay helper is not
+    a good idea. Patch 15 implements old-fashioned ramp-delay)
+  GPIO:
+  - styling changes to GPIO (Mostly suggested by Andy)
+  - implemented init_valid_mask (but can't count on it yet)
+Changelog v4:
+  - Sorted ROHM chip ID enum
+  - Statcized DVS structures in regulator driver
+  - Minor styling for regulator driver
+  - rebased on v5.12-rc4
+Changelog v3:
+  - GPIO clean-up as suggested by Bartosz
+  - MFD clean-up as suggested by Lee
+  - clk-mode dt-binding handling in MFD driver corrected to reflect new
+    property values.
+  - Dropped already applied patches
+  - Rebased on v5.12-rc2
+Changelog v2:
+  - Rebased on top of v5.11-rc3
+  - Added another "preliminary patch" which fixes HW-dvs voltage
+    handling (patch 1)
+  - split regulator patch to two.
+  - changed dt-binding patch ordering.
+  regulators:
+    - staticized probe
+    - removed some unnecessary defines
+    - updated comments
+    - split rohm-regulator patch adding SNVS and supporting simple
+      linear mapping into two - one adding support for mapping, other
+      adding SNVS.
+  GPIO:
+    - removed unnecessary headers
+    - clarified dev/parent->dev usage
+    - removed forgotten #define DEBUG
+  dt-bindings:
+    - changed patch order to meet ref-dependencies
+    - added missing regulator nodes
+    - changed string property for clk mode to tristated
+  MFD:
+    - header cleanups.
+  CLK:
+    - fixed commit message
+
+--
+
+Matti Vaittinen (19):
+  rtc: bd70528: Do not require parent data
+  mfd: bd718x7: simplify by cleaning unnecessary device data
+  dt_bindings: bd71828: Add clock output mode
+  dt_bindings: regulator: Add ROHM BD71815 PMIC regulators
+  dt_bindings: mfd: Add ROHM BD71815 PMIC
+  mfd: Add ROHM BD71815 ID
+  mfd: Sort ROHM chip ID list for better readability
+  mfd: Support for ROHM BD71815 PMIC core
+  gpio: support ROHM BD71815 GPOs
+  regulator: helpers: Export helper voltage listing
+  regulator: rohm-regulator: linear voltage support
+  regulator: rohm-regulator: Support SNVS HW state.
+  regulator: Add regmap helper for ramp-delay setting
+  regulator: bd718x7, bd71828: Use ramp-delay helper
+  regulator: Support ROHM BD71815 regulators
+  regulator: bd71815: use ramp-delay helper
+  clk: bd718x7: Add support for clk gate on ROHM BD71815 PMIC
+  rtc: bd70528: Support RTC on ROHM BD71815
+  MAINTAINERS: Add ROHM BD71815AGW
+
+ .../bindings/mfd/rohm,bd71815-pmic.yaml       | 201 ++++++
+ .../bindings/mfd/rohm,bd71828-pmic.yaml       |   6 +
+ .../regulator/rohm,bd71815-regulator.yaml     | 116 ++++
+ MAINTAINERS                                   |   3 +
+ drivers/clk/clk-bd718x7.c                     |   9 +-
+ drivers/gpio/Kconfig                          |  10 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-bd71815.c                   | 193 ++++++
+ drivers/mfd/Kconfig                           |  15 +-
+ drivers/mfd/rohm-bd71828.c                    | 486 +++++++++----
+ drivers/mfd/rohm-bd718x7.c                    |  43 +-
+ drivers/regulator/Kconfig                     |  11 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/bd71815-regulator.c         | 651 ++++++++++++++++++
+ drivers/regulator/bd71828-regulator.c         |  51 +-
+ drivers/regulator/bd718x7-regulator.c         |  60 +-
+ drivers/regulator/helpers.c                   | 101 ++-
+ drivers/regulator/rohm-regulator.c            |  23 +-
+ drivers/rtc/Kconfig                           |   6 +-
+ drivers/rtc/rtc-bd70528.c                     | 104 +--
+ include/linux/mfd/rohm-bd71815.h              | 562 +++++++++++++++
+ include/linux/mfd/rohm-bd71828.h              |   3 +
+ include/linux/mfd/rohm-bd718x7.h              |  13 -
+ include/linux/mfd/rohm-generic.h              |  15 +-
+ include/linux/regulator/driver.h              |   7 +
+ 25 files changed, 2393 insertions(+), 298 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+ create mode 100644 drivers/gpio/gpio-bd71815.c
+ create mode 100644 drivers/regulator/bd71815-regulator.c
+ create mode 100644 include/linux/mfd/rohm-bd71815.h
+
+
+base-commit: 0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b
+-- 
+2.25.4
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
