@@ -2,23 +2,23 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD4F34FF2E
+	by mail.lfdr.de (Postfix) with ESMTP id E855B34FF2F
 	for <lists+linux-rtc@lfdr.de>; Wed, 31 Mar 2021 13:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbhCaLCz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 31 Mar 2021 07:02:55 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:52124 "EHLO
+        id S235353AbhCaLC4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 31 Mar 2021 07:02:56 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52114 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235533AbhCaLCa (ORCPT
+        with ESMTP id S235534AbhCaLCa (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Wed, 31 Mar 2021 07:02:30 -0400
-X-UUID: 91949b8b527b4598b679c89a4638c01c-20210331
-X-UUID: 91949b8b527b4598b679c89a4638c01c-20210331
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+X-UUID: 17b415228856475fa6015d2c8e9a7d00-20210331
+X-UUID: 17b415228856475fa6015d2c8e9a7d00-20210331
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
         (envelope-from <hsin-hsiung.wang@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 474028446; Wed, 31 Mar 2021 19:02:20 +0800
+        with ESMTP id 1758570673; Wed, 31 Mar 2021 19:02:21 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
  15.0.1497.2; Wed, 31 Mar 2021 19:02:19 +0800
 Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
@@ -42,457 +42,200 @@ CC:     Eddie Huang <eddie.huang@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
         <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Wen Su <wen.su@mediatek.com>
-Subject: [PATCH v7 6/8] regulator: mt6359: Add support for MT6359 regulator
-Date:   Wed, 31 Mar 2021 19:02:05 +0800
-Message-ID: <1617188527-3392-7-git-send-email-hsin-hsiung.wang@mediatek.com>
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v7 7/8] regulator: mt6359: Add support for MT6359P regulator
+Date:   Wed, 31 Mar 2021 19:02:06 +0800
+Message-ID: <1617188527-3392-8-git-send-email-hsin-hsiung.wang@mediatek.com>
 X-Mailer: git-send-email 2.6.4
 In-Reply-To: <1617188527-3392-1-git-send-email-hsin-hsiung.wang@mediatek.com>
 References: <1617188527-3392-1-git-send-email-hsin-hsiung.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: D97410162E80A537FA399D10FC3824F7C8753CFA648FE429D1834526614BE4562000:8
 X-MTK:  N
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Wen Su <wen.su@mediatek.com>
+The MT6359P is a eco version for MT6359 regulator.
+We add support based on MT6359 regulator driver.
 
-The MT6359 is a regulator found on boards based on MediaTek MT6779 and
-probably other SoCs. It is a so called pmic and connects as a slave to
-SoC using SPI, wrapped inside the pmic-wrapper.
-
-Signed-off-by: Wen Su <wen.su@mediatek.com>
 Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
 Acked-by: Mark Brown <broonie@kernel.org>
 ---
 changes since v6:
 - no change.
 ---
- drivers/regulator/Kconfig                  |   9 +
- drivers/regulator/Makefile                 |   1 +
- drivers/regulator/mt6359-regulator.c       | 669 +++++++++++++++++++++
- include/linux/regulator/mt6359-regulator.h |  58 ++
- 4 files changed, 737 insertions(+)
- create mode 100644 drivers/regulator/mt6359-regulator.c
- create mode 100644 include/linux/regulator/mt6359-regulator.h
+ drivers/regulator/mt6359-regulator.c       | 379 ++++++++++++++++++++-
+ include/linux/mfd/mt6359p/registers.h      | 249 ++++++++++++++
+ include/linux/regulator/mt6359-regulator.h |   1 +
+ 3 files changed, 623 insertions(+), 6 deletions(-)
+ create mode 100644 include/linux/mfd/mt6359p/registers.h
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index 77c43134bc9e..1d671dbf4fd2 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -759,6 +759,15 @@ config REGULATOR_MT6358
- 	  This driver supports the control of different power rails of device
- 	  through regulator interface.
- 
-+config REGULATOR_MT6359
-+	tristate "MediaTek MT6359 PMIC"
-+	depends on MFD_MT6397
-+	help
-+	  Say y here to select this option to enable the power regulator of
-+	  MediaTek MT6359 PMIC.
-+	  This driver supports the control of different power rails of device
-+	  through regulator interface.
-+
- config REGULATOR_MT6360
- 	tristate "MT6360 SubPMIC Regulator"
- 	depends on MFD_MT6360
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 44d2f8bf4b74..c3ca97377044 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -92,6 +92,7 @@ obj-$(CONFIG_REGULATOR_MT6311) += mt6311-regulator.o
- obj-$(CONFIG_REGULATOR_MT6315) += mt6315-regulator.o
- obj-$(CONFIG_REGULATOR_MT6323)	+= mt6323-regulator.o
- obj-$(CONFIG_REGULATOR_MT6358)	+= mt6358-regulator.o
-+obj-$(CONFIG_REGULATOR_MT6359)	+= mt6359-regulator.o
- obj-$(CONFIG_REGULATOR_MT6360) += mt6360-regulator.o
- obj-$(CONFIG_REGULATOR_MT6380)	+= mt6380-regulator.o
- obj-$(CONFIG_REGULATOR_MT6397)	+= mt6397-regulator.o
 diff --git a/drivers/regulator/mt6359-regulator.c b/drivers/regulator/mt6359-regulator.c
-new file mode 100644
-index 000000000000..994d3f67f73d
---- /dev/null
+index 994d3f67f73d..4f517c9fd6c4 100644
+--- a/drivers/regulator/mt6359-regulator.c
 +++ b/drivers/regulator/mt6359-regulator.c
-@@ -0,0 +1,669 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2021 MediaTek Inc.
-+
-+#include <linux/platform_device.h>
-+#include <linux/mfd/mt6359/registers.h>
-+#include <linux/mfd/mt6397/core.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/mt6359-regulator.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#define MT6359_BUCK_MODE_AUTO		0
-+#define MT6359_BUCK_MODE_FORCE_PWM	1
-+#define MT6359_BUCK_MODE_NORMAL		0
-+#define MT6359_BUCK_MODE_LP		2
-+
-+/*
-+ * MT6359 regulators' information
-+ *
-+ * @desc: standard fields of regulator description.
-+ * @status_reg: for query status of regulators.
-+ * @qi: Mask for query enable signal status of regulators.
-+ * @modeset_reg: for operating AUTO/PWM mode register.
-+ * @modeset_mask: MASK for operating modeset register.
-+ * @modeset_shift: SHIFT for operating modeset register.
-+ */
-+struct mt6359_regulator_info {
-+	struct regulator_desc desc;
-+	u32 status_reg;
-+	u32 qi;
-+	u32 modeset_reg;
-+	u32 modeset_mask;
-+	u32 modeset_shift;
-+	u32 lp_mode_reg;
-+	u32 lp_mode_mask;
-+	u32 lp_mode_shift;
-+};
-+
-+#define MT6359_BUCK(match, _name, min, max, step, min_sel,	\
-+	volt_ranges, _enable_reg, _status_reg,			\
-+	_vsel_reg, _vsel_mask,					\
-+	_lp_mode_reg, _lp_mode_shift,				\
-+	_modeset_reg, _modeset_shift)				\
-+[MT6359_ID_##_name] = {						\
-+	.desc = {						\
-+		.name = #_name,					\
-+		.of_match = of_match_ptr(match),		\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.ops = &mt6359_volt_range_ops,			\
-+		.type = REGULATOR_VOLTAGE,			\
-+		.id = MT6359_ID_##_name,			\
-+		.owner = THIS_MODULE,				\
-+		.uV_step = (step),				\
-+		.linear_min_sel = (min_sel),			\
-+		.n_voltages = ((max) - (min)) / (step) + 1,	\
-+		.min_uV = (min),				\
-+		.linear_ranges = volt_ranges,			\
-+		.n_linear_ranges = ARRAY_SIZE(volt_ranges),	\
-+		.vsel_reg = _vsel_reg,				\
-+		.vsel_mask = _vsel_mask,			\
-+		.enable_reg = _enable_reg,			\
-+		.enable_mask = BIT(0),				\
-+		.of_map_mode = mt6359_map_mode,			\
-+	},							\
-+	.status_reg = _status_reg,				\
-+	.qi = BIT(0),						\
-+	.lp_mode_reg = _lp_mode_reg,				\
-+	.lp_mode_mask = BIT(_lp_mode_shift),			\
-+	.lp_mode_shift = _lp_mode_shift,			\
-+	.modeset_reg = _modeset_reg,				\
-+	.modeset_mask = BIT(_modeset_shift),			\
-+	.modeset_shift = _modeset_shift				\
-+}
-+
-+#define MT6359_LDO_LINEAR(match, _name, min, max, step, min_sel,\
-+	volt_ranges, _enable_reg, _status_reg,			\
-+	_vsel_reg, _vsel_mask)					\
-+[MT6359_ID_##_name] = {						\
-+	.desc = {						\
-+		.name = #_name,					\
-+		.of_match = of_match_ptr(match),		\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.ops = &mt6359_volt_range_ops,			\
-+		.type = REGULATOR_VOLTAGE,			\
-+		.id = MT6359_ID_##_name,			\
-+		.owner = THIS_MODULE,				\
-+		.uV_step = (step),				\
-+		.linear_min_sel = (min_sel),			\
-+		.n_voltages = ((max) - (min)) / (step) + 1,	\
-+		.min_uV = (min),				\
-+		.linear_ranges = volt_ranges,			\
-+		.n_linear_ranges = ARRAY_SIZE(volt_ranges),	\
-+		.vsel_reg = _vsel_reg,				\
-+		.vsel_mask = _vsel_mask,			\
-+		.enable_reg = _enable_reg,			\
-+		.enable_mask = BIT(0),				\
-+	},							\
-+	.status_reg = _status_reg,				\
-+	.qi = BIT(0),						\
-+}
-+
-+#define MT6359_LDO(match, _name, _volt_table,			\
-+	_enable_reg, _enable_mask, _status_reg,			\
-+	_vsel_reg, _vsel_mask, _en_delay)			\
-+[MT6359_ID_##_name] = {						\
-+	.desc = {						\
-+		.name = #_name,					\
-+		.of_match = of_match_ptr(match),		\
-+		.regulators_node = of_match_ptr("regulators"),	\
-+		.ops = &mt6359_volt_table_ops,			\
-+		.type = REGULATOR_VOLTAGE,			\
-+		.id = MT6359_ID_##_name,			\
-+		.owner = THIS_MODULE,				\
-+		.n_voltages = ARRAY_SIZE(_volt_table),		\
-+		.volt_table = _volt_table,			\
-+		.vsel_reg = _vsel_reg,				\
-+		.vsel_mask = _vsel_mask,			\
-+		.enable_reg = _enable_reg,			\
-+		.enable_mask = BIT(_enable_mask),		\
-+		.enable_time = _en_delay,			\
-+	},							\
-+	.status_reg = _status_reg,				\
-+	.qi = BIT(0),						\
-+}
-+
-+#define MT6359_REG_FIXED(match, _name, _enable_reg,	\
-+	_status_reg, _fixed_volt)			\
+@@ -4,6 +4,7 @@
+ 
+ #include <linux/platform_device.h>
+ #include <linux/mfd/mt6359/registers.h>
++#include <linux/mfd/mt6359p/registers.h>
+ #include <linux/mfd/mt6397/core.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -147,6 +148,29 @@ struct mt6359_regulator_info {
+ 	.qi = BIT(0),					\
+ }
+ 
++#define MT6359P_LDO1(match, _name, _ops, _volt_table,	\
++	_enable_reg, _enable_mask, _status_reg,		\
++	_vsel_reg, _vsel_mask)				\
 +[MT6359_ID_##_name] = {					\
 +	.desc = {					\
 +		.name = #_name,				\
 +		.of_match = of_match_ptr(match),	\
 +		.regulators_node = of_match_ptr("regulators"),	\
-+		.ops = &mt6359_volt_fixed_ops,		\
++		.ops = &_ops,				\
 +		.type = REGULATOR_VOLTAGE,		\
 +		.id = MT6359_ID_##_name,		\
 +		.owner = THIS_MODULE,			\
-+		.n_voltages = 1,			\
++		.n_voltages = ARRAY_SIZE(_volt_table),	\
++		.volt_table = _volt_table,		\
++		.vsel_reg = _vsel_reg,			\
++		.vsel_mask = _vsel_mask,		\
 +		.enable_reg = _enable_reg,		\
-+		.enable_mask = BIT(0),			\
-+		.fixed_uV = (_fixed_volt),		\
++		.enable_mask = BIT(_enable_mask),	\
 +	},						\
 +	.status_reg = _status_reg,			\
 +	.qi = BIT(0),					\
 +}
 +
-+static const struct linear_range mt_volt_range1[] = {
-+	REGULATOR_LINEAR_RANGE(800000, 0, 0x70, 12500),
+ static const struct linear_range mt_volt_range1[] = {
+ 	REGULATOR_LINEAR_RANGE(800000, 0, 0x70, 12500),
+ };
+@@ -175,6 +199,10 @@ static const struct linear_range mt_volt_range7[] = {
+ 	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
+ };
+ 
++static const struct linear_range mt_volt_range8[] = {
++	REGULATOR_LINEAR_RANGE(506250, 0, 0x7f, 6250),
 +};
 +
-+static const struct linear_range mt_volt_range2[] = {
-+	REGULATOR_LINEAR_RANGE(400000, 0, 0x7f, 6250),
+ static const u32 vsim1_voltages[] = {
+ 	0, 0, 0, 1700000, 1800000, 0, 0, 0, 2700000, 0, 0, 3000000, 3100000,
+ };
+@@ -212,6 +240,10 @@ static const u32 vrfck_voltages[] = {
+ 	0, 0, 1500000, 0, 0, 0, 0, 1600000, 0, 0, 0, 0, 1700000,
+ };
+ 
++static const u32 vrfck_voltages_1[] = {
++	1240000, 1600000,
 +};
 +
-+static const struct linear_range mt_volt_range3[] = {
-+	REGULATOR_LINEAR_RANGE(400000, 0, 0x70, 6250),
+ static const u32 vio28_voltages[] = {
+ 	0, 0, 0, 0, 0, 0, 0, 0, 0, 2800000, 2900000, 3000000, 3100000, 3300000,
+ };
+@@ -220,6 +252,11 @@ static const u32 vemc_voltages[] = {
+ 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2900000, 3000000, 0, 3300000,
+ };
+ 
++static const u32 vemc_voltages_1[] = {
++	0, 0, 0, 0, 0, 0, 0, 0, 2500000, 2800000, 2900000, 3000000, 3100000,
++	3300000,
 +};
 +
-+static const struct linear_range mt_volt_range4[] = {
-+	REGULATOR_LINEAR_RANGE(800000, 0, 0x40, 12500),
-+};
-+
-+static const struct linear_range mt_volt_range5[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0, 0x3F, 50000),
-+};
-+
-+static const struct linear_range mt_volt_range6[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
-+};
-+
-+static const struct linear_range mt_volt_range7[] = {
-+	REGULATOR_LINEAR_RANGE(500000, 0, 0x7f, 6250),
-+};
-+
-+static const u32 vsim1_voltages[] = {
-+	0, 0, 0, 1700000, 1800000, 0, 0, 0, 2700000, 0, 0, 3000000, 3100000,
-+};
-+
-+static const u32 vibr_voltages[] = {
-+	1200000, 1300000, 1500000, 0, 1800000, 2000000, 0, 0, 2700000, 2800000,
-+	0, 3000000, 0, 3300000,
-+};
-+
-+static const u32 vrf12_voltages[] = {
-+	0, 0, 1100000, 1200000,	1300000,
-+};
-+
-+static const u32 volt18_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1700000, 1800000, 1900000,
-+};
-+
-+static const u32 vcn13_voltages[] = {
-+	900000, 1000000, 0, 1200000, 1300000,
-+};
-+
-+static const u32 vcn33_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 0, 0, 0, 2800000, 0, 0, 0, 3300000, 3400000, 3500000,
-+};
-+
-+static const u32 vefuse_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1700000, 1800000, 1900000, 2000000,
-+};
-+
-+static const u32 vxo22_voltages[] = {
-+	1800000, 0, 0, 0, 2200000,
-+};
-+
-+static const u32 vrfck_voltages[] = {
-+	0, 0, 1500000, 0, 0, 0, 0, 1600000, 0, 0, 0, 0, 1700000,
-+};
-+
-+static const u32 vio28_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 0, 0, 0, 2800000, 2900000, 3000000, 3100000, 3300000,
-+};
-+
-+static const u32 vemc_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2900000, 3000000, 0, 3300000,
-+};
-+
-+static const u32 va12_voltages[] = {
-+	0, 0, 0, 0, 0, 0, 1200000, 1300000,
-+};
-+
-+static const u32 va09_voltages[] = {
-+	0, 0, 800000, 900000, 0, 0, 1200000,
-+};
-+
-+static const u32 vrf18_voltages[] = {
-+	0, 0, 0, 0, 0, 1700000, 1800000, 1810000,
-+};
-+
-+static const u32 vbbck_voltages[] = {
-+	0, 0, 0, 0, 1100000, 0, 0, 0, 1150000, 0, 0, 0, 1200000,
-+};
-+
-+static const u32 vsim2_voltages[] = {
-+	0, 0, 0, 1700000, 1800000, 0, 0, 0, 2700000, 0, 0, 3000000, 3100000,
-+};
-+
-+static inline unsigned int mt6359_map_mode(unsigned int mode)
+ static const u32 va12_voltages[] = {
+ 	0, 0, 0, 0, 0, 0, 1200000, 1300000,
+ };
+@@ -356,6 +393,78 @@ static int mt6359_regulator_set_mode(struct regulator_dev *rdev,
+ 	return ret;
+ }
+ 
++static int mt6359p_vemc_set_voltage_sel(struct regulator_dev *rdev,
++					u32 sel)
 +{
-+	switch (mode) {
-+	case MT6359_BUCK_MODE_NORMAL:
-+		return REGULATOR_MODE_NORMAL;
-+	case MT6359_BUCK_MODE_FORCE_PWM:
-+		return REGULATOR_MODE_FAST;
-+	case MT6359_BUCK_MODE_LP:
-+		return REGULATOR_MODE_IDLE;
-+	default:
-+		return REGULATOR_MODE_INVALID;
-+	}
-+}
-+
-+static int mt6359_get_status(struct regulator_dev *rdev)
-+{
++	struct mt6359_regulator_info *info = rdev_get_drvdata(rdev);
 +	int ret;
-+	u32 regval;
-+	struct mt6359_regulator_info *info = rdev_get_drvdata(rdev);
++	u32 val = 0;
 +
-+	ret = regmap_read(rdev->regmap, info->status_reg, &regval);
-+	if (ret != 0) {
-+		dev_err(&rdev->dev, "Failed to get enable reg: %d\n", ret);
++	sel <<= ffs(info->desc.vsel_mask) - 1;
++	ret = regmap_write(rdev->regmap, MT6359P_TMA_KEY_ADDR, TMA_KEY);
++	if (ret)
 +		return ret;
-+	}
 +
-+	if (regval & info->qi)
-+		return REGULATOR_STATUS_ON;
-+	else
-+		return REGULATOR_STATUS_OFF;
-+}
-+
-+static unsigned int mt6359_regulator_get_mode(struct regulator_dev *rdev)
-+{
-+	struct mt6359_regulator_info *info = rdev_get_drvdata(rdev);
-+	int ret, regval;
-+
-+	ret = regmap_read(rdev->regmap, info->modeset_reg, &regval);
-+	if (ret != 0) {
-+		dev_err(&rdev->dev,
-+			"Failed to get mt6359 buck mode: %d\n", ret);
++	ret = regmap_read(rdev->regmap, MT6359P_VM_MODE_ADDR, &val);
++	if (ret)
 +		return ret;
-+	}
 +
-+	if ((regval & info->modeset_mask) >> info->modeset_shift ==
-+		MT6359_BUCK_MODE_FORCE_PWM)
-+		return REGULATOR_MODE_FAST;
-+
-+	ret = regmap_read(rdev->regmap, info->lp_mode_reg, &regval);
-+	if (ret != 0) {
-+		dev_err(&rdev->dev,
-+			"Failed to get mt6359 buck lp mode: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (regval & info->lp_mode_mask)
-+		return REGULATOR_MODE_IDLE;
-+	else
-+		return REGULATOR_MODE_NORMAL;
-+}
-+
-+static int mt6359_regulator_set_mode(struct regulator_dev *rdev,
-+				     unsigned int mode)
-+{
-+	struct mt6359_regulator_info *info = rdev_get_drvdata(rdev);
-+	int ret = 0, val;
-+	int curr_mode;
-+
-+	curr_mode = mt6359_regulator_get_mode(rdev);
-+	switch (mode) {
-+	case REGULATOR_MODE_FAST:
-+		val = MT6359_BUCK_MODE_FORCE_PWM;
-+		val <<= info->modeset_shift;
++	switch (val) {
++	case 0:
++		/* If HW trapping is 0, use VEMC_VOSEL_0 */
 +		ret = regmap_update_bits(rdev->regmap,
-+					 info->modeset_reg,
-+					 info->modeset_mask,
-+					 val);
++					 info->desc.vsel_reg,
++					 info->desc.vsel_mask, sel);
 +		break;
-+	case REGULATOR_MODE_NORMAL:
-+		if (curr_mode == REGULATOR_MODE_FAST) {
-+			val = MT6359_BUCK_MODE_AUTO;
-+			val <<= info->modeset_shift;
-+			ret = regmap_update_bits(rdev->regmap,
-+						 info->modeset_reg,
-+						 info->modeset_mask,
-+						 val);
-+		} else if (curr_mode == REGULATOR_MODE_IDLE) {
-+			val = MT6359_BUCK_MODE_NORMAL;
-+			val <<= info->lp_mode_shift;
-+			ret = regmap_update_bits(rdev->regmap,
-+						 info->lp_mode_reg,
-+						 info->lp_mode_mask,
-+						 val);
-+			udelay(100);
-+		}
-+		break;
-+	case REGULATOR_MODE_IDLE:
-+		val = MT6359_BUCK_MODE_LP >> 1;
-+		val <<= info->lp_mode_shift;
++	case 1:
++		/* If HW trapping is 1, use VEMC_VOSEL_1 */
 +		ret = regmap_update_bits(rdev->regmap,
-+					 info->lp_mode_reg,
-+					 info->lp_mode_mask,
-+					 val);
++					 info->desc.vsel_reg + 0x2,
++					 info->desc.vsel_mask, sel);
 +		break;
 +	default:
 +		return -EINVAL;
 +	}
 +
-+	if (ret != 0) {
-+		dev_err(&rdev->dev,
-+			"Failed to set mt6359 buck mode: %d\n", ret);
-+	}
++	if (ret)
++		return ret;
 +
++	ret = regmap_write(rdev->regmap, MT6359P_TMA_KEY_ADDR, 0);
 +	return ret;
 +}
 +
-+static const struct regulator_ops mt6359_volt_range_ops = {
-+	.list_voltage = regulator_list_voltage_linear_range,
-+	.map_voltage = regulator_map_voltage_linear_range,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
-+	.set_voltage_time_sel = regulator_set_voltage_time_sel,
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.get_status = mt6359_get_status,
-+	.set_mode = mt6359_regulator_set_mode,
-+	.get_mode = mt6359_regulator_get_mode,
-+};
++static int mt6359p_vemc_get_voltage_sel(struct regulator_dev *rdev)
++{
++	struct mt6359_regulator_info *info = rdev_get_drvdata(rdev);
++	int ret;
++	u32 val = 0;
 +
-+static const struct regulator_ops mt6359_volt_table_ops = {
++	ret = regmap_read(rdev->regmap, MT6359P_VM_MODE_ADDR, &val);
++	if (ret)
++		return ret;
++	switch (val) {
++	case 0:
++		/* If HW trapping is 0, use VEMC_VOSEL_0 */
++		ret = regmap_read(rdev->regmap,
++				  info->desc.vsel_reg, &val);
++		break;
++	case 1:
++		/* If HW trapping is 1, use VEMC_VOSEL_1 */
++		ret = regmap_read(rdev->regmap,
++				  info->desc.vsel_reg + 0x2, &val);
++		break;
++	default:
++		return -EINVAL;
++	}
++	if (ret)
++		return ret;
++
++	val &= info->desc.vsel_mask;
++	val >>= ffs(info->desc.vsel_mask) - 1;
++
++	return val;
++}
++
+ static const struct regulator_ops mt6359_volt_range_ops = {
+ 	.list_voltage = regulator_list_voltage_linear_range,
+ 	.map_voltage = regulator_map_voltage_linear_range,
+@@ -389,6 +498,18 @@ static const struct regulator_ops mt6359_volt_fixed_ops = {
+ 	.get_status = mt6359_get_status,
+ };
+ 
++static const struct regulator_ops mt6359p_vemc_ops = {
 +	.list_voltage = regulator_list_voltage_table,
 +	.map_voltage = regulator_map_voltage_iterate,
-+	.set_voltage_sel = regulator_set_voltage_sel_regmap,
-+	.get_voltage_sel = regulator_get_voltage_sel_regmap,
++	.set_voltage_sel = mt6359p_vemc_set_voltage_sel,
++	.get_voltage_sel = mt6359p_vemc_get_voltage_sel,
 +	.set_voltage_time_sel = regulator_set_voltage_time_sel,
 +	.enable = regulator_enable_regmap,
 +	.disable = regulator_disable_regmap,
@@ -500,15 +243,14 @@ index 000000000000..994d3f67f73d
 +	.get_status = mt6359_get_status,
 +};
 +
-+static const struct regulator_ops mt6359_volt_fixed_ops = {
-+	.enable = regulator_enable_regmap,
-+	.disable = regulator_disable_regmap,
-+	.is_enabled = regulator_is_enabled_regmap,
-+	.get_status = mt6359_get_status,
-+};
-+
-+/* The array is indexed by id(MT6359_ID_XXX) */
-+static struct mt6359_regulator_info mt6359_regulators[] = {
+ /* The array is indexed by id(MT6359_ID_XXX) */
+ static struct mt6359_regulator_info mt6359_regulators[] = {
+ 	MT6359_BUCK("buck_vs1", VS1, 800000, 2200000, 12500, 0,
+@@ -626,21 +747,267 @@ static struct mt6359_regulator_info mt6359_regulators[] = {
+ 			  MT6359_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_SHIFT),
+ };
+ 
++static struct mt6359_regulator_info mt6359p_regulators[] = {
 +	MT6359_BUCK("buck_vs1", VS1, 800000, 2200000, 12500, 0,
 +		    mt_volt_range1, MT6359_RG_BUCK_VS1_EN_ADDR,
 +		    MT6359_DA_VS1_EN_ADDR, MT6359_RG_BUCK_VS1_VOSEL_ADDR,
@@ -518,7 +260,7 @@ index 000000000000..994d3f67f73d
 +		    MT6359_RG_VS1_FPWM_ADDR, MT6359_RG_VS1_FPWM_SHIFT),
 +	MT6359_BUCK("buck_vgpu11", VGPU11, 400000, 1193750, 6250, 0,
 +		    mt_volt_range2, MT6359_RG_BUCK_VGPU11_EN_ADDR,
-+		    MT6359_DA_VGPU11_EN_ADDR, MT6359_RG_BUCK_VGPU11_VOSEL_ADDR,
++		    MT6359_DA_VGPU11_EN_ADDR, MT6359P_RG_BUCK_VGPU11_VOSEL_ADDR,
 +		    MT6359_RG_BUCK_VGPU11_VOSEL_MASK <<
 +		    MT6359_RG_BUCK_VGPU11_VOSEL_SHIFT,
 +		    MT6359_RG_BUCK_VGPU11_LP_ADDR,
@@ -539,9 +281,9 @@ index 000000000000..994d3f67f73d
 +		    MT6359_RG_BUCK_VPU_VOSEL_SHIFT,
 +		    MT6359_RG_BUCK_VPU_LP_ADDR, MT6359_RG_BUCK_VPU_LP_SHIFT,
 +		    MT6359_RG_VPU_FCCM_ADDR, MT6359_RG_VPU_FCCM_SHIFT),
-+	MT6359_BUCK("buck_vcore", VCORE, 400000, 1193750, 6250, 0,
-+		    mt_volt_range2, MT6359_RG_BUCK_VCORE_EN_ADDR,
-+		    MT6359_DA_VCORE_EN_ADDR, MT6359_RG_BUCK_VCORE_VOSEL_ADDR,
++	MT6359_BUCK("buck_vcore", VCORE, 506250, 1300000, 6250, 0,
++		    mt_volt_range8, MT6359_RG_BUCK_VCORE_EN_ADDR,
++		    MT6359_DA_VCORE_EN_ADDR, MT6359P_RG_BUCK_VCORE_VOSEL_ADDR,
 +		    MT6359_RG_BUCK_VCORE_VOSEL_MASK <<
 +		    MT6359_RG_BUCK_VCORE_VOSEL_SHIFT,
 +		    MT6359_RG_BUCK_VCORE_LP_ADDR, MT6359_RG_BUCK_VCORE_LP_SHIFT,
@@ -576,279 +318,475 @@ index 000000000000..994d3f67f73d
 +		    MT6359_RG_BUCK_VPROC1_LP_ADDR,
 +		    MT6359_RG_BUCK_VPROC1_LP_SHIFT,
 +		    MT6359_RG_VPROC1_FCCM_ADDR, MT6359_RG_VPROC1_FCCM_SHIFT),
-+	MT6359_BUCK("buck_vcore_sshub", VCORE_SSHUB, 400000, 1193750, 6250, 0,
-+		    mt_volt_range2, MT6359_RG_BUCK_VCORE_SSHUB_EN_ADDR,
-+		    MT6359_DA_VCORE_EN_ADDR,
-+		    MT6359_RG_BUCK_VCORE_SSHUB_VOSEL_ADDR,
-+		    MT6359_RG_BUCK_VCORE_SSHUB_VOSEL_MASK <<
-+		    MT6359_RG_BUCK_VCORE_SSHUB_VOSEL_SHIFT,
-+		    MT6359_RG_BUCK_VCORE_LP_ADDR, MT6359_RG_BUCK_VCORE_LP_SHIFT,
-+		    MT6359_RG_VCORE_FCCM_ADDR, MT6359_RG_VCORE_FCCM_SHIFT),
-+	MT6359_REG_FIXED("ldo_vaud18", VAUD18, MT6359_RG_LDO_VAUD18_EN_ADDR,
-+			 MT6359_DA_VAUD18_B_EN_ADDR, 1800000),
++	MT6359_BUCK("buck_vgpu11_sshub", VGPU11_SSHUB, 400000, 1193750, 6250, 0,
++		    mt_volt_range2, MT6359P_RG_BUCK_VGPU11_SSHUB_EN_ADDR,
++		    MT6359_DA_VGPU11_EN_ADDR,
++		    MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_ADDR,
++		    MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_MASK <<
++		    MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_SHIFT,
++		    MT6359_RG_BUCK_VGPU11_LP_ADDR,
++		    MT6359_RG_BUCK_VGPU11_LP_SHIFT,
++		    MT6359_RG_VGPU11_FCCM_ADDR, MT6359_RG_VGPU11_FCCM_SHIFT),
++	MT6359_REG_FIXED("ldo_vaud18", VAUD18, MT6359P_RG_LDO_VAUD18_EN_ADDR,
++			 MT6359P_DA_VAUD18_B_EN_ADDR, 1800000),
 +	MT6359_LDO("ldo_vsim1", VSIM1, vsim1_voltages,
-+		   MT6359_RG_LDO_VSIM1_EN_ADDR, MT6359_RG_LDO_VSIM1_EN_SHIFT,
-+		   MT6359_DA_VSIM1_B_EN_ADDR, MT6359_RG_VSIM1_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VSIM1_EN_ADDR, MT6359P_RG_LDO_VSIM1_EN_SHIFT,
++		   MT6359P_DA_VSIM1_B_EN_ADDR, MT6359P_RG_VSIM1_VOSEL_ADDR,
 +		   MT6359_RG_VSIM1_VOSEL_MASK << MT6359_RG_VSIM1_VOSEL_SHIFT,
 +		   480),
 +	MT6359_LDO("ldo_vibr", VIBR, vibr_voltages,
-+		   MT6359_RG_LDO_VIBR_EN_ADDR, MT6359_RG_LDO_VIBR_EN_SHIFT,
-+		   MT6359_DA_VIBR_B_EN_ADDR, MT6359_RG_VIBR_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VIBR_EN_ADDR, MT6359P_RG_LDO_VIBR_EN_SHIFT,
++		   MT6359P_DA_VIBR_B_EN_ADDR, MT6359P_RG_VIBR_VOSEL_ADDR,
 +		   MT6359_RG_VIBR_VOSEL_MASK << MT6359_RG_VIBR_VOSEL_SHIFT,
 +		   240),
 +	MT6359_LDO("ldo_vrf12", VRF12, vrf12_voltages,
-+		   MT6359_RG_LDO_VRF12_EN_ADDR, MT6359_RG_LDO_VRF12_EN_SHIFT,
-+		   MT6359_DA_VRF12_B_EN_ADDR, MT6359_RG_VRF12_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VRF12_EN_ADDR, MT6359P_RG_LDO_VRF12_EN_SHIFT,
++		   MT6359P_DA_VRF12_B_EN_ADDR, MT6359P_RG_VRF12_VOSEL_ADDR,
 +		   MT6359_RG_VRF12_VOSEL_MASK << MT6359_RG_VRF12_VOSEL_SHIFT,
-+		   120),
-+	MT6359_REG_FIXED("ldo_vusb", VUSB, MT6359_RG_LDO_VUSB_EN_0_ADDR,
-+			 MT6359_DA_VUSB_B_EN_ADDR, 3000000),
++		   480),
++	MT6359_REG_FIXED("ldo_vusb", VUSB, MT6359P_RG_LDO_VUSB_EN_0_ADDR,
++			 MT6359P_DA_VUSB_B_EN_ADDR, 3000000),
 +	MT6359_LDO_LINEAR("ldo_vsram_proc2", VSRAM_PROC2, 500000, 1293750, 6250,
-+			  0, mt_volt_range6, MT6359_RG_LDO_VSRAM_PROC2_EN_ADDR,
-+			  MT6359_DA_VSRAM_PROC2_B_EN_ADDR,
-+			  MT6359_RG_LDO_VSRAM_PROC2_VOSEL_ADDR,
++			  0, mt_volt_range6, MT6359P_RG_LDO_VSRAM_PROC2_EN_ADDR,
++			  MT6359P_DA_VSRAM_PROC2_B_EN_ADDR,
++			  MT6359P_RG_LDO_VSRAM_PROC2_VOSEL_ADDR,
 +			  MT6359_RG_LDO_VSRAM_PROC2_VOSEL_MASK <<
 +			  MT6359_RG_LDO_VSRAM_PROC2_VOSEL_SHIFT),
 +	MT6359_LDO("ldo_vio18", VIO18, volt18_voltages,
-+		   MT6359_RG_LDO_VIO18_EN_ADDR, MT6359_RG_LDO_VIO18_EN_SHIFT,
-+		   MT6359_DA_VIO18_B_EN_ADDR, MT6359_RG_VIO18_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VIO18_EN_ADDR, MT6359P_RG_LDO_VIO18_EN_SHIFT,
++		   MT6359P_DA_VIO18_B_EN_ADDR, MT6359P_RG_VIO18_VOSEL_ADDR,
 +		   MT6359_RG_VIO18_VOSEL_MASK << MT6359_RG_VIO18_VOSEL_SHIFT,
 +		   960),
 +	MT6359_LDO("ldo_vcamio", VCAMIO, volt18_voltages,
-+		   MT6359_RG_LDO_VCAMIO_EN_ADDR, MT6359_RG_LDO_VCAMIO_EN_SHIFT,
-+		   MT6359_DA_VCAMIO_B_EN_ADDR, MT6359_RG_VCAMIO_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VCAMIO_EN_ADDR,
++		   MT6359P_RG_LDO_VCAMIO_EN_SHIFT,
++		   MT6359P_DA_VCAMIO_B_EN_ADDR, MT6359P_RG_VCAMIO_VOSEL_ADDR,
 +		   MT6359_RG_VCAMIO_VOSEL_MASK << MT6359_RG_VCAMIO_VOSEL_SHIFT,
 +		   1290),
-+	MT6359_REG_FIXED("ldo_vcn18", VCN18, MT6359_RG_LDO_VCN18_EN_ADDR,
-+			 MT6359_DA_VCN18_B_EN_ADDR, 1800000),
-+	MT6359_REG_FIXED("ldo_vfe28", VFE28, MT6359_RG_LDO_VFE28_EN_ADDR,
-+			 MT6359_DA_VFE28_B_EN_ADDR, 2800000),
++	MT6359_REG_FIXED("ldo_vcn18", VCN18, MT6359P_RG_LDO_VCN18_EN_ADDR,
++			 MT6359P_DA_VCN18_B_EN_ADDR, 1800000),
++	MT6359_REG_FIXED("ldo_vfe28", VFE28, MT6359P_RG_LDO_VFE28_EN_ADDR,
++			 MT6359P_DA_VFE28_B_EN_ADDR, 2800000),
 +	MT6359_LDO("ldo_vcn13", VCN13, vcn13_voltages,
-+		   MT6359_RG_LDO_VCN13_EN_ADDR, MT6359_RG_LDO_VCN13_EN_SHIFT,
-+		   MT6359_DA_VCN13_B_EN_ADDR, MT6359_RG_VCN13_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VCN13_EN_ADDR, MT6359P_RG_LDO_VCN13_EN_SHIFT,
++		   MT6359P_DA_VCN13_B_EN_ADDR, MT6359P_RG_VCN13_VOSEL_ADDR,
 +		   MT6359_RG_VCN13_VOSEL_MASK << MT6359_RG_VCN13_VOSEL_SHIFT,
 +		   240),
 +	MT6359_LDO("ldo_vcn33_1_bt", VCN33_1_BT, vcn33_voltages,
-+		   MT6359_RG_LDO_VCN33_1_EN_0_ADDR,
++		   MT6359P_RG_LDO_VCN33_1_EN_0_ADDR,
 +		   MT6359_RG_LDO_VCN33_1_EN_0_SHIFT,
-+		   MT6359_DA_VCN33_1_B_EN_ADDR, MT6359_RG_VCN33_1_VOSEL_ADDR,
++		   MT6359P_DA_VCN33_1_B_EN_ADDR, MT6359P_RG_VCN33_1_VOSEL_ADDR,
 +		   MT6359_RG_VCN33_1_VOSEL_MASK <<
 +		   MT6359_RG_VCN33_1_VOSEL_SHIFT, 240),
 +	MT6359_LDO("ldo_vcn33_1_wifi", VCN33_1_WIFI, vcn33_voltages,
-+		   MT6359_RG_LDO_VCN33_1_EN_1_ADDR,
-+		   MT6359_RG_LDO_VCN33_1_EN_1_SHIFT,
-+		   MT6359_DA_VCN33_1_B_EN_ADDR, MT6359_RG_VCN33_1_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VCN33_1_EN_1_ADDR,
++		   MT6359P_RG_LDO_VCN33_1_EN_1_SHIFT,
++		   MT6359P_DA_VCN33_1_B_EN_ADDR, MT6359P_RG_VCN33_1_VOSEL_ADDR,
 +		   MT6359_RG_VCN33_1_VOSEL_MASK <<
 +		   MT6359_RG_VCN33_1_VOSEL_SHIFT, 240),
-+	MT6359_REG_FIXED("ldo_vaux18", VAUX18, MT6359_RG_LDO_VAUX18_EN_ADDR,
-+			 MT6359_DA_VAUX18_B_EN_ADDR, 1800000),
++	MT6359_REG_FIXED("ldo_vaux18", VAUX18, MT6359P_RG_LDO_VAUX18_EN_ADDR,
++			 MT6359P_DA_VAUX18_B_EN_ADDR, 1800000),
 +	MT6359_LDO_LINEAR("ldo_vsram_others", VSRAM_OTHERS, 500000, 1293750,
 +			  6250, 0, mt_volt_range6,
-+			  MT6359_RG_LDO_VSRAM_OTHERS_EN_ADDR,
-+			  MT6359_DA_VSRAM_OTHERS_B_EN_ADDR,
-+			  MT6359_RG_LDO_VSRAM_OTHERS_VOSEL_ADDR,
++			  MT6359P_RG_LDO_VSRAM_OTHERS_EN_ADDR,
++			  MT6359P_DA_VSRAM_OTHERS_B_EN_ADDR,
++			  MT6359P_RG_LDO_VSRAM_OTHERS_VOSEL_ADDR,
 +			  MT6359_RG_LDO_VSRAM_OTHERS_VOSEL_MASK <<
 +			  MT6359_RG_LDO_VSRAM_OTHERS_VOSEL_SHIFT),
 +	MT6359_LDO("ldo_vefuse", VEFUSE, vefuse_voltages,
-+		   MT6359_RG_LDO_VEFUSE_EN_ADDR, MT6359_RG_LDO_VEFUSE_EN_SHIFT,
-+		   MT6359_DA_VEFUSE_B_EN_ADDR, MT6359_RG_VEFUSE_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VEFUSE_EN_ADDR,
++		   MT6359P_RG_LDO_VEFUSE_EN_SHIFT,
++		   MT6359P_DA_VEFUSE_B_EN_ADDR, MT6359P_RG_VEFUSE_VOSEL_ADDR,
 +		   MT6359_RG_VEFUSE_VOSEL_MASK << MT6359_RG_VEFUSE_VOSEL_SHIFT,
 +		   240),
 +	MT6359_LDO("ldo_vxo22", VXO22, vxo22_voltages,
-+		   MT6359_RG_LDO_VXO22_EN_ADDR, MT6359_RG_LDO_VXO22_EN_SHIFT,
-+		   MT6359_DA_VXO22_B_EN_ADDR, MT6359_RG_VXO22_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VXO22_EN_ADDR, MT6359P_RG_LDO_VXO22_EN_SHIFT,
++		   MT6359P_DA_VXO22_B_EN_ADDR, MT6359P_RG_VXO22_VOSEL_ADDR,
 +		   MT6359_RG_VXO22_VOSEL_MASK << MT6359_RG_VXO22_VOSEL_SHIFT,
-+		   120),
-+	MT6359_LDO("ldo_vrfck", VRFCK, vrfck_voltages,
-+		   MT6359_RG_LDO_VRFCK_EN_ADDR, MT6359_RG_LDO_VRFCK_EN_SHIFT,
-+		   MT6359_DA_VRFCK_B_EN_ADDR, MT6359_RG_VRFCK_VOSEL_ADDR,
++		   480),
++	MT6359_LDO("ldo_vrfck_1", VRFCK, vrfck_voltages_1,
++		   MT6359P_RG_LDO_VRFCK_EN_ADDR, MT6359P_RG_LDO_VRFCK_EN_SHIFT,
++		   MT6359P_DA_VRFCK_B_EN_ADDR, MT6359P_RG_VRFCK_VOSEL_ADDR,
 +		   MT6359_RG_VRFCK_VOSEL_MASK << MT6359_RG_VRFCK_VOSEL_SHIFT,
 +		   480),
-+	MT6359_REG_FIXED("ldo_vbif28", VBIF28, MT6359_RG_LDO_VBIF28_EN_ADDR,
-+			 MT6359_DA_VBIF28_B_EN_ADDR, 2800000),
++	MT6359_REG_FIXED("ldo_vbif28", VBIF28, MT6359P_RG_LDO_VBIF28_EN_ADDR,
++			 MT6359P_DA_VBIF28_B_EN_ADDR, 2800000),
 +	MT6359_LDO("ldo_vio28", VIO28, vio28_voltages,
-+		   MT6359_RG_LDO_VIO28_EN_ADDR, MT6359_RG_LDO_VIO28_EN_SHIFT,
-+		   MT6359_DA_VIO28_B_EN_ADDR, MT6359_RG_VIO28_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VIO28_EN_ADDR, MT6359P_RG_LDO_VIO28_EN_SHIFT,
++		   MT6359P_DA_VIO28_B_EN_ADDR, MT6359P_RG_VIO28_VOSEL_ADDR,
 +		   MT6359_RG_VIO28_VOSEL_MASK << MT6359_RG_VIO28_VOSEL_SHIFT,
-+		   240),
-+	MT6359_LDO("ldo_vemc", VEMC, vemc_voltages,
-+		   MT6359_RG_LDO_VEMC_EN_ADDR, MT6359_RG_LDO_VEMC_EN_SHIFT,
-+		   MT6359_DA_VEMC_B_EN_ADDR, MT6359_RG_VEMC_VOSEL_ADDR,
-+		   MT6359_RG_VEMC_VOSEL_MASK << MT6359_RG_VEMC_VOSEL_SHIFT,
-+		   240),
++		   1920),
++	MT6359P_LDO1("ldo_vemc_1", VEMC, mt6359p_vemc_ops, vemc_voltages_1,
++		     MT6359P_RG_LDO_VEMC_EN_ADDR, MT6359P_RG_LDO_VEMC_EN_SHIFT,
++		     MT6359P_DA_VEMC_B_EN_ADDR,
++		     MT6359P_RG_LDO_VEMC_VOSEL_0_ADDR,
++		     MT6359P_RG_LDO_VEMC_VOSEL_0_MASK <<
++		     MT6359P_RG_LDO_VEMC_VOSEL_0_SHIFT),
 +	MT6359_LDO("ldo_vcn33_2_bt", VCN33_2_BT, vcn33_voltages,
-+		   MT6359_RG_LDO_VCN33_2_EN_0_ADDR,
-+		   MT6359_RG_LDO_VCN33_2_EN_0_SHIFT,
-+		   MT6359_DA_VCN33_2_B_EN_ADDR, MT6359_RG_VCN33_2_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VCN33_2_EN_0_ADDR,
++		   MT6359P_RG_LDO_VCN33_2_EN_0_SHIFT,
++		   MT6359P_DA_VCN33_2_B_EN_ADDR, MT6359P_RG_VCN33_2_VOSEL_ADDR,
 +		   MT6359_RG_VCN33_2_VOSEL_MASK <<
 +		   MT6359_RG_VCN33_2_VOSEL_SHIFT, 240),
 +	MT6359_LDO("ldo_vcn33_2_wifi", VCN33_2_WIFI, vcn33_voltages,
-+		   MT6359_RG_LDO_VCN33_2_EN_1_ADDR,
++		   MT6359P_RG_LDO_VCN33_2_EN_1_ADDR,
 +		   MT6359_RG_LDO_VCN33_2_EN_1_SHIFT,
-+		   MT6359_DA_VCN33_2_B_EN_ADDR, MT6359_RG_VCN33_2_VOSEL_ADDR,
++		   MT6359P_DA_VCN33_2_B_EN_ADDR, MT6359P_RG_VCN33_2_VOSEL_ADDR,
 +		   MT6359_RG_VCN33_2_VOSEL_MASK <<
 +		   MT6359_RG_VCN33_2_VOSEL_SHIFT, 240),
 +	MT6359_LDO("ldo_va12", VA12, va12_voltages,
-+		   MT6359_RG_LDO_VA12_EN_ADDR, MT6359_RG_LDO_VA12_EN_SHIFT,
-+		   MT6359_DA_VA12_B_EN_ADDR, MT6359_RG_VA12_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VA12_EN_ADDR, MT6359P_RG_LDO_VA12_EN_SHIFT,
++		   MT6359P_DA_VA12_B_EN_ADDR, MT6359P_RG_VA12_VOSEL_ADDR,
 +		   MT6359_RG_VA12_VOSEL_MASK << MT6359_RG_VA12_VOSEL_SHIFT,
-+		   240),
++		   960),
 +	MT6359_LDO("ldo_va09", VA09, va09_voltages,
-+		   MT6359_RG_LDO_VA09_EN_ADDR, MT6359_RG_LDO_VA09_EN_SHIFT,
-+		   MT6359_DA_VA09_B_EN_ADDR, MT6359_RG_VA09_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VA09_EN_ADDR, MT6359P_RG_LDO_VA09_EN_SHIFT,
++		   MT6359P_DA_VA09_B_EN_ADDR, MT6359P_RG_VA09_VOSEL_ADDR,
 +		   MT6359_RG_VA09_VOSEL_MASK << MT6359_RG_VA09_VOSEL_SHIFT,
-+		   240),
++		   960),
 +	MT6359_LDO("ldo_vrf18", VRF18, vrf18_voltages,
-+		   MT6359_RG_LDO_VRF18_EN_ADDR, MT6359_RG_LDO_VRF18_EN_SHIFT,
-+		   MT6359_DA_VRF18_B_EN_ADDR, MT6359_RG_VRF18_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VRF18_EN_ADDR, MT6359P_RG_LDO_VRF18_EN_SHIFT,
++		   MT6359P_DA_VRF18_B_EN_ADDR, MT6359P_RG_VRF18_VOSEL_ADDR,
 +		   MT6359_RG_VRF18_VOSEL_MASK << MT6359_RG_VRF18_VOSEL_SHIFT,
-+		   120),
-+	MT6359_LDO_LINEAR("ldo_vsram_md", VSRAM_MD, 500000, 1100000, 6250,
-+			  0, mt_volt_range7, MT6359_RG_LDO_VSRAM_MD_EN_ADDR,
-+			  MT6359_DA_VSRAM_MD_B_EN_ADDR,
-+			  MT6359_RG_LDO_VSRAM_MD_VOSEL_ADDR,
++		   240),
++	MT6359_LDO_LINEAR("ldo_vsram_md", VSRAM_MD, 500000, 1293750, 6250,
++			  0, mt_volt_range7, MT6359P_RG_LDO_VSRAM_MD_EN_ADDR,
++			  MT6359P_DA_VSRAM_MD_B_EN_ADDR,
++			  MT6359P_RG_LDO_VSRAM_MD_VOSEL_ADDR,
 +			  MT6359_RG_LDO_VSRAM_MD_VOSEL_MASK <<
 +			  MT6359_RG_LDO_VSRAM_MD_VOSEL_SHIFT),
 +	MT6359_LDO("ldo_vufs", VUFS, volt18_voltages,
-+		   MT6359_RG_LDO_VUFS_EN_ADDR, MT6359_RG_LDO_VUFS_EN_SHIFT,
-+		   MT6359_DA_VUFS_B_EN_ADDR, MT6359_RG_VUFS_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VUFS_EN_ADDR, MT6359P_RG_LDO_VUFS_EN_SHIFT,
++		   MT6359P_DA_VUFS_B_EN_ADDR, MT6359P_RG_VUFS_VOSEL_ADDR,
 +		   MT6359_RG_VUFS_VOSEL_MASK << MT6359_RG_VUFS_VOSEL_SHIFT,
 +		   1920),
 +	MT6359_LDO("ldo_vm18", VM18, volt18_voltages,
-+		   MT6359_RG_LDO_VM18_EN_ADDR, MT6359_RG_LDO_VM18_EN_SHIFT,
-+		   MT6359_DA_VM18_B_EN_ADDR, MT6359_RG_VM18_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VM18_EN_ADDR, MT6359P_RG_LDO_VM18_EN_SHIFT,
++		   MT6359P_DA_VM18_B_EN_ADDR, MT6359P_RG_VM18_VOSEL_ADDR,
 +		   MT6359_RG_VM18_VOSEL_MASK << MT6359_RG_VM18_VOSEL_SHIFT,
 +		   1920),
 +	MT6359_LDO("ldo_vbbck", VBBCK, vbbck_voltages,
-+		   MT6359_RG_LDO_VBBCK_EN_ADDR, MT6359_RG_LDO_VBBCK_EN_SHIFT,
-+		   MT6359_DA_VBBCK_B_EN_ADDR, MT6359_RG_VBBCK_VOSEL_ADDR,
-+		   MT6359_RG_VBBCK_VOSEL_MASK << MT6359_RG_VBBCK_VOSEL_SHIFT,
-+		   240),
++		   MT6359P_RG_LDO_VBBCK_EN_ADDR, MT6359P_RG_LDO_VBBCK_EN_SHIFT,
++		   MT6359P_DA_VBBCK_B_EN_ADDR, MT6359P_RG_VBBCK_VOSEL_ADDR,
++		   MT6359P_RG_VBBCK_VOSEL_MASK << MT6359P_RG_VBBCK_VOSEL_SHIFT,
++		   480),
 +	MT6359_LDO_LINEAR("ldo_vsram_proc1", VSRAM_PROC1, 500000, 1293750, 6250,
-+			  0, mt_volt_range6, MT6359_RG_LDO_VSRAM_PROC1_EN_ADDR,
-+			  MT6359_DA_VSRAM_PROC1_B_EN_ADDR,
-+			  MT6359_RG_LDO_VSRAM_PROC1_VOSEL_ADDR,
++			  0, mt_volt_range6, MT6359P_RG_LDO_VSRAM_PROC1_EN_ADDR,
++			  MT6359P_DA_VSRAM_PROC1_B_EN_ADDR,
++			  MT6359P_RG_LDO_VSRAM_PROC1_VOSEL_ADDR,
 +			  MT6359_RG_LDO_VSRAM_PROC1_VOSEL_MASK <<
 +			  MT6359_RG_LDO_VSRAM_PROC1_VOSEL_SHIFT),
 +	MT6359_LDO("ldo_vsim2", VSIM2, vsim2_voltages,
-+		   MT6359_RG_LDO_VSIM2_EN_ADDR, MT6359_RG_LDO_VSIM2_EN_SHIFT,
-+		   MT6359_DA_VSIM2_B_EN_ADDR, MT6359_RG_VSIM2_VOSEL_ADDR,
++		   MT6359P_RG_LDO_VSIM2_EN_ADDR, MT6359P_RG_LDO_VSIM2_EN_SHIFT,
++		   MT6359P_DA_VSIM2_B_EN_ADDR, MT6359P_RG_VSIM2_VOSEL_ADDR,
 +		   MT6359_RG_VSIM2_VOSEL_MASK << MT6359_RG_VSIM2_VOSEL_SHIFT,
 +		   480),
 +	MT6359_LDO_LINEAR("ldo_vsram_others_sshub", VSRAM_OTHERS_SSHUB,
 +			  500000, 1293750, 6250, 0, mt_volt_range6,
-+			  MT6359_RG_LDO_VSRAM_OTHERS_SSHUB_EN_ADDR,
-+			  MT6359_DA_VSRAM_OTHERS_B_EN_ADDR,
-+			  MT6359_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_ADDR,
++			  MT6359P_RG_LDO_VSRAM_OTHERS_SSHUB_EN_ADDR,
++			  MT6359P_DA_VSRAM_OTHERS_B_EN_ADDR,
++			  MT6359P_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_ADDR,
 +			  MT6359_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_MASK <<
 +			  MT6359_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_SHIFT),
 +};
 +
-+static int mt6359_regulator_probe(struct platform_device *pdev)
-+{
-+	struct mt6397_chip *mt6397 = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_config config = {};
-+	struct regulator_dev *rdev;
-+	int i;
+ static int mt6359_regulator_probe(struct platform_device *pdev)
+ {
+ 	struct mt6397_chip *mt6397 = dev_get_drvdata(pdev->dev.parent);
+ 	struct regulator_config config = {};
+ 	struct regulator_dev *rdev;
+-	int i;
++	struct mt6359_regulator_info *mt6359_info;
++	int i, hw_ver;
 +
-+	config.dev = mt6397->dev;
-+	config.regmap = mt6397->regmap;
-+	for (i = 0; i < MT6359_MAX_REGULATOR; i++) {
-+		config.driver_data = &mt6359_regulators[i];
-+		rdev = devm_regulator_register(&pdev->dev, &mt6359_regulators[i].desc, &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(&pdev->dev, "failed to register %s\n",
-+				mt6359_regulators[i].desc.name);
-+			return PTR_ERR(rdev);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct platform_device_id mt6359_platform_ids[] = {
-+	{"mt6359-regulator", 0},
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(platform, mt6359_platform_ids);
-+
-+static struct platform_driver mt6359_regulator_driver = {
-+	.driver = {
-+		.name = "mt6359-regulator",
-+	},
-+	.probe = mt6359_regulator_probe,
-+	.id_table = mt6359_platform_ids,
-+};
-+
-+module_platform_driver(mt6359_regulator_driver);
-+
-+MODULE_AUTHOR("Wen Su <wen.su@mediatek.com>");
-+MODULE_DESCRIPTION("Regulator Driver for MediaTek MT6359 PMIC");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/regulator/mt6359-regulator.h b/include/linux/regulator/mt6359-regulator.h
++	regmap_read(mt6397->regmap, MT6359P_HWCID, &hw_ver);
++	if (hw_ver >= MT6359P_CHIP_VER)
++		mt6359_info = mt6359p_regulators;
++	else
++		mt6359_info = mt6359_regulators;
+ 
+ 	config.dev = mt6397->dev;
+ 	config.regmap = mt6397->regmap;
+-	for (i = 0; i < MT6359_MAX_REGULATOR; i++) {
+-		config.driver_data = &mt6359_regulators[i];
+-		rdev = devm_regulator_register(&pdev->dev, &mt6359_regulators[i].desc, &config);
++	for (i = 0; i < MT6359_MAX_REGULATOR; i++, mt6359_info++) {
++		config.driver_data = mt6359_info;
++		rdev = devm_regulator_register(&pdev->dev, &mt6359_info->desc, &config);
+ 		if (IS_ERR(rdev)) {
+-			dev_err(&pdev->dev, "failed to register %s\n",
+-				mt6359_regulators[i].desc.name);
++			dev_err(&pdev->dev, "failed to register %s\n", mt6359_info->desc.name);
+ 			return PTR_ERR(rdev);
+ 		}
+ 	}
+diff --git a/include/linux/mfd/mt6359p/registers.h b/include/linux/mfd/mt6359p/registers.h
 new file mode 100644
-index 000000000000..14c4b715613e
+index 000000000000..3d97c1885171
 --- /dev/null
-+++ b/include/linux/regulator/mt6359-regulator.h
-@@ -0,0 +1,58 @@
++++ b/include/linux/mfd/mt6359p/registers.h
+@@ -0,0 +1,249 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2021 MediaTek Inc.
 + */
 +
-+#ifndef __LINUX_REGULATOR_MT6359_H
-+#define __LINUX_REGULATOR_MT6359_H
++#ifndef __MFD_MT6359P_REGISTERS_H__
++#define __MFD_MT6359P_REGISTERS_H__
 +
-+enum {
-+	MT6359_ID_VS1 = 0,
-+	MT6359_ID_VGPU11,
-+	MT6359_ID_VMODEM,
-+	MT6359_ID_VPU,
-+	MT6359_ID_VCORE,
-+	MT6359_ID_VS2,
-+	MT6359_ID_VPA,
-+	MT6359_ID_VPROC2,
-+	MT6359_ID_VPROC1,
-+	MT6359_ID_VCORE_SSHUB,
-+	MT6359_ID_VAUD18 = 10,
-+	MT6359_ID_VSIM1,
-+	MT6359_ID_VIBR,
-+	MT6359_ID_VRF12,
-+	MT6359_ID_VUSB,
-+	MT6359_ID_VSRAM_PROC2,
-+	MT6359_ID_VIO18,
-+	MT6359_ID_VCAMIO,
-+	MT6359_ID_VCN18,
-+	MT6359_ID_VFE28,
-+	MT6359_ID_VCN13,
-+	MT6359_ID_VCN33_1_BT,
-+	MT6359_ID_VCN33_1_WIFI,
-+	MT6359_ID_VAUX18,
-+	MT6359_ID_VSRAM_OTHERS,
-+	MT6359_ID_VEFUSE,
-+	MT6359_ID_VXO22,
-+	MT6359_ID_VRFCK,
-+	MT6359_ID_VBIF28,
-+	MT6359_ID_VIO28,
-+	MT6359_ID_VEMC,
-+	MT6359_ID_VCN33_2_BT,
-+	MT6359_ID_VCN33_2_WIFI,
-+	MT6359_ID_VA12,
-+	MT6359_ID_VA09,
-+	MT6359_ID_VRF18,
-+	MT6359_ID_VSRAM_MD,
-+	MT6359_ID_VUFS,
-+	MT6359_ID_VM18,
-+	MT6359_ID_VBBCK,
-+	MT6359_ID_VSRAM_PROC1,
-+	MT6359_ID_VSIM2,
-+	MT6359_ID_VSRAM_OTHERS_SSHUB,
-+	MT6359_ID_RG_MAX,
-+};
++#define MT6359P_CHIP_VER 0x5930
 +
-+#define MT6359_MAX_REGULATOR	MT6359_ID_RG_MAX
++/* PMIC Registers */
++#define MT6359P_HWCID                         0x8
++#define MT6359P_TOP_TRAP                      0x50
++#define MT6359P_TOP_TMA_KEY                   0x3a8
++#define MT6359P_BUCK_VCORE_ELR_NUM            0x152a
++#define MT6359P_BUCK_VCORE_ELR0               0x152c
++#define MT6359P_BUCK_VGPU11_SSHUB_CON0        0x15aa
++#define MT6359P_BUCK_VGPU11_ELR0              0x15b4
++#define MT6359P_LDO_VSRAM_PROC1_ELR           0x1b44
++#define MT6359P_LDO_VSRAM_PROC2_ELR           0x1b46
++#define MT6359P_LDO_VSRAM_OTHERS_ELR          0x1b48
++#define MT6359P_LDO_VSRAM_MD_ELR              0x1b4a
++#define MT6359P_LDO_VEMC_ELR_0                0x1b4c
++#define MT6359P_LDO_VFE28_CON0                0x1b88
++#define MT6359P_LDO_VFE28_MON                 0x1b8c
++#define MT6359P_LDO_VXO22_CON0                0x1b9a
++#define MT6359P_LDO_VXO22_MON                 0x1b9e
++#define MT6359P_LDO_VRF18_CON0                0x1bac
++#define MT6359P_LDO_VRF18_MON                 0x1bb0
++#define MT6359P_LDO_VRF12_CON0                0x1bbe
++#define MT6359P_LDO_VRF12_MON                 0x1bc2
++#define MT6359P_LDO_VEFUSE_CON0               0x1bd0
++#define MT6359P_LDO_VEFUSE_MON                0x1bd4
++#define MT6359P_LDO_VCN33_1_CON0              0x1be2
++#define MT6359P_LDO_VCN33_1_MON               0x1be6
++#define MT6359P_LDO_VCN33_1_MULTI_SW          0x1bf4
++#define MT6359P_LDO_VCN33_2_CON0              0x1c08
++#define MT6359P_LDO_VCN33_2_MON               0x1c0c
++#define MT6359P_LDO_VCN33_2_MULTI_SW          0x1c1a
++#define MT6359P_LDO_VCN13_CON0                0x1c1c
++#define MT6359P_LDO_VCN13_MON                 0x1c20
++#define MT6359P_LDO_VCN18_CON0                0x1c2e
++#define MT6359P_LDO_VCN18_MON                 0x1c32
++#define MT6359P_LDO_VA09_CON0                 0x1c40
++#define MT6359P_LDO_VA09_MON                  0x1c44
++#define MT6359P_LDO_VCAMIO_CON0               0x1c52
++#define MT6359P_LDO_VCAMIO_MON                0x1c56
++#define MT6359P_LDO_VA12_CON0                 0x1c64
++#define MT6359P_LDO_VA12_MON                  0x1c68
++#define MT6359P_LDO_VAUX18_CON0               0x1c88
++#define MT6359P_LDO_VAUX18_MON                0x1c8c
++#define MT6359P_LDO_VAUD18_CON0               0x1c9a
++#define MT6359P_LDO_VAUD18_MON                0x1c9e
++#define MT6359P_LDO_VIO18_CON0                0x1cac
++#define MT6359P_LDO_VIO18_MON                 0x1cb0
++#define MT6359P_LDO_VEMC_CON0                 0x1cbe
++#define MT6359P_LDO_VEMC_MON                  0x1cc2
++#define MT6359P_LDO_VSIM1_CON0                0x1cd0
++#define MT6359P_LDO_VSIM1_MON                 0x1cd4
++#define MT6359P_LDO_VSIM2_CON0                0x1ce2
++#define MT6359P_LDO_VSIM2_MON                 0x1ce6
++#define MT6359P_LDO_VUSB_CON0                 0x1d08
++#define MT6359P_LDO_VUSB_MON                  0x1d0c
++#define MT6359P_LDO_VUSB_MULTI_SW             0x1d1a
++#define MT6359P_LDO_VRFCK_CON0                0x1d1c
++#define MT6359P_LDO_VRFCK_MON                 0x1d20
++#define MT6359P_LDO_VBBCK_CON0                0x1d2e
++#define MT6359P_LDO_VBBCK_MON                 0x1d32
++#define MT6359P_LDO_VBIF28_CON0               0x1d40
++#define MT6359P_LDO_VBIF28_MON                0x1d44
++#define MT6359P_LDO_VIBR_CON0                 0x1d52
++#define MT6359P_LDO_VIBR_MON                  0x1d56
++#define MT6359P_LDO_VIO28_CON0                0x1d64
++#define MT6359P_LDO_VIO28_MON                 0x1d68
++#define MT6359P_LDO_VM18_CON0                 0x1d88
++#define MT6359P_LDO_VM18_MON                  0x1d8c
++#define MT6359P_LDO_VUFS_CON0                 0x1d9a
++#define MT6359P_LDO_VUFS_MON                  0x1d9e
++#define MT6359P_LDO_VSRAM_PROC1_CON0          0x1e88
++#define MT6359P_LDO_VSRAM_PROC1_MON           0x1e8c
++#define MT6359P_LDO_VSRAM_PROC1_VOSEL1        0x1e90
++#define MT6359P_LDO_VSRAM_PROC2_CON0          0x1ea8
++#define MT6359P_LDO_VSRAM_PROC2_MON           0x1eac
++#define MT6359P_LDO_VSRAM_PROC2_VOSEL1        0x1eb0
++#define MT6359P_LDO_VSRAM_OTHERS_CON0         0x1f08
++#define MT6359P_LDO_VSRAM_OTHERS_MON          0x1f0c
++#define MT6359P_LDO_VSRAM_OTHERS_VOSEL1       0x1f10
++#define MT6359P_LDO_VSRAM_OTHERS_SSHUB        0x1f28
++#define MT6359P_LDO_VSRAM_MD_CON0             0x1f2e
++#define MT6359P_LDO_VSRAM_MD_MON              0x1f32
++#define MT6359P_LDO_VSRAM_MD_VOSEL1           0x1f36
++#define MT6359P_VFE28_ANA_CON0                0x1f88
++#define MT6359P_VAUX18_ANA_CON0               0x1f8c
++#define MT6359P_VUSB_ANA_CON0                 0x1f90
++#define MT6359P_VBIF28_ANA_CON0               0x1f94
++#define MT6359P_VCN33_1_ANA_CON0              0x1f98
++#define MT6359P_VCN33_2_ANA_CON0              0x1f9c
++#define MT6359P_VEMC_ANA_CON0                 0x1fa0
++#define MT6359P_VSIM1_ANA_CON0                0x1fa2
++#define MT6359P_VSIM2_ANA_CON0                0x1fa6
++#define MT6359P_VIO28_ANA_CON0                0x1faa
++#define MT6359P_VIBR_ANA_CON0                 0x1fae
++#define MT6359P_VFE28_ELR_4                   0x1fc0
++#define MT6359P_VRF18_ANA_CON0                0x2008
++#define MT6359P_VEFUSE_ANA_CON0               0x200c
++#define MT6359P_VCN18_ANA_CON0                0x2010
++#define MT6359P_VCAMIO_ANA_CON0               0x2014
++#define MT6359P_VAUD18_ANA_CON0               0x2018
++#define MT6359P_VIO18_ANA_CON0                0x201c
++#define MT6359P_VM18_ANA_CON0                 0x2020
++#define MT6359P_VUFS_ANA_CON0                 0x2024
++#define MT6359P_VRF12_ANA_CON0                0x202a
++#define MT6359P_VCN13_ANA_CON0                0x202e
++#define MT6359P_VA09_ANA_CON0                 0x2032
++#define MT6359P_VRF18_ELR_3                   0x204e
++#define MT6359P_VXO22_ANA_CON0                0x2088
++#define MT6359P_VRFCK_ANA_CON0                0x208c
++#define MT6359P_VBBCK_ANA_CON0                0x2096
 +
-+#endif /* __LINUX_REGULATOR_MT6359_H */
++#define MT6359P_RG_BUCK_VCORE_VOSEL_ADDR         MT6359P_BUCK_VCORE_ELR0
++#define MT6359P_RG_BUCK_VGPU11_SSHUB_EN_ADDR     MT6359P_BUCK_VGPU11_SSHUB_CON0
++#define MT6359P_RG_BUCK_VGPU11_VOSEL_ADDR        MT6359P_BUCK_VGPU11_ELR0
++#define MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_ADDR  MT6359P_BUCK_VGPU11_SSHUB_CON0
++#define MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_MASK  0x7F
++#define MT6359P_RG_BUCK_VGPU11_SSHUB_VOSEL_SHIFT 4
++#define MT6359P_RG_LDO_VSRAM_PROC1_VOSEL_ADDR    MT6359P_LDO_VSRAM_PROC1_ELR
++#define MT6359P_RG_LDO_VSRAM_PROC2_VOSEL_ADDR    MT6359P_LDO_VSRAM_PROC2_ELR
++#define MT6359P_RG_LDO_VSRAM_OTHERS_VOSEL_ADDR   MT6359P_LDO_VSRAM_OTHERS_ELR
++#define MT6359P_RG_LDO_VSRAM_MD_VOSEL_ADDR       MT6359P_LDO_VSRAM_MD_ELR
++#define MT6359P_RG_LDO_VEMC_VOSEL_0_ADDR         MT6359P_LDO_VEMC_ELR_0
++#define MT6359P_RG_LDO_VEMC_VOSEL_0_MASK         0xF
++#define MT6359P_RG_LDO_VEMC_VOSEL_0_SHIFT        0
++#define MT6359P_RG_LDO_VFE28_EN_ADDR             MT6359P_LDO_VFE28_CON0
++#define MT6359P_DA_VFE28_B_EN_ADDR               MT6359P_LDO_VFE28_MON
++#define MT6359P_RG_LDO_VXO22_EN_ADDR             MT6359P_LDO_VXO22_CON0
++#define MT6359P_RG_LDO_VXO22_EN_SHIFT            0
++#define MT6359P_DA_VXO22_B_EN_ADDR               MT6359P_LDO_VXO22_MON
++#define MT6359P_RG_LDO_VRF18_EN_ADDR             MT6359P_LDO_VRF18_CON0
++#define MT6359P_RG_LDO_VRF18_EN_SHIFT            0
++#define MT6359P_DA_VRF18_B_EN_ADDR               MT6359P_LDO_VRF18_MON
++#define MT6359P_RG_LDO_VRF12_EN_ADDR             MT6359P_LDO_VRF12_CON0
++#define MT6359P_RG_LDO_VRF12_EN_SHIFT            0
++#define MT6359P_DA_VRF12_B_EN_ADDR               MT6359P_LDO_VRF12_MON
++#define MT6359P_RG_LDO_VEFUSE_EN_ADDR            MT6359P_LDO_VEFUSE_CON0
++#define MT6359P_RG_LDO_VEFUSE_EN_SHIFT           0
++#define MT6359P_DA_VEFUSE_B_EN_ADDR              MT6359P_LDO_VEFUSE_MON
++#define MT6359P_RG_LDO_VCN33_1_EN_0_ADDR         MT6359P_LDO_VCN33_1_CON0
++#define MT6359P_DA_VCN33_1_B_EN_ADDR             MT6359P_LDO_VCN33_1_MON
++#define MT6359P_RG_LDO_VCN33_1_EN_1_ADDR         MT6359P_LDO_VCN33_1_MULTI_SW
++#define MT6359P_RG_LDO_VCN33_1_EN_1_SHIFT        15
++#define MT6359P_RG_LDO_VCN33_2_EN_0_ADDR         MT6359P_LDO_VCN33_2_CON0
++#define MT6359P_RG_LDO_VCN33_2_EN_0_SHIFT        0
++#define MT6359P_DA_VCN33_2_B_EN_ADDR             MT6359P_LDO_VCN33_2_MON
++#define MT6359P_RG_LDO_VCN33_2_EN_1_ADDR         MT6359P_LDO_VCN33_2_MULTI_SW
++#define MT6359P_RG_LDO_VCN13_EN_ADDR             MT6359P_LDO_VCN13_CON0
++#define MT6359P_RG_LDO_VCN13_EN_SHIFT            0
++#define MT6359P_DA_VCN13_B_EN_ADDR               MT6359P_LDO_VCN13_MON
++#define MT6359P_RG_LDO_VCN18_EN_ADDR             MT6359P_LDO_VCN18_CON0
++#define MT6359P_DA_VCN18_B_EN_ADDR               MT6359P_LDO_VCN18_MON
++#define MT6359P_RG_LDO_VA09_EN_ADDR              MT6359P_LDO_VA09_CON0
++#define MT6359P_RG_LDO_VA09_EN_SHIFT             0
++#define MT6359P_DA_VA09_B_EN_ADDR                MT6359P_LDO_VA09_MON
++#define MT6359P_RG_LDO_VCAMIO_EN_ADDR            MT6359P_LDO_VCAMIO_CON0
++#define MT6359P_RG_LDO_VCAMIO_EN_SHIFT           0
++#define MT6359P_DA_VCAMIO_B_EN_ADDR              MT6359P_LDO_VCAMIO_MON
++#define MT6359P_RG_LDO_VA12_EN_ADDR              MT6359P_LDO_VA12_CON0
++#define MT6359P_RG_LDO_VA12_EN_SHIFT             0
++#define MT6359P_DA_VA12_B_EN_ADDR                MT6359P_LDO_VA12_MON
++#define MT6359P_RG_LDO_VAUX18_EN_ADDR            MT6359P_LDO_VAUX18_CON0
++#define MT6359P_DA_VAUX18_B_EN_ADDR              MT6359P_LDO_VAUX18_MON
++#define MT6359P_RG_LDO_VAUD18_EN_ADDR            MT6359P_LDO_VAUD18_CON0
++#define MT6359P_DA_VAUD18_B_EN_ADDR              MT6359P_LDO_VAUD18_MON
++#define MT6359P_RG_LDO_VIO18_EN_ADDR             MT6359P_LDO_VIO18_CON0
++#define MT6359P_RG_LDO_VIO18_EN_SHIFT            0
++#define MT6359P_DA_VIO18_B_EN_ADDR               MT6359P_LDO_VIO18_MON
++#define MT6359P_RG_LDO_VEMC_EN_ADDR              MT6359P_LDO_VEMC_CON0
++#define MT6359P_RG_LDO_VEMC_EN_SHIFT             0
++#define MT6359P_DA_VEMC_B_EN_ADDR                MT6359P_LDO_VEMC_MON
++#define MT6359P_RG_LDO_VSIM1_EN_ADDR             MT6359P_LDO_VSIM1_CON0
++#define MT6359P_RG_LDO_VSIM1_EN_SHIFT            0
++#define MT6359P_DA_VSIM1_B_EN_ADDR               MT6359P_LDO_VSIM1_MON
++#define MT6359P_RG_LDO_VSIM2_EN_ADDR             MT6359P_LDO_VSIM2_CON0
++#define MT6359P_RG_LDO_VSIM2_EN_SHIFT            0
++#define MT6359P_DA_VSIM2_B_EN_ADDR               MT6359P_LDO_VSIM2_MON
++#define MT6359P_RG_LDO_VUSB_EN_0_ADDR            MT6359P_LDO_VUSB_CON0
++#define MT6359P_DA_VUSB_B_EN_ADDR                MT6359P_LDO_VUSB_MON
++#define MT6359P_RG_LDO_VUSB_EN_1_ADDR            MT6359P_LDO_VUSB_MULTI_SW
++#define MT6359P_RG_LDO_VRFCK_EN_ADDR             MT6359P_LDO_VRFCK_CON0
++#define MT6359P_RG_LDO_VRFCK_EN_SHIFT            0
++#define MT6359P_DA_VRFCK_B_EN_ADDR               MT6359P_LDO_VRFCK_MON
++#define MT6359P_RG_LDO_VBBCK_EN_ADDR             MT6359P_LDO_VBBCK_CON0
++#define MT6359P_RG_LDO_VBBCK_EN_SHIFT            0
++#define MT6359P_DA_VBBCK_B_EN_ADDR               MT6359P_LDO_VBBCK_MON
++#define MT6359P_RG_LDO_VBIF28_EN_ADDR            MT6359P_LDO_VBIF28_CON0
++#define MT6359P_DA_VBIF28_B_EN_ADDR              MT6359P_LDO_VBIF28_MON
++#define MT6359P_RG_LDO_VIBR_EN_ADDR              MT6359P_LDO_VIBR_CON0
++#define MT6359P_RG_LDO_VIBR_EN_SHIFT             0
++#define MT6359P_DA_VIBR_B_EN_ADDR                MT6359P_LDO_VIBR_MON
++#define MT6359P_RG_LDO_VIO28_EN_ADDR             MT6359P_LDO_VIO28_CON0
++#define MT6359P_RG_LDO_VIO28_EN_SHIFT            0
++#define MT6359P_DA_VIO28_B_EN_ADDR               MT6359P_LDO_VIO28_MON
++#define MT6359P_RG_LDO_VM18_EN_ADDR              MT6359P_LDO_VM18_CON0
++#define MT6359P_RG_LDO_VM18_EN_SHIFT             0
++#define MT6359P_DA_VM18_B_EN_ADDR                MT6359P_LDO_VM18_MON
++#define MT6359P_RG_LDO_VUFS_EN_ADDR              MT6359P_LDO_VUFS_CON0
++#define MT6359P_RG_LDO_VUFS_EN_SHIFT             0
++#define MT6359P_DA_VUFS_B_EN_ADDR                MT6359P_LDO_VUFS_MON
++#define MT6359P_RG_LDO_VSRAM_PROC1_EN_ADDR       MT6359P_LDO_VSRAM_PROC1_CON0
++#define MT6359P_DA_VSRAM_PROC1_B_EN_ADDR         MT6359P_LDO_VSRAM_PROC1_MON
++#define MT6359P_DA_VSRAM_PROC1_VOSEL_ADDR        MT6359P_LDO_VSRAM_PROC1_VOSEL1
++#define MT6359P_RG_LDO_VSRAM_PROC2_EN_ADDR       MT6359P_LDO_VSRAM_PROC2_CON0
++#define MT6359P_DA_VSRAM_PROC2_B_EN_ADDR         MT6359P_LDO_VSRAM_PROC2_MON
++#define MT6359P_DA_VSRAM_PROC2_VOSEL_ADDR        MT6359P_LDO_VSRAM_PROC2_VOSEL1
++#define MT6359P_RG_LDO_VSRAM_OTHERS_EN_ADDR      MT6359P_LDO_VSRAM_OTHERS_CON0
++#define MT6359P_DA_VSRAM_OTHERS_B_EN_ADDR        MT6359P_LDO_VSRAM_OTHERS_MON
++#define MT6359P_DA_VSRAM_OTHERS_VOSEL_ADDR       MT6359P_LDO_VSRAM_OTHERS_VOSEL1
++#define MT6359P_RG_LDO_VSRAM_OTHERS_SSHUB_EN_ADDR    MT6359P_LDO_VSRAM_OTHERS_SSHUB
++#define MT6359P_RG_LDO_VSRAM_OTHERS_SSHUB_VOSEL_ADDR MT6359P_LDO_VSRAM_OTHERS_SSHUB
++#define MT6359P_RG_LDO_VSRAM_MD_EN_ADDR          MT6359P_LDO_VSRAM_MD_CON0
++#define MT6359P_DA_VSRAM_MD_B_EN_ADDR            MT6359P_LDO_VSRAM_MD_MON
++#define MT6359P_DA_VSRAM_MD_VOSEL_ADDR           MT6359P_LDO_VSRAM_MD_VOSEL1
++#define MT6359P_RG_VCN33_1_VOSEL_ADDR            MT6359P_VCN33_1_ANA_CON0
++#define MT6359P_RG_VCN33_2_VOSEL_ADDR            MT6359P_VCN33_2_ANA_CON0
++#define MT6359P_RG_VEMC_VOSEL_ADDR               MT6359P_VEMC_ANA_CON0
++#define MT6359P_RG_VSIM1_VOSEL_ADDR              MT6359P_VSIM1_ANA_CON0
++#define MT6359P_RG_VSIM2_VOSEL_ADDR              MT6359P_VSIM2_ANA_CON0
++#define MT6359P_RG_VIO28_VOSEL_ADDR              MT6359P_VIO28_ANA_CON0
++#define MT6359P_RG_VIBR_VOSEL_ADDR               MT6359P_VIBR_ANA_CON0
++#define MT6359P_RG_VRF18_VOSEL_ADDR              MT6359P_VRF18_ANA_CON0
++#define MT6359P_RG_VEFUSE_VOSEL_ADDR             MT6359P_VEFUSE_ANA_CON0
++#define MT6359P_RG_VCAMIO_VOSEL_ADDR             MT6359P_VCAMIO_ANA_CON0
++#define MT6359P_RG_VIO18_VOSEL_ADDR              MT6359P_VIO18_ANA_CON0
++#define MT6359P_RG_VM18_VOSEL_ADDR               MT6359P_VM18_ANA_CON0
++#define MT6359P_RG_VUFS_VOSEL_ADDR               MT6359P_VUFS_ANA_CON0
++#define MT6359P_RG_VRF12_VOSEL_ADDR              MT6359P_VRF12_ANA_CON0
++#define MT6359P_RG_VCN13_VOSEL_ADDR              MT6359P_VCN13_ANA_CON0
++#define MT6359P_RG_VA09_VOSEL_ADDR               MT6359P_VRF18_ELR_3
++#define MT6359P_RG_VA12_VOSEL_ADDR               MT6359P_VFE28_ELR_4
++#define MT6359P_RG_VXO22_VOSEL_ADDR              MT6359P_VXO22_ANA_CON0
++#define MT6359P_RG_VRFCK_VOSEL_ADDR              MT6359P_VRFCK_ANA_CON0
++#define MT6359P_RG_VBBCK_VOSEL_ADDR              MT6359P_VBBCK_ANA_CON0
++#define MT6359P_RG_VBBCK_VOSEL_MASK              0xF
++#define MT6359P_RG_VBBCK_VOSEL_SHIFT             4
++#define MT6359P_VM_MODE_ADDR                     MT6359P_TOP_TRAP
++#define MT6359P_TMA_KEY_ADDR                     MT6359P_TOP_TMA_KEY
++
++#define TMA_KEY 0x9CA6
++
++#endif /* __MFD_MT6359P_REGISTERS_H__ */
+diff --git a/include/linux/regulator/mt6359-regulator.h b/include/linux/regulator/mt6359-regulator.h
+index 14c4b715613e..6d6e5a58f482 100644
+--- a/include/linux/regulator/mt6359-regulator.h
++++ b/include/linux/regulator/mt6359-regulator.h
+@@ -17,6 +17,7 @@ enum {
+ 	MT6359_ID_VPROC2,
+ 	MT6359_ID_VPROC1,
+ 	MT6359_ID_VCORE_SSHUB,
++	MT6359_ID_VGPU11_SSHUB = MT6359_ID_VCORE_SSHUB,
+ 	MT6359_ID_VAUD18 = 10,
+ 	MT6359_ID_VSIM1,
+ 	MT6359_ID_VIBR,
 -- 
 2.18.0
 
