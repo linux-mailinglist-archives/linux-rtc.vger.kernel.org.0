@@ -2,49 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40903529B9
-	for <lists+linux-rtc@lfdr.de>; Fri,  2 Apr 2021 12:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34D63529BB
+	for <lists+linux-rtc@lfdr.de>; Fri,  2 Apr 2021 12:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhDBK1s (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 2 Apr 2021 06:27:48 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35390 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbhDBK1r (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 2 Apr 2021 06:27:47 -0400
+        id S229924AbhDBK2T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 2 Apr 2021 06:28:19 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:31192 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229553AbhDBK2Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 2 Apr 2021 06:28:16 -0400
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20210402102745euoutp01d995110419290a9198362fa0b3d54707~yA67UIHk72607326073euoutp01G;
-        Fri,  2 Apr 2021 10:27:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20210402102745euoutp01d995110419290a9198362fa0b3d54707~yA67UIHk72607326073euoutp01G
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210402102814euoutp02061d45b5d50d75fd6671a5de4f6d690b~yA7V0frI21182511825euoutp02V;
+        Fri,  2 Apr 2021 10:28:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210402102814euoutp02061d45b5d50d75fd6671a5de4f6d690b~yA7V0frI21182511825euoutp02V
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1617359265;
-        bh=hrg9Zjh6wkEEq/WpL8UP5fUQYy13RF9DsNWtImnSqRA=;
+        s=mail20170921; t=1617359294;
+        bh=MgE9vhgJDxNX/7OSTmWVb2DPktc/puyZSxUEVub/ni4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T7j3Yz3Y63KC8tOiBTsRCHnb4kwvrTO3g/A/iy9mo1cqJq5E9DSTOTIvVQoUXU/Ir
-         gnwcPHpFzkaG4plh3hYjAU1Si1gFMd9riHiLlT8BaFV+aeTxkH/g/nw80707IFJUDO
-         hYI7TXSdXADwY4dAjWpcz3YEtMTiIbxLsa1ujwU0=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20210402102744eucas1p2d25bb06736a291b1958ebadf342f1b15~yA66tOazs2540125401eucas1p2q;
-        Fri,  2 Apr 2021 10:27:44 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 71.D8.09439.0A1F6606; Fri,  2
-        Apr 2021 11:27:44 +0100 (BST)
+        b=omcDR/AUjsiQWf8PqjHH3ZZ0QoR9eupWGh8oDgfrItwQZxxrH6Qw54XBKfe37oZ3f
+         yGs2WtaeA1eE7qXGfaSCh0VaU76dRErwa2unJoER4KLMoAdD+v5WH1zN871jH2rWUN
+         rnzKHoJFLxFaS4X2TUSSGVNOHEn064rkj09V6YTQ=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20210402102813eucas1p1cf3098a4ecfe51c51986e4e4b6eb715e~yA7VjaW1V1504015040eucas1p10;
+        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 32.D6.09444.DB1F6606; Fri,  2
+        Apr 2021 11:28:13 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210402102743eucas1p23690e0df642a10fa0326a84fac6c0ed3~yA65WZYHO1494714947eucas1p2-;
-        Fri,  2 Apr 2021 10:27:43 +0000 (GMT)
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0~yA7VI2HMj0542305423eucas1p1-;
+        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210402102743eusmtrp2f76589fe3676f2f9284d5114dbcdc14f~yA65VySOB2900629006eusmtrp2G;
-        Fri,  2 Apr 2021 10:27:43 +0000 (GMT)
-X-AuditID: cbfec7f5-c1bff700000024df-cb-6066f1a022a7
+        20210402102813eusmtrp248c1cf8a1f7be57cc25e75867c96a941~yA7VIQFMG2853628536eusmtrp2E;
+        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
+X-AuditID: cbfec7f4-dbdff700000024e4-b3-6066f1bdcff9
 Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A0.B9.08696.F91F6606; Fri,  2
-        Apr 2021 11:27:43 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 99.B9.08696.DB1F6606; Fri,  2
+        Apr 2021 11:28:13 +0100 (BST)
 Received: from localhost (unknown [106.120.51.46]) by eusmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20210402102743eusmtip1ef9cf1545f84519c1da193d21ebc4dc3~yA65Kvh1F0203102031eusmtip1Y;
-        Fri,  2 Apr 2021 10:27:43 +0000 (GMT)
+        20210402102813eusmtip1af6019f143c7711d58f54d33b2f455f8~yA7U4SlyQ0203102031eusmtip1b;
+        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
 From:   =?utf-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org,
@@ -52,54 +52,54 @@ Cc:     linux-rtc@vger.kernel.org,
         <b.zolnierkie@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] rtc: ds1307: remove flags
-Date:   Fri, 02 Apr 2021 12:27:42 +0200
-In-Reply-To: <20210330000343.801566-2-alexandre.belloni@bootlin.com>
-        (Alexandre Belloni's message of "Tue, 30 Mar 2021 02:03:42 +0200")
-Message-ID: <dleftjr1jtdlr5.fsf%l.stelmach@samsung.com>
+Subject: Re: [PATCH 3/3] rtc: rtc_update_irq_enable: rework UIE emulation
+Date:   Fri, 02 Apr 2021 12:28:12 +0200
+In-Reply-To: <20210330000343.801566-3-alexandre.belloni@bootlin.com>
+        (Alexandre Belloni's message of "Tue, 30 Mar 2021 02:03:43 +0200")
+Message-ID: <dleftjmtuhdlqb.fsf%l.stelmach@samsung.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
         protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHKsWRmVeSWpSXmKPExsWy7djP87oLPqYlGOydZWrR/m4Zu8XGGetZ
-        LS7vmsNmcWz1FTaLtUfusjuwesxbU+3Rt2UVo8fnTXIBzFFcNimpOZllqUX6dglcGbNuvmEu
-        WMlTseCXTgPjFa4uRk4OCQETiamX+5m7GLk4hARWMEqc/z+bESQhJPCFUWLeHG8I+zOjxMce
-        VpiG7y23WCAaljNK3O86xwbhPAdyvv5mB6liE7CX6D+yjwXEFhEwlWht3AVWxCxwglHife80
-        sBXCAkYSxzqXATVwcLAIqEocmw92BqdAJ6PElNW/wdbxCphLfHy0DmyoqIClxJYX99kh4oIS
-        J2c+AVvALJArMfP8G0aI825wSMyYawxhu0gsfLqCBcIWlnh1fAs7hC0j8X/nfCaQvRIC9RKT
-        J5mB7JUQ6GGU2DbnB1S9tcSdc7/YIGxHiTv3mtgh6vkkbrwVhFjLJzFp23RmiDCvREebEES1
-        isS6/j1QU6Qkel+tgLrMQ2JFzyFWSIBOZ5T4uUBoAqPCLCTPzELyzCygqcwCmhLrd+lDhLUl
-        li18zQxh20qsW/eeZQEj6ypG8dTS4tz01GLjvNRyveLE3OLSvHS95PzcTYzAZHP63/GvOxhX
-        vPqod4iRiYPxEKMKUPOjDasvMEqx5OXnpSqJ8N7YkpogxJuSWFmVWpQfX1Sak1p8iFGag0VJ
-        nHfX1jXxQgLpiSWp2ampBalFMFkmDk6pBqbNr9VnX12l4CaxzuD68kNbDB7sCE9c7blUeyrD
-        YfXKinRd5Wlb5XmO372hHDltsl3tux3uRvEVmXuv/n6okFS2LG8fA9N/jqLlsqp/Ju2eLsQ/
-        teAl06arwvsX+NsVPlz+PSxyR52A4LaTUScX3pX1DGSVcbsXfnXbziumpRcsOV1uNWzwq/67
-        9UVX3vTfiq98XHQTVLruvP2S2FYsF8p/1rr56Oat5/9/3a6u/up2UUuQk8L3tY4pEzLZVBz1
-        fs0N7oi012JreLPpuvWGJoNXnYI/BUKWW+p7N16fYnJ349qoAxw1TRcmrOGQZgz8uq9w35Lc
-        yVz5R+cvach/8Z7pY9YCr/CHrRYzjk5ym/ZJiaU4I9FQi7moOBEAFmYn2LEDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsVy+t/xu7rzP6YlGHxZIGnR/m4Zu8XGGetZ
-        LS7vmsNmcWz1FTaLtUfusjuwesxbU+3Rt2UVo8fnTXIBzFF6NkX5pSWpChn5xSW2StGGFkZ6
-        hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6GbNuvmEuWMlTseCXTgPjFa4uRk4OCQET
-        ie8tt1i6GLk4hASWMkpM7l/P2MXIAZSQklg5Nx2iRljiz7UuNoiap4wSJ6asYgRJsAnYS/Qf
-        2ccCYosImEq0Nu4CK2IWOMEo8fPmfDaQhLCAkcSxzmXsILaQgLPE9Y8rwBawCKhKHJvPDFLP
-        KdDJKDFl9W9WkBpeAXOJj4/WgdWLClhKbHlxnx0iLihxcuYTsGXMAtkSX1c/Z57AKDALSWoW
-        ktQsoBXMApoS63fpQ4S1JZYtfM0MYdtKrFv3nmUBI+sqRpHU0uLc9NxiI73ixNzi0rx0veT8
-        3E2MwHjZduznlh2MK1991DvEyMTBeIhRBajz0YbVFxilWPLy81KVRHhvbElNEOJNSaysSi3K
-        jy8qzUktPsRoCvTaRGYp0eR8YCTnlcQbmhmYGpqYWRqYWpoZK4nzmhxZEy8kkJ5YkpqdmlqQ
-        WgTTx8TBKdXAVMS/dKpM4PWatCCxG/cVpr3ie6B3uqBv5/nw6UesO4NTvW3668ScPhqkaors
-        jwowX6owdcK3wDP8D6Yw3bosFORv+b7mxoIpS/VMeHcZbVg4+xt3W+0mJ/mkWFV5psOqzItu
-        vfjB6Mtkd7C4Q+Scps3UwDoT3+t3HviuZ5l4v2atK98OHsvNkpMvRJxp/l//Y+/0HTcvT2Hi
-        OzHTrSTLNvFr/HehvXdDf0vqlm1ylA1h0/mxUiIq+XAKU3LLjvmvzhgXRLlyHjfTrFz6K8nB
-        8frhf8E2nX6GETsb9s97vfDO9t0PVqx+3r7ZxyFnymfHahuh7aulGn7mR27vPGzHOeeV+dFJ
-        v6XKFxd9OXZspRJLcUaioRZzUXEiABHGno4sAwAA
-X-CMS-MailID: 20210402102743eucas1p23690e0df642a10fa0326a84fac6c0ed3
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfSzUcRzH973f73f3c9vp16X5dFq1S21pXXp0SnpQo6ep9TCrFRe/juG0
+        +zmFFio9KA49XLh0aWHnCLsOh4wMdRutVKJSEnXCdNajHpyftv57f9+f1/vzsH1JTJhHiMgw
+        RTStVMgixFw+bmr63rqoduRwkPtojpv07FA+T1p27Q4hfWLWcqVNRe1caXHjK946wi/XEO+X
+        ZtQjP1v5rB3YPr5XCB0RFkMrF3sH8UN7np0hjnTOOFZe9ZWbiPKmpyAHEqjlYDF1YCmITwqp
+        QgTVqfU89jGKoD/ZQLAPG4J2/SD3X6Ty+hucLRQgeFimmaT6EWiHbhF2ikutBXXjPdyunagV
+        kJxk5tohjGpBMJx6FaUgkpxGbYYP9W52BqfmwcuKdI6dcaDOI+js0iJ7QUB5QOflHxNNp1Oe
+        YPzQzWP9qfAgq3diAEZFQlbbJ2QPA9VBgvbhCx6760ZosyVjrJ4G1mbjpD8T/lTd4NiXACoB
+        LmWuZLMXEZi033CWWQ0vW39M3rweSm29BMs7QsfgVHauI2SaNBhrC+DcGSFLu0KJumayiwhS
+        rYWI1X5gGb4/oYWUBsFprVc6mpP93zXZ/12TPd4VoxbAHfNi1l4I+TcHMFavgZKSYVyHCD1y
+        plVMpJxmlirooxJGFsmoFHJJcFRkORr/OpbfzaOVqMA6ImlAHBI1INfxcE9p0SMkwhVRClrs
+        JOgw0kFCQYgsNo5WRgUqVRE004BcSFzsLDhkNAQKKbksmg6n6SO08l+VQzqIEjmnfPfU9LkE
+        5y91L6mtaBELE8ID694l7lRvu/f8bNuKsYHs4uM9vvXWohOVPklxVZrX+hSPK2XN3oqKodhZ
+        R/m5u334B2p45o/y1r3GKaTe877zslCft1hfgFG16zH61X/souHg/O0Lths37f/ZnmiTn7+b
+        wXdgGsIdrxXw4iw9slTtwPux3iZu2Jf2+qjWukJ/POPk3IIY3dD6C14bPr9WLc/bejMtpM6p
+        SuftH+xZeDvW5WpOuirtkiTkdvEtj6SgT6YAUbXl8fAy9+67koON6n0JAV2llZbZhyviA+Kd
+        t/B2H8rS5T7lL1TrzGmx4ViLprar20BYe025MWNF/auqGTHOhMqWuGFKRvYXJh88t7UDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsVy+t/xu7p7P6YlGHTO57Jof7eM3WLjjPWs
+        Fpd3zWGzOLb6CpvF2iN32R1YPeatqfbo27KK0ePzJrkA5ig9m6L80pJUhYz84hJbpWhDCyM9
+        Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jEfX2lgLbklWbNr5na2BcZFoFyMnh4SA
+        icSOuQ9YQGwhgaWMEuffSHUxcgDFpSRWzk2HKBGW+HOtiw2i5CmjxLKJISA2m4C9RP+RfWCt
+        IgKmEq2Nu4BquDiYBU4wSvy8OZ8NZI6wgKfEi4NaEL3OEs9OX2EFsVkEVCXubJ/ABFLPKdDJ
+        KHHr9hxGkASvgLnErSm/wIpEBSwltry4zw4RF5Q4OfMJ2DJmgWyJr6ufM09gFJiFJDULSWoW
+        0GpmAU2J9bv0IcLaEssWvmaGsG0l1q17z7KAkXUVo0hqaXFuem6xkV5xYm5xaV66XnJ+7iZG
+        YLRsO/Zzyw7Gla8+6h1iZOJgPMSoAtT5aMPqC4xSLHn5ealKIrw3tqQmCPGmJFZWpRblxxeV
+        5qQWH2I0BfptIrOUaHI+MI7zSuINzQxMDU3MLA1MLc2MlcR5TY6siRcSSE8sSc1OTS1ILYLp
+        Y+LglGpgmvZ5aj3DsfqOg3/1ZRx++csvZqmaoiKS+p614D3nRpGFB9+s01+htPBj47Q9yo+q
+        Pa6w/z/PaBXgMfV4S/CV51lHJfydipbsnFLtPi23KfTBO/dvzi94/JyPrC995/fGYAfXtImn
+        DEyYPrO/jrZaVFmzgq3X33PmvGKXB8Zbb7SlvlYqVAq4ulw54oGFLuOLlxpv88sE/SX8DZ5P
+        /2B+MtBOUXcCdw+DwCUDlaXz3/7alm2x8sCfZRE3frUuOF5vZrBv35djcR9XznySqrbQs27z
+        RQaWRayrRB03sq3MS7+usqlxX/R9vv7/coskM88embCQ+5bTnIiHEyr9LjxIefHwhsPzDLtb
+        W6+t95NYLqPEUpyRaKjFXFScCAC2qjCgKwMAAA==
+X-CMS-MailID: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
 X-Msg-Generator: CA
-X-RootMTR: 20210402102743eucas1p23690e0df642a10fa0326a84fac6c0ed3
+X-RootMTR: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20210402102743eucas1p23690e0df642a10fa0326a84fac6c0ed3
-References: <20210330000343.801566-2-alexandre.belloni@bootlin.com>
-        <CGME20210402102743eucas1p23690e0df642a10fa0326a84fac6c0ed3@eucas1p2.samsung.com>
+X-CMS-RootMailID: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
+References: <20210330000343.801566-3-alexandre.belloni@bootlin.com>
+        <CGME20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
@@ -109,30 +109,81 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 It was <2021-03-30 wto 02:03>, when Alexandre Belloni wrote:
-> flags is now unused, drop it.
+> Now that the core is aware of whether alarms are available, it is possible
+> to decide whether UIE emulation is required before actually trying to set
+> the alarm.
+>
+> This greatly simplifies rtc_update_irq_enable because there is now only o=
+ne
+> error value to track and is not relying on the return value of
+> __rtc_set_alarm anymore.
 >
 > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->  drivers/rtc/rtc-ds1307.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/rtc/interface.c | 28 +++++++---------------------
+>  1 file changed, 7 insertions(+), 21 deletions(-)
 >
 
 Tested-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
-Reviewed-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
 
-> diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-> index 76d67c419f7d..089509d0a3a0 100644
-> --- a/drivers/rtc/rtc-ds1307.c
-> +++ b/drivers/rtc/rtc-ds1307.c
-> @@ -169,8 +169,6 @@ enum ds_type {
+> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> index dcb34c73319e..b162964d2b39 100644
+> --- a/drivers/rtc/interface.c
+> +++ b/drivers/rtc/interface.c
+> @@ -561,8 +561,12 @@ int rtc_update_irq_enable(struct rtc_device *rtc, un=
+signed int enabled)
+>  	if (rtc->uie_rtctimer.enabled =3D=3D enabled)
+>  		goto out;
 >=20=20
->  struct ds1307 {
->  	enum ds_type		type;
-> -	unsigned long		flags;
-> -#define HAS_NVRAM	0		/* bit 0 =3D=3D sysfs file active */
->  	struct device		*dev;
->  	struct regmap		*regmap;
->  	const char		*name;
+> -	if (rtc->uie_unsupported) {
+> +	if (rtc->uie_unsupported || !test_bit(RTC_FEATURE_ALARM, rtc->features)=
+) {
+> +#ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+> +		err =3D rtc_dev_update_irq_enable_emul(rtc, enabled);
+> +#else
+>  		err =3D -EINVAL;
+> +#endif
+>  		goto out;
+>  	}
+>=20=20
+> @@ -570,8 +574,8 @@ int rtc_update_irq_enable(struct rtc_device *rtc, uns=
+igned int enabled)
+>  		struct rtc_time tm;
+>  		ktime_t now, onesec;
+>=20=20
+> -		rc =3D __rtc_read_time(rtc, &tm);
+> -		if (rc)
+> +		err =3D __rtc_read_time(rtc, &tm);
+> +		if (err)
+>  			goto out;
+>  		onesec =3D ktime_set(1, 0);
+>  		now =3D rtc_tm_to_ktime(tm);
+> @@ -585,24 +589,6 @@ int rtc_update_irq_enable(struct rtc_device *rtc, un=
+signed int enabled)
+>  out:
+>  	mutex_unlock(&rtc->ops_lock);
+>=20=20
+> -	/*
+> -	 * __rtc_read_time() failed, this probably means that the RTC time has
+> -	 * never been set or less probably there is a transient error on the
+> -	 * bus. In any case, avoid enabling emulation has this will fail when
+> -	 * reading the time too.
+> -	 */
+> -	if (rc)
+> -		return rc;
+> -
+> -#ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+> -	/*
+> -	 * Enable emulation if the driver returned -EINVAL to signal that it has
+> -	 * been configured without interrupts or they are not available at the
+> -	 * moment.
+> -	 */
+> -	if (err =3D=3D -EINVAL)
+> -		err =3D rtc_dev_update_irq_enable_emul(rtc, enabled);
+> -#endif
+>  	return err;
+>  }
+>  EXPORT_SYMBOL_GPL(rtc_update_irq_enable);
 
 =2D-=20
 =C5=81ukasz Stelmach
@@ -144,13 +195,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmBm8Z4ACgkQsK4enJil
-gBDcmAf/bVClaqSUnXfrEE0vihyjzXryYII9Aqn3eOgLZiEginIJUp9nZrfHAtBM
-+YYH4FDEdIzbSgeLol0cPTBYt7KK5P8cGW2LDsTyWmzZZEz+VJMn7pHb9E3oeS4J
-FJOwFoqHbi6AENUVN1qf668xHjKliZf3pPX9gkGMc4qHh8183km1P9OBGxzo17Wf
-7vV9PVrE/vGUE9kQa09nlZ0/HgB8YRLqis/CLjj6By5Ja8so87ojf91piYLAW/WS
-xGvZcUQFIc2aLrvxgrXwfl47ErQJQFJu6Q3t7qC9ddgGIFirF6/znl+aMdpRptLg
-uJ5x62QFb6mR4w28P9K3Bk8dX3rVmQ==
-=P0X9
+iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmBm8bwACgkQsK4enJil
+gBD42wf/UcrU2D9DLxVyCc1wtFCR+nbGigi/3pfka0FGhspMGjPhXlmbthkob3Eo
+hTPvfZCUjAZ1G6SV3ZgCrLqKzqiKmtYQLdfZKnH7i+p8t5Uc5CfbV/mhfupZbrS+
+PphJCO+sW/yiz0eeDLptDPhUhr7modWBsDS4+WK4o9AwBOXMZfKoJErn9UutTNIV
+EEevVHzXc00nlRt7MU5D6s8E1OIn8HXhEcBDJJ2DssqtOj2Xw7RncNfxUNyHg+Ke
+QpdAxH31lYRHnvQEpLEkcbqY3JkJpsOjpI2ID1+V69iIVeEQymw18C/Sbf9BYlSW
+Ns7y1JVtzTA/b//7RAOvJRDOD89pcQ==
+=sLOG
 -----END PGP SIGNATURE-----
 --=-=-=--
