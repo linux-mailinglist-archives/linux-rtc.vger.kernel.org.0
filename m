@@ -2,206 +2,120 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D34D63529BB
-	for <lists+linux-rtc@lfdr.de>; Fri,  2 Apr 2021 12:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C390E352FA0
+	for <lists+linux-rtc@lfdr.de>; Fri,  2 Apr 2021 21:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhDBK2T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 2 Apr 2021 06:28:19 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:31192 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbhDBK2Q (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 2 Apr 2021 06:28:16 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210402102814euoutp02061d45b5d50d75fd6671a5de4f6d690b~yA7V0frI21182511825euoutp02V;
-        Fri,  2 Apr 2021 10:28:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210402102814euoutp02061d45b5d50d75fd6671a5de4f6d690b~yA7V0frI21182511825euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1617359294;
-        bh=MgE9vhgJDxNX/7OSTmWVb2DPktc/puyZSxUEVub/ni4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=omcDR/AUjsiQWf8PqjHH3ZZ0QoR9eupWGh8oDgfrItwQZxxrH6Qw54XBKfe37oZ3f
-         yGs2WtaeA1eE7qXGfaSCh0VaU76dRErwa2unJoER4KLMoAdD+v5WH1zN871jH2rWUN
-         rnzKHoJFLxFaS4X2TUSSGVNOHEn064rkj09V6YTQ=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210402102813eucas1p1cf3098a4ecfe51c51986e4e4b6eb715e~yA7VjaW1V1504015040eucas1p10;
-        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 32.D6.09444.DB1F6606; Fri,  2
-        Apr 2021 11:28:13 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0~yA7VI2HMj0542305423eucas1p1-;
-        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20210402102813eusmtrp248c1cf8a1f7be57cc25e75867c96a941~yA7VIQFMG2853628536eusmtrp2E;
-        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
-X-AuditID: cbfec7f4-dbdff700000024e4-b3-6066f1bdcff9
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 99.B9.08696.DB1F6606; Fri,  2
-        Apr 2021 11:28:13 +0100 (BST)
-Received: from localhost (unknown [106.120.51.46]) by eusmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20210402102813eusmtip1af6019f143c7711d58f54d33b2f455f8~yA7U4SlyQ0203102031eusmtip1b;
-        Fri,  2 Apr 2021 10:28:13 +0000 (GMT)
-From:   =?utf-8?Q?=C5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org,
-        =?utf-8?Q?Bart=C5=82omiej_=C5=BBolnierkiew?= =?utf-8?Q?icz?= 
-        <b.zolnierkie@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] rtc: rtc_update_irq_enable: rework UIE emulation
-Date:   Fri, 02 Apr 2021 12:28:12 +0200
-In-Reply-To: <20210330000343.801566-3-alexandre.belloni@bootlin.com>
-        (Alexandre Belloni's message of "Tue, 30 Mar 2021 02:03:43 +0200")
-Message-ID: <dleftjmtuhdlqb.fsf%l.stelmach@samsung.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S236503AbhDBTUG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 2 Apr 2021 15:20:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35558 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229553AbhDBTUF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 2 Apr 2021 15:20:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A737A6115A;
+        Fri,  2 Apr 2021 19:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617391204;
+        bh=PRpSTE+uCYtRFa0lZsZ+bpij6OkbE/yPXMysib3so3k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=friQo4yO67kYFvDFxkgZfH9Lx1H71ACkbqEVS4OPgHsAG7/MzDCvZ6YY1E6SWWAnh
+         5cRwKaYG2/GofZz4fnvfQGUdUF2NxNkY7I/nT+BsLv9scUlkmdDw7D6xPAE3g7udc/
+         WncWAPWD2z09HdbRJ2bNymXcYIy4zNWJ8grNtjIemIOx6k+qUU5sb1/nB4LC600prC
+         R8evLQxp+MIFz75/uTPzQJUyMTx5nGew5Bbg6+DMaE9Cz4LD4SOQ6581BDiOZOenNi
+         pf0/d1TMFNUOlv7qb129ustqmdJnob5OAgjoWCA5t/Yh4PebvAEnhEsHJJ54cgWxTH
+         9lmheeWdBrRVw==
+Date:   Fri, 2 Apr 2021 20:19:50 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        linux-power <linux-power@fi.rohmeurope.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>
+Subject: Re: [PATCH v5 00/19] Support ROHM BD71815 PMIC
+Message-ID: <20210402191950.GK5402@sirena.org.uk>
+References: <cover.1617020713.git.matti.vaittinen@fi.rohmeurope.com>
+ <303b164aaa3d36cf8c9d03ee9b3863635be4073d.camel@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-="; micalg="pgp-sha256";
-        protocol="application/pgp-signature"
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfSzUcRzH973f73f3c9vp16X5dFq1S21pXXp0SnpQo6ep9TCrFRe/juG0
-        +zmFFio9KA49XLh0aWHnCLsOh4wMdRutVKJSEnXCdNajHpyftv57f9+f1/vzsH1JTJhHiMgw
-        RTStVMgixFw+bmr63rqoduRwkPtojpv07FA+T1p27Q4hfWLWcqVNRe1caXHjK946wi/XEO+X
-        ZtQjP1v5rB3YPr5XCB0RFkMrF3sH8UN7np0hjnTOOFZe9ZWbiPKmpyAHEqjlYDF1YCmITwqp
-        QgTVqfU89jGKoD/ZQLAPG4J2/SD3X6Ty+hucLRQgeFimmaT6EWiHbhF2ikutBXXjPdyunagV
-        kJxk5tohjGpBMJx6FaUgkpxGbYYP9W52BqfmwcuKdI6dcaDOI+js0iJ7QUB5QOflHxNNp1Oe
-        YPzQzWP9qfAgq3diAEZFQlbbJ2QPA9VBgvbhCx6760ZosyVjrJ4G1mbjpD8T/lTd4NiXACoB
-        LmWuZLMXEZi033CWWQ0vW39M3rweSm29BMs7QsfgVHauI2SaNBhrC+DcGSFLu0KJumayiwhS
-        rYWI1X5gGb4/oYWUBsFprVc6mpP93zXZ/12TPd4VoxbAHfNi1l4I+TcHMFavgZKSYVyHCD1y
-        plVMpJxmlirooxJGFsmoFHJJcFRkORr/OpbfzaOVqMA6ImlAHBI1INfxcE9p0SMkwhVRClrs
-        JOgw0kFCQYgsNo5WRgUqVRE004BcSFzsLDhkNAQKKbksmg6n6SO08l+VQzqIEjmnfPfU9LkE
-        5y91L6mtaBELE8ID694l7lRvu/f8bNuKsYHs4uM9vvXWohOVPklxVZrX+hSPK2XN3oqKodhZ
-        R/m5u334B2p45o/y1r3GKaTe877zslCft1hfgFG16zH61X/souHg/O0Lths37f/ZnmiTn7+b
-        wXdgGsIdrxXw4iw9slTtwPux3iZu2Jf2+qjWukJ/POPk3IIY3dD6C14bPr9WLc/bejMtpM6p
-        SuftH+xZeDvW5WpOuirtkiTkdvEtj6SgT6YAUbXl8fAy9+67koON6n0JAV2llZbZhyviA+Kd
-        t/B2H8rS5T7lL1TrzGmx4ViLprar20BYe025MWNF/auqGTHOhMqWuGFKRvYXJh88t7UDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsVy+t/xu7p7P6YlGHTO57Jof7eM3WLjjPWs
-        Fpd3zWGzOLb6CpvF2iN32R1YPeatqfbo27KK0ePzJrkA5ig9m6L80pJUhYz84hJbpWhDCyM9
-        Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy1CJ9uwS9jEfX2lgLbklWbNr5na2BcZFoFyMnh4SA
-        icSOuQ9YQGwhgaWMEuffSHUxcgDFpSRWzk2HKBGW+HOtiw2i5CmjxLKJISA2m4C9RP+RfWCt
-        IgKmEq2Nu4BquDiYBU4wSvy8OZ8NZI6wgKfEi4NaEL3OEs9OX2EFsVkEVCXubJ/ABFLPKdDJ
-        KHHr9hxGkASvgLnErSm/wIpEBSwltry4zw4RF5Q4OfMJ2DJmgWyJr6ufM09gFJiFJDULSWoW
-        0GpmAU2J9bv0IcLaEssWvmaGsG0l1q17z7KAkXUVo0hqaXFuem6xkV5xYm5xaV66XnJ+7iZG
-        YLRsO/Zzyw7Gla8+6h1iZOJgPMSoAtT5aMPqC4xSLHn5ealKIrw3tqQmCPGmJFZWpRblxxeV
-        5qQWH2I0BfptIrOUaHI+MI7zSuINzQxMDU3MLA1MLc2MlcR5TY6siRcSSE8sSc1OTS1ILYLp
-        Y+LglGpgmvZ5aj3DsfqOg3/1ZRx++csvZqmaoiKS+p614D3nRpGFB9+s01+htPBj47Q9yo+q
-        Pa6w/z/PaBXgMfV4S/CV51lHJfydipbsnFLtPi23KfTBO/dvzi94/JyPrC995/fGYAfXtImn
-        DEyYPrO/jrZaVFmzgq3X33PmvGKXB8Zbb7SlvlYqVAq4ulw54oGFLuOLlxpv88sE/SX8DZ5P
-        /2B+MtBOUXcCdw+DwCUDlaXz3/7alm2x8sCfZRE3frUuOF5vZrBv35djcR9XznySqrbQs27z
-        RQaWRayrRB03sq3MS7+usqlxX/R9vv7/coskM88embCQ+5bTnIiHEyr9LjxIefHwhsPzDLtb
-        W6+t95NYLqPEUpyRaKjFXFScCAC2qjCgKwMAAA==
-X-CMS-MailID: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
-X-Msg-Generator: CA
-X-RootMTR: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0
-References: <20210330000343.801566-3-alexandre.belloni@bootlin.com>
-        <CGME20210402102813eucas1p1bae7ec57559fa8df622118275bf6fae0@eucas1p1.samsung.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EVcIhgQsEzAXu06J"
+Content-Disposition: inline
+In-Reply-To: <303b164aaa3d36cf8c9d03ee9b3863635be4073d.camel@fi.rohmeurope.com>
+X-Cookie: Dammit Jim, I'm an actor, not a doctor.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-It was <2021-03-30 wto 02:03>, when Alexandre Belloni wrote:
-> Now that the core is aware of whether alarms are available, it is possible
-> to decide whether UIE emulation is required before actually trying to set
-> the alarm.
->
-> This greatly simplifies rtc_update_irq_enable because there is now only o=
-ne
-> error value to track and is not relying on the return value of
-> __rtc_set_alarm anymore.
->
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
->  drivers/rtc/interface.c | 28 +++++++---------------------
->  1 file changed, 7 insertions(+), 21 deletions(-)
->
+--EVcIhgQsEzAXu06J
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tested-by: =C5=81ukasz Stelmach <l.stelmach@samsung.com>
+On Tue, Mar 30, 2021 at 11:06:53AM +0000, Vaittinen, Matti wrote:
 
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index dcb34c73319e..b162964d2b39 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -561,8 +561,12 @@ int rtc_update_irq_enable(struct rtc_device *rtc, un=
-signed int enabled)
->  	if (rtc->uie_rtctimer.enabled =3D=3D enabled)
->  		goto out;
->=20=20
-> -	if (rtc->uie_unsupported) {
-> +	if (rtc->uie_unsupported || !test_bit(RTC_FEATURE_ALARM, rtc->features)=
-) {
-> +#ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
-> +		err =3D rtc_dev_update_irq_enable_emul(rtc, enabled);
-> +#else
->  		err =3D -EINVAL;
-> +#endif
->  		goto out;
->  	}
->=20=20
-> @@ -570,8 +574,8 @@ int rtc_update_irq_enable(struct rtc_device *rtc, uns=
-igned int enabled)
->  		struct rtc_time tm;
->  		ktime_t now, onesec;
->=20=20
-> -		rc =3D __rtc_read_time(rtc, &tm);
-> -		if (rc)
-> +		err =3D __rtc_read_time(rtc, &tm);
-> +		if (err)
->  			goto out;
->  		onesec =3D ktime_set(1, 0);
->  		now =3D rtc_tm_to_ktime(tm);
-> @@ -585,24 +589,6 @@ int rtc_update_irq_enable(struct rtc_device *rtc, un=
-signed int enabled)
->  out:
->  	mutex_unlock(&rtc->ops_lock);
->=20=20
-> -	/*
-> -	 * __rtc_read_time() failed, this probably means that the RTC time has
-> -	 * never been set or less probably there is a transient error on the
-> -	 * bus. In any case, avoid enabling emulation has this will fail when
-> -	 * reading the time too.
-> -	 */
-> -	if (rc)
-> -		return rc;
-> -
-> -#ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
-> -	/*
-> -	 * Enable emulation if the driver returned -EINVAL to signal that it has
-> -	 * been configured without interrupts or they are not available at the
-> -	 * moment.
-> -	 */
-> -	if (err =3D=3D -EINVAL)
-> -		err =3D rtc_dev_update_irq_enable_emul(rtc, enabled);
-> -#endif
->  	return err;
->  }
->  EXPORT_SYMBOL_GPL(rtc_update_irq_enable);
+> Do you think Lee could merge other but the regulator parts to MFD if
+> Mark is busy? I'd like to be able to squeeze the amount of patches and
+> recipients for future iterations. It might be easier to work directly
+> on regulator tree if regulator part gets delayed to next cycle. (I do
+> also plan further working with the GPIO part during 5.13-rc cycle to
+> utilize the regmap_gpio. That could be done in the GPIO tree then). I
+> think the other portions are in a pretty stable shape now.
 
-=2D-=20
-=C5=81ukasz Stelmach
-Samsung R&D Institute Poland
-Samsung Electronics
+This wouldn't be a bad idea in general for these serieses, especially
+the bigger ones or the ones that get a lot of review comments on some
+patches.
 
---=-=-=
+In any case, here's a pull request for the helpers that are added
+
+The following changes since commit 0d02ec6b3136c73c09e7859f0d0e4e2c4c07b49b:
+
+  Linux 5.12-rc4 (2021-03-21 14:56:43 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-list-ramp-helpers
+
+for you to fetch changes up to fb8fee9efdcf084d9e31ba14cc4734d97e5dd972:
+
+  regulator: Add regmap helper for ramp-delay setting (2021-04-02 18:33:59 +0100)
+
+----------------------------------------------------------------
+regulator: Add a new helper and export an existing one
+
+For new drivers.
+
+----------------------------------------------------------------
+Matti Vaittinen (2):
+      regulator: helpers: Export helper voltage listing
+      regulator: Add regmap helper for ramp-delay setting
+
+ drivers/regulator/helpers.c      | 101 +++++++++++++++++++++++++++++++++++----
+ include/linux/regulator/driver.h |   7 +++
+ 2 files changed, 100 insertions(+), 8 deletions(-)
+
+--EVcIhgQsEzAXu06J
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEXpuyqjq9kGEVr9UQsK4enJilgBAFAmBm8bwACgkQsK4enJil
-gBD42wf/UcrU2D9DLxVyCc1wtFCR+nbGigi/3pfka0FGhspMGjPhXlmbthkob3Eo
-hTPvfZCUjAZ1G6SV3ZgCrLqKzqiKmtYQLdfZKnH7i+p8t5Uc5CfbV/mhfupZbrS+
-PphJCO+sW/yiz0eeDLptDPhUhr7modWBsDS4+WK4o9AwBOXMZfKoJErn9UutTNIV
-EEevVHzXc00nlRt7MU5D6s8E1OIn8HXhEcBDJJ2DssqtOj2Xw7RncNfxUNyHg+Ke
-QpdAxH31lYRHnvQEpLEkcbqY3JkJpsOjpI2ID1+V69iIVeEQymw18C/Sbf9BYlSW
-Ns7y1JVtzTA/b//7RAOvJRDOD89pcQ==
-=sLOG
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBnblUACgkQJNaLcl1U
+h9BQEwf/RuI3X5ibi67PgHKtZBl58wGqUZfH+2oBTHq1nRZle8r/3i2I+o+Ifvd8
+BHC7PcWUW7ieEwXgntZnt9jTe2rQCdYsBHK1+VUJ43BDOH0wocz+/9voeVpoLQgu
+THWJLSayS9+jjv0knBuG8evSH4ddiRrnBJXq9fHHRYwqQukAXaAZLFYfF5N1cTnd
+b2oZoGeom7DBtrBh75tV8ZmrtvafigjoaZFOh+euYstYfjoNK4ZBmDxYtwX7qTfl
+yYOikVjMXeLCWLKmuR8rdjZ8NNnuduPl7ct8vx7DbkdIDt3ajwj+EkCs29mLc3RB
+JxucX6EF4NI4inJqd3+NVzpze3hU5A==
+=RfZr
 -----END PGP SIGNATURE-----
---=-=-=--
+
+--EVcIhgQsEzAXu06J--
