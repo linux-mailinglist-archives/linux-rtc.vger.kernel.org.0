@@ -2,113 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690D83541CF
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 13:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0C93542A1
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 16:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236561AbhDELpd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Apr 2021 07:45:33 -0400
-Received: from mail-lf1-f49.google.com ([209.85.167.49]:40534 "EHLO
-        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbhDELpX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Apr 2021 07:45:23 -0400
-Received: by mail-lf1-f49.google.com with SMTP id d13so16985053lfg.7;
-        Mon, 05 Apr 2021 04:45:16 -0700 (PDT)
+        id S237452AbhDEOOM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Apr 2021 10:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241261AbhDEOOM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Apr 2021 10:14:12 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BDFC061756
+        for <linux-rtc@vger.kernel.org>; Mon,  5 Apr 2021 07:14:06 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id c3so11567062qkc.5
+        for <linux-rtc@vger.kernel.org>; Mon, 05 Apr 2021 07:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UGAZDvikM3ntGj44hKL9ZLq+2otHE3NaBFg6ddjcMJY=;
+        b=LUqal+0ERi39JA7rpR3tVI7RKIcDLp1VJ03QZp4Li2cbz8QK4gJqqz2RuWYKBk0UXI
+         xkWO5GEvCucmPjfISmM7ZbFJHKxHHA4CKHtceuxLEVd/N66IbqdgyPHGTzhDG9DiXbYB
+         ljfHdgt/wAd3hrBb047hXQ8asayZvag7vQtoDR18Al7Fa2bbT/M+Sy8UsVZivs5n04M7
+         gHgiFsmPf2owscIZHK65USCNcjAVaZ3P9OeJFwcm5fyynAe1nl0p//ErqKpqqMCoTPTd
+         Kfk7433/VZftYGwuyx2gxrVV7iVkQXoW91Rv3MU2/mkw6HnDMNC/imOerpOLGBWxOZZ+
+         5K7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l508csWiRPsHhhFkiDj4WKmXTzwbXTp4twwhNiGLm5s=;
-        b=a4KnRb7xuusyaoQ9NQquwFuWst70XBhpZHR6UmRX1ynuP6/x4ej/6Y95bXbrc3OK+j
-         c04yqAElBL7OlbgcELIl9SnwEx/YiVjTU2f0/dAZCt0RczgZQ742ROMSTW8LyLjEK1ea
-         2rSmpVekt0wf1YZOZxFS5rGn+MCHHmFP6XzLpxVZPl4uwK24OkRXk3+OxBstOjP4xm6q
-         di21RKFCQbe5iFkYGHWjmhTgpYb0tDXmOC1PqwQTcLyTu8YxiPVPZR7W+58zMIDy/x/M
-         gZWxl1vdVg0V5lEINXgTKgbIses661nwgMZe2eVIqlk0NB1xF6MrYdWVrTeYWIM+g2rZ
-         5vrg==
-X-Gm-Message-State: AOAM5335PSvs0r5EV29Zl+WK6eLzrlK60x7ua9J7tFEEU67yUqSJAtMV
-        /g8Y7jZGlgF+5r2S+OoDxLw=
-X-Google-Smtp-Source: ABdhPJwOBXlWO51mNBcMv+/SkalTVJR70Sugq/7ja2aEXJ//BuyZMDd+OtoEsomPBcIJczn+6u9rZg==
-X-Received: by 2002:a19:23c7:: with SMTP id j190mr17339229lfj.148.1617623115513;
-        Mon, 05 Apr 2021 04:45:15 -0700 (PDT)
-Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
-        by smtp.gmail.com with ESMTPSA id p10sm1877391ljg.99.2021.04.05.04.45.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UGAZDvikM3ntGj44hKL9ZLq+2otHE3NaBFg6ddjcMJY=;
+        b=SIpToi4rcUHIflCVrwXEqz7qqHYSTi4ISaYI8xUMcUvihxZx1Dy5A7AeXy/CDwGu/s
+         4t5OS3SqmkIhAbqfAo4CE9sOfbaycYI8yx5F5u/5p/6PPe2VK4QPD5sfiJe3EcHF/IvV
+         YXc5K71Ek7AhWla0WMR6GZOtjXFLrJdzbnJk8UMBPnJ5guzET8vkYjKbEitJ9hZXs803
+         2bWL707/OhH6CY0TbnPxw71LjDx3JOUtesgaMlA+ACbiykuBRWgoYngyp+6pe76Wv0qd
+         vIQaSEHG5L4eVZRB48H2mz5TLJcgWrMBcxmQQe0vIWB30YontU6FEUjaf/2dVmk7h+Ya
+         cSvQ==
+X-Gm-Message-State: AOAM530whBKVTSb4ylpg/R2q0nJzauWAPo9XPloF2nteTmH24kWPvszE
+        p53IGV7kMKut5ZBhAoVt0BM=
+X-Google-Smtp-Source: ABdhPJwAU5AfAFh6oF+2GSE0iBhDZWJp7D7e5DoDFsdex4HTay8hRfHEzb+FXLKtOUHUYSsKPv/1/Q==
+X-Received: by 2002:a37:a785:: with SMTP id q127mr23885424qke.425.1617632045722;
+        Mon, 05 Apr 2021 07:14:05 -0700 (PDT)
+Received: from shaak.xiphos.ca (198-48-202-89.cpe.pppoe.ca. [198.48.202.89])
+        by smtp.gmail.com with ESMTPSA id h14sm11970633qtx.64.2021.04.05.07.14.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Apr 2021 04:45:14 -0700 (PDT)
-Date:   Mon, 5 Apr 2021 14:45:09 +0300
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v6 16/16] MAINTAINERS: Add ROHM BD71815AGW
-Message-ID: <c71f80a7b34d3ee09d0ef928a3d2803786ce0fe1.1617616855.git.matti.vaittinen@fi.rohmeurope.com>
-References: <cover.1617616855.git.matti.vaittinen@fi.rohmeurope.com>
+        Mon, 05 Apr 2021 07:14:05 -0700 (PDT)
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     liambeguin@gmail.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, panfilov.artyom@gmail.com
+Cc:     linux-rtc@vger.kernel.org
+Subject: [PATCH v1 0/4] add alarm support for the rtc-ab-eoz9
+Date:   Mon,  5 Apr 2021 10:13:30 -0400
+Message-Id: <20210405141334.3884528-1-liambeguin@gmail.com>
+X-Mailer: git-send-email 2.30.1.489.g328c10930387
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1617616855.git.matti.vaittinen@fi.rohmeurope.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add maintainer entries for ROHM BD71815AGW drivers.
-New regulator and GPIO drivers were introduced for these PMICs.
+From: Liam Beguin <lvb@xiphos.com>
 
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
----
-Changes since v3:
- - No changes
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+Add alarm support for the rtc-ab-eoz9.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c80ad735b384..4176880a4eee 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15446,18 +15446,21 @@ F:	Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic.txt
- F:	Documentation/devicetree/bindings/regulator/rohm,bd70528-regulator.txt
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd70528.c
-+F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd70528.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/power/supply/bd70528-charger.c
- F:	drivers/regulator/bd70528-regulator.c
-+F:	drivers/regulator/bd71815-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd70528_wdt.c
- F:	include/linux/mfd/rohm-bd70528.h
-+F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
- F:	include/linux/mfd/rohm-generic.h
+The board used to test this series has the interrupt line of the RTC
+connected to a circuit controlling the power of the board.
+
+An event on the interrupt line while the board is off will power it on.
+Because of these hardware limitations, the irq handler added in this
+patch wasn't fully tested.
+
+The alarm functionality was tested, with:
+
+	$ date "2010-10-10 10:10"
+	Sun Oct 10 10:10:00 UTC 2010
+	$ /usr/sbin/rtcwake -u -d /dev/rtc0  -s20 --mode off
+	[ ... ]
+	$ # power on after 20 seconds
+
+
+Liam Beguin (4):
+  rtc: ab-eoz9: make use of regmap local variable
+  rtc: ab-eoz9: set regmap max_register
+  rtc: ab-eoz9: add alarm support
+  rtc: ab-eoz9: make use of RTC_FEATURE_ALARM
+
+ drivers/rtc/rtc-ab-eoz9.c | 149 ++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 141 insertions(+), 8 deletions(-)
+
+
+base-commit: e49d033bddf5b565044e2abe4241353959bc9120
 -- 
-2.25.4
+2.30.1.489.g328c10930387
 
-
--- 
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =] 
