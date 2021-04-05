@@ -2,59 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0C93542A1
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 16:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2DA3542A2
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 16:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237452AbhDEOOM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Apr 2021 10:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S235848AbhDEOOU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Apr 2021 10:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241261AbhDEOOM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Apr 2021 10:14:12 -0400
+        with ESMTP id S235763AbhDEOOU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Apr 2021 10:14:20 -0400
 Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BDFC061756
-        for <linux-rtc@vger.kernel.org>; Mon,  5 Apr 2021 07:14:06 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id c3so11567062qkc.5
-        for <linux-rtc@vger.kernel.org>; Mon, 05 Apr 2021 07:14:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581C6C061756
+        for <linux-rtc@vger.kernel.org>; Mon,  5 Apr 2021 07:14:14 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id c3so11567592qkc.5
+        for <linux-rtc@vger.kernel.org>; Mon, 05 Apr 2021 07:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UGAZDvikM3ntGj44hKL9ZLq+2otHE3NaBFg6ddjcMJY=;
-        b=LUqal+0ERi39JA7rpR3tVI7RKIcDLp1VJ03QZp4Li2cbz8QK4gJqqz2RuWYKBk0UXI
-         xkWO5GEvCucmPjfISmM7ZbFJHKxHHA4CKHtceuxLEVd/N66IbqdgyPHGTzhDG9DiXbYB
-         ljfHdgt/wAd3hrBb047hXQ8asayZvag7vQtoDR18Al7Fa2bbT/M+Sy8UsVZivs5n04M7
-         gHgiFsmPf2owscIZHK65USCNcjAVaZ3P9OeJFwcm5fyynAe1nl0p//ErqKpqqMCoTPTd
-         Kfk7433/VZftYGwuyx2gxrVV7iVkQXoW91Rv3MU2/mkw6HnDMNC/imOerpOLGBWxOZZ+
-         5K7A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qkYrLuIJtmzdFA+UITP1gB3xB15FAR1oaiWoAmYgfGU=;
+        b=P//iaUv8377+FjSXFeotOegZtDT6/8RFkxHO3eZ28KLNBfgFQ3CXJRdsUFMzYHm1Wv
+         JcdKoW80ODuieNuApK9qNmsZS+VPOlAMSfIYC/f+miaWwi8tcJYNBhsze+aSIsSIIVRW
+         vbAnjNuIcrGPlg1hmC3MQZRRYC/iCzCyL2ihju9bs68BX5W4irJu79VTaSkAV0lgcMnV
+         UPQW8PLjOb2dn0xjwWOI+6apue9IY7/EXI3I0sRT7j5ITDhlqwJqgOi8Nj5za3R9u678
+         WB/PugEnX80ILl92m6oLKZwLY/b5LLHl2v1Kd4YycKCIc8bV5Di1ty2jsY0jfgKPecJ1
+         Pp1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UGAZDvikM3ntGj44hKL9ZLq+2otHE3NaBFg6ddjcMJY=;
-        b=SIpToi4rcUHIflCVrwXEqz7qqHYSTi4ISaYI8xUMcUvihxZx1Dy5A7AeXy/CDwGu/s
-         4t5OS3SqmkIhAbqfAo4CE9sOfbaycYI8yx5F5u/5p/6PPe2VK4QPD5sfiJe3EcHF/IvV
-         YXc5K71Ek7AhWla0WMR6GZOtjXFLrJdzbnJk8UMBPnJ5guzET8vkYjKbEitJ9hZXs803
-         2bWL707/OhH6CY0TbnPxw71LjDx3JOUtesgaMlA+ACbiykuBRWgoYngyp+6pe76Wv0qd
-         vIQaSEHG5L4eVZRB48H2mz5TLJcgWrMBcxmQQe0vIWB30YontU6FEUjaf/2dVmk7h+Ya
-         cSvQ==
-X-Gm-Message-State: AOAM530whBKVTSb4ylpg/R2q0nJzauWAPo9XPloF2nteTmH24kWPvszE
-        p53IGV7kMKut5ZBhAoVt0BM=
-X-Google-Smtp-Source: ABdhPJwAU5AfAFh6oF+2GSE0iBhDZWJp7D7e5DoDFsdex4HTay8hRfHEzb+FXLKtOUHUYSsKPv/1/Q==
-X-Received: by 2002:a37:a785:: with SMTP id q127mr23885424qke.425.1617632045722;
-        Mon, 05 Apr 2021 07:14:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qkYrLuIJtmzdFA+UITP1gB3xB15FAR1oaiWoAmYgfGU=;
+        b=Q2tvRKr4HEHcUCbrIpu0XWJ8NNlGjWhpYAMYKptkxK/U4Jk7r41ZKiEo2Z//k6XQgy
+         oVU1uyH6XxKMA0n6nQ6D6nEkvjZpvitBglmzHko7vYE4uUAEBxIcOM1/fUrjzsW7m8PL
+         zYEOgJlAhuuRd3bM/UPNJ9UB8lOWSkeDgO5fJfPhSMZmZVJo183B/VMKvx4N/nNVtmGK
+         chpAh97H6cRWWttW1iTlUvMB7T/eeZowBZZqDa8Vd8yOZkz7RtXCIw/MhlYsuRP1JV21
+         Wesy6UaFoC8CJvXFKwmf5GAQVQUNdinHNbE6Mdq3DLqNeKec/9QHPLIc4Cg8fFqIw/+p
+         5y9A==
+X-Gm-Message-State: AOAM530KUjoyZu0gc2t+GuFMz1RKiRZ3F3IZ4ZGba0u3VFmjSpKRohi4
+        UfJsKoM/PmGQKUaQjnbljKPPA1v9LI2REg==
+X-Google-Smtp-Source: ABdhPJw07B8DzMJ0S7PPUKxcPNJ322v6YHsOpPr1IoKSsnvcHRk5I58+9xt+96jNWTb/DsDZrwLr1w==
+X-Received: by 2002:a05:620a:13db:: with SMTP id g27mr25146599qkl.367.1617632053661;
+        Mon, 05 Apr 2021 07:14:13 -0700 (PDT)
 Received: from shaak.xiphos.ca (198-48-202-89.cpe.pppoe.ca. [198.48.202.89])
-        by smtp.gmail.com with ESMTPSA id h14sm11970633qtx.64.2021.04.05.07.14.04
+        by smtp.gmail.com with ESMTPSA id h14sm11970633qtx.64.2021.04.05.07.14.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Apr 2021 07:14:05 -0700 (PDT)
+        Mon, 05 Apr 2021 07:14:12 -0700 (PDT)
 From:   Liam Beguin <liambeguin@gmail.com>
 To:     liambeguin@gmail.com, a.zummo@towertech.it,
         alexandre.belloni@bootlin.com, panfilov.artyom@gmail.com
 Cc:     linux-rtc@vger.kernel.org
-Subject: [PATCH v1 0/4] add alarm support for the rtc-ab-eoz9
-Date:   Mon,  5 Apr 2021 10:13:30 -0400
-Message-Id: <20210405141334.3884528-1-liambeguin@gmail.com>
+Subject: [PATCH v1 1/4] rtc: ab-eoz9: make use of regmap local variable
+Date:   Mon,  5 Apr 2021 10:13:31 -0400
+Message-Id: <20210405141334.3884528-2-liambeguin@gmail.com>
 X-Mailer: git-send-email 2.30.1.489.g328c10930387
+In-Reply-To: <20210405141334.3884528-1-liambeguin@gmail.com>
+References: <20210405141334.3884528-1-liambeguin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -63,35 +65,48 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Liam Beguin <lvb@xiphos.com>
 
-Add alarm support for the rtc-ab-eoz9.
+Make use of the regmap local variable to shorten long lines.
 
-The board used to test this series has the interrupt line of the RTC
-connected to a circuit controlling the power of the board.
+Signed-off-by: Liam Beguin <lvb@xiphos.com>
+---
+ drivers/rtc/rtc-ab-eoz9.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-An event on the interrupt line while the board is off will power it on.
-Because of these hardware limitations, the irq handler added in this
-patch wasn't fully tested.
-
-The alarm functionality was tested, with:
-
-	$ date "2010-10-10 10:10"
-	Sun Oct 10 10:10:00 UTC 2010
-	$ /usr/sbin/rtcwake -u -d /dev/rtc0  -s20 --mode off
-	[ ... ]
-	$ # power on after 20 seconds
-
-
-Liam Beguin (4):
-  rtc: ab-eoz9: make use of regmap local variable
-  rtc: ab-eoz9: set regmap max_register
-  rtc: ab-eoz9: add alarm support
-  rtc: ab-eoz9: make use of RTC_FEATURE_ALARM
-
- drivers/rtc/rtc-ab-eoz9.c | 149 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 141 insertions(+), 8 deletions(-)
-
-
-base-commit: e49d033bddf5b565044e2abe4241353959bc9120
+diff --git a/drivers/rtc/rtc-ab-eoz9.c b/drivers/rtc/rtc-ab-eoz9.c
+index b20d8f26dcdb..2568984fb8d3 100644
+--- a/drivers/rtc/rtc-ab-eoz9.c
++++ b/drivers/rtc/rtc-ab-eoz9.c
+@@ -124,6 +124,7 @@ static int abeoz9_reset_validity(struct regmap *regmap)
+ static int abeoz9_rtc_get_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct abeoz9_rtc_data *data = dev_get_drvdata(dev);
++	struct regmap *regmap = data->regmap;
+ 	u8 regs[ABEOZ9_SEC_LEN];
+ 	int ret;
+ 
+@@ -131,9 +132,7 @@ static int abeoz9_rtc_get_time(struct device *dev, struct rtc_time *tm)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = regmap_bulk_read(data->regmap, ABEOZ9_REG_SEC,
+-			       regs,
+-			       sizeof(regs));
++	ret = regmap_bulk_read(regmap, ABEOZ9_REG_SEC, regs, sizeof(regs));
+ 	if (ret) {
+ 		dev_err(dev, "reading RTC time failed (%d)\n", ret);
+ 		return ret;
+@@ -174,10 +173,7 @@ static int abeoz9_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	regs[ABEOZ9_REG_MONTHS - ABEOZ9_REG_SEC] = bin2bcd(tm->tm_mon + 1);
+ 	regs[ABEOZ9_REG_YEARS - ABEOZ9_REG_SEC] = bin2bcd(tm->tm_year - 100);
+ 
+-	ret = regmap_bulk_write(data->regmap, ABEOZ9_REG_SEC,
+-				regs,
+-				sizeof(regs));
+-
++	ret = regmap_bulk_write(regmap, ABEOZ9_REG_SEC, regs, sizeof(regs));
+ 	if (ret) {
+ 		dev_err(dev, "set RTC time failed (%d)\n", ret);
+ 		return ret;
 -- 
 2.30.1.489.g328c10930387
 
