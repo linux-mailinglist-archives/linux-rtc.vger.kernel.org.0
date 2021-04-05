@@ -2,158 +2,209 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EED7B353BB5
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 07:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A7635419C
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Apr 2021 13:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbhDEFYu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Apr 2021 01:24:50 -0400
-Received: from mail-vi1eur05on2046.outbound.protection.outlook.com ([40.107.21.46]:51681
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232065AbhDEFXw (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 5 Apr 2021 01:23:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c2nRNkoZ/1LwJ9zHvEa3C/OAn6WiHzx5NXA2l916IHEAD4nw2y8lQjFFgwuclGksGl/OkKqbilrBZXyyMz6YV2EVi8CuV7ronbOPLGjmImCyNApldR9Ru6kgPepJhCu2omV5EJFCHFhzwQWAQd0x/BPAF4tIddoLH0kLtYGarefd1fvC3dSyoH7t3XrM7jWjgyZtvkhlRFgijR91Cv9Iqe8x23FCfOFa1Wdcuz4dSbFJtMkqEcMa7ybjIjZOhuqPdxUZ6d6e6CxQv7KHkp1sMC/zR9dh4klgib41SznpBiIp3O3/E8KhhZ4wDuee8HAjiPahRebhwgq3CtSAPKi52g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iWCjWZVRjvaGodqNylLB0EssfajXZTgpOwyRLrRLYDU=;
- b=TTASRbMKZOpMuyycxEmjEy5qGTyW2IXmMe+S68IHpS6r/38CBS11NZjOEctM0gO95etiVRZ3aXR6Us/bz1irZeS+mGE618+gQ2EWsHYRP3b/ubl+3w/mBTY5CTC9+vQlOCuu5kzGe4r0hEyaKO91038+73yiYhz59aC7nCC1fWJZHxYXyjOt077aKoH34hi/IjWp/2CqhINw4+9ppvxqJf+/fwQC60kYyhV4ej+SnCeOhGGgT10NshMfSq+bRIYlJTH/0CqsHCTOMauATyjvxafdC0LgJXHN2tc2sMWdBuKk6VFfUeVKZTll1U7WnuDcbyZZmd6sI8GkRyWc4O4+Vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iWCjWZVRjvaGodqNylLB0EssfajXZTgpOwyRLrRLYDU=;
- b=ee70KcWNCCoiYVFOxklXilpkLr76GQu/ahpCoo4OAjNl2IaJYG5OUaOnEp2EM8LfhAVFbm7aDwWyrn5KaQIzNKwzJY/P2EtVuj6/iHrtQb8i3Hu7ts40/Df3EjY6iKJufoJ32rC3WwsxFxAkFs5r3JT7g8OmmDX2/xluzfP8NN0=
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com (2603:10a6:7:55::20) by
- HE1PR0301MB2396.eurprd03.prod.outlook.com (2603:10a6:3:67::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3999.32; Mon, 5 Apr 2021 05:23:41 +0000
-Received: from HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::f4d0:ee66:d5fb:9cdd]) by HE1PR03MB3162.eurprd03.prod.outlook.com
- ([fe80::f4d0:ee66:d5fb:9cdd%3]) with mapi id 15.20.3999.032; Mon, 5 Apr 2021
- 05:23:41 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "broonie@kernel.org" <broonie@kernel.org>
-CC:     "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH v5 00/19] Support ROHM BD71815 PMIC
-Thread-Topic: [PATCH v5 00/19] Support ROHM BD71815 PMIC
-Thread-Index: AQHXJJps4G37QdCWoUakTStXWzuSFqqcYF4AgAVAugCAA81egA==
-Date:   Mon, 5 Apr 2021 05:23:41 +0000
-Message-ID: <e0b83eee4417e4e267b15a8c22bbc7f70df919e9.camel@fi.rohmeurope.com>
-References: <cover.1617020713.git.matti.vaittinen@fi.rohmeurope.com>
-         <303b164aaa3d36cf8c9d03ee9b3863635be4073d.camel@fi.rohmeurope.com>
-         <20210402191950.GK5402@sirena.org.uk>
-In-Reply-To: <20210402191950.GK5402@sirena.org.uk>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [2001:14ba:16e2:8300::6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 595c90c5-15fb-41ac-3220-08d8f7f2f99f
-x-ms-traffictypediagnostic: HE1PR0301MB2396:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <HE1PR0301MB2396108C9E03B0A09D2BAEC1AD779@HE1PR0301MB2396.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bi3+rPEC3WHykCG861/puXSHl1hF/cqkjDtDTvkerweAVnVM9VcxAuogkF9wTALtXzhmqib9A5XaJmZUnU202haB+0LwQ8canOUbT7ZTaaiGyDVMxug1U98WsvSVyBVPnfZBEGCFWLEPW6WUM2LU4gR2ZUoEYz60h3hItN4Fo17YrEJ4qwYELABUt2IR38AyjnHT12g23xfT/eVGVfBHHFlSXH56jHOIp6tTf4laNlJKTKjSKWyfVkaFMCe/JQzmLDd+hS5LEueVnYgRWN7yrEJh8lMiJFc4o4ADm5F+AdgF/tJ03efurLJteA94lRJaTx1GeCDWu/SwiBXoPNyy6Bsc7JzHGdtHh8fljkgFL5pD1WqlayUMzDA7fTQicnkJQK60rsJx1vznPVxHfNL2Hb3s2qAb+2ksXeUytnRhMopOU2x6Foh9SvAeHx3w6EVNn8YUcGTI9oncfVhNFwDCE0zapneItsjVNvdeRJ0GoMhE/XZjlLkPWflafbn5yzoDfaKL6B+2gW65b4my+mBwLYwBGAGWnAiJE5VXZcK+BW/8qAus1oU5MiFgw7jhCD4xGMKQmzKoaeMwguSPDcjHwz4XxuOhK3mmwOy71Z7NMx69r+6CiR6n8DPB9wT4AEn5k+L8tWBOQExCtE63+M2GoKNJf8PVUOd7I8YuuxQk27c=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR03MB3162.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39840400004)(376002)(136003)(346002)(396003)(478600001)(6512007)(7416002)(86362001)(2616005)(6486002)(71200400001)(6506007)(186003)(76116006)(5660300002)(6916009)(38100700001)(66476007)(3450700001)(66446008)(4326008)(64756008)(66556008)(2906002)(8676002)(316002)(8936002)(66946007)(83380400001)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?R3g2S21jQ1RFWkpVeXFDdVZjdy9KaTRwdmR4R2RaZThXTVJoRThkUTVWOWtO?=
- =?utf-8?B?a0szVzAxVnJyRENTN1U0Y0VtOElhOHROV09vUS8vT1VvUzJPZkVxYU5HWTVu?=
- =?utf-8?B?K1BJWFYvaTNmbGIrWkdBdDljS2Y5eE5pdDNiVG5YMTNRcDc4TmJZNEgwekZn?=
- =?utf-8?B?Q3U3N3dPU2ZBSXhjd0tieDZxS0ZKOGxnb3pLeEhRNUVKRXRoU2tSRzNsdkxL?=
- =?utf-8?B?b0tmc1NXamlUQklyMDlqbTNITmhwK0dseXRKQ3RkSk5uWXJ0SEg2RXdQMW9t?=
- =?utf-8?B?NkZKK2MzaVR4b0RjQlpNMVl1WW1nSVkwdzROSWgvRFdSQjA1emkrQUFQaDg0?=
- =?utf-8?B?VUszTURlbExJMzZpZVkweE10bEZoNkV5dHdxYkQyN3NIdklTWUo0NXl2bE1T?=
- =?utf-8?B?SHNzb2VuS3o5NFlkbU8wM0o3ZVNVUDNlUlJmK3FUZXA0Z2xDc3hjSzJFb3dT?=
- =?utf-8?B?aUlIbENObTUzckoyM3lBR3RJcmw1cUl1QjVER24wYU9RU3gyM3gwVDBEQU91?=
- =?utf-8?B?WVlRYUFTRVY3bERRbVU4UWYvak4vTHY1RGpTczdTNGZFK2FWRzR5NWd1ZFds?=
- =?utf-8?B?MEovWVBISlRQNGlYQ1FCdE1qS1d6U3c2REFSaS9TTWdzRHdXL2RYSUpyTndD?=
- =?utf-8?B?blNLaEVyeGJHRkFSYjhXZWRIQTJHc05sL1RHR08rdmZ6TW5Ed0l4bGhXY3lu?=
- =?utf-8?B?dnp5bG1HRjk4UVMxNlliTkNwWitvem5NQTVKMXBEaFY3WmRaeXRaTVR5MnZq?=
- =?utf-8?B?emR5dWVLODZ3OGEwaXB4S0h0SGhDb2ZVdm9VYmY2UHFGTWkveXE5Mm0yZkNu?=
- =?utf-8?B?Ums2TUNwQWs3WUZDaGRKZloyMklxb29JSU85U0IxK2JLTi9CbHg2dE5rVzM2?=
- =?utf-8?B?QStRQjIrMWdRbTE5SHJMSnIxY0MwMGVNNEZjTDB1c0xPWE5kOXpwM1RPQzZW?=
- =?utf-8?B?ODVybEcvU0lYVHdTM2VPVEoveFVvN2NNZUkzcGhYby9vUWhJcTQyOWhvcWtS?=
- =?utf-8?B?V3NLVGVBT1RRYUJ1UDFFcWdqZTBERFgwV0pGeG4zVmo3Zi8wWWp5am9mREZE?=
- =?utf-8?B?WGU4VUhqSzRvTUlWT2kvUjVyYUdYVUZFcmU1bWNENUFkNnpuQjgxSjFHZ1lX?=
- =?utf-8?B?eTVKQlpobkZLNEk4Z1IwbXFBRTdRbHVZZVAveks5S2tGV0NzQTJRN21hMDZV?=
- =?utf-8?B?Vk5pd2dNeTNnVmNCYmZ1Nm1zQU02NWliVjNvNzJWNmJueHNpczVoMkI3RUdj?=
- =?utf-8?B?bUhHQTAxVU1uK0I4UDgzY3FaRVNRc24zSHFEMmIzaHN3M0VQUGxndGJmSTcw?=
- =?utf-8?B?NzhJaXBkYU04dXJ4S3pSR0xYMzBzQ2FWZUxKcHcxRWdPOGNFWDEycE9rRENF?=
- =?utf-8?B?L1dCZ2d2K3d0by9mQWdKTWIvekoxRXgxYmRXZWFhcCtlbU43bDJEN0lNL0Fz?=
- =?utf-8?B?ZUdTdi84NlkvQ2FHWTJ5eStLOXRZKzBhMnp3dW1GQlhxUEgrdlk0WmxicmFZ?=
- =?utf-8?B?U24yV0pEQzd2OHFtREE5UXorclM2Y0ZNeGZMcUgzZ1dWOXhvMGVmUVJPdVdY?=
- =?utf-8?B?N0VpdnFDS1dBOEpBcmZSM1Vqa1VXVDF5TlU3TmIzVnNZRGNsMHBrN1VwQ05S?=
- =?utf-8?B?blJuZnAwRXhmQkNlOEJMdW9JU2t1WUt5TzhYUjlRYktkTVovS2grQ1NBQjIv?=
- =?utf-8?B?OU8rODQ0UG9CemEzSGQrcWVTakNzME0vMkpoQkFDcVJIbWRmU2IybldZZ0Rk?=
- =?utf-8?B?VjJla1UyU3d4TUMxUURkV3BES1VQME9NaXNXR1RQaHkyTTlYZ0hmZ2pFNGV6?=
- =?utf-8?Q?gbMj5hMaMqbtAVYx/E1YiZRqblSWNQO/oMGlM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EF6A72578D7386489178652C8B359CBE@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S232569AbhDELkW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Apr 2021 07:40:22 -0400
+Received: from mail-lf1-f43.google.com ([209.85.167.43]:44642 "EHLO
+        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232755AbhDELkW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Apr 2021 07:40:22 -0400
+Received: by mail-lf1-f43.google.com with SMTP id d12so16929100lfv.11;
+        Mon, 05 Apr 2021 04:40:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=zIXXSCqMXDob1DAPG5CCbwNP2i92dYCSQ1Gjx9Ia5QE=;
+        b=A6NrUmbdslsnvgPJDt5MOGd/dgX7GjJe8s579FSpuKS/dRImVc1umbgc2OhsaifYAZ
+         vKJ8HnlFd+p6XubGdI14PE64cPqeTcipDoZ88+ah44qVsaTsXxRUZjiv1Rln242T0axz
+         1BxUEG4cap3HxW2ju/O1dRRyKBOwhaDxFNncBM/ioK126pcka1ReQd33O3twTNeOccSr
+         jMjPXqgttjtftmK9Ni/G4XLdYbGkxBPLt/7B3FC6XWrdSrkU+Ltiqklonm+5m2JIYWlR
+         5zQCzCIwgT9frDt76lQNWbRJU3G8WLx/SjYTCDfd9jqB6hw/v6eisAO1ajd8h9uVcpwW
+         XL/A==
+X-Gm-Message-State: AOAM532ad7FP4z2P42DdyYVAtUchHRRxG8cmyRcC3z8xub8EZ8cIaSnX
+        ilBi+P3EPz/pvp9aiwH5PHQ=
+X-Google-Smtp-Source: ABdhPJwKaAC8+FP0vP4kjp8sh+KI9jXnex5lyylHDRAC4RmeaqgtD6ACmuyVwhKzaUDsF/vFYgb2NA==
+X-Received: by 2002:a05:6512:504:: with SMTP id o4mr16628598lfb.438.1617622814783;
+        Mon, 05 Apr 2021 04:40:14 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::6])
+        by smtp.gmail.com with ESMTPSA id r3sm1842666ljn.13.2021.04.05.04.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Apr 2021 04:40:13 -0700 (PDT)
+Date:   Mon, 5 Apr 2021 14:40:06 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v6 00/16] Support ROHM BD71815 PMIC
+Message-ID: <cover.1617616855.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR03MB3162.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 595c90c5-15fb-41ac-3220-08d8f7f2f99f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2021 05:23:41.3432
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vqNFKQIdYdGkjZP/wMglUaGbYqdzDVMWCmnBbh5wQ1VzwO6thoLokc9gLjxmE1DX1ues+vY/GGlqFQmC0Tg0euvbibKTsgBG2XXONfkl+ZNvypUr7ZrHktFUM46RU0oW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR0301MB2396
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBGcmksIDIwMjEtMDQtMDIgYXQgMjA6MTkgKzAxMDAsIE1hcmsgQnJvd24gd3JvdGU6DQo+
-IE9uIFR1ZSwgTWFyIDMwLCAyMDIxIGF0IDExOjA2OjUzQU0gKzAwMDAsIFZhaXR0aW5lbiwgTWF0
-dGkgd3JvdGU6DQo+IA0KPiA+IERvIHlvdSB0aGluayBMZWUgY291bGQgbWVyZ2Ugb3RoZXIgYnV0
-IHRoZSByZWd1bGF0b3IgcGFydHMgdG8gTUZEDQo+ID4gaWYNCj4gPiBNYXJrIGlzIGJ1c3k/IEkn
-ZCBsaWtlIHRvIGJlIGFibGUgdG8gc3F1ZWV6ZSB0aGUgYW1vdW50IG9mIHBhdGNoZXMNCj4gPiBh
-bmQNCj4gPiByZWNpcGllbnRzIGZvciBmdXR1cmUgaXRlcmF0aW9ucy4gSXQgbWlnaHQgYmUgZWFz
-aWVyIHRvIHdvcmsNCj4gPiBkaXJlY3RseQ0KPiA+IG9uIHJlZ3VsYXRvciB0cmVlIGlmIHJlZ3Vs
-YXRvciBwYXJ0IGdldHMgZGVsYXllZCB0byBuZXh0IGN5Y2xlLiAoSQ0KPiA+IGRvDQo+ID4gYWxz
-byBwbGFuIGZ1cnRoZXIgd29ya2luZyB3aXRoIHRoZSBHUElPIHBhcnQgZHVyaW5nIDUuMTMtcmMg
-Y3ljbGUNCj4gPiB0bw0KPiA+IHV0aWxpemUgdGhlIHJlZ21hcF9ncGlvLiBUaGF0IGNvdWxkIGJl
-IGRvbmUgaW4gdGhlIEdQSU8gdHJlZSB0aGVuKS4NCj4gPiBJDQo+ID4gdGhpbmsgdGhlIG90aGVy
-IHBvcnRpb25zIGFyZSBpbiBhIHByZXR0eSBzdGFibGUgc2hhcGUgbm93Lg0KPiANCj4gVGhpcyB3
-b3VsZG4ndCBiZSBhIGJhZCBpZGVhIGluIGdlbmVyYWwgZm9yIHRoZXNlIHNlcmllc2VzLCBlc3Bl
-Y2lhbGx5DQo+IHRoZSBiaWdnZXIgb25lcyBvciB0aGUgb25lcyB0aGF0IGdldCBhIGxvdCBvZiBy
-ZXZpZXcgY29tbWVudHMgb24gc29tZQ0KPiBwYXRjaGVzLg0KPiANCj4gSW4gYW55IGNhc2UsIGhl
-cmUncyBhIHB1bGwgcmVxdWVzdCBmb3IgdGhlIGhlbHBlcnMgdGhhdCBhcmUgYWRkZWQNCg0KVGhh
-bmtzIE1hcmsuDQoNCj4gTWF0dGkgVmFpdHRpbmVuICgyKToNCj4gICAgICAgcmVndWxhdG9yOiBo
-ZWxwZXJzOiBFeHBvcnQgaGVscGVyIHZvbHRhZ2UgbGlzdGluZw0KPiAgICAgICByZWd1bGF0b3I6
-IEFkZCByZWdtYXAgaGVscGVyIGZvciByYW1wLWRlbGF5IHNldHRpbmcNCj4gDQoNCklmIEkgdW5k
-ZXJzdGFuZCB0aGlzIGNvcnJlY3RseSwgdGhlIGlkZWEgaXMgdGhhdCBMZWUgY291bGQgcHVsbCB0
-aGVzZQ0KY2hhbmdlcyB0byBoaXMgdHJlZT8gU28sIEkgd2lsbCBkcm9wIHRoZXNlIHR3byBwYXRj
-aGVzIGZyb20gdGhlIHNlcmllcw0Kd2hlbiBJIHJlc2VuZCBpdC4gSGVscGVycyBhcmUgbmVlZGVk
-IGZvciB0aGUgcmVndWxhdG9yIHBhcnQgb2YgdGhlDQpzZXJpZXMgdG8gYXBwbHkuIExlZSwgTWFy
-aywgcGxlYXNlIGxldCBtZSBrbm93IGlmIEkgbWlzdW5kZXJzdG9vZC4NCg0KDQpCZXN0IFJlZ2Fy
-ZHMNCglNYXR0aSBWYWl0dGluZW4NCg0K
+Patch series introducing support for ROHM BD71815 PMIC
+
+ROHM BD71815 is a power management IC used in some battery powered
+systems. It contains regulators, GPO(s), charger + coulomb counter, RTC
+and a clock gate.
+
+All regulators can be controlled via I2C. LDO4 can additionally be set to
+be enabled/disabled by a GPIO. LDO3 voltage could be selected from two
+voltages written into separate VSEL reisters using GPIO but this mode is
+not supported by driver. On top of that the PMIC has the typical HW
+state machine which is present also on many other ROHM PMICs.
+
+IC contains two GPOs - but one of the GPOs is marked as GND in
+data-sheet. Thus the driver by default only exposes one GPO. The second
+GPO can be enabled by special DT property.
+
+RTC is almost similar to what is on BD71828. For currently used features
+only the register address offset to RTC block differs.
+
+The charger driver is not included in this series. ROHM has a charger
+driver with some fuel-gauging logig written in but this is not included
+here. I am working on separating the logic from HW specific driver and
+supporting both BD71815 and BD71828 chargers in separate patch series.
+
+Changelog v6:
+  Rebased on v5.12-rc6
+  Regulator:
+   - Fixed few minor issues pointer by Mark
+   - Dropped the helper patches which were applied to regulator tree.
+     Please note, there is compile-time dependency to those helpers so
+     regulator helpers should be pulled in from:
+     https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git
+     tags/regulator-list-ramp-helpers
+  GPIO:
+   - Corrected change log spelling
+   - Fixes some styling issues pointed by Andy.
+Changelog v5:
+  Regulator:
+  - Added regmap helper for regulator ramp-delay and taken it in use
+    (patches 13, 14, 16 - they can be just dropped if ramp-delay helper is not
+    a good idea. Patch 15 implements old-fashioned ramp-delay)
+  GPIO:
+  - styling changes to GPIO (Mostly suggested by Andy)
+  - implemented init_valid_mask (but can't count on it yet)
+Changelog v4:
+  - Sorted ROHM chip ID enum
+  - Statcized DVS structures in regulator driver
+  - Minor styling for regulator driver
+  - rebased on v5.12-rc4
+Changelog v3:
+  - GPIO clean-up as suggested by Bartosz
+  - MFD clean-up as suggested by Lee
+  - clk-mode dt-binding handling in MFD driver corrected to reflect new
+    property values.
+  - Dropped already applied patches
+  - Rebased on v5.12-rc2
+Changelog v2:
+  - Rebased on top of v5.11-rc3
+  - Added another "preliminary patch" which fixes HW-dvs voltage
+    handling (patch 1)
+  - split regulator patch to two.
+  - changed dt-binding patch ordering.
+  regulators:
+    - staticized probe
+    - removed some unnecessary defines
+    - updated comments
+    - split rohm-regulator patch adding SNVS and supporting simple
+      linear mapping into two - one adding support for mapping, other
+      adding SNVS.
+  GPIO:
+    - removed unnecessary headers
+    - clarified dev/parent->dev usage
+    - removed forgotten #define DEBUG
+  dt-bindings:
+    - changed patch order to meet ref-dependencies
+    - added missing regulator nodes
+    - changed string property for clk mode to tristated
+  MFD:
+    - header cleanups.
+  CLK:
+    - fixed commit message
+
+--
+
+Matti Vaittinen (16):
+  rtc: bd70528: Do not require parent data
+  mfd: bd718x7: simplify by cleaning unnecessary device data
+  dt_bindings: bd71828: Add clock output mode
+  dt_bindings: regulator: Add ROHM BD71815 PMIC regulators
+  dt_bindings: mfd: Add ROHM BD71815 PMIC
+  mfd: Add ROHM BD71815 ID
+  mfd: Sort ROHM chip ID list for better readability
+  mfd: Support for ROHM BD71815 PMIC core
+  gpio: support ROHM BD71815 GPOs
+  regulator: rohm-regulator: linear voltage support
+  regulator: rohm-regulator: Support SNVS HW state.
+  regulator: bd718x7, bd71828: Use ramp-delay helper
+  regulator: Support ROHM BD71815 regulators
+  clk: bd718x7: Add support for clk gate on ROHM BD71815 PMIC
+  rtc: bd70528: Support RTC on ROHM BD71815
+  MAINTAINERS: Add ROHM BD71815AGW
+
+ .../bindings/mfd/rohm,bd71815-pmic.yaml       | 201 ++++++
+ .../bindings/mfd/rohm,bd71828-pmic.yaml       |   6 +
+ .../regulator/rohm,bd71815-regulator.yaml     | 116 ++++
+ MAINTAINERS                                   |   3 +
+ drivers/clk/clk-bd718x7.c                     |   9 +-
+ drivers/gpio/Kconfig                          |  10 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-bd71815.c                   | 185 +++++
+ drivers/mfd/Kconfig                           |  15 +-
+ drivers/mfd/rohm-bd71828.c                    | 486 +++++++++----
+ drivers/mfd/rohm-bd718x7.c                    |  43 +-
+ drivers/regulator/Kconfig                     |  11 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/bd71815-regulator.c         | 652 ++++++++++++++++++
+ drivers/regulator/bd71828-regulator.c         |  51 +-
+ drivers/regulator/bd718x7-regulator.c         |  60 +-
+ drivers/regulator/rohm-regulator.c            |  23 +-
+ drivers/rtc/Kconfig                           |   6 +-
+ drivers/rtc/rtc-bd70528.c                     | 104 +--
+ include/linux/mfd/rohm-bd71815.h              | 562 +++++++++++++++
+ include/linux/mfd/rohm-bd71828.h              |   3 +
+ include/linux/mfd/rohm-bd718x7.h              |  13 -
+ include/linux/mfd/rohm-generic.h              |  15 +-
+ 23 files changed, 2286 insertions(+), 290 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.yaml
+ create mode 100644 drivers/gpio/gpio-bd71815.c
+ create mode 100644 drivers/regulator/bd71815-regulator.c
+ create mode 100644 include/linux/mfd/rohm-bd71815.h
+
+
+base-commit: e49d033bddf5b565044e2abe4241353959bc9120
+-- 
+2.25.4
+
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
