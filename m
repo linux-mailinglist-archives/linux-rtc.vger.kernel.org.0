@@ -2,27 +2,29 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A42C35608E
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Apr 2021 03:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C6635615C
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Apr 2021 04:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbhDGBJy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 6 Apr 2021 21:09:54 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:15499 "EHLO
+        id S1343988AbhDGCSr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 6 Apr 2021 22:18:47 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:15936 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbhDGBJy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Apr 2021 21:09:54 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FFR863gtGzyNMC;
-        Wed,  7 Apr 2021 09:07:34 +0800 (CST)
+        with ESMTP id S234067AbhDGCSr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 6 Apr 2021 22:18:47 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FFSgZ6LG6zyNLy;
+        Wed,  7 Apr 2021 10:16:26 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Wed, 7 Apr 2021 09:09:37 +0800
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 7 Apr 2021 10:18:30 +0800
 From:   Tian Tao <tiantao6@hisilicon.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <linux-rtc@vger.kernel.org>, Tian Tao <tiantao6@hisilicon.com>
-Subject: [PATCH] rtc: vr41xx: move to use request_irq by IRQF_NO_AUTOEN flag
-Date:   Wed, 7 Apr 2021 09:10:03 +0800
-Message-ID: <1617757803-38695-1-git-send-email-tiantao6@hisilicon.com>
+To:     <patrice.chotard@foss.st.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-rtc@vger.kernel.org>, "Tian Tao" <tiantao6@hisilicon.com>
+Subject: [PATCH] rtc: st-lpc: move to use request_irq by IRQF_NO_AUTOEN flag
+Date:   Wed, 7 Apr 2021 10:18:57 +0800
+Message-ID: <1617761937-58318-1-git-send-email-tiantao6@hisilicon.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -41,43 +43,31 @@ is being merged: https://lore.kernel.org/patchwork/patch/1388765/
 
 Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
 ---
- drivers/rtc/rtc-vr41xx.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/rtc/rtc-st-lpc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/rtc/rtc-vr41xx.c b/drivers/rtc/rtc-vr41xx.c
-index 5a9f9ad..1a02b52 100644
---- a/drivers/rtc/rtc-vr41xx.c
-+++ b/drivers/rtc/rtc-vr41xx.c
-@@ -312,8 +312,8 @@ static int rtc_probe(struct platform_device *pdev)
- 		goto err_iounmap_all;
+diff --git a/drivers/rtc/rtc-st-lpc.c b/drivers/rtc/rtc-st-lpc.c
+index bdb20f6..2df2179 100644
+--- a/drivers/rtc/rtc-st-lpc.c
++++ b/drivers/rtc/rtc-st-lpc.c
+@@ -218,15 +218,14 @@ static int st_rtc_probe(struct platform_device *pdev)
+ 		return -EINVAL;
  	}
  
--	retval = devm_request_irq(&pdev->dev, aie_irq, elapsedtime_interrupt, 0,
--				"elapsed_time", pdev);
-+	retval = devm_request_irq(&pdev->dev, aie_irq, elapsedtime_interrupt,
-+				  IRQF_NO_AUTOEN, "elapsed_time", pdev);
- 	if (retval < 0)
- 		goto err_iounmap_all;
- 
-@@ -323,16 +323,13 @@ static int rtc_probe(struct platform_device *pdev)
- 		goto err_iounmap_all;
+-	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler, 0,
+-			       pdev->name, rtc);
++	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler,
++			       IRQF_NO_AUTOEN, pdev->name, rtc);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to request irq %i\n", rtc->irq);
+ 		return ret;
  	}
  
--	retval = devm_request_irq(&pdev->dev, pie_irq, rtclong1_interrupt, 0,
--				"rtclong1", pdev);
-+	retval = devm_request_irq(&pdev->dev, pie_irq, rtclong1_interrupt,
-+				  IRQF_NO_AUTOEN, "rtclong1", pdev);
- 	if (retval < 0)
- 		goto err_iounmap_all;
+ 	enable_irq_wake(rtc->irq);
+-	disable_irq(rtc->irq);
  
- 	platform_set_drvdata(pdev, rtc);
- 
--	disable_irq(aie_irq);
--	disable_irq(pie_irq);
--
- 	dev_info(&pdev->dev, "Real Time Clock of NEC VR4100 series\n");
- 
- 	retval = devm_rtc_register_device(rtc);
+ 	rtc->clk = clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(rtc->clk)) {
 -- 
 2.7.4
 
