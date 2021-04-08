@@ -2,105 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989C1357DC5
-	for <lists+linux-rtc@lfdr.de>; Thu,  8 Apr 2021 10:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F69358723
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Apr 2021 16:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhDHIEh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 8 Apr 2021 04:04:37 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:2626 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229623AbhDHIEh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Apr 2021 04:04:37 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13883Rlt004817;
-        Thu, 8 Apr 2021 10:04:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=3lmdHjpmGNyJcNcVl8lJSCC55iHfVRZvzlEF1Bg4cnw=;
- b=2UFIR761HcviA0h1m1wF6CP8Fyxvv2OAUNnRUTcmCFaG9dagZfqv+NEun9l/rtHG35ij
- 3wwD/sX0v46/11obeFbjXHP60z7LGQIxu9/PvlErFM54pPy2nU8j210tnXljUwb7mmvB
- z2en35ZpLsVSkf/eJEYJDzM6jlWQdDFhaTImExEvLUuY0u3SaT9xU+vjRoTuJ7BsDjp1
- 4KIDOSR2wl0XxNzExuWkCGw+Q0EhDbNnBzSfWzq3MOTKlxau93Pt+PFwIENp5GleWx7H
- KdGYIgD4IaCqXHnb1X45fNEgwuKYAQb0hbmCQ2PHqfRXZw03ob6v8Rft/GL8CDSGNy1l DQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 37ssm3ha47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Apr 2021 10:04:08 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5975A10002A;
-        Thu,  8 Apr 2021 10:04:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E42A21B2D9;
-        Thu,  8 Apr 2021 10:04:06 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 8 Apr
- 2021 10:04:05 +0200
-Subject: Re: [PATCH] rtc: st-lpc: move to use request_irq by IRQF_NO_AUTOEN
- flag
-To:     Tian Tao <tiantao6@hisilicon.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>
-References: <1617761937-58318-1-git-send-email-tiantao6@hisilicon.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <1df61277-23b0-0351-7373-2e1e5c9f6651@foss.st.com>
-Date:   Thu, 8 Apr 2021 10:04:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231742AbhDHO3B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 8 Apr 2021 10:29:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231659AbhDHO3B (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 8 Apr 2021 10:29:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D91EE6113D;
+        Thu,  8 Apr 2021 14:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617892130;
+        bh=2FuIUpNq5FIFplx4EeFCO4ieAf4OaROCW1udvxA38HM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=q4+2HCpcV+rS5tQbc0ehHIFcU43mYM92ygvDGNdO61ec7U7uxl6z/g5VUuCahu1d7
+         tclDT/WHqPdalS2H/kvCw59rIEj1o0/NyKCgLxrewa2mIEtUgBjdtsKK2x81FzjliN
+         uw+jo1d/K4o/DLj5Xy+jU/mH+yercmiEO/1QVp6bBQaQnRHe+J7+YaOT0+95DCEF+J
+         cASgDaHb2prTzoCruYIXU+2JIyHemzG79APBJ3AyPtiBdDo1GAWEuaaV3V/Ci1JOum
+         qSBa6ANdwyb4B26pLZ/tFa1b2RZBtpfnmixCCsdP9XolNJxUCMuBNpZeja4RZb/2Cn
+         Zh+P3eorDIV0Q==
+Received: by mail-ed1-f53.google.com with SMTP id f8so2657838edd.11;
+        Thu, 08 Apr 2021 07:28:49 -0700 (PDT)
+X-Gm-Message-State: AOAM532z3GWc8H9CFlDJGH3d7jyujc0DqC59rp/ImRAtx8Cvm6NAG0jB
+        ooKDuKv1w3VGCXYww3Xikj0LyN33OXpSa/Dwyw==
+X-Google-Smtp-Source: ABdhPJz4i8EdGJ6gG+z3e0xfEVwHZQEAJpCAY2QsFcp9e1muisyWgXQMDwqQbL0LT7UVpYYGYEQjULRMZIZcSo7sitA=
+X-Received: by 2002:a50:fd12:: with SMTP id i18mr6127269eds.137.1617892128439;
+ Thu, 08 Apr 2021 07:28:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1617761937-58318-1-git-send-email-tiantao6@hisilicon.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-08_02:2021-04-08,2021-04-08 signatures=0
+References: <1615447798-6959-1-git-send-email-skakit@codeaurora.org>
+ <1615447798-6959-3-git-send-email-skakit@codeaurora.org> <YEpNV55KR2nlAXMP@builder.lan>
+ <86f8d5dbdb8d5d6627b9deece1978d07@codeaurora.org> <20210408023656.GM904837@yoga>
+In-Reply-To: <20210408023656.GM904837@yoga>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 8 Apr 2021 09:28:36 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJXaeuWPDAH30p_DKqkLm+tru8N8kqsgLaT1Y6pr6k-Lw@mail.gmail.com>
+Message-ID: <CAL_JsqJXaeuWPDAH30p_DKqkLm+tru8N8kqsgLaT1Y6pr6k-Lw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: mfd: Convert pm8xxx bindings to yaml
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     satya priya <skakit@codeaurora.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Kiran Gunda <kgunda@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Tian
+On Wed, Apr 7, 2021 at 9:37 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Wed 07 Apr 10:37 CDT 2021, skakit@codeaurora.org wrote:
+>
+> > Hi Bjorn,
+> >
+> > On 2021-03-11 22:33, Bjorn Andersson wrote:
+> > > On Thu 11 Mar 01:29 CST 2021, satya priya wrote:
+> [..]
+> > > > +patternProperties:
+> > > > +  "rtc@[0-9a-f]+$":
+> > >
+> > > Can we somehow link this to individual binding docs instead of listing
+> > > all the possible functions here?
+> > >
+> >
+> > you mean we should split this into two:
+> > qcom-pm8xxx.yaml and qcom-pm8xxx-rtc.yaml
+> > Please correct me if wrong.
+> >
+>
+> Right, I'm worried that it will be quite hard to maintain this document
+> once we start adding all the various pmic blocks to it. So if we somehow
+> can maintain a series of qcom-pm8xxx-<func>.yaml and just ref them into
+> the main PMIC definition.
+>
+> @Rob, can you give us some guidance on how to structure this binding,
+> with the various PMICs described will have some defined subset of a
+> larger set of hardware blocks that's often shared between versions?
 
-On 4/7/21 4:18 AM, Tian Tao wrote:
-> disable_irq() after request_irq() still has a time gap in which
-> interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
-> disable IRQ auto-enable because of requesting.
-> 
-> this patch is made base on "add IRQF_NO_AUTOEN for request_irq" which
-> is being merged: https://lore.kernel.org/patchwork/patch/1388765/
-> 
-> Signed-off-by: Tian Tao <tiantao6@hisilicon.com>
-> ---
->  drivers/rtc/rtc-st-lpc.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-st-lpc.c b/drivers/rtc/rtc-st-lpc.c
-> index bdb20f6..2df2179 100644
-> --- a/drivers/rtc/rtc-st-lpc.c
-> +++ b/drivers/rtc/rtc-st-lpc.c
-> @@ -218,15 +218,14 @@ static int st_rtc_probe(struct platform_device *pdev)
->  		return -EINVAL;
->  	}
->  
-> -	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler, 0,
-> -			       pdev->name, rtc);
-> +	ret = devm_request_irq(&pdev->dev, rtc->irq, st_rtc_handler,
-> +			       IRQF_NO_AUTOEN, pdev->name, rtc);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to request irq %i\n", rtc->irq);
->  		return ret;
->  	}
->  
->  	enable_irq_wake(rtc->irq);
-> -	disable_irq(rtc->irq);
->  
->  	rtc->clk = clk_get(&pdev->dev, NULL);
->  	if (IS_ERR(rtc->clk)) {
-> 
+How you suggest is good. The only other thing is just 1 complete
+example rather than a bunch of <func> fragments.
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-
-Thanks
-Patrice
+Rob
