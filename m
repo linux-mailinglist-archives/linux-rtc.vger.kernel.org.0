@@ -2,80 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B96D362878
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 21:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1884D362952
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 22:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbhDPTRc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Apr 2021 15:17:32 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:41869 "EHLO
+        id S245407AbhDPU0y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Apr 2021 16:26:54 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:50565 "EHLO
         relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbhDPTRc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 15:17:32 -0400
+        with ESMTP id S244249AbhDPU0x (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 16:26:53 -0400
 X-Originating-IP: 90.65.108.55
 Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 3D4F4FF803;
-        Fri, 16 Apr 2021 19:17:05 +0000 (UTC)
-Date:   Fri, 16 Apr 2021 21:17:04 +0200
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 422A6FF802;
+        Fri, 16 Apr 2021 20:26:27 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        satya priya <skakit@codeaurora.org>,
+To:     linux-kernel@vger.kernel.org, Laurent Vivier <laurent@vivier.eu>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Kiran Gunda <kgunda@codeaurora.org>
-Subject: Re: [PATCH V2 3/4] dt-bindings: mfd: Convert pm8xxx bindings to yaml
-Message-ID: <YHnisFroaR1qWA0Y@piout.net>
-References: <1617976766-7852-1-git-send-email-skakit@codeaurora.org>
- <1617976766-7852-4-git-send-email-skakit@codeaurora.org>
- <20210414083820.GH4869@dell>
- <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com>
+        linux-m68k@lists.linux-m68k.org, linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH 0/2] m68k: Add Virtual M68k Machine
+Date:   Fri, 16 Apr 2021 22:26:26 +0200
+Message-Id: <161860472066.842937.16850667459079911050.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210323221430.3735147-1-laurent@vivier.eu>
+References: <20210323221430.3735147-1-laurent@vivier.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 16/04/2021 12:20:30-0500, Rob Herring wrote:
-> On Wed, Apr 14, 2021 at 3:38 AM Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > On Fri, 09 Apr 2021, satya priya wrote:
-> >
-> > > Convert pm8xxx bindings from .txt to .yaml format. Also,
-> > > split this binding into two: parent binding(qcom-pm8xxx.yaml)
-> > > and child node RTC binding(qcom-pm8xxx-rtc.yaml).
-> > >
-> > > Signed-off-by: satya priya <skakit@codeaurora.org>
-> > > ---
-> > > Changes in V2:
-> > >  - As per Bjorn's comments, I've split this into two, one parent binding
-> > >    and one child node rtc binding.
-> > >  - Fixed bot errors and changed maintainer name.
-> > >
-> > >  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        | 100 ---------------------
-> > >  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  54 +++++++++++
-> > >  2 files changed, 54 insertions(+), 100 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> >
-> > Applied, thanks.
+On Tue, 23 Mar 2021 23:14:28 +0100, Laurent Vivier wrote:
+> The most powerful m68k machine emulated by QEMU is a Quadra 800,
+> but this machine is very limited: only 1 GiB of memory and only some
+> specific interfaces, with no DMA.
 > 
-> You need to apply the rtc schema too. linux-next has an error on this one now.
+> The Virtual M68k Machine is based on Goldfish interfaces defined by Google
+> for Android simulator. It uses Goldfish-rtc (timer and RTC),
+> Goldfish-pic (PIC) and Goldfish-tty (for early tty).
 > 
+> [...]
 
-I'm going to apply it later tonight
+Applied, thanks!
 
+[1/2] rtc: goldfish: remove dependency to OF
+      commit: 3fd00fdc4f11c656a63e6a6280c0bcb63cf109a2
+[2/2] m68k: introduce a virtual m68k machine
+      commit: 95631785c64840f3816f7a4cc2ce1a5332f43184
 
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Alexandre Belloni <alexandre.belloni@bootlin.com>
