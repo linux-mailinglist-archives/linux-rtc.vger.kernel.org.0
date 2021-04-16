@@ -2,207 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C370636177B
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 04:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2039B361C05
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 11:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238126AbhDPCUV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Apr 2021 22:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbhDPCUV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Apr 2021 22:20:21 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63260C061574;
-        Thu, 15 Apr 2021 19:19:57 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 31so2750907pgn.13;
-        Thu, 15 Apr 2021 19:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1c3XANJp3SRLg0MiJy2ydzLv+HXxXVrH+J+qpyjxeMo=;
-        b=RvLCBMeKc9B10u/JSftidewJh+NxFiz3AG+ygV5Q3aiKH9BWYKqnT6NsxNICxM+2Dm
-         cneLYlyuBmW/lgGHoKMlYGW64UftFNPUJy19PUmp28y2o8X+/skqkXqUHtuMMNSGC3xR
-         p0bQ2KI6S3TPNz28fwTfB5y2uodapSnV9LdiTt/9QlyuoDWRhKWXbFkrv+qBa3EqXK/Y
-         784ZpL34JsoPqojatFq2KivhwrMjfTnuHV4LOiEqudAa2/67Eu5XK32I3IjjdOXp3YUT
-         aktxnB8LcwFdokQOob7I93enjFBMSCFOwxIDUbywuszShurUHEJ+73pP+3p6/Jg0y+0U
-         APng==
+        id S240251AbhDPIoo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Apr 2021 04:44:44 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:58663 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238397AbhDPIol (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 04:44:41 -0400
+Received: from mail-ed1-f72.google.com ([209.85.208.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lXK5I-0005Ey-JU
+        for linux-rtc@vger.kernel.org; Fri, 16 Apr 2021 08:44:16 +0000
+Received: by mail-ed1-f72.google.com with SMTP id i25-20020a50fc190000b0290384fe0dab00so1060373edr.6
+        for <linux-rtc@vger.kernel.org>; Fri, 16 Apr 2021 01:44:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1c3XANJp3SRLg0MiJy2ydzLv+HXxXVrH+J+qpyjxeMo=;
-        b=iEmir+YfU4/TOFesQs2qR2b+IkMh2N4SR/8Z+EAbuJ0zDJW1bpCRvnwjK13PwkieHR
-         2XOupPur82q8Z0P16kK+s8ZtN3pBdK2yz6RgevTOCCZM+PTLAV1ONc+uL4qt0h0+jeoP
-         hxjt0/ACx+Et19ZxZjyqZcu6cvjoVq/KT0tN/pVweOikS9CLKq0qf5T6pJYUQhMAvsk+
-         aD1UDqIhghfxDhw9ug9BNKwPKVp7l95uofPswhCaXW3jPlkpdcsBHuf0C5LHKp5tD+7l
-         Va5zCxNMYMUTX2etJ48Re0cQgyqtfMVv/7WFneC2M24SLCEfSiWri8lVEyvoGYV4Uzir
-         PR9w==
-X-Gm-Message-State: AOAM531OT81HmVkfKqfORYS8eMN4syF/+y0JxJJFbJmVEBM6dP+Awe7N
-        81/RcbeqkH4QuewaPgzy5XU=
-X-Google-Smtp-Source: ABdhPJy4H/k0YeMasBgQvdxoT1mYCifNxP+u/yBrtA9K/OYh3Zvo5A41irfb4y2kPvvsTMndSaPm3w==
-X-Received: by 2002:a65:5c8a:: with SMTP id a10mr6157057pgt.233.1618539596557;
-        Thu, 15 Apr 2021 19:19:56 -0700 (PDT)
-Received: from mi-OptiPlex-7060.mioffice.cn ([209.9.72.212])
-        by smtp.gmail.com with ESMTPSA id g14sm3520255pjh.28.2021.04.15.19.19.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 19:19:56 -0700 (PDT)
-From:   zhuguangqing83@gmail.com
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=18JK8yDx0NtD/4aG8Ry1RsSt82JPj7kXl6NfpXnnE+w=;
+        b=BvtqcnHxeKi+3a/A6vjhsd9js4u3IkVsOicGnlGMww7pZS4+px1tRT3EOTIrGw+OXW
+         4RyeA1k+Sj5Lu8sPujFM4wUWJSfzzJHvKZlwPRINR3pRqLvFQxT7sxfDqG9jgKQUvMY8
+         nWfY3GBJGPIYWs7RVWTS87+f41YcOahIJ52qeAB6nx5ZOiEaOdIKpY+flLzh3t8Tk8L1
+         NkRnKjhgYf1fxkCD6XaQ0uJo3Jja80zuQa8GnTIbI2hqhW2iLq5NS+e0I70EQQeYRNH9
+         9j/AJvon8UK/iAKac+58vFet5DAYTZ1uerXm+0z2BQTEna1HfGkS/caf26m4JFCbPH/N
+         xOgg==
+X-Gm-Message-State: AOAM533oR9bsUtnL0fGTX0wm4ETUGJzmwdxu5v9eIp7o8x9uTheOa440
+        aaYMdYnn8XzNpZaadu+VWKpC+0Uuy2393PGKMi0u5NhfR/Qh1CBFgvmUa8jsM0BI/njGR+2yMVz
+        x8u3dWh093o8LB8fEHpVVonPFSHegV2QuZQvE5g==
+X-Received: by 2002:a05:6402:1393:: with SMTP id b19mr8644386edv.333.1618562656306;
+        Fri, 16 Apr 2021 01:44:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyWlZwkE7N5B0Dp/1iadZ9AeAo0s6MU3gYpUBAwDZeypnM8XTtbr/fqA3I+xsF7L+M1syvUFQ==
+X-Received: by 2002:a05:6402:1393:: with SMTP id b19mr8644380edv.333.1618562656146;
+        Fri, 16 Apr 2021 01:44:16 -0700 (PDT)
+Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
+        by smtp.gmail.com with ESMTPSA id r10sm3799693ejd.112.2021.04.16.01.44.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Apr 2021 01:44:15 -0700 (PDT)
+Subject: Re: [PATCH] rtc: Fix missing IRQF_ONESHOT as only threaded handler
+To:     zhuguangqing83@gmail.com, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Guangqing Zhu <zhuguangqing83@gmail.com>
-Subject: [PATCH] rtc: Fix missing IRQF_ONESHOT as only threaded handler
-Date:   Fri, 16 Apr 2021 10:19:49 +0800
-Message-Id: <20210416021949.1569-1-zhuguangqing83@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        linux-samsung-soc@vger.kernel.org
+References: <20210416021949.1569-1-zhuguangqing83@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <66e46265-f2b5-2133-4cd4-5dc0421e9a37@canonical.com>
+Date:   Fri, 16 Apr 2021 10:44:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
+MIME-Version: 1.0
+In-Reply-To: <20210416021949.1569-1-zhuguangqing83@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Guangqing Zhu <zhuguangqing83@gmail.com>
+On 16/04/2021 04:19, zhuguangqing83@gmail.com wrote:
+> From: Guangqing Zhu <zhuguangqing83@gmail.com>
+> 
+> Coccinelle noticed:
+> 1. drivers/rtc/rtc-s5m.c:810:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 2. drivers/rtc/rtc-rk808.c:441:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 3. drivers/rtc/rtc-max77686.c:779:7-27: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 4. drivers/rtc/rtc-tps65910.c:415:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 5. drivers/rtc/rtc-lp8788.c:277:8-33: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 6. drivers/rtc/rtc-max8998.c:283:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 7. drivers/rtc/rtc-rc5t583.c:241:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 8. drivers/rtc/rtc-max8997.c:495:7-32: ERROR: Threaded IRQ with no primary
+>    handler requested without IRQF_ONESHOT
+> 
+> Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
+> ---
+>  drivers/rtc/rtc-lp8788.c   | 2 +-
+>  drivers/rtc/rtc-max77686.c | 4 ++--
+>  drivers/rtc/rtc-max8997.c  | 2 +-
+>  drivers/rtc/rtc-max8998.c  | 3 ++-
+>  drivers/rtc/rtc-rc5t583.c  | 2 +-
+>  drivers/rtc/rtc-rk808.c    | 2 +-
+>  drivers/rtc/rtc-s5m.c      | 4 ++--
+>  drivers/rtc/rtc-tps65910.c | 2 +-
+>  8 files changed, 11 insertions(+), 10 deletions(-)
+>
 
-Coccinelle noticed:
-1. drivers/rtc/rtc-s5m.c:810:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-2. drivers/rtc/rtc-rk808.c:441:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-3. drivers/rtc/rtc-max77686.c:779:7-27: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-4. drivers/rtc/rtc-tps65910.c:415:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-5. drivers/rtc/rtc-lp8788.c:277:8-33: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-6. drivers/rtc/rtc-max8998.c:283:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-7. drivers/rtc/rtc-rc5t583.c:241:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
-8. drivers/rtc/rtc-max8997.c:495:7-32: ERROR: Threaded IRQ with no primary
-   handler requested without IRQF_ONESHOT
+The same with all other patches for IRQF_ONESHOT which are send recently:
+1. On what board did you test it?
+2. Is this just blind patch from Coccinelle without investigation
+whether it is needed (hint: it might not be needed in all of these
+places, because at least some of them do not use default primary handler).
+3. If you think otherwise, please explain.
 
-Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
----
- drivers/rtc/rtc-lp8788.c   | 2 +-
- drivers/rtc/rtc-max77686.c | 4 ++--
- drivers/rtc/rtc-max8997.c  | 2 +-
- drivers/rtc/rtc-max8998.c  | 3 ++-
- drivers/rtc/rtc-rc5t583.c  | 2 +-
- drivers/rtc/rtc-rk808.c    | 2 +-
- drivers/rtc/rtc-s5m.c      | 4 ++--
- drivers/rtc/rtc-tps65910.c | 2 +-
- 8 files changed, 11 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/rtc/rtc-lp8788.c b/drivers/rtc/rtc-lp8788.c
-index c0b8fbce1082..ebb717ae6c8b 100644
---- a/drivers/rtc/rtc-lp8788.c
-+++ b/drivers/rtc/rtc-lp8788.c
-@@ -276,7 +276,7 @@ static int lp8788_alarm_irq_register(struct platform_device *pdev,
- 
- 	return devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
- 				lp8788_alarm_irq_handler,
--				0, LP8788_ALM_IRQ, rtc);
-+				IRQF_ONESHOT, LP8788_ALM_IRQ, rtc);
- }
- 
- static int lp8788_rtc_probe(struct platform_device *pdev)
-diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index d51cc12114cb..a23825ccf62a 100644
---- a/drivers/rtc/rtc-max77686.c
-+++ b/drivers/rtc/rtc-max77686.c
-@@ -776,8 +776,8 @@ static int max77686_rtc_probe(struct platform_device *pdev)
- 		goto err_rtc;
- 	}
- 
--	ret = request_threaded_irq(info->virq, NULL, max77686_rtc_alarm_irq, 0,
--				   "rtc-alarm1", info);
-+	ret = request_threaded_irq(info->virq, NULL, max77686_rtc_alarm_irq,
-+				   IRQF_ONESHOT, "rtc-alarm1", info);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			info->virq, ret);
-diff --git a/drivers/rtc/rtc-max8997.c b/drivers/rtc/rtc-max8997.c
-index 20e50d9fdf88..15843ed12e36 100644
---- a/drivers/rtc/rtc-max8997.c
-+++ b/drivers/rtc/rtc-max8997.c
-@@ -493,7 +493,7 @@ static int max8997_rtc_probe(struct platform_device *pdev)
- 	info->virq = virq;
- 
- 	ret = devm_request_threaded_irq(&pdev->dev, virq, NULL,
--				max8997_rtc_alarm_irq, 0,
-+				max8997_rtc_alarm_irq, IRQF_ONESHOT,
- 				"rtc-alarm0", info);
- 	if (ret < 0)
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
-diff --git a/drivers/rtc/rtc-max8998.c b/drivers/rtc/rtc-max8998.c
-index c873b4509b3c..28c5b367f633 100644
---- a/drivers/rtc/rtc-max8998.c
-+++ b/drivers/rtc/rtc-max8998.c
-@@ -281,7 +281,8 @@ static int max8998_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = devm_request_threaded_irq(&pdev->dev, info->irq, NULL,
--				max8998_rtc_alarm_irq, 0, "rtc-alarm0", info);
-+				max8998_rtc_alarm_irq, IRQF_ONESHOT,
-+				"rtc-alarm0", info);
- 
- 	if (ret < 0)
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
-diff --git a/drivers/rtc/rtc-rc5t583.c b/drivers/rtc/rtc-rc5t583.c
-index 18684a7026c4..d9f4e0d4d943 100644
---- a/drivers/rtc/rtc-rc5t583.c
-+++ b/drivers/rtc/rtc-rc5t583.c
-@@ -239,7 +239,7 @@ static int rc5t583_rtc_probe(struct platform_device *pdev)
- 
- 	irq += RC5T583_IRQ_YALE;
- 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
--		rc5t583_rtc_interrupt, IRQF_TRIGGER_LOW,
-+		rc5t583_rtc_interrupt, IRQF_TRIGGER_LOW | IRQF_ONESHOT,
- 		"rtc-rc5t583", &pdev->dev);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "IRQ is not free.\n");
-diff --git a/drivers/rtc/rtc-rk808.c b/drivers/rtc/rtc-rk808.c
-index e920da8c08da..753583cff5d4 100644
---- a/drivers/rtc/rtc-rk808.c
-+++ b/drivers/rtc/rtc-rk808.c
-@@ -439,7 +439,7 @@ static int rk808_rtc_probe(struct platform_device *pdev)
- 
- 	/* request alarm irq of rk808 */
- 	ret = devm_request_threaded_irq(&pdev->dev, rk808_rtc->irq, NULL,
--					rk808_alarm_irq, 0,
-+					rk808_alarm_irq, IRQF_ONESHOT,
- 					"RTC alarm", rk808_rtc);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ %d: %d\n",
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index 80b66f16db89..56e82987b4a2 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -808,8 +808,8 @@ static int s5m_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = devm_request_threaded_irq(&pdev->dev, info->irq, NULL,
--					s5m_rtc_alarm_irq, 0, "rtc-alarm0",
--					info);
-+					s5m_rtc_alarm_irq, IRQF_ONESHOT,
-+					"rtc-alarm0", info);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "Failed to request alarm IRQ: %d: %d\n",
- 			info->irq, ret);
-diff --git a/drivers/rtc/rtc-tps65910.c b/drivers/rtc/rtc-tps65910.c
-index bc89c62ccb9b..6ab67820d77c 100644
---- a/drivers/rtc/rtc-tps65910.c
-+++ b/drivers/rtc/rtc-tps65910.c
-@@ -413,7 +413,7 @@ static int tps65910_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
--		tps65910_rtc_interrupt, IRQF_TRIGGER_LOW,
-+		tps65910_rtc_interrupt, IRQF_TRIGGER_LOW | IRQF_ONESHOT,
- 		dev_name(&pdev->dev), &pdev->dev);
- 	if (ret < 0)
- 		irq = -1;
--- 
-2.17.1
-
+Best regards,
+Krzysztof
