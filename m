@@ -2,110 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C0F361D00
-	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 12:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C99362697
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Apr 2021 19:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbhDPJOQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Apr 2021 05:14:16 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:59524 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234914AbhDPJOQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 05:14:16 -0400
-Received: from mail-ed1-f71.google.com ([209.85.208.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lXKXv-0007Kp-6q
-        for linux-rtc@vger.kernel.org; Fri, 16 Apr 2021 09:13:51 +0000
-Received: by mail-ed1-f71.google.com with SMTP id y13-20020aa7cccd0000b02903781fa66252so6686723edt.18
-        for <linux-rtc@vger.kernel.org>; Fri, 16 Apr 2021 02:13:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TBHSrQMedfIZ0NHm4Vuee3oMabjgi2Z9z+wuaFSao34=;
-        b=I+J4ccuSuaZJRvMS+Qu3qbu6ftWJP/xZfqQqtWbUPQcDlJo5mSaZKZzFdvb1BVfj4W
-         j0ZweZUx320KrqQuqpObZTdA9UP4IbeFREXkYimJVKf6Se6d5l1p9csCUABxYxIxBmry
-         twck3y1f8unwguWat+iYQgHgPhywXX75k2qj6CCq45yq96q6F+DU7bwVd5gwnDYDQyRc
-         z4Sm2qyORz+M8jJIFjH/Lrd7rNCOBdqmdReWmO3BUKb06zQWd49h+CBkSVs4ubLurqSj
-         x2NAh+gO05D65kKV8ODA+AozxLqQ4wnkX/ze/tIqOTwR4iEW/ykfngRr6AAadEhs48AV
-         leSQ==
-X-Gm-Message-State: AOAM531P1rbDqjQBy+RXC3+UHGiKhyN/ahv5yFgn2NO/tBQK8mlPgoIX
-        28oJy/EmTqOoq1bwFqkgPO7dOeOgSRTpkYmGT7IVBOynmB89rZF+AExr5wVhaL5A+SA3vsH2GuV
-        BtKgWTcpKMh2YpyGr04U+2m1V+IaKcszyTS7tPA==
-X-Received: by 2002:a17:906:53c7:: with SMTP id p7mr7337268ejo.89.1618564430903;
-        Fri, 16 Apr 2021 02:13:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJweK9tiB7uzLCIeFzW76R/mM0DO97HxN0N8y+fVULfDExeD0z+87Y25+JwAgl7DxkP3goJkpA==
-X-Received: by 2002:a17:906:53c7:: with SMTP id p7mr7337261ejo.89.1618564430799;
-        Fri, 16 Apr 2021 02:13:50 -0700 (PDT)
-Received: from [192.168.1.115] (xdsl-188-155-192-147.adslplus.ch. [188.155.192.147])
-        by smtp.gmail.com with ESMTPSA id m10sm3830584ejc.32.2021.04.16.02.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Apr 2021 02:13:50 -0700 (PDT)
-Subject: Re: [PATCH] rtc: Fix missing IRQF_ONESHOT as only threaded handler
-To:     zhuguangqing83@gmail.com, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20210416021949.1569-1-zhuguangqing83@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <342f2c09-87a8-571e-e032-d954de4cf2fc@canonical.com>
-Date:   Fri, 16 Apr 2021 11:13:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S240608AbhDPRVJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Apr 2021 13:21:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54132 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233606AbhDPRVI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 16 Apr 2021 13:21:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E8CA6613BB;
+        Fri, 16 Apr 2021 17:20:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618593643;
+        bh=DgqWTJb1Z+HKN9VW4qCZgJDVVwJytGX9V+66YuoSKXg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TVRsJBjKQ6RpS0XiwN92qJPEOSAxr8oYInJt+5l04dNdv59fY8aKTcRpm8AHdKAt1
+         CoVepH6JQ0zFRJd1IMUBcCwi2+CTYJMZrz+ghjbLyK03+EBPu5r9E3fmLZ8FOx6Ujb
+         mDPmrRI94Pz15BgHslmw9+W6IxwR8mDBdGr0HtRr5vZWdXGm76E7hAjMK5ra1whajb
+         4x6pMovjYS+H/sAH6B7MPvqVJttTsHmQdokN6XezdbVocjtP4pTSlT8Fpwe4wr1ViT
+         andoyMhzN9nczztk8TkscR1XVOTpZ4nwyn2DxbbRcPEjFZvM/IH7+EM/vmsJQ4EjlR
+         xMcKgZ2NjjELA==
+Received: by mail-ej1-f42.google.com with SMTP id w3so43250948ejc.4;
+        Fri, 16 Apr 2021 10:20:43 -0700 (PDT)
+X-Gm-Message-State: AOAM533heXkYeLEr5/e04TF2CtX/yZg17pnpnj+HflJutAd4Epev2TTM
+        Fjmsa0rKB9LBiWVf2XeacOVLiqmIOLUfxx1pNg==
+X-Google-Smtp-Source: ABdhPJyCFfax6nihY7mtSy1gIy1kLGf50Frz/52eDZ9jBaYGNWv32kco7rFKkOeYCtTf3SYQt5biMyijpQlfWkCYOQM=
+X-Received: by 2002:a17:906:4fcd:: with SMTP id i13mr9385535ejw.341.1618593642471;
+ Fri, 16 Apr 2021 10:20:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210416021949.1569-1-zhuguangqing83@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1617976766-7852-1-git-send-email-skakit@codeaurora.org>
+ <1617976766-7852-4-git-send-email-skakit@codeaurora.org> <20210414083820.GH4869@dell>
+In-Reply-To: <20210414083820.GH4869@dell>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 16 Apr 2021 12:20:30 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com>
+Message-ID: <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com>
+Subject: Re: [PATCH V2 3/4] dt-bindings: mfd: Convert pm8xxx bindings to yaml
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     satya priya <skakit@codeaurora.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Kiran Gunda <kgunda@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 16/04/2021 04:19, zhuguangqing83@gmail.com wrote:
-> From: Guangqing Zhu <zhuguangqing83@gmail.com>
-> 
-> Coccinelle noticed:
-> 1. drivers/rtc/rtc-s5m.c:810:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 2. drivers/rtc/rtc-rk808.c:441:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 3. drivers/rtc/rtc-max77686.c:779:7-27: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 4. drivers/rtc/rtc-tps65910.c:415:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 5. drivers/rtc/rtc-lp8788.c:277:8-33: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 6. drivers/rtc/rtc-max8998.c:283:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 7. drivers/rtc/rtc-rc5t583.c:241:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 8. drivers/rtc/rtc-max8997.c:495:7-32: ERROR: Threaded IRQ with no primary
->    handler requested without IRQF_ONESHOT
-> 
-> Signed-off-by: Guangqing Zhu <zhuguangqing83@gmail.com>
-> ---
->  drivers/rtc/rtc-lp8788.c   | 2 +-
->  drivers/rtc/rtc-max77686.c | 4 ++--
->  drivers/rtc/rtc-max8997.c  | 2 +-
->  drivers/rtc/rtc-max8998.c  | 3 ++-
->  drivers/rtc/rtc-rc5t583.c  | 2 +-
->  drivers/rtc/rtc-rk808.c    | 2 +-
->  drivers/rtc/rtc-s5m.c      | 4 ++--
+On Wed, Apr 14, 2021 at 3:38 AM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Fri, 09 Apr 2021, satya priya wrote:
+>
+> > Convert pm8xxx bindings from .txt to .yaml format. Also,
+> > split this binding into two: parent binding(qcom-pm8xxx.yaml)
+> > and child node RTC binding(qcom-pm8xxx-rtc.yaml).
+> >
+> > Signed-off-by: satya priya <skakit@codeaurora.org>
+> > ---
+> > Changes in V2:
+> >  - As per Bjorn's comments, I've split this into two, one parent binding
+> >    and one child node rtc binding.
+> >  - Fixed bot errors and changed maintainer name.
+> >
+> >  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        | 100 ---------------------
+> >  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  54 +++++++++++
+> >  2 files changed, 54 insertions(+), 100 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+>
+> Applied, thanks.
 
-The commit msg suggests in misleading way that there is an issue here to
-solve but at least for max* and s5m it is not true. These are nested
-interrupts.
+You need to apply the rtc schema too. linux-next has an error on this one now.
 
-I tested *only* the S5M:
-Tested-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
-but still I wonder - why this change is needed, except satisfying blind
-Coccinelle runs? Does it really bring benefit for the nested interrupts?
-
-
-Best regards,
-Krzysztof
+Rob
