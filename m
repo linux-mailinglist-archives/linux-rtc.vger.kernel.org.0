@@ -2,31 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AE0362BBC
-	for <lists+linux-rtc@lfdr.de>; Sat, 17 Apr 2021 01:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F64362BD5
+	for <lists+linux-rtc@lfdr.de>; Sat, 17 Apr 2021 01:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhDPXFJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Apr 2021 19:05:09 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:52507 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhDPXFJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 19:05:09 -0400
+        id S229719AbhDPXPj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Apr 2021 19:15:39 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:60123 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234708AbhDPXPj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 19:15:39 -0400
 X-Originating-IP: 90.65.108.55
 Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id ADB5EC0002;
-        Fri, 16 Apr 2021 23:04:42 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id B9B98FF805;
+        Fri, 16 Apr 2021 23:15:12 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     patrice.chotard@foss.st.com, Tian Tao <tiantao6@hisilicon.com>,
-        a.zummo@towertech.it
+To:     a.zummo@towertech.it,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] rtc: st-lpc: move to use request_irq by IRQF_NO_AUTOEN flag
-Date:   Sat, 17 Apr 2021 01:04:42 +0200
-Message-Id: <161861427504.875812.2882489673201893898.b4-ty@bootlin.com>
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: remove unused function
+Date:   Sat, 17 Apr 2021 01:15:12 +0200
+Message-Id: <161861490647.878360.6058660269915278290.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <1617761937-58318-1-git-send-email-tiantao6@hisilicon.com>
-References: <1617761937-58318-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1618475821-102974-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+References: <1618475821-102974-1-git-send-email-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -34,18 +34,16 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 7 Apr 2021 10:18:57 +0800, Tian Tao wrote:
-> disable_irq() after request_irq() still has a time gap in which
-> interrupts can come. request_irq() with IRQF_NO_AUTOEN flag will
-> disable IRQ auto-enable because of requesting.
+On Thu, 15 Apr 2021 16:37:01 +0800, Jiapeng Chong wrote:
+> Fix the following clang warning:
 > 
-> this patch is made base on "add IRQF_NO_AUTOEN for request_irq" which
-> is being merged: https://lore.kernel.org/patchwork/patch/1388765/
+> drivers/rtc/rtc-ds1511.c:108:1: warning: unused function
+> 'rtc_write_alarm' [-Wunused-function].
 
 Applied, thanks!
 
-[1/1] rtc: st-lpc: move to use request_irq by IRQF_NO_AUTOEN flag
-      commit: 81a0eaf28af6bcf925cee63ba5f6ab4d73c1d072
+[1/1] rtc: remove unused function
+      commit: ef062a45ec9c2b6d15ddd9f76f897219334c7cd2
 
 Best regards,
 -- 
