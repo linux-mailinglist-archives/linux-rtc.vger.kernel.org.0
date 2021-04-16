@@ -2,30 +2,30 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206C5362BA4
-	for <lists+linux-rtc@lfdr.de>; Sat, 17 Apr 2021 00:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD90362BA5
+	for <lists+linux-rtc@lfdr.de>; Sat, 17 Apr 2021 00:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbhDPWyr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 16 Apr 2021 18:54:47 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:48127 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbhDPWyr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 18:54:47 -0400
+        id S230489AbhDPW4X (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Apr 2021 18:56:23 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:53999 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230258AbhDPW4X (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 16 Apr 2021 18:56:23 -0400
 X-Originating-IP: 90.65.108.55
 Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 8DE6D240004;
-        Fri, 16 Apr 2021 22:54:20 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 98FA7FF806;
+        Fri, 16 Apr 2021 22:55:56 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     a.zummo@towertech.it, Tian Tao <tiantao6@hisilicon.com>
+To:     Tian Tao <tiantao6@hisilicon.com>, a.zummo@towertech.it
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: rtc-spear: replace spin_lock_irqsave by spin_lock in hard IRQ
-Date:   Sat, 17 Apr 2021 00:54:20 +0200
-Message-Id: <161861365456.872735.12795353876804013883.b4-ty@bootlin.com>
+Subject: Re: [PATCH v2] rtc: tps6586x: move to use request_irq by IRQF_NO_AUTOEN flag
+Date:   Sat, 17 Apr 2021 00:55:55 +0200
+Message-Id: <161861370729.873140.14388091691512384989.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <1615775970-59070-1-git-send-email-tiantao6@hisilicon.com>
-References: <1615775970-59070-1-git-send-email-tiantao6@hisilicon.com>
+In-Reply-To: <1615812674-62449-1-git-send-email-tiantao6@hisilicon.com>
+References: <1615812674-62449-1-git-send-email-tiantao6@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -33,14 +33,14 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 15 Mar 2021 10:39:30 +0800, Tian Tao wrote:
-> The code has been in a irq-disabled context since it is hard IRQ. There
-> is no necessity to do it again.
+On Mon, 15 Mar 2021 20:51:14 +0800, Tian Tao wrote:
+> request_irq() with IRQF_NO_AUTOEN flag will disable IRQ auto-enable
+> because of requesting.
 
 Applied, thanks!
 
-[1/1] rtc: rtc-spear: replace spin_lock_irqsave by spin_lock in hard IRQ
-      commit: 880f25d690150937e42a2e8b86c111aae8da6d08
+[1/1] rtc: tps6586x: move to use request_irq by IRQF_NO_AUTOEN flag
+      commit: 44db35cb9bf31163d17bee2c9748e1570b81be26
 
 Best regards,
 -- 
