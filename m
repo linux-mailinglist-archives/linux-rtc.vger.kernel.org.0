@@ -2,84 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF21365068
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Apr 2021 04:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11FA9365E08
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Apr 2021 19:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbhDTCk2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 19 Apr 2021 22:40:28 -0400
-Received: from mo-csw1516.securemx.jp ([210.130.202.155]:42206 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhDTCk1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Apr 2021 22:40:27 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 13K2dc2q019361; Tue, 20 Apr 2021 11:39:38 +0900
-X-Iguazu-Qid: 34ts1PSq9DIwrlqr4U
-X-Iguazu-QSIG: v=2; s=0; t=1618886378; q=34ts1PSq9DIwrlqr4U; m=W01vTTr0wjDYL4octYmaG42SgzO/8PKDbHe8zkiEPv0=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1511) id 13K2da2T007789
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 20 Apr 2021 11:39:37 +0900
-Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id A87DE1000BE;
-        Tue, 20 Apr 2021 11:39:36 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
-        by enc01.toshiba.co.jp  with ESMTP id 13K2da1A031876;
-        Tue, 20 Apr 2021 11:39:36 +0900
-From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Cc:     linux-rtc@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH v2] rtc: ds1307: Fix wday settings for rx8130
-Date:   Tue, 20 Apr 2021 11:39:17 +0900
-X-TSB-HOP: ON
-Message-Id: <20210420023917.1949066-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-X-Mailer: git-send-email 2.30.0.rc2
+        id S233242AbhDTRCG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Apr 2021 13:02:06 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:50051 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232799AbhDTRCE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Apr 2021 13:02:04 -0400
+Received: from mail-ej1-f69.google.com ([209.85.218.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lYtkg-0004Rl-RD
+        for linux-rtc@vger.kernel.org; Tue, 20 Apr 2021 17:01:30 +0000
+Received: by mail-ej1-f69.google.com with SMTP id k5-20020a1709061c05b029037cb8a99e03so5012922ejg.16
+        for <linux-rtc@vger.kernel.org>; Tue, 20 Apr 2021 10:01:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CHsQSEUOmORiTB8Zkf0mC2OREpdRoRDZ4OLN4iMgWKc=;
+        b=ddnbiRajs7+1ikXOmHKLuabKqgm5n+sEi5mguqAe8pxhPo7S+XIQ95Y7WxMrQ28P4c
+         T8/+S8XiILyiKmEOe9euUJ0gh4k7x66eiI4kACH1s+5JhHhMSfHTmCmic2ZTJhpdepnn
+         DgttiS/opM4nmZOuv992gwSRwtAtPk2viX5At9OzN6kOBk9RfzgrOYnYG7jisQhfaO/9
+         ylXSkh02tQIO4KXEXw5AdYPodNEuyMq0BGeRoUonD+GKcON25E63ZJ+NRVNcmEhm1hC0
+         +sF70LGQaSirzeeOBqlXP1/7bj8ju10+6BzqxQpqXK2xyZZIsijV9xCoSoF5dcLPLo19
+         KV7g==
+X-Gm-Message-State: AOAM531H1TFsqLLGtgkB7QI3l3jo37KU3eWaDSCWtezuO5O9wIvsQzwn
+        HpB3FNxBTcTj3z57L4viOXlf4c/Tdpez9zP3kU2GR0qMEYpe/Y+TgTYPU903WsSQbQdFDL3zHph
+        1+ONd2ReQFMrH/Ec06e5F2r50CnfMcPtTL48nfw==
+X-Received: by 2002:a17:906:b353:: with SMTP id cd19mr28801330ejb.253.1618938090428;
+        Tue, 20 Apr 2021 10:01:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyWCjFUTB+i+AWDnumgO9r4qpi2r6FWXN4Xy3B0T5zjsqdLAfvrora74Xl3gg1bViJWFcX6bQ==
+X-Received: by 2002:a17:906:b353:: with SMTP id cd19mr28801300ejb.253.1618938090234;
+        Tue, 20 Apr 2021 10:01:30 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-180-75.adslplus.ch. [188.155.180.75])
+        by smtp.gmail.com with ESMTPSA id x7sm16334441eds.67.2021.04.20.10.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Apr 2021 10:01:29 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: [PATCH 0/9] mfd/rtc/regulator: Drop board file support for Samsung PMIC
+Date:   Tue, 20 Apr 2021 19:01:09 +0200
+Message-Id: <20210420170118.12788-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-rx8130 wday specifies the bit position, not BCD.
+Hi,
 
-Fixes: ee0981be7704 ("rtc: ds1307: Add support for Epson RX8130CE")
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- drivers/rtc/rtc-ds1307.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+The Samsung PMIC drivers since long time are used only on devicetree
+platforms (Samsung Exynos) and there are no users with board files.
 
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index cd8e438bc9c46b..8752620d8e34af 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -296,7 +296,11 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
- 	t->tm_min = bcd2bin(regs[DS1307_REG_MIN] & 0x7f);
- 	tmp = regs[DS1307_REG_HOUR] & 0x3f;
- 	t->tm_hour = bcd2bin(tmp);
--	t->tm_wday = bcd2bin(regs[DS1307_REG_WDAY] & 0x07) - 1;
-+	/* rx8130 is bit position, not BCD */
-+	if (ds1307->type == rx_8130)
-+		t->tm_wday = fls(regs[DS1307_REG_WDAY] & 0x7f);
-+	else
-+		t->tm_wday = bcd2bin(regs[DS1307_REG_WDAY] & 0x07) - 1;
- 	t->tm_mday = bcd2bin(regs[DS1307_REG_MDAY] & 0x3f);
- 	tmp = regs[DS1307_REG_MONTH] & 0x1f;
- 	t->tm_mon = bcd2bin(tmp) - 1;
-@@ -343,7 +347,11 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
- 	regs[DS1307_REG_SECS] = bin2bcd(t->tm_sec);
- 	regs[DS1307_REG_MIN] = bin2bcd(t->tm_min);
- 	regs[DS1307_REG_HOUR] = bin2bcd(t->tm_hour);
--	regs[DS1307_REG_WDAY] = bin2bcd(t->tm_wday + 1);
-+	/* rx8130 is bit position, not BCD */
-+	if (ds1307->type == rx_8130)
-+		regs[DS1307_REG_WDAY] = 1 << t->tm_wday;
-+	else
-+		regs[DS1307_REG_WDAY] = bin2bcd(t->tm_wday + 1);
- 	regs[DS1307_REG_MDAY] = bin2bcd(t->tm_mday);
- 	regs[DS1307_REG_MONTH] = bin2bcd(t->tm_mon + 1);
- 
+Drop the support for board files entirely and depend on OF for matching.
+
+This makes the code smaller and simpler.
+
+Dependencies
+============
+The MFD pieces are rebased on my previous sec-core dirver changes:
+mfd: sec: Simplify getting of_device_id match data
+https://lore.kernel.org/linux-samsung-soc/20210420113929.278082-1-krzysztof.kozlowski@canonical.com/T/#t
+
+Applying - can be independent
+=============================
+The last RTC and regulator patches can be picked up independently via
+regulator and rtc trees.  There are no board files currently, so the
+code in these drivers is basically dead code and feature-bisection is
+preserved.
+
+Best regards,
+Krzysztof
+
+
+Krzysztof Kozlowski (9):
+  mfd: sec: Drop support for board files and require devicetree
+  mfd: sec: Remove unused cfg_pmic_irq in platform data
+  mfd: sec: Remove unused device_type in platform data
+  mfd: sec: Remove unused irq_base in platform data
+  mfd: sec: Enable wakeup from suspend via devicetree property
+  mfd: sec: Remove unused platform data members
+  rtc: s5m: Remove reference to parent's device pdata
+  regulator: s2mpa01: Drop initialization via platform data
+  regulator: s2mps11: Drop initialization via platform data
+
+ drivers/mfd/Kconfig              |  1 +
+ drivers/mfd/sec-core.c           | 64 +++++---------------------------
+ drivers/mfd/sec-irq.c            |  4 +-
+ drivers/regulator/s2mpa01.c      |  4 --
+ drivers/regulator/s2mps11.c      | 22 +----------
+ drivers/rtc/rtc-s5m.c            |  6 ---
+ include/linux/mfd/samsung/core.h | 33 ----------------
+ 7 files changed, 14 insertions(+), 120 deletions(-)
+
 -- 
-2.30.0
+2.25.1
 
