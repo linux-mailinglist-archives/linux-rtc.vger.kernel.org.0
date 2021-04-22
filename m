@@ -2,90 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9404368322
-	for <lists+linux-rtc@lfdr.de>; Thu, 22 Apr 2021 17:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9F636832B
+	for <lists+linux-rtc@lfdr.de>; Thu, 22 Apr 2021 17:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbhDVPQ3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Apr 2021 11:16:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51632 "EHLO mail.kernel.org"
+        id S236563AbhDVPRt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 22 Apr 2021 11:17:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233106AbhDVPQ3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 22 Apr 2021 11:16:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DE9A61077;
-        Thu, 22 Apr 2021 15:15:51 +0000 (UTC)
+        id S236545AbhDVPRs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 22 Apr 2021 11:17:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBB76613C8;
+        Thu, 22 Apr 2021 15:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619104554;
-        bh=8QU0e3aDFsJV+2WSG378IPXXZatKl7pXZ0rVgBfEI3U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oV1nCyMvUT1Cdv6yVlCM6yULq1mvxTleVKIdV7SI2rL8H1Isp7Sp338dIUTvD31bh
-         P8tLjUY8mfPg13dlt3QIdKj/cKliUGIAh9nzIup1U6LHCHHLbYM3dUJ2P/w6G3qx7N
-         YqATvV1atxrFjiIYZ400lf1knn/vWDiwwGtygeylF3U4S+DXsahASo4cknuv+4qlG6
-         T/7qX+obDwJ0kjQdfM6uCtbI8R4U8GNU4g8Vt47Gp0EfICOM7XlCba60Pb24fESFKp
-         XSibCggCO9RbPyqbE/UAwj54DA0nC+bYQh+l6UpFw3atq/nXdQs9xusBpdvjHJiTIl
-         rtbDlMk8/GvJw==
+        s=k20201202; t=1619104633;
+        bh=W8iGIqJG4zluG1+8hGwKSis7uYy6Ct+D0O1tpNsCCnM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dL/8BcsLMs9MkDWPKeXGo1h2GQTzpE3nC1r9AImH9Dp8xVPRkOBVqp2or3aTq4/6f
+         RWZDz6EWZj34AZzm8bg/W9jBCqa58RqZunr7DRGHPQJ9Z2q+4zMpXygTOTtQLcZsOU
+         hUO1TfI3Ii67/naPw8knx/sTPjsWJ1PwHRBoWZj1fGFncDrtbAbU/FHWtbiSq4NwzL
+         bn5vXl1DTCKPYN9ivv30kS7G51i77yGjSiokIhNItG8wUB6RIRfAIudjYcfzAhUzSZ
+         aQJpfauSj/0Yj7rbylwIVQHGs8xLqDr2m9VQvkRjkopA1MiTaBQJJVDacQPDcJedAU
+         jtu9XLWAEzXzA==
+Received: by mail-wm1-f47.google.com with SMTP id y5-20020a05600c3645b0290132b13aaa3bso3346930wmq.1;
+        Thu, 22 Apr 2021 08:17:13 -0700 (PDT)
+X-Gm-Message-State: AOAM532uQ1DwjGivs+H/fyuwEQPVLJoisbmoYx9DXViKt5cNe7b8gGgu
+        MovQGRFXUnWnwNeBMf3pQgIxOE9x7jSatgEfdZc=
+X-Google-Smtp-Source: ABdhPJzaA5K7NHngZk5kbZI1Nu/xW1ztSM0nD9LIKxCpNlNByzqYD9Uy8m9iDD8K8PM25znTLjD3c27Wo0umtEPYgWw=
+X-Received: by 2002:a7b:c14a:: with SMTP id z10mr538741wmi.75.1619104632198;
+ Thu, 22 Apr 2021 08:17:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210422133307.1710832-1-arnd@kernel.org> <82120164-c12a-bf12-0838-c3d926fe4eaf@roeck-us.net>
+In-Reply-To: <82120164-c12a-bf12-0838-c3d926fe4eaf@roeck-us.net>
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+Date:   Thu, 22 Apr 2021 17:16:51 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2OfujAbCHqr+cRYw3SLNE0EnMkvPCvxd5R8hxv4zGCrw@mail.gmail.com>
+Message-ID: <CAK8P3a2OfujAbCHqr+cRYw3SLNE0EnMkvPCvxd5R8hxv4zGCrw@mail.gmail.com>
+Subject: Re: [PATCH] rtc: bd70528: fix BD71815 watchdog dependency
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Claudius Heine <ch@denx.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] rtc: bd70528: fix BD71815 watchdog dependency
-Date:   Thu, 22 Apr 2021 17:15:21 +0200
-Message-Id: <20210422151545.2403356-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Apr 22, 2021 at 4:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
 
-The added Kconfig dependency is slightly incorrect, which can
-lead to a link failure when the watchdog is a loadable module:
+> >
+> >  config RTC_DRV_BD70528
+> >       tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
+> > -     depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
+> > +     depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 || BD70528_WATCHDOG
+>
+> Is the "|| BD70528_WATCHDOG" above correct ? Seems odd to me, since
+> it makes the depend statement true even if neither MFD_ROHM_BD71828
+> nor MFD_ROHM_BD70528 is enabled.
+>
+> I think the condition needs to be something like
+>         depends on (MFD_ROHM_BD71828 || MFD_ROHM_BD70528) && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
+> or, in two lines,
+>         depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528
+>         depends on BD70528_WATCHDOG || !BD70528_WATCHDOG
 
-arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_rtc_based_timers':
-rtc-bd70528.c:(.text+0x6cc): undefined reference to `bd70528_wdt_set'
-arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_time':
-rtc-bd70528.c:(.text+0xaa0): undefined reference to `bd70528_wdt_lock'
-arm-linux-gnueabi-ld: rtc-bd70528.c:(.text+0xab8): undefined reference to `bd70528_wdt_unlock'
-arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_alm_enable':
-rtc-bd70528.c:(.text+0xfc0): undefined reference to `bd70528_wdt_lock'
-arm-linux-gnueabi-ld: rtc-bd70528.c:(.text+0x1030): undefined reference to `bd70528_wdt_unlock'
+Indeed, I misread this as being used on any of three drivers, but
+MFD_ROHM_BD70528/BD70528_WATCHDOG is really the same
+thing.
 
-The problem is that it allows to be built-in if MFD_ROHM_BD71828
-is built-in, even when the watchdog is a loadable module.
+I sent an updated patch.
 
-Rework this so that having the watchdog as a loadable module always
-forces the rtc to be a module as well instead of built-in,
-regardless of bd71828.
-
-Fixes: c56dc069f268 ("rtc: bd70528: Support RTC on ROHM BD71815")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: Fix as suggested by Guenter Roeck, reword description
----
- drivers/rtc/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d8c13fded164..914497abeef9 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -502,7 +502,8 @@ config RTC_DRV_M41T80_WDT
- 
- config RTC_DRV_BD70528
- 	tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
--	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
-+	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528
-+	depends on BD70528_WATCHDOG || !BD70528_WATCHDOG
- 	help
- 	  If you say Y here you will get support for the RTC
- 	  block on ROHM BD70528, BD71815 and BD71828 Power Management IC.
--- 
-2.29.2
-
+        Arnd
