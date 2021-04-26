@@ -2,87 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E04B736A7E2
-	for <lists+linux-rtc@lfdr.de>; Sun, 25 Apr 2021 17:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B21436B4A9
+	for <lists+linux-rtc@lfdr.de>; Mon, 26 Apr 2021 16:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhDYPIV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 25 Apr 2021 11:08:21 -0400
-Received: from smtp-35-i2.italiaonline.it ([213.209.12.35]:43393 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230244AbhDYPIU (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 25 Apr 2021 11:08:20 -0400
-X-Greylist: delayed 489 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Apr 2021 11:08:20 EDT
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([95.244.94.151])
-        by smtp-35.iol.local with ESMTPA
-        id agEHlY8ippK9wagELlbBD1; Sun, 25 Apr 2021 16:59:29 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1619362769; bh=IebJ39rC3YsAS5xcTpDkg4gCO5NahbB0WbaWRAFj/w4=;
-        h=From;
-        b=oI/jhgzhNFHHxfSRzm4moPnc+TMttR9dCsrmmz1prn9aelKJ2ywgpN4BgAR6/+CST
-         /KpJfRuEAkVaZk1cctJ5ToVEOyK4h4u2+BQRfd5fOy5NT+VVZ+0h/dt7dX05AOISJp
-         rPyP/pRb7W1cBYecT7CXKBWX8uKAEhCaNF1YBC5BgKs9g3tO5m5hDwdXLPip0qTKw1
-         TPQjFnXbxuhZk7QzPW062V9AOINBEobnO6onv5JGsR7YJvbV90CAe6shJjeA0x+aNK
-         z+2YjHg+/qfbcyLV+AkE25Mae4ksKaYHBnq5CaovdKveEbu+z0o9nqosVQrTX5nnrZ
-         FKRsYXFqTwg7A==
-X-CNFS-Analysis: v=2.4 cv=A9ipg4aG c=1 sm=1 tr=0 ts=608583d1 cx=a_exe
- a=ugxisoNCKEotYwafST++Mw==:117 a=ugxisoNCKEotYwafST++Mw==:17
- a=VTExqAix1d_2lDZdMv4A:9
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dariobin@libero.it>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S233793AbhDZOSd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 26 Apr 2021 10:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233775AbhDZOSc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 26 Apr 2021 10:18:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA213C06175F
+        for <linux-rtc@vger.kernel.org>; Mon, 26 Apr 2021 07:17:50 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23K-0002KB-Ie; Mon, 26 Apr 2021 16:17:34 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23I-0005nU-Px; Mon, 26 Apr 2021 16:17:32 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: omap: use rtc_write to access OMAP_RTC_OSC_REG
-Date:   Sun, 25 Apr 2021 16:59:23 +0200
-Message-Id: <20210425145924.23353-1-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-X-CMAE-Envelope: MS4xfCmwAtpzgqSBvqvD0wrg6fFGgfB/GIyon6Zwfi9hzuSo4XorEh2Uu0oeSMcmQzSO6erot9c9HHPVfjNd8K+YZ0/MugbNYBEyVPGAWiq+D9bD/krMBwAu
- IVXsOnUFy3cuUZFGjDUpguLDPWX9FQ1eDcf7ipCQoeBTMU5G4qOMwZTpPb7mRduhUQcCKnlZZZUX2+2G6vtiG4T3jQxQn2hIVgCldyST7rgnkZpKs0UAJK5j
- IRfRrdP1+TS/CeFLRf0aqV7KDqdY7JvBKSXAiPmsLfb3H94e1bVo4jq+RfKiK2UjoDNr2iT1qQvioijKzCg99nogPNWdpjFsWmpRV+u25Pf5BLY5r5QIvc8/
- TYJEPwUbnZRooJbVhijvejWl0YTBe3AqsIIcE2W3IdaLLkywc5A=
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 26 Apr 2021 16:17:24 +0200
+Message-Id: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RTC_OSC_REG register is 32-bit, but the useful information is found
-in the 7 least significant bits (bits 7-31 are reserved). And in fact,
-as you can see from the code, all read accesses are 8-bit, as well as
-some writes. Let's make sure all writes are 8-bit. Moreover, in contexts
-where consecutive reads / writes after the busy check must take place
-within 15 us, it is better not to waste time on useless accesses.
+Hello,
 
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
----
+compared to v5 sent last week this series only fixes two typos in the
+commit logs.
 
- drivers/rtc/rtc-omap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+The range-diff is
+1:  0f2fe65a9c9c ! 1:  38f213c5eeff rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    +    rtc: at91sam9: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+2:  3f11b70e7427 ! 2:  b9cebea08a73 i2c: imx: Simplify using devm_clk_get_enableded()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    i2c: imx: Simplify using devm_clk_get_enableded()
+    +    i2c: imx: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+3:  6c357913e391 = 3:  8167605ad349 spi: davinci: Simplify using devm_clk_get_enabled()
+4:  71b3db526357 < -:  ------------ pwm: Clarify documentation about pwm_get_state()
 
-diff --git a/drivers/rtc/rtc-omap.c b/drivers/rtc/rtc-omap.c
-index dc7db2477f88..d46e0f0cc502 100644
---- a/drivers/rtc/rtc-omap.c
-+++ b/drivers/rtc/rtc-omap.c
-@@ -786,8 +786,7 @@ static int omap_rtc_probe(struct platform_device *pdev)
- 	/* enable RTC functional clock */
- 	if (rtc->type->has_32kclk_en) {
- 		reg = rtc_read(rtc, OMAP_RTC_OSC_REG);
--		rtc_writel(rtc, OMAP_RTC_OSC_REG,
--				reg | OMAP_RTC_OSC_32KCLK_EN);
-+		rtc_write(rtc, OMAP_RTC_OSC_REG, reg | OMAP_RTC_OSC_32KCLK_EN);
- 	}
- 
- 	/* clear old status */
-@@ -845,7 +844,7 @@ static int omap_rtc_probe(struct platform_device *pdev)
- 		reg = rtc_read(rtc, OMAP_RTC_OSC_REG);
- 		reg &= ~OMAP_RTC_OSC_OSC32K_GZ_DISABLE;
- 		reg |= OMAP_RTC_OSC_32KCLK_EN | OMAP_RTC_OSC_SEL_32KCLK_SRC;
--		rtc_writel(rtc, OMAP_RTC_OSC_REG, reg);
-+		rtc_write(rtc, OMAP_RTC_OSC_REG, reg);
- 	}
- 
- 	rtc->type->lock(rtc);
+Other than that the state is still unchanged: This is a series which
+allows several cleanups (as can be seen from patches 2 to 6) and I
+didn't get any feedback from the clock maintainers since v1 that I sent
+in October.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
+
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
+
+
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
 -- 
-2.17.1
+2.30.2
 
