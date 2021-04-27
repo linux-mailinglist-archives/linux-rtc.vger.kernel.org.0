@@ -2,130 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5107C36B4A2
-	for <lists+linux-rtc@lfdr.de>; Mon, 26 Apr 2021 16:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB61E36CA3C
+	for <lists+linux-rtc@lfdr.de>; Tue, 27 Apr 2021 19:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbhDZOS2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 26 Apr 2021 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbhDZOS1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 26 Apr 2021 10:18:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37464C06175F
-        for <linux-rtc@vger.kernel.org>; Mon, 26 Apr 2021 07:17:45 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0002KF-LM; Mon, 26 Apr 2021 16:17:34 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0005nh-A0; Mon, 26 Apr 2021 16:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6 4/6] rtc: at91sam9: Simplify using devm_clk_get_enabled()
-Date:   Mon, 26 Apr 2021 16:17:28 +0200
-Message-Id: <20210426141730.2826832-5-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
-References: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+        id S236713AbhD0RU4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 27 Apr 2021 13:20:56 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:45815 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236019AbhD0RUy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Apr 2021 13:20:54 -0400
+Received: from [192.168.100.1] ([82.142.25.254]) by mrelayeu.kundenserver.de
+ (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1M734j-1lfaFZ2MSF-008WxH; Tue, 27 Apr 2021 19:20:02 +0200
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20210323221430.3735147-1-laurent@vivier.eu>
+ <20210323221430.3735147-3-laurent@vivier.eu>
+From:   Laurent Vivier <laurent@vivier.eu>
+Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
+Message-ID: <a9c75ae7-6023-6b6c-260f-a0d6841ea4fa@vivier.eu>
+Date:   Tue, 27 Apr 2021 19:20:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20210323221430.3735147-3-laurent@vivier.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: fr
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Provags-ID: V03:K1:sX/rtXIi5HFyO2slzgGBdwOV7llxl+jRhOcOSfVR/K7V+VwTuh2
+ LA58ztWttzkC7r2JvDXEVGtGXL1ohfdKM60o8U8qodVdzvPyxw8zOc3V3CZgCbTRVGPH6D9
+ hFGX1RQ+o9dMEUaoyzUNqHRsjQPE41l91WR57IIjQekH+RI6S/6ODdhzfNYiHIa36wWczkf
+ SCzPppAA/Yh+EGOlceaSQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yUxnXIozo6I=:p0EVhQjNOZDnM482R7yLcD
+ bXyTB6w1Ic4udfkVni3NQhO96qucqDWGHT65AEKlHS8digfPxaNTI1PXjQ7sXvovydXz/zgZF
+ 72VuT8Xd6MQid4LcImTWG28Po73Z/mjFaS9EowGp2l9pzdXMqJJR9Gh9oX1cxPtaw4KLSq2ra
+ Zjf7lRWoe9zG02Enopq6yARGC1yJ2V9XtOw2T1bMEukgwwxBCIjFwGJ42UIrmChGL/ZqMzOVI
+ D+ejKvU7ICKBCtkri4OHu9s5GNN9iG9jE30xQJSiUC65EADzc65nxmAnbir5FSMidvPBxkplZ
+ 1I9a0+/6pkV3npxBNcVOkIS8VElEDXKUBWUwlMIdaE6LvsWcP91C4hALWeJxhtzVnYUX42JYl
+ Q7oRI1BNPPh2JguG1hRwFih3F9zY5kEJbZia0Lu/k+ivcJf+wM9HPI6tm1Rk7uKfBP2NDW1xy
+ lPTI5REihWKrFRzUOR4uCM1jzNcLjGg6lEKyeqt09jBrLikeTVTK8oW2vqoVfbiU6Z0VrUaZz
+ sUrxvmbAKFBu6nrOdQqKF8=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+Hi,
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/rtc/rtc-at91sam9.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+Le 23/03/2021 à 23:14, Laurent Vivier a écrit :
+> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
+> 
+> It is based on android goldfish devices.
+> 
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> ---
+>  arch/m68k/Kbuild                           |   1 +
+>  arch/m68k/Kconfig.machine                  |  17 +++
+>  arch/m68k/configs/virt_defconfig           |  93 ++++++++++++++++
+>  arch/m68k/include/asm/irq.h                |   3 +-
+>  arch/m68k/include/asm/pgtable_mm.h         |   7 ++
+>  arch/m68k/include/asm/setup.h              |  44 ++++++--
+>  arch/m68k/include/asm/virt.h               |  26 +++++
+>  arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
+>  arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
+>  arch/m68k/kernel/Makefile                  |   1 +
+>  arch/m68k/kernel/head.S                    |  30 ++++++
+>  arch/m68k/kernel/setup_mm.c                |   9 ++
+>  arch/m68k/mm/kmap.c                        |  20 ++--
+>  arch/m68k/virt/Makefile                    |   6 ++
+>  arch/m68k/virt/config.c                    | 118 +++++++++++++++++++++
+>  arch/m68k/virt/ints.c                      | 110 +++++++++++++++++++
+>  arch/m68k/virt/platform.c                  |  80 ++++++++++++++
+>  arch/m68k/virt/timer.c                     |  91 ++++++++++++++++
+>  18 files changed, 658 insertions(+), 17 deletions(-)
+>  create mode 100644 arch/m68k/configs/virt_defconfig
+>  create mode 100644 arch/m68k/include/asm/virt.h
+>  create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
+>  create mode 100644 arch/m68k/virt/Makefile
+>  create mode 100644 arch/m68k/virt/config.c
+>  create mode 100644 arch/m68k/virt/ints.c
+>  create mode 100644 arch/m68k/virt/platform.c
+>  create mode 100644 arch/m68k/virt/timer.c
+> 
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index 2216be429ab7..b52e7bd26303 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -374,21 +374,14 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
- 
--	rtc->sclk = devm_clk_get(&pdev->dev, NULL);
-+	rtc->sclk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(rtc->sclk))
- 		return PTR_ERR(rtc->sclk);
- 
--	ret = clk_prepare_enable(rtc->sclk);
--	if (ret) {
--		dev_err(&pdev->dev, "Could not enable slow clock\n");
--		return ret;
--	}
--
- 	sclk_rate = clk_get_rate(rtc->sclk);
- 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
- 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
--		ret = -EINVAL;
--		goto err_clk;
-+		return -EINVAL;
- 	}
- 
- 	mr = rtt_readl(rtc, MR);
-@@ -406,7 +399,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtcdev)) {
- 		ret = PTR_ERR(rtc->rtcdev);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	rtc->rtcdev->ops = &at91_rtc_ops;
-@@ -418,7 +411,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			       dev_name(&rtc->rtcdev->dev), rtc);
- 	if (ret) {
- 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
-@@ -432,11 +425,6 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			 dev_name(&rtc->rtcdev->dev));
- 
- 	return devm_rtc_register_device(rtc->rtcdev);
--
--err_clk:
--	clk_disable_unprepare(rtc->sclk);
--
--	return ret;
- }
- 
- /*
-@@ -450,8 +438,6 @@ static int at91_rtc_remove(struct platform_device *pdev)
- 	/* disable all interrupts */
- 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
- 
--	clk_disable_unprepare(rtc->sclk);
--
- 	return 0;
- }
- 
--- 
-2.30.2
+As 5.12 has been released, is this possible to consider having this new machine in the next release?
 
+All changes are contained under arch/m68k and protected by the CONFIG_VIRT flag. This should not
+have any impact on the other m68k machines. In any case, I'll be able to maintain the machine and
+fix any problem.
+
+Thanks,
+Laurent
