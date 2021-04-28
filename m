@@ -2,97 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB61E36CA3C
-	for <lists+linux-rtc@lfdr.de>; Tue, 27 Apr 2021 19:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D698736D057
+	for <lists+linux-rtc@lfdr.de>; Wed, 28 Apr 2021 03:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbhD0RU4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 27 Apr 2021 13:20:56 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:45815 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236019AbhD0RUy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Apr 2021 13:20:54 -0400
-Received: from [192.168.100.1] ([82.142.25.254]) by mrelayeu.kundenserver.de
- (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1M734j-1lfaFZ2MSF-008WxH; Tue, 27 Apr 2021 19:20:02 +0200
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-m68k@lists.linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20210323221430.3735147-1-laurent@vivier.eu>
- <20210323221430.3735147-3-laurent@vivier.eu>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
-Message-ID: <a9c75ae7-6023-6b6c-260f-a0d6841ea4fa@vivier.eu>
-Date:   Tue, 27 Apr 2021 19:20:01 +0200
+        id S231605AbhD1Bkh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 27 Apr 2021 21:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230425AbhD1Bkh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 27 Apr 2021 21:40:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13027C061574;
+        Tue, 27 Apr 2021 18:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=j0YMlGzHf/h6mz2607RywJBcwp3+uuEe5/I39C4Plt4=; b=WXmy1DnTJDqIRSAOvxtbULE6M7
+        8kCQWqcYQETvbNwhJmVY1v7B+irbL5ezKWxXEr6OpRVNARMubEalpLzLrumXzTacTdx++gWDspJXQ
+        DRYfkAuaB01eqLv0/kdZM8gnUjB9H+LKgD9R2rn8DggtzXDhnmsbouiqk35MoStzacFLvjt8IjgRo
+        6oK5ZJvN6PEQzl6Y+9Y+We9mkD4FKkdeBpu0j+w1B36jCCqfxvXBE12MgfAcxCknnKdAXUszjXqbK
+        x9zyXEf89Wk6knV2uvuwVlTGA2fBsV6W9kWRRGtjpPtgH3jtqdFhC1j7CsXR7HqzjmmU6/1CfvHy0
+        VAhy7+RA==;
+Received: from [2601:1c0:6280:3f0::df68]
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lbZAu-007hVE-Ps; Wed, 28 Apr 2021 01:39:43 +0000
+Subject: Re: [PATCH] [v2] rtc: bd70528: fix BD71815 watchdog dependency
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Claudius Heine <ch@denx.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210422151545.2403356-1-arnd@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <5bb5dc13-2637-c6b7-b681-c16eaf8af53c@infradead.org>
+Date:   Tue, 27 Apr 2021 18:39:32 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-In-Reply-To: <20210323221430.3735147-3-laurent@vivier.eu>
+In-Reply-To: <20210422151545.2403356-1-arnd@kernel.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: fr
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:sX/rtXIi5HFyO2slzgGBdwOV7llxl+jRhOcOSfVR/K7V+VwTuh2
- LA58ztWttzkC7r2JvDXEVGtGXL1ohfdKM60o8U8qodVdzvPyxw8zOc3V3CZgCbTRVGPH6D9
- hFGX1RQ+o9dMEUaoyzUNqHRsjQPE41l91WR57IIjQekH+RI6S/6ODdhzfNYiHIa36wWczkf
- SCzPppAA/Yh+EGOlceaSQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yUxnXIozo6I=:p0EVhQjNOZDnM482R7yLcD
- bXyTB6w1Ic4udfkVni3NQhO96qucqDWGHT65AEKlHS8digfPxaNTI1PXjQ7sXvovydXz/zgZF
- 72VuT8Xd6MQid4LcImTWG28Po73Z/mjFaS9EowGp2l9pzdXMqJJR9Gh9oX1cxPtaw4KLSq2ra
- Zjf7lRWoe9zG02Enopq6yARGC1yJ2V9XtOw2T1bMEukgwwxBCIjFwGJ42UIrmChGL/ZqMzOVI
- D+ejKvU7ICKBCtkri4OHu9s5GNN9iG9jE30xQJSiUC65EADzc65nxmAnbir5FSMidvPBxkplZ
- 1I9a0+/6pkV3npxBNcVOkIS8VElEDXKUBWUwlMIdaE6LvsWcP91C4hALWeJxhtzVnYUX42JYl
- Q7oRI1BNPPh2JguG1hRwFih3F9zY5kEJbZia0Lu/k+ivcJf+wM9HPI6tm1Rk7uKfBP2NDW1xy
- lPTI5REihWKrFRzUOR4uCM1jzNcLjGg6lEKyeqt09jBrLikeTVTK8oW2vqoVfbiU6Z0VrUaZz
- sUrxvmbAKFBu6nrOdQqKF8=
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-Le 23/03/2021 à 23:14, Laurent Vivier a écrit :
-> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
+On 4/22/21 8:15 AM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> It is based on android goldfish devices.
+> The added Kconfig dependency is slightly incorrect, which can
+> lead to a link failure when the watchdog is a loadable module:
 > 
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_rtc_based_timers':
+> rtc-bd70528.c:(.text+0x6cc): undefined reference to `bd70528_wdt_set'
+> arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_set_time':
+> rtc-bd70528.c:(.text+0xaa0): undefined reference to `bd70528_wdt_lock'
+> arm-linux-gnueabi-ld: rtc-bd70528.c:(.text+0xab8): undefined reference to `bd70528_wdt_unlock'
+> arm-linux-gnueabi-ld: drivers/rtc/rtc-bd70528.o: in function `bd70528_alm_enable':
+> rtc-bd70528.c:(.text+0xfc0): undefined reference to `bd70528_wdt_lock'
+> arm-linux-gnueabi-ld: rtc-bd70528.c:(.text+0x1030): undefined reference to `bd70528_wdt_unlock'
+> 
+> The problem is that it allows to be built-in if MFD_ROHM_BD71828
+> is built-in, even when the watchdog is a loadable module.
+> 
+> Rework this so that having the watchdog as a loadable module always
+> forces the rtc to be a module as well instead of built-in,
+> regardless of bd71828.
+> 
+> Fixes: c56dc069f268 ("rtc: bd70528: Support RTC on ROHM BD71815")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  arch/m68k/Kbuild                           |   1 +
->  arch/m68k/Kconfig.machine                  |  17 +++
->  arch/m68k/configs/virt_defconfig           |  93 ++++++++++++++++
->  arch/m68k/include/asm/irq.h                |   3 +-
->  arch/m68k/include/asm/pgtable_mm.h         |   7 ++
->  arch/m68k/include/asm/setup.h              |  44 ++++++--
->  arch/m68k/include/asm/virt.h               |  26 +++++
->  arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
->  arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
->  arch/m68k/kernel/Makefile                  |   1 +
->  arch/m68k/kernel/head.S                    |  30 ++++++
->  arch/m68k/kernel/setup_mm.c                |   9 ++
->  arch/m68k/mm/kmap.c                        |  20 ++--
->  arch/m68k/virt/Makefile                    |   6 ++
->  arch/m68k/virt/config.c                    | 118 +++++++++++++++++++++
->  arch/m68k/virt/ints.c                      | 110 +++++++++++++++++++
->  arch/m68k/virt/platform.c                  |  80 ++++++++++++++
->  arch/m68k/virt/timer.c                     |  91 ++++++++++++++++
->  18 files changed, 658 insertions(+), 17 deletions(-)
->  create mode 100644 arch/m68k/configs/virt_defconfig
->  create mode 100644 arch/m68k/include/asm/virt.h
->  create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
->  create mode 100644 arch/m68k/virt/Makefile
->  create mode 100644 arch/m68k/virt/config.c
->  create mode 100644 arch/m68k/virt/ints.c
->  create mode 100644 arch/m68k/virt/platform.c
->  create mode 100644 arch/m68k/virt/timer.c
+> v2: Fix as suggested by Guenter Roeck, reword description
+> ---
+>  drivers/rtc/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index d8c13fded164..914497abeef9 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -502,7 +502,8 @@ config RTC_DRV_M41T80_WDT
+>  
+>  config RTC_DRV_BD70528
+>  	tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
+> -	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
+> +	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528
+> +	depends on BD70528_WATCHDOG || !BD70528_WATCHDOG
+>  	help
+>  	  If you say Y here you will get support for the RTC
+>  	  block on ROHM BD70528, BD71815 and BD71828 Power Management IC.
 > 
 
-As 5.12 has been released, is this possible to consider having this new machine in the next release?
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-All changes are contained under arch/m68k and protected by the CONFIG_VIRT flag. This should not
-have any impact on the other m68k machines. In any case, I'll be able to maintain the machine and
-fix any problem.
+thanks.
 
-Thanks,
-Laurent
+-- 
+~Randy
+
