@@ -2,47 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6795736F20E
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 23:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26AE36F23A
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 23:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbhD2Vas (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Apr 2021 17:30:48 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38683 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbhD2Var (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Apr 2021 17:30:47 -0400
-X-Originating-IP: 90.65.108.55
+        id S237485AbhD2Vo4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 29 Apr 2021 17:44:56 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:53125 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237337AbhD2Voz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Apr 2021 17:44:55 -0400
 Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 1B34C1BF204;
-        Thu, 29 Apr 2021 21:29:58 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id A129D200002;
+        Thu, 29 Apr 2021 21:44:07 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Marek Vasut <marex@denx.de>, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: ds1307: Fix wday settings for rx8130
-Date:   Thu, 29 Apr 2021 23:29:51 +0200
-Message-Id: <161973168394.2582973.4174648734341158108.b4-ty@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: sysfs: check features instead of ops
+Date:   Thu, 29 Apr 2021 23:44:03 +0200
+Message-Id: <20210429214403.2610952-1-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210420023917.1949066-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-References: <20210420023917.1949066-1-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 20 Apr 2021 11:39:17 +0900, Nobuhiro Iwamatsu wrote:
-> rx8130 wday specifies the bit position, not BCD.
+Test RTC_FEATURE_ALARM instead of relying on .set_alarm to know whether
+alarms are available.
 
-Applied, thanks!
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1/1] rtc: ds1307: Fix wday settings for rx8130
-      commit: a2cd545784d06f0ce88a21ba17a9653d2cd98d88
-
-Best regards,
+diff --git a/drivers/rtc/sysfs.c b/drivers/rtc/sysfs.c
+index 8a957d31a1a4..74026f67fdfb 100644
+--- a/drivers/rtc/sysfs.c
++++ b/drivers/rtc/sysfs.c
+@@ -273,7 +273,7 @@ static bool rtc_does_wakealarm(struct rtc_device *rtc)
+ 	if (!device_can_wakeup(rtc->dev.parent))
+ 		return false;
+ 
+-	return rtc->ops->set_alarm != NULL;
++	return !!test_bit(RTC_FEATURE_ALARM, rtc->features);
+ }
+ 
+ static umode_t rtc_attr_is_visible(struct kobject *kobj,
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+2.30.2
+
