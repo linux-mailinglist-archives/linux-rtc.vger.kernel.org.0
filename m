@@ -2,96 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF6D36ED41
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 17:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D0936F1FC
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 23:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbhD2PTV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Apr 2021 11:19:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233148AbhD2PTU (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 29 Apr 2021 11:19:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB54B61447;
-        Thu, 29 Apr 2021 15:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619709514;
-        bh=uV4pH8bW9rxeLWB3WXO/T+5i0gmgm4sBbiw2Lm7Jk0Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tnUPevTboJ6pYRb+MA1Gg+Cwq7LE06m5gIUW1X8Eu33WMQsjuzyWewG+kDI2WTgHA
-         d10dQueou/p4WSDTdbxoOaQkanf4t4pS+bw1DeEkQK6kDQ5sMsqurlm+JKfyN1WWMb
-         OMjPqupiusTVovVcLGZDWkiVeNk0IZjjIUX0hAyNZxWgdM6N1VMqAjrZ+IhUjwIQXX
-         ok/BWop+hb1dedpWjmJYqMFN0gtd3ts9pheVuxcg79dc+mPtLaXOYDYW1GDx4XgCEq
-         0YytVTI/Se8/FB4/jq0LFeBy7qgO1XkA8LTRdWCp/UT9g5j/NFgYwpncoZokzAxmOD
-         8SwiKUDNfbBWQ==
-Received: by mail-qt1-f175.google.com with SMTP id a18so25608351qtj.10;
-        Thu, 29 Apr 2021 08:18:33 -0700 (PDT)
-X-Gm-Message-State: AOAM533NP3zNARaoPDL98Ds9S3l/4HKCXTAXpeFDlkqqPlWiNIQcfnOL
-        N4uDxAKaoIb+fCuhjQukon8u7IDxavQvFUsMfw==
-X-Google-Smtp-Source: ABdhPJyvnKfB3Mjs6tNMy27mCpJHlNiYu6wPEX1WAGi/QlDuZ7Ax+59Z4uCOBrNhOuO71QhBlF9qwe23+IqDNDTWkTY=
-X-Received: by 2002:ac8:48c2:: with SMTP id l2mr10939431qtr.134.1619709512977;
- Thu, 29 Apr 2021 08:18:32 -0700 (PDT)
+        id S233315AbhD2V0m (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 29 Apr 2021 17:26:42 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:55029 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233293AbhD2V0m (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Apr 2021 17:26:42 -0400
+X-Originating-IP: 90.65.108.55
+Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 621A81C0004;
+        Thu, 29 Apr 2021 21:25:53 +0000 (UTC)
+Date:   Thu, 29 Apr 2021 23:25:53 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Mian Yousaf Kaukab <ykaukab@suse.de>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf2127: handle timestamp interrupts
+Message-ID: <YIskYdBAW0yZ+JLi@piout.net>
+References: <20210429144758.4552-1-ykaukab@suse.de>
 MIME-Version: 1.0
-References: <1617976766-7852-1-git-send-email-skakit@codeaurora.org>
- <1617976766-7852-4-git-send-email-skakit@codeaurora.org> <20210414083820.GH4869@dell>
- <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com> <YHnisFroaR1qWA0Y@piout.net>
-In-Reply-To: <YHnisFroaR1qWA0Y@piout.net>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 29 Apr 2021 10:18:21 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKO12CuA3MdX6bpENVYaT-0Xvm2L0S9UquHx2P-AhgiZQ@mail.gmail.com>
-Message-ID: <CAL_JsqKO12CuA3MdX6bpENVYaT-0Xvm2L0S9UquHx2P-AhgiZQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/4] dt-bindings: mfd: Convert pm8xxx bindings to yaml
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     satya priya <skakit@codeaurora.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Kiran Gunda <kgunda@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210429144758.4552-1-ykaukab@suse.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 2:17 PM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hi,
->
-> On 16/04/2021 12:20:30-0500, Rob Herring wrote:
-> > On Wed, Apr 14, 2021 at 3:38 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > >
-> > > On Fri, 09 Apr 2021, satya priya wrote:
-> > >
-> > > > Convert pm8xxx bindings from .txt to .yaml format. Also,
-> > > > split this binding into two: parent binding(qcom-pm8xxx.yaml)
-> > > > and child node RTC binding(qcom-pm8xxx-rtc.yaml).
-> > > >
-> > > > Signed-off-by: satya priya <skakit@codeaurora.org>
-> > > > ---
-> > > > Changes in V2:
-> > > >  - As per Bjorn's comments, I've split this into two, one parent binding
-> > > >    and one child node rtc binding.
-> > > >  - Fixed bot errors and changed maintainer name.
-> > > >
-> > > >  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        | 100 ---------------------
-> > > >  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  54 +++++++++++
-> > > >  2 files changed, 54 insertions(+), 100 deletions(-)
-> > > >  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
-> > > >  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
-> > >
-> > > Applied, thanks.
-> >
-> > You need to apply the rtc schema too. linux-next has an error on this one now.
-> >
->
-> I'm going to apply it later tonight
+Hello,
 
-I've said this before, but MFD bindings with more than one schema file
-like this one need to go thru one tree or things break temporarily (as
-now Linus' tree is broken).
+On 29/04/2021 16:47:58+0200, Mian Yousaf Kaukab wrote:
+> commit 03623b4b041c ("rtc: pcf2127: add tamper detection support")
+> added support for timestamp interrupts. However they are not being
+> handled in the irq handler. If a timestamp interrupt occurs it
+> results in kernel disabling the interrupt and displaying the call
+> trace:
+> 
+> [  121.145580] irq 78: nobody cared (try booting with the "irqpoll" option)
+> ...
+> [  121.238087] [<00000000c4d69393>] irq_default_primary_handler threaded [<000000000a90d25b>] pcf2127_rtc_irq [rtc_pcf2127]
+> [  121.248971] Disabling IRQ #78
+> 
+> Handle timestamp interrupts in pcf2127_rtc_irq(). Display a message
+> in kernel log when a timestamp interrupt occurs. Don’t check for
+> TSF1 and TSF2 flags in timestamp0_show() as they are cleared in the
+> IRQ handler now.
 
-Rob
+This breaks an important functionality (as I already replied to a
+previous fix a while ago) as then there is no way to know whether the
+timestamp is bogus or if an event really happened. Please fix properly.
+
+> 
+> Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 34 +++++++++++++++++++++++++---------
+>  1 file changed, 25 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index d13c20a2adf7..0dbc0473cc68 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -94,6 +94,13 @@
+>  #define PCF2127_WD_VAL_MAX		255
+>  #define PCF2127_WD_VAL_DEFAULT		60
+>  
+> +/* Mask for currently enabled interrupts */
+> +#define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
+> +#define PCF2127_CTRL2_IRQ_MASK ( \
+> +		PCF2127_BIT_CTRL2_AF | \
+> +		PCF2127_BIT_CTRL2_WDTF | \
+> +		PCF2127_BIT_CTRL2_TSF2)
+> +
+>  struct pcf2127 {
+>  	struct rtc_device *rtc;
+>  	struct watchdog_device wdd;
+> @@ -437,20 +444,33 @@ static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+>  static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
+>  {
+>  	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> -	unsigned int ctrl2 = 0;
+> +	unsigned int ctrl1, ctrl2;
+>  	int ret = 0;
+>  
+> +	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
+> +	if (ret)
+> +		return IRQ_NONE;
+> +
+>  	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
+>  	if (ret)
+>  		return IRQ_NONE;
+>  
+> -	if (!(ctrl2 & PCF2127_BIT_CTRL2_AF))
+> +	if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
+>  		return IRQ_NONE;
+>  
+> -	regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+> -		     ctrl2 & ~(PCF2127_BIT_CTRL2_AF | PCF2127_BIT_CTRL2_WDTF));
+> +	if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
+> +		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
+> +			ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
+>  
+> -	rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
+> +	if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
+> +		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+> +			ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
+> +
+> +	if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
+> +		dev_info(dev, "timestamp interrupt generated");
+> +
+
+Please do not add random strings in the kernel, this will probably never
+be seen by any real user.
+
+> +	if (ctrl2 & PCF2127_BIT_CTRL2_AF)
+> +		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
+>  
+>  	pcf2127_wdt_active_ping(&pcf2127->wdd);
+>  
+> @@ -524,10 +544,6 @@ static ssize_t timestamp0_show(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
+> -	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
+> -		return 0;
+> -
+>  	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
+>  	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
+>  	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
+> -- 
+> 2.26.2
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
