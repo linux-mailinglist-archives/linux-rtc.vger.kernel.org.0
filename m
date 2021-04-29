@@ -2,93 +2,123 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2162D36E5DB
-	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 09:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15EA36EC9D
+	for <lists+linux-rtc@lfdr.de>; Thu, 29 Apr 2021 16:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbhD2HZy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 29 Apr 2021 03:25:54 -0400
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:34622 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbhD2HZu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 29 Apr 2021 03:25:50 -0400
-Received: by mail-vk1-f169.google.com with SMTP id q192so3306949vke.1;
-        Thu, 29 Apr 2021 00:25:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BR+Zb6bXtQ8BGY8mZumeMhUwBbZF2jGOR3njZwlxxUo=;
-        b=pSQl/F6GHiWWSyjZNPEnp6B0D8lZB0Rg3QVAQ5xd7NYXsPINZNp+BWID7jwnIXAKDX
-         LKx6kVjqzjbb4Snt5dpMpBHojVo+3v0LUpPvMfmQmUYrqJog5VSPiT0uwhym/mphEyox
-         osEl+xDc7ybfLr60hdXdflKWCn72Uy4xRsqIOwasXuSaSY3DgpsI7OQeoN4uJHiLtgf7
-         gOF/vhXq5r8RoahJNnPwRbTH+MRnGYOvtLycF19OOxxYJwQKVQzwzfLPZFN6EGEgATH3
-         4U86xWumKWaFGhNth14QUi5OHAsdU5a0g6iQB2X8cqBXoqGy0354QuTlQOfBfY+p/s9w
-         EKWA==
-X-Gm-Message-State: AOAM5324RBrF5AztyqW1qGeHnb/EVBYVhQGGd6y3KiwZe3FgPo+8+VaT
-        xrWr5fs8NI3vqudnMbqxVSixa0nQs3BASgT+qgrYAFLRzd0=
-X-Google-Smtp-Source: ABdhPJzWxXJHZHy/a/3azuE76fEyxLCedtlAO9sChfUUdpE3dbANNOgLoCyBS8aBE6LYvOYl+2jaqpKGLBJpBu4clNQ=
-X-Received: by 2002:a1f:5682:: with SMTP id k124mr28961242vkb.2.1619681006490;
- Thu, 29 Apr 2021 00:23:26 -0700 (PDT)
+        id S232989AbhD2Osp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 29 Apr 2021 10:48:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58332 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232820AbhD2Osp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 29 Apr 2021 10:48:45 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 73BD0B133;
+        Thu, 29 Apr 2021 14:47:57 +0000 (UTC)
+From:   Mian Yousaf Kaukab <ykaukab@suse.de>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mian Yousaf Kaukab <ykaukab@suse.de>
+Subject: [PATCH] rtc: pcf2127: handle timestamp interrupts
+Date:   Thu, 29 Apr 2021 16:47:58 +0200
+Message-Id: <20210429144758.4552-1-ykaukab@suse.de>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210323221430.3735147-1-laurent@vivier.eu> <20210323221430.3735147-3-laurent@vivier.eu>
- <CAMuHMdUFh2W-bY5Ez1aOTZQjq0=THvmOf22JdxWoNNtFLskSzw@mail.gmail.com> <F9FB9B1D-3B31-452D-AD67-D1C57A302B83@gmail.com>
-In-Reply-To: <F9FB9B1D-3B31-452D-AD67-D1C57A302B83@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 29 Apr 2021 09:23:15 +0200
-Message-ID: <CAMuHMdXhSQNwCU627MOONOrXdasQN=VZxSGrCZiDN7iwQSwi7Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
-To:     Josh Juran <jjuran@gmail.com>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Josh,
+commit 03623b4b041c ("rtc: pcf2127: add tamper detection support")
+added support for timestamp interrupts. However they are not being
+handled in the irq handler. If a timestamp interrupt occurs it
+results in kernel disabling the interrupt and displaying the call
+trace:
 
-On Thu, Apr 29, 2021 at 1:06 AM Josh Juran <jjuran@gmail.com> wrote:
-> On Apr 28, 2021, at 8:04 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > This can be simplified by shifting irq_pending instead of irq_bit:
-> >
-> >    do {
-> >            if (irq_pending & 1)
-> >                    generic_handle_irq(irq_num);
-> >
-> >            ++irq_num;
-> >            irq_pending >>= 1;
-> >    } while (irq_pending);
-> >
-> > Unfortunately m68k doesn't have a single-instruction __ffs().
->
-> The 68000 and 68010 don't, but couldn't the 68020's BFFFO do the job?
+[  121.145580] irq 78: nobody cared (try booting with the "irqpoll" option)
+...
+[  121.238087] [<00000000c4d69393>] irq_default_primary_handler threaded [<000000000a90d25b>] pcf2127_rtc_irq [rtc_pcf2127]
+[  121.248971] Disabling IRQ #78
 
-I looked at the code generated by gcc for __builtin_ffs(), and while
-it did use BFFFO, it needs several other instructions.
+Handle timestamp interrupts in pcf2127_rtc_irq(). Display a message
+in kernel log when a timestamp interrupt occurs. Don’t check for
+TSF1 and TSF2 flags in timestamp0_show() as they are cleared in the
+IRQ handler now.
 
-The same can be seen in arch/m68k/include/asm/bitops.h:
+Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+---
+ drivers/rtc/rtc-pcf2127.c | 34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
 
-    static inline int ffs(int x)
-    {
-            int cnt;
-
-            __asm__ ("bfffo %1{#0:#0},%0"
-                    : "=d" (cnt)
-                    : "dm" (x & -x));
-            return 32 - cnt;
-    }
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index d13c20a2adf7..0dbc0473cc68 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -94,6 +94,13 @@
+ #define PCF2127_WD_VAL_MAX		255
+ #define PCF2127_WD_VAL_DEFAULT		60
+ 
++/* Mask for currently enabled interrupts */
++#define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
++#define PCF2127_CTRL2_IRQ_MASK ( \
++		PCF2127_BIT_CTRL2_AF | \
++		PCF2127_BIT_CTRL2_WDTF | \
++		PCF2127_BIT_CTRL2_TSF2)
++
+ struct pcf2127 {
+ 	struct rtc_device *rtc;
+ 	struct watchdog_device wdd;
+@@ -437,20 +444,33 @@ static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
+ {
+ 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+-	unsigned int ctrl2 = 0;
++	unsigned int ctrl1, ctrl2;
+ 	int ret = 0;
+ 
++	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
++	if (ret)
++		return IRQ_NONE;
++
+ 	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
+ 	if (ret)
+ 		return IRQ_NONE;
+ 
+-	if (!(ctrl2 & PCF2127_BIT_CTRL2_AF))
++	if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
+ 		return IRQ_NONE;
+ 
+-	regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
+-		     ctrl2 & ~(PCF2127_BIT_CTRL2_AF | PCF2127_BIT_CTRL2_WDTF));
++	if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
++		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
++			ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
+ 
+-	rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
++	if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
++		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
++			ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
++
++	if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
++		dev_info(dev, "timestamp interrupt generated");
++
++	if (ctrl2 & PCF2127_BIT_CTRL2_AF)
++		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
+ 
+ 	pcf2127_wdt_active_ping(&pcf2127->wdd);
+ 
+@@ -524,10 +544,6 @@ static ssize_t timestamp0_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
+-	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
+-		return 0;
+-
+ 	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
+ 	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
+ 	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.26.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
