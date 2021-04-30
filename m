@@ -2,151 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2F636F805
-	for <lists+linux-rtc@lfdr.de>; Fri, 30 Apr 2021 11:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C42536F856
+	for <lists+linux-rtc@lfdr.de>; Fri, 30 Apr 2021 12:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhD3JkL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 30 Apr 2021 05:40:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51708 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhD3JkL (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 30 Apr 2021 05:40:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1EAC9B080;
-        Fri, 30 Apr 2021 09:39:22 +0000 (UTC)
-From:   Mian Yousaf Kaukab <ykaukab@suse.de>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+        id S229598AbhD3KO2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 30 Apr 2021 06:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229543AbhD3KO1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 30 Apr 2021 06:14:27 -0400
+X-Greylist: delayed 2469 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Apr 2021 03:13:39 PDT
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AEEC06174A
+        for <linux-rtc@vger.kernel.org>; Fri, 30 Apr 2021 03:13:39 -0700 (PDT)
+Received: from dslb-084-059-234-193.084.059.pools.vodafone-ip.de ([84.59.234.193] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1lcPVW-0007DS-J6; Fri, 30 Apr 2021 11:32:22 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        biwen.li@nxp.com, Mian Yousaf Kaukab <ykaukab@suse.de>
-Subject: [PATCH v3] rtc: pcf2127: handle timestamp interrupts
-Date:   Fri, 30 Apr 2021 11:39:25 +0200
-Message-Id: <20210430093925.17363-1-ykaukab@suse.de>
-X-Mailer: git-send-email 2.26.2
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH] rtc: imxdi: add wakeup support
+Date:   Fri, 30 Apr 2021 11:32:10 +0200
+Message-Id: <20210430093210.7034-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-commit 03623b4b041c ("rtc: pcf2127: add tamper detection support")
-added support for timestamp interrupts. However they are not being
-handled in the irq handler. If a timestamp interrupt occurs it
-results in kernel disabling the interrupt and displaying the call
-trace:
+The DryIce-based RTC supports alarms that trigger an interrupt.
 
-[  121.145580] irq 78: nobody cared (try booting with the "irqpoll" option)
-...
-[  121.238087] [<00000000c4d69393>] irq_default_primary_handler threaded [<000000000a90d25b>] pcf2127_rtc_irq [rtc_pcf2127]
-[  121.248971] Disabling IRQ #78
+Add an option to configure this interrupt as a wakeup source that wakes
+the system up from standby mode.
 
-Handle timestamp interrupts in pcf2127_rtc_irq(). Set a flag to mark
-the timestamp as valid and only report to sysfs if the flag is set.
-
-Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
-history:
-v3: -Restore call to pcf2127_wdt_active_ping() in timestamp0_store().
-     It was removed by mistake.
-v2: -Add a flag to mark the occurrence of timestamp interrupt
-    -Add Biwen Li in Cc
 
- drivers/rtc/rtc-pcf2127.c | 48 +++++++++++++++++++++++----------------
- 1 file changed, 28 insertions(+), 20 deletions(-)
+simple test
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index d13c20a2adf7..d8dec4cbe39f 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -94,10 +94,18 @@
- #define PCF2127_WD_VAL_MAX		255
- #define PCF2127_WD_VAL_DEFAULT		60
- 
-+/* Mask for currently enabled interrupts */
-+#define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-+#define PCF2127_CTRL2_IRQ_MASK ( \
-+		PCF2127_BIT_CTRL2_AF | \
-+		PCF2127_BIT_CTRL2_WDTF | \
-+		PCF2127_BIT_CTRL2_TSF2)
-+
- struct pcf2127 {
+   [root@board ]# echo enabled > /sys/class/rtc/rtc0/device/power/wakeup
+   [root@board ]# rtcwake -s 3 -m mem
+   wakeup from "mem" at Fri Apr 30 09:23:52 2021
+   ...
+   [root@board ]#
+
+ drivers/rtc/rtc-imxdi.c | 39 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/rtc/rtc-imxdi.c b/drivers/rtc/rtc-imxdi.c
+index c1806f4d68e7..63957be25759 100644
+--- a/drivers/rtc/rtc-imxdi.c
++++ b/drivers/rtc/rtc-imxdi.c
+@@ -98,6 +98,7 @@
+  * @pdev: pointer to platform dev
+  * @rtc: pointer to rtc struct
+  * @ioaddr: IO registers pointer
++ * @norm_irq: irq number of the "normal" irq
+  * @clk: input reference clock
+  * @dsr: copy of the DSR register
+  * @irq_lock: interrupt enable register (DIER) lock
+@@ -109,6 +110,7 @@ struct imxdi_dev {
+ 	struct platform_device *pdev;
  	struct rtc_device *rtc;
- 	struct watchdog_device wdd;
- 	struct regmap *regmap;
-+	bool timestamp_valid;
- };
- 
- /*
-@@ -437,20 +445,33 @@ static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
+ 	void __iomem *ioaddr;
++	int norm_irq;
+ 	struct clk *clk;
+ 	u32 dsr;
+ 	spinlock_t irq_lock;
+@@ -741,7 +743,7 @@ static void dryice_work(struct work_struct *work)
+ static int __init dryice_rtc_probe(struct platform_device *pdev)
  {
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
--	unsigned int ctrl2 = 0;
-+	unsigned int ctrl1, ctrl2;
- 	int ret = 0;
+ 	struct imxdi_dev *imxdi;
+-	int norm_irq, sec_irq;
++	int sec_irq;
+ 	int rc;
  
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
-+	if (ret)
-+		return IRQ_NONE;
+ 	imxdi = devm_kzalloc(&pdev->dev, sizeof(*imxdi), GFP_KERNEL);
+@@ -756,9 +758,9 @@ static int __init dryice_rtc_probe(struct platform_device *pdev)
+ 
+ 	spin_lock_init(&imxdi->irq_lock);
+ 
+-	norm_irq = platform_get_irq(pdev, 0);
+-	if (norm_irq < 0)
+-		return norm_irq;
++	imxdi->norm_irq = platform_get_irq(pdev, 0);
++	if (imxdi->norm_irq < 0)
++		return imxdi->norm_irq;
+ 
+ 	/* the 2nd irq is the security violation irq
+ 	 * make this optional, don't break the device tree ABI
+@@ -795,7 +797,7 @@ static int __init dryice_rtc_probe(struct platform_device *pdev)
+ 	if (rc != 0)
+ 		goto err;
+ 
+-	rc = devm_request_irq(&pdev->dev, norm_irq, dryice_irq,
++	rc = devm_request_irq(&pdev->dev, imxdi->norm_irq, dryice_irq,
+ 			      IRQF_SHARED, pdev->name, imxdi);
+ 	if (rc) {
+ 		dev_warn(&pdev->dev, "interrupt not available.\n");
+@@ -811,6 +813,8 @@ static int __init dryice_rtc_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, imxdi);
+ 
++	device_set_wakeup_capable(&pdev->dev, true);
 +
- 	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
- 	if (ret)
- 		return IRQ_NONE;
+ 	imxdi->rtc->ops = &dryice_rtc_ops;
+ 	imxdi->rtc->range_max = U32_MAX;
  
--	if (!(ctrl2 & PCF2127_BIT_CTRL2_AF))
-+	if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
- 		return IRQ_NONE;
+@@ -830,6 +834,8 @@ static int __exit dryice_rtc_remove(struct platform_device *pdev)
+ {
+ 	struct imxdi_dev *imxdi = platform_get_drvdata(pdev);
  
--	regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
--		     ctrl2 & ~(PCF2127_BIT_CTRL2_AF | PCF2127_BIT_CTRL2_WDTF));
-+	if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
-+		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
-+			ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
- 
--	rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
-+	if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
-+		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
-+			ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
++	device_set_wakeup_capable(&pdev->dev, false);
 +
-+	if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
-+		pcf2127->timestamp_valid = true;
+ 	flush_work(&imxdi->work);
+ 
+ 	/* mask all interrupts */
+@@ -847,10 +853,33 @@ static const struct of_device_id dryice_dt_ids[] = {
+ 
+ MODULE_DEVICE_TABLE(of, dryice_dt_ids);
+ 
++#ifdef CONFIG_PM_SLEEP
++static int dryice_suspend(struct device *dev)
++{
++	struct imxdi_dev *imxdi = dev_get_drvdata(dev);
 +
-+	if (ctrl2 & PCF2127_BIT_CTRL2_AF)
-+		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
- 
- 	pcf2127_wdt_active_ping(&pcf2127->wdd);
- 
-@@ -475,19 +496,7 @@ static ssize_t timestamp0_store(struct device *dev,
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
- 	int ret;
- 
--	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
--				 PCF2127_BIT_CTRL1_TSF1, 0);
--	if (ret) {
--		dev_err(dev, "%s: update ctrl1 ret=%d\n", __func__, ret);
--		return ret;
--	}
--
--	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
--				 PCF2127_BIT_CTRL2_TSF2, 0);
--	if (ret) {
--		dev_err(dev, "%s: update ctrl2 ret=%d\n", __func__, ret);
--		return ret;
--	}
-+	pcf2127->timestamp_valid = false;
- 
- 	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
- 	if (ret)
-@@ -524,8 +533,7 @@ static ssize_t timestamp0_show(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
--	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
-+	if (!pcf2127->timestamp_valid)
- 		return 0;
- 
- 	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
++	if (device_may_wakeup(dev))
++		enable_irq_wake(imxdi->norm_irq);
++	return 0;
++}
++
++static int dryice_resume(struct device *dev)
++{
++	struct imxdi_dev *imxdi = dev_get_drvdata(dev);
++
++	if (device_may_wakeup(dev))
++		disable_irq_wake(imxdi->norm_irq);
++	return 0;
++}
++#endif
++
++static SIMPLE_DEV_PM_OPS(dryice_pm, dryice_suspend, dryice_resume);
++
+ static struct platform_driver dryice_rtc_driver = {
+ 	.driver = {
+ 		   .name = "imxdi_rtc",
+ 		   .of_match_table = dryice_dt_ids,
++		   .pm = &dryice_pm,
+ 		   },
+ 	.remove = __exit_p(dryice_rtc_remove),
+ };
 -- 
-2.26.2
+2.20.1
 
