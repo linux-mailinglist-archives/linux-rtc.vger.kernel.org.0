@@ -2,77 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6241E3729DD
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 May 2021 14:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7FD372CC7
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 May 2021 17:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbhEDMNu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 4 May 2021 08:13:50 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:49303 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbhEDMNt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 May 2021 08:13:49 -0400
+        id S230515AbhEDPMK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 4 May 2021 11:12:10 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:54025 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230246AbhEDPMK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 May 2021 11:12:10 -0400
+X-Originating-IP: 90.65.108.55
 Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 65F8D240004;
-        Tue,  4 May 2021 12:12:51 +0000 (UTC)
-Date:   Tue, 4 May 2021 14:12:50 +0200
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id AC30C1BF206;
+        Tue,  4 May 2021 15:11:12 +0000 (UTC)
+Date:   Tue, 4 May 2021 17:11:12 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH] rtc: imxdi: add wakeup support
-Message-ID: <YJE6QhePvy7f4LKW@piout.net>
-References: <20210430093210.7034-1-martin@kaiser.cx>
- <YI0n/7M3Ke4DAwG2@piout.net>
- <20210504100858.4i2crnfwchlcopr7@viti.kaiser.cx>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        satya priya <skakit@codeaurora.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Kiran Gunda <kgunda@codeaurora.org>
+Subject: Re: [PATCH V2 3/4] dt-bindings: mfd: Convert pm8xxx bindings to yaml
+Message-ID: <YJFkEFQHiwq4+7zQ@piout.net>
+References: <1617976766-7852-1-git-send-email-skakit@codeaurora.org>
+ <1617976766-7852-4-git-send-email-skakit@codeaurora.org>
+ <20210414083820.GH4869@dell>
+ <CAL_JsqKYQ2EBgQJzKJSy-+D20Pmu_mzUQog03nAw=_PRY-uRjg@mail.gmail.com>
+ <YHnisFroaR1qWA0Y@piout.net>
+ <CAL_JsqKO12CuA3MdX6bpENVYaT-0Xvm2L0S9UquHx2P-AhgiZQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210504100858.4i2crnfwchlcopr7@viti.kaiser.cx>
+In-Reply-To: <CAL_JsqKO12CuA3MdX6bpENVYaT-0Xvm2L0S9UquHx2P-AhgiZQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/05/2021 12:08:58+0200, Martin Kaiser wrote:
-> Thus wrote Alexandre Belloni (alexandre.belloni@bootlin.com):
+On 29/04/2021 10:18:21-0500, Rob Herring wrote:
+> On Fri, Apr 16, 2021 at 2:17 PM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> >
+> > Hi,
+> >
+> > On 16/04/2021 12:20:30-0500, Rob Herring wrote:
+> > > On Wed, Apr 14, 2021 at 3:38 AM Lee Jones <lee.jones@linaro.org> wrote:
+> > > >
+> > > > On Fri, 09 Apr 2021, satya priya wrote:
+> > > >
+> > > > > Convert pm8xxx bindings from .txt to .yaml format. Also,
+> > > > > split this binding into two: parent binding(qcom-pm8xxx.yaml)
+> > > > > and child node RTC binding(qcom-pm8xxx-rtc.yaml).
+> > > > >
+> > > > > Signed-off-by: satya priya <skakit@codeaurora.org>
+> > > > > ---
+> > > > > Changes in V2:
+> > > > >  - As per Bjorn's comments, I've split this into two, one parent binding
+> > > > >    and one child node rtc binding.
+> > > > >  - Fixed bot errors and changed maintainer name.
+> > > > >
+> > > > >  .../devicetree/bindings/mfd/qcom-pm8xxx.txt        | 100 ---------------------
+> > > > >  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  54 +++++++++++
+> > > > >  2 files changed, 54 insertions(+), 100 deletions(-)
+> > > > >  delete mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.txt
+> > > > >  create mode 100644 Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml
+> > > >
+> > > > Applied, thanks.
+> > >
+> > > You need to apply the rtc schema too. linux-next has an error on this one now.
+> > >
+> >
+> > I'm going to apply it later tonight
 > 
-> > >  	platform_set_drvdata(pdev, imxdi);
-> 
-> > > +	device_set_wakeup_capable(&pdev->dev, true);
-> 
-> > Maybe it makes sense to simply use device_init_wakeup here.
-> 
-> the explanation for device_init_wakeup
-> 
-> "By default, most devices should leave wakeup disabled. The exceptions
-> are devices that everyone expects to be wakeup sources: keyboards, power
-> buttons, ..."
-> 
-> made me think that device_set_wakeup_capable is more appropriate here. I
-> can change this if you want.
+> I've said this before, but MFD bindings with more than one schema file
+> like this one need to go thru one tree or things break temporarily (as
+> now Linus' tree is broken).
 > 
 
-Doesn't everyone expect the RTC to be a wakeup source? :)
+Noted, I'll be more careful next time.
 
-> However, if I compile rtc-imxdi as a module and use device_init_wakeup,
-> the module can't be unloaded any more. The reason is that alarmtimer
-> (kernel/time/alarmtimer.c) starts using rtc-imxdi as its backing rtc
-> device and holds a reference to it. It seems that alarmtimer has no way
-> to relinquish its backing rtc device, regardless of any pending alarms.
-> 
-> What is the right approach here? Are there any rtc drivers that act as a
-> wakeup source and can still be unloaded if compiled as a module?
-> 
-
-Yes, when you don't have alarmtimer ;)
-I honestly think the RTC selection needs to be a bit more dynamic but at
-the same time, it would not be great to change it at suspend time. I
-guess the best way would be to allow module unloading and tracking when
-the RTC disappears.
-
+> Rob
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
