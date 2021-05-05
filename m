@@ -2,86 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D289373FD4
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 May 2021 18:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3803743B9
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 May 2021 19:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbhEEQba (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 5 May 2021 12:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234063AbhEEQb3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 May 2021 12:31:29 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B75C061574;
-        Wed,  5 May 2021 09:30:32 -0700 (PDT)
-Received: from dslb-188-104-057-152.188.104.pools.vodafone-ip.de ([188.104.57.152] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1leKPr-0001PJ-Rh; Wed, 05 May 2021 18:30:27 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v2] rtc: imxdi: add wakeup support
-Date:   Wed,  5 May 2021 18:30:09 +0200
-Message-Id: <20210505163009.14252-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210430093210.7034-1-martin@kaiser.cx>
-References: <20210430093210.7034-1-martin@kaiser.cx>
+        id S235505AbhEEQvg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 5 May 2021 12:51:36 -0400
+Received: from [115.28.160.31] ([115.28.160.31]:46574 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-FAIL-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S236095AbhEEQrr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 May 2021 12:47:47 -0400
+Received: from ld50.lan (unknown [101.224.80.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E4D5C600BB;
+        Thu,  6 May 2021 00:39:19 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
+        t=1620232760; bh=vx2b9SDlVsCxcZQpwe+BPwvZaY58DskBa9Xh3l9tEsU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Iv6fvd4LG7IJZ4UiEwXerPPa0GGFiS1lx/U1JkiqAzBNKqHzYUkjlL4kCLVhXZgR8
+         5STrugC+hrEN6Gt7ixDqaNnxIPAV7QGUvVuH2nAL8f36lxgixABrJGtsV+uuTl9V60
+         G6ETTQMHFI79jXudUgHUs2KO5WV5xIBTMZdM7l5o=
+From:   WANG Xuerui <git@xen0n.name>
+To:     linux-rtc@vger.kernel.org
+Cc:     WANG Xuerui <git@xen0n.name>, linux-mips@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/6] rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+Date:   Thu,  6 May 2021 00:38:59 +0800
+Message-Id: <20210505163905.1199923-1-git@xen0n.name>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The DryIce-based RTC supports alarms that trigger an interrupt.
+It has been a while since v1 of this series was sent (2020-09);
+apparently, I did not have enough time or resource figuring out the exact
+difference between rtc-ls1x and rtc-ls2x to see if the two can in fact be
+merged, even today. Sorry for the long delay!
 
-Add an option to configure this interrupt as a wakeup source that wakes the
-system up from standby mode.
+According to the manuals, though, the initialization sequence and
+bitfield descriptions look certainly different, so I'm a bit wary about
+just going ahead and merging these. Per Tiezhu's suggestion in the
+previous thread, I'm just re-submitting this series with tags collected
+and Huacai's e-mail address updated. If anyone (probably Loongson guys?)
+could provide more information regarding the possible merger of rtc-ls1x
+and rtc-ls2x, that would be great.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
+This patch series adds support for the RTC module found on various
+Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+The driver is rewritten from an out-of-tree version to meet mainline
+standards. I write kernel code as a hobby, though, so there might still
+be overlooked issues. Any suggestions are welcome.
+
+Note that, the Loongson-2K platform was upstreamed after v1 of this
+series, so v2 additionally contains enablement for it. I'm unable to
+test with my 2K board now, however, so Loongson guys, please test this
+series again on your collection of LS7A and 2K systems, thanks!
+
 v2:
- - unconditionally declare rtc-imxdi as wakeup source
- - use dev_pm_set_wake_irq instead of manually coding suspend and resume
+- Rebased on top of latest linux-next
+- Updated Huacai's e-mail address to the kernel.org one
+- Added collected tags
+- Added adaptation for newly upstreamed Loongson-2K platforms
 
-simple test (no need to configure the wakeup source via sysfs any more)
+WANG Xuerui (6):
+  rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+  dt-bindings: rtc: Add bindings for LS2X RTC
+  MIPS: Loongson64: DTS: Add RTC support to LS7A
+  MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+  MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+  MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
 
-   [root@board ]# rtcwake -s 3 -m mem
-   wakeup from "mem" at Fri Apr 30 09:23:52 2021
-   ...
-   [root@board ]#
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+ arch/mips/configs/loongson2k_defconfig        |   1 +
+ arch/mips/configs/loongson3_defconfig         |   1 +
+ drivers/rtc/Kconfig                           |  11 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ls2x.c                        | 225 ++++++++++++++++++
+ 8 files changed, 251 insertions(+)
+ create mode 100644 drivers/rtc/rtc-ls2x.c
 
- drivers/rtc/rtc-imxdi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/rtc/rtc-imxdi.c b/drivers/rtc/rtc-imxdi.c
-index c1806f4d68e7..4b712e5ab08a 100644
---- a/drivers/rtc/rtc-imxdi.c
-+++ b/drivers/rtc/rtc-imxdi.c
-@@ -24,6 +24,7 @@
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/rtc.h>
- #include <linux/sched.h>
- #include <linux/spinlock.h>
-@@ -811,6 +812,9 @@ static int __init dryice_rtc_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, imxdi);
- 
-+	device_init_wakeup(&pdev->dev, true);
-+	dev_pm_set_wake_irq(&pdev->dev, norm_irq);
-+
- 	imxdi->rtc->ops = &dryice_rtc_ops;
- 	imxdi->rtc->range_max = U32_MAX;
- 
 -- 
-2.20.1
+2.30.1
 
