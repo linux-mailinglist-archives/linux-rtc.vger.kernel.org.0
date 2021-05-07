@@ -2,143 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FD33759A2
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 May 2021 19:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F29375EDC
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 May 2021 04:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbhEFRql (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 6 May 2021 13:46:41 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:40791 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236302AbhEFRqk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 May 2021 13:46:40 -0400
-Received: by mail-oi1-f177.google.com with SMTP id u16so6239150oiu.7;
-        Thu, 06 May 2021 10:45:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8JstkJRMoUa2rOTYrsovoiLvT3L+r/P+UlSPFpzuQx0=;
-        b=bOKWM1gSW0KlOk7kni1vREbiAV3aKYJwtbn5R/481PCrSnALpkl3tB/3VcT3Der6qZ
-         xz34HmS9MCx8J8S1ET7D2TW8ttKMPTFW/tg3aivYAaRtZmBucXWqwkPtfYrny+U3InoV
-         dXixjiqejvLYVH8IoLDhp+zqvJ+tImnbkmjaxpFh8ZRryGhnwBctYXP8HDOVljs5Mt7+
-         KL8cmMty2kuJLINvfeRBUcbAHi/CaksWBtSD0SRSvlRLQ4pSlF6DkCi7jHtk2zykikhG
-         9dVPiANnxWi+rW7OQcY4xTsMpwzsqRdhn2EsqBGxJH2L6xXbEjdBEQX1tQ7TAyr/sxpj
-         fRlQ==
-X-Gm-Message-State: AOAM53225c9mcRh3CNdKuzcSDtozIXYSOpLgoXuNIPZhqY1+UhJp8Bao
-        2GG3Vrc99vad86Zmabwokw==
-X-Google-Smtp-Source: ABdhPJy0kRine7Bu4k6/BpEtz+3Jkytl50ii+fI5jYKHWg1wSyH0QbWPT8lU41qW8mbrGuNq9WeL2Q==
-X-Received: by 2002:aca:ebc1:: with SMTP id j184mr4047236oih.125.1620323141537;
-        Thu, 06 May 2021 10:45:41 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t74sm531884oie.51.2021.05.06.10.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 May 2021 10:45:40 -0700 (PDT)
-Received: (nullmailer pid 539169 invoked by uid 1000);
-        Thu, 06 May 2021 17:45:39 -0000
-Date:   Thu, 6 May 2021 12:45:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        linus.walleij@linaro.org, ulli.kroll@googlemail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: convert rtc/faraday,ftrtc01 to yaml
-Message-ID: <20210506174539.GA536770@robh.at.kernel.org>
-References: <20210503195048.1575007-1-clabbe@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210503195048.1575007-1-clabbe@baylibre.com>
+        id S232674AbhEGCn4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 6 May 2021 22:43:56 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:51205 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231334AbhEGCn4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 May 2021 22:43:56 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2A1775C00DB;
+        Thu,  6 May 2021 22:42:57 -0400 (EDT)
+Received: from imap1 ([10.202.2.51])
+  by compute6.internal (MEProxy); Thu, 06 May 2021 22:42:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=250IqGvz6u58BFoPT4ncZ3T/BSW+bwX
+        b69ZJGgm1m6Y=; b=DmnR23jccaLHmGz8kQCwEW30ZRoW37dSJE0BTW4X+qAV4wG
+        XLgmaD41kGD5CrwPvLqmerpmQssu/PEkqd98oYKGH+0gollmsdyVxlydC03tJHoU
+        ko0SAN0fXFPbkXerETerKSFHp8mOGhCD/OW6yPM1Je6MxtFoVwoh4HJqlE0Q51D5
+        EghG3GKHy4K/zBZa86i6/31n0DZtTSGMLaucqmXInqNL022wt8WQeo5VeXcyGKXW
+        mt7WLt6FcwiwtAcED/54a08WathJuO9/7VEAr1wWdwe8sWP68toe9H5K85gPNLSJ
+        PSx1AwnDI1EVCRFHBlSveQkP6oHQdpp92FxGFFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=250IqG
+        vz6u58BFoPT4ncZ3T/BSW+bwXb69ZJGgm1m6Y=; b=QVOH2pa6EYn8CQRf6Q/fH4
+        cEt8t7OzmyQ7S+RhDWEdw4kpD+AaSGgbTLnxrhwrZh5yrAnbCXjWyebjr63MDM1f
+        OyWFSE7tNJRsuRgiv3pmcRFuuSHBW6BktF1ZbPO6R5LroUnnqeBtaarcfbfIxx4K
+        irqb001J0WWwNZ0XIAtOpov6xHYQYipM/35Ti1rr6+9DvyM/2uCetjtVH2Xjetf1
+        tixt1wTG26zi6NuyDSqgd4D2izsdCmgqqh4Xnrj2RBG7Hoys7dutrLe0nGmqvqLu
+        cAkOvcZ4O8fPgaCnuyEUwmp0qFzJgestsH/NBV0OVt4UO42P1xqJVl/3dljPXKgg
+        ==
+X-ME-Sender: <xms:MKmUYEEuPU-Fk-nIv0D-w9Kab-NVorJjtEdqAxs9Vw9Qq8qG0ynH9w>
+    <xme:MKmUYNUzff48h_TobGwswu1Kh2K57soazzgWrhgx1kSb4L1vxFBApi4brZsYUh9kn
+    i-uew4L1bRJwGw2mig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdeguddgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvufgtsehttd
+    ertderreejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdih
+    rghnghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepieetvdefleejud
+    elffegudetiedvgeegieehjeeiieduleehuddvlefgueefgedvnecuffhomhgrihhnpehk
+    vghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:MKmUYOLHnE2-RhEY_I1AD19gqdXbt5I8xAgLUqsJae9b2LoL8EPWaA>
+    <xmx:MKmUYGGTkWxVZMiZj-3ixlLxHlS11A4zP8kxiAsnfvSf-YZVa4YyhQ>
+    <xmx:MKmUYKWqFDzO0B1TCjwYi2uvygWEDPUod2Zel5e__7QWMLq0tBYEqg>
+    <xmx:MamUYNdJqRC_8-WcmM9Ip2iP1gqG3_yKX0gyaI70jZPw-a1r00GfZw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4C59C1300504; Thu,  6 May 2021 22:42:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-448-gae190416c7-fm-20210505.004-gae190416
+Mime-Version: 1.0
+Message-Id: <1463598d-8248-4b11-aab6-45bf2f997cd7@www.fastmail.com>
+In-Reply-To: <20210506010435.1333647-1-git@xen0n.name>
+References: <20210506010435.1333647-1-git@xen0n.name>
+Date:   Fri, 07 May 2021 10:42:36 +0800
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "WANG Xuerui" <git@xen0n.name>, linux-rtc@vger.kernel.org
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: =?UTF-8?Q?Re:_[PATCH_v3_0/6]_rtc:_ls2x:_Add_support_for_the_Loongson-2K/?=
+ =?UTF-8?Q?LS7A_RTC?=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, May 03, 2021 at 07:50:47PM +0000, Corentin Labbe wrote:
-> Converts rtc/faraday,ftrtc01.txt to yaml.
-> This permits to detect some missing properties: reg, resets, interrupts
+
+
+On Thu, May 6, 2021, at 9:04 AM, WANG Xuerui wrote:
+> It has been a while since v1 of this series was sent (2020-09);
+> apparently, I did not have enough time or resource figuring out the exact
+> difference between rtc-ls1x and rtc-ls2x to see if the two can in fact be
+> merged, even today. Sorry for the long delay!
 > 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  .../bindings/rtc/faraday,ftrtc010.txt         | 28 ---------
->  .../bindings/rtc/faraday,ftrtc010.yaml        | 59 +++++++++++++++++++
->  2 files changed, 59 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/faraday,ftrtc010.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
+> According to the manuals, though, the initialization sequence and
+> bitfield descriptions look certainly different, so I'm a bit wary about
+> just going ahead and merging these. Per Tiezhu's suggestion in the
+> previous thread, I'm just re-submitting this series with tags collected
+> and Huacai's e-mail address updated. If anyone (probably Loongson guys?)
+> could provide more information regarding the possible merger of rtc-ls1x
+> and rtc-ls2x, that would be great.
+> 
+> This patch series adds support for the RTC module found on various
+> Loongson systems with the Loongson-2K SoC or the LS7A bridge chip.
+> The driver is rewritten from an out-of-tree version to meet mainline
+> standards. I write kernel code as a hobby, though, so there might still
+> be overlooked issues. Any suggestions are welcome.
+> 
+> Note that, the Loongson-2K platform was upstreamed after v1 of this
+> series, so v2 additionally contains enablement for it. I'm unable to
+> test with my 2K board now, however, so Loongson guys, please test this
+> series again on your collection of LS7A and 2K systems, thanks!
+> 
+> This patch is based on next-20210505, since we're in the middle of merge
+> window. Should apply cleanly after the merge window closes, though.
+
+For whole series,
+Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
 
 
-> diff --git a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
-> new file mode 100644
-> index 000000000000..6b318650e79f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/faraday,ftrtc010.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Faraday Technology FTRTC010 Real Time Clock
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +description: |
-> +  This RTC appears in for example the Storlink Gemini family of SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: "faraday,ftrtc010"
-> +      - items:
-> +          - const: "cortina,gemini-rtc"
-> +          - const: "faraday,ftrtc010"
-
-Drop quotes.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 2
-> +    description: when present should contain clock references to the
-> +                 PCLK and EXTCLK clocks. Faraday calls the later CLK1HZ and
-> +                 says the clock should be 1 Hz, but implementers actually seem
-> +                 to choose different clocks here, like Cortina who chose
-> +                 32768 Hz (a typical low-power clock).
-
-Normal formatting is 2 space indent.
-
-Split to use 'items' like PCI.
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: "PCLK"
-> +      - const: "EXTCLK"
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    rtc@45000000 {
-> +      compatible = "cortina,gemini-rtc", "faraday,ftrtc010";
-> +      reg = <0x45000000 0x100>;
-> +      interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
-> +      clocks = <&foo 0>, <&foo 1>;
-> +      clock-names = "PCLK", "EXTCLK";
-> +    };
+> 
+> v3:
+> - Fixed compile error not discovered after rebase (blame sleep
+>   deprivation)
+> - Tested on Loongson-3A4000 (still need testing on Loongson-2K)
+> 
+> v2:
+> - Rebased on top of latest linux-next
+> - Updated Huacai's e-mail address to the kernel.org one
+> - Added collected tags
+> - Added adaptation for newly upstreamed Loongson-2K platforms
+> 
+> WANG Xuerui (6):
+>   rtc: ls2x: Add support for the Loongson-2K/LS7A RTC
+>   dt-bindings: rtc: Add bindings for LS2X RTC
+>   MIPS: Loongson64: DTS: Add RTC support to LS7A
+>   MIPS: Loongson: Enable LS2X RTC in loongson3_defconfig
+>   MIPS: Loongson64: DTS: Add RTC support to Loongson-2K
+>   MIPS: Loongson: Enable LS2X RTC in loongson2k_defconfig
+> 
+>  .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+>  .../boot/dts/loongson/loongson64-2k1000.dtsi  |   5 +
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi     |   5 +
+>  arch/mips/configs/loongson2k_defconfig        |   1 +
+>  arch/mips/configs/loongson3_defconfig         |   1 +
+>  drivers/rtc/Kconfig                           |  11 +
+>  drivers/rtc/Makefile                          |   1 +
+>  drivers/rtc/rtc-ls2x.c                        | 225 ++++++++++++++++++
+>  8 files changed, 251 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-ls2x.c
+> 
+> 
+> base-commit: 29955e0289b3255c5f609a7564a0f0bb4ae35c7a
 > -- 
-> 2.26.3
+> 2.30.1
 > 
+> 
+
+
+-- 
+- Jiaxun
