@@ -2,86 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C213780E4
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 12:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1C6378F15
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 15:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbhEJKLs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 10 May 2021 06:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbhEJKLs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 06:11:48 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6383C061574
-        for <linux-rtc@vger.kernel.org>; Mon, 10 May 2021 03:10:42 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id x17so3792335vsc.0
-        for <linux-rtc@vger.kernel.org>; Mon, 10 May 2021 03:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=FBZbU3iwyQDYQqeSRGTNKiskutU02Chvl1nOpbng8Os=;
-        b=U7UgpebG3y+QTmhMnzyfvTRRZIgL6qwijx9sAaan5P/x5n2GgIWoK9UyZRhz7BzdGz
-         y/qquf/ooyR7Hsv5M5ukYfnOQM2lhIsYCDy+7DU5k+0VqyAgIjvQKXqSJ9YisEY0TpAI
-         BhR+O2eRRrOqm3ySUxNRASBzPmv4VU8tLVEPRlTzMzPmKBPNXtF6JA2oDeAa/ehJzvNz
-         pmHwlOHuKC8sX7nT1MbRDD592gQPLvOzj9i/vkQvNqitBiHwcSGBWxFCO6N+3RzC2qtn
-         wXUcMJ8gZm7zT9mADdnihQ+rAKgq6T7e+xdeEdTreetJK7fxOsZFFnhe6TSGHbHLYtk+
-         6Yyg==
+        id S232349AbhEJNdU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 10 May 2021 09:33:20 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43290 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244269AbhEJMT5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 08:19:57 -0400
+Received: from mail-qv1-f69.google.com ([209.85.219.69])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lg4s8-00039M-1P
+        for linux-rtc@vger.kernel.org; Mon, 10 May 2021 12:18:52 +0000
+Received: by mail-qv1-f69.google.com with SMTP id g26-20020a0caada0000b02901b93eb92373so12417627qvb.3
+        for <linux-rtc@vger.kernel.org>; Mon, 10 May 2021 05:18:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=FBZbU3iwyQDYQqeSRGTNKiskutU02Chvl1nOpbng8Os=;
-        b=Ay9Ic4wEMYT7APfA5cVO6rsgICvut51fSM5NsXjVtsfvvi6dw1KyMFKwyWYmmJJ/hm
-         WDLNeZB677iO47S5G4G1IBAO1zdhA6PKqe2PZwUPrImaSxksvOfE3lmqtBdXVNSuSaJS
-         T4tuDVuujAPTs/nX/aBVwTxnK5oSklq2ZVC6vk5pphGz5Jpo/Mm87G1hbcWcXAHGedtJ
-         EZ4bcq0MNXby359bW2aXepIVINDGIlvWMi+z2HeJaRd7Fs/cXpPrkb5SUrb/uqUaQGp2
-         RlyMxjnq5IIZpmGGPq/yZniHWEp1ACT30oIhR+1Oe/WlfFp+l7qe1d3tehU5V9wAJik+
-         ZgXg==
-X-Gm-Message-State: AOAM530or2EEAQhxahdfvG18awv1qL9Ab92mdKctGKpOZ+bmCkcsCX00
-        ueGhyxeSprLObL4Wtnf9DyUlCBQivViJGMZ1jQw=
-X-Google-Smtp-Source: ABdhPJz7h/K7MRBMuWbzcgmE60z/uBiuoWSGBRW4duiHIxitdU3H3hPydLYkaFOx1VWGbHj6Uj96pp6SHLUXrCEXoQg=
-X-Received: by 2002:a67:cb0c:: with SMTP id b12mr18110365vsl.16.1620641441517;
- Mon, 10 May 2021 03:10:41 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qw2xIhE1YQPqR0OG1inwWyXnTht9gARQqIiYkO8Zeek=;
+        b=P4L3UyOFcxX1hqc+isk9NBzjNC8nnVpd8m01oWffzl6ytutwqwuv+IaXIZ7HrnSwQq
+         5bif3bc+h+ytmZ414SdUuVP1jQSuI3qPlyjdDTAb8jJUA/YaNEnqmMOaEvA0yGR092QF
+         I/L0MpUQxc1N3O/pYicdYaqNG5XPKx+wa6tMUVkaIf+rmBbFT6PhwHG4VLb9DM4O6sBY
+         A2NWlA/NrxksxI/SyyEuGKROrl6OGrmJE/XLyOe6wQwXnXchlDHL4qZXGgbLPz/folZj
+         2lUMF8naShlLzFKub++TRwq/TEvTTPpW1Tz2Mvsb6u/ZlQ5PyF8Qt6zQPK4iAqpptEmx
+         K44A==
+X-Gm-Message-State: AOAM5328Hcnw/rgSr8EpZW9ochxXqN1rgsI1X+nSZ6lxFH86MYYmz66l
+        wvTWi+e5QDwi5oz2UQgHKST3VXqhPce0sjea1jgwY3Pi4JuBk1s84zHe6BsNy2SOLichmVIFuDb
+        aQ6QDDGQ7aTkxakMS8ROjO7Fg4CZHZw/ONPNzFg==
+X-Received: by 2002:a37:61cd:: with SMTP id v196mr19056892qkb.454.1620649131210;
+        Mon, 10 May 2021 05:18:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyunxzu4B8x+Dts17JtJ41BIvhjuofWIqji9fp6Sm5lxjBnUuVITR4zQbsN+I/u5NwXYtqC6Q==
+X-Received: by 2002:a37:61cd:: with SMTP id v196mr19056870qkb.454.1620649131056;
+        Mon, 10 May 2021 05:18:51 -0700 (PDT)
+Received: from [192.168.1.4] ([45.237.49.2])
+        by smtp.gmail.com with ESMTPSA id m205sm4051312qke.2.2021.05.10.05.18.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 May 2021 05:18:50 -0700 (PDT)
+Subject: Re: [PATCH] rtc: max77686: Remove some dead code
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <a6b23ee8d3ea78f62d3fda0b53aa273718f14c6d.1620452523.git.christophe.jaillet@wanadoo.fr>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <d5250408-b899-ab1a-c86c-0366b6b286c3@canonical.com>
+Date:   Mon, 10 May 2021 08:18:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Received: by 2002:a67:7714:0:0:0:0:0 with HTTP; Mon, 10 May 2021 03:10:39
- -0700 (PDT)
-Reply-To: uchennailobitenone@gmail.com
-From:   uchenna <robertandersonhappy9@gmail.com>
-Date:   Mon, 10 May 2021 03:10:39 -0700
-Message-ID: <CAJ63Umjm8fwY5SFOsLLyz-hP7hFq7PNiX7rnaJ3roug_etU-0Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+In-Reply-To: <a6b23ee8d3ea78f62d3fda0b53aa273718f14c6d.1620452523.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-0JTQvtGA0L7Qs9C+0Lkg0LTRgNGD0LMsDQrQnNC10L3RjyDQt9C+0LLRg9GCINCR0LDRgC4g0KPR
-h9C10L3QvdCwINC40LvQvtCx0LguINCvINCw0LTQstC+0LrQsNGCINC4INGH0LDRgdGC0L3QvtC1
-INC70LjRhtC+Lg0K0LzQtdC90LXQtNC20LXRgCDQv9C+INGA0LDQsdC+0YLQtSDRgSDQvNC+0LjQ
-vCDQv9C+0LrQvtC50L3Ri9C8INC60LvQuNC10L3RgtC+0LwuINCSIDIwMTYg0LPQvtC00YMg0LzQ
-vtC5INC60LvQuNC10L3RgiDQv9C+INC40LzQtdC90LgNCijQnNC40YHRgtC10YAg0JTQttC+0L0s
-INGB0LrQvtC90YfQsNC70YHRjykg0K8g0YHQstGP0LfQsNC70YHRjyDRgSDQstCw0LzQuCDQv9C+
-0YLQvtC80YMsINGH0YLQviDQstGLDQrQvdC+0YHQuNGC0Ywg0YLRgyDQttC1INGE0LDQvNC40LvQ
-uNGOINGBINGD0LzQtdGA0YjQuNC8LCDQuCDRjyDQvNC+0LPRgyDQv9GA0LXQtNGB0YLQsNCy0LjR
-gtGMINCy0LDRgSDQutCw0LoNCtC/0L7Qu9GD0YfQsNGC0LXQu9GMINC4INCx0LvQuNC20LDQudGI
-0LjQtSDRgNC+0LTRgdGC0LLQtdC90L3QuNC60Lgg0YHRgNC10LTRgdGC0LIg0LzQvtC10LPQviDQ
-v9C+0LrQvtC50L3QvtCz0L4g0LrQu9C40LXQvdGC0LAsDQrRgtC+0LPQtNCwINCy0Ysg0LHRg9C0
-0LXRgtC1DQrRgdGC0LDRgtGMINC10LPQviDQsdC70LjQttCw0LnRiNC40Lwg0YDQvtC00YHRgtCy
-0LXQvdC90LjQutC+0Lwg0Lgg0L/QvtGC0YDQtdCx0L7QstCw0YLRjCDQtNC10L3RjNCz0LguINC+
-0YHRgtCw0LLQuNCyINC90LDQu9C40YfQvdGL0LUNCtC90LDRgdC70LXQtNGB0YLQstC+INGB0LXQ
-vNC4INC80LjQu9C70LjQvtC90L7QsiDQv9GP0YLQuNGB0L7RgiDRgtGL0YHRj9GHINCh0L7QtdC0
-0LjQvdC10L3QvdGL0YUg0KjRgtCw0YLQvtCyDQrQlNC+0LvQu9Cw0YDQvtCyICg3LDUg0LzQu9C9
-INC00L7Qu9C70LDRgNC+0LIg0KHQqNCQKSDQnNC+0Lkg0L/QvtC60L7QudC90YvQuSDQutC70LjQ
-tdC90YIg0Lgg0LfQsNC60LDQtNGL0YfQvdGL0Lkg0LTRgNGD0LMg0LLRi9GA0L7RgdC70Lgg0LIN
-CsKr0JTQvtC8INCx0LXQtyDQvNCw0YLQtdGA0LjCuy4g0KMg0L3QtdCz0L4g0L3QtSDQsdGL0LvQ
-viDQvdC4INGB0LXQvNGM0LgsINC90Lgg0LHQtdC90LXRhNC40YbQuNCw0YDQsCwg0L3QuCDRgdC7
-0LXQtNGD0Y7RidC10LPQvg0K0YDQvtC00YHRgtCy0LXQvdC90LjQutC+0LIg0LIg0L3QsNGB0LvQ
-tdC00YHRgtCy0L4uINCh0YDQtdC00YHRgtCy0LAsINC+0YHRgtCw0LLQu9C10L3QvdGL0LUg0LIg
-0LHQsNC90LrQtS4NCtCS0Ysg0LTQvtC70LbQvdGLINGB0LLRj9C30LDRgtGM0YHRjyDRgdC+INC8
-0L3QvtC5INGH0LXRgNC10Lcg0LzQvtC5INC70LjRh9C90YvQuSDQsNC00YDQtdGBINGN0LvQtdC6
-0YLRgNC+0L3QvdC+0Lkg0L/QvtGH0YLRizoNCnVjaGVubmFpbG9iaXRlbm9uZUBnbWFpbC5jb20N
-CtCd0LDQuNC70YPRh9GI0LjQtSDQv9C+0LbQtdC70LDQvdC40Y8sDQrQkdCw0YAuINCj0YfQtdC9
-0L3QsCDQmNC70L7QsdC4DQo=
+On 08/05/2021 01:43, Christophe JAILLET wrote:
+> 'ret' is known to be an error pointer here, so it can't be 0.
+> Remove this dead code.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/rtc/rtc-max77686.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+> index d51cc12114cb..ce089ed934ad 100644
+> --- a/drivers/rtc/rtc-max77686.c
+> +++ b/drivers/rtc/rtc-max77686.c
+> @@ -764,8 +764,6 @@ static int max77686_rtc_probe(struct platform_device *pdev)
+>  	if (IS_ERR(info->rtc_dev)) {
+>  		ret = PTR_ERR(info->rtc_dev);
+>  		dev_err(&pdev->dev, "Failed to register RTC device: %d\n", ret);
+> -		if (ret == 0)
+> -			ret = -EINVAL;
+>  		goto err_rtc;
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof
