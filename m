@@ -2,112 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC5F377AA5
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 05:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC29D377C2F
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 08:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhEJDkk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 9 May 2021 23:40:40 -0400
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:34933 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230126AbhEJDkj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 9 May 2021 23:40:39 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 50D4917C4;
-        Sun,  9 May 2021 23:39:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 09 May 2021 23:39:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        to:cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=I
-        ZUFszC6jE/mtDj0KCiCRll83jCHjDqxXjCZzLBuhwU=; b=lapYcN9ptLh86Cscs
-        MMQRNm8UYK3+e08/ShU/GX1v1v9lBEMi3Cew5KOAhtIfOQHzebOdqVUJugyIayKt
-        1tV2H1om0IFFvBuH5WKWgZedJw//3R/PqD3g6fJJcgHjoYc3IxdbT22in1BM7/6u
-        Q8+plX63zDvHKOr1ycqVQy+xB1cTyvt2jun1klGiP1y55PqsjannHnvb/dM6oKX+
-        G1j2OhwN65Z5xeeKRorHRGRdfQ0a6KZUaZsOYpeS3jimJ6x92FQyI3sLQDH1H1YN
-        eoSacoJuDzJBmd8yYpvhq8E2pdT10ounLChSE7tbyfZ+rtDwIF+d+STSjWgd1JRv
-        UaVkg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=IZUFszC6jE/mtDj0KCiCRll83jCHjDqxXjCZzLBuh
-        wU=; b=msGzqQU1RGw9+1Txytj0DVNTIs4+ucYxyiQh0ajyDCR1VVX2NNvk8AEsf
-        SsoRqMAq79NEvpah5BMJz3COnMo0JtsUe8G7KWofRBP4OcLfG+asv0LFFLFb8NAB
-        aT9VThGcrs777j2N5acJp9T1YH7jC78rKplrVcE+/4QfxL1I7ry+JyAbf6rqgYF9
-        tdAlHZ+Qa6IAh+bjilqKsw61jkuZB52g2cGuk3yjPdPZk8JmbcXAthkYzJg+MyAf
-        wNsjhkvqQaf6Q7D4DUJlZ5wVkBmkKGO7Zv63kcf7YfCjFlu834Q2dvkMVyYVxfXH
-        4hIhHNZkzDvtSbcuPjxGTDyN2D8XQ==
-X-ME-Sender: <xms:86qYYJ5Xes7seoVw1nxW2DU48Ej89h7LL31TzvkW9X0RUlPHIVSeGQ>
-    <xme:86qYYG5ebeZswX0DILnkVoq7doASQ2q62j2CAsorm7wMHk-Xb-PzYeEZcarndEP1r
-    GreL_1hFtDr8BrPaw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdegjedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefheenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepheejgefhudeffeetleeigefgheetveeiteeuffehhfffkeeuvdff
-    veffveetudefnecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:86qYYAdhMMhwf1C5vZjxv4FkWkSQtZyRToqFlvvu0QQRrYsHBag95A>
-    <xmx:86qYYCIGHX1PQiaIXxmL_vJrF_tjcEo-OWSoR5rOXdsYu58zCteW9Q>
-    <xmx:86qYYNLsebh9pykxyCKk6it0BVX-Tx_ndwhjXYFC14Z7SaJXsBd7dg>
-    <xmx:9KqYYF_gxAChs0oEw9tN5THuX4-IR-hv4WeCx8U843GeKU0YBDUfcA>
-Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Sun,  9 May 2021 23:39:31 -0400 (EDT)
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S229996AbhEJGSy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 10 May 2021 02:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230134AbhEJGSw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 02:18:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D403C061573
+        for <linux-rtc@vger.kernel.org>; Sun,  9 May 2021 23:17:48 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lfzEU-0007Z9-So; Mon, 10 May 2021 08:17:34 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lfzET-0004Zw-F8; Mon, 10 May 2021 08:17:33 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20210419014549.26900-1-samuel@sholland.org>
- <20210430090206.lybmygrt636nysoc@gilmour>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH] rtc: sun6i: Add NVMEM provider
-Message-ID: <a3b03a06-c8fc-7dbe-7c0b-ffd1f194ecbc@sholland.org>
-Date:   Sun, 9 May 2021 22:39:30 -0500
-User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 RESEND 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 10 May 2021 08:17:18 +0200
+Message-Id: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210430090206.lybmygrt636nysoc@gilmour>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 4/30/21 4:02 AM, Maxime Ripard wrote:
-> Hi,
-> 
-> On Sun, Apr 18, 2021 at 08:45:49PM -0500, Samuel Holland wrote:
->> The sun6i RTC provides 32 bytes of general-purpose data registers.
->> They can be used to save data in the always-on RTC power domain.
->> The registers are writable via 32-bit MMIO accesses only.
->>
->> Expose the region as a NVMEM provider so it can be used by userspace and
->> other drivers.
->>
->> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> 
-> As far as I understood, you want to use those registers to implement
-> super-standby? If so, while it makes sense for the kernel to be able to
-> be able to write to those registers, I guess it would be a bit unwise to
-> allow the userspace to access it?
+Hello,
 
-I want the user to be able to pass information to the bootloader (to
-select a boot device, e.g. reboot to FEL). I also want the user to be
-able to read data stored to these registers by system firmware (e.g.
-crust writes exception information there). It's not really related to
-standby.
+this is just a resend as I didn't get any feedback in the two weeks
+since the original v6 submission. Would be nice to hear something back,
+I'm trying for more than half a year now to get feedback. :-\
 
-I would want to stack a nvmem-reboot-mode on top to give friendlier
-names to some of the numbers, but I don't see a problem with root having
-direct access to the registers. It's no different from /dev/nvram
-providing access to the PC CMOS RAM.
+Best regards
+Uwe
 
-Regards,
-Samuel
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
+
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
+
+
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.30.2
+
