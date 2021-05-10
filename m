@@ -2,99 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BF0378F19
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 15:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA2C379264
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 17:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbhEJNde (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 10 May 2021 09:33:34 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43327 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345187AbhEJMWB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 08:22:01 -0400
-Received: from mail-qv1-f72.google.com ([209.85.219.72])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lg4u7-0003Ja-LB
-        for linux-rtc@vger.kernel.org; Mon, 10 May 2021 12:20:55 +0000
-Received: by mail-qv1-f72.google.com with SMTP id l5-20020a0ce0850000b02901c37c281207so12356040qvk.11
-        for <linux-rtc@vger.kernel.org>; Mon, 10 May 2021 05:20:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Y+brPHK6z0qfj8MD7JTAIcwTm+x3W3WlQXIOTpGxTZ8=;
-        b=hy7n9KddpDPnmDwidcBblEZyc/8G0laiVp3ogRs64aL911gH8+0Fkx/HIWdcAVdAyT
-         8yjxxAiO4WOFsDicpc0vTvdhf96EPMTOnWT067uhJNRILEgjE9Bc/vy/kqKdSkgm7QN7
-         Qv2M5hETWQTsvswEgg0zJwgp6vccUQ+CXbqmkT1mRLZh6XZZqbS+nI4RBZtaUY4K3/D3
-         WU8+qGZNJMHUPn2v9itiM2/Vp7lBCctNN83EGGBZ8tKXl/T0WXQSI07DnATQa4bcEHPX
-         b0DHHmaOywtbavRyelCEbmgfLwM9reGocoezH2g2IzUd1gWmqfk9yhU5oGrphwj17YS3
-         zMBQ==
-X-Gm-Message-State: AOAM530NHV9Hkfs2KFIPpDtCiqsxZVfhd0pXeItJMtXOwKg0ly1rOgPm
-        kZTNON3D8zJlKfPWkbpZtOLFryM1kSsdyN/XBQoBlwnIGY8aH1D+4NvkTWtR/5tXEqCGpIlQMU9
-        k/98puqlKEZG3h9GnWY0f6MAkiC7TEGvVUvvdJg==
-X-Received: by 2002:ac8:7dd2:: with SMTP id c18mr22423554qte.301.1620649254827;
-        Mon, 10 May 2021 05:20:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwMunM+w/xF+r8imk3jOy21ySiyKh1GdRxXlfCXnAc7JoAsdSDDjE6CNw9JyHSGV2p/qnWbyw==
-X-Received: by 2002:ac8:7dd2:: with SMTP id c18mr22423538qte.301.1620649254655;
-        Mon, 10 May 2021 05:20:54 -0700 (PDT)
-Received: from [192.168.1.4] ([45.237.49.2])
-        by smtp.gmail.com with ESMTPSA id v65sm11805007qkc.125.2021.05.10.05.20.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 May 2021 05:20:54 -0700 (PDT)
-Subject: Re: [PATCH] rtc: max77686: Remove some dead code
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Edmundo Carmona Antoranz <eantoranz@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com,
-        a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <a6b23ee8d3ea78f62d3fda0b53aa273718f14c6d.1620452523.git.christophe.jaillet@wanadoo.fr>
- <CAOc6etaUPtJqoH9DBDE72nDW7s7iEZHnaJRpKx9zFow02WOZig@mail.gmail.com>
- <9f34ebcd-0c17-cd7f-eb08-52c6c3dc7b03@wanadoo.fr>
- <CAOc6etYwTvVPnoB3BQfuQEikvsCwSs9AqBWnLFrs9zQ0pJGp1A@mail.gmail.com>
- <YJhO0cEqpbJAdv7s@piout.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <219efcc7-ca05-a7d1-5943-d34a42f0d49f@canonical.com>
-Date:   Mon, 10 May 2021 08:20:52 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S233262AbhEJPUN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 10 May 2021 11:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234299AbhEJPSs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 11:18:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DE4C08EAF0
+        for <linux-rtc@vger.kernel.org>; Mon, 10 May 2021 07:47:20 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1lg7Bb-0005Em-Ef; Mon, 10 May 2021 16:47:07 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1lg7BZ-0001jS-In; Mon, 10 May 2021 16:47:05 +0200
+Message-ID: <6dc43e369107d470d85dc541dc67432744bd4d01.camel@pengutronix.de>
+Subject: Re: [PATCHv2 2/5] drm/imx: Add 8 pixel alignment fix
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Saravana Kannan <saravanak@google.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        kernel@collabora.com,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Date:   Mon, 10 May 2021 16:47:05 +0200
+In-Reply-To: <20210428222953.235280-3-sebastian.reichel@collabora.com>
+References: <20210428222953.235280-1-sebastian.reichel@collabora.com>
+         <20210428222953.235280-3-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-In-Reply-To: <YJhO0cEqpbJAdv7s@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 09/05/2021 17:06, Alexandre Belloni wrote:
-> On 08/05/2021 18:06:03-0600, Edmundo Carmona Antoranz wrote:
->> On Sat, May 8, 2021 at 10:59 AM Christophe JAILLET
->> <christophe.jaillet@wanadoo.fr> wrote:
->>>
->>>>
->>>> Following the recent conversations, I think it might make sense to do
->>>> dev_err(&pdev->dev, "Failed to register RTC device: %pe\n", info->rtc_dev);
->>>>
->>>> Is that right?
->>>>
->>>
->>> Yes, it is right, but it should be done in another patch.
->>>
->>> Would you like to give it a try?
->>>
->> Sure, I'll have the patch ready to send it when I see yours on next.
+Hi Sebastian,
+
+On Thu, 2021-04-29 at 00:29 +0200, Sebastian Reichel wrote:
+> Some standard resolutions like 1366x768 do not work properly with
+> i.MX6 SoCs, since the horizontal resolution needs to be aligned
+> to 8 pixels (so 1360x768 or 1368x768 would work).
 > 
-> Does it make sense to print anything at all? Who would use the output?
-> Is anyone actually going to read it?
+> This patch allocates framebuffers allocated to 8 pixels. The extra
+> time required to send the extra pixels are removed from the blank
+> time. In order to expose the correct display size to userspace,
+> the stride is increased without increasing the width.
+> 
+> Without this patch systems with this display resolution hang
+> indefinitely during boot up.
+> 
+> Suggested-by: Boris Brezillon <boris.brezillon@collabora.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-If the RTC core does not print the message, it should be
-dev_err_probe().  However the first is recently preferred - RTC core
-should do it for all drivers.  I find such error messages useful - helps
-easily spotting regressions via dmesg -l err.
+Thank you, I've rebased and applied this patch on top of imx-drm/next.
 
-
-Best regards,
-Krzysztof
+regards
+Philipp
