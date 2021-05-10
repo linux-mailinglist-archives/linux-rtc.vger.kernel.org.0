@@ -2,131 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B620377C25
-	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 08:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA5A377D94
+	for <lists+linux-rtc@lfdr.de>; Mon, 10 May 2021 10:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbhEJGSw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 10 May 2021 02:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbhEJGSv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 02:18:51 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7742C06175F
-        for <linux-rtc@vger.kernel.org>; Sun,  9 May 2021 23:17:44 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lfzEU-0007ZD-T9; Mon, 10 May 2021 08:17:34 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lfzEU-0004a8-A2; Mon, 10 May 2021 08:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S230116AbhEJIB6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 10 May 2021 04:01:58 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:55257 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230153AbhEJIBz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 10 May 2021 04:01:55 -0400
+X-Originating-IP: 90.65.108.55
+Received: from localhost (lfbn-lyo-1-1676-55.w90-65.abo.wanadoo.fr [90.65.108.55])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 3890C240006;
+        Mon, 10 May 2021 08:00:46 +0000 (UTC)
+Date:   Mon, 10 May 2021 10:00:46 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6 RESEND 4/6] rtc: at91sam9: Simplify using devm_clk_get_enabled()
-Date:   Mon, 10 May 2021 08:17:22 +0200
-Message-Id: <20210510061724.940447-5-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
-References: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: sun6i: Add NVMEM provider
+Message-ID: <YJjoLuwTSbZlNCPa@piout.net>
+References: <20210419014549.26900-1-samuel@sholland.org>
+ <20210430090206.lybmygrt636nysoc@gilmour>
+ <a3b03a06-c8fc-7dbe-7c0b-ffd1f194ecbc@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3b03a06-c8fc-7dbe-7c0b-ffd1f194ecbc@sholland.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+On 09/05/2021 22:39:30-0500, Samuel Holland wrote:
+> On 4/30/21 4:02 AM, Maxime Ripard wrote:
+> > Hi,
+> > 
+> > On Sun, Apr 18, 2021 at 08:45:49PM -0500, Samuel Holland wrote:
+> >> The sun6i RTC provides 32 bytes of general-purpose data registers.
+> >> They can be used to save data in the always-on RTC power domain.
+> >> The registers are writable via 32-bit MMIO accesses only.
+> >>
+> >> Expose the region as a NVMEM provider so it can be used by userspace and
+> >> other drivers.
+> >>
+> >> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> > 
+> > As far as I understood, you want to use those registers to implement
+> > super-standby? If so, while it makes sense for the kernel to be able to
+> > be able to write to those registers, I guess it would be a bit unwise to
+> > allow the userspace to access it?
+> 
+> I want the user to be able to pass information to the bootloader (to
+> select a boot device, e.g. reboot to FEL). I also want the user to be
+> able to read data stored to these registers by system firmware (e.g.
+> crust writes exception information there). It's not really related to
+> standby.
+> 
+> I would want to stack a nvmem-reboot-mode on top to give friendlier
+> names to some of the numbers, but I don't see a problem with root having
+> direct access to the registers. It's no different from /dev/nvram
+> providing access to the PC CMOS RAM.
+> 
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/rtc/rtc-at91sam9.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+(which is deprecated in favor of nvmem)
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index 2216be429ab7..b52e7bd26303 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -374,21 +374,14 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
- 
--	rtc->sclk = devm_clk_get(&pdev->dev, NULL);
-+	rtc->sclk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(rtc->sclk))
- 		return PTR_ERR(rtc->sclk);
- 
--	ret = clk_prepare_enable(rtc->sclk);
--	if (ret) {
--		dev_err(&pdev->dev, "Could not enable slow clock\n");
--		return ret;
--	}
--
- 	sclk_rate = clk_get_rate(rtc->sclk);
- 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
- 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
--		ret = -EINVAL;
--		goto err_clk;
-+		return -EINVAL;
- 	}
- 
- 	mr = rtt_readl(rtc, MR);
-@@ -406,7 +399,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtcdev)) {
- 		ret = PTR_ERR(rtc->rtcdev);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	rtc->rtcdev->ops = &at91_rtc_ops;
-@@ -418,7 +411,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			       dev_name(&rtc->rtcdev->dev), rtc);
- 	if (ret) {
- 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
-@@ -432,11 +425,6 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			 dev_name(&rtc->rtcdev->dev));
- 
- 	return devm_rtc_register_device(rtc->rtcdev);
--
--err_clk:
--	clk_disable_unprepare(rtc->sclk);
--
--	return ret;
- }
- 
- /*
-@@ -450,8 +438,6 @@ static int at91_rtc_remove(struct platform_device *pdev)
- 	/* disable all interrupts */
- 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
- 
--	clk_disable_unprepare(rtc->sclk);
--
- 	return 0;
- }
- 
+
 -- 
-2.30.2
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
