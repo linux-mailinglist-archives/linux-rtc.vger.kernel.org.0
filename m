@@ -2,82 +2,48 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A47537AB97
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 May 2021 18:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7233937B48B
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 May 2021 05:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhEKQPS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 11 May 2021 12:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbhEKQPR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 May 2021 12:15:17 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF85CC061574;
-        Tue, 11 May 2021 09:14:09 -0700 (PDT)
-Received: from dslb-094-219-032-254.094.219.pools.vodafone-ip.de ([94.219.32.254] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1lgV1B-0002rQ-EN; Tue, 11 May 2021 18:13:57 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v3] rtc: imxdi: add wakeup support
-Date:   Tue, 11 May 2021 18:12:44 +0200
-Message-Id: <20210511161244.16111-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210430093210.7034-1-martin@kaiser.cx>
-References: <20210430093210.7034-1-martin@kaiser.cx>
+        id S230019AbhELDdI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 11 May 2021 23:33:08 -0400
+Received: from mail2.directv.syn-alias.com ([69.168.106.50]:44656 "EHLO
+        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230002AbhELDdI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 May 2021 23:33:08 -0400
+DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
+        q=dns/txt; i=@wildblue.net; t=1620790320;
+        h=From:Subject:Date:To:MIME-Version:Content-Type;
+        bh=WUG3OZfoJL5GgRQMneId4hT4nLU=;
+        b=LUB1uLXbfo1cYMiDJ3sPT7dHnckNRmaAc4jHdUVDHJml0+qKkkCmHr3GIhsFOSAB
+        lzlTfsrbId+nwJh2GQIiE3pFQ1+1YHoXJWAJy8IM8aQeh7GmmiHB7ZkFkC5f4JNU
+        8l/lvn8QjxuHK0cixH28N2awR9XGOcmWPRYlxJxEzrdtNjcNQ7EOJsv4JT3hbZB8
+        ULiClkr9ZATAid593cgFDxv71EnTF6Bc2DpMr5AORBgttHT+IWKKh7FZ+yLGlTfu
+        aqo9beiG0F3oU7451NxRB/4VbFrwmfRDkVufhEJPjD9Nau1J3k4pRxdddrsDM9uh
+        htx4xPR3VwyXe3S/zR8KZw==;
+X-Authed-Username: c21pdGhncmluZGluZ0B3aWxkYmx1ZS5uZXQ=
+Received: from [10.80.118.29] ([10.80.118.29:54466] helo=md07.jasper.bos.sync.lan)
+        by mail2.directv.syn-alias.com (envelope-from <smithgrinding@wildblue.net>)
+        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
+        id 8D/CD-02609-F2C4B906; Tue, 11 May 2021 23:32:00 -0400
+Date:   Tue, 11 May 2021 23:31:59 -0400 (EDT)
+From:   Rowell Hambrick <smithgrinding@wildblue.net>
+Reply-To: rwhambrick92@gmail.com
+To:     fanxuemei527@163.com
+Message-ID: <36212914.90781495.1620790319765.JavaMail.zimbra@wildblue.net>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [89.46.103.172]
+X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
+Thread-Index: Bf+x5WSWrvToo5a2/xayK0xGbMxq4Q==
+Thread-Topic: 
+X-Vade-Verditct: clean
+X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrvdehuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtfdpggfktefutefvpdfqfgfvnecuuegrihhlohhuthemuceftddunecugfhmphhthicushhusghjvggtthculddutddmnecujfgurhepfffhrhfvkffugggtgfhiofhtsehtjegttdertdejnecuhfhrohhmpeftohifvghllhcujfgrmhgsrhhitghkuceoshhmihhthhhgrhhinhguihhnghesfihilhgusghluhgvrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhfelkedtteettedtveejveejffeikeejgfdtkeejkeeiudfhvdetgefgiedutdenucfkphepuddtrdektddruddukedrvdelpdekledrgeeirddutdefrddujedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtrdektddruddukedrvdelpdhhvghlohepmhgutdejrdhjrghsphgvrhdrsghoshdrshihnhgtrdhlrghnpdhmrghilhhfrhhomhepshhmihhthhhgrhhinhguihhnghesfihilhgusghluhgvrdhnvghtpdhrtghpthhtoheplhhiqhhirghnuddttddttdesuddviedrtghomhdphhhoshhtpehsmhhtphdrjhgrshhpvghrrdgsohhsrdhshihntgdrlhgrnhdpshhpfhepshhofhhtfhgrihhlpdgukhhimhep
+X-Vade-Client: VIASAT
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The DryIce-based RTC supports alarms that trigger an interrupt.
-
-Configure this interrupt as a wakeup source that wakes the system up
-from standby mode.
-
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
-v3:
- - fix the commit message, the interrupt is always a wakeup source
-
-v2:
- - unconditionally declare rtc-imxdi as wakeup source
- - use dev_pm_set_wake_irq instead of manually coding suspend and resume
-
- drivers/rtc/rtc-imxdi.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/rtc/rtc-imxdi.c b/drivers/rtc/rtc-imxdi.c
-index c1806f4d68e7..4b712e5ab08a 100644
---- a/drivers/rtc/rtc-imxdi.c
-+++ b/drivers/rtc/rtc-imxdi.c
-@@ -24,6 +24,7 @@
- #include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/rtc.h>
- #include <linux/sched.h>
- #include <linux/spinlock.h>
-@@ -811,6 +812,9 @@ static int __init dryice_rtc_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, imxdi);
- 
-+	device_init_wakeup(&pdev->dev, true);
-+	dev_pm_set_wake_irq(&pdev->dev, norm_irq);
-+
- 	imxdi->rtc->ops = &dryice_rtc_ops;
- 	imxdi->rtc->range_max = U32_MAX;
- 
--- 
-2.20.1
-
+Did you get my previous mail
