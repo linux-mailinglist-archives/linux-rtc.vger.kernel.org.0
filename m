@@ -2,48 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7233937B48B
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 May 2021 05:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDFC37BB78
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 May 2021 13:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbhELDdI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 11 May 2021 23:33:08 -0400
-Received: from mail2.directv.syn-alias.com ([69.168.106.50]:44656 "EHLO
-        mail.directv.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbhELDdI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 May 2021 23:33:08 -0400
-DKIM-Signature: v=1; a=rsa-sha1; d=wildblue.net; s=20170921; c=relaxed/simple;
-        q=dns/txt; i=@wildblue.net; t=1620790320;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=WUG3OZfoJL5GgRQMneId4hT4nLU=;
-        b=LUB1uLXbfo1cYMiDJ3sPT7dHnckNRmaAc4jHdUVDHJml0+qKkkCmHr3GIhsFOSAB
-        lzlTfsrbId+nwJh2GQIiE3pFQ1+1YHoXJWAJy8IM8aQeh7GmmiHB7ZkFkC5f4JNU
-        8l/lvn8QjxuHK0cixH28N2awR9XGOcmWPRYlxJxEzrdtNjcNQ7EOJsv4JT3hbZB8
-        ULiClkr9ZATAid593cgFDxv71EnTF6Bc2DpMr5AORBgttHT+IWKKh7FZ+yLGlTfu
-        aqo9beiG0F3oU7451NxRB/4VbFrwmfRDkVufhEJPjD9Nau1J3k4pRxdddrsDM9uh
-        htx4xPR3VwyXe3S/zR8KZw==;
-X-Authed-Username: c21pdGhncmluZGluZ0B3aWxkYmx1ZS5uZXQ=
-Received: from [10.80.118.29] ([10.80.118.29:54466] helo=md07.jasper.bos.sync.lan)
-        by mail2.directv.syn-alias.com (envelope-from <smithgrinding@wildblue.net>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 8D/CD-02609-F2C4B906; Tue, 11 May 2021 23:32:00 -0400
-Date:   Tue, 11 May 2021 23:31:59 -0400 (EDT)
-From:   Rowell Hambrick <smithgrinding@wildblue.net>
-Reply-To: rwhambrick92@gmail.com
-To:     fanxuemei527@163.com
-Message-ID: <36212914.90781495.1620790319765.JavaMail.zimbra@wildblue.net>
-Subject: 
+        id S230129AbhELLMu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 12 May 2021 07:12:50 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:62181 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230035AbhELLMu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 May 2021 07:12:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1620817903; x=1652353903;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2mMEcWBlHlrWU8bjPsSiCJZUDcBVw7uO2Zc306a3VIU=;
+  b=Yr1v7uI7rHLkTng0mtBgJQC7E9yREXBMUU/ILq3Y1gfJnuBdjKvNF6Td
+   SB6ujnml18VU4RuldXIgnDjgs6EriDT8Z7Vgq6OJo4BzdQa9NJ72245c8
+   GgURB6Vg14eg+Vl225wtyPuFqAKFf8L/iH4z001ebGcJ1r9rmFyPqL7HI
+   AqulnLzsUC4cE/2tN618mEoAww/8mfWE4+PU2eLOVB34m1whEulHsCyPp
+   t+EQPO9mYBWoo4u91qptKCgiyOnFgW+SdqOG/xTclZj3iQGBfU5j1tC1z
+   wxtAp2FoR8/djAAe6Cm6gajHNEAiBh/5EQ6dI6sWGHFcpEoow03wM+RVT
+   A==;
+IronPort-SDR: gBNIov3OB2gCbdDZx//iotF284mdkQs9qhbkZ4Bq99UfzRjQLSd6Mzsb0qw5hVXkF92MFhjzb6
+ HvSMPeYAA5kQS3WZpoU3MED6DGBtAd+QzaTW9J/cBaJ0ewHBAyWC/GYXakwT5LnEy+n6oc2oqx
+ d457Y2i7Xq/785fzPZoZtNL8E/EtGUZgrOQ2cUcxYIELnul61mMLka/UlESI7HOamSt36sFlJq
+ QFtTsTZT7Es7HzgT7BVYLkgq7jt6ddZwYp/tpm9aPYoxMEFON2DcTtE4qiSoY+EIVHwIvW+sHU
+ ywk=
+X-IronPort-AV: E=Sophos;i="5.82,293,1613458800"; 
+   d="scan'208";a="120801165"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2021 04:11:43 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 12 May 2021 04:11:41 -0700
+Received: from daire-ubuntu.school.villiers.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 12 May 2021 04:11:38 -0700
+From:   <daire.mcnamara@microchip.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <palmer@dabbelt.com>, <cyril.jean@microchip.com>,
+        <padmarao.begari@microchip.com>, <lewis.hanly@microchip.com>,
+        <conor.dooley@microchip.com>, <david.abdurachmanov@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+Subject: [PATCH v1 0/2] rtc: microchip: Add driver for PolarFire SoC
+Date:   Wed, 12 May 2021 12:11:31 +0100
+Message-ID: <20210512111133.1650740-1-daire.mcnamara@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [89.46.103.172]
-X-Mailer: Zimbra 8.7.6_GA_1776 (zclient/8.7.6_GA_1776)
-Thread-Index: Bf+x5WSWrvToo5a2/xayK0xGbMxq4Q==
-Thread-Topic: 
-X-Vade-Verditct: clean
-X-Vade-Analysis: gggruggvucftvghtrhhoucdtuddrgeduledrvdehuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuufgjpfetvefqtfdpggfktefutefvpdfqfgfvnecuuegrihhlohhuthemuceftddunecugfhmphhthicushhusghjvggtthculddutddmnecujfgurhepfffhrhfvkffugggtgfhiofhtsehtjegttdertdejnecuhfhrohhmpeftohifvghllhcujfgrmhgsrhhitghkuceoshhmihhthhhgrhhinhguihhnghesfihilhgusghluhgvrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhfelkedtteettedtveejveejffeikeejgfdtkeejkeeiudfhvdetgefgiedutdenucfkphepuddtrdektddruddukedrvdelpdekledrgeeirddutdefrddujedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtrdektddruddukedrvdelpdhhvghlohepmhgutdejrdhjrghsphgvrhdrsghoshdrshihnhgtrdhlrghnpdhmrghilhhfrhhomhepshhmihhthhhgrhhinhguihhnghesfihilhgusghluhgvrdhnvghtpdhrtghpthhtoheplhhiqhhirghnuddttddttdesuddviedrtghomhdphhhoshhtpehsmhhtphdrjhgrshhpvghrrdgsohhsrdhshihntgdrlhgrnhdpshhpfhepshhofhhtfhgrihhlpdgukhhimhep
-X-Vade-Client: VIASAT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Did you get my previous mail
+From: Daire McNamara <daire.mcnamara@microchip.com>
+
+This patchset adds support for the Microchip PolarFire SoC RTC
+hardware block.
+
+Daire McNamara (2):
+  dt-bindings: rtc: microchip: Add Microchip PolarFire host binding
+  rtc: microchip: Add driver for Microchip PolarFire SoC
+
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  61 +++
+ drivers/rtc/Kconfig                           |   7 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-mpfs.c                        | 449 ++++++++++++++++++
+ 4 files changed, 518 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-mpfs.c
+
+
+base-commit: acd3d28594536e9096c1ea76c5867d8a68babef6
+prerequisite-patch-id: 6f7f70120adfa8e938b97517f0c664e43e8745a0
+prerequisite-patch-id: 4ea37008d23838aa2e0658811fe15462f6cdbd87
+prerequisite-patch-id: 378c9d7495e56454b7bffbdbc430185dc4e36b90
+prerequisite-patch-id: b547bbdf0a800c652cdd1a542b8ce725dfd6fcc9
+prerequisite-patch-id: 98fc35868a9b0e284ba666422770fb3a4fe27ed9
+prerequisite-patch-id: 28006f331625d755e92cc87ae194e05138f26909
+prerequisite-patch-id: 26afc006e51cf743902bf609b537e1558e70f69c
+-- 
+2.25.1
+
