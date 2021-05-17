@@ -2,86 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 001CE381ADB
-	for <lists+linux-rtc@lfdr.de>; Sat, 15 May 2021 21:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2725A382393
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 May 2021 06:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbhEOTwh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 15 May 2021 15:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbhEOTwg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 15 May 2021 15:52:36 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA29C061573
-        for <linux-rtc@vger.kernel.org>; Sat, 15 May 2021 12:51:22 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id p24so2108221ejb.1
-        for <linux-rtc@vger.kernel.org>; Sat, 15 May 2021 12:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CBzb0xG+UvURsB9kNJTGzZDCQbolAM+N5wgrUrMHeF0=;
-        b=E723nUkXvTFOig0iOWOrwZL76x3JfnSXBw9tAnw3op0bajF/8SlVqkMmCXHThfvs+o
-         QXpgZnx3WUVZVSrwiej1kE01ro8lgKbi9AG7oh+m8HMvUvAlcTcO0UtiMLIwRzv5aqWu
-         7KrX87sAb5fHWPhHObUuX4z3u8t3+MtMbkEn7R65Pf8ek1arXTW1sGLJgqP+Nhe3fpV+
-         xg4cQdkI3/t/DCkR3IzbRXFO2M1pQ/4S87fbAhPegPk5bsFbJyiddYP1hADb/n5CkvIy
-         6K30y8E0S7nLya3Q1ERO4uc0hmM3wQ9KzUvsDgSbbMC2owQxzkRcYstMyUPagVWehmbb
-         N25A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CBzb0xG+UvURsB9kNJTGzZDCQbolAM+N5wgrUrMHeF0=;
-        b=iWpTzAN2o6lQfN1MRRf8A5AWBSOQXMI0sAaD1Dtl+M++zcqdbsdq8Beba8SvNtmihf
-         s+kEZRIvyIv7XBtxhUiQqfX9VlrzGVB7+pQp4LLFzVA5IIOHNCQVYoncF/OEtgdNc/VM
-         LQKUfCOKqcx8KAs8UNWS0aoLMXZXZWeqv9ng1eaj+/PCTkJKJ661zw9dLsWhLjq0XJ96
-         3DIruNV+hp/NYeeBQCBjWRqBzCc4MlXhUnRJSl5jJPFOeWy2KXYb24H5NH7GlbaAr3Pb
-         ZCl95SbpMoN8hfh1kEd7gZY/hxlHKgeIaM7uSASVQxmV/VaIIMEJHi1qditM0HBcy6vt
-         HS1A==
-X-Gm-Message-State: AOAM531+TiNb5o/LM/Eo8mWlnnCmdWwrf3Swtqk9gc10Zp0+MtmbiFW1
-        t6dsQs8HiSjIlz5IQ5SS4fyzbyj1ZTHbx0q8zfE=
-X-Google-Smtp-Source: ABdhPJyEWXeYmWn9jSp9VAnEkO/jlFUxKamRkuxeaCwVAZMGio+z/tbgLBTPq6qe3tSawLDuunvsXVoAiJ5e4czob1Y=
-X-Received: by 2002:a17:906:d184:: with SMTP id c4mr21301862ejz.83.1621108281071;
- Sat, 15 May 2021 12:51:21 -0700 (PDT)
+        id S229787AbhEQE5f (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 17 May 2021 00:57:35 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:3704 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229625AbhEQE5d (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 May 2021 00:57:33 -0400
+Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fk6GK5bXbz16QrV;
+        Mon, 17 May 2021 12:53:29 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 17 May 2021 12:56:13 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Mon, 17 May
+ 2021 12:56:13 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
+CC:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+Subject: [PATCH -next] rtc: m41t80: correct function names in rtc-m41t80.c
+Date:   Mon, 17 May 2021 12:58:31 +0800
+Message-ID: <20210517045831.3461507-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a50:7f0d:0:0:0:0:0 with HTTP; Sat, 15 May 2021 12:51:20
- -0700 (PDT)
-Reply-To: delivery.postoffice@post.com
-From:   Dr Fatima Salatt <nelson.johnson309@gmail.com>
-Date:   Sat, 15 May 2021 21:51:20 +0200
-Message-ID: <CAB9QXVCY29QvyXk+JTua3EPiEt1G-PK8jdtNBUSF_2O=Gfc8nw@mail.gmail.com>
-Subject: Your visa debit card is working online
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-ATTN; DEAR,
+Fix the following make W=1 kernel build warnings:
 
-This is Dr Fatima Salatt ,I have registered your ATM CARD to the POST
-OFFICE BENIN REPUBLIC so that they will Post it to your home address
-and I believe your current address is still the same. Your total
-amount in the envelope is $3.2 Million USD and the POST OFFICE assured
-me that there will be no stoppage until it gets to your hand. I want
-you to contact them and re- confirm your address where to Post it.
+  drivers/rtc/rtc-m41t80.c:811: warning: expecting prototype for wdt_close(). Prototype was for wdt_release() instead
+  drivers/rtc/rtc-m41t80.c:830: warning: expecting prototype for notify_sys(). Prototype was for wdt_notify_sys() instead
 
-Contact Dr.Hameed Wani,
-03 BP 1000,COTONOU
-BENIN REPUBLIC.
-E-mail: (delivery.postoffice@post.com)
-Your full information for the Postal.
-PHONE NUMBER;
-FULL NAME: ==============
-COUNTRY: ==============
-CITY: ==============
-CURRENT HOME ADDRESS: ===========
-TELEPHONE/CELL PHONE NUMBER.=========
-AGE/OCCUPATION: =============
-SEX/A COPY OF YOUR IDENTIFICATION: ===============
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/rtc/rtc-m41t80.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The manager informed me that it will take 3 days to get to your house
-and your Envelope accumulate. Your Current address has to be
-reconfirmed when contacting the post office.
+diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
+index 89128fc29ccc..79512d1c828e 100644
+--- a/drivers/rtc/rtc-m41t80.c
++++ b/drivers/rtc/rtc-m41t80.c
+@@ -802,7 +802,7 @@ static int wdt_open(struct inode *inode, struct file *file)
+ }
+ 
+ /**
+- *	wdt_close:
++ *	wdt_release:
+  *	@inode: inode to board
+  *	@file: file handle to board
+  *
+@@ -815,7 +815,7 @@ static int wdt_release(struct inode *inode, struct file *file)
+ }
+ 
+ /**
+- *	notify_sys:
++ *	wdt_notify_sys:
+  *	@this: our notifier block
+  *	@code: the event being reported
+  *	@unused: unused
+-- 
+2.25.1
 
-Thanks & remain blessed.
-Ms. Fatima Salatt
