@@ -2,132 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A14C638BC74
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 May 2021 04:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C6138BC7A
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 May 2021 04:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238205AbhEUCjA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 May 2021 22:39:00 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:57187 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231681AbhEUCi7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 May 2021 22:38:59 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1764C58094A;
-        Thu, 20 May 2021 22:37:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 20 May 2021 22:37:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        to:cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=D
-        e6xzMF2FgeEmdaTMR3eSkk8CwPQCVbY4en6vEtoeyA=; b=GyCY0HdhhuUpmr374
-        VfMZMmReizfI2KIX6FBCHJUH+YNxdm7gVtajBS6b+3I/d7LICeo2mdVdWAmpfHr0
-        BIPLtTuWlYy9EWTwSTg6uHS+N17fgQT+tytiqJgGgQ/r1GLeF4ukLiMP+hWXEkB/
-        pLmD34ipjZtePC3G5uVNISWrlDKUUEPTtOA/ZkloP3hfk5z/aqiBnErOSgtXTkYT
-        JDH17LxNyOquZcXhQmV7JjBweDC8nKCE+Zj2DdCZ0sXmooHNtjOuNo1u4cYGiSjF
-        s2Jp1Er5XkkRTl9Y64fXEmqoLT2sD9zN3iKyrx/PdVGTDc/52Y2KxHKWg/uFc7M0
-        sVG6w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=De6xzMF2FgeEmdaTMR3eSkk8CwPQCVbY4en6vEtoe
-        yA=; b=R/B7VL5XgmRVFvF0Jw4g+3tfflkqISOf6/2rXzXrS/nd2FDTYx/LOLnRK
-        lBWgJgwe3/DKj/PVws7Scj3+x31ofpDJGkvqgCNIvojKdZrdJsP9EaxbJ4GWaZ6q
-        msAj6NCs0b8y8kgy6KaG1skjuZRyEB2LKb6QzP1FeyxDwyoJSPVNIfxhPCnhgw/B
-        gWTPfny4NfCltqwvPTBKUK/bCGmrtj4PEKKByQZa+2nhr9vMvEhUUBx5CvffXgNw
-        fR7VtfDF8MJebK0qRXgBFPaGWTo7kJHPR7iFxifIsuLA066o70mwKhweo0GS9u4z
-        3MuFHSKGl2qZB4nAKWsPlgb11KAgw==
-X-ME-Sender: <xms:7xynYFU_IU-YS9abw3wxkTkrYZgXGTRwnHXE3gQ6yK-RXcc35qUjqQ>
-    <xme:7xynYFlxYPA_AMIKChNAn6I3cn5GZGkPEFELW2wua3X5OeWFDR6kv4zy3G3lqXH_G
-    lRd9DS7y3na5p7YFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdejvddgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvddttdejieduudfgffevteekffegffeguddtgfefkeduvedukeff
-    hedtfeevuedvnecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:7xynYBaRUqI3D8YrkCIHs8AoiUMdjhvH6ciBF5I4HtCmDnjFbj0u2g>
-    <xmx:7xynYIX2rGRypVm2udaXepLfm5Z_TT6razf4LIhJggqtApUkLCAJsA>
-    <xmx:7xynYPk4ABhXgKMwzixt8SqRm4yqHz3HXtiIru0Eesq-4aXbcOqx3A>
-    <xmx:8RynYC8r69Q4k1_jputi0x3LS84eIketYJpntW8loxTEydbCNM15EQ>
-Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Thu, 20 May 2021 22:37:34 -0400 (EDT)
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Ondrej Jirman <megous@megous.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-References: <20210519104152.21119-1-andre.przywara@arm.com>
- <20210519104152.21119-4-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v6 03/17] dt-bindings: rtc: sun6i: Add H616 compatible
- string
-Message-ID: <99a2069b-99e9-9b47-12a6-aae01c7f59dc@sholland.org>
-Date:   Thu, 20 May 2021 21:37:34 -0500
-User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S234669AbhEUCmW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 May 2021 22:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231681AbhEUCmW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 May 2021 22:42:22 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC571C061574;
+        Thu, 20 May 2021 19:40:58 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y15so2454577pfn.13;
+        Thu, 20 May 2021 19:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHpQOqyUWs2SR2xgKoUhI9yaLxE0nRI3mQRRH6qiBjA=;
+        b=po5OLpR8QFpnsPBudiC/w99K0SQG8bvjcJjOA3esPV8JWZka7yUs5RUV2T9xsVwdAL
+         msW0U3gAwXgh95++SNiQWkzcz6IprLLMTzTCNi6emGQmlnt6OoAbB9rRajQgix3Nwddo
+         N/WpGghxR8ehSvpipGKBfwRIUzwZ/sfuMIGLu+xV6ZsObM0jKFa/tv9QYYXjCOU1dAbF
+         ysE4LsBw8e6I2VM4l9patmy9ggIASd0fH32hjYWumFX/7O9qh7jOHesFihl3Fib4vWcv
+         mzUeWC2xfNo2hba+3m2iFwflUvg/m4TJpoAP3JsLVXbXSbgv7JvdcIPq1SzzHuNo6Os9
+         DDVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XHpQOqyUWs2SR2xgKoUhI9yaLxE0nRI3mQRRH6qiBjA=;
+        b=dCQxvQtC8W2dFMx3JrUxq8BwhsHg2OVhFa0Y+MYJY6UgYb4R5+e6LMEbW2bTS284Nj
+         bGIyyPT5z349v0uqOHaWo2BB/rG99344u/KfF/LcTQtzojZTAdC4UBbuDP0riuINnolr
+         mlmT98TVTDt02IwMuQ7VGNxcQtxwOR5VcNIl+C3nYNKIIxAjRKTyM//qTxDLRQyCDI7d
+         CmViosCEJDSMZfnzuvzGJP9uh5WGR27ZyeF669XGLaHwJFxCfsg+6v+kSHzlYDExRch3
+         7G0TAzGsRsTUeu7ryZR6Vcm7u6lIe0IcKnLiVHxpKCEm+BklzviiuiBExnQT90puX4ZA
+         BHYg==
+X-Gm-Message-State: AOAM533s9WNLYgfg8kGX2Kkx2rYfyawiYmYbSuGi8mOWljlgL/TyK/hm
+        W5RXdetZ6jpJLMR0Q3qqOEAh0k6HvNxS9rha
+X-Google-Smtp-Source: ABdhPJw1DhV4lGWNVZcmA4gvBqaYBT71SxMH6Nv+34O39YrAhquTmSA0mdyFj0w+Io/z5i5dikQ4FA==
+X-Received: by 2002:aa7:8809:0:b029:2de:3b94:487e with SMTP id c9-20020aa788090000b02902de3b94487emr7606623pfo.33.1621564858532;
+        Thu, 20 May 2021 19:40:58 -0700 (PDT)
+Received: from localhost.localdomain ([203.90.233.36])
+        by smtp.gmail.com with ESMTPSA id o6sm3095037pfb.126.2021.05.20.19.40.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 20 May 2021 19:40:58 -0700 (PDT)
+From:   qxj511mail@gmail.com
+To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qiuxiaojin@cvte.com
+Subject: [PATCH] rtc: rs5c372:  Fix read the time from RTC is illegal When reading time from an uninitialized RTC chip, The value may be illegal
+Date:   Fri, 21 May 2021 10:40:26 +0800
+Message-Id: <20210521024026.28472-1-qxj511mail@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <20210519104152.21119-4-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Andre,
+From: qiuxiaojin <qiuxiaojin@cvte.com>
 
-On 5/19/21 5:41 AM, Andre Przywara wrote:
-> Add the obvious compatible name to the existing RTC binding.
-> The actual RTC part of the device uses a different day/month/year
-> storage scheme, so it's not compatible with the previous devices.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml     | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> index b1b0ee769b71..178c955f88bf 100644
-> --- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> @@ -26,6 +26,7 @@ properties:
->            - const: allwinner,sun50i-a64-rtc
->            - const: allwinner,sun8i-h3-rtc
->        - const: allwinner,sun50i-h6-rtc
-> +      - const: allwinner,sun50i-h616-rtc
->  
->    reg:
->      maxItems: 1
-> @@ -97,7 +98,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: allwinner,sun50i-h6-rtc
-> +            enum:
-> +              - allwinner,sun50i-h6-rtc
-> +              - allwinner,sun50i-h616-rtc
->  
->      then:
->        properties:
-> 
+Signed-off-by: qiuxiaojin <qiuxiaojin@cvte.com>
+---
+ drivers/rtc/rtc-rs5c372.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-This binding is missing a clock reference for the pll-periph0-2x input
-to the 32kHz clock fanout.
+diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+index 3bd6eaa0dcf6..39b123497807 100644
+--- a/drivers/rtc/rtc-rs5c372.c
++++ b/drivers/rtc/rtc-rs5c372.c
+@@ -212,6 +212,7 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	struct rs5c372	*rs5c = i2c_get_clientdata(client);
+ 	int		status = rs5c_get_regs(rs5c);
+ 	unsigned char ctrl2 = rs5c->regs[RS5C_REG_CTRL2];
++	int flags_utime = 0;
+ 
+ 	if (status < 0)
+ 		return status;
+@@ -239,12 +240,27 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	tm->tm_wday = bcd2bin(rs5c->regs[RS5C372_REG_WDAY] & 0x07);
+ 	tm->tm_mday = bcd2bin(rs5c->regs[RS5C372_REG_DAY] & 0x3f);
+ 
++	if (tm->tm_mday < 1) {
++		// The value read from the register may be zero, which is an illegal value
++		flags_utime = flags_utime + 1;
++		tm->tm_mday = 1;
++	}
++
+ 	/* tm->tm_mon is zero-based */
+ 	tm->tm_mon = bcd2bin(rs5c->regs[RS5C372_REG_MONTH] & 0x1f) - 1;
+ 
++	if (tm->tm_mon < 0) {
++		flags_utime = flags_utime + 1;
++		tm->tm_mon = 0;
++	}
++
+ 	/* year is 1900 + tm->tm_year */
+ 	tm->tm_year = bcd2bin(rs5c->regs[RS5C372_REG_YEAR]) + 100;
+ 
++	if (flags_utime > 0) {
++		rs5c372_rtc_set_time(dev, tm);
++	}
++
+ 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
+ 		"mday=%d, mon=%d, year=%d, wday=%d\n",
+ 		__func__,
+-- 
+2.29.0
 
-It is also missing a clock reference to the RTC register gate (and that
-clock is in turn missing from the r_ccu driver).
-
-Regards,
-Samuel
