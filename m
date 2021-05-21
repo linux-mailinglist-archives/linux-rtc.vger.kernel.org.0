@@ -2,112 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E5A389BE4
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 May 2021 05:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB40638BBB7
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 May 2021 03:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbhETDde (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 May 2021 23:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbhETDde (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 May 2021 23:33:34 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD633C061574;
-        Wed, 19 May 2021 20:32:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id kr9so329160pjb.5;
-        Wed, 19 May 2021 20:32:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=27vMgcBoK9ejwXq1ePHAeG7jlHZcEPcZzjaJh1mmpP4=;
-        b=ep+qZMIPjndRE5CAdoC1tDXeOD+YCgiv+YD6b1xhiyU1Nfe59KlBBR9+tPrf/z4omf
-         pzSegEIlaQ44L4/wKMzt+MW6FScOtdgMEv+yHKqoSvfpzJqSKV5EP5zuplCOVsTqWQKh
-         cG0wWTWkoMjuhM1b3OkqsQpn0FPDgYUQpz1VMnGWx0f86trw4N0iSliFmMkKg5asBUpS
-         aYEXmiS/tKZlYo7cm03HLIaBtTBjfEk5WbB7BoXGzMexK2ud5eBPUHhc/S0OuHS4ajz+
-         CdSC78R5uY7yQLXrYv7e8+BqWIsNlEVdacMrhKWyBUb7UMRTy05Rgzn7jdW8dr2Ze2nN
-         Z78g==
+        id S237119AbhEUBlL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 May 2021 21:41:11 -0400
+Received: from mail-oo1-f47.google.com ([209.85.161.47]:46666 "EHLO
+        mail-oo1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237113AbhEUBlK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 May 2021 21:41:10 -0400
+Received: by mail-oo1-f47.google.com with SMTP id o14-20020a4a384e0000b029020ec48a2358so2148827oof.13;
+        Thu, 20 May 2021 18:39:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=27vMgcBoK9ejwXq1ePHAeG7jlHZcEPcZzjaJh1mmpP4=;
-        b=k6XLFforaHoNFiiI7uvrUW7IkuA+f+pVxaue+C2zwwVa4QqwktSyQSngFFnZL1W8k8
-         o2bcRHgm2SNIcR4QKTsGjTM+w3rD9ok9oU6pFVnygbVR+7jNcoX2756gB9VvUzLqSQcq
-         3rlhVJa4adZxQ6VXG109BqwQdCZZCK/LXm+zYAF9cxE8fUFiecvdCf6Y5u05iiQcbDTA
-         4kGOKVZxEwHKfDg0H70Fba72Nm3a8z1N1CFLUMMNFmI1dwBNw7PekZHNpucdz8gtaxhg
-         1+vX8BlUSA5h2OmgfbbdHJucKK5KQKwPDLqMuOdKUQWxEbKNiR2p5+utkAyF0WqwZ2J4
-         7eQQ==
-X-Gm-Message-State: AOAM532rOiqCY2wVJTTJpeXaMs0m54yxifFvXi8fWKwZ7nKI9Pw5TMex
-        Z06JK9aiqWTS0OpLnvRY0H0=
-X-Google-Smtp-Source: ABdhPJwOFctzlfOT8MQ0V2PMhrbrfjr3TSufidZF7N6mtN0ewSE756Yl9s6NK9LTECVuUUiYBc2oMw==
-X-Received: by 2002:a17:90b:180b:: with SMTP id lw11mr2484356pjb.141.1621481532376;
-        Wed, 19 May 2021 20:32:12 -0700 (PDT)
-Received: from localhost.localdomain ([203.90.233.36])
-        by smtp.gmail.com with ESMTPSA id 4sm632912pgn.31.2021.05.19.20.32.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 May 2021 20:32:11 -0700 (PDT)
-From:   qxj511mail@gmail.com
-To:     a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, qiuxiaojin@cvte.com
-Subject: [PATCH] rtc: rs5c372:  Fix read the time from RTC is illegal When reading time from an uninitialized RTC chip, The value may be illegal
-Date:   Thu, 20 May 2021 11:31:56 +0800
-Message-Id: <20210520033156.23209-1-qxj511mail@gmail.com>
-X-Mailer: git-send-email 2.29.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=twIIkTMnAszhUEiU17DepvUWRNVDKbFl4+4yGD34k5k=;
+        b=IFTIgrxA9FhPDyIn2Z/WxKtmcyV5NZg1tPY3chg+OlQgAe6tOCwFRA6L91DpIQxqqA
+         peqhIow9MYjyXDwm8wwnGOmgNJGI9XXM2m34ft9Vg1vrwSRkBxvFGjIRlGwl4PS4zFXn
+         KSJbDy6hp8F4HTd3daoZWh7jIiGXVuHsxXhMqNbrvYwOC0HqxWXn4ukEsKZ2OmnM+OkH
+         CzoNCud0g3cDJFpZt1GZQ9sbzmmDcD2qthU29SlyaGSyByYp2tZtcrIIlhQMtv6Fu2pb
+         Vf+TkYDtxBLipuWtjw1SaAsXqtIuX985iaQIounXPR5J2qLxo0VS7ZCmxpOqCxKIYqxf
+         V7Ww==
+X-Gm-Message-State: AOAM532uDmaaTEf2UQ+33XCUbOwXLxMasW7sJUV9EuSUnsnMfme46K3s
+        gtwed24kmXqOO4hbuIiyTW7NMA4Jkg==
+X-Google-Smtp-Source: ABdhPJywIEAjV6PJzo8otOaFuoJTJP8F5lzBvqeWyHUM5mp/ztXEA4AwjUCsGAT4m4e2e6pn3Bu5gQ==
+X-Received: by 2002:a4a:88f2:: with SMTP id q47mr5943925ooh.30.1621561186891;
+        Thu, 20 May 2021 18:39:46 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id n11sm615941oom.1.2021.05.20.18.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 May 2021 18:39:46 -0700 (PDT)
+Received: (nullmailer pid 2460455 invoked by uid 1000);
+        Fri, 21 May 2021 01:39:45 -0000
+Date:   Thu, 20 May 2021 20:39:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Samuel Holland <samuel@sholland.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Ondrej Jirman <megous@megous.com>, devicetree@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v6 03/17] dt-bindings: rtc: sun6i: Add H616 compatible
+ string
+Message-ID: <20210521013945.GA2460400@robh.at.kernel.org>
+References: <20210519104152.21119-1-andre.przywara@arm.com>
+ <20210519104152.21119-4-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210519104152.21119-4-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: qiuxiaojin <qiuxiaojin@cvte.com>
+On Wed, 19 May 2021 11:41:38 +0100, Andre Przywara wrote:
+> Add the obvious compatible name to the existing RTC binding.
+> The actual RTC part of the device uses a different day/month/year
+> storage scheme, so it's not compatible with the previous devices.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml     | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
 
-Signed-off-by: qiuxiaojin <qiuxiaojin@cvte.com>
----
- drivers/rtc/rtc-rs5c372.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index 3bd6eaa0dcf6..ce61e15d5f3a 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -212,6 +212,7 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	struct rs5c372	*rs5c = i2c_get_clientdata(client);
- 	int		status = rs5c_get_regs(rs5c);
- 	unsigned char ctrl2 = rs5c->regs[RS5C_REG_CTRL2];
-+	int flags_utime = 0;
- 
- 	if (status < 0)
- 		return status;
-@@ -239,12 +240,27 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
- 	tm->tm_wday = bcd2bin(rs5c->regs[RS5C372_REG_WDAY] & 0x07);
- 	tm->tm_mday = bcd2bin(rs5c->regs[RS5C372_REG_DAY] & 0x3f);
- 
-+	if (tm->tm_mday < 1) {
-+		// The value read from the register may be zero, which is an illegal value
-+		flags_utime = flags_utime + 1;
-+		tm->tm_mday = 1;
-+	}
-+
- 	/* tm->tm_mon is zero-based */
- 	tm->tm_mon = bcd2bin(rs5c->regs[RS5C372_REG_MONTH] & 0x1f) - 1;
- 
-+	if (tm->tm_mon < 0) {
-+		flags_utime = flags_utime + 1;
-+		tm->tm_mday = 0;
-+	}
-+
- 	/* year is 1900 + tm->tm_year */
- 	tm->tm_year = bcd2bin(rs5c->regs[RS5C372_REG_YEAR]) + 100;
- 
-+	if (flags_utime > 0) {
-+		rs5c372_rtc_set_time(dev, tm);
-+	}
-+
- 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
- 		"mday=%d, mon=%d, year=%d, wday=%d\n",
- 		__func__,
--- 
-2.29.0
-
+Acked-by: Rob Herring <robh@kernel.org>
