@@ -2,27 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 728F438DA37
-	for <lists+linux-rtc@lfdr.de>; Sun, 23 May 2021 10:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E670F38DC64
+	for <lists+linux-rtc@lfdr.de>; Sun, 23 May 2021 20:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbhEWIWl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 23 May 2021 04:22:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231599AbhEWIWk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 23 May 2021 04:22:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DF82C61263;
-        Sun, 23 May 2021 08:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621758074;
-        bh=MICF+Uu1HkhetRxQCscJNaBrHSc35hE+tXwnn6k6VUE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BxQGlTsr5rBXr9k0Gh1xiDMJaKVu8hEpBcU8BD75BH1RlSMLE5q/MOipnZP80e3S3
-         ZA3H/dO78sbvmjI/DZxaUPTPHLc5yrVGjiyxI3dIh1NlDue3adN5ruhgORXE+qYoSD
-         iXLMxUIrvdCuVo+I9ACpjjz7Qd9cuVeSacORuac8=
-Date:   Sun, 23 May 2021 10:21:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S231833AbhEWS0W (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 23 May 2021 14:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231929AbhEWS0W (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 23 May 2021 14:26:22 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60270C061574
+        for <linux-rtc@vger.kernel.org>; Sun, 23 May 2021 11:24:55 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lksmM-0005qv-JT; Sun, 23 May 2021 20:24:46 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4062:af82:ca48:e761])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7B8CC629CEC;
+        Sun, 23 May 2021 18:24:42 +0000 (UTC)
+Date:   Sun, 23 May 2021 20:24:41 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Francois Gervais <fgervais@distech-controls.com>,
         linux-rtc@vger.kernel.org,
@@ -30,47 +36,70 @@ Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Subject: Re: [PATCH 1/1] rtc: pcf85063: fallback to parent of_node
-Message-ID: <YKoQds5N0dP2Gjg5@kroah.com>
+Message-ID: <20210523182441.he5kqrlhargchaxw@pengutronix.de>
 References: <20210310211026.27299-1-fgervais@distech-controls.com>
  <161861118020.865088.6364463756780633947.b4-ty@bootlin.com>
  <20210522153636.ymyyq4vtzz2dq5k2@pengutronix.de>
+ <YKoQds5N0dP2Gjg5@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="55tqwaddqmsh55rc"
 Content-Disposition: inline
-In-Reply-To: <20210522153636.ymyyq4vtzz2dq5k2@pengutronix.de>
+In-Reply-To: <YKoQds5N0dP2Gjg5@kroah.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, May 22, 2021 at 05:36:36PM +0200, Marc Kleine-Budde wrote:
-> Hello Greg,
-> 
-> On 17.04.2021 00:16:40, Alexandre Belloni wrote:
-> > On Wed, 10 Mar 2021 16:10:26 -0500, Francois Gervais wrote:
-> > > The rtc device node is always or at the very least can possibly be NULL.
-> > > 
-> > > Since v5.12-rc1-dontuse/3c9ea42802a1fbf7ef29660ff8c6e526c58114f6 this
-> > > will lead to a NULL pointer dereference.
-> > > 
-> > > To fix this we fallback to using the parent node which is the i2c client
-> > > node as set by devm_rtc_allocate_device().
-> > > 
-> > > [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [1/1] rtc: pcf85063: fallback to parent of_node
-> >       commit: 03531606ef4cda25b629f500d1ffb6173b805c05
-> > 
-> > I made the fallback unconditionnal because this should have been that way from
-> > the beginning as you point out.
-> 
-> can you queue this for stable, as it causes a NULL Pointer deref with
-> (at least) v5.12.
 
-After it hits Linus's tree, let stable@vger.kernel.org know the id and
-we will glad to add it to the stable trees.
+--55tqwaddqmsh55rc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+On 23.05.2021 10:21:10, Greg Kroah-Hartman wrote:
+> On Sat, May 22, 2021 at 05:36:36PM +0200, Marc Kleine-Budde wrote:
+> > > [1/1] rtc: pcf85063: fallback to parent of_node
+> > >       commit: 03531606ef4cda25b629f500d1ffb6173b805c05
+> > >=20
+> > > I made the fallback unconditionnal because this should have been that=
+ way from
+> > > the beginning as you point out.
+> >=20
+> > can you queue this for stable, as it causes a NULL Pointer deref with
+> > (at least) v5.12.
+>=20
+> After it hits Linus's tree, let stable@vger.kernel.org know the id and
+> we will glad to add it to the stable trees.
 
-greg k-h
+It's in Linus's tree since v5.13-rc1~64^2~19 and the commit id is
+03531606ef4c ("rtc: pcf85063: fallback to parent of_node").
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--55tqwaddqmsh55rc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCqnecACgkQqclaivrt
+76kQKwf+MTBuPtLWQPRQawOmM1P/s4C8lSEdTEZVWhyCEBbDbhVoC19m7ORt/XT/
+LUThURIUi1JZARW8H0Fohbr53iTRLpxlWSZrrfyA2ANz6DnoL0YyqmaCskuTTHSQ
+zpxUweK7zYN0OhaOQXCNwRVREvFQX+QKyG7klhLoiMmY60R3N77Fyo5ahGl2eTa2
+pb55anvkdLvwmp7g9oNgoW872MKNdG2b9lKcfXtFz0M8sFkXJKv2eVENlY6hWSMz
+h2h/jiBEsi7LHhZ8/uBGpYo5mL/MqGZIYhO5Ci0z39xGB13XykWRzIT0yn9kbVcY
+KqekXNnM5Fqy3ZYDsXtJq152CKefKA==
+=0o5v
+-----END PGP SIGNATURE-----
+
+--55tqwaddqmsh55rc--
