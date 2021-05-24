@@ -2,58 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1238438E071
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 May 2021 06:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB5C38E081
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 May 2021 06:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbhEXEoN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 May 2021 00:44:13 -0400
-Received: from mail-vk1-f173.google.com ([209.85.221.173]:39715 "EHLO
-        mail-vk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbhEXEoL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 May 2021 00:44:11 -0400
-Received: by mail-vk1-f173.google.com with SMTP id k22so3649052vko.6
-        for <linux-rtc@vger.kernel.org>; Sun, 23 May 2021 21:42:21 -0700 (PDT)
+        id S229633AbhEXE6A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 24 May 2021 00:58:00 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:42971 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229824AbhEXE6A (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 May 2021 00:58:00 -0400
+Received: by mail-vs1-f51.google.com with SMTP id j12so8561421vsq.9
+        for <linux-rtc@vger.kernel.org>; Sun, 23 May 2021 21:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=nigauri-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=oo5s8uwjF8OUbBmkEbKQsEf78QSRRFiHDe/U/edTUi8=;
-        b=B/+f7/rg2nxf8jbn87Ja7wWnko3ugfw5by9xEcHYm1zc9+DLasjWeUz56wkphR6I0m
-         Ry0tNpRtLlzMm9EbYoOCxKX52Im0K6/0NDmarXkUz2VQVnWFl9F8UCff1Z7Ea7SCIun0
-         zT39J5JHNF/3BrlCbleNJEM/5V544sJbd2yLoeaL0PaGs7jJK41jiyxoibFnACMQpYss
-         sdsakwwp7XERCEnUQesMNY1rMeE1AE8VFkzsWziGPXQBome0dIqzrDfofYT+JQZam5QD
-         /w6SN+QlJyp+Lc2lna/MnajFRq6aQzgtwCJC0tkZ0Y/c2OYe+3VX4Uxx6WeUU46iqcTC
-         Ulsg==
+        bh=aCou1GN+VFtJo9bn++vd0SQb+ICnnNfgmjfEdtqu+TU=;
+        b=r+okJWapj6LP9sM7DQYVx+X+UNKfi1pmuTWUqUdUd7O6gTcDym9ZyoAlBkOOzpFd8h
+         s9YazJGK/BNBBuz/R678Ym+zpnxI5P0mHyUJ/4bqTAZocp513soXI2zxYd+N3/PRBGzg
+         xbASLRSRSRUFo9CchWADbKzDuJ7+YCl1rkX+a0csjlzibnlRhj3ez1tHhWr7u6ipy9Fg
+         yljVvjwLRGt6o1mDA2lafL5ennH/1oe6Vspquu1Dj2ERmFDQriet0nxhn2YrhSCNZA6N
+         zf9QppdSaEzVM3RsZ9Ck5rnen+/cytRtqcKUq9BQ4K9APuNP1zqjj4JTXJt4wAn0JnVU
+         BHbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oo5s8uwjF8OUbBmkEbKQsEf78QSRRFiHDe/U/edTUi8=;
-        b=kpzgkU3PDEag9eQXKkhuCy2vuuGUHuUQh7NqaWrjMb4NA589SstND7YHaEFsMNeeZ+
-         RAIpznxozC+/2PisNI4GtUX5cvX8W6D8eRp0fBoxy3QgW2lUlEJJL3xxJMaA9Cw8Rh1f
-         ayKmp+ZNO0TXFJkNH3RrGPnBgQgKZuAFZJbHAG0R3zDU9QZ8yRtGI8QuYIc9MRlgouhA
-         j6j13ddq+MBMjju7/AVHrGrbxtOY39BK+BGA15M65FBI66I15AX7gj92LUMQnGDDFE/C
-         ZwnaUsEu6vG9E4ejm7b2XQK4rUIq/oVhWdSLG9nJsCvkCEa+DTSCnGJDC7W5twByVtNk
-         6DBg==
-X-Gm-Message-State: AOAM5339I+IKF5Ne696CYP5xNiXeIEV6hphJA66/XzFZ/v5ydDtLU/+P
-        oNRQ6h+x2vuCMyvTpgi8UdWHwU3cH6scd7iXYaal
-X-Google-Smtp-Source: ABdhPJwubfN66hEaBX7DuVUrkG2WV39k605CpKZQiPKpwbDi4Z0To1yEhCmQ7/3IuCuh4Tj059RyLW3QjmJK6NVy1Xo=
-X-Received: by 2002:a05:6122:a23:: with SMTP id 35mr19257058vkn.20.1621831274980;
- Sun, 23 May 2021 21:41:14 -0700 (PDT)
+        bh=aCou1GN+VFtJo9bn++vd0SQb+ICnnNfgmjfEdtqu+TU=;
+        b=DPG5mnhena9D4wZBDjYaoQvERmXEQ+hmTGj8Xp9tQuGmhNbo7kKte5wr45gKdXejZ2
+         zYSyHM1IK0ji/EWEvysvTzM8Q6aiYzc09dLU74/wHavxLxU8cKU/QkAh8lw9qH7PTg50
+         pNHwfmJCsWBvJTwh4Honw7QiC4KxWTW5o1W6lbhJDkiwd5qkF6mUBdPqW34Lo8DHwfzM
+         NdDdimjhjDiCba1mKFv4zViX/G+5Q2d38VyxdB4JCNBfZPKokBJxPpzW7g3xQuMBxMJB
+         YQ4udebYWk1kOnFjcMd6YFo7I1fgTTc3hBqVExU9k/JZ1l9VUaiVhPASMl3IpfEysduL
+         JfFg==
+X-Gm-Message-State: AOAM532A2BgDolyUNb/MUNEWFVC5QcbCKX3BFg26XaNI6epxlRI2K7DU
+        zHPnNekcrDvW9WeS9bF15z4Vt6zOEIGEHTpHu5qVrnrzlJPu
+X-Google-Smtp-Source: ABdhPJyQ1sCG7EzyJjxM8qGA6E35iVomWczbCw795hTy1vTQpPzRIJXlHn8Ok/vRfG55i/app4kI7K7nCaWAwiY5LW8=
+X-Received: by 2002:a67:f281:: with SMTP id m1mr18731775vsk.24.1621831990685;
+ Sun, 23 May 2021 21:53:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210520033156.23209-1-qxj511mail@gmail.com>
-In-Reply-To: <20210520033156.23209-1-qxj511mail@gmail.com>
+References: <AM8P190MB09806335DF5E7967BB8EA9E4F52C9@AM8P190MB0980.EURP190.PROD.OUTLOOK.COM>
+In-Reply-To: <AM8P190MB09806335DF5E7967BB8EA9E4F52C9@AM8P190MB0980.EURP190.PROD.OUTLOOK.COM>
 From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Mon, 24 May 2021 13:40:48 +0900
-Message-ID: <CABMQnV+5gN_6BA4tYS+GugrA0HrQD9+_EkQk_emqsUy1YzFCOA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: rs5c372: Fix read the time from RTC is illegal When
- reading time from an uninitialized RTC chip, The value may be illegal
-To:     qxj511mail@gmail.com
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        qiuxiaojin@cvte.com
+Date:   Mon, 24 May 2021 13:52:44 +0900
+Message-ID: <CABMQnVLmkQtBqgMiUVpdpTm2c1LmZZZ2Y5y=zMHrCE34J5A7eg@mail.gmail.com>
+Subject: Re: [RFC] rtc: rv3032: Add devicetree parameter to enable level
+ switching mode
+To:     Hager Stefan <s.hager@abatec.at>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -62,82 +60,68 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 Hi,
 
-2021=E5=B9=B45=E6=9C=8820=E6=97=A5(=E6=9C=A8) 12:32 <qxj511mail@gmail.com>:
+2021=E5=B9=B45=E6=9C=8818=E6=97=A5(=E7=81=AB) 17:46 Hager Stefan <s.hager@a=
+batec.at>:
 >
-> From: qiuxiaojin <qiuxiaojin@cvte.com>
-
-Please briefly describe the patch contained in the email to the subject.
-And, please write a description of the patch in the text
-
+> When the Micro Crystal RV3032 rtc is used with a primary coin-cell for po=
+wer backup, the backup switching mode LSM (level switching mode) should be =
+used according to the technical support from the manufacturer of this devic=
+e.
 >
-> Signed-off-by: qiuxiaojin <qiuxiaojin@cvte.com>
+> Currently there is no way to set this mode by the driver.
+>
+> Thererfore, i suggest to introduce an additional parameter for the device=
+tree to enable this backup switchover mode
+> and to extend the probe function to look for that parameter and activate =
+the LSM.
+>
+> Is this an appropriate solution? Does it need improvements?
+>
+> Signed-off-by: Stefan Hager <s.hager@abatec.at>
+>
 > ---
->  drivers/rtc/rtc-rs5c372.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+> diff --git a/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.ya=
+ml b/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+> index a2c55303810d..b948e19e358b 100644
+> --- a/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/microcrystal,rv3032.yaml
+> @@ -37,6 +37,10 @@ properties:
+>        - 3000
+>        - 4400
 >
-> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-> index 3bd6eaa0dcf6..ce61e15d5f3a 100644
-> --- a/drivers/rtc/rtc-rs5c372.c
-> +++ b/drivers/rtc/rtc-rs5c372.c
-> @@ -212,6 +212,7 @@ static int rs5c372_rtc_read_time(struct device *dev, =
-struct rtc_time *tm)
->         struct rs5c372  *rs5c =3D i2c_get_clientdata(client);
->         int             status =3D rs5c_get_regs(rs5c);
->         unsigned char ctrl2 =3D rs5c->regs[RS5C_REG_CTRL2];
-> +       int flags_utime =3D 0;
+> +  backup-switchover-mode-level:
+> +    description:
+> +      Use level switching mode for backup switchover mode
+
+Please add 'type: boolean'.
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/drivers/rtc/rtc-rv3032.c b/drivers/rtc/rtc-rv3032.c
+> index d63102d5cb1e..a28a3e0172d0 100644
+> --- a/drivers/rtc/rtc-rv3032.c
+> +++ b/drivers/rtc/rtc-rv3032.c
+> @@ -881,6 +881,12 @@ static int rv3032_probe(struct i2c_client *client)
+>         if (ret)
+>                 return ret;
 >
->         if (status < 0)
->                 return status;
-> @@ -239,12 +240,27 @@ static int rs5c372_rtc_read_time(struct device *dev=
-, struct rtc_time *tm)
->         tm->tm_wday =3D bcd2bin(rs5c->regs[RS5C372_REG_WDAY] & 0x07);
->         tm->tm_mday =3D bcd2bin(rs5c->regs[RS5C372_REG_DAY] & 0x3f);
->
-> +       if (tm->tm_mday < 1) {
-> +               // The value read from the register may be zero, which is=
- an illegal value
-
-Please use C89 style commet (/* */).
-
-> +               flags_utime =3D flags_utime + 1;
-
-I like using ++ (flags_utime++).
-
-> +               tm->tm_mday =3D 1;
+> +       if (device_property_read_bool(&client->dev, "backup-switchover-mo=
+de-level")) {
+> +               ret =3D regmap_update_bits(rv3032->regmap, RV3032_PMU, RV=
+3032_PMU_BSM, (RV3032_PMU_BSM_LSM) << 4);
+> +               if (ret)
+> +                       return ret;
 > +       }
 > +
->         /* tm->tm_mon is zero-based */
->         tm->tm_mon =3D bcd2bin(rs5c->regs[RS5C372_REG_MONTH] & 0x1f) - 1;
+>         rv3032_trickle_charger_setup(&client->dev, rv3032);
 >
-> +       if (tm->tm_mon < 0) {
-> +               flags_utime =3D flags_utime + 1;
-> +               tm->tm_mday =3D 0;
-> +       }
-> +
->         /* year is 1900 + tm->tm_year */
->         tm->tm_year =3D bcd2bin(rs5c->regs[RS5C372_REG_YEAR]) + 100;
->
-> +       if (flags_utime > 0) {
-
-{} is unnecessary.
-
-> +               rs5c372_rtc_set_time(dev, tm);
-
-A build error will occur because there is no declaration of
-rs5c372_rtc_set_time.
-Please make sure this can be compiled.
-
-> +       }
-> +
->         dev_dbg(&client->dev, "%s: tm is secs=3D%d, mins=3D%d, hours=3D%d=
-, "
->                 "mday=3D%d, mon=3D%d, year=3D%d, wday=3D%d\n",
->                 __func__,
-> --
-> 2.29.0
+>         rv3032->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
 >
 
-
+Best regards,
+  Nobuhiro
 --=20
 Nobuhiro Iwamatsu
    iwamatsu at {nigauri.org / debian.org}
