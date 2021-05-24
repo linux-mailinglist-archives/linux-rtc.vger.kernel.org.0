@@ -2,107 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BA438E514
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 May 2021 13:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE24638E6D2
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 May 2021 14:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbhEXLLq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 May 2021 07:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbhEXLLl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 May 2021 07:11:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BDC06138F
-        for <linux-rtc@vger.kernel.org>; Mon, 24 May 2021 04:10:13 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ll8TF-00051P-01; Mon, 24 May 2021 13:10:05 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ll8TB-0003A0-Qt; Mon, 24 May 2021 13:10:01 +0200
-Date:   Mon, 24 May 2021 13:09:58 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S232744AbhEXMqc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 24 May 2021 08:46:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59266 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232426AbhEXMqb (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 24 May 2021 08:46:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 15F4F61151;
+        Mon, 24 May 2021 12:45:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621860302;
+        bh=9eF1B+lCgVcGfvxMI8iyWawnoLTg1xQrIafehihlN6s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ai6gCZG4+a3d9h44JQEtsUbDizPk0tix8MxcjkDQreZB4HidLH1VfaE6iV3dNPTjT
+         W5bZZiD6B4B5xWPXhDuZoX/djZkHtjP8AE9k5rNmVPBClxOGS3vtIspgcTk0EKVrva
+         0QCER5UeZ/sN0KM+7iXD71OM34srdFpikSgJlX7Q=
+Date:   Mon, 24 May 2021 14:45:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Francois Gervais <fgervais@distech-controls.com>,
+        linux-rtc@vger.kernel.org,
+        Michael McCormick <michael.mccormick@enatel.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 0/6] clk: provide new devm helpers for prepared and
- enabled clocks
-Message-ID: <20210524110958.ytcqzdgkqw6jeah5@pengutronix.de>
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] rtc: pcf85063: fallback to parent of_node
+Message-ID: <YKufzM5Z5uQSn7DO@kroah.com>
+References: <20210310211026.27299-1-fgervais@distech-controls.com>
+ <161861118020.865088.6364463756780633947.b4-ty@bootlin.com>
+ <20210522153636.ymyyq4vtzz2dq5k2@pengutronix.de>
+ <YKoQds5N0dP2Gjg5@kroah.com>
+ <20210523182441.he5kqrlhargchaxw@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7put5ziwze3atjbn"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+In-Reply-To: <20210523182441.he5kqrlhargchaxw@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Sun, May 23, 2021 at 08:24:41PM +0200, Marc Kleine-Budde wrote:
+> On 23.05.2021 10:21:10, Greg Kroah-Hartman wrote:
+> > On Sat, May 22, 2021 at 05:36:36PM +0200, Marc Kleine-Budde wrote:
+> > > > [1/1] rtc: pcf85063: fallback to parent of_node
+> > > >       commit: 03531606ef4cda25b629f500d1ffb6173b805c05
+> > > > 
+> > > > I made the fallback unconditionnal because this should have been that way from
+> > > > the beginning as you point out.
+> > > 
+> > > can you queue this for stable, as it causes a NULL Pointer deref with
+> > > (at least) v5.12.
+> > 
+> > After it hits Linus's tree, let stable@vger.kernel.org know the id and
+> > we will glad to add it to the stable trees.
+> 
+> It's in Linus's tree since v5.13-rc1~64^2~19 and the commit id is
+> 03531606ef4c ("rtc: pcf85063: fallback to parent of_node").
 
---7put5ziwze3atjbn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Now queued up, thanks.
 
-On Mon, May 10, 2021 at 07:41:36PM +0200, Uwe Kleine-K=F6nig wrote:
-> compared to v6 I rebased to v5.13-rc1 (which resulted in a conflict in
-> the pwm-atmel patch), reformated the doc comments in patch 2 (as
-> suggested by Jonathan Cameron) and added the two Reviewed-by tags for
-> Jonathan Cameron.
-
-Another two weeks without maintainer feedback. I didn't find a single
-mail by either Michael Turquette nor by Stephen Boyd on the linux-clk
-list on lore dating from this month. This patch set didn't get a reply
-since more than half a year.
-
-Is the clk tree still maintained?  Would a pull request help? There are
-several people who expressed interest in this series and the cleanup it
-allows.
-
-@Andrew: Would you be willing to take the first two patches if Michael
-and Stephen don't react in the near future?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---7put5ziwze3atjbn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCriYMACgkQwfwUeK3K
-7Amfngf9Ga4caGfJs9XN3dun54N+DsOf8YkklfYBiAAjCixalrvdei8QJA3djFos
-TTUqAA5pZSaT5RZBoXVn7bwDkIOTJHIKgD05+7uZL01XZ6LaO0b6euqhSnpUSWV5
-yB8DteZUg4+FPgxa8a0DPgfBq5dRr1ADn3U2YBAvZXUnpIk49chH5viOQ7CockL/
-28GJcNA94L87QFKtUMiw5myBy+ThHJiA5G8WKSXbSJB4JpI24B113XZH9lmCpxEg
-1H9Z23S68CuV+9uvzIZAEhDPgwrSon7ILGeszXEYgBmGE2O/mL9WPptcCkRS0H35
-DfScTBSMeU7Cw4q6705OV82DdPyFmQ==
-=0Iaw
------END PGP SIGNATURE-----
-
---7put5ziwze3atjbn--
+greg k-h
