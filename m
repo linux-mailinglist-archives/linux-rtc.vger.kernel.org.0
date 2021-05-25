@@ -2,266 +2,185 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3196D38FE76
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 May 2021 12:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5338FEA2
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 May 2021 12:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbhEYKNC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 25 May 2021 06:13:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36290 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229890AbhEYKNA (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 25 May 2021 06:13:00 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1621937487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FZNk8Vim+uEytFqhHdK96TjBFpFi4M9FGDRAsn05nm4=;
-        b=m5sejKW6sEdDxWfNU1K27c4OfScY0MYgMqKP7kRBj3Rdvfgzn4xUaYK6bKY9uVBHEAJ2zh
-        HlqAU/yb/Je2FanLIft3+HIajDfKLuQzfuXZvIt4zEHmyYMisA1RR2zpW8cATF/ye/79a8
-        7Df6NBd6HPlBWV1WWZZdQY72C29XY8g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1621937487;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=FZNk8Vim+uEytFqhHdK96TjBFpFi4M9FGDRAsn05nm4=;
-        b=/Ee2P2i1nkLH9ZQIiewWGsC6Z/BLlYgXuVJ26A3s8PaFnTWewIxEPMFTgu2VKaIpcuTgOO
-        VRhja4ksl0NUDDCw==
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9ABD7AE1F;
-        Tue, 25 May 2021 10:11:27 +0000 (UTC)
-From:   Mian Yousaf Kaukab <ykaukab@suse.de>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        biwen.li@nxp.com, Mian Yousaf Kaukab <ykaukab@suse.de>
-Subject: [PATCH v4] rtc: pcf2127: handle timestamp interrupts
-Date:   Tue, 25 May 2021 12:11:07 +0200
-Message-Id: <20210525101107.9605-1-ykaukab@suse.de>
-X-Mailer: git-send-email 2.26.2
+        id S230141AbhEYKPK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 25 May 2021 06:15:10 -0400
+Received: from mail-lf1-f47.google.com ([209.85.167.47]:42951 "EHLO
+        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230218AbhEYKPG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 May 2021 06:15:06 -0400
+Received: by mail-lf1-f47.google.com with SMTP id a2so45194131lfc.9;
+        Tue, 25 May 2021 03:13:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=bKfxY6mSloECBEhPINl3+vEHZAIdmfDNQyztmX6YrqA=;
+        b=XoyXQFPQPyaib28Fy0xl0TeFElHKa2X+m6JBQSMI8lCUcR8HrZ+pIvBaRDhbgIbkuM
+         LC68jeUwYHB7J7hvlGDz8WhX3rfqcRKEOQ5745bYqKSOXVZicRXX+nqZhBk5HAmFQ8Jy
+         b/VPm3TTsRJJdS+kEzLHoiIgIRlBZenT0otS1HItwlVicRcy11O1d6M66NrbnbeNNWWi
+         iCrYwBul2dI3btIMd8BsZOcDJIcwif7G1lfaUffxK7L6R2XjqoikREV9uYv1h5o+aoJh
+         O9sMNMQ6ka+WXEjpa+0ZpIhQoowHYQtEXvEyUHdgj7GBVLwNWnXGusvmhly/H3mU5IFt
+         njQg==
+X-Gm-Message-State: AOAM5302GvLvtwmaxRYEnxFzIyifz3Njh09+jCdgu99MdF7zwKAEBgDo
+        vNZ1v5Kdyv7vwcG9EbvD9EE=
+X-Google-Smtp-Source: ABdhPJyd/seBDSLExiEdshhwpoFZVPNcW5lavyyG/mPGb5jIxHr/rfjgXrEarA8o4tc3kjdoUcqFQg==
+X-Received: by 2002:ac2:5edb:: with SMTP id d27mr13199748lfq.577.1621937613182;
+        Tue, 25 May 2021 03:13:33 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id c9sm2170474lji.18.2021.05.25.03.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 May 2021 03:13:32 -0700 (PDT)
+Date:   Tue, 25 May 2021 13:13:25 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/9] Drop ROHM BD70528 support
+Message-ID: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="KsGdsel6WgEHnImy"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-commit 03623b4b041c ("rtc: pcf2127: add tamper detection support")
-added support for timestamp interrupts. However they are not being
-handled in the irq handler. If a timestamp interrupt occurs it
-results in kernel disabling the interrupt and displaying the call
-trace:
 
-[  121.145580] irq 78: nobody cared (try booting with the "irqpoll" option)
-...
-[  121.238087] [<00000000c4d69393>] irq_default_primary_handler threaded [<000000000a90d25b>] pcf2127_rtc_irq [rtc_pcf2127]
-[  121.248971] Disabling IRQ #78
+--KsGdsel6WgEHnImy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Handle timestamp interrupts in pcf2127_rtc_irq(). Save time stamp
-before clearing TSF1 and TSF2 flags so that it can't be overwritten.
-Set a flag to mark if the timestamp is valid and only report to sysfs
-if the flag is set. To mimic the hardware behavior, don’t save
-another timestamp until the first one has been read by the userspace.
+Drop ROHM BD70528 support
 
-Signed-off-by: Mian Yousaf Kaukab <ykaukab@suse.de>
+Unfortunately there has not been a big demand for ROHM BD70528
+IC. The few users I know control PMIC from separate M4-core,
+which is not running Linux. I am not aware of any users of this
+Linux driver.
+
+While I did really like this IC and writing the drivers for it,
+seems like these drivers are becoming useless burden. So, I see
+no point in maintaining them. Let's just drop the drivers if
+there is no objections to this series. :(
+
+Few notes:
+
+The GPIO, regulator, power-supply and watchdog drivers should be
+only used on BD70528 and depend on the BD70528 MFD Kconfig. I guess
+the removal can be independently merged to the respective subsystems.
+
+The BD70528 RTC driver is still used by BD71815 and BD71828 -
+but the watchdog-hack can be removed and driver is greatly
+simplified. However, it's worth noting that there is dependency
+=66rom the BD70528 RTC driver to the header files - thus the
+RTC driver changes should be merged before MFD changes. Also the
+CLK driver remains in use and needs the BD70528 IC-type.
+
+As a final note - Few improvements/fixes were just applied to the
+regulator tree so this series is likely to conflict. Some fixes
+were also added to RTC Kconfig - which means also the RTC tree
+may have conflicts. Please let me know if you wish me to rebase
+this series or those patches.
+
 ---
-history:
-v4: -Save timestamp before clearing TSF1 and TSF2 flags
-    -Rename timstamp_valid flag to ts_valid
-v3: -Restore call to pcf2127_wdt_active_ping() in timestamp0_store().
-     It was removed by mistake.
-v2: -Add a flag to mark the occurrence of timestamp interrupt
-    -Add Biwen Li in Cc
 
- drivers/rtc/rtc-pcf2127.c | 130 ++++++++++++++++++++++----------------
- 1 file changed, 76 insertions(+), 54 deletions(-)
+Matti Vaittinen (9):
+  dt-bindings: mfd: regulator: Drop BD70528 support
+  rtc: bd70528: Drop BD70528 support
+  watchdog: bd70528 drop bd70528 support
+  regulator: bd70528: Drop BD70528 support
+  clk: bd718xx: Drop BD70528 support
+  gpio: bd70528 Drop BD70528 support
+  power: supply: Drop BD70528 support
+  mfd: bd70528: Drop BD70528 support
+  MAINTAINERS: bd70528: Drop ROHM BD70528 drivers
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index d13c20a2adf7..7d55f737f38e 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -94,10 +94,19 @@
- #define PCF2127_WD_VAL_MAX		255
- #define PCF2127_WD_VAL_DEFAULT		60
- 
-+/* Mask for currently enabled interrupts */
-+#define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-+#define PCF2127_CTRL2_IRQ_MASK ( \
-+		PCF2127_BIT_CTRL2_AF | \
-+		PCF2127_BIT_CTRL2_WDTF | \
-+		PCF2127_BIT_CTRL2_TSF2)
-+
- struct pcf2127 {
- 	struct rtc_device *rtc;
- 	struct watchdog_device wdd;
- 	struct regmap *regmap;
-+	time64_t ts;
-+	bool ts_valid;
- };
- 
- /*
-@@ -434,23 +443,82 @@ static int pcf2127_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	return pcf2127_rtc_alarm_irq_enable(dev, alrm->enabled);
- }
- 
-+static void pcf2127_rtc_ts_snapshot(struct device *dev)
-+{
-+	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
-+	struct rtc_time tm;
-+	int ret;
-+	unsigned char data[25];
-+
-+	/* Let userspace read the first timestamp */
-+	if (pcf2127->ts_valid)
-+		return;
-+
-+	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, data,
-+			       sizeof(data));
-+	if (ret) {
-+		dev_err(dev, "%s: read error ret=%d\n", __func__, ret);
-+		return;
-+	}
-+
-+	dev_dbg(dev,
-+		"%s: raw data is cr1=%02x, cr2=%02x, cr3=%02x, ts_sc=%02x, ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
-+		__func__, data[PCF2127_REG_CTRL1], data[PCF2127_REG_CTRL2],
-+		data[PCF2127_REG_CTRL3], data[PCF2127_REG_TS_SC],
-+		data[PCF2127_REG_TS_MN], data[PCF2127_REG_TS_HR],
-+		data[PCF2127_REG_TS_DM], data[PCF2127_REG_TS_MO],
-+		data[PCF2127_REG_TS_YR]);
-+
-+	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
-+	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
-+	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
-+	tm.tm_mday = bcd2bin(data[PCF2127_REG_TS_DM] & 0x3F);
-+	/* TS_MO register (month) value range: 1-12 */
-+	tm.tm_mon = bcd2bin(data[PCF2127_REG_TS_MO] & 0x1F) - 1;
-+	tm.tm_year = bcd2bin(data[PCF2127_REG_TS_YR]);
-+	if (tm.tm_year < 70)
-+		tm.tm_year += 100; /* assume we are in 1970...2069 */
-+
-+	ret = rtc_valid_tm(&tm);
-+	if (ret) {
-+		dev_err(dev, "Invalid timestamp. ret=%d\n", ret);
-+		return;
-+	}
-+
-+	pcf2127->ts = rtc_tm_to_time64(&tm);
-+	pcf2127->ts_valid = true;
-+};
-+
- static irqreturn_t pcf2127_rtc_irq(int irq, void *dev)
- {
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
--	unsigned int ctrl2 = 0;
-+	unsigned int ctrl1, ctrl2;
- 	int ret = 0;
- 
-+	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL1, &ctrl1);
-+	if (ret)
-+		return IRQ_NONE;
-+
- 	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CTRL2, &ctrl2);
- 	if (ret)
- 		return IRQ_NONE;
- 
--	if (!(ctrl2 & PCF2127_BIT_CTRL2_AF))
-+	if (!(ctrl1 & PCF2127_CTRL1_IRQ_MASK || ctrl2 & PCF2127_CTRL2_IRQ_MASK))
- 		return IRQ_NONE;
- 
--	regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
--		     ctrl2 & ~(PCF2127_BIT_CTRL2_AF | PCF2127_BIT_CTRL2_WDTF));
-+	if (ctrl1 & PCF2127_BIT_CTRL1_TSF1 || ctrl2 & PCF2127_BIT_CTRL2_TSF2)
-+		pcf2127_rtc_ts_snapshot(dev);
- 
--	rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
-+	if (ctrl1 & PCF2127_CTRL1_IRQ_MASK)
-+		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL1,
-+			ctrl1 & ~PCF2127_CTRL1_IRQ_MASK);
-+
-+	if (ctrl2 & PCF2127_CTRL2_IRQ_MASK)
-+		regmap_write(pcf2127->regmap, PCF2127_REG_CTRL2,
-+			ctrl2 & ~PCF2127_CTRL2_IRQ_MASK);
-+
-+	if (ctrl2 & PCF2127_BIT_CTRL2_AF)
-+		rtc_update_irq(pcf2127->rtc, 1, RTC_IRQF | RTC_AF);
- 
- 	pcf2127_wdt_active_ping(&pcf2127->wdd);
- 
-@@ -475,19 +543,7 @@ static ssize_t timestamp0_store(struct device *dev,
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
- 	int ret;
- 
--	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
--				 PCF2127_BIT_CTRL1_TSF1, 0);
--	if (ret) {
--		dev_err(dev, "%s: update ctrl1 ret=%d\n", __func__, ret);
--		return ret;
--	}
--
--	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL2,
--				 PCF2127_BIT_CTRL2_TSF2, 0);
--	if (ret) {
--		dev_err(dev, "%s: update ctrl2 ret=%d\n", __func__, ret);
--		return ret;
--	}
-+	pcf2127->ts_valid = false;
- 
- 	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
- 	if (ret)
-@@ -500,50 +556,16 @@ static ssize_t timestamp0_show(struct device *dev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct pcf2127 *pcf2127 = dev_get_drvdata(dev->parent);
--	struct rtc_time tm;
- 	int ret;
--	unsigned char data[25];
--
--	ret = regmap_bulk_read(pcf2127->regmap, PCF2127_REG_CTRL1, data,
--			       sizeof(data));
--	if (ret) {
--		dev_err(dev, "%s: read error ret=%d\n", __func__, ret);
--		return ret;
--	}
--
--	dev_dbg(dev,
--		"%s: raw data is cr1=%02x, cr2=%02x, cr3=%02x, ts_sc=%02x, "
--		"ts_mn=%02x, ts_hr=%02x, ts_dm=%02x, ts_mo=%02x, ts_yr=%02x\n",
--		__func__, data[PCF2127_REG_CTRL1], data[PCF2127_REG_CTRL2],
--		data[PCF2127_REG_CTRL3], data[PCF2127_REG_TS_SC],
--		data[PCF2127_REG_TS_MN], data[PCF2127_REG_TS_HR],
--		data[PCF2127_REG_TS_DM], data[PCF2127_REG_TS_MO],
--		data[PCF2127_REG_TS_YR]);
- 
- 	ret = pcf2127_wdt_active_ping(&pcf2127->wdd);
- 	if (ret)
- 		return ret;
- 
--	if (!(data[PCF2127_REG_CTRL1] & PCF2127_BIT_CTRL1_TSF1) &&
--	    !(data[PCF2127_REG_CTRL2] & PCF2127_BIT_CTRL2_TSF2))
-+	if (!pcf2127->ts_valid)
- 		return 0;
- 
--	tm.tm_sec = bcd2bin(data[PCF2127_REG_TS_SC] & 0x7F);
--	tm.tm_min = bcd2bin(data[PCF2127_REG_TS_MN] & 0x7F);
--	tm.tm_hour = bcd2bin(data[PCF2127_REG_TS_HR] & 0x3F);
--	tm.tm_mday = bcd2bin(data[PCF2127_REG_TS_DM] & 0x3F);
--	/* TS_MO register (month) value range: 1-12 */
--	tm.tm_mon = bcd2bin(data[PCF2127_REG_TS_MO] & 0x1F) - 1;
--	tm.tm_year = bcd2bin(data[PCF2127_REG_TS_YR]);
--	if (tm.tm_year < 70)
--		tm.tm_year += 100; /* assume we are in 1970...2069 */
--
--	ret = rtc_valid_tm(&tm);
--	if (ret)
--		return ret;
--
--	return sprintf(buf, "%llu\n",
--		       (unsigned long long)rtc_tm_to_time64(&tm));
-+	return sprintf(buf, "%llu\n", (unsigned long long)pcf2127->ts);
- };
- 
- static DEVICE_ATTR_RW(timestamp0);
--- 
-2.26.2
+ .../bindings/mfd/rohm,bd70528-pmic.txt        | 102 ---
+ .../regulator/rohm,bd70528-regulator.txt      |  68 --
+ MAINTAINERS                                   |   8 -
+ drivers/clk/Kconfig                           |   6 +-
+ drivers/clk/clk-bd718x7.c                     |  11 +-
+ drivers/gpio/Kconfig                          |  11 -
+ drivers/gpio/Makefile                         |   1 -
+ drivers/gpio/gpio-bd70528.c                   | 230 ------
+ drivers/mfd/Kconfig                           |  17 -
+ drivers/mfd/Makefile                          |   1 -
+ drivers/mfd/rohm-bd70528.c                    | 314 --------
+ drivers/power/supply/Kconfig                  |   9 -
+ drivers/power/supply/Makefile                 |   1 -
+ drivers/power/supply/bd70528-charger.c        | 710 ------------------
+ drivers/regulator/Kconfig                     |  11 -
+ drivers/regulator/Makefile                    |   1 -
+ drivers/regulator/bd70528-regulator.c         | 283 -------
+ drivers/rtc/Kconfig                           |   4 +-
+ drivers/rtc/rtc-bd70528.c                     | 316 +-------
+ drivers/watchdog/Kconfig                      |  12 -
+ drivers/watchdog/Makefile                     |   1 -
+ drivers/watchdog/bd70528_wdt.c                | 291 -------
+ include/linux/mfd/rohm-bd70528.h              | 391 ----------
+ include/linux/mfd/rohm-generic.h              |   1 -
+ 24 files changed, 18 insertions(+), 2782 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd70528-pmic=
+=2Etxt
+ delete mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd7052=
+8-regulator.txt
+ delete mode 100644 drivers/gpio/gpio-bd70528.c
+ delete mode 100644 drivers/mfd/rohm-bd70528.c
+ delete mode 100644 drivers/power/supply/bd70528-charger.c
+ delete mode 100644 drivers/regulator/bd70528-regulator.c
+ delete mode 100644 drivers/watchdog/bd70528_wdt.c
+ delete mode 100644 include/linux/mfd/rohm-bd70528.h
 
+
+base-commit: c4681547bcce777daf576925a966ffa824edd09d
+--=20
+2.25.4
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--KsGdsel6WgEHnImy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCsza8ACgkQeFA3/03a
+ocVoGwf+O32fpxiyhvf67obU6gAfgVe/c6gTD1F1YVRt7tE4QU0fnJBZKSu+koIh
+TS7j0JMGIqZ2XZqnplgCpiElLge8rHFLn4p/qGY1b8+M8e0yRo6zCx6GecX8pvIt
+UlXRv6CWL2S1f/4ajG/wvmjtMLrpEkXHP9o+0QeXABCbvRzJSkXzw5NsPKrV/9ga
+Pof3oQVhhPII1B5pngglL+gpLdzgpOuxkL2uAgX+ipuXLULqZxy2mnjsakSj+X6G
+qc3kyslrN32OmN68FPL1FjomO4YL6VItDrcx7aaP/4EWICe4q91msdgbu/kI+osC
+OgH7n0Gdbhtpax5YULdpd1jVnSG1Iw==
+=0spF
+-----END PGP SIGNATURE-----
+
+--KsGdsel6WgEHnImy--
