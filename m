@@ -2,46 +2,46 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411BD391DCA
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 May 2021 19:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236A3391DD3
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 May 2021 19:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbhEZRWZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 26 May 2021 13:22:25 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36711 "EHLO
+        id S234832AbhEZRWd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 26 May 2021 13:22:33 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36737 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234326AbhEZRWY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 May 2021 13:22:24 -0400
-Received: from mail-vs1-f71.google.com ([209.85.217.71])
+        with ESMTP id S234453AbhEZRW1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 May 2021 13:22:27 -0400
+Received: from mail-ua1-f72.google.com ([209.85.222.72])
         by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1llxD9-0003Vr-AR
-        for linux-rtc@vger.kernel.org; Wed, 26 May 2021 17:20:51 +0000
-Received: by mail-vs1-f71.google.com with SMTP id a11-20020a67d30b0000b02902363051a2cbso550744vsj.18
-        for <linux-rtc@vger.kernel.org>; Wed, 26 May 2021 10:20:51 -0700 (PDT)
+        id 1llxDC-0003Xh-Iw
+        for linux-rtc@vger.kernel.org; Wed, 26 May 2021 17:20:54 +0000
+Received: by mail-ua1-f72.google.com with SMTP id 5-20020ab000850000b029020fb0e74c2aso1080594uaj.21
+        for <linux-rtc@vger.kernel.org>; Wed, 26 May 2021 10:20:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YMY2yvxHNG1nkzYJPg4/G4TbXbdFqsqs8hq2uBFV7DI=;
-        b=pg1mGXNbcKnTPuKoF/XgSbVEhNBRU6X1QllZJjM1aLJkUfWLTV3o0jXcB5RKpyqQB8
-         Dq2Z05vC0ZoYGu5CSsWeek8TY/Qwv2c0RZQG2H/rNpWdcAmWHxrcFpCuttqtNvzbsaDW
-         cr3vFXuPwpfydS4VCPhX412nVCBc3zY5mRlH9GfD6oCfq83StKRrM8U/J3fwaiY4ZxGa
-         870kJ7Q9qV+Bl0yKcD/HuUx26TDHHB/AJs8xCq02Terg7s70wChbc52bv/cPQC6DOXWC
-         pRMRpGVMQlHTLQNYStS7LMFdnFPBJxies3ZBqd8jKZmbyBVLEA+pkmxl6vOyVM7jh4OM
-         6Gjg==
-X-Gm-Message-State: AOAM533DAOmDjUPtF9+wVhBy19K7gtQylyXfPHMWVeeHkCIBXPlpM1mf
-        8gTIWCQbtzncIlOQti85iMbC09jI/vDHm9m/uOVPYFR4K9WbROJSdRYZq4d+YSVR89H2qHONHVJ
-        rdfAhslqOUk58eXHxrVzuZZjlwJeIGh27JIS7sw==
-X-Received: by 2002:ab0:60c5:: with SMTP id g5mr33849447uam.5.1622049650413;
-        Wed, 26 May 2021 10:20:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJybUIvC2EVKiQpagnKWUZU70TWT6eIvSvzu8uRFmvzo4oT1pL7W1A2sY8ZZ5oe7mDhPI5A4nw==
-X-Received: by 2002:ab0:60c5:: with SMTP id g5mr33849422uam.5.1622049650219;
-        Wed, 26 May 2021 10:20:50 -0700 (PDT)
+        bh=n51+iZBJFEKTpd4H5RsiqOX4EmYJ/qwnjVcD0oxhR00=;
+        b=oJzsA/qB1p5sWZNHY+oFuNIQwScBKGv1fdf3IpEfpP6Oh/tlyB0T3uQ/8YI7aC+jTd
+         nuYZ/avpOq2sJGBte6lk4iMJqWlTCf8emTvoOnUrhp4HTzUtaxUrOE9c6EK/0Js2RIHj
+         gFxnpCCobk3fgrY00kyEF7MwgC2t4PzSE5APxeSdr2K9auLBubM7BRFvi6qHuNc7AvZM
+         FdQr/cw15s2G7dE54KihLWPoJ/p40ByQdkAfpjmK328TcNr9VK070Vl2K7qlg7Dz/dRt
+         R40JfDPHI9alrqJzILXCWBHuvaUwhTwQr5M7iN/hFxqvm5nWtl4I+C6DrpUxcNSMYZoT
+         YgNQ==
+X-Gm-Message-State: AOAM531CdFaOftevH5l3/5vrgdU657/psDUHGEqrr/COwr42J2B2iNkd
+        V2CZB+zQrvfkEo4gnvsJzDmfAvj7b3e3d1f5lTgY3iR9Wbn7kWg1KT/IG+sZ7+Ccl885aAS9Ou/
+        jp6fXXSwJs07+IZ0USOBoH32DUke+IYFrW7dTLA==
+X-Received: by 2002:a9f:3624:: with SMTP id r33mr34092722uad.66.1622049653615;
+        Wed, 26 May 2021 10:20:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwHZU50VG+nCX6FzJS9FPiUsgoOyUktGbP4eh0jiRweuFMnQ5d7pabHfuFMw+F1GN2DaHP2IQ==
+X-Received: by 2002:a9f:3624:: with SMTP id r33mr34092695uad.66.1622049653440;
+        Wed, 26 May 2021 10:20:53 -0700 (PDT)
 Received: from localhost.localdomain ([45.237.48.6])
-        by smtp.gmail.com with ESMTPSA id u195sm2036032vsc.10.2021.05.26.10.20.47
+        by smtp.gmail.com with ESMTPSA id u195sm2036032vsc.10.2021.05.26.10.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 10:20:49 -0700 (PDT)
+        Wed, 26 May 2021 10:20:52 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -60,9 +60,9 @@ To:     Chanwoo Choi <cw00.choi@samsung.com>,
         linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/7] mfd: max77686: Do not enforce (incorrect) interrupt trigger type
-Date:   Wed, 26 May 2021 13:20:31 -0400
-Message-Id: <20210526172036.183223-3-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 3/7] mfd: max77693: Do not enforce (incorrect) interrupt trigger type
+Date:   Wed, 26 May 2021 13:20:32 -0400
+Message-Id: <20210526172036.183223-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com>
 References: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com>
@@ -78,7 +78,7 @@ Interrupt line can be configured on different hardware in different way,
 even inverted.  Therefore driver should not enforce specific trigger
 type - edge falling - but instead rely on Devicetree to configure it.
 
-The Maxim 77686 datasheet describes the interrupt line as active low
+The Maxim 77693 datasheet describes the interrupt line as active low
 with a requirement of acknowledge from the CPU therefore the edge
 falling is not correct.
 
@@ -96,73 +96,67 @@ Acked-by: Rob Herring <robh@kernel.org>
 Changes since v1:
 1. Add ack.
 ---
- Documentation/devicetree/bindings/clock/maxim,max77686.txt | 4 ++--
- Documentation/devicetree/bindings/mfd/max77686.txt         | 2 +-
- Documentation/devicetree/bindings/regulator/max77686.txt   | 2 +-
- drivers/mfd/max77686.c                                     | 3 +--
- 4 files changed, 5 insertions(+), 6 deletions(-)
+ Documentation/devicetree/bindings/mfd/max77693.txt |  2 +-
+ drivers/mfd/max77693.c                             | 12 ++++--------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/maxim,max77686.txt b/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-index 3472b461ca93..c10849efb444 100644
---- a/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-+++ b/Documentation/devicetree/bindings/clock/maxim,max77686.txt
-@@ -49,7 +49,7 @@ Example:
- 		max77686: max77686@9 {
- 			compatible = "maxim,max77686";
- 			interrupt-parent = <&wakeup_eint>;
--			interrupts = <26 0>;
-+			interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 			reg = <0x09>;
- 			#clock-cells = <1>;
+diff --git a/Documentation/devicetree/bindings/mfd/max77693.txt b/Documentation/devicetree/bindings/mfd/max77693.txt
+index 0ced96e16c16..1032df14498b 100644
+--- a/Documentation/devicetree/bindings/mfd/max77693.txt
++++ b/Documentation/devicetree/bindings/mfd/max77693.txt
+@@ -139,7 +139,7 @@ Example:
+ 		compatible = "maxim,max77693";
+ 		reg = <0x66>;
+ 		interrupt-parent = <&gpx1>;
+-		interrupts = <5 2>;
++		interrupts = <5 IRQ_TYPE_LEVEL_LOW>;
  
-@@ -74,7 +74,7 @@ Example:
- 		max77802: max77802@9 {
- 			compatible = "maxim,max77802";
- 			interrupt-parent = <&wakeup_eint>;
--			interrupts = <26 0>;
-+			interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 			reg = <0x09>;
- 			#clock-cells = <1>;
+ 		regulators {
+ 			esafeout@1 {
+diff --git a/drivers/mfd/max77693.c b/drivers/mfd/max77693.c
+index 596ed85cab3b..4e6244e17559 100644
+--- a/drivers/mfd/max77693.c
++++ b/drivers/mfd/max77693.c
+@@ -222,8 +222,7 @@ static int max77693_i2c_probe(struct i2c_client *i2c,
+ 	}
  
-diff --git a/Documentation/devicetree/bindings/mfd/max77686.txt b/Documentation/devicetree/bindings/mfd/max77686.txt
-index 42968b7144e0..4447d074894a 100644
---- a/Documentation/devicetree/bindings/mfd/max77686.txt
-+++ b/Documentation/devicetree/bindings/mfd/max77686.txt
-@@ -21,6 +21,6 @@ Example:
- 	max77686: pmic@9 {
- 		compatible = "maxim,max77686";
- 		interrupt-parent = <&wakeup_eint>;
--		interrupts = <26 0>;
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 		reg = <0x09>;
- 	};
-diff --git a/Documentation/devicetree/bindings/regulator/max77686.txt b/Documentation/devicetree/bindings/regulator/max77686.txt
-index e9f7578ca09a..ff3d2dec8c4b 100644
---- a/Documentation/devicetree/bindings/regulator/max77686.txt
-+++ b/Documentation/devicetree/bindings/regulator/max77686.txt
-@@ -43,7 +43,7 @@ Example:
- 	max77686: pmic@9 {
- 		compatible = "maxim,max77686";
- 		interrupt-parent = <&wakeup_eint>;
--		interrupts = <26 IRQ_TYPE_NONE>;
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
- 		reg = <0x09>;
+ 	ret = regmap_add_irq_chip(max77693->regmap, max77693->irq,
+-				IRQF_ONESHOT | IRQF_SHARED |
+-				IRQF_TRIGGER_FALLING, 0,
++				IRQF_ONESHOT | IRQF_SHARED, 0,
+ 				&max77693_led_irq_chip,
+ 				&max77693->irq_data_led);
+ 	if (ret) {
+@@ -232,8 +231,7 @@ static int max77693_i2c_probe(struct i2c_client *i2c,
+ 	}
  
- 		voltage-regulators {
-diff --git a/drivers/mfd/max77686.c b/drivers/mfd/max77686.c
-index 2ad554b921d9..f9e12ab2bc75 100644
---- a/drivers/mfd/max77686.c
-+++ b/drivers/mfd/max77686.c
-@@ -209,8 +209,7 @@ static int max77686_i2c_probe(struct i2c_client *i2c)
+ 	ret = regmap_add_irq_chip(max77693->regmap, max77693->irq,
+-				IRQF_ONESHOT | IRQF_SHARED |
+-				IRQF_TRIGGER_FALLING, 0,
++				IRQF_ONESHOT | IRQF_SHARED, 0,
+ 				&max77693_topsys_irq_chip,
+ 				&max77693->irq_data_topsys);
+ 	if (ret) {
+@@ -242,8 +240,7 @@ static int max77693_i2c_probe(struct i2c_client *i2c,
+ 	}
  
- 	ret = devm_regmap_add_irq_chip(&i2c->dev, max77686->regmap,
- 				       max77686->irq,
--				       IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				       IRQF_SHARED, 0, irq_chip,
-+				       IRQF_ONESHOT | IRQF_SHARED, 0, irq_chip,
- 				       &max77686->irq_data);
- 	if (ret < 0) {
- 		dev_err(&i2c->dev, "failed to add PMIC irq chip: %d\n", ret);
+ 	ret = regmap_add_irq_chip(max77693->regmap, max77693->irq,
+-				IRQF_ONESHOT | IRQF_SHARED |
+-				IRQF_TRIGGER_FALLING, 0,
++				IRQF_ONESHOT | IRQF_SHARED, 0,
+ 				&max77693_charger_irq_chip,
+ 				&max77693->irq_data_chg);
+ 	if (ret) {
+@@ -252,8 +249,7 @@ static int max77693_i2c_probe(struct i2c_client *i2c,
+ 	}
+ 
+ 	ret = regmap_add_irq_chip(max77693->regmap_muic, max77693->irq,
+-				IRQF_ONESHOT | IRQF_SHARED |
+-				IRQF_TRIGGER_FALLING, 0,
++				IRQF_ONESHOT | IRQF_SHARED, 0,
+ 				&max77693_muic_irq_chip,
+ 				&max77693->irq_data_muic);
+ 	if (ret) {
 -- 
 2.27.0
 
