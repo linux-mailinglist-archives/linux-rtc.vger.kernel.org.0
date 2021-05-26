@@ -2,390 +2,234 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BA53910F7
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 May 2021 08:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41FE391722
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 May 2021 14:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232934AbhEZGxx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 26 May 2021 02:53:53 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37268 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232917AbhEZGxu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 May 2021 02:53:50 -0400
-X-UUID: d2496758ff0647508d025fcdff66bb9a-20210526
-X-UUID: d2496758ff0647508d025fcdff66bb9a-20210526
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <hsin-hsiung.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1663337596; Wed, 26 May 2021 14:52:13 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 26 May 2021 14:52:13 +0800
-Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 May 2021 14:52:13 +0800
-From:   Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Fei Shao <fshao@chromium.org>
-CC:     Sean Wang <sean.wang@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        Yuchen Huang <yuchen.huang@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Wen Su <wen.su@mediatek.com>
-Subject: [PATCH v8 8/8] arm64: dts: mt6359: add PMIC MT6359 related nodes
-Date:   Wed, 26 May 2021 14:52:07 +0800
-Message-ID: <1622011927-359-9-git-send-email-hsin-hsiung.wang@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1622011927-359-1-git-send-email-hsin-hsiung.wang@mediatek.com>
-References: <1622011927-359-1-git-send-email-hsin-hsiung.wang@mediatek.com>
+        id S233714AbhEZMOd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 26 May 2021 08:14:33 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:44293 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233709AbhEZMOc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 May 2021 08:14:32 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 5A4216000A;
+        Wed, 26 May 2021 12:12:59 +0000 (UTC)
+Date:   Wed, 26 May 2021 14:12:59 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "qxj511mail@gmail.com" <qxj511mail@gmail.com>
+Cc:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+        "a.zummo" <a.zummo@towertech.it>,
+        linux-rtc <linux-rtc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        =?utf-8?B?6YKx5pmT6YeR?= <qiuxiaojin@cvte.com>
+Subject: Re: Re: [PATCH] rtc: rs5c372: Fix read the time from RTC is illegal
+ When reading time from an uninitialized RTC chip, The value may be illegal
+Message-ID: <YK47S4840JFacxfT@piout.net>
+References: <20210520033156.23209-1-qxj511mail@gmail.com>
+ <CABMQnV+5gN_6BA4tYS+GugrA0HrQD9+_EkQk_emqsUy1YzFCOA@mail.gmail.com>
+ <202105251924130320028@gmail.com>
+ <YK1pmXd8ODTzw0r/@piout.net>
+ <202105261935305975621@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202105261935305975621@gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Wen Su <wen.su@mediatek.com>
+On 26/05/2021 19:35:31+0800, qxj511mail@gmail.com wrote:
+> > If the time on the RTC is invalid, then rtc_valid_tm has to fail, there
+> > is nothing to fix here.
+> 
+> I mean, if you try to get the time or execute hwclock command, Invalid arguments are returned when the RTC chip is not initialized
+> therefore，we need to get a valid time
+> 
 
-add PMIC MT6359 related nodes which is for MT6779 platform
+Well, the time is invalid so hwclock needs to know it is invalid.
+Returning a bogus time and date doesn't make it right. hwclock needs to
+fail.
 
-Signed-off-by: Wen Su <wen.su@mediatek.com>
-Signed-off-by: Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
----
-changes since v7:
-- no change.
----
- arch/arm64/boot/dts/mediatek/mt6359.dtsi    | 298 ++++++++++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts |   1 +
- 2 files changed, 299 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> 
+> 
+> qxj511mail@gmail.com
+>  
+> From: Alexandre Belloni
+> Date: 2021-05-26 05:18
+> To: qxj511mail@gmail.com
+> CC: Nobuhiro Iwamatsu; a.zummo; linux-rtc; linux-kernel; 邱晓金
+> Subject: Re: Re: [PATCH] rtc: rs5c372: Fix read the time from RTC is illegal When reading time from an uninitialized RTC chip, The value may be illegal
+> Hi,
+>  
+> On 25/05/2021 19:24:14+0800, qxj511mail@gmail.com wrote:
+> > Please briefly describe the patch contained in the email to the subject.
+> > And, please write a description of the patch in the text
+> > ---->   The legal days are 1 to 31 and the legal month is less than or equal to 12.
+> >            But for an uninitialized RTC chip, the time is random.
+> >            Days and month may be zero, leading to RTC_valid_TM failed
+> > 
+>  
+> If the time on the RTC is invalid, then rtc_valid_tm has to fail, there
+> is nothing to fix here.
+>  
+> > add description  && fix build error, so I modefied my code :
+> >  
+> > Signed-off-by: qiuxiaojin <qiuxiaojin@cvte.com>
+> > ---
+> >  drivers/rtc/rtc-rs5c372.c | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+> > index 3bd6eaa0dcf6..cb3f90983778 100644
+> > --- a/drivers/rtc/rtc-rs5c372.c
+> > +++ b/drivers/rtc/rtc-rs5c372.c
+> > @@ -128,6 +128,9 @@ struct rs5c372 {
+> >   char *regs;
+> >  };
+> >  
+> > +
+> > +static int rs5c372_rtc_set_time(struct device *dev, struct rtc_time *tm);
+> > +
+> >  static int rs5c_get_regs(struct rs5c372 *rs5c)
+> >  {
+> >   struct i2c_client *client = rs5c->client;
+> > @@ -212,6 +215,7 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> >   struct rs5c372 *rs5c = i2c_get_clientdata(client);
+> >   int status = rs5c_get_regs(rs5c);
+> >   unsigned char ctrl2 = rs5c->regs[RS5C_REG_CTRL2];
+> > + int flags_utime = 0;
+> >  
+> >   if (status < 0)
+> >   return status;
+> > @@ -239,12 +243,28 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> >   tm->tm_wday = bcd2bin(rs5c->regs[RS5C372_REG_WDAY] & 0x07);
+> >   tm->tm_mday = bcd2bin(rs5c->regs[RS5C372_REG_DAY] & 0x3f);
+> >  
+> > + /* The value read from the register may be zero, which is an illegal value */
+> > + if (tm->tm_mday < 1) {
+> > + flags_utime++;
+> > + tm->tm_mday = 1;
+> > + }
+> > +
+> >   /* tm->tm_mon is zero-based */
+> >   tm->tm_mon = bcd2bin(rs5c->regs[RS5C372_REG_MONTH] & 0x1f) - 1;
+> >  
+> > + if (tm->tm_mon < 0) {
+> > + /* avoid illegal month */
+> > + flags_utime++;
+> > + tm->tm_mon = 0;
+> > + }
+> > +
+> >   /* year is 1900 + tm->tm_year */
+> >   tm->tm_year = bcd2bin(rs5c->regs[RS5C372_REG_YEAR]) + 100;
+> >  
+> > + /* update legal time */
+> > + if (flags_utime > 0)
+> > + rs5c372_rtc_set_time(dev, tm);
+> > +
+> >   dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
+> >   "mday=%d, mon=%d, year=%d, wday=%d\n",
+> >   __func__,
+> > -- 
+> > 2.29.0
+> > 
+> > 
+> > 
+> > qxj511mail@gmail.com
+> >  
+> > From: Nobuhiro Iwamatsu
+> > Date: 2021-05-24 12:40
+> > To: qxj511mail
+> > CC: Alessandro Zummo; Alexandre Belloni; linux-rtc; Linux Kernel Mailing List; qiuxiaojin
+> > Subject: Re: [PATCH] rtc: rs5c372: Fix read the time from RTC is illegal When reading time from an uninitialized RTC chip, The value may be illegal
+> > Hi,
+> >  
+> > 2021年5月20日(木) 12:32 <qxj511mail@gmail.com>:
+> > >
+> > > From: qiuxiaojin <qiuxiaojin@cvte.com>
+> >  
+> > Please briefly describe the patch contained in the email to the subject.
+> > And, please write a description of the patch in the text
+> >  
+> > >
+> > > Signed-off-by: qiuxiaojin <qiuxiaojin@cvte.com>
+> > > ---
+> > >  drivers/rtc/rtc-rs5c372.c | 16 ++++++++++++++++
+> > >  1 file changed, 16 insertions(+)
+> > >
+> > > diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+> > > index 3bd6eaa0dcf6..ce61e15d5f3a 100644
+> > > --- a/drivers/rtc/rtc-rs5c372.c
+> > > +++ b/drivers/rtc/rtc-rs5c372.c
+> > > @@ -212,6 +212,7 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> > >         struct rs5c372  *rs5c = i2c_get_clientdata(client);
+> > >         int             status = rs5c_get_regs(rs5c);
+> > >         unsigned char ctrl2 = rs5c->regs[RS5C_REG_CTRL2];
+> > > +       int flags_utime = 0;
+> > >
+> > >         if (status < 0)
+> > >                 return status;
+> > > @@ -239,12 +240,27 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> > >         tm->tm_wday = bcd2bin(rs5c->regs[RS5C372_REG_WDAY] & 0x07);
+> > >         tm->tm_mday = bcd2bin(rs5c->regs[RS5C372_REG_DAY] & 0x3f);
+> > >
+> > > +       if (tm->tm_mday < 1) {
+> > > +               // The value read from the register may be zero, which is an illegal value
+> >  
+> > Please use C89 style commet (/* */).
+> >  
+> > > +               flags_utime = flags_utime + 1;
+> >  
+> > I like using ++ (flags_utime++).
+> >  
+> > > +               tm->tm_mday = 1;
+> > > +       }
+> > > +
+> > >         /* tm->tm_mon is zero-based */
+> > >         tm->tm_mon = bcd2bin(rs5c->regs[RS5C372_REG_MONTH] & 0x1f) - 1;
+> > >
+> > > +       if (tm->tm_mon < 0) {
+> > > +               flags_utime = flags_utime + 1;
+> > > +               tm->tm_mday = 0;
+> > > +       }
+> > > +
+> > >         /* year is 1900 + tm->tm_year */
+> > >         tm->tm_year = bcd2bin(rs5c->regs[RS5C372_REG_YEAR]) + 100;
+> > >
+> > > +       if (flags_utime > 0) {
+> >  
+> > {} is unnecessary.
+> >  
+> > > +               rs5c372_rtc_set_time(dev, tm);
+> >  
+> > A build error will occur because there is no declaration of
+> > rs5c372_rtc_set_time.
+> > Please make sure this can be compiled.
+> >  
+> > > +       }
+> > > +
+> > >         dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d, "
+> > >                 "mday=%d, mon=%d, year=%d, wday=%d\n",
+> > >                 __func__,
+> > > --
+> > > 2.29.0
+> > >
+> >  
+> >  
+> > -- 
+> > Nobuhiro Iwamatsu
+> >    iwamatsu at {nigauri.org / debian.org}
+> >    GPG ID: 40AD1FA6
+>  
+>  
+>  
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-new file mode 100644
-index 0000000..18c0d53
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 MediaTek Inc.
-+ */
-+
-+&pwrap {
-+	pmic: pmic {
-+		compatible = "mediatek,mt6359";
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		mt6359codec: mt6359codec {
-+		};
-+
-+		regulators {
-+			mt6359_vs1_buck_reg: buck_vs1 {
-+				regulator-name = "vs1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vgpu11_buck_reg: buck_vgpu11 {
-+				regulator-name = "vgpu11";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vmodem_buck_reg: buck_vmodem {
-+				regulator-name = "vmodem";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <200>;
-+			};
-+			mt6359_vpu_buck_reg: buck_vpu {
-+				regulator-name = "vpu";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_buck_reg: buck_vcore {
-+				regulator-name = "vcore";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vs2_buck_reg: buck_vs2 {
-+				regulator-name = "vs2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1600000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vpa_buck_reg: buck_vpa {
-+				regulator-name = "vpa";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3650000>;
-+				regulator-enable-ramp-delay = <300>;
-+			};
-+			mt6359_vproc2_buck_reg: buck_vproc2 {
-+				regulator-name = "vproc2";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vproc1_buck_reg: buck_vproc1 {
-+				regulator-name = "vproc1";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
-+				regulator-name = "vcore_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
-+				regulator-name = "vgpu11_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vaud18_ldo_reg: ldo_vaud18 {
-+				regulator-name = "vaud18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vsim1_ldo_reg: ldo_vsim1 {
-+				regulator-name = "vsim1";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vibr_ldo_reg: ldo_vibr {
-+				regulator-name = "vibr";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vrf12_ldo_reg: ldo_vrf12 {
-+				regulator-name = "vrf12";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vusb_ldo_reg: ldo_vusb {
-+				regulator-name = "vusb";
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
-+				regulator-name = "vsram_proc2";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vio18_ldo_reg: ldo_vio18 {
-+				regulator-name = "vio18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vcamio_ldo_reg: ldo_vcamio {
-+				regulator-name = "vcamio";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vcn18_ldo_reg: ldo_vcn18 {
-+				regulator-name = "vcn18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vfe28_ldo_reg: ldo_vfe28 {
-+				regulator-name = "vfe28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <120>;
-+			};
-+			mt6359_vcn13_ldo_reg: ldo_vcn13 {
-+				regulator-name = "vcn13";
-+				regulator-min-microvolt = <900000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
-+				regulator-name = "vcn33_1_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
-+				regulator-name = "vcn33_1_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vaux18_ldo_reg: ldo_vaux18 {
-+				regulator-name = "vaux18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
-+				regulator-name = "vsram_others";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vefuse_ldo_reg: ldo_vefuse {
-+				regulator-name = "vefuse";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <2000000>;
-+			};
-+			mt6359_vxo22_ldo_reg: ldo_vxo22 {
-+				regulator-name = "vxo22";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vrfck_ldo_reg: ldo_vrfck {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <1700000>;
-+			};
-+			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1240000>;
-+				regulator-max-microvolt = <1600000>;
-+			};
-+			mt6359_vbif28_ldo_reg: ldo_vbif28 {
-+				regulator-name = "vbif28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vio28_ldo_reg: ldo_vio28 {
-+				regulator-name = "vio28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vemc_ldo_reg: ldo_vemc {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2900000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2500000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
-+				regulator-name = "vcn33_2_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
-+				regulator-name = "vcn33_2_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_va12_ldo_reg: ldo_va12 {
-+				regulator-name = "va12";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_va09_ldo_reg: ldo_va09 {
-+				regulator-name = "va09";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vrf18_ldo_reg: ldo_vrf18 {
-+				regulator-name = "vrf18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1810000>;
-+			};
-+			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
-+				regulator-name = "vsram_md";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vufs_ldo_reg: ldo_vufs {
-+				regulator-name = "vufs";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vm18_ldo_reg: ldo_vm18 {
-+				regulator-name = "vm18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vbbck_ldo_reg: ldo_vbbck {
-+				regulator-name = "vbbck";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
-+				regulator-name = "vsram_proc1";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsim2_ldo_reg: ldo_vsim2 {
-+				regulator-name = "vsim2";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
-+				regulator-name = "vsram_others_sshub";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+			};
-+		};
-+
-+		mt6359rtc: mt6359rtc {
-+			compatible = "mediatek,mt6358-rtc";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 0205837..808be49 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -5,6 +5,7 @@
-  */
- /dts-v1/;
- #include "mt8192.dtsi"
-+#include "mt6359.dtsi"
- 
- / {
- 	model = "MediaTek MT8192 evaluation board";
 -- 
-2.6.4
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
