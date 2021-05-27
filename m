@@ -2,176 +2,575 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4953392BEB
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 May 2021 12:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065A2392C35
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 May 2021 12:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbhE0KhW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 May 2021 06:37:22 -0400
-Received: from mail-eopbgr70083.outbound.protection.outlook.com ([40.107.7.83]:61861
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236157AbhE0KhU (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 27 May 2021 06:37:20 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D4GvJyrw6dxXro4xAooxAPck4b7ay8HQeBnq08cogYmVYB4+eN2kbO5ZAKa5K30hsT2uGT9W+Pmzc33TjiFFD9vumOnbGdPRT/32LpjjsWt9N6aVsQZ0rcRDcPsfJulIAUANMrKUiA7OxknN5mvG6utJbfTEOYg6eg9Mc468GHyq1DTdAPt+MsRTRLpqjj5q7sHYGq5e7QtcbBSQZgCu59EMGQNC23sLuOsx4n5bm3b/OT+HwoIUo6TMh26je473KH6EEnA+VS/JVrsPLuAdvrjAurJw5i99C2Q6wQJG53CdhGTOJEEix4AmEHk2VTfqT40Lsg+xrjQAN8oJSadIEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F16p57xd31urzuNhh+gSwkOxMyPX7yZYB/QxJyACp3c=;
- b=VFNVwQJ0q92erlt/ZrLnFGL84/V8LtaNpurf85Qi3AEeb1nmmpRoG2gtzTR9aCADhqNgOQSbTVu/rfMnnB96twzdngKDyryhtyvErmbinhM/txAcrr830efWxWCIAX6SDqjEUMqsNrA6krIhW6g+yI5OilS63hgSQuilVzDnqUrZ98RePymLKyhmmuXwFLsWOJ3CUP8TyZYMzlHWyJ/W0dBG+e6FwIOwPwqWJs8L7ozUvcHjVydDd4qyN3fJMulisR0tTu3cpp6xfh3+bnWFv0GvCUmup6kvpLXJF06uiV9zL/OcpVLebWEqlA43OLZg46AVmbW8rnMmZGRvlFiHlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
- header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rohmsemiconductoreurope.onmicrosoft.com;
- s=selector1-rohmsemiconductoreurope-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F16p57xd31urzuNhh+gSwkOxMyPX7yZYB/QxJyACp3c=;
- b=vDtFlln+G66jvX57J5oY/Db/817xssDhPOfOlq5i3rXXM2SCSSmo629d3Y/X8J/F0gwd2BDPCXBOM438FZwwsDd8dGGC6+r9et+zuphUo5r196bzJaS2WzVCuKeI/vPQ7jf+HbBvI4ddlqeQKqoa27dzMAtfkNvwAyyJ6uxWQkk=
-Received: from DB6PR03MB3160.eurprd03.prod.outlook.com (2603:10a6:6:37::21) by
- DB9PR03MB7467.eurprd03.prod.outlook.com (2603:10a6:10:22d::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4173.21; Thu, 27 May 2021 10:35:44 +0000
-Received: from DB6PR03MB3160.eurprd03.prod.outlook.com
- ([fe80::d10a:71a9:656c:7d96]) by DB6PR03MB3160.eurprd03.prod.outlook.com
- ([fe80::d10a:71a9:656c:7d96%3]) with mapi id 15.20.4173.020; Thu, 27 May 2021
- 10:35:44 +0000
-From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 0/9] Drop ROHM BD70528 support
-Thread-Topic: [PATCH 0/9] Drop ROHM BD70528 support
-Thread-Index: AQHXUU6g/F3P4WWLe0S0t2z9ZGko1Kr3JXmA
-Date:   Thu, 27 May 2021 10:35:44 +0000
-Message-ID: <de5a85b755799db771616147da36de7d5af17a6f.camel@fi.rohmeurope.com>
-References: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-In-Reply-To: <cover.1621937490.git.matti.vaittinen@fi.rohmeurope.com>
-Reply-To: "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Accept-Language: fi-FI, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.34.4 (3.34.4-1.fc31) 
-authentication-results: fi.rohmeurope.com; dkim=none (message not signed)
- header.d=none;fi.rohmeurope.com; dmarc=none action=none
- header.from=fi.rohmeurope.com;
-x-originating-ip: [2001:14ba:16e2:8300::4]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 253d9b00-4e2e-40ea-1976-08d920fb2ee2
-x-ms-traffictypediagnostic: DB9PR03MB7467:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB9PR03MB74673A9AAF6BD7C250BB03F8AD239@DB9PR03MB7467.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7Kms8aGAQ7384+4Pk2sb9NPQpiskkUfGCmrr1xF6lpkuf56cXuzULm3gBjiwznN1nsxnE8RThpRC6I/O2LV1By4FdQmvXo/t1kh1DMflki/P8bOy/g265YEJv9fFhzoj13u3d/8S7p8ktjDUZ+HWTYyctyY8MTxV7ZCdak3yWBdcH+pHlTo8iSsYhEQl9G8LpZJKzGclM2HRJ+PH72pPrQ2+EV4f0FEiGfR5xEHGy6ZFBmPJUBCbQd41vBJKT/15CNG+e5liApNRlICQfxgFvsGiK2X2SufWZwqOTjqIELpQ9IyMP+KIaHwl/S8kV1D1Qr++X4XLUHIo1ttYY3QKAnTZ2EU31Z/2SBVBP90C9KwoOqK0fEu/PZ/9TrctRsJnJ9OONr1FASBzY1f/6zqVjtihxOqeMn/IpxXDb7WWN9efPj+WOtpGoWhXDkiL4f/cyWlOmU1QbL8GQPsm70t+WgVEkJujXmDt1y9DQzo4/70n7OD8dbqxBane/EY3KRO37Ny7WRdDMqkM5zipB5g6AxPTwwrnjess0MINtqVlYAZZTOrxSB1acUm5gzXyd5DZf/F/vetH738Sc0z7jcmnfXrOmAew8B0xksBSOvP8d1MicxWHcBOtxNFt8OWYJsyf4XCRmFSMPQueFUKgzcOuD1yc42tsrpPuedKVU2Ej3SC+DXqbGYeQM1/AhwIYhbI1jRPGBH7n/do5y2B9LBYQKqTjg3Gm5Ulm/9BhBxi7faE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR03MB3160.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(346002)(396003)(39830400003)(376002)(6512007)(6200100001)(316002)(7416002)(37006003)(122000001)(6506007)(6486002)(54906003)(86362001)(8936002)(8676002)(186003)(478600001)(64756008)(66476007)(66556008)(66446008)(91956017)(76116006)(66946007)(2616005)(3450700001)(5660300002)(2906002)(71200400001)(4326008)(38100700002)(6862004)(966005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?N1NHaVllK3kzQWZRN3llNmxWZWpRYlMxYnJrYlNEV0hkeDEyYlh5NFBqWjhO?=
- =?utf-8?B?SU11STBuSUpKcUkweDFCemNBSGYvLytSQmRLQlEweld6Q0VKTGhyL1MzbktK?=
- =?utf-8?B?Z1h0ZXVzTVZWN05RdGpUelVKZFM1ZVhUOHcyRWVTd3VLaXp6N2RxaTRTd091?=
- =?utf-8?B?RE9EUFFrZHBGNWRFTjhFZlZHc1FsVXNlbU5yY3h3T3FRRk9ITTZQN1MyWWVU?=
- =?utf-8?B?VDZmdWZhR0JEek9HdmdQZmpFcmcybVlCNnpHdGhaV0l4dlg2aU1hMmN5Q0hN?=
- =?utf-8?B?TjFQZUpsaFhBSXM5eitDcHBMUkZpZm0rVldnL2kybTJlWS9uYWhJU1l2QldR?=
- =?utf-8?B?Z25LVTZvUjRPMkdKT3gxUWE2UGxWc3JRMlRPN0s4b2l6b1E3T0hKTDhFUTYx?=
- =?utf-8?B?SWh0ZG9GNW5CWklZdWFjYmtxQmdlS2JtRHBrV25SQ1VjNFhscXFSM2E4YmZS?=
- =?utf-8?B?Y2tkN2d2dldkZmV2WlY1eUxGVFhGeGE4eDZqMlVCYUE0WDBSUTVmbm1FaGJq?=
- =?utf-8?B?WGswNzVvbnREUkx6bzhlR3NneDl5L2d2L1BOSnd1ZkFPRlY1SjZic0RRUmE2?=
- =?utf-8?B?aFZVZ0pJbEl2dkF3VWoydHJYZHQ4QVNPemsvMDlUVTNyN2VpbXAxbndjWk9Q?=
- =?utf-8?B?b0hHTGV5L1JMekxMdjJKOWo0WklmZE1HTlRGNDVFTVVLUkZBak9wQXdJb0U4?=
- =?utf-8?B?anRZRzluUEVKc0c0c3YxczM3b0MxRU1jZEJOM3VKU2djVDNaODkzbjdmekNj?=
- =?utf-8?B?NTJIdjhIRUNTanBUUDEwNFpqRjh2dEtoRkJTN3Awd2lLemticVRWVExCMU83?=
- =?utf-8?B?OHJjYlJnMm9NdkhZUVNPN1llc0sxWXZKbmUzc2dlL29LbXE2Q0wxYjJtMUNV?=
- =?utf-8?B?YWQzRTZoL2ZsMXJxbWZ4bHNKMEVncHRMS2JpUWdsVlNoOGxLcjNhQVBoRTRE?=
- =?utf-8?B?S2RzNlR3dm00c2FiNGEyOVpyaCtLbnpsS1VNWjgwN0t5OThWa0tsYlJOaFN0?=
- =?utf-8?B?NTl1elhnMmQxMzZ1WFkwRnVreTFwWkhUQUxiTFRDNG1Ub2R4R0J2b09jMHVE?=
- =?utf-8?B?bXk0bzJmdzNKK2hORVcxdGlqMGNZcWdleVhucEVhU2ltVmpNNVZFTVdZa1RL?=
- =?utf-8?B?bjI0MnJGcEN4N1M2dk56QU1VVEZUN3NhNEx4YzBsNE9JTGN4ZnVteTNXdkVj?=
- =?utf-8?B?eFJmMFA2bEJCbkNBZzlWbkkvbmtmSzQxSmVYd2UrTEtHNkJjMnVhOVBMVW1E?=
- =?utf-8?B?RmE3Y2xqS3JWS1U1NG9jaWVqVjFrNjZlbVdlN1hJc2MyK3l1Z2RBZDdoRTJo?=
- =?utf-8?B?K3NxSkxscHM2K1FXdnMwREhuTUhYbFZ0YXoyUFREZkMrcE5ITi8rQ3NzRE1h?=
- =?utf-8?B?SGFzMko0ME9JWERWZ3RGZk4yckU1Sklyd0RNc1JBYjNmUVZwamRoU2o2dkdy?=
- =?utf-8?B?NkcwWERScVVISk1sNzAxYUNXSEtwMGhhNDdHQUxmZUNadEpxMnNTL3VTSnB6?=
- =?utf-8?B?TlVKS01ocWZPOGVDYjhabXhJUGtiOHk5YkdqY1BvNWR5NlQ3U1BuSndsNWJB?=
- =?utf-8?B?YXdJYnppQklpc2hVblhwZ3E1RE13S0g2TzY3WjBKYTBWUG5nV2l6YTZrSyt5?=
- =?utf-8?B?UXc4RXY3VHdUd2JtN3JmNTNtWmQzaStpQ1Z2eVplWGlabmZZeGNiV1Z0bENt?=
- =?utf-8?B?MGM1aTNPTVJUNkh1OUIwTVNFS2h3RmxmY20wRk8yUmRPc3ZraVlSeko5cXNu?=
- =?utf-8?B?ZWVMeVAxMnFyKzZURXlxOU5KeDZ5ZmlKN1ZtTTFKUHVxa1piTjJQRnhtZWFO?=
- =?utf-8?Q?pDgfp6dgOUEtZQw84eJGfMegHjvVTgMf94Frk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <66F84A895622BF438BCB4C734C44365C@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S236217AbhE0LAC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 May 2021 07:00:02 -0400
+Received: from mail-lj1-f170.google.com ([209.85.208.170]:39688 "EHLO
+        mail-lj1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236204AbhE0LAB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 May 2021 07:00:01 -0400
+Received: by mail-lj1-f170.google.com with SMTP id w7so207543lji.6;
+        Thu, 27 May 2021 03:58:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=KDmxczimwrDm8uB5QRdfoitoPKlULy9tkYLOYxjrDz4=;
+        b=amPF6aZKznpX4Gh5w9UMdR9bw2jO32SOF5JHEzM5LrmpMQjHSacLf+L+sKElrIFxKq
+         o5ncQ3bCrPWOEuiem0/J9vyC6iPu4iE0IVPe2R+Mk2b3rHs5xGXyLLeYIWuj9MpHevMW
+         iMYf8ngGr5TQJdWsjRa9nhmMpryF3uA27Ixrz+66W0/8lP9xfLiA2CCkI6CRNnUq1BZM
+         ZE35+OeK1lAPjp6vlW9V/Hp1RfHKiOuPSLReDsGDYZ9xCYdeA9vO3Q+5VyiJ2do+Zz22
+         ojD4nLIyh4myshuaSU5glGP1yn2eqIvyTbYlovQFwxPks5lwtNP9xESCfVk41NcH6aS4
+         9B8g==
+X-Gm-Message-State: AOAM530QeGDOhcTQ46i6YMlkqYcaNv9xFm/NC9FRU/7u9QdImq4C9X0P
+        uEcP2NaHlWl7iaNgiRQmhBpNtozNbVo=
+X-Google-Smtp-Source: ABdhPJyWW4iGUZgLi+vSTPpQ2DhJCw8jmi1C9p3HqRYHBnzH4jSamFRDqV33j2egz/MQsqOcGgiybw==
+X-Received: by 2002:a2e:bb8a:: with SMTP id y10mr2110097lje.78.1622113106600;
+        Thu, 27 May 2021 03:58:26 -0700 (PDT)
+Received: from localhost.localdomain (dc7vkhyyyyyyyyyyyyycy-3.rev.dnainternet.fi. [2001:14ba:16e2:8300::4])
+        by smtp.gmail.com with ESMTPSA id r5sm211168ljk.90.2021.05.27.03.58.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 May 2021 03:58:25 -0700 (PDT)
+Date:   Thu, 27 May 2021 13:58:19 +0300
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-power@fi.rohmeurope.com,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: bd70528: Drop BD70528 support
+Message-ID: <20210527105819.GA3111334@localhost.localdomain>
 MIME-Version: 1.0
-X-OriginatorOrg: fi.rohmeurope.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR03MB3160.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 253d9b00-4e2e-40ea-1976-08d920fb2ee2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 May 2021 10:35:44.3686
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 94f2c475-a538-4112-b5dd-63f17273d67a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6WZZWHAZQH7q5QDeGvyqpaoRoEjiyemQrNVLIszf8fxfCvTI1r49nyMykvb3Y4m0W1DM1T1jJdtdP7LBo/p96TTaHnKVO7RanQ5BaobhFg151riaYt6eW7zlW/769nqB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7467
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-DQpPbiBUdWUsIDIwMjEtMDUtMjUgYXQgMTM6MTMgKzAzMDAsIE1hdHRpIFZhaXR0aW5lbiB3cm90
-ZToNCj4gRHJvcCBST0hNIEJENzA1Mjggc3VwcG9ydA0KPiANCj4gVW5mb3J0dW5hdGVseSB0aGVy
-ZSBoYXMgbm90IGJlZW4gYSBiaWcgZGVtYW5kIGZvciBST0hNIEJENzA1MjgNCj4gSUMuIFRoZSBm
-ZXcgdXNlcnMgSSBrbm93IGNvbnRyb2wgUE1JQyBmcm9tIHNlcGFyYXRlIE00LWNvcmUsDQo+IHdo
-aWNoIGlzIG5vdCBydW5uaW5nIExpbnV4LiBJIGFtIG5vdCBhd2FyZSBvZiBhbnkgdXNlcnMgb2Yg
-dGhpcw0KPiBMaW51eCBkcml2ZXIuDQo+IA0KPiBXaGlsZSBJIGRpZCByZWFsbHkgbGlrZSB0aGlz
-IElDIGFuZCB3cml0aW5nIHRoZSBkcml2ZXJzIGZvciBpdCwNCj4gc2VlbXMgbGlrZSB0aGVzZSBk
-cml2ZXJzIGFyZSBiZWNvbWluZyB1c2VsZXNzIGJ1cmRlbi4gU28sIEkgc2VlDQo+IG5vIHBvaW50
-IGluIG1haW50YWluaW5nIHRoZW0uIExldCdzIGp1c3QgZHJvcCB0aGUgZHJpdmVycyBpZg0KPiB0
-aGVyZSBpcyBubyBvYmplY3Rpb25zIHRvIHRoaXMgc2VyaWVzLiA6KA0KPiANCj4gRmV3IG5vdGVz
-Og0KPiANCj4gVGhlIEdQSU8sIHJlZ3VsYXRvciwgcG93ZXItc3VwcGx5IGFuZCB3YXRjaGRvZyBk
-cml2ZXJzIHNob3VsZCBiZQ0KPiBvbmx5IHVzZWQgb24gQkQ3MDUyOCBhbmQgZGVwZW5kIG9uIHRo
-ZSBCRDcwNTI4IE1GRCBLY29uZmlnLiBJIGd1ZXNzDQo+IHRoZSByZW1vdmFsIGNhbiBiZSBpbmRl
-cGVuZGVudGx5IG1lcmdlZCB0byB0aGUgcmVzcGVjdGl2ZSBzdWJzeXN0ZW1zLg0KPiANCj4gVGhl
-IEJENzA1MjggUlRDIGRyaXZlciBpcyBzdGlsbCB1c2VkIGJ5IEJENzE4MTUgYW5kIEJENzE4Mjgg
-LQ0KPiBidXQgdGhlIHdhdGNoZG9nLWhhY2sgY2FuIGJlIHJlbW92ZWQgYW5kIGRyaXZlciBpcyBn
-cmVhdGx5DQo+IHNpbXBsaWZpZWQuIEhvd2V2ZXIsIGl0J3Mgd29ydGggbm90aW5nIHRoYXQgdGhl
-cmUgaXMgZGVwZW5kZW5jeQ0KPiBmcm9tIHRoZSBCRDcwNTI4IFJUQyBkcml2ZXIgdG8gdGhlIGhl
-YWRlciBmaWxlcyAtIHRodXMgdGhlDQo+IFJUQyBkcml2ZXIgY2hhbmdlcyBzaG91bGQgYmUgbWVy
-Z2VkIGJlZm9yZSBNRkQgY2hhbmdlcy4gQWxzbyB0aGUNCj4gQ0xLIGRyaXZlciByZW1haW5zIGlu
-IHVzZSBhbmQgbmVlZHMgdGhlIEJENzA1MjggSUMtdHlwZS4NCj4gDQo+IEFzIGEgZmluYWwgbm90
-ZSAtIEZldyBpbXByb3ZlbWVudHMvZml4ZXMgd2VyZSBqdXN0IGFwcGxpZWQgdG8gdGhlDQo+IHJl
-Z3VsYXRvciB0cmVlIHNvIHRoaXMgc2VyaWVzIGlzIGxpa2VseSB0byBjb25mbGljdC4gU29tZSBm
-aXhlcw0KPiB3ZXJlIGFsc28gYWRkZWQgdG8gUlRDIEtjb25maWcgLSB3aGljaCBtZWFucyBhbHNv
-IHRoZSBSVEMgdHJlZQ0KPiBtYXkgaGF2ZSBjb25mbGljdHMuIFBsZWFzZSBsZXQgbWUga25vdyBp
-ZiB5b3Ugd2lzaCBtZSB0byByZWJhc2UNCj4gdGhpcyBzZXJpZXMgb3IgdGhvc2UgcGF0Y2hlcy4N
-Cg0KQXMgc2hvcnRseSBkaXNjdXNzZWQgd2l0aCBBbGV4YW5kcmUgaGVyZToNCmh0dHBzOi8vbG9y
-ZS5rZXJuZWwub3JnL2xrbWwvWUt6MjVQREwyWjZ2Z3FKdkBwaW91dC5uZXQvDQoNClRoZSBlYXNp
-ZXN0IHdheSB0byBkcm9wIHRoZSBzdXBwb3J0IHdpdGhvdXQgYnJlYWtpbmcgdGhlIGRlcGVuZGVu
-Y2llcw0KYW5kIHdpdGhvdXQgaW50cm9kdWNpbmcgY29uZmxpY3RzIGlzIHRvIGRyb3Agc3VwcG9y
-dCBmcm9tIHN1Yi1kZXZpY2VzDQppbiBvbmUgY3ljbGUgYW5kIHRoZSBNRkQgb25seSBhdCBuZXh0
-IGN5Y2xlLiBTbyBMZWUsIHBsZWFzZSBpZ25vcmUgdGhlDQpNRkQgcGFydCBmb3Igbm93Lg0KDQpJ
-J2xsIHJlYmFzZSB0aGUgUlRDIGFuZCByZWd1bGF0b3IgcGF0Y2hlcyB0byBSVEMgYW5kIHJlZ3Vs
-YXRvciB0cmVlcw0KYW5kIHNlbmQgdGhlbSBhcyBpbmRpdmlkdWFsIHBhdGNoZXMgdG8gTWFyayBh
-bmQgQWxleGFuZHJlLiBJIHRoaW5rIHRoZQ0Kb3RoZXIgc3ViLWRldmljZSBwYXRjaGVzIGFuZCB0
-aGUgRFQgYmluZGluZ3MgcGF0Y2ggc2hvdWxkIGFwcGx5IGNsZWFubHkNCnRvIHRoZSByZXNwZWN0
-aXZlIHRyZWVzLiBQbGVhc2UgbGV0IG1lIGtub3cgaWYgdGhpcyBkb2VzIG5vdCB3b3JrIGZvcg0K
-eW91Lg0KDQpJJ2xsIHJlLXNwaW4gdGhlIE1GRCBwb3J0aW9uIGR1cmluZyB0aGUgbmV4dCBjeWNs
-ZS4NCg0KQmVzdCBSZWdhcmRzDQoJTWF0dGkgVmFpdHRpbmVuDQo=
+
+--UugvWAfsgieZRqgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+The only known BD70528 use-cases are such that the PMIC is controlled
+=66rom separate MCU which is not running Linux. I am not aware of
+any Linux driver users. Furthermore, it seems there is no demand for
+this IC. Let's ease the maintenance burden and drop the driver. We can
+always add it back if there is sudden need for it.
+
+Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+---
+This was previously part of the series here:
+https://lore.kernel.org/lkml/cover.1621937490.git.matti.vaittinen@fi.rohmeu=
+rope.com/
+
+ drivers/rtc/Kconfig       |   7 +-
+ drivers/rtc/rtc-bd70528.c | 316 ++------------------------------------
+ 2 files changed, 14 insertions(+), 309 deletions(-)
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 914497abeef9..12153d5801ce 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -501,12 +501,11 @@ config RTC_DRV_M41T80_WDT
+ 	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
+=20
+ config RTC_DRV_BD70528
+-	tristate "ROHM BD70528, BD71815 and BD71828 PMIC RTC"
+-	depends on MFD_ROHM_BD71828 || MFD_ROHM_BD70528
+-	depends on BD70528_WATCHDOG || !BD70528_WATCHDOG
++	tristate "ROHM BD71815 and BD71828 PMIC RTC"
++	depends on MFD_ROHM_BD71828
+ 	help
+ 	  If you say Y here you will get support for the RTC
+-	  block on ROHM BD70528, BD71815 and BD71828 Power Management IC.
++	  block on ROHM BD71815 and BD71828 Power Management IC.
+=20
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-bd70528.
+diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
+index 6454afca02a6..59b627fc1ecf 100644
+--- a/drivers/rtc/rtc-bd70528.c
++++ b/drivers/rtc/rtc-bd70528.c
+@@ -2,10 +2,9 @@
+ //
+ // Copyright (C) 2018 ROHM Semiconductors
+ //
+-// RTC driver for ROHM BD70528 PMIC
++// RTC driver for ROHM BD71828 and BD71815 PMIC
+=20
+ #include <linux/bcd.h>
+-#include <linux/mfd/rohm-bd70528.h>
+ #include <linux/mfd/rohm-bd71815.h>
+ #include <linux/mfd/rohm-bd71828.h>
+ #include <linux/module.h>
+@@ -39,11 +38,6 @@ struct bd70528_rtc_data {
+ 	u8 year;
+ } __packed;
+=20
+-struct bd70528_rtc_wake {
+-	struct bd70528_rtc_day time;
+-	u8 ctrl;
+-} __packed;
+-
+ struct bd71828_rtc_alm {
+ 	struct bd70528_rtc_data alm0;
+ 	struct bd70528_rtc_data alm1;
+@@ -51,141 +45,14 @@ struct bd71828_rtc_alm {
+ 	u8 alm1_mask;
+ } __packed;
+=20
+-struct bd70528_rtc_alm {
+-	struct bd70528_rtc_data data;
+-	u8 alm_mask;
+-	u8 alm_repeat;
+-} __packed;
+-
+ struct bd70528_rtc {
+ 	struct rohm_regmap_dev *parent;
+ 	struct regmap *regmap;
+ 	struct device *dev;
+ 	u8 reg_time_start;
+ 	u8 bd718xx_alm_block_start;
+-	bool has_rtc_timers;
+ };
+=20
+-static int bd70528_set_wake(struct rohm_regmap_dev *bd70528,
+-			    int enable, int *old_state)
+-{
+-	int ret;
+-	unsigned int ctrl_reg;
+-
+-	ret =3D regmap_read(bd70528->regmap, BD70528_REG_WAKE_EN, &ctrl_reg);
+-	if (ret)
+-		return ret;
+-
+-	if (old_state) {
+-		if (ctrl_reg & BD70528_MASK_WAKE_EN)
+-			*old_state |=3D BD70528_WAKE_STATE_BIT;
+-		else
+-			*old_state &=3D ~BD70528_WAKE_STATE_BIT;
+-
+-		if (!enable =3D=3D !(*old_state & BD70528_WAKE_STATE_BIT))
+-			return 0;
+-	}
+-
+-	if (enable)
+-		ctrl_reg |=3D BD70528_MASK_WAKE_EN;
+-	else
+-		ctrl_reg &=3D ~BD70528_MASK_WAKE_EN;
+-
+-	return regmap_write(bd70528->regmap, BD70528_REG_WAKE_EN,
+-			    ctrl_reg);
+-}
+-
+-static int bd70528_set_elapsed_tmr(struct rohm_regmap_dev *bd70528,
+-				   int enable, int *old_state)
+-{
+-	int ret;
+-	unsigned int ctrl_reg;
+-
+-	/*
+-	 * TBD
+-	 * What is the purpose of elapsed timer ?
+-	 * Is the timeout registers counting down, or is the disable - re-enable
+-	 * going to restart the elapsed-time counting? If counting is restarted
+-	 * the timeout should be decreased by the amount of time that has
+-	 * elapsed since starting the timer. Maybe we should store the monotonic
+-	 * clock value when timer is started so that if RTC is set while timer
+-	 * is armed we could do the compensation. This is a hack if RTC/system
+-	 * clk are drifting. OTOH, RTC controlled via I2C is in any case
+-	 * inaccurate...
+-	 */
+-	ret =3D regmap_read(bd70528->regmap, BD70528_REG_ELAPSED_TIMER_EN,
+-			  &ctrl_reg);
+-	if (ret)
+-		return ret;
+-
+-	if (old_state) {
+-		if (ctrl_reg & BD70528_MASK_ELAPSED_TIMER_EN)
+-			*old_state |=3D BD70528_ELAPSED_STATE_BIT;
+-		else
+-			*old_state &=3D ~BD70528_ELAPSED_STATE_BIT;
+-
+-		if ((!enable) =3D=3D (!(*old_state & BD70528_ELAPSED_STATE_BIT)))
+-			return 0;
+-	}
+-
+-	if (enable)
+-		ctrl_reg |=3D BD70528_MASK_ELAPSED_TIMER_EN;
+-	else
+-		ctrl_reg &=3D ~BD70528_MASK_ELAPSED_TIMER_EN;
+-
+-	return regmap_write(bd70528->regmap, BD70528_REG_ELAPSED_TIMER_EN,
+-			    ctrl_reg);
+-}
+-
+-static int bd70528_set_rtc_based_timers(struct bd70528_rtc *r, int new_sta=
+te,
+-					int *old_state)
+-{
+-	int ret;
+-
+-	ret =3D bd70528_wdt_set(r->parent, new_state & BD70528_WDT_STATE_BIT,
+-			      old_state);
+-	if (ret) {
+-		dev_err(r->dev,
+-			"Failed to disable WDG for RTC setting (%d)\n", ret);
+-		return ret;
+-	}
+-	ret =3D bd70528_set_elapsed_tmr(r->parent,
+-				      new_state & BD70528_ELAPSED_STATE_BIT,
+-				      old_state);
+-	if (ret) {
+-		dev_err(r->dev,
+-			"Failed to disable 'elapsed timer' for RTC setting\n");
+-		return ret;
+-	}
+-	ret =3D bd70528_set_wake(r->parent, new_state & BD70528_WAKE_STATE_BIT,
+-			       old_state);
+-	if (ret) {
+-		dev_err(r->dev,
+-			"Failed to disable 'wake timer' for RTC setting\n");
+-		return ret;
+-	}
+-
+-	return ret;
+-}
+-
+-static int bd70528_re_enable_rtc_based_timers(struct bd70528_rtc *r,
+-					      int old_state)
+-{
+-	if (!r->has_rtc_timers)
+-		return 0;
+-
+-	return bd70528_set_rtc_based_timers(r, old_state, NULL);
+-}
+-
+-static int bd70528_disable_rtc_based_timers(struct bd70528_rtc *r,
+-					    int *old_state)
+-{
+-	if (!r->has_rtc_timers)
+-		return 0;
+-
+-	return bd70528_set_rtc_based_timers(r, 0, old_state);
+-}
+-
+ static inline void tmday2rtc(struct rtc_time *t, struct bd70528_rtc_day *d)
+ {
+ 	d->sec &=3D ~BD70528_MASK_RTC_SEC;
+@@ -267,52 +134,6 @@ static int bd71828_set_alarm(struct device *dev, struc=
+t rtc_wkalrm *a)
+=20
+ }
+=20
+-static int bd70528_set_alarm(struct device *dev, struct rtc_wkalrm *a)
+-{
+-	struct bd70528_rtc_wake wake;
+-	struct bd70528_rtc_alm alm;
+-	int ret;
+-	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+-
+-	ret =3D regmap_bulk_read(r->regmap, BD70528_REG_RTC_WAKE_START, &wake,
+-			       sizeof(wake));
+-	if (ret) {
+-		dev_err(dev, "Failed to read wake regs\n");
+-		return ret;
+-	}
+-
+-	ret =3D regmap_bulk_read(r->regmap, BD70528_REG_RTC_ALM_START, &alm,
+-			       sizeof(alm));
+-	if (ret) {
+-		dev_err(dev, "Failed to read alarm regs\n");
+-		return ret;
+-	}
+-
+-	tm2rtc(&a->time, &alm.data);
+-	tmday2rtc(&a->time, &wake.time);
+-
+-	if (a->enabled) {
+-		alm.alm_mask &=3D ~BD70528_MASK_ALM_EN;
+-		wake.ctrl |=3D BD70528_MASK_WAKE_EN;
+-	} else {
+-		alm.alm_mask |=3D BD70528_MASK_ALM_EN;
+-		wake.ctrl &=3D ~BD70528_MASK_WAKE_EN;
+-	}
+-
+-	ret =3D regmap_bulk_write(r->regmap, BD70528_REG_RTC_WAKE_START, &wake,
+-				sizeof(wake));
+-	if (ret) {
+-		dev_err(dev, "Failed to set wake time\n");
+-		return ret;
+-	}
+-	ret =3D regmap_bulk_write(r->regmap, BD70528_REG_RTC_ALM_START, &alm,
+-				sizeof(alm));
+-	if (ret)
+-		dev_err(dev, "Failed to set alarm time\n");
+-
+-	return ret;
+-}
+-
+ static int bd71828_read_alarm(struct device *dev, struct rtc_wkalrm *a)
+ {
+ 	int ret;
+@@ -336,78 +157,28 @@ static int bd71828_read_alarm(struct device *dev, str=
+uct rtc_wkalrm *a)
+ 	return 0;
+ }
+=20
+-static int bd70528_read_alarm(struct device *dev, struct rtc_wkalrm *a)
++static int bd71828_set_time(struct device *dev, struct rtc_time *t)
+ {
+-	struct bd70528_rtc_alm alm;
+ 	int ret;
+-	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+-
+-	ret =3D regmap_bulk_read(r->regmap, BD70528_REG_RTC_ALM_START, &alm,
+-			       sizeof(alm));
+-	if (ret) {
+-		dev_err(dev, "Failed to read alarm regs\n");
+-		return ret;
+-	}
+-
+-	rtc2tm(&alm.data, &a->time);
+-	a->time.tm_mday =3D -1;
+-	a->time.tm_mon =3D -1;
+-	a->time.tm_year =3D -1;
+-	a->enabled =3D !(alm.alm_mask & BD70528_MASK_ALM_EN);
+-	a->pending =3D 0;
+-
+-	return 0;
+-}
+-
+-static int bd70528_set_time_locked(struct device *dev, struct rtc_time *t)
+-{
+-	int ret, tmpret, old_states;
+ 	struct bd70528_rtc_data rtc_data;
+ 	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+=20
+-	ret =3D bd70528_disable_rtc_based_timers(r, &old_states);
+-	if (ret)
+-		return ret;
+-
+-	tmpret =3D regmap_bulk_read(r->regmap, r->reg_time_start, &rtc_data,
+-				  sizeof(rtc_data));
+-	if (tmpret) {
++	ret =3D regmap_bulk_read(r->regmap, r->reg_time_start, &rtc_data,
++			       sizeof(rtc_data));
++	if (ret) {
+ 		dev_err(dev, "Failed to read RTC time registers\n");
+-		goto renable_out;
++		return ret;
+ 	}
+ 	tm2rtc(t, &rtc_data);
+=20
+-	tmpret =3D regmap_bulk_write(r->regmap, r->reg_time_start, &rtc_data,
+-				   sizeof(rtc_data));
+-	if (tmpret) {
++	ret =3D regmap_bulk_write(r->regmap, r->reg_time_start, &rtc_data,
++				sizeof(rtc_data));
++	if (ret)
+ 		dev_err(dev, "Failed to set RTC time\n");
+-		goto renable_out;
+-	}
+-
+-renable_out:
+-	ret =3D bd70528_re_enable_rtc_based_timers(r, old_states);
+-	if (tmpret)
+-		ret =3D tmpret;
+=20
+ 	return ret;
+ }
+=20
+-static int bd71828_set_time(struct device *dev, struct rtc_time *t)
+-{
+-	return bd70528_set_time_locked(dev, t);
+-}
+-
+-static int bd70528_set_time(struct device *dev, struct rtc_time *t)
+-{
+-	int ret;
+-	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+-
+-	bd70528_wdt_lock(r->parent);
+-	ret =3D bd70528_set_time_locked(dev, t);
+-	bd70528_wdt_unlock(r->parent);
+-	return ret;
+-}
+-
+ static int bd70528_get_time(struct device *dev, struct rtc_time *t)
+ {
+ 	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+@@ -427,31 +198,6 @@ static int bd70528_get_time(struct device *dev, struct=
+ rtc_time *t)
+ 	return 0;
+ }
+=20
+-static int bd70528_alm_enable(struct device *dev, unsigned int enabled)
+-{
+-	int ret;
+-	unsigned int enableval =3D BD70528_MASK_ALM_EN;
+-	struct bd70528_rtc *r =3D dev_get_drvdata(dev);
+-
+-	if (enabled)
+-		enableval =3D 0;
+-
+-	bd70528_wdt_lock(r->parent);
+-	ret =3D bd70528_set_wake(r->parent, enabled, NULL);
+-	if (ret) {
+-		dev_err(dev, "Failed to change wake state\n");
+-		goto out_unlock;
+-	}
+-	ret =3D regmap_update_bits(r->regmap, BD70528_REG_RTC_ALM_MASK,
+-				 BD70528_MASK_ALM_EN, enableval);
+-	if (ret)
+-		dev_err(dev, "Failed to change alarm state\n");
+-
+-out_unlock:
+-	bd70528_wdt_unlock(r->parent);
+-	return ret;
+-}
+-
+ static int bd71828_alm_enable(struct device *dev, unsigned int enabled)
+ {
+ 	int ret;
+@@ -470,14 +216,6 @@ static int bd71828_alm_enable(struct device *dev, unsi=
+gned int enabled)
+ 	return ret;
+ }
+=20
+-static const struct rtc_class_ops bd70528_rtc_ops =3D {
+-	.read_time		=3D bd70528_get_time,
+-	.set_time		=3D bd70528_set_time,
+-	.read_alarm		=3D bd70528_read_alarm,
+-	.set_alarm		=3D bd70528_set_alarm,
+-	.alarm_irq_enable	=3D bd70528_alm_enable,
+-};
+-
+ static const struct rtc_class_ops bd71828_rtc_ops =3D {
+ 	.read_time		=3D bd70528_get_time,
+ 	.set_time		=3D bd71828_set_time,
+@@ -503,7 +241,6 @@ static int bd70528_probe(struct platform_device *pdev)
+ 	struct rtc_device *rtc;
+ 	int irq;
+ 	unsigned int hr;
+-	bool enable_main_irq =3D false;
+ 	u8 hour_reg;
+ 	enum rohm_chip_type chip =3D platform_get_device_id(pdev)->driver_data;
+=20
+@@ -518,21 +255,9 @@ static int bd70528_probe(struct platform_device *pdev)
+ 	}
+=20
+ 	bd_rtc->dev =3D &pdev->dev;
++	rtc_ops =3D &bd71828_rtc_ops;
+=20
+ 	switch (chip) {
+-	case ROHM_CHIP_TYPE_BD70528:
+-		bd_rtc->parent =3D dev_get_drvdata(pdev->dev.parent);
+-		if (!bd_rtc->parent) {
+-			dev_err(&pdev->dev, "No MFD data\n");
+-			return -EINVAL;
+-		}
+-		irq_name =3D "bd70528-rtc-alm";
+-		bd_rtc->has_rtc_timers =3D true;
+-		bd_rtc->reg_time_start =3D BD70528_REG_RTC_START;
+-		hour_reg =3D BD70528_REG_RTC_HOUR;
+-		enable_main_irq =3D true;
+-		rtc_ops =3D &bd70528_rtc_ops;
+-		break;
+ 	case ROHM_CHIP_TYPE_BD71815:
+ 		irq_name =3D "bd71815-rtc-alm-0";
+ 		bd_rtc->reg_time_start =3D BD71815_REG_RTC_START;
+@@ -549,14 +274,12 @@ static int bd70528_probe(struct platform_device *pdev)
+ 		 */
+ 		bd_rtc->bd718xx_alm_block_start =3D BD71815_REG_RTC_ALM_START;
+ 		hour_reg =3D BD71815_REG_HOUR;
+-		rtc_ops =3D &bd71828_rtc_ops;
+ 		break;
+ 	case ROHM_CHIP_TYPE_BD71828:
+ 		irq_name =3D "bd71828-rtc-alm-0";
+ 		bd_rtc->reg_time_start =3D BD71828_REG_RTC_START;
+ 		bd_rtc->bd718xx_alm_block_start =3D BD71828_REG_RTC_ALM_START;
+ 		hour_reg =3D BD71828_REG_RTC_HOUR;
+-		rtc_ops =3D &bd71828_rtc_ops;
+ 		break;
+ 	default:
+ 		dev_err(&pdev->dev, "Unknown chip\n");
+@@ -611,27 +334,10 @@ static int bd70528_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+=20
+-	/*
+-	 *  BD70528 irq controller is not touching the main mask register.
+-	 *  So enable the RTC block interrupts at main level. We can just
+-	 *  leave them enabled as irq-controller should disable irqs
+-	 *  from sub-registers when IRQ is disabled or freed.
+-	 */
+-	if (enable_main_irq) {
+-		ret =3D regmap_update_bits(bd_rtc->regmap,
+-				 BD70528_REG_INT_MAIN_MASK,
+-				 BD70528_INT_RTC_MASK, 0);
+-		if (ret) {
+-			dev_err(&pdev->dev, "Failed to enable RTC interrupts\n");
+-			return ret;
+-		}
+-	}
+-
+ 	return devm_rtc_register_device(rtc);
+ }
+=20
+ static const struct platform_device_id bd718x7_rtc_id[] =3D {
+-	{ "bd70528-rtc", ROHM_CHIP_TYPE_BD70528 },
+ 	{ "bd71828-rtc", ROHM_CHIP_TYPE_BD71828 },
+ 	{ "bd71815-rtc", ROHM_CHIP_TYPE_BD71815 },
+ 	{ },
+@@ -649,6 +355,6 @@ static struct platform_driver bd70528_rtc =3D {
+ module_platform_driver(bd70528_rtc);
+=20
+ MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+-MODULE_DESCRIPTION("ROHM BD70528 and BD71828 PMIC RTC driver");
++MODULE_DESCRIPTION("ROHM BD71828 and BD71815 PMIC RTC driver");
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:bd70528-rtc");
+
+base-commit: bcae59d0d45b866d5b9525ea8ece6d671e6767c8
+--=20
+2.25.4
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--UugvWAfsgieZRqgk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmCve0MACgkQeFA3/03a
+ocVeXAgAhqJ6af0k4ipb502GqzW+8bEdw7YHK1MAAV54TRMVX2hE6ey1jrxVHPae
+xqotSY8ABRH9RAu0LZueZ9eRbtgb+GcqSkQIOIZGTV4wlQeFSj2+ORsUNepezHqo
+gtHgP5M0xD9a9qMEzfAlyS5wz8QID/O0DnIUBkPboqG9GadT0I/d5+7R2p3bRwjC
+roMtl8AmC5aQC/z0CyF+V+cA2YH/9SwtNebohxzXbHYWELFWarXtM1tLE/G/5jmk
+oeeFfvlcpcBOtVCNB0ZrWIeP/2LrgwPN5Lg3O+AeFtVBciSBsTgbWIujRwdmgDKi
+dyk23rUTybYLqav5TP5EXPG3gVrgBw==
+=Q6YM
+-----END PGP SIGNATURE-----
+
+--UugvWAfsgieZRqgk--
