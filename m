@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B82EC39832E
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Jun 2021 09:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B3A398331
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Jun 2021 09:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbhFBHk7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Jun 2021 03:40:59 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:3340 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbhFBHko (ORCPT
+        id S231865AbhFBHlA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Jun 2021 03:41:00 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:3381 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231837AbhFBHko (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Jun 2021 03:40:44 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Fw1470qgcz19S48;
-        Wed,  2 Jun 2021 15:33:59 +0800 (CST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Fw15G0BfQz66Tn;
+        Wed,  2 Jun 2021 15:34:58 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 2 Jun 2021 15:38:41 +0800
+ 15.1.2176.2; Wed, 2 Jun 2021 15:38:42 +0800
 Received: from thunder-town.china.huawei.com (10.174.177.72) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -31,9 +31,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc <linux-rtc@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 2/8] rtc: rx8025: use DEVICE_ATTR_RW macro
-Date:   Wed, 2 Jun 2021 15:38:14 +0800
-Message-ID: <20210602073820.11011-3-thunder.leizhen@huawei.com>
+Subject: [PATCH 3/8] rtc: rs5c372: use DEVICE_ATTR_RO macro
+Date:   Wed, 2 Jun 2021 15:38:15 +0800
+Message-ID: <20210602073820.11011-4-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210602073820.11011-1-thunder.leizhen@huawei.com>
 References: <20210602073820.11011-1-thunder.leizhen@huawei.com>
@@ -48,54 +48,51 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use DEVICE_ATTR_RW macro helper instead of plain DEVICE_ATTR, which makes
+Use DEVICE_ATTR_RO macro helper instead of plain DEVICE_ATTR, which makes
 the code a bit shorter and easier to read.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/rtc/rtc-rx8025.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/rtc/rtc-rs5c372.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-index c914091819ba7da..73973886db4441d 100644
---- a/drivers/rtc/rtc-rx8025.c
-+++ b/drivers/rtc/rtc-rx8025.c
-@@ -458,9 +458,9 @@ static int rx8025_set_clock_adjust(struct device *dev, int adj)
- 	return 0;
- }
+diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+index 80980414890c703..eae0fbad64c109e 100644
+--- a/drivers/rtc/rtc-rs5c372.c
++++ b/drivers/rtc/rtc-rs5c372.c
+@@ -496,8 +496,8 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
  
--static ssize_t rx8025_sysfs_show_clock_adjust(struct device *dev,
--					      struct device_attribute *attr,
--					      char *buf)
-+static ssize_t clock_adjust_ppb_show(struct device *dev,
-+				     struct device_attribute *attr,
-+				     char *buf)
+ #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
+ 
+-static ssize_t rs5c372_sysfs_show_trim(struct device *dev,
+-				struct device_attribute *attr, char *buf)
++static ssize_t trim_show(struct device *dev,
++			 struct device_attribute *attr, char *buf)
  {
- 	int err, adj;
+ 	int err, trim;
  
-@@ -471,9 +471,9 @@ static ssize_t rx8025_sysfs_show_clock_adjust(struct device *dev,
- 	return sprintf(buf, "%d\n", adj);
+@@ -507,10 +507,10 @@ static ssize_t rs5c372_sysfs_show_trim(struct device *dev,
+ 
+ 	return sprintf(buf, "%d\n", trim);
  }
+-static DEVICE_ATTR(trim, S_IRUGO, rs5c372_sysfs_show_trim, NULL);
++static DEVICE_ATTR_RO(trim);
  
--static ssize_t rx8025_sysfs_store_clock_adjust(struct device *dev,
--					       struct device_attribute *attr,
--					       const char *buf, size_t count)
-+static ssize_t clock_adjust_ppb_store(struct device *dev,
-+				      struct device_attribute *attr,
-+				      const char *buf, size_t count)
+-static ssize_t rs5c372_sysfs_show_osc(struct device *dev,
+-				struct device_attribute *attr, char *buf)
++static ssize_t osc_show(struct device *dev,
++			struct device_attribute *attr, char *buf)
  {
- 	int adj, err;
+ 	int err, osc;
  
-@@ -485,9 +485,7 @@ static ssize_t rx8025_sysfs_store_clock_adjust(struct device *dev,
- 	return err ? err : count;
+@@ -520,7 +520,7 @@ static ssize_t rs5c372_sysfs_show_osc(struct device *dev,
+ 
+ 	return sprintf(buf, "%d.%03d KHz\n", osc / 1000, osc % 1000);
  }
+-static DEVICE_ATTR(osc, S_IRUGO, rs5c372_sysfs_show_osc, NULL);
++static DEVICE_ATTR_RO(osc);
  
--static DEVICE_ATTR(clock_adjust_ppb, S_IRUGO | S_IWUSR,
--		   rx8025_sysfs_show_clock_adjust,
--		   rx8025_sysfs_store_clock_adjust);
-+static DEVICE_ATTR_RW(clock_adjust_ppb);
- 
- static int rx8025_sysfs_register(struct device *dev)
+ static int rs5c_sysfs_register(struct device *dev)
  {
 -- 
 2.26.0.106.g9fadedd
