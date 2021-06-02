@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E89B398330
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Jun 2021 09:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE71398333
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Jun 2021 09:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbhFBHlB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Jun 2021 03:41:01 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2948 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbhFBHko (ORCPT
+        id S231839AbhFBHlC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Jun 2021 03:41:02 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:3341 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231834AbhFBHko (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Jun 2021 03:40:44 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Fw16B2q7zz685g;
-        Wed,  2 Jun 2021 15:35:46 +0800 (CST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Fw1484r63z19RJy;
+        Wed,  2 Jun 2021 15:34:00 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 2 Jun 2021 15:38:42 +0800
+ 15.1.2176.2; Wed, 2 Jun 2021 15:38:43 +0800
 Received: from thunder-town.china.huawei.com (10.174.177.72) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -31,9 +31,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc <linux-rtc@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 4/8] rtc: isl1208: use DEVICE_ATTR_* macro
-Date:   Wed, 2 Jun 2021 15:38:16 +0800
-Message-ID: <20210602073820.11011-5-thunder.leizhen@huawei.com>
+Subject: [PATCH 5/8] rtc: ds1685: use DEVICE_ATTR_RO macro
+Date:   Wed, 2 Jun 2021 15:38:17 +0800
+Message-ID: <20210602073820.11011-6-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20210602073820.11011-1-thunder.leizhen@huawei.com>
 References: <20210602073820.11011-1-thunder.leizhen@huawei.com>
@@ -48,84 +48,89 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use DEVICE_ATTR_* macro helper instead of plain DEVICE_ATTR, which makes
+Use DEVICE_ATTR_RO macro helper instead of plain DEVICE_ATTR, which makes
 the code a bit shorter and easier to read.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/rtc/rtc-isl1208.c | 29 ++++++++++++-----------------
- 1 file changed, 12 insertions(+), 17 deletions(-)
+ drivers/rtc/rtc-ds1685.c | 27 ++++++++++++---------------
+ 1 file changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 182dfa605515572..1e0069ab9769647 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -654,9 +654,8 @@ static const struct rtc_class_ops isl1208_rtc_ops = {
+diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
+index 75db7ab654a5ae1..60209320c7ac9ca 100644
+--- a/drivers/rtc/rtc-ds1685.c
++++ b/drivers/rtc/rtc-ds1685.c
+@@ -975,14 +975,13 @@ static int ds1685_nvram_write(void *priv, unsigned int pos, void *val,
+ /* SysFS interface */
  
- /* sysfs interface */
- 
+ /**
+- * ds1685_rtc_sysfs_battery_show - sysfs file for main battery status.
++ * battery_show - sysfs file for main battery status.
+  * @dev: pointer to device structure.
+  * @attr: pointer to device_attribute structure.
+  * @buf: pointer to char array to hold the output.
+  */
 -static ssize_t
--isl1208_sysfs_show_atrim(struct device *dev,
--			 struct device_attribute *attr, char *buf)
-+static ssize_t atrim_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
+-ds1685_rtc_sysfs_battery_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
++static ssize_t battery_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
  {
- 	int atr = isl1208_i2c_get_atr(to_i2c_client(dev->parent));
- 	if (atr < 0)
-@@ -665,11 +664,10 @@ isl1208_sysfs_show_atrim(struct device *dev,
- 	return sprintf(buf, "%d.%.2d pF\n", atr >> 2, (atr & 0x3) * 25);
+ 	struct ds1685_priv *rtc = dev_get_drvdata(dev->parent);
+ 	u8 ctrld;
+@@ -992,17 +991,16 @@ ds1685_rtc_sysfs_battery_show(struct device *dev,
+ 	return sprintf(buf, "%s\n",
+ 			(ctrld & RTC_CTRL_D_VRT) ? "ok" : "not ok or N/A");
  }
+-static DEVICE_ATTR(battery, S_IRUGO, ds1685_rtc_sysfs_battery_show, NULL);
++static DEVICE_ATTR_RO(battery);
  
--static DEVICE_ATTR(atrim, S_IRUGO, isl1208_sysfs_show_atrim, NULL);
-+static DEVICE_ATTR_RO(atrim);
- 
+ /**
+- * ds1685_rtc_sysfs_auxbatt_show - sysfs file for aux battery status.
++ * auxbatt_show - sysfs file for aux battery status.
+  * @dev: pointer to device structure.
+  * @attr: pointer to device_attribute structure.
+  * @buf: pointer to char array to hold the output.
+  */
 -static ssize_t
--isl1208_sysfs_show_dtrim(struct device *dev,
--			 struct device_attribute *attr, char *buf)
-+static ssize_t dtrim_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
+-ds1685_rtc_sysfs_auxbatt_show(struct device *dev,
+-			      struct device_attribute *attr, char *buf)
++static ssize_t auxbatt_show(struct device *dev,
++			    struct device_attribute *attr, char *buf)
  {
- 	int dtr = isl1208_i2c_get_dtr(to_i2c_client(dev->parent));
- 	if (dtr < 0)
-@@ -678,11 +676,10 @@ isl1208_sysfs_show_dtrim(struct device *dev,
- 	return sprintf(buf, "%d ppm\n", dtr - 100);
+ 	struct ds1685_priv *rtc = dev_get_drvdata(dev->parent);
+ 	u8 ctrl4a;
+@@ -1014,17 +1012,16 @@ ds1685_rtc_sysfs_auxbatt_show(struct device *dev,
+ 	return sprintf(buf, "%s\n",
+ 			(ctrl4a & RTC_CTRL_4A_VRT2) ? "ok" : "not ok or N/A");
  }
+-static DEVICE_ATTR(auxbatt, S_IRUGO, ds1685_rtc_sysfs_auxbatt_show, NULL);
++static DEVICE_ATTR_RO(auxbatt);
  
--static DEVICE_ATTR(dtrim, S_IRUGO, isl1208_sysfs_show_dtrim, NULL);
-+static DEVICE_ATTR_RO(dtrim);
- 
+ /**
+- * ds1685_rtc_sysfs_serial_show - sysfs file for silicon serial number.
++ * serial_show - sysfs file for silicon serial number.
+  * @dev: pointer to device structure.
+  * @attr: pointer to device_attribute structure.
+  * @buf: pointer to char array to hold the output.
+  */
 -static ssize_t
--isl1208_sysfs_show_usr(struct device *dev,
--		       struct device_attribute *attr, char *buf)
-+static ssize_t usr_show(struct device *dev,
-+			struct device_attribute *attr, char *buf)
+-ds1685_rtc_sysfs_serial_show(struct device *dev,
+-			     struct device_attribute *attr, char *buf)
++static ssize_t serial_show(struct device *dev,
++			   struct device_attribute *attr, char *buf)
  {
- 	int usr = isl1208_i2c_get_usr(to_i2c_client(dev->parent));
- 	if (usr < 0)
-@@ -691,10 +688,9 @@ isl1208_sysfs_show_usr(struct device *dev,
- 	return sprintf(buf, "0x%.4x\n", usr);
+ 	struct ds1685_priv *rtc = dev_get_drvdata(dev->parent);
+ 	u8 ssn[8];
+@@ -1035,7 +1032,7 @@ ds1685_rtc_sysfs_serial_show(struct device *dev,
+ 
+ 	return sprintf(buf, "%8phC\n", ssn);
  }
+-static DEVICE_ATTR(serial, S_IRUGO, ds1685_rtc_sysfs_serial_show, NULL);
++static DEVICE_ATTR_RO(serial);
  
--static ssize_t
--isl1208_sysfs_store_usr(struct device *dev,
--			struct device_attribute *attr,
--			const char *buf, size_t count)
-+static ssize_t usr_store(struct device *dev,
-+			 struct device_attribute *attr,
-+			 const char *buf, size_t count)
- {
- 	int usr = -1;
- 
-@@ -715,8 +711,7 @@ isl1208_sysfs_store_usr(struct device *dev,
- 	return count;
- }
- 
--static DEVICE_ATTR(usr, S_IRUGO | S_IWUSR, isl1208_sysfs_show_usr,
--		   isl1208_sysfs_store_usr);
-+static DEVICE_ATTR_RW(usr);
- 
- static struct attribute *isl1208_rtc_attrs[] = {
- 	&dev_attr_atrim.attr,
+ /*
+  * struct ds1685_rtc_sysfs_misc_attrs - list for misc RTC features.
 -- 
 2.26.0.106.g9fadedd
 
