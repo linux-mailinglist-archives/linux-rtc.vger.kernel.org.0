@@ -2,100 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9694C39A415
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Jun 2021 17:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B9139B443
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Jun 2021 09:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbhFCPPf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Jun 2021 11:15:35 -0400
-Received: from mail-vs1-f43.google.com ([209.85.217.43]:39832 "EHLO
-        mail-vs1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbhFCPPe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Jun 2021 11:15:34 -0400
-Received: by mail-vs1-f43.google.com with SMTP id z206so3173631vsz.6
-        for <linux-rtc@vger.kernel.org>; Thu, 03 Jun 2021 08:13:34 -0700 (PDT)
+        id S230109AbhFDHsk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Jun 2021 03:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230036AbhFDHsk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Jun 2021 03:48:40 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF9EC061761
+        for <linux-rtc@vger.kernel.org>; Fri,  4 Jun 2021 00:46:54 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id v22so11344627lfa.3
+        for <linux-rtc@vger.kernel.org>; Fri, 04 Jun 2021 00:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Ieapn99oA9OkrHs7OsxYMHgBOluz5xhMTXD+Y3GBze4=;
-        b=a5P9+eUjeu/Wk8Il/C541ZmfAdZc0ljy6YCupZtsL1LKbq3b+KSyum1lnsSFqNE0Qk
-         EWBx04nI77pZK2ai1MNGl/qynJClqdgeuh3cgJLnGOByWW9a1XdiN+8c7LvWk55lbKKO
-         nfIqFYSN5JB22KR43M2a82pRtpJSmFg20al+Tf9SoUIwLYsjwAcmNPMqrVyDg4pyuPRE
-         Twe+MWaQdilQmA52ijCqxL2synPAZyzKegzDsRlTjsA4dB7L2W+ywxSumw++tfmKH+wZ
-         U1DZEIAunFy0tqLt7CCf2bvftJFOyw36pPC5Dky9sJXSwMatFdt8qQM8qVIcfn3aky3g
-         orUA==
+         :cc;
+        bh=GGN1e1fZoVLsGZaUqzYtHHdtjrUyCytvAb6o6aP63HM=;
+        b=msrHTL2y69s+2YhUz62/tGOY+yuNUCSTYg7AhCClV9WNnzICXVziI/JAguQAmC1wqt
+         JzQYum0jXmtr+9iCgwqdBn5lLZOmJlhDXHV3wIfxkqDaA1mo3QqC5GRcYjkUpzzRYgqy
+         lgo1BqhA3m4EaTUOsOwC0a99cWgorgIMboTGVgXxSCm4RcwlKx5mew8lm89LZE3E4piW
+         WMJgrr2t0UVMV2Zq089Dm8Cj4hs/Uf2km5Z2XzhXJNphTurkF9AhNdmGy2WT3iN7dRrZ
+         wv0LDRZbQfcfcTTvFKgoHyKAkP6iX8yEomauy5oEvl2ltflW0GY5IwrbbGMd1KUeqz3U
+         cIUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Ieapn99oA9OkrHs7OsxYMHgBOluz5xhMTXD+Y3GBze4=;
-        b=PupZdYwfDjX2w4fmg27p8DAAZ81pTQDOUpR01Pb/lWHhOlbzybmt+p63ivlMv4cy5F
-         uuDlT2KnguH8NOaXfyt3bVLeWvJUFhtLGgwlKRurmz1GqB9Lt07xfr4hzXWhT8j5qPqT
-         UwNG3oEuLEpNY9ElByEU+qokDz/S0aM8ziXRiEhK8TkHhHaHEMEueAohte16CTuZWkxa
-         qSXxi/LNBapYVsfYBaaoOmZKJl2VphSTZwSEDHoYRjYqk9VaquxPn5gfFyNcsd+MAcBv
-         UMvKgqZaNHOUwXz93NVbqR1T5FRYamodhr9vByXmfqBdtdcXdkOvG29LwvKi/tlCV+Gt
-         Ybaw==
-X-Gm-Message-State: AOAM533DPu3wGWBnljKoEp0PYQU+r6KsVXClgnKJ7THquo/exDbQXKig
-        +OKnuOYIAVKjVp6v0TwPQiiAPNolmoKW6JTf6CJ6
-X-Google-Smtp-Source: ABdhPJz/ttLqAlW8pbs0ubUg+RAi2P7whHE4JNsM/P7v5ksKIQDBWx7Bbr0eswUAn+HcMRTvw7UCv8XuQTjNDX46AaI=
-X-Received: by 2002:a05:6102:c49:: with SMTP id y9mr649647vss.24.1622733154378;
- Thu, 03 Jun 2021 08:12:34 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=GGN1e1fZoVLsGZaUqzYtHHdtjrUyCytvAb6o6aP63HM=;
+        b=R0gHfqqLSHQr1ezY2Ja6GhivYNpdESfLgrVXX3FII5re7+bVsznnp/8NG2HX2p/51n
+         iUX4uwG0RG2HRQoaRVs1iYZZGp/thULiybtZqkIXsgkNgrVT/f5ok15iba+rbb26rIUW
+         XdgHI1C0NfFKcclOOWr90/WDpMFyv/M+rXHkY8m2EejfavuxATza7uhGAqDhg80Ws1Cm
+         ilI1kAm1qSTomixPGXbgi6jOzB2FRyiRfOpet66IyPN2l1quY02A47AUi9/GZkQg9bQj
+         cAPtLyuKb3MEQqHCEkQ9QACR5CiXZXunuwZNXFs9glO2vKiIso1amS9HooxwROM/kQCa
+         l65g==
+X-Gm-Message-State: AOAM530DMYuOBnuOcVMOFYwGGNhpJpSYiLZify8crRL+D8hLP2dyh09L
+        XuWX0ScoRjh+GHT3hEmxLO9+T0ZIyMGnB+/turZDDQ==
+X-Google-Smtp-Source: ABdhPJzzCT+RNeP+IY7pbsrAJ1fgWD4dRQI+FAzSlryTiYVtiWkwluM+NFAnLXRjMkG5dfHS0DGoYhOnadRzVoqCYg0=
+X-Received: by 2002:a05:6512:3241:: with SMTP id c1mr2003330lfr.29.1622792812519;
+ Fri, 04 Jun 2021 00:46:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210603143447.2223353-1-festevam@gmail.com> <20210603143447.2223353-2-festevam@gmail.com>
-In-Reply-To: <20210603143447.2223353-2-festevam@gmail.com>
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Fri, 4 Jun 2021 00:12:08 +0900
-Message-ID: <CABMQnVJix7n5d8zK0f3nstmOGeEVmVWAgbUY=M5kubGQZNQkBg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] rtc: pcf85063: Fix the datasheet URL
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
+References: <20210602073820.11011-1-thunder.leizhen@huawei.com> <20210602073820.11011-9-thunder.leizhen@huawei.com>
+In-Reply-To: <20210602073820.11011-9-thunder.leizhen@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 4 Jun 2021 09:46:41 +0200
+Message-ID: <CACRpkdZ07GnpfYM0+9XN_Gx0-boQiNSc5ZarB=3fH2w3EuOp1g@mail.gmail.com>
+Subject: Re: [PATCH 8/8] rtc: ab8500: use DEVICE_ATTR_RW macro
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Joshua Kinard <kumba@gentoo.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rtc <linux-rtc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On Wed, Jun 2, 2021 at 9:38 AM Zhen Lei <thunder.leizhen@huawei.com> wrote:
 
-2021=E5=B9=B46=E6=9C=883=E6=97=A5(=E6=9C=A8) 23:36 Fabio Estevam <festevam@=
-gmail.com>:
+> Use DEVICE_ATTR_RW macro helper instead of plain DEVICE_ATTR, which makes
+> the code a bit shorter and easier to read.
 >
-> The current datasheet URL is no longer valid.
->
-> Replace with a valid one.
->
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  drivers/rtc/rtc-pcf85063.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-> index 82becae14229..9a5297098d39 100644
-> --- a/drivers/rtc/rtc-pcf85063.c
-> +++ b/drivers/rtc/rtc-pcf85063.c
-> @@ -21,8 +21,8 @@
->  /*
->   * Information for this driver was pulled from the following datasheets.
->   *
-> - *  https://www.nxp.com/documents/data_sheet/PCF85063A.pdf
-> - *  https://www.nxp.com/documents/data_sheet/PCF85063TP.pdf
-> + *  https://www.nxp.com/docs/en/data-sheet/PCF85063A.pdf
-> + *  https://www.nxp.com/docs/en/data-sheet/PCF85063TP.pdf
->   *
->   *  PCF85063A -- Rev. 6 =E2=80=94 18 November 2015
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-Could you also update Rev and date?
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
->   *  PCF85063TP -- Rev. 4 =E2=80=94 6 May 2015
-> --
-> 2.25.1
->
-
-Best regards,
-  Nobuhiro
-
---=20
-Nobuhiro Iwamatsu
-   iwamatsu at {nigauri.org / debian.org}
-   GPG ID: 40AD1FA6
+Yours,
+Linus Walleij
