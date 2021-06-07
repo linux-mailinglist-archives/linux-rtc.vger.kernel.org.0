@@ -2,133 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA18A39E59E
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jun 2021 19:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1D439E792
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Jun 2021 21:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhFGRkK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Jun 2021 13:40:10 -0400
-Received: from mail-wr1-f97.google.com ([209.85.221.97]:46645 "EHLO
-        mail-wr1-f97.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbhFGRkJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Jun 2021 13:40:09 -0400
-Received: by mail-wr1-f97.google.com with SMTP id a11so16681850wrt.13
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Jun 2021 10:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flowbird.group; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=cQ0HCecLBzhbySylNjeEx08B0uL27TMXk9h3b7u59u8=;
-        b=IKZ39F3MtKcHSODjiGeVlgghGWdYJpIvhLIwqnMiLNI2IAME2p1/clgRDOsLBARP3o
-         I/QMQVZHsvccukjM/ZCqNoQJivLFJat8c2KXlE/2Jr5t8RPMoYJJiY8yTv5qVK8rKwn7
-         /JWPKj3yOWf4S5Enu4EqGOgOUyib6I9TON9n3yElHpZ1a/ek/elsfaPTAf8jFQpeXFGZ
-         4EFbt+RvanRD17t185mxnlFYQ6Pb25QPoXR7YO9aCAIA4dKyI+pB/hLhZdokppTUCIol
-         gd4yhcFqyyYrBRyhQJ9xXrAGjvsQTBifWAyA9ON5H5f1peURrYLBwuyyCknUmJ6CxNnD
-         gryg==
+        id S231312AbhFGTj2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Jun 2021 15:39:28 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:34485 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230311AbhFGTj2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Jun 2021 15:39:28 -0400
+Received: by mail-ot1-f52.google.com with SMTP id v27-20020a056830091bb02903cd67d40070so14838693ott.1;
+        Mon, 07 Jun 2021 12:37:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cQ0HCecLBzhbySylNjeEx08B0uL27TMXk9h3b7u59u8=;
-        b=OOpPnuzXNgbKT/g67LIHyh2b3wdDgVLksqm4bRQeR3bgcJyt5juPZ2noaZTH3YIN6U
-         mjb71OA6Ajj8T+lrjasy3GqqxLOYvmxC7zkY3zDUYeuJkRX1IHlU+APupzThlqoVldth
-         S7l99d+i/Ws48OOcGwnn3612CxTUiQAMaomww2Fi1BmSC1DctstaD8yOoWx22nxzFdmV
-         j+Re3W/CQ9BPEePu8ni0HWUuyfBSbGvqUNKLg1evzPcr9QaBDlYownTFqHefDDP2KHyK
-         0iHmluINUpC2ErnOM6ehOcJAhUENfuHit7Njl4pQLukKpeXbWAT+jAwHYFH/TKCaIY4p
-         hXQg==
-X-Gm-Message-State: AOAM5307PkTDMCYPcR5ADrsc1zK1GDnOSc3xE4hYthFvUIO8cf54Zthr
-        62xIswrjHMr8ABmW4SIq/AhhGSVadI1iggxFDh9f3xOLB3U7
-X-Google-Smtp-Source: ABdhPJz/FE6FN3pJLi6cmrgl515irLBG83lTgyOd3htyaW4LLOC1eozKZN2fgQXMpbtxmtiMenJRLmx2yMdP
-X-Received: by 2002:adf:c392:: with SMTP id p18mr18476789wrf.373.1623087422760;
-        Mon, 07 Jun 2021 10:37:02 -0700 (PDT)
-Received: from mta1.parkeon.com ([185.149.63.251])
-        by smtp-relay.gmail.com with ESMTPS id s4sm1131512wrv.91.2021.06.07.10.37.02
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 07 Jun 2021 10:37:02 -0700 (PDT)
-X-Relaying-Domain: flowbird.group
-Received: from [172.16.14.190] (port=40436 helo=PC12445-BES.dynamic.besancon.parkeon.com)
-        by mta1.parkeon.com with esmtp (Exim 4.71)
-        (envelope-from <martin.fuzzey@flowbird.group>)
-        id 1lqJBO-0004zR-EB; Mon, 07 Jun 2021 19:37:02 +0200
-From:   Martin Fuzzey <martin.fuzzey@flowbird.group>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Martin Fuzzey <martin.fuzzey@flowbird.group>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        linux-rtc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rtc: stm32: Fix unbalanced clk_disable_unprepare() on probe error path
-Date:   Mon,  7 Jun 2021 19:36:40 +0200
-Message-Id: <1623087421-19722-1-git-send-email-martin.fuzzey@flowbird.group>
-X-Mailer: git-send-email 1.9.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FRSxC13zHpan7fvtvaA5He0Vxjqfa70sKFxtkfFWbcw=;
+        b=CugNqgTndal7WiqFkFQmQdP47y3XctJr/aJU4dRoTy4YA50/sOfLLgCNNCa5cJZKVN
+         +AISFpxED7IgNORY8FnoEkVCB6RuP0TzepqzvIiEdhEW+4lZ+l/CNhb3/8XUnL4e1pZZ
+         aAtCTkjIgrY2mlDtzt5THACTGSQpHLd9oZghRqOKBH4Mp9lgPJz3f2cm48j6tS7SS2gR
+         l/UlE/pwxgFqYlV76TJahViwga1M4PPgmi8Le2EYF1P41xNgH1UDbV6vVfj7+irgQdXR
+         AmqP3rN5JRUPMhDHkdtaC7CZZGSgXT0ojJJpxt2KMXfCTbcpZGFRT6tUufjWVkAejmVh
+         YMvg==
+X-Gm-Message-State: AOAM531x1NxurHhulDElx2vcFPr2wE7jFw9QkUPedqnw4ar/Tr7HC8Hb
+        ShRfRlopYXgCdlJAR7ysXVTROOpzbQ==
+X-Google-Smtp-Source: ABdhPJzIBylnHYbjgquLEQkHLHDwH51VYqwQHfURLr0VwtjpKZ+Ex+dM9B6he9kGK3Jtiic6YnNzZg==
+X-Received: by 2002:a9d:541:: with SMTP id 59mr10202960otw.301.1623094639797;
+        Mon, 07 Jun 2021 12:37:19 -0700 (PDT)
+Received: from xps15.herring.priv (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.googlemail.com with ESMTPSA id 94sm2544375otj.33.2021.06.07.12.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 12:37:19 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH] dt-bindings: rtc: Add Arm PL031 schema
+Date:   Mon,  7 Jun 2021 14:37:18 -0500
+Message-Id: <20210607193718.3090202-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The STM32MP1 RTC may have 2 clocks, the pclk and the rtc_ck.
+The PL031 RTC binding has been in use for a long time, but never got
+documented. Fortunately, it's simple and existing users are consistent.
 
-If clk_prepare_enable() fails for the second clock (rtc_ck) we must only
-call clk_disable_unprepare() for the first clock (pclk) but currently we
-call it on both leading to a WARN:
-
-[   15.629568] WARNING: CPU: 0 PID: 146 at drivers/clk/clk.c:958 clk_core_disable+0xb0/0xc8
-[   15.637620] ck_rtc already disabled
-[   15.663322] CPU: 0 PID: 146 Comm: systemd-udevd Not tainted 5.4.77-pknbsp-svn5759-atag-v5.4.77-204-gea4235203137-dirty #2413
-[   15.674510] Hardware name: STM32 (Device Tree Support)
-[   15.679658] [<c0111148>] (unwind_backtrace) from [<c010c0b8>] (show_stack+0x10/0x14)
-[   15.687371] [<c010c0b8>] (show_stack) from [<c0ab3d28>] (dump_stack+0xc0/0xe0)
-[   15.694574] [<c0ab3d28>] (dump_stack) from [<c012360c>] (__warn+0xc8/0xf0)
-[   15.701428] [<c012360c>] (__warn) from [<c0123694>] (warn_slowpath_fmt+0x60/0x94)
-[   15.708894] [<c0123694>] (warn_slowpath_fmt) from [<c053b518>] (clk_core_disable+0xb0/0xc8)
-[   15.717230] [<c053b518>] (clk_core_disable) from [<c053c190>] (clk_core_disable_lock+0x18/0x24)
-[   15.725924] [<c053c190>] (clk_core_disable_lock) from [<bf0adc44>] (stm32_rtc_probe+0x124/0x5e4 [rtc_stm32])
-[   15.735739] [<bf0adc44>] (stm32_rtc_probe [rtc_stm32]) from [<c05f7d4c>] (platform_drv_probe+0x48/0x98)
-[   15.745095] [<c05f7d4c>] (platform_drv_probe) from [<c05f5cec>] (really_probe+0x1f0/0x458)
-[   15.753338] [<c05f5cec>] (really_probe) from [<c05f61c4>] (driver_probe_device+0x70/0x1c4)
-[   15.761584] [<c05f61c4>] (driver_probe_device) from [<c05f6580>] (device_driver_attach+0x58/0x60)
-[   15.770439] [<c05f6580>] (device_driver_attach) from [<c05f6654>] (__driver_attach+0xcc/0x170)
-[   15.779032] [<c05f6654>] (__driver_attach) from [<c05f40d8>] (bus_for_each_dev+0x58/0x7c)
-[   15.787191] [<c05f40d8>] (bus_for_each_dev) from [<c05f4ffc>] (bus_add_driver+0xdc/0x1f8)
-[   15.795352] [<c05f4ffc>] (bus_add_driver) from [<c05f6ed8>] (driver_register+0x7c/0x110)
-[   15.803425] [<c05f6ed8>] (driver_register) from [<c01027bc>] (do_one_initcall+0x70/0x1b8)
-[   15.811588] [<c01027bc>] (do_one_initcall) from [<c01a1094>] (do_init_module+0x58/0x1f8)
-[   15.819660] [<c01a1094>] (do_init_module) from [<c01a0074>] (load_module+0x1e58/0x23c8)
-[   15.827646] [<c01a0074>] (load_module) from [<c01a0860>] (sys_finit_module+0xa0/0xd4)
-[   15.835459] [<c01a0860>] (sys_finit_module) from [<c01011e0>] (__sys_trace_return+0x0/0x20)
-
-Signed-off-by: Martin Fuzzey <martin.fuzzey@flowbird.group>
-Fixes: 4e64350f42e2 ("rtc: add STM32 RTC driver")
-Cc: stable@vger.kernel.org
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/rtc/rtc-stm32.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/rtc/arm,pl031.yaml    | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/arm,pl031.yaml
 
-diff --git a/drivers/rtc/rtc-stm32.c b/drivers/rtc/rtc-stm32.c
-index 75a8924..ac9e228 100644
---- a/drivers/rtc/rtc-stm32.c
-+++ b/drivers/rtc/rtc-stm32.c
-@@ -754,7 +754,7 @@ static int stm32_rtc_probe(struct platform_device *pdev)
- 
- 	ret = clk_prepare_enable(rtc->rtc_ck);
- 	if (ret)
--		goto err;
-+		goto err_no_rtc_ck;
- 
- 	if (rtc->data->need_dbp)
- 		regmap_update_bits(rtc->dbp, rtc->dbp_reg,
-@@ -830,10 +830,12 @@ static int stm32_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
+diff --git a/Documentation/devicetree/bindings/rtc/arm,pl031.yaml b/Documentation/devicetree/bindings/rtc/arm,pl031.yaml
+new file mode 100644
+index 000000000000..77452c9e9b63
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/arm,pl031.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/arm,pl031.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- err:
-+	clk_disable_unprepare(rtc->rtc_ck);
-+err_no_rtc_ck:
- 	if (rtc->data->has_pclk)
- 		clk_disable_unprepare(rtc->pclk);
--	clk_disable_unprepare(rtc->rtc_ck);
- 
- 	if (rtc->data->need_dbp)
- 		regmap_update_bits(rtc->dbp, rtc->dbp_reg, rtc->dbp_mask, 0);
++title: Arm Primecell PL031 Real Time Clock
++
++select:
++  properties:
++    compatible:
++      contains:
++        const: arm,pl031
++  required:
++    - compatible
++
++allOf:
++  - $ref: rtc.yaml#
++
++maintainers:
++  - Rob Herring <robh@kernel.org>
++
++properties:
++  compatible:
++    items:
++      - const: arm,pl031
++      - const: arm,primecell
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++additionalProperties: false
++
++examples:
++  - |
++    rtc@10017000 {
++        compatible = "arm,pl031", "arm,primecell";
++        reg = <0x10017000 0x1000>;
++        clocks = <&pclk>;
++        clock-names = "apb_pclk";
++    };
 -- 
-1.9.1
+2.27.0
 
