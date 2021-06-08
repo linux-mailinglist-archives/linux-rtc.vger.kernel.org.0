@@ -2,126 +2,198 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCF839EB5F
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Jun 2021 03:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C6039ED70
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Jun 2021 06:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbhFHBca (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Jun 2021 21:32:30 -0400
-Received: from mail-vs1-f46.google.com ([209.85.217.46]:38447 "EHLO
-        mail-vs1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbhFHBc3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Jun 2021 21:32:29 -0400
-Received: by mail-vs1-f46.google.com with SMTP id x8so10000405vso.5
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Jun 2021 18:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=czIj+vTuyUPTTsGflIZKxK3a6KoDVGJuiWeqdLZDc+4=;
-        b=fFS/3zH3mKfpl9GjJEKOuKlEFJ+8r2RpSD0v0dIoHf5cXcc2HkzcRj2AsiaQGnUAHB
-         LPvAuk3NiBz8pqbUqpZo1UvKX0Di+zVTOJ85/YxSf9Ls/NjMsVdCt7pLOujOUo3Vct7j
-         6+5AQRDWfpSZJqmSTgCgS0qD+lYUoXFPqgk0kvFgwen8b5Iu9Vqfze5n7TF78qyrlL0+
-         xIdns4qpwa7OWiEZvNI3e8lwm3bsX2bm2wFLjy6rsI3TXOBDcgjFqTM3NS+qJ/zlIees
-         YFtKgCRnAxxTPfU83+vBY+yreoJDTnQLpmO6JJTF8bbnFVrVNMewg1XPlQ6H8EeUvyAz
-         b0KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=czIj+vTuyUPTTsGflIZKxK3a6KoDVGJuiWeqdLZDc+4=;
-        b=IPtHTC4QA7/Fu/AQiX7GHdOLb+nXmpwgsImTaY+Bd5/s/Si2rp5gCWvG2l/4GK2iZh
-         Pb0qvJkN5FtwlTbiGSvDcDSzPHMmrZvpcr70H1eRA6UXJY0QCyUq40Yq8Mfig3aFv3UI
-         zs1LOCRBsNkQAWuRNUy/JUOLeH3KC9up69XDcFR8+RWj3f5LhFc4fTvyGk7u9HmWTvT5
-         ddiqllTbufsYK9z7eCg0OV0WuoQ291TTNCE6nCUUUNUhFgsqIE1SjSGP9kO4UWpK2g6T
-         xPIgqS0PNhZ0romotF+Dtq7WG091UO3J6/lh0HfHFngGluom2Beu4nfgDOAIWGzoaZ4t
-         4oGw==
-X-Gm-Message-State: AOAM5332M/cC7cm+dHSMyvc9itcPd/DhVTd+5sYyObhlq6CKPt+vQ7IL
-        ytxdJbjZZw7OCHsWafRoU/av7ykZ4xlyIPXZo/cH
-X-Google-Smtp-Source: ABdhPJzC7d0aAG0wK/pgbD9DvKJ8Ow19ZTC+Sb1kKloTawBaehfjEs5EMOa8IuEsEpT6pV2T497kijKZggNr/b9P7nE=
-X-Received: by 2002:a67:6c42:: with SMTP id h63mr3602107vsc.33.1623115777392;
- Mon, 07 Jun 2021 18:29:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210606162423.22235-1-rdunlap@infradead.org>
-In-Reply-To: <20210606162423.22235-1-rdunlap@infradead.org>
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Tue, 8 Jun 2021 10:29:11 +0900
-Message-ID: <CABMQnVL5fEbrj1VVV5kX7Gc7urW4qj+Hknt9EwhpzrYuLwHBeA@mail.gmail.com>
-Subject: Re: [PATCH] rtc: pcf8523: rename REG_OFFSET register
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
+        id S229518AbhFHEZB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Jun 2021 00:25:01 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:50627 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229451AbhFHEZB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Jun 2021 00:25:01 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 39EAF580380;
+        Tue,  8 Jun 2021 00:23:08 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 08 Jun 2021 00:23:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        to:cc:references:from:subject:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm2; bh=D
+        breLLCI1Z3Z70YI4GhLwoUgolRQXxKS5uyu6JXhpEI=; b=A02M7myfd/Md3XUTg
+        /fFD+hBr0J5blEiuvKEjI+US6Tg63Xwhewewq78rTJNd6ixclzvKzUHhFE8Ns/3A
+        fANqWvQUNpsWENsTiz9y43EA3oE14U7X/7A/bZm6o26aQvYaWq97Q7IIkC1NJl/K
+        EbZGjdwYgEMNdHr6hsz/4yn0+d1pnCqTLe3H/mxc8gXJj2KlNEzsGHQdfy5yE4Yc
+        v6b0hOMe3ELi8twOVSt4+iVftI/S431XIAyttDxwRaJC5CmIuM4eNFP1M9bHkVkM
+        ObfD5I6h3of3dACSiIKOeyvx0LcMIBgUi9cp2iW5yXzegAfbAJQ+DI/SbYz4U956
+        9YoYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=DbreLLCI1Z3Z70YI4GhLwoUgolRQXxKS5uyu6JXhp
+        EI=; b=Miml0ien3x1rXxEOVfcK5cpf1VKZr1aDkvTgeptFdFQQzNfPhC8SSRBdK
+        fMFTjtpVtxo/uXm02Yf251Z+XLyLCTYVokxF8/r4kkOk4GBFfS/qVkq1IBQG6Kch
+        sWv8AUVeK7ZPp8UuPvD5EiJr5OB7sYaT0kazY9eu3awTLASGA0FCJPliTSc8uX+J
+        5dX4/MhPPP/ausMGEpYOQMndPUSfPRcOwjjAax5VpySlI/9LHwmXFDiIq1xyKjGu
+        PJpknEemJvujG329TbmXcS+lOazyqunwjQr1NUCbfQu0XzWY8Kqt4gI+2UZnKVt2
+        Kr0NLpWWMltnFvpI3iiXkHEoxTYKw==
+X-ME-Sender: <xms:qfC-YEu5S4Qog4vZ9wm2EnG0zMBqMp99SI1r0W7B_FgSu-IPaBtMeg>
+    <xme:qfC-YBdj0X95UZ2Qw0DXCPuIIst3WVh1WshAzuxjVQkZm9MA-yDDgs-Viu9CtYDt_
+    uwLfdO5jii1tC6M5g>
+X-ME-Received: <xmr:qfC-YPwyws1EbsFE05S69Q4m_W350EU2_ZByhAX0rEmW0G1LADVM_OS0H4n1pBFyfbBORnFSKbxi3BsorIyRaAMcSNH2UbwyBGrAW5OmOdG3Y1PY26TC4cjCiw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedtkedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhephfehgfejveeigfelleejvddujeeihfdukeegjeevhfevtdffudfg
+    ueelgeejheeinecuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgr
+    mhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:qfC-YHOJseKVqJnyUcZqWy9Rcjep9y7HFcqupBwXtyd92TF8ZjCHOQ>
+    <xmx:qfC-YE-cXLOHM5DNhsR9_vVj-Z869F-05AEJM-g-51CYlttF2yqbRg>
+    <xmx:qfC-YPUjmK7vWri0VYsg7OVmMo1etCvClgZ96Ih5hhb3GoAR8OHuhQ>
+    <xmx:rPC-YIUMThGkWTD07yMigcxCend76zsKNbxnrXzLs8yRqzd2W9bsaw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 8 Jun 2021 00:23:05 -0400 (EDT)
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Ondrej Jirman <megous@megous.com>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        linux-rtc@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20210519104152.21119-1-andre.przywara@arm.com>
+ <20210519104152.21119-4-andre.przywara@arm.com>
+ <99a2069b-99e9-9b47-12a6-aae01c7f59dc@sholland.org>
+ <20210607135910.63560ffc@slackpad.fritz.box>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v6 03/17] dt-bindings: rtc: sun6i: Add H616 compatible
+ string
+Message-ID: <56ad752b-b1c2-cb05-be8b-71c29f271ec9@sholland.org>
+Date:   Mon, 7 Jun 2021 23:23:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210607135910.63560ffc@slackpad.fritz.box>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On 6/7/21 7:59 AM, Andre Przywara wrote:
+> On Thu, 20 May 2021 21:37:34 -0500
+> Samuel Holland <samuel@sholland.org> wrote:
+> 
+> Hi,
+> 
+>> On 5/19/21 5:41 AM, Andre Przywara wrote:
+>>> Add the obvious compatible name to the existing RTC binding.
+>>> The actual RTC part of the device uses a different day/month/year
+>>> storage scheme, so it's not compatible with the previous devices.
+>>>
+>>> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+>>> ---
+>>>  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml     | 5 ++++-
+>>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+>>> index b1b0ee769b71..178c955f88bf 100644
+>>> --- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+>>> +++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
+>>> @@ -26,6 +26,7 @@ properties:
+>>>            - const: allwinner,sun50i-a64-rtc
+>>>            - const: allwinner,sun8i-h3-rtc
+>>>        - const: allwinner,sun50i-h6-rtc
+>>> +      - const: allwinner,sun50i-h616-rtc
+>>>  
+>>>    reg:
+>>>      maxItems: 1
+>>> @@ -97,7 +98,9 @@ allOf:
+>>>        properties:
+>>>          compatible:
+>>>            contains:
+>>> -            const: allwinner,sun50i-h6-rtc
+>>> +            enum:
+>>> +              - allwinner,sun50i-h6-rtc
+>>> +              - allwinner,sun50i-h616-rtc
+>>>  
+>>>      then:
+>>>        properties:
+>>>   
+>>
+>> This binding is missing a clock reference for the pll-periph0-2x input
+>> to the 32kHz clock fanout.
+> 
+> Right. So do I get this correctly that we don't model the OSC24M input
+> explicitly so far in the DT? I only see one possible input clock, which
+> is for an optional 32K crystal oscillator.
+> And this means we need to change some code also? Because at the moment
+> a clock specified is assumed to be the 32K OSC, and having this clock
+> means we switch to the external 32K OSC.
 
-2021=E5=B9=B46=E6=9C=887=E6=97=A5(=E6=9C=88) 1:24 Randy Dunlap <rdunlap@inf=
-radead.org>:
->
-> REG_OFFSET is defined both here and in arch/arm/mach-ixp4xx/, which
-> causes a build warning, so rename this macro in the RTC driver.
->
-> ../drivers/rtc/rtc-pcf8523.c:44: warning: "REG_OFFSET" redefined
->    44 | #define REG_OFFSET   0x0e
->
-> ../arch/arm/mach-ixp4xx/include/mach/platform.h:25: note: this is the loc=
-ation of the previous definition
->    25 | #define REG_OFFSET 3
->
-> Fixes: bc3bee025272 ("rtc: pcf8523: add support for trimming the RTC osci=
-llator")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Russell King <rmk+kernel@armlinux.org.uk>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: linux-rtc@vger.kernel.org
-> ---
->  drivers/rtc/rtc-pcf8523.c |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> --- linux-next-20210604.orig/drivers/rtc/rtc-pcf8523.c
-> +++ linux-next-20210604/drivers/rtc/rtc-pcf8523.c
-> @@ -41,7 +41,7 @@
->  #define REG_WEEKDAY_ALARM      0x0d
->  #define ALARM_DIS BIT(7)
->
-> -#define REG_OFFSET   0x0e
-> +#define REG_OFFSET_TUNE   0x0e /* offset register is used for tuning */
->  #define REG_OFFSET_MODE BIT(7)
->
->  #define REG_TMR_CLKOUT_CTRL 0x0f
-> @@ -442,7 +442,7 @@ static int pcf8523_rtc_read_offset(struc
->         u8 value;
->         s8 val;
->
-> -       err =3D pcf8523_read(client, REG_OFFSET, &value);
-> +       err =3D pcf8523_read(client, REG_OFFSET_TUNE, &value);
->         if (err < 0)
->                 return err;
->
-> @@ -467,7 +467,7 @@ static int pcf8523_rtc_set_offset(struct
->         else
->                 value =3D (reg_m1 & 0x7f) | REG_OFFSET_MODE;
->
-> -       return pcf8523_write(client, REG_OFFSET, value);
-> +       return pcf8523_write(client, REG_OFFSET_TUNE, value);
->  }
->
->  static const struct rtc_class_ops pcf8523_rtc_ops =3D {
+Right. The code would need updates to follow the binding.
 
-Looks good to me.
-Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+> And who would decide which clock source to use? What would be the
+> reason to use PLL_PERIPH(2x) over the RC16M based clock or the
+> divided down 24MHz?
 
-Best regards,
-  Nobuhiro
---=20
-Nobuhiro Iwamatsu
-   iwamatsu at {nigauri.org / debian.org / kernel.org}
-   GPG ID: 40AD1FA6
+Because it would be more accurate. 24MHz/750 == 32000 Hz, while the RTC
+expects 32768 Hz.
+
+> So shall we ignore the PLL based input clock for now, put "0 input
+> clocks" in the current binding, then later on extend this to allow
+> choosing the PLL? And have it that way that having the PLL reference
+> means we use it?
+
+No, the device tree represents the hardware, not whatever happens to be
+used by Linux drivers at the time. It should be in the binding
+regardless of what the driver does with it.
+
+Though the circular dependency between the clock providers does cause
+problems. We cannot get a clk_hw for the PLL-based clock, so we would
+have to hardcode a global name for it, which means we aren't really
+using the device tree.
+
+We already see this "not really using the binding" with the other CCUs:
+the H616 CCU hardcodes the name "osc24M", while the A100 CCU hardcodes
+"dcxo24M" for the same clock. So moving that clock into the RTC clock
+provider would require using both names in one clk_hw simultaneously (or
+rather fixing the CCU drivers to get a clk_hw from the DT instead of
+referencing by name).
+
+And trying to deal with optional clocks by index is only going to get
+more painful over time. For example, with the R329 and D1, the RTC has
+the following inputs:
+ * DCXO24M (unless you model it inside the RTC)
+ * External OSC32k (optional!)
+ * The RTC bus gate/reset from the PRCM
+ * R-AHB from the PRCM for the RTC SPI clock domain
+
+So it seems time to start using clock-names in the RTC binding.
+
+>> It is also missing a clock reference to the RTC register gate (and that
+>> clock is in turn missing from the r_ccu driver).
+> 
+> Do you mean a gate bit somewhere in the PRCM? Do you have any
+> pointer/documentation for that?
+
+Yes, it's bit 0 of PRCM+0x20c, documented in the BSP[1], used in
+mainline[2], and verified by experiment.
+
+[1]:
+https://github.com/orangepi-xunlong/linux-orangepi/blob/orange-pi-4.9-sun50iw9/drivers/clk/sunxi/clk-sun50iw9.h#L169
+[2]:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c#n129
+
+> Cheers,
+> Andre
+
+Regards,
+Samuel
