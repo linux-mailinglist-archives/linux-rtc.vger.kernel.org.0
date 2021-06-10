@@ -2,138 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6F13A1E0C
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Jun 2021 22:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB603A216D
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jun 2021 02:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbhFIUXg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Jun 2021 16:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S229743AbhFJAav (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Jun 2021 20:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhFIUXg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Jun 2021 16:23:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDF6C06175F
-        for <linux-rtc@vger.kernel.org>; Wed,  9 Jun 2021 13:21:41 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lr4hc-0002WB-Au; Wed, 09 Jun 2021 22:21:28 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lr4hX-0003g3-WB; Wed, 09 Jun 2021 22:21:24 +0200
-Date:   Wed, 9 Jun 2021 22:21:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        with ESMTP id S229507AbhFJAav (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Jun 2021 20:30:51 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15C4C061574;
+        Wed,  9 Jun 2021 17:28:55 -0700 (PDT)
+Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 17CE182D15;
+        Thu, 10 Jun 2021 02:28:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1623284932;
+        bh=wFd/qRWTKJWKzM4Q4EEo/8l+uBRGY8gyeffvoSBXWxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JMj8Z+tUfNVU95q+6bkzprmaB/SkzoOV/T7Wfss6p6GhCcPiWa4Pve+q+n/sQ3bN2
+         rMSaauawAh0ZTfozA1UtgphkoE0tEY+QS5N5doJEIqVDL7N8ha7vujwy4MD+3bFHfI
+         2T/4BGQfZuLsZ5lGTxr76esaLd9JsV4sa7b5XL4GdicKvLIGu+cJ5u56PHN8dzCJ+J
+         A+rCRkRaztWPGM10za/d6K8UjtpkMqzxkrMNRSMULYSjA+A7RV0NSF4/qohGxqFJvF
+         R1nu6wVVhgbSztUkEOyUWOJUs0hLEFgMGrBpf9PYSz4uVLa7aGgB88tOFITC+/6Npy
+         ny2LoED3EXLaQ==
+From:   Marek Vasut <marex@denx.de>
+To:     devicetree@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-clk@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-spi@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PULL] Add variants of devm_clk_get for prepared and enabled clocks
- enabled clocks
-Message-ID: <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+        Rob Herring <robh@kernel.org>, kernel@dh-electronics.com,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH] dt-bindings: rtc: rx8900: Convert to YAML schema
+Date:   Thu, 10 Jun 2021 02:28:41 +0200
+Message-Id: <20210610002841.134200-1-marex@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jlb5tlnr3m7frksr"
-Content-Disposition: inline
-In-Reply-To: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.102.4 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Convert the Epson RX8900 DT bindings to YAML schema.
 
---jlb5tlnr3m7frksr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: kernel@dh-electronics.com
+Cc: linux-rtc@vger.kernel.org
+To: devicetree@vger.kernel.org
+---
+ .../devicetree/bindings/rtc/epson,rx8900.txt  | 22 ---------
+ .../devicetree/bindings/rtc/epson,rx8900.yaml | 49 +++++++++++++++++++
+ 2 files changed, 49 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/rtc/epson,rx8900.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
 
-Hello Stephen,
+diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.txt b/Documentation/devicetree/bindings/rtc/epson,rx8900.txt
+deleted file mode 100644
+index 3f61e516ecf6..000000000000
+--- a/Documentation/devicetree/bindings/rtc/epson,rx8900.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Real Time Clock driver for:
+-  - Epson RX8900
+-  - Micro Crystal rv8803
+-
+-Required properties:
+-- compatible: should be: "microcrystal,rv8803" or "epson,rx8900"
+-- reg : the I2C address of the device for I2C
+-
+-Optional properties:
+-- epson,vdet-disable : boolean, if present will disable voltage detector.
+-  Should be set if no backup battery is used.
+-- trickle-diode-disable : boolean, if present will disable internal trickle
+-  charger diode
+-
+-Example:
+-
+-	rtc: rtc@32 {
+-		compatible = "epson,rx8900"
+-		reg = <0x32>;
+-		epson,vdet-disable;
+-		trickle-diode-disable;
+-	};
+diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+new file mode 100644
+index 000000000000..92ea28de9a3f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/epson,rx8900.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: EPSON RX8900 / Microcrystal RV8803 Real-Time Clock DT bindings
++
++maintainers:
++  - Marek Vasut <marex@denx.de>
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    enum:
++      - epson,rx8900
++      - microcrystal,rv8803
++
++  reg:
++    maxItems: 1
++
++  epson,vdet-disable:
++    type: boolean
++    description: |
++      Disable voltage detector. Should be set if no backup battery is used.
++
++  trickle-diode-disable: true
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        rtc@32 {
++            compatible = "epson,rx8900";
++            reg = <0x32>;
++            epson,vdet-disable;
++            trickle-diode-disable;
++        };
++    };
+-- 
+2.30.2
 
-given that I don't succeed in getting any feedback for my patch set, I'm
-trying with a pull request today. It would be really great if this pull
-request made it finally in for the next merge window.
-
-The changes are not as bad or complex as the diffstat suggests. The
-first patch contains all the complexity and only has
- 1 file changed, 50 insertions(+), 17 deletions(-)
-=2E The second patch makes use of this and just adds kernel-doc, four
-functions that are one-line wrappers around the newly introduced
-__devm_clk_get() function in the first patch and dummy implementations
-for the !CONFIG_HAVE_CLK case.
-
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
-
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
-
-are available in the Git repository at:
-
-  https://git.pengutronix.de/git/ukl/linux tags/devm-clk-get-enabled
-
-for you to fetch changes up to fec74d434d6f6016b6b2d5ab13aa28a0c657f5fb:
-
-  clk: Provide new devm_clk_helpers for prepared and enabled clocks (2021-0=
-5-11 14:20:13 +0200)
-
-----------------------------------------------------------------
-New variants of devm_clk_get() for prepared and enabled clocks
-
-These two patches create a set of new devm helpers that return clocks
-already prepared or prepared-and-enabled. The automatic cleanup cares
-for unpreparing and disabling+unpreparing respectively.
-
-This allows to simplify various drivers as was demonstrated with
-additional patches sent with the various revisions of this patch set.
-See
-https://lore.kernel.org/r/20210510174142.986250-1-u.kleine-koenig@pengutron=
-ix.de
-for the last submission round. This pull request doesn't contain these
-patches though.
-
-----------------------------------------------------------------
-Uwe Kleine-K=F6nig (2):
-      clk: generalize devm_clk_get() a bit
-      clk: Provide new devm_clk_helpers for prepared and enabled clocks
-
- drivers/clk/clk-devres.c | 96 ++++++++++++++++++++++++++++++++++++++++----=
-----
- include/linux/clk.h      | 90 ++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 169 insertions(+), 17 deletions(-)
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jlb5tlnr3m7frksr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDBIsAACgkQwfwUeK3K
-7Alkugf/WZeWnWAV4qBqO+Z6x4ARRoga+Gjpg6BwHHpK+Kk9UNydeZtR0UeaVDZp
-hK/705S/EeZplYpkKxrxtsVV4EK2fqagBccxfYDtbcbjQsWEOZzqBAxtw+xoUPB0
-FXwwQcD6RIMMnMsILzsr43KX4gOmDp6rUSAGsQj9ctOJtGd0qp8Y0g2FxcUkXRYK
-tmLuixTBnOegyNmzK99qGA7bPNABkbt4wfnqPDrn30txhGV7ZOjeCm5FOApsgt2E
-BYIl6DTFCKRvE1EDQMFV1FHI8eX2ygJ/KjrDOm+OWkO4bEJfZxrS0I48gm3GFkbG
-l4kofwamfBagjIlMv2toKyH0CpDyEw==
-=OVXu
------END PGP SIGNATURE-----
-
---jlb5tlnr3m7frksr--
