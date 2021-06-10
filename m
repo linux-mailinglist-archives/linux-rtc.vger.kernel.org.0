@@ -2,152 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957063A2EDA
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jun 2021 17:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D678E3A31F4
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Jun 2021 19:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbhFJPCt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Jun 2021 11:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbhFJPCt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Jun 2021 11:02:49 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335FEC061574;
-        Thu, 10 Jun 2021 08:00:53 -0700 (PDT)
-Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A163B82CBE;
-        Thu, 10 Jun 2021 17:00:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1623337251;
-        bh=yyoCyaHO4w6IoR4qUUqboKSLy+i3pd351UDxLaZ5LXY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fwqxLsKMJtVqnKbqrtKQgzK4Ch0giCmhxsMm9CV6rA1qRJ4LWVu55MsfwtDw/HMnl
-         99zL9XXd53q3t/8kvJG51Y+d9lZKbjKCFEK7eeE3xdYhL40pndkq8hQN7gEXgxWHyV
-         tLV9C2LgFJpUTpUde/+RtGQeuh6AB6Ts6Xj05Gx8A7P3zGiYxEz5xpNBXNe0FkUzDf
-         38KBoDTujDjW4/eIfTUMo+GqLpxpYM3PLImKStsctWPkOpCWuwSp4dSbWeAFfiSQnO
-         X9fDjOf5IT8ToNodwdRhXcBqmJEFWwAWuNKfoUxfhUCBXRWh454GNnAoqXCTg44/ns
-         MaIcai2AlhEYA==
-From:   Marek Vasut <marex@denx.de>
-To:     devicetree@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
+        id S230026AbhFJRXy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Jun 2021 13:23:54 -0400
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:45010 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229802AbhFJRXy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Jun 2021 13:23:54 -0400
+Received: by mail-ot1-f41.google.com with SMTP id q5-20020a9d66450000b02903f18d65089fso403495otm.11;
+        Thu, 10 Jun 2021 10:21:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ifnPsB6wQoNjNoGIoOZ3f4syykDwHdUi4l5zc8NJ55Y=;
+        b=O5HFamT9x37XvfLsiphsPUpX1WPPPe1DsNl18GdgX9H4Qcjxo43yF4JUgcnR0xrrDm
+         BVQqraWlD8DA6icCi/2dFTRoSHjZJvg95Pj8vIQBEiUEgUCYfGEmkCBlQN8T4Hocp6/S
+         iAp9/sKBixxmbvmKYS22nZBRmjzKmOvjBRJ+hUuWv/0Ktxj/106RRHVidEWfkSpi7tXz
+         xTaZ+1gLxBQOG1VTdBCT3WrgdvHhNy9CPCFKY5Oa0Cn+aT2gRth7KVpaVMn+UtAdpP8j
+         Em4Maet6xVhbTZHku27k/XhEgpv7mb7ThqNWunhPyPjQcB04/pgP3X+CPBzEQneHNO6L
+         MJMw==
+X-Gm-Message-State: AOAM533E8kDneaMQW6eJaAFVyl5dvq/1eVyZcB6djpOYhoM/7VMZ1AqY
+        yUNPY7ReDufZEj3t3gOL9w==
+X-Google-Smtp-Source: ABdhPJwZ2mnbD6nRpRtHSzRyehAprYA+2uqAJimI3xSlzSOJtyOGi9mT5r/GmrvQZuEkT1ji4imRAg==
+X-Received: by 2002:a05:6830:43:: with SMTP id d3mr3263268otp.118.1623345704552;
+        Thu, 10 Jun 2021 10:21:44 -0700 (PDT)
+Received: from robh.at.kernel.org ([172.58.99.113])
+        by smtp.gmail.com with ESMTPSA id u1sm629502ooo.18.2021.06.10.10.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Jun 2021 10:21:43 -0700 (PDT)
+Received: (nullmailer pid 2054170 invoked by uid 1000);
+        Thu, 10 Jun 2021 17:21:41 -0000
+Date:   Thu, 10 Jun 2021 12:21:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>, kernel@dh-electronics.com,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH V2] dt-bindings: rtc: rx8900: Convert to YAML schema
-Date:   Thu, 10 Jun 2021 17:00:44 +0200
-Message-Id: <20210610150044.29792-1-marex@denx.de>
-X-Mailer: git-send-email 2.30.2
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: rtc: zynqmp: convert bindings to YAML
+Message-ID: <20210610172141.GA1972573@robh.at.kernel.org>
+References: <20210602000918.779983-1-iwamatsu@nigauri.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.102.4 at phobos.denx.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210602000918.779983-1-iwamatsu@nigauri.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert the Epson RX8900 DT bindings to YAML schema.
+On Wed, Jun 02, 2021 at 09:09:18AM +0900, Nobuhiro Iwamatsu wrote:
+> Convert Real Time Clock for Xilinx Zynq MPSoC SoC bindings documentation
+> to YAML schemas.
+> And this renamed the file to compatible string of DT.
+> 
+> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+> ---
+> 
+> v2: Fix warning with DT_CHECKER_FLAGS=-m
+> 
+>  .../bindings/rtc/xlnx,zynqmp-rtc.yaml         | 61 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/xlnx-rtc.txt      | 25 --------
+>  2 files changed, 61 insertions(+), 25 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/xlnx-rtc.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> new file mode 100644
+> index 00000000000000..c205cb86ef00be
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/xlnx,zynqmp-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Zynq Ultrascale+ MPSoC Real Time Clock
+> +
+> +description: |
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: kernel@dh-electronics.com
-Cc: linux-rtc@vger.kernel.org
-To: devicetree@vger.kernel.org
----
-V2: - Switch the license to (GPL-2.0-only OR BSD-2-Clause)
----
- .../devicetree/bindings/rtc/epson,rx8900.txt  | 22 ---------
- .../devicetree/bindings/rtc/epson,rx8900.yaml | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 22 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/epson,rx8900.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+Don't need '|'
 
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.txt b/Documentation/devicetree/bindings/rtc/epson,rx8900.txt
-deleted file mode 100644
-index 3f61e516ecf6..000000000000
---- a/Documentation/devicetree/bindings/rtc/epson,rx8900.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Real Time Clock driver for:
--  - Epson RX8900
--  - Micro Crystal rv8803
--
--Required properties:
--- compatible: should be: "microcrystal,rv8803" or "epson,rx8900"
--- reg : the I2C address of the device for I2C
--
--Optional properties:
--- epson,vdet-disable : boolean, if present will disable voltage detector.
--  Should be set if no backup battery is used.
--- trickle-diode-disable : boolean, if present will disable internal trickle
--  charger diode
--
--Example:
--
--	rtc: rtc@32 {
--		compatible = "epson,rx8900"
--		reg = <0x32>;
--		epson,vdet-disable;
--		trickle-diode-disable;
--	};
-diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
-new file mode 100644
-index 000000000000..29fe39bb08ad
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/epson,rx8900.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: EPSON RX8900 / Microcrystal RV8803 Real-Time Clock DT bindings
-+
-+maintainers:
-+  - Marek Vasut <marex@denx.de>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - epson,rx8900
-+      - microcrystal,rv8803
-+
-+  reg:
-+    maxItems: 1
-+
-+  epson,vdet-disable:
-+    type: boolean
-+    description: |
-+      Disable voltage detector. Should be set if no backup battery is used.
-+
-+  trickle-diode-disable: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@32 {
-+            compatible = "epson,rx8900";
-+            reg = <0x32>;
-+            epson,vdet-disable;
-+            trickle-diode-disable;
-+        };
-+    };
--- 
-2.30.2
+> +  RTC controller for the Xilinx Zynq MPSoC Real Time Clock.
+> +  This separates IRQ lines for seconds and alarm.
 
+The RTC controller has separate IRQ...
+
+> +
+> +maintainers:
+> +  - Michal Simek <michal.simek@xilinx.com>
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,zynqmp-rtc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 2
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: alarm
+> +      - const: sec
+> +
+> +  calibration:
+> +    description: |
+> +      calibration value for 1 sec period which will
+> +      be programmed directly to calibration register.
+
+Needs a type $ref.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      rtc: rtc@ffa60000 {
+> +        compatible = "xlnx,zynqmp-rtc";
+> +        reg = <0x0 0xffa60000 0x0 0x100>;
+> +        interrupt-parent = <&gic>;
+> +        interrupts = <0 26 4>, <0 27 4>;
+> +        interrupt-names = "alarm", "sec";
+> +        calibration = <0x198233>;
+> +      };
+> +    };
