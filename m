@@ -2,183 +2,344 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7A13A5A75
-	for <lists+linux-rtc@lfdr.de>; Sun, 13 Jun 2021 22:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182273A6B93
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Jun 2021 18:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbhFMUxa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 13 Jun 2021 16:53:30 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:55279 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232063AbhFMUx3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 13 Jun 2021 16:53:29 -0400
-Received: by mail-pj1-f41.google.com with SMTP id g24so8564505pji.4
-        for <linux-rtc@vger.kernel.org>; Sun, 13 Jun 2021 13:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hj6PxG9Uu38xsSuh/hPwTGIxfZIdP7m3pLuGKjMI4Ig=;
-        b=mwXVVLB90/gQt17r0SmRD3NCA1LSGQ9lYDRT4es14qQWrN8t1CedXYywJJ92B4DG/O
-         081kJCAGNs6l5OWxj319TpXx/u3FUc5Yuf/zxR/mbOdkUj5rve3p7DlMLWcdNIDbUYLz
-         I8PXWjtNW6kED/8QAcYbG6C8WpgIx8ij3VyBT0CDbWrtBbCBFy/2yu2SvY5/sIhYJlm8
-         CMIR3GgNMAf+hGVB03QYIWhE3JUcWDFu93mUepG2ENUnUvy7oTDFeKEvw2oK2jOAovDf
-         BijJsPAfDKaYlfJStl4n9RLsRuDrsvXt00cZquhcTNHz+eBvJ9KXZoU6H+SBk7aqm0u1
-         5lGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hj6PxG9Uu38xsSuh/hPwTGIxfZIdP7m3pLuGKjMI4Ig=;
-        b=fUhMJ+MVlHm0egx1gJh58aNo4cSKUHGdYM2y0vLkLtw3OucyC4FwDesSnntE2Pf28h
-         lwU7WZNlHXlDSa4am3J/+SkGo8jxp6aLIRciRnZhXRBy71OrMpX3uwk5Ug6K+kRU/F67
-         bxEnYXRQFfQPHgfe4rpqGIICjfQ4Ijw8iPvALOTqDUjW1HvWpp8P+t2hvif4a1tEZnsg
-         hHnEd5HN2FTZYTl5tLTdBoJf1pz4hyH9wrYbpnstI0lp+L1exKaJBAIP13cmVOpFZBQT
-         L3p+EVmRQwKBXkw+P0EYgyGWSJORfo+QrIVBBZVCsK/f3MtSoSr4KQH73eUeLNKEPYf7
-         Q69g==
-X-Gm-Message-State: AOAM532yWJR4BbgrSr6QchShJb2R5dhpleBnyGBGcOqsHcVwb6L0E4R/
-        Z7eYAyYdCBW0lbE3k0CfHIWb
-X-Google-Smtp-Source: ABdhPJzR0RqnjUDAD8TPWM4Ru3po1fe+dl5FA/QfSsiGQXlnOQZgkLt17y1WJ5ATp2FD+cI1FPgtPQ==
-X-Received: by 2002:a17:903:2311:b029:115:29a9:a3ee with SMTP id d17-20020a1709032311b029011529a9a3eemr13557169plh.46.1623617428389;
-        Sun, 13 Jun 2021 13:50:28 -0700 (PDT)
-Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
-        by smtp.gmail.com with ESMTPSA id y3sm6986615pgr.46.2021.06.13.13.50.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Jun 2021 13:50:27 -0700 (PDT)
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To:     robh@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, michal.simek@xilinx.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH v3 resend] dt-bindings: rtc: zynqmp: convert bindings to YAML
-Date:   Mon, 14 Jun 2021 05:50:22 +0900
-Message-Id: <20210613205022.292575-1-iwamatsu@nigauri.org>
-X-Mailer: git-send-email 2.32.0
+        id S234547AbhFNQ0g (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Jun 2021 12:26:36 -0400
+Received: from mga07.intel.com ([134.134.136.100]:44517 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233044AbhFNQ0f (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 14 Jun 2021 12:26:35 -0400
+IronPort-SDR: GeFWEb1AC/hOjiaIcA7CxHZJjmms+Ajpfk/5tSRU9etZvih/NB2dY9NtCh8YLsoUqit0kuPuTG
+ BaOZTlTj/meA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="269688728"
+X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
+   d="scan'208";a="269688728"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2021 09:24:30 -0700
+IronPort-SDR: dIwh2W3ARmNyx6AJ0UHIsyOPuPNEjNbpUF3eQ6JlTPBILqeqwgStO+iUx5EYWuiUsak1ZeCDpO
+ usDMYicED5xQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
+   d="scan'208";a="487451518"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2021 09:24:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 66E12128; Mon, 14 Jun 2021 19:24:51 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Ye Xiang <xiang.ye@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH v2 1/1] iio: hid-sensors: lighten exported symbols by moving to IIO_HID namespace
+Date:   Mon, 14 Jun 2021 19:24:47 +0300
+Message-Id: <20210614162447.5392-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert Real Time Clock for Xilinx Zynq MPSoC SoC bindings documentation
-to YAML schemas.
-And this renamed the file to compatible string of DT.
+A namespace for exported symbols makes clear who is a provider
+and who is a consumer of the certain resources. Besides that,
+it doesn't pollute the common namespace.
 
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
-v3: Fix description.
-    Add $refs to calibration property.
-    Add minimum, maximum and default to calibration property.
-v2: Fix warning with DT_CHECKER_FLAGS=-m
+v2: updated RTC HID sensor driver as well (Jonathan)
+ drivers/iio/accel/hid-sensor-accel-3d.c       |  1 +
+ .../hid-sensors/hid-sensor-attributes.c       | 26 +++++++++----------
+ .../common/hid-sensors/hid-sensor-trigger.c   |  9 ++++---
+ drivers/iio/gyro/hid-sensor-gyro-3d.c         |  1 +
+ drivers/iio/humidity/hid-sensor-humidity.c    |  1 +
+ drivers/iio/light/hid-sensor-als.c            |  1 +
+ drivers/iio/light/hid-sensor-prox.c           |  1 +
+ drivers/iio/magnetometer/hid-sensor-magn-3d.c |  1 +
+ drivers/iio/orientation/hid-sensor-incl-3d.c  |  1 +
+ drivers/iio/orientation/hid-sensor-rotation.c |  1 +
+ .../position/hid-sensor-custom-intel-hinge.c  |  1 +
+ drivers/iio/pressure/hid-sensor-press.c       |  1 +
+ .../iio/temperature/hid-sensor-temperature.c  |  1 +
+ drivers/rtc/rtc-hid-sensor-time.c             |  1 +
+ 14 files changed, 30 insertions(+), 17 deletions(-)
 
- .../bindings/rtc/xlnx,zynqmp-rtc.yaml         | 65 +++++++++++++++++++
- .../devicetree/bindings/rtc/xlnx-rtc.txt      | 25 -------
- 2 files changed, 65 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/xlnx-rtc.txt
-
-diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
-new file mode 100644
-index 00000000000000..bdb72d3ddf2a93
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/xlnx,zynqmp-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Xilinx Zynq Ultrascale+ MPSoC Real Time Clock
-+
-+description:
-+  RTC controller for the Xilinx Zynq MPSoC Real Time Clock.
-+  The RTC controller has separate IRQ lines for seconds and alarm.
-+
-+maintainers:
-+  - Michal Simek <michal.simek@xilinx.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    const: xlnx,zynqmp-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 2
-+
-+  interrupt-names:
-+    items:
-+      - const: alarm
-+      - const: sec
-+
-+  calibration:
-+    description: |
-+      calibration value for 1 sec period which will
-+      be programmed directly to calibration register.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0x1
-+    maximum: 0x1FFFFF
-+    default: 0x198233
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      rtc: rtc@ffa60000 {
-+        compatible = "xlnx,zynqmp-rtc";
-+        reg = <0x0 0xffa60000 0x0 0x100>;
-+        interrupt-parent = <&gic>;
-+        interrupts = <0 26 4>, <0 27 4>;
-+        interrupt-names = "alarm", "sec";
-+        calibration = <0x198233>;
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/rtc/xlnx-rtc.txt b/Documentation/devicetree/bindings/rtc/xlnx-rtc.txt
-deleted file mode 100644
-index 0df6f016b1b771..00000000000000
---- a/Documentation/devicetree/bindings/rtc/xlnx-rtc.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--* Xilinx Zynq Ultrascale+ MPSoC Real Time Clock
--
--RTC controller for the Xilinx Zynq MPSoC Real Time Clock
--Separate IRQ lines for seconds and alarm
--
--Required properties:
--- compatible: Should be "xlnx,zynqmp-rtc"
--- reg: Physical base address of the controller and length
--       of memory mapped region.
--- interrupts: IRQ lines for the RTC.
--- interrupt-names: interrupt line names eg. "sec" "alarm"
--
--Optional:
--- calibration: calibration value for 1 sec period which will
--		be programmed directly to calibration register
--
--Example:
--rtc: rtc@ffa60000 {
--	compatible = "xlnx,zynqmp-rtc";
--	reg = <0x0 0xffa60000 0x100>;
--	interrupt-parent = <&gic>;
--	interrupts = <0 26 4>, <0 27 4>;
--	interrupt-names = "alarm", "sec";
--	calibration = <0x198233>;
--};
+diff --git a/drivers/iio/accel/hid-sensor-accel-3d.c b/drivers/iio/accel/hid-sensor-accel-3d.c
+index 27f47e1c251e..bcafca7b2eac 100644
+--- a/drivers/iio/accel/hid-sensor-accel-3d.c
++++ b/drivers/iio/accel/hid-sensor-accel-3d.c
+@@ -465,3 +465,4 @@ module_platform_driver(hid_accel_3d_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Accel 3D");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/common/hid-sensors/hid-sensor-attributes.c b/drivers/iio/common/hid-sensors/hid-sensor-attributes.c
+index cb52b4fd6bf7..a81a0b206af6 100644
+--- a/drivers/iio/common/hid-sensors/hid-sensor-attributes.c
++++ b/drivers/iio/common/hid-sensors/hid-sensor-attributes.c
+@@ -176,7 +176,7 @@ s32 hid_sensor_read_poll_value(struct hid_sensor_common *st)
+ 
+ 	return value;
+ }
+-EXPORT_SYMBOL(hid_sensor_read_poll_value);
++EXPORT_SYMBOL_NS(hid_sensor_read_poll_value, IIO_HID_ATTRIBUTES);
+ 
+ int hid_sensor_read_samp_freq_value(struct hid_sensor_common *st,
+ 				int *val1, int *val2)
+@@ -203,7 +203,7 @@ int hid_sensor_read_samp_freq_value(struct hid_sensor_common *st,
+ 
+ 	return IIO_VAL_INT_PLUS_MICRO;
+ }
+-EXPORT_SYMBOL(hid_sensor_read_samp_freq_value);
++EXPORT_SYMBOL_NS(hid_sensor_read_samp_freq_value, IIO_HID);
+ 
+ int hid_sensor_write_samp_freq_value(struct hid_sensor_common *st,
+ 				int val1, int val2)
+@@ -238,7 +238,7 @@ int hid_sensor_write_samp_freq_value(struct hid_sensor_common *st,
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_write_samp_freq_value);
++EXPORT_SYMBOL_NS(hid_sensor_write_samp_freq_value, IIO_HID);
+ 
+ int hid_sensor_read_raw_hyst_value(struct hid_sensor_common *st,
+ 				int *val1, int *val2)
+@@ -261,7 +261,7 @@ int hid_sensor_read_raw_hyst_value(struct hid_sensor_common *st,
+ 
+ 	return IIO_VAL_INT_PLUS_MICRO;
+ }
+-EXPORT_SYMBOL(hid_sensor_read_raw_hyst_value);
++EXPORT_SYMBOL_NS(hid_sensor_read_raw_hyst_value, IIO_HID);
+ 
+ int hid_sensor_read_raw_hyst_rel_value(struct hid_sensor_common *st, int *val1,
+ 				       int *val2)
+@@ -283,7 +283,7 @@ int hid_sensor_read_raw_hyst_rel_value(struct hid_sensor_common *st, int *val1,
+ 
+ 	return IIO_VAL_INT_PLUS_MICRO;
+ }
+-EXPORT_SYMBOL(hid_sensor_read_raw_hyst_rel_value);
++EXPORT_SYMBOL_NS(hid_sensor_read_raw_hyst_rel_value, IIO_HID);
+ 
+ 
+ int hid_sensor_write_raw_hyst_value(struct hid_sensor_common *st,
+@@ -315,7 +315,7 @@ int hid_sensor_write_raw_hyst_value(struct hid_sensor_common *st,
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_write_raw_hyst_value);
++EXPORT_SYMBOL_NS(hid_sensor_write_raw_hyst_value, IIO_HID);
+ 
+ int hid_sensor_write_raw_hyst_rel_value(struct hid_sensor_common *st,
+ 					int val1, int val2)
+@@ -346,7 +346,7 @@ int hid_sensor_write_raw_hyst_rel_value(struct hid_sensor_common *st,
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_write_raw_hyst_rel_value);
++EXPORT_SYMBOL_NS(hid_sensor_write_raw_hyst_rel_value, IIO_HID);
+ 
+ /*
+  * This fuction applies the unit exponent to the scale.
+@@ -430,14 +430,14 @@ int hid_sensor_format_scale(u32 usage_id,
+ 
+ 	return IIO_VAL_INT_PLUS_NANO;
+ }
+-EXPORT_SYMBOL(hid_sensor_format_scale);
++EXPORT_SYMBOL_NS(hid_sensor_format_scale, IIO_HID);
+ 
+ int64_t hid_sensor_convert_timestamp(struct hid_sensor_common *st,
+ 				     int64_t raw_value)
+ {
+ 	return st->timestamp_ns_scale * raw_value;
+ }
+-EXPORT_SYMBOL(hid_sensor_convert_timestamp);
++EXPORT_SYMBOL_NS(hid_sensor_convert_timestamp, IIO_HID);
+ 
+ static
+ int hid_sensor_get_reporting_interval(struct hid_sensor_hub_device *hsdev,
+@@ -484,7 +484,7 @@ int hid_sensor_get_report_latency(struct hid_sensor_common *st)
+ 
+ 	return value;
+ }
+-EXPORT_SYMBOL(hid_sensor_get_report_latency);
++EXPORT_SYMBOL_NS(hid_sensor_get_report_latency, IIO_HID_ATTRIBUTES);
+ 
+ int hid_sensor_set_report_latency(struct hid_sensor_common *st, int latency_ms)
+ {
+@@ -492,13 +492,13 @@ int hid_sensor_set_report_latency(struct hid_sensor_common *st, int latency_ms)
+ 				      st->report_latency.index,
+ 				      sizeof(latency_ms), &latency_ms);
+ }
+-EXPORT_SYMBOL(hid_sensor_set_report_latency);
++EXPORT_SYMBOL_NS(hid_sensor_set_report_latency, IIO_HID_ATTRIBUTES);
+ 
+ bool hid_sensor_batch_mode_supported(struct hid_sensor_common *st)
+ {
+ 	return st->report_latency.index > 0 && st->report_latency.report_id > 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_batch_mode_supported);
++EXPORT_SYMBOL_NS(hid_sensor_batch_mode_supported, IIO_HID_ATTRIBUTES);
+ 
+ int hid_sensor_parse_common_attributes(struct hid_sensor_hub_device *hsdev,
+ 					u32 usage_id,
+@@ -590,7 +590,7 @@ int hid_sensor_parse_common_attributes(struct hid_sensor_hub_device *hsdev,
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_parse_common_attributes);
++EXPORT_SYMBOL_NS(hid_sensor_parse_common_attributes, IIO_HID);
+ 
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_DESCRIPTION("HID Sensor common attribute processing");
+diff --git a/drivers/iio/common/hid-sensors/hid-sensor-trigger.c b/drivers/iio/common/hid-sensors/hid-sensor-trigger.c
+index c06537e106e9..60e85d675387 100644
+--- a/drivers/iio/common/hid-sensors/hid-sensor-trigger.c
++++ b/drivers/iio/common/hid-sensors/hid-sensor-trigger.c
+@@ -150,7 +150,7 @@ static int _hid_sensor_power_state(struct hid_sensor_common *st, bool state)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL(hid_sensor_power_state);
++EXPORT_SYMBOL_NS(hid_sensor_power_state, IIO_HID);
+ 
+ int hid_sensor_power_state(struct hid_sensor_common *st, bool state)
+ {
+@@ -225,7 +225,7 @@ void hid_sensor_remove_trigger(struct iio_dev *indio_dev,
+ 	iio_trigger_free(attrb->trigger);
+ 	iio_triggered_buffer_cleanup(indio_dev);
+ }
+-EXPORT_SYMBOL(hid_sensor_remove_trigger);
++EXPORT_SYMBOL_NS(hid_sensor_remove_trigger, IIO_HID);
+ 
+ static const struct iio_trigger_ops hid_sensor_trigger_ops = {
+ 	.set_trigger_state = &hid_sensor_data_rdy_trigger_set_state,
+@@ -291,7 +291,7 @@ int hid_sensor_setup_trigger(struct iio_dev *indio_dev, const char *name,
+ 	iio_triggered_buffer_cleanup(indio_dev);
+ 	return ret;
+ }
+-EXPORT_SYMBOL(hid_sensor_setup_trigger);
++EXPORT_SYMBOL_NS(hid_sensor_setup_trigger, IIO_HID);
+ 
+ static int __maybe_unused hid_sensor_suspend(struct device *dev)
+ {
+@@ -321,8 +321,9 @@ const struct dev_pm_ops hid_sensor_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(hid_sensor_suspend,
+ 			   hid_sensor_runtime_resume, NULL)
+ };
+-EXPORT_SYMBOL(hid_sensor_pm_ops);
++EXPORT_SYMBOL_NS(hid_sensor_pm_ops, IIO_HID);
+ 
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_DESCRIPTION("HID Sensor trigger processing");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID_ATTRIBUTES);
+diff --git a/drivers/iio/gyro/hid-sensor-gyro-3d.c b/drivers/iio/gyro/hid-sensor-gyro-3d.c
+index dad26ee4fd1f..2ed2a8effb86 100644
+--- a/drivers/iio/gyro/hid-sensor-gyro-3d.c
++++ b/drivers/iio/gyro/hid-sensor-gyro-3d.c
+@@ -400,3 +400,4 @@ module_platform_driver(hid_gyro_3d_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Gyroscope 3D");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/humidity/hid-sensor-humidity.c b/drivers/iio/humidity/hid-sensor-humidity.c
+index 74383abc0d44..8a9091d71d2a 100644
+--- a/drivers/iio/humidity/hid-sensor-humidity.c
++++ b/drivers/iio/humidity/hid-sensor-humidity.c
+@@ -295,3 +295,4 @@ module_platform_driver(hid_humidity_platform_driver);
+ MODULE_DESCRIPTION("HID Environmental humidity sensor");
+ MODULE_AUTHOR("Song Hongyan <hongyan.song@intel.com>");
+ MODULE_LICENSE("GPL v2");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/light/hid-sensor-als.c b/drivers/iio/light/hid-sensor-als.c
+index 85c8a05b73cb..a63d577493e2 100644
+--- a/drivers/iio/light/hid-sensor-als.c
++++ b/drivers/iio/light/hid-sensor-als.c
+@@ -392,3 +392,4 @@ module_platform_driver(hid_als_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor ALS");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/light/hid-sensor-prox.c b/drivers/iio/light/hid-sensor-prox.c
+index 17d167c3d595..99de268563d6 100644
+--- a/drivers/iio/light/hid-sensor-prox.c
++++ b/drivers/iio/light/hid-sensor-prox.c
+@@ -350,3 +350,4 @@ module_platform_driver(hid_prox_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Proximity");
+ MODULE_AUTHOR("Archana Patni <archana.patni@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/magnetometer/hid-sensor-magn-3d.c b/drivers/iio/magnetometer/hid-sensor-magn-3d.c
+index b78691523dd4..a66f9e933628 100644
+--- a/drivers/iio/magnetometer/hid-sensor-magn-3d.c
++++ b/drivers/iio/magnetometer/hid-sensor-magn-3d.c
+@@ -587,3 +587,4 @@ module_platform_driver(hid_magn_3d_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Magnetometer 3D");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/orientation/hid-sensor-incl-3d.c b/drivers/iio/orientation/hid-sensor-incl-3d.c
+index 7af48d336285..cc905b0fa835 100644
+--- a/drivers/iio/orientation/hid-sensor-incl-3d.c
++++ b/drivers/iio/orientation/hid-sensor-incl-3d.c
+@@ -425,3 +425,4 @@ module_platform_driver(hid_incl_3d_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Inclinometer 3D");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/orientation/hid-sensor-rotation.c b/drivers/iio/orientation/hid-sensor-rotation.c
+index cf7f57a47681..6570bfd22035 100644
+--- a/drivers/iio/orientation/hid-sensor-rotation.c
++++ b/drivers/iio/orientation/hid-sensor-rotation.c
+@@ -373,3 +373,4 @@ module_platform_driver(hid_dev_rot_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Device Rotation");
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/position/hid-sensor-custom-intel-hinge.c b/drivers/iio/position/hid-sensor-custom-intel-hinge.c
+index 738b5f4626ce..4478ad9387c5 100644
+--- a/drivers/iio/position/hid-sensor-custom-intel-hinge.c
++++ b/drivers/iio/position/hid-sensor-custom-intel-hinge.c
+@@ -376,3 +376,4 @@ module_platform_driver(hid_hinge_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor INTEL Hinge");
+ MODULE_AUTHOR("Ye Xiang <xiang.ye@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/pressure/hid-sensor-press.c b/drivers/iio/pressure/hid-sensor-press.c
+index c416d261e3e3..79b3399e4095 100644
+--- a/drivers/iio/pressure/hid-sensor-press.c
++++ b/drivers/iio/pressure/hid-sensor-press.c
+@@ -357,3 +357,4 @@ module_platform_driver(hid_press_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Pressure");
+ MODULE_AUTHOR("Archana Patni <archana.patni@intel.com>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/iio/temperature/hid-sensor-temperature.c b/drivers/iio/temperature/hid-sensor-temperature.c
+index dc534ed784c3..21aa952b9f6d 100644
+--- a/drivers/iio/temperature/hid-sensor-temperature.c
++++ b/drivers/iio/temperature/hid-sensor-temperature.c
+@@ -291,3 +291,4 @@ module_platform_driver(hid_temperature_platform_driver);
+ MODULE_DESCRIPTION("HID Environmental temperature sensor");
+ MODULE_AUTHOR("Song Hongyan <hongyan.song@intel.com>");
+ MODULE_LICENSE("GPL v2");
++MODULE_IMPORT_NS(IIO_HID);
+diff --git a/drivers/rtc/rtc-hid-sensor-time.c b/drivers/rtc/rtc-hid-sensor-time.c
+index 47cd12db2356..16fdefafec5d 100644
+--- a/drivers/rtc/rtc-hid-sensor-time.c
++++ b/drivers/rtc/rtc-hid-sensor-time.c
+@@ -328,3 +328,4 @@ module_platform_driver(hid_time_platform_driver);
+ MODULE_DESCRIPTION("HID Sensor Time");
+ MODULE_AUTHOR("Alexander Holler <holler@ahsoftware.de>");
+ MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(IIO_HID);
 -- 
-2.32.0
+2.30.2
 
