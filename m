@@ -2,34 +2,23 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8F93A9B01
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jun 2021 14:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C0C3A9C19
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jun 2021 15:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbhFPMwl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Jun 2021 08:52:41 -0400
-Received: from mga04.intel.com ([192.55.52.120]:1040 "EHLO mga04.intel.com"
+        id S233313AbhFPNlT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Jun 2021 09:41:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232692AbhFPMwk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 16 Jun 2021 08:52:40 -0400
-IronPort-SDR: ImAEQJLhdOgxP1bMUMlxMJXX5AZ+iZYdgtcnSxTrpmoHIp9CIfHG0guQtVlinmjwS0rpsO5OxT
- e/cA5wFZ59tw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10016"; a="204339799"
-X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
-   d="scan'208";a="204339799"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 05:50:34 -0700
-IronPort-SDR: HwJf+vV63t00TlEUgHbCL3CI0lQdDgwcTwERqMANkTrhvwFJkSJ3GCnk00QrMKyfCgKcDm6e3v
- a7o0loZlJKdg==
-X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
-   d="scan'208";a="554798230"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 05:50:32 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ltV00-002oiw-At; Wed, 16 Jun 2021 15:50:28 +0300
-Date:   Wed, 16 Jun 2021 15:50:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <jic23@kernel.org>
+        id S233306AbhFPNlS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 16 Jun 2021 09:41:18 -0400
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 908B661241;
+        Wed, 16 Jun 2021 13:39:07 +0000 (UTC)
+Date:   Wed, 16 Jun 2021 14:41:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Ye Xiang <xiang.ye@intel.com>, linux-input@vger.kernel.org,
@@ -40,45 +29,49 @@ Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>
 Subject: Re: [PATCH v2 1/1] iio: hid-sensors: lighten exported symbols by
  moving to IIO_HID namespace
-Message-ID: <YMnzlGDQn2s1vuKz@smile.fi.intel.com>
+Message-ID: <20210616144108.3771d4b2@jic23-huawei>
+In-Reply-To: <YMnzlGDQn2s1vuKz@smile.fi.intel.com>
 References: <20210614162447.5392-1-andriy.shevchenko@linux.intel.com>
- <YMfDBhM52iyM0eFU@piout.net>
- <20210616134153.1007b5cf@jic23-huawei>
+        <YMfDBhM52iyM0eFU@piout.net>
+        <20210616134153.1007b5cf@jic23-huawei>
+        <YMnzlGDQn2s1vuKz@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210616134153.1007b5cf@jic23-huawei>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 01:41:53PM +0100, Jonathan Cameron wrote:
-> On Mon, 14 Jun 2021 22:58:46 +0200
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+On Wed, 16 Jun 2021 15:50:28 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> On Wed, Jun 16, 2021 at 01:41:53PM +0100, Jonathan Cameron wrote:
+> > On Mon, 14 Jun 2021 22:58:46 +0200
+> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> >   
+> > > On 14/06/2021 19:24:47+0300, Andy Shevchenko wrote:  
+> > > > A namespace for exported symbols makes clear who is a provider
+> > > > and who is a consumer of the certain resources. Besides that,
+> > > > it doesn't pollute the common namespace.
+> > > > 
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>    
+> > > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>  
+> > 
+> > Thanks,  applied to the togreg branch of iio.git and pushed out as
+> > testing for 0-day to poke at it  
 > 
-> > On 14/06/2021 19:24:47+0300, Andy Shevchenko wrote:
-> > > A namespace for exported symbols makes clear who is a provider
-> > > and who is a consumer of the certain resources. Besides that,
-> > > it doesn't pollute the common namespace.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>  
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Thanks!
 > 
-> Thanks,  applied to the togreg branch of iio.git and pushed out as
-> testing for 0-day to poke at it
+> > and see if we missed anything.  
+> 
+> Hopefully nothing in the code.
+> 
+> What I have missed is the Ack from Srinivas. Can you add it later on?
+> 
 
-Thanks!
+Done which was easy because I hadn't pushed it out anywhere yet!
 
-> and see if we missed anything.
-
-Hopefully nothing in the code.
-
-What I have missed is the Ack from Srinivas. Can you add it later on?
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Jonathan
 
 
