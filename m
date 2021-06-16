@@ -2,114 +2,146 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6B33A8C9E
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jun 2021 01:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2DF3A91A9
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Jun 2021 08:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbhFOXhM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Jun 2021 19:37:12 -0400
-Received: from mail-il1-f174.google.com ([209.85.166.174]:46709 "EHLO
-        mail-il1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbhFOXhM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Jun 2021 19:37:12 -0400
-Received: by mail-il1-f174.google.com with SMTP id i12so649795ila.13;
-        Tue, 15 Jun 2021 16:35:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M7mtpARxZOramxjxaW7DY3FJniUk5KYYeFWsUiBQS4s=;
-        b=fjSNvdgiXnv7cpBQKSKkpBLyU1Kf1efASmKSxyNAOglchJMiHmVRLTlboUUT5ZMPoU
-         SH7Ub5stQoCQs2WJjzSgs9qFpJeyvbGLyKhFXK0DwiAAX7Id2crkxnWvY6p2mB5FFm5P
-         UlleEbzgA0IrEReVhoOnbz3JLPDY1hrExIUx9QBt5kUu4khTXryKy5J+LopZsxwIUfX5
-         Zb2m+dLMtvcIUreHz6WtV8i5eHrcZk+Nv1vFZ8bi3w4JYdKk04me0Tx/o57ibg0TpH+d
-         YLXLVQbxYAQ2hZYH/XP2z6c4zgH9KKyDZ8rtogr6fQBUTI86FTEF9XGzs7RJ948w2VkE
-         4IKg==
-X-Gm-Message-State: AOAM532rJs6SWxWBm2rdMoNXO6ASBlon8VorYtdNixXNmZ2kDFiurDgs
-        7xQw3IpAO7UvnFpj3f/dDA==
-X-Google-Smtp-Source: ABdhPJzZpda2GZV56qSibl8HTwsctfk6cpz/tUqIyo+rWfUorW+b8tZ2HGW4F0404Loq2ti7RNgU4Q==
-X-Received: by 2002:a05:6e02:1d82:: with SMTP id h2mr1452459ila.180.1623800105906;
-        Tue, 15 Jun 2021 16:35:05 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a17sm263693ilb.57.2021.06.15.16.35.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jun 2021 16:35:05 -0700 (PDT)
-Received: (nullmailer pid 1649131 invoked by uid 1000);
-        Tue, 15 Jun 2021 23:35:02 -0000
-Date:   Tue, 15 Jun 2021 17:35:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>, devicetree@vger.kernel.org,
+        id S231295AbhFPGIG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Jun 2021 02:08:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229543AbhFPGIE (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 16 Jun 2021 02:08:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BD9161350;
+        Wed, 16 Jun 2021 06:05:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623823558;
+        bh=wj+fnX135Oi/RuBZlfcRXEj82T4M+/zm2RKoeLfcdHI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gHZLhaFOGuJEdFzGD8ad6/WT9r+ZqPlWGvOwJoE3JRn+pqz1O74eBVMbWjjeG87Dj
+         TPvrvUCNWbz/7lixm1DsLz03lLNe9Um44ZNofR+Fgv+slwMtNQEfvKCMrcTThWdf6e
+         F+7I/PxIo72YidQoQbZHHngOc0S41uEQR6nyNaRA=
+Date:   Wed, 16 Jun 2021 08:05:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v7 03/19] dt-bindings: rtc: sun6i: Add H616 compatible
- string
-Message-ID: <20210615233502.GA1630203@robh.at.kernel.org>
-References: <20210615110636.23403-1-andre.przywara@arm.com>
- <20210615110636.23403-4-andre.przywara@arm.com>
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <YMmUwCsdy4OaQCiU@kroah.com>
+References: <20210615191543.1043414-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20210615110636.23403-4-andre.przywara@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 12:06:20PM +0100, Andre Przywara wrote:
-> Add the obvious compatible name to the existing RTC binding.
-> The actual RTC part of the device uses a different day/month/year
-> storage scheme, so it's not compatible with the previous devices.
-> Also the clock part is quite different, as there is no external 32K LOSC
-> oscillator input.
+On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml     | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> index b1b0ee769b71..2c3fd72e17ee 100644
-> --- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> @@ -26,6 +26,7 @@ properties:
->            - const: allwinner,sun50i-a64-rtc
->            - const: allwinner,sun8i-h3-rtc
->        - const: allwinner,sun50i-h6-rtc
-> +      - const: allwinner,sun50i-h616-rtc
->  
->    reg:
->      maxItems: 1
-> @@ -105,6 +106,20 @@ allOf:
->            minItems: 3
->            maxItems: 3
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: allwinner,sun50i-h616-rtc
-> +
-> +    then:
-> +      properties:
-> +        clock-output-names:
-> +          minItems: 3
-> +          maxItems: 3
-> +        clocks:
-> +          maxItems: 0
 
-clocks: false
-
-if forbidding clocks is what you want.
-
-> +
->    - if:
->        properties:
->          compatible:
-> -- 
-> 2.17.5
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
