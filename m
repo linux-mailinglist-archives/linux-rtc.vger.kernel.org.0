@@ -2,78 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A9F3AAF71
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Jun 2021 11:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189703AB501
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Jun 2021 15:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbhFQJRM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Jun 2021 05:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
+        id S232897AbhFQNl2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Jun 2021 09:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbhFQJRK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Jun 2021 05:17:10 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808BDC0617AF
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Jun 2021 02:15:02 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id b1so2610702vsh.7
-        for <linux-rtc@vger.kernel.org>; Thu, 17 Jun 2021 02:15:02 -0700 (PDT)
+        with ESMTP id S231454AbhFQNlY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Jun 2021 09:41:24 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1D8C061574;
+        Thu, 17 Jun 2021 06:39:16 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id a6so3225210ioe.0;
+        Thu, 17 Jun 2021 06:39:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=NiiU6fiVLbE4syulfvGQUEnbQNZvmtFPXY1KRGZ4VKs=;
-        b=tspUddDmWP1nXGb8dYzDapkXukDhtaQZ8yVoZQOykE4MszNmnQ2Jc7pAu3v7qBcemT
-         UyLs98rU9nEy8e3wRIJkxsl8g3L8Eb/AvQODxlfCIA8Y+SqSVtbG2msAYvDIZFEizfbY
-         20UD8As6h7+oRqO/LBfp1JKzos5qS4bIZn22juJCAEEZOMhbhqM1f/S6KCbcFkkK35Tr
-         P7laFgsJQmqhNYip+ALRHKPPvbOtIHBYtRpZR/hgm9hpO06Ne5Y1MzvmGVRytTLSpocX
-         +CLKqhQk6OUYMP0R+b/JJQ4/QkH+6e5JGgp8Hm8OfSHuZ6CIo4hVwTpj+jWWd51a3cq+
-         7N8A==
+        bh=8uLouHcYHuvh5T6xM8yIVrzF523FcxAB8VCcMY44PSs=;
+        b=DrkJglOKwg+WmIiFFG6K712yfI6x/RLf5UEIcKJydGaOBMRZNFam7wWwsGYeL6N5JC
+         40XbFWouWd4QbPoLw8juqNhDZjeFW8IIRYwllHXIDFq7EEBSOdqop4JrK/NiPWcrxHZP
+         /7Xin9xwWygH3SObqeMvZKjZ2iaQKa1insYgEv0RWSpNGlKsE4RoDeEL46eBil9pauhu
+         NNEsvRKP+YC8j+BjCLOuR9lNaBR92oHV3zowMDb2lWi+WdOnuqIjH2NQUK2KvphQxb1t
+         hK2dV+lsVMmfmM0S2aVlI4PLW+ESdaXkuzI8NPiT9kFyN0CohBvacdSflevgnk8XhAvL
+         2/nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NiiU6fiVLbE4syulfvGQUEnbQNZvmtFPXY1KRGZ4VKs=;
-        b=AA97pH3wJF2c23o5MvjVEKG2nxblQqix6vi1Cw4+uqyZKolBY5RP7KWAgyBHi9Davn
-         759WC+m8479NhrnZ5ZzJe1Lpq7PezlGQ5N5Ew451vePPPFvgB4wTc1PTx+VsIP8dYVYS
-         qolUparymHmWZMd/l2iC7yQi9qld3D0TlVEkhr//OI6Z8V9wUGOb+NX24C2rAINrm7F9
-         Ff8onicsfHYyCFaUAYl3Dx8DGdWrVd9y8FC+mu2b3uokegmnkLEKRZrKTv5dtCKKmvWe
-         5x9x/gtZioky/CUBwit297IjwzRPevxzAAsQr4pJiUCSv3WDnR6y0X47e2bYAyDM+u3Q
-         4x5A==
-X-Gm-Message-State: AOAM530Hz9ZmD3USp56ado9lqIwL5uRrUWufZQYBBpKTTHgU+1LsJVNe
-        vtew8qly4bM1EoOUovPabjWxj3pfWIlRaJwfs1eQrA==
-X-Google-Smtp-Source: ABdhPJyDDRUn2syWiuy8XigFtL3iDYKz59Ub/6ekAvgFfmAY9tRuxX/nulbHrrDC8J99+RHvCUQeMQ9XnjKDaURJSR4=
-X-Received: by 2002:a05:6102:2159:: with SMTP id h25mr3349328vsg.19.1623921301368;
- Thu, 17 Jun 2021 02:15:01 -0700 (PDT)
+        bh=8uLouHcYHuvh5T6xM8yIVrzF523FcxAB8VCcMY44PSs=;
+        b=UmvHzrrm1XoMTphnbEhgZho3vQQozBoUG9e497vImcNb7/N4rrHRPh0us3T5opzGKG
+         c25fJdQQfCNQkdhSMg4WZBNDtBB4kajxQxmwi8hQMqiQK9KK8ptyfxkXOPJGvXLp7Iqd
+         Ahclu1nWudjxZaPwpn0MkbnC0QkrIcmHX5ufGppAkoWJHzNq4D9jWT1Zbn+ze66QMKyE
+         k/6bn41x8pLJ2i8yWRjJMSNw1uZMJHRx3IzNUumuzXCXFQzlQn7plorqLVJX32361Hav
+         +peDKGXiI7oRpp5hmPwiCJkuRmwyFti1qpVcolsWjAdapHlSmW0nGkXuOEwjC3H7Omek
+         y9pA==
+X-Gm-Message-State: AOAM531q429JijDXscApyyjVwEp0RhfgdwpFDsH1d0jDZOoO6md27W0D
+        1go6JUQNmEoLhtr3Ku9vOorpIgpj4rVsNxfJdYo=
+X-Google-Smtp-Source: ABdhPJxnfkeEWGUJgQcDn0I2Ve0wSFkY7REYvBKyja2+qam6LK577H+YFA9dEQrKZJ960bwwySGIDnthxfzoxsKE1u0=
+X-Received: by 2002:a5d:97d9:: with SMTP id k25mr3918157ios.197.1623937155671;
+ Thu, 17 Jun 2021 06:39:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210615191543.1043414-1-robh@kernel.org>
 In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 17 Jun 2021 11:14:25 +0200
-Message-ID: <CAPDyKFrY4UOO5CbZ8Bj7AH2+3Wo1PRpUv+Zs96tub=MzGuGrrQ@mail.gmail.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Thu, 17 Jun 2021 08:39:04 -0500
+Message-ID: <CABb+yY1hR8=7Bc7tw8koqNd2_r0-P6HiHkoyb0j=C7QbN4Dvrw@mail.gmail.com>
 Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
 To:     Rob Herring <robh@kernel.org>
-Cc:     DTML <devicetree@vger.kernel.org>,
+Cc:     Devicetree List <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-ide@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-crypto@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
         dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org,
+        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
+        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Stephen Boyd <sboyd@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        linux-spi <linux-spi@vger.kernel.org>, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
         David Airlie <airlied@linux.ie>,
@@ -84,9 +79,9 @@ Cc:     DTML <devicetree@vger.kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -118,7 +113,7 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 15 Jun 2021 at 21:15, Rob Herring <robh@kernel.org> wrote:
+On Tue, Jun 15, 2021 at 2:15 PM Rob Herring <robh@kernel.org> wrote:
 >
 > If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
 he
@@ -175,10 +170,111 @@ ng
 > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
 > Cc: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/ata/nvidia,tegra-ahci.yaml          | 1 -
+>  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml  | 2 --
+>  .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml         | 1 -
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml | 2 --
+>  .../devicetree/bindings/clock/qcom,gcc-sm8350.yaml          | 2 --
+>  .../devicetree/bindings/clock/sprd,sc9863a-clk.yaml         | 1 -
+>  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml      | 2 --
+>  Documentation/devicetree/bindings/crypto/fsl-dcp.yaml       | 1 -
+>  .../display/allwinner,sun4i-a10-display-backend.yaml        | 6 ------
+>  .../bindings/display/allwinner,sun6i-a31-mipi-dsi.yaml      | 1 -
+>  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml      | 4 ----
+>  .../bindings/display/allwinner,sun8i-a83t-hdmi-phy.yaml     | 2 --
+>  .../bindings/display/allwinner,sun8i-r40-tcon-top.yaml      | 2 --
+>  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 2 --
+>  .../bindings/display/rockchip/rockchip,dw-hdmi.yaml         | 2 --
+>  Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+>  .../devicetree/bindings/display/st,stm32-ltdc.yaml          | 1 -
+>  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml | 4 ----
+>  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
+>  .../devicetree/bindings/edac/amazon,al-mc-edac.yaml         | 2 --
+>  Documentation/devicetree/bindings/eeprom/at24.yaml          | 1 -
+>  Documentation/devicetree/bindings/example-schema.yaml       | 2 --
+>  Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml     | 1 -
+>  Documentation/devicetree/bindings/gpu/vivante,gc.yaml       | 1 -
+>  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 1 -
+>  .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml        | 2 --
+>  .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml         | 1 -
+>  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
+>  .../bindings/interrupt-controller/fsl,irqsteer.yaml         | 1 -
+>  .../bindings/interrupt-controller/loongson,liointc.yaml     | 1 -
+>  Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml    | 1 -
+>  .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml       | 1 -
+>  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
+>  .../devicetree/bindings/media/amlogic,gx-vdec.yaml          | 1 -
+>  Documentation/devicetree/bindings/media/i2c/adv7604.yaml    | 1 -
+>  .../devicetree/bindings/media/marvell,mmp2-ccic.yaml        | 1 -
+>  .../devicetree/bindings/media/qcom,sc7180-venus.yaml        | 1 -
+>  .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml     | 1 -
+>  .../devicetree/bindings/media/qcom,sm8250-venus.yaml        | 1 -
+>  Documentation/devicetree/bindings/media/renesas,drif.yaml   | 1 -
+>  .../bindings/memory-controllers/mediatek,smi-common.yaml    | 6 ++----
+>  .../bindings/memory-controllers/mediatek,smi-larb.yaml      | 1 -
+>  .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml    | 2 --
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml    | 1 -
+>  Documentation/devicetree/bindings/mmc/mtk-sd.yaml           | 2 --
+>  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml     | 2 --
+>  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml      | 1 -
+>  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml        | 1 -
+>  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml        | 2 --
+>  .../devicetree/bindings/net/brcm,bcm4908-enet.yaml          | 2 --
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+>  Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml     | 2 --
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml       | 2 --
+>  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 1 -
+>  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml    | 2 --
+>  Documentation/devicetree/bindings/pci/loongson.yaml         | 1 -
+>  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml         | 1 -
+>  .../devicetree/bindings/pci/microchip,pcie-host.yaml        | 2 --
+>  Documentation/devicetree/bindings/perf/arm,cmn.yaml         | 1 -
+>  .../devicetree/bindings/phy/brcm,bcm63xx-usbh-phy.yaml      | 1 -
+>  .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml       | 3 ---
+>  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
+>  .../devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml   | 1 -
+>  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml    | 1 -
+>  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml    | 1 -
+>  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
+>  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml     | 1 -
+>  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml  | 1 -
+>  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml    | 1 -
+>  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+>  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml    | 1 -
+>  Documentation/devicetree/bindings/rtc/imxdi-rtc.yaml        | 1 -
+>  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml    | 2 --
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml  | 1 -
+>  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml          | 1 -
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml      | 2 --
+>  .../bindings/sound/nvidia,tegra-audio-graph-card.yaml       | 1 -
+>  .../devicetree/bindings/sound/nvidia,tegra210-i2s.yaml      | 2 --
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
+>  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml     | 1 -
+>  .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml          | 2 --
+>  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml          | 2 --
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml   | 1 -
+>  .../bindings/timer/allwinner,sun5i-a13-hstimer.yaml         | 1 -
+>  Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 -
+>  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 2 --
+>  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml       | 1 -
+>  .../devicetree/bindings/usb/maxim,max3420-udc.yaml          | 2 --
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml          | 4 ----
+>  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml    | 3 ---
+>  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 1 -
+>  101 files changed, 2 insertions(+), 163 deletions(-)
+>
+mailbox stuff
+Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # for MMC
-
-[...]
-
-Kind regards
-Uffe
+thanks.
