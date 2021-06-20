@@ -2,106 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1288F3ADC31
-	for <lists+linux-rtc@lfdr.de>; Sun, 20 Jun 2021 02:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5999D3ADECA
+	for <lists+linux-rtc@lfdr.de>; Sun, 20 Jun 2021 15:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbhFTAox (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 19 Jun 2021 20:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S229846AbhFTNi5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 20 Jun 2021 09:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbhFTAow (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Jun 2021 20:44:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AB5C061574
-        for <linux-rtc@vger.kernel.org>; Sat, 19 Jun 2021 17:42:41 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1624149759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=xK+DmaXnoyosriDPMF/7746cVAw94Vag+mYBs6UPJGo=;
-        b=4FR15Q4/JQeepp9r2nY+XdAnjiQnjTT+B2pPEn/fXAkwgmbwVglJeTiIWSa4p3p3xMYAwE
-        FPnsipcJVxHeKubHxxaCc9OzKlOQ9ZYTxs0vSWd/1HRzNQvyISfPdoqj1ciYRtr635DNRM
-        rXVH4i85Yok6vQlHDhVqb3khnlreFrqMyrW8t6NNK2zvReCJ9Mn8XRXOLPU/DEP9qO/iyv
-        rJTxbfg8pxFxIRaxDymcw9j0TL9RQDv2Hzh9sEGKjF+1HHeEUybMhoAJI5IO4fcpeBKlJ4
-        nq9hFYQpuY4RoZGdaokRwIUsYu3b8unGFUyGoWGEzHUSjZo5Vmu8XpobzW/zDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1624149759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=xK+DmaXnoyosriDPMF/7746cVAw94Vag+mYBs6UPJGo=;
-        b=j+xeBocKCsRLfHfdR93MsIyYMQ3bverm5Qyzs2HJajTMFCjnI4dD3Spvo33VGRSTwv1Roc
-        W2No9q7fStWhPbDQ==
-To:     linux-rtc@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: rtc: pcf8523: Rename REG_OFFSET
-Date:   Sun, 20 Jun 2021 02:42:39 +0200
-Message-ID: <8735tdgydc.ffs@nanos.tec.linutronix.de>
+        with ESMTP id S229750AbhFTNit (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 20 Jun 2021 09:38:49 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11BC0617A6
+        for <linux-rtc@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id b14so12613539iow.13
+        for <linux-rtc@vger.kernel.org>; Sun, 20 Jun 2021 06:36:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=uDIEtWfgl91FDet7ZYX1u1ozW0abpKvg4acx3thqXBCDoYcWKg7eyNZSXNk+51VeuJ
+         sYbwx77CCJt/Xl1UBy7P++4/uHOQjQcptGzc4BiJd5A/7x+FLCtsFr6R08yAScCPxE/G
+         ycRitdP5UZQCPHBcljPWiYz9qooX9+o9VlIcE1iBIKjgWFsG58IfpnIZmKh5Mer/et0Q
+         Wvv2McVtUA6rn+iTugaAQulni5t+7gIBWkpgi42U+JEUmcEEUifIxcViVFyKhDEEgfNV
+         A33afccbptAYxVMQ3XRd6cg8QS8Vl2AEYQyihFbFLRpIaiCXlHMQE4BSfPfytvzUMqcd
+         FXMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=M55QYJeDccKPmfla+3aXatOf99uO0MZyrIiTuXBtjFq2NER/Zt2TdKUHZb3MQDbcri
+         7tt4NUyBKmgPShyMG8JAlbjgGtD3IBfMooYnxCaOsktzxShtuWeEnyeSAK+svDYPegMP
+         vrtg8vhaw5liGF2BlD1GIwSauOUg2+DJ25AqfrtE6HAIyBQRCAJTpp8Bnov4yH2iYZt6
+         TYcnECTqTFbH4MlmyZF1Cqturj8mR2WT5YgYicvQUuLurFBdegMSSgZxyD6UWaAx6MjI
+         AA3PbW5bt1QGRgULtHaKi7Kg5k7JluREBNPqd0SZ1eXaXPVhbtKpFqiGZHi2NpMg2ypG
+         zz1A==
+X-Gm-Message-State: AOAM533+Ry2Vq0d/8fEW7F/EWjiE7cqEso6gem9L97ssSLVoVCHcwknC
+        mZJNAuN+OsB8KZwc2vVBhSqsm1AT/sWG24pN3qE=
+X-Google-Smtp-Source: ABdhPJwOQ5lA8oaPxit1UXNypL8Kah2QWj0jtAWNuj5/Z8/Rl7T8YsfxHtOIriCZuXo1tXOWzxp5d5YlbnVjDFRsY5Q=
+X-Received: by 2002:a02:a810:: with SMTP id f16mr12630337jaj.64.1624196175568;
+ Sun, 20 Jun 2021 06:36:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:36:14
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <sarah.koffi101@gmail.com>
+Date:   Sun, 20 Jun 2021 15:36:14 +0200
+Message-ID: <CA+ifgLE1g7jgi567M2HhZfvRSUF63Hu6stsW+ysX=3U-=qnn6Q@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Moving ARM to the generic irqstat infrastructure caused
-arch/arm/mach-ixp4xx/include/mach/platform.h to be included indirectly in
-interrupt related headers, which results in a build failure:
+Greetings From Mrs. Sarah Koffi
 
->> drivers/rtc/rtc-pcf8523.c:35: warning: "REG_OFFSET" redefined                                                                                                                                                                                                                
-      35 | #define REG_OFFSET   0x0e                                                                                                                                                                                                                                           
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-Rename it to PCF_REG_OFFSET and for consistency the mode define to
-PCF_REG_OFFSET_MODE.
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
-Fixes: 7fd70c65faac ("ARM: irqstat: Get rid of duplicated declaration")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-rtc@vger.kernel.org
----
- drivers/rtc/rtc-pcf8523.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
 
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -41,8 +41,8 @@
- #define REG_WEEKDAY_ALARM	0x0d
- #define ALARM_DIS BIT(7)
- 
--#define REG_OFFSET   0x0e
--#define REG_OFFSET_MODE BIT(7)
-+#define PCF_REG_OFFSET		0x0e
-+#define PCF_REG_OFFSET_MODE	BIT(7)
- 
- #define REG_TMR_CLKOUT_CTRL 0x0f
- 
-@@ -442,13 +442,13 @@ static int pcf8523_rtc_read_offset(struc
- 	u8 value;
- 	s8 val;
- 
--	err = pcf8523_read(client, REG_OFFSET, &value);
-+	err = pcf8523_read(client, PCF_REG_OFFSET, &value);
- 	if (err < 0)
- 		return err;
- 
- 	/* sign extend the 7-bit offset value */
- 	val = value << 1;
--	*offset = (value & REG_OFFSET_MODE ? 4069 : 4340) * (val >> 1);
-+	*offset = (value & PCF_REG_OFFSET_MODE ? 4069 : 4340) * (val >> 1);
- 
- 	return 0;
- }
-@@ -465,9 +465,9 @@ static int pcf8523_rtc_set_offset(struct
- 	if (abs(reg_m0 * 4340 - offset) < abs(reg_m1 * 4069 - offset))
- 		value = reg_m0 & 0x7f;
- 	else
--		value = (reg_m1 & 0x7f) | REG_OFFSET_MODE;
-+		value = (reg_m1 & 0x7f) | PCF_REG_OFFSET_MODE;
- 
--	return pcf8523_write(client, REG_OFFSET, value);
-+	return pcf8523_write(client, PCF_REG_OFFSET, value);
- }
- 
- static const struct rtc_class_ops pcf8523_rtc_ops = {
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
