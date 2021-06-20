@@ -2,39 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2142C3AE035
-	for <lists+linux-rtc@lfdr.de>; Sun, 20 Jun 2021 22:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4033AE03D
+	for <lists+linux-rtc@lfdr.de>; Sun, 20 Jun 2021 22:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbhFTUYw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 20 Jun 2021 16:24:52 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:42037 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbhFTUYv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 20 Jun 2021 16:24:51 -0400
+        id S229897AbhFTU1S (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 20 Jun 2021 16:27:18 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:39067 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229632AbhFTU1R (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 20 Jun 2021 16:27:17 -0400
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0B8191BF204;
-        Sun, 20 Jun 2021 20:22:35 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id BE4BD2000A;
+        Sun, 20 Jun 2021 20:25:02 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Lee Jones <lee.jones@linaro.org>,
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        devicetree@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: (subset) [PATCH v2 0/7] mfd/power/rtc: Do not enforce (incorrect) interrupt trigger type
-Date:   Sun, 20 Jun 2021 22:22:35 +0200
-Message-Id: <162422055082.1088008.17353011796840416475.b4-ty@bootlin.com>
+        linux-power@fi.rohmeurope.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH] rtc: bd70528: Drop BD70528 support
+Date:   Sun, 20 Jun 2021 22:25:01 +0200
+Message-Id: <162422069731.1088764.12978660660257938127.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com>
-References: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210527105819.GA3111334@localhost.localdomain>
+References: <20210527105819.GA3111334@localhost.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -42,21 +34,17 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 26 May 2021 13:20:29 -0400, Krzysztof Kozlowski wrote:
-> This is a v2 with only minor changes:
-> 1. Drop patches which landed in mainline.
-> 2. Add acks.
-> 3. Rebase max17040 power supply (dtschema conversion).
-> 
-> Patches are independent and there are no external dependencies, so
-> please pick up freely.
-> 
-> [...]
+On Thu, 27 May 2021 13:58:19 +0300, Matti Vaittinen wrote:
+> The only known BD70528 use-cases are such that the PMIC is controlled
+> from separate MCU which is not running Linux. I am not aware of
+> any Linux driver users. Furthermore, it seems there is no demand for
+> this IC. Let's ease the maintenance burden and drop the driver. We can
+> always add it back if there is sudden need for it.
 
 Applied, thanks!
 
-[5/7] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
-      commit: 742b0d7e15c333303daad4856de0764f4bc83601
+[1/1] rtc: bd70528: Drop BD70528 support
+      commit: e5e3352580702b3727637dd988cddfe6a5880fe9
 
 Best regards,
 -- 
