@@ -2,200 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA67B3BB75A
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jul 2021 08:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C414C3BB884
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Jul 2021 10:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbhGEG7c convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 5 Jul 2021 02:59:32 -0400
-Received: from mail.eclipso.de ([217.69.254.104]:51096 "EHLO mail.eclipso.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229817AbhGEG7c (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 5 Jul 2021 02:59:32 -0400
-Received: from mail.eclipso.de (www1.eclipso.de [217.69.254.102])
-        by mail.eclipso.de with ESMTP id 11CED34A
-        for <linux-rtc@vger.kernel.org>; Mon, 05 Jul 2021 08:56:54 +0200 (CEST)
-Date:   Mon, 05 Jul 2021 08:56:54 +0200
+        id S230032AbhGEIE2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Jul 2021 04:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229984AbhGEIE2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Jul 2021 04:04:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93223C061574
+        for <linux-rtc@vger.kernel.org>; Mon,  5 Jul 2021 01:01:51 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m0JY4-0000hQ-TF; Mon, 05 Jul 2021 10:01:48 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m0JY1-0000t7-0J; Mon, 05 Jul 2021 10:01:45 +0200
+Date:   Mon, 5 Jul 2021 10:01:44 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        kernel@pengutronix.de,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
+ clocks enabled clocks
+Message-ID: <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+ <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
+ <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
 MIME-Version: 1.0
-Message-ID: <3527caffc044a13e023053dc5d173271@mail.eclipso.de>
-X-Mailer: eclipso / 7.4.0
-From:   " " <Cedric.dewijs@eclipso.eu>
-Subject: Re: Fwd: Re: rtc_rv8803.ko does not create a /dev/rtc?
-Reply-To: " " <Cedric.dewijs@eclipso.eu>
-To:     <Cedric.dewijs@eclipso.eu>, <iwamatsu@nigauri.org>,
-        "linux-rtc@vger.kernel.org>" <linux-rtc@vger.kernel.org>
-In-Reply-To: <e565b6503bfcf0dcd704e2959640aee5@mail.eclipso.de>
-References: <d7b7ce395a76a995f1998ff21266dfaf@mail.eclipso.de>
-        <CABMQnVKD8hLoYtDXo7SQehkw=N6kinyhsvGZAWC+gJQdRMuS2g@mail.gmail.com>
-        <e565b6503bfcf0dcd704e2959640aee5@mail.eclipso.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zkue7xi2s6vksapu"
 Content-Disposition: inline
+In-Reply-To: <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---- Ursprüngliche Nachricht ---
-Von: " " <Cedric.dewijs@eclipso.eu>
-Datum: 05.07.2021 06:32:30
-An: <cedric.dewijs@eclipso.eu>
-Betreff: Fwd: Re: rtc_rv8803.ko does not create a /dev/rtc?
+--zkue7xi2s6vksapu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---- Ursprüngliche Nachricht ---
-Von: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Datum: 02.07.2021 15:08:38
-An: Cedric.dewijs@eclipso.eu
-Betreff: Re: rtc_rv8803.ko does not create a /dev/rtc?
+Hello Stephen,
 
-Hi,
+On Fri, Jun 25, 2021 at 07:14:34PM +0200, Uwe Kleine-K=F6nig wrote:
+> On Wed, Jun 09, 2021 at 10:21:23PM +0200, Uwe Kleine-K=F6nig wrote:
+> > given that I don't succeed in getting any feedback for my patch set, I'm
+> > trying with a pull request today. It would be really great if this pull
+> > request made it finally in for the next merge window.
+>=20
+> It seems sending a pull request didn't help either :-\
+>=20
+> I'm waiting since October for feedback, several people expressed to like
+> this series and I want to make use of it to simplify a few drivers. I'm
+> quite annoyed that your missing feedback blocks me from further
+> improving stuff.
 
-2021年7月1日(木) 21:50 <Cedric.dewijs@eclipso.eu>:
->
-> ­Hi all,
->
-> I have a raspberry pi 3B, running kernel 5.10.17. On the i2c bus, I've
+There is still no feedback, not even something like: "I saw your
+nagging, sorry. I'm drown in other missions, please have some more
+patience."
 
-added a rx8900 rtc chip. I would like to use this chip, but I fail to create
+I assume it's not to much to expect at least such a reply after more
+than 8 months?
 
-a /dev/rtc for it.
->
-> I have checked the kernel version:
-> # uname -a
-> Linux raspberrypi 5.10.17-v7+ #1421 SMP Thu May 27 13:59:01 BST 2021
+Best regards
+Uwe
 
-armv7l GNU/Linux
->
-> I've downloaded the rtc driver for this version of the kernel from here:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--zkue7xi2s6vksapu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/drivers/rtc/rtc-rv8803.c
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmDivGUACgkQwfwUeK3K
+7AkjnAf/a6JWigt/E4r2Q+YarOahwo6FeKczLbaLzTCJNlhBmRV/Meyb3zKO0C/f
+tejQizaLLLrHlhP/iSjItUpzMJ0PxECM/xWhaAuAq5Bir9J5EjBj1ryFdYB/Styv
+Bv4gAmoEbjPAaoOimPt0eZaoe1vXJ+KhtGyYV89a77GZLPOjZvAugKbdxU5TU46i
+oLbAQEjgroBM93AMRc/BiakWh6OAnLb1lu69Z3Vc7GbZPeSDoEkZBjqFi3Q+EAA8
+UbvamISvheZ8ZHvjuxRxCGv7IQv4ZmBrRiLJePrboNTKGhUMktt4Zc7Ye0rMoNTc
+6iDHWYLtjng09CMf01KEsc39jpmN5g==
+=A+R2
+-----END PGP SIGNATURE-----
 
->
-> And compiled the driver with this makefile [1, see below] and installed
-
-the resulting rtc-rv8803.ko here:
->
-> $ modinfo /usr/lib/modules/5.10.17-v7+/kernel/drivers/rtc/rtc-rv8803.ko
-
-
-> filename:       /usr/lib/modules/5.10.17-v7+/kernel/drivers/rtc/rtc-rv8803.ko
-
-
-> license:        GPL v2
-> description:    Micro Crystal RV8803 RTC driver
-> author:         Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-
-> srcversion:     0067552CB786360DEA9CADB
-> alias:          i2c:rx8900
-> alias:          i2c:rx8803
-> alias:          i2c:rv8803
-> alias:          of:N*T*Cepson,rx8900C*
-> alias:          of:N*T*Cepson,rx8900
-> alias:          of:N*T*Cepson,rx8803C*
-> alias:          of:N*T*Cepson,rx8803
-> alias:          of:N*T*Cmicrocrystal,rv8803C*
-> alias:          of:N*T*Cmicrocrystal,rv8803
-> depends:
-> name:           rtc_rv8803
-> vermagic:       5.10.17-v7+ SMP mod_unload modversions ARMv7 p2v8
->
-> Next I do the following steps to load the module:
-> # modprobe i2c:rx8900
-> [  130.591843] rtc_rv8803: loading out-of-tree module taints kernel.
-
-
-
-This is not necessary if the module is installed correctly.
-The module will be loaded when you write to '/sys/class/
-i2c-adapter/i2c-1/new_device' below.
-
->
-> The module is loaded:
-> # lsmod
-> Module                  Size  Used by
-> rtc_rv8803             16384  0
->
-> Next I bind the driver to the i2c address 0x32:
-> # echo i2c:rx8900 0x32 > /sys/class/i2c-adapter/i2c-1/new_device
-
-
-
-I think ' i2c' is unnecessary.
-Please check with following:
-  echo rx8900 0x32 > /sys/class/i2c-adapter/i2c-1/new_device
-
-> [  176.871589] i2c i2c-1: new_device: Instantiated device i2c:rx8900
-
-at 0x32
->
-> This does not give me a /dev/rtc device:
-> # ls /dev/rtc*
-> ls: cannot access '/dev/rtc*': No such file or directory
->
-> The rtc is detected at address 0x32, but it's not claimed by any driver
-
-(that would have been indicated by UU instead of 32).
-> # i2cdetect -y 1
->      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-> 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
-> 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- --
-> 30: -- -- 32 -- -- -- -- -- -- -- -- -- -- -- -- --
-> 40: -- -- -- -- -- -- -- -- -- 49 4a -- -- -- -- --
-> 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-> 60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- --
-> 70: -- -- -- -- -- -- -- --
->
-> What did I miss?
->
-> Kind regards,
-> Cedric
-
-Best regards,
-  Nobuhiro
-
-
-Hi, it worked:
-pi@raspberrypi:~ $ sudo -i
-root@raspberrypi:~# echo rx8900 0x32 > /sys/class/i2c-adapter/i2c-1/new_device
-
-Jul  1 17:17:32 raspberrypi kernel: i2c i2c-1: new_device: Instantiated device rx8900 at 0x32
-Jul  1 17:17:32 raspberrypi kernel: rtc_rv8803: loading out-of-tree module taints kernel.
-Jul  1 17:17:32 raspberrypi kernel: rtc-rv8803 1-0032: Voltage low, temperature compensation stopped.
-Jul  1 17:17:32 raspberrypi kernel: rtc-rv8803 1-0032: Voltage low, data loss detected.
-Jul  1 17:17:32 raspberrypi kernel: rtc-rv8803 1-0032: An alarm maybe have been missed.
-Jul  1 17:17:32 raspberrypi kernel: rtc-rv8803 1-0032: Voltage low, data is invalid.
-Jul  1 17:17:32 raspberrypi kernel: rtc-rv8803 1-0032: registered as rtc0
-Jul  1 17:21:02 raspberrypi dhcpcd[430]: wlan0: hardware address 00:00:00:00:00:00 claims 10.93.128.58
-root@raspberrypi:~# ls -l /dev/rtc0 
-crw------- 1 root root 252, 0 Jul  1 17:17 /dev/rtc0
-
-
-root@raspberrypi:~# i2cdetect -y 1
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-20: -- -- -- -- -- -- -- -- -- 29 -- -- -- -- -- -- 
-30: -- -- UU -- -- -- -- -- -- -- -- -- -- -- -- -- 
-40: -- -- -- -- -- -- -- -- -- 49 4a -- -- -- -- -- 
-50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-60: -- -- -- -- -- -- -- -- 68 -- -- -- -- -- -- -- 
-70: -- -- -- -- -- -- -- --                         
-
-root@raspberrypi:~# hwclock -w
-root@raspberrypi:~# hwclock -r
-2021-07-01 17:29:37.223549+02:00
-root@raspberrypi:~# hwclock -r
-2021-07-01 17:29:49.788067+02:00
-
-Thank you,
-Cedric
-
-
-
-________________________________________________________
-Ihr Recht auf Privatsphäre. Schützen Sie Ihre Daten und wechseln jetzt zu eclipso Mail & Cloud - https://www.eclipso.de
-
-
+--zkue7xi2s6vksapu--
