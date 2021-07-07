@@ -2,40 +2,40 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0A13BE426
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jul 2021 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA7F3BE424
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jul 2021 10:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbhGGIPx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Jul 2021 04:15:53 -0400
-Received: from mo-csw-fb1115.securemx.jp ([210.130.202.174]:52694 "EHLO
+        id S230408AbhGGIPF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Jul 2021 04:15:05 -0400
+Received: from mo-csw-fb1115.securemx.jp ([210.130.202.174]:52462 "EHLO
         mo-csw-fb.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbhGGIPx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jul 2021 04:15:53 -0400
-Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 1677wWXW019270; Wed, 7 Jul 2021 16:58:33 +0900
-Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 1677wJWu032642; Wed, 7 Jul 2021 16:58:19 +0900
-X-Iguazu-Qid: 2wGqimLSq63hP4fWMT
-X-Iguazu-QSIG: v=2; s=0; t=1625644699; q=2wGqimLSq63hP4fWMT; m=E1oHAtRpAziOclHynNSi7h3wDnFAIxgOmVLLUVfRId0=
-Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
-        by relay.securemx.jp (mx-mr1111) id 1677wJso006697
+        with ESMTP id S230480AbhGGIPE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jul 2021 04:15:04 -0400
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 1677wSA8019263; Wed, 7 Jul 2021 16:58:31 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 1677wFTM032280; Wed, 7 Jul 2021 16:58:15 +0900
+X-Iguazu-Qid: 2wGqsZ5qxpEwtgN91O
+X-Iguazu-QSIG: v=2; s=0; t=1625644695; q=2wGqsZ5qxpEwtgN91O; m=y3kfJ6GQrh7uDGDWD3SG8E2ZM2WTRzR1KsUTW+uloe4=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1110) id 1677wEvQ020151
         (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 7 Jul 2021 16:58:19 +0900
-Received: from enc02.toshiba.co.jp (enc02.toshiba.co.jp [61.202.160.51])
+        Wed, 7 Jul 2021 16:58:14 +0900
+Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imx12-a.toshiba.co.jp (Postfix) with ESMTPS id F28301000B2;
-        Wed,  7 Jul 2021 16:58:18 +0900 (JST)
-Received: from hop101.toshiba.co.jp ([133.199.85.107])
-        by enc02.toshiba.co.jp  with ESMTP id 1677wIqt003723;
-        Wed, 7 Jul 2021 16:58:18 +0900
+        by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id 500D51000C1;
+        Wed,  7 Jul 2021 16:58:14 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 1677wDxd013858;
+        Wed, 7 Jul 2021 16:58:14 +0900
 From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org,
         Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH 09/10] rtc: starfire: convert to SPDX identifier
-Date:   Wed,  7 Jul 2021 16:58:03 +0900
+Subject: [PATCH 10/10] rtc: spear: convert to SPDX identifier
+Date:   Wed,  7 Jul 2021 16:58:04 +0900
 X-TSB-HOP: ON
-Message-Id: <20210707075804.337458-10-nobuhiro1.iwamatsu@toshiba.co.jp>
+Message-Id: <20210707075804.337458-11-nobuhiro1.iwamatsu@toshiba.co.jp>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210707075804.337458-1-nobuhiro1.iwamatsu@toshiba.co.jp>
 References: <20210707075804.337458-1-nobuhiro1.iwamatsu@toshiba.co.jp>
@@ -45,26 +45,31 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use SPDX-License-Identifier instead of a license line.
+Use SPDX-License-Identifier instead of a verbose license text.
 
 Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 ---
- drivers/rtc/rtc-starfire.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-spear.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/rtc/rtc-starfire.c b/drivers/rtc/rtc-starfire.c
-index fbd1ed41cbf1..ccaef051d6e6 100644
---- a/drivers/rtc/rtc-starfire.c
-+++ b/drivers/rtc/rtc-starfire.c
-@@ -1,7 +1,7 @@
+diff --git a/drivers/rtc/rtc-spear.c b/drivers/rtc/rtc-spear.c
+index ee721e53c155..b4a520056b1a 100644
+--- a/drivers/rtc/rtc-spear.c
++++ b/drivers/rtc/rtc-spear.c
+@@ -1,12 +1,9 @@
 +// SPDX-License-Identifier: GPL-2.0-only
- /* rtc-starfire.c: Starfire platform RTC driver.
+ /*
+  * drivers/rtc/rtc-spear.c
   *
-  * Author: David S. Miller
-- * License: GPL
-  *
-  * Copyright (C) 2008 David S. Miller <davem@davemloft.net>
+  * Copyright (C) 2010 ST Microelectronics
+  * Rajeev Kumar<rajeev-dlh.kumar@st.com>
+- *
+- * This file is licensed under the terms of the GNU General Public
+- * License version 2. This program is licensed "as is" without any
+- * warranty of any kind, whether express or implied.
   */
+ 
+ #include <linux/bcd.h>
 -- 
 2.32.0
 
