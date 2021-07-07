@@ -2,54 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF103BF173
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jul 2021 23:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FDC3BF187
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Jul 2021 23:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbhGGVlx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Jul 2021 17:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
+        id S230479AbhGGVtk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Jul 2021 17:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbhGGVlx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jul 2021 17:41:53 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C473C061574
-        for <linux-rtc@vger.kernel.org>; Wed,  7 Jul 2021 14:39:12 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id e20so1381675ual.9
-        for <linux-rtc@vger.kernel.org>; Wed, 07 Jul 2021 14:39:12 -0700 (PDT)
+        with ESMTP id S229717AbhGGVtk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Jul 2021 17:49:40 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118BDC061574
+        for <linux-rtc@vger.kernel.org>; Wed,  7 Jul 2021 14:46:59 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id o12so2406915vsr.11
+        for <linux-rtc@vger.kernel.org>; Wed, 07 Jul 2021 14:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=nigauri-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=RXyEo0cDhLbIf8bC+6p6VI3JmiO1V1r4nPpmv6Lh3cw=;
-        b=Yy3rye3RBQbSjlYsIw5+WREoZ/v6zvcRJLI1vd6HMBPsG4rTj8ekS6meVkapGwvMtU
-         Nar+4zMtYyko3QZCVjjDCf+YZA7odO3sUtVwhhj836GeaWTgluuNcqmkUp/Fyx51v4VG
-         tl9exKl+RVE36N0eza+lCllxta8jS8Q71A2RI+yUZA30SyGxNE41O0RIkIyL2i34OU+J
-         begmo3xXnyJTKUcDaqud2gaKw3izsW94xHNOJ+4tR8ogowORK5Si2gRETXwzSc0Cnw0w
-         DBvwMFSrmJVctYM9np9aiICqoJ6H2aYGM12n/pu7D2y7kQrh65/RQaAK4FzRxtTjhek6
-         UEDw==
+        bh=OVlLJ+pAPYItXS3tJPJzpRseDWUnf4Vt5BYFXZy5W6s=;
+        b=JSd4aZViw9xv9hsjqi6SjRBaCRT/OacAY8LCaxo1GKDShfdUS3AxcntMLgIsKCUU9t
+         fSBv7QBvwFVj7zom9sEXO0FsKGU9kFfhx9izhIOftsHvTwEO5UXTmM30dwB4Fc9NLR6r
+         Zp9Eo/unOo8bZ2IHiOLsX2KMg63xYCZGqs99eyV8cpoorX9MIkEVVL4GhcXV/q+zpXdZ
+         9QF/MJvgJ9PCUdH8jZoYoRbvm6WiwRH4FN6QoPJpvpDHZpxgCoR9dNXs7GEduwU3YCvy
+         et4dsthn/5F8JqGjGX6WMvZpWjvndaeJPpREVXWyBAAIzICGXLAc51PapgSmnBlYny6c
+         aYWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RXyEo0cDhLbIf8bC+6p6VI3JmiO1V1r4nPpmv6Lh3cw=;
-        b=i0pPMJcR4XDi5A/Fa7CQ+nqjYG4QfjGc9+edKPpVqjCMy5Ppkcc9qo0AGVKbHREGQ5
-         NKBy01VMnfGug0043+ZVY7nz6K8guMFvcN2WQrCBvAn57HCBlgRj9vhX3GGgdo86GL0F
-         NSyQdC2uKnT5Y7jQ2OQlHzuGPykkRHK0DV2Tik3qK/2ZsrntXwPgvvueQ4AUvvA/RKVV
-         TG3BqFj7o6cMPlz7Cp+7rMF27pkjg9nh6CwBZK9Q5gJzA0o1vMn5kM6X9L2XeJ4Spjcg
-         KaNs194f8X8mc4WH2ietUoW/L61WIrXNuuZz2gJtOItiLiLay7tJdarU3w0VUVPwYw/2
-         nG7Q==
-X-Gm-Message-State: AOAM533RHxTKZhvoJgzVLUpQFunn9MQIG1F/W2DunLToKHybBf3wieJg
-        X2jQAFk5aHhgYBvr56Pmk75+K4PCp+XYldQzxRFr
-X-Google-Smtp-Source: ABdhPJwIDH0S+ZennpMtx4BVUQxVJpupWsgftT0fBDTm0RCw+rsKPUHbcaB9wVePwh2y08pfr2Vm3/Ynzl5/oV5v7CQ=
-X-Received: by 2002:ab0:2e81:: with SMTP id f1mr25499580uaa.74.1625693951226;
- Wed, 07 Jul 2021 14:39:11 -0700 (PDT)
+        bh=OVlLJ+pAPYItXS3tJPJzpRseDWUnf4Vt5BYFXZy5W6s=;
+        b=gbUn8wjkJi+fg9ZtBdfWzfc3g1jSndp39IgAOBERH+9Fm1MNH5Z76jbt03yP800Fmd
+         Ai4FdCTAPG7UuemHpKUX1irFW0O+cYzP0kS2GRfaHDCSIaaXmpfaPJm4EDidWp4MYXYE
+         LzC4MzoMoY+xUFvUWDC9sDsRFkBj/t1OEvTebeJvyAQvNK4Y2IzHXzWXpi5r/Ri/Q6v6
+         DvIk6Pghx8J4Fw3BSNA5b58TFYmkgXl9zinrfYtYBiCxTKkN5921ExhcQDLQAqhnjYAu
+         R2wywYb7UEON68T0NGes/Xwpq1kuigYDb2U9BIy5jyUQoxntyiCSDG2AMkfdHSYgKRs5
+         BLjA==
+X-Gm-Message-State: AOAM530RUwxmQu+Wp3D4WRGA2PipQuhUMF83RkB5U/CuZPC9ewLnuxog
+        E3SVUWREyGUkd/stZDN5rFFwUV89DDZvY/jfBxWTRLwliQ==
+X-Google-Smtp-Source: ABdhPJyzpMHO0j8v9TXbeld2eR6G5cyvpMfbAaaw/P9uCLfV6lTDBvDMaedLubxyGaUOzYFA7qKCeDeosakM5C9BReg=
+X-Received: by 2002:a67:ba17:: with SMTP id l23mr23711956vsn.24.1625694417381;
+ Wed, 07 Jul 2021 14:46:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210707071616.28976-1-matt@traverse.com.au> <20210707071616.28976-2-matt@traverse.com.au>
-In-Reply-To: <20210707071616.28976-2-matt@traverse.com.au>
+References: <20210707071616.28976-1-matt@traverse.com.au> <20210707071616.28976-3-matt@traverse.com.au>
+In-Reply-To: <20210707071616.28976-3-matt@traverse.com.au>
 From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Thu, 8 Jul 2021 06:38:44 +0900
-Message-ID: <CABMQnVLm2f7cm_j3NtAKXzoyMHrm1ALSR7J99faEOCK6KysNnQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] rtc: rx8025: implement RX-8035 support
+Date:   Thu, 8 Jul 2021 06:46:31 +0900
+Message-ID: <CABMQnVL379GkR_s5c91a0LAPMemup_Lq8U+qU9M1-kBWfVqmTw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: add Epson RX-8025 and RX-8035
 To:     Mathew McBride <matt@traverse.com.au>
 Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -65,176 +65,34 @@ Hi,
 2021=E5=B9=B47=E6=9C=887=E6=97=A5(=E6=B0=B4) 16:17 Mathew McBride <matt@tra=
 verse.com.au>:
 >
-> The RX-8035 is a newer RTC from EPSON that is very
-> similar to the RX-8025.
->
-> The key difference is in the oscillation stop (XSTP)
-> bit which is inverted on the RX-8035.
+> These are supported by the rtc-rx8025 module. RX-8025
+> also has support in ds1307 due to compatible time registers.
 >
 > Signed-off-by: Mathew McBride <matt@traverse.com.au>
 > ---
->  drivers/rtc/rtc-rx8025.c | 59 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 53 insertions(+), 6 deletions(-)
+>  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-> index c914091819ba..1a33ec402f4a 100644
-> --- a/drivers/rtc/rtc-rx8025.c
-> +++ b/drivers/rtc/rtc-rx8025.c
-> @@ -60,14 +60,24 @@
->  #define RX8025_ADJ_DATA_MAX    62
->  #define RX8025_ADJ_DATA_MIN    -62
->
-> +enum rx_model {
-> +       model_rx_unknown,
-> +       model_rx_8025,
-> +       model_rx_8035,
-> +       model_last
-> +};
-> +
->  static const struct d rx8025_id[] =3D {
-> -       { "rx8025", 0 },
-> +       { "rx8025", model_rx_8025 },
-> +       { "rx8035", model_rx_8035 },
->         { }
->  };
-> +
->  MODULE_DEVICE_TABLE(i2c, rx8025_id);
->
->  struct rx8025_data {
->         struct rtc_device *rtc;
-> +       enum rx_model type;
+> diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Doc=
+umentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> index 7548d8714871..13925bb78ec7 100644
+> --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
+> @@ -32,6 +32,9 @@ properties:
+>        - dallas,ds3232
+>        # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
+>        - epson,rx8010
+> +      # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
+> +      - epson,rx8025
+> +      - epson,rx8035
 
-I think 'model' is easier to understand than 'type'.
+'epson,rx8035' is unnsecessary.
+This lists compatible string, so we don't list compatible that doesn't exis=
+t.
 
->         u8 ctrl1;
->  };
->
-> @@ -100,10 +110,26 @@ static s32 rx8025_write_regs(const struct i2c_clien=
-t *client,
->                                               length, values);
->  }
->
-> +static int rx8025_is_osc_stopped(enum rx_model model, int ctrl2)
-> +{
-> +       int xstp =3D ctrl2 & RX8025_BIT_CTRL2_XST;
-> +       /* XSTP bit has different polarity on RX-8025 vs RX-8035.
-> +        * RX-8025: 0 =3D=3D oscillator stopped
-> +        * RX-8035: 1 =3D=3D oscillator stopped
-> +        */
-> +
-> +       if (model =3D=3D model_rx_8025)
-> +               xstp =3D !xstp;
-> +
-> +       return xstp;
-> +}
-> +
->  static int rx8025_check_validity(struct device *dev)
->  {
->         struct i2c_client *client =3D to_i2c_client(dev);
-> +       struct rx8025_data *drvdata =3D dev_get_drvdata(dev);
->         int ctrl2;
-> +       int xstp;
->
->         ctrl2 =3D rx8025_read_reg(client, RX8025_REG_CTRL2);
->         if (ctrl2 < 0)
-> @@ -117,7 +143,8 @@ static int rx8025_check_validity(struct device *dev)
->                 return -EINVAL;
->         }
->
-> -       if (!(ctrl2 & RX8025_BIT_CTRL2_XST)) {
-> +       xstp =3D rx8025_is_osc_stopped(drvdata->type, ctrl2);
-> +       if (xstp) {
->                 dev_warn(dev, "crystal stopped, date is invalid\n");
->                 return -EINVAL;
->         }
-> @@ -125,7 +152,7 @@ static int rx8025_check_validity(struct device *dev)
->         return 0;
->  }
->
-> -static int rx8025_reset_validity(struct i2c_client *client)
-> +static int rx8025_reset_validity(enum rx_model model, struct i2c_client =
-*client)
-
-We can get the struct rx8025_data by using i2c_get_clientdata().
-Therefore, I think that it can be updated without increasing the arguments.
-
-```
-struct rx8025_data *rx8025 =3D i2c_get_clientdata(client);
-
-if (rx8025->type =3D=3D model_rx_8025)
-```
-
->  {
->         int ctrl2 =3D rx8025_read_reg(client, RX8025_REG_CTRL2);
->
-> @@ -134,8 +161,13 @@ static int rx8025_reset_validity(struct i2c_client *=
-client)
->
->         ctrl2 &=3D ~(RX8025_BIT_CTRL2_PON | RX8025_BIT_CTRL2_VDET);
->
-> +       if (model =3D=3D model_rx_8025)
-> +               ctrl2 |=3D RX8025_BIT_CTRL2_XST;
-> +       else
-> +               ctrl2 &=3D ~(RX8025_BIT_CTRL2_XST);
-> +
->         return rx8025_write_reg(client, RX8025_REG_CTRL2,
-> -                               ctrl2 | RX8025_BIT_CTRL2_XST);
-> +                               ctrl2);
->  }
->
->  static irqreturn_t rx8025_handle_irq(int irq, void *dev_id)
-> @@ -149,7 +181,7 @@ static irqreturn_t (int irq, void *dev_id)
->         if (status < 0)
->                 goto out;
->
-> -       if (!(status & RX8025_BIT_CTRL2_XST))
-> +       if (rx8025_is_osc_stopped(rx8025->type, status))
-
-In rx8025_check_validity(), the return value is put in xstp and confirmed.
-I thought it would be better to unify to either one.
-
->                 dev_warn(&client->dev, "Oscillation stop was detected,"
->                          "you may have to readjust the clock\n");
->
-> @@ -241,7 +273,7 @@ static int rx8025_set_time(struct device *dev, struct=
- rtc_time *dt)
->         if (ret < 0)
->                 return ret;
->
-> -       return rx8025_reset_validity(client);
-> +       return rx8025_reset_validity(rx8025->type, client);
->  }
->
->  static int rx8025_init_client(struct i2c_client *client)
-> @@ -519,6 +551,21 @@ static int rx8025_probe(struct i2c_client *client,
->
->         i2c_set_clientdata(client, rx8025);
->
-> +       if (id) {
-> +               rx8025->type =3D id->driver_data;
-> +               switch (rx8025->type) {
-> +               case model_rx_8025:
-> +                       dev_info(&client->dev, "Type RX-8025");
-> +               break;
-
-Please fix indent.
-
-> +               case model_rx_8035:
-> +                       dev_info(&client->dev, "Type RX-8035");
-> +                       break;
-> +               default:
-> +                       dev_warn(&client->dev, "Unknown type: %d\n", rx80=
-25->type);
-> +               break;
-
-ditto.
-
-> +               }
-> +       }
-> +
->         err =3D rx8025_init_client(client);
->         if (err)
->                 return err;
+>        # I2C-BUS INTERFACE REAL TIME CLOCK MODULE with Battery Backed RAM
+>        - epson,rx8571
+>        # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
 > --
 > 2.30.1
 >
@@ -242,7 +100,8 @@ ditto.
 Best regards,
   Nobuhiro
 
---=20
+
+--
 Nobuhiro Iwamatsu
    iwamatsu at {nigauri.org / debian.org / kernel.org}
    GPG ID: 40AD1FA6
