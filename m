@@ -2,132 +2,231 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 104BB3C403C
-	for <lists+linux-rtc@lfdr.de>; Mon, 12 Jul 2021 02:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B033C7703
+	for <lists+linux-rtc@lfdr.de>; Tue, 13 Jul 2021 21:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhGLAFx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 11 Jul 2021 20:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbhGLAFx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 11 Jul 2021 20:05:53 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20472C0613DD
-        for <linux-rtc@vger.kernel.org>; Sun, 11 Jul 2021 17:03:06 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id w13so4395415vsa.3
-        for <linux-rtc@vger.kernel.org>; Sun, 11 Jul 2021 17:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=k1+A7QcokWdPNl2M1r52ewHwT7LYjcRk65lo+mWhFnY=;
-        b=md8aiR8HKvNkFp+5k0RYao/RYfhmbAQooL535E6rA1GS0eCtls+Xl1dmep5lAQosKh
-         49XSxAckn4oXHGQEj1Ncer5NYD9BGSh10/KgfIVln+xJHdopb8gJdCWNYdxt8Geryo+x
-         4pGOf3tJqpgDWuUG+B74GnPg6wQjt811/FDJ4Nrs5Xiewp5fRVM8mmVGjTqj5A8H5hRq
-         oJv8LZcchBU5epKasgyMXODsrK++YWJN675SBhWxZY2hqDIdPvvXNuKvyS7+FLBVRfgD
-         Ld6TQ5TzhTblkx5hmk+hcIs+BJCRNT2r3L1keAWLQeIh1rV6F7m5DIuMZnqOAoUBNn0P
-         hKoA==
+        id S234457AbhGMThv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 13 Jul 2021 15:37:51 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:41929 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230376AbhGMThu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 13 Jul 2021 15:37:50 -0400
+Received: by mail-io1-f54.google.com with SMTP id b1so28702271ioz.8;
+        Tue, 13 Jul 2021 12:34:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=k1+A7QcokWdPNl2M1r52ewHwT7LYjcRk65lo+mWhFnY=;
-        b=XGPQarvEoddEcr4NmTcxlDc8G5JzqaHA35b98S695PMGDv91XiCcgj7cdPAKzR4t4N
-         ZMCpPXbMEU5ETm/bZQNJA023zCVhxNRiF3oMEnF2Gci+7L2GZzV7kOExwBm3TWRoqOVr
-         Zmy+AuAibGPgGFLGi0TiqQH22t3MCOv+AEJKZxWGgDdFZ1/vCXW3WFy5njRadqmRvYa/
-         Kx0UGJlydlj2NLmQpBQgu4fUzhskLHhA3yBdH133H/zwBkELTwIPjyM8mefqhyTiM8h9
-         on5kjjgq4Sxwy/2UZeWw0y47wu+5o+Wq/Cnv1mcCRqLDi3ZKsCef2FnXbeGEsP5e07up
-         Br/w==
-X-Gm-Message-State: AOAM532wOKaH0/3bqtHOfsh0p8IqAaTYdciJED/NV39ZAEUYA3cCXvC9
-        u0LG8NvGgYu3xVME7L3cNCzCvXIJ08AhhUIOp4T8Kz2yImhw
-X-Google-Smtp-Source: ABdhPJxANIsr4SOpdxnprb0mqLLonVDY6CQ0YruScAGFr0HZPF0Vf/yNL8cJmSzWAYg6KwaR4bXie2IvjN+PFCcRB7s=
-X-Received: by 2002:a05:6102:3089:: with SMTP id l9mr13148901vsb.2.1626048185107;
- Sun, 11 Jul 2021 17:03:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210707071616.28976-1-matt@traverse.com.au> <20210707071616.28976-3-matt@traverse.com.au>
- <CABMQnVL379GkR_s5c91a0LAPMemup_Lq8U+qU9M1-kBWfVqmTw@mail.gmail.com>
- <YOYiDlQM/xfgb0CH@piout.net> <CABMQnV+zxURp2K3aXjH3cobndoAXjTdb4xB4w+mMJmjnwyPyLg@mail.gmail.com>
- <YOjsm9wujqczPIKw@piout.net>
-In-Reply-To: <YOjsm9wujqczPIKw@piout.net>
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Mon, 12 Jul 2021 09:02:38 +0900
-Message-ID: <CABMQnVLMeDTNgDmuNKxbBYA4B4n0krzq5WQ8Lh4RKhVN_tPTJA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: rtc: add Epson RX-8025 and RX-8035
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Mathew McBride <matt@traverse.com.au>, linux-rtc@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXNbiOfz2OADKu5/Fro0uEc8qfMv6oN+akM7nAMsoNs=;
+        b=R5rmT8ovYq4T9/0xGqehGSjL2Tkr709x7kPP68DY1EqMpoNcw7BgNbAxp3J5ngszVn
+         8W2efjOTgRrAoEobCI4hFcCFO1t6kHHLpLzIwK5Py/VyfSuOkW9EVZtUbAp8ugV2Vl+m
+         tWL5L08czLP5JTQJNz5EJOFJdUX1ILP9izXYPs1ITg+zCiX8ecKGJhuH+EfwBpIwv1sD
+         +dMWDupVjw367iIJPFtdi4dcygoHlxIUwqDQpes3LTzBXQL+tObiKdlMHhZ7N4xzi7b+
+         KvKV1o+lGhKQaIK0mCqdbdGpD9TOIT48Ao9yBowHgfn3kCKRDzmIovBHuH4CxeJ91Wvx
+         mZjQ==
+X-Gm-Message-State: AOAM530Hw1faVojnBObdZAsNQxX4C/QjEdeFFb6DAgf2KMfWFseJBrC1
+        klLKwSIRkKIE4fjYpyvEaHETiT9BRQ==
+X-Google-Smtp-Source: ABdhPJzw9lbjwb1pdT4tIxapva2T9ilTykdW85tANNfljZrD6J0J6zkjV6l4axi9xOmTnyTsjbnCSg==
+X-Received: by 2002:a5d:928f:: with SMTP id s15mr4391019iom.142.1626204898597;
+        Tue, 13 Jul 2021 12:34:58 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id k13sm4640772ilv.18.2021.07.13.12.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jul 2021 12:34:57 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-clk@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: More dropping redundant minItems/maxItems
+Date:   Tue, 13 Jul 2021 13:34:53 -0600
+Message-Id: <20210713193453.690290-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+Another round of removing redundant minItems/maxItems from new schema in
+the recent merge window.
 
-2021=E5=B9=B47=E6=9C=8810=E6=97=A5(=E5=9C=9F) 9:41 Alexandre Belloni <alexa=
-ndre.belloni@bootlin.com>:
->
-> Hello,
->
-> On 09/07/2021 16:19:49+0900, Nobuhiro Iwamatsu wrote:
-> > Hi,
-> >
-> > 2021=E5=B9=B47=E6=9C=888=E6=97=A5(=E6=9C=A8) 6:52 Alexandre Belloni <al=
-exandre.belloni@bootlin.com>:
-> > >
-> > > On 08/07/2021 06:46:31+0900, Nobuhiro Iwamatsu wrote:
-> > > > Hi,
-> > > >
-> > > > 2021=E5=B9=B47=E6=9C=887=E6=97=A5(=E6=B0=B4) 16:17 Mathew McBride <=
-matt@traverse.com.au>:
-> > > > >
-> > > > > These are supported by the rtc-rx8025 module. RX-8025
-> > > > > also has support in ds1307 due to compatible time registers.
-> > > > >
-> > > > > Signed-off-by: Mathew McBride <matt@traverse.com.au>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/rtc/trivial-rtc.yaml | 3 +++
-> > > > >  1 file changed, 3 insertions(+)
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.ya=
-ml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > > > > index 7548d8714871..13925bb78ec7 100644
-> > > > > --- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-> > > > > @@ -32,6 +32,9 @@ properties:
-> > > > >        - dallas,ds3232
-> > > > >        # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
-> > > > >        - epson,rx8010
-> > > > > +      # I2C-BUS INTERFACE REAL TIME CLOCK MODULE
-> > > > > +      - epson,rx8025
-> > > > > +      - epson,rx8035
-> > > >
-> > > > 'epson,rx8035' is unnsecessary.
-> > > > This lists compatible string, so we don't list compatible that does=
-n't exist.
-> > > >
-> > >
-> > > Well, the previous patch adds it.
-> > >
-> >
-> > I couldn't find anything to add "epson,rx8035" as device tree compatibl=
-e in
-> > previous patch(rtc: rx8025: implement RX-8035 support)....
-> > I think that i2c_device_id was added and it is not device tree compatib=
-le.
-> > Can you tell me if my understanding is wrong?
->
-> Having "rx8035" in the struct i2c_device_id array is enough to have the
-> driver probed using DT. IIRC, it is a side effect of
-> i2c_of_match_device_sysfs()
+If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+same size as the list is redundant and can be dropped. Note that is DT
+schema specific behavior and not standard json-schema behavior. The tooling
+will fixup the final schema adding any unspecified minItems/maxItems.
 
-I understood. Thanks for the explanation.
+This condition is partially checked with the meta-schema already, but
+only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+An improved meta-schema is pending.
 
-Best regards,
-  Nobuhiro
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Cc: Brian Norris <computersforpeace@gmail.com>
+Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sebastian Siewior <bigeasy@linutronix.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-clk@vger.kernel.org
+Cc: iommu@lists.linux-foundation.org
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/clock/brcm,iproc-clocks.yaml      | 1 -
+ .../devicetree/bindings/iommu/rockchip,iommu.yaml         | 2 --
+ .../bindings/memory-controllers/arm,pl353-smc.yaml        | 1 -
+ Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml  | 8 --------
+ .../devicetree/bindings/rtc/faraday,ftrtc010.yaml         | 1 -
+ Documentation/devicetree/bindings/usb/nxp,isp1760.yaml    | 2 --
+ 6 files changed, 15 deletions(-)
 
---=20
-Nobuhiro Iwamatsu
-   iwamatsu at {nigauri.org / debian.org}
-   GPG ID: 40AD1FA6
+diff --git a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
+index 8dc7b404ee12..1174c9aa9934 100644
+--- a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
++++ b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
+@@ -50,7 +50,6 @@ properties:
+ 
+   reg:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - description: base register
+       - description: power register
+diff --git a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
+index d2e28a9e3545..ba9124f721f1 100644
+--- a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
+@@ -28,14 +28,12 @@ properties:
+       - description: configuration registers for MMU instance 0
+       - description: configuration registers for MMU instance 1
+     minItems: 1
+-    maxItems: 2
+ 
+   interrupts:
+     items:
+       - description: interruption for MMU instance 0
+       - description: interruption for MMU instance 1
+     minItems: 1
+-    maxItems: 2
+ 
+   clocks:
+     items:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
+index 7a63c85ef8c5..01c9acf9275d 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
+@@ -57,7 +57,6 @@ properties:
+ 
+   ranges:
+     minItems: 1
+-    maxItems: 3
+     description: |
+       Memory bus areas for interacting with the devices. Reflects
+       the memory layout with four integer values following:
+diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+index e5f1a33332a5..dd5a64969e37 100644
+--- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
++++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+@@ -84,7 +84,6 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - description: NAND CTLRDY interrupt
+       - description: FLASH_DMA_DONE if flash DMA is available
+@@ -92,7 +91,6 @@ properties:
+ 
+   interrupt-names:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - const: nand_ctlrdy
+       - const: flash_dma_done
+@@ -148,8 +146,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 2
+-          maxItems: 2
+           items:
+             - const: nand
+             - const: nand-int-base
+@@ -161,8 +157,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 3
+-          maxItems: 3
+           items:
+             - const: nand
+             - const: nand-int-base
+@@ -175,8 +169,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 3
+-          maxItems: 3
+           items:
+             - const: nand
+             - const: iproc-idm
+diff --git a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
+index 657c13b62b67..056d42daae06 100644
+--- a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
++++ b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
+@@ -30,7 +30,6 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    minItems: 2
+     items:
+       - description: PCLK clocks
+       - description: EXTCLK clocks. Faraday calls it CLK1HZ and says the clock
+diff --git a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+index a88f99adfe8e..f238848ad094 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+@@ -25,14 +25,12 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    maxItems: 2
+     items:
+       - description: Host controller interrupt
+       - description: Device controller interrupt in isp1761
+ 
+   interrupt-names:
+     minItems: 1
+-    maxItems: 2
+     items:
+       - const: host
+       - const: peripheral
+-- 
+2.27.0
+
