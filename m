@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D7E3C9104
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 22:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320A53C9106
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 22:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240892AbhGNT5i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Jul 2021 15:57:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47274 "EHLO mail.kernel.org"
+        id S240939AbhGNT5j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 14 Jul 2021 15:57:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241187AbhGNTu0 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:50:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 718B2613F2;
-        Wed, 14 Jul 2021 19:47:13 +0000 (UTC)
+        id S241471AbhGNTux (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:50:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07F55613D2;
+        Wed, 14 Jul 2021 19:47:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626292034;
-        bh=0FQ45pWstN+Zlkt7RQ/AP0WjMo6LEH/8ijahYy65CRY=;
+        s=k20201202; t=1626292079;
+        bh=l0Cw9TsyCc7qYbac/t7+DIPSgHI2IXBGitlxGGgv+sY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jMJCNSWghmge8V05ejODsCwEF8THFpoN17xDyvJkZTQOflCI2dwep5XIaRFmyJSKH
-         VjZKseOekPVGdX/LqUAyBG3iNjXPEHfUgWqRQ0el7VxuSq4LC7o2tx9aIvisMCMP3s
-         2NeO/wBMd8hD7EnbDmPYQWzQ3+PmHhdBwMiFhRNg1A3xO+ktpzrgbUyud/UAwY2r4Q
-         C/nnDmacQlxRYKZVC+jGXKROIfHUD3NP20qLAsPldilitwJ1vXNcUrGHcpDLALqaSz
-         ltwlQNiDg0e7CYUwLWo2tV2fHABjLhV3McnXIP98AzFlWNc6RKBK3PfeCwNWjjDS2j
-         U91y3gJpU84uQ==
+        b=ApajaRL2nqVbh+3GO1aGQIb5X6dAjjcpoZ+t+/qPWtgS0KQBbN4EnbBBpA8+NdAMo
+         xVjmIK/8vlOZ7c+2rvTQRUUPc6tUTem1XaIxKpmfp/FMkYy4EI8F4lkZ+Ta5e6vZga
+         cQkTjQTS0QD7gq9FKxWecpm+YPTqM67kuy8FXzDY+HkuCbFJF6q6QjxG18aUZmtGa9
+         QY7huHHR5HG3rv85usL0vilitCdC11UFVl6U+UQB0yTw8Ci1foihtX/2edEu309Ejv
+         oZGj26WwNkeHWbTXgcYT+Nrw2GEYZVEiy/0BMw3G0qw2Nb3PUn2Bv5/wlp/Rhrj3XR
+         6Qu9uhAcEHcxw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 34/39] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
-Date:   Wed, 14 Jul 2021 15:46:19 -0400
-Message-Id: <20210714194625.55303-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 24/28] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
+Date:   Wed, 14 Jul 2021 15:47:19 -0400
+Message-Id: <20210714194723.55677-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210714194625.55303-1-sashal@kernel.org>
-References: <20210714194625.55303-1-sashal@kernel.org>
+In-Reply-To: <20210714194723.55677-1-sashal@kernel.org>
+References: <20210714194723.55677-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index 4aff349ae301..8e09450d11a6 100644
+index 182fdd00e290..ecd61573dd31 100644
 --- a/drivers/rtc/rtc-max77686.c
 +++ b/drivers/rtc/rtc-max77686.c
-@@ -710,8 +710,8 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+@@ -718,8 +718,8 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
  
  add_rtc_irq:
  	ret = regmap_add_irq_chip(info->rtc_regmap, info->rtc_irq,
