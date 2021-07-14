@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 756F13C8D28
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 21:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8A23C8DAD
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 21:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbhGNTnu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Jul 2021 15:43:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38286 "EHLO mail.kernel.org"
+        id S236360AbhGNTp0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 14 Jul 2021 15:45:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38626 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235866AbhGNTnM (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 14 Jul 2021 15:43:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49C6661370;
-        Wed, 14 Jul 2021 19:40:19 +0000 (UTC)
+        id S236489AbhGNTov (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:44:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 02F96613D4;
+        Wed, 14 Jul 2021 19:41:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626291620;
-        bh=E+iOY2yzXNa/d+8Y+LyMMqT6lx3jzGNbC2lLNqo6/cM=;
+        s=k20201202; t=1626291687;
+        bh=ToHPHCSJF2WG4YeTUnEG8RVXT2dtGFwMgCE15/wD/m4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YBXeDHz3EoOH7LW7BUKeUYau/rT4Dr3O+Q1zCkRmTQUPRC4IoQhWZBWmyASJyGaM2
-         a0L+fca+LCFl9pKRPacQSEH5O0K2QH4guNs2GE7wRtzPUWp+NiKiqE2W6+FBlzApU9
-         sTforb6er/81kr2aerVtsrohfZ/qJoshSCAcddNWo62f7qW0qURclG5Pk0tC6QL0Zo
-         t0fyt0pA916IUvqzs/m6vFxKfN8f1iOTsJXTvlW1RmI8bNC4iZgvSgJRYUDy6AfV/a
-         hOg/XyIHLBmCUk4KdzsP83E7jL3/Q2Hr83JdC/xTPosunNVPjcHZ5Ugz4E23c+rN++
-         nkdk+Opowx65A==
+        b=dkLm0H8dwQqdS0JNEI//cTfqa/aHbSu7H2Rq7CqkXYPbKvHuO30y0q6X4UIHWC22q
+         6YtPLzLIYLe3iPM59kc1dbrSD4E/IhAg6f4qpPmsdVt/1LGGnKtbCwIipSudHUtzFO
+         P+PbPywQaNfYtPFWjT2Zcza9AQhXSx51z6ZG23iWo4jATzsoK722AGe5fKitueSib2
+         wiLBYbjmKDA80Iln3jhDaeyGC4fXYAkmqslM1VeVIwgXhiGNyD9IZq90i3lxhE1XIT
+         lkAjkwtbAGVIP5fhdAZryLVNtlC7q7oDc28Uz/vc+bZWrHvqaaaL54US0EWpt62fpe
+         Rl+YUOaPUSKHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+Cc:     Bixuan Cui <cuibixuan@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 097/108] rtc: max77686: Do not enforce (incorrect) interrupt trigger type
-Date:   Wed, 14 Jul 2021 15:37:49 -0400
-Message-Id: <20210714193800.52097-97-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 036/102] rtc: mxc_v2: add missing MODULE_DEVICE_TABLE
+Date:   Wed, 14 Jul 2021 15:39:29 -0400
+Message-Id: <20210714194036.53141-36-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210714193800.52097-1-sashal@kernel.org>
-References: <20210714193800.52097-1-sashal@kernel.org>
+In-Reply-To: <20210714194036.53141-1-sashal@kernel.org>
+References: <20210714194036.53141-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,47 +42,35 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzk@kernel.org>
+From: Bixuan Cui <cuibixuan@huawei.com>
 
-[ Upstream commit 742b0d7e15c333303daad4856de0764f4bc83601 ]
+[ Upstream commit 206e04ec7539e7bfdde9aa79a7cde656c9eb308e ]
 
-Interrupt line can be configured on different hardware in different way,
-even inverted.  Therefore driver should not enforce specific trigger
-type - edge falling - but instead rely on Devicetree to configure it.
+This patch adds missing MODULE_DEVICE_TABLE definition which generates
+correct modalias for automatic loading of this driver when it is built
+as an external module.
 
-The Maxim 77686 datasheet describes the interrupt line as active low
-with a requirement of acknowledge from the CPU therefore the edge
-falling is not correct.
-
-The interrupt line is shared between PMIC and RTC driver, so using level
-sensitive interrupt is here especially important to avoid races.  With
-an edge configuration in case if first PMIC signals interrupt followed
-shortly after by the RTC, the interrupt might not be yet cleared/acked
-thus the second one would not be noticed.
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20210526172036.183223-6-krzysztof.kozlowski@canonical.com
+Link: https://lore.kernel.org/r/20210508031509.53735-1-cuibixuan@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-max77686.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-mxc_v2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index d51cc12114cb..eae7cb9faf1e 100644
---- a/drivers/rtc/rtc-max77686.c
-+++ b/drivers/rtc/rtc-max77686.c
-@@ -717,8 +717,8 @@ static int max77686_init_rtc_regmap(struct max77686_rtc_info *info)
+diff --git a/drivers/rtc/rtc-mxc_v2.c b/drivers/rtc/rtc-mxc_v2.c
+index a577a74aaf75..5e0383401629 100644
+--- a/drivers/rtc/rtc-mxc_v2.c
++++ b/drivers/rtc/rtc-mxc_v2.c
+@@ -372,6 +372,7 @@ static const struct of_device_id mxc_ids[] = {
+ 	{ .compatible = "fsl,imx53-rtc", },
+ 	{}
+ };
++MODULE_DEVICE_TABLE(of, mxc_ids);
  
- add_rtc_irq:
- 	ret = regmap_add_irq_chip(info->rtc_regmap, info->rtc_irq,
--				  IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				  IRQF_SHARED, 0, info->drv_data->rtc_irq_chip,
-+				  IRQF_ONESHOT | IRQF_SHARED,
-+				  0, info->drv_data->rtc_irq_chip,
- 				  &info->rtc_irq_data);
- 	if (ret < 0) {
- 		dev_err(info->dev, "Failed to add RTC irq chip: %d\n", ret);
+ static struct platform_driver mxc_rtc_driver = {
+ 	.driver = {
 -- 
 2.30.2
 
