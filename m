@@ -2,30 +2,20 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0312E3C8061
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 10:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B2D3C849C
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 14:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbhGNIl2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Jul 2021 04:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238482AbhGNIl2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 14 Jul 2021 04:41:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B39EC06175F;
-        Wed, 14 Jul 2021 01:38:37 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9EA68CC;
-        Wed, 14 Jul 2021 10:38:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1626251915;
-        bh=YbyFIqNHO3+cig/EdKRQenB4YdAV8pA1dPKaR9Ajrb0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pZ0PKnDxKLI8zEjX4dbxQdGSqpGC0WsyAIK8YFApt9/5WfEUne+DwoFdwe719/AfP
-         q88kPyOc7s2GDRkoRX0SP6fZstxlduNZ7cq5hBJ6OQf97998wtga0XVb+HHu7oxcGp
-         +ri5+FqXm+R52UKo3X+sPsPQYvQ0Z+iF5BLNOVbc=
-Date:   Wed, 14 Jul 2021 11:38:34 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        id S231391AbhGNMrN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 14 Jul 2021 08:47:13 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:15325 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231260AbhGNMrM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 14 Jul 2021 08:47:12 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 59B93240005;
+        Wed, 14 Jul 2021 12:44:17 +0000 (UTC)
+Date:   Wed, 14 Jul 2021 14:44:17 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Rob Herring <robh@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
@@ -35,32 +25,28 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
         Brian Norris <computersforpeace@gmail.com>,
         Kamal Dasu <kdasu.kdev@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-clk@vger.kernel.org, iommu@lists.linux-foundation.org,
         linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: More dropping redundant minItems/maxItems
-Message-ID: <YO6iinTsYE6EC+mn@pendragon.ideasonboard.com>
+Message-ID: <YO7cIQLn3i4+zOK/@piout.net>
 References: <20210713193453.690290-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210713193453.690290-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Rob,
-
-Thank you for the patch.
-
-On Tue, Jul 13, 2021 at 01:34:53PM -0600, Rob Herring wrote:
+On 13/07/2021 13:34:53-0600, Rob Herring wrote:
 > Another round of removing redundant minItems/maxItems from new schema in
 > the recent merge window.
 > 
@@ -95,8 +81,7 @@ On Tue, Jul 13, 2021 at 01:34:53PM -0600, Rob Herring wrote:
 > Cc: linux-rtc@vger.kernel.org
 > Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 > ---
 >  .../devicetree/bindings/clock/brcm,iproc-clocks.yaml      | 1 -
@@ -228,8 +213,11 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 >      items:
 >        - const: host
 >        - const: peripheral
+> -- 
+> 2.27.0
+> 
 
 -- 
-Regards,
-
-Laurent Pinchart
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
