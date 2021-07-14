@@ -2,90 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E93FE3C84FE
-	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 15:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784BE3C8C67
+	for <lists+linux-rtc@lfdr.de>; Wed, 14 Jul 2021 21:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbhGNNLY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 14 Jul 2021 09:11:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33358 "EHLO mail.kernel.org"
+        id S233935AbhGNTl6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 14 Jul 2021 15:41:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231338AbhGNNLX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 14 Jul 2021 09:11:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C2646613B9;
-        Wed, 14 Jul 2021 13:08:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626268111;
-        bh=KIO73uVOgAHUJ2tW1iAFvOKar4Y4IkrEUHdCZSKRr8U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=myoJUPUnh11X57SjfqOXaxapv3wGdGj0ms5k3evtuw+sLNhV9XrpRNwamVPSclPfS
-         fw8+ArVTk6ff9xN+xeR+Weg4RReQQE8q/vAbBPEv+OX2nT81FSlqkdM5kE3yu4UHLQ
-         cF1q6yEG3mCdhZ8WBVp7PWZIp4NNK3P2tYer/09Y=
-Date:   Wed, 14 Jul 2021 15:08:28 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S233622AbhGNTlq (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 14 Jul 2021 15:41:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 829E3613D6;
+        Wed, 14 Jul 2021 19:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626291533;
+        bh=ToHPHCSJF2WG4YeTUnEG8RVXT2dtGFwMgCE15/wD/m4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qJ3RPvjkQEm4UouropyHw0Jj2KfM72WhpYIRZcKWah4OBBPtZUQsGg2uhSUAYBKZA
+         jSBm5xLicdTamODP+pg3Z05eUHRGeQ5+uHoCOokf29HjAbrWgfzyWeEWtPWqC/3SLS
+         JDXGYAYi2XeT74J2OYnSdGQtOOlHLCnaetcbnfk4Otw+zJiXzBbkpmlsDv60ti+oxK
+         UsCyFwnWpPZJeiJPQZw8pN0pPzjsV6z3y4MJJF4v4g97mv1KLQ/V1lNjyBJNIqxdGi
+         O5M4cHc8tcWT7YzdbMhWuuSqoo4ojsAuZt0JjKLdHgJZ238ZwexNvnNisWJypbmh/V
+         HovDbui9G+jrg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bixuan Cui <cuibixuan@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-clk@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: More dropping redundant minItems/maxItems
-Message-ID: <YO7hzMnIlCdE/z8K@kroah.com>
-References: <20210713193453.690290-1-robh@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 036/108] rtc: mxc_v2: add missing MODULE_DEVICE_TABLE
+Date:   Wed, 14 Jul 2021 15:36:48 -0400
+Message-Id: <20210714193800.52097-36-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210714193800.52097-1-sashal@kernel.org>
+References: <20210714193800.52097-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210713193453.690290-1-robh@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 01:34:53PM -0600, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems from new schema in
-> the recent merge window.
-> 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
-> 
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-> 
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-> Cc: Brian Norris <computersforpeace@gmail.com>
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Siewior <bigeasy@linutronix.de>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+From: Bixuan Cui <cuibixuan@huawei.com>
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[ Upstream commit 206e04ec7539e7bfdde9aa79a7cde656c9eb308e ]
+
+This patch adds missing MODULE_DEVICE_TABLE definition which generates
+correct modalias for automatic loading of this driver when it is built
+as an external module.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20210508031509.53735-1-cuibixuan@huawei.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/rtc/rtc-mxc_v2.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/rtc/rtc-mxc_v2.c b/drivers/rtc/rtc-mxc_v2.c
+index a577a74aaf75..5e0383401629 100644
+--- a/drivers/rtc/rtc-mxc_v2.c
++++ b/drivers/rtc/rtc-mxc_v2.c
+@@ -372,6 +372,7 @@ static const struct of_device_id mxc_ids[] = {
+ 	{ .compatible = "fsl,imx53-rtc", },
+ 	{}
+ };
++MODULE_DEVICE_TABLE(of, mxc_ids);
+ 
+ static struct platform_driver mxc_rtc_driver = {
+ 	.driver = {
+-- 
+2.30.2
+
