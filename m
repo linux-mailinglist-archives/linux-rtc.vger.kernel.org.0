@@ -2,76 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5913CA440
-	for <lists+linux-rtc@lfdr.de>; Thu, 15 Jul 2021 19:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC2B3CBE2B
+	for <lists+linux-rtc@lfdr.de>; Fri, 16 Jul 2021 23:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235462AbhGOR2i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 15 Jul 2021 13:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbhGOR2g (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 15 Jul 2021 13:28:36 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9001C0613E7
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id b12so3754835plh.10
-        for <linux-rtc@vger.kernel.org>; Thu, 15 Jul 2021 10:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
-         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
-         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
-         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
-         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
-         7b/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=rS/8HLX4ND1LPGdz+GRavDQHbxDqrUwzer587ZAUtmV+0OiiqCLz2SBSwseTDj2pmj
-         PBVlzzkaGmHGruXEae1yeju6kLFgT82PkcSgrnheaBglA77B73ifFpRQ2z07sWtVBpUf
-         eeBQX1LyFYbA06oQ4PhEI8sClJplkd4P1lYQ5hVjcHStu69dElBr/9yWnXfCT9ZEGndB
-         TWUDK6ThuROMwnzCZOaudtHumbBeN1eY4Sb9NImfjyr3sBQTup8IGi9BIYLi/qfLELey
-         FuSQ33QqKcon/jIDA/W/PgPT5JXpUSUcuo3nr5MKcHaj0XXUJZyciJhdXddCIFo7UAhF
-         rpAg==
-X-Gm-Message-State: AOAM530cr4ZFBaj7A/pQTmT1dLQMNuf4ZMBRTAPlXpidqzEQh38o6TwT
-        6f1zFxAVgtwft5ECW8g3KC0OTFaW8c61YtfGt3g=
-X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
-X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
- Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
+        id S234698AbhGPVID (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 16 Jul 2021 17:08:03 -0400
+Received: from mx-out.tlen.pl ([193.222.135.145]:17649 "EHLO mx-out.tlen.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232896AbhGPVID (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 16 Jul 2021 17:08:03 -0400
+Received: (wp-smtpd smtp.tlen.pl 11191 invoked from network); 16 Jul 2021 23:05:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1626469503; bh=78D/XVBXBKYEstCIhkP3KuOQ9/83xoUC4l8G6kPPPbg=;
+          h=From:To:Cc:Subject;
+          b=uB9PBYVmtZTC8+SB6ZbTkbwVZjmu5cbHBhFSA/lkoUjFYPU0pQy5TZfrgnQIP87Gd
+           58qYQ/0cyE2NAK7W+x/n8FbJfJq6eSdiJdw+xFZ8j/ee6LMNiLXIBXwl8SHvDb6KUR
+           +lmGtkDxosU7zpTjH0G8rUBJqYU0FF5CABGAufEs=
+Received: from aaey41.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.128.41])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 16 Jul 2021 23:05:02 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc-cmos: remove stale REVISIT comments
+Date:   Fri, 16 Jul 2021 23:04:37 +0200
+Message-Id: <20210716210437.29622-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
- -0700 (PDT)
-Reply-To: faty.muhamad@gmail.com
-From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
-Date:   Thu, 15 Jul 2021 17:25:41 +0000
-Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: cce730fc3bc9d7cf797e29ca7373e195
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [8bMk]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Dear,
+It appears mc146818_get_time() and mc146818_set_time() now correctly
+use the century register as specified in the ACPI FADT table. It is not
+clear what else could be done here.
 
-My name is Ms.Fatima Muhammad., Please forgive me for stressing you
-with my predicaments and I sorry to approach you through this media
-because is serves the fastest means of  my communication right now,
+These comments were introduced by
+        commit 7be2c7c96aff ("[PATCH] RTC framework driver for CMOS RTCs")
+in 2007, which originally referenced function get_rtc_time() in
+include/asm-generic/rtc.h .
 
-I came across your Email from my personal search and I decided to
-contact you believing you will be honest to fulfill my business
-proposal which I believe that will be a very good opportunity for both
-of us. Please it is my pleasure to contact you today for a business
-partnership investments projects worth $4.6 million USD which I intend
-to establish in your country..
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Pls If this business proposal offends your moral and ethic values do
-accept my apology. therefore kindly contact me immediately if you are
-interested for more details.
+---
+ drivers/rtc/rtc-cmos.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-Thank you for your wiliness to help me
-Yours Sincerely Fatima Muhammad
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 670fd8a2970e..eb15067a605e 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -229,19 +229,13 @@ static int cmos_read_time(struct device *dev, struct rtc_time *t)
+ 	if (!pm_trace_rtc_valid())
+ 		return -EIO;
+ 
+-	/* REVISIT:  if the clock has a "century" register, use
+-	 * that instead of the heuristic in mc146818_get_time().
+-	 * That'll make Y3K compatility (year > 2070) easy!
+-	 */
+ 	mc146818_get_time(t);
+ 	return 0;
+ }
+ 
+ static int cmos_set_time(struct device *dev, struct rtc_time *t)
+ {
+-	/* REVISIT:  set the "century" register if available
+-	 *
+-	 * NOTE: this ignores the issue whereby updating the seconds
++	/* NOTE: this ignores the issue whereby updating the seconds
+ 	 * takes effect exactly 500ms after we write the register.
+ 	 * (Also queueing and other delays before we get this far.)
+ 	 */
+-- 
+2.25.1
+
