@@ -2,97 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2523D0025
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Jul 2021 19:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4D93D00EB
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Jul 2021 19:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231951AbhGTQnK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Jul 2021 12:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbhGTQms (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Jul 2021 12:42:48 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E85C0613E2;
-        Tue, 20 Jul 2021 10:23:15 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m2so26869719wrq.2;
-        Tue, 20 Jul 2021 10:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Irrd4jtOn6498HfdXqzrUQsx/bjOrWlV0M76X3ljkdk=;
-        b=D33o0g2qylPxHB47L2iv+w0ysH8u0oV58QeQwMHn2/cJTtBCBqLondU6e4pixdyoFh
-         33Or13AQG6UDV/Wyu0Mn4tPp2pLh4UvJ4hbCaLnyiTfcNfwHJvk0MqKSlEqamVYIVeNZ
-         RlkkH8GGKFqzcnKJRRjtvrIBalJgmmkZrUB76Okhe5SnwbYCd3FHf+deqGBx1vDuIFxO
-         /mTTFtDqHG/1/GzNC0eFWcpyeGD9wsMGaqPUfeepwzXjRlT+Wxve4M/YTv6AUrx/cAM4
-         ht+QgV65sOXjgu4PFMJ8F9Bn16Oxj/SopcNUJvvR/bhBVjdeJz9bri9asDaND9wtkhVg
-         7HVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Irrd4jtOn6498HfdXqzrUQsx/bjOrWlV0M76X3ljkdk=;
-        b=oxbWbv5C53V7sPtIxxU1DGxuy1Ci40znD4A6+gLru8U8eEgf6owahUJwFFdimLt28w
-         g2ilvqX+bpq6nAym12EQPMU8Mcr/Qv0FRONbDn35L5gJkHW8HEb9P8wX38yBXYKQK531
-         E23CJtrx6tFTGwM1NmI4Rs60llI6lu6tVt1kNNI5mulH1ohV9/EtGqbbK1go1GqGXeSb
-         yYor7R1nRe4bAkuEr2+hjBw5AIuJIsddIRlwRShFOXHOhxSlchmFN0FwBsoR8LP2zc5a
-         oT4Iktzn18Z+3503QjFbpo70nYybJRVSDhwW9cKnPbgxUVDYSEm43didRDyEH9NzfEWU
-         jvtg==
-X-Gm-Message-State: AOAM531TojI/UAtidRnR1yDegiO/jT1n1//kdNeOUvyqXHaHUr8/7iTY
-        oY0xuXQHh0qqLHc/e55NpXk=
-X-Google-Smtp-Source: ABdhPJyrV+RcBAPf8vQpCa1Q1/zmv44/OHcaeK45lwFAPyy6HcdPLZqpRZHO37iwQ1EF5NKvPkOA+Q==
-X-Received: by 2002:adf:dfc9:: with SMTP id q9mr36749999wrn.117.1626801793589;
-        Tue, 20 Jul 2021 10:23:13 -0700 (PDT)
-Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id a7sm13899964wru.67.2021.07.20.10.23.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 10:23:13 -0700 (PDT)
-From:   Romain Perier <romain.perier@gmail.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S232292AbhGTRJg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Jul 2021 13:09:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229536AbhGTRIt (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 20 Jul 2021 13:08:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E6C8361004;
+        Tue, 20 Jul 2021 17:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626803367;
+        bh=rr5DyOF74U0H7iKb0m9zjXCsuqsP8q1pI+d5NX2axk8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VEsgFDZvIXjcoaGpPEoA0Lu9YRxM0Dj90aWqsnbErQ2UUMNfFjiL3KKy2ihSuQKA8
+         DpJfkpmYcVJtchYg4JZ0xVl4g2Mg2o7fCdXq98nn/PAwMTFoWJ250/salXXOhJJg55
+         abW/iC3f5GUZpAEMSlUl/XMmPNxf0dbMFp9c17FIFUFh6aPXTQv17aO0FFf2m4m8ho
+         FzpeQH9QYcsgshAwYqEOKnzQKiefkbesH4vObWgtP6wKthPFfdBb/jqahxbI+okmue
+         fOLCT92FxMSaj5N+ZOIj1PAxbFu2Oagsxe6Rc6uhcjBjL97r/vUbkyUju8PW712k3f
+         K0QVogmSx6JEw==
+Date:   Tue, 20 Jul 2021 19:49:17 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 3/3] ARM: dts: mstar: Add rtc device node
-Date:   Tue, 20 Jul 2021 19:22:51 +0200
-Message-Id: <20210720172251.4504-4-romain.perier@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210720172251.4504-1-romain.perier@gmail.com>
-References: <20210720172251.4504-1-romain.perier@gmail.com>
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH] dt-bindings: Remove "status" from schema examples
+Message-ID: <20210720194917.576b7d70@coco.lan>
+In-Reply-To: <20210720172025.363238-1-robh@kernel.org>
+References: <20210720172025.363238-1-robh@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This adds the definition of the rtc device node. The RTC being able to
-work with the oscillator at 12Mhz for now, it shares the same xtal than
-the watchdog.
+Em Tue, 20 Jul 2021 11:20:25 -0600
+Rob Herring <robh@kernel.org> escreveu:
 
-Signed-off-by: Romain Perier <romain.perier@gmail.com>
----
- arch/arm/boot/dts/mstar-v7.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+> There's no reason to have "status" properties in examples. "okay" is the
+> default, and "disabled" turns off some schema checks ('required'
+> specifically).
+> 
+> Enabling qca,ar71xx causes a warning, so let's fix the node names:
+> 
+> Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: phy@3: '#phy-cells' is a required property
+>         From schema: schemas/phy/phy-provider.yaml
+> 
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Robert Marko <robert.marko@sartura.hr>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ramesh Shanmugasundaram <rashanmu@gmail.com>
+> Cc: "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> Cc: ChiYuan Huang <cy_huang@richtek.com>
+> Cc: Wei Xu <xuwei5@hisilicon.com>
+> Cc: Dilip Kota <eswara.kota@linux.intel.com>
+> Cc: Karol Gugala <kgugala@antmicro.com>
+> Cc: Mateusz Holenko <mholenko@antmicro.com>
+> Cc: Olivier Moysan <olivier.moysan@st.com>
+> Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../display/allwinner,sun8i-a83t-dw-hdmi.yaml |  2 --
+>  .../display/panel/boe,tv101wum-nl6.yaml       |  1 -
 
-diff --git a/arch/arm/boot/dts/mstar-v7.dtsi b/arch/arm/boot/dts/mstar-v7.dtsi
-index 982dba9d28eb..1d4419aee67d 100644
---- a/arch/arm/boot/dts/mstar-v7.dtsi
-+++ b/arch/arm/boot/dts/mstar-v7.dtsi
-@@ -116,6 +116,13 @@ watchdog@6000 {
- 				clocks = <&xtal_div2>;
- 			};
- 
-+			rtc@2400 {
-+				compatible = "mstar,msc313-rtc";
-+				reg = <0x2400 0x40>;
-+				clocks = <&xtal_div2>;
-+				interrupts-extended = <&intc_irq GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+
- 			intc_fiq: interrupt-controller@201310 {
- 				compatible = "mstar,mst-intc";
- 				reg = <0x201310 0x40>;
--- 
-2.30.2
+>  .../bindings/media/nxp,imx7-mipi-csi2.yaml    |  2 --
+>  .../bindings/media/renesas,drif.yaml          |  1 -
 
+Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org> # For media
+
+
+Thanks,
+Mauro
