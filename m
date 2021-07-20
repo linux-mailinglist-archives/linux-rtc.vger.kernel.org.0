@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 350913D0027
-	for <lists+linux-rtc@lfdr.de>; Tue, 20 Jul 2021 19:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816B53D002A
+	for <lists+linux-rtc@lfdr.de>; Tue, 20 Jul 2021 19:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbhGTQnO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 20 Jul 2021 12:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S232233AbhGTQnQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 20 Jul 2021 12:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbhGTQmq (ORCPT
+        with ESMTP id S232324AbhGTQmq (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Tue, 20 Jul 2021 12:42:46 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8D9C0613DF;
-        Tue, 20 Jul 2021 10:23:10 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id g8-20020a1c9d080000b02901f13dd1672aso1931197wme.0;
-        Tue, 20 Jul 2021 10:23:10 -0700 (PDT)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F750C0613E0;
+        Tue, 20 Jul 2021 10:23:12 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id u1so26890990wrs.1;
+        Tue, 20 Jul 2021 10:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TPW95lb64Ytz4tlki+ReqrdJoY3TpXfPxzeB+jbcK4Y=;
-        b=h1Y58ykjJ3F4+1DP/PAnlI8gWSVOl7yqP+Zjdu+Eq+6VfN+V/iLgcCoKMicevOkFN4
-         K+KUS4uHakF0Mzf+otsFGbWWKb8+GcG3dvK4p01DwcxujstXxgwr7XWdD03t2X7KJvjw
-         uEC4ONZ8+atnXbIWSOqv/04HxrE1GE4P5m3nt6lPW6fkq8EUvED232cK/OdjZHlMHTHo
-         jrEz3UPr+H7zAJOl7z7mKUYfICSfHslwPwRNS/GphybWh0QnZEz3dve9DMJTmZ8TiWTz
-         cPT1JV+qpyGxhnQvU7gB6I6kHPshk69vyyKd9GH7u20/4o9ux0Q+djiUrF85w6ZEta/l
-         Q9sw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zhLiMJZRNY6qUDk4IIbiRtvY/5CeP3owVFf8Rh0foos=;
+        b=c7ZsQEReXTuJMEibJsFZnTOqVmK4iaqbAXocjphBZKhR4EIAWSr8lK1YMZtsLvOlFf
+         9EaJ2bRTt+9ZN56hL7nEyi1Xwse4BhfWzioHmeY7NE272x0c23LvSuhepcYRVP4v3/f5
+         T+MaRN5VHFzyyVhn2muBzl/FQCvLRGfHfH7CrezRhY+qGFFPxfteT4F+BplHVQ64VrCh
+         YdLqoEK73t2pwye9yR7eNPFZB1mppp7zXDkfLUEvDlPYzNj+QS6XLg3EJxNOcSE9gsVv
+         vsUZSIHPRE+gw6LUF7fhuZvfokWOu6OGkgbNosDtwtIiNsnFBCE7LIqqKCn+or5df1Ob
+         dcaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TPW95lb64Ytz4tlki+ReqrdJoY3TpXfPxzeB+jbcK4Y=;
-        b=AvsWEl5IawqD2gpqbOsz2OwzAXtINuPyT19mplKpfKlCA3iKAzqQ4VUNNuxmp3Gy0j
-         6+wPcAXAAduxzP/ylDjGVtYzSeQngYbP9p8Yzortll0TC1TvGqktQ4edf64vaoPWWWnM
-         2R0OJKDfW3BvXVtePeEjTj8+p0TirgDqndANwXGSa+qg3+d2qSPuL0ZAYpas/WS0Xfry
-         h4LzCqtWvvGCTLiibQaGwmqzhf2MmK92+ne1x6pl1fVQkE0zNEikdCws4a/J8N3NF7V3
-         PxN01eh42l+SFvm70Z5I5QPId0rT0/gP489+DPCXprbPlBmSxWdNg5nBryJaRGLH2afK
-         +m2w==
-X-Gm-Message-State: AOAM5318CkQizUmhkHeauYZYGHh/WcxJPOnpUu6AeILMG0VHoxB6YKRr
-        BT2EJd/nC9CQMcVLmYFLv28=
-X-Google-Smtp-Source: ABdhPJwjwPsBB+KxDoJoSPw9XBAyqXkyAd6N2QJC6zYOSs8VWb7t51bwWsBuGRMGyAoVQa8PpLbOOg==
-X-Received: by 2002:a05:600c:21d7:: with SMTP id x23mr32552240wmj.98.1626801789183;
-        Tue, 20 Jul 2021 10:23:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zhLiMJZRNY6qUDk4IIbiRtvY/5CeP3owVFf8Rh0foos=;
+        b=EhH+JYbiTBKGou23En6AQzHyaoVnIIdcKdOXbfovp99WpMXFtNDqvSEe/gs5LNeHaE
+         /eDreybUL+9SkdLhe6KlDSWSM/HbEAtcpolVe5m5/LY8clS1d9QA/CPHKxCHg2ZEFqjG
+         b99tfpnub5X2sfb1vW5PROtbKBeDnEHBnNkdHGNPz5ezAVIrLlFHw27Ah2snx2+X0GaP
+         RW4VgLlZUJTrdgji+FB5fc6wR0RIH97iHRq0Aq/zJx1h4hXdIuonOdyRQ1Ka0QO+Kz5w
+         fvP91jhHF66RDwFa91eLcFLlp9hwsg+h+FSLPBh2U62vktbN6pjxo6L4lhGvrj0o45Le
+         6dXw==
+X-Gm-Message-State: AOAM533dGqkBBeFkMKL0qPw1uCfuchctREdcYXtyfO+ms8S5C6SYbggQ
+        RC5ZZG95tZ/pxEOCcCnys9zIJmY0Mxk=
+X-Google-Smtp-Source: ABdhPJwkskpxG+Uu6ZM1dtd9EQWOfgynMHFAOU3QVeTkNsxtOPoX2tS4zH7DbxsanYPBBRIK6gUVDQ==
+X-Received: by 2002:a05:6000:18ae:: with SMTP id b14mr36272495wri.427.1626801790789;
+        Tue, 20 Jul 2021 10:23:10 -0700 (PDT)
 Received: from debby (176-141-241-253.abo.bbox.fr. [176.141.241.253])
-        by smtp.gmail.com with ESMTPSA id y12sm8132439wmc.12.2021.07.20.10.23.08
+        by smtp.gmail.com with ESMTPSA id d29sm29755232wrb.63.2021.07.20.10.23.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 10:23:08 -0700 (PDT)
+        Tue, 20 Jul 2021 10:23:10 -0700 (PDT)
 From:   Romain Perier <romain.perier@gmail.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -54,38 +54,79 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/3] Add RTC for MStar SoCs
-Date:   Tue, 20 Jul 2021 19:22:48 +0200
-Message-Id: <20210720172251.4504-1-romain.perier@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: rtc: Add Mstar MSC313e RTC devicetree bindings documentation
+Date:   Tue, 20 Jul 2021 19:22:49 +0200
+Message-Id: <20210720172251.4504-2-romain.perier@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210720172251.4504-1-romain.perier@gmail.com>
+References: <20210720172251.4504-1-romain.perier@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This patches series adds a new driver for the RTC found in the Mstar
-MSC313e SoCs and newer. It adds a basic rtc driver, the corresponding
-devicetree bindings and its documentation.
+This adds the documentation for the devicetree bindings of the Mstar
+MSC313e RTC driver, found from MSC313e SoCs and newer.
 
-Daniel Palmer (1):
-  rtc: Add support for the MSTAR MSC313 RTC
-
-Romain Perier (2):
-  dt-bindings: rtc: Add Mstar MSC313e RTC devicetree bindings
-    documentation
-  ARM: dts: mstar: Add rtc device node
-
- .../bindings/rtc/mstar,msc313-rtc.yaml        |  46 ++++
- MAINTAINERS                                   |   1 +
- arch/arm/boot/dts/mstar-v7.dtsi               |   7 +
- drivers/rtc/Kconfig                           |  10 +
- drivers/rtc/Makefile                          |   1 +
- drivers/rtc/rtc-msc313.c                      | 246 ++++++++++++++++++
- 6 files changed, 311 insertions(+)
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+---
+ .../bindings/rtc/mstar,msc313-rtc.yaml        | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
- create mode 100644 drivers/rtc/rtc-msc313.c
 
+diff --git a/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+new file mode 100644
+index 000000000000..978c28bc3da5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/mstar,msc313-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mstar MSC313e RTC Device Tree Bindings
++
++allOf:
++  - $ref: "rtc.yaml#"
++
++maintainers:
++  - Daniel Palmer <daniel@0x0f.com>
++  - Romain Perier <romain.perier@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - mstar,msc313-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    rtc@2400 {
++        compatible = "mstar,msc313-rtc";
++        reg = <0x2400 0x40>;
++        clocks = <&xtal_div2>;
++        interrupts-extended = <&intc_irq GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
++    };
++...
 -- 
 2.30.2
 
