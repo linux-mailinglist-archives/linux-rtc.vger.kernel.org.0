@@ -2,90 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 391573D0FC8
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jul 2021 15:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD303D103A
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Jul 2021 15:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238104AbhGUNBb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Jul 2021 09:01:31 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:37843 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238587AbhGUNBK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Jul 2021 09:01:10 -0400
-Received: by mail-io1-f43.google.com with SMTP id r18so2389800iot.4;
-        Wed, 21 Jul 2021 06:41:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=KEcNM05hAV/bUpQFjkQJfyPHgSoI0NrQQwwCVIQKpSI=;
-        b=H2OdpDdiBmG89qhcyO13IWRISCB0KKehfi2gw1oLUPDdzi3qLg3rF2+9jyKp4LGtDE
-         nLEw/VxBRaus9hiY5Nn90J6m0yeL66n8hbJdC8SdpZlVv5tCYfInab6NeyuEtRW+Rlez
-         Nnrmxn2b2O3OE17qgN4C92hBM6VW/B9IxTNDV6NIaboE5m7VKHT5jSmYTCuKNHvuUpRc
-         a436I0Ir8aNNnuBQsHcJvRzNL6ST5MeC5pro4bdUMWW5AhMUgGMPWUHFhbuRPOVWsHnV
-         vmrQkAQrA/o5F8vCn5mc6/UFHVdReisLPaQ5dr9ud0XTgKoozAyedKFq7Ve9XstCgTip
-         dpGA==
-X-Gm-Message-State: AOAM533c9qXNwbBvMv4e945iaqtwM8/CgvfbX9U8cZeCHqGRQwVKI2Jq
-        7HqAdV+KBTpY/fDDdzF+mg==
-X-Google-Smtp-Source: ABdhPJxzRF5CTTIes7TdGyv5ZT/q6dcuiCWSwD4gd9FEJkUAjaXUzxiU/o0bwQ1dNmuQg5mOv5C1ag==
-X-Received: by 2002:a6b:b2d7:: with SMTP id b206mr26848213iof.155.1626874906364;
-        Wed, 21 Jul 2021 06:41:46 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m184sm14330857ioa.17.2021.07.21.06.41.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 06:41:45 -0700 (PDT)
-Received: (nullmailer pid 2187177 invoked by uid 1000);
-        Wed, 21 Jul 2021 13:41:42 -0000
+        id S239071AbhGUNJL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Jul 2021 09:09:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238996AbhGUNJH (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 21 Jul 2021 09:09:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3453C6121E;
+        Wed, 21 Jul 2021 13:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626875384;
+        bh=Fcd46JsRF5Xzokx8EbEQAOvgZr4ne1Di199XOOqGdXI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MlngOFVzPy6D4n/vJS8cjv7UbvZgk2BbOpnI5+S4srLE5uyBvjmuzvuK6bVFb3fFj
+         19HPLZGZUuiHcV3pVbD+3M2mCNVMqiZ2hmQprUrNSSdqQ2+6HZZKs4XkkeMRjPgsCF
+         j/6ZYtYhD/trRr673VMxc9e6EOc0rL1pUmfUtUijh5aOHbIGCnCQ8Nxi8CTPWlypNM
+         uCXisRccE7jOfEPF/4SZTKVHS8JIOZ6Wsk0Zon74S97Bmb3BzdgmWrhehfUzALQmrN
+         +an+o4ZhXnKawCDxTNtX0d6jgAw7c+hMbNWhkva58kZcDvUDKAJ5khJ/kid8yv0l2q
+         VRaXfzTQnwJtw==
+Received: by mail-ej1-f54.google.com with SMTP id dp20so3351333ejc.7;
+        Wed, 21 Jul 2021 06:49:44 -0700 (PDT)
+X-Gm-Message-State: AOAM5331v6oohHBSF80LwYsbKi9X5VAFuedk6zKHNBlB31uxJ0CB1qYQ
+        iVN8OjAlq9i/+Slb5UrxCjUu1TWer8xJtnoEgg==
+X-Google-Smtp-Source: ABdhPJzh5cj++jO5fwUbg47UmcOOhxrwvB/MBLzILA/PNS+iWEyxrXcgOCfI8OpXmusl3DEp7otnJa9jAjW0ixfrR7g=
+X-Received: by 2002:a17:906:5fc1:: with SMTP id k1mr37644013ejv.360.1626875382783;
+ Wed, 21 Jul 2021 06:49:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210720172025.363238-1-robh@kernel.org> <8343dfe9d1af1ad4ab806104b74a95819c765dea.camel@pengutronix.de>
+In-Reply-To: <8343dfe9d1af1ad4ab806104b74a95819c765dea.camel@pengutronix.de>
 From:   Rob Herring <robh@kernel.org>
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     devicetree@vger.kernel.org, Daniel Palmer <daniel@0x0f.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Date:   Wed, 21 Jul 2021 07:49:30 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+XEbEJuoSiQ=PeL-34FkLqG-eYA86FvNK7K-uGbaTFwg@mail.gmail.com>
+Message-ID: <CAL_Jsq+XEbEJuoSiQ=PeL-34FkLqG-eYA86FvNK7K-uGbaTFwg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Remove "status" from schema examples
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Robert Marko <robert.marko@sartura.hr>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20210720172251.4504-2-romain.perier@gmail.com>
-References: <20210720172251.4504-1-romain.perier@gmail.com> <20210720172251.4504-2-romain.perier@gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: rtc: Add Mstar MSC313e RTC devicetree bindings documentation
-Date:   Wed, 21 Jul 2021 07:41:42 -0600
-Message-Id: <1626874902.819807.2187176.nullmailer@robh.at.kernel.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 20 Jul 2021 19:22:49 +0200, Romain Perier wrote:
-> This adds the documentation for the devicetree bindings of the Mstar
-> MSC313e RTC driver, found from MSC313e SoCs and newer.
-> 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> ---
->  .../bindings/rtc/mstar,msc313-rtc.yaml        | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
-> 
+On Wed, Jul 21, 2021 at 2:33 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+>
+> Hi Rob,
+>
+> On Tue, 2021-07-20 at 11:20 -0600, Rob Herring wrote:
+> > There's no reason to have "status" properties in examples. "okay" is the
+> > default, and "disabled" turns off some schema checks ('required'
+> > specifically).
+>
+> Is this documented somewhere? If not, should it be? (Maybe in writing-
+> schema.rst -> Schema Contents -> examples?)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I don't think it is. I'm writing a schema for it which works for both
+those that read documentation and those that don't.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.example.dts:23.46-47 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:380: Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1418: dt_binding_check] Error 2
-\ndoc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1507685
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Rob
