@@ -2,89 +2,141 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A473D3C91
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jul 2021 17:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002E03D4214
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jul 2021 23:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbhGWO7C (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Jul 2021 10:59:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:47780 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235668AbhGWO66 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 23 Jul 2021 10:58:58 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75D46139F;
-        Fri, 23 Jul 2021 08:39:31 -0700 (PDT)
-Received: from localhost.localdomain (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6240F3F73D;
-        Fri, 23 Jul 2021 08:39:29 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S231350AbhGWUiF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Jul 2021 16:38:05 -0400
+Received: from mail-il1-f178.google.com ([209.85.166.178]:46623 "EHLO
+        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229461AbhGWUiF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Jul 2021 16:38:05 -0400
+Received: by mail-il1-f178.google.com with SMTP id r5so2730879ilc.13;
+        Fri, 23 Jul 2021 14:18:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CKG+SIFOLcCaYKwd2tEvLAZD7WaQ/IHSvWAesLjHfew=;
+        b=CEaUDY2BFU+hC09pvJQc9Q3JSElps/2BDAddKB3n/wvQoZmIA5qafBEzQoijFBACWL
+         RhX8paZvh6TUHiXsLB58OoHVJ/GgIRrBTGe66agHPjDq0lk7taUMf4ZqaHEiq4+5ODrT
+         9ouT5GAgm8qBVoYIKPhijY6G6eXDKH2yAZNotsLDhcw732euBHW2N9ABJHV3Nc/HgPOa
+         0XAmsOqpUJzVuWb0BtWz/EWDgxwqKZ0AM5NrLLa8BIScAXWJ1LOxCzpWIsYzhsa8kmlL
+         PlcPGoKhlkkvq5yurcwGfL0/hRk1RtnrsqMkGDBPMB+oOTb21Cgx3l36Uj0zMvNNUWno
+         H2OA==
+X-Gm-Message-State: AOAM530uR/cpOrMT1K1NElOeB536K5QIAmmFHExv742BFTCn41Gqc0FL
+        0/p32M+Ykk8Bc0IQlH5fRw==
+X-Google-Smtp-Source: ABdhPJyOIbF9rq5B3bw9Tx2y/wvm92OqGc0Be5P5cyYWmK3oh5EqS+J3TTa94Os0/ICItRZB++DE4A==
+X-Received: by 2002:a05:6e02:190d:: with SMTP id w13mr4883804ilu.53.1627075117897;
+        Fri, 23 Jul 2021 14:18:37 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l11sm19496837ios.8.2021.07.23.14.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jul 2021 14:18:37 -0700 (PDT)
+Received: (nullmailer pid 2602448 invoked by uid 1000);
+        Fri, 23 Jul 2021 21:18:32 -0000
+Date:   Fri, 23 Jul 2021 15:18:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, netdev@vger.kernel.org,
+        Robert Marko <robert.marko@sartura.hr>,
+        Karol Gugala <kgugala@antmicro.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>, linux-rtc@vger.kernel.org,
+        Maxime Ripard <mripard@kernel.org>,
+        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
+        Mateusz Holenko <mholenko@antmicro.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Ramesh Shanmugasundaram <rashanmu@gmail.com>,
+        alsa-devel@alsa-project.org,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH v8 07/11] rtc: sun6i: Add Allwinner H616 support
-Date:   Fri, 23 Jul 2021 16:38:34 +0100
-Message-Id: <20210723153838.6785-8-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <20210723153838.6785-1-andre.przywara@arm.com>
-References: <20210723153838.6785-1-andre.przywara@arm.com>
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Olivier Moysan <olivier.moysan@st.com>
+Subject: Re: [PATCH] dt-bindings: Remove "status" from schema examples
+Message-ID: <20210723211832.GA2602340@robh.at.kernel.org>
+References: <20210720172025.363238-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210720172025.363238-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The H616 RTC changes its day storage to the newly introduced linear day
-scheme, so pair the new compatible string with this feature flag.
-The clock part is missing an external 32768 Hz oscillator input pin,
-for future expansion we must thus ignore any provided clock for now.
+On Tue, 20 Jul 2021 11:20:25 -0600, Rob Herring wrote:
+> There's no reason to have "status" properties in examples. "okay" is the
+> default, and "disabled" turns off some schema checks ('required'
+> specifically).
+> 
+> Enabling qca,ar71xx causes a warning, so let's fix the node names:
+> 
+> Documentation/devicetree/bindings/net/qca,ar71xx.example.dt.yaml: phy@3: '#phy-cells' is a required property
+>         From schema: schemas/phy/phy-provider.yaml
+> 
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Robert Marko <robert.marko@sartura.hr>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Ramesh Shanmugasundaram <rashanmu@gmail.com>
+> Cc: "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> Cc: ChiYuan Huang <cy_huang@richtek.com>
+> Cc: Wei Xu <xuwei5@hisilicon.com>
+> Cc: Dilip Kota <eswara.kota@linux.intel.com>
+> Cc: Karol Gugala <kgugala@antmicro.com>
+> Cc: Mateusz Holenko <mholenko@antmicro.com>
+> Cc: Olivier Moysan <olivier.moysan@st.com>
+> Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-media@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../display/allwinner,sun8i-a83t-dw-hdmi.yaml |  2 --
+>  .../display/panel/boe,tv101wum-nl6.yaml       |  1 -
+>  .../bindings/media/nxp,imx7-mipi-csi2.yaml    |  2 --
+>  .../bindings/media/renesas,drif.yaml          |  1 -
+>  .../bindings/net/intel,dwmac-plat.yaml        |  2 --
+>  .../bindings/net/intel,ixp4xx-ethernet.yaml   |  2 --
+>  .../bindings/net/nfc/samsung,s3fwrn5.yaml     |  3 ---
+>  .../devicetree/bindings/net/qca,ar71xx.yaml   | 25 ++++---------------
+>  .../regulator/richtek,rt6245-regulator.yaml   |  1 -
+>  .../regulator/vqmmc-ipq4019-regulator.yaml    |  1 -
+>  .../reset/hisilicon,hi3660-reset.yaml         |  1 -
+>  .../bindings/reset/intel,rcu-gw.yaml          |  1 -
+>  .../bindings/rtc/microcrystal,rv3032.yaml     |  1 -
+>  .../soc/litex/litex,soc-controller.yaml       |  1 -
+>  .../bindings/sound/st,stm32-sai.yaml          |  2 --
+>  .../bindings/sound/ti,j721e-cpb-audio.yaml    |  2 --
+>  .../sound/ti,j721e-cpb-ivi-audio.yaml         |  2 --
+>  17 files changed, 5 insertions(+), 45 deletions(-)
+> 
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/rtc/rtc-sun6i.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index ef2b1027ce4c..db65273c6f59 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -392,6 +392,23 @@ static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
- CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
- 		      sun50i_h6_rtc_clk_init);
- 
-+static const struct sun6i_rtc_clk_data sun50i_h616_rtc_data = {
-+	.rc_osc_rate = 16000000,
-+	.fixed_prescaler = 32,
-+	.has_prescaler = 1,
-+	.has_out_clk = 1,
-+	.export_iosc = 1,
-+	.no_ext_losc = 1,
-+};
-+
-+static void __init sun50i_h616_rtc_clk_init(struct device_node *node)
-+{
-+	sun6i_rtc_clk_init(node, &sun50i_h616_rtc_data);
-+}
-+
-+CLK_OF_DECLARE_DRIVER(sun50i_h616_rtc_clk, "allwinner,sun50i-h616-rtc",
-+		      sun50i_h616_rtc_clk_init);
-+
- /*
-  * The R40 user manual is self-conflicting on whether the prescaler is
-  * fixed or configurable. The clock diagram shows it as fixed, but there
-@@ -799,6 +816,8 @@ static const struct of_device_id sun6i_rtc_dt_ids[] = {
- 	{ .compatible = "allwinner,sun8i-v3-rtc" },
- 	{ .compatible = "allwinner,sun50i-h5-rtc" },
- 	{ .compatible = "allwinner,sun50i-h6-rtc" },
-+	{ .compatible = "allwinner,sun50i-h616-rtc",
-+		.data = (void *)RTC_LINEAR_DAY },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
--- 
-2.17.6
-
+Applied, thanks!
