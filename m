@@ -2,115 +2,188 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580AD3D301D
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jul 2021 01:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7153D376A
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Jul 2021 11:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbhGVWhZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 22 Jul 2021 18:37:25 -0400
-Received: from foss.arm.com ([217.140.110.172]:35088 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232024AbhGVWhZ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 22 Jul 2021 18:37:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E767106F;
-        Thu, 22 Jul 2021 16:17:59 -0700 (PDT)
-Received: from slackpad.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5BC713F694;
-        Thu, 22 Jul 2021 16:17:57 -0700 (PDT)
-Date:   Fri, 23 Jul 2021 00:17:21 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S229949AbhGWId1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Jul 2021 04:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhGWId0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Jul 2021 04:33:26 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E93C061575
+        for <linux-rtc@vger.kernel.org>; Fri, 23 Jul 2021 02:14:00 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6rFP-0006Ca-H4; Fri, 23 Jul 2021 11:13:35 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6rFL-00042o-FB; Fri, 23 Jul 2021 11:13:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m6rFL-0007WN-DB; Fri, 23 Jul 2021 11:13:31 +0200
+Date:   Fri, 23 Jul 2021 11:13:31 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v7 06/19] rtc: sun6i: Add support for RTCs without
- external LOSCs
-Message-ID: <20210723001721.0bb02cf2@slackpad.fritz.box>
-In-Reply-To: <20210616091431.6tm3zdf77p2x3upc@gilmour>
-References: <20210615110636.23403-1-andre.przywara@arm.com>
-        <20210615110636.23403-7-andre.przywara@arm.com>
-        <20210616091431.6tm3zdf77p2x3upc@gilmour>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.31; x86_64-slackware-linux-gnu)
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
+ clocks enabled clocks
+Message-ID: <20210723091331.wl33wtcvvnejuhau@pengutronix.de>
+References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
+ <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
+ <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
+ <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
+ <20210722060654.nudpdtemosi64nlb@pengutronix.de>
+ <YPkg0wtYIoHKpTUW@kunai>
+ <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
+ <YPlfcbkxiBmB+vw1@kunai>
+ <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7dh7scaylhwikjek"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 16 Jun 2021 11:14:31 +0200
-Maxime Ripard <maxime@cerno.tech> wrote:
 
-Hi Maxime,
+--7dh7scaylhwikjek
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Jun 15, 2021 at 12:06:23PM +0100, Andre Przywara wrote:
-> > Some newer Allwinner RTCs (for instance the one in the H616 SoC) lack
-> > a pin for an external 32768 Hz oscillator. As a consequence, this LOSC
-> > can't be selected as the RTC clock source, and we must rely on the
-> > internal RC oscillator.
-> > To allow additions of clocks to the RTC node, add a feature bit to ignore
-> > any provided clocks for now (the current code would think this is the
-> > external LOSC). Later DTs and code can then for instance add the PLL
-> > based clock input, and older kernel won't get confused.
-> > 
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>  
-> 
-> Honestly, I don't really know if it's worth it at this point.
-> 
-> If we sums this up:
-> 
->  - The RTC has 2 features that we use, mostly centered around 2
->    registers set plus a global one
-> 
->  - Those 2 features are programmed in a completely different way
-> 
->  - Even the common part is different, given the discussion around the
->    clocks that we have.
-> 
-> What is there to share in that driver aside from the probe, and maybe
-> the interrupt handling? Instead of complicating this further with more
-> special case that you were (rightfully) complaining about, shouldn't we
-> just acknowledge the fact that it's a completely separate design and
-> should be treated as such, with a completely separate driver?
+Hello,
 
-So I had a look, and I don't think it justifies a separate driver:
-- Indeed it looks like the core functionality is different, but there
-  are a lot of commonalities, with all the RTC and driver boilerplate,
-  register offsets, and also the special access pattern (rtc_wait and
-  rtc_setaie).
-- The actual difference is really in the way the *date* is stored
-  (the time is still in 24h H/M/S format), and the missing LOSC input
-  clock - which is already optional for existing devices. The two
-  patches just make this obvious, by using if() statements at the parts
-  where they differ.
+[adding Linus and lkml to Cc: and adding some more context]=20
 
-So we would end up with possibly some shared .c file, and two driver
-front-end files, which I am not sure is really worth it.
+On Wed, Jun 09, 2021 at 10:21:23PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> given that I don't succeed in getting any feedback for my patch set, I'm
+> trying with a pull request today.
 
-Next I thought about providing separate rtc_class_ops, but even they
-share a lot of code, so they would be possibly be calling a shared
-function each. I don't think that is really better.
+This is for a series that is currently in v7 and didn't get any feedback
+at all yet. The history is:
 
-If you dislike the rather large if/else branches in the previous two
-patches, I could move that out into separate functions, but I feel this
-is more code, for no real benefit.
+v1: 2020-10-13, https://lore.kernel.org/linux-clk/20201013082132.661993-1-u=
+=2Ekleine-koenig@pengutronix.de
+    no feedback at all
 
-So for now I am tempted to keep it shared. I think Samuel had ideas for
-bigger changes in the clock part, at which point we could revisit this
-decision - for instance keep the RTC part (still quite similar) mostly
-in a shared file, while modelling the clocks in separate files - in a
-more "common clock" style for the new SoCs.
+v2: 2021-03-01, https://lore.kernel.org/linux-clk/20210301110821.1445756-1-=
+uwe@kleine-koenig.org
+    kernel test robot identified some issues
 
-Feel free to disagree, but when I tried to actually separate the drivers
-it just felt wrong.
+v3: 2021-03-01, https://lore.kernel.org/linux-clk/20210301135053.1462168-1-=
+u.kleine-koenig@pengutronix.de
+    I added a few driver patches to show the benefit. (However in a way
+    that the autobuilders don't understand, so there were some false
+    positive build failure reports.)
 
-Cheers,
-Andre
+v4: 2021-03-30, https://lore.kernel.org/linux-clk/20210330181755.204339-1-u=
+=2Ekleine-koenig@pengutronix.de
+    Got some feedback for the converted drivers by the respective
+    maintainers. Some were indifferent, some found it good
+
+v5: 2021-04-22, https://lore.kernel.org/linux-clk/20210422065726.1646742-1-=
+u.kleine-koenig@pengutronix.de
+    Fixed a problem in one of the driver changes (i2c-imx), no feedback
+    apart from pointing out a few typos, silence from the clk
+    maintainers
+
+v6: 2021-04-26, https://lore.kernel.org/linux-clk/20210426141730.2826832-1-=
+u.kleine-koenig@pengutronix.de
+    Just the typos fixed, no feedback
+
+v6 resend: 2021-05-10, https://lore.kernel.org/linux-clk/20210510061724.940=
+447-1-u.kleine-koenig@pengutronix.de
+    no changes in code. Got some feedback from Jonathan Cameron
+
+v7: 2021-05-10, https://lore.kernel.org/linux-clk/20210510174142.986250-1-u=
+=2Ekleine-koenig@pengutronix.de
+    Adress Jonathan's feedback, recieved some more acks from non-clk
+    people
+
+pull request: 2021-07-09, https://lore.kernel.org/linux-clk/20210609202123.=
+u5rmw7al4x3rrvun@pengutronix.de
+
+On Fri, Jul 23, 2021 at 11:26:58AM +0300, Andy Shevchenko wrote:
+> On Thursday, July 22, 2021, Wolfram Sang <wsa@kernel.org> wrote:
+>=20
+> >
+> > > > What about adding gkh to the list explaining the situation to him?
+> > >
+> > > Greg doesn't like devm_ stuff.
+> > >
+> > > I already asked Arnd who doesn't want to interfere and akpm who didn't
+> > > react either up to now.
+> >
+> > Wow, okay, that is frustrating.
+>=20
+> The situation simply shows the process gap and One Maintainer nowadays is
+> far from enough to satisfy demands.
+
+Technically there are two maintainers for drivers/clk, Michael Turquette
+and Stephen Boyd. It seems Michael is MIA and Stephen doesn't have the
+capacity to address all requests.
+
+> What I think about is that we need to escalate this to Linus and
+> others and elaborate the mechanisms how to squeeze a new (additional)
+> maintainer when the original one is not responsive. Let=E2=80=99s say some
+> procedural steps. Otherwise we doomed because of human factor.
+
+Assuming there was some process for this, is there someone who is
+willing to take responsibility here?
+
+Best regards
+Uwe
+=20
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--7dh7scaylhwikjek
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmD6iDgACgkQwfwUeK3K
+7Alfmwf/d10tYw/BrbClW56C9FCNGAhT1ACcLUxq9mF9kPuafNk9VXbSFdYwtm6M
+mwp9Er33t3/rfzxt3LYfRReNt/K1cB8CfLxdkCjFiVe9w5IjxEbYTKx13R/v56M4
+C5v8DkL1Y5Af/e8GLsLP4W4gE4D6ZrXG35UXW07hMtuHd8gcXIUAtiODlE/3Mlx6
+HVF+6ytkRCXONa4CpNdJWR84cfqka9IhYYv/k0ttG5nt/Xj7yrcEEwjR9jzQk8sD
+H38mmqZsdAD5eQHDgi0ZkCiGoI5sJ7uV5ERoEyH6BsCtKRKu945CM+f8h6IeNPmi
+z349jO7W2FxoVJTSLPEsw5/o1dSb/A==
+=mQTO
+-----END PGP SIGNATURE-----
+
+--7dh7scaylhwikjek--
