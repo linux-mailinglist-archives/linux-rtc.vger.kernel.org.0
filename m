@@ -2,121 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFA23DD344
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Aug 2021 11:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B463DD3FE
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Aug 2021 12:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbhHBJsd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Aug 2021 05:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
+        id S233254AbhHBKkS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 Aug 2021 06:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbhHBJsd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Aug 2021 05:48:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14297C06175F;
-        Mon,  2 Aug 2021 02:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=EuWMmKq4SfpJmtGNCymVReAeRTht0Bdg7VG7/exrrCw=; b=yb4BJMeklOXEuLu6GHSoDZ382
-        JZ+rWCauEZ4nW4CeuE0cZ46WaGcFVsah2s21cKq7LWBnQZbSilf6ZLgm1RuMW2+efdfa4R5oUyS33
-        iccBCQjCQgM5WxFlRxXKmtigRhrVf2fIbr/kjSdntCaSPK/D8zcePV7r7YaMBQt0yQNKJ6QA0VJ0X
-        Iu3fG+7/u13Ps85rSxkMA/tDV/Cveq7ySLmUP6NX+6Rnu050OCnX8eWOpKaYVTfp0CmjhSVslUEO1
-        hPiAYviPJylj4ooTBA+mh8PgdUoSzVaICpIkOD3ZT0V1Q0Ui3+X/nCQ48Ry9XpBAs21GVdYNS0ler
-        mUH6f8Bdg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46850)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mAUYS-0005LR-30; Mon, 02 Aug 2021 10:48:16 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mAUYM-0002nN-Mu; Mon, 02 Aug 2021 10:48:10 +0100
-Date:   Mon, 2 Aug 2021 10:48:10 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Stephen Boyd <sboyd@kernel.org>, alexandre.belloni@bootlin.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Ludovic.Desroches@microchip.com, o.rempel@pengutronix.de,
-        andy.shevchenko@gmail.com, aardelean@deviqon.com,
-        linux-pwm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        broonie@kernel.org, Jonathan.Cameron@huawei.com,
-        linux-arm-kernel@lists.infradead.org, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        wsa@kernel.org, kernel@pengutronix.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, Claudiu.Beznea@microchip.com
-Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of
- devm_clk_get for prepared and enabled clocks enabled clocks]
-Message-ID: <20210802094810.GJ22278@shell.armlinux.org.uk>
-References: <YPkg0wtYIoHKpTUW@kunai>
- <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
- <YPlfcbkxiBmB+vw1@kunai>
- <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
- <20210723091331.wl33wtcvvnejuhau@pengutronix.de>
- <06e799be-b7c0-5b93-8586-678a449d2239@microchip.com>
- <20210728202547.7uvfwflpruku7yps@pengutronix.de>
- <20210728204033.GF22278@shell.armlinux.org.uk>
- <162771727997.714452.2303764341103276867@swboyd.mtv.corp.google.com>
- <20210731120004.i3affxw7upl5y4c5@pengutronix.de>
+        with ESMTP id S233081AbhHBKkS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Aug 2021 06:40:18 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23698C061796
+        for <linux-rtc@vger.kernel.org>; Mon,  2 Aug 2021 03:40:09 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id x9so11289427qtw.13
+        for <linux-rtc@vger.kernel.org>; Mon, 02 Aug 2021 03:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tu9oYeOBswUb031Yjp53w6z/8TnC/wbddAHGRPP+IEw=;
+        b=J/+SDKEj8GHiNxWrghg4YbRnMgIBMIW/K400NCSdX819DXPsuo3psqtXqWtQKdmPFt
+         Qltvp8EL5VFYapBitgCb54TiKhy4NOcgF4IPOK81OJfWdPKOJyXAHFv+rZMOmxVNRBnw
+         2BF2uQh7vyLNb5N8v4a3MbnF0hlMH38kGcSpg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tu9oYeOBswUb031Yjp53w6z/8TnC/wbddAHGRPP+IEw=;
+        b=jx4gwtG38fTGhG2KpvnGMBwMpGfwFHmL8FSJstLfcMvJZkYzmdIRW4kTXPcob+eXt2
+         icmDqX1B7sB+WIfkbvVah4Rl1aJoksGVjrvaB0ZkvQViZkopOVnwYmQlzVJPpvtPXsG2
+         xDUNMj4K6WBZK3hceaHgb0bIXoI51ZxXyFDq+fIsgaFO5HIzWpVIyQSg2J/7xT8I1c75
+         C9iNxCbw1Y8AxN9a7qDkydGN6hNN6k21Uwzd9QuIVS8YmDy0ZcP0DPWkVDw+O2Nn/dDy
+         uq3AVjPiN38KdqwBegt1Zue6cZwDqdNz3lx5tmi14LEiiFmdz4o1ctHWVX71+hdS/U8H
+         KK3w==
+X-Gm-Message-State: AOAM530dKCc92ItEyEfeSGQ0aG/qAh9euJDnKQt2+brRtdyPSz1D1wux
+        4rbcZ8CL6wzth+3O7OTOfDgT5lES+6erFXqFWG2+Dg==
+X-Google-Smtp-Source: ABdhPJyn3Xnoa1W0+VeBNy0IvOb6d4QL/35IsVcJxMUzim3ZLjugnsv+IftrUfL+qImfxD3tgfBm2vsw+9jR82/T28Y=
+X-Received: by 2002:ac8:4f11:: with SMTP id b17mr13431338qte.33.1627900808259;
+ Mon, 02 Aug 2021 03:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210731120004.i3affxw7upl5y4c5@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20210801160921.233081-1-romain.perier@gmail.com> <20210801160921.233081-4-romain.perier@gmail.com>
+In-Reply-To: <20210801160921.233081-4-romain.perier@gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Mon, 2 Aug 2021 19:39:57 +0900
+Message-ID: <CAFr9PXmqiu=toGf9DjoH8XMbPaiXaWLV=GsmR7OCkkqix5tRvw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] ARM: dts: mstar: Add rtc device node
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Jul 31, 2021 at 02:00:04PM +0200, Uwe Kleine-König wrote:
-> Hi Russell, hi Stephen,
-> 
-> On Sat, Jul 31, 2021 at 12:41:19AM -0700, Stephen Boyd wrote:
-> > +1 This patch doesn't fall under CCF maintainer.
-> 
-> Given that CCF is the only implementer of devm_clk_get at least an Ack
-> from your side would still be good I guess?
+Hi Romain,
 
-I think devm_clk_get() should not be part of CCF but should be
-part of the interface level - it's silly to have devm_clk_get()
-being CCF but not clk_get(). The same should go for the other
-devm wrappers around the plain clk_* interfaces.
+On Mon, 2 Aug 2021 at 01:09, Romain Perier <romain.perier@gmail.com> wrote:
+> +++ b/arch/arm/boot/dts/mstar-v7.dtsi
+> @@ -116,6 +116,13 @@ watchdog@6000 {
+>                                 clocks = <&xtal_div2>;
+>                         };
+>
+> +                       rtc@2400 {
 
-> I found a patch set adding devm variants of clk_enable (e.g.
-> https://lore.kernel.org/patchwork/patch/755667/) but this approach is
-> different as it also contains clk_get which IMHO makes more sense 
-> The discussion considered wrapping get+enable at one point, but I didn't
-> find a followup.
+I think the rtc should be before the watchdog as the address is lower.
+I think maybe this got flipped around during cherry-picking.
+I can flip it around when I pull this into an mstar dts for 5.15
+branch so you don't need to fix it and send a v3 assuming everything
+else is ok.
 
-There have been several different approaches to wrapping things up,
-but here's a question: should we make it easier to do the lazy thing
-(get+enable) or should we make it easier to be power efficient?
-Shouldn't we be encouraging people to write power efficient drivers?
+Thanks,
 
-> > I still wonder if it would be better if we had some sort of DT binding
-> > that said "turn this clk on when the driver probes this device and keep
-> > it on until the driver is unbound".
-> 
-> This doesn't sound like a hardware property and so I don't think this
-> belongs into DT and I would be surprised if the dt maintainers would be
-> willing to accept an idea with this semantic.
-
-I really don't like that idea - enabling or disabling a clock is
-an implementation decision, one which can change over time. Even
-if a clock is required to be on for e.g. accessing device registers,
-we may decide that, if we want maximum power savings, to disable
-that clock when the device is not being used, but an initial driver
-implementation may not do that. If we encourage people to throw a
-property in DT, then the driver's runtime behaviour becomes a
-combination of the DT being used and the driver implementation.
-Let's keep that to a minimum.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Daniel
