@@ -2,79 +2,138 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B463DD3FE
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 Aug 2021 12:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7BD3DDC6D
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 Aug 2021 17:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbhHBKkS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 Aug 2021 06:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S234839AbhHBP2Y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 Aug 2021 11:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbhHBKkS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Aug 2021 06:40:18 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23698C061796
-        for <linux-rtc@vger.kernel.org>; Mon,  2 Aug 2021 03:40:09 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id x9so11289427qtw.13
-        for <linux-rtc@vger.kernel.org>; Mon, 02 Aug 2021 03:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tu9oYeOBswUb031Yjp53w6z/8TnC/wbddAHGRPP+IEw=;
-        b=J/+SDKEj8GHiNxWrghg4YbRnMgIBMIW/K400NCSdX819DXPsuo3psqtXqWtQKdmPFt
-         Qltvp8EL5VFYapBitgCb54TiKhy4NOcgF4IPOK81OJfWdPKOJyXAHFv+rZMOmxVNRBnw
-         2BF2uQh7vyLNb5N8v4a3MbnF0hlMH38kGcSpg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tu9oYeOBswUb031Yjp53w6z/8TnC/wbddAHGRPP+IEw=;
-        b=jx4gwtG38fTGhG2KpvnGMBwMpGfwFHmL8FSJstLfcMvJZkYzmdIRW4kTXPcob+eXt2
-         icmDqX1B7sB+WIfkbvVah4Rl1aJoksGVjrvaB0ZkvQViZkopOVnwYmQlzVJPpvtPXsG2
-         xDUNMj4K6WBZK3hceaHgb0bIXoI51ZxXyFDq+fIsgaFO5HIzWpVIyQSg2J/7xT8I1c75
-         C9iNxCbw1Y8AxN9a7qDkydGN6hNN6k21Uwzd9QuIVS8YmDy0ZcP0DPWkVDw+O2Nn/dDy
-         uq3AVjPiN38KdqwBegt1Zue6cZwDqdNz3lx5tmi14LEiiFmdz4o1ctHWVX71+hdS/U8H
-         KK3w==
-X-Gm-Message-State: AOAM530dKCc92ItEyEfeSGQ0aG/qAh9euJDnKQt2+brRtdyPSz1D1wux
-        4rbcZ8CL6wzth+3O7OTOfDgT5lES+6erFXqFWG2+Dg==
-X-Google-Smtp-Source: ABdhPJyn3Xnoa1W0+VeBNy0IvOb6d4QL/35IsVcJxMUzim3ZLjugnsv+IftrUfL+qImfxD3tgfBm2vsw+9jR82/T28Y=
-X-Received: by 2002:ac8:4f11:: with SMTP id b17mr13431338qte.33.1627900808259;
- Mon, 02 Aug 2021 03:40:08 -0700 (PDT)
+        with ESMTP id S235070AbhHBP2X (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 Aug 2021 11:28:23 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCE2C06175F
+        for <linux-rtc@vger.kernel.org>; Mon,  2 Aug 2021 08:28:14 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mAZrC-00076g-Hh; Mon, 02 Aug 2021 17:27:58 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mAZrA-0004Qi-3t; Mon, 02 Aug 2021 17:27:56 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mAZrA-0008Ni-1g; Mon, 02 Aug 2021 17:27:56 +0200
+Date:   Mon, 2 Aug 2021 17:27:55 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     alexandre.belloni@bootlin.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, o.rempel@pengutronix.de,
+        andy.shevchenko@gmail.com, aardelean@deviqon.com,
+        linux-pwm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        broonie@kernel.org, Jonathan.Cameron@huawei.com,
+        linux-arm-kernel@lists.infradead.org, a.zummo@towertech.it,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, wsa@kernel.org, kernel@pengutronix.de,
+        akpm@linux-foundation.org, torvalds@linux-foundation.org,
+        Claudiu.Beznea@microchip.com
+Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of
+ devm_clk_get for prepared and enabled clocks enabled clocks]
+Message-ID: <20210802152755.ibisunvibmwhiyry@pengutronix.de>
+References: <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
+ <YPlfcbkxiBmB+vw1@kunai>
+ <CAHp75VfC=s12Unw3+Cn0ag71mM5i90=Jbwj4nYwB5cPKiUTRSA@mail.gmail.com>
+ <20210723091331.wl33wtcvvnejuhau@pengutronix.de>
+ <06e799be-b7c0-5b93-8586-678a449d2239@microchip.com>
+ <20210728202547.7uvfwflpruku7yps@pengutronix.de>
+ <20210728204033.GF22278@shell.armlinux.org.uk>
+ <162771727997.714452.2303764341103276867@swboyd.mtv.corp.google.com>
+ <20210731120004.i3affxw7upl5y4c5@pengutronix.de>
+ <20210802094810.GJ22278@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20210801160921.233081-1-romain.perier@gmail.com> <20210801160921.233081-4-romain.perier@gmail.com>
-In-Reply-To: <20210801160921.233081-4-romain.perier@gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Mon, 2 Aug 2021 19:39:57 +0900
-Message-ID: <CAFr9PXmqiu=toGf9DjoH8XMbPaiXaWLV=GsmR7OCkkqix5tRvw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] ARM: dts: mstar: Add rtc device node
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4yhd4k7pc6ksrfur"
+Content-Disposition: inline
+In-Reply-To: <20210802094810.GJ22278@shell.armlinux.org.uk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Romain,
 
-On Mon, 2 Aug 2021 at 01:09, Romain Perier <romain.perier@gmail.com> wrote:
-> +++ b/arch/arm/boot/dts/mstar-v7.dtsi
-> @@ -116,6 +116,13 @@ watchdog@6000 {
->                                 clocks = <&xtal_div2>;
->                         };
->
-> +                       rtc@2400 {
+--4yhd4k7pc6ksrfur
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think the rtc should be before the watchdog as the address is lower.
-I think maybe this got flipped around during cherry-picking.
-I can flip it around when I pull this into an mstar dts for 5.15
-branch so you don't need to fix it and send a v3 assuming everything
-else is ok.
+Hello Russell,
 
-Thanks,
+On Mon, Aug 02, 2021 at 10:48:10AM +0100, Russell King (Oracle) wrote:
+> On Sat, Jul 31, 2021 at 02:00:04PM +0200, Uwe Kleine-K=F6nig wrote:
+> > Hi Russell, hi Stephen,
+> >=20
+> > On Sat, Jul 31, 2021 at 12:41:19AM -0700, Stephen Boyd wrote:
+> > > +1 This patch doesn't fall under CCF maintainer.
+> >=20
+> > Given that CCF is the only implementer of devm_clk_get at least an Ack
+> > from your side would still be good I guess?
+>=20
+> I think devm_clk_get() should not be part of CCF but should be
+> part of the interface level - it's silly to have devm_clk_get()
+> being CCF but not clk_get(). The same should go for the other
+> devm wrappers around the plain clk_* interfaces.
 
-Daniel
+What is the practical difference between "Function X is part of CCF" and
+"Function X is part of the clk interface and there is only CCF who
+implements it"?
+
+> > I found a patch set adding devm variants of clk_enable (e.g.
+> > https://lore.kernel.org/patchwork/patch/755667/) but this approach is
+> > different as it also contains clk_get which IMHO makes more sense=20
+> > The discussion considered wrapping get+enable at one point, but I didn't
+> > find a followup.
+>=20
+> There have been several different approaches to wrapping things up,
+> but here's a question: should we make it easier to do the lazy thing
+> (get+enable) or should we make it easier to be power efficient?
+> Shouldn't we be encouraging people to write power efficient drivers?
+
+Yeah, sounds compelling, but I wonder if that's of practical importance.
+How many driver authors do you expect to lure into making a better
+driver just because devm_clk_get_prepared() doesn't exist? In contrast:
+How many drivers become simpler with devm_clk_get_prepared() and so
+it becomes easier to maintain them and easier to spot bugs?
+In the absence of devm_clk_get_prepared(), is it better that several
+frameworks (or drivers) open code it?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--4yhd4k7pc6ksrfur
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEIDvMACgkQwfwUeK3K
+7Alp/gf/YuHVn2QCiQY9Ln+XZfkad7QXQJYE0+fG2AJ7dxEy13P7sSRuADCYTAGu
+sE2xOSevHd7QQeJjY2UcjHahHyGJwJXMBKLouDyrPEhocQpBd3mp9ewBe1BL/jRH
+4Euz/1SRM2NSfTc9lw7QzxHD6tGOY6Lo6Qj34pE7gKel4UX9FrYOqCoq2YbViMoX
+nVueeVsmqp5pt+mB4tfNDWOA+H7dkH+LoGc0yggaVQW/K+rZqdr/qBYsFq7k4Zjv
+Csk4EcDMhWkDlTekyjRutr3F6uGoCFWvuu52IQqxkVfRVy35Zx0tBpzGtILDTVRB
+Ww69Vm7tkWdIyLcrczBXbDvc7FMunQ==
+=PmG8
+-----END PGP SIGNATURE-----
+
+--4yhd4k7pc6ksrfur--
