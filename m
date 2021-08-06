@@ -2,144 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 240803E2FCA
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Aug 2021 21:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BB63E3133
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Aug 2021 23:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbhHFTiW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Aug 2021 15:38:22 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:41229 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbhHFTiW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Aug 2021 15:38:22 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 9F8D4240006;
-        Fri,  6 Aug 2021 19:38:03 +0000 (UTC)
-Date:   Fri, 6 Aug 2021 21:38:03 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+        id S241063AbhHFVhc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Aug 2021 17:37:32 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:37861 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240808AbhHFVhb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Aug 2021 17:37:31 -0400
+Received: by mail-io1-f44.google.com with SMTP id l20so11987443iom.4;
+        Fri, 06 Aug 2021 14:37:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O/ZVuXX1p8CqDOt58VogWKvsIhRU1cmOHYxxfCm/Ft4=;
+        b=VF2SHMH10iIa9g6vqDjroLOHNrHohpCG4Svkwn3HnaLQZCBocKf3NJZbSy0MLJygoN
+         qWbJyDe0E0bc0dwsXE9P7l7lBpoXzBk5zCpWasOqSfLuBlpuDk+xu54omoI3+uwvJRzy
+         eRy6pZMVKpwCArB6z57siDn41lPRUUWtnQd98HlY7MVpGLmji7ij5E5J02PxPHZrKhLm
+         RKCUTQupf7E1Y/JmJDOIpSem8ztQsGpZHUYjGtJUy+6RbgZOKpMTllubWlTD79qyMnwW
+         R8T4E+Dlipx3BZm3iqDlimpE/rAExF3E2Mj92HQDekeZKFxWSZAda+12oh1Z71ff6eOz
+         Atqw==
+X-Gm-Message-State: AOAM532adoBARD+oNN/wKBbaFOyy6FEwzeP+07ruAYgsT//vcKv1Ro43
+        8dP0G3lE4+kHZVtL4GtZXg==
+X-Google-Smtp-Source: ABdhPJwc6r7sl/xJRV/BUpj6QYZkJef2zlWA1o733Pbor7wK9pSThcU+QzmCWAl1PKdug0lGD4SmYQ==
+X-Received: by 2002:a92:4b0a:: with SMTP id m10mr29839ilg.163.1628285835172;
+        Fri, 06 Aug 2021 14:37:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id d20sm5033656iow.33.2021.08.06.14.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Aug 2021 14:37:14 -0700 (PDT)
+Received: (nullmailer pid 1845465 invoked by uid 1000);
+        Fri, 06 Aug 2021 21:37:13 -0000
+Date:   Fri, 6 Aug 2021 15:37:13 -0600
+From:   Rob Herring <robh@kernel.org>
 To:     Romain Perier <romain.perier@gmail.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Daniel Palmer <daniel@0x0f.com>, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/3] rtc: Add support for the MSTAR MSC313 RTC
-Message-ID: <YQ2Pm7nrEFmdS6Ky@piout.net>
+Subject: Re: [PATCH v2 1/3] dt-bindings: rtc: Add Mstar MSC313e RTC
+ devicetree bindings documentation
+Message-ID: <YQ2riRW1hZmn6x4B@robh.at.kernel.org>
 References: <20210801160921.233081-1-romain.perier@gmail.com>
- <20210801160921.233081-3-romain.perier@gmail.com>
+ <20210801160921.233081-2-romain.perier@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210801160921.233081-3-romain.perier@gmail.com>
+In-Reply-To: <20210801160921.233081-2-romain.perier@gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+On Sun, Aug 01, 2021 at 06:09:19PM +0200, Romain Perier wrote:
+> This adds the documentation for the devicetree bindings of the Mstar
+> MSC313e RTC driver, found from MSC313e SoCs and newer.
+> 
+> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> ---
+>  .../bindings/rtc/mstar,msc313-rtc.yaml        | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+> new file mode 100644
+> index 000000000000..62bc12b1feb6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-On 01/08/2021 18:09:20+0200, Romain Perier wrote:
-> +static int msc313_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct msc313_rtc *priv;
-> +	int ret;
-> +	int irq;
-> +	unsigned long rate;
-> +	u16 reg;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(struct msc313_rtc), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->rtc_base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->rtc_base))
-> +		return PTR_ERR(priv->rtc_base);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return -EINVAL;
-> +
-> +	priv->rtc_dev = devm_rtc_allocate_device(dev);
-> +	if (IS_ERR(priv->rtc_dev))
-> +		return PTR_ERR(priv->rtc_dev);
-> +
-> +	priv->rtc_dev->ops = &msc313_rtc_ops;
-> +	priv->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_0000;
+As checkpatch.pl will tell you, should be dual licensed.
 
-I'm pretty sure this doesn't fit in this RTC registers, you should
-probably leave range_min to 0 (i.e. not set it at all).
-
-> +	priv->rtc_dev->range_max = U32_MAX - 1; /* 2106-02-07 06:28:14 */
-
-I guess this one should be U32_MAX
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/mstar,msc313-rtc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	ret = devm_request_irq(dev, irq, msc313_rtc_interrupt, IRQF_SHARED,
-> +			       dev_name(&pdev->dev), &pdev->dev);
-> +	if (ret) {
-> +		dev_err(dev, "Could not request IRQ\n");
-> +		return ret;
-> +	}
+> +title: Mstar MSC313e RTC Device Tree Bindings
 > +
-> +	priv->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(priv->clk)) {
-> +		dev_err(dev, "No input reference clock\n");
-> +		return PTR_ERR(priv->clk);
-> +	}
+> +allOf:
+> +  - $ref: "rtc.yaml#"
 > +
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
-> +		return ret;
-> +	}
+> +maintainers:
+> +  - Daniel Palmer <daniel@0x0f.com>
+> +  - Romain Perier <romain.perier@gmail.com>
 > +
-> +	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, priv->clk);
-> +	if (ret)
-> +		return ret;
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mstar,msc313-rtc
 > +
-> +	rate = clk_get_rate(priv->clk);
-> +	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
-> +	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
+> +  reg:
+> +    maxItems: 1
 > +
-> +	reg = readw(priv->rtc_base + REG_RTC_CTRL);
-> +	reg |= CNT_EN_BIT;
-> +	writew(reg, priv->rtc_base + REG_RTC_CTRL);
+> +  interrupts:
+> +    maxItems: 1
 > +
-
-If on POR, CNT_EN_BIT is not set, then it would be nice to use that to
-know whether the RTC is properly set. You can then check CNT_EN_BIT in
-.read_time and return -EINVAL if it is not set. Then you can set the bit
-in .set_time. It is anyway useless to let the RTC running if it is not
-set.
-
-> +	platform_set_drvdata(pdev, priv);
+> +  start-year: true
 > +
-> +	return devm_rtc_register_device(priv->rtc_dev);
-> +}
+> +  clocks:
+> +    maxItems: 1
 > +
-> +static const struct of_device_id msc313_rtc_of_match_table[] = {
-> +	{ .compatible = "mstar,msc313-rtc" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ms_rtc_of_match_table);
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
 > +
-> +static struct platform_driver msc313_rtc_driver = {
-> +	.probe = msc313_rtc_probe,
-> +	.driver = {
-> +		.name = "msc313-rtc",
-> +		.of_match_table = msc313_rtc_of_match_table,
-> +	},
-> +};
+> +additionalProperties: false
 > +
-> +module_platform_driver(msc313_rtc_driver);
-> +
-> +MODULE_AUTHOR("Daniel Palmer <daniel@thingy.jp>");
-> +MODULE_AUTHOR("Romain Perier <romain.perier@gmail.com>");
-> +MODULE_DESCRIPTION("MStar RTC Driver");
-> +MODULE_LICENSE("GPL v2");
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    rtc@2400 {
+> +        compatible = "mstar,msc313-rtc";
+> +        reg = <0x2400 0x40>;
+> +        clocks = <&xtal_div2>;
+> +        interrupts-extended = <&intc_irq GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +...
 > -- 
 > 2.30.2
 > 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
