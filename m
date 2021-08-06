@@ -2,104 +2,144 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 400AE3E1FFD
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 Aug 2021 02:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240803E2FCA
+	for <lists+linux-rtc@lfdr.de>; Fri,  6 Aug 2021 21:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbhHFA0d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 Aug 2021 20:26:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43216 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235480AbhHFA0c (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 5 Aug 2021 20:26:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C6C4D6103B;
-        Fri,  6 Aug 2021 00:26:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628209577;
-        bh=YFtjL1PAXNXSdcZpSOdpjOpPtHM0Uq0mwmaKoBiv7Ng=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=nTBlAbLcMlktPMKTmuZWSwf8qZuNTuimEEJKAP/Jl70nzb4PuCp6jmXm8On/8rZ1e
-         bHd3PWXnDvVTCHCQVNFqLBoxRx+9WiplFvAARRKooeyFeoZhQGZY5iw5Ny+qO8Fqa5
-         rYC46cEsbkvsa/1RbsPZKrfbZLEjfoVhEE4Ue+/xAq8aIgEqmD9eoXeSQVBc//Kdie
-         hmgHunpMJQAq3sRgiUdkuydl0OV6ikTNVBmDP2Q1nKrHjQ2f4jD3anKK/Jy40PXPeG
-         ON3ASC7tam/ND04fURgRmqwi/Vb1kYry7MFHzvt2LrSGQzeU+NkmC5+yKOAxJL3DXL
-         4yEushO9353bA==
-Content-Type: text/plain; charset="utf-8"
+        id S230154AbhHFTiW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 Aug 2021 15:38:22 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:41229 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229748AbhHFTiW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Aug 2021 15:38:22 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 9F8D4240006;
+        Fri,  6 Aug 2021 19:38:03 +0000 (UTC)
+Date:   Fri, 6 Aug 2021 21:38:03 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] rtc: Add support for the MSTAR MSC313 RTC
+Message-ID: <YQ2Pm7nrEFmdS6Ky@piout.net>
+References: <20210801160921.233081-1-romain.perier@gmail.com>
+ <20210801160921.233081-3-romain.perier@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210803104012.wf2buscbukxufesl@pengutronix.de>
-References: <20210723091331.wl33wtcvvnejuhau@pengutronix.de> <20210728202547.7uvfwflpruku7yps@pengutronix.de> <20210728204033.GF22278@shell.armlinux.org.uk> <162771727997.714452.2303764341103276867@swboyd.mtv.corp.google.com> <20210731120004.i3affxw7upl5y4c5@pengutronix.de> <20210802094810.GJ22278@shell.armlinux.org.uk> <20210802152755.ibisunvibmwhiyry@pengutronix.de> <20210802163824.GK22278@shell.armlinux.org.uk> <162797831443.714452.3551045763456936564@swboyd.mtv.corp.google.com> <20210803104012.wf2buscbukxufesl@pengutronix.de>
-Subject: Re: About clk maintainership [Was: Re: [PULL] Add variants of devm_clk_get for prepared and enabled clocks enabled clocks]
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        alexandre.belloni@bootlin.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Ludovic.Desroches@microchip.com, o.rempel@pengutronix.de,
-        andy.shevchenko@gmail.com, aardelean@deviqon.com,
-        linux-pwm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        broonie@kernel.org, Jonathan.Cameron@huawei.com,
-        linux-arm-kernel@lists.infradead.org, a.zummo@towertech.it,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        wsa@kernel.org, kernel@pengutronix.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, Claudiu.Beznea@microchip.com
-To:     <u.kleine-koenig@pengutronix.de>
-Date:   Thu, 05 Aug 2021 17:26:16 -0700
-Message-ID: <162820957661.19113.17221558053361108175@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210801160921.233081-3-romain.perier@gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Uwe Kleine-K=C3=B6nig (2021-08-03 03:40:12)
-> On Tue, Aug 03, 2021 at 01:11:54AM -0700, Stephen Boyd wrote:
-> >=20
-> > Maybe this series would be more compelling if those various drivers that
-> > are hand rolling the devm action were converted to the consolidated
-> > official devm function. The truth is it's already happening in various
-> > subsystems so consolidating that logic into one place would be a win
-> > code size wise and very hard to ignore.
-> >=20
-> > Doing
-> >=20
-> >  $ git grep devm_add_action | grep clk
-> >=20
-> > seems to catch quite a few of them.
->=20
-> Another upside is that grepping for these drivers with a potential for
-> further improvement become easier to grep for as
-> devm_clk_get_{prepared,enabled} is a much better hint :-)
+Hello,
 
-Sorry, but that's a pretty weak argument. I'd think grepping for the
-absence of pm_ops in drivers would be the same hint.
+On 01/08/2021 18:09:20+0200, Romain Perier wrote:
+> +static int msc313_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct msc313_rtc *priv;
+> +	int ret;
+> +	int irq;
+> +	unsigned long rate;
+> +	u16 reg;
+> +
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(struct msc313_rtc), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->rtc_base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->rtc_base))
+> +		return PTR_ERR(priv->rtc_base);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return -EINVAL;
+> +
+> +	priv->rtc_dev = devm_rtc_allocate_device(dev);
+> +	if (IS_ERR(priv->rtc_dev))
+> +		return PTR_ERR(priv->rtc_dev);
+> +
+> +	priv->rtc_dev->ops = &msc313_rtc_ops;
+> +	priv->rtc_dev->range_min = RTC_TIMESTAMP_BEGIN_0000;
 
->=20
-> The changes to these drivers probably won't go through a clk tree, so
-> adding these patches before adding devm_clk_get_enabled() would only
-> help for the warm and cozy feeling that it is right to do so, correct?
+I'm pretty sure this doesn't fit in this RTC registers, you should
+probably leave range_min to 0 (i.e. not set it at all).
 
-It isn't to feel warm and cozy. It's to demonstrate the need for
-consolidating code. Converting the i2c and spi drivers to use this is
-actively damaging the cause though. Those driver frameworks are more
-likely to encourage proper power management around bus transfers, so
-converting them to use the devm API moves them away from power
-management, not closer to it.
+> +	priv->rtc_dev->range_max = U32_MAX - 1; /* 2106-02-07 06:28:14 */
 
-This proves why this topic is always contentious. It's too easy to
-blindly convert drivers to get the clk and leave it enabled forever and
-then they never use power management. The janitors win and nobody else.
+I guess this one should be U32_MAX
+> +
+> +	ret = devm_request_irq(dev, irq, msc313_rtc_interrupt, IRQF_SHARED,
+> +			       dev_name(&pdev->dev), &pdev->dev);
+> +	if (ret) {
+> +		dev_err(dev, "Could not request IRQ\n");
+> +		return ret;
+> +	}
+> +
+> +	priv->clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(priv->clk)) {
+> +		dev_err(dev, "No input reference clock\n");
+> +		return PTR_ERR(priv->clk);
+> +	}
+> +
+> +	ret = clk_prepare_enable(priv->clk);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to enable the reference clock, %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, priv->clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	rate = clk_get_rate(priv->clk);
+> +	writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
+> +	writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H);
+> +
+> +	reg = readw(priv->rtc_base + REG_RTC_CTRL);
+> +	reg |= CNT_EN_BIT;
+> +	writew(reg, priv->rtc_base + REG_RTC_CTRL);
+> +
 
-Is there some way to avoid that trap? Maybe through some combination of
-a device PM function that indicates the driver has no runtime PM
-callbacks (pm_runtime_no_callbacks() perhaps?) and
-devm_clk_get_enabled() checking for that and returning the clk only when
-that call has been made (i.e. pm_runtime_has_no_callbacks())? This
-approach would fail to catch the case where system wide suspend/resume
-could turn the clk off but the driver doesn't do it. I'm not sure how
-much we care about that case though.
+If on POR, CNT_EN_BIT is not set, then it would be nice to use that to
+know whether the RTC is properly set. You can then check CNT_EN_BIT in
+.read_time and return -EINVAL if it is not set. Then you can set the bit
+in .set_time. It is anyway useless to let the RTC running if it is not
+set.
 
->=20
-> As my focus is limited to (mostly) drivers/pwm and I already have quite
-> some other patch quests on my list:
+> +	platform_set_drvdata(pdev, priv);
+> +
+> +	return devm_rtc_register_device(priv->rtc_dev);
+> +}
+> +
+> +static const struct of_device_id msc313_rtc_of_match_table[] = {
+> +	{ .compatible = "mstar,msc313-rtc" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ms_rtc_of_match_table);
+> +
+> +static struct platform_driver msc313_rtc_driver = {
+> +	.probe = msc313_rtc_probe,
+> +	.driver = {
+> +		.name = "msc313-rtc",
+> +		.of_match_table = msc313_rtc_of_match_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(msc313_rtc_driver);
+> +
+> +MODULE_AUTHOR("Daniel Palmer <daniel@thingy.jp>");
+> +MODULE_AUTHOR("Romain Perier <romain.perier@gmail.com>");
+> +MODULE_DESCRIPTION("MStar RTC Driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.30.2
+> 
 
-Don't we all? :)
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
