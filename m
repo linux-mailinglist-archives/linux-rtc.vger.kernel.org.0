@@ -2,64 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA313E317F
-	for <lists+linux-rtc@lfdr.de>; Sat,  7 Aug 2021 00:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1763E3B3C
+	for <lists+linux-rtc@lfdr.de>; Sun,  8 Aug 2021 18:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbhHFWEf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 Aug 2021 18:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S230049AbhHHQBg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 8 Aug 2021 12:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240112AbhHFWEf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 Aug 2021 18:04:35 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E988DC0613CF
-        for <linux-rtc@vger.kernel.org>; Fri,  6 Aug 2021 15:04:17 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h17so2557128ljh.13
-        for <linux-rtc@vger.kernel.org>; Fri, 06 Aug 2021 15:04:17 -0700 (PDT)
+        with ESMTP id S229608AbhHHQBg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 8 Aug 2021 12:01:36 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBB0C061760;
+        Sun,  8 Aug 2021 09:01:15 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a7so19868416ljq.11;
+        Sun, 08 Aug 2021 09:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tnDna/Ib8icLCE4b+wM7ObHDTJS6I04e67mDcZR+NOs=;
-        b=omtICc1q08y8nE4rbBtGvrz7LeFqVRbOqkJrBd5CgHk5uAwiL1oPhJ75IDE6rGUBCT
-         61/XRj3bo6dcREYKRil3GpFLrxwjSqJiQAd5QGV8UcjCgYNd+BTQjGADLvjyxgnN0Zjg
-         7kgSpKZGM0QY/UiRSaVhVVBLK2evg6A3Qewslj77zwNOs4TAuzUMrtPjIG//CIEc9fJs
-         jRZTnq6o5LdnhQZ613uPu8Ode6gbae0iZvKks8ZBO8gzGE2CRGpYcOmwoz6kIfnqxSSZ
-         cmI4/ZI7UsfSJ99pNJtytMMSP9nF65u1ewMeoJDROl9pTkw7K1U9gyDx0/aqczsavG9e
-         ZZYQ==
+        bh=89d9PFSl6f0XdrabkTEFUnWMev9/DYMfhxE7Q7oaJJk=;
+        b=MniDHjSS9B5A9nu73tOEWjAgw/CPBPDM90KA23b1+Ar51O7svKroSrQmrDwERmHpQQ
+         tvE9Ac/q87TQoMWGWyEe57iuME0Z3zVnLY3uMC0TrUorPRkGZOF9DOKIyQVGIKy+8t4o
+         HXjNf/Xg4t2ZMDt6kDV/TZx3qXiCaYVGbVZggYOxc81XfupVkMXmz6sjjruWEykJacbp
+         i7Gj1qazp1iFm9wo6/vdun0Ux304bPgLMbPSUwxeZxOWkzcruLukO+0kj8vf7AAgGb3M
+         lYg2yxui49sr2l0fxOLwmXFSEs4NQ278T6RAG3vXJxvem0ExFLGXqLXOZwYMr7zbqBel
+         0RPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=tnDna/Ib8icLCE4b+wM7ObHDTJS6I04e67mDcZR+NOs=;
-        b=Emx4rATqsgUbuC7IxlkVHgh6e6Wvxlk8RavJlTfu54iJlxdF/Hg+G61asb/4LS/zGm
-         NciOpmXemv24OGMkOpLGeKr5bqT1ufpoXdx8gmTVezaSkEvbiMHOlphBPtHsabNdbeiN
-         HsNDzOESgRWDoZvE3M9D5jjUK2Lu5LYvjXhgD3uD2WmzsszyuIVPF/6IBiUg3E/LWbKq
-         ehAs+jMHde36i+fOrRKA0PBx8XcybphU6gUDB+ltGT7yrlRvxTLkEfhZCXjtL9L6WlfR
-         MkI8DdG3BSVtjXSn3o9U5RijwGgB2RBIplUJ04z3RPhJ71arz4SRynSNQNL5msamqlDd
-         FOgw==
-X-Gm-Message-State: AOAM533coIUoWJnYEZnuU5PylP5onAB0H0p71PG2RYtIPSJJYaaQ0Ody
-        kHHSH/hwLNxDtwUAk3bI52nWfTYp+pwBlcv2hww=
-X-Google-Smtp-Source: ABdhPJyoGlow45jha/q7nIKUXjB1n7ZDeNY3OLWbDhi+1+ED/8mvAerWBU9R25rBpKvaCg3rdVTCU+TRZgo1+gVlkNA=
-X-Received: by 2002:a2e:b529:: with SMTP id z9mr188638ljm.420.1628287456396;
- Fri, 06 Aug 2021 15:04:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=89d9PFSl6f0XdrabkTEFUnWMev9/DYMfhxE7Q7oaJJk=;
+        b=FXzHD9ZZhBbLLkPr+TxJms55ep1dRcO2uHEJONQDDTu4yhssBVzoPl0XzbEp+rzCqK
+         Er4uaBDjfm7IKaoLasIZfjM8eQxUGzRv1sjnZC2eHFjuWkhlAOU4nMry0QwsaNuOR4pQ
+         l2CAT0UAAp7Fcyj48g5G+s3dNr1qaJpq8ZBmSJgZHy4KOxyaevLC/YcWyqMmtt4kGvar
+         EukYnYeKADRBnnLYPj/HN4y5O3AB2aCKsMU0HVx90soROQ/Yu8Mzl4615oy8ejFow0tW
+         mY7z45ixundP7CRTAm/M8STukcRMbW/JfYkdFhdttGRXYw2aKTlCvWgx1AyRCrJxXgEr
+         q6Ug==
+X-Gm-Message-State: AOAM5338XZSKlbaGFKll0RzRPUacrNdMK0tlmlwJCqg3Obcg4wSeGYwx
+        6BVquBpEURtWc+xc3btr9JM=
+X-Google-Smtp-Source: ABdhPJw58mlPpK1UuFuNfJjAbFpIieik88LlavD9zcXG2sAS1tM95cpjks5gi3c8HsTz6o8cwoqX9g==
+X-Received: by 2002:a2e:84c7:: with SMTP id q7mr12554184ljh.61.1628438474302;
+        Sun, 08 Aug 2021 09:01:14 -0700 (PDT)
+Received: from localhost.localdomain (46-138-117-53.dynamic.spd-mgts.ru. [46.138.117.53])
+        by smtp.gmail.com with ESMTPSA id a6sm1589014lfs.160.2021.08.08.09.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Aug 2021 09:01:13 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Anton Bambura <jenneron@protonmail.com>
+Cc:     linux-rtc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] rtc: tps65910: Correct driver module alias
+Date:   Sun,  8 Aug 2021 19:00:30 +0300
+Message-Id: <20210808160030.8556-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:a2e:9b53:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 15:04:15 -0700 (PDT)
-Reply-To: pmaurice335@gmail.com
-From:   peacemaurice <iyidjobomahamedawali@gmail.com>
-Date:   Fri, 6 Aug 2021 22:04:15 +0000
-Message-ID: <CABSG11iAX8cCYbnOE0ReaEFg25xQGMKdz4iXKkyYyWChakYEfA@mail.gmail.com>
-Subject: =?UTF-8?B?TWlsw70=?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Prosz=C4=99, mo=C5=BCemy porozmawia=C4=87?
-Co=C5=9B w=C5=82a=C5=9Bnie si=C4=99 pojawi=C5=82o i jest bardzo pilne, pros=
-z=C4=99 o uwag=C4=99.
+The TPS65910 RTC driver module doesn't auto-load because of the wrong
+module alias that doesn't match the device name, fix it.
 
-pozdrowienia
-Pok=C3=B3j Maurycego.
+Cc: stable@vger.kernel.org
+Reported-by: Anton Bambura <jenneron@protonmail.com>
+Tested-by: Anton Bambura <jenneron@protonmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/rtc/rtc-tps65910.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-tps65910.c b/drivers/rtc/rtc-tps65910.c
+index bc89c62ccb9b..75e4c2d777b9 100644
+--- a/drivers/rtc/rtc-tps65910.c
++++ b/drivers/rtc/rtc-tps65910.c
+@@ -467,6 +467,6 @@ static struct platform_driver tps65910_rtc_driver = {
+ };
+ 
+ module_platform_driver(tps65910_rtc_driver);
+-MODULE_ALIAS("platform:rtc-tps65910");
++MODULE_ALIAS("platform:tps65910-rtc");
+ MODULE_AUTHOR("Venu Byravarasu <vbyravarasu@nvidia.com>");
+ MODULE_LICENSE("GPL");
+-- 
+2.32.0
+
