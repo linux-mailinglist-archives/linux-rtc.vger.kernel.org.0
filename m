@@ -2,59 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7449D3EF57B
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 Aug 2021 00:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F3D3EF8DF
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 Aug 2021 05:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbhHQWIx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 Aug 2021 18:08:53 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:35909 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235388AbhHQWIw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Aug 2021 18:08:52 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 9AE46C0003;
-        Tue, 17 Aug 2021 22:08:17 +0000 (UTC)
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Mathew McBride <matt@traverse.com.au>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2 0/2] rtc: Implement support for EPSON RX-8035
-Date:   Wed, 18 Aug 2021 00:08:16 +0200
-Message-Id: <162923801494.571654.15730416924469451816.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210709044518.28769-1-matt@traverse.com.au>
-References: <20210709044518.28769-1-matt@traverse.com.au>
+        id S236287AbhHRDzE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 Aug 2021 23:55:04 -0400
+Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:17416 "EHLO
+        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236105AbhHRDzE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 Aug 2021 23:55:04 -0400
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 18 Aug
+ 2021 11:54:27 +0800
+Received: from [10.122.79.217] (221.11.61.182) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 18 Aug
+ 2021 11:54:25 +0800
+Date:   Wed, 18 Aug 2021 11:54:20 +0800
+From:   <tonywwang-oc@zhaoxin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <a.zummo@towertech.it>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <TimGuo-oc@zhaoxin.com>,
+        <CooperYan@zhaoxin.com>, <QiyuanWang@zhaoxin.com>,
+        <HerryYang@zhaoxin.com>, <CobeChen@zhaoxin.com>,
+        <YanchenSun@zhaoxin.com>
+Subject: Re: [PATCH] rtc: Fix set RTC time delay 500ms on some Zhaoxin SOCs
+User-Agent: K-9 Mail for Android
+In-Reply-To: <YRu3v0pb/Z54XxWJ@piout.net>
+References: <1629121638-3246-1-git-send-email-TonyWWang-oc@zhaoxin.com> <YRogod0HB4d7Og4E@piout.net> <a4b6b0b4-9aa5-9a75-e523-0fd7656b82cf@zhaoxin.com> <YRpb4Fey2lM3aOAw@piout.net> <7EA395FF-EB66-4274-9EDE-EC28450A0259@zhaoxin.com> <YRu3v0pb/Z54XxWJ@piout.net>
+Message-ID: <F4869089-9792-4C4F-B984-553662B03E91@zhaoxin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [221.11.61.182]
+X-ClientProxiedBy: ZXSHCAS2.zhaoxin.com (10.28.252.162) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 9 Jul 2021 04:45:16 +0000, Mathew McBride wrote:
-> The EPSON RX-8035[SA] is a I2C real time clock module with
-> built-in oscillator[1]. It is a very close relative of the EPSON
-> RX-8025 that is supported by the rtc-rx8025 driver.
-> 
-> The main difference is that the RX-8035 has inverted the
-> 'oscillator stop' bit in the control register. The operation
-> of the devices is otherwise identical for the features currently
-> supported.
-> 
-> [...]
 
-Applied, thanks!
 
-[1/2] rtc: rx8025: implement RX-8035 support
-      commit: f120e2e33ac8ba1adac4f59eaf1ae1705305158f
+On August 17, 2021 9:21:03 PM GMT+08:00, Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+>On 17/08/2021 19:09:28+0800, tonywwang-oc@zhaoxin.com wrote:
+>> 
+>> 
+>> On August 16, 2021 8:36:48 PM GMT+08:00, Alexandre Belloni
+><alexandre.belloni@bootlin.com> wrote:
+>> >On 16/08/2021 18:03:13+0800, Tony W Wang-oc wrote:
+>> >> 
+>> >> On 16/08/2021 16:24, Alexandre Belloni wrote:
+>> >> > Hello,
+>> >> > 
+>> >> > On 16/08/2021 21:47:18+0800, Tony W Wang-oc wrote:
+>> >> >> When the RTC divider is changed from reset to an operating time
+>> >base,
+>> >> >> the first update cycle should be 500ms later. But on some
+>Zhaoxin
+>> >SOCs,
+>> >> >> this first update cycle is one second later.
+>> >> >>
+>> >> >> So set RTC time on these Zhaoxin SOCs will causing 500ms delay.
+>> >> >>
+>> >> > 
+>> >> > Can you explain what is the relationship between writing the
+>> >divider and
+>> >> > the 500ms delay?
+>> >> >> Isn't the issue that you are using systohc and set_offset_nsec
+>is
+>> >set to
+>> >> > NSEC_PER_SEC / 2 ?
+>> >> > 
+>> >> No.
+>> >> When using #hwclock -s to set RTC time and set_offset_nsec is
+>> >> NSEC_PER_SEC / 2, the function mc146818_set_time() requires the
+>first
+>> >> update cycle after RTC divider be changed from reset to an
+>operating
+>> >> mode is 500ms as the MC146818A spec specified. But on some Zhaoxin
+>> >SOCs,
+>> >> the first update cycle of RTC is one second later after RTC
+>divider
+>> >be
+>> >> changed from reset to an operating mode. So the first update cycle
+>> >after
+>> >> RTC divider be changed from reset to an operation mode on These
+>SOCs
+>> >> will causing 500ms delay with current mc146818_set_time()
+>> >implementation.
+>> >> 
+>> >
+>> >What happens with hwclock --delay=0 -s ?
+>> 
+>> With "hwclock --delay=0 -s" still have this problem. Actually, this
+>500ms delay caused by writing the RTC time on these Zhaoxin SOCs.
+>> As I've tested, with hwclock --delay=0 -w can fix it too. 
+>> 
+>
+>Both -s and -w end up calling set_hardware_clock_exact() so both should
+>end up with the correct time. If this is not the case, then hwclock
+>needs to be fixed.
 
-I did remove the switch and dev_info in an attempt to cut down on unecessary
-strings.
+I checked Util-linux-2.37.2, hwclock -w will call
+set_hardware_clock_exact() and hwclock -s will not.
+Please correct me if I'm wrong.
 
-[2/2] dt-bindings: rtc: add Epson RX-8025 and RX-8035
-      commit: 8158da6a33f2656c2a98c30eb9185a44e215a6b6
-
-Best regards,
--- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Sincerely
+TonyWWang-oc
