@@ -2,51 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1975C3F1E9F
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 Aug 2021 19:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68553F1E97
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 Aug 2021 19:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbhHSRDs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 Aug 2021 13:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S230506AbhHSRDr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 Aug 2021 13:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbhHSRDm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Aug 2021 13:03:42 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47869C061575;
-        Thu, 19 Aug 2021 10:03:06 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id l11so10140261wrx.4;
-        Thu, 19 Aug 2021 10:03:06 -0700 (PDT)
+        with ESMTP id S230475AbhHSRDo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 Aug 2021 13:03:44 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2070C061756;
+        Thu, 19 Aug 2021 10:03:07 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l11so10140355wrx.4;
+        Thu, 19 Aug 2021 10:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ltKmt/JpYcjujKMY1NbAqfQilXNFyNfsoBSQ5TkpJDY=;
-        b=P/amnaNkLUwyC3pXp6j8AczBcIkshq69TsmZAvgQVh39ai4JHtuIaDYwunXdcuw0f+
-         awk/1w24g9im7d1O8pJwcHIXIj7Up9fTES1/F/Sgrd21GXGFBUrCLT94KpGglsmy7e/N
-         cYxmomHIDpYdXYlo+MMexD+fqmi2RYfx6Hm2Gx8o0hfncJRSt9DM/o95vt6FFsEuyma0
-         l5Q+TcIdeF6N4s5e+tXbdGESVX5kBgNR6s03/A5E8yN3NW8F1hw29jTb+PUc5lm9seZ2
-         0uDr/JGKv7JD+nnMf8V5PByO1xexZJnFJxS/b4OQCMjhddcf79Gg+3uI+KwXysZbFVVm
-         fCvA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3ZGaaM2GSAFsysJeyN/26wnpCp1EgFQ7NteQr3i/NpY=;
+        b=DtspEGW+nuBNf5cUEs5GTYtjS4GSRKl0rrvHkjCxMnNmUDSUNwwfKpsUAKhYL4aih+
+         DdB1PoUVmW/tQtEnnzUwMM1qPdzXeF7yJ40NejDF27cjjNz0Dz8U4EMVtOebI3Eui5WC
+         A5/1KBB9Nhll3zBip40nlLGb3tBjkzRfXDejwSYbwYk84T7Mb3QDb23BUcGWVQhH6U2M
+         frdYoofBVpgWWpTCDZfJ8AnlnuW+VWxvLDJoPmZpe1BmfWPhF6hcE8j6wsmkqFV7D4Ru
+         XcunVzzrqvh2qb3bMhJYgxXMKjfw0JD1k0WWulJPoV64aj1xZq+pkK6OdiPfQWJO4ycS
+         9+9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ltKmt/JpYcjujKMY1NbAqfQilXNFyNfsoBSQ5TkpJDY=;
-        b=nVRvHB3k+NAScijPJixTC/fcLc2T2nCPSDE9KkgA9WK9/kj5aeFw6u3bshwRUG5sHX
-         2aAkv4650J+FSXytBBHJGJoA+FOWqxZ8ZzA77cJUPWaZOuTS1PEUFxAZqGhFhkv6RaGY
-         2e1ELlt16Q1kANypg9Te3yg+xh+Y0MutTcCG5ZwfOKf+IeS3kG2pZXksNdXXysiJEY2+
-         VosEx68eH1XIc5vjl2s4nvbsxvU1o5jNSxFggeiWUS5nQ+QDT+x/Lb+KJOlmAowVMHy9
-         o1hRlDBhcBJfBasL1XejpDz+FCE/fQCv5Fi48pACp4jKI10CABEUwpD2SslOfehjFIUV
-         5bSQ==
-X-Gm-Message-State: AOAM531TE/XJCmPVPGc+HeT7IfM/E+OFvP4Ch7ZgY8idabE0EWgbn60R
-        cOTyaQWVMelmIUirrPJ2Zb8=
-X-Google-Smtp-Source: ABdhPJzIonaES95dPAUO8NRmFzFwzslz1hsk3C/gdCiqnZSpexWCVpesVZ19wiKL4rild/3rWNDr9Q==
-X-Received: by 2002:adf:f90e:: with SMTP id b14mr5308542wrr.28.1629392584874;
-        Thu, 19 Aug 2021 10:03:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3ZGaaM2GSAFsysJeyN/26wnpCp1EgFQ7NteQr3i/NpY=;
+        b=csfG//hZWVLqzrG8Ek1pGVS2o7LVtbAPO+OAL7uSL9jh0oUUn+XLQYfYbu1MtXHA+w
+         Bsj3PnHNksTprrxFyTY45MNul7dcrxELSxEeh8yJvA2qI1G6KRlVum8g5Rc2PBscNns9
+         v/DeW2kMNKqKmJyh0o7rkRMIufWhtmym/2jL60y/mTZIYiOyQGp6ibaWTsrp7aVRtXeQ
+         iyLgbi/aS2IoD0486jD/3tDA8xNZzbW8qYhvP9G6OWuYKJhJgxTB+bBzqJJ0g75ZJoHJ
+         sKDcR1xi5cYHFdH9KyJGvyov1jmdUqnDym4cXQ8B/9xMJYgUljlbSTdfLMPSYQAn6gBq
+         pKEg==
+X-Gm-Message-State: AOAM531lyCVijQOdZTgl5/xuGjDd5zdXiVxZbcQ79DGhJ3LnB86Oueor
+        ScFQDirZwm0cXxPdC1FwMNA=
+X-Google-Smtp-Source: ABdhPJwOdfw2qQVbBbAtSlGea8G1nJjsS4qdVFZwX8CgJdLFVafTxxXhMHvUACrSTaR4rDZTHacUVA==
+X-Received: by 2002:a5d:45c2:: with SMTP id b2mr4993624wrs.188.1629392586507;
+        Thu, 19 Aug 2021 10:03:06 -0700 (PDT)
 Received: from debby ([2a01:cb19:13:7900:ae2b:c45b:3c7c:7e51])
-        by smtp.gmail.com with ESMTPSA id w14sm3340773wrt.23.2021.08.19.10.03.04
+        by smtp.gmail.com with ESMTPSA id i9sm4250784wre.36.2021.08.19.10.03.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 10:03:04 -0700 (PDT)
+        Thu, 19 Aug 2021 10:03:05 -0700 (PDT)
 From:   Romain Perier <romain.perier@gmail.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -54,105 +54,82 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 0/3] Add RTC for MStar SoCs
-Date:   Thu, 19 Aug 2021 19:02:58 +0200
-Message-Id: <20210819170301.10520-1-romain.perier@gmail.com>
+Subject: [PATCH v3 1/3] dt-bindings: rtc: Add Mstar MSC313e RTC devicetree bindings documentation
+Date:   Thu, 19 Aug 2021 19:02:59 +0200
+Message-Id: <20210819170301.10520-2-romain.perier@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210819170301.10520-1-romain.perier@gmail.com>
+References: <20210819170301.10520-1-romain.perier@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This patches series adds a new driver for the RTC found in the Mstar
-MSC313e SoCs and newer. It adds a basic rtc driver, the corresponding
-devicetree bindings and its documentation.
+This adds the documentation for the devicetree bindings of the Mstar
+MSC313e RTC driver, found from MSC313e SoCs and newer.
 
-The rtctest (from selftests) has been passed on this driver, with the
-following output:
-$ rtctest 
-TAP version 13
-1..7
-# Starting 7 tests from 2 test cases.
-#  RUN           rtc.date_read ...
-# rtctest.c:47:date_read:Current RTC date/time is 01/01/1970 00:02:03.
-#            OK  rtc.date_read
-ok 1 rtc.date_read
-#  RUN           rtc.uie_read ...
-#            OK  rtc.uie_read
-ok 2 rtc.uie_read
-#  RUN           rtc.uie_select ...
-#            OK  rtc.uie_select
-ok 3 rtc.uie_select
-#  RUN           rtc.alarm_alm_set ...
-# rtctest.c:136:alarm_alm_set:Alarm time now set to 00:02:12.
-# rtctest.c:156:alarm_alm_set:data: 1a0
-#            OK  rtc.alarm_alm_set
-ok 4 rtc.alarm_alm_set
-#  RUN           rtc.alarm_wkalm_set ...
-# rtctest.c:192:alarm_wkalm_set:Alarm time now set to 01/01/1970 00:02:15.
-#            OK  rtc.alarm_wkalm_set
-ok 5 rtc.alarm_wkalm_set
-#  RUN           rtc.alarm_alm_set_minute ...
-# rtctest.c:238:alarm_alm_set_minute:Alarm time now set to 00:03:00.
-# rtctest.c:258:alarm_alm_set_minute:data: 1a0
-#            OK  rtc.alarm_alm_set_minute
-ok 6 [  180.545015] random: fast init done
-rtc.alarm_alm_set_minute
-#  RUN           rtc.alarm_wkalm_set_minute ...
-# rtctest.c:294:alarm_wkalm_set_minute:Alarm time now set to 01/01/1970 00:04:00.
-#            OK  rtc.alarm_wkalm_set_minute
-ok 7 rtc.alarm_wkalm_set_minute
-# PASSED: 7 / 7 tests passed.
-# Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Changes since v2:
-- Added dual-license header to the dt-bindings documentation
-- Reordered dts entries, so the rtc device_node is before the watchdog
-  device_node (because it has a lower address)
-- Updated rtc range_max to U32_MAX
-- Leave range_min to 0 (default value when it is not set at all)
-- Fixed the CNT_EN_BIT logic, so .read_time will only read the time when
-  the RTC has been previously set and has a valid state (which is not
-  the case after a POR).
-
-Changes since v1:
-- Fixed the DT bindings documentation and fixed dt_binding_check (an
-  include was missing)
-- Added || COMPILE_TEST to kconfig
-- Removed rtc_valid_tm from msc313_rtc_read_time()
-- Removed the last write of the msc313_rtc_set_time() function (not
-  required) and improved comments
-- Replaced the relaxed io by normal io in msc313_rtc_interrupt()
-- Added checks to be sure that the alarm fired in msc313_rtc_interrupt()
-- Removed msc313_rtc_remove() (replaced by devm_add_action_or_reset)
-- Removed unnecessary software reset of the IP in the probe function
-  (the soft reset is never executed, it is a mistake from the initial
-  refactoring)
-- Switched to devm_rtc_allocate_device() and devm_rtc_register_device(),
-  and dropped the error message related to the rtc device allocation
-- Added an RTC range by setting .range_min and .range_max
-- Added the "start-year" property to the DT bindings documentation
-
-
-Daniel Palmer (1):
-  rtc: Add support for the MSTAR MSC313 RTC
-
-Romain Perier (2):
-  dt-bindings: rtc: Add Mstar MSC313e RTC devicetree bindings
-    documentation
-  ARM: dts: mstar: Add rtc device node
-
- .../bindings/rtc/mstar,msc313-rtc.yaml        |  49 ++++
- MAINTAINERS                                   |   1 +
- arch/arm/boot/dts/mstar-v7.dtsi               |   8 +
- drivers/rtc/Kconfig                           |  10 +
- drivers/rtc/Makefile                          |   1 +
- drivers/rtc/rtc-msc313.c                      | 258 ++++++++++++++++++
- 6 files changed, 327 insertions(+)
+Signed-off-by: Romain Perier <romain.perier@gmail.com>
+---
+ .../bindings/rtc/mstar,msc313-rtc.yaml        | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
- create mode 100644 drivers/rtc/rtc-msc313.c
 
+diff --git a/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+new file mode 100644
+index 000000000000..114199cf4d28
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/mstar,msc313-rtc.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/mstar,msc313-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mstar MSC313e RTC Device Tree Bindings
++
++allOf:
++  - $ref: "rtc.yaml#"
++
++maintainers:
++  - Daniel Palmer <daniel@0x0f.com>
++  - Romain Perier <romain.perier@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - mstar,msc313-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  start-year: true
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    rtc@2400 {
++        compatible = "mstar,msc313-rtc";
++        reg = <0x2400 0x40>;
++        clocks = <&xtal_div2>;
++        interrupts-extended = <&intc_irq GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
++    };
++...
 -- 
 2.30.2
 
