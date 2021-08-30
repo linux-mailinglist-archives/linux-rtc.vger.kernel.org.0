@@ -2,71 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F903FB019
-	for <lists+linux-rtc@lfdr.de>; Mon, 30 Aug 2021 05:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFFB3FB0C8
+	for <lists+linux-rtc@lfdr.de>; Mon, 30 Aug 2021 07:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbhH3D5f (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 Aug 2021 23:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S230191AbhH3F0d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 30 Aug 2021 01:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhH3D5e (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 29 Aug 2021 23:57:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9418C061575;
-        Sun, 29 Aug 2021 20:56:41 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id u6so10501066pfi.0;
-        Sun, 29 Aug 2021 20:56:41 -0700 (PDT)
+        with ESMTP id S229936AbhH3F0c (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Aug 2021 01:26:32 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03428C061575;
+        Sun, 29 Aug 2021 22:25:39 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id q21so7865160plq.3;
+        Sun, 29 Aug 2021 22:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:cc:message-id:date:user-agent:mime-version
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HjNZBedsFuw0ZBtpjYkbCXssQyv/l8LUL4tzZE4plgI=;
-        b=WPpNjWJF3y1ylaD51PRZQslkWjArPxnR1/UkWWF4HGyTEJLeXd3TV2sVEym+d//J4K
-         A9Qaq7OYohA3fykEG79ZQk/z2vDjK20UrYUCzA7luG+85cjzXttmBD6oTSVo7YRXoL9k
-         bfqrlM983ARFP0m1o98v8u7CBpT59pHEfk5gmHeLiu/MgeMWKsjC5Y8KdRWdSOq5kywN
-         WXA1SJ4iqMMamIMvnr2qeHfmEVI2yRsGOZVSynfGHRziXeZCtc7z8Os/3Aq/Lc/aceI+
-         Ovk1Cybxpuxdgqe7O5qlJuxMbOl0RofnumsuscX+4EzMlLQ8sotTA+hER63A7TfqmKhx
-         Y55g==
+        bh=5veyo9Ry0StfUWfoIo1uO4FnVWpRSgAmiP0O2/2xtyE=;
+        b=ja9nZVv5BY7tVqCB6oK4eLJbbjmEEvDjg/gmWnE8Ywgtan0f8J8fFZ6b8FeJOg+woT
+         JBN5Xb6LnKT7CZIakKApM99GgrgEDYZFxWDpd3XnhQ+L/blTnMMkNrT+vd+UcWwHPMgY
+         guu39XC6hFByRcxlPgKx9kMCNnWz56fW8sWLst0pe6Frv5q5PSI9IwtTNCpNEAB13177
+         nIHH4tt6ClO1D6EWClxsGQN5JGNBLieOVhf9gVka21m3EuuXWP+HzMR16pwmE0ULN+LD
+         d36r8+dt71E4o4fc4Pi1sECZ6JJxFDLhPPgiv3QC7QiYG7ykh6Xxm9O5RMg6HEQtEFm3
+         isTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:cc:message-id:date:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=HjNZBedsFuw0ZBtpjYkbCXssQyv/l8LUL4tzZE4plgI=;
-        b=TeqLlhFRzxTHqSIK4TL4iDFLAyTeEPlePXdL2rdNX0Pwsn6fdf31IBVvLNkUdr194y
-         VQJz2+TG8SLGrpqCu2Aj6SMh8W+cjDv2f86sjh7Xl/YcA8Mi9Wz1FdBhWgVFhYfm+yy1
-         4kQxMWrpRO8mTz7Hw0+U+0jxT0o2GKOIJdFkyjDV/0KtRlJzDwB+s5Iu2FF9U3gQbIU1
-         tu8dcdgrC01E2O+8A69tihuZWy4RX1lIhbQRHInp+ajxoMHNvFfa2plMDyTMu3zZu6Qn
-         rXFSuXwMoP5Ara9DIN0lYWOrPqTkjW5bUmxJJW253GtzqPTKyGtzzSFtqN5tgvXiD26Y
-         SxQA==
-X-Gm-Message-State: AOAM5329PfoPoQxu8lTcl1kOjWrJBsTgmDV5FtQZo1VSIintN8SpSj9r
-        RroY2J1F8+jpJv1MneYhqgRIDHVehDs=
-X-Google-Smtp-Source: ABdhPJx+ICg/wDcPdZwcJYPqUHuw95JkOO+wR4etB0VRCSJ2UsDiE4PxE+7IXanOA/Wk/M/VFnH0HA==
-X-Received: by 2002:a65:62c4:: with SMTP id m4mr20121584pgv.453.1630295801294;
-        Sun, 29 Aug 2021 20:56:41 -0700 (PDT)
-Received: from [192.168.1.111] ([211.72.215.15])
-        by smtp.gmail.com with ESMTPSA id w11sm5810872pfj.65.2021.08.29.20.56.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Aug 2021 20:56:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5veyo9Ry0StfUWfoIo1uO4FnVWpRSgAmiP0O2/2xtyE=;
+        b=eQWUI5df2y5XKBpjMLlh86qy6x437G/KAHg1NYYVSAzq8hcOs32f8p05+8Ec5c8cHB
+         vMP88gg0D+UQEeoXa736OaRXq2dadtnDoHtxvj5rBywyQJd9VODJSMR7yHTGpNhxc+tg
+         MzFGotQuoUtYB/WNIYpHPENxL8bnFvWcorZGBqSkYeEp1yl0byuIHQK84Nn1pYYFrXM5
+         Dt2o9fs1sfS8ZQPcp6MbFIaxCPFqnx41hAYAcerdGhOdvYo+MkY6ZyN7p0BqayQcKce3
+         RcQFhZIr1wftJThXBVce9lIk5vRW+HO3y3asFm4ObIBdhhdQnpa7J0jQW5yvMGI67Mea
+         5YaQ==
+X-Gm-Message-State: AOAM530AfP8vdHmdu/iXbP5WqJn5BTmkxHViYxYRfaunkPxdbvO7yuJ5
+        syjsy3CRGgr8V13aOITIepSh+wKxD08=
+X-Google-Smtp-Source: ABdhPJy89kWy4Xf8qb/yfJ43BLanYchu9drlpTuSqq3PNXFGHxjV3Hhswkx/STNCnxdhL9JEssV3vQ==
+X-Received: by 2002:a17:90a:ae12:: with SMTP id t18mr17685626pjq.45.1630301139425;
+        Sun, 29 Aug 2021 22:25:39 -0700 (PDT)
+Received: from ruantu-linux-2.. ([211.72.215.15])
+        by smtp.gmail.com with ESMTPSA id k190sm4220804pgc.11.2021.08.29.22.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Aug 2021 22:25:38 -0700 (PDT)
 From:   Yu-Tung Chang <mtwget@gmail.com>
-To:     mtwget@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Yu-Tung Chang <mtwget@gmail.com>
 Subject: [PATCH] rtc: rx8010: select REGMAP_I2C
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Message-ID: <f58c6a58-86a6-1b37-7cec-6a9d801189ed@gmail.com>
-Date:   Mon, 30 Aug 2021 11:56:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+Date:   Mon, 30 Aug 2021 13:25:32 +0800
+Message-Id: <20210830052532.40356-1-mtwget@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
-
-From 45801967ad80578161485937a0833b27b90210f9 Mon Sep 17 00:00:00 2001
-From: Yu-Tung Chang <mtwget@gmail.com>
-Date: Mon, 30 Aug 2021 10:59:17 +0800
-Subject: [PATCH] rtc: rx8010: select REGMAP_I2C
 
 The rtc-rx8010 uses the I2C regmap but doesn't select it in Kconfig so
 depending on the configuration the build may fail. Fix it.
@@ -81,12 +74,13 @@ index 12153d5801ce..f7bf87097a9f 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
 @@ -624,6 +624,7 @@ config RTC_DRV_FM3130
-
+ 
  config RTC_DRV_RX8010
-        tristate "Epson RX8010SJ"
-+       select REGMAP_I2C
-        help
-          If you say yes here you get support for the Epson RX8010SJ RTC
-          chip.
---
+ 	tristate "Epson RX8010SJ"
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for the Epson RX8010SJ RTC
+ 	  chip.
+-- 
 2.33.0
+
