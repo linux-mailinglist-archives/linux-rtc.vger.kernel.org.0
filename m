@@ -2,62 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34BB3FBFFC
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 02:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A65C3FC007
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 02:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239129AbhHaAaO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Aug 2021 20:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S239214AbhHaAfT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 30 Aug 2021 20:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbhHaAaN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Aug 2021 20:30:13 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9868C061760
-        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:29:19 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id p14so127251vsm.2
-        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:29:19 -0700 (PDT)
+        with ESMTP id S239209AbhHaAfS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Aug 2021 20:35:18 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50634C06175F
+        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:34:24 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id g2so8809876uad.4
+        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=nigauri-org.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=ua6RJJdSzE5NnhckPixGrbnyF28l+OENKnDCqpy4XCU=;
-        b=LWp6R3wZ9i4CHlNIOtyA2AIrW6TZoKDCSJR8fkKqf3Hx6D2hbEGeIl64dFbuKxFani
-         f/9cy3SmkRNj4isHI6CUv7hkYu3PKIlfruejErqtmiDNNKru8cFeiXClWMJIPnxtYKTs
-         2lDXVgFf6/V//tOG1BoVSxLF3v9OtDg6NKE74X0a7ZFQFjttVeJGyw2x3/vKgAb+w9ye
-         Xjh3GO+/D3aVxzt96Rgs+aGvR1j/7jeNBF1dA7qNPh0DycfxZ5U1h2Y4ybf3gWtvZDEy
-         8FzbUja0oiCwlNr0gW4ozQAZz1/X6LpoDm3pVPhLaN8bidn9UrQNp5z1iJCHu8nWORu5
-         6WXg==
+        bh=4No7OmDhYH71cDuM902ztr+gz1Pkd+7iA3xvuwmnN+Y=;
+        b=1iGcw3M9CCLKuF0wYys5bFa+kaQyoBIC6R/gdNyavhjaZaQKlAH1omUEaWACVCI95y
+         Q9anlWOSnXFbA2YUXjgnMHUPIyHXdBj4lQCqrJBKWNSf1azsAhsb7Yw3pc0ZgQBWmHh2
+         3y2roihnBNEqawQ7PH9s+h8TDJBuWkRQdd3eRb1QDHr6/o5xbHUCPPm8fK8QFQ3+olve
+         oLdEhCT6cMIXe43P4UXvBRoKSd0dSwPViZ2t+MXruj7tt847I/GOSgWU+VD+yMqFUVtd
+         D5a3ElnHlIC7/yRymjdHI5m9rplsTUY/3pWYeELuICg65sk3Iiqy5p48SfM7y+a8ddhM
+         /M9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ua6RJJdSzE5NnhckPixGrbnyF28l+OENKnDCqpy4XCU=;
-        b=ItK0YDMpHf+4VHxzwCw1S0A6DHh2K2kPHdI48C7Ipvv3hZ8/p2fmjaG4/6V+ugO6sC
-         HR2f2WaUpDPTOpjQwGH7yDO2eVlXGwyhzQSBx89q4zQ/aRBRD4fKtzwHBDz80aXPtjsK
-         BlL2MfbbvDp7dBEc3ah2oRYrC7CSQzqW/NqOaVnABHb9hdwLkKR0wN1Cunx04/BLsQvv
-         c+B1GBfwQvII16E8vXs2mlgcEa7Mym1HH+/QlN7Kt1AieUzOZBFwXoA6yfZe+gjLWTWt
-         Bj8KvtA+4/plXn/4hHYvqkaJMF2EDIG4b7AJsvrZsbpEKfL2FuNUvWH+nkvq3trPEjKB
-         QOxA==
-X-Gm-Message-State: AOAM530qhqc41jLwEcV0lKhfwy0c3Ci1q1WHZcexDV/kMXbU/xFsVBpU
-        7jynjMKzYl76zQn+YsMTX7JGKrYxGaeqB6PfswoK
-X-Google-Smtp-Source: ABdhPJzY8SEoXozwxOq0BDzCTC+NWt319mvEPZ1zvVPdw/f9LIMTDDa7ysRy9Ii9GP84sQ15gFjoLceUt67AlPFoMUg=
-X-Received: by 2002:a05:6102:c06:: with SMTP id x6mr17238308vss.2.1630369758714;
- Mon, 30 Aug 2021 17:29:18 -0700 (PDT)
+        bh=4No7OmDhYH71cDuM902ztr+gz1Pkd+7iA3xvuwmnN+Y=;
+        b=L3/ZtoftwQAja7SCzboEi2o9PeHLoe88q9T2KNoaMQdUchv5MX7aQWFS0byxR2i3U/
+         aup0QXa7WNmqR1ychq33Rcf0Fs8Jr0XYWGnwN9XGYC2Eh6DrpY4iGBRdJBoB02GXEbij
+         DoYm1MDQaoOIZQuaKh6ycrSjlBMtbkamKQpbPmugS2jl+f+dHe2mGQFESueDdTkQ+S1M
+         Ch8hQoGYjaixVa1m1HeDQhfhJ78BFIsICvmi2fPk6ftJp3AJQHnCDrapR9r2WiGQxhkY
+         ocY70R1lJhWhPoMScP/e5JCfUXZ+K5v7mYTGvQ2cHvbAO08xwPIPWN4PaM8+LtF/EAa8
+         s0TQ==
+X-Gm-Message-State: AOAM531spnvgeFNKBCHJGLR9h2TaZXgrN1qIJmTVFMeVKfz1Qr4MLsj0
+        ychC5dA1VME5YdWRRaBIQs0MgrMObLQbw8GIRRW7
+X-Google-Smtp-Source: ABdhPJxVULiDngx88UAs0Vp+/wbdw5tXbWzMy8qHMcLiXrR/fI5LPC2TYdniJP/19YuB3Na0oMTJAjsVTHKNXpISlOg=
+X-Received: by 2002:ab0:7304:: with SMTP id v4mr17236231uao.30.1630370063254;
+ Mon, 30 Aug 2021 17:34:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210823171613.18941-1-romain.perier@gmail.com> <20210823171613.18941-3-romain.perier@gmail.com>
-In-Reply-To: <20210823171613.18941-3-romain.perier@gmail.com>
+References: <20210823163142.586529-1-git@xen0n.name> <20210823163142.586529-2-git@xen0n.name>
+In-Reply-To: <20210823163142.586529-2-git@xen0n.name>
 From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Tue, 31 Aug 2021 09:28:52 +0900
-Message-ID: <CABMQnVLxJ6_ZshFZVC7rxAg+xVv_06XyxxvsOUmkopG9X0A4kA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] rtc: Add support for the MSTAR MSC313 RTC
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+Date:   Tue, 31 Aug 2021 09:33:56 +0900
+Message-ID: <CABMQnV+1Zd3emmET5+2cC-kGR6y15W8QD2vgykMQOUzMn2E_Yw@mail.gmail.com>
+Subject: Re: [PATCH RESEND v5 1/6] rtc: ls2x: Add support for the
+ Loongson-2K/LS7A RTC
+To:     WANG Xuerui <git@xen0n.name>
+Cc:     linux-rtc@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux ARM <linux-arm-kernel@lists.infradead.org>
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -66,23 +64,25 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 Hello,
 
-2021=E5=B9=B48=E6=9C=8824=E6=97=A5(=E7=81=AB) 2:16 Romain Perier <romain.pe=
-rier@gmail.com>:
+2021=E5=B9=B48=E6=9C=8824=E6=97=A5(=E7=81=AB) 1:39 WANG Xuerui <git@xen0n.n=
+ame>:
 >
-> From: Daniel Palmer <daniel@0x0f.com>
+> This RTC module is integrated into the Loongson-2K SoC and the LS7A
+> bridge chip. This version is almost entirely rewritten to make use of
+> current kernel API.
 >
-> This adds support for the RTC block on the Mstar MSC313e SoCs and newer.
->
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> Co-developed-by: Romain Perier <romain.perier@gmail.com>
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
 > ---
->  MAINTAINERS              |   1 +
->  drivers/rtc/Kconfig      |  10 ++
->  drivers/rtc/Makefile     |   1 +
->  drivers/rtc/rtc-msc313.c | 258 +++++++++++++++++++++++++++++++++++++++
->  4 files changed, 270 insertions(+)
->  create mode 100644 drivers/rtc/rtc-msc313.c
+>  drivers/rtc/Kconfig    |  11 +++
+>  drivers/rtc/Makefile   |   1 +
+>  drivers/rtc/rtc-ls2x.c | 180 +++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 192 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-ls2x.c
 
 Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 
@@ -90,328 +90,233 @@ Best regards,
   Nobuhiro
 
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fd25e4ecf0b9..ebacdd5e8878 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2220,6 +2220,7 @@ F:        arch/arm/boot/dts/mstar-*
->  F:     arch/arm/mach-mstar/
->  F:     drivers/clk/mstar/
->  F:     drivers/gpio/gpio-msc313.c
-> +F:     drivers/rtc/rtc-msc313.c
->  F:     drivers/watchdog/msc313e_wdt.c
->  F:     include/dt-bindings/clock/mstar-*
->  F:     include/dt-bindings/gpio/msc313-gpio.h
 > diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index 12153d5801ce..9ce4baab5fcf 100644
+> index daff06707455..819f366b4d91 100644
 > --- a/drivers/rtc/Kconfig
 > +++ b/drivers/rtc/Kconfig
-> @@ -1925,4 +1925,14 @@ config RTC_DRV_WILCO_EC
->           This can also be built as a module. If so, the module will
->           be named "rtc_wilco_ec".
+> @@ -1313,6 +1313,17 @@ config RTC_DRV_NTXEC
+>           embedded controller found in certain e-book readers designed by=
+ the
+>           original design manufacturer Netronix.
 >
-> +config RTC_DRV_MSC313
-> +       tristate "MStar MSC313 RTC"
-> +        depends on ARCH_MSTARV7 || COMPILE_TEST
+> +config RTC_DRV_LS2X
+> +       tristate "Loongson LS2X RTC"
+> +       depends on OF && MACH_LOONGSON64 || COMPILE_TEST
+> +       select REGMAP_MMIO
 > +       help
-> +         If you say yes here you get support for the Mstar MSC313e On-Ch=
-ip
-> +         Real Time Clock.
+> +         If you say yes here you get support for the RTC on the Loongson=
+-2K
+> +         SoC and LS7A bridge, which first appeared on the Loongson-2H.
 > +
-> +         This driver can also be built as a module, if so, the module
-> +         will be called "rtc-msc313".
+> +         This driver can also be built as a module. If so, the module
+> +         will be called rtc-ls2x.
 > +
->  endif # RTC_CLASS
+>  comment "on-CPU RTC drivers"
+>
+>  config RTC_DRV_ASM9260
 > diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 2dd0dd956b0e..5efda8a60cee 100644
+> index 5ceeafe4d5b2..98e68484f519 100644
 > --- a/drivers/rtc/Makefile
 > +++ b/drivers/rtc/Makefile
-> @@ -101,6 +101,7 @@ obj-$(CONFIG_RTC_DRV_MCP795)        +=3D rtc-mcp795.o
->  obj-$(CONFIG_RTC_DRV_MESON)    +=3D rtc-meson.o
->  obj-$(CONFIG_RTC_DRV_MOXART)   +=3D rtc-moxart.o
->  obj-$(CONFIG_RTC_DRV_MPC5121)  +=3D rtc-mpc5121.o
-> +obj-$(CONFIG_RTC_DRV_MSC313)   +=3D rtc-msc313.o
->  obj-$(CONFIG_RTC_DRV_MSM6242)  +=3D rtc-msm6242.o
->  obj-$(CONFIG_RTC_DRV_MT2712)   +=3D rtc-mt2712.o
->  obj-$(CONFIG_RTC_DRV_MT6397)   +=3D rtc-mt6397.o
-> diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+> @@ -83,6 +83,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)       +=3D rtc-ls1x.o
+>  obj-$(CONFIG_RTC_DRV_LP8788)   +=3D rtc-lp8788.o
+>  obj-$(CONFIG_RTC_DRV_LPC24XX)  +=3D rtc-lpc24xx.o
+>  obj-$(CONFIG_RTC_DRV_LPC32XX)  +=3D rtc-lpc32xx.o
+> +obj-$(CONFIG_RTC_DRV_LS2X)     +=3D rtc-ls2x.o
+>  obj-$(CONFIG_RTC_DRV_M41T80)   +=3D rtc-m41t80.o
+>  obj-$(CONFIG_RTC_DRV_M41T93)   +=3D rtc-m41t93.o
+>  obj-$(CONFIG_RTC_DRV_M41T94)   +=3D rtc-m41t94.o
+> diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
 > new file mode 100644
-> index 000000000000..f493ca5f181b
+> index 000000000000..58901323b219
 > --- /dev/null
-> +++ b/drivers/rtc/rtc-msc313.c
-> @@ -0,0 +1,258 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/drivers/rtc/rtc-ls2x.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Real time clocks driver for MStar/SigmaStar ARMv7 SoCs.
-> + * Based on "Real Time Clock driver for msb252x." that was contained
-> + * in various MStar kernels.
+> + * Loongson-2K/7A RTC driver
 > + *
-> + * (C) 2019 Daniel Palmer
-> + * (C) 2021 Romain Perier
+> + * Based on the original out-of-tree Loongson-2H RTC driver for Linux 2.=
+6.32,
+> + * by Shaozong Liu <liushaozong@loongson.cn>.
+> + *
+> + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
+> + *
+> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
 > + */
 > +
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
+> +#include <linux/bitfield.h>
 > +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
+> +#include <linux/of.h>
 > +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
 > +#include <linux/rtc.h>
 > +
-> +/* Registers */
-> +#define REG_RTC_CTRL           0x00
-> +#define REG_RTC_FREQ_CW_L      0x04
-> +#define REG_RTC_FREQ_CW_H      0x08
-> +#define REG_RTC_LOAD_VAL_L     0x0C
-> +#define REG_RTC_LOAD_VAL_H     0x10
-> +#define REG_RTC_MATCH_VAL_L    0x14
-> +#define REG_RTC_MATCH_VAL_H    0x18
-> +#define REG_RTC_STATUS_INT     0x1C
-> +#define REG_RTC_CNT_VAL_L      0x20
-> +#define REG_RTC_CNT_VAL_H      0x24
+> +#define TOY_TRIM_REG   0x20
+> +#define TOY_WRITE0_REG 0x24
+> +#define TOY_WRITE1_REG 0x28
+> +#define TOY_READ0_REG  0x2c
+> +#define TOY_READ1_REG  0x30
+> +#define TOY_MATCH0_REG 0x34
+> +#define TOY_MATCH1_REG 0x38
+> +#define TOY_MATCH2_REG 0x3c
+> +#define RTC_CTRL_REG   0x40
+> +#define RTC_TRIM_REG   0x60
+> +#define RTC_WRITE0_REG 0x64
+> +#define RTC_READ0_REG  0x68
+> +#define RTC_MATCH0_REG 0x6c
+> +#define RTC_MATCH1_REG 0x70
+> +#define RTC_MATCH2_REG 0x74
 > +
-> +/* Control bits for REG_RTC_CTRL */
-> +#define SOFT_RSTZ_BIT          BIT(0)
-> +#define CNT_EN_BIT             BIT(1)
-> +#define WRAP_EN_BIT            BIT(2)
-> +#define LOAD_EN_BIT            BIT(3)
-> +#define READ_EN_BIT            BIT(4)
-> +#define INT_MASK_BIT           BIT(5)
-> +#define INT_FORCE_BIT          BIT(6)
-> +#define INT_CLEAR_BIT          BIT(7)
+> +#define TOY_MON        GENMASK(31, 26)
+> +#define TOY_DAY        GENMASK(25, 21)
+> +#define TOY_HOUR       GENMASK(20, 16)
+> +#define TOY_MIN        GENMASK(15, 10)
+> +#define TOY_SEC        GENMASK(9, 4)
+> +#define TOY_MSEC       GENMASK(3, 0)
 > +
-> +/* Control bits for REG_RTC_STATUS_INT */
-> +#define RAW_INT_BIT            BIT(0)
-> +#define ALM_INT_BIT            BIT(1)
-> +
-> +struct msc313_rtc {
-> +       struct rtc_device *rtc_dev;
-> +       void __iomem *rtc_base;
+> +struct ls2x_rtc_priv {
+> +       struct regmap *regmap;
 > +};
 > +
-> +static int msc313_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *=
-alarm)
-> +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev);
-> +       unsigned long seconds;
-> +
-> +       seconds =3D readw(priv->rtc_base + REG_RTC_MATCH_VAL_L)
-> +                       | (readw(priv->rtc_base + REG_RTC_MATCH_VAL_H) <<=
- 16);
-> +
-> +       rtc_time64_to_tm(seconds, &alarm->time);
-> +
-> +       if (!(readw(priv->rtc_base + REG_RTC_CTRL) & INT_MASK_BIT))
-> +               alarm->enabled =3D 1;
-> +
-> +       return 0;
-> +}
-> +
-> +static int msc313_rtc_alarm_irq_enable(struct device *dev, unsigned int =
-enabled)
-> +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev);
-> +       u16 reg;
-> +
-> +       reg =3D readw(priv->rtc_base + REG_RTC_CTRL);
-> +       if (enabled)
-> +               reg &=3D ~INT_MASK_BIT;
-> +       else
-> +               reg |=3D INT_MASK_BIT;
-> +       writew(reg, priv->rtc_base + REG_RTC_CTRL);
-> +       return 0;
-> +}
-> +
-> +static int msc313_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *a=
-larm)
-> +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev);
-> +       unsigned long seconds;
-> +
-> +       seconds =3D rtc_tm_to_time64(&alarm->time);
-> +       writew((seconds & 0xFFFF), priv->rtc_base + REG_RTC_MATCH_VAL_L);
-> +       writew((seconds >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_MATCH_V=
-AL_H);
-> +
-> +       msc313_rtc_alarm_irq_enable(dev, alarm->enabled);
-> +
-> +       return 0;
-> +}
-> +
-> +static bool msc313_rtc_get_enabled(struct msc313_rtc *priv)
-> +{
-> +       return readw(priv->rtc_base + REG_RTC_CTRL) & CNT_EN_BIT;
-> +}
-> +
-> +static void msc313_rtc_set_enabled(struct msc313_rtc *priv)
-> +{
-> +       u16 reg;
-> +
-> +       reg =3D readw(priv->rtc_base + REG_RTC_CTRL);
-> +       reg |=3D CNT_EN_BIT;
-> +       writew(reg, priv->rtc_base + REG_RTC_CTRL);
-> +}
-> +
-> +static int msc313_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev);
-> +       u32 seconds;
-> +       u16 reg;
-> +
-> +       if (!msc313_rtc_get_enabled(priv))
-> +               return -EINVAL;
-> +
-> +       reg =3D readw(priv->rtc_base + REG_RTC_CTRL);
-> +       writew(reg | READ_EN_BIT, priv->rtc_base + REG_RTC_CTRL);
-> +
-> +       /* Wait for HW latch done */
-> +       while (readw(priv->rtc_base + REG_RTC_CTRL) & READ_EN_BIT)
-> +               udelay(1);
-> +
-> +       seconds =3D readw(priv->rtc_base + REG_RTC_CNT_VAL_L)
-> +                       | (readw(priv->rtc_base + REG_RTC_CNT_VAL_H) << 1=
-6);
-> +
-> +       rtc_time64_to_tm(seconds, tm);
-> +
-> +       return 0;
-> +}
-> +
-> +static int msc313_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev);
-> +       unsigned long seconds;
-> +       u16 reg;
-> +
-> +       seconds =3D rtc_tm_to_time64(tm);
-> +       writew(seconds & 0xFFFF, priv->rtc_base + REG_RTC_LOAD_VAL_L);
-> +       writew((seconds >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_LOAD_VA=
-L_H);
-> +
-> +       /* Enable load for loading value into internal RTC counter */
-> +       reg =3D readw(priv->rtc_base + REG_RTC_CTRL);
-> +       writew(reg | LOAD_EN_BIT, priv->rtc_base + REG_RTC_CTRL);
-> +
-> +       /* Wait for HW latch done */
-> +       while (readw(priv->rtc_base + REG_RTC_CTRL) & LOAD_EN_BIT)
-> +               udelay(1);
-> +       msc313_rtc_set_enabled(priv);
-> +       return 0;
-> +}
-> +
-> +static const struct rtc_class_ops msc313_rtc_ops =3D {
-> +       .read_time =3D msc313_rtc_read_time,
-> +       .set_time =3D msc313_rtc_set_time,
-> +       .read_alarm =3D msc313_rtc_read_alarm,
-> +       .set_alarm =3D msc313_rtc_set_alarm,
-> +       .alarm_irq_enable =3D msc313_rtc_alarm_irq_enable,
+> +static const struct regmap_config ls2x_rtc_regmap_config =3D {
+> +       .reg_bits =3D 32,
+> +       .val_bits =3D 32,
+> +       .reg_stride =3D 4,
 > +};
 > +
-> +static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
+> +struct ls2x_rtc_regs {
+> +       u32 reg0;
+> +       u32 reg1;
+> +};
+> +
+> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
+> +                                        struct rtc_time *tm)
 > +{
-> +       struct msc313_rtc *priv =3D dev_get_drvdata(dev_id);
-> +       u16 reg;
-> +
-> +       reg =3D readw(priv->rtc_base + REG_RTC_STATUS_INT);
-> +       if (!(reg & ALM_INT_BIT))
-> +               return IRQ_NONE;
-> +
-> +       reg =3D readw(priv->rtc_base + REG_RTC_CTRL);
-> +       reg |=3D INT_CLEAR_BIT;
-> +       reg &=3D ~INT_FORCE_BIT;
-> +       writew(reg, priv->rtc_base + REG_RTC_CTRL);
-> +
-> +       rtc_update_irq(priv->rtc_dev, 1, RTC_IRQF | RTC_AF);
-> +
-> +       return IRQ_HANDLED;
+> +       tm->tm_year =3D regs->reg1;
+> +       tm->tm_sec =3D FIELD_GET(TOY_SEC, regs->reg0);
+> +       tm->tm_min =3D FIELD_GET(TOY_MIN, regs->reg0);
+> +       tm->tm_hour =3D FIELD_GET(TOY_HOUR, regs->reg0);
+> +       tm->tm_mday =3D FIELD_GET(TOY_DAY, regs->reg0);
+> +       tm->tm_mon =3D FIELD_GET(TOY_MON, regs->reg0) - 1;
 > +}
 > +
-> +static int msc313_rtc_probe(struct platform_device *pdev)
+> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
+> +                                        struct ls2x_rtc_regs *regs)
+> +{
+> +       regs->reg0 =3D FIELD_PREP(TOY_SEC, tm->tm_sec);
+> +       regs->reg0 |=3D FIELD_PREP(TOY_MIN, tm->tm_min);
+> +       regs->reg0 |=3D FIELD_PREP(TOY_HOUR, tm->tm_hour);
+> +       regs->reg0 |=3D FIELD_PREP(TOY_DAY, tm->tm_mday);
+> +       regs->reg0 |=3D FIELD_PREP(TOY_MON, tm->tm_mon + 1);
+> +       regs->reg1 =3D tm->tm_year;
+> +}
+> +
+> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +       struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> +       struct ls2x_rtc_regs regs;
+> +       int ret;
+> +
+> +       ret =3D regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
+> +       if (unlikely(ret))
+> +               return ret;
+> +
+> +       ret =3D regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
+> +       if (unlikely(ret))
+> +               return ret;
+> +
+> +       ls2x_rtc_regs_to_time(&regs, tm);
+> +
+> +       return 0;
+> +}
+> +
+> +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +       struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
+> +       struct ls2x_rtc_regs regs;
+> +       int ret;
+> +
+> +       ls2x_rtc_time_to_regs(tm, &regs);
+> +
+> +       ret =3D regmap_write(priv->regmap, TOY_WRITE0_REG, regs.reg0);
+> +       if (unlikely(ret))
+> +               return ret;
+> +
+> +       return regmap_write(priv->regmap, TOY_WRITE1_REG, regs.reg1);
+> +}
+> +
+> +static struct rtc_class_ops ls2x_rtc_ops =3D {
+> +       .read_time =3D ls2x_rtc_read_time,
+> +       .set_time =3D ls2x_rtc_set_time,
+> +};
+> +
+> +static int ls2x_rtc_probe(struct platform_device *pdev)
 > +{
 > +       struct device *dev =3D &pdev->dev;
-> +       struct msc313_rtc *priv;
-> +       unsigned long rate;
-> +       struct clk *clk;
-> +       int ret;
-> +       int irq;
+> +       struct rtc_device *rtc;
+> +       struct ls2x_rtc_priv *priv;
+> +       void __iomem *regs;
 > +
-> +       priv =3D devm_kzalloc(&pdev->dev, sizeof(struct msc313_rtc), GFP_=
-KERNEL);
-> +       if (!priv)
+> +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +       if (unlikely(!priv))
 > +               return -ENOMEM;
-> +
-> +       priv->rtc_base =3D devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(priv->rtc_base))
-> +               return PTR_ERR(priv->rtc_base);
-> +
-> +       irq =3D platform_get_irq(pdev, 0);
-> +       if (irq < 0)
-> +               return -EINVAL;
-> +
-> +       priv->rtc_dev =3D devm_rtc_allocate_device(dev);
-> +       if (IS_ERR(priv->rtc_dev))
-> +               return PTR_ERR(priv->rtc_dev);
-> +
-> +       priv->rtc_dev->ops =3D &msc313_rtc_ops;
-> +       priv->rtc_dev->range_max =3D U32_MAX;
-> +
-> +       ret =3D devm_request_irq(dev, irq, msc313_rtc_interrupt, IRQF_SHA=
-RED,
-> +                              dev_name(&pdev->dev), &pdev->dev);
-> +       if (ret) {
-> +               dev_err(dev, "Could not request IRQ\n");
-> +               return ret;
-> +       }
-> +
-> +       clk =3D devm_clk_get(dev, NULL);
-> +       if (IS_ERR(clk)) {
-> +               dev_err(dev, "No input reference clock\n");
-> +               return PTR_ERR(clk);
-> +       }
-> +
-> +       ret =3D clk_prepare_enable(clk);
-> +       if (ret) {
-> +               dev_err(dev, "Failed to enable the reference clock, %d\n"=
-, ret);
-> +               return ret;
-> +       }
-> +
-> +       ret =3D devm_add_action_or_reset(dev, (void (*) (void *))clk_disa=
-ble_unprepare, clk);
-> +       if (ret)
-> +               return ret;
-> +
-> +       rate =3D clk_get_rate(clk);
-> +       writew(rate & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_L);
-> +       writew((rate >> 16) & 0xFFFF, priv->rtc_base + REG_RTC_FREQ_CW_H)=
-;
 > +
 > +       platform_set_drvdata(pdev, priv);
 > +
-> +       return devm_rtc_register_device(priv->rtc_dev);
+> +       regs =3D devm_platform_ioremap_resource(pdev, 0);
+> +       if (IS_ERR(regs))
+> +               return PTR_ERR(regs);
+> +
+> +       priv->regmap =3D devm_regmap_init_mmio(dev, regs,
+> +                                            &ls2x_rtc_regmap_config);
+> +       if (IS_ERR(priv->regmap))
+> +               return PTR_ERR(priv->regmap);
+> +
+> +       rtc =3D devm_rtc_allocate_device(dev);
+> +       if (IS_ERR(rtc))
+> +               return PTR_ERR(rtc);
+> +
+> +       rtc->ops =3D &ls2x_rtc_ops;
+> +
+> +       /* Due to hardware erratum, all years multiple of 4 are considere=
+d
+> +        * leap year, so only years 2000 through 2099 are usable.
+> +        *
+> +        * Previous out-of-tree versions of this driver wrote tm_year dir=
+ectly
+> +        * into the year register, so epoch 2000 must be used to preserve
+> +        * semantics on shipped systems.
+> +        */
+> +       rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> +       rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> +
+> +       return devm_rtc_register_device(rtc);
 > +}
 > +
-> +static const struct of_device_id msc313_rtc_of_match_table[] =3D {
-> +       { .compatible =3D "mstar,msc313-rtc" },
-> +       { }
+> +static const struct of_device_id ls2x_rtc_of_match[] =3D {
+> +       { .compatible =3D "loongson,ls2x-rtc" },
+> +       { /* sentinel */ },
 > +};
-> +MODULE_DEVICE_TABLE(of, msc313_rtc_of_match_table);
+> +MODULE_DEVICE_TABLE(of, ls2x_rtc_of_match);
 > +
-> +static struct platform_driver msc313_rtc_driver =3D {
-> +       .probe =3D msc313_rtc_probe,
-> +       .driver =3D {
-> +               .name =3D "msc313-rtc",
-> +               .of_match_table =3D msc313_rtc_of_match_table,
+> +static struct platform_driver ls2x_rtc_driver =3D {
+> +       .probe          =3D ls2x_rtc_probe,
+> +       .driver         =3D {
+> +               .name   =3D "ls2x-rtc",
+> +               .of_match_table =3D ls2x_rtc_of_match,
 > +       },
 > +};
 > +
-> +module_platform_driver(msc313_rtc_driver);
+> +module_platform_driver(ls2x_rtc_driver);
 > +
-> +MODULE_AUTHOR("Daniel Palmer <daniel@thingy.jp>");
-> +MODULE_AUTHOR("Romain Perier <romain.perier@gmail.com>");
-> +MODULE_DESCRIPTION("MStar RTC Driver");
-> +MODULE_LICENSE("GPL v2");
+> +MODULE_DESCRIPTION("LS2X RTC driver");
+> +MODULE_AUTHOR("WANG Xuerui");
+> +MODULE_AUTHOR("Huacai Chen");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:ls2x-rtc");
 > --
-> 2.30.2
+> 2.33.0
 >
 
 
