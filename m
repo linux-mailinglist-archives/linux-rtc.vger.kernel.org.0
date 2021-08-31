@@ -2,325 +2,134 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A65C3FC007
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 02:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA103FC427
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 10:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239214AbhHaAfT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 30 Aug 2021 20:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbhHaAfS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 Aug 2021 20:35:18 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50634C06175F
-        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:34:24 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id g2so8809876uad.4
-        for <linux-rtc@vger.kernel.org>; Mon, 30 Aug 2021 17:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=4No7OmDhYH71cDuM902ztr+gz1Pkd+7iA3xvuwmnN+Y=;
-        b=1iGcw3M9CCLKuF0wYys5bFa+kaQyoBIC6R/gdNyavhjaZaQKlAH1omUEaWACVCI95y
-         Q9anlWOSnXFbA2YUXjgnMHUPIyHXdBj4lQCqrJBKWNSf1azsAhsb7Yw3pc0ZgQBWmHh2
-         3y2roihnBNEqawQ7PH9s+h8TDJBuWkRQdd3eRb1QDHr6/o5xbHUCPPm8fK8QFQ3+olve
-         oLdEhCT6cMIXe43P4UXvBRoKSd0dSwPViZ2t+MXruj7tt847I/GOSgWU+VD+yMqFUVtd
-         D5a3ElnHlIC7/yRymjdHI5m9rplsTUY/3pWYeELuICg65sk3Iiqy5p48SfM7y+a8ddhM
-         /M9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=4No7OmDhYH71cDuM902ztr+gz1Pkd+7iA3xvuwmnN+Y=;
-        b=L3/ZtoftwQAja7SCzboEi2o9PeHLoe88q9T2KNoaMQdUchv5MX7aQWFS0byxR2i3U/
-         aup0QXa7WNmqR1ychq33Rcf0Fs8Jr0XYWGnwN9XGYC2Eh6DrpY4iGBRdJBoB02GXEbij
-         DoYm1MDQaoOIZQuaKh6ycrSjlBMtbkamKQpbPmugS2jl+f+dHe2mGQFESueDdTkQ+S1M
-         Ch8hQoGYjaixVa1m1HeDQhfhJ78BFIsICvmi2fPk6ftJp3AJQHnCDrapR9r2WiGQxhkY
-         ocY70R1lJhWhPoMScP/e5JCfUXZ+K5v7mYTGvQ2cHvbAO08xwPIPWN4PaM8+LtF/EAa8
-         s0TQ==
-X-Gm-Message-State: AOAM531spnvgeFNKBCHJGLR9h2TaZXgrN1qIJmTVFMeVKfz1Qr4MLsj0
-        ychC5dA1VME5YdWRRaBIQs0MgrMObLQbw8GIRRW7
-X-Google-Smtp-Source: ABdhPJxVULiDngx88UAs0Vp+/wbdw5tXbWzMy8qHMcLiXrR/fI5LPC2TYdniJP/19YuB3Na0oMTJAjsVTHKNXpISlOg=
-X-Received: by 2002:ab0:7304:: with SMTP id v4mr17236231uao.30.1630370063254;
- Mon, 30 Aug 2021 17:34:23 -0700 (PDT)
+        id S240226AbhHaIPe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 Aug 2021 04:15:34 -0400
+Received: from gproxy5-pub.mail.unifiedlayer.com ([67.222.38.55]:47339 "EHLO
+        gproxy5-pub.mail.unifiedlayer.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240227AbhHaIPd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Aug 2021 04:15:33 -0400
+X-Greylist: delayed 1483 seconds by postgrey-1.27 at vger.kernel.org; Tue, 31 Aug 2021 04:15:33 EDT
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by gproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id B12BF8033D20
+        for <linux-rtc@vger.kernel.org>; Tue, 31 Aug 2021 07:49:50 +0000 (UTC)
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+        by cmsmtp with ESMTP
+        id KyWimf8eUKpssKyWjmm0Ae; Tue, 31 Aug 2021 07:49:50 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=GIfNrsBK c=1 sm=1 tr=0 ts=612ddf1e
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=LfuyaZh/8e9VOkaVZk0aRw==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=MhDmnRu9jo8A:10:nop_rcvd_month_year
+ a=oz0wMknONp8A:10:endurance_base64_authed_username_1 a=vU9dKmh3AAAA:8
+ a=MkikGF2PeDrwNyO4gr0A:9 a=rsP06fVo5MYu2ilr0aT5:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+        ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Q2H2HKL1uokrl2tJeyxsJrFTUnTm6BSdzifIeKOsVhA=; b=S6JrUBd8wRaTG8SQkOCSmVosBH
+        LGOxh0GYK/IxWla3MC8O+ZhRUVU/jlNQzIxKvPXkYIx9efOgenLqiHz5k7Ag8SLPi+t/HkVgu9Qok
+        tCVUaXsTPS61CuRihJHy0qD/UQsM4nszHgkxTUGtx8gPpq5jw+vvl7eajvkyqw4WpZ5qh7W5OxR8p
+        BPr4O0xXbjbaxtnkfFm2KSwZ16F4vspOxFeJKMj5kW0uZ7WNaeqi1otuqP6/73q01+XcclyoRu6hJ
+        shbx5yWirIbx7eRJhIauAgcQ2kO2bX+uvfLGaKMo4pUUHzTx5y4MW4viZACRvDpnr2dHYbVM86orS
+        m4XUQ+sQ==;
+Received: from [117.193.211.216] (port=44562 helo=localhost.localdomain)
+        by md-in-79.webhostbox.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <navin@linumiz.com>)
+        id 1mKyWh-0026XO-JQ; Tue, 31 Aug 2021 07:49:47 +0000
+From:   Navin Sankar Velliangiri <navin@linumiz.com>
+To:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, navin@linumiz.com
+Subject: [PATCH] rtc: bq32000: Add TI BQ32002 compatible
+Date:   Tue, 31 Aug 2021 13:19:22 +0530
+Message-Id: <20210831074922.273809-1-navin@linumiz.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20210823163142.586529-1-git@xen0n.name> <20210823163142.586529-2-git@xen0n.name>
-In-Reply-To: <20210823163142.586529-2-git@xen0n.name>
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Date:   Tue, 31 Aug 2021 09:33:56 +0900
-Message-ID: <CABMQnV+1Zd3emmET5+2cC-kGR6y15W8QD2vgykMQOUzMn2E_Yw@mail.gmail.com>
-Subject: Re: [PATCH RESEND v5 1/6] rtc: ls2x: Add support for the
- Loongson-2K/LS7A RTC
-To:     WANG Xuerui <git@xen0n.name>
-Cc:     linux-rtc@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 117.193.211.216
+X-Source-L: No
+X-Exim-ID: 1mKyWh-0026XO-JQ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (localhost.localdomain) [117.193.211.216]:44562
+X-Source-Auth: linumcmc
+X-Email-Count: 6
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+The TI BQ32002 is software compatible with the TI BQ32000,
+add DT compatible entries
 
-2021=E5=B9=B48=E6=9C=8824=E6=97=A5(=E7=81=AB) 1:39 WANG Xuerui <git@xen0n.n=
-ame>:
->
-> This RTC module is integrated into the Loongson-2K SoC and the LS7A
-> bridge chip. This version is almost entirely rewritten to make use of
-> current kernel API.
->
-> Signed-off-by: Huacai Chen <chenhuacai@kernel.org>
-> Signed-off-by: WANG Xuerui <git@xen0n.name>
-> Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # loongson2k
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-mips@vger.kernel.org
-> ---
->  drivers/rtc/Kconfig    |  11 +++
->  drivers/rtc/Makefile   |   1 +
->  drivers/rtc/rtc-ls2x.c | 180 +++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 192 insertions(+)
->  create mode 100644 drivers/rtc/rtc-ls2x.c
+Signed-off-by: Navin Sankar Velliangiri <navin@linumiz.com>
+---
+ Documentation/devicetree/bindings/rtc/ti,bq32000.yaml | 11 +++++++++++
+ drivers/rtc/rtc-bq32k.c                               |  2 ++
+ 2 files changed, 13 insertions(+)
 
-Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+diff --git a/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml b/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
+index bf9c1c4ddb7e..2ddf1cc097d8 100644
+--- a/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
++++ b/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
+@@ -15,6 +15,7 @@ allOf:
+ properties:
+   compatible:
+     const: ti,bq32000
++    const: ti,bq32002
+ 
+   reg:
+     const: 0x68
+@@ -35,6 +36,16 @@ required:
+ 
+ additionalProperties: false
+ 
++if:
++  properties:
++     compatible:
++       items:
++         - const: ti,bq32002
++then:
++  properties:
++    trickle-resistor-ohms: false
++    trickle-diode-disable: false
++
+ examples:
+   - |
+     i2c {
+diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
+index 2235c968842d..a167a6afdc7e 100644
+--- a/drivers/rtc/rtc-bq32k.c
++++ b/drivers/rtc/rtc-bq32k.c
+@@ -307,12 +307,14 @@ static int bq32k_remove(struct i2c_client *client)
+ 
+ static const struct i2c_device_id bq32k_id[] = {
+ 	{ "bq32000", 0 },
++	{ "bq32002", 0 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, bq32k_id);
+ 
+ static const __maybe_unused struct of_device_id bq32k_of_match[] = {
+ 	{ .compatible = "ti,bq32000" },
++	{ .compatible = "ti,bq32002" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, bq32k_of_match);
+-- 
+2.32.0
 
-Best regards,
-  Nobuhiro
-
->
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index daff06707455..819f366b4d91 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1313,6 +1313,17 @@ config RTC_DRV_NTXEC
->           embedded controller found in certain e-book readers designed by=
- the
->           original design manufacturer Netronix.
->
-> +config RTC_DRV_LS2X
-> +       tristate "Loongson LS2X RTC"
-> +       depends on OF && MACH_LOONGSON64 || COMPILE_TEST
-> +       select REGMAP_MMIO
-> +       help
-> +         If you say yes here you get support for the RTC on the Loongson=
--2K
-> +         SoC and LS7A bridge, which first appeared on the Loongson-2H.
-> +
-> +         This driver can also be built as a module. If so, the module
-> +         will be called rtc-ls2x.
-> +
->  comment "on-CPU RTC drivers"
->
->  config RTC_DRV_ASM9260
-> diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-> index 5ceeafe4d5b2..98e68484f519 100644
-> --- a/drivers/rtc/Makefile
-> +++ b/drivers/rtc/Makefile
-> @@ -83,6 +83,7 @@ obj-$(CONFIG_RTC_DRV_LOONGSON1)       +=3D rtc-ls1x.o
->  obj-$(CONFIG_RTC_DRV_LP8788)   +=3D rtc-lp8788.o
->  obj-$(CONFIG_RTC_DRV_LPC24XX)  +=3D rtc-lpc24xx.o
->  obj-$(CONFIG_RTC_DRV_LPC32XX)  +=3D rtc-lpc32xx.o
-> +obj-$(CONFIG_RTC_DRV_LS2X)     +=3D rtc-ls2x.o
->  obj-$(CONFIG_RTC_DRV_M41T80)   +=3D rtc-m41t80.o
->  obj-$(CONFIG_RTC_DRV_M41T93)   +=3D rtc-m41t93.o
->  obj-$(CONFIG_RTC_DRV_M41T94)   +=3D rtc-m41t94.o
-> diff --git a/drivers/rtc/rtc-ls2x.c b/drivers/rtc/rtc-ls2x.c
-> new file mode 100644
-> index 000000000000..58901323b219
-> --- /dev/null
-> +++ b/drivers/rtc/rtc-ls2x.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Loongson-2K/7A RTC driver
-> + *
-> + * Based on the original out-of-tree Loongson-2H RTC driver for Linux 2.=
-6.32,
-> + * by Shaozong Liu <liushaozong@loongson.cn>.
-> + *
-> + * Maintained out-of-tree by Huacai Chen <chenhuacai@kernel.org>.
-> + *
-> + * Rewritten for mainline by WANG Xuerui <git@xen0n.name>.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/rtc.h>
-> +
-> +#define TOY_TRIM_REG   0x20
-> +#define TOY_WRITE0_REG 0x24
-> +#define TOY_WRITE1_REG 0x28
-> +#define TOY_READ0_REG  0x2c
-> +#define TOY_READ1_REG  0x30
-> +#define TOY_MATCH0_REG 0x34
-> +#define TOY_MATCH1_REG 0x38
-> +#define TOY_MATCH2_REG 0x3c
-> +#define RTC_CTRL_REG   0x40
-> +#define RTC_TRIM_REG   0x60
-> +#define RTC_WRITE0_REG 0x64
-> +#define RTC_READ0_REG  0x68
-> +#define RTC_MATCH0_REG 0x6c
-> +#define RTC_MATCH1_REG 0x70
-> +#define RTC_MATCH2_REG 0x74
-> +
-> +#define TOY_MON        GENMASK(31, 26)
-> +#define TOY_DAY        GENMASK(25, 21)
-> +#define TOY_HOUR       GENMASK(20, 16)
-> +#define TOY_MIN        GENMASK(15, 10)
-> +#define TOY_SEC        GENMASK(9, 4)
-> +#define TOY_MSEC       GENMASK(3, 0)
-> +
-> +struct ls2x_rtc_priv {
-> +       struct regmap *regmap;
-> +};
-> +
-> +static const struct regmap_config ls2x_rtc_regmap_config =3D {
-> +       .reg_bits =3D 32,
-> +       .val_bits =3D 32,
-> +       .reg_stride =3D 4,
-> +};
-> +
-> +struct ls2x_rtc_regs {
-> +       u32 reg0;
-> +       u32 reg1;
-> +};
-> +
-> +static inline void ls2x_rtc_regs_to_time(struct ls2x_rtc_regs *regs,
-> +                                        struct rtc_time *tm)
-> +{
-> +       tm->tm_year =3D regs->reg1;
-> +       tm->tm_sec =3D FIELD_GET(TOY_SEC, regs->reg0);
-> +       tm->tm_min =3D FIELD_GET(TOY_MIN, regs->reg0);
-> +       tm->tm_hour =3D FIELD_GET(TOY_HOUR, regs->reg0);
-> +       tm->tm_mday =3D FIELD_GET(TOY_DAY, regs->reg0);
-> +       tm->tm_mon =3D FIELD_GET(TOY_MON, regs->reg0) - 1;
-> +}
-> +
-> +static inline void ls2x_rtc_time_to_regs(struct rtc_time *tm,
-> +                                        struct ls2x_rtc_regs *regs)
-> +{
-> +       regs->reg0 =3D FIELD_PREP(TOY_SEC, tm->tm_sec);
-> +       regs->reg0 |=3D FIELD_PREP(TOY_MIN, tm->tm_min);
-> +       regs->reg0 |=3D FIELD_PREP(TOY_HOUR, tm->tm_hour);
-> +       regs->reg0 |=3D FIELD_PREP(TOY_DAY, tm->tm_mday);
-> +       regs->reg0 |=3D FIELD_PREP(TOY_MON, tm->tm_mon + 1);
-> +       regs->reg1 =3D tm->tm_year;
-> +}
-> +
-> +static int ls2x_rtc_read_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +       struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +       struct ls2x_rtc_regs regs;
-> +       int ret;
-> +
-> +       ret =3D regmap_read(priv->regmap, TOY_READ1_REG, &regs.reg1);
-> +       if (unlikely(ret))
-> +               return ret;
-> +
-> +       ret =3D regmap_read(priv->regmap, TOY_READ0_REG, &regs.reg0);
-> +       if (unlikely(ret))
-> +               return ret;
-> +
-> +       ls2x_rtc_regs_to_time(&regs, tm);
-> +
-> +       return 0;
-> +}
-> +
-> +static int ls2x_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +       struct ls2x_rtc_priv *priv =3D dev_get_drvdata(dev);
-> +       struct ls2x_rtc_regs regs;
-> +       int ret;
-> +
-> +       ls2x_rtc_time_to_regs(tm, &regs);
-> +
-> +       ret =3D regmap_write(priv->regmap, TOY_WRITE0_REG, regs.reg0);
-> +       if (unlikely(ret))
-> +               return ret;
-> +
-> +       return regmap_write(priv->regmap, TOY_WRITE1_REG, regs.reg1);
-> +}
-> +
-> +static struct rtc_class_ops ls2x_rtc_ops =3D {
-> +       .read_time =3D ls2x_rtc_read_time,
-> +       .set_time =3D ls2x_rtc_set_time,
-> +};
-> +
-> +static int ls2x_rtc_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev =3D &pdev->dev;
-> +       struct rtc_device *rtc;
-> +       struct ls2x_rtc_priv *priv;
-> +       void __iomem *regs;
-> +
-> +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +       if (unlikely(!priv))
-> +               return -ENOMEM;
-> +
-> +       platform_set_drvdata(pdev, priv);
-> +
-> +       regs =3D devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(regs))
-> +               return PTR_ERR(regs);
-> +
-> +       priv->regmap =3D devm_regmap_init_mmio(dev, regs,
-> +                                            &ls2x_rtc_regmap_config);
-> +       if (IS_ERR(priv->regmap))
-> +               return PTR_ERR(priv->regmap);
-> +
-> +       rtc =3D devm_rtc_allocate_device(dev);
-> +       if (IS_ERR(rtc))
-> +               return PTR_ERR(rtc);
-> +
-> +       rtc->ops =3D &ls2x_rtc_ops;
-> +
-> +       /* Due to hardware erratum, all years multiple of 4 are considere=
-d
-> +        * leap year, so only years 2000 through 2099 are usable.
-> +        *
-> +        * Previous out-of-tree versions of this driver wrote tm_year dir=
-ectly
-> +        * into the year register, so epoch 2000 must be used to preserve
-> +        * semantics on shipped systems.
-> +        */
-> +       rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
-> +       rtc->range_max =3D RTC_TIMESTAMP_END_2099;
-> +
-> +       return devm_rtc_register_device(rtc);
-> +}
-> +
-> +static const struct of_device_id ls2x_rtc_of_match[] =3D {
-> +       { .compatible =3D "loongson,ls2x-rtc" },
-> +       { /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ls2x_rtc_of_match);
-> +
-> +static struct platform_driver ls2x_rtc_driver =3D {
-> +       .probe          =3D ls2x_rtc_probe,
-> +       .driver         =3D {
-> +               .name   =3D "ls2x-rtc",
-> +               .of_match_table =3D ls2x_rtc_of_match,
-> +       },
-> +};
-> +
-> +module_platform_driver(ls2x_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("LS2X RTC driver");
-> +MODULE_AUTHOR("WANG Xuerui");
-> +MODULE_AUTHOR("Huacai Chen");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:ls2x-rtc");
-> --
-> 2.33.0
->
-
-
---=20
-Nobuhiro Iwamatsu
-   iwamatsu at {nigauri.org / debian.org}
-   GPG ID: 40AD1FA6
