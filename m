@@ -2,54 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF773FC949
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76F73FCD6B
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 Aug 2021 21:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbhHaODl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 31 Aug 2021 10:03:41 -0400
-Received: from mail-oo1-f51.google.com ([209.85.161.51]:40476 "EHLO
-        mail-oo1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbhHaODj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Aug 2021 10:03:39 -0400
-Received: by mail-oo1-f51.google.com with SMTP id j11-20020a4a92cb000000b002902ae8cb10so5684226ooh.7;
-        Tue, 31 Aug 2021 07:02:44 -0700 (PDT)
+        id S238061AbhHaTFi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 Aug 2021 15:05:38 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:43828 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238068AbhHaTFh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 Aug 2021 15:05:37 -0400
+Received: by mail-ot1-f44.google.com with SMTP id x10-20020a056830408a00b004f26cead745so368889ott.10;
+        Tue, 31 Aug 2021 12:04:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=siSurg9Mj4lOmhFCOYxSAG/uyAcqicBKkSE3YXG7CoY=;
-        b=YnzZXXM/FlWOqHDA+AuA6UXJcv9Fgk+K3g2LscfAJP3FPCr9IPe/JPS/Tm5pgKB9Yu
-         PsM7vEoEEdfR0YRZfZD0HAXbHe7fHMkkpoNay9P0/i5o9GhcTTyYMnybYpT4avLSRpdd
-         p7jIJ4Hb6trokkMhGHp8jpQFBkp2nVgRUtV1ywuA0BeTZXCWtHk3iuCp82aei/JsIg85
-         j64rOU/XyrxMyOReZ1N8C4/sO1xtJqBigDnpkWzkXTgcNpMs2fc8x8AU76u6X7RUFE0U
-         YN6yr76GMzh+33G8uCWmySU0NHpigbD7CWYk7HUn8DUsc0vgi5V7Q+1HizyQ65RWnT2T
-         m1UA==
-X-Gm-Message-State: AOAM533w5v6dvtpZCEnLmG3D6AohVJQqi2rPV0+VdpzvPkxCcgVze4bz
-        rov/LEVr9QO+MWSXzycdug==
-X-Google-Smtp-Source: ABdhPJyUxmnfU7FI1daQ0AqrjWJ2CDyymFn+KqhOXS1I4AGy5V1YBoicf4L8ANNGXG/oe0lvmENqEQ==
-X-Received: by 2002:a4a:e907:: with SMTP id z7mr14641574ood.20.1630418563544;
-        Tue, 31 Aug 2021 07:02:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=W9w1w21DdRbVUz09+7iwKeSrHli8LROFhuhLFNVX38M=;
+        b=epVWniu5duu6pAbIWqB6xjR8KTHHe7XwjfVcXPYp6Ll4mes9WNJ1lAMB/hWUVCfTD6
+         kv2ubMDPbnoE/SoJbYebkZhK5iL2uhT0jnWxPcb1XigygIauFcDNoI6tdOpfCLhwlYB1
+         lvujwL9MgtGPR25WNLGquqroSJ2qd/fdUm6gT9ccZJNFNUwB3lpdNJC/5oTqJJwR7l5Q
+         StL7f+lykoFUDFo2ig09pwmmYYweFi5ksg5nWjsCfD9X4SALm120IGzrvIee+FqvW7VL
+         LXc+d8AK2J/Du1GNm7RstrmbHqoKkTlTKfetU+tQQj1SzbMUi0zl0cW+ztN7q4RmhRYv
+         84Tw==
+X-Gm-Message-State: AOAM531pSZoMqRo6bT2zLrImsp7cjlAcLXazDl3Xl25Msl/JMZi09Fm7
+        oZdPVJ4QkzyIxZikZ6JDg9VgMyVc+g==
+X-Google-Smtp-Source: ABdhPJxJkz8PhGJXTQPrVysULkUbmCcCV2OdMO4amhKVmn2i6gpD5xCi+1Pi0q54u82Oa1Y2Bbb43w==
+X-Received: by 2002:a9d:65da:: with SMTP id z26mr25112974oth.303.1630436681918;
+        Tue, 31 Aug 2021 12:04:41 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w23sm3900313otk.56.2021.08.31.07.02.42
+        by smtp.gmail.com with ESMTPSA id k24sm4038647otp.31.2021.08.31.12.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Aug 2021 07:02:42 -0700 (PDT)
-Received: (nullmailer pid 79946 invoked by uid 1000);
-        Tue, 31 Aug 2021 14:02:42 -0000
+        Tue, 31 Aug 2021 12:04:41 -0700 (PDT)
+Received: (nullmailer pid 482100 invoked by uid 1000);
+        Tue, 31 Aug 2021 19:04:40 -0000
+Date:   Tue, 31 Aug 2021 14:04:40 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Navin Sankar Velliangiri <navin@linumiz.com>
-Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <20210831074922.273809-1-navin@linumiz.com>
-References: <20210831074922.273809-1-navin@linumiz.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
 Subject: Re: [PATCH] rtc: bq32000: Add TI BQ32002 compatible
-Date:   Tue, 31 Aug 2021 09:02:42 -0500
-Message-Id: <1630418562.136316.79945.nullmailer@robh.at.kernel.org>
+Message-ID: <YS59SDh1/mkpBpEJ@robh.at.kernel.org>
+References: <20210831074922.273809-1-navin@linumiz.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210831074922.273809-1-navin@linumiz.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 31 Aug 2021 13:19:22 +0530, Navin Sankar Velliangiri wrote:
+On Tue, Aug 31, 2021 at 01:19:22PM +0530, Navin Sankar Velliangiri wrote:
 > The TI BQ32002 is software compatible with the TI BQ32000,
 > add DT compatible entries
 > 
@@ -59,93 +62,61 @@ On Tue, 31 Aug 2021 13:19:22 +0530, Navin Sankar Velliangiri wrote:
 >  drivers/rtc/rtc-bq32k.c                               |  2 ++
 >  2 files changed, 13 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml b/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
+> index bf9c1c4ddb7e..2ddf1cc097d8 100644
+> --- a/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
+> @@ -15,6 +15,7 @@ allOf:
+>  properties:
+>    compatible:
+>      const: ti,bq32000
+> +    const: ti,bq32002
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+'enum' is what you want here.
 
-yamllint warnings/errors:
+>  
+>    reg:
+>      const: 0x68
+> @@ -35,6 +36,16 @@ required:
+>  
+>  additionalProperties: false
+>  
+> +if:
+> +  properties:
+> +     compatible:
+> +       items:
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/rtc/ti,bq32000.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 17, column 5
-found duplicate key "const" with value "ti,bq32002" (original value: "ti,bq32000")
-  in "<unicode string>", line 18, column 5
+Use 'contains'
 
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/rtc/ti,bq32000.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 25, in check_doc
-    testtree = dtschema.load(filename, line_number=line_number)
-  File "/usr/local/lib/python3.8/dist-packages/dtschema/lib.py", line 623, in load
-    return yaml.load(f.read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 122, in get_single_data
-    return self.construct_document(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 132, in construct_document
-    for _dummy in generator:
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 722, in construct_yaml_map
-    value = self.construct_mapping(node)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 446, in construct_mapping
-    return BaseConstructor.construct_mapping(self, node, deep=deep)
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 264, in construct_mapping
-    if self.check_mapping_key(node, key_node, mapping, key, value):
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 295, in check_mapping_key
-    raise DuplicateKeyError(*args)
-ruamel.yaml.constructor.DuplicateKeyError: while constructing a mapping
-  in "<unicode string>", line 17, column 5
-found duplicate key "const" with value "ti,bq32002" (original value: "ti,bq32000")
-  in "<unicode string>", line 18, column 5
-
-To suppress this check see:
-    http://yaml.readthedocs.io/en/latest/api.html#duplicate-keys
-
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 67, in <module>
-    ret = check_doc(f)
-  File "/usr/local/bin/dt-doc-validate", line 30, in check_doc
-    print(filename + ":", exc.path[-1], exc.message, file=sys.stderr)
-AttributeError: 'DuplicateKeyError' object has no attribute 'path'
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/rtc/ti,bq32000.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/rtc/ti,bq32000.yaml
-make: *** [Makefile:1419: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1522467
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+> +         - const: ti,bq32002
+> +then:
+> +  properties:
+> +    trickle-resistor-ohms: false
+> +    trickle-diode-disable: false
+> +
+>  examples:
+>    - |
+>      i2c {
+> diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
+> index 2235c968842d..a167a6afdc7e 100644
+> --- a/drivers/rtc/rtc-bq32k.c
+> +++ b/drivers/rtc/rtc-bq32k.c
+> @@ -307,12 +307,14 @@ static int bq32k_remove(struct i2c_client *client)
+>  
+>  static const struct i2c_device_id bq32k_id[] = {
+>  	{ "bq32000", 0 },
+> +	{ "bq32002", 0 },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, bq32k_id);
+>  
+>  static const __maybe_unused struct of_device_id bq32k_of_match[] = {
+>  	{ .compatible = "ti,bq32000" },
+> +	{ .compatible = "ti,bq32002" },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, bq32k_of_match);
+> -- 
+> 2.32.0
+> 
+> 
