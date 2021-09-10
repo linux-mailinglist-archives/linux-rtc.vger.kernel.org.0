@@ -2,91 +2,105 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B66A13FE1DC
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Sep 2021 20:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6A1406337
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Sep 2021 02:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346821AbhIASMU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Sep 2021 14:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        id S242462AbhIJArB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Sep 2021 20:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346762AbhIASMT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Sep 2021 14:12:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F265C0612A3
-        for <linux-rtc@vger.kernel.org>; Wed,  1 Sep 2021 11:11:21 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id fz10so204542pjb.0
-        for <linux-rtc@vger.kernel.org>; Wed, 01 Sep 2021 11:11:21 -0700 (PDT)
+        with ESMTP id S240197AbhIJAmC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Sep 2021 20:42:02 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28A1C061574
+        for <linux-rtc@vger.kernel.org>; Thu,  9 Sep 2021 17:40:52 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id s15so106734vst.13
+        for <linux-rtc@vger.kernel.org>; Thu, 09 Sep 2021 17:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
-        b=LD3mpzy1s09M3e/Eheelu/QMtbN6lrYJQ+S1BsYhmG4zP9OQuKOeD1zHV2lZaK7Hdt
-         vXoBMumPRACuZhnwd8TYAFIvdImPe0Zn4DA41GnzHGsnpDZPE0wUFWVFNzgpxF6bh6D8
-         CVxTiiIN7w8BVpPirFLytZKK2cFqqV6q9qR8cw4XmdYYgGZs+MdnDeP+neEr/SbnLI2h
-         mwT6gqJ8+HvNCQei5Zu6b3U+/YcUOepEDfVn6t0IkNG5YzxTV8mH8IqZ4zEsqBchdgxI
-         E/zGH3KCiuS7UdfEMBVKPbpzhhPyh4quLRALvE4iCHtswqSZDgWUuzksodIw8OWwGR1Z
-         0RlA==
+        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=u99A3nTsEcjLLtFLYfw0zQdAAXoFdW/AuvMLvdfo3s4=;
+        b=TW7VBVq6dK6hsRFpDVJJBgboDluU3a+UwpCW4hBgVvH8sOBE5QfR/PI5spsa0KR+tR
+         xRsSXywROggbTW7FX9pv8vo6R/cO5JMcm5lJp3ZriRuTnOwD85QLKGbxFvYSu+EqDRAp
+         cg7sGGMsrbZI6VyOKbIgE7SSi2A5ArNHO9bfoWx4bU0+bknhS4FitHbJlyABXOxKDuTD
+         LoObBJ0IdP+DiLyAdmvGEH5BjnzH44OtT6fjZUOFs8uAXjp0DfGktG0bWwOGobDzUozz
+         /boUVhlxqmxwen9I0ktEp1cZvN6szGSfSjrO71UHDMT0fZU798j5PqCjg8QxnpTLU2zn
+         rVBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=2joGkq8i8C5vglZO1FYNTlWqLyr4vSiCXKQYXBVnv4Q=;
-        b=K2/k3qdgihfzhn7ebZSydFITqohOjedNhBFk83GeCN8qy1bdoZ1YDiwnvm08NUbGoH
-         lZK3TSkZATz7YDcSOBbqKobcOBYPR9IUGeZjT1M7qAPnzw8MKJZGzwMVoPjbj4KMrKOr
-         Zu+N3n6bllPxKSRciUr0mrlz9wLY08DyWiD1SZmWoEojZpRxZH6BEChAPL2tDfK2oB19
-         28VKAMCRAvKiEQDQBl7JK58qBJPJuB+gXO8+2rK3eDXrSWklFUZksyou+H8eo3ZUNfHm
-         rFTad7Cb0o+/AqbgBnDZhydEdvA8Q3cEdSA7+wOvoC3OK7RsQM7l2qMlykj5jjw02c1p
-         GgvQ==
-X-Gm-Message-State: AOAM532SNe699nhqDl2J9WJBz/RQk1T+4WvYub0wABTxwJbZN7p3lruZ
-        uotoXFqRdIyVRakNoRnQpPrezXrrRda1A9BqxfmlAzvoTx5UZw==
-X-Google-Smtp-Source: ABdhPJwbbBYGjUEQSS3Bb7EfYk34O3AVuG22pVIF78fkATQG8c+PQmeHgcc35+YrriS74Wl5STB8JbzOasp+8kCVBlk=
-X-Received: by 2002:a67:8c5:: with SMTP id 188mr1017695vsi.4.1630519870726;
- Wed, 01 Sep 2021 11:11:10 -0700 (PDT)
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=u99A3nTsEcjLLtFLYfw0zQdAAXoFdW/AuvMLvdfo3s4=;
+        b=mSSd6/Nkoczp4pGejIuEJ+4JCO86pREgNi7LULrbCs/cgJhpFtNp4LiaLQ2B3xPoLw
+         2AiGKigyJHz8BuIfSrVX6cGP7VGYL4S7OeJbIOMSkL7+WLy5EMp5IRXnMcmBesS5ZaJE
+         S8JPQL3X6oH9zkxIuwsW3gIt3KH9/yfsvbQMA0h9rkW4YVxXpyAzugvJejMpxaQhafdu
+         xztBcNGJ6l87qjl+/AbkdwoIeLd4bSTqxgYlt19SE+vg/ytJpH3zwfAYfxRu1jW6rrZr
+         adCvC+FTZbWw63fNjESR8Zk7hIRhIAM4kOWo/7KYGqqpxxE3OwrWsuAyQHwMJhiSrHuP
+         CkEw==
+X-Gm-Message-State: AOAM530Pf08kp2jogENjWu24fpiaXROCSuA5dLGRHUv5klqY125TTHnh
+        STXP3gzeD+0klRWfWCLR9/ne6mtIFwCNCja70+ryej+t2ek79t0=
+X-Google-Smtp-Source: ABdhPJwkaBrAuiHABMu8IcTdvxJeg1KK4aP27a3qLiVaj8iQxGCaBhVotOsv0c4stecCCk4+BPxRMpAgcT494uzIS7o=
+X-Received: by 2002:a67:6245:: with SMTP id w66mr4292730vsb.34.1631234451815;
+ Thu, 09 Sep 2021 17:40:51 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab0:740d:0:0:0:0:0 with HTTP; Wed, 1 Sep 2021 11:11:10 -0700 (PDT)
-From:   CorisBank International <corisbankintlbf@gmail.com>
-Date:   Wed, 1 Sep 2021 11:11:10 -0700
-Message-ID: <CA+25hwzjLgVdtDXYWeuqFBTvAbpc4oxK0dW54s7tjGNyU_m0ow@mail.gmail.com>
-Subject: CORISBANK INTERNATIONAL OFFICIAL NOTIFICATION
-To:     undisclosed-recipients:;
+References: <f58c6a58-86a6-1b37-7cec-6a9d801189ed@gmail.com>
+In-Reply-To: <f58c6a58-86a6-1b37-7cec-6a9d801189ed@gmail.com>
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Date:   Fri, 10 Sep 2021 09:40:25 +0900
+Message-ID: <CABMQnVJ8z6Tcbee6rv2vCR48ZDesC9f_ZnH6gx7rFONYT8iTpg@mail.gmail.com>
+Subject: Re: [PATCH] rtc: rx8010: select REGMAP_I2C
+To:     Yu-Tung Chang <mtwget@gmail.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Att: Client
+Hi,
 
+2021=E5=B9=B48=E6=9C=8830=E6=97=A5(=E6=9C=88) 12:56 Yu-Tung Chang <mtwget@g=
+mail.com>:
+>
+> From 45801967ad80578161485937a0833b27b90210f9 Mon Sep 17 00:00:00 2001
+> From: Yu-Tung Chang <mtwget@gmail.com>
+> Date: Mon, 30 Aug 2021 10:59:17 +0800
+> Subject: [PATCH] rtc: rx8010: select REGMAP_I2C
+>
+> The rtc-rx8010 uses the I2C regmap but doesn't select it in Kconfig so
+> depending on the configuration the build may fail. Fix it.
+>
+> Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
+> ---
+>  drivers/rtc/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-CORISBANK INTERNATIONAL URGENT NOTIFICATION
+Reviewed-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 
-Notification / Notification/ Notification
+>
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 12153d5801ce..f7bf87097a9f 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -624,6 +624,7 @@ config RTC_DRV_FM3130
+>
+>  config RTC_DRV_RX8010
+>         tristate "Epson RX8010SJ"
+> +       select REGMAP_I2C
+>         help
+>           If you say yes here you get support for the Epson RX8010SJ RTC
+>           chip.
+> --
+> 2.33.0
 
-Note, We are writing to inform you officially that Finally the Central
-Bank Financial Authority have approved to transfer your $8.2Million
-which was signed by late Mrs Rose Banneth the COVID.19 victim to
-transfer to you, Late Mrs Rose Banneth the France Lady contacted us to
-transfer her fund in our bank to you for Orphanage work before she
-died by the COVID.19
-and as it is now, you will receive your fund through our corresponding
-bank in Dubai [Emirate Investment Bank ] for security reason. Please
-you should reconfirm your details to receive the $8.2Million.
+Best regards,
+  Nobuhiro
 
-Name, Country, Address, occupations, Age, Telephone number, account
-Details so that we can immediately forward to the World Bank to
-transfer the fund.
-You are advised to comply on timely manner to permit this esteem bank
-transfer your fund as scheduled.
-
-We look forward to serving you better
-Your Financial Comfort Is A Priority
-Thank you for choosing Corisbank International.
-
-Sincerely,
-
-----
-
-Mr Diakarya Ouattara
-Managing Director
-Bank Coris
-Burkina Faso
-+226 556 163 37
-financial_bf_info@accountant.com
+--=20
+Nobuhiro Iwamatsu
+   iwamatsu at {nigauri.org / debian.org / kernel.org}
+   GPG ID: 40AD1FA6
