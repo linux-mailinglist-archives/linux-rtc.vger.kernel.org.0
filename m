@@ -2,99 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2580340793B
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Sep 2021 17:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E886C4079B5
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Sep 2021 19:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbhIKQAd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Sep 2021 12:00:33 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:42275 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbhIKQAd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Sep 2021 12:00:33 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 3C1F31BF208;
-        Sat, 11 Sep 2021 15:59:19 +0000 (UTC)
-Date:   Sat, 11 Sep 2021 17:59:18 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC changes for 5.15
-Message-ID: <YTzSVk5Scx/nRP7K@piout.net>
+        id S232241AbhIKRGf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Sep 2021 13:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231765AbhIKRGf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Sep 2021 13:06:35 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D15C061756
+        for <linux-rtc@vger.kernel.org>; Sat, 11 Sep 2021 10:05:22 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id f2so8821649ljn.1
+        for <linux-rtc@vger.kernel.org>; Sat, 11 Sep 2021 10:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nyaNa5jh7u4OrH4aT60jYwA/34rGKStvVyqkKWK4Gkg=;
+        b=Xob4PFHNa8tZ1GDNjHJX5f6b7gNZu+EbwhD3b0fGvMBPIGOZr2rUsTbSEsh9InOUxs
+         TTOYUWIuKPiD9z0fhWWjBnl+oUe6UI9fnZBkhfxTQ+zIYbjEjHhks9fQBPotpWyssRUB
+         peWcciku5OOo5siPQRO5nFhOP853uQDyf3HiE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nyaNa5jh7u4OrH4aT60jYwA/34rGKStvVyqkKWK4Gkg=;
+        b=Vcbv1Z7MauArZsUcb+M/ZQ2Z7zgrXlDN7fpQxXD/vgf93CJdKIh9HckeNZOHVCHPfh
+         m+MWwFOD8xawF+0jTaLx84R4CDaLttIBjWWbLyTXuOCmnCYXLFqJtWWZENxbl5RhbJoD
+         XhK3BmXSWI8j9gDfbm7NEL3+j6rZCz++MYIeLwEyibfeAXCNvC6G7CIiF0N37w/fMrKy
+         bzGwLKMTAiQp5+OD/CE6SETg6t457yzONj2KpnrlLr9zSZGUgjpaFDYRoIAua0GzFIRx
+         nqtu3tkCnvMBUAmUedDLyruxTSJVnqYgse7VGqQhj+ab7Py68iVU8sONZWnD3EKdQPOj
+         tGnQ==
+X-Gm-Message-State: AOAM532Oah96OUkcU6pBTCSscE7UQ8dJOizshtudB2aKrBw3XG2jNJ0p
+        ziP4ZlBAvuSm2ki5e2LPf1aWu5SbR1TIQhMJbos=
+X-Google-Smtp-Source: ABdhPJzHgfo97RVGwYt7Ky+/t/OIKurpNoPGTSBYC3arXb0OjY0fCplS9piU6CL+0daalcN7fPYVaw==
+X-Received: by 2002:a05:651c:1683:: with SMTP id bd3mr2895223ljb.323.1631379920180;
+        Sat, 11 Sep 2021 10:05:20 -0700 (PDT)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id g10sm255750lfb.87.2021.09.11.10.05.19
+        for <linux-rtc@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Sep 2021 10:05:19 -0700 (PDT)
+Received: by mail-lj1-f174.google.com with SMTP id q21so8807420ljj.6
+        for <linux-rtc@vger.kernel.org>; Sat, 11 Sep 2021 10:05:19 -0700 (PDT)
+X-Received: by 2002:a2e:8185:: with SMTP id e5mr2798909ljg.31.1631379918659;
+ Sat, 11 Sep 2021 10:05:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <YTzSVk5Scx/nRP7K@piout.net>
+In-Reply-To: <YTzSVk5Scx/nRP7K@piout.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 11 Sep 2021 10:05:02 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
+Message-ID: <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
+Subject: Re: [GIT PULL] RTC changes for 5.15
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Linus,
+On Sat, Sep 11, 2021 at 8:59 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> The broken down time conversion is similar to what is done
+> in the time subsystem since v5.14.
 
-Here is the RTC subsystem pull request for v5.15 which is very late.
-I'll try to not make that a habit. The broken down time conversion is
-similar to what is done in the time subsystem since v5.14. The rest is
-fairly straightforward.
+By "similar" you mean "identical", no?
 
-The following changes since commit e73f0f0ee7541171d89f2e2491130c7771ba58d3:
+Why is the rtc subsystem not just using the generic time64_to_tm()?
 
-  Linux 5.14-rc1 (2021-07-11 15:07:40 -0700)
+Yes, yes, I realize that due to historical mistakes, there's a
+duplicate 'struct rtc_time' struct, but it turns out that that is
+_identical_ to 'struct tm' except it also has a 'int tm_isdst' at the
+end.
 
-are available in the Git repository at:
+So you could literally make a union of the two, pass the 'struct tm'
+part down to the generic code, and just do
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.15
+     rtc_tm->tm_isdst = 0;
 
-for you to fetch changes up to 0c45d3e24ef3d3d87c5e0077b8f38d1372af7176:
+at the end.
 
-  rtc: rx8010: select REGMAP_I2C (2021-09-09 10:18:40 +0200)
+Rather than have a duplicate copy of that admittedly clever Neri and
+Schneider algorithm.
 
-----------------------------------------------------------------
-RTC for 5.15
+Hmm?
 
-Subsystem:
- - Switch to Neri and Schneider time conversion algorithm
-
-Drivers:
- - rx8025: add rx8035 support
- - s5m: modernize driver and set range
-
-----------------------------------------------------------------
-Alexandre Belloni (6):
-      rtc: s5m: switch to devm_rtc_allocate_device
-      rtc: s5m: signal the core when alarm are not available
-      rtc: s5m: enable wakeup only when available
-      rtc: s5m: set range
-      rtc: lib_test: add MODULE_LICENSE
-      rtc: move RTC_LIB_KUNIT_TEST to proper location
-
-Cassio Neri (1):
-      rtc: Improve performance of rtc_time64_to_tm(). Add tests.
-
-Dmitry Osipenko (1):
-      rtc: tps65910: Correct driver module alias
-
-Mateusz Jończyk (1):
-      rtc: cmos: remove stale REVISIT comments
-
-Mathew McBride (2):
-      rtc: rx8025: implement RX-8035 support
-      dt-bindings: rtc: add Epson RX-8025 and RX-8035
-
-Yu-Tung Chang (1):
-      rtc: rx8010: select REGMAP_I2C
-
- .../devicetree/bindings/rtc/trivial-rtc.yaml       |   3 +
- drivers/rtc/Kconfig                                |  10 ++
- drivers/rtc/Makefile                               |   2 +
- drivers/rtc/lib.c                                  | 107 +++++++++++++++------
- drivers/rtc/lib_test.c                             |  81 ++++++++++++++++
- drivers/rtc/rtc-cmos.c                             |   8 +-
- drivers/rtc/rtc-rx8025.c                           |  46 ++++++++-
- drivers/rtc/rtc-s5m.c                              |  48 ++++-----
- drivers/rtc/rtc-tps65910.c                         |   2 +-
- 9 files changed, 243 insertions(+), 64 deletions(-)
- create mode 100644 drivers/rtc/lib_test.c
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+             Linus
