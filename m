@@ -2,59 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE694079DB
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Sep 2021 19:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B095D407A57
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Sep 2021 21:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbhIKRbT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Sep 2021 13:31:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49546 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232635AbhIKRbT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 11 Sep 2021 13:31:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4E58E60FED;
-        Sat, 11 Sep 2021 17:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631381406;
-        bh=k1KRNJGuhUOQwxZ17K8TuiC2Lxquyc/jIHnaqoepqdM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=UB1Fyi0bdfOOOFvkAB1639k3rzPaZAyGY0KiB0fAZ/mb92VwPx1YwgOS0Tn3yWSSW
-         5xjsUYTZlOK6pEqtBv+7mnwWMHkJx0NIWJSENwT+bbGK/smJggMZNqRhnGJMDpJlFi
-         XPkD5CFfxpQ+9Tgs8Lf3mQMl4HFH2sfuC2g8beihFoxvJn2qiAAWKvJeJUGuZ6u9gx
-         0ImEroE1BdLBYRWpjUxGZCqo9vTFiRiMFUAmbUB+v5yD3pyspZuvweIKpbJgqHMOz5
-         DPdwU/Aqk9lDC3VLINMZD9jbEK5BE+UWArMgGRoToLMnOtp+C2z0feMtAn6tDoqcoD
-         8l3WIPnkf86DA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4985F600E8;
-        Sat, 11 Sep 2021 17:30:06 +0000 (UTC)
+        id S232353AbhIKTrz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Sep 2021 15:47:55 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41815 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230347AbhIKTrz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Sep 2021 15:47:55 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3549A40002;
+        Sat, 11 Sep 2021 19:46:41 +0000 (UTC)
+Date:   Sat, 11 Sep 2021 21:46:40 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: [GIT PULL] RTC changes for 5.15
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YTzSVk5Scx/nRP7K@piout.net>
+Message-ID: <YT0HoCMW6nGEnpPL@piout.net>
 References: <YTzSVk5Scx/nRP7K@piout.net>
-X-PR-Tracked-List-Id: <linux-rtc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YTzSVk5Scx/nRP7K@piout.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.15
-X-PR-Tracked-Commit-Id: 0c45d3e24ef3d3d87c5e0077b8f38d1372af7176
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 107ccc45bb25c7fdc7a744496caa4d8a52af4812
-Message-Id: <163138140629.31565.15345255369155701465.pr-tracker-bot@kernel.org>
-Date:   Sat, 11 Sep 2021 17:30:06 +0000
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+ <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The pull request you sent on Sat, 11 Sep 2021 17:59:18 +0200:
+On 11/09/2021 10:05:02-0700, Linus Torvalds wrote:
+> On Sat, Sep 11, 2021 at 8:59 AM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> >
+> > The broken down time conversion is similar to what is done
+> > in the time subsystem since v5.14.
+> 
+> By "similar" you mean "identical", no?
+> 
+> Why is the rtc subsystem not just using the generic time64_to_tm()?
+> 
+> Yes, yes, I realize that due to historical mistakes, there's a
+> duplicate 'struct rtc_time' struct, but it turns out that that is
+> _identical_ to 'struct tm' except it also has a 'int tm_isdst' at the
+> end.
+> 
+> So you could literally make a union of the two, pass the 'struct tm'
+> part down to the generic code, and just do
+> 
+>      rtc_tm->tm_isdst = 0;
+> 
+> at the end.
+> 
+> Rather than have a duplicate copy of that admittedly clever Neri and
+> Schneider algorithm.
+> 
+> Hmm?
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.15
+Yes, most of it is historical, I did have a look at removing the copy
+but at the time, rtc_time64_to_tm was slightly more efficient because
+it knew the time was positive.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/107ccc45bb25c7fdc7a744496caa4d8a52af4812
+The other issue is that struct rtc_time is exposed to userspace while
+the kernel struct tm is not and this would tie both struct and if you
+look close enough, struct tm has long tm_year and struct rtc_time has
+int tm_year which on 32-bit ARM has a different size.
 
-Thank you!
+I've been reluctant to change struct tm because I didn't take the time
+to check the impact on all the users (IIRC, mainly in filesystems).
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
