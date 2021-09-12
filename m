@@ -2,77 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B095D407A57
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Sep 2021 21:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015F407D4C
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Sep 2021 14:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbhIKTrz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Sep 2021 15:47:55 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41815 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbhIKTrz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Sep 2021 15:47:55 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3549A40002;
-        Sat, 11 Sep 2021 19:46:41 +0000 (UTC)
-Date:   Sat, 11 Sep 2021 21:46:40 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] RTC changes for 5.15
-Message-ID: <YT0HoCMW6nGEnpPL@piout.net>
-References: <YTzSVk5Scx/nRP7K@piout.net>
- <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
+        id S235168AbhILMnv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Sep 2021 08:43:51 -0400
+Received: from mx-out.tlen.pl ([193.222.135.148]:5660 "EHLO mx-out.tlen.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235166AbhILMnv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 12 Sep 2021 08:43:51 -0400
+Received: (wp-smtpd smtp.tlen.pl 10553 invoked from network); 12 Sep 2021 14:42:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1631450552; bh=TGU1vyGHSz5KGRlzz7YiYbVHIRcNC3phkI3/eiW1bew=;
+          h=From:To:Cc:Subject;
+          b=IU7u9oqZRTrK+D6j8oQv17EtPT539BGwfUTPCLbUcos77Cx8DtqjC+i01Fpse3Dxr
+           kgaMm+VfKLkPBMxVeEFNAkNSp6Jgso57MyT1VIDFopLgM8FwYygGdW5z4MiL/KFVci
+           5srqpRAeP44QZsCB0pEcKCzRCVy62zItfGCjdBhY=
+Received: from aafh223.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.137.223])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 12 Sep 2021 14:42:31 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: rtc,x86: CMOS RTC fixes
+Date:   Sun, 12 Sep 2021 14:42:07 +0200
+Message-Id: <20210912124214.81853-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgPJrMhr1_62O2xwD1QbT9oxJJ_uXw2mm6sa0hNDrFuwQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 38a79067d5c3a9a47b67eb1fce459178
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [kYPk]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/09/2021 10:05:02-0700, Linus Torvalds wrote:
-> On Sat, Sep 11, 2021 at 8:59 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > The broken down time conversion is similar to what is done
-> > in the time subsystem since v5.14.
-> 
-> By "similar" you mean "identical", no?
-> 
-> Why is the rtc subsystem not just using the generic time64_to_tm()?
-> 
-> Yes, yes, I realize that due to historical mistakes, there's a
-> duplicate 'struct rtc_time' struct, but it turns out that that is
-> _identical_ to 'struct tm' except it also has a 'int tm_isdst' at the
-> end.
-> 
-> So you could literally make a union of the two, pass the 'struct tm'
-> part down to the generic code, and just do
-> 
->      rtc_tm->tm_isdst = 0;
-> 
-> at the end.
-> 
-> Rather than have a duplicate copy of that admittedly clever Neri and
-> Schneider algorithm.
-> 
-> Hmm?
-> 
+Hello,
 
-Yes, most of it is historical, I did have a look at removing the copy
-but at the time, rtc_time64_to_tm was slightly more efficient because
-it knew the time was positive.
+This patch series fixes some issues in the RTC CMOS handling code.
 
-The other issue is that struct rtc_time is exposed to userspace while
-the kernel struct tm is not and this would tie both struct and if you
-look close enough, struct tm has long tm_year and struct rtc_time has
-int tm_year which on 32-bit ARM has a different size.
+First three patches fix bugs in drivers/rtc:
+1. Fix rtc_lock usage in cmos_set_alarm() in rtc-cmos.c.
+2. Do not touch RTC alarm registers when the RTC update is in progress. 
+   (On some Intel chipsets, this causes bogus values being read or writes to
+   fail silently.)
+3. Fix presence check of the RTC CMOS: the clock was misdetected as broken on
+   one of my systems.
 
-I've been reluctant to change struct tm because I didn't take the time
-to check the impact on all the users (IIRC, mainly in filesystems).
+Patches 1 and 2 are Cced stable. I'm going to  submit patch 3 manually
+to stable after some regression testing in master.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Next three patches contain fixes for arch/x86/rtc.c: duplicate code removal
+and a renaming of a function.
+
+The final patch reverts a buggy commit - to prevent a possible deadlock at
+resume from suspend.
+
+I'm also considering whether function x86_wallclock_init() in
+arch/x86/kernel/x86_init.c should call mc146818_does_rtc_work() to make sure
+that the CMOS RTC is present and behaves itself. This might be useful.
+
+Tested on top of v5.14.2, on two systems.
+
+This is my first patch series, so please review carefully.
+
+Greetings,
+Mateusz
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
