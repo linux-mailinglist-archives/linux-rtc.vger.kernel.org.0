@@ -2,109 +2,155 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 350A1407D59
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Sep 2021 14:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CED6407D5C
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Sep 2021 14:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbhILMpA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Sep 2021 08:45:00 -0400
-Received: from mx-out.tlen.pl ([193.222.135.148]:44614 "EHLO mx-out.tlen.pl"
+        id S235168AbhILMqX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Sep 2021 08:46:23 -0400
+Received: from mx-out.tlen.pl ([193.222.135.145]:24849 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235166AbhILMo7 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 12 Sep 2021 08:44:59 -0400
-Received: (wp-smtpd smtp.tlen.pl 10165 invoked from network); 12 Sep 2021 14:43:41 +0200
+        id S235050AbhILMqW (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 12 Sep 2021 08:46:22 -0400
+Received: (wp-smtpd smtp.tlen.pl 9608 invoked from network); 12 Sep 2021 14:45:06 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1631450622; bh=+A8FuHHP1nSvfu/Go3umMKL2PE4clz97aaQH+nyexCY=;
+          t=1631450706; bh=8r8xgy65ZR76BqRT88sVTuFNy8P/G7PRukyy/pHFjGc=;
           h=From:To:Cc:Subject;
-          b=pUfgoh2oSRbaCT7f9FcaNmqrHAjobrirLNEdzfJWgazeH+Ft7rNROXRQ2oZFoUJA4
-           JNFJja3CiFyKDsps2YH4kGn5qOKSNYD2IgKFAZ2qfO4gNkQS2LeQWyoyYtPaCSZfsU
-           2SxzvwWw1f7CMcN8x4W5Fmoug8MWRURRtMT4jtik=
+          b=K6i/AfpI2JblyZsm9V+GvTJWV31TtCKQesBWKUwQ33aOM+7CEg51KQ6+5H2eyy3Vt
+           WymFO1u8F97nKmS9OlZANRD7gr86txHItNwMoiOg7SKT2QxT20YQ8uFur7LhS1XxQ9
+           FGNONQDPmh7Nm0s+h8kVSPBheBnfVZwFCFRhe5A8=
 Received: from aafh223.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.137.223])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 12 Sep 2021 14:43:41 +0200
+          for <linux-rtc@vger.kernel.org>; 12 Sep 2021 14:45:06 +0200
 From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 To:     linux-rtc@vger.kernel.org
 Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Xiaofei Tan <tanxiaofei@huawei.com>
-Subject: [PATCH 7/7] Revert "rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ"
-Date:   Sun, 12 Sep 2021 14:42:14 +0200
-Message-Id: <20210912124214.81853-8-mat.jonczyk@o2.pl>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [TEST PATCH] rtc-cmos: cmos_read_alarm bug demonstration
+Date:   Sun, 12 Sep 2021 14:44:53 +0200
+Message-Id: <20210912124453.81925-1-mat.jonczyk@o2.pl>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210912124214.81853-1-mat.jonczyk@o2.pl>
-References: <20210912124214.81853-1-mat.jonczyk@o2.pl>
+In-Reply-To: <20210912124214.81853-3-mat.jonczyk@o2.pl>
+References: <20210912124214.81853-3-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 55792f7d98831567ca942f991b8f353b
+X-WP-MailID: 98eab5c8cd5e189c9ff73a4c4b83faaf
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [0RMB]                               
+X-WP-SPAM: NO 0000000 [0ZNE]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Revert
-commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
-and add a comment.
+Before my commit "rtc-cmos: dont touch alarm registers during update",
+applying this patch and reading the CMOS time like so:
 
-As described in a previous
-commit 66e4f4a9cc38 ("rtc: cmos: Use spin_lock_irqsave() in cmos_interrupt()")
-from February 2020:
+        while true; do cat /sys/class/rtc/rtc0/time ; sleep 0.5; done
 
-        cmos_interrupt() isn't always called from hardirq context, so
-        we must use spin_lock_irqsave() & co.
-
-Indeed, cmos_interrupt() is called from cmos_check_wkalrm(), which is
-called from cmos_resume() - apparently not in an interrupt context.
-
-A later
-commit 6950d046eb6e ("rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ")
-did not take account of this and changed spin_lock_irqsave() to spin_lock().
-This may cause a deadlock as quoted in the body of
-commit 66e4f4a9cc38 ("rtc: cmos: Use spin_lock_irqsave() in cmos_interrupt()")
-mentioned earlier.
+produces errors in dmesg.
 
 Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 Cc: Alessandro Zummo <a.zummo@towertech.it>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Cc: Xiaofei Tan <tanxiaofei@huawei.com>
+
 ---
- drivers/rtc/rtc-cmos.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-cmos.c | 61 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
 diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index c24465f7bed4..508fba8746a1 100644
+index f353a41dfe8c..c24465f7bed4 100644
 --- a/drivers/rtc/rtc-cmos.c
 +++ b/drivers/rtc/rtc-cmos.c
-@@ -741,10 +741,14 @@ static struct cmos_rtc	cmos_rtc;
+@@ -43,6 +43,9 @@
+ #include <linux/dmi.h>
+ #endif
  
- static irqreturn_t cmos_interrupt(int irq, void *p)
++#include <linux/ktime.h>
++#include <linux/timekeeping.h>
++
+ /* this is for "generic access to PC-style RTC" using CMOS_READ/CMOS_WRITE */
+ #include <linux/mc146818rtc.h>
+ 
+@@ -220,6 +223,8 @@ static inline void cmos_write_bank2(unsigned char val, unsigned char addr)
+ 
+ /*----------------------------------------------------------------*/
+ 
++static void cmos_read_alarm_uip_debugging(struct device *dev);
++
+ static int cmos_read_time(struct device *dev, struct rtc_time *t)
  {
+ 	/*
+@@ -234,6 +239,8 @@ static int cmos_read_time(struct device *dev, struct rtc_time *t)
+ 	 * That'll make Y3K compatility (year > 2070) easy!
+ 	 */
+ 	mc146818_get_time(t);
++
++	cmos_read_alarm_uip_debugging(dev);
+ 	return 0;
+ }
+ 
+@@ -348,6 +355,60 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
+ 	return 0;
+ }
+ 
++static void cmos_read_alarm_uip_debugging(struct device *dev)
++{
 +	unsigned long	flags;
- 	u8		irqstat;
- 	u8		rtc_control;
- 
--	spin_lock(&rtc_lock);
-+	/* cmos_interrupt() may be called from cmos_check_wkalrm() not in
-+	 * interrupt context, so using spin_lock_irqsave() is required
-+	 */
++	unsigned char	rtc_uip_baseline, rtc_uip;
++	struct rtc_wkalrm t_baseline, t;
++	ktime_t time_start, time_end;
++	int i;
++
 +	spin_lock_irqsave(&rtc_lock, flags);
- 
- 	/* When the HPET interrupt handler calls us, the interrupt
- 	 * status is passed as arg1 instead of the irq number.  But
-@@ -778,7 +782,7 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- 			hpet_mask_rtc_irq_bit(RTC_AIE);
- 		CMOS_READ(RTC_INTR_FLAGS);
- 	}
--	spin_unlock(&rtc_lock);
++	rtc_uip_baseline = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
 +	spin_unlock_irqrestore(&rtc_lock, flags);
- 
- 	if (is_intr(irqstat)) {
- 		rtc_update_irq(p, 1, irqstat);
++
++	cmos_read_alarm(dev, &t_baseline);
++
++	time_start = ktime_get();
++
++	for (i = 0; i < 2000; i++) {
++		spin_lock_irqsave(&rtc_lock, flags);
++		rtc_uip = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
++		spin_unlock_irqrestore(&rtc_lock, flags);
++
++		cmos_read_alarm(dev, &t);
++
++		if (t_baseline.time.tm_sec != t.time.tm_sec) {
++			dev_err(dev,
++				"Inconsistent alarm tm_sec value: %d != %d (RTC_UIP = %d; %d)\n",
++				t_baseline.time.tm_sec,
++				t.time.tm_sec,
++				rtc_uip_baseline, rtc_uip);
++		}
++		if (t_baseline.time.tm_min != t.time.tm_min) {
++			dev_err(dev,
++				"Inconsistent alarm tm_min value: %d != %d (RTC_UIP = %d; %d)\n",
++				t_baseline.time.tm_min,
++				t.time.tm_min,
++				rtc_uip_baseline, rtc_uip);
++		}
++		if (t_baseline.time.tm_hour != t.time.tm_hour) {
++			dev_err(dev,
++				"Inconsistent alarm tm_hour value: %d != %d (RTC_UIP = %d; %d)\n",
++				t_baseline.time.tm_hour,
++				t.time.tm_hour,
++				rtc_uip_baseline, rtc_uip);
++		}
++
++	}
++
++	time_end = ktime_get();
++
++	pr_info_ratelimited("%s: loop executed in %lld ns\n",
++			__func__, ktime_to_ns(ktime_sub(time_end, time_start)));
++}
++
++
+ static void cmos_checkintr(struct cmos_rtc *cmos, unsigned char rtc_control)
+ {
+ 	unsigned char	rtc_intr;
 -- 
 2.25.1
 
