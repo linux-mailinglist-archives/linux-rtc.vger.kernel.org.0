@@ -2,39 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 204BD40EF8D
-	for <lists+linux-rtc@lfdr.de>; Fri, 17 Sep 2021 04:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692E440EF9E
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 Sep 2021 04:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243499AbhIQCgl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Sep 2021 22:36:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33658 "EHLO mail.kernel.org"
+        id S243614AbhIQCg7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Sep 2021 22:36:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242848AbhIQCgI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 16 Sep 2021 22:36:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B9CC561164;
-        Fri, 17 Sep 2021 02:34:46 +0000 (UTC)
+        id S243260AbhIQCgS (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Sep 2021 22:36:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0320261260;
+        Fri, 17 Sep 2021 02:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631846087;
-        bh=lERD2q2Bl3YqPIJL9b6mEqEa7dG5EZcffThjaffYEHM=;
+        s=k20201202; t=1631846096;
+        bh=PaL2obuOxeOjy9Zxz/WgmfbDkT0BvVxEMnRbqCoV0bE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F6pGHbj6WP+pU4111wlf0E+Cusyi1etq8PNyjty3POridmpx3zBJP3l7nFCgxRfBE
-         JmqWEd5+aJEc3wGJdGHtOiIShIsAZPwAbNBpEqEVmfNPMwyMFBpj6/pnXuOUA0kxg2
-         4B93shvAddDP0q443Yu/Mo1//TFi75vheSFMVmPJsjIhqqe4gmPkX2Fg3demYoLuyK
-         CJ/XKBVySQoSGweH6DNgdiOeIcKf6yqzUOPdtt0gwTnbO3FM4WBCpt8JiJib7g49gq
-         BlcpHoLnO76dHUMnUKRLPsT6EWshxzlWpykiw35LDzylF32U4eFUNd966iJJSCp6k8
-         85hID9vAQKh9g==
+        b=MZTBZZHllYtAbghhPcru2XJeDvwFTv7BGitSrP9AV7xFqB9xvEeG2jdccwA+h0Hyu
+         ZxlcQzVkWTEKIo5mJTV1J3XcjZXWyvpzJlK9vlhyU6sM1JLdgLS05R3lM0kXiBJuri
+         bqzZFvKCBJiBs7lZwlhxK84CZ8IXDnXhyDxwZe8+OZ+TX98KDh8JRNsj3IAyVS0DvW
+         CiPzHbFv95eqe4ZiVDawpEp/2kmj5EtkokPb04VdMofZz3uA0h149eQ963y4zlv1qj
+         MlNuVXNN4vj+qtZd8Azt2AIX9W+mFaCm8M/LRy6XnyzRZalx18+8Swj4qxcCVHSavJ
+         3GoBRWdd9qMSg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yu-Tung Chang <mtwget@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
         linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 7/8] rtc: rx8010: select REGMAP_I2C
-Date:   Thu, 16 Sep 2021 22:34:32 -0400
-Message-Id: <20210917023437.816574-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 5/5] rtc: rx8010: select REGMAP_I2C
+Date:   Thu, 16 Sep 2021 22:34:49 -0400
+Message-Id: <20210917023449.816713-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210917023437.816574-1-sashal@kernel.org>
-References: <20210917023437.816574-1-sashal@kernel.org>
+In-Reply-To: <20210917023449.816713-1-sashal@kernel.org>
+References: <20210917023449.816713-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,10 +59,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 33e4ecd6c665..54cf5ec8f401 100644
+index 9ae7ce3f5069..0ad8d84aeb33 100644
 --- a/drivers/rtc/Kconfig
 +++ b/drivers/rtc/Kconfig
-@@ -624,6 +624,7 @@ config RTC_DRV_FM3130
+@@ -625,6 +625,7 @@ config RTC_DRV_FM3130
  
  config RTC_DRV_RX8010
  	tristate "Epson RX8010SJ"
