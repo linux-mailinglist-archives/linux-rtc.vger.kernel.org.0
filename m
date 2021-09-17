@@ -2,93 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3A040E3A7
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Sep 2021 19:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204BD40EF8D
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 Sep 2021 04:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbhIPQv0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Sep 2021 12:51:26 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58344
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243815AbhIPQrb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Sep 2021 12:47:31 -0400
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F118A40269
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Sep 2021 16:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1631810770;
-        bh=TkTHOhbG7+Cs8KGkPzHFU+IfRiM3V1/WUAdUOTTHlrE=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=R3fOw3uQ3MxPPSIJu7d5fXyJRqH2PIvrvz9wPwFd5IW8H0S5rd7FJYYC0ZLUtHpMq
-         PUqPfc7FC5bJVn70lySGYfTPnzTdYTNNRUrkJZFnZg6UZH9o/HYSpNWGoW8q127m/S
-         RwP16LT5JH3s2ILB2HgOj5CdwwUFclrbese805QqUbSZxWPnpP5UMJ6Oe6t/eUBxdf
-         Flve0MRLquL5nqo9+f3iALf3oII2nfWTvVnO67jzKZ+ZPCJO0hPcG9f6QLTuSApC0A
-         izbSpR538kt94Xi5xnxOaGx5xLryPFye2DRFMQtVSNblCZyGE3hVq3KEqFvsCcH7u/
-         ELJG1NfVdQoTA==
-Received: by mail-wr1-f70.google.com with SMTP id r7-20020a5d6947000000b0015e0f68a63bso2676451wrw.22
-        for <linux-rtc@vger.kernel.org>; Thu, 16 Sep 2021 09:46:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TkTHOhbG7+Cs8KGkPzHFU+IfRiM3V1/WUAdUOTTHlrE=;
-        b=rcGoSWc6Wtgx5gbj2py7irx6rJVhw4Nnzbiwdh9lUAHA7UVj8VNwkDuWXYHgFOn+e1
-         twVkw9ZNV6Y6GMb6WlNvKFggnOPzuugZmiPhIA9Bqlj3r3Lak/pqKTH+8dZaKUKDmj8t
-         ggUAI9TN1+A4Hwz6/X2f5kfBJ9KunoKcvMtqaEcaLmU/a7j+mvGFgjqCrukTgu+TIqAp
-         jKNnaoFfWGqjEG31GrmKxEJUx/Y3q/dOyInXTZwF0nxQRX7aL29Cvc3fvxsnr80T17nt
-         i/Z2mrPSiGYkk1FmlAmVmEBixnflTM8aCIIWdaISW3I0QMX0PxcfL8n+tfNCDljQ8bO+
-         q39Q==
-X-Gm-Message-State: AOAM532qnGIH/dDvF04sEeIVufdQlZy0NMMXKy2VnkNanlYBbDPtovzm
-        pVWOc6QewLzDEE7TTU+CaWSvPfVNt1W0cONcnHP7LnRLWqTkDS1bcf2jPC/9SqRacD4nVEczsMb
-        zvYPxJVZV5f9BA9BCQIZTOxif+as4toZ3p02V8A==
-X-Received: by 2002:a05:600c:4f0b:: with SMTP id l11mr10746886wmq.0.1631810769631;
-        Thu, 16 Sep 2021 09:46:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyW+OkIKkP01ToiSTSOU4G0hJjjzBqvO2StScpKKfwwlhY9dJZUVxfnRqcLlXIIqO+lwZLbw==
-X-Received: by 2002:a05:600c:4f0b:: with SMTP id l11mr10746871wmq.0.1631810769456;
-        Thu, 16 Sep 2021 09:46:09 -0700 (PDT)
-Received: from kozik-lap.lan (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id l21sm3718194wmh.31.2021.09.16.09.46.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Sep 2021 09:46:08 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S243499AbhIQCgl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Sep 2021 22:36:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242848AbhIQCgI (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 16 Sep 2021 22:36:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B9CC561164;
+        Fri, 17 Sep 2021 02:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631846087;
+        bh=lERD2q2Bl3YqPIJL9b6mEqEa7dG5EZcffThjaffYEHM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=F6pGHbj6WP+pU4111wlf0E+Cusyi1etq8PNyjty3POridmpx3zBJP3l7nFCgxRfBE
+         JmqWEd5+aJEc3wGJdGHtOiIShIsAZPwAbNBpEqEVmfNPMwyMFBpj6/pnXuOUA0kxg2
+         4B93shvAddDP0q443Yu/Mo1//TFi75vheSFMVmPJsjIhqqe4gmPkX2Fg3demYoLuyK
+         CJ/XKBVySQoSGweH6DNgdiOeIcKf6yqzUOPdtt0gwTnbO3FM4WBCpt8JiJib7g49gq
+         BlcpHoLnO76dHUMnUKRLPsT6EWshxzlWpykiw35LDzylF32U4eFUNd966iJJSCp6k8
+         85hID9vAQKh9g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yu-Tung Chang <mtwget@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 2/2] rtc: s5m: drop unneeded MODULE_ALIAS
-Date:   Thu, 16 Sep 2021 18:46:04 +0200
-Message-Id: <20210916164604.134924-1-krzysztof.kozlowski@canonical.com>
+        Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 7/8] rtc: rx8010: select REGMAP_I2C
+Date:   Thu, 16 Sep 2021 22:34:32 -0400
+Message-Id: <20210917023437.816574-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210916164513.134725-1-krzysztof.kozlowski@canonical.com>
-References: <20210916164513.134725-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20210917023437.816574-1-sashal@kernel.org>
+References: <20210917023437.816574-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The MODULE_DEVICE_TABLE already creates proper alias for platform
-driver.  Having another MODULE_ALIAS causes the alias to be duplicated.
+From: Yu-Tung Chang <mtwget@gmail.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+[ Upstream commit 0c45d3e24ef3d3d87c5e0077b8f38d1372af7176 ]
+
+The rtc-rx8010 uses the I2C regmap but doesn't select it in Kconfig so
+depending on the configuration the build may fail. Fix it.
+
+Signed-off-by: Yu-Tung Chang <mtwget@gmail.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20210830052532.40356-1-mtwget@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-s5m.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/rtc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-index fb9c6b709e13..4243fe6d3842 100644
---- a/drivers/rtc/rtc-s5m.c
-+++ b/drivers/rtc/rtc-s5m.c
-@@ -861,4 +861,3 @@ module_platform_driver(s5m_rtc_driver);
- MODULE_AUTHOR("Sangbeom Kim <sbkim73@samsung.com>");
- MODULE_DESCRIPTION("Samsung S5M/S2MPS14 RTC driver");
- MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:s5m-rtc");
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 33e4ecd6c665..54cf5ec8f401 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -624,6 +624,7 @@ config RTC_DRV_FM3130
+ 
+ config RTC_DRV_RX8010
+ 	tristate "Epson RX8010SJ"
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for the Epson RX8010SJ RTC
+ 	  chip.
 -- 
 2.30.2
 
