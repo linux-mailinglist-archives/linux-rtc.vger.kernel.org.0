@@ -2,107 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D7D412D36
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Sep 2021 05:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C0B412F12
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Sep 2021 09:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbhIUDQA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 20 Sep 2021 23:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
+        id S230026AbhIUHKe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Sep 2021 03:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349470AbhIUC0k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 20 Sep 2021 22:26:40 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2FC1E3A53
-        for <linux-rtc@vger.kernel.org>; Mon, 20 Sep 2021 12:04:42 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id u7-20020a632347000000b0026722cd9defso16037567pgm.7
-        for <linux-rtc@vger.kernel.org>; Mon, 20 Sep 2021 12:04:42 -0700 (PDT)
+        with ESMTP id S230105AbhIUHK3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Sep 2021 03:10:29 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F44C061756
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 00:08:49 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id q26so36151025wrc.7
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 00:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=F6cGi29a7AfEikhLMTK8OrCpcnf5YNIMe8XqMKTgBWE=;
-        b=WaybUjqVu/zv+vIZpFhmoCtqsH0J+cSC+hsipU29HLqreSTA/oMTEV/usynjaGKZv9
-         msiqVmzTwaISJLYoVuxNtt/gOJvHGb5rzFhqx8PlX8iGzC6ckmoHCoC+/hATCx2U31/j
-         TkVCx8hqU8GF/UDHHT56XsQM+OTxqhNkZk9Y/iPCywv/zZ7F4ZAIi8ehJxEe76mkRz7m
-         hH6zzWmqGPwAO8mqf7wcq0CCIre4iWQ3SvtB3uVg9xWldB19R5ZESw1sLbOiM9W/8gnD
-         Z3arInj4gTz0ScRRtSPLos5dgfQAQrczWtK0J4PeTHKcyQw2hrt9Qdw4zYI2rIzCUBRJ
-         /bdw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Cyc6wAvsiYvYVdHCei88zIBgag7U9mJqxcUyH3r1CWM=;
+        b=EQ6/tvjLOGJ2R/hFuNnnTCnC3AcN5Ge1Dz3gKT8j2pYOuibo305AQJBZ28DeSmOwey
+         kgy2cyVUs/8oOsaprC3nuq2fBpukx47phqrIvU2glPkoMWq6t2gzOWSs0Mn+9RwHiJN+
+         lwvpXENzFUrZYGWwtwbWjOxPsO5d32qtFdDIca8DcC8yUYzTKLm63eiTUO0iUM/NkMiG
+         OzuWjrwmGZWqvOiP7z+RCa6OI/vzA19wb+zFsyJeiYrIVOOEepCGECJ4jmHQ61b9k+8p
+         pATfcSEH8tYyMdeTvkMn76kTisaNd4zYTqVyTA7j7Ir+87DSM8yr6SBWe01TN3GpzQ+T
+         VlNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=F6cGi29a7AfEikhLMTK8OrCpcnf5YNIMe8XqMKTgBWE=;
-        b=5hjpBEjwj1eZPpc2cU+66Up20qmzRyvt0nPA5f9AGLYsUvUdZ5ZfRx+63OZuDLVwQd
-         BIjuCsvdhNPrO7bO6Uh6P5nlYaDro5g8UcJ3AmErg6rbL7Bqpu+g4swGBw0xZ1szcSUj
-         P2Ve9Vy4CIWBnwSN//Jzzy0GbllZe6YrMSGCBq5tnzEOqQyIiTKZkO775atw0phVNc5x
-         0hAADP6eErf15Vp00nI2zZW2Ab6fLuNRJMpePwgctxWTCF3Mvj3NwQ5tBd2/C2+2Vluj
-         m1D00b2tfhyFqrlxggiqHhP4UVb8GhSJL1WrMNsE5y6J7uSUTcyFxFtTgGUHou/uTcvw
-         +NLQ==
-X-Gm-Message-State: AOAM533HyE/sRMEDQQkOJxviE5sODx+2ADnKI30FSY7rFBGGCIReISu1
-        ZnbYZV57s8bNMiwFX+UpaENJqilNJ/K5PcOH/4w=
-X-Google-Smtp-Source: ABdhPJxzkMfeAZXRaAianGXffx1iCvr9RAwg8Omo/kfgyxb2a4u5Shp06Gkd/wq7B2gWBPNgyV3oA9U2ASPf6mLOHUo=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a05:6a00:1141:b0:440:3c27:807c with
- SMTP id b1-20020a056a00114100b004403c27807cmr26237287pfm.71.1632164681943;
- Mon, 20 Sep 2021 12:04:41 -0700 (PDT)
-Date:   Mon, 20 Sep 2021 19:03:49 +0000
-In-Reply-To: <20210920190350.3860821-1-willmcvicker@google.com>
-Message-Id: <20210920190350.3860821-5-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20210920190350.3860821-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
-Subject: [PATCH v1 4/4] rtc: change HAVE_S3C_RTC default config logic
-From:   Will McVicker <willmcvicker@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Cyc6wAvsiYvYVdHCei88zIBgag7U9mJqxcUyH3r1CWM=;
+        b=CIRBbJiuXt5OwW1iDAnqDaOaTagssYJBp3SYm9lGAJggb4DDTirmyuicfHQS7JJ5Wr
+         DTIuqYAyFwuFkgn72Eqea4WHEuXyOhdR2oxKAMovFdazepHQ2pO/FkFJyaDYHYGqEOdJ
+         hn7JCC8HuHoxoEEen0r51Fpmz51kV/6X+6+g43wELjMr4yv1zPLNkUh/opTXH16NMnW1
+         nrk6boNUhFH44HE96Ng81Wb554b/0dBWQHRp2uPTlbZQoXrsz8Jq2Clg4/YrYl4oH/KR
+         nBhf4le+o6IlHqdT8xoiPTZAVjYf7WHUblzSSuQms4th3wjEdp7LEkPDYS8y6KFFr8cM
+         5xsA==
+X-Gm-Message-State: AOAM531BilzEb931dbF9sJXMB0qxthsyKtxCIj49NgGYrNq4XbOy0d6x
+        6ZaGg+NbGiVfrKUwHK1iYdxsew==
+X-Google-Smtp-Source: ABdhPJyPQ/o1Rh01pdww1XQiFIlGSq+2ub4xW3Lao90e3fivXN469GPYJVCY/MaD/ditL/22MZeDcw==
+X-Received: by 2002:a1c:28b:: with SMTP id 133mr2886271wmc.14.1632208127619;
+        Tue, 21 Sep 2021 00:08:47 -0700 (PDT)
+Received: from google.com ([95.148.6.233])
+        by smtp.gmail.com with ESMTPSA id g22sm1654479wmp.39.2021.09.21.00.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Sep 2021 00:08:47 -0700 (PDT)
+Date:   Tue, 21 Sep 2021 08:08:44 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Will McVicker <willmcvicker@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Will McVicker <willmcvicker@google.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
+Message-ID: <YUmE/LqlFCiongfn@google.com>
+References: <20210920190350.3860821-1-willmcvicker@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210920190350.3860821-1-willmcvicker@google.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Switches the default config logic of HAVE_S3C_RTC to use "default y if
-(ARCH_EXYNOS && RTC_CLASS)" versus having ARCH_EXYNOS directly select
-it. This provides vendors flexibility to disable the config if desired
-or modularize it in the presence of a generic kernel.
+On Mon, 20 Sep 2021, Will McVicker wrote:
 
-Verified this change doesn't impact the .config.
+> This patch series tries to address the issue of ARCH_EXYNOS force selecting
+> a handful of drivers without allowing the vendor to override any of the
+> default configs. This takes away from the flexibilty of compiling a generic
+> kernel with exynos kernel modules. For example, it doesn't allow vendors to
+> modularize these drivers out of the core kernel in order to share a generic
+> kernel image across multiple devices that require device-specific kernel
+> modules.
+> 
+> To address this without impacting the existing behavior, this series
+> switches the default config logic for the offending configs to use "default
+> y if ARCH_EXYNOS" versus having ARCH_EXYNOS directly select them. I have
+> verified that these patches do not impact the default aarch64 .config.
+> 
+> Will McVicker (4):
+>   clk: samsung: change COMMON_CLK_SAMSUNG default config logic
+>   soc: samsung: change SOC_SAMSUNG default config logic
+>   pinctrl: samsung: change PINCTRL_EXYNOS default config logic
+>   rtc: change HAVE_S3C_RTC default config logic
+> 
+>  arch/arm64/Kconfig.platforms    | 7 -------
+>  drivers/clk/samsung/Kconfig     | 1 +
+>  drivers/pinctrl/samsung/Kconfig | 1 +
+>  drivers/rtc/Kconfig             | 1 +
+>  drivers/soc/samsung/Kconfig     | 4 ++++
+>  5 files changed, 7 insertions(+), 7 deletions(-)
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
----
- arch/arm64/Kconfig.platforms | 1 -
- drivers/rtc/Kconfig          | 1 +
- 2 files changed, 1 insertion(+), 1 deletion(-)
+For all patches in the series:
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index a884e5da8b0f..f9f829aab511 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -91,7 +91,6 @@ config ARCH_BRCMSTB
- 
- config ARCH_EXYNOS
- 	bool "ARMv8 based Samsung Exynos SoC family"
--	select HAVE_S3C_RTC if RTC_CLASS
- 	select PINCTRL
- 	select PM_GENERIC_DOMAINS if PM
- 	help
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index e1bc5214494e..40afdb37d2a5 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1406,6 +1406,7 @@ config RTC_DRV_OMAP
- 
- config HAVE_S3C_RTC
- 	bool
-+	default y if (ARCH_EXYNOS && RTC_CLASS)
- 	help
- 	  This will include RTC support for Samsung SoCs. If
- 	  you want to include RTC support for any machine, kindly
+Reviewed-by: Lee Jones <lee.jones@linaro.org>
+
 -- 
-2.33.0.464.g1972c5931b-goog
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
