@@ -2,135 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CC9412F92
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Sep 2021 09:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E988412FF7
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Sep 2021 10:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbhIUHiG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Sep 2021 03:38:06 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:37554
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230208AbhIUHiD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Sep 2021 03:38:03 -0400
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DCAB4402CD
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 07:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632209794;
-        bh=5xtuLVRlXiTMHH96D8zimgkDHcNXy9X9ihNLTsNCcqE=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=KYeovEO7J1SuJYe3ER8quU3K/9bGCFFvYmykARPDPS6wAUODPE/7zPWekYhOdB6sP
-         yWHRVHNsJp4ztdxDOSh2db+egrZn83kHDZ1nqgUcJql6y+sIIoackAJ6IUDY4M6H4N
-         4yiisoed0JBCFjV/OifNryVt6DqzQ11EnDxoSjNpU5ihZsOJ0S1zDlp2bpldIYguHn
-         nBbBMNU3Igu6Vr40Y5HVkKzZE/GELGqi7mfi7R+N30+XJy+HVNRhMnHbkdLu1uATRQ
-         1HPaUwT+smKnyeHFwpyKOK8IacFUk0RenPqgUPTlExRD/JaSz8kXiB1NTFSe6I3FaR
-         KVoWmhmBg++cw==
-Received: by mail-wr1-f70.google.com with SMTP id x7-20020a5d6507000000b0015dada209b1so8047056wru.15
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 00:36:34 -0700 (PDT)
+        id S231186AbhIUINR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Sep 2021 04:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231149AbhIUINR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Sep 2021 04:13:17 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AABC061756
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 01:11:49 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t18so36675751wrb.0
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Sep 2021 01:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ydWqOkie+tr01fbOoWOEuomByeEyt2VRZxMCMJGoWKQ=;
+        b=m90vVQ0/g+glJejnMxIyN9vpccBAGiYy5DSylPUvFlECP6wxT9gbfdgf/ycu0oLZzn
+         rvf7DeSGFkOCsKdA7GF/xT3QIO9x69g7b8g6DO2wLzrFDDUdkTmkRo1Jslj9UBik09iy
+         Fxf6Xtj4tyaeCnlf5VypiGZnDNBqEAK9cflPq1vlmlZHNmzYLmtowCWGtbfDyCSqVmXZ
+         PVr7fSmLRNfmLKsPvvqqubuAFw1i/5smUFViSPgTYEnVqikvaUi3JZNJ1kBF5xg1JNYI
+         MgJePs34Jdh5p0Sjk7u4jfVS/fTtHkdJyc11AEKcD/0tuf9lnJ5ZKQncr0uHn1hlHGKp
+         k7SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5xtuLVRlXiTMHH96D8zimgkDHcNXy9X9ihNLTsNCcqE=;
-        b=uhDvqlKIKU4s1JfGasYMHKatDYR4bMSKVzJZ+PwJcJpJ4Q//q25rmCIo9k5IkcpPGA
-         adOqQ2UYrVGf6EEsORKDQD3YVjUyifV3FmnBdGu77Gq+tONdmfwYYrCMU7C+L3FvhGgu
-         1YCF/0j08e39Kk1XkMNQDpfWnvCN22Rf3+RWQpWrzZsHcT4aYeeF5rUU/7B5QZAUZ1Wu
-         lptEvZ8RvF0pXw0YtXAPw9SkOUXj4EglWBhalwENc63BFM+SdcCWLe56FOUKcMJ99d4/
-         6jIizlsU9jY/Ngjy3yGK/dOwg7jgLgge4zKHAuuSOOTc8VYWnPtSCF3qGjxaZf0dAZ05
-         MzZA==
-X-Gm-Message-State: AOAM530/UhMCQ2LOc+KF7TzMX7ezQXbcqJpQSVuFvP9ELI0iaRwI166b
-        ur6OKfYGPZpxCU+CbIORG1sIc7eZK/epIQU6IViBP51G18pkOOoELDG7NY8aNpJ8Yz+ZNDJaUyX
-        s/47u2bRw+eKeAG5uArwMVvEqONiWksDLOmSAjA==
-X-Received: by 2002:a5d:598f:: with SMTP id n15mr30497171wri.74.1632209794155;
-        Tue, 21 Sep 2021 00:36:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLKQWe41cx6PvZ19KxjufcOkHR0IX8PQ9IjcFMsfMXm6dylIN5TbRIN773VgRDP6J6eJhhWw==
-X-Received: by 2002:a5d:598f:: with SMTP id n15mr30497148wri.74.1632209793950;
-        Tue, 21 Sep 2021 00:36:33 -0700 (PDT)
-Received: from [192.168.0.134] (lk.84.20.244.219.dc.cable.static.lj-kabel.net. [84.20.244.219])
-        by smtp.gmail.com with ESMTPSA id i203sm1353028wma.7.2021.09.21.00.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Sep 2021 00:36:33 -0700 (PDT)
-Subject: Re: [PATCH v1 4/4] rtc: change HAVE_S3C_RTC default config logic
-To:     Will McVicker <willmcvicker@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ydWqOkie+tr01fbOoWOEuomByeEyt2VRZxMCMJGoWKQ=;
+        b=APrvoL3RJUgwhQkoWIPP2UX6kQo6ENuiK0vgCurLT1wVQPZzkK3Eq3szVPcuZwHARY
+         2Cio3rZqb91h2BFl9E8UlPNXf1jAOaIFrlvMYYgZw+GaNEzDJf31/ISnI7/jG5igRE1E
+         iwMa/8XRzmb9qlJSdgau6i2zrIr4a03fdz8lYIeBJtuChMOEdyWTYK0goEoP7ivlBxok
+         9LuOoBHY7E+Sj79X4t4QU0TFsxc9Npkt5ZSsNi9Pw97MhPjOdnHFtpcMVXStxhYdr6gJ
+         /0mB+wdfv0KaqGIl8s+vNOORjtE1Ve3nRgYa105Wlsf385l4t5B/xTnNJX6OF3x06uPq
+         RWhg==
+X-Gm-Message-State: AOAM5308apmz/ao/iNjgvAZmlYlyVaiRITVvdfsKbGpdMIAfS3fgzdT9
+        g9lxV5I8Kl8GEwAdjx/MMQmOjQ==
+X-Google-Smtp-Source: ABdhPJzv2vNo66rTcRBrAlohDVsFc3SMmKKr76F/SZVNAIZ9JZ7eBaIvwAaVxjt21dQdltK+QYYkLA==
+X-Received: by 2002:a5d:43cc:: with SMTP id v12mr33874060wrr.329.1632211907545;
+        Tue, 21 Sep 2021 01:11:47 -0700 (PDT)
+Received: from google.com ([95.148.6.233])
+        by smtp.gmail.com with ESMTPSA id j21sm18300805wrd.48.2021.09.21.01.11.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Sep 2021 01:11:47 -0700 (PDT)
+Date:   Tue, 21 Sep 2021 09:11:45 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Will McVicker <willmcvicker@google.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, kernel-team@android.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
+Message-ID: <YUmTwZPqrCfRMekd@google.com>
 References: <20210920190350.3860821-1-willmcvicker@google.com>
- <20210920190350.3860821-5-willmcvicker@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <1f4efb90-4c6f-0972-de67-eae8e0246f5b@canonical.com>
-Date:   Tue, 21 Sep 2021 09:36:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ <7735b09c-cf1c-5e37-a737-9a330fbacf1e@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <20210920190350.3860821-5-willmcvicker@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7735b09c-cf1c-5e37-a737-9a330fbacf1e@canonical.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 20/09/2021 21:03, Will McVicker wrote:
-> Switches the default config logic of HAVE_S3C_RTC to use "default y if
-> (ARCH_EXYNOS && RTC_CLASS)" versus having ARCH_EXYNOS directly select
-> it. This provides vendors flexibility to disable the config if desired
-> or modularize it in the presence of a generic kernel.
+On Tue, 21 Sep 2021, Krzysztof Kozlowski wrote:
+
+> On 20/09/2021 21:03, Will McVicker wrote:
+> > This patch series tries to address the issue of ARCH_EXYNOS force selecting
+> > a handful of drivers without allowing the vendor to override any of the
+> > default configs. This takes away from the flexibilty of compiling a generic
+> > kernel with exynos kernel modules. For example, it doesn't allow vendors to
+> > modularize these drivers out of the core kernel in order to share a generic
+> > kernel image across multiple devices that require device-specific kernel
+> > modules.
 > 
-> Verified this change doesn't impact the .config.
+> You do not address the issue in these patches. The problem you describe
+> is that drivers are not modules and you are not changing them into modules.
+
+The wording is unfortunate.  The reason for this change doesn't have
+much to do with kernel modules.
+
+Let's go back in time 18 months or so when Greg KH submitted this [0]
+patch, which you Acked.  Greg was trying to solve the problem of not
+having to enable ARCH_EXYNOS on kernels which are designed to be
+platform agnostic (sometimes called Generic Kernels).  For some reason
+SERIAL_SAMSUNG is the only symbol with these dependencies, so the
+solution seemed simple and straight forward at the time.
+
+However, For sound reasons Geert NACKed the patch.
+
+Quoting from [1] he says:
+
+  "A generic kernel will include Samsung SoC support, hence
+  PLAT_SAMSUNG or ARCH_EXYNOS will be enabled."
+
+However, since the entry for ARCH_EXYNOS *insists* on building-in a
+bunch of other symbols (via 'select') which will be unused in most
+cases, this is not a currently acceptable approach for many Generic
+Kernels due to size constraints.
+
+What this patch does is migrates those symbols from being 'select'ed
+(always built-in with no recourse) to 'default y'.  Where the former
+cannot be over-ridden, but the latter can be via a vendor's
+defconfig/fragment.
+
+I doubt many (any?) of these symbols can be converted to kernel
+modules anyway, as they are required very early on in the boot
+sequence.
+
+> > To address this without impacting the existing behavior, this series
+> > switches the default config logic for the offending configs to use "default
+> > y if ARCH_EXYNOS" versus having ARCH_EXYNOS directly select them. I have
+> > verified that these patches do not impact the default aarch64 .config.
 > 
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> ---
->  arch/arm64/Kconfig.platforms | 1 -
->  drivers/rtc/Kconfig          | 1 +
->  2 files changed, 1 insertion(+), 1 deletion(-)
+> Yep, this is what you did but it does not match the described problem.
+> You are not solving it but doing something else.
 > 
+> > Will McVicker (4):
+> >   clk: samsung: change COMMON_CLK_SAMSUNG default config logic
+> >   soc: samsung: change SOC_SAMSUNG default config logic
+> >   pinctrl: samsung: change PINCTRL_EXYNOS default config logic
+> >   rtc: change HAVE_S3C_RTC default config logic
 
-It took me some effort to find this patch because you did not send it to
-neither me, nor Samsung SoC list.
+[0] https://lore.kernel.org/lkml/20200220102628.3371996-1-gregkh@linuxfoundation.org/
+[1] https://lore.kernel.org/lkml/CAMuHMdVrVe37JyUNFSf9KRZTcndrvDaZvrVoBxzm_7J2nhg1kg@mail.gmail.com/
 
-Since you touch arm64 code, this should go either via SoC tree or with
-SoC ack, therefore you should simply use get_maintainers.pl on entire
-patchset, not on some pieces.
-
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index a884e5da8b0f..f9f829aab511 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -91,7 +91,6 @@ config ARCH_BRCMSTB
->  
->  config ARCH_EXYNOS
->  	bool "ARMv8 based Samsung Exynos SoC family"
-> -	select HAVE_S3C_RTC if RTC_CLASS
-
-Just remove HAVE_S3C_RTC entirely like in commit:
-7dd3cae90d856e97e93bc1c32904e5aed7210f7b
-
->  	select PINCTRL
->  	select PM_GENERIC_DOMAINS if PM
->  	help
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index e1bc5214494e..40afdb37d2a5 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1406,6 +1406,7 @@ config RTC_DRV_OMAP
->  
->  config HAVE_S3C_RTC
->  	bool
-> +	default y if (ARCH_EXYNOS && RTC_CLASS)
->  	help
->  	  This will include RTC support for Samsung SoCs. If
->  	  you want to include RTC support for any machine, kindly
-> 
-
-
-Best regards,
-Krzysztof
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
