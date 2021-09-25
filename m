@@ -2,64 +2,80 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE820418027
-	for <lists+linux-rtc@lfdr.de>; Sat, 25 Sep 2021 09:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C48E4184A6
+	for <lists+linux-rtc@lfdr.de>; Sat, 25 Sep 2021 23:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbhIYHHj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 25 Sep 2021 03:07:39 -0400
-Received: from mail.hostpark.net ([212.243.197.30]:33446 "EHLO
-        mail.hostpark.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbhIYHHi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 25 Sep 2021 03:07:38 -0400
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Sat, 25 Sep 2021 03:07:38 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hostpark.net (Postfix) with ESMTP id AF9A0165CB
-        for <linux-rtc@vger.kernel.org>; Sat, 25 Sep 2021 09:00:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=elsoft.ch; h=
-        content-transfer-encoding:content-type:content-type:mime-version
-        :user-agent:date:date:message-id:organization:subject:subject
-        :from:from:received:received; s=sel2011a; t=1632553204; bh=eP9dx
-        Xz5wGrpDp7Emzk4YGDZqx69+0W/qwDBF4zv2Ck=; b=I5BRS7Wy5McYZ56e3um08
-        kxKS4w01oZopVZBoCwlUL1JKWGyyVVG0dUraRaT5tz/FJHVt0knh5hG7sV56Go+d
-        /zpFu8i0ndkX/V6gSMITLAcKcKR5Lz/7a1E4e2P6su6slApiennmaaWBQk774lx6
-        mK89xWnfaiRZAFSEVLRQfg=
-X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
-Received: from mail.hostpark.net ([127.0.0.1])
-        by localhost (mail0.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
-        with ESMTP id 6OjPJKKE0Sgr for <linux-rtc@vger.kernel.org>;
-        Sat, 25 Sep 2021 09:00:04 +0200 (CEST)
-Received: from customer (localhost [127.0.0.1])
-        by mail.hostpark.net (Postfix) with ESMTPA id 7BDE2165C1
-        for <linux-rtc@vger.kernel.org>; Sat, 25 Sep 2021 09:00:01 +0200 (CEST)
-From:   =?UTF-8?Q?David_M=c3=bcller_=28ELSOFT_AG=29?= <d.mueller@elsoft.ch>
-Subject: rtc-pcf8563: STOP bit usage during time update?
-To:     linux-rtc@vger.kernel.org
-Openpgp: preference=signencrypt
-Organization: ELSOFT AG
-Message-ID: <43a688c4-f721-ce3f-f6fc-c1065cc12b68@elsoft.ch>
-Date:   Sat, 25 Sep 2021 09:00:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:52.0) Gecko/20100101 Firefox/52.0
- SeaMonkey/2.49.5
+        id S230014AbhIYV1b (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 25 Sep 2021 17:27:31 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56341 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhIYV1a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 25 Sep 2021 17:27:30 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 40AD3E0002;
+        Sat, 25 Sep 2021 21:25:54 +0000 (UTC)
+Date:   Sat, 25 Sep 2021 23:25:53 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Ramona Alexandra Nechita <ramona.nechita@analog.com>
+Cc:     linux-rtc@vger.kernel.org, a.zummo@towertech.it,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: Specified all the parts for DS1216
+Message-ID: <YU+T4acHxHrbIcNQ@piout.net>
+References: <20210915105309.17225-1-ramona.nechita@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210915105309.17225-1-ramona.nechita@analog.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello
+Hello,
 
-According to the example on page 30 of the EPSON datasheet
-https://support.epson.biz/td/api/doc_check.php?dl=app_RTC-8564JE&lang=en
-for the 8564 version of this chip, the time update sequence is as follows:
+On 15/09/2021 13:53:09+0300, Ramona Alexandra Nechita wrote:
+> Included the parts supported in the description (B/C/D/E/F/H).
+> 
 
-- set CTRLSTS1[STOP] bit to 1
-- update time registers
-- set CTRLSTS1[STOP] bit to 0
+I'm sorry, I don't get the point, those are all the ds1216 as seen on
+https://www.maximintegrated.com/en/products/analog/real-time-clocks/DS1216.html
+so DS1216 is probably enough anywere.
 
-The NXP datasheet is not so explicit regarding STOP bit handling.
+> Signed-off-by: Ramona Alexandra Nechita <ramona.nechita@analog.com>
+> ---
+>  drivers/rtc/Kconfig      | 2 +-
+>  drivers/rtc/rtc-ds1216.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 1adf9f815652..0be9a34e75c8 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -966,7 +966,7 @@ config RTC_DRV_VRTC
+>  	updates are done via IPC calls to the system controller FW.
+>  
+>  config RTC_DRV_DS1216
+> -	tristate "Dallas DS1216"
+> +	tristate "Dallas DS1216B/C/D/E/F/H"
+>  	depends on SNI_RM
+>  	help
+>  	  If you say yes here you get support for the Dallas DS1216 RTC chips.
+> diff --git a/drivers/rtc/rtc-ds1216.c b/drivers/rtc/rtc-ds1216.c
+> index b225bcfef50b..ea276260d962 100644
+> --- a/drivers/rtc/rtc-ds1216.c
+> +++ b/drivers/rtc/rtc-ds1216.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Dallas DS1216 RTC driver
+> + * Dallas DS1216B/C/D/E/F/H RTC driver
+>   *
+>   * Copyright (c) 2007 Thomas Bogendoerfer
+>   *
+> -- 
+> 2.25.1
+> 
 
-Nevertheless I don't see any STOP bit related action in the driver:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/rtc/rtc-pcf8563.c?h=v5.14#n244
-
-Am I overlooking or missing something here?
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
