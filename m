@@ -2,79 +2,292 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2051E4194C1
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Sep 2021 15:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86C6419DD7
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Sep 2021 20:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbhI0NFv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Sep 2021 09:05:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234454AbhI0NFv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 27 Sep 2021 09:05:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE1AB6103B;
-        Mon, 27 Sep 2021 13:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632747853;
-        bh=XhDmfGBIAm78Yx1bOSfDGor0lEcFkq0GhvjaK6fIAyw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gECzdWTnmApJruLqRrCSc1Ua3jpmz6+uPl7VETySQw4JKiVIQSxNVlvJRrF1YH2Lf
-         hUs2sLm6Tm0Zk9U9q10feEDgS4FXCtdLj9vUy55Jjzcw+unwchH1hgBtdrIRAR0T30
-         cpu9wVjT5JDpIv+9TEwCTp8q34pnbrxwEqMD2HcdXHsByJ9kn2s2w6kZauKLcha6Vk
-         3GdoiBC1M9VoIowhdvqt9Ec79vyALNwgJWS9VY5EYT6S/RDsYJeWAOrfmqYSBV6yfL
-         ItEUPSqAxw4Pr1nbh81P3xp3julS6kLpplFxrTiX6zQwZ50ONV7ie2gA648Bv5j3fm
-         QTFIpVVuRiDfg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] rtc: mcp795: Add SPI ID table
-Date:   Mon, 27 Sep 2021 14:02:40 +0100
-Message-Id: <20210927130240.33693-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S235963AbhI0SJR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 Sep 2021 14:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235928AbhI0SJQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Sep 2021 14:09:16 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DC8C061604
+        for <linux-rtc@vger.kernel.org>; Mon, 27 Sep 2021 11:07:38 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id i84so25905441ybc.12
+        for <linux-rtc@vger.kernel.org>; Mon, 27 Sep 2021 11:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YolFVCrzWqJGBIiStEoOBZ3MZ7NnNyNvRsLA4PugcZ4=;
+        b=N4/LuKRExHZ/Ke9/1lT1dORZxc6QJyC/1mxPNC+htXeykWUDoWOZhAcDG0AinlHXS+
+         BiLIOUy+UYwpqDxlWimW/f6c2vm60ZRl16Y09c+WgrhhQAeFPApvDcKMHe1VHGm9LKRl
+         keIVyQY0wZQu2s4xj5f9XsyONEQrgVxrqC7NsnxljjXcvuq6VXaaSInu9A8I6nMFT7OU
+         NZccim8iWq66W8RT8IA4gX7rYWiytfLtIB2op4ZVIdWfD+EcgqdRHrxJqTlDjyMdLoH8
+         ZIlW4hZWDXFqjwUcaVHkV14b20+QuTasEnsKAgUdQSNSnF+q3I41eLKbo8q1YWgBLv+4
+         jLlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YolFVCrzWqJGBIiStEoOBZ3MZ7NnNyNvRsLA4PugcZ4=;
+        b=wmRkOXaxvfXkRTpjcIWqTxWh+PKccMayIxaVe1rMEVDnSRCxQJvWB2TjNaRHAm7HFh
+         UcYwTo9zv/yn3oj1A8JQgJ0i4chV3fjoBOiTTeWqb16Kw9S9oiLfTovzM13Fi31RxA6N
+         cdlxgIMmrdoyy+l63tJLCwxa5jFQBXoRZfIQaXHeebspE9YQoep0ARs90BNJCHNAH3Bs
+         lFT0DduQnVLYd6aYdz1jHMKu1q0lL6kprBVTCE2a8kjBKL8lRefy0pZITnCur+SkwIxE
+         lNyEcKqKWXsY9BK5DEmJ/D+40KRWSELxSOwWxCtwCl79wOAD5/8d6PWeEn0Oh3WRDTRH
+         Pp9A==
+X-Gm-Message-State: AOAM531CGRpPDzBD3w4E/wBYHp4CswC9N5cmCV9ImuXpdI2zud7dm2Ll
+        pkz2CUv67FaB2aP5mUcZ4CggspzykZ3jFOAQu16rqA==
+X-Google-Smtp-Source: ABdhPJxk9waOnE/GEpYsMZa+XW5YCS/TXzMipOQFVXGjZyi0Hb5rxdU/5QmjNVirBYqrwoiRjihGMovnx5H10BTy12I=
+X-Received: by 2002:a25:dd46:: with SMTP id u67mr1424730ybg.295.1632766057145;
+ Mon, 27 Sep 2021 11:07:37 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1219; h=from:subject; bh=XhDmfGBIAm78Yx1bOSfDGor0lEcFkq0GhvjaK6fIAyw=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhUcDi052yiiY/AyKveE+KVrJo2+Ld5z9GOs05QGT0 Jk1js4GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYVHA4gAKCRAk1otyXVSH0JYKB/ 92tDg+OE7sND+KFGKiWbhijOZoQPwrizLi6YxXcE4dOVVb84forKswang318CBZ1YddcgWKsZqCX9J iM8WDNARvbl0w0EKe/yyDbILWU91QTHhxWXEkscAgnqxRNJs/0QRNvNGH9JP7ZU9F7/QC+Iggu102u 2rjKjImU8tT7OI7qSDb6/RxSZtzUiXv+XBJCYN6M8n7KHY6f3CQWNahPn8w+J2y1vwAc7LHs6uxCTN CBI3VWJigOU5k9Gn7ld4Pt9TBy+WzAbbxpFlhD8HnX2ptL30cKU3abc6FNjbC0vVDu+wr/Thx3itCj XBjzf01YG930GuxX/hS5TZ9rrHhOHa
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+References: <20210920190350.3860821-1-willmcvicker@google.com>
+ <7735b09c-cf1c-5e37-a737-9a330fbacf1e@canonical.com> <YUmTwZPqrCfRMekd@google.com>
+ <d6212801-f2a0-a6a7-6154-0f99b57f1c4d@canonical.com> <CAGETcx9wp3cbsehODj=oAd658hF6KNL5Qiy2nVc=7Bxqxxwimw@mail.gmail.com>
+ <5ec72235-add4-d6dd-f89f-ca3941c9878e@canonical.com>
+In-Reply-To: <5ec72235-add4-d6dd-f89f-ca3941c9878e@canonical.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 27 Sep 2021 11:07:00 -0700
+Message-ID: <CAGETcx-b9nPjq2PqUYoXohU-WE1PAPzy4Mz5M99CzNfqvGTOsA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Will McVicker <willmcvicker@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Currently autoloading for SPI devices does not use the DT ID table, it uses
-SPI modalises. Supporting OF modalises is going to be difficult if not
-impractical, an attempt was made but has been reverted, so ensure that
-module autoloading works for this driver by adding an id_table listing the
-SPI IDs for everything.
+On Mon, Sep 27, 2021 at 1:08 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 25/09/2021 04:17, Saravana Kannan wrote:
+> > On Tue, Sep 21, 2021 at 1:25 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >>
+> >> On 21/09/2021 10:11, Lee Jones wrote:
+> >>> On Tue, 21 Sep 2021, Krzysztof Kozlowski wrote:
+> >>>
+> >>>> On 20/09/2021 21:03, Will McVicker wrote:
+> >>>>> This patch series tries to address the issue of ARCH_EXYNOS force selecting
+> >>>>> a handful of drivers without allowing the vendor to override any of the
+> >>>>> default configs. This takes away from the flexibilty of compiling a generic
+> >>>>> kernel with exynos kernel modules. For example, it doesn't allow vendors to
+> >>>>> modularize these drivers out of the core kernel in order to share a generic
+> >>>>> kernel image across multiple devices that require device-specific kernel
+> >>>>> modules.
+> >>>>
+> >>>> You do not address the issue in these patches. The problem you describe
+> >>>> is that drivers are not modules and you are not changing them into modules.
+> >>>
+> >>> The wording is unfortunate.  The reason for this change doesn't have
+> >>> much to do with kernel modules.
+> >>>
+> >>> Let's go back in time 18 months or so when Greg KH submitted this [0]
+> >>> patch, which you Acked.  Greg was trying to solve the problem of not
+> >>> having to enable ARCH_EXYNOS on kernels which are designed to be
+> >>> platform agnostic (sometimes called Generic Kernels).  For some reason
+> >>> SERIAL_SAMSUNG is the only symbol with these dependencies, so the
+> >>> solution seemed simple and straight forward at the time.
+> >>>
+> >>> However, For sound reasons Geert NACKed the patch.
+> >>>
+> >>> Quoting from [1] he says:
+> >>>
+> >>>   "A generic kernel will include Samsung SoC support, hence
+> >>>   PLAT_SAMSUNG or ARCH_EXYNOS will be enabled."
+> >>
+> >> Yes, it's correct reasoning. There is also one more use-case -
+> >> non-upstreamed (out of tree) platform which wants to use Exynos-specific
+> >> drivers. Something like was happening with Apple M1 except that it got
+> >> upstreamed and we do not care much about out-of-tree.
+> >>
+> >>>
+> >>> However, since the entry for ARCH_EXYNOS *insists* on building-in a
+> >>> bunch of other symbols (via 'select') which will be unused in most
+> >>> cases, this is not a currently acceptable approach for many Generic
+> >>> Kernels due to size constraints.
+> >>
+> >> In the mainline kernel there is no such use case. If you want to have
+> >> Exynos-whatever-driver (e.g. SERIAL_SAMSUNG or S3C RTC), you should
+> >> select ARCH_EXYNOS because otherwise it does not make any sense. Zero
+> >> sense. Such kernel won't work.
+> >>
+> >> It makes sense only if there is some other work, hidden here, where
+> >> someone might want to have SERIAL_SAMSUNG or S3C RTC without
+> >> ARCH_EXYNOS. Although GKI is not that work because GKI kernel will
+> >> select ARCH_EXYNOS. It must select ARCH_EXYNOS if it wants to support
+> >> Exynos platforms.
+> >>
+> >> Therefore I expect first to bring this "some other work, hidden here" to
+> >> broader audience, so we can review its use case.
+> >>
+> >>>
+> >>> What this patch does is migrates those symbols from being 'select'ed
+> >>> (always built-in with no recourse) to 'default y'.  Where the former
+> >>> cannot be over-ridden, but the latter can be via a vendor's
+> >>> defconfig/fragment.
+> >>
+> >> It cannot be overridden by vendor fragment because options are not
+> >> visible. You cannot change them.
+> >>
+> >> The patch does nothing in this regard (making them selectable/possible
+> >> to disable), which is why I complained.
+> >>
+> >>>
+> >>> I doubt many (any?) of these symbols can be converted to kernel
+> >>> modules anyway, as they are required very early on in the boot
+> >>> sequence.
+> >>
+> >> True, some could, some not. Also some platforms are set up via
+> >> bootloader, so actually could "survive" till module is loaded from some
+> >> initrd.
+> >
+> > Hi Krzysztof,
+> >
+> > I was trying to chime in, but the discussion got spread out across all
+> > the patches. Since the cover letter seems to have everyone, I thought
+> > I'd reply here. Hope you don't mind. I'll try to respond/chime in on
+> > the various topics that were raised across the patches.
+> >
+> > Yes, the next patch series would To/Cc folks correctly. William simply
+> > forgot to use the --to-cover and --cc-cover options when using git
+> > send-email.
+> >
+> > I agree with you that it doesn't make sense to have ARCH_EXYNOS
+> > enabled but to have all the clock drivers exynos compiled out. Then
+> > one obviously can't boot an exynos platform using that kernel.
+>
+> If downstream kernel does not use any upstream platforms (e.g.
+> Exynos5433 or Exynos7) and has its own drivers for everything, then
+> downstream does not even need ARCH_EXYNOS. Just disable it.
 
-Fixes: 96c8395e2166 ("spi: Revert modalias changes")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/rtc/rtc-mcp795.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+As Geert pointed out in another reply, that prevents the use of
+earlyconsole on an exynos SoC + fully modular generic kernel. Are we
+okay with removing the ARCH_EXYNOS dependency on the early console
+driver now?
 
-diff --git a/drivers/rtc/rtc-mcp795.c b/drivers/rtc/rtc-mcp795.c
-index bad7792b6ca5..0d515b3df571 100644
---- a/drivers/rtc/rtc-mcp795.c
-+++ b/drivers/rtc/rtc-mcp795.c
-@@ -430,12 +430,19 @@ static const struct of_device_id mcp795_of_match[] = {
- MODULE_DEVICE_TABLE(of, mcp795_of_match);
- #endif
- 
-+static const struct spi_device_id mcp795_spi_ids[] = {
-+	{ .name = "mcp795" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, mcp795_spi_ids);
-+
- static struct spi_driver mcp795_driver = {
- 		.driver = {
- 				.name = "rtc-mcp795",
- 				.of_match_table = of_match_ptr(mcp795_of_match),
- 		},
- 		.probe = mcp795_probe,
-+		.id_table = mcp795_spi_ids,
- };
- 
- module_spi_driver(mcp795_driver);
--- 
-2.20.1
+> > I think
+> > William is going to send out a new patch series with a few drivers
+> > modularized. That'll ensure all the common exynos clock code is
+> > modularized and we have a few examples of exynos clock modules.
+>
+> If it works on supported Exynos platforms: awesome!
 
+Yes, that's the idea :) What's the point of sending a module upstream
+if it doesn't work with upstream? And this is where William would need
+help with testing.
+
+> If it does not work: not that good. I understand that downstream or
+> vendor do not want to mainline their SoC drivers and SoC support. Either
+> because HW is too new (do not disclose it) or it is too old (lost
+> interest). It's their right, they do not have to work with mainline on
+> this. However changing mainline kernel in such a case to affect it so
+> you can use your non-upstreamed drivers is wrong.
+
+Since the goal is to have some of the existing clock drivers work as
+modules, we wouldn't be running into this situation above.
+
+> Affecting upstream platforms just because vendor/downstream does not
+> want to mainline some code is unacceptable. Please upstream your drivers
+> and DTS.
+>
+> Everyone else are working like this. NXP, Renesas, Xilinx, TI, Rockchip,
+> AllWinner. Samsung or Google is not special to receive an exception for
+> this.
+>
+> >
+> > Speaking of modules, a fully modularized generic ARM64 kernel where
+> > everything is modularized out and we only load the necessary modules
+> > is a great goal. And this is where I can chime in the most since I
+> > wrote fw_devlink and tested this out. Such a kernel is not
+> > hypothetical. IIRC hikey960 can already do this. There's an upstream
+> > amlogic(?) board that can do this (Kevin Hilman has done that). A more
+> > complex/recent/powerful, but downstream example is the Pixel 5 -- it
+> > has a fully modular kernel. 320+ modules! Including interrupt
+> > controllers, timers, pinctrl and clocks.
+>
+> Awesome! I am in, if it works. :)
+
+Great!
+
+> > I can assure you any of the framework code related to pulling off
+> > booting a fully modular ARM64 kernel is already upstreamed
+> > (fw_devlink, irq framework changes, etc) or sent upstream (timer -- by
+> > a SoC vendor, etc) and being worked on. As for fw_devlink, I've
+> > extended it way past what GKI or Android would need. It would have
+> > been super trivial if all I wanted to do was support Android devices.
+> > I've also upstreamed changes that improve module loading time for all
+> > ARM64 modules. All of this and more upstream work came out of GKI and
+> > our push to be upstream first -- so I think it's reasonable to say the
+> > GKI effort helps and cares to get more work upstreamed.
+>
+> Except UFS driver and recent Linaro work on Exynos850, none of these
+> apply to the vendor discussed here.
+
+I obviously can't force a vendor to upstream their stuff and I can't
+speak for them. However the Android kernel team's goal is to have the
+core Android kernel be the upstream kernel (we are making progress
+every year). This will also have the nice effect that vendor
+downstream drivers written for Android would automatically be
+compatible with upstream and way more likely to get upstreamed.
+
+> > Speaking of GKI, let's not speak of it. It really doesn't matter.
+> > Android is just yet another distribution (albeit a very popular one).
+> > The part that's relevant to upstream/all the other distributions is
+> > the fully modular generic ARM64 kernel and that's what we should focus
+> > on.
+> >
+> > In that context, I think William's attempts are reasonable and I think
+> > he'll be glad to fix up any technical issues that people point out. So
+> > hopefully we can focus on that?
+>
+> Yes, we can focus on that.
+
+Thanks!
+
+> In technical issues, I do not agree to
+> affecting negatively supported platforms just because downstream/vendor
+> does not want to send upstream its drivers.
+>
+> Please upstream your drivers. By "your" I mean all the drivers which you
+> want to enable after disabling ARCH_EXYNOS mainline drivers.
+
+I'm not sure I fully understood this part. But if your point is that
+we shouldn't have a negative impact on hardware supported in upstream
+just so a downstream driver can work, I completely agree with you.
+
+At the same time, it also doesn't make sense to have a negative impact
+on upstream (rejecting patches that are working towards a fully
+modular generic ARM64 kernel) just because it might also help
+downstream drivers. That is like cutting your nose to spite your face.
+
+Also, by taking this position, you are just making it even harder to
+upstream the downstream drivers while also hurting upstream. Which is
+clearly not what we want. Almost all vendors have engineers working
+for them that'd like to see more of their code upstream. Treating them
+as one monolithic "vendor" entity doesn't help. You are just making it
+harder for the pro-upstream engineers to make a case for upstreaming
+their drivers.
+
+
+-Saravana
