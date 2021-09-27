@@ -2,273 +2,262 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF62C418F10
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Sep 2021 08:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB24419065
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Sep 2021 10:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbhI0Gku (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Sep 2021 02:40:50 -0400
-Received: from mail-dm6nam10on2075.outbound.protection.outlook.com ([40.107.93.75]:3232
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232955AbhI0Gks (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 27 Sep 2021 02:40:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YFiBIIWSQNZ6zuv1tsbqUnmS1hxJYQ4o2Ek492PgktVinA9PlhISogIs4pow9dCLq08r83OW8Pid7B6jZHXLfWZ65etABW3TBDVFqB5E/gVUPe6x97DOI9LgOTFbYWfLiEdDloCQZn+QAeFgLPH8XWRCtTNegA806JvOTtjRWOz4PLwQ8Q4OE5CZRGEpYBP5qwc834+8b/Eg0i1UTCk0iE60BO45tpweEYYaWX0bjarlKd3v5hSSHVrrLgaffqNVkj8z8FOLqdXbJELUSfRm2VUNXUHmczcC++WzjhUdX3ebK4vAbdHDTajGCgKWRgi/Mg5U7sIMLbiIOD2qInbp7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=Y374y5IlMRQ7aUgiulltuj5Rk/zq79jL9KOT64z/iMs=;
- b=McoOjxLoMGczYgoG/TNVpjscepXVqQ/XRDMpxNLT3+bC65UN+9V14lMcwbYAK1EIAqm5A1I/8Zdro5Cn0pVC+EOw+OPHMJCA7zozBK+8/pw37KcAaHbKSMdlYRcv/WT2kk9cB4l5kITIWty5LVTfOOonVMf7K9LyVU3qDV6FBu6RVQinw+hjqldZSuInLCwWnicpUimmtftGLEuzs38BCG4OJnZYkHk3Uk7K4rhP2KPnDeWOas9VjKVJHb6Sk6uihJRiwfQyMaMT+LDwIHZmcSNxu/zg20fJhE2cLUpm1SJe8hg2S/rRIzBw6FB6iciseErv+Vv05AFzrrcDaOjWOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=towertech.it smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y374y5IlMRQ7aUgiulltuj5Rk/zq79jL9KOT64z/iMs=;
- b=Qip1pHxfKVrS587Oh9Q5AMnENMr//mJoKen4HUEhvEKinQIVDhB25qS87UQ3eCmjn5H2Vs0RPqq4843bvhMiEGueB5GGOafcJiAOV8JJT9sxMbSg4Ee0bkQZZ34N1U59QBo0RomeBVKMYPv7jW6nJbRrOcvbKqsFSVLFyJOXCck=
-Received: from DM5PR07CA0166.namprd07.prod.outlook.com (2603:10b6:3:ee::32) by
- SJ0PR02MB8768.namprd02.prod.outlook.com (2603:10b6:a03:3d8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.18; Mon, 27 Sep
- 2021 06:39:09 +0000
-Received: from DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:ee:cafe::2a) by DM5PR07CA0166.outlook.office365.com
- (2603:10b6:3:ee::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4544.15 via Frontend
- Transport; Mon, 27 Sep 2021 06:39:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; towertech.it; dkim=none (message not signed)
- header.d=none;towertech.it; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT010.mail.protection.outlook.com (10.13.5.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4544.13 via Frontend Transport; Mon, 27 Sep 2021 06:39:08 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Sun, 26 Sep 2021 23:38:46 -0700
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Sun, 26 Sep 2021 23:38:46 -0700
-Envelope-to: git@xilinx.com,
- a.zummo@towertech.it,
- alexandre.belloni@bootlin.com,
- linux-rtc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [172.23.66.193] (port=60102 helo=xhdsneeli40u.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1mUkHl-00073C-F9; Sun, 26 Sep 2021 23:38:45 -0700
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <michal.simek@xilinx.com>, <sgoud@xilinx.com>,
-        <shubhraj@xilinx.com>
-CC:     <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH V2] rtc: zynqmp: Add calibration set and get support
-Date:   Mon, 27 Sep 2021 12:08:37 +0530
-Message-ID: <20210927063837.38478-1-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        id S233330AbhI0IJz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 Sep 2021 04:09:55 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:34784
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233349AbhI0IJy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Sep 2021 04:09:54 -0400
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7935A406E1
+        for <linux-rtc@vger.kernel.org>; Mon, 27 Sep 2021 08:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632730096;
+        bh=q5WJ36pkYt6Zs2G3Lb2ExKY5tf1guh4Epvr/TI1D0B8=;
+        h=To:Cc:References:From:Subject:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=NZYEXU2yJ9fRRMH0gfM2IgwOtmR0GGl8UsRGPXsnv7d+7F2XReRE0JmJAEV5/Rs4D
+         6NvGaDSDhRzqdfL/s4B/uv/8QACz380Nppd+e0MYvHTZ7+DEuxUwkmfaeKFxsX0iuj
+         /o+SN3kY40dWqWfnASWYmFhZJ9RcvsYl2OsXAnepbMktdyMu3/iR25v5yFDgYyIi6n
+         qInPO8H0VUt+3Re0bitBmvveBtPZS7GbAJ4tjwr/68T1ZJbGdRUQSt/VY/gj0VQ1uj
+         G5LEtJGzXk1uEuyiHlU5XNoEuxUmjb1ohjfctKtv4h3q13aUPp/yXz5UaP1xXb+l/4
+         lzGa0G9J9df2w==
+Received: by mail-lf1-f71.google.com with SMTP id z9-20020a0565120c0900b003fce36c1f74so3041537lfu.9
+        for <linux-rtc@vger.kernel.org>; Mon, 27 Sep 2021 01:08:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q5WJ36pkYt6Zs2G3Lb2ExKY5tf1guh4Epvr/TI1D0B8=;
+        b=XttNJVYKaZmheaUOyK/IKC/S9Qqqqj4K6OQMHuwAofpOnkIEa6NtZk4Ke/5EF+aHYK
+         bXFGPVCNjwVs6cbmAPi+0v6+xfTrHK4g2MjsU3+0h4zuzoM+eItNMvkXIjnLw7HxQVXU
+         kiXB16K6bFbrbMBGdCLAN/ylon5IokxYtaHK3Yyq/VEhS/Vp9vEWsvltTkpAvDwRb/vb
+         HQffeG4w2evUWgdFfAVMwMVHBzpokODDorT1UtXEU8vYqR9qTOxJZdAfP8hH4dGQEavz
+         ugf22uBaxs7gn22AaLL3BKknyCVqNZf08630votwloRaeoIF9pS5SpmQ74/8wg9h5/r9
+         k5zQ==
+X-Gm-Message-State: AOAM531ewbeeJK0D+Dxo1neHGSbVYwtpzduUPkpWH8HDA8hl3psFgA9R
+        XyyTICHuA24Po/8tI6oMz4IC/wB63amWf6Yrakp/j2Ozs/sqy9mITKg0i9U4VLa55iSmJ7FTE99
+        pKAoNdLxTkdDhG2FwDcZGIwjY54dBJv0FRupG9w==
+X-Received: by 2002:a05:6512:b29:: with SMTP id w41mr23823304lfu.508.1632730095615;
+        Mon, 27 Sep 2021 01:08:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzO9D+MFvfo7QqvZbpj2VJouLw+R/EGuIqlkcKPx+aer2ePkAwgx+q+94o9gCaoeKkhveY6Ww==
+X-Received: by 2002:a05:6512:b29:: with SMTP id w41mr23822816lfu.508.1632730087936;
+        Mon, 27 Sep 2021 01:08:07 -0700 (PDT)
+Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 8sm1905053ljf.39.2021.09.27.01.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Sep 2021 01:08:07 -0700 (PDT)
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Will McVicker <willmcvicker@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kevin Hilman <khilman@baylibre.com>
+References: <20210920190350.3860821-1-willmcvicker@google.com>
+ <7735b09c-cf1c-5e37-a737-9a330fbacf1e@canonical.com>
+ <YUmTwZPqrCfRMekd@google.com>
+ <d6212801-f2a0-a6a7-6154-0f99b57f1c4d@canonical.com>
+ <CAGETcx9wp3cbsehODj=oAd658hF6KNL5Qiy2nVc=7Bxqxxwimw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
+Message-ID: <5ec72235-add4-d6dd-f89f-ca3941c9878e@canonical.com>
+Date:   Mon, 27 Sep 2021 10:08:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c2491918-ef46-47db-384b-08d98181828e
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB8768:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB8768A617B49D808900356DC6AFA79@SJ0PR02MB8768.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gzqfqZZjgC+QaFJRHicmsd+w9O+wLcTw4CfJQiLXHOQzJ/tMWb7HFAdVdzHBlgy3ALteSNwGMTySkgR8EIJOg05Y2ch0F9XL1tZjeYRXrjei6pPEsx+hKjooIZIBmXQFFpAgoJteQmHxqUto3a3hS6VlhRwLkDIuefwdhUo2E4k7MINuMbtFwZETxbFMxNXkfVQimPgr5cd04dgv/GsgfjL24GwOKMKonQxO5LjCxEREyvaTN2evYzJXARfJXdKS3Qy8p22/J0s9YFF5Nk9U1N+ImfOTKDKXOvvZNlId8u0yI8z8aFC9UsnAOqS7tL/9wnhBGu2SwWmZTp34O4yB9HkwrZj5N/fznqYU9VR3IwpCRx2IU17b8eEzlocCsasiGzlr3DWZ6otPa1U+Z915DhSyEdBm7hg8Dv6H5yE0V4pF7yfCxDr2x08VCpWOT7eceZn7WE7ErQ8h9J7XQILmvblrVuMNNNRisyRhli6EfNJChEEXpsr6hXnkEmnJqUXtARTMgYP5E8a7nIgVtOMaQAMxmyWany7hpau7cfwizWQ1xwoWqkqWjMBMWFlTPDBQYFHYI2HI7iEaUogoCMVgFD4CNtz7D+N2a4uPQfqF8Y1ddBbY2SAvPgiUSZmMHF1FwEu4YVxVXrkkHsM91TN5YBgygVQkL9bfcVJaIpI5+76aHUgXfI4r5hr464hoAPEIXedbc71lL/JCIxSuqdFQqOaMAF1y+P4kzGtlVm3eBwoXKN/MZefOeb92/mza3fs7
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(6666004)(36756003)(54906003)(110136005)(336012)(36860700001)(2616005)(186003)(44832011)(1076003)(47076005)(83380400001)(26005)(426003)(9786002)(8936002)(4326008)(316002)(70206006)(36906005)(107886003)(82310400003)(70586007)(6636002)(8676002)(2906002)(7696005)(508600001)(7636003)(356005)(5660300002)(102446001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2021 06:39:08.9849
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2491918-ef46-47db-384b-08d98181828e
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT010.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8768
+In-Reply-To: <CAGETcx9wp3cbsehODj=oAd658hF6KNL5Qiy2nVc=7Bxqxxwimw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Zynqmp RTC controller has a calibration feature to compensate
-time deviation due to input clock inaccuracy.
-Set and get calibration API's are used for setting and getting
-calibration value from the controller calibration register.
+On 25/09/2021 04:17, Saravana Kannan wrote:
+> On Tue, Sep 21, 2021 at 1:25 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 21/09/2021 10:11, Lee Jones wrote:
+>>> On Tue, 21 Sep 2021, Krzysztof Kozlowski wrote:
+>>>
+>>>> On 20/09/2021 21:03, Will McVicker wrote:
+>>>>> This patch series tries to address the issue of ARCH_EXYNOS force selecting
+>>>>> a handful of drivers without allowing the vendor to override any of the
+>>>>> default configs. This takes away from the flexibilty of compiling a generic
+>>>>> kernel with exynos kernel modules. For example, it doesn't allow vendors to
+>>>>> modularize these drivers out of the core kernel in order to share a generic
+>>>>> kernel image across multiple devices that require device-specific kernel
+>>>>> modules.
+>>>>
+>>>> You do not address the issue in these patches. The problem you describe
+>>>> is that drivers are not modules and you are not changing them into modules.
+>>>
+>>> The wording is unfortunate.  The reason for this change doesn't have
+>>> much to do with kernel modules.
+>>>
+>>> Let's go back in time 18 months or so when Greg KH submitted this [0]
+>>> patch, which you Acked.  Greg was trying to solve the problem of not
+>>> having to enable ARCH_EXYNOS on kernels which are designed to be
+>>> platform agnostic (sometimes called Generic Kernels).  For some reason
+>>> SERIAL_SAMSUNG is the only symbol with these dependencies, so the
+>>> solution seemed simple and straight forward at the time.
+>>>
+>>> However, For sound reasons Geert NACKed the patch.
+>>>
+>>> Quoting from [1] he says:
+>>>
+>>>   "A generic kernel will include Samsung SoC support, hence
+>>>   PLAT_SAMSUNG or ARCH_EXYNOS will be enabled."
+>>
+>> Yes, it's correct reasoning. There is also one more use-case -
+>> non-upstreamed (out of tree) platform which wants to use Exynos-specific
+>> drivers. Something like was happening with Apple M1 except that it got
+>> upstreamed and we do not care much about out-of-tree.
+>>
+>>>
+>>> However, since the entry for ARCH_EXYNOS *insists* on building-in a
+>>> bunch of other symbols (via 'select') which will be unused in most
+>>> cases, this is not a currently acceptable approach for many Generic
+>>> Kernels due to size constraints.
+>>
+>> In the mainline kernel there is no such use case. If you want to have
+>> Exynos-whatever-driver (e.g. SERIAL_SAMSUNG or S3C RTC), you should
+>> select ARCH_EXYNOS because otherwise it does not make any sense. Zero
+>> sense. Such kernel won't work.
+>>
+>> It makes sense only if there is some other work, hidden here, where
+>> someone might want to have SERIAL_SAMSUNG or S3C RTC without
+>> ARCH_EXYNOS. Although GKI is not that work because GKI kernel will
+>> select ARCH_EXYNOS. It must select ARCH_EXYNOS if it wants to support
+>> Exynos platforms.
+>>
+>> Therefore I expect first to bring this "some other work, hidden here" to
+>> broader audience, so we can review its use case.
+>>
+>>>
+>>> What this patch does is migrates those symbols from being 'select'ed
+>>> (always built-in with no recourse) to 'default y'.  Where the former
+>>> cannot be over-ridden, but the latter can be via a vendor's
+>>> defconfig/fragment.
+>>
+>> It cannot be overridden by vendor fragment because options are not
+>> visible. You cannot change them.
+>>
+>> The patch does nothing in this regard (making them selectable/possible
+>> to disable), which is why I complained.
+>>
+>>>
+>>> I doubt many (any?) of these symbols can be converted to kernel
+>>> modules anyway, as they are required very early on in the boot
+>>> sequence.
+>>
+>> True, some could, some not. Also some platforms are set up via
+>> bootloader, so actually could "survive" till module is loaded from some
+>> initrd.
+> 
+> Hi Krzysztof,
+> 
+> I was trying to chime in, but the discussion got spread out across all
+> the patches. Since the cover letter seems to have everyone, I thought
+> I'd reply here. Hope you don't mind. I'll try to respond/chime in on
+> the various topics that were raised across the patches.
+> 
+> Yes, the next patch series would To/Cc folks correctly. William simply
+> forgot to use the --to-cover and --cc-cover options when using git
+> send-email.
+> 
+> I agree with you that it doesn't make sense to have ARCH_EXYNOS
+> enabled but to have all the clock drivers exynos compiled out. Then
+> one obviously can't boot an exynos platform using that kernel.
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
-Changes in V2:
--Removed unused macro.
--Updated code with review comments.
----
- drivers/rtc/rtc-zynqmp.c | 100 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 83 insertions(+), 17 deletions(-)
+If downstream kernel does not use any upstream platforms (e.g.
+Exynos5433 or Exynos7) and has its own drivers for everything, then
+downstream does not even need ARCH_EXYNOS. Just disable it.
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index f440bb52be92..3731ddfbd90f 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -36,10 +36,15 @@
- #define RTC_OSC_EN		BIT(24)
- #define RTC_BATT_EN		BIT(31)
- 
--#define RTC_CALIB_DEF		0x198233
-+#define RTC_CALIB_DEF		0x8000
- #define RTC_CALIB_MASK		0x1FFFFF
- #define RTC_ALRM_MASK          BIT(1)
- #define RTC_MSEC               1000
-+#define RTC_FR_MASK		0xF0000
-+#define RTC_FR_MAX_TICKS	16
-+#define RTC_OFFSET_MAX		150000
-+#define RTC_OFFSET_MIN		-150000
-+#define RTC_PPB			1000000000LL
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
-@@ -61,13 +66,6 @@ static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	 */
- 	new_time = rtc_tm_to_time64(tm) + 1;
- 
--	/*
--	 * Writing into calibration register will clear the Tick Counter and
--	 * force the next second to be signaled exactly in 1 second period
--	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
--
- 	writel(new_time, xrtcdev->reg_base + RTC_SET_TM_WR);
- 
- 	/*
-@@ -174,14 +172,76 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev *xrtcdev)
- 	rtc_ctrl |= RTC_BATT_EN;
- 	writel(rtc_ctrl, xrtcdev->reg_base + RTC_CTRL);
- 
--	/*
--	 * Based on crystal freq of 33.330 KHz
--	 * set the seconds counter and enable, set fractions counter
--	 * to default value suggested as per design spec
--	 * to correct RTC delay in frequency over period of time.
-+	/* Update calibvalue */
-+	xrtcdev->calibval = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+}
-+
-+static int xlnx_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	long offset_val = 0;
-+	unsigned int tick_mult = RTC_PPB / (xrtcdev->calibval & RTC_TICK_MASK);
-+
-+	/* Offset with seconds ticks */
-+	offset_val = xrtcdev->calibval & RTC_TICK_MASK;
-+	offset_val = offset_val - RTC_CALIB_DEF;
-+	offset_val = offset_val * tick_mult;
-+
-+	/* Offset with fractional ticks */
-+	if (xrtcdev->calibval & RTC_FR_EN)
-+		offset_val += ((xrtcdev->calibval & RTC_FR_MASK) >> RTC_FR_DATSHIFT)
-+			* (tick_mult / RTC_FR_MAX_TICKS);
-+	*offset = offset_val;
-+
-+	return 0;
-+}
-+
-+static int xlnx_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	short int  max_tick;
-+	unsigned char fract_tick = 0;
-+	unsigned int calibval;
-+	int fract_offset;
-+	unsigned int tick_mult = RTC_PPB / (xrtcdev->calibval & RTC_TICK_MASK);
-+
-+	/* Make sure offset value is within supported range */
-+	if (offset < RTC_OFFSET_MIN || offset > RTC_OFFSET_MAX)
-+		return -ERANGE;
-+
-+	/* Number ticks for given offset */
-+	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
-+
-+	/* Number fractional ticks for given offset */
-+	if (fract_offset) {
-+		if (fract_offset < 0) {
-+			fract_offset = fract_offset + tick_mult;
-+			max_tick--;
-+		}
-+		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-+			for (fract_tick = 1; fract_tick < 16; fract_tick++) {
-+				if (fract_offset <=
-+				    (fract_tick *
-+				     (tick_mult / RTC_FR_MAX_TICKS)))
-+					break;
-+			}
-+		}
-+	}
-+
-+	/* Zynqmp RTC uses second and fractional tick
-+	 * counters for compensation
- 	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+	calibval = max_tick + RTC_CALIB_DEF;
-+
-+	if (fract_tick)
-+		calibval |= RTC_FR_EN;
-+
-+	calibval |= (fract_tick << RTC_FR_DATSHIFT);
-+
-+	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+	xrtcdev->calibval = calibval;
-+
-+	return 0;
- }
- 
- static const struct rtc_class_ops xlnx_rtc_ops = {
-@@ -190,6 +250,8 @@ static const struct rtc_class_ops xlnx_rtc_ops = {
- 	.read_alarm	  = xlnx_rtc_read_alarm,
- 	.set_alarm	  = xlnx_rtc_set_alarm,
- 	.alarm_irq_enable = xlnx_rtc_alarm_irq_enable,
-+	.read_offset	  = xlnx_rtc_read_offset,
-+	.set_offset	  = xlnx_rtc_set_offset,
- };
- 
- static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
-@@ -215,6 +277,7 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
- {
- 	struct xlnx_rtc_dev *xrtcdev;
- 	int ret;
-+	unsigned int calibval;
- 
- 	xrtcdev = devm_kzalloc(&pdev->dev, sizeof(*xrtcdev), GFP_KERNEL);
- 	if (!xrtcdev)
-@@ -256,9 +319,12 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
- 	}
- 
- 	ret = of_property_read_u32(pdev->dev.of_node, "calibration",
--				   &xrtcdev->calibval);
-+				   &calibval);
- 	if (ret)
--		xrtcdev->calibval = RTC_CALIB_DEF;
-+		calibval = RTC_CALIB_DEF;
-+	ret = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+	if (!ret)
-+		writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
- 
- 	xlnx_init_rtc(xrtcdev);
- 
--- 
-2.17.1
+> I think
+> William is going to send out a new patch series with a few drivers
+> modularized. That'll ensure all the common exynos clock code is
+> modularized and we have a few examples of exynos clock modules.
 
+If it works on supported Exynos platforms: awesome!
+If it does not work: not that good. I understand that downstream or
+vendor do not want to mainline their SoC drivers and SoC support. Either
+because HW is too new (do not disclose it) or it is too old (lost
+interest). It's their right, they do not have to work with mainline on
+this. However changing mainline kernel in such a case to affect it so
+you can use your non-upstreamed drivers is wrong.
+
+Affecting upstream platforms just because vendor/downstream does not
+want to mainline some code is unacceptable. Please upstream your drivers
+and DTS.
+
+Everyone else are working like this. NXP, Renesas, Xilinx, TI, Rockchip,
+AllWinner. Samsung or Google is not special to receive an exception for
+this.
+
+> 
+> Speaking of modules, a fully modularized generic ARM64 kernel where
+> everything is modularized out and we only load the necessary modules
+> is a great goal. And this is where I can chime in the most since I
+> wrote fw_devlink and tested this out. Such a kernel is not
+> hypothetical. IIRC hikey960 can already do this. There's an upstream
+> amlogic(?) board that can do this (Kevin Hilman has done that). A more
+> complex/recent/powerful, but downstream example is the Pixel 5 -- it
+> has a fully modular kernel. 320+ modules! Including interrupt
+> controllers, timers, pinctrl and clocks.
+
+Awesome! I am in, if it works. :)
+
+> I can assure you any of the framework code related to pulling off
+> booting a fully modular ARM64 kernel is already upstreamed
+> (fw_devlink, irq framework changes, etc) or sent upstream (timer -- by
+> a SoC vendor, etc) and being worked on. As for fw_devlink, I've
+> extended it way past what GKI or Android would need. It would have
+> been super trivial if all I wanted to do was support Android devices.
+> I've also upstreamed changes that improve module loading time for all
+> ARM64 modules. All of this and more upstream work came out of GKI and
+> our push to be upstream first -- so I think it's reasonable to say the
+> GKI effort helps and cares to get more work upstreamed.
+
+Except UFS driver and recent Linaro work on Exynos850, none of these
+apply to the vendor discussed here.
+
+> Speaking of GKI, let's not speak of it. It really doesn't matter.
+> Android is just yet another distribution (albeit a very popular one).
+> The part that's relevant to upstream/all the other distributions is
+> the fully modular generic ARM64 kernel and that's what we should focus
+> on.
+> 
+> In that context, I think William's attempts are reasonable and I think
+> he'll be glad to fix up any technical issues that people point out. So
+> hopefully we can focus on that?
+
+Yes, we can focus on that. In technical issues, I do not agree to
+affecting negatively supported platforms just because downstream/vendor
+does not want to send upstream its drivers.
+
+Please upstream your drivers. By "your" I mean all the drivers which you
+want to enable after disabling ARCH_EXYNOS mainline drivers.
+
+Best regards,
+Krzysztof
