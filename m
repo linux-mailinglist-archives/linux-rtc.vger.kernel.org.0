@@ -2,197 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F229C419F93
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Sep 2021 21:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8979541AA51
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Sep 2021 10:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbhI0T4j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Sep 2021 15:56:39 -0400
-Received: from mail-vs1-f50.google.com ([209.85.217.50]:35487 "EHLO
-        mail-vs1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235711AbhI0T4j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Sep 2021 15:56:39 -0400
-Received: by mail-vs1-f50.google.com with SMTP id f18so19525067vsp.2;
-        Mon, 27 Sep 2021 12:55:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/qYkJdocNMf64y4DQpFrkh7ip501uJ0j8evhtC6TmAM=;
-        b=0fIY7wtBFrQO+SJMseuDECznpzHwKHekKh0hLdqAmfbIwq0B6mYPQzgMDu2YxuPqtf
-         amtLQq4QS89LY5IjgacQpn7QsqiNBPPSeqcrEz1/F0i09mGdaA37xnPPoJ1AsLpbmLoA
-         NiJNivANXR9p/MGRcc4tdm77YIkdyhfG9MSo32tSYU6o+KF4yM366uT6qPOQnwfCI0CO
-         4dpj/lq7ugfLv/SmhXgs1WJGZarmOZ4YRmzCa+zzYdriHtgkZ5vY96nbVny+VnqFl7qa
-         pxXCvGQnEio1lyLqX9NfneZVH0XFjOj6xS5pdReCzKAXTj56Og/cQfoCrzBuaQICP/tf
-         OaXQ==
-X-Gm-Message-State: AOAM531kFbQND+BtLqfVYl43pKZXCMPWNYEx6Bxi0KBY5dVNsYimYBPH
-        4jUp+sQNEt02YeqhtElmm+rgzXgxYg6dcXeXx2g=
-X-Google-Smtp-Source: ABdhPJwPJmXU/Uf1MApSAaImmnQ49AfoZTTvSJ9EYE8DADK73laAy0lsWW8ZIuxb0TKgP4nWS1QiGkDkmY8p1587B1s=
-X-Received: by 2002:a67:cc1c:: with SMTP id q28mr1689183vsl.37.1632772500240;
- Mon, 27 Sep 2021 12:55:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210920190350.3860821-1-willmcvicker@google.com>
- <7735b09c-cf1c-5e37-a737-9a330fbacf1e@canonical.com> <YUmTwZPqrCfRMekd@google.com>
- <d6212801-f2a0-a6a7-6154-0f99b57f1c4d@canonical.com> <CAGETcx9wp3cbsehODj=oAd658hF6KNL5Qiy2nVc=7Bxqxxwimw@mail.gmail.com>
- <5ec72235-add4-d6dd-f89f-ca3941c9878e@canonical.com> <CAGETcx-b9nPjq2PqUYoXohU-WE1PAPzy4Mz5M99CzNfqvGTOsA@mail.gmail.com>
-In-Reply-To: <CAGETcx-b9nPjq2PqUYoXohU-WE1PAPzy4Mz5M99CzNfqvGTOsA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 27 Sep 2021 21:54:48 +0200
-Message-ID: <CAMuHMdXKcbBEpXbbc8eret8oOndwnqRq0d17e5qWpRmLH1SBgg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Will McVicker <willmcvicker@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S239482AbhI1IF7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Sep 2021 04:05:59 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:57467 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239321AbhI1IF3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 04:05:29 -0400
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.west.internal (Postfix) with ESMTP id 356ED2B01458;
+        Tue, 28 Sep 2021 04:03:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 28 Sep 2021 04:03:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=0ug29t+efHhaBUw2Dp50mQebuU
+        OvAPftYFzNvqEV2qY=; b=QVNNBVh9PXfkYoaPdq9UUH7QOZikJTT0VB7bfUzlVN
+        5kcwLcrWCHGHWmxvu3e9it/qR3/pSzem2vNQeVVD0P9glN/50Lxt6SIZpAlt4DtF
+        Mruxk+kZlcpWlEnFM+G1E+iY0+8ZvD+H8l9reXpYbco0nKnG/WVn7j2V+ungOGVS
+        Ei3DduyUQ5pWdm9fxrL5ifmMH4kB5pVRvA2QxVceQ/FSNW6X6R0rFD7gruy6sK5o
+        XkENSberJhGMlDczdaGmjuYYTdmEUKhx45gmvfbPnFfKVpotRvZHkgVTs4sK3YtY
+        OBu0x5VBCMVzuuhPJJkOjHIT2rho/Iyy9G46t/Dcdj+A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=0ug29t+efHhaBUw2D
+        p50mQebuUOvAPftYFzNvqEV2qY=; b=JX4ZcJtpfl6gTkwFqylB5d2NbjKwNa2It
+        jJ9LgcUH8reebwd3/pllIGuRI7GTwz3ojhvnjOUWBZm3bLbX4xgbPsyHl+TDeIWr
+        wSjymAzhwnXKf3TTj/cvTqSkWVBrRCJfEzNbxQP1nF/+T/aSsZZrBOHQFm34aSsv
+        Hs+ts+4kdkH8VpegsfyooIsl5KuCFKVp+jGjIrLbuaBgpG35R3KNTjskAWgx1/k6
+        GgqgJ2rKhZ73MPRUD1gTqGUXt642SvLiClrtTsF1k3gdboARhgTOeT7OPxSSt0gQ
+        n8JddxFhJzGoKJgDmuuZuLQQ/gqsaf3xuhOv/qDJY2ItVnGX6t+2A==
+X-ME-Sender: <xms:WMxSYT6ar2jXCSH9m5EN3hgx9CR1mIZYJImga9SwWvhaJh1N87bWOQ>
+    <xme:WMxSYY58dpSujoIicoyNo1EDj09DMvUXh6pV2egWzPPPDUM0GTNd2iX0OXBhT7q2-
+    Pld_GxloL_neckM7Q>
+X-ME-Received: <xmr:WMxSYaf0opjKVon3ama2KnshCSIfM5ztrFhPRWrBDheYKGg0LXax_C_0BRUmA3ooLabsbWxhR3Q0EEUnK68Y0ObFR7mssLM9T40h1446wQ38mdR7zifmuMFSurS3ueXfXHEz_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejledguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepieetkefhheduudfgledtudefjeejfeegveehkeeufffhhfejkeehieff
+    tdevtdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:WMxSYUKhBwbhTYkNP9kb18soWuUFS_NWqwbMlATvyyIzomGHPG4nqQ>
+    <xmx:WMxSYXK5PI0U8huuhXGA4arvriLF-dorPeCT8dACRhJwOQKHIJVxgQ>
+    <xmx:WMxSYdz9dQP9FSowHY6Z5yuRR31gZPKpDmBa16jnSZnCsoH32x6hGg>
+    <xmx:WMxSYWYPtiL_bp4mTAtSUHmF-FVnWt06seTvfdkFKt2_wdSAcKzxKaBNJzc>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Sep 2021 04:03:36 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v2 0/9] clk: sunxi-ng: Add a RTC CCU driver
+Date:   Tue, 28 Sep 2021 03:03:26 -0500
+Message-Id: <20210928080335.36706-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Saravana,
+This patch series adds a CCU driver for the RTC in the H616, R329 and
+D1. The extra patches at the end of this series show how it would be
+explanded to additional hardware variants.
 
-On Mon, Sep 27, 2021 at 8:07 PM Saravana Kannan <saravanak@google.com> wrote:
-> On Mon, Sep 27, 2021 at 1:08 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@canonical.com> wrote:
-> > On 25/09/2021 04:17, Saravana Kannan wrote:
-> > > On Tue, Sep 21, 2021 at 1:25 AM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@canonical.com> wrote:
-> > >> On 21/09/2021 10:11, Lee Jones wrote:
-> > >>> On Tue, 21 Sep 2021, Krzysztof Kozlowski wrote:
-> > >>>> On 20/09/2021 21:03, Will McVicker wrote:
-> > >>>>> This patch series tries to address the issue of ARCH_EXYNOS force selecting
-> > >>>>> a handful of drivers without allowing the vendor to override any of the
-> > >>>>> default configs. This takes away from the flexibilty of compiling a generic
-> > >>>>> kernel with exynos kernel modules. For example, it doesn't allow vendors to
-> > >>>>> modularize these drivers out of the core kernel in order to share a generic
-> > >>>>> kernel image across multiple devices that require device-specific kernel
-> > >>>>> modules.
-> > >>>>
-> > >>>> You do not address the issue in these patches. The problem you describe
-> > >>>> is that drivers are not modules and you are not changing them into modules.
-> > >>>
-> > >>> The wording is unfortunate.  The reason for this change doesn't have
-> > >>> much to do with kernel modules.
-> > >>>
-> > >>> Let's go back in time 18 months or so when Greg KH submitted this [0]
-> > >>> patch, which you Acked.  Greg was trying to solve the problem of not
-> > >>> having to enable ARCH_EXYNOS on kernels which are designed to be
-> > >>> platform agnostic (sometimes called Generic Kernels).  For some reason
-> > >>> SERIAL_SAMSUNG is the only symbol with these dependencies, so the
-> > >>> solution seemed simple and straight forward at the time.
-> > >>>
-> > >>> However, For sound reasons Geert NACKed the patch.
-> > >>>
-> > >>> Quoting from [1] he says:
-> > >>>
-> > >>>   "A generic kernel will include Samsung SoC support, hence
-> > >>>   PLAT_SAMSUNG or ARCH_EXYNOS will be enabled."
-> > >>
-> > >> Yes, it's correct reasoning. There is also one more use-case -
-> > >> non-upstreamed (out of tree) platform which wants to use Exynos-specific
-> > >> drivers. Something like was happening with Apple M1 except that it got
-> > >> upstreamed and we do not care much about out-of-tree.
-> > >>
-> > >>>
-> > >>> However, since the entry for ARCH_EXYNOS *insists* on building-in a
-> > >>> bunch of other symbols (via 'select') which will be unused in most
-> > >>> cases, this is not a currently acceptable approach for many Generic
-> > >>> Kernels due to size constraints.
-> > >>
-> > >> In the mainline kernel there is no such use case. If you want to have
-> > >> Exynos-whatever-driver (e.g. SERIAL_SAMSUNG or S3C RTC), you should
-> > >> select ARCH_EXYNOS because otherwise it does not make any sense. Zero
-> > >> sense. Such kernel won't work.
-> > >>
-> > >> It makes sense only if there is some other work, hidden here, where
-> > >> someone might want to have SERIAL_SAMSUNG or S3C RTC without
-> > >> ARCH_EXYNOS. Although GKI is not that work because GKI kernel will
-> > >> select ARCH_EXYNOS. It must select ARCH_EXYNOS if it wants to support
-> > >> Exynos platforms.
-> > >>
-> > >> Therefore I expect first to bring this "some other work, hidden here" to
-> > >> broader audience, so we can review its use case.
-> > >>
-> > >>>
-> > >>> What this patch does is migrates those symbols from being 'select'ed
-> > >>> (always built-in with no recourse) to 'default y'.  Where the former
-> > >>> cannot be over-ridden, but the latter can be via a vendor's
-> > >>> defconfig/fragment.
-> > >>
-> > >> It cannot be overridden by vendor fragment because options are not
-> > >> visible. You cannot change them.
-> > >>
-> > >> The patch does nothing in this regard (making them selectable/possible
-> > >> to disable), which is why I complained.
-> > >>
-> > >>>
-> > >>> I doubt many (any?) of these symbols can be converted to kernel
-> > >>> modules anyway, as they are required very early on in the boot
-> > >>> sequence.
-> > >>
-> > >> True, some could, some not. Also some platforms are set up via
-> > >> bootloader, so actually could "survive" till module is loaded from some
-> > >> initrd.
-> > >
-> > > I was trying to chime in, but the discussion got spread out across all
-> > > the patches. Since the cover letter seems to have everyone, I thought
-> > > I'd reply here. Hope you don't mind. I'll try to respond/chime in on
-> > > the various topics that were raised across the patches.
-> > >
-> > > Yes, the next patch series would To/Cc folks correctly. William simply
-> > > forgot to use the --to-cover and --cc-cover options when using git
-> > > send-email.
-> > >
-> > > I agree with you that it doesn't make sense to have ARCH_EXYNOS
-> > > enabled but to have all the clock drivers exynos compiled out. Then
-> > > one obviously can't boot an exynos platform using that kernel.
-> >
-> > If downstream kernel does not use any upstream platforms (e.g.
-> > Exynos5433 or Exynos7) and has its own drivers for everything, then
-> > downstream does not even need ARCH_EXYNOS. Just disable it.
->
-> As Geert pointed out in another reply, that prevents the use of
-> earlyconsole on an exynos SoC + fully modular generic kernel. Are we
-> okay with removing the ARCH_EXYNOS dependency on the early console
-> driver now?
+The driver is intended to support the existing binding used for the H6,
+but also an updated binding which includes all RTC input clocks.
 
-IMHO not in upstream, as there is no upstream use yet for not having
-the dependencies.
+A future patch series could add functionality to the driver to manage
+IOSC calibration at boot and during suspend/resume.
 
-Even if there was, I think it is good to have dependencies like
-ARCH_EXYNOS, as they let us partition the (19000, as Arnd said recently)
-Kconfig symbols into better manageable groups.  Without these, we cannot
-do better than "depends on ARM || ARM64 || COMPILE_TEST".
+It may be possible to support all of these hardware variants in the
+existing RTC clock driver and avoid some duplicate code, but I'm
+concerned about the complexity there, without any of the CCU
+abstraction.
 
-Greg says that's what defconfig files are for, but the arm64 policy is
-to have a single defconfig file only.  But thanks to the ARCH_* symbol,
-you can take arm64 defconfig, disable the ARCH_* symbols not applicable
-to your platform, and have a good start for a config file tailored to
-your platform. Note that works for the arm multi_v*_defconfigs, too.
+This series is currently based on top of the other series I just sent
+("[PATCH v2 0/4] clk: sunxi-ng: Module support"), but I can rebase it
+elsewhere.
 
-Gr{oetje,eeting}s,
+Changes since v1:
+  - Rebase on v2 of the module support series.
+  - Combine "const"s to "enum" in the DT binding compatible property.
+  - Properly update the DT binding clocks and clock-names properties.
+  - Load the CCU driver from the RTC driver, not as an OF provider.
 
-                        Geert
+Samuel Holland (9):
+  dt-bindings: rtc: sun6i: Clean up repetition
+  dt-bindings: rtc: sun6i: Add H616, R329, and D1 support
+  clk: sunxi-ng: div: Add macro using CLK_HW_INIT_FW_NAME
+  clk: sunxi-ng: mux: Add macro using CLK_HW_INIT_PARENTS_DATA
+  clk: sunxi-ng: mux: Allow muxes to have keys
+  rtc: sun6i: Allow probing without an early clock provider
+  clk: sunxi-ng: Add support for the sun6i RTC clocks
+  [DO NOT MERGE] clk: sunxi-ng: sun6i-rtc: Add support for H6
+  [DO NOT MERGE] clk: sunxi-ng: sun6i-rtc: Add support for T5
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |  84 +++-
+ drivers/clk/sunxi-ng/Kconfig                  |   5 +
+ drivers/clk/sunxi-ng/Makefile                 |   2 +
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.c          | 467 ++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.h          |  16 +
+ drivers/clk/sunxi-ng/ccu_common.h             |   1 +
+ drivers/clk/sunxi-ng/ccu_div.h                |  14 +
+ drivers/clk/sunxi-ng/ccu_gate.c               |   3 +
+ drivers/clk/sunxi-ng/ccu_mux.c                |   7 +
+ drivers/clk/sunxi-ng/ccu_mux.h                |  28 ++
+ drivers/rtc/rtc-sun6i.c                       |  35 +-
+ include/dt-bindings/clock/sun6i-rtc.h         |  10 +
+ include/linux/clk/sunxi-ng.h                  |   9 +
+ 13 files changed, 648 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
+ create mode 100644 include/dt-bindings/clock/sun6i-rtc.h
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.31.1
+
