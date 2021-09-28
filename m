@@ -2,56 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E40041BB4B
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Sep 2021 01:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8603341BB52
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Sep 2021 01:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243456AbhI1X6j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Sep 2021 19:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S243526AbhI1X6v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Sep 2021 19:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243428AbhI1X6i (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 19:58:38 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E921C061746
-        for <linux-rtc@vger.kernel.org>; Tue, 28 Sep 2021 16:56:58 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id u5-20020a63d3450000b029023a5f6e6f9bso597267pgi.21
-        for <linux-rtc@vger.kernel.org>; Tue, 28 Sep 2021 16:56:58 -0700 (PDT)
+        with ESMTP id S243405AbhI1X6n (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 19:58:43 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F0AC061755
+        for <linux-rtc@vger.kernel.org>; Tue, 28 Sep 2021 16:57:00 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id 16-20020ac85710000000b002a6f5f98101so2838063qtw.1
+        for <linux-rtc@vger.kernel.org>; Tue, 28 Sep 2021 16:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=A8qNzCNapMxw2jtmX47pKK84lMS41znzFOgk5hTsT4g=;
-        b=rEo7ZDk5e74TCZBbSEUciWvSKxRQt3AIRdoY/S4aknlZO6vJvuU71n003Fc6U8WYth
-         0kHrD/+d368nV17Q41I0GkP3xTCrlv8locgEp+y/zMuLznOMvYWEN+PPQznKHGoR1qwW
-         5ud0uIR1ymaCY67XvJWUyz4g6h/cV3RcVB5tL1z/9Fg24KaHkZ25ldxkUJcT2SmvXUY+
-         kZzVFsAcvtCEQAq6Vpjq5TdtIUyJh6TM6caJoAuvOJ7N2eOxGyi6a69qKunyA9Q98+EP
-         pgCavuUeDMhoN70PAK08NwPgPm6cuBogJkWbzdO+vzmo9n3wqNgV7No4YROJsrnwFxYo
-         O1Ig==
+        bh=vr0wJpYVwT3Wf5W9z3LnDmKiASoPIRkm5Y4SX8T/B5k=;
+        b=kVj2HdM4TMb0AZXD1FVelYqajEn71wPdxCt1MylacuFcuLnC28OvEM6vzlnJnrNIfQ
+         dtZDs/s8QIyZAFdlN8dSTFjJNzgRhbHRsK+Yy2UNBNgHAJxxeF82Zxx13tleu7Gq5vSI
+         f6n5rGfRw6Zwmc4jARyZrnxwzIxDOzX3YuemP1rs2aVbnmnkuE5nXxz1CPXsQvjOAW99
+         /FDrzGBP4EHHeAP+vl7lQ2ZCFwtXlryWd6Q1A4n3XEVmqnqcsnflNQwsm+HdIj9tBG5X
+         MpYtsMrMB8cwoIm5LgbGqlwSll3rWTy4IuyIfj+N77lzL6s1D1tO9AJ9NnAmq97KvpWH
+         VfPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=A8qNzCNapMxw2jtmX47pKK84lMS41znzFOgk5hTsT4g=;
-        b=j8alcCgWL6cGn/8Qvb5/Ipdybt9KK/sTCen2CBbl+Oul8YB+00SSoUnU7Rn2J9YxHc
-         w63vU1NNrErd95ZhRC0YZW/pgY8YWjjeBwIxZm0dyq+jEFtZfaA5pEwJEI4ioqU/5vOL
-         z/zl5DTiSiFuAeu115pEOVouI5emDo4mqk1rdUjrCFPSO9TUhOj16ExZe/8O8wgRbe76
-         rvtvlQNVU6lYVaB1oBVBaGGjxQNXepBC/MPSCaQ6/j+jDX6R0rhzxkNcgAGH6ssyT5d8
-         RJyISlw1NPDoy3bMzEapCNUS3jPEzW9uxAkbn/nEsUpeeJ4j9xx1V+tg83fs+x6eSoAV
-         l+pw==
-X-Gm-Message-State: AOAM532vnH6kcR89rXPSN8IMk7chfUrUBg17j6SmVIxh45GnrUTlqC6F
-        4ZPSR2VZYPbORk2nwL6+Em2GJ9VfDJdnM8X7YFM=
-X-Google-Smtp-Source: ABdhPJwRgu3AvnXGjTVwA8JT01BkJv7hKMCFR0qy8+4P5LRuXfn4cDD3Trc0z1P2c4Oy7QYgSjVQOIaQWfZ46jPwhNE=
+        bh=vr0wJpYVwT3Wf5W9z3LnDmKiASoPIRkm5Y4SX8T/B5k=;
+        b=ucB98m4o8Sa1cpbLCKn/Gnq8BYgYBeUpNgKeM178AWLvXKMRqLTpnJwHImKIsrZKX3
+         GzQL9iohMOmSMU+ms3Y6/iE2f4ExbJEo9CW/LS8cLff2ggEffkx+Z1Zo61v3wwo567iI
+         JK7zX/rl7r+ZIPvweUSdLEE4yn9VkLEXQsT3e+gi0JxsHBds+rvT4eUHPL5Or2kEBT9u
+         3K/Wk7TBU6S6LGQYpubC271lwkvhJJkkQKOJe4GNukdOvntXc/sejkT7HZfAK6pGFsA7
+         GSTmXsTYOXiOBxc+8zzT+8wERFgRQuhXURvWAtxTMpYRVNUS5yeHBWaN4sydmbVQRxBu
+         E/Dw==
+X-Gm-Message-State: AOAM531ck1ZzWzR585o0EUMG9H5NctiPWKQQDLb25OqGEtp0/OhfU86g
+        NzFv//0RfJ6lXGbO7e514AwTkPVtAggtg6cdsX0=
+X-Google-Smtp-Source: ABdhPJzVWvnFzcOenwV1KFMPgwyLHTY5xI3xxVNlgn4OW95Xjc374MNho/692ny5HZjJ8ThoLixN4aO9xsiIYMO9SYs=
 X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:902:7e05:b0:13d:e01a:be5f with
- SMTP id b5-20020a1709027e0500b0013de01abe5fmr243419plm.56.1632873417456; Tue,
- 28 Sep 2021 16:56:57 -0700 (PDT)
-Date:   Tue, 28 Sep 2021 23:56:20 +0000
+ (user=willmcvicker job=sendgmr) by 2002:a05:6214:3ac:: with SMTP id
+ m12mr8367504qvy.9.1632873419629; Tue, 28 Sep 2021 16:56:59 -0700 (PDT)
+Date:   Tue, 28 Sep 2021 23:56:21 +0000
 In-Reply-To: <20210928235635.1348330-1-willmcvicker@google.com>
-Message-Id: <20210928235635.1348330-4-willmcvicker@google.com>
+Message-Id: <20210928235635.1348330-5-willmcvicker@google.com>
 Mime-Version: 1.0
 References: <20210928235635.1348330-1-willmcvicker@google.com>
 X-Mailer: git-send-email 2.33.0.685.g46640cef36-goog
-Subject: [PATCH v2 03/12] clk: samsung: add support for CPU clocks
+Subject: [PATCH v2 04/12] clk: samsung: exynos5433: update apollo and atlas
+ clock probing
 From:   Will McVicker <willmcvicker@google.com>
 To:     Russell King <linux@armlinux.org.uk>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -80,115 +80,171 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Adds 'struct samsung_cpu_clock' and correpsonding code to the samsung
-common clk driver. This allows drivers to register their CPU clocks with
-the samsung_cmu_register_one() API.
+Use the samsung common clk driver to initialize and probe the apollo and
+atlas clocks. This removes their dedicated init functions and uses the
+platform driver to handle the probing.
 
 Signed-off-by: Will McVicker <willmcvicker@google.com>
 ---
- drivers/clk/samsung/clk-cpu.c | 26 ++++++++++++++++++++++++++
- drivers/clk/samsung/clk.c     |  2 ++
- drivers/clk/samsung/clk.h     | 26 ++++++++++++++++++++++++++
- 3 files changed, 54 insertions(+)
+ drivers/clk/samsung/clk-exynos5433.c | 130 ++++++++++-----------------
+ 1 file changed, 49 insertions(+), 81 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-cpu.c b/drivers/clk/samsung/clk-cpu.c
-index 00ef4d1b0888..b5017934fc41 100644
---- a/drivers/clk/samsung/clk-cpu.c
-+++ b/drivers/clk/samsung/clk-cpu.c
-@@ -469,3 +469,29 @@ int __init exynos_register_cpu_clock(struct samsung_clk_provider *ctx,
- 	kfree(cpuclk);
- 	return ret;
- }
-+
-+void samsung_clk_register_cpu(struct samsung_clk_provider *ctx,
-+		const struct samsung_cpu_clock *list, unsigned int nr_clk)
-+{
-+	unsigned int idx;
-+	unsigned int num_cfgs;
-+	struct clk *parent_clk, *alt_parent_clk;
-+	const struct clk_hw *parent_clk_hw = NULL;
-+	const struct clk_hw *alt_parent_clk_hw = NULL;
-+
-+	for (idx = 0; idx < nr_clk; idx++, list++) {
-+		/* find count of configuration rates in cfg */
-+		for (num_cfgs = 0; list->cfg[num_cfgs].prate != 0; )
-+			num_cfgs++;
-+
-+		parent_clk = __clk_lookup(list->parent_name);
-+		if (parent_clk)
-+			parent_clk_hw = __clk_get_hw(parent_clk);
-+		alt_parent_clk = __clk_lookup(list->alt_parent_name);
-+		if (alt_parent_clk)
-+			alt_parent_clk_hw = __clk_get_hw(alt_parent_clk);
-+
-+		exynos_register_cpu_clock(ctx, list->id, list->name, parent_clk_hw,
-+				alt_parent_clk_hw, list->offset, list->cfg, num_cfgs, list->flags);
-+	}
-+}
-diff --git a/drivers/clk/samsung/clk.c b/drivers/clk/samsung/clk.c
-index 1949ae7851b2..336243c6f120 100644
---- a/drivers/clk/samsung/clk.c
-+++ b/drivers/clk/samsung/clk.c
-@@ -378,6 +378,8 @@ struct samsung_clk_provider * __init samsung_cmu_register_one(
- 		samsung_clk_extended_sleep_init(reg_base,
- 			cmu->clk_regs, cmu->nr_clk_regs,
- 			cmu->suspend_regs, cmu->nr_suspend_regs);
-+	if (cmu->cpu_clks)
-+		samsung_clk_register_cpu(ctx, cmu->cpu_clks, cmu->nr_cpu_clks);
+diff --git a/drivers/clk/samsung/clk-exynos5433.c b/drivers/clk/samsung/clk-exynos5433.c
+index f203074d858b..b45f6a65ba64 100644
+--- a/drivers/clk/samsung/clk-exynos5433.c
++++ b/drivers/clk/samsung/clk-exynos5433.c
+@@ -3675,47 +3675,28 @@ static const struct exynos_cpuclk_cfg_data exynos5433_apolloclk_d[] __initconst
+ 	{  0 },
+ };
  
- 	samsung_clk_of_add_provider(np, ctx);
- 
-diff --git a/drivers/clk/samsung/clk.h b/drivers/clk/samsung/clk.h
-index c1e1a6b2f499..a52a38cc1740 100644
---- a/drivers/clk/samsung/clk.h
-+++ b/drivers/clk/samsung/clk.h
-@@ -271,6 +271,27 @@ struct samsung_pll_clock {
- 	__PLL(_typ, _id, _name, _pname, CLK_GET_RATE_NOCACHE, _lock,	\
- 	      _con, _rtable)
- 
-+struct samsung_cpu_clock {
-+	unsigned int		id;
-+	const char		*name;
-+	const char		*parent_name;
-+	const char		*alt_parent_name;
-+	unsigned long		flags;
-+	int			offset;
-+	const struct exynos_cpuclk_cfg_data *cfg;
+-static void __init exynos5433_cmu_apollo_init(struct device_node *np)
+-{
+-	void __iomem *reg_base;
+-	struct samsung_clk_provider *ctx;
+-	struct clk_hw **hws;
+-
+-	reg_base = of_iomap(np, 0);
+-	if (!reg_base) {
+-		panic("%s: failed to map registers\n", __func__);
+-		return;
+-	}
+-
+-	ctx = samsung_clk_init(np, reg_base, APOLLO_NR_CLK);
+-	if (!ctx) {
+-		panic("%s: unable to allocate ctx\n", __func__);
+-		return;
+-	}
+-
+-	samsung_clk_register_pll(ctx, apollo_pll_clks,
+-				 ARRAY_SIZE(apollo_pll_clks), reg_base);
+-	samsung_clk_register_mux(ctx, apollo_mux_clks,
+-				 ARRAY_SIZE(apollo_mux_clks));
+-	samsung_clk_register_div(ctx, apollo_div_clks,
+-				 ARRAY_SIZE(apollo_div_clks));
+-	samsung_clk_register_gate(ctx, apollo_gate_clks,
+-				  ARRAY_SIZE(apollo_gate_clks));
+-
+-	hws = ctx->clk_data.hws;
+-
+-	exynos_register_cpu_clock(ctx, CLK_SCLK_APOLLO, "apolloclk",
+-		hws[CLK_MOUT_APOLLO_PLL], hws[CLK_MOUT_BUS_PLL_APOLLO_USER], 0x200,
+-		exynos5433_apolloclk_d, ARRAY_SIZE(exynos5433_apolloclk_d),
+-		CLK_CPU_HAS_E5433_REGS_LAYOUT);
+-
+-	samsung_clk_sleep_init(reg_base, apollo_clk_regs,
+-			       ARRAY_SIZE(apollo_clk_regs));
+-
+-	samsung_clk_of_add_provider(np, ctx);
+-}
+-CLK_OF_DECLARE(exynos5433_cmu_apollo, "samsung,exynos5433-cmu-apollo",
+-		exynos5433_cmu_apollo_init);
++static const struct samsung_cpu_clock apollo_cpu_clks[] __initconst = {
++	CPU_CLK(CLK_SCLK_APOLLO, "apolloclk", "mout_apollo_pll",
++			"mout_bus_pll_apollo_user",
++			CLK_CPU_HAS_E5433_REGS_LAYOUT, 0x200,
++			exynos5433_apolloclk_d),
 +};
 +
-+#define CPU_CLK(_id, _name, _pname, _apname, _flags, _offset, _cfg) \
-+	{							    \
-+		.id		  = _id,			    \
-+		.name		  = _name,			    \
-+		.parent_name	  = _pname,			    \
-+		.alt_parent_name  = _apname,			    \
-+		.flags		  = _flags,			    \
-+		.offset		  = _offset,			    \
-+		.cfg		  = _cfg,			    \
-+	}
-+
- struct samsung_clock_reg_cache {
- 	struct list_head node;
- 	void __iomem *reg_base;
-@@ -301,6 +322,9 @@ struct samsung_cmu_info {
- 	unsigned int nr_fixed_factor_clks;
- 	/* total number of clocks with IDs assigned*/
- 	unsigned int nr_clk_ids;
-+	/* list of cpu clocks and respective count */
-+	const struct samsung_cpu_clock *cpu_clks;
-+	unsigned int nr_cpu_clks;
++static const struct samsung_cmu_info apollo_cmu_info __initconst = {
++	.pll_clks	= apollo_pll_clks,
++	.nr_pll_clks	= ARRAY_SIZE(apollo_pll_clks),
++	.mux_clks	= apollo_mux_clks,
++	.nr_mux_clks	= ARRAY_SIZE(apollo_mux_clks),
++	.div_clks	= apollo_div_clks,
++	.nr_div_clks	= ARRAY_SIZE(apollo_div_clks),
++	.gate_clks	= apollo_gate_clks,
++	.nr_gate_clks	= ARRAY_SIZE(apollo_gate_clks),
++	.cpu_clks	= apollo_cpu_clks,
++	.nr_cpu_clks	= ARRAY_SIZE(apollo_cpu_clks),
++	.nr_clk_ids	= APOLLO_NR_CLK,
++	.clk_regs	= apollo_clk_regs,
++	.nr_clk_regs	= ARRAY_SIZE(apollo_clk_regs),
++};
  
- 	/* list and number of clocks registers */
- 	const unsigned long *clk_regs;
-@@ -350,6 +374,8 @@ extern void __init samsung_clk_register_gate(struct samsung_clk_provider *ctx,
- extern void __init samsung_clk_register_pll(struct samsung_clk_provider *ctx,
- 			const struct samsung_pll_clock *pll_list,
- 			unsigned int nr_clk, void __iomem *base);
-+extern void __init samsung_clk_register_cpu(struct samsung_clk_provider *ctx,
-+		const struct samsung_cpu_clock *list, unsigned int nr_clk);
+ /*
+  * Register offset definitions for CMU_ATLAS
+@@ -3932,47 +3913,28 @@ static const struct exynos_cpuclk_cfg_data exynos5433_atlasclk_d[] __initconst =
+ 	{  0 },
+ };
  
- extern struct samsung_clk_provider __init *samsung_cmu_register_one(
- 			struct device_node *,
+-static void __init exynos5433_cmu_atlas_init(struct device_node *np)
+-{
+-	void __iomem *reg_base;
+-	struct samsung_clk_provider *ctx;
+-	struct clk_hw **hws;
+-
+-	reg_base = of_iomap(np, 0);
+-	if (!reg_base) {
+-		panic("%s: failed to map registers\n", __func__);
+-		return;
+-	}
+-
+-	ctx = samsung_clk_init(np, reg_base, ATLAS_NR_CLK);
+-	if (!ctx) {
+-		panic("%s: unable to allocate ctx\n", __func__);
+-		return;
+-	}
+-
+-	samsung_clk_register_pll(ctx, atlas_pll_clks,
+-				 ARRAY_SIZE(atlas_pll_clks), reg_base);
+-	samsung_clk_register_mux(ctx, atlas_mux_clks,
+-				 ARRAY_SIZE(atlas_mux_clks));
+-	samsung_clk_register_div(ctx, atlas_div_clks,
+-				 ARRAY_SIZE(atlas_div_clks));
+-	samsung_clk_register_gate(ctx, atlas_gate_clks,
+-				  ARRAY_SIZE(atlas_gate_clks));
+-
+-	hws = ctx->clk_data.hws;
+-
+-	exynos_register_cpu_clock(ctx, CLK_SCLK_ATLAS, "atlasclk",
+-		hws[CLK_MOUT_ATLAS_PLL], hws[CLK_MOUT_BUS_PLL_ATLAS_USER], 0x200,
+-		exynos5433_atlasclk_d, ARRAY_SIZE(exynos5433_atlasclk_d),
+-		CLK_CPU_HAS_E5433_REGS_LAYOUT);
+-
+-	samsung_clk_sleep_init(reg_base, atlas_clk_regs,
+-			       ARRAY_SIZE(atlas_clk_regs));
++static const struct samsung_cpu_clock atlas_cpu_clks[] __initconst = {
++	CPU_CLK(CLK_SCLK_ATLAS, "atlasclk", "mout_atlas_pll",
++			"mout_bus_pll_atlas_user",
++			CLK_CPU_HAS_E5433_REGS_LAYOUT, 0x200,
++			exynos5433_atlasclk_d),
++};
+ 
+-	samsung_clk_of_add_provider(np, ctx);
+-}
+-CLK_OF_DECLARE(exynos5433_cmu_atlas, "samsung,exynos5433-cmu-atlas",
+-		exynos5433_cmu_atlas_init);
++static const struct samsung_cmu_info atlas_cmu_info __initconst = {
++	.pll_clks	= atlas_pll_clks,
++	.nr_pll_clks	= ARRAY_SIZE(atlas_pll_clks),
++	.mux_clks	= atlas_mux_clks,
++	.nr_mux_clks	= ARRAY_SIZE(atlas_mux_clks),
++	.div_clks	= atlas_div_clks,
++	.nr_div_clks	= ARRAY_SIZE(atlas_div_clks),
++	.gate_clks	= atlas_gate_clks,
++	.nr_gate_clks	= ARRAY_SIZE(atlas_gate_clks),
++	.cpu_clks	= atlas_cpu_clks,
++	.nr_cpu_clks	= ARRAY_SIZE(atlas_cpu_clks),
++	.nr_clk_ids	= ATLAS_NR_CLK,
++	.clk_regs	= atlas_clk_regs,
++	.nr_clk_regs	= ARRAY_SIZE(atlas_clk_regs),
++};
+ 
+ /*
+  * Register offset definitions for CMU_MSCL
+@@ -5700,6 +5662,12 @@ static const struct of_device_id exynos5433_cmu_of_match[] = {
+ 	}, {
+ 		.compatible = "samsung,exynos5433-cmu-imem",
+ 		.data = &imem_cmu_info,
++	}, {
++		.compatible = "samsung,exynos5433-cmu-atlas",
++		.data = &atlas_cmu_info,
++	}, {
++		.compatible = "samsung,exynos5433-cmu-apollo",
++		.data = &apollo_cmu_info,
+ 	}, {
+ 	},
+ };
 -- 
 2.33.0.685.g46640cef36-goog
 
