@@ -2,58 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE9D41AA4B
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Sep 2021 10:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621A841AA5B
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Sep 2021 10:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239462AbhI1IF5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Sep 2021 04:05:57 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:36803 "EHLO
+        id S239469AbhI1IGI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Sep 2021 04:06:08 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:36755 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239313AbhI1IF3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 04:05:29 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 3E71D2B01482;
-        Tue, 28 Sep 2021 04:03:46 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S239324AbhI1IFa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 04:05:30 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 6EB672B01619;
+        Tue, 28 Sep 2021 04:03:48 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 28 Sep 2021 04:03:47 -0400
+  by compute3.internal (MEProxy); Tue, 28 Sep 2021 04:03:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=l6+f8N/o4CzHv
-        n8mnmbz2zIJFwh4u7TbPKw9aQRkUvM=; b=n5eU77gF7m3rbPoQ6DuuZfycVPMtJ
-        UY7eLzE/Q2nQkcEUTOu7BmHb3OoBdTNkngxNZKfgzMsi9jDIGYau4+3lgwQlcMeu
-        L6/rz/tV8DNj4i8p4LIDk1gdaKbsx4rRkIIKkLaUdyMspICIfKzB2Wbn1+N6IDxi
-        PwqxbheWhGsHj4JkkjlVcrWa7LwpLV/BYUEYOGHooGGbppTssw/OIB2ok8k1w2e6
-        8v8+IFqJ9qEC7B5FoRN4wMElUNJ7TobnnHsYqw4JKTYMrLgt54j6Fi3pMeWNTQQa
-        Wy4MLIYuE2qQaDGN9K8LoKv3pSeI80Orvr/d70g9VVhD0SL1xK61Rr/5A==
+        :mime-version:content-transfer-encoding; s=fm3; bh=QgH4NWp1cwKin
+        oSU/DCR2ZQ5c69368eYkorZC4IC6nA=; b=l7yQfD4Vq8aTGBTn5WQZJl+NLUFpU
+        zLbYv2tZ+C+y4Fq+6/qLQR50CPGZYNIAGDCLtYB37rfTf2HPfG5DJNE3RbkNIbKn
+        7IcWvH8KpXq7lejQ14Ka4tQI6oyDVj31tbcJVv+2p7WNR+lanAUTaRsIqljUExb/
+        g9g+030cCC9b68gfGbhjbbOqLAHyqAzarv7JFI67WjZkaklwGR3422vwgGxTP1fg
+        OMNKILVARhSt2F3s80xVK1bHQiki9A3Jaw7+SD3gdqzjvvp5TNt7QMJnAbl6yeTs
+        80cpBVCuEtzUt3M6yBwe0i5fqvuf3/59HJBHYj1lvwOfwx14bQin1MK4g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=l6+f8N/o4CzHvn8mnmbz2zIJFwh4u7TbPKw9aQRkUvM=; b=kWc/DHWt
-        bsK7M+veN52q/bybsVtsKK3EcGgSJ65PgKTUaNfb3777IiiGm/oeKSKSsGWicHCO
-        /uA6fCfst491/f6m7RYffh1gFJee9uWxZ7es15CdbW646l+CBuEqIjw8euPzhGBV
-        j1h3fxrrYhfUuughYVnuq5h6mL7RcJ/h34vksmnQPjYqVuy7aQ1cScHccESFDH8j
-        CLHCJcOGtWeepUVhSMQP5A4qVgqW6bdZxYkp+cu4zriPhAisR9OOs9wh2OQNi3KF
-        OW5ZJetVAiVo6adOS7M8wn4QQmpoZyMKJhXxDOfZINcRpfWbmgiZq9nEb2f8y5PY
-        ocq0E1jhYB/lzw==
-X-ME-Sender: <xms:YcxSYedCYdJmgmupv0ygmKVwxto49-tPUe9UCAgKkoe2KzGW42t9TA>
-    <xme:YcxSYYMibzyzQMn8YF3Tbdr-U-C97_zsI6jB23DKiLMXDxFUB85oy575JcSVGqSlh
-    a76GXsF5DOw8CMmvQ>
-X-ME-Received: <xmr:YcxSYfi7d_bVuJM3dWgwj5YcjZU1DzL0G_6Bgg2-jPiHE9ZO-fwLnFHhQzg-dZpxBCpWsZjrYvD2pRTNS7rEpW0WXyubzGz1FL6JzdqV99bP3z5wOFGsy6V9Orx4AVu6MNkxow>
+        fm3; bh=QgH4NWp1cwKinoSU/DCR2ZQ5c69368eYkorZC4IC6nA=; b=OkO4r9kw
+        +Q+RSemvmgeGoD6gOI+jb0RRzFPHYyZXyYvUC2jX2J3DMFmaWwXMx1fzZCwBGMZY
+        dD6wzX0VyWDb0exvt6e72G5gLlQ2kcDb+BnuELTR1q5VHwMUiiecRK8rZZXCOX03
+        0a8HGpLCWyu5VaMdtrVe5k1yFUniwtdMbQKVKm7IqHUJn8x4Z/Rxcbyr7NRSBqrB
+        nN3OcTlpaqc4kKG48ythFF53NtGpgveS52y/2/zPpIur5+5EB+C26CMdRhKXF3b0
+        r26Hsb8cvYFchy2uDWBZVJVgCUHsInP09JKaDwPztaK+9oe0EOy0bbOJ+jyC7VDq
+        QnWgZdmTsECOrg==
+X-ME-Sender: <xms:Y8xSYbh5MyIQ7qS9JI1lJ25U2VgIIOAQi-GgzWCRwmmXd_M1c3iNcw>
+    <xme:Y8xSYYA_3NxSZoLnl_hMkj6elabJBXlFn1FDjR4P11TPlHN8Uj7Ct90oZvy7Xg8xD
+    rOO3ZVGTQIn47L7fQ>
+X-ME-Received: <xmr:Y8xSYbFhNGzHV5wKPduobUnG71BQiG26AmEkOvbikL5skKguyHGKIJUocU8M8aKQpCLV7bJs1Hu04FVZ8YEmOh6-rOj6LEYiNGL87w2Iz9qBhT9lLwV2V6t6I5zQwp003RCzdA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudejledguddvfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
     vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
     ftrfgrthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheej
-    vdfgjeehueeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrh
+    vdfgjeehueeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:YcxSYb9EXyGj3qpGOS_4BYS3lMBStzSJJgPyUoYTeFS0PJMQ_OKcug>
-    <xmx:YcxSYaujqwu-rBo8tkUX0TqgKLby1euQ5ApG9-s8cpLhqvbsY6N4Zw>
-    <xmx:YcxSYSHuqtm05NAUJj7uZYCVHu2j30DSTN9IWcPsehs7_KqnZrnH_g>
-    <xmx:YcxSYfN6X3kpCCCIbqKRgjtLB9pQLBYn2s3Za0_VJrkqNB744sjUhVzpgTs>
+X-ME-Proxy: <xmx:Y8xSYYQKIvS3StnKhebDLA91RSGlhoKXKGcsNemVZRQ84uyDBXUGlQ>
+    <xmx:Y8xSYYzW5O1qlshDCe0Ghshpkw6iUPiXHau6v5HEjArHHNdElJQpbg>
+    <xmx:Y8xSYe69J5XHKDtYkAVsDfUolgSpYYINqdlR_6iQ0b7oFdX4S_yI5w>
+    <xmx:ZMxSYUgnXAgWnmuZcPWRezc6mIBP7ddg098e7qobci6nX6qFRbb7CofH2lc>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Sep 2021 04:03:45 -0400 (EDT)
+ 28 Sep 2021 04:03:47 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 4/9] clk: sunxi-ng: mux: Add macro using CLK_HW_INIT_PARENTS_DATA
-Date:   Tue, 28 Sep 2021 03:03:30 -0500
-Message-Id: <20210928080335.36706-5-samuel@sholland.org>
+Subject: [PATCH v2 5/9] clk: sunxi-ng: mux: Allow muxes to have keys
+Date:   Tue, 28 Sep 2021 03:03:31 -0500
+Message-Id: <20210928080335.36706-6-samuel@sholland.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210928080335.36706-1-samuel@sholland.org>
 References: <20210928080335.36706-1-samuel@sholland.org>
@@ -78,38 +78,78 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Some muxes need the flexibility to specify a combination of internal
-parents (using .hw) and external parents (using .fw_name). Support
-this with a version of the SUNXI_CCU_MUX_WITH_GATE macro that uses
-CLK_HW_INIT_PARENTS_DATA to provide the parent information.
+The muxes in the RTC can only be updated when setting a key field to a
+specific value. Add a feature flag to denote muxes with this property.
+
+Since so far the key value is always the same, it does not need to be
+provided separately for each mux.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 Changes since v1:
   - None.
 
- drivers/clk/sunxi-ng/ccu_mux.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/clk/sunxi-ng/ccu_common.h |  1 +
+ drivers/clk/sunxi-ng/ccu_mux.c    |  7 +++++++
+ drivers/clk/sunxi-ng/ccu_mux.h    | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
 
+diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu_common.h
+index 98a1834b58bb..fbf16c6b896d 100644
+--- a/drivers/clk/sunxi-ng/ccu_common.h
++++ b/drivers/clk/sunxi-ng/ccu_common.h
+@@ -17,6 +17,7 @@
+ #define CCU_FEATURE_LOCK_REG		BIT(5)
+ #define CCU_FEATURE_MMC_TIMING_SWITCH	BIT(6)
+ #define CCU_FEATURE_SIGMA_DELTA_MOD	BIT(7)
++#define CCU_FEATURE_KEY_FIELD		BIT(8)
+ 
+ /* MMC timing mode switch bit */
+ #define CCU_MMC_NEW_TIMING_MODE		BIT(30)
+diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mux.c
+index e8149f3c2324..da5ad4b87440 100644
+--- a/drivers/clk/sunxi-ng/ccu_mux.c
++++ b/drivers/clk/sunxi-ng/ccu_mux.c
+@@ -12,6 +12,8 @@
+ #include "ccu_gate.h"
+ #include "ccu_mux.h"
+ 
++#define CCU_MUX_KEY_VALUE		0x16aa0000
++
+ static u16 ccu_mux_get_prediv(struct ccu_common *common,
+ 			      struct ccu_mux_internal *cm,
+ 			      int parent_index)
+@@ -188,6 +190,11 @@ int ccu_mux_helper_set_parent(struct ccu_common *common,
+ 	spin_lock_irqsave(common->lock, flags);
+ 
+ 	reg = readl(common->base + common->reg);
++
++	/* The key field always reads as zero. */
++	if (common->features & CCU_FEATURE_KEY_FIELD)
++		reg |= CCU_MUX_KEY_VALUE;
++
+ 	reg &= ~GENMASK(cm->width + cm->shift - 1, cm->shift);
+ 	writel(reg | (index << cm->shift), common->base + common->reg);
+ 
 diff --git a/drivers/clk/sunxi-ng/ccu_mux.h b/drivers/clk/sunxi-ng/ccu_mux.h
-index e31efc509b3d..f0e3094f29e4 100644
+index f0e3094f29e4..1758dcc82ca6 100644
 --- a/drivers/clk/sunxi-ng/ccu_mux.h
 +++ b/drivers/clk/sunxi-ng/ccu_mux.h
-@@ -72,6 +72,20 @@ struct ccu_mux {
- 	SUNXI_CCU_MUX_TABLE_WITH_GATE(_struct, _name, _parents, NULL,	\
- 				      _reg, _shift, _width, 0, _flags)
+@@ -86,6 +86,20 @@ struct ccu_mux {
+ 		}							\
+ 	}
  
-+#define SUNXI_CCU_MUX_DATA_WITH_GATE(_struct, _name, _parents, _reg,	\
-+				     _shift, _width, _gate, _flags)	\
++#define SUNXI_CCU_MUX_HW_WITH_KEY(_struct, _name, _parents, _reg,	\
++				  _shift, _width, _flags)		\
 +	struct ccu_mux _struct = {					\
-+		.enable	= _gate,					\
 +		.mux	= _SUNXI_CCU_MUX(_shift, _width),		\
 +		.common	= {						\
 +			.reg		= _reg,				\
-+			.hw.init	= CLK_HW_INIT_PARENTS_DATA(_name, \
-+								   _parents, \
-+								   &ccu_mux_ops, \
-+								   _flags), \
++			.features	= CCU_FEATURE_KEY_FIELD,	\
++			.hw.init	= CLK_HW_INIT_PARENTS_HW(_name,	\
++								 _parents, \
++								 &ccu_mux_ops, \
++								 _flags), \
 +		}							\
 +	}
 +
