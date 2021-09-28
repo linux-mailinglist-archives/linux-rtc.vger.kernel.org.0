@@ -2,90 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D4441B0EB
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Sep 2021 15:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622F141B114
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Sep 2021 15:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241439AbhI1Ngu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 28 Sep 2021 09:36:50 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:44766
+        id S240995AbhI1Nsj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 28 Sep 2021 09:48:39 -0400
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:45458
         "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241533AbhI1Ngd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 09:36:33 -0400
-Received: from [10.172.193.212] (1.general.cking.uk.vpn [10.172.193.212])
+        by vger.kernel.org with ESMTP id S241007AbhI1Nsf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 28 Sep 2021 09:48:35 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 16CDC40CEE;
-        Tue, 28 Sep 2021 13:34:50 +0000 (UTC)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 19D29405E4;
+        Tue, 28 Sep 2021 13:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632836090;
-        bh=LthWjnlRqwPVsS/SaAlB15xuPGLGuLfciTawY1djQSY=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=rjtC0iVxro3HDDb+ajvexNya1mRfJj0n7ePicasiTxDHVlsEnB+eJxugdJFHJDdN+
-         wnayh9SkmpmSOHAHlK9tGX3iuAXOuVW+gQBIstMINUfwtPDbUyit+fwaWW9pB9SWXS
-         LZDOhyQLvKd2ktLsY2b6AzyhOQeBNzr5/BL+UFulSWWoDiZM8ANJRuhNEyKkbKs39G
-         my6YrA3JXSXCCdIlOqs9OwlN+NplKaKBYKDuhgTbhSW3QXeIJ0J8NMfqqCGlGasvB8
-         5LYmkXNN5uhiaD0brBhx28+jbhc/mQM7yUuQay+6Q0H0A0TIEiiFWewPmAkqTotz/X
-         aJisN56dq9mWw==
-Subject: Re: [PATCH][next] rtc: msc313: Fix unintentional sign extension issue
- on left shift of a u16
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Daniel Palmer <daniel@thingy.jp>,
+        s=20210705; t=1632836815;
+        bh=CVPzKw2Lf6fMiEtRUXtIUtsODqt2nAe+y+A62+2Z9IY=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=DSXRZ0wptf2RiwWyAD0QPn2zdUgT89tEBpTwHBqCgEPUx48yTDEulxBLFXUCgpICR
+         tyZJKsR+RUsxjSTytHcs6u/Vg7q9b75ycMuuVTICwi9Attq658OoC8bak2feTQFX9c
+         h7GVZiR8+MJuFNvP9m/PJ6j91YF+/3jMw208n/QuA2IGg1BGwN/36KitkUzRiR3Vqm
+         8SCigiokb9y+ZWIigeBfQg9BVCLRH2ye4cQ0TyowvL1rmppSPFZakhmcDDpKg5tXz9
+         pJCKf1pDSRGOu38clY9lxfOjMHNOtxBMRWBXHzG33GvCBkw2B5VO7l1xvsIGMR4xGz
+         TbazDNZNjvcaA==
+From:   Colin King <colin.king@canonical.com>
+To:     Daniel Palmer <daniel@thingy.jp>,
         Romain Perier <romain.perier@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20210928123906.988813-1-colin.king@canonical.com>
- <CAFr9PXnMXPmuaUnfr-VwaZDX1hY8ZDtp1+UxOau6DKpUP9FdzQ@mail.gmail.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Message-ID: <8f21ec82-201d-efee-d1db-382a7885d38f@canonical.com>
-Date:   Tue, 28 Sep 2021 14:34:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next][V2] rtc: msc313: Fix unintentional sign extension issues with left shift of a u16
+Date:   Tue, 28 Sep 2021 14:46:54 +0100
+Message-Id: <20210928134654.991923-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <CAFr9PXnMXPmuaUnfr-VwaZDX1hY8ZDtp1+UxOau6DKpUP9FdzQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/09/2021 14:31, Daniel Palmer wrote:
-> Hi Colin,
-> 
-> On Tue, 28 Sept 2021 at 21:39, Colin King <colin.king@canonical.com> wrote:
->> Shifting the u16 value returned by readw by 16 bits to the left
->> will be promoted to a 32 bit signed int and then sign-extended
->> to an unsigned long. If the top bit of the readw is set then
->> the shifted value will be sign extended and the top 32 bits of
->> the result will be set.
-> 
-> Ah,.. C is fun in all the wrong places. :)
-> These chips are full of 32bit registers that are split into two 16
-> registers 4 bytes apart when seen from the ARM CPU so we probably have
-> this same mistake in a few other places.
-> 
-> A similar pattern is used a bit later on in the same file to read the counter:
-> 
-> seconds = readw(priv->rtc_base + REG_RTC_CNT_VAL_L)
-> | (readw(priv->rtc_base + REG_RTC_CNT_VAL_H) << 16);
+From: Colin Ian King <colin.king@canonical.com>
 
-Ah, I missed that one! I'll send a V2.
+Shifting the u16 value returned by readw by 16 bits to the left
+will be promoted to a 32 bit signed int and then sign-extended
+to an unsigned long. If the top bit of the readw is set then
+the shifted value will be sign extended and the top 32 bits of
+the result will be set.
 
-> 
-> I guess it works at the moment because the top bit won't be set until 2038.
+Fixes: be7d9c9161b9 ("rtc: Add support for the MSTAR MSC313 RTC")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+V2: Fix identical issue in msc313_rtc_read_time too. Thanks to Daniel Palmer
+    for noticing this ommission.
+---
+ drivers/rtc/rtc-msc313.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I hope to be retired by then, but I guess fixing it up before 2038 is a
-good idea ;-)
-
-> 
-> Thanks,
-> 
-> Daniel
-> 
+diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+index 5f178d29cfd8..f3fde013c4b8 100644
+--- a/drivers/rtc/rtc-msc313.c
++++ b/drivers/rtc/rtc-msc313.c
+@@ -53,7 +53,7 @@ static int msc313_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ 	unsigned long seconds;
+ 
+ 	seconds = readw(priv->rtc_base + REG_RTC_MATCH_VAL_L)
+-			| (readw(priv->rtc_base + REG_RTC_MATCH_VAL_H) << 16);
++			| ((unsigned long)readw(priv->rtc_base + REG_RTC_MATCH_VAL_H) << 16);
+ 
+ 	rtc_time64_to_tm(seconds, &alarm->time);
+ 
+@@ -122,7 +122,7 @@ static int msc313_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 		udelay(1);
+ 
+ 	seconds = readw(priv->rtc_base + REG_RTC_CNT_VAL_L)
+-			| (readw(priv->rtc_base + REG_RTC_CNT_VAL_H) << 16);
++			| ((unsigned long)readw(priv->rtc_base + REG_RTC_CNT_VAL_H) << 16);
+ 
+ 	rtc_time64_to_tm(seconds, tm);
+ 
+-- 
+2.32.0
 
