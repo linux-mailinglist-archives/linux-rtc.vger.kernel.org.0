@@ -2,150 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 450A741C3CE
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Sep 2021 13:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42E541C4F4
+	for <lists+linux-rtc@lfdr.de>; Wed, 29 Sep 2021 14:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244760AbhI2LyR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 29 Sep 2021 07:54:17 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41739 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244263AbhI2LyQ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 29 Sep 2021 07:54:16 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id E0EBE20000D;
-        Wed, 29 Sep 2021 11:52:30 +0000 (UTC)
-Date:   Wed, 29 Sep 2021 13:52:30 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 12/12] ARM: rtc: remove HAVE_S3C_RTC in favor of
- direct dependencies
-Message-ID: <YVRTfuoC8TxtFTEO@piout.net>
-References: <20210928235635.1348330-1-willmcvicker@google.com>
- <20210928235635.1348330-13-willmcvicker@google.com>
+        id S1343892AbhI2M4Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 29 Sep 2021 08:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343867AbhI2M4P (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 29 Sep 2021 08:56:15 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E83C061755
+        for <linux-rtc@vger.kernel.org>; Wed, 29 Sep 2021 05:54:34 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id t200so1111446vkt.0
+        for <linux-rtc@vger.kernel.org>; Wed, 29 Sep 2021 05:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zfQ5dM+Ri1P9r/ui3gb3SorhujmtF4JU4NTdcKikmrY=;
+        b=Bsb7ycsZA74HsDPL09ZQAQzDgROsLRCu95Hc6OF0nBRCNlpFqOEl7hBm5n1R5n+GxS
+         DY57YA9QCGz0DcHNnzyH8eenAa47pYdR9FLLRm9K7+sO4Y14fI7RCyHBToxJaDIhz0cc
+         ozkSrY4d/0ZoSX99+wPd+DDkFDbf68V2vK3iI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zfQ5dM+Ri1P9r/ui3gb3SorhujmtF4JU4NTdcKikmrY=;
+        b=CA5bbeng9RZSzFYxCjiFotIWZM3yxsYfqqNroP2NCf/ayoDXXSzR0jKEHnhnkppxef
+         bC3w/6eFkbjHklqH+XZZj4z6Tf6uxSlrP6IRHEwSCMyyUrBb61XWJ6kXGzYgo/VfieR3
+         NngImUrqRF5S3A9LqbSq+Giv0TaFx8/QSzTpe6/GjC02JyiekdrlbcWixvBZFRAAZJxW
+         W9ruAEufaM+SZDOsABHg5fD6fRRBH16wx9M9wCGRPqtLc7bwO4KsTZMOF4/7vavCXN8N
+         TTVAo8WPyIvRXVA72YQJjvbqVw0Zz6mM/FrgGj3h0eMi3FdRhVUUuZNC88P9nZqJ7xWu
+         KLtg==
+X-Gm-Message-State: AOAM5301r2A11pxZ87FNJOAqJcwj6EFP1hZJlsRAu9tG5XArhqHWR6Iy
+        oDzz02pjjHCocOVSUhp5cF25Q7SX0qbslStXAQ1Tag==
+X-Google-Smtp-Source: ABdhPJzASCAh1IQGYf0Z3+LmFUl4XjYjTnybbVYyzQweEYSBjlUQemy10vtzR3hPvQY3k1Ypz3X3t1Ghxi70+l2QGFs=
+X-Received: by 2002:a1f:f203:: with SMTP id q3mr8867332vkh.1.1632920073828;
+ Wed, 29 Sep 2021 05:54:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210928235635.1348330-13-willmcvicker@google.com>
+References: <20210928123906.988813-1-colin.king@canonical.com>
+ <CAFr9PXnMXPmuaUnfr-VwaZDX1hY8ZDtp1+UxOau6DKpUP9FdzQ@mail.gmail.com> <CABgxDoLPTcRbZZgAdJ9+=9OG+a=F59x9SQ9HvQkVvGmkDjO6-A@mail.gmail.com>
+In-Reply-To: <CABgxDoLPTcRbZZgAdJ9+=9OG+a=F59x9SQ9HvQkVvGmkDjO6-A@mail.gmail.com>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 29 Sep 2021 21:56:36 +0900
+Message-ID: <CAFr9PXna7YsYnfdtu1jvJhkVSX0SiyixYr_bTsx3tDepeHqcMg@mail.gmail.com>
+Subject: Re: [PATCH][next] rtc: msc313: Fix unintentional sign extension issue
+ on left shift of a u16
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     Colin King <colin.king@canonical.com>,
+        Daniel Palmer <daniel@thingy.jp>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+Hi Romain,
 
-I'd argue that the subject should be rtc: s3c: ...
+On Tue, 28 Sept 2021 at 22:55, Romain Perier <romain.perier@gmail.com> wrot=
+e:
+>
+> Hi,
+>
+> Le mar. 28 sept. 2021 =C3=A0 15:31, Daniel Palmer <daniel@0x0f.com> a =C3=
+=A9crit :
+> The crazy stuff being, I ran rtctest from selftests and rtc-range (1)
+> that tests a variety
+> of dates including 2038 and 2106 for example. Both tests passed :) (proba=
+bly
+> because *this case* specifically did not happen while running the test)
 
-On 28/09/2021 23:56:29+0000, Will McVicker wrote:
-> The config HAVE_S3C_RTC is not really needed since we can simply just
-> add the dependencies directly to RTC_DRV_S3C. Also, one less config to
-> keep track of!
-> 
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+I suspect it works because for reading the time because seconds is a
+u32 not unsigned long like the other functions.
+So if the high word of the register is read, is promoted to a wider
+type and sign extended it doesn't actually matter because it gets
+truncated to 32 bits so the sign extended part is gone.
 
-> ---
->  arch/arm/Kconfig              |  1 -
->  arch/arm/mach-exynos/Kconfig  |  1 -
->  arch/arm/mach-s5pv210/Kconfig |  1 -
->  arch/arm64/Kconfig.platforms  |  1 -
->  drivers/rtc/Kconfig           | 10 ++--------
->  5 files changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index fc196421b2ce..5ed6b5de981e 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -475,7 +475,6 @@ config ARCH_S3C24XX
->  	select GPIOLIB
->  	select GENERIC_IRQ_MULTI_HANDLER
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C_RTC if RTC_CLASS
->  	select NEED_MACH_IO_H
->  	select S3C2410_WATCHDOG
->  	select SAMSUNG_ATAGS
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index 2ad19a08bf06..8b72a70b6c43 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -19,7 +19,6 @@ menuconfig ARCH_EXYNOS
->  	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
->  	select HAVE_ARM_SCU if SMP
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select PM_GENERIC_DOMAINS if PM
->  	select S5P_DEV_MFC
-> diff --git a/arch/arm/mach-s5pv210/Kconfig b/arch/arm/mach-s5pv210/Kconfig
-> index 62b90dda571f..681823687018 100644
-> --- a/arch/arm/mach-s5pv210/Kconfig
-> +++ b/arch/arm/mach-s5pv210/Kconfig
-> @@ -12,7 +12,6 @@ config ARCH_S5PV210
->  	select CLKSRC_SAMSUNG_PWM
->  	select GPIOLIB
->  	select HAVE_S3C2410_I2C if I2C
-> -	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select SOC_SAMSUNG
->  	help
-> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-> index e44d5e9f5058..02c8637d3f09 100644
-> --- a/arch/arm64/Kconfig.platforms
-> +++ b/arch/arm64/Kconfig.platforms
-> @@ -91,7 +91,6 @@ config ARCH_BRCMSTB
->  
->  config ARCH_EXYNOS
->  	bool "ARMv8 based Samsung Exynos SoC family"
-> -	select HAVE_S3C_RTC if RTC_CLASS
->  	select PINCTRL
->  	select PM_GENERIC_DOMAINS if PM
->  	select SOC_SAMSUNG
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index e1bc5214494e..7208eeb8459a 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -1404,16 +1404,10 @@ config RTC_DRV_OMAP
->  	  This driver can also be built as a module, if so, module
->  	  will be called rtc-omap.
->  
-> -config HAVE_S3C_RTC
-> -	bool
-> -	help
-> -	  This will include RTC support for Samsung SoCs. If
-> -	  you want to include RTC support for any machine, kindly
-> -	  select this in the respective mach-XXXX/Kconfig file.
-> -
->  config RTC_DRV_S3C
->  	tristate "Samsung S3C series SoC RTC"
-> -	depends on ARCH_S3C64XX || HAVE_S3C_RTC || COMPILE_TEST
-> +	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S3C24XX || ARCH_S5PV210 || \
-> +		   COMPILE_TEST
->  	help
->  	  RTC (Realtime Clock) driver for the clock inbuilt into the
->  	  Samsung S3C24XX series of SoCs. This can provide periodic
-> -- 
-> 2.33.0.685.g46640cef36-goog
-> 
+Cheers,
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Daniel
