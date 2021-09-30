@@ -2,61 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EABA41DAB6
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 15:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EBA41DB11
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 15:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350068AbhI3NKY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Sep 2021 09:10:24 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45274
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350178AbhI3NKW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 09:10:22 -0400
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 14467405FD
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 13:08:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1633007318;
-        bh=hUl4AzMPgOLZrORvQmrSxH7LjjpDiFvnLVFli7UcmE4=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=V4/LgKloF4kNKP3EfT09NxMH5y/TftsnhnWSB5wFBIMibmEDwevrSggdTzS8a9PkF
-         BZ3FUQUC6EbJXkQobHWSZUGketb2Q5LD4yyKYqPbl6n9CEI9kf5wWs1qB73IaKwPEK
-         Zbd+7YQBsS9s+YT+QPNKG6qEwB3egSs8ZIYQTvtMZhmMivahIpR6ezdCI4MqRZj45i
-         mFvvEblDVi+K03ukdKOPLzJ+Mcb2iOOJnorl4vDvpNr4mqJvaFCNGjjjGVDkko7qY9
-         F1c6gg69uWtCAejj6GEIBvBfHUAZMpn+Ij0gWtJGvWb/6rVpnrN2d/Eg4hbGGdz3/1
-         Q8G8kdfoW4UJw==
-Received: by mail-lf1-f69.google.com with SMTP id d16-20020a056512369000b003fca9e038ddso5574616lfs.3
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 06:08:38 -0700 (PDT)
+        id S1351455AbhI3Nba (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Sep 2021 09:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350054AbhI3Nb3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 09:31:29 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E559EC06176D
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 06:29:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d6so10037558wrc.11
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 06:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=q+R3lw9hSs/DZNzD1ywHyamm1IrGhxmkV4ENbV1GCU4=;
+        b=DgISTWDu6rOHfzRjV6Qlml3/7p6txDssydTajODz+GlRBwZnnZJ+mHqxja6SLqqzZS
+         eyqevG/RTJ1e19LvzUSviCvcRdY/ZQlLzVjdheF0j9oYG2VCjjxYzy70fFH6h8wQFIl1
+         heZTwo8Ij6lQSgsdYl1dZiwV3X78qZHJLVBF7Te55QST9l020nZl0zdexD6cQxRMEf6W
+         SRIUEGew9SLXCrM/mV3q/VEp2npSKkXBbZ5+s2TfsplI/1q6wc/x7KyW1mrI5x5IDs/H
+         NBJzxCeq6cVp7HZB2iCl43ejKQHiNBQy43JZ3VV5ezx4T/8upAw3Pc/u2fcrSEWOZw/o
+         CpiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hUl4AzMPgOLZrORvQmrSxH7LjjpDiFvnLVFli7UcmE4=;
-        b=wiagcarWsdiZRAA16ionUSMIzjxt3GH7o3uLyUQ5jcxSYJ1xunknOMmeMPpbralfIr
-         ODxsbLR5kt2tX9G6OBxYAZdhuDOdYjrdrreqKU99leuzHH5QMOPwYsdrqYRlr+y/kQQq
-         J4/yzP0LDKrmwRIOs4nHFhQ4tKAutKvxsnIVk9WDZP8uCrU21HXuVkqCzAvvU8SYdxqp
-         a/PXVzyK6VI2bkzCG0Nr4KyvL6R2CWbb5AYZPYvw0BI3CI+G/0cljKZxDVgnd2Hycwgb
-         GMuuzXRebZH7b4l+rhif7YggaJ8Zj1mhP/ybOK25wmW0dhlM/5cNKlW3R43gcOEngCCg
-         cDbg==
-X-Gm-Message-State: AOAM530DGdRR3UQF+JXHPR1we7mXXZ7xIbfnwervJrYv6bp1BsmvOjIz
-        CPRdNBoK1ndllRva1dYjzJNLOI+2Nic/IgbkhRNuRsPpCNzCiSmCR2PbrNcLZTy3gA49/1TgSmM
-        HPeQog0YIuSuwkHfzE48enB2InZPhaMe8SnnLJw==
-X-Received: by 2002:a05:6512:3093:: with SMTP id z19mr5967978lfd.242.1633007305685;
-        Thu, 30 Sep 2021 06:08:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyjm3vd0EFvqL7ckfqAQvq9Lo79q9lkx+VOJUC5cK4B1tRx3+/dBYuyWUn8tO852nNIwX6f3w==
-X-Received: by 2002:a05:6512:3093:: with SMTP id z19mr5967946lfd.242.1633007305455;
-        Thu, 30 Sep 2021 06:08:25 -0700 (PDT)
-Received: from [192.168.0.197] ([193.178.187.25])
-        by smtp.gmail.com with ESMTPSA id r3sm367245lfc.131.2021.09.30.06.08.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Sep 2021 06:08:24 -0700 (PDT)
-Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
- configs
-To:     Lee Jones <lee.jones@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=q+R3lw9hSs/DZNzD1ywHyamm1IrGhxmkV4ENbV1GCU4=;
+        b=p0/6St24Rhstr0tmjp+Wq9hvjM1RYWuqg+CDYHo9OlVqnmz4lGdxfNKuvqYe/2KiGa
+         Zo8cyNyCoGLm0lffk1JV7mfBJ1HjZFF4nofHCfYBN899+chRey4MJ8tbCoA5F//JObbf
+         xTAf+gEGbc5yvksjKVURBacZASxVV6V4k6BEv7UEB1CU64yzbp8v9kgt/eUNDEnyORLJ
+         2XqYJj2gHSUOty1OmZ1Vuev40w7Dp5hkW2hqAgZ0LCb69BYgA3fYk2IN0y1YB4h8LKuw
+         RrwcZDrN2ZbbifnXaQA1qRqqz+tZo2fKMSeWTXZHN1UPr7gnFK7Ps7aPzd51GPLusg8U
+         QdqA==
+X-Gm-Message-State: AOAM533VF9oiWGwUXzZ0xuOu5tNZIV1aHa5uUTntvSLg9TybL/mRArSs
+        WLpBCr4ShBKzkLVg//YnPnXrBw==
+X-Google-Smtp-Source: ABdhPJy/y/6uR/KPQ8dQ/+hV2n00qqTbyI2pfOM4zKq4a5jrPB98oGnv1D/dr/8czG2Kuq8YEDugGw==
+X-Received: by 2002:adf:eac8:: with SMTP id o8mr5785614wrn.273.1633008585451;
+        Thu, 30 Sep 2021 06:29:45 -0700 (PDT)
+Received: from google.com ([95.148.6.233])
+        by smtp.gmail.com with ESMTPSA id x21sm4825619wmc.14.2021.09.30.06.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 06:29:44 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 14:29:42 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Cc:     Will McVicker <willmcvicker@google.com>,
         Russell King <linux@armlinux.org.uk>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -80,6 +74,9 @@ Cc:     Will McVicker <willmcvicker@google.com>,
         linux-clk <linux-clk@vger.kernel.org>,
         linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
+ configs
+Message-ID: <YVW7xoHaLdGHBoEQ@google.com>
 References: <20210928235635.1348330-1-willmcvicker@google.com>
  <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com>
  <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
@@ -87,52 +84,60 @@ References: <20210928235635.1348330-1-willmcvicker@google.com>
  <YVWCK5QO331rfhJJ@google.com>
  <72d27a82-9d4d-1f91-bd1f-ebead3b75ffa@canonical.com>
  <YVWwBz8jrznqXah4@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com>
-Date:   Thu, 30 Sep 2021 15:08:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+ <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <YVWwBz8jrznqXah4@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 30/09/2021 14:39, Lee Jones wrote:
-> On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
-> 
->> On 30/09/2021 11:23, Lee Jones wrote:
->>> [0] Full disclosure: part of my role at Linaro is to keep the Android
->>> kernel running as close to Mainline as possible and encourage/push the
->>> upstream-first mantra, hence my involvement with this and other sets.
->>> I assure you all intentions are good and honourable.  If you haven't
->>> already seen it, please see Todd's most recent update on the goals and
->>> status of GKI:
->>>
->>>   Article: https://tinyurl.com/saaen3sp
->>>   Video:   https://youtu.be/O_lCFGinFPM
->>>
->>
->> Side topic, why this patchset is in your scope or Will's/Google's scope?
->> Just drop it from Android main kernel, it will not be your problem. I
->> mean, really, you don't need this patchset in your tree at all. The only
->> platform which needs it, the only platform which will loose something
->> will be one specific vendor. Therefore this will be an incentive for
->> them to join both discussions and upstream development. :)
-> 
-> How would they fix this besides upstreaming support for unreleased
-> work-in-progress H/W?
-> 
-> Haven't I explained this several times already? :)
+On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
 
-Either that way or the same as Will's doing but that's not my question.
-I understand you flush the queue of your GKI patches to be closer to
-upstream. Reduce the backlog/burden. you can achieve your goal by simply
-dropping such patch and making it not your problem. :)
+> On 30/09/2021 14:39, Lee Jones wrote:
+> > On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
+> > 
+> >> On 30/09/2021 11:23, Lee Jones wrote:
+> >>> [0] Full disclosure: part of my role at Linaro is to keep the Android
+> >>> kernel running as close to Mainline as possible and encourage/push the
+> >>> upstream-first mantra, hence my involvement with this and other sets.
+> >>> I assure you all intentions are good and honourable.  If you haven't
+> >>> already seen it, please see Todd's most recent update on the goals and
+> >>> status of GKI:
+> >>>
+> >>>   Article: https://tinyurl.com/saaen3sp
+> >>>   Video:   https://youtu.be/O_lCFGinFPM
+> >>>
+> >>
+> >> Side topic, why this patchset is in your scope or Will's/Google's scope?
+> >> Just drop it from Android main kernel, it will not be your problem. I
+> >> mean, really, you don't need this patchset in your tree at all. The only
+> >> platform which needs it, the only platform which will loose something
+> >> will be one specific vendor. Therefore this will be an incentive for
+> >> them to join both discussions and upstream development. :)
+> > 
+> > How would they fix this besides upstreaming support for unreleased
+> > work-in-progress H/W?
+> > 
+> > Haven't I explained this several times already? :)
+> 
+> Either that way or the same as Will's doing but that's not my question.
+> I understand you flush the queue of your GKI patches to be closer to
+> upstream. Reduce the backlog/burden. you can achieve your goal by simply
+> dropping such patch and making it not your problem. :)
 
+git reset --hard mainline/master   # job done - tea break  :)
 
-Best regards,
-Krzysztof
+Seriously though, we wish to encourage the use of GKI so all vendors
+can enjoy the benefits of more easily updateable/secure code-bases.
+
+I can't see how pushing back on seamlessly benign changes would
+benefit them or anyone else.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
