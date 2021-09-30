@@ -2,55 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E38C041D9E2
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 14:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B74841D9F9
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 14:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350366AbhI3MgU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Sep 2021 08:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350448AbhI3MgU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 08:36:20 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675EBC06176E
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 05:34:37 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i23so9828545wrb.2
-        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 05:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=HRgJEndOuR4ynn0OPA7sKb8RToaEd1xX8/0RUVPc1gs=;
-        b=PRGDsSbneH4StUFwwnRbLwzVrVS8dXAQMsfx9rpM11hullUX4XhH0L8xtDo2A/JSkh
-         vfBLbBJodUO8FPeQngR5h+hr4KzarQc3FnV7xoLaGEAqs4Mq3Nxqk8Tka17mIGHBR8Od
-         esOL2mV/wXFcVwgwNwRbo3Q3ZQnzpznbdz36TaU/MQyMq8aXDMshuKrRT/qvB5Sm90Uq
-         GVOsPer9/U8+t0an4EcH7UcvvfTO0BqQiwyNuympdIbRjiTOy6VmqkBA9QuR13uL6a8c
-         3cEBsixjLbEzKXW6P/6E1GmBNN1bveSx8Y12kRb7bitYdhJf98gFz7TxmEcyjy9XVeIp
-         srug==
+        id S1350948AbhI3Mk0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Sep 2021 08:40:26 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:43946
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350938AbhI3Mk0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 08:40:26 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id AC2E140606
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 12:38:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1633005522;
+        bh=9UEPWfr7ebPMheyY1ItfdUf+trBF8Xkd/Vl6hTzqSXw=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=v/Hhpuo4muIpVpv52hZR7Pjg4/TlIYvyM5MyzbieesJ4pOKTpP/UJUGBL4YO5NF2i
+         Ly7owuwG/5FyWPNwnDJry2WxhfSVun5wNHx9tILglX0/rGGLwS4lc7Bc8iRogqAkoW
+         0o3kd2MXUG5+I5FgE9+0OvmvUvKvyaxHjXTCCQJE0MDFDUT87qfRkOhiRH7sVj1dA0
+         mqJJ4QbAnhonsv6GbhrchXvRExKmviWMNybpf5auH8SpzqGKAYRjfD1ZHiuedhhOQp
+         /V6B9KkXIbHPDuq8LR/rHI+9hE17IqYEK6uRFJZBq5mTmdRPpz0Xvtag5BiTy5pF21
+         JQD6KE+BuwdvQ==
+Received: by mail-lf1-f70.google.com with SMTP id n22-20020a0565120ad600b003fcc09af59fso5462515lfu.21
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 05:38:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=HRgJEndOuR4ynn0OPA7sKb8RToaEd1xX8/0RUVPc1gs=;
-        b=lACmpnkFoK8qcZNagerrcgoHNUuYYKPezaTEJwJbwfLUDQOj2FqDbynhqPH4z4QvWq
-         Uhr26XPzTKIKiOf+Ps0j9x2fOiG9YypjIDqbVSxA1rPgh85nqt9TQPdwxSoDOqN5Ag3v
-         DD1fsfnbzVv9SdHWyH+TOlRodHsuZFRBNb4VBVnGaKXNZ2sGJA4tltoDB3BWbzW70kRb
-         1Jy1kRpJbdaqA6C1bWHOKzjQdRFf1WnR1jjrjVmVAr1Kr+GZbKyaOX9TuTOkBtrYjcbm
-         5O19rSptdRE27P5wsedaDzQ8a0+C9zc6Mkdw/oTEMm2cYfqkjijZLPnZN4QLIkdRmlIR
-         6jAA==
-X-Gm-Message-State: AOAM53331vJ0xsE6wiEUNW4+vueIZTIh+BiL6Si1zI+ILBR/HoiHGbeU
-        pWc5URml/TLvcD4opi4surI06w==
-X-Google-Smtp-Source: ABdhPJzruR/5Ef2zjhhdSPBNA0SVjA7uVPC3/lwtP8K1MW5Z2+vlJQr3w2Z7LogtLW9jhnrPbK8iNw==
-X-Received: by 2002:a5d:66d0:: with SMTP id k16mr5973546wrw.98.1633005275981;
-        Thu, 30 Sep 2021 05:34:35 -0700 (PDT)
-Received: from google.com ([95.148.6.233])
-        by smtp.gmail.com with ESMTPSA id u5sm3175142wrg.57.2021.09.30.05.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Sep 2021 05:34:35 -0700 (PDT)
-Date:   Thu, 30 Sep 2021 13:34:33 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9UEPWfr7ebPMheyY1ItfdUf+trBF8Xkd/Vl6hTzqSXw=;
+        b=BPS6k/F10XMTCV+QdKqChoLEu72k4YabsZ1D9FjiF0TX56fD+W8PAJJ6F0kwrflAkc
+         4KUdEUX6rEEvF/OYBfIJPeMcH87ovcpgpwPjD5VK3pSBtsQVrDQvTYT21QC0kQ/C+7Uf
+         OTEFGwMiunMUrZVoVsSW7pQgom4qjqC+B1FiKhUjDYyyFNcLkFiLLEvxpRK/m0PIQ5Vu
+         n7GmXHcngB29iYyRMop1Np3qZvXGO33vOpM+DRD5ybRdiY6wEhHCfsFxHC8KklBmKRuu
+         ZyyaZzSTSDEBFF3zdpfQgMAWkD9MS8B/Km+QEWgmGrwgpdziX1LNanvz/Zn7oTk6EK8f
+         NqdA==
+X-Gm-Message-State: AOAM5329iBx/B+j6s7wVxyONmcaV+19L6Sub/EXcNIZFEmgQwt8dJyF8
+        NQ/cYJ4cqP1ZxqcbRvQFd6jXVUDoilhABw0kNtZEIg22KHuQvTWwN2UWDK3ovCNt9BmjTAh2Oww
+        wuHm6AG9pkMMVt5BnaTu7RvFQ7ePkW4jLehbdLg==
+X-Received: by 2002:a2e:98c4:: with SMTP id s4mr5529049ljj.316.1633005521795;
+        Thu, 30 Sep 2021 05:38:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz4VmVl8yLsL1J3X6zPeVy08Dz03yCtDXig4BMfZlB5TReP45Vy4ZGUWpipnx+5aVpp7cIQEg==
+X-Received: by 2002:a2e:98c4:: with SMTP id s4mr5529018ljj.316.1633005521617;
+        Thu, 30 Sep 2021 05:38:41 -0700 (PDT)
+Received: from [192.168.0.197] ([193.178.187.25])
+        by smtp.gmail.com with ESMTPSA id x9sm152040lfr.246.2021.09.30.05.38.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Sep 2021 05:38:41 -0700 (PDT)
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
+ configs
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Will McVicker <willmcvicker@google.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -75,9 +81,6 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-clk <linux-clk@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-rtc@vger.kernel.org, Olof Johansson <olof@lixom.net>
-Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
- configs
-Message-ID: <YVWu2RoSqEzcG79I@google.com>
 References: <20210928235635.1348330-1-willmcvicker@google.com>
  <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com>
  <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
@@ -85,39 +88,54 @@ References: <20210928235635.1348330-1-willmcvicker@google.com>
  <CAK8P3a0zezKvexqvL29Oc44uQq-8QG7LwZy31VYJuYAYbh-Utw@mail.gmail.com>
  <YVWDsFE7qyH6AwxR@google.com>
  <8928290c-73d9-0843-25ed-2a4817ad32f7@canonical.com>
+ <YVWu2RoSqEzcG79I@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <5eb551d9-a26e-f4eb-6641-3264c2398adc@canonical.com>
+Date:   Thu, 30 Sep 2021 14:38:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <YVWu2RoSqEzcG79I@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8928290c-73d9-0843-25ed-2a4817ad32f7@canonical.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
-> >   It sounds like a lack of testing is your main concern.
-> > 
-> >   How can I help here?  What H/W do I need to be able to fully test this?
+On 30/09/2021 14:34, Lee Jones wrote:
+> On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
+>>>   It sounds like a lack of testing is your main concern.
+>>>
+>>>   How can I help here?  What H/W do I need to be able to fully test this?
+>>
+>> The changes here need to be tested on affected platforms (ARMv7 and
+>> ARMv8), when built as a modules on some types of regular distros (e.g.
+>> Arch, Ubuntu). From each of such boot I would be happy to see number of
+>> new dmesg warnings/errors plus number of probe deferrals.
+>>
+>> Since the drivers could be switched to modules (and some distros might
+>> do it), they might be hit by surprise regressions in boot performance
+>> due to probe deferrals. This should be also checked on these platforms.
+>> Geert pointed out before that clocks in many cases are not optional -
+>> driver needs them and will wait defer.
+>>
+>> Assuming of course that boot succeeds. Minor differences in boot speed
+>> should not be a problem, I think, because distro anyway chosen
+>> all-module approach so it accepts the penalty.
 > 
-> The changes here need to be tested on affected platforms (ARMv7 and
-> ARMv8), when built as a modules on some types of regular distros (e.g.
-> Arch, Ubuntu). From each of such boot I would be happy to see number of
-> new dmesg warnings/errors plus number of probe deferrals.
-> 
-> Since the drivers could be switched to modules (and some distros might
-> do it), they might be hit by surprise regressions in boot performance
-> due to probe deferrals. This should be also checked on these platforms.
-> Geert pointed out before that clocks in many cases are not optional -
-> driver needs them and will wait defer.
-> 
-> Assuming of course that boot succeeds. Minor differences in boot speed
-> should not be a problem, I think, because distro anyway chosen
-> all-module approach so it accepts the penalty.
+> Do you have any suggestions in terms of devboards?
 
-Do you have any suggestions in terms of devboards?
+Minimal set:
+1. Something with Exynos4 (e.g. Odroid U3 with Exynos4412).
+2. Something with Exynos 5422/5800 (e.g. Odroid XU3/XU4/HC1/MC1 or
+Chromebook Peach Pi).
+3. Exynos5433 - TM2 or TM2E. Boards are not widely available, so we need
+to rely on provided testing by Samsung.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+What would be good is to also test Exynos3 boards, but this is also not
+widely available.
+
+
+Best regards,
+Krzysztof
