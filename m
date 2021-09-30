@@ -2,35 +2,20 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0FC41E2E5
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 22:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C59341E2F3
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 23:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348360AbhI3U62 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Sep 2021 16:58:28 -0400
-Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:54109 "EHLO
-        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346766AbhI3U62 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 16:58:28 -0400
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1mW36h-003yql-7J; Thu, 30 Sep 2021 22:56:43 +0200
-Received: from p57bd97e9.dip0.t-ipconnect.de ([87.189.151.233] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1mW36f-003cOA-Gk; Thu, 30 Sep 2021 22:56:43 +0200
-Message-ID: <9f7ad0df-b58c-1b24-5c48-5ee6478260dd@physik.fu-berlin.de>
-Date:   Thu, 30 Sep 2021 22:56:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
+        id S1345623AbhI3VED (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Sep 2021 17:04:03 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:46079 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229957AbhI3VEC (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 17:04:02 -0400
+Received: from [192.168.100.1] ([82.142.21.142]) by mrelayeu.kundenserver.de
+ (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MS3vJ-1mPDgh22d1-00TRvk; Thu, 30 Sep 2021 23:02:00 +0200
 Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
-Content-Language: en-US
-To:     Laurent Vivier <laurent@vivier.eu>,
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
@@ -41,36 +26,60 @@ References: <20210323221430.3735147-1-laurent@vivier.eu>
  <a9c75ae7-6023-6b6c-260f-a0d6841ea4fa@vivier.eu>
  <CAMuHMdW49S_81Oip2p+yUO5YUL1-V3_K_C1WEXux7mQWcb-mKA@mail.gmail.com>
  <c28b0c92-a997-6978-890f-4222f4bb8cc6@vivier.eu>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <c28b0c92-a997-6978-890f-4222f4bb8cc6@vivier.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.151.233
+ <9f7ad0df-b58c-1b24-5c48-5ee6478260dd@physik.fu-berlin.de>
+From:   Laurent Vivier <laurent@vivier.eu>
+Message-ID: <7748de16-1087-1039-a1cc-5a94dc293dbb@vivier.eu>
+Date:   Thu, 30 Sep 2021 23:01:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <9f7ad0df-b58c-1b24-5c48-5ee6478260dd@physik.fu-berlin.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:KwAzeqLKWmeHvbBipaoWRg9gsbROUHqCygHskcptL60d6q9Kp5G
+ +ElasxtHFdquzPB+XB8UuXpI0dBToT4jfg/z4/2CedMqcxtR86v1yMdvcCWMxQKCFe6N4VQ
+ B9yNxtbzxan6zlCT8wpvoehKXG7Z0/QHg/PPRU5TTKE3k4He+YszGVJIhKrzUDJ75UmCcic
+ KpCD9iMY7vy7l+SE+j9jA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IKF5m6Zp7xk=:dlUvunV4r2NsEQ1dBIzuiL
+ Hk2Jna+3DuA2CjDSEwx4Tq0IqIevHdqPJ/XYeQllfdZWboVObG2TaqdTfKl2NknvrAVqFsN/x
+ EPx/irCs5HZUgGVXL8JXQzVst1pplqpmpiAUqjrOMhU0CIhVgiUFggBYiv1PhtAudEuRT+DF/
+ BoN1hb3LQJru92bfNLOa0+l6Kj3ObDy5caxmhCrfITtGn6E9cq7PisvnHXkl81DtnqN/PSbQK
+ il173Q6HDhR9Aoi00SEjRxwfh9HXCrMRAtxb/ZELMMXqqOek7DTZIrcxsYK+D4fMSkJeeDwiD
+ R5NdALSC9PvTslCAL8ZHhsp8GO2UZYNBA71GjlvXmp8CyMfD8K/wGHms4TdYuqoSjDVF7y+13
+ Hef7U/fNXgX4Bde38ND5Q85DaLPz1zMiBcpDC2EUCB1K6GSQLerfxy+Y2WzC58GcsW8yXlHrv
+ m1Mxj4P+Zior7rZ9OXSM5z3syNLLHhv0VH17/OjIuDwy4IZL2+YI8k+49ggr8irTlVwTD06/Q
+ dPrwWRYuSGg0vWnt8QtTTapaeL9dJt9txhWbPQhzZDj7BkHLOi1zLcc1gJIZWHy8O1Ju/Y9Vx
+ exrejKJznItYO0i2Ax7X9Wmq0CpFgLyZOPrVWsLIuasQDD51I6FnqmYeN/UzlH+7PW174Hqfm
+ q5Uzx3DEeA9/hhjEi3xuomwQbJx7ZKXvo6X0Wm+7UDRUr+rmKIKeim6A/9SzoaVJVwHkF+OyT
+ kEcuitxScfaqOyjdrpASH7y5lfqQI353XRbMig==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Laurent!
-
-On 4/28/21 14:15, Laurent Vivier wrote:
->> I have tested and reviewed your patch, great work!
->> I'm confident this can make v5.14, with the small nits fixed.
+Le 30/09/2021 à 22:56, John Paul Adrian Glaubitz a écrit :
+> Hi Laurent!
 > 
-> Thank you for your review.
+> On 4/28/21 14:15, Laurent Vivier wrote:
+>>> I have tested and reviewed your patch, great work!
+>>> I'm confident this can make v5.14, with the small nits fixed.
+>>
+>> Thank you for your review.
+>>
+>> I will answer to some of your comments and update accordingly my patch.
 > 
-> I will answer to some of your comments and update accordingly my patch.
+> It looks like this patch somehow fell off the table, didn't it?
+> 
+> I was hoping to be able to build a virt kernel for Debian/m68k by default
+> in the near future.
 
-It looks like this patch somehow fell off the table, didn't it?
+Yes, I started to update my work according to the comments from Geert but didn't have time to finish.
 
-I was hoping to be able to build a virt kernel for Debian/m68k by default
-in the near future.
+Especially I tried to remove the LEGACY_TIMER_TICK, but it doesn't work, and as it has been tested
+like this by you and most of the other m68k targets uses it I think I will let the patch with it.
 
-Adrian
+I'm going to update my patch to have a v2, at least to have fresh reviews.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+Thanks,
+Laurent
