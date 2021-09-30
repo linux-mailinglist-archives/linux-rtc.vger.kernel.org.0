@@ -2,84 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C59341E2F3
-	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 23:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4446B41E30C
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 23:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345623AbhI3VED (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 30 Sep 2021 17:04:03 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:46079 "EHLO
+        id S1348785AbhI3VNH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Sep 2021 17:13:07 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:49089 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbhI3VEC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 17:04:02 -0400
+        with ESMTP id S1348777AbhI3VNG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 17:13:06 -0400
 Received: from [192.168.100.1] ([82.142.21.142]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MS3vJ-1mPDgh22d1-00TRvk; Thu, 30 Sep 2021 23:02:00 +0200
-Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+ (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MbAYo-1n7b0j2wqO-00bel8; Thu, 30 Sep 2021 23:11:13 +0200
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 References: <20210323221430.3735147-1-laurent@vivier.eu>
  <20210323221430.3735147-3-laurent@vivier.eu>
- <a9c75ae7-6023-6b6c-260f-a0d6841ea4fa@vivier.eu>
- <CAMuHMdW49S_81Oip2p+yUO5YUL1-V3_K_C1WEXux7mQWcb-mKA@mail.gmail.com>
- <c28b0c92-a997-6978-890f-4222f4bb8cc6@vivier.eu>
- <9f7ad0df-b58c-1b24-5c48-5ee6478260dd@physik.fu-berlin.de>
+ <CAMuHMdUFh2W-bY5Ez1aOTZQjq0=THvmOf22JdxWoNNtFLskSzw@mail.gmail.com>
 From:   Laurent Vivier <laurent@vivier.eu>
-Message-ID: <7748de16-1087-1039-a1cc-5a94dc293dbb@vivier.eu>
-Date:   Thu, 30 Sep 2021 23:01:59 +0200
+Subject: Re: [PATCH 2/2] m68k: introduce a virtual m68k machine
+Message-ID: <90ab81cd-0d83-9537-b7d8-40e4bffa152e@vivier.eu>
+Date:   Thu, 30 Sep 2021 23:11:12 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <9f7ad0df-b58c-1b24-5c48-5ee6478260dd@physik.fu-berlin.de>
+In-Reply-To: <CAMuHMdUFh2W-bY5Ez1aOTZQjq0=THvmOf22JdxWoNNtFLskSzw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:KwAzeqLKWmeHvbBipaoWRg9gsbROUHqCygHskcptL60d6q9Kp5G
- +ElasxtHFdquzPB+XB8UuXpI0dBToT4jfg/z4/2CedMqcxtR86v1yMdvcCWMxQKCFe6N4VQ
- B9yNxtbzxan6zlCT8wpvoehKXG7Z0/QHg/PPRU5TTKE3k4He+YszGVJIhKrzUDJ75UmCcic
- KpCD9iMY7vy7l+SE+j9jA==
+X-Provags-ID: V03:K1:MvX4RX6N5TWXkBxTvXsqxo5ukgEyP4aE7u4NNYBlkHd1ZOJA1if
+ 2aowt1q5k3thQGS8dCf6HPA6UApo/YcHKUDZVWMniFujuxdstYsAf3qhZxDVJLnvm47Ckb+
+ fGJVOJXxHZhyPK6txJmDWuwAt/ByHIXCJGzCUkg4A2RiRMAMxHjBDgCDQ0wlEFGg4Xzo1ye
+ SLhjpQYUK1dORP4TzEn/Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IKF5m6Zp7xk=:dlUvunV4r2NsEQ1dBIzuiL
- Hk2Jna+3DuA2CjDSEwx4Tq0IqIevHdqPJ/XYeQllfdZWboVObG2TaqdTfKl2NknvrAVqFsN/x
- EPx/irCs5HZUgGVXL8JXQzVst1pplqpmpiAUqjrOMhU0CIhVgiUFggBYiv1PhtAudEuRT+DF/
- BoN1hb3LQJru92bfNLOa0+l6Kj3ObDy5caxmhCrfITtGn6E9cq7PisvnHXkl81DtnqN/PSbQK
- il173Q6HDhR9Aoi00SEjRxwfh9HXCrMRAtxb/ZELMMXqqOek7DTZIrcxsYK+D4fMSkJeeDwiD
- R5NdALSC9PvTslCAL8ZHhsp8GO2UZYNBA71GjlvXmp8CyMfD8K/wGHms4TdYuqoSjDVF7y+13
- Hef7U/fNXgX4Bde38ND5Q85DaLPz1zMiBcpDC2EUCB1K6GSQLerfxy+Y2WzC58GcsW8yXlHrv
- m1Mxj4P+Zior7rZ9OXSM5z3syNLLHhv0VH17/OjIuDwy4IZL2+YI8k+49ggr8irTlVwTD06/Q
- dPrwWRYuSGg0vWnt8QtTTapaeL9dJt9txhWbPQhzZDj7BkHLOi1zLcc1gJIZWHy8O1Ju/Y9Vx
- exrejKJznItYO0i2Ax7X9Wmq0CpFgLyZOPrVWsLIuasQDD51I6FnqmYeN/UzlH+7PW174Hqfm
- q5Uzx3DEeA9/hhjEi3xuomwQbJx7ZKXvo6X0Wm+7UDRUr+rmKIKeim6A/9SzoaVJVwHkF+OyT
- kEcuitxScfaqOyjdrpASH7y5lfqQI353XRbMig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KSk2j04gCJU=:Nrq8OClLxONIuuVB80d+kd
+ sYB7YSMurnBkixuBqbzL0B6x21srE1IlNq6zGCMy4BxnrclSuTROTGBhmVrYATlHF2N974K7t
+ LhbHuEL/2jNWENViHZHuMyhCogvez9pmVHQ7v6GmJtP44B47ic6kMsp3odEpRbLeQQklKbTrR
+ NKRN8YojUcJyhT4pz0tB1rPBgI522dojFtDhzjem33JdgWU6hgpgkX0LmfpCRqVUDlf0H6Hat
+ V7zxH94JTY/zHHjytpNLw4YgNP11wIckd7Skp7scvyh49377yMzICLuiROOQiuevkOIaNhbCT
+ FQCAonszYgSnBI+VgvISo7uV+tmepQqRC4Z0GMtlwhqhUI9joEi4hgCf6jXDLrK1aX2nOG4Zk
+ 9iPHMPXwq/Re+AkCsCLuf1I/xCYWmHdANtof0hJq3eK3pYNEYs5eN7RP3NabfbYIGMyUygkzW
+ UNo5xmE2duCGFnjK4x280g7YmAR0dwIzeDH1cFxzxSnz45ZZ4RoGLNfa1wlqpoYPy/CPjDfsY
+ n+1BzwoXmTUk0GfZJpVc2P4pKpheROexeLE5Zf2OA2aKaOLIlXCTaTb2R2T6oR11VqvcZVi12
+ BQs4qSnUjh3orfNUcWam5eQDAcdLkErNsWGBGHQ3IQr5OPA+8Mjhiy99/ydYNT2/l/L+mWB72
+ F0/W35WbFPbuwZ6U+yTmmQpYeV8pt5+N9TQGeGPzlccYRcG9b6HCYZH1k5sS8/fpZGfabNc0V
+ ghiVVYdDVEhNAStujIFuIeuDlztpvr/ButRZqg==
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le 30/09/2021 à 22:56, John Paul Adrian Glaubitz a écrit :
-> Hi Laurent!
+Le 28/04/2021 à 14:04, Geert Uytterhoeven a écrit :
+> Hi Laurent,
 > 
-> On 4/28/21 14:15, Laurent Vivier wrote:
->>> I have tested and reviewed your patch, great work!
->>> I'm confident this can make v5.14, with the small nits fixed.
+> On Tue, Mar 23, 2021 at 11:14 PM Laurent Vivier <laurent@vivier.eu> wrote:
+>> This machine allows to have up to 3.2 GiB and 128 Virtio devices.
 >>
->> Thank you for your review.
+>> It is based on android goldfish devices.
 >>
->> I will answer to some of your comments and update accordingly my patch.
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 > 
-> It looks like this patch somehow fell off the table, didn't it?
+> Thanks for your patch!
+
+Thank you for the review, sorry for the very late answer.
+
+Only two comments before I send a v2.
+
+>> --- a/arch/m68k/Kconfig.machine
+>> +++ b/arch/m68k/Kconfig.machine
+>> @@ -145,6 +145,23 @@ config SUN3
+>>
+>>           If you don't want to compile a kernel exclusively for a Sun 3, say N.
+>>
+>> +config VIRT
+>> +       bool "Virtual M68k Machine support"
+>> +       depends on MMU
+>> +       select MMU_MOTOROLA if MMU
+>> +       select M68040
+>> +       select LEGACY_TIMER_TICK
 > 
-> I was hoping to be able to build a virt kernel for Debian/m68k by default
-> in the near future.
+> Can we avoid selecting this for a new platform?
+> 
 
-Yes, I started to update my work according to the comments from Geert but didn't have time to finish.
+I tried but I was not able to have a working scheduler.
 
-Especially I tried to remove the LEGACY_TIMER_TICK, but it doesn't work, and as it has been tested
-like this by you and most of the other m68k targets uses it I think I will let the patch with it.
+As the machine has been tested with this option and most of the other m68k machines uses it, I will
+keep it.
 
-I'm going to update my patch to have a v2, at least to have fresh reviews.
+...
+>> --- /dev/null
+>> +++ b/arch/m68k/virt/platform.c
+>> @@ -0,0 +1,80 @@
+...
+>> +
+>> +       if (!MACH_IS_VIRT)
+>> +               return -ENODEV;
+>> +
+>> +       min_low_pfn = 0;
+> 
+> Why is this needed?
+> 
+
+This is needed to be able to have working DMA in goldfish_tty.
+
+Without this, memory provided for the buffer in goldish_tty_rw() are not usable with DMA and we
+cannot transfer the data. If I remember correctly dma_map_single() fails.
+
+I think this is because the memory provided by the kernel is not in the DMA area. But the virt
+machine has no DMA...
+
+Perhaps you can propose better solution?
 
 Thanks,
 Laurent
