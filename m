@@ -2,59 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D0641CD89
-	for <lists+linux-rtc@lfdr.de>; Wed, 29 Sep 2021 22:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DC841D319
+	for <lists+linux-rtc@lfdr.de>; Thu, 30 Sep 2021 08:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346768AbhI2UsB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 29 Sep 2021 16:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233018AbhI2UsB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 29 Sep 2021 16:48:01 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9789C061765
-        for <linux-rtc@vger.kernel.org>; Wed, 29 Sep 2021 13:46:19 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x27so15888964lfa.9
-        for <linux-rtc@vger.kernel.org>; Wed, 29 Sep 2021 13:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ei5m2coJFPE9ArBvAOBUe88q9SzwkYzMD0NediKju6U=;
-        b=qEv872EZJ1VZxT3IbJ1lydKZMOtHlz2Tq+poMTU1EKCSqXT6FO1OsC7Rr+v4XFJLfu
-         sh3FDwWV8D8kla4buDfzP9s/pIFjI20Ke+2kzu5bFSRunrsNbTbLE22/VNWZbyl31Ho4
-         zC6ZL3/oa0CIuBN4hbE+4PVZPLmzFeni2OSZIC+HlfoxlZ6aVFhfUwfAtkyGN6GsyOap
-         VOpWLMT6atWAINgWI7nt6MoexZQ6FhZ0nt5uIVa2L2mIbSs2XtHhnILZCdtulY3U5+CM
-         n60SmQgw3yX64OcifIiQ9uN5K10wtgiaDdQ6m4PPUVmHMue7zLg41F2rxhTG6NjmFsS2
-         URSw==
+        id S1348054AbhI3GQh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 30 Sep 2021 02:16:37 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49940
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347847AbhI3GQg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 30 Sep 2021 02:16:36 -0400
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 94BD34028F
+        for <linux-rtc@vger.kernel.org>; Thu, 30 Sep 2021 06:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1632982493;
+        bh=l4P1yQgHmK4IoeNIUGcmxpjGHV2AL8XAWEflVAlKCuA=;
+        h=To:Cc:References:From:Subject:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=hX273xb7wbURaqLddyJHK3nb9bHiZOTGmXqI6aK4EhTAWmi9Lc/e/bwuhvDZHz+ip
+         zg26Busm5nPnC5BE0CHtaa7pFZQbMPoyejmw86NZe5tyjtKC7/+FBzsAnG9U8LxMt0
+         5bcwG2XzrSCVs1eDRH+QRZQvcBXmhR6HF9LK9Z5XpuTjSHt/EFTa3cEb5+M8benrPn
+         64o3H5QFA/xd/8wdVWX7hAiA8qNXokgcSFPNvSipTWA+8pAJi5d2SAEwVntT4EQn5p
+         q5ehtVOYAuX7SB+3D27JC6LNa95CgmQCHavXazSDvBSMbqRNzE9uXHSmwL341jkGVt
+         4AIDFE2DiV5zA==
+Received: by mail-lf1-f71.google.com with SMTP id c18-20020a056512075200b003fd0e54a0deso3719083lfs.17
+        for <linux-rtc@vger.kernel.org>; Wed, 29 Sep 2021 23:14:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ei5m2coJFPE9ArBvAOBUe88q9SzwkYzMD0NediKju6U=;
-        b=CtY6UBFIdY2zrSNt4Pl/Ifhs4cnhsExMcWxTixeKuVUsgrpM5V5KuNskDONFgUw1Zi
-         6wuJjexBneawe5H4OuqKwdamKGefqV7WvPMTNxK75bh362ZstSHwYZuQObhvOpJF+Xvn
-         /NINfniOugOfmvXxrQA3BkM5u/7juYkPopfWh6cpXjHpV+Y2F+pmzmjjKOwfzlP6ky+E
-         v6zvlW/P7fbUXi8S2eMIHux85tGvLesrMa2oHG1vktFsC6mATmbDOaVZGiagV3puv6Fq
-         4dsxUf1gQsqHQUo7FRTkXE1EOoyS4s3jOeGCG54nrrDCITs6GGoyegQ8LaZQv3fuZf2J
-         nrEw==
-X-Gm-Message-State: AOAM532JzbKxJSuTGbR5w3vgwhz9G6eKfk61+iS5WwF+fuKe0pijNq43
-        b93kO9yCTVrXuGVyoFznTGWBEhL2DMLf3E8gz93T2w==
-X-Google-Smtp-Source: ABdhPJxrEvaOY+BJcEwgYKyltmJ1P95B1u5A4ohEGs0wRyoS4JlFDwH3bL8wLds17FeMKw6Pk2VeWmVGDsuYCaCd4P0=
-X-Received: by 2002:a2e:9802:: with SMTP id a2mr2036742ljj.427.1632948377858;
- Wed, 29 Sep 2021 13:46:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210928235635.1348330-1-willmcvicker@google.com>
- <20210928235635.1348330-3-willmcvicker@google.com> <CALAqxLUju1Bw0dDpi_oK6-eOiP6B2Xm1MV19G53WaRFm3Z_AWw@mail.gmail.com>
- <CABYd82Z4pgJpYVhJEGjgbWgSQp7if_=Rf03VmTu+U9D3b=dVzA@mail.gmail.com>
-In-Reply-To: <CABYd82Z4pgJpYVhJEGjgbWgSQp7if_=Rf03VmTu+U9D3b=dVzA@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 29 Sep 2021 13:46:05 -0700
-Message-ID: <CALAqxLXUOY+tdJat0YaxAEiS_AWrwxBaLq3M90btSVdWfvFBag@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] timekeeping: add API for getting timekeeping_suspended
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=l4P1yQgHmK4IoeNIUGcmxpjGHV2AL8XAWEflVAlKCuA=;
+        b=aqfAQdY4DmsEq+1oKKobGAhgqqoG9Q5lghKtyE8EF1a3XhZx+904nDSLQ/z0bKJXZm
+         MQDfBskvYL5oFrqlOdnunX8s6ZPvHefQCM36nWvY6DoWMv9zSCA1D+9ZWlUBc4s+466G
+         1m8eoiXfTMdD3mtw2WTkcCmDOkyp8VcZgSm+ejDOUibp/qdAP8Fc72ZU3/Ta5pki0ojt
+         VacVLDffCl7tTdMpg2oMC7/Yd+eSx3pXbjSZNd1liCEhmtqAiyGCDJ3GgzI+xIVwdA/+
+         Cilt0PZ6YaNLN5L6QghK3KdN/Xo/Gq8aaMaUpqFaviUOGnkUwvO3KT+2GHL1rCI05ijL
+         NS7Q==
+X-Gm-Message-State: AOAM533Br4Yea4J5wy0Bw0RrDAaJhnTFX76A/6PtPGXqOCkLx4amClR/
+        21a0iEsVCZtAUcNS+4wjXE35zuJYwJJ8m1yKv3KoMvytllXTlhuYFSsTJRKFEBdzDrJ9yc/Fu3u
+        qCWnCegg0pUpAsGwnJ6Xwbz0OCQAiGM526m96iA==
+X-Received: by 2002:a05:6512:3193:: with SMTP id i19mr1482822lfe.485.1632982492792;
+        Wed, 29 Sep 2021 23:14:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw2ed5i0IuL5p++CT70JdS9PYYz1vbD+xm+23BVhAAobKjG9WLM+ErIJYhEnSrjoPv18RAJXQ==
+X-Received: by 2002:a05:6512:3193:: with SMTP id i19mr1482787lfe.485.1632982492506;
+        Wed, 29 Sep 2021 23:14:52 -0700 (PDT)
+Received: from [192.168.0.197] ([193.178.187.25])
+        by smtp.gmail.com with ESMTPSA id l6sm252964lfp.143.2021.09.29.23.14.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Sep 2021 23:14:51 -0700 (PDT)
 To:     Will McVicker <willmcvicker@google.com>
 Cc:     Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -65,60 +66,229 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Linus Walleij <linus.walleij@linaro.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Lee Jones <lee.jones@linaro.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Saravana Kannan <saravanak@google.com>,
-        Android Kernel Team <kernel-team@android.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com>
+ <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
+ configs
+Message-ID: <c65bf0db-6fd1-eb05-f407-37c41f9125f4@canonical.com>
+Date:   Thu, 30 Sep 2021 08:14:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Sep 29, 2021 at 1:01 PM Will McVicker <willmcvicker@google.com> wrote:
-> On Tue, Sep 28, 2021 at 8:42 PM John Stultz <john.stultz@linaro.org> wrote:
-> > On Tue, Sep 28, 2021 at 4:56 PM Will McVicker <willmcvicker@google.com> wrote:
-> > >
-> > > This allows modules to access the value of timekeeping_suspended without
-> > > giving them write access to the variable.
-> > >
-> >
-> > It's important to cover "the why" not "the what" in these commit
-> > messages, so you might add a note as to what code will be the user of
-> > this (the samsung/clk-pll.c code changed later in this series).
-> >
-> > thanks
-> > -john
->
-> Thanks John for the tip. I will try to be better at that in the followup.
+On 29/09/2021 21:48, Will McVicker wrote:
+> On Wed, Sep 29, 2021 at 6:02 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+>>
+>> On 29/09/2021 01:56, Will McVicker wrote:
+>>> This is v2 of the series of patches that modularizes a number of core
+>>> ARCH_EXYNOS drivers. Based off of the feedback from the v1 series, I have
+>>> modularized all of the drivers that are removed from the ARCH_EXYNOS
+>>> series of "select XXX". This includes setting the following configs as
+>>> tristate:
+>>>
+>>>  * COMMON_CLK_SAMSUNG
+>>>  * EXYNOS_ARM64_COMMON_CLK
+>>>  * PINCTRL_SAMSUNG
+>>>  * PINCTRL_EXYNOS
+>>>  * EXYNOS_PMU_ARM64
+>>>  * EXYNOS_PM_DOMAINS
+>>>
+>>> Additionally, it introduces the config EXYNOS_PMU_ARM64 and EXYNOS_PMU_ARM
+>>> which was previously EXYNOS_PMU and EXYNOS_PMU_ARM_DRIVERS respectively.
+>>> The reason for these new configs is because we are not able to easily
+>>> modularize the ARMv7 PMU driver due to built-in arch dependencies on
+>>> pmu_base_addr under arch/arm/mach-exynos/*. So the new configs split up
+>>> the ARM and ARM64 portions into two separate configs.
+>>>
+>>> Overall, these drivers didn't require much refactoring and converted to
+>>> modules relatively easily. However, due to my lack of exynos hardware, I
+>>> was not able to boot test these changes. I'm mostly concerned about the
+>>> CLK_OF_DECLARE() changes having dependencies on early timers. So I'm
+>>> requesting help for testing these changes on the respective hardware.
+>>>
+>>
+>> These are all not tested at all? In such case, since these are not
+>> trivial changes, please mark the series as RFT.
+>>
+>> I will not be able to test these for some days, so it must wait.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> +Cc Arnd and Olof,
+> 
+> Hi Krzysztof,
+> 
+> To avoid the scrambled conversation from the first patchset, I'm going
+> to address all your general questions here in the cover letter thread
+> so that it's easier for everyone to follow and reference in the
+> future.
+> 
+>> What is more, it seems you entirely ignored Geert's comments. I pointed
+>> attention to it last time and you just said you will send v2 instead of
+>> joining discussion.
+>>
+>> It's a NAK for this reason - ignoring what Geert brought: you just broke
+>> distro configs for Exynos.
+> 
+> First off I did want to chime into the discussion from the previous
+> patchset, but I felt that Lee and Saravana addressed all your concerns
+> regarding the intent and feasibility. You also made it clear what the
+> next steps were that I needed to take.
 
-I have to remind myself regularly as well. :)  Apologies if my quick
-reply above seemed curt (as it does to me re-reading it now). Wasn't
-my intent.
+One of the steps was problem with distros using everything as modules.
+They should not receive these drivers as modules.
+Reminder: these are essential drivers and all Exynos platforms must have
+them as built-in (at least till someone really tests this on multiple
+setups).
 
-> For this specific patch, I am adding this new API because the Samsung
-> PLL driver (drivers/clk/samsung/clk-pll.c) currently is using the
-> variable 'timekeeping_suspended' to detect timeouts before the
-> clocksource is initialized or timekeeping itself is suspended. My
-> patch series aims to modularize the Samsung PLL driver. So to keep the
-> driver's functionality intact, I need to add this additional API.
+> 
+>> Please also explain why Exynos is so special that we deviate from the
+>> policy for all SoC that critical SoC-related drivers have to be enabled
+>> (built-in or as module).
+> 
+> I am not actually changing ANY default build configurations here and
+> I'm not removing any existing configuration.
 
-Sounds good!
+You are changing not default, but selectability which is part of the
+enforced configuration to make platforms working. The distros do not
+always choose defaults but rather all as modules. Kernel configuration
+is huge and complex, so by mistake they could now even disable
+potentially essential driver. There is no need to disable for example
+essential clock driver on a supported Exynos platform.
 
-Another small/medium suggestion:  Since you're adding a new interface
-for non-core users of timekeeping_suspended, it might be good to
-switch the other users as well (seems like just
-drivers/clk/ti/clkctrl.c and kernel/sched/clock.c), then also remove
-the extern in include/linux/timekeeping.h (so there's one consistent
-method to access it)?  I know it's a sort of scope creep, so apologies
-for asking, but it would make the series more attractive if it's not
-leaving something for others to clean up later.
+> I tried to make it pretty
+> clear in my original patch series commit messages that none of my
+> changes modify the default behavior. The .config is the same with and
+> without my patches. All of these drivers remain enabled as built-in.
+> So if there is a distro that requires all of these drivers to be
+> built-in, then they can continue as is without noticing any
+> difference. IOW, all of these changes are/should be backwards
+> compatible.
 
-thanks
--john
+I was not referring to default neither to backwards compatibility.
+Please explain why Exynos is special that it does not require essential
+drivers to be selected as built-in. For example why aren't same changes
+done for Renesas?
+
+Is that now a new global approach that all SoC drivers should be allowed
+to be disabled for ARCH_XXX?
+
+> 
+> I really appreciate yours and John Stultz's comments regarding
+> including the "why" in my commit message wording. I will spend more
+> time on the next series on trying to write a more meaningful commit
+> message, but before that we can surely discuss the "why" here.
+> 
+> As mentioned by Lee and Saravana, our common goal is to make it easier
+> for everyone to contribute upstream. In particular, this series of
+> patches is laying the ground work for distros to have more flexibility
+> in supporting a wider range of platforms without forcing everyone to
+> include unnecessary drivers. 
+
+The drivers are usually necessary. Actually, you admitted you didn't
+test patchset, so how do you even know that they are unnecessary? How do
+ you judge?
+
+> You said that upstream supports a generic
+> kernel, but I argue that the upstream "generic" arm64 kernel can't be
+> considered generic if it builds in SoC specific drivers that can be
+> modules.
+
+Good point, but since having them as modules was not tested, I consider
+it as theoretical topic.
+
+> This patch series is addressing exactly that -- allow distros
+> to move SoC specific drivers out of the core kernel and into modules.
+> Ultimately, our goal is to be able to directly develop with the
+> upstream kernel on new and old SoCs by not including SoC specific
+> drivers in our generic kernel distro. This helps the upstream
+> community in a number of ways:
+> 
+> (1) It makes the ARM64 generic kernel smaller by converting more
+> drivers into modules
+> (2) It makes it a lot easier for everyone to develop upstream if they
+> can directly use the upstream kernel without carrying downstream
+> changes.
+
+I don't understand the point (2) here. Anyone can use upstream kernel
+for supported and unsupported platforms. How upstream benefits from a
+change affecting supported platforms made for unsupported, downstream
+platforms.
+
+> 
+>> Even if there was, I think it is good to have dependencies like
+>> ARCH_EXYNOS, as they let us partition the (19000, as Arnd said recently)
+>> Kconfig symbols into better manageable groups.  Without these, we cannot
+>> do better than "depends on ARM || ARM64 || COMPILE_TEST".
+> 
+> My patch series still keeps the dependencies on ARCH_EXYNOS. I am
+> totally fine with "depends on ARCH_EXYNOS" and totally fine with
+> "default ARCH_EXYNOS". The problem we have is that ARCH_EXYNOS
+> forcefully selects SoC specific drivers to be built-in because it just
+> adds more and more SoC-specific drivers to a generic kernel.
+
+The selected drivers are essential for supported platforms. We don't
+even know what are these unsupported, downstream platforms you want
+customize kernel for. They cannot be audited, cannot be compared.
+
+Therefore I don't agree with calling it a "problem" that we select
+*necessary* drivers for supported platforms. It's by design - supported
+platforms should receive them without ability to remove.
+
+If you want to change it, let me paste from previous discussion:
+
+Affecting upstream platforms just because vendor/downstream does not
+want to mainline some code is unacceptable. Please upstream your drivers
+and DTS.
+
+Everyone else are working like this. NXP, Renesas, Xilinx, TI, Rockchip,
+AllWinner. Samsung or Google is not special to receive an exception for
+this.
+
+
+> 
+> I know you are asking for me to only push changes that have proven to
+> work. 
+
+Yep, tested.
+
+> The theory behind these changes has been proven downstream on
+> other devices and I'm more than willing to help debug any issues that
+> arise out of this patch series, but since I don't have the hardware
+> myself I do need help with device testing these changes.
+
+Downstream uses very specific Linux "distro" or fork - Android - with
+changes not present in others. Although tests on other
+(unsupported/unupstreamed) devices is good, but it's not sufficient. For
+example I guess that half or most of Odroid devices are running standard
+Linux distro (Arch, Ubuntu).
+
+You also mentioned downstream devices but without actually ever defining
+them. Please be more specific. What SoC, what hardware?
+
+Best regards,
+Krzysztof
