@@ -2,57 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CADBA41ED7C
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Oct 2021 14:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2603A41F132
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Oct 2021 17:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353665AbhJAMdW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 1 Oct 2021 08:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S232313AbhJAP27 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 1 Oct 2021 11:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353707AbhJAMdW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Oct 2021 08:33:22 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE022C06177E
-        for <linux-rtc@vger.kernel.org>; Fri,  1 Oct 2021 05:31:37 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id a131-20020a1c7f89000000b0030d4c90fa87so1414820wmd.2
-        for <linux-rtc@vger.kernel.org>; Fri, 01 Oct 2021 05:31:37 -0700 (PDT)
+        with ESMTP id S232017AbhJAP26 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Oct 2021 11:28:58 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DE3C06177C
+        for <linux-rtc@vger.kernel.org>; Fri,  1 Oct 2021 08:27:14 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id rj12-20020a17090b3e8c00b0019f88e44d85so500664pjb.4
+        for <linux-rtc@vger.kernel.org>; Fri, 01 Oct 2021 08:27:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Mu18CAq1hBqJeqwZJAQst74KZfOgiaFerApR3I6y0OU=;
-        b=FXQiOVBOuXGIos9ZeYjN3BTAxm8yH1TdT07eKtbvce8xv5IVrtB1Lg4FQNFN9p7TN9
-         QkzNV6Ct/N3bi2v03QgZ1xJ+RqGFou/Pao0LO5z6nRQ51/hYNajXGlPREYU8VP7YoD6Y
-         vV13HXltj32P+yT4nhrAPpmLdz3iJUMgJuVprWHaBQkgObe1fnscPjuC3mtmfv6wIUB1
-         zgZQWcaz0BAljE8CIgE7XCnwZRuScBaNR274lLCpj9jara54mzkZPLfAIs3Ehiyyluo3
-         TRuxz5k1l+uYwZM5+DfHuL4h2dX6BIBeF0LRqMKWNoL9E0He3LhLvGa3XQg3e5Yq0tTQ
-         9DUA==
+        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NDBF0d4bKXIj7mL5yYNHBXYAg7HQa1G1QOL0lrIIjuQ=;
+        b=vyCE1SjTyUO59YshqoxCZREYCGmX1MLlD2wPH86txBGh9li4OkL1kVFk49gHlm1VaD
+         ftZLw4tkzhpF5hlX2FiAddEp3MvH4L4Fg1Mu1TLOsaieKla+AmpvH5c4iQ3aOZdX7oJz
+         J/pGhZFBosmhuydsPFT3/19gQUVWyqr0eY8Ghyjckm8+STHJ+H6Q3LINLYMkm4Tb/VWo
+         NQFkzjZU7JhIkTJrzj0vuwTjz49j6dfiPPG5QsH1KGBsWpu6suruD2Zoqy6ujUV0mXRr
+         zpx/0+szWfgVfjxzN57nEoskVnF5Aq/8+LXxY5e8sLc4+/IuGcxQc+oC0D/0qQqUcHIX
+         l9ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Mu18CAq1hBqJeqwZJAQst74KZfOgiaFerApR3I6y0OU=;
-        b=AwUmVJxWCiQlfhBCuzHSj/qKzQtad363+I1Zsy6ZXQImie+pDTYGe5TbqXTJedmTg5
-         Bi23k+/YI16DraDrlq4G2in2T37lo+YrjaLvwBNbIwRI/pmSUmZCKSXFfLWXCIjGLrGu
-         URxpFvxchVPtpXYkSMZr0n2YJQSakGVviRvh9cgSnnkx+OpHqD+0+nA79CpCBtTqw8L8
-         TgsjdBQJ5ugWzy6R3QODxh1a34ZRCMrqckamWKJA7hO7UWRoURi26hFWMS4hJNWLuDqJ
-         ScZ4i18uOft3c1o7dok3eC/CCBBUICXr3d41d3GI5FUEBidugoJ/aFAxdEZJoapM0d5c
-         F0gQ==
-X-Gm-Message-State: AOAM532BeE849bxJv4/0fDIopnqwN/N6CrH1KE9t+2lB2D7cTLrznNsa
-        kIAY3KKRg5u5meBaBLoii8HA+A==
-X-Google-Smtp-Source: ABdhPJyANjmM1xve1FUQ4nbwObWE0NHXAsZCEc1kKceOWCG8u6kOYtyXw5EldAPiHn3NgpgT0bxlGA==
-X-Received: by 2002:a05:600c:3646:: with SMTP id y6mr4250718wmq.61.1633091496338;
-        Fri, 01 Oct 2021 05:31:36 -0700 (PDT)
-Received: from google.com ([95.148.6.233])
-        by smtp.gmail.com with ESMTPSA id v18sm5429361wml.44.2021.10.01.05.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 05:31:35 -0700 (PDT)
-Date:   Fri, 1 Oct 2021 13:31:33 +0100
-From:   Lee Jones <lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NDBF0d4bKXIj7mL5yYNHBXYAg7HQa1G1QOL0lrIIjuQ=;
+        b=2jMY/2OupMV5PRgkHlHBR31tIgHQFINKcpfI6bdZfEIVSyrn/AANtgs0nyQtdaEM3U
+         j4alQSK1QAGR2BjcR5SsC1s3hIMY9xhSU4udbLy6gmvmf2DeaTbtIA3L20S24h4GO8Ch
+         qHjAsox6ftB/WFxMecIYditNWQHQa09PANC+IyMwYiojtVQg74ryoFlQthgaHHVZfqqv
+         Ufg8afo/EHEv89rx2SvgmJsmtGOsad8AoM4A5KmwRB+tqKt5NjKdlQTim+dSLOGTCgv2
+         AfFJ6OjqjtIZqxUd4qvb42/Fi+4vHAJxQzpbdIat5l+k9QWi1GTXg6Uo/xS6ds03N9VW
+         FGCQ==
+X-Gm-Message-State: AOAM531/F4umRnpBfemEreEI2DODHXInPcR8VE3xvH2SAQ6/JrlG6iSq
+        KBFiip8Xa0EAG3P/A91XGppeHbiXsSHXqW5mqlMs+Q==
+X-Google-Smtp-Source: ABdhPJw+H/uBI4TBsasR8eBHLbgky559HD5gbdguuPNsq60YvUyVD3gt7UgsIT81kS73NIa4qmiR13/eOF+1CUlO760=
+X-Received: by 2002:a17:902:c193:b0:13e:8e77:6c82 with SMTP id
+ d19-20020a170902c19300b0013e8e776c82mr1802110pld.29.1633102033855; Fri, 01
+ Oct 2021 08:27:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+ <CAOesGMgSt_mYvRzF0rC=fnjMYGO9EX0_Ow2cD1d8XKLD5pHsZA@mail.gmail.com>
+ <CAGETcx-b0ea-rqH+fj37sq9SLWY=+ePK94Y6rnLPuNbqFVBWmw@mail.gmail.com>
+ <CAMuHMdWhCB_zg6TwjYfz+=vc+_Wd5yzuAAzk=2ToZOQSAyaiJA@mail.gmail.com> <CAK8P3a10R-Q8hB-piH_QT0hzkaAZTczLbM=6WmgoMHYL8EhZ4g@mail.gmail.com>
+In-Reply-To: <CAK8P3a10R-Q8hB-piH_QT0hzkaAZTczLbM=6WmgoMHYL8EhZ4g@mail.gmail.com>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Fri, 1 Oct 2021 08:27:02 -0700
+Message-ID: <CAOesGMhHK7Z8Ki+UFRi24dXTdk4=YC6ExneOnfkVmG2HFiVMKw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Olof Johansson <olof@lixom.net>,
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Saravana Kannan <saravanak@google.com>,
         Will McVicker <willmcvicker@google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Russell King <linux@armlinux.org.uk>,
@@ -68,7 +73,7 @@ Cc:     Saravana Kannan <saravanak@google.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         John Stultz <john.stultz@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lee Jones <lee.jones@linaro.org>,
         "Cc: Android Kernel" <kernel-team@android.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -76,47 +81,79 @@ Cc:     Saravana Kannan <saravanak@google.com>,
         linux-clk <linux-clk@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
- configs
-Message-ID: <YVb/pQ1l34TcP81G@google.com>
-References: <20210928235635.1348330-1-willmcvicker@google.com>
- <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com>
- <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
- <CAOesGMgSt_mYvRzF0rC=fnjMYGO9EX0_Ow2cD1d8XKLD5pHsZA@mail.gmail.com>
- <CAGETcx-b0ea-rqH+fj37sq9SLWY=+ePK94Y6rnLPuNbqFVBWmw@mail.gmail.com>
- <CAOesGMhQ3YsLJeQ7aUfb=0oNa3uPCx42wO1U7-ArqJTAUq1G3Q@mail.gmail.com>
- <CAGETcx_k2-mo9oUcYhsXhhsazLdwbifjP7ZT8pvyEbWB5k_qQg@mail.gmail.com>
- <CAK8P3a1HtDoEDeqs42s1hDzCZMwU7MhudJ7TVONn6TjoijaWRw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK8P3a1HtDoEDeqs42s1hDzCZMwU7MhudJ7TVONn6TjoijaWRw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 01 Oct 2021, Arnd Bergmann wrote:
-> The vmlinux file is clearly too big and includes too much stuff that should
-> be in loadable modules
+On Fri, Oct 1, 2021 at 2:01 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Oct 1, 2021 at 10:19 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Fri, Oct 1, 2021 at 7:24 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > GIC and arch timer. Basically the minimal kernel would need a timer
+> > > for the scheduler tick and IRQ controller to get the timer IRQ and the
+> > > fixed clock driver if the archtimer uses one to get its frequency and
+> > > the early UART console is pointless as a module (so build it in to
+> > > allow debugging/development).
+> > >
+> > > And then all new drivers, we should make sure are implemented as
+> > > tristate drivers. And we can go back and slowly work on converting
+> > > existing drivers to modules (community effort -- not one person or
+> > > entity) -- at least the ones where the author has hardware or ones
+> > > where the change is very likely to be correct and someone else is
+> > > willing to test it. We'll never be able to support some/all ARM32 (do
+> > > they even have a GIC/arch timer standard?), but at least for ARM64,
+> > > this seems like a viable goal.
+> >
+> > Cortex-A7/A15 and later have GIC and architectured timer, so it should
+> > work for contemporary systems.
+> > Cortex-A9 systems may have GIC, and TWD and/or Global Timer (but I've
+> > seen SoCs where the interrupt for the latter was not wired :-(.
+>
+> There are a number of well-known examples even with 64-bit chips or
+> Cortex-A7/A15 based SoCs that can't use the architected timer,
+> irqchip or iommu.
+>
+> Apple M1, Broadcom BCM283x, Samsung Exynos5 and
+> some Hisilicon server parts come to mind, I'm sure there
+> are more.
 
-This for me is the crux of the matter.
+There's also more and more movement towards having coprocessors with
+standardized interfaces dealing with this functionality. We're
+currently at the point where they have coprocessors with
+non-standardized interfaces, and it's useful to keep encouraging
+convergence in this area to everybody's benefit. I don't find it
+particularly useful to make life easier for the custom solutions at
+the expense of others like this patchset does, when that's (just
+beyond? on?) the horizon.
 
-The ability to replace modules was only brought to light as an "and
-also, this is possible".  However in retrospect, given the attention
-this has received, it probably shouldn't have even mentioned, as it's
-not that important.
+> > What are the plans for other architectures?
+> > I've seen similar patches being applied for e.g. MIPS.
+>
+> There is some work in the more actively maintained MIPS
+> platforms to make those behave more like Arm/powerpc/riscv/m68k
+> platforms, using a single image and moving drivers into modules.
+> Most MIPS platforms seem unlikely to get updated to this,
+> and will continue to require a SoC specific kernel binary forever,
+> similar to the renesas superh platforms. Most of the less
+> common architectures (arc, csky, hexagon, nios2, xtensa,
+> microblaze, nds32, openrisc, sparc/leon) are way behind that
+> though, and generally don't work at all without out-of-tree
+> code.
 
-We should focus on the benefits of making parts of the kernel modular
-if technically possible.  The most prominent of those is core binary
-size, since this has a direct impact on boot-time and RAM usage.
+One of the arguments for needing some of these core drivers in-kernel
+is that some platforms boot at very conservative DVFS operating
+points, to a degree that you really want to turn up the CPU clocks
+fairly early during boot.
 
-Reclaiming dead code after boot is certainly one way to tackle part of
-the problem.  Ensuring that it's not even loaded into RAM in the first
-place is a better more encompassing solution to both issues IMHO.
+If you don't have the drivers built-in, you can't do that and/or you
+create possible fragile or awkward inter-module dependencies with
+deferred probing, etc. We do care about boot time enough to prefer to
+just build them in for this reason.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+If vmlinux binary size is a concern, maybe it's time to consider
+splitting the drivers into a bare-minimum piece that's not a module
+for early setup, and the rest that can be loaded post-boot.
+
+
+-Olof
