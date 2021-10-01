@@ -2,48 +2,47 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15FF41F2CD
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Oct 2021 19:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA90741F393
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Oct 2021 19:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354146AbhJARRn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 1 Oct 2021 13:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
+        id S1354178AbhJARuP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 1 Oct 2021 13:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbhJARRm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Oct 2021 13:17:42 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3394CC061775
-        for <linux-rtc@vger.kernel.org>; Fri,  1 Oct 2021 10:15:58 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y8so8521310pfa.7
-        for <linux-rtc@vger.kernel.org>; Fri, 01 Oct 2021 10:15:58 -0700 (PDT)
+        with ESMTP id S229515AbhJARuN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Oct 2021 13:50:13 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6CCC061775
+        for <linux-rtc@vger.kernel.org>; Fri,  1 Oct 2021 10:48:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id p13so9396086edw.0
+        for <linux-rtc@vger.kernel.org>; Fri, 01 Oct 2021 10:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jueFac70vsdugMKzw/1hrymuPlNnU6vlBs2drd9HRZ0=;
-        b=MxbNLGQCCbig5Uhw0R3MYcSN0quir7cSgwrasXVMo1eRFqOmSCQ7r4TYG2FC3ixZy4
-         jBMcrNynGmQdWbhSVyLVXa2EpSjplxv+iYzO/8PXOti0dHSC8qLJf/a1GBprUAxzvjCO
-         JqNqT1gdnTpQltTFXvTpSb6bWuYNpcbE9f11eittnUpS3OOrISFq4a2qP88HNlvBe6+O
-         Rd5WDArlZ92bdAl5jz2Se9zIJQwmh3DOe1aZPb1ipBHjTpx5a5AR4EXIPjk1Lu2RgzKk
-         6hGU7dFst5zk9EdUEnAhHO8EqFAUD0GIzsnAQWCvj3xVZBFtFdI6Ie/oJjhw81gHok71
-         3S2w==
+        bh=E435VevWHNvFfwzbwrSEsjtgrZwBjPFMUID//rqAmHc=;
+        b=HrAVVITqn8UALvaJMLEFX1IEvob89yUVhXwoNDpJg2aBCxAEgrEksiWwl/Pr+Hxc+3
+         3RVhXkMCRrBwLVNDhch3zhiHFzIOOlRJ43XQEf2/qVzwZWoM4xh5uiPYcItFTNLYWqgN
+         zJYjgi49ajbjRRiITLovVYrTLgWqIYL+DdavFCwUGZNXs8U2nYCNEZ7zf3dTADSfYOfE
+         dvmto4Slm0JeiFuzCB/HUvabALZvuz1ENrxPhlr87swuBhd8mcRoUFk0X1t9n+u+gkxA
+         S1OAGY5w7NyVZNtD0UqccaAqAJWMZiyKOF0s0xVpbKbwkfTU7fVFJFTTCMfdlK2Q9aAN
+         1hsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jueFac70vsdugMKzw/1hrymuPlNnU6vlBs2drd9HRZ0=;
-        b=fZdilW0DWfurlkr/FNImtfJ1DvNBjGDR4+0v+b9Nt9tSUXb/PVfgHOCyB+9Tt07ixf
-         p+skr7aWy1ld/JvTd6y1pBVxJ0bKwbPSpKhCQhOBvkMHjQMpX+oIZgpPwIaAGSzpi2IF
-         gQueEX9aVeeFAZDl/kPNXpVxuxYw1G8l6uMHBsr93YVu/er6lqFM4fkKOKa9uLWer7E7
-         kIC98tlrvDIUOQmSjAXubQ7BwSxGXAuoHE2DhIaVOHJLGzyH2qSDiKoOzrl1vqPS0b2q
-         pKBMvMkWWn7r5je/Z4OkR8dRil2BxTD4JrrMGLS8XJ78KyKhV7YWHMZnw+hg+MIB75gN
-         H73g==
-X-Gm-Message-State: AOAM531O+qEaj/O4fVr3vk0WJo6FZnF4OFSJa6oN9Z49MQyv8r0zLogr
-        X++rtyH/QBUP4sSvF9hIe6NjIoexj+9dMFcIUSucpg==
-X-Google-Smtp-Source: ABdhPJzIURC1ilSo/RDRJtK9qrgQDFjOMuiaHQU4uBaUufPCNARajRkk+XZvnHmfCrnQDb6mpRHlKcoo93g+Wny3hJY=
-X-Received: by 2002:aa7:959a:0:b0:43b:adeb:ef58 with SMTP id
- z26-20020aa7959a000000b0043badebef58mr11278939pfj.19.1633108557566; Fri, 01
- Oct 2021 10:15:57 -0700 (PDT)
+        bh=E435VevWHNvFfwzbwrSEsjtgrZwBjPFMUID//rqAmHc=;
+        b=4QdSd43vgQVjVhf+SX+NgreWbxUKBfsJCokErysrw+zbj5RHB4hI4v1X0glcrMgOzA
+         goJx6gZkAQ0Bb6tqbYH1e8vPWJDrbhYGnAcj4JZjXeH7ur7vFe9Pd+AVP4+1QSJX/jgx
+         C/04FBglcaW6gqMlNHxmc6n04GM2lU05cKc0+QywzEZb7jQVnX+P+8ZLjuOQg6Rsd6me
+         uZH15wen7utFmpeHwnjvqai94J1hhTmmEz3iFIpomB4KkM0lctbaxASfxkrw9oaPhBu5
+         a88tXiKOmApiBJuNykhmgofllARz7Y7K+b5L1dM6s69qg2vYhTDVPdDwU/3DJ61kWoVl
+         ZNcQ==
+X-Gm-Message-State: AOAM530M40X0inLUrNbIsxsxrdD5hmjdCx8MYTcFxlcMqNr0iovAU4Gl
+        cY0CL8ZS04tGosqkPnG1c+AnQFOCSGddELWkONSQxQ==
+X-Google-Smtp-Source: ABdhPJx2UKqAdOO40LH0YnQG+0frDPf32/9ThPP5PQp8PkBdz4P4kYMJpQVj2Lm4c8EVFOtz5hRi6xe/znckYZs8U8o=
+X-Received: by 2002:a17:906:3a58:: with SMTP id a24mr7926006ejf.67.1633110506264;
+ Fri, 01 Oct 2021 10:48:26 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210928235635.1348330-1-willmcvicker@google.com>
  <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
@@ -51,13 +50,14 @@ References: <20210928235635.1348330-1-willmcvicker@google.com>
  <CAGETcx-b0ea-rqH+fj37sq9SLWY=+ePK94Y6rnLPuNbqFVBWmw@mail.gmail.com>
  <CAOesGMhQ3YsLJeQ7aUfb=0oNa3uPCx42wO1U7-ArqJTAUq1G3Q@mail.gmail.com>
  <CAMuHMdUkMwyA-bk7hfr7S7TE-_S9eBUxKWKmpj0rDCUvHL+fxw@mail.gmail.com>
- <CAOesGMg_eA5PNzsL76xv6kDQ2QUZeCwC04BNeucfGXkFSOE=Tw@mail.gmail.com> <CABYd82YSh=q-QrUN+nbzMZ7Z9SKq8V7eAL1=m1mg-j-f8BCbDg@mail.gmail.com>
-In-Reply-To: <CABYd82YSh=q-QrUN+nbzMZ7Z9SKq8V7eAL1=m1mg-j-f8BCbDg@mail.gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Fri, 1 Oct 2021 10:15:45 -0700
-Message-ID: <CAOesGMiubqENbGSuQ_FQA59vA897R5nkgq5vu5Tg6kqbEVdz0A@mail.gmail.com>
+ <CAOesGMg_eA5PNzsL76xv6kDQ2QUZeCwC04BNeucfGXkFSOE=Tw@mail.gmail.com>
+ <CABYd82YSh=q-QrUN+nbzMZ7Z9SKq8V7eAL1=m1mg-j-f8BCbDg@mail.gmail.com> <CAOesGMiubqENbGSuQ_FQA59vA897R5nkgq5vu5Tg6kqbEVdz0A@mail.gmail.com>
+In-Reply-To: <CAOesGMiubqENbGSuQ_FQA59vA897R5nkgq5vu5Tg6kqbEVdz0A@mail.gmail.com>
+From:   Will McVicker <willmcvicker@google.com>
+Date:   Fri, 1 Oct 2021 10:48:09 -0700
+Message-ID: <CABYd82ZHCrd5qhFUCTFPxPXn69LgdfWbW7zSMoTKaKq7FXvx=g@mail.gmail.com>
 Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
-To:     Will McVicker <willmcvicker@google.com>
+To:     Olof Johansson <olof@lixom.net>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Saravana Kannan <saravanak@google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -87,76 +87,88 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 9:51 AM Will McVicker <willmcvicker@google.com> wrote:
+On Fri, Oct 1, 2021 at 10:16 AM Olof Johansson <olof@lixom.net> wrote:
 >
-> On Fri, Oct 1, 2021 at 9:00 AM Olof Johansson <olof@lixom.net> wrote:
+> On Fri, Oct 1, 2021 at 9:51 AM Will McVicker <willmcvicker@google.com> wrote:
 > >
-> > On Fri, Oct 1, 2021 at 4:59 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Fri, Oct 1, 2021 at 9:00 AM Olof Johansson <olof@lixom.net> wrote:
 > > >
-> > > Hi Olof,
+> > > On Fri, Oct 1, 2021 at 4:59 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > >
+> > > > Hi Olof,
+> > > >
+> > > > On Fri, Oct 1, 2021 at 7:36 AM Olof Johansson <olof@lixom.net> wrote:
+> > > > > A much more valuable approach would be to work towards being able to
+> > > > > free up memory by un-probed drivers at the end of boot. That would
+> > > > > possibly benefit all platforms on all architectures.
+> > > >
+> > > > We used to have such a functionality in arch/ppc (not arch/powerpc!),
+> > > > where code/data could be tagged __prep, __chrp, or __pmac, to put it
+> > > > in a special section, and to be freed with initdata when unused.  It
+> > > > was removed in v2.6.15[1], as the savings weren't worth the hassle.
+> > > > In a more fragmented space like arm the memory lost due to alignment
+> > > > of the sections would be even more substantial.
 > > >
-> > > On Fri, Oct 1, 2021 at 7:36 AM Olof Johansson <olof@lixom.net> wrote:
-> > > > A much more valuable approach would be to work towards being able to
-> > > > free up memory by un-probed drivers at the end of boot. That would
-> > > > possibly benefit all platforms on all architectures.
+> > > Yeah, the balance between per-platform code size and overall kernel
+> > > code size shifted over time to a point where it wasn't as meaningful
+> > > on ppc.
 > > >
-> > > We used to have such a functionality in arch/ppc (not arch/powerpc!),
-> > > where code/data could be tagged __prep, __chrp, or __pmac, to put it
-> > > in a special section, and to be freed with initdata when unused.  It
-> > > was removed in v2.6.15[1], as the savings weren't worth the hassle.
-> > > In a more fragmented space like arm the memory lost due to alignment
-> > > of the sections would be even more substantial.
+> > > > Another problem is to know when is the end of the boot, especially
+> > > > with deferred probing.
+> > >
+> > > Most of this code either has a module_init() or an initcall that
+> > > actually registers the drivers and/or probes for the platform and does
+> > > the work.
+> > >
+> > > This means you can have a late equivalent hook/initcall that
+> > > determines whether this path ended up being probed/used. If it wasn't,
+> > > you can then unregister and flag the corresponding memory to be freed
+> > > at the end, and would take out the heuristics and guessing on needing
+> > > to do it automatically from the code path that's doing said freeing.
+> > >
+> > >
+> > > -Olof
 > >
-> > Yeah, the balance between per-platform code size and overall kernel
-> > code size shifted over time to a point where it wasn't as meaningful
-> > on ppc.
+> > First off, I appreciate the constructive conversations and I
+> > understand the ask here. So I'd like to close the "we don't want this"
+> > and "this isn't possible" conversation. We have already proven
+> > downstream that it is in fact possible to modularize these drivers on
+> > other SoCs (mentioned earlier if you missed it) and I'd like to direct
+> > the conversation towards verifying/testing here instead of negatively
+> > arguing about how SoC vendors aren't upstreaming their drivers. I
+> > think everyone understands that, but unfortunately I have no control
+> > over that even though I would love everyone to work upstream directly.
 > >
-> > > Another problem is to know when is the end of the boot, especially
-> > > with deferred probing.
-> >
-> > Most of this code either has a module_init() or an initcall that
-> > actually registers the drivers and/or probes for the platform and does
-> > the work.
-> >
-> > This means you can have a late equivalent hook/initcall that
-> > determines whether this path ended up being probed/used. If it wasn't,
-> > you can then unregister and flag the corresponding memory to be freed
-> > at the end, and would take out the heuristics and guessing on needing
-> > to do it automatically from the code path that's doing said freeing.
-> >
-> >
-> > -Olof
+> > I am fine with forcing these drivers to always be enabled in some form
+> > upstream even though it doesn't really make much sense for a generic
+> > kernel that will run on Qualcomm, Exynos, Mediatek, (you name it) SoC
+> > devices. I thought about how to do this yesterday and wasn't able to
+> > come up with a proper solution that didn't always force this driver to
+> > be a module when CONFIG_MODULES is enabled.
 >
-> First off, I appreciate the constructive conversations and I
-> understand the ask here. So I'd like to close the "we don't want this"
-> and "this isn't possible" conversation. We have already proven
-> downstream that it is in fact possible to modularize these drivers on
-> other SoCs (mentioned earlier if you missed it) and I'd like to direct
-> the conversation towards verifying/testing here instead of negatively
-> arguing about how SoC vendors aren't upstreaming their drivers. I
-> think everyone understands that, but unfortunately I have no control
-> over that even though I would love everyone to work upstream directly.
+> This line of reasoning: "I couldn't think of a better option" made us
+> merge a userspace ABI some time ago that within a few months was
+> replaced with a better solution. In that case it was the kernel
+> headers bundling with a build (extending the vmlinux size by a lot),
+> that seemed to have no concerns about binary growth. Not all that far
+> after that went in, the BPF folks came up with a solid solution for
+> CO-RE by introducing BTF, etc.
 >
-> I am fine with forcing these drivers to always be enabled in some form
-> upstream even though it doesn't really make much sense for a generic
-> kernel that will run on Qualcomm, Exynos, Mediatek, (you name it) SoC
-> devices. I thought about how to do this yesterday and wasn't able to
-> come up with a proper solution that didn't always force this driver to
-> be a module when CONFIG_MODULES is enabled.
+> So, the argument "I can't think of a better solution" is a local
+> maxima that we shouldn't settle for if there's a likely better global
+> maxima available with a bit more time/effort. If we say "this problem
+> is worth solving but this doesn't seem to be the solution we want to
+> go for" we might actually be better off long-term.
+>
+>
+> -Olof
 
-This line of reasoning: "I couldn't think of a better option" made us
-merge a userspace ABI some time ago that within a few months was
-replaced with a better solution. In that case it was the kernel
-headers bundling with a build (extending the vmlinux size by a lot),
-that seemed to have no concerns about binary growth. Not all that far
-after that went in, the BPF folks came up with a solid solution for
-CO-RE by introducing BTF, etc.
+If the answer is, "we don't have a solution for that" then that's
+fine. I'm not an expert at Kconfig configurations and am asking if
+there is already a way to handle this. To me it sounded like there
+might be a solution already due to this policy of "we don't allow
+disabling drivers that are essential." I'll wait for Krysztof to
+respond (or someone who has a potential solution) before I dig into
+this deeper.
 
-So, the argument "I can't think of a better solution" is a local
-maxima that we shouldn't settle for if there's a likely better global
-maxima available with a bit more time/effort. If we say "this problem
-is worth solving but this doesn't seem to be the solution we want to
-go for" we might actually be better off long-term.
-
-
--Olof
+--Will
