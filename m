@@ -2,190 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F22A841FE26
-	for <lists+linux-rtc@lfdr.de>; Sat,  2 Oct 2021 23:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7264201A5
+	for <lists+linux-rtc@lfdr.de>; Sun,  3 Oct 2021 15:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbhJBVE7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 2 Oct 2021 17:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S230290AbhJCNRV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 3 Oct 2021 09:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbhJBVE7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 2 Oct 2021 17:04:59 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2655C0613F0
-        for <linux-rtc@vger.kernel.org>; Sat,  2 Oct 2021 14:03:12 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 75so12779573pga.3
-        for <linux-rtc@vger.kernel.org>; Sat, 02 Oct 2021 14:03:12 -0700 (PDT)
+        with ESMTP id S230215AbhJCNRU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 3 Oct 2021 09:17:20 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D73C0613EC
+        for <linux-rtc@vger.kernel.org>; Sun,  3 Oct 2021 06:15:32 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id n2so9304908plk.12
+        for <linux-rtc@vger.kernel.org>; Sun, 03 Oct 2021 06:15:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f7kGYU9i8iehxQ7ed0jxcX484pBLuV+nP2UpT0YHga0=;
-        b=KCFo1XEywDIaVfsHl65LLQZLhInq0HBpq3+oWSErEM00ItsX5IHl+xXjsw30f5qNfY
-         GcJPfDhslBinoV++447QA+WNp9oVKL7+UjxlR2Pj+mPLnS+/l/jt+r0XEpvWam0MWV7b
-         K+enVYzKefruDJIA3vIq2R5OCTWMbBL9aX626+JXAQ9ZrL4vl2/Lagt2QU5iaWlkxM08
-         xcuyL7xPiIxL74Mvp36cToiPtTIQgfPY7bGXJeo1oziAMObwXHIyYZy06bFc/T2TFmrH
-         Fyrl4AkwSpuPBIAzGiwICybIH/KuXgmFZfW4DOWGun16Bjb6knwM/KAf5cpdvnXXzL8u
-         cbCQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=RNJERDOIDcil3yoF2ADjmROEOLO4j0hGtz7GlVopmOU=;
+        b=Ku31O49TKxGkgrtjjyrnP6eeJJCWPNI+/7eaCBwDN79KwMqoVIp92RH6OzNTTW6MKA
+         qWoB9NkzEsnyeOVQB2gJFk6nTSeFMxtXJAeU52Ao5NDkUcD6bbkusDRnJoo9P0HpjUhL
+         HqdabfC7ZJ4ARM/5YbDJEMLbx6898uKl8kHkN+tNSBf/E3P0KAPuzvD+tvS2zPxnWKbt
+         2hgT3WrlgIhcaL2V/PCsuOeM1gNbGbAx0ZZGNXL2EK3m/Ro6ANBIzVCa6YbeH/yeVIZA
+         cJiiTAXT8VZUfO/yP9TkkGeWmiDSKvR6JMLlV45+SVYhXpTx6zWrWRHvHv6Z6XANCm0Y
+         8s8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f7kGYU9i8iehxQ7ed0jxcX484pBLuV+nP2UpT0YHga0=;
-        b=2u0OtxlO7bQMu+/z/QMIeOfYBsd4zDNqXvvQ+iNkOKc69vPgBPuOV4neufWHUgaZG/
-         aRFR2BC/hRVykfgxY9En2pmROnwgEjyvwGXrFHQYQoki8kSwJCxHhJBdhm1hPoIsMJfF
-         NEXpGg5WGslUhAUmhPPoiJGgva2QqhREfa96ltGiae8KtKvgKLSU47AHMCvDKCUvl39m
-         6N2QVTRvgB5TNKl5TCk5xTKX1vOL6iBJ+og32MB2N8hS/VEhP0Cgc9hCrpPZxFbSOzx9
-         TLcOy8wYIuUciAa6OtiH2OmrdWQBsvbc3vZ06ljjIC8nD/PQanQo3Tc5EBRshvGiVsRQ
-         a/Pw==
-X-Gm-Message-State: AOAM533STtdpEsN60RP4gZPSCypeQ4tOj6Ed3Z7yjJjWifWEorZoWGxW
-        0pxQZ6LRoJYvhOU4X2aljyWPnGEnCI07BlqgDF/Nng==
-X-Google-Smtp-Source: ABdhPJzhI8aTPmQj2TCDJhpk71KTGItBNrMGOeuXQgD40I3hEWBhRl+v6gpth7rPwL1yQxOj5GJoI1Mw+eknEQj7Zp0=
-X-Received: by 2002:aa7:959a:0:b0:43b:adeb:ef58 with SMTP id
- z26-20020aa7959a000000b0043badebef58mr16909160pfj.19.1633208592223; Sat, 02
- Oct 2021 14:03:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=RNJERDOIDcil3yoF2ADjmROEOLO4j0hGtz7GlVopmOU=;
+        b=JVT9jhbGAtM8wVBjbrhHiNZbxBp2gJqHAAKZerjoXCgrsKpAIG785z9ekWZ8pkPxQI
+         ZL0xjErl//xY0mvwov4Wj+1pVxk7a+FRZwfr6hMIJxtB4YKvStwKTauwd7G1IZ5PX3QV
+         Rgrcg3F5vJ8nM1ySM2b6mGzCUWWNV7q3+VVl3jdfhVajqxS2Mv0SWaAbVhdAz9sJfYSj
+         ClC8DJCSK7IgEzjyR/KK0GsZIb/OD9U5SzPTEvBUbqnU3lNKM4kkGNJtj1m6efRqXxBa
+         W4Anq46N3xvYZymu4RIFqcbSc8/I6noFKPFqNQPzKSjef7dYongwxCZ5DWaz8A1ZPMPg
+         Gtuw==
+X-Gm-Message-State: AOAM531RFXKs//Qf/QKkn3DDuezgKOhsU3iBl69/97tCO7t76ly9V75/
+        C5A6vSpLErU2zak+xM6T+59kySFgT1Y3cSYPj34=
+X-Google-Smtp-Source: ABdhPJw5EKdQxe1lMEfHk1VwrCXRklAI65YOay7OOBvD0+QO6RQeDMbHrnesvdJ17xopo9+2ff/uxm6m6KYep0cQI98=
+X-Received: by 2002:a17:90b:4a90:: with SMTP id lp16mr7724012pjb.25.1633266932137;
+ Sun, 03 Oct 2021 06:15:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210928235635.1348330-1-willmcvicker@google.com>
- <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
- <CAOesGMgSt_mYvRzF0rC=fnjMYGO9EX0_Ow2cD1d8XKLD5pHsZA@mail.gmail.com>
- <CAGETcx-b0ea-rqH+fj37sq9SLWY=+ePK94Y6rnLPuNbqFVBWmw@mail.gmail.com>
- <CAMuHMdWhCB_zg6TwjYfz+=vc+_Wd5yzuAAzk=2ToZOQSAyaiJA@mail.gmail.com>
- <CAK8P3a10R-Q8hB-piH_QT0hzkaAZTczLbM=6WmgoMHYL8EhZ4g@mail.gmail.com>
- <CAOesGMhHK7Z8Ki+UFRi24dXTdk4=YC6ExneOnfkVmG2HFiVMKw@mail.gmail.com> <CAGETcx_UFLCwmqs_d5c8JY8Je9r=jy=KnELz1h91Qbrw9z+kaw@mail.gmail.com>
-In-Reply-To: <CAGETcx_UFLCwmqs_d5c8JY8Je9r=jy=KnELz1h91Qbrw9z+kaw@mail.gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Sat, 2 Oct 2021 14:03:00 -0700
-Message-ID: <CAOesGMjn-RKqRBL_A2bYjOb4jVhMbjvJs4JGtrQzX-WVSvJ6dQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Will McVicker <willmcvicker@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
+Received: by 2002:a05:6a10:83c2:0:0:0:0 with HTTP; Sun, 3 Oct 2021 06:15:31
+ -0700 (PDT)
+Reply-To: drrhamabenson16@gmail.com
+From:   Dr Rhama Benson <drrhamabenson2016@gmail.com>
+Date:   Sun, 3 Oct 2021 06:15:31 -0700
+Message-ID: <CAJPyHHY-xuZ8NJ2rya-EN=6CLQcuEGP+DNJPUvfUvasLrGkPZw@mail.gmail.com>
+Subject: Contact me back immediately.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Oct 1, 2021 at 12:26 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Fri, Oct 1, 2021 at 8:27 AM Olof Johansson <olof@lixom.net> wrote:
-> >
-> > On Fri, Oct 1, 2021 at 2:01 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Fri, Oct 1, 2021 at 10:19 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Fri, Oct 1, 2021 at 7:24 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > > > GIC and arch timer. Basically the minimal kernel would need a timer
-> > > > > for the scheduler tick and IRQ controller to get the timer IRQ and the
-> > > > > fixed clock driver if the archtimer uses one to get its frequency and
-> > > > > the early UART console is pointless as a module (so build it in to
-> > > > > allow debugging/development).
-> > > > >
-> > > > > And then all new drivers, we should make sure are implemented as
-> > > > > tristate drivers. And we can go back and slowly work on converting
-> > > > > existing drivers to modules (community effort -- not one person or
-> > > > > entity) -- at least the ones where the author has hardware or ones
-> > > > > where the change is very likely to be correct and someone else is
-> > > > > willing to test it. We'll never be able to support some/all ARM32 (do
-> > > > > they even have a GIC/arch timer standard?), but at least for ARM64,
-> > > > > this seems like a viable goal.
-> > > >
-> > > > Cortex-A7/A15 and later have GIC and architectured timer, so it should
-> > > > work for contemporary systems.
-> > > > Cortex-A9 systems may have GIC, and TWD and/or Global Timer (but I've
-> > > > seen SoCs where the interrupt for the latter was not wired :-(.
-> > >
-> > > There are a number of well-known examples even with 64-bit chips or
-> > > Cortex-A7/A15 based SoCs that can't use the architected timer,
-> > > irqchip or iommu.
-> > >
-> > > Apple M1, Broadcom BCM283x, Samsung Exynos5 and
-> > > some Hisilicon server parts come to mind, I'm sure there
-> > > are more.
-> >
-> > There's also more and more movement towards having coprocessors with
-> > standardized interfaces dealing with this functionality. We're
-> > currently at the point where they have coprocessors with
-> > non-standardized interfaces, and it's useful to keep encouraging
-> > convergence in this area to everybody's benefit. I don't find it
-> > particularly useful to make life easier for the custom solutions at
-> > the expense of others like this patchset does, when that's (just
-> > beyond? on?) the horizon.
-> >
-> > > > What are the plans for other architectures?
-> > > > I've seen similar patches being applied for e.g. MIPS.
-> > >
-> > > There is some work in the more actively maintained MIPS
-> > > platforms to make those behave more like Arm/powerpc/riscv/m68k
-> > > platforms, using a single image and moving drivers into modules.
-> > > Most MIPS platforms seem unlikely to get updated to this,
-> > > and will continue to require a SoC specific kernel binary forever,
-> > > similar to the renesas superh platforms. Most of the less
-> > > common architectures (arc, csky, hexagon, nios2, xtensa,
-> > > microblaze, nds32, openrisc, sparc/leon) are way behind that
-> > > though, and generally don't work at all without out-of-tree
-> > > code.
-> >
-> > One of the arguments for needing some of these core drivers in-kernel
-> > is that some platforms boot at very conservative DVFS operating
-> > points, to a degree that you really want to turn up the CPU clocks
-> > fairly early during boot.
-> >
-> > If you don't have the drivers built-in, you can't do that and/or you
-> > create possible fragile or awkward inter-module dependencies with
-> > deferred probing, etc. We do care about boot time enough to prefer to
-> > just build them in for this reason.
->
-> Go look at a Pixel 5, we got this working just fine with all these
-> drivers as modules and we definitely care about boot time. You just
-> need to load your CPU freq driver and the other ones it needs early
-> on. And with fw_devlink=on (default in upstream), there's hardly any
-> deferred probing.
+My Dear Friend.
 
-Unfortunately these problems are usually easier to fix on new
-platforms, especially during new product development. The hard part is
-making sure you haven't regressed any of the legacy platforms when
-you're changing the implementation for them as well.
+How are you and your family today? I hope all is well, I'm happy to
+share this transaction with you. I have a very lucrative business
+transaction which requires your utmost discretion. Please understand
+that you and me are to work as one team to inherit this fund, hence I
+am your insider in the bank as the transaction commence. I will direct
+you how to claim and get the fund without any problem I also advise
+you to feel free because its 100% legal and risk free.
 
+Though, I know it would come to you at uttermost surprise and unbelief
+because its internet contact and it's virtually impossible to know who
+is trustworthy and who to believed but don't be afraid you will not
+regret of dealing with me, I want you to help me to claim and receive
+the fund to your account in your country where it will share between
+me and you for our own benefit.
 
-> > If vmlinux binary size is a concern, maybe it's time to consider
-> > splitting the drivers into a bare-minimum piece that's not a module
-> > for early setup, and the rest that can be loaded post-boot.
->
-> Isn't this literally what I was suggesting with my
-> ARM64_MINIMAL_GENERIC_KERNEL suggestion? Build in all the bare minimum
-> drivers that are needed before module loading can happen? You'd just
-> select them all under that config. And any existing platform that
-> wants to use it would break up their drivers into modules and switch
-> to it.
+I am aware of the unsafe nature of the internet and was compelled to
+use this medium due to the nature of this project. I have access to
+every vital information that can be used to transfer the fund, which
+may culminate into the investment of the said funds into your account
+or any lucrative company in your country.
 
-Do you understand the implications of your proposal on the complexity
-for those who care about making sure different config combinations
-keep building and working, i.e. both the minimal-generic-kernel and
-the regular generic version? You've doubled the testing workload for
-all of those folks. It's a different mindset from when you mostly need
-to care about your one config and platform.
+If you will like to assist me as a partner then kindly indicate your
+interest, after which we shall both discuss the modalities and the
+sharing percentage. Upon receipt of your reply on your expression of
+interest, I will give you full details on how the business will be
+executed. I am open for negotiation,
 
+Thanks for your anticipated cooperation. Note you might receive this
+message in your inbox or spam folder, depends on your web host or
+server network. Contact me through this
+email(drrhamabenson16@gmail.com)
 
--Olof
+Name....
+Age.......
+Country......
+Telephone Number......
+
+Compliment of the day,
+Regards,
+Dr. Rhama.
