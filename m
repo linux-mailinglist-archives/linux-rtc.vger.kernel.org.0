@@ -2,81 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612C54263D0
-	for <lists+linux-rtc@lfdr.de>; Fri,  8 Oct 2021 06:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29047427A23
+	for <lists+linux-rtc@lfdr.de>; Sat,  9 Oct 2021 14:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbhJHEdi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 8 Oct 2021 00:33:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57910 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229501AbhJHEdh (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 8 Oct 2021 00:33:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 033DA60F3A;
-        Fri,  8 Oct 2021 04:31:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633667503;
-        bh=utkmbRIJp7j/rfAwWkG5g17O9iieLqyGctrPZuR07oU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=qAUKYUF8o2QxOtUmCJZ48ELFKpXhVoh0lmGpW/9Yrizk/L0xmbw2xWVeRq2FEcHFt
-         v2CF9AVbbmsDs6U8M4mOosI6yO5gGQTNAnacbBueWdQErGMgBFJCxh+hobHhc3yP0Y
-         e6bmdQi72UHTMnXyeRBAwxG0mqrluG5ekjkebg9Y2SNybbxxjg1NrcyQgz9UA4vg9T
-         OTaE5JZDQO+ydlV8oOQLsM1prBeI3J/Sen6ncqrRGHWkoEpX2WogMj4zo23wl3gzzT
-         RCpMBsLyR/rAOB+W0pwOG3yR9kMeKB7cqDEqP5rimbX4exKM1wSpm+9dMf4kvsk//i
-         +kLtlDYUDQNFQ==
-Content-Type: text/plain; charset="utf-8"
+        id S232382AbhJIMfF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 9 Oct 2021 08:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232332AbhJIMfE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 9 Oct 2021 08:35:04 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D42C061570
+        for <linux-rtc@vger.kernel.org>; Sat,  9 Oct 2021 05:33:08 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id r1so27080687ybo.10
+        for <linux-rtc@vger.kernel.org>; Sat, 09 Oct 2021 05:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Up0euE0T7PDAvcflpiaUZY3A6bcvHprIyA15lwDbsnE=;
+        b=RDynEaMVsbBeneFQZ/aiPYas5VuswkAcTUuHScSLlWab8zZBzh6+FPriQdgYWATTFs
+         A35ySwN8ymDJ+H/X/CaI3B/v98uEX3Rkbzl03sWVylcCrni8Ap1R2VlyXESDop224jw8
+         cTKo4ZsK5jkOeFt3OfPJ3pBFlnpg4TAv+18LoRI+raq/KuRBKB251+sVDp5JD+9o/EL9
+         WmNjvXICYmJD1e8jMVAaKz48CSO/YkWiyajD9OXtjG++nXbBbae6nElJT+OZipEYSqfT
+         OlPAFlh1dpMLYMEB0WktL+P9c4eNNZpUTs6NaKbrgeab8ZhQiKeVoDXJhwKnFuuIIT5d
+         +puA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Up0euE0T7PDAvcflpiaUZY3A6bcvHprIyA15lwDbsnE=;
+        b=EnY1dF61xUowxtrx0YkRTcm/6kHgMYzmXTiom3tAVzxafYaVd2IaWR6pIfbOQnVzzr
+         VQEUylVVWbuFAqQ5KM2+g/MSuA1NHkg7LtRx2EY2w/3q4Pbf7+Ky8fjLd50rTMFcoXRv
+         atd6EIamGzEOOR5IATGHTGvowEBWSVMnuY70TaZPd9sUZCcPiie/pjvlMpucflMU0DUD
+         zFRTQuIbDaoFvD0Rg3AeXeQ4houpFPyhb0+36qZ9jwXYu8R3By0dY1XK/HXTHZtlyxOQ
+         9uucR74lP36ytwsbBIhtb6PxS2vj2+NSgyIFToBenroMBAlSyPJ2no1oJ52jzpvRNXkJ
+         UjyA==
+X-Gm-Message-State: AOAM532sdB2WAf9J2J7erKQTg1lQwUFqLckpN8a8HWSgyVGPduSVD5qM
+        6bjjrABhxduqSeBc57Gsht06PobJP7evcbD1xWQ=
+X-Google-Smtp-Source: ABdhPJzlJH5wW//1iTQh4BMmPc7G6hiH1JDHPMHCdPrgLWBlQiVaBIj9nshQOriSQ4YI1cvRkibfoBs4Zmaup+NsYJg=
+X-Received: by 2002:a25:34c8:: with SMTP id b191mr9474980yba.184.1633782787146;
+ Sat, 09 Oct 2021 05:33:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210928235635.1348330-6-willmcvicker@google.com>
-References: <20210928235635.1348330-1-willmcvicker@google.com> <20210928235635.1348330-6-willmcvicker@google.com>
-Subject: Re: [PATCH v2 05/12] clk: export __clk_lookup
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Will McVicker <willmcvicker@google.com>,
-        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Will McVicker <willmcvicker@google.com>
-Date:   Thu, 07 Oct 2021 21:31:41 -0700
-Message-ID: <163366750168.2041162.10913803047304286656@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Received: by 2002:a05:7000:285:0:0:0:0 with HTTP; Sat, 9 Oct 2021 05:33:06
+ -0700 (PDT)
+Reply-To: lydiawright836@gmail.com
+From:   LYDIA WRIGHT <jacobbarney32@gmail.com>
+Date:   Sat, 9 Oct 2021 15:33:06 +0300
+Message-ID: <CAO1RZwMRQRHFb+TBKJcSjy64=qH7EtZicsV+GbzTJPKmBGrKUQ@mail.gmail.com>
+Subject: Greetings to You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Will McVicker (2021-09-28 16:56:22)
-> This symbol is needed to modularize the samsung clk drivers. It's used
-> to get the clock using the clock name.
->=20
-> Signed-off-by: Will McVicker <willmcvicker@google.com>
-> ---
->  drivers/clk/clk.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 65508eb89ec9..f2aa4b49adfc 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -612,6 +612,7 @@ struct clk *__clk_lookup(const char *name)
-> =20
->         return !core ? NULL : core->hw->clk;
->  }
-> +EXPORT_SYMBOL_GPL(__clk_lookup);
-
-I'd prefer we deleted this API. Can you make the samsung clk driver stop
-using it instead?
+Greetings dear,
+I intend to donate funds to a charity in your country with your
+help... Please respond for additional information here.
+(lydiawright836@gmail.com),if you are interested.
+regards
+Mrs. Lydia A. Wright
+Akron, Ohio, U.S.A
