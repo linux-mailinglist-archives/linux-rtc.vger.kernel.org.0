@@ -2,19 +2,19 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC1642953D
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 19:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A792342953B
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 19:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232915AbhJKRJC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Oct 2021 13:09:02 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:49781 "EHLO
+        id S233310AbhJKRIr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Oct 2021 13:08:47 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:40018 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232477AbhJKRI7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 13:08:59 -0400
+        by vger.kernel.org with ESMTP id S232477AbhJKRIq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 13:08:46 -0400
 Received: from [77.244.183.192] (port=63592 helo=melee.dev.aim)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1mZxfQ-00DXft-46; Mon, 11 Oct 2021 17:56:44 +0200
+        id 1mZxfQ-00DXft-LW; Mon, 11 Oct 2021 17:56:44 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
@@ -30,9 +30,9 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
-Subject: [PATCH 6/8] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-Date:   Mon, 11 Oct 2021 17:56:13 +0200
-Message-Id: <20211011155615.257529-7-luca@lucaceresoli.net>
+Subject: [PATCH 7/8] watchdog: max77714: add driver for the watchdog in the MAX77714 PMIC
+Date:   Mon, 11 Oct 2021 17:56:14 +0200
+Message-Id: <20211011155615.257529-8-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211011155615.257529-1-luca@lucaceresoli.net>
 References: <20211011155615.257529-1-luca@lucaceresoli.net>
@@ -52,76 +52,68 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
-watchdog only.
+Add a simple driver to suppor the watchdog embedded in the Maxim MAX77714
+PMIC.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- MAINTAINERS                  |   2 +
- drivers/mfd/Kconfig          |  14 ++++
- drivers/mfd/Makefile         |   1 +
- drivers/mfd/max77714.c       | 151 +++++++++++++++++++++++++++++++++++
- include/linux/mfd/max77714.h |  68 ++++++++++++++++
- 5 files changed, 236 insertions(+)
- create mode 100644 drivers/mfd/max77714.c
- create mode 100644 include/linux/mfd/max77714.h
+ MAINTAINERS                     |   1 +
+ drivers/watchdog/Kconfig        |   9 ++
+ drivers/watchdog/Makefile       |   1 +
+ drivers/watchdog/max77714_wdt.c | 171 ++++++++++++++++++++++++++++++++
+ 4 files changed, 182 insertions(+)
+ create mode 100644 drivers/watchdog/max77714_wdt.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 4d0134752537..df394192f14e 100644
+index df394192f14e..08900b5729a5 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -11389,6 +11389,8 @@ MAXIM MAX77714 PMIC MFD DRIVER
- M:	Luca Ceresoli <luca@lucaceresoli.net>
+@@ -11390,6 +11390,7 @@ M:	Luca Ceresoli <luca@lucaceresoli.net>
  S:	Maintained
  F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-+F:	drivers/mfd/max77714.c
-+F:	include/linux/mfd/max77714.h
+ F:	drivers/mfd/max77714.c
++F:	drivers/watchdog/max77714_wdt.c
+ F:	include/linux/mfd/max77714.h
  
  MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
- M:	Javier Martinez Canillas <javier@dowhile0.org>
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index ca0edab91aeb..b5f6e6174508 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -853,6 +853,20 @@ config MFD_MAX77693
- 	  additional drivers must be enabled in order to use the functionality
- 	  of the device.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index bf59faeb3de1..00bc3f932a6c 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -699,6 +699,15 @@ config MAX77620_WATCHDOG
+ 	 MAX77620 chips. To compile this driver as a module,
+ 	 choose M here: the module will be called max77620_wdt.
  
-+config MFD_MAX77714
-+	bool "Maxim Semiconductor MAX77714 PMIC Support"
-+	depends on I2C
-+	depends on OF || COMPILE_TEST
-+	select MFD_CORE
-+	select REGMAP_I2C
++config MAX77714_WATCHDOG
++	tristate "Maxim MAX77714 Watchdog Timer"
++	depends on MFD_MAX77714 || COMPILE_TEST
 +	help
-+	  Say yes here to add support for Maxim Semiconductor MAX77714.
-+	  This is a Power Management IC with 4 buck regulators, 9
-+	  low-dropout regulators, 8 GPIOs, RTC, watchdog etc. This driver
-+	  provides common support for accessing the device; additional
-+	  drivers must be enabled in order to use each functionality of the
-+	  device.
++	 This is the driver for watchdog timer in the MAX77714 PMIC.
++	 Say 'Y' here to enable the watchdog timer support for
++	 MAX77714 chips. To compile this driver as a module,
++	 choose M here: the module will be called max77714_wdt.
 +
- config MFD_MAX77843
- 	bool "Maxim Semiconductor MAX77843 PMIC Support"
- 	depends on I2C=y
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 2ba6646e874c..fe43f2fdd5cb 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -163,6 +163,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
- obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
- obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
- obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
-+obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
- obj-$(CONFIG_MFD_MAX77843)	+= max77843.o
- obj-$(CONFIG_MFD_MAX8907)	+= max8907.o
- max8925-objs			:= max8925-core.o max8925-i2c.o
-diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
+ config IMX2_WDT
+ 	tristate "IMX2+ Watchdog"
+ 	depends on ARCH_MXC || ARCH_LAYERSCAPE || COMPILE_TEST
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 1bd2d6f37c53..268a942311a0 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -215,6 +215,7 @@ obj-$(CONFIG_WM831X_WATCHDOG) += wm831x_wdt.o
+ obj-$(CONFIG_WM8350_WATCHDOG) += wm8350_wdt.o
+ obj-$(CONFIG_MAX63XX_WATCHDOG) += max63xx_wdt.o
+ obj-$(CONFIG_MAX77620_WATCHDOG) += max77620_wdt.o
++obj-$(CONFIG_MAX77714_WATCHDOG) += max77714_wdt.o
+ obj-$(CONFIG_ZIIRAVE_WATCHDOG) += ziirave_wdt.o
+ obj-$(CONFIG_SOFT_WATCHDOG) += softdog.o
+ obj-$(CONFIG_MENF21BMC_WATCHDOG) += menf21bmc_wdt.o
+diff --git a/drivers/watchdog/max77714_wdt.c b/drivers/watchdog/max77714_wdt.c
 new file mode 100644
-index 000000000000..5d6c88d4d6c0
+index 000000000000..2d468db849f9
 --- /dev/null
-+++ b/drivers/mfd/max77714.c
-@@ -0,0 +1,151 @@
++++ b/drivers/watchdog/max77714_wdt.c
+@@ -0,0 +1,171 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Maxim MAX77714 Watchdog Driver
@@ -130,223 +122,169 @@ index 000000000000..5d6c88d4d6c0
 + * Author: Luca Ceresoli <luca@lucaceresoli.net>
 + */
 +
-+#include <linux/i2c.h>
-+#include <linux/interrupt.h>
-+#include <linux/mfd/core.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
 +#include <linux/mfd/max77714.h>
-+#include <linux/of.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
 +#include <linux/regmap.h>
++#include <linux/watchdog.h>
 +
-+static const struct regmap_range max77714_readable_ranges[] = {
-+	regmap_reg_range(MAX77714_INT_TOP,     MAX77714_INT_TOP),
-+	regmap_reg_range(MAX77714_INT_TOPM,    MAX77714_INT_TOPM),
-+	regmap_reg_range(MAX77714_32K_STATUS,  MAX77714_32K_CONFIG),
-+	regmap_reg_range(MAX77714_CNFG_GLBL2,  MAX77714_CNFG2_ONOFF),
++struct max77714_wdt {
++	struct device		*dev;
++	struct regmap		*rmap;
++	struct watchdog_device	wd_dev;
 +};
 +
-+static const struct regmap_range max77714_writable_ranges[] = {
-+	regmap_reg_range(MAX77714_INT_TOPM,    MAX77714_INT_TOPM),
-+	regmap_reg_range(MAX77714_32K_CONFIG,  MAX77714_32K_CONFIG),
-+	regmap_reg_range(MAX77714_CNFG_GLBL2,  MAX77714_CNFG2_ONOFF),
-+};
++/* Timeout in seconds, indexed by TWD bits of CNFG_GLBL2 register */
++unsigned int max77714_margin_value[] = { 2, 16, 64, 128 };
 +
-+static const struct regmap_access_table max77714_readable_table = {
-+	.yes_ranges = max77714_readable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(max77714_readable_ranges),
-+};
-+
-+static const struct regmap_access_table max77714_writable_table = {
-+	.yes_ranges = max77714_writable_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(max77714_writable_ranges),
-+};
-+
-+static const struct regmap_config max77714_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = MAX77714_CNFG2_ONOFF,
-+	.rd_table = &max77714_readable_table,
-+	.wr_table = &max77714_writable_table,
-+};
-+
-+static const struct regmap_irq max77714_top_irqs[] = {
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_ONOFF,   0, MAX77714_INT_TOP_ONOFF),
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_RTC,     0, MAX77714_INT_TOP_RTC),
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_GPIO,    0, MAX77714_INT_TOP_GPIO),
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_LDO,     0, MAX77714_INT_TOP_LDO),
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_SD,      0, MAX77714_INT_TOP_SD),
-+	REGMAP_IRQ_REG(MAX77714_IRQ_TOP_GLBL,    0, MAX77714_INT_TOP_GLBL),
-+};
-+
-+static const struct regmap_irq_chip max77714_irq_chip = {
-+	.name			= "max77714-pmic",
-+	.status_base		= MAX77714_INT_TOP,
-+	.mask_base		= MAX77714_INT_TOPM,
-+	.num_regs		= 1,
-+	.irqs			= max77714_top_irqs,
-+	.num_irqs		= ARRAY_SIZE(max77714_top_irqs),
-+};
-+
-+static const struct mfd_cell max77714_cells[] = {
-+	{ .name = "max77714-watchdog" },
-+	{ .name = "max77714-rtc" },
-+};
-+
-+/*
-+ * MAX77714 initially uses the internal, low precision oscillator. Enable
-+ * the external oscillator by setting the XOSC_RETRY bit. If the external
-+ * oscillator is not OK (probably not installed) this has no effect.
-+ */
-+static int max77714_setup_xosc(struct max77714 *chip)
++static int max77714_wdt_start(struct watchdog_device *wd_dev)
 +{
-+	/* Internal Crystal Load Capacitance, indexed by value of 32KLOAD bits */
-+	static const unsigned int load_cap[4] = {0, 10, 12, 22};
-+	unsigned int load_cap_idx;
-+	unsigned int status;
-+	int err;
++	struct max77714_wdt *wdt = watchdog_get_drvdata(wd_dev);
 +
-+	err = regmap_update_bits(chip->regmap, MAX77714_32K_CONFIG,
-+				 MAX77714_32K_CONFIG_XOSC_RETRY,
-+				 MAX77714_32K_CONFIG_XOSC_RETRY);
-+	if (err)
-+		return dev_err_probe(chip->dev, err, "cannot configure XOSC\n");
-+
-+	err = regmap_read(chip->regmap, MAX77714_32K_STATUS, &status);
-+	if (err)
-+		return dev_err_probe(chip->dev, err, "cannot read XOSC status\n");
-+
-+	load_cap_idx = (status >> MAX77714_32K_STATUS_32KLOAD_SHF)
-+		& MAX77714_32K_STATUS_32KLOAD_MSK;
-+
-+	dev_info(chip->dev, "Using %s oscillator, %d pF load cap\n",
-+		 status & MAX77714_32K_STATUS_32KSOURCE ? "internal" : "external",
-+		 load_cap[load_cap_idx]);
-+
-+	return 0;
++	return regmap_update_bits(wdt->rmap, MAX77714_CNFG_GLBL2,
++				  MAX77714_WDTEN, MAX77714_WDTEN);
 +}
 +
-+static int max77714_probe(struct i2c_client *client)
++static int max77714_wdt_stop(struct watchdog_device *wd_dev)
 +{
-+	struct max77714 *chip;
++	struct max77714_wdt *wdt = watchdog_get_drvdata(wd_dev);
++
++	return regmap_update_bits(wdt->rmap, MAX77714_CNFG_GLBL2,
++				  MAX77714_WDTEN, 0);
++}
++
++static int max77714_wdt_ping(struct watchdog_device *wd_dev)
++{
++	struct max77714_wdt *wdt = watchdog_get_drvdata(wd_dev);
++
++	return regmap_update_bits(wdt->rmap, MAX77714_CNFG_GLBL3,
++				  MAX77714_WDTC, 1);
++}
++
++static int max77714_wdt_set_timeout(struct watchdog_device *wd_dev,
++				    unsigned int timeout)
++{
++	struct max77714_wdt *wdt = watchdog_get_drvdata(wd_dev);
++	unsigned int new_timeout, new_twd;
 +	int err;
 +
-+	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
++	for (new_twd = 0; new_twd < ARRAY_SIZE(max77714_margin_value) - 1; new_twd++)
++		if (timeout <= max77714_margin_value[new_twd])
++			break;
 +
-+	i2c_set_clientdata(client, chip);
-+	chip->dev = &client->dev;
++	/* new_wdt is not out of bounds here due to the "- 1" in the for loop */
++	new_timeout = max77714_margin_value[new_twd];
 +
-+	chip->regmap = devm_regmap_init_i2c(client, &max77714_regmap_config);
-+	if (IS_ERR(chip->regmap))
-+		return dev_err_probe(chip->dev, PTR_ERR(chip->regmap),
-+				     "failed to initialise regmap\n");
-+
-+	err = max77714_setup_xosc(chip);
++	/*
++	 * "If the value of TWD needs to be changed, clear the system
++	 * watchdog timer first [...], then change the value of TWD."
++	 * (MAX77714 datasheet)
++	 */
++	err = regmap_update_bits(wdt->rmap, MAX77714_CNFG_GLBL3,
++				 MAX77714_WDTC, 1);
 +	if (err)
 +		return err;
 +
-+	err = devm_regmap_add_irq_chip(chip->dev, chip->regmap, client->irq,
-+				       IRQF_ONESHOT | IRQF_SHARED, 0,
-+				       &max77714_irq_chip, &chip->irq_data);
++	err = regmap_update_bits(wdt->rmap, MAX77714_CNFG_GLBL2,
++				 MAX77714_TWD_MASK, new_twd);
 +	if (err)
-+		return dev_err_probe(chip->dev, err, "failed to add PMIC irq chip\n");
++		return err;
 +
-+	err =  devm_mfd_add_devices(chip->dev, PLATFORM_DEVID_NONE,
-+				    max77714_cells, ARRAY_SIZE(max77714_cells),
-+				    NULL, 0, NULL);
-+	if (err)
-+		return dev_err_probe(chip->dev, err, "failed adding MFD children\n");
++	wd_dev->timeout = new_timeout;
++
++	dev_dbg(wdt->dev, "New timeout = %u s (WDT = 0x%x)", new_timeout, new_twd);
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id max77714_dt_match[] = {
-+	{ .compatible = "maxim,max77714" },
-+	{},
++static const struct watchdog_info max77714_wdt_info = {
++	.identity = "max77714-watchdog",
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
 +};
 +
-+static struct i2c_driver max77714_driver = {
-+	.driver = {
-+		.name = "max77714",
-+		.of_match_table = of_match_ptr(max77714_dt_match),
++static const struct watchdog_ops max77714_wdt_ops = {
++	.start		= max77714_wdt_start,
++	.stop		= max77714_wdt_stop,
++	.ping		= max77714_wdt_ping,
++	.set_timeout	= max77714_wdt_set_timeout,
++};
++
++static int max77714_wdt_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct max77714_wdt *wdt;
++	struct watchdog_device *wd_dev;
++	unsigned int regval;
++	int err;
++
++	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
++	if (!wdt)
++		return -ENOMEM;
++
++	wdt->dev = dev;
++
++	wd_dev = &wdt->wd_dev;
++	wd_dev->info = &max77714_wdt_info;
++	wd_dev->ops = &max77714_wdt_ops;
++	wd_dev->min_timeout = 2;
++	wd_dev->max_timeout = 128;
++
++	platform_set_drvdata(pdev, wdt);
++	watchdog_set_drvdata(wd_dev, wdt);
++
++	wdt->rmap = dev_get_regmap(dev->parent, NULL);
++	if (!wdt->rmap)
++		return dev_err_probe(wdt->dev, -ENODEV, "Failed to get parent regmap\n");
++
++	/* WD_RST_WK: if 1 wdog restarts; if 0 wdog shuts down */
++	err = regmap_update_bits(wdt->rmap, MAX77714_CNFG2_ONOFF,
++				 MAX77714_WD_RST_WK, MAX77714_WD_RST_WK);
++	if (err)
++		return dev_err_probe(wdt->dev, err, "Error updating CNFG2_ONOFF\n");
++
++	err = regmap_read(wdt->rmap, MAX77714_CNFG_GLBL2, &regval);
++	if (err)
++		return dev_err_probe(wdt->dev, err, "Error reading CNFG_GLBL2\n");
++
++	/* enable watchdog | enable auto-clear in sleep state */
++	regval |= (MAX77714_WDTEN | MAX77714_WDTSLPC);
++
++	err = regmap_write(wdt->rmap, MAX77714_CNFG_GLBL2, regval);
++	if (err)
++		return dev_err_probe(wdt->dev, err, "Error writing CNFG_GLBL2\n");
++
++	wd_dev->timeout = max77714_margin_value[regval & MAX77714_TWD_MASK];
++
++	dev_dbg(wdt->dev, "Timeout = %u s (WDT = 0x%x)",
++		wd_dev->timeout, regval & MAX77714_TWD_MASK);
++
++	set_bit(WDOG_HW_RUNNING, &wd_dev->status);
++
++	watchdog_stop_on_unregister(wd_dev);
++
++	err = devm_watchdog_register_device(dev, wd_dev);
++	if (err)
++		return dev_err_probe(dev, err, "Cannot register watchdog device\n");
++
++	dev_info(dev, "registered as /dev/watchdog%d\n", wd_dev->id);
++
++	return 0;
++}
++
++static struct platform_driver max77714_wdt_driver = {
++	.driver	= {
++		.name	= "max77714-watchdog",
 +	},
-+	.probe_new = max77714_probe,
-+};
-+builtin_i2c_driver(max77714_driver);
-diff --git a/include/linux/mfd/max77714.h b/include/linux/mfd/max77714.h
-new file mode 100644
-index 000000000000..ca6b747b73c2
---- /dev/null
-+++ b/include/linux/mfd/max77714.h
-@@ -0,0 +1,68 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Maxim MAX77714 Register and data structures definition.
-+ *
-+ * Copyright (C) 2021 Luca Ceresoli
-+ * Author: Luca Ceresoli <luca@lucaceresoli.net>
-+ */
-+
-+#ifndef _MFD_MAX77714_H_
-+#define _MFD_MAX77714_H_
-+
-+#include <linux/bits.h>
-+
-+#define MAX77714_INT_TOP	0x00
-+#define MAX77714_INT_TOPM	0x07 /* Datasheet says "read only", but it is RW */
-+
-+#define MAX77714_INT_TOP_ONOFF		BIT(1)
-+#define MAX77714_INT_TOP_RTC		BIT(3)
-+#define MAX77714_INT_TOP_GPIO		BIT(4)
-+#define MAX77714_INT_TOP_LDO		BIT(5)
-+#define MAX77714_INT_TOP_SD		BIT(6)
-+#define MAX77714_INT_TOP_GLBL		BIT(7)
-+
-+#define MAX77714_32K_STATUS	0x30
-+#define MAX77714_32K_STATUS_SIOSCOK	BIT(5)
-+#define MAX77714_32K_STATUS_XOSCOK	BIT(4)
-+#define MAX77714_32K_STATUS_32KSOURCE	BIT(3)
-+#define MAX77714_32K_STATUS_32KLOAD_MSK	0x3
-+#define MAX77714_32K_STATUS_32KLOAD_SHF	1
-+#define MAX77714_32K_STATUS_CRYSTAL_CFG	BIT(0)
-+
-+#define MAX77714_32K_CONFIG	0x31
-+#define MAX77714_32K_CONFIG_XOSC_RETRY	BIT(4)
-+
-+#define MAX77714_CNFG_GLBL2	0x91
-+#define MAX77714_WDTEN			BIT(2)
-+#define MAX77714_WDTSLPC		BIT(3)
-+#define MAX77714_TWD_MASK		0x3
-+#define MAX77714_TWD_2s			0x0
-+#define MAX77714_TWD_16s		0x1
-+#define MAX77714_TWD_64s		0x2
-+#define MAX77714_TWD_128s		0x3
-+
-+#define MAX77714_CNFG_GLBL3	0x92
-+#define MAX77714_WDTC			BIT(0)
-+
-+#define MAX77714_CNFG2_ONOFF	0x94
-+#define MAX77714_WD_RST_WK		BIT(5)
-+
-+/* Interrupts */
-+enum {
-+	MAX77714_IRQ_TOP_ONOFF,
-+	MAX77714_IRQ_TOP_RTC,		/* Real-time clock */
-+	MAX77714_IRQ_TOP_GPIO,		/* GPIOs */
-+	MAX77714_IRQ_TOP_LDO,		/* Low-dropout regulators */
-+	MAX77714_IRQ_TOP_SD,		/* Step-down regulators */
-+	MAX77714_IRQ_TOP_GLBL,		/* "Global resources": Low-Battery, overtemp... */
++	.probe	= max77714_wdt_probe,
 +};
 +
-+struct max77714 {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct regmap_irq_chip_data *irq_data;
++module_platform_driver(max77714_wdt_driver);
 +
-+	int irq;
-+};
-+
-+#endif /* _MFD_MAX77714_H_ */
++MODULE_DESCRIPTION("MAX77714 watchdog timer driver");
++MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.25.1
 
