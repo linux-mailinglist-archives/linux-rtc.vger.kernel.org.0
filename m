@@ -2,19 +2,19 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3397429452
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 18:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFA8429544
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 19:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbhJKQO3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Oct 2021 12:14:29 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:41107 "EHLO
+        id S233581AbhJKRJI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Oct 2021 13:09:08 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:36407 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231560AbhJKQO1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 12:14:27 -0400
+        by vger.kernel.org with ESMTP id S233586AbhJKRJH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 13:09:07 -0400
 Received: from [77.244.183.192] (port=63592 helo=melee.dev.aim)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1mZxfL-00DXft-03; Mon, 11 Oct 2021 17:56:39 +0200
+        id 1mZxfN-00DXft-SF; Mon, 11 Oct 2021 17:56:41 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
@@ -30,9 +30,9 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
-Subject: [PATCH 1/8] mfd: max77686: Correct tab-based alignment of register addresses
-Date:   Mon, 11 Oct 2021 17:56:08 +0200
-Message-Id: <20211011155615.257529-2-luca@lucaceresoli.net>
+Subject: [PATCH 2/8] rtc: max77686: convert comments to kernel-doc format
+Date:   Mon, 11 Oct 2021 17:56:09 +0200
+Message-Id: <20211011155615.257529-3-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211011155615.257529-1-luca@lucaceresoli.net>
 References: <20211011155615.257529-1-luca@lucaceresoli.net>
@@ -52,67 +52,55 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Some lines have an extra tab, remove them for proper visual alignment as
-present on the rest of this file.
+Convert the comments documenting this struct to kernel-doc format for
+standardization and readability.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- include/linux/mfd/max77686-private.h | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/rtc/rtc-max77686.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/mfd/max77686-private.h b/include/linux/mfd/max77686-private.h
-index 833e578e051e..b1482b3cf353 100644
---- a/include/linux/mfd/max77686-private.h
-+++ b/include/linux/mfd/max77686-private.h
-@@ -133,35 +133,35 @@ enum max77686_pmic_reg {
- 	/* Reserved: 0x7A-0x7D */
- 
- 	MAX77686_REG_BBAT_CHG		= 0x7E,
--	MAX77686_REG_32KHZ			= 0x7F,
-+	MAX77686_REG_32KHZ		= 0x7F,
- 
- 	MAX77686_REG_PMIC_END		= 0x80,
+diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
+index eae7cb9faf1e..bac52cdea97d 100644
+--- a/drivers/rtc/rtc-max77686.c
++++ b/drivers/rtc/rtc-max77686.c
+@@ -61,24 +61,27 @@ enum {
+ 	RTC_NR_TIME
  };
  
- enum max77686_rtc_reg {
--	MAX77686_RTC_INT			= 0x00,
--	MAX77686_RTC_INTM			= 0x01,
-+	MAX77686_RTC_INT		= 0x00,
-+	MAX77686_RTC_INTM		= 0x01,
- 	MAX77686_RTC_CONTROLM		= 0x02,
- 	MAX77686_RTC_CONTROL		= 0x03,
- 	MAX77686_RTC_UPDATE0		= 0x04,
- 	/* Reserved: 0x5 */
- 	MAX77686_WTSR_SMPL_CNTL		= 0x06,
--	MAX77686_RTC_SEC			= 0x07,
--	MAX77686_RTC_MIN			= 0x08,
--	MAX77686_RTC_HOUR			= 0x09,
-+	MAX77686_RTC_SEC		= 0x07,
-+	MAX77686_RTC_MIN		= 0x08,
-+	MAX77686_RTC_HOUR		= 0x09,
- 	MAX77686_RTC_WEEKDAY		= 0x0A,
--	MAX77686_RTC_MONTH			= 0x0B,
--	MAX77686_RTC_YEAR			= 0x0C,
--	MAX77686_RTC_DATE			= 0x0D,
--	MAX77686_ALARM1_SEC			= 0x0E,
--	MAX77686_ALARM1_MIN			= 0x0F,
-+	MAX77686_RTC_MONTH		= 0x0B,
-+	MAX77686_RTC_YEAR		= 0x0C,
-+	MAX77686_RTC_DATE		= 0x0D,
-+	MAX77686_ALARM1_SEC		= 0x0E,
-+	MAX77686_ALARM1_MIN		= 0x0F,
- 	MAX77686_ALARM1_HOUR		= 0x10,
- 	MAX77686_ALARM1_WEEKDAY		= 0x11,
- 	MAX77686_ALARM1_MONTH		= 0x12,
- 	MAX77686_ALARM1_YEAR		= 0x13,
- 	MAX77686_ALARM1_DATE		= 0x14,
--	MAX77686_ALARM2_SEC			= 0x15,
--	MAX77686_ALARM2_MIN			= 0x16,
-+	MAX77686_ALARM2_SEC		= 0x15,
-+	MAX77686_ALARM2_MIN		= 0x16,
- 	MAX77686_ALARM2_HOUR		= 0x17,
- 	MAX77686_ALARM2_WEEKDAY		= 0x18,
- 	MAX77686_ALARM2_MONTH		= 0x19,
++/**
++ * struct max77686_rtc_driver_data - model-specific configuration
++ * @delay: Minimum usecs needed for a RTC update
++ * @mask: Mask used to read RTC registers value
++ * @map: Registers offset to I2C addresses map
++ * @alarm_enable_reg: Has a separate alarm enable register?
++ * @rtc_i2c_addr: I2C address for RTC block
++ * @rtc_irq_from_platform: RTC interrupt via platform resource
++ * @alarm_pending_status_reg: Pending alarm status register
++ * @rtc_irq_chip: RTC IRQ CHIP for regmap
++ * @regmap_config: regmap configuration for the chip
++ */
+ struct max77686_rtc_driver_data {
+-	/* Minimum usecs needed for a RTC update */
+ 	unsigned long		delay;
+-	/* Mask used to read RTC registers value */
+ 	u8			mask;
+-	/* Registers offset to I2C addresses map */
+ 	const unsigned int	*map;
+-	/* Has a separate alarm enable register? */
+ 	bool			alarm_enable_reg;
+-	/* I2C address for RTC block */
+ 	int			rtc_i2c_addr;
+-	/* RTC interrupt via platform resource */
+ 	bool			rtc_irq_from_platform;
+-	/* Pending alarm status register */
+ 	int			alarm_pending_status_reg;
+-	/* RTC IRQ CHIP for regmap */
+ 	const struct regmap_irq_chip *rtc_irq_chip;
+-	/* regmap configuration for the chip */
+ 	const struct regmap_config *regmap_config;
+ };
+ 
 -- 
 2.25.1
 
