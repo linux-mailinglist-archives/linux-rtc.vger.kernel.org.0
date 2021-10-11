@@ -2,19 +2,19 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA15429542
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 19:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE658429538
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 19:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhJKRJF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Oct 2021 13:09:05 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:37875 "EHLO
+        id S233271AbhJKRIm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Oct 2021 13:08:42 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:52501 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233520AbhJKRJF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 13:09:05 -0400
+        by vger.kernel.org with ESMTP id S232477AbhJKRIl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 13:08:41 -0400
 Received: from [77.244.183.192] (port=63592 helo=melee.dev.aim)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1mZxfO-00DXft-DY; Mon, 11 Oct 2021 17:56:42 +0200
+        id 1mZxfP-00DXft-0P; Mon, 11 Oct 2021 17:56:43 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
@@ -30,9 +30,9 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
-Subject: [PATCH 3/8] rtc: max77686: rename day-of-month defines
-Date:   Mon, 11 Oct 2021 17:56:10 +0200
-Message-Id: <20211011155615.257529-4-luca@lucaceresoli.net>
+Subject: [PATCH 4/8] rtc: max77686: remove useless variable
+Date:   Mon, 11 Oct 2021 17:56:11 +0200
+Message-Id: <20211011155615.257529-5-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211011155615.257529-1-luca@lucaceresoli.net>
 References: <20211011155615.257529-1-luca@lucaceresoli.net>
@@ -52,106 +52,53 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-RTC_DATE and REG_RTC_DATE are used for the registers holding the day of
-month. Rename these constants to mean what they mean.
+rtc_24hr_mode is set to 1 in max77686_rtc_probe()->max77686_rtc_init_reg()
+before being read and is never set back to 0 again. As such, it is de facto
+a constant.
+
+Remove the variable and the unreachable code.
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- drivers/rtc/rtc-max77686.c           | 16 ++++++++--------
- include/linux/mfd/max77686-private.h |  4 ++--
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-max77686.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
 diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index bac52cdea97d..7e765207f28e 100644
+index 7e765207f28e..9901c596998a 100644
 --- a/drivers/rtc/rtc-max77686.c
 +++ b/drivers/rtc/rtc-max77686.c
-@@ -57,7 +57,7 @@ enum {
- 	RTC_WEEKDAY,
- 	RTC_MONTH,
- 	RTC_YEAR,
--	RTC_DATE,
-+	RTC_MONTHDAY,
- 	RTC_NR_TIME
+@@ -99,7 +99,6 @@ struct max77686_rtc_info {
+ 
+ 	int rtc_irq;
+ 	int virq;
+-	int rtc_24hr_mode;
  };
  
-@@ -119,7 +119,7 @@ enum max77686_rtc_reg_offset {
- 	REG_RTC_WEEKDAY,
- 	REG_RTC_MONTH,
- 	REG_RTC_YEAR,
--	REG_RTC_DATE,
-+	REG_RTC_MONTHDAY,
- 	REG_ALARM1_SEC,
- 	REG_ALARM1_MIN,
- 	REG_ALARM1_HOUR,
-@@ -150,7 +150,7 @@ static const unsigned int max77686_map[REG_RTC_END] = {
- 	[REG_RTC_WEEKDAY]    = MAX77686_RTC_WEEKDAY,
- 	[REG_RTC_MONTH]      = MAX77686_RTC_MONTH,
- 	[REG_RTC_YEAR]       = MAX77686_RTC_YEAR,
--	[REG_RTC_DATE]       = MAX77686_RTC_DATE,
-+	[REG_RTC_MONTHDAY]   = MAX77686_RTC_MONTHDAY,
- 	[REG_ALARM1_SEC]     = MAX77686_ALARM1_SEC,
- 	[REG_ALARM1_MIN]     = MAX77686_ALARM1_MIN,
- 	[REG_ALARM1_HOUR]    = MAX77686_ALARM1_HOUR,
-@@ -233,7 +233,7 @@ static const unsigned int max77802_map[REG_RTC_END] = {
- 	[REG_RTC_WEEKDAY]    = MAX77802_RTC_WEEKDAY,
- 	[REG_RTC_MONTH]      = MAX77802_RTC_MONTH,
- 	[REG_RTC_YEAR]       = MAX77802_RTC_YEAR,
--	[REG_RTC_DATE]       = MAX77802_RTC_DATE,
-+	[REG_RTC_MONTHDAY]   = MAX77802_RTC_MONTHDAY,
- 	[REG_ALARM1_SEC]     = MAX77802_ALARM1_SEC,
- 	[REG_ALARM1_MIN]     = MAX77802_ALARM1_MIN,
- 	[REG_ALARM1_HOUR]    = MAX77802_ALARM1_HOUR,
-@@ -288,7 +288,7 @@ static void max77686_rtc_data_to_tm(u8 *data, struct rtc_time *tm,
+ enum MAX77686_RTC_OP {
+@@ -278,13 +277,7 @@ static void max77686_rtc_data_to_tm(u8 *data, struct rtc_time *tm,
+ 
+ 	tm->tm_sec = data[RTC_SEC] & mask;
+ 	tm->tm_min = data[RTC_MIN] & mask;
+-	if (info->rtc_24hr_mode) {
+-		tm->tm_hour = data[RTC_HOUR] & 0x1f;
+-	} else {
+-		tm->tm_hour = data[RTC_HOUR] & 0x0f;
+-		if (data[RTC_HOUR] & HOUR_PM_MASK)
+-			tm->tm_hour += 12;
+-	}
++	tm->tm_hour = data[RTC_HOUR] & 0x1f;
  
  	/* Only a single bit is set in data[], so fls() would be equivalent */
  	tm->tm_wday = ffs(data[RTC_WEEKDAY] & mask) - 1;
--	tm->tm_mday = data[RTC_DATE] & 0x1f;
-+	tm->tm_mday = data[RTC_MONTHDAY] & 0x1f;
- 	tm->tm_mon = (data[RTC_MONTH] & 0x0f) - 1;
- 	tm->tm_year = data[RTC_YEAR] & mask;
- 	tm->tm_yday = 0;
-@@ -309,7 +309,7 @@ static int max77686_rtc_tm_to_data(struct rtc_time *tm, u8 *data,
- 	data[RTC_MIN] = tm->tm_min;
- 	data[RTC_HOUR] = tm->tm_hour;
- 	data[RTC_WEEKDAY] = 1 << tm->tm_wday;
--	data[RTC_DATE] = tm->tm_mday;
-+	data[RTC_MONTHDAY] = tm->tm_mday;
- 	data[RTC_MONTH] = tm->tm_mon + 1;
+@@ -662,8 +655,6 @@ static int max77686_rtc_init_reg(struct max77686_rtc_info *info)
+ 	data[0] = (1 << BCD_EN_SHIFT) | (1 << MODEL24_SHIFT);
+ 	data[1] = (0 << BCD_EN_SHIFT) | (1 << MODEL24_SHIFT);
  
- 	if (info->drv_data->alarm_enable_reg) {
-@@ -565,8 +565,8 @@ static int max77686_rtc_start_alarm(struct max77686_rtc_info *info)
- 			data[RTC_MONTH] |= (1 << ALARM_ENABLE_SHIFT);
- 		if (data[RTC_YEAR] & info->drv_data->mask)
- 			data[RTC_YEAR] |= (1 << ALARM_ENABLE_SHIFT);
--		if (data[RTC_DATE] & 0x1f)
--			data[RTC_DATE] |= (1 << ALARM_ENABLE_SHIFT);
-+		if (data[RTC_MONTHDAY] & 0x1f)
-+			data[RTC_MONTHDAY] |= (1 << ALARM_ENABLE_SHIFT);
- 
- 		ret = regmap_bulk_write(info->rtc_regmap, map[REG_ALARM1_SEC],
- 					data, ARRAY_SIZE(data));
-diff --git a/include/linux/mfd/max77686-private.h b/include/linux/mfd/max77686-private.h
-index b1482b3cf353..3acceeedbaba 100644
---- a/include/linux/mfd/max77686-private.h
-+++ b/include/linux/mfd/max77686-private.h
-@@ -152,7 +152,7 @@ enum max77686_rtc_reg {
- 	MAX77686_RTC_WEEKDAY		= 0x0A,
- 	MAX77686_RTC_MONTH		= 0x0B,
- 	MAX77686_RTC_YEAR		= 0x0C,
--	MAX77686_RTC_DATE		= 0x0D,
-+	MAX77686_RTC_MONTHDAY		= 0x0D,
- 	MAX77686_ALARM1_SEC		= 0x0E,
- 	MAX77686_ALARM1_MIN		= 0x0F,
- 	MAX77686_ALARM1_HOUR		= 0x10,
-@@ -352,7 +352,7 @@ enum max77802_rtc_reg {
- 	MAX77802_RTC_WEEKDAY		= 0xCA,
- 	MAX77802_RTC_MONTH		= 0xCB,
- 	MAX77802_RTC_YEAR		= 0xCC,
--	MAX77802_RTC_DATE		= 0xCD,
-+	MAX77802_RTC_MONTHDAY		= 0xCD,
- 	MAX77802_RTC_AE1		= 0xCE,
- 	MAX77802_ALARM1_SEC		= 0xCF,
- 	MAX77802_ALARM1_MIN		= 0xD0,
+-	info->rtc_24hr_mode = 1;
+-
+ 	ret = regmap_bulk_write(info->rtc_regmap,
+ 				info->drv_data->map[REG_RTC_CONTROLM],
+ 				data, ARRAY_SIZE(data));
 -- 
 2.25.1
 
