@@ -2,22 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B684C42882A
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 09:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3F042882B
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Oct 2021 09:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234639AbhJKH5U (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Oct 2021 03:57:20 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:28914 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234570AbhJKH5S (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 03:57:18 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HSWF63sD9zbn3s;
-        Mon, 11 Oct 2021 15:50:50 +0800 (CST)
+        id S234683AbhJKH5V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Oct 2021 03:57:21 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:24234 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234611AbhJKH5U (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Oct 2021 03:57:20 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HSWK049Y1zQj8D;
+        Mon, 11 Oct 2021 15:54:12 +0800 (CST)
 Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Mon, 11 Oct 2021 15:55:16 +0800
+ 15.1.2308.8; Mon, 11 Oct 2021 15:55:17 +0800
 Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
  (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Mon, 11 Oct
@@ -25,10 +25,12 @@ Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
 From:   Yang Yingliang <yangyingliang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
 CC:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-Subject: [PATCH 1/2] rtc: class: check return value when calling dev_set_name()
-Date:   Mon, 11 Oct 2021 16:03:01 +0800
-Message-ID: <20211011080302.1982894-1-yangyingliang@huawei.com>
+Subject: [PATCH 2/2] rtc: class: return error code when cdev_device_add() failed
+Date:   Mon, 11 Oct 2021 16:03:02 +0800
+Message-ID: <20211011080302.1982894-2-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211011080302.1982894-1-yangyingliang@huawei.com>
+References: <20211011080302.1982894-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -42,79 +44,67 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 I got a null-ptr-deref report when doing fault injection test:
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP KASAN PTI
-CPU: 2 PID: 925 Comm: 29 Not tainted 5.15.0-rc3-00111-gf5dad42ed4fe-dirty #487 5b4d17fc3275713934c1a9cb26349fbabf82adbf
+general protection fault, probably for non-canonical address 0xdffffc0000000022: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000110-0x0000000000000117]
+CPU: 1 PID: 1028 Comm: 33 Not tainted 5.15.0-rc3-00111-gf5dad42ed4fe-dirty #481 2a70b3e6ca240b8638beac7ef491cce6183bbec7
 Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-RIP: 0010:strcmp+0xc/0x20
-Code: 17 48 83 c6 01 44 0f b6 46 ff 48 83 c1 01 44 88 41 ff 45 84 c0 75 e5 c3 c6 01 00 c3 66 90 31 c0 eb 08 48 83 c0 01 84 d2 74 0f <0f> b6 14 07 3a 14 06 74 ef 19 c0 83 c8 01 c3 31 c0 c3 66 90 48 85
-RSP: 0018:ffffc900025af368 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 1ffff920004b5e6f RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8ebcf680 RDI: 0000000000000000
-RBP: ffff888014746000 R08: ffffed102097e3fa R09: ffffed102097e3fa
-R10: ffff888104bf1fcb R11: ffffed102097e3f9 R12: ffff888014746040
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff8880147468c0
-FS:  00007f783e6d5500(0000) GS:ffff888104a00000(0000) knlGS:0000000000000000
+RIP: 0010:device_del+0x132/0xdc0
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 4f 0c 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 7b 48 4d 8d a7 10 01 00 00 4c 89 e2 48 c1 ea 03 <0f> b6 04 02 84 c0 74 06 0f 8e 7f 0a 00 00 45 0f b6 b7 10 01 00 00
+RSP: 0018:ffffc90002e876b8 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff88801eb84000 RCX: ffffffff97227644
+RDX: 0000000000000022 RSI: ffff8880146a0000 RDI: 0000000000000002
+RBP: ffff88801eb84120 R08: fffffbfff349a60d R09: fffffbfff349a60d
+R10: ffffc90002e876b8 R11: fffffbfff349a60c R12: 0000000000000110
+R13: 0000000000000001 R14: ffffc90002e87848 R15: 0000000000000000
+FS:  00007fa514973500(0000) GS:ffff888104600000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000008cee002 CR4: 0000000000770ee0
+CR2: 00007fa51474ccb0 CR3: 000000002bcb0001 CR4: 0000000000770ee0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 PKRU: 55555554
 Call Trace:
- __devm_rtc_register_device.cold.7+0x16a/0x2df
- ? rtc_suspend+0x330/0x330
- ? irqentry_exit+0x32/0x80
- ? __sanitizer_cov_trace_pc+0x1d/0x50
- ? irqentry_exit+0x32/0x80
- ? trace_hardirqs_on+0x63/0x2d0
- ? rtc_ktime_to_tm+0x120/0x120
- ? tracer_hardirqs_on+0x36/0x530
- ? _raw_spin_unlock_irqrestore+0x4b/0x5d
- ? _raw_spin_unlock_irqrestore+0x54/0x5d
- ? __sanitizer_cov_trace_pc+0x1d/0x50
  ? write_comp_data+0x2a/0x90
- ? __sanitizer_cov_trace_pc+0x1d/0x50
- rv3029_probe+0x4b1/0x770 [rtc_rv3029c2]
- ? rv3029_hwmon_show_update_interval+0x160/0x160 [rtc_rv3029c2]
- ? write_comp_data+0x2a/0x90
- ? _raw_spin_unlock_irqrestore+0x4b/0x5d
- ? tracer_hardirqs_on+0x36/0x530
- ? rv3029_nvram_write+0x40/0x40 [rtc_rv3029c2]
- ? rv3029_set_time+0x350/0x350 [rtc_rv3029c2]
- ? __sanitizer_cov_trace_pc+0x1d/0x50
- rv3029_i2c_probe+0x141/0x180 [rtc_rv3029c2]
- ? rv3029_probe+0x770/0x770 [rtc_rv3029c2]
- i2c_device_probe+0xa07/0xbb0
- ? i2c_device_match+0x110/0x110
- really_probe+0x285/0xc30
+ ? cleanup_glue_dir+0x260/0x260
+ ? is_rtc_hctosys.isra.0+0xb9/0xf0
+ ? rtc_proc_show+0x440/0x440
+ ? rcu_read_lock_held_common+0xe/0xa0
+ ? rcu_read_lock_sched_held+0x62/0xe0
+ cdev_device_del+0x1a/0x80
+ devm_rtc_unregister_device+0x37/0x80
+ release_nodes+0xc3/0x3b0
 
-If dev_set_name() fails, dev_name() is null, it causes null-ptr-deref,
-we need check the return value of dev_set_name().
+If cdev_device_add() fails, 'dev->p' is not set, it causes
+null-ptr-deref when calling cdev_device_del(), return error
+code when cdev_device_add() failed to fix this.
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: 3068a254d5519 ("rtc: introduce new registration method")
 Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/rtc/class.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/rtc/class.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index f77bc089eb6b..1f18c39a4b82 100644
+index 1f18c39a4b82..76422faee05b 100644
 --- a/drivers/rtc/class.c
 +++ b/drivers/rtc/class.c
-@@ -363,7 +363,9 @@ struct rtc_device *devm_rtc_allocate_device(struct device *dev)
+@@ -399,12 +399,14 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	rtc_dev_prepare(rtc);
  
- 	rtc->id = id;
- 	rtc->dev.parent = dev;
--	dev_set_name(&rtc->dev, "rtc%d", id);
-+	err = dev_set_name(&rtc->dev, "rtc%d", id);
-+	if (err)
-+		return ERR_PTR(err);
+ 	err = cdev_device_add(&rtc->char_dev, &rtc->dev);
+-	if (err)
++	if (err) {
+ 		dev_warn(rtc->dev.parent, "failed to add char device %d:%d\n",
+ 			 MAJOR(rtc->dev.devt), rtc->id);
+-	else
++		return err;
++	} else {
+ 		dev_dbg(rtc->dev.parent, "char device (%d:%d)\n",
+ 			MAJOR(rtc->dev.devt), rtc->id);
++	}
  
- 	err = devm_add_action_or_reset(dev, devm_rtc_release_device, rtc);
- 	if (err)
+ 	rtc_proc_add_device(rtc);
+ 
 -- 
 2.25.1
 
