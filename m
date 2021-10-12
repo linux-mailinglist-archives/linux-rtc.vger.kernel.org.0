@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1F4429F53
+	by mail.lfdr.de (Postfix) with ESMTP id BE8C2429F54
 	for <lists+linux-rtc@lfdr.de>; Tue, 12 Oct 2021 10:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbhJLIFt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Oct 2021 04:05:49 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38260
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234825AbhJLIEC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Oct 2021 04:04:02 -0400
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        id S234670AbhJLIFu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Oct 2021 04:05:50 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52720
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234952AbhJLIFG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Oct 2021 04:05:06 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5F9043FFE0
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Oct 2021 08:01:25 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3E3D83FFE3
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Oct 2021 08:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634025685;
-        bh=JHyKbjTift426wz+CkjwB4QsgP3nBOzBlm+zKKFBLrQ=;
+        s=20210705; t=1634025781;
+        bh=uRYagTk6MpIfpm938XTiHR//S2u2wtANBbTnjpAOHf0=;
         h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
          In-Reply-To:Content-Type;
-        b=nTdGrWM1g/ojwN4hcsHoB/xz8suphpUtgdoLWpb6ACX89k1iw/hNOZECaaVsscP6F
-         4ihu31EiTHH3eHw46k5cg8KdjOUxDkCBTYeHfcnmPJnX7WRGxQlbBAMo6pyrTGvRi7
-         C6nlNw8YRi2S54sCz7gzALyYxuxwKFb86si371qGUVcoLjYGrq+2mRRJvexAG0/Rdh
-         6ixPx/Bk0CmLHyJGf7Fcxmm823kYFO0BH7xO9ftOXMLKl8jD8v4a0axo6S7pgf4i1F
-         eG37edxwOtafFL+mc2N1TSCKBrczUfgk35Anbm/KpjNAjBXtMc3yNyjW1gkgjZOk6E
-         zVyp/W4yzbH6Q==
-Received: by mail-lf1-f72.google.com with SMTP id bt36-20020a056512262400b003fd7e6a96e8so5983114lfb.19
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Oct 2021 01:01:25 -0700 (PDT)
+        b=NgJCNbn3G28wne8h7IZ8PbGMusLSGskQgaUV5A+hvM53JRMJsk1GDYoKcROpljjXc
+         nf6lbTBHgH56cPehzwjkT8z98Og9ZxPJithaF/R6yaNQOohbEWI5kxJLWRxCmuHFwH
+         tKn9nTRHEPxEC8nn7SgL5JR2m6zuLL7q6mUrGry9qTVCb+gI7JhHYaLxbl2mO8kPMj
+         uk3+TBjkKQ4ajTk2araUW/DMTwxEugtkSfM5NomedHfJuCc8I7P/VB0h5kO4HBijXr
+         GaQeTk++ZuXrnukbfgppZUX1DeAUPBNuaojSZi9quoHka3SALFkcPXQTDLooRo/tFF
+         PTiSIwnzj+2Nw==
+Received: by mail-lf1-f70.google.com with SMTP id bp4-20020a056512158400b003fd96a37f3bso2184185lfb.21
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Oct 2021 01:03:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=JHyKbjTift426wz+CkjwB4QsgP3nBOzBlm+zKKFBLrQ=;
-        b=nsBaEsmN/Rs3sn18rKQRoWhKOcFr4s6RO50siIA7xeQ3PuwK6zV6s3QmFI5H62Vjce
-         XPy6LSWSBUll/LStsPzfwb+ST1a1Jxxrit4GEFbjjzNbtQpsjza8oacv6JoXfC2mQZXL
-         VSN7Q0pqjg2swXaye4mU/+M7Lv3kYP5hJ6KxNxd3OEbMoP8oAy9axoBXpIriPZ7A94sf
-         5w+YZRP0wGOb0WDKam3nPzth3nyLrSOCspxFyX/KGTzHHBJvgsm5aYsTQ00ROkjGSjHm
-         p1P2dr75Q4RyJW4NneE1P7gzJTjgOLQcsh4yf2N+Hcf8mhQ4Kzubf0fEK0wnhNOOeNMR
-         LBBg==
-X-Gm-Message-State: AOAM531SLdQQkQSX1FsD+eU4mT8HS7cbIcTDQULz/rhaT+P4+RQlbP8k
-        P1bKOFE4N+9Qh0pn5fTwyyw39YH2cP3DIEh5PomqvFnFmvXipqddRDhlvRZt1pgEj2886J0Fk9p
-        ErbjdoyI8DsOVdwfj1jJaiYq+BCFYOHeU1K40rA==
-X-Received: by 2002:a05:6512:12d3:: with SMTP id p19mr33215024lfg.280.1634025684650;
-        Tue, 12 Oct 2021 01:01:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNBcrjWlAgA0DVgCpnAIyjVoJ0m61P7YwAe3a19d6w8XjZGCQJ4xECpD5up8MG19txYXE2gw==
-X-Received: by 2002:a05:6512:12d3:: with SMTP id p19mr33214997lfg.280.1634025684383;
-        Tue, 12 Oct 2021 01:01:24 -0700 (PDT)
+        bh=uRYagTk6MpIfpm938XTiHR//S2u2wtANBbTnjpAOHf0=;
+        b=MzbjvXaUh5yGq/5+j4fSdT76N4OYYFR9xCCdG67C2UrbRLVR6wgmfIzsDvxhuJfvwV
+         jd2rycJmQUK3imJynOZX81Ak6hlXCpm5vieZCUAfHlOunPhhMPcnJZC0lzrBZW6Ohs2C
+         stvvsESPm7wZKdtMzO6fbnEehApWqglLjF8lZSSL3/lZp//pmlTDrMlKSoND7tJZ0FvO
+         BAtYBzC6NOPEHDycFwpCT9s/SKT4Imq5agS78IIsgdjE7cHbhGUIh9oL3Eetz8yOgfOJ
+         /vvSCVP4bu+9NOQJAdhgQK9zk9q4Gky+um7C6QJrCc2ZUW/hOKuFBO+PseI+XLcwb1h0
+         HSGQ==
+X-Gm-Message-State: AOAM53351CRH8tYA37aX0WDd37u49ltntZMsdhr9F4T95fIaHZqAujTo
+        g9cl9rX0CwKYlN/r4l0B6bzsbeGuMLrqbdhIDwg78WnT5l562R20ZLqS0Npzq6GKsOsCJGp2f0r
+        xCh31rbDG//Pes+kg8qGEbzxdJJ5ijGF6KypYkw==
+X-Received: by 2002:a2e:5c43:: with SMTP id q64mr27667391ljb.224.1634025780488;
+        Tue, 12 Oct 2021 01:03:00 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxWblHn4Br++Rtsc1RT2izUIH3qGN0inuK9izfQk7VScP/dXcNHCxXTuwT/b4FMiYLl8dGHnw==
+X-Received: by 2002:a2e:5c43:: with SMTP id q64mr27667382ljb.224.1634025780318;
+        Tue, 12 Oct 2021 01:03:00 -0700 (PDT)
 Received: from [192.168.0.20] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u27sm956373lfm.275.2021.10.12.01.01.23
+        by smtp.gmail.com with ESMTPSA id s11sm954282lfd.262.2021.10.12.01.02.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Oct 2021 01:01:23 -0700 (PDT)
-Subject: Re: [PATCH 4/8] rtc: max77686: remove useless variable
+        Tue, 12 Oct 2021 01:02:59 -0700 (PDT)
+Subject: Re: [PATCH 5/8] dt-bindings: mfd: add Maxim MAX77714 PMIC
 To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -67,14 +67,14 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
 References: <20211011155615.257529-1-luca@lucaceresoli.net>
- <20211011155615.257529-5-luca@lucaceresoli.net>
+ <20211011155615.257529-6-luca@lucaceresoli.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <43b0cc1e-8b65-0322-d8ee-a8e45f1aa8fe@canonical.com>
-Date:   Tue, 12 Oct 2021 10:01:22 +0200
+Message-ID: <8ad40ebc-8430-9fa0-ae60-88e0d486e8cc@canonical.com>
+Date:   Tue, 12 Oct 2021 10:02:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211011155615.257529-5-luca@lucaceresoli.net>
+In-Reply-To: <20211011155615.257529-6-luca@lucaceresoli.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -83,20 +83,82 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 11/10/2021 17:56, Luca Ceresoli wrote:
-> rtc_24hr_mode is set to 1 in max77686_rtc_probe()->max77686_rtc_init_reg()
-> before being read and is never set back to 0 again. As such, it is de facto
-> a constant.
-> 
-> Remove the variable and the unreachable code.
+> Add bindings for the MAX77714 PMIC with GPIO, RTC and watchdog.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  drivers/rtc/rtc-max77686.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
+>  .../bindings/mfd/maxim,max77714.yaml          | 58 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 ++
+>  2 files changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+> new file mode 100644
+> index 000000000000..2b0ce3b9bc92
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/maxim,max77714.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MAX77714 PMIC with GPIO, RTC and watchdog from Maxim Integrated.
+> +
+> +maintainers:
+> +  - Luca Ceresoli <luca@lucaceresoli.net>
+> +
+> +description: |
+> +  MAX77714 is a Power Management IC with 4 buck regulators, 9
+> +  low-dropout regulators, 8 GPIOs, RTC and watchdog.
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77714
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +    description:
+> +      The first cell is the IRQ number, the second cell is the trigger type.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        pmic@1c {
+> +            compatible = "maxim,max77714";
+> +            reg = <0x1c>;
+> +            interrupt-parent = <&gpio2>;
+> +            interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +        };
+> +    };
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Looks good to me, but what about regulators and other properties? Are
+you planning to add them later?
 
 
 Best regards,
