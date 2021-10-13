@@ -2,151 +2,152 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD02D42CCBE
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Oct 2021 23:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A5F42CCCE
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Oct 2021 23:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbhJMVZU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Oct 2021 17:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbhJMVZT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Oct 2021 17:25:19 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4949FC061749
-        for <linux-rtc@vger.kernel.org>; Wed, 13 Oct 2021 14:23:16 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id x10-20020a17090abc8a00b001a04877d05bso2262730pjr.5
-        for <linux-rtc@vger.kernel.org>; Wed, 13 Oct 2021 14:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=CULyeJTJVJ+bhqH61eKq0VGTitHRm0H9eFT6VyJWHZQ=;
-        b=V5vj278IDz5u9J9eQEvIguDgzLJgZpkiwD69OCg3m6SaZ8BuOuDWgh8If+2lIZqRl1
-         WkZQ7eNtIbJ4HeiM+avql/plX75XCAHt+wnbbxVNCmV3wk/sFORX9xW3aSWlJDSfAAsi
-         UOAsxwd1+uykwN0JUDKQChx0daPE5TTj4zrGWBh5cNI22m7ApH/9BPXJ+PR3sQZ6BQGr
-         mgtBMAms75b05FwjBu+W20kViohDWe0vhxmACCg1w6wvLtUT1qLzXffVhIMBGNN5Pu37
-         gyGs2uHa7V6pIGfVzs0yY2ry79zAgbUbX47RFwWRDF435XN97QsQoCfWfYdF1jZzGXwh
-         ZlzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=CULyeJTJVJ+bhqH61eKq0VGTitHRm0H9eFT6VyJWHZQ=;
-        b=vQxKJ8NT8e/hWDpqgLD5gCqbvSJVqmtql54f26q8L0TMiFSWjW5LYLcqx+ufIMxbOc
-         zsWqZItg6W6jIenQA9iLSLGUOXCHx7HcHYdiKc5qM8ITTTJdc3YgiXcQqSzt1HHg8R30
-         2gJsdgP2q2xpRAxVua/K/vPfVHD/DW5JajC5WWYYMPZ7QCOskKlObzV6JiBPgJDzd4Rw
-         v1JY5KfGOtkmhYAGf5OPYew1bvkwMaFxpycWA6iSLmF6/4horooJKgbLOqmrNE2vIAXA
-         FExIzdVBerXHS91adVschtZ3oCuB4QtkLrKvWIL+UfW6wmgZY44S6Hum/Cis82a6osi3
-         nMKg==
-X-Gm-Message-State: AOAM532KBTs8NpzDd06ymEMFmibfSt45kD7UgR6v6vDbW/LKnJrHq2Ez
-        rDxBQGHtLKiQIDVA7N2PiEnyMrx4msFTgniTM4Y=
-X-Google-Smtp-Source: ABdhPJxdZff9YhBwBPiborfQVMP8q1qVYvtCKwp62VbGVaHdZxg/co9HSsItSqABdO5PioENCq6uzHX8tKQ8qB1FXQc=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a63:6c89:: with SMTP id
- h131mr1227261pgc.47.1634160195777; Wed, 13 Oct 2021 14:23:15 -0700 (PDT)
-Date:   Wed, 13 Oct 2021 21:22:55 +0000
-Message-Id: <20211013212256.3425889-1-willmcvicker@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v3] rtc: s3c: remove HAVE_S3C_RTC in favor of direct dependencies
-From:   Will McVicker <willmcvicker@google.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S229892AbhJMVai (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Oct 2021 17:30:38 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:46203 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229706AbhJMVai (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Oct 2021 17:30:38 -0400
+Received: from [77.244.183.192] (port=64956 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1malnc-0028zC-EO; Wed, 13 Oct 2021 23:28:32 +0200
+Subject: Re: [PATCH 5/8] dt-bindings: mfd: add Maxim MAX77714 PMIC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     kernel-team@android.com, Will McVicker <willmcvicker@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+References: <20211011155615.257529-1-luca@lucaceresoli.net>
+ <20211011155615.257529-6-luca@lucaceresoli.net>
+ <8ad40ebc-8430-9fa0-ae60-88e0d486e8cc@canonical.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <4fc0fe37-1a25-4058-6326-a14e32ef18f5@lucaceresoli.net>
+Date:   Wed, 13 Oct 2021 23:28:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <8ad40ebc-8430-9fa0-ae60-88e0d486e8cc@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The config HAVE_S3C_RTC is not really needed since we can simply just
-add the dependencies directly to RTC_DRV_S3C. Also, one less config to
-keep track of!
+Hi Krzysztof,
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- arch/arm/Kconfig              |  1 -
- arch/arm/mach-exynos/Kconfig  |  1 -
- arch/arm/mach-s5pv210/Kconfig |  1 -
- arch/arm64/Kconfig.platforms  |  1 -
- drivers/rtc/Kconfig           | 10 ++--------
- 5 files changed, 2 insertions(+), 12 deletions(-)
+thanks for reviewing.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 59baf6c132a7..29b745c05d37 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -475,7 +475,6 @@ config ARCH_S3C24XX
- 	select GPIOLIB
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select HAVE_S3C2410_I2C if I2C
--	select HAVE_S3C_RTC if RTC_CLASS
- 	select NEED_MACH_IO_H
- 	select S3C2410_WATCHDOG
- 	select SAMSUNG_ATAGS
-diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-index 30f930e20599..dd1ae5571f43 100644
---- a/arch/arm/mach-exynos/Kconfig
-+++ b/arch/arm/mach-exynos/Kconfig
-@@ -21,7 +21,6 @@ menuconfig ARCH_EXYNOS
- 	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
- 	select HAVE_ARM_SCU if SMP
- 	select HAVE_S3C2410_I2C if I2C
--	select HAVE_S3C_RTC if RTC_CLASS
- 	select PINCTRL
- 	select PINCTRL_EXYNOS
- 	select PM_GENERIC_DOMAINS if PM
-diff --git a/arch/arm/mach-s5pv210/Kconfig b/arch/arm/mach-s5pv210/Kconfig
-index d644b45bc29d..5a96099af991 100644
---- a/arch/arm/mach-s5pv210/Kconfig
-+++ b/arch/arm/mach-s5pv210/Kconfig
-@@ -13,7 +13,6 @@ config ARCH_S5PV210
- 	select COMMON_CLK_SAMSUNG
- 	select GPIOLIB
- 	select HAVE_S3C2410_I2C if I2C
--	select HAVE_S3C_RTC if RTC_CLASS
- 	select PINCTRL
- 	select PINCTRL_EXYNOS
- 	select SOC_SAMSUNG
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 90c5cf4856e1..d5f0f4cdf093 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -94,7 +94,6 @@ config ARCH_EXYNOS
- 	select COMMON_CLK_SAMSUNG
- 	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
- 	select EXYNOS_PMU
--	select HAVE_S3C_RTC if RTC_CLASS
- 	select PINCTRL
- 	select PINCTRL_EXYNOS
- 	select PM_GENERIC_DOMAINS if PM
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index e1bc5214494e..7208eeb8459a 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1404,16 +1404,10 @@ config RTC_DRV_OMAP
- 	  This driver can also be built as a module, if so, module
- 	  will be called rtc-omap.
- 
--config HAVE_S3C_RTC
--	bool
--	help
--	  This will include RTC support for Samsung SoCs. If
--	  you want to include RTC support for any machine, kindly
--	  select this in the respective mach-XXXX/Kconfig file.
--
- config RTC_DRV_S3C
- 	tristate "Samsung S3C series SoC RTC"
--	depends on ARCH_S3C64XX || HAVE_S3C_RTC || COMPILE_TEST
-+	depends on ARCH_EXYNOS || ARCH_S3C64XX || ARCH_S3C24XX || ARCH_S5PV210 || \
-+		   COMPILE_TEST
- 	help
- 	  RTC (Realtime Clock) driver for the clock inbuilt into the
- 	  Samsung S3C24XX series of SoCs. This can provide periodic
+On 12/10/21 10:02, Krzysztof Kozlowski wrote:
+> On 11/10/2021 17:56, Luca Ceresoli wrote:
+>> Add bindings for the MAX77714 PMIC with GPIO, RTC and watchdog.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>>  .../bindings/mfd/maxim,max77714.yaml          | 58 +++++++++++++++++++
+>>  MAINTAINERS                                   |  5 ++
+>>  2 files changed, 63 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+>> new file mode 100644
+>> index 000000000000..2b0ce3b9bc92
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+>> @@ -0,0 +1,58 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mfd/maxim,max77714.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MAX77714 PMIC with GPIO, RTC and watchdog from Maxim Integrated.
+>> +
+>> +maintainers:
+>> +  - Luca Ceresoli <luca@lucaceresoli.net>
+>> +
+>> +description: |
+>> +  MAX77714 is a Power Management IC with 4 buck regulators, 9
+>> +  low-dropout regulators, 8 GPIOs, RTC and watchdog.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: maxim,max77714
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 2
+>> +    description:
+>> +      The first cell is the IRQ number, the second cell is the trigger type.
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +  - interrupt-controller
+>> +  - "#interrupt-cells"
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        pmic@1c {
+>> +            compatible = "maxim,max77714";
+>> +            reg = <0x1c>;
+>> +            interrupt-parent = <&gpio2>;
+>> +            interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +            interrupt-controller;
+>> +            #interrupt-cells = <2>;
+>> +        };
+>> +    };
+> 
+> Looks good to me, but what about regulators and other properties? Are
+> you planning to add them later?
+
+No plan to add them, sorry.
+
+I know, complete bindings are better than incomplete bindings. But in
+the foreseeable future I don't need to do anything on the regulators
+(even though it might happen at some point). And since their setting is
+possibly non trivial, I'm not going to study them to write a complete
+bindings document and then make no use of it.
+
+Is it a problem for you?
+
 -- 
-2.33.0.882.g93a45727a2-goog
-
+Luca
