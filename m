@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7935842FBEB
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 21:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F8242FBED
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 21:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242675AbhJOTXh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Oct 2021 15:23:37 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:44819 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242537AbhJOTXh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 15:23:37 -0400
+        id S242683AbhJOTXj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 Oct 2021 15:23:39 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:47937 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242673AbhJOTXi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 15:23:38 -0400
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 92AEC240006;
-        Fri, 15 Oct 2021 19:21:29 +0000 (UTC)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 71EC620008;
+        Fri, 15 Oct 2021 19:21:30 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] rtc: add BSM parameter
-Date:   Fri, 15 Oct 2021 21:21:18 +0200
-Message-Id: <20211015192121.817642-6-alexandre.belloni@bootlin.com>
+Subject: [PATCH 6/7] rtc: rv3028: add BSM support
+Date:   Fri, 15 Oct 2021 21:21:19 +0200
+Message-Id: <20211015192121.817642-7-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015192121.817642-1-alexandre.belloni@bootlin.com>
 References: <20211015192121.817642-1-alexandre.belloni@bootlin.com>
@@ -30,92 +30,120 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-BSM or Backup Switch Mode is a common feature on RTCs, allowing to select
-how the RTC will decide when to switch from its primary power supply to the
-backup power supply. It is necessary to be able to set it from userspace as
-there are uses cases where it has to be done dynamically.
-
-Supported values are:
-  RTC_BSM_DISABLED: disabled
-  RTC_BSM_DIRECT: switching will happen as soon as Vbackup > Vdd
-  RTC_BSM_LEVEL: switching will happen around a threshold, usually with an
-  hysteresis
-  RTC_BSM_STANDBY: switching will not happen until Vdd > Vbackup, this is
-  useful to ensure the RTC doesn't draw any power until the device is first
-  powered on.
+Backup Switch Mode controls how the RTC decides when to switch to the
+backup power supply. As it is disabled by default, provide a way to enable
+and configure it.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/dev.c        | 10 ++++++++--
- include/linux/rtc.h      |  2 ++
- include/uapi/linux/rtc.h |  9 ++++++++-
- 3 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-rv3028.c | 73 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
-index abee1fc4705e..e104972a28fd 100644
---- a/drivers/rtc/dev.c
-+++ b/drivers/rtc/dev.c
-@@ -409,7 +409,10 @@ static long rtc_dev_ioctl(struct file *file,
- 			break;
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 12c807306893..45c82e59d68f 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -10,6 +10,7 @@
  
- 		default:
--			err = -EINVAL;
-+			if (rtc->ops->param_get)
-+				err = rtc->ops->param_get(rtc->dev.parent, &param);
-+			else
-+				err = -EINVAL;
- 		}
+ #include <linux/clk-provider.h>
+ #include <linux/bcd.h>
++#include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+@@ -80,6 +81,10 @@
  
- 		if (!err)
-@@ -436,7 +439,10 @@ static long rtc_dev_ioctl(struct file *file,
- 			return rtc_set_offset(rtc, param.svalue);
+ #define RV3028_BACKUP_TCE		BIT(5)
+ #define RV3028_BACKUP_TCR_MASK		GENMASK(1,0)
++#define RV3028_BACKUP_BSM		GENMASK(3,2)
++
++#define RV3028_BACKUP_BSM_DSM		0x1
++#define RV3028_BACKUP_BSM_LSM		0x3
  
- 		default:
--			err = -EINVAL;
-+			if (rtc->ops->param_set)
-+				err = rtc->ops->param_set(rtc->dev.parent, &param);
-+			else
-+				err = -EINVAL;
- 		}
+ #define OFFSET_STEP_PPT			953674
  
- 		break;
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 354e0843ab17..47fd1c2d3a57 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -66,6 +66,8 @@ struct rtc_class_ops {
- 	int (*alarm_irq_enable)(struct device *, unsigned int enabled);
- 	int (*read_offset)(struct device *, long *offset);
- 	int (*set_offset)(struct device *, long offset);
-+	int (*param_get)(struct device *, struct rtc_param *param);
-+	int (*param_set)(struct device *, struct rtc_param *param);
+@@ -512,6 +517,72 @@ static int rv3028_set_offset(struct device *dev, long offset)
+ 
+ }
+ 
++static int rv3028_param_get(struct device *dev, struct rtc_param *param)
++{
++	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++	int ret;
++
++	switch(param->param) {
++		u32 value;
++
++	case RTC_PARAM_BACKUP_SWITCH_MODE:
++		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &value);
++		if (ret < 0)
++			return ret;
++
++		value = FIELD_GET(RV3028_BACKUP_BSM, value);
++
++		switch(value) {
++		case RV3028_BACKUP_BSM_DSM:
++			param->uvalue = RTC_BSM_DIRECT;
++			break;
++		case RV3028_BACKUP_BSM_LSM:
++			param->uvalue = RTC_BSM_LEVEL;
++			break;
++		default:
++			param->uvalue = RTC_BSM_DISABLED;
++		}
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int rv3028_param_set(struct device *dev, struct rtc_param *param)
++{
++	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++
++	switch(param->param) {
++		u8 mode;
++	case RTC_PARAM_BACKUP_SWITCH_MODE:
++		switch (param->uvalue) {
++		case RTC_BSM_DISABLED:
++			mode = 0;
++			break;
++		case RTC_BSM_DIRECT:
++			mode = RV3028_BACKUP_BSM_DSM;
++			break;
++		case RTC_BSM_LEVEL:
++			mode = RV3028_BACKUP_BSM_LSM;
++			break;
++		default:
++			return -EINVAL;
++		}
++
++		rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_BSM,
++				  FIELD_PREP(RV3028_BACKUP_BSM, mode));
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int rv3028_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
+@@ -776,6 +847,8 @@ static const struct rtc_class_ops rv3028_rtc_ops = {
+ 	.read_offset = rv3028_read_offset,
+ 	.set_offset = rv3028_set_offset,
+ 	.ioctl = rv3028_ioctl,
++	.param_get = rv3028_param_get,
++	.param_set = rv3028_param_set,
  };
  
- struct rtc_device;
-diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
-index 04da6c3082b3..dbbab0dbc8c8 100644
---- a/include/uapi/linux/rtc.h
-+++ b/include/uapi/linux/rtc.h
-@@ -132,11 +132,18 @@ struct rtc_param {
- #define RTC_FEATURE_UPDATE_INTERRUPT	3
- #define RTC_FEATURE_NEED_WEEK_DAY	4
- #define RTC_FEATURE_CORRECTION		5
--#define RTC_FEATURE_CNT			6
-+#define RTC_FEATURE_BACKUP_SWITCH_MODE	6
-+#define RTC_FEATURE_CNT			7
- 
- /* parameter list */
- #define RTC_PARAM_FEATURES		0
- #define RTC_PARAM_CORRECTION		1
-+#define RTC_PARAM_BACKUP_SWITCH_MODE	2
-+
-+#define RTC_BSM_DISABLED	0
-+#define RTC_BSM_DIRECT		1
-+#define RTC_BSM_LEVEL		2
-+#define RTC_BSM_STANDBY		3
- 
- #define RTC_MAX_FREQ	8192
- 
+ static const struct regmap_config regmap_config = {
 -- 
 2.31.1
 
