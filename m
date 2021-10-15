@@ -2,32 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E63D42FBD4
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 21:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C1A42FBC4
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 21:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242671AbhJOTRE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Oct 2021 15:17:04 -0400
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:43377 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbhJOTRE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 15:17:04 -0400
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 3EB48CC6A9;
-        Fri, 15 Oct 2021 19:12:46 +0000 (UTC)
+        id S242586AbhJOTOd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 Oct 2021 15:14:33 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:57597 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234151AbhJOTOc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 15:14:32 -0400
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 85580FF804;
-        Fri, 15 Oct 2021 19:12:24 +0000 (UTC)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 19E7A60009;
+        Fri, 15 Oct 2021 19:12:25 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: rv3032: fix error handling in rv3032_clkout_set_rate()
-Date:   Fri, 15 Oct 2021 21:12:19 +0200
-Message-Id: <163432513382.815620.16082619578546658825.b4-ty@bootlin.com>
+        Phil Elwell <phil@raspberrypi.com>, linux-rtc@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH] rtc: pcf85063: Always clear EXT_TEST from set_time
+Date:   Fri, 15 Oct 2021 21:12:20 +0200
+Message-Id: <163432513382.815620.1409724606768389621.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211012101028.GT2083@kadam>
-References: <20211012101028.GT2083@kadam>
+In-Reply-To: <20211015111208.1757110-1-phil@raspberrypi.com>
+References: <20211015111208.1757110-1-phil@raspberrypi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -35,16 +31,21 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 12 Oct 2021 13:10:28 +0300, Dan Carpenter wrote:
-> Do not call rv3032_exit_eerd() if the enter function fails but don't
-> forget to call the exit when the enter succeeds.
+On Fri, 15 Oct 2021 12:12:08 +0100, Phil Elwell wrote:
+> Power-on reset after the insertion of a battery does not always complete
+> successfully, leading to corrupted register content. The EXT_TEST bit
+> will stop the clock from running, but currently the driver will never
+> recover.
 > 
+> Safely handle the erroneous state by clearing EXT_TEST as part of the
+> usual set_time method.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] rtc: rv3032: fix error handling in rv3032_clkout_set_rate()
-      commit: c3336b8ac6091df60a5c1049a8c685d0b947cc61
+[1/1] rtc: pcf85063: Always clear EXT_TEST from set_time
+      commit: 9f08c9ed580a287de6546044e28f15bb183d00ff
 
 Best regards,
 -- 
