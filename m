@@ -2,119 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5537B42ED23
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 11:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A993342EF6B
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 13:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbhJOJJU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Oct 2021 05:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S233034AbhJOLO3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 Oct 2021 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235948AbhJOJJT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 05:09:19 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA94C061570
-        for <linux-rtc@vger.kernel.org>; Fri, 15 Oct 2021 02:07:13 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r10so25174398wra.12
-        for <linux-rtc@vger.kernel.org>; Fri, 15 Oct 2021 02:07:13 -0700 (PDT)
+        with ESMTP id S230031AbhJOLO1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 07:14:27 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FCAC061570
+        for <linux-rtc@vger.kernel.org>; Fri, 15 Oct 2021 04:12:20 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u18so25989404wrg.5
+        for <linux-rtc@vger.kernel.org>; Fri, 15 Oct 2021 04:12:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=raspberrypi.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lXhetO1x2EIYKbDU8xmsFF99cY7vSAOdQQKMdIk4COI=;
-        b=AdSs2Ufd0vP7CwVh3j4Url0IZhtaR38yKuqX5gDREXpSTwAbu0qHMLR/0tsYjgLBZK
-         mwxxxSlvF/I41V+5vXM9Xbelg/buCLsRNwmfyIH9cC1+83QAkf1W9rUiFNIddnH1BltW
-         AEwyY1qQVw6l3nZssC4KyDsXMvcGMccKJHYYMLjRSnyPVVv3q1A4WSq4kXrkvdizk1qu
-         hbkHxNz6azjCU7GYQ1F5TDRYK2bWNZu9pM/UuwAsjbBj857Ssi4yjEF/4LojteC+V9+f
-         JbWC3yQewHqG2VxOIBFh84tsCbaleOlxX307k2MK3AJao54qPdLnWCp57rb/XC13/cKG
-         YirQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TN5tAyN8j8rWJ17cXA0EevDLE3MR9amtnzn88LcMl/o=;
+        b=fHGUCkJMHSdMUqxhh/4GNEQgLGITuTKQEeXkduLPdwZRxvEygeNZcEPzIeKMENHhVS
+         S6eqJ3hsvzXd5UDuBDgbdGQWBlb5GY1PCg8S4j5XuGo+oPYlvUssf9Wg7YtEXJcfsf7O
+         1GXollW07kGPSKhU4BK2gl4wq97u0xRQAiYe3026VZO5/5CZNZ15aoJD2BOvdg9rZjpL
+         3dR3/qt2lJbyHRyduYfdH3H2Nj55BxcLvyCNS3+ZtVsiVluPLgv/haUjGfPoYQih5k2B
+         /4BbKwZwJfpf4nV0XsNojJ60059RvcSxgib7xXPduKEIHISjNcPHZN9kxNX4xF13vbvZ
+         4/Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lXhetO1x2EIYKbDU8xmsFF99cY7vSAOdQQKMdIk4COI=;
-        b=rRq8TgSs6Dm9pjlDkNsPLxCgulWMh6K7ft8n0//4BEozfwwQA6+yZ+BisKyaTDIJuE
-         9Q/TpaGQS5UivkasLylfmDGvhTq/DP0ROX+CJnf5z1zoaEFWRuGKX7SNhwJ/B9naDQhC
-         QHLGMnEuoNyHhx7MR/Kv3Ok0e5yJPCd2pOIVoWAq6WSujIdlC/0iEBJQreFCO0eUj2Xm
-         4Hv/bFK1AGjiBKZUkHWUuFMOCftvQE0JUki5l4Ip6QmCet6KOOOTI8+mvEdp3EdtTScf
-         lirDd0zsxYUX6q+QMs0i+kkdFoBG7iw/kT4klHCvcpj9mv1iAAC/jYslRv2gFpSo8sYS
-         DJrw==
-X-Gm-Message-State: AOAM532Ya17gDPoqKOz0KNBXs86Eldh6CgclNSWUFUTBhS5IVRduMsW4
-        BCzOiFSUmaNxBlxH3wJ2ZCi5tDFjwcjREfWh
-X-Google-Smtp-Source: ABdhPJwKe6jZ8mD4AAy4FYrYyKOohSiF/94cG3YfpPaVDWyItUXvFb5WeNyuoJvinxNRHaCpclK32A==
-X-Received: by 2002:adf:a415:: with SMTP id d21mr13363344wra.236.1634288831825;
-        Fri, 15 Oct 2021 02:07:11 -0700 (PDT)
-Received: from ?IPv6:2a00:1098:3142:14:b1cf:1ea:46e5:8f4e? ([2a00:1098:3142:14:b1cf:1ea:46e5:8f4e])
-        by smtp.gmail.com with ESMTPSA id 1sm10576611wmb.24.2021.10.15.02.07.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Oct 2021 02:07:11 -0700 (PDT)
-Subject: Re: Question about PCF85063A invalid state
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org
-References: <3c6e4252-8271-c968-0bf9-83a23384ce01@raspberrypi.com>
- <YWc+IghMxa4oCcK9@piout.net>
+        bh=TN5tAyN8j8rWJ17cXA0EevDLE3MR9amtnzn88LcMl/o=;
+        b=t7IK6+Ey7Jr1cGYnj1pYKWyiqEkmuqq2vo8JXN+QvX7geVfiAb/DqbNyXp3i7IOJNg
+         wI5T/EzSsU8h4qIsJ5octmqhhsfF3GfHNRdRrLcYGpr7MYAWmYZV/qabfXlhE9zEao1u
+         3MSlAHUO6LUFWcJwh0m6/bvhoCVLcXiyjbVgsmLvarwKBD8m9HXK4pBXYyz6mD+6qnhh
+         j+KAC7OWLE6hMaKVIVCoZqI/C4w4JHZoISE4P5uSopp37na280tzjh3XEsJF3A+mX55g
+         Oac3Xy26XbHzm8euab2c0WgqMEcfmkeiRiKvUFvCJaOHyGCk7xtu73h0k+EEzFwnIQaP
+         ulDA==
+X-Gm-Message-State: AOAM532o3fzPQN1hmVYfNIFvBLNvgml+n2XU3u0xB2ABZDIbtuumjsnZ
+        bWTPOqkG9E97mpN8mJXko5N7vg==
+X-Google-Smtp-Source: ABdhPJyXnpCSnOA82kRFwfKktHkS4KbWk6ZklEDrVOJ37Z7gEYggT4jR56fIYXGqwmRn7T6EUCjzAw==
+X-Received: by 2002:adf:f309:: with SMTP id i9mr13770705wro.256.1634296339376;
+        Fri, 15 Oct 2021 04:12:19 -0700 (PDT)
+Received: from buildbot.pitowers.org ([2a00:1098:3142:14:ae1f:6bff:fedd:de54])
+        by smtp.gmail.com with ESMTPSA id k17sm4741621wrq.7.2021.10.15.04.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Oct 2021 04:12:19 -0700 (PDT)
 From:   Phil Elwell <phil@raspberrypi.com>
-Message-ID: <4b9cbddb-2fbb-e223-80d2-bb13001355af@raspberrypi.com>
-Date:   Fri, 15 Oct 2021 10:07:11 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Phil Elwell <phil@raspberrypi.com>
+Subject: [PATCH] rtc: pcf85063: Always clear EXT_TEST from set_time
+Date:   Fri, 15 Oct 2021 12:12:08 +0100
+Message-Id: <20211015111208.1757110-1-phil@raspberrypi.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YWc+IghMxa4oCcK9@piout.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Alexandre,
+Power-on reset after the insertion of a battery does not always complete
+successfully, leading to corrupted register content. The EXT_TEST bit
+will stop the clock from running, but currently the driver will never
+recover.
 
-On 13/10/2021 21:14, Alexandre Belloni wrote:
-> Hello,
-> 
-> On 13/10/2021 10:48:48+0100, Phil Elwell wrote:
->> Hi,
->>
->> We're using the PCF85063A on our Compute Module 4 I/O board, and a number of
->> users have experienced problems with invalid state after inserting a backup
->> battery. So far the problem has been confined to EXT_TEST (bit 7 of CTRL_1)
->> being set, but there are a number of registers for which the driver only
->> modifies a subset of the bits.
->>
->> I can think of a number of ways to clear this invalid state, none of which
->> are difficult - force a software reset whenever certain bits of certain
->> registers have certain values, always specifically force some bits to known
->> values, etc. -
->> but are there any preferences or pitfalls to be aware of?
->>
-> 
-> This is a very difficult topic because contrary to most of the other
-> IPs, the RTC is still running while Linux is not and it is expected that
-> it will retain its configuration across reboots (well, this is exactly
-> what the RTC is for).
-> 
-> This means that you may have some code (bootloader, firmware) running
-> before Linux configuring the RTC and so setting or clearing bits in
-> registers that are never touched by Linux. So, it is not possible to go
-> and change random bits because they don't have the default value or the
-> value we expect. Instead it is usually necessary to provide a way to
-> set those bits.
-> 
-> However, for EXT_TEST, I would assume the RTC lost its time once it is
-> set so I would treat it just like OS: if it is set, then leave it that
-> way until .set_time is called and return -EINVAL in .read_time.
-> 
-> I didn't try but if OS is always set by the RTC when EXT_TEST is set,
-> then maybe we don't need to check in .read_time.
+Safely handle the erroneous state by clearing EXT_TEST as part of the
+usual set_time method.
 
-I think your suggestion can be summarised as:
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+---
+ drivers/rtc/rtc-pcf85063.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The existing code probably already detects EXT_TEST because it will cause
-the OS bit to be set. All that is required is to clear the EXT_TEST bit
-as part of the usual .set_time handler.
+diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
+index 14da4ab30104..ea75b71a1f16 100644
+--- a/drivers/rtc/rtc-pcf85063.c
++++ b/drivers/rtc/rtc-pcf85063.c
+@@ -34,6 +34,7 @@
+ #define PCF85063_REG_CTRL1		0x00 /* status */
+ #define PCF85063_REG_CTRL1_CAP_SEL	BIT(0)
+ #define PCF85063_REG_CTRL1_STOP		BIT(5)
++#define PCF85063_REG_CTRL1_EXT_TEST	BIT(7)
+ 
+ #define PCF85063_REG_CTRL2		0x01
+ #define PCF85063_CTRL2_AF		BIT(6)
+@@ -117,6 +118,7 @@ static int pcf85063_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	 * reset state until all time/date registers are written
+ 	 */
+ 	rc = regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL1,
++				PCF85063_REG_CTRL1_EXT_TEST |
+ 				PCF85063_REG_CTRL1_STOP,
+ 				PCF85063_REG_CTRL1_STOP);
+ 	if (rc)
+-- 
+2.25.1
 
-I will do it that way.
-
-Many thanks,
-
-Phil
