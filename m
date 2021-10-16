@@ -2,100 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4499342FD2C
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Oct 2021 23:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DCB4304BC
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Oct 2021 21:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbhJOVCC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Oct 2021 17:02:02 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:37390 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231621AbhJOVCC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Oct 2021 17:02:02 -0400
-Received: from [77.244.183.192] (port=63076 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mbUIz-007DZ3-HN; Fri, 15 Oct 2021 22:59:53 +0200
-Subject: Re: [PATCH 4/8] rtc: max77686: remove useless variable
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-References: <20211011155615.257529-1-luca@lucaceresoli.net>
- <20211011155615.257529-5-luca@lucaceresoli.net> <YWm7VpFY3LABdKmn@piout.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <61be8df2-cec5-8df0-425d-aae458710112@lucaceresoli.net>
-Date:   Fri, 15 Oct 2021 22:59:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S234108AbhJPTXv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Oct 2021 15:23:51 -0400
+Received: from esa1.mentor.iphmx.com ([68.232.129.153]:44825 "EHLO
+        esa1.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232336AbhJPTXv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 16 Oct 2021 15:23:51 -0400
+IronPort-SDR: TcqhI8DNzJS8y/p59kUvTuEgY4AcjIwJuK2zccie2IOj6ow0ClLOqMcO1+e+9PKVVuaNgoOpjV
+ GPjxtENqs6mVcZrV44rgryG4UT7K8NDdGtZ1cwHarPpnvfnaivAEuPRF0MrCISrlGQ945w5soq
+ Rt8hlmmhvpKy9pJ8AyFD0d56FBF2krjNuV7VrIxvhD/bQ00ovNpxflCHsMC0B+pH2uugjMBP+H
+ I2EIdPxkPJ5xCAnweuhOuMSXea4MtTCAb8oHywHiICRBAY1cL7durmyiWSXfCQee30vuHHRS3A
+ 996Alv8IJk0vrx0SLzpmoxB+
+X-IronPort-AV: E=Sophos;i="5.85,378,1624348800"; 
+   d="scan'208";a="69743824"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa1.mentor.iphmx.com with ESMTP; 16 Oct 2021 11:21:42 -0800
+IronPort-SDR: aM7BHjH34cLbQdUnst9lFEehOi0L9zbQVYS+h+ayZgS6BXVKw1NiZggCIZdvqx4yAhDKhHjWDF
+ gYVmUOndX/9OQauZtYxvGvH6SVX62DlFZgMtzoU7N2dHDSTUyC/oMkwUji6HfGNhpFWZvvu3h1
+ bpVq7MtJqkfptNKzDHI+IIfO2yz4DT9r5ZAcrudVEVW8kYsn9xZclHFbJ/GUS2lckU1FC6FqjO
+ 0AibMPCOW98hKO0EPDx2NPA81En9f+TLaUwesrNAA8+Am37jNyIUZsYVnr3ugYBSbWKtBNn6IX
+ wrM=
+From:   Alexey Firago <alexey_firago@mentor.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>
+CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexey Firago <alexey_firago@mentor.com>
+Subject: [PATCH 0/2] rtc: Add driver for MAX31343
+Date:   Sat, 16 Oct 2021 22:21:16 +0300
+Message-ID: <20211016192118.255624-1-alexey_firago@mentor.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YWm7VpFY3LABdKmn@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: SVR-IES-MBX-04.mgc.mentorg.com (139.181.222.4) To
+ SVR-IES-MBX-04.mgc.mentorg.com (139.181.222.4)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+This adds support for the Maxim Integrated MAX31343 RTC.
+Publicly available datasheet can be found at:
+https://datasheets.maximintegrated.com/en/ds/MAX31343.pdf
 
-On 15/10/21 19:33, Alexandre Belloni wrote:
-> On 11/10/2021 17:56:11+0200, Luca Ceresoli wrote:
->>> rtc_24hr_mode is set to 1 in max77686_rtc_probe()->max77686_rtc_init_reg()
->> before being read and is never set back to 0 again. As such, it is de facto
->> a constant.
->>
->> Remove the variable and the unreachable code.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>  drivers/rtc/rtc-max77686.c | 11 +----------
->>  1 file changed, 1 insertion(+), 10 deletions(-)
->>
->> diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
->> index 7e765207f28e..9901c596998a 100644
->> --- a/drivers/rtc/rtc-max77686.c
->> +++ b/drivers/rtc/rtc-max77686.c
->> @@ -99,7 +99,6 @@ struct max77686_rtc_info {
->>  
->>  	int rtc_irq;
->>  	int virq;
->> -	int rtc_24hr_mode;
->>  };
->>  
->>  enum MAX77686_RTC_OP {
->> @@ -278,13 +277,7 @@ static void max77686_rtc_data_to_tm(u8 *data, struct rtc_time *tm,
->>  
->>  	tm->tm_sec = data[RTC_SEC] & mask;
->>  	tm->tm_min = data[RTC_MIN] & mask;
->> -	if (info->rtc_24hr_mode) {
->> -		tm->tm_hour = data[RTC_HOUR] & 0x1f;
->> -	} else {
->> -		tm->tm_hour = data[RTC_HOUR] & 0x0f;
->> -		if (data[RTC_HOUR] & HOUR_PM_MASK)
-> 
-> So I guess HOUR_PM_SHIFT and HOUR_PM_MASK can also be removed
+Currently supported features are:
+- Date/time
+- SRAM
+- Temperature sensor
 
-Sure. Coming in v2.
+Features to be implemented:
+- Interrupts (my current platform doesn't have IRQ line connected)
+- Alarms, countdown timer
+- Clock output
+- Trickle charger
 
-Thanks.
+Patches were verified on a custom NXP i.MX8MPlus based platform.
+
+Alexey Firago (2):
+  rtc: max31343: Add a driver for Maxim MAX31343
+  dt-bindings: rtc: Add Maxim Integrated MAX31343
+
+ .../devicetree/bindings/rtc/trivial-rtc.yaml  |   2 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-max31343.c                    | 494 ++++++++++++++++++
+ 4 files changed, 507 insertions(+)
+ create mode 100644 drivers/rtc/rtc-max31343.c
+
 -- 
-Luca
+2.25.1
+
