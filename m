@@ -2,156 +2,193 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DF9430BCD
-	for <lists+linux-rtc@lfdr.de>; Sun, 17 Oct 2021 21:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E46430BCF
+	for <lists+linux-rtc@lfdr.de>; Sun, 17 Oct 2021 21:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344559AbhJQTmI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 17 Oct 2021 15:42:08 -0400
-Received: from mx-out.tlen.pl ([193.222.135.142]:5744 "EHLO mx-out.tlen.pl"
+        id S1344561AbhJQTmJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 17 Oct 2021 15:42:09 -0400
+Received: from mx-out.tlen.pl ([193.222.135.142]:37584 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344555AbhJQTmD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sun, 17 Oct 2021 15:42:03 -0400
-Received: (wp-smtpd smtp.tlen.pl 2760 invoked from network); 17 Oct 2021 21:39:45 +0200
+        id S1344552AbhJQTmF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sun, 17 Oct 2021 15:42:05 -0400
+Received: (wp-smtpd smtp.tlen.pl 4997 invoked from network); 17 Oct 2021 21:39:49 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1634499585; bh=7IdaZZIuiekG92mGZkWkTZhUEs0esuhAH7fpWv5Xq/0=;
+          t=1634499589; bh=XRf4WaQo+RlXU1/FyjY3NoF5PMpZedJLswBjgSBPu7s=;
           h=From:To:Cc:Subject;
-          b=ixcqgXYNkGsQ2uipQVBMwOm9L30VvWvUqDwK12dzOm0FiVfHY5LvbtfennQyrLRCM
-           qUYSrf6rVQB56mmTIE/BKN9dvhiCWGQOxGt4rCOCzXv9VZkOEjxiRZjR44wmqwcdU2
-           dcYrKA10dsu3mxlx2uvd+wyMbOIQXTBO5FCJb1Bc=
+          b=NrxPwUQb9aOAAK7BHgjFZRVsphCebi36ue4J65oagyxHPsEkePbRDj+1cxsbheCbe
+           5iJnWs7qalMa/8dHAmAi9QmiyXMqtJmZfvP7F3NO1a2AxfJL0h+zEttgkZL7/TLOGA
+           fL7XF00GgqsUjhIpSqqaVGok5hPvV+7neqZuSEJY=
 Received: from aaet142.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.123.142])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-kernel@vger.kernel.org>; 17 Oct 2021 21:39:45 +0200
+          for <linux-kernel@vger.kernel.org>; 17 Oct 2021 21:39:49 +0200
 From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
 Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        stable@vger.kernel.org
-Subject: [PATCH RESEND 2/6] rtc-cmos: dont touch alarm registers during update
-Date:   Sun, 17 Oct 2021 21:39:23 +0200
-Message-Id: <20211017193927.277409-3-mat.jonczyk@o2.pl>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH RESEND v2 3/6] rtc-mc146818-lib: fix RTC presence check
+Date:   Sun, 17 Oct 2021 21:39:24 +0200
+Message-Id: <20211017193927.277409-4-mat.jonczyk@o2.pl>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211017193927.277409-1-mat.jonczyk@o2.pl>
 References: <20211017193927.277409-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: bfb27348964793ea07308b98bcdfca1e
+X-WP-MailID: 77a28373b63ec872af226726696d0fc9
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [MWOk]                               
+X-WP-SPAM: NO 0000000 [cTO0]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Some Intel chipsets disconnect the time and date RTC registers when the
-clock update is in progress: during this time reads may return bogus
-values and writes fail silently. This includes the RTC alarm registers.
-[1]
+To prevent an infinite loop in mc146818_get_time(),
+commit 211e5db19d15 ("rtc: mc146818: Detect and handle broken RTCs")
+added a check for RTC availability. Together with a later fix, it
+checked if bit 6 in register 0x0d is cleared. This, however, caused a
+false negative on a motherboard with an AMD SB710 southbridge; according
+to the specification [1], bit 6 of register 0x0d of this chipset is a
+scratchbit.
 
-cmos_read_alarm() and cmos_set_alarm() did not take account for that,
-which caused alarm time reads to sometimes return bogus values. This can
-be shown with a test patch that I am attaching to this patch series.
-Setting the alarm clock also probably did fail sometimes.
+This caused a regression in Linux 5.11 - the RTC was determined broken
+by the kernel and not used by rtc-cmos.c [3].
 
-To make this patch suitable for inclusion in stable kernels, I'm using a
-simple method for avoiding the RTC update cycle. This method is used in
-mach_set_rtc_mmss() in arch/x86/kernel/rtc.c. A more elaborate algorithm
-- as in mc146818_get_time() in drivers/rtc/rtc-mc146818-lib.c - would be
-too complcated for stable. [2]
+As a better alternative, check whether the UIP ("Update-in-progress")
+bit is set for longer then 10ms. If that is the case, then apparently
+the RTC is either absent (and all register reads return 0xff) or broken.
+Also limit the number of loop iterations in mc146818_get_time() to 10.
 
-cmos_wait_for_uip_clear() has the rtc_lock taken while waiting for the
-UIP bit to become clear. This should be harmless as during the UIP the RTC
-cannot be read from anyway. mach_get_cmos_time() in arch/x86/kernel/rtc.c
-does things the same way.
+In a previous approach to this problem, I implemented a check whether
+the RTC_HOURS register contains a value <= 24. This, however, sometimes
+did not work correctly on my Intel Kaby Lake laptop. According to
+Intel's documentation [2], "the time and date RAM locations (0-9) are
+disconnected from the external bus" during the update cycle so reading
+this register without checking the UIP bit is incorrect.
 
-[1] 7th Generation Intel ® Processor Family I/O for U/Y Platforms [...]
-Datasheet, Volume 1 of 2 (Intel's Document Number: 334658-006)
-Page 208
+[1] AMD SB700/710/750 Register Reference Guide, page 308,
+https://developer.amd.com/wordpress/media/2012/10/43009_sb7xx_rrg_pub_1.00.pdf
+
+[2] 7th Generation Intel ® Processor Family I/O for U/Y Platforms [...] Datasheet
+Volume 1 of 2, page 209
+Intel's Document Number: 334658-006,
 https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/7th-and-8th-gen-core-family-mobile-u-y-processor-lines-i-o-datasheet-vol-1.pdf
-        "If a RAM read from the ten time and date bytes is attempted
-        during an update cycle, the value read do not necessarily
-        represent the true contents of those locations. Any RAM writes
-        under the same conditions are ignored.'
 
-[2] I'm going to submit a unification patch for a later kernel release -
-prefer to see this in stable.
+[3] Functions in arch/x86/kernel/rtc.c apparently were using it.
 
+Fixes: 211e5db19d15 ("rtc: mc146818: Detect and handle broken RTCs")
+Fixes: ebb22a059436 ("rtc: mc146818: Dont test for bit 0-5 in Register D")
 Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Alessandro Zummo <a.zummo@towertech.it>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: stable@vger.kernel.org
+
 ---
- drivers/rtc/rtc-cmos.c | 38 ++++++++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-cmos.c         | 10 ++++------
+ drivers/rtc/rtc-mc146818-lib.c | 34 ++++++++++++++++++++++++++++++----
+ include/linux/mc146818rtc.h    |  1 +
+ 3 files changed, 35 insertions(+), 10 deletions(-)
+
+v2: Tweak commit description, remove "Cc: stable" (I'll send it manually
+after more regression testing).
 
 diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 2cd0fe728ab2..643433d984ab 100644
+index 643433d984ab..f353a41dfe8c 100644
 --- a/drivers/rtc/rtc-cmos.c
 +++ b/drivers/rtc/rtc-cmos.c
-@@ -248,6 +248,31 @@ static int cmos_set_time(struct device *dev, struct rtc_time *t)
- 	return mc146818_set_time(t);
- }
+@@ -833,16 +833,14 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
  
-+/* Some Intel chipsets disconnect the alarm registers when the clock update is
-+ * in progress - during this time reads return bogus values and writes may fail
-+ * silently. See for example "7th Generation Intel® Processor Family I/O for
-+ * U/Y Platforms [...] Datasheet", section 27.7.1
-+ *
-+ * Check the UIP bit to prevent this, waiting for max 10ms for it to become
-+ * clear.
-+ *
-+ * This function has to be called with rtc_lock taken.
-+ */
-+static int cmos_wait_for_uip_clear(struct device *dev)
-+{
-+	int i;
-+
-+	for (i = 0; i < 100; i++) {
-+		if ((CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP) == 0)
-+			return 0;
-+		udelay(100);
-+	}
-+
-+	dev_warn_ratelimited(dev, "UIP bit is stuck, cannot access RTC registers\n");
-+
-+	return 1;
-+}
-+
- static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- {
- 	struct cmos_rtc	*cmos = dev_get_drvdata(dev);
-@@ -257,12 +282,17 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	if (!is_valid_irq(cmos->irq))
- 		return -EIO;
+ 	rename_region(ports, dev_name(&cmos_rtc.rtc->dev));
+ 
+-	spin_lock_irq(&rtc_lock);
+-
+-	/* Ensure that the RTC is accessible. Bit 6 must be 0! */
+-	if ((CMOS_READ(RTC_VALID) & 0x40) != 0) {
+-		spin_unlock_irq(&rtc_lock);
+-		dev_warn(dev, "not accessible\n");
++	if (!mc146818_does_rtc_work()) {
++		dev_warn(dev, "broken or not accessible\n");
+ 		retval = -ENXIO;
+ 		goto cleanup1;
+ 	}
  
 +	spin_lock_irq(&rtc_lock);
 +
-+	if (cmos_wait_for_uip_clear(dev)) {
-+		spin_unlock_irq(&rtc_lock);
-+		return -EIO;
+ 	if (!(flags & CMOS_RTC_FLAGS_NOFREQ)) {
+ 		/* force periodic irq to CMOS reset default of 1024Hz;
+ 		 *
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index dcfaf09946ee..9175e11baf26 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -8,10 +8,35 @@
+ #include <linux/acpi.h>
+ #endif
+ 
++/*
++ * If the UIP (Update-in-progress) bit of the RTC is set for more then
++ * 10ms, the RTC apparently is broken or not present.
++ */
++unsigned int mc146818_does_rtc_work(void)
++{
++	int i;
++	unsigned char val;
++	unsigned long flags;
++
++	for (i = 0; i < 20; i++) {
++		spin_lock_irqsave(&rtc_lock, flags);
++		val = CMOS_READ(RTC_FREQ_SELECT);
++		spin_unlock_irqrestore(&rtc_lock, flags);
++
++		if ((val & RTC_UIP) == 0)
++			return 1;
++
++		udelay(500);
 +	}
 +
- 	/* Basic alarms only support hour, minute, and seconds fields.
- 	 * Some also support day and month, for alarms up to a year in
- 	 * the future.
- 	 */
--
--	spin_lock_irq(&rtc_lock);
- 	t->time.tm_sec = CMOS_READ(RTC_SECONDS_ALARM);
- 	t->time.tm_min = CMOS_READ(RTC_MINUTES_ALARM);
- 	t->time.tm_hour = CMOS_READ(RTC_HOURS_ALARM);
-@@ -477,6 +507,10 @@ static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
++	return 0;
++}
++
+ unsigned int mc146818_get_time(struct rtc_time *time)
+ {
+ 	unsigned char ctrl;
+ 	unsigned long flags;
++	unsigned int iter_count = 0;
+ 	unsigned char century = 0;
+ 	bool retry;
+ 
+@@ -20,13 +45,14 @@ unsigned int mc146818_get_time(struct rtc_time *time)
+ #endif
+ 
+ again:
+-	spin_lock_irqsave(&rtc_lock, flags);
+-	/* Ensure that the RTC is accessible. Bit 6 must be 0! */
+-	if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x40) != 0)) {
+-		spin_unlock_irqrestore(&rtc_lock, flags);
++	if (iter_count > 10) {
++		pr_err_ratelimited("Unable to read current time from RTC\n");
+ 		memset(time, 0xff, sizeof(*time));
+ 		return 0;
  	}
++	iter_count++;
++
++	spin_lock_irqsave(&rtc_lock, flags);
  
- 	spin_lock_irq(&rtc_lock);
-+	if (cmos_wait_for_uip_clear(dev)) {
-+		spin_unlock_irq(&rtc_lock);
-+		return -EIO;
-+	}
+ 	/*
+ 	 * Check whether there is an update in progress during which the
+diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+index 0661af17a758..046a03df1e56 100644
+--- a/include/linux/mc146818rtc.h
++++ b/include/linux/mc146818rtc.h
+@@ -123,6 +123,7 @@ struct cmos_rtc_board_info {
+ #define RTC_IO_EXTENT_USED      RTC_IO_EXTENT
+ #endif /* ARCH_RTC_LOCATION */
  
- 	/* next rtc irq must not be from previous alarm setting */
- 	cmos_irq_disable(cmos, RTC_AIE);
++unsigned int mc146818_does_rtc_work(void);
+ unsigned int mc146818_get_time(struct rtc_time *time);
+ int mc146818_set_time(struct rtc_time *time);
+ 
 -- 
 2.25.1
 
