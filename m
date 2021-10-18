@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED724322A2
+	by mail.lfdr.de (Postfix) with ESMTP id D779D4322A3
 	for <lists+linux-rtc@lfdr.de>; Mon, 18 Oct 2021 17:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233499AbhJRPWA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 18 Oct 2021 11:22:00 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:44167 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbhJRPVz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Oct 2021 11:21:55 -0400
+        id S233394AbhJRPWB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 18 Oct 2021 11:22:01 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:60415 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233382AbhJRPV5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 18 Oct 2021 11:21:57 -0400
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id F0570240015;
-        Mon, 18 Oct 2021 15:19:42 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 0FA271BF205;
+        Mon, 18 Oct 2021 15:19:43 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/7] rtc: add BSM parameter
-Date:   Mon, 18 Oct 2021 17:19:31 +0200
-Message-Id: <20211018151933.76865-6-alexandre.belloni@bootlin.com>
+Subject: [PATCH v2 6/7] rtc: rv3028: add BSM support
+Date:   Mon, 18 Oct 2021 17:19:32 +0200
+Message-Id: <20211018151933.76865-7-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211018151933.76865-1-alexandre.belloni@bootlin.com>
 References: <20211018151933.76865-1-alexandre.belloni@bootlin.com>
@@ -30,92 +30,128 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-BSM or Backup Switch Mode is a common feature on RTCs, allowing to select
-how the RTC will decide when to switch from its primary power supply to the
-backup power supply. It is necessary to be able to set it from userspace as
-there are uses cases where it has to be done dynamically.
-
-Supported values are:
-  RTC_BSM_DISABLED: disabled
-  RTC_BSM_DIRECT: switching will happen as soon as Vbackup > Vdd
-  RTC_BSM_LEVEL: switching will happen around a threshold, usually with an
-  hysteresis
-  RTC_BSM_STANDBY: switching will not happen until Vdd > Vbackup, this is
-  useful to ensure the RTC doesn't draw any power until the device is first
-  powered on.
+Backup Switch Mode controls how the RTC decides when to switch to the
+backup power supply. As it is disabled by default, provide a way to enable
+and configure it.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/dev.c        | 10 ++++++++--
- include/linux/rtc.h      |  2 ++
- include/uapi/linux/rtc.h |  9 ++++++++-
- 3 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/rtc/rtc-rv3028.c | 74 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
-index abee1fc4705e..e104972a28fd 100644
---- a/drivers/rtc/dev.c
-+++ b/drivers/rtc/dev.c
-@@ -409,7 +409,10 @@ static long rtc_dev_ioctl(struct file *file,
- 			break;
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index 12c807306893..cdc623b3e365 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -10,6 +10,7 @@
  
- 		default:
--			err = -EINVAL;
-+			if (rtc->ops->param_get)
-+				err = rtc->ops->param_get(rtc->dev.parent, &param);
-+			else
-+				err = -EINVAL;
- 		}
+ #include <linux/clk-provider.h>
+ #include <linux/bcd.h>
++#include <linux/bitfield.h>
+ #include <linux/bitops.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
+@@ -80,6 +81,10 @@
  
- 		if (!err)
-@@ -436,7 +439,10 @@ static long rtc_dev_ioctl(struct file *file,
- 			return rtc_set_offset(rtc, param.svalue);
+ #define RV3028_BACKUP_TCE		BIT(5)
+ #define RV3028_BACKUP_TCR_MASK		GENMASK(1,0)
++#define RV3028_BACKUP_BSM		GENMASK(3,2)
++
++#define RV3028_BACKUP_BSM_DSM		0x1
++#define RV3028_BACKUP_BSM_LSM		0x3
  
- 		default:
--			err = -EINVAL;
-+			if (rtc->ops->param_set)
-+				err = rtc->ops->param_set(rtc->dev.parent, &param);
-+			else
-+				err = -EINVAL;
- 		}
+ #define OFFSET_STEP_PPT			953674
  
- 		break;
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 354e0843ab17..47fd1c2d3a57 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -66,6 +66,8 @@ struct rtc_class_ops {
- 	int (*alarm_irq_enable)(struct device *, unsigned int enabled);
- 	int (*read_offset)(struct device *, long *offset);
- 	int (*set_offset)(struct device *, long offset);
-+	int (*param_get)(struct device *, struct rtc_param *param);
-+	int (*param_set)(struct device *, struct rtc_param *param);
+@@ -512,6 +517,71 @@ static int rv3028_set_offset(struct device *dev, long offset)
+ 
+ }
+ 
++static int rv3028_param_get(struct device *dev, struct rtc_param *param)
++{
++	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++	int ret;
++
++	switch(param->param) {
++		u32 value;
++
++	case RTC_PARAM_BACKUP_SWITCH_MODE:
++		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &value);
++		if (ret < 0)
++			return ret;
++
++		value = FIELD_GET(RV3028_BACKUP_BSM, value);
++
++		switch(value) {
++		case RV3028_BACKUP_BSM_DSM:
++			param->uvalue = RTC_BSM_DIRECT;
++			break;
++		case RV3028_BACKUP_BSM_LSM:
++			param->uvalue = RTC_BSM_LEVEL;
++			break;
++		default:
++			param->uvalue = RTC_BSM_DISABLED;
++		}
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int rv3028_param_set(struct device *dev, struct rtc_param *param)
++{
++	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
++
++	switch(param->param) {
++		u8 mode;
++	case RTC_PARAM_BACKUP_SWITCH_MODE:
++		switch (param->uvalue) {
++		case RTC_BSM_DISABLED:
++			mode = 0;
++			break;
++		case RTC_BSM_DIRECT:
++			mode = RV3028_BACKUP_BSM_DSM;
++			break;
++		case RTC_BSM_LEVEL:
++			mode = RV3028_BACKUP_BSM_LSM;
++			break;
++		default:
++			return -EINVAL;
++		}
++
++		return rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_BSM,
++					 FIELD_PREP(RV3028_BACKUP_BSM, mode));
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int rv3028_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
+@@ -776,6 +846,8 @@ static const struct rtc_class_ops rv3028_rtc_ops = {
+ 	.read_offset = rv3028_read_offset,
+ 	.set_offset = rv3028_set_offset,
+ 	.ioctl = rv3028_ioctl,
++	.param_get = rv3028_param_get,
++	.param_set = rv3028_param_set,
  };
  
- struct rtc_device;
-diff --git a/include/uapi/linux/rtc.h b/include/uapi/linux/rtc.h
-index 5debe82439c2..03e5b776e597 100644
---- a/include/uapi/linux/rtc.h
-+++ b/include/uapi/linux/rtc.h
-@@ -132,11 +132,18 @@ struct rtc_param {
- #define RTC_FEATURE_ALARM_RES_2S	3
- #define RTC_FEATURE_UPDATE_INTERRUPT	4
- #define RTC_FEATURE_CORRECTION		5
--#define RTC_FEATURE_CNT			6
-+#define RTC_FEATURE_BACKUP_SWITCH_MODE	6
-+#define RTC_FEATURE_CNT			7
+ static const struct regmap_config regmap_config = {
+@@ -878,6 +950,8 @@ static int rv3028_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
  
- /* parameter list */
- #define RTC_PARAM_FEATURES		0
- #define RTC_PARAM_CORRECTION		1
-+#define RTC_PARAM_BACKUP_SWITCH_MODE	2
++	set_bit(RTC_FEATURE_BACKUP_SWITCH_MODE, rv3028->rtc->features);
 +
-+#define RTC_BSM_DISABLED	0
-+#define RTC_BSM_DIRECT		1
-+#define RTC_BSM_LEVEL		2
-+#define RTC_BSM_STANDBY		3
- 
- #define RTC_MAX_FREQ	8192
- 
+ 	rv3028->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+ 	rv3028->rtc->range_max = RTC_TIMESTAMP_END_2099;
+ 	rv3028->rtc->ops = &rv3028_rtc_ops;
 -- 
 2.31.1
 
