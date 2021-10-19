@@ -2,19 +2,19 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D76433966
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 16:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE8643396B
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 16:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbhJSPBt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Oct 2021 11:01:49 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59832 "EHLO
+        id S231874AbhJSPBv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Oct 2021 11:01:51 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:57038 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229641AbhJSPBs (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 11:01:48 -0400
+        by vger.kernel.org with ESMTP id S231296AbhJSPBu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 11:01:50 -0400
 Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
         by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1mcqaT-00D5qd-Mz; Tue, 19 Oct 2021 16:59:33 +0200
+        id 1mcqaW-00D5qd-H3; Tue, 19 Oct 2021 16:59:36 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-kernel@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
@@ -31,10 +31,12 @@ Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v2 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
-Date:   Tue, 19 Oct 2021 16:59:10 +0200
-Message-Id: <20211019145919.7327-1-luca@lucaceresoli.net>
+Subject: [PATCH v2 1/9] mfd: max77686: Correct tab-based alignment of register addresses
+Date:   Tue, 19 Oct 2021 16:59:11 +0200
+Message-Id: <20211019145919.7327-2-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211019145919.7327-1-luca@lucaceresoli.net>
+References: <20211019145919.7327-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -51,58 +53,72 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+Some lines have an extra tab, remove them for proper visual alignment as
+present on the rest of this file.
 
-this series adds minimal drivers for the Maxim Semiconductor MAX77714
-(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
-Only RTC and watchdog are implemented by these patches.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-All implemented functionality is tested and working: RTC read/write,
-watchdog start/stop/ping/set_timeout.
+---
 
-Patches 1-4 + 7 are trivial cleanups to the max77686 drivers and can
-probably be applied easily.
+Changes in v2: none
+---
+ include/linux/mfd/max77686-private.h | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-Patches 5, 6, 8 and 9 add: dt bindings, mfd driver, watchdog driver and rtc
-driver.
-
-Changes in v2:
- - fixed all issues reported on v1 patches
- - added patch 7 ("watchdog: Kconfig: fix help text indentation")
- - additional minor improvements
-
-Luca
-
-Luca Ceresoli (9):
-  mfd: max77686: Correct tab-based alignment of register addresses
-  rtc: max77686: convert comments to kernel-doc format
-  rtc: max77686: rename day-of-month defines
-  rtc: max77686: remove unused code to read in 12-hour mode
-  dt-bindings: mfd: add Maxim MAX77714 PMIC
-  mfd: max77714: Add driver for Maxim MAX77714 PMIC
-  watchdog: Kconfig: fix help text indentation
-  watchdog: max77714: add driver for the watchdog in the MAX77714 PMIC
-  rtc: max77686: add MAX77714 support
-
- .../bindings/mfd/maxim,max77714.yaml          |  58 ++++++
- MAINTAINERS                                   |   8 +
- drivers/mfd/Kconfig                           |  14 ++
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/max77686.c                        |   2 +-
- drivers/mfd/max77714.c                        | 165 ++++++++++++++++
- drivers/rtc/Kconfig                           |   2 +-
- drivers/rtc/rtc-max77686.c                    |  75 +++++---
- drivers/watchdog/Kconfig                      |  57 +++---
- drivers/watchdog/Makefile                     |   1 +
- drivers/watchdog/max77714_wdt.c               | 179 ++++++++++++++++++
- include/linux/mfd/max77686-private.h          |  28 +--
- include/linux/mfd/max77714.h                  |  60 ++++++
- 13 files changed, 580 insertions(+), 70 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
- create mode 100644 drivers/mfd/max77714.c
- create mode 100644 drivers/watchdog/max77714_wdt.c
- create mode 100644 include/linux/mfd/max77714.h
-
+diff --git a/include/linux/mfd/max77686-private.h b/include/linux/mfd/max77686-private.h
+index 833e578e051e..b1482b3cf353 100644
+--- a/include/linux/mfd/max77686-private.h
++++ b/include/linux/mfd/max77686-private.h
+@@ -133,35 +133,35 @@ enum max77686_pmic_reg {
+ 	/* Reserved: 0x7A-0x7D */
+ 
+ 	MAX77686_REG_BBAT_CHG		= 0x7E,
+-	MAX77686_REG_32KHZ			= 0x7F,
++	MAX77686_REG_32KHZ		= 0x7F,
+ 
+ 	MAX77686_REG_PMIC_END		= 0x80,
+ };
+ 
+ enum max77686_rtc_reg {
+-	MAX77686_RTC_INT			= 0x00,
+-	MAX77686_RTC_INTM			= 0x01,
++	MAX77686_RTC_INT		= 0x00,
++	MAX77686_RTC_INTM		= 0x01,
+ 	MAX77686_RTC_CONTROLM		= 0x02,
+ 	MAX77686_RTC_CONTROL		= 0x03,
+ 	MAX77686_RTC_UPDATE0		= 0x04,
+ 	/* Reserved: 0x5 */
+ 	MAX77686_WTSR_SMPL_CNTL		= 0x06,
+-	MAX77686_RTC_SEC			= 0x07,
+-	MAX77686_RTC_MIN			= 0x08,
+-	MAX77686_RTC_HOUR			= 0x09,
++	MAX77686_RTC_SEC		= 0x07,
++	MAX77686_RTC_MIN		= 0x08,
++	MAX77686_RTC_HOUR		= 0x09,
+ 	MAX77686_RTC_WEEKDAY		= 0x0A,
+-	MAX77686_RTC_MONTH			= 0x0B,
+-	MAX77686_RTC_YEAR			= 0x0C,
+-	MAX77686_RTC_DATE			= 0x0D,
+-	MAX77686_ALARM1_SEC			= 0x0E,
+-	MAX77686_ALARM1_MIN			= 0x0F,
++	MAX77686_RTC_MONTH		= 0x0B,
++	MAX77686_RTC_YEAR		= 0x0C,
++	MAX77686_RTC_DATE		= 0x0D,
++	MAX77686_ALARM1_SEC		= 0x0E,
++	MAX77686_ALARM1_MIN		= 0x0F,
+ 	MAX77686_ALARM1_HOUR		= 0x10,
+ 	MAX77686_ALARM1_WEEKDAY		= 0x11,
+ 	MAX77686_ALARM1_MONTH		= 0x12,
+ 	MAX77686_ALARM1_YEAR		= 0x13,
+ 	MAX77686_ALARM1_DATE		= 0x14,
+-	MAX77686_ALARM2_SEC			= 0x15,
+-	MAX77686_ALARM2_MIN			= 0x16,
++	MAX77686_ALARM2_SEC		= 0x15,
++	MAX77686_ALARM2_MIN		= 0x16,
+ 	MAX77686_ALARM2_HOUR		= 0x17,
+ 	MAX77686_ALARM2_WEEKDAY		= 0x18,
+ 	MAX77686_ALARM2_MONTH		= 0x19,
 -- 
 2.25.1
 
