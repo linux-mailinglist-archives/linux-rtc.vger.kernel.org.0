@@ -2,119 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BBE4336E1
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 15:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D76433966
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 16:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbhJSNXK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Oct 2021 09:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235857AbhJSNXJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 09:23:09 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F02EC06161C
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 06:20:57 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id f4so3328650uad.4
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 06:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yakjl3k2K+eVxhNNWDfRDoKIqXUztjprPOzVgOncdWQ=;
-        b=zkN1LOShPIaJLCCuJKUVdZXh8rfBKPDQq7AQULRZLfLQfG4UW0nnf6Ly3xtLBJlTU9
-         iM0ceOmIGLZcBdyt0cQqrkWmdpgUFVAyoXrHS6zozluOWh62tgUkpmh54su7Ck8U2oIt
-         wOU+c/ISp3063otRZJKkJ7nxC0rw+SFfhkvNR6HJgwFFJV7/N6sfQFp2Xp4+oVq/9ZPV
-         Mu3EkqEprpIVcuQsE9XjwHNsidgTeLs5AaXMdyzWtlqjVG8zebe/Jg/iCMRxOlWKFU7Q
-         Pv5TTAI3NG7mqhEwNocdQOC0Ziw0xP3r98/0TwFWpsWeH5Fbko1Bk4Rz76jhito2YnEX
-         DbEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yakjl3k2K+eVxhNNWDfRDoKIqXUztjprPOzVgOncdWQ=;
-        b=Is+vT/eOIkNgXltJPm5cfOTtLoRjW1eDVWWsHzwzqOQDiJvbjFj8n+lY/n3SitUKTP
-         p7WcvphIL83GK0MxhddBe2rqD+fmdSAH940hSU63S4VzEOmfygj1jhclMM+0lpa33uFZ
-         jmeEexF7re2a5XPiUtzcLQ82EakX6PGSWcu3slPW8pB4p5k2pPZ9JKA4o+NBUBbXANex
-         pP2fNcEwxiQCcgMWcWTzlddP5dIGIEI5rUCvCAB5cCV8L6i9Mw3hefCCR77pi8KMzdw4
-         al5LFPG/rsg0yMF7HAzFByvBrK7JZOVrMfHPU3qXvB3Fm7wB75elpAwktHZvSZI41+WY
-         3gcg==
-X-Gm-Message-State: AOAM53234+sozp/53ls2kyGBAlSbuVN9Sih5fVc+9cJZWQu3psK76Y9F
-        WUnYV4oStBwmir8RQMGSUCyrNEBEzMvgRODvvPruUA==
-X-Google-Smtp-Source: ABdhPJzEXTNc1bgO5xY3Fz7Wp7BiIO+u3gIQlsaK3t6XTvo2QR/edpc1j0onYDbLRZc+kiVFbJ88kbsY/xppDBq4YeE=
-X-Received: by 2002:a67:1781:: with SMTP id 123mr35032706vsx.1.1634649656361;
- Tue, 19 Oct 2021 06:20:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211018173201.2166-1-semen.protsenko@linaro.org> <YW3DjEuszEZ1Uw6/@piout.net>
-In-Reply-To: <YW3DjEuszEZ1Uw6/@piout.net>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 19 Oct 2021 16:20:45 +0300
-Message-ID: <CAPLW+4mLdu-QGhhpFMsMK-GCS9vY9r-L0NnjyijtohfeRSiC3g@mail.gmail.com>
-Subject: Re: [PATCH] rtc: s3c: Remove usage of devm_rtc_device_register()
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        id S230365AbhJSPBt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Oct 2021 11:01:49 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:59832 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229641AbhJSPBs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 11:01:48 -0400
+Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mcqaT-00D5qd-Mz; Tue, 19 Oct 2021 16:59:33 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-rtc@vger.kernel.org,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v2 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Tue, 19 Oct 2021 16:59:10 +0200
+Message-Id: <20211019145919.7327-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 18 Oct 2021 at 21:57, Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> On 18/10/2021 20:32:01+0300, Sam Protsenko wrote:
-> > devm_rtc_device_register() is deprecated. Use devm_rtc_allocate_device()
-> > and devm_rtc_register_device() API instead.
-> >
->
-> If you do that, please also set the range properly, either in the same
-> patch or as a follow-up.
->
+Hi,
 
-No problem. Just sent patch series [1], which supersedes this one.
-Time range setting is present there in [PATCH 2/4].
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-[1] https://lkml.org/lkml/2021/10/19/632
+All implemented functionality is tested and working: RTC read/write,
+watchdog start/stop/ping/set_timeout.
 
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > ---
-> >  drivers/rtc/rtc-s3c.c | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
-> > index e57d3ca70a78..10e591794276 100644
-> > --- a/drivers/rtc/rtc-s3c.c
-> > +++ b/drivers/rtc/rtc-s3c.c
-> > @@ -447,15 +447,18 @@ static int s3c_rtc_probe(struct platform_device *pdev)
-> >
-> >       device_init_wakeup(&pdev->dev, 1);
-> >
-> > -     /* register RTC and exit */
-> > -     info->rtc = devm_rtc_device_register(&pdev->dev, "s3c", &s3c_rtcops,
-> > -                                          THIS_MODULE);
-> > +     info->rtc = devm_rtc_allocate_device(&pdev->dev);
-> >       if (IS_ERR(info->rtc)) {
-> > -             dev_err(&pdev->dev, "cannot attach rtc\n");
-> >               ret = PTR_ERR(info->rtc);
-> >               goto err_nortc;
-> >       }
-> >
-> > +     info->rtc->ops = &s3c_rtcops;
-> > +
-> > +     ret = devm_rtc_register_device(info->rtc);
-> > +     if (ret)
-> > +             goto err_nortc;
-> > +
-> >       ret = devm_request_irq(&pdev->dev, info->irq_alarm, s3c_rtc_alarmirq,
-> >                              0, "s3c2410-rtc alarm", info);
-> >       if (ret) {
-> > --
-> > 2.30.2
-> >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Patches 1-4 + 7 are trivial cleanups to the max77686 drivers and can
+probably be applied easily.
+
+Patches 5, 6, 8 and 9 add: dt bindings, mfd driver, watchdog driver and rtc
+driver.
+
+Changes in v2:
+ - fixed all issues reported on v1 patches
+ - added patch 7 ("watchdog: Kconfig: fix help text indentation")
+ - additional minor improvements
+
+Luca
+
+Luca Ceresoli (9):
+  mfd: max77686: Correct tab-based alignment of register addresses
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove unused code to read in 12-hour mode
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: Kconfig: fix help text indentation
+  watchdog: max77714: add driver for the watchdog in the MAX77714 PMIC
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  58 ++++++
+ MAINTAINERS                                   |   8 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77686.c                        |   2 +-
+ drivers/mfd/max77714.c                        | 165 ++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  75 +++++---
+ drivers/watchdog/Kconfig                      |  57 +++---
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/max77714_wdt.c               | 179 ++++++++++++++++++
+ include/linux/mfd/max77686-private.h          |  28 +--
+ include/linux/mfd/max77714.h                  |  60 ++++++
+ 13 files changed, 580 insertions(+), 70 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 drivers/watchdog/max77714_wdt.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+2.25.1
+
