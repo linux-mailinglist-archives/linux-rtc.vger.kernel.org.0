@@ -2,98 +2,121 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEA4433C0A
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 18:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0D1433C41
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Oct 2021 18:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhJSQ07 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Oct 2021 12:26:59 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45540
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229774AbhJSQ06 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 12:26:58 -0400
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 639B14074C
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 16:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634660685;
-        bh=498IUqh7qiqUKcZ9Q0qZOmmm/FH00+0dL2t8BJdk6fA=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=apnn2sB5st76EtsitHaukDhDJOObRvaO+OWhM/gtXGB6nbTm9zZMvpAER6CpOdxUO
-         Mqi5l5vrbipouLmP+RWop4ljgdceT+52lQUGdsemC2xFBSawiVS19hCmEsYrkqAwod
-         oD+IX/S30pRyI8y1id5Up1zELEoBpng9QWrAuryGR+yu/PzSkHYR9jO3HuiU49Z6l1
-         Fgv/ejqrxxoj00JxGli/azcfak1l8swCqCc6vBndOrvKTg246qBvuQRPbxud/TBWPE
-         plNOxHfkPABtb4QSeYELIxzUDKik7QsRBWtHB19DGkElsb1JcmwJbeq8svbQ34vlzr
-         guueitUlLcT/A==
-Received: by mail-lj1-f198.google.com with SMTP id s5-20020a2e98c5000000b002112895b3f6so1074935ljj.21
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 09:24:45 -0700 (PDT)
+        id S233961AbhJSQeV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Oct 2021 12:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234145AbhJSQeU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Oct 2021 12:34:20 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7225C061749
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 09:32:07 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id r17so1035801uaf.8
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Oct 2021 09:32:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hahfVOoHWaswWYG6AOdwobrg+9oFJjD78UWkQSP5iBo=;
+        b=E1IZ9VcAEyedR+jX7NNNMbreSe4uG0nyM9N7yuY3sk9PSqHBG4TwSPqkZTMjnEt4Mb
+         EYxjZN2QTZ1MlUgbzFPWyM63ihdr0CEVc7xdZkZJ6vh8NcfJrtuC6aGBEhplNvqcFAAS
+         3LBlZ1AMJkq8shq0fYFNBegn1EGMvj3bI6/LTjPKYvBZkQ3mDvSrOlcZLXJwKMrLK2JY
+         QyY6EbHFuD+ZcTZS8Ar5KFCAxrfVu471RU28npVrh8BOf2QDxUPKusE9N+Cw+qhXvqTM
+         jklyQCsP87Vnm6mZ/PnuaijjL8XqAD/lTxLZyODdRoznKt9LvAFAk4yBdijAFl/h5OxW
+         D70Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=498IUqh7qiqUKcZ9Q0qZOmmm/FH00+0dL2t8BJdk6fA=;
-        b=b1kGCYvYuFRrqpCHhBUZ8/uGl0Wj3kPFTFEDekRsmtm+ZXg9Ghl3gaZhJKej7ER2iq
-         T5vrl0Lg+ugd81hdL6prSmVoaFQqgU42DvnU1P9m3pyEAWr6t91JL6BpoWRtzNI1Q/mb
-         NUlX9HbS0wF1Y8hHMxbwC4OtODvfFIlajQPJOXR7J68YOW2WIeYsI/EaGwpTlj9zrrjH
-         QfReEagg6KtKtu4omOznrU866eWCE3NNfZMwezhMnvPbWu1SUyZsv9tdaSeMPv7ck7XI
-         Iq4DHFeY/D7jfMqwqQI1Kg++xapqW/VeR11ya5OaRx3soxMsSsqyhRwR313Fke6ziars
-         nTsw==
-X-Gm-Message-State: AOAM532hsL+tl5cdLI64F8XWjZHVb1nfW8FHfm5Sv9uzN8H7WTICNBKf
-        3INvRcdGlri6lD9Ll8ZDf52Uy7KsYml5O2gJrnon0mZgiR290pOJuI7VHUd9YNgJ0+hTXz3P5Fl
-        qD81S1RgaQNP/duMGfU3EmAdx3+OhSXKSPPuqKA==
-X-Received: by 2002:a2e:9d2:: with SMTP id 201mr7553966ljj.163.1634660684599;
-        Tue, 19 Oct 2021 09:24:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJykGa5sogCFDqH8jTBbw0yAdFSWHwImCp941pYeQoMrhNAOHaCU1EWke4ktmA/lwSiGuenk1A==
-X-Received: by 2002:a2e:9d2:: with SMTP id 201mr7553945ljj.163.1634660684344;
-        Tue, 19 Oct 2021 09:24:44 -0700 (PDT)
-Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id f6sm2115939ljo.36.2021.10.19.09.24.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Oct 2021 09:24:43 -0700 (PDT)
-Subject: Re: [PATCH 3/4] rtc: s3c: Extract read/write IO into separate
- functions
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211019131724.3109-1-semen.protsenko@linaro.org>
- <20211019131724.3109-4-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <1a71e63d-0586-2208-bd84-6bc2d15147e4@canonical.com>
-Date:   Tue, 19 Oct 2021 18:24:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hahfVOoHWaswWYG6AOdwobrg+9oFJjD78UWkQSP5iBo=;
+        b=QBXBk28zm9/IIA6ptAphW4x7ZzcjQ/jHkmry5KxTv5wyPDwq1hu1MLHb5xxs9PO7y6
+         avtpaLTX3Qz69SHR83qI46TjLHmzhl67ZBRhhefhvznMeYAzXGN1ftkYuvp9GifXqlD0
+         eZjbo81Lyyt5n7dzvmuyEUIIL7b9emjpjWWVKAb/95ymXQeRBxViQKYCwCru2WUACYtj
+         B/HiNzH+tdI5NTNSLgQQ7+wddyqkaHyYQ8d1+0mBngpejhHvFN8b41bm2XenZI++nSnT
+         d9O8GupBULfiaeglEnXpf1mHKokW3O2kzk+9tkkqwNefkGdUIX71vjKmhbumdJEmkLEL
+         dI2Q==
+X-Gm-Message-State: AOAM532ovV4bOXi9TBixK+5FM06t0BWbOWtVMfLUHjmsp3MykEebzQ4l
+        ku+mQpwa+3vJ7oFflYtmB+98vPTbPJcGipxcV/Ft0pXN7B45Egnm
+X-Google-Smtp-Source: ABdhPJzMkEBEDghfVNd7ZH6s9/IUFdm8ZBbkizGDdXiUVgEEgcgXk5j22Ilzem9n/a/TGoR5j2zFABdQFwTUh62jCyE=
+X-Received: by 2002:ab0:3303:: with SMTP id r3mr1049741uao.17.1634661126908;
+ Tue, 19 Oct 2021 09:32:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211019131724.3109-4-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211019131724.3109-1-semen.protsenko@linaro.org>
+ <20211019131724.3109-3-semen.protsenko@linaro.org> <YW7wTY5VOsPMAT3v@piout.net>
+In-Reply-To: <YW7wTY5VOsPMAT3v@piout.net>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 19 Oct 2021 19:31:55 +0300
+Message-ID: <CAPLW+4=nO8oPRnGL5PhRJyRZ6gEhA0pe2SOjQ6hrwo=SV_z1zA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] rtc: s3c: Add time range
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-rtc@vger.kernel.org,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/10/2021 15:17, Sam Protsenko wrote:
-> Create dedicated functions for I/O operations and BCD conversion. It can
-> be useful to separete those from representation conversion and other
-> stuff found in RTC callbacks, e.g. for initializing RTC registers.
-> This patch does not introduce any functional changes, it's merely
-> refactoring change.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  drivers/rtc/rtc-s3c.c | 98 +++++++++++++++++++++++++++----------------
->  1 file changed, 61 insertions(+), 37 deletions(-)
-> 
+On Tue, 19 Oct 2021 at 19:20, Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On 19/10/2021 16:17:22+0300, Sam Protsenko wrote:
+> > This RTC driver only accepts dates from 2000 to 2099 year. It starts
+> > counting from 2000 to avoid Y2K problem, and S3C RTC only supports 100
+> > years range. Provide this info to RTC framework.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  drivers/rtc/rtc-s3c.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
+> > index 10e591794276..d9994efd70ef 100644
+> > --- a/drivers/rtc/rtc-s3c.c
+> > +++ b/drivers/rtc/rtc-s3c.c
+> > @@ -454,6 +454,8 @@ static int s3c_rtc_probe(struct platform_device *pdev)
+> >       }
+> >
+> >       info->rtc->ops = &s3c_rtcops;
+> > +     info->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> > +     info->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> >
+>
+> This change is missing the if (year < 0 || year >= 100)  removal in
+> s3c_rtc_settime()
+>
 
-Looks correct:
+It's not actually removed in [PATCH 3/4] (if I'm following you
+correctly), it was replaced with this code:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>
+    if (rtc_tm.tm_year < 0 || rtc_tm.tm_year >= 100) {
+        dev_err(dev, "rtc only supports 100 years\n");
+        return -EINVAL;
+    }
+<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>
 
+But [PATCH 3/4] is mostly needed for [PATCH 4/4], so you can drop it
+if you don't like it. Or it might be kept as a cleanup.
 
-Best regards,
-Krzysztof
++
++    if (rtc_tm.tm_year < 0 || rtc_tm.tm_year >= 100) {
++        dev_err(dev, "rtc only supports 100 years\n");
++        return -EINVAL;
++    }
+
+> >       ret = devm_rtc_register_device(info->rtc);
+> >       if (ret)
+> > --
+> > 2.30.2
+> >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
