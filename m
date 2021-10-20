@@ -2,61 +2,31 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1035C43460E
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Oct 2021 09:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89718434A41
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Oct 2021 13:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbhJTHrf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Oct 2021 03:47:35 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39268
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229723AbhJTHrd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Oct 2021 03:47:33 -0400
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        id S230209AbhJTLld (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Oct 2021 07:41:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56848 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229941AbhJTLla (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 20 Oct 2021 07:41:30 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 723B44074C
-        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 07:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634715918;
-        bh=hn4G6B24NKuuI7XYmyB2qc+VHWq7V63yNRCu8uWR8QM=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=lbRsub2w+CZ422YSr5qqTyT/0qVMc7iDXTUB+eSZ5Ercuo/SGRZYagpQd60oAW0P6
-         hkvaF5jgODZq0FWhYheixrGWA2BOEN4V13bd2nrEcaE7JIYanQai+hLicl9dydmg6J
-         L7csQwYw7ax8F3ccHF6r2DOpEca1mHVRg53d698V0+VMPPuhVNuwsV2NQW8JqAvchD
-         AEuTMP0OR7gF9msyjg4yr3QOYlFVeDmGw8h2dCwsnDGXe1lTe2Np45ksyvTXfYcrtu
-         t84uC1S/VAwe7t2LrU/zT8eP+JrCaueQLDvXKPkLADK6GjDhogyEAlGHKsAMMEhJMQ
-         jhSe6F3AI244A==
-Received: by mail-wm1-f70.google.com with SMTP id k6-20020a7bc306000000b0030d92a6bdc7so2631232wmj.3
-        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 00:45:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hn4G6B24NKuuI7XYmyB2qc+VHWq7V63yNRCu8uWR8QM=;
-        b=6IgHp4x6eAWPgPNNUSnVUj6Hrmvl9etauP8c3JkhPU/++14Q9+5AauMMeA2KATTVZ6
-         4QqzmXCCkTkidM+qCV15BHtGVDMpdEJLfUK/g1oqBJCvAdV+W+3kw82IJHa8pApvtzw6
-         4nBUdygZDtwFueaYuoE3auTCmibOdLDMslYFDynNjxE/95/J3pQvxQgk8GwmZBC4Qrzj
-         U/mnGDoEEsw8GET5DBIFhQciuGT0Yr/WhNrLuXCAIiShNUktejfc9M/OdYVsH2WAZlwB
-         o5BrvKRXqLbcoa+DkOrVlSvecmS2frKcv99X2HgRUlHwqBxprXACDFl47pg+4QsOrU5i
-         jRcw==
-X-Gm-Message-State: AOAM5316KX6PwSCIf+Zpx1V806GxQynOLyOz+rmwRm3DAWU5/63yHoy3
-        aqQ3JbnMQi7iTq8pwk2Fd6n/dBCvAJWdUrpGirGVFx7tvq5cggTschdb9Cz2fbtHobLb5G4T073
-        R+DlyXJK++anXCCllFwBT2L3LPXI63upSBWugDg==
-X-Received: by 2002:a05:651c:10ac:: with SMTP id k12mr11579159ljn.296.1634715906901;
-        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJylw2trvF0ZXu7khnQZx/gnaE1TXWFJT87p6K5VtMB66Foj+aVE5ln4wd6dcSv0cFlFYuFolg==
-X-Received: by 2002:a05:651c:10ac:: with SMTP id k12mr11579071ljn.296.1634715906590;
-        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
-Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id s10sm127484lfr.172.2021.10.20.00.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
-Subject: Re: dt-bindings: treewide: Update @st.com email address to
- @foss.st.com
-To:     patrice.chotard@foss.st.com, Rob Herring <robh+dt@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 4BCC3611B0;
+        Wed, 20 Oct 2021 11:39:15 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1md9w8-000Q93-UK; Wed, 20 Oct 2021 12:39:13 +0100
+Date:   Wed, 20 Oct 2021 12:39:11 +0100
+Message-ID: <878ryoc4dc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        patrice.chotard@foss.st.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
         maxime coquelin <mcoquelin.stm32@gmail.com>,
         alexandre torgue <alexandre.torgue@foss.st.com>,
         michael turquette <mturquette@baylibre.com>,
@@ -79,7 +49,6 @@ To:     patrice.chotard@foss.st.com, Rob Herring <robh+dt@kernel.org>,
         olivier moysan <olivier.moysan@foss.st.com>,
         arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hugues Fruchet <hugues.fruchet@foss.st.com>,
@@ -126,8 +95,8 @@ To:     patrice.chotard@foss.st.com, Rob Herring <robh+dt@kernel.org>,
         pascal Paillet <p.paillet@foss.st.com>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Le Ray <erwan.leray@foss.st.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -139,33 +108,45 @@ Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: dt-bindings: treewide: Update @st.com email address to @foss.st.com
+In-Reply-To: <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
 References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
-Date:   Wed, 20 Oct 2021 09:45:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211020065000.21312-1-patrice.chotard@foss.st.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: krzysztof.kozlowski@canonical.com, patrice.chotard@foss.st.com, robh+dt@kernel.org, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net, airlied@linux.ie, daniel@ffwll.ch, thierry.reding@gmail.com, sam@ravnborg.org, yannick.fertre@foss.st.com, philippe.cornu@foss.st.com, benjamin.gaignard@linaro.org, vkoul@kernel.org, ohad@wizery.com, bjorn.andersson@linaro.org, baolin.wang7@gmail.com, jic23@kernel.org, lars@metafoo.de, olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com, tglx@linutronix.de, jassisinghbrar@gmail.com, mchehab@kernel.org, hugues.fruchet@foss.st.com, fabrice.gasnier@foss.st.com, lee.jones@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, kuba@kernel.org, srinivas.kandagatla@linaro.org, kishon@ti.com, linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org, mathieu.poirier@linaro.org, mpm@selenic.com, a.zummo@towertech.i
+ t, alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org, rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com, wim@linux-watchdog.org, linux@roeck-us.net, geert+renesas@glider.be, viresh.kumar@linaro.org, a.fatoum@pengutronix.de, jagan@amarulasolutions.com, dillon.minfei@gmail.com, marex@denx.de, laurent.pinchart@ideasonboard.com, sre@kernel.org, dmitry.torokhov@gmail.com, paul@crapouillou.net, fabien.dessenne@foss.st.com, christophe.roullier@foss.st.com, gabriel.fernandez@foss.st.com, lionel.debieve@foss.st.com, amelie.delaunay@foss.st.com, pierre-yves.mordret@foss.st.com, ludovic.barre@foss.st.com, christophe.kerello@foss.st.com, p.paillet@foss.st.com, peppe.cavallaro@st.com, joabreu@synopsys.com, erwan.leray@foss.st.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
+  dmaengine@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, alsa-devel@alsa-project.org, linux-media@vger.kernel.org, linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Wed, 20 Oct 2021 08:45:02 +0100,
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
 > 
-> Not all @st.com email address are concerned, only people who have
-> a specific @foss.st.com email will see their entry updated.
-> For some people, who left the company, remove their email.
+> On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
+> > From: Patrice Chotard <patrice.chotard@foss.st.com>
+> > 
+> > Not all @st.com email address are concerned, only people who have
+> > a specific @foss.st.com email will see their entry updated.
+> > For some people, who left the company, remove their email.
+> > 
 > 
+> Please split simple address change from maintainer updates (removal,
+> addition).
+> 
+> Also would be nice to see here explained *why* are you doing this.
 
-Please split simple address change from maintainer updates (removal,
-addition).
+And why this can't be done with a single update to .mailmap, like
+anyone else does.
 
-Also would be nice to see here explained *why* are you doing this.
+	M.
 
-Best regards,
-Krzysztof
+-- 
+Without deviation from the norm, progress is not possible.
