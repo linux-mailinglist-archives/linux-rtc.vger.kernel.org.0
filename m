@@ -2,80 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70AC43459F
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Oct 2021 09:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1035C43460E
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Oct 2021 09:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbhJTHDF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Oct 2021 03:03:05 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:51100
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229809AbhJTHDF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Oct 2021 03:03:05 -0400
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
+        id S229686AbhJTHrf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Oct 2021 03:47:35 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39268
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229723AbhJTHrd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Oct 2021 03:47:33 -0400
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 969BA402AB
-        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 07:00:50 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 723B44074C
+        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 07:45:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1634713250;
-        bh=9bjdXHVOrSvIBWOc34yHW9pLuEO40fxL7CkdiqqaGyY=;
+        s=20210705; t=1634715918;
+        bh=hn4G6B24NKuuI7XYmyB2qc+VHWq7V63yNRCu8uWR8QM=;
         h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
          In-Reply-To:Content-Type;
-        b=Ie9K8/jTBu0b+adN7P1Zup44PFfnjfZkf23OsL6OTF6FW5oebVdR7RXIWYPJaBAU6
-         Q3U7WDT5DiSHBEyZRE/pM8bmJmW08MehpD4jLERZIFl2Gicly3U6tq2PCVshSipPJX
-         Sfy1AaD5fK9BXWbRAz89wVbMMv4d4Mbbr4Hqn4ccHNeVRgaZ1pE1YlCXZRH4lEFhjB
-         N8Jq7Xcjj+wfRsMKwixzuI18u6wTC8Rm78g3z8vALsPJsjOkGLsMJiyuPG4WvSelcq
-         1y0F1aquFTO6EnbpcxSMwZC2d4EMevxsE/IBX2w2aV/4y9eNSwieveQREvWO2axCxt
-         d9AtMsEC7DIxQ==
-Received: by mail-lf1-f72.google.com with SMTP id k15-20020a05651239cf00b003fe1ba9c94cso2014403lfu.6
-        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 00:00:50 -0700 (PDT)
+        b=lbRsub2w+CZ422YSr5qqTyT/0qVMc7iDXTUB+eSZ5Ercuo/SGRZYagpQd60oAW0P6
+         hkvaF5jgODZq0FWhYheixrGWA2BOEN4V13bd2nrEcaE7JIYanQai+hLicl9dydmg6J
+         L7csQwYw7ax8F3ccHF6r2DOpEca1mHVRg53d698V0+VMPPuhVNuwsV2NQW8JqAvchD
+         AEuTMP0OR7gF9msyjg4yr3QOYlFVeDmGw8h2dCwsnDGXe1lTe2Np45ksyvTXfYcrtu
+         t84uC1S/VAwe7t2LrU/zT8eP+JrCaueQLDvXKPkLADK6GjDhogyEAlGHKsAMMEhJMQ
+         jhSe6F3AI244A==
+Received: by mail-wm1-f70.google.com with SMTP id k6-20020a7bc306000000b0030d92a6bdc7so2631232wmj.3
+        for <linux-rtc@vger.kernel.org>; Wed, 20 Oct 2021 00:45:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=9bjdXHVOrSvIBWOc34yHW9pLuEO40fxL7CkdiqqaGyY=;
-        b=CSMUj0DQoQJHSSa3au7MDL9URxpNitVBUstkO1VJXUcZTFpHmxctOYvM1yGEIBpeFQ
-         5h910Io4rM6pjKfWwIz/tpY1Rvv64D+ws+Uhy51LzeicheGo+1i7zlUHUzziTwG5eClM
-         yI8557Pn+0ySYj7MjI3P8REFPMwKSjZPHzlaV9CSHVrHOihmdAnaL0p9La4EsZvPJ7Dk
-         VGXzg134vkCxnGt1NxlEa+REqoJP6zsiQFvVT5JCWshP3r9W3wtkuxzRu0a+VFs/dhqK
-         8W5DLUYIFKbMYrkbUqOBMCP9Hkqd5h9frzKY+yxwOYkyUkV7T61OFIaDqY2eVSo1SOHj
-         ObDg==
-X-Gm-Message-State: AOAM532DlnUwxV6oCnytox+to/cknbZ1n+BCsp543U7J0+wTqIf4QeJZ
-        MNWHqUk2tAp1FqC2RBuW6EYnF6VvCrGOE+ziRCTHKj1pV+KJA1e4eMumfTY8rva7x5SiYVj8lG+
-        KiFB5Pzc6f/xsybrLXnEZSJd8OJ67Vn6GGfgOKA==
-X-Received: by 2002:a19:48c9:: with SMTP id v192mr10274520lfa.269.1634713249401;
-        Wed, 20 Oct 2021 00:00:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzFnuOeJrsLzrbx6D4CBtk/GXOJiTJ5G3/0lCJFHQczwnpGGx59K2hBW6Uu+m127SqlR7eGSw==
-X-Received: by 2002:a19:48c9:: with SMTP id v192mr10274504lfa.269.1634713249254;
-        Wed, 20 Oct 2021 00:00:49 -0700 (PDT)
+        bh=hn4G6B24NKuuI7XYmyB2qc+VHWq7V63yNRCu8uWR8QM=;
+        b=6IgHp4x6eAWPgPNNUSnVUj6Hrmvl9etauP8c3JkhPU/++14Q9+5AauMMeA2KATTVZ6
+         4QqzmXCCkTkidM+qCV15BHtGVDMpdEJLfUK/g1oqBJCvAdV+W+3kw82IJHa8pApvtzw6
+         4nBUdygZDtwFueaYuoE3auTCmibOdLDMslYFDynNjxE/95/J3pQvxQgk8GwmZBC4Qrzj
+         U/mnGDoEEsw8GET5DBIFhQciuGT0Yr/WhNrLuXCAIiShNUktejfc9M/OdYVsH2WAZlwB
+         o5BrvKRXqLbcoa+DkOrVlSvecmS2frKcv99X2HgRUlHwqBxprXACDFl47pg+4QsOrU5i
+         jRcw==
+X-Gm-Message-State: AOAM5316KX6PwSCIf+Zpx1V806GxQynOLyOz+rmwRm3DAWU5/63yHoy3
+        aqQ3JbnMQi7iTq8pwk2Fd6n/dBCvAJWdUrpGirGVFx7tvq5cggTschdb9Cz2fbtHobLb5G4T073
+        R+DlyXJK++anXCCllFwBT2L3LPXI63upSBWugDg==
+X-Received: by 2002:a05:651c:10ac:: with SMTP id k12mr11579159ljn.296.1634715906901;
+        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJylw2trvF0ZXu7khnQZx/gnaE1TXWFJT87p6K5VtMB66Foj+aVE5ln4wd6dcSv0cFlFYuFolg==
+X-Received: by 2002:a05:651c:10ac:: with SMTP id k12mr11579071ljn.296.1634715906590;
+        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
 Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id q24sm117882lfr.138.2021.10.20.00.00.48
+        by smtp.gmail.com with ESMTPSA id s10sm127484lfr.172.2021.10.20.00.45.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Oct 2021 00:00:48 -0700 (PDT)
-Subject: Re: [PATCH v2 6/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Wed, 20 Oct 2021 00:45:06 -0700 (PDT)
+Subject: Re: dt-bindings: treewide: Update @st.com email address to
+ @foss.st.com
+To:     patrice.chotard@foss.st.com, Rob Herring <robh+dt@kernel.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        "david s . miller" <davem@davemloft.net>,
+        david airlie <airlied@linux.ie>,
+        daniel vetter <daniel@ffwll.ch>,
+        thierry reding <thierry.reding@gmail.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        philippe cornu <philippe.cornu@foss.st.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        vinod koul <vkoul@kernel.org>,
+        ohad ben-cohen <ohad@wizery.com>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        jonathan cameron <jic23@kernel.org>,
+        lars-peter clausen <lars@metafoo.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Mackall <mpm@selenic.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211019145919.7327-1-luca@lucaceresoli.net>
- <20211019145919.7327-7-luca@lucaceresoli.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        dillon min <dillon.minfei@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        dmaengine@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-media@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20211020065000.21312-1-patrice.chotard@foss.st.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <50ada6b7-44e6-6d4b-6784-405bb86aebbc@canonical.com>
-Date:   Wed, 20 Oct 2021 09:00:47 +0200
+Message-ID: <22fb6f19-21eb-dcb5-fa31-bb243d4a7eaf@canonical.com>
+Date:   Wed, 20 Oct 2021 09:45:02 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211019145919.7327-7-luca@lucaceresoli.net>
+In-Reply-To: <20211020065000.21312-1-patrice.chotard@foss.st.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -83,35 +154,18 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/10/2021 16:59, Luca Ceresoli wrote:
-> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
-> watchdog only.
+On 20/10/2021 08:50, patrice.chotard@foss.st.com wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
-> 
-> Changes in v2:
->  - fix "watchdog" word in heading comment (Guenter Roeck)
->  - move struct max77714 to .c file (Krzysztof Kozlowski)
->  - change include guard format (Krzysztof Kozlowski)
->  - allow building as a module (Krzysztof Kozlowski)
->  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
->    (Reported-by: kernel test robot <lkp@intel.com>)
-> ---
->  MAINTAINERS                  |   2 +
->  drivers/mfd/Kconfig          |  14 +++
->  drivers/mfd/Makefile         |   1 +
->  drivers/mfd/max77714.c       | 165 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max77714.h |  60 +++++++++++++
->  5 files changed, 242 insertions(+)
->  create mode 100644 drivers/mfd/max77714.c
->  create mode 100644 include/linux/mfd/max77714.h
+> Not all @st.com email address are concerned, only people who have
+> a specific @foss.st.com email will see their entry updated.
+> For some people, who left the company, remove their email.
 > 
 
+Please split simple address change from maintainer updates (removal,
+addition).
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
+Also would be nice to see here explained *why* are you doing this.
 
 Best regards,
 Krzysztof
