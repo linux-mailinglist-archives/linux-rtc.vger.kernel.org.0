@@ -2,49 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AF4436B47
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Oct 2021 21:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93949436B49
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Oct 2021 21:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbhJUTZ6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Oct 2021 15:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S231775AbhJUTZ7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Oct 2021 15:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbhJUTZ5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Oct 2021 15:25:57 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E928BC061764;
-        Thu, 21 Oct 2021 12:23:40 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id l5so403113lja.13;
-        Thu, 21 Oct 2021 12:23:40 -0700 (PDT)
+        with ESMTP id S231687AbhJUTZ6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Oct 2021 15:25:58 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFA4C061764;
+        Thu, 21 Oct 2021 12:23:42 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id n7so1717868ljp.5;
+        Thu, 21 Oct 2021 12:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IlvbifZsbZAnav3oP7dlLIIybj3gfnsNpn6USl8liNA=;
-        b=RNlLVtte0+hNwmYalL05rZDPmkHdRicxBt65l/JCgOrumPFfyTyrMhn/Hfoz0D3MG6
-         PDi61JZOdlRBaqsThbbBJpJwEdUSGl4FsuMfrMBQvOIsxMoSYA4pcR7NCupvX0/Z6piG
-         F/Noq8Cxjm0LRV1cxAmnaHEyOdbKgV8viuVfJDIdFM0lGibOy9oeIqBG6+0xrTlrgjsR
-         cbyCEFWOLlC4CEnoEmf93LBW3oeR+fLIYsbMyWE0uzCbqDFb0q0fCNXrDBwHFKKEnCih
-         mm3UQmUo0yJOCuXWX5KWg/o4jVdpxxyyTmTg/cBnzhdLgFub3/hTJeQbviT4AVVZP/fO
-         WV0g==
+        bh=WcVFsiX4dh6G0/l6sNm/m1rJJaVmTxpYvWVFkoyZiNY=;
+        b=PyrshhQfueSqC3Nkup+mAvzcH8VSolPDOSYSz6CUQZifDNRvCiyWePnhUvBkHajySL
+         Ajw4y70iw9TchFi5zDf/N/tp8nunov7kczkt3NqfLmkFEQa1+1C+xEY9i2IuejvM1Gaj
+         iH1sDPzW+G6Q1noGMD1nNi24MzK0Yrt9l0PLaoV2KRuKSGZhsi7L0kdzemEluUqYCOM7
+         WxJYg9wP84rXwZYBR+XTek2i2Hx83IhqAfnaH8BMz/sqlBRIIsPr7mChwv9uTeufWH56
+         J705KUPg8HMfv3ygHBJdxSLig2ClFw5FqNbUJJiE5NwXgP0XF/lFiH9lizbzaltoc7Kx
+         9U+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IlvbifZsbZAnav3oP7dlLIIybj3gfnsNpn6USl8liNA=;
-        b=q+ngBTPh/UbNiNEaLnhUkbFeZJaNsGypORj+7HTWJfzCaldSCbMbh0FTfUGo7JQ2KE
-         UCYi8erOkf+JEfU/84rzvWpaTEN2FNtywwMG0eIKgS556HIb0EjONo71ulbV3XbH6nCh
-         duw5qBeWFK2BaP0pNMi3BoYZtU2aC51SsZHUqpicUFhME2pDu+oajgJ5wYdXHvo+pjSm
-         7l/FZ7taNierqXInwkQntCHhL2snk7rH1aKcE0ec+qjQuS2yPQSiq+cAsFkH+5xPA5mT
-         gu8WQLs2DekzOCxNP8PKE0DwNH2joJqT4jHKFQRgY2tX8WiRr8nPM4Td56FhdOTTIYNN
-         iPAQ==
-X-Gm-Message-State: AOAM5317PLGgl2oGTNG4vJDsyU3y1a61e3C1Ao4CZJd6Sut2zRUDR+vO
-        rYAsKi4DCsc4HF0AHAUa/7k=
-X-Google-Smtp-Source: ABdhPJwfEseoK4n0XPnXydLzBZCc1kowdh19zZnVX7N5Cpoi8JV1+OJZWy3DlcaCU7/waSu9ZUAYog==
-X-Received: by 2002:a2e:bf26:: with SMTP id c38mr8148464ljr.127.1634844219312;
-        Thu, 21 Oct 2021 12:23:39 -0700 (PDT)
+        bh=WcVFsiX4dh6G0/l6sNm/m1rJJaVmTxpYvWVFkoyZiNY=;
+        b=zZ9QsRIdTfADeoghL1AUcyHwzeV/BudqdSqobxChkCYc/3U+uXOmOkhxd/w63/UrkR
+         ZQpFPulygh4Gm+Bc/vIeaYwORFyWx5jTlne1QIpAMJDSbcJn8VtSxAkXYL8LRRD+QXi/
+         D5Uyqwm8GhDUVh+YE087NKT4Ah0yEdg/yvKqqxyXwGabc/o/p37X0BlgLX0wjFagyNVY
+         U2clGvM8hn7xfNg5kY6aTB0dgVOaAi9Tg1AMMV+OyRonaS5mwbyK2U0u7DSxnPoAOstr
+         xf0Go+rqcr+30Eq0F2/vUU0Dv1/+tJdq6LH9McQnTpvelcsrmMZxLbHElgCERMK+6UZk
+         n8pQ==
+X-Gm-Message-State: AOAM531PjExOSu20vRzxFcthRGgvLqgLwvJAtyfUcj2GpGH565Z9saUV
+        CZJANtb+Lmq93IroZy//u54=
+X-Google-Smtp-Source: ABdhPJybD4Pl8Hh+5AFawQCn2AM4r81abH8BAA4hu763p6AZGutouKektzPW4rW43Br/vIWK+ExeEw==
+X-Received: by 2002:a2e:88ce:: with SMTP id a14mr7754373ljk.396.1634844220000;
+        Thu, 21 Oct 2021 12:23:40 -0700 (PDT)
 Received: from localhost.localdomain (94-29-61-202.dynamic.spd-mgts.ru. [94.29.61.202])
-        by smtp.gmail.com with ESMTPSA id c20sm533763lfi.182.2021.10.21.12.23.38
+        by smtp.gmail.com with ESMTPSA id c20sm533763lfi.182.2021.10.21.12.23.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 21 Oct 2021 12:23:39 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
@@ -55,9 +55,9 @@ To:     Lee Jones <lee.jones@linaro.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Laxman Dewangan <ldewangan@nvidia.com>
 Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH v1 1/3] rtc: tps80031: Remove driver
-Date:   Thu, 21 Oct 2021 22:22:56 +0300
-Message-Id: <20211021192258.21968-2-digetx@gmail.com>
+Subject: [PATCH v1 2/3] regulator: tps80031: Remove driver
+Date:   Thu, 21 Oct 2021 22:22:57 +0300
+Message-Id: <20211021192258.21968-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211021192258.21968-1-digetx@gmail.com>
 References: <20211021192258.21968-1-digetx@gmail.com>
@@ -71,371 +71,801 @@ Driver was upstreamed in 2013 and never got a user, remove it.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/rtc/Kconfig        |   8 -
- drivers/rtc/Makefile       |   1 -
- drivers/rtc/rtc-tps80031.c | 324 -------------------------------------
- 3 files changed, 333 deletions(-)
- delete mode 100644 drivers/rtc/rtc-tps80031.c
+ drivers/regulator/Kconfig              |   9 -
+ drivers/regulator/Makefile             |   1 -
+ drivers/regulator/tps80031-regulator.c | 753 -------------------------
+ 3 files changed, 763 deletions(-)
+ delete mode 100644 drivers/regulator/tps80031-regulator.c
 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 456450722555..058e56a10ab8 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -583,14 +583,6 @@ config RTC_DRV_TPS65910
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-tps65910.
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index 27578e9504d2..6be9b1c8a615 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -1339,15 +1339,6 @@ config REGULATOR_TPS65912
+ 	help
+ 	    This driver supports TPS65912 voltage regulator chip.
  
--config RTC_DRV_TPS80031
--	tristate "TI TPS80031/TPS80032 RTC driver"
+-config REGULATOR_TPS80031
+-	tristate "TI TPS80031/TPS80032 power regulator driver"
 -	depends on MFD_TPS80031
 -	help
--	  TI Power Management IC TPS80031 supports RTC functionality
--	  along with alarm. This driver supports the RTC driver for
--	  the TPS80031 RTC module.
+-	  TPS80031/ TPS80032 Fully Integrated Power Management with Power
+-	  Path and Battery Charger. It has 5 configurable step-down
+-	  converters, 11 general purpose LDOs, VBUS generator and digital
+-	  output to control regulators.
 -
- config RTC_DRV_RC5T583
- 	tristate "RICOH 5T583 RTC driver"
- 	depends on MFD_RC5T583
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index e76308053b0f..678a8ef4abae 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -170,7 +170,6 @@ obj-$(CONFIG_RTC_DRV_TEGRA)	+= rtc-tegra.o
- obj-$(CONFIG_RTC_DRV_TEST)	+= rtc-test.o
- obj-$(CONFIG_RTC_DRV_TPS6586X)	+= rtc-tps6586x.o
- obj-$(CONFIG_RTC_DRV_TPS65910)	+= rtc-tps65910.o
--obj-$(CONFIG_RTC_DRV_TPS80031)	+= rtc-tps80031.o
- obj-$(CONFIG_RTC_DRV_TWL4030)	+= rtc-twl.o
- obj-$(CONFIG_RTC_DRV_V3020)	+= rtc-v3020.o
- obj-$(CONFIG_RTC_DRV_VR41XX)	+= rtc-vr41xx.o
-diff --git a/drivers/rtc/rtc-tps80031.c b/drivers/rtc/rtc-tps80031.c
+ config REGULATOR_TWL4030
+ 	tristate "TI TWL4030/TWL5030/TWL6030/TPS659x0 PMIC"
+ 	depends on TWL4030_CORE
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 9e382b50a5ef..b07d2a22df0b 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -158,7 +158,6 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
+-obj-$(CONFIG_REGULATOR_TPS80031) += tps80031-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
+ obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
+ obj-$(CONFIG_REGULATOR_UNIPHIER) += uniphier-regulator.o
+diff --git a/drivers/regulator/tps80031-regulator.c b/drivers/regulator/tps80031-regulator.c
 deleted file mode 100644
-index c77b8eab94a0..000000000000
---- a/drivers/rtc/rtc-tps80031.c
+index a29e65230132..000000000000
+--- a/drivers/regulator/tps80031-regulator.c
 +++ /dev/null
-@@ -1,324 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * rtc-tps80031.c -- TI TPS80031/TPS80032 RTC driver
-- *
-- * RTC driver for TI TPS80031/TPS80032 Fully Integrated
-- * Power Management with Power Path and Battery Charger
-- *
-- * Copyright (c) 2012, NVIDIA Corporation.
-- *
-- * Author: Laxman Dewangan <ldewangan@nvidia.com>
-- */
+@@ -1,753 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-//
+-// tps80031-regulator.c -- TI TPS80031 regulator driver.
+-//
+-// Regulator driver for TI TPS80031/TPS80032 Fully Integrated Power
+-// Management with Power Path and Battery Charger.
+-//
+-// Copyright (c) 2012, NVIDIA Corporation.
+-//
+-// Author: Laxman Dewangan <ldewangan@nvidia.com>
 -
--#include <linux/bcd.h>
--#include <linux/device.h>
+-#include <linux/delay.h>
 -#include <linux/err.h>
 -#include <linux/init.h>
 -#include <linux/kernel.h>
--#include <linux/module.h>
 -#include <linux/mfd/tps80031.h>
+-#include <linux/module.h>
 -#include <linux/platform_device.h>
--#include <linux/pm.h>
--#include <linux/rtc.h>
+-#include <linux/regulator/driver.h>
+-#include <linux/regulator/machine.h>
 -#include <linux/slab.h>
 -
--#define ENABLE_ALARM_INT			0x08
--#define ALARM_INT_STATUS			0x40
+-/* Flags for DCDC Voltage reading */
+-#define DCDC_OFFSET_EN		BIT(0)
+-#define DCDC_EXTENDED_EN	BIT(1)
+-#define TRACK_MODE_ENABLE	BIT(2)
 -
--/**
-- * Setting bit to 1 in STOP_RTC will run the RTC and
-- * setting this bit to 0 will freeze RTC.
-- */
--#define STOP_RTC				0x1
+-#define SMPS_MULTOFFSET_VIO	BIT(1)
+-#define SMPS_MULTOFFSET_SMPS1	BIT(3)
+-#define SMPS_MULTOFFSET_SMPS2	BIT(4)
+-#define SMPS_MULTOFFSET_SMPS3	BIT(6)
+-#define SMPS_MULTOFFSET_SMPS4	BIT(0)
 -
--/* Power on reset Values of RTC registers */
--#define TPS80031_RTC_POR_YEAR			0
--#define TPS80031_RTC_POR_MONTH			1
--#define TPS80031_RTC_POR_DAY			1
+-#define SMPS_CMD_MASK		0xC0
+-#define SMPS_VSEL_MASK		0x3F
+-#define LDO_VSEL_MASK		0x1F
+-#define LDO_TRACK_VSEL_MASK	0x3F
 -
--/* Numbers of registers for time and alarms */
--#define TPS80031_RTC_TIME_NUM_REGS		7
--#define TPS80031_RTC_ALARM_NUM_REGS		6
+-#define MISC2_LDOUSB_IN_VSYS	BIT(4)
+-#define MISC2_LDOUSB_IN_PMID	BIT(3)
+-#define MISC2_LDOUSB_IN_MASK	0x18
 -
--/**
-- * PMU RTC have only 2 nibbles to store year information, so using an
-- * offset of 100 to set the base year as 2000 for our driver.
-- */
--#define RTC_YEAR_OFFSET 100
+-#define MISC2_LDO3_SEL_VIB_VAL	BIT(0)
+-#define MISC2_LDO3_SEL_VIB_MASK	0x1
 -
--struct tps80031_rtc {
--	struct rtc_device	*rtc;
--	int			irq;
+-#define BOOST_HW_PWR_EN		BIT(5)
+-#define BOOST_HW_PWR_EN_MASK	BIT(5)
+-
+-#define OPA_MODE_EN		BIT(6)
+-#define OPA_MODE_EN_MASK	BIT(6)
+-
+-#define USB_VBUS_CTRL_SET	0x04
+-#define USB_VBUS_CTRL_CLR	0x05
+-#define VBUS_DISCHRG		0x20
+-
+-struct tps80031_regulator_info {
+-	/* Regulator register address.*/
+-	u8		trans_reg;
+-	u8		state_reg;
+-	u8		force_reg;
+-	u8		volt_reg;
+-	u8		volt_id;
+-
+-	/*Power request bits */
+-	int		preq_bit;
+-
+-	/* used by regulator core */
+-	struct regulator_desc	desc;
+-
 -};
 -
--static int tps80031_rtc_read_time(struct device *dev, struct rtc_time *tm)
+-struct tps80031_regulator {
+-	struct device			*dev;
+-	struct tps80031_regulator_info	*rinfo;
+-
+-	u8				device_flags;
+-	unsigned int			config_flags;
+-	unsigned int			ext_ctrl_flag;
+-};
+-
+-static inline struct device *to_tps80031_dev(struct regulator_dev *rdev)
 -{
--	u8 buff[TPS80031_RTC_TIME_NUM_REGS];
--	int ret;
--
--	ret = tps80031_reads(dev->parent, TPS80031_SLAVE_ID1,
--			TPS80031_SECONDS_REG, TPS80031_RTC_TIME_NUM_REGS, buff);
--	if (ret < 0) {
--		dev_err(dev, "reading RTC_SECONDS_REG failed, err = %d\n", ret);
--		return ret;
--	}
--
--	tm->tm_sec = bcd2bin(buff[0]);
--	tm->tm_min = bcd2bin(buff[1]);
--	tm->tm_hour = bcd2bin(buff[2]);
--	tm->tm_mday = bcd2bin(buff[3]);
--	tm->tm_mon = bcd2bin(buff[4]) - 1;
--	tm->tm_year = bcd2bin(buff[5]) + RTC_YEAR_OFFSET;
--	tm->tm_wday = bcd2bin(buff[6]);
--	return 0;
+-	return rdev_get_dev(rdev)->parent->parent;
 -}
 -
--static int tps80031_rtc_set_time(struct device *dev, struct rtc_time *tm)
+-static int tps80031_reg_is_enabled(struct regulator_dev *rdev)
 -{
--	u8 buff[7];
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	u8 reg_val;
 -	int ret;
 -
--	buff[0] = bin2bcd(tm->tm_sec);
--	buff[1] = bin2bcd(tm->tm_min);
--	buff[2] = bin2bcd(tm->tm_hour);
--	buff[3] = bin2bcd(tm->tm_mday);
--	buff[4] = bin2bcd(tm->tm_mon + 1);
--	buff[5] = bin2bcd(tm->tm_year % RTC_YEAR_OFFSET);
--	buff[6] = bin2bcd(tm->tm_wday);
+-	if (ri->ext_ctrl_flag & TPS80031_EXT_PWR_REQ)
+-		return true;
 -
--	/* Stop RTC while updating the RTC time registers */
--	ret = tps80031_clr_bits(dev->parent, TPS80031_SLAVE_ID1,
--				TPS80031_RTC_CTRL_REG, STOP_RTC);
+-	ret = tps80031_read(parent, TPS80031_SLAVE_ID1, ri->rinfo->state_reg,
+-				&reg_val);
 -	if (ret < 0) {
--		dev_err(dev->parent, "Stop RTC failed, err = %d\n", ret);
+-		dev_err(&rdev->dev, "Reg 0x%02x read failed, err = %d\n",
+-			ri->rinfo->state_reg, ret);
 -		return ret;
 -	}
+-	return (reg_val & TPS80031_STATE_MASK) == TPS80031_STATE_ON;
+-}
 -
--	ret = tps80031_writes(dev->parent, TPS80031_SLAVE_ID1,
--			TPS80031_SECONDS_REG,
--			TPS80031_RTC_TIME_NUM_REGS, buff);
+-static int tps80031_reg_enable(struct regulator_dev *rdev)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	int ret;
+-
+-	if (ri->ext_ctrl_flag & TPS80031_EXT_PWR_REQ)
+-		return 0;
+-
+-	ret = tps80031_update(parent, TPS80031_SLAVE_ID1, ri->rinfo->state_reg,
+-			TPS80031_STATE_ON, TPS80031_STATE_MASK);
 -	if (ret < 0) {
--		dev_err(dev, "writing RTC_SECONDS_REG failed, err %d\n", ret);
+-		dev_err(&rdev->dev, "Reg 0x%02x update failed, err = %d\n",
+-			ri->rinfo->state_reg, ret);
 -		return ret;
 -	}
--
--	ret = tps80031_set_bits(dev->parent, TPS80031_SLAVE_ID1,
--				TPS80031_RTC_CTRL_REG, STOP_RTC);
--	if (ret < 0)
--		dev_err(dev->parent, "Start RTC failed, err = %d\n", ret);
 -	return ret;
 -}
 -
--static int tps80031_rtc_alarm_irq_enable(struct device *dev,
--					 unsigned int enable)
+-static int tps80031_reg_disable(struct regulator_dev *rdev)
 -{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
 -	int ret;
 -
--	if (enable)
--		ret = tps80031_set_bits(dev->parent, TPS80031_SLAVE_ID1,
--				TPS80031_RTC_INTERRUPTS_REG, ENABLE_ALARM_INT);
--	else
--		ret = tps80031_clr_bits(dev->parent, TPS80031_SLAVE_ID1,
--				TPS80031_RTC_INTERRUPTS_REG, ENABLE_ALARM_INT);
--	if (ret < 0) {
--		dev_err(dev, "Update on RTC_INT failed, err = %d\n", ret);
--		return ret;
--	}
--	return 0;
--}
+-	if (ri->ext_ctrl_flag & TPS80031_EXT_PWR_REQ)
+-		return 0;
 -
--static int tps80031_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
--{
--	u8 buff[TPS80031_RTC_ALARM_NUM_REGS];
--	int ret;
--
--	buff[0] = bin2bcd(alrm->time.tm_sec);
--	buff[1] = bin2bcd(alrm->time.tm_min);
--	buff[2] = bin2bcd(alrm->time.tm_hour);
--	buff[3] = bin2bcd(alrm->time.tm_mday);
--	buff[4] = bin2bcd(alrm->time.tm_mon + 1);
--	buff[5] = bin2bcd(alrm->time.tm_year % RTC_YEAR_OFFSET);
--	ret = tps80031_writes(dev->parent, TPS80031_SLAVE_ID1,
--			TPS80031_ALARM_SECONDS_REG,
--			TPS80031_RTC_ALARM_NUM_REGS, buff);
--	if (ret < 0) {
--		dev_err(dev, "Writing RTC_ALARM failed, err %d\n", ret);
--		return ret;
--	}
--	return tps80031_rtc_alarm_irq_enable(dev, alrm->enabled);
--}
--
--static int tps80031_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
--{
--	u8 buff[6];
--	int ret;
--
--	ret = tps80031_reads(dev->parent, TPS80031_SLAVE_ID1,
--			TPS80031_ALARM_SECONDS_REG,
--			TPS80031_RTC_ALARM_NUM_REGS, buff);
--	if (ret < 0) {
--		dev_err(dev->parent,
--			"reading RTC_ALARM failed, err = %d\n", ret);
--		return ret;
--	}
--
--	alrm->time.tm_sec = bcd2bin(buff[0]);
--	alrm->time.tm_min = bcd2bin(buff[1]);
--	alrm->time.tm_hour = bcd2bin(buff[2]);
--	alrm->time.tm_mday = bcd2bin(buff[3]);
--	alrm->time.tm_mon = bcd2bin(buff[4]) - 1;
--	alrm->time.tm_year = bcd2bin(buff[5]) + RTC_YEAR_OFFSET;
--	return 0;
--}
--
--static int clear_alarm_int_status(struct device *dev, struct tps80031_rtc *rtc)
--{
--	int ret;
--	u8 buf;
--
--	/**
--	 * As per datasheet, A dummy read of this  RTC_STATUS_REG register
--	 * is necessary before each I2C read in order to update the status
--	 * register value.
--	 */
--	ret = tps80031_read(dev->parent, TPS80031_SLAVE_ID1,
--				TPS80031_RTC_STATUS_REG, &buf);
--	if (ret < 0) {
--		dev_err(dev, "reading RTC_STATUS failed. err = %d\n", ret);
--		return ret;
--	}
--
--	/* clear Alarm status bits.*/
--	ret = tps80031_set_bits(dev->parent, TPS80031_SLAVE_ID1,
--			TPS80031_RTC_STATUS_REG, ALARM_INT_STATUS);
--	if (ret < 0) {
--		dev_err(dev, "clear Alarm INT failed, err = %d\n", ret);
--		return ret;
--	}
--	return 0;
--}
--
--static irqreturn_t tps80031_rtc_irq(int irq, void *data)
--{
--	struct device *dev = data;
--	struct tps80031_rtc *rtc = dev_get_drvdata(dev);
--	int ret;
--
--	ret = clear_alarm_int_status(dev, rtc);
+-	ret = tps80031_update(parent, TPS80031_SLAVE_ID1, ri->rinfo->state_reg,
+-			TPS80031_STATE_OFF, TPS80031_STATE_MASK);
 -	if (ret < 0)
--		return ret;
--
--	rtc_update_irq(rtc->rtc, 1, RTC_IRQF | RTC_AF);
--	return IRQ_HANDLED;
+-		dev_err(&rdev->dev, "Reg 0x%02x update failed, err = %d\n",
+-			ri->rinfo->state_reg, ret);
+-	return ret;
 -}
 -
--static const struct rtc_class_ops tps80031_rtc_ops = {
--	.read_time = tps80031_rtc_read_time,
--	.set_time = tps80031_rtc_set_time,
--	.set_alarm = tps80031_rtc_set_alarm,
--	.read_alarm = tps80031_rtc_read_alarm,
--	.alarm_irq_enable = tps80031_rtc_alarm_irq_enable,
+-/* DCDC voltages for the selector of 58 to 63 */
+-static const int tps80031_dcdc_voltages[4][5] = {
+-	{ 1350, 1500, 1800, 1900, 2100},
+-	{ 1350, 1500, 1800, 1900, 2100},
+-	{ 2084, 2315, 2778, 2932, 3241},
+-	{ 4167, 2315, 2778, 2932, 3241},
 -};
 -
--static int tps80031_rtc_probe(struct platform_device *pdev)
+-static int tps80031_dcdc_list_voltage(struct regulator_dev *rdev, unsigned sel)
 -{
--	struct tps80031_rtc *rtc;
--	struct rtc_time tm;
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	int volt_index = ri->device_flags & 0x3;
+-
+-	if (sel == 0)
+-		return 0;
+-	else if (sel < 58)
+-		return regulator_list_voltage_linear(rdev, sel - 1);
+-	else
+-		return tps80031_dcdc_voltages[volt_index][sel - 58] * 1000;
+-}
+-
+-static int tps80031_dcdc_set_voltage_sel(struct regulator_dev *rdev,
+-		unsigned vsel)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	int ret;
+-	u8 reg_val;
+-
+-	if (ri->rinfo->force_reg) {
+-		ret = tps80031_read(parent, ri->rinfo->volt_id,
+-						ri->rinfo->force_reg, &reg_val);
+-		if (ret < 0) {
+-			dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-				ri->rinfo->force_reg, ret);
+-			return ret;
+-		}
+-		if (!(reg_val & SMPS_CMD_MASK)) {
+-			ret = tps80031_update(parent, ri->rinfo->volt_id,
+-				ri->rinfo->force_reg, vsel, SMPS_VSEL_MASK);
+-			if (ret < 0)
+-				dev_err(ri->dev,
+-					"reg 0x%02x update failed, e = %d\n",
+-					ri->rinfo->force_reg, ret);
+-			return ret;
+-		}
+-	}
+-	ret = tps80031_update(parent, ri->rinfo->volt_id,
+-			ri->rinfo->volt_reg, vsel, SMPS_VSEL_MASK);
+-	if (ret < 0)
+-		dev_err(ri->dev, "reg 0x%02x update failed, e = %d\n",
+-			ri->rinfo->volt_reg, ret);
+-	return ret;
+-}
+-
+-static int tps80031_dcdc_get_voltage_sel(struct regulator_dev *rdev)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	uint8_t vsel = 0;
 -	int ret;
 -
--	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
--	if (!rtc)
--		return -ENOMEM;
+-	if (ri->rinfo->force_reg) {
+-		ret = tps80031_read(parent, ri->rinfo->volt_id,
+-						ri->rinfo->force_reg, &vsel);
+-		if (ret < 0) {
+-			dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-					ri->rinfo->force_reg, ret);
+-			return ret;
+-		}
 -
--	rtc->irq = platform_get_irq(pdev, 0);
--	platform_set_drvdata(pdev, rtc);
--
--	/* Start RTC */
--	ret = tps80031_set_bits(pdev->dev.parent, TPS80031_SLAVE_ID1,
--			TPS80031_RTC_CTRL_REG, STOP_RTC);
+-		if (!(vsel & SMPS_CMD_MASK))
+-			return vsel & SMPS_VSEL_MASK;
+-	}
+-	ret = tps80031_read(parent, ri->rinfo->volt_id,
+-				ri->rinfo->volt_reg, &vsel);
 -	if (ret < 0) {
--		dev_err(&pdev->dev, "failed to start RTC. err = %d\n", ret);
+-		dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-			ri->rinfo->volt_reg, ret);
+-		return ret;
+-	}
+-	return vsel & SMPS_VSEL_MASK;
+-}
+-
+-static int tps80031_ldo_list_voltage(struct regulator_dev *rdev,
+-				     unsigned int sel)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-
+-	/* Check for valid setting for TPS80031 or TPS80032-ES1.0 */
+-	if ((ri->rinfo->desc.id == TPS80031_REGULATOR_LDO2) &&
+-			(ri->device_flags & TRACK_MODE_ENABLE)) {
+-		unsigned nvsel = (sel) & 0x1F;
+-		if (((tps80031_get_chip_info(parent) == TPS80031) ||
+-			((tps80031_get_chip_info(parent) == TPS80032) &&
+-			(tps80031_get_pmu_version(parent) == 0x0))) &&
+-			((nvsel == 0x0) || (nvsel >= 0x19 && nvsel <= 0x1F))) {
+-				dev_err(ri->dev,
+-					"Invalid sel %d in track mode LDO2\n",
+-					nvsel);
+-				return -EINVAL;
+-		}
+-	}
+-
+-	return regulator_list_voltage_linear(rdev, sel);
+-}
+-
+-static int tps80031_ldo_map_voltage(struct regulator_dev *rdev,
+-				    int min_uV, int max_uV)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-
+-	/* Check for valid setting for TPS80031 or TPS80032-ES1.0 */
+-	if ((ri->rinfo->desc.id == TPS80031_REGULATOR_LDO2) &&
+-			(ri->device_flags & TRACK_MODE_ENABLE)) {
+-		if (((tps80031_get_chip_info(parent) == TPS80031) ||
+-			((tps80031_get_chip_info(parent) == TPS80032) &&
+-			(tps80031_get_pmu_version(parent) == 0x0)))) {
+-			return regulator_map_voltage_iterate(rdev, min_uV,
+-							     max_uV);
+-		}
+-	}
+-
+-	return regulator_map_voltage_linear(rdev, min_uV, max_uV);
+-}
+-
+-static int tps80031_vbus_is_enabled(struct regulator_dev *rdev)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	int ret;
+-	uint8_t ctrl1 = 0;
+-	uint8_t ctrl3 = 0;
+-
+-	ret = tps80031_read(parent, TPS80031_SLAVE_ID2,
+-			TPS80031_CHARGERUSB_CTRL1, &ctrl1);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-			TPS80031_CHARGERUSB_CTRL1, ret);
+-		return ret;
+-	}
+-	ret = tps80031_read(parent, TPS80031_SLAVE_ID2,
+-				TPS80031_CHARGERUSB_CTRL3, &ctrl3);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-			TPS80031_CHARGERUSB_CTRL3, ret);
+-		return ret;
+-	}
+-	if ((ctrl1 & OPA_MODE_EN) && (ctrl3 & BOOST_HW_PWR_EN))
+-		return 1;
+-	return ret;
+-}
+-
+-static int tps80031_vbus_enable(struct regulator_dev *rdev)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	int ret;
+-
+-	ret = tps80031_set_bits(parent, TPS80031_SLAVE_ID2,
+-				TPS80031_CHARGERUSB_CTRL1, OPA_MODE_EN);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-					TPS80031_CHARGERUSB_CTRL1, ret);
 -		return ret;
 -	}
 -
--	/* If RTC have POR values, set time 01:01:2000 */
--	tps80031_rtc_read_time(&pdev->dev, &tm);
--	if ((tm.tm_year == RTC_YEAR_OFFSET + TPS80031_RTC_POR_YEAR) &&
--		(tm.tm_mon == (TPS80031_RTC_POR_MONTH - 1)) &&
--		(tm.tm_mday == TPS80031_RTC_POR_DAY)) {
--		tm.tm_year = 2000;
--		tm.tm_mday = 1;
--		tm.tm_mon = 1;
--		ret = tps80031_rtc_set_time(&pdev->dev, &tm);
+-	ret = tps80031_set_bits(parent, TPS80031_SLAVE_ID2,
+-				TPS80031_CHARGERUSB_CTRL3, BOOST_HW_PWR_EN);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "reg 0x%02x read failed, e = %d\n",
+-			TPS80031_CHARGERUSB_CTRL3, ret);
+-		return ret;
+-	}
+-	return ret;
+-}
+-
+-static int tps80031_vbus_disable(struct regulator_dev *rdev)
+-{
+-	struct tps80031_regulator *ri = rdev_get_drvdata(rdev);
+-	struct device *parent = to_tps80031_dev(rdev);
+-	int ret;
+-
+-	if (ri->config_flags & TPS80031_VBUS_DISCHRG_EN_PDN) {
+-		ret = tps80031_write(parent, TPS80031_SLAVE_ID2,
+-			USB_VBUS_CTRL_SET, VBUS_DISCHRG);
 -		if (ret < 0) {
--			dev_err(&pdev->dev,
--				"RTC set time failed, err = %d\n", ret);
+-			dev_err(ri->dev, "reg 0x%02x write failed, e = %d\n",
+-				USB_VBUS_CTRL_SET, ret);
 -			return ret;
 -		}
 -	}
 -
--	/* Clear alarm intretupt status if it is there */
--	ret = clear_alarm_int_status(&pdev->dev, rtc);
+-	ret = tps80031_clr_bits(parent, TPS80031_SLAVE_ID2,
+-			TPS80031_CHARGERUSB_CTRL1,  OPA_MODE_EN);
 -	if (ret < 0) {
--		dev_err(&pdev->dev, "Clear alarm int failed, err = %d\n", ret);
+-		dev_err(ri->dev, "reg 0x%02x clearbit failed, e = %d\n",
+-				TPS80031_CHARGERUSB_CTRL1, ret);
 -		return ret;
 -	}
 -
--	rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
--			       &tps80031_rtc_ops, THIS_MODULE);
--	if (IS_ERR(rtc->rtc)) {
--		ret = PTR_ERR(rtc->rtc);
--		dev_err(&pdev->dev, "RTC registration failed, err %d\n", ret);
+-	ret = tps80031_clr_bits(parent, TPS80031_SLAVE_ID2,
+-				TPS80031_CHARGERUSB_CTRL3, BOOST_HW_PWR_EN);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "reg 0x%02x clearbit failed, e = %d\n",
+-				TPS80031_CHARGERUSB_CTRL3, ret);
 -		return ret;
 -	}
 -
--	ret = devm_request_threaded_irq(&pdev->dev, rtc->irq, NULL,
--			tps80031_rtc_irq,
--			IRQF_ONESHOT,
--			dev_name(&pdev->dev), rtc);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "request IRQ:%d failed, err = %d\n",
--			 rtc->irq, ret);
--		return ret;
+-	mdelay(DIV_ROUND_UP(ri->rinfo->desc.enable_time, 1000));
+-	if (ri->config_flags & TPS80031_VBUS_DISCHRG_EN_PDN) {
+-		ret = tps80031_write(parent, TPS80031_SLAVE_ID2,
+-			USB_VBUS_CTRL_CLR, VBUS_DISCHRG);
+-		if (ret < 0) {
+-			dev_err(ri->dev, "reg 0x%02x write failed, e = %d\n",
+-					USB_VBUS_CTRL_CLR, ret);
+-			return ret;
+-		}
 -	}
--	device_set_wakeup_capable(&pdev->dev, 1);
--	return 0;
+-	return ret;
 -}
 -
--#ifdef CONFIG_PM_SLEEP
--static int tps80031_rtc_suspend(struct device *dev)
--{
--	struct tps80031_rtc *rtc = dev_get_drvdata(dev);
--
--	if (device_may_wakeup(dev))
--		enable_irq_wake(rtc->irq);
--	return 0;
--}
--
--static int tps80031_rtc_resume(struct device *dev)
--{
--	struct tps80031_rtc *rtc = dev_get_drvdata(dev);
--
--	if (device_may_wakeup(dev))
--		disable_irq_wake(rtc->irq);
--	return 0;
+-static const struct regulator_ops tps80031_dcdc_ops = {
+-	.list_voltage		= tps80031_dcdc_list_voltage,
+-	.set_voltage_sel	= tps80031_dcdc_set_voltage_sel,
+-	.get_voltage_sel	= tps80031_dcdc_get_voltage_sel,
+-	.enable		= tps80031_reg_enable,
+-	.disable	= tps80031_reg_disable,
+-	.is_enabled	= tps80031_reg_is_enabled,
 -};
--#endif
 -
--static SIMPLE_DEV_PM_OPS(tps80031_pm_ops, tps80031_rtc_suspend,
--			tps80031_rtc_resume);
+-static const struct regulator_ops tps80031_ldo_ops = {
+-	.list_voltage		= tps80031_ldo_list_voltage,
+-	.map_voltage		= tps80031_ldo_map_voltage,
+-	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
+-	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
+-	.enable			= tps80031_reg_enable,
+-	.disable		= tps80031_reg_disable,
+-	.is_enabled		= tps80031_reg_is_enabled,
+-};
 -
--static struct platform_driver tps80031_rtc_driver = {
+-static const struct regulator_ops tps80031_vbus_sw_ops = {
+-	.list_voltage	= regulator_list_voltage_linear,
+-	.enable		= tps80031_vbus_enable,
+-	.disable	= tps80031_vbus_disable,
+-	.is_enabled	= tps80031_vbus_is_enabled,
+-};
+-
+-static const struct regulator_ops tps80031_vbus_hw_ops = {
+-	.list_voltage	= regulator_list_voltage_linear,
+-};
+-
+-static const struct regulator_ops tps80031_ext_reg_ops = {
+-	.list_voltage	= regulator_list_voltage_linear,
+-	.enable		= tps80031_reg_enable,
+-	.disable	= tps80031_reg_disable,
+-	.is_enabled	= tps80031_reg_is_enabled,
+-};
+-
+-/* Non-exiting default definition for some register */
+-#define TPS80031_SMPS3_CFG_FORCE	0
+-#define TPS80031_SMPS4_CFG_FORCE	0
+-
+-#define TPS80031_VBUS_CFG_TRANS		0
+-#define TPS80031_VBUS_CFG_STATE		0
+-
+-#define TPS80031_REG_SMPS(_id, _volt_id, _pbit)	\
+-{								\
+-	.trans_reg = TPS80031_##_id##_CFG_TRANS,		\
+-	.state_reg = TPS80031_##_id##_CFG_STATE,		\
+-	.force_reg = TPS80031_##_id##_CFG_FORCE,		\
+-	.volt_reg = TPS80031_##_id##_CFG_VOLTAGE,		\
+-	.volt_id = TPS80031_SLAVE_##_volt_id,			\
+-	.preq_bit = _pbit,					\
+-	.desc = {						\
+-		.name = "tps80031_"#_id,			\
+-		.id = TPS80031_REGULATOR_##_id,			\
+-		.n_voltages = 63,				\
+-		.ops = &tps80031_dcdc_ops,			\
+-		.type = REGULATOR_VOLTAGE,			\
+-		.owner = THIS_MODULE,				\
+-		.enable_time = 500,				\
+-	},							\
+-}
+-
+-#define TPS80031_REG_LDO(_id, _preq_bit)			\
+-{								\
+-	.trans_reg = TPS80031_##_id##_CFG_TRANS,		\
+-	.state_reg = TPS80031_##_id##_CFG_STATE,		\
+-	.volt_reg = TPS80031_##_id##_CFG_VOLTAGE,		\
+-	.volt_id = TPS80031_SLAVE_ID1,				\
+-	.preq_bit = _preq_bit,					\
+-	.desc = {						\
+-		.owner = THIS_MODULE,				\
+-		.name = "tps80031_"#_id,			\
+-		.id = TPS80031_REGULATOR_##_id,			\
+-		.ops = &tps80031_ldo_ops,			\
+-		.type = REGULATOR_VOLTAGE,			\
+-		.min_uV = 1000000,				\
+-		.uV_step = 100000,				\
+-		.linear_min_sel = 1,				\
+-		.n_voltages = 25,				\
+-		.vsel_reg = TPS80031_##_id##_CFG_VOLTAGE,	\
+-		.vsel_mask = LDO_VSEL_MASK,			\
+-		.enable_time = 500,				\
+-	},							\
+-}
+-
+-#define TPS80031_REG_FIXED(_id, max_mV, _ops, _delay, _pbit)	\
+-{								\
+-	.trans_reg = TPS80031_##_id##_CFG_TRANS,		\
+-	.state_reg = TPS80031_##_id##_CFG_STATE,		\
+-	.volt_id = TPS80031_SLAVE_ID1,				\
+-	.preq_bit = _pbit,					\
+-	.desc = {						\
+-		.name = "tps80031_"#_id,			\
+-		.id = TPS80031_REGULATOR_##_id,			\
+-		.min_uV = max_mV * 1000,			\
+-		.n_voltages = 1,				\
+-		.ops = &_ops,					\
+-		.type = REGULATOR_VOLTAGE,			\
+-		.owner = THIS_MODULE,				\
+-		.enable_time = _delay,				\
+-	},							\
+-}
+-
+-static struct tps80031_regulator_info tps80031_rinfo[TPS80031_REGULATOR_MAX] = {
+-	TPS80031_REG_SMPS(VIO,   ID0, 4),
+-	TPS80031_REG_SMPS(SMPS1, ID0, 0),
+-	TPS80031_REG_SMPS(SMPS2, ID0, 1),
+-	TPS80031_REG_SMPS(SMPS3, ID1, 2),
+-	TPS80031_REG_SMPS(SMPS4, ID1, 3),
+-	TPS80031_REG_LDO(VANA,   -1),
+-	TPS80031_REG_LDO(LDO1,   8),
+-	TPS80031_REG_LDO(LDO2,   9),
+-	TPS80031_REG_LDO(LDO3,   10),
+-	TPS80031_REG_LDO(LDO4,   11),
+-	TPS80031_REG_LDO(LDO5,   12),
+-	TPS80031_REG_LDO(LDO6,   13),
+-	TPS80031_REG_LDO(LDO7,   14),
+-	TPS80031_REG_LDO(LDOLN,  15),
+-	TPS80031_REG_LDO(LDOUSB, 5),
+-	TPS80031_REG_FIXED(VBUS,   5000, tps80031_vbus_hw_ops, 100000, -1),
+-	TPS80031_REG_FIXED(REGEN1, 3300, tps80031_ext_reg_ops, 0, 16),
+-	TPS80031_REG_FIXED(REGEN2, 3300, tps80031_ext_reg_ops, 0, 17),
+-	TPS80031_REG_FIXED(SYSEN,  3300, tps80031_ext_reg_ops, 0, 18),
+-};
+-
+-static int tps80031_power_req_config(struct device *parent,
+-		struct tps80031_regulator *ri,
+-		struct tps80031_regulator_platform_data *tps80031_pdata)
+-{
+-	int ret = 0;
+-
+-	if (ri->rinfo->preq_bit < 0)
+-		goto skip_pwr_req_config;
+-
+-	ret = tps80031_ext_power_req_config(parent, ri->ext_ctrl_flag,
+-			ri->rinfo->preq_bit, ri->rinfo->state_reg,
+-			ri->rinfo->trans_reg);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "ext powerreq config failed, err = %d\n", ret);
+-		return ret;
+-	}
+-
+-skip_pwr_req_config:
+-	if (tps80031_pdata->ext_ctrl_flag & TPS80031_PWR_ON_ON_SLEEP) {
+-		ret = tps80031_update(parent, TPS80031_SLAVE_ID1,
+-				ri->rinfo->trans_reg, TPS80031_TRANS_SLEEP_ON,
+-				TPS80031_TRANS_SLEEP_MASK);
+-		if (ret < 0) {
+-			dev_err(ri->dev, "Reg 0x%02x update failed, e %d\n",
+-					ri->rinfo->trans_reg, ret);
+-			return ret;
+-		}
+-	}
+-	return ret;
+-}
+-
+-static int tps80031_regulator_config(struct device *parent,
+-		struct tps80031_regulator *ri,
+-		struct tps80031_regulator_platform_data *tps80031_pdata)
+-{
+-	int ret = 0;
+-
+-	switch (ri->rinfo->desc.id) {
+-	case TPS80031_REGULATOR_LDOUSB:
+-		if (ri->config_flags & (TPS80031_USBLDO_INPUT_VSYS |
+-			TPS80031_USBLDO_INPUT_PMID)) {
+-			unsigned val;
+-
+-			if (ri->config_flags & TPS80031_USBLDO_INPUT_VSYS)
+-				val = MISC2_LDOUSB_IN_VSYS;
+-			else
+-				val = MISC2_LDOUSB_IN_PMID;
+-
+-			ret = tps80031_update(parent, TPS80031_SLAVE_ID1,
+-				TPS80031_MISC2, val,
+-				MISC2_LDOUSB_IN_MASK);
+-			if (ret < 0) {
+-				dev_err(ri->dev,
+-					"LDOUSB config failed, e= %d\n", ret);
+-				return ret;
+-			}
+-		}
+-		break;
+-
+-	case TPS80031_REGULATOR_LDO3:
+-		if (ri->config_flags & TPS80031_LDO3_OUTPUT_VIB) {
+-			ret = tps80031_update(parent, TPS80031_SLAVE_ID1,
+-				TPS80031_MISC2, MISC2_LDO3_SEL_VIB_VAL,
+-				MISC2_LDO3_SEL_VIB_MASK);
+-			if (ret < 0) {
+-				dev_err(ri->dev,
+-					"LDO3 config failed, e = %d\n", ret);
+-				return ret;
+-			}
+-		}
+-		break;
+-
+-	case TPS80031_REGULATOR_VBUS:
+-		/* Provide SW control Ops if VBUS is SW control */
+-		if (!(ri->config_flags & TPS80031_VBUS_SW_ONLY))
+-			ri->rinfo->desc.ops = &tps80031_vbus_sw_ops;
+-		break;
+-	default:
+-		break;
+-	}
+-
+-	/* Configure Active state to ON, SLEEP to OFF and OFF_state to OFF */
+-	ret = tps80031_update(parent, TPS80031_SLAVE_ID1, ri->rinfo->trans_reg,
+-		TPS80031_TRANS_ACTIVE_ON | TPS80031_TRANS_SLEEP_OFF |
+-		TPS80031_TRANS_OFF_OFF, TPS80031_TRANS_ACTIVE_MASK |
+-		TPS80031_TRANS_SLEEP_MASK | TPS80031_TRANS_OFF_MASK);
+-	if (ret < 0) {
+-		dev_err(ri->dev, "trans reg update failed, e %d\n", ret);
+-		return ret;
+-	}
+-
+-	return ret;
+-}
+-
+-static int check_smps_mode_mult(struct device *parent,
+-	struct tps80031_regulator *ri)
+-{
+-	int mult_offset;
+-	int ret;
+-	u8 smps_offset;
+-	u8 smps_mult;
+-
+-	ret = tps80031_read(parent, TPS80031_SLAVE_ID1,
+-			TPS80031_SMPS_OFFSET, &smps_offset);
+-	if (ret < 0) {
+-		dev_err(parent, "Error in reading smps offset register\n");
+-		return ret;
+-	}
+-
+-	ret = tps80031_read(parent, TPS80031_SLAVE_ID1,
+-			TPS80031_SMPS_MULT, &smps_mult);
+-	if (ret < 0) {
+-		dev_err(parent, "Error in reading smps mult register\n");
+-		return ret;
+-	}
+-
+-	switch (ri->rinfo->desc.id) {
+-	case TPS80031_REGULATOR_VIO:
+-		mult_offset = SMPS_MULTOFFSET_VIO;
+-		break;
+-	case TPS80031_REGULATOR_SMPS1:
+-		mult_offset = SMPS_MULTOFFSET_SMPS1;
+-		break;
+-	case TPS80031_REGULATOR_SMPS2:
+-		mult_offset = SMPS_MULTOFFSET_SMPS2;
+-		break;
+-	case TPS80031_REGULATOR_SMPS3:
+-		mult_offset = SMPS_MULTOFFSET_SMPS3;
+-		break;
+-	case TPS80031_REGULATOR_SMPS4:
+-		mult_offset = SMPS_MULTOFFSET_SMPS4;
+-		break;
+-	case TPS80031_REGULATOR_LDO2:
+-		ri->device_flags = smps_mult & BIT(5) ? TRACK_MODE_ENABLE : 0;
+-		/* TRACK mode the ldo2 varies from 600mV to 1300mV */
+-		if (ri->device_flags & TRACK_MODE_ENABLE) {
+-			ri->rinfo->desc.min_uV = 600000;
+-			ri->rinfo->desc.uV_step = 12500;
+-			ri->rinfo->desc.n_voltages = 57;
+-			ri->rinfo->desc.vsel_mask = LDO_TRACK_VSEL_MASK;
+-		}
+-		return 0;
+-	default:
+-		return 0;
+-	}
+-
+-	ri->device_flags = (smps_offset & mult_offset) ? DCDC_OFFSET_EN : 0;
+-	ri->device_flags |= (smps_mult & mult_offset) ? DCDC_EXTENDED_EN : 0;
+-	switch (ri->device_flags) {
+-	case 0:
+-		ri->rinfo->desc.min_uV = 607700;
+-		ri->rinfo->desc.uV_step = 12660;
+-		break;
+-	case DCDC_OFFSET_EN:
+-		ri->rinfo->desc.min_uV = 700000;
+-		ri->rinfo->desc.uV_step = 12500;
+-		break;
+-	case DCDC_EXTENDED_EN:
+-		ri->rinfo->desc.min_uV = 1852000;
+-		ri->rinfo->desc.uV_step = 38600;
+-		break;
+-	case DCDC_OFFSET_EN | DCDC_EXTENDED_EN:
+-		ri->rinfo->desc.min_uV = 2161000;
+-		ri->rinfo->desc.uV_step = 38600;
+-		break;
+-	}
+-	return 0;
+-}
+-
+-static int tps80031_regulator_probe(struct platform_device *pdev)
+-{
+-	struct tps80031_platform_data *pdata;
+-	struct tps80031_regulator_platform_data *tps_pdata;
+-	struct tps80031_regulator *ri;
+-	struct tps80031_regulator *pmic;
+-	struct regulator_dev *rdev;
+-	struct regulator_config config = { };
+-	struct tps80031 *tps80031_mfd = dev_get_drvdata(pdev->dev.parent);
+-	int ret;
+-	int num;
+-
+-	pdata = dev_get_platdata(pdev->dev.parent);
+-
+-	if (!pdata) {
+-		dev_err(&pdev->dev, "No platform data\n");
+-		return -EINVAL;
+-	}
+-
+-	pmic = devm_kcalloc(&pdev->dev,
+-			TPS80031_REGULATOR_MAX, sizeof(*pmic), GFP_KERNEL);
+-	if (!pmic)
+-		return -ENOMEM;
+-
+-	for (num = 0; num < TPS80031_REGULATOR_MAX; ++num) {
+-		tps_pdata = pdata->regulator_pdata[num];
+-		ri = &pmic[num];
+-		ri->rinfo = &tps80031_rinfo[num];
+-		ri->dev = &pdev->dev;
+-
+-		check_smps_mode_mult(pdev->dev.parent, ri);
+-		config.dev = &pdev->dev;
+-		config.init_data = NULL;
+-		config.driver_data = ri;
+-		config.regmap = tps80031_mfd->regmap[ri->rinfo->volt_id];
+-
+-		if (tps_pdata) {
+-			config.init_data = tps_pdata->reg_init_data;
+-			ri->config_flags = tps_pdata->config_flags;
+-			ri->ext_ctrl_flag = tps_pdata->ext_ctrl_flag;
+-			ret = tps80031_regulator_config(pdev->dev.parent,
+-					ri, tps_pdata);
+-			if (ret < 0) {
+-				dev_err(&pdev->dev,
+-					"regulator config failed, e %d\n", ret);
+-				return ret;
+-			}
+-
+-			ret = tps80031_power_req_config(pdev->dev.parent,
+-					ri, tps_pdata);
+-			if (ret < 0) {
+-				dev_err(&pdev->dev,
+-					"pwr_req config failed, err %d\n", ret);
+-				return ret;
+-			}
+-		}
+-		rdev = devm_regulator_register(&pdev->dev, &ri->rinfo->desc,
+-					       &config);
+-		if (IS_ERR(rdev)) {
+-			dev_err(&pdev->dev,
+-				"register regulator failed %s\n",
+-					ri->rinfo->desc.name);
+-			return PTR_ERR(rdev);
+-		}
+-	}
+-
+-	platform_set_drvdata(pdev, pmic);
+-	return 0;
+-}
+-
+-static struct platform_driver tps80031_regulator_driver = {
 -	.driver	= {
--		.name	= "tps80031-rtc",
--		.pm	= &tps80031_pm_ops,
+-		.name	= "tps80031-pmic",
 -	},
--	.probe	= tps80031_rtc_probe,
+-	.probe		= tps80031_regulator_probe,
 -};
 -
--module_platform_driver(tps80031_rtc_driver);
+-static int __init tps80031_regulator_init(void)
+-{
+-	return platform_driver_register(&tps80031_regulator_driver);
+-}
+-subsys_initcall(tps80031_regulator_init);
 -
--MODULE_ALIAS("platform:tps80031-rtc");
--MODULE_DESCRIPTION("TI TPS80031/TPS80032 RTC driver");
+-static void __exit tps80031_regulator_exit(void)
+-{
+-	platform_driver_unregister(&tps80031_regulator_driver);
+-}
+-module_exit(tps80031_regulator_exit);
+-
+-MODULE_ALIAS("platform:tps80031-regulator");
+-MODULE_DESCRIPTION("Regulator Driver for TI TPS80031/TPS80032 PMIC");
 -MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
 -MODULE_LICENSE("GPL v2");
 -- 
