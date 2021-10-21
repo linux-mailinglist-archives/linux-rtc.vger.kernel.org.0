@@ -2,100 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DF24366D8
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Oct 2021 17:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067064367C2
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Oct 2021 18:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbhJUP4L (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Oct 2021 11:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhJUP4K (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Oct 2021 11:56:10 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F3AC061764
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Oct 2021 08:53:53 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 67-20020a1c1946000000b0030d4c90fa87so132275wmz.2
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Oct 2021 08:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=RiUvh0ktpqCA7fZqTGI1aV30cE3yIMDtrq4XdFWDz3c=;
-        b=nxj/lswM3BP8tKL+rxtxFVguaNRMLh/Hjxrj5bltEa6eCcDJl12Ha/csvdw8STAA5t
-         jnbuCfkdwo11Hx3ctxt+jRCXDWDw473brc53wDYCah3M2OfH4v2GWfSZcwuPD85T1HPl
-         hWKnWcdZ+mHgfHJl+TlL+tePN56EN+xf580Y5sOaylG0M85HywFn5fHnb67cJo0nCtIa
-         un7to2Z0IuBebbI9xQgF3V1C4vZXLt+0gfUYZOgo4n97bZTTkDO6USGQ7EZN3zabiiKa
-         VtClWI0F0OjUZaPsZF/jHMpCc6hO2MKNM1pjLT0rIdNUdR75woY7SkTeNgZ0YYbkrCZG
-         ZG+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=RiUvh0ktpqCA7fZqTGI1aV30cE3yIMDtrq4XdFWDz3c=;
-        b=4/QymfUYSfazMXkzeAlXbHKr3qJScFiGRHJJVgyAu1QspwTCNAqiZCG33baCNni/JR
-         VOTORG2utWbChLK5RHRUzyDRMyTDqxJLn2jJ7YKib9y7STX3g/ufQSz8Qi0Uc/xQUzvo
-         jt3uJc9COyhcADBv8bSX4f7kYQVWEXLvubrg8DQdWAYGPajGmvOKS4Yq/ptK+6HLAXqM
-         9l2YApnGxeTssMOGW355zFCoE76+E5PZ8dYX5PzCH0xvCY3lgyCZeig2rX/meJWtbzKg
-         obuWT3ct7gDn+izz0LM0Yxc+YhxzJBO2dofozBvtQ1jrCWt8Q4v3xBHbeYYYovUqnw+Y
-         BRfQ==
-X-Gm-Message-State: AOAM530v80lTE2P6bNE6ckfNsj9F0pGFx90JBuPFm/L7lokyPPbgu6s7
-        7lnQUgsUa2HvSb19RcQocs94bA==
-X-Google-Smtp-Source: ABdhPJyoyHKkVFQ93CGd5H00pN/2DftHR/6cPv38ILBCxFjUmjec2Asvge3c71IyKbmo65Vu90PmbQ==
-X-Received: by 2002:a7b:cb10:: with SMTP id u16mr21967132wmj.65.1634831632452;
-        Thu, 21 Oct 2021 08:53:52 -0700 (PDT)
-Received: from google.com ([95.148.6.207])
-        by smtp.gmail.com with ESMTPSA id n11sm5217954wrw.43.2021.10.21.08.53.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Oct 2021 08:53:51 -0700 (PDT)
-Date:   Thu, 21 Oct 2021 16:53:49 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        id S231933AbhJUQbT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Oct 2021 12:31:19 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:52490 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231788AbhJUQbT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Oct 2021 12:31:19 -0400
+Received: from [77.244.183.192] (port=65154 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mdaw9-000ZT9-2O; Thu, 21 Oct 2021 18:29:01 +0200
+Subject: Re: [PATCH v2 7/9] watchdog: Kconfig: fix help text indentation
+To:     Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v2 1/9] mfd: max77686: Correct tab-based alignment of
- register addresses
-Message-ID: <YXGNDZCMHYjr2B9s@google.com>
 References: <20211019145919.7327-1-luca@lucaceresoli.net>
- <20211019145919.7327-2-luca@lucaceresoli.net>
+ <20211019145919.7327-8-luca@lucaceresoli.net>
+ <62fb371c-81d3-a338-624b-0e3fbade23db@roeck-us.net>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <8129ae8a-0978-426f-649d-feab1292e15d@lucaceresoli.net>
+Date:   Thu, 21 Oct 2021 18:28:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <62fb371c-81d3-a338-624b-0e3fbade23db@roeck-us.net>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211019145919.7327-2-luca@lucaceresoli.net>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 19 Oct 2021, Luca Ceresoli wrote:
+Hi Guenter,
 
-> Some lines have an extra tab, remove them for proper visual alignment as
-> present on the rest of this file.
+On 19/10/21 17:06, Guenter Roeck wrote:
+> On 10/19/21 7:59 AM, Luca Ceresoli wrote:
+>> Some entries indent their help text with 1 tab + 1 space or 1 tab only
+>> instead of 1 tab + 2 spaces. Add the missing spaces.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> ---
-> 
-> Changes in v2: none
-> ---
->  include/linux/mfd/max77686-private.h | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
+> FWIW, this patch should probably be handled separately, not as part
+> of this series.
 
-Applied, thanks.
+That was the initial idea. But this patch patch and patch 8 touch nearby
+lines, so adding the patch to this series looked like a good idea to
+avoid wasting maintainer time. It looks like I got the opposite effect... :(
+
+> Anyway,
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Thanks.
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Luca
