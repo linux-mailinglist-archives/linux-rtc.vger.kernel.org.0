@@ -2,92 +2,86 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9B9437536
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Oct 2021 12:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CC7438517
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Oct 2021 21:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbhJVKFG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 22 Oct 2021 06:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbhJVKFF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Oct 2021 06:05:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F734C061764
-        for <linux-rtc@vger.kernel.org>; Fri, 22 Oct 2021 03:02:48 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v17so2145471wrv.9
-        for <linux-rtc@vger.kernel.org>; Fri, 22 Oct 2021 03:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=nGjT1AOVEd9u+o/+gwUtiVquACHYTgqPaEm19BZqzks=;
-        b=nuygEqAjt4hZHvYg383a/4J/0cZ4ltTZw7vuniBg8ryX9BvfLDJfRQ2gdm54CpS/fp
-         WI0IWxc5HsFcXCwYOEs3PfD6OlU8t5/90igIK13eQb8xxdKh9ba272h/XHLEunW2QqON
-         8k5FG+stAoVMaAVF1zkci0xyA/kS6fH46OlTIUfW3ZgQfrivX6Z5J7Vm+i0LJmdhWQxp
-         Z6SJgrsy/4JChXJvK1zLu+rhZ2+VztL/i030CAm9pb0AsG6Dak/22PxRWqSnu+qBAhjV
-         dbhY20a8lITwVb6pxD9Vz1QDMLG6YBOJGC/+ljTFH2e1OnZKzr5kq968FqHSPzp4e6J5
-         T8jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=nGjT1AOVEd9u+o/+gwUtiVquACHYTgqPaEm19BZqzks=;
-        b=6CWduiOoE7bQXv7S0hQLNZQ+LgeM4q8CCcPcxXKYEEaxEcnZi7zlNQuWzCdZ92ebCM
-         iJoF/P2D7HiFgQER2oqq+7jWFBghJPd64oQNhf+FPQ4QeE+ZlXx5SStMsXYhsVPnw2Aq
-         pt9kAxlNw/qi/oMMttu+zdscHNDYJxfFVJ37EfQb2Sa7Pyi6eedaR5AE1yRaQCi2jt5G
-         n1igj7zoJnc2r9ldBQGsMQ98dXi5lT6KsrNoJD6HlQN3WiNpLVIf8lHX01FRcvQB2lyg
-         P3xaVmfZk1yPyxlsERr0qe6oLsnL8yXIA3x9aKbalCEgCIBZt9RMS4JPL+U3vDu3b/fm
-         tXZw==
-X-Gm-Message-State: AOAM5338BH06c91/l6OojKBKtIpt2ZrM4Gr9skEHNx9/+3ldLvEGQW2R
-        7p3/8a4W/F8NtjMCn5glDl+7pA==
-X-Google-Smtp-Source: ABdhPJyU8SPbKWh/ZJVVNpIOCfeScFOeqeql/+ttz0VcR88SMJHnMe2kapfTFYdC+twQcMhJ5DSrVQ==
-X-Received: by 2002:a05:6000:1689:: with SMTP id y9mr14340579wrd.52.1634896966959;
-        Fri, 22 Oct 2021 03:02:46 -0700 (PDT)
-Received: from google.com ([95.148.6.207])
-        by smtp.gmail.com with ESMTPSA id u1sm782155wrt.97.2021.10.22.03.02.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Oct 2021 03:02:46 -0700 (PDT)
-Date:   Fri, 22 Oct 2021 11:02:44 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S231165AbhJWUAi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 23 Oct 2021 16:00:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34146 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231174AbhJWUAg (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 23 Oct 2021 16:00:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2163C61050;
+        Sat, 23 Oct 2021 19:58:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635019096;
+        bh=d5GM8INkmkLbrnWpYDwQZ0MWghsRDuj0ZeutvzDLxKI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W69SzhXiOhJctTgMQSB+I68WSsHqZd3C3+PJNWXzOUWTid/FM3m+Z6jEb74aSRQ7N
+         IhlSS+9+nnkzi1G0hzjACZLC52HBGdQfPCf+yL03mQFd5n7MomKZLijV+WZlPyQckG
+         Tx3CQJB3o/JnBgxv2aFIdjKNI+l//4xKSI+0ycaZvPdcicooky6ZG4Kts4PKNclMDt
+         olL2ZioKHk4bDLQkmPNrQWasFAUIBTwJLpKyC0wy9LTkRLtVFTIo0YZysXz0TNeFVo
+         +lCof3ggySnP1rBF764MUK1pg8N4I6C2OXiwYkPcG4Vago8vpaaFzmz45z134vyj+q
+         V1Ewog65D/Q7w==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] mfd: tps80031: Remove driver
-Message-ID: <YXKMRFLW/jYbhOiO@google.com>
+        Lee Jones <lee.jones@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     Mark Brown <broonie@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v1 0/3] Remove TPS80031 driver
+Date:   Sat, 23 Oct 2021 20:58:03 +0100
+Message-Id: <163501903136.919198.2215583761573321430.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211021192258.21968-1-digetx@gmail.com>
 References: <20211021192258.21968-1-digetx@gmail.com>
- <20211021192258.21968-4-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211021192258.21968-4-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 21 Oct 2021, Dmitry Osipenko wrote:
-
-> Driver was upstreamed in 2013 and never got a user, remove it.
+On Thu, 21 Oct 2021 22:22:55 +0300, Dmitry Osipenko wrote:
+> TPS80031 driver was upstreamed back in 2013 and never got a user. I noticed
+> that driver is abandoned while was about to write a patch to switch it to a
+> new power-off API (that I'm working on). Driver requires platform data that
+> nobody provides. Instead of changing the dead code, let's remove it.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/mfd/Kconfig          |  14 -
->  drivers/mfd/Makefile         |   1 -
->  drivers/mfd/tps80031.c       | 526 -----------------------------
->  include/linux/mfd/tps80031.h | 637 -----------------------------------
->  4 files changed, 1178 deletions(-)
->  delete mode 100644 drivers/mfd/tps80031.c
->  delete mode 100644 include/linux/mfd/tps80031.h
+> Dmitry Osipenko (3):
+>   rtc: tps80031: Remove driver
+>   regulator: tps80031: Remove driver
+>   mfd: tps80031: Remove driver
+> 
+> [...]
 
-Applied, thanks.
+Applied to
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[2/3] regulator: tps80031: Remove driver
+      commit: d7477e646291b2dcdd5521cf926cd390ddd6a7c1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
