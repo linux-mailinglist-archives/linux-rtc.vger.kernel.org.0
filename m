@@ -2,180 +2,152 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB311439ACC
-	for <lists+linux-rtc@lfdr.de>; Mon, 25 Oct 2021 17:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8B243B1B3
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Oct 2021 13:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhJYPwM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 25 Oct 2021 11:52:12 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:51853 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230070AbhJYPwM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 25 Oct 2021 11:52:12 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7D7305806E4;
-        Mon, 25 Oct 2021 11:49:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 25 Oct 2021 11:49:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=0aER1SAbuXA9nYwjSnrNi66UhKk
-        Mzhn0/WJpn0hsF2I=; b=a3HDdU3oG6CY8b3GHjdKaB5w08HQNnLO0b7ow8rgCHn
-        QLSDmr7wbfQ4qqchyk1XklS7i7CHr7a+TPUc78e/ENH92Vpf/hxKiupMcz/IMoEa
-        10niQvw+bRbEV3/D0U3WZtfh+8vDRQP2LZildMs6pCLPLVq67cbRlsvN8GdFA7CW
-        lRSf0n3F6ve4HfrTO9phOjTY0T5zCb/Freyemcoi0FJwqtUuYWjgbMc5cZvE1xOa
-        STI1g2ghRVSkgH0B+NxlbzXbnczza5lC36zWLOSDW53IgRwwpwf9oBUqJoC4+Fgq
-        yQQm3NMTnid30Vdu7kGgX9Qpd7j2cgIKPZJfFrM4UFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=0aER1S
-        AbuXA9nYwjSnrNi66UhKkMzhn0/WJpn0hsF2I=; b=TXvfYLmNlJzAj25uXHxj4U
-        LuabYELPTeKHnKUUiEpQO7IjyTsogqzj5tRA1x7tQ4qOKhbiKtvXx3+sGrBnqsbP
-        0qqP68eYmhjTSpAla1lnYqmQy74jbT37FbI3qv/3wigC5HTak9Osj2vwAjGxw5S+
-        BkRAfVMdDKO7Sj9jkhSc+J3uyOzsUnM3PongiXKJdU/QkKoRotVf7/kPB3NXoziI
-        AMVTg137o+CLTocZF63d6R6/kyPGYXdf6qDpWpJBu7ozrr/VZvA8lsOjap+RhICn
-        uA22i7sUe1Gm4aIFAc186HH2krU+sMxMyWXl6Isy+svRkSWaIEoX3AQT7+0TkEoQ
-        ==
-X-ME-Sender: <xms:G9J2YbRC7-45o-m3FHYhpcL2lOnWgy5K5VRkr_EfqEpSulCjSuuliA>
-    <xme:G9J2Ycw6s4-L6skN-EpVViAD832PVYxXCKe8Mq7PkLj4geky9aIue271XLN-hWFFS
-    W1JBAZR60h8uaXDSwY>
-X-ME-Received: <xmr:G9J2YQ2pk0m8Xv5M6GNjxLns07AJ7mSLjCrYjRUEKlG-3PQ0M7p0YRZyhCks44_xNpMrWCSNLMK3QZ66AfMCculhMFdqIOorgoJEUvtU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrvdefhedgkeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:G9J2YbAUoGC6Lnl7bYGuDw-PZul04KodCu1RQJQeVD76R4yllfo8cg>
-    <xmx:G9J2YUizQuWwZW6VVZ6sSqA6UCnBb_DUthdj0utT_suUCEEvqsZCkA>
-    <xmx:G9J2Yfqhv8Gc4XofYEgGk2N7O3cEAVKLrY8P2I7x7rGLbFE2Cqqosw>
-    <xmx:HdJ2YVZTk9djiSN8X49jHj9yP-qB9C--K9FHyMX5F3e8ZzExgMmxNw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 Oct 2021 11:49:47 -0400 (EDT)
-Date:   Mon, 25 Oct 2021 17:49:45 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] dt-bindings: rtc: sun6i: Add H616, R329, and D1
- support
-Message-ID: <20211025154945.6vbp7ru5qvvpe34r@gilmour>
-References: <20210928080335.36706-1-samuel@sholland.org>
- <20210928080335.36706-3-samuel@sholland.org>
+        id S231126AbhJZL7o (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Oct 2021 07:59:44 -0400
+Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:25635 "EHLO
+        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234446AbhJZL7n (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Oct 2021 07:59:43 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Tue, 26 Oct 2021 07:59:42 EDT
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 26 Oct
+ 2021 19:42:14 +0800
+Received: from [10.89.154.55] (123.139.80.25) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 26 Oct
+ 2021 19:42:13 +0800
+Date:   Tue, 26 Oct 2021 19:42:12 +0800
+From:   <tonywwang-oc@zhaoxin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <a.zummo@towertech.it>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <TimGuo-oc@zhaoxin.com>,
+        <CooperYan@zhaoxin.com>, <QiyuanWang@zhaoxin.com>,
+        <HerryYang@zhaoxin.com>, <CobeChen@zhaoxin.com>,
+        <YanchenSun@zhaoxin.com>
+Subject: Re: [PATCH] rtc: Fix set RTC time delay 500ms on some Zhaoxin SOCs
+User-Agent: K-9 Mail for Android
+In-Reply-To: <F4869089-9792-4C4F-B984-553662B03E91@zhaoxin.com>
+References: <1629121638-3246-1-git-send-email-TonyWWang-oc@zhaoxin.com> <YRogod0HB4d7Og4E@piout.net> <a4b6b0b4-9aa5-9a75-e523-0fd7656b82cf@zhaoxin.com> <YRpb4Fey2lM3aOAw@piout.net> <7EA395FF-EB66-4274-9EDE-EC28450A0259@zhaoxin.com> <YRu3v0pb/Z54XxWJ@piout.net> <F4869089-9792-4C4F-B984-553662B03E91@zhaoxin.com>
+Message-ID: <2DAA636C-A992-4FC7-BB53-3E68342437F9@zhaoxin.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ihzrd562brfvvncn"
-Content-Disposition: inline
-In-Reply-To: <20210928080335.36706-3-samuel@sholland.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [123.139.80.25]
+X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---ihzrd562brfvvncn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On August 18, 2021 11:54:20 AM GMT+08:00, tonywwang-oc@zhaoxin.com wrote:
+>
+>
+>On August 17, 2021 9:21:03 PM GMT+08:00, Alexandre Belloni
+><alexandre.belloni@bootlin.com> wrote:
+>>On 17/08/2021 19:09:28+0800, tonywwang-oc@zhaoxin.com wrote:
+>>> 
+>>> 
+>>> On August 16, 2021 8:36:48 PM GMT+08:00, Alexandre Belloni
+>><alexandre.belloni@bootlin.com> wrote:
+>>> >On 16/08/2021 18:03:13+0800, Tony W Wang-oc wrote:
+>>> >> 
+>>> >> On 16/08/2021 16:24, Alexandre Belloni wrote:
+>>> >> > Hello,
+>>> >> > 
+>>> >> > On 16/08/2021 21:47:18+0800, Tony W Wang-oc wrote:
+>>> >> >> When the RTC divider is changed from reset to an operating
+>time
+>>> >base,
+>>> >> >> the first update cycle should be 500ms later. But on some
+>>Zhaoxin
+>>> >SOCs,
+>>> >> >> this first update cycle is one second later.
+>>> >> >>
+>>> >> >> So set RTC time on these Zhaoxin SOCs will causing 500ms
+>delay.
+>>> >> >>
+>>> >> > 
+>>> >> > Can you explain what is the relationship between writing the
+>>> >divider and
+>>> >> > the 500ms delay?
+>>> >> >> Isn't the issue that you are using systohc and set_offset_nsec
+>>is
+>>> >set to
+>>> >> > NSEC_PER_SEC / 2 ?
+>>> >> > 
+>>> >> No.
+>>> >> When using #hwclock -s to set RTC time and set_offset_nsec is
+>>> >> NSEC_PER_SEC / 2, the function mc146818_set_time() requires the
+>>first
+>>> >> update cycle after RTC divider be changed from reset to an
+>>operating
+>>> >> mode is 500ms as the MC146818A spec specified. But on some
+>Zhaoxin
+>>> >SOCs,
+>>> >> the first update cycle of RTC is one second later after RTC
+>>divider
+>>> >be
+>>> >> changed from reset to an operating mode. So the first update
+>cycle
+>>> >after
+>>> >> RTC divider be changed from reset to an operation mode on These
+>>SOCs
+>>> >> will causing 500ms delay with current mc146818_set_time()
+>>> >implementation.
+>>> >> 
+>>> >
+>>> >What happens with hwclock --delay=0 -s ?
+>>> 
+>>> With "hwclock --delay=0 -s" still have this problem. Actually, this
+>>500ms delay caused by writing the RTC time on these Zhaoxin SOCs.
+>>> As I've tested, with hwclock --delay=0 -w can fix it too. 
+>>> 
+>>
+>>Both -s and -w end up calling set_hardware_clock_exact() so both
+>should
+>>end up with the correct time. If this is not the case, then hwclock
+>>needs to be fixed.
+>
+>I checked Util-linux-2.37.2, hwclock -w will call
+>set_hardware_clock_exact() and hwclock -s will not.
+>Please correct me if I'm wrong.
+>
+>Sincerely
+>TonyWWang-oc
 
-On Tue, Sep 28, 2021 at 03:03:28AM -0500, Samuel Holland wrote:
-> These new RTC variants all have a single alarm, like the R40 variant.
->=20
-> For the new SoCs, start requiring a complete list of input clocks. The
-> H616 has three required clocks. The R329 also has three required clocks
-> (but one is different), plus an optional crystal oscillator input. The
-> D1 RTC is identical to the one in the R329.
->=20
-> And since these new SoCs will have a well-defined output clock order as
-> well, they do not need the clock-output-names property.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> Changes since v1:
->   - Properly update the DT binding clocks and clock-names properties.
->=20
->  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml | 72 ++++++++++++++++++-
->  include/dt-bindings/clock/sun6i-rtc.h         | 10 +++
->  2 files changed, 79 insertions(+), 3 deletions(-)
->  create mode 100644 include/dt-bindings/clock/sun6i-rtc.h
->=20
-> diff --git a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rt=
-c.yaml b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> index a88d46ffb457..b971510a5ae7 100644
-> --- a/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml
-> @@ -24,9 +24,14 @@ properties:
->            - allwinner,sun8i-v3-rtc
->            - allwinner,sun50i-h5-rtc
->            - allwinner,sun50i-h6-rtc
-> +          - allwinner,sun50i-h616-rtc
-> +          - allwinner,sun50i-r329-rtc
->        - items:
->            - const: allwinner,sun50i-a64-rtc
->            - const: allwinner,sun8i-h3-rtc
-> +      - items:
-> +          - const: allwinner,sun20i-d1-rtc
-> +          - const: allwinner,sun50i-r329-rtc
-> =20
->    reg:
->      maxItems: 1
-> @@ -38,7 +43,10 @@ properties:
->        - description: RTC Alarm 1
-> =20
->    clocks:
-> -    maxItems: 1
-> +    minItems: 1
-> +
-> +  clock-names:
-> +    minItems: 1
-> =20
->    clock-output-names:
->      minItems: 1
-> @@ -98,7 +106,66 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: allwinner,sun8i-r40-rtc
-> +            const: allwinner,sun50i-h616-rtc
-> +
-> +    then:
-> +      clocks:
-> +        minItems: 3
-> +        maxItems: 3
+As explained before, the root cause of this problem is: these Zhaoxin SOCs
 
-If clocks is set to minItems: 1, you'll still get a failure.
+which belong to X86 architecture do not meet the requirement of
 
-The way the schemas are checked is a bit weird, but it's not checked
-once with the sum of all the schemas, they are all checked separately.
+MC146818A compatible RTC about “When the divider is changed from reset
 
-So the schema under the then here will be valid, but the global check
-property will fail because it expects 1 item.
+to an operating time base, the first update cycle is one-half second later”.
 
-You'll need minItems: 1, maxItems: 4 for the global clocks and
-clock-names.
+Actually the first update cycle on these Zhaoxin SOCs is one second later in
 
-Maxime
+this case.
 
---ihzrd562brfvvncn
-Content-Type: application/pgp-signature; name="signature.asc"
+ 
 
------BEGIN PGP SIGNATURE-----
+This problem is not only happened when running “hwclock -w”. On X86 platform,
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYXbSGQAKCRDj7w1vZxhR
-xUS7AP9dNLk6cWYN+vxStPWF4+biVpg60Zru5IdULikRqQBmlQD/dCBOoGYPDuE0
-TtN7hEAVpGbjJcDGTznhWfsYr5rTJQM=
-=b+4w
------END PGP SIGNATURE-----
+the 0.5s delay is default for both “hwclock –w” and NTP driver’s invoke of
 
---ihzrd562brfvvncn--
+sync_cmos_clock().  So set RTC time caused by NTP driver also has this problem.
+
+ 
+
+As have been test pass, skip operate the RTC_REG_A (which divider-control bits in)
+
+with these Zhaoxin SOCs in function mc146818_set_time() can  fix this problem.
+
+I think this patch seems appropriate.
+
+Sincerely
+TonyWWang-oc
