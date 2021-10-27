@@ -2,111 +2,151 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD7E43CBB0
-	for <lists+linux-rtc@lfdr.de>; Wed, 27 Oct 2021 16:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB52743CC0B
+	for <lists+linux-rtc@lfdr.de>; Wed, 27 Oct 2021 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbhJ0OO4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 27 Oct 2021 10:14:56 -0400
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:33466 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbhJ0OOz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 27 Oct 2021 10:14:55 -0400
-Received: by mail-oo1-f43.google.com with SMTP id q39-20020a4a962a000000b002b8bb100791so983235ooi.0;
-        Wed, 27 Oct 2021 07:12:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=xHwTiCe25Vq0S+cLU9+jyc/EEHh4jWHAnrWkyaRQ0AU=;
-        b=aX+OblF28wUgMIviTSKtwNYuLlRB1bjfN87+rBO9Sr2nPJERmMIKUcFiAt00nPPEcM
-         Q+hktmxVU5B01hY3oZ9o47vK3FcaOMa9K/L4IzWHMtZOLY8XjOodE2FtC5p8bzn6P/gU
-         tvarbl8oXC5UW45AZ45rZTJsb1K6e/vBhA2h+UFeIVLOc6tYTXN744+rSPI5qSm4YdpL
-         uYGbOP1m3GDlm4/EIQlyhU/miLbbzHGI3vx+bzU2EZwa0sDrq9xoAqe+O4Zrwr7dI0uk
-         2ODyNaLgAcx8oW3AHIeBO8pTwkq8xYFgyusxlVBkDWUZG1aJvm2dxCtTw/90a2d51D7m
-         kyMg==
-X-Gm-Message-State: AOAM533fK/Z6cPQi06pDsiR2klCUrtc3xZLBBNw0M/gvVOtTSdbMu6po
-        b1VGLBMZIWIUPR8mT05+9A==
-X-Google-Smtp-Source: ABdhPJyZEjWOZ4sONCj9i+vxmlu+p2sO7NBgcLV+PbDqKV1EGUTjJo5g7D3M9LI8MuRor18zTgUPbA==
-X-Received: by 2002:a4a:9682:: with SMTP id s2mr22607921ooi.29.1635343949733;
-        Wed, 27 Oct 2021 07:12:29 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t18sm18764otd.37.2021.10.27.07.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Oct 2021 07:12:29 -0700 (PDT)
-Received: (nullmailer pid 862168 invoked by uid 1000);
-        Wed, 27 Oct 2021 14:12:28 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        id S238003AbhJ0O00 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 27 Oct 2021 10:26:26 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58642 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238272AbhJ0O00 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 27 Oct 2021 10:26:26 -0400
+Received: from [79.2.93.196] (port=40416 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mfjqQ-000JQb-LM; Wed, 27 Oct 2021 16:23:58 +0200
+Subject: Re: [PATCH v2 6/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-watchdog@vger.kernel.org,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        Support Opensource <support.opensource@diasemi.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-In-Reply-To: <20211027052323.1788476-2-alexandre.ghiti@canonical.com>
-References: <20211027052323.1788476-1-alexandre.ghiti@canonical.com> <20211027052323.1788476-2-alexandre.ghiti@canonical.com>
-Subject: Re: [PATCH 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
-Date:   Wed, 27 Oct 2021 09:12:28 -0500
-Message-Id: <1635343948.038781.862167.nullmailer@robh.at.kernel.org>
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211019145919.7327-1-luca@lucaceresoli.net>
+ <20211019145919.7327-7-luca@lucaceresoli.net> <YXG060evUw8rnR3O@google.com>
+ <3520ff3d-1ec0-5500-7fee-538afa25d413@lucaceresoli.net>
+ <YXlXvovUsvOIPYyV@google.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <d5674e8e-34c9-86ca-94cc-dca79ed82496@lucaceresoli.net>
+Date:   Wed, 27 Oct 2021 16:23:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <YXlXvovUsvOIPYyV@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 27 Oct 2021 07:23:23 +0200, Alexandre Ghiti wrote:
-> DA9063 devices bindings used text format, so migrate those bindings to YAML
-> format before adding any new bindings.
+Hi Lee,
+
+On 27/10/21 15:44, Lee Jones wrote:
+> On Wed, 27 Oct 2021, Luca Ceresoli wrote:
 > 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> ---
->  .../bindings/input/da9063-onkey.yaml          |  39 ++++++
->  .../devicetree/bindings/mfd/da9063.txt        | 111 ------------------
->  .../devicetree/bindings/mfd/da9063.yaml       |  98 ++++++++++++++++
->  .../bindings/regulator/da9063-regulator.yaml  |  51 ++++++++
->  .../devicetree/bindings/rtc/da9063-rtc.yaml   |  31 +++++
->  .../bindings/watchdog/da9063-watchdog.yaml    |  31 +++++
->  6 files changed, 250 insertions(+), 111 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/input/da9063-onkey.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
->  create mode 100644 Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
->  create mode 100644 Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
+>> Hi Lee,
+>>
+>> On 21/10/21 20:43, Lee Jones wrote:
+>>> On Tue, 19 Oct 2021, Luca Ceresoli wrote:
+>> [...]
+>>>> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
+>>>> new file mode 100644
+>>>> index 000000000000..4b49d16fe199
+>>>> --- /dev/null
+>>>> +++ b/drivers/mfd/max77714.c
+>>>> @@ -0,0 +1,165 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>> +/*
+>>>> + * Maxim MAX77714 MFD Driver
+>>>> + *
+>>>> + * Copyright (C) 2021 Luca Ceresoli
+>>>> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
+>>>> + */
+>>>> +
+>>>> +#include <linux/i2c.h>
+>>>> +#include <linux/interrupt.h>
+>>>> +#include <linux/mfd/core.h>
+>>>> +#include <linux/mfd/max77714.h>
+>>>> +#include <linux/module.h>
+>>>> +#include <linux/of.h>
+>>>> +#include <linux/regmap.h>
+>>>> +
+>>>> +struct max77714 {
+>>>> +	struct device *dev;
+>>>> +	struct regmap *regmap;
+>>>> +	struct regmap_irq_chip_data *irq_data;
+>>>
+>>> Is this used outside of .probe()?
+>>
+>> No.
 > 
+> Then you don't need to store it in a struct.
+> 
+> [...]
+> 
+>>>> +	/* Internal Crystal Load Capacitance, indexed by value of 32KLOAD bits */
+>>>> +	static const unsigned int load_cap[4] = {0, 10, 12, 22};
+>>>
+>>> Probably best to define these magic numbers.
+>>
+>> Since these numbers do not appear anywhere else I don't find added value in:
+>>
+>>   #define MAX77714_LOAD_CAP_0   0
+>>   #define MAX77714_LOAD_CAP_10  10
+>>   #define MAX77714_LOAD_CAP_12  12
+>>   #define MAX77714_LOAD_CAP_22  22
+>>   [...]
+>>   static const unsigned int load_cap[4] = {
+>>       MAX77714_LOAD_CAP_0,
+>>       MAX77714_LOAD_CAP_10,
+>>       MAX77714_LOAD_CAP_12,
+>>       MAX77714_LOAD_CAP_12,
+>>   };
+> 
+> I don't find value in that nomenclature either! :)
+> 
+> I was suggesting that you used better, more forthcoming names.
+> 
+>  LOAD_CAPACITANCE_00_pF
+>  LOAD_CAPACITANCE_10_pF
+>  LOAD_CAPACITANCE_12_pF
+>  LOAD_CAPACITANCE_22_pF
+> 
+>> besides adding lots of lines and lots of "MAX77714_LOAD_CAP_". Even
+>> worse, there is potential for copy-paste errors -- can you spot it? ;)
+> 
+> Yes.  Straight away.
+> 
+>> Finally, consider this is not even global but local to a small function.
+>>
+>> But I'd rather add the unit ("pF") to either the comment line of the
+>> array name (load_cap -> load_cap_pf) for clarity. Would that be OK for you?
+> 
+> I did have to read the code again to get a handle on things (probably
+> not a good sign).  To keep things simple, just add "/* pF */" onto the
+> end of the load_cap line for now.  That should clear things up at
+> first glance.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Ok, let's see how it works. I'm sending v3 in the next few days.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/mfd/da9063.yaml:26:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/mfd/da9063.yaml:27:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/mfd/da9063.example.dts:21.17-18 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1441: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-Documentation/devicetree/bindings/input/da9062-onkey.txt: Documentation/devicetree/bindings/mfd/da9063.txt
-
-See https://patchwork.ozlabs.org/patch/1546751
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+-- 
+Luca
