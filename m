@@ -2,147 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D68FB440C36
-	for <lists+linux-rtc@lfdr.de>; Sun, 31 Oct 2021 00:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178EC440C3C
+	for <lists+linux-rtc@lfdr.de>; Sun, 31 Oct 2021 00:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbhJ3Wxn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 30 Oct 2021 18:53:43 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:25911 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232023AbhJ3Wxm (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Sat, 30 Oct 2021 18:53:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1635634272;
-  x=1667170272;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lOpQfqpMsuNgZWc/EdM232nPPYSXeYpY0uJFl6xH1Mk=;
-  b=lYaWwVDCmTzHTTONC+rQ7XQ3uyc7+WdDn4BTi+1sQdm78geyviv1RujM
-   ZWTpTbgxnNmBEaMTmeYeSZ+X9V+ydpcNCvM+I7X4cPvrpiaWL1jQRBNhV
-   jarezQBzu15cp0X9XMFcq3YpAGTpR3qCjddnaOPrdECNBtOijM4LfufFv
-   a4ZQsYnzWQUAm2g0oodcivsYkptmW3HTuDNcbB5yKvhfnR2e4kF8A6rzZ
-   HBBQ8Aa5bQoEh7kP23PhgE/WGd7xZGWAG0F+QTL6cTUtxx+2u5EVU6fBR
-   fLJzqK+fHVnCK8vXf6kVpRoNmCUIfFmYWZovXvvoB531YF1IL1IVwPNaV
-   g==;
-From:   Pavel Modilaynen <pavel.modilaynen@axis.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>
-CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lkml@axis.com>, <kernel@axis.com>,
-        "Pavel Modilaynen" <pavelmn@axis.com>
-Subject: [PATCH 2/2] dt-bindings: rtc: Add bindings for Ricoh rs5c372
-Date:   Sun, 31 Oct 2021 00:50:54 +0200
-Message-ID: <20211030225054.32114-3-pavel.modilaynen@axis.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211030225054.32114-1-pavel.modilaynen@axis.com>
+        id S231556AbhJ3XAd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 30 Oct 2021 19:00:33 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:33697 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231462AbhJ3XAd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 30 Oct 2021 19:00:33 -0400
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 43347100005;
+        Sat, 30 Oct 2021 22:57:58 +0000 (UTC)
+Date:   Sun, 31 Oct 2021 00:57:57 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Pavel Modilaynen <pavel.modilaynen@axis.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkml@axis.com, kernel@axis.com,
+        Pavel Modilaynen <pavelmn@axis.com>
+Subject: Re: [PATCH 1/2] rtc: rs5c372: Add support for trim configuration
+Message-ID: <YX3N9b6P4w1kSGfp@piout.net>
 References: <20211030225054.32114-1-pavel.modilaynen@axis.com>
+ <20211030225054.32114-2-pavel.modilaynen@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211030225054.32114-2-pavel.modilaynen@axis.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Pavel Modilaynen <pavelmn@axis.com>
+Hello,
 
-Create new DT bindings yaml file for Ricoh rs5c372 driver
-since adding property support naturally deserves it.
-Place a description of this property: ricoh,trim.
+Please use the proper RTC interface by implementing .set_offset and
+.read_offset.
 
-Signed-off-by: Pavel Modilaynen <pavelmn@axis.com>
----
- .../bindings/rtc/ricoh,rs5c372.yaml           | 58 +++++++++++++++++++
- .../devicetree/bindings/rtc/trivial-rtc.yaml  | 12 ----
- 2 files changed, 58 insertions(+), 12 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/ricoh,rs5c372.yaml
+On 31/10/2021 00:50:53+0200, Pavel Modilaynen wrote:
+> From: Pavel Modilaynen <pavelmn@axis.com>
+> 
+> Add support for oscillation adjustment register RS5C372_REG_TRIM
+> setting that is needed to accommodate for effective crystal
+> capacitance.
+> 
+> Use optional property ricoh,trim that should contain
+> raw value to setup this register. According to
+> datasheets for RS5C372, R2025S/D, RV5C38[67] and R222[13]
+> the value will be converted to a number of ticks that
+> is to be subtracted or added when the second digits read
+> 00, 20 or 40 seconds.
+> 
+> Signed-off-by: Pavel Modilaynen <pavelmn@axis.com>
+> ---
+>  drivers/rtc/rtc-rs5c372.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+> index 80980414890c..3a2db0326669 100644
+> --- a/drivers/rtc/rtc-rs5c372.c
+> +++ b/drivers/rtc/rtc-rs5c372.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of.h>
+>  
+>  /*
+>   * Ricoh has a family of I2C based RTCs, which differ only slightly from
+> @@ -560,6 +561,8 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+>  {
+>  	unsigned char buf[2];
+>  	int addr, i, ret = 0;
+> +	struct i2c_client *client = rs5c372->client;
+> +	u8 trim = 0;
+>  
+>  	addr   = RS5C_ADDR(RS5C_REG_CTRL1);
+>  	buf[0] = rs5c372->regs[RS5C_REG_CTRL1];
+> @@ -599,9 +602,22 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+>  		break;
+>  	}
+>  
+> +	/* optional setup of xtal trimming */
+> +	if (!of_property_read_u8(client->dev.of_node, "ricoh,trim", &trim)) {
+> +		if (rs5c372->type != rtc_r2221tl && (trim & ~RS5C372_TRIM_MASK)) {
+> +			dev_warn(&client->dev, "Erroneous setting for ricoh,trim in devicetree\n");
+> +		} else {
+> +			int addr = RS5C_ADDR(RS5C372_REG_TRIM);
+> +			int ret = i2c_smbus_write_byte_data(client, addr, trim);
+> +
+> +			if (unlikely(ret < 0))
+> +				return ret;
+> +		}
+> +	}
+> +
+>  	for (i = 0; i < sizeof(buf); i++) {
+>  		addr = RS5C_ADDR(RS5C_REG_CTRL1 + i);
+> -		ret = i2c_smbus_write_byte_data(rs5c372->client, addr, buf[i]);
+> +		ret = i2c_smbus_write_byte_data(client, addr, buf[i]);
+>  		if (unlikely(ret < 0))
+>  			return ret;
+>  	}
+> -- 
+> 2.20.1
+> 
 
-diff --git a/Documentation/devicetree/bindings/rtc/ricoh,rs5c372.yaml b/Documentation/devicetree/bindings/rtc/ricoh,rs5c372.yaml
-new file mode 100644
-index 000000000000..6cb6a97db5d1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/ricoh,rs5c372.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/ricoh,rs5c372.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ricoh RS5C372, R2025S/D, RV5C38[67] and R222[13] Real Time Clock
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ricoh,r2025sd
-+      - ricoh,r2221tl
-+      - ricoh,rs5c372a
-+      - ricoh,rs5c372b
-+      - ricoh,rv5c386
-+      - ricoh,rv5c387a
-+
-+  reg:
-+    maxItems: 1
-+
-+  ricoh,trim:
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    description: |
-+      Raw value of Oscillation Adjustment Register (0x7) which changes
-+      time counts of 1 second. Normally, the second counter is incremented
-+      once per 32768 clock pulses. The value causes to increment
-+      decrement time counts when second digits read 00, 20, 40 seconds
-+      (R222[13] can operate on 00 seconds if MSB set).
-+      See datasheets for details.
-+
-+  start-year: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@32 {
-+            compatible = "ricoh,r2221tl";
-+            reg = <0x32>;
-+            ricoh,trim = /bits/ 8 <0x23>;
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-index 13925bb78ec7..aeabede89654 100644
---- a/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/trivial-rtc.yaml
-@@ -55,18 +55,6 @@ properties:
-       - nxp,pcf2129
-       # Real-time Clock Module
-       - pericom,pt7c4338
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,r2025sd
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,r2221tl
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,rs5c372a
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,rs5c372b
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,rv5c386
--      # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
--      - ricoh,rv5c387a
-       # 2-wire CMOS real-time clock
-       - sii,s35390a
-       # I2C bus SERIAL INTERFACE REAL-TIME CLOCK IC
 -- 
-2.20.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
