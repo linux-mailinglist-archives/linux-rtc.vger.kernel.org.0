@@ -2,198 +2,182 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA37442394
-	for <lists+linux-rtc@lfdr.de>; Mon,  1 Nov 2021 23:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5305A4423D4
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Nov 2021 00:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbhKAWvX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 1 Nov 2021 18:51:23 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:45181 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbhKAWvX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Nov 2021 18:51:23 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 40799C000A;
-        Mon,  1 Nov 2021 22:48:46 +0000 (UTC)
-Date:   Mon, 1 Nov 2021 23:48:46 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/2] rv8803: add irq-gpio optional dts attribute
-Message-ID: <YYBuzqZD8/uK3d6Z@piout.net>
-References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
- <20211101013400.325855-2-dominique.martinet@atmark-techno.com>
+        id S232389AbhKAXRR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 1 Nov 2021 19:17:17 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:1836 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229684AbhKAXRQ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Mon, 1 Nov 2021 19:17:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1635808482;
+  x=1667344482;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=z3BN2Y8GN2zH9YpSG6dTXVGhEXvbYAAcpFEo7GO+5qk=;
+  b=Z5IAA+HpshSSSTzpxgNNcawcCyk/h3nlgTMDaFujzrpF7o5YoU3jxWn6
+   p1486O4qDGx5iMmgIxW0NJ58fy3OFXhqrvzAsli+SzQc8OcwlM+u4hNpS
+   49xJO39uULgHWGe/LD9qS78joVykmHy3P3uWfZuY0LclWVxiV7wM+7PDT
+   kT5RF7bRDUyZ4tEOeFmS9eAK8ngQPZXphi8nukrF2oYJvBlYE4Z3wOxUx
+   qlaZUpA1vRTshnP25EP0ssXnWOLSY8BODqS8rXaEy6/howETsP+b3YP0Q
+   qid6noBYgd6aFgswyVktZ3X2emPfSXgCY08SmMlZd1zRkJbeXQx0EDnKJ
+   Q==;
+Subject: Re: [PATCH 1/2] rtc: rs5c372: Add support for trim configuration
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Pavel Modilaynen <Pavel.Modilaynen@axis.com>
+CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+References: <20211030225054.32114-1-pavel.modilaynen@axis.com>
+ <20211030225054.32114-2-pavel.modilaynen@axis.com>
+ <YX3N9b6P4w1kSGfp@piout.net> <6cc22970-fa11-ccb4-c155-62396a7e3890@axis.com>
+ <YYAwkZ0RmhyfSewe@piout.net>
+From:   Pavel Modilaynen <pavelmn@axis.com>
+Message-ID: <2cd99097-043e-8aed-bc0d-a4d9fa8a38e8@axis.com>
+Date:   Tue, 2 Nov 2021 00:14:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211101013400.325855-2-dominique.martinet@atmark-techno.com>
+In-Reply-To: <YYAwkZ0RmhyfSewe@piout.net>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail05w.axis.com (10.20.40.11) To se-mail05w.axis.com
+ (10.20.40.11)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 01/11/2021 10:34:00+0900, Dominique Martinet wrote:
-> Some device cannot be woken up from i2c signal.
-> Add a new irq-gpio attribute for devices which have a gpio connected to
-> the rv8803 INT line so the rtc can be used for suspend to mem
-> 
+Hi Alexandre,
 
-I don't think this is right, the interrupts property of the rtc node can
-point to a gpio and this is expected to be the one connected on INT. You
-don't need another property.
+On 11/1/21 7:23 PM, Alexandre Belloni wrote:
+> On 31/10/2021 11:29:12+0100, Pavel Modilaynen wrote:
+>> On 10/31/21 12:57 AM, Alexandre Belloni wrote:
+>> > Hello,
+>> > 
+>> > Please use the proper RTC interface by implementing .set_offset and
+>> > .read_offset.
+>> 
+>> I am not sure about .set/read_offset. It looks as runtime adjustment
+>> interface,
+>> however this Xtal trimming parameter is based on schematics and Xtal
+>> capacitance (datasheet parameter).
+>> It is found by calibration procedure based on RTC clock output (the
+>> procedure and calculation of trimming parameter is described in datasheets).
+>> So, I would like to say that this parameter is functionally close to
+>> "quartz-load-femtofarads" for rtc-pcf8523/pcf85063.
+>> 
+> 
+> quartz-load-femtofarads is for analog trimming which this RTC doesn't
+> have, both CD and CG are set to 10pF. .set/read_offset are for digital
+> trimming which is what you are configuring here. You definitively want
+> to be able to do that at runtime as you need to adjust for temperature
+> and ageing of the crystal (datasheet, page 14: "For those systems that
+> have temperature detection precision of clock function may be increased
+> by correcting clock error according to temperature fluctuations.")
+>
 
-> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
-> ---
+Thank you for reply.
+
+I am not denying the need in runtime adjustment related to
+temperature, aging and precision, which you are referring by excerpt 
+from p.14.
+
+I would like to make a point that Xtal trimming is for coarse grained 
+adjustment (pages 36-39), primarily related to Xtal capacitance CL (not 
+CD/CG). Our goal is to keep a reasonable  drift of ,say, <1 second per 
+day and for Xtal that we use with 12.5pF RTC manufacturer recommends 
+using 0x23 value for adjustment. In this case we act according to (A) 
+course from page 38:
+
+"Adjustment of clock is not made for IC (no adjustment) and any CL value 
+may be used for the crystal oscillator. Precision fluctuations of a 
+crystal oscillator may be selected as long as clock precision allows. 
+Obtain the central frequency as described in section 2.2 using several 
+crystal oscillator and ICs, determine an adjustment value as
+described in “2.4 Time Trimming Circuit” which shall be set to the 
+RS5C372A/B."
+
+
+>> > 
+>> > On 31/10/2021 00:50:53+0200, Pavel Modilaynen wrote:
+>> > > From: Pavel Modilaynen <pavelmn@axis.com>
+>> > > 
+>> > > Add support for oscillation adjustment register RS5C372_REG_TRIM
+>> > > setting that is needed to accommodate for effective crystal
+>> > > capacitance.
+>> > > 
+>> > > Use optional property ricoh,trim that should contain
+>> > > raw value to setup this register. According to
+>> > > datasheets for RS5C372, R2025S/D, RV5C38[67] and R222[13]
+>> > > the value will be converted to a number of ticks that
+>> > > is to be subtracted or added when the second digits read
+>> > > 00, 20 or 40 seconds.
+>> > > 
+>> > > Signed-off-by: Pavel Modilaynen <pavelmn@axis.com>
+>> > > ---
+>> > >   drivers/rtc/rtc-rs5c372.c | 18 +++++++++++++++++-
+>> > >   1 file changed, 17 insertions(+), 1 deletion(-)
+>> > > 
+>> > > diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+>> > > index 80980414890c..3a2db0326669 100644
+>> > > --- a/drivers/rtc/rtc-rs5c372.c
+>> > > +++ b/drivers/rtc/rtc-rs5c372.c
+>> > > @@ -13,6 +13,7 @@
+>> > >   #include <linux/slab.h>
+>> > >   #include <linux/module.h>
+>> > >   #include <linux/of_device.h>
+>> > > +#include <linux/of.h>
+>> > >   /*
+>> > >    * Ricoh has a family of I2C based RTCs, which differ only slightly from
+>> > > @@ -560,6 +561,8 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+>> > >   {
+>> > >         unsigned char buf[2];
+>> > >         int addr, i, ret = 0;
+>> > > +     struct i2c_client *client = rs5c372->client;
+>> > > +     u8 trim = 0;
+>> > >         addr   = RS5C_ADDR(RS5C_REG_CTRL1);
+>> > >         buf[0] = rs5c372->regs[RS5C_REG_CTRL1];
+>> > > @@ -599,9 +602,22 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+>> > >                 break;
+>> > >         }
+>> > > +     /* optional setup of xtal trimming */
+>> > > +     if (!of_property_read_u8(client->dev.of_node, "ricoh,trim", &trim)) {
+>> > > +             if (rs5c372->type != rtc_r2221tl && (trim & ~RS5C372_TRIM_MASK)) {
+>> > > +                     dev_warn(&client->dev, "Erroneous setting for ricoh,trim in devicetree\n");
+>> > > +             } else {
+>> > > +                     int addr = RS5C_ADDR(RS5C372_REG_TRIM);
+>> > > +                     int ret = i2c_smbus_write_byte_data(client, addr, trim);
+>> > > +
+>> > > +                     if (unlikely(ret < 0))
+>> > > +                             return ret;
+>> > > +             }
+>> > > +     }
+>> > > +
+>> > >         for (i = 0; i < sizeof(buf); i++) {
+>> > >                 addr = RS5C_ADDR(RS5C_REG_CTRL1 + i);
+>> > > -             ret = i2c_smbus_write_byte_data(rs5c372->client, addr, buf[i]);
+>> > > +             ret = i2c_smbus_write_byte_data(client, addr, buf[i]);
+>> > >                 if (unlikely(ret < 0))
+>> > >                         return ret;
+>> > >         }
+>> > > -- 
+>> > > 2.20.1
+>> > > 
+>> > 
+>> > -- 
+>> > Alexandre Belloni, co-owner and COO, Bootlin
+>> > Embedded Linux and Kernel engineering
+>> > https://bootlin.com <https://bootlin.com> <https://bootlin.com 
+> <https://bootlin.com>>
 > 
-> Our board does not have an upstream dts so I cannot provide a real
-> example for it, but I've tested this on something close to the
-> imx8mp-evk.
-> 
-> It should not break anything for people having no alarm at all or using
-> the i2c irq.
-> 
->  .../devicetree/bindings/rtc/epson,rx8900.yaml |  5 ++
->  drivers/rtc/rtc-rv8803.c                      | 73 +++++++++++++++++--
->  2 files changed, 73 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
-> index 29fe39bb08ad..0d7912b984c7 100644
-> --- a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
-> @@ -28,6 +28,10 @@ properties:
->  
->    trickle-diode-disable: true
->  
-> +  irq-gpio:
-> +    description: |
-> +      gpio for INT signal. Set up gpio for irq and device wakeup.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -45,5 +49,6 @@ examples:
->              reg = <0x32>;
->              epson,vdet-disable;
->              trickle-diode-disable;
-> +            irq-gpio = <&gpio1 11 GPIO_ACTIVE_LOW>;
->          };
->      };
-> diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-> index 0d5ed38bf60c..1c4b96bc110e 100644
-> --- a/drivers/rtc/rtc-rv8803.c
-> +++ b/drivers/rtc/rtc-rv8803.c
-> @@ -16,6 +16,7 @@
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/rtc.h>
-> +#include <linux/pm_wakeirq.h>
->  
->  #define RV8803_I2C_TRY_COUNT		4
->  
-> @@ -509,6 +510,61 @@ static int rx8900_trickle_charger_init(struct rv8803_data *rv8803)
->  					 flags);
->  }
->  
-> +static int rv8803_setup_gpio_irq(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	int err;
-> +	int irq;
-> +	unsigned long irqflags;
-> +	struct gpio_desc *gpiod;
-> +
-> +
-> +	gpiod = devm_gpiod_get_from_of_node(dev, dev->of_node, "irq-gpio",
-> +					    0, GPIOD_IN, "RTC irq pin");
-> +	if (!gpiod || IS_ERR(gpiod)) {
-> +		dev_dbg(dev, "no gpio for rtc: skipping\n");
-> +		return -ENOENT;
-> +	}
-> +
-> +	irq = gpiod_to_irq(gpiod);
-> +	if (irq < 0) {
-> +		dev_err(dev, "gpio found but no irq\n");
-> +		err = irq;
-> +		goto error_gpio;
-> +	}
-> +
-> +	irqflags = IRQF_ONESHOT;
-> +	irqflags |= gpiod_is_active_low(gpiod) ?
-> +		    IRQF_TRIGGER_FALLING : IRQF_TRIGGER_RISING;
-> +
-> +	err = devm_request_threaded_irq(dev, irq, NULL, rv8803_handle_irq,
-> +					irqflags, "rtc-rv8803-gpio", client);
-> +	if (err) {
-> +		dev_warn(dev, "unable to request IRQ\n");
-> +		goto error_gpio;
-> +	}
-> +
-> +	err = device_init_wakeup(dev, true);
-> +	if (err) {
-> +		dev_warn(dev, "unable to set as wakeup source\n");
-> +		goto error_irq;
-> +	}
-> +
-> +	err = dev_pm_set_wake_irq(dev, irq);
-> +	if (err) {
-> +		dev_warn(dev, "unable to set wake irq\n");
-> +		goto error_irq;
-> +	}
-> +
-> +	return 0;
-> +
-> +error_irq:
-> +	devm_free_irq(dev, irq, client);
-> +error_gpio:
-> +	devm_gpiod_put(dev, gpiod);
-> +	return err;
-> +}
-> +
->  static int rv8803_probe(struct i2c_client *client,
->  			const struct i2c_device_id *id)
->  {
-> @@ -524,6 +580,7 @@ static int rv8803_probe(struct i2c_client *client,
->  		.reg_write = rv8803_nvram_write,
->  		.priv = client,
->  	};
-> +	bool irq_setup = false;
->  
->  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA |
->  				     I2C_FUNC_SMBUS_I2C_BLOCK)) {
-> @@ -562,17 +619,23 @@ static int rv8803_probe(struct i2c_client *client,
->  	if (IS_ERR(rv8803->rtc))
->  		return PTR_ERR(rv8803->rtc);
->  
-> -	if (client->irq > 0) {
-> +	if (client->dev.of_node) {
-> +		err = rv8803_setup_gpio_irq(client);
-> +		if (!err)
-> +			irq_setup = true;
-> +	}
-> +
-> +	if (!irq_setup && client->irq > 0) {
->  		err = devm_request_threaded_irq(&client->dev, client->irq,
->  						NULL, rv8803_handle_irq,
->  						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
->  						"rv8803", client);
-> -		if (err) {
-> +		if (err)
->  			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
-> -			client->irq = 0;
-> -		}
-> +		else
-> +			irq_setup = true;
->  	}
-> -	if (!client->irq)
-> +	if (!irq_setup)
->  		clear_bit(RTC_FEATURE_ALARM, rv8803->rtc->features);
->  
->  	err = rv8803_write_reg(rv8803->client, RV8803_EXT, RV8803_EXT_WADA);
 > -- 
-> 2.30.2
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com <https://bootlin.com>
