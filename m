@@ -2,182 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5305A4423D4
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Nov 2021 00:14:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8D944243F
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Nov 2021 00:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbhKAXRR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 1 Nov 2021 19:17:17 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:1836 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229684AbhKAXRQ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 1 Nov 2021 19:17:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1635808482;
-  x=1667344482;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=z3BN2Y8GN2zH9YpSG6dTXVGhEXvbYAAcpFEo7GO+5qk=;
-  b=Z5IAA+HpshSSSTzpxgNNcawcCyk/h3nlgTMDaFujzrpF7o5YoU3jxWn6
-   p1486O4qDGx5iMmgIxW0NJ58fy3OFXhqrvzAsli+SzQc8OcwlM+u4hNpS
-   49xJO39uULgHWGe/LD9qS78joVykmHy3P3uWfZuY0LclWVxiV7wM+7PDT
-   kT5RF7bRDUyZ4tEOeFmS9eAK8ngQPZXphi8nukrF2oYJvBlYE4Z3wOxUx
-   qlaZUpA1vRTshnP25EP0ssXnWOLSY8BODqS8rXaEy6/howETsP+b3YP0Q
-   qid6noBYgd6aFgswyVktZ3X2emPfSXgCY08SmMlZd1zRkJbeXQx0EDnKJ
-   Q==;
-Subject: Re: [PATCH 1/2] rtc: rs5c372: Add support for trim configuration
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Pavel Modilaynen <Pavel.Modilaynen@axis.com>
-CC:     "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-References: <20211030225054.32114-1-pavel.modilaynen@axis.com>
- <20211030225054.32114-2-pavel.modilaynen@axis.com>
- <YX3N9b6P4w1kSGfp@piout.net> <6cc22970-fa11-ccb4-c155-62396a7e3890@axis.com>
- <YYAwkZ0RmhyfSewe@piout.net>
-From:   Pavel Modilaynen <pavelmn@axis.com>
-Message-ID: <2cd99097-043e-8aed-bc0d-a4d9fa8a38e8@axis.com>
-Date:   Tue, 2 Nov 2021 00:14:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S230468AbhKAXnm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 1 Nov 2021 19:43:42 -0400
+Received: from gw2.atmark-techno.com ([35.74.137.57]:33302 "EHLO
+        gw2.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230396AbhKAXnm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Nov 2021 19:43:42 -0400
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        by gw2.atmark-techno.com (Postfix) with ESMTPS id 629AB20D0C
+        for <linux-rtc@vger.kernel.org>; Tue,  2 Nov 2021 08:41:06 +0900 (JST)
+Received: by mail-pf1-f199.google.com with SMTP id s39-20020a056a0017a700b00481146e614cso1955933pfg.9
+        for <linux-rtc@vger.kernel.org>; Mon, 01 Nov 2021 16:41:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=By2nrQuCIKQf3NwzY9ElfQ1+ViWJvdE8NoIkqa/IBjs=;
+        b=wBkDn+m+1Sh2RfVuDS9VM2cJRjp/DvfqZPAsr0NyCe0jlVLyF9tLFD1dH3zZUpO+bf
+         AaKCvH7H14KYf64VJTEAXFkGof1CRC7awh8L845H8BkYcNEVSpW3lMsN85fJ5iO4Hz4L
+         kpyfzKwLJIIL7UtKvnBCxhIXyT3D7r9bRjj6l+Xg9MqLXjVWCmbbhvmQzb5O5I6mUInj
+         XGHRg78Zb0NX/bS6v1lvzYYHCumwLBD0fkIBuhRf2NrPEe1hW70+ogDCIKxqVEbFD8Y6
+         z42233Gzdc4XXe/xrGIoPpjl4XXtV68SLswZ190mh0SE1rwfYutdlnfN6bi5G0E+BMxS
+         3EDA==
+X-Gm-Message-State: AOAM5300H0Dv7JPn1tmKpZeIpWzmMLcgfAI0lvO4oIpVZKe1Eu/0Ett+
+        u2f1LBC5a/CAbzq35vXAj94+NV7OJra0KB/JulJd4CDJuAb+J34lQ1pKr8vmFnIW2nLGQUZp64k
+        1lj9zxBLSIM6YPJDX5eM10Q==
+X-Received: by 2002:a17:90a:4fa1:: with SMTP id q30mr2368106pjh.12.1635810065468;
+        Mon, 01 Nov 2021 16:41:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwKq07jW36bYZxVDX5xVHL1vEAzZYjXVifD+GkKzqnt6PSGYkqOLdf8EWVUYOJvICQ7EySleQ==
+X-Received: by 2002:a17:90a:4fa1:: with SMTP id q30mr2368072pjh.12.1635810065211;
+        Mon, 01 Nov 2021 16:41:05 -0700 (PDT)
+Received: from pc-0115 (103.131.189.35.bc.googleusercontent.com. [35.189.131.103])
+        by smtp.gmail.com with ESMTPSA id w21sm17737559pfu.68.2021.11.01.16.41.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Nov 2021 16:41:04 -0700 (PDT)
+Received: from martinet by pc-0115 with local (Exim 4.94.2)
+        (envelope-from <martinet@pc-0115>)
+        id 1mhgvH-002dX5-LD; Tue, 02 Nov 2021 08:41:03 +0900
+Date:   Tue, 2 Nov 2021 08:40:53 +0900
+From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 2/2] rv8803: add irq-gpio optional dts attribute
+Message-ID: <YYB7BXuLXWuiWGw6@atmark-techno.com>
+References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
+ <20211101013400.325855-2-dominique.martinet@atmark-techno.com>
+ <YYBuzqZD8/uK3d6Z@piout.net>
 MIME-Version: 1.0
-In-Reply-To: <YYAwkZ0RmhyfSewe@piout.net>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail05w.axis.com (10.20.40.11) To se-mail05w.axis.com
- (10.20.40.11)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YYBuzqZD8/uK3d6Z@piout.net>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre,
-
-On 11/1/21 7:23 PM, Alexandre Belloni wrote:
-> On 31/10/2021 11:29:12+0100, Pavel Modilaynen wrote:
->> On 10/31/21 12:57 AM, Alexandre Belloni wrote:
->> > Hello,
->> > 
->> > Please use the proper RTC interface by implementing .set_offset and
->> > .read_offset.
->> 
->> I am not sure about .set/read_offset. It looks as runtime adjustment
->> interface,
->> however this Xtal trimming parameter is based on schematics and Xtal
->> capacitance (datasheet parameter).
->> It is found by calibration procedure based on RTC clock output (the
->> procedure and calculation of trimming parameter is described in datasheets).
->> So, I would like to say that this parameter is functionally close to
->> "quartz-load-femtofarads" for rtc-pcf8523/pcf85063.
->> 
+Alexandre Belloni wrote on Mon, Nov 01, 2021 at 11:48:46PM +0100:
+> On 01/11/2021 10:34:00+0900, Dominique Martinet wrote:
+> > Some device cannot be woken up from i2c signal.
+> > Add a new irq-gpio attribute for devices which have a gpio connected to
+> > the rv8803 INT line so the rtc can be used for suspend to mem
 > 
-> quartz-load-femtofarads is for analog trimming which this RTC doesn't
-> have, both CD and CG are set to 10pF. .set/read_offset are for digital
-> trimming which is what you are configuring here. You definitively want
-> to be able to do that at runtime as you need to adjust for temperature
-> and ageing of the crystal (datasheet, page 14: "For those systems that
-> have temperature detection precision of clock function may be increased
-> by correcting clock error according to temperature fluctuations.")
->
+> I don't think this is right, the interrupts property of the rtc node can
+> point to a gpio and this is expected to be the one connected on INT. You
+> don't need another property.
 
-Thank you for reply.
+Oh, why didn't I know about such a useful property.
 
-I am not denying the need in runtime adjustment related to
-temperature, aging and precision, which you are referring by excerpt 
-from p.14.
-
-I would like to make a point that Xtal trimming is for coarse grained 
-adjustment (pages 36-39), primarily related to Xtal capacitance CL (not 
-CD/CG). Our goal is to keep a reasonable  drift of ,say, <1 second per 
-day and for Xtal that we use with 12.5pF RTC manufacturer recommends 
-using 0x23 value for adjustment. In this case we act according to (A) 
-course from page 38:
-
-"Adjustment of clock is not made for IC (no adjustment) and any CL value 
-may be used for the crystal oscillator. Precision fluctuations of a 
-crystal oscillator may be selected as long as clock precision allows. 
-Obtain the central frequency as described in section 2.2 using several 
-crystal oscillator and ICs, determine an adjustment value as
-described in “2.4 Time Trimming Circuit” which shall be set to the 
-RS5C372A/B."
+I thought I'd have a problem with the device wakeup part but there also
+is another 'wakeup-source' property, so there is really nothing left to
+do for this patch.
+Thank you for the pointer, no code is the best code!
 
 
->> > 
->> > On 31/10/2021 00:50:53+0200, Pavel Modilaynen wrote:
->> > > From: Pavel Modilaynen <pavelmn@axis.com>
->> > > 
->> > > Add support for oscillation adjustment register RS5C372_REG_TRIM
->> > > setting that is needed to accommodate for effective crystal
->> > > capacitance.
->> > > 
->> > > Use optional property ricoh,trim that should contain
->> > > raw value to setup this register. According to
->> > > datasheets for RS5C372, R2025S/D, RV5C38[67] and R222[13]
->> > > the value will be converted to a number of ticks that
->> > > is to be subtracted or added when the second digits read
->> > > 00, 20 or 40 seconds.
->> > > 
->> > > Signed-off-by: Pavel Modilaynen <pavelmn@axis.com>
->> > > ---
->> > >   drivers/rtc/rtc-rs5c372.c | 18 +++++++++++++++++-
->> > >   1 file changed, 17 insertions(+), 1 deletion(-)
->> > > 
->> > > diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
->> > > index 80980414890c..3a2db0326669 100644
->> > > --- a/drivers/rtc/rtc-rs5c372.c
->> > > +++ b/drivers/rtc/rtc-rs5c372.c
->> > > @@ -13,6 +13,7 @@
->> > >   #include <linux/slab.h>
->> > >   #include <linux/module.h>
->> > >   #include <linux/of_device.h>
->> > > +#include <linux/of.h>
->> > >   /*
->> > >    * Ricoh has a family of I2C based RTCs, which differ only slightly from
->> > > @@ -560,6 +561,8 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
->> > >   {
->> > >         unsigned char buf[2];
->> > >         int addr, i, ret = 0;
->> > > +     struct i2c_client *client = rs5c372->client;
->> > > +     u8 trim = 0;
->> > >         addr   = RS5C_ADDR(RS5C_REG_CTRL1);
->> > >         buf[0] = rs5c372->regs[RS5C_REG_CTRL1];
->> > > @@ -599,9 +602,22 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
->> > >                 break;
->> > >         }
->> > > +     /* optional setup of xtal trimming */
->> > > +     if (!of_property_read_u8(client->dev.of_node, "ricoh,trim", &trim)) {
->> > > +             if (rs5c372->type != rtc_r2221tl && (trim & ~RS5C372_TRIM_MASK)) {
->> > > +                     dev_warn(&client->dev, "Erroneous setting for ricoh,trim in devicetree\n");
->> > > +             } else {
->> > > +                     int addr = RS5C_ADDR(RS5C372_REG_TRIM);
->> > > +                     int ret = i2c_smbus_write_byte_data(client, addr, trim);
->> > > +
->> > > +                     if (unlikely(ret < 0))
->> > > +                             return ret;
->> > > +             }
->> > > +     }
->> > > +
->> > >         for (i = 0; i < sizeof(buf); i++) {
->> > >                 addr = RS5C_ADDR(RS5C_REG_CTRL1 + i);
->> > > -             ret = i2c_smbus_write_byte_data(rs5c372->client, addr, buf[i]);
->> > > +             ret = i2c_smbus_write_byte_data(client, addr, buf[i]);
->> > >                 if (unlikely(ret < 0))
->> > >                         return ret;
->> > >         }
->> > > -- 
->> > > 2.20.1
->> > > 
->> > 
->> > -- 
->> > Alexandre Belloni, co-owner and COO, Bootlin
->> > Embedded Linux and Kernel engineering
->> > https://bootlin.com <https://bootlin.com> <https://bootlin.com 
-> <https://bootlin.com>>
+Rob Herring wrote on Mon, Nov 01, 2021 at 07:53:52AM -0500:
+> Please send DT patches to the DT list.
 > 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com <https://bootlin.com>
+> Binding changes should be a separate patch.
+
+Ack, I'll do that for new patches onwards. It looks like a DT change
+will not be required here but I will remember this.
+
+
+Thanks,
+-- 
+Dominique
