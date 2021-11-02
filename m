@@ -2,92 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8D944243F
-	for <lists+linux-rtc@lfdr.de>; Tue,  2 Nov 2021 00:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787F144270C
+	for <lists+linux-rtc@lfdr.de>; Tue,  2 Nov 2021 07:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbhKAXnm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 1 Nov 2021 19:43:42 -0400
-Received: from gw2.atmark-techno.com ([35.74.137.57]:33302 "EHLO
-        gw2.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbhKAXnm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Nov 2021 19:43:42 -0400
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        by gw2.atmark-techno.com (Postfix) with ESMTPS id 629AB20D0C
-        for <linux-rtc@vger.kernel.org>; Tue,  2 Nov 2021 08:41:06 +0900 (JST)
-Received: by mail-pf1-f199.google.com with SMTP id s39-20020a056a0017a700b00481146e614cso1955933pfg.9
-        for <linux-rtc@vger.kernel.org>; Mon, 01 Nov 2021 16:41:06 -0700 (PDT)
+        id S229510AbhKBGYn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 2 Nov 2021 02:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhKBGYl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 2 Nov 2021 02:24:41 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB9BC061714;
+        Mon,  1 Nov 2021 23:22:07 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id k4so4588653plx.8;
+        Mon, 01 Nov 2021 23:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Nhi8A69n35wz1j8eG1NavWlgxA1pSKinVrZqcjltJbI=;
+        b=V/vUTfg2BkVrAzjLmhrRCg40Do8FURrxL/qf6MuZ+Awqz+Xmt2HGD47BxQsjQzLuGV
+         rircwI0/Z/f1ugTHVHzuQ8+Yp3h92l3xCDJQ4vFTSVg4E2GbIF1wiKMP1TxHIGC5YnPX
+         0BZL9+59NUUWFRAtDyKQMVihUExCwcJcGtPEX9Dj55pDECy5xFy2dNmVf5K182yinziD
+         TKqD8DzZO0kZ4GyC8r/4h3fknLzMMlSWozWsMFEQ9Mbhr55lHvUK7Kiv75kSpIKC37ib
+         f+6omtLldJgz2o3evA2PxdJyiOgVs94oKkrxhvfOo6LUGG39EVWSSuwrqJUKChYMRZsA
+         xGsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=By2nrQuCIKQf3NwzY9ElfQ1+ViWJvdE8NoIkqa/IBjs=;
-        b=wBkDn+m+1Sh2RfVuDS9VM2cJRjp/DvfqZPAsr0NyCe0jlVLyF9tLFD1dH3zZUpO+bf
-         AaKCvH7H14KYf64VJTEAXFkGof1CRC7awh8L845H8BkYcNEVSpW3lMsN85fJ5iO4Hz4L
-         kpyfzKwLJIIL7UtKvnBCxhIXyT3D7r9bRjj6l+Xg9MqLXjVWCmbbhvmQzb5O5I6mUInj
-         XGHRg78Zb0NX/bS6v1lvzYYHCumwLBD0fkIBuhRf2NrPEe1hW70+ogDCIKxqVEbFD8Y6
-         z42233Gzdc4XXe/xrGIoPpjl4XXtV68SLswZ190mh0SE1rwfYutdlnfN6bi5G0E+BMxS
-         3EDA==
-X-Gm-Message-State: AOAM5300H0Dv7JPn1tmKpZeIpWzmMLcgfAI0lvO4oIpVZKe1Eu/0Ett+
-        u2f1LBC5a/CAbzq35vXAj94+NV7OJra0KB/JulJd4CDJuAb+J34lQ1pKr8vmFnIW2nLGQUZp64k
-        1lj9zxBLSIM6YPJDX5eM10Q==
-X-Received: by 2002:a17:90a:4fa1:: with SMTP id q30mr2368106pjh.12.1635810065468;
-        Mon, 01 Nov 2021 16:41:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwKq07jW36bYZxVDX5xVHL1vEAzZYjXVifD+GkKzqnt6PSGYkqOLdf8EWVUYOJvICQ7EySleQ==
-X-Received: by 2002:a17:90a:4fa1:: with SMTP id q30mr2368072pjh.12.1635810065211;
-        Mon, 01 Nov 2021 16:41:05 -0700 (PDT)
-Received: from pc-0115 (103.131.189.35.bc.googleusercontent.com. [35.189.131.103])
-        by smtp.gmail.com with ESMTPSA id w21sm17737559pfu.68.2021.11.01.16.41.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Nhi8A69n35wz1j8eG1NavWlgxA1pSKinVrZqcjltJbI=;
+        b=MKGn3qdZ9EmGILy4ziTeJn3TSTW/En1M8DuixxWnop0A2tLLH/ow0jTvdMjh16Z+vj
+         ++MY0jbyXjtxWZcyqjWPFP/Bq7qrBKjvZsnKafWjLcYEDAsd7B04dBVmF5GR/qESbDZY
+         7THKago/Kmcr/suz7yebtRO7SW9w+0R0uMOX+kTX3brH5FVH15SITStGQVf1PL1waxU/
+         iL8QTkgaPbQo+xjSTL1pioYpDqCGQdALBqM5VeJPpmIJJxHcQb+bXkR7WGif0uQH7yVe
+         ezPTHG7xYdWh5DAnbT3HVp/7frOmiD0QEomDENk40cj9kuSHGGBy8QGpgTk6JTpQcBZX
+         FvJA==
+X-Gm-Message-State: AOAM5313WWHzeSpYK84AxsIWn4lgkO8IKFzCTn2zPgzJdA2Q4l0qUqhh
+        i4CaCTh8JcNzlGijtrs6tDSzNgrMjzGBXA==
+X-Google-Smtp-Source: ABdhPJwC0E4yPCAHfK7CT3Xzwhf7DMzbwcFu8MAbU79w/UUDVBX3nJLSgWwDGOxd+teoUOYANjZRTw==
+X-Received: by 2002:a17:90a:c394:: with SMTP id h20mr4331478pjt.136.1635834127165;
+        Mon, 01 Nov 2021 23:22:07 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id v2sm14859402pga.57.2021.11.01.23.22.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Nov 2021 16:41:04 -0700 (PDT)
-Received: from martinet by pc-0115 with local (Exim 4.94.2)
-        (envelope-from <martinet@pc-0115>)
-        id 1mhgvH-002dX5-LD; Tue, 02 Nov 2021 08:41:03 +0900
-Date:   Tue, 2 Nov 2021 08:40:53 +0900
-From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marek Vasut <marex@denx.de>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/2] rv8803: add irq-gpio optional dts attribute
-Message-ID: <YYB7BXuLXWuiWGw6@atmark-techno.com>
-References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
- <20211101013400.325855-2-dominique.martinet@atmark-techno.com>
- <YYBuzqZD8/uK3d6Z@piout.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YYBuzqZD8/uK3d6Z@piout.net>
+        Mon, 01 Nov 2021 23:22:06 -0700 (PDT)
+From:   Vincent Shih <vincent.sunplus@gmail.com>
+X-Google-Original-From: Vincent Shih <vincent.shih@sunplus.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Vincent Shih <vincent.shih@sunplus.com>
+Subject: [PATCH 0/2] Add RTC driver for Sunplus SP7021 SoC
+Date:   Tue,  2 Nov 2021 14:22:01 +0800
+Message-Id: <1635834123-24668-1-git-send-email-vincent.shih@sunplus.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Alexandre Belloni wrote on Mon, Nov 01, 2021 at 11:48:46PM +0100:
-> On 01/11/2021 10:34:00+0900, Dominique Martinet wrote:
-> > Some device cannot be woken up from i2c signal.
-> > Add a new irq-gpio attribute for devices which have a gpio connected to
-> > the rv8803 INT line so the rtc can be used for suspend to mem
-> 
-> I don't think this is right, the interrupts property of the rtc node can
-> point to a gpio and this is expected to be the one connected on INT. You
-> don't need another property.
+This is a patch series for RTC driver for Sunplus SP7021 SoC.
 
-Oh, why didn't I know about such a useful property.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
+etc.) into a single chip. It is designed for industrial control.
 
-I thought I'd have a problem with the device wakeup part but there also
-is another 'wakeup-source' property, so there is really nothing left to
-do for this patch.
-Thank you for the pointer, no code is the best code!
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
+Vincent Shih (2):
+  rtc: Add driver for Sunplus SP7021
+  dt-bindings: rtc: Convert Sunplus RTC to json-schema
 
-Rob Herring wrote on Mon, Nov 01, 2021 at 07:53:52AM -0500:
-> Please send DT patches to the DT list.
-> 
-> Binding changes should be a separate patch.
+ .../bindings/rtc/sunplus,sp7021-rtc.yaml           |  58 +++
+ MAINTAINERS                                        |   7 +
+ drivers/rtc/Kconfig                                |  10 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-sunplus.c                          | 389 +++++++++++++++++++++
+ 5 files changed, 465 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-sunplus.c
 
-Ack, I'll do that for new patches onwards. It looks like a DT change
-will not be required here but I will remember this.
-
-
-Thanks,
 -- 
-Dominique
+2.7.4
+
