@@ -2,203 +2,150 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD94A445426
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Nov 2021 14:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A01A445D11
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 Nov 2021 01:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbhKDNpL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Nov 2021 09:45:11 -0400
-Received: from mail-qt1-f181.google.com ([209.85.160.181]:37529 "EHLO
-        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbhKDNnM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Nov 2021 09:43:12 -0400
-Received: by mail-qt1-f181.google.com with SMTP id o12so4105071qtv.4;
-        Thu, 04 Nov 2021 06:40:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Xa2FxXm6EvIpFGYPWL3bZJ+I6Y3hXoRrueVo8Uzn4QU=;
-        b=ysJsTFQbWMQOpo0OOU7ged1wHdVgxtgm312o+ch19B4bqL76Km9V4kZfOIGANjApIe
-         CeNOC7724zwX3BRKNaIjrCZwGKUYbz34odD10KnobPzU+C26kxWMGRiYK3BBvvQnDZHn
-         VcweRnOJomQAarfzCjpUMKvNbwRvtxAINPShyNwX8VdHGauqOQITRsLG4dXIhnsg939f
-         aVKXOFnYoF7uFhjZgNvduGG2hn0OYcrnsj/FT0xn0MM9XSPaNdD+kCSwSr4pGxqaWE11
-         ljG8jQM53bE9Q+aUseV751T+eykcD0Duce68uTTSoIxYtxCrUi4AMe9F5ddh8Gsvw4mM
-         2Kdw==
-X-Gm-Message-State: AOAM531PMsZnIb049gaVjbjU+zekRisGR0khpBgcFuDSquXcMgEAB4vY
-        1hq3unkBHLRF0m0pHA24hOCWtUs+2/g=
-X-Google-Smtp-Source: ABdhPJwpvNoqDh0GmZQzfNPdQ5UlrzRoxGpKJ2AJPG2aGoaGToi0wBxFrPmvmZ5KbpPIo4ruZOvMKQ==
-X-Received: by 2002:ac8:6112:: with SMTP id a18mr53329488qtm.401.1636033231236;
-        Thu, 04 Nov 2021 06:40:31 -0700 (PDT)
-Received: from mfe-desktop.dimonoffinc.intra (ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca. [142.116.33.166])
-        by smtp.googlemail.com with ESMTPSA id k4sm3187684qko.79.2021.11.04.06.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Nov 2021 06:40:30 -0700 (PDT)
-From:   ferlandm@amotus.ca
-To:     a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marc Ferland <ferlandm@amotus.ca>
-Subject: [PATCH] rtc: pcf85063: add i2c_device_id name matching support
-Date:   Thu,  4 Nov 2021 09:40:07 -0400
-Message-Id: <20211104134007.1159581-1-ferlandm@amotus.ca>
-X-Mailer: git-send-email 2.30.2
+        id S229971AbhKEAnf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Nov 2021 20:43:35 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:9290 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229587AbhKEAnf (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 4 Nov 2021 20:43:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1636072857;
+  x=1667608857;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GjYacMkXqPa7BY/QUGUd7Cu5vTMkFLoJdOBo70fFGAg=;
+  b=i01lGdl8iJZG1tdXDENeI33ZPdqzekc107SLf312ar65YE13gO3J8DTO
+   1wxUqXIVrqW9xYwZDy6Ka2rYHZbHeZgbHWtFGksebh7mhHJyMIYbcKfyb
+   uFlAu743z18hjwcHnSnMbnNb7t9L63Z+SFgL9M5ZPBDBxE2iP2wUu87yf
+   URugCrolvalmUa6rJ5CYO0pMawMFdKple7F0XcqC6YE1+Xltt5euCxzp8
+   XeaYZn1RpJUgd0sNCDyaXfcUWuH2Pr4VlOOnCGJcG78ualMUr/kIxEy0k
+   aU46+VuaRHmNI4xzdaEgjRn4bo/0runoB1BwU3yiytR/IAG+YeMlGEjcD
+   A==;
+From:   Pavel Modilaynen <pavel.modilaynen@axis.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>, Pavel Modilaynen <pavelmn@axis.com>
+Subject: [PATCH] rtc: rs5c372: Add support of RTC_VL_READ ioctl
+Date:   Fri, 5 Nov 2021 01:40:49 +0100
+Message-ID: <20211105004049.5486-1-pavel.modilaynen@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Marc Ferland <ferlandm@amotus.ca>
+From: Pavel Modilaynen <pavelmn@lnxpavelmn.se.axis.com>
 
-The pcf85063 driver regsitration currently supports the "compatible"
-property type of matching (for DT).
+Read, cache and expose with RTC_VL_READ ioctl low voltage
+detection flag. It is supported on all devices except RS5C372A/B,
+for which osciallation halt detection bit is interpreted
+as low voltage condition.
+Add RTC_VL_CLEAR ioctl to clear the cached value.
 
-This patch adds "matching by name" support to the driver by defining
-an i2c_device_id table and setting the id_table parameter in the
-i2c_driver struct.
-
-This will, for example, make the driver easier to instantiate on
-systems where CONFIG_OF is not enabled (x86 in my case).
-
-Signed-off-by: Marc Ferland <ferlandm@amotus.ca>
+Signed-off-by: Pavel Modilaynen <pavelmn@lnxpavelmn.se.axis.com>
 ---
- drivers/rtc/rtc-pcf85063.c | 92 +++++++++++++++++++++++++-------------
- 1 file changed, 61 insertions(+), 31 deletions(-)
+ drivers/rtc/rtc-rs5c372.c | 46 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/rtc/rtc-pcf85063.c b/drivers/rtc/rtc-pcf85063.c
-index 14da4ab30104..521607213ada 100644
---- a/drivers/rtc/rtc-pcf85063.c
-+++ b/drivers/rtc/rtc-pcf85063.c
-@@ -500,21 +500,56 @@ static struct clk *pcf85063_clkout_register_clk(struct pcf85063 *pcf85063)
- }
+diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+index 80980414890c..68d2ed9670c4 100644
+--- a/drivers/rtc/rtc-rs5c372.c
++++ b/drivers/rtc/rtc-rs5c372.c
+@@ -126,6 +126,7 @@ struct rs5c372 {
+ 	unsigned		smbus:1;
+ 	char			buf[17];
+ 	char			*regs;
++	int			voltage_low;
+ };
+ 
+ static int rs5c_get_regs(struct rs5c372 *rs5c)
+@@ -216,22 +217,40 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 	if (status < 0)
+ 		return status;
+ 
++	/* check the warning bits */
+ 	switch (rs5c->type) {
+ 	case rtc_r2025sd:
+ 	case rtc_r2221tl:
+ 		if ((rs5c->type == rtc_r2025sd && !(ctrl2 & R2x2x_CTRL2_XSTP)) ||
+ 		    (rs5c->type == rtc_r2221tl &&  (ctrl2 & R2x2x_CTRL2_XSTP))) {
+ 			dev_warn(&client->dev, "rtc oscillator interruption detected. Please reset the rtc clock.\n");
++			/* keep it as indicator of low/dead battery */
++			rs5c->voltage_low = 1;
+ 			return -EINVAL;
+ 		}
+ 		break;
+ 	default:
+ 		if (ctrl2 & RS5C_CTRL2_XSTP) {
+ 			dev_warn(&client->dev, "rtc oscillator interruption detected. Please reset the rtc clock.\n");
++			/* keep it as indicator of low/dead battery */
++			rs5c->voltage_low = 1;
+ 			return -EINVAL;
+ 		}
+ 	}
+ 
++
++	switch (rs5c->type) {
++	case rtc_rs5c372a:
++	case rtc_rs5c372b:
++		break;
++	default:
++		if (ctrl2 & R2x2x_CTRL2_VDET) {
++			rs5c->voltage_low = 1;
++			dev_warn(&client->dev, "low voltage detected\n");
++		}
++		break;
++	}
++
+ 	tm->tm_sec = bcd2bin(rs5c->regs[RS5C372_REG_SECS] & 0x7f);
+ 	tm->tm_min = bcd2bin(rs5c->regs[RS5C372_REG_MINS] & 0x7f);
+ 	tm->tm_hour = rs5c_reg2hr(rs5c, rs5c->regs[RS5C372_REG_HOURS]);
+@@ -485,6 +504,32 @@ static int rs5c372_rtc_proc(struct device *dev, struct seq_file *seq)
+ #define	rs5c372_rtc_proc	NULL
  #endif
  
--static const struct pcf85063_config pcf85063tp_config = {
--	.regmap = {
--		.reg_bits = 8,
--		.val_bits = 8,
--		.max_register = 0x0a,
-+enum pcf85063_type {
-+	PCF85063,
-+	PCF85063TP,
-+	PCF85063A,
-+	RV8263,
-+};
++#ifdef CONFIG_RTC_INTF_DEV
++static int rs5c372_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
++{
++	struct rs5c372	*rs5c = i2c_get_clientdata(to_i2c_client(dev));
 +
-+static struct pcf85063_config pcf85063_cfg[] = {
-+	[PCF85063] = {
-+		.regmap = {
-+			.reg_bits = 8,
-+			.val_bits = 8,
-+			.max_register = 0x0a,
-+		},
-+	},
-+	[PCF85063TP] = {
-+		.regmap = {
-+			.reg_bits = 8,
-+			.val_bits = 8,
-+			.max_register = 0x0a,
-+		},
-+	},
-+	[PCF85063A] = {
-+		.regmap = {
-+			.reg_bits = 8,
-+			.val_bits = 8,
-+			.max_register = 0x11,
-+		},
-+		.has_alarms = 1,
-+	},
-+	[RV8263] = {
-+		.regmap = {
-+			.reg_bits = 8,
-+			.val_bits = 8,
-+			.max_register = 0x11,
-+		},
-+		.has_alarms = 1,
-+		.force_cap_7000 = 1,
- 	},
- };
- 
-+static const struct i2c_device_id pcf85063_ids[];
++	dev_dbg(dev, "%s: cmd=%x\n", __func__, cmd);
 +
- static int pcf85063_probe(struct i2c_client *client)
- {
- 	struct pcf85063 *pcf85063;
- 	unsigned int tmp;
- 	int err;
--	const struct pcf85063_config *config = &pcf85063tp_config;
--	const void *data = of_device_get_match_data(&client->dev);
-+	const struct pcf85063_config *config;
-+	enum pcf85063_type type;
- 	struct nvmem_config nvmem_cfg = {
- 		.name = "pcf85063_nvram",
- 		.reg_read = pcf85063_nvmem_read,
-@@ -530,8 +565,12 @@ static int pcf85063_probe(struct i2c_client *client)
- 	if (!pcf85063)
- 		return -ENOMEM;
- 
--	if (data)
--		config = data;
-+	if (client->dev.of_node)
-+		type = (enum pcf85063_type)of_device_get_match_data(&client->dev);
-+	else
-+		type = i2c_match_id(pcf85063_ids, client)->driver_data;
++	switch (cmd) {
++	case RTC_VL_READ:
++		if (rs5c->voltage_low)
++			dev_info(dev, "low voltage detected, date/time is not reliable.\n");
 +
-+	config = &pcf85063_cfg[type];
- 
- 	pcf85063->regmap = devm_regmap_init_i2c(client, &config->regmap);
- 	if (IS_ERR(pcf85063->regmap))
-@@ -590,31 +629,21 @@ static int pcf85063_probe(struct i2c_client *client)
- 	return devm_rtc_register_device(pcf85063->rtc);
- }
- 
--#ifdef CONFIG_OF
--static const struct pcf85063_config pcf85063a_config = {
--	.regmap = {
--		.reg_bits = 8,
--		.val_bits = 8,
--		.max_register = 0x11,
--	},
--	.has_alarms = 1,
--};
--
--static const struct pcf85063_config rv8263_config = {
--	.regmap = {
--		.reg_bits = 8,
--		.val_bits = 8,
--		.max_register = 0x11,
--	},
--	.has_alarms = 1,
--	.force_cap_7000 = 1,
-+static const struct i2c_device_id pcf85063_ids[] = {
-+	{ "pcf85063", PCF85063 },
-+	{ "pcf85063tp", PCF85063TP },
-+	{ "pcf85063a", PCF85063A },
-+	{ "rv8263", RV8263 },
-+	{}
- };
-+MODULE_DEVICE_TABLE(i2c, pcf85063_ids);
- 
-+#ifdef CONFIG_OF
- static const struct of_device_id pcf85063_of_match[] = {
--	{ .compatible = "nxp,pcf85063", .data = &pcf85063tp_config },
--	{ .compatible = "nxp,pcf85063tp", .data = &pcf85063tp_config },
--	{ .compatible = "nxp,pcf85063a", .data = &pcf85063a_config },
--	{ .compatible = "microcrystal,rv8263", .data = &rv8263_config },
-+	{ .compatible = "nxp,pcf85063", .data =  (void *)PCF85063 },
-+	{ .compatible = "nxp,pcf85063tp", .data = (void *)PCF85063TP },
-+	{ .compatible = "nxp,pcf85063a", .data = (void *)PCF85063A },
-+	{ .compatible = "microcrystal,rv8263", .data = (void *)RV8263 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, pcf85063_of_match);
-@@ -626,6 +655,7 @@ static struct i2c_driver pcf85063_driver = {
- 		.of_match_table = of_match_ptr(pcf85063_of_match),
- 	},
- 	.probe_new	= pcf85063_probe,
-+	.id_table	= pcf85063_ids,
++		return put_user(rs5c->voltage_low, (unsigned int __user *)arg);
++	case RTC_VL_CLR:
++		/* Clear the cached value. */
++		rs5c->voltage_low = 0;
++		return 0;
++	default:
++		return -ENOIOCTLCMD;
++	}
++	return 0;
++}
++#else
++#define rs5c372_ioctl	NULL
++#endif
++
+ static const struct rtc_class_ops rs5c372_rtc_ops = {
+ 	.proc		= rs5c372_rtc_proc,
+ 	.read_time	= rs5c372_rtc_read_time,
+@@ -492,6 +537,7 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
+ 	.read_alarm	= rs5c_read_alarm,
+ 	.set_alarm	= rs5c_set_alarm,
+ 	.alarm_irq_enable = rs5c_rtc_alarm_irq_enable,
++	.ioctl		= rs5c372_ioctl,
  };
  
- module_i2c_driver(pcf85063_driver);
+ #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
 -- 
-2.30.2
+2.20.1
 
