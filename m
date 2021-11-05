@@ -2,194 +2,173 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4294463A7
-	for <lists+linux-rtc@lfdr.de>; Fri,  5 Nov 2021 13:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFA94465AE
+	for <lists+linux-rtc@lfdr.de>; Fri,  5 Nov 2021 16:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbhKEMzi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 5 Nov 2021 08:55:38 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:51511 "EHLO
+        id S233356AbhKEP3M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 5 Nov 2021 11:29:12 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:53131 "EHLO
         relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbhKEMzh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 Nov 2021 08:55:37 -0400
+        with ESMTP id S233488AbhKEP3L (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 5 Nov 2021 11:29:11 -0400
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 4D1D4100005;
-        Fri,  5 Nov 2021 12:52:55 +0000 (UTC)
-Date:   Fri, 5 Nov 2021 13:52:55 +0100
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id C37B9100007;
+        Fri,  5 Nov 2021 15:26:29 +0000 (UTC)
+Date:   Fri, 5 Nov 2021 16:26:29 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Vincent Shih =?utf-8?B?5pa96YyV6bS7?= <vincent.shih@sunplus.com>
-Cc:     Vincent Shih <vincent.sunplus@gmail.com>,
+To:     Pavel Modilaynen <pavelmn@axis.com>
+Cc:     Pavel Modilaynen <Pavel.Modilaynen@axis.com>,
         "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] rtc: Add driver for Sunplus SP7021
-Message-ID: <YYUpJ14jqK9gT4RD@piout.net>
-References: <1635834123-24668-1-git-send-email-vincent.shih@sunplus.com>
- <1635834123-24668-2-git-send-email-vincent.shih@sunplus.com>
- <YYHZdXqpNqzusQ5n@piout.net>
- <6b70a97056fe4ab79326b472227899da@sphcmbx02.sunplus.com.tw>
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH 1/2] rtc: rs5c372: Add support for trim configuration
+Message-ID: <YYVNJR0oAGuvOv6t@piout.net>
+References: <20211030225054.32114-1-pavel.modilaynen@axis.com>
+ <20211030225054.32114-2-pavel.modilaynen@axis.com>
+ <YX3N9b6P4w1kSGfp@piout.net>
+ <6cc22970-fa11-ccb4-c155-62396a7e3890@axis.com>
+ <YYAwkZ0RmhyfSewe@piout.net>
+ <2cd99097-043e-8aed-bc0d-a4d9fa8a38e8@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6b70a97056fe4ab79326b472227899da@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <2cd99097-043e-8aed-bc0d-a4d9fa8a38e8@axis.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/11/2021 12:05:22+0000, Vincent Shih 施錕鴻 wrote:
-> > > +static int sp_rtc_set_alarm(struct device *dev, struct rtc_wkalrm
-> > > +*alrm) {
-> > > +	struct rtc_device *rtc = dev_get_drvdata(dev);
-> > > +	unsigned long alarm_time;
-> > > +
-> > > +	alarm_time = rtc_tm_to_time64(&alrm->time);
-> > > +	RTC_DEBUG("%s, alarm_time: %u\n", __func__, (u32)(alarm_time));
-> > > +
-> > > +	if (alarm_time > 0xFFFFFFFF)
-> > > +		return -EINVAL;
+On 02/11/2021 00:14:39+0100, Pavel Modilaynen wrote:
+> Hi Alexandre,
+> 
+> On 11/1/21 7:23 PM, Alexandre Belloni wrote:
+> > On 31/10/2021 11:29:12+0100, Pavel Modilaynen wrote:
+> > > On 10/31/21 12:57 AM, Alexandre Belloni wrote:
+> > > > Hello,
+> > > > > Please use the proper RTC interface by implementing .set_offset
+> > > and
+> > > > .read_offset.
+> > > 
+> > > I am not sure about .set/read_offset. It looks as runtime adjustment
+> > > interface,
+> > > however this Xtal trimming parameter is based on schematics and Xtal
+> > > capacitance (datasheet parameter).
+> > > It is found by calibration procedure based on RTC clock output (the
+> > > procedure and calculation of trimming parameter is described in datasheets).
+> > > So, I would like to say that this parameter is functionally close to
+> > > "quartz-load-femtofarads" for rtc-pcf8523/pcf85063.
+> > > 
 > > 
-> > Please set the range of the rtc properly and the core will do this check for you.
+> > quartz-load-femtofarads is for analog trimming which this RTC doesn't
+> > have, both CD and CG are set to 10pF. .set/read_offset are for digital
+> > trimming which is what you are configuring here. You definitively want
+> > to be able to do that at runtime as you need to adjust for temperature
+> > and ageing of the crystal (datasheet, page 14: "For those systems that
+> > have temperature detection precision of clock function may be increased
+> > by correcting clock error according to temperature fluctuations.")
+> > 
 > 
-> I modified it as the following statements
+> Thank you for reply.
 > 
-> #define RTC_ALARM_SET 0x50		//register offset
-> #define ALARM_SET 0xFFFFFFFF		//field in the register
-> If (alarm_time > ALARM_SET)
->       return -EINVAL;
+> I am not denying the need in runtime adjustment related to
+> temperature, aging and precision, which you are referring by excerpt from
+> p.14.
 > 
-> Is it applicable??
+> I would like to make a point that Xtal trimming is for coarse grained
+> adjustment (pages 36-39), primarily related to Xtal capacitance CL (not
+> CD/CG). Our goal is to keep a reasonable  drift of ,say, <1 second per day
+> and for Xtal that we use with 12.5pF RTC manufacturer recommends using 0x23
+> value for adjustment. In this case we act according to (A) course from page
+> 38:
+> 
+> "Adjustment of clock is not made for IC (no adjustment) and any CL value may
+> be used for the crystal oscillator. Precision fluctuations of a crystal
+> oscillator may be selected as long as clock precision allows. Obtain the
+> central frequency as described in section 2.2 using several crystal
+> oscillator and ICs, determine an adjustment value as
+> described in “2.4 Time Trimming Circuit” which shall be set to the
+> RS5C372A/B."
 > 
 
-No, please set the rtc .range_min and .range_max and the core will do
-the check for you.
+This doesn't prevent you from using the .set/read_offset interface.
+Simply have a startup script that forcibly set the hardcoded value if
+this is what you want. However, I'm pretty sure your products have NTP
+which allows to precisely set a calculated value instead of an hardcoded
+one.
 
-> > 
-> > > +
-> > > +	if ((rtc->aie_timer.enabled) && (rtc->aie_timer.node.expires ==
-> > ktime_set(alarm_time, 0))) {
-> > > +		if (rtc->uie_rtctimer.enabled)
-> > > +			sp_rtc.set_alarm_again = 1;
-> > > +	}
-> > 
-> > You have to explain that.
 > 
-> Since the alarm and update interrupts use the same HW one, rtc->aie_timer.enabled,
-> rtc->uie_rtctimer.enabled and sp_rtc.set_alarm_again are used to distinguish between
-> alarm interrupt and update one in rtc_irq_handler() (RTC_UF or RTC_AF). There is
-> only alarm interrupt supported in out HW. I found the update interrupt is implemented
-> by the alarm one in kernel.
-> 
+> > > > > On 31/10/2021 00:50:53+0200, Pavel Modilaynen wrote:
+> > > > > From: Pavel Modilaynen <pavelmn@axis.com>
+> > > > > > > Add support for oscillation adjustment register
+> > > RS5C372_REG_TRIM
+> > > > > setting that is needed to accommodate for effective crystal
+> > > > > capacitance.
+> > > > > > > Use optional property ricoh,trim that should contain
+> > > > > raw value to setup this register. According to
+> > > > > datasheets for RS5C372, R2025S/D, RV5C38[67] and R222[13]
+> > > > > the value will be converted to a number of ticks that
+> > > > > is to be subtracted or added when the second digits read
+> > > > > 00, 20 or 40 seconds.
+> > > > > > > Signed-off-by: Pavel Modilaynen <pavelmn@axis.com>
+> > > > > ---
+> > > > >   drivers/rtc/rtc-rs5c372.c | 18 +++++++++++++++++-
+> > > > >   1 file changed, 17 insertions(+), 1 deletion(-)
+> > > > > > > diff --git a/drivers/rtc/rtc-rs5c372.c
+> > > b/drivers/rtc/rtc-rs5c372.c
+> > > > > index 80980414890c..3a2db0326669 100644
+> > > > > --- a/drivers/rtc/rtc-rs5c372.c
+> > > > > +++ b/drivers/rtc/rtc-rs5c372.c
+> > > > > @@ -13,6 +13,7 @@
+> > > > >   #include <linux/slab.h>
+> > > > >   #include <linux/module.h>
+> > > > >   #include <linux/of_device.h>
+> > > > > +#include <linux/of.h>
+> > > > >   /*
+> > > > >    * Ricoh has a family of I2C based RTCs, which differ only slightly from
+> > > > > @@ -560,6 +561,8 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+> > > > >   {
+> > > > >         unsigned char buf[2];
+> > > > >         int addr, i, ret = 0;
+> > > > > +     struct i2c_client *client = rs5c372->client;
+> > > > > +     u8 trim = 0;
+> > > > >         addr   = RS5C_ADDR(RS5C_REG_CTRL1);
+> > > > >         buf[0] = rs5c372->regs[RS5C_REG_CTRL1];
+> > > > > @@ -599,9 +602,22 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+> > > > >                 break;
+> > > > >         }
+> > > > > +     /* optional setup of xtal trimming */
+> > > > > +     if (!of_property_read_u8(client->dev.of_node, "ricoh,trim", &trim)) {
+> > > > > +             if (rs5c372->type != rtc_r2221tl && (trim & ~RS5C372_TRIM_MASK)) {
+> > > > > +                     dev_warn(&client->dev, "Erroneous setting for ricoh,trim in devicetree\n");
+> > > > > +             } else {
+> > > > > +                     int addr = RS5C_ADDR(RS5C372_REG_TRIM);
+> > > > > +                     int ret = i2c_smbus_write_byte_data(client, addr, trim);
+> > > > > +
+> > > > > +                     if (unlikely(ret < 0))
+> > > > > +                             return ret;
+> > > > > +             }
+> > > > > +     }
+> > > > > +
+> > > > >         for (i = 0; i < sizeof(buf); i++) {
+> > > > >                 addr = RS5C_ADDR(RS5C_REG_CTRL1 + i);
+> > > > > -             ret = i2c_smbus_write_byte_data(rs5c372->client, addr, buf[i]);
+> > > > > +             ret = i2c_smbus_write_byte_data(client, addr, buf[i]);
+> > > > >                 if (unlikely(ret < 0))
+> > > > >                         return ret;
+> > > > >         }
+> > > > > -- > > 2.20.1
+> > > > > > > -- > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > Embedded Linux and Kernel engineering
+> > > > https://bootlin.com <https://bootlin.com> <https://bootlin.com
+> > <https://bootlin.com>>
 > > 
-> > > +
-> > > +	writel((u32)alarm_time, &rtc_reg_ptr->rtc_alarm_set);
-> > > +	wmb();			// make sure settings are effective.
-> > 
-> > doesn't writel come with a barrier?
-> 
-> It is useless. I will remove it.
-> 
-> > 
-> > > +
-> > > +	// enable alarm for update irq
-> > > +	if (rtc->uie_rtctimer.enabled)
-> > > +		writel((0x003F << 16) | 0x17, &rtc_reg_ptr->rtc_ctrl);
-> > > +	else if (!rtc->aie_timer.enabled)
-> > > +		writel((0x0007 << 16) | 0x0, &rtc_reg_ptr->rtc_ctrl);
-> > 
-> > Magic values, please explain also, I'm not sure why you need to look at
-> > uie_rtctimer and aie_timer as your RTC seems capable of having an alarm
-> > every seconds.
-> 
-> 1. I will give the definitions for that magic values.
-> 2. It is for update interrupt. rtc_alarm_irq_enable() will call alarm_irq_enable()
->   to enable HW alarm interrupt , but rtc_update_irq_enable() will not. Therefore
->   the HW interrupt for update one is enabled here. Otherwise how can I enable
->   HW alarm interrupt for update one??
-> 
-
-From the .set_alarm point of view, there is no difference between a
-regular alarm and the uie alarm set by the core. alrm.enabled will
-always be enabled.
-
-> > 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int sp_rtc_read_alarm(struct device *dev, struct rtc_wkalrm
-> > > +*alrm) {
-> > > +	unsigned int alarm_time;
-> > > +
-> > > +	alarm_time = readl(&rtc_reg_ptr->rtc_alarm_set);
-> > > +	RTC_DEBUG("%s, alarm_time: %u\n", __func__, alarm_time);
-> > > +	rtc_time64_to_tm((unsigned long)(alarm_time), &alrm->time);
-> > > +
-> > 
-> > You have to also set whether the alarm is enabled or not, else, simply don't
-> > bother returning anything.
-> 
-> I will modify it.
-> 
-> > 
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int sp_rtc_alarm_irq_enable(struct device *dev, unsigned int
-> > > +enabled) {
-> > > +	struct rtc_device *rtc = dev_get_drvdata(dev);
-> > > +
-> > > +	if (enabled)
-> > > +		writel((0x003F << 16) | 0x17, &rtc_reg_ptr->rtc_ctrl);
-> > > +	else if (!rtc->uie_rtctimer.enabled)
-> > > +		writel((0x0007 << 16) | 0x0, &rtc_reg_ptr->rtc_ctrl);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static const struct rtc_class_ops sp_rtc_ops = {
-> > > +	.read_time =		sp_rtc_read_time,
-> > > +	.set_time =		sp_rtc_set_time,
-> > > +	.set_alarm =		sp_rtc_set_alarm,
-> > > +	.read_alarm =		sp_rtc_read_alarm,
-> > > +	.alarm_irq_enable =	sp_rtc_alarm_irq_enable,
-> > > +};
-> > > +
-> > > +static irqreturn_t rtc_irq_handler(int irq, void *dev_id) {
-> > > +	struct platform_device *plat_dev = dev_id;
-> > > +	struct rtc_device *rtc = platform_get_drvdata(plat_dev);
-> > > +
-> > > +	if (rtc->uie_rtctimer.enabled) {
-> > > +		rtc_update_irq(rtc, 1, RTC_IRQF | RTC_UF);
-> > > +		RTC_DEBUG("[RTC] update irq\n");
-> > > +
-> > > +		if (sp_rtc.set_alarm_again == 1) {
-> > > +			sp_rtc.set_alarm_again = 0;
-> > > +			rtc_update_irq(rtc, 1, RTC_IRQF | RTC_AF);
-> > > +			RTC_DEBUG("[RTC] alarm irq\n");
-> > > +		}
-> > > +	} else {
-> > > +		rtc_update_irq(rtc, 1, RTC_IRQF | RTC_AF);
-> > > +		RTC_DEBUG("[RTC] alarm irq\n");
-> > > +	}
-> > 
-> > I'm pretty sure you can get rid of most of that and stop looking at uie_rtctimer.
-> 
-> rtc->aie_timer.enabled, rtc->uie_rtctimer.enabled and sp_rtc.set_alarm_again are
-> used to distinguish between alarm interrupt and update one. There 3 conditions for
-> triggering the alarm interrupt :
-> 1. only alarm
-> 2. only update
-> 3. alarm and update together
-> 
-
-No, stop emulating UIE in your driver and let the core handle that. If
-UIE is enabled for the RTC, it will set up an alarm every second. Your
-driver doesn't have to handle the difference.
-
-
+> > -- 
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com <https://bootlin.com>
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
