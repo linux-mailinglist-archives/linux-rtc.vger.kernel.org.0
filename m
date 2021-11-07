@@ -2,25 +2,25 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C12C3447689
-	for <lists+linux-rtc@lfdr.de>; Sun,  7 Nov 2021 23:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FB044768A
+	for <lists+linux-rtc@lfdr.de>; Sun,  7 Nov 2021 23:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbhKGW56 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S236763AbhKGW56 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Sun, 7 Nov 2021 17:57:58 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:33085 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbhKGW5y (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Nov 2021 17:57:54 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:38423 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236758AbhKGW5z (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Nov 2021 17:57:55 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 1658D240008;
-        Sun,  7 Nov 2021 22:55:09 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id E1FE7100007;
+        Sun,  7 Nov 2021 22:55:10 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/12] rtc: rx8025: clear RTC_FEATURE_ALARM when alarm are not supported
-Date:   Sun,  7 Nov 2021 23:54:55 +0100
-Message-Id: <20211107225458.111068-10-alexandre.belloni@bootlin.com>
+Subject: [PATCH 11/12] rtc: rx8025: use rtc_add_group
+Date:   Sun,  7 Nov 2021 23:54:56 +0100
+Message-Id: <20211107225458.111068-11-alexandre.belloni@bootlin.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211107225458.111068-1-alexandre.belloni@bootlin.com>
 References: <20211107225458.111068-1-alexandre.belloni@bootlin.com>
@@ -30,51 +30,69 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Clear RTC_FEATURE_ALARM to signal alarms are not supported to the core
-instead of checking client->irq.
+Remove open coded sysfs registration by using rtc_add_group.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-rx8025.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-rx8025.c | 27 +++++++++------------------
+ 1 file changed, 9 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-index 6002305efa2d..fcfdefe94a7c 100644
+index fcfdefe94a7c..c5b3814f8c8e 100644
 --- a/drivers/rtc/rtc-rx8025.c
 +++ b/drivers/rtc/rtc-rx8025.c
-@@ -315,9 +315,6 @@ static int rx8025_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	u8 ald[2];
- 	int ctrl2, err;
+@@ -502,15 +502,14 @@ static DEVICE_ATTR(clock_adjust_ppb, S_IRUGO | S_IWUSR,
+ 		   rx8025_sysfs_show_clock_adjust,
+ 		   rx8025_sysfs_store_clock_adjust);
  
--	if (client->irq <= 0)
--		return -EINVAL;
--
- 	err = rx8025_read_regs(client, RX8025_REG_ALDMIN, 2, ald);
+-static int rx8025_sysfs_register(struct device *dev)
+-{
+-	return device_create_file(dev, &dev_attr_clock_adjust_ppb);
+-}
++static struct attribute *rx8025_attrs[] = {
++	&dev_attr_clock_adjust_ppb.attr,
++	NULL
++};
+ 
+-static void rx8025_sysfs_unregister(struct device *dev)
+-{
+-	device_remove_file(dev, &dev_attr_clock_adjust_ppb);
+-}
++static const struct attribute_group rx8025_attr_group = {
++	.attrs	= rx8025_attrs,
++};
+ 
+ static int rx8025_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+@@ -562,18 +561,11 @@ static int rx8025_probe(struct i2c_client *client,
+ 	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rx8025->rtc->features);
+ 	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rx8025->rtc->features);
+ 
+-	err = devm_rtc_register_device(rx8025->rtc);
++	err = rtc_add_group(rx8025->rtc, &rx8025_attr_group);
  	if (err)
  		return err;
-@@ -352,9 +349,6 @@ static int rx8025_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	u8 ald[2];
- 	int err;
  
--	if (client->irq <= 0)
--		return -EINVAL;
+-	err = rx8025_sysfs_register(&client->dev);
+-	return err;
+-}
 -
- 	ald[0] = bin2bcd(t->time.tm_min);
- 	if (rx8025->ctrl1 & RX8025_BIT_CTRL1_1224)
- 		ald[1] = bin2bcd(t->time.tm_hour);
-@@ -559,10 +553,8 @@ static int rx8025_probe(struct i2c_client *client,
- 						rx8025_handle_irq,
- 						IRQF_ONESHOT,
- 						"rx8025", client);
--		if (err) {
--			dev_err(&client->dev, "unable to request IRQ, alarms disabled\n");
--			client->irq = 0;
--		}
-+		if (err)
-+			clear_bit(RTC_FEATURE_ALARM, rx8025->rtc->features);
- 	}
+-static int rx8025_remove(struct i2c_client *client)
+-{
+-	rx8025_sysfs_unregister(&client->dev);
+-	return 0;
++	return devm_rtc_register_device(rx8025->rtc);
+ }
  
- 	rx8025->rtc->max_user_freq = 1;
+ static struct i2c_driver rx8025_driver = {
+@@ -581,7 +573,6 @@ static struct i2c_driver rx8025_driver = {
+ 		.name = "rtc-rx8025",
+ 	},
+ 	.probe		= rx8025_probe,
+-	.remove		= rx8025_remove,
+ 	.id_table	= rx8025_id,
+ };
+ 
 -- 
 2.31.1
 
