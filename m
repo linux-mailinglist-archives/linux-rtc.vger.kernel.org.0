@@ -2,61 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C9A447ACF
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 08:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60894447C2C
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 09:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbhKHH3l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Nov 2021 02:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235470AbhKHH3k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 02:29:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1D0C0613B9
-        for <linux-rtc@vger.kernel.org>; Sun,  7 Nov 2021 23:26:56 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id j21so58450641edt.11
-        for <linux-rtc@vger.kernel.org>; Sun, 07 Nov 2021 23:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=PnTjqCg/4dLlfwZvkIw5TCFiXXqI7eQL3D+17+RauQ+gPkf2k9hY9S+Ii/M5IA0uoj
-         tcY9XkBE8UoWnMFVRIdA+q744Hmx7Z0JsFaVREssmf6KamM5Bd6A03cMP5bTAvPf1/y/
-         DwxXsJaTEuCfFdzSQFJTUHpZB56hO6UBVJPo7/S7fIQbraF2JB9fnNx0H/YOCyXyn5Fv
-         TpIbuoc9MhMDHEy5d5ztUWIHQVhdvbVN+KOKXsEiQg7QzXSruhiqF9yWAy+A70V6Qa0U
-         ve8aiam44Pcv5P2919T2rRvgnVW0nPh2s7GY8MWiotEmFwjxJpYnpgBFa5LZ/bTsndTX
-         N0eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=dQolrG/kdwwVEb/0PEd/AIgfXv3wv502PnEG56ZOV2xzgtyDXoucMY2JPHb6XDkLWD
-         SE3ruNPEs1/D4PhwcgOSgplIy0MqLNHozBRzd2odt6aUk1wk1L/1v7fGYvRxNROB84V1
-         0zFhObDJP6KeeBxEG3dGX3TnqGh7JGJtTr+hc+61qNLAiNpvwYZ2QvARwEbzsTkijcoG
-         wThkXYVFLe3EhhzvIDS2429YYMmfHx+TdTi1j97dLwPReEk82zTqzwGIOqX40FnYlIXi
-         hX3VUz1W0f4SdcnnxurEfBe8tW9VP64bITlWSCPGifusB0Q3keQWlmtl38KLaVDncsKJ
-         qdMw==
-X-Gm-Message-State: AOAM5309CsU75T/M4oEBNQB5jqbWbTjXw7cv2zDfO4pHOfL2lkG74A1n
-        xIgv3KEc8jcP9CxTMm0jg7o9nqRchCMcWsdI3CA=
-X-Google-Smtp-Source: ABdhPJz9Akl6xfGwwFGOOyIMXLWznjij6kDDSEQ53AjVdYeVh/nfgX+la012XOuUHhNctlqPhGJ9oR9znvMO/9Cv6/o=
-X-Received: by 2002:a50:930b:: with SMTP id m11mr83450378eda.133.1636356414537;
- Sun, 07 Nov 2021 23:26:54 -0800 (PST)
+        id S237474AbhKHIpl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Nov 2021 03:45:41 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42617 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237443AbhKHIpj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 03:45:39 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B71541C0009;
+        Mon,  8 Nov 2021 08:42:53 +0000 (UTC)
+Date:   Mon, 8 Nov 2021 09:42:53 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] rtc-rv8803: fix writing back ctrl in flag register
+Message-ID: <YYjjDW6WhBJqUGJD@piout.net>
+References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
+ <YYiWq564QzQgTsqV@atmark-techno.com>
 MIME-Version: 1.0
-Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:54 -0800 (PST)
-Reply-To: mariaschaefler@gmx.com
-From:   Maria Schaefler <ziskoraa@gmail.com>
-Date:   Mon, 8 Nov 2021 07:26:54 +0000
-Message-ID: <CAJh0FjiDs5_oQE4K3AME-kH_RMPNXEEapYKvrR9As+S+Dzwh5Q@mail.gmail.com>
-Subject: MY HEART CHOOSE YOU.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YYiWq564QzQgTsqV@atmark-techno.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Given my current state of health, I have decided to donate what I
-inherited from my late husband to you to help the poor and needy. I am
-Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
-cancer about 2 years ago and I have few months to live according to
-medical experts. Email me for my directives
+On 08/11/2021 12:16:59+0900, Dominique Martinet wrote:
+> Hi Alexandre, Alessandro,
+> 
+> the other patch was proved to be unneeded, but this one is still a valid
+> fix as far as I can understand the code (reusing RV8803_CTRL value to
+> write into RV8803_FLAG does not look correct)
+> 
+> (I'm also convinced either mostly work because the original values are
+> usually close enough, but that's not a reason to keep using the wrong
+> one)
+> 
+> 
+> Would you have time to take a look?
+
+I did check with the initial review and I'm going to apply it, I just
+didn't have the time to do that yet.
+
+> 
+> 
+> Thanks!
+> 
+> Dominique Martinet wrote on Mon, Nov 01, 2021 at 10:33:59AM +0900:
+> > ctrl is set from read_regs(..FLAG, 2, ctrl), so ctrl[0] is FLAG
+> > and ctrl[1] is the CTRL register.
+> > Use ctrl[0] to write back to the FLAG register as appropriate.
+> > 
+> > Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+> > ---
+> >  drivers/rtc/rtc-rv8803.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
+> > index 72adef5a5ebe..0d5ed38bf60c 100644
+> > --- a/drivers/rtc/rtc-rv8803.c
+> > +++ b/drivers/rtc/rtc-rv8803.c
+> > @@ -340,8 +340,8 @@ static int rv8803_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> >  		}
+> >  	}
+> >  
+> > -	ctrl[1] &= ~RV8803_FLAG_AF;
+> > -	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[1]);
+> > +	ctrl[0] &= ~RV8803_FLAG_AF;
+> > +	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[0]);
+> >  	mutex_unlock(&rv8803->flags_lock);
+> >  	if (err)
+> >  		return err;
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
