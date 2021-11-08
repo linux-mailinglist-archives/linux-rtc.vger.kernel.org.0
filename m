@@ -2,100 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC734478D2
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 04:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C9A447ACF
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 08:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbhKHDT6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 7 Nov 2021 22:19:58 -0500
-Received: from gw2.atmark-techno.com ([35.74.137.57]:34344 "EHLO
-        gw2.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbhKHDT6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 7 Nov 2021 22:19:58 -0500
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        by gw2.atmark-techno.com (Postfix) with ESMTPS id D5EC020D48
-        for <linux-rtc@vger.kernel.org>; Mon,  8 Nov 2021 12:17:12 +0900 (JST)
-Received: by mail-pf1-f197.google.com with SMTP id 125-20020a621883000000b0049fb7d3c77cso2475143pfy.20
-        for <linux-rtc@vger.kernel.org>; Sun, 07 Nov 2021 19:17:12 -0800 (PST)
+        id S234904AbhKHH3l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Nov 2021 02:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235470AbhKHH3k (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 02:29:40 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1D0C0613B9
+        for <linux-rtc@vger.kernel.org>; Sun,  7 Nov 2021 23:26:56 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id j21so58450641edt.11
+        for <linux-rtc@vger.kernel.org>; Sun, 07 Nov 2021 23:26:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=PnTjqCg/4dLlfwZvkIw5TCFiXXqI7eQL3D+17+RauQ+gPkf2k9hY9S+Ii/M5IA0uoj
+         tcY9XkBE8UoWnMFVRIdA+q744Hmx7Z0JsFaVREssmf6KamM5Bd6A03cMP5bTAvPf1/y/
+         DwxXsJaTEuCfFdzSQFJTUHpZB56hO6UBVJPo7/S7fIQbraF2JB9fnNx0H/YOCyXyn5Fv
+         TpIbuoc9MhMDHEy5d5ztUWIHQVhdvbVN+KOKXsEiQg7QzXSruhiqF9yWAy+A70V6Qa0U
+         ve8aiam44Pcv5P2919T2rRvgnVW0nPh2s7GY8MWiotEmFwjxJpYnpgBFa5LZ/bTsndTX
+         N0eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y2FcHysnsMknog0uaTYU3E4CwupcvxTmlhl1H6xc5dI=;
-        b=OUP78PMyt487N9CZbryM5HQ3/ayrALGZ9hjV9raddI7q2ttvLX2ejXmbM3VM4IoXK5
-         WKvnctw2B5QSQWSqIheS1omo1GbZK5x7ktwA7mzIn6Sc44JvTuknkFxKUEVcBj7nYnWf
-         9GQXo1o9hDIP4fvA4B2GOX6c8b80dQ49dSOV3BUj9r1a6iwm5OPVXqFWtBu8U5wB9LGT
-         j2Tm/8QSNr9GB4dKsyDofkicpUzvOZcfsq5jc8pbJcLlYtkykmSPgKL9FNbVCEKGjw3K
-         EoKirnqw8vdHGslMOdu6HEW8/K3pF+pO1zGz1R4FgkXfOSw9Ck7CTUgQiqzTY1UVN5gA
-         qU+Q==
-X-Gm-Message-State: AOAM533CwrxpUWarx5gZBGoyGD3ucvd376VkG8cJGPVCHE/YnzSVPJzX
-        snEpGjVZIjdNsw39IO0ahoeJc1+/AmRT+CKyJu1JybfKhLqF7ODDG/YUItuIYPm/veAN1qDSY6f
-        /GzSPm+fwd7voBLkOmHwyZQ==
-X-Received: by 2002:a17:90a:4a06:: with SMTP id e6mr49437288pjh.228.1636341431870;
-        Sun, 07 Nov 2021 19:17:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwy/Idfivc1sa4+t5BsWIwzMYc4fOxvigXDuH2qUjVpbqz8jnRkaYmiEpRRvsxFiZNPtRBLXQ==
-X-Received: by 2002:a17:90a:4a06:: with SMTP id e6mr49437264pjh.228.1636341431644;
-        Sun, 07 Nov 2021 19:17:11 -0800 (PST)
-Received: from pc-0115 (70.211.187.35.bc.googleusercontent.com. [35.187.211.70])
-        by smtp.gmail.com with ESMTPSA id t13sm8564924pfl.214.2021.11.07.19.17.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Nov 2021 19:17:11 -0800 (PST)
-Received: from martinet by pc-0115 with local (Exim 4.94.2)
-        (envelope-from <martinet@pc-0115>)
-        id 1mjv9h-005qLx-Uh; Mon, 08 Nov 2021 12:17:09 +0900
-Date:   Mon, 8 Nov 2021 12:16:59 +0900
-From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc-rv8803: fix writing back ctrl in flag register
-Message-ID: <YYiWq564QzQgTsqV@atmark-techno.com>
-References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=dQolrG/kdwwVEb/0PEd/AIgfXv3wv502PnEG56ZOV2xzgtyDXoucMY2JPHb6XDkLWD
+         SE3ruNPEs1/D4PhwcgOSgplIy0MqLNHozBRzd2odt6aUk1wk1L/1v7fGYvRxNROB84V1
+         0zFhObDJP6KeeBxEG3dGX3TnqGh7JGJtTr+hc+61qNLAiNpvwYZ2QvARwEbzsTkijcoG
+         wThkXYVFLe3EhhzvIDS2429YYMmfHx+TdTi1j97dLwPReEk82zTqzwGIOqX40FnYlIXi
+         hX3VUz1W0f4SdcnnxurEfBe8tW9VP64bITlWSCPGifusB0Q3keQWlmtl38KLaVDncsKJ
+         qdMw==
+X-Gm-Message-State: AOAM5309CsU75T/M4oEBNQB5jqbWbTjXw7cv2zDfO4pHOfL2lkG74A1n
+        xIgv3KEc8jcP9CxTMm0jg7o9nqRchCMcWsdI3CA=
+X-Google-Smtp-Source: ABdhPJz9Akl6xfGwwFGOOyIMXLWznjij6kDDSEQ53AjVdYeVh/nfgX+la012XOuUHhNctlqPhGJ9oR9znvMO/9Cv6/o=
+X-Received: by 2002:a50:930b:: with SMTP id m11mr83450378eda.133.1636356414537;
+ Sun, 07 Nov 2021 23:26:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:54 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:26:54 +0000
+Message-ID: <CAJh0FjiDs5_oQE4K3AME-kH_RMPNXEEapYKvrR9As+S+Dzwh5Q@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Alexandre, Alessandro,
-
-the other patch was proved to be unneeded, but this one is still a valid
-fix as far as I can understand the code (reusing RV8803_CTRL value to
-write into RV8803_FLAG does not look correct)
-
-(I'm also convinced either mostly work because the original values are
-usually close enough, but that's not a reason to keep using the wrong
-one)
-
-
-Would you have time to take a look?
-
-
-Thanks!
-
-Dominique Martinet wrote on Mon, Nov 01, 2021 at 10:33:59AM +0900:
-> ctrl is set from read_regs(..FLAG, 2, ctrl), so ctrl[0] is FLAG
-> and ctrl[1] is the CTRL register.
-> Use ctrl[0] to write back to the FLAG register as appropriate.
-> 
-> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
-> ---
->  drivers/rtc/rtc-rv8803.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-> index 72adef5a5ebe..0d5ed38bf60c 100644
-> --- a/drivers/rtc/rtc-rv8803.c
-> +++ b/drivers/rtc/rtc-rv8803.c
-> @@ -340,8 +340,8 @@ static int rv8803_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
->  		}
->  	}
->  
-> -	ctrl[1] &= ~RV8803_FLAG_AF;
-> -	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[1]);
-> +	ctrl[0] &= ~RV8803_FLAG_AF;
-> +	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[0]);
->  	mutex_unlock(&rv8803->flags_lock);
->  	if (err)
->  		return err;
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
