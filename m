@@ -2,83 +2,136 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60894447C2C
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 09:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D328544976B
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Nov 2021 16:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237474AbhKHIpl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Nov 2021 03:45:41 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42617 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237443AbhKHIpj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 03:45:39 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B71541C0009;
-        Mon,  8 Nov 2021 08:42:53 +0000 (UTC)
-Date:   Mon, 8 Nov 2021 09:42:53 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Dominique Martinet <dominique.martinet@atmark-techno.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc-rv8803: fix writing back ctrl in flag register
-Message-ID: <YYjjDW6WhBJqUGJD@piout.net>
-References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
- <YYiWq564QzQgTsqV@atmark-techno.com>
+        id S230348AbhKHPJO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Nov 2021 10:09:14 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:41805 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236457AbhKHPJM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 10:09:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1636383987; x=1667919987;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8SrEU9XI/OEo5uTJNfmiDpAr5AwL1FBJ0ig/W9RdeJY=;
+  b=uVT1wnJxxS7GgFyYEjB0ZVgGtyFscrseVnsFUZmcirIQOfYoCvUbPApg
+   KMNCD6wdpcdlFnsFP3mS/aK6ibYOkTR2zcFi6VIeKndP+uuRfHZK79MZw
+   +EOcxvgoZNcb6oeAOjuBHTSdud7HlDe90ddKHoE5CZLWJD3j++hlsZPTV
+   ce5AbYUdtwUKmsgaq+qjqx5sjUKhucm/7/EdcL/yQiN1oA4/y75+uP6BT
+   iDRJLIL4P+E5uGyjiopt6dyPJG1vW9JaCVyA0XT28aUh5DuWf2YquWqRm
+   wi1eghMc78q7cMeFmCM6zNcFNECREpLi0BXXJjf8IDnaaZ2lnqW4YN4ri
+   A==;
+IronPort-SDR: rKaUUnhxQEuffL258X7HEch2+KTgcTsz45WpCwjQFqdvi8jf1EDK/efkqY6IZ8ZUpCzJsKfE4K
+ fgxIdeqoyQBgLCKd+c5YqltwAtfrElduaVhZivZVIyZNykcinto/2oJdjfbZVi8qpomr8qiY+5
+ xvIo0j6fITV7ox+ZkTGm3VHcDlg3p/F8tKywsi/ROTKcRlaZHem9FmP1RYErwPj0c0fq/yJExn
+ Ge+EtfgudJp/+8PUoXcjGOeNR++YFCHA8AGfjsFN/WY8+sr7YVPwvi8LXrQVx/OEJV9KmkbI0f
+ 1vRBKjAwQ16j2JOLIbTgLjaZ
+X-IronPort-AV: E=Sophos;i="5.87,218,1631602800"; 
+   d="scan'208";a="135847455"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Nov 2021 08:06:22 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 8 Nov 2021 08:06:19 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Mon, 8 Nov 2021 08:06:15 -0700
+From:   <conor.dooley@microchip.com>
+To:     <linus.walleij@linaro.org>, <bgolaszewski@baylibre.com>,
+        <robh+dt@kernel.org>, <jassisinghbrar@gmail.com>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+        <gregkh@linuxfoundation.org>, <lewis.hanly@microchip.com>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>,
+        <atish.patra@wdc.com>, <ivan.griffin@microchip.com>,
+        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-crypto@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+CC:     <krzysztof.kozlowski@canonical.com>, <geert@linux-m68k.org>,
+        <bin.meng@windriver.com>
+Subject: [PATCH 00/13]Update the icicle kit device tree
+Date:   Mon, 8 Nov 2021 15:05:41 +0000
+Message-ID: <20211108150554.4457-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YYiWq564QzQgTsqV@atmark-techno.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 08/11/2021 12:16:59+0900, Dominique Martinet wrote:
-> Hi Alexandre, Alessandro,
-> 
-> the other patch was proved to be unneeded, but this one is still a valid
-> fix as far as I can understand the code (reusing RV8803_CTRL value to
-> write into RV8803_FLAG does not look correct)
-> 
-> (I'm also convinced either mostly work because the original values are
-> usually close enough, but that's not a reason to keep using the wrong
-> one)
-> 
-> 
-> Would you have time to take a look?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-I did check with the initial review and I'm going to apply it, I just
-didn't have the time to do that yet.
+This series updates the microchip icicle kit device tree by adding a host
+of peripherals, and some updates to the memory map. In addition, the device
+tree has been split into a third part, which contains "soft" peripherals 
+that are in the fpga fabric.
 
-> 
-> 
-> Thanks!
-> 
-> Dominique Martinet wrote on Mon, Nov 01, 2021 at 10:33:59AM +0900:
-> > ctrl is set from read_regs(..FLAG, 2, ctrl), so ctrl[0] is FLAG
-> > and ctrl[1] is the CTRL register.
-> > Use ctrl[0] to write back to the FLAG register as appropriate.
-> > 
-> > Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
-> > ---
-> >  drivers/rtc/rtc-rv8803.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-> > index 72adef5a5ebe..0d5ed38bf60c 100644
-> > --- a/drivers/rtc/rtc-rv8803.c
-> > +++ b/drivers/rtc/rtc-rv8803.c
-> > @@ -340,8 +340,8 @@ static int rv8803_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> >  		}
-> >  	}
-> >  
-> > -	ctrl[1] &= ~RV8803_FLAG_AF;
-> > -	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[1]);
-> > +	ctrl[0] &= ~RV8803_FLAG_AF;
-> > +	err = rv8803_write_reg(rv8803->client, RV8803_FLAG, ctrl[0]);
-> >  	mutex_unlock(&rv8803->flags_lock);
-> >  	if (err)
-> >  		return err;
+Several of the entries are for peripherals that have not get had their drivers
+upstreamed, so in those cases the dt bindings are included where appropriate
+in order to avoid as many "DT compatible string <x> appears un-documented" 
+errors as possible.
+
+Depends on mpfs clock driver series [1] to provide:
+dt-bindings/clock/microchip,mpfs-clock.h
+and on the other changes to the icicle/mpfs device tree
+that are already in linux/riscv/for-next.
+
+[1] https://lore.kernel.org/linux-clk/20210818141102.36655-2-daire.mcnamara@microchip.com/
+
+Conor Dooley (11):
+  dt-bindings: soc/microchip: update sys ctrlr compat string
+  dt-bindings: riscv: update microchip polarfire binds
+  dt-bindings: i2c: add bindings for microchip mpfs i2c
+  dt-bindings: rng: add bindings for microchip mpfs rng
+  dt-bindings: rtc: add bindings for microchip mpfs rtc
+  dt-bindings: soc/microchip: add bindings for mpfs system services
+  dt-bindings: gpio: add bindings for microchip mpfs gpio
+  dt-bindings: spi: add bindings for microchip mpfs spi
+  dt-bindings: usb: add bindings for microchip mpfs musb
+  riscv: icicle-kit: update microchip icicle kit device tree
+  MAINTAINERS: update riscv/microchip entry
+
+Ivan Griffin (2):
+  dt-bindings: interrupt-controller: add defines for riscv-hart
+  dt-bindings: interrupt-controller: add defines for mpfs-plic
+
+ .../bindings/gpio/microchip,mpfs-gpio.yaml    | 108 ++++++
+ .../bindings/i2c/microchip,mpfs-i2c.yaml      |  74 ++++
+ .../microchip,polarfire-soc-mailbox.yaml      |   4 +-
+ .../devicetree/bindings/riscv/microchip.yaml  |   1 +
+ .../bindings/rng/microchip,mpfs-rng.yaml      |  31 ++
+ .../bindings/rtc/microchip,mfps-rtc.yaml      |  61 ++++
+ .../microchip,mpfs-generic-service.yaml       |  31 ++
+ ...icrochip,polarfire-soc-sys-controller.yaml |   4 +-
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  72 ++++
+ .../bindings/usb/microchip,mpfs-usb-host.yaml |  70 ++++
+ MAINTAINERS                                   |   2 +
+ .../dts/microchip/microchip-mpfs-fabric.dtsi  |  21 ++
+ .../microchip/microchip-mpfs-icicle-kit.dts   | 159 +++++++--
+ .../boot/dts/microchip/microchip-mpfs.dtsi    | 333 ++++++++++++++----
+ drivers/mailbox/mailbox-mpfs.c                |   1 +
+ .../microchip,mpfs-plic.h                     | 199 +++++++++++
+ .../interrupt-controller/riscv-hart.h         |  19 +
+ 17 files changed, 1103 insertions(+), 87 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+ create mode 100644 Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
+ create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-generic-service.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-usb-host.yaml
+ create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+ create mode 100644 include/dt-bindings/interrupt-controller/microchip,mpfs-plic.h
+ create mode 100644 include/dt-bindings/interrupt-controller/riscv-hart.h
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.33.1
+
