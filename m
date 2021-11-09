@@ -2,88 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38934449F18
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Nov 2021 00:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFDC44A58D
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Nov 2021 05:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238600AbhKHXol (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Nov 2021 18:44:41 -0500
-Received: from gw2.atmark-techno.com ([35.74.137.57]:52458 "EHLO
-        gw2.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbhKHXok (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 18:44:40 -0500
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-        by gw2.atmark-techno.com (Postfix) with ESMTPS id 203C920D48
-        for <linux-rtc@vger.kernel.org>; Tue,  9 Nov 2021 08:41:54 +0900 (JST)
-Received: by mail-pg1-f198.google.com with SMTP id w13-20020a63934d000000b002a2935891daso10913858pgm.15
-        for <linux-rtc@vger.kernel.org>; Mon, 08 Nov 2021 15:41:54 -0800 (PST)
+        id S242648AbhKIEJb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Nov 2021 23:09:31 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:42971 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241057AbhKIEJY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Nov 2021 23:09:24 -0500
+Received: by mail-ot1-f53.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso26239734otg.9;
+        Mon, 08 Nov 2021 20:06:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9JYAOHc5Bzc8zfpQ0inqY9Jus/ttd4RsPfwt3JJBGgs=;
-        b=73d5cjtgkzOH2NW3HW4zhGExclV9kXlVzD26Wf+FS2Mh4p2aEvEpCf8R4eZvdDVt2t
-         T+c4wVbxihnMdwzTl+aH3yxCj7wHn9OVeZJxNk3rFne/YaaVB5tJJ1l5PPfnBqp1ZWf3
-         Q+TQN1Ln56fijJwpo+DflmlZ/qJt6KcGut4zvfpDXZ/0tOFzMyUbofJFd0wi3G07xXlc
-         LX4G0nPNqx0QqQgeh6nLWBjBM2f0HuiakndQx0vuAOh4bd7UUfKPi+qyJmB7y8mC8098
-         QYG+qQQGqMDvDHbKhQA06NuAtjxEQ5nCMgeE6o08EQragSa48prljC7LM2I4OPVfKbT3
-         MsRA==
-X-Gm-Message-State: AOAM530RDsvMmNMv881VY/Qwl8wolut7GItpk9AWSskisly/IyDPGFPI
-        RNga2i5ovMrFr1NnWGdnVae1WbcFKbv9N1IHcHef/y30bfpV2cGw1/HezAX2nF+W+WT+YHFoPJj
-        xuh+BfOf+5dQIX45EfFGfMQ==
-X-Received: by 2002:a63:b54a:: with SMTP id u10mr2498358pgo.69.1636414913169;
-        Mon, 08 Nov 2021 15:41:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwGtJSPNlUIj77nNviXLhyTvTLyu/pChs/rPD9a5gR5EudQZYF25eTXL+L5gjHwbBFkWtMLew==
-X-Received: by 2002:a63:b54a:: with SMTP id u10mr2498335pgo.69.1636414912929;
-        Mon, 08 Nov 2021 15:41:52 -0800 (PST)
-Received: from pc-0115 (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
-        by smtp.gmail.com with ESMTPSA id e14sm13407047pga.76.2021.11.08.15.41.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Nov 2021 15:41:52 -0800 (PST)
-Received: from martinet by pc-0115 with local (Exim 4.94.2)
-        (envelope-from <martinet@pc-0115>)
-        id 1mkEGt-0065Az-2P; Tue, 09 Nov 2021 08:41:51 +0900
-Date:   Tue, 9 Nov 2021 08:41:41 +0900
-From:   Dominique Martinet <dominique.martinet@atmark-techno.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc-rv8803: fix writing back ctrl in flag register
-Message-ID: <YYm1tb304Thqqjjj@atmark-techno.com>
-References: <20211101013400.325855-1-dominique.martinet@atmark-techno.com>
- <YYiWq564QzQgTsqV@atmark-techno.com>
- <YYjjDW6WhBJqUGJD@piout.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YYjjDW6WhBJqUGJD@piout.net>
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=srBAEqiQv7t2TUoCMiKomnj9CXcpM/RXP2/IhsCEUt4=;
+        b=Id4oeY1Rtgk4Uzmq8cFQvIB4rz9CZZF3nRO/yMvW1puv3a0mGe9tsq36IT9wgM2d/e
+         YXD7myHXbp0pHhX5Xzppy5SefrREgoXVbF4mjY6JlZHit2wBlsYN63ON2/85qGFxpgDA
+         g6pz4UCNKiUNQQa3zAzdrzycX2hZnI15b3E3J8+dhnokJuJK5WQ6EmcgEPiOG1ZS16dO
+         W1v+e1Le4Nl4lRIojouEMPemswYAMi34lQdhAM9aryBnkudKmsH1VxJyUokmIUuVcKIJ
+         FetH+npSVCLbRDJW1SEBdVqqiCRJVq4PQEM/Gha6tSYm/Pplc6LoUuDH9V9WHIfnzUPK
+         UtKA==
+X-Gm-Message-State: AOAM533WytWd4uf3bvMfqzL1VaEhfMNq/kfLVE7cE/sRAQ53Jxnc6E8b
+        hzQ+3sKjnPEJ40O9VvHYzw==
+X-Google-Smtp-Source: ABdhPJxAD8OzRK/Sli7Q+xp3mQUCmoiHP7RN7OOEEvobUZ0MlWRieiCoDJdFa0SI20BV1G+hYm0D6w==
+X-Received: by 2002:a9d:76d1:: with SMTP id p17mr3474638otl.328.1636430798093;
+        Mon, 08 Nov 2021 20:06:38 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q81sm6985766oib.47.2021.11.08.20.06.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Nov 2021 20:06:37 -0800 (PST)
+Received: (nullmailer pid 743039 invoked by uid 1000);
+        Tue, 09 Nov 2021 04:06:29 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linux-spi@vger.kernel.org, linus.walleij@linaro.org,
+        lewis.hanly@microchip.com, ivan.griffin@microchip.com,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-crypto@vger.kernel.org, paul.walmsley@sifive.com,
+        broonie@kernel.org, robh+dt@kernel.org, atish.patra@wdc.com,
+        linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com,
+        alexandre.belloni@bootlin.com, krzysztof.kozlowski@canonical.com,
+        bin.meng@windriver.com, linux-gpio@vger.kernel.org,
+        bgolaszewski@baylibre.com, a.zummo@towertech.it,
+        aou@eecs.berkeley.edu, palmer@dabbelt.com, geert@linux-m68k.org,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        jassisinghbrar@gmail.com, linux-rtc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+In-Reply-To: <20211108150554.4457-8-conor.dooley@microchip.com>
+References: <20211108150554.4457-1-conor.dooley@microchip.com> <20211108150554.4457-8-conor.dooley@microchip.com>
+Subject: Re: [PATCH 07/13] dt-bindings: rtc: add bindings for microchip mpfs rtc
+Date:   Mon, 08 Nov 2021 22:06:29 -0600
+Message-Id: <1636430789.913081.743038.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Alexandre Belloni wrote on Mon, Nov 08, 2021 at 09:42:53AM +0100:
-> On 08/11/2021 12:16:59+0900, Dominique Martinet wrote:
-> > Hi Alexandre, Alessandro,
-> > 
-> > the other patch was proved to be unneeded, but this one is still a valid
-> > fix as far as I can understand the code (reusing RV8803_CTRL value to
-> > write into RV8803_FLAG does not look correct)
-> > 
-> > (I'm also convinced either mostly work because the original values are
-> > usually close enough, but that's not a reason to keep using the wrong
-> > one)
-> > 
-> > 
-> > Would you have time to take a look?
+On Mon, 08 Nov 2021 15:05:48 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 > 
-> I did check with the initial review and I'm going to apply it, I just
-> didn't have the time to do that yet.
+> Add device tree bindings for the real time clock on
+> the Microchip PolarFire SoC.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> ---
+>  .../bindings/rtc/microchip,mfps-rtc.yaml      | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> 
 
-Sorry, it wasn't clear to me whether this was dropped with the other or
-not.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-There's no hurry on my end, please apply when you can!
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dts:19:18: fatal error: dt-bindings/clock/microchip,mpfs-clock.h: No such file or directory
+   19 |         #include <dt-bindings/clock/microchip,mpfs-clock.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:385: Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1441: dt_binding_check] Error 2
 
-Thanks,
--- 
-Dominique
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1552374
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
