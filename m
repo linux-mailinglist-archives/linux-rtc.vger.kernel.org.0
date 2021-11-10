@@ -2,167 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1549C44C1CE
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Nov 2021 14:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E820044C216
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Nov 2021 14:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbhKJNHE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Nov 2021 08:07:04 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:43568 "EHLO smtp1.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231679AbhKJNHD (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 10 Nov 2021 08:07:03 -0500
+        id S231290AbhKJNcp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Nov 2021 08:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231210AbhKJNco (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Nov 2021 08:32:44 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492E0C061764
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Nov 2021 05:29:57 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id r26so5223827oiw.5
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Nov 2021 05:29:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1636549457;
-  x=1668085457;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=nU3nv8rOCy8pYPsaPbC1Tl2lc1EFo7HiiaRCokA64wI=;
-  b=Rdt5pyaqRK6HVwsW5YRRhVi8Elb8G6TFpgZHGrLzGLCQtoyVGTpeh2M+
-   3RZtmIJqxxshDoK+Lgvpy+12UmCMRUimxpmEWxLOpsakTkYeJwq5f603a
-   RVZllvsMDf00gNJ9gWDRmp5y0JgCbVPF6SYwS2rj2HVoRD9JPQ5hyAZGo
-   IVVOA3Yd9PMW/weWNAdVIGmfRmMdqGNRz297wvID81w5bcpYWRk+O/q1t
-   ZJqZVRdmOB04I7vTTwyQjYeaWXJxAipoCsr5d5/B0b4xwlnCZghLZLNhh
-   C9bsjnLJxd6RirpxwpqFegZGRTysc7JkJZmXC2Lg5MmNhO6pKGl3sOxRy
-   A==;
-Subject: Re: [PATCH] rtc: rs5c372: Add support of RTC_VL_READ ioctl
-To:     Pavel Modilaynen <pavel.modilaynen@axis.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>, Pavel Modilaynen <pavelmn@axis.com>
-References: <20211105004049.5486-1-pavel.modilaynen@axis.com>
-From:   Camel Guo <camelg@axis.com>
-Message-ID: <bf954e46-700c-48f4-ee51-65733f643a18@axis.com>
-Date:   Wed, 10 Nov 2021 14:03:19 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xOQJYBsGgYy5CkdKgtncGqPKYnfRxE1hj0M+QRFTNGU=;
+        b=q4vVPaB4d5ukCNioGKj4k7ftB+oathxTlDJSegmg3MwgqEf02smHg8TsL7W+zbZtRC
+         /MbCou/xPY7Gqle7CFYyRrd/kYzPwA9ojQ6qfAkVuLGwvibUV9+vHCTefmM7mdblFJMb
+         cZ8Jkymb5XUOn8AorpqAcd/vO3JxSl1XLBF/jGzGd0UBCnxN+ebP5L/6EA0jM/TFdVaS
+         4SAUYG2JoOHdqFJgcvwLK5o0XtsFdvTTL5XMo4JpSmQIJ1NoeQUkZqD3anXH/zDQSb8t
+         Vj9d8E5Dspno5MVs40VYOaIgvkRFuVj2mRT2Mphx2Do+ZNMH/KOsD4NwbMAkCGpskD9u
+         1NDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xOQJYBsGgYy5CkdKgtncGqPKYnfRxE1hj0M+QRFTNGU=;
+        b=OYp64/2WPeQIqVnJN50uvrasEuNE9jTEfCkvFDVaYFt8CQozZ8TnxRRsa+U02hyTI3
+         ugnxK0qQrAvKVL+VmiXYhAO/JlT9c9psClkXvzpouDFLBU9Wd2PXEXDSgcFuJYwg/U/Q
+         3lMjdxnuNJjRfUQiOVj2hNLbteumGL7CG4AK0ELHsMkQnwANCTKnY8RrKcq5iB0Ry89T
+         JhVgukekvCkLQuc0Y9ZBdgL7KWfxTULtI6JQZlNnOhEVjQ3uS0dQPvl7D5IztAJh6d3/
+         u1qQUNem2RjGCnJ0HgDYR/JeS08VBKFLy6i0CsPRpTTKczvphkGa9AwBMlpMcr9ohdXw
+         9aHw==
+X-Gm-Message-State: AOAM5334gp9Rc2iY5eHGQXWcChhp9FSfYlTcXi2/exBFL5WJWrwDMhHh
+        nQK3NF+4u7zUKZarisoLdI0AeLPh1hI=
+X-Google-Smtp-Source: ABdhPJzaCQf43QICcYGVM7in7WXx3txjndXrqdG1LrqMk22l1QTAGG9u4GB/AGTh9uA7c8IvOJnmQw==
+X-Received: by 2002:a54:4401:: with SMTP id k1mr12753677oiw.143.1636550996629;
+        Wed, 10 Nov 2021 05:29:56 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:485:504a:bd4f:acc1:b596:17e6])
+        by smtp.gmail.com with ESMTPSA id q5sm8629676otg.1.2021.11.10.05.29.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Nov 2021 05:29:56 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, otavio@ossystems.com.br,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH 1/2] dt/bindings: rtc: rx8900: Add an entry for RX8804
+Date:   Wed, 10 Nov 2021 10:29:45 -0300
+Message-Id: <20211110132946.514825-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211105004049.5486-1-pavel.modilaynen@axis.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail03w.axis.com
- (10.20.40.9)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+The Epson RX8804 RTC has the same programming model as RV8803 and
+RX8900.
 
-After discussion internally on this patch, we would like to abandon this 
-patch and purpose this one 
-https://lore.kernel.org/linux-rtc/20211110115455.18699-1-camel.guo@axis.com/T/#u 
-instead. Sorry for the inconvenience and please review that patch instead.
+Add an entry for it in the binding document.
 
-Best Regards
-Camel Guo
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ Documentation/devicetree/bindings/rtc/epson,rx8900.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 11/5/21 1:40 AM, Pavel Modilaynen wrote:
-> From: Pavel Modilaynen <pavelmn@lnxpavelmn.se.axis.com>
-> 
-> Read, cache and expose with RTC_VL_READ ioctl low voltage
-> detection flag. It is supported on all devices except RS5C372A/B,
-> for which osciallation halt detection bit is interpreted
-> as low voltage condition.
-> Add RTC_VL_CLEAR ioctl to clear the cached value.
-> 
-> Signed-off-by: Pavel Modilaynen <pavelmn@lnxpavelmn.se.axis.com>
-> ---
->   drivers/rtc/rtc-rs5c372.c | 46 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 46 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-> index 80980414890c..68d2ed9670c4 100644
-> --- a/drivers/rtc/rtc-rs5c372.c
-> +++ b/drivers/rtc/rtc-rs5c372.c
-> @@ -126,6 +126,7 @@ struct rs5c372 {
->   	unsigned		smbus:1;
->   	char			buf[17];
->   	char			*regs;
-> +	int			voltage_low;
->   };
->   
->   static int rs5c_get_regs(struct rs5c372 *rs5c)
-> @@ -216,22 +217,40 @@ static int rs5c372_rtc_read_time(struct device *dev, struct rtc_time *tm)
->   	if (status < 0)
->   		return status;
->   
-> +	/* check the warning bits */
->   	switch (rs5c->type) {
->   	case rtc_r2025sd:
->   	case rtc_r2221tl:
->   		if ((rs5c->type == rtc_r2025sd && !(ctrl2 & R2x2x_CTRL2_XSTP)) ||
->   		    (rs5c->type == rtc_r2221tl &&  (ctrl2 & R2x2x_CTRL2_XSTP))) {
->   			dev_warn(&client->dev, "rtc oscillator interruption detected. Please reset the rtc clock.\n");
-> +			/* keep it as indicator of low/dead battery */
-> +			rs5c->voltage_low = 1;
->   			return -EINVAL;
->   		}
->   		break;
->   	default:
->   		if (ctrl2 & RS5C_CTRL2_XSTP) {
->   			dev_warn(&client->dev, "rtc oscillator interruption detected. Please reset the rtc clock.\n");
-> +			/* keep it as indicator of low/dead battery */
-> +			rs5c->voltage_low = 1;
->   			return -EINVAL;
->   		}
->   	}
->   
-> +
-> +	switch (rs5c->type) {
-> +	case rtc_rs5c372a:
-> +	case rtc_rs5c372b:
-> +		break;
-> +	default:
-> +		if (ctrl2 & R2x2x_CTRL2_VDET) {
-> +			rs5c->voltage_low = 1;
-> +			dev_warn(&client->dev, "low voltage detected\n");
-> +		}
-> +		break;
-> +	}
-> +
->   	tm->tm_sec = bcd2bin(rs5c->regs[RS5C372_REG_SECS] & 0x7f);
->   	tm->tm_min = bcd2bin(rs5c->regs[RS5C372_REG_MINS] & 0x7f);
->   	tm->tm_hour = rs5c_reg2hr(rs5c, rs5c->regs[RS5C372_REG_HOURS]);
-> @@ -485,6 +504,32 @@ static int rs5c372_rtc_proc(struct device *dev, struct seq_file *seq)
->   #define	rs5c372_rtc_proc	NULL
->   #endif
->   
-> +#ifdef CONFIG_RTC_INTF_DEV
-> +static int rs5c372_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
-> +{
-> +	struct rs5c372	*rs5c = i2c_get_clientdata(to_i2c_client(dev));
-> +
-> +	dev_dbg(dev, "%s: cmd=%x\n", __func__, cmd);
-> +
-> +	switch (cmd) {
-> +	case RTC_VL_READ:
-> +		if (rs5c->voltage_low)
-> +			dev_info(dev, "low voltage detected, date/time is not reliable.\n");
-> +
-> +		return put_user(rs5c->voltage_low, (unsigned int __user *)arg);
-> +	case RTC_VL_CLR:
-> +		/* Clear the cached value. */
-> +		rs5c->voltage_low = 0;
-> +		return 0;
-> +	default:
-> +		return -ENOIOCTLCMD;
-> +	}
-> +	return 0;
-> +}
-> +#else
-> +#define rs5c372_ioctl	NULL
-> +#endif
-> +
->   static const struct rtc_class_ops rs5c372_rtc_ops = {
->   	.proc		= rs5c372_rtc_proc,
->   	.read_time	= rs5c372_rtc_read_time,
-> @@ -492,6 +537,7 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
->   	.read_alarm	= rs5c_read_alarm,
->   	.set_alarm	= rs5c_set_alarm,
->   	.alarm_irq_enable = rs5c_rtc_alarm_irq_enable,
-> +	.ioctl		= rs5c372_ioctl,
->   };
->   
->   #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
-> 
+diff --git a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+index 29fe39bb08ad..d12855e7ffd7 100644
+--- a/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
++++ b/Documentation/devicetree/bindings/rtc/epson,rx8900.yaml
+@@ -15,6 +15,7 @@ allOf:
+ properties:
+   compatible:
+     enum:
++      - epson,rx8804
+       - epson,rx8900
+       - microcrystal,rv8803
+ 
+-- 
+2.25.1
+
