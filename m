@@ -2,70 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7F944C2ED
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Nov 2021 15:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A7B44C2F7
+	for <lists+linux-rtc@lfdr.de>; Wed, 10 Nov 2021 15:30:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbhKJOab (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Nov 2021 09:30:31 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:43257 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbhKJOaa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Nov 2021 09:30:30 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id DFAB81C0008;
-        Wed, 10 Nov 2021 14:27:41 +0000 (UTC)
-Date:   Wed, 10 Nov 2021 15:27:41 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Camel Guo <camelg@axis.com>
-Cc:     Camel Guo <Camel.Guo@axis.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        kernel <kernel@axis.com>,
+        id S232176AbhKJOd2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Nov 2021 09:33:28 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:64193 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232035AbhKJOd2 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 10 Nov 2021 09:33:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1636554641;
+  x=1668090641;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=9kI++ufZhv3l81MzwqI23PjZg4/Jwqnhj/RwRBkqNWI=;
+  b=oMvmPYkGaaGSQrAnFQ3GcvTT3U3JzrfYj7D7YX3CssQg2Es8eIIwEAja
+   cg38D9O7JIqI7iUfUMlfR4q54CUWGX1T7VhuIA8VTgn3kPmnRAmgiSpdN
+   8cftsGEKWZ6bbCmBU7ImmK3wny0A79QGN2Dl1jyCLprRkZ2klssn8iRQl
+   ejL+/JxUPApykuF4V2vyznAH53g3uRO2YxIqtGIWL3TayxeKuhBKvJYQl
+   /yj0JJEC+x03ed2Y6zg7VEyc4F5bp/VUnDPhrrsR5GF+pwNo9q25d5pz1
+   ier2CHhYUO27hoYhpAIkoYLnM+4cwzMOj1Yi+AwHRH6i6OU5qvsggJx7T
+   w==;
+Subject: Re: [PATCH] rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Camel Guo <Camel.Guo@axis.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>, kernel <kernel@axis.com>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
-Message-ID: <YYvW3T3wM/Qn5jSw@piout.net>
 References: <20211110115455.18699-1-camel.guo@axis.com>
- <YYvPCehWWVE5mKTy@piout.net>
- <2303e635-dbd0-1730-cc6f-84021eb37223@axis.com>
+ <YYvPCehWWVE5mKTy@piout.net> <2303e635-dbd0-1730-cc6f-84021eb37223@axis.com>
+ <YYvW3T3wM/Qn5jSw@piout.net>
+From:   Camel Guo <camelg@axis.com>
+Message-ID: <fa032379-2ca6-f5ca-0e84-91ae13a19488@axis.com>
+Date:   Wed, 10 Nov 2021 15:30:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <YYvW3T3wM/Qn5jSw@piout.net>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2303e635-dbd0-1730-cc6f-84021eb37223@axis.com>
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail06w.axis.com (10.20.40.12) To se-mail03w.axis.com
+ (10.20.40.9)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/11/2021 15:03:49+0100, Camel Guo wrote:
-> > On 10/11/2021 12:54:54+0100, Camel Guo wrote:
-> > > From: Camel Guo <camelg@axis.com>
-> > > +     switch (cmd) {
-> > > +     case RTC_VL_READ:
-> > > +             flags = 0;
-> > > +
-> > > +             switch (rs5c->type) {
-> > > +             case rtc_r2025sd:
-> > > +             case rtc_r2221tl:
-> > > +                     if ((rs5c->type == rtc_r2025sd && !(ctrl2 & R2x2x_CTRL2_XSTP)) ||
-> > > +                             (rs5c->type == rtc_r2221tl &&  (ctrl2 & R2x2x_CTRL2_XSTP))) {
-> > > +                             flags |= RTC_VL_DATA_INVALID;
-> > > +                     }
-> > > +                     if (ctrl2 & R2x2x_CTRL2_VDET)
-> > > +                             flags |= RTC_VL_ACCURACY_LOW;
-> > 
-> > Shouldn't that be RTC_VL_BACKUP_LOW?
-> 
-> Some drivers (e.g: rv3029_ioctl and rv8803_ioctl) use RTC_VL_ACCURACY_LOW,
-> but some other drivers (e.g: abx80x_ioctl, pcf2127_rtc_ioctl and
-> pcf8523_rtc_ioctl) use RTC_VL_BACKUP_LOW instead. Is there any guideline or
-> document telling the differences between them?
-> 
+Hello,
 
-RTC_VL_BACKUP_LOW: The backup voltage is low
-RTC_VL_ACCURACY_LOW: the primary or backup voltage is low, temperature
-compensation (or similar) has stopped
+On 11/10/21 3:27 PM, Alexandre Belloni wrote:
+> On 10/11/2021 15:03:49+0100, Camel Guo wrote:
+>> > On 10/11/2021 12:54:54+0100, Camel Guo wrote:
+>> > > From: Camel Guo <camelg@axis.com>
+>> > > +     switch (cmd) {
+>> > > +     case RTC_VL_READ:
+>> > > +             flags = 0;
+>> > > +
+>> > > +             switch (rs5c->type) {
+>> > > +             case rtc_r2025sd:
+>> > > +             case rtc_r2221tl:
+>> > > +                     if ((rs5c->type == rtc_r2025sd && !(ctrl2 & R2x2x_CTRL2_XSTP)) ||
+>> > > +                             (rs5c->type == rtc_r2221tl &&  (ctrl2 & R2x2x_CTRL2_XSTP))) {
+>> > > +                             flags |= RTC_VL_DATA_INVALID;
+>> > > +                     }
+>> > > +                     if (ctrl2 & R2x2x_CTRL2_VDET)
+>> > > +                             flags |= RTC_VL_ACCURACY_LOW;
+>> > 
+>> > Shouldn't that be RTC_VL_BACKUP_LOW?
+>> 
+>> Some drivers (e.g: rv3029_ioctl and rv8803_ioctl) use RTC_VL_ACCURACY_LOW,
+>> but some other drivers (e.g: abx80x_ioctl, pcf2127_rtc_ioctl and
+>> pcf8523_rtc_ioctl) use RTC_VL_BACKUP_LOW instead. Is there any guideline or
+>> document telling the differences between them?
+>> 
+> 
+> RTC_VL_BACKUP_LOW: The backup voltage is low
+> RTC_VL_ACCURACY_LOW: the primary or backup voltage is low, temperature
+> compensation (or similar) has stopped
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Then I agree that we should go for RTC_VL_BACKUP_LOW.
+
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
