@@ -2,148 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 425AD44C9D8
-	for <lists+linux-rtc@lfdr.de>; Wed, 10 Nov 2021 20:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2059E44CF27
+	for <lists+linux-rtc@lfdr.de>; Thu, 11 Nov 2021 02:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbhKJT41 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 10 Nov 2021 14:56:27 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:42895 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbhKJT4Y (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Nov 2021 14:56:24 -0500
-Received: by mail-ot1-f43.google.com with SMTP id g91-20020a9d12e4000000b0055ae68cfc3dso5557492otg.9;
-        Wed, 10 Nov 2021 11:53:36 -0800 (PST)
+        id S232005AbhKKBqM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 10 Nov 2021 20:46:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231312AbhKKBqK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 10 Nov 2021 20:46:10 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20FEC061766
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Nov 2021 17:43:22 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id bl12so4347182qkb.13
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Nov 2021 17:43:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ossystems-com-br.20210112.gappssmtp.com; s=20210112;
+        h=from:mime-version:references:in-reply-to:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ti7WkCLQF0dVUpIdhiLvTzXgvpPlHD77cIXHQgV4Rec=;
+        b=EYa2QkNYtPTXwou2mvSkn5MGqLVqOoi4UrhDCMEYLzVAgdA9nOnuYUVBS74QJgjnnB
+         +vs2fRL3VlV9qxeFSUYO6DnoAePV2x52Io0vChgMuLnZjw+Dsvu2L47O6xOuEUXvOe9H
+         sEn3eaRFTjKbRqcvvti9qR7kUZJcCZild2KgZNbR/E3Tk59M9V2WbDwpLa7L7rZmr6/K
+         3GKELRzoycQibUMd4kPqqLvXaCQ9RzTsEdl0Ed45uBrw4sub1NxYwPQArrBVoKSJcYL0
+         pNeRreykIULK1fHXJ9fkNGljMwKwJUackykQb6NKCZ4WTcWzYwTEWFjMhWHCiWvm1NEO
+         YxOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rtQL/sbdzpxz6Lu8ElJAZUiYQnGOPRjAvEo183EhEZQ=;
-        b=Y+G/EpUnkYeRwidEQcxcB/bCKh8UXs/sQt22sSAO1wgkYWmb6nrJ7MuuHhQul2ci8j
-         2CwHUXM2ymOtKrduUBQB+2NKgfo1yAiFZ3j6AQ3PxM07YMklELUttcvWqG0omYwHl/sV
-         yq8ZNsn3uiX3CnIQsK4DPopYdZ06Tq2RKg71EImg75aZyWplCShG2+E4b+BN9TypjKq/
-         mxKnFrAPVWtMfZ5FpoGYvy/PhT51mw5okPo70sezswBDfmXPIo1gcvzoTOUMmdMFJ1J6
-         XUoK7OrbJdyduylqzZ0cXRPntrMYyIIcF9X993qFHhgxve4XP2bRPSjR8QOauLAvH5kc
-         sZwA==
-X-Gm-Message-State: AOAM532SQ0biJ93+S/ljBKB2KNqVAnkdvc6jx23hWkd0WvEF1lIpE4E4
-        TbYwou8v7aIAf5FdWCwmag==
-X-Google-Smtp-Source: ABdhPJzPMoAqV3AUGDDa1G/mcQBg1/+e3vLu75Mv4kA30QovRpmA/hmvXuDtC6I5AysjT0t7pidUQg==
-X-Received: by 2002:a9d:6a4e:: with SMTP id h14mr1449816otn.134.1636574015905;
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id j7sm129827oon.13.2021.11.10.11.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 11:53:35 -0800 (PST)
-Received: (nullmailer pid 1864115 invoked by uid 1000);
-        Wed, 10 Nov 2021 19:53:32 -0000
-Date:   Wed, 10 Nov 2021 13:53:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     patrice.chotard@foss.st.com
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alexandre torgue <alexandre.torgue@foss.st.com>,
-        jonathan cameron <jic23@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        olivier moysan <olivier.moysan@foss.st.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-watchdog@vger.kernel.org,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        maxime coquelin <mcoquelin.stm32@gmail.com>,
-        Matt Mackall <mpm@selenic.com>, vinod koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        baolin wang <baolin.wang7@gmail.com>,
-        linux-spi@vger.kernel.org, david airlie <airlied@linux.ie>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        ohad ben-cohen <ohad@wizery.com>, linux-gpio@vger.kernel.org,
-        Jose Abreu <joabreu@synopsys.com>,
-        Le Ray <erwan.leray@foss.st.com>,
-        herbert xu <herbert@gondor.apana.org.au>,
-        michael turquette <mturquette@baylibre.com>,
-        Christophe Kerello <christophe.kerello@foss.st.com>,
-        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        linux-serial@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Ludovic Barre <ludovic.barre@foss.st.com>,
-        "david s . miller" <davem@davemloft.net>,
-        Lionel Debieve <lionel.debieve@foss.st.com>,
-        linux-i2c@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        thierry reding <thierry.reding@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        philippe cornu <philippe.cornu@foss.st.com>,
-        linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        alsa-devel@alsa-project.org, Zhang Rui <rui.zhang@intel.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-iio@vger.kernel.org, pascal Paillet <p.paillet@foss.st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        linux-pm@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        stephen boyd <sboyd@kernel.org>,
-        dillon min <dillon.minfei@gmail.com>,
-        devicetree@vger.kernel.org,
-        yannick fertre <yannick.fertre@foss.st.com>,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        linux-phy@lists.infradead.org,
-        benjamin gaignard <benjamin.gaignard@linaro.org>,
-        sam ravnborg <sam@ravnborg.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        daniel vetter <daniel@ffwll.ch>, Marc Zyngier <maz@kernel.org>,
-        bjorn andersson <bjorn.andersson@linaro.org>,
-        lars-peter clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: timers: Update maintainers for
- st,stm32-timers
-Message-ID: <YYwjPAoCtuM6iycz@robh.at.kernel.org>
-References: <20211110150144.18272-1-patrice.chotard@foss.st.com>
- <20211110150144.18272-3-patrice.chotard@foss.st.com>
+        h=x-gm-message-state:from:mime-version:references:in-reply-to:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ti7WkCLQF0dVUpIdhiLvTzXgvpPlHD77cIXHQgV4Rec=;
+        b=BO7RUfSSgP9ry2cHiENsZ57gfUutSNiF7GRuGRuIT4tyE2sz4anmwS7UJicfUWanbw
+         8UUrRd5IToIau2somcmYqJ/qF4JW4lLISfF44uGTRag99X8j7LGWdZFEhpVCzx62f1Cx
+         704ZpHZsx7jsYF2Sk2iNJaByuCDPchiVk8SSpTWFSmffzqQ1qXCcubp/vcyT2EnLHFUf
+         qdyPDlKSJqsSNP4up5zaAhLhnThWHXlimLV2IqkW+b8CMxlUy7+sw2YtrN+kvwLNZPCU
+         jle44DtzsKo8jdT/ywUrc5mXUkL4PgZCq5VkKQPcQ618Np4dwZ03mYJZ2M9j/nyxC6p4
+         2bog==
+X-Gm-Message-State: AOAM532UKQsSv/gB3ecjA5WuKIMSy/R11CsTAIXqIdRbhbB08TjkyNM1
+        rHhnxRPTTNsYnp4OguufdEsA8gFhKfauTrjD
+X-Google-Smtp-Source: ABdhPJzPLF3Ty8oE8z+P/F118qPpPi+Zm8xd9hGU61nmZIAptVioAsdLxRvAmDVMYMMgjT/SMqeDnA==
+X-Received: by 2002:a37:9481:: with SMTP id w123mr3244384qkd.75.1636595001711;
+        Wed, 10 Nov 2021 17:43:21 -0800 (PST)
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
+        by smtp.gmail.com with ESMTPSA id g19sm1004019qtg.78.2021.11.10.17.43.21
+        for <linux-rtc@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Nov 2021 17:43:21 -0800 (PST)
+From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
+X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
+Received: by mail-qt1-f182.google.com with SMTP id p19so3927109qtw.12
+        for <linux-rtc@vger.kernel.org>; Wed, 10 Nov 2021 17:43:21 -0800 (PST)
+X-Received: by 2002:ac8:5acc:: with SMTP id d12mr3970198qtd.32.1636595000843;
+ Wed, 10 Nov 2021 17:43:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110150144.18272-3-patrice.chotard@foss.st.com>
+References: <20211110132946.514825-1-festevam@gmail.com>
+In-Reply-To: <20211110132946.514825-1-festevam@gmail.com>
+Date:   Wed, 10 Nov 2021 22:43:09 -0300
+X-Gmail-Original-Message-ID: <CAP9ODKqymNyv=wP_p06ukPO=SVs4NvTXcgcjEUscKQGwmgUotA@mail.gmail.com>
+Message-ID: <CAP9ODKqymNyv=wP_p06ukPO=SVs4NvTXcgcjEUscKQGwmgUotA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt/bindings: rtc: rx8900: Add an entry for RX8804
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        Otavio Salvador <otavio@ossystems.com.br>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 10 Nov 2021 16:01:41 +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> Benjamin has left the company, remove his name from maintainers.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml | 1 -
->  1 file changed, 1 deletion(-)
-> 
+Em qua., 10 de nov. de 2021 =C3=A0s 10:29, Fabio Estevam
+<festevam@gmail.com> escreveu:
+>
+> The Epson RX8804 RTC has the same programming model as RV8803 and
+> RX8900.
+>
+> Add an entry for it in the binding document.
+>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Lee indicated he was going to pick this one up, so:
-
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Otavio Salvador <otavio@ossystems.com.br>
