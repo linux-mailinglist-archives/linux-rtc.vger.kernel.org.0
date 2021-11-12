@@ -2,59 +2,79 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FC244EE03
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Nov 2021 21:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA9444EF25
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Nov 2021 23:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235616AbhKLUpF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 12 Nov 2021 15:45:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52660 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235620AbhKLUpE (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 12 Nov 2021 15:45:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 50D3D604D7;
-        Fri, 12 Nov 2021 20:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636749733;
-        bh=7n6+6LAMHvjNzoeN5EGCUejmgr+h38crSQIm2ehEyiw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=u+rYc4d+jRXs3vyPOq01CDYL/AWhOtPuTgXnydTE9E9b1KrFxPq3QvTR5+b8Gy0Rb
-         /GPRhVD105JT6EIfnHKPPmeFzNzdfKeR/vJE9iYS2Rd/IVYd66iQL/xUjZWzdMJWAd
-         kibmYBAFWjXGdvw1DYO2KwCx8ZFCxy635H3jt9hbKkE30H5F8nOZioEEP4kWyQuILQ
-         oXeilNxe5ss2xLxr9UYNLJWoWZJmafiHBAzYXmokxQVlkhL1W8juaS+bfdaHHD0urD
-         zKU0U8CKAX64DlcDlho0A112gEnXnzIMwAtgm2j09O+DfUKhnFa5bcVV8fXzqaO+yF
-         F1bzRHmLtdNhA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4A007608FE;
-        Fri, 12 Nov 2021 20:42:13 +0000 (UTC)
-Subject: Re: [GIT PULL] RTC for 5.16
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YY2fDo+B4GfFWjn5@piout.net>
-References: <YY2fDo+B4GfFWjn5@piout.net>
-X-PR-Tracked-List-Id: <linux-rtc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YY2fDo+B4GfFWjn5@piout.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.16
-X-PR-Tracked-Commit-Id: b476266f063e680039be1541cfde5f5cee400da3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3b81bf78b7338bcc66581593e604e95addc546cc
-Message-Id: <163674973329.4802.11686374602155650762.pr-tracker-bot@kernel.org>
-Date:   Fri, 12 Nov 2021 20:42:13 +0000
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S233451AbhKLWWE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 12 Nov 2021 17:22:04 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:50789 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229634AbhKLWWE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Nov 2021 17:22:04 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id C4A6560007;
+        Fri, 12 Nov 2021 22:19:11 +0000 (UTC)
+Date:   Fri, 12 Nov 2021 23:19:11 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] rtc: s3c: S3C driver improvements
+Message-ID: <YY7oX8k3dTH6n5lp@piout.net>
+References: <20211021202256.28517-1-semen.protsenko@linaro.org>
+ <163502632457.411308.6365977083733513077.b4-ty@bootlin.com>
+ <CAPLW+4mBKH_-A5rWGKgpA=r8as6UqhmHf6h1DRg0fEY9jSmJQA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPLW+4mBKH_-A5rWGKgpA=r8as6UqhmHf6h1DRg0fEY9jSmJQA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The pull request you sent on Thu, 11 Nov 2021 23:54:06 +0100:
+On 11/11/2021 19:05:06+0200, Sam Protsenko wrote:
+> On Sun, 24 Oct 2021 at 00:58, Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> >
+> > On Thu, 21 Oct 2021 23:22:53 +0300, Sam Protsenko wrote:
+> > > While working on Exynos850 support (where this driver works fine in its
+> > > current state), I've stumbled upon some minor issue. This is the effort
+> > > to fix those.
+> > >
+> > >   * [PATCH 1/3]: moves S3C RTC driver to newer API usage
+> > >     (no functional changes)
+> > >   * [PATCH 2/3]: refactoring/cleanup (no functional changes)
+> > >   * [PATCH 3/3]: adds time range, as [PATCH 1/3] made it possible
+> > >
+> > > [...]
+> >
+> > Applied, thanks!
+> >
+> 
+> Hi Alexandre,
+> 
+> Just want to check if this series is going to be merged during current
+> merge window, or is it scheduled for the next one?
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.16
+This is now pulled by Linus.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3b81bf78b7338bcc66581593e604e95addc546cc
-
-Thank you!
+> Thanks!
+> 
+> > [1/3] rtc: s3c: Remove usage of devm_rtc_device_register()
+> >       commit: dba28c37f23a09fc32dbc37463ddb2feb3886f98
+> > [2/3] rtc: s3c: Extract read/write IO into separate functions
+> >       commit: e4a1444e10cbda2892a4ea7325ef5efa47c75cfb
+> > [3/3] rtc: s3c: Add time range
+> >       commit: a5feda3b361e11b291786d5c4ff86d4b9a55498f
+> >
+> > Best regards,
+> > --
+> > Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
