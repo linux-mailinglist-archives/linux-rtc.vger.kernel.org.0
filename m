@@ -2,82 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1FF44ED94
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Nov 2021 20:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FC244EE03
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Nov 2021 21:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbhKLTyv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 12 Nov 2021 14:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235450AbhKLTyt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Nov 2021 14:54:49 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCF6C06120B
-        for <linux-rtc@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id q14so9513732qtx.10
-        for <linux-rtc@vger.kernel.org>; Fri, 12 Nov 2021 11:51:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
-        b=Yw+p9Uo+5KQGoccvBks5Ci8+ZDlSvu7l93VGRCY8ZYQsu1lz4knSEy8/eb+Lm1NrTH
-         GzipEoLboD7DWs9KzyvxslfEQnOs47b4R+Mj3XTWdKpp9XbQbKGtQ5YEG4ijUfu4jtFE
-         /W10fgxlqEe+6aRVIUBq8hjn0WDG4ehNda55kNT8iGXmOlSHaRwW1cWqtcqPo7/8IsYv
-         ++i9VPM2+sDvzFA/3oGv0pgZ14q/FD3/XGYca2kZucVBmfHmPufcVhCxgT6+p0hlokNp
-         mczuTft5lmdIQk+wmMyhToWgPsUVVogCgYAJYJiCefNKNr/IESGhoapdVJe5hEI4CWJ5
-         GL1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=sbMEA9n9Pj/HfzsuX4iVianfftPXl0x7Eo0HpPDJsqs=;
-        b=JqYiU/nrSnHWB8q/pzgTEzf1iAjBKm7w+s5iw8cLYpFaBVi+yp0bqnks7MctOKw47O
-         g3gi4TfmMtnehhFSfXwXNXPO6BupCFtfGQZ24hVjLiKWtk8eE8T343ts1Kgw+/pyhE0V
-         PBJMsppbGmRZO4ptaTK/68pJIfZBN61pOaQpT93Og0cjVhkfdaFJsglVL6ijNiOWbsFT
-         VyFTUCsDzQ3rvnpzsjTNOhyb3+3Asp16RoX6e1OOnnSTh8eBcXihgotkIrjzcXJIclTH
-         cUljlATl+TtA5hvq104vCBXFFrLB7z/fumVtNoMJcg/Co3EiUxNcJF69u1MFE3OlhVA4
-         pxhw==
-X-Gm-Message-State: AOAM530rptdMs1gW/eDFo9k2WNszjXU5zRbpGwGHY07DPPiIm/cYhn6z
-        xy7MbbQ4hQk73LLUDJ3ZxACNW/9NbcMjxvHHq1Y=
-X-Google-Smtp-Source: ABdhPJzgXRGarOjDsfXSyoLLQhf4PuMveqEb8UybTzsWaDF3my0/TZkv9ycoscWO5tfBf/dcGT3T28QHSdbjOxuqecM=
-X-Received: by 2002:ac8:74c7:: with SMTP id j7mr18777867qtr.118.1636746717505;
- Fri, 12 Nov 2021 11:51:57 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac8:5a03:0:0:0:0:0 with HTTP; Fri, 12 Nov 2021 11:51:56
- -0800 (PST)
-Reply-To: wmchfa@gmail.com
-From:   William Chalmers <pv.wcha@gmail.com>
-Date:   Fri, 12 Nov 2021 20:51:56 +0100
-Message-ID: <CAO9cJj-OSU5qoJZ85Ow=KAGpF82M3g_cF3aScOinyZwY3Tj3mw@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S235616AbhKLUpF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 12 Nov 2021 15:45:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52660 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235620AbhKLUpE (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 12 Nov 2021 15:45:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 50D3D604D7;
+        Fri, 12 Nov 2021 20:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636749733;
+        bh=7n6+6LAMHvjNzoeN5EGCUejmgr+h38crSQIm2ehEyiw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=u+rYc4d+jRXs3vyPOq01CDYL/AWhOtPuTgXnydTE9E9b1KrFxPq3QvTR5+b8Gy0Rb
+         /GPRhVD105JT6EIfnHKPPmeFzNzdfKeR/vJE9iYS2Rd/IVYd66iQL/xUjZWzdMJWAd
+         kibmYBAFWjXGdvw1DYO2KwCx8ZFCxy635H3jt9hbKkE30H5F8nOZioEEP4kWyQuILQ
+         oXeilNxe5ss2xLxr9UYNLJWoWZJmafiHBAzYXmokxQVlkhL1W8juaS+bfdaHHD0urD
+         zKU0U8CKAX64DlcDlho0A112gEnXnzIMwAtgm2j09O+DfUKhnFa5bcVV8fXzqaO+yF
+         F1bzRHmLtdNhA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4A007608FE;
+        Fri, 12 Nov 2021 20:42:13 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 5.16
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YY2fDo+B4GfFWjn5@piout.net>
+References: <YY2fDo+B4GfFWjn5@piout.net>
+X-PR-Tracked-List-Id: <linux-rtc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YY2fDo+B4GfFWjn5@piout.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.16
+X-PR-Tracked-Commit-Id: b476266f063e680039be1541cfde5f5cee400da3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3b81bf78b7338bcc66581593e604e95addc546cc
+Message-Id: <163674973329.4802.11686374602155650762.pr-tracker-bot@kernel.org>
+Date:   Fri, 12 Nov 2021 20:42:13 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-ATTENTION,
-        Sir/Madam.
+The pull request you sent on Thu, 11 Nov 2021 23:54:06 +0100:
 
-Greetings to you, I am contacting you after going through your
-interesting profile. I am Mr.William Chalmers. I am from London, United
-Kingdom, If this message successfully gets to you, I will like to
-discuss business with you, which you will have an immense benefit from
-if we can work together with, The Group Finance Director of Lloyds
-Banking Group United Kingdom.
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.16
 
-I am contacting you for a legitimate business transaction strictly for
-you and me alone. I personally discovered a dormant account with a
-total sum of =C2=A3 1,35,000.000.00 - [One-hundred Thirty-Five Million GBP
-Only] here in our bank. The owner of this dormant account died on 4th
-Jan 2012. Since his death, nobody has operated in his account because
-the account has NO BENEFICIARY attached to it. I wish to present you
-as the next of kin to the bank.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3b81bf78b7338bcc66581593e604e95addc546cc
 
-Kindly get back to me as soon as possible for more details on how to
-proceed further. I look forward to hearing from you soon.
+Thank you!
 
-Regards,
-Mr.William Chalmers.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
