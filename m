@@ -2,64 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD4C4584C2
-	for <lists+linux-rtc@lfdr.de>; Sun, 21 Nov 2021 17:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1102458562
+	for <lists+linux-rtc@lfdr.de>; Sun, 21 Nov 2021 18:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbhKUQve (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 21 Nov 2021 11:51:34 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:60978
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237304AbhKUQvd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 21 Nov 2021 11:51:33 -0500
+        id S238395AbhKURXr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 21 Nov 2021 12:23:47 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:49664
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233693AbhKURXq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 21 Nov 2021 12:23:46 -0500
 Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 78C663F338
-        for <linux-rtc@vger.kernel.org>; Sun, 21 Nov 2021 16:48:27 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AB8503F32D
+        for <linux-rtc@vger.kernel.org>; Sun, 21 Nov 2021 17:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1637513307;
-        bh=K8WNLh2BhNltzeUMzWCHhBj0rP6siNBgFRXvuYUpglA=;
+        s=20210705; t=1637515240;
+        bh=NhrY2YoYU8o49TvBH2U7Xc9BTYaL2Sw0oQZK6cM53jg=;
         h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
          In-Reply-To:Content-Type;
-        b=XS0scDyAfhoejAEElxhW8ih9X6w/Li/cXcwoVbVgEbJr6Rv8ebxnu7X+mJBvFpRQq
-         H7u/1N4HxJvU77HdnhRwijtd9vRpnHWhCnFUZoiGCP/zt+FBiecqcTeObbKeEYpK1t
-         WnxT+W4M8fHCXZoAYOp0vldU32/gtS5LHVmDt13NApO1TFvvFMV7WfkDOd7jXYrBhR
-         tZDeB3ScYK7oulc8dpw+Qh5PyGIQa2mNpWz9qFrR8+hgxmi+2l/ZPFQVuJWCfQ/8jg
-         vmI28leUo3Ftzvlh+5R4jaZSoySykHyswxa14xG77baqVQyImTSayayAmrhyEEFoy6
-         urb3VZTxIp3Rw==
-Received: by mail-lf1-f69.google.com with SMTP id z12-20020a0565120c0c00b004037427efb7so10262356lfu.1
-        for <linux-rtc@vger.kernel.org>; Sun, 21 Nov 2021 08:48:27 -0800 (PST)
+        b=A790Fe7d5Pgr4WRmbxlyDsOGjRddmKqGwOMTmQxiWXNZew6AO3HSTQi0xA7QXb0Dx
+         hmNXHB9/QmjKlRYGTwOVm2o7fWVcnlC/bKIHrSeiOgXUhHyIBAdV/Flc0ebjx8DhAf
+         IgSWMLr6UtXeoV2V1ZvpCGv0Gabme1r+kvMK/wBgI53dO+SwOli91pib9xB4KSAg6K
+         kVvUPmC+qOtRmup8H/GpkWsbdMaoivXvmF9cAVjY9i9yW4c0rjoP0yPZPhLqAkHL+W
+         30ADOV0kFUtwM52dgrERdvW4q2gEwGZhlWro/smYJVzMtOogIG/rohMYiCSo0/tZ9t
+         doEwsPohFB8AA==
+Received: by mail-lf1-f69.google.com with SMTP id b23-20020a0565120b9700b00403a044bfcdso10300575lfv.13
+        for <linux-rtc@vger.kernel.org>; Sun, 21 Nov 2021 09:20:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=K8WNLh2BhNltzeUMzWCHhBj0rP6siNBgFRXvuYUpglA=;
-        b=P1sXxrid2BhN/oDLnJ4KsVFiz/n1QJI8fEBNQYurrDhbiUBvvy19+5UUakYRNF6JUy
-         c5uVJxPOEzDcf9QgCW/xiBGHcnmGw2+JcwfWTqM155bHOU2B5VGOFW/dtEpaYqL2b0w2
-         ty1QbvfXtD0+kuozP1ogzR6gJpPo4ZpWjw4dZLkDpj/Uj7sxVcWHeZlAc2mOvrprIKJz
-         r8NiW+6ZHDNTvZH7iwrtRfTZnjAx38u8UWXOssYMwCQvZlBrQmvaAGtgGqG+TWeuQk2+
-         5EUWvOu3UbvIOmRlOOIkxhOg/TrBZc7Z9bNWx7Qu0736ZTTA4WGUi2/CULnR6LrFiJ0Q
-         SNcA==
-X-Gm-Message-State: AOAM531fJ2Eue0/KhFzUDnrW+jBdr7gIMOkbk445wNrzAgq40RpAbj6S
-        HPd2NtLhYZ+OzIz/zMokpUgAA5/+FlXRN5mcxTxieAocjvxOOaiTkVoWMnHBeKriVrB8IV0gX8l
-        /uAmVsDqaEVQSifF5DXn9VghIyb4kqGPkns4BzA==
-X-Received: by 2002:a2e:141e:: with SMTP id u30mr44782273ljd.434.1637513306839;
-        Sun, 21 Nov 2021 08:48:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzivQ+d3pUhfOFGcDUzWT7iqm/ykn54rpcjdMc9CACB6IBgMojuJVrO+qMAr6C3C6u/fB2log==
-X-Received: by 2002:a2e:141e:: with SMTP id u30mr44782237ljd.434.1637513306650;
-        Sun, 21 Nov 2021 08:48:26 -0800 (PST)
+        bh=NhrY2YoYU8o49TvBH2U7Xc9BTYaL2Sw0oQZK6cM53jg=;
+        b=gQOs54DMXNQ2FU1jqshtfkzTaetAF3pnNxDiyTNQdaWgyReLFJ9KcDasJtBy1NdomC
+         QYGQYXxFhMCwgsQ93hme1TRImTzBQ1DMwd0neyOjWd1DI32b2CeCxtiguyGqBed5Io8S
+         NqarP4JPucZtVog0GuyyiWCPNGqdex6VwZhs6Hv1tazL5M/0tlHqmTY+WBu+/Y3LyT0l
+         SwZTKqObansE4kIJDlYf52jsu7bsHy8aEQpFt/NH9nIiYm7Zgn2pUq4QGdtEpNdi1Nl/
+         lDir+VByLI7NFdsDkGyBvmjYk/Phls5r7w4lK2V4SRbBO77TRFtdjTFQc+olBWylY7zA
+         aF/Q==
+X-Gm-Message-State: AOAM5300NCu7A/Qu9+PwGHJ0BN0eQfYVkamhM4JjPDGQtvG867ASiwdZ
+        y/fKWBLFNOnQMDMukPH83V8YeAYF3klRvqfjxAOjFUqijo8Dth1HND917JyGHVJwlSejHoZPVrU
+        sZpOKjc+H1/cuZRzl8oZ9lXN+bP4/xQ/gz9A0Lg==
+X-Received: by 2002:a05:6512:3996:: with SMTP id j22mr52673217lfu.637.1637515239404;
+        Sun, 21 Nov 2021 09:20:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3OJlK6L++IcfAoz7b9WAy/3faXnNWTTp/ncrpwEtPTPXJ5uUwkzUh2rlxkju/Nt2T4ynj0w==
+X-Received: by 2002:a05:6512:3996:: with SMTP id j22mr52673176lfu.637.1637515239152;
+        Sun, 21 Nov 2021 09:20:39 -0800 (PST)
 Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id bp41sm692511lfb.129.2021.11.21.08.48.25
+        by smtp.gmail.com with ESMTPSA id m8sm799964lfg.140.2021.11.21.09.20.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Nov 2021 08:48:26 -0800 (PST)
-Message-ID: <5e5bc9ca-b648-e465-1638-adb0a26500de@canonical.com>
-Date:   Sun, 21 Nov 2021 17:48:24 +0100
+        Sun, 21 Nov 2021 09:20:36 -0800 (PST)
+Message-ID: <42516013-3b4e-0c05-5e4a-5a1fe9ff942b@canonical.com>
+Date:   Sun, 21 Nov 2021 18:20:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.1
-Subject: Re: [PATCH v4 4/9] dt-bindings: mfd: add Maxim MAX77714 PMIC
+Subject: Re: [PATCH v4 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
 Content-Language: en-US
 To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -72,12 +72,11 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh@kernel.org>
+        Randy Dunlap <rdunlap@infradead.org>
 References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-5-luca@lucaceresoli.net>
+ <20211120155707.4019487-6-luca@lucaceresoli.net>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20211120155707.4019487-5-luca@lucaceresoli.net>
+In-Reply-To: <20211120155707.4019487-6-luca@lucaceresoli.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -85,24 +84,38 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 20/11/2021 16:57, Luca Ceresoli wrote:
-> Add bindings for the MAX77714 PMIC with GPIO, RTC and watchdog.
+> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
+> watchdog only.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Rob Herring <robh@kernel.org>
 > 
 > ---
 > 
 > Changes in v4: none
 > 
 > Changes in v3:
->  - add 'regulators' node (Krzysztof Kozlowski, Rob Herring)
+>  - Suggested by Lee Jones:
+>    - move struct mfd_cell to top of file
+>    - remove struct max77714 and its kmalloc, not used after probe
+>    - reword error messages
+>    - add "/* pF */" onto the end of the load_cap line
 > 
-> Changes in v2: none
+> Changes in v2:
+>  - fix "watchdog" word in heading comment (Guenter Roeck)
+>  - move struct max77714 to .c file (Krzysztof Kozlowski)
+>  - change include guard format (Krzysztof Kozlowski)
+>  - allow building as a module (Krzysztof Kozlowski)
+>  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
+>    (Reported-by: kernel test robot <lkp@intel.com>)
 > ---
->  .../bindings/mfd/maxim,max77714.yaml          | 68 +++++++++++++++++++
->  MAINTAINERS                                   |  5 ++
->  2 files changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+>  MAINTAINERS                  |   2 +
+>  drivers/mfd/Kconfig          |  14 ++++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77714.h |  60 ++++++++++++++
+>  5 files changed, 229 insertions(+)
+>  create mode 100644 drivers/mfd/max77714.c
+>  create mode 100644 include/linux/mfd/max77714.h
 > 
 
 
