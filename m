@@ -2,58 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B194592C6
-	for <lists+linux-rtc@lfdr.de>; Mon, 22 Nov 2021 17:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3C245986D
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Nov 2021 00:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240032AbhKVQOh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 22 Nov 2021 11:14:37 -0500
-Received: from mx08-00227901.pphosted.com ([91.207.212.184]:52378 "EHLO
-        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229955AbhKVQOf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Nov 2021 11:14:35 -0500
-Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
-        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixf018132;
-        Fri, 19 Nov 2021 10:27:13 +0100
-Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
-        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 19 Nov 2021 10:27:13 +0100
-Received: from zbw2k16ex02.bardusch.net (172.25.1.2) by
- ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
- Fri, 19 Nov 2021 10:27:11 +0100
-Received: from User (172.25.1.131) by zbw2k16ex02.bardusch.net (172.25.1.2)
- with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
- Nov 2021 10:27:00 +0100
-Reply-To: <josechoondak@gmail.com>
-From:   Joseph Choondak <info@ndd.co.mz>
-Subject: I hope this email finds you well.
-Date:   Fri, 19 Nov 2021 01:27:14 -0800
+        id S231811AbhKVXd1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 22 Nov 2021 18:33:27 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39967 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231874AbhKVXd0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 22 Nov 2021 18:33:26 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id EC831E000B;
+        Mon, 22 Nov 2021 23:30:16 +0000 (UTC)
+Date:   Tue, 23 Nov 2021 00:30:16 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] rtc: da9063: add as wakeup source
+Message-ID: <YZwoCBKy+OJl8T1u@piout.net>
+References: <20211118084008.30327-1-nikita.shubin@maquefel.me>
+ <YZYd7kNanfxY3tJq@piout.net>
+ <20211119120710.13eb1173@redslave.neermore.group>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <e36b6b33-d3b3-4f08-8033-0aba2c4cece8@zbw2k16ex02.bardusch.net>
-To:     Undisclosed recipients:;
-X-Proofpoint-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
-X-Proofpoint-ORIG-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Reason: orgsafe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119120710.13eb1173@redslave.neermore.group>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-May I please ask with considerable urgency for your kind assistance with the following matter.
-I'm a financial person, I think  I have something huge you might be interested in.
+On 19/11/2021 12:07:10+0300, Nikita Shubin wrote:
+> Hello Alexandre,
+> 
+> Sorry for the rush - I should have to think more before sending this
+> patch ...
+> 
+> On Thu, 18 Nov 2021 10:33:34 +0100
+> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> 
+> > Hello,
+> > 
+> > On 18/11/2021 11:40:08+0300, Nikita Shubin wrote:
+> > > in case if threaded irq registered successfully - add da9063
+> > > as a wakeup source if "wakeup-source" node present in device tree,
+> > > set as wakeup capable otherwise.
+> > > 
+> > > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > > ---
+> > >  drivers/rtc/rtc-da9063.c | 10 +++++++++-
+> > >  1 file changed, 9 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/rtc/rtc-da9063.c b/drivers/rtc/rtc-da9063.c
+> > > index d4b72a9fa2ba..1aceb5ba6992 100644
+> > > --- a/drivers/rtc/rtc-da9063.c
+> > > +++ b/drivers/rtc/rtc-da9063.c
+> > > @@ -490,7 +490,15 @@ static int da9063_rtc_probe(struct
+> > > platform_device *pdev) da9063_alarm_event,
+> > >  					IRQF_TRIGGER_LOW |
+> > > IRQF_ONESHOT, "ALARM", rtc);
+> > > -	if (ret)
+> > > +	if (!ret) {
+> > > +		if (device_property_present(&pdev->dev,
+> > > "wakeup-source")) {
+> > > +			device_init_wakeup(&pdev->dev, true);  
+> > 
+> > If wakeup-source is present, then this should be done regardless of
+> > the registration of the interrupt handler. Note that wakeup-source and
+> > interrupt are supposed to be mutually exclusive.
+> > 
+> 
+> We still able to wakeup either ALARM IRQ is present or not.
+> 
+> Actually the only thing is needed in this particular case is the ability
+> to set "wakealarm" via sysfs - so we can wakeup from
+> POWER-DOWN/DELIVERY/RTC modes, namely shutdown, regardless of CONFIG_PM.
+> 
+> Setting dev->power.can_wakeup to true is enough for that.
+> 
+> On the other hand device_init_wakeup also sets can_wakeup.
+> 
+> May be it's enough to use device_init_wakeup in case if ALARM IRQ is
+> present or "wakeup-source" is set ?
+> 
+> I see some construction in drivers/rtc like :
+> 
+> ```
+> rtc/rtc-pcf2127.c:673:  if (alarm_irq > 0 ||
+> device_property_read_bool(dev, "wakeup-source")) {
+> rtc/rtc-ab-eoz9.c:552:  if (client->irq > 0 ||
+> device_property_read_bool(dev, "wakeup-source")) {
+> ```
+> 
 
-Looking forward to hearing from you.
+Yes, this is what I meant, call device_init_wakeup when an irq has been
+successfully requested or wakeup-source is present.
 
 
-Respectfully!!
-Joseph Choondak
-Account Executive.
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
