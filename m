@@ -2,130 +2,250 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A58945EB61
-	for <lists+linux-rtc@lfdr.de>; Fri, 26 Nov 2021 11:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0122445ECCF
+	for <lists+linux-rtc@lfdr.de>; Fri, 26 Nov 2021 12:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377144AbhKZK20 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 26 Nov 2021 05:28:26 -0500
-Received: from forward500p.mail.yandex.net ([77.88.28.110]:39234 "EHLO
-        forward500p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376791AbhKZK0Z (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 26 Nov 2021 05:26:25 -0500
-X-Greylist: delayed 4414 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Nov 2021 05:26:24 EST
-Received: from myt6-0c96ceb81798.qloud-c.yandex.net (myt6-0c96ceb81798.qloud-c.yandex.net [IPv6:2a02:6b8:c12:2ca1:0:640:c96:ceb8])
-        by forward500p.mail.yandex.net (Yandex) with ESMTP id D83EDF01DAE;
-        Fri, 26 Nov 2021 13:23:10 +0300 (MSK)
-Received: from myt5-ca5ec8faf378.qloud-c.yandex.net (myt5-ca5ec8faf378.qloud-c.yandex.net [2a02:6b8:c12:2514:0:640:ca5e:c8fa])
-        by myt6-0c96ceb81798.qloud-c.yandex.net (mxback/Yandex) with ESMTP id cMbiGnzSOD-NAC4mgdG;
-        Fri, 26 Nov 2021 13:23:10 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1637922190;
-        bh=C8h7n/snmrr7VMsjaotT+OXGgDBbrOtd9iXOJRm2QR8=;
-        h=In-Reply-To:Subject:To:From:References:Date:Message-ID:Cc;
-        b=RIEak6uJM8ICqsffw3HIWdQ5sJMkOyM4wvX+XvqrvtakgvT51k7ELMJqQ08oQ2hHB
-         Q08zfOOJZ13b6mIKIU17MhygAaR4zGRzs8vAnf67qZij+Dtiv4xcHWY62bsmDGlojS
-         51X5WjyCSP4TwM0T7Jq66pqzcH1yV0/Zrji4NK0w=
-Authentication-Results: myt6-0c96ceb81798.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by myt5-ca5ec8faf378.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id pmKXsvOiW4-N9wq2Gcw;
-        Fri, 26 Nov 2021 13:23:09 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-Date:   Fri, 26 Nov 2021 13:23:08 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rtc: da9063: add as wakeup source
-Message-ID: <20211126132308.7b265f17@redslave.neermore.group>
-In-Reply-To: <DB9PR10MB465287595152C33A43FDBCDA80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-References: <20211123140604.21655-1-nikita.shubin@maquefel.me>
-        <DB9PR10MB465224854946DABA0F75515980609@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-        <20211126120935.188e672a@redslave.neermore.group>
-        <DB9PR10MB465287595152C33A43FDBCDA80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S233271AbhKZLoj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 26 Nov 2021 06:44:39 -0500
+Received: from mx-out.tlen.pl ([193.222.135.175]:26779 "EHLO mx-out.tlen.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232169AbhKZLmi (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 26 Nov 2021 06:42:38 -0500
+Received: (wp-smtpd smtp.tlen.pl 35669 invoked from network); 25 Nov 2021 23:12:43 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1637878363; bh=LMy6KUjHBGjULoq4e0kku+UDl+RpuwHnZhdQuJQvOMU=;
+          h=From:Subject:To:Cc;
+          b=ZaD0KTUXlh21jNEwZ9kTTVS4U/mw+LKj5n6RAqs865r1MQQd9qldw3wrlDdz92k+a
+           VN4knBTD4VbwdgpM2RCs5w8BPPjvtdH7WMCLrRZwpMksDzNWNEjlfFpQym8MK1Rrkn
+           pTp9ZabEiK4qph1Xp4LwpbYMTkVm0Vx6IMTLgXxg=
+Received: from aaen55.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.117.55])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <alexandre.belloni@bootlin.com>; 25 Nov 2021 23:12:43 +0100
+Message-ID: <277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl>
+Date:   Thu, 25 Nov 2021 23:12:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+Subject: Re: [PATCH RESEND v3 2/7] rtc-mc146818-lib: fix RTC presence check
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>
+References: <20211119204221.66918-1-mat.jonczyk@o2.pl>
+ <20211119204221.66918-3-mat.jonczyk@o2.pl> <YZ69RB0ePgaHcqVm@piout.net>
+Content-Language: en-GB
+In-Reply-To: <YZ69RB0ePgaHcqVm@piout.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 81ade90a1d98cfabcf1e5c021c7cab64
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000D [IQPk]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Adam!
+W dniu 24.11.2021 o 23:31, Alexandre Belloni pisze:
+> Hello,
+>
+> By moving this patch later on in the series, you'd avoid the subsequent
+> refactor. I think this would be better for bisection later on.
 
-On Fri, 26 Nov 2021 09:50:18 +0000
-Adam Thomson <Adam.Thomson.Opensource@diasemi.com> wrote:
+Hi,
 
-> On 26 November 2021 09:10, Nikita Shubin wrote:
-> 
-> > > Can you please make the commit message more detailed, explaining
-> > > why you're making this change; what it adds/fixes/removes/etc.?
-> > > Right now just reading this I'm unclear as to why you're adding a
-> > > call to device_init_wakeup() here. The generic I2C client code
-> > > will mark the parent MFD device as a wake source, if the relevant
-> > > boolean 'wakeup' is defined in DT, so what does this add?  
-> > 
-> > Sorry for long response had to double check setting wakeup-source in
-> > case i have missed something.
-> > 
-> > I2C_CLIENT_WAKE is set in of_i2c_get_board_info - the place da9063
-> > rtc would never get to.
-> > 
-> > Setting "wakeup-source" for pmic indeed marks it as wakeup source,
-> > but that's not exactly we want.
-> > 
-> > What we want is "wakealarm" in RTC sysfs directory, to be able to
-> > set alarm so we can wake up from SHUTDOWN/DELIVERY/RTC mode of
-> > da9063.
-> > 
-> > We do have /sys/class/rtc/rtc0/wakealarm if marking da9063-rtc as
-> > device_init_wakeup.
-> > 
-> > Unfortunately marking pmic or rtc as wakeup-source in device tree
-> > gives us nothing.
-> > 
-> > ls /proc/device-tree/soc/i2c\@10030000/pmic\@58/
-> > compatible            interrupt-parent  name  regulators
-> > wakeup-source interrupt-controller  interrupts        reg   rtc
-> >     wdt
-> > 
-> > ls /proc/device-tree/soc/i2c\@10030000/pmic\@58/rtc/
-> > compatible  name  wakeup-source
-> > 
-> > ls /sys/class/rtc/rtc0/wakealarm
-> > ls: cannot access '/sys/class/rtc/rtc0/wakealarm': No such file or
-> > directory
-> > 
-> > So i currently see that either da9063 RTC should be marked as wakeup
-> > source, or the da9063 MFD should somehow set that for RTC.
-> > 
-> > And we want this even if CONFIG_PM is off.
-> > 
-> > Mentioning "/sys/class/rtc/rtc0/wakealarm" in commit message would
-> > be enough ?  
-> 
-> Thanks for the detailed response; it helped a lot. Having reviewed
-> the core code along with your description I know understand what's
-> happening here. Basically marking as 'wakeup-source' is simply a
-> means to expose the sysfs attribute to user-space.
-> 
-> Yes I think in the commit message you should be clear that there's a
-> need to access the sys attribute 'wakealarm' in the RTC core and
-> clarify exactly why there is that need. Your commit log should be
-> good enough so that if anyone else needs to look at this later they
-> completely understand the intention behind the change.
-> 
-> By the way, I assume the functionality you're looking for could also
-> have been achieved through using the /dev/rtcX instance for DA9063?
+There are three issues I'm trying to fix in this series:
 
-Thank you for pointing this out, indeed i missed that obvious thing.
+1. (less important) Insufficient locking in cmos_set_alarm()
+2. misdetection of the RTC CMOS as broken on some motherboards,
+3. reading / writing of the RTC alarm time during RTC update-in-progress.
 
-We can also simply set alarm via rtcwake, even if CONFIG_PM is off:
+Do you mean I should drop the patch
+    nr 2. ("rtc-mc146818-lib: fix RTC presence check")
+and instead straight away introduce mc146818_avoid_UIP() with the new approach (as in patch 3 in the series),
+then modify mc146818_get_time() to use it (as in patch 4 - fixing issue nr 2),
+then modify cmos_read_alarm / cmos_set_alarm to use mc146818_avoid_UIP() (patches 5-6, fixing issue no. 3)?
 
-rtcwake -m no -s 60
+I was afraid this risks some confusion what is being fixed when.
 
-Now i am not sure we should make changes to da9063-rtc driver - what do
-you think ?
+On 19/11/2021 21:42:16+0100, Mateusz Jończyk wrote:
+
+>> To prevent an infinite loop in mc146818_get_time(),
+>> commit 211e5db19d15 ("rtc: mc146818: Detect and handle broken RTCs")
+>> added a check for RTC availability. Together with a later fix, it
+>> checked if bit 6 in register 0x0d is cleared. This, however, caused a
+>> false negative on a motherboard with an AMD SB710 southbridge; according
+>> to the specification [1], bit 6 of register 0x0d of this chipset is a
+>> scratchbit.
+>>
+>> This caused a regression in Linux 5.11 - the RTC was determined broken
+>> by the kernel and not used by rtc-cmos.c [3].
+>>
+>> As a better alternative, check whether the UIP ("Update-in-progress")
+>> bit is set for longer then 10ms. If that is the case, then apparently
+>> the RTC is either absent (and all register reads return 0xff) or broken.
+>> Also limit the number of loop iterations in mc146818_get_time() to 10 to
+>> prevent an infinite loop there.
+>>
+>> In a previous approach to this problem, I implemented a check whether
+>> the RTC_HOURS register contains a value <= 24. This, however, sometimes
+>> did not work correctly on my Intel Kaby Lake laptop. According to
+>> Intel's documentation [2], "the time and date RAM locations (0-9) are
+>> disconnected from the external bus" during the update cycle so reading
+>> this register without checking the UIP bit is incorrect.
+>>
+>> [1] AMD SB700/710/750 Register Reference Guide, page 308,
+>> https://developer.amd.com/wordpress/media/2012/10/43009_sb7xx_rrg_pub_1.00.pdf
+>>
+>> [2] 7th Generation Intel ® Processor Family I/O for U/Y Platforms [...] Datasheet
+>> Volume 1 of 2, page 209
+>> Intel's Document Number: 334658-006,
+>> https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/7th-and-8th-gen-core-family-mobile-u-y-processor-lines-i-o-datasheet-vol-1.pdf
+>>
+>> [3] Functions in arch/x86/kernel/rtc.c apparently were using it.
+>>
+>> Fixes: 211e5db19d15 ("rtc: mc146818: Detect and handle broken RTCs")
+>> Fixes: ebb22a059436 ("rtc: mc146818: Dont test for bit 0-5 in Register D")
+>> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Alessandro Zummo <a.zummo@towertech.it>
+>> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+>>
+>> v2: Tweak commit description, remove "Cc: stable" (I'll send it manually
+>> after more regression testing).
+>>
+>> v3: - add "EXPORT_SYMBOL_GPL(mc146818_does_rtc_work)",
+>> - change return type from mc146818_does_rtc_work to bool
+> This changelog should come after the --- marker
+OK
+>
+>> ---
+>> drivers/rtc/rtc-cmos.c | 10 ++++------
+>> drivers/rtc/rtc-mc146818-lib.c | 35 ++++++++++++++++++++++++++++++----
+>> include/linux/mc146818rtc.h | 1 +
+>> 3 files changed, 36 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+>> index dc3f8b0dde98..9404f58ee01d 100644
+>> --- a/drivers/rtc/rtc-cmos.c
+>> +++ b/drivers/rtc/rtc-cmos.c
+>> @@ -793,16 +793,14 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+>> rename_region(ports, dev_name(&cmos_rtc.rtc->dev));
+>> - spin_lock_irq(&rtc_lock);
+>> -
+>> - /* Ensure that the RTC is accessible. Bit 6 must be 0! */
+>> - if ((CMOS_READ(RTC_VALID) & 0x40) != 0) {
+>> - spin_unlock_irq(&rtc_lock);
+>> - dev_warn(dev, "not accessible\n");
+>> + if (!mc146818_does_rtc_work()) {
+>> + dev_warn(dev, "broken or not accessible\n");
+>> retval = -ENXIO;
+>> goto cleanup1;
+>> }
+>> + spin_lock_irq(&rtc_lock);
+>> +
+>> if (!(flags & CMOS_RTC_FLAGS_NOFREQ)) {
+>> /* force periodic irq to CMOS reset default of 1024Hz;
+>> *
+>> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+>> index dcfaf09946ee..b50612ce1a6d 100644
+>> --- a/drivers/rtc/rtc-mc146818-lib.c
+>> +++ b/drivers/rtc/rtc-mc146818-lib.c
+>> @@ -8,10 +8,36 @@
+>> #include <linux/acpi.h>
+>> #endif
+>> +/*
+>> + * If the UIP (Update-in-progress) bit of the RTC is set for more then
+>> + * 10ms, the RTC is apparently broken or not present.
+>> + */
+>> +bool mc146818_does_rtc_work(void)
+>> +{
+>> + int i;
+>> + unsigned char val;
+>> + unsigned long flags;
+>> +
+>> + for (i = 0; i < 10; i++) {
+>> + spin_lock_irqsave(&rtc_lock, flags);
+>> + val = CMOS_READ(RTC_FREQ_SELECT);
+>> + spin_unlock_irqrestore(&rtc_lock, flags);
+>> +
+>> + if ((val & RTC_UIP) == 0)
+>> + return true;
+>> +
+>> + mdelay(1);
+>> + }
+>> +
+>> + return false;
+>> +}
+>> +EXPORT_SYMBOL_GPL(mc146818_does_rtc_work);
+>> +
+>> unsigned int mc146818_get_time(struct rtc_time *time)
+>> {
+>> unsigned char ctrl;
+>> unsigned long flags;
+>> + unsigned int iter_count = 0;
+>> unsigned char century = 0;
+>> bool retry;
+>> @@ -20,13 +46,14 @@ unsigned int mc146818_get_time(struct rtc_time *time)
+>> #endif
+>> again:
+>> - spin_lock_irqsave(&rtc_lock, flags);
+>> - /* Ensure that the RTC is accessible. Bit 6 must be 0! */
+>> - if (WARN_ON_ONCE((CMOS_READ(RTC_VALID) & 0x40) != 0)) {
+>> - spin_unlock_irqrestore(&rtc_lock, flags);
+>> + if (iter_count > 10) {
+>> + pr_err_ratelimited("Unable to read current time from RTC\n");
+> I'd prefer if we could avoid adding strings in the lib.
+
+The problem is that mc146818_get_time() is used 4 times in the kernel and the callers do not check
+its return value. Before this patch, I was getting something like this in dmesg:
+
+[    0.352905] ------------[ cut here ]------------
+[    0.352905] WARNING: CPU: 0 PID: 1 at drivers/rtc/rtc-mc146818-lib.c:25 mc146818_get_time+0x1d5/0x230
+[    0.352905] Modules linked in:
+[    0.352905] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.13.0stacj-mj4 #3
+[    0.352905] Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./A780GXH/128M, BIOS P1.70 05/14/2010
+[    0.352905] RIP: 0010:mc146818_get_time+0x1d5/0x230
+[    0.352905] Code: 10 5b 41 5c 41 5d 41 5e 41 5f 5d c3 4c 89 e6 48 c7 c7 d0 a7 ba a3 e8 ca a8 2f 00 bf 58 89 41 00 e8 30 78 d0 ff e9 43 fe ff
+ff <0f> 0b 48 c7 c7 d0 a7 ba a3 4c 89 e6 e8 aa a8 2f 00 48 c7 03 ff ff
+[    0.352905] RSP: 0018:ffffbf8d8001fda8 EFLAGS: 00010002
+[...]
+[    0.352905] PM: RTC time: 18446744073709551615:18446744073709551615:18446744073709551615, date: 1899-00-18446744073709551615
+
+which is not very helpful.
+
+So I think I'll modify (in a separate patch) the callers to check the result and print a warning message (alspo in the callers).
+
+For the record, the callers are:
+
+drivers/rtc/rtc-cmos.c:    mc146818_get_time(t);
+drivers/base/power/trace.c:    mc146818_get_time(&time);
+arch/alpha/kernel/rtc.c:    mc146818_get_time(tm);
+arch/x86/kernel/hpet.c:        mc146818_get_time(&curr_time);
+
+Greetings,
+
+Mateusz
+
+>> memset(time, 0xff, sizeof(*time));
+>> return 0;
+>> }
+>> + iter_count++;
+>> +
+>> + spin_lock_irqsave(&rtc_lock, flags);
+>> /*
+>> * Check whether there is an update in progress during which the
+>> diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+>> index 0661af17a758..69c80c4325bf 100644
+>> --- a/include/linux/mc146818rtc.h
+>> +++ b/include/linux/mc146818rtc.h
+>> @@ -123,6 +123,7 @@ struct cmos_rtc_board_info {
+>> #define RTC_IO_EXTENT_USED RTC_IO_EXTENT
+>> #endif /* ARCH_RTC_LOCATION */
+>> +bool mc146818_does_rtc_work(void);
+>> unsigned int mc146818_get_time(struct rtc_time *time);
+>> int mc146818_set_time(struct rtc_time *time);
+>> -- 2.25.1
+>>
+
+
