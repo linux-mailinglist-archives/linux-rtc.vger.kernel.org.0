@@ -2,15 +2,15 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0150C45D60B
-	for <lists+linux-rtc@lfdr.de>; Thu, 25 Nov 2021 09:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C327645D54D
+	for <lists+linux-rtc@lfdr.de>; Thu, 25 Nov 2021 08:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234391AbhKYIUq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 25 Nov 2021 03:20:46 -0500
-Received: from mx-out.tlen.pl ([193.222.135.158]:12088 "EHLO mx-out.tlen.pl"
+        id S238883AbhKYHUt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 25 Nov 2021 02:20:49 -0500
+Received: from mx-out.tlen.pl ([193.222.135.158]:50049 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347232AbhKYISp (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 25 Nov 2021 03:18:45 -0500
+        id S1352782AbhKYHSq (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 25 Nov 2021 02:18:46 -0500
 Received: (wp-smtpd smtp.tlen.pl 28409 invoked from network); 25 Nov 2021 06:28:52 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
           t=1637818132; bh=dm5AajixXHCRSWQL4H2xZWv4TUiiZ2j0GzIFPSh9Avk=;
