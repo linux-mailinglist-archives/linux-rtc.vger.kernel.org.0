@@ -2,166 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFEE460C49
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 02:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFF3460F52
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 08:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239743AbhK2BgV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 28 Nov 2021 20:36:21 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:42524 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbhK2BeU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 28 Nov 2021 20:34:20 -0500
-Received: by mail-ot1-f45.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so23274106otv.9;
-        Sun, 28 Nov 2021 17:31:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yuIIzswFUnhvz0vYtUmOo6fxmiYVeZ1BcocfPx8Cer0=;
-        b=TmIzQ2EIMcX38nRJpXNpOJSaLTr49uqxbzqHHxYlGx0tk4+ECz2jxxJLiSPm5OhPyV
-         wjnj3vSU2f8LYt7vh6jMFJcX/CxRezV3jVUmnjP/+9+QYu/PjFU9vnXxb2vgmf5IRPfK
-         Vb5xu1sU5erz88yatwOLVFyvB5iC2J5EPjFcRsyGUnuqYD3ZTe2hziun1NPBd9HOemRx
-         OTGFaZRx8e/HOZ8w3Qdm6MLEUZrXeVq/Y0nH9tcB86fwpvq3WThJHOeVNCjA64TG+vfK
-         K/c7vm4+5FEkRRE0QIT8WyzBoQaKbDWSNMhR32oSJPur7q198rHpSAmi21QQ7yrrMe19
-         nTyg==
-X-Gm-Message-State: AOAM532IUmJguNmvxkvc9Na88vGtCNiUzilZRAbDIwoYFzWRQ4JEnOLz
-        ms2b5N0SMIjabgkOrMGloA==
-X-Google-Smtp-Source: ABdhPJxNqsJLNITH3dadj8Cskxno577tzHZOr8BseIopy2fnI1hRPHMJoCRM9iNy5zKKsWm9ZaB2/g==
-X-Received: by 2002:a9d:1727:: with SMTP id i39mr40387654ota.48.1638149463653;
-        Sun, 28 Nov 2021 17:31:03 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.99.229])
-        by smtp.gmail.com with ESMTPSA id g24sm2421582oti.19.2021.11.28.17.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 17:31:03 -0800 (PST)
-Received: (nullmailer pid 2978665 invoked by uid 1000);
-        Mon, 29 Nov 2021 01:31:00 -0000
-Date:   Sun, 28 Nov 2021 19:31:00 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com,
-        in-reply-to=1635834123-24668-1-git-send-email-vincent.shih@sunplus.com,
-        Vincent Shih <vincent.shih@sunplus.com>
-Subject: Re: [PATCH v2 2/2] dt-bindings: rtc: Convert Sunplus RTC to
- json-schema
-Message-ID: <YaQtVDilgRqQu4KL@robh.at.kernel.org>
-References: <1636439898-7358-1-git-send-email-vincent.shih@sunplus.com>
- <1636439898-7358-3-git-send-email-vincent.shih@sunplus.com>
+        id S236776AbhK2Hcg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 29 Nov 2021 02:32:36 -0500
+Received: from forward100o.mail.yandex.net ([37.140.190.180]:51296 "EHLO
+        forward100o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231872AbhK2Hag (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 02:30:36 -0500
+Received: from iva4-d8b0e1d849e5.qloud-c.yandex.net (iva4-d8b0e1d849e5.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:825:0:640:d8b0:e1d8])
+        by forward100o.mail.yandex.net (Yandex) with ESMTP id 948ED52AA678;
+        Mon, 29 Nov 2021 10:27:13 +0300 (MSK)
+Received: from iva6-2d18925256a6.qloud-c.yandex.net (iva6-2d18925256a6.qloud-c.yandex.net [2a02:6b8:c0c:7594:0:640:2d18:9252])
+        by iva4-d8b0e1d849e5.qloud-c.yandex.net (mxback/Yandex) with ESMTP id xdeE83QEUJ-RDC0OG9d;
+        Mon, 29 Nov 2021 10:27:13 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1638170833;
+        bh=JYQsy4mOX+raRW9UXfPNZdvs9lW5+P8ca7w6o6pREMY=;
+        h=Date:Subject:To:From:Message-Id:Cc;
+        b=mwT4VtTil47JBnyhUQH5ovT0MLlTcsk3JDXfiJ0DmXJ5h3cZqk9EVR9jKJDuES55s
+         fjDLihf0XP42qvC1XU3R2TIxWG5qpF++EtC/RhAI8uU48qx/Ag4coC8KEDhIOTDQGQ
+         /7E5F4e+X7gnEAiELQewkG2vDnJnNUWB7FTbrodQ=
+Authentication-Results: iva4-d8b0e1d849e5.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by iva6-2d18925256a6.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id wqH2Ri6STH-RCLicaq7;
+        Mon, 29 Nov 2021 10:27:12 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] rtc: da9063: add as wakeup source
+Date:   Mon, 29 Nov 2021 10:26:49 +0300
+Message-Id: <20211129072650.22686-1-nikita.shubin@maquefel.me>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1636439898-7358-3-git-send-email-vincent.shih@sunplus.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 02:38:18PM +0800, Vincent Shih wrote:
-> Convert Sunplus RTC to json-schema
+As da9063 RTC is not a real I2C client, but relies on da9063 MFD 
+driver, we need to explicitly mark da9063 RTC as a wakeup source 
+to be able to access class/rtc/rtcN/wakealarm sysfs entry 
+to set alarms, so we can wakeup from SHUTDOWN/RTC/DELIVERY mode.
 
-You are adding, not converting.
+As da9063 driver refuses to load without irq, we simply add it 
+as a wakeup source before registering rtc device.
 
-> 
-> Signed-off-by: Vincent Shih <vincent.shih@sunplus.com>
+Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+---
+v2->v3:
+Adam Thomson:
+Commit message more verbose.
+---
+ drivers/rtc/rtc-da9063.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The author (From) must match S-o-b.
+diff --git a/drivers/rtc/rtc-da9063.c b/drivers/rtc/rtc-da9063.c
+index d4b72a9fa2ba..b9a73356bace 100644
+--- a/drivers/rtc/rtc-da9063.c
++++ b/drivers/rtc/rtc-da9063.c
+@@ -494,6 +494,8 @@ static int da9063_rtc_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "Failed to request ALARM IRQ %d: %d\n",
+ 			irq_alarm, ret);
+ 
++	device_init_wakeup(&pdev->dev, true);
++
+ 	return devm_rtc_register_device(rtc->rtc_dev);
+ }
+ 
+-- 
+2.31.1
 
-> ---
-> Changes in v2:
->  - Removed the header file of dt-bindings/clock/sp-sp7021.h
->  - Removed the header file of dt-bindings/reset/sp-sp7021.h
->  - Modified some statements after removing the header files
-> 
->  .../bindings/rtc/sunplus,sp7021-rtc.yaml           | 56 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml b/Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
-> new file mode 100644
-> index 0000000..e74e015
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/sunplus,sp7021-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus SP7021 Real Time Clock controller
-> +
-> +maintainers:
-> +  - Vincent Shih <vincent.shih@sunplus.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: sunplus,sp7021-rtc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  reg-names:
-> +    items:
-> +      - const: rtc_reg
-
-reg-names is kind of pointless here. At a minimum, '_reg' is redundant.
-
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - resets
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    rtc: serial@9c003A00 {
-
-rtc@9c003a00
-
-> +        compatible = "sunplus,sp7021-rtc";
-> +        reg = <0x9c003A00 0x80>;
-
-Use consistent case for hex (lower case).
-
-> +        reg-names = "rtc_reg";
-> +        clocks = <&clkc 0x12>;
-> +        resets = <&rstc 0x02>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <163 IRQ_TYPE_EDGE_RISING>;
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 6c1a535..c6774d1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17949,6 +17949,7 @@ SUNPLUS RTC DRIVER
->  M:	Vincent Shih <vincent.shih@sunplus.com>
->  L:	linux-rtc@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
->  F:	drivers/rtc/rtc-sunplus.c
->  
->  SUPERH
-> -- 
-> 2.7.4
-> 
-> 
