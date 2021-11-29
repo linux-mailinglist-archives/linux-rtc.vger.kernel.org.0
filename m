@@ -2,82 +2,211 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFF3460F52
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 08:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30494611B8
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 11:05:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236776AbhK2Hcg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Nov 2021 02:32:36 -0500
-Received: from forward100o.mail.yandex.net ([37.140.190.180]:51296 "EHLO
-        forward100o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231872AbhK2Hag (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 02:30:36 -0500
-Received: from iva4-d8b0e1d849e5.qloud-c.yandex.net (iva4-d8b0e1d849e5.qloud-c.yandex.net [IPv6:2a02:6b8:c0c:825:0:640:d8b0:e1d8])
-        by forward100o.mail.yandex.net (Yandex) with ESMTP id 948ED52AA678;
-        Mon, 29 Nov 2021 10:27:13 +0300 (MSK)
-Received: from iva6-2d18925256a6.qloud-c.yandex.net (iva6-2d18925256a6.qloud-c.yandex.net [2a02:6b8:c0c:7594:0:640:2d18:9252])
-        by iva4-d8b0e1d849e5.qloud-c.yandex.net (mxback/Yandex) with ESMTP id xdeE83QEUJ-RDC0OG9d;
-        Mon, 29 Nov 2021 10:27:13 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1638170833;
-        bh=JYQsy4mOX+raRW9UXfPNZdvs9lW5+P8ca7w6o6pREMY=;
-        h=Date:Subject:To:From:Message-Id:Cc;
-        b=mwT4VtTil47JBnyhUQH5ovT0MLlTcsk3JDXfiJ0DmXJ5h3cZqk9EVR9jKJDuES55s
-         fjDLihf0XP42qvC1XU3R2TIxWG5qpF++EtC/RhAI8uU48qx/Ag4coC8KEDhIOTDQGQ
-         /7E5F4e+X7gnEAiELQewkG2vDnJnNUWB7FTbrodQ=
-Authentication-Results: iva4-d8b0e1d849e5.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Received: by iva6-2d18925256a6.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id wqH2Ri6STH-RCLicaq7;
-        Mon, 29 Nov 2021 10:27:12 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 2
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Nikita Shubin <nikita.shubin@maquefel.me>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] rtc: da9063: add as wakeup source
-Date:   Mon, 29 Nov 2021 10:26:49 +0300
-Message-Id: <20211129072650.22686-1-nikita.shubin@maquefel.me>
-X-Mailer: git-send-email 2.31.1
+        id S239714AbhK2KIu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 29 Nov 2021 05:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232220AbhK2KGt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 05:06:49 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A1AC0617A1
+        for <linux-rtc@vger.kernel.org>; Mon, 29 Nov 2021 01:45:36 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mrdDw-0000Zg-Ul; Mon, 29 Nov 2021 10:45:24 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1mrdDv-0003uZ-4L; Mon, 29 Nov 2021 10:45:23 +0100
+Message-ID: <9640ea147188dc18586a399d903cd5a8759e2714.camel@pengutronix.de>
+Subject: Re: [PATCH v2 1/2] rtc: Add driver for Sunplus SP7021
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Vincent Shih <vincent.sunplus@gmail.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com,
+        in-reply-to=1635834123-24668-1-git-send-email-vincent.shih@sunplus.com
+Cc:     Vincent Shih <vincent.shih@sunplus.com>
+Date:   Mon, 29 Nov 2021 10:45:23 +0100
+In-Reply-To: <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
+References: <1636439898-7358-1-git-send-email-vincent.shih@sunplus.com>
+         <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-As da9063 RTC is not a real I2C client, but relies on da9063 MFD 
-driver, we need to explicitly mark da9063 RTC as a wakeup source 
-to be able to access class/rtc/rtcN/wakealarm sysfs entry 
-to set alarms, so we can wakeup from SHUTDOWN/RTC/DELIVERY mode.
+Hi Vincent,
 
-As da9063 driver refuses to load without irq, we simply add it 
-as a wakeup source before registering rtc device.
+On Tue, 2021-11-09 at 14:38 +0800, Vincent Shih wrote:
+[...]
+> +struct sunplus_rtc {
+> +	struct clk *rtcclk;
+> +	struct reset_control *rstc;
+> +	void __iomem *base;
+> +	u32 ohms;
+> +};
+> +
+> +struct sunplus_rtc sp_rtc;
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
-v2->v3:
-Adam Thomson:
-Commit message more verbose.
----
- drivers/rtc/rtc-da9063.c | 2 ++
- 1 file changed, 2 insertions(+)
+Why is this global?
 
-diff --git a/drivers/rtc/rtc-da9063.c b/drivers/rtc/rtc-da9063.c
-index d4b72a9fa2ba..b9a73356bace 100644
---- a/drivers/rtc/rtc-da9063.c
-+++ b/drivers/rtc/rtc-da9063.c
-@@ -494,6 +494,8 @@ static int da9063_rtc_probe(struct platform_device *pdev)
- 		dev_err(&pdev->dev, "Failed to request ALARM IRQ %d: %d\n",
- 			irq_alarm, ret);
- 
-+	device_init_wakeup(&pdev->dev, true);
-+
- 	return devm_rtc_register_device(rtc->rtc_dev);
- }
- 
--- 
-2.31.1
 
+[...]
+> +static int sp_rtc_probe(struct platform_device *plat_dev)
+> +{
+> +	struct rtc_device *rtc;
+> +	struct resource *res;
+> +	const struct rtc_class_ops *rtc_ops;
+> +	void __iomem *reg_base;
+> +	int ret, irq;
+> +
+> +	memset(&sp_rtc, 0, sizeof(sp_rtc));
+
+I'd allocate device private data here with devm_kzalloc() instead.
+
+> +	// find and map our resources
+> +	res = platform_get_resource_byname(plat_dev, IORESOURCE_MEM, RTC_REG_NAME);
+> +
+> +	if (res) {
+> +		dev_dbg(&plat_dev->dev, "res = 0x%x\n", res->start);
+> +
+> +		reg_base = devm_ioremap_resource(&plat_dev->dev, res);
+
+There is no need to check res before feeding it into
+devm_ioremap_resource(). You can simplify this even further with
+devm_platform_ioremap_resource_by_name().
+
+> +		if (IS_ERR(reg_base)) {
+> +			dev_err(&plat_dev->dev, "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
+> +			return PTR_ERR(reg_base);
+> +		}
+> +
+> +		dev_dbg(&plat_dev->dev, "reg_base = 0x%lx\n", (unsigned long)reg_base);
+> +	}
+> +
+> +	sp_rtc.base = reg_base;
+> +	rtc_ops = &sp_rtc_ops;
+> +
+> +	// Keep RTC from system reset
+> +	writel(DIS_SYS_RST_RTC_MASK | DIS_SYS_RST_RTC, sp_rtc.base + RTC_CTRL);
+
+Are you allowed to write to sp_rtc.base registers before releasing the
+reset?
+
+> +	// request irq
+> +	irq = platform_get_irq(plat_dev, 0);
+> +	if (irq < 0) {
+> +		dev_err(&plat_dev->dev, "platform_get_irq failed\n");
+> +		irq = IRQ_NOTCONNECTED;
+
+By doing this you are making devm_request_irq() below return -ENOTCONN.
+Why not return the real error code right here?
+
+		return dev_err_probe(&plat_dev->dev, irq, "platform_get_irq failed\n");
+
+> +	}
+> +
+> +	ret = devm_request_irq(&plat_dev->dev, irq, rtc_irq_handler,
+> +					IRQF_TRIGGER_RISING, "rtc irq", plat_dev);
+> +	if (ret) {
+> +		dev_err(&plat_dev->dev, "devm_request_irq failed: %d\n", ret);
+> +		return ret;
+
+This could be shortened to:
+
+		return dev_err_probe(&plat_dev->dev, ret, "devm_request_irq failed\n");
+
+> +	}
+> +
+> +	// Setup trickle charger
+> +	if (plat_dev->dev.of_node)
+> +		sp_rtc_set_trickle_charger(plat_dev->dev);
+> +
+> +	// reset
+> +	sp_rtc.rstc = devm_reset_control_get_exclusive(&plat_dev->dev, NULL);
+> +	if (IS_ERR(sp_rtc.rstc)) {
+> +		ret = dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc.rstc),
+> +					    "failed to retrieve reset controller\n");
+> +		return PTR_ERR(sp_rtc.rstc);
+
+This could be shortened to:
+
+		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc.rstc),
+				     "failed to retrieve reset controller\n");
+
+> +	}
+> +
+> +	// clk
+> +	sp_rtc.rtcclk = devm_clk_get(&plat_dev->dev, NULL);
+> +	if (IS_ERR(sp_rtc.rtcclk)) {
+> +		dev_err(&plat_dev->dev, "devm_clk_get fail\n");
+> +		return PTR_ERR(sp_rtc.rtcclk);
+
+
+> +	}
+> +
+> +	ret = reset_control_deassert(sp_rtc.rstc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(sp_rtc.rtcclk);
+> +	if (ret)
+
+Assert reset on failure?
+
+> +		return ret;
+> +
+> +	device_init_wakeup(&plat_dev->dev, 1);
+> +
+> +	rtc = devm_rtc_allocate_device(&plat_dev->dev);
+> +	if (IS_ERR(rtc))
+
+Disable clock and assert reset on failure?
+
+> +		return PTR_ERR(rtc);
+> +
+> +	rtc->range_max = U32_MAX;
+> +	rtc->range_min = 0;
+> +	rtc->ops = rtc_ops;
+> +
+> +	ret = devm_rtc_register_device(rtc);
+> +	if (ret)
+> +		goto free_reset_assert_clk;
+> +
+> +	platform_set_drvdata(plat_dev, rtc);
+> +	dev_info(&plat_dev->dev, "sp7021-rtc loaded\n");
+> +
+> +	return 0;
+> +
+> +free_reset_assert_clk:
+> +	reset_control_assert(sp_rtc.rstc);
+> +	clk_disable_unprepare(sp_rtc.rtcclk);
+
+Should this be the other way around? I'd expect this to be in the
+opposite order of reset deassert and clock enable.
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int sp_rtc_remove(struct platform_device *plat_dev)
+> +{
+> +	reset_control_assert(sp_rtc.rstc);
+> +	clk_disable_unprepare(sp_rtc.rtcclk);
+
+Same as above.
+
+regards
+Philipp
