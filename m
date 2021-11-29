@@ -2,136 +2,450 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E16246131B
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 12:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E124613CA
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 12:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348694AbhK2LJU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Nov 2021 06:09:20 -0500
-Received: from mail-eopbgr50083.outbound.protection.outlook.com ([40.107.5.83]:3767
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1354283AbhK2LHT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:07:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m3UASlnhhDtKjct4QsgWAx7ZjP7aEUBIi9a38pAuAzyv7+xMnarTKaRSYQDrfYbCivze6Xp+k4ooqbrHiuCEVKsiAzgPujVFfl69tOlMjGzLdi6F0vN0jlaIFvxsF5g3V3Z/h3mYzw9ebE2c8F5KKOK1hw53EzxoBOG+HUFYyBqqD+utQf8houEtAcR9/yyVF2hjGuHlGe+InX8ZyhfLF7ceb1Z/5+MemtNu+4+gqJCxsCiCJEtmXDteH35jhU7RdZ0pWkVNx/3Z/0MjTZJrdEz/AQrztwPkm0Xpn/MLPR8fznnrNNDpC9wE/q13K++uNm9G4FqLHeCumIYCvY0AOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6U4M0jeBxTtOJBYWjW/uFzQxfarVZS4/sMwkDAOiTL4=;
- b=C5NkjrOfUao4djM8DSU9RDVEUJ3WJX1V+0E4ZhgGBxMkugsqpPcFZG5RemC58EMZtFlGNfHFLZd029M88lhC/GXyP9cTcrHqZKaNq5I33ypfPXQGt5U4aUQEv7ZLs0tVkv59NXXNqFgLgbXnILeEeo5hnTimJnfAoYTshmAxK7njzqQ5n4qkaNpZeUQqHey4gJpVcY2Qxik4k2U7HrRHuiCEfQqjd4xablQWPGc8TcsYUeUiuMp8zGm9pSby+Ptq7F/d1hEMw6PJnnh3ukSyVQhy3s73CGUiqpXghkdJksJ7DZ4mnzWq7TdB40bzTpDjQGCEzINHqRqXdce1L/dLbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
- dkim=pass header.d=diasemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6U4M0jeBxTtOJBYWjW/uFzQxfarVZS4/sMwkDAOiTL4=;
- b=QxxM+kjcpzHOaKYXEhveKTBCVn1gODZ3dduIwNlNOLaEckbljSkw+AGrtSy2AibTlPC6ZMMOAx8Zmhs6kkkuH12hGvis5IEOAiz441mf/EAAoBnpJeSHYXzhHusrUpaOBWIE/uwq/BS6a1m3ymwLxULoVeFmP1P2yPxZlP0T2Cs=
-Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
- by DB6PR10MB1576.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:6:38::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Mon, 29 Nov
- 2021 11:03:56 +0000
-Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::852d:c54f:8414:3276]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::852d:c54f:8414:3276%3]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 11:03:56 +0000
-From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-CC:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] rtc: da9063: add as wakeup source
-Thread-Topic: [PATCH v3] rtc: da9063: add as wakeup source
-Thread-Index: AQHX5PKJ6KO7EBlE+EGOwLgsbrHEvawaV2TA
-Date:   Mon, 29 Nov 2021 11:03:56 +0000
-Message-ID: <DB9PR10MB4652F8B0DD6D4294276CFCB980669@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-References: <20211129072650.22686-1-nikita.shubin@maquefel.me>
-In-Reply-To: <20211129072650.22686-1-nikita.shubin@maquefel.me>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=diasemi.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cc4c7d63-4e07-46d8-fbec-08d9b327f037
-x-ms-traffictypediagnostic: DB6PR10MB1576:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-microsoft-antispam-prvs: <DB6PR10MB157637A362DE887BEEA5799BA7669@DB6PR10MB1576.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tewpxOhILP4OKPEBHwgjq6kUCoEv8H1i2fW2tZh/yXwVlrU8VlOvO+OZZ4p8tcLUtom9G8w+l1p+LIUZUB6VsesAcriLY7F2F4t+LFxMMPLEWeo6UmDndMPbWEKwaGAaru48dWYTJbawlUJu3zENgTFsaIOeJ1iPzuSVoN9G3O9DMG8aMDGNvNnKvOz4gCxeou4PYEI9q+IlmZa97wBKprmhQnTzWanRlF23Q0CnWKXrIe/ncIFpDQPdlSS6xyUtLked+w/ZkPyxzWAMwyaHA9wlMX8Gem0n/h8LUtYXkzXDcc/E7yzFaTXLRsra5a84bqFM4Qk1MDhwE2R9vuT8TWA5MEfMhMQDxeV50r4DwjYK5Ku+84t1I/HJb6H1i2F9mNTa6/RWVxRFktV6RUuRSwRNVF+E/npvDZii+ypwOpZUZS4CicyCk3z61vX60+9KhHuqUJ0n+mBMAfzdyCu+oG/7VwM5krk7H3s2gYdxVhmfXvmby/J0hN5M4njKtPjrFH5e65sZkOyiyd1U+ldijK/uF7viVWOryRHHpp9pBw0FH9NIojVxcNngJLad9wmhOopcZCAIhmITiRwEpM/AnsrhMQg9pM92CHedXcO1PUeryPC/yXJelj0rgk3I8cuiCsAXDgBpY95enCDNK2JOs7yNiWZlpCGg1Tz5QtNKbiZVnHDVb1R8V4ww9A6Sr3yxDTyXVOAS8z+ZNPQ2cRQHTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(9686003)(38100700002)(122000001)(7696005)(83380400001)(52536014)(86362001)(4326008)(54906003)(2906002)(6916009)(5660300002)(55016003)(6506007)(33656002)(53546011)(76116006)(66476007)(26005)(38070700005)(64756008)(186003)(66556008)(66946007)(4744005)(316002)(8936002)(8676002)(71200400001)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fhr8D1mnr7dRbEJ19iMDXKSFyeeQvMMb/mOZo53kU31DzS1xj9VnCNsFGSC3?=
- =?us-ascii?Q?El8bwCEEZ4LxW68eQE2hj48qMws2xv7zGRlSN5rF0mtFfWZDnhOfCvNo6NtY?=
- =?us-ascii?Q?LZrX8zEg5lkkJR+mkmwHIe/v5yFnd+K1n/mlj55m7VSRAdaRZ4D0JzjWxfRr?=
- =?us-ascii?Q?VsJ621V86YLDtJdSBgrOyDQI0fhycN9WftjizIYhzW8HmocUZwnZwDfSSxn4?=
- =?us-ascii?Q?UfgzDkVmJt7R9GAAR7bMtJDZ8gFd7lOi+aIfBAgucoKxVsNxevsAFKwjqvUQ?=
- =?us-ascii?Q?oyK2hFbqotVrHkfqUu7Y/go0KaOqouveVRfXVDKfSnmXku7+y5R0YJeQOZDp?=
- =?us-ascii?Q?odVFRbKBy9ULJTFRdQbfyOki/m3SgJtGX9hhFmf4LXbdL6nbKnSWpgmCcFdK?=
- =?us-ascii?Q?CAOGwKiL6+h4Cu0FjTGU9kH2DtiuFeMJjrSo3SwFBkj3a0UME9yxuqg4ChSy?=
- =?us-ascii?Q?IOD90fdP+O3mG7iP4I2Be2NJcHgY/alQgQJiGiLNIemaWJj4ygLDZMf5F8k+?=
- =?us-ascii?Q?+AG50XQL4+oc2PR16QVVKOp4qNEeqnCYeGUByYmm/PBWutpx5yVvoiYmQ1fZ?=
- =?us-ascii?Q?+wWCOX68BinszBC9TKcEOCq5xdRTT219yc1gKmnTn9BZCH9LVEEsuYrHlzrN?=
- =?us-ascii?Q?mtopoUIDG5yEG8Mjf5m0Jcda1GXdJ99zVOt7ilfeQWdaqMAPExUcWsuApxSy?=
- =?us-ascii?Q?YWKnT6FOCyzWt0O73iQHyzMKa2pyWvs/N2EtW6DoE0XjBeNu7te/dT53JRtJ?=
- =?us-ascii?Q?CD17+kRKDCAXhXEWgaUgnd0XXfgXBSnxKin74JL2N2N4yWMK9dqbwAsrGnXK?=
- =?us-ascii?Q?1AmF0iXR9SV2446AhhYYHK+4DbX1NmXfeq+JM78KpyRCpIam2rdk2DLd4kr9?=
- =?us-ascii?Q?MENo4Fhqj8XcRyq+d9r1850/d0jQW+bxR0KOxz0c6xLT8DXALURzYieTSYRR?=
- =?us-ascii?Q?VrbPL0B9vCK0nDqW8LbIRXvRY2HhHa2MSImWAo9Z4wfvxAQqOXNMybrKJYgK?=
- =?us-ascii?Q?85V6LwEATwkJ2T03WS6xSEBxSn+33D9w4gVrwQHqouFLp39v9wr0d+UPtBJH?=
- =?us-ascii?Q?Ajoee99hN+q4GRVrK9BysZs8mO15yLI3uENMT1TlTD2897+O0d8Ctq7fqyRC?=
- =?us-ascii?Q?+CV5zdvJgBq2/Ym2f7k2kz5Mxv/xcVxoqGUpWIwft7auB23PGx1H794JaNLe?=
- =?us-ascii?Q?a/ZO3cKPUrA3mnXhhci1GiPgOb7T73nJEe4gAx+5lL3GYapLsMNWJaMqNUgD?=
- =?us-ascii?Q?GL75T6Nh6t0hRMBu/ABwCmsPUbPjHhCTcAm+TnrT/4gkPb2RnqrRZhLHq8dz?=
- =?us-ascii?Q?Lxd+j02PCxZSGW6RQ7f6D/A/7JtnIt83i3qwr3Q4L7Uy8L4ATCdC7mkdFtz5?=
- =?us-ascii?Q?FEmt0E6gQPhSzQtyQ9/yyc54ZcHbrLvllgnDPgYsBjC5ut5PwSiABo/SqNSW?=
- =?us-ascii?Q?y/mPlXK4tfUHZBphwvpj4U61tO/IDAvXeeJWJ+zbmTo3HGL3RlCyoVo9ztgx?=
- =?us-ascii?Q?T4o5JM+xqtrKJvJEnPoLjaE4euGMQ7ZoK4/z4NRvp+rxiht/FVJa1uJGKOP7?=
- =?us-ascii?Q?wKXoTGYz4hsUYqE3+4lC9G8igS6l2HYddFpmirL6ImUHgK2a3jq5fItSmiZE?=
- =?us-ascii?Q?mqiXLAkNdPXdM/RH6noWQyYfcSKCGPxrbutsLh5KG4yYCZvZxJEx5r8fskeE?=
- =?us-ascii?Q?ohf4fg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S241616AbhK2LZ2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 29 Nov 2021 06:25:28 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:59113 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244428AbhK2LX1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 06:23:27 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 706EA24001C;
+        Mon, 29 Nov 2021 11:20:06 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 12:20:06 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Vincent Shih <vincent.sunplus@gmail.com>
+Cc:     a.zummo@towertech.it, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com,
+        in-reply-to=1635834123-24668-1-git-send-email-vincent.shih@sunplus.com,
+        Vincent Shih <vincent.shih@sunplus.com>
+Subject: Re: [PATCH v2 1/2] rtc: Add driver for Sunplus SP7021
+Message-ID: <YaS3Zn7x+iEZN3fj@piout.net>
+References: <1636439898-7358-1-git-send-email-vincent.shih@sunplus.com>
+ <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
 MIME-Version: 1.0
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc4c7d63-4e07-46d8-fbec-08d9b327f037
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 11:03:56.3549
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ICmM2zJwfUHqm+4f58Y8Pdk/gpReD+mvRfTb9Fbv41E4hLSZIdPZhyc0QSpmyWGBaWdd1/hfTUaCBzI8aiIbOGcmWUg8IkoZcC9lIq5SGIw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR10MB1576
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 29 November 2021 07:27, Nikita Shubin wrote:
+Hello,
 
-> As da9063 RTC is not a real I2C client, but relies on da9063 MFD
-> driver, we need to explicitly mark da9063 RTC as a wakeup source
-> to be able to access class/rtc/rtcN/wakealarm sysfs entry
-> to set alarms, so we can wakeup from SHUTDOWN/RTC/DELIVERY mode.
->=20
-> As da9063 driver refuses to load without irq, we simply add it
-> as a wakeup source before registering rtc device.
->=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
+On 09/11/2021 14:38:17+0800, Vincent Shih wrote:
+> +#define RTC_REG_NAME			"rtc_reg"
+> +
+> +#define RTC_CTRL			0x40
+> +#define TIMER_FREEZE			(0x1 << 5)
+> +#define TIMER_FREEZE_MASK		(1 << (5 + 16))
+> +#define DIS_SYS_RST_RTC			(0x1 << 4)
+> +#define DIS_SYS_RST_RTC_MASK		(1 << (4 + 16))
+> +#define RTC32K_MODE_RESET		(0x1 << 3)
+> +#define RTC32K_MODE_RESET_MASK		(1 << (3 + 16))
+> +#define ALARM_EN_OVERDUE		(0x1 << 2)
+> +#define ALARM_EN_OVERDUE_MASK		(1 << (2 + 16))
+> +#define ALARM_EN_PMC			(0x1 << 1)
+> +#define ALARM_EN_PMC_MASK		(1 << (1 + 16))
+> +#define ALARM_EN			(0x1 << 0)
+> +#define ALARM_EN_MASK			(1 << (0 + 16))
 
-Thanks for the update.
+You should definitively use BIT() and probably GENMASK
 
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> +#define RTC_TIMER_OUT			0x44
+> +#define RTC_DIVIDER			0x48
+> +#define RTC_TIMER_SET			0x4c
+> +#define RTC_ALARM_SET			0x50
+> +#define RTC_USER_DATA			0x54
+> +#define RTC_RESET_RECORD		0x58
+> +#define RTC_BATTERY_CTRL		0x5c
+> +#define BAT_CHARGE_RSEL_2K_OHM		(0x0 << 2)
+> +#define BAT_CHARGE_RSEL_250_OHM		(0x1 << 2)
+> +#define BAT_CHARGE_RSEL_50_OHM		(0x2 << 2)
+> +#define BAT_CHARGE_RSEL_0_OHM		(0x3 << 2)
+
+Using FIELD_GET and FIELD_PREP later on will simplify those defines.
+
+> +#define BAT_CHARGE_RSEL_MASK		(0x3 << (2 + 16))
+> +#define BAT_CHARGE_DSEL_ON		(0x0 << 1)
+> +#define BAT_CHARGE_DSEL_OFF		(0x1 << 1)
+> +#define BAT_CHARGE_DSEL_MASK		(0x1 << (1 + 16))
+> +#define BAT_CHARGE_EN			(0x1 << 0)
+> +#define BAT_CHARGE_EN_MASK		(0x1 << (0 + 16))
+> +#define RTC_TRIM_CTRL			0x60
+> +
+> +struct sunplus_rtc {
+> +	struct clk *rtcclk;
+> +	struct reset_control *rstc;
+> +	void __iomem *base;
+> +	u32 ohms;
+> +};
+> +
+> +struct sunplus_rtc sp_rtc;
+> +
+> +static void sp_get_seconds(unsigned long *secs)
+> +{
+> +	*secs = (unsigned long)readl(sp_rtc.base + RTC_TIMER_OUT);
+> +}
+> +
+> +static void sp_set_seconds(unsigned long secs)
+> +{
+> +	writel((u32)secs, sp_rtc.base + RTC_TIMER_SET);
+> +}
+> +
+> +static int sp_rtc_read_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	unsigned long secs;
+> +
+> +	sp_get_seconds(&secs);
+> +	rtc_time64_to_tm(secs, tm);
+> +	dev_dbg(dev, "%s:  RTC date/time to %d-%d-%d, %02d:%02d:%02d.\r\n",
+> +		__func__, tm->tm_mday, tm->tm_mon + 1, tm->tm_year,
+> +					tm->tm_hour, tm->tm_min, tm->tm_sec);
+
+You should use %ptR or simplify remove this debug message as the core
+has a tracepoint
+
+> +
+> +	return rtc_valid_tm(tm);
+
+This is uneccessary as the first thing the core does is check the
+validity.
+
+> +}
+> +
+> +int sp_rtc_get_time(struct rtc_time *tm)
+
+This function seems unused.
+
+> +{
+> +	unsigned long secs;
+> +
+> +	sp_get_seconds(&secs);
+> +	rtc_time64_to_tm(secs, tm);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_suspend(struct platform_device *pdev, pm_message_t state)
+> +{
+> +	dev_dbg(&pdev->dev, "[RTC] Debug: %s(%d)\n", __func__, __LINE__);
+> +
+> +	// Keep RTC from system reset
+> +	writel(DIS_SYS_RST_RTC_MASK | DIS_SYS_RST_RTC, sp_rtc.base + RTC_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_resume(struct platform_device *pdev)
+> +{
+> +	/*						*/
+> +	/* Because RTC is still powered during suspend,	*/
+> +	/* there is nothing to do here.			*/
+> +	/*						*/
+
+I'd prefer this comment to use a more common formatting.
+
+> +	dev_dbg(&pdev->dev, "[RTC] Debug: %s(%d)\n", __func__, __LINE__);
+> +
+> +	// Keep RTC from system reset
+> +	writel(DIS_SYS_RST_RTC_MASK | DIS_SYS_RST_RTC, sp_rtc.base + RTC_CTRL);
+> +
+
+Isn't that already done on suspend?
+
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	unsigned long secs;
+> +
+> +	secs = rtc_tm_to_time64(tm);
+> +	dev_dbg(dev, "%s, secs = %lu\n", __func__, secs);
+> +	sp_set_seconds(secs);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	unsigned long alarm_time;
+> +
+> +	alarm_time = rtc_tm_to_time64(&alrm->time);
+> +	dev_dbg(dev, "%s, alarm_time: %u\n", __func__, (u32)(alarm_time));
+> +	writel((u32)alarm_time, sp_rtc.base + RTC_ALARM_SET);
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	unsigned int alarm_time;
+> +
+> +	alarm_time = readl(sp_rtc.base + RTC_ALARM_SET);
+> +	dev_dbg(dev, "%s, alarm_time: %u\n", __func__, alarm_time);
+> +
+> +	if (alarm_time == 0) {
+> +		// alarm is disabled
+
+This comment is not really useful
+
+> +		alrm->enabled = 0;
+> +	} else {
+> +		// alarm is enabled
+
+Ditto
+
+> +		alrm->enabled = 1;
+> +		rtc_time64_to_tm((unsigned long)(alarm_time), &alrm->time);
+
+This should be done in either case.
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int sp_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
+> +{
+> +	if (enabled)
+> +		writel((TIMER_FREEZE_MASK | DIS_SYS_RST_RTC_MASK | RTC32K_MODE_RESET_MASK |
+> +				ALARM_EN_OVERDUE_MASK | ALARM_EN_PMC_MASK | ALARM_EN_MASK) |
+> +					(DIS_SYS_RST_RTC | ALARM_EN_OVERDUE | ALARM_EN_PMC |
+> +						ALARM_EN), sp_rtc.base + RTC_CTRL);
+> +	else
+> +		writel((ALARM_EN_OVERDUE_MASK | ALARM_EN_PMC_MASK | ALARM_EN_MASK) | 0x0,
+> +				sp_rtc.base + RTC_CTRL);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct rtc_class_ops sp_rtc_ops = {
+> +	.read_time =		sp_rtc_read_time,
+> +	.set_time =		sp_rtc_set_time,
+> +	.set_alarm =		sp_rtc_set_alarm,
+> +	.read_alarm =		sp_rtc_read_alarm,
+> +	.alarm_irq_enable =	sp_rtc_alarm_irq_enable,
+> +};
+> +
+> +static irqreturn_t rtc_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct platform_device *plat_dev = dev_id;
+> +	struct rtc_device *rtc = platform_get_drvdata(plat_dev);
+> +
+> +	rtc_update_irq(rtc, 1, RTC_IRQF | RTC_AF);
+> +	dev_dbg(&plat_dev->dev, "[RTC] ALARM INT\n");
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +/* ---------------------------------------------------------------------------------------------- */
+> +/* bat_charge_rsel   bat_charge_dsel   bat_charge_en     Remarks				  */
+> +/*         x              x                 0            Disable				  */
+> +/*         0              0                 1            0.86mA (2K Ohm with diode)		  */
+> +/*         1              0                 1            1.81mA (250 Ohm with diode)		  */
+> +/*         2              0                 1            2.07mA (50 Ohm with diode)		  */
+> +/*         3              0                 1            16.0mA (0 Ohm with diode)		  */
+> +/*         0              1                 1            1.36mA (2K Ohm without diode)		  */
+> +/*         1              1                 1            3.99mA (250 Ohm without diode)		  */
+> +/*         2              1                 1            4.41mA (50 Ohm without diode)		  */
+> +/*         3              1                 1            16.0mA (0 Ohm without diode)		  */
+> +/* ---------------------------------------------------------------------------------------------- */
+> +static void sp_rtc_set_trickle_charger(struct device dev)
+> +{
+> +	int ret;
+> +	u32 rsel;
+> +
+> +	ret = of_property_read_u32(dev.of_node, "trickle-resistor-ohms", &sp_rtc.ohms);
+> +	if (ret)
+> +		return;
+> +
+> +	switch (sp_rtc.ohms) {
+> +	case 2000:
+> +		rsel = BAT_CHARGE_RSEL_2K_OHM;
+> +		break;
+> +	case 250:
+> +		rsel = BAT_CHARGE_RSEL_250_OHM;
+> +		break;
+> +	case 50:
+> +		rsel = BAT_CHARGE_RSEL_50_OHM;
+> +		break;
+> +	case 0:
+> +		rsel = BAT_CHARGE_RSEL_0_OHM;
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	writel(BAT_CHARGE_RSEL_MASK | rsel, sp_rtc.base + RTC_BATTERY_CTRL);
+> +
+> +	ret = of_property_read_bool(dev.of_node, "trickle-diode-disable");
+
+This property is deprecated and used to be about disabling the charger,
+it has been replaced by aux-voltage-chargeable.
+
+I guess we need a new property, probably "trickle-diode" that would take
+a string parameter as some RTCs will need to know which type of diode
+has to be enabled (e.g. rv1805 would need "standard" or "schottky")
+
+> +	if (ret)
+> +		writel(BAT_CHARGE_DSEL_MASK | BAT_CHARGE_DSEL_OFF, sp_rtc.base + RTC_BATTERY_CTRL);
+> +	else
+> +		writel(BAT_CHARGE_DSEL_MASK | BAT_CHARGE_DSEL_ON, sp_rtc.base + RTC_BATTERY_CTRL);
+> +
+> +	writel(BAT_CHARGE_EN_MASK | BAT_CHARGE_EN, sp_rtc.base + RTC_BATTERY_CTRL);
+> +}
+> +
+> +static int sp_rtc_probe(struct platform_device *plat_dev)
+> +{
+> +	struct rtc_device *rtc;
+> +	struct resource *res;
+> +	const struct rtc_class_ops *rtc_ops;
+> +	void __iomem *reg_base;
+> +	int ret, irq;
+> +
+> +	memset(&sp_rtc, 0, sizeof(sp_rtc));
+> +
+> +	// find and map our resources
+> +	res = platform_get_resource_byname(plat_dev, IORESOURCE_MEM, RTC_REG_NAME);
+> +
+> +	if (res) {
+> +		dev_dbg(&plat_dev->dev, "res = 0x%x\n", res->start);
+> +
+> +		reg_base = devm_ioremap_resource(&plat_dev->dev, res);
+> +		if (IS_ERR(reg_base)) {
+> +			dev_err(&plat_dev->dev, "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
+> +			return PTR_ERR(reg_base);
+> +		}
+> +
+> +		dev_dbg(&plat_dev->dev, "reg_base = 0x%lx\n", (unsigned long)reg_base);
+> +	}
+> +
+> +	sp_rtc.base = reg_base;
+> +	rtc_ops = &sp_rtc_ops;
+> +
+> +	// Keep RTC from system reset
+> +	writel(DIS_SYS_RST_RTC_MASK | DIS_SYS_RST_RTC, sp_rtc.base + RTC_CTRL);
+> +
+
+I guess this is already done in .suspend, are you sure you need that in
+all those locations?
+
+> +	// request irq
+
+Useless comment
+
+> +	irq = platform_get_irq(plat_dev, 0);
+> +	if (irq < 0) {
+> +		dev_err(&plat_dev->dev, "platform_get_irq failed\n");
+> +		irq = IRQ_NOTCONNECTED;
+> +	}
+> +
+> +	ret = devm_request_irq(&plat_dev->dev, irq, rtc_irq_handler,
+> +					IRQF_TRIGGER_RISING, "rtc irq", plat_dev);
+> +	if (ret) {
+> +		dev_err(&plat_dev->dev, "devm_request_irq failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	// Setup trickle charger
+> +	if (plat_dev->dev.of_node)
+> +		sp_rtc_set_trickle_charger(plat_dev->dev);
+> +
+> +	// reset
+> +	sp_rtc.rstc = devm_reset_control_get_exclusive(&plat_dev->dev, NULL);
+> +	if (IS_ERR(sp_rtc.rstc)) {
+> +		ret = dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc.rstc),
+> +					    "failed to retrieve reset controller\n");
+> +		return PTR_ERR(sp_rtc.rstc);
+> +	}
+> +
+> +	// clk
+> +	sp_rtc.rtcclk = devm_clk_get(&plat_dev->dev, NULL);
+> +	if (IS_ERR(sp_rtc.rtcclk)) {
+> +		dev_err(&plat_dev->dev, "devm_clk_get fail\n");
+> +		return PTR_ERR(sp_rtc.rtcclk);
+> +	}
+> +
+> +	ret = reset_control_deassert(sp_rtc.rstc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(sp_rtc.rtcclk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	device_init_wakeup(&plat_dev->dev, 1);
+> +
+> +	rtc = devm_rtc_allocate_device(&plat_dev->dev);
+> +	if (IS_ERR(rtc))
+> +		return PTR_ERR(rtc);
+> +
+> +	rtc->range_max = U32_MAX;
+> +	rtc->range_min = 0;
+> +	rtc->ops = rtc_ops;
+> +
+> +	ret = devm_rtc_register_device(rtc);
+> +	if (ret)
+> +		goto free_reset_assert_clk;
+> +
+> +	platform_set_drvdata(plat_dev, rtc);
+> +	dev_info(&plat_dev->dev, "sp7021-rtc loaded\n");
+
+This message needs to be removed, it is wrong and a proper message is
+already printed by the core.
+
+> +
+> +	return 0;
+> +
+> +free_reset_assert_clk:
+> +	reset_control_assert(sp_rtc.rstc);
+> +	clk_disable_unprepare(sp_rtc.rtcclk);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sp_rtc_remove(struct platform_device *plat_dev)
+> +{
+> +	reset_control_assert(sp_rtc.rstc);
+> +	clk_disable_unprepare(sp_rtc.rtcclk);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sp_rtc_of_match[] = {
+> +	{ .compatible = "sunplus,sp7021-rtc" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, sp_rtc_of_match);
+> +
+> +static struct platform_driver sp_rtc_driver = {
+> +	.probe   = sp_rtc_probe,
+> +	.remove  = sp_rtc_remove,
+> +	.suspend = sp_rtc_suspend,
+> +	.resume  = sp_rtc_resume,
+> +	.driver  = {
+> +		.name = "sp7021-rtc",
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = sp_rtc_of_match,
+> +	},
+> +};
+> +module_platform_driver(sp_rtc_driver);
+> +
+> +MODULE_AUTHOR("Vincent Shih <vincent.shih@sunplus.com>");
+> +MODULE_DESCRIPTION("Sunplus RTC driver");
+> +MODULE_LICENSE("GPL v2");
+> +
+> -- 
+> 2.7.4
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
