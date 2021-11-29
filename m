@@ -2,147 +2,223 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C454621D7
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 21:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E49462342
+	for <lists+linux-rtc@lfdr.de>; Mon, 29 Nov 2021 22:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbhK2UON (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Nov 2021 15:14:13 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:34675 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbhK2UMI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 15:12:08 -0500
-Received: by mail-oi1-f179.google.com with SMTP id t19so36815629oij.1;
-        Mon, 29 Nov 2021 12:08:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Z6xdOSQsfsaoPSj9BpA6Xmod/xwiCQkOb+qTA/iCb/o=;
-        b=mMamZOPZMcT6WNosUBYp4n0oFl4pn33lkbNiYL2v2y6B4/u2/owYEVJXz+LHXOi5Pd
-         2CFy4rszd1uh9pUDAtI8mtq4ICVebFJzEwIkEOxdYG/zQE3JoNNf3TnNiUG5sUXXHP5v
-         mUGaYr7rRa8Wz0KvhXfikXqvya9TU9gvm8+QowWOQYGNb4uR8QN/eK83g80bdzRptWxJ
-         2lx2uPGg8BWerrg8dpCv7IJVtbl9qaxDb+GZPKXKFpSY7hTPhE+0+ZalKLfWquFSWTDW
-         EnPCIG7L0qCcg7l3Uud00uJ01eQ3lBFBdHQrhZ70Py7R/Rald8zrXHM5/Hivb8MgnCCr
-         x0oA==
-X-Gm-Message-State: AOAM531xdmA4PNRTdrpeSH7i0VQkE+WqucNk1Z+YriLf6dZWJSC3prmv
-        U4LsHMhKaMspYayAXRq4KA==
-X-Google-Smtp-Source: ABdhPJy2T7U5QNpYE8mKhDs4Y0kpsY4X+RruhTn7EbB9g52UuWIuwRJoXI1gDNqGmpcZq9IEms65YQ==
-X-Received: by 2002:a05:6808:3c2:: with SMTP id o2mr241205oie.112.1638216529867;
-        Mon, 29 Nov 2021 12:08:49 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n6sm2837920otj.78.2021.11.29.12.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 12:08:49 -0800 (PST)
-Received: (nullmailer pid 520021 invoked by uid 1000);
-        Mon, 29 Nov 2021 20:08:47 -0000
-Date:   Mon, 29 Nov 2021 14:08:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     krzysztof.kozlowski@canonical.com, broonie@kernel.org,
-        aou@eecs.berkeley.edu, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, jassisinghbrar@gmail.com,
-        atish.patra@wdc.com, Daire.McNamara@microchip.com,
-        Lewis.Hanly@microchip.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-usb@vger.kernel.org,
-        bin.meng@windriver.com, linux-i2c@vger.kernel.org,
-        alexandre.belloni@bootlin.com, Ivan.Griffin@microchip.com,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        a.zummo@towertech.it, gregkh@linuxfoundation.org
-Subject: Re: [PATCH 06/13] dt-bindings: rng: add bindings for microchip mpfs
- rng
-Message-ID: <YaUzT6+WvICiTk1q@robh.at.kernel.org>
-References: <20211108150554.4457-1-conor.dooley@microchip.com>
- <20211108150554.4457-7-conor.dooley@microchip.com>
- <f60cf7e0-4f67-f4b3-2596-01114cff6623@canonical.com>
- <71c6917e-1463-c708-550a-726e5fe1566d@microchip.com>
- <ca17d6ac-ef8e-b01c-3278-7cbb0d5745e3@canonical.com>
- <ea871add-bddc-c4ae-ac9d-e86b4fad5a02@microchip.com>
- <a0713a10-3409-4401-e612-0a9c06f88ea1@canonical.com>
- <9d6f2e66-860c-2b8a-0b45-7dc56dd5298f@microchip.com>
+        id S229731AbhK2V3t (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 29 Nov 2021 16:29:49 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35937 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229635AbhK2V1t (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Nov 2021 16:27:49 -0500
+Received: from [77.244.183.192] (port=61954 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mro8S-0001y6-Vg; Mon, 29 Nov 2021 22:24:29 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v4 7/9] watchdog: max77620: add support for the max77714
+ variant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-8-luca@lucaceresoli.net>
+ <20211129155320.GA2761477@roeck-us.net>
+Message-ID: <8efe5354-6308-4f0c-a0c8-6657f705cfb1@lucaceresoli.net>
+Date:   Mon, 29 Nov 2021 22:24:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d6f2e66-860c-2b8a-0b45-7dc56dd5298f@microchip.com>
+In-Reply-To: <20211129155320.GA2761477@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Nov 10, 2021 at 09:46:23AM +0000, Conor.Dooley@microchip.com wrote:
-> On 10/11/2021 07:43, Krzysztof Kozlowski wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On 09/11/2021 14:36, Conor.Dooley@microchip.com wrote:
-> >> On 09/11/2021 12:56, Krzysztof Kozlowski wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>
-> >>> On 09/11/2021 13:54, Conor.Dooley@microchip.com wrote:
-> >>>> On 08/11/2021 21:16, Krzysztof Kozlowski wrote:
-> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>>>>
-> >>>>> On 08/11/2021 16:05, conor.dooley@microchip.com wrote:
-> >>>>>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>>>>
-> >>>>>> Add device tree bindings for the hardware rng device accessed via
-> >>>>>> the system services on the Microchip PolarFire SoC.
-> >>>>>>
-> >>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >>>>>> ---
-> >>>>>>     .../bindings/rng/microchip,mpfs-rng.yaml      | 31 +++++++++++++++++++
-> >>>>>>     1 file changed, 31 insertions(+)
-> >>>>>>     create mode 100644 Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
-> >>>>>>
-> >>>>>> diff --git a/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
-> >>>>>> new file mode 100644
-> >>>>>> index 000000000000..e8ecb3538a86
-> >>>>>> --- /dev/null
-> >>>>>> +++ b/Documentation/devicetree/bindings/rng/microchip,mpfs-rng.yaml
-> >>>>>> @@ -0,0 +1,31 @@
-> >>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>>>>> +%YAML 1.2
-> >>>>>> +---
-> >>>>>> +$id: "http://devicetree.org/schemas/rng/microchip,mpfs-rng.yaml#"
-> >>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> >>>>>> +
-> >>>>>> +title: Microchip MPFS random number generator
-> >>>>>> +
-> >>>>>> +maintainers:
-> >>>>>> +  - Conor Dooley <conor.dooley@microchip.com>
-> >>>>>> +
-> >>>>>> +properties:
-> >>>>>> +  compatible:
-> >>>>>> +    const: microchip,polarfire-soc-rng
-> >>>>>> +
-> >>>>>> +  syscontroller:
-> >>>>>> +    maxItems: 1
-> >>>>>> +    description: name of the system controller device node
-> >>>>>
-> >>>>> There are several issues with this:
-> >>>>> 1. You need to describe the type.
-> >>>>> 2. Description is not helpful (just copying the name of property) and
-> >>>>> actually misleading because you do not put there the name of device node.
-> >>>>> 3. What is it? Looks like syscon (or sometimes called sysreg). If yes,
-> >>>>> please use existing syscon bindings.
-> >>>> 1 & 2 - Correct, it is bad & I'll write a better description for it.
-> >>>> 3 - Its a system controller implemented as a mailbox. The syscontroller
-> >>>> is the mailbox client, which the rng and generic drivers both use.
-> >>>
-> >>> I understood that pointed device node is a mailbox, not this node. But
-> >>> here, what is it here? How do you use it here?
-> >> The system controller is the means of access to the random number
-> >> generator. The phandle to the sys controller is provided here so that
-> >> the rng driver can locate the mailbox client through which it requests
-> >> random numbers.
-> > 
-> > I am asking this to understand whether there is a generic or existing
-> > property which should be used instead.
-> > 
-> > If I understand correctly, the rng driver needs a mailbox client?
-> Correct, it needs one. Binding for that is here:
-> Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+Hi Guenter,
 
-The rng node and others should be a child of the sys controller node.
+thanks for you review!
 
-Rob
+On 29/11/21 16:53, Guenter Roeck wrote:
+> On Sat, Nov 20, 2021 at 04:57:05PM +0100, Luca Ceresoli wrote:
+>> The MAX77714 is a MFD chip whose watchdog has the same programming
+>> procedures as the MAX77620 watchdog, but most register offsets and bit
+>> masks are different, as well as some features.
+>>
+>> Support the MAX77714 watchdog by adding a variant description table holding
+>> the differences.
+>>
+>> All the features implemented by this driver are available on the MAX77714
+>> except for the lack of a WDTOFFC bit. Instead of using a "HAS_*" flag we
+>> handle this by holding in the cnfg_glbl2_cfg_bits struct field the bits
+>> (i.e. the features) to enable in the CNFG_GLBL2 register. These bits differ
+>> among the two models. This implementation allows to avoid any conditional
+>> code, keeping the execution flow unchanged.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>>
+>> This patch is new in v4. It replaces v3 patch 7 ("watchdog: max77714: add
+>> driver for the watchdog in the MAX77714 PMIC") by adding MAX77714 wdog
+>> support to the existing MAX77620 wdog driver instead of adding a new
+>> driver. Suggested by Guenter Roeck and Krzysztof Kozlowski.
+>> ---
+>>  drivers/watchdog/Kconfig        |  2 +-
+>>  drivers/watchdog/max77620_wdt.c | 96 +++++++++++++++++++++++++--------
+>>  2 files changed, 75 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index a6d97f30325a..f920ad271dde 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -677,7 +677,7 @@ config MAX63XX_WATCHDOG
+>>  
+>>  config MAX77620_WATCHDOG
+>>  	tristate "Maxim Max77620 Watchdog Timer"
+>> -	depends on MFD_MAX77620 || COMPILE_TEST
+>> +	depends on MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
+>>  	select WATCHDOG_CORE
+>>  	help
+>>  	  This is the driver for the Max77620 watchdog timer.
+>> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+>> index be6a53c30002..06b48295fab6 100644
+>> --- a/drivers/watchdog/max77620_wdt.c
+>> +++ b/drivers/watchdog/max77620_wdt.c
+>> @@ -3,8 +3,10 @@
+>>   * Maxim MAX77620 Watchdog Driver
+>>   *
+>>   * Copyright (C) 2016 NVIDIA CORPORATION. All rights reserved.
+>> + * Copyright (C) 2021 Luca Ceresoli
+>>   *
+>>   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+>> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
+>>   */
+>>  
+>>  #include <linux/err.h>
+>> @@ -13,6 +15,7 @@
+>>  #include <linux/module.h>
+>>  #include <linux/mod_devicetable.h>
+>>  #include <linux/mfd/max77620.h>
+>> +#include <linux/mfd/max77714.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/regmap.h>
+>>  #include <linux/slab.h>
+>> @@ -20,17 +23,66 @@
+>>  
+>>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>>  
+>> +/**
+>> + * struct max77620_variant - Data specific to a chip variant
+>> + * @wdt_info:            watchdog descriptor
+>> + * @reg_onoff_cnfg2:     ONOFF_CNFG2 register offset
+>> + * @reg_cnfg_glbl2:      CNFG_GLBL2 register offset
+>> + * @reg_cnfg_glbl3:      CNFG_GLBL3 register offset
+>> + * @wdtc_mask:           WDTC bit mask in CNFG_GLBL3 (=bits to update to ping the watchdog)
+>> + * @bit_wd_rst_wk:       WD_RST_WK bit offset within ONOFF_CNFG2
+>> + * @cnfg_glbl2_cfg_bits: configuration bits to enable in CNFG_GLBL2 register
+>> + */
+>> +struct max77620_variant {
+>> +	const struct watchdog_info wdt_info;
+>> +	u8 reg_onoff_cnfg2;
+>> +	u8 reg_cnfg_glbl2;
+>> +	u8 reg_cnfg_glbl3;
+>> +	u8 wdtc_mask;
+>> +	u8 bit_wd_rst_wk;
+>> +	u8 cnfg_glbl2_cfg_bits;
+>> +};
+>> +
+>>  struct max77620_wdt {
+>>  	struct device			*dev;
+>>  	struct regmap			*rmap;
+>> +	const struct max77620_variant	*drv_data;
+>>  	struct watchdog_device		wdt_dev;
+>>  };
+>>  
+>> +static const struct max77620_variant max77620_wdt_data = {
+>> +	.wdt_info = {
+>> +		.identity = "max77620-watchdog",
+>> +		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+>> +	},
+> 
+> That does not have to be, and should not be, part of device specific data,
+> just because of the identity string.
+
+Ok, no problem, will fix, but I have two questions.
+
+First, what's the reason? Coding style or a functional difference?
+Usually const data is preferred to runtime assignment.
+
+Second: it's not clear how you expect it to be done. Looking into the
+kernel it looks like almost all drivers set a constant string. I could
+find only one exception, f71808e_wdt:
+https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/watchdog/f71808e_wdt.c#L471
+
+> Either keep the current identity string,
+> mark max77620_wdt_info as __ro_after_init and overwrite the identity string
+> there during probe
+
+And also remove 'static' I guess. Hm, I don't love this, as above I tend
+to prefer static const when possible for file-scoped data.
+
+> or add the structure to max77620_wdt and fill it out there.
+
+Do you mean like the following, untested, kind-of-pseudocode?
+
+ struct max77620_wdt {
+ 	struct device			*dev;
+ 	struct regmap			*rmap;
+	const struct max77620_variant	*drv_data;
++	struct watchdog_info		info;     /* not a pointer! */
+ 	struct watchdog_device		wdt_dev;
+ };
+
+and then, in probe:
+
+   wdt->dev = dev;
+   wdt->drv_data = (const struct max77620_variant *)id->driver_data;
+   /* ... assign other wdt fields ... */
++  strlcpy(wdt_dev->info.identity, id->name, \
++          sizeof(wdt_dev->info.identity));
++  wdt_dev->info.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | \
++                          WDIOF_MAGICCLOSE;
+
+Finally, what about simply:
+
+ static const struct max77620_variant max77620_wdt_data = {
+	.wdt_info = {
+-		.identity = "max77620-watchdog",
++		.identity = "max77xxx-watchdog",
+		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | ...
+	},
+
+and always use that struct unconditionally? The max63xx_wdt.c driver
+seems to do that. Or, if this is an issue for backward compatibility (is
+it?), just leave max77620_wdt_data and the .identity field will always
+be "max77620-watchdog" even when using a MAX77714.
+
+Thanks for you patience in reading so far.
+-- 
+Luca (slightly confused, but very open to learning)
