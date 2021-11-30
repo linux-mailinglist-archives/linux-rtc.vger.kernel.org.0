@@ -2,290 +2,198 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27CF462C64
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 06:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB6E462CE0
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 07:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238410AbhK3F7k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Nov 2021 00:59:40 -0500
-Received: from mail-dm6nam08on2084.outbound.protection.outlook.com ([40.107.102.84]:56384
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        id S238641AbhK3GlG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Nov 2021 01:41:06 -0500
+Received: from mail-co1nam11on2083.outbound.protection.outlook.com ([40.107.220.83]:20480
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238403AbhK3F7j (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:59:39 -0500
+        id S233463AbhK3GlG (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 30 Nov 2021 01:41:06 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MeDowvvwOdd/Pqw7JyMsH8JEqdX+cC+vtyYvXcYpGErPahhrBpBxrHgdvpPJlQ8scZmcBtXsPlRF+d1DW6nXuaEWKxf88F/MPg/B3TrFLy/KWZDxKyAE05wNQLdoQZXSWdkdaKJYZzBhy5YyRy2xy0tE+XMazPDXqyOBV6/iXHs+aBIQX47Ltt9rB/sHqljub3sQBHPUhUBfkZ8geoH2ALZsJ4VUP4TXWh+6SNBiV9A9C+QO9zL2OqdqDurIpQskdqXg6ljsufYvA+aXrkP4zwvnEVZiLsS3iS49czqGWi+B/zqQcAFsC5J6uOgA5AA5Def6wFfxz2HGUsoD8OZdUw==
+ b=LNV0r+Obw7LiTDRrOYfwIFn6ARBY2exHnuPK3q4aIFJWxVLw9s1sC4zZPXQNBr9jcQdyAGBT2eQMhoJ3KqkiHHNHDrzvJHB/2zldXkWBt3IDwGBNy/vekeEmBD2ZV5og8x9I6oMVlvvxnNDrqQidxvpmNJ3+pwPyttqraHVwWkNe3f/jvzulAjl7YbcEVojMkKd3omeVRd2XiyGpX0bZva+hwxakXxy/21j6HGdmolKxeRwZIu8aX53tpHYY2y2CpTi2JpiTXC2DPJbp/aO+6mp+N/qWW9kej6RGo2e3DT5pCO2DNmVHqoNji6gwAwcEfvdDyQb3gWXEZH7QY3FR+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=925sDxT8AMlGoWlpBeRoH1c8uMdyH5Ium4w9RSGFDvs=;
- b=hMulSAyFmrsWT+obeokkhhySoFm3aBhP5aVJz6b9hJqWx4CltUBbk6Zcyg6NgvNGVzNO7s5rCBQp5QexqFryNjChG/py7uiwpXZbd5wWtAESbQEsjY6xSLT6jbpTCM/SncfxRakcvWsXL3NEmtJCuKQUiANqlGzC2UtrcYwmarehafuKByd/F9q1HySgHQHBdJ+sP2NxsGPQi0MDoX4BffQgCbZI3Y4di71448QvK/1j9/2OAQP7m11txj5f/K9qMPE0mA2m8KPGIOYMo9Il+RvsOPucrFaFpvN9LtyzIjAblrJpAD9XO39Nnv/M0yaJJzyy7ObrH2Pa5YjOoNPihw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=towertech.it smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+ bh=JuWnsctZcA5Is/TzFk+ay3fOqRuGz4B2G1+qlD0eyg4=;
+ b=ixAKntzX4cpsl/tpwwzD5YToIhZV1i66ddLKhcKQB26vBnJNsTS5ycTvMrD5JUvZ1vIRYo6LO1l2BuGSAuZsD7YAn4qq072THQ4wnX8aKuPFSiOTePuHJkv2RXgm25X8/uj8rrLxfTTtZojnwfr5YG8IUxHzJyNX6NGLsIRC96ovZA+B6YlvTgi180fwy4Q8+eS1ksI9SI/cBZ0jKS/Vs+QHEzm/zP5ZWFyn8qO4LthUgCqFSWoRmclel+jpg2rpk+zihbHEsHfhQTY/SXzTqbReqgJI6+4gBu+ARBFEz867JcZGIc0ady2V5HW/wad+PUEKBHZQuvJOXvwYPBjQBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=925sDxT8AMlGoWlpBeRoH1c8uMdyH5Ium4w9RSGFDvs=;
- b=HWBD50jhNKPo4QHURVdePqTAbJKsGOR/QV37XyOM81clDt+hKlb5MbtB4x+d90qQyhvP+nQYKRRMbms9f2+czchRt2UecT7RNEONdfYUMj45iSBG/nMTOre9WEkDdfhkIBzgemixXf49nCjaHu3ULdMCErZRWR9BmfPt83WDSz0=
-Received: from SN7PR04CA0050.namprd04.prod.outlook.com (2603:10b6:806:120::25)
- by SJ0PR02MB8675.namprd02.prod.outlook.com (2603:10b6:a03:3ff::12) with
+ bh=JuWnsctZcA5Is/TzFk+ay3fOqRuGz4B2G1+qlD0eyg4=;
+ b=VDnE7sd0rHhy8xqWiYT86yj26ByFhRHuAegRtI9BP5AoSjmWMnjzy0Dbu2vmeLfs617J0CE1Eo32o4g7hQeQ2evjM1WUgSC8la/tZIcRhPVUV6iLfxXB9Dvmx567PSWopGL1OOcwZGcvPezUd75otC+J5LVxvAanHZycbqs2qUQ=
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com (2603:10b6:806:1fb::24)
+ by SA2PR02MB7836.namprd02.prod.outlook.com (2603:10b6:806:140::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
- 2021 05:56:19 +0000
-Received: from SN1NAM02FT0062.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:120:cafe::4f) by SN7PR04CA0050.outlook.office365.com
- (2603:10b6:806:120::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
- Transport; Tue, 30 Nov 2021 05:56:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0062.mail.protection.outlook.com (10.97.4.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.20 via Frontend Transport; Tue, 30 Nov 2021 05:56:18 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 21:56:10 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 21:56:10 -0800
-Envelope-to: git@xilinx.com,
- a.zummo@towertech.it,
- alexandre.belloni@bootlin.com,
- linux-rtc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=57772 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1mrw7d-0005MM-Pc; Mon, 29 Nov 2021 21:56:10 -0800
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <michal.simek@xilinx.com>, <sgoud@xilinx.com>,
-        <shubhraj@xilinx.com>, <radheys@xilinx.com>
-CC:     <linux-rtc@vger.kernel.org>,
+ 2021 06:37:45 +0000
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::4513:36a7:3adf:3b0f]) by SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::4513:36a7:3adf:3b0f%7]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 06:37:45 +0000
+From:   Radhey Shyam Pandey <radheys@xilinx.com>
+To:     Srinivas Neeli <sneeli@xilinx.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        Michal Simek <michals@xilinx.com>,
+        Srinivas Goud <sgoud@xilinx.com>,
+        Shubhrajyoti Datta <shubhraj@xilinx.com>
+CC:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH V3 2/2] rtc: zynqmp: Add calibration set and get support
-Date:   Tue, 30 Nov 2021 11:25:41 +0530
-Message-ID: <20211130055541.2789-2-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130055541.2789-1-srinivas.neeli@xilinx.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>, Srinivas Neeli <sneeli@xilinx.com>
+Subject: RE: [PATCH V3 1/2] dt-bindings: rtc: zynqmp: Add clock information
+Thread-Topic: [PATCH V3 1/2] dt-bindings: rtc: zynqmp: Add clock information
+Thread-Index: AQHX5a78uI2umgdOiUyv8fs35l1KgqwbmrgA
+Date:   Tue, 30 Nov 2021 06:37:45 +0000
+Message-ID: <SA1PR02MB8560D9A6A6C90DC1A90A2364C7679@SA1PR02MB8560.namprd02.prod.outlook.com>
 References: <20211130055541.2789-1-srinivas.neeli@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1355d9e7-6186-40e1-e231-08d9b3c62122
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB8675:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB8675921CE03E1B8FE4E54BB9AF679@SJ0PR02MB8675.namprd02.prod.outlook.com>
+In-Reply-To: <20211130055541.2789-1-srinivas.neeli@xilinx.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
 X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 08os37MHqIketBrr8vZeOt7D06SbtfmkaPIKoInLiPQODJ1ES6BGiySgvKSvcSJ96UYLcWwOIuqy6FMTP0UjvD2U/ABuMIDsOb6I6MnV7Kve2g9Ml9ugjzUyYg2LPqmzqkzf43WMC08G3AA2Ndfc3fKtwIy+JlFb0M3nG+bNln9NCNc50/1RF5yKEDGkeuvpLmUtagllzlPXAToRN411YaJ/HIiME9r1qSLKVXTzJvHiqufIV3aEXWxBmRqScEPulWVL1H/3Uwcua50uiA/7uAUgl/5QJaPYJ+ZCAWiOv5RpsYUx1lRSYdpI9vnm28vVheVNF19/X5K7rPC/Wqa6OuwFx20pEAMX3lESlkNKnwDj+ec3enGE0ex8geV/vvDc8aZmj06qQsQva6dKcNV+5hirR0umxhHAcVcLBQck8yr9V8TAtmZY24Spk6Np/a/s+AsiggjqYaiJsrdH+FWVzv4uCc/PjvJqAdxnB5yX6wZ8GldNUd6ih5smgL5gaHzbO3Be72Q98PXT0Gl54R9ndSxkjbKNfYNUGL16lT746nmnRKALQAt/gdfjzrmaJKbY30PliLc5W81/eUkrOTvL2KzFOlTruCG3+Y3fMpllpWwygUpSoR4UhG5244m7IiLoh5mvz9fLN1VsyCuuwkMySaueZ+UqK/kscJbw2a1FOeq/lXPhrZiUPHJ5eiU5ww5qnKfBe9xaXmr6j35YBuAM8Z80CpWWs0RNQCXRNEBRBLFBB7QDyg193fCl1c4QAUqH
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(47076005)(7636003)(426003)(83380400001)(107886003)(36756003)(8936002)(7696005)(44832011)(8676002)(356005)(9786002)(70586007)(5660300002)(4326008)(26005)(2906002)(508600001)(6636002)(316002)(186003)(82310400004)(1076003)(6666004)(110136005)(336012)(36860700001)(2616005)(54906003)(70206006)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 20907d96-2ed9-4485-987e-08d9b3cbeb15
+x-ms-traffictypediagnostic: SA2PR02MB7836:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <SA2PR02MB78363C5397252DFE02A989F4C7679@SA2PR02MB7836.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2043;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: J6etNoHdbWO5j2jwoy/AtPjJKqpetgLFN8Q+DLJR5hjOdfcZWhbsJJJYCcyHNV9zzbrbMgFSk8OeULd6RyUAilV2O1X/q4FrZfnddfAKafidcPLab2KrpQzPqymX+y+KIVQbrO4K3gQQQ982d5kY60V3U4VtjkgkUz+vH5z6QmiWZ9qjgjiH3BRbdNJAxIE3IuFnK0wclqArwM07CeFSDh0Pbs4IpKZG5f3LCCG5LkpDEH+r7BoUgrOY2/CvuYFGnzL1spmbgT71YHB8Pf0x5Ckg4oVUi1dJcUosIT2iQNOETTa1R0pLJJxqqMdE0yQ9zf0R1XQED5/HnhmuAW9eAdj2sIo0gdT+A69bFbwiG2qNjT/XAXkvugWgGJFu1LrYpuHL2geO0dys/KSU9jRK+4x9/ruRkkkZ/7nOSP+mqZjS6197xaDDiKFxVFNyum94W7hP88sac8OSeE65eEZFDhB91DVG8BQ271Z5Ja/RdZzBgYOr6J7WLWOw/nyXYOlHPZS8pU9WqmZxt/FAQXqFKO0c93qQkYxdbPpOEqJFGh3/7SDa8V65YfLpMH0CzMfj0GgoX61s4EEDStu0Ih9V4PaqM0FhBbECAbJ/MalMJywcpxsQyjX35kKuMZ7WwbTW++vwLM1ttAK9pVbMbPeGKtuTnsMU9QF6WEY+f7GoP+6RqgJFQOTT+VRHoy3zZdBjwIKxyckUK4/ky0QM+DYG2g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR02MB8560.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(64756008)(66556008)(186003)(5660300002)(107886003)(66446008)(8676002)(26005)(66476007)(66946007)(122000001)(2906002)(83380400001)(9686003)(55016003)(33656002)(86362001)(6506007)(53546011)(71200400001)(508600001)(54906003)(110136005)(6636002)(76116006)(316002)(38100700002)(8936002)(38070700005)(7696005)(52536014)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?89BZ6OiC9ifljl3yuv7BXaVy6DE/4N6eDEVMWZQs5OhBxNkspnp35KGpemC2?=
+ =?us-ascii?Q?uzJc2c3gxXSO3QYkksOxbh66xseyZUzXLeNc6VOcDICNZb3m5hM6FrMjrU1r?=
+ =?us-ascii?Q?HXFO59RIWfxPHvLHbNZtZ0Tt2o3RVdnq1Wt47wz0RnX0zz7It8xGn4J3H+ZK?=
+ =?us-ascii?Q?pMlCTM0HgwY+iSmmu4xe48g4aknRMg74SjbrnrMhIByKDCAxvAszxcthVE9e?=
+ =?us-ascii?Q?KymczSIHzgUlKCkoO4dN/DFaQ5N0W1DV3qBQ0z6Kv/7JGCTU/a1UWpKRrHtm?=
+ =?us-ascii?Q?FSaCV3wZyaoPFRsBsnxx5iQVz4m9F/IQwP5ADKQJ/kj5GFiXeUywpWenVHnc?=
+ =?us-ascii?Q?A7Gnz2GctjrDf8hwuT8P4atHcMj6Bxxs9h3w47sf1AuE0hrp8dYSfGNjzwOS?=
+ =?us-ascii?Q?932gAR2ZSdkR05XBkshBV/doxHj8cc5o1yQ3FRcLXovX7gFo/P6cety5m7so?=
+ =?us-ascii?Q?RZhLGaudjYTGgH+voD3eLNEtfW0r9lW8K7JLTcX3lGRRh16X98OqlcXbLTbv?=
+ =?us-ascii?Q?2ObH8rtntDALvVQjozdt32Endbmg/+8AQr1lVRNzZxg076T0Xnss5UaQgpNy?=
+ =?us-ascii?Q?aIgps2V6QiXeG5tkDVZYdYlwI/bXvL3OH9l1lltp1SpzO1y4Ymkyt9h5uO9q?=
+ =?us-ascii?Q?K32AvZYYVYdiZ3aGfxFBe1ZLCrIsyTOM9KThmzeuD305uskhv4mKEuuto4gX?=
+ =?us-ascii?Q?70/UPg8pbg1xP9JkYzMPWGTk42aMxjtgsje4qOjF7eurNsJgse/tCsTI4RCv?=
+ =?us-ascii?Q?b3pY0h6cOPjsRSlvsvtuPblPE1hqkSvzXYwXTmJ98iQDfhQzNMkVdesaOnlI?=
+ =?us-ascii?Q?nH3uJEoZI79aHQOxNa/kgj4UAvTl+F14b2z0y7UtL5UDMm5NJdpZz755peah?=
+ =?us-ascii?Q?U6gTKt1klJ+osFBBoaELwEHjykvC1gLZRKJveZmenzdZMFtbt1ydMCWyIPXt?=
+ =?us-ascii?Q?Bdj5BGiP0ImqFugmNvdjVPK5vpJNrkvmJOU9x4CW4CKBOlEvDkouKT/SxUWA?=
+ =?us-ascii?Q?0bHB1H+LgBf/iqw1MsenRG7sd60NTmU6u4T1JYvmCBGEmWyH2UcrTdlxpMoc?=
+ =?us-ascii?Q?ZvlUmdzcI9MA7XHwMqgaeDfoE8TSdlRi00jGPxG5YeCall/55BOKMs6AGx5B?=
+ =?us-ascii?Q?kUZzQ/80JS9XQQT79OblvMl+Jzp5p3nN40/jXFDydUf1G4Cqo8TNEak4ffMh?=
+ =?us-ascii?Q?T5O2xwmNeix/icRoR8rHAX5VEju1JAiOKQA206BovJty7WBaOgTW7hgbVqLT?=
+ =?us-ascii?Q?Ytc2n/oWhTU8vFfrNXbYifKgYsq+6STy3Tx/Ap9MIFgmMts6GCeh+QAkabyP?=
+ =?us-ascii?Q?Cx+VMQi6HMG8K5ALOMc/ZXz+BSUK/+nJAGGsdNcdC+uewa4SkpyrJH63sG5i?=
+ =?us-ascii?Q?GE/OHem9B7OnsDqrh/pNepOKYQokqIc2SR4oB18ZxdXfXyFYSDfA4WZiDRAj?=
+ =?us-ascii?Q?ayNO/YupJSw0TCjdOdOSdPahkMV7F76MHeFeKeWvTdEToccHdGB9JJVCnbhj?=
+ =?us-ascii?Q?i8bmvwSrifdc4PjpegBLMEs3AeiVboxudcxNizb22OF7yNA4fDrcD9fSpILb?=
+ =?us-ascii?Q?JQa3sJGZ+Zn9k3TlaGbuBtLZn3BByIDwndv4iWYhuUxcuYIp+DbShcow51ZL?=
+ =?us-ascii?Q?68rE3hkh75wlvb+5aOyazTs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 05:56:18.9666
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR02MB8560.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20907d96-2ed9-4485-987e-08d9b3cbeb15
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 06:37:45.1279
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1355d9e7-6186-40e1-e231-08d9b3c62122
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0062.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8675
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /NOknixTyrjtakt0OwblVxnL4RWo8ThvZrjys9ohR2xzluV6NuxX2o4dUlSVboHvCv5YRMhT4gfXlj155KtsQw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR02MB7836
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Zynqmp RTC controller has a calibration feature to compensate
-time deviation due to input clock inaccuracy.
-Set and get calibration API's are used for setting and getting
-calibration value from the controller calibration register.
+> -----Original Message-----
+> From: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> Sent: Tuesday, November 30, 2021 11:26 AM
+> To: a.zummo@towertech.it; alexandre.belloni@bootlin.com; Michal Simek
+> <michals@xilinx.com>; Srinivas Goud <sgoud@xilinx.com>; Shubhrajyoti Datt=
+a
+> <shubhraj@xilinx.com>; Radhey Shyam Pandey <radheys@xilinx.com>
+> Cc: linux-rtc@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linu=
+x-
+> kernel@vger.kernel.org; git <git@xilinx.com>; Srinivas Neeli
+> <sneeli@xilinx.com>
+> Subject: [PATCH V3 1/2] dt-bindings: rtc: zynqmp: Add clock information
+>=20
+> Added clock information and deprecated calibration support.
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
-Changes in V3:
- -Calculated tick_mult using crystal frequency.
- -Calibration register updating based on crystal frequency in probe.
- -Supressed MIN an MAX calibration values,Will send separate patch in future.
-Changes in V2:
- -Removed unused macro.
- -Updated code with review comments.
----
- drivers/rtc/rtc-zynqmp.c | 104 +++++++++++++++++++++++++++++++--------
- 1 file changed, 84 insertions(+), 20 deletions(-)
+Better to also add some background for this change.
+>=20
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index f440bb52be92..eb6ee55ca725 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -6,6 +6,7 @@
-  *
-  */
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/init.h>
- #include <linux/io.h>
-@@ -36,17 +37,21 @@
- #define RTC_OSC_EN		BIT(24)
- #define RTC_BATT_EN		BIT(31)
- 
--#define RTC_CALIB_DEF		0x198233
-+#define RTC_CALIB_DEF		0x8000
- #define RTC_CALIB_MASK		0x1FFFFF
- #define RTC_ALRM_MASK          BIT(1)
- #define RTC_MSEC               1000
-+#define RTC_FR_MASK		0xF0000
-+#define RTC_FR_MAX_TICKS	16
-+#define RTC_PPB			1000000000LL
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
- 	void __iomem		*reg_base;
- 	int			alarm_irq;
- 	int			sec_irq;
--	unsigned int		calibval;
-+	struct clk		*rtc_clk;
-+	unsigned int		freq;
- };
- 
- static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
-@@ -61,13 +66,6 @@ static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	 */
- 	new_time = rtc_tm_to_time64(tm) + 1;
- 
--	/*
--	 * Writing into calibration register will clear the Tick Counter and
--	 * force the next second to be signaled exactly in 1 second period
--	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
--
- 	writel(new_time, xrtcdev->reg_base + RTC_SET_TM_WR);
- 
- 	/*
-@@ -173,15 +171,71 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev *xrtcdev)
- 	rtc_ctrl = readl(xrtcdev->reg_base + RTC_CTRL);
- 	rtc_ctrl |= RTC_BATT_EN;
- 	writel(rtc_ctrl, xrtcdev->reg_base + RTC_CTRL);
-+}
- 
--	/*
--	 * Based on crystal freq of 33.330 KHz
--	 * set the seconds counter and enable, set fractions counter
--	 * to default value suggested as per design spec
--	 * to correct RTC delay in frequency over period of time.
-+static int xlnx_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	long offset_val = 0;
-+	unsigned int tick_mult = RTC_PPB / xrtcdev->freq;
-+	unsigned int calibval;
-+
-+	calibval = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+	/* Offset with seconds ticks */
-+	offset_val = calibval & RTC_TICK_MASK;
-+	offset_val = offset_val - RTC_CALIB_DEF;
-+	offset_val = offset_val * tick_mult;
-+
-+	/* Offset with fractional ticks */
-+	if (calibval & RTC_FR_EN)
-+		offset_val += ((calibval & RTC_FR_MASK) >> RTC_FR_DATSHIFT)
-+			* (tick_mult / RTC_FR_MAX_TICKS);
-+	*offset = offset_val;
-+
-+	return 0;
-+}
-+
-+static int xlnx_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	short int  max_tick;
-+	unsigned char fract_tick = 0;
-+	unsigned int calibval;
-+	int fract_offset;
-+	unsigned int tick_mult = RTC_PPB / xrtcdev->freq;
-+
-+	/* Number ticks for given offset */
-+	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
-+
-+	/* Number fractional ticks for given offset */
-+	if (fract_offset) {
-+		if (fract_offset < 0) {
-+			fract_offset = fract_offset + tick_mult;
-+			max_tick--;
-+		}
-+		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-+			for (fract_tick = 1; fract_tick < 16; fract_tick++) {
-+				if (fract_offset <=
-+				    (fract_tick *
-+				     (tick_mult / RTC_FR_MAX_TICKS)))
-+					break;
-+			}
-+		}
-+	}
-+
-+	/* Zynqmp RTC uses second and fractional tick
-+	 * counters for compensation
- 	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+	calibval = max_tick + RTC_CALIB_DEF;
-+
-+	if (fract_tick)
-+		calibval |= RTC_FR_EN;
-+
-+	calibval |= (fract_tick << RTC_FR_DATSHIFT);
-+
-+	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+
-+	return 0;
- }
- 
- static const struct rtc_class_ops xlnx_rtc_ops = {
-@@ -190,6 +244,8 @@ static const struct rtc_class_ops xlnx_rtc_ops = {
- 	.read_alarm	  = xlnx_rtc_read_alarm,
- 	.set_alarm	  = xlnx_rtc_set_alarm,
- 	.alarm_irq_enable = xlnx_rtc_alarm_irq_enable,
-+	.read_offset	  = xlnx_rtc_read_offset,
-+	.set_offset	  = xlnx_rtc_set_offset,
- };
- 
- static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
-@@ -255,10 +311,18 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = of_property_read_u32(pdev->dev.of_node, "calibration",
--				   &xrtcdev->calibval);
--	if (ret)
--		xrtcdev->calibval = RTC_CALIB_DEF;
-+	/* Getting the rtc_clk info */
-+	xrtcdev->rtc_clk = devm_clk_get_optional(&pdev->dev, "rtc_clk");
-+	if (IS_ERR(xrtcdev->rtc_clk)) {
-+		if (PTR_ERR(xrtcdev->rtc_clk) != -EPROBE_DEFER)
-+			dev_warn(&pdev->dev, "Device clock not found.\n");
-+	}
-+	xrtcdev->freq = clk_get_rate(xrtcdev->rtc_clk);
-+	if (!xrtcdev->freq)
-+		xrtcdev->freq = RTC_CALIB_DEF;
-+	ret = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+	if (!ret)
-+		writel(xrtcdev->freq, (xrtcdev->reg_base + RTC_CALIB_WR));
- 
- 	xlnx_init_rtc(xrtcdev);
- 
--- 
-2.17.1
+Please add Rob and DT mailing list.
+
+./scripts/get_maintainer.pl <.patch>
+> ---
+> Changes in V3:
+> -New patch
+> ---
+>  .../bindings/rtc/xlnx,zynqmp-rtc.yaml         | 20 +++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> index bdb72d3ddf2a..7e87bc1ef9df 100644
+> --- a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> +++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+> @@ -26,20 +26,19 @@ properties:
+>    interrupts:
+>      minItems: 2
+>=20
+> +  clocks:
+> +    items:
+> +      - description: rtc_clk is the operating frequency of crystal.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "rtc_clk"
+> +
+>    interrupt-names:
+>      items:
+>        - const: alarm
+>        - const: sec
+>=20
+> -  calibration:
+
+What about existing users for this property?
+> -    description: |
+> -      calibration value for 1 sec period which will
+> -      be programmed directly to calibration register.
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+> -    minimum: 0x1
+> -    maximum: 0x1FFFFF
+> -    default: 0x198233
+> -
+>  required:
+>    - compatible
+>    - reg
+> @@ -60,6 +59,7 @@ examples:
+>          interrupt-parent =3D <&gic>;
+>          interrupts =3D <0 26 4>, <0 27 4>;
+>          interrupt-names =3D "alarm", "sec";
+> -        calibration =3D <0x198233>;
+> +        clock-names =3D "rtc_clk";
+> +        clocks =3D <&rtc_clk>;
+>        };
+>      };
+> --
+> 2.17.1
 
