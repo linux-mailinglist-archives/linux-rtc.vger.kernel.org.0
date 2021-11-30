@@ -2,181 +2,138 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB994638C5
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 16:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D146746414F
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 23:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244589AbhK3PGB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Nov 2021 10:06:01 -0500
-Received: from smtp2.axis.com ([195.60.68.18]:51403 "EHLO smtp2.axis.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242496AbhK3O7G (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:59:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1638284147;
-  x=1669820147;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GEwps9U7tK6Vybkz0p12QAIPYCPNnsYr8d7YW0CvhWg=;
-  b=Xl1oyLCZt/yjNWkL/5JVikvwoVGuEqflWFbL6L+Gf9FOWkwTiKD9lKE2
-   eciZJHh4N4iyk5PFCE4dKDZKyzEKgwEcHLi/jmuf8GFKBd8zspMCaPNgq
-   XOB0LYn0k4P/m0iaE6bDi0q2NXQ4loF+gtLrCjuKNsA4cLccBKs2Pq992
-   5mC98z2ATmM7ICuTMmbdD6QVDVswlIVMHyEJkh21N6zozP5l8OZGO3Jpb
-   +SxHP46XPhilxln/tXMLxZ2a+0iAVflmCaBvAqoub4PmG0WKT4iP7Gq4I
-   1Dfp/dXt5EZCqmPAu+qldq7BJgxm3LvAoZc4tLc/RJgDjnthFA5I00S/Y
-   w==;
-Subject: Re: [PATCH] rtc: rs5c372: add offset correction support
-To:     Camel Guo <Camel.Guo@axis.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     kernel <kernel@axis.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211130095004.22777-1-camel.guo@axis.com>
-From:   Camel Guo <camelg@axis.com>
-Message-ID: <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
-Date:   Tue, 30 Nov 2021 15:55:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1344571AbhK3Wfi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Nov 2021 17:35:38 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:37853 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344545AbhK3Wf3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 17:35:29 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 62E591C0004;
+        Tue, 30 Nov 2021 22:32:05 +0000 (UTC)
+Date:   Tue, 30 Nov 2021 23:32:05 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Alexey Firago <alexey_firago@mentor.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/2] rtc: max31343: Add a driver for Maxim MAX31343
+Message-ID: <YaamZW1nyOGDXfyw@piout.net>
+References: <20211016192118.255624-1-alexey_firago@mentor.com>
+ <20211016192118.255624-2-alexey_firago@mentor.com>
 MIME-Version: 1.0
-In-Reply-To: <20211130095004.22777-1-camel.guo@axis.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail06w.axis.com (10.20.40.12) To se-mail03w.axis.com
- (10.20.40.9)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211016192118.255624-2-alexey_firago@mentor.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/30/21 10:50 AM, Camel Guo wrote:
-> From: Camel Guo <camelg@axis.com>
-> 
-> This commit adds support of offset correction by configuring the
-> oscillation adjustment register of rs5c372.
-> 
-> Signed-off-by: Camel Guo <camelg@axis.com>
-> ---
->   drivers/rtc/rtc-rs5c372.c | 80 +++++++++++++++++++++++++++++++++++++++
->   1 file changed, 80 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-> index 80980414890c..77027498cad5 100644
-> --- a/drivers/rtc/rtc-rs5c372.c
-> +++ b/drivers/rtc/rtc-rs5c372.c
-> @@ -30,6 +30,8 @@
->   #define RS5C372_REG_TRIM        7
->   #       define RS5C372_TRIM_XSL         0x80
->   #       define RS5C372_TRIM_MASK        0x7F
-> +#      define RS5C372_TRIM_DEV         (1 << 7)
-> +#      define RS5C372_TRIM_DECR        (1 << 6)
-> 
->   #define RS5C_REG_ALARM_A_MIN    8                       /* or ALARM_W */
->   #define RS5C_REG_ALARM_A_HOURS  9
-> @@ -485,6 +487,82 @@ static int rs5c372_rtc_proc(struct device *dev, 
-> struct seq_file *seq)
->   #define rs5c372_rtc_proc        NULL
->   #endif
-> 
-> +static int rs5c372_read_offset(struct device *dev, long *offset)
-> +{
-> +       struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
-> +       int addr = RS5C_ADDR(RS5C372_REG_TRIM);
-> +       unsigned char val = i2c_smbus_read_byte_data(rs5c->client, addr);
-> +       long ppb_per_step = (val & RS5C372_TRIM_DEV) ? 1017 : 3052;
-> +       unsigned char decr = val & RS5C372_TRIM_DECR;
-> +
-> +       /* Only bits[0:5] repsents the time counts */
-> +       val &= 0x3F;
-> +
-> +       /* If bits[1:5] are all 0, it means no increment or decrement */
-> +       if (!(val & 0x3E)) {
-> +               *offset = 0;
-> +       } else {
-> +               if (decr)
-> +                       *offset = -(((~val) & 0x3F) + 1) * ppb_per_step;
-> +               else
-> +                       *offset = (val - 1) * ppb_per_step;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int rs5c372_set_offset(struct device *dev, long offset)
-> +{
-> +       struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
-> +       int addr = RS5C_ADDR(RS5C372_REG_TRIM);
-> +       unsigned char val = RS5C372_TRIM_DEV;
-> +       long steps = 0;
-> +
-> +       /*
-> +        * Check if it is possible to use high resolution mode (DEV=1). 
-> In this
-> +        * mode, the minimum resolution is 2 / (32768 * 20 * 3), which 
-> is about
-> +        * 1017 ppb
-> +        */
-> +       steps = DIV_ROUND_CLOSEST(offset, 1017);
-> +       if (steps > 0x3E || steps < -0x3E) {
-> +               /*
-> +                * offset is out of the range of high resolution mode. 
-> Try to
-> +                * use low resolution mode (DEV=0). In this mode, the 
-> minimum
-> +                * resolution is 2 / (32768 * 20), which is about 3052 ppb.
-> +                */
-> +               val &= ~RS5C372_TRIM_DEV;
-> +               steps = DIV_ROUND_CLOSEST(offset, 3052);
-> +
-> +               if (steps > 0x3E || steps < -0x3E)
-> +                       return -ERANGE;
-> +       }
-> +
-> +       if (steps > 0) {
-> +               val |= steps + 1;
-> +       } else {
-> +               val |= RS5C372_TRIM_DECR;
-> +               val |= (~(-steps - 1)) & 0x3F;
-> +       }
-> +
-> +       if (!steps || !(val & 0x3E)) {
-> +               /*
-> +                * if offset is too small, set oscillation adjustment 
-> register
-> +                * with the default values, which means no increment or
-> +                * decrement.
-> +                */
-> +               val = 0;
-> +       }
-> +
-> +       dev_dbg(&rs5c->client->dev, "write 0x%x for offset %ld\n", val, 
-> offset);
-> +
-> +       if (i2c_smbus_write_byte_data(rs5c->client, addr, val) < 0) {
-> +               dev_err(&rs5c->client->dev, "failed to write 0x%x to reg 
-> %d\n", val, addr);
-> +               return -EIO;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->   static const struct rtc_class_ops rs5c372_rtc_ops = {
->           .proc           = rs5c372_rtc_proc,
->           .read_time      = rs5c372_rtc_read_time,
-> @@ -492,6 +570,8 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
->           .read_alarm     = rs5c_read_alarm,
->           .set_alarm      = rs5c_set_alarm,
->           .alarm_irq_enable = rs5c_rtc_alarm_irq_enable,
-> +       .read_offset    = rs5c372_read_offset,
-> +       .set_offset     = rs5c372_set_offset,
->   };
-> 
->   #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
-> -- 
-> 2.20.1
-> 
+Hello,
 
-Just realize that the oscillation adjustment registers of r2*, rs5c* are 
-not totally same and all of these differences need to be handled in 
-different way. Hence this patch needs to be updated to cover all cases.
+On 16/10/2021 22:21:17+0300, Alexey Firago wrote:
+> +#define MAX31343_REG_TIMER_CFG	(0x05)
+> +#define  TIMER_CFG_TFS		GENMASK(1, 0) /* Timer frequency */
+> +#define  TIMER_CFG_TRPT		BIT(2) /* Timer repeat mode */
+> +#define  TIMER_CFG_TPAUSE	BIT(3) /* Timer Pause */
+> +#define  TIMER_CFG_TE		BIT(4) /* Timer enable */
+> +
+> +/* RTC section */
+> +#define MAX31343_REG_SEC	(0x06)
+> +#define  SEC10_MASK	GENMASK(6, 4) /* RTC seconds in multiples of 10 */
+> +#define  SEC_MASK	GENMASK(3, 0) /* RTC seconds value */
+
+I'm not convinced having separate masks is useful here, was that
+automatically generated?
+
+> +static int max31343_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> +{
+> +	struct max31343_rtc_data *max31343 = dev_get_drvdata(dev);
+> +	u8 date[7];
+> +	int ret;
+> +
+> +	dev_dbg(dev, "RTC set time %04d-%02d-%02d %02d/%02d/%02d\n",
+> +		tm->tm_year + 1900, tm->tm_mon, tm->tm_mday,
+> +		tm->tm_hour, tm->tm_min, tm->tm_sec);
+> +
+
+This could use %ptR
+
+> +	date[0] = bin2bcd(tm->tm_sec);
+> +	date[1] = bin2bcd(tm->tm_min);
+> +	date[2] = bin2bcd(tm->tm_hour);
+> +	date[3] = tm->tm_wday;
+> +	date[4] = bin2bcd(tm->tm_mday);
+> +	date[5] = bin2bcd(tm->tm_mon + 1);
+> +
+> +	if (tm->tm_year >= 200)
+> +		date[5] |= CENTURY;
+> +	date[6] = bin2bcd(tm->tm_year % 100);
+> +
+> +	ret = regmap_bulk_write(max31343->regmap, MAX31343_REG_SEC, date,
+> +				sizeof(date));
+> +	return ret;
+> +}
+> +
+
+[...]
+
+> +static int
+> +max31343_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> +{
+> +	struct max31343_rtc_data *max31343 = NULL;
+> +	int ret, status;
+> +	struct nvmem_config nvmem_cfg = {
+> +		.name = "max31343_nvram",
+> +		.word_size = 1,
+> +		.stride = 1,
+> +		.size = MAX31343_RAM_SIZE,
+> +		.type = NVMEM_TYPE_BATTERY_BACKED,
+> +		.reg_read = max31343_nvram_read,
+> +		.reg_write = max31343_nvram_write,
+> +	};
+> +
+> +	max31343 = devm_kzalloc(&client->dev, sizeof(struct max31343_rtc_data),
+> +				GFP_KERNEL);
+> +	if (!max31343)
+> +		return -ENOMEM;
+> +
+> +	max31343->regmap = devm_regmap_init_i2c(client, &max31343_regmap_config);
+> +	if (IS_ERR(max31343->regmap))
+> +		return PTR_ERR(max31343->regmap);
+> +
+> +	i2c_set_clientdata(client, max31343);
+> +
+> +	ret = regmap_read(max31343->regmap, MAX31343_REG_STATUS, &status);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	max31343->rtc = devm_rtc_allocate_device(&client->dev);
+> +	if (IS_ERR(max31343->rtc))
+> +		return PTR_ERR(max31343->rtc);
+> +
+> +	max31343->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	max31343->rtc->range_max = RTC_TIMESTAMP_END_2199;
+
+For my information, did you check the time continuity in this interval?
+
+> +	max31343->rtc->ops = &max31343_rtc_ops;
+> +	ret = devm_rtc_register_device(max31343->rtc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	nvmem_cfg.priv = max31343->regmap;
+> +	devm_rtc_nvmem_register(max31343->rtc, &nvmem_cfg);
+> +	max31343_hwmon_register(&client->dev);
+
+The whole driver seems ok, I'd like to get a review from the hwmon
+maintainers on the hwmon part as it is quite large.
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
