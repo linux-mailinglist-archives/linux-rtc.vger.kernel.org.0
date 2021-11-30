@@ -2,118 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D4A4641C1
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 23:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7BC4641F1
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Dec 2021 00:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345140AbhK3Wsv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Nov 2021 17:48:51 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41861 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344991AbhK3Wsn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 17:48:43 -0500
+        id S1344981AbhK3XJl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Nov 2021 18:09:41 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:43205 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235547AbhK3XJl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 18:09:41 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 11BBE1C0002;
-        Tue, 30 Nov 2021 22:45:19 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 23:45:18 +0100
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 7CE52200004;
+        Tue, 30 Nov 2021 23:06:19 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        Ash Logan <ash@heyquark.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.ne@posteo.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] rtc: gamecube: Report low battery as invalid data
-Message-ID: <YaapfmykL0BOHHhF@piout.net>
-References: <20211014220524.9988-1-linkmauve@linkmauve.fr>
- <20211027223516.2031-1-linkmauve@linkmauve.fr>
- <20211027223516.2031-3-linkmauve@linkmauve.fr>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Camel Guo <camel.guo@axis.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com, Camel Guo <camelg@axis.com>
+Subject: Re: [PATCH v3] rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
+Date:   Wed,  1 Dec 2021 00:06:18 +0100
+Message-Id: <163831354984.80026.71132451941412651.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211111083625.10216-1-camel.guo@axis.com>
+References: <20211111083625.10216-1-camel.guo@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211027223516.2031-3-linkmauve@linkmauve.fr>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 28/10/2021 00:35:12+0200, Emmanuel Gil Peyrot wrote:
-> I haven’t been able to test this patch as all of my consoles have a
-> working RTC battery, but according to the documentation it should work
-> like that.
+On Thu, 11 Nov 2021 09:36:25 +0100, Camel Guo wrote:
+> From: Camel Guo <camelg@axis.com>
 > 
-> Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-> ---
->  drivers/rtc/rtc-gamecube.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
+> In order to make it possible to get battery voltage status, this commit
+> adds RTC_VL_READ, RTC_VL_CLR ioctl commands to rtc-rs5c372.
 > 
-> diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-> index e8260c82c07d..1932c6fe1301 100644
-> --- a/drivers/rtc/rtc-gamecube.c
-> +++ b/drivers/rtc/rtc-gamecube.c
-> @@ -83,6 +83,10 @@
->  #define RTC_CONTROL0	0x21000c
->  #define RTC_CONTROL1	0x21000d
->  
-> +/* RTC flags */
-> +#define RTC_CONTROL0_UNSTABLE_POWER	0x00000800
-> +#define RTC_CONTROL0_LOW_BATTERY	0x00000200
-> +
->  struct priv {
->  	struct regmap *regmap;
->  	void __iomem *iob;
-> @@ -182,9 +186,35 @@ static int gamecube_rtc_set_time(struct device *dev, struct rtc_time *t)
->  	return regmap_write(d->regmap, RTC_COUNTER, timestamp - d->rtc_bias);
->  }
->  
-> +static int gamecube_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
-> +{
-> +	struct priv *d = dev_get_drvdata(dev);
-> +	int value;
-> +	int control0;
-> +	int ret;
-> +
-> +	switch (cmd) {
-> +	case RTC_VL_READ:
-> +		ret = regmap_read(d->regmap, RTC_CONTROL0, &control0);
-> +		if (ret)
-> +			return ret;
-> +
-> +		value = 0;
-> +		if (control0 & RTC_CONTROL0_UNSTABLE_POWER)
-> +			value |= RTC_VL_DATA_INVALID;
-> +		if (control0 & RTC_CONTROL0_LOW_BATTERY)
-> +			value |= RTC_VL_DATA_INVALID;
-
-Shouldn't that one be RTC_VL_BACKUP_LOW?
-
-Else, the driver is great, I'm ready to apply it.
-
-> +		return put_user(value, (unsigned int __user *)arg);
-> +
-> +	default:
-> +		return -ENOIOCTLCMD;
-> +	}
-> +}
-> +
->  static const struct rtc_class_ops gamecube_rtc_ops = {
->  	.read_time	= gamecube_rtc_read_time,
->  	.set_time	= gamecube_rtc_set_time,
-> +	.ioctl		= gamecube_rtc_ioctl,
->  };
->  
->  static int gamecube_rtc_read_offset_from_sram(struct priv *d)
-> -- 
-> 2.33.1
 > 
 
+Applied, thanks!
+
+[1/1] rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
+      commit: f601aa7930669439623dd266fc9e90b0218b42c1
+
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Alexandre Belloni <alexandre.belloni@bootlin.com>
