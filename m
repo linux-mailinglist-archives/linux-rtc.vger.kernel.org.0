@@ -2,53 +2,71 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E11E4641F5
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Dec 2021 00:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8039346422B
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Dec 2021 00:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345072AbhK3XLT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Nov 2021 18:11:19 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:39827 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344850AbhK3XLM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 18:11:12 -0500
+        id S236703AbhK3XWg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Nov 2021 18:22:36 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:34987 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231514AbhK3XWe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 18:22:34 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 1C69D40008;
-        Tue, 30 Nov 2021 23:07:49 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id EE0B2200002;
+        Tue, 30 Nov 2021 23:19:12 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 00:19:12 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     ferlandm@amotus.ca, a.zummo@towertech.it
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2] rtc: pcf85063: add i2c_device_id name matching support
-Date:   Wed,  1 Dec 2021 00:07:49 +0100
-Message-Id: <163831366173.80369.17100409949013853477.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211116164733.17149-1-ferlandm@amotus.ca>
-References: <202111051119.UeuF3GiJ-lkp@intel.com> <20211116164733.17149-1-ferlandm@amotus.ca>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, kernel@axis.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf8523: fix alarm interrupt disabling
+Message-ID: <YaaxcFn/di3wCnO1@piout.net>
+References: <20211103152253.22844-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211103152253.22844-1-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 16 Nov 2021 11:47:33 -0500, ferlandm@amotus.ca wrote:
-> From: Marc Ferland <ferlandm@amotus.ca>
-> 
-> The pcf85063 driver regsitration currently supports the "compatible"
-> property type of matching (for DT).
-> 
-> This patch adds "matching by name" support to the driver by defining
-> an i2c_device_id table and setting the id_table parameter in the
-> i2c_driver struct.
-> 
-> [...]
+Hello,
 
-Applied, thanks!
+On 03/11/2021 16:22:52+0100, Vincent Whitchurch wrote:
+> Fix the driver to actually disable the IRQ and not overwrite other bits
+> in the CONTROL_1 register when it is asked to disable the alarm
+> interrupt.
+> 
+> Compile-tested only.
+> 
+> Fixes: 13e37b7fb75dfaeb4 ("rtc: pcf8523: add alarm support")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>  drivers/rtc/rtc-pcf8523.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+> index 8b6fb20774bf..e26477267451 100644
+> --- a/drivers/rtc/rtc-pcf8523.c
+> +++ b/drivers/rtc/rtc-pcf8523.c
+> @@ -347,7 +347,7 @@ static int pcf8523_irq_enable(struct device *dev, unsigned int enabled)
+>  	if (err < 0)
+>  		return err;
+>  
+> -	value &= PCF8523_CONTROL1_AIE;
+> +	value &= ~PCF8523_CONTROL1_AIE;
+>  
 
-[1/1] rtc: pcf85063: add i2c_device_id name matching support
-      commit: 1c1b3098ae1e0d9725d0d4d49986e0edebba443a
+I was going to apply that but it seems this was fixed by:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=91f3849d956d58073ef55e01f2e8871dc30847a5
 
-Best regards,
+>  	if (enabled)
+>  		value |= PCF8523_CONTROL1_AIE;
+> -- 
+> 2.28.0
+> 
+
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
