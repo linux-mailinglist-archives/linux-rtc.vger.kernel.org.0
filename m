@@ -2,109 +2,181 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEB1463503
-	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 13:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB994638C5
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Nov 2021 16:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbhK3NCZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 30 Nov 2021 08:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbhK3NCW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Nov 2021 08:02:22 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0846DC061574;
-        Tue, 30 Nov 2021 04:59:02 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id 70so13504390vkx.7;
-        Tue, 30 Nov 2021 04:59:01 -0800 (PST)
+        id S244589AbhK3PGB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Nov 2021 10:06:01 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:51403 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242496AbhK3O7G (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:59:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7eybnsDg7wBXEVC+0fnHnHq01RFd44IK/DduaEmP+Sc=;
-        b=Pp2dv3ij7s3Ac/IHzAFULShVGarzukm5R9jJuaDa0Z+n1hLs3MfLbRfFwdq/jSvOWn
-         0Yog2H6PxEfTY4zBiATACk8rhBAsaKMZ68xrUDm7AxZhxc0AWeHE9VYeiQkXn/eFy9KY
-         I7Gp3UIccYfHSsquL4Iez+Yp8Bak3WOPB1UNAl8CYI84d3NcxC0j9R9v0sBA6JoooAc7
-         Que1aUT67ageAE++q/cxrB/qzQ6qysP8n0g6upyMuz5IwHzbCp3NNHCsj3J2Th5NHdeS
-         qaxkjLWM+t4yuZO3L3HyX5aQONFA5EcAu5Wrj6cxhOrJX+72bDFj9rtHAzRYg0cZm988
-         HO3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7eybnsDg7wBXEVC+0fnHnHq01RFd44IK/DduaEmP+Sc=;
-        b=drNNtxWVeGmRisRgWVPBgeH1mXeV1alcmaTfsz457B3IC8xkOiQHxjT9rklX+Kq5jY
-         RyhY7ODHaapv9lTK6BYlH3K8DsrtpwIUQWJGM8k+fd53UvwWIsGY0qHZ4w5wl7/408cx
-         HswEy6eSYhAw/XoGk+SOmhbZyKBqc0DQ1Zk0H54rSK9hDmeoz0keZRi7C0j70c5GGK7L
-         wZ26ZtbLcghKwVEUfqqSDhjo0/5o8XFneEFXJG/anXwmagGKRPZjsFY3hCHuZVV46L1J
-         jvfjJe+R7Od1UpexOm2veMYpoL4t7aAwiOKC7gcIDJseL2+9C/C99VGb7yf6B3HJuazI
-         zskg==
-X-Gm-Message-State: AOAM531ll5VRx8ZVA+0lGK++UQEIbElxVYFS1/eOGYqwR3jV0npT96F5
-        psTrRRLKkk4VmLjBm3muCt0=
-X-Google-Smtp-Source: ABdhPJz6YfnyoRKlVLGUkaiFvcvcijtGNsP6I2SBXO/YV7reF4PuNEnim/DaKUS/XPdQRya4U2f/TQ==
-X-Received: by 2002:a1f:a08c:: with SMTP id j134mr39268831vke.35.1638277140156;
-        Tue, 30 Nov 2021 04:59:00 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:485:504a:eba2:106:255b:d69c])
-        by smtp.gmail.com with ESMTPSA id x9sm10008031vkn.36.2021.11.30.04.58.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 04:59:00 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     alexandre.belloni@bootlin.com
-Cc:     robh+dt@kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, otavio@ossystems.com.br,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH 2/2 RESEND] rtc: rv8803: Add support for the Epson RX8804 RTC
-Date:   Tue, 30 Nov 2021 09:58:30 -0300
-Message-Id: <20211130125830.1166194-2-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211130125830.1166194-1-festevam@gmail.com>
-References: <20211130125830.1166194-1-festevam@gmail.com>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638284147;
+  x=1669820147;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=GEwps9U7tK6Vybkz0p12QAIPYCPNnsYr8d7YW0CvhWg=;
+  b=Xl1oyLCZt/yjNWkL/5JVikvwoVGuEqflWFbL6L+Gf9FOWkwTiKD9lKE2
+   eciZJHh4N4iyk5PFCE4dKDZKyzEKgwEcHLi/jmuf8GFKBd8zspMCaPNgq
+   XOB0LYn0k4P/m0iaE6bDi0q2NXQ4loF+gtLrCjuKNsA4cLccBKs2Pq992
+   5mC98z2ATmM7ICuTMmbdD6QVDVswlIVMHyEJkh21N6zozP5l8OZGO3Jpb
+   +SxHP46XPhilxln/tXMLxZ2a+0iAVflmCaBvAqoub4PmG0WKT4iP7Gq4I
+   1Dfp/dXt5EZCqmPAu+qldq7BJgxm3LvAoZc4tLc/RJgDjnthFA5I00S/Y
+   w==;
+Subject: Re: [PATCH] rtc: rs5c372: add offset correction support
+To:     Camel Guo <Camel.Guo@axis.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     kernel <kernel@axis.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211130095004.22777-1-camel.guo@axis.com>
+From:   Camel Guo <camelg@axis.com>
+Message-ID: <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
+Date:   Tue, 30 Nov 2021 15:55:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20211130095004.22777-1-camel.guo@axis.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: se-mail06w.axis.com (10.20.40.12) To se-mail03w.axis.com
+ (10.20.40.9)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The Epson RX8804 RTC has the same programming model as RV8803.
+On 11/30/21 10:50 AM, Camel Guo wrote:
+> From: Camel Guo <camelg@axis.com>
+> 
+> This commit adds support of offset correction by configuring the
+> oscillation adjustment register of rs5c372.
+> 
+> Signed-off-by: Camel Guo <camelg@axis.com>
+> ---
+>   drivers/rtc/rtc-rs5c372.c | 80 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 80 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+> index 80980414890c..77027498cad5 100644
+> --- a/drivers/rtc/rtc-rs5c372.c
+> +++ b/drivers/rtc/rtc-rs5c372.c
+> @@ -30,6 +30,8 @@
+>   #define RS5C372_REG_TRIM        7
+>   #       define RS5C372_TRIM_XSL         0x80
+>   #       define RS5C372_TRIM_MASK        0x7F
+> +#      define RS5C372_TRIM_DEV         (1 << 7)
+> +#      define RS5C372_TRIM_DECR        (1 << 6)
+> 
+>   #define RS5C_REG_ALARM_A_MIN    8                       /* or ALARM_W */
+>   #define RS5C_REG_ALARM_A_HOURS  9
+> @@ -485,6 +487,82 @@ static int rs5c372_rtc_proc(struct device *dev, 
+> struct seq_file *seq)
+>   #define rs5c372_rtc_proc        NULL
+>   #endif
+> 
+> +static int rs5c372_read_offset(struct device *dev, long *offset)
+> +{
+> +       struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
+> +       int addr = RS5C_ADDR(RS5C372_REG_TRIM);
+> +       unsigned char val = i2c_smbus_read_byte_data(rs5c->client, addr);
+> +       long ppb_per_step = (val & RS5C372_TRIM_DEV) ? 1017 : 3052;
+> +       unsigned char decr = val & RS5C372_TRIM_DECR;
+> +
+> +       /* Only bits[0:5] repsents the time counts */
+> +       val &= 0x3F;
+> +
+> +       /* If bits[1:5] are all 0, it means no increment or decrement */
+> +       if (!(val & 0x3E)) {
+> +               *offset = 0;
+> +       } else {
+> +               if (decr)
+> +                       *offset = -(((~val) & 0x3F) + 1) * ppb_per_step;
+> +               else
+> +                       *offset = (val - 1) * ppb_per_step;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int rs5c372_set_offset(struct device *dev, long offset)
+> +{
+> +       struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
+> +       int addr = RS5C_ADDR(RS5C372_REG_TRIM);
+> +       unsigned char val = RS5C372_TRIM_DEV;
+> +       long steps = 0;
+> +
+> +       /*
+> +        * Check if it is possible to use high resolution mode (DEV=1). 
+> In this
+> +        * mode, the minimum resolution is 2 / (32768 * 20 * 3), which 
+> is about
+> +        * 1017 ppb
+> +        */
+> +       steps = DIV_ROUND_CLOSEST(offset, 1017);
+> +       if (steps > 0x3E || steps < -0x3E) {
+> +               /*
+> +                * offset is out of the range of high resolution mode. 
+> Try to
+> +                * use low resolution mode (DEV=0). In this mode, the 
+> minimum
+> +                * resolution is 2 / (32768 * 20), which is about 3052 ppb.
+> +                */
+> +               val &= ~RS5C372_TRIM_DEV;
+> +               steps = DIV_ROUND_CLOSEST(offset, 3052);
+> +
+> +               if (steps > 0x3E || steps < -0x3E)
+> +                       return -ERANGE;
+> +       }
+> +
+> +       if (steps > 0) {
+> +               val |= steps + 1;
+> +       } else {
+> +               val |= RS5C372_TRIM_DECR;
+> +               val |= (~(-steps - 1)) & 0x3F;
+> +       }
+> +
+> +       if (!steps || !(val & 0x3E)) {
+> +               /*
+> +                * if offset is too small, set oscillation adjustment 
+> register
+> +                * with the default values, which means no increment or
+> +                * decrement.
+> +                */
+> +               val = 0;
+> +       }
+> +
+> +       dev_dbg(&rs5c->client->dev, "write 0x%x for offset %ld\n", val, 
+> offset);
+> +
+> +       if (i2c_smbus_write_byte_data(rs5c->client, addr, val) < 0) {
+> +               dev_err(&rs5c->client->dev, "failed to write 0x%x to reg 
+> %d\n", val, addr);
+> +               return -EIO;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>   static const struct rtc_class_ops rs5c372_rtc_ops = {
+>           .proc           = rs5c372_rtc_proc,
+>           .read_time      = rs5c372_rtc_read_time,
+> @@ -492,6 +570,8 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
+>           .read_alarm     = rs5c_read_alarm,
+>           .set_alarm      = rs5c_set_alarm,
+>           .alarm_irq_enable = rs5c_rtc_alarm_irq_enable,
+> +       .read_offset    = rs5c372_read_offset,
+> +       .set_offset     = rs5c372_set_offset,
+>   };
+> 
+>   #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
+> -- 
+> 2.20.1
+> 
 
-Add support for it in the driver.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Otavio Salvador <otavio@ossystems.com.br>
----
- drivers/rtc/rtc-rv8803.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-index 0d5ed38bf60c..f69e0b1137cd 100644
---- a/drivers/rtc/rtc-rv8803.c
-+++ b/drivers/rtc/rtc-rv8803.c
-@@ -55,6 +55,7 @@
- 
- enum rv8803_type {
- 	rv_8803,
-+	rx_8804,
- 	rx_8900
- };
- 
-@@ -601,6 +602,7 @@ static int rv8803_probe(struct i2c_client *client,
- 
- static const struct i2c_device_id rv8803_id[] = {
- 	{ "rv8803", rv_8803 },
-+	{ "rv8804", rx_8804 },
- 	{ "rx8803", rv_8803 },
- 	{ "rx8900", rx_8900 },
- 	{ }
-@@ -616,6 +618,10 @@ static const __maybe_unused struct of_device_id rv8803_of_match[] = {
- 		.compatible = "epson,rx8803",
- 		.data = (void *)rv_8803
- 	},
-+	{
-+		.compatible = "epson,rx8804",
-+		.data = (void *)rx_8804
-+	},
- 	{
- 		.compatible = "epson,rx8900",
- 		.data = (void *)rx_8900
--- 
-2.25.1
-
+Just realize that the oscillation adjustment registers of r2*, rs5c* are 
+not totally same and all of these differences need to be handled in 
+different way. Hence this patch needs to be updated to cover all cases.
