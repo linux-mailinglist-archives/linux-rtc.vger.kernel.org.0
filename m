@@ -2,56 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37398464A07
-	for <lists+linux-rtc@lfdr.de>; Wed,  1 Dec 2021 09:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6BA464A2A
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Dec 2021 09:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbhLAIqY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Dec 2021 03:46:24 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:24189 "EHLO smtp1.axis.com"
+        id S231570AbhLAIwu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Dec 2021 03:52:50 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:61352 "EHLO smtp2.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232256AbhLAIqY (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:46:24 -0500
+        id S231397AbhLAIwu (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Wed, 1 Dec 2021 03:52:50 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1638348184;
-  x=1669884184;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638348570;
+  x=1669884570;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=LAK/bVC4aHlcgnP06p+vpyCO35Fk8GtaJt7UyHkSZTM=;
-  b=SxV6O3teBg+1q4ml30bk9O4DsIuSTzI5D5O5HtdDRqsQQM9CngCcvKiJ
-   s6vJCz6L8MXNo00QG/pFuOgkSASVhQIvjRzkDsaky2xmh0reosw3QHxIa
-   jlDvkLXD7/xfAF4xAl04lh1FxhUL4CQcXKZKhQx9613RKbNUL1fLkQurw
-   wAqBp+meLGGI6SZSDaPdwBDtE3RL4886GjhRgfagI654mRbiBy+xIKDbc
-   +SidkUSC52IfvyQ9Xa5VFo0rlkEcLKxQaHt9st+dqUDEswqXSffMV05Iz
-   Jl/oVpD6DBW7yOiTYpNKqUFajd0qBn+3FQZvqdsCPSR1TebXcoOR+Ypln
-   w==;
-Date:   Wed, 1 Dec 2021 09:43:02 +0100
+  bh=f0gShEKXjzX9AdLiLP+/IR19sas2R14bBFUPZdaEFTw=;
+  b=K5dXPbbNsE+zJS4yzEVNThT5Si1JyphTahSc1x5IDydgEqW/HdFrINV3
+   o/gs7GPpu9lkB61pqmlSEhg7EG1/ztT85t6ezAKU1/MTW5ZjMHCZOns62
+   4WKDrNc+lTKw3VkzeNmn+UqWzdn9mJ8NAK/tjWoW8DItya6OQXRoqfFxX
+   fwdsVBwN+zcAHZdw575jfafPnRku5bGKBYmeXsdE0WLJJaBg1H4MEtbgN
+   kTFqIpX8WqAFvzri6Kql4gmnL44TyOu1dYsGJnF+A4xhB/bV6PHKvWUhg
+   agywyNq59DAVU1ABeG5erL0vB90nTG5NtErepKhxpqyUB3mdk/z13Mldf
+   Q==;
+Date:   Wed, 1 Dec 2021 09:49:27 +0100
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Camel Guo <Camel.Guo@axis.com>
-CC:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>, kernel <kernel@axis.com>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        kernel <kernel@axis.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: rs5c372: add offset correction support
-Message-ID: <20211201084302.GA26222@axis.com>
-References: <20211130095004.22777-1-camel.guo@axis.com>
- <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
+Subject: Re: [PATCH] rtc: pcf8523: fix alarm interrupt disabling
+Message-ID: <20211201084927.GB26222@axis.com>
+References: <20211103152253.22844-1-vincent.whitchurch@axis.com>
+ <YaaxcFn/di3wCnO1@piout.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
+In-Reply-To: <YaaxcFn/di3wCnO1@piout.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 03:55:43PM +0100, Camel Guo wrote:
-> Just realize that the oscillation adjustment registers of r2*, rs5c* are 
-> not totally same and all of these differences need to be handled in 
-> different way. Hence this patch needs to be updated to cover all cases.
+On Wed, Dec 01, 2021 at 12:19:12AM +0100, Alexandre Belloni wrote:
+> On 03/11/2021 16:22:52+0100, Vincent Whitchurch wrote:
+> > Fix the driver to actually disable the IRQ and not overwrite other bits
+> > in the CONTROL_1 register when it is asked to disable the alarm
+> > interrupt.
+> > 
+> > Compile-tested only.
+> > 
+> > Fixes: 13e37b7fb75dfaeb4 ("rtc: pcf8523: add alarm support")
+> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> > ---
+> >  drivers/rtc/rtc-pcf8523.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+> > index 8b6fb20774bf..e26477267451 100644
+> > --- a/drivers/rtc/rtc-pcf8523.c
+> > +++ b/drivers/rtc/rtc-pcf8523.c
+> > @@ -347,7 +347,7 @@ static int pcf8523_irq_enable(struct device *dev, unsigned int enabled)
+> >  	if (err < 0)
+> >  		return err;
+> >  
+> > -	value &= PCF8523_CONTROL1_AIE;
+> > +	value &= ~PCF8523_CONTROL1_AIE;
+> >  
+> 
+> I was going to apply that but it seems this was fixed by:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=91f3849d956d58073ef55e01f2e8871dc30847a5
 
-Unless you have the hardware to actually test the other variants,
-perhaps it would be safer to just reject them in ->set_offset /
-->get_offset for now?  Returning -EINVAL for unsupported types should
-make rtc_set_offset() and rtc_get_offset() have the same behaviour as
-not implementing the callbacks for these variants.
+Yes, you're right, sorry.  I had only checked mainline at the time I
+wrote the patch and not what was queued up in linux-next.
