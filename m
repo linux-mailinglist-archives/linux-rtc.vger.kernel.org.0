@@ -2,301 +2,206 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A15465A8C
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Dec 2021 01:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C8546665E
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Dec 2021 16:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354057AbhLBAVb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Dec 2021 19:21:31 -0500
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:36908 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344285AbhLBAVa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Dec 2021 19:21:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638404288; x=1669940288;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=dnRwlM2g208wpzcQ1fHoMh5ABTusv5pFo5cTKx90whg=;
-  b=ZHa6bLhQ2o9cVrlX0oFBwY6YznSuOw+2Dvt9jhIZvihjxP5567DDiGLy
-   YZrjOzffJscor8zhodIY388IaUSHNexMPWDrFfyVpqtSpxXiHuCEpcCTH
-   0eCDgVYg9sGFGJBtGTB6PyfGxJMx1KXa2E1NwWd/qUR0h2QshM35x9W1k
-   rk7r6GBoeKP2eX+bBWmHsoJAG6g45LZ0fOlUdEkn2vQY64aF92gtAKFTe
-   XlRVrN4RF71Hhmf7jwfZ26Vh0UIviMnCjXbgEG3mfnABXMLO9dQHiZBwu
-   vdSXhY/GLucYusDO3j3q2w2x4VS+Zk/L20gwjFO8HWN5UpDgTFqMeeXc8
-   w==;
-X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
-   d="scan'208";a="291190910"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Dec 2021 07:58:13 +0800
-IronPort-SDR: SsqhvdJ9XF+l51H/X9QA0JmMUFMG15/8frHNVOTsKqNLg/kZogMOBr+/AvMngJNltKC/12lwXl
- Z1fmKNj7he1OtVOAQ5sweKcvc8VEsojXbdCDQPTsB1+zbbOyRBuii+1yGhnl/9tY8+1it6Cf2f
- w6JG7IUovjZ7uUOOQZLcPj47nyb9DMNahk1ZwG7PXd4Zv0waARj3hXMYtbdSitlDjpbkO1tA6m
- VgNUWMbEUK8rFOnxoU8zp6d7c0/hOjtJ/2WkfbdKqmbpqMZPka4KCadrbn9+vGMTyGZvCZrTp2
- /1xaE2rJyCZvpn8X9Jt5spyA
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 15:32:57 -0800
-IronPort-SDR: jHHwd30LrCut2q8JwRoYhSHLiWf4mBJ9QAdbN3RGjaxU/phzrhFT1aYYWwEt+bBwB0n7VC5PSB
- FnZiA7l/R1JgHvTXHPmX0ZL5A4EY/z1RDUAIDdnFKxSKfQyBhcAMfBQlRTIgrVijLkVZv+dnyk
- hOzIFMQbHEbUwywe08xsrXLkNKCfafwCiuw7wd/3OROPBldQNR2bDtDTDwOkgxJdKOnEoiesS2
- Qda5ue6xTeaelIdJJ97HboKeg3pIY1B55tFEUlRwlnGyJjhPJiCXizC4PWNrp/yJHBEFrOToP+
- ncQ=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 15:58:15 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J4GHn4MMCz1RtVt
-        for <linux-rtc@vger.kernel.org>; Wed,  1 Dec 2021 15:58:13 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1638403091; x=1640995092; bh=dnRwlM2g208wpzcQ1fHoMh5ABTusv5pFo5c
-        TKx90whg=; b=Smg8tZ+TvJgoqFK7osdFry7pC21BK7S3yr15mJQjwB/VT9nSMYr
-        7iIvDU9l8vFruHz8R0A0SVuly46XttI5hP7+kfC5nbW0dAzvHaZXyz4ZDsmfd3qB
-        D0Ph8lgqh06/wHt+lro2VpDTfjRFCGMvRHXyhklU38zB6iPfugAApaDMw29xaH6x
-        Pocm/LRy1wZ1rAlLDlzn9u7axyibnyRJDEalhSezz+2Wqhp77ULG7HlRPACEG+Q7
-        fSVIANXzSmOc7Dv7ZW8aIyMLJPlNNQjybxvXCKMmPtm/7CIV298EqCCQ+BEWWo6h
-        LcJe0ZNh1pNmkNb9fwaGI9bsqmnIs91czqw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PiGQ9j0BJQZO for <linux-rtc@vger.kernel.org>;
-        Wed,  1 Dec 2021 15:58:11 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J4GHc4pQzz1RtVl;
-        Wed,  1 Dec 2021 15:58:04 -0800 (PST)
-Message-ID: <0cbaad0b-bab0-177e-48ef-5c4f6dd4391a@opensource.wdc.com>
-Date:   Thu, 2 Dec 2021 08:58:03 +0900
+        id S1358918AbhLBP0U (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 2 Dec 2021 10:26:20 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:29449 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358921AbhLBP0U (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 2 Dec 2021 10:26:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638458578;
+  x=1669994578;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SCt8C0q+oYi8J/SOt7dYSP4jqOMkKUjKj7Bq9mvE+d0=;
+  b=erK1YpgXoCaUAkoY6ejnq7tMKDR3yM4BaiDc7WQbon02r2++JRcMNOoa
+   uKwn9mWN826XYX9uc9jC3pLjrrg4howHukq7EUVO88aZBM5tUqv92bduO
+   H0y17PsqNPELisd/vBeCLkT53TeQKPM/oaAkwA63ntJFHh0hnID37rjKV
+   MRAZtmVf/IgjIRTWTPkrgKCThzEovEg3OYLeVQvIcGO4PTJG3GoWRB58b
+   BZ4iPfhpbE9Hiyq2dyxa8UbR5XPySWRwvpX5mexPEPhrbySlXCPe4nldm
+   KjmzlUVHFc3zWnM22/iYnpbaCbubRVhrg2iVim5wWaULnlszqWHde/zns
+   Q==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     <kernel@axis.com>, Camel Guo <camelg@axis.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] rtc: rs5c372: add offset correction support
+Date:   Thu, 2 Dec 2021 16:22:52 +0100
+Message-ID: <20211202152252.31264-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211201205110.41656-1-f.fainelli@gmail.com>
- <20211201205110.41656-13-f.fainelli@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <20211201205110.41656-13-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 2021/12/02 5:51, Florian Fainelli wrote:
-> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
-> to help with validation.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
->  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
->  2 files changed, 91 insertions(+), 45 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
->  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
-> deleted file mode 100644
-> index b9ae4ce4a0a0..000000000000
-> --- a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
-> +++ /dev/null
-> @@ -1,45 +0,0 @@
-> -* Broadcom SATA3 AHCI Controller
-> -
-> -SATA nodes are defined to describe on-chip Serial ATA controllers.
-> -Each SATA controller should have its own node.
-> -
-> -Required properties:
-> -- compatible         : should be one or more of
-> -			"brcm,bcm7216-ahci"
-> -			"brcm,bcm7425-ahci"
-> -			"brcm,bcm7445-ahci"
-> -			"brcm,bcm-nsp-ahci"
-> -			"brcm,sata3-ahci"
-> -			"brcm,bcm63138-ahci"
-> -- reg                : register mappings for AHCI and SATA_TOP_CTRL
-> -- reg-names          : "ahci" and "top-ctrl"
-> -- interrupts         : interrupt mapping for SATA IRQ
-> -
-> -Optional properties:
-> -
-> -- reset: for "brcm,bcm7216-ahci" must be a valid reset phandle
-> -  pointing to the RESCAL reset controller provider node.
-> -- reset-names: for "brcm,bcm7216-ahci", must be "rescal".
-> -
-> -Also see ahci-platform.txt.
-> -
-> -Example:
-> -
-> -	sata@f045a000 {
-> -		compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
-> -		reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
-> -		reg-names = "ahci", "top-ctrl";
-> -		interrupts = <0 30 0>;
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -
-> -		sata0: sata-port@0 {
-> -			reg = <0>;
-> -			phys = <&sata_phy 0>;
-> -		};
-> -
-> -		sata1: sata-port@1 {
-> -			reg = <1>;
-> -			phys = <&sata_phy 1>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> new file mode 100644
-> index 000000000000..4098d56872ae
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/ata/brcm,sata-brcm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom SATA3 AHCI Controller
-> +
-> +description:
-> +  SATA nodes are defined to describe on-chip Serial ATA controllers.
-> +  Each SATA controller should have its own node.
-> +
-> +maintainers:
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +allOf:
-> +  - $ref: sata-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm7216-ahci
-> +          - const: brcm,sata3-ahci
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm7445-ahci
-> +          - const: brcm,sata3-ahci
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm7425-ahci
-> +          - const: brcm,sata3-ahci
-> +      - items:
-> +          - const: brcm,bcm-nsp-ahci
-> +      - items:
-> +          - const: brcm,bcm63138-ahci
-> +
-> +  reg:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: ahci
-> +      - const: top-ctrl
-> +
-> +  interrupts: true
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - brcm,bcm7216-ahci
-> +then:
-> +  properties:
-> +    resets: true
-> +    reset-names:
-> +      items:
-> +        - const: rescal
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    sata@f045a000 {
-> +        compatible = "brcm,bcm7445-ahci", "brcm,sata3-ahci";
-> +        reg = <0xf045a000 0xa9c>, <0xf0458040 0x24>;
-> +        reg-names = "ahci", "top-ctrl";
-> +        interrupts = <0 30 0>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        sata0: sata-port@0 {
-> +            reg = <0>;
-> +            phys = <&sata_phy 0>;
-> +        };
-> +
-> +        sata1: sata-port@1 {
-> +            reg = <1>;
-> +            phys = <&sata_phy 1>;
-> +        };
-> +    };
-> 
+From: Camel Guo <camelg@axis.com>
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+In order for linux userspace application to be able to adjust offset to
+keep rtc precision as high as possible, this commit adds support of
+offset correction by adjusting the time trimming register on
+rs5c372[a|b] and oscilluation adjustment register on r2025x, r222[1|3]x,
+rv5c38[6|7]a.
 
-Rob,
+Signed-off-by: Camel Guo <camelg@axis.com>
+---
 
-Will take this through your tree ?
+Notes:
+    v2: cover all supported rtc chips in rtc-rs5c372.c
 
+ drivers/rtc/rtc-rs5c372.c | 120 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 120 insertions(+)
+
+diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
+index 955513514179..b3155fa914f1 100644
+--- a/drivers/rtc/rtc-rs5c372.c
++++ b/drivers/rtc/rtc-rs5c372.c
+@@ -30,6 +30,8 @@
+ #define RS5C372_REG_TRIM	7
+ #	define RS5C372_TRIM_XSL		0x80
+ #	define RS5C372_TRIM_MASK	0x7F
++#	define R2221TL_TRIM_DEV		(1 << 7)	/* only if R2221TL */
++#	define RS5C372_TRIM_DECR	(1 << 6)
+ 
+ #define RS5C_REG_ALARM_A_MIN	8			/* or ALARM_W */
+ #define RS5C_REG_ALARM_A_HOURS	9
+@@ -539,6 +541,122 @@ static int rs5c372_ioctl(struct device *dev, unsigned int cmd, unsigned long arg
+ #define rs5c372_ioctl	NULL
+ #endif
+ 
++static int rs5c372_read_offset(struct device *dev, long *offset)
++{
++	struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
++	u8 val = rs5c->regs[RS5C372_REG_TRIM];
++	long ppb_per_step = 0;
++	bool decr = val & RS5C372_TRIM_DECR;
++
++	switch (rs5c->type) {
++	case rtc_r2221tl:
++		ppb_per_step = val & R2221TL_TRIM_DEV ? 1017 : 3051;
++		break;
++	case rtc_rs5c372a:
++	case rtc_rs5c372b:
++		ppb_per_step = val & RS5C372_TRIM_XSL ? 3125 : 3051;
++		break;
++	default:
++		ppb_per_step = 3051;
++		break;
++	}
++
++	/* Only bits[0:5] repsents the time counts */
++	val &= 0x3F;
++
++	/* If bits[1:5] are all 0, it means no increment or decrement */
++	if (!(val & 0x3E)) {
++		*offset = 0;
++	} else {
++		if (decr)
++			*offset = -(((~val) & 0x3F) + 1) * ppb_per_step;
++		else
++			*offset = (val - 1) * ppb_per_step;
++	}
++
++	return 0;
++}
++
++static int rs5c372_set_offset(struct device *dev, long offset)
++{
++	struct rs5c372 *rs5c = i2c_get_clientdata(to_i2c_client(dev));
++	int addr = RS5C_ADDR(RS5C372_REG_TRIM);
++	u8 val = 0;
++	u8 tmp = 0;
++	long ppb_per_step = 3051;
++	long steps = LONG_MIN;
++
++	switch (rs5c->type) {
++	case rtc_rs5c372a:
++	case rtc_rs5c372b:
++		tmp = rs5c->regs[RS5C372_REG_TRIM];
++		if (tmp & RS5C372_TRIM_XSL) {
++			ppb_per_step = 3125;
++			val |= RS5C372_TRIM_XSL;
++		}
++		break;
++	case rtc_r2221tl:
++		/*
++		 * Check if it is possible to use high resolution mode (DEV=1).
++		 * In this mode, the minimum resolution is 2 / (32768 * 20 * 3),
++		 * which is about 1017 ppb.
++		 */
++		steps = DIV_ROUND_CLOSEST(offset, 1017);
++		if (steps >= -0x3E && steps <= 0x3E) {
++			ppb_per_step = 1017;
++			val |= R2221TL_TRIM_DEV;
++		} else {
++			/*
++			 * offset is out of the range of high resolution mode.
++			 * Try to use low resolution mode (DEV=0). In this mode,
++			 * the minimum resolution is 2 / (32768 * 20), which is
++			 * about 3051 ppb.
++			 */
++			steps = LONG_MIN;
++		}
++		break;
++	default:
++		break;
++	}
++
++	if (steps == LONG_MIN) {
++		steps = DIV_ROUND_CLOSEST(offset, ppb_per_step);
++		if (steps > 0x3E || steps < -0x3E)
++			return -ERANGE;
++	}
++
++	if (steps > 0) {
++		val |= steps + 1;
++	} else {
++		val |= RS5C372_TRIM_DECR;
++		val |= (~(-steps - 1)) & 0x3F;
++	}
++
++	if (!steps || !(val & 0x3E)) {
++		/*
++		 * if offset is too small, set oscillation adjustment register
++		 * or time trimming register with its default value whic means
++		 * no increment or decrement. But for rs5c372[a|b], the XSL bit
++		 * should be kept unchanged.
++		 */
++		if (rs5c->type == rtc_rs5c372a || rs5c->type == rtc_rs5c372b)
++			val &= RS5C372_TRIM_XSL;
++		else
++			val = 0;
++	}
++
++	dev_dbg(&rs5c->client->dev, "write 0x%x for offset %ld\n", val, offset);
++
++	if (i2c_smbus_write_byte_data(rs5c->client, addr, val) < 0) {
++		dev_err(&rs5c->client->dev, "failed to write 0x%x to reg %d\n", val, addr);
++		return -EIO;
++	}
++
++	rs5c->regs[RS5C372_REG_TRIM] = val;
++
++	return 0;
++}
++
+ static const struct rtc_class_ops rs5c372_rtc_ops = {
+ 	.proc		= rs5c372_rtc_proc,
+ 	.read_time	= rs5c372_rtc_read_time,
+@@ -547,6 +665,8 @@ static const struct rtc_class_ops rs5c372_rtc_ops = {
+ 	.set_alarm	= rs5c_set_alarm,
+ 	.alarm_irq_enable = rs5c_rtc_alarm_irq_enable,
+ 	.ioctl		= rs5c372_ioctl,
++	.read_offset    = rs5c372_read_offset,
++	.set_offset     = rs5c372_set_offset,
+ };
+ 
+ #if IS_ENABLED(CONFIG_RTC_INTF_SYSFS)
 -- 
-Damien Le Moal
-Western Digital Research
+2.20.1
+
