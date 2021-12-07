@@ -2,133 +2,139 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FF546B4FE
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Dec 2021 09:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4112F46BE74
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Dec 2021 15:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbhLGIEO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Dec 2021 03:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbhLGIEO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Dec 2021 03:04:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC5CC061746
-        for <linux-rtc@vger.kernel.org>; Tue,  7 Dec 2021 00:00:44 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOQ-0007PQ-FL; Tue, 07 Dec 2021 09:00:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOM-003B7k-DF; Tue, 07 Dec 2021 09:00:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1muVOL-00046X-3Z; Tue, 07 Dec 2021 09:00:01 +0100
-Date:   Tue, 7 Dec 2021 08:59:58 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+        id S238365AbhLGPCK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Dec 2021 10:02:10 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:42771 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238379AbhLGPBx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Dec 2021 10:01:53 -0500
+Received: by mail-oi1-f177.google.com with SMTP id n66so28109787oia.9;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=+5Z+s+qZr/dqYuPrhwxEsfm4VoIv7raKxg2fSVPXZ1s=;
+        b=xHQOICTa9TFDdai7dyn7nNyifSpUKGxOiCiW3C2SPZoYHQ+RXcnFJ9syWxKMqNP3dc
+         nvj6KKiAphfkzpfoiy4y2YlBQ0P5a+03m4PnZ3xxho5SDcmoNTX1BU80dpRc0CwfvE1g
+         Zl7f0yUp4174Or9MbhiaGVDyO6ehhjIKGoj2Q02m1SC33vwbDfDdwCoNAbgxlyjpUEWn
+         6HJSkQptPRJY7vS9LnStrr8ph1AJNl/feYoHqnY+tEcd4uoCr277e3BoCyD0aD8We4Ok
+         LfE479Ik4GyC7ZZcG4MtUTFgXyZhoLkvcUO8NvIx26+6Jtal82au5ONlY8S/swruJ1bD
+         kCKw==
+X-Gm-Message-State: AOAM5324MyjTZfuHjYcnkULfJZv3SzXU+xoBzPIEx1iVsJO8JQPsCvPZ
+        jDMTFAdwkfIJxOxt3bnjoQ==
+X-Google-Smtp-Source: ABdhPJyPQz8MGdEnpy+dfjpiUez2RQSbPKGqr/ncBa0qgl3Qa9MdN4Hom3+TzcbiAkTw6HJamzmPOA==
+X-Received: by 2002:a54:4104:: with SMTP id l4mr5476582oic.17.1638889102302;
+        Tue, 07 Dec 2021 06:58:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id be12sm3524103oib.50.2021.12.07.06.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Dec 2021 06:58:21 -0800 (PST)
+Received: (nullmailer pid 5804 invoked by uid 1000);
+        Tue, 07 Dec 2021 14:58:10 -0000
+From:   Rob Herring <robh@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
+        linux-gpio@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-rtc@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Marc Zyngier <maz@kernel.org>,
         Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        kernel@pengutronix.de
-Subject: Re: [PATCH v2 03/14] dt-bindings: pwm: Convert BCM7038 PWM binding
- to YAML
-Message-ID: <20211207075958.fsw6hcvpocnwokot@pengutronix.de>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
- <20211206182616.2089677-4-f.fainelli@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="icyezc67xbpvw2hr"
-Content-Disposition: inline
-In-Reply-To: <20211206182616.2089677-4-f.fainelli@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
+        Markus Mayer <mmayer@broadcom.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Zhang Rui <rui.zhang@intel.com>, linux-ide@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        linux-crypto@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>
+In-Reply-To: <20211206182616.2089677-13-f.fainelli@gmail.com>
+References: <20211206182616.2089677-1-f.fainelli@gmail.com> <20211206182616.2089677-13-f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
+Date:   Tue, 07 Dec 2021 08:58:10 -0600
+Message-Id: <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---icyezc67xbpvw2hr
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-On Mon, Dec 06, 2021 at 10:26:05AM -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB BCM7038 PWM Device Tree binding to YAML to help
-> with validation.
->=20
+On Mon, 06 Dec 2021 10:26:14 -0800, Florian Fainelli wrote:
+> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
+> to help with validation.
+> 
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
+>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
+>  2 files changed, 91 insertions(+), 45 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
+> 
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-I assume you intend to take these patches all together via the bcm tree?
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-Best regards
-Uwe
+Full log is available here: https://patchwork.ozlabs.org/patch/1564108
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---icyezc67xbpvw2hr
-Content-Type: application/pgp-signature; name="signature.asc"
+ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
 
------BEGIN PGP SIGNATURE-----
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'dma-coherent', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958522er.dt.yaml
+	arch/arm/boot/dts/bcm958525er.dt.yaml
+	arch/arm/boot/dts/bcm958525xmc.dt.yaml
+	arch/arm/boot/dts/bcm958622hr.dt.yaml
+	arch/arm/boot/dts/bcm958623hr.dt.yaml
+	arch/arm/boot/dts/bcm958625hr.dt.yaml
+	arch/arm/boot/dts/bcm958625k.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
+	arch/arm/boot/dts/bcm988312hr.dt.yaml
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmGvFHsACgkQwfwUeK3K
-7Am9zgf9F6D7Bcmxx5leYwqjEfbY0JtJ3JTkZmn3TENEY7kofnBMDZ9DvgsvnamU
-9GlECGVZSlUN/w6jWu1AEVpchAWRj7R+rzlwLuACXqZuhAAQIanbu/OUm3hjyODa
-EsYa/UNfNYPRtb02YYMeMqSbWWHW7QLNahOTlCs0vPYZqY89qGOK3S4fLtPpxMMT
-CXYHUvAxBFFAXV1Vc63YYok++9FYu66Xwx2JAC71ETrejR/OfTQm9ZwHuzu5Fz73
-kSCtdWm96QyJFhkgrkHlon+KkZcFAmR3LG2E3Pe/AQeNZ2h4ZvQ6DAKHwgdOjfQD
-VY3xAxykgM6YmDnYURchttBrwq9bWw==
-=R7jM
------END PGP SIGNATURE-----
+ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
+	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
+	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
 
---icyezc67xbpvw2hr--
+sata@a000: compatible: 'oneOf' conditional failed, one must be fixed:
+	arch/arm/boot/dts/bcm963138dvt.dt.yaml
+
