@@ -2,164 +2,82 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0498246C2D3
-	for <lists+linux-rtc@lfdr.de>; Tue,  7 Dec 2021 19:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5232046C788
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Dec 2021 23:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240573AbhLGSb5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Dec 2021 13:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbhLGSbz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Dec 2021 13:31:55 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628A8C061574;
-        Tue,  7 Dec 2021 10:28:25 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so122953pjq.4;
-        Tue, 07 Dec 2021 10:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3K6TOKmuXzbOyoxK5qeZN6UfLrjbFqLBLFd2or1FY3U=;
-        b=bMn4HZzovqnSsKBYjx7SaX/7/1YnQpwZP0+VKOP4iiLq7LSFfCBZV9AU+pFkzJI1Fd
-         4Nw+zBXs8m4ta8JPlqj4SuV8/lpOYJgqD3XTRBRBtwgX4BBCorP93aKWdbbOvahP9Ieu
-         4fclBZDgT1sK/yI1MCQv9+gKiO4Q/+AVDNEtSgu3P9KKH42p1qdgD0C+JoS/spi52ZUo
-         ayTkva3dvK5bn99tb883HDN9TNA9iomarw6Fl3mB9XdQscrwPuSQfQ5YPdDXW/bEzdm7
-         gfdZZzrQtDoMjwOnx3I48NQchGUqZnOwQMwdOskA8X+RCIW6dMoxHO34UGD6PcdG2kp5
-         8Zjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3K6TOKmuXzbOyoxK5qeZN6UfLrjbFqLBLFd2or1FY3U=;
-        b=FYIYkCnXeyXZ/dOoJ9TEKSeYcsrw8dsikGa+17VCFd3cf06ruBeq4E73eEOcq76mFb
-         l8LziJw/HpAqm9Taf5fWXvlhH7g6bvyQ0RDOEcelCaei4r3fqjvAK7xrljl8vyQaS4RB
-         SG5iR791V+iLKMaH2RV3SvKjxGCgcN+rxYyHMW23E1m+buMCEjzSEoaaKe8QdOL191um
-         IMPqQ1bZOg2Lrxsz8Tw7TJSbu8fyJw5XR5LsbUwEBh1ujq8FVqh7LEec+DVd6wzQrqdI
-         RHOS5B0YJ5tH7yfc3OSW9LEaf/zHTKG2Kkw7jdS6sgP2uBAQaYJhXPon6xQ2GJg8gaLq
-         kpAA==
-X-Gm-Message-State: AOAM5315rzCPKgmcaoSrdFJtdSuay66GpN40qq+1apgp0S4efQ1C2uDn
-        JhhuFovFaWPVRpKMc36B2XM=
-X-Google-Smtp-Source: ABdhPJzn0pfJRBt8YChyiQar1VcDrvcPxcRCu77UgUdlxwGOW7ggxIp8oNfTZO1IIk1I65ugPQuz/A==
-X-Received: by 2002:a17:903:2443:b0:142:1e92:1d19 with SMTP id l3-20020a170903244300b001421e921d19mr53256611pls.24.1638901704865;
-        Tue, 07 Dec 2021 10:28:24 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l21sm3446135pjt.24.2021.12.07.10.28.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Dec 2021 10:28:24 -0800 (PST)
-Subject: Re: [PATCH v2 12/14] dt-bindings: ata: Convert Broadcom SATA to YAML
-To:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-pwm@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-gpio@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-rtc@vger.kernel.org,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Doug Berger <opendmb@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Al Cooper <alcooperx@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Ray Jui <rjui@broadcom.com>, linux-pm@vger.kernel.org,
-        Markus Mayer <mmayer@broadcom.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Zhang Rui <rui.zhang@intel.com>, linux-ide@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        linux-crypto@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <20211206182616.2089677-1-f.fainelli@gmail.com>
- <20211206182616.2089677-13-f.fainelli@gmail.com>
- <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f463f454-943c-e081-9005-c7b4df7304af@gmail.com>
-Date:   Tue, 7 Dec 2021 10:28:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S237804AbhLGWia (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Dec 2021 17:38:30 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:45222 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232434AbhLGWi3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Dec 2021 17:38:29 -0500
+X-Greylist: delayed 2299 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Dec 2021 17:38:29 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=CeuVHtUFLn7b/ZEZ5WxCFr9pXaQsL+cPjhzzHc54meA=; b=Y
+        K3tSriQjws91OY5omJQiWgwpgGTitqhSCfk0X4g3hFs6/lvBDlgG6MBq+bRn/JRLG86KSpeZHMOv/
+        ODzDnQBuzlo4b6hx7SQ6sQvc/61pqOOqsmwrZ7e5ZsuW//cnO+34Wn6obV0nEKPZW9o3zBNr6wdi4
+        bMmQE2CNNu94kqmI=;
+Received: from ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca ([142.116.33.166]:13104 helo=pettiford.dimonoffinc.intra)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1muiRu-0000k3-Ii; Tue, 07 Dec 2021 16:56:35 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue,  7 Dec 2021 16:56:25 -0500
+Message-Id: <20211207215626.2619819-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <1638889090.722845.5803.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 142.116.33.166
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: dimonoff.com]
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
+Subject: [PATCH] rtc: pcf2127: Fix typo in comment
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/7/21 6:58 AM, Rob Herring wrote:
-> On Mon, 06 Dec 2021 10:26:14 -0800, Florian Fainelli wrote:
->> Convert the Broadcom SATA3 AHCI controller Device Tree binding to YAML
->> to help with validation.
->>
->> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/ata/brcm,sata-brcm.txt           | 45 ---------
->>  .../bindings/ata/brcm,sata-brcm.yaml          | 91 +++++++++++++++++++
->>  2 files changed, 91 insertions(+), 45 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
->>  create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1564108
-> 
-> 
-> ahci@41000: $nodename:0: 'ahci@41000' does not match '^sata(@.*)?$'
-> 	arch/arm/boot/dts/bcm958522er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625k.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
-> 
-> ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'dma-coherent', 'sata-port@0', 'sata-port@1' were unexpected)
-> 	arch/arm/boot/dts/bcm958522er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525er.dt.yaml
-> 	arch/arm/boot/dts/bcm958525xmc.dt.yaml
-> 	arch/arm/boot/dts/bcm958622hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958623hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625hr.dt.yaml
-> 	arch/arm/boot/dts/bcm958625k.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx65w.dt.yaml
-> 	arch/arm/boot/dts/bcm988312hr.dt.yaml
-> 
-> ahci@41000: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'sata-port@0', 'sata-port@1' were unexpected)
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64-a0.dt.yaml
-> 	arch/arm/boot/dts/bcm958625-meraki-mx64w-a0.dt.yaml
-> 
-> sata@a000: compatible: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm/boot/dts/bcm963138dvt.dt.yaml
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-All of those fixed in v3.
+Replace TFS2 with TSF2.
+
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index f0a6861ff3ae..d01671676a00 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -650,7 +650,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 
+ 	/*
+ 	 * Enable timestamp function and store timestamp of first trigger
+-	 * event until TSF1 and TFS2 interrupt flags are cleared.
++	 * event until TSF1 and TSF2 interrupt flags are cleared.
+ 	 */
+ 	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_TS_CTRL,
+ 				 PCF2127_BIT_TS_CTRL_TSOFF |
 -- 
-Florian
+2.30.2
+
