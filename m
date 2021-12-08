@@ -2,92 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC4346CC33
-	for <lists+linux-rtc@lfdr.de>; Wed,  8 Dec 2021 05:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7C246D2CB
+	for <lists+linux-rtc@lfdr.de>; Wed,  8 Dec 2021 12:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244188AbhLHERT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 7 Dec 2021 23:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S232630AbhLHL7P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Wed, 8 Dec 2021 06:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244196AbhLHERS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Dec 2021 23:17:18 -0500
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5468FC061746
-        for <linux-rtc@vger.kernel.org>; Tue,  7 Dec 2021 20:13:47 -0800 (PST)
-Received: by mail-il1-x144.google.com with SMTP id r2so1041293ilb.10
-        for <linux-rtc@vger.kernel.org>; Tue, 07 Dec 2021 20:13:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=cGWxDwe8B66FlIrZtrergIqE5+JvdqJ48sEvPTrvhBJ9xEqZLGyWZmuSPdCEFce/7D
-         /sVR44uqtlb2dmBH+iwgt0kboAu4/HTy3OZt9J6nwOu1H5twbKwVBnMykOKrBLHcBBEb
-         cgMJ7/59oMUtMggaQ9x/N1xe+U0YzN1k+xfCXkO5L7YIW30RFDnvCB0PrD7sMExliX7S
-         joeNtgfdJmxv3l42BA4cQp1HveXj/LpauGoYMsZKrrlYurvW6FC9Nrn9v/z7yklCLUv+
-         2uZJGSHlx+O0Rg+LxyFVcXJ8erZC2O96QnEFLkA1QmSl94RBUxOevwSkF8rG8CDqN06m
-         KdcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=3wkm2lrefsNE6j9C6RtmiaS9MwjXMUqY0G5FqTkXcJoiKi6IWz3Qie3NpvXhEcojp/
-         bA21+BX9FiVLBb+odLABesmAI2Un6ug8fbsWX/8FsPjW5Zovm+TYFd5zppwEUCwvBXxh
-         m82BAlnfNDxsSlUwYMSjrJYoeo7qxwT/IRmFgF1FCvR3F3lSvDSLb9yUUlyn8dMGBnxi
-         Aku3Gldpqe+sOov0GfdmkHU9eyZx3BhApL4TiLTvWphyGzu1WEdvKjTbF5fGO83Qc2O3
-         Dg1uutnfXRtIv9MXtkiMtgwM87dphvFM8NHwucGFLOvAndXh3jYmyU+XVZefIGXQpPZH
-         I+hA==
-X-Gm-Message-State: AOAM530FT1XPFFDOlxJS5JUTQAw4XWyiGZToP8kCImcDeMGYsdu2O77m
-        JJvP5K1tP3NjJaEPPcBz5JqvWqdB0HD7XwMRDYhI2fWG6XHCgg==
-X-Google-Smtp-Source: ABdhPJx498jQ3rDCAEAukf875uPMCUUvAAHHJyp/169nhahBv8dg1ZTt80/LmlBc7j967yPpWx87fZn4PQyrL4JX27A=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3954317ilb.292.1638936815828;
- Tue, 07 Dec 2021 20:13:35 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:13:35
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:13:35 +0100
-Message-ID: <CAG7-cQ_JEx-8fDdxn0Ex314ViSE32kaUjoR=sUvV7wmCUiKRGw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
+        with ESMTP id S232638AbhLHL7O (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 8 Dec 2021 06:59:14 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A9C0617A2
+        for <linux-rtc@vger.kernel.org>; Wed,  8 Dec 2021 03:55:42 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1muvXT-0003yx-Aa; Wed, 08 Dec 2021 12:55:11 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1muvXL-0009LG-9d; Wed, 08 Dec 2021 12:55:03 +0100
+Message-ID: <7fd56b837d64307983828bde89096c495d9b5cf9.camel@pengutronix.de>
+Subject: Re: [PATCH v2 02/14] dt-bindings: reset: Convert Broadcom STB reset
+ to YAML
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Gregory Fong <gregory.0xf0@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Date:   Wed, 08 Dec 2021 12:55:03 +0100
+In-Reply-To: <20211206182616.2089677-3-f.fainelli@gmail.com>
+References: <20211206182616.2089677-1-f.fainelli@gmail.com>
+         <20211206182616.2089677-3-f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+On Mon, 2021-12-06 at 10:26 -0800, Florian Fainelli wrote:
+> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
-
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
-
-We urgently wait to receive your response.
-
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+regards
+Philipp
