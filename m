@@ -2,94 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4295746E5C0
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Dec 2021 10:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9506946F449
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Dec 2021 20:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbhLIJpi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 9 Dec 2021 04:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbhLIJpi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Dec 2021 04:45:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81A8C061746
-        for <linux-rtc@vger.kernel.org>; Thu,  9 Dec 2021 01:42:04 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFvk-0001TL-1T; Thu, 09 Dec 2021 10:41:36 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mvFve-0004Ge-0z; Thu, 09 Dec 2021 10:41:30 +0100
-Message-ID: <ab45adc2e305c79286f6b63fa42cfd78983cb757.camel@pengutronix.de>
-Subject: Re: [PATCH v3 02/15] dt-bindings: reset: Convert Broadcom STB reset
- to YAML
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>, devicetree@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Date:   Thu, 09 Dec 2021 10:41:29 +0100
-In-Reply-To: <20211208003727.3596577-3-f.fainelli@gmail.com>
-References: <20211208003727.3596577-1-f.fainelli@gmail.com>
-         <20211208003727.3596577-3-f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+        id S231132AbhLITzo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Dec 2021 14:55:44 -0500
+Received: from mail.hugovil.com ([162.243.120.170]:46688 "EHLO
+        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbhLITzo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Dec 2021 14:55:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ww0JTX4rkmb11KBUNzaX4AtPLZ+R+bgJBGMPHbzLzYQ=; b=u5eVIvWFsMBMF9Ukt+kAMl2kjB
+        PXcHLQFewoO68OsCpsTZlz7Qb+A8jNd8zIaqER6kwdG3bDF7X7MFBCDO2bA1eXU2JxJu/xF1d0Pe8
+        9h4TX4/LG9MAtwIBy4XqQ9Y5Ewgvom46s1cVllfnXKl8dr29dgbWeYYHjbBnfNwuE1BY=;
+Received: from ipagstaticip-ad9375f2-382c-b511-8ac1-9541f69fe50f.sdsl.bell.ca ([142.116.33.166]:19006 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1mvPSa-0003Mh-5j; Thu, 09 Dec 2021 14:52:09 -0500
+Date:   Thu, 9 Dec 2021 14:52:07 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     linux-rtc@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        r.cerrato@til-technologies.fr
+Message-Id: <20211209145207.30ee844655c553a5c20d9249@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 142.116.33.166
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
+X-Spam-Level: 
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: nxp.com]
+        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
+Subject: Inquiry about new RTC driver PCF2131
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2021-12-07 at 16:37 -0800, Florian Fainelli wrote:
-> Convert the Broadcom STB SW_INIT style reset controller binding to YAML.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi,
+I am currently developping a new RTC driver for the NXP PCF2131 chip.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+This RTC is very similar in functionality to the PCF2127/29.
 
-regards
-Philipp
+Basically it:
+  -supports two new control registers at offsets 4 and 5
+  -supports a new reset register
+  -supports 4 tamper detection functions instead of 1
+  -has no nvmem (like the PCF2129)
+  -has two output interrupt pins
+
+Because of that, most of the register addresses are very different, although they still follow the same layout. For example, the tamper registers have a different base address, but the offsets are all the same.
+
+I would like to modify the existing PCF2127 driver to add support for this new RTC, instead of simply copying (forking) the PCF2127 driver. I think that it would ease the maintenance in the long term.
+
+I am curious to hear the RTC maintainers view on that proposition.
+
+Here is a link to the datasheets of the two chips:
+
+    https://www.nxp.com/docs/en/data-sheet/PCF2131DS.pdf
+    https://www.nxp.com/docs/en/data-sheet/PCF2127.pdf
+
+Thank you,
+Hugo V.
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
