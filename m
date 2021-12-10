@@ -2,110 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E5B470557
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 17:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35B54709C9
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 20:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbhLJQN3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Dec 2021 11:13:29 -0500
-Received: from smtp1.axis.com ([195.60.68.17]:18344 "EHLO smtp1.axis.com"
+        id S1343554AbhLJTJd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Dec 2021 14:09:33 -0500
+Received: from mx-out.tlen.pl ([193.222.135.158]:5685 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238157AbhLJQN3 (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 10 Dec 2021 11:13:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1639152594;
-  x=1670688594;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FYBGOA6sC3CRc57FcHrATP9TifdTUJPqbaBfTOEGkCg=;
-  b=VuLhHpVtT9vldkLROxn6akUlTPZN7Ua3gMOni8dfBh8gRPFKHVPj6zh3
-   Pq30hKtAZ1W0GqTurq1QH3+AsArezPhWOtVQ792KRe6jLTARfaaYwAL9d
-   IuPtJrDPbkQHOQu43jiw9jBDxEl1FlMz8z8cRpMbcHJ364oqxmp5Fps5l
-   uo1WhEnuSKVgUf57IirPQQ6AKd0jWYcNwOrVL97Gk0xVtnl199EZQBJW/
-   WUZIwOS+lMS5bz8IHDE2IRiZ3vFnbb26S0OfaC5z3R+NYOhWUItJsswbS
-   K2IiDlnJJJuCXnuIZINn5kcVwGmmdSe0aNrb+MTAwlhR01yn1YCX2WV6b
-   w==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] rtc: fix use-after-free on device removal
-Date:   Fri, 10 Dec 2021 17:09:51 +0100
-Message-ID: <20211210160951.7718-1-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.33.1
+        id S245598AbhLJTJc (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 10 Dec 2021 14:09:32 -0500
+Received: (wp-smtpd smtp.tlen.pl 36088 invoked from network); 10 Dec 2021 20:05:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1639163151; bh=XlxCGbBCaxE7x41aV4Afh/rZ2qOx8kmOLzHrK+2sw5Q=;
+          h=Subject:To:Cc:From;
+          b=fCiwlsDadw8GKJjLL15QfPeP+pcSYHChot/2emwu+LCoQXlIxAAGCGUpfcFjurX2k
+           BfR3DUVR7hhJIxUbEUD3eunGXKbNb7AHcSAodCs2Pt/pdlpCHx/Ok3O+D3nvZIa2lN
+           0uxP1tDY33gmHHQJo1orHfYJmZxgaadqsRQxZe1M=
+Received: from aaff136.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.135.136])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <alexandre.belloni@bootlin.com>; 10 Dec 2021 20:05:51 +0100
+Message-ID: <5efcbdad-972d-2159-34ea-97eb6e29c613@o2.pl>
+Date:   Fri, 10 Dec 2021 20:05:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH RESEND v3 2/7] rtc-mc146818-lib: fix RTC presence check
+Content-Language: en-GB
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>
+References: <20211119204221.66918-1-mat.jonczyk@o2.pl>
+ <20211119204221.66918-3-mat.jonczyk@o2.pl> <YZ69RB0ePgaHcqVm@piout.net>
+ <277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl> <YbNxum2SgyW97dyB@piout.net>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <YbNxum2SgyW97dyB@piout.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-WP-MailID: d1c25c1f610b53f62f5903bfd35bf89c
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000A [8SOU]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-If the irqwork is still scheduled or running while the RTC device is
-removed, a use-after-free occurs in rtc_timer_do_work().  Cleanup the
-timerqueue and ensure the work is stopped to fix this.
+W dniu 10.12.2021 o 16:26, Alexandre Belloni pisze:
+> Hi,
+>
+> On 25/11/2021 23:12:42+0100, Mateusz Jończyk wrote:
+>> W dniu 24.11.2021 o 23:31, Alexandre Belloni pisze:
+>>> Hello,
+>>>
+>>> By moving this patch later on in the series, you'd avoid the subsequent
+>>> refactor. I think this would be better for bisection later on.
+>> Hi,
+>>
+>> There are three issues I'm trying to fix in this series:
+>>
+>> 1. (less important) Insufficient locking in cmos_set_alarm()
+>> 2. misdetection of the RTC CMOS as broken on some motherboards,
+>> 3. reading / writing of the RTC alarm time during RTC update-in-progress.
+>>
+>> Do you mean I should drop the patch
+>>     nr 2. ("rtc-mc146818-lib: fix RTC presence check")
+>> and instead straight away introduce mc146818_avoid_UIP() with the new approach (as in patch 3 in the series),
+>> then modify mc146818_get_time() to use it (as in patch 4 - fixing issue nr 2),
+>> then modify cmos_read_alarm / cmos_set_alarm to use mc146818_avoid_UIP() (patches 5-6, fixing issue no. 3)?
+>>
+>> I was afraid this risks some confusion what is being fixed when.
+> I realize I never replied to this. This is fine, I'm planning to apply
+> the whole series once the few comments are fixed.
 
- BUG: KASAN: use-after-free in mutex_lock+0x94/0x110
- Write of size 8 at addr ffffff801d846338 by task kworker/3:1/41
+Great!
 
- Workqueue: events rtc_timer_do_work
- Call trace:
-  mutex_lock+0x94/0x110
-  rtc_timer_do_work+0xec/0x630
-  process_one_work+0x5fc/0x1344
-  ...
+I've got other things mostly sorted out and tested, so I'll send a v4 shortly after some last-minute checks.
 
- Allocated by task 551:
-  kmem_cache_alloc_trace+0x384/0x6e0
-  devm_rtc_allocate_device+0xf0/0x574
-  devm_rtc_device_register+0x2c/0x12c
-  ...
+> We'll probably get some breakage later on because many RTCs using this
+> driver are not adhering to the spec.
+>
+Thanks,
 
- Freed by task 572:
-  kfree+0x114/0x4d0
-  rtc_device_release+0x64/0x80
-  device_release+0x8c/0x1f4
-  kobject_put+0x1c4/0x4b0
-  put_device+0x20/0x30
-  devm_rtc_release_device+0x1c/0x30
-  devm_action_release+0x54/0x90
-  release_nodes+0x124/0x310
-  devres_release_group+0x170/0x240
-  i2c_device_remove+0xd8/0x314
-  ...
-
- Last potentially related work creation:
-  insert_work+0x5c/0x330
-  queue_work_on+0xcc/0x154
-  rtc_set_time+0x188/0x5bc
-  rtc_dev_ioctl+0x2ac/0xbd0
-  ...
-
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- drivers/rtc/class.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index 4b460c61f1d8..40d504dac1a9 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -26,6 +26,15 @@ struct class *rtc_class;
- static void rtc_device_release(struct device *dev)
- {
- 	struct rtc_device *rtc = to_rtc_device(dev);
-+	struct timerqueue_head *head = &rtc->timerqueue;
-+	struct timerqueue_node *node;
-+
-+	mutex_lock(&rtc->ops_lock);
-+	while ((node = timerqueue_getnext(head)))
-+		timerqueue_del(head, node);
-+	mutex_unlock(&rtc->ops_lock);
-+
-+	cancel_work_sync(&rtc->irqwork);
- 
- 	ida_simple_remove(&rtc_ida, rtc->id);
- 	mutex_destroy(&rtc->ops_lock);
--- 
-2.33.1
-
+Mateusz
