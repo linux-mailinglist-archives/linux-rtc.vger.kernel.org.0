@@ -2,154 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D580E470B5A
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 21:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04DF470CF6
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 23:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbhLJUHU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Dec 2021 15:07:20 -0500
-Received: from mx-out.tlen.pl ([193.222.135.142]:39041 "EHLO mx-out.tlen.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229619AbhLJUHT (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 10 Dec 2021 15:07:19 -0500
-Received: (wp-smtpd smtp.tlen.pl 4465 invoked from network); 10 Dec 2021 21:03:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1639166622; bh=6EV3+Db16M1TTmcxm0Ltf+cHXWaK6K5VL+dcc/n0F48=;
-          h=From:To:Cc:Subject;
-          b=uaFrV1+7Goh9zI8smbFJXAMZVID7+wgEAs4rJJ6IMzHU0pWjnE3PK2WqvRYoSvt7e
-           cOS6EOSRZiIwi/iO4yIjkvp04HuUp6z7rDdj1OjMxnX1xsrRpAAvK/t2A4Iw7in0qZ
-           oQ212rGFz5vgPg8i1XCAcWsc9QcGB6XI+GiqlIqw=
-Received: from aaff136.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.135.136])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 10 Dec 2021 21:03:42 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [DEBUG PATCH v4] rtc-cmos: cmos_read_alarm bug demonstration
-Date:   Fri, 10 Dec 2021 21:03:27 +0100
-Message-Id: <20211210200327.153966-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211210200131.153887-9-mat.jonczyk@o2.pl>
-References: <20211210200131.153887-9-mat.jonczyk@o2.pl>
+        id S234808AbhLJWTC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Dec 2021 17:19:02 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:38745 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231806AbhLJWTB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Dec 2021 17:19:01 -0500
+Received: by mail-ot1-f54.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso11053049ota.5;
+        Fri, 10 Dec 2021 14:15:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VIqrSy1sLiBnnkiC9H3jd0iv6yMg9WmbKsGc1t9lov0=;
+        b=oMah1NUGlh1BGRobxejWHabTgV5EU/93sh3ARxUNNl2eerm52jTgJsEWtdlXR+kyE9
+         9f8IsCP2fpCM+ry8WPd1xsRxanX+iLg66qYnhhYC1n+TAKqi3+VSdfwIke8E+sY9QPB7
+         YZ866Rem3pvpdJq2B5qCkJ01feQDxgmcN/iYXmQpDAcX+T3UEDaRQaA2FMKOBKZ7TXTv
+         GDXd5hY0smYcO7SI5fCGs2yhIpwOWhEAoRFS/tTFy/6gM39MJeusiBTwLUJS2Hr+nhIT
+         SsC9iLr9DWtiFm3OLuG/y/mtAzwwUrUtB8i5olGBbRgIi1EDh9ds7ZTb4RF5LvuMNE+c
+         BbLQ==
+X-Gm-Message-State: AOAM532CakQ4I/8dIsQkeV4pBhtxJkYdfRizlzkX4vYHLjEdu/Vh89wb
+        hwZdDxZwrd5FnZJUA7QMTtC4Ul4wTw==
+X-Google-Smtp-Source: ABdhPJwa50Gb4HdlXxt0u9oVuWKl3rU/TtUZEQA7Kms4L0z16q4bAfSFEMZ0JPoU3CWJNk909BeO+w==
+X-Received: by 2002:a9d:12a6:: with SMTP id g35mr13277472otg.61.1639174525793;
+        Fri, 10 Dec 2021 14:15:25 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id y12sm1089298oiv.49.2021.12.10.14.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Dec 2021 14:15:25 -0800 (PST)
+Received: (nullmailer pid 2025207 invoked by uid 1000);
+        Fri, 10 Dec 2021 22:15:24 -0000
+Date:   Fri, 10 Dec 2021 16:15:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vincent Shih <vincent.sunplus@gmail.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        wells.lu@sunplus.com, Vincent Shih <vincent.sunplus@gamil.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: Add Sunplus RTC json-schema
+Message-ID: <YbPRfCw/qm0giJaN@robh.at.kernel.org>
+References: <1638517579-10316-1-git-send-email-vincent.sunplus@gamil.com>
+ <1638517579-10316-3-git-send-email-vincent.sunplus@gamil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: a624c190df58d0367e0b96c5b60aaf90
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0100001 [QUIj]                               
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638517579-10316-3-git-send-email-vincent.sunplus@gamil.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Before my commit "rtc-cmos: avoid UIP when reading alarm time",
-applying this patch and reading the CMOS time like so:
+On Fri, Dec 03, 2021 at 03:46:19PM +0800, Vincent Shih wrote:
+> Add Sunplus RTC json-schema
+> 
+> Signed-off-by: Vincent Shih <vincent.sunplus@gamil.com>
 
-        while true; do cat /sys/class/rtc/rtc0/time ; sleep 0.5; done
+typo
 
-produces errors in dmesg on my Intel Kaby Lake laptop.
+With that fixed,
 
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/rtc-cmos.c | 61 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index b6d7dd3cf066..3de049930745 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -43,6 +43,9 @@
- #include <linux/dmi.h>
- #endif
- 
-+#include <linux/ktime.h>
-+#include <linux/timekeeping.h>
-+
- /* this is for "generic access to PC-style RTC" using CMOS_READ/CMOS_WRITE */
- #include <linux/mc146818rtc.h>
- 
-@@ -220,6 +223,8 @@ static inline void cmos_write_bank2(unsigned char val, unsigned char addr)
- 
- /*----------------------------------------------------------------*/
- 
-+static void cmos_read_alarm_uip_debugging(struct device *dev);
-+
- static int cmos_read_time(struct device *dev, struct rtc_time *t)
- {
- 	/*
-@@ -230,6 +235,8 @@ static int cmos_read_time(struct device *dev, struct rtc_time *t)
- 		return -EIO;
- 
- 	mc146818_get_time(t);
-+
-+	cmos_read_alarm_uip_debugging(dev);
- 	return 0;
- }
- 
-@@ -338,6 +345,60 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	return 0;
- }
- 
-+static void cmos_read_alarm_uip_debugging(struct device *dev)
-+{
-+	unsigned long	flags;
-+	unsigned char	rtc_uip_baseline, rtc_uip;
-+	struct rtc_wkalrm t_baseline, t;
-+	ktime_t time_start, time_end;
-+	int i;
-+
-+	spin_lock_irqsave(&rtc_lock, flags);
-+	rtc_uip_baseline = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
-+	spin_unlock_irqrestore(&rtc_lock, flags);
-+
-+	cmos_read_alarm(dev, &t_baseline);
-+
-+	time_start = ktime_get();
-+
-+	for (i = 0; i < 2000; i++) {
-+		spin_lock_irqsave(&rtc_lock, flags);
-+		rtc_uip = CMOS_READ(RTC_FREQ_SELECT) & RTC_UIP;
-+		spin_unlock_irqrestore(&rtc_lock, flags);
-+
-+		cmos_read_alarm(dev, &t);
-+
-+		if (t_baseline.time.tm_sec != t.time.tm_sec) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_sec value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_sec,
-+				t.time.tm_sec,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+		if (t_baseline.time.tm_min != t.time.tm_min) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_min value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_min,
-+				t.time.tm_min,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+		if (t_baseline.time.tm_hour != t.time.tm_hour) {
-+			dev_err(dev,
-+				"Inconsistent alarm tm_hour value: %d != %d (RTC_UIP = %d; %d)\n",
-+				t_baseline.time.tm_hour,
-+				t.time.tm_hour,
-+				rtc_uip_baseline, rtc_uip);
-+		}
-+
-+	}
-+
-+	time_end = ktime_get();
-+
-+	pr_info_ratelimited("%s: loop executed in %lld ns\n",
-+			__func__, ktime_to_ns(ktime_sub(time_end, time_start)));
-+}
-+
-+
- static void cmos_checkintr(struct cmos_rtc *cmos, unsigned char rtc_control)
- {
- 	unsigned char	rtc_intr;
--- 
-2.25.1
-
+> ---
+> Changes in v3:
+>  - Addressed the comments from Mr. Rob Herring
+> 
+>  .../bindings/rtc/sunplus,sp7021-rtc.yaml           | 56 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
