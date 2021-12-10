@@ -2,85 +2,85 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D35B54709C9
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 20:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F79470B44
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 21:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343554AbhLJTJd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Dec 2021 14:09:33 -0500
-Received: from mx-out.tlen.pl ([193.222.135.158]:5685 "EHLO mx-out.tlen.pl"
+        id S233805AbhLJUFl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Dec 2021 15:05:41 -0500
+Received: from mx-out.tlen.pl ([193.222.135.142]:46175 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245598AbhLJTJc (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 10 Dec 2021 14:09:32 -0500
-Received: (wp-smtpd smtp.tlen.pl 36088 invoked from network); 10 Dec 2021 20:05:51 +0100
+        id S236447AbhLJUFk (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 10 Dec 2021 15:05:40 -0500
+Received: (wp-smtpd smtp.tlen.pl 31614 invoked from network); 10 Dec 2021 21:02:00 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1639163151; bh=XlxCGbBCaxE7x41aV4Afh/rZ2qOx8kmOLzHrK+2sw5Q=;
-          h=Subject:To:Cc:From;
-          b=fCiwlsDadw8GKJjLL15QfPeP+pcSYHChot/2emwu+LCoQXlIxAAGCGUpfcFjurX2k
-           BfR3DUVR7hhJIxUbEUD3eunGXKbNb7AHcSAodCs2Pt/pdlpCHx/Ok3O+D3nvZIa2lN
-           0uxP1tDY33gmHHQJo1orHfYJmZxgaadqsRQxZe1M=
-Received: from aaff136.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.135.136])
+          t=1639166520; bh=ro91BKZb7ftRmQH03BQVatByZlZtZxH95clzpQgFwBs=;
+          h=From:To:Cc:Subject;
+          b=UXoRG4CEgmKcsr6WHB3GdZTm54W7DF+qHkvkj61p9A9rrpT5vgw2wOb5aIAtdB4Kj
+           DDhOSSFx6VzTvht388d9JtL5iLGWtYBcJZjrX15YPntwilyHpOhI5Pbjs9BEIYQx7U
+           4BXZBTwwS/yC0lIV9E/FRD9+TdzWusA2NGbzRA6s=
+Received: from aaff136.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.135.136])
           (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <alexandre.belloni@bootlin.com>; 10 Dec 2021 20:05:51 +0100
-Message-ID: <5efcbdad-972d-2159-34ea-97eb6e29c613@o2.pl>
-Date:   Fri, 10 Dec 2021 20:05:38 +0100
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 10 Dec 2021 21:02:00 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH v4 0/9] rtc-cmos,rtc-mc146818-lib: fixes
+Date:   Fri, 10 Dec 2021 21:01:22 +0100
+Message-Id: <20211210200131.153887-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH RESEND v3 2/7] rtc-mc146818-lib: fix RTC presence check
-Content-Language: en-GB
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>
-References: <20211119204221.66918-1-mat.jonczyk@o2.pl>
- <20211119204221.66918-3-mat.jonczyk@o2.pl> <YZ69RB0ePgaHcqVm@piout.net>
- <277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl> <YbNxum2SgyW97dyB@piout.net>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <YbNxum2SgyW97dyB@piout.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: d1c25c1f610b53f62f5903bfd35bf89c
+X-WP-MailID: 80a83cc73dcd7d1024b4fda400e06e99
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [8SOU]                               
+X-WP-SPAM: NO 0000000 [AQOk]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-W dniu 10.12.2021 o 16:26, Alexandre Belloni pisze:
-> Hi,
->
-> On 25/11/2021 23:12:42+0100, Mateusz Jończyk wrote:
->> W dniu 24.11.2021 o 23:31, Alexandre Belloni pisze:
->>> Hello,
->>>
->>> By moving this patch later on in the series, you'd avoid the subsequent
->>> refactor. I think this would be better for bisection later on.
->> Hi,
->>
->> There are three issues I'm trying to fix in this series:
->>
->> 1. (less important) Insufficient locking in cmos_set_alarm()
->> 2. misdetection of the RTC CMOS as broken on some motherboards,
->> 3. reading / writing of the RTC alarm time during RTC update-in-progress.
->>
->> Do you mean I should drop the patch
->>     nr 2. ("rtc-mc146818-lib: fix RTC presence check")
->> and instead straight away introduce mc146818_avoid_UIP() with the new approach (as in patch 3 in the series),
->> then modify mc146818_get_time() to use it (as in patch 4 - fixing issue nr 2),
->> then modify cmos_read_alarm / cmos_set_alarm to use mc146818_avoid_UIP() (patches 5-6, fixing issue no. 3)?
->>
->> I was afraid this risks some confusion what is being fixed when.
-> I realize I never replied to this. This is fine, I'm planning to apply
-> the whole series once the few comments are fixed.
+Hello,
 
-Great!
+This patch series fixes some issues in the RTC CMOS handling code:
 
-I've got other things mostly sorted out and tested, so I'll send a v4 shortly after some last-minute checks.
+1. A missing spin_lock_irq() / spin_unlock_irq() pair in cmos_set_alarm().
+2. A failing presence check of the RTC: the clock was misdetected as
+   broken since Linux 5.11 on one of our home systems.
+3. Do not touch the RTC alarm registers when the RTC update is in
+   progress. (On some Intel chipsets, this causes bogus values being
+   read or writes to fail silently.)
 
-> We'll probably get some breakage later on because many RTCs using this
-> driver are not adhering to the spec.
->
-Thanks,
+This is my first patch series, so please review carefully.
 
+v2: Drop the last patch:
+        Revert "rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ"
+which was made obsolete by mainlining of 
+commit 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
+
+v3: Rework solution to problem 3 (I'd like to thank Greg KH for comment),
+drop x86 refactoring patches (I'll send them later).
+
+v4: Fixed some issues pointed out by Mr Alexandre Belloni:
+    - do not add strings to rtc-mc146818-lib.c - I moved the error printing
+      code to callers of mc146818_get_time(). This resulted in two new
+      patches in the series,
+    - other small issues.
+
+I have noticed that mach_get_cmos_time() in arch/x86/kernel/rtc.c
+performs a similar function to mc146818_get_time() in
+drivers/rtc/rtc-cmos.c . In the future, I'm going to post a new series
+that removes this duplicated code and makes mach_get_cmos_time() use
+mc146818_get_time(). This will likely include reducing polling interval
+in mc146818_avoid_UIP() from 1ms to 100us to make it more similar to
+mach_get_cmos_time()'s current behaviour.
+
+Greetings,
 Mateusz
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
