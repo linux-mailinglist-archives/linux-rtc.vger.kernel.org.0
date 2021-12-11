@@ -2,74 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04DF470CF6
-	for <lists+linux-rtc@lfdr.de>; Fri, 10 Dec 2021 23:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34681471525
+	for <lists+linux-rtc@lfdr.de>; Sat, 11 Dec 2021 19:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234808AbhLJWTC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 10 Dec 2021 17:19:02 -0500
-Received: from mail-ot1-f54.google.com ([209.85.210.54]:38745 "EHLO
-        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbhLJWTB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Dec 2021 17:19:01 -0500
-Received: by mail-ot1-f54.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso11053049ota.5;
-        Fri, 10 Dec 2021 14:15:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VIqrSy1sLiBnnkiC9H3jd0iv6yMg9WmbKsGc1t9lov0=;
-        b=oMah1NUGlh1BGRobxejWHabTgV5EU/93sh3ARxUNNl2eerm52jTgJsEWtdlXR+kyE9
-         9f8IsCP2fpCM+ry8WPd1xsRxanX+iLg66qYnhhYC1n+TAKqi3+VSdfwIke8E+sY9QPB7
-         YZ866Rem3pvpdJq2B5qCkJ01feQDxgmcN/iYXmQpDAcX+T3UEDaRQaA2FMKOBKZ7TXTv
-         GDXd5hY0smYcO7SI5fCGs2yhIpwOWhEAoRFS/tTFy/6gM39MJeusiBTwLUJS2Hr+nhIT
-         SsC9iLr9DWtiFm3OLuG/y/mtAzwwUrUtB8i5olGBbRgIi1EDh9ds7ZTb4RF5LvuMNE+c
-         BbLQ==
-X-Gm-Message-State: AOAM532CakQ4I/8dIsQkeV4pBhtxJkYdfRizlzkX4vYHLjEdu/Vh89wb
-        hwZdDxZwrd5FnZJUA7QMTtC4Ul4wTw==
-X-Google-Smtp-Source: ABdhPJwa50Gb4HdlXxt0u9oVuWKl3rU/TtUZEQA7Kms4L0z16q4bAfSFEMZ0JPoU3CWJNk909BeO+w==
-X-Received: by 2002:a9d:12a6:: with SMTP id g35mr13277472otg.61.1639174525793;
-        Fri, 10 Dec 2021 14:15:25 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id y12sm1089298oiv.49.2021.12.10.14.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 14:15:25 -0800 (PST)
-Received: (nullmailer pid 2025207 invoked by uid 1000);
-        Fri, 10 Dec 2021 22:15:24 -0000
-Date:   Fri, 10 Dec 2021 16:15:24 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com, Vincent Shih <vincent.sunplus@gamil.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: rtc: Add Sunplus RTC json-schema
-Message-ID: <YbPRfCw/qm0giJaN@robh.at.kernel.org>
-References: <1638517579-10316-1-git-send-email-vincent.sunplus@gamil.com>
- <1638517579-10316-3-git-send-email-vincent.sunplus@gamil.com>
+        id S230394AbhLKSAH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 11 Dec 2021 13:00:07 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:53309 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229497AbhLKSAG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Dec 2021 13:00:06 -0500
+Received: from [77.244.183.192] (port=64660 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mw6fD-0009HU-GX; Sat, 11 Dec 2021 19:00:03 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Sat, 11 Dec 2021 18:59:42 +0100
+Message-Id: <20211211175951.30763-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638517579-10316-3-git-send-email-vincent.sunplus@gamil.com>
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 03:46:19PM +0800, Vincent Shih wrote:
-> Add Sunplus RTC json-schema
-> 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gamil.com>
+Hi,
 
-typo
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-With that fixed,
+All implemented functionality is tested and working: RTC read/write,
+watchdog start/stop/ping/set_timeout.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
+indentation and can probably be applied easily.
 
-> ---
-> Changes in v3:
->  - Addressed the comments from Mr. Rob Herring
-> 
->  .../bindings/rtc/sunplus,sp7021-rtc.yaml           | 56 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
+rtc driver.
+
+Changes in v5:
+ - patch 7: fix (and simplify) watchdog_info code
+ - patch 8: remove amibguity in comment
+
+Changes in v4:
+ - do not add a new wdog driver for MAX77714, extend the MAX77620 wdog
+   driver; this means removing v3 patch 7, now replaced by patches 7+8
+ - added review tags
+
+Changes in v3:
+ - fixed all issues reported on v1 patches
+ - removed patch 1 of v2, already applied
+   ("mfd: max77686: Correct tab-based alignment of register addresses")
+
+Changes in v2:
+ - fixed all issues reported on v1 patches
+ - added patch 7 ("watchdog: Kconfig: fix help text indentation")
+ - additional minor improvements
+
+Luca
+
+Luca Ceresoli (9):
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove unused code to read in 12-hour mode
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: Kconfig: fix help text indentation
+  watchdog: max77620: add support for the max77714 variant
+  watchdog: max77620: add comment to clarify set_timeout procedure
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  68 ++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77686.c                        |   2 +-
+ drivers/mfd/max77714.c                        | 152 ++++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  75 +++++----
+ drivers/watchdog/Kconfig                      |  50 +++---
+ drivers/watchdog/max77620_wdt.c               |  85 ++++++++--
+ include/linux/mfd/max77686-private.h          |   4 +-
+ include/linux/mfd/max77714.h                  |  60 +++++++
+ 12 files changed, 445 insertions(+), 75 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+2.25.1
+
