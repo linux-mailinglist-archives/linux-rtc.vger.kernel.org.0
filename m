@@ -2,84 +2,87 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 913804734F3
-	for <lists+linux-rtc@lfdr.de>; Mon, 13 Dec 2021 20:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82777473860
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 00:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbhLMT3z (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Dec 2021 14:29:55 -0500
-Received: from ixit.cz ([94.230.151.217]:46476 "EHLO ixit.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236101AbhLMT3z (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 13 Dec 2021 14:29:55 -0500
-Received: from localhost.localdomain (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id A9F8824AF0;
-        Mon, 13 Dec 2021 20:29:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1639423793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4oxdGdB/G1y/dNIRRmI7quDKk8Sl01FVf6r8YcPs7/U=;
-        b=bKcqtWlgKVMCrRyk/CIXe60uYp8agwfF9eXuo270MlPHlSISCkSDfDX3qfQYuptbHV3t3f
-        Kh+Mg8O+cvJSbZYsHspS7ZuLRdKEebZEmcSw+m8cLmEh3pxinlApKwWm78J9+GnZ6UYM/K
-        DiytZttopIfJ8R0ANnQCjdkycd6hs00=
-From:   David Heidelberg <david@ixit.cz>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S244187AbhLMXXy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Dec 2021 18:23:54 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:35488 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237678AbhLMXXx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Dec 2021 18:23:53 -0500
+Received: by mail-ot1-f53.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso19170357otr.2;
+        Mon, 13 Dec 2021 15:23:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=MN07U4V1fbFM28Uah7L22YfdYwHkREoQZ5ADmY6LxmE=;
+        b=rSIVAvCmRlEKecklB/83Nk5Zt2JVCJ2KYc2JG5Js++zZkyfZt0b1gXnZvhcjlMMWq7
+         1UgDvmtqynKTst6eEGjcPyWgEM0oD5rVQBu72pRVnnXD1z4MRxWrjwyoFNjpajFJeHmx
+         +BZRMBOJDI2ndfsEywAN0fKpsbTiDJRlkCfTIc3FMXLnhNEXt9X8Ijj1HZnadBFMIrkt
+         /D021ucbYg1B49fl4RyPN5cEIbqgKFlMp6e/pvjVVjWG47pQ3YjSX2TK5GOsM2OTnUCS
+         rsr6LRGerbk6IP6yygudk+zcSjFloxZTEgHw8iZLiliT67DDiyL+/xD+B8dxvLm4iRYd
+         sNjQ==
+X-Gm-Message-State: AOAM5312dwZJqGB6+yn/7adYo2vbhrS9XP8uWcvKVLAwNRJj5fZZaAEJ
+        xOLyu5R96dmZznEIKkCpm+gR/erfdQ==
+X-Google-Smtp-Source: ABdhPJygG9UxSLszfKCq3BJLXLaO6nhd2/v54vOpy5+rwpMfGis0qNScFE8ZLYHpZVfIYMEj9h8b8g==
+X-Received: by 2002:a9d:2085:: with SMTP id x5mr1371352ota.228.1639437832980;
+        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e16sm2431958ook.38.2021.12.13.15.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
+Received: (nullmailer pid 1773614 invoked by uid 1000);
+        Mon, 13 Dec 2021 23:23:49 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     David Heidelberg <david@ixit.cz>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Satya Priya <skakit@codeaurora.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <skakit@codeaurora.org>
-Cc:     Caleb Connolly <caleb@connolly.tech>,
-        David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
-Date:   Mon, 13 Dec 2021 20:29:45 +0100
-Message-Id: <20211213192946.111320-1-david@ixit.cz>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-rtc@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <20211213192946.111320-1-david@ixit.cz>
+References: <20211213192946.111320-1-david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
+Date:   Mon, 13 Dec 2021 17:23:49 -0600
+Message-Id: <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Extend registers up to 2, also document their names.
+On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
+> Extend registers up to 2, also document their names.
+> 
+> Also fixes warnings generated by `make qcom/sdm845-oneplus-fajita.dtb`:
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: reg: [[24576], [24832]] is too long
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+>         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+>  .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
 
-Also fixes warnings generated by `make qcom/sdm845-oneplus-fajita.dtb`:
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: reg: [[24576], [24832]] is too long
-        From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
-        From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
----
- .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-diff --git a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-index 4fba6dba16f3..6fa7d9fc2dc7 100644
---- a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-@@ -19,7 +19,14 @@ properties:
-       - qcom,pmk8350-rtc
- 
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
-+
-+  reg-names:
-+    minItems: 1
-+    items:
-+      - const: rtc
-+      - const: alarm
- 
-   interrupts:
-     maxItems: 1
--- 
-2.33.0
+Full log is available here: https://patchwork.ozlabs.org/patch/1567467
+
+
+rtc@11d: compatible: Additional items are not allowed ('qcom,pm8921-rtc' was unexpected)
+	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
+
+rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
+	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
 
