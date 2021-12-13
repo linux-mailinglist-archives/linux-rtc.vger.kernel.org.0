@@ -2,141 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4DF471626
-	for <lists+linux-rtc@lfdr.de>; Sat, 11 Dec 2021 21:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83554471F49
+	for <lists+linux-rtc@lfdr.de>; Mon, 13 Dec 2021 03:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhLKUfs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 11 Dec 2021 15:35:48 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:49410 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229591AbhLKUfr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 11 Dec 2021 15:35:47 -0500
-Received: from [77.244.183.192] (port=65056 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mw95t-0003Xg-P9; Sat, 11 Dec 2021 21:35:45 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v5 9/9] rtc: max77686: add MAX77714 support
-Date:   Sat, 11 Dec 2021 21:34:32 +0100
-Message-Id: <20211211203432.32446-3-luca@lucaceresoli.net>
+        id S230020AbhLMCP6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Dec 2021 21:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhLMCP6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Dec 2021 21:15:58 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604BC06173F;
+        Sun, 12 Dec 2021 18:15:58 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id p19so13902812qtw.12;
+        Sun, 12 Dec 2021 18:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OK+01rE8av+7Y4vzBf+grUD9vYsbU9TwKKraT+N95Pc=;
+        b=FY8iVW63KGP5lbyFd7OGt33SfGHPjhgQJ1TzdqCmeUE4+GmjPjoaiJ6eqGAG4qE654
+         oDE/nPnSl4NdJwupq8c3L+W0enI5+YTZNkBQcLrR5hr8VEpTRR6stBLOoLeKMbtR7UU7
+         XNWSiU7ZUTZOhiGHDpZVbZypFoSNYHVHXHAmUdjfoIdJniw9p4/rliw3smm7sKbV9Ezr
+         ChdPRhgtdYHfDKa+W1Z8e1fVWhXTeEB9j4I/52KV8W1vtMQmwO7rwWAU/74hnaOCoqwM
+         WJSKYG1muLUR+zWJbMCk9NEiaqLTvQWf42mJkI7dALIlBKnHhl1bZnJptTV+2AZ5HsQk
+         YTAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OK+01rE8av+7Y4vzBf+grUD9vYsbU9TwKKraT+N95Pc=;
+        b=PMIPiR7NywmzQlnirhF2fRRWEI95CVqJiEMNlyEaDQ1lq15cpMFOqnarQaZlHcoNJ+
+         X/aKWqenj7UdOdeYq1k5a3csnvXX3BhUKH3EdFi9D1oFUGoidk28dZEKkxTUWKLbOwVt
+         s16ibKxuBK4QD7wm0oa985UnsKFfLOJ4zJujZ691e9RGcMd4ULta3WyLtrXPK8TOmZgl
+         50mVhSc4oatFKCRcPA6Sy+nUdGZJiGvn9hosP64Kv6GKRF+mHUaPFPqHxzmkztRrKiaj
+         ul+2belFuRG10xw4P96HJbpZF9UIR7icKGnhsUQYh+DstVoX9ampp/B7i6HOHORRNnne
+         eeTw==
+X-Gm-Message-State: AOAM532ve58lHKWCw544gs39/v+sh59MOWb+FZ+mvhGjhzqsG7sgNoGR
+        cAMWGikxoSjzvpKbmzOSzAuq6ply378=
+X-Google-Smtp-Source: ABdhPJxcsspCwPrhH0BGs6rwawHGlTuuolVIhdQfb0CPh3CD2DKPdKzE7rXYpuhCSXMYnZ5BvMfaNA==
+X-Received: by 2002:a05:622a:287:: with SMTP id z7mr42809520qtw.223.1639361757084;
+        Sun, 12 Dec 2021 18:15:57 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m20sm8573687qtx.39.2021.12.12.18.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Dec 2021 18:15:52 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     a.zummo@towertech.it
+Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH rtc-next] drivers/rtc: remove redundant err variable
+Date:   Mon, 13 Dec 2021 02:15:38 +0000
+Message-Id: <20211213021538.435341-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211211203432.32446-1-luca@lucaceresoli.net>
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <20211211203432.32446-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RTC included in the MAX77714 PMIC is very similar to the one in the
-MAX77686. Reuse the rtc-max77686.c driver with the minimum required changes
-for the MAX77714 RTC.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Return value from s35390a_set_reg() directly instead
+of taking this in another redundant variable.
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
+ drivers/rtc/rtc-s35390a.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Changes in v5: none
-
-Changes in v4: none
-
-Changes in v3: none
-
-Changes in v2: none
----
- drivers/rtc/Kconfig        |  2 +-
- drivers/rtc/rtc-max77686.c | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index 058e56a10ab8..4242cca5e560 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -375,7 +375,7 @@ config RTC_DRV_MAX8997
+diff --git a/drivers/rtc/rtc-s35390a.c b/drivers/rtc/rtc-s35390a.c
+index 26278c770731..b382759aa544 100644
+--- a/drivers/rtc/rtc-s35390a.c
++++ b/drivers/rtc/rtc-s35390a.c
+@@ -211,7 +211,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct s35390a	*s35390a = i2c_get_clientdata(client);
+-	int i, err;
++	int i;
+ 	char buf[7], status;
  
- config RTC_DRV_MAX77686
- 	tristate "Maxim MAX77686"
--	depends on MFD_MAX77686 || MFD_MAX77620 || COMPILE_TEST
-+	depends on MFD_MAX77686 || MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
- 	help
- 	  If you say yes here you will get support for the
- 	  RTC of Maxim MAX77686/MAX77620/MAX77802 PMIC.
-diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index 5c64d08c0732..b0250d91fb00 100644
---- a/drivers/rtc/rtc-max77686.c
-+++ b/drivers/rtc/rtc-max77686.c
-@@ -19,6 +19,7 @@
+ 	dev_dbg(&client->dev, "%s: tm is secs=%d, mins=%d, hours=%d mday=%d, "
+@@ -234,9 +234,7 @@ static int s35390a_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	for (i = 0; i < 7; ++i)
+ 		buf[i] = bitrev8(buf[i]);
  
- #define MAX77686_I2C_ADDR_RTC		(0x0C >> 1)
- #define MAX77620_I2C_ADDR_RTC		0x68
-+#define MAX77714_I2C_ADDR_RTC		0x48
- #define MAX77686_INVALID_I2C_ADDR	(-1)
+-	err = s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
+-
+-	return err;
++	return s35390a_set_reg(s35390a, S35390A_CMD_TIME1, buf, sizeof(buf));
+ }
  
- /* Define non existing register */
-@@ -200,6 +201,28 @@ static const struct max77686_rtc_driver_data max77686_drv_data = {
- 	.regmap_config = &max77686_rtc_regmap_config,
- };
- 
-+static const struct regmap_irq_chip max77714_rtc_irq_chip = {
-+	.name		= "max77714-rtc",
-+	.status_base	= MAX77686_RTC_INT,
-+	.mask_base	= MAX77686_RTC_INTM,
-+	.num_regs	= 1,
-+	.irqs		= max77686_rtc_irqs,
-+	.num_irqs	= ARRAY_SIZE(max77686_rtc_irqs) - 1, /* no WTSR on 77714 */
-+};
-+
-+static const struct max77686_rtc_driver_data max77714_drv_data = {
-+	.delay = 16000,
-+	.mask  = 0x7f,
-+	.map   = max77686_map,
-+	.alarm_enable_reg = false,
-+	.rtc_irq_from_platform = false,
-+	/* On MAX77714 RTCA1 is BIT 1 of RTCINT (0x00). Not supported by this driver. */
-+	.alarm_pending_status_reg = MAX77686_INVALID_REG,
-+	.rtc_i2c_addr = MAX77714_I2C_ADDR_RTC,
-+	.rtc_irq_chip = &max77714_rtc_irq_chip,
-+	.regmap_config = &max77686_rtc_regmap_config,
-+};
-+
- static const struct regmap_config max77620_rtc_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -843,6 +866,7 @@ static const struct platform_device_id rtc_id[] = {
- 	{ "max77686-rtc", .driver_data = (kernel_ulong_t)&max77686_drv_data, },
- 	{ "max77802-rtc", .driver_data = (kernel_ulong_t)&max77802_drv_data, },
- 	{ "max77620-rtc", .driver_data = (kernel_ulong_t)&max77620_drv_data, },
-+	{ "max77714-rtc", .driver_data = (kernel_ulong_t)&max77714_drv_data, },
- 	{},
- };
- MODULE_DEVICE_TABLE(platform, rtc_id);
+ static int s35390a_rtc_read_time(struct device *dev, struct rtc_time *tm)
 -- 
 2.25.1
 
