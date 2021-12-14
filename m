@@ -2,51 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E470473E6F
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 09:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7067D474400
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 14:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbhLNIkv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Dec 2021 03:40:51 -0500
-Received: from mail.thebizzie.pl ([192.236.147.111]:41998 "EHLO
-        mail.thebizzie.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbhLNIkv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Dec 2021 03:40:51 -0500
-Received: by mail.thebizzie.pl (Postfix, from userid 1002)
-        id B99061816B2; Tue, 14 Dec 2021 08:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=thebizzie.pl; s=mail;
-        t=1639470836; bh=kU+//Lu71IqgcFfjayWXuIc0mZtoyrYJc2YuqyU8eS8=;
-        h=Date:From:To:Subject:From;
-        b=SCmKZaTgCo+9KhypLQs5xyExVaUxlK9fGpslmsss5Iz+2gtvKNFj8NFDluwGVRF7V
-         h0OZIltLSyr95nLOxC4feeyV85YpoPI6joZ7eNfaKBAznuiAuZurJdy7t11hC6yk/I
-         zVGhGqGuAFQPheRtOSOJ+ErdkQ5v75j3cn+mfRnCA4fXj0Sa3iAAybneXsGkNTIRUq
-         IAtTboZhpF1hqrRcOVrbxe34WmicEGcZEt7te88Yf10dLpoZzQeCOD4aGcFN5izXVF
-         1gK6q8rtTzQllZcHyxbPNONAHdjOAUX+feJgb1I8E8XFbODP5FUSMlQoUaabcgQwAM
-         sNamMtTbvjcuw==
-Received: by mail.thebizzie.pl for <linux-rtc@vger.kernel.org>; Tue, 14 Dec 2021 08:31:44 GMT
-Message-ID: <20211214074500-0.1.7.1vu.0.ilewpwtu5e@thebizzie.pl>
-Date:   Tue, 14 Dec 2021 08:31:44 GMT
-From:   "Mateusz Adamczyk" <mateusz.adamczyk@thebizzie.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.thebizzie.pl
+        id S230038AbhLNN5r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Dec 2021 08:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229653AbhLNN5r (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Dec 2021 08:57:47 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80C061574;
+        Tue, 14 Dec 2021 05:57:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1639490265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
+        b=oc4HTFTol/r89SvaPNWCGhBJ0KP+kxOYyxFWFNlOCt/bXCUziuPWQPOHMFPS3+j0Y8vvS3
+        mtRwDeI1K7M7WS+w3RlYx5zgWrJSIHhnHlIbBbzH5bXEFUJ3SQLVkf+W60D1ogEzIk6O7B
+        YOzb6QSEjqZbW4ZAEGZyDZaOtjjdhW2CEt6iB1OZWSTmRvrq/Symdtz4i8AQmiIBo+HUNi
+        /GXjIUq6hbz2YatEYnY/qaAhZevTbb4Gsprd1UM52/smVMgcB0JNJVu+wLdOjxkUw+bS7p
+        GiR9D9xqnsh5YFej1oXYEQyCm+hsxrruBPTeHIui/Xoqh5d5/Z79ws/LllZJTg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1639490265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
+        b=KXtFcINluHsAWrxcwLo8lDTAklWFUBm1nf5dgjlOoMONUoPpti0UqI1mOtEUCdezZhMBMJ
+        +G66Xq3dp5FpbVCQ==
+To:     Joel Daniels <jdaniels@sent.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Subject: Re: Time keeping while suspended in the presence of persistent
+ clock drift
+In-Reply-To: <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
+ <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
+ <87wnkbuuuz.ffs@tglx>
+ <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
+Date:   Tue, 14 Dec 2021 14:57:45 +0100
+Message-ID: <8735mvthk6.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Joel,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
+> On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
+>> Can you please verify that the problem persists with NTP enabled and
+>> synchronized?
+>
+> Yes, I just verified that the problem still exists while
+> synchronized to NTP.
+...
+>     $ chronyc tracking && echo && chronyc sources
+>     [...]
+>     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
+>     System time     : 5.597892284 seconds fast of NTP time
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+thanks for making sure that this is really a RTC issue on that machine.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+> The "if" branch does not apply as I have no clock sources flagged as
+> CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
 
+Which CPU is in that box?
 
-Pozdrawiam,
-Mateusz Adamczyk
+> The kernel seems to believe that the time spent sleeping is exactly
+> the difference of two calls to read_persistent_clock64 with no option
+> to adjust for persistent clock drift.
+
+The kernel does not believe. It relies on the accuracy of the CMOS clock
+which is usually pretty good.
+
+> I would like to provide a way for user space to inform the kernel
+> that the persistent clock drifts so it can make a corresponding
+> adjustment when resuming from a long suspend period.
+>
+> In my use case it would be enough for me to set this parameter on
+> boot. In use cases with continuous network access, NTP daemons
+> could be enhanced to periodically update this parameter with the
+> daemon's best estimate of the persistent clock drift.
+
+That needs some thought. The RTC people (cc'ed now) might have opionions
+on that.
+
+Thanks,
+
+        tglx
