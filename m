@@ -2,101 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7067D474400
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 14:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2A54747C6
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 17:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbhLNN5r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 14 Dec 2021 08:57:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbhLNN5r (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 14 Dec 2021 08:57:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80C061574;
-        Tue, 14 Dec 2021 05:57:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1639490265;
+        id S235904AbhLNQXX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 14 Dec 2021 11:23:23 -0500
+Received: from ixit.cz ([94.230.151.217]:53922 "EHLO ixit.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235873AbhLNQXF (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 14 Dec 2021 11:23:05 -0500
+Received: from [192.168.1.138] (ip-89-176-96-70.net.upcbroadband.cz [89.176.96.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ixit.cz (Postfix) with ESMTPSA id 5B1522243C;
+        Tue, 14 Dec 2021 17:23:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+        t=1639498982;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
-        b=oc4HTFTol/r89SvaPNWCGhBJ0KP+kxOYyxFWFNlOCt/bXCUziuPWQPOHMFPS3+j0Y8vvS3
-        mtRwDeI1K7M7WS+w3RlYx5zgWrJSIHhnHlIbBbzH5bXEFUJ3SQLVkf+W60D1ogEzIk6O7B
-        YOzb6QSEjqZbW4ZAEGZyDZaOtjjdhW2CEt6iB1OZWSTmRvrq/Symdtz4i8AQmiIBo+HUNi
-        /GXjIUq6hbz2YatEYnY/qaAhZevTbb4Gsprd1UM52/smVMgcB0JNJVu+wLdOjxkUw+bS7p
-        GiR9D9xqnsh5YFej1oXYEQyCm+hsxrruBPTeHIui/Xoqh5d5/Z79ws/LllZJTg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1639490265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3rX9sx3/Rg0XcX58GUjdtswXYZt0YUczNTsQIoAklfg=;
-        b=KXtFcINluHsAWrxcwLo8lDTAklWFUBm1nf5dgjlOoMONUoPpti0UqI1mOtEUCdezZhMBMJ
-        +G66Xq3dp5FpbVCQ==
-To:     Joel Daniels <jdaniels@sent.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
+        bh=ZktYTD9EM17d3mZGc7bB98tBUNT5vMvozHbm6QejS+U=;
+        b=jbjT/cxAuBYI2jZmaJLbC05eA+vLArOWkFQ2k8DA3OLQsXDyZb1+bv+6sor5Oub7PXTnYk
+        LGsB6MEGaIzAy08N0gc6Jcoy+Wmf5LikcDkPksFo4vvOI41zGC7RBJrmiyQ7bp3Y/oge4s
+        GIK1yKcjfvozF/oS+hLQtwx5HpCrSSs=
+Date:   Tue, 14 Dec 2021 17:22:55 +0100
+From:   David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register
+ numbers
+To:     Rob Herring <robh@kernel.org>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Satya Priya <skakit@codeaurora.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, x86@kernel.org
-Subject: Re: Time keeping while suspended in the presence of persistent
- clock drift
-In-Reply-To: <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
-References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
- <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
- <87wnkbuuuz.ffs@tglx>
- <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
-Date:   Tue, 14 Dec 2021 14:57:45 +0100
-Message-ID: <8735mvthk6.ffs@tglx>
+        linux-rtc@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Message-Id: <7I544R.923UO8WZHK48@ixit.cz>
+In-Reply-To: <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
+References: <20211213192946.111320-1-david@ixit.cz>
+        <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Joel,
 
-On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
-> On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
->> Can you please verify that the problem persists with NTP enabled and
->> synchronized?
->
-> Yes, I just verified that the problem still exists while
-> synchronized to NTP.
-...
->     $ chronyc tracking && echo && chronyc sources
->     [...]
->     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
->     System time     : 5.597892284 seconds fast of NTP time
 
-thanks for making sure that this is really a RTC issue on that machine.
 
-> The "if" branch does not apply as I have no clock sources flagged as
-> CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
+On Mon, Dec 13 2021 at 17:23:49 -0600, Rob Herring <robh@kernel.org> 
+wrote:
+> On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
+>>  Extend registers up to 2, also document their names.
+>> 
+>>  Also fixes warnings generated by `make 
+>> qcom/sdm845-oneplus-fajita.dtb`:
+>>  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 
+>> reg: [[24576], [24832]] is too long
+>>          From schema: 
+>> Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+>>  arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 
+>> 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+>>          From schema: 
+>> Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+>> 
+>>  Signed-off-by: David Heidelberg <david@ixit.cz>
+>>  ---
+>>   .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 
+>> ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>> 
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+> 
+> Note that it is not yet a requirement to have 0 warnings for 
+> dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/patch/1567467
+> 
+> 
+> rtc@11d: compatible: Additional items are not allowed 
+> ('qcom,pm8921-rtc' was unexpected)
+> 	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
+> 
+> rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too 
+> long
+> 	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
 
-Which CPU is in that box?
 
-> The kernel seems to believe that the time spent sleeping is exactly
-> the difference of two calls to read_persistent_clock64 with no option
-> to adjust for persistent clock drift.
+Would you consider safe, if I sent patch to remove redundant 
+`qcom,pm8921-rtc` from arch/arm/boot/dts/qcom-mdm9615.dtsi?
 
-The kernel does not believe. It relies on the accuracy of the CMOS clock
-which is usually pretty good.
+David
 
-> I would like to provide a way for user space to inform the kernel
-> that the persistent clock drifts so it can make a corresponding
-> adjustment when resuming from a long suspend period.
->
-> In my use case it would be enough for me to set this parameter on
-> boot. In use cases with continuous network access, NTP daemons
-> could be enhanced to periodically update this parameter with the
-> daemon's best estimate of the persistent clock drift.
 
-That needs some thought. The RTC people (cc'ed now) might have opionions
-on that.
-
-Thanks,
-
-        tglx
