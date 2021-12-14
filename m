@@ -2,87 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82777473860
-	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 00:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE854739B2
+	for <lists+linux-rtc@lfdr.de>; Tue, 14 Dec 2021 01:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244187AbhLMXXy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 13 Dec 2021 18:23:54 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:35488 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237678AbhLMXXx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Dec 2021 18:23:53 -0500
-Received: by mail-ot1-f53.google.com with SMTP id x43-20020a056830246b00b00570d09d34ebso19170357otr.2;
-        Mon, 13 Dec 2021 15:23:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=MN07U4V1fbFM28Uah7L22YfdYwHkREoQZ5ADmY6LxmE=;
-        b=rSIVAvCmRlEKecklB/83Nk5Zt2JVCJ2KYc2JG5Js++zZkyfZt0b1gXnZvhcjlMMWq7
-         1UgDvmtqynKTst6eEGjcPyWgEM0oD5rVQBu72pRVnnXD1z4MRxWrjwyoFNjpajFJeHmx
-         +BZRMBOJDI2ndfsEywAN0fKpsbTiDJRlkCfTIc3FMXLnhNEXt9X8Ijj1HZnadBFMIrkt
-         /D021ucbYg1B49fl4RyPN5cEIbqgKFlMp6e/pvjVVjWG47pQ3YjSX2TK5GOsM2OTnUCS
-         rsr6LRGerbk6IP6yygudk+zcSjFloxZTEgHw8iZLiliT67DDiyL+/xD+B8dxvLm4iRYd
-         sNjQ==
-X-Gm-Message-State: AOAM5312dwZJqGB6+yn/7adYo2vbhrS9XP8uWcvKVLAwNRJj5fZZaAEJ
-        xOLyu5R96dmZznEIKkCpm+gR/erfdQ==
-X-Google-Smtp-Source: ABdhPJygG9UxSLszfKCq3BJLXLaO6nhd2/v54vOpy5+rwpMfGis0qNScFE8ZLYHpZVfIYMEj9h8b8g==
-X-Received: by 2002:a9d:2085:: with SMTP id x5mr1371352ota.228.1639437832980;
-        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e16sm2431958ook.38.2021.12.13.15.23.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Dec 2021 15:23:52 -0800 (PST)
-Received: (nullmailer pid 1773614 invoked by uid 1000);
-        Mon, 13 Dec 2021 23:23:49 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     David Heidelberg <david@ixit.cz>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Caleb Connolly <caleb@connolly.tech>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Satya Priya <skakit@codeaurora.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-In-Reply-To: <20211213192946.111320-1-david@ixit.cz>
-References: <20211213192946.111320-1-david@ixit.cz>
-Subject: Re: [PATCH] dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
-Date:   Mon, 13 Dec 2021 17:23:49 -0600
-Message-Id: <1639437829.348405.1773613.nullmailer@robh.at.kernel.org>
+        id S236786AbhLNAlp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 13 Dec 2021 19:41:45 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44540 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233802AbhLNAlp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 13 Dec 2021 19:41:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 001B9B81729;
+        Tue, 14 Dec 2021 00:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60AB8C34603;
+        Tue, 14 Dec 2021 00:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639442502;
+        bh=FO7GgzjWU/qyhUV5Wjn+qT3hf7OTOQWpwBaqn+IhpT4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TMTcCD6HUdPg26enS6xT2YPMwwn8g1fC3+RLdva7+4EsZf5mCuQ6RhuG1VzM0PnyR
+         xkwZ3oECRYK2ZGYHZKJSOZP7OlRo40U07N5NatKEQef9r6mMw3vDb1LrOh8s+/8B09
+         b9Uzm5p0lhOQNEpEKfcsh0NoeGvyJIi/pmiVeH7Qwatqzbzq0IMnLntvTpGZMpd5RC
+         3BW3RjB8gRKN0aQiJ5KvsuYFJSlHq52hUoV8tkgjX55qF3XZFrfmmKBl0A5F6R6m9W
+         SDfxRuhWL0MSxeNmifuzLI6U78EGD3S/PBpfUDHEylijHLxJvZCVVXY37WOv7WtNYh
+         E2llqsaR/qQ+Q==
+Date:   Mon, 13 Dec 2021 18:47:21 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: Re: [PATCH] rtc: Move variable into switch case statement
+Message-ID: <20211214004721.GA74477@embeddedor>
+References: <20211209043915.1378393-1-keescook@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211209043915.1378393-1-keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 13 Dec 2021 20:29:45 +0100, David Heidelberg wrote:
-> Extend registers up to 2, also document their names.
+On Wed, Dec 08, 2021 at 08:39:15PM -0800, Kees Cook wrote:
+> When building with automatic stack variable initialization, GCC 12
+> complains about variables defined outside of switch case statements.
+> Move the variable into the case that uses it, which silences the warning:
 > 
-> Also fixes warnings generated by `make qcom/sdm845-oneplus-fajita.dtb`:
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: reg: [[24576], [24832]] is too long
->         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-> arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: rtc@6000: 'reg-names' does not match any of the regexes: 'pinctrl-[0-9]+'
->         From schema: Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
+> drivers/rtc/dev.c: In function 'rtc_dev_ioctl':
+> drivers/rtc/dev.c:394:30: warning: statement will never be executed [-Wswitch-unreachable]
+>   394 |                         long offset;
+>       |                              ^~~~~~
 > 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Fixes: 6a8af1b6568a ("rtc: add parameter ioctl")
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks
+--
+Gustavo
+
 > ---
->  .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml         | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>  drivers/rtc/dev.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1567467
-
-
-rtc@11d: compatible: Additional items are not allowed ('qcom,pm8921-rtc' was unexpected)
-	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
-
-rtc@11d: compatible: ['qcom,pm8018-rtc', 'qcom,pm8921-rtc'] is too long
-	arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dt.yaml
-
+> diff --git a/drivers/rtc/dev.c b/drivers/rtc/dev.c
+> index e104972a28fd..69325aeede1a 100644
+> --- a/drivers/rtc/dev.c
+> +++ b/drivers/rtc/dev.c
+> @@ -391,14 +391,14 @@ static long rtc_dev_ioctl(struct file *file,
+>  		}
+>  
+>  		switch(param.param) {
+> -			long offset;
+>  		case RTC_PARAM_FEATURES:
+>  			if (param.index != 0)
+>  				err = -EINVAL;
+>  			param.uvalue = rtc->features[0];
+>  			break;
+>  
+> -		case RTC_PARAM_CORRECTION:
+> +		case RTC_PARAM_CORRECTION: {
+> +			long offset;
+>  			mutex_unlock(&rtc->ops_lock);
+>  			if (param.index != 0)
+>  				return -EINVAL;
+> @@ -407,7 +407,7 @@ static long rtc_dev_ioctl(struct file *file,
+>  			if (err == 0)
+>  				param.svalue = offset;
+>  			break;
+> -
+> +		}
+>  		default:
+>  			if (rtc->ops->param_get)
+>  				err = rtc->ops->param_get(rtc->dev.parent, &param);
+> -- 
+> 2.30.2
+> 
+> 
+> 
+> 
