@@ -2,92 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 444B647649A
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Dec 2021 22:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61714764BD
+	for <lists+linux-rtc@lfdr.de>; Wed, 15 Dec 2021 22:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbhLOVcr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Dec 2021 16:32:47 -0500
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:34617 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhLOVcr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 16:32:47 -0500
+        id S229535AbhLOVmx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Dec 2021 16:42:53 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40487 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229526AbhLOVmw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 16:42:52 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id A3CE26000D;
-        Wed, 15 Dec 2021 21:32:44 +0000 (UTC)
-Date:   Wed, 15 Dec 2021 22:32:44 +0100
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id D3C6340002;
+        Wed, 15 Dec 2021 21:42:50 +0000 (UTC)
+Date:   Wed, 15 Dec 2021 22:42:50 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     John Stultz <john.stultz@linaro.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     Joel Daniels <jdaniels@sent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <john.stultz@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, x86@kernel.org
 Subject: Re: Time keeping while suspended in the presence of persistent clock
  drift
-Message-ID: <Ybpe/ND+MQq6tqoR@piout.net>
+Message-ID: <YbphWpMl7W0Qzs+d@piout.net>
 References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
  <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
  <87wnkbuuuz.ffs@tglx>
  <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com>
  <8735mvthk6.ffs@tglx>
- <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com>
- <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+In-Reply-To: <8735mvthk6.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/12/2021 13:06:30-0800, John Stultz wrote:
-> I'm not really active in this space much anymore, but a few of my
-> (possibly wrongheaded) thoughts:
+On 14/12/2021 14:57:45+0100, Thomas Gleixner wrote:
+> Joel,
 > 
-> >    [A] On machines with a persistent clock how is userspace supposed
-> >        to be sure what drift to measure? Can it assume that the drift
-> >        of the persistent clock used for sleep time injection is the
-> >        same as the drift of /dev/rtc? This seems dangerous.
+> On Mon, Dec 13 2021 at 06:39, Joel Daniels wrote:
+> > On Sat, 11 Dec 2021 14:36 +0100, Thomas Gleixner wrote:
+> >> Can you please verify that the problem persists with NTP enabled and
+> >> synchronized?
+> >
+> > Yes, I just verified that the problem still exists while
+> > synchronized to NTP.
+> ...
+> >     $ chronyc tracking && echo && chronyc sources
+> >     [...]
+> >     Ref time (UTC)  : Mon Dec 13 13:30:52 2021
+> >     System time     : 5.597892284 seconds fast of NTP time
 > 
-> Yea, there can be multiple RTCs as well.
+> thanks for making sure that this is really a RTC issue on that machine.
 > 
-> >    [B] Sleep time injection can come from the "persistent clock" or,
-> >        if there is no persistent clock, from an RTC driver. I'd like
-> >        to correct for drift from the perisistant clock but not touch
-> >        the RTC driver sleep time injection mechanism. Is this
-> >        acceptable or do people feel that any drift correction should
-> >        work with both mechanisms in order to ensure a polished
-> >        interface?
+> > The "if" branch does not apply as I have no clock sources flagged as
+> > CLOCK_SOURCE_SUSPEND_NONSTOP but the "else if" branch does apply.
 > 
-> This dual interface comes from the desire to support both the more
-> atomic/earlier correction we can do w/ the persistent_clock interface
-> while holding the timekeeping lock, while also supporting RTC devices
-> that may sleep when being read, or may have dependencies that aren't
-> ready that early in resume.
+> Which CPU is in that box?
 > 
-> Admittedly having two separate abstractions here is a bit of a pain,
-> and fixing just one side doesn't make it better.
+> > The kernel seems to believe that the time spent sleeping is exactly
+> > the difference of two calls to read_persistent_clock64 with no option
+> > to adjust for persistent clock drift.
 > 
-> >    [C] Some users may want to correct for drift during suspend-to-RAM
-> >        but during suspend-to-disk they might boot into some other
-> >        operating system which itself sets the CMOS RTC. Hopefully,
-> >        this could be solved from userspace by changing the drift
-> >        correction parameter to 0 just before a suspend-to-disk
-> >        operation.
+> The kernel does not believe. It relies on the accuracy of the CMOS clock
+> which is usually pretty good.
 > 
-> Oof. This feels particularly complex and fragile to try to address.
+> > I would like to provide a way for user space to inform the kernel
+> > that the persistent clock drifts so it can make a corresponding
+> > adjustment when resuming from a long suspend period.
+> >
+> > In my use case it would be enough for me to set this parameter on
+> > boot. In use cases with continuous network access, NTP daemons
+> > could be enhanced to periodically update this parameter with the
+> > daemon's best estimate of the persistent clock drift.
 > 
-> > I suspect that there are other things about which I should also be
-> > worried if only I were less ignorant. That is why I am asking here.
-> 
-> Personally, I'm not sure this warrants adding new userland interfaces
-> for. I'd probably lean towards having the RTC framework internally
-> measure and correct for drift, rather than adding an extra knob in
-> userland.
+> That needs some thought. The RTC people (cc'ed now) might have opionions
+> on that.
 > 
 
-I'd rather lean towards the timekeeping code doing that. The RTC
-subsystem doesn't know which RTC has to be used.
+The RTC subsystem already has two interfaces to correct the drift of an
+RTC. However, this is currently limited to RTC that have hardware
+support for this feature. I guess we could had software emulation of the
+feature to be able to correct for any RTCs  but this will raise many
+design questions, like how often the correction has to happen, what to
+do with RTC that have a counter that doesn't reset when setting their
+time, etc...
+
+I guess this would be able to solve your particular issue has you will
+need a mechanism to handle when you overshoot the regular correction
+timer.
+
+However, everything falls down once the machine is turned off, making
+the whole effort moot...
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
