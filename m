@@ -2,29 +2,29 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD9F476681
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 00:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D1F476694
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 00:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhLOX20 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Dec 2021 18:28:26 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:36235 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhLOX20 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 18:28:26 -0500
+        id S232081AbhLOXgL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Dec 2021 18:36:11 -0500
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:39869 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232073AbhLOXgK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 18:36:10 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 781AA100002;
-        Wed, 15 Dec 2021 23:28:24 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 00:28:24 +0100
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 25EA11BF206;
+        Wed, 15 Dec 2021 23:36:09 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 00:36:08 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Joel Daniels <jdaniels@sent.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Joel Daniels <jdaniels@sent.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, x86@kernel.org
 Subject: Re: Time keeping while suspended in the presence of persistent clock
  drift
-Message-ID: <Ybp6GHIwpx84wSHL@piout.net>
+Message-ID: <Ybp76D62Le2aEc5R@piout.net>
 References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
  <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com>
  <87wnkbuuuz.ffs@tglx>
@@ -33,84 +33,63 @@ References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
  <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com>
  <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
  <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
+ <CALAqxLX795pURb_aJTEAdq80LGiY=br88A+R3TN3HQh+HtS85Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
+In-Reply-To: <CALAqxLX795pURb_aJTEAdq80LGiY=br88A+R3TN3HQh+HtS85Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/12/2021 15:42:05-0700, Joel Daniels wrote:
-> Measuring RTC drift is hard. The standard PC RTC has only one second
-> resolution so you have to wait for the "edge" of a tick and measure
-> drift over an extended period of time.
-
-Having a one second resolution and measuring drift is orthogonal. The
-proper way to read the time from an RTC is not to read its time but to
-program an alarm or an update interrupt.
-
-> If you have some NTP daemon
-> slewing your system clock while you try to measure RTC drift then
-> you will get garbage.
-
-Yeah, the issue is that CLOCK_MONOTONIC is affected by adjtime.
-
-> If your motherboard gets hot enough then your
-> RTC will run at a different rate while the machine is on than while
-> it is off.
-
-Indeed, you get about 1ppm per degree Celsius on a typical quartz. the
-farther away you get from 25°C, the worse it gets.
-You also lose about 5ppm per year due to aging.
-
+On 15/12/2021 15:26:28-0800, John Stultz wrote:
+> > Any method of measuring the drift is going to need to persist the
+> > drift coefficient to disk so that it can set the system clock
+> > correctly on boot. I think it would be best for the kernel to use this
+> > same coefficient.
 > 
-> I know of three programs that measure RTC drift today:
+> My initial thought was for the rtc class layer to do the estimation
+> internally against the system time (assuming it was NTP corrected) to
+> try establish a close enough correction factor as the system was up
+> and running, but you're right that would be reset on every reboot, and
+> with second granular RTCs accurate error calculations will take awhile
+> (though polling for the second-edge might work well enough, but would
+> be cpu heavy for a background task).
 > 
->   # hwclock: you must use it to set the RTC twice, the second time
->     with the "--update-drift" argument. The manual suggests waiting
->     one day between calls. The drift and offset information is
->     stored in /etc/adjtime. On boot "hwclock --hctosys" will use this
->     to set the system clock correctly.
-> 
->   # adjtimex (program not syscall) when run with the "--compare"
->     option. It uses a least squares estimate from multiple samples
->     which by default are each 10 seconds apart.
-> 
->   # chrony with the "rtcfile" directive. It tracks the RTC over time
->     to measure its offset and drift similarly to how it tracks the
->     system clock drift. Tracking information is saved into
->       /var/lib/chrony/rtc
->     and can be used (via "chronyd -s") to set the system clock
->     correctly on next boot.
-> 
-> Any method of measuring the drift is going to need to persist the
-> drift coefficient to disk so that it can set the system clock
-> correctly on boot. I think it would be best for the kernel to use this
-> same coefficient.
+> Maybe that's a good enough argument for having an ADJ ioctl added to
+> the rtc chardev?
 > 
 
-I usually use chrony to measure the drift and then get the RTC to
-correct its own drift when it is supported by the hardware. The value is
-then stored directly on the RTC and nothing more is needed.
+Then why not got for the correction software emulation? that would avoid
+duplicating interfaces and we'd avoid to use it on RTCs with hardware
+support.
 
-Anything that is not using NTP will actually measure the drift
-difference between the clocksource and the RTC and I've seen systems
-where the RTC was drifting less than the clocksource so you may be
-overcompensating in the wrong direction.
+> But it also seems to suggest that if chronyd already has all this
+> logic in userland, maybe having it calculate and call settimeofday()
+> on resume from userland instead of pushing half of that logic into the
+> kernel?
 
-Note that on any system using systemd, the kernel hctosys will be used
-to the the system time at boot so you may be already more than a second
-away from the actual time.
+My suggestion would leave the correction calculation to userspace which
+is definitively where it should stay.
 
-> > Alternatively I'd go very simple and just put the correction factor in
-> > a boot argument.
 > 
-> This works for my use case though it won't be useful to a general
-> distro. Would you have one argument being used regardless of where the
-> sleep injection was coming from or would you try to tie it to the
-> persistent clock and/or a specific RTC?
+> > > Alternatively I'd go very simple and just put the correction factor in
+> > > a boot argument.
+> >
+> > This works for my use case though it won't be useful to a general
+> > distro. Would you have one argument being used regardless of where the
+> > sleep injection was coming from or would you try to tie it to the
+> > persistent clock and/or a specific RTC?
+> 
+> I agree it is an important thing to consider how to generalize this
+> for common use (which is why I prefer the approach that works
+> *without* any distro integration).
+> 
+> But it's also important to consider if the added complexity is
+> *really* needed in the general case.
+> 
+> thanks
+> -john
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
