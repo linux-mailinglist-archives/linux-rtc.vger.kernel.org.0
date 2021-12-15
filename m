@@ -2,172 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5BB476613
-	for <lists+linux-rtc@lfdr.de>; Wed, 15 Dec 2021 23:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D00B476657
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 00:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbhLOWoG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 15 Dec 2021 17:44:06 -0500
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:40809 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229919AbhLOWoF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 17:44:05 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 795443200993;
-        Wed, 15 Dec 2021 17:44:04 -0500 (EST)
-Received: from imap43 ([10.202.2.93])
-  by compute4.internal (MEProxy); Wed, 15 Dec 2021 17:44:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=Z7/1T82NiBSfL1mx6xqXOcBRkHJyE4Q
-        m2TVOxX3axkw=; b=lHHZd7lBWZS8b/LXM1lLcWBc8qRTd6DV6UrNN9fNfwyUQZC
-        ATqNbSpeWAoXN6mTFpspv35BcYPN2kEhgKopgMJS7/4UThXVrx3I2ygj56v72wfN
-        bfvx6uWoAieiJszeZH5SRDXS5tGLdlxXCETYq0oV7l2EiB37a7GYRiG9Ni/sGCam
-        oNct40Mh3h0eaTFaGAhNx013m/zOHc268sPQvADdfmwSZKnv2mBXRk7HW8pAnrwC
-        HbUzL0LxubCks5rdN/4uy+mSHoaQd2S39cMld8Ht0eUm4M0p51nz4pvolCXiHUl8
-        iBSp34tbcflFlmNNMoPqseKbGOjaPrZJCUndlbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Z7/1T8
-        2NiBSfL1mx6xqXOcBRkHJyE4Qm2TVOxX3axkw=; b=QjpOpJQ1xYOlm9tTzGiSY6
-        DLh5gWmp6if8sJ2k9g6+u+CPqjwRi0zQKGnd3cph/LQIERHyRBx8tStnOEHnWUMI
-        G1RfY8qWZHuyCo6iN8BStWOGrRzzMaFnQ7GSzhUNq0L7mJxQYM5CGY+QoPK8aOgS
-        J4tAQJ4iTvbQv/RSKqZRBuJl3Qqpj3DSGbnEEuGw3eDTwu+ivShCe2Ff3T2+VRwy
-        Qs5qE3WO0YYsSPxjW3BvZHzbjw03f4ngoSDxnVPGlNy08QGtYbZPkfP8jgKuqPON
-        VO4D/VuVM/EP6dI8qs9VanT94Vd7vHkTI4IYIELOQL2v9iZ1rPSI2jl+p9OUTzuA
-        ==
-X-ME-Sender: <xms:s2-6YcMxZGiDSkdwnKbbAzWzokuLzIhdrgUuGUi5Bv-Ku3fhDgvs1g>
-    <xme:s2-6YS9-GLmltlcDOE9mRQZbZnKqJlGrzUFNnaiv8E17YeCkyPnZSwpi9h2o_rdDo
-    BaBUDcdDjvVpoJo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrledvgdduieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdflohgv
-    lhcuffgrnhhivghlshdfuceojhgurghnihgvlhhssehsvghnthdrtghomheqnecuggftrf
-    grthhtvghrnhephfduudevveefuddtveefveejleekfeevvdevgfehvdelteehgffgudej
-    fffffeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epjhgurghnihgvlhhssehsvghnthdrtghomh
-X-ME-Proxy: <xmx:s2-6YTRMgN1yPDmS5fDJDCt4ih0dO3I67M2tb6JTXxpBEP4XfjU4rA>
-    <xmx:s2-6YUuW6jBK1QzueQBlMq-Sv4FlzoOjtlyfOO3USdys_BJrnwQqLw>
-    <xmx:s2-6YUckUWrwgiwea16z8QT_k5PptnmBsS0Qt3RdSvCyWWpbIRY4jA>
-    <xmx:s2-6YZElAznXxjzTdUoqT5gwRP6yjdl9ceyKUFJQDB8OxmfvlYJyJA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D7DD4AC03DB; Wed, 15 Dec 2021 17:44:03 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4524-g5e5d2efdba-fm-20211214.001-g5e5d2efd
-Mime-Version: 1.0
-Message-Id: <83deaa79-39eb-4fd7-ad80-9d233fd6fdbb@www.fastmail.com>
-In-Reply-To: <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+        id S231699AbhLOXKv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 15 Dec 2021 18:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231638AbhLOXKv (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 15 Dec 2021 18:10:51 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBB6C06173E
+        for <linux-rtc@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id b19so33856599ljr.12
+        for <linux-rtc@vger.kernel.org>; Wed, 15 Dec 2021 15:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
+        b=ChEBPDb8pXFVDfq44AJ/HKzPCkqcS2H4CAqjTnUdbGcwdE+8ICS219FWqZqsO1PcrP
+         pFkxIyUKYpFCTxjcs8i5fIhu40y4+ot+YK3lLjE/lSnOqrGFfnWcyzPThJCkBdw7m0gM
+         ZfKqw1uxsnKUbFGpGydoXy+dEzY5ClXsgwjSNV5FSZcEfu2iQuRmrwaH1cCKZv0YTFDH
+         IbfiwU4MntfMg7IIVEUku+IFYeFNVWTgwwZCDiDQeDuJ4Rl/ELLQV/BXUoWZdLNKbClX
+         8NsjywQycnXF/9KN2AFFREOJ+zR0GaqJo0V6v1yD7B5LDwtIFgk4d6PoOzhKXc/uzNLv
+         SbNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y7DAUjl0wbjv/4De3uR/B1mDYliz+uJw6v1sVT86P/0=;
+        b=SlXqNcxcombYEDFYzlJ6qKP/Wue9qwBpGS6KsS5teovVLOCAg3BPC9li4/MTEadato
+         H6ad5Wy8bTLQO23KczXE8JkDMPhrwcITcYxlaQjNqXQXNk5PgVyLXF8k8bVwMwO4tLuj
+         pGktf6BDcWfmcC8WirKFifyQH6fp/mKEKZbeCoLfbMOd4sLjAhtL1i0oS6+y0r+yAeuJ
+         IMjATFFJ2cvuQiFi5gYA0T8IJpyCFkLSc3kdOreeUiXxHzmraV2MInfjidPqDuu+JEdG
+         kKHPmlmf+3JWqUayUkQ2hJLr3DwrgpZht1sVUafWcTDdVvq/oxZbGrMW76375fgvYWHO
+         KGew==
+X-Gm-Message-State: AOAM531MeSrXcJVunC+4wzHgBuglruYfv58L+c4OyUBptP4SFd35G8/o
+        MQNHNkYtlwBnsfytJ6DBTdb1GbTTKxyGGmNaD3F4Cg==
+X-Google-Smtp-Source: ABdhPJx4cvTTBXFqEZkT1GB0kUVQZrVn1kPQL0HpO20VRBPmvBRZLZsWMjSZw5LuWPt5oJFsHz66EGtUKPCrbnbAwuA=
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr12740025ljh.175.1639609849022;
+ Wed, 15 Dec 2021 15:10:49 -0800 (PST)
+MIME-Version: 1.0
 References: <5af5d2a5-767c-d313-3be6-cb6f426f1980@sent.com>
  <b074f506-2568-4506-9557-4a9bc9cbea83@www.fastmail.com> <87wnkbuuuz.ffs@tglx>
  <4bb238e1-e8fa-44e6-9f5e-d047d1d4a892@www.fastmail.com> <8735mvthk6.ffs@tglx>
- <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com>
- <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
-Date:   Wed, 15 Dec 2021 15:42:05 -0700
-From:   "Joel Daniels" <jdaniels@sent.com>
-To:     "John Stultz" <john.stultz@linaro.org>
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Stephen Boyd" <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        "Alessandro Zummo" <a.zummo@towertech.it>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, x86@kernel.org
+ <2ab24da8-e37d-426a-9500-b7541d21f8a3@www.fastmail.com> <CALAqxLXf6TmOn_jCOv68oop=4On+CN-p_KkN-70BDt9OjQhzUw@mail.gmail.com>
+ <Ybpe/ND+MQq6tqoR@piout.net> <CALAqxLWe13ZghdWphzWZZsRGa+MeAH58syfem6ktDFHF0WG4Dg@mail.gmail.com>
+ <87pmpxlcrd.ffs@tglx>
+In-Reply-To: <87pmpxlcrd.ffs@tglx>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 15 Dec 2021 15:10:37 -0800
+Message-ID: <CALAqxLUz8c-mOMVUsHj39Vbh35wHA1a8QfbTjLFrnL8qi2Ju6Q@mail.gmail.com>
 Subject: Re: Time keeping while suspended in the presence of persistent clock drift
-Content-Type: text/plain
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Joel Daniels <jdaniels@sent.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi John,
-
-Thanks for your feedback.
-
->>    [A] On machines with a persistent clock how is userspace supposed
->>        to be sure what drift to measure? Can it assume that the drift
->>        of the persistent clock used for sleep time injection is the
->>        same as the drift of /dev/rtc? This seems dangerous.
+On Wed, Dec 15, 2021 at 2:33 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> Yea, there can be multiple RTCs as well.
+> On Wed, Dec 15 2021 at 14:02, John Stultz wrote:
+> > On Wed, Dec 15, 2021 at 1:32 PM Alexandre Belloni
+> >> I'd rather lean towards the timekeeping code doing that. The RTC
+> >
+> > Heh, touche'!  :)
+> >
+> >> subsystem doesn't know which RTC has to be used.
+> >
+> > Though the RTC layer *is* the one that tracks which RTC is used, via
+> > the logic in drivers/rtc/class.c, and the timekeeping core already has
+> > adjtimex for timekeeping corrections, so if we're correcting
+> > underlying RTCs it seems such tuning would best be done in the RTC
+> > layer.
+> >
+> > Though how the persistent_clock interface ties into such corrections
+> > would be a separate thing.
 >
->>    [B] Sleep time injection can come from the "persistent clock" or,
->>        if there is no persistent clock, from an RTC driver. I'd like
->>        to correct for drift from the perisistant clock but not touch
->>        the RTC driver sleep time injection mechanism. Is this
->>        acceptable or do people feel that any drift correction should
->>        work with both mechanisms in order to ensure a polished
->>        interface?
+> Might be the final trigger to get rid of that leftover from the last
+> millenium?
 >
-> This dual interface comes from the desire to support both the more
-> atomic/earlier correction we can do w/ the persistent_clock interface
-> while holding the timekeeping lock, while also supporting RTC devices
-> that may sleep when being read, or may have dependencies that aren't
-> ready that early in resume.
-> 
-> Admittedly having two separate abstractions here is a bit of a pain,
-> and fixing just one side doesn't make it better.
 
-Thanks; that makes sense to me. I suppose I ought to have a separate
-sleep-time-injection drift correction parameter per RTC? That way the
-kernel wouldn't do something silly if somebody hotplugs one RTC while
-removing another. The persistent clock is almost always exposed as an
-RTC as well, so either I could try to be very clever and make the
-persistent clock share the drift correction parameter of its
-corresponding RTC or I could just maintain a separate correction for
-the persistent clock.
+Yeah. Simplifying probably helps for consistency and maintainability.
+(on top of the rtc and persistent clock, we also have the nonstop
+clocksources that keep running through suspend and can be used. :)
 
->>    [C] Some users may want to correct for drift during suspend-to-RAM
->>        but during suspend-to-disk they might boot into some other
->>        operating system which itself sets the CMOS RTC. Hopefully,
->>        this could be solved from userspace by changing the drift
->>        correction parameter to 0 just before a suspend-to-disk
->>        operation.
->
-> Oof. This feels particularly complex and fragile to try to address.
+It's just that window after resume but before the sleep time injection
+where time would be incorrect always made me uncomfortable, so it was
+nice to have some correct way to avoid that, even if all hardware
+couldn't utilize it.  But as I'm less involved here, maybe someone
+else can simplify things and live with that worry. :)
 
-Yes, I think we should ignore this issue and treat all suspend/resume
-cycles identically. People who regularly dual-boot can just not use
-the new feature.
-
-> Personally, I'm not sure this warrants adding new userland interfaces
-> for. I'd probably lean towards having the RTC framework internally
-> measure and correct for drift, rather than adding an extra knob in
-> userland.
-
-Measuring RTC drift is hard. The standard PC RTC has only one second
-resolution so you have to wait for the "edge" of a tick and measure
-drift over an extended period of time. If you have some NTP daemon
-slewing your system clock while you try to measure RTC drift then
-you will get garbage. If your motherboard gets hot enough then your
-RTC will run at a different rate while the machine is on than while
-it is off.
-
-I know of three programs that measure RTC drift today:
-
-  # hwclock: you must use it to set the RTC twice, the second time
-    with the "--update-drift" argument. The manual suggests waiting
-    one day between calls. The drift and offset information is
-    stored in /etc/adjtime. On boot "hwclock --hctosys" will use this
-    to set the system clock correctly.
-
-  # adjtimex (program not syscall) when run with the "--compare"
-    option. It uses a least squares estimate from multiple samples
-    which by default are each 10 seconds apart.
-
-  # chrony with the "rtcfile" directive. It tracks the RTC over time
-    to measure its offset and drift similarly to how it tracks the
-    system clock drift. Tracking information is saved into
-      /var/lib/chrony/rtc
-    and can be used (via "chronyd -s") to set the system clock
-    correctly on next boot.
-
-Any method of measuring the drift is going to need to persist the
-drift coefficient to disk so that it can set the system clock
-correctly on boot. I think it would be best for the kernel to use this
-same coefficient.
-
-> Alternatively I'd go very simple and just put the correction factor in
-> a boot argument.
-
-This works for my use case though it won't be useful to a general
-distro. Would you have one argument being used regardless of where the
-sleep injection was coming from or would you try to tie it to the
-persistent clock and/or a specific RTC?
+thanks
+-john
