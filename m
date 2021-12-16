@@ -2,70 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB755476E2A
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 10:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB482476E3F
+	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 10:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbhLPJts (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Dec 2021 04:49:48 -0500
-Received: from relay12.mail.gandi.net ([217.70.178.232]:41089 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbhLPJts (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Dec 2021 04:49:48 -0500
+        id S233066AbhLPJut (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Dec 2021 04:50:49 -0500
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:34295 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233223AbhLPJus (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Dec 2021 04:50:48 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 2E19A200009;
-        Thu, 16 Dec 2021 09:49:45 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7102024000D;
+        Thu, 16 Dec 2021 09:50:45 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 10:50:44 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.ne@posteo.net>,
-        linux-rtc@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
+        Ash Logan <ash@heyquark.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.ne@posteo.net>,
         Rob Herring <robh+dt@kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Ash Logan <ash@heyquark.com>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube, Wii and Wii U
-Date:   Thu, 16 Dec 2021 10:49:44 +0100
-Message-Id: <163964813197.6786.14005810276404182021.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211215175501.6761-1-linkmauve@linkmauve.fr>
-References: <20211027223516.2031-1-linkmauve@linkmauve.fr> <20211215175501.6761-1-linkmauve@linkmauve.fr>
+        Paul Mackerras <paulus@samba.org>,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube,
+ Wii and Wii U
+Message-ID: <YbsL9C6qjo/8SgjU@piout.net>
+References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
+ <20211215175501.6761-1-linkmauve@linkmauve.fr>
+ <87tuf9kv6c.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tuf9kv6c.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 15 Dec 2021 18:54:56 +0100, Emmanuel Gil Peyrot wrote:
-> These three consoles share a device, the MX23L4005, which contains a
-> clock and 64 bytes of SRAM storage, and is exposed on the EXI bus
-> (similar to SPI) on channel 0, device 1.  This driver allows it to be
-> used as a Linux RTC device, where time can be read and set.
+Hello,
+
+On 16/12/2021 15:52:59+1100, Michael Ellerman wrote:
+> > Emmanuel Gil Peyrot (5):
+> >   rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
+> >   rtc: gamecube: Report low battery as invalid data
+> >   powerpc: wii.dts: Expose HW_SRNPROT on this platform
+> >   powerpc: gamecube_defconfig: Enable the RTC driver
+> >   powerpc: wii_defconfig: Enable the RTC driver
+> >
+> >  drivers/rtc/Kconfig                     |  11 +
+> >  drivers/rtc/Makefile                    |   1 +
+> >  drivers/rtc/rtc-gamecube.c              | 377 ++++++++++++++++++++++++
 > 
-> The hardware also exposes two timers, one which shuts down the console
-> and one which powers it on, but these aren’t supported currently.
+> This is basically an rtc series as far as I'm concerned.
 > 
-> [...]
+> >  arch/powerpc/boot/dts/wii.dts           |   5 +
+> >  arch/powerpc/configs/gamecube_defconfig |   2 +-
+> >  arch/powerpc/configs/wii_defconfig      |   2 +-
+> 
+> I have nothing queued in the powerpc tree that touches any of those
+> files, so conflicts are unlikely.
+> 
+> So I'm happy for this to go via the rtc tree whenever it's ready.
+> 
+> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Applied, thanks!
-
-[1/5] rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
-      commit: 86559400b3ef9de93ba50523cffe767c35cd531a
-[2/5] rtc: gamecube: Report low battery as invalid data
-      commit: 322539a014bcd24cbb9281832c09b24e07912237
-[3/5] powerpc: wii.dts: Expose HW_SRNPROT on this platform
-      commit: 5479618e1e2641dd57352a73b7b7b2f6908fbeee
-[4/5] powerpc: gamecube_defconfig: Enable the RTC driver
-      commit: 57bd7d356506b713d0df8d8e42da7810a18864df
-[5/5] powerpc: wii_defconfig: Enable the RTC driver
-      commit: 69e8ba80ddda4db31e59facbf2db19773ad3785b
-
-This one didn't apply ceanly but I believe I did the right thing. Can you check?
+That's done, thanks.
 
 
-Best regards,
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
