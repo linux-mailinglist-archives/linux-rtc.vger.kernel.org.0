@@ -2,123 +2,116 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743C7477DF9
-	for <lists+linux-rtc@lfdr.de>; Thu, 16 Dec 2021 21:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624944783C0
+	for <lists+linux-rtc@lfdr.de>; Fri, 17 Dec 2021 04:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234048AbhLPU6j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 16 Dec 2021 15:58:39 -0500
-Received: from 82-65-109-163.subs.proxad.net ([82.65.109.163]:47070 "EHLO
-        luna.linkmauve.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbhLPU6j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Dec 2021 15:58:39 -0500
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id D134AF40EA4; Thu, 16 Dec 2021 21:58:36 +0100 (CET)
-Date:   Thu, 16 Dec 2021 21:58:36 +0100
-From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        id S232554AbhLQDrg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 16 Dec 2021 22:47:36 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:41842 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231143AbhLQDrg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 16 Dec 2021 22:47:36 -0500
+Received: by mail-ot1-f47.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so1312486otl.8;
+        Thu, 16 Dec 2021 19:47:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=IjN1lQ8TMy6cozBFxz44Wo6W8rmof9sCHtnvpj2Bo38=;
+        b=uAGH3B6sc+JS3vMNEzOZb41oxZ1e2DuebanCRayHkCw3WnfJ40SipX0IoGdoJ4X+oe
+         FMMl7X5Zs3+pKsptPlvMd9eTs+U35uUoFtGM+41zaTui2NB7C/ikqQ47gtsEFvNLUaB/
+         K77L3ddR3ZdAAHQNv4eWbmggnf2XjjcPSun8W/n/a6MFIj740/aEYtTmmxm3yvygciAY
+         qmzI7K61tPKVUKzXSaTeXnpg0ta6Y4TvbwxChi/HpdNkqmzd64/QQl4CCXN1rbcB9gUb
+         dhAxnBLax0oG7Eq1jUiAJS0YXSCQBHCYmZBuf+bkZigarAsWuGI4wpDUQfUnZBgVynsI
+         uhEg==
+X-Gm-Message-State: AOAM531EBGbNyleBfwQa8RJxB5CdyH1b7NV10+mHL+QH7Ht/MzM5ydB1
+        Xk0U5g4tee9UPem8If22wR6KmtKUeQ==
+X-Google-Smtp-Source: ABdhPJy/kY6Z89M12GyVScc3+lNAcRyL5J+2ADa1Hgwv/kSmIaRfly5bpkzE/qTvRVurygXzGDxbLA==
+X-Received: by 2002:a9d:73d7:: with SMTP id m23mr877918otk.380.1639712855192;
+        Thu, 16 Dec 2021 19:47:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p14sm1386195oou.31.2021.12.16.19.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 19:47:34 -0800 (PST)
+Received: (nullmailer pid 1677946 invoked by uid 1000);
+        Fri, 17 Dec 2021 03:47:33 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-rtc@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.ne@posteo.net>,
-        linux-rtc@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linuxppc-dev@lists.ozlabs.org, Ash Logan <ash@heyquark.com>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH v3 0/5] rtc: nintendo: Add a RTC driver for the GameCube,
- Wii and Wii U
-Message-ID: <20211216205836.yporkr4omon4mdd2@luna>
-Jabber-ID: linkmauve@linkmauve.fr
-References: <20211027223516.2031-1-linkmauve@linkmauve.fr>
- <20211215175501.6761-1-linkmauve@linkmauve.fr>
- <163964813197.6786.14005810276404182021.b4-ty@bootlin.com>
- <20211216202220.y6rctd2k72yuya5w@luna>
- <Ybun5qp6DH7qkAGy@piout.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g7bzb2vspv7jrctf"
-Content-Disposition: inline
-In-Reply-To: <Ybun5qp6DH7qkAGy@piout.net>
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
+References: <20211216164037.2888316-1-alexandre.ghiti@canonical.com> <20211216164037.2888316-2-alexandre.ghiti@canonical.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: Migrate DA9063 text bindings to YAML
+Date:   Thu, 16 Dec 2021 21:47:33 -0600
+Message-Id: <1639712853.383823.1677945.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On Thu, 16 Dec 2021 17:40:37 +0100, Alexandre Ghiti wrote:
+> DA9063 devices bindings used text format, so migrate those bindings to YAML
+> format before adding any new bindings.
+> 
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> ---
+> 
+> Changes in v2:
+> - Fix all errors detected with make dt_binding_checks
+> 
+>  .../bindings/input/da9063-onkey.yaml          |  39 ++++++
+>  .../devicetree/bindings/mfd/da9063.txt        | 111 ------------------
+>  .../devicetree/bindings/mfd/da9063.yaml       | 105 +++++++++++++++++
+>  .../bindings/regulator/da9063-regulator.yaml  |  51 ++++++++
+>  .../devicetree/bindings/rtc/da9063-rtc.yaml   |  31 +++++
+>  .../bindings/watchdog/da9063-watchdog.yaml    |  31 +++++
+>  6 files changed, 257 insertions(+), 111 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/input/da9063-onkey.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/da9063.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/da9063.yaml
+>  create mode 100644 Documentation/devicetree/bindings/regulator/da9063-regulator.yaml
+>  create mode 100644 Documentation/devicetree/bindings/rtc/da9063-rtc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/da9063-watchdog.yaml
+> 
 
---g7bzb2vspv7jrctf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-On Thu, Dec 16, 2021 at 09:56:06PM +0100, Alexandre Belloni wrote:
-> On 16/12/2021 21:22:20+0100, Emmanuel Gil Peyrot wrote:
-> > On Thu, Dec 16, 2021 at 10:49:44AM +0100, Alexandre Belloni wrote:
-> > > On Wed, 15 Dec 2021 18:54:56 +0100, Emmanuel Gil Peyrot wrote:
-> > > > These three consoles share a device, the MX23L4005, which contains a
-> > > > clock and 64=C2=A0bytes of SRAM storage, and is exposed on the EXI =
-bus
-> > > > (similar to SPI) on channel 0, device 1.  This driver allows it to =
-be
-> > > > used as a Linux RTC device, where time can be read and set.
-> > > >=20
-> > > > The hardware also exposes two timers, one which shuts down the cons=
-ole
-> > > > and one which powers it on, but these aren=E2=80=99t supported curr=
-ently.
-> > > >=20
-> > > > [...]
-> > >=20
-> > > Applied, thanks!
-> > >=20
-> > > [1/5] rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
-> > >       commit: 86559400b3ef9de93ba50523cffe767c35cd531a
-> > > [2/5] rtc: gamecube: Report low battery as invalid data
-> > >       commit: 322539a014bcd24cbb9281832c09b24e07912237
-> > > [3/5] powerpc: wii.dts: Expose HW_SRNPROT on this platform
-> > >       commit: 5479618e1e2641dd57352a73b7b7b2f6908fbeee
-> > > [4/5] powerpc: gamecube_defconfig: Enable the RTC driver
-> > >       commit: 57bd7d356506b713d0df8d8e42da7810a18864df
-> > > [5/5] powerpc: wii_defconfig: Enable the RTC driver
-> > >       commit: 69e8ba80ddda4db31e59facbf2db19773ad3785b
-> > >=20
-> > > This one didn't apply ceanly but I believe I did the right thing. Can=
- you check?
-> >=20
-> > I believe you didn=E2=80=99t, at least that commit[1] seems to have one=
- =E2=80=9C+=E2=80=9D too
-> > many in the modified line, whereas the previous one[2] doesn=E2=80=99t.
-> >=20
->=20
-> I knew I needed you to check, this is fixed now.
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git/commit=
-/?id=3Dc636783d594f6cfc95db51c796761719317ce5eb
+yamllint warnings/errors:
 
-Perfect, thanks a lot!
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: 'interrupt-controller', 'onkey', 'regulators', 'rtc', 'wdt' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/trivial-devices.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: regulators: 'compatible' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: regulators: 'bcore1', 'ldo11' do not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.example.dt.yaml: da9063@58: 'wdt' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/da9063.yaml
 
->=20
->=20
-> --=20
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+doc reference errors (make refcheckdocs):
+Documentation/devicetree/bindings/input/da9062-onkey.txt: Documentation/devicetree/bindings/mfd/da9063.txt
 
---=20
-Emmanuel Gil Peyrot
+See https://patchwork.ozlabs.org/patch/1569315
 
---g7bzb2vspv7jrctf
-Content-Type: application/pgp-signature; name="signature.asc"
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
------BEGIN PGP SIGNATURE-----
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-iQEzBAABCAAdFiEEjrVT1SzTln43kCLJOWgfYkb2LpAFAmG7qHkACgkQOWgfYkb2
-LpB+lggAqK4bBYvcQJuO7l3AfG48bohYpR73j6lYIN6SfBi5N2F17LKCDz0Km5ry
-8UYKuEIz1qt3LKKXc8SmEEmd5U8sP1rwy0fZKDAjy2OZu+2n+g7tpAmEj6wu7qdQ
-I29nqeALUbY179Ykk3VyHvT9NHgqe4c7LMHqbuEM9mSFQlipOpeW4j0uNCFJHezE
-ROx6Fuz5Gp6STzArDHpgtGrTS3yvt8KeuoeX8Xt2v1VRLTgYPlCnJLym7eaamH1M
-TcId8j44UNck0AGfwTPgLUCM/IKDQxh+sEqmaexBJOa3EM6naG63QxUY9eegVYZv
-M3/zwHnr+VPRatCx5NzZf+a+rjFDuw==
-=VwOp
------END PGP SIGNATURE-----
+pip3 install dtschema --upgrade
 
---g7bzb2vspv7jrctf--
+Please check and re-submit.
+
