@@ -2,277 +2,194 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 175F447BC02
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 09:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87FD47BCDA
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 10:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbhLUIno (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Dec 2021 03:43:44 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:24875 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbhLUInn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 03:43:43 -0500
+        id S236068AbhLUJ3O (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Dec 2021 04:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235325AbhLUJ3N (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 04:29:13 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2FC061401
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Dec 2021 01:29:13 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so1231763wmb.0
+        for <linux-rtc@vger.kernel.org>; Tue, 21 Dec 2021 01:29:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1640076223; x=1671612223;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=FoteKoRJX78H5c16Zg+pD+tD6dRTUsTN1ii4EqBF/l8=;
-  b=NmfqEQ168vy0RaxMh3UaJngwYAHqp+3BIJgNwoKqRj1G9qfTi2N0mH7N
-   tvdsK11KRBICGGGFUc/BINsdLwGSKW8ORNCYUvCHAbMCWva43YLsR69U2
-   Ux0h677nl/Z3QMzyAxtbpvvuUSDo6R30LWGyUoIecdVyFW4SM62T4dxEw
-   8=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 21 Dec 2021 00:43:43 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2021 00:43:42 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 00:43:42 -0800
-Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Tue, 21 Dec 2021 00:43:39 -0800
-From:   jianbinz <quic_jianbinz@quicinc.com>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-CC:     jianbinz <quic_jianbinz@quicinc.com>, <quic_fenglinw@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_collinsd@quicinc.com>,
-        <quic_aghayal@quicinc.com>, <quic_maggarwa@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: [PATCH] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired before the driver probed
-Date:   Tue, 21 Dec 2021 16:43:18 +0800
-Message-ID: <20211221084318.8125-1-quic_jianbinz@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=E+OUjvCnSBIVoOPsykbmMVaOVrA8L4E94Kk6TCgw0jo=;
+        b=IoxK+ClGrvbMTQhykcalbweIya3OerwbEqChoVnIW6R6LBwBrV6i4dOSWSwwqiLfLa
+         7InK7hzSuWUW2YPN2Z+hCyewoICLGwdrVcNh8pA17iWeJaPr9YDs056IgxgAbBvbJhEY
+         83QdtyYndPTHWvPqGPD6Kbtk4yQihDOB7idzkRuPTXbLDj1PI669uT95WLWNHOjkmzwG
+         I2DsP4SMEVe8KIz9AWhg87l0rkkaOaDfOJddvSDahouDUuw1GyDEGpZSySsQDJrcjlUG
+         +kjFHokxwHrADmwx5IjFVbaX2Zjepq/esd2tl9/ORsUtdd2bODMpY6YfuoUw5UxEWsXO
+         wLCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=E+OUjvCnSBIVoOPsykbmMVaOVrA8L4E94Kk6TCgw0jo=;
+        b=G48fstpCPfcpYzwCpA09NMwCrWPx0hkiElpO8dQxk6hOWCXBsYrT3aobSe5FxFuw3u
+         sAeJAI/pVz0DgvdXxjBQpoRsNg6Hc1SFN5JUPURhQG6Jb/PHyGBxikH7+z3HTeeUZy64
+         XjigJzD7IyH2GT47j1OKPS3xZILT+B6BbAYkYyhTtYUCe5mlwZWblNkOe/OBG35NWmzp
+         4bIknE5CWo/in/VESGGf1XsQhGLNKxb2bGI3buFNjkHCm74LhEoJLYsMulWq//iiw3Ld
+         hQOuSOg17MJc1RUmdaly7bpl4LZ6Ushb5VkVbc3N0GP2FajksoBL4F448Fmw34ll/vQF
+         uxYw==
+X-Gm-Message-State: AOAM532Ne1t/++/oLMR6T5O4Lf1vWI3pb2e+MO7qJ5dn54G1AeNhuJQ4
+        1m3PcElxkxU3YSwOzxIcQweSLw==
+X-Google-Smtp-Source: ABdhPJxAoAbZw7yJ1GaBfn5OQqJrEqLtDyo/KsPDod8usButB1eKgUdw+LQJhbJfofrl3Z2BJKX7Rg==
+X-Received: by 2002:a7b:cb55:: with SMTP id v21mr1874464wmj.147.1640078951624;
+        Tue, 21 Dec 2021 01:29:11 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id c9sm1768897wml.12.2021.12.21.01.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 01:29:10 -0800 (PST)
+Date:   Tue, 21 Dec 2021 09:29:09 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v5 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
+Message-ID: <YcGeZVgqNWDyvovW@google.com>
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+ <20211211175951.30763-6-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211211175951.30763-6-luca@lucaceresoli.net>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-If the alarm is triggered before the driver gets probed, the alarm
-interrupt will be missed and it won't be detected, and the stale
-alarm settings will be still retained because of not being cleared.
-Check this condition during driver probe, retrigger the alarm and
-clear the settings manually if it's such case.
+On Sat, 11 Dec 2021, Luca Ceresoli wrote:
 
-Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
----
- drivers/rtc/rtc-pm8xxx.c | 149 ++++++++++++++++++++++++++++++---------
- 1 file changed, 114 insertions(+), 35 deletions(-)
+> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
+> watchdog only.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> 
+> ---
+> 
+> Changes in v5: none
+> 
+> Changes in v4: none
+> 
+> Changes in v3:
+>  - Suggested by Lee Jones:
+>    - move struct mfd_cell to top of file
+>    - remove struct max77714 and its kmalloc, not used after probe
+>    - reword error messages
+>    - add "/* pF */" onto the end of the load_cap line
+> 
+> Changes in v2:
+>  - fix "watchdog" word in heading comment (Guenter Roeck)
+>  - move struct max77714 to .c file (Krzysztof Kozlowski)
+>  - change include guard format (Krzysztof Kozlowski)
+>  - allow building as a module (Krzysztof Kozlowski)
+>  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
+>    (Reported-by: kernel test robot <lkp@intel.com>)
+> ---
+>  MAINTAINERS                  |   2 +
+>  drivers/mfd/Kconfig          |  14 ++++
+>  drivers/mfd/Makefile         |   1 +
+>  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max77714.h |  60 ++++++++++++++
+>  5 files changed, 229 insertions(+)
+>  create mode 100644 drivers/mfd/max77714.c
+>  create mode 100644 include/linux/mfd/max77714.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a08f5167dfe0..ef3ffba828af 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11586,6 +11586,8 @@ MAXIM MAX77714 PMIC MFD DRIVER
+>  M:	Luca Ceresoli <luca@lucaceresoli.net>
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+> +F:	drivers/mfd/max77714.c
+> +F:	include/linux/mfd/max77714.h
+>  
+>  MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
+>  M:	Javier Martinez Canillas <javier@dowhile0.org>
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 3fb480818599..1b9d772bdae6 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -855,6 +855,20 @@ config MFD_MAX77693
+>  	  additional drivers must be enabled in order to use the functionality
+>  	  of the device.
+>  
+> +config MFD_MAX77714
+> +	tristate "Maxim Semiconductor MAX77714 PMIC Support"
+> +	depends on I2C
+> +	depends on OF || COMPILE_TEST
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	help
+> +	  Say yes here to add support for Maxim Semiconductor MAX77714.
+> +	  This is a Power Management IC with 4 buck regulators, 9
+> +	  low-dropout regulators, 8 GPIOs, RTC, watchdog etc. This driver
+> +	  provides common support for accessing the device; additional
+> +	  drivers must be enabled in order to use each functionality of the
+> +	  device.
+> +
+>  config MFD_MAX77843
+>  	bool "Maxim Semiconductor MAX77843 PMIC Support"
+>  	depends on I2C=y
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 0b1b629aef3e..03115cf1336b 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -162,6 +162,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+>  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+>  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+>  obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
+> +obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
+>  obj-$(CONFIG_MFD_MAX77843)	+= max77843.o
+>  obj-$(CONFIG_MFD_MAX8907)	+= max8907.o
+>  max8925-objs			:= max8925-core.o max8925-i2c.o
+> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
+> new file mode 100644
+> index 000000000000..08dfb69bc6e8
+> --- /dev/null
+> +++ b/drivers/mfd/max77714.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Maxim MAX77714 MFD Driver
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index 29a1c65661e9..adba2fdd6645 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-  */
-+
- #include <linux/of.h>
- #include <linux/module.h>
- #include <linux/init.h>
-@@ -64,6 +65,62 @@ struct pm8xxx_rtc {
- 	spinlock_t ctrl_reg_lock;
- };
- 
-+static int pm8xxx_rtc_read_rtc_data(struct pm8xxx_rtc *rtc_dd, unsigned long *rtc_data)
-+{
-+	int rc;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+	unsigned int reg;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	if (rc) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+		return rc;
-+	}
-+
-+	/*
-+	 * Read the LSB again and check if there has been a carry over.
-+	 * If there is, redo the read operation.
-+	 */
-+	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
-+	if (rc < 0) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+		return rc;
-+	}
-+
-+	if (unlikely(reg < value[0])) {
-+		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
-+				      value, sizeof(value));
-+		if (rc) {
-+			dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
-+			return rc;
-+		}
-+	}
-+
-+	*rtc_data = value[0] | (value[1] << 8) | (value[2] << 16) |
-+			((unsigned long)value[3] << 24);
-+
-+	return 0;
-+}
-+
-+static int pm8xxx_rtc_read_alarm_data(struct pm8xxx_rtc *rtc_dd, unsigned long *alarm_data)
-+{
-+	int rc;
-+	u8 value[NUM_8_BIT_RTC_REGS];
-+
-+	rc = regmap_bulk_read(rtc_dd->regmap, rtc_dd->regs->alarm_rw, value,
-+			      sizeof(value));
-+	if (rc) {
-+		dev_err(rtc_dd->rtc_dev, "RTC read alarm data failed\n");
-+		return rc;
-+	}
-+
-+	*alarm_data = value[0] | (value[1] << 8) | (value[2] << 16) |
-+			((unsigned long)value[3] << 24);
-+
-+	return 0;
-+}
-+
- /*
-  * Steps to write the RTC registers.
-  * 1. Disable alarm if enabled.
-@@ -175,40 +232,15 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	int rc;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned long secs;
--	unsigned int reg;
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
--	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
-+	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &secs);
- 	if (rc) {
--		dev_err(dev, "RTC read data register failed\n");
-+		dev_err(dev, "RTC read time failed\n");
- 		return rc;
- 	}
- 
--	/*
--	 * Read the LSB again and check if there has been a carry over.
--	 * If there is, redo the read operation.
--	 */
--	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
--	if (rc < 0) {
--		dev_err(dev, "RTC read data register failed\n");
--		return rc;
--	}
--
--	if (unlikely(reg < value[0])) {
--		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
--				      value, sizeof(value));
--		if (rc) {
--			dev_err(dev, "RTC read data register failed\n");
--			return rc;
--		}
--	}
--
--	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
--	       ((unsigned long)value[3] << 24);
--
- 	rtc_time64_to_tm(secs, tm);
- 
- 	dev_dbg(dev, "secs = %lu, h:m:s == %ptRt, y-m-d = %ptRdr\n", secs, tm, tm);
-@@ -267,21 +299,16 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
- {
- 	int rc;
- 	unsigned int ctrl_reg;
--	u8 value[NUM_8_BIT_RTC_REGS];
- 	unsigned long secs;
- 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
- 
--	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
--			      sizeof(value));
-+	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &secs);
- 	if (rc) {
--		dev_err(dev, "RTC alarm time read failed\n");
-+		dev_err(dev, "RTC alarm data read failed\n");
- 		return rc;
- 	}
- 
--	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
--	       ((unsigned long)value[3] << 24);
--
- 	rtc_time64_to_tm(secs, &alarm->time);
- 
- 	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-@@ -394,6 +421,52 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+/*
-+ * Trigger the alarm event and clear the alarm settings
-+ * if the alarm data has been behind the RTC data which
-+ * means the alarm has been triggered before the driver
-+ * is probed.
-+ */
-+static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
-+{
-+	int rc;
-+	unsigned long rtc_data, alarm_data, irq_flags;
-+	unsigned int ctrl_reg, alarm_en;
-+	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-+
-+	spin_lock_irqsave(&rtc_dd->ctrl_reg_lock, irq_flags);
-+
-+	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &rtc_data);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "rtc read rtc data failed\n");
-+		return rc;
-+	}
-+
-+	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &alarm_data);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "rtc read alarm data failed\n");
-+		return rc;
-+	}
-+
-+	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
-+	if (rc) {
-+		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+		dev_err(rtc_dd->rtc_dev, "Read from RTC alarm control register failed\n");
-+		return rc;
-+	}
-+
-+	spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
-+
-+	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
-+
-+	if (alarm_en && rtc_data >= alarm_data)
-+		pm8xxx_alarm_trigger(0, rtc_dd);
-+
-+	return 0;
-+}
-+
- static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
- {
- 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
-@@ -527,7 +600,13 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
- 		return rc;
- 	}
- 
--	return devm_rtc_register_device(rtc_dd->rtc);
-+	rc =  devm_rtc_register_device(rtc_dd->rtc);
-+	if (rc < 0) {
-+		dev_err(&pdev->dev, "Register RTC device failed\n");
-+		return rc;
-+	}
-+
-+	return pm8xxx_rtc_init_alarm(rtc_dd);
- }
- 
- #ifdef CONFIG_PM_SLEEP
+I'm only mentioning this because you are still missing some reviews.
+
+But I'd prefer for drivers not to describe themselves as MFD Drivers.
+
+The term Parent or Core driver is usually better.
+
+If you have to respin the set, please fix it.
+
+If not, please sent a subsequent fix-up.
+
+Once fixed:
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
