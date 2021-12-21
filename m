@@ -2,55 +2,22 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C87FD47BCDA
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 10:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A9747BCFF
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 10:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbhLUJ3O (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Dec 2021 04:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235325AbhLUJ3N (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 04:29:13 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F2FC061401
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Dec 2021 01:29:13 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id bg2-20020a05600c3c8200b0034565c2be15so1231763wmb.0
-        for <linux-rtc@vger.kernel.org>; Tue, 21 Dec 2021 01:29:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=E+OUjvCnSBIVoOPsykbmMVaOVrA8L4E94Kk6TCgw0jo=;
-        b=IoxK+ClGrvbMTQhykcalbweIya3OerwbEqChoVnIW6R6LBwBrV6i4dOSWSwwqiLfLa
-         7InK7hzSuWUW2YPN2Z+hCyewoICLGwdrVcNh8pA17iWeJaPr9YDs056IgxgAbBvbJhEY
-         83QdtyYndPTHWvPqGPD6Kbtk4yQihDOB7idzkRuPTXbLDj1PI669uT95WLWNHOjkmzwG
-         I2DsP4SMEVe8KIz9AWhg87l0rkkaOaDfOJddvSDahouDUuw1GyDEGpZSySsQDJrcjlUG
-         +kjFHokxwHrADmwx5IjFVbaX2Zjepq/esd2tl9/ORsUtdd2bODMpY6YfuoUw5UxEWsXO
-         wLCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=E+OUjvCnSBIVoOPsykbmMVaOVrA8L4E94Kk6TCgw0jo=;
-        b=G48fstpCPfcpYzwCpA09NMwCrWPx0hkiElpO8dQxk6hOWCXBsYrT3aobSe5FxFuw3u
-         sAeJAI/pVz0DgvdXxjBQpoRsNg6Hc1SFN5JUPURhQG6Jb/PHyGBxikH7+z3HTeeUZy64
-         XjigJzD7IyH2GT47j1OKPS3xZILT+B6BbAYkYyhTtYUCe5mlwZWblNkOe/OBG35NWmzp
-         4bIknE5CWo/in/VESGGf1XsQhGLNKxb2bGI3buFNjkHCm74LhEoJLYsMulWq//iiw3Ld
-         hQOuSOg17MJc1RUmdaly7bpl4LZ6Ushb5VkVbc3N0GP2FajksoBL4F448Fmw34ll/vQF
-         uxYw==
-X-Gm-Message-State: AOAM532Ne1t/++/oLMR6T5O4Lf1vWI3pb2e+MO7qJ5dn54G1AeNhuJQ4
-        1m3PcElxkxU3YSwOzxIcQweSLw==
-X-Google-Smtp-Source: ABdhPJxAoAbZw7yJ1GaBfn5OQqJrEqLtDyo/KsPDod8usButB1eKgUdw+LQJhbJfofrl3Z2BJKX7Rg==
-X-Received: by 2002:a7b:cb55:: with SMTP id v21mr1874464wmj.147.1640078951624;
-        Tue, 21 Dec 2021 01:29:11 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id c9sm1768897wml.12.2021.12.21.01.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 01:29:10 -0800 (PST)
-Date:   Tue, 21 Dec 2021 09:29:09 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
+        id S236434AbhLUJiP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Dec 2021 04:38:15 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:49375 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236423AbhLUJiO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 04:38:14 -0500
+Received: from host-79-2-93-196.business.telecomitalia.it ([79.2.93.196]:35472 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mzbb1-0007jy-QE; Tue, 21 Dec 2021 10:38:11 +0100
+Subject: Re: [PATCH v5 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,133 +30,152 @@ Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         Chiwoong Byun <woong.byun@samsung.com>,
         Laxman Dewangan <ldewangan@nvidia.com>,
         Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v5 5/9] mfd: max77714: Add driver for Maxim MAX77714 PMIC
-Message-ID: <YcGeZVgqNWDyvovW@google.com>
 References: <20211211175951.30763-1-luca@lucaceresoli.net>
- <20211211175951.30763-6-luca@lucaceresoli.net>
+ <20211211175951.30763-6-luca@lucaceresoli.net> <YcGeZVgqNWDyvovW@google.com>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <698fb091-6532-7bba-bc14-6275db32c524@lucaceresoli.net>
+Date:   Tue, 21 Dec 2021 10:38:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
+In-Reply-To: <YcGeZVgqNWDyvovW@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211211175951.30763-6-luca@lucaceresoli.net>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, 11 Dec 2021, Luca Ceresoli wrote:
+Hi Lee,
 
-> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
-> watchdog only.
+On 21/12/21 10:29, Lee Jones wrote:
+> On Sat, 11 Dec 2021, Luca Ceresoli wrote:
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> Add a simple driver for the Maxim MAX77714 PMIC, supporting RTC and
+>> watchdog only.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> ---
+>>
+>> Changes in v5: none
+>>
+>> Changes in v4: none
+>>
+>> Changes in v3:
+>>  - Suggested by Lee Jones:
+>>    - move struct mfd_cell to top of file
+>>    - remove struct max77714 and its kmalloc, not used after probe
+>>    - reword error messages
+>>    - add "/* pF */" onto the end of the load_cap line
+>>
+>> Changes in v2:
+>>  - fix "watchdog" word in heading comment (Guenter Roeck)
+>>  - move struct max77714 to .c file (Krzysztof Kozlowski)
+>>  - change include guard format (Krzysztof Kozlowski)
+>>  - allow building as a module (Krzysztof Kozlowski)
+>>  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
+>>    (Reported-by: kernel test robot <lkp@intel.com>)
+>> ---
+>>  MAINTAINERS                  |   2 +
+>>  drivers/mfd/Kconfig          |  14 ++++
+>>  drivers/mfd/Makefile         |   1 +
+>>  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
+>>  include/linux/mfd/max77714.h |  60 ++++++++++++++
+>>  5 files changed, 229 insertions(+)
+>>  create mode 100644 drivers/mfd/max77714.c
+>>  create mode 100644 include/linux/mfd/max77714.h
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index a08f5167dfe0..ef3ffba828af 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11586,6 +11586,8 @@ MAXIM MAX77714 PMIC MFD DRIVER
+>>  M:	Luca Ceresoli <luca@lucaceresoli.net>
+>>  S:	Maintained
+>>  F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+>> +F:	drivers/mfd/max77714.c
+>> +F:	include/linux/mfd/max77714.h
+>>  
+>>  MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
+>>  M:	Javier Martinez Canillas <javier@dowhile0.org>
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index 3fb480818599..1b9d772bdae6 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -855,6 +855,20 @@ config MFD_MAX77693
+>>  	  additional drivers must be enabled in order to use the functionality
+>>  	  of the device.
+>>  
+>> +config MFD_MAX77714
+>> +	tristate "Maxim Semiconductor MAX77714 PMIC Support"
+>> +	depends on I2C
+>> +	depends on OF || COMPILE_TEST
+>> +	select MFD_CORE
+>> +	select REGMAP_I2C
+>> +	help
+>> +	  Say yes here to add support for Maxim Semiconductor MAX77714.
+>> +	  This is a Power Management IC with 4 buck regulators, 9
+>> +	  low-dropout regulators, 8 GPIOs, RTC, watchdog etc. This driver
+>> +	  provides common support for accessing the device; additional
+>> +	  drivers must be enabled in order to use each functionality of the
+>> +	  device.
+>> +
+>>  config MFD_MAX77843
+>>  	bool "Maxim Semiconductor MAX77843 PMIC Support"
+>>  	depends on I2C=y
+>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+>> index 0b1b629aef3e..03115cf1336b 100644
+>> --- a/drivers/mfd/Makefile
+>> +++ b/drivers/mfd/Makefile
+>> @@ -162,6 +162,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
+>>  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
+>>  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
+>>  obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
+>> +obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
+>>  obj-$(CONFIG_MFD_MAX77843)	+= max77843.o
+>>  obj-$(CONFIG_MFD_MAX8907)	+= max8907.o
+>>  max8925-objs			:= max8925-core.o max8925-i2c.o
+>> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
+>> new file mode 100644
+>> index 000000000000..08dfb69bc6e8
+>> --- /dev/null
+>> +++ b/drivers/mfd/max77714.c
+>> @@ -0,0 +1,152 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Maxim MAX77714 MFD Driver
 > 
-> ---
+> I'm only mentioning this because you are still missing some reviews.
 > 
-> Changes in v5: none
+> But I'd prefer for drivers not to describe themselves as MFD Drivers.
 > 
-> Changes in v4: none
+> The term Parent or Core driver is usually better.
 > 
-> Changes in v3:
->  - Suggested by Lee Jones:
->    - move struct mfd_cell to top of file
->    - remove struct max77714 and its kmalloc, not used after probe
->    - reword error messages
->    - add "/* pF */" onto the end of the load_cap line
-> 
-> Changes in v2:
->  - fix "watchdog" word in heading comment (Guenter Roeck)
->  - move struct max77714 to .c file (Krzysztof Kozlowski)
->  - change include guard format (Krzysztof Kozlowski)
->  - allow building as a module (Krzysztof Kozlowski)
->  - remove of_match_ptr usage (Krzysztof Kozlowski / lkp)
->    (Reported-by: kernel test robot <lkp@intel.com>)
-> ---
->  MAINTAINERS                  |   2 +
->  drivers/mfd/Kconfig          |  14 ++++
->  drivers/mfd/Makefile         |   1 +
->  drivers/mfd/max77714.c       | 152 +++++++++++++++++++++++++++++++++++
->  include/linux/mfd/max77714.h |  60 ++++++++++++++
->  5 files changed, 229 insertions(+)
->  create mode 100644 drivers/mfd/max77714.c
->  create mode 100644 include/linux/mfd/max77714.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a08f5167dfe0..ef3ffba828af 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11586,6 +11586,8 @@ MAXIM MAX77714 PMIC MFD DRIVER
->  M:	Luca Ceresoli <luca@lucaceresoli.net>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-> +F:	drivers/mfd/max77714.c
-> +F:	include/linux/mfd/max77714.h
->  
->  MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
->  M:	Javier Martinez Canillas <javier@dowhile0.org>
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3fb480818599..1b9d772bdae6 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -855,6 +855,20 @@ config MFD_MAX77693
->  	  additional drivers must be enabled in order to use the functionality
->  	  of the device.
->  
-> +config MFD_MAX77714
-> +	tristate "Maxim Semiconductor MAX77714 PMIC Support"
-> +	depends on I2C
-> +	depends on OF || COMPILE_TEST
-> +	select MFD_CORE
-> +	select REGMAP_I2C
-> +	help
-> +	  Say yes here to add support for Maxim Semiconductor MAX77714.
-> +	  This is a Power Management IC with 4 buck regulators, 9
-> +	  low-dropout regulators, 8 GPIOs, RTC, watchdog etc. This driver
-> +	  provides common support for accessing the device; additional
-> +	  drivers must be enabled in order to use each functionality of the
-> +	  device.
-> +
->  config MFD_MAX77843
->  	bool "Maxim Semiconductor MAX77843 PMIC Support"
->  	depends on I2C=y
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 0b1b629aef3e..03115cf1336b 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -162,6 +162,7 @@ obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
->  obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
->  obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
->  obj-$(CONFIG_MFD_MAX77693)	+= max77693.o
-> +obj-$(CONFIG_MFD_MAX77714)	+= max77714.o
->  obj-$(CONFIG_MFD_MAX77843)	+= max77843.o
->  obj-$(CONFIG_MFD_MAX8907)	+= max8907.o
->  max8925-objs			:= max8925-core.o max8925-i2c.o
-> diff --git a/drivers/mfd/max77714.c b/drivers/mfd/max77714.c
-> new file mode 100644
-> index 000000000000..08dfb69bc6e8
-> --- /dev/null
-> +++ b/drivers/mfd/max77714.c
-> @@ -0,0 +1,152 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Maxim MAX77714 MFD Driver
+> If you have to respin the set, please fix it.
 
-I'm only mentioning this because you are still missing some reviews.
+OK. However No plan for a new iteration, but the wdog patches still need
+a review so it's possible. I don't expect changes for the other patches,
+they are acked and unchanged since a couple iterations.
 
-But I'd prefer for drivers not to describe themselves as MFD Drivers.
+> If not, please sent a subsequent fix-up.
 
-The term Parent or Core driver is usually better.
+Sure. Maybe I'll find some good will and reword all drivers which
+currently self-describe as "MFD drivers".
 
-If you have to respin the set, please fix it.
+> Acked-by: Lee Jones <lee.jones@linaro.org>
 
-If not, please sent a subsequent fix-up.
-
-Once fixed:
-
-Acked-by: Lee Jones <lee.jones@linaro.org>
-
+Thanks.
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Luca
