@@ -2,159 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4967547C0D2
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 14:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EE847C234
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 16:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238243AbhLUNdB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Dec 2021 08:33:01 -0500
-Received: from mail-qt1-f173.google.com ([209.85.160.173]:39557 "EHLO
-        mail-qt1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbhLUNdA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 08:33:00 -0500
-Received: by mail-qt1-f173.google.com with SMTP id f3so1504504qtf.6;
-        Tue, 21 Dec 2021 05:32:59 -0800 (PST)
+        id S238913AbhLUPGJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Dec 2021 10:06:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238890AbhLUPGJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 10:06:09 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C303FC061574;
+        Tue, 21 Dec 2021 07:06:08 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id d1-20020a4a3c01000000b002c2612c8e1eso4151977ooa.6;
+        Tue, 21 Dec 2021 07:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jxJLCKdii3ZBovJHJ1Lr3yRQh18xoe4Lj056VTHDmPs=;
+        b=Bmi5loPyz4cI2aCEOWBDEYFQ9TCEhRGQ/HbaJrSJMboimVrnqFVdjV8oZIJR+9qvlN
+         wwBsDAXcsLHe3RxzPV4w7svfUcVTYs475u7liaAoCWEEWzJdQpzGlsJhEBJjP5M3usx5
+         OkWo9d9nPtLYwovRpqkFYOvyK7N1H4Y8SbbZ+lhut5dmtevxHuEIfL73MDgQrKdmHkOl
+         ekJ0D/RLKHkDR6HvFsdlNYc9M32iwIQfRg3TxifCoDOfwTCePyuJSFnABfefiDb1R0c+
+         Ln+A7g2SLgdKryjiMhNqVkhRQK+GxwezP/ecb5B/bWRcD03jZ4Beolb2jqu16df4OmN5
+         doCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DHbNzpt0iAUYfu5r/W24qY79bvlSWjiGM23ZPveiPVQ=;
-        b=D99EakVYIDlTNLRRy/o58sdPMyM9yD1FRibjY6f46mlgBZ9U6F5eK01/fb6hgRnfGK
-         iGGAbHVUlSQuTdGBOKxz/xzZg4DKPJx1kalrO+5aNdXBEnqNUkbKde4B7hs+4JETN0+9
-         Fwd0qw+6SzkUZIIKpvvcDrfuU1L7Y/VFCy98IrfHwHcLkPvMsNpYh2l23S3sH+2Bh4KB
-         g3JuNwj2l5CHP8GA/sbnUGMbQ3q/nrC2ErTZf0BM1ZXOnwCuyQp24CjVzOdnTkA2JZoT
-         eKuCwxX65GidpJ8tquztwHNzHx7qm+PnvW58vEe7aLiFX4xlkLLUV8laVocBbLbK99pP
-         kIhA==
-X-Gm-Message-State: AOAM532Tj9O9qRndsYTrvz4r+XgVwrrCaHVg05K7WK0NerVq3mpxKaOW
-        qyw9Skny/+gioCyyVew8AA==
-X-Google-Smtp-Source: ABdhPJy3Z1ImApelVtQQKouP5J7Mv1P6nlUyv+LtrwSb6ZYUeEsizGUI8yk3xIcWpcpRQ2mkxiO6CA==
-X-Received: by 2002:ac8:4f07:: with SMTP id b7mr1371584qte.301.1640093579004;
-        Tue, 21 Dec 2021 05:32:59 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id y16sm12642056qkj.69.2021.12.21.05.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Dec 2021 05:32:58 -0800 (PST)
-Received: (nullmailer pid 1262982 invoked by uid 1000);
-        Tue, 21 Dec 2021 13:32:55 -0000
-Date:   Tue, 21 Dec 2021 09:32:55 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atish.patra@wdc.com
-Subject: Re: [PATCH v2 11/17] dt-bindings: usb: add bindings for microchip
- mpfs musb
-Message-ID: <YcHXhyYhFfPty7mA@robh.at.kernel.org>
-References: <20211217093325.30612-1-conor.dooley@microchip.com>
- <20211217093325.30612-12-conor.dooley@microchip.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jxJLCKdii3ZBovJHJ1Lr3yRQh18xoe4Lj056VTHDmPs=;
+        b=VfmIv4/sfFoOqo5+1lO7POaL4kZ3twdZbHMjM2uubByCSrMkO7loAJ4iB5uqPa05qP
+         AESsHZO7LvZIuX/RBKjtutupEbX2cEwJUV4j6Tdi9XOZVCLZ7o8csPtsiP7L//TfUM+O
+         dYQZnEg1ud1lSIyp1tAIDloRpZv3xRiqI8dAcRMJqKaYxeas5lp/l0Ojd5NZyYtiAzQo
+         YtGDvNbA0Wn8J75cmABPBicO6nwhU9J6XAxKX++1hTctLF1Hgtav+kkshhVdyQWZRKs8
+         F9YoeZmiieP7V3bbpNriQruvMbw3s7A0OQ1YvLj8d+4DR2stVKA25HYzNN4xouFk+HDS
+         iUZQ==
+X-Gm-Message-State: AOAM530FD2TPDY1Zlwo23L5DUUs2Nr52OY5DWIqULEweKp5suSGZfApO
+        XDcJwDH3bM0ePNY81YoMoPI=
+X-Google-Smtp-Source: ABdhPJzEJ0TU1QntJG/hNFU4s47BueQ+uqlLdOa0Zwitm0SaVEivs3kbUclw4G26Y/dYVSwKDc7ZEw==
+X-Received: by 2002:a4a:d453:: with SMTP id p19mr2210473oos.85.1640099168111;
+        Tue, 21 Dec 2021 07:06:08 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bq5sm4248283oib.55.2021.12.21.07.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Dec 2021 07:06:07 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v5 7/9] watchdog: max77620: add support for the max77714
+ variant
+To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+ <20211211203432.32446-1-luca@lucaceresoli.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <72d7d229-75da-603d-0b71-46db8e32af2b@roeck-us.net>
+Date:   Tue, 21 Dec 2021 07:06:04 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217093325.30612-12-conor.dooley@microchip.com>
+In-Reply-To: <20211211203432.32446-1-luca@lucaceresoli.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 09:33:19AM +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 12/11/21 12:34 PM, Luca Ceresoli wrote:
+> The MAX77714 is a MFD chip whose watchdog has the same programming
+> procedures as the MAX77620 watchdog, but most register offsets and bit
+> masks are different, as well as some features.
 > 
-> Add device tree bindings for the usb controller on
-> the Microchip PolarFire SoC.
+> Support the MAX77714 watchdog by adding a variant description table holding
+> the differences.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/usb/microchip,mpfs-musb.yaml     | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
+> All the features implemented by this driver are available on the MAX77714
+> except for the lack of a WDTOFFC bit. Instead of using a "HAS_*" flag we
+> handle this by holding in the cnfg_glbl2_cfg_bits struct field the bits
+> (i.e. the features) to enable in the CNFG_GLBL2 register. These bits differ
+> among the two models. This implementation allows to avoid any conditional
+> code, keeping the execution flow unchanged.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
-> new file mode 100644
-> index 000000000000..eec918046c73
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/microchip,mpfs-musb.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/microchip,mpfs-musb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MPFS USB Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Conor Dooley <conor.dooley@microchip.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mpfs-musb
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: dma
-> +      - const: mc
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  dr_mode:
-> +    enum:
-> +      - host
-> +      - otg
-> +      - peripheral
-
-Reference usb-drd.yaml and you can drop this.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - clocks
-> +  - dr_mode
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include "dt-bindings/clock/microchip,mpfs-clock.h"
-> +    usb: usb@20201000 {
-
-Drop unused labels.
-
-> +        compatible = "microchip,mpfs-musb";
-> +        reg = <0x20201000 0x1000>;
-> +        clocks = <&clkcfg CLK_USB>;
-> +        interrupt-parent = <&plic>;
-> +        interrupts = <86>, <87>;
-> +        interrupt-names = "dma","mc";
-
-space                              ^
-
-> +        dr_mode = "host";
-> +    };
-> +
-> +...
-> -- 
-> 2.33.1
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > 
-> 
+
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+
