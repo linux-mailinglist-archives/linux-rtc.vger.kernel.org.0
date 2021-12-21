@@ -2,71 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B318747BEB0
-	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 12:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F16447BF7A
+	for <lists+linux-rtc@lfdr.de>; Tue, 21 Dec 2021 13:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbhLULO7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 21 Dec 2021 06:14:59 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:29274 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236868AbhLULO7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 21 Dec 2021 06:14:59 -0500
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JJDPR2g0FzbjYG;
-        Tue, 21 Dec 2021 19:14:35 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 19:14:58 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 21 Dec
- 2021 19:14:57 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-CC:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>,
-        <linkmauve@linkmauve.fr>
-Subject: [PATCH -next] rtc: gamecube: Fix return value check in gamecube_rtc_probe()
-Date:   Tue, 21 Dec 2021 19:20:59 +0800
-Message-ID: <20211221112059.305682-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+        id S237450AbhLUMPv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 21 Dec 2021 07:15:51 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:59578 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237447AbhLUMPv (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 21 Dec 2021 07:15:51 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 11C621A1300;
+        Tue, 21 Dec 2021 13:15:50 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 047571A1217;
+        Tue, 21 Dec 2021 13:15:50 +0100 (CET)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id ED3EC203C3;
+        Tue, 21 Dec 2021 13:15:48 +0100 (CET)
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Rob Herring <robh@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Abel Vesa <abel.vesa@nxp.com>
+Subject: [PATCH 0/3] Add RTC support to i.MX8QM
+Date:   Tue, 21 Dec 2021 14:15:45 +0200
+Message-Id: <1640088948-3690-1-git-send-email-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In case of error, the devm_kzalloc() returns NULL pointer
-not ERR_PTR(). The IS_ERR() test in the return value check
-should be replaced with NULL test.
+This adds rtc devicetree node to i.MX8QM, adds the compatible to the
+rtc-imx-sc driver and documents it.
 
-Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/rtc/rtc-gamecube.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Abel Vesa (3):
+  dt-bindings: fsl: scu: Add i.MX8QM rtc binding
+  rtc: imx-sc: Add i.MX8QM RTC support
+  arm64: dts: imx8qm: Add SCU RTC node
 
-diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-index 98128746171e..f717b36f4738 100644
---- a/drivers/rtc/rtc-gamecube.c
-+++ b/drivers/rtc/rtc-gamecube.c
-@@ -319,8 +319,8 @@ static int gamecube_rtc_probe(struct platform_device *pdev)
- 	int ret;
- 
- 	d = devm_kzalloc(dev, sizeof(struct priv), GFP_KERNEL);
--	if (IS_ERR(d))
--		return PTR_ERR(d);
-+	if (!d)
-+		return -ENOMEM;
- 
- 	d->iob = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(d->iob))
+ Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 4 +++-
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi                   | 3 +++
+ drivers/rtc/rtc-imx-sc.c                                    | 1 +
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
 -- 
-2.25.1
+2.31.1
 
