@@ -2,68 +2,51 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B2C47D6D8
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Dec 2021 19:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238E947E00A
+	for <lists+linux-rtc@lfdr.de>; Thu, 23 Dec 2021 08:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344794AbhLVS3q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Dec 2021 13:29:46 -0500
-Received: from mail-qk1-f169.google.com ([209.85.222.169]:46700 "EHLO
-        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344751AbhLVS3q (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Dec 2021 13:29:46 -0500
-Received: by mail-qk1-f169.google.com with SMTP id a11so3128893qkh.13;
-        Wed, 22 Dec 2021 10:29:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OEshpyGQHS/pVav7gzTopQjVYTvop1Kq52uMv091xqU=;
-        b=WLQwFTpaASlPX2Erl2N6tUXNBti+jxSPDS9oPegoalUGxMB8X/PPqj3vtZC8vpEmAL
-         SJOXYW6cI4ZwhGdfvHkjmKPqYdsw7h0ZchZGNUyR0n/s6HN1by05fzM0jgqdqSkXpr6G
-         qBJNJ3St4xnePBGIZp3IYNaz1dmjmdhV6vZ+25zj+umnVD7iLgwz8zRrZhFqW3S91oSq
-         Av6lk+ZBI+lERo2QiN0RGQeTSi0OpQoUHI/69a00CSauqdjQbFH0MVuw1Us+IfWs0PjS
-         ydqHurQjMxrM33Dzi3as9lLfNbQfYBL9WgM0TBftdpBzJPMZ2kNEeHqKktERsBkYBynf
-         OpBw==
-X-Gm-Message-State: AOAM5310wZEMrF7/EF5kAz1/o4NPaO2g6c2D2hCql2fRmMBg2XhLiTQ1
-        LlafyDiYWnSaVVvYKa2SQg==
-X-Google-Smtp-Source: ABdhPJzp/zJa2A6+Mc/1aZb51iGXrEa00upwEfuI4nc02X3O0XvOU62pvhKXBc5qts/WO57QHM+Vsg==
-X-Received: by 2002:a05:620a:706:: with SMTP id 6mr2959169qkc.374.1640197784671;
-        Wed, 22 Dec 2021 10:29:44 -0800 (PST)
-Received: from robh.at.kernel.org ([24.55.105.145])
-        by smtp.gmail.com with ESMTPSA id m1sm2317309qtk.34.2021.12.22.10.29.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 10:29:42 -0800 (PST)
-Received: (nullmailer pid 2466254 invoked by uid 1000);
-        Wed, 22 Dec 2021 18:29:40 -0000
-Date:   Wed, 22 Dec 2021 14:29:40 -0400
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@nxp.com>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH 1/3] dt-bindings: fsl: scu: Add i.MX8QM rtc binding
-Message-ID: <YcNulKqtIg8Unm76@robh.at.kernel.org>
-References: <1640088948-3690-1-git-send-email-abel.vesa@nxp.com>
- <1640088948-3690-2-git-send-email-abel.vesa@nxp.com>
+        id S239426AbhLWH4u (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 23 Dec 2021 02:56:50 -0500
+Received: from mail.BETTERBIZ.PL ([45.86.209.138]:58386 "EHLO
+        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239468AbhLWH4t (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Dec 2021 02:56:49 -0500
+Received: by mail.betterbiz.pl (Postfix, from userid 1001)
+        id ABF6582E42; Thu, 23 Dec 2021 02:45:49 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
+        t=1640245750; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        h=Date:From:To:Subject:From;
+        b=C0nZ/u+xq4Dxz7S6vNDrPXVqd6TWngqvYrzVxEB4P+EIWesFMEjVCPyLeQvzDS6H4
+         3nOMJfIbQsOulQ2wh4+zYp+2qJDWN1XyMgoUbgcz+ZXI+qilvRdyvxbPBMSOini/sA
+         SNbzLyzYKgvav5DyU+CBUrEbEigsv+9MvSKH40SVlXVaGmfOscYyGzB/y2AjDK3kCY
+         vXageg4Sg5IXXX3Ylb17dGsLO7TQkjkDkhKB5bggjuizE2c2dzNL33rpV64rY2mZud
+         EUQmA8zmxl7pdgib3A+ZvbuGNH35kn+D7cI32eD6NsjH/Qw761M5yYfCEaX52DEhkT
+         bbMb316WwPbKg==
+Received: by mail.betterbiz.pl for <linux-rtc@vger.kernel.org>; Thu, 23 Dec 2021 07:45:46 GMT
+Message-ID: <20211223024500-0.1.f.zr2.0.k87km3kvh3@betterbiz.pl>
+Date:   Thu, 23 Dec 2021 07:45:46 GMT
+From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.betterbiz.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1640088948-3690-2-git-send-email-abel.vesa@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 21 Dec 2021 14:15:46 +0200, Abel Vesa wrote:
-> Add i.MX8QM rtc compatible to the SCU bindings documentation.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> ---
->  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+Dzie=C5=84 dobry,
 
-Acked-by: Rob Herring <robh@kernel.org>
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
+
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
+
+
+Pozdrawiam,
+Jakub Daroch
