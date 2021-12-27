@@ -2,126 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EEE47E729
-	for <lists+linux-rtc@lfdr.de>; Thu, 23 Dec 2021 18:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400A247FB62
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Dec 2021 10:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbhLWRgZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 23 Dec 2021 12:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbhLWRgY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 23 Dec 2021 12:36:24 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACABBC06175D
-        for <linux-rtc@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso9402654pji.0
-        for <linux-rtc@vger.kernel.org>; Thu, 23 Dec 2021 09:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
-        b=L0sjRUzYInvoF3lTrWwfgbrnXNR7T+eXsaPmPTag7OLNZPysAOAy+7D/eWdc8Y8pWa
-         ZYd8pC2fEDwzZy3dX8MHG6cokMq+LvNvhyVHt7n4Ot4zwmRwldtutxXO3oyyhccGcTGj
-         6HqoZZOHqzyqhn2YiN2yvj0pdcsduMD2RNXRxGoK6VCf9RFwFffI4Bcz668E4CDGnHCe
-         W9InkcEY0CD9FxjiRL4s4xROMFQ19FlU2EzPctV1dHFiCYC2qFsXNDzh4+eMW8ZOMg0i
-         GvYkYHgDSayVhkayneoGjmk9tIMU7TKP2/FjiXoGEbnsbQKYI7gPlGu5VC6SGmmrwTQd
-         Q6mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=dPYUZWC+77UBrBLBUUxU9fHb6AxVTt9UdaUWIxpei+o=;
-        b=X4dn4ezSCZ/w7ISJdBHa0YqCgQgk453DidSJE4utkC9p2/XD8PZ38Nvm1+0wtBmy51
-         izbhTL78qtV+dw74JlQ5WDIVkM2ykInzWOF0mBCW86O6IjqmfrLU6oamqP1R1ZpbWgez
-         m/KFi7aRKlj+NwqnAt80oUrTlTe0nllgqJYTa/Q/8Og13Nn4k+az3VI7KsXAeGoxAXA+
-         YFb/y3tgQnNI8qdZPR5K4grvRj/FOywxRhQUfwcVkqJm1guGn2IjzhRyzhJ/qjdLyCgP
-         c3uGu7Z17lM6lmUY8e+SOIv8wLQFSG6cvk522jdpxh2qYagFNMRIhiW42gtz7D5UHhc7
-         HcVw==
-X-Gm-Message-State: AOAM533gBJWo7zhdpLgY+doKDp1PbPW/cJx7zw5xnFhEAKyYLtCtxJLv
-        9NWfAssLR9G6izuzwLFGPUq3cQ==
-X-Google-Smtp-Source: ABdhPJypoRaM/7mbkBhlfvlUN6kGHVEF9KQ22b8kXscmQCQL7JNkF0LVo3y3phgMBogpBLz4jmYGaw==
-X-Received: by 2002:a17:90b:4d07:: with SMTP id mw7mr3712671pjb.69.1640280983976;
-        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-Received: from localhost ([12.163.77.120])
-        by smtp.gmail.com with ESMTPSA id g6sm7407727pfj.156.2021.12.23.09.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-Date:   Thu, 23 Dec 2021 09:36:23 -0800 (PST)
-X-Google-Original-Date: Thu, 23 Dec 2021 09:36:07 PST (-0800)
-Subject:     Re: [PATCH v2 17/17] MAINTAINERS: update riscv/microchip entry
-In-Reply-To: <05d6a273-19f6-2147-75ba-1fff726a0f70@microchip.com>
-CC:     krzysztof.kozlowski@canonical.com, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, broonie@kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        geert@linux-m68k.org, bin.meng@windriver.com, heiko@sntech.de,
-        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
-        Ivan.Griffin@microchip.com, Atish Patra <atishp@rivosinc.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor.Dooley@microchip.com
-Message-ID: <mhng-0e4cde83-cfa1-4bf6-9f2c-611d9a4ddb5f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S235832AbhL0Jjn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 27 Dec 2021 04:39:43 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:45137 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233173AbhL0Jjm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Dec 2021 04:39:42 -0500
+Received: from quad ([82.142.30.186]) by mrelayeu.kundenserver.de (mreue107
+ [212.227.15.183]) with ESMTPSA (Nemesis) id 1MadGG-1mQmy644RG-00cBAv; Mon, 27
+ Dec 2021 10:39:33 +0100
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH v2 0/1] m68k: Add Virtual M68k Machine
+Date:   Mon, 27 Dec 2021 10:39:30 +0100
+Message-Id: <20211227093931.480329-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.33.1
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:fE+9S3RXnXn3AFWIj8kvwpDVE3sFvKWR6/jB09PIS2a5I8Amvug
+ FgPU4qpVb+GSdzeVInaYGOYdhHip8EU8J+2XrzXtw/0/nOnatiFZEzhJYD8KuWHZoaScnuQ
+ VX1a3i1Poj+7fJe7LDkNjXJY80Y0V+QNnyn2SHP6csCVbcgNsny1NGGBYB9+9uhwz6UD7ZK
+ H7gWBub+LF2ql97IynQSg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JXMQUKYRg5c=:dKmjuvagxuTKHSSOtwiCGh
+ aMNmHJmto2qjUeZNhy8uZf3RbVcNy1gTf+VTQMfJwhOzByXmXkX++B6BLXMmSlu/wq8HEgdS1
+ IkypvunzJovN8zq/iQdeS2+XUKvZROHsgrruGiyUqBckMR0UZVFzgD9fkJtZLLerDnesbZp6K
+ bezVUShmNHu6siVb0mTXNXEPqgTdfpnq/kSH5OtxQyXaOaQg8WWjYRzu01Atblx4qo2H3joR3
+ yOQkR3xjx4oiBH+Jgj9Rib3NYCQdKnQ0GUMNHaZGZnTrFd/ljxYvdYmUS+xsOjxRFux7woGgv
+ S0jmvtETxopk6HleVNKsHOCfJ6TG1H9+aHi7PDwUYWcIaO3+1321MQYl6144wjx+x9jdDPiav
+ +gfubam21uNa4TGe4cgiduyqeLLvW9fG9OXoNfhy3MmCy9gqyW+ANo8hvRlnXOgxClqFbVWC5
+ yXEJBJBcMOnUPUGLsJIAZz10qAEJ3sAMj4c6K0g7KJQHyT8y/5H0TrLm+qHitat65ENK9dED3
+ QB+zhBuRXYbK64Kmh1IvhfTpf938JCjbyvHWiTm6Pcg4JQsa0NOT0TrxzzSiPVa74oS6rQRUr
+ ZVXbI/j+CR38MkTzcAhhRC2ypfKojH62Nbc/m8xmIgOavWq7Bal35dXe/9R69/1kTwPBnU7Df
+ JZaMmq9Fy+7jiW/+vZIOoPOjrtaY7QXCdCe/Z916VDT8nuPjE920uAmevcCFSOztURB0=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 23 Dec 2021 06:56:45 PST (-0800), Conor.Dooley@microchip.com wrote:
-> On 17/12/2021 15:09, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> 
->> On 17/12/2021 10:33, conor.dooley@microchip.com wrote:
->>> From: Conor Dooley <conor.dooley@microchip.com>
->>>
->>> Update the RISC-V/Microchip entry by adding the microchip dts
->>> directory and myself as maintainer
->>>
->>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>> ---
->>>   MAINTAINERS | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 7a2345ce8521..3b1d6be7bd56 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -16348,8 +16348,10 @@ K:   riscv
->>>
->>>   RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
->>>   M:   Lewis Hanly <lewis.hanly@microchip.com>
->>> +M:   Conor Dooley <conor.dooley@microchip.com>
->>>   L:   linux-riscv@lists.infradead.org
->>>   S:   Supported
->>> +F:   arch/riscv/boot/dts/microchip/
->>>   F:   drivers/mailbox/mailbox-mpfs.c
->>>   F:   drivers/soc/microchip/
->>>   F:   include/soc/microchip/mpfs.h
->>>
->> 
->> Good to have the DTS covered, so FWIW:
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->> 
->> You still should get Lewis' ack (unless he merges it)
-> Aye, it'll be an ack. We don't currently have a tree & would rather do 
-> this via risc-v than the at91/sam arm soc tree.
+The most powerful m68k machine emulated by QEMU is a Quadra 800,
+but this machine is very limited: only 1 GiB of memory and only some
+specific interfaces, with no DMA.
 
-WFM.  I'll be awaiting the ack.  I don't see any fundamental issues from 
-my end, as long is it's got all the acks/reviews then I'm generally fine 
-with this sort of stuff.  I'll take a look before merging it, I'm kind 
-of buried right now.  Sorry!
+The Virtual M68k Machine is based on Goldfish interfaces defined by Google
+for Android simulator. It uses Goldfish-rtc (timer and RTC),
+Goldfish-pic (PIC) and Goldfish-tty (for early tty).
 
->> 
->> Best regards,
->> Krzysztof
->> 
-> 
+The machine is created with 128 virtio-mmio buses, and they can
+be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
+
+The virtual m68k machine has been merged in QEMU and will be available
+with the release 6.0.
+
+This series introduces the support of this new machine in the linux kernel.
+
+If you want to try:
+
+- Configure and build latest QEMU with (or download qemu 6.0 binary):
+
+  .../configure --target-list=m68k-softmmu --enable-virglrenderer
+  make
+
+- Configure and build linux with:
+
+  make virt_defconfig
+  make vmlinux
+
+A pre-installed qcow2 disk image is available at:
+
+http://vivier.eu/debian-10.0.qcow2
+
+You can run the machine with something like:
+
+qemu-system-m68k -M virt \
+  -m 3G \
+  -chardev stdio,signal=off,mux=on,id=char0 \
+  -mon chardev=char0,mode=readline \
+  -kernel vmlinux \
+  -append "console=hvc0 root=/dev/vda2" \
+  -blockdev node-name=system,driver=file,filename=debian-10.0.qcow2 \
+  -blockdev node-name=drive0,driver=qcow2,file=system \
+  -device virtio-blk-device,drive=drive0 \
+  -serial chardev:char0 \
+  -device virtio-net-device,netdev=hostnet0 \
+  -netdev bridge,id=hostnet0,br=virbr0,helper=/usr/libexec/qemu-bridge-helper \
+  -device virtio-serial-device \
+  -device virtio-gpu-device \
+  -device virtconsole,chardev=char0 \
+  -device virtio-keyboard-device \
+  -device virtio-mouse-device
+
+You can watch a presentation about the machine on the Planet m68k channel:
+
+    https://youtu.be/s_ve0bCC9q4
+    [Demo at 38:00]
+
+v2:
+- Remove VIRTO_MENU set y
+- sort the selects
+- add CONFIG_LOCALVERSION="-virt"
+- generate virt_defconfig using "make savedefconfig"
+- rename MACH_VIRTONLY to MACH_VIRT_ONLY
+- add a test_notvirt label in head.S
+- rework iounmap() to use two separate #ifdefs
+- use %u in virt_get_model()
+- drop show_registers() in config.c
+- drop pr_err() from config_virt()
+- sort includes in ints.c
+- call virt_irq_enable() in virt_irq_startup()
+- drop virt_irq_shutdown() and use virt_irq_disable()
+- move in_nmi into virt_nmi_handler()
+- use pr_warn() in virt_nmi_handler()
+- rework goldfish_pic_irq() IRQ scan
+- copy goldfish-pic IRQs related information from QEMU hw/m68k/virt
+- add a comment to "min_low_pfn = 0"
+- use platform_device_register_simple()
+- use goldfish_timer_read(), upper_32_bits() and lower_32_bits()
+
+Thanks,
+Laurent
+
+Laurent Vivier (1):
+  m68k: introduce a virtual m68k machine
+
+ arch/m68k/Kbuild                           |   1 +
+ arch/m68k/Kconfig.machine                  |  16 +++
+ arch/m68k/configs/virt_defconfig           |  65 +++++++++++
+ arch/m68k/include/asm/irq.h                |   3 +-
+ arch/m68k/include/asm/pgtable_mm.h         |   7 ++
+ arch/m68k/include/asm/setup.h              |  44 ++++++--
+ arch/m68k/include/asm/virt.h               |  26 +++++
+ arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
+ arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
+ arch/m68k/kernel/Makefile                  |   1 +
+ arch/m68k/kernel/head.S                    |  31 ++++++
+ arch/m68k/kernel/setup_mm.c                |   9 ++
+ arch/m68k/mm/kmap.c                        |  23 ++--
+ arch/m68k/virt/Makefile                    |   6 ++
+ arch/m68k/virt/config.c                    | 111 +++++++++++++++++++
+ arch/m68k/virt/ints.c                      | 120 +++++++++++++++++++++
+ arch/m68k/virt/platform.c                  |  72 +++++++++++++
+ arch/m68k/virt/timer.c                     |  90 ++++++++++++++++
+ 18 files changed, 626 insertions(+), 18 deletions(-)
+ create mode 100644 arch/m68k/configs/virt_defconfig
+ create mode 100644 arch/m68k/include/asm/virt.h
+ create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
+ create mode 100644 arch/m68k/virt/Makefile
+ create mode 100644 arch/m68k/virt/config.c
+ create mode 100644 arch/m68k/virt/ints.c
+ create mode 100644 arch/m68k/virt/platform.c
+ create mode 100644 arch/m68k/virt/timer.c
+
+-- 
+2.33.1
+
