@@ -2,153 +2,136 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C39047FDBC
-	for <lists+linux-rtc@lfdr.de>; Mon, 27 Dec 2021 15:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87E4480253
+	for <lists+linux-rtc@lfdr.de>; Mon, 27 Dec 2021 17:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236958AbhL0OAY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Dec 2021 09:00:24 -0500
-Received: from mga01.intel.com ([192.55.52.88]:38980 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236955AbhL0OAX (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Mon, 27 Dec 2021 09:00:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640613623; x=1672149623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fI+vasy/JcocGCw2WSA/p27qt8qZEyylmM6e3KRu2yA=;
-  b=n+J1RWKRnNcRqPDNlUP3bD2nOlC5TqDJD2eZGNRpV8pqM8rv1rQ2gR5/
-   3F6cG4Sk1e7F7TECfjkXgpKv3dK9oei/NpM5BGvcc8YTtwF/SpMKTx3VR
-   Ti5kc4vUrWe4aW4pqG4GKODgQlUsvy5bMLn+0TRQFvIfbPiaZ60CuskXx
-   y7ayVz69FsWRVvnuaoy8QUIJgPKa+Xtjr46d2AFVQGyPdc7LN7iQxdeDW
-   O7MluAfhXzOX5Flo8YBvoKs3V/jTi0p1NGE3Hayqr2ZP25YMc1WgvFt5T
-   v9D7+2fuxa/TI8ib8+ot+creY5pGfKeUppPV0e2PUOB/lDNgtIx+nHxhu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10209"; a="265433722"
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="265433722"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 06:00:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,239,1635231600"; 
-   d="scan'208";a="572045895"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Dec 2021 06:00:21 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n1qY0-0006Jq-FC; Mon, 27 Dec 2021 14:00:20 +0000
-Date:   Mon, 27 Dec 2021 22:00:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v2 1/1] m68k: introduce a virtual m68k machine
-Message-ID: <202112272147.UoQokuQR-lkp@intel.com>
-References: <20211227093931.480329-2-laurent@vivier.eu>
+        id S229949AbhL0Qqf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 Dec 2021 11:46:35 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:50474 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230450AbhL0QoY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Dec 2021 11:44:24 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGCORT003213;
+        Mon, 27 Dec 2021 16:43:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=rVA/opujcDurk3T7BUVOWmBKZAmV4zilWfIilRnO+MA=;
+ b=FrM8XWC3BtAu/mNOm38ZFBM4D4F6/vcbKnxwsl+zjE8HVJuilRziHeaE9FelFK6H02RY
+ upByhv481Q5PVBgfR4ygy2/YhmSH5usiZXai6yWyft77C4ZCdmf2YycybKKj4oWD7Laf
+ NNkf0vSPYdjdAXIcc8NisbCBDI4f1SZhA1qDNH26cswScS812uUYXJ1xQfyGL9fIVc3A
+ s3oc5lJxvfmIP2Qcjq8Sat1Xa9lekDDrO+voVGwsO1uVb+RpWP0nu2J6Lrnagrlb3q7p
+ SZGdtjZihsvsb2nzmH6v+hIKNCJJdOHWRNEmywKf73bhwqjDvjoGHKT3Q9GLi6KbF/r8 8A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gswgfg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:51 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGVGZS014787;
+        Mon, 27 Dec 2021 16:43:50 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7gswgffu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:50 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGbgD4001684;
+        Mon, 27 Dec 2021 16:43:48 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3d5tx9as3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:48 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhkjL41615672
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Dec 2021 16:43:46 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4598EA4060;
+        Mon, 27 Dec 2021 16:43:46 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B30DDA405B;
+        Mon, 27 Dec 2021 16:43:45 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Dec 2021 16:43:45 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [RFC 23/32] rtc: Kconfig: add HAS_IOPORT dependencies
+Date:   Mon, 27 Dec 2021 17:43:08 +0100
+Message-Id: <20211227164317.4146918-24-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227093931.480329-2-laurent@vivier.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _nRzpFR8XZugFnDlJYuZthkPV3pNLzx6
+X-Proofpoint-GUID: YYAqwpTGAprwqTg35VINxMMyHGeBa-PB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ impostorscore=0 mlxlogscore=856 lowpriorityscore=0 adultscore=0
+ bulkscore=0 clxscore=1011 phishscore=0 malwarescore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112270080
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Laurent,
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on geert-m68k/for-next]
-[also build test WARNING on linux/master linus/master v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k.git for-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20211227/202112272147.UoQokuQR-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20211227-174054
-        git checkout 02e0dceb9e3bfcc8ef254308394ddb2a6a4cac2f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/virt/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/m68k/virt/config.c:56:12: warning: no previous prototype for 'virt_parse_bootinfo' [-Wmissing-prototypes]
-      56 | int __init virt_parse_bootinfo(const struct bi_record *record)
-         |            ^~~~~~~~~~~~~~~~~~~
->> arch/m68k/virt/config.c:97:13: warning: no previous prototype for 'config_virt' [-Wmissing-prototypes]
-      97 | void __init config_virt(void)
-         |             ^~~~~~~~~~~
---
->> arch/m68k/virt/ints.c:48:13: warning: no previous prototype for 'virt_nmi_handler' [-Wmissing-prototypes]
-      48 | irqreturn_t virt_nmi_handler(int irq, void *dev_id)
-         |             ^~~~~~~~~~~~~~~~
-
-
-vim +/virt_parse_bootinfo +56 arch/m68k/virt/config.c
-
-    51	
-    52	/*
-    53	 * Parse a virtual-m68k-specific record in the bootinfo
-    54	 */
-    55	
-  > 56	int __init virt_parse_bootinfo(const struct bi_record *record)
-    57	{
-    58		int unknown = 0;
-    59		const void *data = record->data;
-    60	
-    61		switch (be16_to_cpu(record->tag)) {
-    62		case BI_VIRT_QEMU_VERSION:
-    63			virt_bi_data.qemu_version = be32_to_cpup(data);
-    64			break;
-    65		case BI_VIRT_GF_PIC_BASE:
-    66			virt_bi_data.pic.mmio = be32_to_cpup(data);
-    67			data += 4;
-    68			virt_bi_data.pic.irq = be32_to_cpup(data);
-    69			break;
-    70		case BI_VIRT_GF_RTC_BASE:
-    71			virt_bi_data.rtc.mmio = be32_to_cpup(data);
-    72			data += 4;
-    73			virt_bi_data.rtc.irq = be32_to_cpup(data);
-    74			break;
-    75		case BI_VIRT_GF_TTY_BASE:
-    76			virt_bi_data.tty.mmio = be32_to_cpup(data);
-    77			data += 4;
-    78			virt_bi_data.tty.irq = be32_to_cpup(data);
-    79			break;
-    80		case BI_VIRT_CTRL_BASE:
-    81			virt_bi_data.ctrl.mmio = be32_to_cpup(data);
-    82			data += 4;
-    83			virt_bi_data.ctrl.irq = be32_to_cpup(data);
-    84			break;
-    85		case BI_VIRT_VIRTIO_BASE:
-    86			virt_bi_data.virtio.mmio = be32_to_cpup(data);
-    87			data += 4;
-    88			virt_bi_data.virtio.irq = be32_to_cpup(data);
-    89			break;
-    90		default:
-    91			unknown = 1;
-    92			break;
-    93		}
-    94		return unknown;
-    95	}
-    96	
-  > 97	void __init config_virt(void)
-
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/rtc/Kconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 058e56a10ab8..fde2bdb7090d 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -951,6 +951,7 @@ comment "Platform RTC drivers"
+ config RTC_DRV_CMOS
+ 	tristate "PC-style 'CMOS'"
+ 	depends on X86 || ARM || PPC || MIPS || SPARC64
++	depends on HAS_IOPORT
+ 	default y if X86
+ 	select RTC_MC146818_LIB
+ 	help
+@@ -971,6 +972,7 @@ config RTC_DRV_CMOS
+ config RTC_DRV_ALPHA
+ 	bool "Alpha PC-style CMOS"
+ 	depends on ALPHA
++	depends on HAS_IOPORT
+ 	select RTC_MC146818_LIB
+ 	default y
+ 	help
+@@ -1188,7 +1190,7 @@ config RTC_DRV_MSM6242
+ 
+ config RTC_DRV_BQ4802
+ 	tristate "TI BQ4802"
+-	depends on HAS_IOMEM
++	depends on HAS_IOMEM && HAS_IOPORT
+ 	help
+ 	  If you say Y here you will get support for the TI
+ 	  BQ4802 RTC chip.
+-- 
+2.32.0
+
