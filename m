@@ -2,106 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50E94827D6
-	for <lists+linux-rtc@lfdr.de>; Sat,  1 Jan 2022 16:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0BC4831B6
+	for <lists+linux-rtc@lfdr.de>; Mon,  3 Jan 2022 15:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiAAPmm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 1 Jan 2022 10:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S232030AbiACONS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 3 Jan 2022 09:13:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiAAPmm (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 1 Jan 2022 10:42:42 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56C2C061574
-        for <linux-rtc@vger.kernel.org>; Sat,  1 Jan 2022 07:42:41 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id g7-20020a7bc4c7000000b00345c4bb365aso16076684wmk.4
-        for <linux-rtc@vger.kernel.org>; Sat, 01 Jan 2022 07:42:41 -0800 (PST)
+        with ESMTP id S229831AbiACONS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 3 Jan 2022 09:13:18 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4D8C061761;
+        Mon,  3 Jan 2022 06:13:17 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id o63so57962869uao.5;
+        Mon, 03 Jan 2022 06:13:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mimaa3xxwrXFPKQWSeurtx3y4r/WnkNlgXPr8Q0N/24=;
-        b=m2rSVbpCp6Ljua4eb8BsntnKEWL/2SeM4vQQMjGQs262fxamz1Z4xSPaO9XGixL3df
-         hBy08EAD8kw5dOzLRuPee2rzU+Azrh3VjjOj4Uje8imTRhCN1MhqP9UyPa9/WXbYXYXa
-         U718JkfKi6xtCIzUR/DlDeOkZn2faBzQDZ2iZod8mOhCmQpcmy1659ESEEn/tvObe/Gm
-         /bLBMRD+r5oJNkf9wtrQ9xhRePfbIiZq6oCaRs16ZpyjfIPUIrS1LSCNSH3YWsVFq686
-         mHbseTJZfvO3Y4Z7js4xhIf+WyGqZ8XFgcdK8NLZ+jaPqDVH5XdHT6llNu25YE/8DZh/
-         g24A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
+        b=iUd6OgjQIQOJ+2STZhjzuYn99Wa6bykJ3/NRtPlLiiIdh8UkMnXIvX6mbzPrfX1x7o
+         kSktM1Con9Ybym6MGjt8Rvr0iNeZoI1FeLvr8lYLXCU0Nmue/wqZlevwTq/H6Kw8ZsFW
+         +V8lrWU2bcAbuaBRMMWMxhTYpRdHnO0IREJyDa+CP0QuYKTHgghvmNlEOS/qbxFv30Rq
+         wz4//V8mlBkfFA2SnQgn61Usy9YtxJF16JWOmIJCWZc/Vw3c1oMT/hxsNr5tXXzhP2xV
+         ZP7YXAf/DxJ+ZcJUzo4OkwkSdCABIYvb9HvKppySgy8XfGbUkqEKo/ZMbZ52I+/Xj7UY
+         OhfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mimaa3xxwrXFPKQWSeurtx3y4r/WnkNlgXPr8Q0N/24=;
-        b=NP/WaN1drANceSZM+AJxVFzy7biQPHMp9GVfxeHbFOQp7HFIsTUurWVWcKWWsebYwV
-         RvlEoWOhPxZpvUaEz6fMn4h1400QVbU44NkHBn3qR4Ij8oNjK4LzYO1kEuOgTZbx/FDE
-         RtWjuVJC/iCqbwn4oxUeh7mfjn458WjvRgxDiHFQEvtbZ08SoTr43L2hKZPHlgxK7fpA
-         U3zfT9t5uKo9XyCbSOJfRGX8cMZMSSoYdeX1+wOtktOS/EMxW3PofTf29riXG2zZnKJ+
-         GTOcg0EvHBqIztQaV0YB/R3KrKOdUGPicnKI42Y/ygXvO6gG1tUhLBFDHt3GtSL5WTvO
-         Fgng==
-X-Gm-Message-State: AOAM5302EilBmRjpC9eBUha/z6NqUWUug9iJZ0PB223aLOE4zKYhQjNI
-        eymFoFx0gG07nCV/M36kALliMDZTazY=
-X-Google-Smtp-Source: ABdhPJyZEC6dHiBHp/VxLQE3k8sPLyiRV0A9bnarvU3aYGTXwXnGH+tuETuY2x3TQXsyIOPz0H2OXA==
-X-Received: by 2002:a05:600c:4f91:: with SMTP id n17mr30077927wmq.195.1641051759842;
-        Sat, 01 Jan 2022 07:42:39 -0800 (PST)
-Received: from voidz-builder.home ([2a00:23c8:1808:7100:bf83:f058:18b2:3b92])
-        by smtp.gmail.com with ESMTPSA id z11sm36361107wmf.9.2022.01.01.07.42.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Jan 2022 07:42:39 -0800 (PST)
-From:   Laurence de Bruxelles <lfdebrux@gmail.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>, linux-rtc@vger.kernel.org,
-        Laurence de Bruxelles <lfdebrux@gmail.com>
-Subject: [PATCH] rtc: pxa: fix null pointer dereference
-Date:   Sat,  1 Jan 2022 15:41:49 +0000
-Message-Id: <20220101154149.12026-1-lfdebrux@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iPVzylUVRpeAcfXNQppU6FqeZrAVxB1sR63Dt2iVLwU=;
+        b=I/J2iKV+NKF2R+NP7LX6R2R1HVZ32YS47I33eV5TjhCw0+SkpwQpmn/KN+PYtKwwMf
+         K5e3Xdj84jgS6YaDQ4mrRJbRz3eIPRIkgcMiwrpHxscxTEAQX57HQud/x799O+znJR4K
+         morw7yI4LLZXWU0u9yFGWGA1StZYeoFZoyk7j3IpZ/VQN0AGQ0P5mBu1nkkjIVtIxb+J
+         Lpul4+HbPG576Jmf+rVXkpWVG3wDIx87vArtpCTVe9kI5lQHinzTYciXfAa1eESNNJhf
+         45VsVhaFwzCnhbaRKSLBPog6neN2B5kpJE3xiLmHfoxiqNqqwNdhqW79RVAIPeBPl2IP
+         QRjg==
+X-Gm-Message-State: AOAM5339T2DAJkSknsmMOdLnidlvV75wYAXw1NtTpkeMW0FG0ibGU6gz
+        iWyseVXFizZQYejP/z/cEHAOPLF/rv9hauw2Bxg=
+X-Google-Smtp-Source: ABdhPJw6vTeLy4HHkOD0cRJ66G1hNoZL4n6P2HY1spPFAU24qh9JshJb35crTY48+wIUAzkztf1JWDIur+aALh9+ueY=
+X-Received: by 2002:a05:6102:1613:: with SMTP id cu19mr13217645vsb.39.1641219196826;
+ Mon, 03 Jan 2022 06:13:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211230044027.2739732-1-daniel@0x0f.com>
+In-Reply-To: <20211230044027.2739732-1-daniel@0x0f.com>
+From:   Romain Perier <romain.perier@gmail.com>
+Date:   Mon, 3 Jan 2022 15:13:05 +0100
+Message-ID: <CABgxDoKMNcYzPH6mcO0yfJhpK2kRZR5BK=p5H1YvVqJGjbynDg@mail.gmail.com>
+Subject: Re: [PATCH] rtc: msc313: Select by default on MSTARV7
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-With the latest stable kernel versions the rtc on the PXA based
-Zaurus does not work, when booting I see the following kernel messages:
+Hi,
 
-pxa-rtc pxa-rtc: failed to find rtc clock source
-pxa-rtc pxa-rtc: Unable to init SA1100 RTC sub-device
-pxa-rtc: probe of pxa-rtc failed with error -2
-hctosys: unable to open rtc device (rtc0)
+Le jeu. 30 d=C3=A9c. 2021 =C3=A0 05:40, Daniel Palmer <daniel@0x0f.com> a =
+=C3=A9crit :
+>
+> All of the ARCH_MSTARV7 chips have this RTC so it's more likey
+> ARCH_MSTARV7 wants it than doesn't.
+>
+> At the same time fix up the indent on the depends on line that looks
+> like it got converted from a tab to spaces at some point.
+>
+> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> ---
+>  drivers/rtc/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 058e56a10ab8..9acd4ea267df 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -1924,7 +1924,8 @@ config RTC_DRV_WILCO_EC
+>
+>  config RTC_DRV_MSC313
+>         tristate "MStar MSC313 RTC"
+> -        depends on ARCH_MSTARV7 || COMPILE_TEST
+> +       depends on ARCH_MSTARV7 || COMPILE_TEST
+> +       default ARCH_MSTARV7
 
-I think this is because commit f2997775b111 ("rtc: sa1100: fix possible
-race condition") moved the allocation of the rtc_device struct out of
-sa1100_rtc_init and into sa1100_rtc_probe. This means that pxa_rtc_probe
-also needs to do allocation for the rtc_device struct, otherwise
-sa1100_rtc_init will try to dereference a null pointer. This patch adds
-that allocation by copying how sa1100_rtc_probe in
-drivers/rtc/rtc-sa1100.c does it; after the IRQs are set up a managed
-rtc_device is allocated.
+You still depend on ARCH_MSTARV7 so "default y" is enough. It
+will only work if the dependencies are satisfied and, when it is the
+case, the value can be overridden by the user.
 
-I've tested this patch with `qemu-system-arm -machine akita` and with a
-real Zaurus SL-C1000 applied to 4.19, 5.4, and 5.10.
-
-Signed-off-by: Laurence de Bruxelles <lfdebrux@gmail.com>
-Fixes: f2997775b111 ("rtc: sa1100: fix possible race condition")
----
- drivers/rtc/rtc-pxa.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/rtc/rtc-pxa.c b/drivers/rtc/rtc-pxa.c
-index d2f1d8f754bf..cf8119b6d320 100644
---- a/drivers/rtc/rtc-pxa.c
-+++ b/drivers/rtc/rtc-pxa.c
-@@ -330,6 +330,10 @@ static int __init pxa_rtc_probe(struct platform_device *pdev)
- 	if (sa1100_rtc->irq_alarm < 0)
- 		return -ENXIO;
- 
-+	sa1100_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(sa1100_rtc->rtc))
-+		return PTR_ERR(sa1100_rtc->rtc);
-+
- 	pxa_rtc->base = devm_ioremap(dev, pxa_rtc->ress->start,
- 				resource_size(pxa_rtc->ress));
- 	if (!pxa_rtc->base) {
--- 
-2.34.1
-
+Cheers,
+Romain
