@@ -2,97 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA94948593F
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jan 2022 20:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1574859B7
+	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jan 2022 21:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243540AbiAETey (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 5 Jan 2022 14:34:54 -0500
-Received: from mail.hugovil.com ([162.243.120.170]:38876 "EHLO
-        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiAETex (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jan 2022 14:34:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=f+UuEnMxTVqpzxOb1LP/W65bh42k1E6+C/VjtXgdTb4=; b=g
-        LxFSZAbAXh4UjCu1ynYXRRD356LT1OfPMbTt2gZsrw1m/gS6M3wJwj/IGP9pVOOLKZtRed0B8He+1
-        KowIYj2z/h4kJHLrxIMt2pvqjSZ7DsE/3mx4eCi8Cpjv5VtS18Gv+gIAuEpXUL7KPWX+RiFnOobjv
-        w69mjzAN2A6p40tQ=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:53874 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1n5C3c-0001ym-Mm; Wed, 05 Jan 2022 14:34:49 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        id S243786AbiAEUBQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 5 Jan 2022 15:01:16 -0500
+Received: from relay11.mail.gandi.net ([217.70.178.231]:60761 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243779AbiAEUBO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jan 2022 15:01:14 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5811D100004;
+        Wed,  5 Jan 2022 20:01:11 +0000 (UTC)
+Date:   Wed, 5 Jan 2022 21:01:10 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed,  5 Jan 2022 14:34:39 -0500
-Message-Id: <20220105193440.151359-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
+Message-ID: <YdX5BocOfHE/0twa@piout.net>
+References: <20220105193440.151359-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
-X-Spam-Level: 
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: dimonoff.com]
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
-Subject: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220105193440.151359-1-hugo@hugovil.com>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> The rc variable doesn't need to be tested a second time when the <if> block
+> evaluates to false.
+> 
 
-The rc variable doesn't need to be tested a second time when the <if> block
-evaluates to false.
+rc is not tested a second time, here is the relevant listing:
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/rtc/rtc-isl1208.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-index 182dfa605515..c7f04df5a0b6 100644
---- a/drivers/rtc/rtc-isl1208.c
-+++ b/drivers/rtc/rtc-isl1208.c
-@@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	if (rc)
- 		return rc;
- 
 -	if (client->irq > 0)
 +	if (client->irq > 0) {
+ ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
+ ffffffff81aef64e:	85 f6                	test   %esi,%esi
+ ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
  		rc = isl1208_setup_irq(client, client->irq);
--	if (rc)
--		return rc;
-+		if (rc)
-+			return rc;
+ 	if (rc)
+ 		return rc;
 +	}
  
 -	if (evdet_irq > 0 && evdet_irq != client->irq)
 +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+ ffffffff81aef656:	85 db                	test   %ebx,%ebx
+ ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
+ ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
+@@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
  		rc = isl1208_setup_irq(client, evdet_irq);
--	if (rc)
--		return rc;
-+		if (rc)
-+			return rc;
-+	}
- 
- 	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
  	if (rc)
--- 
-2.30.2
+ 		return rc;
++	}
 
+As you can see, no change in assembly but it is worse to read. gcc on
+arm behaves the same way.
+
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
+> index 182dfa605515..c7f04df5a0b6 100644
+> --- a/drivers/rtc/rtc-isl1208.c
+> +++ b/drivers/rtc/rtc-isl1208.c
+> @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	if (rc)
+>  		return rc;
+>  
+> -	if (client->irq > 0)
+> +	if (client->irq > 0) {
+>  		rc = isl1208_setup_irq(client, client->irq);
+> -	if (rc)
+> -		return rc;
+> +		if (rc)
+> +			return rc;
+> +	}
+>  
+> -	if (evdet_irq > 0 && evdet_irq != client->irq)
+> +	if (evdet_irq > 0 && evdet_irq != client->irq) {
+>  		rc = isl1208_setup_irq(client, evdet_irq);
+> -	if (rc)
+> -		return rc;
+> +		if (rc)
+> +			return rc;
+> +	}
+>  
+>  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
+>  	if (rc)
+> -- 
+> 2.30.2
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
