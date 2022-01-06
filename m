@@ -2,81 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6D54861A1
-	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jan 2022 09:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEBA4869C9
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jan 2022 19:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbiAFIqi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 6 Jan 2022 03:46:38 -0500
-Received: from mailgw.kylinos.cn ([123.150.8.42]:28084 "EHLO nksmu.kylinos.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231734AbiAFIqi (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Thu, 6 Jan 2022 03:46:38 -0500
-X-UUID: 1625e98c9b3640ae86d6faa3c6159411-20220106
-X-CPASD-INFO: 9ddb1f2e13a74e36aefeeeda5bd59ddd@grSegl6YYJVdU6ODg6h-cIGWlpWWkYS
-        wd5yEZWeUkISVhH5xTWJsXVKBfG5QZWNdYVN_eGpQY19gZFB5i3-XblBgXoZgUZB3iKaegmGUYg==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 9ddb1f2e13a74e36aefeeeda5bd59ddd
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:186.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:92.0,IP:-2.0,MAL:0.0,ATTNUM:0.
-        0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFO
-        B:0.0,SPC:0.0,SIG:-5,AUF:0,DUF:29551,ACD:155,DCD:258,SL:0,AG:0,CFC:0.285,CFSR
-        :0.097,UAT:0,RAF:0,VERSION:2.3.4
-X-CPASD-ID: 1625e98c9b3640ae86d6faa3c6159411-20220106
-X-CPASD-BLOCK: 1001
-X-CPASD-STAGE: 1, 1
-X-UUID: 1625e98c9b3640ae86d6faa3c6159411-20220106
-X-User: luriwen@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <luriwen@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1439652963; Thu, 06 Jan 2022 16:59:39 +0800
-From:   Riwen Lu <luriwen@kylinos.cn>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com, e@80x24.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Riwen Lu <luriwen@kylinos.cn>
-Subject: [PATCH v1] rtc: cmos: Evaluate century appropriate
-Date:   Thu,  6 Jan 2022 16:46:09 +0800
-Message-Id: <20220106084609.1223688-1-luriwen@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        id S242840AbiAFSZk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 6 Jan 2022 13:25:40 -0500
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:39863 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242801AbiAFSZh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jan 2022 13:25:37 -0500
+Received: by mail-oi1-f172.google.com with SMTP id a129so3859731oif.6;
+        Thu, 06 Jan 2022 10:25:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5h1dR4PNN5NFkFW0+XiCyKA8d8fazWVArSi0BOxk1SE=;
+        b=Bga3uG3lhYTWOBGMyXup/kS3O7N4Z2+uLYpPCfMbI14sVi50QjtFaA2cO12H/xdKSe
+         WGUZKK9cIfHyQsjXNFOYD3e6ZPG9g3cTzErQXs78I2DT3b+P3aoUAGmIQ70Ch4kmCljt
+         7LeQvZHOgzQXnb/jm2gvbuLtGqUJIDWel5poWSbriTVOL6yG6pIzhhv8pEePqapG84L9
+         VVeRNk6zbwdH8GlgE20AeV1lmJpwPZesDPAFScvod6dnmnkvj6uzixBFFsYOIbV3D17A
+         LlxxAvrKX411fN5TxUYQqo0wcO7BahraYoxjR5YytDeUrhd9VzWSH8OkP5Jad2FSmN/s
+         ZsSg==
+X-Gm-Message-State: AOAM531r3OEiJQegrWrDZ5XZshK/veUcqca1cATQB305ML3VrKxG4FFi
+        CV8LBqDPhoMYiiaNBwWJDA==
+X-Google-Smtp-Source: ABdhPJzepteQkCoDKy1ujIilUFsyTVi5z9LtR0nkVZhj5YPNewotOVWZzrv2vR4uYHaHaLpVu1wZ6A==
+X-Received: by 2002:a54:4502:: with SMTP id l2mr3544191oil.167.1641493536337;
+        Thu, 06 Jan 2022 10:25:36 -0800 (PST)
+Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.googlemail.com with ESMTPSA id r13sm484949oth.21.2022.01.06.10.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Jan 2022 10:25:35 -0800 (PST)
+From:   Rob Herring <robh@kernel.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: rtc: st,stm32-rtc: Make each example a separate entry
+Date:   Thu,  6 Jan 2022 12:25:15 -0600
+Message-Id: <20220106182518.1435497-7-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-There's limiting the year to 2069. When setting the rtc year to 2070,
-reading it returns 1970. Evaluate century starting from 19 to count the
-correct year.
+Each independent example should be a separate entry. This allows for
+'interrupts' to have different cell sizes.
 
-$ sudo date -s 20700106
-Mon 06 Jan 2070 12:00:00 AM CST
-$ sudo hwclock -w
-$ sudo hwclock -r
-1970-01-06 12:00:49.604968+08:00
-
-Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index dcfaf09946ee..2065842f775d 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -104,7 +104,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
- 	time->tm_year += real_year - 72;
- #endif
+diff --git a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+index 2359f541b770..764717ce1873 100644
+--- a/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml
+@@ -127,6 +127,7 @@ examples:
+       st,syscfg = <&pwrcfg 0x00 0x100>;
+     };
  
--	if (century > 20)
-+	if (century > 19)
- 		time->tm_year += (century - 19) * 100;
- 
- 	/*
++  - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+     #include <dt-bindings/clock/stm32mp1-clks.h>
+     rtc@5c004000 {
 -- 
-2.25.1
+2.32.0
 
-
-No virus found
-		Checked by Hillstone Network AntiVirus
