@@ -2,165 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05658485B95
-	for <lists+linux-rtc@lfdr.de>; Wed,  5 Jan 2022 23:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB72486128
+	for <lists+linux-rtc@lfdr.de>; Thu,  6 Jan 2022 08:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244887AbiAEW0B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 5 Jan 2022 17:26:01 -0500
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:43445 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244883AbiAEWZ7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 5 Jan 2022 17:25:59 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id CD77B1BF203;
-        Wed,  5 Jan 2022 22:25:56 +0000 (UTC)
-Date:   Wed, 5 Jan 2022 23:25:56 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: isl1208: avoid unnecessary rc variable tests
-Message-ID: <YdYa9IY2dM4BrAH0@piout.net>
-References: <20220105193440.151359-1-hugo@hugovil.com>
- <YdX5BocOfHE/0twa@piout.net>
- <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
+        id S235896AbiAFHvn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 6 Jan 2022 02:51:43 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:30258 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235701AbiAFHvn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 6 Jan 2022 02:51:43 -0500
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JTz7G5m9Hzbhxp;
+        Thu,  6 Jan 2022 15:51:06 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 15:51:41 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 15:51:41 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
+CC:     <vincent.sunplus@gmail.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>
+Subject: [PATCH -next] rtc: rtc-sunplus: fix return value in sp_rtc_probe()
+Date:   Thu, 6 Jan 2022 15:57:11 +0800
+Message-ID: <20220106075711.3216468-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220105153446.82214b48a4c77ec960ce03f3@hugovil.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/01/2022 15:34:46-0500, Hugo Villeneuve wrote:
-> On Wed, 5 Jan 2022 21:01:10 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 05/01/2022 14:34:39-0500, Hugo Villeneuve wrote:
-> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > 
-> > > The rc variable doesn't need to be tested a second time when the <if> block
-> > > evaluates to false.
-> > > 
-> > 
-> > rc is not tested a second time, here is the relevant listing:
-> > 
-> > -	if (client->irq > 0)
-> > +	if (client->irq > 0) {
-> >  ffffffff81aef647:	41 8b b5 bc 01 00 00 	mov    0x1bc(%r13),%esi
-> >  ffffffff81aef64e:	85 f6                	test   %esi,%esi
-> >  ffffffff81aef650:	0f 8f 35 01 00 00    	jg     ffffffff81aef78b <isl1208_probe+0x314>
-> >  		rc = isl1208_setup_irq(client, client->irq);
-> >  	if (rc)
-> >  		return rc;
-> > +	}
-> >  
-> > -	if (evdet_irq > 0 && evdet_irq != client->irq)
-> > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
-> >  ffffffff81aef656:	85 db                	test   %ebx,%ebx
-> >  ffffffff81aef658:	7e 0d                	jle    ffffffff81aef667 <isl1208_probe+0x1f0>
-> >  ffffffff81aef65a:	41 39 9d bc 01 00 00 	cmp    %ebx,0x1bc(%r13)
-> > @@ -1663,6 +1664,7 @@ ffffffff81aef661:	0f 85 0a 01 00 00
-> >  		rc = isl1208_setup_irq(client, evdet_irq);
-> >  	if (rc)
-> >  		return rc;
-> > +	}
-> > 
-> > As you can see, no change in assembly but it is worse to read. gcc on
-> > arm behaves the same way.
-> 
-> Hi Alexandre,
-> I am not sure that I fully understand your assembly code analysis. Maybe my patch comment was misleading, because I am not talking about a redundant test inside the if block, but ouside of it (after it).
-> 
+If devm_ioremap_resource() fails, it should return error
+code from sp_rtc->reg_base in sp_rtc_probe().
 
-I understood that and what I'm showing is that it doesn't matter to the
-compiler, it will not test the same variable twice if it didn't change.
+Fixes: fad6cbe9b2b4 ("rtc: Add driver for RTC in Sunplus SP7021")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/rtc/rtc-sunplus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Here is the original code with my annotations. Let's assume that the variable client->irq = 0:
-> 
-> ---
-> /* If client->irq = 0, then function isl1208_setup_irq() will not be called, and rc will not be modified: */
-> if (client->irq > 0)
-> 	rc = isl1208_setup_irq(client, client->irq);
-> 
-> /* If rc hasn't been modified, there is no need to re-test its value here: */
-> if (rc)
-> 	return rc;
-> ---
-> 
-> After the patch, this code section becomes:
-> 
-> ---
-> if (client->irq > 0) {
-> 	rc = isl1208_setup_irq(client, client->irq);
-> 	if (rc)
-> 		return rc;
-> }
-> ---
-> 
-> For me it is more logical and clearer like this. Moreover, you can see that at line 873 of the original driver, the same kind of mechanism is used:
-> 
-> ---
-> if (isl1208->config->has_timestamp) {
-> 	rc = rtc_add_group(isl1208->rtc, &isl1219_rtc_sysfs_files);
-> 	if (rc)
-> 		return rc;
-> }
-> ---
-> 
-> Regards,
-> Hugo.
-> 
-> 
-> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > ---
-> > >  drivers/rtc/rtc-isl1208.c | 14 ++++++++------
-> > >  1 file changed, 8 insertions(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-> > > index 182dfa605515..c7f04df5a0b6 100644
-> > > --- a/drivers/rtc/rtc-isl1208.c
-> > > +++ b/drivers/rtc/rtc-isl1208.c
-> > > @@ -880,15 +880,17 @@ isl1208_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> > >  	if (rc)
-> > >  		return rc;
-> > >  
-> > > -	if (client->irq > 0)
-> > > +	if (client->irq > 0) {
-> > >  		rc = isl1208_setup_irq(client, client->irq);
-> > > -	if (rc)
-> > > -		return rc;
-> > > +		if (rc)
-> > > +			return rc;
-> > > +	}
-> > >  
-> > > -	if (evdet_irq > 0 && evdet_irq != client->irq)
-> > > +	if (evdet_irq > 0 && evdet_irq != client->irq) {
-> > >  		rc = isl1208_setup_irq(client, evdet_irq);
-> > > -	if (rc)
-> > > -		return rc;
-> > > +		if (rc)
-> > > +			return rc;
-> > > +	}
-> > >  
-> > >  	rc = devm_rtc_nvmem_register(isl1208->rtc, &isl1208->nvmem_config);
-> > >  	if (rc)
-> > > -- 
-> > > 2.30.2
-> > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
-> 
-> 
-> -- 
-> Hugo Villeneuve <hugo@hugovil.com>
-
+diff --git a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
+index 0b3873204f5c..e8e2ab1103fc 100644
+--- a/drivers/rtc/rtc-sunplus.c
++++ b/drivers/rtc/rtc-sunplus.c
+@@ -238,7 +238,7 @@ static int sp_rtc_probe(struct platform_device *plat_dev)
+ 	sp_rtc->res = platform_get_resource_byname(plat_dev, IORESOURCE_MEM, RTC_REG_NAME);
+ 	sp_rtc->reg_base = devm_ioremap_resource(&plat_dev->dev, sp_rtc->res);
+ 	if (IS_ERR(sp_rtc->reg_base))
+-		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->res),
++		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->reg_base),
+ 					    "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
+ 	dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
+ 		sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
