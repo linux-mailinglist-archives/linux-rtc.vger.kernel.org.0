@@ -2,85 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B378F4877A5
-	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jan 2022 13:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347394877AE
+	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jan 2022 13:49:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiAGMoV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 7 Jan 2022 07:44:21 -0500
-Received: from mx-out.tlen.pl ([193.222.135.148]:49029 "EHLO mx-out.tlen.pl"
+        id S238245AbiAGMts (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 7 Jan 2022 07:49:48 -0500
+Received: from mx-out.tlen.pl ([193.222.135.175]:12439 "EHLO mx-out.tlen.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229624AbiAGMoU (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 7 Jan 2022 07:44:20 -0500
-Received: (wp-smtpd smtp.tlen.pl 5172 invoked from network); 7 Jan 2022 13:44:14 +0100
+        id S237422AbiAGMtr (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 7 Jan 2022 07:49:47 -0500
+Received: (wp-smtpd smtp.tlen.pl 21951 invoked from network); 7 Jan 2022 13:49:45 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1641559456; bh=xiBX8PyBqNcjtRd1m+zKcPOe6AicNgc/BV0BLx9tlc0=;
-          h=Subject:To:Cc:From;
-          b=qrzbVMYzkAeGA09qWmpKKYTFoqoEPCy/N2swBaRigqnE1PHltgTg6yhin3YE8q7Xd
-           Cu/bIFPJTQ1lEp0KKm2XPH5ZVxVWsiprXSnip+69D1lcH4lUKhj3Eqi/y7S7gr9dtj
-           BF4uZYRN9ihOCiWQNoImnFYGypN0dOjwVaViFZFk=
-Received: from aafo3.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.144.3])
+          t=1641559785; bh=aJZwZ7IpWhFWERR2lRcVhZlAPft24k0xF2MqSOnzzq0=;
+          h=From:To:Cc:Subject;
+          b=LqIib5mDajc5fjrTz8ae7DnA2cYhTFnVhGYLSoTPqJl5On1ffp62NzZ1FxQB/Yojb
+           U67FAK3nF2B/aUn41iuwS/qw3S6fY1mn6Vh1HmSIFbWB9ql077IOo2dQIx1kScyZd8
+           B0xWrHnb6FSJxQ4FXg33Ex+cdF0O8faWc5DvQJWo=
+Received: from aafo3.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.144.3])
           (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 13:44:14 +0100
-Message-ID: <475fd4ed-246e-c734-d58a-6a470d61be90@o2.pl>
-Date:   Fri, 7 Jan 2022 13:43:36 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v1] rtc: cmos: Evaluate century appropriate
-Content-Language: en-GB
-To:     linux-rtc@vger.kernel.org
-References: <20220106084609.1223688-1-luriwen () kylinos ! cn>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 13:49:45 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        luriwen@kylinos.cn
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20220106084609.1223688-1-luriwen () kylinos ! cn>
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH v5 0/9] rtc-cmos,rtc-mc146818-lib: fixes
+Date:   Fri,  7 Jan 2022 13:49:25 +0100
+Message-Id: <20220107124934.159878-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 3bcec8ec7771296774a075fce247aa53
+X-WP-MailID: 88d531224465cdb716ec0009a0249a60
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000B [kWOE]                               
+X-WP-SPAM: NO 0000000 [obNU]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-W dniu 06.01.2022 o 09:46, Riwen Lu pisze:
-> There's limiting the year to 2069. When setting the rtc year to 2070,
-> reading it returns 1970. Evaluate century starting from 19 to count the
-> correct year.
->
-> $ sudo date -s 20700106
-> Mon 06 Jan 2070 12:00:00 AM CST
-> $ sudo hwclock -w
-> $ sudo hwclock -r
-> 1970-01-06 12:00:49.604968+08:00
-Indeed, my system is also affected.
-> Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
->
-> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+Hello,
 
-Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+This patch series fixes some issues in the RTC CMOS handling code:
 
+1. A missing spin_lock_irq() / spin_unlock_irq() pair in cmos_set_alarm().
+2. A failing presence check of the RTC: the clock was misdetected as
+   broken since Linux 5.11 on one of our home systems.
+3. Do not touch the RTC alarm registers when the RTC update is in
+   progress. (On some Intel chipsets, this causes bogus values being
+   read or writes to fail silently.)
+
+This is my first patch series, so please review carefully.
+
+v2: Drop the last patch:
+        Revert "rtc: cmos: Replace spin_lock_irqsave with spin_lock in hard IRQ"
+which was made obsolete by mainlining of 
+commit 13be2efc390a ("rtc: cmos: Disable irq around direct invocation of cmos_interrupt()")
+
+v3: Rework solution to problem 3 (I'd like to thank Greg KH for comment),
+drop x86 refactoring patches (I'll send them later).
+
+v4: Fixed some issues pointed out by Mr Alexandre Belloni:
+    - do not add strings to rtc-mc146818-lib.c - I moved the error printing
+      code to callers of mc146818_get_time(). This resulted in two new
+      patches in the series,
+    - other small issues.
+
+v5: Increase maximum accepted duration of the UIP high pulse from 10 to 20ms,
+    in case there are some very slow chips out there.
+
+    Note: this may cause problems with hpet_rtc_interrupt() if the CMOS
+    RTC stops working while the system is running and RTC update
+    interrupt / RTC alarm interrupt is enabled (which should be rare).
+    In this case, hpet_rtc_interrupt() is executed 64 times per second
+    and takes up to 20ms to complete - which may constantly occupy
+    one CPU. I am not sure if this is likely enough to implement
+    special handling of this case in hpet_rtc_interrupt().
+
+I have noticed that mach_get_cmos_time() in arch/x86/kernel/rtc.c
+performs a similar function to mc146818_get_time() in
+drivers/rtc/rtc-cmos.c . In the future, I'm going to post a new series
+that removes this duplicated code and makes mach_get_cmos_time() use
+mc146818_get_time(). This will likely include reducing polling interval
+in mc146818_avoid_UIP() from 1ms to 100us to make it more similar to
+mach_get_cmos_time()'s current behaviour.
+
+Greetings,
+Mateusz
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 Cc: Alessandro Zummo <a.zummo@towertech.it>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-
-> ---
->  drivers/rtc/rtc-mc146818-lib.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-> index dcfaf09946ee..2065842f775d 100644
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -104,7 +104,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
->  	time->tm_year += real_year - 72;
->  #endif
->  
-> -	if (century > 20)
-> +	if (century > 19)
->  		time->tm_year += (century - 19) * 100;
->  
->  	/*
-
-
+Cc: Greg KH <gregkh@linuxfoundation.org>
