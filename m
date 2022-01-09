@@ -2,92 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C9E487C34
-	for <lists+linux-rtc@lfdr.de>; Fri,  7 Jan 2022 19:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6847B48895E
+	for <lists+linux-rtc@lfdr.de>; Sun,  9 Jan 2022 13:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241117AbiAGSas (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 7 Jan 2022 13:30:48 -0500
-Received: from mx-out.tlen.pl ([193.222.135.158]:14245 "EHLO mx-out.tlen.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240535AbiAGSas (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:30:48 -0500
-Received: (wp-smtpd smtp.tlen.pl 34295 invoked from network); 7 Jan 2022 19:30:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1641580245; bh=SWiAconY7zgizwjw07HhTiVctBWou/ptYNxMtMPUvvs=;
-          h=From:To:Cc:Subject;
-          b=ELTGkzekRhYVr6r9MfO9oCMxDA4T288lkA7VTGu8ZQFwGvJfsjVga5gAdUdSzCiIW
-           QlWUmrww1NY7vYquweYU6IPivasAy/gFGb5YxDyq7W1SQzP/JwuZY/Jzhm1gJpFHjP
-           viG/atwCp5fV2VHTUj6jg2RNik9io4ja+nmlLmew=
-Received: from aafo3.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.144.3])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-rtc@vger.kernel.org>; 7 Jan 2022 19:30:45 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH] rtc-cmos: replace obsolete comments
-Date:   Fri,  7 Jan 2022 19:30:29 +0100
-Message-Id: <20220107183029.486207-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
+        id S235515AbiAIMbp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 9 Jan 2022 07:31:45 -0500
+Received: from 82-65-109-163.subs.proxad.net ([82.65.109.163]:47828 "EHLO
+        luna.linkmauve.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233804AbiAIMbp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 9 Jan 2022 07:31:45 -0500
+Received: by luna.linkmauve.fr (Postfix, from userid 1000)
+        id 891F8F403B5; Sun,  9 Jan 2022 13:31:41 +0100 (CET)
+Date:   Sun, 9 Jan 2022 13:31:41 +0100
+From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] rtc: gamecube: Fix an IS_ERR() vs NULL check
+Message-ID: <20220109123141.5hq5osei3v5ebbo2@luna>
+Jabber-ID: linkmauve@linkmauve.fr
+References: <20220107073340.GF22086@kili>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 6964a5c64c8ae93e48457f54cf352c5c
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [gYNU]                               
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ydtq75hapnv2bv4l"
+Content-Disposition: inline
+In-Reply-To: <20220107073340.GF22086@kili>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The comments in cmos_read_alarm() and cmos_set_alarm() do not apply to
-current code, replace them.
 
-These comments were added in
-commit fbb974ba693b ("rtc: cmos: Do not export alarm rtc_ops when we do not support alarms")
-which introduced a separate struct rtc_class_ops, which was used when
-the device did not support RTC alarms. The functions cmos_read_alarm()
-and cmos_set_alarm() were called not only from the rtc_op struct, but
-also explicitly, so they had to independently check for RTC alarm
-support.
+--ydtq75hapnv2bv4l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The separate rtc_class_ops structure was later removed in
-        commit 30f5bd537fdb ("rtc: cmos: remove cmos_rtc_ops_no_alarm")
-but the comments remained and now are obsolete.
+On Fri, Jan 07, 2022 at 10:33:40AM +0300, Dan Carpenter wrote:
+> The devm_kzalloc() function returns NULL on error, it doesn't return
+> error pointers.
 
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
+Good catch, thanks!
 
-This patch applies cleanly on rtc-next.
+Reviewed-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
 
- drivers/rtc/rtc-cmos.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, W=
+ii and Wii U")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/rtc/rtc-gamecube.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
+> index 98128746171e..f717b36f4738 100644
+> --- a/drivers/rtc/rtc-gamecube.c
+> +++ b/drivers/rtc/rtc-gamecube.c
+> @@ -319,8 +319,8 @@ static int gamecube_rtc_probe(struct platform_device =
+*pdev)
+>  	int ret;
+> =20
+>  	d =3D devm_kzalloc(dev, sizeof(struct priv), GFP_KERNEL);
+> -	if (IS_ERR(d))
+> -		return PTR_ERR(d);
+> +	if (!d)
+> +		return -ENOMEM;
+> =20
+>  	d->iob =3D devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(d->iob))
+> --=20
+> 2.20.1
 
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 7c006c2b125f..cd82eff2630a 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -290,7 +290,7 @@ static int cmos_read_alarm(struct device *dev, struct rtc_wkalrm *t)
- 		.time = &t->time,
- 	};
- 
--	/* This not only a rtc_op, but also called directly */
-+	/* Fail if the RTC alarm is not supported */
- 	if (!is_valid_irq(cmos->irq))
- 		return -EIO;
- 
-@@ -523,7 +523,7 @@ static int cmos_set_alarm(struct device *dev, struct rtc_wkalrm *t)
- 	unsigned char rtc_control;
- 	int ret;
- 
--	/* This not only a rtc_op, but also called directly */
-+	/* Fail if the RTC alarm is not supported */
- 	if (!is_valid_irq(cmos->irq))
- 		return -EIO;
- 
--- 
-2.25.1
+--=20
+Emmanuel Gil Peyrot
 
+--ydtq75hapnv2bv4l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEjrVT1SzTln43kCLJOWgfYkb2LpAFAmHa1akACgkQOWgfYkb2
+LpB9BQf/f342kBvI7hwKfQZlT5DyulLVbI/BRz5g+/DA30vRZz9J2ohwXm6Igjd4
+JspkzZiBLqAKMynOJG/lYNtRnY0rrO5R6wnuoWZBgOZjLqZDEIUdYqi0VKwO14Nm
+/Dv8BbFampCNdExakaNX7B0D/yAc1KpcI8PJINsKxzvbI2lz9eVppnLZ1oTus7EV
+V13+eIgkgTILLEq71Q/VrSlTrPRjo6WLB6MU4kuDpaPXHH7W8lHLrdpxCzkRYN6U
+ri/2dVP7h2AP2MkPJPdCHawXULyPGgzO2AoRVPgrZ3WN0TEmNHJx41TJZcrIlsBG
++IIgo/LECX0WGA7RMwivqIrlmrKkJA==
+=F1gM
+-----END PGP SIGNATURE-----
+
+--ydtq75hapnv2bv4l--
