@@ -2,84 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E7448AB0F
-	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jan 2022 11:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CDB48B55D
+	for <lists+linux-rtc@lfdr.de>; Tue, 11 Jan 2022 19:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348386AbiAKKKM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 11 Jan 2022 05:10:12 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58829 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237384AbiAKKKL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 11 Jan 2022 05:10:11 -0500
-Received: from [77.244.183.192] (port=64326 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1n7E6T-000ER6-CL; Tue, 11 Jan 2022 11:10:09 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
- only)
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211211175951.30763-1-luca@lucaceresoli.net>
-Message-ID: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
-Date:   Tue, 11 Jan 2022 11:10:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1345273AbiAKSIH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 11 Jan 2022 13:08:07 -0500
+Received: from dcvr.yhbt.net ([64.71.152.64]:46340 "EHLO dcvr.yhbt.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345903AbiAKSHQ (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:07:16 -0500
+Received: from localhost (dcvr.yhbt.net [127.0.0.1])
+        by dcvr.yhbt.net (Postfix) with ESMTP id 5FC0F1F852;
+        Tue, 11 Jan 2022 18:07:15 +0000 (UTC)
+Date:   Tue, 11 Jan 2022 18:07:15 +0000
+From:   Eric Wong <e@80x24.org>
+To:     Riwen Lu <luriwen@kylinos.cn>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] rtc: cmos: Evaluate century appropriate
+Message-ID: <20220111180715.GB11432@dcvr>
+References: <20220106084609.1223688-1-luriwen@kylinos.cn>
 MIME-Version: 1.0
-In-Reply-To: <20211211175951.30763-1-luca@lucaceresoli.net>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Disposition: inline
+In-Reply-To: <20220106084609.1223688-1-luriwen@kylinos.cn>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi All,
-
-On 11/12/21 18:59, Luca Ceresoli wrote:
-> Hi,
+Riwen Lu <luriwen@kylinos.cn> wrote:
+> There's limiting the year to 2069. When setting the rtc year to 2070,
+> reading it returns 1970. Evaluate century starting from 19 to count the
+> correct year.
 > 
-> this series adds minimal drivers for the Maxim Semiconductor MAX77714
-> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
-> Only RTC and watchdog are implemented by these patches.
+> $ sudo date -s 20700106
+> Mon 06 Jan 2070 12:00:00 AM CST
+> $ sudo hwclock -w
+> $ sudo hwclock -r
+> 1970-01-06 12:00:49.604968+08:00
 > 
-> All implemented functionality is tested and working: RTC read/write,
-> watchdog start/stop/ping/set_timeout.
+> Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
 > 
-> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
-> indentation and can probably be applied easily.
-> 
-> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
-> rtc driver.
+> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
 
-A gentle ping about this series. It's at v5, all patches have at least
-one ack/review tag and most patches are unchanged since ~v2. It applies
-cleanly on current master.
+Oops, I'm not good at arithmetic :x  Thanks for this fix.
 
-Is there anything I should do to help making progress?
+Acked-by: Eric Wong <e@80x24.org>
 
-Regards,
--- 
-Luca
+> index dcfaf09946ee..2065842f775d 100644
+> --- a/drivers/rtc/rtc-mc146818-lib.c
+> +++ b/drivers/rtc/rtc-mc146818-lib.c
+> @@ -104,7 +104,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
+>  	time->tm_year += real_year - 72;
+>  #endif
+>  
+> -	if (century > 20)
+> +	if (century > 19)
+>  		time->tm_year += (century - 19) * 100;
+>  
+>  	/*
