@@ -2,177 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8752C48CDE5
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jan 2022 22:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3011D48CF6B
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jan 2022 00:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbiALVjU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 12 Jan 2022 16:39:20 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:54981 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiALVjS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jan 2022 16:39:18 -0500
-Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue010
- [212.227.15.167]) with ESMTPSA (Nemesis) id 1MFbBO-1n8MDM0glq-00HAXY; Wed, 12
- Jan 2022 22:39:06 +0100
-From:   Laurent Vivier <laurent@vivier.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
+        id S235952AbiALXvi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 12 Jan 2022 18:51:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236192AbiALXvP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jan 2022 18:51:15 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922D0C06173F
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Jan 2022 15:51:15 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id w7so845759ioj.5
+        for <linux-rtc@vger.kernel.org>; Wed, 12 Jan 2022 15:51:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0CvvG6Sg5CRn0S0loFvtHz3tC3c34qm3FIT7bwi49zU=;
+        b=OYDJaZdUTGuRaroxFXXXNdTr51ykvM0AH51j04gwQqdJAUknTFQHloDZAwcIFCBiFZ
+         1pW9K243gh8Rv2VPOVecIhOudZ7Is2czEmGsh0yLW1ZcnF9m+HS+CKhgBKLpojiFnBcv
+         GM1lR4Pmy/iELtFjIYjkp3K09X+yrltigfhfw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0CvvG6Sg5CRn0S0loFvtHz3tC3c34qm3FIT7bwi49zU=;
+        b=ft4GzpVfIlgClm6xJxfBYqjRb7Ig5sw/eCBk6BY/dAUO8vriZd9xR2aYwC3DhVU0G/
+         KF+vYK+wj+TIDTNAmQr30nKcj5vGA87rdx+HwygGrgWTi9RjVj7z8E2gHqEsSNAJmXkb
+         hoWS8gnVxgsFi3zBDvmAuqIV7erGrzOked1iEuM0NmeUxDhTu0JZQvX1XQ4P67XP5fQF
+         hw9lXl1v2ui45z7vJ78rRGslnvBBva/wDqIeDpbfw+DsZxM4hb34RNyFZjrBbit2ygaj
+         9bay8gUq5imEDj6H9kOn9s6qlSJC0kt1I1GbkcS39YBtQ6QA8beDB9Lik5zI15rbyD9N
+         dWiA==
+X-Gm-Message-State: AOAM532PS5WytkJqvIBuZI9wwO2EwvF/KTrpF3wqRkQpe94ONZWhmG/g
+        ihv401BP/80887pqVhzzlpTrb9bg5Db7lw==
+X-Google-Smtp-Source: ABdhPJymO1uP67tDwkSLUyfdC2hMMiuA+ArDBEMBICjwJtjISNY2I19w33OarazW9fRbTnq0yUQ7Mg==
+X-Received: by 2002:a05:6602:1484:: with SMTP id a4mr979952iow.153.1642031474992;
+        Wed, 12 Jan 2022 15:51:14 -0800 (PST)
+Received: from [192.168.1.128] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a12sm930874ilv.69.2022.01.12.15.51.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 15:51:14 -0800 (PST)
+Subject: Re: [PATCH v2] selftests: rtc: Increase test timeout so that all
+ tests run
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Laurent Vivier <laurent@vivier.eu>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v4 3/3] m68k: virt: Remove LEGACY_TIMER_TICK
-Date:   Wed, 12 Jan 2022 22:39:01 +0100
-Message-Id: <20220112213901.2178667-4-laurent@vivier.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220112213901.2178667-1-laurent@vivier.eu>
-References: <20220112213901.2178667-1-laurent@vivier.eu>
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220112194142.3276385-1-nfraprado@collabora.com>
+ <Yd84cDlW9+f7wQxq@piout.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f286a86d-6371-d8bd-6ca9-5f622468d1a4@linuxfoundation.org>
+Date:   Wed, 12 Jan 2022 16:51:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <Yd84cDlW9+f7wQxq@piout.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:YXtM90aHK1d0OvIhVyXWSgykMR28ld+QZcz3xqT1FE55S6fbL2g
- 2XLUVIPCPCcc0cITaHfkR1/1JTWpVqsYttX+FHiZRPHn2vs0OV9m58vIHvifcb2xlccHjJF
- uV+hlJsEhHvz49jJPR2hBLTxk5WijKSYPi5+MW7Jj/R2qqrpkRRICvmY/PlCCjqkGrX6zzz
- KHhzN6PcXqAoqXeeNri9Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:teksdMZ8okw=:Pa5JvdQsPVOSQbzhA3t5YU
- DrZAO9tmjLOIk4lQu9+dmMsozylLLm7DOgX//1UuZ+rK3Xf+k9SxT4bFl4casS7YjZ5Kjl9Mg
- IGmrkBrvoLoEHTTsn5OYOaWZQ6Oqpz1rI8HkDQPYyZ4PSj7biLYYKKfAEz+Wi4RYeZUCjp+AB
- PJIp4NBLOeM84gCMWzk+5w317SVi3wSvu8Sb5Q7cmdM0jTcUl+qCzdfAt5EWcJATVsoKoW7qS
- ArAQ6Ok3V8qem4ciBZJG5/TEKnrGab70jLSLornk0PL1A2N4JEn/NTrWu11ibuDULtPAtrykE
- D1jXl1X2SFSbwg4x4IY44++in2YL3SxdRga08++OWXBl4UTwGhJ7jL0Hy8GHEWnWEPMCQW9iJ
- B52gVwburOrCGBE2WOMLRFov/hCpxSnbfaaz30Eza7jnIlQaFgv3ltepOoqC+A+G2g2VuG1AW
- Mq0tlaXO+smcmyEo2koNcFGyhPZXDBLmJCqaOt9mCeBI1cRjQlYDxRp0YYyzJI8hdgrxXn7OH
- lMm1HcSs8Xpe7Eoe8+4YUHvY8HEWI2OPz85FWQ4YiLE0EJO+Abog3FJEyh8ecuUn2hAPYnB46
- xceey3lE4QNAtRQqyvGYt/BySyXMxgVe8CQD+NXCeg0AP9qSiEsVu7Tk5mwC8PKN4hylfyQdu
- lQculNAc23dZeJtbqjBNTIeRIG4RUGR1e+CZ1Q+wsUS6LtmedKeEO7fxbFwkbRARnfCE=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Move virt machine to generic clockevents.
+On 1/12/22 1:22 PM, Alexandre Belloni wrote:
+> On 12/01/2022 14:41:42-0500, Nícolas F. R. A. Prado wrote:
+>> The timeout setting for the rtc kselftest is currently 90 seconds. This
+>> setting is used by the kselftest runner to stop running a test if it
+>> takes longer than the assigned value.
+>>
+>> However, two of the test cases inside rtc set alarms. These alarms are
+>> set to the next beginning of the minute, so each of these test cases may
+>> take up to, in the worst case, 60 seconds.
+>>
+>> In order to allow for all test cases in rtc to run, even in the worst
+>> case, when using the kselftest runner, the timeout value should be
+>> increased to at least 120. Set it to 180, so there's some additional
+>> slack.
+>>
+>> Correct operation can be tested by running the following command right
+>> after the start of a minute (low second count), and checking that all
+>> test cases run:
+>>
+>> 	./run_kselftest.sh -c rtc
+>>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-cc: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- arch/m68k/Kconfig.machine |  1 -
- arch/m68k/virt/timer.c    | 56 ++++++++++++++++++++++++++++++---------
- 2 files changed, 43 insertions(+), 14 deletions(-)
+Thank you both. Will apply this for 5.17-rc2 once the merge window
+closes.
 
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index 769c5b38fe16..74a2354bc226 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -152,7 +152,6 @@ config SUN3
- config VIRT
- 	bool "Virtual M68k Machine support"
- 	depends on MMU
--	select LEGACY_TIMER_TICK
- 	select M68040
- 	select MMU_MOTOROLA if MMU
- 	select GOLDFISH
-diff --git a/arch/m68k/virt/timer.c b/arch/m68k/virt/timer.c
-index 843bf6ed7e1a..767b01f75abb 100644
---- a/arch/m68k/virt/timer.c
-+++ b/arch/m68k/virt/timer.c
-@@ -3,6 +3,7 @@
- #include <linux/interrupt.h>
- #include <linux/ioport.h>
- #include <linux/clocksource.h>
-+#include <linux/clockchips.h>
- #include <asm/virt.h>
- 
- struct goldfish_timer {
-@@ -41,7 +42,25 @@ static struct clocksource goldfish_timer = {
- 	.max_idle_ns	= LONG_MAX,
- };
- 
--static irqreturn_t golfish_timer_handler(int irq, void *dev_id)
-+static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
-+{
-+	gf_timer->alarm_high = 0;
-+	gf_timer->alarm_low = 0;
-+
-+	gf_timer->irq_enabled = 1;
-+
-+	return 0;
-+}
-+
-+static int goldfish_timer_shutdown(struct clock_event_device *evt)
-+{
-+	gf_timer->irq_enabled = 0;
-+
-+	return 0;
-+}
-+
-+static int goldfish_timer_next_event(unsigned long delta,
-+				     struct clock_event_device *evt)
- {
- 	u64 now;
- 
-@@ -49,19 +68,35 @@ static irqreturn_t golfish_timer_handler(int irq, void *dev_id)
- 
- 	now = goldfish_timer_read(NULL);
- 
--	legacy_timer_tick(1);
-+	now += delta;
- 
--	now += NSEC_PER_SEC / HZ;
- 	gf_timer->alarm_high = upper_32_bits(now);
- 	gf_timer->alarm_low = lower_32_bits(now);
- 
-+	return 0;
-+}
-+
-+struct clock_event_device goldfish_timer_clockevent = {
-+	.name			= "goldfish_timer",
-+	.features		= CLOCK_EVT_FEAT_ONESHOT,
-+	.set_state_shutdown	= goldfish_timer_shutdown,
-+	.set_state_oneshot      = goldfish_timer_set_oneshot,
-+	.set_next_event		= goldfish_timer_next_event,
-+	.shift			= 32,
-+};
-+
-+static irqreturn_t golfish_timer_tick(int irq, void *dev_id)
-+{
-+	struct clock_event_device *evt = &goldfish_timer_clockevent;
-+
-+	evt->event_handler(evt);
-+
- 	return IRQ_HANDLED;
- }
- 
- void __init virt_sched_init(void)
- {
- 	static struct resource sched_res;
--	u64 now;
- 
- 	sched_res.name  = "goldfish_timer";
- 	sched_res.start = virt_bi_data.rtc.mmio;
-@@ -72,19 +107,14 @@ void __init virt_sched_init(void)
- 		return;
- 	}
- 
--	if (request_irq(virt_bi_data.rtc.irq, golfish_timer_handler, IRQF_TIMER,
-+	clockevents_config_and_register(&goldfish_timer_clockevent, NSEC_PER_SEC,
-+					1, 0xffffffff);
-+
-+	if (request_irq(virt_bi_data.rtc.irq, golfish_timer_tick, IRQF_TIMER,
- 			"timer", NULL)) {
- 		pr_err("Couldn't register timer interrupt\n");
- 		return;
- 	}
- 
--	now = goldfish_timer_read(NULL);
--	now += NSEC_PER_SEC / HZ;
--
--	gf_timer->clear_interrupt = 1;
--	gf_timer->alarm_high = upper_32_bits(now);
--	gf_timer->alarm_low = lower_32_bits(now);
--	gf_timer->irq_enabled = 1;
--
- 	clocksource_register_hz(&goldfish_timer, NSEC_PER_SEC);
- }
--- 
-2.34.1
-
+thanks,
+-- Shuah
