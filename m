@@ -2,84 +2,188 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2638D48CD0C
-	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jan 2022 21:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBB348CDE4
+	for <lists+linux-rtc@lfdr.de>; Wed, 12 Jan 2022 22:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357584AbiALUWV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 12 Jan 2022 15:22:21 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:50933 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357564AbiALUWP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jan 2022 15:22:15 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 7D306E0003;
-        Wed, 12 Jan 2022 20:22:08 +0000 (UTC)
-Date:   Wed, 12 Jan 2022 21:22:08 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
+        id S233244AbiALVjS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Wed, 12 Jan 2022 16:39:18 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:37349 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233158AbiALVjO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 12 Jan 2022 16:39:14 -0500
+Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue010
+ [212.227.15.167]) with ESMTPSA (Nemesis) id 1MsI4Q-1mEH4H2TIA-00tggO; Wed, 12
+ Jan 2022 22:39:03 +0100
+From:   Laurent Vivier <laurent@vivier.eu>
+To:     linux-kernel@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2] selftests: rtc: Increase test timeout so that all
- tests run
-Message-ID: <Yd84cDlW9+f7wQxq@piout.net>
-References: <20220112194142.3276385-1-nfraprado@collabora.com>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Laurent Vivier <laurent@vivier.eu>
+Subject: [PATCH v4 0/3] m68k: Add Virtual M68k Machine
+Date:   Wed, 12 Jan 2022 22:38:58 +0100
+Message-Id: <20220112213901.2178667-1-laurent@vivier.eu>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220112194142.3276385-1-nfraprado@collabora.com>
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:4N99baOhvJG11zr7P1b8VwsKrZ920g97xi0dfxLAG++GHybmiHN
+ x93UsGEoyeeAnJMEXmnYJd/cYPy+lEMmHpt71Zw8XdeaNCcynE/FmUOd0FSkeqE+tIhrvfo
+ TTb8EV3S1ZC3isQ6e5tvuTs8ZnN6Uod31rYq1Z/2T6X66c4oWb8mhBAMj4YmA1aYTHax22q
+ yjQC6lKv6M6jUToG5FBBQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:G6PBQvgmGJc=:G7HnsnJ3EWmp+SFBhVBvHs
+ PVmeavCg1+AImhwZbXBJlQbTMnny08JBImVm1arExbmlJ887sHqxOwUxvZOfM285OFLsHmZSG
+ 6XBqA+bPUMujGBGBrTijTQH5I1yNIlgljUvBnM56AcS9FuadRQthQuryZ4V/elwS+iMINnjeW
+ sn+99ElnV6L7SjEGjDpMCSXMneckc2lS/oKpR8wKCTiXgp4pGwtRuv/a1RdGYckzc70KLagES
+ jxHwGPc0MAwVgbLG+foJi8/e9Q6+zyHxyUpqvlTKs6vBzQm8RxAS6BEGhwmrgnTsc8W7SE6F6
+ cp35PzAILnMNILrDx8RVulNyf+J19Qg6bgHjqVFpLBMSTrs3iNpXkLobEZcbcZiEgt+LvzShm
+ va27gYEhRWHSq/8DHBx/Bv43vClx5sFEYyJ/KOb3gQLcit8KJWfliHwWrXsO2VO0S91ErEYyY
+ 1S7QUhGBoeW19NagZYcOGzNHiBE+1acY9MVMiROQjD31nfYM5UQheD9tOSaf7m/iStghiTeVr
+ 57rEdtfb+4RgVFdiI7flHlpOxv5FjHiJjFHpgP2zqNrMzGwRxcA0Ugfple9n9jG1F4t7+z4b7
+ QDrces3p3NqC3QUe7/S3q26LbMgyxMy0nEgAiNFLgjQYd6louZ5YChpOZNE7QYvq+xvI2LeTu
+ BPddMj5nmulp/bISWWfh3D3SMNhdTaYBjoGw+azo00uiXU2lIuIhrDYN9cFVG4qMQq78=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/01/2022 14:41:42-0500, Nícolas F. R. A. Prado wrote:
-> The timeout setting for the rtc kselftest is currently 90 seconds. This
-> setting is used by the kselftest runner to stop running a test if it
-> takes longer than the assigned value.
-> 
-> However, two of the test cases inside rtc set alarms. These alarms are
-> set to the next beginning of the minute, so each of these test cases may
-> take up to, in the worst case, 60 seconds.
-> 
-> In order to allow for all test cases in rtc to run, even in the worst
-> case, when using the kselftest runner, the timeout value should be
-> increased to at least 120. Set it to 180, so there's some additional
-> slack.
-> 
-> Correct operation can be tested by running the following command right
-> after the start of a minute (low second count), and checking that all
-> test cases run:
-> 
-> 	./run_kselftest.sh -c rtc
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+The most powerful m68k machine emulated by QEMU is a Quadra 800,
+but this machine is very limited: only 1 GiB of memory and only some
+specific interfaces, with no DMA.
 
-> ---
-> 
-> Changes in v2:
-> - Expanded commit message to make the issue, and how to test the fix, clearer
-> 
-> v1: https://lore.kernel.org/all/20220112165359.3206047-1-nfraprado@collabora.com/
-> 
->  tools/testing/selftests/rtc/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-> index ba4d85f74cd6..a953c96aa16e 100644
-> --- a/tools/testing/selftests/rtc/settings
-> +++ b/tools/testing/selftests/rtc/settings
-> @@ -1 +1 @@
-> -timeout=90
-> +timeout=180
-> -- 
-> 2.34.1
-> 
+The Virtual M68k Machine is based on Goldfish interfaces defined by Google
+for Android simulator. It uses Goldfish-rtc (timer and RTC),
+Goldfish-pic (PIC) and Goldfish-tty (for early tty).
+
+The machine is created with 128 virtio-mmio buses, and they can
+be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
+
+The virtual m68k machine has been merged in QEMU and will be available
+with the release 6.0.
+
+This series introduces the support of this new machine in the linux kernel.
+
+If you want to try:
+
+- Configure and build latest QEMU with (or download qemu 6.0 binary):
+
+  .../configure --target-list=m68k-softmmu --enable-virglrenderer
+  make
+
+- Configure and build linux with:
+
+  make virt_defconfig
+  make vmlinux
+
+A pre-installed qcow2 disk image is available at:
+
+http://vivier.eu/debian-10.0.qcow2
+
+You can run the machine with something like:
+
+qemu-system-m68k -M virt \
+  -m 3G \
+  -chardev stdio,signal=off,mux=on,id=char0 \
+  -mon chardev=char0,mode=readline \
+  -kernel vmlinux \
+  -append "console=hvc0 root=/dev/vda2" \
+  -blockdev node-name=system,driver=file,filename=debian-10.0.qcow2 \
+  -blockdev node-name=drive0,driver=qcow2,file=system \
+  -device virtio-blk-device,drive=drive0 \
+  -serial chardev:char0 \
+  -device virtio-net-device,netdev=hostnet0 \
+  -netdev bridge,id=hostnet0,br=virbr0,helper=/usr/libexec/qemu-bridge-helper \
+  -device virtio-serial-device \
+  -device virtio-gpu-device \
+  -device virtconsole,chardev=char0 \
+  -device virtio-keyboard-device \
+  -device virtio-mouse-device
+
+You can watch a presentation about the machine on the Planet m68k channel:
+
+    https://youtu.be/s_ve0bCC9q4
+    [Demo at 38:00]
+
+v4:
+- update PATCH 1: comments and parameter names
+- add a patch to move to generic clockevents
+  (I prefer to have a separate patch as it can be used as an example to
+   move from legacy timer tick to generic clockevents)
+
+v3:
+- introduce config.h to export prototypes to arch/m68k/kernel/setup_mm.c
+- define virt_nmi_handler as static
+
+v2:
+- Remove VIRTO_MENU set y
+- sort the selects
+- add CONFIG_LOCALVERSION="-virt"
+- generate virt_defconfig using "make savedefconfig"
+- rename MACH_VIRTONLY to MACH_VIRT_ONLY
+- add a test_notvirt label in head.S
+- rework iounmap() to use two separate #ifdefs
+- use %u in virt_get_model()
+- drop show_registers() in config.c
+- drop pr_err() from config_virt()
+- sort includes in ints.c
+- call virt_irq_enable() in virt_irq_startup()
+- drop virt_irq_shutdown() and use virt_irq_disable()
+- move in_nmi into virt_nmi_handler()
+- use pr_warn() in virt_nmi_handler()
+- rework goldfish_pic_irq() IRQ scan
+- copy goldfish-pic IRQs related information from QEMU hw/m68k/virt
+- add a comment to "min_low_pfn = 0"
+- use platform_device_register_simple()
+- use goldfish_timer_read(), upper_32_bits() and lower_32_bits()
+
+Thanks,
+Laurent
+
+Laurent Vivier (3):
+  m68k: add asm/config.h
+  m68k: introduce a virtual m68k machine
+  m68k: virt: Remove LEGACY_TIMER_TICK
+
+ arch/m68k/Kbuild                           |   1 +
+ arch/m68k/Kconfig.machine                  |  15 +++
+ arch/m68k/amiga/config.c                   |   1 +
+ arch/m68k/apollo/config.c                  |   1 +
+ arch/m68k/atari/config.c                   |   1 +
+ arch/m68k/bvme6000/config.c                |   1 +
+ arch/m68k/configs/virt_defconfig           |  65 +++++++++++
+ arch/m68k/hp300/config.c                   |   1 +
+ arch/m68k/include/asm/config.h             |  35 ++++++
+ arch/m68k/include/asm/irq.h                |   3 +-
+ arch/m68k/include/asm/pgtable_mm.h         |   7 ++
+ arch/m68k/include/asm/setup.h              |  44 ++++++--
+ arch/m68k/include/asm/virt.h               |  26 +++++
+ arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
+ arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
+ arch/m68k/kernel/Makefile                  |   1 +
+ arch/m68k/kernel/head.S                    |  31 ++++++
+ arch/m68k/kernel/setup_mm.c                |  30 ++----
+ arch/m68k/mac/config.c                     |   1 +
+ arch/m68k/mm/kmap.c                        |  23 ++--
+ arch/m68k/mvme147/config.c                 |   1 +
+ arch/m68k/mvme16x/config.c                 |   1 +
+ arch/m68k/q40/config.c                     |   1 +
+ arch/m68k/virt/Makefile                    |   6 ++
+ arch/m68k/virt/config.c                    | 112 +++++++++++++++++++
+ arch/m68k/virt/ints.c                      | 120 +++++++++++++++++++++
+ arch/m68k/virt/platform.c                  |  72 +++++++++++++
+ arch/m68k/virt/timer.c                     | 120 +++++++++++++++++++++
+ 28 files changed, 699 insertions(+), 40 deletions(-)
+ create mode 100644 arch/m68k/configs/virt_defconfig
+ create mode 100644 arch/m68k/include/asm/config.h
+ create mode 100644 arch/m68k/include/asm/virt.h
+ create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
+ create mode 100644 arch/m68k/virt/Makefile
+ create mode 100644 arch/m68k/virt/config.c
+ create mode 100644 arch/m68k/virt/ints.c
+ create mode 100644 arch/m68k/virt/platform.c
+ create mode 100644 arch/m68k/virt/timer.c
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
