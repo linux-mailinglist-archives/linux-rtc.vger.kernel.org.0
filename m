@@ -2,946 +2,218 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 625EA48DED0
-	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jan 2022 21:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A8D48DF80
+	for <lists+linux-rtc@lfdr.de>; Thu, 13 Jan 2022 22:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbiAMUUD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 13 Jan 2022 15:20:03 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:35301 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbiAMUTy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Jan 2022 15:19:54 -0500
-Received: from quad ([82.142.23.158]) by mrelayeu.kundenserver.de (mreue108
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1MY64R-1mpnPP34xx-00YVXf; Thu, 13
- Jan 2022 21:19:27 +0100
-From:   Laurent Vivier <laurent@vivier.eu>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k@lists.linux-m68k.org,
-        John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Laurent Vivier <laurent@vivier.eu>
-Subject: [PATCH v6 4/4] m68k: introduce a virtual m68k machine
-Date:   Thu, 13 Jan 2022 21:19:20 +0100
-Message-Id: <20220113201920.3201760-5-laurent@vivier.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220113201920.3201760-1-laurent@vivier.eu>
+        id S234991AbiAMVTV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 13 Jan 2022 16:19:21 -0500
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:45409 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231592AbiAMVTU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 13 Jan 2022 16:19:20 -0500
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BC6545802C1;
+        Thu, 13 Jan 2022 16:19:19 -0500 (EST)
+Received: from imap44 ([10.202.2.94])
+  by compute4.internal (MEProxy); Thu, 13 Jan 2022 16:19:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type:content-transfer-encoding; s=fm1; bh=wKnJN
+        fNAdFvszmvv1j06We4V9Pb2eZZdg/QXVQobFuk=; b=GbbNa22XndxUtAHAhTE2L
+        1F/Z3QJ4CAxKGineSw57g7VwjzeXB7EOchaSaFvTEIWighJ2AJyDHOtctbnRO9rQ
+        6glhegdBfx38cMOX9mSENrDi1zczCJOYrJNZwF8tkfD7A57neKOIGj0SItQamO47
+        8D65hF3P92vAhshegJQ41tSRHVDtXp/gf2RdvBa0u4WIAJwrxcVliVp6woPJKt0K
+        +ti0GWhGlejEfRXJL1kssPefKwEDhAQ3ng/qxAxm1B1+UkWq0HybCZC3ikvi7pOc
+        ExeshA2MPg3jthBPndpr7qnprV0ngZm6hfkJqX5kt8yQyE+fnLg9dJxD6RueCUdy
+        g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=wKnJNfNAdFvszmvv1j06We4V9Pb2eZZdg/QXVQobF
+        uk=; b=FkQTeMkFqRts4ecT3UGrUHaPsYewTtHYGm765kQRlPiktnXVPcF2CBi+2
+        0pTzd6oxhwGNHklde1ZYGJAKdndvbm67a0FgTREjso+b1W+gS870mjT8CBCDbvIo
+        pxYq1t47ctlg5MTaAxHXz2OJaP7cHDF2OXBfY0V+8/JFe47uogrj/EklZKSI0sro
+        RDIxslljwHXRzrbLYPyhWVI4Asezhafv94/JglRFioAstFMuejhrkcaC5p6TwpVa
+        eJJeR8RHVX4DQP7juTLWdcjiC15Q0ClpR+GjL6L8WFJ5CjBtaU3MfNVdhRBho1wT
+        blDPE/K/ieq1ya+9wIgp9zfUOK78g==
+X-ME-Sender: <xms:V5fgYedW_mDDUQC5msqTs4bniSMR5B2j20f5uVnLHvmHB6y5DUH4ag>
+    <xme:V5fgYYOmSIUhL3KYTNOAGzggREhlGpYOk0hxUaJQFVKobEGk8wigK68geyy-2aCP7
+    CdKKXZzChCPgMXNV7I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrtdefgddugeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
+    rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+    eqnecuggftrfgrthhtvghrnhepuddvhfdvgeekgeduheelhefgjeeuhfegieelueevfffg
+    kefgudevfefgkeduffeinecuffhomhgrihhnpehgohhoghhlvghsohhurhgtvgdrtghomh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
+X-ME-Proxy: <xmx:V5fgYfjvrBdAqKEVNrX2RumJ3-MH6J8d6CwfikLAi8UmqjaqeJmf5Q>
+    <xmx:V5fgYb9ovgEZeUSeaOsB-AVTx3brp60BnVeb0JAXarr1QhxtT1WkLw>
+    <xmx:V5fgYav3hT6oqnt_p7OMifaK7ymHS8-prtT0A9vq6JSmHTl6tutprw>
+    <xmx:V5fgYUI3yyGI6baEz5Q69Cm7sjBfaBT_q03bRF7cdSQaNagWYnGI_g>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2926AFA0AA6; Thu, 13 Jan 2022 16:19:19 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4569-g891f756243-fm-20220111.001-g891f7562
+Mime-Version: 1.0
+Message-Id: <90a1b3b0-97d7-4880-a42f-44c450cbc2fb@www.fastmail.com>
+In-Reply-To: <20220113201920.3201760-3-laurent@vivier.eu>
 References: <20220113201920.3201760-1-laurent@vivier.eu>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mBnT/6oPzEjZqyiKLM5RpnXlEUN4g2wjhw7/FKGn54jyZutsJWO
- DrnwdczIYMwV5/TXZSNNuxWgYsfJs2HjlLF5LC505qJBi04TjdDVwDPNPH8heNXAOIl5AXn
- 7o/UKiGWFpDid1IovPaP8erV4Gn/CBFFHDHrmuYfZlLF5IVyu6KVbT8nPcj6pDEFMhvWDzN
- fMmd76lWDgDY+ollFfg6g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:PeglEh983Uc=:JU3akBfA45Wshz0EeMjpQb
- 2QeJVyWI5DKWN709hhpl4efwpol6OiXbFfqTYVgoG2V1qJiBzzNdoQvTXjHpvWL/SsQV8CHG2
- G3TJV+ibSA23PGxK5XvAsvqVnDEULJX0tQZUTbIqSsdKgHeuNq71eh2+4AgD5k7rZp0Qz4oP6
- wN6/B+NHL2wS2GzmOCb3t4x+rnnTy7DzAA6e0y+lpjY7Wpc3TAva0nScoMLx9paqqCq0GIz7M
- zaHD2xG4K77H0ViL+Cx98acULZqeVDzUfSAwqGY9Yh8whmFuCLghOBXvj1I6CsCAP0iBrSImC
- k21sCrpVw9b/9fg5XDgeiWpZ8BVulCnXhKx8cKb7WPP0SOphMXMx6tfqP8/iWq0LIFSK50Coh
- 9XMKEz7jEfrqHkLVHmjIs25CLkfMNrnOYHuocYqnVVPzDQ1tYTgHTnZE8Jj61X0SJ4fqJ67Po
- AwTP21oBoRc2IT/WcNw0kN5rgFeZGAGb5tJSxlFltkr/3Gx5xrinJwPssHwX5/CxrSRdXtYC6
- 6IyWx0zIA61iQzmGLn6G+1P/s4FhXI+NG6ncqzdZL41s8wOxxGEFsrakyirCOwBLs2taJiqkV
- yBWiv1fu/AAwjYrFsISP5PNW0s8QSg3+sh6viGmYEGSWCfz9URuAehgcK8PaPja6KREurKe8H
- L+3195hoX4TeDkL4cQx0R8ntZcMZ0G69XvG+SGUskvngoK3/xubZwdisxn2jUnidCNcI=
+ <20220113201920.3201760-3-laurent@vivier.eu>
+Date:   Thu, 13 Jan 2022 21:18:53 +0000
+From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To:     "Laurent Vivier" <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        linux-m68k@lists.linux-m68k.org,
+        "John Stultz" <john.stultz@linaro.org>, linux-rtc@vger.kernel.org,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v6 2/4] rtc: goldfish: use __raw_writel()/__raw_readl()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This machine allows to have up to 3.2 GiB and 128 Virtio devices.
 
-It is based on android goldfish devices.
 
-Signed-off-by: Laurent Vivier <laurent@vivier.eu>
----
- arch/m68k/Kbuild                           |   1 +
- arch/m68k/Kconfig.machine                  |  15 +++
- arch/m68k/configs/virt_defconfig           |  65 +++++++++++
- arch/m68k/include/asm/config.h             |   2 +
- arch/m68k/include/asm/irq.h                |   3 +-
- arch/m68k/include/asm/pgtable_mm.h         |   7 ++
- arch/m68k/include/asm/setup.h              |  44 ++++++--
- arch/m68k/include/asm/virt.h               |  25 +++++
- arch/m68k/include/uapi/asm/bootinfo-virt.h |  18 ++++
- arch/m68k/include/uapi/asm/bootinfo.h      |   1 +
- arch/m68k/kernel/Makefile                  |   1 +
- arch/m68k/kernel/head.S                    |  31 ++++++
- arch/m68k/kernel/setup_mm.c                |   7 ++
- arch/m68k/mm/kmap.c                        |  23 ++--
- arch/m68k/virt/Makefile                    |   6 ++
- arch/m68k/virt/config.c                    | 119 ++++++++++++++++++++
- arch/m68k/virt/ints.c                      | 120 +++++++++++++++++++++
- arch/m68k/virt/platform.c                  |  72 +++++++++++++
- 18 files changed, 542 insertions(+), 18 deletions(-)
- create mode 100644 arch/m68k/configs/virt_defconfig
- create mode 100644 arch/m68k/include/asm/virt.h
- create mode 100644 arch/m68k/include/uapi/asm/bootinfo-virt.h
- create mode 100644 arch/m68k/virt/Makefile
- create mode 100644 arch/m68k/virt/config.c
- create mode 100644 arch/m68k/virt/ints.c
- create mode 100644 arch/m68k/virt/platform.c
+=E5=9C=A82022=E5=B9=B41=E6=9C=8813=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:19=EF=BC=8CLaurent Vivier=E5=86=99=E9=81=93=EF=BC=9A
+> As android implementation defines the endianness of the device is the =
+one
+> of the architecture replace all writel()/readl() by
+> __raw_writel()/__raw_readl()
+>
+> https://android.googlesource.com/platform/external/qemu/+/refs/heads/e=
+mu-master-dev/hw/timer/goldfish_timer.c#177
+>
+> The same change has been done for goldfish-tty:
+>
+>   commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl(=
+)")
+>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-diff --git a/arch/m68k/Kbuild b/arch/m68k/Kbuild
-index 18abb35c26a1..7762af9f6def 100644
---- a/arch/m68k/Kbuild
-+++ b/arch/m68k/Kbuild
-@@ -17,3 +17,4 @@ obj-$(CONFIG_M68060)		+= ifpsp060/
- obj-$(CONFIG_M68KFPU_EMU)	+= math-emu/
- obj-$(CONFIG_M68000)		+= 68000/
- obj-$(CONFIG_COLDFIRE)		+= coldfire/
-+obj-$(CONFIG_VIRT)		+= virt/
-diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
-index eeab4f3e6c19..0a2c5d61567d 100644
---- a/arch/m68k/Kconfig.machine
-+++ b/arch/m68k/Kconfig.machine
-@@ -149,6 +149,21 @@ config SUN3
- 
- 	  If you don't want to compile a kernel exclusively for a Sun 3, say N.
- 
-+config VIRT
-+	bool "Virtual M68k Machine support"
-+	depends on MMU
-+	select GENERIC_CLOCKEVENTS
-+	select M68040
-+	select MMU_MOTOROLA if MMU
-+	select GOLDFISH
-+	select GOLDFISH_TIMER
-+	select GOLDFISH_TTY
-+	select TTY
-+	select VIRTIO_MMIO
-+	help
-+	  This options enable a pure virtual machine based on m68k,
-+	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
-+
- config PILOT
- 	bool
- 
-diff --git a/arch/m68k/configs/virt_defconfig b/arch/m68k/configs/virt_defconfig
-new file mode 100644
-index 000000000000..462e51ef69eb
---- /dev/null
-+++ b/arch/m68k/configs/virt_defconfig
-@@ -0,0 +1,65 @@
-+CONFIG_LOCALVERSION="-virt"
-+CONFIG_SYSVIPC=y
-+CONFIG_CGROUPS=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_RDMA=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_VIRT=y
-+CONFIG_PROC_HARDWARE=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_AMIGA_PARTITION=y
-+CONFIG_ATARI_PARTITION=y
-+CONFIG_MAC_PARTITION=y
-+CONFIG_BSD_DISKLABEL=y
-+CONFIG_MINIX_SUBPARTITION=y
-+CONFIG_SOLARIS_X86_PARTITION=y
-+CONFIG_UNIXWARE_DISKLABEL=y
-+CONFIG_LDM_PARTITION=y
-+CONFIG_LDM_DEBUG=y
-+CONFIG_SUN_PARTITION=y
-+CONFIG_SYSV68_PARTITION=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_CGROUP_NET_PRIO=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_SCSI=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_INPUT_MOUSEDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_DRM=y
-+CONFIG_DRM_VIRTIO_GPU=y
-+CONFIG_FB=y
-+CONFIG_VIRT_DRIVERS=y
-+CONFIG_VIRTIO_INPUT=y
-+CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS_FS=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_UDF_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_9P_FS=y
-+CONFIG_9P_FS_POSIX_ACL=y
-+CONFIG_9P_FS_SECURITY=y
-+CONFIG_EARLY_PRINTK=y
-diff --git a/arch/m68k/include/asm/config.h b/arch/m68k/include/asm/config.h
-index aae61070628b..b9dacc52f2c8 100644
---- a/arch/m68k/include/asm/config.h
-+++ b/arch/m68k/include/asm/config.h
-@@ -17,6 +17,7 @@ extern int mvme16x_parse_bootinfo(const struct bi_record *record);
- extern int mvme147_parse_bootinfo(const struct bi_record *record);
- extern int hp300_parse_bootinfo(const struct bi_record *record);
- extern int apollo_parse_bootinfo(const struct bi_record *record);
-+extern int virt_parse_bootinfo(const struct bi_record *record);
- 
- extern void config_amiga(void);
- extern void config_atari(void);
-@@ -29,5 +30,6 @@ extern void config_bvme6000(void);
- extern void config_hp300(void);
- extern void config_q40(void);
- extern void config_sun3x(void);
-+extern void config_virt(void);
- 
- #endif /* _M68K_CONFIG_H */
-diff --git a/arch/m68k/include/asm/irq.h b/arch/m68k/include/asm/irq.h
-index 91dd493791d7..7829e955ca04 100644
---- a/arch/m68k/include/asm/irq.h
-+++ b/arch/m68k/include/asm/irq.h
-@@ -12,7 +12,8 @@
-  */
- #if defined(CONFIG_COLDFIRE)
- #define NR_IRQS 256
--#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || defined(CONFIG_SUN3X)
-+#elif defined(CONFIG_VME) || defined(CONFIG_SUN3) || \
-+      defined(CONFIG_SUN3X) || defined(CONFIG_VIRT)
- #define NR_IRQS 200
- #elif defined(CONFIG_ATARI)
- #define NR_IRQS 141
-diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
-index 143ba7de9bda..9b4e2fe2ac82 100644
---- a/arch/m68k/include/asm/pgtable_mm.h
-+++ b/arch/m68k/include/asm/pgtable_mm.h
-@@ -80,6 +80,9 @@
- #elif defined(CONFIG_COLDFIRE)
- #define KMAP_START	0xe0000000
- #define KMAP_END	0xf0000000
-+#elif defined(CONFIG_VIRT)
-+#define	KMAP_START	0xdf000000
-+#define	KMAP_END	0xff000000
- #else
- #define	KMAP_START	0xd0000000
- #define	KMAP_END	0xf0000000
-@@ -92,6 +95,10 @@ extern unsigned long m68k_vmalloc_end;
- #elif defined(CONFIG_COLDFIRE)
- #define VMALLOC_START	0xd0000000
- #define VMALLOC_END	0xe0000000
-+#elif defined(CONFIG_VIRT)
-+#define VMALLOC_OFFSET	PAGE_SIZE
-+#define VMALLOC_START (((unsigned long) high_memory + VMALLOC_OFFSET) & ~(VMALLOC_OFFSET-1))
-+#define VMALLOC_END     KMAP_START
- #else
- /* Just any arbitrary offset to the start of the vmalloc VM area: the
-  * current 8MB value just means that there will be a 8MB "hole" after the
-diff --git a/arch/m68k/include/asm/setup.h b/arch/m68k/include/asm/setup.h
-index 8f2023f8c1c4..2c99477aaf89 100644
---- a/arch/m68k/include/asm/setup.h
-+++ b/arch/m68k/include/asm/setup.h
-@@ -37,7 +37,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_ATARI) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_AMIGA (m68k_machtype == MACH_AMIGA)
- #else
- #  define MACH_AMIGA_ONLY
-@@ -50,7 +51,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                      \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                  \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_ATARI (m68k_machtype == MACH_ATARI)
- #else
- #  define MACH_ATARI_ONLY
-@@ -63,7 +65,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_ATARI) || defined(CONFIG_APOLLO) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)                 \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                        \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                    \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MAC (m68k_machtype == MACH_MAC)
- #else
- #  define MACH_MAC_ONLY
-@@ -84,7 +87,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_MVME16x) || defined(CONFIG_BVME6000)              \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_APOLLO (m68k_machtype == MACH_APOLLO)
- #else
- #  define MACH_APOLLO_ONLY
-@@ -97,7 +101,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME16x)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME147 (m68k_machtype == MACH_MVME147)
- #else
- #  define MACH_MVME147_ONLY
-@@ -110,7 +115,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_BVME6000)               \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_MVME16x (m68k_machtype == MACH_MVME16x)
- #else
- #  define MACH_MVME16x_ONLY
-@@ -123,7 +129,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_HP300) || defined(CONFIG_Q40)                     \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_BVME6000 (m68k_machtype == MACH_BVME6000)
- #else
- #  define MACH_BVME6000_ONLY
-@@ -136,7 +143,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x) \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_Q40) \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147) \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_HP300 (m68k_machtype == MACH_HP300)
- #else
- #  define MACH_HP300_ONLY
-@@ -149,7 +157,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_SUN3X) || defined(CONFIG_MVME147)                 \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_Q40 (m68k_machtype == MACH_Q40)
- #else
- #  define MACH_Q40_ONLY
-@@ -162,7 +171,8 @@ extern unsigned long m68k_machtype;
- #elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
- 	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
- 	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
--	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)
-+	|| defined(CONFIG_Q40) || defined(CONFIG_MVME147)                   \
-+	|| defined(CONFIG_VIRT)
- #  define MACH_IS_SUN3X (m68k_machtype == MACH_SUN3X)
- #else
- #  define CONFIG_SUN3X_ONLY
-@@ -170,6 +180,20 @@ extern unsigned long m68k_machtype;
- #  define MACH_TYPE (MACH_SUN3X)
- #endif
- 
-+#if !defined(CONFIG_VIRT)
-+#  define MACH_IS_VIRT (0)
-+#elif defined(CONFIG_AMIGA) || defined(CONFIG_MAC) || defined(CONFIG_ATARI) \
-+	|| defined(CONFIG_APOLLO) || defined(CONFIG_MVME16x)                \
-+	|| defined(CONFIG_BVME6000) || defined(CONFIG_HP300)                \
-+	|| defined(CONFIG_Q40) || defined(CONFIG_SUN3X)                     \
-+	|| defined(CONFIG_MVME147)
-+#  define MACH_IS_VIRT (m68k_machtype == MACH_VIRT)
-+#else
-+#  define MACH_VIRT_ONLY
-+#  define MACH_IS_VIRT (1)
-+#  define MACH_TYPE (MACH_VIRT)
-+#endif
-+
- #ifndef MACH_TYPE
- #  define MACH_TYPE (m68k_machtype)
- #endif
-diff --git a/arch/m68k/include/asm/virt.h b/arch/m68k/include/asm/virt.h
-new file mode 100644
-index 000000000000..87647c17afd7
---- /dev/null
-+++ b/arch/m68k/include/asm/virt.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_VIRT_H
-+#define __ASM_VIRT_H
-+
-+#define NUM_VIRT_SOURCES 200
-+
-+struct virt_booter_device_data {
-+	unsigned long mmio;
-+	unsigned long irq;
-+};
-+
-+struct virt_booter_data {
-+	unsigned long qemu_version;
-+	struct virt_booter_device_data pic;
-+	struct virt_booter_device_data rtc;
-+	struct virt_booter_device_data tty;
-+	struct virt_booter_device_data ctrl;
-+	struct virt_booter_device_data virtio;
-+};
-+
-+extern struct virt_booter_data virt_bi_data;
-+
-+extern void __init virt_init_IRQ(void);
-+
-+#endif
-diff --git a/arch/m68k/include/uapi/asm/bootinfo-virt.h b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-new file mode 100644
-index 000000000000..ab17fd9d200d
---- /dev/null
-+++ b/arch/m68k/include/uapi/asm/bootinfo-virt.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * asm/bootinfo-virt.h -- Virtual-m68k-specific boot information definitions
-+ */
-+
-+#ifndef _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+#define _UAPI_ASM_M68K_BOOTINFO_VIRT_H
-+
-+#define BI_VIRT_QEMU_VERSION	0x8000
-+#define BI_VIRT_GF_PIC_BASE	0x8001
-+#define BI_VIRT_GF_RTC_BASE	0x8002
-+#define BI_VIRT_GF_TTY_BASE	0x8003
-+#define BI_VIRT_VIRTIO_BASE	0x8004
-+#define BI_VIRT_CTRL_BASE       0x8005
-+
-+#define VIRT_BOOTI_VERSION	MK_BI_VERSION(2, 0)
-+
-+#endif /* _UAPI_ASM_M68K_BOOTINFO_MAC_H */
-diff --git a/arch/m68k/include/uapi/asm/bootinfo.h b/arch/m68k/include/uapi/asm/bootinfo.h
-index 38d3140381fa..203d9cbf9630 100644
---- a/arch/m68k/include/uapi/asm/bootinfo.h
-+++ b/arch/m68k/include/uapi/asm/bootinfo.h
-@@ -83,6 +83,7 @@ struct mem_info {
- #define MACH_SUN3X		11
- #define MACH_M54XX		12
- #define MACH_M5441X		13
-+#define MACH_VIRT		14
- 
- 
-     /*
-diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
-index dbac7f8743fc..c0833da6a2ca 100644
---- a/arch/m68k/kernel/Makefile
-+++ b/arch/m68k/kernel/Makefile
-@@ -11,6 +11,7 @@ extra-$(CONFIG_VME)	:= head.o
- extra-$(CONFIG_HP300)	:= head.o
- extra-$(CONFIG_Q40)	:= head.o
- extra-$(CONFIG_SUN3X)	:= head.o
-+extra-$(CONFIG_VIRT)	:= head.o
- extra-$(CONFIG_SUN3)	:= sun3-head.o
- extra-y			+= vmlinux.lds
- 
-diff --git a/arch/m68k/kernel/head.S b/arch/m68k/kernel/head.S
-index 493c95db0e51..ca9ccf23de86 100644
---- a/arch/m68k/kernel/head.S
-+++ b/arch/m68k/kernel/head.S
-@@ -262,6 +262,7 @@
- #include <asm/bootinfo-hp300.h>
- #include <asm/bootinfo-mac.h>
- #include <asm/bootinfo-q40.h>
-+#include <asm/bootinfo-virt.h>
- #include <asm/bootinfo-vme.h>
- #include <asm/setup.h>
- #include <asm/entry.h>
-@@ -534,6 +535,7 @@ func_define	putn,1
- #define is_not_apollo(lab) cmpl &MACH_APOLLO,%pc@(m68k_machtype); jne lab
- #define is_not_q40(lab) cmpl &MACH_Q40,%pc@(m68k_machtype); jne lab
- #define is_not_sun3x(lab) cmpl &MACH_SUN3X,%pc@(m68k_machtype); jne lab
-+#define is_not_virt(lab) cmpl &MACH_VIRT,%pc@(m68k_machtype); jne lab
- 
- #define hasnt_leds(lab) cmpl &MACH_HP300,%pc@(m68k_machtype); \
- 			jeq 42f; \
-@@ -647,6 +649,14 @@ ENTRY(__start)
- L(test_notmac):
- #endif /* CONFIG_MAC */
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(test_notvirt))
-+
-+	get_bi_record BI_VIRT_GF_TTY_BASE
-+	lea	%pc@(L(virt_gf_tty_base)),%a1
-+	movel	%a0@,%a1@
-+L(test_notvirt):
-+#endif /* CONFIG_VIRT */
- 
- /*
-  * There are ultimately two pieces of information we want for all kinds of
-@@ -1237,6 +1247,13 @@ L(mmu_init_not_mac):
- L(notsun3x):
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(L(novirt))
-+	mmu_map_tt	#1,#0xFF000000,#0x01000000,#_PAGE_NOCACHE_S
-+	jbra    L(mmu_init_done)
-+L(novirt):
-+#endif
-+
- #ifdef CONFIG_APOLLO
- 	is_not_apollo(L(notapollo))
- 
-@@ -3186,6 +3203,14 @@ func_start	serial_putc,%d0/%d1/%a0/%a1
- 3:
- #endif
- 
-+#ifdef CONFIG_VIRT
-+	is_not_virt(1f)
-+
-+	movel L(virt_gf_tty_base),%a1
-+	moveb %d0,%a1@(GF_PUT_CHAR)
-+1:
-+#endif
-+
- L(serial_putc_done):
- func_return	serial_putc
- 
-@@ -3865,3 +3890,9 @@ q40_mem_cptr:
- L(q40_do_debug):
- 	.long	0
- #endif
-+
-+#if defined(CONFIG_VIRT)
-+GF_PUT_CHAR = 0x00
-+L(virt_gf_tty_base):
-+	.long 0
-+#endif /* CONFIG_VIRT */
-diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
-index 226dc3750397..b4ece3b05504 100644
---- a/arch/m68k/kernel/setup_mm.c
-+++ b/arch/m68k/kernel/setup_mm.c
-@@ -182,6 +182,8 @@ static void __init m68k_parse_bootinfo(const struct bi_record *record)
- 				unknown = hp300_parse_bootinfo(record);
- 			else if (MACH_IS_APOLLO)
- 				unknown = apollo_parse_bootinfo(record);
-+			else if (MACH_IS_VIRT)
-+				unknown = virt_parse_bootinfo(record);
- 			else
- 				unknown = 1;
- 		}
-@@ -312,6 +314,11 @@ void __init setup_arch(char **cmdline_p)
- 		cf_mmu_context_init();
- 		config_BSP(NULL, 0);
- 		break;
-+#endif
-+#ifdef CONFIG_VIRT
-+	case MACH_VIRT:
-+		config_virt();
-+		break;
- #endif
- 	default:
- 		panic("No configuration setup");
-diff --git a/arch/m68k/mm/kmap.c b/arch/m68k/mm/kmap.c
-index 20ddf71b43d0..39729f40d106 100644
---- a/arch/m68k/mm/kmap.c
-+++ b/arch/m68k/mm/kmap.c
-@@ -179,6 +179,12 @@ void __iomem *__ioremap(unsigned long physaddr, unsigned long size, int cachefla
- 			return (void __iomem *)physaddr;
- 	}
- #endif
-+#ifdef CONFIG_VIRT
-+	if (MACH_IS_VIRT) {
-+		if (physaddr >= 0xff000000 && cacheflag == IOMAP_NOCACHE_SER)
-+			return (void __iomem *)physaddr;
-+	}
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (__cf_internalio(physaddr))
- 		return (void __iomem *) physaddr;
-@@ -292,18 +298,21 @@ EXPORT_SYMBOL(__ioremap);
-  */
- void iounmap(void __iomem *addr)
- {
--#ifdef CONFIG_AMIGA
--	if ((!MACH_IS_AMIGA) ||
--	    (((unsigned long)addr < 0x40000000) ||
--	     ((unsigned long)addr > 0x60000000)))
--			free_io_area((__force void *)addr);
--#else
-+#if defined(CONFIG_AMIGA)
-+	if (MACH_IS_AMIGA &&
-+	    ((unsigned long)addr >= 0x40000000) &&
-+	    ((unsigned long)addr < 0x60000000))
-+		return;
-+#endif
-+#if defined(CONFIG_VIRT)
-+	if (MACH_IS_VIRT && (unsigned long)addr >= 0xff000000)
-+		return;
-+#endif
- #ifdef CONFIG_COLDFIRE
- 	if (cf_internalio(addr))
- 		return;
- #endif
- 	free_io_area((__force void *)addr);
--#endif
- }
- EXPORT_SYMBOL(iounmap);
- 
-diff --git a/arch/m68k/virt/Makefile b/arch/m68k/virt/Makefile
-new file mode 100644
-index 000000000000..54b9b2866654
---- /dev/null
-+++ b/arch/m68k/virt/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Makefile for Linux arch/m68k/virt source directory
-+#
-+
-+obj-y		:= config.o ints.o platform.o
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-new file mode 100644
-index 000000000000..fa769669db07
---- /dev/null
-+++ b/arch/m68k/virt/config.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/serial_core.h>
-+#include <clocksource/timer-goldfish.h>
-+
-+#include <asm/bootinfo.h>
-+#include <asm/bootinfo-virt.h>
-+#include <asm/byteorder.h>
-+#include <asm/machdep.h>
-+#include <asm/virt.h>
-+#include <asm/config.h>
-+
-+struct virt_booter_data virt_bi_data;
-+
-+struct virt_ctrl {
-+	u32 features;
-+	u32 cmd;
-+};
-+
-+enum {
-+	CMD_NOOP,
-+	CMD_RESET,
-+	CMD_HALT,
-+	CMD_PANIC,
-+};
-+
-+#define virt_ctrl ((volatile struct virt_ctrl *)virt_bi_data.ctrl.mmio)
-+
-+static void virt_get_model(char *str)
-+{
-+	/* str is 80 characters long */
-+	sprintf(str, "QEMU Virtual M68K Machine (%u.%u.%u)",
-+		(u8)(virt_bi_data.qemu_version >> 24),
-+		(u8)(virt_bi_data.qemu_version >> 16),
-+		(u8)(virt_bi_data.qemu_version >> 8));
-+}
-+
-+static void virt_halt(void)
-+{
-+	virt_ctrl->cmd = CMD_HALT;
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+static void virt_reset(void)
-+{
-+	virt_ctrl->cmd = CMD_RESET;
-+	local_irq_disable();
-+	while (1)
-+		;
-+}
-+
-+/*
-+ * Parse a virtual-m68k-specific record in the bootinfo
-+ */
-+
-+int __init virt_parse_bootinfo(const struct bi_record *record)
-+{
-+	int unknown = 0;
-+	const void *data = record->data;
-+
-+	switch (be16_to_cpu(record->tag)) {
-+	case BI_VIRT_QEMU_VERSION:
-+		virt_bi_data.qemu_version = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_PIC_BASE:
-+		virt_bi_data.pic.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.pic.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_RTC_BASE:
-+		virt_bi_data.rtc.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.rtc.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_GF_TTY_BASE:
-+		virt_bi_data.tty.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.tty.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_CTRL_BASE:
-+		virt_bi_data.ctrl.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.ctrl.irq = be32_to_cpup(data);
-+		break;
-+	case BI_VIRT_VIRTIO_BASE:
-+		virt_bi_data.virtio.mmio = be32_to_cpup(data);
-+		data += 4;
-+		virt_bi_data.virtio.irq = be32_to_cpup(data);
-+		break;
-+	default:
-+		unknown = 1;
-+		break;
-+	}
-+	return unknown;
-+}
-+
-+static void __init virt_sched_init(void)
-+{
-+	goldfish_timer_init(virt_bi_data.rtc.irq,
-+			    (void *)virt_bi_data.rtc.mmio);
-+}
-+
-+void __init config_virt(void)
-+{
-+	char earlycon[24];
-+
-+	snprintf(earlycon, sizeof(earlycon), "early_gf_tty,0x%08lx",
-+		 virt_bi_data.tty.mmio);
-+	setup_earlycon(earlycon);
-+
-+	mach_init_IRQ = virt_init_IRQ;
-+	mach_sched_init = virt_sched_init;
-+	mach_get_model = virt_get_model;
-+	mach_reset = virt_reset;
-+	mach_halt = virt_halt;
-+	mach_power_off = virt_halt;
-+}
-diff --git a/arch/m68k/virt/ints.c b/arch/m68k/virt/ints.c
-new file mode 100644
-index 000000000000..7b2827f84b09
---- /dev/null
-+++ b/arch/m68k/virt/ints.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/sched/debug.h>
-+#include <linux/types.h>
-+
-+#include <asm/hwtest.h>
-+#include <asm/irq.h>
-+#include <asm/irq_regs.h>
-+#include <asm/virt.h>
-+
-+struct goldfish_pic {
-+	u32 status;
-+	u32 irq_pending;
-+	u32 irq_diable_all;
-+	u32 disable;
-+	u32 enable;
-+	u32 pad[1019];
-+};
-+
-+extern void show_registers(struct pt_regs *);
-+
-+#define gf_pic ((volatile struct goldfish_pic *)virt_bi_data.pic.mmio)
-+
-+#define GF_PIC(irq) (gf_pic[(irq - IRQ_USER) / 32])
-+#define GF_IRQ(irq) ((irq - IRQ_USER) % 32)
-+
-+static void virt_irq_enable(struct irq_data *data)
-+{
-+	GF_PIC(data->irq).enable = 1 << GF_IRQ(data->irq);
-+}
-+
-+static void virt_irq_disable(struct irq_data *data)
-+{
-+	GF_PIC(data->irq).disable = 1 << GF_IRQ(data->irq);
-+}
-+
-+static unsigned int virt_irq_startup(struct irq_data *data)
-+{
-+	virt_irq_enable(data);
-+	return 0;
-+}
-+
-+static irqreturn_t virt_nmi_handler(int irq, void *dev_id)
-+{
-+	static volatile int in_nmi;
-+
-+	if (in_nmi)
-+		return IRQ_HANDLED;
-+	in_nmi = 1;
-+
-+	pr_warn("Non-Maskable Interrupt\n");
-+	show_registers(get_irq_regs());
-+
-+	in_nmi = 0;
-+	return IRQ_HANDLED;
-+}
-+
-+static struct irq_chip virt_irq_chip = {
-+	.name		= "virt",
-+	.irq_enable	= virt_irq_enable,
-+	.irq_disable	= virt_irq_disable,
-+	.irq_startup	= virt_irq_startup,
-+	.irq_shutdown	= virt_irq_disable,
-+};
-+
-+static void goldfish_pic_irq(struct irq_desc *desc)
-+{
-+	u32 irq_pending;
-+	int irq_num;
-+
-+	irq_pending = gf_pic[desc->irq_data.irq - 1].irq_pending;
-+	irq_num = IRQ_USER + (desc->irq_data.irq - 1) * 32;
-+
-+	do {
-+		if (irq_pending & 1)
-+			generic_handle_irq(irq_num);
-+		++irq_num;
-+		irq_pending >>= 1;
-+	} while (irq_pending);
-+}
-+
-+/*
-+ * 6 goldfish-pic for CPU IRQ #1 to IRQ #6
-+ * CPU IRQ #1 -> PIC #1
-+ *               IRQ #1 to IRQ #31 -> unused
-+ *               IRQ #32 -> goldfish-tty
-+ * CPU IRQ #2 -> PIC #2
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 1 to 32
-+ * CPU IRQ #3 -> PIC #3
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 33 to 64
-+ * CPU IRQ #4 -> PIC #4
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 65 to 96
-+ * CPU IRQ #5 -> PIC #5
-+ *               IRQ #1 to IRQ #32 -> virtio-mmio from 97 to 128
-+ * CPU IRQ #6 -> PIC #6
-+ *               IRQ #1 -> goldfish-rtc
-+ *               IRQ #2 to IRQ #32 -> unused
-+ * CPU IRQ #7 -> NMI
-+ */
-+void __init virt_init_IRQ(void)
-+{
-+	int i;
-+
-+	m68k_setup_irq_controller(&virt_irq_chip, handle_simple_irq, IRQ_USER,
-+				  NUM_VIRT_SOURCES - IRQ_USER);
-+
-+	for (i = 0; i < 6; i++) {
-+		irq_set_chained_handler(virt_bi_data.pic.irq + i,
-+					goldfish_pic_irq);
-+	}
-+
-+	if (request_irq(IRQ_AUTO_7, virt_nmi_handler, 0, "NMI",
-+			virt_nmi_handler))
-+		pr_err("Couldn't register NMI\n");
-+}
-diff --git a/arch/m68k/virt/platform.c b/arch/m68k/virt/platform.c
-new file mode 100644
-index 000000000000..c16158e7a9ca
---- /dev/null
-+++ b/arch/m68k/virt/platform.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/platform_device.h>
-+#include <linux/interrupt.h>
-+#include <asm/virt.h>
-+#include <asm/irq.h>
-+
-+#define VIRTIO_BUS_NB	128
-+
-+static int __init virt_virtio_init(int id)
-+{
-+	const struct resource res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.virtio.mmio + id * 0x200, 0x200),
-+		DEFINE_RES_IRQ(virt_bi_data.virtio.irq + id),
-+	};
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_register_simple("virtio-mmio", id,
-+					       res, ARRAY_SIZE(res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	return 0;
-+}
-+
-+static int __init virt_platform_init(void)
-+{
-+	const struct resource goldfish_tty_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.tty.mmio, 1),
-+		DEFINE_RES_IRQ(virt_bi_data.tty.irq),
-+	};
-+	/* this is the second gf-rtc, the first one is used by the scheduler */
-+	const struct resource goldfish_rtc_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
-+		DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
-+	};
-+	extern unsigned long min_low_pfn;
-+	struct platform_device *pdev;
-+	int i;
-+
-+	if (!MACH_IS_VIRT)
-+		return -ENODEV;
-+
-+	/* We need this to have DMA'able memory provided to goldfish-tty */
-+	min_low_pfn = 0;
-+
-+	pdev = platform_device_register_simple("goldfish_tty",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_tty_res,
-+					       ARRAY_SIZE(goldfish_tty_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	pdev = platform_device_register_simple("goldfish_rtc",
-+					       PLATFORM_DEVID_NONE,
-+					       goldfish_rtc_res,
-+					       ARRAY_SIZE(goldfish_rtc_res));
-+	if (IS_ERR(pdev))
-+		return PTR_ERR(pdev);
-+
-+	for (i = 0; i < VIRTIO_BUS_NB; i++) {
-+		int err;
-+
-+		err = virt_virtio_init(i);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+arch_initcall(virt_platform_init);
--- 
-2.34.1
+Acked-by: Jiauxn Yang <jiaxun.yang@flygoat.com>
 
+Well I do think it's a mistake by Android. They only considered little e=
+ndian as they only have little endian devices.
+
+But given that the implementation is already a part of QEMU, we must liv=
+e with that :-)
+
+Thanks.
+
+> ---
+>  drivers/rtc/rtc-goldfish.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+> index 7ab95d052644..3e76160d40b9 100644
+> --- a/drivers/rtc/rtc-goldfish.c
+> +++ b/drivers/rtc/rtc-goldfish.c
+> @@ -41,8 +41,8 @@ static int goldfish_rtc_read_alarm(struct device *de=
+v,
+>  	rtcdrv =3D dev_get_drvdata(dev);
+>  	base =3D rtcdrv->base;
+>=20
+> -	rtc_alarm_low =3D readl(base + TIMER_ALARM_LOW);
+> -	rtc_alarm_high =3D readl(base + TIMER_ALARM_HIGH);
+> +	rtc_alarm_low =3D __raw_readl(base + TIMER_ALARM_LOW);
+> +	rtc_alarm_high =3D __raw_readl(base + TIMER_ALARM_HIGH);
+>  	rtc_alarm =3D (rtc_alarm_high << 32) | rtc_alarm_low;
+>=20
+>  	do_div(rtc_alarm, NSEC_PER_SEC);
+> @@ -50,7 +50,7 @@ static int goldfish_rtc_read_alarm(struct device *de=
+v,
+>=20
+>  	rtc_time64_to_tm(rtc_alarm, &alrm->time);
+>=20
+> -	if (readl(base + TIMER_ALARM_STATUS))
+> +	if (__raw_readl(base + TIMER_ALARM_STATUS))
+>  		alrm->enabled =3D 1;
+>  	else
+>  		alrm->enabled =3D 0;
+> @@ -71,18 +71,18 @@ static int goldfish_rtc_set_alarm(struct device *d=
+ev,
+>=20
+>  	if (alrm->enabled) {
+>  		rtc_alarm64 =3D rtc_tm_to_time64(&alrm->time) * NSEC_PER_SEC;
+> -		writel((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+> -		writel(rtc_alarm64, base + TIMER_ALARM_LOW);
+> -		writel(1, base + TIMER_IRQ_ENABLED);
+> +		__raw_writel((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+> +		__raw_writel(rtc_alarm64, base + TIMER_ALARM_LOW);
+> +		__raw_writel(1, base + TIMER_IRQ_ENABLED);
+>  	} else {
+>  		/*
+>  		 * if this function was called with enabled=3D0
+>  		 * then it could mean that the application is
+>  		 * trying to cancel an ongoing alarm
+>  		 */
+> -		rtc_status_reg =3D readl(base + TIMER_ALARM_STATUS);
+> +		rtc_status_reg =3D __raw_readl(base + TIMER_ALARM_STATUS);
+>  		if (rtc_status_reg)
+> -			writel(1, base + TIMER_CLEAR_ALARM);
+> +			__raw_writel(1, base + TIMER_CLEAR_ALARM);
+>  	}
+>=20
+>  	return 0;
+> @@ -98,9 +98,9 @@ static int goldfish_rtc_alarm_irq_enable(struct devi=
+ce *dev,
+>  	base =3D rtcdrv->base;
+>=20
+>  	if (enabled)
+> -		writel(1, base + TIMER_IRQ_ENABLED);
+> +		__raw_writel(1, base + TIMER_IRQ_ENABLED);
+>  	else
+> -		writel(0, base + TIMER_IRQ_ENABLED);
+> +		__raw_writel(0, base + TIMER_IRQ_ENABLED);
+>=20
+>  	return 0;
+>  }
+> @@ -110,7 +110,7 @@ static irqreturn_t goldfish_rtc_interrupt(int irq,=20
+> void *dev_id)
+>  	struct goldfish_rtc *rtcdrv =3D dev_id;
+>  	void __iomem *base =3D rtcdrv->base;
+>=20
+> -	writel(1, base + TIMER_CLEAR_INTERRUPT);
+> +	__raw_writel(1, base + TIMER_CLEAR_INTERRUPT);
+>=20
+>  	rtc_update_irq(rtcdrv->rtc, 1, RTC_IRQF | RTC_AF);
+>=20
+> @@ -128,8 +128,8 @@ static int goldfish_rtc_read_time(struct device=20
+> *dev, struct rtc_time *tm)
+>  	rtcdrv =3D dev_get_drvdata(dev);
+>  	base =3D rtcdrv->base;
+>=20
+> -	time_low =3D readl(base + TIMER_TIME_LOW);
+> -	time_high =3D readl(base + TIMER_TIME_HIGH);
+> +	time_low =3D __raw_readl(base + TIMER_TIME_LOW);
+> +	time_high =3D __raw_readl(base + TIMER_TIME_HIGH);
+>  	time =3D (time_high << 32) | time_low;
+>=20
+>  	do_div(time, NSEC_PER_SEC);
+> @@ -149,8 +149,8 @@ static int goldfish_rtc_set_time(struct device=20
+> *dev, struct rtc_time *tm)
+>  	base =3D rtcdrv->base;
+>=20
+>  	now64 =3D rtc_tm_to_time64(tm) * NSEC_PER_SEC;
+> -	writel((now64 >> 32), base + TIMER_TIME_HIGH);
+> -	writel(now64, base + TIMER_TIME_LOW);
+> +	__raw_writel((now64 >> 32), base + TIMER_TIME_HIGH);
+> +	__raw_writel(now64, base + TIMER_TIME_LOW);
+>=20
+>  	return 0;
+>  }
+> --=20
+> 2.34.1
+
+--=20
+- Jiaxun
