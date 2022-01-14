@@ -2,133 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B720D48E8CF
-	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jan 2022 12:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982D648E8DD
+	for <lists+linux-rtc@lfdr.de>; Fri, 14 Jan 2022 12:07:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240381AbiANLD4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 14 Jan 2022 06:03:56 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:40513 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbiANLD4 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Jan 2022 06:03:56 -0500
-Received: from [192.168.100.1] ([82.142.23.158]) by mrelayeu.kundenserver.de
- (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MVNJ3-1mjHHE2fzD-00SLnq; Fri, 14 Jan 2022 12:03:43 +0100
-Message-ID: <a53e6d46-114f-7bb2-70b9-113c5f8a9c0e@vivier.eu>
-Date:   Fri, 14 Jan 2022 12:03:41 +0100
+        id S240620AbiANLHE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Jan 2022 06:07:04 -0500
+Received: from outpost1.zedat.fu-berlin.de ([130.133.4.66]:35933 "EHLO
+        outpost1.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237845AbiANLHE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Jan 2022 06:07:04 -0500
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1n8KQA-003OF5-08; Fri, 14 Jan 2022 12:07:02 +0100
+Received: from p57bd9aec.dip0.t-ipconnect.de ([87.189.154.236] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1n8KQ9-000SRd-Q1; Fri, 14 Jan 2022 12:07:01 +0100
+Message-ID: <10b80ee9-b180-45e7-77bc-8420908a4b21@physik.fu-berlin.de>
+Date:   Fri, 14 Jan 2022 12:07:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: fr
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v6 2/4] rtc: goldfish: use __raw_writel()/__raw_readl()
+Content-Language: en-US
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
         John Stultz <john.stultz@linaro.org>,
-        linux-rtc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 References: <20220113201920.3201760-1-laurent@vivier.eu>
- <20220113201920.3201760-4-laurent@vivier.eu>
- <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v6 3/4] clocksource/drivers: Add a goldfish-timer
- clocksource
-In-Reply-To: <CAK8P3a2QzMiga0FFVmTuefnq1OzsgyopiJN2he8043K0TRF1ng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:smzK6d4OVWNorZOCeZXQ3R0dRxq4hr/LXuhZg5brBfJJdJNCq7b
- KJIobnfgxnXbl9N3QiD4yaMtOV3IDD2CXLwOgWfVS/e8SbXR4a32dbYpaKSJLFj0xQDvmHU
- tbMfOj4eNd33mdo1/cptU9Qv/cta4toKYiTjYcpwJ1vqsA2jLVoZxB3zGov0bexexue5xWd
- BrewS1+Kbc8yjm0mFMwGA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aQm5OjTfUvk=:bhDOtNIJeeqXG/AztJK+lq
- E7sWztyo5KoUKfrDdBp0MP9cpB8WWpo6E32pbT0QuYie47W22B9gqP0+xW2ttR9bNwS2LOL2U
- v83yQ5liBIZNpGky6+kjCeKJVOqwkmBArCxSslQCs2HVkv3x/DQn/vFuLvVdTwZK0UH0+FrBH
- f8iTdhJpNTqu3k6mN/6AEqmCVNSW4cibMnzoGBZvyLCyjQleTj6PreO4ol60EfZ45WDmIQh8I
- b6b3IGCOM2yC4vPtq6Xs2Kjkx9JluWXAP3DNvtpV0k41kAf+eNhNeusMKvNYF8R61JTuPxP+B
- ofs4btndAP/nVtVq1SmStaAgvo1XsjWa5jIp0Mo/sbMYxOfqOVSy1EayDMlNFUJPbBYkva2Ys
- KK5zSipzIrwkEemGCmoHz03mh9lAvlETkp/4Nf1o8dm/bjIcBXJ0dvRCfOoPY+Q5LNX+Yjf4d
- 7ehAJInIp9fCjgHRZSTxELm/qHMbTrl9m3TEtdDHvyyve6vhUc7HjevJ2yIDC7B7FqdBbzn27
- vA8SfdmkcU+9oloww8zTqk7IG2FBhijw9zOV4OR1FgyXgI0VkAye0rrK0FzG0aQGijasiEOjm
- BhRxMJd/eaQ9HLCQ8ueF9VFHsSamD+m2YwFMb+EcNrOgOpz1rjWhJuw70u9qKbxA72rbklWU0
- FUkTtfUKEfAFDBKx6c5wwlABBLiPCqQEUpP2Iqgszne3+lka7+JshQ7ov+ZWmRXQg7CY=
+ <20220113201920.3201760-3-laurent@vivier.eu>
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+In-Reply-To: <20220113201920.3201760-3-laurent@vivier.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.154.236
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le 14/01/2022 à 11:46, Arnd Bergmann a écrit :
-> On Thu, Jan 13, 2022 at 9:19 PM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> Add a clocksource based on the goldfish-rtc device.
->>
->> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
->> ---
->>   drivers/clocksource/Kconfig          |   7 ++
->>   drivers/clocksource/Makefile         |   1 +
->>   drivers/clocksource/timer-goldfish.c | 130 +++++++++++++++++++++++++++
->>   include/clocksource/timer-goldfish.h |  12 +++
->>   4 files changed, 150 insertions(+)
->>   create mode 100644 drivers/clocksource/timer-goldfish.c
->>   create mode 100644 include/clocksource/timer-goldfish.h
->>
->> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
->> index f65e31bab9ae..6ca9bb78407d 100644
->> --- a/drivers/clocksource/Kconfig
->> +++ b/drivers/clocksource/Kconfig
->> @@ -711,4 +711,11 @@ config MICROCHIP_PIT64B
->>            modes and high resolution. It is used as a clocksource
->>            and a clockevent.
->>
->> +config GOLDFISH_TIMER
->> +       bool "Clocksource using goldfish-rtc"
->> +       select RTC_CLASS
->> +       select RTC_DRV_GOLDFISH
-> 
-> This should probably be
-> 
->            depends on M68K || COMPILE_TEST
->            depends on RTC_DRV_GOLDFISH
-> 
-> A driver should never 'select' another user-selectable subsystem
+Hi Laurent!
 
-ok
+On 1/13/22 21:19, Laurent Vivier wrote:
+> As android implementation defines the endianness of the device is the one
+> of the architecture replace all writel()/readl() by
+> __raw_writel()/__raw_readl()
 
-> 
->> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
->> +{
->> +       struct goldfish_timer *timerdrv = ced_to_gf(evt);
->> +       void __iomem *base = timerdrv->base;
->> +
->> +       __raw_writel(0, base + TIMER_ALARM_HIGH);
->> +       __raw_writel(0, base + TIMER_ALARM_LOW);
->> +       __raw_writel(1, base + TIMER_IRQ_ENABLED);
-> 
-> As mentioned elsewhere, the __raw_* accessors are not portable, please
-> use readl()/writel() here, or possibly ioread32_be()/iowrite32_be() for
-> the big-endian variant.
+I think this sentence is a little hard to understand. Can you rephrase it in
+case you are sending another version of the series?
 
-We can't use readl()/writel() here because it's supposed to read from a little endian device, and 
-goldfish endianness depends on the endianness of the machine.
+Adrian
 
-For goldfish, readl()/writel() works fine on little-endian machine but not on big-endian machine.
-
-On m68k, you have:
-
-#define readl(addr)      in_le32(addr)
-#define writel(val,addr) out_le32((addr),(val))
-
-and with goldfish it's wrong as the device is not little-endian, it is big-endian like the machine.
-
-same comment with ioread32_be()/iowrite32_be(): it will work on big-endian machine not on little-endian.
-
-We need an accessor that doesn't byteswap the value, that accesses it natively, and in all other 
-parts of the kernel __raw_writel() and __raw_readl() are used.
-
-Thanks,
-Laurent
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
