@@ -2,30 +2,28 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E88EF48FF91
-	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jan 2022 23:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A67A48FF93
+	for <lists+linux-rtc@lfdr.de>; Sun, 16 Jan 2022 23:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbiAPW6a (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 16 Jan 2022 17:58:30 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:46241 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236401AbiAPW63 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 16 Jan 2022 17:58:29 -0500
+        id S233918AbiAPW7X (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 16 Jan 2022 17:59:23 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:56453 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233896AbiAPW7X (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 16 Jan 2022 17:59:23 -0500
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6A94D240002;
-        Sun, 16 Jan 2022 22:58:25 +0000 (UTC)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 4D5C0200002;
+        Sun, 16 Jan 2022 22:59:19 +0000 (UTC)
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     linux-rtc@vger.kernel.org,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org
+To:     Fabio Estevam <festevam@gmail.com>
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        vincent.sunplus@gmail.com, a.zummo@towertech.it
-Subject: Re: [PATCH -next] rtc: rtc-sunplus: fix return value in sp_rtc_probe()
-Date:   Sun, 16 Jan 2022 23:58:22 +0100
-Message-Id: <164237389104.3519935.13650173996002383472.b4-ty@bootlin.com>
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH rtc-tools] .gitignore: Add an entry for rtc-range
+Date:   Sun, 16 Jan 2022 23:59:17 +0100
+Message-Id: <164237395201.3520206.5517796351734891121.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220106075711.3216468-1-yangyingliang@huawei.com>
-References: <20220106075711.3216468-1-yangyingliang@huawei.com>
+In-Reply-To: <20211203190324.1514671-1-festevam@gmail.com>
+References: <20211203190324.1514671-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -33,16 +31,17 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 6 Jan 2022 15:57:11 +0800, Yang Yingliang wrote:
-> If devm_ioremap_resource() fails, it should return error
-> code from sp_rtc->reg_base in sp_rtc_probe().
+On Fri, 3 Dec 2021 16:03:24 -0300, Fabio Estevam wrote:
+> The rtc-range binary should also be ignored by git.
+> 
+> Add an entry for it.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] rtc: rtc-sunplus: fix return value in sp_rtc_probe()
-      commit: 5ceee540fdc7f1d65ca6e2b1b193ce5aa95ab99c
+[1/1] .gitignore: Add an entry for rtc-range
+      commit: acc442e7af4e1e783432a43d37f1a7938c692659
 
 Best regards,
 -- 
