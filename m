@@ -2,51 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EA0493629
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jan 2022 09:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533EB49368D
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jan 2022 09:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245118AbiASIV7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Jan 2022 03:21:59 -0500
-Received: from mail-vk1-f182.google.com ([209.85.221.182]:46891 "EHLO
-        mail-vk1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbiASIV7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jan 2022 03:21:59 -0500
-Received: by mail-vk1-f182.google.com with SMTP id bj47so1009050vkb.13;
-        Wed, 19 Jan 2022 00:21:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mNEeF7mEICXaIClDfLKBUPzmMnomVxgHrUkxe4T3tSU=;
-        b=MOmghSv3i7vASpRlDPK61llOlZCr8Qbu+4sB3Kc1tE/MkOar+P/4f4NFAe4yPXDCvh
-         yV++LDpgsTQ+0UCCb/EOTwMsdyZiZJl9MnIv27CIkPmCDPeh19bIi7hDfkAhX9YrAUZe
-         l3GjXL1FCJdlPQPS0Q/pR+XjPc7Uq/sY9C5LdOjBwTy66TlgeuzDg7YFJOWTgVCsKHFj
-         sGN3PXvsifHYC9Pjfp7SVh6VVFbvjN3RlMhgYEimqrx0YlQLly8B9YQncw1tJw7Cdxj6
-         gN4+/9awm9Bc/UG4KNeqU8MzvkPQEiOvTUguEvMmWZMwFKlJFW9nF2fXg2OtB8B93Pw3
-         lsAA==
-X-Gm-Message-State: AOAM532ThnmRqGnOsLQoxIbOGezMVgGQZ9XlZ70ywUhGDwms8CvcGjyq
-        5uB8djimPZGlsMoiXDWARptU4tK1gMoCOA==
-X-Google-Smtp-Source: ABdhPJxWFCNwzFTUlDQgQ0hDiPB59InqaAck4xuPxwrrYd0/b/btmSUFzFq1xwnVTqcD8+cXYdF4Nw==
-X-Received: by 2002:a05:6122:508:: with SMTP id x8mr5988706vko.14.1642580518260;
-        Wed, 19 Jan 2022 00:21:58 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id u124sm4213260vkg.3.2022.01.19.00.21.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jan 2022 00:21:57 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id r15so3113666uao.3;
-        Wed, 19 Jan 2022 00:21:57 -0800 (PST)
-X-Received: by 2002:a05:6102:3581:: with SMTP id h1mr11184748vsu.5.1642580517250;
- Wed, 19 Jan 2022 00:21:57 -0800 (PST)
+        id S1352564AbiASIto (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Jan 2022 03:49:44 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:43209 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352570AbiASItn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jan 2022 03:49:43 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MDy54-1n0FHu0eto-009uaz; Wed, 19 Jan 2022 09:49:42 +0100
+Received: by mail-wm1-f51.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4445691wme.0;
+        Wed, 19 Jan 2022 00:49:42 -0800 (PST)
+X-Gm-Message-State: AOAM531HpSMBtNzwKTRQ8WcxXAoH8J/QkIosXqJDLL07moPbMkSZACiR
+        lIAKMN2q9UJX4gfm9PhTtPULXNAVQCPyyQRDZEg=
+X-Google-Smtp-Source: ABdhPJxf3RtweRtU+CatTOtSpLEk3AYaK311IymBkfKp4ZAtysVZK4i4XHZhQpD0dg01dfcz9lpKSApJdra8Z56WbAg=
+X-Received: by 2002:a1c:2784:: with SMTP id n126mr162213wmn.1.1642582181746;
+ Wed, 19 Jan 2022 00:49:41 -0800 (PST)
 MIME-Version: 1.0
 References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
-In-Reply-To: <20220119000506.1299843-3-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 19 Jan 2022 09:21:46 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
-Message-ID: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+ <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 19 Jan 2022 09:49:25 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
+Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
 Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         John Stultz <john.stultz@linaro.org>,
@@ -57,63 +43,41 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:v6OniHMlZ2asXvsuvt5xjGOjmnpN2NziXswL6PV4E5EO0BjikRy
+ nBP0rrJpGswFUFl8kCQWx1pLn4tPpgeLLqqN8IrCLKrqVTLSqPrd+FoU/Uhf44ar+Lbg71L
+ FUIRwQyu0K11kOGvK3stquu+xIYC0wvj1rIa/uqUGFvYBdapQHf5IXda7eBlYuLP/K/AX/r
+ CB14/zRDy5mymMZIah1IA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:I0+iep35erY=:H+hrOWw6j1pjB69vROamaW
+ jcp9SWBBJR8Gl0uPZzyeAsQmEPPvCwOEdeAetL6wF6g8qDCKYg9GLWN4+o6cOOx53GXciX65/
+ JfIy6KPE9j1LQmjQc5lyggZvspPIqJJg51tyUeKLJMdgDBwIDFLRKRZAUPvipFJ3cQwR13ppy
+ /I5MlPGgHjx184IpZmjsrkfI6Vh1Pk38dxD0F6VAL4AzzIoW+aZvAuA8m3L38UTgUkjCM2Wzx
+ qII+LhOkLH+qrt1qOKcfd44IlYQzaQZB1Wiv+8Joa+bIGZXVzCdmM3aajy959wz/K0qBQepZO
+ MCWSBXJpjyevKHZa1Dp8V++4geuh94McU7BZwr9w1fKrH1vHrXCyB9RDzutnytGU7LkfwhY7b
+ /Qm5vIYvmWOjkuSlIljZyxNKPsroGs8tZbOGWkfTb637IzGKqjIzE7WZjdrsfEQwgK3vePZqP
+ 0pxJ5HZy4xuYN4Iq3fDMG7SuJWElpj1cBwxMgFdNHrO4jcenKF/U9qAkMlqeZfQxRGIaxYgdr
+ ZYZwRPBvCplavKHWabgOUwTLUPXlWQtqJr4/Kan9sbCerSNK0xrWj8MAfAvhfMqJ/sIXc61Na
+ 64vAl4WWzIKoLkzj7QkmrHhGikLXQgyOKrL1VEYaVBmQlQC298Dt+IzMW851uE9WJlpCzGyhN
+ lRX9R60faA0fe90yfUUISfFuV+RGBB8AWHcSmUTW4w8lQfqMuH9T+s/ONq3DOl5ar6xI=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Laurent,
-
-On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
-> The goldfish device always uses the same endianness as the architecture
-> using it:
-> https://android.googlesource.com/platform/external/qemu/+/refs/heads/emu-master-dev/hw/timer/goldfish_timer.c#177
+On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
 >
-> On a big-endian machine, the device is also big-endian, on a
-> little-endian machine the device is little-endian.
+> I've just discovered include/linux/goldfish.h, which already has gf_*()
+> accessors for 64-bit, so it'd make sense to move the above there,
+> and adjust the names.
+
+Yes, good idea.
+
 >
-> So we need to use the right accessor to read/write values to the goldfish
-> registers: ioread32()/iowrite32() on a little-endian machine,
-> ioread32be()/iowrite32be() on a big-endian machine.
->
-> This patch introduces goldfish_ioread32()/goldfish_iowrite32() to allow
-> architectures to define them accordlingly to their endianness.
->
-> We define them by default in asm-generic/io.h to access the device using
-> little-endian access as it is the current use, but we will be able to define
-> big-endian version when new architectures will use them.
->
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> Arnd: note that the existing ones do use __raw_writel().
 
-Thanks for your patch!
+It looks like Laurent introduced that bug in da31de35cd2f ("tty: goldfish: use
+__raw_writel()/__raw_readl()") and could fix it up here. Laurent, was the intent
+of this earlier patch also to make the driver usabel for m68k, or are there
+any other targets you looked at that had mixed up endianness?
 
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -906,6 +906,13 @@ static inline void iowrite64_rep(volatile void __iomem *addr,
->  #endif /* CONFIG_64BIT */
->  #endif /* CONFIG_GENERIC_IOMAP */
->
-> +#ifndef goldfish_ioread32
-> +#define goldfish_ioread32 ioread32
-> +#endif
-> +#ifndef goldfish_iowrite32
-> +#define goldfish_iowrite32 iowrite32
-> +#endif
-> +
->  #ifdef __KERNEL__
-
-I've just discovered include/linux/goldfish.h, which already has gf_*()
-accessors for 64-bit, so it'd make sense to move the above there,
-and adjust the names.
-
-Arnd: note that the existing ones do use __raw_writel().
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+       Arnd
