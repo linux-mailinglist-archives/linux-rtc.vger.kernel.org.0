@@ -2,82 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 533EB49368D
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jan 2022 09:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16D64936E9
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Jan 2022 10:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352564AbiASIto (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Jan 2022 03:49:44 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:43209 "EHLO
+        id S1352891AbiASJLx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Jan 2022 04:11:53 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:50175 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352570AbiASItn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jan 2022 03:49:43 -0500
-Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDy54-1n0FHu0eto-009uaz; Wed, 19 Jan 2022 09:49:42 +0100
-Received: by mail-wm1-f51.google.com with SMTP id q141-20020a1ca793000000b00347b48dfb53so4445691wme.0;
-        Wed, 19 Jan 2022 00:49:42 -0800 (PST)
-X-Gm-Message-State: AOAM531HpSMBtNzwKTRQ8WcxXAoH8J/QkIosXqJDLL07moPbMkSZACiR
-        lIAKMN2q9UJX4gfm9PhTtPULXNAVQCPyyQRDZEg=
-X-Google-Smtp-Source: ABdhPJxf3RtweRtU+CatTOtSpLEk3AYaK311IymBkfKp4ZAtysVZK4i4XHZhQpD0dg01dfcz9lpKSApJdra8Z56WbAg=
-X-Received: by 2002:a1c:2784:: with SMTP id n126mr162213wmn.1.1642582181746;
- Wed, 19 Jan 2022 00:49:41 -0800 (PST)
+        with ESMTP id S1352902AbiASJLu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Jan 2022 04:11:50 -0500
+Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
+ (mreue108 [213.165.67.119]) with ESMTPSA (Nemesis) id
+ 1MD9Ox-1n14SZ1YyP-0096n7; Wed, 19 Jan 2022 10:11:30 +0100
+Message-ID: <64d4b52f-cb5b-2024-e7f9-7a5babc62170@vivier.eu>
+Date:   Wed, 19 Jan 2022 10:11:28 +0100
 MIME-Version: 1.0
-References: <20220119000506.1299843-1-laurent@vivier.eu> <20220119000506.1299843-3-laurent@vivier.eu>
- <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 19 Jan 2022 09:49:25 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
-Message-ID: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
-Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce goldfish_ioread32()/goldfish_iowrite32()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: fr
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         John Stultz <john.stultz@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
+        linux-rtc@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:v6OniHMlZ2asXvsuvt5xjGOjmnpN2NziXswL6PV4E5EO0BjikRy
- nBP0rrJpGswFUFl8kCQWx1pLn4tPpgeLLqqN8IrCLKrqVTLSqPrd+FoU/Uhf44ar+Lbg71L
- FUIRwQyu0K11kOGvK3stquu+xIYC0wvj1rIa/uqUGFvYBdapQHf5IXda7eBlYuLP/K/AX/r
- CB14/zRDy5mymMZIah1IA==
+References: <20220119000506.1299843-1-laurent@vivier.eu>
+ <20220119000506.1299843-3-laurent@vivier.eu>
+ <CAMuHMdXSFU4N+FLYkCLJCJcWJ74g=8Vr23Rx0cka-kDTBs6Z4Q@mail.gmail.com>
+ <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+Subject: Re: [PATCH v10 2/5] rtc: goldfish: introduce
+ goldfish_ioread32()/goldfish_iowrite32()
+In-Reply-To: <CAK8P3a2fjbet+nNAVt_WUxedUDWdRwb880KEa+MY1cFwYNC4SA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:T8yz0Y+A0/3p3L7v1wsH3Yxt6aKOeLEtDNJA8XfpY1VbjBfwuVk
+ oq9p2rDgpFNv1++PCs29juQIeH4xVkxXK5RBZYlvQv7NehCInfzg3jvkl7z9mOebjwQrRRG
+ M9zKL5wO3JV8hFx5jg+NEaHYNA2Xig9X0Pm4mRnh9hBROaACy3WggZ+oAdr/InqPnQtoy9y
+ CdxQ92cnnbUusSWDuvcEw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:I0+iep35erY=:H+hrOWw6j1pjB69vROamaW
- jcp9SWBBJR8Gl0uPZzyeAsQmEPPvCwOEdeAetL6wF6g8qDCKYg9GLWN4+o6cOOx53GXciX65/
- JfIy6KPE9j1LQmjQc5lyggZvspPIqJJg51tyUeKLJMdgDBwIDFLRKRZAUPvipFJ3cQwR13ppy
- /I5MlPGgHjx184IpZmjsrkfI6Vh1Pk38dxD0F6VAL4AzzIoW+aZvAuA8m3L38UTgUkjCM2Wzx
- qII+LhOkLH+qrt1qOKcfd44IlYQzaQZB1Wiv+8Joa+bIGZXVzCdmM3aajy959wz/K0qBQepZO
- MCWSBXJpjyevKHZa1Dp8V++4geuh94McU7BZwr9w1fKrH1vHrXCyB9RDzutnytGU7LkfwhY7b
- /Qm5vIYvmWOjkuSlIljZyxNKPsroGs8tZbOGWkfTb637IzGKqjIzE7WZjdrsfEQwgK3vePZqP
- 0pxJ5HZy4xuYN4Iq3fDMG7SuJWElpj1cBwxMgFdNHrO4jcenKF/U9qAkMlqeZfQxRGIaxYgdr
- ZYZwRPBvCplavKHWabgOUwTLUPXlWQtqJr4/Kan9sbCerSNK0xrWj8MAfAvhfMqJ/sIXc61Na
- 64vAl4WWzIKoLkzj7QkmrHhGikLXQgyOKrL1VEYaVBmQlQC298Dt+IzMW851uE9WJlpCzGyhN
- lRX9R60faA0fe90yfUUISfFuV+RGBB8AWHcSmUTW4w8lQfqMuH9T+s/ONq3DOl5ar6xI=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MmoFlM7kCwg=:g3v93sE9r6Lpnljay8IzKn
+ v0nf4mf9Ovz+FF4N34vKQy6Fs1sTM3Ko9ywe5XEUyciHJWkHJEAnTC5yJD5HPjLgL/aJCuNMU
+ V1PUJ27HWxJ0FyfogHkSCcaN95bF4jb3cOojiruzCs9MIqYXHd6zyrZjI4lgrgLWA6guX2rJy
+ szrTbez7SeGXywrgX9Culgw/s/YNLxl+k7tWRiRfxTWBGbBk1ZR9eUjbq/+/IlGNMMtjP7gb4
+ V7u+px1ZHFsIHmyJyfGB3500BI5Q67z8tpcKf47lke0gvIOW1t6y1+OBfiN0EUMzqCMNeM9/z
+ Cl0YQjpZt9Ro/4o0AhauOBHTMmqIIcstJEZB7XaeaWipmvzQ1Z1i/L8+zWsvlBc13K3m7Ivs7
+ UIQczmxjOkcAGhaYqOxSB+K0PG8a1nZETqUxagKfKP8KbFsYY9KpXZcCa65dek9m2w3W2JFa3
+ ScHqDOt9BwA3gZBPuMEidJP/lhVaYJC6C/vAKJccPz5vd0IKyH4B6CQQFUZ9bjL15MZoDjgZw
+ zoazURbMEw4PjR9qgxGcXUCnakvOeZ3jKcrTZ+YCR+b6BRzeZN9jIctpdN3CN3lZceAmiioof
+ KLYb59dnZ0d30i1+JIOORWYIpmSxjYQUftGsQ6sq2ODUL42DESTeQD9GQxJc3ohXPaHXxUy/Y
+ O0R0vDkv9UxuyGnjrraczCd3Hn5uh/E7QAJWTGiyTFXC7lGL1yanTy4mUxjQadnXPrFA=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
->
-> I've just discovered include/linux/goldfish.h, which already has gf_*()
-> accessors for 64-bit, so it'd make sense to move the above there,
-> and adjust the names.
+Le 19/01/2022 à 09:49, Arnd Bergmann a écrit :
+> On Wed, Jan 19, 2022 at 9:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>> On Wed, Jan 19, 2022 at 1:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
+>>
+>> I've just discovered include/linux/goldfish.h, which already has gf_*()
+>> accessors for 64-bit, so it'd make sense to move the above there,
+>> and adjust the names.
+> 
+> Yes, good idea.
 
-Yes, good idea.
+So the idea is to put goldfish accessors inside a "#ifdef CONFIG_M68K ... #else ... #endif" in 
+include/linux/goldfish.h and not in generic-asm/io.h for the generic version and 
+m68k/include/ams/io.h for the m68k version?
 
->
-> Arnd: note that the existing ones do use __raw_writel().
+> 
+>>
+>> Arnd: note that the existing ones do use __raw_writel().
+> 
+> It looks like Laurent introduced that bug in da31de35cd2f ("tty: goldfish: use
+> __raw_writel()/__raw_readl()") and could fix it up here. Laurent, was the intent
 
-It looks like Laurent introduced that bug in da31de35cd2f ("tty: goldfish: use
-__raw_writel()/__raw_readl()") and could fix it up here. Laurent, was the intent
-of this earlier patch also to make the driver usabel for m68k, or are there
-any other targets you looked at that had mixed up endianness?
+The idea was to use the native endianness of the CPU, I missed it can differ from the one of the 
+architecture.
 
-       Arnd
+> of this earlier patch also to make the driver usabel for m68k, or are there
+> any other targets you looked at that had mixed up endianness?
+> 
+
+Yes, the intent was to make it usable for m68k.
+I think all the targets that use goldfish are little-endian, it's why there was no problem until now.
+
+Let me know which solution you prefer, I will update the series accordingly.
+
+Thanks,
+Laurent
