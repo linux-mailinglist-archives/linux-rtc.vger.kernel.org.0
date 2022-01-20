@@ -2,99 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC89494A0E
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 09:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0AC494C43
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 11:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbiATIuu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jan 2022 03:50:50 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:51351 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359384AbiATIut (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 03:50:49 -0500
-Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M2w4S-1n9Nl516nU-003Iri; Thu, 20 Jan 2022 09:50:47 +0100
-Received: by mail-wm1-f50.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso18739180wma.1;
-        Thu, 20 Jan 2022 00:50:47 -0800 (PST)
-X-Gm-Message-State: AOAM532+T5PvVkwuwVqOAgwW+JAlCBQwuxJ/v/rEw11TyDyI2Vm2oy2m
-        5oL27DNA+HYoJVpKnzG7qUhcJcIzrtBw4hiH2Wk=
-X-Google-Smtp-Source: ABdhPJwa2TLFWWtVzRt+gvdo3caSsHZVcnbUi/A/hVZ7P0/vZnDNJpHv52UMEl2oHT4PQoB1G9hWQmqPRnKWtHwc0qw=
-X-Received: by 2002:a1c:2784:: with SMTP id n126mr5427772wmn.1.1642668646881;
- Thu, 20 Jan 2022 00:50:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20220120080347.1595379-1-laurent@vivier.eu> <20220120080347.1595379-3-laurent@vivier.eu>
-In-Reply-To: <20220120080347.1595379-3-laurent@vivier.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 20 Jan 2022 09:50:30 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S229864AbiATKyr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jan 2022 05:54:47 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:60411 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229810AbiATKyq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 05:54:46 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id AD8E640002;
+        Thu, 20 Jan 2022 10:54:43 +0000 (UTC)
+Date:   Thu, 20 Jan 2022 11:54:43 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-kernel@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hjIIYFRUUftOuns46pp36ouon+Tk8dXglaJJkI5uFMgrWcu517j
- n69BfYDFLCyRSD3bRS7eYpW7kYAdDUQ2B7fNXsUyGaGFz3MqorGhZfb7MPy2FAYhOikPrNb
- 2/OArlbT47nI5ipx2ZbTud9SnRXTo7+xCF6JZmisUOnX61sGAZS444c9LrjiHQC2r9O0MYG
- 7US8SFjqpWwkZJZng+XVg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HcOR5JkVswQ=:JnjTHhX2usyp9GNrmWwikf
- cAsJ6rg4xHyqAjHaCvnCwN4DeG5OLAe5vu/tatZ8yfBu1+1HPYN1XDVL1RmO/SxnBFflI7MBF
- UrUheH1rZk2KNwgOxkljSOlrk2jwUw7vuPA4N8nA0aXQz5c1lnNPYu3UXo6cQSkOJsvui0cph
- NMIHWFMOXPpTmoIh8CMNWEq2Lxt3n4GRUNp4bau/JHjRjj6zE35mv+qPgNkQ80ukbvq5BFXKx
- ZxBC7w014NPW3e9hDnWtpYjoHHjUe8ZY4S1RIvuhSD/u2dqAvVMTg8iAyU/Xe9fk/oXJnk1UK
- c4FexPtqJ5GD2D5y2u+d+6xAgco76evBhazktf43no+RTWRtluz6moJFbF74CtSG0zoHaOAbK
- c+IJH5xvkR493RA/g9+o7ra2fwFCa7Sd7kqKy4/Mm6dZ2CTNqNCUDuBYPd1lVJ4XWUat/Jhxu
- vSpV4cEpWSdnD2ZhaeFgkIjPk6X8xduudTUpy2cG8ajd5zo9u6vvkfaRCTZSh84CAKTgvMnl/
- JzFIEawqZ9zRkTdkhtr2JXEGzY1AsA76+3YKFRM8dkmyLFEo0zH6Nn5JbTGk+BbjmGsrkjmBO
- 4VhQrXYkNcaaBYx9lP6mIx+hvzvoSpoe0RHWX6wYcXArbEYH4weo1E81Q/FvQPv8GnD3CWj36
- ZdlAxEG0RgSBsYIOI6fbAbbzCRyGx4p5kNswSXQyfu1AT36n2Q5lal9dl0aNJ37Pqq7dWT8lH
- +M6arKhHIxTLdEkY9u+4k5HgojZLeTucZRa8/1aQDiCl9Qtdr37Rx/ELUWRFZFGMMPbVYNJR/
- LPrWpg1QsopFjPVfXhdqtUXrVxRorv+rJbeXgVyhT9V23Yruj0=
+        linux-arm-kernel@lists.infradead.org,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+Subject: Re: [PATCH] dt-bindings: rtc: st,stm32-rtc: Make each example a
+ separate entry
+Message-ID: <Yek/c2hPGID0neTc@piout.net>
+References: <20220106182518.1435497-7-robh@kernel.org>
+ <Yeg4Sba3eye24+LG@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yeg4Sba3eye24+LG@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
->
-> Revert
-> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->
-> to use accessors defined by the architecture.
->
-> Define by default the accessor to be little-endian as we
-> have only little-endian architectures using goldfish devices.
->
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Hello Rob,
 
-The patch looks good, but the description seems wrong to me:
+On 19/01/2022 10:11:53-0600, Rob Herring wrote:
+> On Thu, 06 Jan 2022 12:25:15 -0600, Rob Herring wrote:
+> > Each independent example should be a separate entry. This allows for
+> > 'interrupts' to have different cell sizes.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> 
+> Applied, thanks!
 
-Talking about "little-endian architectures" makes no sense here, the
-point is that the device was clearly defined as having little-endian
-registers, and your earlier patch broke this driver when running
-on big-endian kernels (if anyone ever tried this).
+Just for the record, I didn't reply but I trust you completely on this
+one ;) I'm usually letting you apply dt-bindings only patches, let me
+know if you prefer they go through my tree.
 
-This means you should also add
-
-Cc: stable@vger.kernel.org # v5.11+
-Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-
-The fact that m68k gets this wrong is just a bug in qemu, but it's
-probably impossible to fix that since there is no way of knowing which
-other operating systems have started relying on that bug over the years.
-
-It might be a good idea to revisit the qemu implementation and make
-sure that the extra byteswap is only inserted on m68k and not on
-other targets, but hopefully there are no new targets based on goldfish
-anymore and we don't need to care.
-
-        Arnd
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
