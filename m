@@ -2,122 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 015584951A3
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 16:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8599F4952E6
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 18:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376760AbiATPmM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Thu, 20 Jan 2022 10:42:12 -0500
-Received: from mail-4018.proton.ch ([185.70.40.18]:21539 "EHLO
-        mail-4018.proton.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346423AbiATPmK (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 10:42:10 -0500
-Date:   Thu, 20 Jan 2022 15:42:06 +0000
-Authentication-Results: mail-4018.proton.ch; dkim=none
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-From:   conor dooley <mail@conchuod.ie>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <Lewis.Hanly@microchip.com>,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
-Reply-To: conor dooley <mail@conchuod.ie>
-Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip mpfs i2c
-Message-ID: <Op5n9imM72IZnLCmMZ8lEZ7GxZD-r4cYZDB6zF0DcNNRu5dwpGEgi7PyjsAfQFnTMEtB8DTS76wLNWcnTtfDMUa1KDZYO3_geq-oOVXOr50=@conchuod.ie>
-In-Reply-To: <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
-References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com> <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com> <889dab52-95eb-f36d-0af9-beea958a97e7@microchip.com> <CAMuHMdXU_M89W7w064YsjuFfqE2m_PeM9HVps0nmaC1+aUHAQw@mail.gmail.com>
+        id S1377236AbiATRJy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jan 2022 12:09:54 -0500
+Received: from mout.kundenserver.de ([212.227.126.134]:54389 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377242AbiATRJe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 12:09:34 -0500
+Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
+ (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MatZr-1mZLAn3xiF-00cUYe; Thu, 20 Jan 2022 18:09:07 +0100
+Message-ID: <cb884368-0226-e913-80d2-62d2b7b2e761@vivier.eu>
+Date:   Thu, 20 Jan 2022 18:09:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.0 required=10.0 tests=ALL_TRUSTED shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220120080347.1595379-1-laurent@vivier.eu>
+ <20220120080347.1595379-3-laurent@vivier.eu>
+ <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+From:   Laurent Vivier <laurent@vivier.eu>
+Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce
+ gf_ioread32()/gf_iowrite32()
+In-Reply-To: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:dddbphkpSIF6p9YP9xYcw9vEmF+op0Ndo1F40uOawLCcXjeMmby
+ bzCBkRZkM916Hemr2XwL4CE+QGkvN9gPsdnDZSoBwFeEEF1+P71tAnSEekxfLcnseozmQIZ
+ BFedbjRVjUqTrfdGkbfmRKXX3eHaVOMuukaBkOkfkMxV736K6p9Vw1SPkFrsNFT2UjO+T0c
+ kA55JRy6V+N/CaihCUAVw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dy7v5wb7I0k=:yylvJx+860sEkjPyrIC1H8
+ gVm97KvhlrbB7LDmCyziiAT8iq/NfLr2vvH5lp3V5l8hQiyEbH2DoO0Re2ofm8pId0JZ/EiBN
+ B2cu949M9qo/mqWwSEipoGgH7fNy1b8Vx4RAxLGz4k+9det3NYOz4YMSN13/agp5gcQaIBlcp
+ fVlJ8rIQbiJmiTKXvjRe0g0F9IOdz4xDES+FGeeqS6UI8/PmQicu9sKGIB5TwqkNl05RhcoRm
+ nqXRkgjBTILY9TuOplO0v3dw8QubtGKug/O0EB/o34hmLo5n6QT6Vhc/jIgvM4aNEFOV/YoMb
+ IW6RfezQCCe7HzGreO+6KpRXuz4We17N6wlr8rKpBPgjE0W0jJZPZs7jVl8YiPPvLVjNxbeNt
+ +CDACzRdD4WODjEBfVRE0xYbZUpUoi/OZFL4lbiA8KrnRhGe86CW36Mbfs95Tuxq+up/HN0zy
+ BRnVF4DbBpNW/Pgj6qM1XPdSZIRZ5FP1cixDGWpud2Ine6WpIQrH9cPiA0jaftWv4cZqK/xRV
+ hTv0N3mIjhKbIXR+W88kvpJVkbjpy+XCd19S2i7IgUsvOcm2UurA9fWHxqFTdih3JvOscxZ4G
+ olAP2EPrLZtUcgK9ZZNc3pNjiU1CgiA2OhzxMHAXtInR2BzoUIALDTbEdhDFMadAWI88Nm3FU
+ mALgZhB2l9/KRGEMhZIlRPb7Lgfxj0m4Plz4hwBIujqUjQBKiTeRpa8UTmxmW4s58YfE=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
->Hi Conor,
->
->On Thu, Jan 20, 2022 at 2:42 PM <Conor.Dooley@microchip.com> wrote:
->> On 20/01/2022 08:30, Geert Uytterhoeven wrote:
->> > On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
->> > Wouldn't it be more logical to have:
->> >
->> >      items:
->> >        - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
->> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
->> >
->> > ?
->> This would be fine for mpfs-i2c since corei2c is a "superset" - but how
->> would that look for the fabric core? I don't think falling back from the
->> fabric core onto the "hard" one makes sense. This would mean the
->> following two entries:
+Le 20/01/2022 à 09:50, Arnd Bergmann a écrit :
+> On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
 >>
->> i2c2: i2c@44000000 { //fabric
->>         compatible = "microchip,corei2c-rtl-v7";
->> };
->> i2c1: i2c@2010b000 { //"hard" mpfs peripheral
->>         compatible = "microchip,mpfs-i2c", "microchip,corei2c-rtl-v7";
->> };
->
->Oops, I missed that you have both forms.
->But in se, they're the same IP core, just hard vs. soft? Then the
->below makes sense.
-A lot (but not all) of the peripherals on Polarfire SoC are "subsets"
-of the IP cores: I think corei2c is almost identical but for others
-the hard version has some of the optional features disabled or slight
-changes made.
+>> Revert
+>> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+>>
+>> to use accessors defined by the architecture.
+>>
+>> Define by default the accessor to be little-endian as we
+>> have only little-endian architectures using goldfish devices.
+>>
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> 
+> The patch looks good, but the description seems wrong to me:
+> 
+> Talking about "little-endian architectures" makes no sense here, the
+> point is that the device was clearly defined as having little-endian
+> registers, and your earlier patch broke this driver when running
+> on big-endian kernels (if anyone ever tried this).
+To explain why I did that:
 
-If the IP is already written why not use it ;)
->
->> But this generates errors in dt_binding_check w/ your suggestion - so
->> how about the following (similar to ti,omap4-i2c.yaml):
->>
->>    compatible:
->>      oneOf:
->>        - items:
->>          - const: microchip,mpfs-i2c #  Microchip PolarFire...
->>          - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
->>        - const: microchip,corei2c-rtl-v7 # Microchip Fabric...
->>
->> Is there a prettier way than this duplication?
->
->I'm afraid not, and the above scheme is used a lot.
-Fair enough!
->
->> > If the IP core is reused, it can become:
->> >
->> >      items:
->> >        - enum:
->> >            - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
->> >            - microchip,<foo>-i2c # ...
->> >        - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
->> >
->> > That way the driver can just match on the second (fallback) value,
->> > and no further driver changes will be needed (until v8 or later).
+The reference document[1] doesn't define the endianness of goldfish.
+
+In QEMU, goldfish devices are defined with the DEVICE_NATIVE_ENDIAN flag [2], that means all the 
+target architectures defined in QEMU with TARGET_WORDS_BIGENDIAN will present them as big-endian 
+devices, the others as little-endian devices.
+
+According to TARGET_WORDS_BIGENDIAN definition:
+
+On the following QEMU target architectures (qemu-system-XXX), goldfish devices must be accessed with 
+big-endian read/write:
+
+mips, mips64, s390x, sparc, sparc64, or1k, m68k, ppc, ppc64, xtensaeb, hppa, sh4eb, microblaze
+
+On the following QEMU target architectures, goldfish devices must be accessed with little-endian 
+read/write:
+
+arm, aarch64, alpha, avr, cris, i386, x86_64, microblazeel, mipsel, mips64el, nios2, riscv32, 
+riscv64, rx, sh4, tricore, xtensa
+
+Thanks,
+Laurent
+
+[1] https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
+[2] 
+https://android.googlesource.com/platform/external/qemu/+/refs/heads/emu-master-dev/hw/char/goldfish_tty.c#222
