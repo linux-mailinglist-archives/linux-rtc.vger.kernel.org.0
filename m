@@ -2,107 +2,202 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8599F4952E6
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 18:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C28D495358
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 18:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377236AbiATRJy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jan 2022 12:09:54 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:54389 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377242AbiATRJe (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 12:09:34 -0500
-Received: from [192.168.100.1] ([82.142.13.186]) by mrelayeu.kundenserver.de
- (mreue009 [213.165.67.103]) with ESMTPSA (Nemesis) id
- 1MatZr-1mZLAn3xiF-00cUYe; Thu, 20 Jan 2022 18:09:07 +0100
-Message-ID: <cb884368-0226-e913-80d2-62d2b7b2e761@vivier.eu>
-Date:   Thu, 20 Jan 2022 18:09:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S231183AbiATRgS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jan 2022 12:36:18 -0500
+Received: from mga12.intel.com ([192.55.52.136]:14914 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229712AbiATRgR (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Thu, 20 Jan 2022 12:36:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642700177; x=1674236177;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+dYWYcsVjO72w3HaxwuCXXUjMt6guX+HVrSAVR0okx0=;
+  b=gqKmMJUsz8E8pg9vATKjG2dYiWmVtYntfM27mT1b+QRjl0cCBEIoPhP9
+   TXLUGilorRohf8Vxc4HCU3pK82xlBGw9/Swa/h1sNIYxV71DUhPMRudAH
+   sc2R7bg+XyeqRphnMfXRYVZDWDmBam+ybRak+UuiTcU+O/iMSSyyrAX6G
+   5FKlTsj66thDkuGA2Ww9W3p5W3i81c6nmziarIA1SwMLbMkRyAtWpa+LP
+   WVaORfAS6iaPW1yEkfaQy/tOe9AdyZjaJnuR2e/dyKP42p0JfZq/EKz3K
+   QJQvtBiMk/jSajxBFX5+cE59Q53lMeVeAftbOXeYFtQuFbyH9Qu3xi0tM
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="225387979"
+X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
+   d="scan'208";a="225387979"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2022 09:36:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,303,1635231600"; 
+   d="scan'208";a="626391000"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 20 Jan 2022 09:36:13 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAbM5-000EWZ-1L; Thu, 20 Jan 2022 17:36:13 +0000
+Date:   Fri, 21 Jan 2022 01:35:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         Alessandro Zummo <a.zummo@towertech.it>,
         linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220120080347.1595379-1-laurent@vivier.eu>
- <20220120080347.1595379-3-laurent@vivier.eu>
- <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce
- gf_ioread32()/gf_iowrite32()
-In-Reply-To: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:dddbphkpSIF6p9YP9xYcw9vEmF+op0Ndo1F40uOawLCcXjeMmby
- bzCBkRZkM916Hemr2XwL4CE+QGkvN9gPsdnDZSoBwFeEEF1+P71tAnSEekxfLcnseozmQIZ
- BFedbjRVjUqTrfdGkbfmRKXX3eHaVOMuukaBkOkfkMxV736K6p9Vw1SPkFrsNFT2UjO+T0c
- kA55JRy6V+N/CaihCUAVw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Dy7v5wb7I0k=:yylvJx+860sEkjPyrIC1H8
- gVm97KvhlrbB7LDmCyziiAT8iq/NfLr2vvH5lp3V5l8hQiyEbH2DoO0Re2ofm8pId0JZ/EiBN
- B2cu949M9qo/mqWwSEipoGgH7fNy1b8Vx4RAxLGz4k+9det3NYOz4YMSN13/agp5gcQaIBlcp
- fVlJ8rIQbiJmiTKXvjRe0g0F9IOdz4xDES+FGeeqS6UI8/PmQicu9sKGIB5TwqkNl05RhcoRm
- nqXRkgjBTILY9TuOplO0v3dw8QubtGKug/O0EB/o34hmLo5n6QT6Vhc/jIgvM4aNEFOV/YoMb
- IW6RfezQCCe7HzGreO+6KpRXuz4We17N6wlr8rKpBPgjE0W0jJZPZs7jVl8YiPPvLVjNxbeNt
- +CDACzRdD4WODjEBfVRE0xYbZUpUoi/OZFL4lbiA8KrnRhGe86CW36Mbfs95Tuxq+up/HN0zy
- BRnVF4DbBpNW/Pgj6qM1XPdSZIRZ5FP1cixDGWpud2Ine6WpIQrH9cPiA0jaftWv4cZqK/xRV
- hTv0N3mIjhKbIXR+W88kvpJVkbjpy+XCd19S2i7IgUsvOcm2UurA9fWHxqFTdih3JvOscxZ4G
- olAP2EPrLZtUcgK9ZZNc3pNjiU1CgiA2OhzxMHAXtInR2BzoUIALDTbEdhDFMadAWI88Nm3FU
- mALgZhB2l9/KRGEMhZIlRPb7Lgfxj0m4Plz4hwBIujqUjQBKiTeRpa8UTmxmW4s58YfE=
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v11 3/5] rtc: goldfish: use gf_ioread32()/gf_iowrite32()
+Message-ID: <202201210103.XWJt8hcA-lkp@intel.com>
+References: <20220120080347.1595379-4-laurent@vivier.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120080347.1595379-4-laurent@vivier.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le 20/01/2022 à 09:50, Arnd Bergmann a écrit :
-> On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
->>
->> Revert
->> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->>
->> to use accessors defined by the architecture.
->>
->> Define by default the accessor to be little-endian as we
->> have only little-endian architectures using goldfish devices.
->>
->> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> 
-> The patch looks good, but the description seems wrong to me:
-> 
-> Talking about "little-endian architectures" makes no sense here, the
-> point is that the device was clearly defined as having little-endian
-> registers, and your earlier patch broke this driver when running
-> on big-endian kernels (if anyone ever tried this).
-To explain why I did that:
+Hi Laurent,
 
-The reference document[1] doesn't define the endianness of goldfish.
+Thank you for the patch! Yet something to improve:
 
-In QEMU, goldfish devices are defined with the DEVICE_NATIVE_ENDIAN flag [2], that means all the 
-target architectures defined in QEMU with TARGET_WORDS_BIGENDIAN will present them as big-endian 
-devices, the others as little-endian devices.
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linux/master linus/master v5.16 next-20220120]
+[cannot apply to geert-m68k/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-According to TARGET_WORDS_BIGENDIAN definition:
+url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: riscv-randconfig-r042-20220120 (https://download.01.org/0day-ci/archive/20220121/202201210103.XWJt8hcA-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project f7b7138a62648f4019c55e4671682af1f851f295)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/82ea64fc7cab43e258085769ed1d90b0685bf091
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+        git checkout 82ea64fc7cab43e258085769ed1d90b0685bf091
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/rtc/
 
-On the following QEMU target architectures (qemu-system-XXX), goldfish devices must be accessed with 
-big-endian read/write:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-mips, mips64, s390x, sparc, sparc64, or1k, m68k, ppc, ppc64, xtensaeb, hppa, sh4eb, microblaze
+All errors (new ones prefixed by >>):
 
-On the following QEMU target architectures, goldfish devices must be accessed with little-endian 
-read/write:
+>> drivers/rtc/rtc-goldfish.c:44:18: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+           rtc_alarm_low = gf_ioread32(base + TIMER_ALARM_LOW);
+                           ^
+   drivers/rtc/rtc-goldfish.c:44:18: note: did you mean 'ioread32'?
+   include/asm-generic/io.h:726:19: note: 'ioread32' declared here
+   static inline u32 ioread32(const volatile void __iomem *addr)
+                     ^
+   include/asm-generic/io.h:725:18: note: expanded from macro 'ioread32'
+   #define ioread32 ioread32
+                    ^
+>> drivers/rtc/rtc-goldfish.c:74:3: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                   gf_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+                   ^
+   drivers/rtc/rtc-goldfish.c:74:3: note: did you mean 'iowrite32'?
+   include/asm-generic/io.h:760:20: note: 'iowrite32' declared here
+   static inline void iowrite32(u32 value, volatile void __iomem *addr)
+                      ^
+   include/asm-generic/io.h:759:19: note: expanded from macro 'iowrite32'
+   #define iowrite32 iowrite32
+                     ^
+   drivers/rtc/rtc-goldfish.c:83:20: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+                   rtc_status_reg = gf_ioread32(base + TIMER_ALARM_STATUS);
+                                    ^
+   drivers/rtc/rtc-goldfish.c:85:4: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                           gf_iowrite32(1, base + TIMER_CLEAR_ALARM);
+                           ^
+   drivers/rtc/rtc-goldfish.c:101:3: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+                   gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+                   ^
+   drivers/rtc/rtc-goldfish.c:113:2: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+           gf_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
+           ^
+   drivers/rtc/rtc-goldfish.c:131:13: error: implicit declaration of function 'gf_ioread32' [-Werror,-Wimplicit-function-declaration]
+           time_low = gf_ioread32(base + TIMER_TIME_LOW);
+                      ^
+   drivers/rtc/rtc-goldfish.c:152:2: error: implicit declaration of function 'gf_iowrite32' [-Werror,-Wimplicit-function-declaration]
+           gf_iowrite32((now64 >> 32), base + TIMER_TIME_HIGH);
+           ^
+   8 errors generated.
 
-arm, aarch64, alpha, avr, cris, i386, x86_64, microblazeel, mipsel, mips64el, nios2, riscv32, 
-riscv64, rx, sh4, tricore, xtensa
 
-Thanks,
-Laurent
+vim +/gf_ioread32 +44 drivers/rtc/rtc-goldfish.c
 
-[1] https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
-[2] 
-https://android.googlesource.com/platform/external/qemu/+/refs/heads/emu-master-dev/hw/char/goldfish_tty.c#222
+    31	
+    32	static int goldfish_rtc_read_alarm(struct device *dev,
+    33					   struct rtc_wkalrm *alrm)
+    34	{
+    35		u64 rtc_alarm;
+    36		u64 rtc_alarm_low;
+    37		u64 rtc_alarm_high;
+    38		void __iomem *base;
+    39		struct goldfish_rtc *rtcdrv;
+    40	
+    41		rtcdrv = dev_get_drvdata(dev);
+    42		base = rtcdrv->base;
+    43	
+  > 44		rtc_alarm_low = gf_ioread32(base + TIMER_ALARM_LOW);
+    45		rtc_alarm_high = gf_ioread32(base + TIMER_ALARM_HIGH);
+    46		rtc_alarm = (rtc_alarm_high << 32) | rtc_alarm_low;
+    47	
+    48		do_div(rtc_alarm, NSEC_PER_SEC);
+    49		memset(alrm, 0, sizeof(struct rtc_wkalrm));
+    50	
+    51		rtc_time64_to_tm(rtc_alarm, &alrm->time);
+    52	
+    53		if (gf_ioread32(base + TIMER_ALARM_STATUS))
+    54			alrm->enabled = 1;
+    55		else
+    56			alrm->enabled = 0;
+    57	
+    58		return 0;
+    59	}
+    60	
+    61	static int goldfish_rtc_set_alarm(struct device *dev,
+    62					  struct rtc_wkalrm *alrm)
+    63	{
+    64		struct goldfish_rtc *rtcdrv;
+    65		u64 rtc_alarm64;
+    66		u64 rtc_status_reg;
+    67		void __iomem *base;
+    68	
+    69		rtcdrv = dev_get_drvdata(dev);
+    70		base = rtcdrv->base;
+    71	
+    72		if (alrm->enabled) {
+    73			rtc_alarm64 = rtc_tm_to_time64(&alrm->time) * NSEC_PER_SEC;
+  > 74			gf_iowrite32((rtc_alarm64 >> 32), base + TIMER_ALARM_HIGH);
+    75			gf_iowrite32(rtc_alarm64, base + TIMER_ALARM_LOW);
+    76			gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+    77		} else {
+    78			/*
+    79			 * if this function was called with enabled=0
+    80			 * then it could mean that the application is
+    81			 * trying to cancel an ongoing alarm
+    82			 */
+    83			rtc_status_reg = gf_ioread32(base + TIMER_ALARM_STATUS);
+    84			if (rtc_status_reg)
+    85				gf_iowrite32(1, base + TIMER_CLEAR_ALARM);
+    86		}
+    87	
+    88		return 0;
+    89	}
+    90	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
