@@ -2,148 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDE449499F
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 09:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC89494A0E
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Jan 2022 09:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbiATIgZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jan 2022 03:36:25 -0500
-Received: from mail-ua1-f43.google.com ([209.85.222.43]:44026 "EHLO
-        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiATIgZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 03:36:25 -0500
-Received: by mail-ua1-f43.google.com with SMTP id 2so9420095uax.10;
-        Thu, 20 Jan 2022 00:36:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rjpWEc8ofW9Ln+ZzVM/iDZ8qr5vzNcJvKqxioEzCZGY=;
-        b=K8E1eXzycKiQIRWxj6qfUFajLTr2sy1dSiMuVac4Ojo2F6egeEaTWG9ZbEsgSkDSEw
-         qRqO5uQssP45mWIaWpG7nVB3Q97Z1Jr6E/38JLbdq15EI8lBonmLG/R6A0L2wQywHdjM
-         tlbG4o+STxkRss/G4WwK4qJM73GTuEXEIIUh6QnfAQP1F4VZPE5JUYse+fcFqMZoHYGf
-         ZafxGxjyuI5ZOlCI72DNOr278MsPXFnFRVZNTSTswiks1K2dV8F/xbDEQ2JSlTgfnhoE
-         hGKLjtKpj5enGPziEdb98hFXbm2BZ4uB/Zgol/rIMf2zdXs4p+1IuBSGQGYYFahsa+z3
-         ATDw==
-X-Gm-Message-State: AOAM5316YKeuEQHWPMSP3XHEStDeK+5+1EWFv3Cbk15N8tilVELLYVbW
-        GecERymnasaq70RxfNTmqifMrUS2CgMjdQ==
-X-Google-Smtp-Source: ABdhPJxGe1OsDYfyTFLeqMrnaPPS7g1NHd4Hi0o7FeKUu5n/kYgAXhvWwHI1mDzEE/HawGiFuMYvRg==
-X-Received: by 2002:a05:6102:3a68:: with SMTP id bf8mr13173693vsb.63.1642667783746;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
-        by smtp.gmail.com with ESMTPSA id bj23sm432855vkb.23.2022.01.20.00.36.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-Received: by mail-ua1-f47.google.com with SMTP id r15so9486981uao.3;
-        Thu, 20 Jan 2022 00:36:23 -0800 (PST)
-X-Received: by 2002:a1f:a2d3:: with SMTP id l202mr4847687vke.7.1642667418540;
- Thu, 20 Jan 2022 00:30:18 -0800 (PST)
+        id S238978AbiATIuu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jan 2022 03:50:50 -0500
+Received: from mout.kundenserver.de ([212.227.126.187]:51351 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359384AbiATIut (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 03:50:49 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M2w4S-1n9Nl516nU-003Iri; Thu, 20 Jan 2022 09:50:47 +0100
+Received: by mail-wm1-f50.google.com with SMTP id i187-20020a1c3bc4000000b0034d2ed1be2aso18739180wma.1;
+        Thu, 20 Jan 2022 00:50:47 -0800 (PST)
+X-Gm-Message-State: AOAM532+T5PvVkwuwVqOAgwW+JAlCBQwuxJ/v/rEw11TyDyI2Vm2oy2m
+        5oL27DNA+HYoJVpKnzG7qUhcJcIzrtBw4hiH2Wk=
+X-Google-Smtp-Source: ABdhPJwa2TLFWWtVzRt+gvdo3caSsHZVcnbUi/A/hVZ7P0/vZnDNJpHv52UMEl2oHT4PQoB1G9hWQmqPRnKWtHwc0qw=
+X-Received: by 2002:a1c:2784:: with SMTP id n126mr5427772wmn.1.1642668646881;
+ Thu, 20 Jan 2022 00:50:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220117110755.3433142-1-conor.dooley@microchip.com> <20220117110755.3433142-4-conor.dooley@microchip.com>
-In-Reply-To: <20220117110755.3433142-4-conor.dooley@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 20 Jan 2022 09:30:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Message-ID: <CAMuHMdXwe3_F8NeePnoFrLwyzKUwnHtmETC=ambgsC2N3w_h8A@mail.gmail.com>
-Subject: Re: [PATCH v4 03/14] dt-bindings: i2c: add bindings for microchip
- mpfs i2c
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
+References: <20220120080347.1595379-1-laurent@vivier.eu> <20220120080347.1595379-3-laurent@vivier.eu>
+In-Reply-To: <20220120080347.1595379-3-laurent@vivier.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 20 Jan 2022 09:50:30 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+Message-ID: <CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com>
+Subject: Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi <linux-spi@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bin Meng <bin.meng@windriver.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        Atish Patra <atishp@rivosinc.com>
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:hjIIYFRUUftOuns46pp36ouon+Tk8dXglaJJkI5uFMgrWcu517j
+ n69BfYDFLCyRSD3bRS7eYpW7kYAdDUQ2B7fNXsUyGaGFz3MqorGhZfb7MPy2FAYhOikPrNb
+ 2/OArlbT47nI5ipx2ZbTud9SnRXTo7+xCF6JZmisUOnX61sGAZS444c9LrjiHQC2r9O0MYG
+ 7US8SFjqpWwkZJZng+XVg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HcOR5JkVswQ=:JnjTHhX2usyp9GNrmWwikf
+ cAsJ6rg4xHyqAjHaCvnCwN4DeG5OLAe5vu/tatZ8yfBu1+1HPYN1XDVL1RmO/SxnBFflI7MBF
+ UrUheH1rZk2KNwgOxkljSOlrk2jwUw7vuPA4N8nA0aXQz5c1lnNPYu3UXo6cQSkOJsvui0cph
+ NMIHWFMOXPpTmoIh8CMNWEq2Lxt3n4GRUNp4bau/JHjRjj6zE35mv+qPgNkQ80ukbvq5BFXKx
+ ZxBC7w014NPW3e9hDnWtpYjoHHjUe8ZY4S1RIvuhSD/u2dqAvVMTg8iAyU/Xe9fk/oXJnk1UK
+ c4FexPtqJ5GD2D5y2u+d+6xAgco76evBhazktf43no+RTWRtluz6moJFbF74CtSG0zoHaOAbK
+ c+IJH5xvkR493RA/g9+o7ra2fwFCa7Sd7kqKy4/Mm6dZ2CTNqNCUDuBYPd1lVJ4XWUat/Jhxu
+ vSpV4cEpWSdnD2ZhaeFgkIjPk6X8xduudTUpy2cG8ajd5zo9u6vvkfaRCTZSh84CAKTgvMnl/
+ JzFIEawqZ9zRkTdkhtr2JXEGzY1AsA76+3YKFRM8dkmyLFEo0zH6Nn5JbTGk+BbjmGsrkjmBO
+ 4VhQrXYkNcaaBYx9lP6mIx+hvzvoSpoe0RHWX6wYcXArbEYH4weo1E81Q/FvQPv8GnD3CWj36
+ ZdlAxEG0RgSBsYIOI6fbAbbzCRyGx4p5kNswSXQyfu1AT36n2Q5lal9dl0aNJ37Pqq7dWT8lH
+ +M6arKhHIxTLdEkY9u+4k5HgojZLeTucZRa8/1aQDiCl9Qtdr37Rx/ELUWRFZFGMMPbVYNJR/
+ LPrWpg1QsopFjPVfXhdqtUXrVxRorv+rJbeXgVyhT9V23Yruj0=
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Conor,
-
-On Mon, Jan 17, 2022 at 12:06 PM <conor.dooley@microchip.com> wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Jan 20, 2022 at 9:03 AM Laurent Vivier <laurent@vivier.eu> wrote:
 >
-> Add device tree bindings for the i2c controller on
-> the Microchip PolarFire SoC.
+> Revert
+> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
 >
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> to use accessors defined by the architecture.
+>
+> Define by default the accessor to be little-endian as we
+> have only little-endian architectures using goldfish devices.
+>
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
 
-Thanks for your patch!
+The patch looks good, but the description seems wrong to me:
 
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/microchip,mpfs-i2c.yaml
-> @@ -0,0 +1,55 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/i2c/microchip,mpfs-i2c.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip MPFS I2C Controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Daire McNamara <daire.mcnamara@microchip.com>
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-> +      - microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+Talking about "little-endian architectures" makes no sense here, the
+point is that the device was clearly defined as having little-endian
+registers, and your earlier patch broke this driver when running
+on big-endian kernels (if anyone ever tried this).
 
-Wouldn't it be more logical to have:
+This means you should also add
 
-    items:
-      - const: microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
+Cc: stable@vger.kernel.org # v5.11+
+Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
 
-?
+The fact that m68k gets this wrong is just a bug in qemu, but it's
+probably impossible to fix that since there is no way of knowing which
+other operating systems have started relying on that bug over the years.
 
-If the IP core is reused, it can become:
+It might be a good idea to revisit the qemu implementation and make
+sure that the extra byteswap is only inserted on m68k and not on
+other targets, but hopefully there are no new targets based on goldfish
+anymore and we don't need to care.
 
-    items:
-      - enum:
-          - microchip,mpfs-i2c # Microchip PolarFire SoC compatible SoCs
-          - microchip,<foo>-i2c # ...
-      - const: microchip,corei2c-rtl-v7 # Microchip Fabric based i2c IP core
-
-That way the driver can just match on the second (fallback) value,
-and no further driver changes will be needed (until v8 or later).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+        Arnd
