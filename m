@@ -2,155 +2,164 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE538495706
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 00:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96C6495748
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 01:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348155AbiATXfz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jan 2022 18:35:55 -0500
-Received: from mail.hugovil.com ([162.243.120.170]:49952 "EHLO
-        mail.hugovil.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiATXfy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 18:35:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=f3L6TZiJ+uQRcJZkGE5CwwCr2VwQ6AVuXmjyr0r35t4=; b=GNE+s1WZLCKxV6C7H88EjIH/Bv
-        DQJfa+dfUFhV7NDRzEUQ3Urc1qjZVMXLkF+vhLtaXkeXTJ7KUGr6+/xJDfFG5HLVHWkYAOR5427qP
-        LQpGsDnX8DyciLozziTRcwpUEhEf+hgyXoZIc1gAVNTuPnGRTId6wevvaCmL2aSC6olo=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:54882 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1nAgy4-0004Me-LJ; Thu, 20 Jan 2022 18:35:50 -0500
-Date:   Thu, 20 Jan 2022 18:35:48 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20220120183548.e6a8f46ede2a636a8eaf11c1@hugovil.com>
-In-Reply-To: <YehiHJXP23TSREbE@piout.net>
-References: <20220119172740.1856302-1-hugo@hugovil.com>
-        <YehMZC4vduvSH5HA@piout.net>
-        <20220119130845.6de245b8b217e659cd319328@hugovil.com>
-        <YehiHJXP23TSREbE@piout.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.hugovil.com
-X-Spam-Level: 
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: bootlin.com]
-        * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 NICE_REPLY_A Looks like a legit reply (A)
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.2
-Subject: Re: [PATCH] rtc: pcf2127: add error message if writing to CLKOUT
- register fails
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+        id S232090AbiAUARp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Jan 2022 19:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348093AbiAUARk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 19:17:40 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862E0C061574;
+        Thu, 20 Jan 2022 16:17:39 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id AD0CE100005;
+        Fri, 21 Jan 2022 00:17:37 +0000 (UTC)
+Date:   Fri, 21 Jan 2022 01:17:37 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC changes for 5.17
+Message-ID: <Yen7oaDXAbd4tFOD@piout.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 19 Jan 2022 20:10:20 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+Hello Linus,
 
-> On 19/01/2022 13:08:45-0500, Hugo Villeneuve wrote:
-> > On Wed, 19 Jan 2022 18:37:40 +0100
-> > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > 
-> > > On 19/01/2022 12:27:39-0500, Hugo Villeneuve wrote:
-> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > 
-> > > > If writing to CLKOUT register fails, the probe operation will be aborted
-> > > > without a meaningful error message.
-> > > > 
-> > > 
-> > > The current trend is to remove debug messages, please do not add more :)
-> > 
-> > Hi,
-> > If the read operation fails, the probe function will exit silently, and our RTC chip will not work. In that case, if we parse the dmesg logs, I think we  should have an indication that something went wrong.
-> > 
-> 
-> This is not true, it doesn't fail silently, you'd get:
-> rtc-pcf2127: probe of 1-0051 failed with error -121
+Here is the RTC subsystem pull request for v5.17.
 
-Well this is certainly true for me because I am not seing the same error message as you :)
+Two new drivers this cycle and a significant rework of the CMOS driver
+make the bulk of the changes.
+I also carry powerpc changes with the agreement of Michael.
 
-Just for context, I have defined a dummy pcf2127 on I2C bus 0 in my device tree (no actual hardware is present). I also added some debug messages to investigate (rtc-pcf2127.c and dd.c files), and here is the dmesg log after issuing "modprobe rtc-pcf2127":
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_i2c_probe
-[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: pcf2127_probe
-[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: PORO disabling failed with error -6
-[Thu Jan 20 23:22:20 2022] rtc-pcf2127-i2c 0-0051: call_driver_probe probe error: -6
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Error code -6 is -ENXIO, and looking at the call_driver_probe() function in dd.c, I now understand why I didn't see the error message (line 531):
+are available in the Git repository at:
 
-	case -ENXIO:
-		pr_debug("%s: probe of %s rejects match %d\n",
-			 drv->name, dev_name(dev), ret);
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
 
-So it seems that the return code is different than what you got?
+for you to fetch changes up to 5ceee540fdc7f1d65ca6e2b1b193ce5aa95ab99c:
 
+  rtc: sunplus: fix return value in sp_rtc_probe() (2022-01-16 23:50:34 +0100)
 
-> > I had a case where my dev board was not properly plugged-in, and before this patch, I didn't notice it because of the silent abort of the probe function.
-> > 
-> 
-> Again, not silent.
-> 
-> > > 
-> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > ---
-> > > >  drivers/rtc/rtc-pcf2127.c | 4 +++-
-> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > > index 3d1f57e54372..823abe2a7147 100644
-> > > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > > @@ -717,8 +717,10 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > > >  	if (!(val & PCF2127_BIT_CLKOUT_OTPR)) {
-> > > >  		ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
-> > > >  				      PCF2127_BIT_CLKOUT_OTPR);
-> > > > -		if (ret < 0)
-> > > > +		if (ret < 0) {
-> > > > +			dev_err(dev, "writing to CLKOUT register failed\n");
-> > > >  			return ret;
-> > > > +		}
-> > > >  
-> > > >  		msleep(100);
-> > > >  	}
-> > > > -- 
-> > > > 2.30.2
-> > > > 
-> > > 
-> > > -- 
-> > > Alexandre Belloni, co-owner and COO, Bootlin
-> > > Embedded Linux and Kernel engineering
-> > > https://bootlin.com
-> > > 
-> > 
-> > 
-> > -- 
-> > Hugo Villeneuve <hugo@hugovil.com>
-> 
-> -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
+----------------------------------------------------------------
+RTC for 5.17
+
+New driver:
+ - Sunplus SP7021 RTC
+ - Nintendo GameCube, Wii and Wii U RTC
+
+Drivers:
+ - cmos: refactor UIP handling and presence check, fix century
+ - rs5c372: offset correction support, report low voltage
+ - rv8803: Epson RX8804 support
+
+----------------------------------------------------------------
+Alexandre Belloni (1):
+      rtc: da9063: switch to RTC_FEATURE_UPDATE_INTERRUPT
+
+Camel Guo (3):
+      rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
+      rtc: rs5c372: add offset correction support
+      rtc: rs5c372: fix incorrect oscillation value on r2221tl
+
+Dan Carpenter (2):
+      rtc: mc146818-lib: fix signedness bug in mc146818_get_time()
+      rtc: gamecube: Fix an IS_ERR() vs NULL check
+
+David Heidelberg (1):
+      dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
+
+Emmanuel Gil Peyrot (5):
+      rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
+      rtc: gamecube: Report low battery as invalid data
+      powerpc: wii.dts: Expose HW_SRNPROT on this platform
+      powerpc: gamecube_defconfig: Enable the RTC driver
+      powerpc: wii_defconfig: Enable the RTC driver
+
+Fabio Estevam (2):
+      dt/bindings: rtc: rx8900: Add an entry for RX8804
+      rtc: rv8803: Add support for the Epson RX8804 RTC
+
+Hugo Villeneuve (1):
+      rtc: pcf2127: Fix typo in comment
+
+Kees Cook (1):
+      rtc: Move variable into switch case statement
+
+Lad Prabhakar (1):
+      rtc: ftrtc010: Use platform_get_irq() to get the interrupt
+
+Laurence de Bruxelles (1):
+      rtc: pxa: fix null pointer dereference
+
+Marc Ferland (1):
+      rtc: pcf85063: add i2c_device_id name matching support
+
+Mateusz Jończyk (9):
+      rtc: cmos: take rtc_lock while reading from CMOS
+      rtc: mc146818-lib: change return values of mc146818_get_time()
+      rtc: Check return value from mc146818_get_time()
+      rtc: mc146818-lib: fix RTC presence check
+      rtc: mc146818-lib: extract mc146818_avoid_UIP
+      rtc: mc146818-lib: refactor mc146818_get_time
+      rtc: mc146818-lib: refactor mc146818_does_rtc_work
+      rtc: cmos: avoid UIP when reading alarm time
+      rtc: cmos: avoid UIP when writing alarm time
+
+Nikita Shubin (1):
+      rtc: da9063: add as wakeup source
+
+Riwen Lu (1):
+      rtc: cmos: Evaluate century appropriate
+
+Vincent Shih (2):
+      rtc: Add driver for RTC in Sunplus SP7021
+      dt-bindings: rtc: Add Sunplus RTC json-schema
+
+Yang Yingliang (1):
+      rtc: sunplus: fix return value in sp_rtc_probe()
+
+ .../devicetree/bindings/rtc/epson,rx8900.yaml      |   1 +
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |   9 +-
+ .../bindings/rtc/sunplus,sp7021-rtc.yaml           |  56 +++
+ MAINTAINERS                                        |   7 +
+ arch/alpha/kernel/rtc.c                            |   7 +-
+ arch/powerpc/boot/dts/wii.dts                      |   5 +
+ arch/powerpc/configs/gamecube_defconfig            |   2 +-
+ arch/powerpc/configs/wii_defconfig                 |   2 +-
+ arch/x86/kernel/hpet.c                             |   8 +-
+ drivers/base/power/trace.c                         |   6 +-
+ drivers/rtc/Kconfig                                |  24 ++
+ drivers/rtc/Makefile                               |   2 +
+ drivers/rtc/dev.c                                  |   6 +-
+ drivers/rtc/rtc-cmos.c                             | 201 +++++++----
+ drivers/rtc/rtc-da9063.c                           |  16 +-
+ drivers/rtc/rtc-ftrtc010.c                         |   8 +-
+ drivers/rtc/rtc-gamecube.c                         | 377 +++++++++++++++++++++
+ drivers/rtc/rtc-mc146818-lib.c                     | 182 ++++++----
+ drivers/rtc/rtc-pcf2127.c                          |   2 +-
+ drivers/rtc/rtc-pcf85063.c                         |  97 ++++--
+ drivers/rtc/rtc-pxa.c                              |   4 +
+ drivers/rtc/rtc-rs5c372.c                          | 185 +++++++++-
+ drivers/rtc/rtc-rv8803.c                           |   6 +
+ drivers/rtc/rtc-sunplus.c                          | 362 ++++++++++++++++++++
+ include/linux/mc146818rtc.h                        |   6 +-
+ 25 files changed, 1390 insertions(+), 191 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-gamecube.c
+ create mode 100644 drivers/rtc/rtc-sunplus.c
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
