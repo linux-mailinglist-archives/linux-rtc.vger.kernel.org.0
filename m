@@ -2,67 +2,144 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92107495E99
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 12:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C835495EF5
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 13:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380279AbiAULwX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 21 Jan 2022 06:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380246AbiAULwV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Jan 2022 06:52:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE1C061574;
-        Fri, 21 Jan 2022 03:52:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B9B461A81;
-        Fri, 21 Jan 2022 11:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C61A2C340E1;
-        Fri, 21 Jan 2022 11:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642765939;
-        bh=VJYfDLCxd0Zt4kkzA3/Qkgo2ircVuD5F1uHhM3As8Js=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=GCKE+Gk1HGWgKor3elJ9E1dmAfceHnHSMYLMDnl/srKF0kBnKFUeDv83cb4eyFlvv
-         R52+sE+BjvHNvpG8+mt/mR1TEiMh7GgUCJNLIh/oqnkvYJgkjQNUPQKy7Q9DEjxIjf
-         7Qj/FCuOKRH+ZIikMfEz+6O5etGAba/eKIECar2sGD2lSFM5/i8uJjsts4HGWbi/wI
-         bKGdDBlD5v2sX72BeZPmneDMmUxSvtH1+LLY7CWPYDXXQxa+0LGDTG7th5WjR4V+Y8
-         yIG/T0WDamN80W34T7N1v1eSdQbJ042vB+ku15xduJqWeG+rU2I8t6dayp+1thbn32
-         0lkFy6IXqDk1g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B602CF6079B;
-        Fri, 21 Jan 2022 11:52:19 +0000 (UTC)
-Subject: Re: [GIT PULL] RTC changes for 5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yen7oaDXAbd4tFOD@piout.net>
-References: <Yen7oaDXAbd4tFOD@piout.net>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Yen7oaDXAbd4tFOD@piout.net>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
-X-PR-Tracked-Commit-Id: 5ceee540fdc7f1d65ca6e2b1b193ce5aa95ab99c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 75242f31db6cabf602a5eb84c13b579099d72a65
-Message-Id: <164276593972.2956.8722499040092955713.pr-tracker-bot@kernel.org>
-Date:   Fri, 21 Jan 2022 11:52:19 +0000
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1380330AbiAUMYt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 21 Jan 2022 07:24:49 -0500
+Received: from mga05.intel.com ([192.55.52.43]:44938 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1380326AbiAUMYs (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Fri, 21 Jan 2022 07:24:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1642767888; x=1674303888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3hfDR6qd0OhhK8ZgQ4/ZQOZpwPEBT6cE5sRbv1NeCD0=;
+  b=IoQl98cm0m9hmn1GvVY9ffmipUyqlwQHD8vPumRmjiAucGNAJXmZFGX2
+   J/N1nXTbreUUoP/3UQQVSJLzsEcI925XoYfs5s2SdMDtIVSZJKLaJBNO+
+   S1S/RqEGs6kF+9i0De6RuiGY7Lpd1mQRwJMI+ZKsOwlUIU3KPM9cgAbdZ
+   +chrVUBkSthAEUSD8tN3kem9aZD8XSa5Z4u+26IwAVcl6/w3X6esefwVz
+   pGo3Te6A9JIlrj6lwmexOQ30jf3Z4lbkLvWznRSA9rwpAYP7YvZeZc5DK
+   0yhw8BnhT6jSq4biIf5NzEkGsIJEaKHZD5dPptpKyfa/nHMvwSVZxB3q5
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10233"; a="331993633"
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="331993633"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2022 04:24:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,304,1635231600"; 
+   d="scan'208";a="579592908"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jan 2022 04:24:44 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nAsyC-000FHR-AK; Fri, 21 Jan 2022 12:24:44 +0000
+Date:   Fri, 21 Jan 2022 20:23:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v11 4/5] clocksource/drivers: Add a goldfish-timer
+ clocksource
+Message-ID: <202201212032.qL41ty3V-lkp@intel.com>
+References: <20220120080347.1595379-5-laurent@vivier.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220120080347.1595379-5-laurent@vivier.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The pull request you sent on Fri, 21 Jan 2022 01:17:37 +0100:
+Hi Laurent,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
+Thank you for the patch! Yet something to improve:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/75242f31db6cabf602a5eb84c13b579099d72a65
+[auto build test ERROR on tip/timers/core]
+[also build test ERROR on linux/master linus/master next-20220121]
+[cannot apply to geert-m68k/for-next v5.16]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thank you!
+url:    https://github.com/0day-ci/linux/commits/Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 35e13e9da9afbce13c1d36465504ece4e65f24fe
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220121/202201212032.qL41ty3V-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/ea1170b472532011ab0c8208b6414a36810f45ab
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Laurent-Vivier/m68k-Add-Virtual-M68k-Machine/20220120-160832
+        git checkout ea1170b472532011ab0c8208b6414a36810f45ab
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/clocksource/timer-goldfish.c: In function 'goldfish_timer_read':
+>> drivers/clocksource/timer-goldfish.c:52:20: error: implicit declaration of function 'gf_ioread32'; did you mean 'ioread32'? [-Werror=implicit-function-declaration]
+      52 |         time_low = gf_ioread32(base + TIMER_TIME_LOW);
+         |                    ^~~~~~~~~~~
+         |                    ioread32
+   drivers/clocksource/timer-goldfish.c: In function 'goldfish_timer_set_oneshot':
+>> drivers/clocksource/timer-goldfish.c:65:9: error: implicit declaration of function 'gf_iowrite32'; did you mean 'iowrite32'? [-Werror=implicit-function-declaration]
+      65 |         gf_iowrite32(0, base + TIMER_ALARM_HIGH);
+         |         ^~~~~~~~~~~~
+         |         iowrite32
+   cc1: some warnings being treated as errors
+
+
+vim +52 drivers/clocksource/timer-goldfish.c
+
+    40	
+    41	static u64 goldfish_timer_read(struct clocksource *cs)
+    42	{
+    43		struct goldfish_timer *timerdrv = cs_to_gf(cs);
+    44		void __iomem *base = timerdrv->base;
+    45		u32 time_low, time_high;
+    46		u64 ticks;
+    47	
+    48		/*
+    49		 * time_low: get low bits of current time and update time_high
+    50		 * time_high: get high bits of time at last time_low read
+    51		 */
+  > 52		time_low = gf_ioread32(base + TIMER_TIME_LOW);
+    53		time_high = gf_ioread32(base + TIMER_TIME_HIGH);
+    54	
+    55		ticks = ((u64)time_high << 32) | time_low;
+    56	
+    57		return ticks;
+    58	}
+    59	
+    60	static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
+    61	{
+    62		struct goldfish_timer *timerdrv = ced_to_gf(evt);
+    63		void __iomem *base = timerdrv->base;
+    64	
+  > 65		gf_iowrite32(0, base + TIMER_ALARM_HIGH);
+    66		gf_iowrite32(0, base + TIMER_ALARM_LOW);
+    67		gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+    68	
+    69		return 0;
+    70	}
+    71	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
