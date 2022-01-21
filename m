@@ -2,164 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96C6495748
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 01:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92107495E99
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Jan 2022 12:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiAUARp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Jan 2022 19:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S1380279AbiAULwX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 21 Jan 2022 06:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348093AbiAUARk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Jan 2022 19:17:40 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862E0C061574;
-        Thu, 20 Jan 2022 16:17:39 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AD0CE100005;
-        Fri, 21 Jan 2022 00:17:37 +0000 (UTC)
-Date:   Fri, 21 Jan 2022 01:17:37 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC changes for 5.17
-Message-ID: <Yen7oaDXAbd4tFOD@piout.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S1380246AbiAULwV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Jan 2022 06:52:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE1C061574;
+        Fri, 21 Jan 2022 03:52:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B9B461A81;
+        Fri, 21 Jan 2022 11:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C61A2C340E1;
+        Fri, 21 Jan 2022 11:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642765939;
+        bh=VJYfDLCxd0Zt4kkzA3/Qkgo2ircVuD5F1uHhM3As8Js=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=GCKE+Gk1HGWgKor3elJ9E1dmAfceHnHSMYLMDnl/srKF0kBnKFUeDv83cb4eyFlvv
+         R52+sE+BjvHNvpG8+mt/mR1TEiMh7GgUCJNLIh/oqnkvYJgkjQNUPQKy7Q9DEjxIjf
+         7Qj/FCuOKRH+ZIikMfEz+6O5etGAba/eKIECar2sGD2lSFM5/i8uJjsts4HGWbi/wI
+         bKGdDBlD5v2sX72BeZPmneDMmUxSvtH1+LLY7CWPYDXXQxa+0LGDTG7th5WjR4V+Y8
+         yIG/T0WDamN80W34T7N1v1eSdQbJ042vB+ku15xduJqWeG+rU2I8t6dayp+1thbn32
+         0lkFy6IXqDk1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B602CF6079B;
+        Fri, 21 Jan 2022 11:52:19 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC changes for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Yen7oaDXAbd4tFOD@piout.net>
+References: <Yen7oaDXAbd4tFOD@piout.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Yen7oaDXAbd4tFOD@piout.net>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
+X-PR-Tracked-Commit-Id: 5ceee540fdc7f1d65ca6e2b1b193ce5aa95ab99c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 75242f31db6cabf602a5eb84c13b579099d72a65
+Message-Id: <164276593972.2956.8722499040092955713.pr-tracker-bot@kernel.org>
+Date:   Fri, 21 Jan 2022 11:52:19 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Linus,
+The pull request you sent on Fri, 21 Jan 2022 01:17:37 +0100:
 
-Here is the RTC subsystem pull request for v5.17.
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
 
-Two new drivers this cycle and a significant rework of the CMOS driver
-make the bulk of the changes.
-I also carry powerpc changes with the agreement of Michael.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/75242f31db6cabf602a5eb84c13b579099d72a65
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.17
-
-for you to fetch changes up to 5ceee540fdc7f1d65ca6e2b1b193ce5aa95ab99c:
-
-  rtc: sunplus: fix return value in sp_rtc_probe() (2022-01-16 23:50:34 +0100)
-
-----------------------------------------------------------------
-RTC for 5.17
-
-New driver:
- - Sunplus SP7021 RTC
- - Nintendo GameCube, Wii and Wii U RTC
-
-Drivers:
- - cmos: refactor UIP handling and presence check, fix century
- - rs5c372: offset correction support, report low voltage
- - rv8803: Epson RX8804 support
-
-----------------------------------------------------------------
-Alexandre Belloni (1):
-      rtc: da9063: switch to RTC_FEATURE_UPDATE_INTERRUPT
-
-Camel Guo (3):
-      rtc: rs5c372: Add RTC_VL_READ, RTC_VL_CLR ioctls
-      rtc: rs5c372: add offset correction support
-      rtc: rs5c372: fix incorrect oscillation value on r2221tl
-
-Dan Carpenter (2):
-      rtc: mc146818-lib: fix signedness bug in mc146818_get_time()
-      rtc: gamecube: Fix an IS_ERR() vs NULL check
-
-David Heidelberg (1):
-      dt-bindings: rtc: qcom-pm8xxx-rtc: update register numbers
-
-Emmanuel Gil Peyrot (5):
-      rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U
-      rtc: gamecube: Report low battery as invalid data
-      powerpc: wii.dts: Expose HW_SRNPROT on this platform
-      powerpc: gamecube_defconfig: Enable the RTC driver
-      powerpc: wii_defconfig: Enable the RTC driver
-
-Fabio Estevam (2):
-      dt/bindings: rtc: rx8900: Add an entry for RX8804
-      rtc: rv8803: Add support for the Epson RX8804 RTC
-
-Hugo Villeneuve (1):
-      rtc: pcf2127: Fix typo in comment
-
-Kees Cook (1):
-      rtc: Move variable into switch case statement
-
-Lad Prabhakar (1):
-      rtc: ftrtc010: Use platform_get_irq() to get the interrupt
-
-Laurence de Bruxelles (1):
-      rtc: pxa: fix null pointer dereference
-
-Marc Ferland (1):
-      rtc: pcf85063: add i2c_device_id name matching support
-
-Mateusz Jończyk (9):
-      rtc: cmos: take rtc_lock while reading from CMOS
-      rtc: mc146818-lib: change return values of mc146818_get_time()
-      rtc: Check return value from mc146818_get_time()
-      rtc: mc146818-lib: fix RTC presence check
-      rtc: mc146818-lib: extract mc146818_avoid_UIP
-      rtc: mc146818-lib: refactor mc146818_get_time
-      rtc: mc146818-lib: refactor mc146818_does_rtc_work
-      rtc: cmos: avoid UIP when reading alarm time
-      rtc: cmos: avoid UIP when writing alarm time
-
-Nikita Shubin (1):
-      rtc: da9063: add as wakeup source
-
-Riwen Lu (1):
-      rtc: cmos: Evaluate century appropriate
-
-Vincent Shih (2):
-      rtc: Add driver for RTC in Sunplus SP7021
-      dt-bindings: rtc: Add Sunplus RTC json-schema
-
-Yang Yingliang (1):
-      rtc: sunplus: fix return value in sp_rtc_probe()
-
- .../devicetree/bindings/rtc/epson,rx8900.yaml      |   1 +
- .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |   9 +-
- .../bindings/rtc/sunplus,sp7021-rtc.yaml           |  56 +++
- MAINTAINERS                                        |   7 +
- arch/alpha/kernel/rtc.c                            |   7 +-
- arch/powerpc/boot/dts/wii.dts                      |   5 +
- arch/powerpc/configs/gamecube_defconfig            |   2 +-
- arch/powerpc/configs/wii_defconfig                 |   2 +-
- arch/x86/kernel/hpet.c                             |   8 +-
- drivers/base/power/trace.c                         |   6 +-
- drivers/rtc/Kconfig                                |  24 ++
- drivers/rtc/Makefile                               |   2 +
- drivers/rtc/dev.c                                  |   6 +-
- drivers/rtc/rtc-cmos.c                             | 201 +++++++----
- drivers/rtc/rtc-da9063.c                           |  16 +-
- drivers/rtc/rtc-ftrtc010.c                         |   8 +-
- drivers/rtc/rtc-gamecube.c                         | 377 +++++++++++++++++++++
- drivers/rtc/rtc-mc146818-lib.c                     | 182 ++++++----
- drivers/rtc/rtc-pcf2127.c                          |   2 +-
- drivers/rtc/rtc-pcf85063.c                         |  97 ++++--
- drivers/rtc/rtc-pxa.c                              |   4 +
- drivers/rtc/rtc-rs5c372.c                          | 185 +++++++++-
- drivers/rtc/rtc-rv8803.c                           |   6 +
- drivers/rtc/rtc-sunplus.c                          | 362 ++++++++++++++++++++
- include/linux/mc146818rtc.h                        |   6 +-
- 25 files changed, 1390 insertions(+), 191 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/sunplus,sp7021-rtc.yaml
- create mode 100644 drivers/rtc/rtc-gamecube.c
- create mode 100644 drivers/rtc/rtc-sunplus.c
+Thank you!
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
