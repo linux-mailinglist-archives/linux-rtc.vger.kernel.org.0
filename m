@@ -2,102 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC2749EE59
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Jan 2022 23:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240704A2D34
+	for <lists+linux-rtc@lfdr.de>; Sat, 29 Jan 2022 09:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbiA0W7l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Jan 2022 17:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiA0W7k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Jan 2022 17:59:40 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CADEC061714
-        for <linux-rtc@vger.kernel.org>; Thu, 27 Jan 2022 14:59:38 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id m9so8850744oia.12
-        for <linux-rtc@vger.kernel.org>; Thu, 27 Jan 2022 14:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZvBsQ7e/qMjeQrj5WtuDqiGDxf9x6Gltlxltqnmg/y8=;
-        b=eazseXgn/aObU0Q2Lba/1Un67OhCh3S9HdvpLp4zjoieKF53Roa1tZYq41hYzsWZ+Z
-         5ProxY1eQOL5PendzHZEFplXwGFNEFzdcLp64qLet3IBq/JdKn7ddiZqHXG0qA3Ff+Pp
-         /GmYuzG4LGYsOSlV1LTUy59ZGXfOXgL7CeUJUHh5TY/Jp5rpoyt+KxIZsmN4KHjpszvD
-         z5UchfS8pclByep6t/oP+xklMIneePXmNI5RNPwSRtK4tAq7frRuMwcTe8qKlffCkTpO
-         Tpa09xNUbzmBtdf+ltlSy52Z4jSX0Ek6Zb2cCfumIdNqMIGobC2/YhEAcM6iIZm+ilv5
-         8UfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZvBsQ7e/qMjeQrj5WtuDqiGDxf9x6Gltlxltqnmg/y8=;
-        b=H67i3sA7XKIWFC7/FfuKlrWMOT8iA1JF+jQ+h3swIiofYfBSIqPba/HnGrdytODtKI
-         HnovDbcGzn2rWnhYggRMYmPHQxgGqFG1iJaIxpI+HGWFOmKLXvr/RudY0t6ldggJaVlw
-         8qWglnklB5qctCep/ncz3qhWs1Lg8Ciqh+BClQZWeJTRX8Nxs/jWaclu+xe3AkC0rzn4
-         x0uB0CLp5I+fsW1FCYnMvI8BAO425h/Gxb+vLMocpAgJW0/vhj9NcyIDjNtS19ev9Nbf
-         tXFiapxaRWMTgQSzSvgU0e6AxpwXpE5RZN/GbCM14LsJ7GLEPeR15GtsSI92BwW8pqsY
-         7XXQ==
-X-Gm-Message-State: AOAM533PL0RELmaSCySp2K5h6f4E3P7CJrCSqgn4WP8Bw/5XYnYwBeDa
-        ElbtzpG1+zC4Hoh91M4073o=
-X-Google-Smtp-Source: ABdhPJy4dkFwLuF8tvnp1fljlUWIjxQDkAU7uaXQAAH1Px+VcbFPaV6KyKn8hmPanBHSCRWzdNIlBw==
-X-Received: by 2002:a05:6808:13cb:: with SMTP id d11mr4013274oiw.25.1643324377872;
-        Thu, 27 Jan 2022 14:59:37 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:485:4b69:95a2:6da9:5705:29a2])
-        by smtp.gmail.com with ESMTPSA id z17sm6799020otk.62.2022.01.27.14.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 14:59:37 -0800 (PST)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     alexandre.belloni@bootlin.com
-Cc:     peter.kjellerstedt@axis.com, linux-rtc@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: [PATCH rtc-tools v2] rtc-tools: Add a Makefile
-Date:   Thu, 27 Jan 2022 19:59:28 -0300
-Message-Id: <20220127225928.34214-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1352569AbiA2IkM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 29 Jan 2022 03:40:12 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:38579 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352565AbiA2IkM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 29 Jan 2022 03:40:12 -0500
+Received: from [77.244.183.192] (port=65236 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nDjHF-000AeJ-QV; Sat, 29 Jan 2022 09:40:09 +0100
+Message-ID: <4532b372-f16a-7658-623d-71af93306e44@lucaceresoli.net>
+Date:   Sat, 29 Jan 2022 09:40:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 0/9] Add MAX77714 PMIC minimal driver (RTC and watchdog
+ only)
+Content-Language: en-US
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+References: <20211211175951.30763-1-luca@lucaceresoli.net>
+ <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+In-Reply-To: <d8aacb8a-5e41-fd96-daac-e9257358ca71@lucaceresoli.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Fabio Estevam <festevam@denx.de>
+Hi Lee, all,
 
-Add a Makefile to make installation and uninstallation
-process easier.
+On 11/01/22 11:10, Luca Ceresoli wrote:
+> Hi All,
+> 
+> On 11/12/21 18:59, Luca Ceresoli wrote:
+>> Hi,
+>>
+>> this series adds minimal drivers for the Maxim Semiconductor MAX77714
+>> (https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+>> Only RTC and watchdog are implemented by these patches.
+>>
+>> All implemented functionality is tested and working: RTC read/write,
+>> watchdog start/stop/ping/set_timeout.
+>>
+>> Patches 1-3 + 6 are trivial cleanups to the max77686 drivers and Kconfig
+>> indentation and can probably be applied easily.
+>>
+>> Patches 4, 5, 7, 8 and 9 add: dt bindings, mfd driver, watchdog driver and
+>> rtc driver.
+> 
+> A gentle ping about this series. It's at v5, all patches have at least
+> one ack/review tag and most patches are unchanged since ~v2. It applies
+> cleanly on current master.
+> 
+> Is there anything I should do to help making progress?
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v1:
-- Simplify the Makefile by taking Peter Kjellerstedt's feedback in
-the oe-devel list.
+Apologies for pinging again... but as I got no further comments about
+these patches I guess I can really do nothing at the moment.
 
- Makefile | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 Makefile
+Lee, is this series completely in charge to you or should it be applied
+by the respective subsystem maintainers?
 
-diff --git a/Makefile b/Makefile
-new file mode 100644
-index 0000000..71a4c9c
---- /dev/null
-+++ b/Makefile
-@@ -0,0 +1,16 @@
-+prefix ?= /usr
-+bindir ?= $(prefix)/bin
-+
-+EXEC = rtc-range rtc rtc-sync
-+
-+all: $(EXEC)
-+
-+clean:
-+	$(RM) $(EXEC)
-+
-+install:
-+	install -d $(DESTDIR)$(bindir)
-+	install $(EXEC) $(DESTDIR)$(bindir)
-+
-+uninstall:
-+	$(RM) -r $(addprefix $(DESTDIR)$(bindir)/,$(EXEC))
+Thanks.
 -- 
-2.25.1
-
+Luca
