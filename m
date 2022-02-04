@@ -2,168 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4D04A7DD9
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Feb 2022 03:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D244A9582
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Feb 2022 09:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349010AbiBCCSH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Feb 2022 21:18:07 -0500
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:43337 "EHLO
-        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349021AbiBCCSD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Feb 2022 21:18:03 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 8BFB72B001C0;
-        Wed,  2 Feb 2022 21:18:01 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 02 Feb 2022 21:18:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=maCEeMW114688LGhZUXh1aNyGAyiVI
-        HXt4rdxe/VoDw=; b=F+f5FK5qTyyMNgna3BSpVupfP0HYFclzdKXQKrMVVA+a4P
-        j6+Vg/yo/jrfjO+uaIOrzkaGOx3vTCpe3Kk/BlY1oK/hQr6coWQc5jijJAS//vQ7
-        BnsBfCeSUeY6Le8JvQX7oh4hn2AbjqKO6x9nDInlVmxXYygCQHVglsQ9H/7whKDl
-        v3D0zfgAp4KH4UC5IjqAkjrWngLFe4lz/k6bPRyhdkOm09wB3F/1IGVpEGMwXiOV
-        Cn8kSXMVetdrrKA5Y4XyKuBrJSoV8mjTZnOkSQzycZ9/pb7IpeFt+nJyZGY4nWE7
-        QgQ527H6S46yNgE+9aQtb0GlUDpGfWyYOu8ZZ8JA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=maCEeM
-        W114688LGhZUXh1aNyGAyiVIHXt4rdxe/VoDw=; b=YVZe1VLXX/Fug6Q6vVzQdl
-        2R13W8v2rmw24HtGJjF9i0R7rNXlkjU+4MpRaD05ffvyyyrIAQ7lhiqioGZ+xFk1
-        B3KgN8j0p+Ho6Yijv2OEUbP4uDZQmB0XV86o4mN7hhrkdlcWSGlvWjtz5wCtxWDu
-        9xXaQDZkTXjVBXUh99UlE0VGeRiPzVyA1oWsDFFcb/HKm3cTwnHkjpy534nnYpTT
-        Kj0ehBpfGnWMLNJmkK5eTcyNDKwHd8Xi5fgbTCUJADNM48FfrT0eag0rerYZdLbT
-        xMeO0z5wTKffC1JBcXT/idK8QFl60sWC56zOnV4DIDVxKc1mwosGvXbeO4rWk9Yw
-        ==
-X-ME-Sender: <xms:WDv7YYKL2jNz8tJ2C_1X-hpsf2Y7kEYwzuT3MtX5TneCnmGrc4xyDQ>
-    <xme:WDv7YYJOMg0YzG1e_zXzW60gl1Xt3XklaAWVg7aDqpZVAk3qcaPeFkZuvHO7W1Zrl
-    YfnMETI0UY8A3DHkQ>
-X-ME-Received: <xmr:WDv7YYuRLOTEAv-8HCQ-0qrP0FMfhNHdubhkojehTEX-K9_x-j8k28DREsFq5dh2J-sFiIOOmHnayS1VjB6s8CEVoUgbwWiQOz0JjOPDcT8Oj3QgS-7KFWPbYPxnTuIU1zNzhw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeeigdeggecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheejvdfg
-    jeehueeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:WTv7YVZGxCxTxui2FqdkoinOZUFanasEzrdy-eKTu1nXMdOsr6ISPQ>
-    <xmx:WTv7Yfb6Tg5a-pyKqGiDdUdS25Mw7I_yo2PWhQd1bDVh9o5uGQKqFw>
-    <xmx:WTv7YRB7yDxskKrWEkHIdWuGnC-jiz_fqBpkfl_fdiTS7oQE34SOng>
-    <xmx:WTv7YbquHLHHS8c6QCMF8feKGk63iSBQM8Q37KsDElQRENH0vBrzS0uQDJU>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Feb 2022 21:18:00 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 6/6] [DO NOT MERGE] clk: sunxi-ng: sun6i-rtc: Add support for H6
-Date:   Wed,  2 Feb 2022 20:17:36 -0600
-Message-Id: <20220203021736.13434-7-samuel@sholland.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220203021736.13434-1-samuel@sholland.org>
-References: <20220203021736.13434-1-samuel@sholland.org>
+        id S1354198AbiBDIts (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Feb 2022 03:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343626AbiBDItp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Feb 2022 03:49:45 -0500
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2C8C061758
+        for <linux-rtc@vger.kernel.org>; Fri,  4 Feb 2022 00:49:44 -0800 (PST)
+Received: by mail-qv1-xf41.google.com with SMTP id a7so4841796qvl.1
+        for <linux-rtc@vger.kernel.org>; Fri, 04 Feb 2022 00:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=CDFSOFN0ES/B21wE3c/wSpquNkr793M5PFrOQdCJsxTevf9i4PDztomaGoFpyfgVno
+         bWMxeKABDqYZHlD1Rb2n/ylkqnXcckhO0jMWmg+nR8AEMovcxRNNZMK/E36Qm213NNhW
+         AzcrLxoc2uFKz4xLEd7UlwJNet939wgy0A8noSqeMah08kcZIViRrwE7OWm9OliMPH+1
+         cHLqFBGCgkfT6tBx4ZtIw30xfapxf++bMutcYO6jZ8GvdXuYdu+tTVlsGw+yiut20gu3
+         6s3l3XxmAORLWaKSTmlxPsCdYrxDWH0jCnbJz7wvXMtMuo4bGmmobtvUnCXmRHy++MJK
+         zaOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=c5+oKL89+Al8opwNLgJ+ACvlbdVu/5l2SU8tvvvRvuM=;
+        b=MWGsjKgpRaAB0x6C3A8vdusMzrS/t1tSMGe9JQBbo/nXwVZw89rkmdJUnhmQYucind
+         xwzItyei1HDQPQrVuDujLOoD1eSwVqlm/F8lsl/SgL4zQ2O+/0gNxWdGsCC+MV8KYWmW
+         1u786mPFuqwuKjXta+x5Q/Np34YStUVQFApmN9CNANgXSdz6/Ez3Y1680TasU8RMU0Be
+         wX8hkQ5kJ513ps6I7meIrn8cwi/UJ+ULpDBy1RfeRaSSfcz+5gkV2aLdIuHZUq3dFdH1
+         OYVg7DxSxoLx0iBY+6mvkeZQUtNb14za21ZX0pIUUZy3WM67wBC7P6jvoRaP1KNeSqDo
+         uLvA==
+X-Gm-Message-State: AOAM530MTcxln18RYO/8gJkh9JxZJojwiY68Ktk+B78aOnMHhl4B5GNh
+        OVMD7yavWFka5xIi54CQrXW16E293dkpHd9jvIqgf3u4hKo=
+X-Google-Smtp-Source: ABdhPJzBgJIWkxUgthIez0XVIVkawXypuSIwGbHqkMZJABOuvTAWPPs+EiyrqGbcJvlvGhCi4Co1YsBkhVs8U601hYQ=
+X-Received: by 2002:a17:902:c206:: with SMTP id 6mr1947976pll.153.1643964573397;
+ Fri, 04 Feb 2022 00:49:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: bankcoris7@gmail.com
+Received: by 2002:a05:6a10:8ecc:0:0:0:0 with HTTP; Fri, 4 Feb 2022 00:49:32
+ -0800 (PST)
+From:   komi zongo <komizongo2020@gmail.com>
+Date:   Fri, 4 Feb 2022 08:49:32 +0000
+X-Google-Sender-Auth: DJ4IyUdVph8-23fUkF90YeQoGWo
+Message-ID: <CAF8uSvrUQL-7NJvmhBd5s-_YOWh6oBUNPdfHFBiSEKCB_vZFyw@mail.gmail.com>
+Subject: Very Very Urgent.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-H6 supports IOSC calibration and an ext-osc32k input. Unlike newer SoCs,
-it has a single parent for its fanout clock.
+I NEED TRUST.
 
-Add support for H6 in the CCU driver, replacing the support in the
-existing early OF clock provider.
+Hope you are in good health with your family.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+I am Mr.Komi Zongo.  I work as the Foreign Operations Manager with
+one of the international banks here in Burkina Faso. Although the
+world is a very small place and hard place to meet people because you
+don't know who to trust or believe, as I have developed trust in you
+after my fasting and praying,  I made up my mind to confide this
+confidential business suggestion to you.
 
-Changes in v3:
- - Rebase example on top of driver changes, and drop the second example.
+There is an overdue unclaimed sum of Ten Million Five Hundred Thousand
+United States Dollars ($10,500,000.00) in my bank, belonging to one of
+our dead foreign customers. There were no beneficiaries stated
+concerning these funds. Therefore, your request as a foreigner is
+necessary to apply for the claim and release of the fund smoothly into
+your reliable bank account  as the Foreign Business Partner to the
+deceased.
 
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 15 +++++++++++++++
- drivers/rtc/rtc-sun6i.c              | 17 -----------------
- 2 files changed, 15 insertions(+), 17 deletions(-)
+On the transfer of this fund in your account, you will take 40% as
+your share from the total fund, 5% will be shared to Charitable
+Organizations while Motherless Babies homes, disabled helpless as the
+balance of 55% will be for me. If you are really sure of your
+integrity, trustworthy, and confidentiality, reply urgently and to
+prove that, include your particulars as follows.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index a39670a7c446..712fda22efd5 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -295,6 +295,10 @@ static const struct sunxi_ccu_desc sun6i_rtc_ccu_desc = {
- 	.hw_clks	= &sun6i_rtc_ccu_hw_clks,
- };
- 
-+static const struct clk_parent_data sun50i_h6_osc32k_fanout_parents[] = {
-+	{ .hw = &osc32k_clk.common.hw },
-+};
-+
- static const struct clk_parent_data sun50i_h616_osc32k_fanout_parents[] = {
- 	{ .hw = &osc32k_clk.common.hw },
- 	{ .fw_name = "pll-32k" },
-@@ -307,6 +311,13 @@ static const struct clk_parent_data sun50i_r329_osc32k_fanout_parents[] = {
- 	{ .hw = &osc24M_32k_clk.common.hw }
- };
- 
-+static const struct sun6i_rtc_match_data sun50i_h6_rtc_ccu_data = {
-+	.have_ext_osc32k	= true,
-+	.have_iosc_calibration	= true,
-+	.osc32k_fanout_parents	= sun50i_h6_osc32k_fanout_parents,
-+	.osc32k_fanout_nparents	= ARRAY_SIZE(sun50i_h6_osc32k_fanout_parents),
-+};
-+
- static const struct sun6i_rtc_match_data sun50i_h616_rtc_ccu_data = {
- 	.have_iosc_calibration	= true,
- 	.rtc_32k_single_parent	= true,
-@@ -321,6 +332,10 @@ static const struct sun6i_rtc_match_data sun50i_r329_rtc_ccu_data = {
- };
- 
- static const struct of_device_id sun6i_rtc_ccu_match[] = {
-+	{
-+		.compatible	= "allwinner,sun50i-h6-rtc",
-+		.data		= &sun50i_h6_rtc_ccu_data,
-+	},
- 	{
- 		.compatible	= "allwinner,sun50i-h616-rtc",
- 		.data		= &sun50i_h616_rtc_ccu_data,
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 35b34d14a1db..1a875a32357d 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -364,23 +364,6 @@ CLK_OF_DECLARE_DRIVER(sun8i_h3_rtc_clk, "allwinner,sun8i-h3-rtc",
- CLK_OF_DECLARE_DRIVER(sun50i_h5_rtc_clk, "allwinner,sun50i-h5-rtc",
- 		      sun8i_h3_rtc_clk_init);
- 
--static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
--	.rc_osc_rate = 16000000,
--	.fixed_prescaler = 32,
--	.has_prescaler = 1,
--	.has_out_clk = 1,
--	.export_iosc = 1,
--	.has_losc_en = 1,
--	.has_auto_swt = 1,
--};
--
--static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
--{
--	sun6i_rtc_clk_init(node, &sun50i_h6_rtc_data);
--}
--CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
--		      sun50i_h6_rtc_clk_init);
--
- /*
-  * The R40 user manual is self-conflicting on whether the prescaler is
-  * fixed or configurable. The clock diagram shows it as fixed, but there
--- 
-2.33.1
+Please get back to me through this Email Address komizongo2020@gmail.com
 
+please fill in your personal information as indicated below and as
+soon as i receive this information below i will forward you a text of an
+application which you will fill and send to the bank for the claim of the
+fund as i will direct you on what to do.
+
+Your name in full.......................... ........
+Your country....................... ..................
+Your age........................... ....................
+Your cell phone......................... ...........
+Your occupation.................... ...............
+Your sex........................... ....................
+Your marital status........................ .......
+Your id card or passport...........................
+
+Best Regards,
+
+Mr.Komi Zongo.
