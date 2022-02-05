@@ -2,216 +2,92 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4525B4AA8CE
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Feb 2022 13:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BBD4AACD6
+	for <lists+linux-rtc@lfdr.de>; Sat,  5 Feb 2022 23:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379839AbiBEMsJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 5 Feb 2022 07:48:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379736AbiBEMsI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 5 Feb 2022 07:48:08 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5E2C061348
-        for <linux-rtc@vger.kernel.org>; Sat,  5 Feb 2022 04:48:06 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so4871524wml.5
-        for <linux-rtc@vger.kernel.org>; Sat, 05 Feb 2022 04:48:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+LPvcJ2sd5T7CufgUritnA87r/Y5fUmsfeCEUXpPT6E=;
-        b=ef9uwCGIArsx4B0HtycPruLj7UAWV4CigNy4UIbrAY3TClE0iuhryFmiNJKx4dleOg
-         yyA8XqUKF5FM5R0ZmQ30vYByA8DSGJmY1TsX6/zSWJZFfk0llkoBeDYYfGosdLSfS1Qk
-         ehwqDZwKdRwafW/+lg86kz2XUanNm8jZ2g1Tq7SHg0v14EVQKAHRJo/skJ8OeVrzD+qe
-         INtz/+NvmVRRRwzbvAvsNRauN2oObdpKRtrpXXNHFSpmjS9UzLj2X4Y5eLvobCaKL1lB
-         pNd8r5wOZfbFPBEjDbWF5O1+0RDhRc7+e1YfuhSc0UOQQWl8ouLqrtx+n2EqpOuOXDST
-         UQ+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+LPvcJ2sd5T7CufgUritnA87r/Y5fUmsfeCEUXpPT6E=;
-        b=viN8GLmn486tHdsXerZW9fa91H3MmBxTDbW7nKb7Va03zLtctLRC6itWex1ww1CnIg
-         ulPu6l/A7IHv98fy6rEFEDVoVqjANpRH6GzkVUqd+dXodIImXtKN+MH/LbuONCIfZVb6
-         tCPmM2DdtKbcVCEHNK3Pw6rVODZyadc/9SW2J72njiWLclBa7MK3IgX2nbY+lEhPnlC0
-         V5LXJ5QXJJ7UqwKLmtjhDUriZm/G62HGg4UKeeDDtfxL96q/EXPw0Fs0iStNnwlZML7I
-         lmmqwe30GsJ30cq/5YpUBf+lQ7jjjzURcVpnPGHI1NqhZaL2r++k2VQUkjyeiPnxTj/5
-         H7vw==
-X-Gm-Message-State: AOAM533Q99Z4x7pY1JpL+BXyyXBqNVDiyjcckjMkapr2KUXEUAq4Fl9j
-        kN6sXPG+yQrSsqFNCf1796OKgA==
-X-Google-Smtp-Source: ABdhPJxpq/DFWpEEyQIsjuuaVvilLjogf6JlPr9dXqoGfRGP3jRw+knIrG8WTJYlwwMgH5tU0Wc1Vw==
-X-Received: by 2002:a05:600c:3217:: with SMTP id r23mr2998357wmp.159.1644065284763;
-        Sat, 05 Feb 2022 04:48:04 -0800 (PST)
-Received: from [192.168.2.116] ([109.78.72.167])
-        by smtp.gmail.com with ESMTPSA id m8sm4429538wrn.106.2022.02.05.04.48.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Feb 2022 04:48:04 -0800 (PST)
-Message-ID: <c610ce52-e1ef-393c-0948-57a4c6f07d72@conchuod.ie>
-Date:   Sat, 5 Feb 2022 12:48:02 +0000
+        id S231590AbiBEWNe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 5 Feb 2022 17:13:34 -0500
+Received: from mx-out.tlen.pl ([193.222.135.175]:41643 "EHLO mx-out.tlen.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231417AbiBEWNe (ORCPT <rfc822;linux-rtc@vger.kernel.org>);
+        Sat, 5 Feb 2022 17:13:34 -0500
+Received: (wp-smtpd smtp.tlen.pl 31459 invoked from network); 5 Feb 2022 23:13:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1644099210; bh=Dj61o4Pce2pLcAW3DiuxixA3IJrOjC+xvJNNzVrDeuU=;
+          h=From:To:Cc:Subject;
+          b=Llcyuf/6f/2Pn8PCMeyiyQqu9iZFr4eYji4a6rPah/kVA1pP52AHudfPgI99U4q6B
+           xcx9LEr+pHn4WQ1/uoDwxq4qhWvZKa/yluTQ6YGf3wQosfNRGEq3OSC2lIjG4ZXI1x
+           CYWvI+bdxT//y4yWBZL7INU73Sp5TBE9FGI15mlA=
+Received: from aafj183.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.139.183])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <stable@vger.kernel.org>; 5 Feb 2022 23:13:29 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     stable@vger.kernel.org, linux-rtc@vger.kernel.org
+Cc:     Riwen Lu <luriwen@kylinos.cn>, Eric Wong <e@80x24.org>,
+        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc: cmos: Evaluate century appropriate
+Date:   Sat,  5 Feb 2022 23:11:39 +0100
+Message-Id: <20220205221139.5557-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v5 06/12] dt-bindings: pwm: add microchip corepwm binding
-Content-Language: en-US
-To:     Conor.Dooley@microchip.com, geert@linux-m68k.org,
-        u.kleine-koenig@pengutronix.de
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        aou@eecs.berkeley.edu, atishp@rivosinc.com, bin.meng@windriver.com,
-        brgl@bgdev.pl, Daire.McNamara@microchip.com,
-        devicetree@vger.kernel.org, heiko@sntech.de,
-        Ivan.Griffin@microchip.com, jassisinghbrar@gmail.com,
-        krzysztof.kozlowski@canonical.com, lee.jones@linaro.org,
-        Lewis.Hanly@microchip.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
-        robh@kernel.org, thierry.reding@gmail.com
-References: <20220201075824.aixrvkvmjde2ihxx@pengutronix.de>
- <20220202123542.3721512-1-conor.dooley@microchip.com>
- <CAMuHMdWrmuY7pwY8U0t9LumEvUTBEA06uV7hNyKFAPMQtE98_A@mail.gmail.com>
- <3862e358-901c-e848-71af-01eceed26f74@microchip.com>
- <CAMuHMdXvw9cNNzBhp-sSMTXxP2eALhB=fD78Wgx-kks7wr6oiQ@mail.gmail.com>
- <fa747594-a112-d313-5de3-2330bf5ddc8a@microchip.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <fa747594-a112-d313-5de3-2330bf5ddc8a@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-WP-MailID: 760e4fd0c36709f153317bc606c92697
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [4QMk]                               
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Geert, Uwe,
+From: Riwen Lu <luriwen@kylinos.cn>
 
-Hopefully the following does a better job of explaining the two parameters?
+commit ff164ae39b82ee483b24579c8e22a13a8ce5bd04 upstream.
 
-Thanks,
-Conor.
+There's limiting the year to 2069. When setting the rtc year to 2070,
+reading it returns 1970. Evaluate century starting from 19 to count the
+correct year.
 
-microchip,sync-update-mask:
-   description: |
-     Depending on how the IP is instantiated, there are two modes of
-     operation. In synchronous mode, all channels are updated at the
-     beginning of the PWM period, and in asynchronous mode updates
-     happen as the control registers are written. A 16 bit wide
-     "SHADOW_REG_EN" parameter of the IP core controls whether
-     synchronous mode is possible for each channel, and is set by the
-     bitstream programmed to the FPGA. If the IP core is instantiated
-     with SHADOW_REG_ENx=1, both registers that control the duty cycle
-     for channel x have a second "shadow"/buffer reg synthesised.
-     At runtime a bit wide register exposed to APB can be used to toggle
-     on/off synchronised mode for all channels it has been synthesised
-     for.
-     Each bit corresponds to a PWM channel & represents whether
-     synchronous mode is possible for that channel.
+$ sudo date -s 20700106
+Mon 06 Jan 2070 12:00:00 AM CST
+$ sudo hwclock -w
+$ sudo hwclock -r
+1970-01-06 12:00:49.604968+08:00
 
-   $ref: /schemas/types.yaml#/definitions/uint32
-   default: 0
+Fixes: 2a4daadd4d3e5071 ("rtc: cmos: ignore bogus century byte")
 
-microchip,dac-mode-mask:
-   description: |
-     Optional, per-channel Low Ripple DAC mode is possible on this IP
-     core. It creates a minimum period pulse train whose High/Low
-     average is that of the chosen duty cycle. This "DAC" will have far
-     better bandwidth and ripple performance than the standard PWM
-     algorithm can achieve. A 16 bit DAC_MODE module parameter of the IP
-     core, set at instantiation and by the bitstream programmed to the
-     FPGA, determines whether a given channel operates in regular PWM or
-     DAC mode.
-     Each bit corresponds to a PWM channel & represents whether DAC mode
-     is enabled for that channel.
+Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+Acked-by: Eric Wong <e@80x24.org>
+Reviewed-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220106084609.1223688-1-luriwen@kylinos.cn
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl> # preparation for stable
+---
+ drivers/rtc/rtc-mc146818-lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   $ref: /schemas/types.yaml#/definitions/uint32
-   default: 0
+Hello,
 
-On 02/02/2022 14:37, Conor.Dooley@microchip.com wrote:
-> On 02/02/2022 14:02, Geert Uytterhoeven wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> On Wed, Feb 2, 2022 at 2:46 PM <Conor.Dooley@microchip.com> wrote:
->>> On 02/02/2022 13:28, Geert Uytterhoeven wrote:
->>>> On Wed, Feb 2, 2022 at 1:33 PM <conor.dooley@microchip.com> wrote:
->>>>>> On 01/02/2022 07:58, Uwe Kleine-König wrote:
->>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>>>> On Mon, Jan 31, 2022 at 11:47:21AM +0000, conor.dooley@microchip.com wrote:
->>>>>>> From: Conor Dooley <conor.dooley@microchip.com>
->>>>>>>
->>>>>>> Add device tree bindings for the Microchip fpga fabric based "core" PWM
->>>>>>> controller.
->>>>>>>
->>>>>>> Reviewed-by: Rob Herring <robh@kernel.org>
->>>>>>>
->>>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>>>>>> ---
->>>>>>> .../bindings/pwm/microchip,corepwm.yaml       | 75 +++++++++++++++++++
->>>>
->>>>>>> +  microchip,sync-update:
->>>>>>> +    description: |
->>>>>>> +      In synchronous mode, all channels are updated at the beginning of the PWM period.
->>>>>>> +      Asynchronous mode is relevant to applications such as LED control, where
->>>>>>> +      synchronous updates are not required. Asynchronous mode lowers the area size,
->>>>>>> +      reducing shadow register requirements. This can be set at run time, provided
->>>>>>> +      SHADOW_REG_EN is asserted. SHADOW_REG_EN is set by the FPGA bitstream programmed
->>>>>>> +      to the device.
->>>>>>> +      Each bit corresponds to a PWM channel & represents whether synchronous mode is
->>>>>>> +      possible for the PWM channel.
->>>>>>> +
->>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint16
->>>>>>> +    default: 0
->>>>>>
->>>>>> I'm not sure I understand this correctly. This is a soft-core and you
->>>>>> can synthesize it either with or without the ability to do synchronous
->>>>>> updates or not, right? All 16 channels share the same period length and
->>>>>> in the simple implementation changing the duty cycle is done at once
->>>>>> (maybe introducing a glitch) and in the more expensive implementation
->>>>>> there is a register to implement both variants?
->>>>>
->>>>> Correct. If the IP is instantiated with SHADOW_REG_ENx=1, both
->>>>> registers that control the duty cycle for channel x have a second
->>>>> "shadow reg" synthesised. At runtime a bit wide register exposed to
->>>>> APB can be used to toggle on/off synchronised mode for all channels
->>>>> it has been synthesised for.
->>>>>
->>>>> I will reword this description since it is not clear.
->>>>
->>>> Shouldn't it use a different compatible value instead?
->>>> Differentiation by properties is not recommended, as it's easy to
->>>> miss a difference.
->>>
->>> Either you have something in mind that I've not thought of, or I've done
->>> a bad job of explaining again. The buffer/"shadow" registers are
->>> synthesised on a per channel basis, so any combination of the 16
->>> channels may have this capability. The same applies to the DAC mode, per
->>> channel there too.
->>
->> Oops, hadn't noticed this is per channel. Indeed, then a different
->> compatible value is futile.
->> So since "microchip,sync-update" is a bitmask, perhaps it should be
->> called "microchip,sync-update-mask"?
->> Same for "microchip,dac-mode" -> "microchip,dac-mode-mask"?
-> 
-> Adding -mask sounds good to me.
-> 
->> Also, using different integer sizes than uint32 is frowned upon, unless
->> there is a very good reason to do so. I can imagine a future version
->> would support more channels, and then uint16 becomes a limitation.
-> 
-> Sure, uint32 it is.
-> 
->> For both: Rob?
-> 
-> Both of these properties fall under the "DO attempt to make bindings
-> complete even if a driver doesn’t support some features" category, so I
-> am perfectly happy to change these properties to whatever is convention
-> (or ultimately drop them for the sake of the remainder of the series).
-> 
-> Thanks,
-> Conor.
-> 
+I have prepared this patch for inclusion into stable. Run-tested on top
+of 5.16.7 and 4.9.299, works as intended.
+
+Greetings,
+Mateusz
+
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index dcfaf09946ee..2065842f775d 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -104,7 +104,7 @@ unsigned int mc146818_get_time(struct rtc_time *time)
+ 	time->tm_year += real_year - 72;
+ #endif
+ 
+-	if (century > 20)
++	if (century > 19)
+ 		time->tm_year += (century - 19) * 100;
+ 
+ 	/*
+-- 
+2.25.1
+
