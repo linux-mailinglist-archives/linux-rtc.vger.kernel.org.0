@@ -2,64 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36EB4AB711
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Feb 2022 10:08:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3734B4AB6F4
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Feb 2022 10:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiBGJCy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Feb 2022 04:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S242097AbiBGJEA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Feb 2022 04:04:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351276AbiBGI4B (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Feb 2022 03:56:01 -0500
+        with ESMTP id S1349283AbiBGIzb (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Feb 2022 03:55:31 -0500
+X-Greylist: delayed 542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 00:55:28 PST
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88C2C043187;
-        Mon,  7 Feb 2022 00:56:00 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6CA2E580161;
-        Mon,  7 Feb 2022 03:46:24 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 07 Feb 2022 03:46:24 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F2C043181;
+        Mon,  7 Feb 2022 00:55:28 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CA33458018B;
+        Mon,  7 Feb 2022 03:55:27 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 07 Feb 2022 03:55:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=06iDWhIMWF+GL+
-        4tV1ry3WHLDvx8sEGX8SCia4bLUlo=; b=SzyNoAzmVIrpysc1eyqHTcsbRZ33lG
-        kZioZV9XgeEStB5uEDLvkVS+XJNc18BEIMh3xfV5UCIlw5NUT1gIH6OTM8OT6t63
-        efaz9q0t4r3rUsAQFySCwe4JDTukdE39OxTMFAkNYebPDKWZZZuCPukDXOfVWXW3
-        voc7zDtotovPQHB6OeTtvT9sNavWKnsZAmeaJc5GHJxgY1CLrLj8u+8twZxo6skE
-        ncIOkGAHt5iAOq5SFszdPkWlHTOS54aNrdp0QWMvOfGkugfPHqFbrCKtFDuq03zp
-        uwoKSnF22vUn2lMMswRKNIhqzF1D8Vgc/+tg4ra2jv2rIw6+cz/S9S5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=06iDWhIMWF+GL+4tV1ry3WHLDvx8sEGX8SCia4bLU
-        lo=; b=Gdy+GNNvCJjjAF8MZ/+bNLQL4iSm/u2ss9Lf0HTkZ1lGBEETWFMTR+KBo
-        JbEFEdbPEoKYhU6zhp6hPgA6NkHVRWSGhNbASWKiAAgqRj3JnjtpFGxR6CgerOZ5
-        2ppQ6LGU7HXcUDCmY8MJ1EFSl8+tn1hyhZGo6q7giSGUEbGDs4tjtnHDpwVZqPjc
-        n3F07jWlqbwXhrY2Cm++fh6dgWhHcbAGxRjPJ4zR8Jably9LaSORMWGcSImuNh7S
-        Y3FK/D6psNQu3j8koi5dsDjphpzqGvPFuDgsCO+l2BNzKxs1ei/c0S5SYYe7ya3/
-        m5C/1A2IDiFa1BgR13kqpf5XD46yg==
-X-ME-Sender: <xms:X9wAYnyoadC6crowfp6rSS1g_dZJJyZj0HJbNH4Fsz_YHqCWaT9u0g>
-    <xme:X9wAYvRAosyTp15LWmaagYVihilD-ACCq49PDWHSfE8Hj5ISZKeCtnWns09h_Ep-j
-    ca5e0qtAIxgWuubaJ0>
-X-ME-Received: <xmr:X9wAYhU4wVdLfn71BD3noSDT2ROADAh_MlBDHFABwQLaQ0RmWAD3_ORgTpeEekafKSObjUHVfrTrCLt60aT7W5cbkSVXpKuNxSocEng>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeggdduudelucetufdoteggodetrfdotf
+        :subject:to:to; s=fm2; bh=iY/XWrOv5z+3ui6SOcBcF8zRTUJJdfQQ/DmZSz
+        cWgDQ=; b=tmAloTuurUn7U+BsgBpI54lAsHq8irV/mMs5UuUc1nJip6ZWkiDp+L
+        T/u3M2117jpcSQEcvfjjkne0dhg6ac8klXXP5IL6+mgMJLux6K5ToB1ZhYwvmifO
+        hv5Q72yvoWzZ8+Lri4VNoMRqgOleVY5ScyBt1fg2r6FeTBbaowm4GcMgoApItIhe
+        PuhAy82LJ/l2utVvk8M9i4Iu51RFwP/GOCr/Z4M16GXadaUDg4KiG+1Vqr9CmXlm
+        ZXlLGuYf13q2Lay0MnuFfarJQd2k2DJNn66VrRJqf+XQJNjtDPWI5CzAAmMBQc5o
+        APuJVuw0ULJP6Dp+Nm8I2tOIv85i+qlw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=iY/XWrOv5z+3ui6SO
+        cBcF8zRTUJJdfQQ/DmZSzcWgDQ=; b=mcAE9m3LQgQ/Mnz8l2c8I+uhsaUdOFV9A
+        F2I6r+8TLk7Xbc/rgLk5T4myhRqrQuQPHIi29ycXFZpJ2c17gU/+3FHlz64wqvsW
+        +8dNlATUQDWN/jspHrgAYImJtgREJ//9Oj//tpTW/i1OUOQgQXQYKCsRngU3MWFF
+        SJ5vTqN8JY+vfN35mRV05zsQ6zX6riTzKdf5EpDiYDzhSLBADqhji4LJspl0n6xU
+        jlWrbZ7fHT0zLCqx5YZiPnMDjqbb+PYbFbbigJWs/zEGBamJPCstId3Ue9u8HdXj
+        sDRvZKNwqvH4R3O7XrVfleBiu82m3vclvCcG89kR/CsTjY7qTwMlA==
+X-ME-Sender: <xms:f94AYqEMI9Cp1F63PJcg-q8TS4n8umV8WxW7o-tSXHHGudBRj42uEA>
+    <xme:f94AYrUip6bl_HB9jHcptnOM8gqXJZuNX64xccRa-xYzfA63_BFuBM7humSS3j7Nw
+    IA77nFXWAjpC4gSkvg>
+X-ME-Received: <xmr:f94AYkK9lAr_BiL4xNLJri_D3Uv-e2DSFCyqnXFtOUvUOMuBy17pSOEBs7UnDWXJWkd6U2zxT0fGIkh6NMKXq3qJGxLr8DwqCKfX1_M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeggdduvdduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpefgjeettdejgffgffdvteeutdehtdehgeehueetkeefgefhtdetjeekledu
-    gedvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:X9wAYhgr5yOXQMtplYYtze_ycHouRGRlqOM4hfQ7uT8buKsx3m3DVw>
-    <xmx:X9wAYpCtiMCGwFyE1NbyckGN18_nYOxMh0h9jllqSWSAisFh_WD41w>
-    <xmx:X9wAYqLixyckvrMMMAQ-PW9eACQAlrL-zrMFV9unpPM-g_XE05EIaA>
-    <xmx:YNwAYhxau4hnrYfLueK715S0kZ6KONWoSIyJmS1PYmeypzX5iZv_7A>
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:f94AYkFNGR2CITYSmmXT_WfAa3LYpLu1pNC9XvuBLo8cX9Uta0xGGQ>
+    <xmx:f94AYgUPXvEMcdh6qIH9lRyraTuIW3WcZkoGOPlSsFvFUwXz_AEX8Q>
+    <xmx:f94AYnN_DfYQzRMjD5tto5wZ5f_vzAtX8gN_NtnP8fahgpyzQ7z9Hg>
+    <xmx:f94AYhsBC3c2yhahIurEvvnv87_-GJrnwUqsDdNXOk06ZlDC-Wg_hA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 03:46:23 -0500 (EST)
-Date:   Mon, 7 Feb 2022 09:46:20 +0100
+ 7 Feb 2022 03:55:27 -0500 (EST)
+Date:   Mon, 7 Feb 2022 09:55:24 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Samuel Holland <samuel@sholland.org>
 Cc:     Chen-Yu Tsai <wens@csie.org>,
@@ -71,17 +71,17 @@ Cc:     Chen-Yu Tsai <wens@csie.org>,
         linux-arm-kernel@lists.infradead.org,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 1/6] dt-bindings: rtc: sun6i: Clean up repetition
-Message-ID: <20220207084620.xajb5wx6bbgg4ugh@houat>
+        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3 2/6] dt-bindings: rtc: sun6i: Add H616, R329, and D1
+ support
+Message-ID: <20220207085524.rmt6fwku5mdvgvx6@houat>
 References: <20220203021736.13434-1-samuel@sholland.org>
- <20220203021736.13434-2-samuel@sholland.org>
+ <20220203021736.13434-3-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qkbg3fjun5hhqpuu"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220203021736.13434-2-samuel@sholland.org>
+In-Reply-To: <20220203021736.13434-3-samuel@sholland.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -92,14 +92,38 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Feb 02, 2022 at 08:17:31PM -0600, Samuel Holland wrote:
-> - Use "enum" for compatibles instead of several "const" alternatives.
-> - Merge the H6 clock-output-names minItems/maxItems constraint into the
->   identical block above.
+
+--qkbg3fjun5hhqpuu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Feb 02, 2022 at 08:17:32PM -0600, Samuel Holland wrote:
+> These new RTC variants all have a single alarm, like the R40 variant.
 >=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> For the new SoCs, start requiring a complete list of input clocks. The
+> H616 has three required clocks. The R329 also has three required clocks
+> (but one is different), plus an optional crystal oscillator input. The
+> D1 RTC is identical to the one in the R329.
+>=20
+> And since these new SoCs will have a well-defined output clock order as
+> well, they do not need the clock-output-names property.
+>=20
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 Reviewed-by: Maxime Ripard <maxime@cerno.tech>
 
 Maxime
+
+--qkbg3fjun5hhqpuu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgDefAAKCRDj7w1vZxhR
+xanbAQCV3IfYrd8wt+3Bv8a73mndzneaP7kXmLPtVzeaBn9tSgEA0xja/ekjRcsL
+rmx3XMyAvoiTBrDJEYr2r1elL9YxQQk=
+=vfa3
+-----END PGP SIGNATURE-----
+
+--qkbg3fjun5hhqpuu--
