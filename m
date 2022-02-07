@@ -2,191 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6C54ACAA9
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Feb 2022 21:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD884ACB8F
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Feb 2022 22:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiBGUr6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Feb 2022 15:47:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
+        id S231394AbiBGVp7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Feb 2022 16:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240168AbiBGUcv (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Feb 2022 15:32:51 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19F8C0401E1
-        for <linux-rtc@vger.kernel.org>; Mon,  7 Feb 2022 12:32:48 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id u23so3147408wru.6
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Feb 2022 12:32:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lInl3v4291y96qRj5SmrtyZWxmX1JQwpyT8w4NZCIwE=;
-        b=pZIbLbD2z5lCj7TnELtOL5EzoxwY+lBVxsw2GZfWwQfoK6YNhj3asWV4g24WsrMUDE
-         Pc+FJHzk1Vwb1BcSpFfE0vnjX6h1xVtFhGSNFLyr3y/cTOKmdEePr+06n3Mz+WC3/mou
-         J0mx4mjkkjxyu+eFle3FufFVo+vGPTRZhg5T5jQJ48QVvrT3A0n7LcYlyg2H/OCEMVaY
-         BHT2Ifq4ujfMhMkTM0aqvNDcquf+yoJ9VFmdwFRw2RZHH8edWFGZNs69BbhMWPjcKkVn
-         c9XLjQf3kynVd22B2/eWeltNLSu9E35+DnSu7D8cQx+vXVd+jI/IW0YoL7wlOaXz//Kt
-         lNYg==
+        with ESMTP id S241998AbiBGVp7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Feb 2022 16:45:59 -0500
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BDBC061A73;
+        Mon,  7 Feb 2022 13:45:58 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so4796943ooi.2;
+        Mon, 07 Feb 2022 13:45:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lInl3v4291y96qRj5SmrtyZWxmX1JQwpyT8w4NZCIwE=;
-        b=SIbTbqeM6GGmzC0HqNJ0GuTP9jowxP7UrDmK7SkQZhanho3seQQQ7gQnHjnfZ6TUiJ
-         CnXgECCVaqdXVW75CVLGxvKeHNl3cBtFKT1bH/UVxdCFDSeamDBK9wRya1Dh0iIe78Y0
-         N/bhHWJeUjtE4LaYMt3/S7YZokxnWVaVVbjeOSmZhUaHlBxuuehupToWOF0fjA1iouAG
-         LNsPsZoN8a3HcDW7/nGPZ41w054tA7ThVtVHmJGXaPCwE+lCTy7VAN67pq+8SmCAxjrf
-         7IkUmylpV0qGHoRoPCoUBWAgy6h9Y1ygDjNoJ0wreX931y5LW8DSZrQ8RFyYNLmAawPI
-         Lxpw==
-X-Gm-Message-State: AOAM531Cs5Tg3C36KbH3o4i+aKf0K8Ty15pcuezy02E6G4G9q1fdW2Tn
-        mdbkq0YlA89e/OJ43vV9nHccdQ==
-X-Google-Smtp-Source: ABdhPJxli8C56VbUUZpTG/k9gYuJnfVphrd7Cnfcv2luFPINoxa1eE5dK6Blkudp0C9VSCUYzi1P8w==
-X-Received: by 2002:a5d:518f:: with SMTP id k15mr898486wrv.249.1644265966959;
-        Mon, 07 Feb 2022 12:32:46 -0800 (PST)
-Received: from [192.168.2.116] ([109.78.72.167])
-        by smtp.gmail.com with ESMTPSA id t4sm10594105wro.71.2022.02.07.12.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 12:32:46 -0800 (PST)
-Message-ID: <1cce8adf-1f49-b908-ee6e-f7c2ff6b5218@conchuod.ie>
-Date:   Mon, 7 Feb 2022 20:32:44 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QOxTpsiItYIgn973R83OB/6cA8BtGbALp2vvEgGAMiM=;
+        b=CfNhF73zLktFWh0CCodH8HcBg31oeoLszNWSKQiX/HNCN9kNV8IwoA574Cl1Hi+s3S
+         fOwhhm2zi17r42KlanyrtqpQKlhtntn3DVSn/HZTiP9q56aN8uRk9nVtErbmOy2K58N6
+         E0hgq+J08DnlkprMw+Zj9LURLqcE1qdty6ahASjaj+Ob+xh2SLP8tQcCizVwzcZXSvVg
+         3of6loll9gkp7uZcPXhvVOH3ZOqNCz38JNBVlG7Oy5UMy26NmY1qZHf7aHRT+gqIyA+n
+         w9ZBDdZJ0MwlG9YUnwZFPVjLJD+9pJLThRtnaYnMFYsjz5Z1QkseXMGYPSH07nwKyDjj
+         rrJQ==
+X-Gm-Message-State: AOAM532iNLTgYwatw6oldYeweVh8wPY/54udMzi9yM9m6i0cOiEeG6QN
+        7qJ7XWEohfrV9bzdRBOSYA==
+X-Google-Smtp-Source: ABdhPJxjjb8hTz7JrQNc/dwzSDalOZbNtl/l3u7RMYurH9/W708famAbJ2Dk4CF7ZuFBAkYyOEv59Q==
+X-Received: by 2002:a05:6870:3896:: with SMTP id y22mr323481oan.171.1644270357696;
+        Mon, 07 Feb 2022 13:45:57 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i1sm1419831ood.32.2022.02.07.13.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 13:45:56 -0800 (PST)
+Received: (nullmailer pid 978810 invoked by uid 1000);
+        Mon, 07 Feb 2022 21:45:55 -0000
+Date:   Mon, 7 Feb 2022 15:45:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] dt-bindings: rtc: sun6i: Add H616, R329, and D1
+ support
+Message-ID: <YgGTE/vLUBctPo17@robh.at.kernel.org>
+References: <20220203021736.13434-1-samuel@sholland.org>
+ <20220203021736.13434-3-samuel@sholland.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v6 02/12] dt-bindings: soc/microchip: add services as sub
- devs of sys ctrlr
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
-        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
-        atishp@rivosinc.com, Palmer Dabbelt <palmer@rivosinc.com>
-References: <20220207162637.1658677-1-conor.dooley@microchip.com>
- <20220207162637.1658677-3-conor.dooley@microchip.com>
- <YgF8G/Eed03xn9iI@robh.at.kernel.org>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <YgF8G/Eed03xn9iI@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220203021736.13434-3-samuel@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 07/02/2022 20:07, Rob Herring wrote:
-> On Mon, Feb 07, 2022 at 04:26:28PM +0000, conor.dooley@microchip.com wrote:
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> Document mpfs-rng and mpfs-generic-service as subdevices of the system
->> controller.
->>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>   .../microchip,mpfs-sys-controller.yaml        | 35 +++++++++++++++++--
->>   1 file changed, 33 insertions(+), 2 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> index f699772fedf3..b02c8bd72605 100644
->> --- a/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> +++ b/Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
->> @@ -13,7 +13,6 @@ description: |
->>     The PolarFire SoC system controller is communicated with via a mailbox.
->>     This document describes the bindings for the client portion of that mailbox.
->>   
->> -
->>   properties:
->>     mboxes:
->>       maxItems: 1
->> @@ -21,6 +20,38 @@ properties:
->>     compatible:
->>       const: microchip,mpfs-sys-controller
->>   
->> +  rng:
->> +    type: object
->> +
->> +    description: |
->> +      The hardware random number generator on the Polarfire SoC is
->> +      accessed via the mailbox interface provided by the system controller
->> +
->> +    properties:
->> +      compatible:
->> +        const: microchip,mpfs-rng
->> +
->> +    required:
->> +      - compatible
->> +
->> +  sysserv:
->> +    type: object
->> +
->> +    description: |
->> +      The PolarFire SoC system controller is communicated with via a mailbox.
->> +      This binding represents several of the functions provided by the system
->> +      controller which do not belong in a specific subsystem, such as reading
->> +      the fpga device certificate, all of which follow the same format:
->> +        - a command + optional payload sent to the sys controller
->> +        - a status + a payload returned to Linux
->> +
->> +    properties:
->> +      compatible:
->> +        const: microchip,mpfs-generic-service
->> +
->> +    required:
->> +      - compatible
->> +
->>   required:
->>     - compatible
->>     - mboxes
->> @@ -29,7 +60,7 @@ additionalProperties: false
->>   
->>   examples:
->>     - |
->> -    syscontroller: syscontroller {
->> +    syscontroller {
->>         compatible = "microchip,mpfs-sys-controller";
->>         mboxes = <&mbox 0>;
+On Wed, 02 Feb 2022 20:17:32 -0600, Samuel Holland wrote:
+> These new RTC variants all have a single alarm, like the R40 variant.
 > 
-> Removing the child nodes in the example doesn't address my comment. You
-> still have them in the schema. IOW, this patch should be dropped unless
-> you have reasons for child nodes other than I want to partition the OS
-> drivers a certain way and creating DT nodes instantiates them for me.
+> For the new SoCs, start requiring a complete list of input clocks. The
+> H616 has three required clocks. The R329 also has three required clocks
+> (but one is different), plus an optional crystal oscillator input. The
+> D1 RTC is identical to the one in the R329.
 > 
-Obviously dropping this patch doesn't prevent me from instantiating the 
-sub devices since it's not going to be done via DT anymore. Would you 
-rather I replaced this patch with one adding a link to the online 
-documentation [0] for them in the main description? I had left them in 
-as I wasn't sure if you wanted the descriptions dropped entirely or not.
-
-And yes, partition of the services is why I had originally gone for 
-different drivers for the different aspects. Some of the services, like 
-the RNG or reprogramming the FPGA from Linux have obvious subsystems to 
-put them under, if it was just the eclectic mix of Microchip FPGA 
-specific items I'd have not bothered with the partitioning.
-
-Cheers,
-Conor.
-
-[0] 
-https://onlinedocs.microchip.com/pr/GUID-1409CF11-8EF9-4C24-A94E-70979A688632-en-US-1/index.html
->>       };
->> -- 
->> 2.35.1
->>
->>
+> And since these new SoCs will have a well-defined output clock order as
+> well, they do not need the clock-output-names property.
 > 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> Changes in v3:
+>  - Add/fix several maxItems attributes for clocks and clock-items
+> 
+> Changes in v2:
+>  - Properly update the DT binding clocks and clock-names properties.
+> 
+>  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml | 76 ++++++++++++++++++-
+>  include/dt-bindings/clock/sun6i-rtc.h         | 10 +++
+>  2 files changed, 83 insertions(+), 3 deletions(-)
+>  create mode 100644 include/dt-bindings/clock/sun6i-rtc.h
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
