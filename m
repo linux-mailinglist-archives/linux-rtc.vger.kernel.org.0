@@ -2,35 +2,35 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21B84AFA0C
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Feb 2022 19:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F874AFA94
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Feb 2022 19:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239401AbiBISeA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Feb 2022 13:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
+        id S239838AbiBISig (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Feb 2022 13:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239356AbiBISdy (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Feb 2022 13:33:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC95FC05CB8A;
-        Wed,  9 Feb 2022 10:33:56 -0800 (PST)
+        with ESMTP id S239945AbiBISiU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Feb 2022 13:38:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88438C050CE7;
+        Wed,  9 Feb 2022 10:38:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BBE9B82385;
-        Wed,  9 Feb 2022 18:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33228C36AE7;
-        Wed,  9 Feb 2022 18:33:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39A02B82378;
+        Wed,  9 Feb 2022 18:38:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7945C340E7;
+        Wed,  9 Feb 2022 18:38:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644431634;
+        s=k20201202; t=1644431887;
         bh=Kp3T8Uq/wmdAQIvGZCoRhZ+9BMeChwVbO3ac4eqCP1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pjjAyhzjTWSwZC3vK0eV84Ki9kvilUF4oOtZECaOD81W7TiKy7v/teBMCJQZKhT0j
-         kDqIV4QEUYf+czHKzQPLGhrmhwLjhPy5z40QPdp2kxt+WQIGCNOLlE9SgahG6Cui92
-         xfxsLTxRkcOc0sOl2iccKAuDsquUAtnqxUO+tNIzbxZVjNxDXGlU1GoN5WfpIXBOPW
-         EDWAp1QV7K2cnED1fLPc3G7Wjc9VTZjcaALGJAhjtbPKQhmXf6sbtDlkR6rWi0fFUW
-         mOpNS8fZGwlRoHZyFxVOqArjO6AoRZTpE5hHYuj3MObor6FTn9epYKSCyep6o51zXL
-         k6btDoXljieMg==
+        b=YYpPUO6k5C+QZjiCXv2lVBX0UFJCXVXYHPK53f4TAM+4XAbdP9yrbJEBno2YnT6W3
+         t18bS+swbPDeyxU3ojp1IA0wQLS25de855CiCufHjibeEoTCXowpcCRBRDlqm+Kfca
+         U+Qri1a+XLFMZxARZVZJmUEsXdyyfmPOII2JZPxk9ch0NWuy51Homtfl0TpVq9xZmh
+         k5Dy3Uw6l+K0stPqs3yuUyc14ljb+yw5zwd5QcBrAfktNZQv/GQeKordZkDRI63RFf
+         +2EiMYOXSRcjqcT1e/LMQoIL4AR5OhLZ58l6ecR8b0DSKiYC6k3EFmvfhUIfwd961t
+         J3DN6aWtKal4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
@@ -40,12 +40,12 @@ Cc:     =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?=
         Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
         shuah@kernel.org, linux-rtc@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 06/42] selftests: rtc: Increase test timeout so that all tests run
-Date:   Wed,  9 Feb 2022 13:32:38 -0500
-Message-Id: <20220209183335.46545-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 04/36] selftests: rtc: Increase test timeout so that all tests run
+Date:   Wed,  9 Feb 2022 13:37:27 -0500
+Message-Id: <20220209183759.47134-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209183335.46545-1-sashal@kernel.org>
-References: <20220209183335.46545-1-sashal@kernel.org>
+In-Reply-To: <20220209183759.47134-1-sashal@kernel.org>
+References: <20220209183759.47134-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
