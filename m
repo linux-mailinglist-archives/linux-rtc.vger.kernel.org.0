@@ -2,123 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355D44B18DF
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Feb 2022 23:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A324B19C7
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Feb 2022 00:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbiBJWzT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Feb 2022 17:55:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43504 "EHLO
+        id S243829AbiBJXsr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Feb 2022 18:48:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344698AbiBJWzS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Feb 2022 17:55:18 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3375A55B2;
-        Thu, 10 Feb 2022 14:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=qks3yg9iI4qDFGsh2BRdcXvx9gE+lfvznavyp5NtJdI=; b=Sf9q1WTPyhuB1tGsyP9dI+S2+F
-        R/4nAXULzUgiIobtxd/OByP5KKiWeeAIebRkNrm5RTrk8hSi04MxZKhuufQUf9QpcnPKzyKCoKyex
-        6BP8v+EMAJCDkR6gh4rZTxG+WP/GbljqR/oEJOtUgoSumfCxto77mdMWWfdMYaYCw/W0=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55240 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1nIILH-0005sm-95; Thu, 10 Feb 2022 17:55:13 -0500
-Date:   Thu, 10 Feb 2022 17:55:10 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20220210175510.c99eb77c6367d4df5d8bb9a2@hugovil.com>
-In-Reply-To: <YgWSgGTKR63g+S9e@piout.net>
-References: <20220125200009.900660-1-hugo@hugovil.com>
-        <20220125200009.900660-11-hugo@hugovil.com>
-        <YgMy/CYL8lmf6Y+J@robh.at.kernel.org>
-        <20220210171234.4e317c8a5d5f91f358382b07@hugovil.com>
-        <YgWSgGTKR63g+S9e@piout.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        with ESMTP id S242399AbiBJXsr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Feb 2022 18:48:47 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2ED5F7F
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Feb 2022 15:48:46 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so10249841pjl.2
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Feb 2022 15:48:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+VigcQLytz0iuHCE+k+y78JnvvZ09aQp4DOS6f0o7TM=;
+        b=dAh1C5a34PseGXHmaQZfM4wxYL4wwblUd5jDt5LLve2vU6jWUhtwN8MKnJNOf2qufB
+         lLDHDA3elq1Y16fxoyykEwvdijWHwc7OFoKWI14jMZpOT3WpuvHCKRIZu2l8t+rAqmsE
+         SJZTBCTMhb6eQRwZsHqdo4hY7alEqRycNqGHo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+VigcQLytz0iuHCE+k+y78JnvvZ09aQp4DOS6f0o7TM=;
+        b=k9fbwmYsm531uGPQbkSDgJSzWJ2CQ3HGwh4D2veeIRbfwtGSLDpkQW4omUaByDg5tk
+         C7qEtZSHH9sKT0knpgfsxL5I7YLKH7Yh+DVnrnFc5PLpu5vkfa4TdsiaWRmpyG3WcZ50
+         wBnA1r+/smern+sKeGxG+lMbjUwkcFYVIb1ZKPn3PP/1uGUJOYHuXduuRfnVQJyAyxJi
+         U1Myg7CeJU3D+ZsPh4T7VhmWvKqbPU+csUbRA6abZay36ArefnpM4Qyl8rewK7/D+XjW
+         eWXnWygD/YC22sd09nCtOfOFXDeKfe0gGTnB3LFcYPGg9OS8JdPZecSi5lyEUfNSLzAl
+         948A==
+X-Gm-Message-State: AOAM532huGsa8yvymJM07kPbSaj6SrEhrwpgKiWxVE5M1hVJbBtwGoRa
+        8X6tKvHumLFpb3PUjCZi9wPKDcfMA9q/aA==
+X-Google-Smtp-Source: ABdhPJw7Z7RtNFIjE/eg4qhNf5ROtPlhZI8Yn8t9OlJNY4TOQUQQi24WczGyaruM7kFjyOrv2RoZFw==
+X-Received: by 2002:a17:902:ef49:: with SMTP id e9mr9590070plx.56.1644536926217;
+        Thu, 10 Feb 2022 15:48:46 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j3sm18279269pgs.0.2022.02.10.15.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:48:45 -0800 (PST)
+Date:   Thu, 10 Feb 2022 15:48:44 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Victor Erminpour <victor.erminpour@oracle.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trivial@kernel.org
+Subject: Re: [PATCH] rtc: pcf8523: Fix GCC 12 warning
+Message-ID: <202202101548.D2CF8DAC@keescook>
+References: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH 10/10] dt-bindings: rtc: pcf2127: add PCF2131 INT_A and
- INT_B support
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 10 Feb 2022 23:32:32 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> On 10/02/2022 17:12:34-0500, Hugo Villeneuve wrote:
-> > On Tue, 8 Feb 2022 21:20:28 -0600
-> > Rob Herring <robh@kernel.org> wrote:
-> > 
-> > > On Tue, Jan 25, 2022 at 03:00:09PM -0500, Hugo Villeneuve wrote:
-> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > 
-> > > > The PCF2131 has two output interrupt pins, named INT_A and INT_B.
-> > > > 
-> > > > Add properties to identify onto which pin we want the alarm interrupt
-> > > > to be routed. It can be either one, or both.
-> > > > 
-> > > > These properties are automatically set to false for variants other
-> > > > than PCF2131 (ex: PCF2127).
-> > > > 
-> > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > ---
-> > > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  | 23 +++++++++++++++++++
-> > > >  1 file changed, 23 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > index 57eb0a58afa3..83656dd2f97f 100644
-> > > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> > > > @@ -24,6 +24,16 @@ properties:
-> > > >    interrupts:
-> > > >      maxItems: 1
-> > > >  
-> > > > +  alarm-output-a:
-> > > 
-> > > nxp,alarm-output-a
-> > 
-> > Ok, this will be fixed for V2.
-> > 
+On Wed, Feb 09, 2022 at 04:30:27PM -0800, Victor Erminpour wrote:
+> When building with automatic stack variable initialization, GCC 12
+> complains about variables defined outside of switch case statements.
+> Move variables outside the switch, which silences warnings:
 > 
-> Actually, this property has to be made more generic and thought out.
-> There are multiple RTCs that have multiple interrupt pins where one of
-> the pin can be used for different interrupt or clock output.
+> ./drivers/rtc/rtc-pcf8523.c:284:20: error: statement will never be executed [-Werror=switch-unreachable]
+>   284 |                 u8 mode;
+>       |
 > 
-> With your binding, there is no way to separate which interrupt is going
-> to which pin and so there is no way to get the alarm and BLF or the
-> watchdog on different pins and we certainly don't want to have a
-> property per interrupt type.
+> ./drivers/rtc/rtc-pcf8523.c:245:21: error: statement will never be executed [-Werror=switch-unreachable]
+>   245 |                 u32 value;
+>       |                     ^~~~~
+> 
+> Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
 
-Hi,
-can you please suggest how you would prefer it to be done?
+Thanks for finding these! I haven't done any cross compiles with GCC 12
+yet. :)
 
-> Also, the documentation is missing the fact that the driver makes having
-> one of the property mandatory.
-
-I will add it.
-
-Thank you, Hugo.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Hugo Villeneuve <hugo@hugovil.com>
+Kees Cook
