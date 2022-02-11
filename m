@@ -2,92 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5F84B203F
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Feb 2022 09:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB3F4B2567
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Feb 2022 13:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiBKIhk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Feb 2022 03:37:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60594 "EHLO
+        id S236946AbiBKMN7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Feb 2022 07:13:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiBKIhk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Feb 2022 03:37:40 -0500
-X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 00:37:38 PST
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA15EE59;
-        Fri, 11 Feb 2022 00:37:38 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nIRQv-001oqN-BL; Fri, 11 Feb 2022 09:37:37 +0100
-Received: from p5b13a545.dip0.t-ipconnect.de ([91.19.165.69] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nIRQv-000jOQ-3s; Fri, 11 Feb 2022 09:37:37 +0100
-Message-ID: <4592b3f4-5213-72e7-e135-7e43c04fedc7@physik.fu-berlin.de>
-Date:   Fri, 11 Feb 2022 09:37:36 +0100
+        with ESMTP id S1349888AbiBKMN6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Feb 2022 07:13:58 -0500
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F19DA8;
+        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id w6so9576960vsf.3;
+        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ulYLaVXldSoI4tDDRxPqxlHj4drX158bChWih8XppYk=;
+        b=H7jTd4dGwOHJeB8IFqS+Z19tuXaok6mNx3fXVmuXQxTyxr/mGePHyncLyvmTcPcz86
+         6dYInzawnH0ZosYxamOME6xLQM7kBLfF87xueADBh+t/hvZHLnbEoQYjUJk21Ui+nS+A
+         qyN5iwhc8K3orQlbHKxopHWCxs1xTm3WG2BRHU52K0JIHqR5HtMq0nt4SbXawDw/VrPQ
+         aeSu1qAyH4WwBM+yYKzqjop8V0ChWV9KhvqtsAnjXceHkCzg7S3bBddtbQcgu03cjbh1
+         v6o7eVHh2LNdTRvHBct0E4ZHwRUhNb8aObEqBs+qhGzgDpuRB9YR+MEtpjFCtkaljaqB
+         28pQ==
+X-Gm-Message-State: AOAM533JYshnlnUk0qiXikAnF4xrn9ZAlaJz31GP0PdAAQYAPA7R2AdZ
+        OPycLulzO/Z1z+2q5h609IKEm2n6EnD1SQ==
+X-Google-Smtp-Source: ABdhPJxsf3l7v/aOhtds1muYkZEaJkvsq2pGOeHnHeyHuFoS0A/hW+zuhlsxC5W+w81SYw+CmFHJXg==
+X-Received: by 2002:a05:6102:a39:: with SMTP id 25mr372146vsb.84.1644581636726;
+        Fri, 11 Feb 2022 04:13:56 -0800 (PST)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id k204sm4798871vkk.0.2022.02.11.04.13.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 04:13:55 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id j26so8546789vso.12;
+        Fri, 11 Feb 2022 04:13:54 -0800 (PST)
+X-Received: by 2002:a05:6102:34d9:: with SMTP id a25mr377312vst.68.1644581634672;
+ Fri, 11 Feb 2022 04:13:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v14 4/5] clocksource/drivers: Add a goldfish-timer
- clocksource
-Content-Language: en-US
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+References: <20220129184225.407100-1-laurent@vivier.eu> <20220129184225.407100-2-laurent@vivier.eu>
+ <CAMuHMdVmCV4v=LhGRB3d3hbyL4Etv_Wbb2VPhK5G9a2xB1Pm2A@mail.gmail.com> <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
+In-Reply-To: <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Feb 2022 13:13:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
+Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
+Subject: Re: [PATCH v13 1/5] m68k: add asm/config.h
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220130143333.552646-1-laurent@vivier.eu>
- <20220130143333.552646-5-laurent@vivier.eu>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20220130143333.552646-5-laurent@vivier.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.165.69
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        John Stultz <john.stultz@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi!
+Hi Adrian,
 
-On 1/30/22 15:33, Laurent Vivier wrote:
-> Add a clocksource based on the goldfish-rtc device.
-> 
-> Move the timer register definition to <clocksource/timer-goldfish.h>
-> 
-> This kernel implementation is based on the QEMU upstream implementation:
-> 
->    https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/rtc/goldfish_rtc.c
-> 
-> Details related to Goldfish devices can be found in:
-> 
->   https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
-> 
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+On Fri, Feb 11, 2022 at 9:36 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On 1/29/22 20:05, Geert Uytterhoeven wrote:
+> > On Sat, Jan 29, 2022 at 7:42 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> >> To avoid 'warning: no previous prototype for' error, declare all
+> >> the parse_bootinfo and config functions prototypes into asm/config.h
+> >> and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
+> >>
+> >> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> >> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> >
+> > I have already queued v12.
+>
+> I assume you're talking about this particular patch only and not the whole
+> series, correct?
 
-It looks like this is the only patch in the series which has not been approved yet.
+Exactly.
 
-Adrian
+Gr{oetje,eeting}s,
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
