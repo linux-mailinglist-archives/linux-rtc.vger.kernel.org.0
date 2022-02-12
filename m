@@ -2,129 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C704B3868
-	for <lists+linux-rtc@lfdr.de>; Sat, 12 Feb 2022 23:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C29C4B3893
+	for <lists+linux-rtc@lfdr.de>; Sun, 13 Feb 2022 00:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbiBLWm3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 12 Feb 2022 17:42:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56742 "EHLO
+        id S232443AbiBLXYO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 12 Feb 2022 18:24:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBLWm3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 12 Feb 2022 17:42:29 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E123BCF;
-        Sat, 12 Feb 2022 14:42:23 -0800 (PST)
+        with ESMTP id S230252AbiBLXYO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 12 Feb 2022 18:24:14 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6201A5FF06;
+        Sat, 12 Feb 2022 15:24:08 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E1A7D60002;
-        Sat, 12 Feb 2022 22:42:21 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E819BC0007;
+        Sat, 12 Feb 2022 23:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644705742;
+        t=1644708244;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=o7nmq5PpfhPJseJpTWo3AP6LjcDu4IADuUW9epeYJTg=;
-        b=aj1zeNyXQMCippy0hC/h0XaigL/80Gn/7A7P20K6xopvizsENw3S79xXbd16eaKVuxgu31
-        /6J8Iytsm1jluaN2+DAUoyqElgfFV35674X2Fpq8nMJ5Sb8ezERS6joB3u94aUOHWm4zDI
-        5LZMmXLM1comTl837YHR2z7fXL6zyt8brltFF+t4PUKkvZax8GlB46f9sIyc1MyDIBdz9g
-        PQfl18PPrnvDG12e0ABLeB+E4f8T6TNyS8MT5nSNntP3mW9ceKxO2HESLKJbdP3zDP6KsU
-        KdiQejVoAQNfX2sOcr9Ta9HXoJiltVd20xvLtaWYidquJCbzlPgQyEopJ0B6hg==
-Date:   Sat, 12 Feb 2022 23:42:21 +0100
+        bh=oFSzZ5yOgdSQAwv0PITlc/tQFNbxlnrDufyb0qNF53Q=;
+        b=T3Nl6zUHyCCqkZ70eVXfYZPR33z37M7lQnQsY+qmZhmbBJnDZ0vkPcvrgeCaDUCrE7XYTG
+        ILeyfuqBi6bYKAeXp/+nAYT3K5KTIk8buMzeNFwPqKGKGGYbtb4y354lm3VK68YPcM9p13
+        GBXHxFZNceYRpbKJBptTKYI+quWgKOkYq3xEOs79KFibZlf/2IxCxTwvRhrawA52lYqw70
+        im16ziLbq8q0e2vjmRtKvYMY6aMLDbypJbYyeDS7ToLhecyaFV97jUE+rQL876R3RI52D9
+        QCqLVoxh7Gfr90O0YJ26z9EbwtX8EIF6afWEBxUKD5ur6J05GKkR6ln6a7XOOw==
+Date:   Sun, 13 Feb 2022 00:24:02 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-sunxi@lists.linux.dev,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH] rtc-mc146818-lib: wait longer for UIP to clear
-Message-ID: <Ygg3zXX+vgBhDb30@piout.net>
-References: <20220212220454.566548-1-mat.jonczyk@o2.pl>
+Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i
+ RTC clocks
+Message-ID: <YghBkp/sUHdqSn4G@piout.net>
+References: <20220203021736.13434-1-samuel@sholland.org>
+ <20220203021736.13434-6-samuel@sholland.org>
+ <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
+ <bb05bc64-2a9e-fe21-5a69-0ea31134e978@sholland.org>
+ <20220211124312.kiw6t25nojvkp2rw@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220212220454.566548-1-mat.jonczyk@o2.pl>
+In-Reply-To: <20220211124312.kiw6t25nojvkp2rw@houat>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+On 11/02/2022 13:43:12+0100, Maxime Ripard wrote:
+> Hi Samuel,
+> 
+> On Mon, Feb 07, 2022 at 05:54:02PM -0600, Samuel Holland wrote:
+> > On 2/7/22 3:00 AM, Maxime Ripard wrote:
+> > > On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
+> > >> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
+> > >> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz crystal
+> > >> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this power
+> > >> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcxo24M",
+> > >> or "osc24M") as well. The H6 also adds a calibration circuit for IOSC.
+> > >>
+> > >> Later SoCs introduce further variations on the design:
+> > >>  - H616 adds an additional mux for the 32 kHz fanout source.
+> > >>  - R329 adds an additional mux for the RTC timekeeping clock, a clock
+> > >>    for the SPI bus between power domains inside the RTC, and removes the
+> > >>    IOSC calibration functionality.
+> > >>
+> > >> [...]
+> > > 
+> > > Applied to local tree (sunxi/clk-for-5.18).
+> > 
+> > Part of the build failures were because this patch depends on patch 3. Is that
+> > okay, or should I update this patch to be independent?
+> 
+> We don't have anything queued up yet, so I think the easiest would be to
+> merge this through the RTC tree. So nothing to do on your side yet, we
+> just need Alex to answer :)
+> 
 
-On 12/02/2022 23:04:54+0100, Mateusz Jończyk wrote:
-> Before reading date / time from the CMOS RTC, we wait for the UIP
-> (Update in progress) bit to clear --- so that the values are correct and
-> consistent. To avoid a hang, there is a time limit after which we give
-> up waiting.
-> 
-> Increase the time limit from 10 to 20ms in case there are RTCs out there
-> that are much slower than expected.
-> 
+I can take the whole series but I think I would need acks from Stephen
 
-I'm not going to apply that until we actually have reports that there
-are issues because now, we can't know what is the benefit risk balance.
-
-> Note: This may cause problems with hpet_rtc_interrupt() if the CMOS RTC
-> breaks down while the system is running and RTC update interrupt / RTC
-> alarm interrupt happens to be enabled (which should be rare).
-> hpet_rtc_interrupt() is executed usually 64 times per second and after
-> this patch it may take up to 20ms to complete (always hitting RTC read
-> timeout) - which may constantly occupy one CPU. This looks very
-> unlikely, though.
-> 
-> Also fix "then" -> "than" in a comment.
-> 
-> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
-> ---
-> 
-> This comment from Mr Alexandre Belloni got me thinking and is why I am
-> submitting this patch:
-> > We'll probably get some breakage later on because many RTCs using this
-> > driver are not adhering to the spec.
-> (See: https://lore.kernel.org/linux-rtc/277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl/T/ )
-> 
-> Googling for dmesg messages that indicate problems with reading from RTC
-> (such as "unable to read current time" - using quotation marks to force
-> exact phrase search) produces no results apart from kernel code and
-> patches. Any problems would happen rarely on affected systems, though.
-> 
->  drivers/rtc/rtc-mc146818-lib.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-> index ae9f131b43c0..29ceec9875f4 100644
-> --- a/drivers/rtc/rtc-mc146818-lib.c
-> +++ b/drivers/rtc/rtc-mc146818-lib.c
-> @@ -21,7 +21,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  	unsigned long flags;
->  	unsigned char seconds;
->  
-> -	for (i = 0; i < 10; i++) {
-> +	for (i = 0; i < 20; i++) {
->  		spin_lock_irqsave(&rtc_lock, flags);
->  
->  		/*
-> @@ -79,8 +79,8 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
->  EXPORT_SYMBOL_GPL(mc146818_avoid_UIP);
->  
->  /*
-> - * If the UIP (Update-in-progress) bit of the RTC is set for more then
-> - * 10ms, the RTC is apparently broken or not present.
-> + * If the UIP (Update-in-progress) bit of the RTC is set for more than
-> + * 20ms, the RTC is apparently broken or not present.
->   */
->  bool mc146818_does_rtc_work(void)
->  {
-> 
-> base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
-> -- 
-> 2.25.1
-> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
