@@ -2,108 +2,119 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B175C4B2F0D
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Feb 2022 22:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B344E4B3854
+	for <lists+linux-rtc@lfdr.de>; Sat, 12 Feb 2022 23:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352830AbiBKVDJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Feb 2022 16:03:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56564 "EHLO
+        id S229604AbiBLWM1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 12 Feb 2022 17:12:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353650AbiBKVDG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Feb 2022 16:03:06 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DCE2D3;
-        Fri, 11 Feb 2022 13:03:04 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5488620007;
-        Fri, 11 Feb 2022 21:02:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644613382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dBJ4jn/Othh/3mI5Ygz5jPmtny0zhFBhPSaVX6iPMeA=;
-        b=Yj4OgahBfdgUT4cPNMdh3B+AjwN0nLxhAHavhTZ7s8t0zyl0cJWVSDiTPhKQFp48if4UYq
-        BO28iPBqV/qSsif6nLAAafgAyjcjH8Pkh77j8Lx2Vwhi8jO3ObYynyFWcsvR3BDUw7OQyQ
-        Em5e9g4WoPj21dMR6KX5E31C6qDagdstEh7v0sbNJjQC5EI0dcbQaRqY2lT00VL/FYifi4
-        HiLsF0cEfPYudAvwQpcvNAYiiF9wT7mUp7eZCcsAyLKjVaxNby97N+k7XFnsjPU2jvXr+u
-        ayEF4Y4bDI7CrrYa+6GjyT4eeyvLst7pO1l9rILrhX3oclGB4CAK5BzM3cXAMA==
-Date:   Fri, 11 Feb 2022 22:02:58 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Cc:     "hugo@hugovil.com" <hugo@hugovil.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/10] dt-bindings: rtc: pcf2127: add PCF2131 INT_A and
- INT_B support
-Message-ID: <YgbPAtIO5kZ/WLhM@piout.net>
-References: <20220125200009.900660-1-hugo@hugovil.com>
- <20220125200009.900660-11-hugo@hugovil.com>
- <YgMy/CYL8lmf6Y+J@robh.at.kernel.org>
- <20220210171234.4e317c8a5d5f91f358382b07@hugovil.com>
- <YgWSgGTKR63g+S9e@piout.net>
- <20220210175510.c99eb77c6367d4df5d8bb9a2@hugovil.com>
- <7be3f9541eaed7e17e334267e49665f442b1b458.camel@dimonoff.com>
+        with ESMTP id S230283AbiBLWM0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 12 Feb 2022 17:12:26 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 14:12:22 PST
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FEE60A84
+        for <linux-rtc@vger.kernel.org>; Sat, 12 Feb 2022 14:12:22 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 18600 invoked from network); 12 Feb 2022 23:05:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1644703539; bh=AnQN+FJyRGopKtB+HTr7nThFXwjuArnFpHKHUUQNYoY=;
+          h=From:To:Cc:Subject;
+          b=r1TDnwTmPuDEihAsAdSvWAbdrgAuAZ6lf4OSZ/Y3JhQJcTbr3KbTzQu+/IsYxqcwC
+           Y8zoZXDd1OmT5Qx1VJmD1j4gzeEgXhoIvYutCc4aNg5s+Sjut04B26/ay3xqtRr/xL
+           ueakEzF45e8lnB18Ho3IWp6NDSwUG09I64hMKuO0=
+Received: from aaem217.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.116.217])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 12 Feb 2022 23:05:38 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc-mc146818-lib: wait longer for UIP to clear
+Date:   Sat, 12 Feb 2022 23:04:54 +0100
+Message-Id: <20220212220454.566548-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7be3f9541eaed7e17e334267e49665f442b1b458.camel@dimonoff.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 803afe6153e8175b7ef9efb8cb1be6a5
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [gZP0]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/02/2022 20:16:27+0000, Hugo Villeneuve wrote:
-> > > Actually, this property has to be made more generic and thought
-> > > out.
-> > > There are multiple RTCs that have multiple interrupt pins where one
-> > > of
-> > > the pin can be used for different interrupt or clock output.
-> 
-> Hi,
-> the only example I could find of such a device is in rtc-pcf85363.c.
-> This device also has two interrupt pins, INT A/B, like the PCF2131.
-> However, in the pcf85363 driver, pin INT B is simply ignored, and all
-> interrupts are configured to go on INT A.
-> 
+Before reading date / time from the CMOS RTC, we wait for the UIP
+(Update in progress) bit to clear --- so that the values are correct and
+consistent. To avoid a hang, there is a time limit after which we give
+up waiting.
 
-Yes, this was the RTC for which we had that discussion last time but
-there is also pcf8523 and other non NXP RTCs.
+Increase the time limit from 10 to 20ms in case there are RTCs out there
+that are much slower than expected.
 
-> For the moment, I will simply modify my PCF2131 patches serie to mimic
-> the same behavior in V2. This simplifies things a lot, and support for
-> INT B pin could be added at a later stage (and also to pcf85363) if
-> anyone needs it (I don't).
-> 
-> Hugo.
-> 
-> > > With your binding, there is no way to separate which interrupt is
-> > > going
-> > > to which pin and so there is no way to get the alarm and BLF or the
-> > > watchdog on different pins and we certainly don't want to have a
-> > > property per interrupt type.
-> > 
-> > Hi,
-> > can you please suggest how you would prefer it to be done?
-> > 
-> > > Also, the documentation is missing the fact that the driver makes
-> > > having
-> > > one of the property mandatory.
-> > 
-> > I will add it.
-> > 
-> > Thank you, Hugo.
-> > 
-> 
+Note: This may cause problems with hpet_rtc_interrupt() if the CMOS RTC
+breaks down while the system is running and RTC update interrupt / RTC
+alarm interrupt happens to be enabled (which should be rare).
+hpet_rtc_interrupt() is executed usually 64 times per second and after
+this patch it may take up to 20ms to complete (always hitting RTC read
+timeout) - which may constantly occupy one CPU. This looks very
+unlikely, though.
 
+Also fix "then" -> "than" in a comment.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+---
+
+This comment from Mr Alexandre Belloni got me thinking and is why I am
+submitting this patch:
+> We'll probably get some breakage later on because many RTCs using this
+> driver are not adhering to the spec.
+(See: https://lore.kernel.org/linux-rtc/277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl/T/ )
+
+Googling for dmesg messages that indicate problems with reading from RTC
+(such as "unable to read current time" - using quotation marks to force
+exact phrase search) produces no results apart from kernel code and
+patches. Any problems would happen rarely on affected systems, though.
+
+ drivers/rtc/rtc-mc146818-lib.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index ae9f131b43c0..29ceec9875f4 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -21,7 +21,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+ 	unsigned long flags;
+ 	unsigned char seconds;
+ 
+-	for (i = 0; i < 10; i++) {
++	for (i = 0; i < 20; i++) {
+ 		spin_lock_irqsave(&rtc_lock, flags);
+ 
+ 		/*
+@@ -79,8 +79,8 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+ EXPORT_SYMBOL_GPL(mc146818_avoid_UIP);
+ 
+ /*
+- * If the UIP (Update-in-progress) bit of the RTC is set for more then
+- * 10ms, the RTC is apparently broken or not present.
++ * If the UIP (Update-in-progress) bit of the RTC is set for more than
++ * 20ms, the RTC is apparently broken or not present.
+  */
+ bool mc146818_does_rtc_work(void)
+ {
+
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
