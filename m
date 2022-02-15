@@ -2,49 +2,46 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB124B7A5D
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Feb 2022 23:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13044B7A70
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Feb 2022 23:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241830AbiBOWU2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Feb 2022 17:20:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48456 "EHLO
+        id S241149AbiBOW2B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Feb 2022 17:28:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiBOWU2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Feb 2022 17:20:28 -0500
-X-Greylist: delayed 213 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 14:20:16 PST
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB2460DAE;
-        Tue, 15 Feb 2022 14:20:16 -0800 (PST)
+        with ESMTP id S233342AbiBOW2B (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Feb 2022 17:28:01 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D04F95A0B;
+        Tue, 15 Feb 2022 14:27:49 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C600CFF803;
-        Tue, 15 Feb 2022 22:20:14 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CAFEF20002;
+        Tue, 15 Feb 2022 22:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644963615;
+        t=1644964068;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MY3aADxCC3BL/PohzEu0vsfChXWJVF+cjGEC42SVfc4=;
-        b=YOLCaXPdXS5EuBm2Lx8VycDv2Hgn3lxbEU5NvFy3BGXi5f6FdeJOnoqQyXw4t5A0XWu1vo
-        LdGKY+D9FHdhBOuAwAK8NYtrg1IMPoodgRU99gwMuXKAqUlwf7YD6UjCDHPxKtJ6bsE7vS
-        aZnT7S1nN+eQibzXuoeZGPqnPlMFE5lGxyZSvljgof0bYI51/5LD+6b2ob3M41t6R3GVgS
-        QUEGoT9K/fLKgDtLZxQJmaYKWJ7zk+qKBWVRHbIQyuEE2v7gzNLtcLmr61XeU4jSPqAC7+
-        +ySe/syr/f6OAX10W4HnmCSbzzVi/OEnfmQmyS5NcnJb/dY5ksYgjoNIce0UGg==
+        bh=rcDG/pEXhTqGFyte4Xe1d7IY1K/7Jn8oC0T5I0QumNk=;
+        b=CoZuzD9ObjgHBzfi8wtsy0/YUMEGHaxg2HhadSVq2OoRhX4a2zh9FXLXPYvxyexsn62MEl
+        6jWlO0s5U46emJAewMDTgCNPYHvmrJaGYgKYWWSEOucu3xTLtmIHmjZPc9OSu/mb0mUM7y
+        OtXnsYE3GtSDvWqjiBteKndkt6ifbC1vh2CODH6lqOhQZJchmxY9fXVJUVuBThrLXGpVY5
+        Fma80UzEJ0eeSUsqSl/0efg7vsc265gA4W6VhVTphMZeRgz5w4t3t9ywkvaBkNBVP5Dl2G
+        +HvLA/2Q0bZIVam9JvqgPIVsvaAo+7WBuHsyOc//XVnw40drNWOLnEweMTIEtw==
+Date:   Tue, 15 Feb 2022 23:27:46 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Victor Erminpour <victor.erminpour@oracle.com>,
-        a.zummo@towertech.it
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        trivial@kernel.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf8523: Fix GCC 12 warning
-Date:   Tue, 15 Feb 2022 23:20:14 +0100
-Message-Id: <164496360741.65425.10517543967622435540.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
-References: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf2127: add error checking and message when
+ disabling POR0
+Message-ID: <Ygwo4iXtE/hCA5IZ@piout.net>
+References: <20220117225625.1252233-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220117225625.1252233-1-hugo@hugovil.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -55,22 +52,48 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 9 Feb 2022 16:30:27 -0800, Victor Erminpour wrote:
-> When building with automatic stack variable initialization, GCC 12
-> complains about variables defined outside of switch case statements.
-> Move variables outside the switch, which silences warnings:
+Hello,
+
+On 17/01/2022 17:56:24-0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> ./drivers/rtc/rtc-pcf8523.c:284:20: error: statement will never be executed [-Werror=switch-unreachable]
->   284 |                 u8 mode;
->       |
+> If PCF2127 device is absent from the I2C bus, or if there is a
+> communication problem, disabling POR0 may fail silently and we
+> still continue with probing the device. In that case, abort probe
+> operation and display an error message.
 > 
-> [...]
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/rtc/rtc-pcf2127.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index 81a5b1f2e68c..e6d0838ccfe3 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -690,8 +690,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  	 * The "Power-On Reset Override" facility prevents the RTC to do a reset
+>  	 * after power on. For normal operation the PORO must be disabled.
+>  	 */
+> -	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+> +	ret = regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+>  				PCF2127_BIT_CTRL1_POR_OVRD);
+> +	if (ret < 0) {
+> +		dev_err(dev, "PORO disabling failed\n");
 
-Applied, thanks!
+As discussed on the other patches, please do not add a message here.
 
-[1/1] rtc: pcf8523: Fix GCC 12 warning
-      commit: 85bcb01f145dc32e7f88e6eebb3b5f96d3b56eb6
 
-Best regards,
+> +		return ret;
+> +	}
+>  
+>  	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CLKOUT, &val);
+>  	if (ret < 0)
+> -- 
+> 2.30.2
+> 
+
 -- 
-Alexandre Belloni <alexandre.belloni@bootlin.com>
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
