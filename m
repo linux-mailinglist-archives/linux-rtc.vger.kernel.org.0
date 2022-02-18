@@ -2,60 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADF94BADEF
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Feb 2022 01:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEED4BAE8D
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Feb 2022 01:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiBRAAv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Feb 2022 19:00:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46560 "EHLO
+        id S230155AbiBRAeF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Feb 2022 19:34:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbiBRAAu (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Feb 2022 19:00:50 -0500
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B09E43EDC;
-        Thu, 17 Feb 2022 16:00:21 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id c14so1940698ioa.12;
-        Thu, 17 Feb 2022 16:00:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Il/wZD+B4VL/ZBasXxovAwbatloL66gP+RpomVECt8w=;
-        b=RLCfaQ7GhScBtu0amYjmOjumkgXhe3+HavMRFl2ctgJ587vmZPrryPtwzETgxURMuR
-         bz2nj6BnZCsFC4K7kR4xzUlEI6sAfSgxX98DsRA6t9XBXCwD6amFZLN5K/b3Ze8XcEcv
-         OBCPaeui/tXfzfWljyyFseAO6zRvEHoN9+gyUZXxpAQ2xEwmNIH5N7ExvrS7Ck1bblvj
-         4kCFA+0FycN6sfm0/9WM7mKyX05fMkDNAD5YTpUGMaVfM3oQS0EnFQmifw560ozN9p5s
-         M7RAGDIzIhQrqGJUXOC/m5S2p7EDpy6ZL/dIkOy6Nf7jF/EgJEdyvcrv9auXUr1UaW3B
-         AHqA==
-X-Gm-Message-State: AOAM531Bv+dsZE2b64dISo/jl8RJllxbr18LmzcWU691I7X/jZqXaYzv
-        voV2x66sjm7b6nL6OMNeDbmNmL2w5Q==
-X-Google-Smtp-Source: ABdhPJzGwfUv+iWf5iBYNyH6g/xHd5+slKxLYGt8kOXzTx5aIOjksgpcxSoJSYHT0umAK410egSZFw==
-X-Received: by 2002:a02:a804:0:b0:30e:4778:559a with SMTP id f4-20020a02a804000000b0030e4778559amr3519947jaj.291.1645142363273;
-        Thu, 17 Feb 2022 15:59:23 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id q9sm2732858ilo.56.2022.02.17.15.59.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 15:59:22 -0800 (PST)
-Received: (nullmailer pid 4014766 invoked by uid 1000);
-        Thu, 17 Feb 2022 23:59:21 -0000
-Date:   Thu, 17 Feb 2022 17:59:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-Message-ID: <Yg7hWRlxNY2zzg+B@robh.at.kernel.org>
-References: <20220211205029.3940756-1-hugo@hugovil.com>
- <20220211205029.3940756-15-hugo@hugovil.com>
+        with ESMTP id S230146AbiBRAeF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Feb 2022 19:34:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC840A09;
+        Thu, 17 Feb 2022 16:33:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39610B819EE;
+        Fri, 18 Feb 2022 00:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFE5C340E9;
+        Fri, 18 Feb 2022 00:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645144418;
+        bh=e/znNyDINSmervQbv/vjQdjL+iOg2YVcl9VW/Ak7M34=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=MhnvbVUGqtcfi8MC1zO5YLdbZ9LvVI+GP0ULoeKxwQ9yubWwXRLDaovyn4cEXKkdU
+         b7C3lqMBjLhborfb2ZHKcfC287/fFbhQpPaY+WZpAyX+WM5RE3baErc+FzyvXQyXG8
+         2HEwl6Wujsj+eauQUcFZ+NQTWSUaH6o0g1sIvgjedKlIABrW1aevxwnu+q+q6s/KlC
+         5Ao/1ZEF2M/NjahLNQDRs5Dt73RNlNi1n/4UYRg7XYkEtYJK9IVC3bnrcU9XQdupNM
+         xwbeBZXQN6nw7KyE2LuOefGFgbf4kbKCoIXC7ohkyEyGIbreccfLTUCeihMBDiFh1p
+         pDdjkgWKDDLgQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211205029.3940756-15-hugo@hugovil.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YghBkp/sUHdqSn4G@piout.net>
+References: <20220203021736.13434-1-samuel@sholland.org> <20220203021736.13434-6-samuel@sholland.org> <164422443570.21572.13511859513410998733.b4-ty@cerno.tech> <bb05bc64-2a9e-fe21-5a69-0ea31134e978@sholland.org> <20220211124312.kiw6t25nojvkp2rw@houat> <YghBkp/sUHdqSn4G@piout.net>
+Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i RTC clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-sunxi@lists.linux.dev,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Date:   Thu, 17 Feb 2022 16:33:37 -0800
+User-Agent: alot/0.10
+Message-Id: <20220218003338.DBFE5C340E9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,50 +61,47 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 03:50:29PM -0500, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Add support for new NXP RTC PCF2131.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> index cde7b1675ead..57eb0a58afa3 100644
-> --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-> @@ -14,7 +14,9 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    const: nxp,pcf2127
-> +    enum:
-> +      - nxp,pcf2127
-> +      - nxp,pcf2131
->  
->    reg:
->      maxItems: 1
-> @@ -48,4 +50,19 @@ examples:
->          };
->      };
->  
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        rtc@53 {
-> +            compatible = "nxp,pcf2131";
-> +            reg = <0x53>;
-> +            pinctrl-0 = <&rtc_nint_pins>;
-> +            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
-> +            reset-source;
-> +        };
-> +    };
+Quoting Alexandre Belloni (2022-02-12 15:24:02)
+> On 11/02/2022 13:43:12+0100, Maxime Ripard wrote:
+> > Hi Samuel,
+> >=20
+> > On Mon, Feb 07, 2022 at 05:54:02PM -0600, Samuel Holland wrote:
+> > > On 2/7/22 3:00 AM, Maxime Ripard wrote:
+> > > > On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
+> > > >> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
+> > > >> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz cry=
+stal
+> > > >> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this=
+ power
+> > > >> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcx=
+o24M",
+> > > >> or "osc24M") as well. The H6 also adds a calibration circuit for I=
+OSC.
+> > > >>
+> > > >> Later SoCs introduce further variations on the design:
+> > > >>  - H616 adds an additional mux for the 32 kHz fanout source.
+> > > >>  - R329 adds an additional mux for the RTC timekeeping clock, a cl=
+ock
+> > > >>    for the SPI bus between power domains inside the RTC, and remov=
+es the
+> > > >>    IOSC calibration functionality.
+> > > >>
+> > > >> [...]
+> > > >=20
+> > > > Applied to local tree (sunxi/clk-for-5.18).
+> > >=20
+> > > Part of the build failures were because this patch depends on patch 3=
+. Is that
+> > > okay, or should I update this patch to be independent?
+> >=20
+> > We don't have anything queued up yet, so I think the easiest would be to
+> > merge this through the RTC tree. So nothing to do on your side yet, we
+> > just need Alex to answer :)
+> >=20
+>=20
+> I can take the whole series but I think I would need acks from Stephen
+>=20
 
-Just a new compatible doesn't really justify another example.
+For the clk patches
 
-Rob
+Acked-by: Stephen Boyd <sboyd@kernel.org>
