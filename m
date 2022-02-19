@@ -2,73 +2,178 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEFF4BC274
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Feb 2022 23:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F5E4BC6AC
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Feb 2022 08:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiBRWLz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-rtc@lfdr.de>); Fri, 18 Feb 2022 17:11:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57626 "EHLO
+        id S241259AbiBSH2A (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 19 Feb 2022 02:28:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiBRWLz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Feb 2022 17:11:55 -0500
-Received: from fjxxll.cn (unknown [IPv6:240e:37a:2bb:f700:211:32ff:fe2c:a785])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1AA282E50;
-        Fri, 18 Feb 2022 14:11:31 -0800 (PST)
-Received: from Unknown (34.136.150.203.sta.inet.co.th [203.150.136.34])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by fjxxll.cn (Postfix) with ESMTPSA id 0152F6545CE1;
-        Thu, 17 Feb 2022 23:31:16 +0800 (CST)
-Message-ID: <494CFAA9A27658EB37327BC6226604BB@dvrhs>
-Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
-From:   "Fredrik Elvebakk" <investment@dnb.no>
-Subject: Re:
-Date:   Thu, 17 Feb 2022 07:30:58 -0800
+        with ESMTP id S235805AbiBSH2A (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Feb 2022 02:28:00 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972B15621A
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Feb 2022 23:27:37 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 447 invoked from network); 19 Feb 2022 08:27:32 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1645255653; bh=iIEKFg4/9zvOOQA7hbIFGUfZTscRhdZoSb+uYnI8SNI=;
+          h=From:To:Cc:Subject;
+          b=LDHvWM6Plr7cyIB9wnE3nWrAf0Jx3NrA0XJDZ6od0Pf2pkZrxdvliopv0CqbJSvSX
+           /B3KjmfYX7x/WqHQx+zem8sYAPYfI49WbpYUO5zPQO8Kuey3I9jS7XbtwptPOLWNsE
+           QtbQ44uYavEOkmfs/bXRoKYrdkpBhMXn1ZpmnhKE=
+Received: from aaew227.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.126.227])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 19 Feb 2022 08:27:32 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH] selftests/rtc: continuously read RTC in a loop for 30s
+Date:   Sat, 19 Feb 2022 08:27:13 +0100
+Message-Id: <20220219072713.5280-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        format=flowed;
-        charset="windows-1251";
-        reply-type=original
-Content-Transfer-Encoding: 8BIT
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Windows Live Mail 15.4.3538.513
-X-MimeOLE: Produced By Microsoft MimeOLE V15.4.3538.513
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,
-        RDNS_NONE,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_SOFTFAIL,
-        STOX_REPLY_TYPE,T_SCC_BODY_TEXT_LINE,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.4 STOX_REPLY_TYPE No description available.
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [fcresswell9[at]gmail.com]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 XPRIO Has X-Priority header
-X-Spam-Level: *******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: a13651b5016d766a77b643366e2ab4a2
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [oaM0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+Some problems with reading the RTC time may happen rarely, for example
+while the RTC is updating. So read the RTC many times to catch these
+problems. For example, a previous attempt for my
+commit ea6fa4961aab ("rtc: mc146818-lib: fix RTC presence check")
+was incorrect and would have triggered this selftest.
 
-Am Fredrik Elvebakk an Investment Manager from Norway. I wish to solicit 
-your interest in an investment project that is currently ongoing in my 
-company (DNB); It is a short term investment with good returns. Simply 
-reply for me to confirm the validity of your email so i shall give you 
-comprehensive details about the project.
+To avoid the risk of damaging the hardware, wait 11ms before consecutive
+reads.
 
-Best Regards,
-Fredrik Elvebakk
-Business Consultant
+In rtc_time_to_timestamp I copied values manually instead of casting -
+just to be on the safe side. The 11ms wait period was chosen so that it is
+not a divisor of 1000ms.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Shuah Khan <shuah@kernel.org>
+---
+
+Also, before
+commit cdedc45c579f ("rtc: cmos: avoid UIP when reading alarm time")
+reading the RTC alarm time during RTC update produced incorrect results
+on many Intel platforms. Preparing a similar selftest for this case
+would be more difficult, though, because the RTC alarm time is cached by
+the kernel. Direct access would have to be exposed somehow, for example
+in debugfs. I may prepare a patch for it in the future.
+---
+ tools/testing/selftests/rtc/rtctest.c | 66 +++++++++++++++++++++++++++
+ tools/testing/selftests/rtc/settings  |  2 +-
+ 2 files changed, 67 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 66af608fb4c6..2b9d929a24ed 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -20,6 +20,8 @@
+ 
+ #define NUM_UIE 3
+ #define ALARM_DELTA 3
++#define READ_LOOP_DURATION_SEC 30
++#define READ_LOOP_SLEEP_MS 11
+ 
+ static char *rtc_file = "/dev/rtc0";
+ 
+@@ -49,6 +51,70 @@ TEST_F(rtc, date_read) {
+ 	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
+ }
+ 
++static time_t rtc_time_to_timestamp(struct rtc_time *rtc_time)
++{
++	struct tm tm_time = {
++	       .tm_sec = rtc_time->tm_sec,
++	       .tm_min = rtc_time->tm_min,
++	       .tm_hour = rtc_time->tm_hour,
++	       .tm_mday = rtc_time->tm_mday,
++	       .tm_mon = rtc_time->tm_mon,
++	       .tm_year = rtc_time->tm_year,
++	};
++
++	return mktime(&tm_time);
++}
++
++static void nanosleep_with_retries(long ns)
++{
++	struct timespec req = {
++		.tv_sec = 0,
++		.tv_nsec = ns,
++	};
++	struct timespec rem;
++
++	while (nanosleep(&req, &rem) != 0) {
++		req.tv_sec = rem.tv_sec;
++		req.tv_nsec = rem.tv_nsec;
++	}
++}
++
++TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
++	int rc;
++	long iter_count = 0;
++	struct rtc_time rtc_tm;
++	time_t start_rtc_read, prev_rtc_read;
++
++	TH_LOG("Continuously reading RTC time for %ds (with %dms breaks after every read).",
++	       READ_LOOP_DURATION_SEC, READ_LOOP_SLEEP_MS);
++
++	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
++	ASSERT_NE(-1, rc);
++	start_rtc_read = rtc_time_to_timestamp(&rtc_tm);
++	prev_rtc_read = start_rtc_read;
++
++	do  {
++		time_t rtc_read;
++
++		rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
++		ASSERT_NE(-1, rc);
++
++		rtc_read = rtc_time_to_timestamp(&rtc_tm);
++		/* Time should not go backwards */
++		ASSERT_LE(prev_rtc_read, rtc_read);
++		/* Time should not increase more then 1s at a time */
++		ASSERT_GE(prev_rtc_read + 1, rtc_read);
++
++		/* Sleep 11ms to avoid killing / overheating the RTC */
++		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
++
++		prev_rtc_read = rtc_read;
++		iter_count++;
++	} while (prev_rtc_read <= start_rtc_read + READ_LOOP_DURATION_SEC);
++
++	TH_LOG("Performed %ld RTC time reads.", iter_count);
++}
++
+ TEST_F_TIMEOUT(rtc, uie_read, NUM_UIE + 2) {
+ 	int i, rc, irq = 0;
+ 	unsigned long data;
+diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
+index a953c96aa16e..0c1a2075d5f3 100644
+--- a/tools/testing/selftests/rtc/settings
++++ b/tools/testing/selftests/rtc/settings
+@@ -1 +1 @@
+-timeout=180
++timeout=210
+-- 
+2.25.1
+
