@@ -2,138 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55964BF6D5
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Feb 2022 11:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210224BF80A
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Feb 2022 13:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiBVK66 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Feb 2022 05:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
+        id S231932AbiBVM2H (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Feb 2022 07:28:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbiBVK6z (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Feb 2022 05:58:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3DB9B10A7;
-        Tue, 22 Feb 2022 02:58:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A1C4106F;
-        Tue, 22 Feb 2022 02:58:28 -0800 (PST)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C17833F70D;
-        Tue, 22 Feb 2022 02:58:26 -0800 (PST)
-Date:   Tue, 22 Feb 2022 10:58:23 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Ondrej Jirman <megous@megous.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v10 03/18] rtc: sun6i: Fix time overflow handling
-Message-ID: <20220222105823.0cf9b008@donnerap.cambridge.arm.com>
-In-Reply-To: <20220211122643.1343315-4-andre.przywara@arm.com>
-References: <20220211122643.1343315-1-andre.przywara@arm.com>
-        <20220211122643.1343315-4-andre.przywara@arm.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        with ESMTP id S230112AbiBVM2G (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Feb 2022 07:28:06 -0500
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F7D6F49B
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-2d79394434dso28741357b3.5
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=RltRUuEz8qTFSSDlLGIrW17zY6vkj/WiZwk/2DEws0fCs/4S/lZgH7OjKCucY+P9rc
+         PpZSO1MJs+RPLStTXXHm0UvtzMrkNk0vGMEm4nywE6+G6lkgDBgjCIo9+w3vOdi8Sor/
+         V0PD5UAmPtH/oZ3oAyziUzVXc0pnF/o76H6Jse+bevHTbbBo1VP8yZOQITNLqWtRqYJH
+         RNTK3BXyYsuVTedkMfcic0HvXkxRMwYM7n5FD9aiUftk8RfBf+RRJV04ParnSV7tcHDk
+         d27MFGrGBs74FMu6/JZ6nw0qLAGsLSuavAJXEsvOOI5UCeKWgNG8XUYeMS+sswfKrmjm
+         ggmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
+        b=S/J02fXwZf76yV349qZzpIGBlv8pkFNA2riC5hWdXhx9i209/WdiKWldNcjkH9wFoB
+         dxRlvWqW4aEkSIuKgwj1vdh0nRhzrpTEyTGP1v9jOKRaqbhusJROX3I8snqSmbyWipUU
+         RIW9+pfB9RwlchrBqmtK41zcids79yWNhtJOCzjuFoLLsl2rfLxcqBA3sGfLEu9a2gy1
+         ugWlMEkAYtl01trX6INOLhC6DFGkhU3B454MHuKk224Wsrv3fTaqIs+vTsNTXeBS01U/
+         TJMS/fYemi6KunufnNOlv1fQJ6ItsBbtxQU5dOO0ZV6kJOnNIBfKsiD5uu6ch2s9AsMK
+         jaQw==
+X-Gm-Message-State: AOAM530KNSK2IvSYKNONIMGcGKh6zke17zkRzyVHSWm1ZlXrblI8Q1D4
+        pIXM1bTEr9Cjr6YMu6ZDUEP5T0ZbRC9DgajL/zE=
+X-Google-Smtp-Source: ABdhPJzRoBykVu7xnpnnBjdEOY9arVZihjzBMwHAaeshpqP+pSt9pNC6/J+/AMp+3dJehh+CBWgxpq+/O4zotq/f1CQ=
+X-Received: by 2002:a81:5591:0:b0:2ca:287c:6c8a with SMTP id
+ j139-20020a815591000000b002ca287c6c8amr23735902ywb.303.1645532858985; Tue, 22
+ Feb 2022 04:27:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:48d0:b0:210:a074:c1c3 with HTTP; Tue, 22 Feb 2022
+ 04:27:38 -0800 (PST)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <marvelouschinaza54@gmail.com>
+Date:   Tue, 22 Feb 2022 04:27:38 -0800
+Message-ID: <CAE53ddZS_x-v=CDAXwUoU+KzL-ZiH4r9pHYQ4ZJ+VJFjShuLkA@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1144 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4341]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [marvelouschinaza54[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [marvelouschinaza54[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 11 Feb 2022 12:26:28 +0000
-Andre Przywara <andre.przywara@arm.com> wrote:
+-- 
+Hi Dear,
 
-Hi Alessandro, Alexandre,
+My name is Lily William, I am from the United States of America. It's my
+pleasure to contact you for a new and special friendship. I will be glad to
+see your reply so we can get to know each other better.
 
-I was wondering if you would consider taking this (as a fix)?
-This (time_gap > U32_MAX) comparison looks flawed by design, and we should
-use time_t these days anyway.
-
-Also, do you have an opinion on the other RTC patches? The linear day
-patch (v10 04/18)[1] and the broken-down alarm registers (v10 05/18)[2]
-were on the list for a while now and are needed by other SoCs as well
-(R329[3] and the RISC-V D1).
-
-Cheers,
-Andre
-[1] https://lore.kernel.org/linux-arm-kernel/20220211122643.1343315-5-andre.przywara@arm.com/
-[2] https://lore.kernel.org/linux-arm-kernel/20220211122643.1343315-6-andre.przywara@arm.com/
-[3] https://lore.kernel.org/linux-arm-kernel/20210802062212.73220-3-icenowy@sipeed.com/
-
-> Using "unsigned long" for UNIX timestamps is never a good idea, and
-> comparing the value of such a variable against U32_MAX does not do
-> anything useful on 32-bit systems.
-> 
-> Use the proper time64_t type when dealing with timestamps, and avoid
-> cutting down the time range unnecessarily. This also fixes the flawed
-> check for the alarm time being too far into the future.
-> 
-> The check for this condition is actually somewhat theoretical, as the
-> RTC counts till 2033 only anyways, and 2^32 seconds from now is not
-> before the year 2157 - at which point I hope nobody will be using this
-> hardware anymore.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  drivers/rtc/rtc-sun6i.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index 35b34d14a1db..dc3ae851841c 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -139,7 +139,7 @@ struct sun6i_rtc_dev {
->  	const struct sun6i_rtc_clk_data *data;
->  	void __iomem *base;
->  	int irq;
-> -	unsigned long alarm;
-> +	time64_t alarm;
->  
->  	struct clk_hw hw;
->  	struct clk_hw *int_osc;
-> @@ -511,10 +511,8 @@ static int sun6i_rtc_setalarm(struct device *dev,
-> struct rtc_wkalrm *wkalrm) struct sun6i_rtc_dev *chip =
-> dev_get_drvdata(dev); struct rtc_time *alrm_tm = &wkalrm->time;
->  	struct rtc_time tm_now;
-> -	unsigned long time_now = 0;
-> -	unsigned long time_set = 0;
-> -	unsigned long time_gap = 0;
-> -	int ret = 0;
-> +	time64_t time_now, time_set;
-> +	int ret;
->  
->  	ret = sun6i_rtc_gettime(dev, &tm_now);
->  	if (ret < 0) {
-> @@ -529,9 +527,7 @@ static int sun6i_rtc_setalarm(struct device *dev,
-> struct rtc_wkalrm *wkalrm) return -EINVAL;
->  	}
->  
-> -	time_gap = time_set - time_now;
-> -
-> -	if (time_gap > U32_MAX) {
-> +	if ((time_set - time_now) > U32_MAX) {
->  		dev_err(dev, "Date too far in the future\n");
->  		return -EINVAL;
->  	}
-> @@ -540,7 +536,7 @@ static int sun6i_rtc_setalarm(struct device *dev,
-> struct rtc_wkalrm *wkalrm) writel(0, chip->base + SUN6I_ALRM_COUNTER);
->  	usleep_range(100, 300);
->  
-> -	writel(time_gap, chip->base + SUN6I_ALRM_COUNTER);
-> +	writel(time_set - time_now, chip->base + SUN6I_ALRM_COUNTER);
->  	chip->alarm = time_set;
->  
->  	sun6i_rtc_setaie(wkalrm->enabled, chip);
-
+Yours
+Lily
