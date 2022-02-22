@@ -2,103 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210224BF80A
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Feb 2022 13:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DD34C03F8
+	for <lists+linux-rtc@lfdr.de>; Tue, 22 Feb 2022 22:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiBVM2H (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Feb 2022 07:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S235809AbiBVVkN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 22 Feb 2022 16:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiBVM2G (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Feb 2022 07:28:06 -0500
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F7D6F49B
-        for <linux-rtc@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-2d79394434dso28741357b3.5
-        for <linux-rtc@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=RltRUuEz8qTFSSDlLGIrW17zY6vkj/WiZwk/2DEws0fCs/4S/lZgH7OjKCucY+P9rc
-         PpZSO1MJs+RPLStTXXHm0UvtzMrkNk0vGMEm4nywE6+G6lkgDBgjCIo9+w3vOdi8Sor/
-         V0PD5UAmPtH/oZ3oAyziUzVXc0pnF/o76H6Jse+bevHTbbBo1VP8yZOQITNLqWtRqYJH
-         RNTK3BXyYsuVTedkMfcic0HvXkxRMwYM7n5FD9aiUftk8RfBf+RRJV04ParnSV7tcHDk
-         d27MFGrGBs74FMu6/JZ6nw0qLAGsLSuavAJXEsvOOI5UCeKWgNG8XUYeMS+sswfKrmjm
-         ggmQ==
+        with ESMTP id S235766AbiBVVkM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Feb 2022 16:40:12 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677DB139106;
+        Tue, 22 Feb 2022 13:39:46 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id q5so16107767oij.6;
+        Tue, 22 Feb 2022 13:39:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=S/J02fXwZf76yV349qZzpIGBlv8pkFNA2riC5hWdXhx9i209/WdiKWldNcjkH9wFoB
-         dxRlvWqW4aEkSIuKgwj1vdh0nRhzrpTEyTGP1v9jOKRaqbhusJROX3I8snqSmbyWipUU
-         RIW9+pfB9RwlchrBqmtK41zcids79yWNhtJOCzjuFoLLsl2rfLxcqBA3sGfLEu9a2gy1
-         ugWlMEkAYtl01trX6INOLhC6DFGkhU3B454MHuKk224Wsrv3fTaqIs+vTsNTXeBS01U/
-         TJMS/fYemi6KunufnNOlv1fQJ6ItsBbtxQU5dOO0ZV6kJOnNIBfKsiD5uu6ch2s9AsMK
-         jaQw==
-X-Gm-Message-State: AOAM530KNSK2IvSYKNONIMGcGKh6zke17zkRzyVHSWm1ZlXrblI8Q1D4
-        pIXM1bTEr9Cjr6YMu6ZDUEP5T0ZbRC9DgajL/zE=
-X-Google-Smtp-Source: ABdhPJzRoBykVu7xnpnnBjdEOY9arVZihjzBMwHAaeshpqP+pSt9pNC6/J+/AMp+3dJehh+CBWgxpq+/O4zotq/f1CQ=
-X-Received: by 2002:a81:5591:0:b0:2ca:287c:6c8a with SMTP id
- j139-20020a815591000000b002ca287c6c8amr23735902ywb.303.1645532858985; Tue, 22
- Feb 2022 04:27:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e2psfHnwZs5xWnyvc67xSSoWa8E4e5UoRm7fPOvRG2k=;
+        b=J5LoT6ypVfOemIi4NpchuGpJjYJB1piKyMQZsit8PbdadJFbRNMLVdgn5JaBZRKhNJ
+         yL+32IwQD9iNaa6ta3hxZoBm90J227tNBrB/4lOh+Kl2Gh5g7FjzYDjEdFhk3a1xe2SR
+         Ijn+QHCDbZoFTfeD6tCF/b/u0swpNWONMKWCt6LaWCgk4dPZ2RW9TdTdkon3v592aqnY
+         JOV7ty/KlMPFE21iuQNtCeTLTlXeEcT1TPGNS5qjwBPEB9CnruQiPKZaCCrz8bZsBHG7
+         8DqjLoiU0WRMWOgLhRBjT7itpkX1bXchaJ8yE3oJ3E37E7L0L4UEDvU6h/Xd85/pCu8z
+         QkRg==
+X-Gm-Message-State: AOAM533qpZ8qsq0loBdYlIE5PjofVC9f9weUFKJAVjF5MVyRRiYUFraH
+        gsHTNdcZcN8Hl49cNJHaoQ==
+X-Google-Smtp-Source: ABdhPJzrwJuwkbQEPG+nVIKFTN4wDkORO0vQxGqMkcJcmKTnAAfMQGUYwq+TDGVA6kTamSiXcfTrIw==
+X-Received: by 2002:a05:6808:202a:b0:2d4:df36:68a4 with SMTP id q42-20020a056808202a00b002d4df3668a4mr2997913oiw.16.1645565985765;
+        Tue, 22 Feb 2022 13:39:45 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r36sm9663847oiw.40.2022.02.22.13.39.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 13:39:44 -0800 (PST)
+Received: (nullmailer pid 3634892 invoked by uid 1000);
+        Tue, 22 Feb 2022 21:39:43 -0000
+Date:   Tue, 22 Feb 2022 15:39:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linux-gpio@vger.kernel.org, atishp@rivosinc.com,
+        a.zummo@towertech.it, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, paul.walmsley@sifive.com, lee.jones@linaro.org,
+        u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
+        ivan.griffin@microchip.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, daire.mcnamara@microchip.com,
+        jassisinghbrar@gmail.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
+        palmer@dabbelt.com, geert@linux-m68k.org,
+        lewis.hanly@microchip.com, thierry.reding@gmail.com,
+        alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v7 02/11] dt-bindings: soc/microchip: add info about
+ services to mpfs sysctrl
+Message-ID: <YhVYH6vf+b9jKeB3@robh.at.kernel.org>
+References: <20220214135840.168236-1-conor.dooley@microchip.com>
+ <20220214135840.168236-3-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:48d0:b0:210:a074:c1c3 with HTTP; Tue, 22 Feb 2022
- 04:27:38 -0800 (PST)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <marvelouschinaza54@gmail.com>
-Date:   Tue, 22 Feb 2022 04:27:38 -0800
-Message-ID: <CAE53ddZS_x-v=CDAXwUoU+KzL-ZiH4r9pHYQ4ZJ+VJFjShuLkA@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1144 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4341]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [marvelouschinaza54[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lilywilliam989[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [marvelouschinaza54[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214135840.168236-3-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
--- 
-Hi Dear,
+On Mon, 14 Feb 2022 13:58:32 +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The services actually provided by the system controller are not
+> documented so add some words about what the system controller can
+> actually do. Add a link to the oneline documentation with the specific
+> details of each individual service.
+> Also, drop the unneeded label from the example.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../soc/microchip/microchip,mpfs-sys-controller.yaml  | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
 
-My name is Lily William, I am from the United States of America. It's my
-pleasure to contact you for a new and special friendship. I will be glad to
-see your reply so we can get to know each other better.
-
-Yours
-Lily
+Reviewed-by: Rob Herring <robh@kernel.org>
