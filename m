@@ -2,148 +2,186 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A124C1B76
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Feb 2022 20:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4EA4C1D08
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Feb 2022 21:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234105AbiBWTKA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Feb 2022 14:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S234587AbiBWUVd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Feb 2022 15:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiBWTJ7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Feb 2022 14:09:59 -0500
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C0D3BA6A;
-        Wed, 23 Feb 2022 11:09:31 -0800 (PST)
-Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nMvvz-00039p-AE; Wed, 23 Feb 2022 19:00:15 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH v6 8/8] rtc: max77686: add MAX77714 support
-Date:   Wed, 23 Feb 2022 18:59:08 +0100
-Message-Id: <20220223175908.191618-9-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
-References: <20220223175908.191618-1-luca@lucaceresoli.net>
+        with ESMTP id S232105AbiBWUVc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Feb 2022 15:21:32 -0500
+X-Greylist: delayed 18142 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 12:21:00 PST
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6094D24F;
+        Wed, 23 Feb 2022 12:21:00 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 25761FF806;
+        Wed, 23 Feb 2022 20:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645647659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kppx7Y3HjhzvN/0jitv+VoeGh8Sofe2wA4Rh6vVi4nc=;
+        b=i/1fOodDKjajA7oMrrhNGuIu5sn0knGb8CS5vjJRRF7pgR6lo5Ax8zNhM85PKuJUiuuMMJ
+        F0ge0zIXNiPi+gichbf04LURreif0+ASM4CWWywE/KCI6lilVoJDvfZMYiuii5a4mRbP4Y
+        AUv8ltZiNhwC1Ql3jZABl97QRZdG2LeBIC7pGp17YhCDjdnwi+MxSbUwKYL84UFDGbQIgx
+        cscriGuvt8D1yBksk8WwgtAfGxiTH/2OeFLQtKidR0tQoG6rQw94NpHYVw/pgoiQ8+W72f
+        qmrsyQSEpelVR7uovNn5/lleH0xAvDpEEZO2utZV2oJeePAOqWCmWRRSuV7qVg==
+Date:   Wed, 23 Feb 2022 21:20:54 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Conor.Dooley@microchip.com
+Cc:     a.zummo@towertech.it, Lewis.Hanly@microchip.com,
+        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
+        atishp@rivosinc.com, palmer@rivosinc.com, robh@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 03/11] dt-bindings: rtc: add bindings for microchip
+ mpfs rtc
+Message-ID: <YhaXJofTTTgaoEsn@piout.net>
+References: <20220214135840.168236-1-conor.dooley@microchip.com>
+ <20220214135840.168236-4-conor.dooley@microchip.com>
+ <5b0681a0-ff46-7eb4-3644-0d1173c1f0d4@microchip.com>
+ <YhZQRqHib2+GR7Ma@piout.net>
+ <3483b6c4-67a7-5ed5-2953-728ea8ba5874@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3483b6c4-67a7-5ed5-2953-728ea8ba5874@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RTC included in the MAX77714 PMIC is very similar to the one in the
-MAX77686. Reuse the rtc-max77686.c driver with the minimum required changes
-for the MAX77714 RTC.
+On 23/02/2022 15:25:00+0000, Conor.Dooley@microchip.com wrote:
+> On 23/02/2022 15:18, Alexandre Belloni wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On 23/02/2022 07:41:27+0000, Conor.Dooley@microchip.com wrote:
+> >> Hi Alessandro, Alexandre,
+> >> If one of you could take a look at this, that'd be great.
+> > 
+> > I actually expected someone else to apply this, what is your plan?
+> 
+> I was going to ask Palmer to take the series via riscv. Since I have
+> Rob's R-b, I was just looking for a subsystem maintainer ack/R-b before
+> actually asking him.
+> 
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Rob's review is enough for a DT binding, no need to wait for me. but
+FWIW:
+
 Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
----
 
-Changes in v6: none
+> Thanks,
+> Conor.
+> 
+> > 
+> >> Thanks,
+> >> Conor.
+> >>
+> >> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
+> >>> From: Conor Dooley <conor.dooley@microchip.com>
+> >>>
+> >>> Add device tree bindings for the real time clock on
+> >>> the Microchip PolarFire SoC.
+> >>>
+> >>> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> >>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>> ---
+> >>>    .../bindings/rtc/microchip,mfps-rtc.yaml      | 58 +++++++++++++++++++
+> >>>    1 file changed, 58 insertions(+)
+> >>>    create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..a2e984ea3553
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> >>> @@ -0,0 +1,58 @@
+> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
+> >>> +
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: rtc.yaml#
+> >>> +
+> >>> +maintainers:
+> >>> +  - Daire McNamara <daire.mcnamara@microchip.com>
+> >>> +  - Lewis Hanly <lewis.hanly@microchip.com>
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - microchip,mpfs-rtc
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  interrupts:
+> >>> +    items:
+> >>> +      - description: |
+> >>> +          RTC_WAKEUP interrupt
+> >>> +      - description: |
+> >>> +          RTC_MATCH, asserted when the content of the Alarm register is equal
+> >>> +          to that of the RTC's count register.
+> >>> +
+> >>> +  clocks:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  clock-names:
+> >>> +    items:
+> >>> +      - const: rtc
+> >>> +
+> >>> +required:
+> >>> +  - compatible
+> >>> +  - reg
+> >>> +  - interrupts
+> >>> +  - clocks
+> >>> +  - clock-names
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    rtc@20124000 {
+> >>> +        compatible = "microchip,mpfs-rtc";
+> >>> +        reg = <0x20124000 0x1000>;
+> >>> +        clocks = <&clkcfg 21>;
+> >>> +        clock-names = "rtc";
+> >>> +        interrupts = <80>, <81>;
+> >>> +    };
+> >>> +...
+> >>
+> > 
+> > --
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> 
 
-Changes in v5: none
-
-Changes in v4: none
-
-Changes in v3: none
-
-Changes in v2: none
----
- drivers/rtc/Kconfig        |  2 +-
- drivers/rtc/rtc-max77686.c | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d85a3c31347c..f6d6d4c26361 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -375,7 +375,7 @@ config RTC_DRV_MAX8997
- 
- config RTC_DRV_MAX77686
- 	tristate "Maxim MAX77686"
--	depends on MFD_MAX77686 || MFD_MAX77620 || COMPILE_TEST
-+	depends on MFD_MAX77686 || MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
- 	help
- 	  If you say yes here you will get support for the
- 	  RTC of Maxim MAX77686/MAX77620/MAX77802 PMIC.
-diff --git a/drivers/rtc/rtc-max77686.c b/drivers/rtc/rtc-max77686.c
-index 5c64d08c0732..b0250d91fb00 100644
---- a/drivers/rtc/rtc-max77686.c
-+++ b/drivers/rtc/rtc-max77686.c
-@@ -19,6 +19,7 @@
- 
- #define MAX77686_I2C_ADDR_RTC		(0x0C >> 1)
- #define MAX77620_I2C_ADDR_RTC		0x68
-+#define MAX77714_I2C_ADDR_RTC		0x48
- #define MAX77686_INVALID_I2C_ADDR	(-1)
- 
- /* Define non existing register */
-@@ -200,6 +201,28 @@ static const struct max77686_rtc_driver_data max77686_drv_data = {
- 	.regmap_config = &max77686_rtc_regmap_config,
- };
- 
-+static const struct regmap_irq_chip max77714_rtc_irq_chip = {
-+	.name		= "max77714-rtc",
-+	.status_base	= MAX77686_RTC_INT,
-+	.mask_base	= MAX77686_RTC_INTM,
-+	.num_regs	= 1,
-+	.irqs		= max77686_rtc_irqs,
-+	.num_irqs	= ARRAY_SIZE(max77686_rtc_irqs) - 1, /* no WTSR on 77714 */
-+};
-+
-+static const struct max77686_rtc_driver_data max77714_drv_data = {
-+	.delay = 16000,
-+	.mask  = 0x7f,
-+	.map   = max77686_map,
-+	.alarm_enable_reg = false,
-+	.rtc_irq_from_platform = false,
-+	/* On MAX77714 RTCA1 is BIT 1 of RTCINT (0x00). Not supported by this driver. */
-+	.alarm_pending_status_reg = MAX77686_INVALID_REG,
-+	.rtc_i2c_addr = MAX77714_I2C_ADDR_RTC,
-+	.rtc_irq_chip = &max77714_rtc_irq_chip,
-+	.regmap_config = &max77686_rtc_regmap_config,
-+};
-+
- static const struct regmap_config max77620_rtc_regmap_config = {
- 	.reg_bits = 8,
- 	.val_bits = 8,
-@@ -843,6 +866,7 @@ static const struct platform_device_id rtc_id[] = {
- 	{ "max77686-rtc", .driver_data = (kernel_ulong_t)&max77686_drv_data, },
- 	{ "max77802-rtc", .driver_data = (kernel_ulong_t)&max77802_drv_data, },
- 	{ "max77620-rtc", .driver_data = (kernel_ulong_t)&max77620_drv_data, },
-+	{ "max77714-rtc", .driver_data = (kernel_ulong_t)&max77714_drv_data, },
- 	{},
- };
- MODULE_DEVICE_TABLE(platform, rtc_id);
 -- 
-2.25.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
