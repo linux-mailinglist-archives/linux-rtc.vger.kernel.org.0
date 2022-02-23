@@ -2,139 +2,159 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E0A4C0EDB
-	for <lists+linux-rtc@lfdr.de>; Wed, 23 Feb 2022 10:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63DB4C1661
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Feb 2022 16:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239174AbiBWJJj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 23 Feb 2022 04:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S241649AbiBWPTK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Feb 2022 10:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiBWJJi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Feb 2022 04:09:38 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE5580205
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Feb 2022 01:09:10 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id q23so3711047wra.2
-        for <linux-rtc@vger.kernel.org>; Wed, 23 Feb 2022 01:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uhQ2XTHzgwwh3IfSpyyiABP4apEdC3n0uRKIA365nw8=;
-        b=yX7IDc6xgr2DIKYR1fbQdrsvoUEjEPM1JMICqwirtbbhG6Kkujf20LxovE/4LyHp86
-         WRTevNNne+t4clDGmaDCAoCdMUC/M3I8wEtIhi1huBATspu/YvOfPPGXKES+9IlrA65w
-         EXoVM6ESTjP9rO5vMWBYxQCFnWTAruvdxZNUDQFmuPR8eRcRdAQK2GehMRaXRZvx8lHL
-         X7scUpwu7mdXWM8MWFPjsjQB5ji6ERhWdJFnQOMjEa0/CW6aB/A8Z+0X/UK+apIoPao5
-         sfMnODhvNAUrgOqsX08SWAqSFTPhm3wk6PxcYF5Xl9lSSE2zpYYEzi6qZd0hSRnIBSjm
-         6oaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uhQ2XTHzgwwh3IfSpyyiABP4apEdC3n0uRKIA365nw8=;
-        b=Gv4h4MMmEtOSfvw6vYHNELsLUjXiktABH8Ozr6weWfHQSkvaRLEeryOic3HRdvG4+/
-         h0Tf36VK4Jf/UZ6OVZGpJte99dW9WtYAGPgmjSe7RSYt+LKHehgXVGQUp3mcdppWOxBc
-         CR+CHenxo3k/FmH1qNmhIzaYx2XAQ+/3K7g3HLX6ZcKW4Bp1EFOglQA7mRer6Eis0mMQ
-         jwpCGCo23o0Cc4QNLlZ5efUhiShSsGMtUs0dJiXlrufmhVBkiA53UdWrrx+t8ZGekU9q
-         fYLSgweIpCX+NuzJE0M9qgvEUcXQZZtB6SQfGolpHykmBJSa3C0o2kSn4qJudIWJd1eA
-         Ncmw==
-X-Gm-Message-State: AOAM530rXkhHXE7f7YJAmfKj8Pz5wS5U6nMK6Zo66Ohy1s8UDImeUN+y
-        WR5emjyCIlDYPwmVAECV4teggA==
-X-Google-Smtp-Source: ABdhPJz4aTObHNoB5pQsllecyuXgnwlJz4HBUpJXFkjadBwKL0W5K/YET+9QFNOJiVbsLvUssTBxUA==
-X-Received: by 2002:a5d:4b4c:0:b0:1dc:f34a:548 with SMTP id w12-20020a5d4b4c000000b001dcf34a0548mr22346654wrs.554.1645607349429;
-        Wed, 23 Feb 2022 01:09:09 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm526819wmk.9.2022.02.23.01.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 01:09:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 09:09:06 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        conor.dooley@microchip.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atishp@rivosinc.com,
-        Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v7 05/11] dt-bindings: pwm: add microchip corepwm binding
-Message-ID: <YhX5suBeOgHKqcVa@google.com>
+        with ESMTP id S238535AbiBWPTH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Feb 2022 10:19:07 -0500
+X-Greylist: delayed 66724 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 07:18:38 PST
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4559039B9C;
+        Wed, 23 Feb 2022 07:18:38 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E89AAC000A;
+        Wed, 23 Feb 2022 15:18:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645629516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=L8WJ1C1Tx3aKKa3O4w4oElLz8XE2ctzr9MgK1/YUoCU=;
+        b=oc+Jes6pQdZo1kzhSYkAkXsvE4s+RVTUPbPWDmF1a35hrX82st5TluCAV2C15w0eMkA6I5
+        nP4Q+Q12KrmS/7Sss8FFkJroL31r78SoKt2sw/bLzZGFDhtudEOtKMfhmDS+/0qjJ+B7yL
+        J2/IS+Z4W/TYryGG1X8Dz/Y49ypWY9CsE22lqqkz4jV2WVnpyPb9JDrEiHzzf2yyFa3jOd
+        R0ubzG96gMcXnRbrpvcpOyppNxeAFUVC0LPXkmZwmq0wqfUPITlJbx8HtOmcK+ntjSCVm5
+        lVxdfAzaWpUBonEOa73WxiVLJABsIPWjte8zqb/7KK1JEox5Lbi/c0jsv1EyAw==
+Date:   Wed, 23 Feb 2022 16:18:30 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Conor.Dooley@microchip.com
+Cc:     a.zummo@towertech.it, Lewis.Hanly@microchip.com,
+        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
+        atishp@rivosinc.com, palmer@rivosinc.com, robh@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 03/11] dt-bindings: rtc: add bindings for microchip
+ mpfs rtc
+Message-ID: <YhZQRqHib2+GR7Ma@piout.net>
 References: <20220214135840.168236-1-conor.dooley@microchip.com>
- <20220214135840.168236-6-conor.dooley@microchip.com>
- <20220223062018.nbgidqxgh2soz625@pengutronix.de>
- <65edc257-82ec-e100-7a44-5c510aba51ce@canonical.com>
- <20220223082018.degrftmxpk5uc6xn@pengutronix.de>
+ <20220214135840.168236-4-conor.dooley@microchip.com>
+ <5b0681a0-ff46-7eb4-3644-0d1173c1f0d4@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220223082018.degrftmxpk5uc6xn@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5b0681a0-ff46-7eb4-3644-0d1173c1f0d4@microchip.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 23 Feb 2022, Uwe Kleine-König wrote:
+On 23/02/2022 07:41:27+0000, Conor.Dooley@microchip.com wrote:
+> Hi Alessandro, Alexandre,
+> If one of you could take a look at this, that'd be great.
 
-> On Wed, Feb 23, 2022 at 08:12:49AM +0100, Krzysztof Kozlowski wrote:
-> > On 23/02/2022 07:20, Uwe Kleine-König wrote:
-> > > On Mon, Feb 14, 2022 at 01:58:35PM +0000, conor.dooley@microchip.com wrote:
-> > >> From: Conor Dooley <conor.dooley@microchip.com>
-> > >>
-> > >> Add device tree bindings for the Microchip fpga fabric based "core" PWM
-> > >> controller.
-> > >>
-> > >> Reviewed-by: Rob Herring <robh@kernel.org>
-> > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > 
-> > > I like it:
-> > > 
-> > > Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > 
-> > > nitpick: Put your S-o-b last in the commit log. (This doesn't justify a
-> > > resend IMHO)
+I actually expected someone else to apply this, what is your plan?
+
+> Thanks,
+> Conor.
+> 
+> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
+> > From: Conor Dooley <conor.dooley@microchip.com>
 > > 
-> > It should be the opposite - the first. First author signs the patch,
-> > then comes review and finally an ack. Putting SoB at then suggests that
-> > tags were accumulated before sending patch, out of mailing list.
+> > Add device tree bindings for the real time clock on
+> > the Microchip PolarFire SoC.
+> > 
+> > Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >   .../bindings/rtc/microchip,mfps-rtc.yaml      | 58 +++++++++++++++++++
+> >   1 file changed, 58 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> > new file mode 100644
+> > index 000000000000..a2e984ea3553
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+> > @@ -0,0 +1,58 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
+> > +
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
+> > +
+> > +allOf:
+> > +  - $ref: rtc.yaml#
+> > +
+> > +maintainers:
+> > +  - Daire McNamara <daire.mcnamara@microchip.com>
+> > +  - Lewis Hanly <lewis.hanly@microchip.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - microchip,mpfs-rtc
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    items:
+> > +      - description: |
+> > +          RTC_WAKEUP interrupt
+> > +      - description: |
+> > +          RTC_MATCH, asserted when the content of the Alarm register is equal
+> > +          to that of the RTC's count register.
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: rtc
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    rtc@20124000 {
+> > +        compatible = "microchip,mpfs-rtc";
+> > +        reg = <0x20124000 0x1000>;
+> > +        clocks = <&clkcfg 21>;
+> > +        clock-names = "rtc";
+> > +        interrupts = <80>, <81>;
+> > +    };
+> > +...
 > 
-> well, or in an earlier revision of this patch as is the case here. One
-> of the ideas of S-o-b is that the order shows the flow of the patch
-> states and if this patch ends in git with:
-> 
-> 	Referred-by: Rob Herring <robh@kernel.org>
-> 	Singed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> 	Backed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> 	Singed-off-by: Peter Maintainer <pm@example.com>
-> 
-> I'd expect that Backed-by was added by Peter, not Conor.
-> (Modified the tags on purpose to not interfere with b4's tag pickup, I
-> guess you humans still get the point.)
-
-I tend to like *-by tags to appear chronologically.
-
-  Suggested              (suggested-by)
-  Authored               (signed-off-by)
-  Co-Authored            (signed-off-by/co-developed-by)
-  Reviewed/Acked/Tested  (reviewed-by/acked-by/tested-by)
-  Committed              (signed-off-by)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
