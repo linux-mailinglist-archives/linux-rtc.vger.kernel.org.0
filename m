@@ -2,70 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DD34C03F8
-	for <lists+linux-rtc@lfdr.de>; Tue, 22 Feb 2022 22:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C16A34C0C80
+	for <lists+linux-rtc@lfdr.de>; Wed, 23 Feb 2022 07:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbiBVVkN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 22 Feb 2022 16:40:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S229882AbiBWGVH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 23 Feb 2022 01:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235766AbiBVVkM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 22 Feb 2022 16:40:12 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677DB139106;
-        Tue, 22 Feb 2022 13:39:46 -0800 (PST)
-Received: by mail-oi1-f176.google.com with SMTP id q5so16107767oij.6;
-        Tue, 22 Feb 2022 13:39:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=e2psfHnwZs5xWnyvc67xSSoWa8E4e5UoRm7fPOvRG2k=;
-        b=J5LoT6ypVfOemIi4NpchuGpJjYJB1piKyMQZsit8PbdadJFbRNMLVdgn5JaBZRKhNJ
-         yL+32IwQD9iNaa6ta3hxZoBm90J227tNBrB/4lOh+Kl2Gh5g7FjzYDjEdFhk3a1xe2SR
-         Ijn+QHCDbZoFTfeD6tCF/b/u0swpNWONMKWCt6LaWCgk4dPZ2RW9TdTdkon3v592aqnY
-         JOV7ty/KlMPFE21iuQNtCeTLTlXeEcT1TPGNS5qjwBPEB9CnruQiPKZaCCrz8bZsBHG7
-         8DqjLoiU0WRMWOgLhRBjT7itpkX1bXchaJ8yE3oJ3E37E7L0L4UEDvU6h/Xd85/pCu8z
-         QkRg==
-X-Gm-Message-State: AOAM533qpZ8qsq0loBdYlIE5PjofVC9f9weUFKJAVjF5MVyRRiYUFraH
-        gsHTNdcZcN8Hl49cNJHaoQ==
-X-Google-Smtp-Source: ABdhPJzrwJuwkbQEPG+nVIKFTN4wDkORO0vQxGqMkcJcmKTnAAfMQGUYwq+TDGVA6kTamSiXcfTrIw==
-X-Received: by 2002:a05:6808:202a:b0:2d4:df36:68a4 with SMTP id q42-20020a056808202a00b002d4df3668a4mr2997913oiw.16.1645565985765;
-        Tue, 22 Feb 2022 13:39:45 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r36sm9663847oiw.40.2022.02.22.13.39.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 13:39:44 -0800 (PST)
-Received: (nullmailer pid 3634892 invoked by uid 1000);
-        Tue, 22 Feb 2022 21:39:43 -0000
-Date:   Tue, 22 Feb 2022 15:39:43 -0600
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S238013AbiBWGVG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 23 Feb 2022 01:21:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630834CD75
+        for <linux-rtc@vger.kernel.org>; Tue, 22 Feb 2022 22:20:39 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMl0k-0005Jx-7B; Wed, 23 Feb 2022 07:20:26 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMl0h-000lGz-8Y; Wed, 23 Feb 2022 07:20:22 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMl0f-004xzq-GS; Wed, 23 Feb 2022 07:20:21 +0100
+Date:   Wed, 23 Feb 2022 07:20:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     conor.dooley@microchip.com
-Cc:     linux-gpio@vger.kernel.org, atishp@rivosinc.com,
-        a.zummo@towertech.it, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, paul.walmsley@sifive.com, lee.jones@linaro.org,
-        u.kleine-koenig@pengutronix.de, linux-pwm@vger.kernel.org,
-        ivan.griffin@microchip.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, daire.mcnamara@microchip.com,
-        jassisinghbrar@gmail.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        palmer@dabbelt.com, geert@linux-m68k.org,
-        lewis.hanly@microchip.com, thierry.reding@gmail.com,
-        alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v7 02/11] dt-bindings: soc/microchip: add info about
- services to mpfs sysctrl
-Message-ID: <YhVYH6vf+b9jKeB3@robh.at.kernel.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        lee.jones@linaro.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v7 05/11] dt-bindings: pwm: add microchip corepwm binding
+Message-ID: <20220223062018.nbgidqxgh2soz625@pengutronix.de>
 References: <20220214135840.168236-1-conor.dooley@microchip.com>
- <20220214135840.168236-3-conor.dooley@microchip.com>
+ <20220214135840.168236-6-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gwgvgz5a7qk4akyl"
 Content-Disposition: inline
-In-Reply-To: <20220214135840.168236-3-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220214135840.168236-6-conor.dooley@microchip.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,19 +63,49 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 14 Feb 2022 13:58:32 +0000, conor.dooley@microchip.com wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> The services actually provided by the system controller are not
-> documented so add some words about what the system controller can
-> actually do. Add a link to the oneline documentation with the specific
-> details of each individual service.
-> Also, drop the unneeded label from the example.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../soc/microchip/microchip,mpfs-sys-controller.yaml  | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--gwgvgz5a7qk4akyl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Feb 14, 2022 at 01:58:35PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Add device tree bindings for the Microchip fpga fabric based "core" PWM
+> controller.
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+I like it:
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+nitpick: Put your S-o-b last in the commit log. (This doesn't justify a
+resend IMHO)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gwgvgz5a7qk4akyl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIV0h8ACgkQwfwUeK3K
+7AlVlggAjc/UORg1M305xP+mcUpcTjcvnX3xdiGHTYLbwN+fXq35yTpsJLWANloZ
+BC8MUWdeNvNbTXVlp04KLBbY+jRq9oMMptjH4OP5U8xa68BuWVLqWnUFuAVtneDn
+KjaMJV2rqc8wsNKyrU5oItCjuwU5bNTkH3JsicKDhVNRReoR2p6vmDGouStUlQyP
+68BNzKwNIcxR+T6jDbX21FJxc1YYOfYqu7Eabs1cf/You2yJs/fLfAMnS96znVp0
+mjAAS0RhwJfZaqy7//zM1ss/C4LfqTwkmlNG4A2OjzQ0EOfHKtN+oWYM96WdWqPk
+36F8R0cjTJKJfdpbtB31qmYxhPf+SA==
+=OU4n
+-----END PGP SIGNATURE-----
+
+--gwgvgz5a7qk4akyl--
