@@ -2,107 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842EA4C4A76
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Feb 2022 17:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A4F4C5034
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Feb 2022 21:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242850AbiBYQU0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Feb 2022 11:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S237386AbiBYU5B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Feb 2022 15:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242856AbiBYQUS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Feb 2022 11:20:18 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAF4532E5;
-        Fri, 25 Feb 2022 08:19:45 -0800 (PST)
+        with ESMTP id S237048AbiBYU5B (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Feb 2022 15:57:01 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B74422320A
+        for <linux-rtc@vger.kernel.org>; Fri, 25 Feb 2022 12:56:27 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id 9so5239745ily.11
+        for <linux-rtc@vger.kernel.org>; Fri, 25 Feb 2022 12:56:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645805986; x=1677341986;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jV1/rxSD+P2pkzp3I06vMJiO2j7BJNM6TvzL+/6SkCM=;
-  b=sBRXMRfSm7VCcv770ZYqVKITUqQ8lTT1YizF/Cj22XXwqUGT7pp+fbJy
-   NwTILF8ToWdFG4vWQIfn0FMHFCNkhxKpHiW1MPnsXLRboGDg4fbDlLXaW
-   +A2ttPEjIprnwunlsgOO+2C3VGpvjgZoxQbeh6yQ4833xuntZUEoQzY7m
-   g=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 Feb 2022 08:19:45 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2022 08:19:45 -0800
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 25 Feb 2022 08:19:44 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Ali Pouladi <quic_apouladi@quicinc.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        <stable@vger.kernel.org>, Elliot Berman <quic_eberman@quicinc.com>
-Subject: [PATCH] rtc: pl031: fix rtc features null pointer dereference
-Date:   Fri, 25 Feb 2022 08:19:24 -0800
-Message-ID: <20220225161924.274141-1-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=huyLr7FvhwAScRTcVGfKhBUO1dK4/Q5kyJ0SythEREo=;
+        b=Yn6P22agzPqkbTpVeCOjmOTHGBpr4GWVE7B6LdLQfZPalJ9NYVkBo77BnpBbh8qgLs
+         pvBq2xSJR4QIEL0i44p3ajnQ4wXkbh1I2Tld1/Ekoomt2bl+8NrNFf3fnDuAsTVzzwvU
+         wxTTwbSajWrGqWEaCzQ9hzb66qsOgpkJMftig=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=huyLr7FvhwAScRTcVGfKhBUO1dK4/Q5kyJ0SythEREo=;
+        b=Lj2xyG4biem1eHc970zEs9pb/NpJlXXQkiJF8sJHFi5+m0dG8FyszLs7NXgHg53ujU
+         Vxz6FdgYvfr9P7Jkl2pvuyl+yd+NvXIV9C/k0C6psEMwAlr9aFWtTVY0/gMsXb103zDW
+         Ae9GYwT/LPOr010q3T1PYkUiGdWOK/yeqlxSmMw4iRdoBLFCo4x1brfm4Xvbo1JGL2As
+         oM7/njzVgmjvcpOGzuuWSyT4eZH4Mko2kEVJ6Tvrsc4uX5mRS8M4UjbTV+TeB1kQXtCR
+         ZPE/gg1wMWZbkVtgMt46CANVdF4P9PmaTgTVczkh1f1JCe0jwWhiAUn+Ff6+Toi4MZru
+         gqcg==
+X-Gm-Message-State: AOAM530KrKqicgkWDGWpCVvYukNU/Zqmwxqwr+hNAHN1fhriq/LnVuo8
+        rLeY5UGB/vDIRHy6YPik7DV36g==
+X-Google-Smtp-Source: ABdhPJxpNEhm+RTqizALnxiIdAcJGJtBlXOx64h/ljXjBUUU14Gsb7J+iCVqM4iObG4GDcXzNU/moQ==
+X-Received: by 2002:a05:6e02:184c:b0:2bf:f389:1f99 with SMTP id b12-20020a056e02184c00b002bff3891f99mr8202909ilv.22.1645822586901;
+        Fri, 25 Feb 2022 12:56:26 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id 14-20020a92180e000000b002c1bfa2a5e6sm2143693ily.65.2022.02.25.12.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 12:56:26 -0800 (PST)
+Subject: Re: [PATCH] selftests/rtc: continuously read RTC in a loop for 30s
+To:     =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220219072713.5280-1-mat.jonczyk@o2.pl>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6d8f500d-0ee0-3e27-dfdf-e8c0a34880e5@linuxfoundation.org>
+Date:   Fri, 25 Feb 2022 13:56:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <20220219072713.5280-1-mat.jonczyk@o2.pl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Ali Pouladi <quic_apouladi@quicinc.com>
+On 2/19/22 12:27 AM, Mateusz Jończyk wrote:
+> Some problems with reading the RTC time may happen rarely, for example
+> while the RTC is updating. So read the RTC many times to catch these
+> problems. For example, a previous attempt for my
+> commit ea6fa4961aab ("rtc: mc146818-lib: fix RTC presence check")
+> was incorrect and would have triggered this selftest.
+> 
+> To avoid the risk of damaging the hardware, wait 11ms before consecutive
+> reads.
+> 
+> In rtc_time_to_timestamp I copied values manually instead of casting -
+> just to be on the safe side. The 11ms wait period was chosen so that it is
+> not a divisor of 1000ms.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> ---
+> 
+> Also, before
+> commit cdedc45c579f ("rtc: cmos: avoid UIP when reading alarm time")
+> reading the RTC alarm time during RTC update produced incorrect results
+> on many Intel platforms. Preparing a similar selftest for this case
+> would be more difficult, though, because the RTC alarm time is cached by
+> the kernel. Direct access would have to be exposed somehow, for example
+> in debugfs. I may prepare a patch for it in the future.
+> ---
 
-When there is no interrupt line, rtc alarm feature is disabled.
+Looks good to me. We end up tweaking the timeout=210 in settings every
+now and then. Not sure how we can avoid adjusting it as we find problems.
 
-The clearing of the alarm feature bit was being done prior to allocations
-of ldata->rtc device, resulting in a null pointer dereference.
+I will apply this in for Linux 5.18-rc1
 
-Clear RTC_FEATURE_ALARM after the rtc device is allocated.
-
-Fixes: d9b0dd54a194 ("rtc: pl031: use RTC_FEATURE_ALARM")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ali Pouladi <quic_apouladi@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- drivers/rtc/rtc-pl031.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/rtc/rtc-pl031.c b/drivers/rtc/rtc-pl031.c
-index e38ee8848385..bad6a5d9c683 100644
---- a/drivers/rtc/rtc-pl031.c
-+++ b/drivers/rtc/rtc-pl031.c
-@@ -350,9 +350,6 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
- 		}
- 	}
- 
--	if (!adev->irq[0])
--		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
--
- 	device_init_wakeup(&adev->dev, true);
- 	ldata->rtc = devm_rtc_allocate_device(&adev->dev);
- 	if (IS_ERR(ldata->rtc)) {
-@@ -360,6 +357,9 @@ static int pl031_probe(struct amba_device *adev, const struct amba_id *id)
- 		goto out;
- 	}
- 
-+	if (!adev->irq[0])
-+		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
-+
- 	ldata->rtc->ops = ops;
- 	ldata->rtc->range_min = vendor->range_min;
- 	ldata->rtc->range_max = vendor->range_max;
--- 
-2.25.1
+thanks,
+-- Shuah
 
