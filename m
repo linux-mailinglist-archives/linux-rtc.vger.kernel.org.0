@@ -2,99 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2F34CB9A9
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Mar 2022 09:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CCF4CBF42
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Mar 2022 14:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiCCI5T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Mar 2022 03:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S233851AbiCCN5U (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Mar 2022 08:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiCCI5S (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Mar 2022 03:57:18 -0500
-X-Greylist: delayed 349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Mar 2022 00:56:32 PST
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 517081768F6
-        for <linux-rtc@vger.kernel.org>; Thu,  3 Mar 2022 00:56:32 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-03 (Coremail) with SMTP id rQCowADHzsJXgSBi1y6qAQ--.4443S2;
-        Thu, 03 Mar 2022 16:50:32 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     patches@opensource.cirrus.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] rtc: rtc-wm8350: Handle error for wm8350_register_irq
-Date:   Thu,  3 Mar 2022 16:50:30 +0800
-Message-Id: <20220303085030.291793-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233112AbiCCN5U (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Mar 2022 08:57:20 -0500
+X-Greylist: delayed 1001 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Mar 2022 05:56:34 PST
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC3918C781
+        for <linux-rtc@vger.kernel.org>; Thu,  3 Mar 2022 05:56:34 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2235lqoE030833;
+        Thu, 3 Mar 2022 07:39:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=Wil96UH11D63VQZT9D+yQu3zLFJpjvNbnxG2lAUNVzY=;
+ b=d0nOHZQIdPfdrj82Bq6f2ecHOSRjadeUwWvQXDGsM/GOrxLT1rx17goUDbRcYJIa5cz1
+ ozmhirG4mdlw6MylVNiMXwsyIEee50fZAJE4OkZAKYAB4+DTH/3vxIQP3GuMI2JHGI+r
+ vNzkDgqQBbcXGa0QOuLhVeVViRY9wWsfp70vW9q2SfpiKuh6q634cwmTETLadU4R85If
+ FfHiPUeiN8Nf3HmBQZEGIwC4OpzQFsV3ZcSezI/MH00qD9n33ADcCkq0DLh6WqanRqBD
+ S0ln6YtHPWmlc2oW2BUoA1wv8M+H9NmQTyMgmY1V3D5Joki89yMzkZmtL/eTH6/chUN6 iw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ejncq8mbk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 03 Mar 2022 07:39:40 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 3 Mar
+ 2022 13:39:38 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Thu, 3 Mar 2022 13:39:38 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8E3217C;
+        Thu,  3 Mar 2022 13:39:38 +0000 (UTC)
+Date:   Thu, 3 Mar 2022 13:39:38 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+CC:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <patches@opensource.cirrus.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rtc: rtc-wm8350: Handle error for wm8350_register_irq
+Message-ID: <20220303133938.GP38351@ediswmail.ad.cirrus.com>
+References: <20220303085030.291793-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADHzsJXgSBi1y6qAQ--.4443S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtFW8tF43Xry3Gw4fXF4DXFb_yoW8JrWUpF
-        42kry7CryFg3yru3WF9ry7Jrs8Ga1xtrW0grWjkws2vFyfArn5Jr4DZFyjqr1UGFWrta4q
-        vw43Kr4rur18ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r43
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjxR65UUUU
-        U==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220303085030.291793-1-jiasheng@iscas.ac.cn>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: q-McmAQFGKQjxFEtF2jzsa19I2Ed8unW
+X-Proofpoint-GUID: q-McmAQFGKQjxFEtF2jzsa19I2Ed8unW
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, it need not free 'wm_rtc->rtc' since it will be freed
-automatically.
+On Thu, Mar 03, 2022 at 04:50:30PM +0800, Jiasheng Jiang wrote:
+> As the potential failure of the wm8350_register_irq(),
+> it should be better to check it and return error if fails.
+> Also, it need not free 'wm_rtc->rtc' since it will be freed
+> automatically.
+> 
+> Fixes: 077eaf5b40ec ("rtc: rtc-wm8350: add support for WM8350 RTC")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
 
-Fixes: 077eaf5b40ec ("rtc: rtc-wm8350: add support for WM8350 RTC")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/rtc/rtc-wm8350.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-diff --git a/drivers/rtc/rtc-wm8350.c b/drivers/rtc/rtc-wm8350.c
-index 2018614f258f..6eaa9321c074 100644
---- a/drivers/rtc/rtc-wm8350.c
-+++ b/drivers/rtc/rtc-wm8350.c
-@@ -432,14 +432,21 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
- 			    wm8350_rtc_update_handler, 0,
- 			    "RTC Seconds", wm8350);
-+	if (ret)
-+		return ret;
-+
- 	wm8350_mask_irq(wm8350, WM8350_IRQ_RTC_SEC);
- 
--	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
- 			    wm8350_rtc_alarm_handler, 0,
- 			    "RTC Alarm", wm8350);
-+	if (ret) {
-+		wm8350_free_irq(wm8350, WM8350_IRQ_RTC_SEC, wm8350);
-+		return ret;
-+	}
- 
- 	return 0;
- }
--- 
-2.25.1
-
+Thanks,
+Charles
