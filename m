@@ -2,187 +2,245 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D182F4CC248
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Mar 2022 17:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8483E4CC271
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Mar 2022 17:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiCCQIN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Mar 2022 11:08:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S233329AbiCCQSH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Mar 2022 11:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiCCQIF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Mar 2022 11:08:05 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2027B198D1D;
-        Thu,  3 Mar 2022 08:07:17 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id AC9AC4001B;
-        Thu,  3 Mar 2022 16:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646323636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=h/V2fl+WKVWANDZw1/vLE1+4r0C4bFnhRl+F59/e1W8=;
-        b=FBGJrfWaZUm2AGLBZhTuqfxz4xWi7LZ5kL203xwZs/b5cVH2P6C8SL3VSz6spVx7dMo54Z
-        y9jbrfARgLxLXmeOY/1fzGrM52xiIdWuwAb43xOfV4F7GqxzQURV6L+I35FgG2Z3ljZEIQ
-        ZwaP4P/lLaoCFyOBkLzcIZb6LoXP1AxjxZ5gfuds7R3i3KiLhQ/5t6q7mInrKX+Fkv683E
-        gZLcg1KTC13htzBWPdIHl7q8VwazN2fBuzTbA/48RNPK5swORQUkSXTtyc8w59nonrRO6u
-        WlSFhyLTraK59na3ZeRgf9iG+Yk8ej/goti8uLbSwzaAAbs9B2FZxhKlIafs1A==
-Date:   Thu, 3 Mar 2022 17:07:15 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Sergiu Moga <sergiu.moga@microchip.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski@canonical.com, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] ARM: dts: at91: Move rtt node properties from
- "dts" file to "dtsi" file
-Message-ID: <YiDns7xc5mTg7WzH@piout.net>
-References: <20220303140626.38129-1-sergiu.moga@microchip.com>
- <20220303140626.38129-2-sergiu.moga@microchip.com>
+        with ESMTP id S234889AbiCCQSG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Mar 2022 11:18:06 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86154198EF7
+        for <linux-rtc@vger.kernel.org>; Thu,  3 Mar 2022 08:17:20 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id z12-20020a17090ad78c00b001bf022b69d6so4152817pju.2
+        for <linux-rtc@vger.kernel.org>; Thu, 03 Mar 2022 08:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
+        b=f5cbZWp0l7V5NSC/zdO1vxrF3W7wwYFHKtO8cOCwJaIDiB6EMzBYBsj1g6UWsRfLB4
+         aX1Uhevud6cITd1Z+d/TsvEbBYDd2fnfSH2cHOBQdRVrYGrTbq8thToFnuO46RA6Nybt
+         hrtZ+n8mPcu9Dw/9i/Nfd40xkBTM0jFyQGyqVjkeya/O/FoNCdt5yq+Qct21QYxrQBrl
+         ABzhjQ4qMXdxAzqEIhVt9BwtGKxSNSTuPWHd4BccpkheqvEWvMEgQEh/g+EWaqLl2M+8
+         A9FQg4M80zo269WKPnX6UD67fSjA/ZTF1dF6VIBhzRatTW/U9ofK8sYf1kA/qH9dQbqx
+         tJ3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wNHdI8Qs0iO8nGl1EMp9COLDywjh+H/qv94rCAasCRI=;
+        b=ibBe9ycFuEE6PuWLfCDTKQnknzZuf0Egu/Pbt/diJlVMGsd3carqiY6ZV53ByMGu/y
+         lrrTy6tupisxYKjaJVQ1JouxJ/GRHUgMiLcSzhDeTF9Fa+6bBKrWo8O0IcL9aPkqe/+X
+         owpN9rn6CkJJNo83eo6uefBq9E4Z6JoF3gGk9eGUaYf6Eu1eRvmBUX/uvA0IEYcL4aYg
+         r5/HieDFmtMggO3wvTtvqtjbXwI4lZ61rp4f+0ZcnXv9/hw1kDus96SAuaJ3zJkBRn71
+         JlzQRHyMNvx5/E8QQaZjNkzSmGVaqeVACFjvX9QHVtFODYnvprAeQPIID3NmPNg2hy4o
+         OclA==
+X-Gm-Message-State: AOAM53135Rek2D3qieE3ZnfQSMb4t7sXeRBhUJ4hukm/5J6DGCg5dwK5
+        rkJgAy6xU4u1QZtF4XKUM/lJeCA0L2ZJE6ESp36YrA==
+X-Google-Smtp-Source: ABdhPJwPEu+6ywb/M5QvzZRCzi2yTouSdW4zQSvgUsZL0viME6YTiy6qZ4sf58hiUdsCnAuMA9/GDRf7cqf6M9ysSOo=
+X-Received: by 2002:a17:903:24f:b0:14f:73fa:2b30 with SMTP id
+ j15-20020a170903024f00b0014f73fa2b30mr37072357plh.174.1646324239927; Thu, 03
+ Mar 2022 08:17:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303140626.38129-2-sergiu.moga@microchip.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220302150717.11193-1-clement.leger@bootlin.com>
+ <CAHUa44H4d2QdXSY5e5VqrGh5sQPhRuFBaBvsy_mTErQQmxJo6w@mail.gmail.com> <20220303091555.7a0298b9@fixe.home>
+In-Reply-To: <20220303091555.7a0298b9@fixe.home>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 3 Mar 2022 17:17:08 +0100
+Message-ID: <CAHUa44F8HLwd2b0sYR0ELJucEe3-__gSKwVigsr7Oig+vqiTTA@mail.gmail.com>
+Subject: Re: [PATCH] rtc: optee: add RTC driver for OP-TEE RTC PTA
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 03/03/2022 16:06:22+0200, Sergiu Moga wrote:
-> Move the properties of the rtt node of RTT IPs from the "dts" file to the
-> "dtsi" file, since it is more IP specific than it is board specific.
-> 
+On Thu, Mar 3, 2022 at 9:17 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@bootl=
+in.com> wrote:
+>
+> Le Thu, 3 Mar 2022 08:35:17 +0100,
+> Jens Wiklander <jens.wiklander@linaro.org> a =C3=A9crit :
+>
+> Hi Jens, looks like you forgot to "Reply All".
 
-The fact that it uses a specific GPBR register makes it board specific
-so I don't really agree with this patch.
+You're right.
 
-> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
-> ---
->  arch/arm/boot/dts/at91-sam9x60ek.dts   | 5 -----
->  arch/arm/boot/dts/at91-sama7g5ek.dts   | 4 ----
->  arch/arm/boot/dts/at91sam9260.dtsi     | 1 +
->  arch/arm/boot/dts/at91sam9260ek.dts    | 1 -
->  arch/arm/boot/dts/at91sam9g45.dtsi     | 1 +
->  arch/arm/boot/dts/at91sam9m10g45ek.dts | 1 -
->  arch/arm/boot/dts/sam9x60.dtsi         | 1 +
->  arch/arm/boot/dts/sama7g5.dtsi         | 1 +
->  8 files changed, 4 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-> index b1068cca4228..97ff91346cb4 100644
-> --- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-> +++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-> @@ -656,11 +656,6 @@ kernel@200000 {
->  	};
->  };
->  
-> -&rtt {
-> -	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-> -	status = "okay";
-> -};
-> -
->  &shutdown_controller {
->  	debounce-delay-us = <976>;
->  	status = "okay";
-> diff --git a/arch/arm/boot/dts/at91-sama7g5ek.dts b/arch/arm/boot/dts/at91-sama7g5ek.dts
-> index ccf9e224da78..b7416d9469e3 100644
-> --- a/arch/arm/boot/dts/at91-sama7g5ek.dts
-> +++ b/arch/arm/boot/dts/at91-sama7g5ek.dts
-> @@ -708,10 +708,6 @@ &pwm {
->  	status = "disabled"; /* Conflict with leds. */
->  };
->  
-> -&rtt {
-> -	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-> -};
-> -
->  &sdmmc0 {
->  	bus-width = <8>;
->  	non-removable;
-> diff --git a/arch/arm/boot/dts/at91sam9260.dtsi b/arch/arm/boot/dts/at91sam9260.dtsi
-> index 7368347c9357..66d11c8f1a9b 100644
-> --- a/arch/arm/boot/dts/at91sam9260.dtsi
-> +++ b/arch/arm/boot/dts/at91sam9260.dtsi
-> @@ -713,6 +713,7 @@ rtc@fffffd20 {
->  				reg = <0xfffffd20 0x10>;
->  				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
->  				clocks = <&pmc PMC_TYPE_CORE PMC_SLOW>;
-> +				atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  				status = "disabled";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/at91sam9260ek.dts b/arch/arm/boot/dts/at91sam9260ek.dts
-> index ce96345d28a3..6932dab42f2e 100644
-> --- a/arch/arm/boot/dts/at91sam9260ek.dts
-> +++ b/arch/arm/boot/dts/at91sam9260ek.dts
-> @@ -118,7 +118,6 @@ shdwc@fffffd10 {
->  			};
->  
->  			rtc@fffffd20 {
-> -				atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  				status = "okay";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/at91sam9g45.dtsi b/arch/arm/boot/dts/at91sam9g45.dtsi
-> index 2ab730fd6472..fd308e2c15e8 100644
-> --- a/arch/arm/boot/dts/at91sam9g45.dtsi
-> +++ b/arch/arm/boot/dts/at91sam9g45.dtsi
-> @@ -929,6 +929,7 @@ rtc@fffffd20 {
->  				reg = <0xfffffd20 0x10>;
->  				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
->  				clocks = <&clk32k>;
-> +				atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  				status = "disabled";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/at91sam9m10g45ek.dts b/arch/arm/boot/dts/at91sam9m10g45ek.dts
-> index b6256a20fbc7..07bfa8ef715d 100644
-> --- a/arch/arm/boot/dts/at91sam9m10g45ek.dts
-> +++ b/arch/arm/boot/dts/at91sam9m10g45ek.dts
-> @@ -220,7 +220,6 @@ pwm0: pwm@fffb8000 {
->  			};
->  
->  			rtc@fffffd20 {
-> -				atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  				status = "okay";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-> index ec45ced3cde6..57ba47c54043 100644
-> --- a/arch/arm/boot/dts/sam9x60.dtsi
-> +++ b/arch/arm/boot/dts/sam9x60.dtsi
-> @@ -693,6 +693,7 @@ rtt: rtt@fffffe20 {
->  				reg = <0xfffffe20 0x20>;
->  				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
->  				clocks = <&clk32k 0>;
-> +				atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  			};
->  
->  			pit: timer@fffffe40 {
-> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-> index eddcfbf4d223..1530d88ce80f 100644
-> --- a/arch/arm/boot/dts/sama7g5.dtsi
-> +++ b/arch/arm/boot/dts/sama7g5.dtsi
-> @@ -138,6 +138,7 @@ rtt: rtt@e001d020 {
->  			reg = <0xe001d020 0x30>;
->  			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&clk32k 0>;
-> +			atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
->  		};
->  
->  		clk32k: clock-controller@e001d050 {
-> -- 
-> 2.25.1
-> 
+>
+> > > +
+> > > +       /* Fill invoke cmd params */
+> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
+> > > +       param[0].u.memref.size =3D sizeof(struct optee_rtc_time);
+> > > +       param[0].u.memref.shm_offs =3D 0;
+> > > +
+> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
+> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> >
+> > if (ret < 0 || inv_arg.ret) looks easier to me. Please check the patch
+> > with checkpatch --strict do catch all these and other trivial checks.
+>
+> Acked, the rng-optee driver might not be a good starting point :/ Will
+> check that.
+>
+> > > +static int optee_rtc_read_info(struct device *dev, struct rtc_device=
+ *rtc,
+> > > +                              u64 *features)
+> > > +{
+> > > +       struct optee_rtc *priv =3D dev_get_drvdata(dev);
+> > > +       struct tee_ioctl_invoke_arg inv_arg =3D {0};
+> > > +       struct tee_param param[4] =3D {0};
+> > > +       struct optee_rtc_info *info;
+> > > +       struct optee_rtc_time *tm;
+> > > +       int ret =3D 0;
+> > > +
+> > > +       inv_arg.func =3D TA_CMD_RTC_GET_INFO;
+> > > +       inv_arg.session =3D priv->session_id;
+> > > +       inv_arg.num_params =3D 4;
+> > > +
+> > > +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
+> > > +       param[0].u.memref.shm =3D priv->entropy_shm_pool;
+> > > +       param[0].u.memref.size =3D sizeof(*info);
+> > > +       param[0].u.memref.shm_offs =3D 0;
+> > > +
+> > > +       ret =3D tee_client_invoke_func(priv->ctx, &inv_arg, param);
+> > > +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> > > +               dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\=
+n",
+> > > +                       inv_arg.ret);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       info =3D tee_shm_get_va(priv->entropy_shm_pool, 0);
+> > > +       if (IS_ERR(info)) {
+> > > +               dev_err(dev, "tee_shm_get_va failed\n");
+> > > +               return PTR_ERR(info);
+> > > +       }
+> > > +
+> > > +       if (param[0].u.memref.size < sizeof(*info)) {
+> > > +               dev_err(dev, "Invalid read size from OPTEE\n");
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       if (info->version !=3D RTC_INFO_VERSION) {
+> > > +               dev_err(dev, "Unsupported information version %llu\n"=
+,
+> > > +                             info->version);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +
+> > > +       *features =3D info->features;
+> > > +
+> > > +       tm =3D &info->range_min;
+> > > +       rtc->range_min =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
+day,
+> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
+);
+> > > +       tm =3D &info->range_max;
+> > > +       rtc->range_max =3D mktime64(tm->tm_year, tm->tm_mon, tm->tm_m=
+day,
+> > > +                                 tm->tm_hour, tm->tm_min, tm->tm_sec=
+);
+> >
+> > If this is the only thing we're going to do with the returned min and
+> > max, how come this wasn't done on the OP-TEE side already? Without
+> > these large structs we could have defined an ABI without the need for
+> > shared memory.
+>
+> mktime64 converts the time range to the number of seconds elapsed since
+> 1970. I thought it would be better not to assess anything about the way
+> the time is stored on OP-TEE side and thus return the full time struct.
+> If you think it's acceptable to suppose that, then, we can still switch
+> to using timestamps as the ABI with OP-TEE RTC PTA. The same could be
+> done to get/set time if needed in this case.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This is a bit more complicated than I first thought. The proposed ABI
+is fine from my point of view.
+
+Cheers,
+Jens
+
+>
+> > > +
+> > > +static int optee_rtc_probe(struct device *dev)
+> > > +{
+> > > +       struct tee_client_device *rtc_device =3D to_tee_client_device=
+(dev);
+> > > +       struct tee_ioctl_open_session_arg sess_arg;
+> > > +       struct tee_shm *entropy_shm_pool =3D NULL;
+> > > +       int ret =3D 0, err =3D -ENODEV;
+> >
+> > There is generally no need to initialize these here.
+> >
+> > > +       struct optee_rtc *priv;
+> > > +       struct rtc_device *rtc;
+> > > +
+> > > +       memset(&sess_arg, 0, sizeof(sess_arg));
+> > > +
+> > > +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > > +       if (!priv)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       rtc =3D devm_rtc_allocate_device(dev);
+> > > +       if (IS_ERR(rtc))
+> > > +               return PTR_ERR(rtc);
+> > > +
+> > > +       /* Open context with TEE driver */
+> > > +       priv->ctx =3D tee_client_open_context(NULL, optee_ctx_match, =
+NULL,
+> > > +                                              NULL);
+> > > +       if (IS_ERR(priv->ctx))
+> > > +               return -ENODEV;
+> > > +
+> > > +       /* Open session with rtc Trusted App */
+> > > +       memcpy(sess_arg.uuid, rtc_device->id.uuid.b, TEE_IOCTL_UUID_L=
+EN);
+> >
+> > Perhaps uuid_copy() would be better.
+>
+> Ok, I will use export_uuid() then.
+>
+> >
+> > > +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
+> > > +       sess_arg.num_params =3D 0;
+> > > +
+> > > +       ret =3D tee_client_open_session(priv->ctx, &sess_arg, NULL);
+> > > +       if ((ret < 0) || (sess_arg.ret !=3D 0)) {
+> > > +               dev_err(dev, "tee_client_open_session failed, err: %x=
+\n",
+> > > +                       sess_arg.ret);
+> > > +               err =3D -EINVAL;
+> > > +               goto out_ctx;
+> > > +       }
+> > > +       priv->session_id =3D sess_arg.session;
+> > > +
+> > > +       entropy_shm_pool =3D tee_shm_alloc(priv->ctx,
+> > > +                                        sizeof(struct optee_rtc_info=
+),
+> > > +                                        TEE_SHM_MAPPED | TEE_SHM_DMA=
+_BUF);
+> >
+> > tee_shm_alloc() is about to be removed. Please rebase on
+> > https://git.linaro.org/people/jens.wiklander/linux-tee.git/tag/?h=3Dtee=
+-shm-for-v5.18
+>
+> Acked.
+>
+> --
+> Cl=C3=A9ment L=C3=A9ger,
+> Embedded Linux and Kernel engineer at Bootlin
+> https://bootlin.com
