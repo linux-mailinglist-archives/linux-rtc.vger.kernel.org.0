@@ -2,534 +2,176 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0064CD21A
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Mar 2022 11:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0934CD303
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Mar 2022 12:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbiCDKMC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 4 Mar 2022 05:12:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S238876AbiCDLHo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Mar 2022 06:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbiCDKMB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Mar 2022 05:12:01 -0500
-X-Greylist: delayed 154933 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 02:11:12 PST
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D861A948E;
-        Fri,  4 Mar 2022 02:11:11 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 932DC10000C;
-        Fri,  4 Mar 2022 10:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646388670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zazTGCXD/PNF6tuZhygJU94AHX76TqrdKjnbqUzhRVc=;
-        b=bklI1Sw89WzQcnuxP3jyQJLJin8WRdBBMo4/BZwHLMBVWkSIEYWrGQv7vMJK5PpYxkA4BD
-        3MuvKcapKRwVp+R0Rn/maDRd6riCHZZnDIRFGO/Hi8jI5yuGQ1T92OO4gZQv7jwaQC7sWi
-        r3c1owpil9tJNzNxeOBuA8nJ9DyfnE8yJH5bFcp2iUbiD7OZz0v9E2FiifpbnYjjDDRZgd
-        1akUHTY+S5dlEP3DAiFqQnpl9Uf/Vs0NInEi40uMAIposdQt8PLgkTa4PK5gbFMBEUXu6O
-        Gf/0bWGUWHTiaUTThkxObGyRwMwH1HYIKAjBDceTBJiAEPzUURsbZpMICihy6g==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Subject: [PATCH v2] rtc: optee: add RTC driver for OP-TEE RTC PTA
-Date:   Fri,  4 Mar 2022 11:09:33 +0100
-Message-Id: <20220304100933.72175-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S238553AbiCDLHm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Mar 2022 06:07:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2F11B0BCB;
+        Fri,  4 Mar 2022 03:06:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646392012; x=1677928012;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ocgyWaHX+yQpuAXRBy+brWqE3j/9e/ybC99EkW3mnr0=;
+  b=qWaKIdG/BB9NnhrAwf/dZuQCSOUxlDlCSp59CX+LErM6a3sG15YJv3EZ
+   78ihP2FB92twiGbUFNiCrJ77s797adGdvLkHnJej4TWd1FSCNbyRDOL2Y
+   xkRzLRFrwOzWVWeaZFKOSv8l+oF1/s52zXtrJ9VAVik/GJH0ZhQDSxBI5
+   SYkYmQLtcpaHTfWXeSI+TWEbuhyp+AIvZmE8zYV4aMS7hUnKXVmA5nmt6
+   0lHfMrJo37X5+xi1qEyrchX0dnwulCT2DP/IsbYQstKKN/6yl0QVYegKB
+   XLFRQjP0VYXojovdI8wxwL2Q/wTbku5pNUuHAZOiX+Vm7drE22eekDcs9
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="87822988"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 04:06:48 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 04:06:45 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17 via Frontend Transport; Fri, 4 Mar 2022 04:06:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cgbB/Qlvghtt9MC4DNdZYMhxFS13C1noFNDyUcKTHG7sQ3bCOFMs7keWbvTD0x5t44TJC5vyhFqlW72E0WKUeEEZdFHdryQUl3yF9LzeNG/1Yf844CS0ha6pLtAQNetCfy3DlsvjsEnghWACv/xaqzH30s3xXY8Ooihom2u2G1kNiFv+zYEw5VZ1eordv3l3gOX+WD0OVh85JaEHXFHz4RQaKXVz6wFi5e63N8zR8C2K+cGUdtQob1xKG0Ec6ob5+YmUU8vpUjrjRZvvxSd78vJwx7v+toGRCCz8fNgIzrPE9UFPfJtxPpJZGML23qXjT10AAXPocY+1XvV5XItBEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ocgyWaHX+yQpuAXRBy+brWqE3j/9e/ybC99EkW3mnr0=;
+ b=lTcm0IquacKolrTIZfRa/c31NLsus85lkIuOkYDlMBxRRSPfreCqbFHLhSuSg2j8nzmUfTxVDwoxxLBSlYrsD4NeHnwAxdLtE5p675we0mYlamfY7Ms2+WI2hD1UVUhCio9TpreL1tqa2j2KoOVYxnyrMNw+eN5N0vfR3gLHyyWFOEg0IuqybeXIrhlN5z17DyERcNtzcNtXpbiRE1SMMQntCdYyKEjY1JbYHOA981Hcie2xEDrnS8R7z7V47vA2ZY3xFODFa6tJCQr4xatWKg3cT6pwJFX1YBzZQB7NSmE19Jju5qhz/HoEAD6VWd9ozMw8mG8UL+/yaFadz0WAKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ocgyWaHX+yQpuAXRBy+brWqE3j/9e/ybC99EkW3mnr0=;
+ b=up8WAs9Hj4UGHxDZZRtrs/PbE6c3dqehEJCYjHJf8Ef3sDujlvGlwKrr6+tdP2IKhFXJdeNgCNjbWQROr5on6iNVLLGdWgnDVopOHFapTDKk9zJ++1wwYMVrpKA3pjXdo5Qg8p2Fh5naWfci+ihla8WGl34w+BAoU6Eh2zLaV4A=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by MN0PR11MB5962.namprd11.prod.outlook.com (2603:10b6:208:371::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 4 Mar
+ 2022 11:06:39 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::dc94:3c7c:8ef8:21b9]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::dc94:3c7c:8ef8:21b9%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 11:06:39 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <Sergiu.Moga@microchip.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>, <Nicolas.Ferre@microchip.com>,
+        <Claudiu.Beznea@microchip.com>
+CC:     <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] ARM: dts: at91: Add the required `atmel,
+ rtt-rtc-time-reg` property
+Thread-Topic: [PATCH v2 2/5] ARM: dts: at91: Add the required `atmel,
+ rtt-rtc-time-reg` property
+Thread-Index: AQHYL7fssZpfY38WA0uPyxVUYS0IIw==
+Date:   Fri, 4 Mar 2022 11:06:39 +0000
+Message-ID: <c79fbb1e-80f7-b1d5-d403-40054cbd36b4@microchip.com>
+References: <20220303140626.38129-1-sergiu.moga@microchip.com>
+ <20220303140626.38129-3-sergiu.moga@microchip.com>
+In-Reply-To: <20220303140626.38129-3-sergiu.moga@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b100b87d-e173-47ef-bc0f-08d9fdcf0edc
+x-ms-traffictypediagnostic: MN0PR11MB5962:EE_
+x-microsoft-antispam-prvs: <MN0PR11MB5962D415E7885D187E7F44B0F0059@MN0PR11MB5962.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Vh2wXutxWHwdgvq2xjf1I0+otTIOGinsjY5kjrMVGkt4fpUOdvEc6LpW883XVdOWrd5GgKy/sEDzuaeAOwn16c4m+AceYfF1MjczTUHVwk3aoLPfoOhUWBEw/6joTlu6iblsKGYaVyhy2UlFf7AKGAGW3wgo1DZVyYGR+k/FQIODm0l6mF0zqQWQYnhBD/fSgNGUwmOMiIfe41XLCSofBtyBoJ6Lsn9r3ArI+nporapfIqyv4kUxU7XR762Sv/OwFJyLamSsKomfUrNt6gPk2/YRoB644G97ya8yhMkzXyhEsxS0Bj7wCGVXNGyVgxvlOB0znqgwdsl8zFORpw/jTu/DWn7o/m6f+/EDxVsc/1ApY/jHPOzLAkKrrtNL9lDptJ/Ojx15R55R4hex9FgzYa6rzCEqWjCiAwrQ1jDneBjMrLdMjEpk/6/Ct1xCsqUHk1KWwWScl1tmbiS0daHm9Z5v5cFHUu/xq6ojp+mWLFkpv+59cPoAUywkPml1g5ehURUuTcwDW8b5XVq0YQZDNxS06vS4fbgWrYEosameDxt2BJlvLMux0CO7C6EojoG6PWv65ibrglfeole32i9rU70TWysob9d1DaYW5F/ulzD8bgpCaifQcSI59EMnjfPXNfUU4TI5O3+4AWVRkAA9vMxArHL3EaJU7ZWHP7gmqf4N6wIcxqM/QvgyCOrZn6Zh9coVzGxaNq2VLslnQWRdum98x18J0XbACYRXv/MUcgx3jX04lMs112kc4R/My0GV12ub3b5tf4DsrhA3Kx5Cm/j42RqjngcQIMvpwdodHFc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(86362001)(31696002)(8936002)(38070700005)(5660300002)(38100700002)(4744005)(26005)(186003)(2616005)(6636002)(122000001)(110136005)(54906003)(6506007)(508600001)(6512007)(71200400001)(53546011)(6486002)(36756003)(91956017)(66476007)(66556008)(66946007)(76116006)(4326008)(8676002)(64756008)(66446008)(31686004)(316002)(81973001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UjdMRE5NRlgyRTJEaE1pdkpXYmdvN0RVTGtBbWJsZTVVc21zbFByWSt3alBn?=
+ =?utf-8?B?VHFsYk5Na3RFSnNocnNOZzI5akV1b2QrQVhCT0tGK3dEVlhCT0xmaEIweVVD?=
+ =?utf-8?B?R2V5M0hxWHdmMEtGY0pid0lKelNSU09ST1ZkZ01jbGNYbmp0eW9SamJxM3Y2?=
+ =?utf-8?B?TFAyR2U3Q2VlKzBzdHFncmI0cTJjUW1FYzc1dXkvcGlhSENMRXBSSGw3V3kz?=
+ =?utf-8?B?eDhwK3BmREhScnVCcDVqTEhaYThVYnRteVZ2ZU1MVFNCZVZSQzRQNTJCeWdh?=
+ =?utf-8?B?VmxRcXU1ZW1PemtmNTI4S3ZqeHEzK25aeE5Cd1p0R1V3SVkvMmZGVkZFUkJZ?=
+ =?utf-8?B?aXZuS20zNUVuR1ZmWGNKb0tKWjRLUHo1eUhVY3hmK0RqQjZVME8vY3Vxc3lU?=
+ =?utf-8?B?dEZpQ3R1K0NNb0dOMDVNYUdveWJKSFdaTGJ6b1hjVzZQdFBsYlJnbFFpUnJl?=
+ =?utf-8?B?VjNZeERPajY0SmpxbnBRV0pxUGxLOVVkS1Y3WDFBeUpLQkV0SjVscHZISFNY?=
+ =?utf-8?B?enFBUWxKLzg3Yk56eXRpdlNLSUhZR2VCVjVRcUx0a3hYRWs0VVpXNUlHN2Q3?=
+ =?utf-8?B?ZjFrMUFsNkpBTmsyVWZTUngzYzVXWGNPREkwK1B3bGtLOVpKUDVEd2RpWjND?=
+ =?utf-8?B?YXg5TzJzaDhQem41WUxlUHJPdXJHZlp2aFo1a3J6QVlHZWxxeVNkNEhEQkxV?=
+ =?utf-8?B?OFZ6YmlqWkpvWnBNaWVBMFE1cnZLMDZRMWRUN25CTG42U3h6dGJ0SlRxZklK?=
+ =?utf-8?B?L1ZRc28wVVU2OUJRZjd0SkZSMzJvTm8vNWVKcllwZldQOFc0TzQ3RnhXY0xT?=
+ =?utf-8?B?VFViUllTRHpJendxbnJCN1FXQWE4SW5SOHRJOUZyVEY3eU9BOUN5M1FSUVpa?=
+ =?utf-8?B?dmFtMDl2aTlOVk9NWU91anU2THgvVzNJOGR4anlva1lwN25MQm80ZklENDUw?=
+ =?utf-8?B?UVAvR3V3WlFqUWtpV2txTXRtcDBNZFAvZzNrOWEvVTJTZmJnb0pqMGxaNXZB?=
+ =?utf-8?B?bnpZNDE4aEF5MHduakdESUVRUXlBQk0vWkNUYlhQQUJpK0o4UFlmc2pCOGY3?=
+ =?utf-8?B?Z3RJUER2dmZBdUMrYll1S1JRZG5DbW8za0l4RCtNVXN2WFVvRDhpM0l4SXRS?=
+ =?utf-8?B?N0NUaERyK1BNUXdINk1XbDd6SDFRbXNnYm0yaTh0RTJkYTY0QTVTWWZONG4y?=
+ =?utf-8?B?YXZZdEx5TllaeUN1bkR6c1NFRGN2WUlyRFJERHozN3FiVUp6ei83NTVRM3Zs?=
+ =?utf-8?B?aVU5aVRncjlsZjJjU04wakdMSjhCbU1BSTdscUxzV1Z0WDNyOXRaQkZITmcw?=
+ =?utf-8?B?TDdHajNhY3FMdzRKZ3U2RmJFZUdwalc2cmtOdXRoVGlzMW50cFZaSkNqbkFv?=
+ =?utf-8?B?MHRQZVZZQnNHdmxGSXRVbFNWWjNqREJwWTBLN0Z6TE1QSXYwWGY4NmxhMUcr?=
+ =?utf-8?B?NFhKRDBia3lNazdDWlVRUzJBNDFLYmdlVm5nWUE2RCs4dmUwWUtSd1pBS1hm?=
+ =?utf-8?B?MnZnU3FGZm5DWlVZL1F5ZXNvcU5RL0k2RnZaNTFZNTFoWUxyU296T2M1TWYx?=
+ =?utf-8?B?RXV3U0s3VkZJYWo5N016TTBKV2xKbWFaOGt2ZzBrbDl0VTZLbUpTVm9zeW54?=
+ =?utf-8?B?N2Z4MWlKWndlaHlGekQ3Zmg0YWd2d28wallpcVZvekM4bTRHbFFrSFhndytq?=
+ =?utf-8?B?eWx6SnBWVlZITzdvb0gxL1NrejRmem9BVEc3YXdYZ1h1RkFrV1FHa0tyZkZF?=
+ =?utf-8?B?M2lvQk9KaExOdGs0UEZvOHNNZ2MrUVVtK1VBQ1dOUnZpQ0VTNmw5ZTFXUlp3?=
+ =?utf-8?B?OS9TZWYvbGo5akVxMkVxeE5PTGRlMzVETXJieTFkMDc4NXF5bG5ZTldJMUVw?=
+ =?utf-8?B?L20yUSt2TTBTakJSSmxuRHRmQlplaXpkUnl2Q3UvbFVDUGREQ0ZHTThFY0VS?=
+ =?utf-8?B?SUcxMHBoQ29GOTZ1S3JQOE1pQVgxTEJWbWZqT21zUG9sZTJ3ckxTUjZXNWZV?=
+ =?utf-8?B?cjJmQ0wvcys5MTFEc0hBbDhxdk4zMWVZQ0FNR3JkZGROeFdmb1M0M2hoQjYy?=
+ =?utf-8?B?Z0w3STJGbEo1OWZBNGk5NHVWb3ZuNVZtUUdzbHNwNVd1cGtTckQwY1Fmd3Y1?=
+ =?utf-8?B?dnRxRURYRDJ0TGIrUU1EUGdpYUdnYXh5WUJQUlRUS0tuSEYwQm5wZ2ZiQkVD?=
+ =?utf-8?B?YkpWZ3N6Ym5sMWZlUEVXQlBiaElPOFU1VW1CcVFWUmRsWlVkUW9tMy93bXo5?=
+ =?utf-8?B?dEFLazYwNHByQkVBcU5ldGdiR1B3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2A64DB48A4301442AA4209BB1995774A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b100b87d-e173-47ef-bc0f-08d9fdcf0edc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2022 11:06:39.8103
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BfX9RmE3fysiDNWIxGfVJ60+wY7FpbqRkZSnMz7ENzn9+gN21Qff/zQc4dz5uABDwo2gdUxNlfQpnPWsfUoSOubIR2QhCK0ImWGjKquhrVw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB5962
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This drivers allows to communicate with a RTC PTA handled by OP-TEE [1].
-This PTA allows to query RTC information, set/get time and set/get
-offset depending on the supported features.
-
-[1] https://github.com/OP-TEE/optee_os/pull/5179
-
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
-
-Changes in v2:
-- Rebased over tee-shm-for-v5.18
-- Switch to tee_shm_alloc_kernel_buf()
-- Use export_uuid() to copy uuid
-- Fix warnings reported by checkpatch
-- Free SHM in error exit path
-
- MAINTAINERS             |   6 +
- drivers/rtc/Kconfig     |  10 +
- drivers/rtc/Makefile    |   1 +
- drivers/rtc/rtc-optee.c | 396 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 413 insertions(+)
- create mode 100644 drivers/rtc/rtc-optee.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f41088418aae..b21375ad73d2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14361,6 +14361,12 @@ L:	op-tee@lists.trustedfirmware.org
- S:	Maintained
- F:	drivers/char/hw_random/optee-rng.c
- 
-+OP-TEE RTC DRIVER
-+M:	Clément Léger <clement.leger@bootlin.com>
-+L:	linux-rtc@vger.kernel.org
-+S:	Maintained
-+F:	drivers/rtc/rtc-optee.c
-+
- OPA-VNIC DRIVER
- M:	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
- M:	Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index d85a3c31347c..b10d88db8e9c 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -1293,6 +1293,16 @@ config RTC_DRV_OPAL
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-opal.
- 
-+config RTC_DRV_OPTEE
-+	tristate "OP-TEE based RTC driver"
-+	depends on OPTEE
-+	help
-+	  Select this to get support for OP-TEE based RTC control on ARM SoCs
-+	  where RTC are not accessible to the normal world (Linux).
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called rtc-optee.
-+
- config RTC_DRV_ZYNQMP
- 	tristate "Xilinx Zynq Ultrascale+ MPSoC RTC"
- 	depends on OF && HAS_IOMEM
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index e92f3e943245..2d827d8261d5 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -115,6 +115,7 @@ obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-+obj-$(CONFIG_RTC_DRV_OPTEE)	+= rtc-optee.o
- obj-$(CONFIG_RTC_DRV_PALMAS)	+= rtc-palmas.o
- obj-$(CONFIG_RTC_DRV_PCAP)	+= rtc-pcap.o
- obj-$(CONFIG_RTC_DRV_PCF2123)	+= rtc-pcf2123.o
-diff --git a/drivers/rtc/rtc-optee.c b/drivers/rtc/rtc-optee.c
-new file mode 100644
-index 000000000000..7177c9d4675a
---- /dev/null
-+++ b/drivers/rtc/rtc-optee.c
-@@ -0,0 +1,396 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Microchip.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/rtc.h>
-+#include <linux/tee_drv.h>
-+
-+#define RTC_INFO_VERSION	0x1
-+
-+#define TA_CMD_RTC_GET_INFO		0x0
-+#define TA_CMD_RTC_GET_TIME		0x1
-+#define TA_CMD_RTC_SET_TIME		0x2
-+#define TA_CMD_RTC_GET_OFFSET		0x3
-+#define TA_CMD_RTC_SET_OFFSET		0x4
-+
-+#define TA_RTC_FEATURE_CORRECTION	BIT(0)
-+
-+struct optee_rtc_time {
-+	u32 tm_sec;
-+	u32 tm_min;
-+	u32 tm_hour;
-+	u32 tm_mday;
-+	u32 tm_mon;
-+	u32 tm_year;
-+	u32 tm_wday;
-+};
-+
-+struct optee_rtc_info {
-+	u64 version;
-+	u64 features;
-+	struct optee_rtc_time range_min;
-+	struct optee_rtc_time range_max;
-+};
-+
-+/**
-+ * struct optee_rtc - OP-TEE RTC private data
-+ * @dev:		OP-TEE based RTC device.
-+ * @ctx:		OP-TEE context handler.
-+ * @session_id:		RTC TA session identifier.
-+ * @shm:		Memory pool shared with RTC device.
-+ * @features:		Bitfield of RTC features
-+ */
-+struct optee_rtc {
-+	struct device *dev;
-+	struct tee_context *ctx;
-+	u32 session_id;
-+	struct tee_shm *shm;
-+	u64 features;
-+};
-+
-+static int optee_rtc_readtime(struct device *dev, struct rtc_time *tm)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+	struct tee_ioctl_invoke_arg inv_arg = {0};
-+	struct optee_rtc_time *optee_tm;
-+	struct tee_param param[4] = {0};
-+	int ret;
-+
-+	inv_arg.func = TA_CMD_RTC_GET_TIME;
-+	inv_arg.session = priv->session_id;
-+	inv_arg.num_params = 4;
-+
-+	/* Fill invoke cmd params */
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[0].u.memref.shm = priv->shm;
-+	param[0].u.memref.size = sizeof(struct optee_rtc_time);
-+	param[0].u.memref.shm_offs = 0;
-+
-+	ret = tee_client_invoke_func(priv->ctx, &inv_arg, param);
-+	if (ret < 0 || inv_arg.ret != 0) {
-+		dev_err(dev, "TA_CMD_RTC_GET_TIME invoke err: %x\n",
-+			inv_arg.ret);
-+		return ret;
-+	}
-+
-+	optee_tm = tee_shm_get_va(priv->shm, 0);
-+	if (IS_ERR(optee_tm)) {
-+		dev_err(dev, "tee_shm_get_va failed\n");
-+		return PTR_ERR(optee_tm);
-+	}
-+
-+	if (param[0].u.memref.size != sizeof(*optee_tm)) {
-+		dev_err(dev, "Invalid read size from OPTEE\n");
-+		return -EINVAL;
-+	}
-+
-+	tm->tm_sec = optee_tm->tm_sec;
-+	tm->tm_min = optee_tm->tm_min;
-+	tm->tm_hour = optee_tm->tm_hour;
-+	tm->tm_mday = optee_tm->tm_mday;
-+	tm->tm_mon = optee_tm->tm_mon;
-+	tm->tm_year = optee_tm->tm_year - 1900;
-+	tm->tm_wday = optee_tm->tm_wday;
-+	tm->tm_yday = rtc_year_days(tm->tm_mday, tm->tm_mon, tm->tm_year);
-+
-+	return 0;
-+}
-+
-+static int optee_rtc_settime(struct device *dev, struct rtc_time *tm)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+	struct tee_ioctl_invoke_arg inv_arg = {0};
-+	struct tee_param param[4] = {0};
-+	struct optee_rtc_time optee_tm;
-+	void *rtc_data;
-+	int ret;
-+
-+	optee_tm.tm_sec = tm->tm_sec;
-+	optee_tm.tm_min = tm->tm_min;
-+	optee_tm.tm_hour = tm->tm_hour;
-+	optee_tm.tm_mday = tm->tm_mday;
-+	optee_tm.tm_mon = tm->tm_mon;
-+	optee_tm.tm_year = tm->tm_year + 1900;
-+	optee_tm.tm_wday = tm->tm_wday;
-+
-+	inv_arg.func = TA_CMD_RTC_SET_TIME;
-+	inv_arg.session = priv->session_id;
-+	inv_arg.num_params = 4;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT;
-+	param[0].u.memref.shm = priv->shm;
-+	param[0].u.memref.size = sizeof(struct optee_rtc_time);
-+	param[0].u.memref.shm_offs = 0;
-+
-+	rtc_data = tee_shm_get_va(priv->shm, 0);
-+	if (IS_ERR(rtc_data)) {
-+		dev_err(dev, "tee_shm_get_va failed\n");
-+		return PTR_ERR(rtc_data);
-+	}
-+
-+	memcpy(rtc_data, &optee_tm, sizeof(struct optee_rtc_time));
-+
-+	ret = tee_client_invoke_func(priv->ctx, &inv_arg, param);
-+	if (ret < 0 || inv_arg.ret != 0) {
-+		dev_err(dev, "TA_CMD_RTC_GET_TIME invoke err: %x\n",
-+			inv_arg.ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int optee_rtc_readoffset(struct device *dev, long *offset)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+	struct tee_ioctl_invoke_arg inv_arg = {0};
-+	struct tee_param param[4] = {0};
-+	int ret;
-+
-+	if (!(priv->features & TA_RTC_FEATURE_CORRECTION))
-+		return -EOPNOTSUPP;
-+
-+	inv_arg.func = TA_CMD_RTC_GET_OFFSET;
-+	inv_arg.session = priv->session_id;
-+	inv_arg.num_params = 4;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_OUTPUT;
-+
-+	ret = tee_client_invoke_func(priv->ctx, &inv_arg, param);
-+	if (ret < 0 || inv_arg.ret != 0) {
-+		dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\n",
-+			inv_arg.ret);
-+		return -EINVAL;
-+	}
-+
-+	*offset = param[0].u.value.a;
-+
-+	return 0;
-+}
-+
-+static int optee_rtc_setoffset(struct device *dev, long offset)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+	struct tee_ioctl_invoke_arg inv_arg = {0};
-+	struct tee_param param[4] = {0};
-+	int ret;
-+
-+	if (!(priv->features & TA_RTC_FEATURE_CORRECTION))
-+		return -EOPNOTSUPP;
-+
-+	inv_arg.func = TA_CMD_RTC_SET_OFFSET;
-+	inv_arg.session = priv->session_id;
-+	inv_arg.num_params = 4;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
-+	param[0].u.value.a = offset;
-+
-+	ret = tee_client_invoke_func(priv->ctx, &inv_arg, param);
-+	if (ret < 0 || inv_arg.ret != 0) {
-+		dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\n",
-+			inv_arg.ret);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct rtc_class_ops optee_rtc_ops = {
-+	.read_time	= optee_rtc_readtime,
-+	.set_time	= optee_rtc_settime,
-+	.set_offset	= optee_rtc_setoffset,
-+	.read_offset	= optee_rtc_readoffset,
-+};
-+
-+static int optee_rtc_read_info(struct device *dev, struct rtc_device *rtc,
-+			       u64 *features)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+	struct tee_ioctl_invoke_arg inv_arg = {0};
-+	struct tee_param param[4] = {0};
-+	struct optee_rtc_info *info;
-+	struct optee_rtc_time *tm;
-+	int ret;
-+
-+	inv_arg.func = TA_CMD_RTC_GET_INFO;
-+	inv_arg.session = priv->session_id;
-+	inv_arg.num_params = 4;
-+
-+	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_OUTPUT;
-+	param[0].u.memref.shm = priv->shm;
-+	param[0].u.memref.size = sizeof(*info);
-+	param[0].u.memref.shm_offs = 0;
-+
-+	ret = tee_client_invoke_func(priv->ctx, &inv_arg, param);
-+	if (ret < 0 || inv_arg.ret != 0) {
-+		dev_err(dev, "TA_CMD_RTC_GET_RNG_INFO invoke err: %x\n",
-+			inv_arg.ret);
-+		return -EINVAL;
-+	}
-+
-+	info = tee_shm_get_va(priv->shm, 0);
-+	if (IS_ERR(info)) {
-+		dev_err(dev, "tee_shm_get_va failed\n");
-+		return PTR_ERR(info);
-+	}
-+
-+	if (param[0].u.memref.size != sizeof(*info)) {
-+		dev_err(dev, "Invalid read size from OPTEE\n");
-+		return -EINVAL;
-+	}
-+
-+	if (info->version != RTC_INFO_VERSION) {
-+		dev_err(dev, "Unsupported information version %llu\n",
-+			info->version);
-+		return -EINVAL;
-+	}
-+
-+	*features = info->features;
-+
-+	tm = &info->range_min;
-+	rtc->range_min = mktime64(tm->tm_year, tm->tm_mon, tm->tm_mday,
-+				  tm->tm_hour, tm->tm_min, tm->tm_sec);
-+	tm = &info->range_max;
-+	rtc->range_max = mktime64(tm->tm_year, tm->tm_mon, tm->tm_mday,
-+				  tm->tm_hour, tm->tm_min, tm->tm_sec);
-+
-+	return 0;
-+}
-+
-+static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
-+{
-+	if (ver->impl_id == TEE_IMPL_ID_OPTEE)
-+		return 1;
-+	else
-+		return 0;
-+}
-+
-+static int optee_rtc_probe(struct device *dev)
-+{
-+	struct tee_client_device *rtc_device = to_tee_client_device(dev);
-+	struct tee_ioctl_open_session_arg sess_arg;
-+	struct optee_rtc *priv;
-+	struct rtc_device *rtc;
-+	struct tee_shm *shm;
-+	int ret, err;
-+
-+	memset(&sess_arg, 0, sizeof(sess_arg));
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	rtc = devm_rtc_allocate_device(dev);
-+	if (IS_ERR(rtc))
-+		return PTR_ERR(rtc);
-+
-+	/* Open context with TEE driver */
-+	priv->ctx = tee_client_open_context(NULL, optee_ctx_match, NULL, NULL);
-+	if (IS_ERR(priv->ctx))
-+		return -ENODEV;
-+
-+	/* Open session with rtc Trusted App */
-+	export_uuid(sess_arg.uuid, &rtc_device->id.uuid);
-+	sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
-+	sess_arg.num_params = 0;
-+
-+	ret = tee_client_open_session(priv->ctx, &sess_arg, NULL);
-+	if (ret < 0 || sess_arg.ret != 0) {
-+		dev_err(dev, "tee_client_open_session failed, err: %x\n",
-+			sess_arg.ret);
-+		err = -EINVAL;
-+		goto out_ctx;
-+	}
-+	priv->session_id = sess_arg.session;
-+
-+	shm = tee_shm_alloc_kernel_buf(priv->ctx,
-+				       sizeof(struct optee_rtc_info));
-+	if (IS_ERR(shm)) {
-+		dev_err(priv->dev, "tee_shm_alloc failed\n");
-+		err = PTR_ERR(shm);
-+		goto out_sess;
-+	}
-+
-+	priv->shm = shm;
-+	priv->dev = dev;
-+	dev_set_drvdata(dev, priv);
-+
-+	rtc->ops = &optee_rtc_ops;
-+
-+	err = optee_rtc_read_info(dev, rtc, &priv->features);
-+	if (err) {
-+		dev_err(dev, "Failed to get RTC features from OP-TEE\n");
-+		goto out_shm;
-+	}
-+
-+	err = devm_rtc_register_device(rtc);
-+	if (err)
-+		goto out_shm;
-+
-+	/*
-+	 * We must clear this bit after registering because rtc_register_device
-+	 * will set it if it sees that .set_offset is provided.
-+	 */
-+	if (!(priv->features & TA_RTC_FEATURE_CORRECTION))
-+		clear_bit(RTC_FEATURE_CORRECTION, rtc->features);
-+
-+	return 0;
-+
-+out_shm:
-+	tee_shm_free(priv->shm);
-+out_sess:
-+	tee_client_close_session(priv->ctx, priv->session_id);
-+out_ctx:
-+	tee_client_close_context(priv->ctx);
-+
-+	return err;
-+}
-+
-+static int optee_rtc_remove(struct device *dev)
-+{
-+	struct optee_rtc *priv = dev_get_drvdata(dev);
-+
-+	tee_client_close_session(priv->ctx, priv->session_id);
-+	tee_client_close_context(priv->ctx);
-+
-+	return 0;
-+}
-+
-+static const struct tee_client_device_id optee_rtc_id_table[] = {
-+	{UUID_INIT(0xf389f8c8, 0x845f, 0x496c,
-+		   0x8b, 0xbe, 0xd6, 0x4b, 0xd2, 0x4c, 0x92, 0xfd)},
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(tee, optee_rtc_id_table);
-+
-+static struct tee_client_driver optee_rtc_driver = {
-+	.id_table	= optee_rtc_id_table,
-+	.driver		= {
-+		.name		= "optee_rtc",
-+		.bus		= &tee_bus_type,
-+		.probe		= optee_rtc_probe,
-+		.remove		= optee_rtc_remove,
-+	},
-+};
-+
-+static int __init optee_rtc_mod_init(void)
-+{
-+	return driver_register(&optee_rtc_driver.driver);
-+}
-+
-+static void __exit optee_rtc_mod_exit(void)
-+{
-+	driver_unregister(&optee_rtc_driver.driver);
-+}
-+
-+module_init(optee_rtc_mod_init);
-+module_exit(optee_rtc_mod_exit);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Clément Léger <clement.leger@bootlin.com>");
-+MODULE_DESCRIPTION("OP-TEE based RTC driver");
--- 
-2.34.1
-
+T24gMy8zLzIyIDE2OjA2LCBTZXJnaXUgTW9nYSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6IERv
+IG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUg
+Y29udGVudCBpcyBzYWZlDQo+IA0KPiBBZGQgdGhlIHJlcXVpcmVkIGBhdG1lbCxydHQtcnRjLXRp
+bWUtcmVnYCBwcm9wZXJ0eSB0byB0aGUgYHJ0dGAgbm9kZXMNCj4gb2YgdGhlIFJUVCBJUHMuDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBTZXJnaXUgTW9nYSA8c2VyZ2l1Lm1vZ2FAbWljcm9jaGlwLmNv
+bT4NCj4gLS0tDQo+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxc2FtOTI2MS5kdHNpIHwgMSArDQo+
+ICBhcmNoL2FybS9ib290L2R0cy9hdDkxc2FtOTI2My5kdHNpIHwgMiArKw0KPiAgYXJjaC9hcm0v
+Ym9vdC9kdHMvYXQ5MXNhbTlybC5kdHNpICB8IDEgKw0KPiAgMyBmaWxlcyBjaGFuZ2VkLCA0IGlu
+c2VydGlvbnMoKykNCg0KTm93IHdpdGggQWxleGFuZHJlJ3MgZmVlZGJhY2sgZnJvbSBwYXRjaCAx
+LzUsIHlvdSBzaG91bGQgcHJvYmFibHkgbW92ZSB0aGUNCmF0bWVsLHJ0dC1ydGMtdGltZS1yZWcg
+cHJvcCB0byBlYWNoIG9mIHRoZSBib2FyZCBmaWxlcyB0aGF0IHVzZXMgdGhlc2UgU29Dcy4NCg0K
+Y2hlZXJzLA0KdGENCg==
