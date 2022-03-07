@@ -2,68 +2,76 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687A34D01AD
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Mar 2022 15:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 516F94D02D6
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Mar 2022 16:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242928AbiCGOp2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Mar 2022 09:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S240718AbiCGP2k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Mar 2022 10:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243343AbiCGOp1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Mar 2022 09:45:27 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBF56621D
-        for <linux-rtc@vger.kernel.org>; Mon,  7 Mar 2022 06:44:32 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so14316380pjl.4
-        for <linux-rtc@vger.kernel.org>; Mon, 07 Mar 2022 06:44:32 -0800 (PST)
+        with ESMTP id S243826AbiCGP2b (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Mar 2022 10:28:31 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C115D63
+        for <linux-rtc@vger.kernel.org>; Mon,  7 Mar 2022 07:27:33 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id i8so23867835wrr.8
+        for <linux-rtc@vger.kernel.org>; Mon, 07 Mar 2022 07:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5LigUQH3eW5GSlPkafEnbTkMfLkaSU6yR36/4QRsjNw=;
-        b=Bj2iJMwPQ9Dc+ArNwHzYLW3J5J+tEB3ta2nPO3ROhKtqFn/WN8+nK3oscWG3hjsjKj
-         nRSaasKIOfnqm8nMJdhplfrsu/IldF8haJT33RHEssR4peHHgcA5G9tB0Yc9tafYiXhZ
-         lDEoN4i7wXGwhU6YwYpCwFbKy/zu3bEJob5xtPC+7LSEIsD7OE9WamReIbgaqS3DKrcw
-         7IgcNC88X9d9+rZsbR8aDoTDcx5UT5eI/8QUuA5yrJstko1gxEDRtoARyYgAnRUJjCPn
-         htoNB8gk7O6u8sAP3Vn5ela4wrKoWzYPbtxRbxvWfl4TEbTxsmpkjNvDFjASE+ozTC6v
-         gMvg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=I24QTCqFvFoh7ihUG6Nrnh0U6I7FrXodb2oPjmTPrG+TsmBEC5V9FhCJxfr9cWkIKO
+         1T/clYRnUgJeytYtdBqRLwJJrcK9Br37wh8lLef8hEECFb9WIg25klf374BTbpusGGyG
+         qLcMl3eEcA9SZpaT06fqSQ+3ZrAmK0QSVknTvss1FNBLeIsLSH+hWapV+mOqWPVwz+g0
+         NjPm9suyQf2EfBx1u95grF7ENkM3KMXv9Wh5UEjPdPgJcX4zZcpzWsA64q7eALo98dbu
+         XbvYMPSWfiviEflexKrFN3iJKtnoCuOyc4NfQs0x7+RYuyTo8rVqOyNlANSUyg5x5RKz
+         vMtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5LigUQH3eW5GSlPkafEnbTkMfLkaSU6yR36/4QRsjNw=;
-        b=fnsf51jjUuEavFVQqSZOB0ht4mc8t9lBnS6TkzVj4ykkDGHUiKvClSFhVNu9jzVcLZ
-         l6+Z9oBYMj2eGhVochdDHl1rMqaSTx22OlS3c/M6/FlZgk5NQQ7b9vculBw/HELv7EDY
-         Et1sxEDgTmQMmzYS+XJYaz+I26u8tuFzWWvk4xjya08eULRPAyUPh1ZtIVsCYd4sDO+m
-         gDm7KEqawLhIg/zCwR+5QJA2OObCvQywYpS8teW8FutZ39ZaFxRLIrPuPJFwMxGNAxpo
-         cnUFfv85X63eAx3q/WRivRNHEQc2wClo3q3RzI728fjZDGWd+yA21ZU3bbbKT3vwzIgd
-         BvXg==
-X-Gm-Message-State: AOAM531covLAL4MESKCDqGc3fYhUH73R5mupuvlxWr+xJO2STmjUzoE9
-        OieQqqpcgxdJ+iB27gvTnodSQ2nUHj4FYU5GVJOW2Q==
-X-Google-Smtp-Source: ABdhPJwhDSh1G5LGY9HlfurVD/gGTfbGJNcUYLE77BAIahsHjetsjgD//7R9H9Uy23Zcn6xNcSfsfQJV5bUWgmaGFss=
-X-Received: by 2002:a17:902:a3cb:b0:151:e52e:fa0c with SMTP id
- q11-20020a170902a3cb00b00151e52efa0cmr6138611plb.70.1646664271812; Mon, 07
- Mar 2022 06:44:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220307094042.48446-1-clement.leger@bootlin.com>
- <CAHUa44FJEsd1wc=E0p+4pHU1=31z7JTgNDyz9Vxx77N11B8RKg@mail.gmail.com> <20220307120000.49f88c8b@fixe.home>
-In-Reply-To: <20220307120000.49f88c8b@fixe.home>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Mon, 7 Mar 2022 15:44:20 +0100
-Message-ID: <CAHUa44H_hjSK0hh1Kz50pO4=985njD_A8AGkgD6C8Uf9Jvs8Qw@mail.gmail.com>
-Subject: Re: [PATCH v2] rtc: optee: add RTC driver for OP-TEE RTC PTA
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=jaYKUyHTSA7NJB35LAiYvBbaB9ao0d9w011LT+nuUm4=;
+        b=Vnlz4kNVik7k1Hmd9sjJ4qb4ASZrpMdkX8qqVB3Ar/d4PwRGIb5MiKgtFl4prG78Ke
+         NhGG12D72NO2+SMUFw1xs8xOm1J/Fiep1Uu7Hn3kY6r6/RKkbWt/CZhfzQ9UXbsHKyV8
+         nGTn69k5u6nLDOE0+E6TslSIFSJHHiCHT14iTV31USB+KlbYBOzU9ucEHKev7T+sWxXH
+         7NrHP64uxsTPnAlCSYnoJc6nO01fuig+eL+SSAq+ohuQ44DEiCgZ477HB4dMeU9r7ia5
+         BMvOw8+TIUBBIj8dEiRRlPF/C74QZCtZPOHyjYxUaBT+/JpVzRGz/iFqsoU3lYb0emJ9
+         E6jw==
+X-Gm-Message-State: AOAM5300KIi6/4KmRJZWejksrD0EIj5PTcY9wnbpVmUZP1KwrdHKX6l8
+        kCJeDOeJ46dQtqTkV7/g+mmaXA==
+X-Google-Smtp-Source: ABdhPJwxDd5egt0DySXxFusLdNc/Aj/TuHpfZ+WsZIIHRSt4kpBS45As0tN5J1pfwjSW3/ajE3hgXA==
+X-Received: by 2002:a05:6000:1446:b0:1e9:e378:71c5 with SMTP id v6-20020a056000144600b001e9e37871c5mr8561036wrx.128.1646666851656;
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id k12-20020adfb34c000000b001f1e13df54dsm6210417wrd.89.2022.03.07.07.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 07:27:31 -0800 (PST)
+Date:   Mon, 7 Mar 2022 15:27:29 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Etienne Carriere <etienne.carriere@linaro.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, RTC and Watchdog due for
+ the v5.18 merge window
+Message-ID: <YiYkYZjGsRIeklfh@google.com>
+References: <20220223175908.191618-1-luca@lucaceresoli.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,161 +79,53 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 12:01 PM Cl=C3=A9ment L=C3=A9ger <clement.leger@boot=
-lin.com> wrote:
->
-> Le Mon, 7 Mar 2022 11:40:38 +0100,
-> Jens Wiklander <jens.wiklander@linaro.org> a =C3=A9crit :
->
-> > On Mon, Mar 7, 2022 at 10:42 AM Cl=C3=A9ment L=C3=A9ger <clement.leger@=
-bootlin.com> wrote:
-> > >
-> > > This drivers allows to communicate with a RTC PTA handled by OP-TEE [=
-1].
-> > > This PTA allows to query RTC information, set/get time and set/get
-> > > offset depending on the supported features.
-> > >
-> > > [1] https://github.com/OP-TEE/optee_os/pull/5179
-> > >
-> > > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > > ---
-> > >
-> > > Changes in v2:
-> >
-> > Hmm, this seems to be a second v2.
->
-> Hmpf, I answered to Etienne questions on V1 and forgot I already sent a
-> V2.
->
-> >
-> > >  - Rebased over tee-shm-for-v5.18
-> > >  - Switch to tee_shm_alloc_kernel_buf()
-> > >  - Use export_uuid() to copy uuid
-> > >  - Fix warnings reported by checkpatch
-> > >  - Free SHM in error exit path
-> > >  - Fix error messages to include ret value and fix wrong IOCTL names
-> > >  - Use 100 columns char limit
-> >
-> > From bdc48fa11e46 ("checkpatch/coding-style: deprecate 80-column warnin=
-g"):
-> >     Yes, staying withing 80 columns is certainly still _preferred_.  Bu=
-t
-> >     it's not the hard limit that the checkpatch warnings imply, and oth=
-er
-> >     concerns can most certainly dominate.
-> >
-> >     Increase the default limit to 100 characters.  Not because 100
-> >     characters is some hard limit either, but that's certainly a "what =
-are
-> >     you doing" kind of value and less likely to be about the occasional
-> >     slightly longer lines.
->
-> Ok.
->
-> > > +
-> > > +       if (param[0].u.memref.size !=3D sizeof(*optee_tm)) {
-> > > +               dev_err(dev, "Invalid read size from OPTEE\n");
-> > > +               return -EPROTO;
-> > > +       }
-> >
-> > The dev_err() prints above are basically covering "can't happen"
-> > cases. Robust code should certainly do the checks, but I'm not so sure
-> > about how useful the prints are.
->
-> Agreed, if it fails, this is likely to be due to protocol changes and
-> thus, the developer will probably know where to search for the error.
->
-> [...]
->
-> > > +static int optee_rtc_probe(struct device *dev)
-> > > +{
-> > > +       struct tee_client_device *rtc_device =3D to_tee_client_device=
-(dev);
-> > > +       struct tee_ioctl_open_session_arg sess_arg;
-> > > +       struct optee_rtc *priv;
-> > > +       struct rtc_device *rtc;
-> > > +       struct tee_shm *shm;
-> > > +       int ret, err;
-> > > +
-> > > +       memset(&sess_arg, 0, sizeof(sess_arg));
-> > > +
-> > > +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > > +       if (!priv)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       rtc =3D devm_rtc_allocate_device(dev);
-> > > +       if (IS_ERR(rtc))
-> > > +               return PTR_ERR(rtc);
-> > > +
-> > > +       /* Open context with TEE driver */
-> > > +       priv->ctx =3D tee_client_open_context(NULL, optee_ctx_match, =
-NULL, NULL);
-> > > +       if (IS_ERR(priv->ctx))
-> > > +               return -ENODEV;
-> > > +
-> > > +       /* Open session with rtc Trusted App */
-> > > +       export_uuid(sess_arg.uuid, &rtc_device->id.uuid);
-> > > +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
-> > > +
-> > > +       ret =3D tee_client_open_session(priv->ctx, &sess_arg, NULL);
-> > > +       if (ret < 0 || sess_arg.ret !=3D 0) {
-> > > +               dev_err(dev, "tee_client_open_session failed, err: %x=
-\n", sess_arg.ret);
-> >
-> > This print is the most useful print in the driver. This is typically
-> > reached if the PTA doesn't exist.
->
-> If the PTA does not exists, is the driver even probed ? I thought it
-> was based on the UUID matching.
+Enjoy!
 
-Yes, it is, but perhaps there's some configuration mismatch or something.
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
 
->
-> >
-> > > +               err =3D -EINVAL;
-> > > +               goto out_ctx;
-> > > +       }
-> > > +       priv->session_id =3D sess_arg.session;
-> > > +
-> > > +       shm =3D tee_shm_alloc_kernel_buf(priv->ctx, sizeof(struct opt=
-ee_rtc_info));
-> > > +       if (IS_ERR(shm)) {
-> > > +               dev_err(priv->dev, "tee_shm_alloc_kernel_buf failed\n=
-");
-> > > +               err =3D PTR_ERR(shm);
-> > > +               goto out_sess;
-> > > +       }
-> > > +
-> > > +       priv->shm =3D shm;
-> > > +       priv->dev =3D dev;
-> > > +       dev_set_drvdata(dev, priv);
-> > > +
-> > > +       rtc->ops =3D &optee_rtc_ops;
-> > > +
-> > > +       err =3D optee_rtc_read_info(dev, rtc, &priv->features);
-> > > +       if (err) {
-> > > +               dev_err(dev, "Failed to get RTC features from OP-TEE\=
-n");
-> >
-> > This print could also be worth keeping, but the rest are in my opinion
-> > of limited interest.
-> >
-> > It's a tradeoff with the prints, no big deal if you'd like to keep more=
-.
->
-> I'm ok with that statement. The runtime errors are less likely (if not
-> totally unlikely) to happen. I'll sent a new version (V4 this time...)
-> with theses modifications.
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
 
-OK.
+are available in the Git repository at:
 
-Cheers,
-Jens
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-rtc-watchdog-v5.18
 
->
-> Thanks,
->
-> --
-> Cl=C3=A9ment L=C3=A9ger,
-> Embedded Linux and Kernel engineer at Bootlin
-> https://bootlin.com
+for you to fetch changes up to c58e496311a50c087eeeaaae81083cd643fe5128:
+
+  rtc: max77686: Add MAX77714 support (2022-03-07 13:55:04 +0000)
+
+----------------------------------------------------------------
+Immutable branch between MFD, RTC and Watchdog due for the v5.18 merge window
+
+----------------------------------------------------------------
+Luca Ceresoli (8):
+      rtc: max77686: Convert comments to kernel-doc format
+      rtc: max77686: Rename day-of-month defines
+      rtc: max77686: Remove unused code to read in 12-hour mode
+      dt-bindings: mfd: Add Maxim MAX77714 PMIC
+      mfd: max77714: Add driver for Maxim MAX77714 PMIC
+      watchdog: max77620: Add support for the max77714 variant
+      watchdog: max77620: Add comment to clarify set_timeout procedure
+      rtc: max77686: Add MAX77714 support
+
+ .../devicetree/bindings/mfd/maxim,max77714.yaml    |  68 +++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/mfd/Kconfig                                |  14 ++
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/max77686.c                             |   2 +-
+ drivers/mfd/max77714.c                             | 152 +++++++++++++++++++++
+ drivers/rtc/Kconfig                                |   2 +-
+ drivers/rtc/rtc-max77686.c                         |  75 ++++++----
+ drivers/watchdog/Kconfig                           |   2 +-
+ drivers/watchdog/max77620_wdt.c                    |  85 +++++++++---
+ include/linux/mfd/max77686-private.h               |   4 +-
+ include/linux/mfd/max77714.h                       |  60 ++++++++
+ 12 files changed, 421 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
