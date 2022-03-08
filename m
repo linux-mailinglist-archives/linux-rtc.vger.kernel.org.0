@@ -2,56 +2,52 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F1E4D2352
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Mar 2022 22:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F54C4D27A9
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 05:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350467AbiCHV3d (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Mar 2022 16:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S229960AbiCIBXt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Mar 2022 20:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350458AbiCHV3d (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Mar 2022 16:29:33 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C892B3150F;
-        Tue,  8 Mar 2022 13:28:35 -0800 (PST)
+        with ESMTP id S230406AbiCIBWo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Mar 2022 20:22:44 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8328FB54D6;
+        Tue,  8 Mar 2022 17:19:57 -0800 (PST)
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 82E6DC86D9;
+        Tue,  8 Mar 2022 23:32:09 +0000 (UTC)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 57DB0C0006;
-        Tue,  8 Mar 2022 21:28:33 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 03765C0003;
+        Tue,  8 Mar 2022 23:31:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646774914;
+        t=1646782289;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EUIreEr/bRgy0DFDUqowfnimyNsYHJN1LGnjWbGc9eA=;
-        b=XSE/ahn08fYktqXgLludolAYJ90F9Krm7hUvcDtpTO1KypVQimCrkpWoi7GQ6gY0xLAaYa
-        3x4rxzCwrDB6MG8ihsdguCSowoE2nX2cBFopFsMaii4YD1y1qfyHUQODeTMS7CMMF9TYbk
-        IjE2/u8fMDl0IVrZIPbspKj9/k3NaoW2DIm8ZhDC16UrpxMJsNmHst2AIj/gLihdxrYylm
-        cYt4Z0kyc2LhNrEfbf+eS9jvkGXz0PhrGLXv4To/zSvJtP7lCWdWgv9mID3gwvCMHjUqaD
-        eVhNEBvwbpl2SQsIiShNNKElYOGLt5hi9fE5MFEsFOoI7XmaFVAIUoTkl3Yn+g==
+        bh=YlCM3z0vt4xJuaDGP/qHthWWjPQ/iDmyI70ur1aJgMA=;
+        b=ZeO298VTaZW4ZKPS+hbL1WnQkoxuOjCmgXkCIu5l9+mlTl+WzqybFHz15IKUn6dhK/iEJx
+        0RaZ+8+OOFTKo3+f4Kz1ZV4FC53HEwpC0rxmE4DTJiAfyRrmI4p0TyUedzsaJZLbW6wlAi
+        PnHqquyAUoxVVoiX3PuKWCcFC7I26/boPZUnZI1rtrI7qzur9Kco4ZsLM8plhy1jCX5xcF
+        QEU4vwldXDjJxoE7C7QivEi33hy0F/2uARucukhVeB1Eio82925hJnBiM/n1r4+IpV0f8v
+        IgjNOagNWFZmSZ2zcd7pgSA3yUMKqKB5sAQ6zB7mocPxCz0tjFqpqyOwrx5rQw==
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, a.zummo@towertech.it
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Ondrej Jirman <megous@megous.com>
-Subject: Re: (subset) [PATCH v10 06/18] rtc: sun6i: Add Allwinner H616 support
-Date:   Tue,  8 Mar 2022 22:28:29 +0100
-Message-Id: <164677489899.102692.4262645098452145668.b4-ty@bootlin.com>
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH] rtc: rtc-wm8350: Handle error for wm8350_register_irq
+Date:   Wed,  9 Mar 2022 00:31:25 +0100
+Message-Id: <164678227866.114704.3399068049794620806.b4-ty@bootlin.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211122643.1343315-7-andre.przywara@arm.com>
-References: <20220211122643.1343315-1-andre.przywara@arm.com> <20220211122643.1343315-7-andre.przywara@arm.com>
+In-Reply-To: <20220303085030.291793-1-jiasheng@iscas.ac.cn>
+References: <20220303085030.291793-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,18 +56,18 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 11 Feb 2022 12:26:31 +0000, Andre Przywara wrote:
-> The H616 RTC changes its day storage to the newly introduced linear day
-> scheme, so pair the new compatible string with this feature flag.
-> The RTC clock parts are handled in a separate driver now, so we skip
-> the clock parts in this driver completely.
+On Thu, 3 Mar 2022 16:50:30 +0800, Jiasheng Jiang wrote:
+> As the potential failure of the wm8350_register_irq(),
+> it should be better to check it and return error if fails.
+> Also, it need not free 'wm_rtc->rtc' since it will be freed
+> automatically.
 > 
 > 
 
 Applied, thanks!
 
-[06/18] rtc: sun6i: Add Allwinner H616 support
-        commit: df02071fd3fb8228a0996758a251994e61df04cc
+[1/1] rtc: rtc-wm8350: Handle error for wm8350_register_irq
+      commit: 5e086367298dfaa1617885e797c8a58873365f03
 
 Best regards,
 -- 
