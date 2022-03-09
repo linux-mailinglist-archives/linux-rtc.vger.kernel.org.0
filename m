@@ -2,63 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92FBF4D2BBB
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 10:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7844D361C
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 18:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiCIJXa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Mar 2022 04:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S236514AbiCIQfw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Mar 2022 11:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiCIJX3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 04:23:29 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5820C2DF9;
-        Wed,  9 Mar 2022 01:22:31 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id m22so1838635pja.0;
-        Wed, 09 Mar 2022 01:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=kBC32u2ogQlH4HEXRWs9S+Rg6olRvmlFhO2KCjmnIcg=;
-        b=RrtidET1m5TLgd0yHXsgj6NxmHQvuSQHbhT729edKluDynumIV4TuE7jEh84pismxv
-         6UIh5/uY+u8MKLJSIDrunE0DxnowSTPj9T2GX+QQGMCGxbqVsw0uy1iu+8/qSSbFJ53D
-         pbVkIFzCYXKo9eNC+XT5Z+9SHhQysu2bIhjD5JhwkoG9qkD+BOUieeiBD+e8k1WtWNW7
-         DEUR6zqLpX6U1upYKNriDW5zCjoaU9g0tR5wSsHTLhRa87avElWzjE9PE/G8+mm2qI/Z
-         cCoX61Wu3gZ0KXZB8lhMr19QPojuV2G/ppNlfD22dFv2x038V6ge35jkTEGEKWuSSFuo
-         SNtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kBC32u2ogQlH4HEXRWs9S+Rg6olRvmlFhO2KCjmnIcg=;
-        b=FhtVhvxGGtHNgalgLZArm5TPiY3brghWeLKoAxqsTYz3zrvw2rYCGpULUIcMFwSJXj
-         jGNfjNY6P6P45MjBNTBMuKbw2y2CoYpHXyQVk1lnAZhV6fNGv7IYcOxej5zpiStHs1wP
-         82Gyjns5VYHjLZvrR/5UzQZu1UDuaY2S5nKkqfEPFS/g7v4GiQ4U7T5Repc/uTHMX2Wn
-         EqqfnzJYpT0yAFzQcbJebv0n3VhO3l5e6x60RvJKdwl1wSHW8iOmzSSXHVIGKt56Fi8e
-         8I68wTH/1AAfojZVXz3qKZj6bk4gdeRZk2FFaHDG0JItXpD0VQAXMf+WSSUDiTYWBTD/
-         1dDg==
-X-Gm-Message-State: AOAM5337XhXIAiKh5ZNY+N8x292WWazd1VU31fCdXYl6n3FdJdTq/PXX
-        oECWIJ9beqIaANayd4MW3sNgxhjKfme8LV12bAN0Mg==
-X-Google-Smtp-Source: ABdhPJyieel0AiUVEPltiT/fQejzCzNmgj7kH0pTVTYL/XXGSm7DXmoFDD3auujWgDGUtF2WD8QyfQ==
-X-Received: by 2002:a17:90b:314:b0:1be:dc22:62f2 with SMTP id ay20-20020a17090b031400b001bedc2262f2mr9347868pjb.102.1646817750778;
-        Wed, 09 Mar 2022 01:22:30 -0800 (PST)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id d4-20020aa78e44000000b004f6aaa184c9sm2003574pfr.71.2022.03.09.01.22.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Mar 2022 01:22:30 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
+        with ESMTP id S236603AbiCIQaD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 11:30:03 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B438370F63;
+        Wed,  9 Mar 2022 08:23:15 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2DFEB1BF206;
+        Wed,  9 Mar 2022 16:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646842994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Zsnk9RumeZUMQt5XburatyLQRbcfmf+82Q2TdpxHgv8=;
+        b=gKdyPR9/1B9junfywrzMvExpiBJaO1TghiFfkECH052oxU95gKJj0AP6hKBOTKTEY63Pi4
+        aPRHHOUc+7an71hXJYqoCI/Iu2JbSzOuTp/n7q5stFnSxTlgsvSVrdOfIfxeTGcRxXW0aw
+        TbBJuvqaZ2UlHWW8pbLj/rcTSqDwYBIztDkzYOX3aqVv/P8owHIf2f/aG4EGon9il3P/Hk
+        ifL4OUx5o3t0zZUnTTXWlo16e6CQppUn91lMb7+xClIW2L58q2Wll6AEowc1El51eoAw4N
+        E9BUwZvPao5m6zvX4z1Liqxq6bNVA24n4+3pshqHedqBhnrmtVyIVWM/1aNe7Q==
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] rtc: gamecube: Fix refcount leak in gamecube_rtc_read_offset_from_sram
-Date:   Wed,  9 Mar 2022 09:22:25 +0000
-Message-Id: <20220309092225.6930-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Joshua Kinard <kumba@gentoo.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/29] rtc: ds1685: switch to RTC_FEATURE_UPDATE_INTERRUPT
+Date:   Wed,  9 Mar 2022 17:22:32 +0100
+Message-Id: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,28 +48,28 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+Stop using uie_unsupported and clear RTC_FEATURE_UPDATE_INTERRUPT instead.
+There is currently a missing information as to why this is not supported on
+ioc3.
 
-Fixes: 86559400b3ef ("rtc: gamecube: Add a RTC driver for the GameCube, Wii and Wii U")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 ---
- drivers/rtc/rtc-gamecube.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rtc/rtc-ds1685.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-index f717b36f4738..18ca3b38b2d0 100644
---- a/drivers/rtc/rtc-gamecube.c
-+++ b/drivers/rtc/rtc-gamecube.c
-@@ -235,6 +235,7 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
- 	}
+diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
+index 75db7ab654a5..0ec1e44e3431 100644
+--- a/drivers/rtc/rtc-ds1685.c
++++ b/drivers/rtc/rtc-ds1685.c
+@@ -1273,7 +1273,7 @@ ds1685_rtc_probe(struct platform_device *pdev)
  
- 	ret = of_address_to_resource(np, 0, &res);
-+	of_node_put(np);
- 	if (ret) {
- 		pr_err("no io memory range found\n");
- 		return -1;
+ 	/* See if the platform doesn't support UIE. */
+ 	if (pdata->uie_unsupported)
+-		rtc_dev->uie_unsupported = 1;
++		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc_dev->features);
+ 
+ 	rtc->dev = rtc_dev;
+ 
 -- 
-2.17.1
+2.35.1
 
