@@ -2,91 +2,140 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA134D3BB4
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 22:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0824D3C0C
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 22:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238329AbiCIVHI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Mar 2022 16:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S232542AbiCIVas (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Mar 2022 16:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiCIVHH (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 16:07:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89A10C50F;
-        Wed,  9 Mar 2022 13:06:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CDF61AB8;
-        Wed,  9 Mar 2022 21:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D548EC36AE7;
-        Wed,  9 Mar 2022 21:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646859966;
-        bh=FeLtBU7QMp6iEJHccU5vuRdG5htlOJfIhhIpS6r7AhM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Z9Ot8vd0SD9n+maWBFR9fCvdLyFrzkzJZ0clgv0hHJ1OYP0+Ol+cZju3OiiDm/yiL
-         Ma5epBS1vFTVXJvScrqEz3sqDgwZZRa9WZQ/N50WIqeqLnS5haqiPMeYb5BejHUGL9
-         gkkFjOLgV8TSt50cYWcDK+LaTTuSxuz8GymRKPkPuDG5hmOZ8p0Ht1ZGHkyCkNTPL/
-         DDCV4RKt0kOAYVylpiJXblzinr/DN5/tGcfvawWu0Ai9ypNTelwyoytBHwt5kDezU1
-         NN0DAiyCI1mY5mAYJwmq6IsD3tUrRYgfz9cKL6IvIqRry19yENUBPAomSN5yUxxWGJ
-         ZzyIfvzhlIOvQ==
-Received: by mail-ej1-f48.google.com with SMTP id qa43so7725407ejc.12;
-        Wed, 09 Mar 2022 13:06:06 -0800 (PST)
-X-Gm-Message-State: AOAM531dwVIA9D83R8yyQox/mSMMg5ZP+c0MrBiTv6zw9XmG325M6DGK
-        pIMvmI6f9QMs22fSrv/UcGC0aNjhdUf6TJT+JA==
-X-Google-Smtp-Source: ABdhPJxP4r5jkW2XGKLwSeYb+P3R9mLVmIuw9bFE1hEmABTru6Z5W8ocg6Km8rnC2ammFaLr1fc9kholLHA72ed6cTo=
-X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
- k14-20020a170906a38e00b006daa1f9f9eemr1449135ejz.27.1646859965060; Wed, 09
- Mar 2022 13:06:05 -0800 (PST)
+        with ESMTP id S231679AbiCIVar (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 16:30:47 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF3D11C7E9;
+        Wed,  9 Mar 2022 13:29:47 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6D2F2FF807;
+        Wed,  9 Mar 2022 21:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646861385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lJQsblOAULUh3lzCEKVioDO1y36yllC+TMOirGIPqsM=;
+        b=Kh4WQzVD8kiAEnhp2u5nFIvcRz3yVabyHhGLWYW3aox1Nxle3w868CCsFhkCZMN9EhCPDk
+        XuS+5Xnb+3ryvP6Qc8SahoTblB0P9vEIT40VI6wm4TddUYu5NWnXpBh6iYCXv2fSLYjpaW
+        dmV2LRv8I7NRnT5GOOXWbw6Wfw3wtRWHQJNJgf8ImB0o5H6UH/kL2mHjgV+G+vuH21C/lD
+        VgVW5MvbW38d991B7jEJNdKBosalgoGC2OcREaDAVozkw+bSA3biqU5h/D7oAeZPpYiqnV
+        2d7cDPMjySYrvi9sCxj30mqMtwEBYTk2xkYw7e469puIAQcfBhrzj24nugWIWQ==
+Date:   Wed, 9 Mar 2022 22:29:43 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hanna Hawa <hhhawa@amazon.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk, benh@amazon.com,
+        eduval@amazon.com, ronenk@amazon.com, talel@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, farbere@amazon.com
+Subject: Re: [RFC PATCH 1/1] rtc: bq32k: update years calculation according
+ century bit
+Message-ID: <YikcR25H8x1ambO9@piout.net>
+References: <20220207070156.19373-1-hhhawa@amazon.com>
 MIME-Version: 1.0
-References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
-In-Reply-To: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 9 Mar 2022 15:05:53 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207070156.19373-1-hhhawa@amazon.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> atmel,at91sam9-rtc is a confuing name for this file as it is documenting
-> the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
-> and atmel,at91sam9x5-rtc)
->
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Hello,
+
+On 07/02/2022 09:01:56+0200, Hanna Hawa wrote:
+> tm_year filed hold the number of years since 1900, in case the century
+> was changed the driver will return invalid year, as it will not
+> increment the years field by 200.
+> 
+> This change update the years calculation in bq32k_rtc_read_time() and
+> bq32k_rtc_write_time(). By increasing the years by 100 always, and only
+> if the century enable bit (BQ32K_CENT_EN) is set and century bit
+> (BQ32K_CENT) is cleared will increase again by 100 to represent the next
+> century.
+> 
+
+I'm not sure I get the issue, currently, the driver considers that
+BQ32K_CENT not set is 19YY and BQ32K_CENT set is 20YY and what is done
+seems fine to me. Can you elaborate on what you are trying to fix?
+
+> Signed-off-by: Hanna Hawa <hhhawa@amazon.com>
 > ---
->  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
->
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> similarity index 100%
-> rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
-> rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+>  drivers/rtc/rtc-bq32k.c | 29 +++++++++++++++++++++++------
+>  1 file changed, 23 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
+> index 2235c968842d..09795dd2728b 100644
+> --- a/drivers/rtc/rtc-bq32k.c
+> +++ b/drivers/rtc/rtc-bq32k.c
+> @@ -108,8 +108,20 @@ static int bq32k_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  	tm->tm_mday = bcd2bin(regs.date);
+>  	tm->tm_wday = bcd2bin(regs.day) - 1;
+>  	tm->tm_mon = bcd2bin(regs.month) - 1;
+> -	tm->tm_year = bcd2bin(regs.years) +
+> -				((regs.cent_hours & BQ32K_CENT) ? 100 : 0);
+> +	/*
+> +	 * tm_year is number of years since 1900. Need to increase the years by
+> +	 * 100 always assuming we are on 20YY and not 19YY.
+> +	 */
+> +	tm->tm_year = bcd2bin(regs.years) + 100;
+> +
+> +	/*
+> +	 * If the century enable bit (BQ32K_CENT_EN) is set, and century bit
+> +	 * (BQ32K_CENT) is cleared, that means we are on the next century, which
+> +	 * required to increase by 100.
+> +	 */
+> +	if ((regs.cent_hours & BQ32K_CENT_EN) &&
+> +	    !(regs.cent_hours & BQ32K_CENT))
+> +		tm->tm_year += 100;
+>  
+>  	return 0;
+>  }
+> @@ -117,6 +129,7 @@ static int bq32k_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  static int bq32k_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  {
+>  	struct bq32k_regs regs;
+> +	int year;
+>  
+>  	regs.seconds = bin2bcd(tm->tm_sec);
+>  	regs.minutes = bin2bcd(tm->tm_min);
+> @@ -125,11 +138,15 @@ static int bq32k_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  	regs.date = bin2bcd(tm->tm_mday);
+>  	regs.month = bin2bcd(tm->tm_mon + 1);
+>  
+> -	if (tm->tm_year >= 100) {
+> +	/* Assume we are on 20YY and not 19YY */
+> +	year = tm->tm_year - 100;
+> +
+> +	if (year < 100) {
+>  		regs.cent_hours |= BQ32K_CENT;
+> -		regs.years = bin2bcd(tm->tm_year - 100);
+> -	} else
+> -		regs.years = bin2bcd(tm->tm_year);
+> +		regs.years = bin2bcd(year);
+> +	} else {
+> +		regs.years = bin2bcd(year - 100);
+> +	}
+>  
+>  	return bq32k_write(dev, &regs, 0, sizeof(regs));
+>  }
+> -- 
+> 2.17.1
+> 
 
-Now failing in -next:
-
-./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
-$id: relative path/filename doesn't match actual path or filename
-  expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
