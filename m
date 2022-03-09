@@ -2,90 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD9F4D3648
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 18:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA134D3BB4
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Mar 2022 22:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235532AbiCIQh1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Mar 2022 11:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S238329AbiCIVHI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Mar 2022 16:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237011AbiCIQaa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 11:30:30 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26D4150400;
-        Wed,  9 Mar 2022 08:23:57 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 790731BF20A;
-        Wed,  9 Mar 2022 16:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646843019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3C6FB6jhgDsl5acxT2klDaDicyoea6PWDZxx1o8S4oU=;
-        b=cwbnSDJenHY3cCJNJzpk4h5KZESvbQZkXsQo1tjsM4mUFX0U2NfPC0C6uV8LC113OBFjMI
-        nHAfpMIXLR+vj4H0PH5SP2EU3/2ue6/QWM8VZbg0G9pVqcKAw/UCsb4Mmh0i3b+enaLbxm
-        IGjPzYFNvKW498S+6JS+Dyj+gGaJ84ZssFXF5BevLeak/ye2FYkgcohuFpqWRZ09dZwlkL
-        h5UxBGq8C5puxCf7hyZqhX3M5dUpE5sXdCE7LXqVkF0yAP+iq+sdv65GrHC1eoVWSFxoKQ
-        sBzMN+Y3RkqBqSe/dmtParmCYfZfcKjqZv0RU3aWmMge9H4NNJdkCmolMTTVcw==
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 29/29] rtc: remove uie_unsupported
-Date:   Wed,  9 Mar 2022 17:23:00 +0100
-Message-Id: <20220309162301.61679-29-alexandre.belloni@bootlin.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
-References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
+        with ESMTP id S231917AbiCIVHH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Mar 2022 16:07:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF89A10C50F;
+        Wed,  9 Mar 2022 13:06:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CDF61AB8;
+        Wed,  9 Mar 2022 21:06:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D548EC36AE7;
+        Wed,  9 Mar 2022 21:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646859966;
+        bh=FeLtBU7QMp6iEJHccU5vuRdG5htlOJfIhhIpS6r7AhM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z9Ot8vd0SD9n+maWBFR9fCvdLyFrzkzJZ0clgv0hHJ1OYP0+Ol+cZju3OiiDm/yiL
+         Ma5epBS1vFTVXJvScrqEz3sqDgwZZRa9WZQ/N50WIqeqLnS5haqiPMeYb5BejHUGL9
+         gkkFjOLgV8TSt50cYWcDK+LaTTuSxuz8GymRKPkPuDG5hmOZ8p0Ht1ZGHkyCkNTPL/
+         DDCV4RKt0kOAYVylpiJXblzinr/DN5/tGcfvawWu0Ai9ypNTelwyoytBHwt5kDezU1
+         NN0DAiyCI1mY5mAYJwmq6IsD3tUrRYgfz9cKL6IvIqRry19yENUBPAomSN5yUxxWGJ
+         ZzyIfvzhlIOvQ==
+Received: by mail-ej1-f48.google.com with SMTP id qa43so7725407ejc.12;
+        Wed, 09 Mar 2022 13:06:06 -0800 (PST)
+X-Gm-Message-State: AOAM531dwVIA9D83R8yyQox/mSMMg5ZP+c0MrBiTv6zw9XmG325M6DGK
+        pIMvmI6f9QMs22fSrv/UcGC0aNjhdUf6TJT+JA==
+X-Google-Smtp-Source: ABdhPJxP4r5jkW2XGKLwSeYb+P3R9mLVmIuw9bFE1hEmABTru6Z5W8ocg6Km8rnC2ammFaLr1fc9kholLHA72ed6cTo=
+X-Received: by 2002:a17:906:a38e:b0:6da:a1f9:f9ee with SMTP id
+ k14-20020a170906a38e00b006daa1f9f9eemr1449135ejz.27.1646859965060; Wed, 09
+ Mar 2022 13:06:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20220308155735.54146-1-alexandre.belloni@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 9 Mar 2022 15:05:53 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
+Message-ID: <CAL_JsqJXz01F_+-xg8VfAOQ=-C96NVa1KO+nRbXf9mq289kmYQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: rtc: at91: rename rtt bindings file
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-uie_unsupported is not used by any drivers anymore, remove it.
+On Tue, Mar 8, 2022 at 9:57 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> atmel,at91sam9-rtc is a confuing name for this file as it is documenting
+> the RTT used as an RTC and not the other regular RTC (atmel,at91rm9200-rtc
+> and atmel,at91sam9x5-rtc)
+>
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> ---
+>  .../rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml}   | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/rtc/{atmel,at91sam9-rtc.yaml => atmel,at91sam9260-rtt.yaml} (100%)
+>
+> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
+> similarity index 100%
+> rename from Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.yaml
+> rename to Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
----
- drivers/rtc/class.c | 3 ---
- include/linux/rtc.h | 2 --
- 2 files changed, 5 deletions(-)
+Now failing in -next:
 
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index 40d504dac1a9..3c8eec2218df 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -399,9 +399,6 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
- 	if (!rtc->ops->set_alarm)
- 		clear_bit(RTC_FEATURE_ALARM, rtc->features);
- 
--	if (rtc->uie_unsupported)
--		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->features);
--
- 	if (rtc->ops->set_offset)
- 		set_bit(RTC_FEATURE_CORRECTION, rtc->features);
- 
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 47fd1c2d3a57..1fd9c6a21ebe 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -110,8 +110,6 @@ struct rtc_device {
- 	struct hrtimer pie_timer; /* sub second exp, so needs hrtimer */
- 	int pie_enabled;
- 	struct work_struct irqwork;
--	/* Some hardware can't support UIE mode */
--	int uie_unsupported;
- 
- 	/*
- 	 * This offset specifies the update timing of the RTC.
--- 
-2.35.1
-
+./Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml:
+$id: relative path/filename doesn't match actual path or filename
+  expected: http://devicetree.org/schemas/rtc/atmel,at91sam9260-rtt.yaml#
