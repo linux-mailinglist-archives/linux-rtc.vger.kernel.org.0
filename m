@@ -2,234 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA3B4D46BA
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Mar 2022 13:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AAF4D4E36
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Mar 2022 17:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241948AbiCJMWm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Mar 2022 07:22:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S234399AbiCJQKa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Mar 2022 11:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiCJMWl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Mar 2022 07:22:41 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3103B13D559;
-        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id h196so4158665qke.12;
-        Thu, 10 Mar 2022 04:21:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qpr3RDAC4KKd5tO3nXUWw1dDTj6+AwHTeZrBPzvyIHA=;
-        b=ryHjI+/DOSDVNHuhyNbZFyUsS1Je/AcQXQc0UyxyVErLiZOxj2jk3OzLN1fACqV14b
-         vjVXq1cAlRqXK0l/yq406DOIOl9G/DXXH391oulnk8Q70srEFwaTPQTyrz1PA48t7H+r
-         OyW0HqEk57LK6g2FwjMsjRkbPshcwAI5DnqfMjaTUtOWY3m+X10QqFP0em96OQjUa5lb
-         vcKrYqzCkHg/a2I93flM+ySiAyatRjBNruasKkB6im7BvYadUMHAo53kDvntWS9bW7Be
-         PK0fHPdCeWezL3WCVvJXwrz4C3qNQ92grGdgKbKR2vVWN1swsKfOv9ll0aWhLaiRC3Yn
-         kBKw==
-X-Gm-Message-State: AOAM531qVQcW8C2Uo7qXBt1MT4XUm3o1Lpc5GHbESn1g93I4H+Sc+fVP
-        5tYeXXmG6xpaQjEjTr3307AvaOdjJw/Kag==
-X-Google-Smtp-Source: ABdhPJyigrQSiKQnf1kFfnoMz1H8PG0+r/G1aXaxNLC+zl8Re6eKw3fUAfkOFQ74kP8Wiot8JbxNFg==
-X-Received: by 2002:a05:620a:4493:b0:67b:1ead:13b8 with SMTP id x19-20020a05620a449300b0067b1ead13b8mr2742334qkp.716.1646914899758;
-        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id u21-20020ae9c015000000b0067d4b2e1050sm1230287qkk.55.2022.03.10.04.21.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:21:39 -0800 (PST)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2dbd8777564so56272317b3.0;
-        Thu, 10 Mar 2022 04:21:38 -0800 (PST)
-X-Received: by 2002:a81:5a08:0:b0:2db:d8c6:7e4f with SMTP id
- o8-20020a815a08000000b002dbd8c67e4fmr3674889ywb.256.1646914898324; Thu, 10
- Mar 2022 04:21:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20220310090048.1933020-1-laurent@vivier.eu> <20220310090048.1933020-3-laurent@vivier.eu>
-In-Reply-To: <20220310090048.1933020-3-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Mar 2022 13:21:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
-Message-ID: <CAMuHMdXS9kcLapc+AY=F78G1Jv8ANjQcTosU1En=F273E+cFbA@mail.gmail.com>
-Subject: Re: [PATCH v15 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S240760AbiCJQK2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Mar 2022 11:10:28 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9039818F21C;
+        Thu, 10 Mar 2022 08:09:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ga7LhQbUj0BJm9/YIp6vd9e5mI8wLFqKkHI6WlgR2iM=; b=jYcZ3D5y4UT3qqdPO2H11nxNoU
+        gEgE6zKIL9/IrIFL6S9iqnEP4o0ovBh/Aqhj3XrIpsb5lrZ3IbSPMPy+ixz0rOILP7DLE6BC3JCci
+        Lr5a0Nvmufb4+Ju8dV4ab7OQ/13t7g1AiQjUsR2HF0yaqby//ielf25EkUEyEF1Qr0GM=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:59680 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1nSLLr-0002a4-08; Thu, 10 Mar 2022 11:09:20 -0500
+Date:   Thu, 10 Mar 2022 11:09:18 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20220310110918.41a681474f5a0e11abdedc39@hugovil.com>
+In-Reply-To: <20220309162301.61679-11-alexandre.belloni@bootlin.com>
+References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
+        <20220309162301.61679-11-alexandre.belloni@bootlin.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH 11/29] rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-CC tty
-dropped stable
+On Wed,  9 Mar 2022 17:22:42 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-Note that this is a dependency for later patches in this series,
-so I think everything should go in together (through the m68k tree?).
+> The PCF2127 doesn't support UIE because setting an alarm to fire every
+> second confuses the chip and the fastest we can go is an alarm every 2
+> seconds.
 
-On Thu, Mar 10, 2022 at 10:01 AM Laurent Vivier <laurent@vivier.eu> wrote:
->
-> Revert
-> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->
-> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> defined by the architecture.
->
-> Cc: stable@vger.kernel.org # v5.11+
-> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Hi Alexandre,
+can you describe what "confuses the chip" means?
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-(given on v14)
+In my experimental PCF2131 driver, I activated UIE and it seems to be working fine at 1s intervals, but since it is similar to PCF2127, maybe there is still a problem and I just didn't see it.
 
+Hugo.
+
+
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
->  drivers/tty/goldfish.c   | 20 ++++++++++----------
->  include/linux/goldfish.h | 15 +++++++++++----
->  2 files changed, 21 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-> index 5ed19a9857ad..10c13b93ed52 100644
-> --- a/drivers/tty/goldfish.c
-> +++ b/drivers/tty/goldfish.c
-> @@ -61,13 +61,13 @@ static void do_rw_io(struct goldfish_tty *qtty,
->         spin_lock_irqsave(&qtty->lock, irq_flags);
->         gf_write_ptr((void *)address, base + GOLDFISH_TTY_REG_DATA_PTR,
->                      base + GOLDFISH_TTY_REG_DATA_PTR_HIGH);
-> -       __raw_writel(count, base + GOLDFISH_TTY_REG_DATA_LEN);
-> +       gf_iowrite32(count, base + GOLDFISH_TTY_REG_DATA_LEN);
->
->         if (is_write)
-> -               __raw_writel(GOLDFISH_TTY_CMD_WRITE_BUFFER,
-> +               gf_iowrite32(GOLDFISH_TTY_CMD_WRITE_BUFFER,
->                        base + GOLDFISH_TTY_REG_CMD);
->         else
-> -               __raw_writel(GOLDFISH_TTY_CMD_READ_BUFFER,
-> +               gf_iowrite32(GOLDFISH_TTY_CMD_READ_BUFFER,
->                        base + GOLDFISH_TTY_REG_CMD);
->
->         spin_unlock_irqrestore(&qtty->lock, irq_flags);
-> @@ -142,7 +142,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
->         unsigned char *buf;
->         u32 count;
->
-> -       count = __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +       count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->         if (count == 0)
->                 return IRQ_NONE;
->
-> @@ -159,7 +159,7 @@ static int goldfish_tty_activate(struct tty_port *port, struct tty_struct *tty)
->  {
->         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->                                                                         port);
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_ENABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->         return 0;
->  }
->
-> @@ -167,7 +167,7 @@ static void goldfish_tty_shutdown(struct tty_port *port)
->  {
->         struct goldfish_tty *qtty = container_of(port, struct goldfish_tty,
->                                                                         port);
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, qtty->base + GOLDFISH_TTY_REG_CMD);
->  }
->
->  static int goldfish_tty_open(struct tty_struct *tty, struct file *filp)
-> @@ -202,7 +202,7 @@ static unsigned int goldfish_tty_chars_in_buffer(struct tty_struct *tty)
->  {
->         struct goldfish_tty *qtty = &goldfish_ttys[tty->index];
->         void __iomem *base = qtty->base;
-> -       return __raw_readl(base + GOLDFISH_TTY_REG_BYTES_READY);
-> +       return gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
->  }
->
->  static void goldfish_tty_console_write(struct console *co, const char *b,
-> @@ -355,7 +355,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->          * on Ranchu emulator (qemu2) returns 1 here and
->          * driver will use physical addresses.
->          */
-> -       qtty->version = __raw_readl(base + GOLDFISH_TTY_REG_VERSION);
-> +       qtty->version = gf_ioread32(base + GOLDFISH_TTY_REG_VERSION);
->
->         /*
->          * Goldfish TTY device on Ranchu emulator (qemu2)
-> @@ -374,7 +374,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
->                 }
->         }
->
-> -       __raw_writel(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
-> +       gf_iowrite32(GOLDFISH_TTY_CMD_INT_DISABLE, base + GOLDFISH_TTY_REG_CMD);
->
->         ret = request_irq(irq, goldfish_tty_interrupt, IRQF_SHARED,
->                           "goldfish_tty", qtty);
-> @@ -436,7 +436,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
->  #ifdef CONFIG_GOLDFISH_TTY_EARLY_CONSOLE
->  static void gf_early_console_putchar(struct uart_port *port, int ch)
->  {
-> -       __raw_writel(ch, port->membase);
-> +       gf_iowrite32(ch, port->membase);
->  }
->
->  static void gf_early_write(struct console *con, const char *s, unsigned int n)
-> diff --git a/include/linux/goldfish.h b/include/linux/goldfish.h
-> index 12be1601fd84..bcc17f95b906 100644
-> --- a/include/linux/goldfish.h
-> +++ b/include/linux/goldfish.h
-> @@ -8,14 +8,21 @@
->
->  /* Helpers for Goldfish virtual platform */
->
-> +#ifndef gf_ioread32
-> +#define gf_ioread32 ioread32
-> +#endif
-> +#ifndef gf_iowrite32
-> +#define gf_iowrite32 iowrite32
-> +#endif
-> +
->  static inline void gf_write_ptr(const void *ptr, void __iomem *portl,
->                                 void __iomem *porth)
->  {
->         const unsigned long addr = (unsigned long)ptr;
->
-> -       __raw_writel(lower_32_bits(addr), portl);
-> +       gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_64BIT
-> -       __raw_writel(upper_32_bits(addr), porth);
-> +       gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
->
-> @@ -23,9 +30,9 @@ static inline void gf_write_dma_addr(const dma_addr_t addr,
->                                      void __iomem *portl,
->                                      void __iomem *porth)
->  {
-> -       __raw_writel(lower_32_bits(addr), portl);
-> +       gf_iowrite32(lower_32_bits(addr), portl);
->  #ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> -       __raw_writel(upper_32_bits(addr), porth);
-> +       gf_iowrite32(upper_32_bits(addr), porth);
->  #endif
->  }
+>  drivers/rtc/rtc-pcf2127.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> index f8469b134411..63b275b014bd 100644
+> --- a/drivers/rtc/rtc-pcf2127.c
+> +++ b/drivers/rtc/rtc-pcf2127.c
+> @@ -656,6 +656,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+>  	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+>  	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
+>  	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
+> +	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf2127->rtc->features);
+>  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
+>  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+>  
+> -- 
+> 2.35.1
+> 
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
