@@ -2,248 +2,314 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E5B4D5CDD
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Mar 2022 09:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26C64D6620
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Mar 2022 17:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244263AbiCKIBG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Mar 2022 03:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S1350261AbiCKQ0u (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Mar 2022 11:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiCKIBF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Mar 2022 03:01:05 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02641B757A
-        for <linux-rtc@vger.kernel.org>; Fri, 11 Mar 2022 00:00:01 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id z26so11009349lji.8
-        for <linux-rtc@vger.kernel.org>; Fri, 11 Mar 2022 00:00:01 -0800 (PST)
+        with ESMTP id S1350342AbiCKQ0g (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Mar 2022 11:26:36 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41F1B8BF7;
+        Fri, 11 Mar 2022 08:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H61304/5/aT6zo++RCxPy8xIpo0rtqBkReH7sc0wAzE=;
-        b=h5dAHKLnDA5s5TgYxQRR61i78Pt7G77hFIU5nu1TkkshOv5UTcUu5pHiA97t0OMmM/
-         KFOYCMSzYWh9PmKC0MtlXy1dAWxlPC5ypG+zrJTrBI7tbLTGshzjvOqf18FB+xLXEs6K
-         3LWNqZnuDRDE5FxInfTGzLOO6NCMnF8YolVleJDRAt6wM4i6UYXxiE+7hLDcUSkWur/q
-         Y7zIgZVaEa9s96eguO71Q6zZZ5CZ8EF2bpGi78b8f6plkWBLJkt/9z0eScly552vQvHQ
-         1HelRv2TDnxxfblGdhEw6hDP8Yeim147XA+5GEE/KKzgZSggKwiUs4UI8cHOi1un1+8v
-         5P6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H61304/5/aT6zo++RCxPy8xIpo0rtqBkReH7sc0wAzE=;
-        b=Qf1Y8fMim0wwfcHNczDl13QOn53nbaWjmicFYB8vW/y7XULasCHcUnkzSIpIckSr4G
-         Rb/Doc2wWmr9cC6pr9xS/l+mavpX4M2QSQEcMOMEI725u94cCijhdeFLR4E1mFVk/lWp
-         lzwkay3HAWKZr35C7OriQOvDybVnpJ2ewNHY2OCtRAX35x/XN0JMO/hGQNDfyNQ2dzNc
-         QkHW0UfXQy0y75yR+0ed2y69Wf1opuV0GH/0C7+9sqCGRGenpMuGY9oDiXq6B6PsNU9q
-         d4THBJOWniakBdBOh9tO28LlKaiylw9Y1otYeHf318nG8ostoBiYQjggREwGm3js4zjw
-         nMjQ==
-X-Gm-Message-State: AOAM531/CDyIxFab2OqnHeEDvY2UeYRPtzS354pAY2GI8GBq2D2OaSxP
-        HZe4G6RM76bCJDkkAsFwwVjpV7Hc/TpiYs/y01itgw==
-X-Google-Smtp-Source: ABdhPJxcwCfZeFWYSZ32b2nQjvwKVc2ZY4EDXoS35U8GTSd1gnKcH9gkwSMudZGRcPEkXsc1kxUSFuwWP8v7nXAC1rw=
-X-Received: by 2002:a05:651c:552:b0:249:1a87:a4a6 with SMTP id
- q18-20020a05651c055200b002491a87a4a6mr1967934ljp.516.1646985600099; Fri, 11
- Mar 2022 00:00:00 -0800 (PST)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1647015902;
+  x=1678551902;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eqHYnpjKDOMF1TwiA1Bf1WVBNshhdDSbtR3z1p21pAk=;
+  b=LkpaT22z9yzvNZbzx0/U1CPCP2w2+HflUInWlFPV5q44tzUtQbOhBmWT
+   LJVC/RPbvDDO9siDFpGN6BLms1CZOz6Ab+h0tZFH2O2hTk7Pi/Mqu39yg
+   alOd7kEXNLs6jq6a6zuQGQfLvzlF69e0m0vT/q+TBmlntQW7A+Lp3y7b3
+   WAJSlvzconIXizP5VIR0cIs1t+WnsIvIndtVhFaGkpcpu0xuxeVwMfPXR
+   369R4GwH+Qjsx/4JHbFoy6SuHzeFqMj7Om0gZ1VCBCLZrrTE8396ujnCT
+   7UD6NFa/9w2g2PWK7MD+nZUHRnkVKjEUxUl3VMnsSIN8wzx70y/K5MKaQ
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
+        <shuah@kernel.org>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
+        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
+        <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+Subject: [RFC v1 00/10] roadtest: a driver testing framework
+Date:   Fri, 11 Mar 2022 17:24:35 +0100
+Message-ID: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <mhng-bb42ad9f-5772-4749-97e1-9f6c511654f6@palmer-mbp2014> <e9287c9b-6ac7-dcb3-3b03-98bc83bbf119@microchip.com>
-In-Reply-To: <e9287c9b-6ac7-dcb3-3b03-98bc83bbf119@microchip.com>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 11 Mar 2022 15:59:49 +0800
-Message-ID: <CANXhq0rPVKSF64Hwd9+jD3ut0y7VCE940V5do0Hn8=mnoX97yw@mail.gmail.com>
-Subject: Re: [PATCH v7 00/11] Update the Icicle Kit device tree
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Stephen Boyd <sboyd@kernel.org>, Lewis.Hanly@microchip.com,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        atishp@rivosinc.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        Rob Herring <robh+dt@kernel.org>, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        Lee Jones <lee.jones@linaro.org>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-gpio@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 3:35 PM <Conor.Dooley@microchip.com> wrote:
->
-> On 10/03/2022 07:07, Palmer Dabbelt wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >
-> > On Wed, 23 Feb 2022 12:48:16 PST (-0800), mail@conchuod.ie wrote:
-> >> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
-> >>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>
-> >>> This series updates the Microchip Icicle Kit device tree by adding a
-> >>> host of peripherals, and some updates to the memory map. In addition,
-> >>> the device tree has been split into a third part, which contains "soft"
-> >>> peripherals that are in the fpga fabric.
-> >>>
-> >>> Several of the entries are for peripherals that have not get had their
-> >>> drivers upstreamed, so in those cases the dt bindings are included where
-> >>> appropriate in order to avoid the many "DT compatible string <x> appears
-> >>> un-documented" errors.
-> >>>
-> >>> Depends on mpfs clock driver binding (on clk/next) to provide
-> >>> dt-bindings/clock/microchip,mpfs-clock.h for the device tree
-> >>> and on the other changes to the icicle/mpfs device tree from geert
-> >>> that are already in linux/riscv/for-next.
-> >
-> > So that's causing this to not build, as I can't build without the
-> > header.  I went ahead and put these on top of that patch, resulting in
-> >
-> >     * 48e8641c2bf0 - (HEAD -> riscv-microchip, palmer/riscv-microchip) MAINTAINERS: update riscv/microchip entry (2 minutes ago) <Conor Dooley>
-> >     * 528a5b1f2556 - riscv: dts: microchip: add new peripherals to icicle kit device tree (2 minutes ago) <Conor Dooley>
-> >     * 5b28df37d311 - riscv: dts: microchip: update peripherals in icicle kit device tree (2 minutes ago) <Conor Dooley>
-> >     * c5094f371008 - riscv: dts: microchip: refactor icicle kit device tree (2 minutes ago) <Conor Dooley>
-> >     * 72560c6559b8 - riscv: dts: microchip: add fpga fabric section to icicle kit (2 minutes ago) <Conor Dooley>
-> >     * 6546f920868e - riscv: dts: microchip: use clk defines for icicle kit (2 minutes ago) <Conor Dooley>
-> >     * df77f7735786 - dt-bindings: pwm: add microchip corepwm binding (2 minutes ago) <Conor Dooley>
-> >     * 735806d8a68e - dt-bindings: gpio: add bindings for microchip mpfs gpio (2 minutes ago) <Conor Dooley>
-> >     * 4cbcc0d7b397 - dt-bindings: rtc: add bindings for microchip mpfs rtc (2 minutes ago) <Conor Dooley>
-> >     * b435a1728c9f - dt-bindings: soc/microchip: add info about services to mpfs sysctrl (2 minutes ago) <Conor Dooley>
-> >     * 213556235526 - dt-bindings: soc/microchip: update syscontroller compatibles (2 minutes ago) <Conor Dooley>
-> >     * 2145bb687e3f - (clk/clk-microchip) dt-bindings: clk: microchip: Add Microchip PolarFire host binding (6 weeks ago) <Daire McNamara>
-> >     * e783362eb54c - (tag: v5.17-rc1) Linux 5.17-rc1 (7 weeks ago) <Linus Torvalds>
-> >
-> > sboyd: IIRC it's OK to consider clk-microchip as a stable branch?  If
-> > not I can just wait until you send your PR to Linus and send this later
-> > in the merge window, no big deal on my end.
-> >
-> > I've put this on for-next.  If that's a problem let me know and I'll
-> > delay it.
-> Great, thanks! Probably worth mentioning that I've deleted the dma node
-> that Zong Li is modifying in his pdma patchset.
->
+This patchset proposes roadtest, a device-driver testing framework.  Drivers
+are tested under User Mode Linux (UML) and interact with mocked/modelled
+hardware.  The tests and hardware models are written in Python, the former
+using Python's built-in unittest framework.
 
-I guess I could re-sent the next version based on top of for-next, or
-delay my patch set until the next tag. What is your perspective?
+Drivers are tested via their userspace interfaces.  The hardware models allow
+tests to inject values into registers and assert that drivers control the
+hardware in the right way and react as expected to stimuli.
 
-> >
-> > Thanks!
-> >
-> >>>
-> >>> Additionally, the interrupt-extended warnings on the plic/clint are
-> >>> cleared by [1] & [2].
-> >>>
-> >>> [1] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
-> >>> [2] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
-> >>
-> >> Hey Palmer,
-> >>
-> >> dt-bindings should be set now, so if you're still happy to take the
-> >> series via riscv, that'd be great. i2c, spi & usb patches ended going
-> >> via the sub-system trees (and have been dropped from the series), in
-> >> case those generate warnings for you.
-> >
-> > Something went off the rails in email land and #0 and #2 didn't end up
-> > in my patch queue but the rest did.  Luckily enough made it through that
-> > it didn't get lost, and lore's pretty great so this sort of thing isn't
-> > that big of a deal these days.  That said, email is a bit of a black box
-> > so figured I'd give you a heads up.
->
-> Huh, interesting. I do check after sending that I can see the mails in my
-> other email's inbox & they're there. Guess good thing that I sent the follow up.
-> Thanks,
-> Conor.
->
-> >
-> >>
-> >> Thanks,
-> >> Conor.
-> >>>
-> >>> Changes from v6:
-> >>> - Dropped i2c patch, as its in i2c-next
-> >>> - Added ack on gpio, reviewed-by on rtc
-> >>> - Dropped child nodes from sysctrl binding entirely, added a link to
-> >>>    the online documenation for the services the system controller can
-> >>>    provide
-> >>> - Dropped the #pwm-cells and replaced with a ref, a la Krzysztof's
-> >>>    series
-> >>>
-> >>> Changes from v5:
-> >>> - reworded the descriptions in the pwm binding to (hopefully) add
-> >>>    clarity
-> >>> - added -mask to the custom properties and made them 32 bit
-> >>> - renamed the i2c binding to corei2c, since it is not mpfs specific
-> >>> - removed the child nodes of the system controller in example/dts &
-> >>>    will create them in the driver.
-> >>>    @Rob, I assume keeping them documented is the correct thing to do?
-> >>> - removed the dependancy on the clock binding from the examples
-> >>> - reformatted rtc interrupts as per Rob's suggestion
-> >>>
-> >>> Changes from v4:
-> >>> - dont include icicle_kit_defconfig, accidentally added in v3
-> >>> - drop prescaler from mpfs-rtc & calculate the value instead
-> >>> - use corei2c as a fallback device for mpfs-i2c
-> >>> - drop spi dt-binding (on spi-next)
-> >>>    commit 2da187304e556ac59cf2dacb323cc78ded988169
-> >>> - drop usb dt-binding (on usb-next)
-> >>>
-> >>> Changes from v3:
-> >>> - drop "mailbox: change mailbox-mpfs compatible string", already upstream:
-> >>>    commit f10b1fc0161cd99e ("mailbox: change mailbox-mpfs compatible string")
-> >>> - fix copy paste error in microchip,mpfs-mailbox dt-binding
-> >>> - remove whitespace in syscontroller dt entry
-> >>>
-> >>> Changes from v2:
-> >>> - dropped plic int header & corresponding defines in dts{,i}
-> >>> - use $ref to drmode in mpfs-musb binding
-> >>> - split changes to dts{,i} again: functional changes to existing
-> >>>    elements now are in a new patch
-> >>> - drop num-cs property in mpfs-spi binding
-> >>> - dont make the system controller a simple-mfd
-> >>> - move the separate bindings for rng/generic system services into the
-> >>>    system controller binding
-> >>> - added an instance corei2c as i2c2 in the fabric dtsi
-> >>> - add version numbering to corepwm and corei2c compat string (-rtl-vN)
-> >>>
-> >>> Conor Dooley (11):
-> >>>    dt-bindings: soc/microchip: update syscontroller compatibles
-> >>>    dt-bindings: soc/microchip: add info about services to mpfs sysctrl
-> >>>    dt-bindings: rtc: add bindings for microchip mpfs rtc
-> >>>    dt-bindings: gpio: add bindings for microchip mpfs gpio
-> >>>    dt-bindings: pwm: add microchip corepwm binding
-> >>>    riscv: dts: microchip: use clk defines for icicle kit
-> >>>    riscv: dts: microchip: add fpga fabric section to icicle kit
-> >>>    riscv: dts: microchip: refactor icicle kit device tree
-> >>>    riscv: dts: microchip: update peripherals in icicle kit device tree
-> >>>    riscv: dts: microchip: add new peripherals to icicle kit device tree
-> >>>    MAINTAINERS: update riscv/microchip entry
-> >>>
-> >>>   .../bindings/gpio/microchip,mpfs-gpio.yaml    |  79 ++++++
-> >>>   ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
-> >>>   .../bindings/pwm/microchip,corepwm.yaml       |  81 ++++++
-> >>>   .../bindings/rtc/microchip,mfps-rtc.yaml      |  58 ++++
-> >>>   .../microchip,mpfs-sys-controller.yaml        |  40 +++
-> >>>   ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
-> >>>   MAINTAINERS                                   |   2 +
-> >>>   .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
-> >>>   .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
-> >>>   .../boot/dts/microchip/microchip-mpfs.dtsi    | 254 ++++++++++++++----
-> >>>   10 files changed, 591 insertions(+), 104 deletions(-)
-> >>>   create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
-> >>>   rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
-> >>>   create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
-> >>>   create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> >>>   create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
-> >>>   delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
-> >>>   create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-> >>>
->
+Roadtest is meant to be used for relatively simple drivers, such as the ones
+part of the IIO, regulator and RTC subsystems.
+
+Questions and answers:
+
+= Why do we need this?
+
+There are a large amount of these kind of drivers in the kernel.  Most of the
+hardware is not available in current CI systems so most drivers can only, at
+best, be build-tested there.  Even basic soundness such as a driver
+successfully probing and binding to the devices it tries to be support cannot
+be tested.  Drivers cannot be easily regression-tested to ensure that bugs
+fixed once do not get reintroduced.
+
+Many drivers support multiple related hardware variants, and far from all patch
+submitters have access to all the variants which the driver that they are
+patching supports, so there is no way for them to easily verify that they
+haven't broken something basic on a variant which they do not own.
+
+Furthermore, hardware can be used in many different configurations with drivers
+supporting many different devicetree properties, so even just having access to
+all the variants would be insufficient.
+
+On top of that, some of the chips measure environmental conditions such as
+temperature, so testing extreme cases may not be simple even if one has access
+to the hardware.
+
+All this makes development, modification, maintenance, and reviewing of these
+drivers harder than it necessarily needs to be.  Roadtest hopes to make some of
+these things slightly easier by providing a framework to create hardware
+models/mocks and to write testcases which exercise drivers using these models.
+
+= Do you have some specific examples of the kind of code this could be used to
+  test?
+
+Here is an example of a patch which can easily be regression-tested using
+roadtest (in fact, this series includes such a regression test) but is much
+harder to do so automatically with real hardware since it requires specific
+environmental conditions:
+
+ iio: light: opt3001: Fixed timeout error when 0 lux
+ https://lore.kernel.org/lkml/20210920125351.6569-1-valek@2n.cz/
+
+Here is another example.  This driver has code which correctly parses a
+documented devicetree property (amstaos,proximity-diodes) but which then fails
+to actually communicate this setting to the hardware in any way.  Such code can
+be easily tested with roadtest since the framework integrates devicetree
+support and provides functions to assert that drivers writes expected registers
+with expected values:
+
+ drivers/iio/light/tsl2772.c tsl2772_read_prox_diodes()
+
+(Both the above examples happen to be from the same subsystem but that should
+in no way be taken to imply that such issues are unique to that subsystem or
+that that subsystem has more of them.)
+
+= How does this relate to kselftests?
+
+Tests in kselftests also test kernel code using the userspace interfaces, but
+that's about what's common between the frameworks.  kselftests has other goals
+and does not provide any kind of mechanism for hardware mocking.
+
+= How does this relate to kunit?
+
+Kunit is for unit testing of functions in kernel code, and is not meant for
+testing kernel code via userspace interfaces.  It could in theory be used to
+test some of the simple drivers too, but that would require (1) a large amount
+of mocking code in various kernel frameworks, and, more importantly, (2)
+refactoring of the drivers to be tested.
+
+This can be contrasted with roadtest which works with mostly unmodified drivers
+and which mocks the hardware at the lowest level without having to change
+kernel frameworks.
+
+= How do I use it?
+
+See Documentation/dev-tools/roadtest.rst added by the documentation patch for
+more information about running and writing tests using this framework.
+
+= What's included in the patchset?
+
+The current framework allows developing tests for hardware which uses the I2C
+bus.  Hardware models can also control GPIOs and use them to trigger
+interrupts.
+
+This series includes tests for some IIO, regulator and RTC drivers.  The
+regulator and RTC tests depend on a few driver patches which are either in
+review or in linux-next.  These are noted in the commit messages.
+
+The entire patch set, including the required dependencies, is also available in
+a git tree:
+
+ https://github.com/vwax/linux/commits/roadtest/rfc-v1
+
+Cc: linux-kernel@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+
+Cc: shuah@kernel.org
+Cc: brendanhiggins@google.com
+Cc: linux-kselftest@vger.kernel.org
+
+Cc: jic23@kernel.org
+Cc: linux-iio@vger.kernel.org
+
+Cc: lgirdwood@gmail.com
+Cc: broonie@kernel.org
+
+Cc: a.zummo@towertech.it
+Cc: alexandre.belloni@bootlin.com
+Cc: linux-rtc@vger.kernel.org
+
+Cc: corbet@lwn.net
+Cc: linux-doc@vger.kernel.org
+
+Vincent Whitchurch (10):
+  roadtest: import libvhost-user from QEMU
+  roadtest: add C backend
+  roadtest: add framework
+  roadtest: add base config
+  roadtest: add build files
+  roadtest: add documentation
+  iio: light: opt3001: add roadtest
+  iio: light: vcnl4000: add roadtest
+  regulator: tps62864: add roadtest
+  rtc: pcf8563: add roadtest
+
+ Documentation/dev-tools/index.rst             |    1 +
+ Documentation/dev-tools/roadtest.rst          |  669 ++++
+ tools/testing/roadtest/.gitignore             |    2 +
+ tools/testing/roadtest/Dockerfile             |   25 +
+ tools/testing/roadtest/Makefile               |   84 +
+ tools/testing/roadtest/init.sh                |   19 +
+ tools/testing/roadtest/pyproject.toml         |   10 +
+ tools/testing/roadtest/requirements.txt       |    4 +
+ tools/testing/roadtest/roadtest/__init__.py   |    2 +
+ .../roadtest/roadtest/backend/__init__.py     |    0
+ .../roadtest/roadtest/backend/backend.py      |   32 +
+ .../testing/roadtest/roadtest/backend/gpio.py |  111 +
+ .../testing/roadtest/roadtest/backend/i2c.py  |  123 +
+ .../testing/roadtest/roadtest/backend/main.py |   13 +
+ .../testing/roadtest/roadtest/backend/mock.py |   20 +
+ .../roadtest/roadtest/backend/test_gpio.py    |   98 +
+ .../roadtest/roadtest/backend/test_i2c.py     |   84 +
+ .../testing/roadtest/roadtest/cmd/__init__.py |    0
+ tools/testing/roadtest/roadtest/cmd/main.py   |  146 +
+ tools/testing/roadtest/roadtest/cmd/remote.py |   48 +
+ .../roadtest/roadtest/core/__init__.py        |    0
+ .../testing/roadtest/roadtest/core/control.py |   52 +
+ .../roadtest/roadtest/core/devicetree.py      |  155 +
+ .../roadtest/roadtest/core/hardware.py        |   94 +
+ tools/testing/roadtest/roadtest/core/log.py   |   42 +
+ .../testing/roadtest/roadtest/core/modules.py |   38 +
+ .../testing/roadtest/roadtest/core/opslog.py  |   35 +
+ tools/testing/roadtest/roadtest/core/proxy.py |   48 +
+ tools/testing/roadtest/roadtest/core/suite.py |  286 ++
+ tools/testing/roadtest/roadtest/core/sysfs.py |   77 +
+ .../roadtest/roadtest/core/test_control.py    |   35 +
+ .../roadtest/roadtest/core/test_devicetree.py |   31 +
+ .../roadtest/roadtest/core/test_hardware.py   |   41 +
+ .../roadtest/roadtest/core/test_log.py        |   54 +
+ .../roadtest/roadtest/core/test_opslog.py     |   27 +
+ .../roadtest/roadtest/tests/__init__.py       |    0
+ .../roadtest/roadtest/tests/base/config       |   84 +
+ .../roadtest/roadtest/tests/iio/__init__.py   |    0
+ .../roadtest/roadtest/tests/iio/config        |    1 +
+ .../roadtest/roadtest/tests/iio/iio.py        |  112 +
+ .../roadtest/tests/iio/light/__init__.py      |    0
+ .../roadtest/roadtest/tests/iio/light/config  |    2 +
+ .../roadtest/tests/iio/light/test_opt3001.py  |   95 +
+ .../roadtest/tests/iio/light/test_vcnl4000.py |  132 +
+ .../roadtest/tests/iio/light/test_vcnl4010.py |  282 ++
+ .../roadtest/tests/iio/light/test_vcnl4040.py |  104 +
+ .../roadtest/tests/iio/light/test_vcnl4200.py |   96 +
+ .../roadtest/tests/regulator/__init__.py      |    0
+ .../roadtest/roadtest/tests/regulator/config  |    4 +
+ .../roadtest/tests/regulator/test_tps62864.py |  187 ++
+ .../roadtest/roadtest/tests/rtc/__init__.py   |    0
+ .../roadtest/roadtest/tests/rtc/config        |    1 +
+ .../roadtest/roadtest/tests/rtc/rtc.py        |   73 +
+ .../roadtest/tests/rtc/test_pcf8563.py        |  348 ++
+ tools/testing/roadtest/src/.gitignore         |    1 +
+ tools/testing/roadtest/src/backend.c          |  884 +++++
+ .../src/libvhost-user/include/atomic.h        |  310 ++
+ .../src/libvhost-user/libvhost-user.c         | 2885 +++++++++++++++++
+ .../src/libvhost-user/libvhost-user.h         |  691 ++++
+ 59 files changed, 8798 insertions(+)
+ create mode 100644 Documentation/dev-tools/roadtest.rst
+ create mode 100644 tools/testing/roadtest/.gitignore
+ create mode 100644 tools/testing/roadtest/Dockerfile
+ create mode 100644 tools/testing/roadtest/Makefile
+ create mode 100755 tools/testing/roadtest/init.sh
+ create mode 100644 tools/testing/roadtest/pyproject.toml
+ create mode 100644 tools/testing/roadtest/requirements.txt
+ create mode 100644 tools/testing/roadtest/roadtest/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/backend.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/gpio.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/i2c.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/main.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/mock.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/test_gpio.py
+ create mode 100644 tools/testing/roadtest/roadtest/backend/test_i2c.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/main.py
+ create mode 100644 tools/testing/roadtest/roadtest/cmd/remote.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/control.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/devicetree.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/hardware.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/log.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/modules.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/opslog.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/proxy.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/suite.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/sysfs.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_control.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_devicetree.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_hardware.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_log.py
+ create mode 100644 tools/testing/roadtest/roadtest/core/test_opslog.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/base/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/iio.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_opt3001.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4000.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4010.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4040.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/iio/light/test_vcnl4200.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/regulator/test_tps62864.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/__init__.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/config
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/rtc.py
+ create mode 100644 tools/testing/roadtest/roadtest/tests/rtc/test_pcf8563.py
+ create mode 100644 tools/testing/roadtest/src/.gitignore
+ create mode 100644 tools/testing/roadtest/src/backend.c
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/include/atomic.h
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.c
+ create mode 100644 tools/testing/roadtest/src/libvhost-user/libvhost-user.h
+
+-- 
+2.34.1
+
