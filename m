@@ -2,60 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E0F4D684B
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Mar 2022 19:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4816D4D693E
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Mar 2022 20:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350633AbiCKSII (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Mar 2022 13:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S1351110AbiCKT6K (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Mar 2022 14:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232941AbiCKSIG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Mar 2022 13:08:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAF1BA17B;
-        Fri, 11 Mar 2022 10:07:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 178EB61E70;
-        Fri, 11 Mar 2022 18:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AEBC340E9;
-        Fri, 11 Mar 2022 18:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647022021;
-        bh=FbqNvOscYJ7Bfr/Vx00UgkhPaUqUnhlZCF+USYAVP7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vOMJW+v9J+BqQYR/PnmJ698oQuG3E+dq1i4rfVycrdqD+cso8RQTZa5pT2Yo4F9LD
-         1xtdIuzSSBeZcdQ96Kbk9RN5+OYHpfdue+UzoY3aB6SU5fKqE1TQlTGFMJygCFc1EP
-         pFK3kzS7x2d1SfpMUz5b+96BnjndaCnL3HRyaSVI2TFYBQToCgbIz0lSWd9CWrq8bG
-         LVLkcTRBT+tWtgdRhTNsce+EUu/l7QLK7ZlZFGRCDcw+jPkopTFWyLAE5KrPS6espp
-         J/DSeNVhR/jDSNkGi6xHavFIrUTqc4sN119HRZv1mFz+qnkc2xwSt8J5xD6WvekkeU
-         gzrqZFrmzJR1w==
-Date:   Fri, 11 Mar 2022 18:06:54 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        shuah@kernel.org, brendanhiggins@google.com,
-        linux-kselftest@vger.kernel.org, jic23@kernel.org,
-        linux-iio@vger.kernel.org, lgirdwood@gmail.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org
-Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
-Message-ID: <YiuPvkQroV/WdFpx@sirena.org.uk>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-10-vincent.whitchurch@axis.com>
+        with ESMTP id S1351096AbiCKT6J (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Mar 2022 14:58:09 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC571CF0A8
+        for <linux-rtc@vger.kernel.org>; Fri, 11 Mar 2022 11:57:03 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l10so5751327wmb.0
+        for <linux-rtc@vger.kernel.org>; Fri, 11 Mar 2022 11:57:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hyHFdMu5+sDMX2FabVDzHh3nvTbk2iDwWgSCYauJ5LM=;
+        b=App1+65z5XOBrhAKeiDdnq7Tl9pLK8rvdlav6iMyD4bmdsMMutsQPAGkKezmR3oiws
+         uHZpXEmk/56Xe0gVRdVF9f3CbIFP+aDNU2MFB2ajlwd8LDY3zyqEePomlN/iSiVcsTIU
+         RPYQYXdQgm9n3AJ1+vKXN79PLzEjLrl28l2w57/lJXTbTlFN/utHHatVRl2xHQyultSN
+         QA5wOIIsU/X50VKXyLul+EmL4GroIPapmJcJRe4iA/gbbgSWWBLBwgBmhBOzTtyjdtpZ
+         eLSzMPo6UuVIgLI1XFJyijPwofz9voR90MTlJ4OGpz8kMmepfUYR8bVRlN5FYXw0I2Yn
+         URQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hyHFdMu5+sDMX2FabVDzHh3nvTbk2iDwWgSCYauJ5LM=;
+        b=wHgSTrXmdexY/29WDGddxd8ATFyvXdAV4c137tF32bDWMjexuyFqBty7Jzu3aMudCB
+         jDLG0kzO47Eeh/IVDfkQEZPV6E1yy0axGqWRRmqhtUxiNGOxqZd3jpaiKu1BxKEqCO5L
+         64iUe1KncAx0Z2JKZYTlFgeEvFpmmbbq2OuZgQWecWCM1lWRJkq3EfRUd3APONwXZFOo
+         K6V3ZAypgVZQmJq41LPmERQnymM1XPDlMDxTyXPqbQwuVSqbTH/sB1dbEb8kd06/gUqr
+         zx5M3f1uh8w/Li9/MkeQe9Z2Q66z6wHoWj30bc2lTxkvaLO7DYj12Pw3m5ZifN32D+FD
+         /GNg==
+X-Gm-Message-State: AOAM532T+CqxBlhhwapXurN76fEMAjLZMJpYJss5fnCm12mygXhmg9dA
+        KleNeJCA61HXqbbHAqoO+UPcDA==
+X-Google-Smtp-Source: ABdhPJyfcz6JQlr/qzmlbw18c4zbQShcJ+zFmYG81nNEPwjxlj9hg0tSW/T0xVZo7ONXtDqgW/WguQ==
+X-Received: by 2002:a1c:2904:0:b0:37b:ea53:4cbf with SMTP id p4-20020a1c2904000000b0037bea534cbfmr8788549wmp.46.1647028622112;
+        Fri, 11 Mar 2022 11:57:02 -0800 (PST)
+Received: from [192.168.2.222] ([109.76.4.19])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b00389cc36a3bfsm10091830wmp.6.2022.03.11.11.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Mar 2022 11:57:01 -0800 (PST)
+Message-ID: <66d64241-d2bc-d25a-4204-56f10521ad6c@conchuod.ie>
+Date:   Fri, 11 Mar 2022 19:56:59 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MolxjZU9V35M/+dw"
-Content-Disposition: inline
-In-Reply-To: <20220311162445.346685-10-vincent.whitchurch@axis.com>
-X-Cookie: A fool and his money are soon popular.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v7 00/11] Update the Icicle Kit device tree
+Content-Language: en-US
+To:     Zong Li <zong.li@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Lewis.Hanly@microchip.com, Daire.McNamara@microchip.com,
+        Ivan.Griffin@microchip.com, atishp@rivosinc.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        Rob Herring <robh+dt@kernel.org>, jassisinghbrar@gmail.com,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        Lee Jones <lee.jones@linaro.org>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-gpio@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <mhng-bb42ad9f-5772-4749-97e1-9f6c511654f6@palmer-mbp2014>
+ <e9287c9b-6ac7-dcb3-3b03-98bc83bbf119@microchip.com>
+ <CANXhq0rPVKSF64Hwd9+jD3ut0y7VCE940V5do0Hn8=mnoX97yw@mail.gmail.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <CANXhq0rPVKSF64Hwd9+jD3ut0y7VCE940V5do0Hn8=mnoX97yw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,113 +93,180 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---MolxjZU9V35M/+dw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Mar 11, 2022 at 05:24:44PM +0100, Vincent Whitchurch wrote:
+On 11/03/2022 07:59, Zong Li wrote:
+> On Thu, Mar 10, 2022 at 3:35 PM <Conor.Dooley@microchip.com> wrote:
+>>
+>> On 10/03/2022 07:07, Palmer Dabbelt wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On Wed, 23 Feb 2022 12:48:16 PST (-0800), mail@conchuod.ie wrote:
+>>>> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
+>>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>>
+>>>>> This series updates the Microchip Icicle Kit device tree by adding a
+>>>>> host of peripherals, and some updates to the memory map. In addition,
+>>>>> the device tree has been split into a third part, which contains "soft"
+>>>>> peripherals that are in the fpga fabric.
+>>>>>
+>>>>> Several of the entries are for peripherals that have not get had their
+>>>>> drivers upstreamed, so in those cases the dt bindings are included where
+>>>>> appropriate in order to avoid the many "DT compatible string <x> appears
+>>>>> un-documented" errors.
+>>>>>
+>>>>> Depends on mpfs clock driver binding (on clk/next) to provide
+>>>>> dt-bindings/clock/microchip,mpfs-clock.h for the device tree
+>>>>> and on the other changes to the icicle/mpfs device tree from geert
+>>>>> that are already in linux/riscv/for-next.
+>>>
+>>> So that's causing this to not build, as I can't build without the
+>>> header.  I went ahead and put these on top of that patch, resulting in
+>>>
+>>>      * 48e8641c2bf0 - (HEAD -> riscv-microchip, palmer/riscv-microchip) MAINTAINERS: update riscv/microchip entry (2 minutes ago) <Conor Dooley>
+>>>      * 528a5b1f2556 - riscv: dts: microchip: add new peripherals to icicle kit device tree (2 minutes ago) <Conor Dooley>
+>>>      * 5b28df37d311 - riscv: dts: microchip: update peripherals in icicle kit device tree (2 minutes ago) <Conor Dooley>
+>>>      * c5094f371008 - riscv: dts: microchip: refactor icicle kit device tree (2 minutes ago) <Conor Dooley>
+>>>      * 72560c6559b8 - riscv: dts: microchip: add fpga fabric section to icicle kit (2 minutes ago) <Conor Dooley>
+>>>      * 6546f920868e - riscv: dts: microchip: use clk defines for icicle kit (2 minutes ago) <Conor Dooley>
+>>>      * df77f7735786 - dt-bindings: pwm: add microchip corepwm binding (2 minutes ago) <Conor Dooley>
+>>>      * 735806d8a68e - dt-bindings: gpio: add bindings for microchip mpfs gpio (2 minutes ago) <Conor Dooley>
+>>>      * 4cbcc0d7b397 - dt-bindings: rtc: add bindings for microchip mpfs rtc (2 minutes ago) <Conor Dooley>
+>>>      * b435a1728c9f - dt-bindings: soc/microchip: add info about services to mpfs sysctrl (2 minutes ago) <Conor Dooley>
+>>>      * 213556235526 - dt-bindings: soc/microchip: update syscontroller compatibles (2 minutes ago) <Conor Dooley>
+>>>      * 2145bb687e3f - (clk/clk-microchip) dt-bindings: clk: microchip: Add Microchip PolarFire host binding (6 weeks ago) <Daire McNamara>
+>>>      * e783362eb54c - (tag: v5.17-rc1) Linux 5.17-rc1 (7 weeks ago) <Linus Torvalds>
+>>>
+>>> sboyd: IIRC it's OK to consider clk-microchip as a stable branch?  If
+>>> not I can just wait until you send your PR to Linus and send this later
+>>> in the merge window, no big deal on my end.
+>>>
+>>> I've put this on for-next.  If that's a problem let me know and I'll
+>>> delay it.
+>> Great, thanks! Probably worth mentioning that I've deleted the dma node
+>> that Zong Li is modifying in his pdma patchset.
+>>
+> 
+> I guess I could re-sent the next version based on top of for-next, or
+> delay my patch set until the next tag. What is your perspective?
 
-This looks like it could be useful, modulo the general concerns with
-mocking stuff.  I've not looked at the broader framework stuff in any
-meanigful way.
+I'll be honest and say that I have no idea what one is supposed to do here.
+Palmer?
 
-> +    @classmethod
-> +    def setUpClass(cls) -> None:
-> +        insmod("tps6286x-regulator")
-
-Shouldn't this get figured out when the device gets created in DT (if it
-doesn't I guess the tests found a bug...)?
-
-> +    def setUp(self) -> None:
-> +        self.driver = I2CDriver("tps6286x")
-> +        self.hw = Hardware("i2c")
-> +        self.hw.load_model(TPS62864)
-
-This feels like there could be some syntactic sugar to say "create this
-I2C device" in one call?  In general a lot of the frameworkish stuff
-feels verbose.
-
-> +    def test_voltage(self) -> None:
-> +        with (
-> +            self.driver.bind(self.dts["normal"]),
-> +            PlatformDriver("reg-virt-consumer").bind(
-> +                "tps62864_normal_consumer"
-> +            ) as consumerdev,
-> +        ):
-> +            maxfile = consumerdev.path / "max_microvolts"
-> +            minfile = consumerdev.path / "min_microvolts"
-> +
-> +            write_int(maxfile, 1675000)
-> +            write_int(minfile, 800000)
-> +
-> +            mock = self.hw.update_mock()
-> +            mock.assert_reg_write_once(self, REG_CONTROL, 1 << 5)
-> +            mock.assert_reg_write_once(self, REG_VOUT1, 0x50)
-> +            mock.reset_mock()
-
-Some comments about the assertations here would seem to be in order.
-It's not altogether clear what this is testing - it looks to be
-verifying that the regulator is enabled with the voltage set to 800mV
-mapping to 0x50 in VOUT1 but I'm not sure that the idle reader would
-pick that up.
-
-> +            mV = 1000
-> +            data = [
-> +                (400 * mV, 0x00),
-> +                (900 * mV, 0x64),
-> +                (1675 * mV, 0xFF),
-> +            ]
-> +
-> +            for voltage, val in data:
-> +                write_int(minfile, voltage)
-> +                mock = self.hw.update_mock()
-> +                mock.assert_reg_write_once(self, REG_VOUT1, val)
-> +                mock.reset_mock()
-
-For covering regulators in general (especially those like this that use
-the generic helpers) I'd be inclined to go through every single voltage
-that can be set which isn't so interesting for this driver with it's
-linear voltage control but more interesting for something that's not
-continuous.  I'd also put a cross check in that the voltage and enable
-state that's reported via the read interface in sysfs is the one that we
-think we've just set, that'd validate that the framework's model of
-what's going on matches both what the driver did to the "hardware" and
-what the running kernel thinks is going on so we're joined up top to
-bottom (for the regulator framework the read values come from the
-driver so it is actually covering the driver).
-
-This all feels like it could readily be factored out into a generic
-helper, much as the actual drivers are especially when they're more data
-driven.  Ideally with the ability to override the default I/O operations
-for things with sequences that need to be followed instead of just a
-bitfield to update.  Callbacks to validate enable state, voltage, mode
-and so on in the hardware.  If we did that then rather than open coding
-every single test for every single device we could approach things at
-the framework level and give people working on a given device a pile of
-off the shelf tests which are more likely to catch things that an
-individual driver author might've missed, it also avoids the test
-coverage being more laborious than writing the actual driver.
-
-This does raise the questions I mentioned about how useful the testing
-really is of course, even more so when someone works out how to generate
-the data tables for the test and the driver from the same source, but
-that's just generally an issue for mocked tests at the conceptual level
-and clearly it's an approach that's fairly widely used and people get
-value from.
-
---MolxjZU9V35M/+dw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIrj70ACgkQJNaLcl1U
-h9D1Rgf9Ftqa1fE0HqpChhmXg9bevuB0hQF8ey0T0Ypw/UorQPenedWbtt0/waZY
-K8rGaxJFPJbpC26PeXga6PnVPe7rm+uJtKQe7kICGvkvdCzVfqEH6uNxUfMwPki3
-zD2nhS1EvX7bB4NUDP8a3BgrFu8KWh6Npx2yj1cUKUoKFAPBhktCFs/wP5xfhvDV
-16sVYMN3QInL8IERk5F+lJSZHHOqfyt0lu7hgW70d+GoAlix/NwXL67ezPMykft/
-iyATJkFPB6KoBG2IChUzCFOzMN8KVfjXMCcl5JxOgSpER4jqMeDIbjTsv4uilzFf
-LUaSWbjwsd5iJoc7O2UJ+5I6S6vUDA==
-=X5TK
------END PGP SIGNATURE-----
-
---MolxjZU9V35M/+dw--
+> 
+>>>
+>>> Thanks!
+>>>
+>>>>>
+>>>>> Additionally, the interrupt-extended warnings on the plic/clint are
+>>>>> cleared by [1] & [2].
+>>>>>
+>>>>> [1] https://lore.kernel.org/linux-riscv/cover.1639744468.git.geert@linux-m68k.org/
+>>>>> [2] https://lore.kernel.org/linux-riscv/cover.1639744106.git.geert@linux-m68k.org/
+>>>>
+>>>> Hey Palmer,
+>>>>
+>>>> dt-bindings should be set now, so if you're still happy to take the
+>>>> series via riscv, that'd be great. i2c, spi & usb patches ended going
+>>>> via the sub-system trees (and have been dropped from the series), in
+>>>> case those generate warnings for you.
+>>>
+>>> Something went off the rails in email land and #0 and #2 didn't end up
+>>> in my patch queue but the rest did.  Luckily enough made it through that
+>>> it didn't get lost, and lore's pretty great so this sort of thing isn't
+>>> that big of a deal these days.  That said, email is a bit of a black box
+>>> so figured I'd give you a heads up.
+>>
+>> Huh, interesting. I do check after sending that I can see the mails in my
+>> other email's inbox & they're there. Guess good thing that I sent the follow up.
+>> Thanks,
+>> Conor.
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>> Conor.
+>>>>>
+>>>>> Changes from v6:
+>>>>> - Dropped i2c patch, as its in i2c-next
+>>>>> - Added ack on gpio, reviewed-by on rtc
+>>>>> - Dropped child nodes from sysctrl binding entirely, added a link to
+>>>>>     the online documenation for the services the system controller can
+>>>>>     provide
+>>>>> - Dropped the #pwm-cells and replaced with a ref, a la Krzysztof's
+>>>>>     series
+>>>>>
+>>>>> Changes from v5:
+>>>>> - reworded the descriptions in the pwm binding to (hopefully) add
+>>>>>     clarity
+>>>>> - added -mask to the custom properties and made them 32 bit
+>>>>> - renamed the i2c binding to corei2c, since it is not mpfs specific
+>>>>> - removed the child nodes of the system controller in example/dts &
+>>>>>     will create them in the driver.
+>>>>>     @Rob, I assume keeping them documented is the correct thing to do?
+>>>>> - removed the dependancy on the clock binding from the examples
+>>>>> - reformatted rtc interrupts as per Rob's suggestion
+>>>>>
+>>>>> Changes from v4:
+>>>>> - dont include icicle_kit_defconfig, accidentally added in v3
+>>>>> - drop prescaler from mpfs-rtc & calculate the value instead
+>>>>> - use corei2c as a fallback device for mpfs-i2c
+>>>>> - drop spi dt-binding (on spi-next)
+>>>>>     commit 2da187304e556ac59cf2dacb323cc78ded988169
+>>>>> - drop usb dt-binding (on usb-next)
+>>>>>
+>>>>> Changes from v3:
+>>>>> - drop "mailbox: change mailbox-mpfs compatible string", already upstream:
+>>>>>     commit f10b1fc0161cd99e ("mailbox: change mailbox-mpfs compatible string")
+>>>>> - fix copy paste error in microchip,mpfs-mailbox dt-binding
+>>>>> - remove whitespace in syscontroller dt entry
+>>>>>
+>>>>> Changes from v2:
+>>>>> - dropped plic int header & corresponding defines in dts{,i}
+>>>>> - use $ref to drmode in mpfs-musb binding
+>>>>> - split changes to dts{,i} again: functional changes to existing
+>>>>>     elements now are in a new patch
+>>>>> - drop num-cs property in mpfs-spi binding
+>>>>> - dont make the system controller a simple-mfd
+>>>>> - move the separate bindings for rng/generic system services into the
+>>>>>     system controller binding
+>>>>> - added an instance corei2c as i2c2 in the fabric dtsi
+>>>>> - add version numbering to corepwm and corei2c compat string (-rtl-vN)
+>>>>>
+>>>>> Conor Dooley (11):
+>>>>>     dt-bindings: soc/microchip: update syscontroller compatibles
+>>>>>     dt-bindings: soc/microchip: add info about services to mpfs sysctrl
+>>>>>     dt-bindings: rtc: add bindings for microchip mpfs rtc
+>>>>>     dt-bindings: gpio: add bindings for microchip mpfs gpio
+>>>>>     dt-bindings: pwm: add microchip corepwm binding
+>>>>>     riscv: dts: microchip: use clk defines for icicle kit
+>>>>>     riscv: dts: microchip: add fpga fabric section to icicle kit
+>>>>>     riscv: dts: microchip: refactor icicle kit device tree
+>>>>>     riscv: dts: microchip: update peripherals in icicle kit device tree
+>>>>>     riscv: dts: microchip: add new peripherals to icicle kit device tree
+>>>>>     MAINTAINERS: update riscv/microchip entry
+>>>>>
+>>>>>    .../bindings/gpio/microchip,mpfs-gpio.yaml    |  79 ++++++
+>>>>>    ...ilbox.yaml => microchip,mpfs-mailbox.yaml} |   6 +-
+>>>>>    .../bindings/pwm/microchip,corepwm.yaml       |  81 ++++++
+>>>>>    .../bindings/rtc/microchip,mfps-rtc.yaml      |  58 ++++
+>>>>>    .../microchip,mpfs-sys-controller.yaml        |  40 +++
+>>>>>    ...icrochip,polarfire-soc-sys-controller.yaml |  35 ---
+>>>>>    MAINTAINERS                                   |   2 +
+>>>>>    .../dts/microchip/microchip-mpfs-fabric.dtsi  |  25 ++
+>>>>>    .../microchip/microchip-mpfs-icicle-kit.dts   | 115 ++++++--
+>>>>>    .../boot/dts/microchip/microchip-mpfs.dtsi    | 254 ++++++++++++++----
+>>>>>    10 files changed, 591 insertions(+), 104 deletions(-)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/gpio/microchip,mpfs-gpio.yaml
+>>>>>    rename Documentation/devicetree/bindings/mailbox/{microchip,polarfire-soc-mailbox.yaml => microchip,mpfs-mailbox.yaml} (82%)
+>>>>>    create mode 100644 Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml
+>>>>>    create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+>>>>>    create mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,mpfs-sys-controller.yaml
+>>>>>    delete mode 100644 Documentation/devicetree/bindings/soc/microchip/microchip,polarfire-soc-sys-controller.yaml
+>>>>>    create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+>>>>>
+>>
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
