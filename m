@@ -2,122 +2,118 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329AC4DA5A6
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Mar 2022 23:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A9B4DAAE1
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Mar 2022 07:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352332AbiCOWtV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Mar 2022 18:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47136 "EHLO
+        id S1353976AbiCPGxu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Mar 2022 02:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350376AbiCOWtU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Mar 2022 18:49:20 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDF1255BF;
-        Tue, 15 Mar 2022 15:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1647384480; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vePc/2l2kPwqNPcpI7/w16whm1eM7Hut3osd5HFg+AM=;
-        b=jsFuj1qimCPjEGuKNaHW6yqQaPtxJASN3/Kr0LSEzU+5TLxv/hHEUfkzw+sh1BrG8gbE53
-        0nidIxjVglH7P062Z4lr05vFtCKiWPR0N0vYgsmR63Mu1KnPS9SPi9c5QAdDbz4sXeUcc8
-        /iPmtTQOZo7lYCYNcfNfn0LmwgmH0gg=
-Date:   Tue, 15 Mar 2022 22:47:50 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v8 09/16] rtc: ingenic: Simplify using
- devm_clk_get_enabled()
-To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org
-Message-Id: <QZ5T8R.VWFGTZG0ZTLW2@crapouillou.net>
-In-Reply-To: <20220314141643.22184-10-u.kleine-koenig@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-        <20220314141643.22184-10-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S1353971AbiCPGxu (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Mar 2022 02:53:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF7E60D95
+        for <linux-rtc@vger.kernel.org>; Tue, 15 Mar 2022 23:52:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUNVs-0006dA-FP; Wed, 16 Mar 2022 07:52:04 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUNVo-000zbf-Sq; Wed, 16 Mar 2022 07:51:59 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nUNVm-009UG4-Qs; Wed, 16 Mar 2022 07:51:58 +0100
+Date:   Wed, 16 Mar 2022 07:51:55 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     mail@conchuod.ie, sboyd@kernel.org, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        Atish Patra <atishp@rivosinc.com>, conor.dooley@microchip.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        lee.jones@linaro.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 00/11] Update the Icicle Kit device tree
+Message-ID: <20220316065155.tuuq2k4d5dczwtq2@pengutronix.de>
+References: <c94f9c0a-6dbe-c1f4-daff-e4d29f3ace02@conchuod.ie>
+ <mhng-bb42ad9f-5772-4749-97e1-9f6c511654f6@palmer-mbp2014>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bkpwvtdvshkxkizn"
+Content-Disposition: inline
+In-Reply-To: <mhng-bb42ad9f-5772-4749-97e1-9f6c511654f6@palmer-mbp2014>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Uwe,
 
-Le lun., mars 14 2022 at 15:16:36 +0100, Uwe Kleine-K=F6nig=20
-<u.kleine-koenig@pengutronix.de> a =E9crit :
-> With devm_clk_get_enabled() caring to disable (and unprepare) the=20
-> clock,
-> the probe function can be simplified accordingly.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+--bkpwvtdvshkxkizn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+On Wed, Mar 09, 2022 at 11:07:03PM -0800, Palmer Dabbelt wrote:
+> On Wed, 23 Feb 2022 12:48:16 PST (-0800), mail@conchuod.ie wrote:
+> > dt-bindings should be set now, so if you're still happy to take the
+> > series via riscv, that'd be great. i2c, spi & usb patches ended going
+> > via the sub-system trees (and have been dropped from the series), in
+> > case those generate warnings for you.
+>=20
+> Something went off the rails in email land and #0 and #2 didn't end up in=
+ my
+> patch queue but the rest did.  Luckily enough made it through that it did=
+n't
+> get lost, and lore's pretty great so this sort of thing isn't that big of=
+ a
+> deal these days.  That said, email is a bit of a black box so figured I'd
+> give you a heads up.
 
-Thanks!
--Paul
+One of the patches in next now is
+df77f7735786ece2fcd8875b036a511ffcadfab6. It would be great if you could
+fix your patch application setup to not mangle names. Here it's
 
-> ---
->  drivers/rtc/rtc-jz4740.c | 21 ++-------------------
->  1 file changed, 2 insertions(+), 19 deletions(-)
->=20
-> diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-> index 6e51df72fd65..9b7bb6ce93ee 100644
-> --- a/drivers/rtc/rtc-jz4740.c
-> +++ b/drivers/rtc/rtc-jz4740.c
-> @@ -257,11 +257,6 @@ static void jz4740_rtc_power_off(void)
->  	kernel_halt();
->  }
->=20
-> -static void jz4740_rtc_clk_disable(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static const struct of_device_id jz4740_rtc_of_match[] =3D {
->  	{ .compatible =3D "ingenic,jz4740-rtc", .data =3D (void *)ID_JZ4740 },
->  	{ .compatible =3D "ingenic,jz4760-rtc", .data =3D (void *)ID_JZ4760 },
-> @@ -329,24 +324,12 @@ static int jz4740_rtc_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(rtc->base))
->  		return PTR_ERR(rtc->base);
->=20
-> -	clk =3D devm_clk_get(dev, "rtc");
-> +	clk =3D devm_clk_get_enabled(dev, "rtc");
->  	if (IS_ERR(clk)) {
-> -		dev_err(dev, "Failed to get RTC clock\n");
-> +		dev_err(dev, "Failed to get enabled RTC clock\n");
->  		return PTR_ERR(clk);
->  	}
->=20
-> -	ret =3D clk_prepare_enable(clk);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to enable clock\n");
-> -		return ret;
-> -	}
-> -
-> -	ret =3D devm_add_action_or_reset(dev, jz4740_rtc_clk_disable, clk);
-> -	if (ret) {
-> -		dev_err(dev, "Failed to register devm action\n");
-> -		return ret;
-> -	}
-> -
->  	spin_lock_init(&rtc->lock);
->=20
->  	platform_set_drvdata(pdev, rtc);
-> --
-> 2.35.1
->=20
+	Acked-by: Uwe Kleine-K=3DF6nig <u.kleine-koenig@pengutronix.de>
 
+where my =F6 was recorded as =3DF6. :-\
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--bkpwvtdvshkxkizn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIxiQgACgkQwfwUeK3K
+7AnaOAf+KYzjoQhzMwQBCvuk5Nuy19InDXSbXr3hGJaP1HavbuLPFGVesC/ny0hy
+pYoeu3A8RpcK8VCbPnl3E8baLLrWlzzPEjbPzb0hrbGvu79Bkiire4nM9GmnCBKa
+uYWdxrbt8s4NRrvHmeqf3IAaXe3N2T98KWSjklHsqD10/S/QEBNphY6G9mcXi0Aj
+28imRZDsWhU2uTpe4UpbEXAq+GP3MzII3K3+gEtJmsRADPmkVcZlHVPzeABY9PWh
+TIEcWRwydEsaMDxUpl4tEv+lWTt3DpRp65cMC6ElJk7lWVIpIAQYLUYjhoQSIYsP
+XP549wvifCmIMBHY/C7IBeHUgwjl6w==
+=t8CP
+-----END PGP SIGNATURE-----
+
+--bkpwvtdvshkxkizn--
