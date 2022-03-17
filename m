@@ -2,166 +2,188 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2F54DCC2B
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Mar 2022 18:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6644DCCF3
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Mar 2022 18:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236013AbiCQRRi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Mar 2022 13:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
+        id S237048AbiCQRyr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Mar 2022 13:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiCQRRh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Mar 2022 13:17:37 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1070BA6E13;
-        Thu, 17 Mar 2022 10:16:19 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 54D54E000B;
-        Thu, 17 Mar 2022 17:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1647537378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fccZaLU3e9ufDI4tRZPJop/s9Lv4MUlUjsAiY2kUdW0=;
-        b=PDeZ0bkwhoWzeOQnqKILcYTvx76vPbtd4o51rDK58u8n9MfsPtindNsaV9YhI8jUr5vZ0d
-        sMljGWimoHOkt3jqGEIVotBuFyIwrvyiq6wxPf2DDU1p0ao52g7eDfpFWJt33QDEFfICqn
-        OjQ70FgTyCj1dPhKbP9t1pbxGZQ/sWDGkOyLfteDe8WYsDXoM/Qcj7GqFj4VeUXWQtFBCd
-        kSO/PYrkvIZr8Q9NLAGkp8jLTjTvLSfptgBD1QeAVl+teVovbmiks1jvYs+ZRJpmulG2XF
-        kk/u6wnO1ic0MkYPrUQg/hsdulXT5A/ngQLresVustUZdrY2vYU9RkLFq2CqjA==
-Date:   Thu, 17 Mar 2022 18:16:17 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/29] rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
-Message-ID: <YjNs4YykJWZi/t/z@piout.net>
-References: <20220309162301.61679-1-alexandre.belloni@bootlin.com>
- <20220309162301.61679-11-alexandre.belloni@bootlin.com>
- <20220310110918.41a681474f5a0e11abdedc39@hugovil.com>
- <Yiplnqlz2DSXCvi8@piout.net>
- <20220317112820.7617d0d68f50f24ad0c3739e@hugovil.com>
+        with ESMTP id S232658AbiCQRyr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Mar 2022 13:54:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DA514F107;
+        Thu, 17 Mar 2022 10:53:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F13B60C2B;
+        Thu, 17 Mar 2022 17:53:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC39C340E9;
+        Thu, 17 Mar 2022 17:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647539608;
+        bh=G3vTTUVjzClhBp/Uh6N1QJFyi0WktLqSYrQr2Sarmvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pYQDd4fdZ3b3iIRkJA/LH1g5oppy0x2AcD0Dv4pMFjtEjkhBy259htydTKrnoyTuc
+         T3wUMnW7Q780oR8WVyLyk4VO6O2nb0EkAtuSQAKIUd/sgtMcaoGrP+jRgzbLym/o0n
+         d0mMT29hka51UlK5pla4jF0bUw2V3b6Dk/WTbnSn6WZjqkdEuPZQfkRtbobStoocF6
+         +iydm8uCvLqDT3flTgTX7aBKNg3+RwM7m0q14Vktk42gzb+JouvMzczci5ii9lakTC
+         /yKNRYqNhljr9ERGYhIUmm67FVkH0ZCH/Bj6XI2CnGjpH9nDz6NnI3GdXdjgjytBwh
+         iNuGfR38HIttA==
+Date:   Thu, 17 Mar 2022 17:53:22 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@axis.com,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        shuah@kernel.org, brendanhiggins@google.com,
+        linux-kselftest@vger.kernel.org, jic23@kernel.org,
+        linux-iio@vger.kernel.org, lgirdwood@gmail.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org
+Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
+Message-ID: <YjN1ksNGujV611Ka@sirena.org.uk>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+ <20220311162445.346685-10-vincent.whitchurch@axis.com>
+ <YiuPvkQroV/WdFpx@sirena.org.uk>
+ <20220317151326.GA7832@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3BInDUkmR9BH6QDl"
 Content-Disposition: inline
-In-Reply-To: <20220317112820.7617d0d68f50f24ad0c3739e@hugovil.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220317151326.GA7832@axis.com>
+X-Cookie: What foods these morsels be!
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
 
-On 17/03/2022 11:28:20-0400, Hugo Villeneuve wrote:
-> On Thu, 10 Mar 2022 21:58:49 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 10/03/2022 11:09:18-0500, Hugo Villeneuve wrote:
-> > > On Wed,  9 Mar 2022 17:22:42 +0100
-> > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> > > 
-> > > > The PCF2127 doesn't support UIE because setting an alarm to fire every
-> > > > second confuses the chip and the fastest we can go is an alarm every 2
-> > > > seconds.
-> > > 
-> > > Hi Alexandre,
-> > > can you describe what "confuses the chip" means?
-> > > 
-> > > In my experimental PCF2131 driver, I activated UIE and it seems to be working fine at 1s intervals, but since it is similar to PCF2127, maybe there is still a problem and I just didn't see it.
-> > > 
-> > 
-> > Did you remove uie_unsupported? Else, you may have been using uie
-> > emulation. In my tests last year, the pcf2127 was failing to reassert
-> > the interrupt if an alarm was set every second. The same happens on
-> > other NXP based RTCs (i.e. including microcrystal ones).
-> > 
-> > I'm going to test again soon (and also reply to your series).
-> 
-> Hi,
-> I have now access to a board with a PCF2129T.
-> 
+--3BInDUkmR9BH6QDl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I actually did the test again this afternoon with a pcf2127...
+On Thu, Mar 17, 2022 at 04:13:26PM +0100, Vincent Whitchurch wrote:
+> On Fri, Mar 11, 2022 at 06:06:54PM +0000, Mark Brown wrote:
 
-> I have been able to test with it by sending ioctl RTC_UIE_ON and
-> confirm that it exhibits the problem you reported. Basically, the
-> first alarm triggers the IRQ after 1s, as expected, but the next
-> configured alarm 1s into the future never triggers the IRQ again. But
-> the time/date registers seem to be updating (incrementin) correctly
-> after that.
-> 
+> > > +    @classmethod
+> > > +    def setUpClass(cls) -> None:
+> > > +        insmod("tps6286x-regulator")
 
-...and so we agree on what we observe. My guess is that the alarm
-comparator has a latch that triggers only every second update and so you
-need 2 seconds between each alarms.
+> > Shouldn't this get figured out when the device gets created in DT (if it
+> > doesn't I guess the tests found a bug...)?
 
-[...]
+> The system isn't set up to load modules automatically.  The reason for
+> this is to give the test cases full control of when the module is loaded
+> and unload, since the tests could want to load the module with specific
+> options.
 
-> I even did some tests where, in pcf2127_rtc_set_alarm(), I disabled
-> all the alarm registers (set to 0x80), except for the SECONDS alarm
-> register. In this case, I observed that the IRQ is triggered after
-> 61s. This seems to indicate that the alarm detection circuitry is
-> still somewhat operating (AF flag / INT pin), but there is probably a
-> bug in the IC when the configured alarm is close to current time after
-> AF is set once...
-> 
-> I also have done other tests by disabling then re-enabling AIE,
-> stopping and restarting the oscillator (STOP bit), etc, but to no
-> avail.
-> 
-> However, in pcf2127_rtc_set_alarm(), if I set the alarm 2s past the
-> current time, instead of 1s, then the IRQ is always triggered after
-> 2s.
-> 
-> I have opened a support case with NXP to investigate this strange
-> behavior.
+That seems like the uncommon case which could remove the module if it
+explicitly needed it.
 
-Let me know if you ever get a reply.
+> Also, the framework splits up logs and shows errors that occurs during
+> each specific test if the tests fail, and this would become less useful
+> if all modules for all the devices in the devicetree get loaded on
+> startup when the devicetree is parsed and one of the modules failed to
+> load or crashed when loaded.
 
-> 
-> Hugo.
-> 
-> 
-> > > > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > > ---
-> > > >  drivers/rtc/rtc-pcf2127.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > > index f8469b134411..63b275b014bd 100644
-> > > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > > @@ -656,6 +656,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
-> > > >  	pcf2127->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > > >  	pcf2127->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> > > >  	pcf2127->rtc->set_start_time = true; /* Sets actual start to 1970 */
-> > > > +	set_bit(RTC_FEATURE_ALARM_RES_2S, pcf2127->rtc->features);
-> > > >  	clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, pcf2127->rtc->features);
-> > > >  	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
-> > > >  
-> > > > -- 
-> > > > 2.35.1
-> > > > 
-> > > 
-> > > 
-> > > -- 
-> > > Hugo Villeneuve <hugo@hugovil.com>
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
-> 
-> 
-> -- 
-> Hugo Villeneuve <hugo@hugovil.com>
+That sounds like stuff that would be covered already by normal boot
+testing?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > > +                write_int(minfile, voltage)
+> > > +                mock = self.hw.update_mock()
+> > > +                mock.assert_reg_write_once(self, REG_VOUT1, val)
+> > > +                mock.reset_mock()
+
+> > For covering regulators in general (especially those like this that use
+> > the generic helpers) I'd be inclined to go through every single voltage
+> > that can be set which isn't so interesting for this driver with it's
+> > linear voltage control but more interesting for something that's not
+> > continuous.
+
+> That could be useful in some cases, but if going through all the
+> voltages in a loop requires that the test implement the exact same
+> voltage-to-bitfield conversion function as the driver, then the benefit
+> of that part of the test is unclear.  That's the reason why for example
+> the OPT3001 test uses known values from the datasheet rather than just
+> copying the conversion function in the driver to Python.
+
+That's just a generic problem with mocking though - ultimately you have
+to type the same values into the mock and the driver somehow, it's just
+a question of if you type in all the values or some of the values and if
+you use the same format to type them in.  My inclination is to get
+better coverage since it makes it more likely that the interesting cases
+will be picked up, and you can make tests that do things like combine
+multiple settings which might turn something up.
+
+> > This all feels like it could readily be factored out into a generic
+> > helper, much as the actual drivers are especially when they're more data
+> > driven.  Ideally with the ability to override the default I/O operations
+> > for things with sequences that need to be followed instead of just a
+> > bitfield to update.  Callbacks to validate enable state, voltage, mode
+> > and so on in the hardware.  If we did that then rather than open coding
+> > every single test for every single device we could approach things at
+> > the framework level and give people working on a given device a pile of
+> > off the shelf tests which are more likely to catch things that an
+> > individual driver author might've missed, it also avoids the test
+> > coverage being more laborious than writing the actual driver.
+
+> Things could certainly be factored out in the future, but I'm a bit wary
+> of attempting to do that when we have a test for only one regulator
+> driver, and a very minimal regulator driver at that.
+
+My thinking here is that since the driver is so minimal and data driven
+it's clear that any tests for it can also be generalised to cover at the
+very least all similarly data driven drivers.
+
+> > This does raise the questions I mentioned about how useful the testing
+> > really is of course, even more so when someone works out how to generate
+> > the data tables for the test and the driver from the same source, but
+> > that's just generally an issue for mocked tests at the conceptual level
+> > and clearly it's an approach that's fairly widely used and people get
+> > value from.
+
+> For the regulator drivers which are purely-data driven such as the ones
+> mostly implemented by setting the various fields in struct
+> regulator_desc along with the helpers in the framework, it could perhaps
+> be useful to implement kunit tests in the regulator subsystem which test
+> that using the various fields actually results in the expected
+> consumer-visible behaviour with the regulator API.
+
+> Then, for the indivudal drivers themselves, roadtests could cover things
+> like probe handling, functions implemented without using helpers, checks
+> that the correct variant's registers are used in drivers supporting
+> multiple variants, custom devicetree properties, interrupt handling, and
+> the like.
+
+That would be the more obvious approach than roadtest, but that's what's
+there in the patch I was reviewing so...  There is also the fact that
+the external pattern for the operations is the same no matter if they're
+for a simple data driven driver or one using custom ops so you should
+really be able to get the core coverage for every driver set up in a way
+that lets you plug in a model of how the I/O performing each operation
+is expected to work and then have the framework crunch through
+combinations of actions to make sure that all the corner cases check out.
+
+--3BInDUkmR9BH6QDl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIzdZEACgkQJNaLcl1U
+h9B4rAf/ZpllSWKucbyOqwVRoPGzNotZ9RmGuzBTvHuM047iZNtftHLSpZBvc/tJ
+aisx5jUAVHZjAUDPBcoboPOu2KBTUU+irzH6Kab2394Wp62uPH/FZ74fTTWCW6Po
+KThSSPxuV6DZ/LeNXZFyVGAvR7++odTcXrUfWtbBpm1jut29th0on3LoHbh+QNrO
+/YmSFNJRfgaD5PMyrteebEOn7ZRZT4W/dLLeV0oJUiEb1vv6h47H3yJiSOET3v2P
+YU/J5eQwdovc6iiPkiXcrhdsf7pdpcLDlxertBVzqdJLrD26eMmOn9cSZfiTGwC4
+ADj2eVE8IYCqR7V4BGqbRlircjsd4A==
+=bHyi
+-----END PGP SIGNATURE-----
+
+--3BInDUkmR9BH6QDl--
