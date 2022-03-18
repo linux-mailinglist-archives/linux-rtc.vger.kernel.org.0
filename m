@@ -2,35 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475AB4DDD47
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Mar 2022 16:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B534DE222
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Mar 2022 21:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238293AbiCRPuy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Mar 2022 11:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S240317AbiCRUKv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Mar 2022 16:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236491AbiCRPux (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Mar 2022 11:50:53 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F81A2D0241;
-        Fri, 18 Mar 2022 08:49:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1647618572;
-  x=1679154572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wcKA0KxoiU/AM8nvFRewTqVOc2fCyIBAGriShKCLLSk=;
-  b=dfmcli8lf8C/XrNUNuU0x786nL0kFuaD/1YntgoYgOkvvwBibABvLFqR
-   8YnSP88uLG367QGRmB6CtOph3gD/bKCJsKLqXV51LZxaJ4A3Wb51+XcVv
-   gRLTNBMRpvtE8DYR12nTyt4z17lK/ZTk8odYASip4n5FVK0cgSvQkO6gu
-   iVVn9Ymg/3zeVY154dMkslySSKtEGFqvwOPIRZOJliBSQBAo+F4Nd7zHO
-   j5ZtfM2r5MK/8TkH6j1v9l0lmmoRRM2/sZKjAghrqU05Ko+lztH4yDDx4
-   5tYjz0V8FC5RJNZE2641t2usoyopTo2t2IhXLjTsh+2yfm/56KAYRel2R
-   g==;
-Date:   Fri, 18 Mar 2022 16:49:27 +0100
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        with ESMTP id S229792AbiCRUKt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Mar 2022 16:10:49 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBB523D76C;
+        Fri, 18 Mar 2022 13:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=O6uGUdoW6Lxm5JY3J83NMEK8xoTghOZASOlRneAdaZw=;
+        t=1647634168; x=1648843768; b=bQEwG1o/Vm4jlHUDF+ToofOnblLQp81bKySVJxlmbEbsTGn
+        4gvHkbTR8d8B3MxOztQno0siDPdV5gVSqAWK19RmH5esSBx41VpshuQQbAes/L7fDsZlG1FvbE+yW
+        km60nvngaxquE56d8CoLT9Pz71P0SHxF7cXiH4ITdhHSWhsZSluCGW/IxL43NADxXMySUK7FKMBCM
+        ZSiZ5bR3aU9bPSnXeY0LgBzU2MZoKNjydhmBzZEJnWDyXfp+xRxlh13U0E6fFejC/ZBY37KCpiV3f
+        exQi9IIl6VfLm+FroqGiypZHdOmoKjTfJbasmlV02WZMhDWilEIZixke0stAAqSA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nVIuF-00F0HF-AC;
+        Fri, 18 Mar 2022 21:09:03 +0100
+Message-ID: <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         kernel <kernel@axis.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
@@ -45,187 +49,121 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-Message-ID: <20220318154927.GA32172@axis.com>
+Date:   Fri, 18 Mar 2022 21:09:02 +0100
+In-Reply-To: <20220318154927.GA32172@axis.com>
 References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-8-vincent.whitchurch@axis.com>
- <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+         <20220311162445.346685-8-vincent.whitchurch@axis.com>
+         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+         <20220318154927.GA32172@axis.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 12:11:50AM +0100, Brendan Higgins wrote:
-> On Fri, Mar 11, 2022 at 11:24 AM Vincent Whitchurch
-> <vincent.whitchurch@axis.com> wrote:
-> > +class TestOPT3001(UMLTestCase):
+On Fri, 2022-03-18 at 16:49 +0100, Vincent Whitchurch wrote:
 > 
-> I am partial to starting with UML since there are a lot of nice easy
-> things about starting there; however, I imagine people will eventually
-> want to use this on other architectures (speaking from experience).
-> How difficult do you think it would be to extend this to support
-> manipulating fake devices in say QEMU?
-
-It should be possible, but upstream QEMU doesn't have everything that we
-need so some work is needed there.  Also, of course work is need to
-provide user space for running the tests and communicating between the
-virtual machine and the backend:
-
-- We need user space, so build scripts would need to be provided to
-  cross-compile busybox and Python (and whatever libraries it needs) for
-  the target architecture.
-
-- We also use UML's hostfs feature to make things transparent to the
-  user and to avoid having to set up things like networking for
-  communication between the host and the backend.  I think QEMU's 9pfs
-  support can be used as a rootfs too but it's not something I've
-  personally tested.
-
-- We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
-  vhost-user API to communicate from UML to the backend.  The latest
-  version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
-  doesn't seem to have been merged yet, so work is needed on the QEMU
-  side.  This will also be true for other buses in the future, if they
-  are implemented with new virtio devices.
-
-- For MMIO, UML has virtio-mmio which allows implementing any PCIe
-  device (and by extension any platform device) outside of UML, but last
-  I checked, upstream QEMU did not have something similar.
-
-> I also have some colleagues inside of Google that worked on some
-> projects to simulate simple devices on an FPGA to test software and
-> adjacent devices in a conceptually similar way; one of these teams
-> built a Domain Specific Language kind of like roadtest to implement
-> the tests and the environment for the tests. The main reason I mention
-> this here is I am thinking about maybe one day having an API you can
-> implement so you can run your roadtests on UML, QEMU, or on any
-> emulator or hardware testbed that implements the appropriate API.
+> It should be possible, but upstream QEMU doesn't have everything that we
+> need so some work is needed there.  Also, of course work is need to
+> provide user space for running the tests and communicating between the
+> virtual machine and the backend:
 > 
-> I'll try to dig up some people who might be interested and add them here.
+> - We need user space, so build scripts would need to be provided to
+>   cross-compile busybox and Python (and whatever libraries it needs) for
+>   the target architecture.
+
+You could possibly use some nix recipes for all of this, but that's a
+fairly arcane thing (we use it, but ...)
+
+> - We also use UML's hostfs feature to make things transparent to the
+>   user and to avoid having to set up things like networking for
+>   communication between the host and the backend.  I think QEMU's 9pfs
+>   support can be used as a rootfs too but it's not something I've
+>   personally tested.
+
+That works just fine, yes. We used to do exactly this in the wireless
+test suite before we switched to UML, but the switch to UML was due to
+the "time-travel" feature.
+
+https://w1.fi/cgit/hostap/tree/tests/hwsim/vm
+
+has support for both UML and qemu/kvm.
+
+> - We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
+>   vhost-user API to communicate from UML to the backend.  The latest
+>   version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
+>   doesn't seem to have been merged yet, so work is needed on the QEMU
+>   side.  This will also be true for other buses in the future, if they
+>   are implemented with new virtio devices.
 > 
-> > +    dts = DtFragment(
-> > +        src="""
-> > +&i2c {
-> > +    light-sensor@$addr$ {
-> > +        compatible = "ti,opt3001";
-> > +        reg = <0x$addr$>;
-> > +    };
-> > +};
-> > +        """,
-> > +        variables={
-> > +            "addr": DtVar.I2C_ADDR,
-> > +        },
-> > +    )
-> > +
-> > +    @classmethod
-> > +    def setUpClass(cls) -> None:
-> > +        insmod("opt3001")
-> > +
-> > +    @classmethod
-> > +    def tearDownClass(cls) -> None:
-> > +        rmmod("opt3001")
-> > +
-> > +    def setUp(self) -> None:
-> > +        self.driver = I2CDriver("opt3001")
-> > +        self.hw = Hardware("i2c")
-> > +        self.hw.load_model(OPT3001)
-> > +
-> > +    def tearDown(self) -> None:
-> > +        self.hw.close()
-> > +
-> > +    def test_illuminance(self) -> None:
-> > +        data = [
-> > +            # Some values from datasheet, and 0
-> > +            (0b_0000_0000_0000_0000, 0),
-> > +            (0b_0000_0000_0000_0001, 0.01),
-> > +            (0b_0011_0100_0101_0110, 88.80),
-> > +            (0b_0111_1000_1001_1010, 2818.56),
-> > +        ]
-> > +        with self.driver.bind(self.dts["addr"]) as dev:
-> > +            luxfile = dev.path / "iio:device0/in_illuminance_input"
-> > +
-> > +            for regval, lux in data:
-> > +                self.hw.reg_write(REG_RESULT, regval)
-> > +                self.assertEqual(read_float(luxfile), lux)
+> - For MMIO, UML has virtio-mmio which allows implementing any PCIe
+>   device (and by extension any platform device) outside of UML, but last
+>   I checked, upstream QEMU did not have something similar.
+
+I think you have this a bit fuzzy.
+
+The virtio_uml[.c] you speak of is the "bus" driver for virtio in UML.
+Obviously, qemu has support for virtio, so you don't need those bits.
+
+Now, virtio_uml is actually the virtio (bus) driver inside the kernel,
+like you'd have virtio-mmio/virtio-pci in qemu. However, virtio_uml
+doesn't implement the devices in the hypervisor, where most qemu devices
+are implemented, but uses vhost-user to run the device implementation in
+a separate userspace. [1]
+
+Now we're talking about vhost-user to talk to the device, and qemu
+supports this as well, in fact the vhost-user spec is part of qemu:
+https://git.qemu.org/?p=qemu.git;a=blob;f=docs/system/devices/vhost-user.rst;h=86128114fa3788a73679f0af38e141021087c828;hb=1d60bb4b14601e38ed17384277aa4c30c57925d3
+https://www.qemu.org/docs/master/interop/vhost-user.html
+
+The docs on how to use it are here:
+https://www.qemu.org/docs/master/system/devices/vhost-user.html
+
+So once you have a device implementation (regardless of whether it's for
+use with any of the virtio-i2c, arch/um/drivers/virt-pci.c, virtio-gpio,
+virtio-net, ... drivers) you can actually connect it to virtual machines
+running as UML or in qemu.
+
+(Actually, that's not strictly true today since it's
+arch/um/drivers/virt-pci.c and I didn't get a proper device ID assigned
+etc since it was for experimentation, I guess if we make this more
+commonly used then we should move it to drivers/pci/controller/virtio-
+pci.c and actually specify it in the OASIS virtio spec., at the very
+least it'd have to be possible to compile this and lib/logic_iomem.c on
+x86, but that's possible. Anyway I think PCI(e) is probably low on your
+list of things ...)
+
+>  - Also, some paths in this driver needs a modification to be tested
+>    under roadtest.  It uses wait_event_timeout() with a fixed value, but
+>    we cannot guarantee that this constraint is met in the test
+>    environment since it depends on things like CPU load on the host.
 > 
-> I love the framework; this looks very easy to use.
-> 
-> One nit about this test; it seems like you cover just one test case
-> here - the happy path. Can you cover some other one? Particularly some
-> error paths?
-> 
-> Sorry, I am not trying to be cheeky here; it looks like this driver
-> actually should probably be fully (or very close to fully) testable
-> via roadtest as I understand it. It only looks like there are a
-> handful of cases to cover for the driver: the device is busy, the
-> device returned something invalid, the user requested something
-> invalid, and several SMBus read/write failures - it really only looks
-> like there are a handful of paths and I think they are all accessible
-> via the I2C interface (except for maybe the user requesting something
-> invalid).
+>    (Also, we use UML's "time travel" feature which essentially
+>    fast-forwards through idle time, so the constraint can never be met
+>    in practice.)
 
-Yes, there are more things that could be tested in this driver.
-However, as the commit message says, I only indented this particular
-test to serve as a regression test for the specific bug fix, which would
-need an environment where the chip detects 0 lux to be able to test on
-real hardware.  There are a few reasons for this:
+Wohoo! This makes me very happy, finally somebody else who uses it :-)
 
- - Unlike the other drivers being tested in this series, I don't have
-   access to boards with this chip so my interest in this particular
-   piece of hardware is limited.
 
- - I actually started writing more tests for this driver earlier on
-   (specifically, testing the configuration which uses interrupts), but
-   I quickly discovered that this driver has race conditions which
-   result in unbalanced mutex locking (in brief: the ok_to_ignore_lock
-   stuff is broken).  This shows the value of the test framework, but I
-   also didn't want to write non-trivial fixes for drivers where I
-   didn't have real hardware to test.
 
- - Also, some paths in this driver needs a modification to be tested
-   under roadtest.  It uses wait_event_timeout() with a fixed value, but
-   we cannot guarantee that this constraint is met in the test
-   environment since it depends on things like CPU load on the host.
+[1] As an aside, you might be interested in usfstl (which you can find
+at https://github.com/linux-test-project/usfstl) which is one way you
+could implement the device side - though the focus here is on making a
+device implementation easy while under "time-travel" mode.
 
-   (Also, we use UML's "time travel" feature which essentially
-   fast-forwards through idle time, so the constraint can never be met
-   in practice.)
-   
-   So the timeout parameter would have to be made adjustable via say a
-   module parameter, to be able to make it infinite (to test the normal
-   case) and not (to be able to test timeout handling).  I think this
-   could be done fairly cleanly with a one- or two-liner patch to the
-   driver and by hiding the details in a header file behind a
-   roadtest-specific config option, but I wanted to avoid having to
-   patch the kernel proper for the initial version of the framework.
+If you ever want to use time-travel with multiple machines or actually
+with virtio devices, it also contains the necessary controller program
+to glue the entire simulation together. We use this very successfully to
+test the (real but compiled for x86) wifi firmware for iwlwifi together
+with the real driver actually seeing a PCIe device in UML, under time-
+travel :)
 
-For vcnl4000, I have actually inherited some out-of-tree patches which
-are in need of mainlining so the tests are a bit more complete since I'm
-hoping to send some patches to that driver soon.  The period mode busy
-handling is not tested there either though, I can try to add that.
-
-As for I2C API failures, I have not added tests for them in any of the
-drivers.  There's not much the test cases could assert, other than
-perhaps error propagation, so it's unclear if there is enough value
-compared to the effort required to implement test cases to make sure
-that every I2C transaction's failure path is tested.
-
-But I think that we do want to at least make sure the error paths are
-executed, to check that drivers don't crash or deadlock due to faulty
-cleanups and the like.  A way to solve this could be to implement fault
-injection support in the I2C framework.  The fail-nth feature could be
-used to systemically trigger each and every I2C transaction failure and
-check that the driver doesn't blow up, while using the roadtest as a
-means to hit the various code paths in the driver during each of the
-iterations of fail-nth.  Fault injection support would also be helpful
-when testing on real hardware.
+johannes
