@@ -2,168 +2,341 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B534DE222
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Mar 2022 21:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA294DEA0E
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Mar 2022 19:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240317AbiCRUKv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Mar 2022 16:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
+        id S243884AbiCSSXz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 19 Mar 2022 14:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiCRUKt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Mar 2022 16:10:49 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBB523D76C;
-        Fri, 18 Mar 2022 13:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=O6uGUdoW6Lxm5JY3J83NMEK8xoTghOZASOlRneAdaZw=;
-        t=1647634168; x=1648843768; b=bQEwG1o/Vm4jlHUDF+ToofOnblLQp81bKySVJxlmbEbsTGn
-        4gvHkbTR8d8B3MxOztQno0siDPdV5gVSqAWK19RmH5esSBx41VpshuQQbAes/L7fDsZlG1FvbE+yW
-        km60nvngaxquE56d8CoLT9Pz71P0SHxF7cXiH4ITdhHSWhsZSluCGW/IxL43NADxXMySUK7FKMBCM
-        ZSiZ5bR3aU9bPSnXeY0LgBzU2MZoKNjydhmBzZEJnWDyXfp+xRxlh13U0E6fFejC/ZBY37KCpiV3f
-        exQi9IIl6VfLm+FroqGiypZHdOmoKjTfJbasmlV02WZMhDWilEIZixke0stAAqSA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.95)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1nVIuF-00F0HF-AC;
-        Fri, 18 Mar 2022 21:09:03 +0100
-Message-ID: <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
-Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Date:   Fri, 18 Mar 2022 21:09:02 +0100
-In-Reply-To: <20220318154927.GA32172@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
-         <20220311162445.346685-8-vincent.whitchurch@axis.com>
-         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
-         <20220318154927.GA32172@axis.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        with ESMTP id S243868AbiCSSXx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Mar 2022 14:23:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45FED2689A8;
+        Sat, 19 Mar 2022 11:22:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1A85B80D9B;
+        Sat, 19 Mar 2022 18:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32FEC340EC;
+        Sat, 19 Mar 2022 18:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647714148;
+        bh=hhu+iiM+PEsCTNMjvrEDz1ucmDg+Fr+55HCY0c8/UsU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NXtiYgj8z1V7NwGkSTBqzfcsA2AcF0FUaqWmKBlbJdkZlY+5X/Y+POt10MISO2kS/
+         +1wBVMn6in+UaYxrsB+ld5KedeYkHNIj02KA2XruXSe2eHDPJ8URwB8AcSYSv8ps+Z
+         Ifuohar81D4hwwl9tgfqOVucJpMb+IwOwfp/yuzmcpASxtg1A0RlMGefuRRTYs6DZ8
+         Xkap8/jSbiLBifie7GY6O1b3vhEHaGasq6nPAxrFZ7DCPkDSnV0SrTrqs0Z0rxACg7
+         vwu2sYtiP3sQddRlnOw3C8WIjDKnbeTbeq2k5N++3G6fabIoEi1fRpinli5QNuYYzo
+         nvfjeQZ5q5TAQ==
+Date:   Sat, 19 Mar 2022 18:29:36 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        =?UTF-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
+        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>
+Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
+ and enabled clocks
+Message-ID: <20220319182936.06d75742@jic23-huawei>
+In-Reply-To: <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+        <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 2022-03-18 at 16:49 +0100, Vincent Whitchurch wrote:
-> 
-> It should be possible, but upstream QEMU doesn't have everything that we
-> need so some work is needed there.  Also, of course work is need to
-> provide user space for running the tests and communicating between the
-> virtual machine and the backend:
-> 
-> - We need user space, so build scripts would need to be provided to
->   cross-compile busybox and Python (and whatever libraries it needs) for
->   the target architecture.
+On Mon, 14 Mar 2022 15:16:29 +0100
+Uwe Kleine-K=C3=B6nig         <u.kleine-koenig@pengutronix.de> wrote:
 
-You could possibly use some nix recipes for all of this, but that's a
-fairly arcane thing (we use it, but ...)
+> When a driver keeps a clock prepared (or enabled) during the whole
+> lifetime of the driver, these helpers allow to simplify the drivers.
+>=20
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-> - We also use UML's hostfs feature to make things transparent to the
->   user and to avoid having to set up things like networking for
->   communication between the host and the backend.  I think QEMU's 9pfs
->   support can be used as a rootfs too but it's not something I've
->   personally tested.
+One trivial thing below.
 
-That works just fine, yes. We used to do exactly this in the wireless
-test suite before we switched to UML, but the switch to UML was due to
-the "time-travel" feature.
+> ---
+>  drivers/clk/clk-devres.c | 31 ++++++++++++++
+>  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 120 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> index fb7761888b30..4707fe718f0b 100644
+> --- a/drivers/clk/clk-devres.c
+> +++ b/drivers/clk/clk-devres.c
+> @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const ch=
+ar *id)
+>  }
+>  EXPORT_SYMBOL(devm_clk_get);
+> =20
+> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
 
-https://w1.fi/cgit/hostap/tree/tests/hwsim/vm
+Nitpick but this spacing before } in functions is rather unusual and not
+in keeping with the existing code in this file.
 
-has support for both UML and qemu/kvm.
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_prepared);
+> +
+> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get,
+> +			      clk_prepare_enable, clk_disable_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_enabled);
+> +
+>  struct clk *devm_clk_get_optional(struct device *dev, const char *id)
+>  {
+>  	return __devm_clk_get(dev, id, clk_get_optional, NULL, NULL);
+>  }
+>  EXPORT_SYMBOL(devm_clk_get_optional);
+> =20
+> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
+r *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get_optional,
+> +			      clk_prepare, clk_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_optional_prepared);
+> +
+> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
+ *id)
+> +{
+> +	return __devm_clk_get(dev, id, clk_get_optional,
+> +			      clk_prepare_enable, clk_disable_unprepare);
+> +
+> +}
+> +EXPORT_SYMBOL(devm_clk_get_optional_enabled);
+> +
+>  struct clk_bulk_devres {
+>  	struct clk_bulk_data *clks;
+>  	int num_clks;
+> diff --git a/include/linux/clk.h b/include/linux/clk.h
+> index 266e8de3cb51..b011dbba7109 100644
+> --- a/include/linux/clk.h
+> +++ b/include/linux/clk.h
+> @@ -449,7 +449,7 @@ int __must_check devm_clk_bulk_get_all(struct device =
+*dev,
+>   * the clock producer.  (IOW, @id may be identical strings, but
+>   * clk_get may return different clock producers depending on @dev.)
+>   *
+> - * Drivers must assume that the clock source is not enabled.
+> + * Drivers must assume that the clock source is neither prepared nor ena=
+bled.
+>   *
+>   * devm_clk_get should not be called from within interrupt context.
+>   *
+> @@ -458,6 +458,47 @@ int __must_check devm_clk_bulk_get_all(struct device=
+ *dev,
+>   */
+>  struct clk *devm_clk_get(struct device *dev, const char *id);
+> =20
+> +/**
+> + * devm_clk_get_prepared - devm_clk_get() + clk_prepare()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Returns a struct clk corresponding to the clock producer, or
+> + * valid IS_ERR() condition containing errno.  The implementation
+> + * uses @dev and @id to determine the clock consumer, and thereby
+> + * the clock producer.  (IOW, @id may be identical strings, but
+> + * clk_get may return different clock producers depending on @dev.)
+> + *
+> + * The returned clk (if valid) is prepared. Drivers must however assume =
+that the
+> + * clock is not enabled.
+> + *
+> + * devm_clk_get_prepared should not be called from within interrupt cont=
+ext.
+> + *
+> + * The clock will automatically be unprepared and freed when the
+> + * device is unbound from the bus.
+> + */
+> +struct clk *devm_clk_get_prepared(struct device *dev, const char *id);
+> +
+> +/**
+> + * devm_clk_get_enabled - devm_clk_get() + clk_prepare_enable()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Returns a struct clk corresponding to the clock producer, or valid IS=
+_ERR()
+> + * condition containing errno.  The implementation uses @dev and @id to
+> + * determine the clock consumer, and thereby the clock producer.  (IOW, =
+@id may
+> + * be identical strings, but clk_get may return different clock producers
+> + * depending on @dev.)
+> + *
+> + * The returned clk (if valid) is prepared and enabled.
+> + *
+> + * devm_clk_get_prepared should not be called from within interrupt cont=
+ext.
+> + *
+> + * The clock will automatically be disabled, unprepared and freed when t=
+he
+> + * device is unbound from the bus.
+> + */
+> +struct clk *devm_clk_get_enabled(struct device *dev, const char *id);
+> +
+>  /**
+>   * devm_clk_get_optional - lookup and obtain a managed reference to an o=
+ptional
+>   *			   clock producer.
+> @@ -469,6 +510,29 @@ struct clk *devm_clk_get(struct device *dev, const c=
+har *id);
+>   */
+>  struct clk *devm_clk_get_optional(struct device *dev, const char *id);
+> =20
+> +/**
+> + * devm_clk_get_optional_prepared - devm_clk_get_optional() + clk_prepar=
+e()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Behaves the same as devm_clk_get_prepared() except where there is no =
+clock
+> + * producer.  In this case, instead of returning -ENOENT, the function r=
+eturns
+> + * NULL.
+> + */
+> +struct clk *devm_clk_get_optional_prepared(struct device *dev, const cha=
+r *id);
+> +
+> +/**
+> + * devm_clk_get_optional_enabled - devm_clk_get_optional() +
+> + *                                 clk_prepare_enable()
+> + * @dev: device for clock "consumer"
+> + * @id: clock consumer ID
+> + *
+> + * Behaves the same as devm_clk_get_enabled() except where there is no c=
+lock
+> + * producer.  In this case, instead of returning -ENOENT, the function r=
+eturns
+> + * NULL.
+> + */
+> +struct clk *devm_clk_get_optional_enabled(struct device *dev, const char=
+ *id);
+> +
+>  /**
+>   * devm_get_clk_from_child - lookup and obtain a managed reference to a
+>   *			     clock producer from child node.
+> @@ -813,12 +877,36 @@ static inline struct clk *devm_clk_get(struct devic=
+e *dev, const char *id)
+>  	return NULL;
+>  }
+> =20
+> +static inline struct clk *devm_clk_get_prepared(struct device *dev,
+> +						const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline struct clk *devm_clk_get_enabled(struct device *dev,
+> +					       const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline struct clk *devm_clk_get_optional(struct device *dev,
+>  						const char *id)
+>  {
+>  	return NULL;
+>  }
+> =20
+> +static inline struct clk *devm_clk_get_optional_prepared(struct device *=
+dev,
+> +							 const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static inline struct clk *devm_clk_get_optional_enabled(struct device *d=
+ev,
+> +							const char *id)
+> +{
+> +	return NULL;
+> +}
+> +
+>  static inline int __must_check devm_clk_bulk_get(struct device *dev, int=
+ num_clks,
+>  						 struct clk_bulk_data *clks)
+>  {
 
-> - We use virtio-i2c and virtio-gpio and use virtio-uml which uses the
->   vhost-user API to communicate from UML to the backend.  The latest
->   version of QEMU has support for vhost-user-i2c, but vhost-user-gpio
->   doesn't seem to have been merged yet, so work is needed on the QEMU
->   side.  This will also be true for other buses in the future, if they
->   are implemented with new virtio devices.
-> 
-> - For MMIO, UML has virtio-mmio which allows implementing any PCIe
->   device (and by extension any platform device) outside of UML, but last
->   I checked, upstream QEMU did not have something similar.
-
-I think you have this a bit fuzzy.
-
-The virtio_uml[.c] you speak of is the "bus" driver for virtio in UML.
-Obviously, qemu has support for virtio, so you don't need those bits.
-
-Now, virtio_uml is actually the virtio (bus) driver inside the kernel,
-like you'd have virtio-mmio/virtio-pci in qemu. However, virtio_uml
-doesn't implement the devices in the hypervisor, where most qemu devices
-are implemented, but uses vhost-user to run the device implementation in
-a separate userspace. [1]
-
-Now we're talking about vhost-user to talk to the device, and qemu
-supports this as well, in fact the vhost-user spec is part of qemu:
-https://git.qemu.org/?p=qemu.git;a=blob;f=docs/system/devices/vhost-user.rst;h=86128114fa3788a73679f0af38e141021087c828;hb=1d60bb4b14601e38ed17384277aa4c30c57925d3
-https://www.qemu.org/docs/master/interop/vhost-user.html
-
-The docs on how to use it are here:
-https://www.qemu.org/docs/master/system/devices/vhost-user.html
-
-So once you have a device implementation (regardless of whether it's for
-use with any of the virtio-i2c, arch/um/drivers/virt-pci.c, virtio-gpio,
-virtio-net, ... drivers) you can actually connect it to virtual machines
-running as UML or in qemu.
-
-(Actually, that's not strictly true today since it's
-arch/um/drivers/virt-pci.c and I didn't get a proper device ID assigned
-etc since it was for experimentation, I guess if we make this more
-commonly used then we should move it to drivers/pci/controller/virtio-
-pci.c and actually specify it in the OASIS virtio spec., at the very
-least it'd have to be possible to compile this and lib/logic_iomem.c on
-x86, but that's possible. Anyway I think PCI(e) is probably low on your
-list of things ...)
-
->  - Also, some paths in this driver needs a modification to be tested
->    under roadtest.  It uses wait_event_timeout() with a fixed value, but
->    we cannot guarantee that this constraint is met in the test
->    environment since it depends on things like CPU load on the host.
-> 
->    (Also, we use UML's "time travel" feature which essentially
->    fast-forwards through idle time, so the constraint can never be met
->    in practice.)
-
-Wohoo! This makes me very happy, finally somebody else who uses it :-)
-
-
-
-[1] As an aside, you might be interested in usfstl (which you can find
-at https://github.com/linux-test-project/usfstl) which is one way you
-could implement the device side - though the focus here is on making a
-device implementation easy while under "time-travel" mode.
-
-If you ever want to use time-travel with multiple machines or actually
-with virtio devices, it also contains the necessary controller program
-to glue the entire simulation together. We use this very successfully to
-test the (real but compiled for x86) wifi firmware for iwlwifi together
-with the real driver actually seeing a PCIe device in UML, under time-
-travel :)
-
-johannes
