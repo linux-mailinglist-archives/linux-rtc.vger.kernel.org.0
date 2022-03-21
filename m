@@ -2,186 +2,280 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764EC4E2143
-	for <lists+linux-rtc@lfdr.de>; Mon, 21 Mar 2022 08:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05FA4E22E8
+	for <lists+linux-rtc@lfdr.de>; Mon, 21 Mar 2022 10:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344903AbiCUHZQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 21 Mar 2022 03:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S1345508AbiCUJG7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 21 Mar 2022 05:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344910AbiCUHZL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Mar 2022 03:25:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ED61AF07
-        for <linux-rtc@vger.kernel.org>; Mon, 21 Mar 2022 00:23:42 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCND-0006et-Tt; Mon, 21 Mar 2022 08:22:39 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCMp-0021t4-Og; Mon, 21 Mar 2022 08:22:16 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nWCMp-00AcZn-OA; Mon, 21 Mar 2022 08:22:15 +0100
-Date:   Mon, 21 Mar 2022 08:22:15 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tomislav Denis <tomislav.denis@avl.com>,
-        =?utf-8?B?QW5kcsOp?= Gustavo Nakagomi Lopez <andregnl@usp.br>,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-i2c@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-rtc@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-pwm@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-iio@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Michal Simek <michal.simek@xilinx.com>, kernel@pengutronix.de,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Vladimir Zapolskiy <vz@mleia.com>, linux-gpio@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        linux-amlogic@lists.infradead.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        linux-hwmon@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        UNGLinuxDriver@microchip.com, Vinod Koul <vkoul@kernel.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        dmaengine@vger.kernel.org,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>
-Subject: Re: [PATCH v8 02/16] clk: Provide new devm_clk helpers for prepared
- and enabled clocks
-Message-ID: <20220321072215.5lffm7qtpvg5ofk4@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
- <20220314141643.22184-3-u.kleine-koenig@pengutronix.de>
- <20220319182936.06d75742@jic23-huawei>
+        with ESMTP id S235161AbiCUJG7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 21 Mar 2022 05:06:59 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EBF32995;
+        Mon, 21 Mar 2022 02:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1647853534; x=1679389534;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=SWm2rZMQQWr7/N6IuT3e00JWHrd5mZhind7/8gMs0ck=;
+  b=goBg0urROb8Rxiw+X17RhYoC/q+3EUAXVz+FAd1EoKwBGmgQN80fv0zU
+   T45kE9BOwuiWXxjXh2IrCoJqyzIrITb9KxB0sZsVfUeyiev7E1O3e03g5
+   rXPtxNW/9RZlZsf+FjdbPIfSr9eXRmUE32G4pgJvQ+UjlOTzGqAkJV+Xj
+   A=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 21 Mar 2022 02:05:34 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2022 02:05:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 21 Mar 2022 02:05:33 -0700
+Received: from jianbinz-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 21 Mar 2022 02:05:30 -0700
+From:   jianbinz <quic_jianbinz@quicinc.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+CC:     jianbinz <quic_jianbinz@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_fenglinw@quicinc.com>
+Subject: [PATCH] rtc: rtc-pm8xxx: Retrigger RTC alarm if it's fired before the driver probed
+Date:   Mon, 21 Mar 2022 17:05:14 +0800
+Message-ID: <20220321090514.4523-1-quic_jianbinz@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oterd73bfcoy35ck"
-Content-Disposition: inline
-In-Reply-To: <20220319182936.06d75742@jic23-huawei>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+If the alarm is triggered before the driver gets probed, the alarm
+interrupt will be missed and it won't be detected, and the stale
+alarm settings will be still retained because of not being cleared.
+Check this condition during driver probe, retrigger the alarm and
+clear the settings manually if it's such case.
 
---oterd73bfcoy35ck
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: jianbinz <quic_jianbinz@quicinc.com>
+---
+ drivers/rtc/rtc-pm8xxx.c | 148 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 113 insertions(+), 35 deletions(-)
+ mode change 100644 => 100755 drivers/rtc/rtc-pm8xxx.c
 
-On Sat, Mar 19, 2022 at 06:29:36PM +0000, Jonathan Cameron wrote:
-> On Mon, 14 Mar 2022 15:16:29 +0100
-> Uwe Kleine-K=F6nig         <u.kleine-koenig@pengutronix.de> wrote:
->=20
-> > When a driver keeps a clock prepared (or enabled) during the whole
-> > lifetime of the driver, these helpers allow to simplify the drivers.
-> >=20
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> One trivial thing below.
->=20
-> > ---
-> >  drivers/clk/clk-devres.c | 31 ++++++++++++++
-> >  include/linux/clk.h      | 90 +++++++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 120 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
-> > index fb7761888b30..4707fe718f0b 100644
-> > --- a/drivers/clk/clk-devres.c
-> > +++ b/drivers/clk/clk-devres.c
-> > @@ -67,12 +67,43 @@ struct clk *devm_clk_get(struct device *dev, const =
-char *id)
-> >  }
-> >  EXPORT_SYMBOL(devm_clk_get);
-> > =20
-> > +struct clk *devm_clk_get_prepared(struct device *dev, const char *id)
-> > +{
-> > +	return __devm_clk_get(dev, id, clk_get, clk_prepare, clk_unprepare);
->=20
-> Nitpick but this spacing before } in functions is rather unusual and not
-> in keeping with the existing code in this file.
->=20
-> > +
-> > +}
+diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
+old mode 100644
+new mode 100755
+index 29a1c65661e9..f213702a513c
+--- a/drivers/rtc/rtc-pm8xxx.c
++++ b/drivers/rtc/rtc-pm8xxx.c
+@@ -64,6 +64,62 @@ struct pm8xxx_rtc {
+ 	spinlock_t ctrl_reg_lock;
+ };
+ 
++static int pm8xxx_rtc_read_rtc_data(struct pm8xxx_rtc *rtc_dd, unsigned long *rtc_data)
++{
++	int rc;
++	u8 value[NUM_8_BIT_RTC_REGS];
++	unsigned int reg;
++	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
++
++	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
++	if (rc) {
++		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
++		return rc;
++	}
++
++	/*
++	 * Read the LSB again and check if there has been a carry over.
++	 * If there is, redo the read operation.
++	 */
++	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
++	if (rc < 0) {
++		dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
++		return rc;
++	}
++
++	if (unlikely(reg < value[0])) {
++		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
++				      value, sizeof(value));
++		if (rc) {
++			dev_err(rtc_dd->rtc_dev, "RTC read rtc data register failed\n");
++			return rc;
++		}
++	}
++
++	*rtc_data = value[0] | (value[1] << 8) | (value[2] << 16) |
++			((unsigned long)value[3] << 24);
++
++	return 0;
++}
++
++static int pm8xxx_rtc_read_alarm_data(struct pm8xxx_rtc *rtc_dd, unsigned long *alarm_data)
++{
++	int rc;
++	u8 value[NUM_8_BIT_RTC_REGS];
++
++	rc = regmap_bulk_read(rtc_dd->regmap, rtc_dd->regs->alarm_rw, value,
++			      sizeof(value));
++	if (rc) {
++		dev_err(rtc_dd->rtc_dev, "RTC read alarm data failed\n");
++		return rc;
++	}
++
++	*alarm_data = value[0] | (value[1] << 8) | (value[2] << 16) |
++			((unsigned long)value[3] << 24);
++
++	return 0;
++}
++
+ /*
+  * Steps to write the RTC registers.
+  * 1. Disable alarm if enabled.
+@@ -175,40 +231,15 @@ static int pm8xxx_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ static int pm8xxx_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ {
+ 	int rc;
+-	u8 value[NUM_8_BIT_RTC_REGS];
+ 	unsigned long secs;
+-	unsigned int reg;
+ 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+-	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+ 
+-	rc = regmap_bulk_read(rtc_dd->regmap, regs->read, value, sizeof(value));
++	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &secs);
+ 	if (rc) {
+-		dev_err(dev, "RTC read data register failed\n");
+-		return rc;
+-	}
+-
+-	/*
+-	 * Read the LSB again and check if there has been a carry over.
+-	 * If there is, redo the read operation.
+-	 */
+-	rc = regmap_read(rtc_dd->regmap, regs->read, &reg);
+-	if (rc < 0) {
+-		dev_err(dev, "RTC read data register failed\n");
++		dev_err(dev, "RTC read time failed\n");
+ 		return rc;
+ 	}
+ 
+-	if (unlikely(reg < value[0])) {
+-		rc = regmap_bulk_read(rtc_dd->regmap, regs->read,
+-				      value, sizeof(value));
+-		if (rc) {
+-			dev_err(dev, "RTC read data register failed\n");
+-			return rc;
+-		}
+-	}
+-
+-	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
+-	       ((unsigned long)value[3] << 24);
+-
+ 	rtc_time64_to_tm(secs, tm);
+ 
+ 	dev_dbg(dev, "secs = %lu, h:m:s == %ptRt, y-m-d = %ptRdr\n", secs, tm, tm);
+@@ -267,21 +298,16 @@ static int pm8xxx_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alarm)
+ {
+ 	int rc;
+ 	unsigned int ctrl_reg;
+-	u8 value[NUM_8_BIT_RTC_REGS];
+ 	unsigned long secs;
+ 	struct pm8xxx_rtc *rtc_dd = dev_get_drvdata(dev);
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+ 
+-	rc = regmap_bulk_read(rtc_dd->regmap, regs->alarm_rw, value,
+-			      sizeof(value));
++	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &secs);
+ 	if (rc) {
+-		dev_err(dev, "RTC alarm time read failed\n");
++		dev_err(dev, "RTC alarm data read failed\n");
+ 		return rc;
+ 	}
+ 
+-	secs = value[0] | (value[1] << 8) | (value[2] << 16) |
+-	       ((unsigned long)value[3] << 24);
+-
+ 	rtc_time64_to_tm(secs, &alarm->time);
+ 
+ 	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
+@@ -394,6 +420,52 @@ static irqreturn_t pm8xxx_alarm_trigger(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++/*
++ * Trigger the alarm event and clear the alarm settings
++ * if the alarm data has been behind the RTC data which
++ * means the alarm has been triggered before the driver
++ * is probed.
++ */
++static int pm8xxx_rtc_init_alarm(struct pm8xxx_rtc *rtc_dd)
++{
++	int rc;
++	unsigned long rtc_data, alarm_data, irq_flags;
++	unsigned int ctrl_reg, alarm_en;
++	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
++
++	spin_lock_irqsave(&rtc_dd->ctrl_reg_lock, irq_flags);
++
++	rc = pm8xxx_rtc_read_rtc_data(rtc_dd, &rtc_data);
++	if (rc) {
++		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
++		dev_err(rtc_dd->rtc_dev, "rtc read rtc data failed\n");
++		return rc;
++	}
++
++	rc = pm8xxx_rtc_read_alarm_data(rtc_dd, &alarm_data);
++	if (rc) {
++		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
++		dev_err(rtc_dd->rtc_dev, "rtc read alarm data failed\n");
++		return rc;
++	}
++
++	rc = regmap_read(rtc_dd->regmap, regs->alarm_ctrl, &ctrl_reg);
++	if (rc) {
++		spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
++		dev_err(rtc_dd->rtc_dev, "Read from RTC alarm control register failed\n");
++		return rc;
++	}
++
++	spin_unlock_irqrestore(&rtc_dd->ctrl_reg_lock, irq_flags);
++
++	alarm_en = !!(ctrl_reg & PM8xxx_RTC_ALARM_ENABLE);
++
++	if (alarm_en && rtc_data >= alarm_data)
++		pm8xxx_alarm_trigger(0, rtc_dd);
++
++	return 0;
++}
++
+ static int pm8xxx_rtc_enable(struct pm8xxx_rtc *rtc_dd)
+ {
+ 	const struct pm8xxx_rtc_regs *regs = rtc_dd->regs;
+@@ -527,7 +599,13 @@ static int pm8xxx_rtc_probe(struct platform_device *pdev)
+ 		return rc;
+ 	}
+ 
+-	return devm_rtc_register_device(rtc_dd->rtc);
++	rc =  devm_rtc_register_device(rtc_dd->rtc);
++	if (rc < 0) {
++		dev_err(&pdev->dev, "Register RTC device failed\n");
++		return rc;
++	}
++
++	return pm8xxx_rtc_init_alarm(rtc_dd);
+ }
+ 
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.17.1
 
-ack, I fixed that in my tree, so this will be part of an v9. I won't
-send it just for this change, though. I fixed three further functions
-that had a similar empty line, too.
-
-Thanks for looking
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---oterd73bfcoy35ck
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmI4J6MACgkQwfwUeK3K
-7Ak5sAf/aG3oVD1FgzqJLWD3uSmF0uX0/3lky1l56go3LpRjDym8tlGglXT4z7Hl
-Z3q8YXru6LSihHT/n6V4EUdpV6f49dxPfrr9hu9OFU+UY0Cd7NgisKr+0Wi61dbS
-d8IVGHwcCPqBZanHdAEjhle7d7WdWhfukR1oLljd8B2XM6qP2jQgjFWzrSJfZ+hd
-qd6k9TcfIHjy8n8xBtyIYSvYZbywqfa+wJeU54fe4fp4NNPVTmxGtzHFNDipSZGL
-uF+yg7qDqSezst7wO3dNeblEvpVZfG9TZAXvGMCZQLn9x4b35iSmZtLVPN+HZZM4
-WBr/EA6mCSOr4iHXCKfNr4UegGV4/w==
-=gON5
------END PGP SIGNATURE-----
-
---oterd73bfcoy35ck--
