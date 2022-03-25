@@ -2,68 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2F74E7171
-	for <lists+linux-rtc@lfdr.de>; Fri, 25 Mar 2022 11:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3251C4E7178
+	for <lists+linux-rtc@lfdr.de>; Fri, 25 Mar 2022 11:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239240AbiCYKoK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 25 Mar 2022 06:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S244054AbiCYKpI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 25 Mar 2022 06:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236476AbiCYKoI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Mar 2022 06:44:08 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDD1C7488
-        for <linux-rtc@vger.kernel.org>; Fri, 25 Mar 2022 03:42:34 -0700 (PDT)
+        with ESMTP id S244281AbiCYKpG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 25 Mar 2022 06:45:06 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6285A24085;
+        Fri, 25 Mar 2022 03:43:29 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2EB2060002;
-        Fri, 25 Mar 2022 10:42:33 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 92094C0004;
+        Fri, 25 Mar 2022 10:43:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648204953;
+        t=1648205008;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=z4PWrQppJnplwT8s3QOnUmrJamMy1t8sEiRSYyhxh/Q=;
-        b=gHpwYWnijx7y7M77c+ORKn+tG0G8ikFL/C/Iu/Ngf1ZzH9ANnsAqXcF/Ufp0KDaW3Tl4Gn
-        bVeRTqVWAPlfHHIvR8+y2cLKc/GchO/LmYus5n676CQTdIKAlyZ3aUswxszn45779r2nzr
-        hL/zqmdYTqv2K2BmH9x4hPvJq5mxFbuyBTiNeeEO024Qc88prL1vP4KqElzIkGdhcx8Y9i
-        hppXbdFNHruS2aHk7zp5VV55l+dPbU3H7DQ5YoVenPVWzqCPxu72/LOS8BZDUXPjS7AM4u
-        gDg2f1e1L7r5Uc2mqpmTGlJGWiF+HtGmGRLzL8/jL+GvRGFOX79eB5mR4aWb+g==
-Date:   Fri, 25 Mar 2022 11:42:32 +0100
+        bh=VOD+zrnA9txJY0bM10drvRtLQGqbPxHtYntQchITjuQ=;
+        b=MKZi/pKC7+9rUidQuDE7+801NJ3t3rY8PIWduK079IJOi9znBcOuIVXU9sZtN+qAC4CxZS
+        Hpcqq9efPT947uRh1uGsqGnM+5tnjzrjkwkeXmZkvls1+M+GUA3KOyMoISlDg3D9oiabuZ
+        IIdksm0VuiyqJoTVZTph03T2idxXjJTU+Iqht+R8EaBlspUrUGpjRqlM1UO2IINLHSsuio
+        KFooh77SZS3wItYcq1g+S1k+qjolczg4oR0vL+Wp0sgMNBgqRJAXmUlItiAk8dLEiO1Nw4
+        iSERAQVwwOSOh/urM5g9IIdS0E4IJNOhXj6t2XcSY0bzCRX3gQOOC02CfNYGGw==
+Date:   Fri, 25 Mar 2022 11:43:27 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Loic Poulain <loic.poulain@linaro.org>, a.zummo@towertech.it
-Cc:     linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: pm8xxx: Return -ENODEV if set_time disallowed
-Message-ID: <164820472038.149159.1214160671242997426.b4-ty@bootlin.com>
-References: <1645090578-20734-1-git-send-email-loic.poulain@linaro.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     Etienne Carriere <etienne.carriere@linaro.org>,
+        op-tee@lists.trustedfirmware.org, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4] rtc: optee: add RTC driver for OP-TEE RTC PTA
+Message-ID: <164820498345.150187.420135785211936016.b4-ty@bootlin.com>
+References: <20220308133505.471601-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1645090578-20734-1-git-send-email-loic.poulain@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220308133505.471601-1-clement.leger@bootlin.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 17 Feb 2022 10:36:18 +0100, Loic Poulain wrote:
-> Having !allow_set_time is equivalent to non-implemented set_time
-> function, which is normally represented with -ENODEV error in RTC
-> subsystem.
+On Tue, 8 Mar 2022 14:35:05 +0100, Clément Léger wrote:
+> This drivers allows to communicate with a RTC PTA handled by OP-TEE [1].
+> This PTA allows to query RTC information, set/get time and set/get
+> offset depending on the supported features.
 > 
-> Today we are returning -EACCES error code, which is not considered
-> by RTC clients as a 'non implemented' feature, and which causes NTP
-> to retry hw clk sync (update_rtc) indefinitely.
+> [1] https://github.com/OP-TEE/optee_os/pull/5179
+> 
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] rtc: pm8xxx: Return -ENODEV if set_time disallowed
-      commit: 870c54e1a3e111613cd68e5cc867455dc4765cd6
+[1/1] rtc: optee: add RTC driver for OP-TEE RTC PTA
+      commit: 81c2f059ab90b221931e78503c80dcd8fbadac53
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
