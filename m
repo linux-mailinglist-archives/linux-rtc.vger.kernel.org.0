@@ -2,139 +2,117 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1634EAF82
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Mar 2022 16:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDC34EAF9E
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Mar 2022 16:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238058AbiC2Opu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Mar 2022 10:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S238117AbiC2OwS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Mar 2022 10:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238050AbiC2Opt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Mar 2022 10:45:49 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60253B03E;
-        Tue, 29 Mar 2022 07:44:04 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id h23so25156901wrb.8;
-        Tue, 29 Mar 2022 07:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=f1hZOQmmNmyJ7U7nVAiaQQ0lwaiu4vRuIQsNB/VIsek=;
-        b=LFwUL3ZRs6RYhHzf2Bdq3dc2ZslNWBxkB1yhR+wEGS6JH1CAINYO8yj+nLkeMHE24p
-         P5+HJJ9yWBhuBXgX/vfmtySqT1FV/U6hp7W7fVDw/xJ6jwxk/ymbYXTVT92XWs/O9E/6
-         4VMhn4h7OzWX2RHnlJoqHAlaRNFPgU0R/cWjA/iT6aFYEDbkImo4/pFTNs7KsML/jku8
-         ntEHwcuSkgx2jmUNHIsUhxwdHWu7KtNBW51dNBC/v6uAH43kyQmKk9tgQA7WSS3AuHRI
-         XQCrFbf2xcxV4JEHdrv7XDvtf4ESDi19uZAe4x4q2HQr2zgwlTFm8e1/vjvZY8wpc3dx
-         1TGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=f1hZOQmmNmyJ7U7nVAiaQQ0lwaiu4vRuIQsNB/VIsek=;
-        b=73GLBzgLqFPgoBUmilAvMc/E3Y8tYNxc0qamSXagjHqsA7kA1V2b7L4WauCwG7Ho7J
-         063v3Hiq/Z/FgCv1ZiDRFIPR+U9T/yi+m0A+J9bPpjTZbx3jeQUPdhcuxHBLL+H7/WLi
-         V39yRzdj1dnufFXjkBwVAMJ1+Ii5GuOZgwu2EI3hNUW0LnnLh+KPk5/k9Bd2hkD7aDGG
-         bcvxrILU4A2rpqi14tZvfOmnIjLmEZYkQS3S22lpwEgaxJGLScJXISK+lPWBX2jGI08W
-         b4P0eSJgCeeRiQGWujCCPTNWbGquS1HC3yNEfpalC/cGRih/XdmqbsoYg+R1LI8YlX1J
-         ktXg==
-X-Gm-Message-State: AOAM5323w6QvBHUqw51dEx4hZHIj76MOwZm1/3qjhhRK0gQDf6vs72Pw
-        FUpLKnTAeAh0Y1yVmOeugwU=
-X-Google-Smtp-Source: ABdhPJzMwHCsnpQQtTp4CjjZBj9sm+ezIYCdnM4RPz8U92H0vmmgiVSarO5uo1zeXs7VamaIsqqIkw==
-X-Received: by 2002:adf:ec41:0:b0:1ed:beee:6f8f with SMTP id w1-20020adfec41000000b001edbeee6f8fmr30629170wrn.110.1648565042644;
-        Tue, 29 Mar 2022 07:44:02 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05600c028700b0038cc9bfe6a4sm2288573wmk.37.2022.03.29.07.44.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 07:44:01 -0700 (PDT)
-Message-ID: <d3b8f78b-24b0-d0f1-f5cd-c3cb29ee25d7@gmail.com>
-Date:   Tue, 29 Mar 2022 16:44:00 +0200
+        with ESMTP id S235720AbiC2OwQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Mar 2022 10:52:16 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CB84DF4F;
+        Tue, 29 Mar 2022 07:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=S+Tu0Dayg2CTLGhBbl0yg+lgxmDq6qIFjiz7b1KSHxM=;
+        t=1648565433; x=1649775033; b=luoiZwb+tWrBpkhXN5hEJMnMh+15TqG7ksUZ7LkStX5WoCY
+        OzpGNC7aRxwKABLZRLR5knBVrisB7NumgCrGs1tpZzvyAYciERjW9oBwNjZXT/pfNEjlkOHtDlzI9
+        5UwGYhOwnQNZSseP0Fl65/swtIn2wrp3s0Ro6KCw1tRXVDTqaob7uT8nrzhuNRffxKUPUhPe/XxMC
+        hRvShE/5O7LXMjBnedWOMZecqsLcN44n8jiLllpNJeMpuDOT97AlXhzPJcOCdQcLHOE/LQoKHzXdu
+        Pqq5j+SJ+9IhRu6D79kUK3Sy86K1OUzRB3tVgBDqPMIkm3oq3IamSf4lpRozjloA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nZDAg-0021FO-OZ;
+        Tue, 29 Mar 2022 16:50:10 +0200
+Message-ID: <5b39d572e619c812109af7a1b8028bfb8353efda.camel@sipsolutions.net>
+Subject: Re: [RFC v1 07/10] iio: light: opt3001: add roadtest
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Date:   Tue, 29 Mar 2022 16:50:09 +0200
+In-Reply-To: <20220329144319.GA4474@axis.com>
+References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
+         <20220311162445.346685-8-vincent.whitchurch@axis.com>
+         <CAFd5g47O2PbqaUZRoioRROtywTm=6t7cVgHqO7qc0ZGewQk16A@mail.gmail.com>
+         <20220318154927.GA32172@axis.com>
+         <1e61b0f21794e67fb4e87dc41fab90829d3c7cd6.camel@sipsolutions.net>
+         <20220329144319.GA4474@axis.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
-        hsin-hsiung.wang@mediatek.com, sean.wang@mediatek.com,
-        macpaul.lin@mediatek.com, wen.su@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220329115824.13005-1-zhiyong.tao@mediatek.com>
- <20220329115824.13005-2-zhiyong.tao@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v1 1/1] pwrap: mediatek: fix wait time out issue
-In-Reply-To: <20220329115824.13005-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
-
-On 29/03/2022 13:58, Zhiyong Tao wrote:
-> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+On Tue, 2022-03-29 at 16:43 +0200, Vincent Whitchurch wrote:
 > 
-> add sleep delay before read "jiffies"
+> I'm aware of vhost-user, but AFAICS QEMU needs glue for each device type
+> to be able to actually hook up vhost-user implementations to the devices
+> it exposes to the guest via the virtio PCI device.  See e.g.
+> hw/virtio/vhost-user-i2c-pci.c and hw/virtio/vhost-user-i2c.c in QEMU.
+
+Oh, I wasn't aware of that.
+
+> That is what I meant was missing for virtio-gpio, there seems to be an
+> in-progress patch set for that here though:
+>  https://lore.kernel.org/all/cover.1641987128.git.viresh.kumar@linaro.org/
 > 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->   drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
->   mode change 100644 => 100755 drivers/soc/mediatek/mtk-pmic-wrap.c
+> Similarly, glue for something like arch/um/drivers/virt-pci.c does not
+> exist in QEMU.
 > 
-> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> old mode 100644
-> new mode 100755
-> index 952bc554f443..ac7139a67e87
-> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> @@ -12,6 +12,7 @@
->   #include <linux/platform_device.h>
->   #include <linux/regmap.h>
->   #include <linux/reset.h>
-> +#include <linux/delay.h>
->   
->   #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN		0x4
->   #define PWRAP_MT8135_BRIDGE_WACS3_EN		0x10
-> @@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
->   	timeout = jiffies + usecs_to_jiffies(10000);
->   
->   	do {
-> -		if (time_after(jiffies, timeout))
-> -			return fp(wrp) ? 0 : -ETIMEDOUT;
->   		if (fp(wrp))
->   			return 0;
-> +
-> +		usleep_range(10, 11);
-> +
+> Or perhaps you are implying that hw/virtio/vhost-user-i2c* in QEMU are
+> not strictly needed?
 
-You need to explain this change. Why is it needed, are you sure it does not 
-break other platforms etc.
+I _thought_ that was the case, but honestly, that was just from reading
+about it, not looking at the code. Thinking about it though, I don't
+need special glue in UML, just passing the device ID on the command
+line? So not sure what they need the glue for. Looking at the code, it's
+not really much though? Not sure, I guess you need somebody more
+familiar with qemu here, sorry.
 
-I can guess why you need that patch here. In any case in the code you provide, 
-it would make sense to move the first if out of the do loop and only after this 
-wait 10 us before reading again. Right now the code does usleep only after every 
-other read.
+> > Wohoo! This makes me very happy, finally somebody else who uses it :-)
+> 
+> Yes, thanks for that feature, it works well to speed up tests and also
+> has a knack for triggering race conditions (the RTC use-after-free for
+> example).
+> 
+> Time travel however sometimes triggers some WARN_ONs from the core
+> timekeeping code. I haven't seen them when running the test suites, but
+> they show up if the system under UML is idle for several (wall time)
+> seconds.  I haven't had a chance to investigate it further though, but I
+> can dig up the splats if you are interested.
 
-Regards,
-Matthias
+Oh, I haven't seen that, and I'm pretty sure I've had systems idle for
+very long periods of time passing inside (think weeks) ...
 
-> +		if (time_after(jiffies, timeout))
-> +			return fp(wrp) ? 0 : -ETIMEDOUT;
->   	} while (1);
->   }
->   
+So yeah, if you have some splats (ideally with corresponding kernel
+configs), I'd be interested.
+
+johannes
