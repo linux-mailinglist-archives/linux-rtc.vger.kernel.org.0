@@ -2,424 +2,108 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A62A4EAFAC
-	for <lists+linux-rtc@lfdr.de>; Tue, 29 Mar 2022 16:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B9F4EB463
+	for <lists+linux-rtc@lfdr.de>; Tue, 29 Mar 2022 22:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238159AbiC2Ozr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 29 Mar 2022 10:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S239208AbiC2UEm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 29 Mar 2022 16:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238160AbiC2Ozq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Mar 2022 10:55:46 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5216F275FD;
-        Tue, 29 Mar 2022 07:54:02 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so1388193wms.2;
-        Tue, 29 Mar 2022 07:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x2iu+zBPbGJB5ooat97bM+huvpOZWu4gZrFvI4ckaOE=;
-        b=IROVNJM1ru5LaXMGZn903JNdTjJaObmwMRdNp/wp2GoC4nOYeEufiPPCjRsJoTBScn
-         KlC5YmJ06B7vXQuK65JU2caPKNtb4T92OZviYFXdB58px9jgRuCTwQdT9NzJ3TXPc6un
-         tEWVaNUEOOC8IpywB2I7RyUVmSDCLVvxjIs+IAWeRtGk2D6AQklLfGT4yaklVYROLhSW
-         ZyuKRj+YdL4r9XzyQce7tqaz23Bl8f3duuzLfs81e7KqFkZlIiyEfGPFWFrMp3k9elLi
-         uS+72v9iA2EF2XsL52qO9E4VulTSUYe5+BrTOBLe8n6JuifT0TLGbL/DAaZcTjjE2Bhi
-         txfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x2iu+zBPbGJB5ooat97bM+huvpOZWu4gZrFvI4ckaOE=;
-        b=yBHF06YM6SsL5CYGJtRB9Zr14JIkYNoW4ZCJVmWb0YL8irbpQR+ZOJ5f1vMGrp74zH
-         baHoOdtRamCxbbsTPDqkuWq1vIIQGhSzK6wepK2Ti7Q/l+awvt0qGaPcfcKsmNaHJAIZ
-         FEQ6m10MFzpS0bWIRvG3lN/23Iln1typOHgEipI8ph8bSFDDsu7wL4MAxo6RNU4PgQIW
-         EXjWpf6yFyxeRk5WdBsRItCbApMP5RGaQJx+ITRGTR02PsoExIs9A9znHlCwFcCjBGVM
-         KNFs+ZQ6Wqeajm4NZcFIMa4xXZIHV1mwJR65Zp4Adz/EsKsJiHcyQkV/xjAMqquZMShJ
-         VeyA==
-X-Gm-Message-State: AOAM531sqB/rYo675ph8xAm753CLNL15wcP8UigC70g44HwKkd8vNT+Y
-        8ZQhyCqkpLxfQYJidM+1FJA=
-X-Google-Smtp-Source: ABdhPJzDSqcgQxPGLOvYXN+CPNjCKxQ3s32uYGY6KiwJcnuvTHGNN2AcrjyDEqpbvzX7Q3Rmre0xEA==
-X-Received: by 2002:a05:600c:348c:b0:38c:f335:7219 with SMTP id a12-20020a05600c348c00b0038cf3357219mr17239wmq.174.1648565640828;
-        Tue, 29 Mar 2022 07:54:00 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id k23-20020a7bc417000000b0038ccada7566sm2305595wmi.11.2022.03.29.07.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Mar 2022 07:54:00 -0700 (PDT)
-Message-ID: <9fc6564b-6119-e7b6-6edc-95c25d0d4bff@gmail.com>
-Date:   Tue, 29 Mar 2022 16:53:58 +0200
+        with ESMTP id S234860AbiC2UEl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 29 Mar 2022 16:04:41 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3A1E5A75
+        for <linux-rtc@vger.kernel.org>; Tue, 29 Mar 2022 13:02:53 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 24878 invoked from network); 29 Mar 2022 22:02:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1648584169; bh=/g4KKIPXUZrOJnlssSBP5HQLS4UfmGVodkLjCw9J1b0=;
+          h=Subject:To:Cc:From;
+          b=DEuCG1tIaXH9sZAbtuBdbVLD2LxRj6co6BgAgvcnusQU5ab1fK3tIaGSl+Y/u1KYU
+           qmdG3RjaQ+Hx9gTyWYcvZlUG/298SP3O2JKK2oyD36jI4XHt+Dd94tCqdv8GoZkWaQ
+           Ai3NPW4CNGAISH84TUShgAQgmXvngpw33oxyIIPo=
+Received: from aaew62.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.126.62])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <linux-rtc@vger.kernel.org>; 29 Mar 2022 22:02:49 +0200
+Message-ID: <1595f3c3-ea44-0c1a-8375-211789c64590@o2.pl>
+Date:   Tue, 29 Mar 2022 22:02:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/1] arm64: dts: mt6359: add PMIC MT6359 nodes
-Content-Language: en-US
-To:     Hui-Liu Liu <hui.liu@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     srv_heupstream@mediatek.com, zhiyong.tao@mediatek.com,
-        hsin-hsiung.wang@mediatek.com, sean.wang@mediatek.com,
-        macpaul.lin@mediatek.com, yuchen.huang@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220328103729.25102-1-hui.liu@mediatek.com>
- <20220328103729.25102-2-hui.liu@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220328103729.25102-2-hui.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 8/9] rtc-cmos: avoid UIP when reading alarm time
+Content-Language: en-GB
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220107124934.159878-1-mat.jonczyk@o2.pl>
+ <20220107124934.159878-9-mat.jonczyk@o2.pl>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <20220107124934.159878-9-mat.jonczyk@o2.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: a28fd5f8788c77f0b92c197d82dc2fff
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 000000B [cXNE]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+W dniu 07.01.2022 o 13:49, Mateusz Jończyk pisze:
+> Some Intel chipsets disconnect the time and date RTC registers when the
+> clock update is in progress: during this time reads may return bogus
+> values and writes fail silently. This includes the RTC alarm registers.
+> [1]
+>
+> cmos_read_alarm() did not take account for that, which caused alarm time
+> reads to sometimes return bogus values. This can be shown with a test
+> patch that I am attaching to this patch series.
 
+Hello,
 
-On 28/03/2022 12:37, Hui-Liu Liu wrote:
-> From: Hui Liu <hui.liu@mediatek.com>
-> 
-> MT6359 is the primary PMIC for MT8192.
-> Add PMIC MT6359 related node which is used for MT8192 platform.
-> 
+This patch and the following one went to mainline as:
 
-Thanks for the commit message. Can't we include the dtsi directly in the 
-mt8192-evb.dts?
+commit cdedc45c579f ("rtc: cmos: avoid UIP when reading alarm time")
+commit cd17420ebea5 ("rtc: cmos: avoid UIP when writing alarm time")
 
-Regards,
-Matthias
+After some investigation and testing, it turned out that the problem
+was hidden by the algorithm in __rtc_read_alarm() and __rtc_set_alarm()
+and mostly did not affect existing code.
 
-> Signed-off-by: Hui Liu <hui.liu@mediatek.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt6359.dtsi | 298 +++++++++++++++++++++++
->   1 file changed, 298 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-> new file mode 100644
-> index 000000000000..df3e822232d3
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-> @@ -0,0 +1,298 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + */
-> +
-> +&pwrap {
-> +	pmic: pmic {
-> +		compatible = "mediatek,mt6359";
-> +		interrupt-controller;
-> +		#interrupt-cells = <2>;
-> +
-> +		mt6359codec: mt6359codec {
-> +		};
-> +
-> +		regulators {
-> +			mt6359_vs1_buck_reg: buck_vs1 {
-> +				regulator-name = "vs1";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <2200000>;
-> +				regulator-enable-ramp-delay = <0>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vgpu11_buck_reg: buck_vgpu11 {
-> +				regulator-name = "vgpu11";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +				regulator-ramp-delay = <5000>;
-> +				regulator-enable-ramp-delay = <200>;
-> +				regulator-allowed-modes = <0 1 2>;
-> +			};
-> +			mt6359_vmodem_buck_reg: buck_vmodem {
-> +				regulator-name = "vmodem";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1100000>;
-> +				regulator-ramp-delay = <10760>;
-> +				regulator-enable-ramp-delay = <200>;
-> +			};
-> +			mt6359_vpu_buck_reg: buck_vpu {
-> +				regulator-name = "vpu";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +				regulator-ramp-delay = <5000>;
-> +				regulator-enable-ramp-delay = <200>;
-> +				regulator-allowed-modes = <0 1 2>;
-> +			};
-> +			mt6359_vcore_buck_reg: buck_vcore {
-> +				regulator-name = "vcore";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1300000>;
-> +				regulator-ramp-delay = <5000>;
-> +				regulator-enable-ramp-delay = <200>;
-> +				regulator-allowed-modes = <0 1 2>;
-> +			};
-> +			mt6359_vs2_buck_reg: buck_vs2 {
-> +				regulator-name = "vs2";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <1600000>;
-> +				regulator-enable-ramp-delay = <0>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vpa_buck_reg: buck_vpa {
-> +				regulator-name = "vpa";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <3650000>;
-> +				regulator-enable-ramp-delay = <300>;
-> +			};
-> +			mt6359_vproc2_buck_reg: buck_vproc2 {
-> +				regulator-name = "vproc2";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +				regulator-ramp-delay = <7500>;
-> +				regulator-enable-ramp-delay = <200>;
-> +				regulator-allowed-modes = <0 1 2>;
-> +			};
-> +			mt6359_vproc1_buck_reg: buck_vproc1 {
-> +				regulator-name = "vproc1";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +				regulator-ramp-delay = <7500>;
-> +				regulator-enable-ramp-delay = <200>;
-> +				regulator-allowed-modes = <0 1 2>;
-> +			};
-> +			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
-> +				regulator-name = "vcore_sshub";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +			};
-> +			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
-> +				regulator-name = "vgpu11_sshub";
-> +				regulator-min-microvolt = <400000>;
-> +				regulator-max-microvolt = <1193750>;
-> +			};
-> +			mt6359_vaud18_ldo_reg: ldo_vaud18 {
-> +				regulator-name = "vaud18";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-enable-ramp-delay = <240>;
-> +			};
-> +			mt6359_vsim1_ldo_reg: ldo_vsim1 {
-> +				regulator-name = "vsim1";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <3100000>;
-> +			};
-> +			mt6359_vibr_ldo_reg: ldo_vibr {
-> +				regulator-name = "vibr";
-> +				regulator-min-microvolt = <1200000>;
-> +				regulator-max-microvolt = <3300000>;
-> +			};
-> +			mt6359_vrf12_ldo_reg: ldo_vrf12 {
-> +				regulator-name = "vrf12";
-> +				regulator-min-microvolt = <1100000>;
-> +				regulator-max-microvolt = <1300000>;
-> +			};
-> +			mt6359_vusb_ldo_reg: ldo_vusb {
-> +				regulator-name = "vusb";
-> +				regulator-min-microvolt = <3000000>;
-> +				regulator-max-microvolt = <3000000>;
-> +				regulator-enable-ramp-delay = <960>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
-> +				regulator-name = "vsram_proc2";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1293750>;
-> +				regulator-ramp-delay = <7500>;
-> +				regulator-enable-ramp-delay = <240>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vio18_ldo_reg: ldo_vio18 {
-> +				regulator-name = "vio18";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <1900000>;
-> +				regulator-enable-ramp-delay = <960>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vcamio_ldo_reg: ldo_vcamio {
-> +				regulator-name = "vcamio";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <1900000>;
-> +			};
-> +			mt6359_vcn18_ldo_reg: ldo_vcn18 {
-> +				regulator-name = "vcn18";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-enable-ramp-delay = <240>;
-> +			};
-> +			mt6359_vfe28_ldo_reg: ldo_vfe28 {
-> +				regulator-name = "vfe28";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <2800000>;
-> +				regulator-enable-ramp-delay = <120>;
-> +			};
-> +			mt6359_vcn13_ldo_reg: ldo_vcn13 {
-> +				regulator-name = "vcn13";
-> +				regulator-min-microvolt = <900000>;
-> +				regulator-max-microvolt = <1300000>;
-> +			};
-> +			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
-> +				regulator-name = "vcn33_1_bt";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <3500000>;
-> +			};
-> +			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
-> +				regulator-name = "vcn33_1_wifi";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <3500000>;
-> +			};
-> +			mt6359_vaux18_ldo_reg: ldo_vaux18 {
-> +				regulator-name = "vaux18";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-enable-ramp-delay = <240>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
-> +				regulator-name = "vsram_others";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1293750>;
-> +				regulator-ramp-delay = <5000>;
-> +				regulator-enable-ramp-delay = <240>;
-> +			};
-> +			mt6359_vefuse_ldo_reg: ldo_vefuse {
-> +				regulator-name = "vefuse";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <2000000>;
-> +			};
-> +			mt6359_vxo22_ldo_reg: ldo_vxo22 {
-> +				regulator-name = "vxo22";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <2200000>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vrfck_ldo_reg: ldo_vrfck {
-> +				regulator-name = "vrfck";
-> +				regulator-min-microvolt = <1500000>;
-> +				regulator-max-microvolt = <1700000>;
-> +			};
-> +			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
-> +				regulator-name = "vrfck";
-> +				regulator-min-microvolt = <1240000>;
-> +				regulator-max-microvolt = <1600000>;
-> +			};
-> +			mt6359_vbif28_ldo_reg: ldo_vbif28 {
-> +				regulator-name = "vbif28";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <2800000>;
-> +				regulator-enable-ramp-delay = <240>;
-> +			};
-> +			mt6359_vio28_ldo_reg: ldo_vio28 {
-> +				regulator-name = "vio28";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vemc_ldo_reg: ldo_vemc {
-> +				regulator-name = "vemc";
-> +				regulator-min-microvolt = <2900000>;
-> +				regulator-max-microvolt = <3300000>;
-> +			};
-> +			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
-> +				regulator-name = "vemc";
-> +				regulator-min-microvolt = <2500000>;
-> +				regulator-max-microvolt = <3300000>;
-> +			};
-> +			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
-> +				regulator-name = "vcn33_2_bt";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <3500000>;
-> +			};
-> +			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
-> +				regulator-name = "vcn33_2_wifi";
-> +				regulator-min-microvolt = <2800000>;
-> +				regulator-max-microvolt = <3500000>;
-> +			};
-> +			mt6359_va12_ldo_reg: ldo_va12 {
-> +				regulator-name = "va12";
-> +				regulator-min-microvolt = <1200000>;
-> +				regulator-max-microvolt = <1300000>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_va09_ldo_reg: ldo_va09 {
-> +				regulator-name = "va09";
-> +				regulator-min-microvolt = <800000>;
-> +				regulator-max-microvolt = <1200000>;
-> +			};
-> +			mt6359_vrf18_ldo_reg: ldo_vrf18 {
-> +				regulator-name = "vrf18";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <1810000>;
-> +			};
-> +			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
-> +				regulator-name = "vsram_md";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1293750>;
-> +				regulator-ramp-delay = <10760>;
-> +				regulator-enable-ramp-delay = <240>;
-> +			};
-> +			mt6359_vufs_ldo_reg: ldo_vufs {
-> +				regulator-name = "vufs";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <1900000>;
-> +			};
-> +			mt6359_vm18_ldo_reg: ldo_vm18 {
-> +				regulator-name = "vm18";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <1900000>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vbbck_ldo_reg: ldo_vbbck {
-> +				regulator-name = "vbbck";
-> +				regulator-min-microvolt = <1100000>;
-> +				regulator-max-microvolt = <1200000>;
-> +			};
-> +			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
-> +				regulator-name = "vsram_proc1";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1293750>;
-> +				regulator-ramp-delay = <7500>;
-> +				regulator-enable-ramp-delay = <240>;
-> +				regulator-always-on;
-> +			};
-> +			mt6359_vsim2_ldo_reg: ldo_vsim2 {
-> +				regulator-name = "vsim2";
-> +				regulator-min-microvolt = <1700000>;
-> +				regulator-max-microvolt = <3100000>;
-> +			};
-> +			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
-> +				regulator-name = "vsram_others_sshub";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1293750>;
-> +			};
-> +		};
-> +
-> +		mt6359rtc: mt6359rtc {
-> +			compatible = "mediatek,mt6358-rtc";
-> +		};
-> +	};
-> +};
-> -- 
-> 2.25.1
-> 
-> ************* MEDIATEK Confidentiality Notice ********************
-> The information contained in this e-mail message (including any
-> attachments) may be confidential, proprietary, privileged, or otherwise
-> exempt from disclosure under applicable laws. It is intended to be
-> conveyed only to the designated recipient(s). Any use, dissemination,
-> distribution, printing, retaining or copying of this e-mail (including its
-> attachments) by unintended recipient(s) is strictly prohibited and may
-> be unlawful. If you are not an intended recipient of this e-mail, or believe
-> that you have received this e-mail in error, please notify the sender
-> immediately (by replying to this e-mail), delete any and all copies of
-> this e-mail (including any attachments) from your system, and do not
-> disclose the content of this e-mail to any other person. Thank you!
+It happens that both __rtc_read_alarm() and __rtc_set_alarm() call __rtc_read_time()
+before reading / setting the alarm time. In the CMOS RTC driver,
+the function cmos_read_time() waits for the UIP (Update-in-progress)
+bit to clear before proceeding. The UIP bit is set > 244us before actual
+update begins, so there is usually plenty of time to read the current time and
+then the alarm time. My synthetic tests did not catch this and I thought
+that there was a problem.
+
+Therefore, I will not be sending a matching fix to stable.
+
+I have discovered this as I was working on exposing some form of
+__rtc_read_alarm() in debugfs for driver testing purposes. I'm going to send
+RFC patches for this shortly.
+
+Greetings,
+
+Mateusz
+
+> Fix this, by using mc146818_avoid_UIP().
+>
+> [1] 7th Generation Intel ® Processor Family I/O for U/Y Platforms [...]
+> Datasheet, Volume 1 of 2 (Intel's Document Number: 334658-006)
+> Page 208
+> https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/7th-and-8th-gen-core-family-mobile-u-y-processor-lines-i-o-datasheet-vol-1.pdf
+>         "If a RAM read from the ten time and date bytes is attempted
+>         during an update cycle, the value read do not necessarily
+>         represent the true contents of those locations. Any RAM writes
+>         under the same conditions are ignored."
+>
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
