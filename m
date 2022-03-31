@@ -2,74 +2,43 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBBF4EE193
-	for <lists+linux-rtc@lfdr.de>; Thu, 31 Mar 2022 21:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E84F4EE1C7
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Mar 2022 21:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240530AbiCaTXY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 31 Mar 2022 15:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S234639AbiCaTiC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 31 Mar 2022 15:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240744AbiCaTXP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Mar 2022 15:23:15 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F35E1D7D92;
-        Thu, 31 Mar 2022 12:21:26 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 3D2103200B23;
-        Thu, 31 Mar 2022 15:21:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 31 Mar 2022 15:21:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=b8M9HG7NAuCsg1
-        pgzyQ1/FF9x5QgxMEQaO1UmGNT7/g=; b=F6gy1QL+cMrYlqhuww6haTcWdgsupo
-        PD/MEynWirlsagKooa49yUF5NzzjVP4s4HLeCnu+MgAWSC9kJB7fdmoVYy30jkW9
-        MIsP1WHSTNEq1aNKbkKyfGbtIzo7hJMHSoBuDV2T6kI2H1aeje3rosBwnvUGCJGp
-        xtcMtz/AENQyrfo48PF8JNJ10fUw0pigSNZMb5v27kR5XZuv48AXETfLp0lfdeLP
-        N0D8YzKWFcA87zsFDWj7jLl96r/fARUCRug6NdKuAeRRw40CmAD3bSDMQm/v6OQk
-        z/xZ0rHBerRaJM9RPhOVnS1nRYhVGchk2Uu05r5e2gv1bApkoH0u8qag==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=b8M9HG7NAuCsg1pgzyQ1/FF9x5QgxMEQaO1UmGNT7
-        /g=; b=Y4Cr/ankkEVmVWGLE7ygmtcaQLYD9snMTtamTck/NRvqVFKtvEGcgs9LZ
-        bIx5awbqcLHByV/Ii8S+QLiOlfkcnggH9S+Udjp59JYgrmqAE66feS/tdgwTnYVC
-        562RKb6fkcMO9xdgq90i1v2CbsNMdSHwBQmq0F3ikjKnJd/L6rxb6ziudsRm5x9J
-        OzYnDPpmSX+vC4zmrEtdMmrQjRiBpXKEVKNG729iYnN+7QHpEScW7ouB8f9vAeIU
-        NHEVJ6WVeDT/Yd/rlh5vu0NkO9Sio+dMK6okO2mCBbRDu9gEOnIViRIBfqplC/rm
-        WvkZ4f4lNLZnpKyigmWVdkgEj1RSQ==
-X-ME-Sender: <xms:NP9FYmUk3ieyIj_eD3xZWkwxIe-m8k-VTjxv0l-9xeHHmvcIYHs5MQ>
-    <xme:NP9FYilZWvnd7CqyKENVqFqgIm_ashFhOmxMBVYWqwJS3Wr_lziSZu7Aolldl8vJY
-    EvGoSihzBwcMQ>
-X-ME-Received: <xmr:NP9FYqYkvw479bgM94ImzmrX-Jc6D0eWOOIYdJ5oZsVLVpHuqNXMpIvhCRW794xG733KHI7ct9_y9bYICos9yMPElrFbKHFy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpefhud
-    fggeelgfduteeujeefkedvgeegkeehkedvgeelhefgudehtefftefhheegudenucffohhm
-    rghinhepmhgrrhgtrdhinhhfohdpthhimhgvrdhtmhenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:NP9FYtUqOwTQWamVgd4qpFTpljxbLxjwqerKGhrP1BnQNnRd-9MIig>
-    <xmx:NP9FYglfTGTqNZg99YuXhbDBY5luu0qJzaZQwcfV4ZedxeyeeWQQYw>
-    <xmx:NP9FYicpGT3-uDYDbCM_A7vZSP-84w6A8bfgfaYdrcL7aULT4m3zqg>
-    <xmx:NP9FYr-ray9t9PnBHvcXhHKXxDiVn1amuWBxprxKd0KmMVACX8l9VQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 31 Mar 2022 15:21:23 -0400 (EDT)
-Date:   Thu, 31 Mar 2022 21:21:21 +0200
-From:   Greg KH <greg@kroah.com>
+        with ESMTP id S230138AbiCaTiB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Mar 2022 15:38:01 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54951E5310;
+        Thu, 31 Mar 2022 12:36:11 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F20531C0002;
+        Thu, 31 Mar 2022 19:36:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1648755369;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V8fHwSd70iFB+ISHP69lKJKpu/hepzr7wzhuGq/slrA=;
+        b=T8FpwH1M9y04NkMIbM/MSxBGCYDgiJWha5qWF7sIDPHoh5jC1MfDCMtjKnilMEV2fVGupU
+        lYkJxQmbZRjJtg6eqPH1+Tt8picFwnY2D5tYFv5g5SeuGEbgkSq4RxlM+3j0YIOwDSYI9X
+        tosRqteU+usTABUV6A0ozBm4gjW3cdk6p/NrtZ5Y8Szlh4KgP58eNvzj6YR3zmEJjP2WpT
+        SBgnj+FaIPUJdk//TpJ6eHFGHBhL0pscuxq+3cQwESTc9lah3Vd7DRdpo/PFLrGTi9fS4k
+        6CXdgn8qAp8qrag1coPu3vXWqfkX7LIb14H5T4ajWoPIS7Ln4PbYJ1ZIvrYNjg==
+Date:   Thu, 31 Mar 2022 21:36:08 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Shuah Khan <shuah@kernel.org>
 Subject: Re: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm
  time in debugfs
-Message-ID: <YkX/Mbrt/In1HR32@kroah.com>
+Message-ID: <YkYCqI0HEJvi2VjV@piout.net>
 References: <20220331190612.22162-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -77,16 +46,18 @@ Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20220331190612.22162-1-mat.jonczyk@o2.pl>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:06:11PM +0200, Mateusz Jończyk wrote:
+Hello,
+
+On 31/03/2022 21:06:11+0200, Mateusz Jończyk wrote:
 > Before Linux 5.17, there was a problem with the CMOS RTC driver:
 > cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
 > in progress) bit, which could have caused it to sometimes fail silently
@@ -106,6 +77,16 @@ On Thu, Mar 31, 2022 at 09:06:11PM +0200, Mateusz Jończyk wrote:
 > 
 > Is this approach correct and worth it?
 > 
+
+I'm not really in favor of adding another interface for very little
+gain, you want to use this interface to exercise the API in a way that
+will never happen in the real world, especially since __rtc_read_alarm
+is only called once, at registration time.
+
+I'm not sure the selftest is worth it then. You should better improve
+the existing unit tests by exercising the ioctls a bit more. syzbot did
+report interesting race conditions that were more severe.
+
 > TODO:
 > - should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
 >   just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
@@ -186,20 +167,8 @@ On Thu, Mar 31, 2022 at 09:06:11PM +0200, Mateusz Jończyk wrote:
 > +	struct dentry *ret = debugfs_create_dir("rtc", NULL);
 > +
 > +	// No error is critical here
-
-What do you mean by this?
-
 > +	if (!IS_ERR(ret))
 > +		rtc_main_debugfs_dir = ret;
-
-This should not be needed.
-
-Just set the directory and away you go.
-
-But why even save it?  If you need it you can always look it up, right?
-
-And when are you removing this directory you created?
-
 > +}
 > +
 > +/*
@@ -278,10 +247,6 @@ And when are you removing this directory you created?
 > +	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
 > +
 > +	if (IS_ERR(dev_dir)) {
-
-Again, no need to check this.  You never need to test the return value
-of a call to debugfs_*.
-
 > +		rtc->debugfs_dir = NULL;
 > +		return;
 > +	}
@@ -330,9 +295,39 @@ of a call to debugfs_*.
 >  
 > +#ifdef CONFIG_DEBUG_FS
 > +	struct dentry *debugfs_dir;
+> +#endif
+> +
+>  #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+>  	struct work_struct uie_task;
+>  	struct timer_list uie_timer;
+> @@ -190,6 +195,7 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
+>  int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+>  extern int rtc_read_alarm(struct rtc_device *rtc,
+>  			struct rtc_wkalrm *alrm);
+> +int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+>  extern int rtc_set_alarm(struct rtc_device *rtc,
+>  				struct rtc_wkalrm *alrm);
+>  extern int rtc_initialize_alarm(struct rtc_device *rtc,
+> @@ -262,4 +268,14 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
+>  	return 0;
+>  }
+>  #endif
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +void rtc_debugfs_init(void);
+> +void rtc_debugfs_add_device(struct rtc_device *rtc);
+> +void rtc_debugfs_del_device(struct rtc_device *rtc);
+> +#else /* CONFIG_DEBUG_FS */
+> +static inline void rtc_debugfs_init(void) {}
+> +static inline void rtc_debugfs_add_device(struct rtc_device *rtc) {}
+> +static inline void rtc_debugfs_del_device(struct rtc_device *rtc) {}
+> +#endif /* CONFIG_DEBUG_FS */
+>  #endif /* _LINUX_RTC_H_ */
+> -- 
+> 2.25.1
+> 
 
-No need to save this.  Just look it up if you need it.
-
-thanks,
-
-greg k-h
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
