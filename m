@@ -2,113 +2,311 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F52E4ECC3B
-	for <lists+linux-rtc@lfdr.de>; Wed, 30 Mar 2022 20:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA104EE159
+	for <lists+linux-rtc@lfdr.de>; Thu, 31 Mar 2022 21:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350054AbiC3S1N (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 30 Mar 2022 14:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
+        id S229995AbiCaTIh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 31 Mar 2022 15:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350512AbiC3S0j (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 30 Mar 2022 14:26:39 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D706A4A3D1
-        for <linux-rtc@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d39f741ba0so22892148fac.13
-        for <linux-rtc@vger.kernel.org>; Wed, 30 Mar 2022 11:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
-         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
-         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
-         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
-         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
-         ou5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
-        b=N1M4bP2Yqe6VyJgHWj5z54C9vpmCGdAaIhlbFeSUQj2e2GBJTGuJDodr2su7aoyPYK
-         DWjqV0U4+x1SyTabPVw9Bqp1/X1fO/rbO5SjxUrETpm9rjWL+jVvHAveUCUvE8Mq4fiG
-         svHIcxpbRFfpmwE7t67wV0fCXHEIuIqvQ4J96VDmfD000OMVKSe+l7T0tacVFUrmLaRu
-         B35diqwD7uON5MRU9fPjPzw0H3c0gWRgXxgiE5c9SOweevvMkzFSRMZ2fPqpvXSot6+o
-         QQ4FMq8Z7GrdnG9dnDO3I7TZhYWVAHQnApdz1G8Yjca1m3f9bqun6JTdBIOIvFleeSkG
-         n80g==
-X-Gm-Message-State: AOAM530Xf0v1petq1W7S5OEwId/tUJ6JiPibDKljc9u/OgAN+9la4Dky
-        /7lDArRSGYGfaVIjxFHLMvGetl1N9HXlddpEffAZs0ZKpROp
-X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
-X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
- ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
- Mar 2022 11:23:38 -0700 (PDT)
+        with ESMTP id S240475AbiCaTIW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Mar 2022 15:08:22 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195D021D7D3
+        for <linux-rtc@vger.kernel.org>; Thu, 31 Mar 2022 12:06:31 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 11034 invoked from network); 31 Mar 2022 21:06:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1648753588; bh=XZTdSmwm9/yO+AUq3L3jtZKpoXcOQ8kc/B2IKK6OQ0g=;
+          h=From:To:Cc:Subject;
+          b=ubO3oVMPOVqjvN6tQ+rX1kOZP3HTKba9P7eqRqlyQ6ZLsKV8E5DsrG6bN/d7QPuYF
+           kg22ppYJXqXEpo9tT65ne7kV4q0iWjUS00rszY5pzz8xAJjHS6u05AMK3wWCxVhmKf
+           K0pHcSmGSM/qYVb/eVoisklFqLQ9K5EGrfar2kDs=
+Received: from aaew62.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.126.62])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-kernel@vger.kernel.org>; 31 Mar 2022 21:06:27 +0200
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: [PATCH 1/2] [RFC] rtc: expose direct access to hardware alarm time in debugfs
+Date:   Thu, 31 Mar 2022 21:06:11 +0200
+Message-Id: <20220331190612.22162-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Reply-To: isabellasayouba0@gmail.com
-Sender: 040stherchurch@gmail.com
-Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
- 11:23:37 -0700 (PDT)
-From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
-Date:   Wed, 30 Mar 2022 18:23:37 +0000
-X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
-Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
-Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: c9fa4d8a8d8f00513ade2b3eaef03373
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [EcP0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
-kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
-jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
-kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
-leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
-quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
-seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
-ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
-grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
-tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
-gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
-5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
-44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
-44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
-DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
-44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
-44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
-44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
-5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
-geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
-qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
-gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
-sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
-gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
-uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
-gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
-gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
-vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
-puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
-6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
-44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
-44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
-44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
-6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
-56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
-44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
-iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
-guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
-vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
-uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
-jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
-puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
-gonjgIINCg==
+Before Linux 5.17, there was a problem with the CMOS RTC driver:
+cmos_read_alarm() and cmos_set_alarm() did not check for the UIP (Update
+in progress) bit, which could have caused it to sometimes fail silently
+and read bogus values or do not set the alarm correctly.
+Luckily, this issue was masked by cmos_read_time() invocations in core
+RTC code - see https://marc.info/?l=linux-rtc&m=164858416511425&w=4
+
+To avoid such a problem in the future in some other driver, I wrote a
+test unit that reads the alarm time many times in a row. As the alarm
+time is usually read once and cached by the RTC core, this requires a
+way for userspace to trigger direct alarm time read from hardware. I
+think that debugfs is the natural choice for this.
+
+So, introduce /sys/kernel/debug/rtc/rtcX/wakealarm_raw. This interface
+as implemented here does not seem to be that useful to userspace, so
+there is little risk that it will become kernel ABI.
+
+Is this approach correct and worth it?
+
+TODO:
+- should I add a new Kconfig option (like CONFIG_RTC_INTF_DEBUGFS), or
+  just use CONFIG_DEBUG_FS here? I wouldn't like to create unnecessary
+  config options in the kernel.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Shuah Khan <shuah@kernel.org>
+---
+ drivers/rtc/Makefile    |   1 +
+ drivers/rtc/class.c     |   3 ++
+ drivers/rtc/debugfs.c   | 112 ++++++++++++++++++++++++++++++++++++++++
+ drivers/rtc/interface.c |   3 +-
+ include/linux/rtc.h     |  16 ++++++
+ 5 files changed, 133 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/rtc/debugfs.c
+
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 678a8ef4abae..50e166a97f54 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -14,6 +14,7 @@ rtc-core-$(CONFIG_RTC_NVMEM)		+= nvmem.o
+ rtc-core-$(CONFIG_RTC_INTF_DEV)		+= dev.o
+ rtc-core-$(CONFIG_RTC_INTF_PROC)	+= proc.o
+ rtc-core-$(CONFIG_RTC_INTF_SYSFS)	+= sysfs.o
++rtc-core-$(CONFIG_DEBUG_FS)		+= debugfs.o
+ 
+ obj-$(CONFIG_RTC_LIB_KUNIT_TEST)	+= lib_test.o
+ 
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index 4b460c61f1d8..5673b7b26c0d 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -334,6 +334,7 @@ static void devm_rtc_unregister_device(void *data)
+ 	 * Remove innards of this RTC, then disable it, before
+ 	 * letting any rtc_class_open() users access it again
+ 	 */
++	rtc_debugfs_del_device(rtc);
+ 	rtc_proc_del_device(rtc);
+ 	if (!test_bit(RTC_NO_CDEV, &rtc->flags))
+ 		cdev_device_del(&rtc->char_dev, &rtc->dev);
+@@ -417,6 +418,7 @@ int __devm_rtc_register_device(struct module *owner, struct rtc_device *rtc)
+ 	}
+ 
+ 	rtc_proc_add_device(rtc);
++	rtc_debugfs_add_device(rtc);
+ 
+ 	dev_info(rtc->dev.parent, "registered as %s\n",
+ 		 dev_name(&rtc->dev));
+@@ -476,6 +478,7 @@ static int __init rtc_init(void)
+ 	}
+ 	rtc_class->pm = RTC_CLASS_DEV_PM_OPS;
+ 	rtc_dev_init();
++	rtc_debugfs_init();
+ 	return 0;
+ }
+ subsys_initcall(rtc_init);
+diff --git a/drivers/rtc/debugfs.c b/drivers/rtc/debugfs.c
+new file mode 100644
+index 000000000000..5ceed5504033
+--- /dev/null
++++ b/drivers/rtc/debugfs.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++/*
++ * Debugfs interface for testing RTC alarms.
++ */
++#include <linux/debugfs.h>
++#include <linux/err.h>
++#include <linux/rtc.h>
++
++static struct dentry *rtc_main_debugfs_dir;
++
++void rtc_debugfs_init(void)
++{
++	struct dentry *ret = debugfs_create_dir("rtc", NULL);
++
++	// No error is critical here
++	if (!IS_ERR(ret))
++		rtc_main_debugfs_dir = ret;
++}
++
++/*
++ * Handler for /sys/kernel/debug/rtc/rtcX/wakealarm_raw .
++ * This function reads the RTC alarm time directly from hardware. If the RTC
++ * alarm is enabled, this function returns the alarm time modulo 24h in seconds
++ * since midnight.
++ *
++ * Should be only used for testing of the RTC alarm read functionality in
++ * drivers - to make sure that the driver returns consistent values.
++ *
++ * Used in tools/testing/selftests/rtc/rtctest.c .
++ */
++static int rtc_debugfs_alarm_read(void *p, u64 *out)
++{
++	int ret;
++	struct rtc_device *rtc = p;
++	struct rtc_wkalrm alm;
++
++	/* Using rtc_read_alarm_internal() instead of __rtc_read_alarm() will
++	 * allow us to avoid any interaction with rtc_read_time() and possibly
++	 * see more issues.
++	 */
++	ret = rtc_read_alarm_internal(rtc, &alm);
++	if (ret != 0)
++		return ret;
++
++	if (!alm.enabled) {
++		*out = -1;
++		return 0;
++	}
++
++	/* It does not matter if the device does not support seconds resolution
++	 * of the RTC alarm.
++	 */
++	if (test_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->features))
++		alm.time.tm_sec = 0;
++
++	/* The selftest code works with fully defined alarms only.
++	 */
++	if (alm.time.tm_sec == -1 || alm.time.tm_min == -1 || alm.time.tm_hour == -1) {
++		*out = -2;
++		return 0;
++	}
++
++	/* Check if the alarm time is correct.
++	 * rtc_valid_tm() does not allow fields containing "-1", so put in
++	 * something to satisfy it.
++	 */
++	if (alm.time.tm_year == -1)
++		alm.time.tm_year = 100;
++	if (alm.time.tm_mon == -1)
++		alm.time.tm_mon = 0;
++	if (alm.time.tm_mday == -1)
++		alm.time.tm_mday = 1;
++	if (rtc_valid_tm(&alm.time))
++		return -EINVAL;
++
++	/* We do not duplicate the logic in __rtc_read_alarm() and instead only
++	 * return the alarm time modulo 24h, which all devices should support.
++	 * This should be enough for testing purposes.
++	 */
++	*out = alm.time.tm_hour * 3600 + alm.time.tm_min * 60 + alm.time.tm_sec;
++
++	return 0;
++}
++DEFINE_DEBUGFS_ATTRIBUTE(rtc_alarm_raw, rtc_debugfs_alarm_read, NULL, "%lld\n");
++
++void rtc_debugfs_add_device(struct rtc_device *rtc)
++{
++	struct dentry *dev_dir;
++
++	if (!rtc_main_debugfs_dir)
++		return;
++
++	dev_dir = debugfs_create_dir(dev_name(&rtc->dev), rtc_main_debugfs_dir);
++
++	if (IS_ERR(dev_dir)) {
++		rtc->debugfs_dir = NULL;
++		return;
++	}
++	rtc->debugfs_dir = dev_dir;
++
++	if (test_bit(RTC_FEATURE_ALARM, rtc->features) && rtc->ops->read_alarm) {
++		debugfs_create_file("wakealarm_raw", 0444, dev_dir,
++				    rtc, &rtc_alarm_raw);
++	}
++}
++
++void rtc_debugfs_del_device(struct rtc_device *rtc)
++{
++	debugfs_remove_recursive(rtc->debugfs_dir);
++	rtc->debugfs_dir = NULL;
++}
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index d8e835798153..51c801c82472 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -175,8 +175,7 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
+ }
+ EXPORT_SYMBOL_GPL(rtc_set_time);
+ 
+-static int rtc_read_alarm_internal(struct rtc_device *rtc,
+-				   struct rtc_wkalrm *alarm)
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ {
+ 	int err;
+ 
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 47fd1c2d3a57..4665bc238a94 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -41,6 +41,7 @@ static inline time64_t rtc_tm_sub(struct rtc_time *lhs, struct rtc_time *rhs)
+ #include <linux/mutex.h>
+ #include <linux/timerqueue.h>
+ #include <linux/workqueue.h>
++#include <linux/debugfs.h>
+ 
+ extern struct class *rtc_class;
+ 
+@@ -152,6 +153,10 @@ struct rtc_device {
+ 	time64_t offset_secs;
+ 	bool set_start_time;
+ 
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *debugfs_dir;
++#endif
++
+ #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
+ 	struct work_struct uie_task;
+ 	struct timer_list uie_timer;
+@@ -190,6 +195,7 @@ extern int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm);
+ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_read_alarm(struct rtc_device *rtc,
+ 			struct rtc_wkalrm *alrm);
++int rtc_read_alarm_internal(struct rtc_device *rtc, struct rtc_wkalrm *alarm);
+ extern int rtc_set_alarm(struct rtc_device *rtc,
+ 				struct rtc_wkalrm *alrm);
+ extern int rtc_initialize_alarm(struct rtc_device *rtc,
+@@ -262,4 +268,14 @@ int rtc_add_groups(struct rtc_device *rtc, const struct attribute_group **grps)
+ 	return 0;
+ }
+ #endif
++
++#ifdef CONFIG_DEBUG_FS
++void rtc_debugfs_init(void);
++void rtc_debugfs_add_device(struct rtc_device *rtc);
++void rtc_debugfs_del_device(struct rtc_device *rtc);
++#else /* CONFIG_DEBUG_FS */
++static inline void rtc_debugfs_init(void) {}
++static inline void rtc_debugfs_add_device(struct rtc_device *rtc) {}
++static inline void rtc_debugfs_del_device(struct rtc_device *rtc) {}
++#endif /* CONFIG_DEBUG_FS */
+ #endif /* _LINUX_RTC_H_ */
+-- 
+2.25.1
+
