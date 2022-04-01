@@ -2,45 +2,64 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815DF4EE3F2
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Apr 2022 00:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A301D4EEB26
+	for <lists+linux-rtc@lfdr.de>; Fri,  1 Apr 2022 12:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242393AbiCaWXr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 31 Mar 2022 18:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S245401AbiDAKWa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 1 Apr 2022 06:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbiCaWXq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 31 Mar 2022 18:23:46 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80FB247C19;
-        Thu, 31 Mar 2022 15:21:54 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 30633100002;
-        Thu, 31 Mar 2022 22:21:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1648765309;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=9BpVqjZGTnV49SHC+Qsp/9gpkouodEw1HwhW2Ckg0Ec=;
-        b=kIriPuh1iWn87eT/gex+u7BxEob1o8JgAgaiuWYpzlULmbalZUhfnKc+ZfRrRIxkC0JjEK
-        YoBKRO8M60ajS6KyY4B5sobdEQXxMpyz6fRYOP/Ivp1Vq78GMOihdLM6MxpOTbFvctgJ5e
-        TBzoOP7J35LsU1H4Xnxvw7O5wb2r2DnLjkOz8FZsBphG1kvw9zY89Lju1Ltk7QN1S8CFsl
-        ZWAk/e1NuXmmWFMdrR90MyFDncwHNjCY8eszimWp5ri3ad3AMKPRipt+FsBN2F7o4b3Ei9
-        JCLifiEr1fm1xRx7nOVrSb+GWfALgIWX/WnfZsbjl9tPX8RVX2v2dobXExDtKQ==
-Date:   Fri, 1 Apr 2022 00:21:48 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 5.18
-Message-ID: <YkYpfK5ubwafd+Rw@mail.local>
+        with ESMTP id S245363AbiDAKW3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Apr 2022 06:22:29 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B6F1C9B4B;
+        Fri,  1 Apr 2022 03:20:38 -0700 (PDT)
+Received: from [192.168.100.1] ([82.142.17.26]) by mrelayeu.kundenserver.de
+ (mreue010 [213.165.67.103]) with ESMTPSA (Nemesis) id
+ 1MwQGj-1nqnji0vn3-00sLP0; Fri, 01 Apr 2022 12:20:19 +0200
+Message-ID: <f87deb83-7f1f-5acf-b6c6-040fcd02c0be@vivier.eu>
+Date:   Fri, 1 Apr 2022 12:20:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v15 4/5] clocksource/drivers: Add a goldfish-timer
+ clocksource
+Content-Language: fr
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220310090048.1933020-1-laurent@vivier.eu>
+ <20220310090048.1933020-5-laurent@vivier.eu>
+From:   Laurent Vivier <laurent@vivier.eu>
+In-Reply-To: <20220310090048.1933020-5-laurent@vivier.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Provags-ID: V03:K1:u2d6Fo0vt2+bqXskDLHjOPdixCX4zsXvINJ2Jn19xWXsGKxPOxq
+ 1XwntdfcPDTYVDrUzFjrILOv9jflp2j4a2oGsERZp+9tejRjCaycJ6O1Yycab2p5EowcobN
+ T0u13sSkliObBT2/RnxUQzbB5k29damx0RxX+L9maHub8YvDC0cTgYOz96FnnKPeB3x6dYz
+ EzHq5M4WG9LvBfStI4OcQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:81TbQ8LjB+A=:iWBIL0/kInar3gnkCke+Zr
+ 1hCIlIlVcC9UMnvtMboWe8CGwxV0DUo7GT+iu7F8u2TdHo7z0jL5B2326hwgeun/hAW4ez8wy
+ 4jZTWBArzyxChrRsmpsYwJWTuMqVB+9kruwFMnMMS5CWn0fo3f6wAxDCPV/yYIzSyMwZuy6f9
+ ZiwY5tFgKgC/l73lMi5ZLYj4L5n0VcPTpsqVlB06EcxaZ/YRZe0KP5uBOhFC334sgAkum6nx7
+ YqFgjlBONKLnqrara0ioZHauDHM2poIJ49KvtW35/3VQ+bIYZ914ymGUOZy/6LcbMbNTeL56o
+ WDZDj/w2KaUp/uOnjBpM9N2mR8vsGszDcKb2ykCR5tPu3O44h9qNP+c1OHDn7SDw8qb3ekpqv
+ QFRntqOEPVZqf21H3Um3A1G3+hmTY3nUxO4XLxCZ6Z9Uma2aGl46mQfAL2jQY8MxC8wPxwZQM
+ xuPEdlTXyqS4Z2YzomRE+NNUDYN9cK1QVrQFYMzZn3Zkwg58GJArNxmUmvxRxf3q7PKLrrJoZ
+ Ezw+YeX0pCkg94UBgOp4r2KtlKesysuI49SW/Wv7906ycsK4NGIRMXpYRiTyHpb8jBvvuooli
+ ++TCDGbUuUdX5C7iXTiNvDZFhb8EHPE9SkUAluE45BcKrvEZctyo4Q0JEbkQxxSRJ+spVgkwK
+ cLjmWNJSO/uuyAyj1IimeCkbWjqInmMvfbc/7TWdXINYKtauckME7QXwAlldSmmas3BI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,181 +67,280 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Linus,
 
-Here is the RTC subsystem pull request for 5.18. The bulk of the patches
-are about replacing the uie_unsupported strcut rtc_device member by a
-feature bit.
+Daniel ?
 
-I also carry patches for the clk subsystem as they have the proper acks.
+Thanks,
+Laurent
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+Le 10/03/2022 à 10:00, Laurent Vivier a écrit :
+> Add a clocksource based on the goldfish-rtc device.
+> 
+> Move the timer register definition to <clocksource/timer-goldfish.h>
+> 
+> This kernel implementation is based on the QEMU upstream implementation:
+> 
+>     https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/rtc/goldfish_rtc.c
+> 
+> goldfish-timer is a high-precision signed 64-bit nanosecond timer.
+> It is part of the 'goldfish' virtual hardware platform used to run
+> some emulated Android systems under QEMU.
+> This timer only supports oneshot event.
+> 
+> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> ---
+>   drivers/clocksource/Kconfig          |   7 ++
+>   drivers/clocksource/Makefile         |   1 +
+>   drivers/clocksource/timer-goldfish.c | 153 +++++++++++++++++++++++++++
+>   drivers/rtc/rtc-goldfish.c           |  13 +--
+>   include/clocksource/timer-goldfish.h |  31 ++++++
+>   5 files changed, 193 insertions(+), 12 deletions(-)
+>   create mode 100644 drivers/clocksource/timer-goldfish.c
+>   create mode 100644 include/clocksource/timer-goldfish.h
+> 
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index cfb8ea0df3b1..94f00374cebb 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -721,4 +721,11 @@ config MICROCHIP_PIT64B
+>   	  modes and high resolution. It is used as a clocksource
+>   	  and a clockevent.
+>   
+> +config GOLDFISH_TIMER
+> +	bool "Clocksource using goldfish-rtc"
+> +	depends on M68K || COMPILE_TEST
+> +	depends on RTC_DRV_GOLDFISH
+> +	help
+> +	  Support for the timer/counter of goldfish-rtc
+> +
+>   endmenu
+> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+> index fa5f624eadb6..12f5d7e8cc2d 100644
+> --- a/drivers/clocksource/Makefile
+> +++ b/drivers/clocksource/Makefile
+> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)		+= timer-gx6605s.o
+>   obj-$(CONFIG_HYPERV_TIMER)		+= hyperv_timer.o
+>   obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+>   obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+> +obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+> diff --git a/drivers/clocksource/timer-goldfish.c b/drivers/clocksource/timer-goldfish.c
+> new file mode 100644
+> index 000000000000..0512d5eabc82
+> --- /dev/null
+> +++ b/drivers/clocksource/timer-goldfish.c
+> @@ -0,0 +1,153 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/ioport.h>
+> +#include <linux/clocksource.h>
+> +#include <linux/clockchips.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/goldfish.h>
+> +#include <clocksource/timer-goldfish.h>
+> +
+> +struct goldfish_timer {
+> +	struct clocksource cs;
+> +	struct clock_event_device ced;
+> +	struct resource res;
+> +	void __iomem *base;
+> +};
+> +
+> +static struct goldfish_timer *ced_to_gf(struct clock_event_device *ced)
+> +{
+> +	return container_of(ced, struct goldfish_timer, ced);
+> +}
+> +
+> +static struct goldfish_timer *cs_to_gf(struct clocksource *cs)
+> +{
+> +	return container_of(cs, struct goldfish_timer, cs);
+> +}
+> +
+> +static u64 goldfish_timer_read(struct clocksource *cs)
+> +{
+> +	struct goldfish_timer *timerdrv = cs_to_gf(cs);
+> +	void __iomem *base = timerdrv->base;
+> +	u32 time_low, time_high;
+> +	u64 ticks;
+> +
+> +	/*
+> +	 * time_low: get low bits of current time and update time_high
+> +	 * time_high: get high bits of time at last time_low read
+> +	 */
+> +	time_low = gf_ioread32(base + TIMER_TIME_LOW);
+> +	time_high = gf_ioread32(base + TIMER_TIME_HIGH);
+> +
+> +	ticks = ((u64)time_high << 32) | time_low;
+> +
+> +	return ticks;
+> +}
+> +
+> +static int goldfish_timer_set_oneshot(struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(0, base + TIMER_ALARM_HIGH);
+> +	gf_iowrite32(0, base + TIMER_ALARM_LOW);
+> +	gf_iowrite32(1, base + TIMER_IRQ_ENABLED);
+> +
+> +	return 0;
+> +}
+> +
+> +static int goldfish_timer_shutdown(struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(0, base + TIMER_IRQ_ENABLED);
+> +
+> +	return 0;
+> +}
+> +
+> +static int goldfish_timer_next_event(unsigned long delta,
+> +				     struct clock_event_device *evt)
+> +{
+> +	struct goldfish_timer *timerdrv = ced_to_gf(evt);
+> +	void __iomem *base = timerdrv->base;
+> +	u64 now;
+> +
+> +	now = goldfish_timer_read(&timerdrv->cs);
+> +
+> +	now += delta;
+> +
+> +	gf_iowrite32(upper_32_bits(now), base + TIMER_ALARM_HIGH);
+> +	gf_iowrite32(lower_32_bits(now), base + TIMER_ALARM_LOW);
+> +
+> +	return 0;
+> +}
+> +
+> +static irqreturn_t goldfish_timer_irq(int irq, void *dev_id)
+> +{
+> +	struct goldfish_timer *timerdrv = dev_id;
+> +	struct clock_event_device *evt = &timerdrv->ced;
+> +	void __iomem *base = timerdrv->base;
+> +
+> +	gf_iowrite32(1, base + TIMER_CLEAR_INTERRUPT);
+> +
+> +	evt->event_handler(evt);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +int __init goldfish_timer_init(int irq, void __iomem *base)
+> +{
+> +	struct goldfish_timer *timerdrv;
+> +	int ret;
+> +
+> +	timerdrv = kzalloc(sizeof(*timerdrv), GFP_KERNEL);
+> +	if (!timerdrv)
+> +		return -ENOMEM;
+> +
+> +	timerdrv->base = base;
+> +
+> +	timerdrv->ced = (struct clock_event_device){
+> +		.name			= "goldfish_timer",
+> +		.features		= CLOCK_EVT_FEAT_ONESHOT,
+> +		.set_state_shutdown	= goldfish_timer_shutdown,
+> +		.set_state_oneshot      = goldfish_timer_set_oneshot,
+> +		.set_next_event		= goldfish_timer_next_event,
+> +	};
+> +
+> +	timerdrv->res = (struct resource){
+> +		.name  = "goldfish_timer",
+> +		.start = (unsigned long)base,
+> +		.end   = (unsigned long)base + 0xfff,
+> +	};
+> +
+> +	ret = request_resource(&iomem_resource, &timerdrv->res);
+> +	if (ret) {
+> +		pr_err("Cannot allocate '%s' resource\n", timerdrv->res.name);
+> +		return ret;
+> +	}
+> +
+> +	timerdrv->cs = (struct clocksource){
+> +		.name		= "goldfish_timer",
+> +		.rating		= 400,
+> +		.read		= goldfish_timer_read,
+> +		.mask		= CLOCKSOURCE_MASK(64),
+> +		.flags		= 0,
+> +		.max_idle_ns	= LONG_MAX,
+> +	};
+> +
+> +	clocksource_register_hz(&timerdrv->cs, NSEC_PER_SEC);
+> +
+> +	ret = request_irq(irq, goldfish_timer_irq, IRQF_TIMER,
+> +			  "goldfish_timer", timerdrv);
+> +	if (ret) {
+> +		pr_err("Couldn't register goldfish-timer interrupt\n");
+> +		return ret;
+> +	}
+> +
+> +	clockevents_config_and_register(&timerdrv->ced, NSEC_PER_SEC,
+> +					1, 0xffffffff);
+> +
+> +	return 0;
+> +}
+> diff --git a/drivers/rtc/rtc-goldfish.c b/drivers/rtc/rtc-goldfish.c
+> index eb1929b0cbb6..59c0f38cc08d 100644
+> --- a/drivers/rtc/rtc-goldfish.c
+> +++ b/drivers/rtc/rtc-goldfish.c
+> @@ -11,18 +11,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/rtc.h>
+>   #include <linux/goldfish.h>
+> -
+> -#define TIMER_TIME_LOW		0x00	/* get low bits of current time  */
+> -					/*   and update TIMER_TIME_HIGH  */
+> -#define TIMER_TIME_HIGH	0x04	/* get high bits of time at last */
+> -					/*   TIMER_TIME_LOW read         */
+> -#define TIMER_ALARM_LOW	0x08	/* set low bits of alarm and     */
+> -					/*   activate it                 */
+> -#define TIMER_ALARM_HIGH	0x0c	/* set high bits of next alarm   */
+> -#define TIMER_IRQ_ENABLED	0x10
+> -#define TIMER_CLEAR_ALARM	0x14
+> -#define TIMER_ALARM_STATUS	0x18
+> -#define TIMER_CLEAR_INTERRUPT	0x1c
+> +#include <clocksource/timer-goldfish.h>
+>   
+>   struct goldfish_rtc {
+>   	void __iomem *base;
+> diff --git a/include/clocksource/timer-goldfish.h b/include/clocksource/timer-goldfish.h
+> new file mode 100644
+> index 000000000000..d39097729b1d
+> --- /dev/null
+> +++ b/include/clocksource/timer-goldfish.h
+> @@ -0,0 +1,31 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * goldfish-timer clocksource
+> + * Registers definition for the goldfish-timer device
+> + */
+> +
+> +#ifndef _CLOCKSOURCE_TIMER_GOLDFISH_H
+> +#define _CLOCKSOURCE_TIMER_GOLDFISH_H
+> +
+> +/*
+> + * TIMER_TIME_LOW	 get low bits of current time and update TIMER_TIME_HIGH
+> + * TIMER_TIME_HIGH	 get high bits of time at last TIMER_TIME_LOW read
+> + * TIMER_ALARM_LOW	 set low bits of alarm and activate it
+> + * TIMER_ALARM_HIGH	 set high bits of next alarm
+> + * TIMER_IRQ_ENABLED	 enable alarm interrupt
+> + * TIMER_CLEAR_ALARM	 disarm an existin alarm
+> + * TIMER_ALARM_STATUS	 alarm status (running or not)
+> + * TIMER_CLEAR_INTERRUPT clear interrupt
+> + */
+> +#define TIMER_TIME_LOW		0x00
+> +#define TIMER_TIME_HIGH		0x04
+> +#define TIMER_ALARM_LOW		0x08
+> +#define TIMER_ALARM_HIGH	0x0c
+> +#define TIMER_IRQ_ENABLED	0x10
+> +#define TIMER_CLEAR_ALARM	0x14
+> +#define TIMER_ALARM_STATUS	0x18
+> +#define TIMER_CLEAR_INTERRUPT	0x1c
+> +
+> +extern int goldfish_timer_init(int irq, void __iomem *base);
+> +
+> +#endif /* _CLOCKSOURCE_TIMER_GOLDFISH_H */
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.18
-
-for you to fetch changes up to 915593a7a663b2ad08b895a5f3ba8b19d89d4ebf:
-
-  rtc: check if __rtc_read_time was successful (2022-03-29 22:45:50 +0200)
-
-----------------------------------------------------------------
-RTC for 5.18
-
-Subsystem:
- - remove uie_unsupported, all users have been converted to clear
-   RTC_FEATURE_UPDATE_INTERRUPT and provide a reason
- - RTCs with an alarm with a resolution of a minute are now letting the core
-   handle rounding down the alarm time
- - fix use-after-free on device removal
-
-New driver:
- - OP-TEE RTC PTA
-
-Drivers:
- - sun6i: Add H616 support
- - cmos: Fix the AltCentury for AMD platforms
- - spear: set range
-
-----------------------------------------------------------------
-Alexandre Belloni (31):
-      dt-bindings: rtc: at91: rename rtt bindings file
-      rtc: ds1685: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: ds1685: drop no_irq
-      rtc: ds1307: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: mpc5121: let the core handle the alarm resolution
-      rtc: mpc5121: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: m41t80: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: opal: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: pcf2123: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: pcf2123: set RTC_FEATURE_ALARM_RES_MINUTE
-      rtc: pcf2127: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: pcf2127: set RTC_FEATURE_ALARM_RES_2S
-      rtc: pcf85063: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: pcf85063: set RTC_FEATURE_ALARM_RES_2S
-      rtc: pcf8523: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: pcf8523: let the core handle the alarm resolution
-      rtc: pcf8563: let the core handle the alarm resolution
-      rtc: pcf8563: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: spear: switch to devm_rtc_allocate_device
-      rtc: spear: set range
-      rtc: spear: drop uie_unsupported
-      rtc: spear: fix spear_rtc_read_time
-      rtc: add new RTC_FEATURE_ALARM_WAKEUP_ONLY feature
-      rtc: efi: switch to devm_rtc_allocate_device
-      rtc: efi: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: hym8563: switch to devm_rtc_allocate_device
-      rtc: hym8563: let the core handle the alarm resolution
-      rtc: hym8563: switch to RTC_FEATURE_UPDATE_INTERRUPT
-      rtc: xgene: stop using uie_unsupported
-      rtc: remove uie_unsupported
-      clk: sunxi-ng: sun6i-rtc: include clk/sunxi-ng.h
-
-Ali Pouladi (1):
-      rtc: pl031: fix rtc features null pointer dereference
-
-Andre Przywara (4):
-      rtc: sun6i: Fix time overflow handling
-      rtc: sun6i: Add support for linear day storage
-      rtc: sun6i: Add support for broken-down alarm registers
-      rtc: sun6i: Add Allwinner H616 support
-
-Clément Léger (1):
-      rtc: optee: add RTC driver for OP-TEE RTC PTA
-
-Hugo Villeneuve (2):
-      rtc: pcf2127: use IRQ flags obtained from device tree if available
-      rtc: pcf2127: fix bug when reading alarm registers
-
-Jiasheng Jiang (1):
-      rtc: wm8350: Handle error for wm8350_register_irq
-
-Loic Poulain (2):
-      rtc: pm8xxx: Attach wake irq to device
-      rtc: pm8xxx: Return -ENODEV if set_time disallowed
-
-Mario Limonciello (1):
-      rtc: mc146818-lib: Fix the AltCentury for AMD platforms
-
-Mateusz Jończyk (1):
-      rtc: mc146818-lib: fix locking in mc146818_set_time
-
-Miaoqian Lin (1):
-      rtc: gamecube: Fix refcount leak in gamecube_rtc_read_offset_from_sram
-
-Samuel Holland (6):
-      dt-bindings: rtc: sun6i: Clean up repetition
-      dt-bindings: rtc: sun6i: Add H616, R329, and D1 support
-      rtc: sun6i: Enable the bus clock when provided
-      clk: sunxi-ng: mux: Allow muxes to have keys
-      clk: sunxi-ng: Add support for the sun6i RTC clocks
-      clk: sunxi-ng: sun6i-rtc: Add support for H6
-
-Sergiu Moga (2):
-      dt-bindings: rtc: convert at91sam9 bindings to json-schema
-      dt-bindings: rtc: at91: Add SAMA7G5 compatible strings list
-
-Tom Rix (1):
-      rtc: check if __rtc_read_time was successful
-
-Victor Erminpour (1):
-      rtc: pcf8523: Fix GCC 12 warning
-
-Vincent Whitchurch (1):
-      rtc: fix use-after-free on device removal
-
- .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml      |  84 ++++-
- .../devicetree/bindings/rtc/atmel,at91sam9-rtc.txt |  25 --
- .../bindings/rtc/atmel,at91sam9260-rtt.yaml        |  69 ++++
- MAINTAINERS                                        |   6 +
- drivers/clk/sunxi-ng/Kconfig                       |   5 +
- drivers/clk/sunxi-ng/Makefile                      |   2 +
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c               | 395 +++++++++++++++++++++
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.h               |  15 +
- drivers/clk/sunxi-ng/ccu_common.h                  |   1 +
- drivers/clk/sunxi-ng/ccu_mux.c                     |   7 +
- drivers/rtc/Kconfig                                |  10 +
- drivers/rtc/Makefile                               |   1 +
- drivers/rtc/class.c                                |  12 +-
- drivers/rtc/interface.c                            |   7 +-
- drivers/rtc/rtc-ds1307.c                           |   2 +-
- drivers/rtc/rtc-ds1685.c                           |  16 +-
- drivers/rtc/rtc-efi.c                              |  10 +-
- drivers/rtc/rtc-gamecube.c                         |   1 +
- drivers/rtc/rtc-hym8563.c                          |  34 +-
- drivers/rtc/rtc-m41t80.c                           |   6 +-
- drivers/rtc/rtc-mc146818-lib.c                     |  22 +-
- drivers/rtc/rtc-mpc5121.c                          |  17 +-
- drivers/rtc/rtc-opal.c                             |   2 +-
- drivers/rtc/rtc-optee.c                            | 362 +++++++++++++++++++
- drivers/rtc/rtc-pcf2123.c                          |   3 +-
- drivers/rtc/rtc-pcf2127.c                          |  19 +-
- drivers/rtc/rtc-pcf85063.c                         |   3 +-
- drivers/rtc/rtc-pcf8523.c                          |  15 +-
- drivers/rtc/rtc-pcf8563.c                          |  16 +-
- drivers/rtc/rtc-pl031.c                            |   6 +-
- drivers/rtc/rtc-pm8xxx.c                           |  33 +-
- drivers/rtc/rtc-spear.c                            |  25 +-
- drivers/rtc/rtc-sun6i.c                            | 184 ++++++----
- drivers/rtc/rtc-wm8350.c                           |  11 +-
- drivers/rtc/rtc-xgene.c                            |   2 -
- include/dt-bindings/clock/sun6i-rtc.h              |  10 +
- include/linux/clk/sunxi-ng.h                       |   2 +
- include/linux/mc146818rtc.h                        |   2 +
- include/linux/rtc.h                                |   2 -
- include/linux/rtc/ds1685.h                         |   1 -
- include/uapi/linux/rtc.h                           |   3 +-
- 41 files changed, 1205 insertions(+), 243 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9-rtc.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun6i-rtc.h
- create mode 100644 drivers/rtc/rtc-optee.c
- create mode 100644 include/dt-bindings/clock/sun6i-rtc.h
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
