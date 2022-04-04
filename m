@@ -2,60 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189554F07F7
-	for <lists+linux-rtc@lfdr.de>; Sun,  3 Apr 2022 07:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28554F15D3
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Apr 2022 15:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241029AbiDCFvY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 3 Apr 2022 01:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
+        id S1354650AbiDDN2J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 4 Apr 2022 09:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237467AbiDCFvS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 3 Apr 2022 01:51:18 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA37A19E;
-        Sat,  2 Apr 2022 22:49:22 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id w21so5683003pgm.7;
-        Sat, 02 Apr 2022 22:49:22 -0700 (PDT)
+        with ESMTP id S1352518AbiDDN1z (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Apr 2022 09:27:55 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0457AC0B;
+        Mon,  4 Apr 2022 06:26:00 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id m12-20020a17090b068c00b001cabe30a98dso403055pjz.4;
+        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=FmtIu4Pls8Ojb/aaUXocXJF0tN/1qMyxMF56b2SiIYk=;
-        b=pMOT+eXyKvyQNEYJONFSNHX+R6GBmJgYwKQHiadpqbUtimS4b2PDi4qlQeOrRPqkyi
-         1/ugL643s604Puo7tRf9eKhTztPf87JyX3erM9aNgdTrpHlpuYqO4X/cuxY/yzeKHffu
-         pd2RHwP3gERRylVBl+UyAYZL5WbRdUXSFtYQwoM7JXK+GAhWg1glzfk4pnfxk9vDjEef
-         hDJmiSKsptpx6KuPJC4jGtxKUB876Yg8vm3h2Czgh3/sIYcyGOlZHjd6R0i2zVfkXOq6
-         TRjjY6SZcS01HG6Yukk4E+9ulQDAyiESQaRAwkFAlerAUDJh6HfBqptjdLRTvHb3C6ex
-         paKw==
+        bh=FlBsVFEKh4j3VAt6LeTKFsoKsuruo0DcZ5wQSPKgGVo=;
+        b=gZxNZUcVpHlb+PC0mU029qi8y3yaBV33LkmOZB+zCVqsXIYEND5s0ftLAFjpG+DSvG
+         3fre2ImlaHs0IToAEnvx8Ge+DDk9/z+wpD4ZGw38SCtRfsEbEO4pjAklfsQgrWcCtlq+
+         /NChUBrxhCdkVoxZCR6VfOXHeSigso1sRZ7Fc/pZ1khBXeg8xEX1EpjsMh7+AVabZYn2
+         8yv09bnMza+Qfv1P1GRodT8QGwJ1rbgkjTpmC0siV2jwaa8Rslz2GWkomEftev/V7mHa
+         ewRE3nXenMD+InkvCKfXlyVm/K04usRxrRtQbfpqdnt9H2c9hJBLDrzbLpkOlOI6OBTZ
+         IbFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FmtIu4Pls8Ojb/aaUXocXJF0tN/1qMyxMF56b2SiIYk=;
-        b=ZsxUbEFZrKdDelOXXVDJNun5IFNykqsvAEa8/2xHMcYaKvKD8AqxAV9aY3CSWo+a6r
-         57t5vNwtdo5JoyBkZMtU9jKIVbC6ntdZ+LKH13nvYe7GqS7uwa3BZItHK0emDJo/CVoE
-         HqTHg/5DGP9iImsSep272Z+fWzLuIvE/YnbWlzrVdLh9nuqNQUYrHX6daAvzmT2GMuRs
-         9SfkwVi3M2t9dXxTpOgvRjyJRcQKVq4VM9bq1DwMqS/mmw61Hr28CiLOjnu/FOpPiLVq
-         5eINsV98QsuzjKYZCBN3k3zaZioUFGkAFeNtMaLwAWX9RjrGXs94T2HQD9Uyn/oOLdH5
-         YKCA==
-X-Gm-Message-State: AOAM531xKn5IhTU1p+28EfVAfNXPqDXL9lYFKwiAMyh7EbivXwauyOQR
-        nwDngQYIOiE9qbVDjMx3nKo=
-X-Google-Smtp-Source: ABdhPJyNGXn4TOUxCtHsDteWG+OIl68bV+vIcGmkG52HDh/dOmBsojpcEzsUKqeCfj+2RuhQtDidcw==
-X-Received: by 2002:a65:434b:0:b0:382:4fa9:3be6 with SMTP id k11-20020a65434b000000b003824fa93be6mr21127660pgq.459.1648964962007;
-        Sat, 02 Apr 2022 22:49:22 -0700 (PDT)
+        bh=FlBsVFEKh4j3VAt6LeTKFsoKsuruo0DcZ5wQSPKgGVo=;
+        b=rQLpjFALmkhmS1/49E/nqSYWvAcdDnsufbH9Bc6slIsBpZNpj5d290oNE5fHxUKAUk
+         HkBVEuXqcQ1Z/sgK0o5ytiz5QxTBq/5GsCR14YrTSKU/IBACkZNrTwtkSOlyiJH9/xBT
+         PGawEr472JJStNUfA/lMuXP705f6SafmjVutCnW4SYkF7Zv85+zIW8ARzfpjz/C9s14d
+         u28D7Fk+MZm1E8jb+smS4krkGMjfIAq6l18fBrZ9MJ5qktWN1xyI+c3wh3I3p3hlohGE
+         t1Khvl/G4qme3UeEZVFIzStWxaenQroxwiDktUdswIyXsrHdwYcXzq2Gf6Xp0YjQ4YEf
+         FAXw==
+X-Gm-Message-State: AOAM532L2ivPLpW7mRQv2jvd4QkoqtB3JHx5CTYg1S/u8nx37ncvidc9
+        XVQlN4WFVescEBDDSgVuyMyu6LCD7sAv2R5VN58=
+X-Google-Smtp-Source: ABdhPJx3+zSJdu5DehSeyrC7q6wpVT/4HVSBzcFwjxsrzsTyJC0b4HFVuDHkH2ecj14ojRx2BF95tA==
+X-Received: by 2002:a17:903:2285:b0:154:c94:c5b7 with SMTP id b5-20020a170903228500b001540c94c5b7mr22253plh.64.1649078759509;
+        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
 Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm7742460pfc.190.2022.04.02.22.49.19
+        by smtp.googlemail.com with ESMTPSA id j3-20020a056a00234300b004faabba358fsm12617039pfj.14.2022.04.04.06.25.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 22:49:21 -0700 (PDT)
+        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
 From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH] rtc: ftrtc010: Fix error handling in ftrtc010_rtc_probe
-Date:   Sun,  3 Apr 2022 05:49:12 +0000
-Message-Id: <20220403054912.31739-1-linmq006@gmail.com>
+Subject: [PATCH] rtc: mt6397: Fix potential NULL dereference in mtk_rtc_probe
+Date:   Mon,  4 Apr 2022 13:25:53 +0000
+Message-Id: <20220404132553.28064-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -67,84 +70,29 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In the error handling path, the clk_prepare_enable() function
-call should be balanced by a corresponding 'clk_disable_unprepare()'
-call , as already done in the remove function.
+platform_get_resource() may return NULL, add proper check to
+avoid potential NULL dereferencing.
 
-clk_disable_unprepare calls clk_disable() and clk_unprepare().
-They will use IS_ERR_OR_NULL to check the argument.
-
-Fixes: ac05fba39cc5 ("rtc: gemini: Add optional clock handling")
+Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/rtc/rtc-ftrtc010.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+ drivers/rtc/rtc-mt6397.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/rtc/rtc-ftrtc010.c b/drivers/rtc/rtc-ftrtc010.c
-index 53bb08fe1cd4..25c6e7d9570f 100644
---- a/drivers/rtc/rtc-ftrtc010.c
-+++ b/drivers/rtc/rtc-ftrtc010.c
-@@ -137,26 +137,34 @@ static int ftrtc010_rtc_probe(struct platform_device *pdev)
- 		ret = clk_prepare_enable(rtc->extclk);
- 		if (ret) {
- 			dev_err(dev, "failed to enable EXTCLK\n");
--			return ret;
-+			goto err_disable_pclk;
- 		}
- 	}
- 
- 	rtc->rtc_irq = platform_get_irq(pdev, 0);
--	if (rtc->rtc_irq < 0)
--		return rtc->rtc_irq;
-+	if (rtc->rtc_irq < 0) {
-+		ret = rtc->rtc_irq;
-+		goto err_disable_extclk;
-+	}
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 80dc479a6ff0..07c6679366e0 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -269,6 +269,9 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENODEV;
-+	if (!res) {
-+		ret = -ENODEV;
-+		goto err_disable_extclk;
-+	}
- 
- 	rtc->rtc_base = devm_ioremap(dev, res->start,
- 				     resource_size(res));
--	if (!rtc->rtc_base)
--		return -ENOMEM;
-+	if (!rtc->rtc_base) {
-+		ret = -ENOMEM;
-+		goto err_disable_extclk;
-+	}
- 
- 	rtc->rtc_dev = devm_rtc_allocate_device(dev);
--	if (IS_ERR(rtc->rtc_dev))
--		return PTR_ERR(rtc->rtc_dev);
-+	if (IS_ERR(rtc->rtc_dev)) {
-+		ret = PTR_ERR(rtc->rtc_dev);
-+		goto err_disable_extclk;
-+	}
- 
- 	rtc->rtc_dev->ops = &ftrtc010_rtc_ops;
- 
-@@ -172,9 +180,15 @@ static int ftrtc010_rtc_probe(struct platform_device *pdev)
- 	ret = devm_request_irq(dev, rtc->rtc_irq, ftrtc010_rtc_interrupt,
- 			       IRQF_SHARED, pdev->name, dev);
- 	if (unlikely(ret))
--		return ret;
-+		goto err_disable_extclk;
- 
- 	return devm_rtc_register_device(rtc->rtc_dev);
++	if (!res)
++		return -EINVAL;
 +
-+err_disable_extclk:
-+	clk_disable_unprepare(rtc->extclk);
-+err_disable_pclk:
-+	clk_disable_unprepare(rtc->pclk);
-+	return ret;
- }
+ 	rtc->addr_base = res->start;
  
- static int ftrtc010_rtc_remove(struct platform_device *pdev)
+ 	rtc->data = of_device_get_match_data(&pdev->dev);
 -- 
 2.17.1
 
