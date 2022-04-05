@@ -2,57 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43864F487C
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202184F4881
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbiDEVkp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Apr 2022 17:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S229484AbiDEVlF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Apr 2022 17:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443917AbiDEPk2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 11:40:28 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3ED14DFE5;
-        Tue,  5 Apr 2022 07:02:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649167344;
-  x=1680703344;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Quhq+ANDcyqCuN52eIRgLzLh2IoR3G+Ogb7BY7KkCbE=;
-  b=JfWw2js+sHio6dbd67N4f+BKvGcgXqC+jL6zGIBTKIXzryvcIE7qzxyL
-   fAQhMiRTFUrAJ9Wa9Uqfp6pjIffGUKwtBeQ6kq96gPt0Rcx4I/SQa6+tq
-   /4wesHmr64EULkm16LIV+z66YSSuwmFC/PzXL8EuTqLIbViL5BoPaBUqM
-   MtOqJqtCNazap6UZeRrAMa2IfhYQDY98cmlHqo9nrqZ99WVlsnTUi5tsv
-   ZAz3dFApD9DyI+D9oPjtyKzsvhacBT2JvmJ8EVp/x4TIpKfI2wC/zqp6Y
-   037kX7KxN0Pk+KkpeKGXDQrZUbxYVdVVHYyPgtan+kxbYXgNOylSg7HWN
-   g==;
-Date:   Tue, 5 Apr 2022 16:02:21 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
-        <devicetree@vger.kernel.org>, <linux-um@lists.infradead.org>,
-        <shuah@kernel.org>, <brendanhiggins@google.com>,
-        <linux-kselftest@vger.kernel.org>, <jic23@kernel.org>,
-        <linux-iio@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <linux-rtc@vger.kernel.org>, <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 09/10] regulator: tps62864: add roadtest
-Message-ID: <20220405140221.GC28574@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-10-vincent.whitchurch@axis.com>
- <YiuPvkQroV/WdFpx@sirena.org.uk>
- <20220317151326.GA7832@axis.com>
- <YjN1ksNGujV611Ka@sirena.org.uk>
+        with ESMTP id S1573374AbiDES7u (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 14:59:50 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03748CD33E
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 11:57:49 -0700 (PDT)
+Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 72A33CAA59
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 18:47:27 +0000 (UTC)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9DC36200004;
+        Tue,  5 Apr 2022 18:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649184439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AlS3iJ+EMBIdu3DwukTkmu3d5S17/P8BS9spNb/Ba7A=;
+        b=ovTLWGBmZBlXw85uPL5X6YZwA+kKi9xhS4WzLGT+Ktdp5ydyX1i+EiNrA6fGk2LH/8NNwH
+        k1dxdAJx6sXCstShEpnRSdnXhujo5MVJ4LtLn2hjEGZJv9SMPpd6ZuvpzzViZ90RE0lzDp
+        xA8SOqFrIEM/WJBP8/pkzO3iEJNIZcq23FifHctf0V3K5YRrV/oRmc0+034G+2D91qS3NC
+        +rOFdsAy1yVujV17FVbdPFd/IWLc4BYllOIKytXLXKU10V5O227K8HiRECHHkEmFZtD5KZ
+        LHIwXL0wFcUMk2TRUUB24mkSP+s0B3H7mfyxgJzXciQJJgNnC6Owsk4m+MBb9w==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 0/7] RZN1 RTC support
+Date:   Tue,  5 Apr 2022 20:47:09 +0200
+Message-Id: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YjN1ksNGujV611Ka@sirena.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,32 +69,42 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 05:53:22PM +0000, Mark Brown wrote:
-> On Thu, Mar 17, 2022 at 04:13:26PM +0100, Vincent Whitchurch wrote:
-> > On Fri, Mar 11, 2022 at 06:06:54PM +0000, Mark Brown wrote:
-> 
-> > > > +    @classmethod
-> > > > +    def setUpClass(cls) -> None:
-> > > > +        insmod("tps6286x-regulator")
-> 
-> > > Shouldn't this get figured out when the device gets created in DT (if it
-> > > doesn't I guess the tests found a bug...)?
-> 
-> > The system isn't set up to load modules automatically.  The reason for
-> > this is to give the test cases full control of when the module is loaded
-> > and unload, since the tests could want to load the module with specific
-> > options.
-> 
-> That seems like the uncommon case which could remove the module if it
-> explicitly needed it.
+Hello,
 
-Another reason was to get the tests to test module unloading since I've
-seen a lot of especially new driver writers forget to test that, but I
-realise that for most normal drivers that should be mostly covered by
-the fact that we test device unbinding.
+This small series adds support for the RZN1 RTC.
 
-So I went ahead and implemented this and it seems to work.  As you
-hinted earlier, this also means that the modalias stuff gets tested, and
-as we know that's been broken in the recent past for a bunch of drivers,
-so that's another advantage to automatic module loading, besides the
-boilerplate reduction in the tests.
+Despite its limitations, I found useful to at least have alarm and
+offset support.
+
+This depends on the previous sysctrl/dma/uart changes on the sysctrl
+side.
+
+Cheers,
+Miquèl
+
+Michel Pollet (1):
+  rtc: rzn1: Add new RTC driver
+
+Miquel Raynal (6):
+  dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+  soc: renesas: rzn1-sysc: Export a function to enable/disable the RTC
+  rtc: rzn1: Add alarm support
+  rtc: rzn1: Add oscillator offset support
+  MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+  ARM: dts: r9a06g032: Describe the RTC
+
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  69 +++
+ MAINTAINERS                                   |   8 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  12 +
+ drivers/clk/renesas/r9a06g032-clocks.c        |  49 ++
+ drivers/rtc/Kconfig                           |   7 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-rzn1.c                        | 436 ++++++++++++++++++
+ include/linux/soc/renesas/r9a06g032-sysctrl.h |   2 +
+ 8 files changed, 584 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-rzn1.c
+
+-- 
+2.27.0
+
