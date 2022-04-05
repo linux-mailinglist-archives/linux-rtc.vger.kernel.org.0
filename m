@@ -2,97 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28554F15D3
-	for <lists+linux-rtc@lfdr.de>; Mon,  4 Apr 2022 15:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A504F271F
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Apr 2022 10:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354650AbiDDN2J (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 4 Apr 2022 09:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S233247AbiDEIFd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Apr 2022 04:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352518AbiDDN1z (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Apr 2022 09:27:55 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0457AC0B;
-        Mon,  4 Apr 2022 06:26:00 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id m12-20020a17090b068c00b001cabe30a98dso403055pjz.4;
-        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=FlBsVFEKh4j3VAt6LeTKFsoKsuruo0DcZ5wQSPKgGVo=;
-        b=gZxNZUcVpHlb+PC0mU029qi8y3yaBV33LkmOZB+zCVqsXIYEND5s0ftLAFjpG+DSvG
-         3fre2ImlaHs0IToAEnvx8Ge+DDk9/z+wpD4ZGw38SCtRfsEbEO4pjAklfsQgrWcCtlq+
-         /NChUBrxhCdkVoxZCR6VfOXHeSigso1sRZ7Fc/pZ1khBXeg8xEX1EpjsMh7+AVabZYn2
-         8yv09bnMza+Qfv1P1GRodT8QGwJ1rbgkjTpmC0siV2jwaa8Rslz2GWkomEftev/V7mHa
-         ewRE3nXenMD+InkvCKfXlyVm/K04usRxrRtQbfpqdnt9H2c9hJBLDrzbLpkOlOI6OBTZ
-         IbFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FlBsVFEKh4j3VAt6LeTKFsoKsuruo0DcZ5wQSPKgGVo=;
-        b=rQLpjFALmkhmS1/49E/nqSYWvAcdDnsufbH9Bc6slIsBpZNpj5d290oNE5fHxUKAUk
-         HkBVEuXqcQ1Z/sgK0o5ytiz5QxTBq/5GsCR14YrTSKU/IBACkZNrTwtkSOlyiJH9/xBT
-         PGawEr472JJStNUfA/lMuXP705f6SafmjVutCnW4SYkF7Zv85+zIW8ARzfpjz/C9s14d
-         u28D7Fk+MZm1E8jb+smS4krkGMjfIAq6l18fBrZ9MJ5qktWN1xyI+c3wh3I3p3hlohGE
-         t1Khvl/G4qme3UeEZVFIzStWxaenQroxwiDktUdswIyXsrHdwYcXzq2Gf6Xp0YjQ4YEf
-         FAXw==
-X-Gm-Message-State: AOAM532L2ivPLpW7mRQv2jvd4QkoqtB3JHx5CTYg1S/u8nx37ncvidc9
-        XVQlN4WFVescEBDDSgVuyMyu6LCD7sAv2R5VN58=
-X-Google-Smtp-Source: ABdhPJx3+zSJdu5DehSeyrC7q6wpVT/4HVSBzcFwjxsrzsTyJC0b4HFVuDHkH2ecj14ojRx2BF95tA==
-X-Received: by 2002:a17:903:2285:b0:154:c94:c5b7 with SMTP id b5-20020a170903228500b001540c94c5b7mr22253plh.64.1649078759509;
-        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id j3-20020a056a00234300b004faabba358fsm12617039pfj.14.2022.04.04.06.25.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 06:25:59 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Eddie Huang <eddie.huang@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] rtc: mt6397: Fix potential NULL dereference in mtk_rtc_probe
-Date:   Mon,  4 Apr 2022 13:25:53 +0000
-Message-Id: <20220404132553.28064-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234109AbiDEH6A (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 03:58:00 -0400
+X-Greylist: delayed 590 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 00:51:57 PDT
+Received: from mail.bizcall.pl (mail.bizcall.pl [192.71.213.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7C698F4D
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 00:51:56 -0700 (PDT)
+Received: by mail.bizcall.pl (Postfix, from userid 1001)
+        id 2D4D94117D; Tue,  5 Apr 2022 09:40:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bizcall.pl; s=mail;
+        t=1649144518; bh=L7rZPDqncV/PGNK3vBL4eFyhOA8rMHMu3jCfxnl4mEc=;
+        h=Date:From:To:Subject:From;
+        b=mfh/a15DziJHU4EqqjCojBRhclVfaKZE9cajnzYIg2kNmpSqccet9uALJg1pxwlsI
+         bbEwu0suEKG4VZDn2B8NTEvwc6kAeo9nMwdGCIAdZpHOGasglGW4soxGZof4QCue5/
+         WAFL6sdTAc4r/qPPeKGR4tKQMQQ9QPpPhcxkKqg7hRhFJZ4vQusYqEAlL0rdWo7Qlg
+         jxlop5u29mnqXqsvORo0vDyLIU9ECq2uqXaM9/Q5gqYFgTPP1AYf2VIBvnTniENHDZ
+         rbAha8SqK8lcMbSaQlID+jArkjUYdue11iBk0a3PLLFKWwMrtyoh2q0kqjjwviNKxe
+         fNGKnye/5vMMw==
+Received: by mail.bizcall.pl for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 07:38:54 GMT
+Message-ID: <20220405084501-0.1.1v.5h2m.0.0l20u7wj1r@bizcall.pl>
+Date:   Tue,  5 Apr 2022 07:38:54 GMT
+From:   "Marek Onufrowicz" <marek.onufrowicz@bizcall.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: Prezentacja
+X-Mailer: mail.bizcall.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-platform_get_resource() may return NULL, add proper check to
-avoid potential NULL dereferencing.
+Dzie=C5=84 dobry!
 
-Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/rtc/rtc-mt6397.c | 3 +++
- 1 file changed, 3 insertions(+)
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
+=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
+zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
 
-diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-index 80dc479a6ff0..07c6679366e0 100644
---- a/drivers/rtc/rtc-mt6397.c
-+++ b/drivers/rtc/rtc-mt6397.c
-@@ -269,6 +269,9 @@ static int mtk_rtc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return -EINVAL;
-+
- 	rtc->addr_base = res->start;
- 
- 	rtc->data = of_device_get_match_data(&pdev->dev);
--- 
-2.17.1
+Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
+=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
+dostaw.
 
+Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
+nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
+ co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+
+Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
+=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
+zania w Pa=C5=84stwa firmie.
+
+
+Pozdrawiam,
+Marek Onufrowicz
