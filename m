@@ -2,36 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC364F487D
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B5C4F487E
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344470AbiDEVkx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Apr 2022 17:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S1378442AbiDEVlA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Apr 2022 17:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573375AbiDES7u (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 14:59:50 -0400
+        with ESMTP id S1573377AbiDES7v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 14:59:51 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03665CD338
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A77CD33F
         for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 11:57:49 -0700 (PDT)
-Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id BFEC4C2F7B
-        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 18:47:30 +0000 (UTC)
+Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 2071ECACE2
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 18:47:34 +0000 (UTC)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CEBCB200006;
-        Tue,  5 Apr 2022 18:47:21 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id D200820000A;
+        Tue,  5 Apr 2022 18:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649184443;
+        t=1649184446;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0wCROVhxQkzi01xQZ7CtsJyXoDnqptRHhKKgXAf97I8=;
-        b=nZgbol2lDFRyYnzqBtJaMKxRbItRYY9JnbB1a5Y+UcpARzJUkFKNDstOqUNCes3VX8N/2f
-        c7Xn9vYwgvePaycby+DlY5IFtH6sCptZ0SL2r6cjsf+IFGpwVY+6ny3X0NqWYDjhQ0UMHG
-        /3gywrTtSC/Ye3t1OQkQgIiH19PGwe9Li9hCeI530bBQbxme/WXNAZ6Cfk4AOC6fxf2xdG
-        3ntESKddPzvde6rL1rlZG9PL1Xe2zwoYk97tncuZ8A/7I8F4HLVDFSHgfZDtALzvulePyn
-        c7/o1sy3kD7K9I7oLpiPdMQssy5xBY0/gFkks6b5dHF6tDMESJ4PVJRzwqJwgQ==
+        bh=TWMoZhDjM/+WmkcVl9lPWw2Y2HJMKjePrD8Lfn6Z1QQ=;
+        b=kmSfnDSfdqUn/u+Kpd+TfbT8Z8fFve2Ctng/hk9Ov6nCnETgIrllvUfCB2Xsq8LakTCb63
+        iK5V8e8qafuPdqRRljKLaftMgvsgxJ3Bdmfw0pFLXXQmidMOwDdtdILeeuDx2Tt0ALiBzF
+        G5JtYimeBkXHXXixO4alYrrVM6Dqo+7XLsq2hQ+XtMoIIgrM9acp0Zgsm/5/JaaX0ocwgn
+        JVmQjzV2AJ7XGVVckdntYWRoVCG4NK8QWD1GotM1EIDxhDWj/nqyaHOYpD/AyYJgiejjIH
+        QmXcD7Da4SXadwxCl2/Kc88K2qk6JXqB9EKhjVZDQATTZiUcB9watO1vPXRklw==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -52,10 +52,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         Herve Codina <herve.codina@bootlin.com>,
         Clement Leger <clement.leger@bootlin.com>,
         linux-rtc@vger.kernel.org,
+        Michel Pollet <michel.pollet@bp.renesas.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 2/7] soc: renesas: rzn1-sysc: Export a function to enable/disable the RTC
-Date:   Tue,  5 Apr 2022 20:47:11 +0200
-Message-Id: <20220405184716.1578385-3-miquel.raynal@bootlin.com>
+Subject: [PATCH 3/7] rtc: rzn1: Add new RTC driver
+Date:   Tue,  5 Apr 2022 20:47:12 +0200
+Message-Id: <20220405184716.1578385-4-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
 References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
@@ -72,99 +73,311 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-There are two RTC registers located within the system controller.
+From: Michel Pollet <michel.pollet@bp.renesas.com>
 
-Like with the dmamux register, let's add a new helper to enable/disable
-the power, reset and clock of the RTC.
+Add a basic RTC driver for the RZ/N1.
 
+Signed-off-by: Michel Pollet <michel.pollet@bp.renesas.com>
+Co-developed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/clk/renesas/r9a06g032-clocks.c        | 49 +++++++++++++++++++
- include/linux/soc/renesas/r9a06g032-sysctrl.h |  2 +
- 2 files changed, 51 insertions(+)
+ drivers/rtc/Kconfig    |   7 ++
+ drivers/rtc/Makefile   |   1 +
+ drivers/rtc/rtc-rzn1.c | 255 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 263 insertions(+)
+ create mode 100644 drivers/rtc/rtc-rzn1.c
 
-diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
-index 1df56d7ab3e1..7e61db39a43b 100644
---- a/drivers/clk/renesas/r9a06g032-clocks.c
-+++ b/drivers/clk/renesas/r9a06g032-clocks.c
-@@ -26,6 +26,13 @@
- #include <dt-bindings/clock/r9a06g032-sysctrl.h>
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 41c65b4d2baf..f4d72c5b99ea 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1548,6 +1548,13 @@ config RTC_DRV_RS5C313
+ 	help
+ 	  If you say yes here you get support for the Ricoh RS5C313 RTC chips.
  
- #define R9A06G032_SYSCTRL_DMAMUX 0xA0
-+#define R9A06G032_SYSCTRL_PWRCTRL_RTC 0x140
-+#define   R9A06G032_SYSCTRL_PWRCTRL_RTC_CLKEN BIT(0)
-+#define   R9A06G032_SYSCTRL_PWRCTRL_RTC_RST BIT(1)
-+#define   R9A06G032_SYSCTRL_PWRCTRL_RTC_IDLE_REQ BIT(2)
-+#define   R9A06G032_SYSCTRL_PWRCTRL_RTC_RSTN_FW BIT(3)
-+#define R9A06G032_SYSCTRL_PWRSTAT_RTC 0x144
-+#define   R9A06G032_SYSCTRL_PWRSTAT_RTC_IDLE BIT(1)
- 
- struct r9a06g032_gate {
- 	u16 gate, reset, ready, midle,
-@@ -343,6 +350,48 @@ int r9a06g032_sysctrl_set_dmamux(u32 mask, u32 val)
- }
- EXPORT_SYMBOL_GPL(r9a06g032_sysctrl_set_dmamux);
- 
-+/* Exported helper to enable/disable the RTC */
-+int r9a06g032_sysctrl_enable_rtc(bool enable)
++config RTC_DRV_RZN1
++	tristate "Renesas RZN1 RTC"
++	depends on ARCH_RZN1 || COMPILE_TEST
++	depends on OF && HAS_IOMEM
++	help
++	  If you say yes here you get support for the Renesas RZ/N1 RTC.
++
+ config RTC_DRV_GENERIC
+ 	tristate "Generic RTC support"
+ 	# Please consider writing a new RTC driver instead of using the generic
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index 2d827d8261d5..fb04467b652d 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -151,6 +151,7 @@ obj-$(CONFIG_RTC_DRV_RX6110)	+= rtc-rx6110.o
+ obj-$(CONFIG_RTC_DRV_RX8010)	+= rtc-rx8010.o
+ obj-$(CONFIG_RTC_DRV_RX8025)	+= rtc-rx8025.o
+ obj-$(CONFIG_RTC_DRV_RX8581)	+= rtc-rx8581.o
++obj-$(CONFIG_RTC_DRV_RZN1)	+= rtc-rzn1.o
+ obj-$(CONFIG_RTC_DRV_S35390A)	+= rtc-s35390a.o
+ obj-$(CONFIG_RTC_DRV_S3C)	+= rtc-s3c.o
+ obj-$(CONFIG_RTC_DRV_S5M)	+= rtc-s5m.o
+diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+new file mode 100644
+index 000000000000..15c533333930
+--- /dev/null
++++ b/drivers/rtc/rtc-rzn1.c
+@@ -0,0 +1,255 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Renesas RZN1 Real Time Clock interface for Linux
++ *
++ * Copyright:
++ * - 2014 Renesas Electronics Europe Limited
++ * - 2022 Schneider Electric
++ *
++ * Authors:
++ * - Michel Pollet <michel.pollet@bp.renesas.com>, <buserror@gmail.com>
++ * - Miquel Raynal <miquel.raynal@bootlin.com>
++ */
++
++#include <linux/bcd.h>
++#include <linux/clk.h>
++#include <linux/init.h>
++#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/rtc.h>
++#include <linux/soc/renesas/r9a06g032-sysctrl.h>
++
++#define RZN1_RTC_CTL0 0x00
++#define   RZN1_RTC_CTL0_SLSB_SUBU 0
++#define   RZN1_RTC_CTL0_SLSB_SCMP BIT(4)
++#define   RZN1_RTC_CTL0_AMPM BIT(5)
++#define   RZN1_RTC_CTL0_CE BIT(7)
++
++#define RZN1_RTC_CTL1 0x04
++#define   RZN1_RTC_CTL1_ALME BIT(4)
++
++#define RZN1_RTC_CTL2 0x08
++#define   RZN1_RTC_CTL2_WAIT BIT(0)
++#define   RZN1_RTC_CTL2_WST BIT(1)
++#define   RZN1_RTC_CTL2_WUST BIT(5)
++
++#define RZN1_RTC_SEC 0x14
++#define RZN1_RTC_MIN 0x18
++#define RZN1_RTC_HOUR 0x1c
++#define RZN1_RTC_WEEK 0x20
++#define RZN1_RTC_DAY 0x24
++#define RZN1_RTC_MONTH 0x28
++#define RZN1_RTC_YEAR 0x2c
++
++#define RZN1_RTC_SUBU 0x38
++#define   RZN1_RTC_SUBU_DEV BIT(7)
++#define   RZN1_RTC_SUBU_DECR BIT(6)
++
++#define RZN1_RTC_ALM 0x40
++#define RZN1_RTC_ALH 0x44
++#define RZN1_RTC_ALW 0x48
++
++#define RZN1_RTC_SECC 0x4c
++#define RZN1_RTC_MINC 0x50
++#define RZN1_RTC_HOURC 0x54
++#define RZN1_RTC_WEEKC 0x58
++#define RZN1_RTC_DAYC 0x5c
++#define RZN1_RTC_MONTHC 0x60
++#define RZN1_RTC_YEARC 0x64
++
++struct rzn1_rtc {
++	struct rtc_device *rtcdev;
++	void __iomem *base;
++	struct clk *clk;
++};
++
++static void rzn1_rtc_get_time_snapshot(struct rzn1_rtc *rtc, struct rtc_time *tm)
 +{
-+	unsigned long flags;
-+	u32 val;
++	tm->tm_sec = readl(rtc->base + RZN1_RTC_SECC);
++	tm->tm_min = readl(rtc->base + RZN1_RTC_MINC);
++	tm->tm_hour = readl(rtc->base + RZN1_RTC_HOURC);
++	tm->tm_wday = readl(rtc->base + RZN1_RTC_WEEKC);
++	tm->tm_mday = readl(rtc->base + RZN1_RTC_DAYC);
++	tm->tm_mon = readl(rtc->base + RZN1_RTC_MONTHC);
++	tm->tm_year = readl(rtc->base + RZN1_RTC_YEARC);
++}
 +
-+	if (!sysctrl_priv)
-+		return -EPROBE_DEFER;
++static unsigned int rzn1_rtc_tm_to_wday(struct rtc_time *tm)
++{
++	time64_t time;
++	unsigned int days;
++	u32 secs;
 +
-+	spin_lock_irqsave(&sysctrl_priv->lock, flags);
++	time = rtc_tm_to_time64(tm);
++	days = div_s64_rem(time, 86400, &secs);
 +
-+	if (enable) {
-+		val = readl(sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val &= ~R9A06G032_SYSCTRL_PWRCTRL_RTC_RST;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val |= R9A06G032_SYSCTRL_PWRCTRL_RTC_CLKEN;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val |= R9A06G032_SYSCTRL_PWRCTRL_RTC_RSTN_FW;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val &= ~R9A06G032_SYSCTRL_PWRCTRL_RTC_IDLE_REQ;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val = readl(sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRSTAT_RTC);
-+		if (val & R9A06G032_SYSCTRL_PWRSTAT_RTC_IDLE)
-+			return -EIO;
-+	} else {
-+		val = readl(sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val |= R9A06G032_SYSCTRL_PWRCTRL_RTC_IDLE_REQ;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val &= ~R9A06G032_SYSCTRL_PWRCTRL_RTC_RSTN_FW;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val &= ~R9A06G032_SYSCTRL_PWRCTRL_RTC_CLKEN;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+		val |= R9A06G032_SYSCTRL_PWRCTRL_RTC_RST;
-+		writel(val, sysctrl_priv->reg + R9A06G032_SYSCTRL_PWRCTRL_RTC);
-+	}
++	/* day of the week, 1970-01-01 was a Thursday */
++	return (days + 4) % 7;
++}
 +
-+	spin_unlock_irqrestore(&sysctrl_priv->lock, flags);
++static int rzn1_rtc_read_time(struct device *dev, struct rtc_time *tm)
++{
++	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
++	u32 secs;
++
++	rzn1_rtc_get_time_snapshot(rtc, tm);
++	secs = readl(rtc->base + RZN1_RTC_SECC);
++	if (tm->tm_sec != secs)
++		rzn1_rtc_get_time_snapshot(rtc, tm);
++
++	tm->tm_sec = bcd2bin(tm->tm_sec);
++	tm->tm_min = bcd2bin(tm->tm_min);
++	tm->tm_hour = bcd2bin(tm->tm_hour);
++	tm->tm_wday = bcd2bin(tm->tm_wday);
++	tm->tm_mday = bcd2bin(tm->tm_mday);
++	tm->tm_mon = bcd2bin(tm->tm_mon);
++	tm->tm_year = bcd2bin(tm->tm_year);
++
++	dev_dbg(dev, "%d-%d-%d(%d)T%d:%d:%d\n",
++		tm->tm_year, tm->tm_mon, tm->tm_mday, tm->tm_wday,
++		tm->tm_hour, tm->tm_min, tm->tm_sec);
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(r9a06g032_sysctrl_enable_rtc);
 +
- /* register/bit pairs are encoded as an uint16_t */
- static void
- clk_rdesc_set(struct r9a06g032_priv *clocks,
-diff --git a/include/linux/soc/renesas/r9a06g032-sysctrl.h b/include/linux/soc/renesas/r9a06g032-sysctrl.h
-index 066dfb15cbdd..914c8789149c 100644
---- a/include/linux/soc/renesas/r9a06g032-sysctrl.h
-+++ b/include/linux/soc/renesas/r9a06g032-sysctrl.h
-@@ -4,8 +4,10 @@
- 
- #ifdef CONFIG_CLK_R9A06G032
- int r9a06g032_sysctrl_set_dmamux(u32 mask, u32 val);
-+int r9a06g032_sysctrl_enable_rtc(bool enable);
- #else
- static inline int r9a06g032_sysctrl_set_dmamux(u32 mask, u32 val) { return -ENODEV; }
-+static inline int r9a06g032_sysctrl_enable_rtc(bool enable) { return -ENODEV; }
- #endif
- 
- #endif /* __LINUX_SOC_RENESAS_R9A06G032_SYSCTRL_H__ */
++static int rzn1_rtc_set_time(struct device *dev, struct rtc_time *tm)
++{
++	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
++	u32 val;
++	int ret;
++
++	tm->tm_sec = bin2bcd(tm->tm_sec);
++	tm->tm_min = bin2bcd(tm->tm_min);
++	tm->tm_hour = bin2bcd(tm->tm_hour);
++	tm->tm_wday = bin2bcd(rzn1_rtc_tm_to_wday(tm));
++	tm->tm_mday = bin2bcd(tm->tm_mday);
++	tm->tm_mon = bin2bcd(tm->tm_mon);
++	tm->tm_year = bin2bcd(tm->tm_year);
++
++	/* Hold the counter */
++	val = readl(rtc->base + RZN1_RTC_CTL2);
++	val |= RZN1_RTC_CTL2_WAIT;
++	writel(val, rtc->base + RZN1_RTC_CTL2);
++
++	/* Wait for the counter to stop: two 32k clock cycles */
++	usleep_range(61, 100);
++	ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, val,
++				 val & RZN1_RTC_CTL2_WST, 0, 100);
++	if (!ret) {
++		writel(tm->tm_sec, rtc->base + RZN1_RTC_SEC);
++		writel(tm->tm_min, rtc->base + RZN1_RTC_MIN);
++		writel(tm->tm_hour, rtc->base + RZN1_RTC_HOUR);
++		writel(tm->tm_wday, rtc->base + RZN1_RTC_WEEK);
++		writel(tm->tm_mday, rtc->base + RZN1_RTC_DAY);
++		writel(tm->tm_mon, rtc->base + RZN1_RTC_MONTH);
++		writel(tm->tm_year, rtc->base + RZN1_RTC_YEAR);
++	}
++
++	/* Release the counter back */
++	val &= ~RZN1_RTC_CTL2_WAIT;
++	writel(val, rtc->base + RZN1_RTC_CTL2);
++
++	return ret;
++}
++
++static const struct rtc_class_ops rzn1_rtc_ops = {
++	.read_time = rzn1_rtc_read_time,
++	.set_time = rzn1_rtc_set_time,
++};
++
++static int rzn1_rtc_probe(struct platform_device *pdev)
++{
++	struct rzn1_rtc *rtc;
++	int ret;
++
++	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
++	if (!rtc)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, rtc);
++
++	rtc->clk = devm_clk_get(&pdev->dev, "hclk");
++	if (IS_ERR(rtc->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk), "Missing hclk\n");
++
++	rtc->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(rtc->base))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
++
++	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
++	if (IS_ERR(rtc->rtcdev))
++		return PTR_ERR(rtc);
++
++	rtc->rtcdev->range_max = 3178591199UL; /* 100 years */
++	rtc->rtcdev->ops = &rzn1_rtc_ops;
++
++	ret = r9a06g032_sysctrl_enable_rtc(true);
++	if (ret)
++		return ret;
++
++	ret = clk_prepare_enable(rtc->clk);
++	if (ret)
++		goto disable_rtc;
++
++	/*
++	 * Ensure the clock counter is enabled.
++	 * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
++	 */
++	writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | RZN1_RTC_CTL0_SLSB_SUBU,
++	       rtc->base + RZN1_RTC_CTL0);
++
++	/* Disable all interrupts */
++	writel(0, rtc->base + RZN1_RTC_CTL1);
++
++	/* Enable counter operation */
++	writel(0, rtc->base + RZN1_RTC_CTL2);
++
++	ret = devm_rtc_register_device(rtc->rtcdev);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to register RTC\n");
++		goto disable_clk;
++	}
++
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(rtc->clk);
++disable_rtc:
++	r9a06g032_sysctrl_enable_rtc(false);
++
++	return ret;
++}
++
++static int rzn1_rtc_remove(struct platform_device *pdev)
++{
++	struct rzn1_rtc *rtc = platform_get_drvdata(pdev);
++
++	clk_disable_unprepare(rtc->clk);
++	r9a06g032_sysctrl_enable_rtc(false);
++
++	return 0;
++}
++
++static const struct of_device_id rzn1_rtc_of_match[] = {
++	{ .compatible	= "renesas,rzn1-rtc" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, rzn1_rtc_of_match);
++
++static struct platform_driver rzn1_rtc_driver = {
++	.probe = rzn1_rtc_probe,
++	.remove = rzn1_rtc_remove,
++	.driver = {
++		.name	= "rzn1-rtc",
++		.owner	= THIS_MODULE,
++		.of_match_table = rzn1_rtc_of_match,
++	},
++};
++module_platform_driver(rzn1_rtc_driver);
++
++MODULE_AUTHOR("Michel Pollet <Michel.Pollet@bp.renesas.com");
++MODULE_AUTHOR("Miquel Raynal <miquel.raynal@bootlin.com");
++MODULE_DESCRIPTION("RZ/N1 RTC driver");
++MODULE_LICENSE("GPL");
 -- 
 2.27.0
 
