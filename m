@@ -2,36 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B5A4F4885
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36284F4879
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 02:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbiDEVlS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 5 Apr 2022 17:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S1350514AbiDEVkf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Apr 2022 17:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573380AbiDES7w (ORCPT
+        with ESMTP id S1573379AbiDES7w (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Apr 2022 14:59:52 -0400
 Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C1DCD33C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F61CD338
         for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 11:57:53 -0700 (PDT)
-Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 9407DCB34D
-        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 18:47:38 +0000 (UTC)
+Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 41237CB3D7
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Apr 2022 18:47:41 +0000 (UTC)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 850E1200004;
-        Tue,  5 Apr 2022 18:47:28 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 88418200008;
+        Tue,  5 Apr 2022 18:47:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649184450;
+        t=1649184452;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HU1wc5MsgG96qTLzOLNsJmhZ3anFEAxSiwSuwGVQASk=;
-        b=oGRU0W1seWtDq+NuHL5v458Z8ppx4eB/GvwGMk94NwbLYPLTa+oQV3iXVRI1CtwSKT2s32
-        XMm89XB/msM2DghJkfJYN1ge8GgQB6YdO8smFdVqya8rd0Yp0tiLgz9Pvn+HlF058B3zF2
-        mVinZFnos1y3nMQwEvxgvhZBIb8nm3LQM0mAmGcs/5kPeEDZXNSJwJttqYB504XM3Eu6M3
-        Nn+4EW4t3BsWnFXH4F3K5Ui+k2KesIBNJcYImUSPKLgtkQ0w6A+U50asPIsctoSoxhpkkQ
-        mHWw/VsB1hImdExNqjjXhb06KMyMSy/RwIWzsxzbxOwndxo34mr6AosZoNORCw==
+        bh=5VgkvEnP5b6St7Fp3o3CiWue0Qq0QtYCZ+H9lR4xV74=;
+        b=EvtzmemGu+VW/O34YilZ5smr0nIJGAu9gZYrdqsRAzToOBgE5O/NtykvyGz8iW62mjbyeP
+        Gf+p3cW+qxE9XVv7MasQidJQ5VJV80pjuiUNCJpOHiOT5msDV5pPAb8pD5zhDdyWOsXFDT
+        viy5tfF48XQgDh+hc9z+BAdv3NkQaGxJpcVYOdVjNR9AcTphoHQmBcvJNjViX9j3McLUSa
+        56ZxjXFzwBq8hQUHBMrL1PlIkCb7buze6Ec1sPTk+kn09xlI+IzchQSAqvm7JOihXtcRgB
+        CaUEVMA3tB5r/nAVKMzsjEBuGJtPbroclRf8aPD1T2zNnMPJTW0XiA5jIyRM3g==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
@@ -53,9 +53,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         Clement Leger <clement.leger@bootlin.com>,
         linux-rtc@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5/7] rtc: rzn1: Add oscillator offset support
-Date:   Tue,  5 Apr 2022 20:47:14 +0200
-Message-Id: <20220405184716.1578385-6-miquel.raynal@bootlin.com>
+Subject: [PATCH 6/7] MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+Date:   Tue,  5 Apr 2022 20:47:15 +0200
+Message-Id: <20220405184716.1578385-7-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
 References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
@@ -72,111 +72,32 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RZN1 RTC can compensate the imprecision of the oscillator up to
-approximately 190ppm.
-
-Seconds can last slightly shorter or longer depending on the
-configuration.
-
-Below ~65ppm of correction, we can change the time spent in a second
-every minute, which is the most accurate compensation that the RTC can
-offer. Above, the compensation will be active every 20s.
+After contributing it, I'll volunteer to maintain it.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/rtc/rtc-rzn1.c | 73 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index 85c5a68944a0..64eb1ff20a24 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -246,12 +246,85 @@ static int rzn1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	return 0;
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 120d3ae57a4b..a2bafa05ca60 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16849,6 +16849,14 @@ S:	Supported
+ F:	Documentation/devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml
+ F:	drivers/iio/adc/rzg2l_adc.c
  
-+static int rzn1_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-+	unsigned int ppb_per_step;
-+	bool subtract;
-+	u32 val;
++RENESAS RZ/N1 RTC CONTROLLER DRIVER
++M:	Miquel Raynal <miquel.raynal@bootlin.com>
++L:	linux-rtc@vger.kernel.org
++L:	linux-renesas-soc@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
++F:	drivers/rtc/rtc-rzn1.c
 +
-+	val = readl(rtc->base + RZN1_RTC_SUBU);
-+	ppb_per_step = val & RZN1_RTC_SUBU_DEV ? 1017 : 3051;
-+	subtract = val & RZN1_RTC_SUBU_DECR;
-+	val &= 0x3F;
-+
-+	if (!val)
-+		*offset = 0;
-+	else if (subtract)
-+		*offset = -(((~val) & 0x3F) + 1) * ppb_per_step;
-+	else
-+		*offset = (val - 1) * ppb_per_step;
-+
-+	return 0;
-+}
-+
-+static int rzn1_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-+	unsigned int steps, ppb_per_step;
-+	int stepsh, stepsl;
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * Check which resolution mode (every 20 or 60s) can be used.
-+	 * Between 2 and 124 clock pulses can be added or substracted.
-+	 *
-+	 * In 20s mode, the minimum resolution is 2 / (32768 * 20) which is
-+	 * close to 3051 ppb. In 60s mode, the resolution is closer to 1017.
-+	 */
-+	stepsh = DIV_ROUND_CLOSEST(offset, 1017);
-+	stepsl = DIV_ROUND_CLOSEST(offset, 3051);
-+
-+	if (stepsh >= -0x3E && stepsh <= 0x3E) {
-+		ppb_per_step = 1017;
-+		steps = stepsh;
-+		val |= RZN1_RTC_SUBU_DEV;
-+	} else if (stepsl >= -0x3E && stepsl <= 0x3E) {
-+		ppb_per_step = 3051;
-+		steps = stepsl;
-+	} else {
-+		return -ERANGE;
-+	}
-+
-+	if (!steps)
-+		return 0;
-+
-+	if (steps > 0) {
-+		val |= steps + 1;
-+	} else {
-+		val |= RZN1_RTC_SUBU_DECR;
-+		val |= (~(-steps - 1)) & 0x3F;
-+	}
-+
-+	ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, val,
-+				 !(val & RZN1_RTC_CTL2_WUST), 100, 2000000);
-+	if (ret)
-+		return ret;
-+
-+	writel(val, rtc->base + RZN1_RTC_SUBU);
-+
-+	return 0;
-+}
-+
- static const struct rtc_class_ops rzn1_rtc_ops = {
- 	.read_time = rzn1_rtc_read_time,
- 	.set_time = rzn1_rtc_set_time,
- 	.read_alarm = rzn1_rtc_read_alarm,
- 	.set_alarm = rzn1_rtc_set_alarm,
- 	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
-+	.read_offset = rzn1_rtc_read_offset,
-+	.set_offset = rzn1_rtc_set_offset,
- };
- 
- static int rzn1_rtc_probe(struct platform_device *pdev)
+ RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+ L:	linux-mtd@lists.infradead.org
 -- 
 2.27.0
 
