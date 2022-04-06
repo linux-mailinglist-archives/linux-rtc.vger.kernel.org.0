@@ -2,245 +2,249 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0804F610B
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 16:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A354F61AC
+	for <lists+linux-rtc@lfdr.de>; Wed,  6 Apr 2022 16:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbiDFN6p (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Apr 2022 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S234401AbiDFOXA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Apr 2022 10:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbiDFN6P (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 09:58:15 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8D813CA2A;
-        Wed,  6 Apr 2022 02:10:21 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BDD191BF20C;
-        Wed,  6 Apr 2022 09:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649236219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VQ63HwvnHGrZcb0MV+Lbc8R18sMVO+IEaXijo5IJKi0=;
-        b=KP4qyotP0+4BE/6EF2wTNEs6vuJZadjtA0gF1RPOUne3opDxjRA45bb3NFqdEOq7CkvZ2o
-        5h3G+EI8o7oufH/8ygDWxWBn7WWids8pd+pdjOjKg0W0vLuCYL7W/m4SCYcu58wvUKxQgG
-        Xg7MEsiuxPi1Z5mkOr/vPSjlbolN5BqWZWfrJHXu6XUwT+3tte1Ji46LGhRlYJ1bi3H572
-        7hV4KNGCio9LegIDlXvTvC50wRaRBHY8TyTv1mHcJFt69CtX/yeDJEB59dhhA/R+p4UFkH
-        RGT0eE/2gEscIz/EVO8ERYVWYy0CR6BWI7rTSbB6szhYETEO4ZPD2qLQGCfcpA==
-Date:   Wed, 6 Apr 2022 11:10:17 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 4/7] rtc: rzn1: Add alarm support
-Message-ID: <Yk1Y+eaDkk1FFiLZ@mail.local>
-References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
- <20220405184716.1578385-5-miquel.raynal@bootlin.com>
+        with ESMTP id S234533AbiDFOWY (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 10:22:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229E23919C3
+        for <linux-rtc@vger.kernel.org>; Wed,  6 Apr 2022 03:27:55 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id k23so2495566wrd.8
+        for <linux-rtc@vger.kernel.org>; Wed, 06 Apr 2022 03:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BwJ8SAExrW9RROE3H/KoFKcCEjo9fX//swBP0z59ayk=;
+        b=DJsXVuR9LnT4MsrQXyeJ1YXGm1NrYFUF/KXlDFJg0R5rzk9CzQZcmR3jlrF8manMtp
+         ASXneeEVMU4q6+Jap7hwKjd4Be+CLYwPoowyh44dFBJkGy8S4RY19sE1wUe9r62ycByT
+         HOYz/2vRmbkG1CR3+hZqB0h4vUVzlT+OUXPMLAfbeK8tMrsozQf93/f8Xnd16/eMX8BO
+         YHOGa//5Dl8yEeXXBuZTnzd5FH35Qcy0XRDxYTtyvrKUJ2GQNOlSLgAdOJSTyVqCgeQb
+         qDTlMkoSMtO0BwzvIICzlSHb7wRbClWSNEOn12+h1VwnTWM7bReTHIV53mTDlmUbJuMU
+         fMqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BwJ8SAExrW9RROE3H/KoFKcCEjo9fX//swBP0z59ayk=;
+        b=ZCIIGlweaFalsyzTucnsKpaPXTWcvvDnBi2dkGMudTBgyAfPwVYZ9WASNq4Zst8s2T
+         zQUY0Lt7lSwwPtGRBXJgQEee9IonAvDGxhcB++HTJHg8hKTVJiVoMRx4NAgmw0norw6F
+         /cMN8Db3mWSjQgmiZ2XM+4hFZf+e4zLwmvvPQDHqxV8x0aHifwbnpiphcyZrcay6NXy9
+         3Wd7Jd6DjsZsN2XlQRZnvOXJ0k6OFq8GYFQYkYMYWfvbwA5oJhKQYl3+Cm8pp8RG/1/y
+         WFdvaQoNthRm6I2YkUdvG0yzYoJaSNEOP60ESabHHVYz3GW1wVCL32BG46wAomnY8Avu
+         V/Aw==
+X-Gm-Message-State: AOAM533qA6tKa4ZV1bedxJZlEiecpcl8+Ls5lSGEiw7wwNPUvKSRkugh
+        11As1uiTHd7vzj2xpfyDqL+iOQ==
+X-Google-Smtp-Source: ABdhPJxjZWm6A/FkxhLV3pL1XPdURvb/xkERbt+nv44rDcPej9lBzoqljxAT2Qz0N+zvvuec3B4ykA==
+X-Received: by 2002:a5d:6dad:0:b0:204:182a:e601 with SMTP id u13-20020a5d6dad000000b00204182ae601mr6018322wrs.262.1649240874318;
+        Wed, 06 Apr 2022 03:27:54 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:261f:c14c:d23b:d177? ([2a01:e34:ed2f:f020:261f:c14c:d23b:d177])
+        by smtp.googlemail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm5011797wmb.48.2022.04.06.03.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 03:27:52 -0700 (PDT)
+Message-ID: <768c4fe5-fd36-8e4a-a9c2-1c799af3ed44@linaro.org>
+Date:   Wed, 6 Apr 2022 12:27:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405184716.1578385-5-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v15 4/5] clocksource/drivers: Add a goldfish-timer
+ clocksource
+Content-Language: en-US
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        John Stultz <john.stultz@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220310090048.1933020-1-laurent@vivier.eu>
+ <20220310090048.1933020-5-laurent@vivier.eu>
+ <f87deb83-7f1f-5acf-b6c6-040fcd02c0be@vivier.eu>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <f87deb83-7f1f-5acf-b6c6-040fcd02c0be@vivier.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 05/04/2022 20:47:13+0200, Miquel Raynal wrote:
-> The RZN1 RTC can trigger an interrupt when reaching a particular date up
-> to 7 days ahead. Bring support for this alarm.
+
+Hi Laurent,
+
+
+On 01/04/2022 12:20, Laurent Vivier wrote:
 > 
-> One drawback though, the granularity is about a minute.
+> Daniel ?
 > 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/rtc/rtc-rzn1.c | 108 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 108 insertions(+)
+> Thanks,
+> Laurent
 > 
-> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index 15c533333930..85c5a68944a0 100644
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -154,14 +154,110 @@ static int rzn1_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  	return ret;
->  }
->  
-> +static irqreturn_t rzn1_rtc_alarm_irq(int irq, void *dev_id)
-> +{
-> +	struct rzn1_rtc *rtc = dev_id;
-> +
-> +	rtc_update_irq(rtc->rtcdev, 1, RTC_AF | RTC_IRQF);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int rzn1_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
-> +{
-> +	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-> +	u32 ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
-> +
-> +	if (enable)
-> +		ctl1 |= RZN1_RTC_CTL1_ALME;
-> +	else
-> +		ctl1 &= ~RZN1_RTC_CTL1_ALME;
-> +
-> +	writel(ctl1, rtc->base + RZN1_RTC_CTL1);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzn1_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-> +	struct rtc_time *tm = &alrm->time;
-> +	unsigned int min, hour, wday, delta_days;
-> +	u32 ctl1;
-> +	int ret;
-> +
-> +	ret = rzn1_rtc_read_time(dev, tm);
-> +	if (ret)
-> +		return ret;
-> +
-> +	min = readl(rtc->base + RZN1_RTC_ALM);
-> +	hour = readl(rtc->base + RZN1_RTC_ALH);
-> +	wday = readl(rtc->base + RZN1_RTC_ALW);
-> +
-> +	tm->tm_sec = 0;
-> +	tm->tm_min = bcd2bin(min);
-> +	tm->tm_hour = bcd2bin(hour);
-> +	delta_days = ((fls(wday) - 1) - tm->tm_wday + 7) % 7;
-> +	tm->tm_wday = fls(wday) - 1;
-> +	tm->tm_mday += delta_days;
-> +	if (delta_days > rtc_month_days(tm->tm_mon, tm->tm_year)) {
-> +		tm->tm_mday %= rtc_month_days(tm->tm_mon, tm->tm_year);
-> +		tm->tm_mon++;
-> +	}
-> +	if (tm->tm_mon > 12) {
-> +		tm->tm_mon %= 12;
-> +		tm->tm_year++;
-> +	}
+> Le 10/03/2022 à 10:00, Laurent Vivier a écrit :
+>> Add a clocksource based on the goldfish-rtc device.
+>>
+>> Move the timer register definition to <clocksource/timer-goldfish.h>
+>>
+>> This kernel implementation is based on the QEMU upstream implementation:
+>>
+>>     https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/rtc/goldfish_rtc.c
+>>
+>> goldfish-timer is a high-precision signed 64-bit nanosecond timer.
+>> It is part of the 'goldfish' virtual hardware platform used to run
+>> some emulated Android systems under QEMU.
+>> This timer only supports oneshot event.
+>>
+>> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+>> ---
+>>   drivers/clocksource/Kconfig          |   7 ++
+>>   drivers/clocksource/Makefile         |   1 +
+>>   drivers/clocksource/timer-goldfish.c | 153 +++++++++++++++++++++++++++
+>>   drivers/rtc/rtc-goldfish.c           |  13 +--
+>>   include/clocksource/timer-goldfish.h |  31 ++++++
+>>   5 files changed, 193 insertions(+), 12 deletions(-)
+>>   create mode 100644 drivers/clocksource/timer-goldfish.c
+>>   create mode 100644 include/clocksource/timer-goldfish.h
+>>
+>> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+>> index cfb8ea0df3b1..94f00374cebb 100644
+>> --- a/drivers/clocksource/Kconfig
+>> +++ b/drivers/clocksource/Kconfig
+>> @@ -721,4 +721,11 @@ config MICROCHIP_PIT64B
+>>         modes and high resolution. It is used as a clocksource
+>>         and a clockevent.
+>> +config GOLDFISH_TIMER
+>> +    bool "Clocksource using goldfish-rtc"
+>> +    depends on M68K || COMPILE_TEST
+>> +    depends on RTC_DRV_GOLDFISH
+>> +    help
+>> +      Support for the timer/counter of goldfish-rtc
+>> +
+>>   endmenu
+>> diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+>> index fa5f624eadb6..12f5d7e8cc2d 100644
+>> --- a/drivers/clocksource/Makefile
+>> +++ b/drivers/clocksource/Makefile
+>> @@ -89,3 +89,4 @@ obj-$(CONFIG_GX6605S_TIMER)        += timer-gx6605s.o
+>>   obj-$(CONFIG_HYPERV_TIMER)        += hyperv_timer.o
+>>   obj-$(CONFIG_MICROCHIP_PIT64B)        += timer-microchip-pit64b.o
+>>   obj-$(CONFIG_MSC313E_TIMER)        += timer-msc313e.o
+>> +obj-$(CONFIG_GOLDFISH_TIMER)        += timer-goldfish.o
+>> diff --git a/drivers/clocksource/timer-goldfish.c 
+>> b/drivers/clocksource/timer-goldfish.c
+>> new file mode 100644
+>> index 000000000000..0512d5eabc82
+>> --- /dev/null
+>> +++ b/drivers/clocksource/timer-goldfish.c
+>> @@ -0,0 +1,153 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <linux/interrupt.h>
+>> +#include <linux/ioport.h>
+>> +#include <linux/clocksource.h>
+>> +#include <linux/clockchips.h>
+>> +#include <linux/module.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/goldfish.h>
 
-I guess you could avoid having to handle rollover by making the
-calculations on a time64_t and then convert back to a tm. I don't think
-this would be much worse in terms of processing.
+Not related to this patch: would it make sense to move it to linux/soc/... ?
 
-> +
-> +	ctl1 = readl(rtc->base + RZN1_RTC_CTL1);
-> +	alrm->enabled = !!(ctl1 & RZN1_RTC_CTL1_ALME);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzn1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-> +	struct rtc_time *tm = &alrm->time, tm_now;
-> +	unsigned long alarm, farest;
-> +	unsigned int days_ahead, wday;
-> +	int ret;
-> +
-> +	ret = rzn1_rtc_read_time(dev, &tm_now);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* We cannot set alarms more than one week ahead */
-> +	farest = rtc_tm_to_time64(&tm_now) + (7 * 86400);
-> +	alarm = rtc_tm_to_time64(tm);
-> +	if (time_after(alarm, farest))
-> +		return -EOPNOTSUPP;
-> +
 
-I would return -ERANGE
+>> +#include <clocksource/timer-goldfish.h>
+>> +
+>> +struct goldfish_timer {
+>> +    struct clocksource cs;
+>> +    struct clock_event_device ced;
+>> +    struct resource res;
+>> +    void __iomem *base;
+>> +};
+>> +
+>> +static struct goldfish_timer *ced_to_gf(struct clock_event_device *ced)
+>> +{
+>> +    return container_of(ced, struct goldfish_timer, ced);
+>> +}
+>> +
+>> +static struct goldfish_timer *cs_to_gf(struct clocksource *cs)
+>> +{
+>> +    return container_of(cs, struct goldfish_timer, cs);
+>> +}
+>> +
+>> +static u64 goldfish_timer_read(struct clocksource *cs)
+>> +{
+>> +    struct goldfish_timer *timerdrv = cs_to_gf(cs);
+>> +    void __iomem *base = timerdrv->base;
+>> +    u32 time_low, time_high;
+>> +    u64 ticks;
+>> +
+>> +    /*
+>> +     * time_low: get low bits of current time and update time_high
+>> +     * time_high: get high bits of time at last time_low read
+>> +     */
+>> +    time_low = gf_ioread32(base + TIMER_TIME_LOW);
+>> +    time_high = gf_ioread32(base + TIMER_TIME_HIGH);
 
-> +	/* Convert alarm day into week day */
-> +	days_ahead = tm->tm_mday - tm_now.tm_mday;
-> +	wday = (tm_now.tm_wday + days_ahead) % 7;
-> +
-> +	writel(bin2bcd(tm->tm_min), rtc->base + RZN1_RTC_ALM);
-> +	writel(bin2bcd(tm->tm_hour), rtc->base + RZN1_RTC_ALH);
-> +	writel(BIT(wday), rtc->base + RZN1_RTC_ALW);
-> +
-> +	rzn1_rtc_alarm_irq_enable(dev, alrm->enabled);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct rtc_class_ops rzn1_rtc_ops = {
->  	.read_time = rzn1_rtc_read_time,
->  	.set_time = rzn1_rtc_set_time,
-> +	.read_alarm = rzn1_rtc_read_alarm,
-> +	.set_alarm = rzn1_rtc_set_alarm,
-> +	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
->  };
->  
->  static int rzn1_rtc_probe(struct platform_device *pdev)
->  {
->  	struct rzn1_rtc *rtc;
-> +	int alarm_irq;
->  	int ret;
->  
->  	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> @@ -178,12 +274,17 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
->  	if (IS_ERR(rtc->base))
->  		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
->  
-> +	alarm_irq = platform_get_irq(pdev, 0);
-> +	if (alarm_irq < 0)
-> +		return dev_err_probe(&pdev->dev, alarm_irq, "Missing timer IRQ\n");
-> +
->  	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
->  	if (IS_ERR(rtc->rtcdev))
->  		return PTR_ERR(rtc);
->  
->  	rtc->rtcdev->range_max = 3178591199UL; /* 100 years */
->  	rtc->rtcdev->ops = &rzn1_rtc_ops;
-> +	set_bit(RTC_FEATURE_ALARM_RES_MINUTE, rtc->rtcdev->features);
+There is a risk here to have the counter rolling over between low and 
+high reading, no ?
 
-You should probably clear RTC_FEATURE_UPDATE_INTERRUPT too.
+If it is the case, you may consider using 32bits instead of 64bits, 
+otherwise handle the counter wrapping around.
 
->  
->  	ret = r9a06g032_sysctrl_enable_rtc(true);
->  	if (ret)
-> @@ -206,6 +307,13 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
->  	/* Enable counter operation */
->  	writel(0, rtc->base + RZN1_RTC_CTL2);
->  
-> +	ret = devm_request_irq(&pdev->dev, alarm_irq, rzn1_rtc_alarm_irq, 0,
-> +			       dev_name(&pdev->dev), rtc);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "RTC timer interrupt not available\n");
-> +		goto disable_clk;
-> +	}
-> +
->  	ret = devm_rtc_register_device(rtc->rtcdev);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to register RTC\n");
-> -- 
-> 2.27.0
-> 
+>> +    ticks = ((u64)time_high << 32) | time_low;
+>> +
+>> +    return ticks;
+>> +}
+>> +
+
+[ ... ]
+
+>> +/*
+>> + * TIMER_TIME_LOW     get low bits of current time and update 
+>> TIMER_TIME_HIGH
+>> + * TIMER_TIME_HIGH     get high bits of time at last TIMER_TIME_LOW read
+>> + * TIMER_ALARM_LOW     set low bits of alarm and activate it
+>> + * TIMER_ALARM_HIGH     set high bits of next alarm
+>> + * TIMER_IRQ_ENABLED     enable alarm interrupt
+>> + * TIMER_CLEAR_ALARM     disarm an existin alarm
+
+typo: s/existin/existing/
+
+>> + * TIMER_ALARM_STATUS     alarm status (running or not)
+>> + * TIMER_CLEAR_INTERRUPT clear interrupt
+>> + */
+>> +#define TIMER_TIME_LOW        0x00
+>> +#define TIMER_TIME_HIGH        0x04
+>> +#define TIMER_ALARM_LOW        0x08
+>> +#define TIMER_ALARM_HIGH    0x0c
+>> +#define TIMER_IRQ_ENABLED    0x10
+>> +#define TIMER_CLEAR_ALARM    0x14
+>> +#define TIMER_ALARM_STATUS    0x18
+>> +#define TIMER_CLEAR_INTERRUPT    0x1c
+>> +
+>> +extern int goldfish_timer_init(int irq, void __iomem *base);
+>> +
+>> +#endif /* _CLOCKSOURCE_TIMER_GOLDFISH_H */
+
+
+
+
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
