@@ -2,46 +2,48 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D4A4F6F95
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Apr 2022 03:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092BC4F6FC3
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Apr 2022 03:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiDGBNQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Apr 2022 21:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S235188AbiDGBOi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Apr 2022 21:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbiDGBNJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 21:13:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8FF186D8;
-        Wed,  6 Apr 2022 18:10:57 -0700 (PDT)
+        with ESMTP id S235862AbiDGBOE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 21:14:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8BB182D85;
+        Wed,  6 Apr 2022 18:11:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12EF3B82693;
-        Thu,  7 Apr 2022 01:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E708C385BC;
-        Thu,  7 Apr 2022 01:10:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D21A561DB6;
+        Thu,  7 Apr 2022 01:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D4CC385B8;
+        Thu,  7 Apr 2022 01:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649293854;
-        bh=adLbLelwA0eTEMAxwIejJevJ/N5XHRVQmd9kn8IfuU0=;
+        s=k20201202; t=1649293881;
+        bh=rakinzJkTv08OHWnz7KdolfEfKQVaCBbzM4XlCooYVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LUEh62kLR9cvfqWiq+LT6FL9GenB5z53kI3/tKxRHFicUUPT5fGdI6yxO1j+VQXi4
-         hodTsfe5CgNTdSu87Xjr6bMufm/HBOpWtPW+zfG+oZhRyLdeY2sA0c5IAcYS5/7WXm
-         uCOz41I4lyEubGGnfRK1g+4Rwii84YDp3A6j2AZo6A6ZrYaUzG3djtSliscunX+ioS
-         HrWXkmbsN59QHS0Ff9iK5F+GrlMrJ0mrXChZ4bfdySU8Wm7EQhdGW0dRjzcwSoG3SY
-         jhzFjzp2N8suLkUGronHbM5+3ehymYgyxkFotLpmEykibpK8/7ikt91gjW1clA/9AW
-         40yLg+qf3Spog==
+        b=RsQqIrGwEDguYDG/nI3RHmzE9F94fvulJC3B/HgFUqogXUdsnU7k1I642MXCCG6qV
+         60jPd6P5PYYELBcBPhtdfIBvCuLBo2sUqTKad9cAQi3Uj6ciw1YpVUmE8thLbfhPuw
+         CprESrO+LtA8T4xJ/tB/nJI7dOZt1deKzxjLkHBJD0+se97oaojFobl+Zle+tFZG4v
+         5+94uKaa49PIyoJ7POcescwyqMLyYchA1Y3YR9brKwtiEZMHPEbYSwUmMix+G1uCJV
+         kqm1VRinK1VpwARya+hDZ0OslVy1pIjLZ7f6hxgpmhunUOJJG35NzICFKYxuhVIkCg
+         /iEBFkmjR+20A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jinke Fan <fanjinke@hygon.cn>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+        Raul E Rangel <rrangel@chromium.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
-        wens@csie.org, samuel@sholland.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.17 13/31] rtc: sun6i: Fix time overflow handling
-Date:   Wed,  6 Apr 2022 21:10:11 -0400
-Message-Id: <20220407011029.113321-13-sashal@kernel.org>
+        mat.jonczyk@o2.pl, dan.carpenter@oracle.com,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 24/31] rtc: mc146818-lib: Fix the AltCentury for AMD platforms
+Date:   Wed,  6 Apr 2022 21:10:22 -0400
+Message-Id: <20220407011029.113321-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220407011029.113321-1-sashal@kernel.org>
 References: <20220407011029.113321-1-sashal@kernel.org>
@@ -51,86 +53,115 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 9f6cd82eca7e91a0d0311242a87c6aa3c2737968 ]
+[ Upstream commit 3ae8fd41573af4fb3a490c9ed947fc936ba87190 ]
 
-Using "unsigned long" for UNIX timestamps is never a good idea, and
-comparing the value of such a variable against U32_MAX does not do
-anything useful on 32-bit systems.
+Setting the century forward has been failing on AMD platforms.
+There was a previous attempt at fixing this for family 0x17 as part of
+commit 7ad295d5196a ("rtc: Fix the AltCentury value on AMD/Hygon
+platform") but this was later reverted due to some problems reported
+that appeared to stem from an FW bug on a family 0x17 desktop system.
 
-Use the proper time64_t type when dealing with timestamps, and avoid
-cutting down the time range unnecessarily. This also fixes the flawed
-check for the alarm time being too far into the future.
+The same comments mentioned in the previous commit continue to apply
+to the newer platforms as well.
 
-The check for this condition is actually somewhat theoretical, as the
-RTC counts till 2033 only anyways, and 2^32 seconds from now is not
-before the year 2157 - at which point I hope nobody will be using this
-hardware anymore.
+```
+MC146818 driver use function mc146818_set_time() to set register
+RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
+reset value on Intel platform to 0x7.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
+DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
+as reserved.
+
+DV0 is set to 1, it will select Bank 1, which will disable AltCentury
+register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
+(AltCentury), the CMOS write will be failed on code:
+CMOS_WRITE(century, acpi_gbl_FADT.century).
+
+Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
+enable AltCentury(0x32) register writing and finally setup century as
+expected.
+```
+
+However in closer examination the change previously submitted was also
+modifying bits 5 & 6 which are declared reserved in the AMD documentation.
+So instead modify just the DV0 bank selection bit.
+
+Being cognizant that there was a failure reported before, split the code
+change out to a static function that can also be used for exclusions if
+any regressions such as Mikhail's pop up again.
+
+Cc: Jinke Fan <fanjinke@hygon.cn>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Link: https://lore.kernel.org/all/CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com/
+Link: https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
+Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220211122643.1343315-4-andre.przywara@arm.com
+Link: https://lore.kernel.org/r/20220111225750.1699-1-mario.limonciello@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-sun6i.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/rtc/rtc-mc146818-lib.c | 16 +++++++++++++++-
+ include/linux/mc146818rtc.h    |  2 ++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 711832c758ae..bcc0c2ce4b4e 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -138,7 +138,7 @@ struct sun6i_rtc_dev {
- 	const struct sun6i_rtc_clk_data *data;
- 	void __iomem *base;
- 	int irq;
--	unsigned long alarm;
-+	time64_t alarm;
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index ae9f131b43c0..05f251ba6a3a 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -176,6 +176,17 @@ int mc146818_get_time(struct rtc_time *time)
+ }
+ EXPORT_SYMBOL_GPL(mc146818_get_time);
  
- 	struct clk_hw hw;
- 	struct clk_hw *int_osc;
-@@ -510,10 +510,8 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	struct sun6i_rtc_dev *chip = dev_get_drvdata(dev);
- 	struct rtc_time *alrm_tm = &wkalrm->time;
- 	struct rtc_time tm_now;
--	unsigned long time_now = 0;
--	unsigned long time_set = 0;
--	unsigned long time_gap = 0;
--	int ret = 0;
-+	time64_t time_now, time_set;
-+	int ret;
++/* AMD systems don't allow access to AltCentury with DV1 */
++static bool apply_amd_register_a_behavior(void)
++{
++#ifdef CONFIG_X86
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
++	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
++		return true;
++#endif
++	return false;
++}
++
+ /* Set the current date and time in the real time clock. */
+ int mc146818_set_time(struct rtc_time *time)
+ {
+@@ -247,7 +258,10 @@ int mc146818_set_time(struct rtc_time *time)
+ 	save_control = CMOS_READ(RTC_CONTROL);
+ 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+ 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
+-	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
++	if (apply_amd_register_a_behavior())
++		CMOS_WRITE((save_freq_select & ~RTC_AMD_BANK_SELECT), RTC_FREQ_SELECT);
++	else
++		CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
  
- 	ret = sun6i_rtc_gettime(dev, &tm_now);
- 	if (ret < 0) {
-@@ -528,9 +526,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 		return -EINVAL;
- 	}
+ #ifdef CONFIG_MACH_DECSTATION
+ 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
+diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
+index 808bb4cee230..b0da04fe087b 100644
+--- a/include/linux/mc146818rtc.h
++++ b/include/linux/mc146818rtc.h
+@@ -86,6 +86,8 @@ struct cmos_rtc_board_info {
+    /* 2 values for divider stage reset, others for "testing purposes only" */
+ #  define RTC_DIV_RESET1	0x60
+ #  define RTC_DIV_RESET2	0x70
++   /* In AMD BKDG bit 5 and 6 are reserved, bit 4 is for select dv0 bank */
++#  define RTC_AMD_BANK_SELECT	0x10
+   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
+ # define RTC_RATE_SELECT 	0x0F
  
--	time_gap = time_set - time_now;
--
--	if (time_gap > U32_MAX) {
-+	if ((time_set - time_now) > U32_MAX) {
- 		dev_err(dev, "Date too far in the future\n");
- 		return -EINVAL;
- 	}
-@@ -539,7 +535,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	writel(0, chip->base + SUN6I_ALRM_COUNTER);
- 	usleep_range(100, 300);
- 
--	writel(time_gap, chip->base + SUN6I_ALRM_COUNTER);
-+	writel(time_set - time_now, chip->base + SUN6I_ALRM_COUNTER);
- 	chip->alarm = time_set;
- 
- 	sun6i_rtc_setaie(wkalrm->enabled, chip);
 -- 
 2.35.1
 
