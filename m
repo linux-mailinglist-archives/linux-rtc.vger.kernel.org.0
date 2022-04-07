@@ -2,166 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612084F7076
-	for <lists+linux-rtc@lfdr.de>; Thu,  7 Apr 2022 03:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814F04F7080
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Apr 2022 03:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238733AbiDGBVk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Apr 2022 21:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S238806AbiDGBVq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 6 Apr 2022 21:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237297AbiDGBRZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 21:17:25 -0400
+        with ESMTP id S238489AbiDGBSU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Apr 2022 21:18:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F24E18021D;
-        Wed,  6 Apr 2022 18:12:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572A3198949;
+        Wed,  6 Apr 2022 18:13:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B227AB82694;
-        Thu,  7 Apr 2022 01:12:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E813C385A1;
-        Thu,  7 Apr 2022 01:12:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7D2FB81E79;
+        Thu,  7 Apr 2022 01:13:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C07FEC385A7;
+        Thu,  7 Apr 2022 01:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649293953;
-        bh=711AYm5X3wmpxWNIDrA7dGgX9CzomVjiSB0DnvFs3vY=;
+        s=k20201202; t=1649293981;
+        bh=vtfdmjHYyYmA5vp7V1TIWM3kVm7ahhApIciXEJruAOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ONLAUXsm6E7qUxHCQ72dE2u0mdQmkq5vuwN/SzZlU6yi7YF+Fjw4FHvvq4itYdbWk
-         2IT+nJFKPhVhNRNShSXMH1cJf4mSI32pFx9o7TnnGBBD/LqR9Wy86QHP4i6XabttNJ
-         kaZwphNQ9Rh689I9hRKXar5LCNZpgu5gjF5KkClhmvfM+Xug1FmKfoFUgusYZ2rNnf
-         MW9GpnGQmJ40Vp/rjceL17Ou3kSp1LKjv9zGzvNor2EjKgZcxGD2PRLklatd4ywDth
-         hy0W4ouMyHEF+pGzaCRMu6wFXjdqUwB+57j2QRImF4xrFpCS+kQG8Y4L6nZICbld82
-         3aNXLyBwqrOgQ==
+        b=egyMp2+oKB9v2+PoiL3OP/nkbVI3VlqR/dqY/vxaDLglDoxWUe2DdbKP5+/txVoKK
+         QuCUfSPQ3rFDYMUmvgHf+rycqlo/YfbSKSHI2IA+GdipmVDHcEFGXH6AkiHPyOKMWg
+         QArvqsNXR1itmj7TS8TTJBe0ZHN12tp8wskm+9HUQUPLPjm8wPsm9Ri9vbeY8UgFf0
+         mm0GxviIntv7LOZ9ykBjWv7ZPNJ0nXJDaxNv5xBa/6ORik6NL4SRU+7Lax9Pww+4MZ
+         xyYBi323OgBsA2X0B5uB4ANobZ+j3CwWW92snSnHqGn3GXuXdODWl2kJbKIB2OGHgB
+         WswAcTG3vROXA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Jinke Fan <fanjinke@hygon.cn>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        Raul E Rangel <rrangel@chromium.org>,
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
-        mat.jonczyk@o2.pl, dan.carpenter@oracle.com,
         linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 23/30] rtc: mc146818-lib: Fix the AltCentury for AMD platforms
-Date:   Wed,  6 Apr 2022 21:11:33 -0400
-Message-Id: <20220407011140.113856-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 02/27] rtc: fix use-after-free on device removal
+Date:   Wed,  6 Apr 2022 21:12:32 -0400
+Message-Id: <20220407011257.114287-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220407011140.113856-1-sashal@kernel.org>
-References: <20220407011140.113856-1-sashal@kernel.org>
+In-Reply-To: <20220407011257.114287-1-sashal@kernel.org>
+References: <20220407011257.114287-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit 3ae8fd41573af4fb3a490c9ed947fc936ba87190 ]
+[ Upstream commit c8fa17d9f08a448184f03d352145099b5beb618e ]
 
-Setting the century forward has been failing on AMD platforms.
-There was a previous attempt at fixing this for family 0x17 as part of
-commit 7ad295d5196a ("rtc: Fix the AltCentury value on AMD/Hygon
-platform") but this was later reverted due to some problems reported
-that appeared to stem from an FW bug on a family 0x17 desktop system.
+If the irqwork is still scheduled or running while the RTC device is
+removed, a use-after-free occurs in rtc_timer_do_work().  Cleanup the
+timerqueue and ensure the work is stopped to fix this.
 
-The same comments mentioned in the previous commit continue to apply
-to the newer platforms as well.
+ BUG: KASAN: use-after-free in mutex_lock+0x94/0x110
+ Write of size 8 at addr ffffff801d846338 by task kworker/3:1/41
 
-```
-MC146818 driver use function mc146818_set_time() to set register
-RTC_FREQ_SELECT(RTC_REG_A)'s bit4-bit6 field which means divider stage
-reset value on Intel platform to 0x7.
+ Workqueue: events rtc_timer_do_work
+ Call trace:
+  mutex_lock+0x94/0x110
+  rtc_timer_do_work+0xec/0x630
+  process_one_work+0x5fc/0x1344
+  ...
 
-While AMD/Hygon RTC_REG_A(0Ah)'s bit4 is defined as DV0 [Reference]:
-DV0 = 0 selects Bank 0, DV0 = 1 selects Bank 1. Bit5-bit6 is defined
-as reserved.
+ Allocated by task 551:
+  kmem_cache_alloc_trace+0x384/0x6e0
+  devm_rtc_allocate_device+0xf0/0x574
+  devm_rtc_device_register+0x2c/0x12c
+  ...
 
-DV0 is set to 1, it will select Bank 1, which will disable AltCentury
-register(0x32) access. As UEFI pass acpi_gbl_FADT.century 0x32
-(AltCentury), the CMOS write will be failed on code:
-CMOS_WRITE(century, acpi_gbl_FADT.century).
+ Freed by task 572:
+  kfree+0x114/0x4d0
+  rtc_device_release+0x64/0x80
+  device_release+0x8c/0x1f4
+  kobject_put+0x1c4/0x4b0
+  put_device+0x20/0x30
+  devm_rtc_release_device+0x1c/0x30
+  devm_action_release+0x54/0x90
+  release_nodes+0x124/0x310
+  devres_release_group+0x170/0x240
+  i2c_device_remove+0xd8/0x314
+  ...
 
-Correct RTC_REG_A bank select bit(DV0) to 0 on AMD/Hygon CPUs, it will
-enable AltCentury(0x32) register writing and finally setup century as
-expected.
-```
+ Last potentially related work creation:
+  insert_work+0x5c/0x330
+  queue_work_on+0xcc/0x154
+  rtc_set_time+0x188/0x5bc
+  rtc_dev_ioctl+0x2ac/0xbd0
+  ...
 
-However in closer examination the change previously submitted was also
-modifying bits 5 & 6 which are declared reserved in the AMD documentation.
-So instead modify just the DV0 bank selection bit.
-
-Being cognizant that there was a failure reported before, split the code
-change out to a static function that can also be used for exclusions if
-any regressions such as Mikhail's pop up again.
-
-Cc: Jinke Fan <fanjinke@hygon.cn>
-Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Link: https://lore.kernel.org/all/CABXGCsMLob0DC25JS8wwAYydnDoHBSoMh2_YLPfqm3TTvDE-Zw@mail.gmail.com/
-Link: https://www.amd.com/system/files/TechDocs/51192_Bolton_FCH_RRG.pdf
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220111225750.1699-1-mario.limonciello@amd.com
+Link: https://lore.kernel.org/r/20211210160951.7718-1-vincent.whitchurch@axis.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c | 16 +++++++++++++++-
- include/linux/mc146818rtc.h    |  2 ++
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ drivers/rtc/class.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
-index 2065842f775d..e9c6691e1fb0 100644
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -120,6 +120,17 @@ unsigned int mc146818_get_time(struct rtc_time *time)
- }
- EXPORT_SYMBOL_GPL(mc146818_get_time);
- 
-+/* AMD systems don't allow access to AltCentury with DV1 */
-+static bool apply_amd_register_a_behavior(void)
-+{
-+#ifdef CONFIG_X86
-+	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
-+	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
-+		return true;
-+#endif
-+	return false;
-+}
-+
- /* Set the current date and time in the real time clock. */
- int mc146818_set_time(struct rtc_time *time)
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index f77bc089eb6b..0aef7df2ea70 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -26,6 +26,15 @@ struct class *rtc_class;
+ static void rtc_device_release(struct device *dev)
  {
-@@ -191,7 +202,10 @@ int mc146818_set_time(struct rtc_time *time)
- 	save_control = CMOS_READ(RTC_CONTROL);
- 	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
- 	save_freq_select = CMOS_READ(RTC_FREQ_SELECT);
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
-+	if (apply_amd_register_a_behavior())
-+		CMOS_WRITE((save_freq_select & ~RTC_AMD_BANK_SELECT), RTC_FREQ_SELECT);
-+	else
-+		CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
+ 	struct rtc_device *rtc = to_rtc_device(dev);
++	struct timerqueue_head *head = &rtc->timerqueue;
++	struct timerqueue_node *node;
++
++	mutex_lock(&rtc->ops_lock);
++	while ((node = timerqueue_getnext(head)))
++		timerqueue_del(head, node);
++	mutex_unlock(&rtc->ops_lock);
++
++	cancel_work_sync(&rtc->irqwork);
  
- #ifdef CONFIG_MACH_DECSTATION
- 	CMOS_WRITE(real_yrs, RTC_DEC_YEAR);
-diff --git a/include/linux/mc146818rtc.h b/include/linux/mc146818rtc.h
-index 0661af17a758..1e0205811394 100644
---- a/include/linux/mc146818rtc.h
-+++ b/include/linux/mc146818rtc.h
-@@ -86,6 +86,8 @@ struct cmos_rtc_board_info {
-    /* 2 values for divider stage reset, others for "testing purposes only" */
- #  define RTC_DIV_RESET1	0x60
- #  define RTC_DIV_RESET2	0x70
-+   /* In AMD BKDG bit 5 and 6 are reserved, bit 4 is for select dv0 bank */
-+#  define RTC_AMD_BANK_SELECT	0x10
-   /* Periodic intr. / Square wave rate select. 0=none, 1=32.8kHz,... 15=2Hz */
- # define RTC_RATE_SELECT 	0x0F
- 
+ 	ida_simple_remove(&rtc_ida, rtc->id);
+ 	mutex_destroy(&rtc->ops_lock);
 -- 
 2.35.1
 
