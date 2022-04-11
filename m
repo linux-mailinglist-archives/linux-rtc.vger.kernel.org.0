@@ -2,118 +2,126 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48144FB1FE
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Apr 2022 04:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8C94FB671
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Apr 2022 10:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244418AbiDKCyI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 10 Apr 2022 22:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S235378AbiDKI4H convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 11 Apr 2022 04:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244420AbiDKCyE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 10 Apr 2022 22:54:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F2155A6;
-        Sun, 10 Apr 2022 19:51:47 -0700 (PDT)
-X-UUID: 3bdd3723baf247528fc419440bb205bd-20220411
-X-UUID: 3bdd3723baf247528fc419440bb205bd-20220411
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 218981122; Mon, 11 Apr 2022 10:51:42 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 11 Apr 2022 10:51:40 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 10:51:40 +0800
-Message-ID: <8c27890e8b33bce333c2f8afaf4b4f893560ca7f.camel@mediatek.com>
-Subject: Re: [PATCH v1 1/1] dt-bindings: pwrap: mediatek: fix pwrap document
- for mt8195
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
-        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>,
-        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
-        <macpaul.lin@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Mon, 11 Apr 2022 10:51:40 +0800
-In-Reply-To: <20220411014121.15015-2-zhiyong.tao@mediatek.com>
-References: <20220411014121.15015-1-zhiyong.tao@mediatek.com>
-         <20220411014121.15015-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S240222AbiDKI4G (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Apr 2022 04:56:06 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6558D3EAB6;
+        Mon, 11 Apr 2022 01:53:53 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id 75so7242547qkk.8;
+        Mon, 11 Apr 2022 01:53:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rPZ/wvLlErvlmCophlU8VgOKZ6EBQYYUESc80mCcO8Y=;
+        b=WKQuIfRV4eKMiShrepznzCmzjrpBfTiQDksBx8noyr9MIdkktDKOZAajjvK1bwdorH
+         zdmu0MJhmphZv9BUJgyfvTX42+7uNj9BCdmSG7pqLygEuWhZzGPt7cXWB7n/swVs0AkU
+         o9/vV8+kvwkgWLyDwHW3E2ceE5rcYHF6aWseIZIOKdqgurfvzLa0IkFCJz2xnT0pzEYL
+         7G9RWlWgQUse55/zodxcExGJhnC9fVblMl25u9O0rDiwRNh6IGaAV/+o4j7QIG9oVNkM
+         FIRJXva/LjONLk/o5lmDfal1BEkXSczoHqD7G5/M/59PaG5jkNdet6dplH0DGqmQaPuc
+         kH8g==
+X-Gm-Message-State: AOAM531ws1zUpzA9UGbgzY0UAVrqTTp2FxA129OMTtMozoUDeH4TOXUu
+        B+BaSRJ7ELzoiN/ZFzXYxr5JGwHJCMf7/A==
+X-Google-Smtp-Source: ABdhPJyei55FF+NH/zkzl6endo+Q6+02jO8FYqS7UpSAKFPNUoJIqE9TdpCqTkm14tO5P9JpS4vOsw==
+X-Received: by 2002:a37:ac12:0:b0:69c:e9e:8c02 with SMTP id e18-20020a37ac12000000b0069c0e9e8c02mr4554437qkm.603.1649667232208;
+        Mon, 11 Apr 2022 01:53:52 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm25663550qtx.58.2022.04.11.01.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 01:53:51 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id k36so4538270ybj.11;
+        Mon, 11 Apr 2022 01:53:51 -0700 (PDT)
+X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
+ p9-20020a259e89000000b0063cad37a5demr21296668ybq.342.1649667231109; Mon, 11
+ Apr 2022 01:53:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220406201523.243733-1-laurent@vivier.eu> <20220406201523.243733-2-laurent@vivier.eu>
+ <Yk5tNOPE4b2QbHLG@kroah.com> <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu> <Yk6CO11wyo86ylee@kroah.com>
+In-Reply-To: <Yk6CO11wyo86ylee@kroah.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 10:53:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
+Message-ID: <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
+Subject: Re: [PATCH v16 1/4] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi all,
+Hi Greg,
 
-After discussed with Zhiyong, this patch will be sent together within mt8195 dts series.
-It's because this change is related to mt8195 dts pwrap node.
+On Thu, Apr 7, 2022 at 8:18 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> On Thu, Apr 07, 2022 at 08:00:08AM +0200, Laurent Vivier wrote:
+> > Le 07/04/2022 à 06:48, Greg KH a écrit :
+> > > On Wed, Apr 06, 2022 at 10:15:20PM +0200, Laurent Vivier wrote:
+> > > > Revert
+> > > > commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > >
+> > > > and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+> > > > defined by the architecture.
+> > > >
+> > > > Cc: stable@vger.kernel.org # v5.11+
+> > > > Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> > > > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > ---
+> > > >   drivers/tty/goldfish.c   | 20 ++++++++++----------
+> > > >   include/linux/goldfish.h | 15 +++++++++++----
+> > > >   2 files changed, 21 insertions(+), 14 deletions(-)
+> > > >
+> > >
+> > > Why is this a commit for the stable trees?  What bug does it fix?  You
+> > > did not describe the problem in the changelog text at all, this looks
+> > > like a housekeeping change only.
+> >
+> > Arnd asked for that in:
+> >
+> >   Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+> >   https://lore.kernel.org/lkml/CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com/
+>
+> You did not provide a reason in this changelog to explain any of that :(
 
-Follow this link for resend version of this patch,
+OK if I queue that patch with the rationale from Arnd's email added
+to the patch description?
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220411022724.11005-2-tinghan.shen@mediatek.com/
+This series has been dragging out for way too long...
 
+Thanks!
 
-Best regards,
-Tinghan
+Gr{oetje,eeting}s,
 
-On Mon, 2022-04-11 at 09:41 +0800, Zhiyong Tao wrote:
-> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
-> 
-> fix pwrap document description for mt8195
-> 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->  .../devicetree/bindings/soc/mediatek/pwrap.txt         | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> index d74a7a5ae9f2..601647717ceb 100644
-> --- a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> +++ b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
-> @@ -30,20 +30,20 @@ Required properties in pwrap device node.
->  	"mediatek,mt8195-pwrap" for MT8195 SoCs
->  	"mediatek,mt8516-pwrap" for MT8516 SoCs
->  - interrupts: IRQ for pwrap in SOC
-> -- reg-names: Must include the following entries:
-> +- reg-names: Must include "pwrap", "pwrap-bridge" is optinal.
->    "pwrap": Main registers base
->    "pwrap-bridge": bridge base (IP Pairing)
->  - reg: Must contain an entry for each entry in reg-names.
-> -- reset-names: Must include the following entries:
-> -  "pwrap"
-> -  "pwrap-bridge" (IP Pairing)
-> -- resets: Must contain an entry for each entry in reset-names.
->  - clock-names: Must include the following entries:
->    "spi": SPI bus clock
->    "wrap": Main module clock
->  - clocks: Must contain an entry for each entry in clock-names.
->  
->  Optional properities:
-> +- reset-names: Some SoCs include the following entries:
-> +  "pwrap"
-> +  "pwrap-bridge" (IP Pairing)
-> +- resets: Must contain an entry for each entry in reset-names.
->  - pmic: Using either MediaTek PMIC MFD as the child device of pwrap
->    See the following for child node definitions:
->    Documentation/devicetree/bindings/mfd/mt6397.txt
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
