@@ -2,133 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9894FB6CD
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Apr 2022 11:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732184FB729
+	for <lists+linux-rtc@lfdr.de>; Mon, 11 Apr 2022 11:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344093AbiDKJDV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Apr 2022 05:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S233870AbiDKJSg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 11 Apr 2022 05:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344111AbiDKJDD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Apr 2022 05:03:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DC53ED2F;
-        Mon, 11 Apr 2022 02:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649667649; x=1681203649;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dPt81KGByL2JT3h91dRTMfPIeeyxRYvMJGbksSYGCkQ=;
-  b=lwG3my8wtILXVpW3tuPue1yGyrx8cjcs72RR8pcXvHvVtsfY5VbZWzyY
-   C2zFiJlXmLEQm6QgFXghREVuyKtqmZPjrd2JylXT7YLjPCPAZEa6bume6
-   EVs4exKcMQHoUofqVzJIRHQClCj8GXe9JEd91B3uNLUf7Ec+CfSqorOYX
-   LjSeml1leEZOMzICocrLRg0xP7wfE2DHt0Oxq7eqffk+/4kVFe6WqN36B
-   hGsddOAwefXTE8d7dwMn1CXV4MmK+W6bM/2YiWrmj8C+X3+W3bLhz3+Ap
-   bBFlpqlSYp8D+L6bAvqrBVAtDrIx9ReoOKC+h5qojePR2qTF+XChhB/RS
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="155113068"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 02:00:48 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 02:00:48 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 11 Apr 2022 02:00:44 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
-        <palmer@rivosinc.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <daire.mcnamara@microchip.com>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 9/9] riscv: dts: microchip: reparent mpfs clocks
-Date:   Mon, 11 Apr 2022 09:59:17 +0100
-Message-ID: <20220411085916.941433-10-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411085916.941433-1-conor.dooley@microchip.com>
-References: <20220411085916.941433-1-conor.dooley@microchip.com>
+        with ESMTP id S237452AbiDKJSd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Apr 2022 05:18:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90A2CC9D;
+        Mon, 11 Apr 2022 02:16:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88DBFB8118C;
+        Mon, 11 Apr 2022 09:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A377C385A3;
+        Mon, 11 Apr 2022 09:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649668571;
+        bh=xisObcFJacVpSDNre/0NSb+BNa0t4nHTlVZpSFv1auw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dBIs6uqIbCd6a+kmttrcDqRKHOuazGnT4xsxgF5WYpv9e+B3fd7i8MfEv4OgkVnO9
+         7i+++kF7sHCouQ837msmSo5buiO4/FFkXxVpD4fU97zueHa58hpBQ8/rMa7Bsk/CtD
+         Xq9u9rW4ppHiy54KvKJx8GwphBsSF7TqUQoUzbSc=
+Date:   Mon, 11 Apr 2022 11:16:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v16 1/4] tty: goldfish: introduce
+ gf_ioread32()/gf_iowrite32()
+Message-ID: <YlPx0/u/g9dMYxEn@kroah.com>
+References: <20220406201523.243733-1-laurent@vivier.eu>
+ <20220406201523.243733-2-laurent@vivier.eu>
+ <Yk5tNOPE4b2QbHLG@kroah.com>
+ <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu>
+ <Yk6CO11wyo86ylee@kroah.com>
+ <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The 600M clock in the fabric is not the real reference, replace it with
-a 125M clock which is the correct value for the icicle kit. Rename the
-msspllclk node to mssrefclk since this is now the input to, not the
-output of, the msspll clock. Control of the msspll clock has been moved
-into the clock configurator, so add the register range for it to the clk
-configurator. Finally, add a new output of the clock config block which
-will provide the 1M reference clock for the MTIMER and the rtc.
+On Mon, Apr 11, 2022 at 10:53:39AM +0200, Geert Uytterhoeven wrote:
+> Hi Greg,
+> 
+> On Thu, Apr 7, 2022 at 8:18 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Thu, Apr 07, 2022 at 08:00:08AM +0200, Laurent Vivier wrote:
+> > > Le 07/04/2022 à 06:48, Greg KH a écrit :
+> > > > On Wed, Apr 06, 2022 at 10:15:20PM +0200, Laurent Vivier wrote:
+> > > > > Revert
+> > > > > commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > > >
+> > > > > and define gf_ioread32()/gf_iowrite32() to be able to use accessors
+> > > > > defined by the architecture.
+> > > > >
+> > > > > Cc: stable@vger.kernel.org # v5.11+
+> > > > > Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
+> > > > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> > > > > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > ---
+> > > > >   drivers/tty/goldfish.c   | 20 ++++++++++----------
+> > > > >   include/linux/goldfish.h | 15 +++++++++++----
+> > > > >   2 files changed, 21 insertions(+), 14 deletions(-)
+> > > > >
+> > > >
+> > > > Why is this a commit for the stable trees?  What bug does it fix?  You
+> > > > did not describe the problem in the changelog text at all, this looks
+> > > > like a housekeeping change only.
+> > >
+> > > Arnd asked for that in:
+> > >
+> > >   Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
+> > >   https://lore.kernel.org/lkml/CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com/
+> >
+> > You did not provide a reason in this changelog to explain any of that :(
+> 
+> OK if I queue that patch with the rationale from Arnd's email added
+> to the patch description?
 
-Fixes: feeb38685523 ("Update the Icicle Kit device tree")
-Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../boot/dts/microchip/microchip-mpfs-icicle-kit.dts      | 2 +-
- arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi         | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-index cd2fe80fa81a..3392153dd0f1 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-@@ -45,7 +45,7 @@ ddrc_cache_hi: memory@1000000000 {
- };
- 
- &refclk {
--	clock-frequency = <600000000>;
-+	clock-frequency = <125000000>;
- };
- 
- &mmuart1 {
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-index 3b48b7f35410..746c4d4e7686 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-@@ -141,7 +141,7 @@ cpu4_intc: interrupt-controller {
- 		};
- 	};
- 
--	refclk: msspllclk {
-+	refclk: mssrefclk {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 	};
-@@ -190,7 +190,7 @@ plic: interrupt-controller@c000000 {
- 
- 		clkcfg: clkcfg@20002000 {
- 			compatible = "microchip,mpfs-clkcfg";
--			reg = <0x0 0x20002000 0x0 0x1000>;
-+			reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
- 			clocks = <&refclk>;
- 			#clock-cells = <1>;
- 		};
-@@ -393,8 +393,8 @@ rtc: rtc@20124000 {
- 			reg = <0x0 0x20124000 0x0 0x1000>;
- 			interrupt-parent = <&plic>;
- 			interrupts = <80>, <81>;
--			clocks = <&clkcfg CLK_RTC>;
--			clock-names = "rtc";
-+			clocks = <&clkcfg CLK_RTC>, <&clkcfg CLK_RTCREF>;
-+			clock-names = "rtc", "rtcref";
- 			status = "disabled";
- 		};
- 
--- 
-2.35.1
-
+Fine with me, merge away!
