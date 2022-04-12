@@ -2,127 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681F64FC0D8
-	for <lists+linux-rtc@lfdr.de>; Mon, 11 Apr 2022 17:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66144FDB68
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Apr 2022 12:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347932AbiDKPfL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 11 Apr 2022 11:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S237821AbiDLKCZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Apr 2022 06:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242045AbiDKPfF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 11 Apr 2022 11:35:05 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2635236B4C;
-        Mon, 11 Apr 2022 08:32:51 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id b17so13489074qvf.12;
-        Mon, 11 Apr 2022 08:32:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vI8B2NQEJsy0Y3l6kvTznv2x70M0aqJTxZmt3sM3f5I=;
-        b=EudAcLX2aCf0voLJOxaYHF0PRCT1f17umbLtKsX6Xu+j9MeBMtE28Ury+0R3c0etCK
-         hunXKkc6Jjuc18GZME2tCmFC8ODNhdrUrgkpTif9OlTY07zPJVkxT5ff4h7UWjHt/x1v
-         7qqcaFzKA3dmtrOFXCOmziXS6rv5v4RkslEDhA9FH9nv35sNvttxETHMTVYxgmJct1aI
-         8i+6kY7Zpv6aQ4fPyZEe+3k4wepONCy+75ECdSAOeqUBRocUX1q4nT+l8Z448WQl9zyC
-         D7lyzIP1nzGk6Vk1PX35By7l1Jp65+4P291mpzYQbzAAuxYD0z4EeeIUiLCs7FH0l/Ou
-         O7jQ==
-X-Gm-Message-State: AOAM533PZhndpNljlJR2k983/3gP3JWg74s+7Jn4RNEoo5FTgMupXQEP
-        403/9FxLHWW9JeeLVbK2iF5tDnU0xpEc1A==
-X-Google-Smtp-Source: ABdhPJyb2niBOFbIx4F/ieGrq3lg4ZiA/33Fxfb0FVMVRXG5+qkTWdg8r2+2sPa2nmea+0APewdHBg==
-X-Received: by 2002:a05:6214:3001:b0:443:bb87:7f9a with SMTP id ke1-20020a056214300100b00443bb877f9amr26873059qvb.13.1649691169690;
-        Mon, 11 Apr 2022 08:32:49 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id f3-20020ac87f03000000b002ed137e0510sm5239725qtk.77.2022.04.11.08.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 08:32:49 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id t12so7644584ybt.10;
-        Mon, 11 Apr 2022 08:32:49 -0700 (PDT)
-X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
- p9-20020a259e89000000b0063cad37a5demr22542847ybq.342.1649691169145; Mon, 11
- Apr 2022 08:32:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405184716.1578385-1-miquel.raynal@bootlin.com> <20220405184716.1578385-8-miquel.raynal@bootlin.com>
-In-Reply-To: <20220405184716.1578385-8-miquel.raynal@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 17:32:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXHUQg3FZ29rxka1WS=0mGfNPQSuC0xr75WQ7XAxeV3CA@mail.gmail.com>
-Message-ID: <CAMuHMdXHUQg3FZ29rxka1WS=0mGfNPQSuC0xr75WQ7XAxeV3CA@mail.gmail.com>
-Subject: Re: [PATCH 7/7] ARM: dts: r9a06g032: Describe the RTC
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        with ESMTP id S1377937AbiDLHym (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Apr 2022 03:54:42 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B456215;
+        Tue, 12 Apr 2022 00:32:13 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C7W0sa012289;
+        Tue, 12 Apr 2022 02:32:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649748720;
+        bh=eW8lzeaakM005YYC3nGUxibHVtMvgv2QH/HoZA6ps4E=;
+        h=From:To:CC:Subject:Date;
+        b=oF19xDgtVjIvwawiV9/9oOl8Z6RHs+gMb4E+lAbens7ksRIfxlDSWugU4rMAqCP+P
+         jljOSKtihdAP76ebpxpNkAGBgkypGW71rMpnqZD/MldHVP3QmF6apqnWx614A99GTN
+         EnqkDnr00Lk5kqxrqPkEmnoBbxPfxfSbHLd9m21c=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C7W0SZ031891
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 02:32:00 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 02:31:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 02:31:39 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C7Vd4X112001;
+        Tue, 12 Apr 2022 02:31:39 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>
+Subject: [PATCH 0/2] rtc: Introduce rtc-ti-k3
+Date:   Tue, 12 Apr 2022 02:31:36 -0500
+Message-ID: <20220412073138.25027-1-nm@ti.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Miquel,
+Hi,
 
-On Tue, Apr 5, 2022 at 8:47 PM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> Describe the SoC RTC which counts time and provides alarm support.
->
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+This series adds support for TI K3 RTC as instantiated on TI's AM625
+SoC.
 
-Thanks for your patch!
+Documentation in the current early release version of Technical
+Reference Manual is incomplete at the moment, but due to be updated
+later this year.
+https://www.ti.com/lit/pdf/spruiv7
 
-> --- a/arch/arm/boot/dts/r9a06g032.dtsi
-> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
-> @@ -103,6 +103,18 @@ dmamux: dma-router@a0 {
->                         };
->                 };
->
-> +               rtc0: rtc@40006000 {
+Testing log can be found here (20220411 + additional patch to get mmc
+root fs): https://gist.github.com/nmenon/88c56d63c2e163e7ba1e06f30eee52cc
 
-Please insert this before watchdog@40008000, to preserve sort
-order (by unit address).
+Nishanth Menon (2):
+  dt-bindings: rtc: Add TI K3 RTC devicetree bindings documentation
+  rtc: Introduce ti-k3-rtc
 
-> +                       compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
-> +                       reg = <0x40006000 0x1000>;
-> +                       interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 67 IRQ_TYPE_EDGE_RISING>,
-> +                                    <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-> +                       interrupt-names = "alarm", "timer", "pps";
-> +                       clocks = <&sysctrl R9A06G032_HCLK_RTC>;
-> +                       clock-names = "hclk";
-> +                       status = "disabled";
-> +               };
-> +
->                 uart0: serial@40060000 {
->                         compatible = "renesas,r9a06g032-uart", "renesas,rzn1-uart", "snps,dw-apb-uart";
->                         reg = <0x40060000 0x400>;
+ .../devicetree/bindings/rtc/ti,k3-rtc.yaml    |  87 +++
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-ti-k3.c                       | 687 ++++++++++++++++++
+ 4 files changed, 785 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-ti-k3.c
 
-Gr{oetje,eeting}s,
+-- 
+2.31.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
