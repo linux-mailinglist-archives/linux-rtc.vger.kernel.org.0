@@ -2,55 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4C24FE87D
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Apr 2022 21:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328B34FEB17
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 01:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348073AbiDLTRL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Apr 2022 15:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
+        id S230242AbiDLXcK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Apr 2022 19:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244301AbiDLTRJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Apr 2022 15:17:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373DF522E8;
-        Tue, 12 Apr 2022 12:14:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C15D1B81FB3;
-        Tue, 12 Apr 2022 19:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66335C385A1;
-        Tue, 12 Apr 2022 19:14:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649790887;
-        bh=bcAefXnMbjN8CcigBKO+g1I/idDevweEN7l4fJ9EEgU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=i2CBPPGcMCEfc7GP3tVSa1cfoGzVqvE7SZZh9K8M6Qfx09N6T2gvGP29wI3z/2CbP
-         Z8pLTIGtQoLUl7Wx9ILSS1PuHI8UCOmFeYgr6Gt7tUqaONznxPD3Wh9L5PG9VRcyUB
-         Je9xLtuDhd1Yj5XsHdE/JtLQexAtlASNYuXNIoHe7Y5ohLLQiD6VeYzWb/xenjQNgS
-         +oY5rOm+rrxbMU72L8ZYfDMoKlSRlpFYW7zdFXcZ8QZ4BhAq7DtZ1o4dJRsaOyfcAW
-         A1eMrBKoAev2PYV6rVBlcJkI9wBjXl4eu7AErOrvEPz7ALx/aPrczwdj4yig/7UU4I
-         DuWCep8evarPQ==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230171AbiDLXb6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Apr 2022 19:31:58 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8672991367;
+        Tue, 12 Apr 2022 15:18:04 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CMHiDr025325;
+        Tue, 12 Apr 2022 17:17:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649801864;
+        bh=nyNY/m9ONJlCKzS4q3CdtgYdHO/OxuVygYMFfJGfbVc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=wNWOhax4SJjeNOYOlDh/guaxqjCaoCnetpB9byCEN81YlcKpAgDhE3L3VluOSuYVf
+         5wvXqx1oDqR/KaHrL+B1Mo/lENn677nehWEtZATpnawi/WT3skoWn/metfU/7ftVtr
+         vxU8vwSn+rFAxwY24SnlVBT5XZcoPCVrKWPNVA/A=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CMHi3n059118
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 17:17:44 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 17:17:43 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 17:17:43 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CMHhdk128579;
+        Tue, 12 Apr 2022 17:17:43 -0500
+Date:   Tue, 12 Apr 2022 17:17:43 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH 1/2] dt-bindings: rtc: Add TI K3 RTC devicetree bindings
+ documentation
+Message-ID: <20220412221743.vbectb4bcghau2b7@confider>
+References: <20220412073138.25027-1-nm@ti.com>
+ <20220412073138.25027-2-nm@ti.com>
+ <dee496ce-5e74-4a53-c783-6420b2391387@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220411085916.941433-8-conor.dooley@microchip.com>
-References: <20220411085916.941433-1-conor.dooley@microchip.com> <20220411085916.941433-8-conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 7/9] clk: microchip: mpfs: re-parent the configurable clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     daire.mcnamara@microchip.com, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor.dooley@microchip.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, aou@eecs.berkeley.edu,
-        krzk+dt@kernel.org, mturquette@baylibre.com, palmer@rivosinc.com,
-        paul.walmsley@sifive.com, robh+dt@kernel.org
-Date:   Tue, 12 Apr 2022 12:14:45 -0700
-User-Agent: alot/0.10
-Message-Id: <20220412191447.66335C385A1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dee496ce-5e74-4a53-c783-6420b2391387@linaro.org>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,28 +72,105 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Conor Dooley (2022-04-11 01:59:15)
-> Currently the mpfs clock driver uses a reference clock called the
-> "msspll", set in the device tree, as the parent for the cpu/axi/ahb
-> (config) clocks. The frequency of the msspll is determined by the FPGA
-> bitstream & the bootloader configures the clock to match the bitstream.
-> The real reference is provided by a 100 or 125 MHz off chip oscillator.
->=20
-> However, the msspll clock is not actually the parent of all clocks on
-> the system - the reference clock for the rtc/mtimer actually has the
-> off chip oscillator as its parent.
->=20
-> In order to fix this, add support for reading the configuration of the
-> msspll & reparent the "config" clocks so that they are derived from
-> this clock rather than the reference in the device tree.
->=20
-> Fixes: 635e5e73370e ("clk: microchip: Add driver for Microchip PolarFire =
-SoC")
-> Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->=20
-> @Stephen/Mike: Is it acceptable to add the recalc rate without a set
-> rate? If not lmk and I will add one.
+On 14:06-20220412, Krzysztof Kozlowski wrote:
+> > +properties:
+> > +  compatible:
+> > +    items:
+> 
+> No need for items. Just enum under the compatible.
 
-Only recalc_rate is OK. It's like a read-only divider.
+Will fix in next rev. Thanks for catching.
+
+> 
+> > +      - enum:
+> > +          - ti,am62-rtc
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: VBUS Interface clock
+> > +      - description: 32k Clock source (external or internal).
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: "vbus"
+> > +      - const: "osc32k"
+> 
+> No quotes.
+
+Uggh.. my bad. yup
+> 
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  assigned-clocks:
+> > +    description: |
+> > +      override default osc32k parent clock reference to the osc32k clock entry
+> > +    maxItems: 1
+> > +
+> > +  assigned-clock-parents:
+> > +    description: |
+> > +      override default osc32k parent clock phandle of the new parent clock of osc32k
+> > +    maxItems: 1
+> 
+> Usually assigned-clockXXX are not needed in the bindings. Is here
+> something different? They are put only to indicate something special.
+
+I wonder if I should rather use unevaluatedproperties instead? If I use
+additionalProperties: False, then the second example below fails.
+
+Thoughts?
+> 
+> > +
+> > +  wakeup-source: true
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    rtc@2b1f0000 {
+> > +        compatible = "ti,am62-rtc";
+> > +        reg = <0x2b1f0000 0x100>;
+> > +        interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> > +        power-domains = <&bar 0>;
+> > +        clocks = <&foo 0>, <&foo 1>;
+> > +        clock-names = "vbus", "osc32k";
+> > +        wakeup-source;
+> > +    };
+> > +
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    rtc@2b1f0000 {
+> > +        compatible = "ti,am62-rtc";
+> > +        reg = <0x2b1f0000 0x100>;
+> > +        interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+> > +        power-domains = <&bar 0>;
+> > +        clocks = <&foo 0>, <&foo 1>;
+> > +        clock-names = "vbus", "osc32k";
+> > +        wakeup-source;
+> > +        assigned-clocks = <&foo 1>;
+> > +        assigned-clock-parents = <&foo 2>;
+> > +
+> 
+> Unneeded blank line.
+
+Ack.
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
