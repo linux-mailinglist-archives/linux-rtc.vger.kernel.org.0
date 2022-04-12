@@ -2,63 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388A24FDB5E
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Apr 2022 12:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0CF4FDF7F
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Apr 2022 14:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353217AbiDLKCQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Apr 2022 06:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S232901AbiDLMbI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Apr 2022 08:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389277AbiDLJXf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Apr 2022 05:23:35 -0400
-X-Greylist: delayed 1202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 01:32:10 PDT
-Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A426753E30
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Apr 2022 01:32:10 -0700 (PDT)
-Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
-        id 87EDB87FA0; Tue, 12 Apr 2022 08:56:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
-        s=mail; t=1649750211;
-        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
-        h=Date:From:To:Subject:From;
-        b=EfXkGDp6uDI6l9aXPO3tJrg3ZA3n9RMY+0IF1d25lXZ5o6YPo/d/c0+/Gi3yXOscz
-         5WtGaG3rHt7SzBYa446PFMGdUkQBJBMSJq8iLrn35ibwumxaemHrlumGHQU/awBC8R
-         m431ZS6ZuooZVq6fKbDkj/rgzUvYZs/GDAqW5VxwSbDeAAC5nYYZdqXLCfp8RbC5Mm
-         yNNFfiXI4fSi0ecQ93cV/tgfZDNrwAaUFmBhnKzCcMGk3iZ40cvU/bPZHIjzQ+EGsy
-         8Do4xLiiUyowO/Qsa8kcv64kpQtoQ5MzFsQkJiii3agbPtaBTp+ynZgtOCfySOCF3F
-         xy32HbyPuz8/A==
-Received: by mail.growthmindset24.pl for <linux-rtc@vger.kernel.org>; Tue, 12 Apr 2022 07:56:00 GMT
-Message-ID: <20220412073001-0.1.2w.d88z.0.bie4f47ol9@growthmindset24.pl>
-Date:   Tue, 12 Apr 2022 07:56:00 GMT
-From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
-        <przemyslaw.wroblewski@growthmindset24.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.growthmindset24.pl
+        with ESMTP id S1356224AbiDLMaD (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Apr 2022 08:30:03 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56022C43
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Apr 2022 04:46:18 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id t25so9338418edt.9
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Apr 2022 04:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CAzofaR9FtDRM+wFckGofjwaCdLcN5fw9Tp9Ja6KClQ=;
+        b=FkbM4k1L25VdLH3C5Axv+jI5HXZbnjrOgB1F9cfIlW0SFn/s0XwgchhjQhuYd75ZJp
+         l0ggFoX54olXCeWc9IzSamo3CubXGiIDP55x5LX57Oel5PZ6NkUUm+4iB6bxPS06h1HV
+         jqkEqowlNp00SUqof2j7njrdAHS9lNKcWcw0+hK0oH76kh/zz7TXHOhjEzqHRkoEK63j
+         wO1YON+EMja2U1zcYlojaB+aSh99hrGAmHupapX5VwM1ApVn7t0eydmPo4tc7UI95+FQ
+         +gfIaKkp2SSYX2kGa83T2AdSPTyLQfdvQg43BJ6dDbQbRLGtNCrf+SgoVy+4l2QQV06/
+         p+aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CAzofaR9FtDRM+wFckGofjwaCdLcN5fw9Tp9Ja6KClQ=;
+        b=O3guFu7f4UJWNvwSvyxX32pWBGqgvx/WAfkqYd0cx+wEpDyS/B4RD4TBo397RBaxGL
+         MwU4KTy5Z58aXoR7BlRcVjOYDlGlkqZz/BpIlnf2y+BvGKDaQ4CnkGSsESTeGVuWe1m2
+         rtazG6EVu4gorkmZNHNWoOowg/bBMU/RbT4aVQ2ajxoNqr8OXWeIczy4D6aAjezJX5eh
+         encfPnGPxcPEZOEIt45/DfAZyi+xt6hA1aeLMapPaJGuftLYcXq32QTzVTkAFhPOR+h7
+         iYnVWIvnW8GIz1C+CHBKqVR8HaUWyeJ6H8nCbkGXCYwOVNbPEys87ldUz7jURLFCFyw1
+         j4ew==
+X-Gm-Message-State: AOAM532Sus1lSG2RMlKLJi01n8LqIJRQvIAkCMXVQG9uizLXUKOUqF7k
+        MoNJrEPTGG0mybGl+1nMekqxGw==
+X-Google-Smtp-Source: ABdhPJzgTthKDvyK5jkgahd3jA3ghr8ocxlOO81cPS3FfOff0qgYSswuAkilr5C24AhAfauBQLOBDw==
+X-Received: by 2002:a05:6402:4302:b0:419:4be8:6493 with SMTP id m2-20020a056402430200b004194be86493mr38525636edc.294.1649763976885;
+        Tue, 12 Apr 2022 04:46:16 -0700 (PDT)
+Received: from [192.168.0.195] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm13012850ejc.81.2022.04.12.04.46.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 04:46:16 -0700 (PDT)
+Message-ID: <6bd0ef3e-5e50-9207-375d-088167131a9e@linaro.org>
+Date:   Tue, 12 Apr 2022 13:46:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/9] dt-bindings: clk: mpfs document msspll dri
+ registers
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
+        palmer@rivosinc.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     daire.mcnamara@microchip.com, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20220411085916.941433-1-conor.dooley@microchip.com>
+ <20220411085916.941433-5-conor.dooley@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220411085916.941433-5-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 11/04/2022 10:59, Conor Dooley wrote:
+> As there are two sections of registers that are responsible for clock
+> configuration on the PolarFire SoC: add the dynamic reconfiguration
+> interface section to the binding & describe what each of the sections
+> are used for.
+> 
+> Fixes: 2145bb687e3f ("dt-bindings: clk: microchip: Add Microchip PolarFire host binding")
+> Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../devicetree/bindings/clock/microchip,mpfs.yaml     | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
-
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-Pozdrawiam,
-Przemys=C5=82aw Wr=C3=B3blewski
+Best regards,
+Krzysztof
