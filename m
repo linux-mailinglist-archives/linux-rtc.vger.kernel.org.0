@@ -2,123 +2,166 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054CD4FFAA1
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 17:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F4E500267
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Apr 2022 01:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiDMPvN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Apr 2022 11:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S231224AbiDMXT7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Apr 2022 19:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbiDMPvL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 11:51:11 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6666226;
-        Wed, 13 Apr 2022 08:48:48 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7A0C360009;
-        Wed, 13 Apr 2022 15:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649864927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dUc7DZ0s5s8q5Hp7V4kZQSzl4aTwEKtCJGqudHda2mY=;
-        b=H5l4NFNlJQsdB8Ss/FBLauC8vGBummdq9D+Bu9irYpQvpIHYhwDhp6meFOyLbsXThZaW4v
-        fV7L6Op+QXiMZ+PQNQ6TfJfUFc4/jgHmR/5u2B+2PS1tt+IwahSk92gK2sS4xqQg0mIawT
-        W2/3saE14UCRF2nEBq0bM04IkeoeI9rd/M2q9QW0ry7Bt6QJZQ2VXvPGJwRU9hIjPdq1Cj
-        OT2uvWFrOy1sluYR/EcQpnAFhUAmxb2D4XZvJKYFdJau5v5lAQm5qv89696DpRZng0Du25
-        KDnmT0UkW3lTnCNk86jgxjjeKpIyVUAYONe5IS/+XHg+zrWDr3tKykMmIisgJg==
-Date:   Wed, 13 Apr 2022 17:48:45 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Michel Pollet <michel.pollet@bp.renesas.com>
-Subject: Re: [PATCH 3/7] rtc: rzn1: Add new RTC driver
-Message-ID: <Ylbw3bEc+QK4m9hX@mail.local>
-References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
- <20220405184716.1578385-4-miquel.raynal@bootlin.com>
- <Yk1UXjTk32Vc9+/k@mail.local>
- <20220413172327.73d1fcc1@xps13>
+        with ESMTP id S229726AbiDMXT6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 19:19:58 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FF6220FD;
+        Wed, 13 Apr 2022 16:17:36 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5F1F55C01AF;
+        Wed, 13 Apr 2022 19:17:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 13 Apr 2022 19:17:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649891855; x=1649978255; bh=tSItXHrLBGUs0XQQKjEhwuPtZ
+        neu6+UIkfbjKrNGmVg=; b=vJa5eSRn1eWA9g9V/7EuRF+K+uCmBh4GtXhDoMRXd
+        P39S0dSPX+fnwvGsWxlRbmV8alijOSmIGYeZ2IbzJThnnz4wHNoufY5dK6N4rfE7
+        TrxxCTl24HSzUu2Hsc7zmVO5YEUaYfEiN7RiXMLfp9kU9HAFHNccVohuCSh3BDjC
+        i0/AZKwtOmpT8aMCWRWGsQZbeH/5LtXH/xq6sIOxBvkB0ex9ErUMpUEAYrTYUSoD
+        YWj6RZ7+Uy1H7r1Li1/UBtmNyuz0zHhBxsrCUNh5QdqlHQibQzzvsta52aQeF5eG
+        DxjIEJ0f94vsqG2U0oJHRler3VkUis//TlgBQET6qGhHw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1649891855; x=1649978255; bh=t
+        SItXHrLBGUs0XQQKjEhwuPtZneu6+UIkfbjKrNGmVg=; b=kEeM1zYFMo+TuNHId
+        ZD2DuLK7heKqI6EpgMSY8/EYZMw+ncUPywOi/ZWcpgmDK3zPHGAvy0RIWdvni8ef
+        TjNQ9vjlW9ZcLkwbxwxEJ8SA5L7RBk07K4D0QdhXZOWcoS2eSIJdTwJY//HeASGp
+        paciplQWXR51UrMmLesiqgpXiGhCLeUg7qf8GmcgKgbb82VZAmYw6VafX0dGro4p
+        nn2VxAUxnecVHyAJNKBU7tUN2hoGNdAs3a0kfLJjXeHvcb1NmQWL4XTxxxgsmgu5
+        vpAHaAuq6eNxEiKTrCWx8k99moogtVuB35Rbqpx4IpmGl0gfBIF5LKlbN1wIfV4z
+        0Z49A==
+X-ME-Sender: <xms:DlpXYqtk_m3XQYofEduY_QFiACCgbvuS8EofE1ac1XjQAJZ52dwGWw>
+    <xme:DlpXYveaXMOd0DQjWPxjI4bRi8HqiNE7I_o1i51TwuYir-cTQ4fs76R0zi9CyPGoZ
+    FloUEL1JaN7k1Tb_Q>
+X-ME-Received: <xmr:DlpXYlw9vGYUPfZ1tJIzH2cuoNsMxufAgpZlim_L33Z0VV0xh-0_yJfWpkcTTBUrRsseNr_2EZHPCHu3nU3w6RZLLpTD6BUhuY6cx1lIotZGN8_zhz5f7q9bNLusOkEEd7roiA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudelvddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:DlpXYlM0-npvWJrT4SqgFD9WrRN5Dq7NVmZZajtGD_fZJ5q794B2fA>
+    <xmx:DlpXYq-dUpqK3Ff7XFSSPSq7yckssJMfEOYjM63hbVlfqasfcLfc4A>
+    <xmx:DlpXYtX5Eo97c9Uzbp5TmiSbsIMued8wjG3bixd7R5dZ2ue7CwFXDA>
+    <xmx:D1pXYvPQDh5qD2GYcO-t679xKKtOcvk6AaJgcafLqazUEIPcB73i0A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Apr 2022 19:17:34 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] rtc: sun6i: Add NVMEM provider
+Date:   Wed, 13 Apr 2022 18:17:30 -0500
+Message-Id: <20220413231731.56709-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220413172327.73d1fcc1@xps13>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Miquèl,
+The sun6i RTC provides 32 bytes of general-purpose data registers.
+They can be used to save data in the always-on RTC power domain.
+The registers are writable via 32-bit MMIO accesses only.
 
-On 13/04/2022 17:23:27+0200, Miquel Raynal wrote:
-> > > +static int rzn1_rtc_probe(struct platform_device *pdev)
-> > > +{
-> > > +	struct rzn1_rtc *rtc;
-> > > +	int ret;
-> > > +
-> > > +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> > > +	if (!rtc)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	platform_set_drvdata(pdev, rtc);
-> > > +
-> > > +	rtc->clk = devm_clk_get(&pdev->dev, "hclk");
-> > > +	if (IS_ERR(rtc->clk))
-> > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk), "Missing hclk\n");
-> > > +
-> > > +	rtc->base = devm_platform_ioremap_resource(pdev, 0);
-> > > +	if (IS_ERR(rtc->base))
-> > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
-> > > +
-> > > +	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
-> > > +	if (IS_ERR(rtc->rtcdev))
-> > > +		return PTR_ERR(rtc);
-> > > +
-> > > +	rtc->rtcdev->range_max = 3178591199UL; /* 100 years */  
-> > 
-> > I'm not sure how you came to this value, this is 2070-09-22T05:59:59.
-> > I'm pretty sure the RTC will not fail at that time. Also, the comment
-> > seems fishy.
-> 
-> The RTC itself as no "starting point", but just a counter that can
-> count up to 100. So the max range is start-year + 100 years. But at
-> this point I don't yet have access to the start-year value. What's
-> your advise?
+Expose them with a NVMEM provider so they can be used by other drivers.
 
-The question is why is this limited to 100 years? My guess is that it
-doesn't handle leap years properly if this is the case, there is only
-one range that works, this is 2000-01-01 to 2099-12-31 like many other
-RTCs.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-You can run rtc-range from rtc-tools after removing range_max to find
-out.
+ drivers/rtc/rtc-sun6i.c | 42 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-Cheers
-
+diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+index 5b3e4da63406..755aeb82a285 100644
+--- a/drivers/rtc/rtc-sun6i.c
++++ b/drivers/rtc/rtc-sun6i.c
+@@ -71,6 +71,10 @@
+ #define SUN6I_LOSC_OUT_GATING			0x0060
+ #define SUN6I_LOSC_OUT_GATING_EN_OFFSET		0
+ 
++/* General-purpose data */
++#define SUN6I_GP_DATA				0x0100
++#define SUN6I_GP_DATA_SIZE			0x20
++
+ /*
+  * Get date values
+  */
+@@ -662,6 +666,39 @@ static const struct rtc_class_ops sun6i_rtc_ops = {
+ 	.alarm_irq_enable	= sun6i_rtc_alarm_irq_enable
+ };
+ 
++static int sun6i_rtc_nvmem_read(void *priv, unsigned int offset, void *_val, size_t bytes)
++{
++	struct sun6i_rtc_dev *chip = priv;
++	u32 *val = _val;
++	int i;
++
++	for (i = 0; i < bytes / 4; ++i)
++		val[i] = readl(chip->base + SUN6I_GP_DATA + offset + 4 * i);
++
++	return 0;
++}
++
++static int sun6i_rtc_nvmem_write(void *priv, unsigned int offset, void *_val, size_t bytes)
++{
++	struct sun6i_rtc_dev *chip = priv;
++	u32 *val = _val;
++	int i;
++
++	for (i = 0; i < bytes / 4; ++i)
++		writel(val[i], chip->base + SUN6I_GP_DATA + offset + 4 * i);
++
++	return 0;
++}
++
++static struct nvmem_config sun6i_rtc_nvmem_cfg = {
++	.type		= NVMEM_TYPE_BATTERY_BACKED,
++	.reg_read	= sun6i_rtc_nvmem_read,
++	.reg_write	= sun6i_rtc_nvmem_write,
++	.size		= SUN6I_GP_DATA_SIZE,
++	.word_size	= 4,
++	.stride		= 4,
++};
++
+ #ifdef CONFIG_PM_SLEEP
+ /* Enable IRQ wake on suspend, to wake up from RTC. */
+ static int sun6i_rtc_suspend(struct device *dev)
+@@ -795,6 +832,11 @@ static int sun6i_rtc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	sun6i_rtc_nvmem_cfg.priv = chip;
++	ret = devm_rtc_nvmem_register(chip->rtc, &sun6i_rtc_nvmem_cfg);
++	if (ret)
++		return ret;
++
+ 	dev_info(&pdev->dev, "RTC enabled\n");
+ 
+ 	return 0;
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.35.1
+
