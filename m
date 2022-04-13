@@ -2,42 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04524FF135
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 10:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0574FF148
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 10:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiDMIEc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Apr 2022 04:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
+        id S233651AbiDMIEg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Apr 2022 04:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbiDMIEb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 04:04:31 -0400
+        with ESMTP id S230224AbiDMIEf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 04:04:35 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676C32A706;
-        Wed, 13 Apr 2022 01:02:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65452205F8;
+        Wed, 13 Apr 2022 01:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649836931; x=1681372931;
+  t=1649836935; x=1681372935;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=F5JKJ+sKckh/Yv3PJH0Wx7ATRoah+9bM8XitYjEZqzE=;
-  b=CuWz/r8ia70rQvuM8lFGW5r6n8RcUiChopZnTlPtVHDmAWMAVvoxC3J3
-   jS1k37Klg/M/S3lnIZ9kz2ova/LaIMYXER8Ky2qd9W3PnsRAb3v5KFocy
-   eyI5gOstaYxg1+nhz0Wr/vXO2jZBR4OM+c1Cd3q4rY7h7phLm1u49LjQO
-   /+YSn8o8oqtftvTgpA0VZ7t/BJaoV4HWNYAbETrA654YLjGM9vAPzgs82
-   B4MchYUHPrSBHJsBp6IYqJ1TsLsDlyr33EmnY02iivu2axZQuXuPWaaUE
-   dHWvMDnmIibaOWaC77dc6ynsqaNv6pouBvNt7ceSJmfdWC10iibNwLIPG
-   Q==;
+  bh=+wiUAzHIPMa+jpdUCRIcyJzb2DHINVr1TKpIJwUq7qw=;
+  b=knWcJxgpFH0SP8xprg+iz1xx0J8SuheHH1RAe1ZOWIKnSmPuJZ6TMFqR
+   pGQL8mBzQ+YrIsJ2VYS8+PD/0rn2BHuLLCOJvBvxfbU31flxfsGJpXw9C
+   HTSIdPZ0mtyFiWELyGzdUm7vPCQgnpFbvaU/z1nvLfphGhpJ5tonNh1EM
+   vQ6v74Sw3HmcDI4/FCzmgL9YFvWw7+8QAvtEmNAD1wwR9e7UaPxMck7p/
+   uVg7wPL0PJCYkbsAKnDN4c8M2Wo/hlCA4yXL06FUAkHIdS2w45BeioORe
+   rDYIuvrWXIQJQyO3Qu2Q0+3LwKwmKUx5SLxOR8h3O0GcKAyhdH/UFtwNh
+   A==;
 X-IronPort-AV: E=Sophos;i="5.90,256,1643698800"; 
-   d="scan'208";a="159940058"
+   d="scan'208";a="160365332"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 01:02:11 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 01:02:14 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Apr 2022 01:02:10 -0700
+ 15.1.2375.17; Wed, 13 Apr 2022 01:02:14 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 13 Apr 2022 01:02:07 -0700
+ Transport; Wed, 13 Apr 2022 01:02:10 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
@@ -47,11 +47,10 @@ To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
 CC:     <daire.mcnamara@microchip.com>, <linux-rtc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 4/9] dt-bindings: clk: mpfs document msspll dri registers
-Date:   Wed, 13 Apr 2022 08:58:31 +0100
-Message-ID: <20220413075835.3354193-5-conor.dooley@microchip.com>
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 5/9] dt-bindings: clk: mpfs: add defines for two new clocks
+Date:   Wed, 13 Apr 2022 08:58:32 +0100
+Message-ID: <20220413075835.3354193-6-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220413075835.3354193-1-conor.dooley@microchip.com>
 References: <20220413075835.3354193-1-conor.dooley@microchip.com>
@@ -68,50 +67,37 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-As there are two sections of registers that are responsible for clock
-configuration on the PolarFire SoC: add the dynamic reconfiguration
-interface section to the binding & describe what each of the sections
-are used for.
+The RTC reference and MSSPLL were previously not documented or defined,
+as they were unused. Add their defines to the PolarFire SoC header.
 
 Fixes: 2145bb687e3f ("dt-bindings: clk: microchip: Add Microchip PolarFire host binding")
 Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/clock/microchip,mpfs.yaml   | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ include/dt-bindings/clock/microchip,mpfs-clock.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml b/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
-index 0c15afa2214c..016a4f378b9b 100644
---- a/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
-+++ b/Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
-@@ -22,7 +22,16 @@ properties:
-     const: microchip,mpfs-clkcfg
+diff --git a/include/dt-bindings/clock/microchip,mpfs-clock.h b/include/dt-bindings/clock/microchip,mpfs-clock.h
+index 73f2a9324857..4048669bf756 100644
+--- a/include/dt-bindings/clock/microchip,mpfs-clock.h
++++ b/include/dt-bindings/clock/microchip,mpfs-clock.h
+@@ -1,7 +1,7 @@
+ /* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+ /*
+  * Daire McNamara,<daire.mcnamara@microchip.com>
+- * Copyright (C) 2020 Microchip Technology Inc.  All rights reserved.
++ * Copyright (C) 2020-2022 Microchip Technology Inc.  All rights reserved.
+  */
  
-   reg:
--    maxItems: 1
-+    items:
-+      - description: |
-+          clock config registers:
-+          These registers contain enable, reset & divider tables for the, cpu,
-+          axi, ahb and rtc/mtimer reference clocks as well as enable and reset
-+          for the peripheral clocks.
-+      - description: |
-+          mss pll dri registers:
-+          Block of registers responsible for dynamic reconfiguration of the mss
-+          pll
+ #ifndef _DT_BINDINGS_CLK_MICROCHIP_MPFS_H_
+@@ -42,4 +42,7 @@
+ #define CLK_ATHENA	31
+ #define CLK_CFM		32
  
-   clocks:
-     maxItems: 1
-@@ -51,7 +60,7 @@ examples:
-             #size-cells = <2>;
-             clkcfg: clock-controller@20002000 {
-                 compatible = "microchip,mpfs-clkcfg";
--                reg = <0x0 0x20002000 0x0 0x1000>;
-+                reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
-                 clocks = <&ref>;
-                 #clock-cells = <1>;
-         };
++#define CLK_RTCREF	33
++#define CLK_MSSPLL	34
++
+ #endif	/* _DT_BINDINGS_CLK_MICROCHIP_MPFS_H_ */
 -- 
 2.35.1
 
