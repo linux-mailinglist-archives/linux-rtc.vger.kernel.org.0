@@ -2,108 +2,123 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC10B4FFA8F
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 17:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054CD4FFAA1
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 17:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbiDMPrz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Apr 2022 11:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S235009AbiDMPvN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Apr 2022 11:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236739AbiDMPru (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 11:47:50 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5FD5EBF7;
-        Wed, 13 Apr 2022 08:45:28 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23DFjArV099164;
-        Wed, 13 Apr 2022 10:45:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649864710;
-        bh=LKiOhQpH11PRHnUk7E83nty6XMEWWedQyINcMzjxJ8k=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=SVEb3BmVQOgTig6W3fudXL+ubrtWwy2pakyL8YTIVC5bPMqE85CXrPIEtfwcPAxlw
-         zo/X/4lE0+yAM9MoHbDCDkcuWQIRm12LbF8quvim9Q+WxywWZ+zgb0JDd2UfbyTfvk
-         inJtvkeAV8u8eeK6tXf3T56YpKAs7bkmm7bmK1XQ=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23DFjACd014238
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Apr 2022 10:45:10 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 13
- Apr 2022 10:45:09 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 13 Apr 2022 10:45:09 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23DFj9VX015581;
-        Wed, 13 Apr 2022 10:45:09 -0500
-Date:   Wed, 13 Apr 2022 10:45:09 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH 1/2] dt-bindings: rtc: Add TI K3 RTC devicetree bindings
- documentation
-Message-ID: <20220413154509.2bllkjdnp7r2f7fd@remindful>
-References: <20220412073138.25027-1-nm@ti.com>
- <20220412073138.25027-2-nm@ti.com>
- <dee496ce-5e74-4a53-c783-6420b2391387@linaro.org>
- <20220412221743.vbectb4bcghau2b7@confider>
- <2609cb4e-df0e-f4b5-b89f-37287bbc569d@linaro.org>
+        with ESMTP id S234659AbiDMPvL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 11:51:11 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6666226;
+        Wed, 13 Apr 2022 08:48:48 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7A0C360009;
+        Wed, 13 Apr 2022 15:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649864927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dUc7DZ0s5s8q5Hp7V4kZQSzl4aTwEKtCJGqudHda2mY=;
+        b=H5l4NFNlJQsdB8Ss/FBLauC8vGBummdq9D+Bu9irYpQvpIHYhwDhp6meFOyLbsXThZaW4v
+        fV7L6Op+QXiMZ+PQNQ6TfJfUFc4/jgHmR/5u2B+2PS1tt+IwahSk92gK2sS4xqQg0mIawT
+        W2/3saE14UCRF2nEBq0bM04IkeoeI9rd/M2q9QW0ry7Bt6QJZQ2VXvPGJwRU9hIjPdq1Cj
+        OT2uvWFrOy1sluYR/EcQpnAFhUAmxb2D4XZvJKYFdJau5v5lAQm5qv89696DpRZng0Du25
+        KDnmT0UkW3lTnCNk86jgxjjeKpIyVUAYONe5IS/+XHg+zrWDr3tKykMmIisgJg==
+Date:   Wed, 13 Apr 2022 17:48:45 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Michel Pollet <michel.pollet@bp.renesas.com>
+Subject: Re: [PATCH 3/7] rtc: rzn1: Add new RTC driver
+Message-ID: <Ylbw3bEc+QK4m9hX@mail.local>
+References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
+ <20220405184716.1578385-4-miquel.raynal@bootlin.com>
+ <Yk1UXjTk32Vc9+/k@mail.local>
+ <20220413172327.73d1fcc1@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <2609cb4e-df0e-f4b5-b89f-37287bbc569d@linaro.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220413172327.73d1fcc1@xps13>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 08:42-20220413, Krzysztof Kozlowski wrote:
-> On 13/04/2022 00:17, Nishanth Menon wrote:
-> >>> +  assigned-clocks:
-> >>> +    description: |
-> >>> +      override default osc32k parent clock reference to the osc32k clock entry
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  assigned-clock-parents:
-> >>> +    description: |
-> >>> +      override default osc32k parent clock phandle of the new parent clock of osc32k
-> >>> +    maxItems: 1
-> >>
-> >> Usually assigned-clockXXX are not needed in the bindings. Is here
-> >> something different? They are put only to indicate something special.
+Hi Miquèl,
+
+On 13/04/2022 17:23:27+0200, Miquel Raynal wrote:
+> > > +static int rzn1_rtc_probe(struct platform_device *pdev)
+> > > +{
+> > > +	struct rzn1_rtc *rtc;
+> > > +	int ret;
+> > > +
+> > > +	rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> > > +	if (!rtc)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	platform_set_drvdata(pdev, rtc);
+> > > +
+> > > +	rtc->clk = devm_clk_get(&pdev->dev, "hclk");
+> > > +	if (IS_ERR(rtc->clk))
+> > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk), "Missing hclk\n");
+> > > +
+> > > +	rtc->base = devm_platform_ioremap_resource(pdev, 0);
+> > > +	if (IS_ERR(rtc->base))
+> > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
+> > > +
+> > > +	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
+> > > +	if (IS_ERR(rtc->rtcdev))
+> > > +		return PTR_ERR(rtc);
+> > > +
+> > > +	rtc->rtcdev->range_max = 3178591199UL; /* 100 years */  
 > > 
-> > I wonder if I should rather use unevaluatedproperties instead? If I use
-> > additionalProperties: False, then the second example below fails.
-> > 
+> > I'm not sure how you came to this value, this is 2070-09-22T05:59:59.
+> > I'm pretty sure the RTC will not fail at that time. Also, the comment
+> > seems fishy.
 > 
-> Are you sure it fails? I just checked and it worked in my case. This
-> AFAIR was working since some time (or fixed some time ago), so maybe
-> update your dtschema?
+> The RTC itself as no "starting point", but just a counter that can
+> count up to 100. So the max range is start-year + 100 years. But at
+> this point I don't yet have access to the start-year value. What's
+> your advise?
 
-Arrgh, Thanks and you are right.
-Apologies, I should have cross checked again since developing late
-last year (understood the min schema currently is 2022.3).
+The question is why is this limited to 100 years? My guess is that it
+doesn't handle leap years properly if this is the case, there is only
+one range that works, this is 2000-01-01 to 2099-12-31 like many other
+RTCs.
 
-Will fix this up in the repost v2 in a short while.
+You can run rtc-range from rtc-tools after removing range_max to find
+out.
+
+Cheers
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
