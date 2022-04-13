@@ -2,42 +2,42 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942804FF13E
-	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 10:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7015D4FF142
+	for <lists+linux-rtc@lfdr.de>; Wed, 13 Apr 2022 10:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiDMIE0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 13 Apr 2022 04:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S231984AbiDMIE1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 13 Apr 2022 04:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233662AbiDMIET (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 04:04:19 -0400
+        with ESMTP id S233637AbiDMIEZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 13 Apr 2022 04:04:25 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66D44E391;
-        Wed, 13 Apr 2022 01:01:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72407205F1;
+        Wed, 13 Apr 2022 01:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649836918; x=1681372918;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9mN7tnwERo/cEVPyPzj2pzfxIMFtqlOYcaSwSE8vo64=;
-  b=vE7RqAN1/FmxXimEJYxAESxN5ACHjvVDHJqtd8it1/6+Gm28q0K6sSZj
-   tKssCFy1eMggkJACEkmmN0bL/XPfYbK8RiB5MFw8Ta8jb9wahXeF2kfO5
-   0jjHCEP7LNWDLWsaJatHumwILxNGioaq/FRqnDTZpgmOR1L4e5qRN5zKw
-   3/QTDNrqcI+hu43UxR21HbYYn23Y9y+9sKHSOUH2CU83RDxUm+zE6KxvZ
-   oljLRpVH0G8qXKXc+0SwQ1hgbsQ7j6MzXYoee0OYkyfR3DhI1x16U9oTi
-   gppslE0ugAFd9SBQrj/A1KWv7D13IwXmTqghUtaThU2RaoEHVgn+D0OdQ
-   Q==;
+  t=1649836923; x=1681372923;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ptGLsfDZs/+cC1lSfUbsHlNYhSzYidKWWjp9jDVuh6I=;
+  b=AeoSCkGwIjTygI9VnXl4EqcG9HRlYHaiRIBgK8Zsk9WyT/YRL9POf0kd
+   VfyZLjRn2eqb8bpJP3+BTAg545Csnp8fiWK4cgyj+opbgQ52ID0HtbQAg
+   sLLwxdXYbtgYbZ04D4oosausmZbOjuYQBvI3rDfKdFB4ydF+CtEQ5+HyV
+   irxRUVzkGGv7iXBOzrn9c3+oR9B6yztC/cZknQ+YLNEHP++JmobAXV4ro
+   emxxu3LC0dPBOc23ipTZnZFom1HMbfWkT/MDYFbE5eKof76C7m18dg7vM
+   9tinb7q/jvZnGPB+Nol/D2MjXnCRzRtrp4mzQ96Ky/bjoe73RmWBylnxl
+   w==;
 X-IronPort-AV: E=Sophos;i="5.90,256,1643698800"; 
-   d="scan'208";a="152488361"
+   d="scan'208";a="92231035"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 01:01:56 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2022 01:02:01 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
  chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 13 Apr 2022 01:01:56 -0700
+ 15.1.2375.17; Wed, 13 Apr 2022 01:01:59 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 13 Apr 2022 01:01:53 -0700
+ Transport; Wed, 13 Apr 2022 01:01:56 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
@@ -48,10 +48,12 @@ CC:     <daire.mcnamara@microchip.com>, <linux-rtc@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>,
         Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 0/9] More PolarFire SoC Fixes for 5.18
-Date:   Wed, 13 Apr 2022 08:58:27 +0100
-Message-ID: <20220413075835.3354193-1-conor.dooley@microchip.com>
+Subject: [PATCH v3 1/9] clk: microchip: mpfs: fix parents for FIC clocks
+Date:   Wed, 13 Apr 2022 08:58:28 +0100
+Message-ID: <20220413075835.3354193-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220413075835.3354193-1-conor.dooley@microchip.com>
+References: <20220413075835.3354193-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,83 +67,37 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hey all,
-After the clock driver for the PolarFire SoC was accepted I started work
-on the onboard RTC & found out that the reference clock for the rtc was
-actually missing from the clock driver.
+The fabric interconnects are on the AXI bus not AHB.
+Update their parent clocks to fix this.
 
-While restructuring the clock driver to add support for the rtc
-reference, I also noticed that there were some problems with how the FIC
-clocks were being used. The FIC clocks are the cpu side inputs to the
-AXI fabric interconnections & are not the clocks for any peripherals.
+Fixes: 635e5e73370e ("clk: microchip: Add driver for Microchip PolarFire SoC")
+Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ drivers/clk/microchip/clk-mpfs.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-This first three patches in this series fixes the problems with the FICs:
-- the fic clocks incorrectly had the AHB clock as their parents
-- the last fic, named differently to the others, had not been set as
-  a critical clock
-- some peripherals on the fabric side were incorrectly using the cpu
-  side fic clocks, resulting in incorrect rates.
-
-The second part of the series fixes the missing rtc reference clock.
-There are three main changes:
-- Changing the reference clock in the dt to the external 125 MHz
-  oscillator rather than using the output of an internal pll. This has
-  the added benefit of not requiring changes to the device tree if this
-  part of the bitstream changes.
-- Adding a new clock into the driver that sits above the existing
-  configurable clocks & has the external reference as a parent. The new
-  clock provides the parent for the AHB/AXI clocks which formerly came
-  from the device tree.
-- Adding the rtc reference clock to the dt bindings, device tree and
-  clock driver at the configurable clock level, alongside AXI and AHB.
-
-I kept series separate from [0] since that's tied to the CONFIG_PM stuff
-& fixes a specific problem.
-
-Changes since v1:
-After speaking with Krzysztof, I have merged the rtc reference changes
-[1] with these fixes for 5.18. This was done since the relevant drivers
-and bindings only arrived in v5.18 & there'll now be no issue with
-breaking the ABI.
-Backwards compatiblity with the device tree from before 5.18 will be
-broken by these changes, but the board did not boot then anyway... If
-that is not okay, please lmk.
-
-The patch renaming sys_base was dropped since that's not a fix.
-
-Version 1 would not apply without [0] & that should be fixed too.
-
-Thanks,
-Conor.
-
-Changes since v2:
-- Wrapped text in dt-binding changes at 80 cols
-- Ordered the clock defines numerically in the binding header
-- Fixed the Fixes tag on the last patch and added the second tag
-
-[0] https://lore.kernel.org/linux-riscv/20220408143646.3693104-1-conor.dooley@microchip.com
-[1] https://lore.kernel.org/linux-riscv/20220411072340.740981-1-conor.dooley@microchip.com
-
-Conor Dooley (9):
-  clk: microchip: mpfs: fix parents for FIC clocks
-  clk: microchip: mpfs: mark CLK_ATHENA as critical
-  riscv: dts: microchip: fix usage of fic clocks on mpfs
-  dt-bindings: clk: mpfs document msspll dri registers
-  dt-bindings: clk: mpfs: add defines for two new clocks
-  dt-bindings: rtc: add refclk to mpfs-rtc
-  clk: microchip: mpfs: re-parent the configurable clocks
-  clk: microchip: mpfs: add RTCREF clock control
-  riscv: dts: microchip: reparent mpfs clocks
-
- .../bindings/clock/microchip,mpfs.yaml        |  13 +-
- .../bindings/rtc/microchip,mfps-rtc.yaml      |  15 +-
- .../dts/microchip/microchip-mpfs-fabric.dtsi  |  16 +-
- .../microchip/microchip-mpfs-icicle-kit.dts   |   2 +-
- .../boot/dts/microchip/microchip-mpfs.dtsi    |  10 +-
- drivers/clk/microchip/clk-mpfs.c              | 191 +++++++++++++++---
- .../dt-bindings/clock/microchip,mpfs-clock.h  |   5 +-
- 7 files changed, 211 insertions(+), 41 deletions(-)
-
+diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
+index aa1561b773d6..7485a5eeb5c0 100644
+--- a/drivers/clk/microchip/clk-mpfs.c
++++ b/drivers/clk/microchip/clk-mpfs.c
+@@ -277,11 +277,11 @@ static struct mpfs_periph_hw_clock mpfs_periph_clks[] = {
+ 	CLK_PERIPH(CLK_GPIO1, "clk_periph_gpio1", PARENT_CLK(AHB), 21, 0),
+ 	CLK_PERIPH(CLK_GPIO2, "clk_periph_gpio2", PARENT_CLK(AHB), 22, 0),
+ 	CLK_PERIPH(CLK_DDRC, "clk_periph_ddrc", PARENT_CLK(AHB), 23, CLK_IS_CRITICAL),
+-	CLK_PERIPH(CLK_FIC0, "clk_periph_fic0", PARENT_CLK(AHB), 24, CLK_IS_CRITICAL),
+-	CLK_PERIPH(CLK_FIC1, "clk_periph_fic1", PARENT_CLK(AHB), 25, CLK_IS_CRITICAL),
+-	CLK_PERIPH(CLK_FIC2, "clk_periph_fic2", PARENT_CLK(AHB), 26, CLK_IS_CRITICAL),
+-	CLK_PERIPH(CLK_FIC3, "clk_periph_fic3", PARENT_CLK(AHB), 27, CLK_IS_CRITICAL),
+-	CLK_PERIPH(CLK_ATHENA, "clk_periph_athena", PARENT_CLK(AHB), 28, 0),
++	CLK_PERIPH(CLK_FIC0, "clk_periph_fic0", PARENT_CLK(AXI), 24, CLK_IS_CRITICAL),
++	CLK_PERIPH(CLK_FIC1, "clk_periph_fic1", PARENT_CLK(AXI), 25, CLK_IS_CRITICAL),
++	CLK_PERIPH(CLK_FIC2, "clk_periph_fic2", PARENT_CLK(AXI), 26, CLK_IS_CRITICAL),
++	CLK_PERIPH(CLK_FIC3, "clk_periph_fic3", PARENT_CLK(AXI), 27, CLK_IS_CRITICAL),
++	CLK_PERIPH(CLK_ATHENA, "clk_periph_athena", PARENT_CLK(AXI), 28, 0),
+ 	CLK_PERIPH(CLK_CFM, "clk_periph_cfm", PARENT_CLK(AHB), 29, 0),
+ };
+ 
 -- 
 2.35.1
 
