@@ -2,65 +2,71 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81167500AFA
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Apr 2022 12:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB09500C01
+	for <lists+linux-rtc@lfdr.de>; Thu, 14 Apr 2022 13:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242253AbiDNKXC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 Apr 2022 06:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        id S242599AbiDNLWO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 14 Apr 2022 07:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiDNKXB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Apr 2022 06:23:01 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63D03FD80;
-        Thu, 14 Apr 2022 03:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649931636;
-  x=1681467636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I52ZeIB1sWjn9oq7mjMsLXKsTaoEgJRYAOxLZkkUSu4=;
-  b=eEeKiIL5VJKnCD47F5/zqC2gmVbLcXSW2iL+2arC7/Hjh1bHWiOPVaED
-   dbCErOVUBxYaBByZadhjoI3oJOrABd6NA/kCln4huQkJyUfMGPqtVN7vH
-   ZEQ/+vt8+MIywKJWTgTRng9N38bGFVi4RtYD7JZK3xkMXCGH1+emoPx2v
-   UtlskYlZTJA55LeqZxw3f721cCqVEjlqOdzwezKVBmvvFmWOp298UEu9c
-   FKzTWWeqvzfziccVELZmRSWh7gRmltmGxkJdrto3nnmA/RFt1pPeFzY+X
-   VPd13vCH3qXVYjIMyVYWPpF68/9FDR0MG90tWr7x30VB19pGdcmvmMwzu
-   A==;
-Date:   Thu, 14 Apr 2022 12:20:33 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 08/10] iio: light: vcnl4000: add roadtest
-Message-ID: <20220414102033.GA13937@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-9-vincent.whitchurch@axis.com>
- <20220320170253.5b946c84@jic23-huawei>
- <20220405134805.GA28574@axis.com>
- <20220406140816.000038ce@Huawei.com>
+        with ESMTP id S242618AbiDNLWM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Apr 2022 07:22:12 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F76CE0A0
+        for <linux-rtc@vger.kernel.org>; Thu, 14 Apr 2022 04:19:47 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 38EF8240002;
+        Thu, 14 Apr 2022 11:19:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649935177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZXu+LLMNfkUfWr3T7CXhJ1D/5v2k50j/CT0WpseHv5E=;
+        b=GX1HCgY+ayJUwFdp5ht4sKpJN8GAVyXJ8Qr37WNL14jWfOSKoRPTXPcgeB115Q+tRIzp7o
+        61e8s1FfJbEg0Zdsa6zhLCVOQx6nvfFRKo4TM49Cr+qSkNTiimx+D6uVNxhriG1EuxoXLP
+        MzpOxKIgnFB7vVKycvuQxsoVJTkfPzTR0qn4XQg5JfZu50Mzg7WpTM6p8aeHrtzwBakVQD
+        iOb/5ebsjHceMBSPFdhKZq66equNp/gxywTEU9V1APU20UQ0hZ3iDn27kTZZZ8qtyidEd9
+        UuK3818tlpALWD+uyCLiWpM9tHF/S4kpO6mt5FHeimTxfBwkv60g1p5xDKTA9g==
+Date:   Thu, 14 Apr 2022 13:19:32 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Michel Pollet <michel.pollet@bp.renesas.com>
+Subject: Re: [PATCH 3/7] rtc: rzn1: Add new RTC driver
+Message-ID: <20220414131932.5f5285d4@xps13>
+In-Reply-To: <Ylbw3bEc+QK4m9hX@mail.local>
+References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
+        <20220405184716.1578385-4-miquel.raynal@bootlin.com>
+        <Yk1UXjTk32Vc9+/k@mail.local>
+        <20220413172327.73d1fcc1@xps13>
+        <Ylbw3bEc+QK4m9hX@mail.local>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220406140816.000038ce@Huawei.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,75 +74,74 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 03:08:16PM +0200, Jonathan Cameron wrote:
-> On Tue, 5 Apr 2022 15:48:05 +0200
-> Vincent Whitchurch <vincent.whitchurch@axis.com> wrote:
-> I messed around the other day with writing tests for
-> drivers/staging/iio/cdc/ad7746.c and wasn't "too bad" and was useful for
-> verifying some refactoring (and identified a possible precision problem
-> in some integer approximation of floating point calcs)
+Hi Alex,
 
-Good to hear!
+alexandre.belloni@bootlin.com wrote on Wed, 13 Apr 2022 17:48:45 +0200:
 
-> I'll try and find time to flesh that test set out more in the near future and
-> post it so you can see how bad my python is. It amused my wife if nothing
-> else :)
-> 
-> However a future project is to see if I can use this to hook up the SPDM
-> attestation stack via mctp over i2c - just because I like to live dangerously :)
-> 
-> For IIO use more generally we need a sensible path to SPI (and also platform
-> drivers).
+> Hi Miqu=C3=A8l,
+>=20
+> On 13/04/2022 17:23:27+0200, Miquel Raynal wrote:
+> > > > +static int rzn1_rtc_probe(struct platform_device *pdev)
+> > > > +{
+> > > > +	struct rzn1_rtc *rtc;
+> > > > +	int ret;
+> > > > +
+> > > > +	rtc =3D devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
+> > > > +	if (!rtc)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	platform_set_drvdata(pdev, rtc);
+> > > > +
+> > > > +	rtc->clk =3D devm_clk_get(&pdev->dev, "hclk");
+> > > > +	if (IS_ERR(rtc->clk))
+> > > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk), "Missing hcl=
+k\n");
+> > > > +
+> > > > +	rtc->base =3D devm_platform_ioremap_resource(pdev, 0);
+> > > > +	if (IS_ERR(rtc->base))
+> > > > +		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing re=
+g\n");
+> > > > +
+> > > > +	rtc->rtcdev =3D devm_rtc_allocate_device(&pdev->dev);
+> > > > +	if (IS_ERR(rtc->rtcdev))
+> > > > +		return PTR_ERR(rtc);
+> > > > +
+> > > > +	rtc->rtcdev->range_max =3D 3178591199UL; /* 100 years */   =20
+> > >=20
+> > > I'm not sure how you came to this value, this is 2070-09-22T05:59:59.
+> > > I'm pretty sure the RTC will not fail at that time. Also, the comment
+> > > seems fishy. =20
+> >=20
+> > The RTC itself as no "starting point", but just a counter that can
+> > count up to 100. So the max range is start-year + 100 years. But at
+> > this point I don't yet have access to the start-year value. What's
+> > your advise? =20
+>=20
+> The question is why is this limited to 100 years? My guess is that it
+> doesn't handle leap years properly if this is the case, there is only
+> one range that works, this is 2000-01-01 to 2099-12-31 like many other
+> RTCs.
 
-I have SPI working now.  I was able to do this without patching the
-kernel by have the Python code emulate an SC18IS602 I2C-SPI bridge which
-has an existing driver.  There is a limitation of 200 bytes per
-transaction (in the SC18IS602 driver/chip) so not all SPI drivers will
-work, but many will, and the underlying backend can be changed later
-without having to change the test cases.  I used this to implement a
-test for drivers/iio/adc/ti-adc084s021.c.
+I don't know the real reason, actually there is just written that the
+"year" register counts up from 00 to 99 (in bcd).
 
-Platform devices are going to take more work.  I did do some experiments
-(using arch/um/drivers/virt-pci.c) a while ago but I need to see how
-well it works with the rest of the framework in place.
+> You can run rtc-range from rtc-tools after removing range_max to find
+> out.
 
-> For my day job I'd like to mess around with doing PCI devices
-> as well.  The PCI DOE support for example would be nice to run against a
-> test set that doesn't involve spinning up QEMU.
-> DOE driver support:
-> https://lore.kernel.org/all/20220330235920.2800929-1-ira.weiny@intel.com/
-> 
-> Effort wise, it's similar effort to hacking equivalent in QEMU but with the
-> obvious advantage of being in tree and simpler for CI systems etc to use.
-> 
-> It would be nice to only have to use QEMU for complex system CI tests
-> like the ones we are doing for CXL.
-> 
-> > 
-> > > I dream of a world where every driver is testable by people with out hardware
-> > > but I fear it may be a while yet.  Hopefully this will get us a little
-> > > closer!
-> > > 
-> > > I more or less follow what is going on here (good docs btw in the earlier
-> > > patch definitely helped).
-> > > 
-> > > So far I'm thoroughly in favour of road test subject to actually being
-> > > able to review the tests or getting sufficient support to do so.
-> > > It's a 'how to scale it' question really...  
-> > 
-> > Would rewriting the framework in C and forcing tests to be written in
-> > that language mean that maintainers would be able to review tests
-> > without external support?
-> 
-> I was wondering that.  If we stayed in python I think we'd definitely want
-> someone to be the 'roadtester/tests' maintainer (or group of maintainers) 
-> and their Ack to be expected for all tests we upstream.  Idea being they'd
-> sanity check correct use of framework and just how bad the python code
-> us C developers are writing is ;)
-> 
-> However, we'd still need a good chunk of that 'framework' use review even
-> if doing this in C.
+Here is the result. It fails at 2069, which I believe means "100 years"
+from 1970. So what do you conclude with this? Shall I use
+rtc_time64_to_tm(2069-12-31 23:59:59) as the range_max value?
 
-I think this is reasonable, especially for the first tests for each
-subsystem where there will likely be support code and framework bits
-missing.
+# rtc-range=20
+
+Testing 2000-02-28 23:59:59.
+OK
+
+Testing 2038-01-19 03:14:07.
+OK
+
+Testing 2069-12-31 23:59:59.
+KO RTC_RD_TIME returned 22 (line 124)
+
+Thanks,
+Miqu=C3=A8l
