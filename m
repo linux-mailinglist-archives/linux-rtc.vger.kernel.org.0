@@ -2,167 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09516502EB2
-	for <lists+linux-rtc@lfdr.de>; Fri, 15 Apr 2022 20:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171CB503504
+	for <lists+linux-rtc@lfdr.de>; Sat, 16 Apr 2022 09:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbiDOS3P (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 15 Apr 2022 14:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S230252AbiDPHwZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 16 Apr 2022 03:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiDOS3P (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Apr 2022 14:29:15 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FB14D9DF;
-        Fri, 15 Apr 2022 11:26:45 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z12so10754365edl.2;
-        Fri, 15 Apr 2022 11:26:45 -0700 (PDT)
+        with ESMTP id S230167AbiDPHwJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 16 Apr 2022 03:52:09 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8961FFF9E
+        for <linux-rtc@vger.kernel.org>; Sat, 16 Apr 2022 00:49:37 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id r66so10092317pgr.3
+        for <linux-rtc@vger.kernel.org>; Sat, 16 Apr 2022 00:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IiEEMcnc8dyMVnBJRf8MBjYNQSDHZ+TAbtPueaX++m0=;
-        b=XlyJgGlEKw1+nZmDqLlTFmkpRbE3WY6xFRWI29Ehk3YkJS42+sroJQPzN2D6UZAaTO
-         Dk4PkGS/yk/DjxDprFA5+I+AMs7pCnfcCdg1AtYAQL3yuiVxetD0tq3x3aTBurzQlVuM
-         93h0RU+gr6RmWzxcz2zEQ9QNYBLtjSJcCTzEQnir3MVaCwvybVDECwX6eUKEQn6VVfvC
-         LTMbMkf/CGKNdftyt7Si0DkDsrmapJcb3SdCvCNBjeS4bsRhav+7UX1Dh0m+qJPhKRiU
-         rJZW47By9XhQxEMklWuVQyoIT9vvNKK+i2xU0Pr4Bb2v/+ddexNSwJwK9M7dSo29Qiq8
-         zslw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
+         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
+         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
+         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
+         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
+         XtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IiEEMcnc8dyMVnBJRf8MBjYNQSDHZ+TAbtPueaX++m0=;
-        b=WO8v9iS1iP+Uz5Yqq74yJdyjQmFBFRQOyH/WQ3Z24SEA9j/C2acfaCSy5n9l7YBOt5
-         Cqy2tncwRUL4OGKuof4/ncehoqpeU9ZA1manNCcUHjlWJoCRmHDNp8mOvsyQUztOnrF2
-         NTJMNXTvUK9T8fd+6/yJ+tnKDOf313vjL2vI2Tv8pHhetnSPbdkhAvM8E1sO3gYX8jcE
-         2j8X1RRix0p/L1Sfy85y8NKhT7V+GoBKth5tQk93AGBdfzOKMT88pZCldDkcugU21AYK
-         cP2s+uvDQGLxjBRtERxmsj3bbMv8nJQV4ebo09h/LGf6J1Msg6eJ/xwRgGD/DSY0g4Ya
-         5hpA==
-X-Gm-Message-State: AOAM533/Z7QRJAN3QHHYwp6AEsrktF69SdIcxJVPRRzMTYBma2NBxETM
-        R/JNJNzoZazXcPkQTFpTdos=
-X-Google-Smtp-Source: ABdhPJzE85rlxtGMZSL07NJOiy1Xzm62tnxA5MAw9j5i4vVTV49Kks/7gyXFAgjcN+z8CCTqudY4UA==
-X-Received: by 2002:a05:6402:84e:b0:422:b76c:bef8 with SMTP id b14-20020a056402084e00b00422b76cbef8mr497096edz.238.1650047204478;
-        Fri, 15 Apr 2022 11:26:44 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id z2-20020a1709063a0200b006e05b7ce3efsm1910625eje.107.2022.04.15.11.26.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 11:26:44 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] rtc: sun6i: Add NVMEM provider
-Date:   Fri, 15 Apr 2022 20:26:43 +0200
-Message-ID: <10062096.nUPlyArG6x@jernej-laptop>
-In-Reply-To: <20220413231731.56709-1-samuel@sholland.org>
-References: <20220413231731.56709-1-samuel@sholland.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=MAdgpv07NlKI8WDP6L0zDrAGawJTacLITPSq5ArEbSQXq8g1mVydqChDy7lFPPPUzG
+         wx8z1DmXzo8mgzkKsjtYhIZcpb6Ru3xsIcXJp00bvxUbsHirLqvQYTDq3GrhBQTrlV/k
+         Irw4aVrI8j2aQlP6lZcRClajlm4yD6O3bjne7waFDc2M4mIBFwulRkxDUSjnnaKi8QjQ
+         YshVO1CWfSDCoqVxSScAiL2aEFpi0qx/Rg+9Dq756Cz91lIgNNGh9Y00TBXeazi+PlUO
+         n/JpPE5hTrQsXelPPDCZWB/9X3emLPbc4PGJKNX35KiyFaq7yl4XO8/34wPMUd7YaCQr
+         N13w==
+X-Gm-Message-State: AOAM5316k3WUsuBc6oP6iS6wtvOxh5K+JHKcEFPmqGOMAMVF+gH1eN2w
+        RXSlRvo0azH+7sHMIYTNZyhYIxhML09Kz02JFTlaoT2ponI=
+X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
+ q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
+ Apr 2022 00:49:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
+ -0700 (PDT)
+Reply-To: daniel.seyba@yahoo.com
+From:   Seyba Daniel <royhalton13@gmail.com>
+Date:   Sat, 16 Apr 2022 09:49:26 +0200
+Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:542 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [royhalton13[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [royhalton13[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dne =C4=8Detrtek, 14. april 2022 ob 01:17:30 CEST je Samuel Holland napisal=
-(a):
-> The sun6i RTC provides 32 bytes of general-purpose data registers.
-> They can be used to save data in the always-on RTC power domain.
-> The registers are writable via 32-bit MMIO accesses only.
->=20
-> Expose them with a NVMEM provider so they can be used by other drivers.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+Hello,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
 
-Best regards,
-Jernej
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
 
-> ---
->=20
->  drivers/rtc/rtc-sun6i.c | 42 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->=20
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index 5b3e4da63406..755aeb82a285 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -71,6 +71,10 @@
->  #define SUN6I_LOSC_OUT_GATING			0x0060
->  #define SUN6I_LOSC_OUT_GATING_EN_OFFSET		0
->=20
-> +/* General-purpose data */
-> +#define SUN6I_GP_DATA				0x0100
-> +#define SUN6I_GP_DATA_SIZE			0x20
-> +
->  /*
->   * Get date values
->   */
-> @@ -662,6 +666,39 @@ static const struct rtc_class_ops sun6i_rtc_ops =3D {
->  	.alarm_irq_enable	=3D sun6i_rtc_alarm_irq_enable
->  };
->=20
-> +static int sun6i_rtc_nvmem_read(void *priv, unsigned int offset, void
-> *_val, size_t bytes) +{
-> +	struct sun6i_rtc_dev *chip =3D priv;
-> +	u32 *val =3D _val;
-> +	int i;
-> +
-> +	for (i =3D 0; i < bytes / 4; ++i)
-> +		val[i] =3D readl(chip->base + SUN6I_GP_DATA + offset + 4 *=20
-i);
-> +
-> +	return 0;
-> +}
-> +
-> +static int sun6i_rtc_nvmem_write(void *priv, unsigned int offset, void
-> *_val, size_t bytes) +{
-> +	struct sun6i_rtc_dev *chip =3D priv;
-> +	u32 *val =3D _val;
-> +	int i;
-> +
-> +	for (i =3D 0; i < bytes / 4; ++i)
-> +		writel(val[i], chip->base + SUN6I_GP_DATA + offset + 4 *=20
-i);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct nvmem_config sun6i_rtc_nvmem_cfg =3D {
-> +	.type		=3D NVMEM_TYPE_BATTERY_BACKED,
-> +	.reg_read	=3D sun6i_rtc_nvmem_read,
-> +	.reg_write	=3D sun6i_rtc_nvmem_write,
-> +	.size		=3D SUN6I_GP_DATA_SIZE,
-> +	.word_size	=3D 4,
-> +	.stride		=3D 4,
-> +};
-> +
->  #ifdef CONFIG_PM_SLEEP
->  /* Enable IRQ wake on suspend, to wake up from RTC. */
->  static int sun6i_rtc_suspend(struct device *dev)
-> @@ -795,6 +832,11 @@ static int sun6i_rtc_probe(struct platform_device
-> *pdev) if (ret)
->  		return ret;
->=20
-> +	sun6i_rtc_nvmem_cfg.priv =3D chip;
-> +	ret =3D devm_rtc_nvmem_register(chip->rtc, &sun6i_rtc_nvmem_cfg);
-> +	if (ret)
-> +		return ret;
-> +
->  	dev_info(&pdev->dev, "RTC enabled\n");
->=20
->  	return 0;
+So please confirm interest by responding back.
 
+My dearest regards
 
-
-
+Seyba Daniel
