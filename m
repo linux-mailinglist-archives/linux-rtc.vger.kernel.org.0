@@ -2,86 +2,236 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44CF507CDF
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Apr 2022 00:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E7F507D6E
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Apr 2022 01:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243925AbiDSW6R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Apr 2022 18:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S1358537AbiDSX6i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Apr 2022 19:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241646AbiDSW6O (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Apr 2022 18:58:14 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9BF37BDB
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 15:55:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id t67so33768545ybi.2
-        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 15:55:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xsxY8oX9n2vhciOumR/L9MXxAN7BvqpbHg8gddpFlBQ=;
-        b=neBf/Se0eGJRiKmH0WGQs+AqDoywpTvICLrNtFjTzEBS2wfX3FEXjyqNRIurnI+EW1
-         ty+bxfJYV7RADydNRSGgNly1aNO3B6qLVZvA7YfItvs2UwXzJ+kuPIz4V3c4uGwcquA3
-         JUonsnaGwc7UNNZNxDlSi0f+wKiD1gpTadwUPfCGoV4YUGYiY05qFrYffOU22kdEUgnA
-         /9F6ZgkJ7Q3e631YhyyNnVKnRpT/nlvUcAvS76L1HkG9Wnv5EVJEjrtUSv3ZlHiVH6Os
-         ZktG/90399+kbfvE7rT3dz68ixKEKD0giJ0+RICo0sx3GBL2cvMl/7ktdwrl0axuIw7o
-         GFnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xsxY8oX9n2vhciOumR/L9MXxAN7BvqpbHg8gddpFlBQ=;
-        b=HmM6OZfqGAvkHeUSqhE73HMW9hIy7IpxKAmha7ifDE8px6cVsVEOT86yf2osfHcw+0
-         KOn47Vudfw8iNEXTaTWFynmBSKewgQ48BueXvOTXlTtyrnwaZp0VQrerDnY6ef9Kzc5p
-         oGnZU+RthkERO+tW3CDfmFe+1nDLwqK1u/JZ/gLelH3fYc7A8LW2DENMFxPF6UaGVN8d
-         BINr37l2pVG4cWRqhmZGJNNXL4yW8wC1TeSp9hiGA4HNuYhqp6bw2OL4KoFr62rPYyAK
-         SpnUBGwyA9eauahiL+SoNLCq/VzxfERYCpoCCxBkyv2lL7ZXKNRdimH8vnICdZqL46Kd
-         qXmw==
-X-Gm-Message-State: AOAM530M/Z8Qhjob6myoheoeAkM7GxIZKKj2QfyO6kYW9B9N8twboprf
-        n1cmCTbbInjmYnEqeE43MB7CqeQdvEyRtsk18Csdig==
-X-Google-Smtp-Source: ABdhPJw+LpTWRr3nJM9P//IP6dcWalVwUplUPdwIMbE3fc/ol3/PztUUh6Zef7UVPiLPvLlxW8pIXMPXNOpdAiT0meM=
-X-Received: by 2002:a5b:8c8:0:b0:641:e8de:a6f4 with SMTP id
- w8-20020a5b08c8000000b00641e8dea6f4mr17247839ybq.533.1650408929528; Tue, 19
- Apr 2022 15:55:29 -0700 (PDT)
+        with ESMTP id S1354847AbiDSX6g (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Apr 2022 19:58:36 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F41D324
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 16:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1650412551; x=1681948551;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI7ADXChcU=;
+  b=eOMVQ+cwwE9HVMUlo81oXXO+V1nQybzYC1RFCZc6mBeUffMXJ8OlvKTl
+   nrA+YfPvnnhByF4WnE76sfstBwtTR9dlT3ZbNxAMDkwhjrqdYajUtnzkC
+   Tt8Kh6bo2y3zBHPx13m5dVniC8h1uX2LpAVR+d3R8znKwUYsorhDTM+pR
+   5hindj1ewvWFGpHAkluWJhwhD3o6kAYLsL+edOvdKsdPNZY4Sf/TW1XPQ
+   WlxpsMrxgA5anvgSF25/LGa4dezSV0Wuc+Hj6wWzhGnEros5ha/gvg4ou
+   RYzsWu/MjXqj/YAE6pXTNKOquupZIfV/MOwduBMf0E2WPxMuVs/OIgfpf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,274,1643644800"; 
+   d="scan'208";a="302502776"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 20 Apr 2022 07:55:49 +0800
+IronPort-SDR: XN1ucEqnY36EOOkHEi/Ha5+PpSLa5vBweyqmZYfvlPeRcrixFMekDLHorDJ3EoqHKrNlnfGT3b
+ uo05jH8fnnL+XgSkZQ7L/Ym3ycy+ZSek4GG3NioZx1LD2rLNjjNQzDxb4A3SANtwXPh8JZ3FDB
+ KY2w3lJfHWPyU7LSFpou4sCF35yStAdoQFDd9lvSJBTy0r2DzXu0lDboxQCUaVm9QBX0xv6x12
+ Bx8lk2K9W8p79w3oYwiZhuGmfYsw8Wk3l0dVB1BokXGDlkSMDausY7fSZhE3KlpPNbP5WnqP2v
+ bQiZFNUCFQTwb4blFNuIW0Nj
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:26:54 -0700
+IronPort-SDR: KoThnqwQh6+0mzGqBu3oBQOjb7fEo6bSn+88esItqM6K55f4Q9WBWhgWJld5ToR8kxWmXAmCND
+ /T66e7Maj0U6tEMbAAFt3ybRy3d+5V6P7QM7kRE0PrwQXkBCPd54LvUfHTpkXgZZmt4OlBwIHS
+ wg3iyQtJ3fij524KuZ++y1x+6C64mFw8nU8NBtf2fZK2PhkSg9y8wAiIHkpN6W7Wf56jP6e2XP
+ +KcKatefiIFgk2lhxyecdjrIQqjZZviWjIBmnv+N9JChD2wjxzE5QDBwWIaeN7BQjgJRgEt3cA
+ TEk=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Apr 2022 16:55:50 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kjgfs0pQqz1SVnx
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 16:55:48 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1650412547; x=1653004548; bh=KKbVILJHDOZ2N6m0wCdUFAHCkLkQrMH0aZI
+        7ADXChcU=; b=pFEW/uKhXn3SfKmBfD64EaWuvMe7q26hm0k6TE+sEECnehlEu2k
+        JZAKUTdSLIdvQPzDDwtNqieDCFKd2/3AA3HEfr3lw+Tt7zTtPlgqTH805PaZ9XLD
+        n2opLUpjSgtWeer+jG8ad83PPxpRHyOjx3VND3Khq7b+4tkh4xQ3tsW5cXs4Bj1u
+        UKso+W9DyS/Uj+2QDbToc8oCKHbH/6ajijlj8CjOmKZM6k/TNCLhlNGRgLgQk8pd
+        uNG6OCX78fB8zacum/KgbiC3Fm+jyvMirDIzk6aJ6Kmcj1OyXgl+Baraf9/cqoR6
+        86SqXEgXg9GFmxkX6LSna5otrW2oTbdEDwQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id q3gfxsMFwPml for <linux-rtc@vger.kernel.org>;
+        Tue, 19 Apr 2022 16:55:47 -0700 (PDT)
+Received: from [10.225.163.14] (unknown [10.225.163.14])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kjgff0k5zz1Rvlx;
+        Tue, 19 Apr 2022 16:55:37 -0700 (PDT)
+Message-ID: <56f889d7-2305-ba7a-42af-9580d8f7df93@opensource.wdc.com>
+Date:   Wed, 20 Apr 2022 08:55:36 +0900
 MIME-Version: 1.0
-References: <20220403054912.31739-1-linmq006@gmail.com>
-In-Reply-To: <20220403054912.31739-1-linmq006@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 20 Apr 2022 00:55:18 +0200
-Message-ID: <CACRpkdZsaUv+RdAMTd8KwqbLG+BwVuc25mcK4TnpOLsV6KpB6A@mail.gmail.com>
-Subject: Re: [PATCH] rtc: ftrtc010: Fix error handling in ftrtc010_rtc_probe
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 13/48] ARM: pxa: use pdev resource for palmld mmio
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, robert.jarzmik@free.fr,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org, Jens Axboe <axboe@kernel.dk>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220419163810.2118169-14-arnd@kernel.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220419163810.2118169-14-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 7:49 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+On 4/20/22 01:37, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The palmld header is almost unused in drivers, the only
+> remaining thing now is the PATA device address, which should
+> really be passed as a resource.
+> 
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: linux-ide@vger.kernel.org
+> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+> Acked-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-pxa/palmld-pcmcia.c             |  3 ++-
+>  arch/arm/mach-pxa/palmld.c                    | 12 +++++++++---
+>  arch/arm/mach-pxa/{include/mach => }/palmld.h |  2 +-
+>  drivers/ata/pata_palmld.c                     |  3 +--
+>  4 files changed, 13 insertions(+), 7 deletions(-)
+>  rename arch/arm/mach-pxa/{include/mach => }/palmld.h (98%)
+> 
+> diff --git a/arch/arm/mach-pxa/palmld-pcmcia.c b/arch/arm/mach-pxa/palmld-pcmcia.c
+> index 07e0f7438db1..720294a50864 100644
+> --- a/arch/arm/mach-pxa/palmld-pcmcia.c
+> +++ b/arch/arm/mach-pxa/palmld-pcmcia.c
+> @@ -13,9 +13,10 @@
+>  #include <linux/gpio.h>
+>  
+>  #include <asm/mach-types.h>
+> -#include <mach/palmld.h>
+>  #include <pcmcia/soc_common.h>
+>  
+> +#include "palmld.h"
+> +
+>  static struct gpio palmld_pcmcia_gpios[] = {
+>  	{ GPIO_NR_PALMLD_PCMCIA_POWER,	GPIOF_INIT_LOW,	"PCMCIA Power" },
+>  	{ GPIO_NR_PALMLD_PCMCIA_RESET,	GPIOF_INIT_HIGH,"PCMCIA Reset" },
+> diff --git a/arch/arm/mach-pxa/palmld.c b/arch/arm/mach-pxa/palmld.c
+> index d85146957004..d821606ce0b5 100644
+> --- a/arch/arm/mach-pxa/palmld.c
+> +++ b/arch/arm/mach-pxa/palmld.c
+> @@ -29,8 +29,8 @@
+>  #include <asm/mach/map.h>
+>  
+>  #include "pxa27x.h"
+> +#include "palmld.h"
+>  #include <linux/platform_data/asoc-pxa.h>
+> -#include <mach/palmld.h>
+>  #include <linux/platform_data/mmc-pxamci.h>
+>  #include <linux/platform_data/video-pxafb.h>
+>  #include <linux/platform_data/irda-pxaficp.h>
+> @@ -279,9 +279,15 @@ static inline void palmld_leds_init(void) {}
+>   * HDD
+>   ******************************************************************************/
+>  #if defined(CONFIG_PATA_PALMLD) || defined(CONFIG_PATA_PALMLD_MODULE)
+> +static struct resource palmld_ide_resources[] = {
+> +	DEFINE_RES_MEM(PALMLD_IDE_PHYS, 0x1000),
+> +};
+> +
+>  static struct platform_device palmld_ide_device = {
+> -	.name	= "pata_palmld",
+> -	.id	= -1,
+> +	.name		= "pata_palmld",
+> +	.id		= -1,
+> +	.resource	= palmld_ide_resources,
+> +	.num_resources	= ARRAY_SIZE(palmld_ide_resources),
+>  };
+>  
+>  static struct gpiod_lookup_table palmld_ide_gpio_table = {
+> diff --git a/arch/arm/mach-pxa/include/mach/palmld.h b/arch/arm/mach-pxa/palmld.h
+> similarity index 98%
+> rename from arch/arm/mach-pxa/include/mach/palmld.h
+> rename to arch/arm/mach-pxa/palmld.h
+> index 99a6d8b3a1e3..ee3bc15b71a2 100644
+> --- a/arch/arm/mach-pxa/include/mach/palmld.h
+> +++ b/arch/arm/mach-pxa/palmld.h
+> @@ -9,7 +9,7 @@
+>  #ifndef _INCLUDE_PALMLD_H_
+>  #define _INCLUDE_PALMLD_H_
+>  
+> -#include "irqs.h" /* PXA_GPIO_TO_IRQ */
+> +#include <mach/irqs.h> /* PXA_GPIO_TO_IRQ */
+>  
+>  /** HERE ARE GPIOs **/
+>  
+> diff --git a/drivers/ata/pata_palmld.c b/drivers/ata/pata_palmld.c
+> index 2448441571ed..400e65190904 100644
+> --- a/drivers/ata/pata_palmld.c
+> +++ b/drivers/ata/pata_palmld.c
+> @@ -25,7 +25,6 @@
+>  #include <linux/gpio/consumer.h>
+>  
+>  #include <scsi/scsi_host.h>
+> -#include <mach/palmld.h>
+>  
+>  #define DRV_NAME "pata_palmld"
+>  
+> @@ -63,7 +62,7 @@ static int palmld_pata_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	/* remap drive's physical memory address */
+> -	mem = devm_ioremap(dev, PALMLD_IDE_PHYS, 0x1000);
+> +	mem = devm_platform_ioremap_resource(pdev, 0);
+>  	if (!mem)
+>  		return -ENOMEM;
+>  
 
-> In the error handling path, the clk_prepare_enable() function
-> call should be balanced by a corresponding 'clk_disable_unprepare()'
-> call , as already done in the remove function.
->
-> clk_disable_unprepare calls clk_disable() and clk_unprepare().
-> They will use IS_ERR_OR_NULL to check the argument.
->
-> Fixes: ac05fba39cc5 ("rtc: gemini: Add optional clock handling")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Looks correct!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+-- 
+Damien Le Moal
+Western Digital Research
