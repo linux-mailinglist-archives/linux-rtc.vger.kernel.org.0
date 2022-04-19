@@ -2,71 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951315064B1
-	for <lists+linux-rtc@lfdr.de>; Tue, 19 Apr 2022 08:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2316506BA6
+	for <lists+linux-rtc@lfdr.de>; Tue, 19 Apr 2022 14:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348024AbiDSGoo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 19 Apr 2022 02:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S1352017AbiDSMF1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 19 Apr 2022 08:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236888AbiDSGoo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Apr 2022 02:44:44 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2705E2C11C
-        for <linux-rtc@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c6so19973780edn.8
-        for <linux-rtc@vger.kernel.org>; Mon, 18 Apr 2022 23:42:00 -0700 (PDT)
+        with ESMTP id S1349804AbiDSMDZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 19 Apr 2022 08:03:25 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA02C27FDF
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 04:59:09 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b15so20932630edn.4
+        for <linux-rtc@vger.kernel.org>; Tue, 19 Apr 2022 04:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
-        b=kAxwmtbFjL2vIdyOc0SJTzQ1jRxFAwAUqZgQ5ZkF1NnHm/Blxgwz0k4NqRpDIYYQ78
-         xhSPQgOzkY9gQf99yy3p41mmtlzDPDmiYI52EsDiF+zGA+55HjVgUpusGGDgep56zcNq
-         bUtdQi87v1F95EInqQD+8T4uTWUmj2yzlZu6IWdrpAQCptuo+9OTisBgR0v3WQy/VraS
-         RrxbA/RZxjNO1u8ZrFuYuENtRVtEjLz3ninsRhxtlVNMfTB7+tnBfzxAUWAJvTHO+k7a
-         QPNNa95lLWCrzTe18SxlB0kCZGLXQ4g87upZCMEyWRVcJr0ZmDYEoSVnsq9HjMb7VAZN
-         ZxpA==
+        bh=6oA1XojTBV3oA9r/HKQ3Tl1fWWX+00CTBT2nxTWPymY=;
+        b=hDR9Sem7MlKGIbYOPdZKzDLQQoA1Ps1MPKQgOl4DfL9ZhR6uk4ow7cmRujEgHca4+z
+         LHrJQUqfAnG+GYinLCxhNo021USDj7Ay+o6y0eMUirw3v0TDkylvC1rrYu3R7sew6U7T
+         VtcSna4j2XI0YFrEtXDsTUt4V2Wk+cKcq0laOt/lrz/5RB+epAI9zeWa+5t83oL5XEdp
+         ejNyYqxtaDaInpvPZUufRCcnRaAx7mYhj2rVmbty5tG9Ez4ZjDArimtgstQTFnThs2PK
+         qkEowriCnuaEJzFjB25g2rYeXlCrryjPVUyCzonmIymb09b/1bJhE5oHJOxkH4jQTQFC
+         09mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=crADoU7TuQHIvNUCkN3bftpXZTQCbbgAEyPuKyFnosA=;
-        b=7eu6z00kiv8CIAQwJNHJb01fSatDKOCK5xRRRmA9IHv6BreJGIzp94qBQVfIizvLe0
-         dQq1oBGPrIazMBd2R0xMsj5qM4m0+cg1Cf1D42Lf+7xNHSbzc61CXsqC4UfTwfd4yfmJ
-         Nbme9bUEZeejMTgitpXNpC5zY2Zt6qFybN33gc53kUAeH5nP166tJVji6oL8Ggos5WWD
-         djNM31Ez3fOiYo7be317yBliN1UmJOBdGq4NXjUNpODN61tO9AaRG8b8WXvGGZ0aHKv/
-         EEwsrNFoFgQ9kwox3Hw09/czFznLCnoRLbhmlPLwwiByluS67WeQ+dmwC6XvIJ9qCE/o
-         N8ug==
-X-Gm-Message-State: AOAM532kOh/3ZGzfW1ql0kpgBOjASZwn0IxumBMfLe/ilTdcKLXz91W9
-        YwVzXcgUhkpU6oMQgMXwgr4paSRlWefYZw==
-X-Google-Smtp-Source: ABdhPJwzHBRz4mz5yTbCzi/y8+W/yiUPkQ8vl23P9aHgnApQ8eiW8ymYJ0xHpdkdGZF7fZE8OTCANQ==
-X-Received: by 2002:a05:6402:909:b0:415:cdbf:4748 with SMTP id g9-20020a056402090900b00415cdbf4748mr15663935edz.395.1650350518753;
-        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
+        bh=6oA1XojTBV3oA9r/HKQ3Tl1fWWX+00CTBT2nxTWPymY=;
+        b=YLecC5MmxOOfD/hTkeICnAK4vHqbhOilwy4OsZNh8rvPs7cA4/A/RqcW6o+bkezHBg
+         JLL3DO5BBjYWJ0oPKr2zBkV2itHC316APRHcM0Pwuw4OcokGx2ij56ztw00AI29rj5+M
+         PIenaXxG88IxdjuwPIr89pgw+gxkf1c41bEi1wmPfUXkqPtAforamSFxwyoMEg5ZC7C5
+         rz1HOXT3Xf3+6wPziJi9e6F4PIeItwXHsASktdY7CXnV3bcMgrVn9+BTcN69IK2MwOCZ
+         98mBL24/EnyXfnZPMzHt5pthN6iU4scPeefQUrP1NRxO3U4+o7qVnRr9sq7Oivr+zFCj
+         YGDw==
+X-Gm-Message-State: AOAM5318yx6Ju4f3Bo6O/ICOV4lijmD8CAyT3Wp+gnl88f2xcZpuLQMB
+        ZXbjBuOZSy8+CTPRDJ8Ysxs63Q==
+X-Google-Smtp-Source: ABdhPJxS7yTBdB7NfvlxHjWxaLfiWZFzcz7EPz+lZ+OBcndTA1+SohbMymqQSLWiLrTaqWI7UtT/Lg==
+X-Received: by 2002:aa7:c489:0:b0:41d:78a0:5b32 with SMTP id m9-20020aa7c489000000b0041d78a05b32mr16985415edq.305.1650369548476;
+        Tue, 19 Apr 2022 04:59:08 -0700 (PDT)
 Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm5303190eja.217.2022.04.18.23.41.57
+        by smtp.gmail.com with ESMTPSA id p9-20020a05640243c900b0041facb9ac9esm8111757edc.1.2022.04.19.04.59.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 23:41:58 -0700 (PDT)
-Message-ID: <1e9bf9d6-cd5a-6a47-f0d7-5a4bc6e6d2f0@linaro.org>
-Date:   Tue, 19 Apr 2022 08:41:56 +0200
+        Tue, 19 Apr 2022 04:59:07 -0700 (PDT)
+Message-ID: <4f31fc70-c227-f69f-8fbe-6fa8a1113258@linaro.org>
+Date:   Tue, 19 Apr 2022 13:59:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/5] dt-bindings: rtc: Rework compatible strings and add
- #clock-cells
+Subject: Re: [PATCH v3 5/9] dt-bindings: clk: mpfs: add defines for two new
+ clocks
 Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220418184933.13172-1-paul@crapouillou.net>
- <20220418184933.13172-2-paul@crapouillou.net>
+To:     Conor Dooley <conor.dooley@microchip.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
+        palmer@rivosinc.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     daire.mcnamara@microchip.com, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20220413075835.3354193-1-conor.dooley@microchip.com>
+ <20220413075835.3354193-6-conor.dooley@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220418184933.13172-2-paul@crapouillou.net>
+In-Reply-To: <20220413075835.3354193-6-conor.dooley@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,63 +80,17 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 18/04/2022 20:49, Paul Cercueil wrote:
-> The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
-> register that permits to configure the behaviour of the CLK32K pin. The
-> same goes for the RTC in the JZ4780.
+On 13/04/2022 09:58, Conor Dooley wrote:
+> The RTC reference and MSSPLL were previously not documented or defined,
+> as they were unused. Add their defines to the PolarFire SoC header.
 > 
-> Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do not
-> fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc string
-> now falls back to the ingenic,jz4770-rtc string.
-> 
-> Additionally, since the RTCs in the JZ4770 and JZ4780 support outputting
-> the input oscillator's clock to the CLK32K pin, the RTC node is now also
-> a clock provider on these SoCs, so a #clock-cells property is added.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> ---
->  Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> index b235b2441997..57393c3ac724 100644
-> --- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
-> @@ -18,14 +18,14 @@ properties:
->        - enum:
->            - ingenic,jz4740-rtc
->            - ingenic,jz4760-rtc
-> +          - ingenic,jz4770-rtc
->        - items:
->            - const: ingenic,jz4725b-rtc
->            - const: ingenic,jz4740-rtc
->        - items:
->            - enum:
-> -              - ingenic,jz4770-rtc
->                - ingenic,jz4780-rtc
-> -          - const: ingenic,jz4760-rtc
-> +          - const: ingenic,jz4770-rtc
->  
->    reg:
->      maxItems: 1
-> @@ -39,6 +39,9 @@ properties:
->    clock-names:
->      const: rtc
->  
-> +  "#clock-cells":
-> +    const: 0
-> +
->    system-power-controller:
->      description: |
->        Indicates that the RTC is responsible for powering OFF
+> Fixes: 2145bb687e3f ("dt-bindings: clk: microchip: Add Microchip PolarFire host binding")
+> Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Inside allOf:if:then:, please add a constraint which compatible cannot
-have clock-cells (or maybe better which can?).
 
-Some modification of:
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/media/renesas,vsp1.yaml#L53
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
