@@ -2,400 +2,516 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE96508890
-	for <lists+linux-rtc@lfdr.de>; Wed, 20 Apr 2022 14:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3909F508985
+	for <lists+linux-rtc@lfdr.de>; Wed, 20 Apr 2022 15:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378657AbiDTM6F (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 20 Apr 2022 08:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
+        id S1378812AbiDTNqF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 20 Apr 2022 09:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378647AbiDTM6D (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Apr 2022 08:58:03 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B312A707;
-        Wed, 20 Apr 2022 05:55:12 -0700 (PDT)
-X-UUID: daa405f9e17b429fbb94a68de423cf36-20220420
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:d9388393-4666-498b-87d0-8ef9531ae39c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:35b086ef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: daa405f9e17b429fbb94a68de423cf36-20220420
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <hui.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1770524226; Wed, 20 Apr 2022 20:55:09 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 20 Apr 2022 20:55:07 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 20 Apr
- 2022 20:55:07 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 20 Apr 2022 20:55:05 +0800
-From:   Hui-Liu Liu <hui.liu@mediatek.com>
-To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <zhiyong.tao@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
-        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
-        <yuchen.huang@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v4 1/1] arm64: dts: mt6359: add PMIC MT6359 related nodes
-Date:   Wed, 20 Apr 2022 20:55:01 +0800
-Message-ID: <20220420125501.571-2-hui.liu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220420125501.571-1-hui.liu@mediatek.com>
-References: <20220420125501.571-1-hui.liu@mediatek.com>
+        with ESMTP id S235764AbiDTNp6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 20 Apr 2022 09:45:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F4B3ED31;
+        Wed, 20 Apr 2022 06:43:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2138B81ED6;
+        Wed, 20 Apr 2022 13:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1680EC385A0;
+        Wed, 20 Apr 2022 13:43:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650462188;
+        bh=qAX+7/fdnliZOw4nv8Rp4dEJx8oAsndLLAxA2eMiTfA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L42/09/yCO9iNyPaBjWiMD4CSiTKyzal96En6UIVXJBZ8TPeOhlOYXYfO7wwHRjSz
+         mUlV0LBvzIO8NbyfVzbA9Aarvuh36VplGfIaRP9pJJVszuFHqYb7WlIOsh/oyVO4qG
+         aA8T52kx+JWbq+JATh1Fxbwi+3v3CFqWmeQPmDbDRK6YfpctuZ+IkierB/lu1ZgyZ0
+         WTCCChm3if9vCxR4x5Z35u1OMDN8F1sOEGE5B+msjpxzRMWH7MTl9piR4VDraZeqsi
+         Jw3Kw/aMlVggHe4NwSpY6Bx/JG8t1s+d2GRmilCIN5Wi7oDusCKGLouwvXqt3hK4+j
+         hqRCMkShofHPg==
+Received: by mercury (Postfix, from userid 1000)
+        id 5D41D1060347; Wed, 20 Apr 2022 15:43:05 +0200 (CEST)
+Date:   Wed, 20 Apr 2022 15:43:05 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 40/48] ARM: pxa: tosa: use gpio lookup for battery
+Message-ID: <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220419163810.2118169-41-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qpvv5pfrnllxtjfz"
+Content-Disposition: inline
+In-Reply-To: <20220419163810.2118169-41-arnd@kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Hui Liu <hui.liu@mediatek.com>
 
-MT6359 is the promary PMIC for MT8192.
-Add PMIC MT6359 related node which is used for MT8192 platform.
+--qpvv5pfrnllxtjfz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hui Liu <hui.liu@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt6359.dtsi    | 298 ++++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts |   1 +
- 2 files changed, 299 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+Hi,
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-new file mode 100644
-index 000000000000..df3e822232d3
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-@@ -0,0 +1,298 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2022 MediaTek Inc.
-+ */
-+
-+&pwrap {
-+	pmic: pmic {
-+		compatible = "mediatek,mt6359";
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		mt6359codec: mt6359codec {
-+		};
-+
-+		regulators {
-+			mt6359_vs1_buck_reg: buck_vs1 {
-+				regulator-name = "vs1";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vgpu11_buck_reg: buck_vgpu11 {
-+				regulator-name = "vgpu11";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vmodem_buck_reg: buck_vmodem {
-+				regulator-name = "vmodem";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1100000>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <200>;
-+			};
-+			mt6359_vpu_buck_reg: buck_vpu {
-+				regulator-name = "vpu";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_buck_reg: buck_vcore {
-+				regulator-name = "vcore";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vs2_buck_reg: buck_vs2 {
-+				regulator-name = "vs2";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1600000>;
-+				regulator-enable-ramp-delay = <0>;
-+				regulator-always-on;
-+			};
-+			mt6359_vpa_buck_reg: buck_vpa {
-+				regulator-name = "vpa";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3650000>;
-+				regulator-enable-ramp-delay = <300>;
-+			};
-+			mt6359_vproc2_buck_reg: buck_vproc2 {
-+				regulator-name = "vproc2";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vproc1_buck_reg: buck_vproc1 {
-+				regulator-name = "vproc1";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <200>;
-+				regulator-allowed-modes = <0 1 2>;
-+			};
-+			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
-+				regulator-name = "vcore_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
-+				regulator-name = "vgpu11_sshub";
-+				regulator-min-microvolt = <400000>;
-+				regulator-max-microvolt = <1193750>;
-+			};
-+			mt6359_vaud18_ldo_reg: ldo_vaud18 {
-+				regulator-name = "vaud18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vsim1_ldo_reg: ldo_vsim1 {
-+				regulator-name = "vsim1";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vibr_ldo_reg: ldo_vibr {
-+				regulator-name = "vibr";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vrf12_ldo_reg: ldo_vrf12 {
-+				regulator-name = "vrf12";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vusb_ldo_reg: ldo_vusb {
-+				regulator-name = "vusb";
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
-+				regulator-name = "vsram_proc2";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vio18_ldo_reg: ldo_vio18 {
-+				regulator-name = "vio18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-enable-ramp-delay = <960>;
-+				regulator-always-on;
-+			};
-+			mt6359_vcamio_ldo_reg: ldo_vcamio {
-+				regulator-name = "vcamio";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vcn18_ldo_reg: ldo_vcn18 {
-+				regulator-name = "vcn18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vfe28_ldo_reg: ldo_vfe28 {
-+				regulator-name = "vfe28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <120>;
-+			};
-+			mt6359_vcn13_ldo_reg: ldo_vcn13 {
-+				regulator-name = "vcn13";
-+				regulator-min-microvolt = <900000>;
-+				regulator-max-microvolt = <1300000>;
-+			};
-+			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
-+				regulator-name = "vcn33_1_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
-+				regulator-name = "vcn33_1_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vaux18_ldo_reg: ldo_vaux18 {
-+				regulator-name = "vaux18";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
-+				regulator-name = "vsram_others";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <5000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vefuse_ldo_reg: ldo_vefuse {
-+				regulator-name = "vefuse";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <2000000>;
-+			};
-+			mt6359_vxo22_ldo_reg: ldo_vxo22 {
-+				regulator-name = "vxo22";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <2200000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vrfck_ldo_reg: ldo_vrfck {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <1700000>;
-+			};
-+			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
-+				regulator-name = "vrfck";
-+				regulator-min-microvolt = <1240000>;
-+				regulator-max-microvolt = <1600000>;
-+			};
-+			mt6359_vbif28_ldo_reg: ldo_vbif28 {
-+				regulator-name = "vbif28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <2800000>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vio28_ldo_reg: ldo_vio28 {
-+				regulator-name = "vio28";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vemc_ldo_reg: ldo_vemc {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2900000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
-+				regulator-name = "vemc";
-+				regulator-min-microvolt = <2500000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
-+				regulator-name = "vcn33_2_bt";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
-+				regulator-name = "vcn33_2_wifi";
-+				regulator-min-microvolt = <2800000>;
-+				regulator-max-microvolt = <3500000>;
-+			};
-+			mt6359_va12_ldo_reg: ldo_va12 {
-+				regulator-name = "va12";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1300000>;
-+				regulator-always-on;
-+			};
-+			mt6359_va09_ldo_reg: ldo_va09 {
-+				regulator-name = "va09";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vrf18_ldo_reg: ldo_vrf18 {
-+				regulator-name = "vrf18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1810000>;
-+			};
-+			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
-+				regulator-name = "vsram_md";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <10760>;
-+				regulator-enable-ramp-delay = <240>;
-+			};
-+			mt6359_vufs_ldo_reg: ldo_vufs {
-+				regulator-name = "vufs";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+			};
-+			mt6359_vm18_ldo_reg: ldo_vm18 {
-+				regulator-name = "vm18";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <1900000>;
-+				regulator-always-on;
-+			};
-+			mt6359_vbbck_ldo_reg: ldo_vbbck {
-+				regulator-name = "vbbck";
-+				regulator-min-microvolt = <1100000>;
-+				regulator-max-microvolt = <1200000>;
-+			};
-+			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
-+				regulator-name = "vsram_proc1";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+				regulator-ramp-delay = <7500>;
-+				regulator-enable-ramp-delay = <240>;
-+				regulator-always-on;
-+			};
-+			mt6359_vsim2_ldo_reg: ldo_vsim2 {
-+				regulator-name = "vsim2";
-+				regulator-min-microvolt = <1700000>;
-+				regulator-max-microvolt = <3100000>;
-+			};
-+			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
-+				regulator-name = "vsram_others_sshub";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1293750>;
-+			};
-+		};
-+
-+		mt6359rtc: mt6359rtc {
-+			compatible = "mediatek,mt6358-rtc";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 0205837fa698..808be492e970 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -5,6 +5,7 @@
-  */
- /dts-v1/;
- #include "mt8192.dtsi"
-+#include "mt6359.dtsi"
- 
- / {
- 	model = "MediaTek MT8192 evaluation board";
--- 
-2.25.1
+On Tue, Apr 19, 2022 at 06:38:02PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The battery driver uses a lot of GPIO lines, hardcoded from a
+> machine header file.
+>=20
+> Change it to use a gpiod lookup table instead.
+>=20
+> Reviewed-by: Sebastian Reichel <sre@kernel.org>
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
+That's the last power-supply driver not yet using descriptor based
+gpio API :)
+
+> [...]
+> diff --git a/drivers/power/supply/tosa_battery.c b/drivers/power/supply/t=
+osa_battery.c
+> index b26b0eca33e1..d10320f348d0 100644
+> --- a/drivers/power/supply/tosa_battery.c
+> +++ b/drivers/power/supply/tosa_battery.c
+> @@ -15,11 +15,16 @@
+>  #include <linux/gpio.h>
+
+This should be <linux/gpio/consumer.h> now.
+
+-- Sebastian
+
+
+> =20
+>  #include <asm/mach-types.h>
+> -#include <mach/tosa.h>
+> =20
+>  static DEFINE_MUTEX(bat_lock); /* protects gpio pins */
+>  static struct work_struct bat_work;
+> =20
+> +struct tosa_gpio {
+> +	const char *con;
+> +	enum gpiod_flags flags;
+> +	struct gpio_desc *desc;
+> +};
+> +
+>  struct tosa_bat {
+>  	int status;
+>  	struct power_supply *psy;
+> @@ -28,38 +33,42 @@ struct tosa_bat {
+>  	struct mutex work_lock; /* protects data */
+> =20
+>  	bool (*is_present)(struct tosa_bat *bat);
+> -	int gpio_full;
+> -	int gpio_charge_off;
+> +	struct tosa_gpio gpio_full;
+> +	struct tosa_gpio gpio_charge_off;
+> =20
+>  	int technology;
+> =20
+> -	int gpio_bat;
+> +	struct tosa_gpio gpio_bat;
+>  	int adc_bat;
+>  	int adc_bat_divider;
+>  	int bat_max;
+>  	int bat_min;
+> =20
+> -	int gpio_temp;
+> +	struct tosa_gpio gpio_temp;
+>  	int adc_temp;
+>  	int adc_temp_divider;
+>  };
+> =20
+>  static struct tosa_bat tosa_bat_main;
+>  static struct tosa_bat tosa_bat_jacket;
+> +static struct tosa_gpio gpiod_jacket_det =3D { "jacket detect", GPIOD_IN=
+ };
+> +static struct tosa_gpio gpiod_battery_switch =3D { "battery switch", GPI=
+OD_OUT_LOW };
+> +static struct tosa_gpio gpiod_main_battery_low =3D { "main battery low",=
+ GPIOD_IN };
+> +static struct tosa_gpio gpiod_jacket_battery_low =3D { "jacket battery l=
+ow", GPIOD_IN };
+> =20
+>  static unsigned long tosa_read_bat(struct tosa_bat *bat)
+>  {
+>  	unsigned long value =3D 0;
+> =20
+> -	if (bat->gpio_bat < 0 || bat->adc_bat < 0)
+> +	if (!bat->gpio_bat.desc || bat->adc_bat < 0)
+>  		return 0;
+> =20
+>  	mutex_lock(&bat_lock);
+> -	gpio_set_value(bat->gpio_bat, 1);
+> +	gpiod_set_value(bat->gpio_bat.desc, 1);
+>  	msleep(5);
+>  	value =3D wm97xx_read_aux_adc(dev_get_drvdata(bat->psy->dev.parent),
+>  			bat->adc_bat);
+> -	gpio_set_value(bat->gpio_bat, 0);
+> +	gpiod_set_value(bat->gpio_bat.desc, 0);
+>  	mutex_unlock(&bat_lock);
+> =20
+>  	value =3D value * 1000000 / bat->adc_bat_divider;
+> @@ -71,15 +80,15 @@ static unsigned long tosa_read_temp(struct tosa_bat *=
+bat)
+>  {
+>  	unsigned long value =3D 0;
+> =20
+> -	if (bat->gpio_temp < 0 || bat->adc_temp < 0)
+> +	if (!bat->gpio_temp.desc || bat->adc_temp < 0)
+>  		return 0;
+> =20
+>  	mutex_lock(&bat_lock);
+> -	gpio_set_value(bat->gpio_temp, 1);
+> +	gpiod_set_value(bat->gpio_temp.desc, 1);
+>  	msleep(5);
+>  	value =3D wm97xx_read_aux_adc(dev_get_drvdata(bat->psy->dev.parent),
+>  			bat->adc_temp);
+> -	gpio_set_value(bat->gpio_temp, 0);
+> +	gpiod_set_value(bat->gpio_temp.desc, 0);
+>  	mutex_unlock(&bat_lock);
+> =20
+>  	value =3D value * 10000 / bat->adc_temp_divider;
+> @@ -136,7 +145,7 @@ static int tosa_bat_get_property(struct power_supply =
+*psy,
+> =20
+>  static bool tosa_jacket_bat_is_present(struct tosa_bat *bat)
+>  {
+> -	return gpio_get_value(TOSA_GPIO_JACKET_DETECT) =3D=3D 0;
+> +	return gpiod_get_value(gpiod_jacket_det.desc) =3D=3D 0;
+>  }
+> =20
+>  static void tosa_bat_external_power_changed(struct power_supply *psy)
+> @@ -166,23 +175,23 @@ static void tosa_bat_update(struct tosa_bat *bat)
+>  		bat->full_chrg =3D -1;
+>  	} else if (power_supply_am_i_supplied(psy)) {
+>  		if (bat->status =3D=3D POWER_SUPPLY_STATUS_DISCHARGING) {
+> -			gpio_set_value(bat->gpio_charge_off, 0);
+> +			gpiod_set_value(bat->gpio_charge_off.desc, 0);
+>  			mdelay(15);
+>  		}
+> =20
+> -		if (gpio_get_value(bat->gpio_full)) {
+> +		if (gpiod_get_value(bat->gpio_full.desc)) {
+>  			if (old =3D=3D POWER_SUPPLY_STATUS_CHARGING ||
+>  					bat->full_chrg =3D=3D -1)
+>  				bat->full_chrg =3D tosa_read_bat(bat);
+> =20
+> -			gpio_set_value(bat->gpio_charge_off, 1);
+> +			gpiod_set_value(bat->gpio_charge_off.desc, 1);
+>  			bat->status =3D POWER_SUPPLY_STATUS_FULL;
+>  		} else {
+> -			gpio_set_value(bat->gpio_charge_off, 0);
+> +			gpiod_set_value(bat->gpio_charge_off.desc, 0);
+>  			bat->status =3D POWER_SUPPLY_STATUS_CHARGING;
+>  		}
+>  	} else {
+> -		gpio_set_value(bat->gpio_charge_off, 1);
+> +		gpiod_set_value(bat->gpio_charge_off.desc, 1);
+>  		bat->status =3D POWER_SUPPLY_STATUS_DISCHARGING;
+>  	}
+> =20
+> @@ -251,18 +260,18 @@ static struct tosa_bat tosa_bat_main =3D {
+>  	.full_chrg =3D -1,
+>  	.psy =3D NULL,
+> =20
+> -	.gpio_full =3D TOSA_GPIO_BAT0_CRG,
+> -	.gpio_charge_off =3D TOSA_GPIO_CHARGE_OFF,
+> +	.gpio_full =3D { "main battery full", GPIOD_IN },
+> +	.gpio_charge_off =3D { "main charge off" , GPIOD_OUT_HIGH },
+> =20
+>  	.technology =3D POWER_SUPPLY_TECHNOLOGY_LIPO,
+> =20
+> -	.gpio_bat =3D TOSA_GPIO_BAT0_V_ON,
+> +	.gpio_bat =3D { "main battery", GPIOD_OUT_LOW },
+>  	.adc_bat =3D WM97XX_AUX_ID3,
+>  	.adc_bat_divider =3D 414,
+>  	.bat_max =3D 4310000,
+>  	.bat_min =3D 1551 * 1000000 / 414,
+> =20
+> -	.gpio_temp =3D TOSA_GPIO_BAT1_TH_ON,
+> +	.gpio_temp =3D { "main battery temp", GPIOD_OUT_LOW },
+>  	.adc_temp =3D WM97XX_AUX_ID2,
+>  	.adc_temp_divider =3D 10000,
+>  };
+> @@ -273,18 +282,18 @@ static struct tosa_bat tosa_bat_jacket =3D {
+>  	.psy =3D NULL,
+> =20
+>  	.is_present =3D tosa_jacket_bat_is_present,
+> -	.gpio_full =3D TOSA_GPIO_BAT1_CRG,
+> -	.gpio_charge_off =3D TOSA_GPIO_CHARGE_OFF_JC,
+> +	.gpio_full =3D { "jacket battery full", GPIOD_IN },
+> +	.gpio_charge_off =3D { "jacket charge off", GPIOD_OUT_HIGH },
+> =20
+>  	.technology =3D POWER_SUPPLY_TECHNOLOGY_LIPO,
+> =20
+> -	.gpio_bat =3D TOSA_GPIO_BAT1_V_ON,
+> +	.gpio_bat =3D { "jacket battery", GPIOD_OUT_LOW },
+>  	.adc_bat =3D WM97XX_AUX_ID3,
+>  	.adc_bat_divider =3D 414,
+>  	.bat_max =3D 4310000,
+>  	.bat_min =3D 1551 * 1000000 / 414,
+> =20
+> -	.gpio_temp =3D TOSA_GPIO_BAT0_TH_ON,
+> +	.gpio_temp =3D { "jacket battery temp", GPIOD_OUT_LOW },
+>  	.adc_temp =3D WM97XX_AUX_ID2,
+>  	.adc_temp_divider =3D 10000,
+>  };
+> @@ -294,36 +303,16 @@ static struct tosa_bat tosa_bat_bu =3D {
+>  	.full_chrg =3D -1,
+>  	.psy =3D NULL,
+> =20
+> -	.gpio_full =3D -1,
+> -	.gpio_charge_off =3D -1,
+> -
+>  	.technology =3D POWER_SUPPLY_TECHNOLOGY_LiMn,
+> =20
+> -	.gpio_bat =3D TOSA_GPIO_BU_CHRG_ON,
+> +	.gpio_bat =3D { "backup battery", GPIOD_OUT_LOW },
+>  	.adc_bat =3D WM97XX_AUX_ID4,
+>  	.adc_bat_divider =3D 1266,
+> =20
+> -	.gpio_temp =3D -1,
+>  	.adc_temp =3D -1,
+>  	.adc_temp_divider =3D -1,
+>  };
+> =20
+> -static struct gpio tosa_bat_gpios[] =3D {
+> -	{ TOSA_GPIO_CHARGE_OFF,	   GPIOF_OUT_INIT_HIGH, "main charge off" },
+> -	{ TOSA_GPIO_CHARGE_OFF_JC, GPIOF_OUT_INIT_HIGH, "jacket charge off" },
+> -	{ TOSA_GPIO_BAT_SW_ON,	   GPIOF_OUT_INIT_LOW,	"battery switch" },
+> -	{ TOSA_GPIO_BAT0_V_ON,	   GPIOF_OUT_INIT_LOW,	"main battery" },
+> -	{ TOSA_GPIO_BAT1_V_ON,	   GPIOF_OUT_INIT_LOW,	"jacket battery" },
+> -	{ TOSA_GPIO_BAT1_TH_ON,	   GPIOF_OUT_INIT_LOW,	"main battery temp" },
+> -	{ TOSA_GPIO_BAT0_TH_ON,	   GPIOF_OUT_INIT_LOW,	"jacket battery temp" },
+> -	{ TOSA_GPIO_BU_CHRG_ON,	   GPIOF_OUT_INIT_LOW,	"backup battery" },
+> -	{ TOSA_GPIO_BAT0_CRG,	   GPIOF_IN,		"main battery full" },
+> -	{ TOSA_GPIO_BAT1_CRG,	   GPIOF_IN,		"jacket battery full" },
+> -	{ TOSA_GPIO_BAT0_LOW,	   GPIOF_IN,		"main battery low" },
+> -	{ TOSA_GPIO_BAT1_LOW,	   GPIOF_IN,		"jacket battery low" },
+> -	{ TOSA_GPIO_JACKET_DETECT, GPIOF_IN,		"jacket detect" },
+> -};
+> -
+>  #ifdef CONFIG_PM
+>  static int tosa_bat_suspend(struct platform_device *dev, pm_message_t st=
+ate)
+>  {
+> @@ -343,6 +332,21 @@ static int tosa_bat_resume(struct platform_device *d=
+ev)
+>  #define tosa_bat_resume NULL
+>  #endif
+> =20
+> +static int tosa_bat_gpio_get(struct device *dev, struct tosa_gpio *gpio)
+> +{
+> +	int ret;
+> +
+> +	if (!gpio->con)
+> +		return 0;
+> +
+> +	gpio->desc =3D devm_gpiod_get(dev, gpio->con, gpio->flags);
+> +	ret =3D PTR_ERR_OR_ZERO(gpio->desc);
+> +	if (ret)
+> +		dev_warn(dev, "failed to get gpio \"%s\"\n", gpio->con);
+> +
+> +	return ret;
+> +}
+> +
+>  static int tosa_power_supply_register(struct device *dev,
+>  			struct tosa_bat *bat,
+>  			const struct power_supply_desc *desc)
+> @@ -350,6 +354,23 @@ static int tosa_power_supply_register(struct device =
+*dev,
+>  	struct power_supply_config cfg =3D {
+>  		.drv_data =3D bat,
+>  	};
+> +	int ret;
+> +
+> +	ret =3D tosa_bat_gpio_get(dev, &bat->gpio_full);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D tosa_bat_gpio_get(dev, &bat->gpio_charge_off);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D tosa_bat_gpio_get(dev, &bat->gpio_bat);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D tosa_bat_gpio_get(dev, &bat->gpio_temp);
+> +	if (ret)
+> +		return ret;
+> =20
+>  	mutex_init(&bat->work_lock);
+>  	bat->psy =3D power_supply_register(dev, desc, &cfg);
+> @@ -358,49 +379,55 @@ static int tosa_power_supply_register(struct device=
+ *dev,
+>  }
+> =20
+> =20
+> -static int tosa_bat_probe(struct platform_device *dev)
+> +static int tosa_bat_probe(struct platform_device *pdev)
+>  {
+> +	struct device *dev =3D &pdev->dev;
+>  	int ret;
+> =20
+>  	if (!machine_is_tosa())
+>  		return -ENODEV;
+> =20
+> -	ret =3D gpio_request_array(tosa_bat_gpios, ARRAY_SIZE(tosa_bat_gpios));
+> +	ret =3D tosa_bat_gpio_get(dev, &gpiod_jacket_det);
+>  	if (ret)
+>  		return ret;
+> =20
+> +	/* these are not used anywhere, continue on failure */
+> +	tosa_bat_gpio_get(dev, &gpiod_battery_switch);
+> +	tosa_bat_gpio_get(dev, &gpiod_main_battery_low);
+> +	tosa_bat_gpio_get(dev, &gpiod_jacket_battery_low);
+> +
+>  	INIT_WORK(&bat_work, tosa_bat_work);
+> =20
+> -	ret =3D tosa_power_supply_register(&dev->dev, &tosa_bat_main,
+> +	ret =3D tosa_power_supply_register(dev, &tosa_bat_main,
+>  					 &tosa_bat_main_desc);
+>  	if (ret)
+>  		goto err_psy_reg_main;
+> =20
+> -	ret =3D tosa_power_supply_register(&dev->dev, &tosa_bat_jacket,
+> +	ret =3D tosa_power_supply_register(dev, &tosa_bat_jacket,
+>  					 &tosa_bat_jacket_desc);
+>  	if (ret)
+>  		goto err_psy_reg_jacket;
+> =20
+> -	ret =3D tosa_power_supply_register(&dev->dev, &tosa_bat_bu,
+> +	ret =3D tosa_power_supply_register(dev, &tosa_bat_bu,
+>  					 &tosa_bat_bu_desc);
+>  	if (ret)
+>  		goto err_psy_reg_bu;
+> =20
+> -	ret =3D request_irq(gpio_to_irq(TOSA_GPIO_BAT0_CRG),
+> +	ret =3D request_irq(gpiod_to_irq(tosa_bat_main.gpio_full.desc),
+>  				tosa_bat_gpio_isr,
+>  				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+>  				"main full", &tosa_bat_main);
+>  	if (ret)
+>  		goto err_req_main;
+> =20
+> -	ret =3D request_irq(gpio_to_irq(TOSA_GPIO_BAT1_CRG),
+> +	ret =3D request_irq(gpiod_to_irq(tosa_bat_jacket.gpio_full.desc),
+>  				tosa_bat_gpio_isr,
+>  				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+>  				"jacket full", &tosa_bat_jacket);
+>  	if (ret)
+>  		goto err_req_jacket;
+> =20
+> -	ret =3D request_irq(gpio_to_irq(TOSA_GPIO_JACKET_DETECT),
+> +	ret =3D request_irq(gpiod_to_irq(gpiod_jacket_det.desc),
+>  				tosa_bat_gpio_isr,
+>  				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+>  				"jacket detect", &tosa_bat_jacket);
+> @@ -409,9 +436,9 @@ static int tosa_bat_probe(struct platform_device *dev)
+>  		return 0;
+>  	}
+> =20
+> -	free_irq(gpio_to_irq(TOSA_GPIO_BAT1_CRG), &tosa_bat_jacket);
+> +	free_irq(gpiod_to_irq(tosa_bat_jacket.gpio_full.desc), &tosa_bat_jacket=
+);
+>  err_req_jacket:
+> -	free_irq(gpio_to_irq(TOSA_GPIO_BAT0_CRG), &tosa_bat_main);
+> +	free_irq(gpiod_to_irq(tosa_bat_main.gpio_full.desc), &tosa_bat_main);
+>  err_req_main:
+>  	power_supply_unregister(tosa_bat_bu.psy);
+>  err_psy_reg_bu:
+> @@ -423,15 +450,14 @@ static int tosa_bat_probe(struct platform_device *d=
+ev)
+>  	/* see comment in tosa_bat_remove */
+>  	cancel_work_sync(&bat_work);
+> =20
+> -	gpio_free_array(tosa_bat_gpios, ARRAY_SIZE(tosa_bat_gpios));
+>  	return ret;
+>  }
+> =20
+>  static int tosa_bat_remove(struct platform_device *dev)
+>  {
+> -	free_irq(gpio_to_irq(TOSA_GPIO_JACKET_DETECT), &tosa_bat_jacket);
+> -	free_irq(gpio_to_irq(TOSA_GPIO_BAT1_CRG), &tosa_bat_jacket);
+> -	free_irq(gpio_to_irq(TOSA_GPIO_BAT0_CRG), &tosa_bat_main);
+> +	free_irq(gpiod_to_irq(gpiod_jacket_det.desc), &tosa_bat_jacket);
+> +	free_irq(gpiod_to_irq(tosa_bat_jacket.gpio_full.desc), &tosa_bat_jacket=
+);
+> +	free_irq(gpiod_to_irq(tosa_bat_main.gpio_full.desc), &tosa_bat_main);
+> =20
+>  	power_supply_unregister(tosa_bat_bu.psy);
+>  	power_supply_unregister(tosa_bat_jacket.psy);
+> @@ -443,7 +469,6 @@ static int tosa_bat_remove(struct platform_device *de=
+v)
+>  	 * unregistered now.
+>  	 */
+>  	cancel_work_sync(&bat_work);
+> -	gpio_free_array(tosa_bat_gpios, ARRAY_SIZE(tosa_bat_gpios));
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.29.2
+>=20
+
+--qpvv5pfrnllxtjfz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJgDd8ACgkQ2O7X88g7
++pqj0A//Qrvjjke5jQ/QnNji1ayQEZh8WgQVSUMTFK98PKNf0ZJ2sLS9c7EAMHLC
+R8IODTm2NLMY0kQ+fDtHrmXBsOsLfHCqG1WtFQdO55BmIc3R6J0m0VhTySlsijYo
+BZDAVJ9uWMlxPzCXayQqS9BiMot+BTKRU+iPbCyBUwiMlym+w+Itz+InhEq24J22
+xORG4+qSQ8moQPcSG40gzASRE1mtAo811/hndnzJlzhR67vOKmKQlS6lOnQKW6CQ
+eVpYLvmASViXotq74d89al73jRsz7BBPS5pEZjh6cQwpwX8fb+fhwIioFidPtyL7
+CjzaU1hqrNrxzI0DtMNY3J72PIEJ7+UdVlLasO9hGji8P/O4RSiXD41jQ6bpL2zN
+7LtRseESnbxK1ifOqobpEhexJHAfFz9MBRHzd2xUgv8qSTGAltkwK5y+hEzkPvwz
+d1b2ey+CIL8apFUlgffrR1OGS/Ja6vt+uTX5xSu1SVXSsk1GYLa1yifDyjD1HOAb
+hYb5Q+OLjGZjmZkSW6B8KYl3LUQ9S3kqXkrRNwUK/MH4DyZvfi3kl4JgqyQk9cVE
+O3sdikHUATBxGKeLzRh9y0ur3oMmnRTp+X/eldjhYtRHp4EYhwNnXF2wci7F32B5
+PUUv/t/hAp8AJKaJsnFeApn5Bh6EpGumWsXh3QMcS7KoAKgCagw=
+=gkQY
+-----END PGP SIGNATURE-----
+
+--qpvv5pfrnllxtjfz--
