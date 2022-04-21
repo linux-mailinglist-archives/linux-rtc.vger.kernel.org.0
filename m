@@ -2,35 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A601509B88
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Apr 2022 11:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8FE509EC4
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Apr 2022 13:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387183AbiDUJDn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Apr 2022 05:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S1383040AbiDULlB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Apr 2022 07:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387199AbiDUJDk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Apr 2022 05:03:40 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F21D0C2
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Apr 2022 02:00:51 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8D7116001D;
-        Thu, 21 Apr 2022 09:00:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650531646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R/gL8psCUex15I9iG3R0MKEQB83NBv2dh3XrVuv3CyM=;
-        b=a0YwgfAC7rYzOe5ILn+k1y8CbGUjgz+3F4wm1STj0kM2MUv0tC16Mxr8Q7ujOZljDaPhaQ
-        6LChAAnRMrx0zFFCwrA4GLCPUmMKPuZEOo/OHCHYVKOmJUJbxBeMI9J2iBk7QWBNAcsuu5
-        0Gu9ZqF4jB3f8qH1nArvKIy4ikJr6uzPlpQtP1B7B0rm7JclbLX3VHqTOZn10SPIcZm9Y2
-        M0axJZDyhfcW8+eDM+vQXhCLV7WfdAQhJznT02V048/vo2hrKIhz70R791XIxNcWoEmxJ9
-        7cp5l7zPBCy3ANSa9YhT3O8FNDWXInMS3S4AbcOoBHKycnadP8lORo0dbO6pMQ==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+        with ESMTP id S241226AbiDULlA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Apr 2022 07:41:00 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85692BB36
+        for <linux-rtc@vger.kernel.org>; Thu, 21 Apr 2022 04:38:10 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id y10so9391053ejw.8
+        for <linux-rtc@vger.kernel.org>; Thu, 21 Apr 2022 04:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BbZlix/BzmsuD7I7W1o8Rx4IjqXoi2CX5l01Yagkz5M=;
+        b=W2rjq2y9YqaOuYf8zTJ1wzzT2AMRGdVbEftqU8zzXRe6I8mieJPZ+YBkSlwLe/X0Q5
+         mGYasxN84wNpYoQOJkT/hD0kE2+Cv0XReA3+DDerVPjBsawNyeYN8/7BNRBT8/mSNKHA
+         q7Dh3nWTo99y8Akguo6s8m0NTeXQZqXDel2ohH9sPTOuj1HQ5JIGCrUVYOYTbliYYI/q
+         MWe2TWaT5C/Mii6aw7bvMe9HYMtg2rL1lZGWIVrfOxAE1RuO+qTwkm2APy03Gds2QpFV
+         fnxaQtFIf5ZOW3PlYdJop+6cHSemT+7q4hkMzhawfcVrICNqCFB+aZRsUP6Wwky4HZ+Q
+         jmpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BbZlix/BzmsuD7I7W1o8Rx4IjqXoi2CX5l01Yagkz5M=;
+        b=YoU8M80tXFzU1XtiKsjJc63PuTEFomboPR4F/bxTtke5m3pqrByTG9v7ytGxtJUvaP
+         tDNnQFwqkI8oEMf++1LS4OxhL/H4phL8TBP7u0OIaKY5EVYD7ic1TzGvKdVgoA5T2VpS
+         QttUtawIJcGp+Ow/z0DEwuEaNrOo6KuqPpA/VCtegkf81ZdTjP9lWhE4VF23Ge71Q4+X
+         rfxWtR+rp2guXmtKvwQ3kof269n19yrOdsX/rbDcRsp6sXJwt7la/J5R/FYooXfterLU
+         fPNyJqybv1tg5YH6RjsBemnEDM8KnYLA44AAiGIyXkqkB3S9MH/PElQj9u2jGbokL4Hq
+         MKPA==
+X-Gm-Message-State: AOAM533aIdpLNVzf5eceGt/IEcOGf0mRuu//6tRSLg6U+cm9HC+zIJyl
+        hGahA3p65Nex5iLqqGINq/j3EQ==
+X-Google-Smtp-Source: ABdhPJxMBUlR5ao1WK3GENZZnLpDO9xTkm8MNJXZhEi091FFEHDY5G607AlLBEJKJu8Z8vgOtUjYgA==
+X-Received: by 2002:a17:907:6da9:b0:6ef:f582:6fcd with SMTP id sb41-20020a1709076da900b006eff5826fcdmr8255172ejc.685.1650541089149;
+        Thu, 21 Apr 2022 04:38:09 -0700 (PDT)
+Received: from [192.168.0.227] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o2-20020a170906768200b006e89514a449sm7644875ejm.96.2022.04.21.04.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Apr 2022 04:38:08 -0700 (PDT)
+Message-ID: <79a50292-15bd-ef6c-68f2-c84923c2b8e8@linaro.org>
+Date:   Thu, 21 Apr 2022 13:38:06 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/7] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -38,8 +64,7 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Magnus Damm <magnus.damm@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+Cc:     linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         Gareth Williams <gareth.williams.jx@renesas.com>,
         Milan Stevanovic <milan.stevanovic@se.com>,
@@ -48,54 +73,29 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
         Clement Leger <clement.leger@bootlin.com>
-Subject: [PATCH v2 7/7] ARM: dts: r9a06g032: Describe the RTC
-Date:   Thu, 21 Apr 2022 11:00:16 +0200
-Message-Id: <20220421090016.79517-8-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220421090016.79517-1-miquel.raynal@bootlin.com>
 References: <20220421090016.79517-1-miquel.raynal@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <20220421090016.79517-2-miquel.raynal@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220421090016.79517-2-miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Describe the SoC RTC which counts time and provides alarm support.
+On 21/04/2022 11:00, Miquel Raynal wrote:
+> Add new binding file for this RTC.
+> 
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-index 4288b935fcea..cdb3341cb3c6 100644
---- a/arch/arm/boot/dts/r9a06g032.dtsi
-+++ b/arch/arm/boot/dts/r9a06g032.dtsi
-@@ -66,6 +66,18 @@ soc {
- 		interrupt-parent = <&gic>;
- 		ranges;
- 
-+		rtc0: rtc@40006000 {
-+			compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
-+			reg = <0x40006000 0x1000>;
-+			interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 67 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "alarm", "timer", "pps";
-+			clocks = <&sysctrl R9A06G032_HCLK_RTC>;
-+			clock-names = "hclk";
-+			status = "disabled";
-+		};
-+
- 		wdt0: watchdog@40008000 {
- 			compatible = "renesas,r9a06g032-wdt", "renesas,rzn1-wdt";
- 			reg = <0x40008000 0x1000>;
--- 
-2.27.0
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
