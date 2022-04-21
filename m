@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404CF509B82
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Apr 2022 11:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ACB509B94
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Apr 2022 11:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387192AbiDUJDb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Apr 2022 05:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S1387218AbiDUJDh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Apr 2022 05:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387197AbiDUJD1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Apr 2022 05:03:27 -0400
+        with ESMTP id S1387202AbiDUJD2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Apr 2022 05:03:28 -0400
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5758B1E3F9;
-        Thu, 21 Apr 2022 02:00:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA65D1FCFE;
+        Thu, 21 Apr 2022 02:00:25 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BE0666000E;
-        Thu, 21 Apr 2022 09:00:19 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id CADB960018;
+        Thu, 21 Apr 2022 09:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650531621;
+        t=1650531624;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u01b1selyXe0jftTDu7r7t0Ht9P7I1540HtnYasaBwg=;
-        b=ZGkRNZKOX3JtROBJD5zn/Mp7AfYXsbEiJcTPK7kfwuuXauHrxfYfMJq5WFmJETazxNIa8D
-        jQDyCFgRW5B3Q+/KuFymvnzhqUkJH1MUIATKMRY4JT64cUCbeTBmhHZ422wgAsF7itgf80
-        CAdQ03ym3ZXltFC5i44YcbMGaD3FZA+qkX+/1JXgOdvnUciidR94XDb/txilXRM0PHZCri
-        l+MTUm1WHzIMC1HyzvYPJ8Q4kdh1fogFNWrV3uQan4V4IZBynDNLtYqTkBBU6Voiu6fOEK
-        EDKZRqicihZ82kwXjaizDESbRexch6CDEt3ugA5uLQJMytmCmRtiEdnUijNstQ==
+        bh=aUsdGZfRO+5bLYaoUtrNLisEBZwE4ffYBoGLqWmNaUg=;
+        b=gfCxgv6jtxDMHLIqDZqPcCGBnAE9+uEX9KnzH8R1IEKBRYxckin74SEipkjDBlNrNd4Wso
+        N3ZErOP/KSE2kaeQ0bK4zu4c7lFbgGZflhBwUJ63CFadlhxag2JeplB/BnLhIaX43xsMf4
+        XXCQJ/7spSLGAy3o/L1mz13LnR61w2yXnzH2V+WXehF0oR/QzMYICDJbSmLSO0XAifWRBe
+        Zn33hx3hEwUdgVaUlMYxUygWTPcWj+ivqQ+CrEzuHFm2M5h3v70J+WJTS1SV5qqEJU6nGB
+        aeVqT1XY0FrAEjW+rfPF2ydeplrvFRmGMVvYFrzl8yRy95Bh1KwUqqZ1llXbpw==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -48,9 +48,9 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
         Clement Leger <clement.leger@bootlin.com>
-Subject: [PATCH v2 1/7] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
-Date:   Thu, 21 Apr 2022 11:00:10 +0200
-Message-Id: <20220421090016.79517-2-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 2/7] soc: renesas: rzn1-sysc: Fix the RTC hclock description
+Date:   Thu, 21 Apr 2022 11:00:11 +0200
+Message-Id: <20220421090016.79517-3-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220421090016.79517-1-miquel.raynal@bootlin.com>
 References: <20220421090016.79517-1-miquel.raynal@bootlin.com>
@@ -66,85 +66,30 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add new binding file for this RTC.
+It needs to be un-gated, but also a reset must be released and an idle
+flag should also be disabled.
+
+The driver already supports all these operations, so update the
+description of the RTC hclock to fit these requirements.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- .../bindings/rtc/renesas,rzn1-rtc.yaml        | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+ drivers/clk/renesas/r9a06g032-clocks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-new file mode 100644
-index 000000000000..d0bd1ae2f9db
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/renesas,rzn1-rtc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas RZ/N1 SoCs Real-Time Clock DT bindings
-+
-+maintainers:
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+allOf:
-+  - $ref: rtc.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - renesas,r9a06g032-rtc
-+      - const: renesas,rzn1-rtc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    minItems: 3
-+    maxItems: 3
-+
-+  interrupt-names:
-+    items:
-+      - const: alarm
-+      - const: timer
-+      - const: pps
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: hclk
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - clock-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-+    rtc@40006000 {
-+       compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
-+       reg = <0x40006000 0x1000>;
-+       interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>,
-+                    <GIC_SPI 67 IRQ_TYPE_EDGE_RISING>,
-+                    <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-+       interrupt-names = "alarm", "timer", "pps";
-+       clocks = <&sysctrl R9A06G032_HCLK_RTC>;
-+       clock-names = "hclk";
-+       start-year = <2000>;
-+     };
+diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
+index 1df56d7ab3e1..5bd125552b56 100644
+--- a/drivers/clk/renesas/r9a06g032-clocks.c
++++ b/drivers/clk/renesas/r9a06g032-clocks.c
+@@ -260,7 +260,7 @@ static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
+ 	D_MODULE(HCLK_QSPI0, "hclk_qspi0", CLK_REF_SYNC_D4, 0x2a0, 0x2a1, 0x2a2, 0x2a3, 0x300, 0x301, 0x302),
+ 	D_MODULE(HCLK_QSPI1, "hclk_qspi1", CLK_REF_SYNC_D4, 0x480, 0x481, 0x482, 0x483, 0x4c0, 0x4c1, 0x4c2),
+ 	D_MODULE(HCLK_ROM, "hclk_rom", CLK_REF_SYNC_D4, 0xaa0, 0xaa1, 0xaa2, 0, 0xb80, 0, 0),
+-	D_MODULE(HCLK_RTC, "hclk_rtc", CLK_REF_SYNC_D8, 0xa00, 0, 0, 0, 0, 0, 0),
++	D_MODULE(HCLK_RTC, "hclk_rtc", CLK_REF_SYNC_D8, 0xa00, 0xa03, 0, 0xa02, 0, 0, 0),
+ 	D_MODULE(HCLK_SDIO0, "hclk_sdio0", CLK_REF_SYNC_D4, 0x60, 0x61, 0x62, 0x63, 0x80, 0x81, 0x82),
+ 	D_MODULE(HCLK_SDIO1, "hclk_sdio1", CLK_REF_SYNC_D4, 0x640, 0x641, 0x642, 0x643, 0x660, 0x661, 0x662),
+ 	D_MODULE(HCLK_SEMAP, "hclk_semap", CLK_REF_SYNC_D4, 0x7a3, 0x7a4, 0x7a5, 0, 0xb21, 0, 0),
 -- 
 2.27.0
 
