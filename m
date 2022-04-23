@@ -2,156 +2,129 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A459D50CD4F
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Apr 2022 21:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E705550CDD3
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Apr 2022 23:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbiDWT6e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 23 Apr 2022 15:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S237265AbiDWVtR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 23 Apr 2022 17:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbiDWT60 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 Apr 2022 15:58:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2115F183FBD;
-        Sat, 23 Apr 2022 12:55:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5E94B80D1C;
-        Sat, 23 Apr 2022 19:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA3CC385B5;
-        Sat, 23 Apr 2022 19:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650743721;
-        bh=f+gN5VFSk9TvNUY6oLSGkqRdwS9xhEyKvVqBzBXLs0k=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PzAHzR20lzvPfCTqt/UUzx12IPhOfz+TRjqNJ8NxEoRI/bWqgErqlZjk7cfTM259a
-         ES9ZLzK7AQ5x5SMPoX4fGuEBvk10IF/bYoYOZNrIybBirPtSW18FdAPqWZza8MudXV
-         vG23F9GYtnFHpHrf84m9ZBvRrLCT6HR3YBoZ5rIdgNbcdWJ4WulW+Ag5txr/fArK/K
-         8hzENh6M4DW/B6aRii4K02sQiyHAgWdV6wTeninHDFb9FTGsk1kC60BC8Ty7Z9oRiu
-         uezNy/Q8OZSv9U2rlimKsK6lo1l+EW6dZRWZhxxZjuCiGNgZmaJtyoN+hSdEOEgF8G
-         ZbIfS2Abjyb2Q==
-Received: by mail-wm1-f48.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso10070118wme.5;
-        Sat, 23 Apr 2022 12:55:21 -0700 (PDT)
-X-Gm-Message-State: AOAM533lGh9EPqhUPg/nNViJ/yIL6iwq+/2Z9XUGtlSB1o1YIthHmVZa
-        ZwNhKnBa6uPnYoSswxFiRZFxxDjgek5kduGVgxM=
-X-Google-Smtp-Source: ABdhPJwI9oPHj0hjS6Y5T/XpNunPLjXzfhDb/y4TSIxWhFvis5ICGMzIa2Kp6ZajGKm/dLFayXeKiCmoNnJ4Fu7pVP8=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr18417513wmc.94.1650743719480; Sat, 23
- Apr 2022 12:55:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net>
-In-Reply-To: <20220422234150.GA3442771@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Apr 2022 21:55:03 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Message-ID: <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        with ESMTP id S236663AbiDWVtQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 Apr 2022 17:49:16 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFB48320;
+        Sat, 23 Apr 2022 14:46:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A19F55C0120;
+        Sat, 23 Apr 2022 17:46:17 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 23 Apr 2022 17:46:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650750377; x=
+        1650836777; bh=dHEjTHUFDvHxSW67Dq0IGibu2U4W+lozpqOMR2nEllw=; b=P
+        JDLxMHO+ymIlLGjLjQphL5ypU1Akas9WHQQgLUn9iceCDIG5Q6W35nVtXSLjmScg
+        OkNfPaStv0s7aYtcOWQgfXLjp6Ff/sB6cxte0hhe+Cpw4OCjcdp4Fc2DcX5hy4x6
+        1wZ8QOXzlhq7bhppj8PYQIuS9INHyGyTdNtY0ZnUl1W3W0SgIohOBo5D18cgX7GK
+        QSSLdmpVp1IpP99cSBG/m3D7L6IUoxcRRHJkYePR/OtTZlW3STw02UHULfiG+t3K
+        YXKibzAY9IjyS01bstZ8vvrl2/r7JeNUNgVfs23RxvWd49AChFI8Q8d3noMA+tPJ
+        N+KkkPcWAMDBTEiMIfWug==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650750377; x=1650836777; bh=dHEjTHUFDvHxS
+        W67Dq0IGibu2U4W+lozpqOMR2nEllw=; b=AquY4sIAEzHAe6DJdP6E6wZPUms7m
+        GQ/zGhlyc9EMF0vH7mzEtJIi63jqNuIirU1P4eLsCtu0TghIFtEnmmqP+tTamoXU
+        R6b5DjdbNjQGD2muny8iqpQ50xklFATSurAx/00wmSG5qxe1yTsZiiFZsA4P3myU
+        SyGUhhBxYiqHMmOSIfBkDcehlz0fRNPCiaULnmfbMBN9ZNrCfxPSQhnlIKiPbnpD
+        9AnO7qlJgrMJ2SBUhBaRJgZAbzR2sa3y8O/AogM8oe/33GO8auJWU6G2Ffxa66W+
+        e/3fQfu6qjoOMlyX0lZzERW1xVCeIG0r95Sr+lUgTJ4B5wEGrWJntRS4w==
+X-ME-Sender: <xms:qXNkYi-WQIbPeEmBojfz7uusuUgYBMLHEko7Vrp2ijjyPrVwQpiubQ>
+    <xme:qXNkYitIuK3EHfUDP9ob5soedu9qsIf3VQfBpQlxtEFEVDXUAQ0-gChtL1l9KYpmU
+    64QbQq0aWD7cvkb3g>
+X-ME-Received: <xmr:qXNkYoC0UVGYtKogzxxTWuoBK4yMgx5oYqlopgV0ErBd01xmBE9frq7J-KVlrq9Cb2RFxc1ffY2UfwHKyHEHuica_WTqnpi5SbEpibAHXaUy4HI6TM-xxjPRlw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdejgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:qXNkYqdG2LIe-b6h9i48nTfYURtSp8tYxFozgiyq_mkETfI05isIeA>
+    <xmx:qXNkYnPjx6Wl4hfte4IMKmhxg0-uq8-odcQPMBFkAVsrqpPMEqAnbw>
+    <xmx:qXNkYknGXxVitPENq7U0dij-96voGe9zxst0V_3t-4rc3l5g9ACz9Q>
+    <xmx:qXNkYrnxjPGNeAxeLGMvMBR6M5xF3a54yZ43g1Do5tLL6ler0l2zqQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 23 Apr 2022 17:46:16 -0400 (EDT)
+Subject: Re: [PATCH 04/12] rtc: sun6i: add support for R329 RTC
+To:     Icenowy Zheng <icenowy@aosc.io>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+References: <20220422140902.1058101-1-icenowy@aosc.io>
+ <BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <8ae69c13-a619-62a2-1bf6-90a6c5d9dcf7@sholland.org>
+Date:   Sat, 23 Apr 2022 16:46:15 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
-> > On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > On 4/22/22 12:16, Arnd Bergmann wrote:
-> > > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > Which machine did you hit this on? Is this on hardware or in qemu?
-> > > >
-> > > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> > > Also, I just noticed that the failure is not always the same.
-> > > z2 fails to boot from initrd, and sx1 fails to boot completely.
-> >
-> > That's a lot of machines failing, I hope at least we got the same bugs more
-> > than once here.
-> >
-> > For the I/O space, I found now that PXA was not using the standard
-> > virtual I/O address yet, but instead used a NULL-based offset.
-> >
-> > I'm not entirely happy with this patch, but this is an outline of what
-> > I think we need to fix that: https://pastebin.com/3nVgQsEw
-> > This one is probably incomplete, at least it breaks sa1100 for now,
-> > and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-> > in what way the last patch in the series triggers it, rather than the
-> > one that removed mach/io.h.
-> >
-> > I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-> > If you have a custom config for this one, make sure you get the right
-> > DEBUG_LL address.
-> >
-> > > I'll do another round of bisects.
-> >
->
-> Here is the bisect for the sx1 boot failure.
++RTC maintainers
 
-Odd, I can't reproduce this at all. Do you get any console output at
-all for this?
+On 4/22/22 10:41 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
+> 
+> Allwinner R329 has a RTC with a similar time storage with H616 but a
+> slightly different clock part.
+> 
+> As we have already handled the R329 RTC clocks in the CCU driver, add a
+> compatible string to RTC driver to allow probing of the RTC.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 
-Is this the plain omap1_defconfig, or something else?
+Acked-by: Samuel Holland <samuel@sholland.org>
 
-One thing I keep having to apply myself is this snippet:
+> ---
+>  drivers/rtc/rtc-sun6i.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
+> index 5b3e4da63406..522e28fb05c9 100644
+> --- a/drivers/rtc/rtc-sun6i.c
+> +++ b/drivers/rtc/rtc-sun6i.c
+> @@ -816,6 +816,8 @@ static const struct of_device_id sun6i_rtc_dt_ids[] = {
+>  	{ .compatible = "allwinner,sun50i-h6-rtc" },
+>  	{ .compatible = "allwinner,sun50i-h616-rtc",
+>  		.data = (void *)RTC_LINEAR_DAY },
+> +	{ .compatible = "allwinner,sun50i-r329-rtc",
+> +		.data = (void *)RTC_LINEAR_DAY },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
+> 
 
-diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
-index 0bfad62ea858..87c695703580 100644
---- a/arch/arm/mm/proc-arm925.S
-+++ b/arch/arm/mm/proc-arm925.S
-@@ -441,7 +441,6 @@ __arm925_setup:
-
- #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
-        mov     r0, #4                          @ disable write-back
-on caches explicitly
--       mcr     p15, 7, r0, c15, c0, 0
- #endif
-
-        adr     r5, arm925_crval
-
-I don't remember what the story is behind this, but I can't actually manage
-to boot omap1_defconfig on qemu with the instruction intact.
-
-       Arnd
