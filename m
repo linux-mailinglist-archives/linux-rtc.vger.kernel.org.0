@@ -2,41 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C4D50C62A
-	for <lists+linux-rtc@lfdr.de>; Sat, 23 Apr 2022 03:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AC350C628
+	for <lists+linux-rtc@lfdr.de>; Sat, 23 Apr 2022 03:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiDWBou (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 22 Apr 2022 21:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S229506AbiDWBo6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 22 Apr 2022 21:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiDWBot (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Apr 2022 21:44:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EFF1EE8B6;
-        Fri, 22 Apr 2022 18:41:55 -0700 (PDT)
+        with ESMTP id S231559AbiDWBo5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Apr 2022 21:44:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A1C1F3B79;
+        Fri, 22 Apr 2022 18:42:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9766061365;
-        Sat, 23 Apr 2022 01:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01E6C385A4;
-        Sat, 23 Apr 2022 01:41:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F7160FF3;
+        Sat, 23 Apr 2022 01:42:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC10C385A4;
+        Sat, 23 Apr 2022 01:42:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650678114;
-        bh=ihPaSFuwN2TjpHaNcek0Q7kKelDbk3E90g7VQV6Eh+k=;
+        s=k20201202; t=1650678122;
+        bh=4KnlRJYulWnZ68ZF4bHllHzn8HcaDgDKHWhKudKDFEo=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ZvPXzBLjqWioededoX7PB/3PILpKzLUO0+7M6hHReYSYMSpKRYNg5pKyRWX7FXCdc
-         hg+2CtHIO/ry8wD2MLSxpji4PJggT7rzAkbmT5MZKLy10SUTWRIVAa0mLOxjofbx+s
-         VjJrNlZI2DxMiXNNNefSfpRfYmG8ApdLnWoGfNRMJ1vZ0AkyPdWIxNrD7QtS/FTZ8c
-         rwvzrvRuaB2V0v+ZSPR9ynhpBnIyKALv3brFVmbzVAIn2CqIQw7Wsv0RmLqJovkebG
-         cSULV/g2XZYJOVYwzhDfW6zxDRBeDWW8oTacJgsScsbD5pKfVxPc7Hw0svi/59ArfK
-         y3shGZNBppLvQ==
+        b=jHQICZetUsT+dXdq0t6+3+YCGgjNL4ktfLVStpnFEHbrEFaQxOApR9v+VTRSSPiat
+         zG9kmA+JdErG5eolP+RNXQoPVZHuK2c44LClrq5AwL/Y+46i3qaTxTwLCTxu5D8cb4
+         9icFZkd6ZL+ri8wHnpSzPYra0lFkehHcbdgBCwZ9GZU7eZTzdA5L1UTdm0JGEyG6av
+         l+5Rl2Pepi/9K6kerYusRB9Ns1L/oJZDvd41Al3J28Zw4WNMeCp7UvAo4pbSKsoVDZ
+         ed7vEcnmHL7Lx0Mm2svQvmxUgPETD5VRCMFxlx73ZIkY8c41DwqjOHsn9PHrfWUaSH
+         AasWBSIz9/IRA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220413075835.3354193-8-conor.dooley@microchip.com>
-References: <20220413075835.3354193-1-conor.dooley@microchip.com> <20220413075835.3354193-8-conor.dooley@microchip.com>
-Subject: Re: [PATCH v3 7/9] clk: microchip: mpfs: re-parent the configurable clocks
+In-Reply-To: <20220413075835.3354193-9-conor.dooley@microchip.com>
+References: <20220413075835.3354193-1-conor.dooley@microchip.com> <20220413075835.3354193-9-conor.dooley@microchip.com>
+Subject: Re: [PATCH v3 8/9] clk: microchip: mpfs: add RTCREF clock control
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     daire.mcnamara@microchip.com, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
@@ -46,9 +46,9 @@ To:     Conor Dooley <conor.dooley@microchip.com>, a.zummo@towertech.it,
         alexandre.belloni@bootlin.com, aou@eecs.berkeley.edu,
         krzk+dt@kernel.org, mturquette@baylibre.com, palmer@rivosinc.com,
         paul.walmsley@sifive.com, robh+dt@kernel.org
-Date:   Fri, 22 Apr 2022 18:41:52 -0700
+Date:   Fri, 22 Apr 2022 18:42:00 -0700
 User-Agent: alot/0.10
-Message-Id: <20220423014153.F01E6C385A4@smtp.kernel.org>
+Message-Id: <20220423014201.EEC10C385A4@smtp.kernel.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,20 +58,10 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Conor Dooley (2022-04-13 00:58:34)
-> Currently the mpfs clock driver uses a reference clock called the
-> "msspll", set in the device tree, as the parent for the cpu/axi/ahb
-> (config) clocks. The frequency of the msspll is determined by the FPGA
-> bitstream & the bootloader configures the clock to match the bitstream.
-> The real reference is provided by a 100 or 125 MHz off chip oscillator.
->=20
-> However, the msspll clock is not actually the parent of all clocks on
-> the system - the reference clock for the rtc/mtimer actually has the
-> off chip oscillator as its parent.
->=20
-> In order to fix this, add support for reading the configuration of the
-> msspll & reparent the "config" clocks so that they are derived from
-> this clock rather than the reference in the device tree.
+Quoting Conor Dooley (2022-04-13 00:58:35)
+> The reference clock used by the PolarFire SoC's onboard rtc was missing
+> from the clock driver. Add this clock at the "config" clock level, with
+> the external reference clock as its parent.
 >=20
 > Fixes: 635e5e73370e ("clk: microchip: Add driver for Microchip PolarFire =
 SoC")
