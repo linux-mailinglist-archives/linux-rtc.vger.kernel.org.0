@@ -2,117 +2,149 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA7950CEC1
-	for <lists+linux-rtc@lfdr.de>; Sun, 24 Apr 2022 04:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CB250D0A5
+	for <lists+linux-rtc@lfdr.de>; Sun, 24 Apr 2022 10:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237879AbiDXDA6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 23 Apr 2022 23:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S238781AbiDXIz7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 24 Apr 2022 04:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiDXDA5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 23 Apr 2022 23:00:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3EC13FB72;
-        Sat, 23 Apr 2022 19:57:54 -0700 (PDT)
-X-UUID: 83a395d4d9f34e929909b2f9a9eb2d7e-20220424
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f01cc64b-3fc5-4b64-84b8-fedf49e2cdad,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:f829b9f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 83a395d4d9f34e929909b2f9a9eb2d7e-20220424
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <zhiyong.tao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1556752049; Sun, 24 Apr 2022 10:57:48 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sun, 24 Apr 2022 10:57:43 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sun, 24 Apr
- 2022 10:57:42 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 24 Apr 2022 10:57:41 +0800
-From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
-To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <fshao@chromium.org>
-CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
-        <tinghan.shen@mediatek.com>, <zhiyong.tao@mediatek.com>,
-        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
-        <macpaul.lin@mediatek.com>, <wen.su@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v3 1/1] pwrap: mediatek: fix FSM timeout issue
-Date:   Sun, 24 Apr 2022 10:57:38 +0800
-Message-ID: <20220424025738.32271-2-zhiyong.tao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220424025738.32271-1-zhiyong.tao@mediatek.com>
-References: <20220424025738.32271-1-zhiyong.tao@mediatek.com>
+        with ESMTP id S234595AbiDXIz5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 24 Apr 2022 04:55:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A587095A38;
+        Sun, 24 Apr 2022 01:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1003B80DDE;
+        Sun, 24 Apr 2022 08:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F33DC385B6;
+        Sun, 24 Apr 2022 08:52:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650790374;
+        bh=VAIS5RCD9giYhrbO5Hac6FpKh7We3My7pPHwyo54GI8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IlEUmxA7Upi/jZvwszo5tWXIcRM0EAFPHSwLNctN9Y58IvDFrOEsiQajUPCMH7Jvj
+         ffMGYU3Am1eiuRxan/QEzVGZIU4/nZDiD4I9qyEihHwFs57oDBFuZkioK/aaH82E/D
+         cafv1RJevyhRqAmfrOprDhzFhC5PdErVyqMypulLdZQgaDPE2OydWwwQC4+yvZmqbe
+         cKfnbHuByU+9iCxgB+9sW82eJWEWf6s1YXcaaJOKEOR6FMrQj52g4nRCkxQaL9o5DE
+         hRPjDgGmvEn6UrlX0oEzCHgEu1vF7VzmeRUbf/lMOXmL9MVlUAWdZQ45wrK1ipQsiq
+         1YeW3uUpHXgig==
+Received: by mail-wm1-f46.google.com with SMTP id n32-20020a05600c3ba000b00393ea7192faso338998wms.2;
+        Sun, 24 Apr 2022 01:52:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530pm5LKoJ9S9zURth3ykurMGPhtGlFWlgWWk21lbp77o9sfaDGO
+        08lMtfVWNAsO9QdzyqUCGCnBOiJi5UCARkJqihE=
+X-Google-Smtp-Source: ABdhPJwWxQyFReh1xxhP87snsCB/AySgR1dxVTGy6Gpi4+Uz2ZZzeirzOgx8S2o3MdbrdLkLr/78d+DVsl9RCKwJ5Q8=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr20347843wmc.94.1650790372472; Sun, 24
+ Apr 2022 01:52:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+In-Reply-To: <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sun, 24 Apr 2022 10:52:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+Message-ID: <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 4/23/22 12:55, Arnd Bergmann wrote:
+> > On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
+> >
+> > Odd, I can't reproduce this at all. Do you get any console output at
+> > all for this?
+> >
+> > Is this the plain omap1_defconfig, or something else?
+> >
+>
+> No, it is my own sx1 specific configuration.
+>
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/qemu_sx1_defconfig
+>
+> I don't recall where I got it from but ...
 
-Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
-power on.
-Add a usleep delay to avoid busy read for the H/W status.
-For avoiding the system behavior(ex. disable interrupt in suspend/resume
-flow, schedule block task)cause if (time_after()) be turn first,
-we change it after sleep delay.
-Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
-MT8173 SoCs")
+Ok, that explains it, thanks!
 
-Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
----
- drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+I fixed all the defconfig files that come with the kernel, but for your own
+ones you have to add
 
-diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-index 952bc554f443..ac7139a67e87 100644
---- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-+++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-@@ -12,6 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/delay.h>
- 
- #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN		0x4
- #define PWRAP_MT8135_BRIDGE_WACS3_EN		0x10
-@@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
- 	timeout = jiffies + usecs_to_jiffies(10000);
- 
- 	do {
--		if (time_after(jiffies, timeout))
--			return fp(wrp) ? 0 : -ETIMEDOUT;
- 		if (fp(wrp))
- 			return 0;
-+
-+		usleep_range(10, 11);
-+
-+		if (time_after(jiffies, timeout))
-+			return fp(wrp) ? 0 : -ETIMEDOUT;
- 	} while (1);
- }
- 
--- 
-2.18.0
+# CONFIG_ARCH_MULTI_V7 is not set
 
+into the defconfig file, otherwise the multiplatform target defaults to
+an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+you also need to enable CONFIG_ARCH_MULTI_V4T.
+
+This is slightly unfortunate, but I don't see any way to avoid it, and the
+modified defconfig will still work fine with older kernel trees.
+
+> > One thing I keep having to apply myself is this snippet:
+> >
+> > diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+> > index 0bfad62ea858..87c695703580 100644
+> > --- a/arch/arm/mm/proc-arm925.S
+> > +++ b/arch/arm/mm/proc-arm925.S
+> > @@ -441,7 +441,6 @@ __arm925_setup:
+> >
+> >   #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+> >          mov     r0, #4                          @ disable write-back
+> > on caches explicitly
+> > -       mcr     p15, 7, r0, c15, c0, 0
+> >   #endif
+>
+> it does not have CONFIG_CPU_DCACHE_WRITETHROUGH enabled.
+
+Maybe it was disabled explicitly for the sx1_defconfig because of this
+bug. I would think that this is required for actual sx1 hardware because the
+option is default-enabled for ARM925T, and that CPU core is exclusively
+used in OMAP15xx.
+
+        Arnd
