@@ -2,62 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654AF510005
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Apr 2022 16:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CC8510A05
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Apr 2022 22:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345961AbiDZOJh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Apr 2022 10:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S237467AbiDZUQn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Apr 2022 16:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351560AbiDZOJU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Apr 2022 10:09:20 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04DA10CF;
-        Tue, 26 Apr 2022 07:06:12 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id s21-20020a0568301e1500b006054da8e72dso13128848otr.1;
-        Tue, 26 Apr 2022 07:06:12 -0700 (PDT)
+        with ESMTP id S245167AbiDZUQm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Apr 2022 16:16:42 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5954B1848F1;
+        Tue, 26 Apr 2022 13:13:34 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-e9027efe6aso13266773fac.10;
+        Tue, 26 Apr 2022 13:13:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dq4sezhtXvWjGkw6cGqtobAkYrF6Rziq0liMCjl9hY4=;
-        b=PZbbBohbrq/JDTB7+C1NRLLOuGlZc+McLM/lO8FIinR61/zEP3eFfYDTHTsjupF+e8
-         eVHzpmx0BFe3tOtsoQ1pxVlg1Gf6nRhEt20kWzQCpF0cL3LoaQC6FHPbPibMf2hGIFHz
-         yw/hjwdfpijWgcSaGsKGXhpuQ5nOYNZQ5oIB/q5/MTT7AmZW+zqCilIJ5je+7gaRL4mm
-         z/YNIsCaaf8KlT5lYgDF7sW7//A/zkoMh3LTYVTj5OdZztYiY2iAv/ba5ikc5s28QwlK
-         4SXaw8H7XqngsrouCwealHy6XUHFm6bcmbiy6tO0KI93mo+SDPTNUtLgEDuGzBc0Onqe
-         Ukww==
-X-Gm-Message-State: AOAM533+s2Hd6qQvqzbiYopCBGugPLKiSApeC9Ds5pw6q5JaPOhIetJx
-        eMnz142LBbF/vfff7eARfw==
-X-Google-Smtp-Source: ABdhPJwuQX0Ade/O3VuDIyJktv/+LSYobOodBwi0egeYaqVmuGT2LJ039zBY7csrpgKSJa69CnyYzw==
-X-Received: by 2002:a05:6830:304e:b0:5af:f66a:56ee with SMTP id p14-20020a056830304e00b005aff66a56eemr8623044otr.226.1650981971808;
-        Tue, 26 Apr 2022 07:06:11 -0700 (PDT)
+        bh=R+tJ++uKMm4syPuzQI6ULOL9nUzZ2aA5+1OHC9pGsFA=;
+        b=IJOhTqAWm4nL79Hg+G1c8B/NA9t65kQuaJeIVDx8/FgwQebEZTnR8e+P/wBzpA6jKX
+         QYcklWXJ8g9XQZIHjwElXjCWT1+qI6rcW6cH5YvxKdaAS2GH/tDyVoU7CHPGr8zsPp46
+         n+AMV7VRApXD5rOrj8MksdOgGlUlzbMcxhnOzXkngbZhVnFZvTc4a3sSzSj8pCnrLyLR
+         cVHfBAGVugzaXM208WFplSg+MgFg2vCrZQjhQT+R2pjc+fsvnPQ1/ML1PdrUkWabQ+91
+         WoO9vuTSTDM72LyCYKywvayV219+JBBhxc7GCuCHCADQnvvMpPpu8Go4mb0OkVUFA1Ur
+         M9eA==
+X-Gm-Message-State: AOAM5301J8b+isSH1G5iNni7s8PmHlJPq+xe27m1zb44w2sNsd50QfY6
+        hJDOmh2xJ3IGbsSNFqLvZ2qTtaHnXg==
+X-Google-Smtp-Source: ABdhPJxtCRRa7InlyRGyPTJibvEJVV9OMeA/5C+AZTqFLX2MU44W6xcJv259shTxs36Hni/eYxR1Fw==
+X-Received: by 2002:a05:6870:c5a5:b0:da:ab36:48dd with SMTP id ba37-20020a056870c5a500b000daab3648ddmr9920986oab.150.1651004013707;
+        Tue, 26 Apr 2022 13:13:33 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m65-20020acabc44000000b002ed13d0fe6fsm4813724oif.23.2022.04.26.07.06.10
+        by smtp.gmail.com with ESMTPSA id j5-20020a4a9445000000b00329dab1a07fsm5937690ooi.17.2022.04.26.13.13.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 07:06:11 -0700 (PDT)
-Received: (nullmailer pid 1894220 invoked by uid 1000);
-        Tue, 26 Apr 2022 14:06:10 -0000
-Date:   Tue, 26 Apr 2022 09:06:10 -0500
+        Tue, 26 Apr 2022 13:13:33 -0700 (PDT)
+Received: (nullmailer pid 2461137 invoked by uid 1000);
+        Tue, 26 Apr 2022 20:13:32 -0000
+Date:   Tue, 26 Apr 2022 15:13:32 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-rtc@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Richard Weinberger <richard@nod.at>,
-        linux-mtd@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] dt-bindings: Drop empty and unreferenced binding .txt
- files
-Message-ID: <Ymf8UkekSzSIzuSp@robh.at.kernel.org>
-References: <20220422191958.2589318-1-robh@kernel.org>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     alexandre.belloni@bootlin.com, Fabio Estevam <festevam@denx.de>,
+        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-binding: pcf85063: Add an entry for pca85073a
+Message-ID: <YmhSbA/W1NM7ISbP@robh.at.kernel.org>
+References: <20220419014445.341444-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422191958.2589318-1-robh@kernel.org>
+In-Reply-To: <20220419014445.341444-1-festevam@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -69,19 +62,17 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 22 Apr 2022 14:19:57 -0500, Rob Herring wrote:
-> Drop a couple of old, empty .txt binding files which are no longer
-> referenced.
+On Mon, 18 Apr 2022 22:44:44 -0300, Fabio Estevam wrote:
+> From: Fabio Estevam <festevam@denx.de>
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> The PCA85073A RTC has the same programming model as the PCF85063A.
+> 
+> Add a compatible entry for it.
+> 
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
 > ---
->  Documentation/devicetree/bindings/eeprom/at24.txt | 1 -
->  Documentation/devicetree/bindings/mtd/common.txt  | 1 -
->  Documentation/devicetree/bindings/rtc/rtc.txt     | 1 -
->  3 files changed, 3 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/eeprom/at24.txt
->  delete mode 100644 Documentation/devicetree/bindings/mtd/common.txt
->  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc.txt
+>  Documentation/devicetree/bindings/rtc/nxp,pcf85063.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Applied, thanks!
+Acked-by: Rob Herring <robh@kernel.org>
