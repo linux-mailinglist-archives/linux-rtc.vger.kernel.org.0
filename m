@@ -2,53 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF0F512EEE
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 10:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97B3512EF2
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 10:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344825AbiD1Iuv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Apr 2022 04:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S233691AbiD1IwY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Apr 2022 04:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344267AbiD1Itr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 04:49:47 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E46A5E773;
-        Thu, 28 Apr 2022 01:45:18 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id j6so3088632qkp.9;
-        Thu, 28 Apr 2022 01:45:18 -0700 (PDT)
+        with ESMTP id S231406AbiD1IwX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 04:52:23 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6624E39;
+        Thu, 28 Apr 2022 01:49:09 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id e17so2746172qvj.11;
+        Thu, 28 Apr 2022 01:49:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NsvCiErbKX2TatD2CWV4KQZYhmPlqRnfIwZ5STUtAP4=;
-        b=fM/fmt3cxEfUJVPjBPxWgd1Buu4RemT3tQVr7tG5eWq0Y4B/aBdzvJw6QbCKZqX35g
-         j9nRaT7yhAbGPdmy/TinvbpLuwt3w8wKfhN8TUERaLYVW6M2g9VVI6wA2KmmriqZiTzn
-         cTZKUrYsGn1KAMSPvuKbOPNT8aoOkQbPEJmYmmROArCuFWFbwlQXnfNPAwoQjExqP97m
-         8SJh3IZyLkS1/nnJTeRLwBghPFUVQhAha2HUuGKk8VNHWD/S5Cj4gQyZMdi18PLd44D/
-         /Nayeq2pzLm9u6K1kL8aT/gBRZCn3RDvKcbyRZ7hR8DCW8SUHD0j1yKggeDMhkKwhaTG
-         Tnyw==
-X-Gm-Message-State: AOAM532RB338y4Rs9L7hu/Pd/M4beU7J59rrwSYJwdMdlteYxVHzwV8f
-        1sMSLA2V6Ll4gmb7IUqO4w2q8GsENHSxtA==
-X-Google-Smtp-Source: ABdhPJwYfy7NpKtfP2j76shLvkTHXaWgqsI0aqFrm6lJDgrC567ZLuQYfFDKgV551+/gyOMa8M/+Og==
-X-Received: by 2002:a37:750:0:b0:69f:a05d:6d21 with SMTP id 77-20020a370750000000b0069fa05d6d21mr966033qkh.676.1651135516626;
-        Thu, 28 Apr 2022 01:45:16 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id x13-20020a05620a258d00b0069c7468e123sm9663972qko.122.2022.04.28.01.45.15
+        bh=IBi5WBTdEbYqU1V6BFZ8Gs02JhkXoeQPLmgUcm2a+lo=;
+        b=w7wR9Yo3oi+OeB5/M/OsCt/3sb9h3Pb7cVfnwHb1twRxxhveaKrBuZ+hjjv2RNlArK
+         K6gcLOyI15G4uEoJbY2orNfSpO+UduuDugaaNOVpfdxxzUc9LcBeSUsTQ3qjvFIEU9Us
+         GNa5H+xUVcCwsfS3XWAE+t4fxvw+3j5Mn+++p4RcrE4aA4pgU6wdJn9iUeuUG0GPSLrx
+         dbVrsr7bAdJ7Vn8qCQ5B/V14glmVgzGQM4jX6AQ/h5AjD07btBlEbkXqC5izzVkC+G6D
+         9xVbwaKkK8IgQfaz8zNNcLx8YBgGw1umjn5ssCSwwMKanyyqI7A/4jTegRIYcr8cIvMn
+         E/XQ==
+X-Gm-Message-State: AOAM532xAPttlC3ax5Byj23VH2jY2r8N6J4zDQFQ6QlW/TNfHbincaOA
+        mpw9CmaHbjL6umUS7IBkLV8R+RPySSoWFA==
+X-Google-Smtp-Source: ABdhPJxNS4PbZp+grglgp3SAxUNkjJZetVrnmqQZpl0eEy3X+1yQRJg8uoCitc0UdteknBwxNOwOig==
+X-Received: by 2002:a05:6214:d47:b0:456:53cd:d96a with SMTP id 7-20020a0562140d4700b0045653cdd96amr4252264qvr.128.1651135748875;
+        Thu, 28 Apr 2022 01:49:08 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id d1-20020a05622a15c100b002f373d233d3sm5309539qty.71.2022.04.28.01.49.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 01:45:16 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f7ca2ce255so44931897b3.7;
-        Thu, 28 Apr 2022 01:45:15 -0700 (PDT)
-X-Received: by 2002:a81:4782:0:b0:2eb:1cb1:5441 with SMTP id
- u124-20020a814782000000b002eb1cb15441mr29794472ywa.479.1651135515554; Thu, 28
- Apr 2022 01:45:15 -0700 (PDT)
+        Thu, 28 Apr 2022 01:49:08 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f7bb893309so44786117b3.12;
+        Thu, 28 Apr 2022 01:49:08 -0700 (PDT)
+X-Received: by 2002:a81:1cd5:0:b0:2f4:c3fc:2174 with SMTP id
+ c204-20020a811cd5000000b002f4c3fc2174mr32203225ywc.512.1651135747944; Thu, 28
+ Apr 2022 01:49:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421090016.79517-1-miquel.raynal@bootlin.com> <20220421090016.79517-2-miquel.raynal@bootlin.com>
-In-Reply-To: <20220421090016.79517-2-miquel.raynal@bootlin.com>
+References: <20220421090016.79517-1-miquel.raynal@bootlin.com> <20220421090016.79517-8-miquel.raynal@bootlin.com>
+In-Reply-To: <20220421090016.79517-8-miquel.raynal@bootlin.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 Apr 2022 10:45:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWXimtXT+3YsQd=WqWgQGiM7h=ZT1VZOy3myrMWuPvk5A@mail.gmail.com>
-Message-ID: <CAMuHMdWXimtXT+3YsQd=WqWgQGiM7h=ZT1VZOy3myrMWuPvk5A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+Date:   Thu, 28 Apr 2022 10:48:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWoKpKbOvi9dRHL=Ld8fnBOdCfe6kd2MrHqo7BSu-YrOQ@mail.gmail.com>
+Message-ID: <CAMuHMdWoKpKbOvi9dRHL=Ld8fnBOdCfe6kd2MrHqo7BSu-YrOQ@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] ARM: dts: r9a06g032: Describe the RTC
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -72,8 +72,8 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,11 +82,10 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 On Thu, Apr 21, 2022 at 11:00 AM Miquel Raynal
 <miquel.raynal@bootlin.com> wrote:
-> Add new binding file for this RTC.
+> Describe the SoC RTC which counts time and provides alarm support.
 >
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-LGTM, so
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
