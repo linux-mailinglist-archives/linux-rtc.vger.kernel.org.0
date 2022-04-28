@@ -2,160 +2,132 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE23512FC7
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 11:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBA4513591
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 15:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiD1JtV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Apr 2022 05:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S1347624AbiD1Ns0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Apr 2022 09:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345655AbiD1Jbb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 05:31:31 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498857E584;
-        Thu, 28 Apr 2022 02:28:17 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id y3so2990973qtn.8;
-        Thu, 28 Apr 2022 02:28:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UzgLlvHeKfXdKa9mQi9Qa9I2XaZoaDHqGD6rpDfkfEM=;
-        b=ICIxQ6Ra0y19lwtKgEbxgiiEGbGJ487TZHEFBxb7pxQUyx9XB0xsGOAcHhqEqVrJFU
-         beVvRpyE4WNgVL16VOLHnjYWup2wIGIiYdCanLiHbbVTJZmas9GI53W2QzCBy2SEI+Cw
-         8oKG6+vMH8yQAYdNO3wAUxAHvPm+pRwfgI9Vz6/MIXfzZmPTHlcMAkcl+m8/nAufxoW2
-         Lb/lodOuET7JexZfAUwpwTJzGQpV1AhyWrK6f/wWCZk1HOyuVn0aHzpRAF88tx1YbvjW
-         5jmpuiUosdKn7+CpcrbNMUmspZE+SmHaY5dOMDqJOkRLkCJe1ddt6/8izSPfjjW2n6fH
-         HIEg==
-X-Gm-Message-State: AOAM5334krQut+OxOixwweXwNaaXYFWn2n6fr33th4leVytAr2Ocv6Fh
-        anOmZlmuG6b4XJ3bVRMkPhZ8Nr3iv/W+jA==
-X-Google-Smtp-Source: ABdhPJy9RHWxQ86Wi805QX8YiNPLgMfv+NELSifNF8ZS/vCB4/IncOVs71Y7bX1llGU+j1+C+BBfWA==
-X-Received: by 2002:a05:622a:253:b0:2e2:33fb:a583 with SMTP id c19-20020a05622a025300b002e233fba583mr22049621qtx.92.1651138096115;
-        Thu, 28 Apr 2022 02:28:16 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05622a011200b002f38843e32asm949761qtw.35.2022.04.28.02.28.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 02:28:15 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2f7c424c66cso46324977b3.1;
-        Thu, 28 Apr 2022 02:28:15 -0700 (PDT)
-X-Received: by 2002:a81:e10d:0:b0:2f7:bb2a:6529 with SMTP id
- w13-20020a81e10d000000b002f7bb2a6529mr28455005ywh.62.1651138095015; Thu, 28
- Apr 2022 02:28:15 -0700 (PDT)
+        with ESMTP id S1347594AbiD1NsX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 09:48:23 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613661009;
+        Thu, 28 Apr 2022 06:45:07 -0700 (PDT)
+Received: from mail-yw1-f172.google.com ([209.85.128.172]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mbj7g-1oHTX51Pwc-00dBzt; Thu, 28 Apr 2022 15:45:05 +0200
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f16645872fso53520157b3.4;
+        Thu, 28 Apr 2022 06:45:04 -0700 (PDT)
+X-Gm-Message-State: AOAM531rqS3TMANA9dj5PbXHgYaYSabwGuCiqYz/vsc+5F15FvO6r45T
+        WzYb45HYkZmr2LEKIEQie8lnR4wtPfawCBHHv8E=
+X-Google-Smtp-Source: ABdhPJzhKdbLezBOw+onlWys2HjSNrb5hSb6f6j0ogYNPd9ax1npbHyo1Y6CrpuYIOWED3Pgr1SGQ4YvAKDaJmP/tmM=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr33063062ywf.347.1651153503029; Thu, 28
+ Apr 2022 06:45:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421090016.79517-1-miquel.raynal@bootlin.com>
- <20220421090016.79517-4-miquel.raynal@bootlin.com> <CAMuHMdVBxeH=G8Dj0d=vS80c356Z+D2fsxRr6n+bzMxXX=D9+Q@mail.gmail.com>
- <20220428110917.6b1a19ce@xps13>
-In-Reply-To: <20220428110917.6b1a19ce@xps13>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 Apr 2022 11:28:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVPuut+c7ujTPgSvquRXyB=6r9GqXzVG+RPZLkEmL2oSw@mail.gmail.com>
-Message-ID: <CAMuHMdVPuut+c7ujTPgSvquRXyB=6r9GqXzVG+RPZLkEmL2oSw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] rtc: rzn1: Add new RTC driver
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+In-Reply-To: <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 Apr 2022 15:44:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+Message-ID: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Michel Pollet <michel.pollet@bp.renesas.com>
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:FlIDVPKXj9nzRwbk/wtccBdWDayg3PeTGiQuZ0/K42Bc7lGmPdy
+ zssQcyDZ/DvWHSLnMLZ2c9c0/R8//Ct6Le7VOKueD5Qrh1XSkN/immCrCQM54OpPKR7UGyt
+ rQR8FQFtM5HLTQupvDTlwrysBtqfjlwTZD25pEF/Z42s6fyHy6hxD7eWpHSPUujdYwhn8pQ
+ hp2z24g1g13nAlk8lrHHQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bRWqGE+N+ZY=:1iRjrIl6V157UK5O78TAoc
+ 5W5zmo/RxHt6piZZQJR7bHPk8veJW7G/eD5jO6ABZaX8NSxlHXJ4TP5x5uFoaOWveTMuY2YNB
+ E/S7IJzqQcjMpAVq0rBO649N779tX8wy6iezjQHdAX7O/6l7dHbxrLeGuJGtVvy5SPmFPsnuF
+ 7hnbUhs94zbUsLMYQRcLlnGNptZ7bFxfi+PlNYB3jQQh0+wXdJS+P/EHPJK8UZHs5BjQBv+Qa
+ EX048TdTH+63xTL5zzrwgKZLFucF2PiHs68Y/WDhFOvULFD5XwxnpC8QYME42zx9V0NjnR5nN
+ Zars/a9a2hpnBBVlPLxle2k0Ttww//0frPo+wnR8G+aU3Z16D9IvAlHwSrOB4KMSHfQcLKCXw
+ tPZA1Y7PpVtBkQv7lmHrlSCe1xcRYAXOza/mWm2Xjc8xgk76wXvHvzBr1oDGBEonkVw+bOSVk
+ vREnB57Ovs/1UlfpUFpyy1eB8Q7JaktAGlKXASPtn19bnV5rt2G4I4ntfhaJQgAmDnlzlZpC5
+ Evd5+7v4S1X/iOOX+m+Ahkho8f4fM1ugsUVvQaHKOghqQBb6nN0eAvrdXIURg56QmTfn7UwPn
+ N0bxJ5G7FH8Br9CiO+tOZBKs/TdaV+aEaEj9KMO4yP5VYEF6IpBEitkf9ifUTwFwihqSEjEM8
+ bFcGWSSCC9/0KLlTg8Gh5+db6LA5cg7itMKXDE5C7XsBAI9Hm3mx1p5yWo7HLHsbXHmzeASA2
+ rpwe5iV2gi/30EyX8gsnnoe4xEtOTZhUuWGdwxWCA0Vb4Q0oLDG+gyWlREBg6vyV7SR9Ag7iE
+ yckvS97oNG9rtf98GBy9xysVb2+4/y8JObMv6+5+lQPd284ay4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Miquel,
-
-On Thu, Apr 28, 2022 at 11:09 AM Miquel Raynal
-<miquel.raynal@bootlin.com> wrote:
-> geert@linux-m68k.org wrote on Thu, 28 Apr 2022 10:58:03 +0200:
-> > On Thu, Apr 21, 2022 at 11:00 AM Miquel Raynal
-> > <miquel.raynal@bootlin.com> wrote:
-> > > From: Michel Pollet <michel.pollet@bp.renesas.com>
+On Sun, Apr 24, 2022 at 8:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On 4/24/22 01:52, Arnd Bergmann wrote:
+> > > On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > > into the defconfig file, otherwise the multiplatform target defaults to
+> > > an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+> > > you also need to enable CONFIG_ARCH_MULTI_V4T.
 > > >
-> > > Add a basic RTC driver for the RZ/N1.
+> > > This is slightly unfortunate, but I don't see any way to avoid it, and the
+> > > modified defconfig will still work fine with older kernel trees.
 > > >
-> > > Signed-off-by: Michel Pollet <michel.pollet@bp.renesas.com>
-> > > Co-developed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-> > > --- /dev/null
-> > > +++ b/drivers/rtc/rtc-rzn1.c
 > >
-> > > +static int rzn1_rtc_probe(struct platform_device *pdev)
-> > > +{
-> > > +       struct rzn1_rtc *rtc;
-> > > +       int ret;
-> > > +
-> > > +       rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> > > +       if (!rtc)
-> > > +               return -ENOMEM;
-> > > +
-> > > +       platform_set_drvdata(pdev, rtc);
-> > > +
-> > > +       rtc->clk = devm_clk_get(&pdev->dev, "hclk");
-> > > +       if (IS_ERR(rtc->clk))
-> > > +               return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk), "Missing hclk\n");
-> >
-> > As you don't care about the clock rate, only about enabling/disabling
-> > the clock, I recommend using Runtime PM instead of explicit clock
-> > handling.
+> > Yes, that works. I changed it in my configuration.
 >
-> That's right.
->
-> > That does depend on:
-> > [PATCH v3 4/8] soc: renesas: rzn1: Select PM and PM_GENERIC_DOMAINS configs[1]
-> > [PATCH v3 5/8] ARM: dts: r9a06g032: Add missing '#power-domain-cells'[2]
->
-> There should not be any dependency with the RTC tree so that should not
-> be too complex to handle.
+> Ok, great!. I managed to boot the z2 machine with PCMCIA support
+> and it gets around the issue with my patch, correctly detecting the
+> CF card.
 
-Agreed.
+Hi Guenter,
 
-> > and on documenting the power-domains property to the RTC DT bindings,
-> > and on adding a proper power-domains property to the RTC node in DTS.
->
-> Right.
->
-> Do we need to define these properties in the UART, DMA and NAND
-> controller nodes as well? I seem to remember that you mentioned it but
-> I don't recall for which one and I was too focused (lazy?) on other
-> features so I forgot about it.
+I have now sent out a fix that I'm happy with, and applied it to the
+pxa-multiplatform-5.18 branch of the soc tree as well as the
+combined arm/multiplatform tree.
 
-It would be good to have them everywhere.  The initial RZ/N1D DTS
-lacked them, as it only had the uart driver, which is not a Renesas
-IP core.
+I have not merged this new version into the for-next branch
+since I would like to see if there are any other regressions first.
 
-The dw-dmac and 8250_dw drivers already use Runtime PM.
-The renesas-nand-controller driver can be updated later, after the
-power-domains properties have been added to the DTS.
+Can you run your boot tests on the arm/multiplatform branch
+and let me know if that fixes everything you found? If that
+takes a lot of manual steps on your side, I'd just wait for the
+build bots and merge it after all there are no new compile-time
+issues.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+       Arnd
