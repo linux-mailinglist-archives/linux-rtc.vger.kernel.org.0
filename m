@@ -2,66 +2,100 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D71512EA4
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 10:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF0F512EEE
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Apr 2022 10:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344448AbiD1Ijn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Apr 2022 04:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S1344825AbiD1Iuv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Apr 2022 04:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344790AbiD1IjP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 04:39:15 -0400
-X-Greylist: delayed 865 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Apr 2022 01:32:17 PDT
-Received: from mail.profitbizdesign.com.pl (mail.profitbizdesign.com.pl [94.177.252.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6257A2047
-        for <linux-rtc@vger.kernel.org>; Thu, 28 Apr 2022 01:32:17 -0700 (PDT)
-Received: by mail.profitbizdesign.com.pl (Postfix, from userid 1001)
-        id 2A574A825D; Thu, 28 Apr 2022 09:11:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=profitbizdesign.com.pl; s=mail; t=1651133512;
-        bh=Rfzvu4C+yJ1wyuJ4V+t/udh6cgYEQVnY6S5ltO4wdNg=;
-        h=Date:From:To:Subject:From;
-        b=G9Wy7ZrFXVMNM46L5TOrnFj/x9F8Ir9EXfvLpMesXJjhVhV7Nd9C5jCyP21A5bruA
-         SuOECv2qQWIPgxqNR5eRceYm08a4vSuubqU1HMgc8PIGejKJagk34Lrc79f8GWlbcp
-         KnjykUHePBTiJjl8otzQrRY58lsIUq+sVsrfmCdklJcfm9MDMeOMkcA7lNxk6ATA2K
-         uxNyXkV9555zE6FPPx3U5OQdhuy4cieFWzRcwrrwYuQd0B1+ycaRWl5RGl7gkPbbsO
-         YCP03PZyRaOAK4xBy850+t3gcAI/uOptukKKJV4ckLux4YcjcRIGnKSuzgtu+v9fRc
-         Py6A9aA6PMncg==
-Received: by mail.profitbizdesign.com.pl for <linux-rtc@vger.kernel.org>; Thu, 28 Apr 2022 08:10:19 GMT
-Message-ID: <20220428074503-0.1.1z.5z58.0.1je4wrlytj@profitbizdesign.com.pl>
-Date:   Thu, 28 Apr 2022 08:10:19 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@profitbizdesign.com.pl>
-To:     <linux-rtc@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.profitbizdesign.com.pl
+        with ESMTP id S1344267AbiD1Itr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Apr 2022 04:49:47 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E46A5E773;
+        Thu, 28 Apr 2022 01:45:18 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id j6so3088632qkp.9;
+        Thu, 28 Apr 2022 01:45:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NsvCiErbKX2TatD2CWV4KQZYhmPlqRnfIwZ5STUtAP4=;
+        b=fM/fmt3cxEfUJVPjBPxWgd1Buu4RemT3tQVr7tG5eWq0Y4B/aBdzvJw6QbCKZqX35g
+         j9nRaT7yhAbGPdmy/TinvbpLuwt3w8wKfhN8TUERaLYVW6M2g9VVI6wA2KmmriqZiTzn
+         cTZKUrYsGn1KAMSPvuKbOPNT8aoOkQbPEJmYmmROArCuFWFbwlQXnfNPAwoQjExqP97m
+         8SJh3IZyLkS1/nnJTeRLwBghPFUVQhAha2HUuGKk8VNHWD/S5Cj4gQyZMdi18PLd44D/
+         /Nayeq2pzLm9u6K1kL8aT/gBRZCn3RDvKcbyRZ7hR8DCW8SUHD0j1yKggeDMhkKwhaTG
+         Tnyw==
+X-Gm-Message-State: AOAM532RB338y4Rs9L7hu/Pd/M4beU7J59rrwSYJwdMdlteYxVHzwV8f
+        1sMSLA2V6Ll4gmb7IUqO4w2q8GsENHSxtA==
+X-Google-Smtp-Source: ABdhPJwYfy7NpKtfP2j76shLvkTHXaWgqsI0aqFrm6lJDgrC567ZLuQYfFDKgV551+/gyOMa8M/+Og==
+X-Received: by 2002:a37:750:0:b0:69f:a05d:6d21 with SMTP id 77-20020a370750000000b0069fa05d6d21mr966033qkh.676.1651135516626;
+        Thu, 28 Apr 2022 01:45:16 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id x13-20020a05620a258d00b0069c7468e123sm9663972qko.122.2022.04.28.01.45.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 01:45:16 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2f7ca2ce255so44931897b3.7;
+        Thu, 28 Apr 2022 01:45:15 -0700 (PDT)
+X-Received: by 2002:a81:4782:0:b0:2eb:1cb1:5441 with SMTP id
+ u124-20020a814782000000b002eb1cb15441mr29794472ywa.479.1651135515554; Thu, 28
+ Apr 2022 01:45:15 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220421090016.79517-1-miquel.raynal@bootlin.com> <20220421090016.79517-2-miquel.raynal@bootlin.com>
+In-Reply-To: <20220421090016.79517-2-miquel.raynal@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 28 Apr 2022 10:45:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWXimtXT+3YsQd=WqWgQGiM7h=ZT1VZOy3myrMWuPvk5A@mail.gmail.com>
+Message-ID: <CAMuHMdWXimtXT+3YsQd=WqWgQGiM7h=ZT1VZOy3myrMWuPvk5A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Thu, Apr 21, 2022 at 11:00 AM Miquel Raynal
+<miquel.raynal@bootlin.com> wrote:
+> Add new binding file for this RTC.
+>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+LGTM, so
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+Gr{oetje,eeting}s,
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+                        Geert
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
