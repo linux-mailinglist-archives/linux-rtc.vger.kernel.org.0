@@ -2,98 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B52515621
-	for <lists+linux-rtc@lfdr.de>; Fri, 29 Apr 2022 22:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E2D515747
+	for <lists+linux-rtc@lfdr.de>; Fri, 29 Apr 2022 23:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381085AbiD2U5X (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 29 Apr 2022 16:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S236375AbiD2Vuc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 29 Apr 2022 17:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381068AbiD2U5W (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 Apr 2022 16:57:22 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F37CC518
-        for <linux-rtc@vger.kernel.org>; Fri, 29 Apr 2022 13:54:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n10so153855ejk.5
-        for <linux-rtc@vger.kernel.org>; Fri, 29 Apr 2022 13:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8ijMUHM6BZmaa7c0hm3mqC8JYHeyH09dTjrvSxZy1BY=;
-        b=jDZcRUA3YzPLHYV5bc8rvjIuyIhPN6BMCalJK0LvbKoFfLp8PIrNIwur1Crf2WZqx/
-         lEcirE4D5zqId9wjGmYP+xL+MSyb/DO7h3ILtI0cO2wiFNhb5Uv0jNIXYpKoP6VpyyJI
-         Hf7qNN32GMy6FdJvONI4uSRYmi4G50C/xuQS4uo1uiZsBpMYNqk2RPbzIG+oUfV0iOke
-         GfF0i7cGnflrgrn++seNwA+YI2Hn/RkkZS57sn/7q1e3AgpxcrMSnt/oSSY8GiVjo1c4
-         Bs0up1vL/19NSFtazp9B2WY0//RTnNc8V9LYU24i8mPVrFBqGg2lOG/3tclkKOYyg96S
-         VDtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8ijMUHM6BZmaa7c0hm3mqC8JYHeyH09dTjrvSxZy1BY=;
-        b=BYenjV/rHpTjkXP4OPGukk7FjHsXyiKg1gWbfhCVEIaZ+A3Hd8HDm7k6L+XnjY/LDQ
-         U5ghv1CrPKDrajqeydHvoalyuKXnjJo9WHR1dhl3NOCkVVsfbafODxJBIkha8fC1EKgI
-         eyQpp6C1ydOP6rlowIEq6VPCG6q8siLWOkpjcF+5a7nldOjRkbEQPXfXgfYxi+XII0iB
-         EhnS4zvBDPzFLwEw3EVXJSkPGulzt4lcf+6CEfDCRz5fFT/zRIILC9ePvnoK8QaYlsmI
-         ZaCj9b9dx7luqeEELW7gILkZGLwVUwvUUUHB9xLnvErIWJ/JT5P87fNwo3zs+kGMMD6E
-         mztA==
-X-Gm-Message-State: AOAM531hu0ggQpvvn6Zqsk5WQX12cN1kFVR2DrbNHNX16F7xf6kv5UCi
-        Xf9mTn82ZSKDfPRyqCUe5aEW9Q==
-X-Google-Smtp-Source: ABdhPJyEiU/AYnt4FO/n9XbiqqNZdHoU6dwECTZ1TVLYSRRs21KAKVHRfb4kQfHEM4Oa1Qws3c12bw==
-X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id ho43-20020a1709070eab00b006da8ec5d386mr1070959ejc.668.1651265641594;
-        Fri, 29 Apr 2022 13:54:01 -0700 (PDT)
-Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gv19-20020a1709072bd300b006f3ef214df4sm991090ejc.90.2022.04.29.13.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 13:54:01 -0700 (PDT)
-Message-ID: <069b274d-1460-cd70-89f9-6abda4e3b4fa@linaro.org>
-Date:   Fri, 29 Apr 2022 22:54:00 +0200
+        with ESMTP id S238812AbiD2Vua (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 29 Apr 2022 17:50:30 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4AF66224;
+        Fri, 29 Apr 2022 14:47:10 -0700 (PDT)
+Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mna0x-1oAIQr2BZF-00jYkX; Fri, 29 Apr 2022 23:47:08 +0200
+Received: by mail-yb1-f172.google.com with SMTP id j2so16794830ybu.0;
+        Fri, 29 Apr 2022 14:47:07 -0700 (PDT)
+X-Gm-Message-State: AOAM530xFvgaS6E7YleebaxYuHKbztMb8/4ph6JAKkapt9mvY51Aq0Ot
+        ghcHJQm/ZtGSH1zgWh+MyICM7xk9gzphi+BehZs=
+X-Google-Smtp-Source: ABdhPJwtcBUeQCwBE/wHCTNSMt9GmZKG8b0zElf3XSRBB+ltEsvmy5fENkUQ3EnsgyBJ9WDIgobY6XmBd5vZorZaAUk=
+X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
+ e185-20020a25d3c2000000b0064574dff43dmr1535991ybf.394.1651268826333; Fri, 29
+ Apr 2022 14:47:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: mediatek: add mt6358 and mt6366
- compatible
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yuchen Huang <yuchen.huang@mediatek.com>
-References: <20220428092726.25814-1-allen-kh.cheng@mediatek.com>
- <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+In-Reply-To: <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 29 Apr 2022 23:46:50 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:aUt4162Q8o+llL/MljFLEZxLfqetFKE837pmri7fn06Ux+pHE2E
+ HUT40C4ROecFrWGMuh7FZHUctHZLox8PPsZXleJUgvy9mYBXJ8pKhdYxSRIruSY/aMB/RDF
+ U1BEI7N5/2VG8u6N+C3m4+nlZOlEtD7a52T70wiK6/at/danyT6j0f35GJC0igmu+zlPp3o
+ hPSAJrfl8wT08SeKcbKDw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:B6AOKPVl318=:2wVX5LiQoMRiBhVxLqNc5a
+ 6bfir268MD5gQH7DLEuFEsI6WBBc1Y0Ecs6EnhuRsx1K24LuPMh07aYEIpKkcwNAAZfYMwflw
+ pGzfeN1TqZ/DZE0Y6jB9FtL7K+04AeCNHTMZ//8xkL4V0xYBxZAP9BTVlcnEyvTsUYwS2Btg4
+ vlnJGv66VRl18T+sqQf7xxVhibK8Wq70YGqiM+Po4/0hQXeq8MB/INm4yKnqmNUInDxTfWLHT
+ +mmUB0ji5qRvID6/tQH6xrbVdNsZo18KfNLKu/B1CiwzBdT/gKJkj4pXgPVXoMq36ig2Ctu3M
+ adeEof/gPY3eELgS/LtY8Tbwxt40i+enALDiuH+GuPG8sIJGRQ0u8jm4WbQbxpqtQReV/BoN/
+ /0RaUvbG5bCVJ2ZEbQ75GA30AyoYlAIl5/wde1yMLwwVxBXeLmxlq3y/5eFktLuUskS6GspAY
+ H1p4xOJbdwpqwlZHG7GYDtZtFwFoQe2yR7IlaVupWMwQ5kJ/5ARJKy1MGSNGWNv9ynnIW+16q
+ 3r268R/MBM52lW3YHXF62SBnvoquSaaU0AJxZ9zbLVABj6pPn6KV9tk5Ri1US3zrFLmBPLvvv
+ Pd2lciRs/sx2sA+uA6qqK5g0AxTGPfqYDnIHsA76v0M12oIDEVwlBMOnEAJdPKnF+gy/ZbI0Y
+ CtrOeY8EtfkkI4G1vJ1cBEfVKh2jeGqkGpPNTOEJVIAhIn/1s31hjRkhpC7US2ZEOj5g=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/04/2022 11:27, Allen-KH Cheng wrote:
-> Add mt6358 and mt6366 compatible in devicetree-binding document for
-> MediaTek PMIC based RTC. mt6358 and mt6366 use same compatible data
-> to store RTC_WRTGR address offset.
-> 
-> mt6358-rts should be used as fallback for mt6366-rtc.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Signed-off-by: Yuchen Huang <yuchen.huang@mediatek.com>
+On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 4/29/22 10:48, Guenter Roeck wrote:
+> >
+> > I tried the pxa-multiplatform-5.18 branch. Its failures match
+> > those in v5.18-rc1.
+> >
+>
+> Uuh, wait, the build wasn't complete. There are still some
+> failures. I'll report later.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sorry about the breakage, I got a few more reports about minor build errors
+and warnings, the newly uploaded branches should address all of the ones
+I got reports for.
 
-
-Best regards,
-Krzysztof
+        Arnd
