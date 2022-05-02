@@ -2,112 +2,177 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196B85171DE
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 May 2022 16:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5E4517442
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 May 2022 18:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385598AbiEBOtm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 May 2022 10:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S242658AbiEBQ3u (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 May 2022 12:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385654AbiEBOtI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 May 2022 10:49:08 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47270A193;
-        Mon,  2 May 2022 07:45:37 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id kl21so1867787qvb.9;
-        Mon, 02 May 2022 07:45:37 -0700 (PDT)
+        with ESMTP id S238076AbiEBQ3r (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 May 2022 12:29:47 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CEB7642;
+        Mon,  2 May 2022 09:26:18 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id q8so15268881oif.13;
+        Mon, 02 May 2022 09:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=64QIA6q/Jq1SXZtvXAHmkaqaem8y9EOcss9DFzQHU9s=;
+        b=lSCTdreNcz/0Ozt6K1HBv4cRzX5rD5YkQNxljOsfS8tDiCYDoI+IPMQxP7X/EZIUm6
+         nEUbOImYvwji0WLPLOr7WKakqkxdg7JpvGJPTfUXZcQQCuBLI6CBT8jIjTQ6snEColp+
+         42NQ0U8dK6CrK0vLyvJNfr+ZWyi1wOVvde/g8GkgMS8kO99Le/sMzMeHcBDeFPgZnh0r
+         LROiIiUnXvzBr+1b680itD4douFeeTEs3uEVAyKivH87Mp4cNraXu5PlswZdijptsHiy
+         E/tGZIauqoE0htLx1qKBecZCr69Lv4Vi0nEVaQXlcbRczQ9R4I77j4rRVkbcch1Z44Nq
+         l6TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D0SY7wmYyA7yL5OraG4CcPIBeXo9vTXrM08vsIyhv4o=;
-        b=s0lxLYEc3XfTmvX4JKKk8eOoDoz7LMLC8GarkiNCF6R1wT7LewGQ/ZwE/cESKkIK+O
-         rYv8RsKYvRmavYvJ3xiRflf8Y8Tu3kN93micow9p+0WWOjOn52BpZHg5tS+gf1HrOdv+
-         TTEifvcx2c5Z/MxFPIh+3yMOheL/3wFPjhiG3uA3EMF7e8OWu//59MvcxSC60tuHwM7k
-         7sfVkDcEE0/GluMKO0pYeRsIp5FABvbAFosJJCzd7pyg1Y1XdXlCvS28nL86AY+OlSYV
-         9KtnsfqeeFtQ3BZeqZ8oTevyNVBP0udhtP0auOfiAnTo/WQaN9opwhi9QZBUIEmXHn5s
-         Yz5Q==
-X-Gm-Message-State: AOAM530X2MxeW9DviFjr/CVtEj47EabCVBOmXzhcO5619LD/glNUSiVR
-        PSQGP8S+Cskdz2ZOy7xcdJxbMKWWEuLCHg==
-X-Google-Smtp-Source: ABdhPJwiVbuKhdLBqobPuhbBubqqQA0cBtzc5/OPdVwqJr64gYP/66k/GXoyvdc/z3ppLH3RPAUtIg==
-X-Received: by 2002:a05:6214:c2d:b0:456:3af7:5ce1 with SMTP id a13-20020a0562140c2d00b004563af75ce1mr9970124qvd.25.1651502736263;
-        Mon, 02 May 2022 07:45:36 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id b197-20020a3767ce000000b0069fc13ce1e9sm4549598qkc.26.2022.05.02.07.45.35
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=64QIA6q/Jq1SXZtvXAHmkaqaem8y9EOcss9DFzQHU9s=;
+        b=kNapBUcPZwXpLZ3g9kNgyu9Z5XM9RnsUEVkTsYSXqmuPJC4KNEHppWIsd2zkCGKnuo
+         N9kGqkMKnEAGbB4eOeVqQ2BimR//z9O91gzQNzylBIDoSVIng/ejs+fHd3o2N2KrfV2X
+         BdMooJZTCzIno50wqD8Ot6L2FfK27Ccmz9haJ835eCTF8iMEXrWNHESQVM0dgKu8ojo1
+         GB19Is4FiQD5MvomPb29ddCxDcNNbchEX9fjyosfUjDIZvgCc9mhniFjF2YZjsjz6dNI
+         OP5T+u/y2liR03ufp6TnVg+mJnS1wzeIG6UiGQjUpVGSO01LYxkM7Rk4ZCcKMTfHXkfR
+         hzXQ==
+X-Gm-Message-State: AOAM531rbeQB9qw40jfeG0QqNsgp7Cv7nCBQvWtWQBeGpvHmHFRHP3l3
+        HqhMTF/5mJtrYEvCmax77UM=
+X-Google-Smtp-Source: ABdhPJw9C3TtXs+N7Y0xL4doHaW0x+AFJyxcg+z0+P8jqToBpOw3SVN62D2BXqS+EDk7pkn5yUYINw==
+X-Received: by 2002:a05:6808:140f:b0:322:cbe9:8d29 with SMTP id w15-20020a056808140f00b00322cbe98d29mr7789910oiv.220.1651508777476;
+        Mon, 02 May 2022 09:26:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l39-20020a0568302b2700b0060603221256sm3008945otv.38.2022.05.02.09.26.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 07:45:36 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ebf4b91212so150222217b3.8;
-        Mon, 02 May 2022 07:45:35 -0700 (PDT)
-X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
- s12-20020a819b0c000000b002f4c5227d3cmr11313594ywg.316.1651502735635; Mon, 02
- May 2022 07:45:35 -0700 (PDT)
+        Mon, 02 May 2022 09:26:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+Date:   Mon, 2 May 2022 09:26:12 -0700
 MIME-Version: 1.0
-References: <20220429104602.368055-1-miquel.raynal@bootlin.com> <20220429104602.368055-4-miquel.raynal@bootlin.com>
-In-Reply-To: <20220429104602.368055-4-miquel.raynal@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 2 May 2022 16:45:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV8kqfRJFwJt34wi-FGkVTJ4uYb4RwBcRcYcs7XhcNuGA@mail.gmail.com>
-Message-ID: <CAMuHMdV8kqfRJFwJt34wi-FGkVTJ4uYb4RwBcRcYcs7XhcNuGA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] rtc: rzn1: Add alarm support
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-rtc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Miquel,
+On 4/30/22 07:23, Arnd Bergmann wrote:
+> On Sat, Apr 30, 2022 at 3:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 4/30/22 01:04, Arnd Bergmann wrote:
+>>>> and concluded that it must have done this for a long time. In my own qemu
+>>>> instance, I see a crash from iWMMXt, but that works fine on your machine.
+>>>> OTOH, your failed instances all look like they either time out or
+>>>> failed to find a
+>>>> rootfs. I tried passing an MMC device as root, and that works here.
+>>>>
+>>>
+>>> Booting from mmc works for me as well. Booting from pcmcia worked before,
+>>> so I assume that there must be some regression.
+>>
+>> Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
+>> I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
+>> the pcmcia device instead of crashing, so I assumed it was enough when it
+>> clearly was not. Before that patch, it still works, afterwards it hangs with
+>> "pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
+>> have another look.
+> 
+> Got it: as the PCMCIA bus on this machine is the only thing with an I/O space,
+> I assigned it port number range 0-0x1000, with an io_offset of 0, but this
+> was apparently unexpected and triggered this sanity check:
+> 
+> static int static_find_io(struct pcmcia_socket *s, unsigned int attr,
+>                          unsigned int *base, unsigned int num,
+>                          unsigned int align, struct resource **parent)
+> {
+>        if (!s->io_offset)
+>                return -EINVAL;
+>        ...
+>        return 0;
+> }
+> 
+> I moved the devices around now, giving zeus/viper I/O space an offset of
+> zero, and moving PCMCIA to offset 0x10000 and 0x11000 for the two slots,
+> which now works because the io_offset is nonzero. I've regenerated the
+> branches again, and confirmed the for-next branch still boots from pcmcia.
+> 
 
-On Fri, Apr 29, 2022 at 12:46 PM Miquel Raynal
-<miquel.raynal@bootlin.com> wrote:
-> The RZN1 RTC can trigger an interrupt when reaching a particular date up
-> to 7 days ahead. Bring support for this alarm.
->
-> One drawback though, the granularity is about a minute.
->
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-Thanks for your patch!
+With v5.18-rc1-49-gcb813018b5c1, I still get:
 
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -179,6 +272,10 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
->         if (IS_ERR(rtc->base))
->                 return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
->
-> +       alarm_irq = platform_get_irq(pdev, 0);
-> +       if (alarm_irq < 0)
-> +               return dev_err_probe(&pdev->dev, alarm_irq, "Missing timer IRQ\n");
+[    0.797668] RAMDISK: Couldn't find valid RAM disk image starting at 0.
+[    0.805262] /dev/root: Can't open blockdev
+[    0.805487] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
+[    0.805674] Please append a correct "root=" boot option; here are the available partitions:
 
-No need to print a message, platform_get_irq() already does that.
+when trying to boot z2 from initrd.
 
-Gr{oetje,eeting}s,
+The other problems are gone.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Guenter
