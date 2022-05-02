@@ -2,53 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45F85171C8
-	for <lists+linux-rtc@lfdr.de>; Mon,  2 May 2022 16:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196B85171DE
+	for <lists+linux-rtc@lfdr.de>; Mon,  2 May 2022 16:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238171AbiEBOpD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 2 May 2022 10:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S1385598AbiEBOtm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 2 May 2022 10:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiEBOpD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 May 2022 10:45:03 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ADDDCA;
-        Mon,  2 May 2022 07:41:34 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id ke5so10342154qvb.5;
-        Mon, 02 May 2022 07:41:34 -0700 (PDT)
+        with ESMTP id S1385654AbiEBOtI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 2 May 2022 10:49:08 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47270A193;
+        Mon,  2 May 2022 07:45:37 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id kl21so1867787qvb.9;
+        Mon, 02 May 2022 07:45:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=F3UExsrsufW/5/VNk+XHN4yCY4oOPNKng6Dv595Sda8=;
-        b=oR8mgeszXl0a8q8cUUa1NNVFTxrt1fZW6wL6nsKC35clkmwirjFMACwKEWx42RPLmC
-         ebk3JdepIeLrXJSYzJk+5OmqEuLid8tlAozchDmp2c57/rgOmnCFTkdrePQyLyY408a5
-         mUA5dgxsHfpR7VH7rCnqGqxAIAh31EejiZ7luu3Ml2DhXmGeouo5e3HX4dr5EBCmsQ+p
-         mnslg2zVXadGXTbJikentbkqmgp6D4wNoRHIz1Ztg5Rf2HJ786yROSirXoc/eziymyJO
-         18i1+1mJ74/bO7x2TWxr9BH+/q+q3U+S7uumpcDdAOFym8bGEbgH+pVjsK1n+/9bySWd
-         jJ0A==
-X-Gm-Message-State: AOAM533g/w+pwp2AbVnPcgif6gAo8Nq8LwBfSB0Sz7gvAaIeNOdXM+/F
-        iDpd5w/SZOBX0bc06O2iu68c4uEU5YrzWA==
-X-Google-Smtp-Source: ABdhPJwFzJsKqvvCjfKSqksC+pcrMSVHwX7DSEeTevgzDe9f/Li/S3UM7uJwWbMG+0zlLHmoK57V4g==
-X-Received: by 2002:a0c:a68a:0:b0:443:d22b:cdff with SMTP id t10-20020a0ca68a000000b00443d22bcdffmr9685830qva.47.1651502493143;
-        Mon, 02 May 2022 07:41:33 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id c15-20020a05620a268f00b0069ff48599c5sm633727qkp.107.2022.05.02.07.41.32
+        bh=D0SY7wmYyA7yL5OraG4CcPIBeXo9vTXrM08vsIyhv4o=;
+        b=s0lxLYEc3XfTmvX4JKKk8eOoDoz7LMLC8GarkiNCF6R1wT7LewGQ/ZwE/cESKkIK+O
+         rYv8RsKYvRmavYvJ3xiRflf8Y8Tu3kN93micow9p+0WWOjOn52BpZHg5tS+gf1HrOdv+
+         TTEifvcx2c5Z/MxFPIh+3yMOheL/3wFPjhiG3uA3EMF7e8OWu//59MvcxSC60tuHwM7k
+         7sfVkDcEE0/GluMKO0pYeRsIp5FABvbAFosJJCzd7pyg1Y1XdXlCvS28nL86AY+OlSYV
+         9KtnsfqeeFtQ3BZeqZ8oTevyNVBP0udhtP0auOfiAnTo/WQaN9opwhi9QZBUIEmXHn5s
+         Yz5Q==
+X-Gm-Message-State: AOAM530X2MxeW9DviFjr/CVtEj47EabCVBOmXzhcO5619LD/glNUSiVR
+        PSQGP8S+Cskdz2ZOy7xcdJxbMKWWEuLCHg==
+X-Google-Smtp-Source: ABdhPJwiVbuKhdLBqobPuhbBubqqQA0cBtzc5/OPdVwqJr64gYP/66k/GXoyvdc/z3ppLH3RPAUtIg==
+X-Received: by 2002:a05:6214:c2d:b0:456:3af7:5ce1 with SMTP id a13-20020a0562140c2d00b004563af75ce1mr9970124qvd.25.1651502736263;
+        Mon, 02 May 2022 07:45:36 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id b197-20020a3767ce000000b0069fc13ce1e9sm4549598qkc.26.2022.05.02.07.45.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 07:41:32 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f7b815ac06so150198377b3.3;
-        Mon, 02 May 2022 07:41:32 -0700 (PDT)
-X-Received: by 2002:a0d:d953:0:b0:2f7:d5ce:f204 with SMTP id
- b80-20020a0dd953000000b002f7d5cef204mr11206597ywe.502.1651502492441; Mon, 02
- May 2022 07:41:32 -0700 (PDT)
+        Mon, 02 May 2022 07:45:36 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ebf4b91212so150222217b3.8;
+        Mon, 02 May 2022 07:45:35 -0700 (PDT)
+X-Received: by 2002:a81:9b0c:0:b0:2f4:c522:7d3c with SMTP id
+ s12-20020a819b0c000000b002f4c5227d3cmr11313594ywg.316.1651502735635; Mon, 02
+ May 2022 07:45:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429104602.368055-1-miquel.raynal@bootlin.com> <20220429104602.368055-3-miquel.raynal@bootlin.com>
-In-Reply-To: <20220429104602.368055-3-miquel.raynal@bootlin.com>
+References: <20220429104602.368055-1-miquel.raynal@bootlin.com> <20220429104602.368055-4-miquel.raynal@bootlin.com>
+In-Reply-To: <20220429104602.368055-4-miquel.raynal@bootlin.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 2 May 2022 16:41:20 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVU2RDmPC014LjdB=L_b=Kn+htHnC0v4wAAUESbhWTA5w@mail.gmail.com>
-Message-ID: <CAMuHMdVU2RDmPC014LjdB=L_b=Kn+htHnC0v4wAAUESbhWTA5w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] rtc: rzn1: Add new RTC driver
+Date:   Mon, 2 May 2022 16:45:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV8kqfRJFwJt34wi-FGkVTJ4uYb4RwBcRcYcs7XhcNuGA@mail.gmail.com>
+Message-ID: <CAMuHMdV8kqfRJFwJt34wi-FGkVTJ4uYb4RwBcRcYcs7XhcNuGA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] rtc: rzn1: Add alarm support
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -64,13 +64,12 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Pascal Eberhard <pascal.eberhard@se.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Michel Pollet <michel.pollet@bp.renesas.com>
+        Clement Leger <clement.leger@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,94 +80,26 @@ Hi Miquel,
 
 On Fri, Apr 29, 2022 at 12:46 PM Miquel Raynal
 <miquel.raynal@bootlin.com> wrote:
-> From: Michel Pollet <michel.pollet@bp.renesas.com>
+> The RZN1 RTC can trigger an interrupt when reaching a particular date up
+> to 7 days ahead. Bring support for this alarm.
 >
-> Add a basic RTC driver for the RZ/N1.
+> One drawback though, the granularity is about a minute.
 >
-> Signed-off-by: Michel Pollet <michel.pollet@bp.renesas.com>
-> Co-developed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
 Thanks for your patch!
 
-> --- /dev/null
+> --- a/drivers/rtc/rtc-rzn1.c
 > +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -0,0 +1,246 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Renesas RZN1 Real Time Clock interface for Linux
+> @@ -179,6 +272,10 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
+>         if (IS_ERR(rtc->base))
+>                 return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
+>
+> +       alarm_irq = platform_get_irq(pdev, 0);
+> +       if (alarm_irq < 0)
+> +               return dev_err_probe(&pdev->dev, alarm_irq, "Missing timer IRQ\n");
 
-RZ/N1
-
-> +static int rzn1_rtc_probe(struct platform_device *pdev)
-> +{
-> +       struct rzn1_rtc *rtc;
-> +       int ret;
-> +
-> +       rtc = devm_kzalloc(&pdev->dev, sizeof(*rtc), GFP_KERNEL);
-> +       if (!rtc)
-> +               return -ENOMEM;
-> +
-> +       platform_set_drvdata(pdev, rtc);
-> +
-> +       rtc->base = devm_platform_ioremap_resource(pdev, 0);
-> +       if (IS_ERR(rtc->base))
-> +               return dev_err_probe(&pdev->dev, PTR_ERR(rtc->base), "Missing reg\n");
-> +
-> +       rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
-> +       if (IS_ERR(rtc->rtcdev))
-> +               return PTR_ERR(rtc);
-> +
-> +       rtc->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +       rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
-> +       rtc->rtcdev->ops = &rzn1_rtc_ops;
-> +       clear_bit(RTC_FEATURE_ALARM, rtc->rtcdev->features);
-> +       clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, rtc->rtcdev->features);
-> +
-> +       pm_runtime_enable(&pdev->dev);
-> +       pm_runtime_get_sync(&pdev->dev);
-
-While this call cannot really fail on this platform, you may want to
-call pm_runtime_resume_and_get() instead, and check its return
-value (else the janitors will make that change later ;-)
-
-> +
-> +       /*
-> +        * Ensure the clock counter is enabled.
-> +        * Set 24-hour mode and possible oscillator offset compensation in SUBU mode.
-> +        */
-> +       writel(RZN1_RTC_CTL0_CE | RZN1_RTC_CTL0_AMPM | RZN1_RTC_CTL0_SLSB_SUBU,
-> +              rtc->base + RZN1_RTC_CTL0);
-> +
-> +       /* Disable all interrupts */
-> +       writel(0, rtc->base + RZN1_RTC_CTL1);
-> +
-> +       ret = devm_rtc_register_device(rtc->rtcdev);
-> +       if (ret)
-> +               goto dis_runtime_pm;
-> +
-> +       return 0;
-> +
-> +dis_runtime_pm:
-> +       pm_runtime_put_sync(&pdev->dev);
-
-pm_runtime_put() should be fine, no need for the synchronous version.
-
-> +       pm_runtime_disable(&pdev->dev);
-> +
-> +       return ret;
-> +}
-> +
-> +static int rzn1_rtc_remove(struct platform_device *pdev)
-> +{
-> +       pm_runtime_put_sync(&pdev->dev);
-
-pm_runtime_put().
-
-> +       pm_runtime_disable(&pdev->dev);
-> +
-> +       return 0;
-> +}
+No need to print a message, platform_get_irq() already does that.
 
 Gr{oetje,eeting}s,
 
