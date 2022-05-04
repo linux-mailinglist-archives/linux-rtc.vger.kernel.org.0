@@ -2,47 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4A751A45B
-	for <lists+linux-rtc@lfdr.de>; Wed,  4 May 2022 17:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFA051AF09
+	for <lists+linux-rtc@lfdr.de>; Wed,  4 May 2022 22:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352675AbiEDPqj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 4 May 2022 11:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S234521AbiEDUbb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 4 May 2022 16:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352784AbiEDPqc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 4 May 2022 11:46:32 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409AD46643;
-        Wed,  4 May 2022 08:42:45 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e2fa360f6dso1569039fac.2;
-        Wed, 04 May 2022 08:42:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tnMRJsbiS8QiP9lDD2I4JzMT/wd9etKoP6P9ura1i48=;
-        b=oCz0VUEXIj3jIuPey1IVqcOAy6vhH24ER0yQnDh7laEqHv0QtcNP23RmSXBJvEMraV
-         0c5UHR+PB+UYkhyXKKFDu8kvG4GraHgY1u7s4CJTP7/x+tHWkDueQ6eVg0G1GQoLBUTt
-         6OCO9zmvTD7Yr6q+XNm5c2k3zJOxm+MQOocnE756wtrCXwphd17dE5wqRsiRWrizf9Os
-         N4TshiCucCCRgotUoINwmoiT81mBiSb/HLFYz3xpvx1ILYqShV0+c38L5rBzjSDOck6I
-         JHpL9SZlPy+sS/knztc/SPwMo7erCd3PTOzsJSqhl0mVsfI+yx9BHu4HRsM5j026OSgY
-         Jqdw==
-X-Gm-Message-State: AOAM5309sUlYqSCAlSEE0zLsHlYgV70CKvJBPg3NZuP9s0I78PZz4jOS
-        IQgNQm7ccjpEc9ZwP2xN+Q==
-X-Google-Smtp-Source: ABdhPJzNz108HgppQ2njmjK7spVH8oSX47FuDf8S/DyT2/BrJzu23fF4n28T9OGduSEoDRg/Cc5k1w==
-X-Received: by 2002:a05:6870:e412:b0:ed:a30a:2248 with SMTP id n18-20020a056870e41200b000eda30a2248mr39162oag.138.1651678964563;
-        Wed, 04 May 2022 08:42:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v4-20020a9d4e84000000b006060322124bsm5279580otk.27.2022.05.04.08.42.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 08:42:44 -0700 (PDT)
-Received: (nullmailer pid 1762666 invoked by uid 1000);
-        Wed, 04 May 2022 15:42:40 -0000
-Date:   Wed, 4 May 2022 10:42:40 -0500
-From:   Rob Herring <robh@kernel.org>
+        with ESMTP id S229703AbiEDUb2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 4 May 2022 16:31:28 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB404F9CB;
+        Wed,  4 May 2022 13:27:50 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3E3B01BF205;
+        Wed,  4 May 2022 20:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651696069;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hUwQLI04KRlF0eu0GKC8X4hwLKHloFuBKJTjH0IlCc=;
+        b=fqvBj59ZoYRwrHWryJr471246MpSLAYY4m41aJ6HilGtIRQMWbqhO4hmBKkhHwBBvF2lTV
+        Jt91bcWKFse6faQY3nlsQQ7xmv8CUWvhkFoTd8objUhzv8KlNljP5hTbi+zRk72j+9PpgP
+        nuH9ZziWeuOSsCz1jvLoNyE+PToIiocvRcWuPPaG7lWSU5cF1eOM5fg6UwaB1baMV3GMdC
+        no8PHNvic3bFE6ynZBW0/aY5s7wYX4HLY62AOd0mRURakV8OSg9WopjsPzmj2MTSIYIg87
+        9iOIuqog9D3C3zbA1szY1klVwOD62J7lbtrBCwOCHeEeGeYshsiRJVOMco7BxQ==
+Date:   Wed, 4 May 2022 22:27:47 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Valentin Caron <valentin.caron@foss.st.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
@@ -52,25 +42,25 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/6] dt-bindings: rtc: stm32: add alarm A out property to
  select output
-Message-ID: <YnKe8K3FjoaUO2ml@robh.at.kernel.org>
+Message-ID: <YnLhw+Y7m8G2xJpK@mail.local>
 References: <20220504130233.330983-1-valentin.caron@foss.st.com>
  <20220504130617.331290-1-valentin.caron@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20220504130617.331290-1-valentin.caron@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, May 04, 2022 at 03:06:13PM +0200, Valentin Caron wrote:
+Hello,
+
+On 04/05/2022 15:06:13+0200, Valentin Caron wrote:
 > STM32 RTC can pulse some SOC pins when an alarm of RTC expires.
 > 
 > This patch adds property to activate alarm A output. The pulse can
@@ -95,9 +85,6 @@ On Wed, May 04, 2022 at 03:06:13PM +0200, Valentin Caron wrote:
 > +    description: |
 > +      To select and enable RTC Alarm A output.
 > +      Refer to <include/dt-bindings/rtc/rtc-stm32.h> for the supported values.
-
-No, sorry, you need to define the allowed values as a schema here.
-
 > +      Pinctrl state named "default" may be defined to reserve pin for RTC output.
 > +
 >  allOf:
@@ -109,18 +96,6 @@ No, sorry, you need to define the allowed values as a schema here.
 >  
 > +        st,alarm:
 > +          maxItems: 0
-
-st,alarm: false
-
-or:
-
-not:
-  required: [ st,alarm ]
-
-is how you disallow a property.
-
-This should cause a warning, but this patch didn't apply for me.
-
 > +
 >          clock-names: false
 >  
@@ -141,10 +116,6 @@ This should cause a warning, but this patch didn't apply for me.
 >  
 > +        st,alarm:
 > +          maxItems: 1
-
-maxItems applies to arrays, but this is a scalar value. I don't think 
-you need this hunk.
-
 > +
 >        required:
 >          - clock-names
@@ -155,12 +126,14 @@ you need this hunk.
 >        interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
 > +      st,alarm = <RTC_OUT1>;
 >        st,lsco = <RTC_OUT2_RMP>;
-> -      pinctrl-0 = <&rtc_out2_rmp_pins_a>;
-> +      pinctrl-0 = <&rtc_out1_pins_a &rtc_out2_rmp_pins_a>;
->        pinctrl-names = "default";
->      };
->  
-> -- 
-> 2.25.1
-> 
-> 
+
+Shouldn't that be exactly the opposite? You have two pins that can
+output different functions. The property should be the pin and the value
+the function. I'd go even further and I would say this is actually
+pinmuxing.
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
