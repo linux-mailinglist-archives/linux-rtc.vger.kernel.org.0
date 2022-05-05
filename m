@@ -2,61 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC5F51B770
-	for <lists+linux-rtc@lfdr.de>; Thu,  5 May 2022 07:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3BB51B7BD
+	for <lists+linux-rtc@lfdr.de>; Thu,  5 May 2022 08:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243429AbiEEF1t (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 5 May 2022 01:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S244089AbiEEGIQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 5 May 2022 02:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiEEF1t (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 May 2022 01:27:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449961CFFF;
-        Wed,  4 May 2022 22:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651728251; x=1683264251;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CQBdDyKWYy/iEf2kk4r6gXfF52WkzPzsr1wq92EJL6A=;
-  b=GKC8gnTjdMogCPrGCNA73O36ilVWBzw/HGU2E0XxHuHwQL3DJ89bL98d
-   JHNiu9sHhOHBux4llDAbmYe1EdqoviYHUWyLMoC2SpB7OFMqIRAHVWNBA
-   j8Z614JCdaVEKQm8DQyapX6R6Af6yOGHJzJAcxx8jfSZI9IzWE6HcoxyA
-   859P90b9uxbR5sWetStOpcGGN4n0rvqxqhZyHc17EEmS8nd0IHYmMMDJ7
-   CfbzkKwTuFNhmyy4RcnhgTcLEJ8kqnVIJGYkb/pKj/jAs5x289RaU3Pzu
-   l4UlN77uvJD0T0K6ve2cqHRy+TJGhzcub7nfhAyxU2sssUBWamz+43a9U
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="354437405"
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="354437405"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 22:24:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,200,1647327600"; 
-   d="scan'208";a="585138203"
-Received: from bfu-mobl3.ccr.corp.intel.com ([10.255.31.7])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 22:24:07 -0700
-Message-ID: <2358992684eb37823378cb48de2775620ee42031.camel@intel.com>
-Subject: Re: [PATCH 5/7] wil6210: remove debug message for unsupported PM
- event
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     rjw@rjwysocki.net, alexandre.belloni@bootlin.com,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        daniel.lezcano@linaro.org, mat.jonczyk@o2.pl,
-        sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Date:   Thu, 05 May 2022 13:24:04 +0800
-In-Reply-To: <875ymkzj9e.fsf@kernel.org>
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
-         <20220505015814.3727692-6-rui.zhang@intel.com> <875ymkzj9e.fsf@kernel.org>
+        with ESMTP id S230306AbiEEGIN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 5 May 2022 02:08:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07F8366A5;
+        Wed,  4 May 2022 23:04:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 766EA61C03;
+        Thu,  5 May 2022 06:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF6FEC385BC;
+        Thu,  5 May 2022 06:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651730673;
+        bh=gGag8LcvVDzOYjY7vVQNICNRVUATqvouUQ3T9qB8Y4k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IzeX2fl3N2x2kryaheKunqUXxhYq2EKW3EevzAcRMispu7pOGu+LIVB4gtA4lt47H
+         kuw8arO+PfbPq7WQnALg8Llzkb+hKwtvB/sYTsnK/90IacYZCB6DJZ5ZQJOsJ5C1F3
+         TeSHzM+uYa+G41zdiYBmFF25L9TEm88hz+cFkf+LED+1kXeRmilzEAvsC7hDnbfjGn
+         7+T7Dj+o9VKBm1U6ge16L5XMEd+1ntq34MUjLp9fn2cdJO958LQytdZ8prNLl0PmNR
+         JJUBc01v6sbgWXUsh3IWA1bR3+vxPlhbpLgI0/bOseW+q4bkkad+M4ksyG11vuvJyh
+         VmRMQT8XoxC+g==
+Received: by mail-wm1-f49.google.com with SMTP id q20so2010918wmq.1;
+        Wed, 04 May 2022 23:04:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532KYwJ4kV4x0ust3FQTY5P7lDLmdAqa0ZHF8tckDNZFQ3EHpIll
+        agg4oXhlxqv95Hv8yxNuanYbXaFOameqvZcXfEI=
+X-Google-Smtp-Source: ABdhPJxJJBc6IXeb9FDBUjhMgPRC02W3Kaja9XP7Gl4879zHpOvDa2WCA8GypEt4poAHxn+t5qvz/Rnv+5FUxU+6qJI=
+X-Received: by 2002:a05:600c:4f0f:b0:394:54c1:f5b3 with SMTP id
+ l15-20020a05600c4f0f00b0039454c1f5b3mr3065513wmq.33.1651730671693; Wed, 04
+ May 2022 23:04:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+ <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com> <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+In-Reply-To: <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 5 May 2022 08:04:14 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+Message-ID: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,41 +93,71 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi, Kalle,
+On Wed, May 4, 2022 at 11:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon, May 2, 2022 at 9:08 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > >
+> > > (...)
+> > > > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
+> > > > +       .dev_id = "hx4700-audio",
+> > > > +       .table = {
+> > > > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> > > > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
+> > >
+> > > This looks wrong. The n in nDET in the end of the name of the GPIO line
+> > > means active low does it not?
+> > >
+> > > What I usually do when I see this is to properly set it to
+> > > GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
+> > > where it's getting used.
+> > >
+> > > Also rename to earphone-det instead of -ndet
+> >
+> > Thanks for taking a look! I changed it now, but I don't know if
+> > I got the correct number of inversions in the end. How does this look?
+>
+> Looks wrong, you can just invert the argument to any statement of set_value()
+> after tagging respective line as active low. Then gpilob will do a second
+> inversion.
+>
+> > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> > +                           "earphone-det", GPIO_ACTIVE_LOW),
+> > +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
+> > +                           "spk-sd", GPIO_ACTIVE_LOW),
+>
+> So those two have switched polarity.
+>
+> > @@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
+> >  static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
+> >                             struct snd_kcontrol *k, int event)
+> >  {
+> > -       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
+> > +       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
+>
+> Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
 
-thanks for the quick response.
+Ok, done. But I still leave the extra 'invert=1' in hs_jack_pin[], right?
 
-On Thu, 2022-05-05 at 07:38 +0300, Kalle Valo wrote:
-> Zhang Rui <rui.zhang@intel.com> writes:
-> 
-> > Remove the useless debug message for unsupported PM event because
-> > it is
-> > noop in current code, and it gives a warning when a new event is
-> > introduced, which it doesn't care.
-> 
-> It's a debug message, not a warning, and only visible when debug
-> messages are enabled. Why do you want to remove it?
+/* Headphones jack detection DAPM pin */
+static struct snd_soc_jack_pin hs_jack_pin[] = {
+        {
+                .pin    = "Headphone Jack",
+                .mask   = SND_JACK_HEADPHONE,
+        },
+        {
+                .pin    = "Speaker",
+                /* disable speaker when hp jack is inserted */
+                .mask   = SND_JACK_HEADPHONE,
+                .invert = 1,
+        },
+};
 
-I'm concerning that people will report problems when they see new
-messages which never shows up previously.
+> > +       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
+>
+> These initial values don't seem to be set in the old code you could
+> just use GPIOD_ASIS as flag to make sure the new code behaves
+> the same.
 
-Deleting or keeping this message are both okay to me. But patch 6/7
-indeed introduces a change to this piece of code and it's better for
-you to be aware of it before people starts to complain.
+Ok.
 
-> 
-> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> 
-> Is this really tested on a wil6210 device? Not that it matters, just
-> surprised to see a Tested-by for a wil6210 patch. It's not really
-> common
-> hardware.
-
-No, we just tested the whole patch series on a Dell 9360 laptop, and a
-series of internal test machines. I didn't check if any of them has
-this device or not. Maybe I should remove the tested by in this case?
-
-thanks,
-rui
-
+        Arnd
