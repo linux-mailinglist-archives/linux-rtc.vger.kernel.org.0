@@ -2,212 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E55E51E156
-	for <lists+linux-rtc@lfdr.de>; Fri,  6 May 2022 23:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D3B51E21E
+	for <lists+linux-rtc@lfdr.de>; Sat,  7 May 2022 01:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355009AbiEFVub (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 6 May 2022 17:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S1389955AbiEFXdD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 6 May 2022 19:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348985AbiEFVua (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 May 2022 17:50:30 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC76D637D
-        for <linux-rtc@vger.kernel.org>; Fri,  6 May 2022 14:46:44 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 52EABFF802;
-        Fri,  6 May 2022 21:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651873602;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jgdW+utjX69lw9hZBaJPICrrQFeG4ACbfoIiurJVsC0=;
-        b=cWZn2bIvqcSVFGu3IsFqsqClQjrfuRcnBfGvVG1LC+EZb+VCl3Yve3JqmG+2HHscqfqp4i
-        vX97M++arG5GXblHmiyRHG9ZIgYSYZVpCZKXHS8td9kNTSj4IS28/SMJNhO9jrkVvk0ATN
-        24bIxEbxb/BKyXuR5gp81RK8bjzdn5jkjH//ttYhUvkv0x4kUkoWf4YX59s1KBc9aZOfNG
-        0gJTBGziACERliLJVvJ3QeGv//sGN7+r852isaiAwAtl7iQ64GSyw4gmGupgAcheSJ1W+9
-        g30110feSLlykUWTJKC7WTbThbnp43eb6vzRn+UpM8oxgk68GpzG5k+tY7GEVA==
-Date:   Fri, 6 May 2022 23:46:40 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rjw@rjwysocki.net, kvalo@kernel.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-Message-ID: <YnWXQE9QASycOzZo@mail.local>
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
- <20220505015814.3727692-8-rui.zhang@intel.com>
+        with ESMTP id S1349196AbiEFXdB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 6 May 2022 19:33:01 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A685A712D4
+        for <linux-rtc@vger.kernel.org>; Fri,  6 May 2022 16:29:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id p12so7476726pfn.0
+        for <linux-rtc@vger.kernel.org>; Fri, 06 May 2022 16:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nigauri-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZryJIATSG1rhke0rJfXTfUFsBQ86+ZTOTmR7kVabtXI=;
+        b=N8dL8GLe87MYs6OgH7bRT1eZgTqQyzOBKIjqgJ//OQYPu/gPDbsr6lhxB4RSRjjuOE
+         sneUljFGtZHU1OSXJF80lMprGDCqMmp1suZ1v6xEU3ry/RbWrxDeBZCI/D64v7Yjn94M
+         y7mVGqwunG/Czz+9/0m0HElq5op5dJpzi3ShdWh55jfqHkqbtXtX8EsPxP6YtkS2kYg6
+         8LZXeT0ihJ7ekaUgOyFExvPQ7ZcbbysyDw9EtMMfcxYdOI5f2W2mFEO9AJ3MNgGZvCSm
+         ZEBHydh1grVmTOmU5ZCClEbpsVFRTrS3KqWloySM09EWCZkcK2VSHfb4pY/33QylqviM
+         pABA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZryJIATSG1rhke0rJfXTfUFsBQ86+ZTOTmR7kVabtXI=;
+        b=F4oX8DJ53TWXdahGlScurKPRWpbUVBrdtNK6GwbqVFfXN8hmhQqogqJbJT/6xQaCZP
+         /yZToNlpW3nA1IjtN1qSMcHZMwz5VRCtB4KARm6OFgXQCnEkgI3H93h15VZOZVvaOd/m
+         v9VnPwoAywZcWa6JbVjZS7WVAInd0SuDsGsZ83AKmfie0b83fXjQXKyc1qgJios5Tvnp
+         TpCSuGBCmTcuHlws3s07WdpuQIifZ+XiZfFfhO7ODQ8olik81g+/uoL/sG5oknNPyfn6
+         x5Z9Lt4R1lczXgD3bPqm1ef52ndHOXhkgga/xhjlIlPB0avf22+0WrmwSsuFjiImc6tr
+         8nmg==
+X-Gm-Message-State: AOAM532dMoPyPmYaaSvwL6R7uYPDzDBKlgVWJ2ADSKE7PXJ1iGMzGkz5
+        kIEgm0MwV522yn68WjShaLxj
+X-Google-Smtp-Source: ABdhPJwDqQtSYBlWcHAu64fZxver1LDggAI7mPO/6wt4Kp2hobdi2w57JzQzPqGrjGjah4egCMW73w==
+X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr4590923pgd.284.1651879756163;
+        Fri, 06 May 2022 16:29:16 -0700 (PDT)
+Received: from localhost ([2405:6581:5360:1800:7285:c2ff:fec2:8f97])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902a5c900b0015e8d4eb1e3sm2333441plq.45.2022.05.06.16.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 May 2022 16:29:15 -0700 (PDT)
+From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+X-Google-Original-From: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Subject: [PATCH] rtc: rtc-meson: Fix email address in MODULE_AUTHOR
+Date:   Sat,  7 May 2022 08:28:50 +0900
+Message-Id: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505015814.3727692-8-rui.zhang@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
 
-I assume I can ignore this patch as this seems to be only for testing
-I'm not even sure why this is needed as this completely breaks setting
-the alarm time.
+Ben Dooks's email address is <ben.dooks@codethink.co.uk>.
+Fix Ben Dooks's email address in MODULE_AUTHOR.
 
-On 05/05/2022 09:58:14+0800, Zhang Rui wrote:
-> Automated suspend/resume testing uses the RTC for wakeup.
-> A short rtcwake period is desirable, so that more suspend/resume
-> cycles can be completed, while the machine is available for testing.
-> 
-> But if too short a wake interval is specified, the event can occur,
-> while still suspending, and then no event wakes the suspended system
-> until the user notices that testing has stalled, and manually intervenes.
-> 
-> Here we add a hook to the rtc-cmos driver to
-> a) remove the alarm timer in the beginning of suspend, if there is any
-> b) arm the wakeup in PM notifier callback, which is in the very late stage
->    before the system really suspends
-> The remaining part of suspend is usually measured under 10 ms,
-> and so arming the timer at this point could be as fast as the minimum
-> time of 1-second.
-> 
-> But there is a 2nd race.  The RTC has 1-second granularity, and unless
-> you are timing the timer with a higher resolution timer,
-> there is no telling if the current time + 1 will occur immediately,
-> or a full second in the future.  And so 2-seconds is the safest minimum:
-> 
-> Run 1,000 s2idle cycles with (max of) 2 second wakeup period:
-> 
->  # echo 2 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
->  # sleepgraph.py -m freeze -multi 1000 0 -skiphtml -gzip
-> 
-> Clear the timer override, to not interfere with subsequent
-> real use of the machine's suspend/resume feature:
-> 
->  # echo 0 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
-> 
-> Originally-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> ---
->  drivers/rtc/interface.c |  1 +
->  drivers/rtc/rtc-cmos.c  | 45 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 46 insertions(+)
-> 
-> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-> index 9edd662c69ac..fb93aa2dc99c 100644
-> --- a/drivers/rtc/interface.c
-> +++ b/drivers/rtc/interface.c
-> @@ -1020,6 +1020,7 @@ void rtc_timer_cancel(struct rtc_device *rtc, struct rtc_timer *timer)
->  		rtc_timer_remove(rtc, timer);
->  	mutex_unlock(&rtc->ops_lock);
->  }
-> +EXPORT_SYMBOL_GPL(rtc_timer_cancel);
->  
->  /**
->   * rtc_read_offset - Read the amount of rtc offset in parts per billion
-> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-> index 7c006c2b125f..9590c40fa9d8 100644
-> --- a/drivers/rtc/rtc-cmos.c
-> +++ b/drivers/rtc/rtc-cmos.c
-> @@ -32,6 +32,7 @@
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/spinlock.h>
-> +#include <linux/suspend.h>
->  #include <linux/platform_device.h>
->  #include <linux/log2.h>
->  #include <linux/pm.h>
-> @@ -70,6 +71,9 @@ static inline int cmos_use_acpi_alarm(void)
->  }
->  #endif
->  
-> +static int rtc_wake_override_sec;
-> +module_param(rtc_wake_override_sec, int, 0644);
-> +
->  struct cmos_rtc {
->  	struct rtc_device	*rtc;
->  	struct device		*dev;
-> @@ -89,6 +93,7 @@ struct cmos_rtc {
->  	u8			century;
->  
->  	struct rtc_wkalrm	saved_wkalrm;
-> +	struct notifier_block	pm_nb;
->  };
->  
->  /* both platform and pnp busses use negative numbers for invalid irqs */
-> @@ -744,6 +749,42 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
->  		return IRQ_NONE;
->  }
->  
-> +static int cmos_pm_notify(struct notifier_block *nb, unsigned long mode, void *_unused)
-> +{
-> +	struct cmos_rtc *cmos = container_of(nb, struct cmos_rtc, pm_nb);
-> +	struct rtc_device       *rtc = cmos->rtc;
-> +	unsigned long           now;
-> +	struct rtc_wkalrm       alm;
-> +
-> +	if (rtc_wake_override_sec == 0)
-> +		return NOTIFY_OK;
-> +
-> +	switch (mode) {
-> +	case PM_SUSPEND_PREPARE:
-> +		/*
-> +		 * Cancel the timer to make sure it won't fire
-> +		 * before rtc is rearmed later.
-> +		 */
-> +		rtc_timer_cancel(rtc, &rtc->aie_timer);
-> +		break;
-> +	case PM_SUSPEND_LATE:
-> +		if (rtc_read_time(rtc, &alm.time))
-> +			return NOTIFY_BAD;
-> +
-> +		now = rtc_tm_to_time64(&alm.time);
-> +		memset(&alm, 0, sizeof(alm));
-> +		rtc_time64_to_tm(now + rtc_wake_override_sec, &alm.time);
-> +		alm.enabled = true;
-> +		if (rtc_set_alarm(rtc, &alm))
-> +			return NOTIFY_BAD;
-> +		if (cmos->wake_on)
-> +			cmos->wake_on(cmos->dev);
-> +		break;
-> +	}
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  #ifdef	CONFIG_PNP
->  #define	INITSECTION
->  
-> @@ -937,6 +978,9 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
->  		 nvmem_cfg.size,
->  		 use_hpet_alarm() ? ", hpet irqs" : "");
->  
-> +	cmos_rtc.pm_nb.notifier_call = cmos_pm_notify;
-> +	register_pm_notifier(&cmos_rtc.pm_nb);
-> +
->  	return 0;
->  
->  cleanup2:
-> @@ -965,6 +1009,7 @@ static void cmos_do_remove(struct device *dev)
->  	struct cmos_rtc	*cmos = dev_get_drvdata(dev);
->  	struct resource *ports;
->  
-> +	unregister_pm_notifier(&cmos_rtc.pm_nb);
->  	cmos_do_shutdown(cmos->irq);
->  
->  	if (is_valid_irq(cmos->irq)) {
-> -- 
-> 2.17.1
-> 
+Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+---
+ drivers/rtc/rtc-meson.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/rtc/rtc-meson.c b/drivers/rtc/rtc-meson.c
+index 44bdc8b4a90d6..db1d626edca5f 100644
+--- a/drivers/rtc/rtc-meson.c
++++ b/drivers/rtc/rtc-meson.c
+@@ -399,7 +399,7 @@ static struct platform_driver meson_rtc_driver = {
+ module_platform_driver(meson_rtc_driver);
+ 
+ MODULE_DESCRIPTION("Amlogic Meson RTC Driver");
+-MODULE_AUTHOR("Ben Dooks <ben.doosk@codethink.co.uk>");
++MODULE_AUTHOR("Ben Dooks <ben.dooks@codethink.co.uk>");
+ MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:meson-rtc");
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.36.0
+
