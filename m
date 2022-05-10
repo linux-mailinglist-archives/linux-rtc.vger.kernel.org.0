@@ -2,193 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC7C5211EC
-	for <lists+linux-rtc@lfdr.de>; Tue, 10 May 2022 12:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F525213D9
+	for <lists+linux-rtc@lfdr.de>; Tue, 10 May 2022 13:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239655AbiEJKSd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 10 May 2022 06:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S241036AbiEJLha (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 10 May 2022 07:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239651AbiEJKS2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 May 2022 06:18:28 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95C42AC0D7
-        for <linux-rtc@vger.kernel.org>; Tue, 10 May 2022 03:14:30 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bv19so31939259ejb.6
-        for <linux-rtc@vger.kernel.org>; Tue, 10 May 2022 03:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dbb/ygIPwle8pAxWJvLtaKiiriFkDuqy8P36ttqmEG8=;
-        b=yycP2wQZ9HF/b/5FrlR8y2OYTYX3t/FNxIguneIPCWzzxuMa0ywg/+isW+/xZ0N47N
-         ftjZJcdDRDFJt1uCggycsLqPYeBjkUN247gzZUe+mmvza6I/+tCsx32K2B9ZCr3V9yF6
-         RKrYdcQT01qPTOa5mRH+Po281aWca4Ubd245sIIXjuRV7GQt03eS85g1ST1oyMq9hc8O
-         fDegD87KKu4LBgM39oiCem643VRaY9frJPO784Rv7P/OOIklEqi9CCoMsaGLPvvAIAwK
-         Si7cnMCsNwVQqMN4rRFLobj8ZoLw1qSoG04rGJKd4aktEiJJNk5jvixFdKG+0fFl6ZpQ
-         lDBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dbb/ygIPwle8pAxWJvLtaKiiriFkDuqy8P36ttqmEG8=;
-        b=S79Zrn0PBeNh3QhUCDxWBt9BJd88JBao+OXHtJ4C6lMzAvmFb1w2TnTVp/9WoOOdEl
-         WaZ9xxdYlky5v0y+DozNOr5BTKzSl3ZO5VdwWgxNSeUQ2kB8Yuse5Zg7rZttwITwP8ps
-         rrDzSdkRTq1plnxa2SmMmzj+M5Dyn+Wzj0mY7anZImlUlU91vg5DqUqos/KMsAkr4D3R
-         gjGeMJ3/HkMwNuC94EaXwJfch1x7hq6kDLNKC71ZsLF+i3ldF4pyfrbG8g1EKmN287U+
-         p5G6QMXA0x9OfexY3Hv0OAnuZmbLeJp81XnuUseXtnEk6Q/wBu+82ZKjj5mcUlxN/02D
-         LqZA==
-X-Gm-Message-State: AOAM530WG4HYimFzRpHq500oTv48ip/t4TUqiuFJk9rmS3AFxSYRcIkL
-        GjIF/wlb6K+dmo6HH6t3Op4dAw==
-X-Google-Smtp-Source: ABdhPJydVj8m9S+WzagJO2lkw35EdeHC09Xmn2fKUVMjIUdi8GsSf/3KkrMZdALGKxBPh4z0+VaMZw==
-X-Received: by 2002:a17:907:1c8a:b0:6e9:2a0d:d7b7 with SMTP id nb10-20020a1709071c8a00b006e92a0dd7b7mr18248840ejc.572.1652177669239;
-        Tue, 10 May 2022 03:14:29 -0700 (PDT)
-Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709064a0100b006f3ef214db4sm5972354eju.26.2022.05.10.03.14.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 May 2022 03:14:28 -0700 (PDT)
-Message-ID: <ece7675a-a386-0a16-a087-2469758917f7@linaro.org>
-Date:   Tue, 10 May 2022 12:14:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
-Content-Language: en-US
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
-        tinghan.shen@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        with ESMTP id S241065AbiEJLhM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 10 May 2022 07:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBF349695;
+        Tue, 10 May 2022 04:33:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC669B81CFB;
+        Tue, 10 May 2022 11:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42477C385C2;
+        Tue, 10 May 2022 11:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652182392;
+        bh=QilHbgP4OJJFhu6pWZ/iD/7nzOdj3ua+XvagKgVvp/0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F5/ij1/HwGtN9IwgdHuFn/51Mo5tG/ZR/teTcfU6EycepK8Jm0gvxTFHKjuhJcb8r
+         hkgL/QGAYBGixQgIRMl0r1Ur+ayk5AVNhQUodp4wqhulX9FcBZqS66bps2rl7t4cP7
+         eafSAKiQL8KIcYf8P82Z9LDDccNzXz7wHSUr/khhkzT9vedyENzv4v/HXIfAg3ychL
+         DjZq3oJFWd0+2Pw1V/itE1SlE5hvnZJNpKrzRtOVtwAuu0RUv4P9gEb04HcBbS63Eu
+         oVstgiCK8JUHdj277lGUPkIVNQYiLVlZb6nXGjqjS4QTIbMPgvEAwL0U1ge2j+BWhh
+         UFOAeW8sHZvbA==
+Date:   Tue, 10 May 2022 12:33:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, srv_heupstream@mediatek.com,
+        hui.liu@mediatek.com, tinghan.shen@mediatek.com,
+        hsin-hsiung.wang@mediatek.com, sean.wang@mediatek.com,
+        macpaul.lin@mediatek.com, wen.su@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
+Message-ID: <YnpNb258/JRSjZFQ@sirena.org.uk>
 References: <20220510064603.15920-1-zhiyong.tao@mediatek.com>
  <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eivqfnsOGQBavwky"
+Content-Disposition: inline
 In-Reply-To: <20220510064603.15920-2-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Cookie: I've read SEVEN MILLION books!!
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/05/2022 08:46, Zhiyong Tao wrote:
+
+--eivqfnsOGQBavwky
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 10, 2022 at 02:46:03PM +0800, Zhiyong Tao wrote:
 > From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
-> 
+>=20
 > The commit adds mt6366 binding document.
 
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
 
-> 
-> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
-> ---
->  .../bindings/regulator/mt6366-regulator.yaml  | 405 ++++++++++++++++++
->  1 file changed, 405 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
-> new file mode 100644
-> index 000000000000..1f125f5ba860
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/mt6366-regulator.yaml
+--eivqfnsOGQBavwky
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Filename with vendor, so "mediatek,mt6366-regulator.yaml"
+-----BEGIN PGP SIGNATURE-----
 
-> @@ -0,0 +1,405 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/mt6366-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MT6366 Regulator from MediaTek Integrated
-> +
-> +maintainers:
-> +  - Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>
-> +
-> +description: |
-> +  List of regulators provided by this controller. It is named
-> +  according to its regulator type, buck_<name> and ldo_<name>.
-> +  MT6366 regulators node should be sub node of the MT6397 MFD node.
-> +
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJ6TW4ACgkQJNaLcl1U
+h9Cqhwf8DVRTOtYWL6Y7xwHw2INdvAT+AmpFFwIuu6NrjGJzK88XnPHoXaHGBRhj
+RnVchCU8AwLEohvJWg3hNTw5u/nOgro8PPhYZ8O6jnmqy4MNpYEUKfsYdiUjjtTv
+PSpUp9RDJAyJ+Ug2eywKFEkMg6+zrQkayzqet6c1lKIaRUA+L6ldgpRSen8qAccC
+8CGa9YAcmfuhKln7kpeVLWjDKpQybh0kWmiOZYLluu61rj32X+UWwULTPm/CRw4W
+VZyUpl6B8COQN/HwPMfuAvzLmrw8TP/DAiAKXCSr/3382l0iJNdjQ4v3YSHKSitW
+lhkIok52I973FY2hPvXt8gOsoFziEQ==
+=T3z5
+-----END PGP SIGNATURE-----
 
-Missing properties node, missing compatible. How is it supposed to
-match? If you plan to use it as part of other binding, please send
-entire patchset (including the binding which uses this one).
-
-In current form this looks untestable, unusable.
-
-> +patternProperties:
-> +  "^buck_v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(dram1|core|pa|proc11|proc12|gpu|s2|modem|s1)$"
-> +
-> +    unevaluatedProperties: false
-
-Put this one after $ref (other places as well). Makes it more readable.
-
-> +
-> +  "^ldo_v(ibr|rf12|usb|camio|efuse|xo22)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(ibr|rf12|usb|camio|efuse|xo22)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_v(rfck|emc|a12|a09|ufs|bbck)$":
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^v(rfck|emc|a12|a09|ufs|bbck)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$":
-
-No underscores in node names.
-
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vcn(18|13|33_1_bt|13_1_wifi|33_2_bt|33_2_wifi)$"
-> +
-> +    unevaluatedProperties: false
-> +
-> +  "^ldo_vsram_(proc2|others|md|proc1|others_sshub)$":
-
-No underscores in node names, in all places.
-
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +
-> +    properties:
-> +      regulator-name:
-> +        pattern: "^vsram_(proc2|others|md|proc1|others_sshub)$"
-> +
-> +    unevaluatedProperties: false
-> +
-
-Best regards,
-Krzysztof
+--eivqfnsOGQBavwky--
