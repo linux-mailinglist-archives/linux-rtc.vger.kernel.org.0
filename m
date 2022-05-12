@@ -2,107 +2,81 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07290524A08
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 May 2022 12:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE85E524AD6
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 May 2022 12:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352382AbiELKMU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 12 May 2022 06:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S1352867AbiELKyI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 12 May 2022 06:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352490AbiELKMT (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 May 2022 06:12:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080EF63508
-        for <linux-rtc@vger.kernel.org>; Thu, 12 May 2022 03:12:17 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id g6so9246333ejw.1
-        for <linux-rtc@vger.kernel.org>; Thu, 12 May 2022 03:12:16 -0700 (PDT)
+        with ESMTP id S1347401AbiELKyH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 May 2022 06:54:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9F5DD07;
+        Thu, 12 May 2022 03:54:06 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so9498187ejb.0;
+        Thu, 12 May 2022 03:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X47EehVG5WvUqloForq0DZnxSI00PxXqiAYmDlOndV4=;
-        b=XcbBbT5ghzHqWLRyDZ1BKspnTguxqGaIeoUYfzYWe9VUqk+FI7S3Q9xvJ/szWbY1Z6
-         02kucFbrE8C4oNqLGlY63/PTA4XHqGrxwQpjKr66LCH8cD7PNicO4ILOxnMvqIrYsIq+
-         UdsVVRk+xsNd8YWfFxU6Xhr/9OBME5uvIbEkpO2ZrGS31VC9H65RORFO61FOupEVIorB
-         xMpMT+Qy7El3qOGSJRFGxXUttTf+xj28dcmxmirMKer7O8oCawTEjv/XBmxpTGMhHcZu
-         6c3VgQ0/7l8D3W2LpgXIf6Xb4I/edQ5+4LKsv/M7xfuFgTKGyGceWGs1YT0Ew+pU0Ndd
-         XCpg==
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=saIXIgLCPDIyYjz9lRSB2RkGl170e531NzygSMa6KRo=;
+        b=ohw4R9Eg0c2ItbfYTsoSCNIzcYvrRzOml2pKWEQaAB4ocJSt0I8jBEz2xw6tSOU2CG
+         hh3DP8+mQs0TdYnI7eErVcX66oWFzSAVgPT3ekolBdecacsvIww7msvYLh2K7F4kyEE3
+         vTqzPB6lX4MXk7bbBc/bz6b1YPiFKsgk+4S//6wkJBKY1GAuBesTOVDTgH2QdK0Vz25w
+         ASPYe45vQr05a1VolDYvZf8IRUflA5UZ3aJRR2SiPQgUHA4hfgT8wTEDlBtZa+hjgdR3
+         QxYNc5LhO4w8r2e+XKplRSfLt4Is+jWJuEd7ZpnnjpQM1a0P2COUml31sM/Guy16eFjR
+         kNQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X47EehVG5WvUqloForq0DZnxSI00PxXqiAYmDlOndV4=;
-        b=pxwDuq1GIqMFyHux0Eb0c/QuwxCBycMIoe3cYkr+fFwJZHZVtOJp/T5xcpPc2cA2pB
-         Y1WcCgHmxgq/NO75gpAmK7SvYZm5EeQNZDGqL+21aER7P3dJTBvPwZ9j/Wp8HopKv84g
-         J9oCZR46Ca5PqJOqLJPhyn33o2JEtQ7wIqnlJjmSBJYt/iYCpRkzzbKOEp8Ot9GoFCfQ
-         6MUDoEfHxWH4CvEhg/7xx2nDrHoKqnlVrSo5ljOnS0anMnyaNuXfR4Zt9rDwABBP/RwG
-         d/HtnX+i/O50ovD3nCzHguKFCeMGLLwRBmeWF43V1uJKxDLxkrmSLyTbK5LKgsd4DRJB
-         mrLA==
-X-Gm-Message-State: AOAM532GwPO+hYpqz19oVkSImg2ovpKZ+/y7HDTNIN3qPXXoyyBslQXl
-        4FKTGZS1w5Y8M3zG1x5lCLApuA==
-X-Google-Smtp-Source: ABdhPJyOK7m/Haubvq4yt7fx4gwrkdHtoZkWKty8XoSlOK4EgnDcro57q4KvfFw/SJn8cFrNSvZdMw==
-X-Received: by 2002:a17:907:6d1e:b0:6f9:ffbd:477a with SMTP id sa30-20020a1709076d1e00b006f9ffbd477amr20830957ejc.104.1652350335645;
-        Thu, 12 May 2022 03:12:15 -0700 (PDT)
-Received: from [192.168.0.158] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c6-20020aa7c746000000b0042617ba63b9sm2326664eds.67.2022.05.12.03.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 03:12:14 -0700 (PDT)
-Message-ID: <2aeb7845-1dfe-c295-9fc9-38249e84f308@linaro.org>
-Date:   Thu, 12 May 2022 12:12:13 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=saIXIgLCPDIyYjz9lRSB2RkGl170e531NzygSMa6KRo=;
+        b=jDR9mqMyKe8cPzPL8PQ9EAKi66FRO7TBvHK9k58UK11kAr+odr6+WSnVP9oYy235/G
+         BX0aGzXyIv5H20JDauwMBJL1S7woQ+wGvZ43Elb4hCbGFI0UvdSranpxeiTXwHjRLasW
+         +uH5cpzCqEvVxAqH4n4JWtxskQs0qwIyTsTu7Kibg6mfBv+i0C8wIY+1zcSz2ggGCuXu
+         D6F1W+kukkbsVxe2GYFdN5334J82fOqaJKYQgWyddn4jQy7o1bjkOShi/EhGeQYlH/tu
+         4rr1E1YrlnawpROaqE/dQM/d6qnjlY/Dhz0sjUBsRzokk/m8xoKQige1QcU5BlgF3oJh
+         Ri3Q==
+X-Gm-Message-State: AOAM533gijoFvmj638Dv9WKcpDQVetdj2eGUl7ZT62tbSBXMwNwwIlal
+        G9i0HQHk1mypaQLBqekTMcmotNIUofIkQEyYcNE=
+X-Google-Smtp-Source: ABdhPJx1lLArqdjQJqGvhsRJUpI4KPvwCeQobzGn4twNX1r2i4axTm2gv4b7doAu7EwTllKGCeOASI58WuVd4uwVUgE=
+X-Received: by 2002:a17:907:1b19:b0:6f0:1022:1430 with SMTP id
+ mp25-20020a1709071b1900b006f010221430mr30146117ejc.13.1652352845214; Thu, 12
+ May 2022 03:54:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: rtc: Add TI K3 RTC description
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+In-Reply-To: <20220506232850.220582-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 12 May 2022 12:53:54 +0200
+Message-ID: <CAFBinCDdBzHNzP2WiFke3E-ReTbNO34Tm-8kSV7QO_y8s_VjQQ@mail.gmail.com>
+Subject: Re: [PATCH] rtc: rtc-meson: Fix email address in MODULE_AUTHOR
+To:     Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
         linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>
-References: <20220511002600.27964-1-nm@ti.com>
- <20220511002600.27964-2-nm@ti.com>
- <d7f124a7-a338-8ada-8d68-9434059db9fc@linaro.org>
- <20220511193838.o62nvhwfo4fgcg7l@overview>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220511193838.o62nvhwfo4fgcg7l@overview>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/05/2022 21:38, Nishanth Menon wrote:
-> On 18:28-20220511, Krzysztof Kozlowski wrote:
->> On 11/05/2022 02:25, Nishanth Menon wrote:
-> [...]
-> 
->>
->> I didn't brought it earlier (I assumed you used existing RTC examples
->> for your schema): why this is not including generic rtc.yaml schema?
->> Isn't this a RTC?
-> 
-> Oversight, and I suppose I picked a bad example to emulate :(
-> 
-> I assume you mean adding:
-> allOf:
->   - $ref: "rtc.yaml#"
-> 
-> Like this:
-> https://gist.github.com/nmenon/0c326c92fbadecd042209c0078f0af99 ?
-
-Yes plus you need to use unevaluatedProperties:false and remove
-wakeup-source (it's coming from rtc.yaml).
-
-Best regards,
-Krzysztof
+On Sat, May 7, 2022 at 1:29 AM Nobuhiro Iwamatsu <iwamatsu@nigauri.org> wrote:
+>
+> From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+>
+> Ben Dooks's email address is <ben.dooks@codethink.co.uk>.
+> Fix Ben Dooks's email address in MODULE_AUTHOR.
+>
+> Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
