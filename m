@@ -2,32 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EAE52504F
-	for <lists+linux-rtc@lfdr.de>; Thu, 12 May 2022 16:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D60525052
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 May 2022 16:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355443AbiELOj3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 12 May 2022 10:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S1355449AbiELOjb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 12 May 2022 10:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355071AbiELOj0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 May 2022 10:39:26 -0400
+        with ESMTP id S1355465AbiELOj2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 12 May 2022 10:39:28 -0400
 Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C0B26197D;
-        Thu, 12 May 2022 07:39:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAACC253A98;
+        Thu, 12 May 2022 07:39:25 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2E3C820000A;
-        Thu, 12 May 2022 14:39:21 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 17630200006;
+        Thu, 12 May 2022 14:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652366362;
+        t=1652366364;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Y8Q8PUTBehY+tn9jgIuohlr4xyjhUPPOjt8DiFB/M08=;
-        b=Z/osUR+FF/oOteSlo1iDCesBiu7WNLgDpfuUwye+kCWtOj0igx1YEHaP0wLkXR9Ui9taIo
-        DdWAIJz6rrBVGlg4IRu30zEWZj6i0+Pb5IawMUYMY7MjvlPMQZWWM8yaYN/dXMFAW+WGVn
-        0gPBlfP58KbyiCFNvsKrNArepgbo1llEyS4Vf+8LDmzPPal3yJSwWJAHtab7pRaHX0jMQm
-        uYKyrGxVtrHSR5u7zxtH0XzaYqvLiGpz4oLEE2bB0TTLee8RJiQwZPIsd6+Cgmi0DL0Zmm
-        ccjwprV1wbldO1GkUaDEexbCQcAeMMiPmVx+WWLVtN+cbuDb9AtkgoN76OSmfA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8ahdxlylHUe3mADgzeD98ByHKZe3nsmtka5ti0feGmk=;
+        b=jRjRAWwBWVP4gZyCIfX+DbsQ3Y614fCaCJLbEhRC0qFfAjICKds+dkOeAYN+y31xCuLlTV
+        fqLxMtVoUkEoQ+NeVLTDNo7zqoUOB8xYXo00K3pjFKw8gOwwo28r2Itv4jBw6m5XStJOor
+        cl1DF+vjycNQtwoZ9ykUyrljMfDmwNA7/HgG0fHL62j0JeHzQ6JFUdmhdZvhH0qeSfV15Q
+        qifLxTU4e1w6YmnDq1/00dC3V4D7gP1teBaEdWGv5Mg5rg4bteEyxCrG4784K4nsO7NQZC
+        9815rz6Nu8KRxNjTIbTJ94ie1UryU1rWqppyLtrMa5wVAKHw3rScS0v7AyOJQA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -44,11 +45,14 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Pascal Eberhard <pascal.eberhard@se.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>
-Subject: [PATCH v5 0/5] RZ/N1 RTC support
-Date:   Thu, 12 May 2022 16:39:15 +0200
-Message-Id: <20220512143920.238987-1-miquel.raynal@bootlin.com>
+        Clement Leger <clement.leger@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/5] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+Date:   Thu, 12 May 2022 16:39:16 +0200
+Message-Id: <20220512143920.238987-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220512143920.238987-1-miquel.raynal@bootlin.com>
+References: <20220512143920.238987-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,76 +66,92 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+Add new binding file for this RTC.
 
-This small series adds support for the RZ/N1 RTC.
-
-Despite its limitations, I found useful to at least have alarm and
-offset support.
-
-Cheers,
-Miquèl
-
-Changes in v5:
-* Dropped a (now) useless header that could produce a build error.
-
-Changes in v4:
-* Collected more tags (on the DT bindings).
-* Fixed the name of the SoC in the header: RZ/N1 instead of RZN1.
-* Dropped the error message when the alarm IRQ is not available (already
-  handled by the core)
-* Used pm_runtime_put() instead of pm_runtime_put_sync().
-* Used pm_runtime_resume_and_get() instead of pm_runtime_get().
-* Used devm_pm_runtime_enable() instead of pm_runtime_enable().
-
-Changes in v3:
-* Collected tags.
-* s/soc:/clk:/ in the clock commit title.
-* Dropped the RTC hclk fix which has already been applied.
-* Added the power-domain properties both in the bindings and in the DT.
-* Used runtime PM to enable the clock instead of using the clk API
-  directly. 
-
-Changes in v2:
-* Fixed the error path in the clk driver, where I missed to release a
-  spin_lock.
-* Collected tags.
-* Moved the rtc subnode in the dt to keep the nodes ordered by unit
-  address.
-* Dropped the useless "oneOf" statement in the bindings (compatible
-  property).
-* Dropped the start-year property in the bindings (already defined).
-* Avoided rollover calculations that could be more easily handled (and
-  reviewed) with a time64_t conversion.
-* Returned ERANGE instead of EOPNOTSUPP when the alarm date is not
-  valid.
-* Cleared RTC_FEATURE_UPDATE_INTERRUPT to avoid warning from the tools.
-* Dropped the sysctl patch adding the reset helper, instead fulfilled
-  the description of the RTC clock so that when requesting this clock to
-  be enabled, the idle bit is released.
-* Avoided rollover calculations that could be more easily handled
-  (and reviewed) with a time64_t conversion.
-* Fixed the max_range value, after a rtc-range test and looking at other
-  implementations.
-
-Michel Pollet (1):
-  rtc: rzn1: Add new RTC driver
-
-Miquel Raynal (4):
-  dt-bindings: rtc: rzn1: Describe the RZN1 RTC
-  rtc: rzn1: Add alarm support
-  rtc: rzn1: Add oscillator offset support
-  MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
-
- .../bindings/rtc/renesas,rzn1-rtc.yaml        |  70 +++
- MAINTAINERS                                   |   8 +
- drivers/rtc/Kconfig                           |   7 +
- drivers/rtc/Makefile                          |   1 +
- drivers/rtc/rtc-rzn1.c                        | 422 ++++++++++++++++++
- 5 files changed, 508 insertions(+)
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- create mode 100644 drivers/rtc/rtc-rzn1.c
 
+diff --git a/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+new file mode 100644
+index 000000000000..2d4741f51663
+--- /dev/null
++++ b/Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/rtc/renesas,rzn1-rtc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas RZ/N1 SoCs Real-Time Clock DT bindings
++
++maintainers:
++  - Miquel Raynal <miquel.raynal@bootlin.com>
++
++allOf:
++  - $ref: rtc.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - renesas,r9a06g032-rtc
++      - const: renesas,rzn1-rtc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 3
++    maxItems: 3
++
++  interrupt-names:
++    items:
++      - const: alarm
++      - const: timer
++      - const: pps
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: hclk
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - power-domains
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
++    rtc@40006000 {
++       compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
++       reg = <0x40006000 0x1000>;
++       interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>,
++                    <GIC_SPI 67 IRQ_TYPE_EDGE_RISING>,
++                    <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
++       interrupt-names = "alarm", "timer", "pps";
++       clocks = <&sysctrl R9A06G032_HCLK_RTC>;
++       clock-names = "hclk";
++       power-domains = <&sysctrl>;
++       start-year = <2000>;
++     };
 -- 
 2.27.0
 
