@@ -2,157 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE42E523E45
-	for <lists+linux-rtc@lfdr.de>; Wed, 11 May 2022 22:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6976C52425C
+	for <lists+linux-rtc@lfdr.de>; Thu, 12 May 2022 04:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347506AbiEKUCY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 11 May 2022 16:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S237900AbiELCQK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 11 May 2022 22:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347496AbiEKUCS (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 May 2022 16:02:18 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B821D48C7;
-        Wed, 11 May 2022 13:02:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id w24so3836647edx.3;
-        Wed, 11 May 2022 13:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kjm5oS3T2QJVIaXZ5HMZbY1xpEdNpJDDRAUvlhwNL3U=;
-        b=fWLBtbzzyS2l1AlhhPCQYPbP0/60RK4VuD7QGsdqBsun6IeBZ6VTM5h24bDkrGOSlr
-         lJrBNXdfN4rJXa0yKhXjdEDaWxrDgdI+4G6soL2J+jOZwz5Lt4asExh7ji6syOUh5fWD
-         P0ir99Ci4OoyAGJJMxErxke1NVt3tUuzD3aebDWaj+AvgZ/K3vWFcd/hx9riGmx5F9B9
-         ufNribfsGhluK6DJsCdb6FE9NZ0Er3WFJ24uFmDoZspty1JQS0h8vT3l8gfltWEbh43v
-         hQfndi/TW5GFxdS1q0BmyH7oXU7DR++pXUHbOd2HGgYgqLMfgYdph9MCybFMPiD5Oys/
-         YMhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Kjm5oS3T2QJVIaXZ5HMZbY1xpEdNpJDDRAUvlhwNL3U=;
-        b=ssgOTGYqLjtS9ooR6mr6cV+hR5MGmwuRHLNzZqfIh6KRKp7vOxPT0Sada0o9et2t2v
-         SbUjEEARBENwt8b/3rtk6ZpqlJKUxfPQ7QL3WZJ+BrXw8KEQl/VEAnYoy1dd0KOVEWYs
-         leBJB6Enbau5CYd19xDzTRYKmWa19ghy0b3L2ryZKGXqhnEqQc4QVIIPEqDrRkg0zwoA
-         jkF/ykx+JW2TfTN6UPjOkgycDeOo0GbLftoMN6XVheTdtWkqxYC7UEJiVMsdiyUUPtQT
-         ZRxhpZY5uidnXR1bpwyZlxo/l9wrrZ6cREuLBGYv15OyrpuI8yPYP81zLB8m6bmXm1At
-         OKpw==
-X-Gm-Message-State: AOAM533xV/sq7izbeSIcD5QP4eg5lJuaAYS9UwIKu6bNihEZ/Vv1Fr93
-        ie4JTgDetVSP6h0LKs+qd54=
-X-Google-Smtp-Source: ABdhPJwuzCry90j1P+q2DVpYYiCsCxEejAfdbC7nAd7VZk2GginTD4rVQkbU+m7YqZcYCq5h35e5fg==
-X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr31504260edb.189.1652299335444;
-        Wed, 11 May 2022 13:02:15 -0700 (PDT)
-Received: from kista.localdomain (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170906060800b006f3ef214e0esm1347602ejb.116.2022.05.11.13.02.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 13:02:14 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     wens@csie.org, samuel@sholland.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] Revert "clk: sunxi-ng: sun6i-rtc: Add support for H6"
-Date:   Wed, 11 May 2022 22:02:06 +0200
-Message-Id: <20220511200206.2458274-1-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S237917AbiELCQF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 11 May 2022 22:16:05 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616641B7A4;
+        Wed, 11 May 2022 19:15:58 -0700 (PDT)
+X-UUID: 42a4c590455b48428919eb8086b89e23-20220512
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:fff98e7f-170e-4607-bece-21ff7b8a5323,OB:10,L
+        OB:0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:47
+X-CID-INFO: VERSION:1.1.4,REQID:fff98e7f-170e-4607-bece-21ff7b8a5323,OB:10,LOB
+        :0,IP:0,URL:0,TC:0,Content:2,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:47
+X-CID-META: VersionHash:faefae9,CLOUDID:e4f14025-b432-452e-9e03-2bf3148aed85,C
+        OID:495731bb0d09,Recheck:0,SF:28|17|19|48,TC:nil,Content:4,EDM:-3,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 42a4c590455b48428919eb8086b89e23-20220512
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 369692403; Thu, 12 May 2022 10:15:51 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 12 May 2022 10:15:48 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 May 2022 10:15:48 +0800
+Message-ID: <cf30fef1db3f42f7c188f1488f5289517ff04844.camel@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: pmic: mt6366: add binding document
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>, <lee.jones@linaro.org>,
+        <robh+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <eddie.huang@mediatek.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <fshao@chromium.org>
+CC:     <srv_heupstream@mediatek.com>, <hui.liu@mediatek.com>,
+        <tinghan.shen@mediatek.com>, <hsin-hsiung.wang@mediatek.com>,
+        <sean.wang@mediatek.com>, <macpaul.lin@mediatek.com>,
+        <wen.su@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 12 May 2022 10:15:48 +0800
+In-Reply-To: <3e5ddde1-9d0c-a5e8-1828-aef1d1165a3e@linaro.org>
+References: <20220510064603.15920-1-zhiyong.tao@mediatek.com>
+         <20220510064603.15920-2-zhiyong.tao@mediatek.com>
+         <6614cd3783666caa529106464e7684caf16d6582.camel@mediatek.com>
+         <3e5ddde1-9d0c-a5e8-1828-aef1d1165a3e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This reverts commit 1738890a3165ccd0da98ebd3e2d5f9b230d5afa8.
+On Wed, 2022-05-11 at 17:36 +0200, Krzysztof Kozlowski wrote:
+> On 10/05/2022 09:56, Rex-BC Chen wrote:
+> > > +examples:
+> > > +  - |
+> > > +    pmic {
+> > > +      regulators {
+> > > +        mt6366_vdram1_reg: buck_vdram1 {
+> > > +            regulator-name = "vdram1";
+> > > +            regulator-min-microvolt = <500000>;
+> > > +            regulator-max-microvolt = <2087500>;
+> > > +            regulator-ramp-delay = <12500>;
+> > > +            regulator-enable-ramp-delay = <0>;
+> > > +            regulator-always-on;
+> > > +            regulator-allowed-modes = <0 1>;
+> > 
+> > should be two space instead of 4 space?
+> > mt6366_vdram1_reg: buck_vdram1 {
+> >   regulator-name = "vdram1";
+> >   ...
+> > };
+> > 
+> > There is the same issue for this example.
+> 
+> Indentation is four spaces.
+> 
+https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/tree/Documentation/devicetree/bindings/writing-schema.rst?h=for-next&id=7a150b0d850e37e7bdfc87459edd0ff302f67478*n111__;Iw!!CTRNKA9wMg0ARbw!yGLurJNfCjmllj-0EbUwL_HZef0f6MlfC8U968TLmzDG13EL7BErcZjtKu9cf6MMcz-E$
+>  
+> 
+> 
+> Best regards,
+> Krzysztof
 
-Commit 1738890a3165 ("clk: sunxi-ng: sun6i-rtc: Add support for H6")
-breaks HDMI output on Tanix TX6 mini board. Exact reason isn't known,
-but because that commit doesn't actually improve anything, let's just
-revert it.
+Hello Krzysztof,
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 15 ---------------
- drivers/rtc/rtc-sun6i.c              | 17 +++++++++++++++++
- 2 files changed, 17 insertions(+), 15 deletions(-)
+Thanks for your correction.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-index 2f3ddc908ebd..d65398497d5f 100644
---- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
-@@ -298,10 +298,6 @@ static const struct sunxi_ccu_desc sun6i_rtc_ccu_desc = {
- 	.hw_clks	= &sun6i_rtc_ccu_hw_clks,
- };
- 
--static const struct clk_parent_data sun50i_h6_osc32k_fanout_parents[] = {
--	{ .hw = &osc32k_clk.common.hw },
--};
--
- static const struct clk_parent_data sun50i_h616_osc32k_fanout_parents[] = {
- 	{ .hw = &osc32k_clk.common.hw },
- 	{ .fw_name = "pll-32k" },
-@@ -314,13 +310,6 @@ static const struct clk_parent_data sun50i_r329_osc32k_fanout_parents[] = {
- 	{ .hw = &osc24M_32k_clk.common.hw }
- };
- 
--static const struct sun6i_rtc_match_data sun50i_h6_rtc_ccu_data = {
--	.have_ext_osc32k	= true,
--	.have_iosc_calibration	= true,
--	.osc32k_fanout_parents	= sun50i_h6_osc32k_fanout_parents,
--	.osc32k_fanout_nparents	= ARRAY_SIZE(sun50i_h6_osc32k_fanout_parents),
--};
--
- static const struct sun6i_rtc_match_data sun50i_h616_rtc_ccu_data = {
- 	.have_iosc_calibration	= true,
- 	.rtc_32k_single_parent	= true,
-@@ -335,10 +324,6 @@ static const struct sun6i_rtc_match_data sun50i_r329_rtc_ccu_data = {
- };
- 
- static const struct of_device_id sun6i_rtc_ccu_match[] = {
--	{
--		.compatible	= "allwinner,sun50i-h6-rtc",
--		.data		= &sun50i_h6_rtc_ccu_data,
--	},
- 	{
- 		.compatible	= "allwinner,sun50i-h616-rtc",
- 		.data		= &sun50i_h616_rtc_ccu_data,
-diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 5b3e4da63406..5252ce4cbda4 100644
---- a/drivers/rtc/rtc-sun6i.c
-+++ b/drivers/rtc/rtc-sun6i.c
-@@ -370,6 +370,23 @@ CLK_OF_DECLARE_DRIVER(sun8i_h3_rtc_clk, "allwinner,sun8i-h3-rtc",
- CLK_OF_DECLARE_DRIVER(sun50i_h5_rtc_clk, "allwinner,sun50i-h5-rtc",
- 		      sun8i_h3_rtc_clk_init);
- 
-+static const struct sun6i_rtc_clk_data sun50i_h6_rtc_data = {
-+	.rc_osc_rate = 16000000,
-+	.fixed_prescaler = 32,
-+	.has_prescaler = 1,
-+	.has_out_clk = 1,
-+	.export_iosc = 1,
-+	.has_losc_en = 1,
-+	.has_auto_swt = 1,
-+};
-+
-+static void __init sun50i_h6_rtc_clk_init(struct device_node *node)
-+{
-+	sun6i_rtc_clk_init(node, &sun50i_h6_rtc_data);
-+}
-+CLK_OF_DECLARE_DRIVER(sun50i_h6_rtc_clk, "allwinner,sun50i-h6-rtc",
-+		      sun50i_h6_rtc_clk_init);
-+
- /*
-  * The R40 user manual is self-conflicting on whether the prescaler is
-  * fixed or configurable. The clock diagram shows it as fixed, but there
--- 
-2.36.1
+BRs,
+Rex
 
