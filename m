@@ -2,179 +2,144 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FA8C527ED5
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 09:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62228527F98
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 10:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241268AbiEPHvO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 May 2022 03:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S241697AbiEPIZT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 May 2022 04:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241387AbiEPHvM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 03:51:12 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2C927153;
-        Mon, 16 May 2022 00:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652687471; x=1684223471;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gxYxB/yE8IbLAZa6f2e+K6PHlgWLfPazfz5SGyAIbTc=;
-  b=DQ7WCK6XVQkZcBH1epTqyvetEfRL41PyAnA/HOADx62J5BeVN2AmTN6u
-   uCow9ZmS1DoWR4Ev5nxeTPuCWEpMBIWQU2SC64Xcsv+zdNlJu2e05ix7S
-   5EIix/W8vWVygfyd5wwbTT4a4sBneXRktW8ZXn7xlCJxsYko4G55XBir0
-   Z2CwTU2ARo8Xd/vcAWXe28/4KSNk+0pzVMfx3AaWk0YQr9xBxstoYjF4D
-   vvwIVzSO5HTc/Nb6rxN/ddWWGtBtMNBkqjOURDFj04VRFUoWGX88Pw2MS
-   d5iOI5aqMi3IqXbvinRDWukmkAPYk7oqlrj1ffNCX3KikPD3CJLD17dTc
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10348"; a="258332156"
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="258332156"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:50:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="604755423"
-Received: from caofangy-mobl1.ccr.corp.intel.com ([10.255.31.246])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 00:50:55 -0700
-Message-ID: <7f41b0d7f3b13dbf6dcd6abcba4836422cbbbffe.camel@intel.com>
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     rjw@rjwysocki.net, kvalo@kernel.org, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Date:   Mon, 16 May 2022 15:50:52 +0800
-In-Reply-To: <831d118f3eaa6abde991ea3c9f55b6befa956f15.camel@intel.com>
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
-         <20220505015814.3727692-8-rui.zhang@intel.com>
-         <YnWXQE9QASycOzZo@mail.local>
-         <320773e042a538782411f4db838bdc70a1b0851b.camel@intel.com>
-         <YnYgTtwTOtITODD4@mail.local>
-         <831d118f3eaa6abde991ea3c9f55b6befa956f15.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S241690AbiEPIZQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 04:25:16 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF8536E3B
+        for <linux-rtc@vger.kernel.org>; Mon, 16 May 2022 01:25:14 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 80276E000B;
+        Mon, 16 May 2022 08:25:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652689508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DpDCvqDkJ61pIqOdtHGhZAbezDieFUL4myvvlVhBRGc=;
+        b=OvAw6AweI3J0cIiuj3O6+CWsjNJR7mJDmDcrsnu6t/AYS7VRROO+tiE1qZdQqtRWYpMKGa
+        z6s+fT7W/6bFpyN6wyN6FlW5y42eP1YJeQlAnWJo+6n8a3qFzO7PbVc/IGViqydTNFihwi
+        3A7XZdO0C55iayUjugxRdKXzRRAdQyt9NAfGIc2TOSxhmE+9zLQQhUxF8tfJOMbPZwYdoV
+        0/h3PSQBtvj9RwEEpvOx+OZyx9V07UPePK4IxnQ0P7umDPoKYkVOBs3YVaUOFqOXRSG11L
+        YafOshGXHVO2lgTTZmVfhzjPaJpS3n1ql8278UHT/+qtKWA2lpeIZVlOV9LKOw==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>
+Subject: [PATCH v7 0/5] RZ/N1 RTC support
+Date:   Mon, 16 May 2022 10:24:59 +0200
+Message-Id: <20220516082504.33913-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi, Alexandre,
+Hello,
 
-May I know if this addresses your concern or not?
+This small series adds support for the RZ/N1 RTC.
 
-thanks,
-rui
+Despite its limitations, I found useful to at least have alarm and
+offset support.
 
-On Sat, 2022-05-07 at 15:41 +0800, Zhang Rui wrote:
-> On Sat, 2022-05-07 at 09:31 +0200, Alexandre Belloni wrote:
-> > On 07/05/2022 10:00:40+0800, Zhang Rui wrote:
-> > > Hi, Alexandre,
-> > > 
-> > > Thanks for reviewing the patch.
-> > > 
-> > > On Fri, 2022-05-06 at 23:46 +0200, Alexandre Belloni wrote:
-> > > > Hello,
-> > > > 
-> > > > I assume I can ignore this patch as this seems to be only for
-> > > > testing
-> > > 
-> > > The main purpose of this patch is for automate testing.
-> > > But this doesn't mean it cannot be part of upstream code, right?
-> > > 
-> > > > I'm not even sure why this is needed as this completely breaks
-> > > > setting
-> > > > the alarm time.
-> > > 
-> > > Or overrides the alarm time, :)
-> > > 
-> > > People rely on the rtc alarm in the automated suspend stress
-> > > test,
-> > > which suspend and resume the system for over 1000 iterations.
-> > > As I mentioned in the cover letter of this patch series, if the
-> > > system
-> > > suspend time varies from under 1 second to over 60 seconds, how
-> > > to
-> > > alarm the RTC before suspend?
-> > > This feature is critical in this scenario.
-> > > 
-> > > Plus, the current solution is transparent to people who don't
-> > > known/use
-> > > this "rtc_wake_override_sec" parameter. And for people who use
-> > > this,
-> > > they should know that the previous armed RTC alarm will be
-> > > overrode
-> > > whenever a system suspend is triggered. I can add a message when
-> > > the
-> > > parameter is set, if needed.
-> > > 
-> > 
-> > It is not transparent, if I read your patch properly, this breaks
-> > wakeup
-> > for everyone...
-> > 
-> > > > On 05/05/2022 09:58:14+0800, Zhang Rui wrote:
-> > > > > +static int cmos_pm_notify(struct notifier_block *nb,
-> > > > > unsigned
-> > > > > long
-> > > > > mode, void *_unused)
-> > > > > +{
-> > > > > +	struct cmos_rtc *cmos = container_of(nb, struct
-> > > > > cmos_rtc,
-> > > > > pm_nb);
-> > > > > +	struct rtc_device       *rtc = cmos->rtc;
-> > > > > +	unsigned long           now;
-> > > > > +	struct rtc_wkalrm       alm;
-> > > > > +
-> > > > > +	if (rtc_wake_override_sec == 0)
-> > > > > +		return NOTIFY_OK;
-> > > > > +
-> > > > > +	switch (mode) {
-> > > > > +	case PM_SUSPEND_PREPARE:
-> > > > > +		/*
-> > > > > +		 * Cancel the timer to make sure it won't fire
-> > > > > +		 * before rtc is rearmed later.
-> > > > > +		 */
-> > > > > +		rtc_timer_cancel(rtc, &rtc->aie_timer);
-> > > > > +		break;
-> > > > > +	case PM_SUSPEND_LATE:
-> > > > > +		if (rtc_read_time(rtc, &alm.time))
-> > > > > +			return NOTIFY_BAD;
-> > > > > +
-> > > > > +		now = rtc_tm_to_time64(&alm.time);
-> > > > > +		memset(&alm, 0, sizeof(alm));
-> > > > > +		rtc_time64_to_tm(now + rtc_wake_override_sec,
-> > > > > &alm.time);
-> > > > > +		alm.enabled = true;
-> > > > > +		if (rtc_set_alarm(rtc, &alm))
-> > > > > +			return NOTIFY_BAD;
-> > 
-> > ... because if rtc_wake_override_sec is not set, this sets the
-> > alarm
-> > to
-> > now which is the current RTC time, ensuring the alarm will never
-> > trigger.
-> 
-> No.
-> As the code below
-> > > > > 
-> > > > > 	if (rtc_wake_override_sec == 0)
-> > > > > +		return NOTIFY_OK;
-> 
-> We check for rtc_wake_override_sec at the beginning of the notifier
-> callback. So it takes effect only if a) rtc_wake_override_sec is set,
-> AND b) a suspend is triggered.
-> 
-> thanks,
-> rui
-> 
-> 
+Cheers,
+Miquèl
+
+Changes in v7:
+* Drop the unused *clk member of the rtc structure and the clk.h header
+  as well now that we use runtime pm.
+
+Changes in v6:
+* Fix a sparse warning by dropping a variable not really used and
+  replaced by a comment.
+
+Changes in v5:
+* Dropped a (now) useless header that could produce a build error.
+
+Changes in v4:
+* Collected more tags (on the DT bindings).
+* Fixed the name of the SoC in the header: RZ/N1 instead of RZN1.
+* Dropped the error message when the alarm IRQ is not available (already
+  handled by the core)
+* Used pm_runtime_put() instead of pm_runtime_put_sync().
+* Used pm_runtime_resume_and_get() instead of pm_runtime_get().
+* Used devm_pm_runtime_enable() instead of pm_runtime_enable().
+
+Changes in v3:
+* Collected tags.
+* s/soc:/clk:/ in the clock commit title.
+* Dropped the RTC hclk fix which has already been applied.
+* Added the power-domain properties both in the bindings and in the DT.
+* Used runtime PM to enable the clock instead of using the clk API
+  directly. 
+
+Changes in v2:
+* Fixed the error path in the clk driver, where I missed to release a
+  spin_lock.
+* Collected tags.
+* Moved the rtc subnode in the dt to keep the nodes ordered by unit
+  address.
+* Dropped the useless "oneOf" statement in the bindings (compatible
+  property).
+* Dropped the start-year property in the bindings (already defined).
+* Avoided rollover calculations that could be more easily handled (and
+  reviewed) with a time64_t conversion.
+* Returned ERANGE instead of EOPNOTSUPP when the alarm date is not
+  valid.
+* Cleared RTC_FEATURE_UPDATE_INTERRUPT to avoid warning from the tools.
+* Dropped the sysctl patch adding the reset helper, instead fulfilled
+  the description of the RTC clock so that when requesting this clock to
+  be enabled, the idle bit is released.
+* Avoided rollover calculations that could be more easily handled
+  (and reviewed) with a time64_t conversion.
+* Fixed the max_range value, after a rtc-range test and looking at other
+  implementations.
+
+Michel Pollet (1):
+  rtc: rzn1: Add new RTC driver
+
+Miquel Raynal (4):
+  dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+  rtc: rzn1: Add alarm support
+  rtc: rzn1: Add oscillator offset support
+  MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+
+ .../bindings/rtc/renesas,rzn1-rtc.yaml        |  70 +++
+ MAINTAINERS                                   |   8 +
+ drivers/rtc/Kconfig                           |   7 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-rzn1.c                        | 420 ++++++++++++++++++
+ 5 files changed, 506 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-rzn1.c
+
+-- 
+2.27.0
 
