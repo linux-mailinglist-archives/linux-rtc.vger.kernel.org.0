@@ -2,109 +2,96 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB77752861F
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 15:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B705288D2
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 17:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbiEPN5i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 May 2022 09:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S232738AbiEPP2H (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 May 2022 11:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244573AbiEPN44 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 09:56:56 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B40E99;
-        Mon, 16 May 2022 06:56:54 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4A813C0004;
-        Mon, 16 May 2022 13:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652709412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7SpoWIQY72eSmiR3JfnZLb5PGezpamlWkoq3B0Im97c=;
-        b=OB8asnz9ViEfyXVey9yvtRZ28vTTKRL2clDhg7AWJgpkOgjZlQ6PWQBebPRPCzuuUqQ5s3
-        K+HdPw/Q+aBcB012sVnLcbbnwmbwYyu0uLN6f/alewfE6OcPrRLQ4ZUjEE2IyZOomgAqXF
-        Mh8ioBdGCN3RNHYK8ScbgqjSGBziCDbJdpxmlUC5q7pSDjWpAIMYiLC1WcduK8/h+HhDjc
-        lWaQOL5S+TEEt1y/2c3fqhsS3IPDAwFpSGEZ4kCg9+FFsPGt+0YmYQq4yEwkEJ/MD9xpqH
-        cj7J5Bh4DKl7Aoq//WNh9BaM3TIVI1xEfKtXPQOF91rL+ekf49DXy5wJ1H7uOg==
-Date:   Mon, 16 May 2022 15:56:52 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, list@opendingux.net,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 3/5] rtc: jz4740: Reset scratchpad register on power loss
-Message-ID: <YoJYJIqoflaoEpsQ@mail.local>
-References: <20220418184933.13172-1-paul@crapouillou.net>
- <20220418184933.13172-4-paul@crapouillou.net>
- <Yl8PBx5qyvMrwrV/@mail.local>
- <I1RLAR.CF78L45NPJDC1@crapouillou.net>
- <Yl8U4JDSHwjT9nXw@mail.local>
- <T0ULAR.TKXMRCDN7DQ53@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <T0ULAR.TKXMRCDN7DQ53@crapouillou.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230219AbiEPP2G (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 11:28:06 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B935914030;
+        Mon, 16 May 2022 08:28:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d17so14788083plg.0;
+        Mon, 16 May 2022 08:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=jvAEBjwUOb6zwBl6DiP+4dhdWO5kB2YZRGfj+rIA7BU=;
+        b=U4hyg03xi6oe6X6bhQ1T1+v1r88DZ0by9HRN+VaKWFNIlfUp5+BpC2BgklaZ/gjmSZ
+         Hzbe1Rg0Pqrgg6fUbPg9DCsFUP99lBVSI47LnmUwRdBVddVBukWeDVchsCUKHjIsVH6l
+         ialCaFcZI0XBicM6OnNUlqlfGebQB2qNtYT6fZkmsI6mZjrfSzemK8yhu92r5cJSnth/
+         c31ysVRyvCrgDcd/Mp5vp93qiHTtVsQhpo+1zYC87CD5o7XD6ricuQ2ziF1u53JHteK6
+         N39Vy4qsAcIk4UsWLwoGB7+g+5t8oLWp/nfChFy+BlbEL32ZNovG8uZk8Gsv2e1/sYJr
+         qehw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jvAEBjwUOb6zwBl6DiP+4dhdWO5kB2YZRGfj+rIA7BU=;
+        b=W6vR5blQT8aM4rsOTT+/EOSQVHoiviE8LuUizqdP5c3gCRAU1SkrfCIhpiujuGVgsI
+         5JKuJMFEU4FwsE/gQNlGc9GnXkwIXcxHcE17aUs9IjwqxT/MW0UxFI/SqefjDfMQOhN1
+         9HG2bvz9dM+/Oh07zjticcX166gbimKglX6jB6ZcjHnSxDIXo4Pqd35DgRoShRJelYsf
+         tCZh/cE+XxsmqxQ1UZQ4BVKc0wsHohvflswc+JR/kbDm7V+AtsuThBXqd7aWOlPpML5U
+         HfeYEi8ifruMeKzlLyTquDWR37dpSGSl519wM3wwi6EHnXj1ZnQudCcEs6OTxuBpODtK
+         3gUQ==
+X-Gm-Message-State: AOAM533gAhmmYxTGob0bC6wefTy0Y5Hldi/VPhpC/YB2Jn6aFH5NgiRE
+        z7mVHMaFD8y/ii1DXA8Fvsc=
+X-Google-Smtp-Source: ABdhPJy0iI39XqHCU2EmY5yUaX8imnzPT4LnPTzcfum+hrQ94V4WB81XJo2SovUpsXsl2iF2fpfWMw==
+X-Received: by 2002:a17:903:230b:b0:15e:bc9c:18c7 with SMTP id d11-20020a170903230b00b0015ebc9c18c7mr17829910plh.29.1652714885101;
+        Mon, 16 May 2022 08:28:05 -0700 (PDT)
+Received: from localhost.localdomain ([116.89.131.16])
+        by smtp.gmail.com with ESMTPSA id d15-20020a655acf000000b003c14af50605sm6895126pgt.29.2022.05.16.08.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 08:28:04 -0700 (PDT)
+From:   Medad CChien <medadyoung@gmail.com>
+X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
+To:     benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        tali.perry1@gmail.com, tmaimon77@gmail.com, avifishman70@gmail.com,
+        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
+        a.zummo@towertech.it, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        JJLIU0@nuvoton.com, KFTING@nuvoton.com, ctcchien@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v1 1/3] ARM: dts: nuvoton: Add nuvoton RTC3018Y node
+Date:   Mon, 16 May 2022 23:27:49 +0800
+Message-Id: <20220516152751.27716-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 19/04/2022 21:53:17+0100, Paul Cercueil wrote:
-> > >  So what is the best thing to do then?
-> > > 
-> > 
-> > Well, -EINVAL is returned when the time is invalid, this should be
-> > enough. I'm not actually sure what is the issue you are trying to fix
-> > here.
-> 
-> htop fails to start and tells me:
-> "No btime in /proc/stat: No such file or directory"
-> 
-> until the date is reset. So I was assuming it was a case of the jz4740
-> driver not being correct and breaking userspace.
-> 
+Add nuvoton real time clock RTC3018Y in I2C node
 
-I guess either /proc/stat or htop needs fixing then ;)
+Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+---
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> Cheers,
-> -Paul
-> 
-> 
-> > 
-> > >  Cheers,
-> > >  -Paul
-> > > 
-> > >  > >  +	}
-> > >  > >  +
-> > >  > >   	ret = devm_rtc_register_device(rtc->rtc);
-> > >  > >   	if (ret)
-> > >  > >   		return ret;
-> > >  > >  --
-> > >  > >  2.35.1
-> > >  > >
-> > >  >
-> > >  > --
-> > >  > Alexandre Belloni, co-owner and COO, Bootlin
-> > >  > Embedded Linux and Kernel engineering
-> > >  > https://bootlin.com
-> > > 
-> > > 
-> > 
-> > --
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> 
-> 
-
+diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
+index 0334641f8829..c1248211b1b4 100644
+--- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
++++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
+@@ -202,6 +202,12 @@
+ 		reg = <0x48>;
+ 		status = "okay";
+ 	};
++	rtc0: rtc@6f {
++		compatible = "nuvoton,nct3018y";
++		reg = <0x6f>;
++		#clock-cells = <0>;
++		host-wakeup-gpios = <&gpio0 0 GPIO_ACTIVE_LOW>;
++	};
+ };
+ 
+ /* lm75 on EB */
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
+
