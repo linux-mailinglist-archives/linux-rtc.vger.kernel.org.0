@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A0B527FA1
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 10:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9695C527FA5
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 10:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241714AbiEPIZZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 May 2022 04:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S241688AbiEPIZa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 May 2022 04:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbiEPIZX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 04:25:23 -0400
+        with ESMTP id S236546AbiEPIZ2 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 04:25:28 -0400
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C63A3701A;
-        Mon, 16 May 2022 01:25:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9A836E2C
+        for <linux-rtc@vger.kernel.org>; Mon, 16 May 2022 01:25:26 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A34A0E0013;
-        Mon, 16 May 2022 08:25:16 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id BDCC6E0019;
+        Mon, 16 May 2022 08:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652689518;
+        t=1652689520;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BL+sTKG27PMqQBYVFwsmGl/hHTsGnjU8nEN1KvlZmnA=;
-        b=ijYIMhxaGfSSjv3l3L/RMPuPw62hT8w402DG1nuxj0TxiNbnMHDwmXAGJuKhXCeBOk8+v3
-        qYeP+Pptuvafq2wWOaiMdZkhv02KY86noUUrYBVSzKXfJVRmitbdhbuyoI/I1xphSmzK3I
-        K7hfiI9pmAI/yBSHEKcu/7LN6DS7MgnOdSDRHGWa4LUTghbQuKrxgbXpXjnPN4bSDCPtiz
-        jUh83IYcV6SvUady6/D6TnJJvAcaswFcPXZB8ixvFBhJwRyUvcQWg0HdntP8djb2sZehRa
-        rtQNpF2UZbaOlleF//L1oXD3VTaU45sCbqSYPb3KMltawNSZemHQADgDY0zHGA==
+        bh=AeURFA21azT2WZg6+haUTuGeT1PTBOnmz+vdgDPsEgY=;
+        b=cS6LM1anIcE452Gw3UzzpN21KgNtcRPHOI8TbYFPGJxmD0wVaOrmTQla/QbzyQuKwgKbYh
+        IOGnPcFkb1Lb4COl83xXbsFh+g6nAPmoYnVuEa+L1MewEkYAkikyQ8T6roz/7IjtC66rSY
+        ZlDNgfkRCYrtNKmSQ8nqoEYaBW5cT/cMKyi7p8/+cxC1nM5qT/4/+c6ctegTWMc3lEQ14f
+        2UCfZifl0lkrZUdZ/U1BPowlN3z3IMRzoqHjYgv/pIdqXgdabmZvJ1CCptQl9JwLJzD86o
+        ZT7ZEK93Q1LROPxJz06mCYwNs7U/q+e2XoPq4kUwD//9QWxwIYzSOpF766LbrA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -46,9 +46,9 @@ Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
         Clement Leger <clement.leger@bootlin.com>
-Subject: [PATCH v7 4/5] rtc: rzn1: Add oscillator offset support
-Date:   Mon, 16 May 2022 10:25:03 +0200
-Message-Id: <20220516082504.33913-5-miquel.raynal@bootlin.com>
+Subject: [PATCH v7 5/5] MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+Date:   Mon, 16 May 2022 10:25:04 +0200
+Message-Id: <20220516082504.33913-6-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220516082504.33913-1-miquel.raynal@bootlin.com>
 References: <20220516082504.33913-1-miquel.raynal@bootlin.com>
@@ -57,118 +57,41 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The RZN1 RTC can compensate the imprecision of the oscillator up to
-approximately 190ppm.
-
-Seconds can last slightly shorter or longer depending on the
-configuration.
-
-Below ~65ppm of correction, we can change the time spent in a second
-every minute, which is the most accurate compensation that the RTC can
-offer. Above, the compensation will be active every 20s.
+After contributing it, I'll volunteer to maintain it.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/rtc/rtc-rzn1.c | 73 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index c1b082e3c8a7..980ade8c9601 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -245,12 +245,85 @@ static int rzn1_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	return 0;
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9cf74e4eacce..cc4a3cca022e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16847,6 +16847,14 @@ S:	Supported
+ F:	Documentation/devicetree/bindings/iio/adc/renesas,rzg2l-adc.yaml
+ F:	drivers/iio/adc/rzg2l_adc.c
  
-+static int rzn1_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-+	unsigned int ppb_per_step;
-+	bool subtract;
-+	u32 val;
++RENESAS RZ/N1 RTC CONTROLLER DRIVER
++M:	Miquel Raynal <miquel.raynal@bootlin.com>
++L:	linux-rtc@vger.kernel.org
++L:	linux-renesas-soc@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
++F:	drivers/rtc/rtc-rzn1.c
 +
-+	val = readl(rtc->base + RZN1_RTC_SUBU);
-+	ppb_per_step = val & RZN1_RTC_SUBU_DEV ? 1017 : 3051;
-+	subtract = val & RZN1_RTC_SUBU_DECR;
-+	val &= 0x3F;
-+
-+	if (!val)
-+		*offset = 0;
-+	else if (subtract)
-+		*offset = -(((~val) & 0x3F) + 1) * ppb_per_step;
-+	else
-+		*offset = (val - 1) * ppb_per_step;
-+
-+	return 0;
-+}
-+
-+static int rzn1_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
-+	unsigned int steps;
-+	int stepsh, stepsl;
-+	u32 val;
-+	int ret;
-+
-+	/*
-+	 * Check which resolution mode (every 20 or 60s) can be used.
-+	 * Between 2 and 124 clock pulses can be added or substracted.
-+	 *
-+	 * In 20s mode, the minimum resolution is 2 / (32768 * 20) which is
-+	 * close to 3051 ppb. In 60s mode, the resolution is closer to 1017.
-+	 */
-+	stepsh = DIV_ROUND_CLOSEST(offset, 1017);
-+	stepsl = DIV_ROUND_CLOSEST(offset, 3051);
-+
-+	if (stepsh >= -0x3E && stepsh <= 0x3E) {
-+		/* 1017 ppb per step */
-+		steps = stepsh;
-+		val |= RZN1_RTC_SUBU_DEV;
-+	} else if (stepsl >= -0x3E && stepsl <= 0x3E) {
-+		/* 3051 ppb per step */
-+		steps = stepsl;
-+	} else {
-+		return -ERANGE;
-+	}
-+
-+	if (!steps)
-+		return 0;
-+
-+	if (steps > 0) {
-+		val |= steps + 1;
-+	} else {
-+		val |= RZN1_RTC_SUBU_DECR;
-+		val |= (~(-steps - 1)) & 0x3F;
-+	}
-+
-+	ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, val,
-+				 !(val & RZN1_RTC_CTL2_WUST), 100, 2000000);
-+	if (ret)
-+		return ret;
-+
-+	writel(val, rtc->base + RZN1_RTC_SUBU);
-+
-+	return 0;
-+}
-+
- static const struct rtc_class_ops rzn1_rtc_ops = {
- 	.read_time = rzn1_rtc_read_time,
- 	.set_time = rzn1_rtc_set_time,
- 	.read_alarm = rzn1_rtc_read_alarm,
- 	.set_alarm = rzn1_rtc_set_alarm,
- 	.alarm_irq_enable = rzn1_rtc_alarm_irq_enable,
-+	.read_offset = rzn1_rtc_read_offset,
-+	.set_offset = rzn1_rtc_set_offset,
- };
- 
- static int rzn1_rtc_probe(struct platform_device *pdev)
+ RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
+ M:	Miquel Raynal <miquel.raynal@bootlin.com>
+ L:	linux-mtd@lists.infradead.org
 -- 
 2.27.0
 
