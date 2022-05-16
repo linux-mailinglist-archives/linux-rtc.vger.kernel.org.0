@@ -2,86 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DA7527FB0
-	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 10:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB77752861F
+	for <lists+linux-rtc@lfdr.de>; Mon, 16 May 2022 15:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiEPIah (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 16 May 2022 04:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
+        id S240673AbiEPN5i (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 16 May 2022 09:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241720AbiEPIaf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 04:30:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A591E034;
-        Mon, 16 May 2022 01:30:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652689833; x=1684225833;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8pp90tvf8kTP0zWhyfPDbb/zxfLJMKZ53ILcrsvHuto=;
-  b=I5NUd0TQkijsu0RTkSOJDx6OSz2vFXxH2RYWUTYsDAmRTFSRlArP7GiT
-   TDhBprN08n81pbuUEYp/Zc2OtrnyPRYWk+wVdppBifGEubb/KSTYZgoGs
-   U3PlORWTi7ddyVpeEEn3yQC6uvFGgNu1Jg/O3Knipen13eO8p548UqkZ0
-   4BJFYZdF6/Ur/p/x2lwnzG7WN1V2kTBNva8WwATvUnq+PbRll2ixDB4rk
-   4VNh+Q8SJMNR2l0zg/3XaWu0axcHwPbet8R3P6900kySIYXQXzNcasnfu
-   ObDFOAEVrPSPRLk3WT/Vy40fewGkZBDyenYOGPSdPWelKxdBOnBJykXvz
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,229,1647327600"; 
-   d="scan'208";a="173511782"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2022 01:30:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 16 May 2022 01:30:33 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 16 May 2022 01:30:31 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
-CC:     <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
-        <conor.dooley@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v3 2/2] MAINTAINERS: add PolarFire SoC's RTC
-Date:   Mon, 16 May 2022 09:28:39 +0100
-Message-ID: <20220516082838.3717982-3-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516082838.3717982-1-conor.dooley@microchip.com>
-References: <20220516082838.3717982-1-conor.dooley@microchip.com>
+        with ESMTP id S244573AbiEPN44 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 16 May 2022 09:56:56 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B40E99;
+        Mon, 16 May 2022 06:56:54 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A813C0004;
+        Mon, 16 May 2022 13:56:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652709412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7SpoWIQY72eSmiR3JfnZLb5PGezpamlWkoq3B0Im97c=;
+        b=OB8asnz9ViEfyXVey9yvtRZ28vTTKRL2clDhg7AWJgpkOgjZlQ6PWQBebPRPCzuuUqQ5s3
+        K+HdPw/Q+aBcB012sVnLcbbnwmbwYyu0uLN6f/alewfE6OcPrRLQ4ZUjEE2IyZOomgAqXF
+        Mh8ioBdGCN3RNHYK8ScbgqjSGBziCDbJdpxmlUC5q7pSDjWpAIMYiLC1WcduK8/h+HhDjc
+        lWaQOL5S+TEEt1y/2c3fqhsS3IPDAwFpSGEZ4kCg9+FFsPGt+0YmYQq4yEwkEJ/MD9xpqH
+        cj7J5Bh4DKl7Aoq//WNh9BaM3TIVI1xEfKtXPQOF91rL+ekf49DXy5wJ1H7uOg==
+Date:   Mon, 16 May 2022 15:56:52 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, list@opendingux.net,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH 3/5] rtc: jz4740: Reset scratchpad register on power loss
+Message-ID: <YoJYJIqoflaoEpsQ@mail.local>
+References: <20220418184933.13172-1-paul@crapouillou.net>
+ <20220418184933.13172-4-paul@crapouillou.net>
+ <Yl8PBx5qyvMrwrV/@mail.local>
+ <I1RLAR.CF78L45NPJDC1@crapouillou.net>
+ <Yl8U4JDSHwjT9nXw@mail.local>
+ <T0ULAR.TKXMRCDN7DQ53@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <T0ULAR.TKXMRCDN7DQ53@crapouillou.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add an entry for PolarFire SoC's RTC drver to the existing support
-for PolarFire SoC.
+On 19/04/2022 21:53:17+0100, Paul Cercueil wrote:
+> > >  So what is the best thing to do then?
+> > > 
+> > 
+> > Well, -EINVAL is returned when the time is invalid, this should be
+> > enough. I'm not actually sure what is the issue you are trying to fix
+> > here.
+> 
+> htop fails to start and tells me:
+> "No btime in /proc/stat: No such file or directory"
+> 
+> until the date is reset. So I was assuming it was a case of the jz4740
+> driver not being correct and breaking userspace.
+> 
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+I guess either /proc/stat or htop needs fixing then ;)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e8c52d0192a6..625d735f6a24 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16952,6 +16952,7 @@ L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/rtc/rtc-mpfs.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
- 
+> Cheers,
+> -Paul
+> 
+> 
+> > 
+> > >  Cheers,
+> > >  -Paul
+> > > 
+> > >  > >  +	}
+> > >  > >  +
+> > >  > >   	ret = devm_rtc_register_device(rtc->rtc);
+> > >  > >   	if (ret)
+> > >  > >   		return ret;
+> > >  > >  --
+> > >  > >  2.35.1
+> > >  > >
+> > >  >
+> > >  > --
+> > >  > Alexandre Belloni, co-owner and COO, Bootlin
+> > >  > Embedded Linux and Kernel engineering
+> > >  > https://bootlin.com
+> > > 
+> > > 
+> > 
+> > --
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> 
+> 
+
 -- 
-2.36.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
