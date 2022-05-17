@@ -2,47 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AD352A5CC
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 17:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7521352A8E5
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 19:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345367AbiEQPOi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 May 2022 11:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S1351349AbiEQRHv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 May 2022 13:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243212AbiEQPOg (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 11:14:36 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363704BB93;
-        Tue, 17 May 2022 08:14:34 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id s23so19505665iog.13;
-        Tue, 17 May 2022 08:14:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mbFG0j0OOb8L9zhN2w48Y4xmkuGMCVJKy6dA52/T7lY=;
-        b=Oe2oZ4fRNldQ2RrA3y4TuzVMwHgFBnJJFsDcII6BiLBtCcecpKJkYEtaYUVNX1jRxp
-         RqOJ6pPxt+Rhc6xgGHxQaQSo8EOV8lUc4wtJbYXmAEsIOcV7RwcZSGjWOAK00lhvUTan
-         eW43CY5IGdWWCuldiSwSXkWHHFm+Ew2vYIcY0LiAit/Y7wrGBq6gOcxU51BWchULamXO
-         bdaiWk2D4/xFIXEPgy4CJdEICEtXfNcFBAaeps7P8s4gPx0hnLA2Bna1CQRfvkNv4Ga+
-         ShbYa5smC7CHTmV2T+EXjsmu5xWUpIxXT8QstKF9rWC+Fa6MKnC/cUy3pVyCtcrcamgp
-         1Y4g==
-X-Gm-Message-State: AOAM533zT/fbiJZu/oRqguWHfT+J+alEDblKxXSINUtinWtu03KTAoAF
-        iO/zQY0GhzIO4pJ+SngNCu2CYV3Zy+v15JuqAVk=
-X-Google-Smtp-Source: ABdhPJw5xQpiFWoBi/dY9A7l3qiBSYaoqRi7wvq1y38zlaEpSiq91Cpu4sxBMJ0hvEtSAzij38P5pYCiRnixLE2uvw0=
-X-Received: by 2002:a05:6638:3289:b0:32e:2c45:93b5 with SMTP id
- f9-20020a056638328900b0032e2c4593b5mr6150196jav.96.1652800473303; Tue, 17 May
- 2022 08:14:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
-In-Reply-To: <20220505015814.3727692-8-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 May 2022 17:14:22 +0200
-Message-ID: <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        with ESMTP id S1349851AbiEQRHq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 13:07:46 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384A82DD4F
+        for <linux-rtc@vger.kernel.org>; Tue, 17 May 2022 10:07:39 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B3415E0006;
+        Tue, 17 May 2022 17:07:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652807258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lMslnncr3ii3Tkm1tB44alj8rpL8Y4RP39Ic20UO+ks=;
+        b=NV4NKeda8S4TQDTGbPu7/JpPe2xaqRFF+0D2NppThjNGRRqzjeY9dWkIxtMyzboiHAaH6v
+        UcNhUv1rdN6gzz3kDihWRkKcGDn9P3dro+noKnqjp2bhtOhqUqUzOfWH2roWBLLCPjNtWE
+        glY67Ghd34mxekvUcKtwM3v3ufm0tpUbknXzbWjHzEP1JaR9JKNgVCfoGf55dkfdXivuAr
+        RF72k6OwT7VrM5DYoDLPB4mThf3tagC/Ic0eMorY0/P+RzrTNaatCdo1J0tM46DwYyeH5g
+        UtFhUh2v9AA+IikUNbYFa37FRbMoK1fqib3HWrOD4G87QrcYV/j/R6os3MP/8A==
+Date:   Tue, 17 May 2022 19:07:37 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
         Linux PM <linux-pm@vger.kernel.org>,
         ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
         linux-rtc@vger.kernel.org,
@@ -52,29 +42,91 @@ Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
         merez@codeaurora.org, mat.jonczyk@o2.pl,
         Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
         Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/7] PM: Solution for S0ix failure caused by PCH
+ overheating
+Message-ID: <YoPWWYOMqshE06vr@mail.local>
+References: <20220505015814.3727692-1-rui.zhang@intel.com>
+ <CAJZ5v0gj=zOF-9sMaWtWbPm7051W31qbJsK25bceeAe693Wj3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gj=zOF-9sMaWtWbPm7051W31qbJsK25bceeAe693Wj3g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, May 5, 2022 at 3:58 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Automated suspend/resume testing uses the RTC for wakeup.
-> A short rtcwake period is desirable, so that more suspend/resume
-> cycles can be completed, while the machine is available for testing.
->
-> But if too short a wake interval is specified, the event can occur,
-> while still suspending, and then no event wakes the suspended system
-> until the user notices that testing has stalled, and manually intervenes.
+On 17/05/2022 17:11:05+0200, Rafael J. Wysocki wrote:
+> On Thu, May 5, 2022 at 3:58 AM Zhang Rui <rui.zhang@intel.com> wrote:
+> >
+> > On some Intel client platforms like SKL/KBL/CNL/CML, there is a
+> > PCH thermal sensor that monitors the PCH temperature and blocks the system
+> > from entering S0ix in case it overheats.
+> >
+> > Commit ef63b043ac86 ("thermal: intel: pch: fix S0ix failure due to PCH
+> > temperature above threshold") introduces a delay loop to cool the
+> > temperature down for this purpose.
+> >
+> > However, in practice, we found that the time it takes to cool the PCH down
+> > below threshold highly depends on the initial PCH temperature when the
+> > delay starts, as well as the ambient temperature.
+> >
+> > For example, on a Dell XPS 9360 laptop, the problem can be triggered
+> > 1. when it is suspended with heavy workload running.
+> > or
+> > 2. when it is moved from New Hampshire to Florida.
+> >
+> > In these cases, the 1 second delay is not sufficient. As a result, the
+> > system stays in a shallower power state like PCx instead of S0ix, and
+> > drains the battery power, without user' notice.
+> >
+> > In this patch series, we first fix the problem in patch 1/7 ~ 3/7, by
+> > 1. expand the default overall cooling delay timeout to 60 seconds.
+> > 2. make sure the temperature is below threshold rather than equal to it.
+> > 3. move the delay to .suspend_noirq phase instead, in order to
+> >    a) do the cooling when the system is in a more quiescent state
+> >    b) be aware of wakeup events during the long delay, because some wakeup
+> >       events (ACPI Power button Press, USB mouse, etc) become valid only
+> >       in .suspend_noirq phase and later.
+> >
+> > However, this potential long delay introduces a problem to our suspend
+> > stress automation test, because the delay makes it hard to predict how
+> > much time it takes to suspend the system.
+> > As we want to do as much suspend iterations as possible in limited time,
+> > setting a 60+ seconds rtc alarm for suspend which usually takes shorter
+> > than 1 second is far beyond overkill.
+> >
+> > Thus, in patch 4/7 ~ 7/7, a rtc driver hook is introduced, which cancels
+> > the armed rtc alarm in the beginning of suspend and then rearm the rtc
+> > alarm with a short interval (say, 2 second) right before system suspended.
+> >
+> > By running
+> >  # echo 2 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
+> > before suspend, the system can be resumed by RTC alarm right after it is
+> > suspended, no matter how much time the suspend really takes.
+> >
+> > This patch series has been tested on the same Dell XPS 9360 laptop and
+> > S0ix is 100% achieved across 1000+ s2idle iterations.
+> 
+> Overall, the first three patches in the series can go in without the
+> rest, so let's put them into a separate series.
+> 
+> Patch [4/7] doesn't depend on the first three ones, so it can go in by itself.
+> 
+> Patch [5/7] is to be dropped anyway as per the earlier discussion.
+> 
+> Patch [6/7] is only needed to apply patch [7/7] which is controversial.
+> 
+> I think that we can drop or defer patches [6-7/7] for now.
 
-If the wakeup event occurs while still suspending, it should abort the
-suspend in progress, shouldn't it?  But the above implies that it
-doesn't do that.
+I don't think 7/7 is really useful in the upstream kernel, I don't plan
+to apply it
 
-If this is fixed, wouldn't it address the issue at hand?
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
