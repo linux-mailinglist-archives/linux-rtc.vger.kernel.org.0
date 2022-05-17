@@ -2,46 +2,58 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2613752AD55
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 23:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068BC52AD61
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 23:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiEQVJO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 May 2022 17:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S245102AbiEQVNL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 May 2022 17:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiEQVJO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 17:09:14 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D21532E9;
-        Tue, 17 May 2022 14:09:12 -0700 (PDT)
+        with ESMTP id S242972AbiEQVNK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 17:13:10 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B1742EEA;
+        Tue, 17 May 2022 14:13:08 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B921E240003;
-        Tue, 17 May 2022 21:09:10 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id A0AAEC0002;
+        Tue, 17 May 2022 21:13:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652821751;
+        t=1652821987;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4X0RThNZxtIdbfYHNEBRnxF0Yn3t5Yg/fIL7z0LUq1k=;
-        b=Kw37BgzduEUeCEtlDU3OFs5YdMk0lvNTTZwRFRUpLg7h7hyTe7ZpI6ACJ/GpabFbiiN/JL
-        jzMLbuNfs/Ds9ZW44fXyg3AEaPjtQ7k+NApU2CCjcREfzAk+ujwfwz6zVHLTB7qZunt3kL
-        6ItRvBX8bgC5kBa74qnrwazeRYUFNWksJt4fzzkBH0hLXpOJ/B/2d/P54JbaimIJ5Dh8V1
-        9wMgJ+kGIUGFEaon43qC5Nwqt3kz3H5zZUTYvPl5+WBzJ78Tz4CKmf++nvaWDz4y/cG2sh
-        qal+2nPLsy79cymLNK9ZLdhzz3+lYkAK8Nw/+j3nr+rVsDyFg7m/3vAJ9GwMeg==
-Date:   Tue, 17 May 2022 23:09:10 +0200
+        bh=qBaJl8WcrskpVvu5x6uJ7XKJuPc6WqxXWNmf+zmU5C0=;
+        b=XJcefgUihW/mLjSlmZtAH14YAmr+OzwTF9nzTT5peXEn5qhJwOG7F8ludFkaVHvWachzQE
+        Dge4lHwLx7J+sd78ampwrHRodU5qkixX6wbHznUf+cCDE9RRCbCTdUcV/GQMWfpyWBZFjQ
+        1Vku6mgH/GCStsAJ8vd8RZHIYA4J0TTVCXkvMeeGDFTY1b6/cI5FRgQHaZNp2TXMwKKf5f
+        bYl336+RgOZquuSf+B97QxDHxMC49f4COEgh2CU3yhXNA9JfFFLoajmVKd77zBCoQO4k1V
+        jnSIOAgt8YZhrLYXNTBadCC/ssPZKuo3ymniggDSCC7cnstMdcQUrSDSvtgpLw==
+Date:   Tue, 17 May 2022 23:13:05 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     a.zummo@towertech.it, daire.mcnamara@microchip.com,
-        lewis.hanly@microchip.com, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 1/2] rtc: Add driver for Microchip PolarFire SoC
-Message-ID: <YoQO9or6g2r3EU8w@mail.local>
-References: <20220516082838.3717982-1-conor.dooley@microchip.com>
- <20220516082838.3717982-2-conor.dooley@microchip.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Jimmy Lalande <jimmy.lalande@se.com>
+Subject: Re: [PATCH v7 0/5] RZ/N1 RTC support
+Message-ID: <165282193419.289847.12458884088861451958.b4-ty@bootlin.com>
+References: <20220516082504.33913-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220516082838.3717982-2-conor.dooley@microchip.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220516082504.33913-1-miquel.raynal@bootlin.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -52,143 +64,31 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 16/05/2022 09:28:38+0100, Conor Dooley wrote:
-> +struct mpfs_rtc_dev {
-> +	struct rtc_device *rtc;
-> +	void __iomem *base;
-> +	int wakeup_irq;
-
-I believe this is only used in .probe so you make it local to this
-function.
-
-> +};
-> +
-
-
-> +static int mpfs_rtc_readtime(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct mpfs_rtc_dev *rtcdev = dev_get_drvdata(dev);
-> +	u64 time;
-> +
-> +	time = ((u64)readl(rtcdev->base + DATETIME_UPPER_REG) & DATETIME_UPPER_MASK) << 32;
-> +	time |= readl(rtcdev->base + DATETIME_LOWER_REG);
-
-Are the registers properly latched on a DATETIME_UPPER_REG read?
-
-> +	rtc_time64_to_tm(time + rtcdev->rtc->range_min, tm);
-
-range_min is never set so it will end up being 0. I guess you can avoid
-a bunch of arithmetic in all the driver. Offsetting will happen in the
-core which will probably never happen anyway because the max year is
-141338. I guess we will all be gone by then ;)
-
-> +
-> +	return 0;
-> +}
-> +
-
-> +static int mpfs_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct mpfs_rtc_dev *rtcdev;
-> +	struct clk *clk;
-> +	u32 prescaler;
-> +	int ret;
-> +
-> +	rtcdev = devm_kzalloc(&pdev->dev, sizeof(struct mpfs_rtc_dev), GFP_KERNEL);
-> +	if (!rtcdev)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, rtcdev);
-> +
-> +	rtcdev->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(rtcdev->rtc))
-> +		return PTR_ERR(rtcdev->rtc);
-> +
-> +	rtcdev->rtc->ops = &mpfs_rtc_ops;
-> +
-> +	/* range is capped by alarm max, lower reg is 31:0 & upper is 10:0 */
-> +	rtcdev->rtc->range_max = GENMASK_ULL(42, 0);
-> +
-> +	clk = mpfs_rtc_init_clk(&pdev->dev);
-> +	if (IS_ERR(clk))
-> +		return PTR_ERR(clk);
-> +
-> +	rtcdev->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(rtcdev->base)) {
-> +		dev_dbg(&pdev->dev, "invalid ioremap resources\n");
-> +		return PTR_ERR(rtcdev->base);
-> +	}
-> +
-> +	rtcdev->wakeup_irq = platform_get_irq(pdev, 0);
-> +	if (rtcdev->wakeup_irq <= 0) {
-> +		dev_dbg(&pdev->dev, "could not get wakeup irq\n");
-> +		return rtcdev->wakeup_irq;
-> +	}
-> +	ret = devm_request_irq(&pdev->dev, rtcdev->wakeup_irq, mpfs_rtc_wakeup_irq_handler, 0,
-> +			       dev_name(&pdev->dev), rtcdev);
-> +	if (ret) {
-> +		dev_dbg(&pdev->dev, "could not request wakeup irq\n");
-> +		return ret;
-> +	}
-> +
-> +	/* prescaler hardware adds 1 to reg value */
-> +	prescaler = clk_get_rate(devm_clk_get(&pdev->dev, "rtcref")) - 1;
-> +
-> +	if (prescaler > MAX_PRESCALER_COUNT) {
-> +		dev_dbg(&pdev->dev, "invalid prescaler %d\n", prescaler);
-> +		return -EINVAL;
-> +	}
-> +
-> +	writel(prescaler, rtcdev->base + PRESCALER_REG);
-> +	dev_info(&pdev->dev, "prescaler set to: 0x%X \r\n", prescaler);
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	ret = dev_pm_set_wake_irq(&pdev->dev, rtcdev->wakeup_irq);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "failed to enable irq wake\n");
-> +
-> +	return devm_rtc_register_device(rtcdev->rtc);
-> +}
-> +
-> +static int mpfs_rtc_remove(struct platform_device *pdev)
-> +{
-> +	mpfs_rtc_alarm_irq_enable(&pdev->dev, 0);
-
-This is not something you want to do if you want to wake up from
-hibernate or any similar sleep state.
-
-> +	device_init_wakeup(&pdev->dev, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id mpfs_rtc_of_match[] = {
-> +	{ .compatible = "microchip,mpfs-rtc" },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, mpfs_rtc_of_match);
-> +
-> +static struct platform_driver mpfs_rtc_driver = {
-> +	.probe = mpfs_rtc_probe,
-> +	.remove = mpfs_rtc_remove,
-> +	.driver	= {
-> +		.name = "mpfs_rtc",
-> +		.of_match_table = mpfs_rtc_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(mpfs_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("Real time clock for Microchip Polarfire SoC");
-> +MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
-> +MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.36.1
+On Mon, 16 May 2022 10:24:59 +0200, Miquel Raynal wrote:
+> This small series adds support for the RZ/N1 RTC.
 > 
+> Despite its limitations, I found useful to at least have alarm and
+> offset support.
+> 
+> Cheers,
+> Miquèl
+> 
+> [...]
+
+Applied, thanks!
+
+[1/5] dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+      commit: 4c4d145a65e5a7faac440081bc1eac860930cd24
+[2/5] rtc: rzn1: Add new RTC driver
+      commit: deeb4b5393e106b990607df06261fba0ebb7ebde
+[3/5] rtc: rzn1: Add alarm support
+      commit: b5ad1bf00d2c4bf96bf9318f44a929f0b22dd29c
+[4/5] rtc: rzn1: Add oscillator offset support
+      commit: be4a11cf98aff5d456eae947a49b6163393d9420
+[5/5] MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+      commit: 060eceb739e5b30db684666592c2a33d09426651
+
+Best regards,
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
