@@ -2,72 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FD8529AC3
-	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 09:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894B8529E08
+	for <lists+linux-rtc@lfdr.de>; Tue, 17 May 2022 11:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241307AbiEQH15 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 May 2022 03:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S233882AbiEQJ34 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 May 2022 05:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240969AbiEQH0G (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 03:26:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85D665D5;
-        Tue, 17 May 2022 00:26:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84360B816BC;
-        Tue, 17 May 2022 07:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33A26C385B8;
-        Tue, 17 May 2022 07:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652772363;
-        bh=e8dB8oDjlXZshFziU7mg5/YVotBJgiM7Y3R11mue6ng=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=kJqctlKYqneUbfzJtm1UnZc5Akz5kdUaXVHoKu5QJA+itkCv3eBNmM8bB9PwIzeri
-         9PDB1RaZk4ejs5kc97tHLAL1u4B1TTFrlgJ+6lXTv4MQMjotbWQ45y77YXilLcUMLZ
-         KdZ5rbTeEKrJkFX7PUgsec6BpFvTz4/YB58SCp4LWppPfbF/271Xwt80tvnZKnpntH
-         NYR7GDNG7dZKjwNjJKMi5Q0ovizlAWr2+Dn28RYNP9JqnstOjmd0kVbcSOGouaitti
-         eAKfKcefKCpzSohnC7LhlrioWUlOCVSE7ciOdBDEOWVAlXi+E1ST2V3q8iJ/ZgeE2f
-         q+TvFiydtsm4w==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220511200206.2458274-1-jernej.skrabec@gmail.com>
-References: <20220511200206.2458274-1-jernej.skrabec@gmail.com>
-Subject: Re: [PATCH] Revert "clk: sunxi-ng: sun6i-rtc: Add support for H6"
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     wens@csie.org, samuel@sholland.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        stable@vger.kernel.org
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, mturquette@baylibre.com
-Date:   Tue, 17 May 2022 00:26:01 -0700
-User-Agent: alot/0.10
-Message-Id: <20220517072603.33A26C385B8@smtp.kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232364AbiEQJ34 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 05:29:56 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6672B19A;
+        Tue, 17 May 2022 02:29:55 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso1744638pjb.3;
+        Tue, 17 May 2022 02:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=g/E3VZeeSx4dDu8xOt4mwfu7kFDlErlaUWZ6ZYy2iJw=;
+        b=UOVO1JuagN5fkOqvm1Vfy3AVFOBCw1JxX6OnVGhCSluKau7tPaGepitnU5YhrG7tJL
+         Op3DU7A+Yvb4zB9t2mX1kpJO5JsTWzVQSgaBk14JZj6Dy9Ludaz1/w7ZM+wVc+ywR/xo
+         9QEjJ/kXok6b3uVmcIuXT3XNIEjJ19RyjAxfaMKrFCeegNkMmMB2YVRcoGoRTnZgNOvL
+         6MoWjdtJOojboVq/zxmxMS7wuVEc7ojQGmJ0WZB/TgCipZXEvRHH0zsIsJq+yRhjK8kD
+         YOMOomvkhKLemPFTKf8JSJpWcBSwuMD43/Hqkm6dGyZKYmrDDO3eJ/mQo1qygmoP44dk
+         b3gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=g/E3VZeeSx4dDu8xOt4mwfu7kFDlErlaUWZ6ZYy2iJw=;
+        b=IrhGiZtEw8jVwhbBZSru8wumNOpXFj3OENTr9FVD04fUc5f5Q3nCtNkZspx7eYmC6j
+         P5im36aFEJFve9DvHDKNQNKh9Nq8n3YdIM3gOwUYg1DJKpFNwgub1X2tt79zUr/gbtN5
+         o8gXX3lbqWTWNus0qEZqVykZtj3LhBHCrWO9KHkwzxFcX2O2HHjiuNpyGGwFnVVvg+nF
+         YxreG9lISwvKLb4DIuOqDX7qjZy4t+SIDxutRDUgE34qlT7TSjT0Oe4HU0pCMbcRCUt1
+         S0MqW0AViPj20QQngRfue0i9USeOMUDFWUy9AqYrgaQnidPfm4BbmR/BQpveQi55MmYb
+         hmug==
+X-Gm-Message-State: AOAM532yoRFaGE4eO+Lq7iuW20nml/i5nGggLyVIvx37cYpr93gtpy5B
+        2l3bqvopsPr4bdbuOU9wEh8=
+X-Google-Smtp-Source: ABdhPJxPA24MheatYMK3fvrNDnXIJtoCA2tqst7+IsHsKo/cdZGTnbPL6EGXUjwLJlWTmEiWdOLzDg==
+X-Received: by 2002:a17:902:d58f:b0:161:9abd:cff1 with SMTP id k15-20020a170902d58f00b001619abdcff1mr4898522plh.135.1652779794666;
+        Tue, 17 May 2022 02:29:54 -0700 (PDT)
+Received: from localhost.localdomain ([116.89.131.16])
+        by smtp.gmail.com with ESMTPSA id h17-20020a62b411000000b0050df474e4d2sm8399720pfn.218.2022.05.17.02.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 02:29:53 -0700 (PDT)
+From:   Medad CChien <medadyoung@gmail.com>
+X-Google-Original-From: Medad CChien <ctcchien@nuvoton.com>
+To:     benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        tali.perry1@gmail.com, tmaimon77@gmail.com, avifishman70@gmail.com,
+        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
+        a.zummo@towertech.it, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        JJLIU0@nuvoton.com, KFTING@nuvoton.com, ctcchien@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v2 0/3] RTC: nuvoton: Add nuvoton real time clock driver
+Date:   Tue, 17 May 2022 17:29:23 +0800
+Message-Id: <20220517092927.19537-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Quoting Jernej Skrabec (2022-05-11 13:02:06)
-> This reverts commit 1738890a3165ccd0da98ebd3e2d5f9b230d5afa8.
->=20
-> Commit 1738890a3165 ("clk: sunxi-ng: sun6i-rtc: Add support for H6")
-> breaks HDMI output on Tanix TX6 mini board. Exact reason isn't known,
-> but because that commit doesn't actually improve anything, let's just
-> revert it.
->=20
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
+Support Nuvoton NCT3018Y real time clock.
 
-Applied to clk-fixes
+Changes since version 2:
+ - Fix errors in rtc-nct3018y.c.
+ - Fix warnings in rtc-nct3018y.c.
+
+Changes since version 1:
+ - Add nuvoton,nct3018y property in NPCM devicetree.
+ - Add new property in rtc binding document.
+ - Add new driver for nuvoton real time clock driver.
+
+Medad CChien (3):
+  ARM: dts: nuvoton: Add nuvoton RTC3018Y node
+  dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+  RTC: nuvoton: Add NCT3018Y real time clock driver
+
+ .../bindings/rtc/nuvoton,nct3018y.yaml        |  44 ++
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts     |   6 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nct3018y.c                    | 592 ++++++++++++++++++
+ 5 files changed, 653 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
+
+-- 
+2.17.1
+
