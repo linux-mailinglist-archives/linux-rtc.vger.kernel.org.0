@@ -2,68 +2,66 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E106752AE7D
-	for <lists+linux-rtc@lfdr.de>; Wed, 18 May 2022 01:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B7652AFD5
+	for <lists+linux-rtc@lfdr.de>; Wed, 18 May 2022 03:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiEQXSO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 17 May 2022 19:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S233518AbiERBTl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 17 May 2022 21:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiEQXSM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 19:18:12 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0D736B6C;
-        Tue, 17 May 2022 16:18:11 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HNHkg7092412;
-        Tue, 17 May 2022 18:17:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652829466;
-        bh=W9v9fHcaEJh6LKOtCpbqhS5fkM89n49DK7x+5trP2pE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=T/8mzD6rxUAhW2fQZXbJIv1ZYTSW6VlWDBJQUacwU9RMZEH9hIKMCiBc3z1CVk6MM
-         YUrtEdlcWl3velc2dukLM0poqh+Iay1hWtzr2sRaHgBoL0266fYjAudv0FFWPlowAN
-         v/Gts3NsD/xov01H9AxEITm6cqDNykawQ1Qk44HA=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HNHjcV022520
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 18:17:45 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 18:17:45 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 18:17:45 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HNHjid013776;
-        Tue, 17 May 2022 18:17:45 -0500
-Date:   Tue, 17 May 2022 18:17:45 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH V3 2/2] rtc: Introduce ti-k3-rtc
-Message-ID: <20220517231745.j364tz7djodgsh6p@gallon>
-References: <20220513194457.25942-1-nm@ti.com>
- <20220513194457.25942-3-nm@ti.com>
- <YoQa6FoJV5eoxloa@mail.local>
+        with ESMTP id S232630AbiERBTk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 17 May 2022 21:19:40 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74D1541AE;
+        Tue, 17 May 2022 18:19:39 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id n24so952838oie.12;
+        Tue, 17 May 2022 18:19:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kfb+7u6Uw6v+2PpmyDRwb+eNAw16/Ib/MlO+j8uqovw=;
+        b=mZ/7q8HYv3pwt6hiq2yXdLx1xktNNpcHq2Z/1o0leFLe3AD7+T8H75U0JDzVIvEBH3
+         s/216vREfGxTEjqhD6iP+dsAA2aW1UCJ6DLRgIX3j/RFQ/i/UVY5+SLzfho1LZF+pIlQ
+         /j71I2hc89L2mI8bo+sIS0xg6c7IFHGzWwfM6EM3h/LVZxhE2PfnGht56R+GIuFRAs+F
+         MDJ6X+tAqox43Npe8hkYIttr+6PyaqwVkiSo9yVraqaNfs/0iz30PPo4WZdeHRQUEDwZ
+         aTP2Z93pKirBL3gXY4hyuLBlzMmrt0g9Gok9NUCigJf3GzzQNtT5RXhQKpLJB2CuEk7D
+         2Whw==
+X-Gm-Message-State: AOAM531RW/Ps1PFlU6inGSlKeyJAxZckAvlleMdLBkQUJ1MlxJSCQEkP
+        6KDnl/9ngrGtMuFG6g7DrQ==
+X-Google-Smtp-Source: ABdhPJxXkFtw6rUqISK+0opSZFzVWDAiZPa07vOB/cSPlSN2Ohjk1gBwlQ/V2zVbJXsoWuWsG4waQw==
+X-Received: by 2002:a05:6808:178d:b0:326:6f83:13f3 with SMTP id bg13-20020a056808178d00b003266f8313f3mr12056249oib.0.1652836779088;
+        Tue, 17 May 2022 18:19:39 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j3-20020a4ab1c3000000b0035eb4e5a6d6sm407380ooo.44.2022.05.17.18.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 18:19:38 -0700 (PDT)
+Received: (nullmailer pid 2013008 invoked by uid 1000);
+        Wed, 18 May 2022 01:19:37 -0000
+Date:   Tue, 17 May 2022 20:19:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     benjaminfair@google.com, alexandre.belloni@bootlin.com,
+        a.zummo@towertech.it, avifishman70@gmail.com, ctcchien@nuvoton.com,
+        devicetree@vger.kernel.org, tali.perry1@gmail.com,
+        yuenn@google.com, KWLIU@nuvoton.com, openbmc@lists.ozlabs.org,
+        KFTING@nuvoton.com, JJLIU0@nuvoton.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        YSCHU@nuvoton.com, tmaimon77@gmail.com, venture@google.com,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
+ Clock
+Message-ID: <20220518011937.GA2012974-robh@kernel.org>
+References: <20220517092927.19537-1-ctcchien@nuvoton.com>
+ <20220517092927.19537-3-ctcchien@nuvoton.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoQa6FoJV5eoxloa@mail.local>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220517092927.19537-3-ctcchien@nuvoton.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,146 +69,14 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 00:00-20220518, Alexandre Belloni wrote:
-> Hello Nishanth,
+On Tue, 17 May 2022 17:29:25 +0800, Medad CChien wrote:
+> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
 > 
-> I have some very minor comments:
-
-Thanks for the review.
-
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> ---
+>  .../bindings/rtc/nuvoton,nct3018y.yaml        | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
 > 
-> On 13/05/2022 14:44:57-0500, Nishanth Menon wrote:
-> > diff --git a/drivers/rtc/rtc-ti-k3.c b/drivers/rtc/rtc-ti-k3.c
-> > new file mode 100644
-> > index 000000000000..21a64051fd42
-> > --- /dev/null
-> > +++ b/drivers/rtc/rtc-ti-k3.c
-> > @@ -0,0 +1,695 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Texas Instruments K3 RTC driver
-> > + *
-> > + * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
-> > + */
-> > +
-> > +#define dev_fmt(fmt) "%s: " fmt, __func__
-> 
-> Are you sure you want to keep this line?
 
-Saves me the headache of trying to find which function reported it from
-the logs, but I can drop it.
-
-> 
-> > +static int ti_k3_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alarm)
-> > +{
-> > +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
-> > +	time64_t seconds;
-> > +	int ret;
-> > +
-> > +	seconds = rtc_tm_to_time64(&alarm->time);
-> > +
-> > +	k3rtc_field_write(priv, K3RTC_ALM_S_CNT_LSW, seconds);
-> > +	k3rtc_field_write(priv, K3RTC_ALM_S_CNT_MSW, (seconds >> 32));
-> > +
-> > +	/* Make sure the alarm time is synced in */
-> > +	ret = k3rtc_fence(priv);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to fence(%d)!\n", ret);
-> 
-> I'm not sure this message is useful because the only thing the user may
-> do would be trying to set the time again.
-
-I should probably indicate a potential s/w config problem in driver
-here - but the fail here is crucial for me to understand if there is
-some other problem that I have'nt un-covered in the testing (hoping
-none, but everytime I have had a configuration error, this shows up as
-a symptom allowing me to drill down to the problem).
-
-
-Let me know if you feel strongly about this, will drop.
-
-> 
-> > +		return ret;
-> > +	}
-> > +
-> > +	/* Alarm irq enable will do a sync */
-> > +	return ti_k3_rtc_alarm_irq_enable(dev, alarm->enabled);
-> > +}
-> > +
-> 
-> 
-> > +
-> > +static int k3rtc_get_vbusclk(struct device *dev, struct ti_k3_rtc *priv)
-> > +{
-> > +	int ret;
-> > +	struct clk *clk;
-> > +
-> > +	/* Note: VBUS is'nt a context clock, it is needed for hardware operation */
-> typo ---------------^
-
-yup, will replace with  isn't
-
-> 
-> > +	clk = devm_clk_get(dev, "vbus");
-> > +	if (IS_ERR(clk)) {
-> > +		dev_err(dev, "No input vbus clock\n");
-> > +		return PTR_ERR(clk);
-> > +	}
-> > +
-> > +	ret = clk_prepare_enable(clk);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to enable the vbus clock(%d)\n", ret);
-> 
-> I would also remove those two dev_err
-
-OK.
-
-> 
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = devm_add_action_or_reset(dev, (void (*)(void *))clk_disable_unprepare, clk);
-> > +	return ret;
-
-And will drop the ret usage here.. just return the result of
-	devm_add_action_or_reset
-
-> > +}
-> > +
-> > +static int ti_k3_rtc_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct ti_k3_rtc *priv;
-> > +	void __iomem *rtc_base;
-> > +	int ret;
-> > +
-
-	[...]
-
-> > +	ret = k3rtc_configure(dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (device_property_present(dev, "wakeup-source"))
-> > +		device_init_wakeup(dev, true);
-> > +	else
-> > +		device_set_wakeup_capable(dev, true);
-> > +
-> > +	ret = devm_rtc_register_device(priv->rtc_dev);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = devm_rtc_nvmem_register(priv->rtc_dev, &ti_k3_rtc_nvmem_config);
-> > +	return ret;
-> 
-> You don't need ret here and if I take that, I'll soon get an
-> automatically generated patch.
-
-Yup. will do.
-
-[...]
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Reviewed-by: Rob Herring <robh@kernel.org>
