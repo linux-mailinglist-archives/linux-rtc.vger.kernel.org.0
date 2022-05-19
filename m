@@ -2,119 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F5B52C9D2
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 04:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EC552CF3D
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 11:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiESCd4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 May 2022 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S235966AbiESJUl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 May 2022 05:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiESCdz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 May 2022 22:33:55 -0400
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12548C6E74;
-        Wed, 18 May 2022 19:33:55 -0700 (PDT)
-Received: by mail-vk1-f177.google.com with SMTP id d132so2118250vke.0;
-        Wed, 18 May 2022 19:33:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e6jbyutOwumj+LrvLcjzetQUKqPKzUNIp/FTCu48hvw=;
-        b=jOoVC97FIxfNPed3L7v50RfQbh4AxRDz6r5YpX9jAZhcRTU0o+NQKZykKjHAh2F/ys
-         xrm0S25mrpm5bSv+yLmkFFLSy7E/yEB1FdoBWm40eZqCcIqzOHOyz3T0aJ7jJk8q+bSK
-         MHNlEdAHDIapuoQug+gYN8/qLy2ZuuEKXToj7ELyy0Q8jDxQj2QJiYHv67p9Dar+Tfpi
-         KzUczpBWalmeW13dOSI428BpE2wF8Ao+1QAp6M2v/wyw/3d8X3SH7oWwOodIuuyOzUzj
-         4gZxvH3+fnz2X5zF+db+v5uAiHLXzSe7bJPGIm/0vbEdygxuJxOW9AWTAtvEd0AyCTht
-         RC3A==
-X-Gm-Message-State: AOAM530F454QTKv0KMPfxJUShz+1r9KRmFXRwOYuVoL1bEyqPCu0gPFc
-        zDzLC9EjLHuS6wFEP4vKSwRrb6JDUpVPhHhkrK8=
-X-Google-Smtp-Source: ABdhPJwON+5z8eNTjw6bpXmLZQJvvRhiCNs5QCAZObqr3pRwKRoTxGdMQmC3/+8n/nYodjdo61T9rduIi1V9+RNE1ck=
-X-Received: by 2002:a1f:5907:0:b0:352:6327:926f with SMTP id
- n7-20020a1f5907000000b003526327926fmr986181vkb.1.1652927634185; Wed, 18 May
- 2022 19:33:54 -0700 (PDT)
+        with ESMTP id S235938AbiESJUl (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 May 2022 05:20:41 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C707A76DD;
+        Thu, 19 May 2022 02:20:39 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D1AB8200012;
+        Thu, 19 May 2022 09:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652952037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3fF8TXfzuMO2aAQ4ZMYHR9TcyWJ8s6t3LJpHkibRzbo=;
+        b=pMPJsTuEHgPN5iQT99K6z1ZdCIcfwX5MsMSGQwX8O/h0GX+eDDaHKEmZi+ks8VDWONVn5g
+        0Sn1/OrnngudgVnU6ktbTyx7JJD2ZopvUy4J7qVOBZvwrQSkWOsWvHIbFVW8Avjde1p0wm
+        n/2BxOKno8f9sP0vmxsR6ToTWqseLIO0t91qQyYATVAJynCsvaLmuS0XFGyzW5INDEMDXF
+        mPwr44bIdZdFDsk4LJgR0ciB1a4eAy4LdpqaPuDxrxRxLtXcC5/LfclVLfDmdmKUbW+l7I
+        DVk7IvUQ5ZkfKAbZPVj8J9UxyHs6aumOqeLKnxUp6L/PLCXj2q6S1Fm57TtwRw==
+Date:   Thu, 19 May 2022 11:20:36 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>, miquel.raynal@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, a.zummo@towertech.it,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] rtc: rzn1: fix platform_no_drv_owner.cocci warning
+Message-ID: <165295200014.525355.7168522727059763563.b4-ty@bootlin.com>
+References: <20220518232445.79156-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
- <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com>
- <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
- <CAJZ5v0h=pYZkbhN2EiYzUGn36Q4-2tMyzfUP0uyFO=Sybse4DA@mail.gmail.com> <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
-In-Reply-To: <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Wed, 18 May 2022 16:33:43 -1000
-Message-ID: <CAJvTdKnRmsR+1b2urHr7=u7AcvCfr7m+GqLfLLgOgoB9KaB-zQ@mail.gmail.com>
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518232445.79156-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-First let's agree on why this should not be ignored.
+On Thu, 19 May 2022 07:24:45 +0800, Yang Li wrote:
+> Remove .owner field if calls are used which set it automatically.
+> ./drivers/rtc/rtc-rzn1.c:411:3-8: No need to set .owner here. The core
+> will do it.
+> 
+> 
 
-Our development team at Intel has lab with laptops, we run sleepgraph
-on every RC, and we publish the tool in public:
-https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
+Applied, thanks!
 
-But even if we were funded to do it (which we are not), we can't
-possibly test every kind of device.
-We need the community to help testing Linux (suspend/resume,
-specifically) on a broad range of devices, so together we can make it
-better for all.
+[1/1] rtc: rzn1: fix platform_no_drv_owner.cocci warning
+      commit: e60e8a73235ce5d42a2891c6989e8df1c8888c4a
 
-The community is made up mostly of users, rather than kernel hackers,
-and so this effectively means that distro binary kernels need to be
-able to support testing.
+Best regards,
 
-Enabling that broad community of users/contributors is the goal.
-
-As Rui explained, this patch does nothing and breaks nothing if the
-new hook remains unused.
-If it is used, then overrides the wakeup duration for all subsequent
-system suspends, until it is cleared.
-If it does more than that, or does that in a clumsy way, then let's fix that.
-
-Today it gives us two new capabilities:
-
-1. Prevents a lost wake event.  Commonly we see this with kcompatd
-taking 20 seconds when we had previously armed the RTC for 15 seconds.
-The system will sleep forever, until the user intervenes -- which may
-be a very long time later.
-
-Rafael, If you have a better way to fix that, I'm all ears.  Aborted
-suspend flows are ugly -- particularly when the user didn't want them,
-but they are much less ugly then losing a wake event, which can result
-in losing, say 10-hours of test time.
-
-2. Allows more suspends/resume cycles per time.  Say the early wake is
-fixed.  Then we have to decide how long to sleep before being
-suspended.  If we set it for 1 second, and suspend takes longer than 1
-second, then all of our tests will fail with early wakeups and we have
-tested nothing.  If we set it to 60 seconds, and suspend takes 1
-second, then 59/60 seconds are spent sleeping, when they could be
-spent testing Linux.  With this patch, we can set it to the minimum of
-2 seconds right before we sleep, guaranteeing that we spend at least 1
-second, and under 2 seconds sleeping, and the rest of the time testing
--- which allows us to meet the goal.
-
-thanks,
-Len Brown, Intel
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
