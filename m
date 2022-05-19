@@ -2,66 +2,119 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1BA52C774
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 01:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F5B52C9D2
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 04:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiERXYw (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 18 May 2022 19:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
+        id S230322AbiESCd4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 18 May 2022 22:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiERXYw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 May 2022 19:24:52 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B68F583;
-        Wed, 18 May 2022 16:24:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VDhNW0k_1652916287;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VDhNW0k_1652916287)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 19 May 2022 07:24:47 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     miquel.raynal@bootlin.com
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] rtc: rzn1: fix platform_no_drv_owner.cocci warning
-Date:   Thu, 19 May 2022 07:24:45 +0800
-Message-Id: <20220518232445.79156-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S229437AbiESCdz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 18 May 2022 22:33:55 -0400
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12548C6E74;
+        Wed, 18 May 2022 19:33:55 -0700 (PDT)
+Received: by mail-vk1-f177.google.com with SMTP id d132so2118250vke.0;
+        Wed, 18 May 2022 19:33:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6jbyutOwumj+LrvLcjzetQUKqPKzUNIp/FTCu48hvw=;
+        b=jOoVC97FIxfNPed3L7v50RfQbh4AxRDz6r5YpX9jAZhcRTU0o+NQKZykKjHAh2F/ys
+         xrm0S25mrpm5bSv+yLmkFFLSy7E/yEB1FdoBWm40eZqCcIqzOHOyz3T0aJ7jJk8q+bSK
+         MHNlEdAHDIapuoQug+gYN8/qLy2ZuuEKXToj7ELyy0Q8jDxQj2QJiYHv67p9Dar+Tfpi
+         KzUczpBWalmeW13dOSI428BpE2wF8Ao+1QAp6M2v/wyw/3d8X3SH7oWwOodIuuyOzUzj
+         4gZxvH3+fnz2X5zF+db+v5uAiHLXzSe7bJPGIm/0vbEdygxuJxOW9AWTAtvEd0AyCTht
+         RC3A==
+X-Gm-Message-State: AOAM530F454QTKv0KMPfxJUShz+1r9KRmFXRwOYuVoL1bEyqPCu0gPFc
+        zDzLC9EjLHuS6wFEP4vKSwRrb6JDUpVPhHhkrK8=
+X-Google-Smtp-Source: ABdhPJwON+5z8eNTjw6bpXmLZQJvvRhiCNs5QCAZObqr3pRwKRoTxGdMQmC3/+8n/nYodjdo61T9rduIi1V9+RNE1ck=
+X-Received: by 2002:a1f:5907:0:b0:352:6327:926f with SMTP id
+ n7-20020a1f5907000000b003526327926fmr986181vkb.1.1652927634185; Wed, 18 May
+ 2022 19:33:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
+ <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com>
+ <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
+ <CAJZ5v0h=pYZkbhN2EiYzUGn36Q4-2tMyzfUP0uyFO=Sybse4DA@mail.gmail.com> <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
+In-Reply-To: <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Wed, 18 May 2022 16:33:43 -1000
+Message-ID: <CAJvTdKnRmsR+1b2urHr7=u7AcvCfr7m+GqLfLLgOgoB9KaB-zQ@mail.gmail.com>
+Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        merez@codeaurora.org, mat.jonczyk@o2.pl,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Len Brown <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Remove .owner field if calls are used which set it automatically.
-./drivers/rtc/rtc-rzn1.c:411:3-8: No need to set .owner here. The core
-will do it.
+First let's agree on why this should not be ignored.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/rtc/rtc-rzn1.c | 1 -
- 1 file changed, 1 deletion(-)
+Our development team at Intel has lab with laptops, we run sleepgraph
+on every RC, and we publish the tool in public:
+https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index 980ade8c9601..f92d1398b0f1 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -408,7 +408,6 @@ static struct platform_driver rzn1_rtc_driver = {
- 	.remove = rzn1_rtc_remove,
- 	.driver = {
- 		.name	= "rzn1-rtc",
--		.owner	= THIS_MODULE,
- 		.of_match_table = rzn1_rtc_of_match,
- 	},
- };
--- 
-2.20.1.7.g153144c
+But even if we were funded to do it (which we are not), we can't
+possibly test every kind of device.
+We need the community to help testing Linux (suspend/resume,
+specifically) on a broad range of devices, so together we can make it
+better for all.
 
+The community is made up mostly of users, rather than kernel hackers,
+and so this effectively means that distro binary kernels need to be
+able to support testing.
+
+Enabling that broad community of users/contributors is the goal.
+
+As Rui explained, this patch does nothing and breaks nothing if the
+new hook remains unused.
+If it is used, then overrides the wakeup duration for all subsequent
+system suspends, until it is cleared.
+If it does more than that, or does that in a clumsy way, then let's fix that.
+
+Today it gives us two new capabilities:
+
+1. Prevents a lost wake event.  Commonly we see this with kcompatd
+taking 20 seconds when we had previously armed the RTC for 15 seconds.
+The system will sleep forever, until the user intervenes -- which may
+be a very long time later.
+
+Rafael, If you have a better way to fix that, I'm all ears.  Aborted
+suspend flows are ugly -- particularly when the user didn't want them,
+but they are much less ugly then losing a wake event, which can result
+in losing, say 10-hours of test time.
+
+2. Allows more suspends/resume cycles per time.  Say the early wake is
+fixed.  Then we have to decide how long to sleep before being
+suspended.  If we set it for 1 second, and suspend takes longer than 1
+second, then all of our tests will fail with early wakeups and we have
+tested nothing.  If we set it to 60 seconds, and suspend takes 1
+second, then 59/60 seconds are spent sleeping, when they could be
+spent testing Linux.  With this patch, we can set it to the minimum of
+2 seconds right before we sleep, guaranteeing that we spend at least 1
+second, and under 2 seconds sleeping, and the rest of the time testing
+-- which allows us to meet the goal.
+
+thanks,
+Len Brown, Intel
