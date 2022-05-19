@@ -2,128 +2,120 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A312152D3D7
-	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 15:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1594C52D544
+	for <lists+linux-rtc@lfdr.de>; Thu, 19 May 2022 15:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237974AbiESNXG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 19 May 2022 09:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        id S239181AbiESN5K (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 19 May 2022 09:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235367AbiESNXF (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 May 2022 09:23:05 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A76899A
-        for <linux-rtc@vger.kernel.org>; Thu, 19 May 2022 06:23:03 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B166C1BF203;
-        Thu, 19 May 2022 13:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652966582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Z/bb61QBKrjsRjLxhOOKQger6DsEnFxrn/DYS4vl3pM=;
-        b=OlsIjN6GaEk2Ol8mD0PaMJYNbfCk9/Vn61B9Z/ce8c8bZ9FVbXEmoNV5Ms1bHqSZpdDgTC
-        waf9n7kEcGldSjafnkYlm8/oAKnMELE2VsSybvsRI4p74a5Bli025TkPIzgd8LGYGVtLP1
-        yswcZZfixzR4clf/Z5d4CvNmiFATA68ClNdqpXD9L2y3TBBH+lBRsWZomxFYB/HG849E08
-        hNT4l9r8kezv6FCEKNiHnLQ8W96P9D9aF+1X32YepgobJ6Vk2JOEOT3luirNP4xki/Hwzf
-        A5mLNEwAwvBs7dbAnGef7CbStn6I965NTYTPrGk+DIpw4XUxEyZbJhX2d0XuaQ==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Tom Rix <trix@redhat.com>,
-        Colin Ian King <colin.i.king@gmail.com>
-Subject: [PATCH] rtc: rzn1: Avoid mixing variables
-Date:   Thu, 19 May 2022 15:23:00 +0200
-Message-Id: <20220519132300.424095-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232267AbiESN5H (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 19 May 2022 09:57:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A06E53;
+        Thu, 19 May 2022 06:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652968626; x=1684504626;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qHQfaI2qEG6es+WFBkybiU4w71hm7VMtmExmawIPkjc=;
+  b=U3PsAdKQ6v2FYfLmjmfI5wGbL9AuSGjJ+GiPe/TZSUjLvvaQkyRWcl23
+   NmC8s6iii4RoUpIqiZQ58kwwrstX9N7p+O/i+Izeh9NRSMmNvjoprQJlk
+   rliPHXcgvh16mwFJ3rwpG+YUBr4Ugjr4jC75RObwfokzVeO5pd9DVbh8X
+   PY7mYw7utA0f+QhZx2/2q6kLrCVIyiO3276KYGzSBa/hLDXETCniBJ/lU
+   lnxMWhU6T6pRAB25clSaVwQUu4qdVG5Cyn3RxjBMRNqtABTtx8X7Lcxmx
+   Z2yunZ7bKIGZmaBaFIMmzKUBYrta1whYw1tUsG8gPSKrJuQvzFnaFD2ks
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="164801009"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 May 2022 06:56:58 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 19 May 2022 06:56:57 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 19 May 2022 06:56:55 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>
+CC:     <daire.mcnamara@microchip.com>, <lewis.hanly@microchip.com>,
+        <conor.dooley@microchip.com>, <linux-kernel@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v4 0/2] rtc: microchip: Add driver for PolarFire SoC
+Date:   Thu, 19 May 2022 14:55:21 +0100
+Message-ID: <20220519135523.594347-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In the ->set_offset() callback, the 'val' variable is used for two
-different purposes at the same time, which is oviously wrong:
-- It contains the intermediate value of the SUBU register that must be
-  written at the end of ->set_offset().
-- It is used in the middle of the above calculations to poll the CTL2
-  register for a specific value.
+Hey all,
+This is technically a v4 of [0], although a fair bit of time has
+passed since then. In the meantime I upstreamed the dt-binding, which
+was in the v1, and this patch depends on the fixes to the dt-binding
+and device tree etc which landed in v5.18-rc5.
 
-Let's introduce a 'ctl2' variable just for the readl_poll_timeout()
-call and use it there in place of 'var'.
+The driver is quite substantially rewritten from the v1, as you wanted
+it to be switched to "binary" rather than calendar mode - so hopefully I
+have satisfied your concerns with the original driver. Specifically you
+had an significant issue with the counter being reset on startup & that
+is no longer the case.
 
-In order to avoid mixing those two variables again, let's rename the
-remaining occurences of 'val' into 'subu' and initialize it to 0 to
-avoid the uninitialized variable situation reported by Tom Rix and Colin
-Ian King already.
+Thanks,
+Conor.
 
-No real "Fixes:" applies here because the original patch has not yet
-reached Linus' tree, but the offending commit is named:
-"rtc: rzn1: Add oscillator offset support"
+Changes since v3:
+- invert read order of datetime registers so that they are properly
+  aligned. reads of the upper register are aligned to the last read
+  of the lower register
+- move wakeup_irq out of mpfs_rtc_dev & into probe
+- removed range_min since it is not set & implicity zero anyway
+- rewrote the remove function to not call mpfs_rtc_alarm_irq_enable(,0)
 
-Reported-by: Tom Rix <trix@redhat.com>
-Reported-by: Colin Ian King <colin.i.king@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- drivers/rtc/rtc-rzn1.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Changes from v2:
+- move prescaler out of mpfs_rtc_dev & into probe
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index 980ade8c9601..bdd4ebd5c887 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -272,7 +272,7 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 	struct rzn1_rtc *rtc = dev_get_drvdata(dev);
- 	unsigned int steps;
- 	int stepsh, stepsl;
--	u32 val;
-+	u32 subu = 0, ctl2;
- 	int ret;
- 
- 	/*
-@@ -288,7 +288,7 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 	if (stepsh >= -0x3E && stepsh <= 0x3E) {
- 		/* 1017 ppb per step */
- 		steps = stepsh;
--		val |= RZN1_RTC_SUBU_DEV;
-+		subu |= RZN1_RTC_SUBU_DEV;
- 	} else if (stepsl >= -0x3E && stepsl <= 0x3E) {
- 		/* 3051 ppb per step */
- 		steps = stepsl;
-@@ -300,18 +300,18 @@ static int rzn1_rtc_set_offset(struct device *dev, long offset)
- 		return 0;
- 
- 	if (steps > 0) {
--		val |= steps + 1;
-+		subu |= steps + 1;
- 	} else {
--		val |= RZN1_RTC_SUBU_DECR;
--		val |= (~(-steps - 1)) & 0x3F;
-+		subu |= RZN1_RTC_SUBU_DECR;
-+		subu |= (~(-steps - 1)) & 0x3F;
- 	}
- 
--	ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, val,
--				 !(val & RZN1_RTC_CTL2_WUST), 100, 2000000);
-+	ret = readl_poll_timeout(rtc->base + RZN1_RTC_CTL2, ctl2,
-+				 !(ctl2 & RZN1_RTC_CTL2_WUST), 100, 2000000);
- 	if (ret)
- 		return ret;
- 
--	writel(val, rtc->base + RZN1_RTC_SUBU);
-+	writel(subu, rtc->base + RZN1_RTC_SUBU);
- 
- 	return 0;
- }
+Changes from v1:
+- remove duplicate and unused defines
+- remove oneline mpfs_rtc_set_prescaler function
+- dont unconditionally turn off the rtc in the init function
+- dont reset the rtc when init is run.
+- dont disable the alarm when we boot
+- use binary, not calendar mode
+- delete mpfs_rtc_init & set prescale in probe
+- use dev_pm_set_wake_irq rather than writing suspend/resume functions
+- delete calendar mode only register defines
+- since using binary mode, set range min to zero
+- set range max to max alarm value (is this acceptable?)
+- added a MAINTAINERS entry: when v1 was submitted there was nothing to
+  add to, but there is now.
+
+[0] https://lore.kernel.org/linux-rtc/20210512111133.1650740-1-daire.mcnamara@microchip.com/
+
+Conor Dooley (2):
+  rtc: Add driver for Microchip PolarFire SoC
+  MAINTAINERS: add PolarFire SoC's RTC
+
+ MAINTAINERS            |   1 +
+ drivers/rtc/Kconfig    |  10 ++
+ drivers/rtc/Makefile   |   1 +
+ drivers/rtc/rtc-mpfs.c | 326 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 338 insertions(+)
+ create mode 100644 drivers/rtc/rtc-mpfs.c
+
+
+base-commit: c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
 -- 
-2.34.1
+2.36.1
 
