@@ -2,74 +2,86 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B1D53072E
-	for <lists+linux-rtc@lfdr.de>; Mon, 23 May 2022 03:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962BA530ACC
+	for <lists+linux-rtc@lfdr.de>; Mon, 23 May 2022 10:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245122AbiEWBjy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 22 May 2022 21:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S229768AbiEWH6j (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 23 May 2022 03:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245324AbiEWBjx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 22 May 2022 21:39:53 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA63838D99;
-        Sun, 22 May 2022 18:39:51 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L60Ns3lKGzYXPC;
-        Mon, 23 May 2022 09:39:09 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 23 May 2022 09:39:49 +0800
-From:   Ziyang Xuan <william.xuanziyang@huawei.com>
-To:     <miquel.raynal@bootlin.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>
-CC:     <william.xuanziyang@huawei.com>
-Subject: [PATCH] rtc: rzn1: fix inconsistent IS_ERR and PTR_ERR
-Date:   Mon, 23 May 2022 09:57:25 +0800
-Message-ID: <20220523015725.198244-1-william.xuanziyang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229544AbiEWH6h (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 23 May 2022 03:58:37 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061A2EAF;
+        Mon, 23 May 2022 00:58:33 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB76B200007;
+        Mon, 23 May 2022 07:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653292712;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YnX7d82uLFyXKL9RU+Q7pPoOWV1qdJm9PA8IlytzpR4=;
+        b=hh+FeoLrN8cwOptCVVTPnujUtQHs3s/JsJtan241Z5qxAM3MUOf1PxyeN7OZT6YXNKzRnh
+        hR5Knfa/g3U39o9d13vOb6zxaeymm/KIDDOzkcU/Yw9g6NYUOtq8o4WpOqtJQeIA+FbqRJ
+        fuhSjJ3wRPg7+36umHY7t9J8NOe9bZr0zPpQOv7+8IxS90ZOO1oXhxYCc1P1oeA0MJepSP
+        0Fe7v/1UBj7SmI2YmgJkGBLlKziDKLodYQiL6yTPXVtkwVKwwh/a7D+JGB/KbgkFf/DuZI
+        liEJqWiRRM2xeDbFnDHWEp1q3zF7G4QCkDZpqdV+I7CrtKvPZqRs3fQ/bimOaQ==
+Date:   Mon, 23 May 2022 09:58:31 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+Cc:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <linux-rtc@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] rtc: rzn1: fix inconsistent IS_ERR and PTR_ERR
+Message-ID: <20220523095831.241380cd@xps-13>
+In-Reply-To: <20220523015725.198244-1-william.xuanziyang@huawei.com>
+References: <20220523015725.198244-1-william.xuanziyang@huawei.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-It is inconsistent IS_ERR and PTR_ERR for rtc->rtcdev in rzn1_rtc_probe().
+Hi Ziyang,
 
-Generated by coccinelle script:
-	scripts/coccinelle/tests/odd_ptr_err.cocci
+william.xuanziyang@huawei.com wrote on Mon, 23 May 2022 09:57:25 +0800:
 
-Fixes: deeb4b5393e1 ("rtc: rzn1: Add new RTC driver")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
----
- drivers/rtc/rtc-rzn1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> It is inconsistent IS_ERR and PTR_ERR for rtc->rtcdev in rzn1_rtc_probe().
+>=20
+> Generated by coccinelle script:
+> 	scripts/coccinelle/tests/odd_ptr_err.cocci
+>=20
+> Fixes: deeb4b5393e1 ("rtc: rzn1: Add new RTC driver")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
+>  drivers/rtc/rtc-rzn1.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
+> index f92d1398b0f1..4cf54af8a8c3 100644
+> --- a/drivers/rtc/rtc-rzn1.c
+> +++ b/drivers/rtc/rtc-rzn1.c
+> @@ -348,7 +348,7 @@ static int rzn1_rtc_probe(struct platform_device *pde=
+v)
+> =20
+>  	rtc->rtcdev =3D devm_rtc_allocate_device(&pdev->dev);
+>  	if (IS_ERR(rtc->rtcdev))
+> -		return PTR_ERR(rtc);
+> +		return PTR_ERR(rtc->rtcdev);
 
-diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-index f92d1398b0f1..4cf54af8a8c3 100644
---- a/drivers/rtc/rtc-rzn1.c
-+++ b/drivers/rtc/rtc-rzn1.c
-@@ -348,7 +348,7 @@ static int rzn1_rtc_probe(struct platform_device *pdev)
- 
- 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtcdev))
--		return PTR_ERR(rtc);
-+		return PTR_ERR(rtc->rtcdev);
- 
- 	rtc->rtcdev->range_min = RTC_TIMESTAMP_BEGIN_2000;
- 	rtc->rtcdev->range_max = RTC_TIMESTAMP_END_2099;
--- 
-2.25.1
+Thanks for the patch, but Dan Carpenter already provided the exact same
+fix.
 
+Cheers,
+Miqu=C3=A8l
