@@ -2,53 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D35323F0
-	for <lists+linux-rtc@lfdr.de>; Tue, 24 May 2022 09:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D796532536
+	for <lists+linux-rtc@lfdr.de>; Tue, 24 May 2022 10:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235122AbiEXHTp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 24 May 2022 03:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S229538AbiEXI2x (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 24 May 2022 04:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbiEXHTn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 May 2022 03:19:43 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E5193471
-        for <linux-rtc@vger.kernel.org>; Tue, 24 May 2022 00:19:40 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BE3641C0008;
-        Tue, 24 May 2022 07:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1653376774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zjs+j4aGboQ+r/y2NDDZnHkMaoAXbFrfp8OX0hEDMTY=;
-        b=Hrv8Zsh1HBJE+qiGwCtSziYPbAIIZRQYbqJrscPwH/aKPvucWB7QNCTA/CfL1aexxkOq1F
-        wMzpcu4HylA9w6a9lctw6DWeFrYAKpLqs+08J8byQbmBUcgKwmLMLAUj6fyczwFIQloRZn
-        th3Z0qWCX/2yH6IzVFzQ4Q316L9NsOkeCjeA9g6LBuL299vbQUKcAVzgJ043AQGAkX/raQ
-        LzDa4fppfsEWkyKstWce+crnwcI13wDIrWVqzvYaaw0Yv0HyGCPHjaDweDVd3TnxnVTIjA
-        UVkoVlN303xg+Xep8zys1ujxWdm45kwdRo9dQWnBsPK7s8NnZk/K2jUQXVRojw==
-Date:   Tue, 24 May 2022 09:19:30 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Michel Pollet <michel.pollet@bp.renesas.com>,
-        <linux-rtc@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: rzn1: Fix  inconsistent IS_ERR and PTR_ERR
-Message-ID: <20220524091930.51e2a7ef@xps-13>
-In-Reply-To: <1653372586-24736-1-git-send-email-baihaowen@meizu.com>
-References: <1653372586-24736-1-git-send-email-baihaowen@meizu.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229534AbiEXI2x (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 24 May 2022 04:28:53 -0400
+X-Greylist: delayed 1171 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 01:28:52 PDT
+Received: from mail.greatagencyonline.pl (mail.greatagencyonline.pl [89.40.125.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D26D6929D
+        for <linux-rtc@vger.kernel.org>; Tue, 24 May 2022 01:28:52 -0700 (PDT)
+Received: by mail.greatagencyonline.pl (Postfix, from userid 1001)
+        id 80001A7E73; Tue, 24 May 2022 09:01:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=greatagencyonline.pl;
+        s=mail; t=1653379279;
+        bh=ksvwLPFdjL017OLwir5xHXy3Vmrj/5fhZ5DwBI62qzc=;
+        h=Date:From:To:Subject:From;
+        b=VoFV1D+auZV0loGk/PJBmdVAbOraqOdkUFQQVluAzQ/lWT7qFyU15XRcrA2K+OzxW
+         7woXfOhHuXgYQnj5YopLB3rKat37f+4Ghcb8Ts1DUOGtqRdlSErU+boNK7rfEOW19M
+         JlKW669NMhBUt13/ZcJQHlnO6i4wr+UK3e3vW2Na0+lfiMgzbJACGVjIDmCfhGFi53
+         CjqurZYrzdjGvEjGiB/N7NM3YWjifJneDYf1FMaSPVAlH4ofyI+v9Lu6NyWfoqudJF
+         8CVC7YRUhckjbcAf+0uJUNIr4wA0z6XQ0hPsHkrTkkSek6Uxct0HKyONNvBFRg36ad
+         E2JkE/I/ufdrQ==
+Received: by mail.greatagencyonline.pl for <linux-rtc@vger.kernel.org>; Tue, 24 May 2022 08:00:54 GMT
+Message-ID: <20220524074502-0.1.43.vxia.0.c4ezod6pyr@greatagencyonline.pl>
+Date:   Tue, 24 May 2022 08:00:54 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= 
+        <mikolaj.rudzik@greatagencyonline.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.greatagencyonline.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,39 +48,18 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Haowen,
+Dzie=C5=84 dobry,
 
-baihaowen@meizu.com wrote on Tue, 24 May 2022 14:09:45 +0800:
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-> The proper pointer to be passed as argument is rtc->rtcdev.
-> Detected using Coccinelle.
->=20
-> Fixes: deeb4b5393e1 ("rtc: rzn1: Add new RTC driver")
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
-Thanks for your patch. This has already been reported twice,
-Alexandre will likely apply one of the fixes after the merge window.
-
->=20
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
->  drivers/rtc/rtc-rzn1.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index f92d1398b0f1..4cf54af8a8c3 100644
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -348,7 +348,7 @@ static int rzn1_rtc_probe(struct platform_device *pde=
-v)
-> =20
->  	rtc->rtcdev =3D devm_rtc_allocate_device(&pdev->dev);
->  	if (IS_ERR(rtc->rtcdev))
-> -		return PTR_ERR(rtc);
-> +		return PTR_ERR(rtc->rtcdev);
-> =20
->  	rtc->rtcdev->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
->  	rtc->rtcdev->range_max =3D RTC_TIMESTAMP_END_2099;
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
 
 
-Thanks,
-Miqu=C3=A8l
+Pozdrawiam,
+Miko=C5=82aj Rudzik
