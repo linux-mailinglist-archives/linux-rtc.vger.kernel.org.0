@@ -2,105 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90B4534534
-	for <lists+linux-rtc@lfdr.de>; Wed, 25 May 2022 22:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89ED5347EB
+	for <lists+linux-rtc@lfdr.de>; Thu, 26 May 2022 03:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237144AbiEYUsA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 25 May 2022 16:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S1345655AbiEZBPQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 25 May 2022 21:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbiEYUr7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 May 2022 16:47:59 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF479B2266
-        for <linux-rtc@vger.kernel.org>; Wed, 25 May 2022 13:47:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ff90e0937aso152572727b3.4
-        for <linux-rtc@vger.kernel.org>; Wed, 25 May 2022 13:47:57 -0700 (PDT)
+        with ESMTP id S1344426AbiEZBPN (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 25 May 2022 21:15:13 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922B972BB
+        for <linux-rtc@vger.kernel.org>; Wed, 25 May 2022 18:15:11 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-d39f741ba0so550185fac.13
+        for <linux-rtc@vger.kernel.org>; Wed, 25 May 2022 18:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=PnromsGSl/VyCqJRnnJHQGv2emL8SwMg8ftXDY1M1kfjEHhbW+SFcNbx3DogMg04Y9
-         /oZIr62MobI8ksksf+p9sBio2Dq2yBIBPcLJ3b1SShimWCeBsnvQbeReD0NRZ7Om0Lst
-         q1lisGYBsy1KTkD8a/a+P3V6h5TEOEvizQbKOIY52MNwlZwBpCdF++HQA7VleD8dxYmT
-         47CCQBdH112dj3BW1XZfHpBYhUz6nflHJwVhKJ1dOqZAhIGbRVTP42myeLGtiu1ATKwe
-         DXnDVSRqAyDH9FmgiIci81QGTqI4p/Sz0r5xM/GwgFW8dm98Yai8Vi1EO7F7NXK45ral
-         Mg0Q==
+        bh=H/L+ULNoH0Jr8ZIXvSTcwS379FOGyICNt1gezCJsi1w=;
+        b=Fs3G0dq0DjlnxyUvLl1QO9zpMM3E3qbFDd4glvZvYeTClpZH2zjUJpRdN/af+v4tU8
+         oNrNsR9HFsdRKiMP78R64m6M5UFOEPxUml7wioLvw1BaOzlFt+VmBLzhW2NaFznTqsH2
+         K+U1ETWkaC+wdm/K4hRq0Ho05n+NfhBM1gFUdIAsE4t8i/TNYwI84Vl4KcfdkizGc1Qn
+         kE+BhlpjmzimayQU+uxQ9y31X6Rh4pKuk8AAV2d/IsfckoZw69A0DfoQKEd0iuckJBxT
+         E2AfW5upBLHUlR7oICgtcAQRQ+H7AHgF7TSjXZIimT/Zl/Kj1t4wXnHqwrx33wOStrwl
+         //dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+uyh4vUIYntN7Mid2B5fbgguOxBR2RiHnKBh7A4r37I=;
-        b=MzE6N68fBmzz5NDk8SAf26qoQkF8Q/4LV4soX5UVWdmalEqyDiN43tJr6I8L84wAZd
-         cYX4TD1LCOHCjxJjVDdH9pVIn7g5W+8KBA+sOFmzA9tmXN3DB/n6DibZhN0vmqGEj2al
-         KOL8m6SG006FEf6oeLaPE2uegPXXl8rS1EbnQkZpXUP+PBULa5RizkHBUju2nzmTB8tR
-         2O8pi/KZykZ+wNNTVZY/Efcc541YFfI9kecuLgFsvkrrz15W3FK1bVKF+Dhi9coY1OQg
-         3VLT/1bfMI4VjvvPxhLdLZuK/WzzqlYAXB8hqlxjA9s5Cm+BOtNX6V5JqEeWa+DyhMHo
-         hIsQ==
-X-Gm-Message-State: AOAM530WkTTPr6lJwa5MDn77OPoc308hzbdJrxyeXnR0d7oiwiVgncdk
-        nUjM/7tY2jxHKFS/tGPiGKvM2bJjgh8JTZbrBRU=
-X-Google-Smtp-Source: ABdhPJwSUXt4OSD1heOIQ3zIbqBs1JquJNu8NtOAfWl74I7duJ3I9S+mgyYgK4KvmN58QkVh9RTAkFFWkd3+8Flvjy4=
-X-Received: by 2002:a81:1f8b:0:b0:2f8:5846:445e with SMTP id
- f133-20020a811f8b000000b002f85846445emr35075611ywf.50.1653511677047; Wed, 25
- May 2022 13:47:57 -0700 (PDT)
+        bh=H/L+ULNoH0Jr8ZIXvSTcwS379FOGyICNt1gezCJsi1w=;
+        b=s6XVkh4TH1xVnSoK8aOMBWTu5yMekohb/5I+ozgzxK5f4PCS+aLELY+IMpcRcbbUzc
+         +Km/vPF70xSZ0HcI8ar4GuqL/Vd0xme8EDHLfZDxHNq6dDynd5tql1UiRHV1aeSfWXWJ
+         gZ6QzjMsIBl2Ve63KoSEj2dsiFxe80RJ5JMBdU+/t7hx/8qycBdvPfDh8ck6ZUE7xiDr
+         vpNqWzVTb8swYG46JKApAirS8wnNdAwKxB8PLF5Lflb8s/WIHN3AWgafGeIdRpEWq0EH
+         0Z6AkNAV9+LYBUYB8wB+8Y8BT8CwNJnvNTJCdWZiFRshjt3EKIz0QUObERjbWjUVb9oT
+         9S4Q==
+X-Gm-Message-State: AOAM533X31werCfOoYrEVLMFrl9+SPZUO2QV/eJzL7RGmfBAg9+b7hGs
+        Zj11JptzqQShajKoWAIBQx8=
+X-Google-Smtp-Source: ABdhPJyl319twJGXh1ZsS2EcS222iaadSOKWQ5xn5yJUooOrdhwEIE6r1ODpQ+wnU9KBqUfY0cxe2Q==
+X-Received: by 2002:a05:6870:4581:b0:e2:77aa:54ac with SMTP id y1-20020a056870458100b000e277aa54acmr7462042oao.190.1653527710947;
+        Wed, 25 May 2022 18:15:10 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:485:4b69:8e74:fc8e:b11f:9d42])
+        by smtp.gmail.com with ESMTPSA id b8-20020a056830310800b0060b1f3924c3sm98625ots.44.2022.05.25.18.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 18:15:10 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     alexandre.belloni@bootlin.com
+Cc:     nathan@kernel.org, linux-rtc@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] rtc: mxc: Silence a clang warning
+Date:   Wed, 25 May 2022 22:14:59 -0300
+Message-Id: <20220526011459.1167197-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:7110:3682:b0:17b:2b7b:c035 with HTTP; Wed, 25 May 2022
- 13:47:56 -0700 (PDT)
-From:   Colina Fernando <colinafernando724@gmail.com>
-Date:   Wed, 25 May 2022 22:47:56 +0200
-Message-ID: <CAP7Hh1-qYQ=wBUq_p5pXQrtkN1XpxJSADCpbiay82rCojSvQDg@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Guten Tag,
+Change the of_device_get_match_data() cast to (uintptr_t)
+to silence the following clang warning:
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type 'enum imx_rtc_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
 
-haben ?
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: ba7aa63000f2 ("rtc: mxc: use of_device_get_match_data")
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ drivers/rtc/rtc-mxc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ich habe versucht, Sie per E-Mail zu erreichen.
+diff --git a/drivers/rtc/rtc-mxc.c b/drivers/rtc/rtc-mxc.c
+index 0f08f22df869..53d4e253e81f 100644
+--- a/drivers/rtc/rtc-mxc.c
++++ b/drivers/rtc/rtc-mxc.c
+@@ -311,7 +311,7 @@ static int mxc_rtc_probe(struct platform_device *pdev)
+ 	if (!pdata)
+ 		return -ENOMEM;
+ 
+-	pdata->devtype = (enum imx_rtc_type)of_device_get_match_data(&pdev->dev);
++	pdata->devtype = (uintptr_t)of_device_get_match_data(&pdev->dev);
+ 
+ 	pdata->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(pdata->ioaddr))
+-- 
+2.25.1
 
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Fernando Colina
-
-colinafernando724@gmail.com
-
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Fernando Colina
-
-colinafernando724@gmail.com
