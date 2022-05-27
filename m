@@ -2,92 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703CC535A1C
-	for <lists+linux-rtc@lfdr.de>; Fri, 27 May 2022 09:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7C8535BE5
+	for <lists+linux-rtc@lfdr.de>; Fri, 27 May 2022 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242290AbiE0HPu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 27 May 2022 03:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S1349836AbiE0IrA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 27 May 2022 04:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346442AbiE0HPL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 May 2022 03:15:11 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C340A1D;
-        Fri, 27 May 2022 00:15:10 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8bcv2V0rzbbtL;
-        Fri, 27 May 2022 15:13:35 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:15:08 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:15:08 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] rtc: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:36:36 +0000
-Message-ID: <20220527073636.2474546-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1349898AbiE0Iq7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 27 May 2022 04:46:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C796D25C5A;
+        Fri, 27 May 2022 01:46:57 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id a13so3586140plh.6;
+        Fri, 27 May 2022 01:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=LT+QAOqNHX7ViHSsik7kvf3ypjWNwSuEN+rviPBBKVw=;
+        b=EkXFhzB6I2uejZeDOfwTivxzmkAjlXWQzgl7qS1XAqWQSsrMu3JAjkaSjsfaL51svU
+         uZBzGyfFzcwDbnNsjntpXEi6BKOUPzamrL5XX4vGVMPP4+9JI4cl2BQScVC5lNBlEoVm
+         rVtSgcMKqsbGqBzEOr6qb5QvJ0DnzQxDYdxoj5Q+KrmLGGK/IBiaAG5CubqkZ6JAURhh
+         fnHmldWC0iducAx6xhxoqiAVBoh/9AAR2nT6Io4ILBQT4AHvTXNf+j3PX7DjGPUMZ4lU
+         QElFZQaiz8IcjrdWNtptAUIMZpbTh4w4mlws44DvIwY+ZKdT6luOpK2CHcQGD7zgshyQ
+         6/yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LT+QAOqNHX7ViHSsik7kvf3ypjWNwSuEN+rviPBBKVw=;
+        b=vttJdLvBGu5KTrgIkrqvnqw3bjclu3k+f7cPAXjz442iUEreHVCV3U6wRyzr2OT+4F
+         33liF1ZFIN+5F9kQ/9dFv6UY/IXzTwi858iu00BF5af2+NbaT2ElFEnbMpb3otoQFe/N
+         ieB2nOU+mpLWOyixLasxBXM/fUeD3idLj81AHRHjwzbGCIsFHgEB4o5ocqZl35TicBmZ
+         x33KtP9RfnQtfAiIYBTF4Do2WNYpleWI67CVPG7oCyuRvhULmW9GlOienq8uGn6h3Jux
+         wCcsGdYbVzD6XLiEtP/lzZ/+HqlM/bOHIHQx1NXQFXBRWtL4VUBkGBK9ipekDFtnmQ9P
+         TN7Q==
+X-Gm-Message-State: AOAM532R/RI/hoP/ETO3z7WEXcHK9Wgsghm2wCi3HQnTKL6Nga20F904
+        IbTJXY2zVsFFSdK6N7ON9Pjzjp2UUU/Ncw==
+X-Google-Smtp-Source: ABdhPJwbMVfPy1IMJtptgkrIf6LW9VDXVLIQ/vswb1KPSPLQl8dZBhbh32Dh0jzQbem2FdkY30ZOMw==
+X-Received: by 2002:a17:90a:5d03:b0:1e0:cc5b:4808 with SMTP id s3-20020a17090a5d0300b001e0cc5b4808mr7091366pji.180.1653641217105;
+        Fri, 27 May 2022 01:46:57 -0700 (PDT)
+Received: from localhost.localdomain ([116.89.143.231])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902d58c00b0015e8d4eb1ebsm3003254plh.53.2022.05.27.01.46.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 May 2022 01:46:56 -0700 (PDT)
+From:   medadyoung@gmail.com
+X-Google-Original-From: ctcchien@nuvoton.com
+To:     benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        tali.perry1@gmail.com, tmaimon77@gmail.com, avifishman70@gmail.com,
+        robh+dt@kernel.org, alexandre.belloni@bootlin.com,
+        a.zummo@towertech.it, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        JJLIU0@nuvoton.com, KFTING@nuvoton.com, ctcchien@nuvoton.com
+Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH v3 0/3] RTC: nuvoton: Add nuvoton real time clock driver
+Date:   Fri, 27 May 2022 16:46:44 +0800
+Message-Id: <20220527084647.30835-1-ctcchien@nuvoton.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+From: Medad CChien <ctcchien@nuvoton.com>
 
-Signed-off-by: keliu <liuke94@huawei.com>
----
- drivers/rtc/class.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Support Nuvoton NCT3018Y real time clock.
 
-diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
-index 3c8eec2218df..e48223c00c67 100644
---- a/drivers/rtc/class.c
-+++ b/drivers/rtc/class.c
-@@ -36,7 +36,7 @@ static void rtc_device_release(struct device *dev)
- 
- 	cancel_work_sync(&rtc->irqwork);
- 
--	ida_simple_remove(&rtc_ida, rtc->id);
-+	ida_free(&rtc_ida, rtc->id);
- 	mutex_destroy(&rtc->ops_lock);
- 	kfree(rtc);
- }
-@@ -262,7 +262,7 @@ static int rtc_device_get_id(struct device *dev)
- 	}
- 
- 	if (id < 0)
--		id = ida_simple_get(&rtc_ida, 0, 0, GFP_KERNEL);
-+		id = ida_alloc(&rtc_ida, GFP_KERNEL);
- 
- 	return id;
- }
-@@ -368,7 +368,7 @@ struct rtc_device *devm_rtc_allocate_device(struct device *dev)
- 
- 	rtc = rtc_allocate_device();
- 	if (!rtc) {
--		ida_simple_remove(&rtc_ida, id);
-+		ida_free(&rtc_ida, id);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
+Changes since version 3:
+ - Add part number in Kconfig.
+ - Refactor rtc-nct3018y.c.
+
+Changes since version 2:
+ - Fix errors in rtc-nct3018y.c.
+ - Fix warnings in rtc-nct3018y.c.
+
+Changes since version 1:
+ - Add nuvoton,nct3018y property in NPCM devicetree.
+ - Add new property in rtc binding document.
+ - Add new driver for nuvoton real time clock driver.
+
+Medad CChien (3):
+  dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+  ARM: dts: nuvoton: Add nuvoton RTC3018Y node
+  RTC: nuvoton: Add NCT3018Y real time clock driver
+
+ .../bindings/rtc/nuvoton,nct3018y.yaml        |  44 ++
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-npcm750-evb.dts     |   6 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-nct3018y.c                    | 560 ++++++++++++++++++
+ 6 files changed, 623 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
+
 -- 
-2.25.1
+2.17.1
 
