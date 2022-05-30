@@ -2,70 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57A15371B4
-	for <lists+linux-rtc@lfdr.de>; Sun, 29 May 2022 17:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A8E5374DC
+	for <lists+linux-rtc@lfdr.de>; Mon, 30 May 2022 09:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiE2P5R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 29 May 2022 11:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S233294AbiE3HHo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-rtc@lfdr.de>); Mon, 30 May 2022 03:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiE2P5R (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 29 May 2022 11:57:17 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABC0E01C
-        for <linux-rtc@vger.kernel.org>; Sun, 29 May 2022 08:57:14 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id x137so15488675ybg.5
-        for <linux-rtc@vger.kernel.org>; Sun, 29 May 2022 08:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
-        b=AeVFakHwl3ShYUBAR+wdaOObcRjyc/4J4NF1aui8ojiGKJ3nldxlTO5LRf+moLwZ8b
-         jPkn+YN7s/pob/eiNionXmdzFcqhA/Y3fNNZeD1uz0D/O8v2Gk5LtCoaKNERUBoJJNm5
-         Zb0v8IpfdOHRyVWSVNnhW2paJ+fGO9xUvNVvSjOJiM+w2Nb7GXc47OQERjR9BWvycwwt
-         0EPqSazouzwwZV046OphnIKEgnrK2OSTuE0zTOluJUGlZM/wnsi2+91UjLS/AjgWtpQD
-         D5Eg3JgqeigtpHkBDFG4vek9r+NKDCsmWAjWYdkIb6UodoQUV74U/OS1I62CQYSeMOFj
-         6WCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
-        b=5uTghNdiP2VGwY8SvBHpLhXZ6XTnRChy+JWgrZIlgsvFvwgso/f/pmdyic9er7knPP
-         4dpADmf0COMjiB0wb7XMJX/qM96eMakBiqlYwrHhSjnWhSsajWFvKyD9uT46u8g5nC0+
-         KISN3OF4OUsdd9nZyCqkIJyxGgwrtwoguaXgUHaAGolQ1myhtEexTzpkl34Iw8VNaDEm
-         s2l6MadItZDxpT13rrjsgpzt4JL1pG3qVKWtIXddnhDPG7G06Y8/REF6JaGNGXy+iLfD
-         myRke2zwrabb6SFB++SW6MDDkKWifHz95/uQgANvvi701ck9ysj6GLlUPSTfOaLD6PIW
-         7aAw==
-X-Gm-Message-State: AOAM530LjmCzk2Ivt2re12CJZdyNHkNzLI/C7Bp9XLaM2/VBJVCa5Qn+
-        feh1ZjkOQbDFib6mt24tRYM0Pb4VyFGtrlN0IkYOv3Ynzag=
-X-Google-Smtp-Source: ABdhPJyL2x6MVUkHDYX54WjUueaKVacWuK/Q0kt8PsgUpOOA0Qa8tDhgfYiMmeFbY8lxlLx2xmPfewvciA4Sk1Geac8=
-X-Received: by 2002:a9d:6e97:0:b0:60b:3a60:142b with SMTP id
- a23-20020a9d6e97000000b0060b3a60142bmr7434793otr.217.1653839822359; Sun, 29
- May 2022 08:57:02 -0700 (PDT)
+        with ESMTP id S233319AbiE3HHm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 30 May 2022 03:07:42 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D69101FF;
+        Mon, 30 May 2022 00:07:30 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 40A7F1C0BAB; Mon, 30 May 2022 09:07:29 +0200 (CEST)
+Date:   Mon, 30 May 2022 09:07:28 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        daire.mcnamara@microchip.com, lewis.hanly@microchip.com,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 1/2] rtc: Add driver for Microchip PolarFire SoC
+Message-ID: <20220530070728.GH1363@bug>
+References: <20220516082838.3717982-1-conor.dooley@microchip.com>
+ <20220516082838.3717982-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:560a:b0:a3:6e92:e156 with HTTP; Sun, 29 May 2022
- 08:57:01 -0700 (PDT)
-Reply-To: BAkermarrtin@gmail.com
-From:   Martin Baker <m.evelinemartins@gmail.com>
-Date:   Sun, 29 May 2022 15:57:01 +0000
-Message-ID: <CAEvQOXRgPP5GhpUshtwVJ9oGTJHaFEEej5XOpmhHV+oYOMZHfg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20220516082838.3717982-2-conor.dooley@microchip.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
+Hi!
 
+> Add support for the built-in RTC on Microchip PolarFire SoC
 
-I wrote to you this morning because I have something to tell you, please
-let me know if you read my previous post today.
+> +#define CONTROL_UPLOAD_BIT	BIT(5)
+> +#define CONTROL_DOWNLOAD_BIT	BIT(6)
+> +#define CONTROL_DOWNLOAD_BIT	BIT(6)
+> +#define CONTROL_WAKEUP_CLR_BIT	BIT(8)
+
+Dup?
+
+> +static void mpfs_rtc_start(struct mpfs_rtc_dev *rtcdev)
+> +{
+> +	u32 ctrl;
+> +
+> +	ctrl = readl(rtcdev->base + CONTROL_REG);
+> +	ctrl &= ~(CONTROL_STOP_BIT | CONTROL_START_BIT);
+> +	ctrl |= CONTROL_START_BIT;
+> +	writel(ctrl, rtcdev->base + CONTROL_REG);
+> +}
+
+You don't need to clear bit just to set it.
+
+> +	do {
+> +		prog = readl(rtcdev->base + CONTROL_REG);
+> +		prog &= CONTROL_UPLOAD_BIT;
+> +	} while (prog);
+
+Limit to XY iterations?
+
+> +
+> +static int mpfs_rtc_readalarm(struct device *dev, struct rtc_wkalrm *alrm)
+> +{
+> +	u32 mode = readl(rtcdev->base + MODE_REG);
+> +	u64 time;
+> +
+> +	mode = readl(rtcdev->base + MODE_REG);
+
+Dup?
+
+> + if (mode & MODE_WAKE_EN) + alrm->enabled = true; + else + alrm->enabled = false; + 
+
+enabled = ()?
+
+Best regards,
+										Pavel
+
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
