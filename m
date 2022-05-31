@@ -2,29 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D6E538B2D
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 May 2022 08:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEDE538B52
+	for <lists+linux-rtc@lfdr.de>; Tue, 31 May 2022 08:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242627AbiEaGFp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 31 May 2022 02:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S244219AbiEaGUi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 31 May 2022 02:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238360AbiEaGFo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 May 2022 02:05:44 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7513915BB;
-        Mon, 30 May 2022 23:05:42 -0700 (PDT)
-Received: from [192.168.100.1] ([82.142.8.70]) by mrelayeu.kundenserver.de
- (mreue106 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MOzfO-1oAHYT2AcG-00PPL4; Tue, 31 May 2022 08:05:05 +0200
-Message-ID: <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
-Date:   Tue, 31 May 2022 08:05:03 +0200
+        with ESMTP id S236080AbiEaGUh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 May 2022 02:20:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176558DDE4;
+        Mon, 30 May 2022 23:20:35 -0700 (PDT)
+Received: from mail-yb1-f182.google.com ([209.85.219.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MUok5-1oM4xf0f33-00Qje0; Tue, 31 May 2022 08:20:34 +0200
+Received: by mail-yb1-f182.google.com with SMTP id v106so15255754ybi.0;
+        Mon, 30 May 2022 23:20:33 -0700 (PDT)
+X-Gm-Message-State: AOAM532Lg2zvR74NfzminsBOx7Gky2HJfNQHF6zxz62udFQIk0xZFr31
+        EJl2SXC4565Cdz1S5T9XLTBwG090WB96jhgt49c=
+X-Google-Smtp-Source: ABdhPJyjJwXBPGiLFwJcPL8LpszFynK7r8RQeXSulMT/bC7rn948af4y1kE1ObqEbOMAyT3J0meiIKAhEtryxXOB8TY=
+X-Received: by 2002:a25:db8a:0:b0:65c:b04a:f612 with SMTP id
+ g132-20020a25db8a000000b0065cb04af612mr13375290ybf.106.1653978032886; Mon, 30
+ May 2022 23:20:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: fr
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+References: <20220406201523.243733-1-laurent@vivier.eu> <20220406201523.243733-5-laurent@vivier.eu>
+ <3b783435-e734-5391-e758-d709e0462839@infradead.org> <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
+In-Reply-To: <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 31 May 2022 08:20:15 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3mF9CuWC2Tw3VvDVGFgpjAwtMHSjoNa49bny7gMEw8sQ@mail.gmail.com>
+Message-ID: <CAK8P3a3mF9CuWC2Tw3VvDVGFgpjAwtMHSjoNa49bny7gMEw8sQ@mail.gmail.com>
+Subject: Re: [PATCH v16 4/4] m68k: introduce a virtual m68k machine
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-m68k@lists.linux-m68k.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
@@ -34,31 +46,26 @@ Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Alessandro Zummo <a.zummo@towertech.it>
-References: <20220406201523.243733-1-laurent@vivier.eu>
- <20220406201523.243733-5-laurent@vivier.eu>
- <3b783435-e734-5391-e758-d709e0462839@infradead.org>
-From:   Laurent Vivier <laurent@vivier.eu>
-Subject: Re: [PATCH v16 4/4] m68k: introduce a virtual m68k machine
-In-Reply-To: <3b783435-e734-5391-e758-d709e0462839@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:2M69cKCgAGhvU4Z/bGcKhkLwEhWFsUmCE+MqAJdvr4dlqoONtTU
- RQJBHeLTTXHZA94FtxY0BElJEHXoWFuWGF7AmwZeiT25mssQi3qwVl/Mc/E+oDDtaqZB0yU
- XMLrr6zRhptT4gnGp4SrefTG/+GiovC4VAvB3ox0Us0OUswiObaSU86t1A7+IDhEUtDA9X8
- 6LPvQaAmK28DZIKRpkxTA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MBqzMUNXwxg=:rU6kous+bRw+MQsAtRJA8m
- nguTb1stmOwoWhTdm9ZIogkdZI9TAbqfP+/caTcVZ0f/gnGCFTciomaSvjbTtPKdsGboL939E
- 5LEcgT2Ri7qDpMrLt+NoIYz1nqQmwRZLWRrnoG0vJKFWzq4b3nF71SJDbPTswQcKZFoQ4i7Rf
- WZoy1BSfVD8qoj3LKxFxEjazY51pN7RC/dxRj0kxvg9w6Be8FQdq35IqRiSSqTvTqdlLK99N3
- Hn/UAgQUW+wQuqWpEmc8DL8qQ3ARL5Ylj291NxAmUO57RG+LlzqPQ5gVhIgGt8vkq6QWcvVzF
- bpvvWx4aPxPpe/eYA/8YSLs3cZKX18jZArsNpHb7XtY8MMOMaBBt7fi5gXRVjV/OGp9ttX2Bb
- Nz8Z8+kghshRk+4Tfe91Rj5xyM16qAm3k1r0/mC4uEuGMlFpPH5i/xpuSkczImfWqOau/dwhC
- drDZdNj500mFuoAaaH6xHsbDuOv8ZjotL/80jfpAUEzCfoqAq1xqrHTg4SXok8jk2wzUz8IEz
- X86ZiVPLBaKE+IRfPyv+3i1n1fhu/7SZGRVGf7qHwiPT2kg3PjcCZFrBtoxxfGOM329lXb4jf
- IywZ+9kYGexGheEdCl1OoZdLUEF2mTT0dKQAsyFKZYHkNZlhUh47qqcYETKstteYJvDrw/5FA
- 3h5Wox2FY4uBhYq9z1Fmwfe6dUIBXDdU1ylf497DcWhootrFeWfPz56wI0+oD5RxC2s9CP3Xo
- Zd4eTBiO60ZnJSPn30PBWhKMYdfi6DhUdUIBzA==
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:fWVDVDmwfvq9MFlZ28krXFaULaYGmlrGpPHwT141bFJQre1uJEK
+ OBk+laHiPkf9Up47c++giO1iSu8ZmwM3gPEfj9z93WBFUUzkjpozJnnqAYeTvegM9KnRbZL
+ kpJWYaUWaaO2g+4YCTWa03ZrzZbMSMuXrzyqNHsQuEcFF4488Bab/2JS3oHD05XIy7IPbUu
+ 8V7VIl3cmOG4HaEctvraA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6CpOo7Bgy4I=:wKwx9FM1rhDcDw23KWTjYd
+ nySXykUf8gwH2a4wN9K88SgSqC3Ot55fyR7iUF/4koSeHyh8BbSuoXP4cmoX6tYMRwCsnoEha
+ eGuMEZOfEcTe2TAQL0Lipt9Sp0p0gr8GnfR+q5/Rjgndia/uWa0yAjipXedGBukB8aQKNsw8+
+ HljNBjAXOpgrRS/Xd8ce5u6mb500FFDcx41t/JgxHzkzSrXsbDM/iaAIt7y3xrFzmGz8A6jrc
+ zYHgtGJzrR8sloG3/0hOM2t8U+jjPG2MEv4CXvNWasBcqpCTTDVXu1rxHbvIjkhHhOM5j0RCs
+ WfvUSE69p6MosecxMde1Xcka2UStTui96Zm/zcsUNnURZ4sxGdWz81FlJohm9YWW+8lAglOh6
+ dzY4f3LedXo8JqkeDUkY6n4TCdnDiLZsLrJUgjhS5Qt5/A/UVDYdyMF992oxnk8hMVKMR60zI
+ swWD0XUx+2iNenwvJkP2d+99yoqKg4z1PjCBXef5bBntiNIaoq6d6O9nsFFhXcu8dim0Uj3m7
+ 3XQ2Aai1eqyT5bBywkIZV0PDlz5neFhPYOoKhP5zo7kyObqkbgbUwrXNxzzVuVjN6W1feXnhH
+ +l9eicj4yfer0XCpqsJcmge83vMIJuU7c94RfPDLaERtj8DxNLDySFHxU0p2UtBn7EZggkix7
+ FuRyMqxiLCPOCpaFnGeDwqrQUSN4U/UeU7oji6xqWgeauYb6bOAoPjJYzTx4ska8kAs4DiyIX
+ wuiubSgIxNvVbdVo0PMXysbGmqe07G/LhSx6uuTXgqxlAWVCCA+B7pJFEQtR8NH/1pUUcE28x
+ 04ivG7eqppRPmJuLg2cNuXBf8X8guY95MoyHhcUp107XiJYIrVTWekzKJxalfUgzold26hrC7
+ ZpAcam5MYg6LFR8aYRjw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,66 +74,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Le 31/05/2022 à 03:14, Randy Dunlap a écrit :
-> Hi--
+On Tue, May 31, 2022 at 8:05 AM Laurent Vivier <laurent@vivier.eu> wrote:
+> > This select VIRTIO_MMIO can cause a kconfig warning:
+> >
+> > WARNING: unmet direct dependencies detected for VIRTIO_MMIO
+> >    Depends on [n]: VIRTIO_MENU [=n] && HAS_IOMEM [=y] && HAS_DMA [=y]
+>
+> In my repo, VIRTIO_MMIO has no dependency on VIRTIO_MENU:
+>
+> ./drivers/virtio/Kconfig
+> config VIRTIO_MMIO
+>          tristate "Platform bus driver for memory mapped virtio devices"
+>          depends on HAS_IOMEM && HAS_DMA
+>
+> >    Selected by [y]:
+> >    - VIRT [=y] && M68KCLASSIC [=y] && MMU [=y]
+>
 
-Hi,
+The dependency is expressed differently here, but this is the
+same as writing 'depends on VIRTIO_MENU':
 
-> On 4/6/22 13:15, Laurent Vivier wrote:
->> diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
->> index eeab4f3e6c19..188a8f8a0104 100644
->> --- a/arch/m68k/Kconfig.machine
->> +++ b/arch/m68k/Kconfig.machine
->> @@ -149,6 +149,23 @@ config SUN3
->>   
->>   	  If you don't want to compile a kernel exclusively for a Sun 3, say N.
->>   
->> +config VIRT
->> +	bool "Virtual M68k Machine support"
->> +	depends on MMU
->> +	select GENERIC_CLOCKEVENTS
->> +	select GOLDFISH
->> +	select GOLDFISH_TIMER
->> +	select GOLDFISH_TTY
->> +	select M68040
->> +	select MMU_MOTOROLA if MMU
->> +	select RTC_CLASS
->> +	select RTC_DRV_GOLDFISH
->> +	select TTY
->> +	select VIRTIO_MMIO
-> 
-> This select VIRTIO_MMIO can cause a kconfig warning:
-> 
-> WARNING: unmet direct dependencies detected for VIRTIO_MMIO
->    Depends on [n]: VIRTIO_MENU [=n] && HAS_IOMEM [=y] && HAS_DMA [=y]
+menuconfig VIRTIO_MENU
+        bool "Virtio drivers"
+        default y
 
-In my repo, VIRTIO_MMIO has no dependency on VIRTIO_MENU:
+if VIRTIO_MENU
 
-./drivers/virtio/Kconfig
 config VIRTIO_MMIO
-         tristate "Platform bus driver for memory mapped virtio devices"
-         depends on HAS_IOMEM && HAS_DMA
+        tristate "Platform bus driver for memory mapped virtio devices"
 
->    Selected by [y]:
->    - VIRT [=y] && M68KCLASSIC [=y] && MMU [=y]
+endif
 
-How do you generate this warning?
 
-The first version of my patch added the VIRTIO_MENU but Geert said it's not necessary because 
-VIRTIO_MENU defaults to y.
-
-https://lore.kernel.org/lkml/CAMuHMdUFh2W-bY5Ez1aOTZQjq0=THvmOf22JdxWoNNtFLskSzw@mail.gmail.com/
-
-> 
->> +	help
->> +	  This options enable a pure virtual machine based on m68k,
->> +	  VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
-> 
-> The sentence above needs an ending period ('.').
-> 
-
-I agree.
-
-Thanks,
-Laurent
-
+        Arnd
