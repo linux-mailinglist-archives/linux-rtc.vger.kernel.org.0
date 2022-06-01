@@ -2,44 +2,40 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A78053AF49
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jun 2022 00:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECA253AF30
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jun 2022 00:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiFAVU0 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Jun 2022 17:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S231621AbiFAVoA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Jun 2022 17:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231529AbiFAVUZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jun 2022 17:20:25 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37A270342
-        for <linux-rtc@vger.kernel.org>; Wed,  1 Jun 2022 14:20:21 -0700 (PDT)
+        with ESMTP id S231491AbiFAVoA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jun 2022 17:44:00 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4233A3C;
+        Wed,  1 Jun 2022 14:43:56 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F2552240005;
-        Wed,  1 Jun 2022 21:20:17 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 34BC6100006;
+        Wed,  1 Jun 2022 21:43:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654118420;
+        t=1654119835;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sSlDB3gnzPhu7IFK/NzV5c+v5zwrabqJEk+GJGbg4WY=;
-        b=LRWx594nTqjjN/q9EkuELLcKRnW4rjHIFDbzYmednlfwdm50kpta/1EL56jwdL7FoJhkkE
-        2mnG9iXDLhurMvbAF2T3BhVTm+SvwS/aGHo0HWRx9QFnPmJQkU/ToRjIu3zauEwGWAkCfJ
-        3SMoL23dppe+IFbhVCV2hh272usHuaIGb+hEsavJjN6GnBpoWK3BReQSmsCzUotXvWFhAa
-        T2sRX34EvmWsP1+oQHpV3tsYben1fD4eNwftkLODWf/PG5JUmTiBZufWdyDgkOH3W3Hcp8
-        SToWMScoG7+G5F8kCrwp87YrT4DWhsJ5M3iozfvXADyCA1L6tSBcGDrLoDUj/Q==
-Date:   Wed, 1 Jun 2022 23:20:17 +0200
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=QNra6cYe7rAZmodYJlA+KCX2uI9roIVccpwi/1khbXY=;
+        b=M3lBkn8EIlwxc0Jkj0TmAnQ7Gep9ftMoNCAkF7PJGS76XF9RgSN8UMRAPH1l5VxcnoNV97
+        B61zMQCx1J4+MzlibcyrY0E3VYq/iaII/6EOqiIrJAXQLz6icy0Rgs35xQ9SEZuorHpNRa
+        PUgEZJaczzC4CFSMvbbrwEhYBN/OEh2PItjPhnVKmKyoDuUZ/mh+o7KAg9lPb/d/nbaexy
+        INaBsgp2gsJa+nMHO8z4owBOn275jxNH1beCwll/Wxq2cfg3vEWNxWkwQ/9/ftiaAemNR6
+        SsyGsAGwNZRR4zPQRUJASQr1roEmTYMtt0BxdoTm51KVRlpbpsrdNWRJohP3CA==
+Date:   Wed, 1 Jun 2022 23:43:54 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, linux-rtc@vger.kernel.org,
-        nathan@kernel.org
-Subject: Re: [PATCH] rtc: mxc: Silence a clang warning
-Message-ID: <165411839612.796022.11028632602319778983.b4-ty@bootlin.com>
-References: <20220526011459.1167197-1-festevam@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 5.19
+Message-ID: <Ypfdmml1GWU+gYzP@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220526011459.1167197-1-festevam@gmail.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -50,20 +46,90 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 25 May 2022 22:14:59 -0300, Fabio Estevam wrote:
-> Change the of_device_get_match_data() cast to (uintptr_t)
-> to silence the following clang warning:
-> 
-> drivers/rtc/rtc-mxc.c:315:19: warning: cast to smaller integer type 'enum imx_rtc_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> 
-> 
+Hello Linus,
 
-Applied, thanks!
+Here is the pull request for the RTC subsystem. A new driver represents
+the bulk of the changes and then we get the usual small fixes.
 
-[1/1] rtc: mxc: Silence a clang warning
-      commit: f78e3d407a339ffdd2620140300f821ea41118f4
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Best regards,
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
+
+for you to fetch changes up to f78e3d407a339ffdd2620140300f821ea41118f4:
+
+  rtc: mxc: Silence a clang warning (2022-06-01 23:19:17 +0200)
+
+----------------------------------------------------------------
+RTC for 5.19
+
+New driver:
+ - Renesas RZN1 rtc
+
+Drivers:
+ - sun6i: Add nvmem support
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      rtc: rzn1: Fix error code in probe
+
+Fabio Estevam (3):
+      dt-binding: pcf85063: Add an entry for pca85073a
+      rtc: pcf85063: Add a compatible entry for pca85073a
+      rtc: mxc: Silence a clang warning
+
+Miaoqian Lin (1):
+      rtc: ftrtc010: Fix error handling in ftrtc010_rtc_probe
+
+Michel Pollet (1):
+      rtc: rzn1: Add new RTC driver
+
+Minghao Chi (1):
+      rtc: simplify the return expression of rx8025_set_offset()
+
+Miquel Raynal (6):
+      dt-bindings: rtc: rzn1: Describe the RZN1 RTC
+      rtc: rzn1: Add alarm support
+      rtc: rzn1: Add oscillator offset support
+      MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
+      rtc: rzn1: Avoid mixing variables
+      rtc: rzn1: Fix a variable type
+
+Nobuhiro Iwamatsu (1):
+      rtc: meson: Fix email address in MODULE_AUTHOR
+
+Samuel Holland (1):
+      rtc: sun6i: Add NVMEM provider
+
+Yang Li (1):
+      rtc: rzn1: fix platform_no_drv_owner.cocci warning
+
+Yang Yingliang (1):
+      rtc: mt6397: check return value after calling platform_get_resource()
+
+Yuan Can (1):
+      rtc: gamecube: Add missing iounmap in gamecube_rtc_read_offset_from_sram
+
+ .../devicetree/bindings/rtc/nxp,pcf85063.txt       |   1 +
+ .../devicetree/bindings/rtc/renesas,rzn1-rtc.yaml  |  70 ++++
+ MAINTAINERS                                        |   8 +
+ drivers/rtc/Kconfig                                |   7 +
+ drivers/rtc/Makefile                               |   1 +
+ drivers/rtc/rtc-ftrtc010.c                         |  34 +-
+ drivers/rtc/rtc-gamecube.c                         |   1 +
+ drivers/rtc/rtc-meson.c                            |   2 +-
+ drivers/rtc/rtc-mt6397.c                           |   2 +
+ drivers/rtc/rtc-mxc.c                              |   2 +-
+ drivers/rtc/rtc-pcf85063.c                         |   2 +
+ drivers/rtc/rtc-rx8025.c                           |   7 +-
+ drivers/rtc/rtc-rzn1.c                             | 418 +++++++++++++++++++++
+ drivers/rtc/rtc-sun6i.c                            |  42 +++
+ 14 files changed, 579 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-rzn1.c
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
