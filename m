@@ -2,138 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1D5394FE
-	for <lists+linux-rtc@lfdr.de>; Tue, 31 May 2022 18:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD08539EDC
+	for <lists+linux-rtc@lfdr.de>; Wed,  1 Jun 2022 10:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238424AbiEaQcf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 31 May 2022 12:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S1350456AbiFAIAN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Jun 2022 04:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244921AbiEaQce (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 31 May 2022 12:32:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4B32899E;
-        Tue, 31 May 2022 09:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=mCLptYXedfhjubmlw5BpJM5vBm1Qu0fjfrsKQvvk7a0=; b=nC5Eoo4x8LEjS3jCnrkAdRn+Xl
-        v659Gte5fzH4eSwXz7SESGqNma8VaWcPPENSqIx1zJl8H8vZIgoslN3fD1SooS/tQs7Ok/wJI3I8G
-        dwXaiawIZwfLs6S1iNcbYhMmmfRZAnVDzJkeLdkLP+Iy9uUwb2dYmzDG74DHjRRMMLqxErb/QRJOh
-        JK1i0MGCK1CKgd+8BnFvvLxXmEaqVCVoAwsaCGHoQuDdd3g1CwwwRcwJOnyn/vLbm5A1lQk0WktQf
-        jADk5Qro9M5jXaV5/T78JglmKEeCPTPQxaL+VOjpyIynu5iyimUp3d4kJyjE5FQdnIk3zG/Z0Ng33
-        xtqcd6WA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nw4nE-005WpB-9E; Tue, 31 May 2022 16:32:28 +0000
-Message-ID: <eb11e6b1-01cb-78af-2b2d-5884106ad9c7@infradead.org>
-Date:   Tue, 31 May 2022 09:32:22 -0700
+        with ESMTP id S1350526AbiFAIAL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jun 2022 04:00:11 -0400
+X-Greylist: delayed 475 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Jun 2022 01:00:10 PDT
+Received: from mail.forindustry.pl (mail.forindustry.pl [37.187.225.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCB18B08E
+        for <linux-rtc@vger.kernel.org>; Wed,  1 Jun 2022 01:00:10 -0700 (PDT)
+Received: by mail.forindustry.pl (Postfix, from userid 1002)
+        id A4F64A46C8; Wed,  1 Jun 2022 07:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=forindustry.pl;
+        s=mail; t=1654069669;
+        bh=Vw5jk5D1DE7WK/GNf/MxRQNyAyPYcC0rMJLibxKTj58=;
+        h=Date:From:To:Subject:From;
+        b=ZpSPkND/ccK9w6Oc633tjfUCrmiSmIxZn3dX6hE/6Iwon1pcHgNEgF+Mslorz15Eo
+         rnajHzWky2i1pudHJriiAVaMf1j93HPvl7Ima7MHCvDYxAIRNU48cpBenUkqCMjzeA
+         Xbl4NP5JCwI836sZz+QXGL2isAKUvMwDLzHldotGhs75jt/ax0TF2Rv0T6tX+kyNXn
+         WfpO284OY7+SoCYg6AT/Fm4xdDVwILfqM0m2jQjTvGIg3Ak5owqhr0e8U/GNWerAGQ
+         HKirU5j5XRe4/oEsg1+CYDuS1beNLKtaMABUcgp02p+lhSxgKnhaWFP4DmSMgLlpfT
+         hK9Gi8AjdOm+A==
+Received: by mail.forindustry.pl for <linux-rtc@vger.kernel.org>; Wed,  1 Jun 2022 07:45:30 GMT
+Message-ID: <20220601064501-0.1.3k.lmea.0.n3cn1g3qjs@forindustry.pl>
+Date:   Wed,  1 Jun 2022 07:45:30 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@forindustry.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.forindustry.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v16 4/4] m68k: introduce a virtual m68k machine
-Content-Language: en-US
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k@lists.linux-m68k.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alessandro Zummo <a.zummo@towertech.it>
-References: <20220406201523.243733-1-laurent@vivier.eu>
- <20220406201523.243733-5-laurent@vivier.eu>
- <3b783435-e734-5391-e758-d709e0462839@infradead.org>
- <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <64ce78bf-b81b-1eec-74f3-650a72f2874b@vivier.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99.
 
-On 5/30/22 23:05, Laurent Vivier wrote:
-> Le 31/05/2022 à 03:14, Randy Dunlap a écrit :
->> Hi--
-> 
-> Hi,
-> 
->> On 4/6/22 13:15, Laurent Vivier wrote:
->>> diff --git a/arch/m68k/Kconfig.machine b/arch/m68k/Kconfig.machine
->>> index eeab4f3e6c19..188a8f8a0104 100644
->>> --- a/arch/m68k/Kconfig.machine
->>> +++ b/arch/m68k/Kconfig.machine
->>> @@ -149,6 +149,23 @@ config SUN3
->>>           If you don't want to compile a kernel exclusively for a Sun 3, say N.
->>>   +config VIRT
->>> +    bool "Virtual M68k Machine support"
->>> +    depends on MMU
->>> +    select GENERIC_CLOCKEVENTS
->>> +    select GOLDFISH
->>> +    select GOLDFISH_TIMER
->>> +    select GOLDFISH_TTY
->>> +    select M68040
->>> +    select MMU_MOTOROLA if MMU
->>> +    select RTC_CLASS
->>> +    select RTC_DRV_GOLDFISH
->>> +    select TTY
->>> +    select VIRTIO_MMIO
->>
->> This select VIRTIO_MMIO can cause a kconfig warning:
->>
->> WARNING: unmet direct dependencies detected for VIRTIO_MMIO
->>    Depends on [n]: VIRTIO_MENU [=n] && HAS_IOMEM [=y] && HAS_DMA [=y]
-> 
-> In my repo, VIRTIO_MMIO has no dependency on VIRTIO_MENU:
-> 
-> ./drivers/virtio/Kconfig
-> config VIRTIO_MMIO
->         tristate "Platform bus driver for memory mapped virtio devices"
->         depends on HAS_IOMEM && HAS_DMA
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-As Arnd explained...
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
-> 
->>    Selected by [y]:
->>    - VIRT [=y] && M68KCLASSIC [=y] && MMU [=y]
-> 
-> How do you generate this warning?
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
-It's just a random randconfig.
-
-> The first version of my patch added the VIRTIO_MENU but Geert said it's not necessary because VIRTIO_MENU defaults to y.
-> 
-> https://lore.kernel.org/lkml/CAMuHMdUFh2W-bY5Ez1aOTZQjq0=THvmOf22JdxWoNNtFLskSzw@mail.gmail.com/
-
-It's still a user-settable value and can be disabled, so the Kconfig entry
-should account for (allow for) that, either with 'select' or 'depends on'.
-
->>
->>> +    help
->>> +      This options enable a pure virtual machine based on m68k,
->>> +      VIRTIO MMIO devices and GOLDFISH interfaces (TTY, RTC, PIC)
->>
->> The sentence above needs an ending period ('.').
->>
-> 
-> I agree.
-> 
-> Thanks,
-> Laurent
-> 
-
--- 
-~Randy
+Pozdrawiam,
+Arkadiusz Soko=C5=82owski
