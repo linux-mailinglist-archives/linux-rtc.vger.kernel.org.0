@@ -2,136 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECA253AF30
-	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jun 2022 00:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CE753AEE6
+	for <lists+linux-rtc@lfdr.de>; Thu,  2 Jun 2022 00:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiFAVoA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 1 Jun 2022 17:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S232010AbiFAVxQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 1 Jun 2022 17:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiFAVoA (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jun 2022 17:44:00 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B4233A3C;
-        Wed,  1 Jun 2022 14:43:56 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 34BC6100006;
-        Wed,  1 Jun 2022 21:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1654119835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=QNra6cYe7rAZmodYJlA+KCX2uI9roIVccpwi/1khbXY=;
-        b=M3lBkn8EIlwxc0Jkj0TmAnQ7Gep9ftMoNCAkF7PJGS76XF9RgSN8UMRAPH1l5VxcnoNV97
-        B61zMQCx1J4+MzlibcyrY0E3VYq/iaII/6EOqiIrJAXQLz6icy0Rgs35xQ9SEZuorHpNRa
-        PUgEZJaczzC4CFSMvbbrwEhYBN/OEh2PItjPhnVKmKyoDuUZ/mh+o7KAg9lPb/d/nbaexy
-        INaBsgp2gsJa+nMHO8z4owBOn275jxNH1beCwll/Wxq2cfg3vEWNxWkwQ/9/ftiaAemNR6
-        SsyGsAGwNZRR4zPQRUJASQr1roEmTYMtt0BxdoTm51KVRlpbpsrdNWRJohP3CA==
-Date:   Wed, 1 Jun 2022 23:43:54 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 5.19
-Message-ID: <Ypfdmml1GWU+gYzP@mail.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231987AbiFAVxI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 1 Jun 2022 17:53:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204E2DF34;
+        Wed,  1 Jun 2022 14:53:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4DD2B81CF2;
+        Wed,  1 Jun 2022 21:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2B5CCC3411F;
+        Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654120384;
+        bh=fy2k+9SNmeFa7RMilH9Quvxcu/tBFoqghx87e4ljg5k=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=WYuBsXCQLhN8OfYqrK3LtMdNalrjb8LG/OmmH/DC3fGbMJlaCzv05Fws9rD1JQIJs
+         WcwDT7THmhQnFANbMcqjh8NgpNUl9OgOlcaEtKVdDy26uMoVtHT1fgHarr8rmW5PgU
+         gXXrE97LSKqdbBLkrxhU16WNUJl0fE8Wt12akYsHHKHtO5VlNUw9nPtWRTWPgk0gGk
+         b00sFjwSHQfgcca36kiUik+rKln2bRCRqcEbXwklM4ciIiScxCGr92hxWEa3aeqFx8
+         sHxTlbKKFtZfUMYB16VRjuywbthXOYB8jU1gF5hysEb2lnrFghYu9mMm5ebXBrh5cm
+         PoAYF065FWx4g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13122F0394E;
+        Wed,  1 Jun 2022 21:53:04 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Ypfdmml1GWU+gYzP@mail.local>
+References: <Ypfdmml1GWU+gYzP@mail.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Ypfdmml1GWU+gYzP@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
+X-PR-Tracked-Commit-Id: f78e3d407a339ffdd2620140300f821ea41118f4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
+Message-Id: <165412038407.5556.8682390648447535620.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Jun 2022 21:53:04 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello Linus,
+The pull request you sent on Wed, 1 Jun 2022 23:43:54 +0200:
 
-Here is the pull request for the RTC subsystem. A new driver represents
-the bulk of the changes and then we get the usual small fixes.
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/54eb8462f21fb170a05ad64620f0d8d0cf2b7fb5
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-5.19
-
-for you to fetch changes up to f78e3d407a339ffdd2620140300f821ea41118f4:
-
-  rtc: mxc: Silence a clang warning (2022-06-01 23:19:17 +0200)
-
-----------------------------------------------------------------
-RTC for 5.19
-
-New driver:
- - Renesas RZN1 rtc
-
-Drivers:
- - sun6i: Add nvmem support
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      rtc: rzn1: Fix error code in probe
-
-Fabio Estevam (3):
-      dt-binding: pcf85063: Add an entry for pca85073a
-      rtc: pcf85063: Add a compatible entry for pca85073a
-      rtc: mxc: Silence a clang warning
-
-Miaoqian Lin (1):
-      rtc: ftrtc010: Fix error handling in ftrtc010_rtc_probe
-
-Michel Pollet (1):
-      rtc: rzn1: Add new RTC driver
-
-Minghao Chi (1):
-      rtc: simplify the return expression of rx8025_set_offset()
-
-Miquel Raynal (6):
-      dt-bindings: rtc: rzn1: Describe the RZN1 RTC
-      rtc: rzn1: Add alarm support
-      rtc: rzn1: Add oscillator offset support
-      MAINTAINERS: Add myself as maintainer of the RZN1 RTC driver
-      rtc: rzn1: Avoid mixing variables
-      rtc: rzn1: Fix a variable type
-
-Nobuhiro Iwamatsu (1):
-      rtc: meson: Fix email address in MODULE_AUTHOR
-
-Samuel Holland (1):
-      rtc: sun6i: Add NVMEM provider
-
-Yang Li (1):
-      rtc: rzn1: fix platform_no_drv_owner.cocci warning
-
-Yang Yingliang (1):
-      rtc: mt6397: check return value after calling platform_get_resource()
-
-Yuan Can (1):
-      rtc: gamecube: Add missing iounmap in gamecube_rtc_read_offset_from_sram
-
- .../devicetree/bindings/rtc/nxp,pcf85063.txt       |   1 +
- .../devicetree/bindings/rtc/renesas,rzn1-rtc.yaml  |  70 ++++
- MAINTAINERS                                        |   8 +
- drivers/rtc/Kconfig                                |   7 +
- drivers/rtc/Makefile                               |   1 +
- drivers/rtc/rtc-ftrtc010.c                         |  34 +-
- drivers/rtc/rtc-gamecube.c                         |   1 +
- drivers/rtc/rtc-meson.c                            |   2 +-
- drivers/rtc/rtc-mt6397.c                           |   2 +
- drivers/rtc/rtc-mxc.c                              |   2 +-
- drivers/rtc/rtc-pcf85063.c                         |   2 +
- drivers/rtc/rtc-rx8025.c                           |   7 +-
- drivers/rtc/rtc-rzn1.c                             | 418 +++++++++++++++++++++
- drivers/rtc/rtc-sun6i.c                            |  42 +++
- 14 files changed, 579 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- create mode 100644 drivers/rtc/rtc-rzn1.c
+Thank you!
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
