@@ -2,72 +2,53 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD5853DAD9
-	for <lists+linux-rtc@lfdr.de>; Sun,  5 Jun 2022 10:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D04453F84A
+	for <lists+linux-rtc@lfdr.de>; Tue,  7 Jun 2022 10:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243899AbiFEIg5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 5 Jun 2022 04:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S232139AbiFGIhI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 7 Jun 2022 04:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiFEIg5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 5 Jun 2022 04:36:57 -0400
-Received: from smtpbg.qq.com (smtpbg123.qq.com [175.27.65.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817704D9CE;
-        Sun,  5 Jun 2022 01:36:48 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1654418130tsg0818y
-Received: from localhost.localdomain ( [111.9.5.115])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 05 Jun 2022 16:35:16 +0800 (CST)
-X-QQ-SSF: 01000000002000C0G000B00A0000000
-X-QQ-FEAT: aP2oNmVYkM/8WXL6lyMugqaCVwDQOQUAEuXm7NSQSnD6OQvESoOveCBRKTTY/
-        dLpZalDOtAnRhwp/mpem/XA4v/ygtKfwaAb8XJGF5wLHAEy79LL84X7LMBT7t8grVUbbpaL
-        RQ8rDXbFHVx8QjXPPDEE1YEfYYL20s9vOBjzsi0Y/VI8pSaXcqk/uel2MhAlD95FpPEMX+P
-        dfMEbuaJb0Z9hOLgFgWDJhWV+Lcby1/ak2VvyeTxF/q8uTdjtmJOG/sbkOmlL7SuwpNLQKx
-        F59PPrMQBKaSZpFFFkBSSHMdUVrMHPTmSg7t/vuAlRzl8ICpwGHSKKKY8=
-X-QQ-GoodBg: 0
-From:   Xiang wangx <wangxiang@cdjrlc.com>
-To:     a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com,
-        claudiu.beznea@microchip.com, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Xiang wangx <wangxiang@cdjrlc.com>
-Subject: [PATCH] rtc: at91rm9200: Fix syntax errors in comments
-Date:   Sun,  5 Jun 2022 16:35:15 +0800
-Message-Id: <20220605083515.9514-1-wangxiang@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S231558AbiFGIhG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 7 Jun 2022 04:37:06 -0400
+X-Greylist: delayed 360 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 01:37:05 PDT
+Received: from aispr.jp (mailout1.aispr.jp [54.65.74.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1696C9676
+        for <linux-rtc@vger.kernel.org>; Tue,  7 Jun 2022 01:37:05 -0700 (PDT)
+Received: by aispr.jp (Postfix, from userid 48)
+        id D49431BC0C00; Tue,  7 Jun 2022 17:31:04 +0900 (JST)
+To:     linux-rtc@vger.kernel.org
+Subject: =?ISO-2022-JP?B?V0FHQVNISSBFSUtBRE8gGyRCJCpMZCQkOWckbyQ7JHI+NSRqJF4kNyQ/ISMbKEI=?=
+Date:   Tue, 7 Jun 2022 08:31:04 +0000
+From:   =?ISO-2022-JP?B?V0FHQVNISSBFSUtBRE8gGyRCT0IyWztSJE4xUTJaRjIbKEI=?= 
+        <wordpress@eikado.jp>
+Reply-To: info@eikado.jp
+Message-ID: <6feb39862ba34880bd5699c0d4d22b1e@www.eikado.jp>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybgspam:qybgspam8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-2022-JP
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_95,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Delete the redundant word 'is'.
+下記の内容でお問い合わせを受けました。
+後日、担当者からご連絡をさせていただきます。
 
-Signed-off-by: Xiang wangx <wangxiang@cdjrlc.com>
----
- drivers/rtc/rtc-at91rm9200.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ありがとうございました。
 
-diff --git a/drivers/rtc/rtc-at91rm9200.c b/drivers/rtc/rtc-at91rm9200.c
-index fe396d27ebb7..e9d17232d0a8 100644
---- a/drivers/rtc/rtc-at91rm9200.c
-+++ b/drivers/rtc/rtc-at91rm9200.c
-@@ -130,7 +130,7 @@ static void at91_rtc_write_idr(u32 mask)
- 	 *
- 	 * Note that there is still a possibility that the mask is updated
- 	 * before interrupts have actually been disabled in hardware. The only
--	 * way to be certain would be to poll the IMR-register, which is is
-+	 * way to be certain would be to poll the IMR-register, which is
- 	 * the very register we are trying to emulate. The register read back
- 	 * is a reasonable heuristic.
- 	 */
+
+差出人: ? All the girls from next door are here with their cams! Visit Cam: https://dreamgirl22.page.link/H3Ed?h4fw ? (icth32)
+メール: linux-rtc@vger.kernel.org
+電話番号：969371417278
+メッセージ本文:
+sspbt1
+
 -- 
-2.36.1
+このメールは WAGASHI EIKADO 和菓子の英華堂 (https://www.eikado.jp/brand) のお問い合わせフォームから送信されました
 
