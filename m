@@ -2,194 +2,176 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABE4544E39
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jun 2022 15:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3256544E62
+	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jun 2022 16:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244068AbiFINzi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Jun 2022 09:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S244302AbiFIOJB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 9 Jun 2022 10:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243565AbiFINzd (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Jun 2022 09:55:33 -0400
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30053.outbound.protection.outlook.com [40.107.3.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B733E1D;
-        Thu,  9 Jun 2022 06:55:32 -0700 (PDT)
+        with ESMTP id S244977AbiFIOJA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Jun 2022 10:09:00 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2089.outbound.protection.outlook.com [40.107.243.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FD86EB16;
+        Thu,  9 Jun 2022 07:08:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XqJgnAHT63n/kvR+9FWFzloi+vewQkNP/ulavWP6z7TaMdMr2WNYmdm0JVwQ4ViVb50S3VwyES74QA2cklt0GNe6i1+m0Efld0DQ664tGr6PxVo29sjTkjnieJrgutZYOgfmh2aDHAuu3ltxVe1+SeCaGfap0VIJ7hF6KmPudfzLUpPp7mdkr8zSbbfNBEF1qcF7lyGebmbWA8tkZBSXHzIUW9EBLgm3fO/oN9jNSKBFWA+gnYkMJGtuykHndFja8Qn8ZATYOZSmC90FCOuIrxaFKepAigCXdkCpKiyPtHddVnUPa8PJYN9xvTVf9UlwTOtBqXd7MGBzPqE06TUQZQ==
+ b=Urh11i+ZEozl9guSRb/lXWsohydZTUhcmEQ8OtCPc0n4TLnKGQaCT4H6P6NLQN4DyP0Zp7INWAcyaRp+R5nl2ttdqHrQpjKad9xmCQwqk8jpdFTlTfMxeRUlEdvAhMvl/nRwMSXQZ3g7cRAavk/qS+AROZAeNXrNYbc4NCpc5T2ydwZRercD2R1vXqIamXBW7mgTe5ebl60krqj599AGIts3171S116TdsUz+POQ1dmqEsN9uhWiYihjWOAiW+WmHCfsOWCDVpKxLp+hcNDw0pt9T1JOI9MRwHOHSqa1cKMcewQ0mQzMU7sqKFra0kBxuvITHh9xo539M0+BAKgInw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Oz9nGnF0VDq3aCXTGnDBxDQ4RFbjS6TO/aHkLTzDQpI=;
- b=e/Brh5xlNlh2hNtBdnUXIMp+Yv8ew0PdJ1v6jFYdmg6dDiBpXq3ZXb5SbJ10LKq7S5i0az1BbVoDHP1zRMqjW4/y1t/Myy6txDEgvD1FSBaBMjH4mwl4NLtglgT/P9gdsZ0UJMj1KEwOp8sffmhF5kVBmnBkXuIBawX9r1Nk5C3ttvMNfpc98lddH/dDa+2tiEODk5n+gdUu3ql0vT4jIQ/TUzEjbIUGCnfD1O35qcP1hJ72LfgC+LKsnxF6/5Luvv8TTAdKO4yo2Kyx4iyPbFy6QxRK6UZ8WYqC84GqpMs9IiYCEGa4HOYutbnAN00Df/Npk5cUhvCwAwQwmfvSqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=XyUfGslklbNd8KuGHlItuCW6J46vykdY5dAsSI4P060=;
+ b=KfTA2iHtAduixMv7KOPsk7do1+q34bXdWN8L06D7OPIg+oxN7r6aNIThSt3whgy/FM9Syv7w8Q/4OaYtB4fp1nIaeDoE0ajsILQ9iBy0jkNtdQV0U7dhxuZFdHsNI5YB4TZ2lk0ySqs21wfq72zuhtpa4ky7l/h2Kc1CEg24Ijy33hwfDaKuM+eWUc8iUuTMa/pXnbGfAYouIVGFaXRyNQcl33iWaU6F1SDanbUZzJUjISbhUdywp99DYMDeP8Acwq2TXg/pkBRfq9Fc24M1Mn8eRshHPxMQWDiMa0i0jnWlpdHv2bj9zn94ofcehrWR6G7hjZNt4mlPs2ZfCt3Tag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=towertech.it smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Oz9nGnF0VDq3aCXTGnDBxDQ4RFbjS6TO/aHkLTzDQpI=;
- b=OptSIMTerKSBX641WspyNCaaRXArilHhUGDNVFpogMNs/7AoDimAUauQNODCFEqlR0I+wZhqJRQCVuN7jSEwkJmg34W9gSXYSFWVkvxoJF5S7bzwxqfEr7Ho9CoFYn5OWGX7kn6KEgMB+9yTut+J2IdmiauaDbIQU71i6fH5NeY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM9PR04MB8970.eurprd04.prod.outlook.com (2603:10a6:20b:409::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Thu, 9 Jun
- 2022 13:55:30 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a541:25cd:666f:11b1]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a541:25cd:666f:11b1%5]) with mapi id 15.20.5332.013; Thu, 9 Jun 2022
- 13:55:29 +0000
-Date:   Thu, 9 Jun 2022 16:55:26 +0300
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 07/10] dt-bindings: rtc: Add fsl,scu-rtc yaml file
-Message-ID: <YqH7znVBPn1PEooj@abelvesa>
-References: <20220608164928.2706697-1-abel.vesa@nxp.com>
- <20220608164928.2706697-8-abel.vesa@nxp.com>
- <YqDWt0w8/9bwz5OL@mail.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqDWt0w8/9bwz5OL@mail.local>
-X-ClientProxiedBy: AS9P251CA0016.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:50f::28) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+ bh=XyUfGslklbNd8KuGHlItuCW6J46vykdY5dAsSI4P060=;
+ b=opsZzSQ+0or1zSLjQyGdLywNDg1bnuvbDm3bVTea1A0C2cDRy9iez3+Yc7uePMKaq3bx/8xMZokMmryuvh1Wk7u93cfZM4uZYHjXQrr5VHhrPwFIYvFv1bNOM1fwGpcSkAGPY/k2rHXzaFo1mbwgFOjUTS1k0KENG2Q7/eGYWjs=
+Received: from BN6PR1401CA0002.namprd14.prod.outlook.com
+ (2603:10b6:405:4b::12) by CY4PR02MB2406.namprd02.prod.outlook.com
+ (2603:10b6:903:b::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.17; Thu, 9 Jun
+ 2022 14:08:56 +0000
+Received: from BN1NAM02FT044.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:405:4b:cafe::78) by BN6PR1401CA0002.outlook.office365.com
+ (2603:10b6:405:4b::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13 via Frontend
+ Transport; Thu, 9 Jun 2022 14:08:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT044.mail.protection.outlook.com (10.13.2.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Thu, 9 Jun 2022 14:08:55 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 9 Jun 2022 07:08:46 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 9 Jun 2022 07:08:46 -0700
+Envelope-to: git@xilinx.com,
+ a.zummo@towertech.it,
+ alexandre.belloni@bootlin.com,
+ robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org,
+ srinivas.neeli@amd.com,
+ neelisrinivas18@gmail.com,
+ devicetree@vger.kernel.org,
+ linux-rtc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.39] (port=38176 helo=xhdsgoud40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1nzIq5-0001FS-MU; Thu, 09 Jun 2022 07:08:46 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <michal.simek@xilinx.com>, <sgoud@xilinx.com>,
+        <shubhraj@xilinx.com>, <srinivas.neeli@amd.com>,
+        <neelisrinivas18@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>
+Subject: [PATCH V6 1/2] dt-bindings: rtc: zynqmp: Add clock information
+Date:   Thu, 9 Jun 2022 19:38:32 +0530
+Message-ID: <20220609140833.1784738-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 33245b5a-bc5f-4b9d-fc75-08da4a1fb680
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8970:EE_
-X-Microsoft-Antispam-PRVS: <AM9PR04MB897036B12B02221ECB27E761F6A79@AM9PR04MB8970.eurprd04.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: d8c66ee1-aeea-483f-8fb5-08da4a21976c
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2406:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR02MB2406590BD1909352B88095C6AFA79@CY4PR02MB2406.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gDfI8xaAdzD1Q8RoHQQp6Fec2OWJabgMYO0PYlYiuY94PeRT7wkRaJkQRN+TC1+9NeBRXYi9QRweLn2wz7Au1TG7lQ5oEoS52u12DaZuZIJmSugwXTTVxL8ittt46gf+Be7DZwH2p3+dOSNV2nkyr03g6nZFNwh/W0vN2PI5oX1a6B8Wu32x0dT5OsejCWQRlAD7pOaxsptrE79sz7g0qkEKxgaxtLvgoQJjV1Rgz8ovwOESPkkmFsvdoyXO1cBUBgm+33Ob15NmTxAw1sC6+/GrZZI/5ryxYI1iKcUvF7tjjCUb+7kBCGmF+7x36S6RqcUjWq2dBJ+F5nUeY+3s3/teUKsoeCY8awE3mAJZYu2epomXlSd1jkYrVZ3a0Khn+x5mG7t+CYKA8DbjML8b1tcbbxROC0pU0c+jMOpJi6jT4vIMzCl53B9g+FqLy3iRTFIjae6ct6IOMvX0dj37aMVz4GOZPdtGvYQr47cHr/fXUwCpFCkOLAL6yL0W+6rgAhQtU9s1fBAF43//lnzaSnTjNqFYG0GbWRJRAkiuS7aPOXpt93UWvugeeyGAEUPYpldBIJDWq3PLuxVYmz79yFhwmHSgmsGZ3xsrcLCob+W5vqsTEburQOC4jqF/qs73BbOfz7BocGUuSfvqK/IbbfXJGSMAVNBVrFB1EPJfhXJPWiCVev9A4Hv/XytF3/E7SLRLr8K4jAkOsLkI0jsIzP0ob/f2fb8u1Ub3zyC3rcwyVxxDnhQEG1JHtFDTnwHL+wS5btX4f1ebGQRbYg2+pTleXOHWvBz0pH8qZX6bsHIRc8O0NvXjrVDrp0gOXdwNrQrzyyCSNoQhmiUg+G2QJQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(8676002)(86362001)(7416002)(66476007)(8936002)(508600001)(6486002)(966005)(38350700002)(44832011)(83380400001)(5660300002)(4326008)(66556008)(33716001)(38100700002)(66946007)(6666004)(6506007)(52116002)(186003)(53546011)(9686003)(6512007)(26005)(54906003)(6916009)(316002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b/R3VsockM68cf17pbzeul1rOIdWLmf5f8+UcUApnC9x4xIu66VnYONtiryA?=
- =?us-ascii?Q?op/MZ6vQAz91xwyLvPYGVBedcgYz1PcVjTE1HIPfG1c2TDKD+fz6JKQYmTKu?=
- =?us-ascii?Q?vbjT3ke9DwORo0LnmgwP5z+llQ+o8Bu/GLt0meQ9Hvy6oAJI7cE9kpamc/1h?=
- =?us-ascii?Q?5MgG4MccjRjnZqoghYcuDMdQi55+r05D2HKG0E96vLH52GY17YdT54/lZvYr?=
- =?us-ascii?Q?j8fY3kyZHNPS1vIrfrIiLFAgf23o4lOcmbMuktBnzpKSfqITy6/ZcT63Qjg6?=
- =?us-ascii?Q?oUdiydlXo6voNB6vODxV6zYHwraSVfD1S3xByR/e6bvEZfaYmyVDVVOWxpHc?=
- =?us-ascii?Q?q87HZbXgsk2SKx80Q8oSdsSdrNyZQAry7UNub5W6NzuOzQc6ThdRACeTQbOw?=
- =?us-ascii?Q?1r4V7nujYVaTIyW6cqD2OHQx3ha031Ij7Bc8sH5ObHyS7GPfpWPysGreSoLe?=
- =?us-ascii?Q?9eKyaNIscgEg1aBamVveMAHEWZGAv15MCAm7loWmWB0S2Ib+z+DtULyGSA+7?=
- =?us-ascii?Q?26O960VSoyl2BWV8aERZ7RVJN6n2e/4WObopYlZo9UqfHqd1HCADwMp4OWtw?=
- =?us-ascii?Q?o5za8qIJRQEczUrXtFbC57xBhon9GABuJwNhjb3KIWlH5g9TnWAwWPNirZdy?=
- =?us-ascii?Q?OkkksXTxsaUZ0YVxxxS0spMlrn3gPyadLT6BUuao9mFVLC4otti3ZqZvVB7t?=
- =?us-ascii?Q?3ewGNLErZK1Gu0DITYQADQM+N3WHpGfK+LbDZ7Vy3cKs8H3S37I9jBOKu2T+?=
- =?us-ascii?Q?QiYa3POgL7yrfTw99t6+PS5Y+jsKHVc3qY9M05lQlq+gW18bmOQfvTbzNY+U?=
- =?us-ascii?Q?JpUSaV1FBRsA7/Bco84ni69c44TuOAna9kVCmQqSbE3b0QjCtsKIBaL2T+M5?=
- =?us-ascii?Q?fyXw5cBQHpZW8qHI2RYUxgDf09VmZsF/dcwsNjErnbhn8Jpbmhb1m8qr2cWY?=
- =?us-ascii?Q?MbGwd6s5p25lxxXW8KvjkquY2mjz/FN54GfdtB0LyHvx7inzvUJA6qDR+wOy?=
- =?us-ascii?Q?NO4bso3rbwbq5c7O8gG8H1Gw1m8dDJP4Vm3SLl3Ac3Kz7Avm1733OPbn77zQ?=
- =?us-ascii?Q?yzMJCctUPR9chfwkXZn+KVJha4+a+omlHdDc/u+kqKd0B2dPTMqkFoTIXx1x?=
- =?us-ascii?Q?G/359HGkJb+GyqWVqNG4HThyc/iCXvG3Y4cBJfrpjOLpsuznZNKcFzLQJnzK?=
- =?us-ascii?Q?1LvAoEW1E8CVsOcpJEYUJFeqzHZOrm2X921Spge4NCw8MArKHYQhcDJzw1d8?=
- =?us-ascii?Q?GTvvW6+YmtlAFTxwDemoa2UrULN+eT/Ypsp+Dt0cs/GCrbdyn9iLnFhcvb0d?=
- =?us-ascii?Q?p4GqYziqE8YCU3PMQYorRKX2QhxkCQnufSzEm4/QXLbfL8koQ+kGmfMtmgiw?=
- =?us-ascii?Q?U3t61yQ5du0pbP8R5eXaVSB+0giownVYCPxCQev40IcEaZuaowGtUt96XKi8?=
- =?us-ascii?Q?14HtAL6dHtOly8kWrgenN+YO44j3olwaN8qKrhW+pcV82gGSq2hElf5GKUFc?=
- =?us-ascii?Q?u9Teei/MIRNM1pVZ8l31aT1ZHFs0WWAjD7JM9WZh1xM+k9/pYFgDq6zM42e2?=
- =?us-ascii?Q?7NX4JTNOGzofNRmm/r7/tm7taKOIYZ9aMZFT5ej9cvhGLU9QjQKyEYH/lTWG?=
- =?us-ascii?Q?3h2MeHPO/PkawQPfus3CuXm9kNuMfiEisvy6xTbxNMcLpxamCK1ZiFX70//A?=
- =?us-ascii?Q?gCkEN1US0H39hWvXSBk4p7uXIeWUhO2QMnUeK1Sh+ZNC+rSu4oD5XW4Z72p6?=
- =?us-ascii?Q?d3J72i7XqA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33245b5a-bc5f-4b9d-fc75-08da4a1fb680
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 13:55:29.6756
+X-Microsoft-Antispam-Message-Info: 8bAELTAoCa5oZrJy9X6KXLDHetKccL+HeaPP2ZyM1PGzOXaK/IFNCRoC5bqN67tBa+/WD9nt3+8t9DT2OtIweCygMvFtFniU/8a36/AaMI7srbLoW7199nOADZI9QUfKKEpNZPAZLA0LmzmhR2snDcb/ILaCCV01zQVdNzj2jqAwVG8zh75o9wz8ZqhbIofkQkjWTdZ5SA65pG1WWjm324EIynIfJo25XKTUXGdHizvoIJ6v1CuXz50L2ELtQuEqDGWEhEhSaePgJknk+IBCbPfG9GgzhJsB2B4svnOOqP0/J4HznLMkttIsQVm56cdu3WmZUMOF7q22XqdnBTrhb1oRphQ2TmIg9Ac6ofrqLId3kA/+pPxvEZaJHZb54yL4A89b+7lx9mxFUheF6YvThhSObmNgvPibuaIHzsrelRq1C0dXe/33T3+yUexS2nnchML/+PUZexIuQGvPsz5GUoNgmkZGUDOK7E6TI7NvKDHDKFXwqFVUbeg8OW4OWQZChGDTs5H+Vo8b9StmWgb506Bq3/u5WOdQw4N1d8/NUtbLcfXoy/6tuaJyOGLI+yt7BgtTgEGnRweh5sNvn+nlCRI5hHgBpUQob4MwTLpVfVN/Soz4ihz1UhvrfIL2T4yAxKiTrPTNsQOiL0czUQWNE0mLbkfmgQkjtRyvlkoOVMt+xB3DXXvw26LhSBM9q1NqtXt2xr0DaCeeIVete45YlDJluBudAvz3C6yhd8bS49k=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(2616005)(186003)(5660300002)(107886003)(36860700001)(2906002)(4326008)(316002)(8676002)(70586007)(70206006)(6666004)(83380400001)(7636003)(7696005)(44832011)(82310400005)(110136005)(336012)(47076005)(40460700003)(54906003)(9786002)(8936002)(26005)(508600001)(7416002)(36756003)(356005)(1076003)(426003)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2022 14:08:55.9790
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 64J8WwI0p6EIlBBGq7j45ePhta0scEykw43X6XFMKmGFSoSiMlbY2+gFv02Z2xySlNXbZvZNP6vXG5Xk964rPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8970
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8c66ee1-aeea-483f-8fb5-08da4a21976c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT044.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2406
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 22-06-08 19:04:55, Alexandre Belloni wrote:
-> On 08/06/2022 19:49:25+0300, Abel Vesa wrote:
-> > In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> > we need to split it between the right subsystems. This patch documents
-> > separately the 'rtc' child node of the SCU main node.
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> > ---
-> >  .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  | 22 +++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> > new file mode 100644
-> > index 000000000000..bd8c3cf365ff
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
-> > @@ -0,0 +1,22 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/fsl,scu-rtc.yaml
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml
-> > +
-> > +title: i.MX SCU Client Device Node - RTC bindings based on SCU Message Protocol
-> > +
-> > +maintainers:
-> > +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
->
-> Isn't NXP going to maintain their binding?
->
+Added clock information and deprecated calibration support.
 
-Since there is no NXP maintainer for the i.MX rtc drivers,
-I took whoever was in the MAINTAINERS file.
+Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+---
+Changes in V6:
+-Removed dtc warnings.
+Changes in V5:
+-Removed quotes and _clk suffix from clocknames.
+Changes in V4:
+- Deprecated calibrtion support
+Changes in V3:
+- New patch
+---
+ .../devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml     | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-I had a chat with Aisheng Dong and he is OK being mentioned
-as maintainer for all the binding docs related to SCU, not just this
-one.
+diff --git a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+index bdb72d3ddf2a..638dd1d8bb26 100644
+--- a/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml
+@@ -23,8 +23,15 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  clocks:
++    items:
++      - description: rtc_clk is the operating frequency of crystal.
++
++  clock-names:
++    maxItems: 1
++
+   interrupts:
+-    minItems: 2
++    maxItems: 2
+ 
+   interrupt-names:
+     items:
+@@ -39,6 +46,7 @@ properties:
+     minimum: 0x1
+     maximum: 0x1FFFFF
+     default: 0x198233
++    deprecated: true
+ 
+ required:
+   - compatible
+@@ -61,5 +69,7 @@ examples:
+         interrupts = <0 26 4>, <0 27 4>;
+         interrupt-names = "alarm", "sec";
+         calibration = <0x198233>;
++        clock-names = "rtc_clk";
++        clocks = <&rtc_clk>;
+       };
+     };
+-- 
+2.25.1
 
-I'll send a new version.
-
-> > +
-> > +description: i.MX SCU Client Device Node
-> > +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: fsl,imx8qxp-sc-rtc
-> > +
-> > +required:
-> > +  - compatible
-> > +
-> > +additionalProperties: false
-> > --
-> > 2.34.3
-> >
->
-> --
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com/
