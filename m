@@ -2,121 +2,194 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0E154536C
-	for <lists+linux-rtc@lfdr.de>; Thu,  9 Jun 2022 19:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D07C54630C
+	for <lists+linux-rtc@lfdr.de>; Fri, 10 Jun 2022 12:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345174AbiFIRvs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 9 Jun 2022 13:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S1348125AbiFJKDA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 10 Jun 2022 06:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345154AbiFIRvn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 9 Jun 2022 13:51:43 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A06F31D0FC
-        for <linux-rtc@vger.kernel.org>; Thu,  9 Jun 2022 10:51:41 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id j8so14946013qtn.13
-        for <linux-rtc@vger.kernel.org>; Thu, 09 Jun 2022 10:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
-        b=UDGOOky72jyL07Hua5xhTBDqYbAuu1peFfWmRCYXOir+bIonsZfuAJtYNmGWBPdSdp
-         9+moDEFvyipsVEnQMhyLR2GDQcNQLhutuUbMQ+yly/LVK9rgX4enzJxrZCHQPhsyl8b8
-         XtPkLKWrpl2Go8b1xlVRwAcC48jh4xOfXnOqs/cYw0nI/083+8R0YsS4GQRu83zteIIu
-         0xeNCfssicXWd5d6jGS+LPBUYtS14lZLEiqsGgeanGl4xNNu59N1HDpfavzVxG2UMy00
-         ebFyWbpMkyERyTQb2gk3xIsE9mFMTY5QK/EoQbVUUKOsGUZlOx/1yB6zAYhfk4xQD+xl
-         biWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
-        b=nzu/ab/6ttJ+R3iT0Cn7KRIKnJmGokMZvtyOIeNWmXAnETcFzTqImDwizAuLL2R/yJ
-         /mR4S+M7MGbhVY/fke7Erx2/fqYEZ1b2QHs3s6P/h2dtUjCUCb2jF45pcK/JGFNHigai
-         qss6HofMOsPQPyl/vgMbNH/N2m1S48zurZrz+Wo5kiG42UmUsu0qLFKZp1yHrQ0wC/Xa
-         JzhSl+YSr8YQl2qJoosOE0wCYZI3fENaPQkJ2BosPUPFpficg/4Rd9kLPKMQpPgKqrYm
-         bHovVw/zRScWZFN6B/RvCqzDXMlm7Yor8ennf7oQwpwJXQwXz2ETisMxdtyx1KDPTdEi
-         vuGQ==
-X-Gm-Message-State: AOAM530h5XXRXbWGypVl9q/mGxB5J02f8ooVYi6Op4bhSxseMHwSKr+2
-        TNh3aA4wjMUeLBedrHBeIk/lrvbWsx9WqHrU1+I=
-X-Google-Smtp-Source: ABdhPJz9uDgn6plhYXX3UPAtsN2aRkEpgFG9wF17ebQAnW1rSRxwm+q4VUzDvYF7wNzUfJzDfqMT80Dv5ctUn8MKmkM=
-X-Received: by 2002:ac8:5e4b:0:b0:304:f179:4e9a with SMTP id
- i11-20020ac85e4b000000b00304f1794e9amr15839558qtx.490.1654797100197; Thu, 09
- Jun 2022 10:51:40 -0700 (PDT)
+        with ESMTP id S1347307AbiFJKC6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 10 Jun 2022 06:02:58 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2073.outbound.protection.outlook.com [40.107.220.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5608AB0D0E;
+        Fri, 10 Jun 2022 03:02:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=muxQF3cTR//2YFvskCyx0z+vDmbXDxxlJ+BTujz8PSWYe8/PKh6Jrx6ClzAW6uqwYsesa1DQLJfG+dp6vVbLqNtd80qIPi7760iuO1Ye2qi1VG6gENIpnYaMA2C7XyTM4s5WzXBrSc+xCcS66wQmyy6LjRx2TkXJcpJSUycj4lv6MScVTwtzE4Id9vO1FmRzNqZMoPhSY11XkbAmy8oT02YtPT3CGxfknKqTc+AhdB3LMDhlxIF1N/hXliOHeROKS/Zx4x5E3PBCWYzXpImEADu77YuoHkJqoizHK2htRKbMbvqiMrW5ZXr7JZgCm35eLIq2hjbtFnH2zz8HmTwmJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iEJX7UjSRzV53ogXSBzB67FcPe5SAip1ndWVDuoBu3A=;
+ b=knMOq047/JfW6CzmB/NHiYMiDKUU6JfW8em+oQKFJyV5EnDuvUo1qgQB1YOGnRbN+oKj8BNLSzEDfK+GpmT9us0oj++kx48fC1D4R5qF4eBsPzgBSyK2HffSPC9+ZUPJ3y8ZbDc4oeMdWyHZrBhTw9y4PFk4bfbGj18NRcRL/YLNpFIPBtC2q8eVneQdoKhUDITao8Br+NLBpqyjklRrgZlGbH3YvauQiVwaYYY4uqoOqfdKTAhtoa9dM3v02tOm29MDrBdHcRGQ9DgtmsZxiVMCgxTIqfpmjoDKyKxVCuRXb/lVO/IxYoIrUIfjW6ZCgu12Vvz90YPOiAJNbOqGlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iEJX7UjSRzV53ogXSBzB67FcPe5SAip1ndWVDuoBu3A=;
+ b=4ENPKqObLSXiYqGZWL+yZqvdWQn/BZdLEccDccnChmFmoCfw8D2fl/cMTi3T+75Ih5bpxTRbUm0oYxzMhDHAGCGwZagLqoHBh6Y9zxzWPvRLuaTHV/zqvkxPsiPbq+efvaAD78/U61D7l+Bd6aRhoVFu9+FrxQZpKsVB5nJJLMU=
+Received: from BY5PR12MB4033.namprd12.prod.outlook.com (2603:10b6:a03:213::22)
+ by BN9PR12MB5068.namprd12.prod.outlook.com (2603:10b6:408:135::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Fri, 10 Jun
+ 2022 10:02:48 +0000
+Received: from BY5PR12MB4033.namprd12.prod.outlook.com
+ ([fe80::7c94:bf5f:eb5e:f3fe]) by BY5PR12MB4033.namprd12.prod.outlook.com
+ ([fe80::7c94:bf5f:eb5e:f3fe%7]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 10:02:48 +0000
+From:   "Neeli, Srinivas" <srinivas.neeli@amd.com>
+To:     Peter Korsgaard <peter@korsgaard.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
+        "sgoud@xilinx.com" <sgoud@xilinx.com>,
+        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
+        "neelisrinivas18@gmail.com" <neelisrinivas18@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "git@xilinx.com" <git@xilinx.com>
+Subject: RE: [PATCH V6 2/2] rtc: zynqmp: Add calibration set and get support
+Thread-Topic: [PATCH V6 2/2] rtc: zynqmp: Add calibration set and get support
+Thread-Index: AQHYfAq3H1AwUW9mCkuVxsTByCkLV61HKF6ZgAAA/QCAAAG6EYABPtcw
+Date:   Fri, 10 Jun 2022 10:02:47 +0000
+Message-ID: <BY5PR12MB40335583AD9D0527DEEFC4E093A69@BY5PR12MB4033.namprd12.prod.outlook.com>
+References: <20220609140833.1784738-1-srinivas.neeli@xilinx.com>
+        <20220609140833.1784738-2-srinivas.neeli@xilinx.com>
+        <87r13x28o4.fsf@dell.be.48ers.dk> <YqIJektBvAwOqNkA@mail.local>
+ <87mtel287y.fsf@dell.be.48ers.dk>
+In-Reply-To: <87mtel287y.fsf@dell.be.48ers.dk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a3ec196d-c058-4a98-ade8-00007a39f588;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-06-10T10:01:08Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ae76f24a-f169-4a5d-9c02-08da4ac85f61
+x-ms-traffictypediagnostic: BN9PR12MB5068:EE_
+x-microsoft-antispam-prvs: <BN9PR12MB5068E597E229498C293A9F0D93A69@BN9PR12MB5068.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OyD1+RkNU707r0Y2Y/32bS/pPONX5hRombgtlSlvmBoRpj42DJ9xkeD86YKakNk0Pz1Bx+nUnh5ptheX3dTaqQDhVedhDTLW2988zvecFm+NliRgOXx41fpy4J8OTEeDqgEzaGhMxnM6lrW2KMHjRim8JoeN+w7UeE1iBqZZITYXqNFavNluadt3BcVqQ+zApju1uZdAjn5uUtzIej8qX9pXTl9mAeAlq661b57n3mO7P2YAar90I48L5vjMqnRcP7ONnzFOX+On+53pJ9Jbt/iF7JZqu+UdBy357E3vgNCXY/v9prcENrKxTiIjlBdJLHfsGn3leFeaTO2SyyVzQg0JW4Gzv/w4UYldM4IXGmSdMjU5ELARRYBRvQHqMnDvqJgL1PIz2Eu39uUozv0NR61zy+cMHVExemzaqXt2+lx/9Qly8WfKva8W0p7BjhTQzhGWd8BWY5kZFPmbyWbP/PcnPRGnHQXPwrjcMSJrvivZHjtBeY5UrgZ++IGWln0ERYszLZrcEdTJYz7Fl9kumQwV4yLSaMvuXsWRXAej25SL+ydyabjk29y0MXZ6/rmZ3Q88UYtzfZ3KLnrPU48lD76zhkuPR/HPc2LxWXNEHPNSQe68U3ezjxeasnELwH4U3MTMCxVLDxvDWO6bxWo8QayrN9hS2oAEwTFhOFRchNcZPAKXxvhlrcsLAr+coiFgkTbNe3hmCojg/u30uuugUw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4033.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(186003)(2906002)(66476007)(55016003)(316002)(66946007)(66446008)(110136005)(66556008)(76116006)(64756008)(54906003)(8676002)(38070700005)(4326008)(122000001)(9686003)(107886003)(52536014)(8936002)(71200400001)(508600001)(5660300002)(7416002)(33656002)(53546011)(83380400001)(86362001)(7696005)(6506007)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?nj0mupgUYELqz8KTlmemGXxD9B1DevhUXUTM1jL44smGp+36Pwh+JsnBKWcS?=
+ =?us-ascii?Q?l1OnfWu3lzSJ0xzH4fgixtWtV4ti/nPl8NoP/bwK6NciT+Xy3HwHGOLiU5JG?=
+ =?us-ascii?Q?R30raZ7eIgp0SvGSCAEC9ItbaGoBA4K2DMv7gg17PP8Ii7v8P2mfIU8Sempq?=
+ =?us-ascii?Q?AB5JK3orWrbo2dZRZqxL5Z9/Iac5u9Zk9oLeiy7w6EgMeX94aNCsnEDb5Ljf?=
+ =?us-ascii?Q?BYI9j1Bt2jkHMLm8myYGxMeP1BFlQLL3rElt/iH+lQzxXmwZq5kyft7eSOwt?=
+ =?us-ascii?Q?TatURMPx3jgkikjIEh0Qslbu/SNlpKunV96UnXrEl7EuCPR4uH1+ubn8pU8K?=
+ =?us-ascii?Q?v708LeIIDBo8Umj16E5FoQBIu9OpVZG+QtMEPyjFFgmrR2fzbmgIQgHy7ywH?=
+ =?us-ascii?Q?2U2hZoLAVOUAskRRDglsB+ivMYKouqTu285UOViSGUkB7UtDI6EXaUHtVLZP?=
+ =?us-ascii?Q?j8Cm4p+Eh8UM3E8aff4VM5Bc8Y6ZMgjqMfJt766Bt4Ll0E790SGpk7yWaZ37?=
+ =?us-ascii?Q?BN3cEcjbBM2svQVHaiBIQxxY0vn0SgIGz+HAOhxbbCFTxTb4pUtjOUWIYbdp?=
+ =?us-ascii?Q?9sTm1V5EGmmvR3GROv/v18u9S4h84RXDbyOR8dY6IkU5cy7sP+PSZcFRsQGa?=
+ =?us-ascii?Q?xbC7SjaTQMPiO2uvBB3LIUjHdBeVH5bJ+sLKZg8YP6wJ2hLmoyL/63ClzS+N?=
+ =?us-ascii?Q?vklh6d0gwLLEPX+yGpqaLXay3CZv5YewnIcgWQWLqWJFOz9sR36bOrKN9AE3?=
+ =?us-ascii?Q?ERQTQ3Wz4cBr5vTzuYINpRQd88zrZkK/4DQYlyvQwqdrgj32cj0UqoZAY4Jn?=
+ =?us-ascii?Q?n2XH2nXaZ7/e14DF2nW513u4YXWASoghUe20oRoWk3fWYdpu89lHyGG+DBHE?=
+ =?us-ascii?Q?zYRqHQja5Z2DeWdke/lkSbfTd6HXiYzwRXhHpBkfEizoUsQImdVK/WNnzDBh?=
+ =?us-ascii?Q?McT2UFYaVZ4hig6+4RIE5exDgyrngizjHW9dSoiWhFz/1P8cv08ww6mz1r2K?=
+ =?us-ascii?Q?jL1bjt9GKasNznKLRjdhmV4JzUe0XtmcJcNuwimNxLI3sAeuyeCfUQ6tHT64?=
+ =?us-ascii?Q?BEwE8eueeKhOGBhSgG9mpMxjtt2de7t32AgGEv0tklBhP/+QlhGfaIQneQPq?=
+ =?us-ascii?Q?dCfCLZ0NRqYzwjj3tW0j3o69H3Pnr/Yoqs4DIyv25yi1AtVX35YpYp6BRsS3?=
+ =?us-ascii?Q?RwpnkNzlvSbb717GVINCOePcib8NGOrfGF5VbH3G3qgpCO7HfQKYHsL4IRFm?=
+ =?us-ascii?Q?cTBTY118MuyOknkzCkaTfqc+wpbgeHx1xMWT6j+Tj7sJBunxa+bLOwIl6jvf?=
+ =?us-ascii?Q?3kdq0iXDvcL1tzFs9ULXPfXbGpEtjGE7Uu7u+xB8HroZHcmHTzcTAHg3L9II?=
+ =?us-ascii?Q?HzIWwQMv9hrN+tC2HsxPi4x83lEIshy4/wpfZcnYfTRL2Fdyp6azdEJAeatz?=
+ =?us-ascii?Q?mM264nlbwuvHw7H+oBlgNZdQ96QV9g5UqB4KxQbVVWnR3PICbmfjOeB52Xyr?=
+ =?us-ascii?Q?jhchF4NtoyIwU6qAEeiJ7XzAD+WEHwDSAKGWP5fZX/Ctn6TmUFEszj+jqimJ?=
+ =?us-ascii?Q?Vri9soUjYNfFNW4/ekrJkis3kc9txo3D+01SddR6OX00V8soyifqDuvHyz9B?=
+ =?us-ascii?Q?nm99NHMaWLqXD+JG09efGX7UwYTg4/x6pBQxVoDcTtVgko4qN55FYiozBwY2?=
+ =?us-ascii?Q?GaNli0OJLvp6RCVsrOJuJXYAZNAAqHeKNL83yqW96PLavwd1?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Reply-To: mihirpat56@gmail.com
-Sender: charlesjuntikka2204@gmail.com
-Received: by 2002:a05:6214:234a:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:51:39
- -0700 (PDT)
-From:   "Mr. Mihir Patel" <ij261347@gmail.com>
-Date:   Thu, 9 Jun 2022 10:51:39 -0700
-X-Google-Sender-Auth: vXF71wuuneRQ7eGFZd9OCrfhhkA
-Message-ID: <CAEOqroo9Yhh-4Sw+QQt-ZjL50JQ8nX3Mbji_QpO3Udz_NHdDjA@mail.gmail.com>
-Subject: Greetings to you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:82e listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [charlesjuntikka2204[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [charlesjuntikka2204[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mihirpat56[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4033.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae76f24a-f169-4a5d-9c02-08da4ac85f61
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2022 10:02:48.0024
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xkBTBPiyt2rhi7aMn5Ki9qxGqt3ZZeInwLYlK3aIx/i+iE3MdorwB5U1xapf41cY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5068
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Greetings,
+[AMD Official Use Only - General]
 
+Hi,
 
-I am contacting you for us to work together on a profitable business
-because you bear the same last name with a late client of our bank. I
-want to present you as his true next of kin to inherit his fund in our
-bank. As his account officer I have some necessary documents in my
-disposal to achieve this.
+> -----Original Message-----
+> From: Peter Korsgaard <peter@korsgaard.com>
+> Sent: Thursday, June 9, 2022 8:30 PM
+> To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Srinivas Neeli <srinivas.neeli@xilinx.com>; a.zummo@towertech.it;
+> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> michal.simek@xilinx.com; sgoud@xilinx.com; shubhraj@xilinx.com; Neeli,
+> Srinivas <srinivas.neeli@amd.com>; neelisrinivas18@gmail.com;
+> devicetree@vger.kernel.org; linux-rtc@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git@xilinx.com
+> Subject: Re: [PATCH V6 2/2] rtc: zynqmp: Add calibration set and get supp=
+ort
+>
+> >>>>> "Alexandre" =3D=3D Alexandre Belloni <alexandre.belloni@bootlin.com=
+>
+> writes:
+>
+>  > On 09/06/2022 16:50:03+0200, Peter Korsgaard wrote:
+>  >> >>>>> "Srinivas" =3D=3D Srinivas Neeli <srinivas.neeli@xilinx.com> wr=
+ites:
+>  >>
+>  >> > Zynqmp RTC controller has a calibration feature to compensate  >> >
+> time deviation due to input clock inaccuracy.
+>  >> > Set and get calibration API's are used for setting and getting  >> =
+>
+> calibration value from the controller calibration register.
+>  >> > As per RTC spec default calibration value is 0x7FFF.
+>  >>
+>  >> Where do you see that? ug1085 rev2.2 still lists:
+>  >>
+>  >> Programming Sequences
+>  >> init rtc
+>  >> 1. Write the value 0019_8231h into the calibration register, CALIB_WR=
+ITE.
+>  >>
+>
+>  > This is a very weird value. Last time I had a look, I couldn't find an=
+  >
+> explanation for it.
+>
+> Agreed. I am not arguing that it is sensible, I just wondered where this =
+new
+> value comes from?
+>
+This information is missing in our TRM, as per the internal RTC IP design s=
+pecification document, the calibration value should be crystal clock freque=
+ncy minus one.
+For a crystal oscillator of 32.768KHz(0x8000) frequency, the calibration va=
+lue will be 0x7FFF.
 
+Will update TRM with the required information.
 
-I therefore reckoned that you could receive this fund as you are
-qualified by your last name. All the legal papers will be processed in
-your name as the deceased's true next of kin.
-
-Please revert back to me for further details if you can handle this with me.
-
-
-Mr. Mihir Patel
-Customer relation officer
+> --
+> Bye, Peter Korsgaard
