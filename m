@@ -2,76 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197845479AA
-	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jun 2022 11:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2C4547BD6
+	for <lists+linux-rtc@lfdr.de>; Sun, 12 Jun 2022 21:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235924AbiFLJw6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 12 Jun 2022 05:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S231915AbiFLTdQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 12 Jun 2022 15:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbiFLJw5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Jun 2022 05:52:57 -0400
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Jun 2022 02:52:56 PDT
-Received: from mx-out1.startmail.com (mx-out1.startmail.com [145.131.90.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE1D1A3BA
-        for <linux-rtc@vger.kernel.org>; Sun, 12 Jun 2022 02:52:56 -0700 (PDT)
-Date:   Sun, 12 Jun 2022 04:42:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-        s=2020-07; t=1655026977;
-        bh=IQ9prYlA/J6R6f9MDzLadU8e2oAyTtHh3QWFvqikGiM=;
-        h=Date:From:To:Message-ID:MIME-Version:Content-Type:
-         Content-Disposition:From:Subject:To:Date:Sender:Content-Type:
-         Content-Transfer-Encoding:Content-Disposition:Mime-Version:
-         Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-        b=CMzxHsX+B6snFcxoNO0n6joRaeBTj2cXH2FcFUdR3KoMFyAOwZL9lD7kz/RJ5V05C
-         uXoBnrR18JUGTikNRw+vCLAhvUYPUcEg+sNvqlnzQFHuTmNuCW6jxPbgGPlyHBDFjX
-         q910ViQzV7B2df3jhBeRp1LaRE+1XJ6vuHLU5Om+HMz2S29nTX9oaZWTWdD7hEwQ5m
-         DQdrbTShRnUp6/x6hyJpRLXAhveaCXsshH1j9LFjNCyykZWZhKooooEC7KvyUaOTGq
-         gza5aljj1yDRWhB0jqR/oLnpgaJejpuRMi70maKCYDdUfUl8bRzPO92rJY3mwJ7Qlp
-         fuFWtryGfBFYg==
-From:   "Marty E. Plummer" <hanetzer@startmail.com>
-To:     linux-rtc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, a.zummo@towertech.it
-Message-ID: <20220612094253.4rgbp3mcc44nffl6@proprietary-killer>
+        with ESMTP id S232011AbiFLTdQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 12 Jun 2022 15:33:16 -0400
+Received: from 10.mo576.mail-out.ovh.net (10.mo576.mail-out.ovh.net [46.105.73.241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B2F403CF
+        for <linux-rtc@vger.kernel.org>; Sun, 12 Jun 2022 12:33:12 -0700 (PDT)
+Received: from player735.ha.ovh.net (unknown [10.110.208.124])
+        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 57CC0225D9
+        for <linux-rtc@vger.kernel.org>; Sun, 12 Jun 2022 19:23:54 +0000 (UTC)
+Received: from RCM-web10.webmail.mail.ovh.net (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player735.ha.ovh.net (Postfix) with ESMTPSA id 0C6A72B3DD8AF;
+        Sun, 12 Jun 2022 19:23:48 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_SUBJECT,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Date:   Sun, 12 Jun 2022 21:23:47 +0200
+From:   Stephen Kitt <steve@sk2.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Dianlong Li <long17.cool@163.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: use simple i2c probe
+In-Reply-To: <YqSnwf7paZa1+uuh@mail.local>
+References: <20220610162346.4134094-1-steve@sk2.org>
+ <YqSnwf7paZa1+uuh@mail.local>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <2bd6ab78f649ba282c5369d0e969fea2@sk2.org>
+X-Sender: steve@sk2.org
+X-Originating-IP: 82.65.25.201
+X-Webmail-UserID: steve@sk2.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 4416342386368415366
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduhedgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepkeffueehgfegteelveeigffgheegkefhleeukefhfedtiedvvdekgeehfeekffegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejfeehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeei
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-alexandre.belloni@bootlin.com
-Bcc:
-Subject: RTC: utility function: days to year/month/days?
-Reply-To:
+Hi Alexandre,
 
-Hello.
+Le 11/06/2022 16:48, Alexandre Belloni a écrit :
+> On 10/06/2022 18:23:43+0200, Stephen Kitt wrote:
+>> All these drivers have an i2c probe function which doesn't use the
+>> "struct i2c_device_id *id" parameter, so they can trivially be
+>> converted to the "probe_new" style of probe with a single argument.
+>> 
+> 
+> I think you should explain why you want to do that as the trend is to 
+> do
+> the exact opposite to allow support for those RTCS on x86 systems.
 
-I'm currently working on a rtc driver for my soc (HiSilicon Hi3521a, and
-at least one other, potentially more), and it stores time in the
-following registers:
-RTC_10MS_COUNT: 7 bits, 10ms increments
-RTC_S_COUNT, 6 bits, 1s increments
-RTC_M_COUNT, 6 bits, 1m increments
-RTC_H_COUNT, 5 bits, 1h increments
-RTC_D_COUNT_L, 8 bits, 1d increments, low bits
-RTC_D_COUNT_H, 8 bits, 1d increments, high bits
+Indeed, I should have given more context. The idea is to continue the 
+transition started with 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8a1a4cd5a98a2adf8dfd6902cd98e57d910ee12 
+(in 2016...). I²C drivers using probe() involve a call to i2c_match_id: 
+in drivers/i2c/i2c-core-base.c,
 
-No months or years. Is there any utility function one could use to
-convert 0-65535 days into year/month/days already in the kernel, or is
-that something I'll have to roll myself?
+         /*
+          * When there are no more users of probe(),
+          * rename probe_new to probe.
+          */
+         if (driver->probe_new)
+                 status = driver->probe_new(client);
+         else if (driver->probe)
+                 status = driver->probe(client,
+                                        i2c_match_id(driver->id_table, 
+client));
+         else
+                 status = -EINVAL;
 
-Mail receipients taken from ./scripts/get_maintainers.pl -f
-drivers/rtc/rtc-core.h, so if I'm pinging someone I shouldn't, my
-apologies.
+Many drivers don't actually need the second parameter, so instead of 
+having probe() with both parameters, the goal is to switch to a probe 
+function with only "struct i2c_client *". Probe functions that *do* need 
+the "struct i2c_device_id" can call i2c_match_id themselves (as is done 
+currently with of_match_id).
+
+I discussed this briefly with Wolfram beginning of June at Kernel 
+Recipes, and as I understood it the plan was still to continue with this 
+transition (in fact, the plan was for *me* to continue with this 
+transition).
+
+Do you have an example of a change requiring id to support RTCs on x86 
+systems?
 
 Regards,
 
-Marty Plummer
-
+Stephen
