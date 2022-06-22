@@ -2,94 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9010E55420E
-	for <lists+linux-rtc@lfdr.de>; Wed, 22 Jun 2022 07:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AEA5546C7
+	for <lists+linux-rtc@lfdr.de>; Wed, 22 Jun 2022 14:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356867AbiFVFLZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 22 Jun 2022 01:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S1355951AbiFVIxx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 22 Jun 2022 04:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356591AbiFVFLV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Jun 2022 01:11:21 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C2C35DD0;
-        Tue, 21 Jun 2022 22:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655874680; x=1687410680;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=/DbzckqGmRxb/3mPVzWNJSUCm2EB7QZeWOitKJTzFWg=;
-  b=fkfMPdxaIQpwr8l6CnuqaI9DJ9KVYcsqkxZnJEdEX18dNwJpif8rRkTd
-   Co3IXfKVfnureiIi7xLuVCQOECpJ7ct7kag9f/eGfxUQqi0ju6+d8Z4gx
-   UDpbJroL+PonVXpsTaXV/cdD8iH3SHCctIjcRtIkpDj0Xsi1mf2hNxaIw
-   Q=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 21 Jun 2022 22:11:20 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2022 22:11:20 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 21 Jun 2022 22:11:19 -0700
-Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 21 Jun 2022 22:11:15 -0700
-From:   Satya Priya <quic_c_skakit@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <quic_tsoni@quicinc.com>
-Subject: [PATCH 2/2] dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
-Date:   Wed, 22 Jun 2022 10:40:39 +0530
-Message-ID: <1655874639-11273-3-git-send-email-quic_c_skakit@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
+        with ESMTP id S1355915AbiFVIxw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 22 Jun 2022 04:53:52 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E296B33E89;
+        Wed, 22 Jun 2022 01:53:50 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C79321E80CD1;
+        Wed, 22 Jun 2022 16:53:40 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vYMZDhLlUPhD; Wed, 22 Jun 2022 16:53:38 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.64.61.97])
+        (Authenticated sender: jiaming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id BEA741E80C7D;
+        Wed, 22 Jun 2022 16:53:37 +0800 (CST)
+From:   Zhang Jiaming <jiaming@nfschina.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, renyu@nfschina.com,
+        Zhang Jiaming <jiaming@nfschina.com>
+Subject: [PATCH] rtc: Fix some spelling mistakes
+Date:   Wed, 22 Jun 2022 16:53:44 +0800
+Message-Id: <20220622085344.23519-1-jiaming@nfschina.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Update the maintainers section with latest mail ID.
+Change 'modifed' to 'modified'.
+Change 'Updata' to 'Update'.
+Change 'Initiatlize' to 'Initialize'.
 
-Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+Signed-off-by: Zhang Jiaming <jiaming@nfschina.com>
 ---
- Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-rs5c313.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-index 6fa7d9f..23ab5bb 100644
---- a/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm PM8xxx PMIC RTC device
+diff --git a/drivers/rtc/rtc-rs5c313.c b/drivers/rtc/rtc-rs5c313.c
+index e98f85f34206..712a08e9e52d 100644
+--- a/drivers/rtc/rtc-rs5c313.c
++++ b/drivers/rtc/rtc-rs5c313.c
+@@ -2,7 +2,7 @@
+  * Ricoh RS5C313 RTC device/driver
+  *  Copyright (C) 2007 Nobuhiro Iwamatsu
+  *
+- *  2005-09-19 modifed by kogiidena
++ *  2005-09-19 modified by kogiidena
+  *
+  * Based on the old drivers/char/rs5c313_rtc.c  by:
+  *  Copyright (C) 2000 Philipp Rumpf <prumpf@tux.org>
+@@ -36,7 +36,7 @@
+  *      1.11a   Daniele Bellucci: Audit create_proc_read_entry in rtc_init
+  *	1.12	Venkatesh Pallipadi: Hooks for emulating rtc on HPET base-timer
+  *		CONFIG_HPET_EMULATE_RTC
+- *	1.13	Nobuhiro Iwamatsu: Updata driver.
++ *	1.13	Nobuhiro Iwamatsu: Update driver.
+  */
  
- maintainers:
--  - Satya Priya <skakit@codeaurora.org>
-+  - Satya Priya <quic_c_skakit@quicinc.com>
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+@@ -280,7 +280,7 @@ static int rs5c313_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	while (1) {
+ 		RS5C313_CEENABLE;	/* CE:H */
  
- properties:
-   compatible:
+-		/* Initiatlize control reg. 24 hour */
++		/* Initialize control reg. 24 hour */
+ 		rs5c313_write_cntreg(0x04);
+ 
+ 		if (!(rs5c313_read_cntreg() & RS5C313_CNTREG_ADJ_BSY))
 -- 
-2.7.4
+2.25.1
 
