@@ -2,70 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583D255A04E
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jun 2022 20:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 866E155A064
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jun 2022 20:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231479AbiFXRkl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 24 Jun 2022 13:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S231151AbiFXRm5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 24 Jun 2022 13:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiFXRk1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Jun 2022 13:40:27 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC62B11440;
-        Fri, 24 Jun 2022 10:40:25 -0700 (PDT)
+        with ESMTP id S230441AbiFXRm4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Jun 2022 13:42:56 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4B5B31;
+        Fri, 24 Jun 2022 10:42:54 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9C081240005;
-        Fri, 24 Jun 2022 17:40:23 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 35AEDE0002;
+        Fri, 24 Jun 2022 17:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656092424;
+        t=1656092573;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i+I0fAg7dAYLMjZXVCRufkyrCMRSm4aTbpDZNNw4VYY=;
-        b=K7FCNMXUQucpCpZjepBBIywZZdzJ78N7wWoHsTXLIihwMJ2L07JwbFquU7gfJEMXV8Krqg
-        2B12YhbbnggCBS1iCEAgRFT9Nc6haQySllbZnvGDHggkTnzBxbz3CiEjIwarHRMIFRYmY3
-        g+b9wUL4Uqol6uPWgjoBqPxrsid/msiXslgN0ByIl6csR07FCUmuuTs3vLC6Mal3PuGzzE
-        jXxWHq6nR0ZHHJ0/yxRe27Iny3YjLV7Vq89wiK5ugFPXMx9Fp3p2VVbVN5IIGFvfj6m8SD
-        OVUaOZbFOMPTe0G9w8J1TyzfVmT3y1w5fC9IV478muUoMMqIytgaoP45HOjGSQ==
-Date:   Fri, 24 Jun 2022 19:40:21 +0200
+        bh=qGeFKXAsbuWfeBBV1ExpbQrfT21CY1AOWn97gB9KEs4=;
+        b=gA3r0hTMAGyJmijmIsxWjZf4IBThS48a+PqiSwOwy5GhmFClzoN+zZ9EgBiYKprVWVE4PJ
+        Nl+LVxtlwxQbsGgOQA6a3v6xemfqsvsMJk8/JvyLnKRCfFyzPalqyEf7+/kdPjLZqedXYx
+        N7jrMXwt/FoDCsN54PXGvV/eUi5mJCcRHS8YUreVAC7k/xFjFJssC5bQNQdpSkl8J6gim+
+        WNnZVSkDyyajIrblsstO0Jb7Re7ZIShYfeNc6rHAE6Pzfq/Ol54BbvxLEyJbktjcVliVVa
+        tOqfkizATOR1A+vtMpOOUDzIB6iKFuw9QF4gAZuLouBim8Vh83DkLovY8B0XTg==
+Date:   Fri, 24 Jun 2022 19:42:49 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     a.zummo@towertech.it, long17.cool@163.com, steve@sk2.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Dianlong Li <long17.cool@163.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] rtc: use simple i2c probe
-Message-ID: <165609236793.30693.563618039150236880.b4-ty@bootlin.com>
+Message-ID: <YrX3mWxDex7OuEpn@mail.local>
 References: <20220610162346.4134094-1-steve@sk2.org>
+ <YqSnwf7paZa1+uuh@mail.local>
+ <2bd6ab78f649ba282c5369d0e969fea2@sk2.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220610162346.4134094-1-steve@sk2.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2bd6ab78f649ba282c5369d0e969fea2@sk2.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 10 Jun 2022 18:23:43 +0200, Stephen Kitt wrote:
-> All these drivers have an i2c probe function which doesn't use the
-> "struct i2c_device_id *id" parameter, so they can trivially be
-> converted to the "probe_new" style of probe with a single argument.
+On 12/06/2022 21:23:47+0200, Stephen Kitt wrote:
+> Hi Alexandre,
 > 
-> This change was done using the following Coccinelle script, and fixed
-> up for whitespace changes:
+> Le 11/06/2022 16:48, Alexandre Belloni a écrit :
+> > On 10/06/2022 18:23:43+0200, Stephen Kitt wrote:
+> > > All these drivers have an i2c probe function which doesn't use the
+> > > "struct i2c_device_id *id" parameter, so they can trivially be
+> > > converted to the "probe_new" style of probe with a single argument.
+> > > 
+> > 
+> > I think you should explain why you want to do that as the trend is to do
+> > the exact opposite to allow support for those RTCS on x86 systems.
 > 
-> [...]
+> Indeed, I should have given more context. The idea is to continue the
+> transition started with https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8a1a4cd5a98a2adf8dfd6902cd98e57d910ee12
+> (in 2016...). I²C drivers using probe() involve a call to i2c_match_id: in
+> drivers/i2c/i2c-core-base.c,
+> 
+>         /*
+>          * When there are no more users of probe(),
+>          * rename probe_new to probe.
+>          */
+>         if (driver->probe_new)
+>                 status = driver->probe_new(client);
+>         else if (driver->probe)
+>                 status = driver->probe(client,
+>                                        i2c_match_id(driver->id_table,
+> client));
+>         else
+>                 status = -EINVAL;
+> 
+> Many drivers don't actually need the second parameter, so instead of having
+> probe() with both parameters, the goal is to switch to a probe function with
+> only "struct i2c_client *". Probe functions that *do* need the "struct
+> i2c_device_id" can call i2c_match_id themselves (as is done currently with
+> of_match_id).
+> 
+> I discussed this briefly with Wolfram beginning of June at Kernel Recipes,
+> and as I understood it the plan was still to continue with this transition
+> (in fact, the plan was for *me* to continue with this transition).
+> 
+> Do you have an example of a change requiring id to support RTCs on x86
+> systems?
 
-Applied, thanks!
+I checked and your patch is actually fine, the issue I referred to is:
 
-[1/1] rtc: use simple i2c probe
-      commit: 4e4a13cc302ec6ea9b04422a02ebfd422e9eb9a8
+1c1b3098ae1e ("rtc: pcf85063: add i2c_device_id name matching support")
 
-Best regards,
+
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
 Embedded Linux and Kernel engineering
