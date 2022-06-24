@@ -2,47 +2,46 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616A455A1DC
-	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jun 2022 21:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CB055A1F8
+	for <lists+linux-rtc@lfdr.de>; Fri, 24 Jun 2022 21:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiFXTaq (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 24 Jun 2022 15:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S229830AbiFXTgi (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 24 Jun 2022 15:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiFXTap (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Jun 2022 15:30:45 -0400
+        with ESMTP id S229645AbiFXTgh (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 24 Jun 2022 15:36:37 -0400
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAFA51319;
-        Fri, 24 Jun 2022 12:30:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DA481D8C;
+        Fri, 24 Jun 2022 12:36:35 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 56E4BE0004;
-        Fri, 24 Jun 2022 19:30:40 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 390E1E0003;
+        Fri, 24 Jun 2022 19:36:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1656099041;
+        t=1656099394;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=iKFQojvU/Z4xJXXg9m8WeraQpHiDGSwFdVIDjpYzlrc=;
-        b=ilHnaDOy/xGvBXeawsdx83QWHi87hzMkk/ldH6oGbb1G6qMetU+xhquoD8ARuso0McG85K
-        vqttFHHUWT9KGzdKCvHCjho/uHEqIk7rdK4RYaesERV07h4093L/Z+2uZR4POp35kt25Zr
-        BBi8+Fa8sA3TNZ/kLWGoYnZHW/d1uR0aJKu2376HwNZVPAJIJevGWIfjdv5G31jqOT664G
-        rpxfK5KYmSp9HzfjTtjTd3YX+Av1aPr3bC0RiIvrmMlNEjrWPg6mAxKXmaJF/FxmrEx6gy
-        KoqTb/Ss4A1YkO59RkUFZtpp/uh5w+gth9M+3CYY9T2Rj/V5s26wxOfYbc9r8A==
-Date:   Fri, 24 Jun 2022 21:30:38 +0200
+        bh=Gn38J0/acl2kOuqtLJoK7NFueOpNaEXUwlW0/5tfV8I=;
+        b=DwkGdEG4cpTELBeBcdmoCaiN2UoB6kbQ8wHBtCAvTbRI1uKlF8CpaTPKwZyytAxGz6+nGK
+        L2s7wbQXvhEi425qbNyTRY/15DLXN2C725Wxg1ydfb4o2NZLhOjMvzcZ66h0pWYhqJqvSu
+        h4ZHI6Mq74wLGXpv3fktc/oeEJtSEkbidGU7Wl3WxK2yV/hwCnuGtTcGkiLiKWHm1+77Up
+        6eu1zBag8YVL0TEULBR6zyYBgS0bbca/sTbq0dNc1SfkY4rjPrUVFpwXnmLFr7KSsBN8le
+        wwTt/G/dNOi8t62/+3MRBMUVVqV/Ipt52e3OD5vxHHBR5//xUIKgJVEAEoqwWA==
+Date:   Fri, 24 Jun 2022 21:36:31 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     robh+dt@kernel.org, agross@kernel.org, a.zummo@towertech.it,
-        krzysztof.kozlowski+dt@linaro.org, bjorn.andersson@linaro.org,
-        quic_c_skakit@quicinc.com
-Cc:     quic_tsoni@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lee.jones@linaro.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 0/2] Update the binding documents with latest mail ID
-Message-ID: <165609897247.33320.6918087685461996896.b4-ty@bootlin.com>
-References: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
+To:     a.zummo@towertech.it, nm@ti.com, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+Cc:     afd@ti.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com
+Subject: Re: [PATCH V4 0/2] rtc: Introduce rtc-ti-k3
+Message-ID: <165609935670.33848.14304179629453424484.b4-ty@bootlin.com>
+References: <20220623170808.20998-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1655874639-11273-1-git-send-email-quic_c_skakit@quicinc.com>
+In-Reply-To: <20220623170808.20998-1-nm@ti.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
@@ -53,21 +52,25 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 22 Jun 2022 10:40:37 +0530, Satya Priya wrote:
-> Satya Priya (2):
->   dt-bindings: mfd: qcom-pm8xxx: Update the maintainers section
->   dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
+On Thu, 23 Jun 2022 12:08:06 -0500, Nishanth Menon wrote:
+> One more round..
 > 
-> Documentation/devicetree/bindings/mfd/qcom-pm8xxx.yaml     | 2 +-
->  Documentation/devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> This series adds support for TI K3 RTC as instantiated on TI's AM625
+> SoC.
+> 
+> Documentation in the current early release version of Technical
+> Reference Manual is incomplete at the moment, but due to be updated
+> later this year.
+> https://www.ti.com/lit/pdf/spruiv7
 > 
 > [...]
 
 Applied, thanks!
 
-[2/2] dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
-      commit: fa1f8e6ac455b20955f107023916eef946674cb8
+[1/2] dt-bindings: rtc: Add TI K3 RTC description
+      commit: 5e665cf1f0c52163de5517bfb9258390e63772b2
+[2/2] rtc: Introduce ti-k3-rtc
+      commit: b09d633575e54e98e1362bd5c36cd9571cb71d8a
 
 Best regards,
 -- 
