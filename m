@@ -2,157 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022B155D539
-	for <lists+linux-rtc@lfdr.de>; Tue, 28 Jun 2022 15:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E019755E2E8
+	for <lists+linux-rtc@lfdr.de>; Tue, 28 Jun 2022 15:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238833AbiF0MIV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 27 Jun 2022 08:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S239130AbiF0UYy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 27 Jun 2022 16:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240460AbiF0MHo (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Jun 2022 08:07:44 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8221DDEF0
-        for <linux-rtc@vger.kernel.org>; Mon, 27 Jun 2022 05:06:23 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i1so8250589wrb.11
-        for <linux-rtc@vger.kernel.org>; Mon, 27 Jun 2022 05:06:23 -0700 (PDT)
+        with ESMTP id S240356AbiF0UYx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 27 Jun 2022 16:24:53 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296451A80D;
+        Mon, 27 Jun 2022 13:24:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id pk21so21549157ejb.2;
+        Mon, 27 Jun 2022 13:24:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/Vr70S1itQTBF/3bCew+jxqxaJK1aORpqchqJlIulN8=;
-        b=nj5oQcZi8JzRsGM3DFad9Xybe6hpa6FG+MoP8L51KifR9Vnx9eDEerY0sFLxcH32pP
-         yh2DJfqgWpq2zpXtrzs4dP+HhJVpTk5m0rTdKps26yOU5SUfkbzy/DhlLyYaSC+Ocq2j
-         H3cMckzKhtqrZnldgDo9v8nChVSAtAKLitLXMZObAYq0T3IoOVCt5uiwdmKFyMacY5kl
-         FdlOqE9NXg1fkkJPIyCBNCNntcZWm+sNt4zl5IY81kL60mqK4eJnz6Hpt6TLaEC137rb
-         exNw3wpIXASEHPhT6/6P7i5ajW9wGdM3C5LjbdfGViBQtJSbFlgSIPKIxOaBshjymIB6
-         ZoPg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/kOow9vitS6PwBDRVMXZUrJIKbzM8TurUiTbE4cjhJ4=;
+        b=A0Enxr6I6cTRhN63dLpe6rDqZ3D79PzQxc9oz1zz2lIrHjLxPZCVurJiXm89ZWhHH/
+         m4YNqRqNgvXWdIUg450/RJlldqXJ34xjWFVlbdJiVCj3oTmUeD2V77j9hmhXKnlo3zf5
+         RiEZ2bw+Fd6FzWkC8jGWdNJ1gGsAJVAItAuMW/dvgWAzfhPNlmkvDK57sBJGPeXk2brY
+         YYAqaDimsa9Te3WTRN82SuXqzEYfaByw/OSQBUgio4JrmGWkjVLf6J1k0Id2mR5NEHIy
+         QMZORRdWigc4xtfmDZE0YDXwVHc+U6BRHGIj+Dp91NZhGRJiRZULn+CBoB83oZmjYk7x
+         75FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/Vr70S1itQTBF/3bCew+jxqxaJK1aORpqchqJlIulN8=;
-        b=GWwUG19vYmBt1MFh7KTUzkyGHRKHUMdu6ApcRVvvpZe41auctpDjPI2NXDtGBdssHR
-         RHd5kRXhupjkqCUeF0QGUmavtHTwbM7PBWuEZ1JyTXHflCLmNC+TkQPkv7MCxYIjiJbR
-         jGEvqEymP1zIk9yVy4xQa20uG4EfcysNQXi9P4KHpc1bpSvi83KW9w9D1lCOA/GJX9Z6
-         o0UO0dZFaVjyKZWQ9F088G0iGueRjmKhWrF2FNZ6l6/EJdBGR0g0hE/WfvNCgRB+6C6l
-         OXmUf3h/oBahmMj6c+n80PLusi75ols5McdpodaKeUnLGhJ5uyOGayUYdf5sG7yG4jDx
-         jaQw==
-X-Gm-Message-State: AJIora80hjF39kWEBIptWMljkx6+nocGNHvk3v5yEnL3UCvqGKNcl7Is
-        lQ+VZpADppv22EFv+sw8hvT8NA==
-X-Google-Smtp-Source: AGRyM1v4mipmlBAmPoKRfrckMoNmVytCsUsuVXsuKFVR2SVoD35b+p0iU2bhx9v38CDsNf6vGT/67A==
-X-Received: by 2002:a5d:5c11:0:b0:21b:a9a2:7eec with SMTP id cc17-20020a5d5c11000000b0021ba9a27eecmr12101736wrb.579.1656331582103;
-        Mon, 27 Jun 2022 05:06:22 -0700 (PDT)
-Received: from [192.168.0.249] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f8-20020a1cc908000000b0039c99f61e5bsm16608790wmb.5.2022.06.27.05.06.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jun 2022 05:06:21 -0700 (PDT)
-Message-ID: <dca6534e-2601-a943-b6a8-2593f7fc64eb@linaro.org>
-Date:   Mon, 27 Jun 2022 14:06:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 10/14] dt-bindings: firmware: Add fsl,scu yaml file
-Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/kOow9vitS6PwBDRVMXZUrJIKbzM8TurUiTbE4cjhJ4=;
+        b=hJtIEEkmh7grDXcUUaIz/IgSr6AdqBFiTYPESIJeav3uy/hjkEiILD+3ZCDS29fHG9
+         SZ4ppwaHMzbKwraEHm6Wnxao0lqNxIGno1pIH7QUCJHwdshwfUM1WHOJSl09CkXjz8Jd
+         BwL2AarKv/qRsMclzEqegWG5JhHDWxHS8m8/p1TxAgPkBgH+7vG4cBiITJLbTHNyEzsF
+         ZHEPeajto4UIytFxH53bjy8qDAqE+8p6lmYTlZsXb7yrHICH5K772ivPT863E4IzAGO7
+         L1DvsAn/D8vRMHKiOtXrGMK2Vp3raKjXvAFs2ODDqKObk2fW+K7qs8F7LAgrN+o5Lxij
+         B8xg==
+X-Gm-Message-State: AJIora+mHqzQ02gKrc6kY0+11poJNU61Am6xZeU8AgXK7aRQQeXw0ZV1
+        ETVNcqn91O43QrXFL9zvcxk=
+X-Google-Smtp-Source: AGRyM1ucO41refGoDSFrPDo7tl8WOhspo5azxD7hXvL5SqjtjYyW8BRdSebUwVQIweoQxmtDlm9+AA==
+X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr14573895ejj.278.1656361490665;
+        Mon, 27 Jun 2022 13:24:50 -0700 (PDT)
+Received: from jernej-laptop.localnet (213-161-3-76.dynamic.telemach.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id p22-20020a170906605600b00722c44f9301sm5311968ejj.224.2022.06.27.13.24.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jun 2022 13:24:49 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-11-viorel.suman@nxp.com>
- <b653d7af-f846-abb2-d260-3ce615b070a4@linaro.org>
- <20220627114949.pg7az36fz4jrwebp@fsr-ub1664-116>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220627114949.pg7az36fz4jrwebp@fsr-ub1664-116>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Samuel Holland <samuel@sholland.org>
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Samuel Holland <samuel@sholland.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
+Date:   Mon, 27 Jun 2022 22:24:48 +0200
+Message-ID: <12003397.O9o76ZdvQC@jernej-laptop>
+In-Reply-To: <20220626042756.58961-1-samuel@sholland.org>
+References: <20220626042756.58961-1-samuel@sholland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 27/06/2022 13:49, Viorel Suman wrote:
-> On 22-06-24 12:25:44, Krzysztof Kozlowski wrote:
->> On 16/06/2022 18:42, Viorel Suman wrote:
->>> From: Abel Vesa <abel.vesa@nxp.com>
->>>
->>> In order to replace the fsl,scu txt file from bindings/arm/freescale,
->>> we need to split it between the right subsystems. This patch adds the
->>> fsl,scu.yaml in the firmware bindings folder. This one is only for
->>> the main SCU node. The old txt file will be removed only after all
->>> the child nodes have been properly switch to yaml.
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
->>> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
->>> ---
->>>  .../devicetree/bindings/firmware/fsl,scu.yaml | 170 ++++++++++++++++++
->>>  1 file changed, 170 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+Dne nedelja, 26. junij 2022 ob 06:27:56 CEST je Samuel Holland napisal(a):
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> [...]
+> Allwinner R329 has a RTC with a similar time storage with H616 but a
+> slightly different clock part.
 > 
->>> +properties:
->>> +  $nodename:
->>> +    const: 'scu'
->>
->> Why enforcing node name? Second point is that node names should be
->> generic, so I wonder what "SCU" exactly means and whether it is generic?
->>
+> As we have already handled the R329 RTC clocks in the CCU driver, add a
+> compatible string to RTC driver to allow probing of the RTC.
 > 
-> It stands for "System Control Unit" - looks generic to me.
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Nope, it's specific, just like other scu - Snoop Control Unit. What's
-more, reusing the same acronym leads to confusions.
-
-If it was generic, then I expect it to be present in several other
-places, but it's not (except the other SCU).
-
-Generic name is for example "system-controller".
-
-> I guess a reason to enforce it - need to check with Abel - might be
-> the need to group multiple SCU implementations under a common known name.
-
-Device bindings do not enforce the names, unless it's really needed, and
-I doubt there is a need here.  Just drop it and rename nodes in DTS to
-something generic.
-
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
-Krzysztof
+Jernej
+
+
