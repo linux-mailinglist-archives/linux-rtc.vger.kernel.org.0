@@ -2,44 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163C5633DF
-	for <lists+linux-rtc@lfdr.de>; Fri,  1 Jul 2022 15:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE68564F50
+	for <lists+linux-rtc@lfdr.de>; Mon,  4 Jul 2022 10:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234932AbiGANAp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 1 Jul 2022 09:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S233105AbiGDIGr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 4 Jul 2022 04:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbiGANAn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 1 Jul 2022 09:00:43 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0B44161B;
-        Fri,  1 Jul 2022 06:00:40 -0700 (PDT)
-Received: from p508fd39e.dip0.t-ipconnect.de ([80.143.211.158] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o7GG4-0001Vv-Rz; Fri, 01 Jul 2022 15:00:28 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [RESEND PATCH] rtc: sun6i: add support for R329 RTC
-Date:   Fri, 01 Jul 2022 15:00:28 +0200
-Message-ID: <5026101.q0ZmV6gNhb@phil>
-In-Reply-To: <20220626042756.58961-1-samuel@sholland.org>
-References: <20220626042756.58961-1-samuel@sholland.org>
+        with ESMTP id S233006AbiGDIGp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Jul 2022 04:06:45 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2BDAE6C
+        for <linux-rtc@vger.kernel.org>; Mon,  4 Jul 2022 01:06:43 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id i17so5322889ljj.12
+        for <linux-rtc@vger.kernel.org>; Mon, 04 Jul 2022 01:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
+        b=qIVH3JbKvPTI90pL62KYY0CE73JeN2SUYSrBybV8uswZCRUzC7TyQR8SVFp8MZtE+n
+         xr7tJOlv3L2n5ZyjubWWSM+HvxpWMMviQPJGc+z61rfEV7BG6cQlF6JShpAp0jtu8vVF
+         ceTB3j2pH2b/Yt1sE4BJDCgHdKQmyfJZMtTr8D5mHqeWpIZvfd9zndu2IJA4nuyF61qJ
+         PLuksfEnXLVGlUXKspIWeM/QLHcLr0LmFBlIvSpGCb9lgFdOCT5hGek9uM/lI/l3D+aq
+         iN+8aCJy4pGjNnJY/joNcWnXboVwrTUBBtxKGrp15wZVhuCWO0JNd1/VK0fRmlhAUyqW
+         ctvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=W9vEcsuPOmb6PFD1YP9Cd5t2i8+H7vKDdbGELGM7w6o=;
+        b=Z7veFlh9A4JBtw3IIWDQRmNwG3bAapn79v2X/gwLO2W4OWd3SmdEiD/lXof0Madwkz
+         4NYp8cTZEzySjvoxz4Khik+6tJVmyCvUk8a9xAZBSMXAPu2AAmOEs0gHl8EL6tHjzcLY
+         4S4pFQPpZlHzBu2lvZoDtpIDLiliZlvSP2Y8RYO1np0OCuK4VlCrP57bVf+hoso5d1Z8
+         ME/azKFalxGaJNrbxET7t7nVqBTd/lEBdkVZh/n99M2mSHPoi4OH2YcywDeExaxIXV49
+         eGUOamtfVW5PxKpsxa4i0J8FpchviOlSP+LN0KwnbJtc0BPcBRnbusE6Wt+alH6d6I1P
+         e8Bg==
+X-Gm-Message-State: AJIora/yS5KPTi3ymKIgGy7jPXr76ZZdRG0vHD9IcFEELg/3/GhHFVO0
+        wD5ohD4lzCO5vpieOnD/yMIbiToU3IokH82Y
+X-Google-Smtp-Source: AGRyM1shyweS5X2mqdSfWYknlmTWWG1DGobjjvfheeS4TSNX76HtThJhWEt1hwbwlkge4YLK4Rb5CA==
+X-Received: by 2002:a2e:9097:0:b0:25a:6e3a:8b21 with SMTP id l23-20020a2e9097000000b0025a6e3a8b21mr15698533ljg.37.1656922001547;
+        Mon, 04 Jul 2022 01:06:41 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id b8-20020a056512218800b0047f7c897b61sm5018145lft.129.2022.07.04.01.06.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 01:06:40 -0700 (PDT)
+Message-ID: <2823c36d-efce-6c02-3b00-df1466c0d2bc@linaro.org>
+Date:   Mon, 4 Jul 2022 10:06:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v6 10/14] arm64: dts: freescale: imx8qxp: Remove
+ unnecessary clock related entries
+Content-Language: en-US
+To:     Viorel Suman <viorel.suman@oss.nxp.com>
+Cc:     Viorel Suman <viorel.suman@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <20220629164414.301813-11-viorel.suman@oss.nxp.com>
+ <483d5115-4027-e811-8bce-15da6c7c660f@linaro.org>
+ <20220630083636.2c7mclmbq3tjma2j@fsr-ub1664-116>
+ <5d8b2044-5ca6-c90c-57b4-afbb2ae20dde@linaro.org>
+ <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220630194804.sa3mvokpv7iksgbx@fsr-ub1664-116>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,49 +110,19 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Am Sonntag, 26. Juni 2022, 06:27:56 CEST schrieb Samuel Holland:
-> From: Icenowy Zheng <icenowy@aosc.io>
+On 30/06/2022 21:48, Viorel Suman wrote:
 > 
-> Allwinner R329 has a RTC with a similar time storage with H616 but a
-> slightly different clock part.
+> The question context looks a bit shifted. The "clocks" and "clock-names"
+> attributes are removed from a clock provider device.
 > 
-> As we have already handled the R329 RTC clocks in the CCU driver, add a
-> compatible string to RTC driver to allow probing of the RTC.
-> 
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> The OS clock provider in this case is a client which uses some protocol
+> to communicate with SCU via a messaging unit. There is no
+> access to xtal clocks via the existing OS<->SCU communication protocol.
 
-On a D1-Nezha
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-> ---
-> Resending this patch separately from Icenowy's R329 series[1] because it
-> is also needed for D1 (which has R329 as its fallback compatible[2]), so
-> I would like to get it in to 5.20.
-> 
-> [1]: https://lore.kernel.org/lkml/BYAPR20MB2472C608678F3FAEDA7B7541BCF79@BYAPR20MB2472.namprd20.prod.outlook.com/
-> [2]: https://lore.kernel.org/lkml/20220203021736.13434-3-samuel@sholland.org/
-> 
->  drivers/rtc/rtc-sun6i.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-> index 57540727ce1c..ed5516089e9a 100644
-> --- a/drivers/rtc/rtc-sun6i.c
-> +++ b/drivers/rtc/rtc-sun6i.c
-> @@ -875,6 +875,8 @@ static const struct of_device_id sun6i_rtc_dt_ids[] = {
->  	{ .compatible = "allwinner,sun50i-h6-rtc" },
->  	{ .compatible = "allwinner,sun50i-h616-rtc",
->  		.data = (void *)RTC_LINEAR_DAY },
-> +	{ .compatible = "allwinner,sun50i-r329-rtc",
-> +		.data = (void *)RTC_LINEAR_DAY },
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, sun6i_rtc_dt_ids);
-> 
+SCU does not need to access them via communication protocol. It's enough
+that they are clock inputs, physical clocks being fed to your hardware
+which you describe in the DTS.
 
 
-
-
+Best regards,
+Krzysztof
