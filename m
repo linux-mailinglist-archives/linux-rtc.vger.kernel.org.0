@@ -2,85 +2,104 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7A9566044
-	for <lists+linux-rtc@lfdr.de>; Tue,  5 Jul 2022 02:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE74C566413
+	for <lists+linux-rtc@lfdr.de>; Tue,  5 Jul 2022 09:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiGEAvM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 4 Jul 2022 20:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S231290AbiGEH2c (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 5 Jul 2022 03:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiGEAvI (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 4 Jul 2022 20:51:08 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFFAE0BE;
-        Mon,  4 Jul 2022 17:51:04 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id a7so6398657ilj.2;
-        Mon, 04 Jul 2022 17:51:04 -0700 (PDT)
+        with ESMTP id S229512AbiGEH2a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 5 Jul 2022 03:28:30 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38C5262F
+        for <linux-rtc@vger.kernel.org>; Tue,  5 Jul 2022 00:28:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z25so1516007lfr.2
+        for <linux-rtc@vger.kernel.org>; Tue, 05 Jul 2022 00:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BtSob2ANmpucm7jgDzPrzZm9mTZHHtmCG8rQOCvNCKk=;
+        b=FjF+vtRtT5mDMaKdXbAvExh5RFrimWNJd2+HVQxm1ZXvNormLjAJgq+P//9OP8sVp0
+         TJxtYEwM4quly4oA9K1QNVl/AVwj87NNs9Qi3cr1m7580YggIrP9obxmNwF70Lm/nD95
+         n7gxQ6qynzBwKPR1ISPuBWU6tD8C7JZtUbBYAGXmQ6niQLfYKbuZ+cesp+Pd59IsXNXW
+         ejUCax+nXvWLSY6YkM1lbynA2+uq9ZNf3yCNJR4sIZgYqEZiAcFn+cmQBLqkohh8SO+c
+         8XgzUaDKKJfzm4p10urD3subvYzaxy3o/EQFGfiVesUQToTKVy35wQ3oSSPqptcv46/B
+         bV2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=UNRYiUHboxd9yPgEvdNoBbUGsS1csNkOTp+t6rR1iOw=;
-        b=N3+VYrqDkPY4pwojKBguJGzXP29NPhLGBxkodqPGqOGukI+ozXmtDCaRCks+sgvUCR
-         DpdW5sbkdISyrjC2zPTH8sQfka1ARVDda4Uv12VDx76jjGNPKlxwIApU7VErbJHQnk1P
-         udjVAR1DGNFP/bWP2HYyLOQceS91tG8dSi/LZPW93GWx4E72LLY8I9sYlZp+q0db7Eu1
-         XS8JfoB6zrH02YTsa0i5vtfiphtHdO7J2TXpPhivy08h58fnHDsdaWV4v2+eIzSDpSWl
-         RLu7kTpu7HdhaQGXa0l7eoNdrFpTzH6c3BcimsyUvqNBKkBoyL7+OHAksJs+jhQuAX4r
-         APzA==
-X-Gm-Message-State: AJIora/uR3E3745p6NYMvneRC+wseI1pmvGC+Me/sQe+1x3ApE7+wlyh
-        9kTB91we3e75Wr+0y/3Ciw==
-X-Google-Smtp-Source: AGRyM1tS8v3PEUEp2o1+Ur7pauJQIS26mvX+Hsl3rcFPHzkKRTm2fuynyCuuK1DgeB/T2XOG7W4mdg==
-X-Received: by 2002:a05:6e02:1a29:b0:2da:9310:a5fa with SMTP id g9-20020a056e021a2900b002da9310a5famr18049069ile.179.1656982263375;
-        Mon, 04 Jul 2022 17:51:03 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id y10-20020a92090a000000b002dc11cf02e0sm1719265ilg.20.2022.07.04.17.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jul 2022 17:51:02 -0700 (PDT)
-Received: (nullmailer pid 640440 invoked by uid 1000);
-        Tue, 05 Jul 2022 00:50:55 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-Cc:     linux-clk@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Liu Ying <victor.liu@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Viorel Suman <viorel.suman@nxp.com>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BtSob2ANmpucm7jgDzPrzZm9mTZHHtmCG8rQOCvNCKk=;
+        b=zpiMdJLifHloQVheBGEsI9bWiVeYAP8emvVtfUPrE/JeuWSHfRlCUFkEmG4GYwYq04
+         orzGBeAOJJ5Hc3IbJ2yTBs1HvhC/VnAb/mfFkvgHQEcd1XDrVbowVTTE+3MRC6WnBGmZ
+         5PpeiOEInuyRuZA6MrFX06epZD3J2VyJiI1S8aVfi3jCUjFgRIzhB23hVKxcOMVjGpjq
+         SoSU1M9bEqzovLEyWy6gzPye1v0SdNAcw9kuZ/px1ffMKsrgoBMM8ZvjX8ulsGbmDTuI
+         csPrB9sCOatAHoQW5iwoYtr3ss17jP3e5mt/Xk/HXUvZ+T0AWU23fGlHDqghq2Gygft4
+         9f3w==
+X-Gm-Message-State: AJIora8AiY6srE8O3iblUq1wamDUtZgrGpG83bzhmbg5Fa3KPVnZs2LF
+        3tAGFZrDohQAAMmNZo9FtoY9aA==
+X-Google-Smtp-Source: AGRyM1swFsHTxqvW5WdNkUU2jKmalru9GN6rlwHny9vGK0TQbxZ7PmJPnfQFa1g6bBgH5MtEOVwtHw==
+X-Received: by 2002:a05:6512:690:b0:482:a141:7c2 with SMTP id t16-20020a056512069000b00482a14107c2mr11718951lfe.639.1657006106335;
+        Tue, 05 Jul 2022 00:28:26 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id x9-20020ac24889000000b004786d37229csm5537352lfc.155.2022.07.05.00.28.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Jul 2022 00:28:25 -0700 (PDT)
+Message-ID: <4da347bb-4210-e9a5-1bf7-988b95b1db53@linaro.org>
+Date:   Tue, 5 Jul 2022 09:28:24 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 00/14] dt-bindings: arm: freescale: Switch fsl,scu from
+ txt to yaml
+Content-Language: en-US
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Amit Kucheria <amitk@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-gpio@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Abel Vesa <abel.vesa@nxp.com>, Stefan Agner <stefan@agner.ch>,
-        devicetree@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ming Qian <ming.qian@nxp.com>, Zhang Rui <rui.zhang@intel.com>,
         Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        linux-input@vger.kernel.org,
-        Oliver Graute <oliver.graute@kococonnector.com>
-In-Reply-To: <20220704161541.943696-3-viorel.suman@oss.nxp.com>
-References: <20220704161541.943696-1-viorel.suman@oss.nxp.com> <20220704161541.943696-3-viorel.suman@oss.nxp.com>
-Subject: Re: [PATCH v7 02/15] dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
-Date:   Mon, 04 Jul 2022 18:50:55 -0600
-Message-Id: <1656982255.094130.640439.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220629164414.301813-1-viorel.suman@oss.nxp.com>
+ <0e515289-9d3c-9c61-950d-09c14b33c8c2@linaro.org>
+ <20220705003955.GO819983@dragon>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220705003955.GO819983@dragon>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,61 +107,27 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 04 Jul 2022 19:15:28 +0300, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
+On 05/07/2022 02:39, Shawn Guo wrote:
+> On Wed, Jun 29, 2022 at 07:51:06PM +0200, Krzysztof Kozlowski wrote:
+>> On 29/06/2022 18:44, Viorel Suman (OSS) wrote:
+>>> From: Viorel Suman <viorel.suman@nxp.com>
+>>>
+>>> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+>>>   * Updated according to Krzysztof Kozlowski comments
+>>>
+>>
+>> My comment a about removal of each part of TXT bindings in each patch,
+>> was not addressed. Your approach makes it more difficult to read patches
+>> and makes sense only if each subsystem maintainer will take the patches
+>> (separately). If the patches are going through one tree, then better to
+>> remove the TXT gradually.
+>>
+>> So the question - who is going to take each of the patches?
 > 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'iomux/pinctrl' child node of the SCU main node.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../bindings/arm/freescale/fsl,scu.txt        | 40 ----------
->  .../bindings/pinctrl/fsl,scu-pinctrl.yaml     | 74 +++++++++++++++++++
->  2 files changed, 74 insertions(+), 40 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-> 
+> I can take the series through IMX tree if that makes the most sense.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Sounds fine to me. Then however each piece of TXT file should be removed
+in each commit doing that piece conversion.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.example.dtb: iomuxc@400e8000: lpuart1grp:fsl,pins:0: [364, 944, 1568, 0, 0, 241, 368, 948, 1564, 0, 0, 241] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1170.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.example.dtb: pinctrl: lpuart0grp:fsl,pins:0: [111, 0, 100663328, 112, 0, 100663328] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx93-pinctrl.example.dtb: pinctrl@443c0000: uart3grp:fsl,pins:0: [72, 504, 1052, 1, 0, 73, 76, 508, 1048, 1, 0, 73] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx93-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx7d-pinctrl.example.dtb: pinctrl@30330000: uart5grp:fsl,pins:0: [352, 976, 1812, 1, 0, 126, 356, 980, 0, 1, 0, 118] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx7d-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx7d-pinctrl.example.dtb: pinctrl@302c0000: gpio1-grp:fsl,pins:0: [8, 56, 0, 0, 0, 89, 12, 60, 0, 0, 0, 89] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx7d-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.example.dtb: iomuxc@401f8000: lpuart1grp:fsl,pins:0: [236, 732, 0, 2, 0, 241, 240, 736, 0, 2, 0, 241] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imxrt1050.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.example.dtb: pinctrl@30330000: uart2grp:fsl,pins:0: [572, 1188, 1276, 0, 0, 320, 576, 1192, 0, 0, 0, 320] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mn-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.example.dtb: pinctrl@30330000: uart1grp:fsl,pins:0: [564, 1180, 1268, 0, 0, 73, 568, 1184, 1268, 0, 0, 73] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mq-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mm-pinctrl.example.dtb: pinctrl@30330000: uart2grp:fsl,pins:0: [572, 1188, 1276, 0, 0, 320, 576, 1192, 0, 0, 0, 320] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mm-pinctrl.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.example.dtb: pinctrl@30330000: uart2grp:fsl,pins:0: [552, 1160, 1520, 0, 6, 73, 552, 1160, 0, 0, 0, 73] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/fsl,imx8mp-pinctrl.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Best regards,
+Krzysztof
