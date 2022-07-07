@@ -2,349 +2,406 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4BA569077
-	for <lists+linux-rtc@lfdr.de>; Wed,  6 Jul 2022 19:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38C75699D1
+	for <lists+linux-rtc@lfdr.de>; Thu,  7 Jul 2022 07:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiGFRRH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 6 Jul 2022 13:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S229529AbiGGFbQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 7 Jul 2022 01:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiGFRRG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 6 Jul 2022 13:17:06 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70049.outbound.protection.outlook.com [40.107.7.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA27F2A71F;
-        Wed,  6 Jul 2022 10:17:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nG+EcWBlg/UNR3Z+IfUh1pF8WGgaILHrytPhxwszQef+Eb9jYdBSQygUw8ZVnHe1tgBd8wZofqC9uQsc1msL7FT1MQQn+IfU325nYpgALsEojtFU1YMdHf9/8y1q3hsY0c/emTlGYTForK/ofb/yy4QncA9wl54B82+fVz6rxiATbLFw8SBi6UO33m8vhUj6l5n2+asyWFpLfdXI8YIuNJ4CRRf1C6urox/V36U+FQ2i46zsOKRsgAd9Pw2ZoVCcEjZo9Av/9wWvvMNuSpgJj2D1XmGvakRE63cCUfiJHSjWczQCnTZf5WxtS09yTaGnZDSw/pvI37FzhyLaQ6Dj3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nHri1r0IcveZ3f0a12y8puGLF9qLGxYF5DnDu5a73pk=;
- b=blIOBrhbjwX4+tVTk68HC0H7eAxc5PLLSFqKO4SHngaB/Hcg5vpjsgaqNME8vZPju9mWtMjRNiMTbDPg0Z/ajD5+UEfIh+qgywMaVscdcUuA79R2VnsBfngaeq28b2Sr4VN1ecfmXqA8JDeY6a2oiatCnfKiqWHMvUC4ySrBtBQPor1BJLjH0kVkvqvIezcVs62WaSZ/wjGy720Pq3kYQhIDkV7HxgqrDF01hCujDHeyIZlHyhzLWktblnNA2qgU3R/75olGh6yGBCyf7O53UT3umrKF7nhrk12r02cILG1BNVPRWHnOeYmKqbaQe5wFR+ixA3rUWhPZnbHZTrQySA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nHri1r0IcveZ3f0a12y8puGLF9qLGxYF5DnDu5a73pk=;
- b=DUqaferrPUOe9qIuzCUZs1N+1eNmFdR7TMBPMFxDmnF0JuNYq8KpZnFLNoqV+LzD9f5fsYTDml5+hJJCMuHsJfvWNVvTW0TsL1xW18CNM88mpHfd4oFWzPWaCml69hp+vOU5ixiYfqEN9HTrpQIrebCjdFjC26i9DZu3k3AsTrY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by AM9PR04MB8940.eurprd04.prod.outlook.com (2603:10a6:20b:40b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.21; Wed, 6 Jul
- 2022 17:17:01 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.021; Wed, 6 Jul 2022
- 17:17:00 +0000
-Date:   Wed, 6 Jul 2022 20:16:49 +0300
-From:   Viorel Suman <viorel.suman@oss.nxp.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Liu Ying <victor.liu@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: Re: [PATCH v7 09/15] dt-bindings: firmware: Add fsl,scu yaml file
-Message-ID: <20220706171649.gz7x4avjcmho2soh@fsr-ub1664-116>
-References: <20220704161541.943696-1-viorel.suman@oss.nxp.com>
- <20220704161541.943696-10-viorel.suman@oss.nxp.com>
- <20220706143658.GA4191302-robh@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706143658.GA4191302-robh@kernel.org>
-X-ClientProxiedBy: AM0PR03CA0031.eurprd03.prod.outlook.com
- (2603:10a6:208:14::44) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
+        with ESMTP id S229538AbiGGFbP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 7 Jul 2022 01:31:15 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A031346;
+        Wed,  6 Jul 2022 22:31:13 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id v67-20020a1cac46000000b003a1888b9d36so10356358wme.0;
+        Wed, 06 Jul 2022 22:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HGdsxecpYJqAjSPrIEI+NBuaZfrpU2l3H+tCGdU0dyY=;
+        b=MipbWvdNcwc96uOIPdWR/lsfUyMKG5wgbpEl54sz6DMk0btSjU27Y7/4CXdLBjDopn
+         7iJY+H0LCQLUTuPnuCcgH4gYipys2O/Z371Tl1+IEvsU4CGgBHHg1hOwkbR/qe2o7XzA
+         Sf15IpRUZ243lavVcxXsSPq+62PSAYeKUwRk4ir1Nn08wCM9DrHMM3BvT7kbV77o+8VU
+         pbzr/9uA4J6M2bdJXpwVfgzLrlVL2GY/2OFrr1Kz9VW2z9H8VtXq8O8PduOAQXWzj22m
+         JUl/6XsxQVtzNlxgUIOCs7BCC4oH2CTqbsvRQnfeRLEtiIo6oSykM1BaJxxeIbMnvpIc
+         Ha3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HGdsxecpYJqAjSPrIEI+NBuaZfrpU2l3H+tCGdU0dyY=;
+        b=lIkStEn7kiO5mvGD0rB613z4u87TTM3XttDH1kvEEGDuk8fqg9pIpkxJjOXwN9mQP8
+         w/RcIAN19I0cEAmbs7x43A2KhGd6QNHrNbc9WgNQ20qO5foZkoxbJ3JXgAoM+A1rDt80
+         vTBWj3RCuzkNIiNUczfu/52ObMRraqVjfilm/TEVC0eA1jukXSfResZx6UZgQvpryUt/
+         kz3vVKarovM6BIHSLAzIfQRa7Rn4ZuZFs9nidV4sULFfJeGNKfqPHU9/6DNbX0u41sZF
+         EKMNSNf143CZfD0aES5pwSh1O3Mp5acoWMev5OV7xAnT1rloI1P7kus290thSFSVwVTS
+         zvnA==
+X-Gm-Message-State: AJIora/cmaIpSYOILd3XBoKDxmMKdtN+5slZBuuZ0L4RLSZvMnyEhl13
+        tUnLS1VzEm65fS8jJzKBhflLlETWZJ3UiiKXp/o=
+X-Google-Smtp-Source: AGRyM1sw2zioOwNBihKYn4OlhwOa3MfdRHukGDSRJV8elZqm7FuKgyqiC7Oe7vzFFHOBTH3HXxv4GeCZC/eazZ1Itz8=
+X-Received: by 2002:a05:600c:3507:b0:3a1:9fbb:4d62 with SMTP id
+ h7-20020a05600c350700b003a19fbb4d62mr2226711wmq.161.1657171871861; Wed, 06
+ Jul 2022 22:31:11 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e8ada079-cb2d-4e76-e815-08da5f73567b
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8940:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I+ePcq0AOhfEGvn4PvUxH3TQ2vKqbZVAp4saW/85dG3zFnM3EgrNkHNmbqqGWUHA3o3zpjNY6PZgn53AeZP2SxAtkVJ7Wc5nSQVDj3RSWcNZrfPpwnggao9k6dzcRNI4ISnOLCxxsZHrq40oG4cs9DwczNStVAvvkjfjM8wW4aki6lxQFnqPD9QfP8CEk6zFJfrGtaXu3PQOboVl7cG2cGSU5Ey0NRpafwf3rTdgIvJ5EHJhwqn8PpDwKErCUzfWxS3AWP/sC8e55UQhjK/8rCHEpEsKh6qhsKrxlLjqeU8jnZt+gbmRBUZCICPEe2WaL/QrKi/daaBQkHcUp0Qi9MJdrmbBuHrEUg6toTd9ryFu6dPIOR1ENDhdrgdcHaEynYXkGE7EuWwF1ya0zSwWYxmb6rzI0x0178oUsq7LjvuDEv7it/tVPQpyAviCDKa3EQjD7hMe/4VWk8eGAz+mffeL97PO7lvk2RxhVw218vB2rv5rjAscWDFHJao1X9k4RhXKdjDr/sc86eEkz2uP0R+Kp0lQbJQIPArs/gGQzHxxE3d0UNxQ3iSWlQ+Gvwc02rc6g0hk4p5YuHkbugNsiWuzfrTGj680agN9WAjjC/qi5GYetf3JoXck5254C23FaeKOJyWfCzNSEVNoonqDV/14nq0GVq5Xr/KgUdrTA/P/2lG8/ATXshI6I3lwJanS2mMdVYoLPa/zKY9Ja40tV+XfTYgZaoIFFCtoAQH69BR5lfCWC66U51N8JXos1ALBPzOJXugI0/8RpZSDzddj7mLXpHoB/8q1dLfo1/Sb4co9ymKGS8esDzWljydq4rpObTLAGZ/bLv6NjKxgsY0EQYzB+nspQg6SrFjCzK6SVrjn8YZRYHfOksaJj0hqjwtg
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(8936002)(966005)(478600001)(7406005)(86362001)(7416002)(83380400001)(6486002)(44832011)(5660300002)(186003)(316002)(54906003)(1076003)(6916009)(9686003)(33716001)(6512007)(2906002)(38350700002)(6506007)(38100700002)(26005)(41300700001)(52116002)(53546011)(66946007)(4326008)(8676002)(6666004)(66476007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?res+EsbQ8Zt/9XaeZHij9dIr11y0VU17UvsNoMam7Hsd/OO7fdVD6Hvuejt+?=
- =?us-ascii?Q?8EBrqLFbx1VZ/sUipPRDkZZS4QS988jpPZuQbkagAaJttdEaWX/AgNZkWQP3?=
- =?us-ascii?Q?1b/Bp2p4RcoeQ1MBdiJrlTmSJqggMvS5Vxov/08B7Ejii2lny9cjR84t67bc?=
- =?us-ascii?Q?OX/iz5HZlwHkIS56zEOZxew92eAdWRhrkFu26Xg2BaKKLFx/53yCo/tcB5RG?=
- =?us-ascii?Q?V6epzdPVlE2L1ZZiPdxqjqVPyMs7r+8nxh9sQuN71BgAUtJadz+V6A9bz29P?=
- =?us-ascii?Q?XyGmoYi2/I2b7z1kl3G8+RkZMGQDFvu1ddg8R62PjUZWaiqnI06PVRxE9epZ?=
- =?us-ascii?Q?qPctaTY74cPCj2mSOwkvLbJamZNGjrjPcr4qQ5lo04xAK4asb5W+w90pE/4i?=
- =?us-ascii?Q?5f1HIb/LiBxqJgSSCYQH1yFXwdrYtVc4favfLyjh/ouiy9HWrnvZwJLD5IfO?=
- =?us-ascii?Q?ejtl44l2W7UkaBQiObT4B2gZssS0odax8qulIHTRBmPKtz13Boe/ipEDfRx7?=
- =?us-ascii?Q?p7vFVBAah0LHU2IIstC2QVFYlc2wIG08tCefBMJHKiy3AgdQIJOqmM4omUUC?=
- =?us-ascii?Q?I/9+aHkfphkN7ApbQrT5AR+DfI2ocEVYV94/jAuVR/CuVFPXSIVRo/RXTCvn?=
- =?us-ascii?Q?YyGj70OlWpDgqBs1l8enQJ+usfoeUs9sEVXwwqWKpKUI4tTLofhTkMqdwvb6?=
- =?us-ascii?Q?spHfBYI9XZ7rPJNxbDT5wHRXv6FXXwL+zy7l+gB2EepZPmqbr+T0+VGRfGpY?=
- =?us-ascii?Q?MgBr4mYKjkBa02Zyx2GLgLu5XKTLliXyAVE5sXabRRCVCsIWg2YAibaF4ab2?=
- =?us-ascii?Q?1mFI9eeFggUVDaUYKqd88LA5PEvUfCaQmL4+g8Ole2LNtKcWRNyaAL9nP+od?=
- =?us-ascii?Q?YW2XmHn/n8P5TBlMATHvCg4rUe7j0zghmDCM1BV31HOaj0aZDS1rsQ+jmQHg?=
- =?us-ascii?Q?4+nYC3ThBJBA0MIoRv7UJmp4FNmGdrCSjYg3VL+6CZQ4PpcnI9EonjnGqGWN?=
- =?us-ascii?Q?p1CekzzUk8RRr3hTb9n6Iz2M5ZbL699cxS19cyhOrK0xmveCyuIX8WmjDmU5?=
- =?us-ascii?Q?fhoSXTVLBtylHvoRdE9/crATdp6PTsBHukZ34jyU0V/3+G6earRqksjjPQVI?=
- =?us-ascii?Q?WjN5n6c7Fe66KoGQx/QMEebW/Kf0SOeaWBsQ/pZsI121ii4gwUgE/0CaTFr5?=
- =?us-ascii?Q?a60+QFF9hAeNWzx105Hv/fOHOowJGnKAB/HI6Z4GZHTF93GLqh4qSzKEsG9v?=
- =?us-ascii?Q?IB69/MEUvmOZRMzeSNz+fdUTn1A6I+DVyvFBO39HEHrVpuNQTvV5P/huIea0?=
- =?us-ascii?Q?8MFBWX+EoCP8kJFifYb792/4mk/x86xRh5AnhSxSgZEhS1CyEUwsG56zu/Gd?=
- =?us-ascii?Q?ZDuRROSM11ydMbG5hdjd82vhGF4Dc9KzJ8mTYplHjTZo6FQwSHbqIZtzumrw?=
- =?us-ascii?Q?qOMu7nDz8VqagsmoWenDIsYlzGI4/kYiCvzp0B3EMOASME4LofqcbbBlPkZJ?=
- =?us-ascii?Q?hNnyZURnw/Dn99MQk/hZWlzwQwS9oeyPohj9oboLOnYxBV9wIaIj8+KCZ5h5?=
- =?us-ascii?Q?aX7lXFX9RDBs7LjpwSw+i38pSliWQTwb7RHk0YQ1?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8ada079-cb2d-4e76-e815-08da5f73567b
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2022 17:17:00.5372
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wgE04gGSQeE5e9zBOt0SAyYhuMGqOwbPONudLULv7xNBGzsQBzCPQ5xv9pwOaGD2n6p7ihxdPKcExp26cmtPGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8940
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220527084647.30835-1-ctcchien@nuvoton.com> <20220527084647.30835-4-ctcchien@nuvoton.com>
+ <YrYd+FkiFPz84twJ@mail.local>
+In-Reply-To: <YrYd+FkiFPz84twJ@mail.local>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Thu, 7 Jul 2022 13:30:59 +0800
+Message-ID: <CAHpyw9cdmCSZEE4ZbpnehpyvFhpPWA+_E5zXzJerNX9xqYet5Q@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING <KFTING@nuvoton.com>, ctcchien@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, Mining Lin <mimi05633@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 22-07-06 08:36:58, Rob Herring wrote:
-> On Mon, Jul 04, 2022 at 07:15:35PM +0300, Viorel Suman (OSS) wrote:
-> > From: Abel Vesa <abel.vesa@nxp.com>
+Hello Alexandre,
 
-[...]
+Thanks for your comments.
+I add Mining Lin <mimi05633@gmail.com> into this mail thread,
+and she is going to follow up this RTC driver.
+She will be in charge of maintaining this driver.
 
-> > diff --git a/Documentation/devicetree/bindings/firmware/fsl,scu.yaml b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> > new file mode 100644
-> > index 000000000000..c1f5b727352e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/firmware/fsl,scu.yaml
-> > @@ -0,0 +1,160 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/firmware/fsl,scu.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: NXP i.MX System Controller Firmware (SCFW)
-> > +
-> > +maintainers:
-> > +  - Dong Aisheng <aisheng.dong@nxp.com>
-> > +
-> > +description: System Controller Device Node
-> 
-> The formatting here is not maintained unless you use a literal block 
-> ('|'). But I would just drop this first line.
-> 
-
-Thank you for review, will update in the following version.
-
-> > +  The System Controller Firmware (SCFW) is a low-level system function
-> > +  which runs on a dedicated Cortex-M core to provide power, clock, and
-> > +  resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
-> > +  (QM, QP), and i.MX8QX (QXP, DX).
-> > +  The AP communicates with the SC using a multi-ported MU module found
-> > +  in the LSIO subsystem. The current definition of this MU module provides
-> > +  5 remote AP connections to the SC to support up to 5 execution environments
-> > +  (TZ, HV, standard Linux, etc.). The SC side of this MU module interfaces
-> > +  with the LSIO DSC IP bus. The SC firmware will communicate with this MU
-> > +  using the MSI bus.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: fsl,imx-scu
-> > +
-> > +  clock-controller:
-> > +    description:
-> > +      Clock controller node that provides the clocks controlled by the SCU
-> > +    $ref: /schemas/clock/fsl,scu-clk.yaml
-> > +
-> > +  ocotp:
-> > +    description:
-> > +      OCOTP controller node provided by the SCU
-> > +    $ref: /schemas/nvmem/fsl,scu-ocotp.yaml
-> > +
-> > +  keys:
-> > +    description:
-> > +      Keys provided by the SCU
-> > +    $ref: /schemas/input/fsl,scu-key.yaml
-> > +
-> > +  mboxes:
-> > +    description: |
-> > +      List of phandle of 4 MU channels for tx, 4 MU channels for
-> > +      rx, and 1 optional MU channel for general interrupt.
-> > +      All MU channels must be in the same MU instance.
-> > +      Cross instances are not allowed. The MU instance can only
-> > +      be one of LSIO MU0~M4 for imx8qxp and imx8qm. Users need
-> > +      to make sure use the one which is not conflict with other
-> > +      execution environments. e.g. ATF.
-> > +    minItems: 1
-> > +    maxItems: 10
-> 
-> Based on the description, shouldn't this be:
-> 
-> minItems: 8
-> maxItems: 9
+Alexandre Belloni <alexandre.belloni@bootlin.com> =E6=96=BC 2022=E5=B9=B46=
+=E6=9C=8825=E6=97=A5 =E9=80=B1=E5=85=AD =E5=87=8C=E6=99=A84:26=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 >
+> Hello,
+>
+> Please run ./scripts/checkpatch.pl --strict on your patch, there are a
+> bunch of issues.
+>
+> On 27/05/2022 16:46:47+0800, medadyoung@gmail.com wrote:
+> > +static int nct3018y_set_alarm_mode(struct i2c_client *client, bool on)
+> > +{
+> > +     int err, flags;
+> > +
+> > +     dev_dbg(&client->dev, "%s:on:%d\n", __func__, on);
+> > +
+> > +     flags =3D  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
+> > +     if (flags < 0) {
+> > +             dev_err(&client->dev,
+> > +                     "Failed to read NCT3018Y_REG_CTRL\n");
+>
+> You should cut down on the number of error messages, they are usually
+> not useful as the user doesn't have any specific action after getting
+> one of them apart from trying the action once again. Also, this will
+> make your code shorter. dev_dbg is fine.
+>
+> > +/*
+> > + * In the routines that deal directly with the nct3018y hardware, we u=
+se
+> > + * rtc_time -- month 0-11, hour 0-23, yr =3D calendar year-epoch.
+> > + */
+> > +static int nct3018y_rtc_read_time(struct device *dev, struct rtc_time =
+*tm)
+> > +{
+> > +     struct i2c_client *client =3D to_i2c_client(dev);
+> > +     unsigned char buf[10];
+> > +     int err;
+> > +
+>
+> You should still return an error if the time is invalid there but without
+> an error message.
+>
+> > +     err =3D i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SC, si=
+zeof(buf), buf);
+> > +     if (err < 0)
+> > +             return err;
+> > +
+> > +     tm->tm_sec =3D bcd2bin(buf[0] & 0x7F);
+> > +     tm->tm_min =3D bcd2bin(buf[2] & 0x7F);
+> > +     tm->tm_hour =3D bcd2bin(buf[4] & 0x3F);
+> > +     tm->tm_wday =3D buf[6] & 0x07;
+> > +     tm->tm_mday =3D bcd2bin(buf[7] & 0x3F);
+> > +     tm->tm_mon =3D bcd2bin(buf[8] & 0x1F) - 1;
+> > +     tm->tm_year =3D bcd2bin(buf[9]) + 100;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int nct3018y_rtc_read_alarm(struct device *dev, struct rtc_wkal=
+rm *tm)
+> > +{
+> > +     struct i2c_client *client =3D to_i2c_client(dev);
+> > +     unsigned char buf[5];
+> > +     int err;
+> > +
+> > +     err =3D i2c_smbus_read_i2c_block_data(client, NCT3018Y_REG_SCA,
+> > +                                         sizeof(buf), buf);
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to read date\n");
+> > +             return -EIO;
+> > +     }
+> > +
+> > +     dev_dbg(&client->dev, "%s: raw data is sec=3D%02x, min=3D%02x hr=
+=3D%02x\n",
+> > +             __func__, buf[0], buf[2], buf[4]);
+> > +
+> > +     tm->time.tm_sec =3D bcd2bin(buf[0] & 0x7F);
+> > +     tm->time.tm_min =3D bcd2bin(buf[2] & 0x7F);
+> > +     tm->time.tm_hour =3D bcd2bin(buf[4] & 0x3F);
+> > +
+> > +     err =3D nct3018y_get_alarm_mode(client, &tm->enabled, &tm->pendin=
+g);
+> > +     if (err < 0)
+> > +             return err;
+> > +
+> > +     dev_dbg(&client->dev, "%s:s=3D%d m=3D%d, hr=3D%d, enabled=3D%d, p=
+ending=3D%d\n",
+> > +             __func__, tm->time.tm_sec, tm->time.tm_min,
+> > +             tm->time.tm_hour, tm->enabled, tm->pending);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int nct3018y_rtc_set_alarm(struct device *dev, struct rtc_wkalr=
+m *tm)
+> > +{
+> > +     struct i2c_client *client =3D to_i2c_client(dev);
+> > +     unsigned char buf[3];
+> > +     int err;
+> > +
+> > +     dev_dbg(dev, "%s, sec=3D%d, min=3D%d hour=3D%d tm->enabled:%d\n",
+> > +             __func__, tm->time.tm_sec, tm->time.tm_min, tm->time.tm_h=
+our,
+> > +             tm->enabled);
+> > +
+> > +     buf[0] =3D bin2bcd(tm->time.tm_sec);
+> > +     buf[1] =3D bin2bcd(tm->time.tm_min);
+> > +     buf[2] =3D bin2bcd(tm->time.tm_hour);
+>
+> I don't think buf is useful in this function
+> > +
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_SCA, buf[0=
+]);
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to write NCT3018Y_REG_SCA\n=
+");
+> > +             return err;
+> > +     }
+> > +
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_MNA, buf[1=
+]);
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to write NCT3018Y_REG_MNA\n=
+");
+> > +             return err;
+> > +     }
+> > +
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_HRA, buf[2=
+]);
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to write NCT3018Y_REG_HRA\n=
+");
+> > +             return err;
+> > +     }
+> > +
+> > +     return nct3018y_set_alarm_mode(client, tm->enabled);
+> > +}
+> > +
+>
+>
+> > +static struct clk *nct3018y_clkout_register_clk(struct nct3018y *nct30=
+18y)
+> > +{
+> > +     struct i2c_client *client =3D nct3018y->client;
+> > +     struct device_node *node =3D client->dev.of_node;
+> > +     struct clk *clk;
+> > +     struct clk_init_data init;
+> > +     int flags, err;
+> > +
+> > +     /* disable the clkout output */
+> > +     flags =3D 0;
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CLKO, flag=
+s);
+>
+> BTW, this introduces a glitch in the clock output if the clock is
+> actually used. Maybe you could just rely on the CCF core to disable this
+> clock when there are no users.
+>
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to write oscillator status =
+register\n");
+> > +             return ERR_PTR(err);
+> > +     }
+> > +
+> > +     init.name =3D "nct3018y-clkout";
+> > +     init.ops =3D &nct3018y_clkout_ops;
+> > +     init.flags =3D 0;
+> > +     init.parent_names =3D NULL;
+> > +     init.num_parents =3D 0;
+> > +     nct3018y->clkout_hw.init =3D &init;
+> > +
+> > +     /* optional override of the clockname */
+> > +     of_property_read_string(node, "clock-output-names", &init.name);
+> > +
+> > +     /* register the clock */
+> > +     clk =3D devm_clk_register(&client->dev, &nct3018y->clkout_hw);
+> > +
+> > +     if (!IS_ERR(clk))
+> > +             of_clk_add_provider(node, of_clk_src_simple_get, clk);
+> > +
+> > +     return clk;
+> > +}
+> > +#endif
+> > +
+> > +static const struct rtc_class_ops nct3018y_rtc_ops =3D {
+> > +     .read_time      =3D nct3018y_rtc_read_time,
+> > +     .set_time       =3D nct3018y_rtc_set_time,
+> > +     .read_alarm     =3D nct3018y_rtc_read_alarm,
+> > +     .set_alarm      =3D nct3018y_rtc_set_alarm,
+> > +     .alarm_irq_enable =3D nct3018y_irq_enable,
+> > +     .ioctl          =3D nct3018y_ioctl,
+> > +};
+> > +
+> > +static int nct3018y_probe(struct i2c_client *client,
+> > +                       const struct i2c_device_id *id)
+> > +{
+> > +     struct nct3018y *nct3018y;
+> > +     int err, flags;
+> > +
+> > +     if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+>
+> Don't you rather need I2C_FUNC_SMBUS_BYTE and I2C_FUNC_SMBUS_BLOCK_DATA?
+>
+> > +             dev_err(&client->dev, "%s: ENODEV\n", __func__);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     nct3018y =3D devm_kzalloc(&client->dev, sizeof(struct nct3018y),
+> > +                             GFP_KERNEL);
+> > +     if (!nct3018y)
+> > +             return -ENOMEM;
+> > +
+> > +     i2c_set_clientdata(client, nct3018y);
+> > +     nct3018y->client =3D client;
+> > +     device_set_wakeup_capable(&client->dev, 1);
+> > +
+> > +     flags =3D i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
+> > +     if (flags < 0) {
+> > +             dev_err(&client->dev, "%s: read error\n", __func__);
+> > +             return flags;
+> > +     } else if (flags & NCT3018Y_BIT_TWO)
+> > +             dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is set\n", __=
+func__);
+> > +
+> > +
+> > +     flags =3D NCT3018Y_BIT_TWO;
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_CTRL, flag=
+s);
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "Unable to write NCT3018Y_REG_CTRL\=
+n");
+> > +             return err;
+> > +     }
+> > +
+> > +     flags =3D 0;
+> > +     err =3D i2c_smbus_write_byte_data(client, NCT3018Y_REG_ST, flags)=
+;
+> > +     if (err < 0) {
+> > +             dev_err(&client->dev, "%s: write error\n", __func__);
+> > +             return err;
+> > +     }
+> > +
+> > +
+> > +     nct3018y->rtc =3D devm_rtc_allocate_device(&client->dev);
+> > +     if (IS_ERR(nct3018y->rtc))
+> > +             return PTR_ERR(nct3018y->rtc);
+> > +
+> > +     nct3018y->rtc->ops =3D &nct3018y_rtc_ops;
+> > +     nct3018y->rtc->range_min =3D RTC_TIMESTAMP_BEGIN_2000;
+> > +     nct3018y->rtc->range_max =3D RTC_TIMESTAMP_END_2099;
+> > +
+> > +     if (client->irq > 0) {
+> > +             err =3D devm_request_threaded_irq(&client->dev, client->i=
+rq,
+> > +                             NULL, nct3018y_irq,
+> > +                             IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
+> > +                             "nct3018y", client);
+> > +             if (err) {
+> > +                     dev_err(&client->dev, "unable to request IRQ %d\n=
+", client->irq);
+> > +                     return err;
+> > +             }
+> > +     }
+>
+> You need to clear RTC_FEATURE_UPDATE_INTERRUPT and RTC_FEATURE_ALARM
+> from nct3018y->rtc->features when client->irq <=3D 0
+>
+> > +
+> > +     return devm_rtc_register_device(nct3018y->rtc);
+> > +
+>
+> > +#ifdef CONFIG_COMMON_CLK
+> > +     /* register clk in common clk framework */
+> > +     nct3018y_clkout_register_clk(nct3018y);
+> > +#endif
+> > +
+>
+> This code is not reachable anymore
+>
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct i2c_device_id nct3018y_id[] =3D {
+> > +     { "nct3018y", 0 },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, nct3018y_id);
+> > +
+> > +
+> > +static const struct of_device_id nct3018y_of_match[] =3D {
+> > +     { .compatible =3D "nuvoton,nct3018y" },
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(of, nct3018y_of_match);
+> > +
+> > +static struct i2c_driver nct3018y_driver =3D {
+> > +     .driver         =3D {
+> > +             .name   =3D "rtc-nct3018y",
+> > +             .of_match_table =3D of_match_ptr(nct3018y_of_match),
+> > +     },
+> > +     .probe          =3D nct3018y_probe,
+> > +     .id_table       =3D nct3018y_id,
+> > +};
+> > +
+> > +module_i2c_driver(nct3018y_driver);
+> > +
+> > +MODULE_AUTHOR("Medad CChien <ctcchien@nuvoton.com>");
+> > +MODULE_DESCRIPTION("Nuvoton NCT3018Y RTC driver");
+> > +MODULE_LICENSE("GPL v2");
+> > --
+> > 2.17.1
+> >
+>
+> --
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Actually the description should be updated - there is a series sent by Abel
-adding the support for i.MX8 DXL - it has just 1 MU channel for rx, 1 - for tx,
-and 1 optional for general interrupt. An approach would be to add a structure
-which will include two options - one for 8..9, another for 2..3.
-Hopefully I'll be able to define a generic one.
-
-> > +
-> > +  mbox-names:
-> > +    description:
-> > +      include "gip3" if want to support general MU interrupt.
-> 
-> What are all the other names? Needs to be a schema, not freeform text.
-
-Right, ok.
-
-> > +    minItems: 1
-> > +    maxItems: 10
-> > +
-> > +  pinctrl:
-> > +    description:
-> > +      Pin controller provided by the SCU
-> > +    $ref: /schemas/pinctrl/fsl,scu-pinctrl.yaml
-> > +
-> > +  power-controller:
-> > +    description: |
-> > +      Power domains controller node that provides the power domains
-> > +      controlled by the SCU
-> > +    $ref: /schemas/power/fsl,scu-pd.yaml
-> > +
-> > +  rtc:
-> > +    description:
-> > +      RTC controller provided by the SCU
-> > +    $ref: /schemas/rtc/fsl,scu-rtc.yaml
-> > +
-> > +  thermal-sensor:
-> > +    description:
-> > +      Thermal sensor provided by the SCU
-> > +    $ref: /schemas/thermal/fsl,scu-thermal.yaml
-> > +
-> > +  watchdog:
-> > +    description:
-> > +      Watchdog controller provided by the SCU
-> > +    $ref: /schemas/watchdog/fsl,scu-wdt.yaml
-> > +
-> > +required:
-> > +  - compatible
-> > +  - mbox-names
-> > +  - mboxes
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/firmware/imx/rsrc.h>
-> > +    #include <dt-bindings/input/input.h>
-> > +    #include <dt-bindings/pinctrl/pads-imx8qxp.h>
-> > +
-> > +    firmware {
-> > +        system-controller {
-> > +            compatible = "fsl,imx-scu";
-> > +            mbox-names = "tx0", "tx1", "tx2", "tx3",
-> > +                         "rx0", "rx1", "rx2", "rx3",
-> > +                         "gip3";
-> > +            mboxes = <&lsio_mu1 0 0 &lsio_mu1 0 1 &lsio_mu1 0 2 &lsio_mu1 0 3
-> > +                      &lsio_mu1 1 0 &lsio_mu1 1 1 &lsio_mu1 1 2 &lsio_mu1 1 3
-> > +                      &lsio_mu1 3 3>;
-> > +
-> > +            clock-controller {
-> > +                compatible = "fsl,imx8qxp-clk", "fsl,scu-clk";
-> > +                #clock-cells = <2>;
-> > +            };
-> > +
-> > +            pinctrl {
-> > +                compatible = "fsl,imx8qxp-iomuxc";
-> > +
-> > +                pinctrl_lpuart0: lpuart0grp {
-> > +                    fsl,pins = <
-> > +                        IMX8QXP_UART0_RX_ADMA_UART0_RX   0x06000020
-> > +                        IMX8QXP_UART0_TX_ADMA_UART0_TX   0x06000020
-> > +                    >;
-> > +                };
-> > +            };
-> > +
-> > +            ocotp {
-> > +                compatible = "fsl,imx8qxp-scu-ocotp";
-> > +                #address-cells = <1>;
-> > +                #size-cells = <1>;
-> > +
-> > +                fec_mac0: mac@2c4 {
-> > +                    reg = <0x2c4 6>;
-> > +                };
-> > +            };
-> > +
-> > +            power-controller {
-> > +                compatible = "fsl,imx8qxp-scu-pd", "fsl,scu-pd";
-> > +                #power-domain-cells = <1>;
-> > +            };
-> > +
-> > +            rtc {
-> > +                compatible = "fsl,imx8qxp-sc-rtc";
-> > +            };
-> > +
-> > +            keys {
-> > +                compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
-> > +                linux,keycodes = <KEY_POWER>;
-> > +            };
-> > +
-> > +            watchdog {
-> > +                compatible = "fsl,imx8qxp-sc-wdt", "fsl,imx-sc-wdt";
-> > +                timeout-sec = <60>;
-> > +            };
-> > +
-> > +            thermal-sensor {
-> > +                compatible = "fsl,imx8qxp-sc-thermal", "fsl,imx-sc-thermal";
-> > +                #thermal-sensor-cells = <1>;
-> > +            };
-> > +        };
-> > +    };
-> > -- 
-> > 2.25.1
-> > 
-> > 
+B.R.
+Medad
