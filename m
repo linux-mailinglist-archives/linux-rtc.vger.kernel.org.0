@@ -2,140 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7AB56C225
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Jul 2022 01:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACD456C2E6
+	for <lists+linux-rtc@lfdr.de>; Sat,  9 Jul 2022 01:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbiGHSls (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 8 Jul 2022 14:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
+        id S239988AbiGHWOV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 8 Jul 2022 18:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236808AbiGHSlr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 8 Jul 2022 14:41:47 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C95F1A827;
-        Fri,  8 Jul 2022 11:41:47 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f2a4c51c45so30268794fac.9;
-        Fri, 08 Jul 2022 11:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E0+g3v6pC8RZHHJAWVXJd2G4KVUBkvrj09rmmxGrR+E=;
-        b=kSYmvN1LCA3HQHM673GLcBGagoKwVuIV8NANpt2rxPMcLLWoBx+CfJY8ie9CG4TGzW
-         ugF84N5L5QD3G75H5LrXyrM8YkCRQMnK+iZ1dI4DI2zTyth8s05//EGrQJvdGqb9yi4S
-         B/tjHLAOt5UvECMIo6t8OqiACR6SiWt3V+3dF6sUQfeq7kyW6jlLw8j1l2035R9lcPch
-         UcUr8O7CrHvwRQ5lzMep3rsle82S1UVvgN2dAsAoTVQ/xJgiAO/JI8phqK4EF8y6kmpS
-         s0J76+Tjs1AkkNP5UpMf4RoGm4qheTfRTJS/0uObwUMh44154LXbdFg062bUyBbKKDhI
-         FLew==
+        with ESMTP id S240060AbiGHWOU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 8 Jul 2022 18:14:20 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA62A707;
+        Fri,  8 Jul 2022 15:14:20 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id z81so284306iof.0;
+        Fri, 08 Jul 2022 15:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E0+g3v6pC8RZHHJAWVXJd2G4KVUBkvrj09rmmxGrR+E=;
-        b=atIxdAkwCQK2dtTUogb/H8IcAGoCR5yCOQeOL2c97cOK54rstCmv0GQXO22b1uRxrH
-         cDnw7irOWvkEtoyghsqBgGgPtqe8rQ8be/kLNq+7dsZg02XMvjZfCPmM+mn2TtccZkQn
-         EX/5zBpvdkqAjf1HRMjParC55s7hmC2RQXwr+HixpzWjMWMfP0srMlgnBG2PRoFxhNn+
-         0MEWDRRHyYqJ19aaapyt4UNdqX9cvl43hNU+J248n1oF6l+TKbhDG+UQtpWtjAsBsXqV
-         nDIBTWxsXrh5Z7UiUST0kD5mQESHH7cBxN/yXwFNnrFeL34HonczNuZlPs6uWPdWuMeH
-         Zn0A==
-X-Gm-Message-State: AJIora8ywGuPxXS3I1MV37Vz/GiYCpGbys4h72bbZgnJc4BdeNjUwNCj
-        2JOM5Dp1Iwq8EbAxEV3btU2pA+NgRAwQH7KXBERWhW60zxX+5A==
-X-Google-Smtp-Source: AGRyM1tJ/cjliLSb05PEgv9ikZiVR60MsFIKWxl5kdrWfbZDUl5sqhyFFPR61swqCmtESYW1a7F/DCBBVWpAqv0OAXU=
-X-Received: by 2002:a05:6870:88a8:b0:101:6409:ae26 with SMTP id
- m40-20020a05687088a800b001016409ae26mr736747oam.160.1657305706145; Fri, 08
- Jul 2022 11:41:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qizlKD9bE5dN8tJcWqnW6FaDP0qSa79ZfPV40HiDdGQ=;
+        b=Yiu1EWliG8RLFfRL/e3eAzDNbrkLPyf+vzABOthH0KsHQ/X9K0O9HkrwSedV5c5C3H
+         bAm8pLNlNJx7+3vo6yHhEggx879Bk782o5qFCQ72Bljrud9REIxrTbEQZ5e2ov5JVQ9U
+         EwDtpSlRn5r3OKh1o9o0asnbd1QQ78+dsVCQbd1u5DrNo/ZI0zC+ywc6Cfq03fzCgmNA
+         GlG9oiBOTNfw6cd7tWmEWLY+fifqnTxzb7dgXFdNgifPMqVtDrlx1o8aTl4jAa8YWUjC
+         7HkOtmXZW83AmvwAfnTwxaxwY8zFAxO+9r0ORM2U60kOzrEdRcnCaEByg/L/zP4oCbth
+         BNLg==
+X-Gm-Message-State: AJIora/79bt9+kiZRi6/LrVQTowdNGHjwc5S+LE8qhf7g1aaaKkA/nEj
+        /ZpILCjeya8DnRQ7gAOMvQ==
+X-Google-Smtp-Source: AGRyM1t4peia84G04eriBOduqU7X4VUiKCFhcEgAmMHSCwj5GjAENVk5PMLOfC7mJNOQOcZb13sK1g==
+X-Received: by 2002:a05:6602:2e8e:b0:669:d5b1:3fc9 with SMTP id m14-20020a0566022e8e00b00669d5b13fc9mr3158325iow.210.1657318459564;
+        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
+Received: from robh.at.kernel.org ([98.38.210.73])
+        by smtp.gmail.com with ESMTPSA id w10-20020a92db4a000000b002dad39ff841sm10133296ilq.19.2022.07.08.15.14.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
+Received: (nullmailer pid 1573273 invoked by uid 1000);
+        Fri, 08 Jul 2022 22:14:17 -0000
+Date:   Fri, 8 Jul 2022 16:14:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mia Lin <mimi05633@gmail.com>
+Cc:     avifishman70@gmail.com, devicetree@vger.kernel.org,
+        tmaimon77@gmail.com, alexandre.belloni@bootlin.com,
+        yuenn@google.com, KFTING@nuvoton.com, venture@google.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, YSCHU@nuvoton.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com,
+        benjaminfair@google.com, mylin1@nuvoton.com,
+        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        a.zummo@towertech.it, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
+ Clock
+Message-ID: <20220708221417.GA1573219-robh@kernel.org>
+References: <20220707073054.3954-1-mimi05633@gmail.com>
+ <20220707073054.3954-2-mimi05633@gmail.com>
 MIME-Version: 1.0
-References: <20220608161150.58919-1-linux@fw-web.de> <20220608161150.58919-2-linux@fw-web.de>
- <5611d1c5-44db-4144-3c46-256323d39fe3@arm.com>
-In-Reply-To: <5611d1c5-44db-4144-3c46-256323d39fe3@arm.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Fri, 8 Jul 2022 14:41:35 -0400
-Message-ID: <CAMdYzYo=Wft93OEKapVFx-oxe8ocU7OuhU+MOdqUw8-QjqzDGg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] rtc: hym8563: try multiple times to init device
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220707073054.3954-2-mimi05633@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Jul 8, 2022 at 12:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-06-08 17:11, Frank Wunderlich wrote:
-> > From: Peter Geis <pgwipeout@gmail.com>
-> >
-> > RTC sometimes does not respond the first time in init.
-> > Try multiple times to get a response.
->
-> FWIW, given that HYM8563 is fairly common on RK3288 boards - I can't say
-> I've ever noticed an issue with mine, for instance - it seems dubious
-> that this would be a general issue of the chip itself. Are you sure it's
-> not a SoC or board-level issue with the I2C bus being in a funny initial
-> state, timings being marginal, or suchlike?
+On Thu, 07 Jul 2022 15:30:52 +0800, Mia Lin wrote:
+> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
+> 
+> Signed-off-by: Mia Lin <mimi05633@gmail.com>
+> ---
+>  .../bindings/rtc/nuvoton,nct3018y.yaml        | 45 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+> 
 
-I don't think this is an SoC issue since this is the first instance
-I've encountered it. Mind you we don't have the reset lines hooked up
-at all for the Rockchip i2c driver, so it's possible that's the case,
-but I'd imagine it would be observed more broadly if that was the
-case. I've tried pushing the timings out pretty far as well as bumping
-up the drive strength to no change. It seems to occur only with the
-hym rtc used on this board. I suspect it's a new variant of the hym
-that has slightly different behavior.
-
->
-> Robin.
->
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >   drivers/rtc/rtc-hym8563.c | 11 +++++++++--
-> >   1 file changed, 9 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/rtc/rtc-hym8563.c b/drivers/rtc/rtc-hym8563.c
-> > index 90e602e99d03..9adcedaa4613 100644
-> > --- a/drivers/rtc/rtc-hym8563.c
-> > +++ b/drivers/rtc/rtc-hym8563.c
-> > @@ -13,6 +13,7 @@
-> >   #include <linux/clk-provider.h>
-> >   #include <linux/i2c.h>
-> >   #include <linux/bcd.h>
-> > +#include <linux/delay.h>
-> >   #include <linux/rtc.h>
-> >
-> >   #define HYM8563_CTL1                0x00
-> > @@ -438,10 +439,16 @@ static irqreturn_t hym8563_irq(int irq, void *dev_id)
-> >
-> >   static int hym8563_init_device(struct i2c_client *client)
-> >   {
-> > -     int ret;
-> > +     int ret, i;
-> >
-> >       /* Clear stop flag if present */
-> > -     ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
-> > +     for (i = 0; i < 3; i++) {
-> > +             ret = i2c_smbus_write_byte_data(client, HYM8563_CTL1, 0);
-> > +             if (ret == 0)
-> > +                     break;
-> > +             msleep(20);
-> > +     }
-> > +
-> >       if (ret < 0)
-> >               return ret;
-> >
+Reviewed-by: Rob Herring <robh@kernel.org>
