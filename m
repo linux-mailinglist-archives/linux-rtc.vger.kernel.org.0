@@ -2,67 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACD456C2E6
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Jul 2022 01:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7610056C1D3
+	for <lists+linux-rtc@lfdr.de>; Sat,  9 Jul 2022 01:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239988AbiGHWOV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 8 Jul 2022 18:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S239883AbiGHWcR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 8 Jul 2022 18:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240060AbiGHWOU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 8 Jul 2022 18:14:20 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CA62A707;
-        Fri,  8 Jul 2022 15:14:20 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id z81so284306iof.0;
-        Fri, 08 Jul 2022 15:14:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qizlKD9bE5dN8tJcWqnW6FaDP0qSa79ZfPV40HiDdGQ=;
-        b=Yiu1EWliG8RLFfRL/e3eAzDNbrkLPyf+vzABOthH0KsHQ/X9K0O9HkrwSedV5c5C3H
-         bAm8pLNlNJx7+3vo6yHhEggx879Bk782o5qFCQ72Bljrud9REIxrTbEQZ5e2ov5JVQ9U
-         EwDtpSlRn5r3OKh1o9o0asnbd1QQ78+dsVCQbd1u5DrNo/ZI0zC+ywc6Cfq03fzCgmNA
-         GlG9oiBOTNfw6cd7tWmEWLY+fifqnTxzb7dgXFdNgifPMqVtDrlx1o8aTl4jAa8YWUjC
-         7HkOtmXZW83AmvwAfnTwxaxwY8zFAxO+9r0ORM2U60kOzrEdRcnCaEByg/L/zP4oCbth
-         BNLg==
-X-Gm-Message-State: AJIora/79bt9+kiZRi6/LrVQTowdNGHjwc5S+LE8qhf7g1aaaKkA/nEj
-        /ZpILCjeya8DnRQ7gAOMvQ==
-X-Google-Smtp-Source: AGRyM1t4peia84G04eriBOduqU7X4VUiKCFhcEgAmMHSCwj5GjAENVk5PMLOfC7mJNOQOcZb13sK1g==
-X-Received: by 2002:a05:6602:2e8e:b0:669:d5b1:3fc9 with SMTP id m14-20020a0566022e8e00b00669d5b13fc9mr3158325iow.210.1657318459564;
-        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
-Received: from robh.at.kernel.org ([98.38.210.73])
-        by smtp.gmail.com with ESMTPSA id w10-20020a92db4a000000b002dad39ff841sm10133296ilq.19.2022.07.08.15.14.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 15:14:19 -0700 (PDT)
-Received: (nullmailer pid 1573273 invoked by uid 1000);
-        Fri, 08 Jul 2022 22:14:17 -0000
-Date:   Fri, 8 Jul 2022 16:14:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mia Lin <mimi05633@gmail.com>
-Cc:     avifishman70@gmail.com, devicetree@vger.kernel.org,
-        tmaimon77@gmail.com, alexandre.belloni@bootlin.com,
-        yuenn@google.com, KFTING@nuvoton.com, venture@google.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, YSCHU@nuvoton.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com,
-        benjaminfair@google.com, mylin1@nuvoton.com,
-        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        a.zummo@towertech.it, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time
- Clock
-Message-ID: <20220708221417.GA1573219-robh@kernel.org>
-References: <20220707073054.3954-1-mimi05633@gmail.com>
- <20220707073054.3954-2-mimi05633@gmail.com>
+        with ESMTP id S239581AbiGHWcR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 8 Jul 2022 18:32:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C213B458;
+        Fri,  8 Jul 2022 15:32:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657319537; x=1688855537;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pYUR5n3zSWGMe79Vz7YJD1vt8XQmHwETPJxWhHm8Fzs=;
+  b=TjoquACbpslTbS1yj2yyeior5vpHP5uG124AWyqVdFGE+TtcRKjCugUW
+   lGVGCfSjNYiLFwxgX3hSt46D1QhTLMegA/WOTqYnUgyBZFIEhBYDIXE9B
+   0OWdSUzGxJMXdogpJM/PP3AAJ3LJCuPvqwGNVtEOlxjJivs/eoDoIhD0u
+   WZgFZzpUJg+ob0mq7nRAV4Ue4Gl6le59sAMYRlEQtwxNtmSPb1h18UwYL
+   f7S5ofXpXTG5Uh7RXC8txm6UEZ7MOj+L7SiIy9Ox9LW2BfqtgAetooHTt
+   LYU+KP2o9+TAP4qDbomxs22ZVfU+w1l224+9O6mrTlahFf9blwCy0uYJJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="346064522"
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="346064522"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 15:32:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
+   d="scan'208";a="770919860"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Jul 2022 15:32:11 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9wWA-000O0k-Oy;
+        Fri, 08 Jul 2022 22:32:10 +0000
+Date:   Sat, 9 Jul 2022 06:31:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mia Lin <mimi05633@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, KFTING@nuvoton.com,
+        JJLIU0@nuvoton.com, mylin1@nuvoton.com
+Cc:     kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
+Message-ID: <202207090650.qVcM1Juo-lkp@intel.com>
+References: <20220707073054.3954-4-mimi05633@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220707073054.3954-2-mimi05633@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220707073054.3954-4-mimi05633@gmail.com>
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,15 +70,50 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 07 Jul 2022 15:30:52 +0800, Mia Lin wrote:
-> Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
-> 
-> Signed-off-by: Mia Lin <mimi05633@gmail.com>
-> ---
->  .../bindings/rtc/nuvoton,nct3018y.yaml        | 45 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
-> 
+Hi Mia,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on robh/for-next linus/master v5.19-rc5 next-20220708]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mia-Lin/RTC-nuvoton-Add-nuvoton-real-time-clock-driver/20220707-153317
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220709/202207090650.qVcM1Juo-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/028783fef7713ddc9f2d14a39f09741370f42e3c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Mia-Lin/RTC-nuvoton-Add-nuvoton-real-time-clock-driver/20220707-153317
+        git checkout 028783fef7713ddc9f2d14a39f09741370f42e3c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/rtc/rtc-nct3018y.c:553:23: error: unterminated argument list invoking macro "MODULE_AUTHOR"
+     553 | MODULE_LICENSE("GPL");
+         |                       ^
+>> drivers/rtc/rtc-nct3018y.c:551:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
+     551 | MODULE_AUTHOR(("Mia Lin <mimi05633@gmail.com>");
+         | ^~~~~~~~~~~~~
+
+
+vim +/MODULE_AUTHOR +553 drivers/rtc/rtc-nct3018y.c
+
+   549	
+   550	MODULE_AUTHOR("Medad CChien <ctcchien@nuvoton.com>");
+ > 551	MODULE_AUTHOR(("Mia Lin <mimi05633@gmail.com>");
+   552	MODULE_DESCRIPTION("Nuvoton NCT3018Y RTC driver");
+ > 553	MODULE_LICENSE("GPL");
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
