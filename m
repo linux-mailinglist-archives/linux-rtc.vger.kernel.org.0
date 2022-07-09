@@ -2,67 +2,93 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7610056C1D3
-	for <lists+linux-rtc@lfdr.de>; Sat,  9 Jul 2022 01:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9352556CBF0
+	for <lists+linux-rtc@lfdr.de>; Sun, 10 Jul 2022 01:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239883AbiGHWcR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 8 Jul 2022 18:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S229541AbiGIXPz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 9 Jul 2022 19:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239581AbiGHWcR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 8 Jul 2022 18:32:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C213B458;
-        Fri,  8 Jul 2022 15:32:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657319537; x=1688855537;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pYUR5n3zSWGMe79Vz7YJD1vt8XQmHwETPJxWhHm8Fzs=;
-  b=TjoquACbpslTbS1yj2yyeior5vpHP5uG124AWyqVdFGE+TtcRKjCugUW
-   lGVGCfSjNYiLFwxgX3hSt46D1QhTLMegA/WOTqYnUgyBZFIEhBYDIXE9B
-   0OWdSUzGxJMXdogpJM/PP3AAJ3LJCuPvqwGNVtEOlxjJivs/eoDoIhD0u
-   WZgFZzpUJg+ob0mq7nRAV4Ue4Gl6le59sAMYRlEQtwxNtmSPb1h18UwYL
-   f7S5ofXpXTG5Uh7RXC8txm6UEZ7MOj+L7SiIy9Ox9LW2BfqtgAetooHTt
-   LYU+KP2o9+TAP4qDbomxs22ZVfU+w1l224+9O6mrTlahFf9blwCy0uYJJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10402"; a="346064522"
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="346064522"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2022 15:32:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,256,1650956400"; 
-   d="scan'208";a="770919860"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 Jul 2022 15:32:11 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9wWA-000O0k-Oy;
-        Fri, 08 Jul 2022 22:32:10 +0000
-Date:   Sat, 9 Jul 2022 06:31:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mia Lin <mimi05633@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, KFTING@nuvoton.com,
-        JJLIU0@nuvoton.com, mylin1@nuvoton.com
-Cc:     kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
-Message-ID: <202207090650.qVcM1Juo-lkp@intel.com>
-References: <20220707073054.3954-4-mimi05633@gmail.com>
+        with ESMTP id S229471AbiGIXPz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 9 Jul 2022 19:15:55 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC981FCCA
+        for <linux-rtc@vger.kernel.org>; Sat,  9 Jul 2022 16:15:53 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 6so3285689ybc.8
+        for <linux-rtc@vger.kernel.org>; Sat, 09 Jul 2022 16:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mP2wLhwavewGA8FVEJebKzO+AyUl27McMXohUrjH32M=;
+        b=lofU9L5Tz9Yj7xkCPTUYbQb7wUBPYtbVCeSlBrpxJ5w75Xs9r8Vn/0QY2Xx3K6HcNx
+         rM5CSUUaLZEQnVc9zTjuDhaqd4yPqihiguwlOaDvsgGkB5gHgemi0DSm92+LyPUN2yWS
+         U570rUJJr5rrCQ6JtpQA5qRpYDR9WlorM1dCYCDGugTUdgfE4B+G2sNtDVEFkyNOh/B9
+         mmx+1Xbs3pPQzd4XzurQKQ0Jy0l6icPmWeFOC4Z9c98obW1c+PlLUNasrOFsjv4CSTPz
+         s321Z29KouSaMVEAwnq66OqpgMwk97Bb31ALluDtP2v9Q383Frxq+DTCYhDF+4h26hDA
+         9eUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mP2wLhwavewGA8FVEJebKzO+AyUl27McMXohUrjH32M=;
+        b=RlcrB4t5tMPZJCU8r9G9C4nNV7/O56/pYCaZu9GmQsFlGscLKKXsLRtfoADlSJUNIU
+         DEDT2bvn8oLs02hLMhCRexlxNcepusF7H9kwdvphxp7UEoFv8eOlFyzPvhbkY2X2Xx9L
+         wgQc7NTxyDe4aidEl57Dz0fMJFMX6u4wa0VqPjGmGJwiX0ystrpHfB/wZh1gqXGzVFIn
+         +e+L5l/V7uDdYX4O3NEe+KxXpEyIgz/jdxyWNdGEO+zRI6m5Z5Jb682AnhImmh/Mh+Ak
+         ElO+Q+bkFbd6Z+25lxx23Gu8PxaQ7y0GDb0V39eJVqegSLh3B4C5EJmDjZWYZKkP61ej
+         ilvQ==
+X-Gm-Message-State: AJIora/VK26pGifx4aEZMEtrb2Wa6M7bxOazx6cIabIVPzkuJbdiR0Db
+        H0OfQUXPhyde4HhM8OUAquyMc98eoUM60mT+cmZqpQ==
+X-Google-Smtp-Source: AGRyM1snPIFzzPQrblAAlshjOA0mEK4qfSBKO2mQPb+MmznS2glNgzneCmOnOy4qyulsIyO5WJaID6sPej9uHMFeaSs=
+X-Received: by 2002:a25:4046:0:b0:66e:ddca:2ff5 with SMTP id
+ n67-20020a254046000000b0066eddca2ff5mr8784868yba.492.1657408552750; Sat, 09
+ Jul 2022 16:15:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707073054.3954-4-mimi05633@gmail.com>
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com> <20220707125022.1156498-3-viorel.suman@oss.nxp.com>
+In-Reply-To: <20220707125022.1156498-3-viorel.suman@oss.nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 10 Jul 2022 01:15:41 +0200
+Message-ID: <CACRpkdaBXqgxv_2-=Z6Lst7g6kGGL=eti_YaBSqvSQ7LeDgLaA@mail.gmail.com>
+Subject: Re: [PATCH v8 02/15] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,50 +96,23 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Mia,
+On Thu, Jul 7, 2022 at 2:51 PM Viorel Suman (OSS)
+<viorel.suman@oss.nxp.com> wrote:
 
-Thank you for the patch! Yet something to improve:
+> From: Abel Vesa <abel.vesa@nxp.com>
+>
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'iomux/pinctrl' child node of the SCU main node.
+>
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next linus/master v5.19-rc5 next-20220708]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mia-Lin/RTC-nuvoton-Add-nuvoton-real-time-clock-driver/20220707-153317
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220709/202207090650.qVcM1Juo-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/028783fef7713ddc9f2d14a39f09741370f42e3c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mia-Lin/RTC-nuvoton-Add-nuvoton-real-time-clock-driver/20220707-153317
-        git checkout 028783fef7713ddc9f2d14a39f09741370f42e3c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+Tell me if you want me to apply this to the pinctrl tree.
+(I guess Shawn is handling it?)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/rtc/rtc-nct3018y.c:553:23: error: unterminated argument list invoking macro "MODULE_AUTHOR"
-     553 | MODULE_LICENSE("GPL");
-         |                       ^
->> drivers/rtc/rtc-nct3018y.c:551:1: error: expected '=', ',', ';', 'asm' or '__attribute__' at end of input
-     551 | MODULE_AUTHOR(("Mia Lin <mimi05633@gmail.com>");
-         | ^~~~~~~~~~~~~
-
-
-vim +/MODULE_AUTHOR +553 drivers/rtc/rtc-nct3018y.c
-
-   549	
-   550	MODULE_AUTHOR("Medad CChien <ctcchien@nuvoton.com>");
- > 551	MODULE_AUTHOR(("Mia Lin <mimi05633@gmail.com>");
-   552	MODULE_DESCRIPTION("Nuvoton NCT3018Y RTC driver");
- > 553	MODULE_LICENSE("GPL");
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Yours,
+Linus Walleij
