@@ -2,125 +2,122 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDD15715AC
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jul 2022 11:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8D7571631
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jul 2022 11:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiGLJ2r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Jul 2022 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S230269AbiGLJyB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Jul 2022 05:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiGLJ2n (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jul 2022 05:28:43 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29DF9FC5;
-        Tue, 12 Jul 2022 02:28:40 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id u14so9195007ljh.2;
-        Tue, 12 Jul 2022 02:28:40 -0700 (PDT)
+        with ESMTP id S231571AbiGLJx7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jul 2022 05:53:59 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953892125A
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Jul 2022 02:53:56 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a10so7425117ljj.5
+        for <linux-rtc@vger.kernel.org>; Tue, 12 Jul 2022 02:53:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xJct7vEjBCMJh3rBGYc/iOhbOODN5YQYTl76Ke6v2U4=;
-        b=Q24pyPIt/VqdeOyR13jVe1yU+/b/hY7BmZs1Fc+F1bVOdL3EWVKCKWLtmEACMwaS/5
-         ZPsIizXk4WxxPgvbodojzIk++MjiNreYmXfdOWxwj07cd2gdd+uM5NhUYRuvOc5RzT2M
-         dx1oQUkvzDZ0wnwciL2jacrjMj5IgCryk6he+JmacFSPSnYlOHHZd80cGd37f9zdDEdl
-         lMxoLcU87emsF9NnRs7x7hGbOGnY8Ev73+v0RC9d2wQbAYfCGlV54O9g4anOWrhRY7uT
-         6mdK/GDDshEne7UTrqJL+hnTQu5gQRiDvwhokCh8LCl8nct3SDsCNXE3eo90/AjQE37C
-         UQwg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=LMjElaEycr7SAx7h59JBZKxM3vi9DYxeY8Usf5KNPqA=;
+        b=M79X/n3YtBxlMJx0CE/v58ek7eJ/4+aNYp72M7tUXpcGUajqpRjpqWDvzIfk0iDKaZ
+         RBqy7cwj2XdbTfuZTg2g2RKKDn///7skzfv3cZpPIpd0ma8qBuX6zO/9CcEdT+LGPYp9
+         mocZH4KtdzqtbMKmes2DKIjZRmoMQKCICJVEyjM9+tOb/tOTNZIjZmj3nyY0erFmK3Rv
+         WQQtDREaTeHmisLSJ2kBHx5avl8u//N3xZyIhfN2v3n0e4N3CZ4uNp3nkSlgf2tOn5b/
+         WxkW5FP3vbpO3C2Dx2hgQBqQSsndsCtpbpGvI07V9Sxf/OO2qXrUlfyfFzCEnlikGbgr
+         YEZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xJct7vEjBCMJh3rBGYc/iOhbOODN5YQYTl76Ke6v2U4=;
-        b=xTXalcsy4SzrlUU2FpOpSly4KE9ON0IHu3GDqyLcs+UV0b94dADHx8C4xYFG4/tY6X
-         Q+zle/qx+rQYSmq8kMs7p2lqRlZ1dQeSCM+m8SJE9nogUZgusLX/QCtaWR+ujPVbJ2Wg
-         05nomfyWgJEvfBuCW6jeSluv3Yp2Nygns12WNExh4yoEg3eQCQD4UbrSQrWHXb41FO/N
-         4+OznBRqAeliBU03gUP8e+4NHyXx0hNAge0B7YLmDFmesQ3eY08cw4DDtKTqbGESA8B7
-         bilJtown3YfeT2gsGp1vMuplR9xf20BKMsw87xyGRO/BUYJ2p3hZiTFmfyhjVtz6Ffak
-         pU4g==
-X-Gm-Message-State: AJIora8V/zdaDJNMETNmSg8WDSP/xz78nRYT2kwkoEhcrtOePBtUWm9V
-        kJgHM2eYHKljncB1D+ID0uXigGuQ0HYsPFaj5dA=
-X-Google-Smtp-Source: AGRyM1vc3Gcp6847kG1cXb1tgtAB09PmgaOrFEl5S+FEGvbWXaf9an+I+Uw/6X8+vimY2qGyJFP02L80uZLRP5c1u8s=
-X-Received: by 2002:a2e:a288:0:b0:25a:76f9:dc6d with SMTP id
- k8-20020a2ea288000000b0025a76f9dc6dmr12901296lja.152.1657618118747; Tue, 12
- Jul 2022 02:28:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LMjElaEycr7SAx7h59JBZKxM3vi9DYxeY8Usf5KNPqA=;
+        b=Bsf8c/mJZy5nLx+8ZXJzmuvC4AwTN0kFqsR23qbvsbRw5tocf0GhUoGt1b6JRZp18n
+         8NpHbpDp+tLe+kdVX9I8fPvmj4KZGmFzZ4n/hm5+fF9S6ywIMF+dIwYpiFotPURagYgD
+         vdsNbIjx61LgX0oVEa9pSbqsiuVqt6zLWamXGcIGxV3zwoWDjEn4gXxT/O1djgnX6l+q
+         xJXO6GlAKZ8NK8b8peAwtlghEDl+Cpzt3hUVOnMGbZp9w+EF1dJFm4qvvwvofvDJPFFz
+         qNUtCLfCikWCKYkd4myUiDIMedsD6JvJeU9+es85I46A+TJxTu+WIQxyyuPKGVcJRjRq
+         nhAw==
+X-Gm-Message-State: AJIora8qSKJMy9jkIeIrS+2UVrcij5WZ1p2lskYEoMBDKVledW2DXBDd
+        hjuVKo/GdCBQcH3wSPn8cpvOLw==
+X-Google-Smtp-Source: AGRyM1vUyYI89x6KhM9BfxnYOCsnYfp6d4jaPd18IXEKS6Ap6dTYvp3qlHHbxDjKTmb0zSmt5WDAMQ==
+X-Received: by 2002:a2e:96c2:0:b0:25d:7b22:f2dc with SMTP id d2-20020a2e96c2000000b0025d7b22f2dcmr1112264ljj.297.1657619634971;
+        Tue, 12 Jul 2022 02:53:54 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id z2-20020a19f702000000b004794a78bfe7sm2103304lfe.6.2022.07.12.02.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Jul 2022 02:53:54 -0700 (PDT)
+Message-ID: <16107992-a69f-9856-aa36-8596c7cdd4ce@linaro.org>
+Date:   Tue, 12 Jul 2022 11:53:50 +0200
 MIME-Version: 1.0
-References: <20220712030509.23904-1-mimi05633@gmail.com> <20220712030509.23904-3-mimi05633@gmail.com>
- <b9268cfe-2428-65c9-979b-522e4a43f955@linaro.org>
-In-Reply-To: <b9268cfe-2428-65c9-979b-522e4a43f955@linaro.org>
-From:   Minying Lin <mimi05633@gmail.com>
-Date:   Tue, 12 Jul 2022 17:28:27 +0800
-Message-ID: <CAL3Znpyx9Srhkje0HW_0FJPrWmTmmMVPonFH_oQ8hFhZWFrL4A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] ARM: dts: nuvoton: Add nuvoton RTC3018Y node
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>, a.zummo@towertech.it,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 04/15] dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+Content-Language: en-US
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
-        Medad Young <medadyoung@gmail.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, KFTING <KFTING@nuvoton.com>, JJLIU0@nuvoton.com,
-        CS20 MYLin1 <mylin1@nuvoton.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        linux-rtc@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
+ <20220707125022.1156498-5-viorel.suman@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220707125022.1156498-5-viorel.suman@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Dear Krzysztof,
+On 07/07/2022 14:50, Viorel Suman (OSS) wrote:
+> From: Abel Vesa <abel.vesa@nxp.com>
+> 
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'ocotp' child node of the SCU main node.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
 
-Thank you for your comment.
-I will fill blank line.
 
-Thanks.
-Best Regards,
-Mia
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B47=E6=9C=8812=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:44=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On 12/07/2022 05:05, Mia Lin wrote:
-> > Add nuvoton real time clock RTC3018Y in I2C node
-> >
-> > Signed-off-by: Mia Lin <mimi05633@gmail.com>
-> > ---
-> >  arch/arm/boot/dts/nuvoton-npcm750-evb.dts | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/=
-dts/nuvoton-npcm750-evb.dts
-> > index 3dad32834e5e..589aadb67688 100644
-> > --- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-> > +++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-> > @@ -202,6 +202,10 @@
-> >               reg =3D <0x48>;
-> >               status =3D "okay";
-> >       };
->
-> Missing blank line.
->
-> > +     rtc0: rtc@6f {
-> > +             compatible =3D "nuvoton,nct3018y";
-> > +             reg =3D <0x6f>;
-> > +     };
-> >  };
-> >
-> >  /* lm75 on EB */
->
->
-> Best regards,
-> Krzysztof
+
+Best regards,
+Krzysztof
