@@ -2,111 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1C4571357
-	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jul 2022 09:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B09571558
+	for <lists+linux-rtc@lfdr.de>; Tue, 12 Jul 2022 11:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiGLHoF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 12 Jul 2022 03:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S232295AbiGLJI7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 12 Jul 2022 05:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiGLHoD (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jul 2022 03:44:03 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E5D18345
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Jul 2022 00:44:02 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t25so12547659lfg.7
-        for <linux-rtc@vger.kernel.org>; Tue, 12 Jul 2022 00:44:02 -0700 (PDT)
+        with ESMTP id S232296AbiGLJI4 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 12 Jul 2022 05:08:56 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AD8193FE;
+        Tue, 12 Jul 2022 02:08:42 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id a39so9121446ljq.11;
+        Tue, 12 Jul 2022 02:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IcFrG7t1EG6LUI4c3DzqfIRW/OXm84QSXfjqhXP1IYs=;
-        b=iZao2i3gruwi0t0F9xRxQ9CIzUnn7yKtBShxLSHZCUyxi7vmQHEoKW4fRB4VQ/EPUr
-         RgDINDZVpq0Lbgvm7+f3rIn4wmhb11HVo/zS20X1AkyWeZZC9cRQmgdFDReS3k6TfbKt
-         uAs33ywFzgz6MT2l9yG6MRBz4pZAM+VwbBsiJG/7ukMJNLKsGBeOsbPc2hNUGs9FSuXO
-         UJH5ZJkmbirbHQPXyEU+iDCO1AJ3cRws5oJdGriJALuKCiTkQBp1kpHBdZ1MmSvSURGH
-         h7QXLZkwzxVs81XKBVPMnDZGJGP9qwiq23z8zWw6J0wLaZdJ27umIuBQxptqiiTXvUJk
-         prsw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=1RbNAk2loNo7HnTvuU1BMwc2UO5NqN/DOoq+VrgJR2M=;
+        b=EMG22hH8EyDx9MahdYbBc1FhWhhsX6CRNDakWkenx0oAa5GLIwJogcgOF8ENLRQwwx
+         Se3fEsR9DIoaK4WEu4l8vNnj+/sjr3R5m1qdqnSt20dCi8+Xf1H4y2uk06YGJZOIEJY7
+         i4+YBicPhjLJf6N+16P5SwCMP3sfFFVuiUC/+7vTNas7M1lykTfdC7zY4rib22YsIIQ4
+         XcoW09m4HYK9+9sJbFLXHc3cCAp/9+zIBtQAaI49DdiXAVzgCnQcLNoTQk4mHarYnNkq
+         9VasOsv0nXDhMvEC7GP/J4aYp5JzWTnOnYoxwFDIRvpdMPRWE+b7sRgX0kzzmJFI4beE
+         1cdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IcFrG7t1EG6LUI4c3DzqfIRW/OXm84QSXfjqhXP1IYs=;
-        b=nS/roAa7g08TWe9EcdWKM7yT/w3y888p+dkKyZUEVU+nZj5XuRaupckn72wycBb6a1
-         C8qAtNCR26yxVKml2mqXmrTuR8KnPxgOSP6LuOvQD/kJ3rpgQBxTYDJSKebKYAwn1rRu
-         uIpAE2SLZP6qnBog6vj9vcMCqzd5nIPbkDs9gs+m/OVjZI9c181Ddd0r48W8bSZrvlQJ
-         MA3DzS210dlwiuQibR0Uv6K5zhYgsSzbSUU+SjIbeldfgLnsk3ZHKUuWTMg2lvmeqm1v
-         eg3rxWUv4eHZIVuWlPA61EVE2RWEWDoo2lcciV3U38w6S8JNY0ENgAVcZaSJK1BiCd1q
-         G3/g==
-X-Gm-Message-State: AJIora+Rj/a0kiqQ/wbUii1pb1/XGZu0PdxNvMxuPACQx2gE06Qn3Dg3
-        7Z8al43ngoFPJUeMLRjlvx1FBQ==
-X-Google-Smtp-Source: AGRyM1vH1RckPSHeD9P9D+rwKoIv7LbZk2zdF3MOx+FgD60g2vYvqUjSBlEphiWuGj45r7x+fu3/jA==
-X-Received: by 2002:a05:6512:e9b:b0:489:e034:cfc9 with SMTP id bi27-20020a0565120e9b00b00489e034cfc9mr4978432lfb.366.1657611841048;
-        Tue, 12 Jul 2022 00:44:01 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5cab-55.bb.online.no. [88.92.171.55])
-        by smtp.gmail.com with ESMTPSA id c19-20020a197613000000b0048110fd06c4sm2027346lff.53.2022.07.12.00.43.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 00:44:00 -0700 (PDT)
-Message-ID: <b9268cfe-2428-65c9-979b-522e4a43f955@linaro.org>
-Date:   Tue, 12 Jul 2022 09:43:57 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=1RbNAk2loNo7HnTvuU1BMwc2UO5NqN/DOoq+VrgJR2M=;
+        b=CBOFIma+FnvplVmMC/n0ADQuuzog80p2S4bv4E/mrxpUOigU3vFP4bXZg2FFe2H1Rx
+         UCe+VkpKKOrZJTN9BDrDl1fRRzQoobavbDgtNNlAOhyPeMBhFtjinVlkiyzGcouWXp90
+         bj9r7LfVlmBwcp+1l064iNO9lV8yYXDeJ3nQticbijW2aTP2atcG/CC7nrUqOQ2fCVxb
+         a7DluSevnGtm91fMNEXM8efu6E10TSqsaDirtDZod3kN0Ihgs840yWSTDhBOBZyh4RsG
+         CCqOy3ZNlBZmUQjTIZq+u8tEdGe5LjAsCniHEwkP7h8UMEsVcSChG19WruxyvwOI3g49
+         wWJA==
+X-Gm-Message-State: AJIora/C+42WOU9doY2+MrAFgoZI/rqL2sjBrpYGWk7d4e5CimPf2OHU
+        seXphHrAwaTqx40Qs3DChVXHVC3L8DjMqnCjO3o=
+X-Google-Smtp-Source: AGRyM1tMn/6KcyAf3KU/4C9+Nq+Qk7UgIhyc1wPTZ+6jwN+B0OVOO9meDPyQ93iSexAkmvKQOlI11K1GyPF2R+ttqj0=
+X-Received: by 2002:a2e:9cc9:0:b0:25d:755f:c310 with SMTP id
+ g9-20020a2e9cc9000000b0025d755fc310mr2927837ljj.296.1657616920449; Tue, 12
+ Jul 2022 02:08:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 2/3] ARM: dts: nuvoton: Add nuvoton RTC3018Y node
-Content-Language: en-US
-To:     Mia Lin <mimi05633@gmail.com>, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+References: <20220712030509.23904-1-mimi05633@gmail.com> <20220712030509.23904-2-mimi05633@gmail.com>
+ <2f593af5-442e-67cc-9b7c-303d4c24e389@linaro.org>
+In-Reply-To: <2f593af5-442e-67cc-9b7c-303d4c24e389@linaro.org>
+From:   Minying Lin <mimi05633@gmail.com>
+Date:   Tue, 12 Jul 2022 17:08:28 +0800
+Message-ID: <CAL3ZnpxCnWt=fgNvAZ5Efep8bxbAbEb9BM3kWa00brGgoCuKLQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>, a.zummo@towertech.it,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
         krzysztof.kozlowski+dt@linaro.org, ctcchien@nuvoton.com,
-        medadyoung@gmail.com, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
-        KFTING@nuvoton.com, JJLIU0@nuvoton.com, mylin1@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220712030509.23904-1-mimi05633@gmail.com>
- <20220712030509.23904-3-mimi05633@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220712030509.23904-3-mimi05633@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Medad Young <medadyoung@gmail.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, KFTING <KFTING@nuvoton.com>, JJLIU0@nuvoton.com,
+        CS20 MYLin1 <mylin1@nuvoton.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        linux-rtc@vger.kernel.org, devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 12/07/2022 05:05, Mia Lin wrote:
-> Add nuvoton real time clock RTC3018Y in I2C node
-> 
-> Signed-off-by: Mia Lin <mimi05633@gmail.com>
-> ---
->  arch/arm/boot/dts/nuvoton-npcm750-evb.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-> index 3dad32834e5e..589aadb67688 100644
-> --- a/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-> +++ b/arch/arm/boot/dts/nuvoton-npcm750-evb.dts
-> @@ -202,6 +202,10 @@
->  		reg = <0x48>;
->  		status = "okay";
->  	};
+Dear Krzysztof,
 
-Missing blank line.
+Thank you for your reminder.
+I'm new to upstream. I will add the review tag in the next patch.
 
-> +	rtc0: rtc@6f {
-> +		compatible = "nuvoton,nct3018y";
-> +		reg = <0x6f>;
-> +	};
->  };
->  
->  /* lm75 on EB */
-
-
+Thanks.
 Best regards,
-Krzysztof
+Mia
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B47=E6=9C=8812=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=883:43=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 12/07/2022 05:05, Mia Lin wrote:
+> > Document devicetree bindings for the Nuvoton NCT3018Y Real Time Clock.
+> >
+> > Signed-off-by: Mia Lin <mimi05633@gmail.com>
+>
+> Where is the review tag?
+>
+> Best regards,
+> Krzysztof
