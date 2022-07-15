@@ -2,97 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A7E57472F
-	for <lists+linux-rtc@lfdr.de>; Thu, 14 Jul 2022 10:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC875762DF
+	for <lists+linux-rtc@lfdr.de>; Fri, 15 Jul 2022 15:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237501AbiGNIh4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S234657AbiGONfx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 15 Jul 2022 09:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236660AbiGNIhP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 14 Jul 2022 04:37:15 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AFA3FA3F
-        for <linux-rtc@vger.kernel.org>; Thu, 14 Jul 2022 01:37:13 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id e28so1651913lfj.4
-        for <linux-rtc@vger.kernel.org>; Thu, 14 Jul 2022 01:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=eOKhIHPUU5qPTZbjyQcWfvRUY0zDAP8hnIUzGBjF2Jn5DfdNsbEWN2bt7ALPYmKFVp
-         Dxr1gDHkbIBW6Zt+nHPJYVynuk8AW0yQZ/Zbg6Hs/Db/0s9SnaRXX8dPxs4FUxGCTJqt
-         PUYZva9zdBfTCaw+ACjLsUUgRvbYiV1yKAF3EhOBh+YW55bYBsAw2vjNobpxCrdB648X
-         A9Vj0WSfJubet8viXTg/I9X1Zmn6KwP7YNCJiSogQMOb5VTL9XQBYGsxHSC28kklqMwQ
-         Xqm1mx/as6lOSd/UexvuUJPMkR0uIfSfLSUsGSd7SP6mXh7BeziDYVk18AfHAMhcFado
-         ZNLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=X0l9cUpVZJGqWaed2myZ8+RGwjtsyknEuoeCcFQuoJSHQ9hfjsAKv9VHmBY8p+6nP7
-         2DpD5c+0Hm9cGAVVb8je9nqYorlJiHWvnZvVIjbm0t8w0TkiftuWyPxs4sbd0mZb+pXT
-         CoKYTGtbSi2lHJDWz76EYfA/LDbaZFbGpJjhj4Isp74nr3AA9jOiS2h+r1PnLEydpMvT
-         svroMpw8ehKZ4tAxoiBD6vH/yr5KJuuhw8B2dq/sa9PbTkV1BqsZFmmO8fLke8EmpzlI
-         OAH3hiKbRxQaAAb924uRc5ZxdsWrIenus/YuTvT0+wrgNe6+gr+tXDvRv8Jsr6Gf0u9K
-         XmDg==
-X-Gm-Message-State: AJIora/hkR36ojWcNxTyDAL7SjB7O5tghPhcqL+2Jzl61SELDZDLzuX+
-        HNmxZRYn+GxFc7wKn2pvnvoMCDxZh0UzBkxG9B4=
-X-Google-Smtp-Source: AGRyM1suH6kpL0bxxrdPqBdRw7fjg6QmbYsIJ5KtUWeYknhIH8CIkHpjEQ1bnLxbFcENJg0E8wYhVlYhJeESVTPizkI=
-X-Received: by 2002:a05:6512:12c8:b0:489:efbf:18d1 with SMTP id
- p8-20020a05651212c800b00489efbf18d1mr4734610lfg.192.1657787832538; Thu, 14
- Jul 2022 01:37:12 -0700 (PDT)
+        with ESMTP id S234749AbiGONfx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 15 Jul 2022 09:35:53 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956897CB7A
+        for <linux-rtc@vger.kernel.org>; Fri, 15 Jul 2022 06:35:49 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CD41A20000A;
+        Fri, 15 Jul 2022 13:35:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1657892148;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GixBYr/dyhLisknZIt6iN8Pj5jT2bDrSviwZp/FYUOM=;
+        b=W3sdltJZZ+sm2NzJRXyujOuKW6LOUsAmEkSwuDI7qIbCFB2TDykVtccIpFHOEmElHmbKPn
+        i4JhusAMPqi1E0ZLj9zbgQhPUIu85/1HTiJmku1GLSc1HoZ1grSNkD6/lpuJR/60ULCcrT
+        RLIInTtswevtJ5GjDL5ARrYWEGzJ4z1leCcg7yHUvfBRWnVlAjhXTaOBxsnNM6BVaC+pP+
+        +gGrG2jzJwsJcFwb/oeP6gKNSYQr6SVenIwh7KREjPbH5CnAUhyxciKzY6S4CVns0BdU4K
+        6eEjRQr3lS3dQzSc06E33J4aDODbhHjqy9PBCQQ+epbzSBd/hszAILnwvVO9ww==
+Date:   Fri, 15 Jul 2022 15:35:47 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Kevin Rowland <kevin.p.rowland@gmail.com>
+Cc:     linux-rtc@vger.kernel.org
+Subject: Re: rtc: userspace alarmtimer via posix-timers or timerfd
+Message-ID: <YtFtMzpFQPxnEbHw@mail.local>
+References: <CAHK3GzwVbWBi8OYOmdnDq7nOxwp45qpSFU4UT+wK0=UVUNyQsw@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:11
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:11 +0100
-Message-ID: <CAFC-3icPrpmNqEMcqzAOFvzCPc-r5yv89mNAZ9SsCQvcOZ=+9g@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4900]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHK3GzwVbWBi8OYOmdnDq7nOxwp45qpSFU4UT+wK0=UVUNyQsw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+On 11/07/2022 17:48:49-0700, Kevin Rowland wrote:
+> Hello,
+> 
+> I'm curious if there's some mechanism in the kernel to bridge POSIX
+> timers (or the timerfd subsystem) and the alarmtimer feature.
+> The intent is to give userspace the ability to set timers that
+> (optionally) result in the system waking from suspend via RTC alarm.
+> 
+> I was thinking about hacking together something myself in
+> `kernel/time/posix-timers.c`, but then found `alarmtimer.c` which, as
+> far as I can tell, is exposed only to the rest of the kernel.
+> 
+> Any pointers welcome.
+> 
+
+alarmtimers are POSIX timers, see https://lwn.net/Articles/429925/
+
+Simply use the CLOCK_REALTIME_ALARM clockid
+
+> Best,
+> Kevin
+
 -- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
