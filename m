@@ -2,116 +2,89 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C234557CC72
-	for <lists+linux-rtc@lfdr.de>; Thu, 21 Jul 2022 15:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F83857D626
+	for <lists+linux-rtc@lfdr.de>; Thu, 21 Jul 2022 23:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiGUNpl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 21 Jul 2022 09:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S233918AbiGUVhg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 21 Jul 2022 17:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiGUNow (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Jul 2022 09:44:52 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD1B863CC
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jul 2022 06:43:19 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id o12so1885326ljc.3
-        for <linux-rtc@vger.kernel.org>; Thu, 21 Jul 2022 06:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Ugu9+BQebh8oUbesVLf90yINOUSbCYM1Wph6Cxi19ho=;
-        b=hXxAmCBBdRcBuuUkQLQSHKPd2ik/hT1YZYCeZmSJk9huBTf3a0arBXeFb7bF9Rn7VF
-         VrjIii7a8o32Dq2yKaDvkYj9KnRI0RD19vZeFvwWTQzF/HOomGFPZJoAGmXeju6DLfL/
-         WfQia+PqLMj0RaxGoDlWsQLm+b5sTBLKDmQK991mcjTMi7/tsRSjKsiNuVeitNaYOObe
-         Buyb+plCaEy46IjVmktGsm6cj6WflDn6xHbMD43Qxl2UsUhF630e7GhjhKtxil2BLMb1
-         rJgP0d95lcJI76Fwo831+3CzFQXiSfcdajFnGz4N/f1KLDTk1fmfgXxrIdeXrluvc27R
-         lk+g==
+        with ESMTP id S233433AbiGUVhf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 21 Jul 2022 17:37:35 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3393630;
+        Thu, 21 Jul 2022 14:37:34 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id u20so2380436iob.8;
+        Thu, 21 Jul 2022 14:37:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Ugu9+BQebh8oUbesVLf90yINOUSbCYM1Wph6Cxi19ho=;
-        b=NmNmIVlWRQWPy/aMgJh5d6YwWZ7/EfWpZl4mwaVTprJrab2+LEMTLeGb+dfTafsYz1
-         5KWfb5yeL/NCWATSVrp5iprdNtWOhkvyIzjq2s0juApxw0vc77Y+hNogCiq6COGbR9vk
-         UrMNHoa7yhYU0Uk4XjF655r2xAlnFmhBKQabcSOa3qcDJUUxvEbDQA/Ks7HUOvNXJIjv
-         /qD5e0DNvRhRyqVzp0//l1XCZdO8WTsQWmSszT0fWrzb9hiXx5T7+gSSvIeo6eamxGv2
-         0/VgTAItoBVnEroQCSpCVljb1cjfNzGdNQ/IpwEmhyDIA7mM4PD0xHuacUojsrM6WLBE
-         Iymw==
-X-Gm-Message-State: AJIora/vdMCcldeR//LfGVeWmOSc9pcVeQofeD3T5mEc9tHgULPvXEtb
-        sgNYByfwoR9YJQzDG23fjY45Tg==
-X-Google-Smtp-Source: AGRyM1sk6Lk3HTpTVzJJhaufs5oRoDVVpjxoq9YhDCd6efuK2WP78J5IE1t7GiZ0he9gOf6PkljFhg==
-X-Received: by 2002:a2e:b74e:0:b0:25d:d62a:9033 with SMTP id k14-20020a2eb74e000000b0025dd62a9033mr3370071ljo.105.1658410996048;
-        Thu, 21 Jul 2022 06:43:16 -0700 (PDT)
-Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
-        by smtp.gmail.com with ESMTPSA id a21-20020ac25e75000000b0048a6fba9d77sm443202lfr.177.2022.07.21.06.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Jul 2022 06:43:15 -0700 (PDT)
-Message-ID: <5c90ef96-969c-728a-3987-5793956c5224@linaro.org>
-Date:   Thu, 21 Jul 2022 15:43:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: nxp,pcf85063: Convert to DT
- schema
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+0HdgmCZ+Rln6MS1n8RXhMBDElcjUol5xkuMakNkAN4=;
+        b=GAm5qqlDI+YXkaAZKkKFiHmcHQbusTWeciw0PqBamc5ZfyyOuACg6pIYcV5OyKIDx5
+         HJyJJBf3kUpP7WAPJ2mAC1YJv37zfVgchEHeY7Ut3YL8OGCKhsNhfvx58kQ6jOFvcw6/
+         uyYE9lriuwM/4ONaHhFxXo7UVo2BGC9wznnDzQoThO33fgNyY5sfN/yHZc1J13OhA8Yq
+         9C7HdrgtPagpCxMqEIG3CmL3jpI7Udvl8hDNUfGSPQAMcLNWxde07+ROfDNsiuLYn1+g
+         zXpPP0m3IWRmGRvsXK0e1fECpZ8c8CiEBrY/dAaeuf4LLgPXPNeH/rMdpXwX9Mik7F7a
+         zp3Q==
+X-Gm-Message-State: AJIora+Fyi1vNiTi7lRpVDvs8UFQ5K6ESxacz4trPhV97yrARvoWetxZ
+        2H6ZSXd1/BWiTItpYrvf15HIF2GftQ==
+X-Google-Smtp-Source: AGRyM1tW45Lc/rpN/g5qpyrJC/pQA3Y5vk6C4+J0XnxZmoG7s2P2KyKAwpFNwXEyhBXFax/JrozEKg==
+X-Received: by 2002:a02:9705:0:b0:341:468c:7724 with SMTP id x5-20020a029705000000b00341468c7724mr225657jai.143.1658439454145;
+        Thu, 21 Jul 2022 14:37:34 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id q12-20020a92d40c000000b002dd0f4b440fsm1081352ilm.67.2022.07.21.14.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jul 2022 14:37:33 -0700 (PDT)
+Received: (nullmailer pid 1994823 invoked by uid 1000);
+        Thu, 21 Jul 2022 21:37:32 -0000
+Date:   Thu, 21 Jul 2022 15:37:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220721133303.1998356-1-alexander.stein@ew.tq-group.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220721133303.1998356-1-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ds1307: Convert to json-schema
+Message-ID: <20220721213732.GA1993841-robh@kernel.org>
+References: <20220617114420.1398259-1-thierry.reding@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617114420.1398259-1-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 21/07/2022 15:33, Alexander Stein wrote:
-> Convert the NXP PCF85063 RTC binding to DT schema format.
+On Fri, 17 Jun 2022 13:44:19 +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Add 'interrupts' and 'wakeup-source' as this device has an interrupt
-> which was not documented, but is in use.
-> 'clock-output-names' and '#clock-cells' are added as well, those were
-> probably missed when adding clkout support in commit 8c229ab6048b
-> ("rtc: pcf85063: Add pcf85063 clkout control to common clock framework")
-
-Thanks for adding it here, this sounds fine but brought my attention to
-interrupts and quartz-load. It seems that only rv8263 supports
-interrupts. In the same time rv8263 work only with 7000
-quartz-load-femtofarads.
-
-If that's correct, you need to put "allOf" after "required" and inside
-"if:then:" restricting it. For rv8263 interrupts:true and quartz as
-const 7000, for else: interrupts:false.
-
+> Convert the DS1307 (and compatible) RTC bindings from the free-form text
+> format to json-schema.
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
-> Krzysztof, thanks for your review.
-> 
 > Changes in v2:
-> * Sorted compatible list
-> * Mentioned new #clock-cells and clock-output-names properties in commit message
-> * Removed 'interrupt-names', not needed/used anyway
-> * Fixed quartz-load-femtofarads defintion/description
+> - add compatible string list for [ st,m41t00, dallas,ds1338 ]
+> - allow second interrupt and interrupt-names
+> - remove commented-out section
+> - allow vcc-supply
 > 
->  .../devicetree/bindings/rtc/nxp,pcf85063.txt  | 32 --------
->  .../devicetree/bindings/rtc/nxp,pcf85063.yaml | 73 +++++++++++++++++++
->  2 files changed, 73 insertions(+), 32 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
+>  .../devicetree/bindings/rtc/rtc-ds1307.txt    |  52 ---------
+>  .../devicetree/bindings/rtc/rtc-ds1307.yaml   | 102 ++++++++++++++++++
+>  2 files changed, 102 insertions(+), 52 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
 > 
 
-Best regards,
-Krzysztof
+Looks like this hasn't been picked up so I've applied both patches, 
+thanks!
+
+Rob
+
