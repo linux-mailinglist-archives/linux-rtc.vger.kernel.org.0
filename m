@@ -2,88 +2,125 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B020B57E40C
-	for <lists+linux-rtc@lfdr.de>; Fri, 22 Jul 2022 18:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799A457E578
+	for <lists+linux-rtc@lfdr.de>; Fri, 22 Jul 2022 19:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiGVQEy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 22 Jul 2022 12:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S230443AbiGVRZK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 22 Jul 2022 13:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiGVQEx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Jul 2022 12:04:53 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21AA17E3C
-        for <linux-rtc@vger.kernel.org>; Fri, 22 Jul 2022 09:04:51 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B817B240008;
-        Fri, 22 Jul 2022 16:04:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658505890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMTBZyJBu2qexNfv7BzuGD7ItuMgmoc699Ik31JwJh4=;
-        b=W3NApy9oyxKJwhn9jHi4htglHhksEsvyuaiKwGrx/ZYeQyBc3BdC6VCJP2ZpeNfyw0z4MU
-        0C7Wc6I5T0/TS29O/gLs/HPR0c3Qnbt3Fvoz7t1gumwLuycVOm93I8Vuo3QhM4ZLyGp3Lx
-        G5sTHsYOEKDYJvzJ9lVe+G/jCse4raeKURk5p7llr4EEY0+/mmRL7QCMgkgStOVdDzo2fE
-        6ON+A0S7pKO2JlYx5TWPsIt9zNtPlZUtnbTHfECvh8w11JCWoXttIv4WVDca7lke31QQiU
-        +ZwPHW/MhnLB4/YQ2Ns8RkXXAZiXOKyTw0qsaCIrJ0KkJqet/ajWTzUnMSwwIg==
-Date:   Fri, 22 Jul 2022 18:04:49 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ds1307: Convert to json-schema
-Message-ID: <YtrKofy+cZBQDRq3@mail.local>
-References: <20220617114420.1398259-1-thierry.reding@gmail.com>
- <20220721213732.GA1993841-robh@kernel.org>
+        with ESMTP id S230300AbiGVRZI (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 22 Jul 2022 13:25:08 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6BED97
+        for <linux-rtc@vger.kernel.org>; Fri, 22 Jul 2022 10:25:06 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a13so6033629ljr.11
+        for <linux-rtc@vger.kernel.org>; Fri, 22 Jul 2022 10:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KuEpwZJ1uhtFdUF1C/gI9wPx+uXhdTm9dpr0H9Yke6w=;
+        b=egPNOAbAN7Y+qZ60MlIEaORxMlNW33vdbhk/TMQ/ZDFV2yScqD8w0HuBXmVJB23Mgr
+         mJuWq/sryAH4iWp/5UHpI2wskFsbtxE7mUll6tkj0cjp0oEY5R/ZcRCXSo+qH/kk5uIz
+         kHMnq/L9Qt3LQrGEmJuO1QDt2I8sVfV9Hby0UH8vJ6wxfdKNDfOIKuK3qjDPt4vXObaO
+         cmmCNZ1BA6OjXgdOnaLISFsGguwpY4ApUPps3YB59luy7kyLjtd7FJyiYTpYtpBLLnws
+         qG/1qMQpOiWD8AtVLBsmGQctucAgovGC9Ga8TFOFfZRXlOL4oMphLGwTCVTBzFQlpC6F
+         9dRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KuEpwZJ1uhtFdUF1C/gI9wPx+uXhdTm9dpr0H9Yke6w=;
+        b=wZ6nwqNDyyZa3r1QNGt96s4W6wlBP9dWHi9ifiPzsiGH8jizSjEHD+9Nfl4jT+HJBB
+         5IkkxbHgaqWFKCmqc9HLuQF5P/zvWe/x4y8NTE+O0DgOriP1STugma9foCdAbCbeCFb6
+         FkXfKdgbKQZ5OyoU5C20xHGlZ+s6bayItlOq/6jyhf022Q1/4IqkEljMGRJ5msxYOJTM
+         VRitKukDL5/ubAbIWIwJFeRj7RE0W/xcEKH91V2BznLI3DU1q2qWEgl0bu0s7STPPuRk
+         /VQtWutuHp2f733dxwZJlK/C/UITjDshRK/rrIybe7lePvU+rvWI+SK5w8E4n0B1SmHm
+         pQ+Q==
+X-Gm-Message-State: AJIora8CKb6I1JqO7bvYlcFGX8qn1vrlJCrmTNSzD6r2rLkvuZ7uDaUR
+        4vCbVJyiVQ0bzqtfhwTLPS+Frw==
+X-Google-Smtp-Source: AGRyM1sW6Ujrt3+VsCsQa6hm4P4P+ZVr5SIK9xcNS52rdxS+gihxYH01QZB0l5kXGFj69Tua+Y7gPg==
+X-Received: by 2002:a2e:b013:0:b0:25d:8f3d:7f0 with SMTP id y19-20020a2eb013000000b0025d8f3d07f0mr365855ljk.131.1658510704998;
+        Fri, 22 Jul 2022 10:25:04 -0700 (PDT)
+Received: from [192.168.10.173] (93.81-167-86.customer.lyse.net. [81.167.86.93])
+        by smtp.gmail.com with ESMTPSA id o21-20020ac24c55000000b004891b4a4acfsm1157744lfk.185.2022.07.22.10.25.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Jul 2022 10:25:04 -0700 (PDT)
+Message-ID: <12dd9bff-bce4-7360-4a98-89bf31202571@linaro.org>
+Date:   Fri, 22 Jul 2022 19:25:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721213732.GA1993841-robh@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: nxp, pcf85063: Convert to DT
+ schema
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220721133303.1998356-1-alexander.stein@ew.tq-group.com>
+ <5c90ef96-969c-728a-3987-5793956c5224@linaro.org>
+ <5761215.mogB4TqSGs@steina-w>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5761215.mogB4TqSGs@steina-w>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 21/07/2022 15:37:32-0600, Rob Herring wrote:
-> On Fri, 17 Jun 2022 13:44:19 +0200, Thierry Reding wrote:
-> > From: Thierry Reding <treding@nvidia.com>
-> > 
-> > Convert the DS1307 (and compatible) RTC bindings from the free-form text
-> > format to json-schema.
-> > 
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > ---
-> > Changes in v2:
-> > - add compatible string list for [ st,m41t00, dallas,ds1338 ]
-> > - allow second interrupt and interrupt-names
-> > - remove commented-out section
-> > - allow vcc-supply
-> > 
-> >  .../devicetree/bindings/rtc/rtc-ds1307.txt    |  52 ---------
-> >  .../devicetree/bindings/rtc/rtc-ds1307.yaml   | 102 ++++++++++++++++++
-> >  2 files changed, 102 insertions(+), 52 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
-> > 
+On 22/07/2022 08:02, Alexander Stein wrote:
+> Hello Krzysztof,
 > 
-> Looks like this hasn't been picked up so I've applied both patches, 
-> thanks!
+> thanks for your feedback.
+> 
+> Am Donnerstag, 21. Juli 2022, 15:43:13 CEST schrieb Krzysztof Kozlowski:
+>> On 21/07/2022 15:33, Alexander Stein wrote:
+>>> Convert the NXP PCF85063 RTC binding to DT schema format.
+>>>
+>>> Add 'interrupts' and 'wakeup-source' as this device has an interrupt
+>>> which was not documented, but is in use.
+>>> 'clock-output-names' and '#clock-cells' are added as well, those were
+>>> probably missed when adding clkout support in commit 8c229ab6048b
+>>> ("rtc: pcf85063: Add pcf85063 clkout control to common clock framework")
+>>
+>> Thanks for adding it here, this sounds fine but brought my attention to
+>> interrupts and quartz-load. It seems that only rv8263 supports
+>> interrupts. In the same time rv8263 work only with 7000
+>> quartz-load-femtofarads.
+>>
+>> If that's correct, you need to put "allOf" after "required" and inside
+>> "if:then:" restricting it. For rv8263 interrupts:true and quartz as
+>> const 7000, for else: interrupts:false.
+> 
+> It is slightly different. In all the datasheets I found there was an IRQ pin, 
+> so this applies to all models, although only some of them (PCF85063A, 
+> PCF85073A and RV8263) support alarms, which is what Linux cares for right now. 
+> But this is handles in the driver already.
 
-This was on my radar but I'm never sure what you prefer for dt-bindings
-only series.
+OK, this is fine then.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> quartz-load-femtofarads does not apply to RV8263, because it has no OSCI pins 
+> at all but uses an onboard oscillator. See commit 5b3a3ade0293 ("rtc: 
+> pcf85063: add Micro Crystal RV8263 support") for that. But this also handled 
+> in the driver already.
+
+This is what I was based on, so the quartz-load-femtofarads should not
+be even allowed for RV8263.
+
+> Apart from that apparently only PCF85063 has a fixed quartz-load of 7pF, the 
+> other types supported can have either 7 oder 12.5 pF.
+
+...and for PCF85063 this should be fixed to 7.
+
+Best regards,
+Krzysztof
