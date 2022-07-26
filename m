@@ -2,69 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAC65815BB
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jul 2022 16:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B605815C8
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jul 2022 16:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234121AbiGZOy2 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jul 2022 10:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S231815AbiGZO6T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jul 2022 10:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233523AbiGZOy0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jul 2022 10:54:26 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [217.70.178.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B9F2A73A;
-        Tue, 26 Jul 2022 07:54:24 -0700 (PDT)
+        with ESMTP id S229502AbiGZO6S (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jul 2022 10:58:18 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF542BB01
+        for <linux-rtc@vger.kernel.org>; Tue, 26 Jul 2022 07:58:16 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A884A20000A;
-        Tue, 26 Jul 2022 14:54:20 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id D6513240006;
+        Tue, 26 Jul 2022 14:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658847262;
+        t=1658847495;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=6Vl9dAzKmdzMw7JCXJnHE4Fod2FK/hx9X5jnLIYwfFI=;
-        b=cJw0LbyGLtglgby91y7FMBnYElUiKjfTs+YroBsAZ/iH0Wkkg106cit43pBgyr7UbtbT1H
-        yfGUyxBuxt0eWYLe03QPuTjqGGuVpVxPCRli52lsNFuESTVuhxOpYsB7rf8pm23rkOp92k
-        rURS7gvHPLEXTlc87ti2GNrzIoW+ccVysIHgDYpXT2rs2YTYOnLS/w/YZ+L1K88ZxjK7P7
-        p47PVl8xXbpd5BU6MANHhibFHvhQWtfcNDoesonFuNxCUZ+FBRHlI2W6suKz+f9HS8627V
-        dm+3XFCbQCwyIq52fbEkZhmYiQoMcRH1SIwUz8cKx4uABEg9yPuUGOBgdzUxtA==
-Date:   Tue, 26 Jul 2022 16:54:19 +0200
+        bh=A2QVtMJBXp5WDh6xKtWCU7TcIfQMEpW5O9W1Yj5TkIo=;
+        b=h+cXxrgGGbuG4Dmmz+lZ6+At3aUaQW3mFXMWHb3y52//1SYolIDLFYSDC47/ii6Abtps1m
+        njMOoUp2Q2BO1QN5eX0GTkfTUMdgAbJJPDSwNf0LnWL+EMckYtIUi1MbIxFFQabLjIunHl
+        VrN/VHIyvXrh+m27OdOMOsX/qC2Y4mdyqTzvhNyw9DmF8fUYbzmAEaCyYi1pME4R66aBEv
+        X0iVELtpb2MTLjOVZf1jPJ/yxrP+EkW1XT+ccsrMeNdfH8mw04oMhdXTJj05mIfZmh9Wrr
+        wQtZ9AIcXLbgbg14+9JbN1PmsVyPEO9cBzYxxv2JKmU6V2mGq4RtlVOk5Bdzcw==
+Date:   Tue, 26 Jul 2022 16:58:12 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
-        matt@traverse.com.au
-Cc:     stable@vger.kernel.org
-Subject: Re: [PATCH] rtc: rx8025: fix 12/24 hour mode detection on RX-8035
-Message-ID: <165884722628.3161296.5974966086195813215.b4-ty@bootlin.com>
-References: <20220706074236.24011-1-matt@traverse.com.au>
+To:     a.zummo@towertech.it, robh@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: rtc: microcrystal,rv3032: Add missing type
+ to 'trickle-voltage-millivolt'
+Message-ID: <165884747543.3162435.10649453266544407027.b4-ty@bootlin.com>
+References: <20220719215143.1877566-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220706074236.24011-1-matt@traverse.com.au>
+In-Reply-To: <20220719215143.1877566-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 6 Jul 2022 07:42:36 +0000, Mathew McBride wrote:
-> The 12/24hr flag in the RX-8035 can be found in the hour register,
-> instead of the CTRL1 on the RX-8025. This was overlooked when
-> support for the RX-8035 was added, and was causing read errors when
-> the hour register 'overflowed'.
+On Tue, 19 Jul 2022 15:51:42 -0600, Rob Herring wrote:
+> 'trickle-voltage-millivolt' is missing a type definition. '-millivolt' is
+> not a standard unit (should be '-microvolt'). As the property is already
+> in use, add a type reference.
 > 
-> To deal with the relevant register not always being visible in
-> the relevant functions, determine the 12/24 mode at startup and
-> store it in the driver state.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] rtc: rx8025: fix 12/24 hour mode detection on RX-8035
-      commit: 71af91565052214ad86f288e0d8ffb165f790995
+[1/1] dt-bindings: rtc: microcrystal,rv3032: Add missing type to 'trickle-voltage-millivolt'
+      commit: 2830320122d87fb65632f09cdffe129046915d51
 
 Best regards,
 
