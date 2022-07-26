@@ -2,67 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B605815C8
-	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jul 2022 16:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105A95815D4
+	for <lists+linux-rtc@lfdr.de>; Tue, 26 Jul 2022 17:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiGZO6T (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 26 Jul 2022 10:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S234155AbiGZPAk (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 26 Jul 2022 11:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiGZO6S (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jul 2022 10:58:18 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF542BB01
-        for <linux-rtc@vger.kernel.org>; Tue, 26 Jul 2022 07:58:16 -0700 (PDT)
+        with ESMTP id S238739AbiGZPAj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 26 Jul 2022 11:00:39 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF1C240B5;
+        Tue, 26 Jul 2022 08:00:37 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D6513240006;
-        Tue, 26 Jul 2022 14:58:13 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3149BFF813;
+        Tue, 26 Jul 2022 15:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1658847495;
+        t=1658847636;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=A2QVtMJBXp5WDh6xKtWCU7TcIfQMEpW5O9W1Yj5TkIo=;
-        b=h+cXxrgGGbuG4Dmmz+lZ6+At3aUaQW3mFXMWHb3y52//1SYolIDLFYSDC47/ii6Abtps1m
-        njMOoUp2Q2BO1QN5eX0GTkfTUMdgAbJJPDSwNf0LnWL+EMckYtIUi1MbIxFFQabLjIunHl
-        VrN/VHIyvXrh+m27OdOMOsX/qC2Y4mdyqTzvhNyw9DmF8fUYbzmAEaCyYi1pME4R66aBEv
-        X0iVELtpb2MTLjOVZf1jPJ/yxrP+EkW1XT+ccsrMeNdfH8mw04oMhdXTJj05mIfZmh9Wrr
-        wQtZ9AIcXLbgbg14+9JbN1PmsVyPEO9cBzYxxv2JKmU6V2mGq4RtlVOk5Bdzcw==
-Date:   Tue, 26 Jul 2022 16:58:12 +0200
+        bh=DraaBxpt13vT2OYQx+ImtKU2zCJMxssq63gtcac1kv4=;
+        b=cAJmw2DI42AJW/wHS7IhYc0xDwClKeGF2oSi3tpSA6qGIKS7hg4zV2pt1ehxBsOhH2KFLI
+        6tR4y0561YYAXKDkmTy65xm8NQE1L472lVAhhHbkJV8u/UMhkwkvz65p0X0rme/xQkAuPd
+        ZoYCm4WDlcw4c5EJbim81k0rByWn+xLLA0fNMetWyvRvOP5qk+8qF+pqRGqvzUryRLbrmL
+        yR9bIe0LnJhGdsZP3+xN7fFxtDPBaiisI+ZSe4AZkwB6rwuHt1shwqctPGWk9OXWvQkOsT
+        bZLwfoFSPEkAhe8V817dxrYt3NFK10FxGVmre6owzZ4z620Cwov9reCjc3W47g==
+Date:   Tue, 26 Jul 2022 17:00:32 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     a.zummo@towertech.it, robh@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: rtc: microcrystal,rv3032: Add missing type
- to 'trickle-voltage-millivolt'
-Message-ID: <165884747543.3162435.10649453266544407027.b4-ty@bootlin.com>
-References: <20220719215143.1877566-1-robh@kernel.org>
+To:     alexander.stein@ew.tq-group.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] dt-bindings: rtc: nxp,pcf85063: Convert to DT
+ schema
+Message-ID: <165884761584.3162909.14717319628949335829.b4-ty@bootlin.com>
+References: <20220725071919.25342-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220719215143.1877566-1-robh@kernel.org>
+In-Reply-To: <20220725071919.25342-1-alexander.stein@ew.tq-group.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 19 Jul 2022 15:51:42 -0600, Rob Herring wrote:
-> 'trickle-voltage-millivolt' is missing a type definition. '-millivolt' is
-> not a standard unit (should be '-microvolt'). As the property is already
-> in use, add a type reference.
+On Mon, 25 Jul 2022 09:19:19 +0200, Alexander Stein wrote:
+> Convert the NXP PCF85063 RTC binding to DT schema format.
 > 
+> Add 'interrupts' and 'wakeup-source' as this device has an interrupt
+> which was not documented, but is in use.
+> 'clock-output-names' and '#clock-cells' are added as well, those were
+> probably missed when adding clkout support in commit 8c229ab6048b
+> ("rtc: pcf85063: Add pcf85063 clkout control to common clock framework")
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: rtc: microcrystal,rv3032: Add missing type to 'trickle-voltage-millivolt'
-      commit: 2830320122d87fb65632f09cdffe129046915d51
+[1/1] dt-bindings: rtc: nxp,pcf85063: Convert to DT schema
+      commit: 10e1fb88c7b7e71ae04895511f4f98a7721c9e6e
 
 Best regards,
 
