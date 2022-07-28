@@ -2,36 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB86583CBA
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Jul 2022 13:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F4A583CDB
+	for <lists+linux-rtc@lfdr.de>; Thu, 28 Jul 2022 13:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236785AbiG1LAB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Jul 2022 07:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S236474AbiG1LHs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 28 Jul 2022 07:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiG1K7k (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Jul 2022 06:59:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E7866AC3;
-        Thu, 28 Jul 2022 03:59:33 -0700 (PDT)
+        with ESMTP id S236439AbiG1LHr (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Jul 2022 07:07:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C96E1DA79;
+        Thu, 28 Jul 2022 04:07:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4CF8619F9;
-        Thu, 28 Jul 2022 10:59:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761CEC433D6;
-        Thu, 28 Jul 2022 10:59:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E80CDB8240D;
+        Thu, 28 Jul 2022 11:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F4EC433D6;
+        Thu, 28 Jul 2022 11:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659005972;
-        bh=W8zB8u+278oI2Tht4FAyuNGpeZIppdQ+WlcUV9UCJsA=;
+        s=k20201202; t=1659006464;
+        bh=7kmhiHLDWigtfnWVIEbBCX52nEfmZ+N0EJ/w9X+KN3o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jW5Y/C7RYDe8wN323emUqPgme2owEznQSSBwaHbid2pZxzqc0L9J58Xjn9Bo1zpJ8
-         tqg5bXhA8eJt8IQ/0FjKOCTiXjhXa6p/mXMdM4v3J88W4u8dJoDJPbUs5alkVS/QHL
-         uSPilmRREd0l1NgNt2LAOl84khY3YMBKcZg+M1/zVu6z6Wy9K9iAkXsbpWKcoghaf3
-         Ao/vklow/p/yHaLd1oBn4oJ2GUGXxRpRFRsfNTT+ZlPkhQobkakGPJlrdrMljHChAz
-         /iG3+nwrE6wdRaZnDRXHJbTqgo3m0KJ42oQoLNbACxRAuR5emPevgEKi4pETKv9/J6
-         8u/rYqDr3FW/Q==
-Date:   Thu, 28 Jul 2022 11:59:24 +0100
+        b=MyHIRa/lkbHLxiXssB4CsJPYHd2bdzf66hoX5m4HXVQLatBWc5w76l3WVXEZM3lzY
+         ZId8DWigVHSD04dvOILF7n/QNbIlqTIfFWBrkpqbTnCNT7cQeaaD1yj/IwZ7olDH5v
+         Y/RZ7jjrWtSvHcJVXh1DfdimRZOK/N2MWioYMwz/nelsp2VQWAY6oEnPAYsoxKjReH
+         wpR78qJ+35V3K3JZLynxqrVeqW3CX2fAjOj+2JpblFwXZRRBT0y7KjeXRdLppJSk47
+         tFhoDOkVCJE6sU8kZzcBA+rN+/dtq4eOrJIVjqcu5sVoCTZ3SSli21WrZ8iuiAOSb7
+         eIPbMeAOUO6Tw==
+Date:   Thu, 28 Jul 2022 12:07:33 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Zhiyong Tao <zhiyong.tao@mediatek.com>
 Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
@@ -44,15 +44,17 @@ Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
         linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 0/1] Mediatek MT6366 Regulator patch
-Message-ID: <YuJsDI8rqkHuysIT@sirena.org.uk>
+        linux-mediatek@lists.infradead.org,
+        zhiyong tao <zhiyong.tao@mediatk.com>
+Subject: Re: [PATCH v2] pmic: add mt6366 regulator document
+Message-ID: <YuJt9SF9Y2UsA4Jc@sirena.org.uk>
 References: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
+ <20220728062749.18701-2-zhiyong.tao@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EF9Dhh4p1JnapVZl"
+        protocol="application/pgp-signature"; boundary="K08Z7tP9qKND+pgF"
 Content-Disposition: inline
-In-Reply-To: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
+In-Reply-To: <20220728062749.18701-2-zhiyong.tao@mediatek.com>
 X-Cookie: People respond to people who respond.
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,33 +66,33 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---EF9Dhh4p1JnapVZl
+--K08Z7tP9qKND+pgF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 28, 2022 at 02:27:48PM +0800, Zhiyong Tao wrote:
-> Add mt6366 binding documentation
+On Thu, Jul 28, 2022 at 02:27:49PM +0800, Zhiyong Tao wrote:
 
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
+> +        properties:
+> +          regulator-name:
+> +            pattern: "^v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$"
 
---EF9Dhh4p1JnapVZl
+regulator-name should be free form text for the system integrator to
+describe the use of the supply on their board, no constraints should be
+placed on it by the regulator.
+
+--K08Z7tP9qKND+pgF
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLibAsACgkQJNaLcl1U
-h9BQDwgAgnCNhlgMGhYw7HaqbKgbrRyZJJcsqo6ZGtKsrelWYwC9Dl6BAHubd0Py
-6aJjP2A36ng35571uUI8/CcvkzCh0K8ohBE2+8UgXElPMJH/7i2Lvmxwz9REshOX
-gYY8sV02SitN4wj6xWsDJbRqQDKNadHtw6GSYbyR3UaY6PP9egRUFMQTU1oT10Lj
-FWT6PG5LqAzzSuAGBuLN9x2u5XdLKkQzfrUC4hffFiodazOnEWncI6StFPNK3tk0
-5Lw+npv2e0u5jlR53jIaZnsnkF9MlsZV7PP4odHY31xhm4bMMo0bmbGct3YG/IkL
-wz6MXlA/ueBsF1SvmpRBsKRaeWGWPQ==
-=9UEF
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLibfQACgkQJNaLcl1U
+h9AnIQf/Q5AoIqoBgnEB5s1BZS67mELeo51xpoptOVEWQfXqiDJa8lTnJzrku0d6
+1fZLhpWjRSfFM9Ht51vxNhdAcS618Ffw6GMn6vI9uzS4ON/GU8lL76Gu8cyYlMrB
+bn3SoS/1HJso0DCsm1onC1SXSlbc8mkLfvqDshGQuS9eePkHL8VvyVbbbT9Tg6YD
+rWuz9+TeXR2kaom4m9CzK2MxCSAZbMPHH0tDrIJJ/v5DkedEUXb2H2UI5gYpT2QR
+wCUSIfmhlfA7uM/jsI7JkPWN4JmQRGXlWdOGUJQp9ooYyZGIk5a17N5ZBrPLpRr1
+9I5pZAYTM+1NDLmkBs0w6mecARZ4Xw==
+=VTMf
 -----END PGP SIGNATURE-----
 
---EF9Dhh4p1JnapVZl--
+--K08Z7tP9qKND+pgF--
