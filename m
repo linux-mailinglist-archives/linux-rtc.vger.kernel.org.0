@@ -2,38 +2,38 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F4A583CDB
-	for <lists+linux-rtc@lfdr.de>; Thu, 28 Jul 2022 13:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0965867F8
+	for <lists+linux-rtc@lfdr.de>; Mon,  1 Aug 2022 13:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiG1LHs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 28 Jul 2022 07:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S230374AbiHALPC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 1 Aug 2022 07:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbiG1LHr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 28 Jul 2022 07:07:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C96E1DA79;
-        Thu, 28 Jul 2022 04:07:47 -0700 (PDT)
+        with ESMTP id S230338AbiHALPB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 1 Aug 2022 07:15:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF622C645;
+        Mon,  1 Aug 2022 04:15:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E80CDB8240D;
-        Thu, 28 Jul 2022 11:07:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F4EC433D6;
-        Thu, 28 Jul 2022 11:07:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B6E9B81020;
+        Mon,  1 Aug 2022 11:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA93C433C1;
+        Mon,  1 Aug 2022 11:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659006464;
-        bh=7kmhiHLDWigtfnWVIEbBCX52nEfmZ+N0EJ/w9X+KN3o=;
+        s=k20201202; t=1659352498;
+        bh=KXxJvr1Gh3/rx3eZQfM+nY8zLaeraeH2urw35Feo3aY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MyHIRa/lkbHLxiXssB4CsJPYHd2bdzf66hoX5m4HXVQLatBWc5w76l3WVXEZM3lzY
-         ZId8DWigVHSD04dvOILF7n/QNbIlqTIfFWBrkpqbTnCNT7cQeaaD1yj/IwZ7olDH5v
-         Y/RZ7jjrWtSvHcJVXh1DfdimRZOK/N2MWioYMwz/nelsp2VQWAY6oEnPAYsoxKjReH
-         wpR78qJ+35V3K3JZLynxqrVeqW3CX2fAjOj+2JpblFwXZRRBT0y7KjeXRdLppJSk47
-         tFhoDOkVCJE6sU8kZzcBA+rN+/dtq4eOrJIVjqcu5sVoCTZ3SSli21WrZ8iuiAOSb7
-         eIPbMeAOUO6Tw==
-Date:   Thu, 28 Jul 2022 12:07:33 +0100
+        b=kAmIhSAmT/Yj+g0jRrHQ0AYi3z0MwZKJFBZ16W8tayDl0DDBQ4i3Eli2jMg3muJ9W
+         kOPYyaYnZKUEYmjTwB3da0HIgyPXtmgbguC/A15r2+Vi+Zkl9eIOfnv3C79ilkDUwT
+         nZsLwr26jELYuJAPogoOykKQ2SHxomoYxc6QoVtKYMkm3y4w/Ls4rd09AHHkDMWIrj
+         VKa5X7AuTMQBhe2vmhRarM6NOt6iJoYmGu7ZvM17b/EYyfosE4GHKDjvG8ZQAfyWiJ
+         lrd01BE/IKWN0YmOs3ioUnIYPw5wR6vyINaoU0nyV11Pdouba61ZifETRzEUfRfSiX
+         hDEtFyqSAMR1w==
+Date:   Mon, 1 Aug 2022 12:14:47 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
 Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
         lgirdwood@gmail.com, eddie.huang@mediatek.com,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com,
@@ -47,16 +47,18 @@ Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
         linux-mediatek@lists.infradead.org,
         zhiyong tao <zhiyong.tao@mediatk.com>
 Subject: Re: [PATCH v2] pmic: add mt6366 regulator document
-Message-ID: <YuJt9SF9Y2UsA4Jc@sirena.org.uk>
+Message-ID: <Yue1pzPM2rSsL+oy@sirena.org.uk>
 References: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
  <20220728062749.18701-2-zhiyong.tao@mediatek.com>
+ <YuJt9SF9Y2UsA4Jc@sirena.org.uk>
+ <9a99a1e95179f3b55dd1236c41a8cd3d9b2ccf18.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="K08Z7tP9qKND+pgF"
+        protocol="application/pgp-signature"; boundary="4izAq3eOnqAvkCD4"
 Content-Disposition: inline
-In-Reply-To: <20220728062749.18701-2-zhiyong.tao@mediatek.com>
-X-Cookie: People respond to people who respond.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+In-Reply-To: <9a99a1e95179f3b55dd1236c41a8cd3d9b2ccf18.camel@mediatek.com>
+X-Cookie: Dieters live life in the fasting lane.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,33 +68,43 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---K08Z7tP9qKND+pgF
+--4izAq3eOnqAvkCD4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Jul 28, 2022 at 02:27:49PM +0800, Zhiyong Tao wrote:
+On Mon, Aug 01, 2022 at 11:23:03AM +0800, zhiyong.tao wrote:
+> On Thu, 2022-07-28 at 12:07 +0100, Mark Brown wrote:
+> > On Thu, Jul 28, 2022 at 02:27:49PM +0800, Zhiyong Tao wrote:
 
-> +        properties:
-> +          regulator-name:
-> +            pattern: "^v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$"
+> > > +        properties:
+> > > +          regulator-name:
+> > > +            pattern:
+> > > "^v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$"
 
-regulator-name should be free form text for the system integrator to
-describe the use of the supply on their board, no constraints should be
-placed on it by the regulator.
+> > regulator-name should be free form text for the system integrator to
+> > describe the use of the supply on their board, no constraints should
+> > be
+> > placed on it by the regulator.
 
---K08Z7tP9qKND+pgF
+> we put regulator-name here, we describe it by mt6366 datasheet.
+> we think that it is the common attribute.
+> So we place it here.
+
+No, for the reasons above.
+
+--4izAq3eOnqAvkCD4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLibfQACgkQJNaLcl1U
-h9AnIQf/Q5AoIqoBgnEB5s1BZS67mELeo51xpoptOVEWQfXqiDJa8lTnJzrku0d6
-1fZLhpWjRSfFM9Ht51vxNhdAcS618Ffw6GMn6vI9uzS4ON/GU8lL76Gu8cyYlMrB
-bn3SoS/1HJso0DCsm1onC1SXSlbc8mkLfvqDshGQuS9eePkHL8VvyVbbbT9Tg6YD
-rWuz9+TeXR2kaom4m9CzK2MxCSAZbMPHH0tDrIJJ/v5DkedEUXb2H2UI5gYpT2QR
-wCUSIfmhlfA7uM/jsI7JkPWN4JmQRGXlWdOGUJQp9ooYyZGIk5a17N5ZBrPLpRr1
-9I5pZAYTM+1NDLmkBs0w6mecARZ4Xw==
-=VTMf
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLntaYACgkQJNaLcl1U
+h9BMFwf/V6k/8nOfes43hLPGdpN6ZINY6B1Cwbn9fJblGgECALOg9OuoApuLUqQO
+BHsYJ76aJ419c3VAopk2SDcGphOodZ6KwarX5304tqyy1titOAJY/zhWfMHtkz0D
+Gsveg+yW7ju+8uGCC80LNUDvO4eaON599LzQQ4LE0aJe7vgWbCDOh1yyeTuTLeRw
+0xS0R3vft3l6/9z1v3rhGKjZ32Uu2gmMKQW7eZCdanC43xE48pAzUTU4ITt7Tq42
+8Jt9TUj0hc7qGxcCHG20JuJrWzLoBsi6eVzRiuxXAP8gzfmXe5sKT6mwmEBSD2Iv
+uskW1mCgcC49078z385GQX3iXWGiZg==
+=4Xta
 -----END PGP SIGNATURE-----
 
---K08Z7tP9qKND+pgF--
+--4izAq3eOnqAvkCD4--
