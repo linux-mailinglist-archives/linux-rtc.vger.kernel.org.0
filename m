@@ -2,102 +2,61 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D312B58984E
-	for <lists+linux-rtc@lfdr.de>; Thu,  4 Aug 2022 09:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8755758A026
+	for <lists+linux-rtc@lfdr.de>; Thu,  4 Aug 2022 20:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239104AbiHDHZn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 4 Aug 2022 03:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
+        id S239585AbiHDSD6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 4 Aug 2022 14:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiHDHZj (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Aug 2022 03:25:39 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040DEBF45
-        for <linux-rtc@vger.kernel.org>; Thu,  4 Aug 2022 00:25:37 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id bx38so11355950ljb.10
-        for <linux-rtc@vger.kernel.org>; Thu, 04 Aug 2022 00:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tnOwkKfhBzXFppIxRkEPpyNln0liXtEqX58YRBpJcr8=;
-        b=KaBX5C27LU2/hiVV41fSRkEObVVMYRvfYHSIbaXVoHOpgKYVOS4QKSU78WR0R5+b9a
-         OF+nzgrQ97gospGyxLfTDJvji0fJzMtG6v4s0CH5S0dGTdF4c3VSDpo87ozuZDrlXGfz
-         hFrmYFfZti4EdlIVJ+ij29gERCwU0TCakfaI/YHBdE6kYhTw8npkUQEKxbQDKaJeEx95
-         bJpHQLNv9DmZlIrF7IrpiHo0n/gntGbQRSL8spUyRFeDqhZm8czbKSHvH0Hr658EMLX+
-         dkaJNTlUaQ+wg7SgajA3tBtf5O+v82Xjx9mcAtSZXmxRtH7D7I20Q63MYjC0Lw0TfrxF
-         KNGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tnOwkKfhBzXFppIxRkEPpyNln0liXtEqX58YRBpJcr8=;
-        b=b/fr1o7DmyJBMrAM1hHxF+6tqgkaM82LuBR20ZzEKBNTYD8hKfSrbg7lSSaNkAnU43
-         xyDpvQHrerws76yECxN9h/BeDVskL2uKk2AKlsbWX/Vw2dr7HH8wlIJ/YEz4Hj1x3MqI
-         X9JlgEV/Qml9NkvOo0hoOzNtHHWESlP2hNlEnHH+wa+6MFMsrb9TJ0m412EJ129KqLqs
-         FX8XNEz4fFGgLGDAD+Ac3Jn7rruG0xHOIzaG4V6K4OZenR6Gv5gT9EGZChaD/dq9HqV2
-         wLt/oyCY2RGRSOgSSrRIPztxTWxesk4ZVCZkFUpcvU68SZF5FnL81QaFlUwAGA7iIfsP
-         fvtg==
-X-Gm-Message-State: ACgBeo3glV/8IA6yEZEiuP+Ni6fdmJMk8l1yFDpADImVRvDZMoKiEzgb
-        8bTnO7C6frdkQQizP6WmqdEOgA==
-X-Google-Smtp-Source: AA6agR76ryk0wDxrVOrzMuTszxXgfwzTdW7WwyPRIhNvuxMuIMxK8DVdk/uToJEoH+F0vEOAkYdCdw==
-X-Received: by 2002:a2e:9e43:0:b0:25d:d8e9:7b15 with SMTP id g3-20020a2e9e43000000b0025dd8e97b15mr163697ljk.234.1659597935350;
-        Thu, 04 Aug 2022 00:25:35 -0700 (PDT)
-Received: from [192.168.1.6] ([77.222.167.48])
-        by smtp.gmail.com with ESMTPSA id bi36-20020a05651c232400b0025e5ff004a0sm17514ljb.100.2022.08.04.00.25.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Aug 2022 00:25:34 -0700 (PDT)
-Message-ID: <1d6b475b-412d-da94-8505-0fd6f8f6a2c9@linaro.org>
-Date:   Thu, 4 Aug 2022 09:25:30 +0200
+        with ESMTP id S230456AbiHDSD6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 4 Aug 2022 14:03:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475BE1EC4B;
+        Thu,  4 Aug 2022 11:03:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5D7A615A5;
+        Thu,  4 Aug 2022 18:03:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40146C433B5;
+        Thu,  4 Aug 2022 18:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659636236;
+        bh=MYvar+RB8d8gaQ5k8AOlYzIwc6GZaOiEmrr5hg1Qdf0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pj2GxrEokLmfmcpRUg5BQQTnPUwA4OC7zwilnGvod59DLx13/5/8IjiEYHcYcRUGd
+         p7y3mv7CqmfS5dtel2qCqQK3uMiJRCVjfZKY99nkt88HQ+Gu2mZ5+0KbfZjPf+3GNV
+         9LQHLI2p4zlCDp8ZThMVRZV5Y3p/2FfCX8gv13b2qqZiySe8K5TbWvJwWZPzVSjjRq
+         QDVj0LZPhIS1q05D/aV8oaYkEwASYH98EDj+iToIUWkLEuqS/fD0nZ60DKQtYIy/y1
+         ecwLVG5DWYsBXg5FmIFRTzrG/22f9hV2AREwE/ug8mKB0121WXbv6IprvbBD+zUau1
+         C77zZVzlHXpTA==
+Received: by mail-vs1-f54.google.com with SMTP id q15so276692vsr.0;
+        Thu, 04 Aug 2022 11:03:56 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3E0JXSSi1Dx5mfZSZHz557QVcedx5f4sHpOg8KZtmR+cBuEo9U
+        pvYqXe6CyYmPq2T5YMDDzPU3Fch0nlGNDokqmA==
+X-Google-Smtp-Source: AA6agR69cRryiAwhAsieD+8r8oKzDjfeK3Ow5501lanm4SG7tcgmP4MG9TxOFY29wRJIWFs1+bvO0Bjr5+J8OMKbQB4=
+X-Received: by 2002:a67:a246:0:b0:388:7e82:1d80 with SMTP id
+ t6-20020a67a246000000b003887e821d80mr206218vsh.26.1659636235156; Thu, 04 Aug
+ 2022 11:03:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] pmic: add mt6366 regulator document
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        =?UTF-8?B?WmhpeW9uZyBUYW8gKOmZtuW/l+WLhyk=?= 
-        <Zhiyong.Tao@mediatek.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        =?UTF-8?B?RWRkaWUgSHVhbmcgKOm7g+aZuuWCkSk=?= 
-        <eddie.huang@mediatek.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "fshao@chromium.org" <fshao@chromium.org>
-Cc:     =?UTF-8?B?U2VuIENodSAo5YKo5qOuKQ==?= <Sen.Chu@mediatek.com>,
-        =?UTF-8?B?SHVpIExpdSAo5YiY6L6JKQ==?= <Hui.Liu@mediatek.com>,
-        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        =?UTF-8?B?SHNpbi1Ic2l1bmcgV2FuZyAo546L5L+h6ZuEKQ==?= 
-        <Hsin-Hsiung.Wang@mediatek.com>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        =?UTF-8?B?TWFjcGF1bCBMaW4gKOael+aZuuaWjCk=?= 
-        <Macpaul.Lin@mediatek.com>,
-        =?UTF-8?B?V2VuIFN1ICjomIflhqDmlocp?= <Wen.Su@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        zhiyong tao <zhiyong.tao@mediatk.com>
-References: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
- <20220728062749.18701-2-zhiyong.tao@mediatek.com>
- <03a13ed4-e7cd-6f7d-f8f7-9b1e6193e202@linaro.org>
- <3d97d4c46467909739b8b69662412fe162dbe613.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3d97d4c46467909739b8b69662412fe162dbe613.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220617114420.1398259-1-thierry.reding@gmail.com>
+ <20220721213732.GA1993841-robh@kernel.org> <YtrKofy+cZBQDRq3@mail.local>
+In-Reply-To: <YtrKofy+cZBQDRq3@mail.local>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 4 Aug 2022 12:03:43 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJhf32tJAfjO5Go1gmt_yoasoGg+i8rtc-ADWLRfFtfSQ@mail.gmail.com>
+Message-ID: <CAL_JsqJhf32tJAfjO5Go1gmt_yoasoGg+i8rtc-ADWLRfFtfSQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: rtc: ds1307: Convert to json-schema
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,59 +64,40 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 03/08/2022 11:50, Rex-BC Chen wrote:
-> On Thu, 2022-07-28 at 18:46 +0800, Krzysztof Kozlowski wrote:
->> On 28/07/2022 08:27, Zhiyong Tao wrote:
->>> From: zhiyong tao <zhiyong.tao@mediatek.com>
->>>
->>> Add mt6366 regulator document
->>
->> As usual with Mediatek your emails fail to properly pass modern SMTP
->> checks and you end up in spam.
->>
->> I reported it months ago to folks in Mediatek. No improvements since
->> that time.
->>
->> I stopped checking my spam folder for Mediatek stuff and all will be
->> ignored. I will also stop complaining about it - just ignore
->> Mediatek.
->>
->> Fix your systems, instead of putting additional effort on community
->> and
->> on reviewers.
->>
-> 
-> Hello Krzysztof,
-> 
-> I am Rex from MediaTek chrome project team.
-> We noticed your complain of our upstream mail.
-> 
-> First of all, sorry for the inconvenience.
-> We really want to fix this SPAM issue.
-> 
-> From our side, we can make sure mails for kernel upstream from MediaTek
-> is clear and these mails pass the verification of DMARC/DKIM/SPF.
-> Therefore, to identify the root cause, could you please provide us some
-> mails that seen as SPAM from MediaTek?
-> It's more useful if you can use the form of attachment. In that case,
-> we can analyze whole mails including mail headers.
-> 
-> We really appreciate your big support, and we hope we can fix this
-> issue to reduce the inconvenience for reviewing series from MediaTek.
-> If you can spare some time to help us for this, it would very helpful!!
-> 
-> Our IT also adjust the DKIM setting today. If the situation of this
-> issue it much better, please also let us know.
-> 
+On Fri, Jul 22, 2022 at 10:04 AM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On 21/07/2022 15:37:32-0600, Rob Herring wrote:
+> > On Fri, 17 Jun 2022 13:44:19 +0200, Thierry Reding wrote:
+> > > From: Thierry Reding <treding@nvidia.com>
+> > >
+> > > Convert the DS1307 (and compatible) RTC bindings from the free-form text
+> > > format to json-schema.
+> > >
+> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
+> > > ---
+> > > Changes in v2:
+> > > - add compatible string list for [ st,m41t00, dallas,ds1338 ]
+> > > - allow second interrupt and interrupt-names
+> > > - remove commented-out section
+> > > - allow vcc-supply
+> > >
+> > >  .../devicetree/bindings/rtc/rtc-ds1307.txt    |  52 ---------
+> > >  .../devicetree/bindings/rtc/rtc-ds1307.yaml   | 102 ++++++++++++++++++
+> > >  2 files changed, 102 insertions(+), 52 deletions(-)
+> > >  delete mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.txt
+> > >  create mode 100644 Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+> > >
+> >
+> > Looks like this hasn't been picked up so I've applied both patches,
+> > thanks!
+>
+> This was on my radar but I'm never sure what you prefer for dt-bindings
+> only series.
 
-Hi,
+My (or Krzysztof's) Reviewed-by/Acked-by means I expect it to go via
+subsystem tree.
 
-Since few days there were no @mediatek.com emails in my spam folder,
-either because nothing was sent to me, or they passed spam filters.
-
-If this is the result of some changes, then it seems working. Thank you.
-
-I'll let you now when I find something new in the spam.
-
-Best regards,
-Krzysztof
+Rob
