@@ -2,71 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BC858CB55
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Aug 2022 17:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA2858CD90
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Aug 2022 20:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243182AbiHHPfY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Aug 2022 11:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S232098AbiHHSYG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Aug 2022 14:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243601AbiHHPfU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Aug 2022 11:35:20 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5D7E6F;
-        Mon,  8 Aug 2022 08:35:17 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1659972903t2p774qw
-Received: from localhost.localdomain ( [182.148.14.53])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 08 Aug 2022 23:34:55 +0800 (CST)
-X-QQ-SSF: 0100000000200050B000B00A0000000
-X-QQ-FEAT: +ynUkgUhZJmsNTJJ6yUxxh0wvTEWS2SSLFe934YzFSqBPPwtlzaIYwRfw+rdy
-        W7IGy+7s8OwZpC49FKTViEfr5t+Pe2xRj9r/O221D15z1OaUtUkVvfWk6vLYR4GF7wW4HIc
-        lRpEF5f4t/dHNi5lTOGQI29cSMWhicqs6OIe2YQ+P56tcL7JivuzPhLnOZicP40vwwIH6Je
-        d8Iy9kB65A7rD6iH/6Js8KZOvwWplGRS8S4MsxTFivnJS2efupqQt1jPW8+vKbAHFuyCDtg
-        QrP2IabR7Doy6a1sATvk24sym9dh0mSQ3nMdJBtEyexE+QuYP0Uar6+f3nFLxh3I3XHk+0I
-        3q6szO80MjkOOT1urPue7XK1MydbhCr71DsqEhYNL+96+1cnf+fYppXegvcj8zX3LOwUuRT
-X-QQ-GoodBg: 0
-From:   shaomin Deng <dengshaomin@cdjrlc.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] rtc: Fix typo in interface.c
-Date:   Mon,  8 Aug 2022 11:34:54 -0400
-Message-Id: <20220808153454.6844-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S235668AbiHHSYF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Aug 2022 14:24:05 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50311167ED;
+        Mon,  8 Aug 2022 11:24:03 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 5004380e3bf39139; Mon, 8 Aug 2022 20:24:01 +0200
+Received: from kreacher.localnet (unknown [213.134.181.149])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 9891466CEE1;
+        Mon,  8 Aug 2022 20:24:00 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH v2] rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
+Date:   Mon, 08 Aug 2022 20:23:59 +0200
+Message-ID: <12054246.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.149
+X-CLIENT-HOSTNAME: 213.134.181.149
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefkedguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudekuddrudegleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddugeelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Delete repeated word "best" in comments.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
+The ACPI_FADT_LOW_POWER_S0 flag merely means that it is better to
+use low-power S0 idle on the given platform than S3 (provided that
+the latter is supported) and it doesn't preclude using either of
+them (which of them will be used depends on the choices made by user
+space).
+
+For this reason, there is no benefit from checking that flag in
+use_acpi_alarm_quirks().
+
+First off, it cannot be a bug to do S3 with use_acpi_alarm set,
+because S3 can be used on systems with ACPI_FADT_LOW_POWER_S0 and it
+must work if really supported, so the ACPI_FADT_LOW_POWER_S0 check is
+not needed to protect the S3-capable systems from failing.
+
+Second, suspend-to-idle can be carried out on a system with
+ACPI_FADT_LOW_POWER_S0 unset and it is expected to work, so if setting
+use_acpi_alarm is needed to handle that case correctly, it should be
+set regardless of the ACPI_FADT_LOW_POWER_S0 value.
+
+Accordingly, drop the ACPI_FADT_LOW_POWER_S0 check from
+use_acpi_alarm_quirks().
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/rtc/interface.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 9edd662c69ac..7c30cb3c764d 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -256,7 +256,7 @@ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
- 	 *
- 	 * This could all instead be done in the lower level driver,
- 	 * but since more than one lower level RTC implementation needs it,
--	 * then it's probably best best to do it here instead of there..
-+	 * then it's probably best to do it here instead of there..
- 	 */
+-> v2:
+   * Fix typo in the changelog.
+   * Add R-by tag from Mario.
+
+---
+ drivers/rtc/rtc-cmos.c |    3 ---
+ 1 file changed, 3 deletions(-)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -1260,9 +1260,6 @@ static void use_acpi_alarm_quirks(void)
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return;
  
- 	/* Get the "before" timestamp */
--- 
-2.35.1
+-	if (!(acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0))
+-		return;
+-
+ 	if (!is_hpet_enabled())
+ 		return;
+ 
+
+
 
