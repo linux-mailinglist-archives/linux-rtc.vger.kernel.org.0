@@ -2,37 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA52F58CB48
-	for <lists+linux-rtc@lfdr.de>; Mon,  8 Aug 2022 17:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BC858CB55
+	for <lists+linux-rtc@lfdr.de>; Mon,  8 Aug 2022 17:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243690AbiHHP2t (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 8 Aug 2022 11:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S243182AbiHHPfY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 8 Aug 2022 11:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243628AbiHHP2s (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Aug 2022 11:28:48 -0400
+        with ESMTP id S243601AbiHHPfU (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 8 Aug 2022 11:35:20 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F131403B;
-        Mon,  8 Aug 2022 08:28:46 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1659972512tb86q6ms
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5D7E6F;
+        Mon,  8 Aug 2022 08:35:17 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1659972903t2p774qw
 Received: from localhost.localdomain ( [182.148.14.53])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 08 Aug 2022 23:28:23 +0800 (CST)
+        id ; Mon, 08 Aug 2022 23:34:55 +0800 (CST)
 X-QQ-SSF: 0100000000200050B000B00A0000000
-X-QQ-FEAT: 4jmx9f9bCbtc81RdPFdR4lee0Ii+vpCrOxHv287zzW81YddGO3c+Kt8YeWi3z
-        7L0QPvjrOD8jcSGm49w6N1elFoF0xBGQqo942YRkiCyscSMAMia60hNdPGOBaRDzbilGH1a
-        Sy0xyQGekeQ1sdsTzvgl6GgI+ntI3caWDKv4GyMpEMh1h4wPjzpMOyDTUdBX4dUE6BlMBPV
-        Jnt7EIQtm/VREvikCswBOr8ViVbkGTe5MGHYp+5C99083wpiLfEWTrozJkDQZno6+YM5MaW
-        ed96VGjHuPoJxAbqjdDDltXWpxSzAGKERUm0pat9p7QB3sy0HmAbNX87HnJds3u8ZvDeiMB
-        5AdxHx0ktpA5IX9jEdZNpcBV/Lshi/M9chEQPyNtuKHUoxOO9QQnTLxo0vptxLcT0hGStv1
+X-QQ-FEAT: +ynUkgUhZJmsNTJJ6yUxxh0wvTEWS2SSLFe934YzFSqBPPwtlzaIYwRfw+rdy
+        W7IGy+7s8OwZpC49FKTViEfr5t+Pe2xRj9r/O221D15z1OaUtUkVvfWk6vLYR4GF7wW4HIc
+        lRpEF5f4t/dHNi5lTOGQI29cSMWhicqs6OIe2YQ+P56tcL7JivuzPhLnOZicP40vwwIH6Je
+        d8Iy9kB65A7rD6iH/6Js8KZOvwWplGRS8S4MsxTFivnJS2efupqQt1jPW8+vKbAHFuyCDtg
+        QrP2IabR7Doy6a1sATvk24sym9dh0mSQ3nMdJBtEyexE+QuYP0Uar6+f3nFLxh3I3XHk+0I
+        3q6szO80MjkOOT1urPue7XK1MydbhCr71DsqEhYNL+96+1cnf+fYppXegvcj8zX3LOwUuRT
 X-QQ-GoodBg: 0
 From:   shaomin Deng <dengshaomin@cdjrlc.com>
 To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] rtc: m41t80: Fix typo in rtc-m41t80.c
-Date:   Mon,  8 Aug 2022 11:28:22 -0400
-Message-Id: <20220808152822.5012-1-dengshaomin@cdjrlc.com>
+Subject: [PATCH] rtc: Fix typo in interface.c
+Date:   Mon,  8 Aug 2022 11:34:54 -0400
+Message-Id: <20220808153454.6844-1-dengshaomin@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,26 +47,26 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Delete the rebundant word "we" in comments.
+Delete repeated word "best" in comments.
 
 Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 ---
- drivers/rtc/rtc-m41t80.c | 2 +-
+ drivers/rtc/interface.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-m41t80.c b/drivers/rtc/rtc-m41t80.c
-index d868458cd40e..852650c8ad47 100644
---- a/drivers/rtc/rtc-m41t80.c
-+++ b/drivers/rtc/rtc-m41t80.c
-@@ -692,7 +692,7 @@ static void wdt_disable(void)
-  *	@ppos: pointer to the position to write. No seeks allowed
-  *
-  *	A write to a watchdog device is defined as a keepalive signal. Any
-- *	write of data will do, as we we don't define content meaning.
-+ *	write of data will do, as we don't define content meaning.
-  */
- static ssize_t wdt_write(struct file *file, const char __user *buf,
- 			 size_t count, loff_t *ppos)
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 9edd662c69ac..7c30cb3c764d 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -256,7 +256,7 @@ int __rtc_read_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ 	 *
+ 	 * This could all instead be done in the lower level driver,
+ 	 * but since more than one lower level RTC implementation needs it,
+-	 * then it's probably best best to do it here instead of there..
++	 * then it's probably best to do it here instead of there..
+ 	 */
+ 
+ 	/* Get the "before" timestamp */
 -- 
 2.35.1
 
