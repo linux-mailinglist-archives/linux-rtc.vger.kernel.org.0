@@ -2,46 +2,73 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9458C58D31E
-	for <lists+linux-rtc@lfdr.de>; Tue,  9 Aug 2022 07:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2DB58D85E
+	for <lists+linux-rtc@lfdr.de>; Tue,  9 Aug 2022 13:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233812AbiHIFXJ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 9 Aug 2022 01:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S237249AbiHILrI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 9 Aug 2022 07:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbiHIFXJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 9 Aug 2022 01:23:09 -0400
-X-Greylist: delayed 311 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 Aug 2022 22:23:07 PDT
-Received: from host.eagleriverinteractive.com (q2bw-vrsg.accessdomain.com [72.10.54.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A511E1EAC7
-        for <linux-rtc@vger.kernel.org>; Mon,  8 Aug 2022 22:23:07 -0700 (PDT)
-Received: by host.eagleriverinteractive.com (Postfix, from userid 10002)
-        id 23F92246DB; Mon,  8 Aug 2022 23:17:56 -0600 (MDT)
-To:     linux-rtc@vger.kernel.org
-Subject: DIE WELTFINANZKRISE KANN SIE REICH MACHEN!
-X-PHP-Originating-Script: 10002:class-phpmailer.php
-Date:   Tue, 9 Aug 2022 05:17:55 +0000
-From:   Sonnenalp Hotel Gold Club <wordpress@sonnenalp.com>
-Message-ID: <9edc810e32e32c444e5320daae33fd81@sonnenalpgoldclub.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
-X-WPCF7-Content-Type: text/plain
-Reply-To: info@eagleriverassociates.com
+        with ESMTP id S235611AbiHILrH (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 9 Aug 2022 07:47:07 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782E318E13;
+        Tue,  9 Aug 2022 04:47:03 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 19D0D1BF208;
+        Tue,  9 Aug 2022 11:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1660045622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sn5WOfQFWegJOVWU8kZPNtFmDgMIcjaPuOZlWUexaf4=;
+        b=U1MrIO5TAKMmM1emp4U1n/4d+GT4nN4sm6seFBMkb5zUniu9xq4U+Ndmt3/LJj687hixUK
+        ufP9MusDQibxL82X6nTKiC90HVBxVhxKoYqd82AcaWj3WQG2LzxvKA9EiwiL/LEw0B0U9m
+        eYKcBxbMFK9ZI4TeRtiAs0RbFLAV8CWIeXeNHbzs011u/YPJrGsc8Owa3uxcSSZLarJDIZ
+        GoQOwhWbJq/MTrB15kmZBPjwlBDhFCC8qOx4ihM9mqXOYk4xQvdL1Lhm6S+ISA4D8fFHd1
+        paNtRhJi4Z4QEXSuulQ8N8ywpfmOazCE5TAUaZVuvc2zmf7qexYEuAKmtGJ7+A==
+Date:   Tue, 9 Aug 2022 13:47:00 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     a.zummo@towertech.it, zengjx95@gmail.com
+Cc:     linuszeng@tencent.com, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2] rtc: rtc-spear: set range max
+Message-ID: <166004560453.856732.1541589494706195860.b4-ty@bootlin.com>
+References: <20220728100101.1906801-1-zengjx95@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,
-        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220728100101.1906801-1-zengjx95@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Message Body:
-DIE WELTFINANZKRISE KANN SIE ZUM MILLIONAR MACHEN! https://telegra.ph/Deutschland-hat-eine-neue-Einnahmequelle-von-323064-Euro-pro-Woche-08-07
+On Thu, 28 Jul 2022 18:01:01 +0800, Zeng Jingxiang wrote:
+> From: Zeng Jingxiang <linuszeng@tencent.com>
+> 
+> In the commit f395e1d3b28d7c2c67b73bd467c4fb79523e1c65
+> ("rtc: spear: set range"), the value of
+> RTC_TIMESTAMP_END_9999 was incorrectly set to range_min.
+> 390	config->rtc->range_min = RTC_TIMESTAMP_BEGIN_0000;
+> 391	config->rtc->range_max = RTC_TIMESTAMP_END_9999;
+> 
+> [...]
 
---
-This e-mail was sent from a contact form on Sonnenalp Hotel Gold Club (https://sonnenalpgoldclub.com/contact/)
+Applied, thanks!
 
+[1/1] rtc: rtc-spear: set range max
+      commit: 03c4cd6f89e074a51e289eb9129ac646f0f2bd29
+
+Best regards,
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
