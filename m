@@ -2,85 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FAD58F9D5
-	for <lists+linux-rtc@lfdr.de>; Thu, 11 Aug 2022 11:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8A5590A98
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Aug 2022 05:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234930AbiHKJP6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 11 Aug 2022 05:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
+        id S236791AbiHLDXV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 11 Aug 2022 23:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiHKJPz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Aug 2022 05:15:55 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5433DBCD
-        for <linux-rtc@vger.kernel.org>; Thu, 11 Aug 2022 02:15:54 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id z20so18705064ljq.3
-        for <linux-rtc@vger.kernel.org>; Thu, 11 Aug 2022 02:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=eWYdVQgTkSshr+LnqPUerx5UBYrvRFihiIrrHfJRObk=;
-        b=V7SzdIVQUah6XvBKizvA1mVgIky9pI9QACts5UE/xHSbnXlzv5qvmt06tCaJpfdMEp
-         8LVG9IdKWBoImtN747jLTjxZsqEQ3SS/svIo8rGmJ/oEiKFkPfEhGmqErGXM58Zmaa3U
-         QgDqrWPMumitFhDxY4nqBRzTUmIUcSJnPGQoXXrYfpa+OvCbBU+5lbHFUthxydyGFpb4
-         wtkR+UzFC43D/+M/57s9tDYzX9kYGHpnFadSkFEFqkBFBkIpsa8vn8ngxL5OU9QgljRO
-         l2JghWSevhNV7NWvHiuF2PdGHxD2BVmk3WYK8lMj8nPIqWFkmNR/66LgmlSScYfjUelZ
-         YxeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eWYdVQgTkSshr+LnqPUerx5UBYrvRFihiIrrHfJRObk=;
-        b=amLGxByDQWlOMRX48vCBjDdx62NMasEyEdvPbjsyL56yurM0k0sgZLqYpv7s0xM695
-         3ubkvkbedXkZEHP2gEZElWT//Ozt8l5orhGvOww6zLhglrRpWPgKGu1OoNdi0WhUX2Vx
-         JSxgmHhH61p0PjbCf8gukxuPFF34tYsfDXlihWBh443MOphcL2f8xLSB822WlbhGuCf7
-         6CLll+exjV41uIQw7zQQhKF/lfasrhqF93wG8n14J1cTsBAwDXBRiJiGL5p6Vf3rvcc3
-         A1GoXg131KFhApQQ1yod3vXwx1wSsUtbrHT/WjCW4WBbnIogaq4r2FQXySQfd4PWZ+A1
-         WPCA==
-X-Gm-Message-State: ACgBeo3upKZ/5KUsZGljwALf5ATg+iyNtpoRIu5PqwSe2C1cYNtk9btp
-        rvJnZuHFtusLKSMjTPaVZhIaqQ==
-X-Google-Smtp-Source: AA6agR53XfRpjtqJX/e2qIzfPhAibPRJPgQbeXyD0yMC1ANb0zWWn7gz9PDlDZC9gFwqwtlCvsKCCQ==
-X-Received: by 2002:a2e:2ac1:0:b0:25e:4b39:e3cb with SMTP id q184-20020a2e2ac1000000b0025e4b39e3cbmr10344846ljq.458.1660209352649;
-        Thu, 11 Aug 2022 02:15:52 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512028f00b0048b2be5320csm641183lfp.118.2022.08.11.02.15.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 02:15:51 -0700 (PDT)
-Message-ID: <a063d48a-2096-ba5b-7f65-d55fec49d534@linaro.org>
-Date:   Thu, 11 Aug 2022 12:15:50 +0300
+        with ESMTP id S236947AbiHLDXK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 11 Aug 2022 23:23:10 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EABA3D47;
+        Thu, 11 Aug 2022 20:23:05 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27C3Mu0C119184;
+        Thu, 11 Aug 2022 22:22:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660274576;
+        bh=lNW3BqQa6fQK97rdDGIYSbO0YwDXxe23ONuU/uOYiSs=;
+        h=From:To:CC:Subject:Date;
+        b=Dl8fpbpaP/FIFBxXmmERg/kRzmvqM0r6IDj75DA78fwOuJuhcXqrqlNONy0I9vo3W
+         1gtY563s/fc2QHAU44hzkXKPndRN0LSn6ixfif8JaFA2/SUxdTxDXmEmMfV4gHL2uR
+         eEgQ8yLkJbeowdXm4fT6IGKEtVODZB/JGpvH9nKY=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27C3MuNE013572
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 11 Aug 2022 22:22:56 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 11
+ Aug 2022 22:22:55 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 11 Aug 2022 22:22:55 -0500
+Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27C3MkOq096105;
+        Thu, 11 Aug 2022 22:22:48 -0500
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <nm@ti.com>, <j-keerthy@ti.com>, <lee@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Matt Ranostay <mranostay@ti.com>
+Subject: [PATCH v2 0/6] mfd: add tps6594x support for Jacinto platform
+Date:   Thu, 11 Aug 2022 20:22:36 -0700
+Message-ID: <20220812032242.564026-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] pmic: add mt6366 regulator document
-Content-Language: en-US
-To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
-        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        zhiyong tao <zhiyong.tao@mediatk.com>
-References: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
- <20220728062749.18701-2-zhiyong.tao@mediatek.com>
- <03a13ed4-e7cd-6f7d-f8f7-9b1e6193e202@linaro.org>
- <111e1073e1ce689e289e52c645a1be2e7dc7fe12.camel@mediatek.com>
- <86ab77f5-8beb-7237-d6e2-734f52ca176b@linaro.org>
- <3d120fdb5d26d1211f797e5a26e8af3f34439424.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3d120fdb5d26d1211f797e5a26e8af3f34439424.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,58 +63,48 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 11/08/2022 12:14, zhiyong.tao wrote:
-> On Thu, 2022-08-11 at 11:58 +0300, Krzysztof Kozlowski wrote:
->> On 11/08/2022 11:42, zhiyong.tao wrote:
->>>>
->>>>>
->>>>> Signed-off-by: zhiyong tao <zhiyong.tao@mediatk.com>
->>>>> ---
->>>>>  .../regulator/mediatek,mt6366-regulator.yaml  | 375
->>>>> ++++++++++++++++++
->>>>>  1 file changed, 375 insertions(+)
->>>>
->>>> Subject does not match subsystem.
->>>
->>> Hi Krzysztof,
->>>
->>> Do you mean that we should change the title like this:
->>> regulator: dt-bindings: mediatek: add mt6366 regulator document
->>> is it right?
->>
->> Yes. And remove redundant pieces so for example:
->>
->> regulator: dt-bindings: mediatek: add mt6366
->> or:
->> regulator: dt-bindings: add mediatek,mt6366
-> ==>
-> Thanks for your suggestion, we will fix it in next verison.
->>
->>
->> (...)
->>
->>>>> +    patternProperties:
->>>>> +      "^buck-
->>>>> v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
->>>>> +        type: object
->>>>> +        $ref: "regulator.yaml#"
->>>>
->>>> No need for quotes.
->>>
->>> ==>
->>> We will remove the line "$ref: "regulator.yaml#"" in next verison,
->>> is
->>> it right?
->>
->> No, it is not. Why do you want to remove it?
-> ==>
-> We don't understand "No need for quotes."which means.
-> Do you mean that we should remove the quotation marks.
-> We will change it like this:$ref: regulator.yaml#
-> is it right?
+This patchset series adds support for the TPS6594x PMIC along with
+initial support for its RTC, and poweroff sequence.
 
-Yes, remove the quotation marks. You wanted to remove entire line which
-is not correct. $ref should stay.
+Additionally, add usage of the PMIC for the various Jacintor platforms
+devicetree's.
 
-Best regards,
-Krzysztof
+Changes from v1:
+* Corrected devicetree documentation issues found with dt-schema
+* Changed MFD references to PMIC reflecting the more valid use of driver
+* Cleaning up variable naming and ordering within functions
+* Adding gpio + regulator cells for upcoming driver support 
+* Switching from .probe to .probe_new API
+* Revising comments within drivers to be more concise
+* Adding device tree nodes for j721s2 and j721e platforms
+
+Keerthy (3):
+  MFD: TPS6594x: Add new PMIC device driver for TPS6594x chips
+  rtc: rtc-tps6594x: Add support for TPS6594X PMIC RTC
+  arm64: dts: ti: k3-j7200-common-proc-board: Add TPS6594x PMIC node
+
+Matt Ranostay (3):
+  Documentation: tps6594x: Add DT bindings for the TPS6594x PMIC
+  arm64: dts: ti: k3-j721e-common-proc-board: Add TPS6594x PMIC node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add TPS6594x PMIC node
+
+ .../devicetree/bindings/mfd/ti,tps6594x.yaml  |  56 ++++++
+ .../dts/ti/k3-j7200-common-proc-board.dts     |  16 ++
+ .../dts/ti/k3-j721e-common-proc-board.dts     |  16 ++
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  16 ++
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/tps6594x.c                        | 121 ++++++++++++
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-tps6594x.c                    | 181 ++++++++++++++++++
+ include/linux/mfd/tps6594x.h                  |  84 ++++++++
+ 11 files changed, 516 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+ create mode 100644 drivers/mfd/tps6594x.c
+ create mode 100644 drivers/rtc/rtc-tps6594x.c
+ create mode 100644 include/linux/mfd/tps6594x.h
+
+-- 
+2.36.1
+
