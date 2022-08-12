@@ -2,59 +2,59 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214F6590FC2
-	for <lists+linux-rtc@lfdr.de>; Fri, 12 Aug 2022 12:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512F0590FCF
+	for <lists+linux-rtc@lfdr.de>; Fri, 12 Aug 2022 12:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbiHLKzV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 12 Aug 2022 06:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
+        id S237732AbiHLK5B (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 12 Aug 2022 06:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiHLKzU (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Aug 2022 06:55:20 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C094DF26
-        for <linux-rtc@vger.kernel.org>; Fri, 12 Aug 2022 03:55:18 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id f20so831873lfc.10
-        for <linux-rtc@vger.kernel.org>; Fri, 12 Aug 2022 03:55:18 -0700 (PDT)
+        with ESMTP id S237438AbiHLK5A (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 12 Aug 2022 06:57:00 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B0AA3C1
+        for <linux-rtc@vger.kernel.org>; Fri, 12 Aug 2022 03:56:58 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id w5so859654lfq.5
+        for <linux-rtc@vger.kernel.org>; Fri, 12 Aug 2022 03:56:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=aaNl+ijT1LjwDfHOCxRP8aD4iO5jOkHMfS/PbY8NG5o=;
-        b=vxyPj+cWREDjzPfHlMEI4ETGGS++oBpkkT/Z8ItZIeGbY/auOJ9VffjXi3vILLOXOD
-         Mo4fOrJX19n83rdKW55y3kMoxJXPsW3VNDMufG/BYD9YgGQXmwHnmVezKLYcSGjilxPr
-         uTtUnjgaFRPTeCuer2xpXcUcR4Iw1HiDwKfM5sin/m7ISRpv1gn7LOs3dkOCFjorV73C
-         ICUKRGn9+UdbtjCNfViIond8iPgwL+QYjeZNWrAKBWo1QSEULnQppVROKOfORzgCTplG
-         9Igbk9lj21TDOx4yUz2dBCthY4WnoQWvta6ymrNWlz2t6jYvzUu865fqNAfTrbZsVquO
-         Ms0w==
+        bh=mChUjQTtXHpc2A+QlFmH2j/MWN0EZMkc2lSHpOXeQrA=;
+        b=Y9ftosvW+/lXOfo2DHn/iOKLY+DKnzGTJ/du2uR/xcqHW5eEuf/MhEfhmLloPHjwCO
+         oBbJry4O8PjVfaJ5FODDfz5T+LNbcxuJs5Gd0cZfk1nKVp8go/D2FeOtJU+2sXQ3rJLv
+         NDSu+WYXb0U/rhC1Ph+3m/FOizpJlCkHFVx5wsNrFRYQ3UkbZpmeNGHh8sIoAnLenkh+
+         vndZxXrtL+c/XXlsiLfZSyuiYiQ0KKvZJLZJgwiuvEr8HjkHJSwgAJa2LemBKUlEWxtd
+         xISOy5mUZ7ESoOE8vzF8bHvZ0mY+jnuLvpJC3CsD/hI21t4DKdjdnRBgIcmxkgPQcgQU
+         a5IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=aaNl+ijT1LjwDfHOCxRP8aD4iO5jOkHMfS/PbY8NG5o=;
-        b=Y0ypl/bkl1Jr3ioukQuYksCZPZLLFTYwqDt+8aOUGZ+xF0ppLqXLKAca92dZCd5+Vi
-         jYJiipvo8V8Po80D/LGM4c2VPIzY+KLUSLMJ+FVfY+BYugOzwJhTA6XlEVTJc2wp0UTt
-         g2lAs9eEU1zDJDWF4cwWPIcUfcUHwnFEqdd2KVSSUutbksuqaeapoyMaZ8/xWOrFFypQ
-         jmJi8sjvmprYjBB7+D0opupX2itG+54MJp959GaFmmVEDP20a+hlnDX3GqzCe5QQfocC
-         b4F0FmzwzLH7FgkiVpC8LqOeZqP3kACSoUUP5R93yKd4fTw5hgNi6MUXCloaBL6komtq
-         MSrw==
-X-Gm-Message-State: ACgBeo0jkeidhhR7gSttQ2od9BbMoEUMYZxp+EYNEGd2fymEVsr/Omjz
-        ogSChbkPoCGtL2J6jAlaFe7/6Q==
-X-Google-Smtp-Source: AA6agR6nxVAvP/ztJ9CWdcMb5byQai/Ut0mSg3vYquS5IM5ugPUQ8jhyJXPddJBUAd9gQCzcpJbNfA==
-X-Received: by 2002:a05:6512:2313:b0:48a:e615:289b with SMTP id o19-20020a056512231300b0048ae615289bmr1069198lfu.201.1660301716964;
-        Fri, 12 Aug 2022 03:55:16 -0700 (PDT)
+        bh=mChUjQTtXHpc2A+QlFmH2j/MWN0EZMkc2lSHpOXeQrA=;
+        b=nYwcns9TkRUzMKUw8qbWzAhDRVXhJu+oJbsbqVORnZ9poPxoriQJ+9M1ainzAasiPM
+         D3CmD3NHoPXv6+URnBUrXQdzy7/Y3QYkX7A1a4Ck/kibEe9WbjV+FD69Mfb9MJZaJz0O
+         1I4tpEc7spUY5ejjcNeLtZY0ngijKTm5Xg8QXuxpIpCOOtTrNm3YSNRjL2lQ/5rTcR+K
+         kUVBc02Q+K7ZXjC9KSxFoE8C9ZF3DaShm0EMMlWIxovXDb7kXf1P1YZdFiGk8xJGKuPA
+         OdcRyIni6UlR12HwU57EBRSCrJg1jjVP76UmIVa8BuucgVeP/YVErmJuwxWB9fQDQMsz
+         THHQ==
+X-Gm-Message-State: ACgBeo0uKFeUNhbofCUD0oR3pZ3eoRpXu+zwoh61eIsGxOD7IdlmImRs
+        EU+o6htkV6OsTH29yhuWWuvgmw==
+X-Google-Smtp-Source: AA6agR4c+dqcuuneKDezG2XNuToIgmi+wQmcMT9vCnGaJvx1lSq90f0pUvfTgcx6kKuGrwL9SZQRYA==
+X-Received: by 2002:a05:6512:3fa8:b0:48c:ffd1:625d with SMTP id x40-20020a0565123fa800b0048cffd1625dmr998883lfa.251.1660301817252;
+        Fri, 12 Aug 2022 03:56:57 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id l9-20020a056512110900b0048af3154456sm173419lfg.146.2022.08.12.03.55.11
+        by smtp.gmail.com with ESMTPSA id f7-20020a056512360700b0048b0f2dc35asm178317lfs.75.2022.08.12.03.56.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 03:55:16 -0700 (PDT)
-Message-ID: <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
-Date:   Fri, 12 Aug 2022 13:55:10 +0300
+        Fri, 12 Aug 2022 03:56:56 -0700 (PDT)
+Message-ID: <3a26be5c-04c5-cd67-1154-dfd7d99fb5d0@linaro.org>
+Date:   Fri, 12 Aug 2022 13:56:50 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
+Subject: Re: [PATCH v3 0/1] Mediatek MT6366 Regulator patch
 Content-Language: en-US
 To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
         robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
@@ -69,14 +69,13 @@ Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
 References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
- <20220812092901.6429-2-zhiyong.tao@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812092901.6429-2-zhiyong.tao@mediatek.com>
+In-Reply-To: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,30 +84,15 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 12/08/2022 12:29, Zhiyong Tao wrote:
-> Add mt6366 regulator document
+> Add mt6366 binding documentation
 > 
+> Changes in patch v3:
+> 1)change patch title
 
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6366-regulator
-> +
-> +  regulators:
-> +    type: object
-> +    description: List of regulators and its properties
-> +
-> +    patternProperties:
-> +      "^buck-v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
-> +        type: object
-> +        $ref: regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
-> +        type: object
-> +        $ref: regulator.yaml#
+Where is the driver?
 
-You miss unevaluatedProperties in most of the places.
-
+Don't ignore feedback:
+https://lore.kernel.org/all/YuJsDI8rqkHuysIT@sirena.org.uk/
 
 Best regards,
 Krzysztof
