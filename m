@@ -2,136 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2922591A8C
-	for <lists+linux-rtc@lfdr.de>; Sat, 13 Aug 2022 15:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54048591F43
+	for <lists+linux-rtc@lfdr.de>; Sun, 14 Aug 2022 11:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239447AbiHMNSb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 13 Aug 2022 09:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S229607AbiHNJZU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 14 Aug 2022 05:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiHMNSa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 13 Aug 2022 09:18:30 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DE42CE26
-        for <linux-rtc@vger.kernel.org>; Sat, 13 Aug 2022 06:18:29 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 21285 invoked from network); 13 Aug 2022 15:11:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1660396305; bh=K7sZyZBLB32TVPnHXHDCJNKvmqNVMgAxHvI8I7Fg41c=;
-          h=From:To:Cc:Subject;
-          b=kubk1nc3wUo0ZfphY/CIG2BbVWCb2gESwXDc4+BKEGykD7yNODDLRwVpUN/KQflpL
-           2xlhy53XZtrSnvg2he73C31luSx/r4vlWav9YCkHFdRHV2TdTFn/vzNNQLQOKHHwAr
-           WoR+AMqZbnVAR7om1hKUxoBG1kehX3RxHuUxBlJM=
-Received: from aaeq146.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.120.146])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-kernel@vger.kernel.org>; 13 Aug 2022 15:11:45 +0200
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        with ESMTP id S229484AbiHNJZT (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 14 Aug 2022 05:25:19 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B7DB1B;
+        Sun, 14 Aug 2022 02:25:18 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id b16so6274595edd.4;
+        Sun, 14 Aug 2022 02:25:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc;
+        bh=kE8WibN1v5dkHUmz0R+NQjJ+YVKJVhVn9I/8MpEJ5rY=;
+        b=FVuxuioFy4+6sp3uZiew3t12myqNZE2uBQCnSX/AI22/H0t99BMI/eHUPr0QIodYbf
+         Hiq++3KEFKHdX2bVc2S9wy9EvtXAM72xhz+T1+2I0fgHjUEU8QIyOb/06iqm9PzDlCn0
+         Gqb6neKYSzf+d4q9561Azbuh+4f5074UzuPu+/rkf7bPHntBB1+JKw5Lt7U/07nhBhCb
+         Rls2doWHBqjgYan+Me8K5Zp+OwgM5bXda74bW/QCGszS0nSZaD26ZIYbanFyuH+TQQyl
+         +q9/a8aFeStktjHfjNgnRqdenWd1Dlysi8AJ/WiiYbLS+MY9/mPCnFj+fTxt4huUL91P
+         IxvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc;
+        bh=kE8WibN1v5dkHUmz0R+NQjJ+YVKJVhVn9I/8MpEJ5rY=;
+        b=OxehwoXfCNriAgON7z5sLjW2ZKWldNLyYaDTzM3X33ziygmrJVON2oVPLf7n80Jq4l
+         6dIK7jo77VasGtrLY7UcOIeMSiNP6E7fFleldMno93CMBhXs/Q4XGhVhyNkc8LoqxSc7
+         Xetuz9GiljQ4vAAVkx47FNlfShFIyHD6LhOZIUIw7Q+onE5Px8FuQI66AmCXbC/mEo6L
+         KLf7riwxGDG7XL7j7y2JxeFoAbZ/NY/Zsve+4ekLhKRz5Oh8adBGGEV7cRQSNLwS8Sfp
+         BJXIFTsT4kHhDSamQ4rxHlDnKUK5+fjdWk+8hbQsL31Hl2gzU0IUhzErj8md8IRWQ9I+
+         RrzQ==
+X-Gm-Message-State: ACgBeo3MCuM6dNPwPe3T0X8mSvjunoyMINSrj4IGYSYhAK8L5EMhgGuM
+        s01yNVu3sq8lWfjm8qV1TgOyCp8mKXA=
+X-Google-Smtp-Source: AA6agR4B+eoDDHA6KSgFcph8LPH6dVGmEklRaEwrDjzPC3JNpOIE5DUE1bWacrb8q6m+uCZvl17vUA==
+X-Received: by 2002:aa7:db44:0:b0:43d:267c:edd9 with SMTP id n4-20020aa7db44000000b0043d267cedd9mr10243703edt.385.1660469116741;
+        Sun, 14 Aug 2022 02:25:16 -0700 (PDT)
+Received: from gmail.com (195-38-113-253.pool.digikabel.hu. [195.38.113.253])
+        by smtp.gmail.com with ESMTPSA id e1-20020a170906844100b0072f4f4dc038sm2766339ejy.42.2022.08.14.02.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 02:25:16 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sun, 14 Aug 2022 11:25:14 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: [PATCH v4 2/2] x86/rtc: rename mach_set_rtc_mmss
-Date:   Sat, 13 Aug 2022 15:10:34 +0200
-Message-Id: <20220813131034.768527-2-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220813131034.768527-1-mat.jonczyk@o2.pl>
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH v4 1/2] x86/rtc: rewrite mach_get_cmos_time to delete
+ duplicated code
+Message-ID: <Yvi/eq7/IPsUAGVc@gmail.com>
 References: <20220813131034.768527-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 4f51fed1a705c1695ebe1c3fd6fe0912
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [EcNU]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220813131034.768527-1-mat.jonczyk@o2.pl>
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Once upon a time, before
-commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
-in 2013, the function set only the minute and seconds registers
-of the CMOS RTC. This is no longer true, so rename the function to
-mach_set_cmos_time.
 
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
+* Mateusz Jończyk <mat.jonczyk@o2.pl> wrote:
 
----
+> There are functions in drivers/rtc/rtc-mc146818-lib.c that handle
+> reading from / writing to the CMOS RTC clock. mach_get_cmos_time() in
+> arch/x86/kernel/rtc.c did not use them and was mostly a duplicate of
+> mc146818_get_time(). Modify mach_get_cmos_time() to use
+> mc146818_get_time() and remove the duplicated code.
+> 
+> mach_get_cmos_time() used a different algorithm than
+> mc146818_get_time(), but these functions are equivalent. The major
+> differences are:
+> 
+> - mc146818_get_time() is better refined and handles various edge
+>   conditions,
+> 
+> - when the UIP ("Update in progress") bit of the RTC is set,
+>   mach_get_cmos_time() was busy waiting with cpu_relax() while
+>   mc146818_get_time() is using mdelay(1) in every loop iteration.
+>   (However, there is my commit merged for Linux 5.20 / 6.0 to decrease
+>   this period to 100us:
+> commit d2a632a8a117 ("rtc: mc146818-lib: reduce RTC_UIP polling period")
+>   ),
+> 
+> - mach_get_cmos_time() assumed that the RTC year is >= 2000, which
+>   may not be true on some old boxes with a dead battery,
+> 
+> - mach_get_cmos_time() was holding the rtc_lock for a long time
+>   and could hang if the RTC is broken or not present.
+> 
+> The RTC writing counterpart, mach_set_rtc_mmss() is already using
+> mc146818_get_time() from drivers/rtc. This was done in
+>         commit 3195ef59cb42 ("x86: Do full rtc synchronization with ntp")
+> It appears that mach_get_cmos_time() was simply forgotten.
+> 
+> mach_get_cmos_time() is really used only in read_persistent_clock64(),
+> which is called only in a few places in kernel/time/timekeeping.c .
 
-v3:
-  - add more people to the Cc list.
----
- arch/x86/include/asm/mc146818rtc.h | 2 +-
- arch/x86/kernel/rtc.c              | 4 ++--
- arch/x86/kernel/x86_init.c         | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+LGTM, I've added the following background to the commit description:
 
-diff --git a/arch/x86/include/asm/mc146818rtc.h b/arch/x86/include/asm/mc146818rtc.h
-index 97198001e567..6115bb3d5795 100644
---- a/arch/x86/include/asm/mc146818rtc.h
-+++ b/arch/x86/include/asm/mc146818rtc.h
-@@ -95,7 +95,7 @@ static inline unsigned char current_lock_cmos_reg(void)
- unsigned char rtc_cmos_read(unsigned char addr);
- void rtc_cmos_write(unsigned char val, unsigned char addr);
- 
--extern int mach_set_rtc_mmss(const struct timespec64 *now);
-+extern int mach_set_cmos_time(const struct timespec64 *now);
- extern void mach_get_cmos_time(struct timespec64 *now);
- 
- #define RTC_IRQ 8
-diff --git a/arch/x86/kernel/rtc.c b/arch/x86/kernel/rtc.c
-index 1cadc8a15267..349046434513 100644
---- a/arch/x86/kernel/rtc.c
-+++ b/arch/x86/kernel/rtc.c
-@@ -27,13 +27,13 @@ DEFINE_SPINLOCK(rtc_lock);
- EXPORT_SYMBOL(rtc_lock);
- 
- /*
-- * In order to set the CMOS clock precisely, set_rtc_mmss has to be
-+ * In order to set the CMOS clock precisely, mach_set_cmos_time has to be
-  * called 500 ms after the second nowtime has started, because when
-  * nowtime is written into the registers of the CMOS clock, it will
-  * jump to the next second precisely 500 ms later. Check the Motorola
-  * MC146818A or Dallas DS12887 data sheet for details.
-  */
--int mach_set_rtc_mmss(const struct timespec64 *now)
-+int mach_set_cmos_time(const struct timespec64 *now)
- {
- 	unsigned long long nowtime = now->tv_sec;
- 	struct rtc_time tm;
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index e84ee5cdbd8c..57353519bc11 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -138,7 +138,7 @@ struct x86_platform_ops x86_platform __ro_after_init = {
- 	.calibrate_cpu			= native_calibrate_cpu_early,
- 	.calibrate_tsc			= native_calibrate_tsc,
- 	.get_wallclock			= mach_get_cmos_time,
--	.set_wallclock			= mach_set_rtc_mmss,
-+	.set_wallclock			= mach_set_cmos_time,
- 	.iommu_shutdown			= iommu_shutdown_noop,
- 	.is_untracked_pat_range		= is_ISA_range,
- 	.nmi_init			= default_nmi_init,
--- 
-2.25.1
+   These changes are not supposed to change behavior, but they are not 
+   identity transformations either, as mc146818_get_time() is a better but 
+   different implementation of the same logic - so regressions are possible 
+   in principle.
 
+Queued up both patches in tip:x86/timers and will push it out after 
+testing.
+
+Thanks!
+
+	Ingo
