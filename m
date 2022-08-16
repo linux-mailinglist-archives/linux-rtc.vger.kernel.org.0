@@ -2,102 +2,146 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554795953B8
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Aug 2022 09:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A43595C7C
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Aug 2022 14:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbiHPH1N (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Aug 2022 03:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S233087AbiHPM5l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Aug 2022 08:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiHPH0z (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Aug 2022 03:26:55 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BA817DDB8;
-        Mon, 15 Aug 2022 20:56:48 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d16so8087157pll.11;
-        Mon, 15 Aug 2022 20:56:48 -0700 (PDT)
+        with ESMTP id S233488AbiHPM5M (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Aug 2022 08:57:12 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A861C2BF7
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id c28so10746400lfh.3
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc;
-        bh=qLSttsMwGgFXnsk5NhFWTdXd+2tQbLUyp0NNDCVHH9A=;
-        b=SZQdxn0LRoB3Sm/BK6myvoUmneF2rPxNoNYW/qkudaijogCTBK8foe9e9swRxqm8am
-         E2R0Q2dQ8sCFI/JHVrsKPlFPz/9U07gEMiKAkhodCIFqd1Y92AONNmo8g1eTQZQN5jWS
-         3/csoDncaFMVRbm4v10In1P48Eo5Kd2YL9uL3whrh18IpZtUfzi8qacl0HOHcAz/CPlP
-         vIdjoRWY2Cvdiu1PFyPlzThZh9rjP1vgiQ0lg5QNvYGyf5u8Ac5BaooXNF4ZuPIzLgdW
-         rJBDG3Eg4at3j9bz/ZSmHsNkng0dd2CDWXfEyYDbn/h15eckZHHq6vz/qnnpdUCV2ynb
-         1gbQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
+        b=ryshPL7gSJngeT8mVWdgphUp3NPNc5/8T07ioXmLOYFE+RM9kMFox6j/QSmMx+MRjW
+         IF5Tvsu+eUNa/PURaluKXcxsPoKwTU0v6obcpVNF6S4E2WUJQwfcMoAedizNNTEJVzIN
+         qApkaeQsH9W4FBpYE2y4cHYlnaFnoj9yBLWWtHAiDyYD2WSMopnYkuWFR3AZvGXe9orE
+         W7mL52SexG3h2NyytiRZEwQPnlFxYDDwyJbFKcIuCS7pw5DDoUXAJcdrv+Qc4tTN48CC
+         ofihlq8KHD75r9tNZ+KV2KtQWXkZp55mGCW7DPJAuyRkCANnLDWg9JgV8nXF25DqpsEo
+         /E1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=qLSttsMwGgFXnsk5NhFWTdXd+2tQbLUyp0NNDCVHH9A=;
-        b=3Hx7BIkbboe2Vuo1BdnPHMeVta+Uj0plbPVDVN0JAeAQskpo1qlpWOJZOC9F4HB4My
-         XBdlYxgohTsusAIYx8aFy3s+e7Oupj51pWVBuYJook72zZruD00iNp3FEFBeRYG9CeVr
-         itcNVy4nrXP/tFANM3kgydELf7FCXgYXKgXKvaz4Dkib1lMNMryYWFIORhMyXqajtbbg
-         rEVV3mTq/jjT/fHBEOmxAkWcUgLNv3duRrHHl7vS1ZV+MSELns9Ci6pdHxsjJJOPBa/H
-         kpyOtCs8fEslZe1lrvhJ42Ga2zK9lyyxmf3mWtWgc0vcWSzad9yr7mJT+dmt7/eW58kc
-         l86g==
-X-Gm-Message-State: ACgBeo0sa8p9J5nTQ1Z0BvmqMYOpMSWqgq1a0Dvo9EFEC/gDE3Cl8Vqm
-        8NaSeCJSn0OTpJmBqnYVano=
-X-Google-Smtp-Source: AA6agR6ezCfARSKr9teZqM98UWGmox8EuKcG/UykuOWOmBN60SUNF93S9sRfcJtcEICdyPuEUHCqig==
-X-Received: by 2002:a17:90b:4a0a:b0:1f4:e4fc:91d3 with SMTP id kk10-20020a17090b4a0a00b001f4e4fc91d3mr30956594pjb.67.1660622207573;
-        Mon, 15 Aug 2022 20:56:47 -0700 (PDT)
-Received: from localhost.localdomain ([116.75.96.232])
-        by smtp.gmail.com with ESMTPSA id l13-20020a17090ac58d00b001f2fa09786asm5356846pjt.19.2022.08.15.20.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 20:56:47 -0700 (PDT)
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jagathjog1996@gmail.com
-Subject: [PATCH 3/3] rtc: rv3028: Alignment to match the open parenthesis
-Date:   Tue, 16 Aug 2022 09:26:36 +0530
-Message-Id: <20220816035636.27226-4-jagathjog1996@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220816035636.27226-1-jagathjog1996@gmail.com>
-References: <20220816035636.27226-1-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
+        b=NGstoIES8IhE3eBZEPUHfKm7erEO1g9+I0u6HaxES5c2Etjp4aVaUKVivZFyPjBqxR
+         UcAKbalBRMAGnghqK/iTxL4ztdhqKOI2ufDRKiAwekeuNCttsKCpfhHbKvk7AbL4RkJW
+         CXk5nacYYYa9yEkZdZiG4I7gT55JjNpZOmJpDe5pr6jUggsT4kA2dmhkNMCiRIqiBcYm
+         RwP+ouwcWO0dn6Z4K8ei6H23ODcLbw9cT6dqaRpTnJqgc7X+NjdCHlCtP+iVkpzwAl70
+         AgPHh1MfmCskBEfPFO18JYgj5dQKlz9g5QVkbkkSb5jrJ7FINo9zDiAB0NUfyqmEZdJa
+         mDwg==
+X-Gm-Message-State: ACgBeo1sPE/k6DGGE5KUOuG3ocet5iWp0YlfpviEhkJmSx0W+C5OF85y
+        QaWrVwr+RAVGN8pffd4oyQ53eg==
+X-Google-Smtp-Source: AA6agR60sMxOHtIXk2hcNdYq73fYG6QiAiIF8W4tR5L6Ra08qXNqi9BEiQFyK2ct4uvflrrmAZRnVQ==
+X-Received: by 2002:a05:6512:b03:b0:492:88d3:8369 with SMTP id w3-20020a0565120b0300b0049288d38369mr3820559lfu.552.1660654625046;
+        Tue, 16 Aug 2022 05:57:05 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
+        by smtp.gmail.com with ESMTPSA id b26-20020ac2411a000000b0048af9d2d119sm1379707lfi.130.2022.08.16.05.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Aug 2022 05:57:04 -0700 (PDT)
+Message-ID: <1349b271-796b-c9d2-a568-f9be84926ed4@linaro.org>
+Date:   Tue, 16 Aug 2022 15:57:02 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
+Content-Language: en-US
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
+ <20220812092901.6429-2-zhiyong.tao@mediatek.com>
+ <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
+ <4a49b619deb5453749a47874377cad6a36a9a054.camel@mediatek.com>
+ <CAGE=qrohYZ6f9bbEuYfF=2Rz21nbW_8ho3rBQmHt1D+kQG2-jA@mail.gmail.com>
+ <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Fix following checkpatch.pl check by adding space to match the
-open parenthesis and removing unwanted blank line.
-CHECK: Alignment should match open parenthesis.
-CHECK: Blank lines aren't necessary before a close brace '}'.
+On 16/08/2022 15:54, zhiyong.tao wrote:
+> On Fri, 2022-08-12 at 15:55 +0300, Krzysztof Kozlowski wrote:
+>> On Fri, 12 Aug 2022 at 15:52, zhiyong.tao <zhiyong.tao@mediatek.com>
+>> wrote:
+>>>
+>>> On Fri, 2022-08-12 at 13:55 +0300, Krzysztof Kozlowski wrote:
+>>>> On 12/08/2022 12:29, Zhiyong Tao wrote:
+>>>>> Add mt6366 regulator document
+>>>>>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    const: mediatek,mt6366-regulator
+>>>>> +
+>>>>> +  regulators:
+>>>>> +    type: object
+>>>>> +    description: List of regulators and its properties
+>>>>> +
+>>>>> +    patternProperties:
+>>>>> +      "^buck-
+>>>>> v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
+>>>>> +        type: object
+>>>>> +        $ref: regulator.yaml#
+>>>>> +        unevaluatedProperties: false
+>>>>> +
+>>>>> +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
+>>>>> +        type: object
+>>>>> +        $ref: regulator.yaml#
+>>>>
+>>>> You miss unevaluatedProperties in most of the places.
+>>>
+>>> Hi Krzysztof,
+>>>    Thanks for your suggestion,
+>>>    Do you mean that all places should have the
+>>> unevaluatedProperties
+>>> Properties ?
+>>
+>> Yes. You put it in some of the places which does not really make
+>> sense...
+> 
+> Hi Krzysztof,
+>    Thanks for your suggestion,
+>    We find that if there is a properties "compatible = "regulator-
+> fixed";" in ldo-vrf12, we should set unevaluatedProperties as true.
+> or it will check yaml warning "Unevaluated Properties are not
+> allowed('compatible' was unexpected)". is it right?
+>    There is a properties "compatible = "regulator-fixed";"in ldo-vrf12.
+> It will cause the checking yaml error "ldo-vrf12: 'regulator-name' is a
+> required property". Can you help to give a suggestion to fix the
+> warning? Add regulator-name for ldo-vrf12 or other suggestion?
+> 
 
-Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
----
- drivers/rtc/rtc-rv3028.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+And how this regulator is supposed to work? Are you populating DT
+children in your driver?
 
-diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-index f7c801c06d00..0da68fd7cedd 100644
---- a/drivers/rtc/rtc-rv3028.c
-+++ b/drivers/rtc/rtc-rv3028.c
-@@ -266,7 +266,7 @@ static irqreturn_t rv3028_handle_irq(int irq, void *dev_id)
- 	u32 status = 0, ctrl = 0;
- 
- 	if (regmap_read(rv3028->regmap, RV3028_STATUS, &status) < 0 ||
--	   status == 0) {
-+	    status == 0) {
- 		return IRQ_NONE;
- 	}
- 
-@@ -514,7 +514,6 @@ static int rv3028_set_offset(struct device *dev, long offset)
- 	rv3028_exit_eerd(rv3028, eerd);
- 
- 	return ret;
--
- }
- 
- static int rv3028_param_get(struct device *dev, struct rtc_param *param)
--- 
-2.17.1
-
+Best regards,
+Krzysztof
