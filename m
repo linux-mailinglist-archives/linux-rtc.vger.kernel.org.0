@@ -2,146 +2,101 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A43595C7C
-	for <lists+linux-rtc@lfdr.de>; Tue, 16 Aug 2022 14:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928BA595E34
+	for <lists+linux-rtc@lfdr.de>; Tue, 16 Aug 2022 16:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbiHPM5l (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 16 Aug 2022 08:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S233073AbiHPOSl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 16 Aug 2022 10:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233488AbiHPM5M (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Aug 2022 08:57:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A861C2BF7
-        for <linux-rtc@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c28so10746400lfh.3
-        for <linux-rtc@vger.kernel.org>; Tue, 16 Aug 2022 05:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
-        b=ryshPL7gSJngeT8mVWdgphUp3NPNc5/8T07ioXmLOYFE+RM9kMFox6j/QSmMx+MRjW
-         IF5Tvsu+eUNa/PURaluKXcxsPoKwTU0v6obcpVNF6S4E2WUJQwfcMoAedizNNTEJVzIN
-         qApkaeQsH9W4FBpYE2y4cHYlnaFnoj9yBLWWtHAiDyYD2WSMopnYkuWFR3AZvGXe9orE
-         W7mL52SexG3h2NyytiRZEwQPnlFxYDDwyJbFKcIuCS7pw5DDoUXAJcdrv+Qc4tTN48CC
-         ofihlq8KHD75r9tNZ+KV2KtQWXkZp55mGCW7DPJAuyRkCANnLDWg9JgV8nXF25DqpsEo
-         /E1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=u6vsO210HbSOzl+ApBtKdfKeKIVufqnfwmwO0kmWyvI=;
-        b=NGstoIES8IhE3eBZEPUHfKm7erEO1g9+I0u6HaxES5c2Etjp4aVaUKVivZFyPjBqxR
-         UcAKbalBRMAGnghqK/iTxL4ztdhqKOI2ufDRKiAwekeuNCttsKCpfhHbKvk7AbL4RkJW
-         CXk5nacYYYa9yEkZdZiG4I7gT55JjNpZOmJpDe5pr6jUggsT4kA2dmhkNMCiRIqiBcYm
-         RwP+ouwcWO0dn6Z4K8ei6H23ODcLbw9cT6dqaRpTnJqgc7X+NjdCHlCtP+iVkpzwAl70
-         AgPHh1MfmCskBEfPFO18JYgj5dQKlz9g5QVkbkkSb5jrJ7FINo9zDiAB0NUfyqmEZdJa
-         mDwg==
-X-Gm-Message-State: ACgBeo1sPE/k6DGGE5KUOuG3ocet5iWp0YlfpviEhkJmSx0W+C5OF85y
-        QaWrVwr+RAVGN8pffd4oyQ53eg==
-X-Google-Smtp-Source: AA6agR60sMxOHtIXk2hcNdYq73fYG6QiAiIF8W4tR5L6Ra08qXNqi9BEiQFyK2ct4uvflrrmAZRnVQ==
-X-Received: by 2002:a05:6512:b03:b0:492:88d3:8369 with SMTP id w3-20020a0565120b0300b0049288d38369mr3820559lfu.552.1660654625046;
-        Tue, 16 Aug 2022 05:57:05 -0700 (PDT)
-Received: from ?IPV6:2001:14bb:ae:539c:1782:dd68:b0c1:c1a4? (d15l54g8c71znbtrbzt-4.rev.dnainternet.fi. [2001:14bb:ae:539c:1782:dd68:b0c1:c1a4])
-        by smtp.gmail.com with ESMTPSA id b26-20020ac2411a000000b0048af9d2d119sm1379707lfi.130.2022.08.16.05.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Aug 2022 05:57:04 -0700 (PDT)
-Message-ID: <1349b271-796b-c9d2-a568-f9be84926ed4@linaro.org>
-Date:   Tue, 16 Aug 2022 15:57:02 +0300
+        with ESMTP id S235866AbiHPOSi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 16 Aug 2022 10:18:38 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F4F78204
+        for <linux-rtc@vger.kernel.org>; Tue, 16 Aug 2022 07:18:32 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.186.194])
+        by andre.telenet-ops.be with bizsmtp
+        id 8EJV280024C55Sk01EJVAL; Tue, 16 Aug 2022 16:18:29 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oNxOm-001LhP-HE; Tue, 16 Aug 2022 16:18:28 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1oNxOl-00Gv2j-Ey; Tue, 16 Aug 2022 16:18:27 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] rtc: mpfs: Remove printing of stray CR
+Date:   Tue, 16 Aug 2022 16:18:25 +0200
+Message-Id: <bce2ca405ef96b1363fd1370887409d9e8468422.1660659437.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
-Content-Language: en-US
-To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        fshao@chromium.org, sen.chu@mediatek.com, hui.liu@mediatek.com,
-        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
- <20220812092901.6429-2-zhiyong.tao@mediatek.com>
- <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
- <4a49b619deb5453749a47874377cad6a36a9a054.camel@mediatek.com>
- <CAGE=qrohYZ6f9bbEuYfF=2Rz21nbW_8ho3rBQmHt1D+kQG2-jA@mail.gmail.com>
- <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9bc148119fc36c34f404091ca0f5a2e37727c285.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 16/08/2022 15:54, zhiyong.tao wrote:
-> On Fri, 2022-08-12 at 15:55 +0300, Krzysztof Kozlowski wrote:
->> On Fri, 12 Aug 2022 at 15:52, zhiyong.tao <zhiyong.tao@mediatek.com>
->> wrote:
->>>
->>> On Fri, 2022-08-12 at 13:55 +0300, Krzysztof Kozlowski wrote:
->>>> On 12/08/2022 12:29, Zhiyong Tao wrote:
->>>>> Add mt6366 regulator document
->>>>>
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: mediatek,mt6366-regulator
->>>>> +
->>>>> +  regulators:
->>>>> +    type: object
->>>>> +    description: List of regulators and its properties
->>>>> +
->>>>> +    patternProperties:
->>>>> +      "^buck-
->>>>> v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
->>>>> +        type: object
->>>>> +        $ref: regulator.yaml#
->>>>> +        unevaluatedProperties: false
->>>>> +
->>>>> +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
->>>>> +        type: object
->>>>> +        $ref: regulator.yaml#
->>>>
->>>> You miss unevaluatedProperties in most of the places.
->>>
->>> Hi Krzysztof,
->>>    Thanks for your suggestion,
->>>    Do you mean that all places should have the
->>> unevaluatedProperties
->>> Properties ?
->>
->> Yes. You put it in some of the places which does not really make
->> sense...
-> 
-> Hi Krzysztof,
->    Thanks for your suggestion,
->    We find that if there is a properties "compatible = "regulator-
-> fixed";" in ldo-vrf12, we should set unevaluatedProperties as true.
-> or it will check yaml warning "Unevaluated Properties are not
-> allowed('compatible' was unexpected)". is it right?
->    There is a properties "compatible = "regulator-fixed";"in ldo-vrf12.
-> It will cause the checking yaml error "ldo-vrf12: 'regulator-name' is a
-> required property". Can you help to give a suggestion to fix the
-> warning? Add regulator-name for ldo-vrf12 or other suggestion?
-> 
+During boot, the driver prints out a stray carriage return character.
+Remove it, together with the preceding space character.
 
-And how this regulator is supposed to work? Are you populating DT
-children in your driver?
+While at it, change prescaler to "unsigned long", as returned by
+clk_get_rate(), to avoid truncating very large clock rates, and update
+the format specifiers.
 
-Best regards,
-Krzysztof
+Fixes: 0b31d703598dc199 ("rtc: Add driver for Microchip PolarFire SoC")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Apparently updating the RTC when Debian userspace starts fails, causing
+an infinite stream of:
+
+    mpfs_rtc 20124000.rtc: timed out uploading time to rtc
+
+Increasing UPLOAD_TIMEOUT_US from 50 to 50000 doesn't help.
+---
+ drivers/rtc/rtc-mpfs.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/rtc/rtc-mpfs.c b/drivers/rtc/rtc-mpfs.c
+index f14d1925e0c94dfb..944ad10365164c4d 100644
+--- a/drivers/rtc/rtc-mpfs.c
++++ b/drivers/rtc/rtc-mpfs.c
+@@ -233,7 +233,7 @@ static int mpfs_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct mpfs_rtc_dev *rtcdev;
+ 	struct clk *clk;
+-	u32 prescaler;
++	unsigned long prescaler;
+ 	int wakeup_irq, ret;
+ 
+ 	rtcdev = devm_kzalloc(&pdev->dev, sizeof(struct mpfs_rtc_dev), GFP_KERNEL);
+@@ -275,14 +275,13 @@ static int mpfs_rtc_probe(struct platform_device *pdev)
+ 
+ 	/* prescaler hardware adds 1 to reg value */
+ 	prescaler = clk_get_rate(devm_clk_get(&pdev->dev, "rtcref")) - 1;
+-
+ 	if (prescaler > MAX_PRESCALER_COUNT) {
+-		dev_dbg(&pdev->dev, "invalid prescaler %d\n", prescaler);
++		dev_dbg(&pdev->dev, "invalid prescaler %lu\n", prescaler);
+ 		return -EINVAL;
+ 	}
+ 
+ 	writel(prescaler, rtcdev->base + PRESCALER_REG);
+-	dev_info(&pdev->dev, "prescaler set to: 0x%X \r\n", prescaler);
++	dev_info(&pdev->dev, "prescaler set to: %lu\n", prescaler);
+ 
+ 	device_init_wakeup(&pdev->dev, true);
+ 	ret = dev_pm_set_wake_irq(&pdev->dev, wakeup_irq);
+-- 
+2.25.1
+
