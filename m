@@ -2,183 +2,69 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A51596BB0
-	for <lists+linux-rtc@lfdr.de>; Wed, 17 Aug 2022 10:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5E1597F61
+	for <lists+linux-rtc@lfdr.de>; Thu, 18 Aug 2022 09:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiHQIx4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 17 Aug 2022 04:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S243743AbiHRHjA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 18 Aug 2022 03:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiHQIxz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 17 Aug 2022 04:53:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C55E77E9A
-        for <linux-rtc@vger.kernel.org>; Wed, 17 Aug 2022 01:53:54 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oOEo4-0004bT-Cp; Wed, 17 Aug 2022 10:53:44 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oOEo3-000HM1-9E; Wed, 17 Aug 2022 10:53:43 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oOEo2-0054uo-5L; Wed, 17 Aug 2022 10:53:42 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-rtc@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        kernel@pengutronix.de, Sascha Hauer <s.hauer@pengutronix.de>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: [PATCH v2 2/2] rtc: rv8803: invalidate date/time if alarm time is invalid
-Date:   Wed, 17 Aug 2022 10:53:30 +0200
-Message-Id: <20220817085330.1050492-3-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220817085330.1050492-1-s.hauer@pengutronix.de>
-References: <20220817085330.1050492-1-s.hauer@pengutronix.de>
+        with ESMTP id S231408AbiHRHi5 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 18 Aug 2022 03:38:57 -0400
+X-Greylist: delayed 425 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 Aug 2022 00:38:55 PDT
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1AA286F8
+        for <linux-rtc@vger.kernel.org>; Thu, 18 Aug 2022 00:38:55 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id B60CC222A4; Thu, 18 Aug 2022 07:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1660807908; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=KYEFXaRfZyZ2tvtQ/pT94CP9jRJl7OpUUKXARjhcEQVrxiGIehY0W7qSWfOg5rvZy
+         uzJD+eLkqFd88oVk+AgzpPO0O2JBsVb1ddSLPdvsikWMA9SZeg/5hR8ya0KfaSV9Z2
+         vtZKM2cU/SPvoxMHz4LCenJ5QVVEVygLu4UTG2e67c5q9+144PP3ASmNzddeXJ6fZz
+         Ir1K5HlhS5xsQYNJ6pLcN2QV+ZybSbu7SW0Pv38WR8Xd/0jRmdkHy2MSGl9yCQlDjC
+         AHBboDmPW3qE1ggy2v9ev9IwyeeIJX8oRkNw3UiMUt1F6ihiaOV4gZqjRTzWWmXLvQ
+         gJXI/W2nRuyHg==
+Received: by mail.fadrush.pl for <linux-rtc@vger.kernel.org>; Thu, 18 Aug 2022 07:31:10 GMT
+Message-ID: <20220818064500-0.1.13.8fak.0.nyz2gqfhmi@fadrush.pl>
+Date:   Thu, 18 Aug 2022 07:31:10 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-rtc@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-RTC core never calls rv8803_set_alarm with an invalid alarm time,
-so if an invalid alarm time > 0 is set, external factors must have
-corrupted the RTC's alarm time and possibly other registers.
+Dzie=C5=84 dobry,
 
-Play it safe by marking the date/time invalid, so all registers are
-reinitialized on a ->set_time.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-This may cause existing setups to lose time if they so far set only
-date/time, but ignored that the alarm registers had an invalid date
-value, e.g.:
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
-  rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
 
-These systems will have their ->get_time return -EINVAL till
-->set_time initializes the alarm value (and sets a new time).
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
 
-Notes:
-    Changes since v1:
-    - set alarm_invalid directly when one of the alarmvals has invalid BCD
-    - cast to (unsigned int) rather than (unsigned)
-
- drivers/rtc/rtc-rv8803.c | 45 +++++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/rtc/rtc-rv8803.c b/drivers/rtc/rtc-rv8803.c
-index 3527a0521e9b2..4875728014bed 100644
---- a/drivers/rtc/rtc-rv8803.c
-+++ b/drivers/rtc/rtc-rv8803.c
-@@ -70,6 +70,7 @@ struct rv8803_data {
- 	struct mutex flags_lock;
- 	u8 ctrl;
- 	u8 backup;
-+	u8 alarm_invalid:1;
- 	enum rv8803_type type;
- };
- 
-@@ -165,13 +166,13 @@ static int rv8803_regs_init(struct rv8803_data *rv8803)
- 
- static int rv8803_regs_configure(struct rv8803_data *rv8803);
- 
--static int rv8803_regs_reset(struct rv8803_data *rv8803)
-+static int rv8803_regs_reset(struct rv8803_data *rv8803, bool full)
- {
- 	/*
- 	 * The RV-8803 resets all registers to POR defaults after voltage-loss,
- 	 * the Epson RTCs don't, so we manually reset the remainder here.
- 	 */
--	if (rv8803->type == rx_8803 || rv8803->type == rx_8900) {
-+	if (full || rv8803->type == rx_8803 || rv8803->type == rx_8900) {
- 		int ret = rv8803_regs_init(rv8803);
- 		if (ret)
- 			return ret;
-@@ -238,6 +239,11 @@ static int rv8803_get_time(struct device *dev, struct rtc_time *tm)
- 	u8 *date = date1;
- 	int ret, flags;
- 
-+	if (rv8803->alarm_invalid) {
-+		dev_warn(dev, "Corruption detected, data may be invalid.\n");
-+		return -EINVAL;
-+	}
-+
- 	flags = rv8803_read_reg(rv8803->client, RV8803_FLAG);
- 	if (flags < 0)
- 		return flags;
-@@ -313,12 +319,19 @@ static int rv8803_set_time(struct device *dev, struct rtc_time *tm)
- 		return flags;
- 	}
- 
--	if (flags & RV8803_FLAG_V2F) {
--		ret = rv8803_regs_reset(rv8803);
-+	if ((flags & RV8803_FLAG_V2F) || rv8803->alarm_invalid) {
-+		/*
-+		 * If we sense corruption in the alarm registers, but see no
-+		 * voltage loss flag, we can't rely on other registers having
-+		 * sensible values. Reset them fully.
-+		 */
-+		ret = rv8803_regs_reset(rv8803, rv8803->alarm_invalid);
- 		if (ret) {
- 			mutex_unlock(&rv8803->flags_lock);
- 			return ret;
- 		}
-+
-+		rv8803->alarm_invalid = false;
- 	}
- 
- 	ret = rv8803_write_reg(rv8803->client, RV8803_FLAG,
-@@ -344,15 +357,33 @@ static int rv8803_get_alarm(struct device *dev, struct rtc_wkalrm *alrm)
- 	if (flags < 0)
- 		return flags;
- 
-+	alarmvals[0] &= 0x7f;
-+	alarmvals[1] &= 0x3f;
-+	alarmvals[2] &= 0x3f;
-+
-+	if (!bcd_is_valid(alarmvals[0]) ||
-+	    !bcd_is_valid(alarmvals[1]) ||
-+	    !bcd_is_valid(alarmvals[2]))
-+		goto err_invalid;
-+
- 	alrm->time.tm_sec  = 0;
--	alrm->time.tm_min  = bcd2bin(alarmvals[0] & 0x7f);
--	alrm->time.tm_hour = bcd2bin(alarmvals[1] & 0x3f);
--	alrm->time.tm_mday = bcd2bin(alarmvals[2] & 0x3f);
-+	alrm->time.tm_min  = bcd2bin(alarmvals[0]);
-+	alrm->time.tm_hour = bcd2bin(alarmvals[1]);
-+	alrm->time.tm_mday = bcd2bin(alarmvals[2]);
- 
- 	alrm->enabled = !!(rv8803->ctrl & RV8803_CTRL_AIE);
- 	alrm->pending = (flags & RV8803_FLAG_AF) && alrm->enabled;
- 
-+	if ((unsigned int)alrm->time.tm_mday > 31 ||
-+	    (unsigned int)alrm->time.tm_hour >= 24 ||
-+	    (unsigned int)alrm->time.tm_min >= 60)
-+		goto err_invalid;
-+
- 	return 0;
-+
-+err_invalid:
-+	rv8803->alarm_invalid = true;
-+	return -EINVAL;
- }
- 
- static int rv8803_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
--- 
-2.30.2
-
+Pozdrawiam
+Jakub Olejniczak
