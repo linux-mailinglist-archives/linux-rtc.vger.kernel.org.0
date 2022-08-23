@@ -2,83 +2,114 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5C959E820
-	for <lists+linux-rtc@lfdr.de>; Tue, 23 Aug 2022 18:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F11059ECAC
+	for <lists+linux-rtc@lfdr.de>; Tue, 23 Aug 2022 21:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241881AbiHWQ4V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 23 Aug 2022 12:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S229635AbiHWTp7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 23 Aug 2022 15:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343503AbiHWQz2 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Aug 2022 12:55:28 -0400
-X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Aug 2022 06:25:47 PDT
-Received: from luna.linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7CD883CA;
-        Tue, 23 Aug 2022 06:25:46 -0700 (PDT)
-Received: by luna.linkmauve.fr (Postfix, from userid 1000)
-        id DBE46F41DDA; Tue, 23 Aug 2022 15:07:05 +0200 (CEST)
-From:   Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
-        Ash Logan <ash@heyquark.com>,
-        rw-r-r-0644 <r.r.qwertyuiop.r.r@gmail.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.ne@posteo.net>
-Subject: [PATCH] rtc: gamecube: Always reset HW_SRNPROT after read
-Date:   Tue, 23 Aug 2022 15:07:02 +0200
-Message-Id: <20220823130702.1046-1-linkmauve@linkmauve.fr>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S232788AbiHWTpE (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 23 Aug 2022 15:45:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620CFBC81C;
+        Tue, 23 Aug 2022 11:47:18 -0700 (PDT)
+Received: from notapiano (unknown [194.36.25.10])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 029976601E65;
+        Tue, 23 Aug 2022 19:47:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661280436;
+        bh=yvZ81keYhwI6G9e7JnIqRWODLEgNPMGKYnHuBSLuw5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mOxcpNly5jz4ZfzlyvGKuCt/2JZYpTVvicwdFzsY8NSJP2fR5fEWwLVzSZPYP2dXD
+         qQQYgIIqom+9AgdlxLQKBnefxPDWQDJH2AGSlhF5xrcrxwsQLXoOPNU7eWAh7Oz+p6
+         yE82v1LU6up8+LSZ/DcXDZhy03GJ5+6T+g20A3eNVOKIGSAOVy+Z5SGgFNjt9u9LR0
+         +sLYNGjNX8nqdS6tyORZGrvZpOt8Gis02jjDxXG5tuwUf0NFGtb9ugrEYKqXXKwB8Y
+         +ajHow3J2rjrpOD/LKGnxsPrRe+0E0zevTcXqArW2XUrKOKdV3uylc5dQ2RSpISlVS
+         xbIXEt2LLT7CQ==
+Date:   Tue, 23 Aug 2022 14:47:05 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4] regulator: dt-bindings: mediatek: add mt6366
+Message-ID: <20220823184705.6fdpczguait2la4v@notapiano>
+References: <20220823123745.14061-1-zhiyong.tao@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,RCVD_IN_SORBS_DUL,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220823123745.14061-1-zhiyong.tao@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This register would fail to be reset if reading the RTC bias failed for
-whichever reason.  This commit reorganises the code around to
-unconditionally write it back to its previous value, unmap it, and
-return the result of regmap_read(), which makes it both simpler and more
-correct in the error case.
+On Tue, Aug 23, 2022 at 08:37:45PM +0800, Zhiyong Tao wrote:
+> Add mt6366 regulator document
+> 
+> Signed-off-by: Zhiyong Tao <zhiyong.tao@mediatek.com>
+> ---
+[..]
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6366-regulator.yaml
+[..]
+> +      "^buck-(vcore)-sshub$":
 
-Signed-off-by: Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>
----
- drivers/rtc/rtc-gamecube.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+The parentheses here don't serve any purpose, so drop them.
 
-diff --git a/drivers/rtc/rtc-gamecube.c b/drivers/rtc/rtc-gamecube.c
-index c2717bb52b2b..c828bc8e05b9 100644
---- a/drivers/rtc/rtc-gamecube.c
-+++ b/drivers/rtc/rtc-gamecube.c
-@@ -265,18 +265,17 @@ static int gamecube_rtc_read_offset_from_sram(struct priv *d)
- 	 * SRAM address as on previous consoles.
- 	 */
- 	ret = regmap_read(d->regmap, RTC_SRAM_BIAS, &d->rtc_bias);
--	if (ret) {
--		pr_err("failed to get the RTC bias\n");
--		iounmap(hw_srnprot);
--		return -1;
--	}
- 
- 	/* Reset SRAM access to how it was before, our job here is done. */
- 	if (old != 0x7bf)
- 		iowrite32be(old, hw_srnprot);
-+
- 	iounmap(hw_srnprot);
- 
--	return 0;
-+	if (ret)
-+		pr_err("failed to get the RTC bias\n");
-+
-+	return ret;
- }
- 
- static const struct regmap_range rtc_rd_ranges[] = {
--- 
-2.37.2
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        unevaluatedProperties: false
+[..]
+> +      "^ldo-vcn(33)-wifi$":
 
+Ditto.
+
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        unevaluatedProperties: false
+> +
+> +      "^ldo-vsram-(others)-sshub$":
+
+Ditto.
+
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        unevaluatedProperties: false
+[..]
+> +      "^ldo-vsim[2]$":
+
+Based on the example, should be [12].
+
+Thanks,
+Nícolas
+
+> +        type: object
+[..]
+> +            mt6366_vsim1_reg: ldo-vsim1 {
+> +                regulator-enable-ramp-delay = <540>;
+> +            };
+[..]
+> +            mt6366_vsim2_reg: ldo-vsim2 {
+> +                regulator-enable-ramp-delay = <540>;
+> +            };
+[..]
