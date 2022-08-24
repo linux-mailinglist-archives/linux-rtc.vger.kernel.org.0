@@ -2,40 +2,41 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3353959F522
-	for <lists+linux-rtc@lfdr.de>; Wed, 24 Aug 2022 10:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E3859F57C
+	for <lists+linux-rtc@lfdr.de>; Wed, 24 Aug 2022 10:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235900AbiHXIZb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 24 Aug 2022 04:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S235783AbiHXImh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 24 Aug 2022 04:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbiHXIZR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Aug 2022 04:25:17 -0400
+        with ESMTP id S235418AbiHXImf (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 24 Aug 2022 04:42:35 -0400
 Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C570B92F7F
-        for <linux-rtc@vger.kernel.org>; Wed, 24 Aug 2022 01:25:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A6774CE9
+        for <linux-rtc@vger.kernel.org>; Wed, 24 Aug 2022 01:42:33 -0700 (PDT)
 Received: from pop-os.home ([90.11.190.129])
         by smtp.orange.fr with ESMTPA
-        id QlhJo5ZO7EkSDQlhKo6H5V; Wed, 24 Aug 2022 10:25:15 +0200
+        id Qly3o30vrTLjwQly3oELfj; Wed, 24 Aug 2022 10:42:31 +0200
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 24 Aug 2022 10:25:15 +0200
+X-ME-Date: Wed, 24 Aug 2022 10:42:31 +0200
 X-ME-IP: 90.11.190.129
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: k3: Use devm_clk_get_enabled() helper
-Date:   Wed, 24 Aug 2022 10:25:11 +0200
-Message-Id: <601288834ab71c0fddde7eedd8cdb8001254ed7e.1661329498.git.christophe.jaillet@wanadoo.fr>
+        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: jz4740: Use devm_clk_get_enabled() helper
+Date:   Wed, 24 Aug 2022 10:42:29 +0200
+Message-Id: <af10570000d7e103d70bbea590ce8df4f8902b67.1661330532.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,74 +51,70 @@ The devm_clk_get_enabled() helper:
 This simplifies the code, the error handling paths and avoid the need of
 a dedicated function used with devm_add_action_or_reset().
 
+
+As a side effect, some error messages are not logged anymore, so also use
+dev_err_probe() instead of dev_err() in case of error.
+At least the error code will be logged (and -EPROBE_DEFER will be filtered)
+
 Based on my test with allyesconfig, this reduces the .o size from:
    text	   data	    bss	    dec	    hex	filename
-   12843	   4804	     64	  17711	   452f	drivers/rtc/rtc-ti-k3.o
+   9025	   2488	    128	  11641	   2d79	drivers/rtc/rtc-jz4740.o
 down to:
-   12523	   4804	     64	  17391	   43ef	drivers/rtc/rtc-ti-k3.o
+   8267	   2080	    128	  10475	   28eb	drivers/rtc/rtc-jz4740.o
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
 devm_clk_get_enabled() is new and is part of 6.0-rc1
----
- drivers/rtc/rtc-ti-k3.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/rtc/rtc-ti-k3.c b/drivers/rtc/rtc-ti-k3.c
-index 68e50c6a72f1..ba23163cc042 100644
---- a/drivers/rtc/rtc-ti-k3.c
-+++ b/drivers/rtc/rtc-ti-k3.c
-@@ -515,21 +515,12 @@ static struct nvmem_config ti_k3_rtc_nvmem_config = {
- 
- static int k3rtc_get_32kclk(struct device *dev, struct ti_k3_rtc *priv)
- {
--	int ret;
- 	struct clk *clk;
- 
--	clk = devm_clk_get(dev, "osc32k");
-+	clk = devm_clk_get_enabled(dev, "osc32k");
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	ret = clk_prepare_enable(clk);
--	if (ret)
--		return ret;
--
--	ret = devm_add_action_or_reset(dev, (void (*)(void *))clk_disable_unprepare, clk);
--	if (ret)
--		return ret;
--
- 	priv->rate_32k = clk_get_rate(clk);
- 
- 	/* Make sure we are exact 32k clock. Else, try to compensate delay */
-@@ -544,24 +535,19 @@ static int k3rtc_get_32kclk(struct device *dev, struct ti_k3_rtc *priv)
- 	 */
- 	priv->sync_timeout_us = (u32)(DIV_ROUND_UP_ULL(1000000, priv->rate_32k) * 4);
- 
--	return ret;
-+	return 0;
+Some recent changed use "rtc: ingenic". This looks odd to me, so turn back
+to "rtc: jz4740"
+---
+ drivers/rtc/rtc-jz4740.c | 25 +++----------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
+index 6e51df72fd65..c383719292c7 100644
+--- a/drivers/rtc/rtc-jz4740.c
++++ b/drivers/rtc/rtc-jz4740.c
+@@ -257,11 +257,6 @@ static void jz4740_rtc_power_off(void)
+ 	kernel_halt();
  }
  
- static int k3rtc_get_vbusclk(struct device *dev, struct ti_k3_rtc *priv)
- {
--	int ret;
- 	struct clk *clk;
- 
- 	/* Note: VBUS isn't a context clock, it is needed for hardware operation */
--	clk = devm_clk_get(dev, "vbus");
-+	clk = devm_clk_get_enabled(dev, "vbus");
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
--	ret = clk_prepare_enable(clk);
--	if (ret)
--		return ret;
+-static void jz4740_rtc_clk_disable(void *data)
+-{
+-	clk_disable_unprepare(data);
+-}
 -
--	return devm_add_action_or_reset(dev, (void (*)(void *))clk_disable_unprepare, clk);
-+	return 0;
- }
+ static const struct of_device_id jz4740_rtc_of_match[] = {
+ 	{ .compatible = "ingenic,jz4740-rtc", .data = (void *)ID_JZ4740 },
+ 	{ .compatible = "ingenic,jz4760-rtc", .data = (void *)ID_JZ4760 },
+@@ -329,23 +324,9 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(rtc->base))
+ 		return PTR_ERR(rtc->base);
  
- static int ti_k3_rtc_probe(struct platform_device *pdev)
+-	clk = devm_clk_get(dev, "rtc");
+-	if (IS_ERR(clk)) {
+-		dev_err(dev, "Failed to get RTC clock\n");
+-		return PTR_ERR(clk);
+-	}
+-
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable clock\n");
+-		return ret;
+-	}
+-
+-	ret = devm_add_action_or_reset(dev, jz4740_rtc_clk_disable, clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to register devm action\n");
+-		return ret;
+-	}
++	clk = devm_clk_get_enabled(dev, "rtc");
++	if (IS_ERR(clk))
++		return dev_err_probe(dev, PTR_ERR(clk), "Failed to get RTC clock\n");
+ 
+ 	spin_lock_init(&rtc->lock);
+ 
 -- 
 2.34.1
 
