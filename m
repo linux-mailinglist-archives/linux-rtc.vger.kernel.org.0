@@ -2,107 +2,162 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844E65A4C97
-	for <lists+linux-rtc@lfdr.de>; Mon, 29 Aug 2022 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C6D5A5D2A
+	for <lists+linux-rtc@lfdr.de>; Tue, 30 Aug 2022 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiH2M4e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 29 Aug 2022 08:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S231210AbiH3Hmh (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 30 Aug 2022 03:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiH2M4N (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 29 Aug 2022 08:56:13 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992258E0FC;
-        Mon, 29 Aug 2022 05:47:06 -0700 (PDT)
+        with ESMTP id S230293AbiH3Hmg (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 30 Aug 2022 03:42:36 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3FCA1D22
+        for <linux-rtc@vger.kernel.org>; Tue, 30 Aug 2022 00:42:33 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p5so11227469lfc.6
+        for <linux-rtc@vger.kernel.org>; Tue, 30 Aug 2022 00:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1661777227;
-  x=1693313227;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ameRcfksl/UtQ/tKeS4HaC8JfLhSGibsBb/mNnlw9sc=;
-  b=pew8cYchBGfiLavTobxtNBZfYjuo9lsFm/MFELnycNJ+Q8T3vFrtz5FA
-   v6xyQgitpcQMA0Dif4wHOQU4+PofB90wrqIwvhMCGGeVqU09pvMe612vd
-   g3c8NpigFENWRagurUqbepMC9zWPCCscw9tEy7Vb+HDj6fdivVqDqPCej
-   aW67jcbs/0+MMNjWV4ITX65oHKlxmzV8d2gctZx2mGNEQe+Ywy0SFmEdK
-   yU3xyXYtX3U94KxA4w5pfCPAOuddCODqZif3RGJTPvVysvJ/JIZmwrWZ6
-   xqPu7IAszGauLNUqaauLChz40hz/mNHxmBmRopiRqWV9wkVBObY2fCbGj
-   w==;
-From:   paulmn <paulmn@axis.com>
-To:     <alexandre.belloni@bootlin.com>
-CC:     paulmn <paulmn@axis.com>, Alessandro Zummo <a.zummo@towertech.it>,
-        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] rtc: pcf8523: fix for stop bit
-Date:   Mon, 29 Aug 2022 14:46:39 +0200
-Message-ID: <20220829124639.10906-1-paulmn@axis.com>
-X-Mailer: git-send-email 2.30.2
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=c+BAz5TKARnaA7ePcUOXjPEFWuKXdNXQbdrTJXQiOA8=;
+        b=cE6M+jIIm2JY5p5Gd+AJwb7gJD4EP8fNwBY5jsaBGDhUk5F47Jt1yWBILhG6/v01t9
+         iPmhdwwrzBtw2x8aWbrqV+HzC2xg+2gh7HYHRgdMVVFmwVlzQ99Fm0baz8MI1lUb8qt3
+         feihot3Aru7Q+6iAzlZo6vbOUk9At8lVccORWCmbwDzrqW4edMA5kmWyevdx4RhwEOse
+         j2nkWQmsH5mFYVGNVninKWpd4zF8bX0AyOFpUcJTQkCpRidRU+wHEw2YrkiKp1EOy7/N
+         MYYSS+KwJvlA2Z1fJAWGwWJKMEVN7VMuU3IXuwWy8k5VHpFEg0Mt4Bpdx+zIrmUUjzNd
+         k8Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=c+BAz5TKARnaA7ePcUOXjPEFWuKXdNXQbdrTJXQiOA8=;
+        b=CzPS00gUvywYfhfocH8hy7PT2RA2rryTohopLFaOxX5DL7P/icn6OuTwhbwcMstKGC
+         LzwxmaZIjRfwseDJ4lp2mK/egUU1CL+b83+Bg14pbdyutxFvJ4UGv7DJEliEMkHLH6y1
+         IDZ3BZ9FV+8zryyS7i5ENTXYrBvncoLp+RpJ76oHU0bTFl+UQBQGuRbVT/gb5XUMDGZc
+         3h1IJFj9poQ3CUmKaPaziYGfHrqtEO27je3aGrPXxO7MqxMJ+o8tvorVV+nGeaXZWcn+
+         mtPQRuEDjeTfRp85VRhxNwLyUUcIMrp+JKb9L2iFPSl167AL8bA9t9w3Z0Ueco9dzqxo
+         EVVw==
+X-Gm-Message-State: ACgBeo2PSYA4qr08Dy5tTcv4euChcCwex9gQWnhgu1ueTw2rEwqg/zMK
+        2zmojoKQX6mOiuRGxNMlfiAJDQ==
+X-Google-Smtp-Source: AA6agR5e7+jk6RNyxPoSGiPYTuNDPyAoTBhOV75Af0njmGE2v5/xj4Z02ryp1GDslTWJlAu/Y3EvVg==
+X-Received: by 2002:a05:6512:1684:b0:47f:5f27:b006 with SMTP id bu4-20020a056512168400b0047f5f27b006mr7304537lfb.225.1661845352094;
+        Tue, 30 Aug 2022 00:42:32 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00492d270db5esm1520758lfr.242.2022.08.30.00.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:42:31 -0700 (PDT)
+Message-ID: <52336b1e-f0b3-c828-48ef-b6977fd90547@linaro.org>
+Date:   Tue, 30 Aug 2022 10:42:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail03w.axis.com (10.20.40.9) To se-mail02w.axis.com
- (10.20.40.8)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4] regulator: dt-bindings: mediatek: add mt6366
+Content-Language: en-US
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220823123745.14061-1-zhiyong.tao@mediatek.com>
+ <57d259cd-613b-a608-5b67-01aa72c2babb@linaro.org>
+ <93bb8a3f7f5567cfe427ed067f68d5c8b6db776d.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <93bb8a3f7f5567cfe427ed067f68d5c8b6db776d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Bugfix for an issue detected when a goldcap capacitor gets
-fully discharged due to a long absence of the power supply,
-and then recharges again. The RTC failed to continue to keep
-the real-time clock.
+On 29/08/2022 06:25, zhiyong.tao wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    const: mediatek,mt6366-regulator
+>>
+>> This looks incomplete. How does it bind? Further pieces also suggest
+>> you
+>> send something incomplete.
+> ==>
+> 
+> The project dts file(such as 8186-evb.dts) will add the compatible.
+> The project dts file is examining.
+> 
 
-This was caused by the incorrect handling of the STOP bit in
-the RTC internal register.  This fix solves the problem.
+I don't understand this at all. I am not talking about DTS, but about
+bindings which look incomplete. Although seeing entire DTS would
+probably help understand the context.
 
-Signed-off-by: paulmn <paulmn@axis.com>
----
- drivers/rtc/rtc-pcf8523.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+(...)
 
-diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
-index 6174b3fd4b98..92de99f11a7a 100644
---- a/drivers/rtc/rtc-pcf8523.c
-+++ b/drivers/rtc/rtc-pcf8523.c
-@@ -99,24 +99,24 @@ static irqreturn_t pcf8523_irq(int irq, void *dev_id)
- static int pcf8523_rtc_read_time(struct device *dev, struct rtc_time *tm)
- {
- 	struct pcf8523 *pcf8523 = dev_get_drvdata(dev);
--	u8 regs[7];
-+	u8 regs[10];
- 	int err;
- 
--	err = regmap_bulk_read(pcf8523->regmap, PCF8523_REG_SECONDS, regs,
-+	err = regmap_bulk_read(pcf8523->regmap, PCF8523_REG_CONTROL1, regs,
- 			       sizeof(regs));
- 	if (err < 0)
- 		return err;
- 
--	if (regs[0] & PCF8523_SECONDS_OS)
-+	if ((regs[0] & PCF8523_CONTROL1_STOP) || (regs[3] & PCF8523_SECONDS_OS))
- 		return -EINVAL;
- 
--	tm->tm_sec = bcd2bin(regs[0] & 0x7f);
--	tm->tm_min = bcd2bin(regs[1] & 0x7f);
--	tm->tm_hour = bcd2bin(regs[2] & 0x3f);
--	tm->tm_mday = bcd2bin(regs[3] & 0x3f);
--	tm->tm_wday = regs[4] & 0x7;
--	tm->tm_mon = bcd2bin(regs[5] & 0x1f) - 1;
--	tm->tm_year = bcd2bin(regs[6]) + 100;
-+	tm->tm_sec = bcd2bin(regs[3] & 0x7f);
-+	tm->tm_min = bcd2bin(regs[4] & 0x7f);
-+	tm->tm_hour = bcd2bin(regs[5] & 0x3f);
-+	tm->tm_mday = bcd2bin(regs[6] & 0x3f);
-+	tm->tm_wday = regs[7] & 0x7;
-+	tm->tm_mon = bcd2bin(regs[8] & 0x1f) - 1;
-+	tm->tm_year = bcd2bin(regs[9]) + 100;
- 
- 	return 0;
- }
--- 
-2.30.2
+>>
+>>
+>>> +        type: object
+>>> +        $ref: regulator.yaml#
+>>> +        unevaluatedProperties: false
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - regulators
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
 
+>>> +  - |
+>>> +    pmic {
+>>> +        compatible = "mediatek,mt6366-regulator";
+>>> +
+>>> +        regulators {
+>>> +            mt6366_vdram1_reg: buck-vdram1 {
+>>
+>> Drop the labels here and further. Why you do not have here any
+>> regular
+>> constraints like min/max voltage?
+> 
+> we will add properties min/max voltag on project dts file.
+
+Example should be complete. DTS does not matter here.
+
+> 
+>>
+>>> +                regulator-ramp-delay = <12500>;
+>>> +                regulator-enable-ramp-delay = <0>;
+>>> +                regulator-allowed-modes = <0 1>;
+>>
+>> Where do you explain the meaning of modes?
+> support pwm mode.
+
+The question was "Where". Where did you explain them?
+
+(...)
+
+>>> +
+>>> +            mt6366_vsim2_reg: ldo-vsim2 {
+>>> +                regulator-enable-ramp-delay = <540>;
+>>> +            };
+>>> +
+>>> +            mt6366_vcore_sshub_reg: buck-vcore-sshub {
+>>
+>> Empty node? What does it do?
+> just define here, we will add properties on project dts file.
+
+How is it related to bindings?
+
+Best regards,
+Krzysztof
