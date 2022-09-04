@@ -2,110 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952F85ABF49
-	for <lists+linux-rtc@lfdr.de>; Sat,  3 Sep 2022 16:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212E15AC2C3
+	for <lists+linux-rtc@lfdr.de>; Sun,  4 Sep 2022 06:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbiICOUP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 3 Sep 2022 10:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S229564AbiIDErQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 4 Sep 2022 00:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiICOUO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 3 Sep 2022 10:20:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EAA52FD9;
-        Sat,  3 Sep 2022 07:20:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2A17B80966;
-        Sat,  3 Sep 2022 14:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E69C43470;
-        Sat,  3 Sep 2022 14:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662214810;
-        bh=0aD+VSuyqXxSIVEFulDlAaMzWs8mG1JCiPYrFvQbHqk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nXtwWlB287xOlDtpAHhVfl9tPu1xM3cR2NWG5pr9+m3HgOkV32Ou69hgAeGG7anmP
-         9vgQpEnwRDQdGij523rA5e3A6+g6VWHQfONrCeiZBbg8sCWW719hUzFtWf/E7+ICPh
-         YbGrLEsasbuQNEZc2LTc1tjCKOoyVSsGh10qw0qvvZk65xVoGL6WQofHN9cV3PXKXf
-         h9R2KOJKUHBiCOfc9twQPCvhHq5RWxVCGQ/rSJrJ9Xvrv667EDXCdteNQRwhnHqmDq
-         rXPZk0LklN7vT1GjywGscy8ifC+1ThJlqEGxLoum+VF06pyrsf84aszxg5mAly9Y/J
-         q/QWXeq+oz3og==
-Received: by mail-vk1-f172.google.com with SMTP id c2so2240942vkm.9;
-        Sat, 03 Sep 2022 07:20:10 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3SXKi3/Qvvt1kXEmBWO1MaL+GKh//Fx/4BZ8q73eSGNe2OdQRw
-        GUa3Gl9eDtwnmtjD87c+ArY4v7gAyGkHkiPPs0w=
-X-Google-Smtp-Source: AA6agR4DjVYs1Z7O7YPPXaanoHXU3FRdvt+fv4WSmMa7CoMVispaaGhUAL5QcuLgVa9t520FJ2ydXbrkcTwKD8AFeaQ=
-X-Received: by 2002:ac5:cd82:0:b0:397:7f8d:95f7 with SMTP id
- i2-20020ac5cd82000000b003977f8d95f7mr2019923vka.18.1662214809526; Sat, 03 Sep
- 2022 07:20:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1662190009.git.zhoubinbin@loongson.cn> <6d01148014a62d8d412790dc8442af40368c6f8f.1662190009.git.zhoubinbin@loongson.cn>
- <bf3e7516c351f793de08d5311aff10c379720798.camel@xry111.site>
-In-Reply-To: <bf3e7516c351f793de08d5311aff10c379720798.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 3 Sep 2022 22:19:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4QXyaK+H-vMsDgXY+9J1FONKzEi-fm37J9NOr0n+tqOg@mail.gmail.com>
-Message-ID: <CAAhV-H4QXyaK+H-vMsDgXY+9J1FONKzEi-fm37J9NOr0n+tqOg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] LoongArch: Enable LS2X RTC in loongson3_defconfig
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        devicetree@vger.kernel.org, loongarch@lists.linux.dev,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229509AbiIDErP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 4 Sep 2022 00:47:15 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E104D4D5;
+        Sat,  3 Sep 2022 21:47:14 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id q3so5560772pjg.3;
+        Sat, 03 Sep 2022 21:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=EMpOr94bRbY90FW4fuPElnBT2PerHRg5lnKxJbnwv/g=;
+        b=Bvo0xBMcbCiquBH09l6xwLW2WMk9ZoRYYD+KPrF/DWM9wDuPsxR9EQc7QyMdh8XQkx
+         bt5z58BZWIDPgPYRTE3Q2WvI9wS2iZ9WbkWKDHRAASZe0kUW3ZhawYZRROCBF8gJAl8c
+         hRIizo1RHDjM0cJj3qIbuQjqlnb9u1ozaapp+IylpT6jsxNg9JmL/tTI494Bf7vIki2z
+         3XeW3DnYdEDfG4vUWmR1U85iPPXIsFQud/kf758PxHIS05fnqQpzw98Hhumv03i4bL2x
+         4ng6FhUTQGO9eCyC08U+O1jsviinyuRAqKmB5a9S8lBF1V0P1HdIhFpulw3OJqHlPre4
+         r7EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=EMpOr94bRbY90FW4fuPElnBT2PerHRg5lnKxJbnwv/g=;
+        b=YRYjqferxr3aomNHuyNF7DtxFJDCL4jG2cmEWK0BXmjBuvHeMHcHkf7VQWg2y8jJAW
+         bsUXRSDp8Qr0HzZfiR0eC84kiGpo/0WYhElx4iJ9LF3Ep6VSL6AdKMXHubmqTneWi5bS
+         zSS/XxVEh9+Qpepq4xWJD3S/6MtJ1kRwfG6UD1NaTej1tLl/c2mqAU7rM/QxuEUU5jZx
+         IyU9DDZLJGibYwH0iftVwMNbdKv+/EGHMhJaSWYRIft9g1s3bBEpmJlRSzPvgddyz1a8
+         PEcmBEGzqUQydO8nYknvuXrVX8p325lZJ5SKXcVmrshCYBFVhC9FecMnJXVqxTUoNWTo
+         3aGA==
+X-Gm-Message-State: ACgBeo0fp94PMrJLZdjgCZbf+jB3m1GFNG9PKw068Zp3jflVOTu42ZT2
+        TZ2RFCZRdFD6E/Ws+jZK9cPjgr2GGgk=
+X-Google-Smtp-Source: AA6agR7mAJ3jjRnJpZqAGd582eP3upqxb2CO+GIIf/eaYfL1TEIamUJ859hZ/CJN2IJguiyPzIvk+w==
+X-Received: by 2002:a17:903:40cb:b0:176:8449:f34 with SMTP id t11-20020a17090340cb00b0017684490f34mr5387249pld.44.1662266833937;
+        Sat, 03 Sep 2022 21:47:13 -0700 (PDT)
+Received: from localhost.localdomain ([115.99.107.255])
+        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b001641b2d61d4sm4572617plf.30.2022.09.03.21.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Sep 2022 21:47:13 -0700 (PDT)
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, jagathjog1996@gmail.com
+Subject: [PATCH v1 0/2] rtc: add Maxim max31329 real time clock.
+Date:   Sun,  4 Sep 2022 10:17:06 +0530
+Message-Id: <20220904044708.7062-1-jagathjog1996@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi, Ruoyao,
+Support for Maxim max31329 real time clock.
 
-On Sat, Sep 3, 2022 at 6:45 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Sat, 2022-09-03 at 17:34 +0800, Binbin Zhou wrote:
-> > This is now supported, enable for Loongson-3 systems.
-> > Other systems are unaffected.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: WANG Xuerui <git@xen0n.name>
-> > Cc: loongarch@lists.linux.dev
-> > ---
-> >  arch/loongarch/configs/loongson3_defconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/loongarch/configs/loongson3_defconfig
-> > b/arch/loongarch/configs/loongson3_defconfig
-> > index 4083d3051109..b240bc4e2021 100644
-> > --- a/arch/loongarch/configs/loongson3_defconfig
-> > +++ b/arch/loongarch/configs/loongson3_defconfig
-> > @@ -660,6 +660,7 @@ CONFIG_USB_GADGET=y
-> >  CONFIG_INFINIBAND=m
-> >  CONFIG_RTC_CLASS=y
-> >  CONFIG_RTC_DRV_EFI=y
-> > +CONFIG_RTC_DRV_LS2X=y
->
-> We already have RTC_DRV_EFI=y, IIUC this means we leave LS7A RTC for the
-> firmware to drive and operate it through EFI service.  So is this really
-> needed for LoongArch systems?  And if we enable both RTC_DRV_EFI and
-> RTC_DRV_LS2X, will some bad thing (a conflict) happen?
-Don't worry, please. EFI RTC depends on EFI runtime, so we need an
-available RTC if EFI runtime is disabled (by command line or any other
-reasons). On the other hand, multi RTCs can perfectly co-exist, they
-will be rtc0 and rtc1 under sysfs and rtc0 is the default one.
+Jagath Jog J (2):
+  dt-bindings: rtc: add Maxim max31329 rtc device tree bindings
+  rtc: maxim: Add Maxim max31329 real time clock.
 
-Huacai
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
->
+ .../bindings/rtc/maxim,max31329.yaml          |  59 ++
+ MAINTAINERS                                   |   7 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-max31329.c                    | 536 ++++++++++++++++++
+ 5 files changed, 613 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+ create mode 100644 drivers/rtc/rtc-max31329.c
+
+-- 
+2.17.1
+
