@@ -2,56 +2,75 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82B35AD524
-	for <lists+linux-rtc@lfdr.de>; Mon,  5 Sep 2022 16:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B41A55AD617
+	for <lists+linux-rtc@lfdr.de>; Mon,  5 Sep 2022 17:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238560AbiIEOiL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 5 Sep 2022 10:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32864 "EHLO
+        id S238319AbiIEPTF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 5 Sep 2022 11:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238424AbiIEOhY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Sep 2022 10:37:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845B941D13;
-        Mon,  5 Sep 2022 07:36:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDC84B811DD;
-        Mon,  5 Sep 2022 14:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56768C433D6;
-        Mon,  5 Sep 2022 14:36:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662388567;
-        bh=An4UJcU7szR3Q74XA+9r8uY9luGHA9rcsWpB4IpI8xo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M0BH/8LicdfIdp6CNfq5JxKfhrZCzZPlwMXOjY9KnIl9DXY08fo84r+yWZKq3nm/K
-         3MWlzzFKr/S/f1xdenqOsmAulXU5+THYWcSi0bkYbxOHqZpT3pNl6IQ+WXpLSZp/PU
-         gN/a+hUOZzK0Rl47xVyfINqFv8fkRW+MnlnhjEQaY8G2/0BEs3EwXR9xNKS7XN3vwS
-         WotvOQPqXnMEY+BNgwRsAe6h0w9x2Z994kdT4fZL8h2CKzjkQC7IcTB0jePWsyW00e
-         Hpm/Z3KcPtGD306hsAZ3StMz4+eaYCfaTpLJ8LuJ3OcmBjnh12n95AEqwOTnlXgzO/
-         YFeyoXk8AGJ8w==
-Date:   Mon, 5 Sep 2022 15:35:57 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Matt Ranostay <mranostay@ti.com>
-Cc:     nm@ti.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] MFD: TPS6594x: Add new PMIC device driver for
- TPS6594x chips
-Message-ID: <YxYJTU55VgoVYoLO@google.com>
-References: <20220812032242.564026-1-mranostay@ti.com>
- <20220812032242.564026-3-mranostay@ti.com>
- <YvX6sBMItZoAhLKe@google.com>
- <Yw5t4G6hbn+mSD8y@ubuntu>
+        with ESMTP id S238701AbiIEPSn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 5 Sep 2022 11:18:43 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072471FCC4
+        for <linux-rtc@vger.kernel.org>; Mon,  5 Sep 2022 08:18:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z29so13491774lfb.13
+        for <linux-rtc@vger.kernel.org>; Mon, 05 Sep 2022 08:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=swhM6AzvTh3Wgq6o5hGnrDmFgtPvuciwbkOwaBUpKl8=;
+        b=lZL+fyzvTbG/mJAiV0+TOoVnQmmtjGh33kdIIjy6EAVXpkN4HD92LFEdAMVsXkILh6
+         +w8eTWAAFfxmcdfyug2z2rEZEZXj35YNl9RT+GBeZs2fvwoQlJcou9IkRu2SmtwlFsG7
+         w1BBxLIzJP6sI51V5FyswGq0rx6uIjl56O8BBmv1Q5Ua71A4vSfmcSPj6fckd3G0C2Wa
+         RyoUPooOcsS47q0XgLerOKI7+q/0YAMexR3gtMC7dmhGJW+DXfto4/hc2mCbKsZLQVSO
+         UMG0REQ3NsKMNfqb6GblPYmybJ/3VSveN5lROdV0hE88nkBf63LLWJujT9b5hdCgPluY
+         OVJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=swhM6AzvTh3Wgq6o5hGnrDmFgtPvuciwbkOwaBUpKl8=;
+        b=c4zIjUGZMRV43+N2jVwez17mtu3R8IRSinpsBZMDPqbZW41BrfcQ6MO+DP30V/SuMc
+         Gy7o1EjX28twHMh6JuWmIojxOoRkApIrBcfnCln/20BWQtAlUdJ46guceh5kUn0JfMB6
+         gC3mqP61fY8rF0Uv7p8ZGH6pVGh2QdZdtQGuVRFwP1rLT56qilP+l6+uCadrE43rEQeA
+         XA0LtL6k4ObCips1FPhrDmOInmksAN0sw90uit075sF7Wb5tRm619X7EZiHAUM3QlTmf
+         QpgBICOjALvu9Wbl7WGACyVbJokLmbI6mWQ932auCGyejkOzVIjMMckp2DOumK9L280y
+         QrmQ==
+X-Gm-Message-State: ACgBeo2wsWkVIJ24yaaLAruYELIOGb5t+sgquyQ/oj9BuOzUIjkGBN8q
+        fZa+a4gOeQhHqAJ5LSArntY9GA==
+X-Google-Smtp-Source: AA6agR6Waph4vINF+QqSLLaSgRA4/o6x+7YeW9rnIpKNWQUC3Tbn91ovY2H91LjdYBcOeLc0sWwb2Q==
+X-Received: by 2002:a05:6512:110d:b0:494:7626:57a0 with SMTP id l13-20020a056512110d00b00494762657a0mr9821197lfg.302.1662391116342;
+        Mon, 05 Sep 2022 08:18:36 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056512202300b0048b064707ebsm26105lfs.103.2022.09.05.08.18.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 08:18:35 -0700 (PDT)
+Message-ID: <0abb9a84-f9cc-8263-8842-74b9bbe86748@linaro.org>
+Date:   Mon, 5 Sep 2022 17:18:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yw5t4G6hbn+mSD8y@ubuntu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: rtc: add Maxim max31329 rtc device
+ tree bindings
+Content-Language: en-US
+To:     Jagath Jog J <jagathjog1996@gmail.com>,
+        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220904044708.7062-1-jagathjog1996@gmail.com>
+ <20220904044708.7062-2-jagathjog1996@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220904044708.7062-2-jagathjog1996@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,110 +78,38 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 30 Aug 2022, Matt Ranostay wrote:
-
-> On Fri, Aug 12, 2022 at 08:01:04AM +0100, Lee Jones wrote:
-> > On Thu, 11 Aug 2022, Matt Ranostay wrote:
-> > 
-> > > From: Keerthy <j-keerthy@ti.com>
-> > > 
-> > > The TPS6594x chip is a PMIC, and contains the following components:
-> > > 
-> > > - Regulators
-> > > - GPIO controller
-> > > - RTC
-> > > 
-> > > However initially only RTC is supported.
-> > > 
-> > > Signed-off-by: Keerthy <j-keerthy@ti.com>
-> > > Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> > > ---
-> > >  drivers/mfd/Kconfig          |  14 ++++
-> > >  drivers/mfd/Makefile         |   1 +
-> > >  drivers/mfd/tps6594x.c       | 121 +++++++++++++++++++++++++++++++++++
-> > >  include/linux/mfd/tps6594x.h |  84 ++++++++++++++++++++++++
-> > >  4 files changed, 220 insertions(+)
-> > >  create mode 100644 drivers/mfd/tps6594x.c
-> > >  create mode 100644 include/linux/mfd/tps6594x.h
-> > > 
-> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > > index abb58ab1a1a4..4845683ae1d0 100644
-> > > --- a/drivers/mfd/Kconfig
-> > > +++ b/drivers/mfd/Kconfig
-> > > @@ -1547,6 +1547,20 @@ config MFD_TI_LP873X
-> > >  	  This driver can also be built as a module. If so, the module
-> > >  	  will be called lp873x.
-> > >  
-> > > +config MFD_TPS6594X
-> > > +	tristate "TI TPS6594X Power Management IC"
-> > > +	depends on I2C && OF
-> > > +	select MFD_CORE
-> > > +	select REGMAP_I2C
-> > > +	help
-> > > +	  If you say yes here then you get support for the TPS6594X series of
-> > > +	  Power Management Integrated Circuits (PMIC).
-> > > +	  These include voltage regulators, RTS, configurable
-> > > +	  General Purpose Outputs (GPO) that are used in portable devices.
-> > > +
-> > > +	  This driver can also be built as a module. If so, the module
-> > > +	  will be called tps6594x.
-> > > +
-> > >  config MFD_TI_LP87565
-> > >  	tristate "TI LP87565 Power Management IC"
-> > >  	depends on I2C && OF
-> > > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > > index 858cacf659d6..7ff6a8a57d55 100644
-> > > --- a/drivers/mfd/Makefile
-> > > +++ b/drivers/mfd/Makefile
-> > > @@ -105,6 +105,7 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
-> > >  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
-> > >  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
-> > >  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
-> > > +obj-$(CONFIG_MFD_TPS6594X)	+= tps6594x.o
-> > >  obj-$(CONFIG_MENELAUS)		+= menelaus.o
-> > >  
-> > >  obj-$(CONFIG_TWL4030_CORE)	+= twl-core.o twl4030-irq.o twl6030-irq.o
-> > > diff --git a/drivers/mfd/tps6594x.c b/drivers/mfd/tps6594x.c
-> > > new file mode 100644
-> > > index 000000000000..ff265b91db3e
-> > > --- /dev/null
-> > > +++ b/drivers/mfd/tps6594x.c
-> > > @@ -0,0 +1,121 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > +/*
-> > > + * Driver for tps6594x PMIC chips
-> > > + *
-> > > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> > > + * Author: Keerthy <j-keerthy@ti.com>
-> > > + */
-> > > +
-> > > +#include <linux/of.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/mfd/core.h>
-> > > +#include <linux/mfd/tps6594x.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/i2c.h>
-> > > +#include <linux/regmap.h>
-> > > +
-> > > +static const struct regmap_config tps6594x_regmap_config = {
-> > > +	.reg_bits = 8,
-> > > +	.val_bits = 8,
-> > > +	.max_register = TPS6594X_REG_MAX,
-> > > +};
-> > > +
-> > > +static const struct mfd_cell tps6594x_cells[] = {
-> > > +	{ .name = "tps6594x-gpio" },
-> > > +	{ .name = "tps6594x-regulator" },
-> > > +	{ .name = "tps6594x-rtc" },
-> > > +};
-> > 
-> > Where are the device drivers for these?
-> >
+On 04/09/2022 06:47, Jagath Jog J wrote:
+> Document devicetree bindings for the Maxim max31329 Real Time Clock.
 > 
-> They currently don't exist. Would these need to be merged/developed
-> before the acceptance of the mfd driver?
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+> ---
+>  .../bindings/rtc/maxim,max31329.yaml          | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/maxim,max31329.yaml b/Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+> new file mode 100644
+> index 000000000000..757f1ac4fdc2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/maxim,max31329.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim MAX31329 Real Time Clock
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
 
-Yes, they would.
+If there is going to be resend, put the allOf after maintainers. In any
+case:
 
--- 
-Lee Jones [李琼斯]
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+
+Best regards,
+Krzysztof
