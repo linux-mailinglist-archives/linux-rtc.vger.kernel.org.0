@@ -2,113 +2,156 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9CF5B06CD
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Sep 2022 16:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B1D5B0D5A
+	for <lists+linux-rtc@lfdr.de>; Wed,  7 Sep 2022 21:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbiIGOcL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Sep 2022 10:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
+        id S229774AbiIGTho (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 7 Sep 2022 15:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiIGOb5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Sep 2022 10:31:57 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03D62A89
-        for <linux-rtc@vger.kernel.org>; Wed,  7 Sep 2022 07:31:53 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id lz22so9963382ejb.3
-        for <linux-rtc@vger.kernel.org>; Wed, 07 Sep 2022 07:31:53 -0700 (PDT)
+        with ESMTP id S229686AbiIGThn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Sep 2022 15:37:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A4BFEAD;
+        Wed,  7 Sep 2022 12:37:42 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id r17so5340530ejy.9;
+        Wed, 07 Sep 2022 12:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=hlX5LG70Pfi5xUfXCm2C7WvkXcJVP5UakJZVNodPOy7vNkSXQuxkM6JMnL0NkwpmEx
-         GApIDchppryVktOBo5G41BqVss7NVeWmLRXcOx2bAZqQ+LAYFz8ePbLc684sFXT4Nmqj
-         OcoPmJYuvMlwncvSBL0BFnkvuWLyKibj/n8A5QS+qmy30Nhg7xyf0NkI/q67juR/h0tY
-         bD/nOML45bK21IZjrLP4cVfkyGYdsdvh6OJ7KPKPWGwDpi4WDdxiFiQ5bptV3cHn11YY
-         R2/ccByiK1oIAZVOw3mE9dymIO7CzllUwLBF2JbmBffIhO2NpTaaNqhGzBB+XMxejIE1
-         VDsQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
+        b=QhvIfdWKdAUVOScOUIdGm3776l+VYODIO3d9/C/f8bXO+yDukvWV0FESgq/Wmgyf1o
+         u8V0sJbiU5FPvEPDNGnrCNVL+V1bQYE1bknKnEdJ5lhR4O2GoFiAPTB8lUagGGXCHzXY
+         ZQmbMCUyJGI8q8HxjIGRy+20U4iVzYu+09iX+r4lKAtlyarKrLj04z4EZMKrJo6SX9Db
+         gItCmnWM6t4r50i3pIMpdiiySP2nE/Kd/Mi3fwlLM54xzueNFrRcrDrGA1sAg+89V4iG
+         7CxYDg6Ynb7fpqlIrQvyyTq82yJT+S2oSzpK8qJEqBDvuNZQ0b9+w0BGbl08rAodhBOe
+         qzog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=F7Y/99DlBisd7plRR3t5B6hV+Go34lzF/4ofEg6JLFn6y1r+00JA/1mC98AvwaUpUN
-         SHlJBt2bQpBVSGBR0suNHX1azAJwpuCtjMxqUJ1I9FLKB7hUx9BoTVtbDJjIX3vqvPO8
-         unxZ/zuOkelPbr+Ubyj96vILqWGUYZ707ReizTq7F2NKJhWiPwQFU+RAzBo26kvlbBHj
-         DPiksLEf7e+NtHuptgQz1pCrMOIviiMqsm0nLXLp8i8THLFpdPXlWw8n/IJ+IBkerEGd
-         At0z8SXIyIowPk+5YTw5WM/9DONrRnRnwIC3NShqfWMF+ftoKvVfTWa54oC3OyoF6DVq
-         nrrQ==
-X-Gm-Message-State: ACgBeo3gxXPTdPfizPwvIjqP8S1K21SUpkzFj8pvWPoE6+/1MzqbNDU/
-        RNQjSrNYqkAfTm88dMmNJkeIpXBleBiXHs/QOU0=
-X-Google-Smtp-Source: AA6agR4pyZsB+xbbjgKGlrl2+RDjPAQ7wWCMdSGS3qWC1Sv629AIX++hkd3miN/bJlP1/yRRoX5bdHKo53e2l2Vr/Xc=
-X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id
- b15-20020a170906038f00b007421f687058mr2510502eja.743.1662561112231; Wed, 07
- Sep 2022 07:31:52 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
+        b=oP4W1IS6ldO7UDAOf9Pir7bGooUIcjeBNalEwzv8gw10Q0JZAq2y8QClUzl9RretkG
+         ol6UdW64M3xgw39CyW7evS0isV4aR05CO1EjEB5zWmHsPuwCI/vQ2NkOD/NtLHd6HZ1n
+         ZUVVWed4FSt+4rVtGpHAYhzz8IqRm3iFh/KEY5EVqZ0i8gk1mvffzAyvOLZT4VOrMwb/
+         CAgMHrpF9PRIu8vmG72VwMVHdxXMnhgp2OI7IqueZgeyC/2KRJIfQs61QnIKv6VptRYt
+         ylfienFolWzQ5272gS8ajj8nr7yg1V8/5K+swNz6Ni2wf4p5jtDkW/cknO1Lt1mAG3ZR
+         u4og==
+X-Gm-Message-State: ACgBeo3l0vZ4CgGbwxbkFDvxqMtskHQKmPsnUtct2eW32dejUHfKtpYL
+        VsTT+MYwUG6g0K/1ngCQMvdhLzjougpPyszQ1ruDWmCpBFs=
+X-Google-Smtp-Source: AA6agR7DwydpRu6XtC/zVNl1McyHODlkL/bYGYJcGJ8lGN8qaCbuq46FsrbNOrc3r4eb/7G1FcBUDYMS83PPWfsBs60=
+X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id
+ xf9-20020a17090731c900b00740ef932ffdmr3415828ejb.584.1662579461374; Wed, 07
+ Sep 2022 12:37:41 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:51 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:31:51 +0200
-Message-ID: <CAO4StN23CjT73+kAZo3jW6NA7B_rVMGFz9vZYzq4Gs86AZgN6A@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
+References: <20220904044708.7062-1-jagathjog1996@gmail.com>
+ <20220904044708.7062-3-jagathjog1996@gmail.com> <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
+In-Reply-To: <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Thu, 8 Sep 2022 01:07:28 +0530
+Message-ID: <CAM+2Eu+xzAPEwCoGsjM5sqKjOiT5J_-dzpeB-r5XP=KoRkSXGg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] rtc: maxim: Add Maxim max31329 real time clock.
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:643 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5014]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-ATTENTION
+Hi Krzysztof.
+Thank you for reviewing.
 
-BUSINESS PARTNER,
+On Mon, Sep 5, 2022 at 8:50 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 04/09/2022 06:47, Jagath Jog J wrote:
+> > Add real time clock support for Maxim max31329 real time clock.
+> >
+> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+>
+> Thank you for your patch. There is something to discuss/improve.
+>
+> > +     max31329->rtc->ops = &max31329_rtc_ops;
+> > +     max31329->irq = client->irq;
+> > +     max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> > +     max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
+> > +     max31329->dev = &client->dev;
+> > +
+> > +     if (max31329->irq) {
+> > +             ret = devm_request_threaded_irq(&client->dev, max31329->irq,
+> > +                                             NULL, max31329_irq_handler,
+> > +                                             IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+> > +                                             "max31329", &client->dev);
+> > +             if (ret) {
+> > +                     dev_err(&client->dev, "unable to request IRQ\n");
+> > +                     max31329->irq = 0;
+> > +                     return ret;
+> > +             }
+> > +
+> > +             ret = regmap_write(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
+> > +                                MAX31329_RTC_CONFIG2_ENCLKO);
+> > +             if (ret) {
+> > +                     dev_err(&client->dev, "unable to configure INT pin");
+> > +                     max31329->irq = 0;
+> > +                     return ret;
+> > +             }
+> > +
+> > +             device_set_wakeup_capable(&client->dev, true);
+>
+> Probably you should rather respect wakeup-source DT property.
 
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
+Sure, I will configure wakeup based on the value of the wakeup-source
+property from DT.
 
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
+>
+> > +             set_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
+> > +     }
+> > +
+> > +     ret = devm_rtc_register_device(max31329->rtc);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     max31329_trickle_config(&client->dev);
+> > +
+> > +     nvmem_cfg.priv = max31329->regmap;
+> > +     devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
+> > +
+> > +#ifdef CONFIG_COMMON_CLK
+> > +     max31329_clkout_register_clk(max31329, client);
+> > +#endif
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct of_device_id max31329_of_match[] = {
+> > +     { .compatible = "maxim,max31329", },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, max31329_of_match);
+> > +
+> > +static struct i2c_driver max31329_driver = {
+> > +     .driver = {
+> > +             .name = "rtc-max31329",
+> > +             .of_match_table = of_match_ptr(max31329_of_match),
+>
+> of_match_ptr without maybe_unused on the table should cause compile test
+> warnings. You need both or none.
 
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
+I will correct this in the next patch series.
 
-REGARDS,
-
-LUMAR CASEY
+Thank you
+Jagath
+>
+>
+> Best regards,
+> Krzysztof
