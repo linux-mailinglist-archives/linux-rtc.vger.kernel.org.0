@@ -2,156 +2,181 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B1D5B0D5A
-	for <lists+linux-rtc@lfdr.de>; Wed,  7 Sep 2022 21:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1F05B1BEE
+	for <lists+linux-rtc@lfdr.de>; Thu,  8 Sep 2022 13:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiIGTho (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 7 Sep 2022 15:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S231181AbiIHLx4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 8 Sep 2022 07:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiIGThn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 7 Sep 2022 15:37:43 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A4BFEAD;
-        Wed,  7 Sep 2022 12:37:42 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id r17so5340530ejy.9;
-        Wed, 07 Sep 2022 12:37:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
-        b=QhvIfdWKdAUVOScOUIdGm3776l+VYODIO3d9/C/f8bXO+yDukvWV0FESgq/Wmgyf1o
-         u8V0sJbiU5FPvEPDNGnrCNVL+V1bQYE1bknKnEdJ5lhR4O2GoFiAPTB8lUagGGXCHzXY
-         ZQmbMCUyJGI8q8HxjIGRy+20U4iVzYu+09iX+r4lKAtlyarKrLj04z4EZMKrJo6SX9Db
-         gItCmnWM6t4r50i3pIMpdiiySP2nE/Kd/Mi3fwlLM54xzueNFrRcrDrGA1sAg+89V4iG
-         7CxYDg6Ynb7fpqlIrQvyyTq82yJT+S2oSzpK8qJEqBDvuNZQ0b9+w0BGbl08rAodhBOe
-         qzog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ndKB7Atzyf/w1lXbEwzlKmRZsFo1D+5HTUfHps4mdmQ=;
-        b=oP4W1IS6ldO7UDAOf9Pir7bGooUIcjeBNalEwzv8gw10Q0JZAq2y8QClUzl9RretkG
-         ol6UdW64M3xgw39CyW7evS0isV4aR05CO1EjEB5zWmHsPuwCI/vQ2NkOD/NtLHd6HZ1n
-         ZUVVWed4FSt+4rVtGpHAYhzz8IqRm3iFh/KEY5EVqZ0i8gk1mvffzAyvOLZT4VOrMwb/
-         CAgMHrpF9PRIu8vmG72VwMVHdxXMnhgp2OI7IqueZgeyC/2KRJIfQs61QnIKv6VptRYt
-         ylfienFolWzQ5272gS8ajj8nr7yg1V8/5K+swNz6Ni2wf4p5jtDkW/cknO1Lt1mAG3ZR
-         u4og==
-X-Gm-Message-State: ACgBeo3l0vZ4CgGbwxbkFDvxqMtskHQKmPsnUtct2eW32dejUHfKtpYL
-        VsTT+MYwUG6g0K/1ngCQMvdhLzjougpPyszQ1ruDWmCpBFs=
-X-Google-Smtp-Source: AA6agR7DwydpRu6XtC/zVNl1McyHODlkL/bYGYJcGJ8lGN8qaCbuq46FsrbNOrc3r4eb/7G1FcBUDYMS83PPWfsBs60=
-X-Received: by 2002:a17:907:31c9:b0:740:ef93:2ffd with SMTP id
- xf9-20020a17090731c900b00740ef932ffdmr3415828ejb.584.1662579461374; Wed, 07
- Sep 2022 12:37:41 -0700 (PDT)
+        with ESMTP id S230313AbiIHLxw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 8 Sep 2022 07:53:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FD411C7CD;
+        Thu,  8 Sep 2022 04:53:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 775C9B820C9;
+        Thu,  8 Sep 2022 11:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58317C433D6;
+        Thu,  8 Sep 2022 11:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662638024;
+        bh=eDPlPQDfobESm+d9exyMGz9dZwX+P0atTveF2zKzWME=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sp6eSWgCEwNUE6mA4n52SKTLzH1AFzHpyCzn4OYX8+pMQ57jtPUt2RF1tx3VIH8YT
+         q5u+geXknRhAxE0E7p1n9q/zvof48UnVIThMDuw4SW+pxGdypzaaM9rtmyNQHP0mD+
+         /CfIHMeMo64ZVdYu/LfYOaO/kA4pIIZrkq4f5BhMoZaCs5agWc1brXdLox3djyMOsE
+         qArJqlXM/OnuCNi/ioW9ppGn18c6GQFLJEVpUKuPVCu5/FSgHhsnUCg5y6v09YEugq
+         YJNZvcnK+ubXKmCysTQOsH9Jdi+KyTg87FYCdEJ/2ulbWW8dMtB9JRYUsA7qRBPNVc
+         SeGST/cJMn7Gg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Reinier Kuipers <kuipers.reinier@gmail.com>,
+        linux-rtc@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [RFC] rtc: y2038: remove broken RTC_HCTOSYS workaround
+Date:   Thu,  8 Sep 2022 13:53:20 +0200
+Message-Id: <20220908115337.1604277-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20220904044708.7062-1-jagathjog1996@gmail.com>
- <20220904044708.7062-3-jagathjog1996@gmail.com> <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
-In-Reply-To: <3ad3fb30-d56f-78be-610d-a02c9609ba42@linaro.org>
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-Date:   Thu, 8 Sep 2022 01:07:28 +0530
-Message-ID: <CAM+2Eu+xzAPEwCoGsjM5sqKjOiT5J_-dzpeB-r5XP=KoRkSXGg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] rtc: maxim: Add Maxim max31329 real time clock.
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi Krzysztof.
-Thank you for reviewing.
+From: Arnd Bergmann <arnd@arndb.de>
 
-On Mon, Sep 5, 2022 at 8:50 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 04/09/2022 06:47, Jagath Jog J wrote:
-> > Add real time clock support for Maxim max31329 real time clock.
-> >
-> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> > +     max31329->rtc->ops = &max31329_rtc_ops;
-> > +     max31329->irq = client->irq;
-> > +     max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> > +     max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
-> > +     max31329->dev = &client->dev;
-> > +
-> > +     if (max31329->irq) {
-> > +             ret = devm_request_threaded_irq(&client->dev, max31329->irq,
-> > +                                             NULL, max31329_irq_handler,
-> > +                                             IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> > +                                             "max31329", &client->dev);
-> > +             if (ret) {
-> > +                     dev_err(&client->dev, "unable to request IRQ\n");
-> > +                     max31329->irq = 0;
-> > +                     return ret;
-> > +             }
-> > +
-> > +             ret = regmap_write(max31329->regmap, MAX31329_RTC_CONFIG2_REG,
-> > +                                MAX31329_RTC_CONFIG2_ENCLKO);
-> > +             if (ret) {
-> > +                     dev_err(&client->dev, "unable to configure INT pin");
-> > +                     max31329->irq = 0;
-> > +                     return ret;
-> > +             }
-> > +
-> > +             device_set_wakeup_capable(&client->dev, true);
->
-> Probably you should rather respect wakeup-source DT property.
+The RTC_HCTOSYS is fundamentally flawed for legacy user space, and
+unfortunately there are no good solutions for it.
 
-Sure, I will configure wakeup based on the value of the wakeup-source
-property from DT.
+As Reinier Kuipers reports, the current code is broken for any 32-bit
+platform that relies on CONFIG_RTC_HCTOSYS when they want to support
+64-bit time_t. Running with the RTC set to 2038 or later, the system
+clock silently reverts back to 1970, which makes it impossible to actually
+deploy such a system today and expect it to keep working.
 
->
-> > +             set_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
-> > +     }
-> > +
-> > +     ret = devm_rtc_register_device(max31329->rtc);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     max31329_trickle_config(&client->dev);
-> > +
-> > +     nvmem_cfg.priv = max31329->regmap;
-> > +     devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
-> > +
-> > +#ifdef CONFIG_COMMON_CLK
-> > +     max31329_clkout_register_clk(max31329, client);
-> > +#endif
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct of_device_id max31329_of_match[] = {
-> > +     { .compatible = "maxim,max31329", },
-> > +     { }
-> > +};
-> > +MODULE_DEVICE_TABLE(of, max31329_of_match);
-> > +
-> > +static struct i2c_driver max31329_driver = {
-> > +     .driver = {
-> > +             .name = "rtc-max31329",
-> > +             .of_match_table = of_match_ptr(max31329_of_match),
->
-> of_match_ptr without maybe_unused on the table should cause compile test
-> warnings. You need both or none.
+The code that caused this issue was in turn a workaround for a recurring
+problem that happens when RTCs are set to the wrong time accidentally
+or as the result of a depleted battery. If the time is accidentally set
+past INT_MAX, this causes a systemd with 32-bit time_t to hang on boot,
+with no easy recovery.
 
-I will correct this in the next patch series.
+As the kernel has no idea about whether the time from the RTC is real
+or fake, or if the user space it will run has 32-bit or 64-bit time_t,
+it is impossible to make CONFIG_RTC_HCTOSYS work in a way that reliably
+avoids both of the above problems.
 
-Thank you
-Jagath
->
->
-> Best regards,
-> Krzysztof
+Additionally, the current behavior is inconsistent because it works
+differently based on whether the kernel itself is 32-bit or 64-bit,
+regardless of what userspace is actually running. Configurations in
+full compat mode are getting more popular (again) as Arm based SoCs are
+increasingly built using 64-bit CPU cores like Cortex-A35, but memory
+constrained systems still benefit from running 32-bit user space.
+
+Change the current behavior in two ways:
+
+ - In an attempt to pick the lesser of two evils, do not actually set
+   the time differently based on the boot-time RTC contents, but
+   instead warn about affected configurations. This effectively reverts
+   b3a5ac42ab18 ("rtc: hctosys: Ensure system time doesn't overflow
+   time_t") and will make systemd hang again on broken hardware, but
+   at least makes it possible to deploy y2038 ready 32-bit systems.
+
+ - Change the #ifdef to check for CONFIG_COMPAT_32BIT_TIME instead of
+   BITS_PER_LONG, so we do not catch kernels that only support time64_t
+   userspace, but do catch 64-bit kernels that may run a 32-bit rootfs.
+
+Other ideas that have been suggested but discarded include:
+
+ - Using a blacklist or whitelist of RTC drivers to only set
+   the time on reliable hardware, which would effectively break current
+   users of that hardware immediately, rather than in 16 years.
+
+ - Changing affected RTC drivers to interpret the register contents
+   as belonging within the 32-bit time_t range but still allow changing
+   that window using the "start-year" DT property to make it work
+   past y2038. This work avoid most of the problems but still requires
+   identifying exactly which drivers are affected.
+
+ - Dropping CONFIG_RTC_HCTOSYS from the kernel. This is still
+   Alexandre's long-term goal, but we cannot wait for that as users
+   are trying to deploy y2038 compatible systems today.
+
+ - Making CONFIG_RTC_HCTOSYS depend on !CONFIG_COMPAT_32BIT_TIME,
+   which is a trivial way of avoiding both of the bugs, but breaks
+   all general purpose 32-bit userland until they upgrade to
+   a full time64 build or away from RTC_HCTOSYS.
+
+ - Changing systemd to no longer crash on broken hardware, or
+   ideally just set the system time itself to a value that is within
+   its time_t range. This was previously rejected by the systemd
+   developers, but is probably needed again with the b3a5ac42ab18
+   patch reverted.
+
+Cc: Reinier Kuipers <kuipers.reinier@gmail.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: linux-rtc@vger.kernel.org
+Cc: Russell King <linux@armlinux.org.uk>
+Link: https://lore.kernel.org/all/CAKYb531CyL8XRVRcRN30cC3xRgsd-1FzXUeS7o2LiZqALJ42qw@mail.gmail.com/
+Link: https://github.com/systemd/systemd/issues/1143
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/rtc/class.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+index e48223c00c67..572e356821b5 100644
+--- a/drivers/rtc/class.c
++++ b/drivers/rtc/class.c
+@@ -73,11 +73,31 @@ static void rtc_hctosys(struct rtc_device *rtc)
+ 
+ 	tv64.tv_sec = rtc_tm_to_time64(&tm);
+ 
+-#if BITS_PER_LONG == 32
+-	if (tv64.tv_sec > INT_MAX) {
+-		err = -ERANGE;
+-		goto err_read;
+-	}
++#ifdef CONFIG_COMPAT_32BIT_TIME
++	/*
++	 * User space with 32-bit time_t behaves in unexpected ways when
++	 * the time is set past January 19 2038, often leading to
++	 * unbootable systems. With CONFIG_RTC_HCTOSYS, this can happen
++	 * either because of broken RTC hardware that sets a random time
++	 * with a depleted battery, or because it is actually the future.
++	 *
++	 * This can affect 32-bit kernels as well as 64-bit kernels when
++	 * running a 32-bit rootfs or container.
++	 *
++	 * Since the kernel has no way of knowing what user space it runs,
++	 * warn here whenever the kernel is able to run it.
++	 * When CONFIG_COMPAT_32BIT_TIME is disabled, we know that the
++	 * system is safe, but unfortunately this this is currently not
++	 * supported by musl-1.2.x or most glibc based user space.
++	 *
++	 * Disabling CONFIG_RTC_HCTOSYS defers the problem to user space,
++	 * which will work correctly when all of it supports 64-bit
++	 * time_t, or will alternatively be unable to set a time past
++	 * y2038 if it still uses 32-bit time_t.
++	 */
++	dev_warn(rtc->dev.parent, "Warning: CONFIG_RTC_HCTOSYS is broken for 32-bit time_t userspace\n");
++	if (tv64.tv_sec > INT_MAX)
++		dev_warn(rtc->dev.parent, "Time set to past y2038 date\n");
+ #endif
+ 
+ 	err = do_settimeofday64(&tv64);
+-- 
+2.29.2
+
