@@ -2,103 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A01C5BBF5E
-	for <lists+linux-rtc@lfdr.de>; Sun, 18 Sep 2022 20:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3DC5BC456
+	for <lists+linux-rtc@lfdr.de>; Mon, 19 Sep 2022 10:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiIRStF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 18 Sep 2022 14:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S229847AbiISIbQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 19 Sep 2022 04:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiIRStE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 18 Sep 2022 14:49:04 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CD512740;
-        Sun, 18 Sep 2022 11:49:01 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2948C60004;
-        Sun, 18 Sep 2022 18:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663526939;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wv1lkXyPNnvuT33kuOpuzkwbPzoa6t/yV8QTY+AxU2s=;
-        b=it19YxhyIw6Vcpo77yKrWEkY//J7g5tpm/QoARkfbsJWdu/+JHeDsX7hD3bMt3AMPC7Y++
-        4IMjl/mbKx0HTFOOd693f0Qn/ZpehYe+fG5twKCtW2QELB7pXWNsROupD4o567xjNqfPGZ
-        uNmhWJk161vRIQMq+SCj2RUzTjAlTb31aiBzqHU3sLM/397NlhwT9NmGhXPW3HDZKb0SfT
-        Qxc9vyfbGJbRRuBpISmIOcaduQdYOH/WEHtWJFzht2Wo8QkiOTTMC9OVqO8FrpkWGmuhDj
-        qiBSq1FmxgqkzXbFwSmcGkANmELTl4Yh47Tp+228AhhY9eyYQPA9XX0cjaqcpA==
-Date:   Sun, 18 Sep 2022 20:48:58 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] rtc: maxim: Add Maxim max31329 real time clock
-Message-ID: <YydoGsEU/UPkXvXn@mail.local>
-References: <20220912190753.10158-1-jagathjog1996@gmail.com>
- <20220912190753.10158-3-jagathjog1996@gmail.com>
- <YyHBKNC/YHbvIn40@mail.local>
- <CAM+2Eu+jCA9yJma2UtD736opw0=_uCz4Zbiem89ehexTEU7mQw@mail.gmail.com>
+        with ESMTP id S229995AbiISIbO (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 19 Sep 2022 04:31:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFECF2127A
+        for <linux-rtc@vger.kernel.org>; Mon, 19 Sep 2022 01:31:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWHny3mRzzMn4D;
+        Mon, 19 Sep 2022 16:26:30 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 19 Sep 2022 16:31:10 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 19 Sep
+ 2022 16:31:10 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-rtc@vger.kernel.org>
+CC:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH -next] rtc: s3c: Switch to use dev_err_probe() helper
+Date:   Mon, 19 Sep 2022 16:38:12 +0800
+Message-ID: <20220919083812.755082-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM+2Eu+jCA9yJma2UtD736opw0=_uCz4Zbiem89ehexTEU7mQw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 17/09/2022 16:09:54+0530, Jagath Jog J wrote:
-> > This doesn't feel right, doesn't that break start-year?
-> >
-> > What is the actual time range supported by this RTC? Shouldn't you set
-> > the century?
-> 
-> The time range supported by RTC is 2000 to 2199.
-> The alarm registers don't have a century bit.
-> I have tested the alarm for
-> 2122-09-17T01:22:00
-> 2142-09-17T01:22:00
-> 2160-02-29T00:00:00
-> 2196-02-29T00:00:00 etc
-> 
-> I will add another condition such that if the century bit
-> from the time register is not set then configuring the
-> alarm for the next century is not allowed.
+In the probe path, dev_err() can be replace with dev_err_probe()
+which will check if error code is -EPROBE_DEFER and prints the
+error name.
 
-The actual check should be for the alarm to not exceed 100 years in the
-future then. Else, this wouldn't work well with datetime offsetting.
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/rtc/rtc-s3c.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-> > > +static int max31329_set_time(struct device *dev, struct rtc_time *tm)
-> > > +{
-> > > +     struct max31329_data *max31329 = dev_get_drvdata(dev);
-> > > +     u8 regs[7];
-> > > +     int ret;
-> > > +
-> > > +     ret = max31329_get_osc_status(dev);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> >
-> > Checking the oscillator is not needed here but resetting the status is.
-> 
-> Resetting the device will resets the digital block,
-> I2C-programmable registers and oscillator also,
-> The oscillator is taking some time around 80 milli sec
-> to be back as usual.
-> 
-> Is it required to reset every time during the time setting?
-> 
-
-Not but resetting the osc status is.
-
-
+diff --git a/drivers/rtc/rtc-s3c.c b/drivers/rtc/rtc-s3c.c
+index db529733c9c4..8fc5efde3e0b 100644
+--- a/drivers/rtc/rtc-s3c.c
++++ b/drivers/rtc/rtc-s3c.c
+@@ -429,14 +429,9 @@ static int s3c_rtc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(info->base);
+ 
+ 	info->rtc_clk = devm_clk_get(&pdev->dev, "rtc");
+-	if (IS_ERR(info->rtc_clk)) {
+-		ret = PTR_ERR(info->rtc_clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "failed to find rtc clock\n");
+-		else
+-			dev_dbg(&pdev->dev, "probe deferred due to missing rtc clk\n");
+-		return ret;
+-	}
++	if (IS_ERR(info->rtc_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(info->rtc_clk),
++				     "failed to find rtc clock\n");
+ 	ret = clk_prepare_enable(info->rtc_clk);
+ 	if (ret)
+ 		return ret;
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
