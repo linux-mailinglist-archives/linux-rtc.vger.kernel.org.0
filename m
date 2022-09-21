@@ -2,57 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBAE5BFD3B
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Sep 2022 13:47:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F225BFD40
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Sep 2022 13:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiIULrQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Sep 2022 07:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S230307AbiIULrY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Sep 2022 07:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiIULrJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Sep 2022 07:47:09 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1A9956AF
-        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 04:46:41 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id j24so6154181lja.4
-        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 04:46:41 -0700 (PDT)
+        with ESMTP id S229691AbiIULrK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Sep 2022 07:47:10 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE98E95AC7
+        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 04:46:43 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id o2so8718626lfc.10
+        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 04:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=m9+Zmy++ta7sMSatXKhKoM2rtE1PAA0b2u/bqTy/9Yo=;
-        b=hY7GTvbSgNOU09X0DCba8ho6mZShPG9k3hNdmr2t1K3aOuagsPyICR6YM/Guhur5Zi
-         Hxxspf+em6oL8GsG0v8hQh0lLBfv0/45h5GwU6B/38kmuhk0d4c7k0noV/IiWRI+vlBK
-         1tVcjPW7Y1k575XuJStd/o/SranxSgOj3LT10=
+        bh=LLcoUfGxhi8reQQCpbbwos0jhsx1cQA+/9CD5zQKs0M=;
+        b=ZvYzaoWIkLHxaHgb1owNhrW5mvjGeCP30MWPHhKZencsYNmoiCgM/qIN1b3Sdnav/8
+         /y4mBwi/DT7YQX2WTYe370rl7zqprzYbjwebu7S4GjV2CkSMoFBlXKLm5Mu0WCbBJBVH
+         ZRoRjLqlQrkKzsw4ErQmUUb6WAEuV7msR5NWk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=m9+Zmy++ta7sMSatXKhKoM2rtE1PAA0b2u/bqTy/9Yo=;
-        b=v9Arht/+hvo/qs1/yk61OiSCmVhToLWiYj2ctY5NevqwwYIi22tEBmvht80tJis33O
-         34yRBiLfAcjL3f+7d1L8U+ZP19ceQJK4wxVGbg/sGRueUXJKIMP4YKa/CvvTI5Zur4xO
-         vL4leZdXZ5Z83w6ZvEGJzVlLQ4sRv30Fy/u6SxYEHYi+ahijdvp0aJEFHQROvHoS+8Bg
-         CAeyvVXZl3E7XpwFLj5XhzkzNtzYe1UzsM1G5GF8KrUj4kLZUrWU5BiVrTgNLAh24ya1
-         JsCt+q7gk3woKpDaQqmSGQA7aEA2advW1GjMMCqxfbVAs4B72snKevJdG7cBAezWa6GU
-         Ga1A==
-X-Gm-Message-State: ACrzQf33WXj6rXhvrIc2BvSAgWt6MMDbVtmjNz0z1gQ+n/yhDW2b+BFB
-        SmNt+xCtdGkVkSQayp4xpvXNHu1+FnCX5xhr
-X-Google-Smtp-Source: AMsMyM7qN5dEJxOUF9bSZZtyudDeKm4BTi/9npAp2ELjfLp7ivsmOvQQT71JKcXCUwyUhWVDNnU81A==
-X-Received: by 2002:a2e:90da:0:b0:26c:8dc:3c52 with SMTP id o26-20020a2e90da000000b0026c08dc3c52mr8886029ljg.474.1663760799695;
-        Wed, 21 Sep 2022 04:46:39 -0700 (PDT)
+        bh=LLcoUfGxhi8reQQCpbbwos0jhsx1cQA+/9CD5zQKs0M=;
+        b=B2kBiWbv3hYls7PpClCdJcfCqmKWJdQuDFwn4FcGt0w2Q5JSMWylDGGtJaCYYQN8uJ
+         jeXBiHlei0narfxkkAEj6HPn646orOeuEkthAVFpN7D6hy5xiqiK45zMQxiCzghvbmSz
+         WFz0RRl/d0o6XVPc9akbeHsqiW5AziQUALw0eiVNdYo8N+T0skvWDi1X0aLmf+OYvYOV
+         PCvMVRLmlYhgq+D4RNI9SSD+IzNOYG6j59U7KPf3DhW0mlbzMdkdmzchlOoW+x6xv/lp
+         kzHSV/F/s/fQ+5MxxgwuwMste2FfQDd7Y0ZM6B+N86tfk+jQfCeeISYyvNr5nPfyC3G8
+         LznQ==
+X-Gm-Message-State: ACrzQf0xwwFNXdDq+xQzxkzwEQbTjwNJTkrvFRHMkyVa2N9lsQEOWpdv
+        KVpVg+ZXs9ZitHEGm65mQtGUkA==
+X-Google-Smtp-Source: AMsMyM42zVJ/5O/dK+uV1a8A97tuD+lBAW/Jsfjfyc7+cyT/DkNvqZ89pb+KQYVTWfx54lzf7He9+Q==
+X-Received: by 2002:a05:6512:3d2a:b0:49a:92d:cddd with SMTP id d42-20020a0565123d2a00b0049a092dcdddmr10220106lfv.590.1663760801021;
+        Wed, 21 Sep 2022 04:46:41 -0700 (PDT)
 Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00494618889c0sm405713lfr.42.2022.09.21.04.46.38
+        by smtp.gmail.com with ESMTPSA id g4-20020a056512118400b00494618889c0sm405713lfr.42.2022.09.21.04.46.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Sep 2022 04:46:39 -0700 (PDT)
+        Wed, 21 Sep 2022 04:46:40 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/9] rtc: isl12022: drop redundant write to HR register
-Date:   Wed, 21 Sep 2022 13:46:22 +0200
-Message-Id: <20220921114624.3250848-8-linux@rasmusvillemoes.dk>
+Subject: [PATCH v2 8/9] rtc: isl12022: switch to using regmap API
+Date:   Wed, 21 Sep 2022 13:46:23 +0200
+Message-Id: <20220921114624.3250848-9-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
 References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
@@ -69,48 +69,206 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-There's nothing in the data sheet that says writing to one of the time
-keeping registers is necessary to start the RTC. It does so at the
-stop condition of the i2c transfer setting the WRTC bit:
+The regmap abstraction allows us to avoid the private i2c transfer
+helpers, and also offers some nice utility functions such as the
+regmap_update_bits family.
 
-  Upon initialization or power-up, the WRTC must be set to "1" to
-  enable the RTC. Upon the completion of a valid write (STOP), the RTC
-  starts counting.
-
-Moreover, even if such a write to one of the timekeeping registers was
-necessary, that's exactly what we do anyway just below when we
-actually write the given struct rtc_time to the device.
+While at it, simplify the code even more by not keeping track of
+->write_enabled: rtc_set_time is not a hot path, so one extra i2c read
+doesn't hurt (regmap_update_bits elides the write when the bits are
+already as desired).
 
 Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 ---
- drivers/rtc/rtc-isl12022.c | 14 --------------
- 1 file changed, 14 deletions(-)
+ drivers/rtc/Kconfig        |   1 +
+ drivers/rtc/rtc-isl12022.c | 110 +++++++++----------------------------
+ 2 files changed, 26 insertions(+), 85 deletions(-)
 
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index b8de25118ad0..bb63edb507da 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -423,6 +423,7 @@ config RTC_DRV_ISL1208
+ 
+ config RTC_DRV_ISL12022
+ 	tristate "Intersil ISL12022"
++	select REGMAP_I2C
+ 	help
+ 	  If you say yes here you get support for the
+ 	  Intersil ISL12022 RTC chip.
 diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index df6d91f4e8f3..6fb13a5d17f1 100644
+index 6fb13a5d17f1..ca677c4265e6 100644
 --- a/drivers/rtc/rtc-isl12022.c
 +++ b/drivers/rtc/rtc-isl12022.c
-@@ -171,20 +171,6 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 						 buf[0] | ISL12022_INT_WRTC);
- 			if (ret)
- 				return ret;
--
--			/* Write to any RTC register to start RTC, we use the
--			 * HR register, setting the MIL bit to use the 24 hour
--			 * format. */
--			ret = isl12022_read_regs(client, ISL12022_REG_HR,
--						 buf, 1);
--			if (ret)
--				return ret;
--
--			ret = isl12022_write_reg(client,
--						 ISL12022_REG_HR,
--						 buf[0] | ISL12022_HR_MIL);
--			if (ret)
--				return ret;
- 		}
+@@ -16,6 +16,7 @@
+ #include <linux/err.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/regmap.h>
  
- 		isl12022->write_enabled = true;
+ /* ISL register offsets */
+ #define ISL12022_REG_SC		0x00
+@@ -42,72 +43,21 @@ static struct i2c_driver isl12022_driver;
+ 
+ struct isl12022 {
+ 	struct rtc_device *rtc;
+-
+-	bool write_enabled;	/* true if write enable is set */
++	struct regmap *regmap;
+ };
+ 
+-
+-static int isl12022_read_regs(struct i2c_client *client, uint8_t reg,
+-			      uint8_t *data, size_t n)
+-{
+-	struct i2c_msg msgs[] = {
+-		{
+-			.addr	= client->addr,
+-			.flags	= 0,
+-			.len	= 1,
+-			.buf	= data
+-		},		/* setup read ptr */
+-		{
+-			.addr	= client->addr,
+-			.flags	= I2C_M_RD,
+-			.len	= n,
+-			.buf	= data
+-		}
+-	};
+-
+-	int ret;
+-
+-	data[0] = reg;
+-	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+-	if (ret != ARRAY_SIZE(msgs)) {
+-		dev_err(&client->dev, "%s: read error, ret=%d\n",
+-			__func__, ret);
+-		return -EIO;
+-	}
+-
+-	return 0;
+-}
+-
+-
+-static int isl12022_write_reg(struct i2c_client *client,
+-			      uint8_t reg, uint8_t val)
+-{
+-	uint8_t data[2] = { reg, val };
+-	int err;
+-
+-	err = i2c_master_send(client, data, sizeof(data));
+-	if (err != sizeof(data)) {
+-		dev_err(&client->dev,
+-			"%s: err=%d addr=%02x, data=%02x\n",
+-			__func__, err, data[0], data[1]);
+-		return -EIO;
+-	}
+-
+-	return 0;
+-}
+-
+-
+ /*
+  * In the routines that deal directly with the isl12022 hardware, we use
+  * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
+  */
+ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
++	struct isl12022 *isl12022 = dev_get_drvdata(dev);
++	struct regmap *regmap = isl12022->regmap;
+ 	uint8_t buf[ISL12022_REG_INT + 1];
+ 	int ret;
+ 
+-	ret = isl12022_read_regs(client, ISL12022_REG_SC, buf, sizeof(buf));
++	ret = regmap_bulk_read(regmap, ISL12022_REG_SC, buf, sizeof(buf));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -148,33 +98,18 @@ static int isl12022_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 
+ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ {
+-	struct i2c_client *client = to_i2c_client(dev);
+ 	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+-	size_t i;
++	struct regmap *regmap = isl12022->regmap;
+ 	int ret;
+ 	uint8_t buf[ISL12022_REG_DW + 1];
+ 
+ 	dev_dbg(dev, "%s: %ptR\n", __func__, tm);
+ 
+-	if (!isl12022->write_enabled) {
+-
+-		ret = isl12022_read_regs(client, ISL12022_REG_INT, buf, 1);
+-		if (ret)
+-			return ret;
+-
+-		/* Check if WRTC (write rtc enable) is set factory default is
+-		 * 0 (not set) */
+-		if (!(buf[0] & ISL12022_INT_WRTC)) {
+-			/* Set the write enable bit. */
+-			ret = isl12022_write_reg(client,
+-						 ISL12022_REG_INT,
+-						 buf[0] | ISL12022_INT_WRTC);
+-			if (ret)
+-				return ret;
+-		}
+-
+-		isl12022->write_enabled = true;
+-	}
++	/* Ensure the write enable bit is set. */
++	ret = regmap_update_bits(regmap, ISL12022_REG_INT,
++				 ISL12022_INT_WRTC, ISL12022_INT_WRTC);
++	if (ret)
++		return ret;
+ 
+ 	/* hours, minutes and seconds */
+ 	buf[ISL12022_REG_SC] = bin2bcd(tm->tm_sec);
+@@ -191,15 +126,8 @@ static int isl12022_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 
+ 	buf[ISL12022_REG_DW] = tm->tm_wday & 0x07;
+ 
+-	/* write register's data */
+-	for (i = 0; i < ARRAY_SIZE(buf); i++) {
+-		ret = isl12022_write_reg(client, ISL12022_REG_SC + i,
+-					 buf[ISL12022_REG_SC + i]);
+-		if (ret)
+-			return -EIO;
+-	}
+-
+-	return 0;
++	return regmap_bulk_write(isl12022->regmap, ISL12022_REG_SC,
++				 buf, sizeof(buf));
+ }
+ 
+ static const struct rtc_class_ops isl12022_rtc_ops = {
+@@ -207,6 +135,12 @@ static const struct rtc_class_ops isl12022_rtc_ops = {
+ 	.set_time	= isl12022_rtc_set_time,
+ };
+ 
++static const struct regmap_config regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.use_single_write = true,
++};
++
+ static int isl12022_probe(struct i2c_client *client)
+ {
+ 	struct isl12022 *isl12022;
+@@ -220,6 +154,12 @@ static int isl12022_probe(struct i2c_client *client)
+ 		return -ENOMEM;
+ 	dev_set_drvdata(&client->dev, isl12022);
+ 
++	isl12022->regmap = devm_regmap_init_i2c(client, &regmap_config);
++	if (IS_ERR(isl12022->regmap)) {
++		dev_err(&client->dev, "regmap allocation failed\n");
++		return PTR_ERR(isl12022->regmap);
++	}
++
+ 	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(isl12022->rtc))
+ 		return PTR_ERR(isl12022->rtc);
 -- 
 2.37.2
 
