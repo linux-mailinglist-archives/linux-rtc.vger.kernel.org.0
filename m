@@ -2,70 +2,81 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7EA5BFFC7
-	for <lists+linux-rtc@lfdr.de>; Wed, 21 Sep 2022 16:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF9A5BFFFA
+	for <lists+linux-rtc@lfdr.de>; Wed, 21 Sep 2022 16:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiIUOWQ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 21 Sep 2022 10:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S229618AbiIUOgB (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 21 Sep 2022 10:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiIUOWP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Sep 2022 10:22:15 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB49883DF
-        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 07:22:13 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7DBFF60013;
-        Wed, 21 Sep 2022 14:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663770130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=40ad+s16O0GfgV2M2ZamwNn2hpqph2cD3AxpYg508EM=;
-        b=Sok9LG6fGee9AnZT5yyyXwX3vzDFrmJUDe77RdLwSuBCZHDhrl3ozBkSTDZ+iVtg3rqapv
-        xFBAxJ4wwKfUhaZVpesRf1rjgs8mqRBZl/x37PLSvvs39NvNvpG3pmJyYl76LNNjIRebXF
-        tZRB1Zzg7dtNZXa5OBg0R/2K3Dzu9/ykGMMpA+CQ+VuItjGfU4dpDqsnd5fruplIqHb1ZF
-        aUA842tUWB1yubQTWhW+dg0GPAjE05ElZmZLC7wMcL3SqbfzCnWntkZsVxKPNCtoDOjWyi
-        KeWCLDl4cd6cDKIEvrvdbxdLklaLD6nrMqt51iS4Du7G0ud/CZf3sr032r7SKQ==
-Date:   Wed, 21 Sep 2022 16:22:09 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
+        with ESMTP id S229630AbiIUOgA (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 21 Sep 2022 10:36:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877287C310
+        for <linux-rtc@vger.kernel.org>; Wed, 21 Sep 2022 07:35:59 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ob0pR-0008Os-RL; Wed, 21 Sep 2022 16:35:57 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1ob0pR-00046y-7U; Wed, 21 Sep 2022 16:35:57 +0200
+Date:   Wed, 21 Sep 2022 16:35:57 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
         kernel@pengutronix.de
 Subject: Re: [PATCH v2 0/2] rtc: rv8803 patches
-Message-ID: <YyseEdX9/xuyKGka@mail.local>
+Message-ID: <20220921143557.GE986@pengutronix.de>
 References: <20220817085330.1050492-1-s.hauer@pengutronix.de>
  <20220921131753.GP12909@pengutronix.de>
+ <YyseEdX9/xuyKGka@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220921131753.GP12909@pengutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YyseEdX9/xuyKGka@mail.local>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 21/09/2022 15:17:53+0200, Sascha Hauer wrote:
-> Hi Alexandre,
+On Wed, Sep 21, 2022 at 04:22:09PM +0200, Alexandre Belloni wrote:
+> Hi,
 > 
-> Any input to this series?
+> On 21/09/2022 15:17:53+0200, Sascha Hauer wrote:
+> > Hi Alexandre,
+> > 
+> > Any input to this series?
+> 
+> I'm not convinced this is necessary. Having an invalid alarm doesn't
+> mean that the time is invalid and that check will only ever happen at
+> boot time whereas V2F is a reliable indication that the time is invalid.
+> 
+> Have you really had an RTC with an invalid time that is not caught by
+> rtc_valid_tm and with V2F not set?
 
-I'm not convinced this is necessary. Having an invalid alarm doesn't
-mean that the time is invalid and that check will only ever happen at
-boot time whereas V2F is a reliable indication that the time is invalid.
+I don't know. I must talk to Ahmad in this regard, he'll be back next
+week. It could be that we only created this patch to be sure the RTC
+state is sane.
 
-Have you really had an RTC with an invalid time that is not caught by
-rtc_valid_tm and with V2F not set?
+Sascha
 
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
