@@ -2,134 +2,111 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB225E7907
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 13:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04FC5E7C4D
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 15:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiIWLET (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Sep 2022 07:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S229666AbiIWNvd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Sep 2022 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiIWLEP (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 07:04:15 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E91EEE676;
-        Fri, 23 Sep 2022 04:04:09 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6857124000B;
-        Fri, 23 Sep 2022 11:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663931048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1pl7m3BcKQFRdvwHdTlpfN1yQan5OWyAa1ah2yZ/5g4=;
-        b=aF99+PU+f9hssnGMAtIOpVOdvbkkk+MriT+6WCGnCs9rNHx7C6f66ZYdRA3eyNgZetWSSr
-        69u+8OHWDssSgv4PAjayBHT4v4Bjv64JGr+pDB3vpMmz3V1Rl+kxfNwrKwieMzbDN/Fvl4
-        Z2m5g1s8dwpuz6PVlcDlFvNwAKGesNkQazPCcl0osPcRfLt3jPKSVdRc4Ij4Y3Sm4lg/1f
-        vggsnHOWI0tiE2tCO3h3H2csqYiPNsReDobUnKnp721HMAokJ/ITDkg9nXcb08eywaeWH7
-        +RPI3PPUXXvMdddY0dcs8wIDRFj4V0K7MbC2i0rlz8G7O3GVLoTFux5xEm98nw==
-Date:   Fri, 23 Sep 2022 13:04:06 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] rtc: maxim: Add Maxim max31329 real time clock
-Message-ID: <Yy2SpmCy1ZjC1pMz@mail.local>
-References: <20220912190753.10158-1-jagathjog1996@gmail.com>
- <20220912190753.10158-3-jagathjog1996@gmail.com>
- <YyHBKNC/YHbvIn40@mail.local>
- <CAM+2Eu+jCA9yJma2UtD736opw0=_uCz4Zbiem89ehexTEU7mQw@mail.gmail.com>
- <YydoGsEU/UPkXvXn@mail.local>
- <CAM+2EuJsz9NgEskhYapxFg7UrimB3Po97DZGHtBCHTc8+vx_1g@mail.gmail.com>
+        with ESMTP id S230328AbiIWNvc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 09:51:32 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DD127574;
+        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id u69so317723pgd.2;
+        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
+        b=ViQdxJI8Jnzvtb8tZHcp7/WLK2JxnpPajBdwHraR4DjPdGbIRpxfNpk5CCMiljJRoi
+         dvCe4TGC+NKoF+bDuk7ynMT/sAKuHotUgTlBLfWRWChAUyaTbpQZhNxUqWNRr3HFT3ZK
+         Q/7r0QGtZpPd+OLM1CVjy217ZAiFPrsM1AOSUWrC3VNfoC7mUO0YFdj3O6TLOsfUTpGo
+         TEdCxOBz/9H13Z6K2cW6eA7XHiOtQYf7DO8qqcwV4mWBmCGzmkDlDp0tsX1OHotdPg0h
+         CFKVzqJpN1+WZyuMaTkO4ZAUJzdRo71fr4JKPxLeK8Zn8pPrAdmVkMsvd98/tazy8zmZ
+         B18w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
+        b=o3ZO0eSXdumT7mWkeJvGnqg9gifcp6Tv8WcrND0syzopgvCAD9QWb21whz/0+K+Bwe
+         uwRAP05FAkrJcseHhRr3fyvjpW+xLxj0uRXsC0527NrrsZJLZ9B/OH8jQW4CNAK5sfNN
+         K+VcRbM16WGWdyg5HF3EeGwWpSkbpCbInenWNfgehBqD/Abre9RaUrVLg4OFoQHuIAuk
+         kY6yf4RtvHJaoI10quoVetADfO9DWMGxOJYNlqOEeqonFBCl/6pFStCAshGu6+PUgEd7
+         dJwe7NQqvOKDnjA0zaGotb7DK1X3TWmnc5+A4B3v75RTEBYTYerKMwctWGrzV8J8Tyve
+         hZXQ==
+X-Gm-Message-State: ACrzQf23gPM++IAtscx9lrdfCarbYs+ogqc1aL07K0txfIZsmUJ009gk
+        4T3ALkl0VLG3tQFlYlK6T/DevURSavGH6w==
+X-Google-Smtp-Source: AMsMyM6A9EF9xffEXk+S/8BHhmmPiZtxIh9rRWv9NDT3Oqo5tfjnCx0xM0RroT2qDR/ppMjXM8PnQA==
+X-Received: by 2002:a63:f050:0:b0:439:db24:8b07 with SMTP id s16-20020a63f050000000b00439db248b07mr7451289pgj.60.1663941090818;
+        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b0016b81679c1fsm5993698plb.216.2022.09.23.06.51.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <56cc6788-d54b-2f2f-32b2-a318adabf97a@roeck-us.net>
+Date:   Fri, 23 Sep 2022 06:51:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM+2EuJsz9NgEskhYapxFg7UrimB3Po97DZGHtBCHTc8+vx_1g@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 9/9] rtc: isl12022: add support for temperature sensor
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
+ <8cb2bac1-3a03-09a1-c071-96ca4a95fa44@roeck-us.net>
+ <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 20/09/2022 01:09:37+0530, Jagath Jog J wrote:
->  Hi Alexandre,
+On 9/23/22 01:40, Rasmus Villemoes wrote:
+> On 21/09/2022 16.13, Guenter Roeck wrote:
+>> On 9/21/22 04:46, Rasmus Villemoes wrote:
 > 
-> Before sending v3 I have one comment,
-> Please see below.
+>>> +static int isl12022_hwmon_read(struct device *dev,
+>>> +                   enum hwmon_sensor_types type,
+>>> +                   u32 attr, int channel, long *val)
+>>> +{
+>>> +    if (type == hwmon_chip && attr == hwmon_chip_update_interval) {
+>>> +        *val = 60000;
+>>> +        return 0;
+>>> +    }
+>>
+>> It is not the purpose of the update_interval attribute to inform the
+>> user what the update interval of this chip happens to be. The purpose
+>> of the attribute is to inform the chip what update interval it should use.
 > 
-> On Mon, Sep 19, 2022 at 12:18 AM Alexandre Belloni
-> <alexandre.belloni@bootlin.com> wrote:
-> >
-> > On 17/09/2022 16:09:54+0530, Jagath Jog J wrote:
-> > > > This doesn't feel right, doesn't that break start-year?
-> > > >
-> > > > What is the actual time range supported by this RTC? Shouldn't you set
-> > > > the century?
-> > >
-> > > The time range supported by RTC is 2000 to 2199.
-> > > The alarm registers don't have a century bit.
-> > > I have tested the alarm for
-> > > 2122-09-17T01:22:00
-> > > 2142-09-17T01:22:00
-> > > 2160-02-29T00:00:00
-> > > 2196-02-29T00:00:00 etc
-> > >
-> > > I will add another condition such that if the century bit
-> > > from the time register is not set then configuring the
-> > > alarm for the next century is not allowed.
-> >
-> > The actual check should be for the alarm to not exceed 100 years in the
-> > future then. Else, this wouldn't work well with datetime offsetting.
-> 
-> Sure, I will add this check.
-> 
-> >
-> > > > > +static int max31329_set_time(struct device *dev, struct rtc_time *tm)
-> > > > > +{
-> > > > > +     struct max31329_data *max31329 = dev_get_drvdata(dev);
-> > > > > +     u8 regs[7];
-> > > > > +     int ret;
-> > > > > +
-> > > > > +     ret = max31329_get_osc_status(dev);
-> > > > > +     if (ret)
-> > > > > +             return ret;
-> > > > > +
-> > > >
-> > > > Checking the oscillator is not needed here but resetting the status is.
-> > >
-> > > Resetting the device will resets the digital block,
-> > > I2C-programmable registers and oscillator also,
-> > > The oscillator is taking some time around 80 milli sec
-> > > to be back as usual.
-> > >
-> > > Is it required to reset every time during the time setting?
-> > >
-> >
-> > Not but resetting the osc status is.
-> 
-> Actually, the STATUS register which contains the Oscillator Stop
-> Flag (OSF) bit is a read-only register. If the OSF bit is set, then
-> reading the status register will not clear the OSF bit.
-> 
-> Based on the oscillator disable and enable testing, I observed
-> that the OSF bit is getting cleared automatically once the clock
-> settles, which is taking around 80msec. The manual resetting
-> option is not there for the OSC status bit.
-> 
-> Can I set the time without resetting the OSC status?
+> Well, I think it's a completely natural thing to expose a fixed and
+> known update_interval as a 0444 property, and it might even be useful to
+> userspace to know that there's no point reading the sensor any more
+> often than that. And I didn't come up with this by myself, there's
+> already at least a couple of instances of a 0444 update_interval.
 > 
 
-Sure but then it is not even useful to ever test OSF because we just
-don't care if it fails while we are running, the most important info is
-whether it fails when Linux is not running.
+That doesn't make it better. It is still an abuse of the ABI.
 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Guenter
