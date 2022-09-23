@@ -2,98 +2,102 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67435E7558
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 10:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08105E75EF
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 10:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiIWICT (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Sep 2022 04:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54886 "EHLO
+        id S230079AbiIWIkN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Sep 2022 04:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbiIWICM (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 04:02:12 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00D312AECC
-        for <linux-rtc@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id 135so4331837ybl.9
-        for <linux-rtc@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
+        with ESMTP id S230034AbiIWIkM (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 04:40:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE6D9F1B5
+        for <linux-rtc@vger.kernel.org>; Fri, 23 Sep 2022 01:40:10 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id hy2so22728202ejc.8
+        for <linux-rtc@vger.kernel.org>; Fri, 23 Sep 2022 01:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=cfIxv64ssPCAsFkiNHHMFgdJK+aS3ek+iLqUHDY6WnbjhiOIdSnQ44wWRghl+HhmM+
-         ZgInIkmqqBXRmr0iLX3qhhwZFhR/JPfzleN6mm2nw1mLuOcoAzAHWkBFiHwZ7tqjMZgF
-         PsKRUIHjUUQqGprd2uONY74u1xE5BTvss8qSBbNp7Z+Aq70BRE20eriiNGYVyBXq+Hsq
-         b5rkcgTekY6IxWT4nPGAarRMzqwaFzSMb85FKRftobSoeGzks+ft+jlIfNWEogJG+3AZ
-         NOSobbcfUtAgxZtAvcYwJWnSzI9bh6dTNyppITL3cUvgwoUGwW3iGN9w6X1aRyfg5wnI
-         lcKg==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=U6zfmLFphAIrgL4F8F09QdcSH0hrlIdwizKDu5PkikA=;
+        b=d5fGo9EJ+mdGp0vheSqN2Hhijx/dKv5fsFV58WjZSVHyiFgAxUovNWHOAE84sPek/Z
+         5vrwsM7X2ikO6yLQfP4W5LTl3MSNXBANu6MDdvVhsZeer+ZR6MwpiwU4FslP/kSWbfGL
+         68pYAHJ7isHIBd0VMrmpD7HUof9OGwyOjHB+E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
-        b=yE2i5Vff+cGtMBBvOzBpOw+sfWoWmJWTexBCa0vxEZgaLsqhPTjUsLlhFdqdHU8lMw
-         hph9omJI3CegJsrBlXPtkJmHqb/stdRZOvGGrIAOsI0fltkkA1YMVDQal47t0QpiVX94
-         aXfwZiM9dX5XcCRjP6qmxdvPgvcReJMNIO6trEne5iaUSER3shyOXeJPSIJ81AxJjy2u
-         wGkwbOe7jJTDw4gU3iWuctKegvMBZSvs/soz2J/GUvnEL3lrHB99ZHE50qj4WfSyp67f
-         PHt8tBPoJCFJkd4c6spdxOifAUC1wOOhoyyzPGBUE46+jQm8OQdU/dWONOZOF+zxWT/Y
-         buLw==
-X-Gm-Message-State: ACrzQf00eCV5sxda1D65q5sv1N209ggNIAG0AiDClFD2ysPHlnUYdKOS
-        j0wtdW6KcwbhYSVygkhnRxHNiQ33YckSn5mWOnc=
-X-Google-Smtp-Source: AMsMyM4xZCf+qxLt2Ywm13M7JqasT1TK3BugpgoPjyQSFw4MK8Zlc9YURZmRkEz6rKorJr4UyEvKaVmMnfEZ87d4MnU=
-X-Received: by 2002:a25:2f12:0:b0:6b3:e5e4:aeeb with SMTP id
- v18-20020a252f12000000b006b3e5e4aeebmr7800323ybv.22.1663920129070; Fri, 23
- Sep 2022 01:02:09 -0700 (PDT)
+        bh=U6zfmLFphAIrgL4F8F09QdcSH0hrlIdwizKDu5PkikA=;
+        b=vFFEuaQu/oQUstCukL1rr69I0vUwjkEQgc3S6toP01a7NvRKU/lZonc5+TyeydDoCN
+         laU56/mhFHqLWfRWm7kMMSr5mJAxNpBhxndJgsLxBbUfeNOxsi36+Cu+mzlTSsCThGWR
+         SpdovEAamqDuyU9KQVtTGC/H+K48zdp1qwppSNDcAbFZmJjrD95KjCfQNkJvnZ/Q/qGv
+         l+P1r6fIUiOpb65bFA3tI0WHWr+AyK+xP4IlKq7wrLhIy7V/AQsIrxvE2D851ZGc5bvF
+         X264KP3MYIcvmxr4WU0RVO6yvZgYEkLzW4+KUDlhv/ptU3sGcfEAwAwk2vbv14rRG/T7
+         8vWw==
+X-Gm-Message-State: ACrzQf1ZVBJ/EmT2JsnOLU3qxPooeIMm0XySf04V72NDblvlcaLS+QfC
+        qVr3YeCdN8kyergfJQTR1Q4BOg==
+X-Google-Smtp-Source: AMsMyM5VmiBQlwbjfE5Pt8HN6qE+WeUp2rxUd28OvfdnMRUuZP/ywclLHGwuTVBZUtJyGw4hbhWlmQ==
+X-Received: by 2002:a17:907:7baa:b0:779:a71a:c8cf with SMTP id ne42-20020a1709077baa00b00779a71ac8cfmr6174626ejc.126.1663922408786;
+        Fri, 23 Sep 2022 01:40:08 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b007341663d7ddsm3750380ejd.96.2022.09.23.01.40.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Sep 2022 01:40:08 -0700 (PDT)
+Message-ID: <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
+Date:   Fri, 23 Sep 2022 10:40:06 +0200
 MIME-Version: 1.0
-Received: by 2002:a25:3256:0:0:0:0:0 with HTTP; Fri, 23 Sep 2022 01:02:08
- -0700 (PDT)
-Reply-To: seybasaniel@gmail.com
-From:   Seyba Daniel <bellomouse33@gmail.com>
-Date:   Fri, 23 Sep 2022 10:02:08 +0200
-Message-ID: <CAC0qSW7sc6GUJtHgf3r23GFt653_aZzwewRn531NjpkWamAU7A@mail.gmail.com>
-Subject: HELLO,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b44 listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9555]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [bellomouse33[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [bellomouse33[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 9/9] rtc: isl12022: add support for temperature sensor
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
+ <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
+ <8cb2bac1-3a03-09a1-c071-96ca4a95fa44@roeck-us.net>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <8cb2bac1-3a03-09a1-c071-96ca4a95fa44@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it, which you will
-be communicated in details upon response.
+On 21/09/2022 16.13, Guenter Roeck wrote:
+> On 9/21/22 04:46, Rasmus Villemoes wrote:
 
-My dearest regards
+>> +static int isl12022_hwmon_read(struct device *dev,
+>> +                   enum hwmon_sensor_types type,
+>> +                   u32 attr, int channel, long *val)
+>> +{
+>> +    if (type == hwmon_chip && attr == hwmon_chip_update_interval) {
+>> +        *val = 60000;
+>> +        return 0;
+>> +    }
+> 
+> It is not the purpose of the update_interval attribute to inform the
+> user what the update interval of this chip happens to be. The purpose
+> of the attribute is to inform the chip what update interval it should use.
 
-Seyba Daniel
+Well, I think it's a completely natural thing to expose a fixed and
+known update_interval as a 0444 property, and it might even be useful to
+userspace to know that there's no point reading the sensor any more
+often than that. And I didn't come up with this by myself, there's
+already at least a couple of instances of a 0444 update_interval.
+
+I'll leave it to the RTC maintainers to decide, it's easy enough to remove.
+
+Rasmus
