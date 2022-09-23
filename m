@@ -2,80 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04FC5E7C4D
-	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 15:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1295E5E8224
+	for <lists+linux-rtc@lfdr.de>; Fri, 23 Sep 2022 20:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiIWNvd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 23 Sep 2022 09:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S232372AbiIWSyI (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 23 Sep 2022 14:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiIWNvc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 09:51:32 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DD127574;
-        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id u69so317723pgd.2;
-        Fri, 23 Sep 2022 06:51:31 -0700 (PDT)
+        with ESMTP id S231981AbiIWSyG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 23 Sep 2022 14:54:06 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB4012164D;
+        Fri, 23 Sep 2022 11:54:05 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id t3so993294ply.2;
+        Fri, 23 Sep 2022 11:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
-        b=ViQdxJI8Jnzvtb8tZHcp7/WLK2JxnpPajBdwHraR4DjPdGbIRpxfNpk5CCMiljJRoi
-         dvCe4TGC+NKoF+bDuk7ynMT/sAKuHotUgTlBLfWRWChAUyaTbpQZhNxUqWNRr3HFT3ZK
-         Q/7r0QGtZpPd+OLM1CVjy217ZAiFPrsM1AOSUWrC3VNfoC7mUO0YFdj3O6TLOsfUTpGo
-         TEdCxOBz/9H13Z6K2cW6eA7XHiOtQYf7DO8qqcwV4mWBmCGzmkDlDp0tsX1OHotdPg0h
-         CFKVzqJpN1+WZyuMaTkO4ZAUJzdRo71fr4JKPxLeK8Zn8pPrAdmVkMsvd98/tazy8zmZ
-         B18w==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=lW7/qWZ/WvDrx96hAYFtSZz1LI0hioVV1pKSvBV48Rw=;
+        b=Buvn+xZy6x48HfU0DONLmPql/ZRDhMcbgGPvGvOqXbbDHKF/Sq8xBuLakIrOgKgDNh
+         gj9WZ99rTSMEll8i3Jy6U2FRqXqKxgFxVFYpPTxLso+efV7f0aF2wfomfCcLJi0E1cIX
+         ZYVnE4W/kj1VOafrXBOWePZaf/jYHKrA82I1IlXPWBuCX4T+TLsWTMha+OE99S/Ao1rb
+         rIfm6X/HxSb2VbO7xdVSGpA+WxYnghdax1gmbhxEYAsHiPN0kuPDKIj/S4pONyLZ4gbS
+         EWGtWBmO2BOI0FsA2gtM5FWl8PPjRvDd5RK0tY/EUnJE+KfgoYr9IBuMIYLh8x0DIHDh
+         OygA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=vQ7OXxgt3UHb9qns2oREalFT54VGNY8TnAzMaOLw5z0=;
-        b=o3ZO0eSXdumT7mWkeJvGnqg9gifcp6Tv8WcrND0syzopgvCAD9QWb21whz/0+K+Bwe
-         uwRAP05FAkrJcseHhRr3fyvjpW+xLxj0uRXsC0527NrrsZJLZ9B/OH8jQW4CNAK5sfNN
-         K+VcRbM16WGWdyg5HF3EeGwWpSkbpCbInenWNfgehBqD/Abre9RaUrVLg4OFoQHuIAuk
-         kY6yf4RtvHJaoI10quoVetADfO9DWMGxOJYNlqOEeqonFBCl/6pFStCAshGu6+PUgEd7
-         dJwe7NQqvOKDnjA0zaGotb7DK1X3TWmnc5+A4B3v75RTEBYTYerKMwctWGrzV8J8Tyve
-         hZXQ==
-X-Gm-Message-State: ACrzQf23gPM++IAtscx9lrdfCarbYs+ogqc1aL07K0txfIZsmUJ009gk
-        4T3ALkl0VLG3tQFlYlK6T/DevURSavGH6w==
-X-Google-Smtp-Source: AMsMyM6A9EF9xffEXk+S/8BHhmmPiZtxIh9rRWv9NDT3Oqo5tfjnCx0xM0RroT2qDR/ppMjXM8PnQA==
-X-Received: by 2002:a63:f050:0:b0:439:db24:8b07 with SMTP id s16-20020a63f050000000b00439db248b07mr7451289pgj.60.1663941090818;
-        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b0016b81679c1fsm5993698plb.216.2022.09.23.06.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 06:51:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <56cc6788-d54b-2f2f-32b2-a318adabf97a@roeck-us.net>
-Date:   Fri, 23 Sep 2022 06:51:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 9/9] rtc: isl12022: add support for temperature sensor
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=lW7/qWZ/WvDrx96hAYFtSZz1LI0hioVV1pKSvBV48Rw=;
+        b=IxX9bLrQnkuQnfHDOzXduDZBtvxvwcWALbw20F73XgFY0pLev7C9ecvxQMNJlzJa42
+         EhvN0NCswk27sqerszpYPYn6kHe9N0gVaRLcfB26SsTj5zqcDLkpZCRyYgpPAz6IgHpx
+         srXPv227zjSj7ImBC1VfJySGRcnVZOs0aMjOLaULBmtclp/7oonwq9yub7YI4/VheExl
+         1L7ufHBNcwbIR014ZETprPoDq0q7u33uwrf2WXfhtU16N55XKYRNxihZflzeV70/HsGY
+         Eu/O1MYNXZosL50iYIwuJhFsWALKndsETOfJD8yylpIFkkXCe6mq9R9MYLC+PFJ0phFM
+         WA0Q==
+X-Gm-Message-State: ACrzQf34yzous0SZJ6Xnq5GJg9hbJAnuSTvj/hN+8X21Xo78oXXTRlEP
+        2nIdAgfllV0v++DKeRki9lU=
+X-Google-Smtp-Source: AMsMyM6ba0wSuF2CCXasqSH9WNielBVfIgSUnXbH9P8fY79O3NNNAwzoo44S68zY92KPhYqWU9DcAw==
+X-Received: by 2002:a17:90b:1d07:b0:203:6732:e280 with SMTP id on7-20020a17090b1d0700b002036732e280mr22173931pjb.172.1663959244879;
+        Fri, 23 Sep 2022 11:54:04 -0700 (PDT)
+Received: from localhost.localdomain ([115.99.115.48])
+        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b00176b3d7db49sm6490497plh.0.2022.09.23.11.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Sep 2022 11:54:04 -0700 (PDT)
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+To:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
- <20220921114624.3250848-1-linux@rasmusvillemoes.dk>
- <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
- <8cb2bac1-3a03-09a1-c071-96ca4a95fa44@roeck-us.net>
- <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <62a262a1-b945-ad4f-fdb8-d05fcba882d3@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        devicetree@vger.kernel.org, jagathjog1996@gmail.com
+Subject: [PATCH v3 0/2] rtc: max31329: add support for Maxim max31329 RTC
+Date:   Sat, 24 Sep 2022 00:23:56 +0530
+Message-Id: <20220923185358.11023-1-jagathjog1996@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,30 +65,43 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 9/23/22 01:40, Rasmus Villemoes wrote:
-> On 21/09/2022 16.13, Guenter Roeck wrote:
->> On 9/21/22 04:46, Rasmus Villemoes wrote:
-> 
->>> +static int isl12022_hwmon_read(struct device *dev,
->>> +                   enum hwmon_sensor_types type,
->>> +                   u32 attr, int channel, long *val)
->>> +{
->>> +    if (type == hwmon_chip && attr == hwmon_chip_update_interval) {
->>> +        *val = 60000;
->>> +        return 0;
->>> +    }
->>
->> It is not the purpose of the update_interval attribute to inform the
->> user what the update interval of this chip happens to be. The purpose
->> of the attribute is to inform the chip what update interval it should use.
-> 
-> Well, I think it's a completely natural thing to expose a fixed and
-> known update_interval as a 0444 property, and it might even be useful to
-> userspace to know that there's no point reading the sensor any more
-> often than that. And I didn't come up with this by myself, there's
-> already at least a couple of instances of a 0444 update_interval.
-> 
+Add driver and device tree bindings support for Maxim max31329 real
+time clock.
 
-That doesn't make it better. It is still an abuse of the ABI.
+Changes since v2.
+1. Removed log messages from error cases.
+2. Removed OSF check from _read_alarm(), _set_alarm(), _set_time().
+3. Removed CLKOUT pin initialization in probe() since it is configurable
+   during runtime.
+4. Configure wakeup support when interrupt is successfully configured
+   or if the 'wakeup-source' parameter present in DT.
+5. Added check for 'years' in _set_alarm so that it doesn't' cross current
+   century.
 
-Guenter
+Changes since v1.
+1. Move 'allOf' after 'maintainers' in DT.
+2. Add 'wakeup-source' into device tree bindings.
+3. Add wakeup support depending on the 'wakeup-source' parameter from DT. 
+4. Remove unused 'dev' member from device private data structure.
+5. Use '__maybe_unused' attribute for of_device_id table.
+6. Initialize local variable 'events' to 0 in interrupt handler.
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+7. Add Reviewed-by tag for device tree bindings.
+
+Jagath Jog J (2):
+  dt-bindings: rtc: add Maxim max31329 rtc device tree bindings
+  rtc: max31329: Add Maxim max31329 real time clock
+
+ .../bindings/rtc/maxim,max31329.yaml          |  61 +++
+ MAINTAINERS                                   |   7 +
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-max31329.c                    | 507 ++++++++++++++++++
+ 5 files changed, 586 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/maxim,max31329.yaml
+ create mode 100644 drivers/rtc/rtc-max31329.c
+
+-- 
+2.17.1
+
