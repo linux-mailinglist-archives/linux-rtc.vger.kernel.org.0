@@ -2,59 +2,60 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B142D5F3DCB
-	for <lists+linux-rtc@lfdr.de>; Tue,  4 Oct 2022 10:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFDD5F3DCD
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Oct 2022 10:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJDIIs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 4 Oct 2022 04:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S229959AbiJDIIt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 4 Oct 2022 04:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiJDIIi (ORCPT
+        with ESMTP id S229967AbiJDIIi (ORCPT
         <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Oct 2022 04:08:38 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA01B45F40
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DD046616
         for <linux-rtc@vger.kernel.org>; Tue,  4 Oct 2022 01:08:35 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id ay7-20020a05600c1e0700b003b49861bf48so488080wmb.0
+Received: by mail-wm1-x329.google.com with SMTP id e18so8377107wmq.3
         for <linux-rtc@vger.kernel.org>; Tue, 04 Oct 2022 01:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=ERxwEO8S5KqgbZntEyE4toOX6bTMC2xS+dmaphaUMKA=;
-        b=unqTmhZy8A+HDJaKdtS9xNPbiRKpxZ/qyJVjtzF+pammk/F5+/kfUAzats0+OEo3gU
-         OO7KTF/SuFRod0+m+UCJUD4MUuyweTseK+L68JoSJJsJA/KuG7IzU8sWIlnTkcU21pPc
-         R2WS1MknyWd7fgNvRUQ3dSFYPe+pITQ2cjjps39nUcG8ppr7+R2xhNdaSw2NyDf1CHgt
-         Sld5iW/7jYP06PcR8GxwfSs1fc70v8ujr2wMFDffshU7/rCHZb5rtiu1wKh0xcOJJs91
-         /d4zcZw9svfAA7RNhdkLfw4A3TxckzSiex1iORCM+gKYTjidxK75EIp2XGEZ7XS0T3Hc
-         wvbw==
+        bh=FGkwToaEY2/oWxxoPFSmgbzFTRsRAd3NEFRgk9zoGZE=;
+        b=APG/eZ6CUVX2MDUjQXHEG18l1HVsNHWeyRsWKHjW4lIGCXsTCw3vj8DW8a70ZAa8qO
+         3ChKndlanZfZtlZ3qA3oOvB0LbhhWfQPDnQlH0UsCE2bLxw76Q1ZQOdC6H3LbWf916en
+         qm/2B5HtKgFXlAIyhwv6ojU7NyRVI2EXppvVWfDy7jJw/d5I5ClvPUzDA1jsvxzrbKj8
+         SZ+KI3nG8sZG2ceDR0vDsUBirlIzz2+VjwdtM+ar2UebOP9iYXSFrHuTmkTnDTErjxUu
+         1JLm0iTKNRY8SMWVnol7S/HrVQYF+ixyDBcNeuvIOX3ayUsB8DNSdOA4e86OjMLhVUge
+         l3KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=ERxwEO8S5KqgbZntEyE4toOX6bTMC2xS+dmaphaUMKA=;
-        b=bqokBz0GlTdMuvmwEASqRS33RK6m8r7dXuMxiAIppQFz5pOABgPHPrwigRQLbH2Vj/
-         7H6XLgEjMJQ767/h6uV2K40hwfQAPVCQVl/T6oSmIBubUIeVTGXsbsooJw+u10gOKRSZ
-         ZmYbc6y0lKUDEy0bBbwTniVz/meGcS3X4YCqjqAaa9uISlxJwxU/39g1BEz6dnXXWBy+
-         t/dryEW7oCbV9WsnsyYXmy2KFVeJW6uS4UGk/1QV4CwaXfP+xySkRH5CZyrvubyjTqHO
-         0eIiaqNgGxZQMUjHisYwIbIDHjOgt/Dz08XW6/5y6JraEJZjHVVsKezxz/dC8bG4D1At
-         Q9QQ==
-X-Gm-Message-State: ACrzQf3PjmYcD9DksFu9QDhe/jNVI4fXigCi7fvD9VsB+pFiHfSuLtc1
-        Z/IE+Pf5MmvZ1cI/nGZisHgwqg==
-X-Google-Smtp-Source: AMsMyM6aFDcSk++frPMO5CS7FqZcUSWmB3TRai5KAzNrnsiammXqMtCkG4/PaX3mc/O5UMVZ71r0gQ==
-X-Received: by 2002:a05:600c:3781:b0:3a6:804a:afc with SMTP id o1-20020a05600c378100b003a6804a0afcmr9181043wmr.27.1664870914251;
-        Tue, 04 Oct 2022 01:08:34 -0700 (PDT)
+        bh=FGkwToaEY2/oWxxoPFSmgbzFTRsRAd3NEFRgk9zoGZE=;
+        b=Qp5a8BynxftP5qJVjJP0mDLHJI8MYTe8Ot1fS+RW9s9kESJ4Rk9Q21gNlkO3PSl20I
+         Aw7xT3X7h1Va92VpltN14ZyXbSNqet7T2H6x8SxdkOTPD4DyW4m5BBQJC+qRQqI+SakT
+         ptzy46u7+qlAYvE0ZJOCk84l6bZS5Qcgmw9Mfbw4uqxdnrczBKizf0JXwpOOelU/j8S2
+         C06wryTy5tGemd5NjvaJHYzToz5KhkSmUuGHOh1l1vW9/SQmItNkVnX70g7scuuSlzkZ
+         yNtfFIFsApynQb/SvY1gpxzfbK9uo/1nPfkkPJvnJWRDLCS2lI76gT0LB5SEyNYIRK3T
+         t0LA==
+X-Gm-Message-State: ACrzQf2SyXAyqS2Hk2zezDfXhEtq+prbIoQ4YSakRYUvDKYdUJzdOD+A
+        yjZc7Xpv+vLQ1K3kYqFh0eW30w==
+X-Google-Smtp-Source: AMsMyM6NRV3/N5v2bN20Kv0/bQJ1IPPY0qQ6BbXOkruyXpdbZKMuMgM2d5S4Hx/sDp/QC0jD542lig==
+X-Received: by 2002:a7b:c389:0:b0:3b4:a67a:2ef7 with SMTP id s9-20020a7bc389000000b003b4a67a2ef7mr9250243wmj.180.1664870915410;
+        Tue, 04 Oct 2022 01:08:35 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.33
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 01:08:33 -0700 (PDT)
+        Tue, 04 Oct 2022 01:08:34 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 04 Oct 2022 08:08:25 +0000
-Subject: [PATCH v2 09/11] rtc: pm8xxx: drop unused pm8018 compatible
+Date:   Tue, 04 Oct 2022 08:08:26 +0000
+Subject: [PATCH v2 10/11] arm: dts: qcom: mdm9615: remove invalid interrupt-names from
+ pl18x mmc nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-9-87fbeb4ae053@linaro.org>
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-10-87fbeb4ae053@linaro.org>
 References: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -84,23 +85,30 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The PM8921 compatible is used as fallback when PM8018 is available,
-then remove the PM8018 compatible.
+This solves the 'interrupt-names' was unexpected dtbs check error.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-index dc6d1476baa5..716e5d9ad74d 100644
---- a/drivers/rtc/rtc-pm8xxx.c
-+++ b/drivers/rtc/rtc-pm8xxx.c
-@@ -461,7 +461,6 @@ static const struct pm8xxx_rtc_regs pmk8350_regs = {
-  */
- static const struct of_device_id pm8xxx_id_table[] = {
- 	{ .compatible = "qcom,pm8921-rtc", .data = &pm8921_regs },
--	{ .compatible = "qcom,pm8018-rtc", .data = &pm8921_regs },
- 	{ .compatible = "qcom,pm8058-rtc", .data = &pm8058_regs },
- 	{ .compatible = "qcom,pm8941-rtc", .data = &pm8941_regs },
- 	{ .compatible = "qcom,pmk8350-rtc", .data = &pmk8350_regs },
+diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+index 366241dee522..9d950f96280d 100644
+--- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
++++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+@@ -325,7 +325,6 @@ sdcc1: mmc@12180000 {
+ 				arm,primecell-periphid = <0x00051180>;
+ 				reg = <0x12180000 0x2000>;
+ 				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
+-				interrupt-names = "cmd_irq";
+ 				clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
+ 				clock-names = "mclk", "apb_pclk";
+ 				bus-width = <8>;
+@@ -345,7 +344,6 @@ sdcc2: mmc@12140000 {
+ 				status = "disabled";
+ 				reg = <0x12140000 0x2000>;
+ 				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
+-				interrupt-names = "cmd_irq";
+ 				clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
+ 				clock-names = "mclk", "apb_pclk";
+ 				bus-width = <4>;
 
 -- 
 b4 0.10.0
