@@ -2,67 +2,158 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F2B5F3750
-	for <lists+linux-rtc@lfdr.de>; Mon,  3 Oct 2022 22:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D41E5F3DAA
+	for <lists+linux-rtc@lfdr.de>; Tue,  4 Oct 2022 10:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbiJCUsj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 3 Oct 2022 16:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
+        id S229805AbiJDII3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 4 Oct 2022 04:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiJCUsV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 3 Oct 2022 16:48:21 -0400
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7829A4C629;
-        Mon,  3 Oct 2022 13:48:01 -0700 (PDT)
-Message-ID: <1a9f797c-e11f-a60b-8b3f-9e229c17fe64@gentoo.org>
-Date:   Mon, 3 Oct 2022 16:47:56 -0400
+        with ESMTP id S229532AbiJDII1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 4 Oct 2022 04:08:27 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA572CDE2
+        for <linux-rtc@vger.kernel.org>; Tue,  4 Oct 2022 01:08:25 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id bu30so183347wrb.8
+        for <linux-rtc@vger.kernel.org>; Tue, 04 Oct 2022 01:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date;
+        bh=/dCo2x1GJGO6lcsdYgfVE3C0ko4+taeASe5EAnmSl7Y=;
+        b=xNwadZ2h2MHBiX/y6D1x01Qwk/JxsJbGmTP7PcfsSaiQk6yS/g7Q/A2hGgAwuRnKVh
+         4KLY/UyTOx7Ce7gi1HFy5j9u7o77h4Ijb7O2f2cQwWDmThsX/mNDLh0/2OZDEdeCTej4
+         T+jKQoBglw2x1pQsC4BwLDWSq2a82KE8KQmnXxstr4Q7KNYnE32ZqPbX+DAadVCaS2Ws
+         dMEITYYAfswMHJj5wJVyR0RJDfVvIS2ue7cjQjhG+3S0IpuvphReBkMzzB/12hvWHVXn
+         TVLuvHsCQo+mFgHrhibGEOQMemQeoNr16mWqg70nRTrRH9QoFpYnZuKLBy5sWafTdsjY
+         rrkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date;
+        bh=/dCo2x1GJGO6lcsdYgfVE3C0ko4+taeASe5EAnmSl7Y=;
+        b=jwmI4gWfSWWYUnFCVlz8oAm4GtIBMIEwf+hQcN3VjPZfDL92kRvf9Er5HNoUsAbh+w
+         3NNi8wsm2MFNZ8GKZLN3a291IjIrJe7Er4HOnS1Usgnonstz9PfystsNJ9yhWndzJzEq
+         d/2zYTe2f+VM4rGX+hDLVSof+ENYdzfbUVeT+PtL+nQIyOg1xqijV8brKQk7S6wUGEw9
+         JbThiAhMWned4FZEdwlx/UNJSWu5EX/7nde2ia+M4yOzT3BJXNBcdrp19nTVQRu6tbnm
+         6AFUFkp/xRYk+FjgiHYBHsDSaYFB6QqYNo8YnstlO8K1ZfXuvMFUeueEzPglcvHcP320
+         6buw==
+X-Gm-Message-State: ACrzQf0Xln4xznZkcYL6TZGh5ITVo3JYlrrbBo4N3KV0oRW9Ujd/Y4Me
+        CxnfpY7k6dnunT7yPaO2fn2rKA==
+X-Google-Smtp-Source: AMsMyM6Es/yTNo8XrErc7/e8f2DPBMVbSm6jt+YT4UcPFryEALZku1sLyh+siU2xAEWTOoHGqnWL3g==
+X-Received: by 2002:adf:ecc9:0:b0:22e:2e94:bdef with SMTP id s9-20020adfecc9000000b0022e2e94bdefmr8469844wro.689.1664870903597;
+        Tue, 04 Oct 2022 01:08:23 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id l2-20020a1c7902000000b003b33943ce5esm20228866wme.32.2022.10.04.01.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 01:08:23 -0700 (PDT)
+Subject: [PATCH v2 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.0
-Subject: Re: [PATCH] rtc: ds1685: Fix spelling of function name in comment
- block
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAPDpO2MC/4WNWwrCMBREt1Lut1eSqOnjy32IH3ncNoE2gdxalNK9G9yAX8MZODM7MJVIDEOzQ6
+ Etcsypgjo14IJJE2H0lUEJpUSvOlz80mt5Q78iu0CLwTG+iVFrf/XCOdu6FqptDRPaYpIL1U+vea5l
+ iLzm8vm9bbLG4//wJlGg1aQvpvWjpO4+x2RKPucywfM4ji/Xd/HXxAAAAA==
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 04 Oct 2022 08:08:16 +0000
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221003153711.271630-1-colin.i.king@gmail.com>
-From:   Joshua Kinard <kumba@gentoo.org>
-In-Reply-To: <20221003153711.271630-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-input@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-rtc@vger.kernel.org
+X-Mailer: b4 0.10.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/3/2022 11:37, Colin Ian King wrote:
-> The function name is missing the letter 'd' in the comment block.
-> Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/rtc/rtc-ds1685.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rtc/rtc-ds1685.c b/drivers/rtc/rtc-ds1685.c
-> index a24331ba8a5f..5db9c737c022 100644
-> --- a/drivers/rtc/rtc-ds1685.c
-> +++ b/drivers/rtc/rtc-ds1685.c
-> @@ -132,7 +132,7 @@ ds1685_rtc_bin2bcd(struct ds1685_priv *rtc, u8 val, u8 bin_mask, u8 bcd_mask)
->   }
->   
->   /**
-> - * s1685_rtc_check_mday - check validity of the day of month.
-> + * ds1685_rtc_check_mday - check validity of the day of month.
->    * @rtc: pointer to the ds1685 rtc structure.
->    * @mday: day of month.
->    *
+This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 
-Acked-by: Joshua Kinard <kumba@gentoo.org>
+This first round focuses on trivial changes, the remaining work will
+mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
 
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Lee Jones <lee@kernel.org>
+To: Satya Priya <quic_c_skakit@quicinc.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: linux-input@vger.kernel.org
+Cc: linux-rtc@vger.kernel.org
+Dependencies: None
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- patch 1: switch to move from swir.txt to qcom.yaml
+- patch 2: use MIT licence instead of X11 licence
+- patch 3: move reg after compatible
+- patch 4: added Krzysztof's review
+- patch 5: split into 5 changes:
+  - document qcom,pm8921 as fallback of qcom,pm8018
+  - convert qcom,pm8921-pwrkey to dt-schema
+  - document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+  - drop unused PM8018 compatible
+  - drop unused pm8018 RTC compatible
+- patch 6: None
+- patch 7: Reworded commit log based on Dmitry's wording on similar patches
+- Link to v1: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org
+
+---
+Neil Armstrong (11):
+      dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
+      arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
+      arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+      arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
+      dt-bindings: mfd: qcom-pm8xxx: document qcom,pm8921 as fallback of qcom,pm8018
+      dt-bindings: input: qcom,pm8921-pwrkey: convert to dt-schema
+      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
+      mfd: qcom-pm8xxx: drop unused PM8018 compatible
+      rtc: pm8xxx: drop unused pm8018 compatible
+      arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
+      arm: dts: qcom: mdm9615: remove useless amba subnode
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
+ Documentation/devicetree/bindings/arm/swir.txt     |  12 --
+ .../bindings/input/qcom,pm8921-pwrkey.yaml         |  77 +++++++++++++
+ .../bindings/input/qcom,pm8xxx-pwrkey.txt          |  46 --------
+ .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  45 +++++++-
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |  16 ++-
+ .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  39 +------
+ arch/arm/boot/dts/qcom-mdm9615.dtsi                | 121 +++++++--------------
+ drivers/mfd/qcom-pm8xxx.c                          |   1 -
+ drivers/rtc/rtc-pm8xxx.c                           |   1 -
+ 11 files changed, 173 insertions(+), 230 deletions(-)
+---
+base-commit: f76349cf41451c5c42a99f18a9163377e4b364ff
+change-id: 20220928-mdm9615-dt-schema-fixes-66d4d0ccb7c7
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
