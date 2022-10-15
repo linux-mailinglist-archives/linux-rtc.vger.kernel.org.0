@@ -2,128 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067865FF5E7
-	for <lists+linux-rtc@lfdr.de>; Sat, 15 Oct 2022 00:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F84F5FF7ED
+	for <lists+linux-rtc@lfdr.de>; Sat, 15 Oct 2022 03:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiJNWEc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 14 Oct 2022 18:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        id S229583AbiJOBow (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 14 Oct 2022 21:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiJNWEX (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Oct 2022 18:04:23 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1278176520;
-        Fri, 14 Oct 2022 15:04:21 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 18A7B240003;
-        Fri, 14 Oct 2022 22:04:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1665785060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=C9owIX0xWqA1XVKbswZj12TMV1FoncD3STWfIWlYGAQ=;
-        b=pGSOQk8zSt+BSo853hKDVV7Gs1fL/8aPpx/ENYQ/fV25zeP4unxYa6wbxGQBdwE10up46K
-        UGCNc407OBE9yWU0tiaV02kNgsdCPhfQfUEMfixvLbvB3tS0OTq0S64+Kq+rrtvCB/0iXd
-        Lm1KrHqcF2UeC3Lv5fyiWER5l79LHTOz2NhSUbR4lztDjMY2iCGAmXwZtl8gsKtwkGowAB
-        NLE/vgBdh4WfWEQWUUWHpywirEnAzJhOZh8acj8jOqAf6aMIHjEED7+67kqHR55F8WgbDG
-        CQCnIjkIGirtvAm9T/p0j9cp6Yc5Ar7SDedIL5QIpW8QSlVM1zpqtWpRwR/Pew==
-Date:   Sat, 15 Oct 2022 00:04:19 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 6.1
-Message-ID: <Y0nc49iertOPOB02@mail.local>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229716AbiJOBop (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 14 Oct 2022 21:44:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA3A63A2;
+        Fri, 14 Oct 2022 18:44:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0FB261CEE;
+        Sat, 15 Oct 2022 01:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 13BDEC43470;
+        Sat, 15 Oct 2022 01:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665798282;
+        bh=vVHGuInN0eBpbxhFFJ5OaIu1wSTQgv+E0/kGdeXq/VE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=std2aTyP7juiQ9HQORmBKwYdT1dVf3p/s8uezVkdU6b7OMQX3ifGVsfpkNfvDmRHT
+         ny4xY34a6TaCz1ev3hx52dW4RKIWXjZ3Gk4LwwX2AnlIBTLgKzWJmqJicG5IidKoSN
+         c20vMmhSpl4yNUKqXEUFMDV8wT2u7vBdXayQMuniBUCDxkNY+2ry8EQHqDm1yAzOO1
+         JYBrzxOVZ9pDwd5gjd8kHMTMBNr6LvphxBxajpl1ZYmWGBNNg8yX+zMI0qtwXRHOIw
+         QXJ67lT9igMzSAMwuHnGyBP+s/BxrLmAW0ouQ9EzKDn38BDIMW4MrmVnu3HXR5k1wU
+         aAc56IsHxuErQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00478E270EF;
+        Sat, 15 Oct 2022 01:44:42 +0000 (UTC)
+Subject: Re: [GIT PULL] RTC for 6.1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y0nc49iertOPOB02@mail.local>
+References: <Y0nc49iertOPOB02@mail.local>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y0nc49iertOPOB02@mail.local>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.1
+X-PR-Tracked-Commit-Id: e5f12a398371280649ccc9d6eb0b97fd42a5df98
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b7270c69a36efc61ed6ebd31a8a458f354a6edc0
+Message-Id: <166579828199.8004.8199192112539505205.pr-tracker-bot@kernel.org>
+Date:   Sat, 15 Oct 2022 01:44:41 +0000
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Linus,
+The pull request you sent on Sat, 15 Oct 2022 00:04:19 +0200:
 
-Here is the RTC subsystem pull request for 6.1. A great rework of the
-isl12022 driver makes up the bulk of the changes. There is also an
-important fix for CMOS and then the usual small fixes.
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.1
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b7270c69a36efc61ed6ebd31a8a458f354a6edc0
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.1
-
-for you to fetch changes up to e5f12a398371280649ccc9d6eb0b97fd42a5df98:
-
-  rtc: rv3028: Fix codestyle errors (2022-10-13 23:36:52 +0200)
-
-----------------------------------------------------------------
-RTC for 6.1
-
-Drivers:
- - switch to devm_clk_get_enabled() where relevant
- - cmos: event handler registration fix
- - isl12022: code improvements
-
-----------------------------------------------------------------
-Bryan Brattlof (2):
-      rtc: k3: wait until the unlock field is not zero
-      rtc: k3: detect SoC to determine erratum fix
-
-Christophe JAILLET (4):
-      rtc: mxc: Use devm_clk_get_enabled() helper
-      rtc: mpfs: Use devm_clk_get_enabled() helper
-      rtc: jz4740: Use devm_clk_get_enabled() helper
-      rtc: k3: Use devm_clk_get_enabled() helper
-
-Colin Ian King (1):
-      rtc: ds1685: Fix spelling of function name in comment block
-
-Emmanuel Gil Peyrot (1):
-      rtc: gamecube: Always reset HW_SRNPROT after read
-
-Geert Uytterhoeven (1):
-      rtc: mpfs: Remove printing of stray CR
-
-Ke Sun (1):
-      rtc: rv3028: Fix codestyle errors
-
-Lin Yujun (1):
-      rtc: stmp3xxx: Add failure handling for stmp3xxx_wdt_register()
-
-Rafael J. Wysocki (1):
-      rtc: cmos: Fix event handler registration ordering issue
-
-Rasmus Villemoes (8):
-      rtc: isl12022: stop using deprecated devm_rtc_device_register()
-      rtc: isl12022: specify range_min and range_max
-      rtc: isl12022: drop a dev_info()
-      rtc: isl12022: simplify some expressions
-      rtc: isl12022: use %ptR
-      rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
-      rtc: isl12022: drop redundant write to HR register
-      rtc: isl12022: switch to using regmap API
-
- drivers/rtc/Kconfig        |   1 +
- drivers/rtc/rtc-cmos.c     |  29 +++++---
- drivers/rtc/rtc-ds1685.c   |   2 +-
- drivers/rtc/rtc-gamecube.c |  11 ++--
- drivers/rtc/rtc-isl12022.c | 161 +++++++++++----------------------------------
- drivers/rtc/rtc-jz4740.c   |  25 +------
- drivers/rtc/rtc-mpfs.c     |  26 ++------
- drivers/rtc/rtc-mxc.c      |  27 +-------
- drivers/rtc/rtc-rv3028.c   |   5 +-
- drivers/rtc/rtc-stmp3xxx.c |   2 +
- drivers/rtc/rtc-ti-k3.c    |  56 ++++++----------
- 11 files changed, 98 insertions(+), 247 deletions(-)
+Thank you!
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
