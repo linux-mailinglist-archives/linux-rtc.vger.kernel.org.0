@@ -2,69 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF336016C2
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Oct 2022 20:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0AE6016D0
+	for <lists+linux-rtc@lfdr.de>; Mon, 17 Oct 2022 21:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJQS7E (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 17 Oct 2022 14:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        id S230030AbiJQTBc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 17 Oct 2022 15:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJQS7D (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Oct 2022 14:59:03 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0425A753BE;
-        Mon, 17 Oct 2022 11:59:03 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id g130so13144415oia.13;
-        Mon, 17 Oct 2022 11:59:02 -0700 (PDT)
+        with ESMTP id S229801AbiJQTBa (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Oct 2022 15:01:30 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF4E75CE9;
+        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id j188so13170118oih.4;
+        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/vV32roC8QGzARBYQiz3s/fUjLlQrlAPOTqGTgJcRG4=;
-        b=d1+yBoxs/xuM+ZIIbuSKyliYF8meQFOcpMd7axTtcV4+zfzUalszC9xSOA+tsieeaE
-         PgTFXdtX1AU6/Zq7lNgajV/TT8BMTEnm6YvJa5e/b5hlOOrj6SJC1Y4S/R4A0kZSSp+2
-         Y1sXpSXQhIov8DDQqS8GoxUs0APPxnS+dLHoQ9HbpD/FGTK/2Y76vKVv0Ps0ymoumsfT
-         WiGVur5jNvkUvyLpi/g5C/dtxOE1wQCRLFuG+/C2F+VSHm46qQmXnWY/MDE7vEgADacN
-         1p2d3YQpvfHuQMzo/zhr5rG9E93epfK9wTL9ZNLc9kPscxeYNP9aqnV6OKwd9acmd6sA
-         u/1A==
-X-Gm-Message-State: ACrzQf2jkQACdj2zc5AeiS+fj7LCvzh4OscCWUeyVn9DT01PnNXtwbBG
-        kabBHLt3MRgQCuo0OrphTA==
-X-Google-Smtp-Source: AMsMyM6m6CDm9Jv8erVCI2tz7eaLMcp3RE9hGAbUtR1C5H5Cl07JUE9GjF1ijTBqyJVp9cwZ6N0spA==
-X-Received: by 2002:a05:6808:11c7:b0:345:7251:7276 with SMTP id p7-20020a05680811c700b0034572517276mr5615625oiv.5.1666033142273;
-        Mon, 17 Oct 2022 11:59:02 -0700 (PDT)
+        bh=5ya5zQpirRV5VCRWYgpeGtu1wg4yHdKjk73OV+sKS9k=;
+        b=uperkPoUb75n6jgxVp8oQhP3XytA03h1Nc2wLxTjLG1OVR0pBRCUzq9CTPW31DTqI8
+         2AR33vTBOHPv5IfHOAmnIV82bplCEJLuP7wkNQcNBSbz7AyvhPU2TG+aUFMvVCJwEOAw
+         UZppRAyaLu9uXyW0CQWGDeOomMEcqzOgYd3IteCkmlH/yN4teP+rSwhwOFhONCOSlDfI
+         kSW4KxxVAKH80Vd/5Z5bEAMI0p+qXTiq2vBpIKO3z3QeO35oZzUG0Y6lQVmr0wHwTrcO
+         /n0sE10UYAjFbbAVqMPrz8BOYrtQy1G8bZKIJZ2ja3esE6t0m+JN9fIbGBMubaxiGhs8
+         oWug==
+X-Gm-Message-State: ACrzQf1FWuvANFsrmfneGEHs4Z3KiJ2cEVSchYWAnTYU+jpIFbTlWYNU
+        DxsMeXi6RWkz7smj8aOAlg==
+X-Google-Smtp-Source: AMsMyM4Aayqqo2DYURBYBzD94O+UlrAb3dm5pzADmv5cziN28DNd+CgXomsJGHtq631vJSS8FzfT8A==
+X-Received: by 2002:a05:6808:159b:b0:354:5def:1593 with SMTP id t27-20020a056808159b00b003545def1593mr5611896oiw.140.1666033286499;
+        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e18-20020a9d6e12000000b00661b46cc26bsm5028071otr.9.2022.10.17.11.59.01
+        by smtp.gmail.com with ESMTPSA id bj21-20020a056808199500b0035485b54caesm4703971oib.28.2022.10.17.12.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 11:59:01 -0700 (PDT)
-Received: (nullmailer pid 2281284 invoked by uid 1000);
-        Mon, 17 Oct 2022 18:59:02 -0000
-Date:   Mon, 17 Oct 2022 13:59:02 -0500
+        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
+Received: (nullmailer pid 2283860 invoked by uid 1000);
+        Mon, 17 Oct 2022 19:01:26 -0000
+Date:   Mon, 17 Oct 2022 14:01:26 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
         Satya Priya <quic_c_skakit@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-rtc@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 05/11] dt-bindings: mfd: qcom-pm8xxx: document
- qcom,pm8921 as fallback of qcom,pm8018
-Message-ID: <166603314201.2281230.8294091560079145147.robh@kernel.org>
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v3 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
+ to dt-schema
+Message-ID: <20221017190126.GA2281409-robh@kernel.org>
 References: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v3-5-531da552c354@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-5-531da552c354@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -75,14 +74,71 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, 17 Oct 2022 11:45:30 +0200, Neil Armstrong wrote:
-> The PM8018 is used as compatible with PM8921 on the MDM9615, document this situation,
-> and an example section to validate this change.
+On Mon, Oct 17, 2022 at 11:45:31AM +0200, Neil Armstrong wrote:
+> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
+> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 33 ++++++++++++++++++----
->  1 file changed, 28 insertions(+), 5 deletions(-)
+>  .../bindings/input/qcom,pm8921-pwrkey.yaml         | 75 ++++++++++++++++++++++
+>  .../bindings/input/qcom,pm8xxx-pwrkey.txt          | 46 -------------
+>  2 files changed, 75 insertions(+), 46 deletions(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
+> new file mode 100644
+> index 000000000000..9591f77aa22a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/qcom,pm8921-pwrkey.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PM8921 PMIC Power Key
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +allOf:
+> +  - $ref: input.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - enum:
+> +          - qcom,pm8921-pwrkey
+> +          - qcom,pm8058-pwrkey
+> +      - items:
+> +          - enum:
+> +              - qcom,pm8018-pwrkey
+> +          - const: qcom,pm8921-pwrkey
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: key release
+> +      - description: key press
+> +
+> +  debounce:
+> +    description: |
+> +          Time in microseconds that key must be pressed or
+> +          released for state change interrupt to trigger.
+
+Don't need '|' and use standard indentation of 2 chars.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pull-up:
+> +    description: |
+> +           Presence of this property indicates that the KPDPWR_N
+> +           pin should be configured for pull up.
+
+Ditto.
+
+With that,
 
 Reviewed-by: Rob Herring <robh@kernel.org>
