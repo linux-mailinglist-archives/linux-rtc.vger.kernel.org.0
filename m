@@ -2,79 +2,91 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0AE6016D0
-	for <lists+linux-rtc@lfdr.de>; Mon, 17 Oct 2022 21:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E16F601C2C
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Oct 2022 00:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJQTBc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 17 Oct 2022 15:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S229829AbiJQWQ7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 17 Oct 2022 18:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiJQTBa (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Oct 2022 15:01:30 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF4E75CE9;
-        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id j188so13170118oih.4;
-        Mon, 17 Oct 2022 12:01:27 -0700 (PDT)
+        with ESMTP id S229453AbiJQWQ7 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 17 Oct 2022 18:16:59 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0EB36086
+        for <linux-rtc@vger.kernel.org>; Mon, 17 Oct 2022 15:16:57 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id l19so8263992qvu.4
+        for <linux-rtc@vger.kernel.org>; Mon, 17 Oct 2022 15:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r3644dTc+xjbxoWj65g6Y7XO7ILLSKyb7UOk2axF9K8=;
+        b=mNfTQl74nV8DrNWtE/kV/FjKtcTOx6hrdQgoCRRNhjEy+/o7gccT28ch4Z6gwumO6Z
+         rjT5u/CbfympIrBze62SNAjaUbJofWeLhc1UXVsJleU78pdEopxE7ZXvEQRMnvIBVDQn
+         wPnfR44pg0hE6XDb7uBOXR7RMv8Id9iIX2ZPt2Tairl90JvJ0A3ZGGMNql9/LA/j35tZ
+         Zk0hk4wqzQViuB4Xlk3ra4vo4EcwhFZ/vNUbMSZq1X2nmpGfuJGJKYTH0YGdW552jUcE
+         VeWQBzZitfeviiamdddZ1kLYq4syn5ED2ASn/+5TwF1R9WEl6UfUNblT8jV3xUQSjlpb
+         MIqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5ya5zQpirRV5VCRWYgpeGtu1wg4yHdKjk73OV+sKS9k=;
-        b=uperkPoUb75n6jgxVp8oQhP3XytA03h1Nc2wLxTjLG1OVR0pBRCUzq9CTPW31DTqI8
-         2AR33vTBOHPv5IfHOAmnIV82bplCEJLuP7wkNQcNBSbz7AyvhPU2TG+aUFMvVCJwEOAw
-         UZppRAyaLu9uXyW0CQWGDeOomMEcqzOgYd3IteCkmlH/yN4teP+rSwhwOFhONCOSlDfI
-         kSW4KxxVAKH80Vd/5Z5bEAMI0p+qXTiq2vBpIKO3z3QeO35oZzUG0Y6lQVmr0wHwTrcO
-         /n0sE10UYAjFbbAVqMPrz8BOYrtQy1G8bZKIJZ2ja3esE6t0m+JN9fIbGBMubaxiGhs8
-         oWug==
-X-Gm-Message-State: ACrzQf1FWuvANFsrmfneGEHs4Z3KiJ2cEVSchYWAnTYU+jpIFbTlWYNU
-        DxsMeXi6RWkz7smj8aOAlg==
-X-Google-Smtp-Source: AMsMyM4Aayqqo2DYURBYBzD94O+UlrAb3dm5pzADmv5cziN28DNd+CgXomsJGHtq631vJSS8FzfT8A==
-X-Received: by 2002:a05:6808:159b:b0:354:5def:1593 with SMTP id t27-20020a056808159b00b003545def1593mr5611896oiw.140.1666033286499;
-        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bj21-20020a056808199500b0035485b54caesm4703971oib.28.2022.10.17.12.01.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 12:01:26 -0700 (PDT)
-Received: (nullmailer pid 2283860 invoked by uid 1000);
-        Mon, 17 Oct 2022 19:01:26 -0000
-Date:   Mon, 17 Oct 2022 14:01:26 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r3644dTc+xjbxoWj65g6Y7XO7ILLSKyb7UOk2axF9K8=;
+        b=m9DFPyW00UaF5i5COEYUY1UsbmTKGJxumBpGfItgyc/WFTr+durrwe1arI94YX7phs
+         AFlDFjpv/LAz3lfJWovwox7X3bQN0SgRdVLoXBzZZgCTw7fzZlHp2nxqJsG1EjjcLSi3
+         WqD5jZCnUpfb3kfNhJND6n9YunkhCe0bc2gYM79FivBWuIb+dDnurnQuEXVcTE6Pwj1D
+         7cH6BqSFn80QdIMLf1pXlqZPosoEJZffe9mQgPt7XLSjAjKK75CQKU/B/Rs/ejmaz2t0
+         nZ+ByMFzpGzpAino86AJ7QWkoG0Q9/SpxB5Q5oQF2dhp41Mm/rguJl/cXFpp70rRatE+
+         k7fQ==
+X-Gm-Message-State: ACrzQf1KEGxmW0evn0mPqG0tipLKJGVtnvZE9LVNTZMIHXXdH8APEwj9
+        5DR1vICOg85TpBQD056vljiwVQ==
+X-Google-Smtp-Source: AMsMyM4CNOpDBG9+P8Moi+VDJvnMwS7CB1bTaxx1UF16HMWKglFBszmtA4MFoHKybPaYMLLXvpEI5A==
+X-Received: by 2002:ad4:4eec:0:b0:4b1:9859:b74b with SMTP id dv12-20020ad44eec000000b004b19859b74bmr9952835qvb.102.1666045016795;
+        Mon, 17 Oct 2022 15:16:56 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05620a0f0b00b006ecfb2c86d3sm796673qkl.130.2022.10.17.15.16.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Oct 2022 15:16:56 -0700 (PDT)
+Message-ID: <df73124c-f06b-2762-4ea3-8fbeb48148ad@linaro.org>
+Date:   Mon, 17 Oct 2022 18:16:55 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
+ to dt-schema
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Satya Priya <quic_c_skakit@quicinc.com>,
         Lee Jones <lee@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-input@vger.kernel.org
-Subject: Re: [PATCH v3 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-Message-ID: <20221017190126.GA2281409-robh@kernel.org>
 References: <20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org>
  <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v3-6-531da552c354@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 11:45:31AM +0200, Neil Armstrong wrote:
+On 17/10/2022 05:45, Neil Armstrong wrote:
 > Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
 > the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
 > 
@@ -83,62 +95,11 @@ On Mon, Oct 17, 2022 at 11:45:31AM +0200, Neil Armstrong wrote:
 >  .../bindings/input/qcom,pm8921-pwrkey.yaml         | 75 ++++++++++++++++++++++
 >  .../bindings/input/qcom,pm8xxx-pwrkey.txt          | 46 -------------
 >  2 files changed, 75 insertions(+), 46 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
-> new file mode 100644
-> index 000000000000..9591f77aa22a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/qcom,pm8921-pwrkey.yaml
-> @@ -0,0 +1,75 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/qcom,pm8921-pwrkey.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PM8921 PMIC Power Key
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +allOf:
-> +  - $ref: input.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - qcom,pm8921-pwrkey
-> +          - qcom,pm8058-pwrkey
-> +      - items:
-> +          - enum:
-> +              - qcom,pm8018-pwrkey
-> +          - const: qcom,pm8921-pwrkey
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: key release
-> +      - description: key press
-> +
-> +  debounce:
-> +    description: |
-> +          Time in microseconds that key must be pressed or
-> +          released for state change interrupt to trigger.
 
-Don't need '|' and use standard indentation of 2 chars.
+Thanks for the changes.
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  pull-up:
-> +    description: |
-> +           Presence of this property indicates that the KPDPWR_N
-> +           pin should be configured for pull up.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Ditto.
+Best regards,
+Krzysztof
 
-With that,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
