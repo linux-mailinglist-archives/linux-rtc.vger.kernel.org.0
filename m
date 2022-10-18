@@ -2,113 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E8760331A
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Oct 2022 21:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7D8603404
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Oct 2022 22:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiJRTMV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 18 Oct 2022 15:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S229867AbiJRUfe (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 18 Oct 2022 16:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiJRTMN (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Oct 2022 15:12:13 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1628F269;
-        Tue, 18 Oct 2022 12:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666120316; x=1697656316;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=J5Axrfhz5/wL/Kf2l0pHtNIJ+g37kVIeODA4nBzqE+g=;
-  b=QHvhvn2A+AomiDvxOJuMnVIPcqY8flERNNNydkNBIUWUkrrb5ZcivdTR
-   puOw8dhjK49rrL2v93wmkTDJJKDqXWyL1BL7ka02LMXm1Yhip8rSlIdIQ
-   qrkRkxGSPMUxofde9XabRclI7yHXZ9p9MWX8a+JmLo6PRi5mvzawvsYZs
-   0gJ00V1qkwaq070+jDSD33Ov01AxH/M4w8k2+WE2Y6vpRgpgvMKLmzsxi
-   DSIHFRl0+T07x/yvDfbvA/6DBl7c+DTZ8mjOTX1Xj9Kx6DIfhcclogfyi
-   zefurnlbHmYdWkzTnKfR+wUcek7ziT994p3v+TKDcTVVuq27f8cfTeF/g
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="303824875"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="303824875"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 12:11:54 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="957941399"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="957941399"
-Received: from mhans-mobl3.amr.corp.intel.com ([10.209.54.123])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 12:11:52 -0700
-Message-ID: <7f905f62ab85c9728c56482896cfd9d6d970929e.camel@linux.intel.com>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     Len Brown <lenb@kernel.org>,
+        with ESMTP id S229610AbiJRUfd (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Oct 2022 16:35:33 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B32606BA;
+        Tue, 18 Oct 2022 13:35:31 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 855AF1C0003;
+        Tue, 18 Oct 2022 20:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666125330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PIy9OD3XsnKWzgyallw6AVoX1lAXsUoCaj2NoGGyRNk=;
+        b=Dz7W0DKsq3zEjR+RUQfAkGKVdnrq8hnyO54JiDwvmJ8Gze9H2m3598sIHMKGAEZfV/GFkJ
+        MXmbqOIi7Y5J7XGF0WF1sj+4zJtQYscf4aV3hw+9X1ZFezsf70GTIrRIo053noRnX8SByS
+        H+PsKvVQwhutNcSKCTvRgvLWXeMuTx7NQWXcC2js4F0HmiZDq4intWMTE3SVPXLyMhHoLE
+        o97R2rlHoR65G2naIV4DIov91OPSnl5cJFpkKOsuRyQAGmD7iL2UdGVotjdrfxJ7M3v9B8
+        54tFgCR6gGZOZmSwbrUIHn2qR0FGc3nAB8Do4KA7SXbRsQZo6BU3F3Ef1zWJKw==
+From:   alexandre.belloni@bootlin.com
+To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Date:   Tue, 18 Oct 2022 12:11:52 -0700
-In-Reply-To: <CAJvTdKnNM=bT9q=Ypv9FESBLSo0GOViRFn=SOUz_pYk3dFvBaQ@mail.gmail.com>
-References: <5887691.lOV4Wx5bFT@kreacher>
-         <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-         <CAJvTdKnNM=bT9q=Ypv9FESBLSo0GOViRFn=SOUz_pYk3dFvBaQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+Cc:     kernel test robot <lkp@intel.com>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rtc: cmos: fix build on non-ACPI platforms
+Date:   Tue, 18 Oct 2022 22:35:11 +0200
+Message-Id: <20221018203512.2532407-1-alexandre.belloni@bootlin.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2022-10-18 at 18:58 +0200, Len Brown wrote:
-> Works for me!
->=20
-> Tested-by: Len Brown <len.brown@intel.com>
->=20
-> On Tue, Oct 18, 2022 at 6:39 PM Alexandre Belloni
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Works for me too
+Now that rtc_wake_setup is called outside of cmos_wake_setup, it also need
+to be defined on non-ACPI platforms.
 
-Tested-by: Todd Brandt <todd.e.brandt@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-cmos.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> <alexandre.belloni@bootlin.com> wrote:
-> >=20
-> > On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >=20
-> > > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
-> > > ordering issue") overlooked the fact that cmos_do_probe()
-> > > depended
-> > > on the preparations carried out by cmos_wake_setup() and the wake
-> > > alarm stopped working after the ordering of them had been
-> > > changed.
-> > >=20
-> > > [...]
-> >=20
-> > Applied, thanks!
-> >=20
-> > [1/1] rtc: rtc-cmos: Fix wake alarm breakage
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit: 0782b66ed2fbb035dda76111df095451=
-5e417b24
-> >=20
-> > Best regards,
-> >=20
-> > --
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
->=20
->=20
->=20
+diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+index 01fb31f8e534..58cc2bae2f8a 100644
+--- a/drivers/rtc/rtc-cmos.c
++++ b/drivers/rtc/rtc-cmos.c
+@@ -1346,6 +1346,9 @@ static void cmos_check_acpi_rtc_status(struct device *dev,
+ {
+ }
+ 
++static void rtc_wake_setup(struct device *dev)
++{
++}
+ #endif
+ 
+ #ifdef	CONFIG_PNP
+-- 
+2.37.3
 
