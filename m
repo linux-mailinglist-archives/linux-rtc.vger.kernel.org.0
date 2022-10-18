@@ -2,54 +2,55 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B001160250E
-	for <lists+linux-rtc@lfdr.de>; Tue, 18 Oct 2022 09:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA5A602636
+	for <lists+linux-rtc@lfdr.de>; Tue, 18 Oct 2022 09:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJRHJz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 18 Oct 2022 03:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S230455AbiJRHyN (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 18 Oct 2022 03:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiJRHJt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Oct 2022 03:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EA0FAE6;
-        Tue, 18 Oct 2022 00:09:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05DB16148A;
-        Tue, 18 Oct 2022 07:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FD1C433D6;
-        Tue, 18 Oct 2022 07:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666076986;
-        bh=62JY3nEqhgUp3ZcdSeMtpc1uu5IEErz2whw8ZHrBvPU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=nRoTV+UInWMbUAm3sfWNUJCjUiSThNfWBFf1MgP+2JJGhf+LNPfWgby/T20qZLOd0
-         g+Xay5OZ2NVziVGkROaYlRCiykdSBeWsM4NM5bC0RncoD0ZjrSEiIznoC9Nr7W4Zkf
-         NyOEJqtFoyKpOPXtIG6O0d2hjUm/rUWLX+xQMwDIS9Bc3w8Hb5xH6BNkiykhoiiwxE
-         ThgVc8Oj/sGJF9Z7aqEzm+ZxYl+9CqqsQuKFpNYXNmiaNSLLq7omFY2GDfPer44LlQ
-         qvAoNNBUy4nGvhloCakXgrn8rwxkgPQa+IZ3jM5AYT58rykIkJ1+BPgIJjZDdaJi2B
-         C1ti9e8n1Cbsw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-rtc@vger.kernel.org,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION v6.1-rc1] rtc: cmos: rtcwake broken on NUC8i7HVK
-References: <87edv6mlow.fsf@kernel.org>
-        <b2be77b0-bafb-0519-33cb-359d83ded4d8@leemhuis.info>
-Date:   Tue, 18 Oct 2022 10:09:40 +0300
-In-Reply-To: <b2be77b0-bafb-0519-33cb-359d83ded4d8@leemhuis.info> (Thorsten
-        Leemhuis's message of "Tue, 18 Oct 2022 08:33:37 +0200")
-Message-ID: <87a65tmwuj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        with ESMTP id S230346AbiJRHxx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 18 Oct 2022 03:53:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B443172868
+        for <linux-rtc@vger.kernel.org>; Tue, 18 Oct 2022 00:53:51 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1okhQ4-0002Y1-Ol; Tue, 18 Oct 2022 09:53:48 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 743A4101675;
+        Tue, 18 Oct 2022 07:53:47 +0000 (UTC)
+Date:   Tue, 18 Oct 2022 09:53:45 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v2 0/2] rtc: rv8803 patches
+Message-ID: <20221018075345.gknzmdpxqqoxpcfo@pengutronix.de>
+References: <20220817085330.1050492-1-s.hauer@pengutronix.de>
+ <20220921131753.GP12909@pengutronix.de>
+ <YyseEdX9/xuyKGka@mail.local>
+ <20220921143557.GE986@pengutronix.de>
+ <952c4575-1acc-4cbd-4d64-1dc58c53ae99@pengutronix.de>
+ <20221006115346.d4q4y6rrfumqn7tz@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="65dklherpy5zamjj"
+Content-Disposition: inline
+In-Reply-To: <20221006115346.d4q4y6rrfumqn7tz@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,40 +58,89 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Thorsten Leemhuis <regressions@leemhuis.info> writes:
 
-> On 17.10.22 18:58, Kalle Valo wrote:
->> 
->> I upgraded my NUC8i7HVK test box to v6.1-rc1 and noticed that my suspend
->> tests with ath11k were broken, the box never woke up from suspend
->> automatically and I had to manually push the power button to trigger
->> resume. This is the command I used:
->> 
->> sudo rtcwake -m mem -s 30
->> 
->> v6.0 works without problems and a bisect found this commit:
->> 
->> commit 4919d3eb2ec0ee364f7e3cf2d99646c1b224fae8
->> Author:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> AuthorDate: Wed Oct 12 20:07:01 2022 +0200
->> Commit:     Alexandre Belloni <alexandre.belloni@bootlin.com>
->> CommitDate: Thu Oct 13 23:27:52 2022 +0200
->> 
->>     rtc: cmos: Fix event handler registration ordering issue
->
-> FWIW, Todd also reported this yesterday:
-> https://lore.kernel.org/all/967cfe4e2dba242352ccd1cd00bdbcfb48bdd697.camel@linux.intel.com/
-> https://bugzilla.kernel.org/show_bug.cgi?id=216600
->
-> And Zhang Rui provided a patch in bugzilla that should fix this.
+--65dklherpy5zamjj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, this is good info. Strangely enough Zhang's workaround in [1]
-did not fix the issue for me, rtcwake is still broken. Unfortunately no
-time right now to investigate further.
+Hello Alexandre,
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=216600#c3
+On 06.10.2022 13:53:46, Marc Kleine-Budde wrote:
+> Hi Alexandre,
+>=20
+> On 26.09.2022 11:23:13, Ahmad Fatoum wrote:
+> > Hello Alexandre,
+> > Hello Sascha,
+> >=20
+> > On 21.09.22 15:35, Sascha Hauer wrote:
+> > > On Wed, Sep 21, 2022 at 04:22:09PM +0200, Alexandre Belloni wrote:
+> > >> Hi,
+> > >>
+> > >> On 21/09/2022 15:17:53+0200, Sascha Hauer wrote:
+> > >>> Hi Alexandre,
+> > >>>
+> > >>> Any input to this series?
+> > >>
+> > >> I'm not convinced this is necessary. Having an invalid alarm doesn't
+> > >> mean that the time is invalid and that check will only ever happen at
+> > >> boot time whereas V2F is a reliable indication that the time is inva=
+lid.
+> > >>
+> > >> Have you really had an RTC with an invalid time that is not caught by
+> > >> rtc_valid_tm and with V2F not set?
+> > >=20
+> > > I don't know. I must talk to Ahmad in this regard, he'll be back next
+> > > week. It could be that we only created this patch to be sure the RTC
+> > > state is sane.
+> >=20
+> > The kernel message
+> >=20
+> >   rtc rtc0: invalid alarm value: 2020-3-27 7:82:0
+> >=20
+> > listed in the commit message is something I actually ran into. There
+> > was no v2f set then. The customer has also variously observed bit flips
+> > independently of v2f: During EMC testing, electrostatic discharge at de=
+veloper
+> > desks and even in the field: Suspected causes were lightning strikes in=
+ the
+> > vicinity and the switching of larger inductive loads.
+> > They're very paranoid of logging invalid timestamps, so we'll keep the =
+patch
+> > anyhow at our side, but I think it is generally useful as well: If we c=
+an't
+> > set an invalid alarm time by normal means, but read back an invalid tim=
+e,
+> > something may have corrupted other memory, so treating it as a v2f is s=
+ensible.
+>=20
+> Should we re-send the patch with an updated patch description, or do you
+> take it as is?
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+As v6.1-rc1 just came out, what about this patch?
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--65dklherpy5zamjj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNOW4YACgkQrX5LkNig
+013DjAgAodKm945SrHuB9ZogN1CSs+prCny7/DhR0lt7U6eoc0eSFMLn9Yew8wtj
+0uEHW3HN9T7EdCRCB8MoXx5ElTrCC7R0XunYMmkHx/ZXT2+l/GvGi7uemY9VZ9H+
+8c9QVDc0SHL+e8dj8vU+++Gu9HjX9Y3tpGu8Yx3DK+zTlPCYDq6FjjgoFOR1lpgC
+8WWcU8TW/LPI3W00Ng73Z+Zx65jwexlbEBnRIlpAiYg4MjvSvcoBauphl8rZrT+E
+bIMhvAd2PKm1DgaxHz+jeCfqwtW6hAhhYg6Non0R1RGPh74N96WaDlsoxPdU8U2n
+Yfbp8nuUK5kDss/Ay7nafXcuUnmhfA==
+=fRjm
+-----END PGP SIGNATURE-----
+
+--65dklherpy5zamjj--
