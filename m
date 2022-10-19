@@ -2,47 +2,45 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45088604BD5
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Oct 2022 17:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6E3604BDD
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Oct 2022 17:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbiJSPlZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Oct 2022 11:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S231566AbiJSPmU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Oct 2022 11:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiJSPks (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Oct 2022 11:40:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F27313F45;
-        Wed, 19 Oct 2022 08:37:00 -0700 (PDT)
+        with ESMTP id S232364AbiJSPlq (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Oct 2022 11:41:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C861D73DB;
+        Wed, 19 Oct 2022 08:37:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D37606174E;
-        Wed, 19 Oct 2022 15:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82153C433C1;
-        Wed, 19 Oct 2022 15:35:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFE80B8208E;
+        Wed, 19 Oct 2022 15:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5239C433C1;
+        Wed, 19 Oct 2022 15:36:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193734;
-        bh=MHcJ8HZS/GggNKwC2jalHkoMLUqykbU/CG1lvW3RYxA=;
+        s=k20201202; t=1666193796;
+        bh=TDF8oIAMEbi4CFvjgKI3qLPQ+Vabvk3nCCH3fyp15aE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rhrtsc13qr7/AFkhS/dIGyPDrMvL5k03JKgnF0xGg0fFD37OnaQsxW6QQ0P27Fuqp
-         N8/R4P6sSYxd529CDxuZ/CnKq8UHrNRYrT+I5X3Rc70J1efk8C6U3mV6Tqmz2MmHuB
-         yl6hdA10/PC0DDgWpdAXqvhuPFn+qOdo1ANcq53eV37W6VdMud7lKpz/+QNgMQhTlV
-         nWlznMR/yYYtCLaL8TJMKnt/Id1+DtMvcMfEyTJ680lkJlWM6QP3iPFBWWPq4VYVNX
-         dT30xgNmqzJjj8hP7e8edFTHbqLwMWo4zIPmWGq4WHkGsrU8vEQ+wkzHAHVgE7QAvX
-         QYMWT+LgkC5Ew==
+        b=cPxiRxJKjZ2K8MR+MgSruYrNZ0qKnTPjjy2ci9kg54tHTaFmXFkQ58o3qEpo2DVBq
+         H7WR5nVl5j/iUON1V3J+w8kNQaqHPqTNdNLsyi8+8G9nI2Nan3E01iGv7IVfeE0ud8
+         JGH/Bv9DOvI0ViVaMNiAvz+pwbpKiCxPxf2jBHO4lys1XUhVQlWMtbXGNZR5uQ54IL
+         rMFaf9YZlrSf0stNIPICtSbrIxhbMY7AmyKhcnF40Sn3XehWWj1MOU8kE5NOWCXYqK
+         U7WshuOQ+2gmSL5FW5FHmyVyF/SUomGo8GLAs1N165yo8rtmamU3BYP/73nlUP6mUo
+         lDCJLx28OatBg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: [PATCH 06/14] mfd: remove dm355evm_msp driver
-Date:   Wed, 19 Oct 2022 17:29:32 +0200
-Message-Id: <20221019152947.3857217-7-arnd@kernel.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org
+Subject: [PATCH 08/14] rtc: remove davinci rtc driver
+Date:   Wed, 19 Oct 2022 17:29:34 +0200
+Message-Id: <20221019152947.3857217-9-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
 References: <20221019152947.3857217-1-arnd@kernel.org>
@@ -59,1068 +57,568 @@ X-Mailing-List: linux-rtc@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The DaVinci DM355EVM platform is gone after the removal of all
-unused board files, so the MTD device along with its sub-devices
-can be removed as well.
+The Davinci dm365 SoC support was removed, so the rtc driver
+has no remaining users.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/input/misc/Kconfig         |  11 -
- drivers/input/misc/Makefile        |   1 -
- drivers/input/misc/dm355evm_keys.c | 238 ---------------
- drivers/mfd/Kconfig                |   8 -
- drivers/mfd/Makefile               |   1 -
- drivers/mfd/dm355evm_msp.c         | 454 -----------------------------
- drivers/rtc/Kconfig                |   6 -
- drivers/rtc/Makefile               |   1 -
- drivers/rtc/rtc-dm355evm.c         | 151 ----------
- include/linux/mfd/dm355evm_msp.h   |  79 -----
- 10 files changed, 950 deletions(-)
- delete mode 100644 drivers/input/misc/dm355evm_keys.c
- delete mode 100644 drivers/mfd/dm355evm_msp.c
- delete mode 100644 drivers/rtc/rtc-dm355evm.c
- delete mode 100644 include/linux/mfd/dm355evm_msp.h
+ drivers/rtc/Kconfig       |  10 -
+ drivers/rtc/Makefile      |   1 -
+ drivers/rtc/rtc-davinci.c | 512 --------------------------------------
+ 3 files changed, 523 deletions(-)
+ delete mode 100644 drivers/rtc/rtc-davinci.c
 
-diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-index 9f088900f863..540633b164d4 100644
---- a/drivers/input/misc/Kconfig
-+++ b/drivers/input/misc/Kconfig
-@@ -662,17 +662,6 @@ config INPUT_DA9063_ONKEY
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called da9063_onkey.
+diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+index 35298c651730..ab9a1f814119 100644
+--- a/drivers/rtc/Kconfig
++++ b/drivers/rtc/Kconfig
+@@ -1345,16 +1345,6 @@ config RTC_DRV_ASM9260
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called rtc-asm9260.
  
--config INPUT_DM355EVM
--	tristate "TI DaVinci DM355 EVM Keypad and IR Remote"
--	depends on MFD_DM355EVM_MSP
--	select INPUT_SPARSEKMAP
+-config RTC_DRV_DAVINCI
+-	tristate "TI DaVinci RTC"
+-	depends on ARCH_DAVINCI_DM365 || COMPILE_TEST
 -	help
--	  Supports the pushbuttons and IR remote used with
--	  the DM355 EVM board.
+-	  If you say yes here you get support for the RTC on the
+-	  DaVinci platforms (DM365).
 -
--	  To compile this driver as a module, choose M here: the
--	  module will be called dm355evm_keys.
+-	  This driver can also be built as a module. If so, the module
+-	  will be called rtc-davinci.
 -
- config INPUT_WM831X_ON
- 	tristate "WM831X ON pin"
- 	depends on MFD_WM831X
-diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
-index 6abefc41037b..156f9c21f53b 100644
---- a/drivers/input/misc/Makefile
-+++ b/drivers/input/misc/Makefile
-@@ -31,7 +31,6 @@ obj-$(CONFIG_INPUT_DA7280_HAPTICS)	+= da7280.o
- obj-$(CONFIG_INPUT_DA9052_ONKEY)	+= da9052_onkey.o
- obj-$(CONFIG_INPUT_DA9055_ONKEY)	+= da9055_onkey.o
- obj-$(CONFIG_INPUT_DA9063_ONKEY)	+= da9063_onkey.o
--obj-$(CONFIG_INPUT_DM355EVM)		+= dm355evm_keys.o
- obj-$(CONFIG_INPUT_E3X0_BUTTON)		+= e3x0-button.o
- obj-$(CONFIG_INPUT_DRV260X_HAPTICS)	+= drv260x.o
- obj-$(CONFIG_INPUT_DRV2665_HAPTICS)	+= drv2665.o
-diff --git a/drivers/input/misc/dm355evm_keys.c b/drivers/input/misc/dm355evm_keys.c
+ config RTC_DRV_DIGICOLOR
+ 	tristate "Conexant Digicolor RTC"
+ 	depends on ARCH_DIGICOLOR || COMPILE_TEST
+diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
+index c2d474985919..d3c042dcbc73 100644
+--- a/drivers/rtc/Makefile
++++ b/drivers/rtc/Makefile
+@@ -44,7 +44,6 @@ obj-$(CONFIG_RTC_DRV_CROS_EC)	+= rtc-cros-ec.o
+ obj-$(CONFIG_RTC_DRV_DA9052)	+= rtc-da9052.o
+ obj-$(CONFIG_RTC_DRV_DA9055)	+= rtc-da9055.o
+ obj-$(CONFIG_RTC_DRV_DA9063)	+= rtc-da9063.o
+-obj-$(CONFIG_RTC_DRV_DAVINCI)	+= rtc-davinci.o
+ obj-$(CONFIG_RTC_DRV_DIGICOLOR)	+= rtc-digicolor.o
+ obj-$(CONFIG_RTC_DRV_DS1216)	+= rtc-ds1216.o
+ obj-$(CONFIG_RTC_DRV_DS1286)	+= rtc-ds1286.o
+diff --git a/drivers/rtc/rtc-davinci.c b/drivers/rtc/rtc-davinci.c
 deleted file mode 100644
-index 397ca7c787cc..000000000000
---- a/drivers/input/misc/dm355evm_keys.c
+index 6bef0f2353da..000000000000
+--- a/drivers/rtc/rtc-davinci.c
 +++ /dev/null
-@@ -1,238 +0,0 @@
+@@ -1,512 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
-- * dm355evm_keys.c - support buttons and IR remote on DM355 EVM board
+- * DaVinci Power Management and Real Time Clock Driver for TI platforms
 - *
-- * Copyright (c) 2008 by David Brownell
+- * Copyright (C) 2009 Texas Instruments, Inc
+- *
+- * Author: Miguel Aguilar <miguel.aguilar@ridgerun.com>
 - */
 -#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/input.h>
--#include <linux/input/sparse-keymap.h>
--#include <linux/platform_device.h>
--#include <linux/interrupt.h>
--
--#include <linux/mfd/dm355evm_msp.h>
--#include <linux/module.h>
--
--
--/*
-- * The MSP430 firmware on the DM355 EVM monitors on-board pushbuttons
-- * and an IR receptor used for the remote control.  When any key is
-- * pressed, or its autorepeat kicks in, an event is sent.  This driver
-- * read those events from the small (32 event) queue and reports them.
-- *
-- * Note that physically there can only be one of these devices.
-- *
-- * This driver was tested with firmware revision A4.
-- */
--struct dm355evm_keys {
--	struct input_dev	*input;
--	struct device		*dev;
--};
--
--/* These initial keycodes can be remapped */
--static const struct key_entry dm355evm_keys[] = {
--	/*
--	 * Pushbuttons on the EVM board ... note that the labels for these
--	 * are SW10/SW11/etc on the PC board.  The left/right orientation
--	 * comes only from the firmware's documentation, and presumes the
--	 * power connector is immediately in front of you and the IR sensor
--	 * is to the right.  (That is, rotate the board counter-clockwise
--	 * by 90 degrees from the SW10/etc and "DM355 EVM" labels.)
--	 */
--	{ KE_KEY, 0x00d8, { KEY_OK } },		/* SW12 */
--	{ KE_KEY, 0x00b8, { KEY_UP } },		/* SW13 */
--	{ KE_KEY, 0x00e8, { KEY_DOWN } },	/* SW11 */
--	{ KE_KEY, 0x0078, { KEY_LEFT } },	/* SW14 */
--	{ KE_KEY, 0x00f0, { KEY_RIGHT } },	/* SW10 */
--
--	/*
--	 * IR buttons ... codes assigned to match the universal remote
--	 * provided with the EVM (Philips PM4S) using DVD code 0020.
--	 *
--	 * These event codes match firmware documentation, but other
--	 * remote controls could easily send more RC5-encoded events.
--	 * The PM4S manual was used in several cases to help select
--	 * a keycode reflecting the intended usage.
--	 *
--	 * RC5 codes are 14 bits, with two start bits (0x3 prefix)
--	 * and a toggle bit (masked out below).
--	 */
--	{ KE_KEY, 0x300c, { KEY_POWER } },	/* NOTE: docs omit this */
--	{ KE_KEY, 0x3000, { KEY_NUMERIC_0 } },
--	{ KE_KEY, 0x3001, { KEY_NUMERIC_1 } },
--	{ KE_KEY, 0x3002, { KEY_NUMERIC_2 } },
--	{ KE_KEY, 0x3003, { KEY_NUMERIC_3 } },
--	{ KE_KEY, 0x3004, { KEY_NUMERIC_4 } },
--	{ KE_KEY, 0x3005, { KEY_NUMERIC_5 } },
--	{ KE_KEY, 0x3006, { KEY_NUMERIC_6 } },
--	{ KE_KEY, 0x3007, { KEY_NUMERIC_7 } },
--	{ KE_KEY, 0x3008, { KEY_NUMERIC_8 } },
--	{ KE_KEY, 0x3009, { KEY_NUMERIC_9 } },
--	{ KE_KEY, 0x3022, { KEY_ENTER } },
--	{ KE_KEY, 0x30ec, { KEY_MODE } },	/* "tv/vcr/..." */
--	{ KE_KEY, 0x300f, { KEY_SELECT } },	/* "info" */
--	{ KE_KEY, 0x3020, { KEY_CHANNELUP } },	/* "up" */
--	{ KE_KEY, 0x302e, { KEY_MENU } },	/* "in/out" */
--	{ KE_KEY, 0x3011, { KEY_VOLUMEDOWN } },	/* "left" */
--	{ KE_KEY, 0x300d, { KEY_MUTE } },	/* "ok" */
--	{ KE_KEY, 0x3010, { KEY_VOLUMEUP } },	/* "right" */
--	{ KE_KEY, 0x301e, { KEY_SUBTITLE } },	/* "cc" */
--	{ KE_KEY, 0x3021, { KEY_CHANNELDOWN } },/* "down" */
--	{ KE_KEY, 0x3022, { KEY_PREVIOUS } },
--	{ KE_KEY, 0x3026, { KEY_SLEEP } },
--	{ KE_KEY, 0x3172, { KEY_REWIND } },	/* NOTE: docs wrongly say 0x30ca */
--	{ KE_KEY, 0x3175, { KEY_PLAY } },
--	{ KE_KEY, 0x3174, { KEY_FASTFORWARD } },
--	{ KE_KEY, 0x3177, { KEY_RECORD } },
--	{ KE_KEY, 0x3176, { KEY_STOP } },
--	{ KE_KEY, 0x3169, { KEY_PAUSE } },
--};
--
--/*
-- * Because we communicate with the MSP430 using I2C, and all I2C calls
-- * in Linux sleep, we use a threaded IRQ handler.  The IRQ itself is
-- * active low, but we go through the GPIO controller so we can trigger
-- * on falling edges and not worry about enabling/disabling the IRQ in
-- * the keypress handling path.
-- */
--static irqreturn_t dm355evm_keys_irq(int irq, void *_keys)
--{
--	static u16 last_event;
--	struct dm355evm_keys *keys = _keys;
--	const struct key_entry *ke;
--	unsigned int keycode;
--	int status;
--	u16 event;
--
--	/* For simplicity we ignore INPUT_COUNT and just read
--	 * events until we get the "queue empty" indicator.
--	 * Reading INPUT_LOW decrements the count.
--	 */
--	for (;;) {
--		status = dm355evm_msp_read(DM355EVM_MSP_INPUT_HIGH);
--		if (status < 0) {
--			dev_dbg(keys->dev, "input high err %d\n",
--					status);
--			break;
--		}
--		event = status << 8;
--
--		status = dm355evm_msp_read(DM355EVM_MSP_INPUT_LOW);
--		if (status < 0) {
--			dev_dbg(keys->dev, "input low err %d\n",
--					status);
--			break;
--		}
--		event |= status;
--		if (event == 0xdead)
--			break;
--
--		/* Press and release a button:  two events, same code.
--		 * Press and hold (autorepeat), then release: N events
--		 * (N > 2), same code.  For RC5 buttons the toggle bits
--		 * distinguish (for example) "1-autorepeat" from "1 1";
--		 * but PCB buttons don't support that bit.
--		 *
--		 * So we must synthesize release events.  We do that by
--		 * mapping events to a press/release event pair; then
--		 * to avoid adding extra events, skip the second event
--		 * of each pair.
--		 */
--		if (event == last_event) {
--			last_event = 0;
--			continue;
--		}
--		last_event = event;
--
--		/* ignore the RC5 toggle bit */
--		event &= ~0x0800;
--
--		/* find the key, or report it as unknown */
--		ke = sparse_keymap_entry_from_scancode(keys->input, event);
--		keycode = ke ? ke->keycode : KEY_UNKNOWN;
--		dev_dbg(keys->dev,
--			"input event 0x%04x--> keycode %d\n",
--			event, keycode);
--
--		/* report press + release */
--		input_report_key(keys->input, keycode, 1);
--		input_sync(keys->input);
--		input_report_key(keys->input, keycode, 0);
--		input_sync(keys->input);
--	}
--
--	return IRQ_HANDLED;
--}
--
--/*----------------------------------------------------------------------*/
--
--static int dm355evm_keys_probe(struct platform_device *pdev)
--{
--	struct dm355evm_keys	*keys;
--	struct input_dev	*input;
--	int			irq;
--	int			error;
--
--	keys = devm_kzalloc(&pdev->dev, sizeof (*keys), GFP_KERNEL);
--	if (!keys)
--		return -ENOMEM;
--
--	input = devm_input_allocate_device(&pdev->dev);
--	if (!input)
--		return -ENOMEM;
--
--	keys->dev = &pdev->dev;
--	keys->input = input;
--
--	input->name = "DM355 EVM Controls";
--	input->phys = "dm355evm/input0";
--
--	input->id.bustype = BUS_I2C;
--	input->id.product = 0x0355;
--	input->id.version = dm355evm_msp_read(DM355EVM_MSP_FIRMREV);
--
--	error = sparse_keymap_setup(input, dm355evm_keys, NULL);
--	if (error)
--		return error;
--
--	/* REVISIT:  flush the event queue? */
--
--	/* set up "threaded IRQ handler" */
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
--
--	error = devm_request_threaded_irq(&pdev->dev, irq,
--					  NULL, dm355evm_keys_irq,
--					  IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
--					  dev_name(&pdev->dev), keys);
--	if (error)
--		return error;
--
--	/* register */
--	error = input_register_device(input);
--	if (error)
--		return error;
--
--	return 0;
--}
--
--/* REVISIT:  add suspend/resume when DaVinci supports it.  The IRQ should
-- * be able to wake up the system.  When device_may_wakeup(&pdev->dev), call
-- * enable_irq_wake() on suspend, and disable_irq_wake() on resume.
-- */
--
--/*
-- * I2C is used to talk to the MSP430, but this platform device is
-- * exposed by an MFD driver that manages I2C communications.
-- */
--static struct platform_driver dm355evm_keys_driver = {
--	.probe		= dm355evm_keys_probe,
--	.driver		= {
--		.name	= "dm355evm_keys",
--	},
--};
--module_platform_driver(dm355evm_keys_driver);
--
--MODULE_LICENSE("GPL");
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 11c3bd0bd669..31751cd3c4ed 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1439,14 +1439,6 @@ config MFD_TI_AM335X_TSCADC
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called ti_am335x_tscadc.
- 
--config MFD_DM355EVM_MSP
--	bool "TI DaVinci DM355 EVM microcontroller"
--	depends on I2C=y && MACH_DAVINCI_DM355_EVM
--	help
--	  This driver supports the MSP430 microcontroller used on these
--	  boards.  MSP430 firmware manages resets and power sequencing,
--	  inputs from buttons and the IR remote, LEDs, an RTC, and more.
--
- config MFD_LP3943
- 	tristate "TI/National Semiconductor LP3943 MFD Driver"
- 	depends on I2C
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index d74bf111f88e..a3a304f8c762 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -24,7 +24,6 @@ obj-$(CONFIG_MFD_TI_LP873X)	+= lp873x.o
- obj-$(CONFIG_MFD_TI_LP87565)	+= lp87565.o
- 
- obj-$(CONFIG_MFD_DAVINCI_VOICECODEC)	+= davinci_voicecodec.o
--obj-$(CONFIG_MFD_DM355EVM_MSP)	+= dm355evm_msp.o
- obj-$(CONFIG_MFD_TI_AM335X_TSCADC)	+= ti_am335x_tscadc.o
- 
- obj-$(CONFIG_MFD_STA2X11)	+= sta2x11-mfd.o
-diff --git a/drivers/mfd/dm355evm_msp.c b/drivers/mfd/dm355evm_msp.c
-deleted file mode 100644
-index 759c59690680..000000000000
---- a/drivers/mfd/dm355evm_msp.c
-+++ /dev/null
-@@ -1,454 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * dm355evm_msp.c - driver for MSP430 firmware on DM355EVM board
-- *
-- * Copyright (C) 2008 David Brownell
-- */
--
 -#include <linux/init.h>
--#include <linux/mutex.h>
--#include <linux/platform_device.h>
--#include <linux/clk.h>
 -#include <linux/module.h>
--#include <linux/err.h>
--#include <linux/gpio.h>
--#include <linux/gpio/machine.h>
--#include <linux/leds.h>
--#include <linux/i2c.h>
--#include <linux/mfd/dm355evm_msp.h>
--
--
--/*
-- * The DM355 is a DaVinci chip with video support but no C64+ DSP.  Its
-- * EVM board has an MSP430 programmed with firmware for various board
-- * support functions.  This driver exposes some of them directly, and
-- * supports other drivers (e.g. RTC, input) for more complex access.
-- *
-- * Because this firmware is entirely board-specific, this file embeds
-- * knowledge that would be passed as platform_data in a generic driver.
-- *
-- * This driver was tested with firmware revision A4.
-- */
--
--#if IS_ENABLED(CONFIG_INPUT_DM355EVM)
--#define msp_has_keyboard()	true
--#else
--#define msp_has_keyboard()	false
--#endif
--
--#if IS_ENABLED(CONFIG_LEDS_GPIO)
--#define msp_has_leds()		true
--#else
--#define msp_has_leds()		false
--#endif
--
--#if IS_ENABLED(CONFIG_RTC_DRV_DM355EVM)
--#define msp_has_rtc()		true
--#else
--#define msp_has_rtc()		false
--#endif
--
--#if IS_ENABLED(CONFIG_VIDEO_TVP514X)
--#define msp_has_tvp()		true
--#else
--#define msp_has_tvp()		false
--#endif
--
--
--/*----------------------------------------------------------------------*/
--
--/* REVISIT for paranoia's sake, retry reads/writes on error */
--
--static struct i2c_client *msp430;
--
--/**
-- * dm355evm_msp_write - Writes a register in dm355evm_msp
-- * @value: the value to be written
-- * @reg: register address
-- *
-- * Returns result of operation - 0 is success, else negative errno
-- */
--int dm355evm_msp_write(u8 value, u8 reg)
--{
--	return i2c_smbus_write_byte_data(msp430, reg, value);
--}
--EXPORT_SYMBOL(dm355evm_msp_write);
--
--/**
-- * dm355evm_msp_read - Reads a register from dm355evm_msp
-- * @reg: register address
-- *
-- * Returns result of operation - value, or negative errno
-- */
--int dm355evm_msp_read(u8 reg)
--{
--	return i2c_smbus_read_byte_data(msp430, reg);
--}
--EXPORT_SYMBOL(dm355evm_msp_read);
--
--/*----------------------------------------------------------------------*/
+-#include <linux/ioport.h>
+-#include <linux/delay.h>
+-#include <linux/spinlock.h>
+-#include <linux/rtc.h>
+-#include <linux/bcd.h>
+-#include <linux/platform_device.h>
+-#include <linux/io.h>
+-#include <linux/slab.h>
 -
 -/*
-- * Many of the msp430 pins are just used as fixed-direction GPIOs.
-- * We could export a few more of them this way, if we wanted.
+- * The DaVinci RTC is a simple RTC with the following
+- * Sec: 0 - 59 : BCD count
+- * Min: 0 - 59 : BCD count
+- * Hour: 0 - 23 : BCD count
+- * Day: 0 - 0x7FFF(32767) : Binary count ( Over 89 years )
 - */
--#define MSP_GPIO(bit, reg)	((DM355EVM_MSP_ ## reg) << 3 | (bit))
 -
--static const u8 msp_gpios[] = {
--	/* eight leds */
--	MSP_GPIO(0, LED), MSP_GPIO(1, LED),
--	MSP_GPIO(2, LED), MSP_GPIO(3, LED),
--	MSP_GPIO(4, LED), MSP_GPIO(5, LED),
--	MSP_GPIO(6, LED), MSP_GPIO(7, LED),
--	/* SW6 and the NTSC/nPAL jumper */
--	MSP_GPIO(0, SWITCH1), MSP_GPIO(1, SWITCH1),
--	MSP_GPIO(2, SWITCH1), MSP_GPIO(3, SWITCH1),
--	MSP_GPIO(4, SWITCH1),
--	/* switches on MMC/SD sockets */
--	/*
--	 * Note: EVMDM355_ECP_VA4.pdf suggests that Bit 2 and 4 should be
--	 * checked for card detection. However on the EVM bit 1 and 3 gives
--	 * this status, for 0 and 1 instance respectively. The pdf also
--	 * suggests that Bit 1 and 3 should be checked for write protection.
--	 * However on the EVM bit 2 and 4 gives this status,for 0 and 1
--	 * instance respectively.
--	 */
--	MSP_GPIO(2, SDMMC), MSP_GPIO(1, SDMMC),	/* mmc0 WP, nCD */
--	MSP_GPIO(4, SDMMC), MSP_GPIO(3, SDMMC),	/* mmc1 WP, nCD */
+-/* PRTC interface registers */
+-#define DAVINCI_PRTCIF_PID		0x00
+-#define PRTCIF_CTLR			0x04
+-#define PRTCIF_LDATA			0x08
+-#define PRTCIF_UDATA			0x0C
+-#define PRTCIF_INTEN			0x10
+-#define PRTCIF_INTFLG			0x14
+-
+-/* PRTCIF_CTLR bit fields */
+-#define PRTCIF_CTLR_BUSY		BIT(31)
+-#define PRTCIF_CTLR_SIZE		BIT(25)
+-#define PRTCIF_CTLR_DIR			BIT(24)
+-#define PRTCIF_CTLR_BENU_MSB		BIT(23)
+-#define PRTCIF_CTLR_BENU_3RD_BYTE	BIT(22)
+-#define PRTCIF_CTLR_BENU_2ND_BYTE	BIT(21)
+-#define PRTCIF_CTLR_BENU_LSB		BIT(20)
+-#define PRTCIF_CTLR_BENU_MASK		(0x00F00000)
+-#define PRTCIF_CTLR_BENL_MSB		BIT(19)
+-#define PRTCIF_CTLR_BENL_3RD_BYTE	BIT(18)
+-#define PRTCIF_CTLR_BENL_2ND_BYTE	BIT(17)
+-#define PRTCIF_CTLR_BENL_LSB		BIT(16)
+-#define PRTCIF_CTLR_BENL_MASK		(0x000F0000)
+-
+-/* PRTCIF_INTEN bit fields */
+-#define PRTCIF_INTEN_RTCSS		BIT(1)
+-#define PRTCIF_INTEN_RTCIF		BIT(0)
+-#define PRTCIF_INTEN_MASK		(PRTCIF_INTEN_RTCSS \
+-					| PRTCIF_INTEN_RTCIF)
+-
+-/* PRTCIF_INTFLG bit fields */
+-#define PRTCIF_INTFLG_RTCSS		BIT(1)
+-#define PRTCIF_INTFLG_RTCIF		BIT(0)
+-#define PRTCIF_INTFLG_MASK		(PRTCIF_INTFLG_RTCSS \
+-					| PRTCIF_INTFLG_RTCIF)
+-
+-/* PRTC subsystem registers */
+-#define PRTCSS_RTC_INTC_EXTENA1		(0x0C)
+-#define PRTCSS_RTC_CTRL			(0x10)
+-#define PRTCSS_RTC_WDT			(0x11)
+-#define PRTCSS_RTC_TMR0			(0x12)
+-#define PRTCSS_RTC_TMR1			(0x13)
+-#define PRTCSS_RTC_CCTRL		(0x14)
+-#define PRTCSS_RTC_SEC			(0x15)
+-#define PRTCSS_RTC_MIN			(0x16)
+-#define PRTCSS_RTC_HOUR			(0x17)
+-#define PRTCSS_RTC_DAY0			(0x18)
+-#define PRTCSS_RTC_DAY1			(0x19)
+-#define PRTCSS_RTC_AMIN			(0x1A)
+-#define PRTCSS_RTC_AHOUR		(0x1B)
+-#define PRTCSS_RTC_ADAY0		(0x1C)
+-#define PRTCSS_RTC_ADAY1		(0x1D)
+-#define PRTCSS_RTC_CLKC_CNT		(0x20)
+-
+-/* PRTCSS_RTC_INTC_EXTENA1 */
+-#define PRTCSS_RTC_INTC_EXTENA1_MASK	(0x07)
+-
+-/* PRTCSS_RTC_CTRL bit fields */
+-#define PRTCSS_RTC_CTRL_WDTBUS		BIT(7)
+-#define PRTCSS_RTC_CTRL_WEN		BIT(6)
+-#define PRTCSS_RTC_CTRL_WDRT		BIT(5)
+-#define PRTCSS_RTC_CTRL_WDTFLG		BIT(4)
+-#define PRTCSS_RTC_CTRL_TE		BIT(3)
+-#define PRTCSS_RTC_CTRL_TIEN		BIT(2)
+-#define PRTCSS_RTC_CTRL_TMRFLG		BIT(1)
+-#define PRTCSS_RTC_CTRL_TMMD		BIT(0)
+-
+-/* PRTCSS_RTC_CCTRL bit fields */
+-#define PRTCSS_RTC_CCTRL_CALBUSY	BIT(7)
+-#define PRTCSS_RTC_CCTRL_DAEN		BIT(5)
+-#define PRTCSS_RTC_CCTRL_HAEN		BIT(4)
+-#define PRTCSS_RTC_CCTRL_MAEN		BIT(3)
+-#define PRTCSS_RTC_CCTRL_ALMFLG		BIT(2)
+-#define PRTCSS_RTC_CCTRL_AIEN		BIT(1)
+-#define PRTCSS_RTC_CCTRL_CAEN		BIT(0)
+-
+-static DEFINE_SPINLOCK(davinci_rtc_lock);
+-
+-struct davinci_rtc {
+-	struct rtc_device		*rtc;
+-	void __iomem			*base;
+-	int				irq;
 -};
 -
--static struct gpio_led evm_leds[] = {
--	{ .name = "dm355evm::ds14",
--	  .default_trigger = "heartbeat", },
--	{ .name = "dm355evm::ds15",
--	  .default_trigger = "mmc0", },
--	{ .name = "dm355evm::ds16",
--	  /* could also be a CE-ATA drive */
--	  .default_trigger = "mmc1", },
--	{ .name = "dm355evm::ds17",
--	  .default_trigger = "nand-disk", },
--	{ .name = "dm355evm::ds18", },
--	{ .name = "dm355evm::ds19", },
--	{ .name = "dm355evm::ds20", },
--	{ .name = "dm355evm::ds21", },
--};
--
--static struct gpio_led_platform_data evm_led_data = {
--	.num_leds	= ARRAY_SIZE(evm_leds),
--	.leds		= evm_leds,
--};
--
--static struct gpiod_lookup_table evm_leds_gpio_table = {
--	.dev_id = "leds-gpio",
--	.table = {
--		/*
--		 * These GPIOs are on the dm355evm_msp
--		 * GPIO chip at index 0..7
--		 */
--		GPIO_LOOKUP_IDX("dm355evm_msp", 0, NULL,
--				0, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 1, NULL,
--				1, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 2, NULL,
--				2, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 3, NULL,
--				3, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 4, NULL,
--				4, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 5, NULL,
--				5, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 6, NULL,
--				6, GPIO_ACTIVE_LOW),
--		GPIO_LOOKUP_IDX("dm355evm_msp", 7, NULL,
--				7, GPIO_ACTIVE_LOW),
--		{ },
--	},
--};
--
--#define MSP_GPIO_REG(offset)	(msp_gpios[(offset)] >> 3)
--#define MSP_GPIO_MASK(offset)	BIT(msp_gpios[(offset)] & 0x07)
--
--static int msp_gpio_in(struct gpio_chip *chip, unsigned offset)
+-static inline void rtcif_write(struct davinci_rtc *davinci_rtc,
+-			       u32 val, u32 addr)
 -{
--	switch (MSP_GPIO_REG(offset)) {
--	case DM355EVM_MSP_SWITCH1:
--	case DM355EVM_MSP_SWITCH2:
--	case DM355EVM_MSP_SDMMC:
--		return 0;
--	default:
--		return -EINVAL;
--	}
+-	writel(val, davinci_rtc->base + addr);
 -}
 -
--static u8 msp_led_cache;
--
--static int msp_gpio_get(struct gpio_chip *chip, unsigned offset)
+-static inline u32 rtcif_read(struct davinci_rtc *davinci_rtc, u32 addr)
 -{
--	int reg, status;
--
--	reg = MSP_GPIO_REG(offset);
--	status = dm355evm_msp_read(reg);
--	if (status < 0)
--		return status;
--	if (reg == DM355EVM_MSP_LED)
--		msp_led_cache = status;
--	return !!(status & MSP_GPIO_MASK(offset));
+-	return readl(davinci_rtc->base + addr);
 -}
 -
--static int msp_gpio_out(struct gpio_chip *chip, unsigned offset, int value)
+-static inline void rtcif_wait(struct davinci_rtc *davinci_rtc)
 -{
--	int mask, bits;
--
--	/* NOTE:  there are some other signals that could be
--	 * packaged as output GPIOs, but they aren't as useful
--	 * as the LEDs ... so for now we don't.
--	 */
--	if (MSP_GPIO_REG(offset) != DM355EVM_MSP_LED)
--		return -EINVAL;
--
--	mask = MSP_GPIO_MASK(offset);
--	bits = msp_led_cache;
--
--	bits &= ~mask;
--	if (value)
--		bits |= mask;
--	msp_led_cache = bits;
--
--	return dm355evm_msp_write(bits, DM355EVM_MSP_LED);
+-	while (rtcif_read(davinci_rtc, PRTCIF_CTLR) & PRTCIF_CTLR_BUSY)
+-		cpu_relax();
 -}
 -
--static void msp_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
+-static inline void rtcss_write(struct davinci_rtc *davinci_rtc,
+-			       unsigned long val, u8 addr)
 -{
--	msp_gpio_out(chip, offset, value);
+-	rtcif_wait(davinci_rtc);
+-
+-	rtcif_write(davinci_rtc, PRTCIF_CTLR_BENL_LSB | addr, PRTCIF_CTLR);
+-	rtcif_write(davinci_rtc, val, PRTCIF_LDATA);
+-
+-	rtcif_wait(davinci_rtc);
 -}
 -
--static struct gpio_chip dm355evm_msp_gpio = {
--	.label			= "dm355evm_msp",
--	.owner			= THIS_MODULE,
--	.direction_input	= msp_gpio_in,
--	.get			= msp_gpio_get,
--	.direction_output	= msp_gpio_out,
--	.set			= msp_gpio_set,
--	.base			= -EINVAL,		/* dynamic assignment */
--	.ngpio			= ARRAY_SIZE(msp_gpios),
--	.can_sleep		= true,
--};
--
--/*----------------------------------------------------------------------*/
--
--static struct device *add_child(struct i2c_client *client, const char *name,
--		void *pdata, unsigned pdata_len,
--		bool can_wakeup, int irq)
+-static inline u8 rtcss_read(struct davinci_rtc *davinci_rtc, u8 addr)
 -{
--	struct platform_device	*pdev;
--	int			status;
+-	rtcif_wait(davinci_rtc);
 -
--	pdev = platform_device_alloc(name, -1);
--	if (!pdev)
--		return ERR_PTR(-ENOMEM);
+-	rtcif_write(davinci_rtc, PRTCIF_CTLR_DIR | PRTCIF_CTLR_BENL_LSB | addr,
+-		    PRTCIF_CTLR);
 -
--	device_init_wakeup(&pdev->dev, can_wakeup);
--	pdev->dev.parent = &client->dev;
+-	rtcif_wait(davinci_rtc);
 -
--	if (pdata) {
--		status = platform_device_add_data(pdev, pdata, pdata_len);
--		if (status < 0) {
--			dev_dbg(&pdev->dev, "can't add platform_data\n");
--			goto put_device;
+-	return rtcif_read(davinci_rtc, PRTCIF_LDATA);
+-}
+-
+-static inline void davinci_rtcss_calendar_wait(struct davinci_rtc *davinci_rtc)
+-{
+-	while (rtcss_read(davinci_rtc, PRTCSS_RTC_CCTRL) &
+-	       PRTCSS_RTC_CCTRL_CALBUSY)
+-		cpu_relax();
+-}
+-
+-static irqreturn_t davinci_rtc_interrupt(int irq, void *class_dev)
+-{
+-	struct davinci_rtc *davinci_rtc = class_dev;
+-	unsigned long events = 0;
+-	u32 irq_flg;
+-	u8 alm_irq, tmr_irq;
+-	u8 rtc_ctrl, rtc_cctrl;
+-	int ret = IRQ_NONE;
+-
+-	irq_flg = rtcif_read(davinci_rtc, PRTCIF_INTFLG) &
+-		  PRTCIF_INTFLG_RTCSS;
+-
+-	alm_irq = rtcss_read(davinci_rtc, PRTCSS_RTC_CCTRL) &
+-		  PRTCSS_RTC_CCTRL_ALMFLG;
+-
+-	tmr_irq = rtcss_read(davinci_rtc, PRTCSS_RTC_CTRL) &
+-		  PRTCSS_RTC_CTRL_TMRFLG;
+-
+-	if (irq_flg) {
+-		if (alm_irq) {
+-			events |= RTC_IRQF | RTC_AF;
+-			rtc_cctrl = rtcss_read(davinci_rtc, PRTCSS_RTC_CCTRL);
+-			rtc_cctrl |=  PRTCSS_RTC_CCTRL_ALMFLG;
+-			rtcss_write(davinci_rtc, rtc_cctrl, PRTCSS_RTC_CCTRL);
+-		} else if (tmr_irq) {
+-			events |= RTC_IRQF | RTC_PF;
+-			rtc_ctrl = rtcss_read(davinci_rtc, PRTCSS_RTC_CTRL);
+-			rtc_ctrl |=  PRTCSS_RTC_CTRL_TMRFLG;
+-			rtcss_write(davinci_rtc, rtc_ctrl, PRTCSS_RTC_CTRL);
 -		}
+-
+-		rtcif_write(davinci_rtc, PRTCIF_INTFLG_RTCSS,
+-				    PRTCIF_INTFLG);
+-		rtc_update_irq(davinci_rtc->rtc, 1, events);
+-
+-		ret = IRQ_HANDLED;
 -	}
 -
--	if (irq) {
--		struct resource r = {
--			.start = irq,
--			.flags = IORESOURCE_IRQ,
--		};
--
--		status = platform_device_add_resources(pdev, &r, 1);
--		if (status < 0) {
--			dev_dbg(&pdev->dev, "can't add irq\n");
--			goto put_device;
--		}
--	}
--
--	status = platform_device_add(pdev);
--	if (status)
--		goto put_device;
--
--	return &pdev->dev;
--
--put_device:
--	platform_device_put(pdev);
--	dev_err(&client->dev, "failed to add device %s\n", name);
--	return ERR_PTR(status);
--}
--
--static int add_children(struct i2c_client *client)
--{
--	static const struct {
--		int offset;
--		char *label;
--	} config_inputs[] = {
--		/* 8 == right after the LEDs */
--		{ 8 + 0, "sw6_1", },
--		{ 8 + 1, "sw6_2", },
--		{ 8 + 2, "sw6_3", },
--		{ 8 + 3, "sw6_4", },
--		{ 8 + 4, "NTSC/nPAL", },
--	};
--
--	struct device	*child;
--	int		status;
--	int		i;
--
--	/* GPIO-ish stuff */
--	dm355evm_msp_gpio.parent = &client->dev;
--	status = gpiochip_add_data(&dm355evm_msp_gpio, NULL);
--	if (status < 0)
--		return status;
--
--	/* LED output */
--	if (msp_has_leds()) {
--		gpiod_add_lookup_table(&evm_leds_gpio_table);
--		/* NOTE:  these are the only fully programmable LEDs
--		 * on the board, since GPIO-61/ds22 (and many signals
--		 * going to DC7) must be used for AEMIF address lines
--		 * unless the top 1 GB of NAND is unused...
--		 */
--		child = add_child(client, "leds-gpio",
--				&evm_led_data, sizeof(evm_led_data),
--				false, 0);
--		if (IS_ERR(child))
--			return PTR_ERR(child);
--	}
--
--	/* configuration inputs */
--	for (i = 0; i < ARRAY_SIZE(config_inputs); i++) {
--		int gpio = dm355evm_msp_gpio.base + config_inputs[i].offset;
--
--		gpio_request_one(gpio, GPIOF_IN, config_inputs[i].label);
--
--		/* make it easy for userspace to see these */
--		gpio_export(gpio, false);
--	}
--
--	/* MMC/SD inputs -- right after the last config input */
--	if (dev_get_platdata(&client->dev)) {
--		void (*mmcsd_setup)(unsigned) = dev_get_platdata(&client->dev);
--
--		mmcsd_setup(dm355evm_msp_gpio.base + 8 + 5);
--	}
--
--	/* RTC is a 32 bit counter, no alarm */
--	if (msp_has_rtc()) {
--		child = add_child(client, "rtc-dm355evm",
--				NULL, 0, false, 0);
--		if (IS_ERR(child))
--			return PTR_ERR(child);
--	}
--
--	/* input from buttons and IR remote (uses the IRQ) */
--	if (msp_has_keyboard()) {
--		child = add_child(client, "dm355evm_keys",
--				NULL, 0, true, client->irq);
--		if (IS_ERR(child))
--			return PTR_ERR(child);
--	}
--
--	return 0;
--}
--
--/*----------------------------------------------------------------------*/
--
--static void dm355evm_command(unsigned command)
--{
--	int status;
--
--	status = dm355evm_msp_write(command, DM355EVM_MSP_COMMAND);
--	if (status < 0)
--		dev_err(&msp430->dev, "command %d failure %d\n",
--				command, status);
--}
--
--static void dm355evm_power_off(void)
--{
--	dm355evm_command(MSP_COMMAND_POWEROFF);
--}
--
--static void dm355evm_msp_remove(struct i2c_client *client)
--{
--	pm_power_off = NULL;
--	msp430 = NULL;
+-	return ret;
 -}
 -
 -static int
--dm355evm_msp_probe(struct i2c_client *client, const struct i2c_device_id *id)
+-davinci_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
 -{
--	int		status;
--	const char	*video = msp_has_tvp() ? "TVP5146" : "imager";
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	u8 rtc_ctrl;
+-	unsigned long flags;
+-	int ret = 0;
 -
--	if (msp430)
--		return -EBUSY;
--	msp430 = client;
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
 -
--	/* display revision status; doubles as sanity check */
--	status = dm355evm_msp_read(DM355EVM_MSP_FIRMREV);
--	if (status < 0)
--		goto fail;
--	dev_info(&client->dev, "firmware v.%02X, %s as video-in\n",
--			status, video);
+-	rtc_ctrl = rtcss_read(davinci_rtc, PRTCSS_RTC_CTRL);
 -
--	/* mux video input:  either tvp5146 or some external imager */
--	status = dm355evm_msp_write(msp_has_tvp() ? 0 : MSP_VIDEO_IMAGER,
--			DM355EVM_MSP_VIDEO_IN);
--	if (status < 0)
--		dev_warn(&client->dev, "error %d muxing %s as video-in\n",
--			status, video);
+-	switch (cmd) {
+-	case RTC_WIE_ON:
+-		rtc_ctrl |= PRTCSS_RTC_CTRL_WEN | PRTCSS_RTC_CTRL_WDTFLG;
+-		break;
+-	case RTC_WIE_OFF:
+-		rtc_ctrl &= ~PRTCSS_RTC_CTRL_WEN;
+-		break;
+-	default:
+-		ret = -ENOIOCTLCMD;
+-	}
 -
--	/* init LED cache, and turn off the LEDs */
--	msp_led_cache = 0xff;
--	dm355evm_msp_write(msp_led_cache, DM355EVM_MSP_LED);
+-	rtcss_write(davinci_rtc, rtc_ctrl, PRTCSS_RTC_CTRL);
 -
--	/* export capabilities we support */
--	status = add_children(client);
--	if (status < 0)
--		goto fail;
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
 -
--	/* PM hookup */
--	pm_power_off = dm355evm_power_off;
--
--	return 0;
--
--fail:
--	/* FIXME remove children ... */
--	dm355evm_msp_remove(client);
--	return status;
+-	return ret;
 -}
 -
--static const struct i2c_device_id dm355evm_msp_ids[] = {
--	{ "dm355evm_msp", 0 },
--	{ /* end of list */ },
--};
--MODULE_DEVICE_TABLE(i2c, dm355evm_msp_ids);
--
--static struct i2c_driver dm355evm_msp_driver = {
--	.driver.name	= "dm355evm_msp",
--	.id_table	= dm355evm_msp_ids,
--	.probe		= dm355evm_msp_probe,
--	.remove		= dm355evm_msp_remove,
--};
--
--static int __init dm355evm_msp_init(void)
+-static void convertfromdays(u16 days, struct rtc_time *tm)
 -{
--	return i2c_add_driver(&dm355evm_msp_driver);
--}
--subsys_initcall(dm355evm_msp_init);
+-	int tmp_days, year, mon;
 -
--static void __exit dm355evm_msp_exit(void)
--{
--	i2c_del_driver(&dm355evm_msp_driver);
--}
--module_exit(dm355evm_msp_exit);
--
--MODULE_DESCRIPTION("Interface to MSP430 firmware on DM355EVM");
--MODULE_LICENSE("GPL");
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index bb63edb507da..35298c651730 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -540,12 +540,6 @@ config RTC_DRV_BQ32K
- 	  This driver can also be built as a module. If so, the module
- 	  will be called rtc-bq32k.
- 
--config RTC_DRV_DM355EVM
--	tristate "TI DaVinci DM355 EVM RTC"
--	depends on MFD_DM355EVM_MSP
--	help
--	  Supports the RTC firmware in the MSP430 on the DM355 EVM.
--
- config RTC_DRV_TWL92330
- 	bool "TI TWL92330/Menelaus"
- 	depends on MENELAUS
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index aab22bc63432..c2d474985919 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -46,7 +46,6 @@ obj-$(CONFIG_RTC_DRV_DA9055)	+= rtc-da9055.o
- obj-$(CONFIG_RTC_DRV_DA9063)	+= rtc-da9063.o
- obj-$(CONFIG_RTC_DRV_DAVINCI)	+= rtc-davinci.o
- obj-$(CONFIG_RTC_DRV_DIGICOLOR)	+= rtc-digicolor.o
--obj-$(CONFIG_RTC_DRV_DM355EVM)	+= rtc-dm355evm.o
- obj-$(CONFIG_RTC_DRV_DS1216)	+= rtc-ds1216.o
- obj-$(CONFIG_RTC_DRV_DS1286)	+= rtc-ds1286.o
- obj-$(CONFIG_RTC_DRV_DS1302)	+= rtc-ds1302.o
-diff --git a/drivers/rtc/rtc-dm355evm.c b/drivers/rtc/rtc-dm355evm.c
-deleted file mode 100644
-index 94fb16ac3e0f..000000000000
---- a/drivers/rtc/rtc-dm355evm.c
-+++ /dev/null
-@@ -1,151 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0+
--/*
-- * rtc-dm355evm.c - access battery-backed counter in MSP430 firmware
-- *
-- * Copyright (c) 2008 by David Brownell
-- */
--#include <linux/kernel.h>
--#include <linux/init.h>
--#include <linux/rtc.h>
--#include <linux/platform_device.h>
--
--#include <linux/mfd/dm355evm_msp.h>
--#include <linux/module.h>
--
--
--/*
-- * The MSP430 firmware on the DM355 EVM uses a watch crystal to feed
-- * a 1 Hz counter.  When a backup battery is supplied, that makes a
-- * reasonable RTC for applications where alarms and non-NTP drift
-- * compensation aren't important.
-- *
-- * The only real glitch is the inability to read or write all four
-- * counter bytes atomically:  the count may increment in the middle
-- * of an operation, causing trouble when the LSB rolls over.
-- *
-- * This driver was tested with firmware revision A4.
-- */
--union evm_time {
--	u8	bytes[4];
--	u32	value;
--};
--
--static int dm355evm_rtc_read_time(struct device *dev, struct rtc_time *tm)
--{
--	union evm_time	time;
--	int		status;
--	int		tries = 0;
--
--	do {
--		/*
--		 * Read LSB(0) to MSB(3) bytes.  Defend against the counter
--		 * rolling over by re-reading until the value is stable,
--		 * and assuming the four reads take at most a few seconds.
--		 */
--		status = dm355evm_msp_read(DM355EVM_MSP_RTC_0);
--		if (status < 0)
--			return status;
--		if (tries && time.bytes[0] == status)
+-	for (year = 2000;; year++) {
+-		tmp_days = rtc_year_days(1, 12, year);
+-		if (days >= tmp_days)
+-			days -= tmp_days;
+-		else {
+-			for (mon = 0;; mon++) {
+-				tmp_days = rtc_month_days(mon, year);
+-				if (days >= tmp_days) {
+-					days -= tmp_days;
+-				} else {
+-					tm->tm_year = year - 1900;
+-					tm->tm_mon = mon;
+-					tm->tm_mday = days + 1;
+-					break;
+-				}
+-			}
 -			break;
--		time.bytes[0] = status;
--
--		status = dm355evm_msp_read(DM355EVM_MSP_RTC_1);
--		if (status < 0)
--			return status;
--		if (tries && time.bytes[1] == status)
--			break;
--		time.bytes[1] = status;
--
--		status = dm355evm_msp_read(DM355EVM_MSP_RTC_2);
--		if (status < 0)
--			return status;
--		if (tries && time.bytes[2] == status)
--			break;
--		time.bytes[2] = status;
--
--		status = dm355evm_msp_read(DM355EVM_MSP_RTC_3);
--		if (status < 0)
--			return status;
--		if (tries && time.bytes[3] == status)
--			break;
--		time.bytes[3] = status;
--
--	} while (++tries < 5);
--
--	dev_dbg(dev, "read timestamp %08x\n", time.value);
--
--	rtc_time64_to_tm(le32_to_cpu(time.value), tm);
--	return 0;
+-		}
+-	}
 -}
 -
--static int dm355evm_rtc_set_time(struct device *dev, struct rtc_time *tm)
+-static void convert2days(u16 *days, struct rtc_time *tm)
 -{
--	union evm_time	time;
--	unsigned long	value;
--	int		status;
+-	int i;
+-	*days = 0;
 -
--	value = rtc_tm_to_time64(tm);
--	time.value = cpu_to_le32(value);
+-	for (i = 2000; i < 1900 + tm->tm_year; i++)
+-		*days += rtc_year_days(1, 12, i);
 -
--	dev_dbg(dev, "write timestamp %08x\n", time.value);
+-	*days += rtc_year_days(tm->tm_mday, tm->tm_mon, 1900 + tm->tm_year);
+-}
 -
--	/*
--	 * REVISIT handle non-atomic writes ... maybe just retry until
--	 * byte[1] sticks (no rollover)?
--	 */
--	status = dm355evm_msp_write(time.bytes[0], DM355EVM_MSP_RTC_0);
--	if (status < 0)
--		return status;
+-static int davinci_rtc_read_time(struct device *dev, struct rtc_time *tm)
+-{
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	u16 days = 0;
+-	u8 day0, day1;
+-	unsigned long flags;
 -
--	status = dm355evm_msp_write(time.bytes[1], DM355EVM_MSP_RTC_1);
--	if (status < 0)
--		return status;
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
 -
--	status = dm355evm_msp_write(time.bytes[2], DM355EVM_MSP_RTC_2);
--	if (status < 0)
--		return status;
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	tm->tm_sec = bcd2bin(rtcss_read(davinci_rtc, PRTCSS_RTC_SEC));
 -
--	status = dm355evm_msp_write(time.bytes[3], DM355EVM_MSP_RTC_3);
--	if (status < 0)
--		return status;
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	tm->tm_min = bcd2bin(rtcss_read(davinci_rtc, PRTCSS_RTC_MIN));
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	tm->tm_hour = bcd2bin(rtcss_read(davinci_rtc, PRTCSS_RTC_HOUR));
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	day0 = rtcss_read(davinci_rtc, PRTCSS_RTC_DAY0);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	day1 = rtcss_read(davinci_rtc, PRTCSS_RTC_DAY1);
+-
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
+-
+-	days |= day1;
+-	days <<= 8;
+-	days |= day0;
+-
+-	convertfromdays(days, tm);
 -
 -	return 0;
 -}
 -
--static const struct rtc_class_ops dm355evm_rtc_ops = {
--	.read_time	= dm355evm_rtc_read_time,
--	.set_time	= dm355evm_rtc_set_time,
--};
--
--/*----------------------------------------------------------------------*/
--
--static int dm355evm_rtc_probe(struct platform_device *pdev)
+-static int davinci_rtc_set_time(struct device *dev, struct rtc_time *tm)
 -{
--	struct rtc_device *rtc;
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	u16 days;
+-	u8 rtc_cctrl;
+-	unsigned long flags;
 -
--	rtc = devm_rtc_allocate_device(&pdev->dev);
--	if (IS_ERR(rtc))
--		return PTR_ERR(rtc);
+-	convert2days(&days, tm);
 -
--	platform_set_drvdata(pdev, rtc);
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
 -
--	rtc->ops = &dm355evm_rtc_ops;
--	rtc->range_max = U32_MAX;
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, bin2bcd(tm->tm_sec), PRTCSS_RTC_SEC);
 -
--	return devm_rtc_register_device(rtc);
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, bin2bcd(tm->tm_min), PRTCSS_RTC_MIN);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, bin2bcd(tm->tm_hour), PRTCSS_RTC_HOUR);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, days & 0xFF, PRTCSS_RTC_DAY0);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, (days & 0xFF00) >> 8, PRTCSS_RTC_DAY1);
+-
+-	rtc_cctrl = rtcss_read(davinci_rtc, PRTCSS_RTC_CCTRL);
+-	rtc_cctrl |= PRTCSS_RTC_CCTRL_CAEN;
+-	rtcss_write(davinci_rtc, rtc_cctrl, PRTCSS_RTC_CCTRL);
+-
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
+-
+-	return 0;
 -}
 -
--/*
-- * I2C is used to talk to the MSP430, but this platform device is
-- * exposed by an MFD driver that manages I2C communications.
-- */
--static struct platform_driver rtc_dm355evm_driver = {
--	.probe		= dm355evm_rtc_probe,
+-static int davinci_rtc_alarm_irq_enable(struct device *dev,
+-					unsigned int enabled)
+-{
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	unsigned long flags;
+-	u8 rtc_cctrl = rtcss_read(davinci_rtc, PRTCSS_RTC_CCTRL);
+-
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
+-
+-	if (enabled)
+-		rtc_cctrl |= PRTCSS_RTC_CCTRL_DAEN |
+-			     PRTCSS_RTC_CCTRL_HAEN |
+-			     PRTCSS_RTC_CCTRL_MAEN |
+-			     PRTCSS_RTC_CCTRL_ALMFLG |
+-			     PRTCSS_RTC_CCTRL_AIEN;
+-	else
+-		rtc_cctrl &= ~PRTCSS_RTC_CCTRL_AIEN;
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, rtc_cctrl, PRTCSS_RTC_CCTRL);
+-
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
+-
+-	return 0;
+-}
+-
+-static int davinci_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alm)
+-{
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	u16 days = 0;
+-	u8 day0, day1;
+-	unsigned long flags;
+-
+-	alm->time.tm_sec = 0;
+-
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	alm->time.tm_min = bcd2bin(rtcss_read(davinci_rtc, PRTCSS_RTC_AMIN));
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	alm->time.tm_hour = bcd2bin(rtcss_read(davinci_rtc, PRTCSS_RTC_AHOUR));
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	day0 = rtcss_read(davinci_rtc, PRTCSS_RTC_ADAY0);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	day1 = rtcss_read(davinci_rtc, PRTCSS_RTC_ADAY1);
+-
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
+-	days |= day1;
+-	days <<= 8;
+-	days |= day0;
+-
+-	convertfromdays(days, &alm->time);
+-
+-	alm->pending = !!(rtcss_read(davinci_rtc,
+-			  PRTCSS_RTC_CCTRL) &
+-			PRTCSS_RTC_CCTRL_AIEN);
+-	alm->enabled = alm->pending && device_may_wakeup(dev);
+-
+-	return 0;
+-}
+-
+-static int davinci_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alm)
+-{
+-	struct davinci_rtc *davinci_rtc = dev_get_drvdata(dev);
+-	unsigned long flags;
+-	u16 days;
+-
+-	convert2days(&days, &alm->time);
+-
+-	spin_lock_irqsave(&davinci_rtc_lock, flags);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, bin2bcd(alm->time.tm_min), PRTCSS_RTC_AMIN);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, bin2bcd(alm->time.tm_hour), PRTCSS_RTC_AHOUR);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, days & 0xFF, PRTCSS_RTC_ADAY0);
+-
+-	davinci_rtcss_calendar_wait(davinci_rtc);
+-	rtcss_write(davinci_rtc, (days & 0xFF00) >> 8, PRTCSS_RTC_ADAY1);
+-
+-	spin_unlock_irqrestore(&davinci_rtc_lock, flags);
+-
+-	return 0;
+-}
+-
+-static const struct rtc_class_ops davinci_rtc_ops = {
+-	.ioctl			= davinci_rtc_ioctl,
+-	.read_time		= davinci_rtc_read_time,
+-	.set_time		= davinci_rtc_set_time,
+-	.alarm_irq_enable	= davinci_rtc_alarm_irq_enable,
+-	.read_alarm		= davinci_rtc_read_alarm,
+-	.set_alarm		= davinci_rtc_set_alarm,
+-};
+-
+-static int __init davinci_rtc_probe(struct platform_device *pdev)
+-{
+-	struct device *dev = &pdev->dev;
+-	struct davinci_rtc *davinci_rtc;
+-	int ret = 0;
+-
+-	davinci_rtc = devm_kzalloc(&pdev->dev, sizeof(struct davinci_rtc), GFP_KERNEL);
+-	if (!davinci_rtc)
+-		return -ENOMEM;
+-
+-	davinci_rtc->irq = platform_get_irq(pdev, 0);
+-	if (davinci_rtc->irq < 0)
+-		return davinci_rtc->irq;
+-
+-	davinci_rtc->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(davinci_rtc->base))
+-		return PTR_ERR(davinci_rtc->base);
+-
+-	platform_set_drvdata(pdev, davinci_rtc);
+-
+-	davinci_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
+-	if (IS_ERR(davinci_rtc->rtc))
+-		return PTR_ERR(davinci_rtc->rtc);
+-
+-	davinci_rtc->rtc->ops = &davinci_rtc_ops;
+-	davinci_rtc->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+-	davinci_rtc->rtc->range_max = RTC_TIMESTAMP_BEGIN_2000 + (1 << 16) * 86400ULL - 1;
+-
+-	rtcif_write(davinci_rtc, PRTCIF_INTFLG_RTCSS, PRTCIF_INTFLG);
+-	rtcif_write(davinci_rtc, 0, PRTCIF_INTEN);
+-	rtcss_write(davinci_rtc, 0, PRTCSS_RTC_INTC_EXTENA1);
+-
+-	rtcss_write(davinci_rtc, 0, PRTCSS_RTC_CTRL);
+-	rtcss_write(davinci_rtc, 0, PRTCSS_RTC_CCTRL);
+-
+-	ret = devm_request_irq(dev, davinci_rtc->irq, davinci_rtc_interrupt,
+-			  0, "davinci_rtc", davinci_rtc);
+-	if (ret < 0) {
+-		dev_err(dev, "unable to register davinci RTC interrupt\n");
+-		return ret;
+-	}
+-
+-	/* Enable interrupts */
+-	rtcif_write(davinci_rtc, PRTCIF_INTEN_RTCSS, PRTCIF_INTEN);
+-	rtcss_write(davinci_rtc, PRTCSS_RTC_INTC_EXTENA1_MASK,
+-			    PRTCSS_RTC_INTC_EXTENA1);
+-
+-	rtcss_write(davinci_rtc, PRTCSS_RTC_CCTRL_CAEN, PRTCSS_RTC_CCTRL);
+-
+-	device_init_wakeup(&pdev->dev, 0);
+-
+-	return devm_rtc_register_device(davinci_rtc->rtc);
+-}
+-
+-static int __exit davinci_rtc_remove(struct platform_device *pdev)
+-{
+-	struct davinci_rtc *davinci_rtc = platform_get_drvdata(pdev);
+-
+-	device_init_wakeup(&pdev->dev, 0);
+-
+-	rtcif_write(davinci_rtc, 0, PRTCIF_INTEN);
+-
+-	return 0;
+-}
+-
+-static struct platform_driver davinci_rtc_driver = {
+-	.remove		= __exit_p(davinci_rtc_remove),
 -	.driver		= {
--		.name	= "rtc-dm355evm",
+-		.name = "rtc_davinci",
 -	},
 -};
 -
--module_platform_driver(rtc_dm355evm_driver);
+-module_platform_driver_probe(davinci_rtc_driver, davinci_rtc_probe);
 -
+-MODULE_AUTHOR("Miguel Aguilar <miguel.aguilar@ridgerun.com>");
+-MODULE_DESCRIPTION("Texas Instruments DaVinci PRTC Driver");
 -MODULE_LICENSE("GPL");
-diff --git a/include/linux/mfd/dm355evm_msp.h b/include/linux/mfd/dm355evm_msp.h
-deleted file mode 100644
-index 372470350fab..000000000000
---- a/include/linux/mfd/dm355evm_msp.h
-+++ /dev/null
-@@ -1,79 +0,0 @@
--/*
-- * dm355evm_msp.h - support MSP430 microcontroller on DM355EVM board
-- */
--#ifndef __LINUX_I2C_DM355EVM_MSP
--#define __LINUX_I2C_DM355EVM_MSP
--
--/*
-- * Written against Spectrum's writeup for the A4 firmware revision,
-- * and tweaked to match source and rev D2 schematics by removing CPLD
-- * and NOR flash hooks (which were last appropriate in rev B boards).
-- *
-- * Note that the firmware supports a flavor of write posting ... to be
-- * sure a write completes, issue another read or write.
-- */
--
--/* utilities to access "registers" emulated by msp430 firmware */
--extern int dm355evm_msp_write(u8 value, u8 reg);
--extern int dm355evm_msp_read(u8 reg);
--
--
--/* command/control registers */
--#define DM355EVM_MSP_COMMAND		0x00
--#	define MSP_COMMAND_NULL		0
--#	define MSP_COMMAND_RESET_COLD	1
--#	define MSP_COMMAND_RESET_WARM	2
--#	define MSP_COMMAND_RESET_WARM_I	3
--#	define MSP_COMMAND_POWEROFF	4
--#	define MSP_COMMAND_IR_REINIT	5
--#define DM355EVM_MSP_STATUS		0x01
--#	define MSP_STATUS_BAD_OFFSET	BIT(0)
--#	define MSP_STATUS_BAD_COMMAND	BIT(1)
--#	define MSP_STATUS_POWER_ERROR	BIT(2)
--#	define MSP_STATUS_RXBUF_OVERRUN	BIT(3)
--#define DM355EVM_MSP_RESET		0x02	/* 0 bits == in reset */
--#	define MSP_RESET_DC5		BIT(0)
--#	define MSP_RESET_TVP5154	BIT(2)
--#	define MSP_RESET_IMAGER		BIT(3)
--#	define MSP_RESET_ETHERNET	BIT(4)
--#	define MSP_RESET_SYS		BIT(5)
--#	define MSP_RESET_AIC33		BIT(7)
--
--/* GPIO registers ... bit patterns mostly match the source MSP ports */
--#define DM355EVM_MSP_LED		0x03	/* active low (MSP P4) */
--#define DM355EVM_MSP_SWITCH1		0x04	/* (MSP P5, masked) */
--#	define MSP_SWITCH1_SW6_1	BIT(0)
--#	define MSP_SWITCH1_SW6_2	BIT(1)
--#	define MSP_SWITCH1_SW6_3	BIT(2)
--#	define MSP_SWITCH1_SW6_4	BIT(3)
--#	define MSP_SWITCH1_J1		BIT(4)	/* NTSC/PAL */
--#	define MSP_SWITCH1_MSP_INT	BIT(5)	/* active low */
--#define DM355EVM_MSP_SWITCH2		0x05	/* (MSP P6, masked) */
--#	define MSP_SWITCH2_SW10		BIT(3)
--#	define MSP_SWITCH2_SW11		BIT(4)
--#	define MSP_SWITCH2_SW12		BIT(5)
--#	define MSP_SWITCH2_SW13		BIT(6)
--#	define MSP_SWITCH2_SW14		BIT(7)
--#define DM355EVM_MSP_SDMMC		0x06	/* (MSP P2, masked) */
--#	define MSP_SDMMC_0_WP		BIT(1)
--#	define MSP_SDMMC_0_CD		BIT(2)	/* active low */
--#	define MSP_SDMMC_1_WP		BIT(3)
--#	define MSP_SDMMC_1_CD		BIT(4)	/* active low */
--#define DM355EVM_MSP_FIRMREV		0x07	/* not a GPIO (out of order) */
--#define DM355EVM_MSP_VIDEO_IN		0x08	/* (MSP P3, masked) */
--#	define MSP_VIDEO_IMAGER		BIT(7)	/* low == tvp5146 */
--
--/* power supply registers are currently omitted */
--
--/* RTC registers */
--#define DM355EVM_MSP_RTC_0		0x12	/* LSB */
--#define DM355EVM_MSP_RTC_1		0x13
--#define DM355EVM_MSP_RTC_2		0x14
--#define DM355EVM_MSP_RTC_3		0x15	/* MSB */
--
--/* input event queue registers; code == ((HIGH << 8) | LOW) */
--#define DM355EVM_MSP_INPUT_COUNT	0x16	/* decrement by reading LOW */
--#define DM355EVM_MSP_INPUT_HIGH		0x17
--#define DM355EVM_MSP_INPUT_LOW		0x18
--
--#endif /* __LINUX_I2C_DM355EVM_MSP */
 -- 
 2.29.2
 
