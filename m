@@ -2,141 +2,124 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B65C604BCC
-	for <lists+linux-rtc@lfdr.de>; Wed, 19 Oct 2022 17:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8D2604BFA
+	for <lists+linux-rtc@lfdr.de>; Wed, 19 Oct 2022 17:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiJSPjz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 19 Oct 2022 11:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S232592AbiJSPqR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 19 Oct 2022 11:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiJSPjY (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Oct 2022 11:39:24 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D191C77CA;
-        Wed, 19 Oct 2022 08:35:55 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1324e7a1284so21078108fac.10;
-        Wed, 19 Oct 2022 08:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZtSXrbk+/YXqmytmSl9HuYJzWOnh4YSqZcLqLVZsnew=;
-        b=NT7fT2pZ4nzhKqBvZsFMF97TwqEj1L4ObZboENqb5fY0+x7qzGIy/1EKXbhT/lFc5q
-         JV7ll1Zawo/rvn5bpF9Sbo0eqbQobFeSrnzklLD+W2Fg7nFiUYFjP/PhakIgfKDdbX9h
-         1yGjhWsDhtc3pQvm2Ox0qIdsF/WOKUl2PnHIcwqc8GWcgtvNT2cxDvwm8mma5L7PrtwW
-         kirKJGq+/7lPaYzxWJcjNUi56psujJeFyFWBMGGw/r/7E7JDa2old9CyOHjgyB0FS/R8
-         paVIz8VCS7nyDUr5uRQ2X8on1obOXkUhGUJgORuLeHZao/WxJB16J3z+Kr6ekNCihiml
-         p3+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZtSXrbk+/YXqmytmSl9HuYJzWOnh4YSqZcLqLVZsnew=;
-        b=YmucRfNhflj4UTf5dl1VYoJRAiTgiASa2lZ3p8GN37ePtrTKpJTqgn9Q14MuhReY0D
-         hNJPZ3PY30C3DJR9sFzqqNSlM8eN0u8C8szD3tcaGu6bc7J6yIVSJU+U1i8j8SUO/kHz
-         Q7jZUctE3skgCu53YJmH7DMeG201A837EQfQECU56+u7lCyl0bwbFrbEmfyEqyTz6Bf0
-         yxjSAQvtB1wcoa2XVFThKdGxntDyt1aK3AeHc5ZoWXY1nd/CL86kWpZnaa4X9IqoQIiu
-         bRkdTOVWFssyrkksKvNc6dnHkB4JRrNrn/gJpU+h9jiei8tVQAVV7UN5HTz7PPYryJai
-         VBrw==
-X-Gm-Message-State: ACrzQf38HkSxPm2kD8ucIf80dI5Xr1xuRF6/EUy7EDm6FjocvmDhuTkR
-        XXiv4eWPAOyLb1GTQZ5CuVY=
-X-Google-Smtp-Source: AMsMyM4lySCJcZ7kqw7FDWIZF+nYNgOKRKzdVE6hFclXcjnBm4ycOjGnpuoaifyqnP+XsflYrr/ybw==
-X-Received: by 2002:a05:6870:d7a4:b0:136:ddff:40c2 with SMTP id bd36-20020a056870d7a400b00136ddff40c2mr5558767oab.134.1666193698612;
-        Wed, 19 Oct 2022 08:34:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y15-20020a4a450f000000b004767df8f231sm6623348ooa.39.2022.10.19.08.34.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 08:34:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 19 Oct 2022 08:34:56 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, jdelvare@suse.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH 2/2] dt-bindings: rtc: add bindings for max313xx RTCs
-Message-ID: <20221019153456.GD4602@roeck-us.net>
-References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
- <20221019133910.282-2-Ibrahim.Tilki@analog.com>
- <3d07998b-f02a-036c-af66-883671ac1730@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d07998b-f02a-036c-af66-883671ac1730@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231402AbiJSPps (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 19 Oct 2022 11:45:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7051CFF21;
+        Wed, 19 Oct 2022 08:40:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D23EFB824B0;
+        Wed, 19 Oct 2022 15:39:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78462C433D6;
+        Wed, 19 Oct 2022 15:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666193975;
+        bh=R5mUdvcbU/2/tJ5ejtkz4jCaK/oLwR1v0C5V24F/6/k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Zjb61FJnSBefpHHnl1oA1kqetSFgeFF//FrU7kAN9jPwJ8ucHxBbhv3DNoABZ7Xvr
+         7UEj06IcirGVTOiz+Beq5LEQGjoMaqygdMVoVt4J192L3atmvpTDsLINx3sdkT//Fl
+         WP1htq1Nev9xjix5Qh5Lwxntmow9dH5Zd7UvO886IrNjriWoqt+I8xc7Hwo29Xv5BI
+         yC58Nmz4w9y7E5MSTGAegHwpuOFF095SCKQ5XJFPMYccIvsjAI4cXrtydl2qJefsbn
+         I5HBje7WUSFQH3Z4CDN1Hn1fLHnxqL4j8adgWZqVY13ekYxs6qYcT6H5S2WBGbyg03
+         N0amDzKZZNaQQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1olBAK-0001Wd-VX;
+        Wed, 19 Oct 2022 16:39:33 +0100
+Date:   Wed, 19 Oct 2022 16:39:32 +0100
+Message-ID: <867d0vg6vf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        David Lechner <david@lechnology.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
+In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+References: <20221019152947.3857217-1-arnd@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: arnd@kernel.org, nsekhar@ti.com, brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, khilman@baylibre.com, arnd@arndb.de, linux@armlinux.org.uk, mchehab@kernel.org, damien.lemoal@opensource.wdc.com, s.shtylyov@omp.ru, david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org, dmitry.torokhov@gmail.com, tglx@linutronix.de, prabhakar.csengg@gmail.com, lee@kernel.org, a.zummo@towertech.it, alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org, b-liu@ti.com, peter.ujfalusi@gmail.com, lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz, tiwai@suse.com, laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com, linux-media@vger.kernel.org, linux-ide@vger.kernel.org, linux-clk@vger.kernel.org, linux-input@vger.kernel.org, linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:34:15AM -0400, Krzysztof Kozlowski wrote:
-> On 19/10/2022 09:39, Ibrahim Tilki wrote:
-> > Devicetree binding documentation for Analog Devices MAX313XX RTCs
-> > 
-> > Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> > Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> > ---
-> >  .../devicetree/bindings/rtc/adi,max313xx.yaml | 163 ++++++++++++++++++
-> >  1 file changed, 163 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
-> > new file mode 100644
-> > index 000000000..1aa491799
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
-> > @@ -0,0 +1,163 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright 2022 Analog Devices Inc.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Analog Devices MAX313XX series I2C RTC driver
+On Wed, 19 Oct 2022 16:29:26 +0100,
+Arnd Bergmann <arnd@kernel.org> wrote:
 > 
-> Drop "driver" unless it is some hardware-related term.
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> > +
-> > +maintainers:
-> > +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-> > +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> > +
-> > +description: Bindings for the Analog Devices MAX313XX series RTCs.
+> As part of removing all board files that were previously marked as unused,
+> I looked through the davinci platform and recursively removed everything
+> that has now become unused.
 > 
-> Drop "Bindings for"
+> In particular, this is for all dm3xx support, in addition to the dm64xx
+> support removed previously. The remaining support is now for da8xx using
+> devicetree only, which means a lot of the da8xx specific device support
+> can also go away.
 > 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - adi,max31328
-> > +      - adi,max31329
-> > +      - adi,max31331
-> > +      - adi,max31334
-> > +      - adi,max31341
-> > +      - adi,max31342
-> > +      - adi,max31343
+> As with the previous series, I can keep patches together in the
+> soc tree, or subsystem maintainers can pick them up individually
+> through their subsystems, whichever they prefer.
 > 
-> This looked familiar... and indeed it is.
-> 
-> https://lore.kernel.org/all/a382fdee-3672-50b8-cd58-85563b9d9079@linaro.org/
-> 
-> Where is the changelog? What are the differences? How can we understand
-> what is happening here?
-> 
+> Arnd Bergmann (14):
 
-I hope that other submission was an error; otherwise it tried to sneak in
-the bindings for max313xx under an unrelated subject.
+[...]
 
-Guenter
+>   irqchip: remove davinci aintc driver
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
