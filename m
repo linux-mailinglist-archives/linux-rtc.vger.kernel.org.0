@@ -2,126 +2,159 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEC1606888
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 20:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16A76069F6
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 23:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJTS5k (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Oct 2022 14:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S229692AbiJTVB4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Oct 2022 17:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbiJTS5h (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 14:57:37 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7D16A4DB;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1364357a691so696687fac.7;
-        Thu, 20 Oct 2022 11:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=iG5AeI0/6LPqVn/bxFYgGKQkry7Ay9XE/eaONqFI/mo9j/HJzjIgsqQWjrVzX1KPY5
-         nhQEIA/n+LseZ/34DnuQUZ2jNxlStZec6mw4ErMnB/ogzF2OOGNdnfsMVdlbc+UbI4/v
-         a1T/DzEAyyD5zPkokF6Dl8HPYckT8JGnDakXqUrezAt7fO75IFdhcBQ0dahfJRfZW2+T
-         mB4sI67g5K5uPgo/3yo6f0AW0hjXCy4SE1PtQzsWblE4HdvLqQqlwZqz2TtBsVvj1Drm
-         Pghy1wllNqcwN22+e/Q6lPVYa91kFmS8qKyQY1Rt/pNKyK4vLyEbcSKqq60DWSxi1LVx
-         Wvzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mcRseKjTDv1dnCkTp74lsoW6tE2eVMgrAQoJL5kJyc=;
-        b=N1/AkeV9CysaMGBnJPbYAq4+Z0u1jTeOk51AHkPr9WEKh8TwWkbiUah1t3stTbvJ/f
-         8m8HAA5hL9qz/el5Yjf1/Q7vENpMjiNEsIWyjtAJNVrZuzNCfYNpcN9aB0NbbzPfyhI5
-         R0rIwyQRwJP0ZuXlv0AdKOv0c6WMhL1NgcaOlcAFYzllMA1+lgNZRJvFtpM6yMjRB900
-         s1w9fkFvs0ZbEID2Rw1GPCXR6n0RyaFsKmAiQtwT9jP/syJsno1WODYXk1zvGdfU+ZY6
-         k2efCu1aFQJwdpoBN/r5Tn31HykaQdiR6MfPGLjJjchaVh753vO8IqzmIv5xDWIV7WF5
-         o7eA==
-X-Gm-Message-State: ACrzQf1FxnTqzRaHWA80aNrvaSH+xDvp4LQuhCgx0xP7V5wPwzrILrsu
-        KwAkGAYdQWnDex3XhO3p7oE=
-X-Google-Smtp-Source: AMsMyM5H583fHPrarJCAQlhw2RpOm6I+O7B5AbrTGYZYamUDFMvjnn4q0fz+fOy7Qin0SLVMP9j01A==
-X-Received: by 2002:a05:6870:b68d:b0:12d:484a:2643 with SMTP id cy13-20020a056870b68d00b0012d484a2643mr26753310oab.105.1666292253132;
-        Thu, 20 Oct 2022 11:57:33 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c8-20020a9d4808000000b00661ac688285sm269710otf.0.2022.10.20.11.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 11:57:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ba17a8b0-bd35-d172-fced-222ffa771ace@roeck-us.net>
-Date:   Thu, 20 Oct 2022 11:57:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
- <409d7e93-f911-11b6-ed54-8ae8c94a8af0@roeck-us.net>
- <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+        with ESMTP id S229585AbiJTVBt (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 17:01:49 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1991D5869;
+        Thu, 20 Oct 2022 14:01:47 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D8A8F40005;
+        Thu, 20 Oct 2022 21:01:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666299705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hAioOkHX/l8yWrqfHFpnxAMqognQ7v1zu2QhYwdycTY=;
+        b=GZtmZZyeDRBTXDZzIyF/JrX7Ymr6OpHhR6IPaCDUCTxIkdhtjsfUeRMNZGKOzBgUOFwA39
+        8YfocEkDVJuJuewB+ysBKXpRwNt/zI3yklXUqVJVK0rC3L31NGOtRyKwgyjP0wf/NANnFE
+        SMbLGCLM2aAX9tjCwIIM7+pwNUoG4qUzxpnPS/TbNBaR6mxr4UmngIOghQDxZpsf24B9Ui
+        Y30jPqLN708R6Vn21vt5wGkVLAHpDpgDTGwdpswy61L4aPkiheEMhauZeu/E1eDRkomYYM
+        UReZ5BDtLsEhZQGXUza7E4Dt1ibVA/wwcdsis0nEdieKa/uMWQJC8D6nMQR7ow==
+Date:   Thu, 20 Oct 2022 23:01:44 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 Subject: Re: [PATCH 1/2] drivers: rtc: add max313xx series rtc driver
-In-Reply-To: <DM8PR03MB624786DEF5E135986ECB7B1F962A9@DM8PR03MB6247.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <Y1G3OA068WKbz3ED@mail.local>
+References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/20/22 07:47, Tilki, Ibrahim wrote:
-> ...
-> 
->>> +
->>> +static int max313xx_wdt_ping(struct watchdog_device *wdd)
->>> +{
->>> +	int ret;
->>> +
->>> +	ret = max313xx_wdt_stop(wdd);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	return max313xx_wdt_start(wdd);
->>
->> Having to stop a watchdog just to ping it is unusual. Is this really
->> necessary ?
->>
-> 
-> Unfortunately RTCs do not have any other way of resetting timer counter
-> other than restarting the timer.
-> 
+Hello,
 
-That is a bit too generic. I sampled a couple of rtc drivers implementing
-watchdog support, and they all support pinging the watchdog without
-stopping it (or, in other words, they have explicit watchdog support).
+On 19/10/2022 16:39:09+0300, Ibrahim Tilki wrote:
+> +static int max313xx_set_time(struct device *dev, struct rtc_time *t)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	u8 regs[7];
+> +	int ret;
+> +
+> +	if (t->tm_year < 100 || t->tm_year >= 300)
+> +		return -EINVAL;
 
-Looking at one of the chip datasheets, I would argue that the timers
-on that chip series are not really suitable (nor intended) to support
-watchdog functionality. They are real time alarm timers. They don't
-generate an alarm N seconds in the future, but at specific times/dates.
-That means that updating the time would interfere with watchdog functionality.
-That is way too fragile to be usable as watchdog timer.
+This is unnecessary
 
-I would suggest to drop watchdog support from this driver.
+> +
+> +	regs[0] = bin2bcd(t->tm_sec);
+> +	regs[1] = bin2bcd(t->tm_min);
+> +	regs[2] = bin2bcd(t->tm_hour);
+> +	regs[3] = bin2bcd(t->tm_wday + 1);
+> +	regs[4] = bin2bcd(t->tm_mday);
+> +	regs[5] = bin2bcd(t->tm_mon + 1);
+> +
+> +	if (t->tm_year >= 200) {
+> +		regs[5] |= FIELD_PREP(MAX313XX_MONTH_CENTURY, 1);
+> +		regs[6] = bin2bcd(t->tm_year - 200);
+> +	} else {
+> +		regs[6] = bin2bcd(t->tm_year - 100);
+> +	}
 
-Thanks,
-Guenter
+regs[6] = bin2bcd(t->tm_year % 100); would be simpler
 
+> +static int max313xx_set_alarm(struct device *dev, struct rtc_wkalrm *t)
+> +{
+> +	struct max313xx *rtc = dev_get_drvdata(dev);
+> +	struct rtc_time time;
+> +	unsigned int reg;
+> +	u8 regs[6];
+> +	int ret;
+> +
+> +	regs[0] = bin2bcd(t->time.tm_sec);
+> +	regs[1] = bin2bcd(t->time.tm_min);
+> +	regs[2] = bin2bcd(t->time.tm_hour);
+> +	regs[3] = bin2bcd(t->time.tm_mday);
+> +	regs[4] = bin2bcd(t->time.tm_mon + 1);
+> +
+> +	if (t->time.tm_year >= 200) {
+> +		/*
+> +		 * Century bit is shared between time and alarm registers so
+> +		 * make sure that new alarm and RTC time is in the same century.
+> +		 */
+> +		ret = max313xx_read_time(dev, &time);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (time.tm_year < 200)
+> +			return -EINVAL;
+> +
+
+This doesn't feel right and it seems you are losing a whole range of
+alarm years. The correct thing to do is to check whether the alarm is in
+the same 100 years range.
+
+
+> +	/* Convert to 24Hr */
+> +	hour = bcd2bin(reg[MAX313XX_REG_HOUR] & 0x1f);
+> +	if (hour == 12)
+> +		hour = 0;
+
+I'm not sure this is worth it, you should probably instead support
+reading both formats and setting only 24h
+> +
+> +	if (FIELD_GET(MAX313XX_HRS_F_AM_PM, reg[MAX313XX_REG_HOUR]))
+> +		hour += 12;
+> +
+> +	reg[MAX313XX_REG_HOUR] = bin2bcd(hour);
+> +	/*
+> +	 * If minute is 59, write all registers in case hour register
+> +	 * gets updated during read-write cycle
+> +	 */
+> +	if (reg[MAX313XX_REG_MINUTE] == 0x59)
+> +		return regmap_bulk_write(rtc->regmap, rtc->chip->sec_reg, reg, 7);
+> +
+> +	return regmap_write(rtc->regmap, rtc->chip->sec_reg + MAX313XX_REG_HOUR,
+> +			    reg[MAX313XX_REG_HOUR]);
+
+You should probably reuse .set_time here
+
+> +/* Some devices require initialization */
+> +static int max313xx_init(struct max313xx *rtc)
+> +{
+> +	switch (rtc->id) {
+> +	case ID_MAX31341:
+> +	case ID_MAX31342:
+> +		return regmap_update_bits(rtc->regmap, MAX3134X_CFG_REG,
+> +					  MAX3134X_CFG_INIT_MASK,
+> +					  MAX3134X_CFG_INIT_VALUE);
+
+The comment is not really useful and now I'm intrigued and want to know
+what this does!
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
