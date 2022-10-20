@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16A76069F6
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 23:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD1D606A19
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 23:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJTVB4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Oct 2022 17:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S229819AbiJTVOF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Oct 2022 17:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiJTVBt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 17:01:49 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1991D5869;
-        Thu, 20 Oct 2022 14:01:47 -0700 (PDT)
+        with ESMTP id S229552AbiJTVOB (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 17:14:01 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC42421CD76;
+        Thu, 20 Oct 2022 14:13:59 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D8A8F40005;
-        Thu, 20 Oct 2022 21:01:44 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 131C2100003;
+        Thu, 20 Oct 2022 21:13:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666299705;
+        t=1666300438;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=hAioOkHX/l8yWrqfHFpnxAMqognQ7v1zu2QhYwdycTY=;
-        b=GZtmZZyeDRBTXDZzIyF/JrX7Ymr6OpHhR6IPaCDUCTxIkdhtjsfUeRMNZGKOzBgUOFwA39
-        8YfocEkDVJuJuewB+ysBKXpRwNt/zI3yklXUqVJVK0rC3L31NGOtRyKwgyjP0wf/NANnFE
-        SMbLGCLM2aAX9tjCwIIM7+pwNUoG4qUzxpnPS/TbNBaR6mxr4UmngIOghQDxZpsf24B9Ui
-        Y30jPqLN708R6Vn21vt5wGkVLAHpDpgDTGwdpswy61L4aPkiheEMhauZeu/E1eDRkomYYM
-        UReZ5BDtLsEhZQGXUza7E4Dt1ibVA/wwcdsis0nEdieKa/uMWQJC8D6nMQR7ow==
-Date:   Thu, 20 Oct 2022 23:01:44 +0200
+        bh=I4LMS7M24fpjh0kpPQ6wTQki84VuHmXWkbDR03Gia6E=;
+        b=d7huTAh7uLOSo8nMo7dzpL+0zLckuH1/c/CLaY2BHtCjfzSsFCJ/PjEhgj2L/2nKki3qOI
+        ygkHRiJHyyqCO2V48uv++SuQAzODf0f5L+bEg9ABu79yZLmPfYEvC+BT7TRjKZEu6AI9zy
+        UuXP10bJlwGL6se+a5UGwz/1STX7bLKeIFa6DfDaUyxEOZvfluZQpXsumcjKUjslKkkuoc
+        1sXc3q3/JJNoKNDpQCOdt0Uz0b6Oz+RlxYR1HMVs+6H++bv2HxFeSgz2hhBwQCOTizu3gs
+        BBQmR+TR/qiRCuhHxlQT67DoKwytuxELo9ll3uqSvWheRTN3teZf5wjDWl5JXA==
+Date:   Thu, 20 Oct 2022 23:13:56 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
 Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
@@ -36,123 +36,213 @@ Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
         linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
         Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <Y1G3OA068WKbz3ED@mail.local>
+Subject: Re: [PATCH 2/2] dt-bindings: rtc: add bindings for max313xx RTCs
+Message-ID: <Y1G6FIvS6WD57GXW@mail.local>
 References: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+ <20221019133910.282-2-Ibrahim.Tilki@analog.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221019133910.282-1-Ibrahim.Tilki@analog.com>
+In-Reply-To: <20221019133910.282-2-Ibrahim.Tilki@analog.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-On 19/10/2022 16:39:09+0300, Ibrahim Tilki wrote:
-> +static int max313xx_set_time(struct device *dev, struct rtc_time *t)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	u8 regs[7];
-> +	int ret;
+On 19/10/2022 16:39:10+0300, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 163 ++++++++++++++++++
+>  1 file changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..1aa491799
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,163 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	if (t->tm_year < 100 || t->tm_year >= 300)
-> +		return -EINVAL;
-
-This is unnecessary
-
+> +title: Analog Devices MAX313XX series I2C RTC driver
 > +
-> +	regs[0] = bin2bcd(t->tm_sec);
-> +	regs[1] = bin2bcd(t->tm_min);
-> +	regs[2] = bin2bcd(t->tm_hour);
-> +	regs[3] = bin2bcd(t->tm_wday + 1);
-> +	regs[4] = bin2bcd(t->tm_mday);
-> +	regs[5] = bin2bcd(t->tm_mon + 1);
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 > +
-> +	if (t->tm_year >= 200) {
-> +		regs[5] |= FIELD_PREP(MAX313XX_MONTH_CENTURY, 1);
-> +		regs[6] = bin2bcd(t->tm_year - 200);
-> +	} else {
-> +		regs[6] = bin2bcd(t->tm_year - 100);
-> +	}
-
-regs[6] = bin2bcd(t->tm_year % 100); would be simpler
-
-> +static int max313xx_set_alarm(struct device *dev, struct rtc_wkalrm *t)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	struct rtc_time time;
-> +	unsigned int reg;
-> +	u8 regs[6];
-> +	int ret;
+> +description: Bindings for the Analog Devices MAX313XX series RTCs.
 > +
-> +	regs[0] = bin2bcd(t->time.tm_sec);
-> +	regs[1] = bin2bcd(t->time.tm_min);
-> +	regs[2] = bin2bcd(t->time.tm_hour);
-> +	regs[3] = bin2bcd(t->time.tm_mday);
-> +	regs[4] = bin2bcd(t->time.tm_mon + 1);
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
 > +
-> +	if (t->time.tm_year >= 200) {
-> +		/*
-> +		 * Century bit is shared between time and alarm registers so
-> +		 * make sure that new alarm and RTC time is in the same century.
-> +		 */
-> +		ret = max313xx_read_time(dev, &time);
-> +		if (ret)
-> +			return ret;
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
 > +
-> +		if (time.tm_year < 200)
-> +			return -EINVAL;
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    description: |
+> +      Name of the interrupt pin of the RTC used for IRQ. Not required for
+> +      RTCs that only have single interrupt pin available. Some of the RTCs
+> +      share interrupt pins with clock input/output pins.
+> +    minItems: 1
+> +    items:
+> +      - enum: [INTA, INTB]
+> +      - enum: [INTA, INTB]
 > +
 
-This doesn't feel right and it seems you are losing a whole range of
-alarm years. The correct thing to do is to check whether the alarm is in
-the same 100 years range.
+I don't think this is right, what this is doing is essentially pinmuxing
+interrupts versus clocks. What happens if you want INTB but this goes
+directly to a PMIC instead of the SoC?
+It is not something you can express with your current bindings.
 
 
-> +	/* Convert to 24Hr */
-> +	hour = bcd2bin(reg[MAX313XX_REG_HOUR] & 0x1f);
-> +	if (hour == 12)
-> +		hour = 0;
-
-I'm not sure this is worth it, you should probably instead support
-reading both formats and setting only 24h
+> +  "#clock-cells":
+> +    description: |
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
+> +    const: 0
 > +
-> +	if (FIELD_GET(MAX313XX_HRS_F_AM_PM, reg[MAX313XX_REG_HOUR]))
-> +		hour += 12;
+> +  clocks:
+> +    description: |
+> +      RTC uses this clock for clock input when supplied. Clock has to provide
+> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+> +    maxItems: 1
 > +
-> +	reg[MAX313XX_REG_HOUR] = bin2bcd(hour);
-> +	/*
-> +	 * If minute is 59, write all registers in case hour register
-> +	 * gets updated during read-write cycle
-> +	 */
-> +	if (reg[MAX313XX_REG_MINUTE] == 0x59)
-> +		return regmap_bulk_write(rtc->regmap, rtc->chip->sec_reg, reg, 7);
+> +  trickle-diode-disable: true
 > +
-> +	return regmap_write(rtc->regmap, rtc->chip->sec_reg + MAX313XX_REG_HOUR,
-> +			    reg[MAX313XX_REG_HOUR]);
-
-You should probably reuse .set_time here
-
-> +/* Some devices require initialization */
-> +static int max313xx_init(struct max313xx *rtc)
-> +{
-> +	switch (rtc->id) {
-> +	case ID_MAX31341:
-> +	case ID_MAX31342:
-> +		return regmap_update_bits(rtc->regmap, MAX3134X_CFG_REG,
-> +					  MAX3134X_CFG_INIT_MASK,
-> +					  MAX3134X_CFG_INIT_VALUE);
-
-The comment is not really useful and now I'm intrigued and want to know
-what this does!
-
+> +  trickle-resistor-ohms:
+> +    description: Enables trickle charger with specified resistor value.
+> +    enum: [3000, 6000, 11000]
+> +
+> +  wakeup-source: true
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - $ref: rtc.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31328
+> +              - adi,max31342
+> +
+> +    then:
+> +      properties:
+> +        trickle-diode-disable: false
+> +        trickle-resistor-ohms: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31328
+> +              - adi,max31331
+> +              - adi,max31334
+> +              - adi,max31343
+> +
+> +    then:
+> +      properties:
+> +        clocks: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - adi,max31341
+> +              - adi,max31342
+> +
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - const: 0x69
+> +
+> +    else:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - const: 0x68
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31329";
+> +            clocks = <&clkin>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTB";
+> +        };
+> +    };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@68 {
+> +            reg = <0x68>;
+> +            compatible = "adi,max31331";
+> +            #clock-cells = <0>;
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <25 IRQ_TYPE_EDGE_FALLING>, <26 IRQ_TYPE_EDGE_FALLING>;
+> +            interrupt-names = "INTA", "INTB";
+> +        };
+> +    };
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        rtc@69 {
+> +            reg = <0x69>;
+> +            compatible = "adi,max31341";
+> +            #clock-cells = <0>;
+> +            clocks = <&clkin>;
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
