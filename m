@@ -2,72 +2,83 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7735560595E
-	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 10:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD983605EF5
+	for <lists+linux-rtc@lfdr.de>; Thu, 20 Oct 2022 13:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiJTIK4 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 20 Oct 2022 04:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S230102AbiJTLfa (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 20 Oct 2022 07:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbiJTIKw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 04:10:52 -0400
-Received: from outbound-smtp23.blacknight.com (outbound-smtp23.blacknight.com [81.17.249.191])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CAD106929
-        for <linux-rtc@vger.kernel.org>; Thu, 20 Oct 2022 01:10:38 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp23.blacknight.com (Postfix) with ESMTPS id 0F684BED5B
-        for <linux-rtc@vger.kernel.org>; Thu, 20 Oct 2022 09:10:37 +0100 (IST)
-Received: (qmail 8911 invoked from network); 20 Oct 2022 08:10:36 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 20 Oct 2022 08:10:36 -0000
-Date:   Thu, 20 Oct 2022 09:10:35 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
-Message-ID: <20221020081035.4lafnpunbacrhdqs@techsingularity.net>
-References: <5887691.lOV4Wx5bFT@kreacher>
+        with ESMTP id S231359AbiJTLf0 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 20 Oct 2022 07:35:26 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4528111B8C
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Oct 2022 04:35:24 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id j6so8757310uaa.10
+        for <linux-rtc@vger.kernel.org>; Thu, 20 Oct 2022 04:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NX61EmoPANTTiaQZVWeBOZjZ7m4YL4tc7lcvxXLNF9E=;
+        b=SfZDCpdldM7ysEzjKVqfCcSv2cWv8B6qdryTBS4NOafGbJdIIy7siw+ACb59VLhpG5
+         ISiJKdMM1PiQ2h8dpGZZs5RA8axQ/zNth2IXswlD/4nRY0v81atHulsWRuMexiIa3+7r
+         AoUPcQhB125Pd8v1YC+kdHrYyVtJL4/7R+L3N3DOFwRuJUXKWVSSzBq5UFjRIpxdXeJO
+         LC+dCVOxjx5F9qB5iJdn3Amism7gD/24j8F6/Sz/TDdTyGKsipvN95wyttw15cgkrHfZ
+         hgHBJO6iOOuNsY7JVKs9bb+fE8Jj5DOLxAvXh3YlaZgXGkjKLq2njBKWNxwYL5NvTf/d
+         m8jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NX61EmoPANTTiaQZVWeBOZjZ7m4YL4tc7lcvxXLNF9E=;
+        b=TrT26pdlpvdkxTifW9F8M4RL+0T6QMcK/ktA3kKRY3LqnJ8JEKLJxrycBYdEjtgrI9
+         3rIdKofc2rCdfAy84CYAMC7q6nezzAbwP7jS02jymF7PNU3m2lXN+dPla2iPmhrg9Ufd
+         aUX6CUTBuEdHmIDlpjaZID5pPsmNpC5XVfJ2fLXsf9Z7ejqr+K0DnUbPMfd/k/ydGYcu
+         aghvzSyQ0Z7tF12eLiQ2DapUtTxM5puh1JgrbEQ/XK82LvGSdjv7XVs1+2mZMv2qbacS
+         LmZ1VOe7zVrOfX4InnvyQxdR5Jrul377JJpnnvPGyuy26YRjkXPeSiTesOOI1NUkMAoN
+         vmvw==
+X-Gm-Message-State: ACrzQf3KmpXMcERvgsmJsLbj4kpIC4cvRwvvzgpCtDrttcjh4joVkMmF
+        +9B5iM1d+CW4tStlg6uKuG5hJcjHSMqE8qhwAtwGmg==
+X-Google-Smtp-Source: AMsMyM6zK5JPI5hcl0T9Vp61LylczAIviV2KUjyw9uFLzMSQoRPeq+N4w+YQndK6cXhv/XeiHOjqJ01dgGjDCU6whas=
+X-Received: by 2002:a05:6102:5788:b0:3a6:764d:1382 with SMTP id
+ dh8-20020a056102578800b003a6764d1382mr6615933vsb.13.1666265723289; Thu, 20
+ Oct 2022 04:35:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <5887691.lOV4Wx5bFT@kreacher>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-7-arnd@kernel.org>
+In-Reply-To: <20221019152947.3857217-7-arnd@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Oct 2022 13:35:12 +0200
+Message-ID: <CAMRc=McDGdofRMMv9Z4AmPBYk9Zg8MA4_eTQbg2Bn0iCvS2=2g@mail.gmail.com>
+Subject: Re: [PATCH 06/14] mfd: remove dm355evm_msp driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, linux-arm-kernel@lists.infradead.org,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 06:09:31PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
-> ordering issue") overlooked the fact that cmos_do_probe() depended
-> on the preparations carried out by cmos_wake_setup() and the wake
-> alarm stopped working after the ordering of them had been changed.
-> 
-> Address this by partially reverting commit 4919d3eb2ec0 so that
-> cmos_wake_setup() is called before cmos_do_probe() again and moving
-> the rtc_wake_setup() invocation from cmos_wake_setup() directly to the
-> callers of cmos_do_probe() where it will happen after a successful
-> completion of the latter.
-> 
-> Fixes: 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration ordering issue")
-> Reported-by: Zhang Rui <rui.zhang@intel.com>
-> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Oct 19, 2022 at 5:35 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The DaVinci DM355EVM platform is gone after the removal of all
+> unused board files, so the MTD device along with its sub-devices
+> can be removed as well.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Boot test that previously hit NULL pointer exceptions also completed successfully.
-
--- 
-Mel Gorman
-SUSE Labs
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
