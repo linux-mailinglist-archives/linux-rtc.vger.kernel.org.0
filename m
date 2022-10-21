@@ -2,62 +2,63 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF05B60734C
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Oct 2022 11:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD9860734E
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Oct 2022 11:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiJUJJD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        id S230494AbiJUJJD (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
         Fri, 21 Oct 2022 05:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiJUJIw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Oct 2022 05:08:52 -0400
+        with ESMTP id S230499AbiJUJIx (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Oct 2022 05:08:53 -0400
 Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE2B1A3E07
-        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so1542712wmb.3
-        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B791A3E0B
+        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1591561wmb.0
+        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=rjuKSGV50wTNMTGg13pBdWijHuHSlBBgwS9gcRtk9h4=;
-        b=HD23P+1/uGFBYkEyS+rdMW0i4V8LCgolsxrEDB6++mLvwlfpyqkIkwoYGwUz1UkQZW
-         +Mme4JOWml98FLAU0wAFGspagU8CqS7FjOWZGFMSkSfrlh32ITc3hRfF79HjRiWJt/7/
-         WRFFypPzagOQrxJc2qHTbFtb4BBKxlncOM9IRdJ0E3qa8/L/vuw37N1CwABbJo8yyq2k
-         IwQ3sIS7k2Uo9AN48fnyijrqq6wSkwgjPlfUFWmghJDlpS2RiZlE+eoyxg/mYZLOvJ/+
-         2+GGR3YrxcnvGzsh3Z/FiAX0w1T1p63TTVSCztFpABBCJr9u36Izq1kPJ46rrpap6yGB
-         o53w==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JEMkL9tW27qh7qB7z1dOyn6IVj+P4lSJ9BRc/xcD6yA=;
+        b=Fdv0tSfxqc9lFn2vsyEpLqH/mIfo2xlGI5ESruFQWGS2H4h4Xve67qskhiUC4vkAOL
+         jp9s3CL7OL9VFHy8lrK8VXN/6vbZ9+PFl7l5oHsPgS/DH8z7Df70OdRyyEezSH/OWx5V
+         LgfO2hCylr060TxHJUkGlMlcF+Dec01lMALbEAItXTNTExjXlSUGvZlkmPjwX+YeAtgc
+         SIUxTSEkdTv/+OgA8IZw9IK9CcZ7Eb8EwahdRV/oR/NrkkaeK4/tx5ziPO4acSk4kQp8
+         m+nE4brnCJiwik/WmeBNLPzgbQul/9ZHOlT5SKBV9+pUl570jgvOh2YOjfXEUYV2xUPp
+         Lobw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rjuKSGV50wTNMTGg13pBdWijHuHSlBBgwS9gcRtk9h4=;
-        b=kAnJkN8AbhoicyYjIVQSFxhprr+GOmbj3LS2b4eYFiht6cCClw5b/cHZweQn0idQYj
-         +7nweqjW1TUeFbOBmPmaAHnvSqk4LoV6GYAa7SSGN9jUefcTCd8NBKJBysb8zq971CFT
-         Jag3tMXz6Yb3FLycIS5LOmY/GeTAtz0GvtC82kVKtsqZuhCrWUS14SAdQ1I/l8DsQRep
-         kNuUj52/0xr3q54wfPIbos9opUsENbAnT9aBM+oNfkzgl+qU/LsunOOOyheA68Pul86B
-         SD+z4Zb5Iw48SmZJnj1virmITEvsN4IpOdzoxtJzjbOx2FUjBKhL+pC5LjaO+TN7JlAa
-         tjcA==
-X-Gm-Message-State: ACrzQf1rmv4ReKbFhGIlLW5f/eI5N/1PNkgav27w5NSXP1Rc55FanfFD
-        bwKhI7FYfy6n8PgWkjKhhc/WIg==
-X-Google-Smtp-Source: AMsMyM6bIFqppyQVJfbAz5vhEyejiuXMtlNwdPV+afz+Cg7hK1XpWReSLStbAczvDnPcqTKn5Jh74Q==
-X-Received: by 2002:a05:600c:3384:b0:3c6:f25a:96e9 with SMTP id o4-20020a05600c338400b003c6f25a96e9mr20487867wmp.112.1666343328648;
-        Fri, 21 Oct 2022 02:08:48 -0700 (PDT)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JEMkL9tW27qh7qB7z1dOyn6IVj+P4lSJ9BRc/xcD6yA=;
+        b=Efkrdb/PzA6MzDiS1aNcEEDxopGqnim73hOPSLwU1+z6ZkqTs9EtZ6Y07UOezbWhtf
+         Xpv/Jv4YbNWVgsyOYziSZJXKwtOCgRu58d+yH/yQasQBrQKMX7OjPgpFlEqAU8e10mp8
+         KJJ8iRZAW/ivTPefj4VQF8VcYQ7V48UeR8WplcLpOn9FkK2AJ4Fm2njlqKKMxaob4QiJ
+         pVZX/UnqXqxtgffP+35oRO+grwykT2FnAADLEqrnphTmC8EpzQuWVx+buM3akjEkBxJ3
+         erIiWY9e0y0FGfsbd7JBuIi5V36aB5J2jYX7SWAxure+svGU2o9n+Zz1tOWlE0TLse8X
+         08Ww==
+X-Gm-Message-State: ACrzQf2LrxX/Rig6YAxu3c9crDiKozawDG5ghWw/p1GIxulCnXux+cqY
+        3+3FWlABHq261Eqp5OAdduqarA==
+X-Google-Smtp-Source: AMsMyM6V1N6SjorKzw6JVSS3tvnK0Y49BcdyxB/3asfQVXN2SL4B7kTCY2CQ1hyzpoAQpPgHl6JTlQ==
+X-Received: by 2002:a05:600c:3c8e:b0:3b4:d224:ae27 with SMTP id bg14-20020a05600c3c8e00b003b4d224ae27mr12509297wmb.187.1666343329602;
+        Fri, 21 Oct 2022 02:08:49 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003c6f27d275dsm2230286wmn.33.2022.10.21.02.08.47
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003c6f27d275dsm2230286wmn.33.2022.10.21.02.08.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 02:08:48 -0700 (PDT)
-Subject: [PATCH v4 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
+        Fri, 21 Oct 2022 02:08:49 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 21 Oct 2022 11:06:37 +0200
+Subject: [PATCH v4 01/11] dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board
+ documentation to qcom.yaml
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIABxhUmMC/43NywrCMBAF0F8pWTuSR5O2rvwPcZHHtA20KSRaFOm/O7gTF3Y13Av3zIsVzBELO1
- UvlnGNJS6JQn2omB9tGhBioMwkl5J3soU5zJ0RGsINih9xttDHBxYwJtSBe+8a3zBaO1sQXLbJj7RP
- 92micozltuTn59sq6Fz+w6sADs6gUbYJvcD2PMVk83Jc8sCuhK5yJyQJapveoastcq1+ILUTUgRpJY LVWnql6y9o27Y3tggEz1YBAAA=
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 21 Oct 2022 11:06:36 +0200
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+Message-Id: <20220928-mdm9615-dt-schema-fixes-v4-1-dac2dfaac703@linaro.org>
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Satya Priya <quic_c_skakit@quicinc.com>,
         Lee Jones <lee@kernel.org>,
@@ -86,105 +87,50 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
+Document into the main qcom.yaml as conversion from swir.txt to dt-schema.
 
-This first round focuses on trivial changes, the remaining work will
-mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
-
-To: Andy Gross <agross@kernel.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>
-To: Konrad Dybcio <konrad.dybcio@somainline.org>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Lee Jones <lee@kernel.org>
-To: Satya Priya <quic_c_skakit@quicinc.com>
-To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Alessandro Zummo <a.zummo@towertech.it>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: linux-input@vger.kernel.org
-Cc: linux-rtc@vger.kernel.org
-Dependencies: None
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
-Changes in v4:
-- patch 1: None
-- patch 2: None
-- patch 3: None
-- patch 4: None
-- patch 5: Added reviewed-by tag
-- patch 6: Fix descriptions, Added reviewed-by tags
-- patch 7: None
-- patch 8: None
-- patch 9: Added acked-by tag
-- patch 10: None
-- patch 11: None
-- Link to v3: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v3-0-531da552c354@linaro.org
+ Documentation/devicetree/bindings/arm/qcom.yaml |  6 ++++++
+ Documentation/devicetree/bindings/arm/swir.txt  | 12 ------------
+ 2 files changed, 6 insertions(+), 12 deletions(-)
 
-Changes in v3:
-- Rebased on v6.1-rc1
-- patch 1: Added reviewed-by tag
-- patch 2: Fixes typo in commit msg and added precision about why MIT was selected
-- patch 3: Added reviewed-by tag
-- patch 4: None
-- patch 5: Drop second example node
-- patch 6: Drop Andy, fix interrupts desc and fix example indentation
-- patch 7: Fix commit msg wrap & add reviewed-by tag
-- patch 8: Reword commit msg & add reviewed-by tag
-- patch 9: Reword commit msg & add reviewed-by tag
-- patch 10: None
-- patch 11: Added reviewed-by tag
-- Link to v2: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v2-0-87fbeb4ae053@linaro.org
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 1b5ac6b02bc5..0a9a1dc68c1b 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -265,6 +265,12 @@ properties:
+               - qcom,ipq8074-hk10-c2
+           - const: qcom,ipq8074
+ 
++      - description: Sierra Wireless MangOH Green with WP8548 Module
++        items:
++          - const: swir,mangoh-green-wp8548
++          - const: swir,wp8548
++          - const: qcom,mdm9615
++
+       - description: Qualcomm Technologies, Inc. SC7180 IDP
+         items:
+           - enum:
+diff --git a/Documentation/devicetree/bindings/arm/swir.txt b/Documentation/devicetree/bindings/arm/swir.txt
+deleted file mode 100644
+index 042be73a95d3..000000000000
+--- a/Documentation/devicetree/bindings/arm/swir.txt
++++ /dev/null
+@@ -1,12 +0,0 @@
+-Sierra Wireless Modules device tree bindings
+---------------------------------------------
+-
+-Supported Modules :
+- - WP8548 : Includes MDM9615 and PM8018 in a module
+-
+-Sierra Wireless modules shall have the following properties :
+-  Required root node property
+-   - compatible: "swir,wp8548" for the WP8548 CF3 Module
+-
+-Board compatible values:
+-  - "swir,mangoh-green-wp8548" for the mangOH green board with the WP8548 module
 
-Changes in v2:
-- patch 1: switch to move from swir.txt to qcom.yaml
-- patch 2: use MIT licence instead of X11 licence
-- patch 3: move reg after compatible
-- patch 4: added Krzysztof's review
-- patch 5: split into 5 changes:
-  - document qcom,pm8921 as fallback of qcom,pm8018
-  - convert qcom,pm8921-pwrkey to dt-schema
-  - document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
-  - drop unused PM8018 compatible
-  - drop unused pm8018 RTC compatible
-- patch 6: None
-- patch 7: Reworded commit log based on Dmitry's wording on similar patches
-- Link to v1: https://lore.kernel.org/r/20220928-mdm9615-dt-schema-fixes-v1-0-b6e63a7df1e8@linaro.org
-
----
-Neil Armstrong (11):
-      dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
-      arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
-      arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
-      arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
-      dt-bindings: mfd: qcom-pm8xxx: document qcom,pm8921 as fallback of qcom,pm8018
-      dt-bindings: input: qcom,pm8921-pwrkey: convert to dt-schema
-      dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
-      mfd: qcom-pm8xxx: drop unused PM8018 compatible
-      rtc: pm8xxx: drop unused pm8018 compatible
-      arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
-      arm: dts: qcom: mdm9615: remove useless amba subnode
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |   6 +
- Documentation/devicetree/bindings/arm/swir.txt     |  12 --
- .../bindings/input/qcom,pm8921-pwrkey.yaml         |  75 +++++++++++++
- .../bindings/input/qcom,pm8xxx-pwrkey.txt          |  46 --------
- .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       |  33 +++++-
- .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |  16 ++-
- .../boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  39 +------
- arch/arm/boot/dts/qcom-mdm9615-wp8548.dtsi         |  39 +------
- arch/arm/boot/dts/qcom-mdm9615.dtsi                | 121 +++++++--------------
- drivers/mfd/qcom-pm8xxx.c                          |   1 -
- drivers/rtc/rtc-pm8xxx.c                           |   1 -
- 11 files changed, 159 insertions(+), 230 deletions(-)
----
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
-change-id: 20220928-mdm9615-dt-schema-fixes-66d4d0ccb7c7
-
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+b4 0.10.1
