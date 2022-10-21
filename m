@@ -2,83 +2,54 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E7C60737C
-	for <lists+linux-rtc@lfdr.de>; Fri, 21 Oct 2022 11:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648186073F2
+	for <lists+linux-rtc@lfdr.de>; Fri, 21 Oct 2022 11:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiJUJJW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 21 Oct 2022 05:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S229864AbiJUJYO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 21 Oct 2022 05:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiJUJJE (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Oct 2022 05:09:04 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78561A3E1A
-        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:59 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bp11so3515492wrb.9
-        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z8zoiO3HcCMOhvwnFbJarwF7HI12ZyCQT2wJzcSF7bw=;
-        b=Uz6ED8+AFKkavxx4Z4rUSZ49p6KCGe3ktPcOBHN6WexT7SyHWpM6TnwFv/A3y1Sd5x
-         WE9Nuf4iKsjXPtEkH6zp+umlRZCRh37PLcXAZy6nqmiWmRBE+mTivIKi0MpiGhHSi/pn
-         xNeRFpiKCEDcj38NIp+sNtJSP96sQYyygQH2rMvZ/X4SrKR7vCvSUF/AnE8vqs55l6Od
-         XkeRrMcVjzW95YqcF1/os/jOLZI/6FJdMOKjlDXWCj2FVYV45DwL2DdLgU3tCJohi9sA
-         VUna4rGH+A01zmT9mJtRtT1LuDZbp2Bq8wT5zxMPuIQchB//v9g1u7GiCyMWeeEIsjkt
-         lv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z8zoiO3HcCMOhvwnFbJarwF7HI12ZyCQT2wJzcSF7bw=;
-        b=mbsQ4alg/fIeoQRnQ3HEYwXl6J3uuhHtHOrp2D2P4pZHua3CNaZ5+gn/KhGuqlnZlP
-         3cAUL8x9YOhYjbHpHbvHPwVpaR03HlgwkWvHkTJmUdrKxRl29gFO2M7XeLGXeMAMzE7k
-         TBBu2Zm1ddU4UFaniQwn7wS64OzQ48StGHnKhMIuJyotTLI8SWf49slmv4s3oSu/qRCe
-         nAzKJ35zyhWj/x+fJGJo1CNgvqyENl32HhHMxsXzo6CpQg4Bm+NBh1wBLXyFrV9fb9ST
-         M56b0m2nNoiR6gagsquVN2JuAPKV/y+UnDY/22XST7OLlb2ZjIrnjZJk56PrjrIHcJ00
-         uTKQ==
-X-Gm-Message-State: ACrzQf0SyVqXrC0YyYUrP9Q3w61ILhAqAXixeQjab9VJPQgFQwFxX+k8
-        dX1rZOsVbdIifnzEWTFQT1L0fw==
-X-Google-Smtp-Source: AMsMyM6jIh9zbKsc1vnvwPsF6zzTaHqTxKuVbiY7pDHJlXhCrSir/VQF9R12RHVdtYEqxXhm2nHf2Q==
-X-Received: by 2002:adf:d0c5:0:b0:22d:e73a:a4c9 with SMTP id z5-20020adfd0c5000000b0022de73aa4c9mr11224682wrh.315.1666343339285;
-        Fri, 21 Oct 2022 02:08:59 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c444a00b003c6f27d275dsm2230286wmn.33.2022.10.21.02.08.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 02:08:58 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 21 Oct 2022 11:06:47 +0200
-Subject: [PATCH v4 11/11] arm: dts: qcom: mdm9615: remove useless amba subnode
+        with ESMTP id S230233AbiJUJYF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 21 Oct 2022 05:24:05 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745C8173FD1
+        for <linux-rtc@vger.kernel.org>; Fri, 21 Oct 2022 02:24:04 -0700 (PDT)
+Received: from [192.168.1.101] (95.49.29.134.neoplus.adsl.tpnet.pl [95.49.29.134])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C395A1F4B3;
+        Fri, 21 Oct 2022 11:14:10 +0200 (CEST)
+Message-ID: <a991e218-f799-6e09-478a-24115c4135f1@somainline.org>
+Date:   Fri, 21 Oct 2022 11:14:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20220928-mdm9615-dt-schema-fixes-v4-11-dac2dfaac703@linaro.org>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v4 03/11] arm: dts: qcom: mdm9615: add missing reg in
+ cpu@0 node
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Satya Priya <quic_c_skakit@quicinc.com>,
         Lee Jones <lee@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Andy Gross <agross@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v4-3-dac2dfaac703@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-3-dac2dfaac703@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,106 +57,30 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The separate amba device node doesn't add anything significant to the
-DT. The OF parsing code already creates amba_device or platform_device
-depending on the compatibility lists.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm/boot/dts/qcom-mdm9615.dtsi | 78 +++++++++++++++++--------------------
- 1 file changed, 36 insertions(+), 42 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index 9d950f96280d..482fd246321c 100644
---- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-+++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -314,49 +314,43 @@ sdcc2bam: dma-controller@12142000{
- 			qcom,ee = <0>;
- 		};
- 
--		amba {
--			compatible = "simple-bus";
--			#address-cells = <1>;
--			#size-cells = <1>;
--			ranges;
--			sdcc1: mmc@12180000 {
--				status = "disabled";
--				compatible = "arm,pl18x", "arm,primecell";
--				arm,primecell-periphid = <0x00051180>;
--				reg = <0x12180000 0x2000>;
--				interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
--				clock-names = "mclk", "apb_pclk";
--				bus-width = <8>;
--				max-frequency = <48000000>;
--				cap-sd-highspeed;
--				cap-mmc-highspeed;
--				vmmc-supply = <&vsdcc_fixed>;
--				dmas = <&sdcc1bam 2>, <&sdcc1bam 1>;
--				dma-names = "tx", "rx";
--				assigned-clocks = <&gcc SDC1_CLK>;
--				assigned-clock-rates = <400000>;
--			};
-+		sdcc1: mmc@12180000 {
-+			status = "disabled";
-+			compatible = "arm,pl18x", "arm,primecell";
-+			arm,primecell-periphid = <0x00051180>;
-+			reg = <0x12180000 0x2000>;
-+			interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc SDC1_CLK>, <&gcc SDC1_H_CLK>;
-+			clock-names = "mclk", "apb_pclk";
-+			bus-width = <8>;
-+			max-frequency = <48000000>;
-+			cap-sd-highspeed;
-+			cap-mmc-highspeed;
-+			vmmc-supply = <&vsdcc_fixed>;
-+			dmas = <&sdcc1bam 2>, <&sdcc1bam 1>;
-+			dma-names = "tx", "rx";
-+			assigned-clocks = <&gcc SDC1_CLK>;
-+			assigned-clock-rates = <400000>;
-+		};
- 
--			sdcc2: mmc@12140000 {
--				compatible = "arm,pl18x", "arm,primecell";
--				arm,primecell-periphid = <0x00051180>;
--				status = "disabled";
--				reg = <0x12140000 0x2000>;
--				interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
--				clock-names = "mclk", "apb_pclk";
--				bus-width = <4>;
--				cap-sd-highspeed;
--				cap-mmc-highspeed;
--				max-frequency = <48000000>;
--				no-1-8-v;
--				vmmc-supply = <&vsdcc_fixed>;
--				dmas = <&sdcc2bam 2>, <&sdcc2bam 1>;
--				dma-names = "tx", "rx";
--				assigned-clocks = <&gcc SDC2_CLK>;
--				assigned-clock-rates = <400000>;
--			};
-+		sdcc2: mmc@12140000 {
-+			compatible = "arm,pl18x", "arm,primecell";
-+			arm,primecell-periphid = <0x00051180>;
-+			status = "disabled";
-+			reg = <0x12140000 0x2000>;
-+			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc SDC2_CLK>, <&gcc SDC2_H_CLK>;
-+			clock-names = "mclk", "apb_pclk";
-+			bus-width = <4>;
-+			cap-sd-highspeed;
-+			cap-mmc-highspeed;
-+			max-frequency = <48000000>;
-+			no-1-8-v;
-+			vmmc-supply = <&vsdcc_fixed>;
-+			dmas = <&sdcc2bam 2>, <&sdcc2bam 1>;
-+			dma-names = "tx", "rx";
-+			assigned-clocks = <&gcc SDC2_CLK>;
-+			assigned-clock-rates = <400000>;
- 		};
- 
- 		tcsr: syscon@1a400000 {
+On 21.10.2022 11:06, Neil Armstrong wrote:
+> Fixes cpu@0: 'reg' is a required property from dtbs check.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
--- 
-b4 0.10.1
+Konrad
+>  arch/arm/boot/dts/qcom-mdm9615.dtsi | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> index de36e4545e75..eaa3236f62db 100644
+> --- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> +++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
+> @@ -27,6 +27,7 @@ cpus {
+>  
+>  		cpu0: cpu@0 {
+>  			compatible = "arm,cortex-a5";
+> +			reg = <0>;
+>  			device_type = "cpu";
+>  			next-level-cache = <&L2>;
+>  		};
+> 
