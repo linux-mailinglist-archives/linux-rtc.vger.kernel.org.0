@@ -2,70 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA6D6084C1
-	for <lists+linux-rtc@lfdr.de>; Sat, 22 Oct 2022 07:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783C0608CC5
+	for <lists+linux-rtc@lfdr.de>; Sat, 22 Oct 2022 13:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJVFsX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 22 Oct 2022 01:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S230410AbiJVLhy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 22 Oct 2022 07:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiJVFsW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 22 Oct 2022 01:48:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62052B2E2F;
-        Fri, 21 Oct 2022 22:48:19 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1666417679tbqqeg7x
-Received: from localhost.localdomain ( [182.148.15.254])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 22 Oct 2022 13:47:58 +0800 (CST)
-X-QQ-SSF: 01000000000000C0E000000A0000000
-X-QQ-FEAT: OXH3MF60TyVvr9UVGSDDaeJb5XQDEbeuxnXAZL6qn0Yay+npMA4rP9EGhkh6V
-        z1VdbZQ1uqXXbbfVU5Ha2DihsX97fjlqUV4BCrZ8kEguDnClygwUC9LmxpH5/iC7uWkRXNa
-        0q/RGlNzC009J/TAnWRUiSe7v3p9OsJWGLDWlI8d+ZafEjY3AMv8wOfkMvbFolDOxOGFFyW
-        AmzKZObceBJ3n6VYe4FfPzpa4/gVA31ac0hYLsSBpCURDEuYfBN472h6XS2JY8tnIWCU/f6
-        13pCItTsR7+xRPjANaVlCT0Y77X4So34t+Kz73voQgCDpq7lP83R/d0mdJ/4enhC1abgYlq
-        oWfa0VpePEpTX0uOBAu0LHr6qY9HqpprA6bZnFjJCJYXuLpuDc=
-X-QQ-GoodBg: 0
-From:   wangjianli <wangjianli@cdjrlc.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wangjianli <wangjianli@cdjrlc.com>
-Subject: [PATCH] drivers/rtc: fix repeated words in comments
-Date:   Sat, 22 Oct 2022 13:47:52 +0800
-Message-Id: <20221022054752.37596-1-wangjianli@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S230020AbiJVLhi (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 22 Oct 2022 07:37:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F30DF9;
+        Sat, 22 Oct 2022 04:24:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3920260D34;
+        Sat, 22 Oct 2022 11:24:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED202C433C1;
+        Sat, 22 Oct 2022 11:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666437854;
+        bh=QlHVwvQAZAIgvjk8abE10EkrdDUL7r/AigVC5ALYQK4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=un1PldCoLSJ88cWZRYnjm5Oi1KiCHJHB0LueFTTYXn8D7fIAxS0vK6V48SeMy9VdW
+         ZuWEiHtsrYztxbCEB+Ntyz+QhjY7UYniFteggfYw/ntXKMozNoEsqsq66wk3rOhU3K
+         hzsEaBZQY3uGlKbG/0kkX3FnGtw/tJtrFvWLyT24=
+Date:   Sat, 22 Oct 2022 13:24:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+Message-ID: <Y1PS3A75mXIEb+MA@kroah.com>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-2-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Delete the redundant word 'the'.
+On Fri, Oct 21, 2022 at 10:27:35PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
----
- drivers/rtc/rtc-rs5c372.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index cb15983383f5..8d551e15b91a 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -150,7 +150,7 @@ static int rs5c_get_regs(struct rs5c372 *rs5c)
- 	 * least 80219 chips; this works around that bug.
- 	 *
- 	 * The third method on the other hand doesn't work for the SMBus-only
--	 * configurations, so we use the the first method there, stripping off
-+	 * configurations, so we use the first method there, stripping off
- 	 * the extra register in the process.
- 	 */
- 	if (rs5c->smbus) {
--- 
-2.36.1
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
