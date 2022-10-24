@@ -2,37 +2,37 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F6B60B885
-	for <lists+linux-rtc@lfdr.de>; Mon, 24 Oct 2022 21:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932B860BC15
+	for <lists+linux-rtc@lfdr.de>; Mon, 24 Oct 2022 23:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiJXTuc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 Oct 2022 15:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
+        id S234278AbiJXVZ1 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 24 Oct 2022 17:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234147AbiJXTtz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Oct 2022 15:49:55 -0400
+        with ESMTP id S234365AbiJXVZJ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Oct 2022 17:25:09 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CAD168E63;
-        Mon, 24 Oct 2022 11:15:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69B22D8731;
+        Mon, 24 Oct 2022 12:31:17 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-096-059-109.ewe-ip-backbone.de [91.96.59.109])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86827660283F;
-        Mon, 24 Oct 2022 17:55:58 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E68FF6602831;
+        Mon, 24 Oct 2022 17:55:55 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666630558;
-        bh=4ZJL66e4uW0ZMfoXxSwlQ168x6AE5qji5g/hEVVVtNI=;
+        s=mail; t=1666630556;
+        bh=IQfA/rjSC8iXKiLYxLYySHd/9TLQ9kJX50bPBRU+wQI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U+ts7lMAMaWbjGgf47Fa/x8M9r74NDlhkJ23lZoQTUPGZwiHwGaAQaybJZy8O2Hur
-         jffcrKCymXnnLhjBFBC9fFbniFal2QGpkWaFogWxTtyPldygP1pM3geMIGwXJGlJLG
-         DlnFI6gUL7q7BF6Mr6b8QiLDTwGB7y7q7mRcASHcmcFlMH7xEwv2+EvE3JA5EMsUFe
-         q/1sD+RcxAV0WnNumJaVxQno+zl6KgZ3outsIoCgoJ5wBFwXOaqGa3yvPC50gMVaKi
-         PLVJs2F35RXXDuDFlNEftBEqtbDJQIJoo1oUFuRhZ+y0/QREx9L/ruy5bTJMDNLBy4
-         Hz07fHHRzs9fg==
+        b=duef4a48j43UXRDooZFg5Tcx+c7cHP8CYaHz/I3gN3ng1rU7jHSNzOL/hHP40fJ3i
+         gNsrEohcKR6z6xnBmvOB2yqzw/dKkmj5Sr2hhTIMn53Z+nHPVk9kKa5hDjCtBOBPNJ
+         qLz//IwJQnK5No1loN2JbkyBlo6YeXlx0dfAQEWc2G1rsXevEFiRi0IQZuf7EOFB2N
+         e3T5+5ln7bFV8fQPrOqPTomoy44YZcopKhKCGs64/N9A4mp9Z+GaMkmH5Ko0nYK5sh
+         b8hjHERCtLiRaywWUXUjbAq44qf5cGYG1pq6TAgxS93SaIML4k7qI8n/977Iydr6fi
+         cC6Ru2rV2M8sg==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 099CF480AF2; Mon, 24 Oct 2022 18:55:54 +0200 (CEST)
+        id F38C3480AEE; Mon, 24 Oct 2022 18:55:53 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
@@ -48,9 +48,9 @@ Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCHv2 6/6] dt-bindings: rtc: convert hym8563 bindings to json-schema
-Date:   Mon, 24 Oct 2022 18:55:49 +0200
-Message-Id: <20221024165549.74574-7-sebastian.reichel@collabora.com>
+Subject: [PATCHv2 2/6] arm64: dts: rockchip: remove clock-frequency from rtc
+Date:   Mon, 24 Oct 2022 18:55:45 +0200
+Message-Id: <20221024165549.74574-3-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221024165549.74574-1-sebastian.reichel@collabora.com>
 References: <20221024165549.74574-1-sebastian.reichel@collabora.com>
@@ -65,115 +65,91 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Convert RTC binding for Haoyu Microelectronics HYM8563 to Device Tree
-Schema format.
+'clock-frequency' is not part of the DT binding and not supported by the
+Linux driver.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
- .../bindings/rtc/haoyu,hym8563.yaml           | 56 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
+ arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts | 1 -
+ arch/arm64/boot/dts/rockchip/rk3368-r88.dts            | 1 -
+ arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts    | 1 -
+ arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi  | 1 -
+ arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts     | 1 -
+ arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts        | 1 -
+ 6 files changed, 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-deleted file mode 100644
-index a8934fe2ab4c..000000000000
---- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Haoyu Microelectronics HYM8563 Real Time Clock
--
--The HYM8563 provides basic rtc and alarm functionality
--as well as a clock output of up to 32kHz.
--
--Required properties:
--- compatible: should be: "haoyu,hym8563"
--- reg: i2c address
--- #clock-cells: the value should be 0
--
--Optional properties:
--- clock-output-names: From common clock binding
--- interrupts: rtc alarm/event interrupt
--
--Example:
--
--hym8563: hym8563@51 {
--	compatible = "haoyu,hym8563";
--	reg = <0x51>;
--
--	interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
--
--	#clock-cells = <0>;
--};
--
--device {
--...
--	clocks = <&hym8563>;
--...
--};
-diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-new file mode 100644
-index 000000000000..0b9f39ef0edc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-@@ -0,0 +1,56 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Haoyu Microelectronics HYM8563 RTC
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: haoyu,hym8563
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#clock-cells":
-+    const: 0
-+
-+  clock-output-names:
-+    description: From common clock binding to override the default output clock name.
-+    maxItems: 1
-+
-+  wakeup-source:
-+    description: Enables wake up of host system on alarm.
-+
-+allOf:
-+  - $ref: rtc.yaml
-+
-+unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@51 {
-+            compatible = "haoyu,hym8563";
-+            reg = <0x51>;
-+            interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
-+            #clock-cells = <0>;
-+        };
-+    };
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+index 0e88e9592c1c..81d1064fdb21 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+@@ -212,7 +212,6 @@ hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "xin32k";
+ 		/* rtc_int is not connected */
+ 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+index e147d6f8b43e..5589f3db6b36 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+@@ -196,7 +196,6 @@ hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "xin32k";
+ 		/* rtc_int is not connected */
+ 	};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
+index 18b5050c6cd3..7ba1c28f70a9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
+@@ -104,7 +104,6 @@ hym8563: rtc@51 {
+ 		interrupt-parent = <&gpio0>;
+ 		interrupts = <RK_PA5 IRQ_TYPE_EDGE_FALLING>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "xin32k";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hym8563_int>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi b/arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi
+index 6c168566321b..bf9eb0405b62 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399pro-vmarc-som.dtsi
+@@ -301,7 +301,6 @@ hym8563: rtc@51 {
+ 		compatible = "haoyu,hym8563";
+ 		reg = <0x51>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "hym8563";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hym8563_int>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+index c282f6e79960..26d7fda275ed 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+@@ -500,7 +500,6 @@ hym8563: rtc@51 {
+ 		interrupt-parent = <&gpio0>;
+ 		interrupts = <RK_PD3 IRQ_TYPE_EDGE_FALLING>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "rtcic_32kout";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hym8563_int>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+index fb87a168fe96..539ef8cc7792 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
+@@ -509,7 +509,6 @@ hym8563: rtc@51 {
+ 		interrupt-parent = <&gpio0>;
+ 		interrupts = <RK_PD3 IRQ_TYPE_LEVEL_LOW>;
+ 		#clock-cells = <0>;
+-		clock-frequency = <32768>;
+ 		clock-output-names = "rtcic_32kout";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&hym8563_int>;
 -- 
 2.35.1
 
