@@ -2,212 +2,97 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B91060BEF3
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 Oct 2022 01:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC5060D095
+	for <lists+linux-rtc@lfdr.de>; Tue, 25 Oct 2022 17:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJXXtU (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 24 Oct 2022 19:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S232721AbiJYPaH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 25 Oct 2022 11:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiJXXsp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 24 Oct 2022 19:48:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EC94BA49;
-        Mon, 24 Oct 2022 15:06:42 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C7AF5660239F;
-        Mon, 24 Oct 2022 23:06:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666649161;
-        bh=0DZREBkMejpNRqf8Nqk2/WVBPsg4sk2w69lAt8niLSM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZPyx+sZXh9qqFB/rX4k4sH3V+SoGANcR+dIjR5pq8JVS3XCR0Aq7Hl8UZqdSg3vNQ
-         GbEfkx68nhYD0mYnTF0D2S6uMAxEud2M/vCXdhGyfLDXbiGACdmEOQmlvxRxbaI0SG
-         8JsYuchohy3bMXpx/O/lMDZuRm87THXp7Zldd635HksRrRem9Y6N1dH/7t+uQhS3zw
-         vmw54iYJyTrx19p3wFTFRtEbgZlmkmkCbiQEIOpgjjC8hXiWc46RbvE4k6Vv3XC8P8
-         Hr4nb4RjTn0zPDV9ONphGsj8xMdqz8AsK/1uZ9CP6E3Eq4azgujx6F7mPypMupAbPF
-         IO96eRbMgH6YQ==
-Received: by mercury (Postfix, from userid 1000)
-        id BA81210607D6; Tue, 25 Oct 2022 00:05:59 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 00:05:59 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        with ESMTP id S233105AbiJYPaG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 Oct 2022 11:30:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD92AC78;
+        Tue, 25 Oct 2022 08:30:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666711805; x=1698247805;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xn5JOS/FH+ZZXqzrPkPODHcTMuCEZjsZ59+va4WxJ7A=;
+  b=CvPslIeOsFexfPByRaSzOuU8ter0iUdOGyGigzfK/IAq3bXKJNNfwUf0
+   hcVkRfi64TzU4gjecrijIu/b2NfpGxfN9BqnaOf7pgFlgwgT9Zgkh6XdK
+   8fHfU8aMXVH6tGucy8D7uTfz2z7P6n+rT2AG1jCaOj8bYXDG68cQ/Dxkf
+   UdE23kwtTIQKkDEFB2PDqGEmBb0RobqYR4APHA9zXwcK7BKBLYcbMsHcq
+   49VqNwxGQ8C3CDfavm/tysVnSK4C7xMQXiYy9MVYT1a5eUivbcA4e56yD
+   uEHty3t+S1/JeHe4E8pPozr9Urbxv/p2YLKnwsjaz35nVv/qdA0g2l+Rx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371921673"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="371921673"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694995410"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="694995410"
+Received: from wdunn-mobl1.amr.corp.intel.com ([10.212.194.192])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:39 -0700
+Message-ID: <836b1787426d5b1569f6d77007a4765ee17d5ea6.camel@linux.intel.com>
+Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 1/1] dt-bindings: rtc: convert hym8563 bindings to
- json-schema
-Message-ID: <20221024220559.dddihmq4xg55h26w@mercury.elektranox.org>
-References: <20221021170605.85163-1-sebastian.reichel@collabora.com>
- <a5db8a34-acd0-e262-36f0-0b904468bd1f@linaro.org>
- <20221024185049.GA2034297-robh@kernel.org>
+        linux-rtc@vger.kernel.org
+Date:   Tue, 25 Oct 2022 08:28:39 -0700
+In-Reply-To: <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
+References: <5887691.lOV4Wx5bFT@kreacher>
+         <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="omachftlzphorltz"
-Content-Disposition: inline
-In-Reply-To: <20221024185049.GA2034297-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-
---omachftlzphorltz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Mon, Oct 24, 2022 at 01:50:49PM -0500, Rob Herring wrote:
-> On Fri, Oct 21, 2022 at 07:59:26PM -0400, Krzysztof Kozlowski wrote:
-> > On 21/10/2022 13:06, Sebastian Reichel wrote:
-> > > Convert RTC binding for Haoyu Microelectronics HYM8563 to Device Tree
-> > > Schema format.
-> > >=20
-> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > > ---
-> > >  .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
-> > >  .../bindings/rtc/haoyu,hym8563.yaml           | 55 +++++++++++++++++=
-++
-> > >  2 files changed, 55 insertions(+), 30 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym85=
-63.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/rtc/haoyu,hym85=
-63.yaml
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt =
-b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-> > > deleted file mode 100644
-> > > index a8934fe2ab4c..000000000000
-> > > --- a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.txt
-> > > +++ /dev/null
-> > > @@ -1,30 +0,0 @@
-> > > -Haoyu Microelectronics HYM8563 Real Time Clock
-> > > -
-> > > -The HYM8563 provides basic rtc and alarm functionality
-> > > -as well as a clock output of up to 32kHz.
-> > > -
-> > > -Required properties:
-> > > -- compatible: should be: "haoyu,hym8563"
-> > > -- reg: i2c address
-> > > -- #clock-cells: the value should be 0
-> > > -
-> > > -Optional properties:
-> > > -- clock-output-names: From common clock binding
-> > > -- interrupts: rtc alarm/event interrupt
-> > > -
-> > > -Example:
-> > > -
-> > > -hym8563: hym8563@51 {
-> > > -	compatible =3D "haoyu,hym8563";
-> > > -	reg =3D <0x51>;
-> > > -
-> > > -	interrupts =3D <13 IRQ_TYPE_EDGE_FALLING>;
-> > > -
-> > > -	#clock-cells =3D <0>;
-> > > -};
-> > > -
-> > > -device {
-> > > -...
-> > > -	clocks =3D <&hym8563>;
-> > > -...
-> > > -};
-> > > diff --git a/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml=
- b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-> > > new file mode 100644
-> > > index 000000000000..b0b6126b12dd
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/rtc/haoyu,hym8563.yaml
-> > > @@ -0,0 +1,55 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
+On Tue, 2022-10-18 at 18:38 +0200, Alexandre Belloni wrote:
+> On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >=20
-> > Dual license please. I don't think you copied any content from original
-> > bindings... unless the example?
+> > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
+> > ordering issue") overlooked the fact that cmos_do_probe() depended
+> > on the preparations carried out by cmos_wake_setup() and the wake
+> > alarm stopped working after the ordering of them had been changed.
 > >=20
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/rtc/haoyu,hym8563.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Haoyu Microelectronics HYM8563 RTC
-> > > +
-> > > +maintainers:
-> > > +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: haoyu,hym8563
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  "#clock-cells":
-> > > +    const: 0
-> > > +
-> > > +  clock-output-names:
-> > > +    description: From common clock binding to override the default o=
-utput clock name.
-> >=20
-> > You need maxItems for this.
-> >=20
-> > > +
-> > > +  wakeup-source:
-> > > +    description: Enables wake up of host system on alarm.
-> > > +
-> > > +allOf:
-> > > +  - $ref: rtc.yaml
-> > > +
-> > > +unevaluatedProperties: false
-> > > +
-> >=20
-> > Would be great if you could also correct DTS using these bindings (see
-> > warning from Rob).
+> > [...]
 >=20
-> It looked to me like 'clock-frequency' should be added to the schema.
+> Applied, thanks!
 
-I've sent PATCHv2, which removes clock-frequency from all hym8563
-users. My reasoning is, that the old txt binding does not describe
-it and the current Linux driver does not handle it as far as I can
-see.
+I did testing yesterday on the 6.1.0-rc2 build and this patch hasn't
+made it into rc2. This is an extreme inconvenience to anyone testing
+low power modes as the rtc wakealarm doesn't function. I'm a little
+surprised more people haven't complained.
 
-https://lore.kernel.org/all/20221024165549.74574-1-sebastian.reichel@collab=
-ora.com/
+Please get this in 6.1.0-rc3.
 
--- Sebastian
+> [1/1] rtc: rtc-cmos: Fix wake alarm breakage
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit: 0782b66ed2fbb035dda76111df0954515e=
+417b24
+>=20
+> Best regards,
+>=20
 
---omachftlzphorltz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNXDEAACgkQ2O7X88g7
-+ppQbhAAqQfruhqqJn348vOyNGJBus/9pu1vnLc38D5XA7rI2GPjifPpwuDCJOl2
-dnqnIet6jQo06lPOLeTM+EB06/Z19wmjnNXj3I8q+UQcST5ndxZE8j59RDbcV0KK
-+Y7w2JLshRHZOs4iYiyKb1M9kF0whxMViqiHxA4Oba2pMyNqTyL9TWdluB6EV6Z0
-1s61QlzhD58nWmewfYobxlFmJBvVgEoRAETxYeYrW6cbE30KesVx76TkypMipOQf
-S7/Qn7d80rU37bedjScwPVRa9W1E8AmfICrJ2ZCVEnhIH5WvsxB+h+om740UyETp
-0KQQZgmsY76l2YIArW6t8gQWyGWtPgUeNt3x4VP/3qyZ5rfnR/AvdDpY6KOqPunY
-cYpvUp5wE+hzgOvp0dG69ItQP7Xc6zizKew1j/8J2SydYDXprN7joB9ejWqcBSdp
-nVa6FSGTplhiTt/hPEeigs3VXIkvyP+XEptIVjmmg7xjVb+hCD1MnLsl3imIiei9
-pOnpxh7ty+IAcjv2fHzXPhNm7JCf3KMuDAh48IgEdsQYlPnCN//rqrPWGC14V2z7
-pWrFrHW/8i0bxptnguv0dtuaut+c+FzaWKUm6WeRkl3yqvkOc55S7/UTAgwbgSj0
-0ZdY1+WndR8L+ZJPqFF7+77jj7Zhqyu1sTtl9X0ua+EIWeQcr9k=
-=GlDT
------END PGP SIGNATURE-----
-
---omachftlzphorltz--
