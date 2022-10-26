@@ -2,97 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC5060D095
-	for <lists+linux-rtc@lfdr.de>; Tue, 25 Oct 2022 17:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0052360D9F1
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Oct 2022 05:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiJYPaH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 25 Oct 2022 11:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S232471AbiJZDev (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 25 Oct 2022 23:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiJYPaG (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 Oct 2022 11:30:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD92AC78;
-        Tue, 25 Oct 2022 08:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666711805; x=1698247805;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xn5JOS/FH+ZZXqzrPkPODHcTMuCEZjsZ59+va4WxJ7A=;
-  b=CvPslIeOsFexfPByRaSzOuU8ter0iUdOGyGigzfK/IAq3bXKJNNfwUf0
-   hcVkRfi64TzU4gjecrijIu/b2NfpGxfN9BqnaOf7pgFlgwgT9Zgkh6XdK
-   8fHfU8aMXVH6tGucy8D7uTfz2z7P6n+rT2AG1jCaOj8bYXDG68cQ/Dxkf
-   UdE23kwtTIQKkDEFB2PDqGEmBb0RobqYR4APHA9zXwcK7BKBLYcbMsHcq
-   49VqNwxGQ8C3CDfavm/tysVnSK4C7xMQXiYy9MVYT1a5eUivbcA4e56yD
-   uEHty3t+S1/JeHe4E8pPozr9Urbxv/p2YLKnwsjaz35nVv/qdA0g2l+Rx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371921673"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="371921673"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694995410"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="694995410"
-Received: from wdunn-mobl1.amr.corp.intel.com ([10.212.194.192])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:39 -0700
-Message-ID: <836b1787426d5b1569f6d77007a4765ee17d5ea6.camel@linux.intel.com>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Date:   Tue, 25 Oct 2022 08:28:39 -0700
-In-Reply-To: <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-References: <5887691.lOV4Wx5bFT@kreacher>
-         <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        with ESMTP id S232662AbiJZDer (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 25 Oct 2022 23:34:47 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47562B626;
+        Tue, 25 Oct 2022 20:34:44 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MxvSZ4MrBz15M1m;
+        Wed, 26 Oct 2022 11:29:50 +0800 (CST)
+Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 11:34:43 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
+ (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 26 Oct
+ 2022 11:34:42 +0800
+From:   Yu Liao <liaoyu15@huawei.com>
+To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
+CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
+Subject: [RFC PATCH 0/2] rtc: fix race condition between uie enable and rtc set time
+Date:   Wed, 26 Oct 2022 11:33:46 +0800
+Message-ID: <20221026033348.1660732-1-liaoyu15@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500003.china.huawei.com (7.185.36.200)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2022-10-18 at 18:38 +0200, Alexandre Belloni wrote:
-> On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >=20
-> > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
-> > ordering issue") overlooked the fact that cmos_do_probe() depended
-> > on the preparations carried out by cmos_wake_setup() and the wake
-> > alarm stopped working after the ordering of them had been changed.
-> >=20
-> > [...]
->=20
-> Applied, thanks!
+The patch series fixes two issues in rtc_set_time caused by race
+conditions:
+- rtc_timer_do_work will loop for a while when setting rtc time in the
+  future with uie enabled.
+- RTC_UIE_OFF does not work when RTC_UIE_OFF and RTC_SET_TIME are
+  running in parallel.
 
-I did testing yesterday on the 6.1.0-rc2 build and this patch hasn't
-made it into rc2. This is an extreme inconvenience to anyone testing
-low power modes as the rtc wakealarm doesn't function. I'm a little
-surprised more people haven't complained.
+Patch #1 extracts lockless version from rtc_update_irq_enable, and
+patch #2 addresses the race condition issue.
 
-Please get this in 6.1.0-rc3.
+Yu Liao (2):
+  rtc: add lockless rtc_update_irq_enable
+  rtc: fix race condition in rtc_set_time()
 
-> [1/1] rtc: rtc-cmos: Fix wake alarm breakage
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit: 0782b66ed2fbb035dda76111df0954515e=
-417b24
->=20
-> Best regards,
->=20
+ drivers/rtc/interface.c | 43 ++++++++++++++++++++++++-----------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
+
+-- 
+2.25.1
 
