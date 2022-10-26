@@ -2,72 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE10D60E3A1
-	for <lists+linux-rtc@lfdr.de>; Wed, 26 Oct 2022 16:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D0560E3CA
+	for <lists+linux-rtc@lfdr.de>; Wed, 26 Oct 2022 16:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbiJZOqR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 26 Oct 2022 10:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S233709AbiJZOx7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 26 Oct 2022 10:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbiJZOqR (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 Oct 2022 10:46:17 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F08F954;
-        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id s206so5409384oie.3;
-        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
+        with ESMTP id S230522AbiJZOx6 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 26 Oct 2022 10:53:58 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55B9BBF25;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bd2aea61bso9546777fac.0;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
-        b=AVHqEVKxSyBPceT01vuHPGkTjNXI68esBbeZ1bY6be+5xvhCzivCbkclZETbQde/Hh
-         yYvc8D8bBS/ktZMAFeCcOOnqBWFjTQB5ml8Q7DsVIeL1NCDTNndstQZ4LrZ1PjgmvCuP
-         pAh7QBgKMYDbBkUK4+IJsh5EYKhL3ylTllqIISkEPbPmcaSGnYcJ56c89M+kGiMcdbNj
-         LuZ0avqUiEj5rdcLRKGyh7XS0NGmVCmE4Nws1OBHNexi3hFHYK7cEsqQBhqCoBFpfAuR
-         +gfjrDn9jYlfGp30Kzg7WhRrlUWpBU3PHFEr3YiGjCHdtTwWEHtOwQfNNolGrlb8X8AN
-         89fg==
+        bh=0Nk9mWz0Lc07+mKRswe0gqSMa42Dcin935f+9F0ZCrw=;
+        b=YZGfdyr+VFY30gxUawfKWb5y493oI5OXeBa4RJNoYSgcl2BPynKtklJpO10bSnOHZ1
+         QYSbDfk+SLuZRRZEC2Ts7zvEyV/pTqA9t0X3SR8A2+lUr0tVpE91BMNHH9U63cyPH9JW
+         Fkme6yjeSg9GC4Yi3fcJy2MM7Y+PIz9xFghZcI8LfWEt6KeK5DgXoxcbYCInMZPUQdfq
+         tjKlQTSo1h7CotoYzfWaySISJZm0oXgXdlqiZxOssnlLEe135vzgW6e6y76HE/D45jH3
+         qJ901z3VTP7im/oq/XdGja9NeMCub9C78itvQvIN5rgEslZFwIueTATQIto1537CjymO
+         hvlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
-        b=AAX2sTe3Z8ikubhd8VGauN6YncxiDk8hZzfYiwACohNrQ/VInk0sz6HrXY1mJwbdtf
-         h2BSijSp8v2udKD3tVy1ESFASoWypIrKtAogg0Hr87lJdLPgWtL3rYHXEQBp/pFptpnu
-         kIzsgGzrq+FDuiUj4GsZs9ci2M5hRmiGF7WjogzIxras7EwrW0uB05cJk9LVuHf2MPVa
-         edojHyhsG+s/LZR4xbaJ5pvHJsVHhShn0V/GltdktxC4R6UINetoI/LoJnMRWmwwamDa
-         j6ydvtdTQC36jGsXg9rLQONGnJqRZVSTt5uAqCP4anTtug91GlMRFACi6FW77D1WH890
-         oGCA==
-X-Gm-Message-State: ACrzQf3pz59gHe3bnxadnFjLkbgGrzIdXuwc1nEo76skZ1yc6fyrLC2Q
-        K47Q3fM9Hg0r4RWwWI2nzeQ=
-X-Google-Smtp-Source: AMsMyM7QS/EkPZbY3lAXH44G43Ssys1duk6sOh+Z4FTn4VnqRdYgZgK6FbZALfETkVwAzzakyigrpQ==
-X-Received: by 2002:a05:6808:6c3:b0:351:45ae:7b with SMTP id m3-20020a05680806c300b0035145ae007bmr2113093oih.28.1666795575311;
-        Wed, 26 Oct 2022 07:46:15 -0700 (PDT)
+        bh=0Nk9mWz0Lc07+mKRswe0gqSMa42Dcin935f+9F0ZCrw=;
+        b=L3mGNS354g6j7re4EfBQ87bOA5TGD2PHwcgGcq+4StDL3HkLvtjol+NgCw5t++ByAS
+         Msc+pS9vQF8phKtE/bxLC1fK4QxVDaJzE87guCNN3mOh93VG7umG5uujiWarUFl8vTRe
+         Tq51puwwyBoSaeJFJ/PjJgodBff/ob3BxV5+RzTg3VXyqLDtFYXpauDI/I5ZPYwk3K12
+         HPyWZfQ2siX/4cJu9lKhVeuvZDaGocZOoWYNzGJWAK3K3yzWixK3NH9s3s89irUZ5oaX
+         RM+W+augavGh54gXuDxEwpx6z0tRIpMy9NB/NcLWTvNbsUUnQlqcR54zOvhH4ScWHZ9y
+         YN1Q==
+X-Gm-Message-State: ACrzQf3kgOB85yj7mA5++M3o8O4qpCFZ/pFHx9AJLH0WcGoVbO63QiE+
+        Hxq/oC9UsKuRZKw7yx9+IbU=
+X-Google-Smtp-Source: AMsMyM4vDWuLjuvsrFnCW6vUX3lLIR1t9k6ZkMtbDYa/on8aTVs0k3wShNBfsVpYDpKDVPUk2XRPGQ==
+X-Received: by 2002:a05:6870:312a:b0:132:9c83:353b with SMTP id v42-20020a056870312a00b001329c83353bmr2314047oaa.65.1666796037111;
+        Wed, 26 Oct 2022 07:53:57 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6-20020a4a5a06000000b00480dccc0c2asm2262697ooa.14.2022.10.26.07.46.13
+        by smtp.gmail.com with ESMTPSA id d22-20020a4ad356000000b004805e9e9f3dsm2246828oos.1.2022.10.26.07.53.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:46:14 -0700 (PDT)
+        Wed, 26 Oct 2022 07:53:56 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4f1a17fa-596e-eaf5-2dad-790b1ab95dc1@roeck-us.net>
-Date:   Wed, 26 Oct 2022 07:46:13 -0700
+Message-ID: <ef7858ae-0236-0f04-ba5a-7302ecb6162e@roeck-us.net>
+Date:   Wed, 26 Oct 2022 07:53:54 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v3 9/9] rtc: isl12022: add support for temperature sensor
+Subject: Re: [PATCH v2 1/2] drivers: rtc: add max313xx series rtc driver
 Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
- <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20221026131124.289-1-Ibrahim.Tilki@analog.com>
+ <20221026131124.289-2-Ibrahim.Tilki@analog.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20221026131124.289-2-Ibrahim.Tilki@analog.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,152 +81,33 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 10/26/22 06:38, Rasmus Villemoes wrote:
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+On 10/26/22 06:11, Ibrahim Tilki wrote:
+> Adding support for Analog Devices MAX313XX series RTCs.
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
 
-There should be some description above. Other than that,
+Nit below, otherwise for hwmon:
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
- > ---
-> v3: drop 0444 update_interval property.
-> 
-> v2 of patches 1-8 are already upstream (b1a1baa657c7 and parents).
-> 
->   drivers/rtc/rtc-isl12022.c | 94 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 94 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-> index ca677c4265e6..a3b0de3393f5 100644
-> --- a/drivers/rtc/rtc-isl12022.c
-> +++ b/drivers/rtc/rtc-isl12022.c
-> @@ -17,6 +17,7 @@
->   #include <linux/of.h>
->   #include <linux/of_device.h>
->   #include <linux/regmap.h>
-> +#include <linux/hwmon.h>
->   
->   /* ISL register offsets */
->   #define ISL12022_REG_SC		0x00
-> @@ -30,6 +31,9 @@
->   #define ISL12022_REG_SR		0x07
->   #define ISL12022_REG_INT	0x08
->   
-> +#define ISL12022_REG_BETA	0x0d
-> +#define ISL12022_REG_TEMP_L	0x28
+> ---
+[ ... ]
 > +
->   /* ISL register bits */
->   #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
->   
-> @@ -38,6 +42,7 @@
->   
->   #define ISL12022_INT_WRTC	(1 << 6)
->   
-> +#define ISL12022_BETA_TSE	(1 << 7)
->   
->   static struct i2c_driver isl12022_driver;
->   
-> @@ -46,6 +51,93 @@ struct isl12022 {
->   	struct regmap *regmap;
->   };
->   
-> +static umode_t isl12022_hwmon_is_visible(const void *data,
-> +					 enum hwmon_sensor_types type,
-> +					 u32 attr, int channel)
-> +{
-> +	if (type == hwmon_temp && attr == hwmon_temp_input)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * A user-initiated temperature conversion is not started by this function,
-> + * so the temperature is updated once every ~60 seconds.
-> + */
-> +static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
-> +{
-> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
-> +	struct regmap *regmap = isl12022->regmap;
-> +	u8 temp_buf[2];
-> +	int temp, ret;
-> +
-> +	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
-> +			       temp_buf, sizeof(temp_buf));
-> +	if (ret)
-> +		return ret;
-> +	/*
-> +	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
-> +	 */
-> +	temp = (temp_buf[1] << 8) | temp_buf[0];
-> +	temp *= 500;
-> +	temp -= 273000;
-> +
-> +	*mC = temp;
-> +
-> +	return 0;
-> +}
-> +
-> +static int isl12022_hwmon_read(struct device *dev,
-> +			       enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, long *val)
-> +{
-> +	if (type == hwmon_temp && attr == hwmon_temp_input)
-> +		return isl12022_hwmon_read_temp(dev, val);
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static const struct hwmon_channel_info *isl12022_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops isl12022_hwmon_ops = {
-> +	.is_visible = isl12022_hwmon_is_visible,
-> +	.read = isl12022_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
-> +	.ops = &isl12022_hwmon_ops,
-> +	.info = isl12022_hwmon_info,
-> +};
-> +
-> +static void isl12022_hwmon_register(struct device *dev)
-> +{
-> +	struct isl12022 *isl12022;
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	if (!IS_REACHABLE(CONFIG_HWMON))
-> +		return;
-> +
-> +	isl12022 = dev_get_drvdata(dev);
-> +
-> +	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
-> +				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
-> +	if (ret) {
-> +		dev_warn(dev, "unable to enable temperature sensor\n");
-> +		return;
+> +	if (max313xx->chip->temp_reg) {
+> +		hwmon = devm_hwmon_device_register_with_info(dev, client->name,
+> +							     max313xx,
+> +							     &max313xx_chip_info,
+> +							     NULL);
+> +		if (IS_ERR(hwmon))
+> +			dev_warn(dev, "cannot register hwmon device: %li\n",
+> +				 PTR_ERR(hwmon));
+
+You could use %pe here and just pass hwmon as parameter.
+
 > +	}
 > +
-> +	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
-> +						     &isl12022_hwmon_chip_info,
-> +						     NULL);
-> +	if (IS_ERR(hwmon))
-> +		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
+> +	return max313xx_trickle_charger_setup(dev);
 > +}
-> +
->   /*
->    * In the routines that deal directly with the isl12022 hardware, we use
->    * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
-> @@ -160,6 +252,8 @@ static int isl12022_probe(struct i2c_client *client)
->   		return PTR_ERR(isl12022->regmap);
->   	}
->   
-> +	isl12022_hwmon_register(&client->dev);
-> +
->   	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
->   	if (IS_ERR(isl12022->rtc))
->   		return PTR_ERR(isl12022->rtc);
+
 
