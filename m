@@ -2,44 +2,78 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9483860FD4E
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Oct 2022 18:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F4E61062E
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Oct 2022 01:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbiJ0Qlt (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Oct 2022 12:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S235701AbiJ0XLH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 Oct 2022 19:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbiJ0Qlr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Oct 2022 12:41:47 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Oct 2022 09:41:45 PDT
-Received: from smtp99.iad3a.emailsrvr.com (smtp99.iad3a.emailsrvr.com [173.203.187.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E217A1867AF;
-        Thu, 27 Oct 2022 09:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20190130-41we5z8j; t=1666888383;
-        bh=DCe5hAhHoPzLmhCsocUrN9hiv2IiDuceRGj1XymUrsc=;
-        h=From:To:Subject:Date:From;
-        b=IO0GBFOadFXKRXrNtHI+RTrSDJB/ea13zIfef4GmRIPxxtD5+Ud4P12gsStLlSuvD
-         MEQeMRUcjCGr4CKrtCztpakmHELspyhO3gViN1sM78pkV9s6og3JfBYl6fzeVvky8c
-         VJcMcT8fW+jyjQ4Tyz7hrxCQZ5blf/het+ml0QWY=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp37.relay.iad3a.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 5A8B65AEC;
-        Thu, 27 Oct 2022 12:33:02 -0400 (EDT)
-From:   Ian Abbott <abbotti@mev.co.uk>
-To:     linux-rtc@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ian Abbott <abbotti@mev.co.uk>, stable@vger.kernel.org
-Subject: [PATCH] rtc: ds1347: fix value written to century register
-Date:   Thu, 27 Oct 2022 17:32:49 +0100
-Message-Id: <20221027163249.447416-1-abbotti@mev.co.uk>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229941AbiJ0XLF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Oct 2022 19:11:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14709A28C;
+        Thu, 27 Oct 2022 16:11:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C51B62595;
+        Thu, 27 Oct 2022 23:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C76F5C43470;
+        Thu, 27 Oct 2022 23:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666912260;
+        bh=KpiEoi6pX2qKSKUG5diicN97WlLWtC2P66cRAuNsOnE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Aoa2evZvjzvRF4K1QlaTMcMNpdb1/mxlcG+r8YmUmGF1l34Uecq70uF9O7xf+ICY6
+         2cQdLsVudksJ9udKltQeOWBIHEEye9dHJGVqiAjWS1HbTV3UVisCAbuiYMvo2Yp81o
+         asisy+aHeOSh5t7qrsLsMnpIID7Zcb5MfYQ5OtLH7NB8PDjZjjDupHr5NQYBVwFcrX
+         FxDZmmz94qFYesdi7izz8Foh4VPm/W80yAAQUKjsumAbM9JWXX9cNuSpvXAi0rdQnQ
+         s2pS4HeRbDMHCI541D2Tyy5G1DySXnjARmYp7LWWxFqOiLRKVgWgxXCnMg4BON7kDZ
+         na7zbhXEsEnwQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Classification-ID: 9007f867-7bd6-4674-9078-8711a990a260-1-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+References: <20221021202254.4142411-1-arnd@kernel.org> <20221021203329.4143397-2-arnd@kernel.org>
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Date:   Thu, 27 Oct 2022 16:10:58 -0700
+User-Agent: alot/0.10
+Message-Id: <20221027231100.C76F5C43470@smtp.kernel.org>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,30 +81,15 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-In `ds1347_set_time()`, the wrong value is being written to the
-`DS1347_CENTURY_REG` register.  It needs to be converted to BCD.  Fix
-it.
+Quoting Arnd Bergmann (2022-10-21 13:27:35)
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-Fixes: 147dae76dbb9 ("rtc: ds1347: handle century register")
-Cc: <stable@vger.kernel.org> # v5.5+
-Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
----
- drivers/rtc/rtc-ds1347.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rtc/rtc-ds1347.c b/drivers/rtc/rtc-ds1347.c
-index 157bf5209ac4..a40c1a52df65 100644
---- a/drivers/rtc/rtc-ds1347.c
-+++ b/drivers/rtc/rtc-ds1347.c
-@@ -112,7 +112,7 @@ static int ds1347_set_time(struct device *dev, struct rtc_time *dt)
- 		return err;
- 
- 	century = (dt->tm_year / 100) + 19;
--	err = regmap_write(map, DS1347_CENTURY_REG, century);
-+	err = regmap_write(map, DS1347_CENTURY_REG, bin2bcd(century));
- 	if (err)
- 		return err;
- 
--- 
-2.35.1
-
+Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
