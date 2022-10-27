@@ -2,93 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4739060FB0B
-	for <lists+linux-rtc@lfdr.de>; Thu, 27 Oct 2022 17:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8AF60FC92
+	for <lists+linux-rtc@lfdr.de>; Thu, 27 Oct 2022 18:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbiJ0PAr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Oct 2022 11:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S235506AbiJ0QAV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 27 Oct 2022 12:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbiJ0PAl (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Oct 2022 11:00:41 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFE7C1F8
-        for <linux-rtc@vger.kernel.org>; Thu, 27 Oct 2022 08:00:39 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id w10so1523105qvr.3
-        for <linux-rtc@vger.kernel.org>; Thu, 27 Oct 2022 08:00:39 -0700 (PDT)
+        with ESMTP id S233971AbiJ0QAR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Oct 2022 12:00:17 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36F53E77B;
+        Thu, 27 Oct 2022 09:00:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id n12so5882906eja.11;
+        Thu, 27 Oct 2022 09:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oBHDI3Ai6tJ/2wSsx3a8pbGEwv3D3cNXDPZBpWeFWJw=;
-        b=JwsNdMMMJdZSDa+37FVxiNdJIjvu0HSsnrTpAxsDAzXg6WbZz/g3kffdckqKOcpR4f
-         T25EG864kVLWIdpAlgIFWFOBgIoPspfWEFz2dJGFzN6Y2IqZ/bGdoT/k44Kv254AGFEB
-         YhyKxEzhTGJ5sGl8AJ5oWgge02zBjn5NFqKJOD+tNnUiHlMgXCNDLtynq4c149uUO1QX
-         mjM9OhLcd3CXF4GzmN8aEkwHfcRpvT+UfdXt3FbxqPoHZZ90/s4LVDmJ762hA4LFYhru
-         HHYMkFss7u+k/KdOLbq82L1Z/ee+MvJLlUXuhJ8YsSH6Lial5ZAqZ3yueqeNCeKlLSea
-         uYkg==
+        bh=2Q+FhdFfWXCodxANna05rQkLf68c4F7yR8oJG26j/8I=;
+        b=PGhAtJg71umuNe9hEDkN5++IWfnmk90PX9PuHKnYfJDitaKwi+XWXt1BYwOnouqeQe
+         MLjN8Vaze98KOrxnWYSiJCJBepFyDI3fdtZ+udiIzikucdrQ5qUmUu0o7qE1YIG+ndAn
+         7p1F0m8d75SnJfpHtJwSjaHlbMJSEcqZq3Hhy9uKGT11fp8FzH8NL+WMxSQutGN0thUy
+         eY5S8irzdDq21hifbgPF1r7UjvYaMTuUnFG3WKaYIagd1WTNJ7OGdIh8ni/st2UEaIS6
+         2RWfUfOcB5/PyK4rEbHde9A5llS2KvSzpUAuU2KaJ93pcveQm+7BbNIFpkn/L2OyPojI
+         sVgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oBHDI3Ai6tJ/2wSsx3a8pbGEwv3D3cNXDPZBpWeFWJw=;
-        b=VFp8AoZDwJhjk6ss7ojur15qw91BY8neVYuxsb34lH1NZjAr6VVt1FvoI1wuphJ7FT
-         SGkCPb0laM40qflttJId+wCeRczipSxPWK7yPyt4bPoXmKYQGRW2M4HEqkuMIOnD1ULk
-         9sc+KhAEkyD6FmtJ+3eQq4bxaUzW6GW5jXCYn9dXz8ps0pT8ud7ZeQ6mifA+l+92luiG
-         kHSyCKDO4bEGQMlxezfsCJCw9ZoYAomCsaBrym+EEuzKcmoXBgxiNc4p4D0IITiNtIo4
-         9dUsQ5IOHdl7j5VI1PC8jcMUZri41AhTKtc9jL7bgtxql8+Enzew0kSzet72BZDvH/L2
-         R8SA==
-X-Gm-Message-State: ACrzQf1TdmwxHfBDC+eU+aGqm3gs5XEPMEjPiCSSVsUckMWYPLsQG2t+
-        7uMllW7dvYqJivfwlVMBueV8tg==
-X-Google-Smtp-Source: AMsMyM47Cl5/WRHYlqSCVqKZWdt9kqanDgXMtXRMfaHpIxswrzLr7hXGDI7S1pmPhzhOg+w0VKv0aQ==
-X-Received: by 2002:ad4:5ca7:0:b0:4bb:97ea:27b5 with SMTP id q7-20020ad45ca7000000b004bb97ea27b5mr6506429qvh.104.1666882838858;
-        Thu, 27 Oct 2022 08:00:38 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bl24-20020a05620a1a9800b006ed61f18651sm1123874qkb.16.2022.10.27.08.00.37
+        bh=2Q+FhdFfWXCodxANna05rQkLf68c4F7yR8oJG26j/8I=;
+        b=vOUDy3L8Nb2z9eSUVvJ6w7czWtPqc/4y3CUorkMw5QE2UnUjs3moVFSxAzXb1POdIk
+         ywYJyVgarLU8syxyySxjftw5K52JnYl7LpBfoLpAaq4UMGJGDkuyfW58kEuPqipioU7p
+         bWlUXYR0Ps4bdeY4pjzrqDD7xAI2BsLczVDcrQVHxkveCConxxoDRW5eKSAD/0GhORI3
+         xyeIyzODXAW7SaLGYz3OenoHIP8NYbhHUmkRDzuLl7TcfLzkcTR8D/m8cEEje/U4C0Bu
+         KJusenxOEeU5zv8NHCIK/kSSgA6lq7GshkJyAPb0AJtMeg8CJzK3e6Zo6gWZRLjge4z5
+         KjGA==
+X-Gm-Message-State: ACrzQf3QSorDi+mxP3I6M8q6MvnMAjycugUXTJ9qtV5BhAR/bC63GZBo
+        FhZDYMl6LSOZyg3YlLng4pDsjAgMD5E=
+X-Google-Smtp-Source: AMsMyM4ha8qSxDMf4y7djfvLJtt8clxvlapNvWVxOlVc0diAa5i9x+gJDUkbUa+ez2Mup3R/WhFL3w==
+X-Received: by 2002:a05:6402:5483:b0:45c:1336:6d9b with SMTP id fg3-20020a056402548300b0045c13366d9bmr46426634edb.100.1666886404555;
+        Thu, 27 Oct 2022 09:00:04 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id f1-20020a05640214c100b004623028c594sm1214536edx.49.2022.10.27.09.00.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 08:00:38 -0700 (PDT)
-Message-ID: <00b1b451-5c0f-0749-de80-4b9eacc0b5fb@linaro.org>
-Date:   Thu, 27 Oct 2022 11:00:36 -0400
+        Thu, 27 Oct 2022 09:00:04 -0700 (PDT)
+Message-ID: <f5e8193b-8671-6b9d-2290-cea1962848c4@gmail.com>
+Date:   Thu, 27 Oct 2022 18:00:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v1 2/3] ARM: dts: rockchip: rename "haoyu,hym8563" rtc
- nodes
-Content-Language: en-US
-To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: rtc: convert haoyu,hym8563.txt to
+ yaml
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        heiko@sntech.de
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org
 References: <f7127f87-05fd-5e20-eb2d-a3fd04674229@gmail.com>
- <84f14b40-0804-9734-963a-31e200687a8d@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <84f14b40-0804-9734-963a-31e200687a8d@gmail.com>
+ <2a09aec9-96c3-0ea9-a2b5-4a04c9982bb5@linaro.org>
+Content-Language: en-US
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <2a09aec9-96c3-0ea9-a2b5-4a04c9982bb5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 26/10/2022 19:00, Johan Jonker wrote:
-> The "haoyu,hym8563" RTC node names should be generic,
-> so change them.
+
+
+On 10/27/22 17:00, Krzysztof Kozlowski wrote:
+> On 26/10/2022 18:58, Johan Jonker wrote:
+>> Convert haoyu,hym8563.txt to yaml.
+>>
+>> Changed:
+>>   Add clock-frequency property
+>>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+>> ---
+>>  .../devicetree/bindings/rtc/haoyu,hym8563.txt | 30 ----------
+>>  .../bindings/rtc/haoyu,hym8563.yaml           | 60 +++++++++++++++++++
 > 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  arch/arm/boot/dts/rk3036-evb.dts            | 2 +-
 
-Also done.
+> https://lore.kernel.org/all/20221024165549.74574-7-sebastian.reichel@collabora.com/
 
-Best regards,
-Krzysztof
+Ooops, didn't see that one...
+Needed it for the rk3128-evb board to pass without notifications.
 
+Johan
+
+> 
+> Best regards,
+> Krzysztof
+> 
