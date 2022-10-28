@@ -2,150 +2,165 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36D2611DCC
-	for <lists+linux-rtc@lfdr.de>; Sat, 29 Oct 2022 00:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3C8611E48
+	for <lists+linux-rtc@lfdr.de>; Sat, 29 Oct 2022 01:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJ1W42 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 28 Oct 2022 18:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229905AbiJ1XtM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 28 Oct 2022 19:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiJ1W4I (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Oct 2022 18:56:08 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C91F5246;
-        Fri, 28 Oct 2022 15:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666997730; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RvJj+3xY9RbhTi17+j1hh7xVviAFKRxXo4nyj02tbpM=;
-        b=HZOqXXpfdzNX6zPLA4Js1X6WpuSNU4ALdzg43R66pCt/RenTadFhbMEsdRZcYygTQ1AL3u
-        0c6IvJqM2oPiJc5hzZih4B90wWxQWosKbEqk8yofZDHTU8xO/sG2nzBbQcgfYoWqxfSNyA
-        BvuGgGA12b2iW26xvKZqhPdbMe5qoEw=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        od@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 4/4] rtc: jz4740: Support for fine-tuning the RTC clock
-Date:   Fri, 28 Oct 2022 23:55:19 +0100
-Message-Id: <20221028225519.89210-5-paul@crapouillou.net>
-In-Reply-To: <20221028225519.89210-1-paul@crapouillou.net>
-References: <20221028225519.89210-1-paul@crapouillou.net>
+        with ESMTP id S229670AbiJ1XtL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Oct 2022 19:49:11 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A26E2475CD
+        for <linux-rtc@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id l9so4481730qkk.11
+        for <linux-rtc@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
+        b=lNRM++TEsOOQdoJkPPi2j3oCwZ9MgoABUmqx/DlBsZEE5TBaGJ/iUNlnKTFD9+wUpo
+         fWaA7zH19/CcjOcWPUdHi+VUe9Ws1PP+Xb/MGBi0wZXV9L702eSZ5QXub6eRLKqv2p8j
+         mUWHgbktkLvNPkwi9lUCdJQg74YF48tLUF1AiSGXy2wglL7mETxiWkpPKzgh19rWNfN3
+         bCtvv4LfwMNx+WI+8o6v7YVoA9e4aTXVairb4A4AWxmbjYCCzCungBVsjx2MkU3Ah65K
+         2FeQ+N6XN0xabbZU/awhiFqNFlWXzeo/MM/wVGO1S+IrtkIqIWqOe66sR/uQbW21vWL/
+         jqOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
+        b=CzfK+dAbOLdylraPNNNy876JKOIHf/cp+lhagcqO7WMZfauPSxLesjBLeBCG8iXK9h
+         1hT+jJB8w+1zSsIeLvF+AgJbxC0J1U+n1SKpe4OhGw238Us0xaOuJOaSNWDW9lkoIp2d
+         tRkVyIU053qDsN8K9aOQX1oe9esdRfEVcAs0Hu7qTGJJLpy7hwjUBuAttEDEwiUFrHP4
+         65Ct+KjIS5iPmLSDgEbyvYpXvDZ01Xgk7tv9zeqUMxjUg9sxF0P32csAwu/a46FN/UyP
+         zMECk56MaNS4kB99y6HBO5KDeLsSR0tKXjAjaw5gfVsBrwIDsuK1K3THE26BDLtoZ7rM
+         NqvQ==
+X-Gm-Message-State: ACrzQf1UsKP5GAhQycxcUtEreeHVYf/QkN8CiBwbrAbuMCJ3upydkJHX
+        K5AaFgeh0Hb19qRba0yB2I8NM7uy6VAE6A==
+X-Google-Smtp-Source: AMsMyM7R4pV35Ac0Ut6hmcynP9u2Swne9bQcW3gcQ8DsD39A/z8fNafRdy0YOTjAOD/DwE5dqG6JeQ==
+X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id q20-20020a05620a0d9400b006bc5a8c3168mr1451802qkl.56.1667000949580;
+        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bs11-20020ac86f0b000000b0039cc82a319asm8100qtb.76.2022.10.28.16.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
+Message-ID: <360e6322-e5c1-b698-22d7-d7c8c5be368a@linaro.org>
+Date:   Fri, 28 Oct 2022 19:49:07 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Microchip MCP795xx RTC driver patch
+Content-Language: en-US
+To:     tollsimy <simonetollardo@gmail.com>, a.zummo@towertech.it
+Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221016162913.38661-1-simonetollardo@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221016162913.38661-1-simonetollardo@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Write the NC1HZ and ADJC register fields, which allow to tweak the
-frequency of the RTC clock, so that it can run as accurately as
-possible.
+On 16/10/2022 12:29, tollsimy wrote:
+> RTC Microchip mcp795 patch for 5.19-rc5
+> 
+> Here is the mcp795 patch for the 5.19-rc5 merge window.
+> The main modification are the following:
+>         - fixed wrong driver naming: RTC is a Microchip
+>           mcp795 and not Maxim mcp795
+>         - added date/time write sequences: added date/time      
+>           write sequences accordingly to official silicon 
+>           errata document to fix silicon bugs.
+>         - added support to date/time permanent storage:
+>           the driver was missing some register bits in order
+>           to enable the storage of date/time whenever the       
+>           device looses main power.
+>         - added a check after starting oscillator in order
+>           to be sure that it is properly working as specified
+>           in the datasheet
+>         - renamed OSCON bit to OSCRUN as in the datasheet
+>         - add debug messages when setting and reading the
+>           alarm
+>         - removed wrong offset when retrieving the current
+>           year from the device
+> 
+> The patch has been successfully tested in the latest
+> linux-next releases, and the original problems that I found have
+> all been resolved.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/rtc/rtc-jz4740.c | 45 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index 1602e8a4283a..70b63ce75e21 100644
---- a/drivers/rtc/rtc-jz4740.c
-+++ b/drivers/rtc/rtc-jz4740.c
-@@ -5,6 +5,7 @@
-  *	 JZ4740 SoC RTC driver
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/io.h>
-@@ -41,6 +42,9 @@
- #define JZ_RTC_CTRL_AE		BIT(2)
- #define JZ_RTC_CTRL_ENABLE	BIT(0)
- 
-+#define JZ_RTC_REGULATOR_NC1HZ_MASK	GENMASK(15, 0)
-+#define JZ_RTC_REGULATOR_ADJC_MASK	GENMASK(25, 16)
-+
- /* Magic value to enable writes on jz4780 */
- #define JZ_RTC_WENR_MAGIC	0xA55A
- 
-@@ -61,6 +65,7 @@ struct jz4740_rtc {
- 	enum jz4740_rtc_type type;
- 
- 	struct rtc_device *rtc;
-+	struct clk *clk;
- 
- 	struct clk_hw clk32k;
- 
-@@ -217,12 +222,51 @@ static int jz4740_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
- 	return jz4740_rtc_ctrl_set_bits(rtc, JZ_RTC_CTRL_AF_IRQ, enable);
- }
- 
-+static int jz4740_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 nc1hz, adjc, offset1k;
-+	u32 reg;
-+
-+	reg = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_REGULATOR);
-+	nc1hz = FIELD_GET(JZ_RTC_REGULATOR_NC1HZ_MASK, reg);
-+	adjc = FIELD_GET(JZ_RTC_REGULATOR_ADJC_MASK, reg);
-+
-+	offset1k = (nc1hz - rate + 1) * 1024L + adjc;
-+	*offset = offset1k * 1000000L / (rate * 1024L);
-+
-+	return 0;
-+}
-+
-+static int jz4740_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
-+	long rate = clk_get_rate(rtc->clk);
-+	s32 offset1k, adjc, nc1hz;
-+
-+	offset1k = div_s64_rem(offset * rate * 1024LL, 1000000LL, &adjc);
-+	nc1hz = rate - 1 + offset1k / 1024L;
-+
-+	if (adjc < 0) {
-+		nc1hz--;
-+		adjc += 1024;
-+	}
-+
-+	nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
-+	adjc = FIELD_PREP(JZ_RTC_REGULATOR_ADJC_MASK, adjc);
-+
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_REGULATOR, nc1hz | adjc);
-+}
-+
- static const struct rtc_class_ops jz4740_rtc_ops = {
- 	.read_time	= jz4740_rtc_read_time,
- 	.set_time	= jz4740_rtc_set_time,
- 	.read_alarm	= jz4740_rtc_read_alarm,
- 	.set_alarm	= jz4740_rtc_set_alarm,
- 	.alarm_irq_enable = jz4740_rtc_alarm_irq_enable,
-+	.read_offset	= jz4740_rtc_read_offset,
-+	.set_offset	= jz4740_rtc_set_offset,
- };
- 
- static irqreturn_t jz4740_rtc_irq(int irq, void *data)
-@@ -353,6 +397,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 
- 	spin_lock_init(&rtc->lock);
- 
-+	rtc->clk = clk;
- 	platform_set_drvdata(pdev, rtc);
- 
- 	device_init_wakeup(dev, 1);
--- 
-2.35.1
+You missed several people so it seems you did not follow the process.
+
+> 
+> Signed-off-by: tollsimy <simonetollardo@gmail.com>
+
+Full name is needed.
+
+> 
+> ---
+>  .../devicetree/bindings/rtc/maxim,mcp795.txt  |  11 -
+>  .../bindings/rtc/microchip,mcp795.txt         |  11 +
+
+Bindings are always separate patch.
+
+>  drivers/rtc/rtc-mcp795.c                      | 359 ++++++++++++++----
+>  3 files changed, 296 insertions(+), 85 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
+>  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
+> deleted file mode 100644
+> index a59fdd8c236d..000000000000
+> --- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -* Maxim MCP795		SPI Serial Real-Time Clock
+> -
+> -Required properties:
+> -- compatible: Should contain "maxim,mcp795".
+> -- reg: SPI address for chip
+> -
+> -Example:
+> -	mcp795: rtc@0 {
+> -		compatible = "maxim,mcp795";
+> -		reg = <0>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
+> new file mode 100644
+> index 000000000000..854364c3a173
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
+> @@ -0,0 +1,11 @@
+> +* Microchip MCP795		SPI Serial Real-Time Clock
+> +
+> +Required properties:
+> +- compatible: Should contain "microchip,mcp795".
+> +- reg: SPI address for chip
+> +
+> +Example:
+> +	mcp795: rtc@0 {
+> +		compatible = "microchip,mcp795";
+> +		reg = <0>;
+> +	};
+
+This part is not erally explained/justified.
+
+Best regards,
+Krzysztof
 
