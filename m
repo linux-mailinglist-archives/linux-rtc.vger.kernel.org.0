@@ -2,114 +2,95 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0C96106FD
-	for <lists+linux-rtc@lfdr.de>; Fri, 28 Oct 2022 02:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C69611566
+	for <lists+linux-rtc@lfdr.de>; Fri, 28 Oct 2022 17:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235409AbiJ1Axb (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 27 Oct 2022 20:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S229773AbiJ1PDz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 28 Oct 2022 11:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234810AbiJ1Ax3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 27 Oct 2022 20:53:29 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519A0A3F73;
-        Thu, 27 Oct 2022 17:53:26 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8364960pjg.5;
-        Thu, 27 Oct 2022 17:53:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTLDGG1JfCbcJjNOZkikvC8f7AaHQJjjKAzvQey3fqs=;
-        b=YnAdcvuXVzFEKYlYf+iaNqeO54C1FKncfcUPJNMcb9fT3kuLTBm1UToeqsx0dAmz3w
-         YIU1Kk3Af0qMH7kR5YnVFhLLbyG1FR3Z7PuKnPUyVzfL3LtPVEs5BLP3+tHdHJcc8dkh
-         l1N2kRSl+QuKM3DEayZicbnVHgQqQKTjGRJgVRsV45fV5suhfQpIm/6z8LKgrYu7EnTb
-         po3Mtx06BVaoGcxu8k3H+tovzxKoKxzg5V2gf3LmWmdwGokt1y/pPUO3CsYWoZyHz63l
-         gXwoQWf3wkd+Bvcyr7Cavb1POamSpm1W8P6XR7A/XjJOGxm1XHl4rJ4c6KH/dpxj0eCc
-         dndw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BTLDGG1JfCbcJjNOZkikvC8f7AaHQJjjKAzvQey3fqs=;
-        b=K4w4GnidSTQPrAsWtnI0XJ7/K/2gyrQarNd0RssVC6kxBx+YixBtCcl9YuO6q797He
-         n7d8/h62Aibk0nL88KYLIBrDYClhkoHkD0tQWdAEIXJINIJjRH8qqc0L/sThLR2fLnNp
-         9vADgq9Pu/qxt4k+S+TKiO3Ajea7O3NFg2K5uyK26US6TKdIC3odTn4CbAMzZVqSrI8C
-         cgWa4hhcU7vty6YFQ8IEI9W1LY3s0fUJM63hu7CusRTn2H8m56T892uQAPpt8NJoInzs
-         j9iyZzJxK2qpLIEFocxralbiGistcPTNZ8h5RK5ywKAhAh5rnNMMXKW4JCWZssJ1e1Q8
-         LT3Q==
-X-Gm-Message-State: ACrzQf2iLxWow8fW3KZ7vwN+0AIwpGkc2HSmYeB+p606dtnN7ZUUyMaM
-        U0YsgHtoGfkqp1JLtm8Gm3wttTHpGIk=
-X-Google-Smtp-Source: AMsMyM4MlDLg14I1SS17xTsY8wvg4fC9kOv0osvlxi1GA2wcy5gtR5CrX6S1qEjfxC6MYC0rgq4mEg==
-X-Received: by 2002:a17:902:f710:b0:184:7a4c:fdc1 with SMTP id h16-20020a170902f71000b001847a4cfdc1mr51902574plo.27.1666918405546;
-        Thu, 27 Oct 2022 17:53:25 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:ea9a:801b:ed52:2db1])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ecd100b00176b3d7db49sm1843475plh.0.2022.10.27.17.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Oct 2022 17:53:24 -0700 (PDT)
-Date:   Thu, 27 Oct 2022 17:53:21 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     neil.armstrong@linaro.org, Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/11] dt-bindings: input: qcom,pm8921-pwrkey: convert
- to dt-schema
-Message-ID: <Y1soAaUqIHb6+I8T@google.com>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-6-dac2dfaac703@linaro.org>
- <Y1o5hYAnBuf1akJ9@google.com>
- <e8f53c8a-2842-9e6e-75bd-e099db3fe6f3@linaro.org>
- <68f6d58e-8b7a-1032-4a3d-c4c74b82d111@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68f6d58e-8b7a-1032-4a3d-c4c74b82d111@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229519AbiJ1PDy (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Oct 2022 11:03:54 -0400
+Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F69207532;
+        Fri, 28 Oct 2022 08:03:49 -0700 (PDT)
+Received: from host-ubmmyvj.static.zeelandnet.nl ([217.102.255.198] helo=mail.zeelandnet.nl)
+        by spamfilter04.delta.nl with esmtp (Exim 4.92)
+        (envelope-from <glasveze@delta.nl>)
+        id 1ooQDC-0000TK-P7; Fri, 28 Oct 2022 16:19:58 +0200
+X-Sender-IP: 204.168.188.16
+Received: from phenom.domain_not_set.invalid (016-188-168-204.dynamic.caiway.nl [204.168.188.16])
+        (Authenticated sender: glasveze@delta.nl)
+        by mail.zeelandnet.nl (Postfix) with ESMTPA;
+        Fri, 28 Oct 2022 16:19:42 +0200 (CEST)
+From:   glasveze@delta.nl
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH 1/2] dt-bindings: rtc: ds1307: Add support for Epson RX8111
+Date:   Fri, 28 Oct 2022 16:19:41 +0200
+Message-Id: <20221028141942.10442-1-glasveze@delta.nl>
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: 217.102.255.198
+X-DELTA-Domain: zeelandnet.nl
+X-DELTA-Username: 217.102.255.198
+Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.198@zeelandnet.nl
+X-DELTA-Outgoing-Class: ham
+X-DELTA-Outgoing-Evidence: SB/global_tokens (0.00196518661148)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+JXbjng4B8KCaTq3NTvS14PUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wr4cCRmG2oKTFnKAAvDWJPvjDSqTwBCKJA01U6S0IF3CG1
+ TXgY2TYLA02EG+6b19hUwqWpTVihCNBf6Y0ngLN9W55S5Odoi2XRRfrzh43Mii9G2t8Q2UJdUrYK
+ bqcQwkqhSENMlzwkX5dwDoKhqGrqW1ZaarE32k/fZS9WDJcJpYZGB+n268qSza3XvlKKEFTbC8dt
+ /CV3fELBVC/AS5PvDdqpp0PwvA0T6h+PF2lQM+UptZeMWqwM87Sr86NOUNNXJcphKwwtkJ0il/aM
+ E1JAuAZvvM53msAYiwEKD8v9MuKVse1sVhWabI0/+PN3sIJkYWvWNZaZ0U+2WAj4IohtB5Wku8Z+
+ HjscnTdG7OzuuhO9UWZR6DygHL2uL+fpoKfkmbmoofKALtn/uXeLjRifqraCXgGgCDOczZcC0s+1
+ rMP5P71XxSY6Bud0I4P+npSUhdUKb/ejZlGAm5aYDC522S9lxf1W0a5eEMc7eunFGmvh9GiopPC0
+ UD6wcbWJMl9n+3TblTAKGom+tz90NlkS2XisTmNxpUcDTKRyhJJrVG18n/RbDuZUqQqTgt7VC9CP
+ AtwL+re6Uz43RIVa9gaV9SxdNCEKGT/Znx3aa/MYykHvm3Pq/TMVhLiLVSlbDnIwjZjn7QogpmK0
+ eNWmS0n931/E3ahF5MMcDI7KdpjQKTxLZ9y9gIsjefalsT+at7OgkXa3w91ZfeRDvUeK4qGp36oy
+ bTZpB4Wv6ElyTZU8c8TJRwRvw2AEVD26W3GQDiXO7ujGdCQPoAa02/HGzYqRDuOlu0DGJJ/yi3xl
+ Qv+7Ye5iAwG6iqW74zZvnRHNN8yRiVjjk+nqGoPj2ahc7Nr7g8f4ANeGelsjxQhkhOscjNc7xQ2h
+ dHEckmcQGOuBPq9rt4dOEn9WJA7yfGK6BkBGG0mLtmuzbfeFGb2hZWsDt/fmCo6d12yvI0wed/0Q
+ udAWg/9etw9TIOEergZFaJ91hnCJ4odIJjOae1BAYoct5kI/cxiIQMFEDBGcoZ8K51uNKuJ4zqgJ
+ 4SeU8y5Ph884ctgzcDoFd+96Xw4QUNtTnctHmbpOK0RKd6E2YmmZo3u87jDsfKYWdCAewd7hjSHD
+ v1yU8GDv9kO7wH7K9y8hX1+STHELjwkcdmgWo2JoBLv+psOGtMjI9qGEbmhFtfi+crcUX31Co0Zg
+ NRr7F4I7T5HIIbgqOGhNKCbnOkqTNOYxCCw6fqSlOTqlv1QhfFxXVbH+G+02TrybDOP2Co+U5w==
+X-Report-Abuse-To: spam@spamfilter03.delta.nl
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 08:43:20AM -0400, Krzysztof Kozlowski wrote:
-> On 27/10/2022 08:39, Neil Armstrong wrote:
-> > Hi,
-> > 
-> > On 27/10/2022 09:55, Dmitry Torokhov wrote:
-> >> On Fri, Oct 21, 2022 at 11:06:42AM +0200, Neil Armstrong wrote:
-> >>> Convert input/qcom,pm8xxx-pwrkey.txt to YAML, and take in account that
-> >>> the PM8921 pwrkey compatible is used as fallback for the PM8018 pwrkey.
-> >>>
-> >>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> >>
-> >> Should I merge this through my tree or you want all these changes to go
-> >> together through some particular tree?
-> > 
-> > I have no preference,
-> > Krzysztof will you take it and prepare a branch to Bjorn ?
-> 
-> No, I did not plan on doing it.
-> 
-> Dmitry,
-> Please grab it (assuming there are no dependencies).
+From: Mike Looijmans <mike.looijmans@topic.nl>
 
-Applied, thank you.
+The rx_8111 is quite similar to the rx_8030. This adds support for this
+chip to the ds1307 driver.
 
+This adds the entry to the devicetree bindings.
+
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+---
+ Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+index 98d10e680144..a9590da64b84 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
++++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+@@ -30,6 +30,7 @@ properties:
+           - pericom,pt7c4338
+           - epson,rx8025
+           - isil,isl12057
++          - epson,rx8111
+           - epson,rx8130
+ 
+       - items:
 -- 
-Dmitry
+2.17.1
+
