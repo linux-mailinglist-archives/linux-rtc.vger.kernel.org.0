@@ -2,165 +2,174 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3C8611E48
-	for <lists+linux-rtc@lfdr.de>; Sat, 29 Oct 2022 01:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FBE611ED0
+	for <lists+linux-rtc@lfdr.de>; Sat, 29 Oct 2022 02:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiJ1XtM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 28 Oct 2022 19:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S229549AbiJ2AyH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 28 Oct 2022 20:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJ1XtL (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Oct 2022 19:49:11 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A26E2475CD
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id l9so4481730qkk.11
-        for <linux-rtc@vger.kernel.org>; Fri, 28 Oct 2022 16:49:10 -0700 (PDT)
+        with ESMTP id S229482AbiJ2AyG (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 28 Oct 2022 20:54:06 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35901AFA97;
+        Fri, 28 Oct 2022 17:54:05 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id x13so5151959qvn.6;
+        Fri, 28 Oct 2022 17:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
-        b=lNRM++TEsOOQdoJkPPi2j3oCwZ9MgoABUmqx/DlBsZEE5TBaGJ/iUNlnKTFD9+wUpo
-         fWaA7zH19/CcjOcWPUdHi+VUe9Ws1PP+Xb/MGBi0wZXV9L702eSZ5QXub6eRLKqv2p8j
-         mUWHgbktkLvNPkwi9lUCdJQg74YF48tLUF1AiSGXy2wglL7mETxiWkpPKzgh19rWNfN3
-         bCtvv4LfwMNx+WI+8o6v7YVoA9e4aTXVairb4A4AWxmbjYCCzCungBVsjx2MkU3Ah65K
-         2FeQ+N6XN0xabbZU/awhiFqNFlWXzeo/MM/wVGO1S+IrtkIqIWqOe66sR/uQbW21vWL/
-         jqOQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=EusSo/p3BKtiGbC/ZHm4yuPM5rgXDVCJOfRp7hcyVL0=;
+        b=BjPRGbJrXrkI4GSls3ex8AXtwiUAz475vrmRxv8lGZQIwmABkLry0KqaI3pxTnuR9F
+         o79kt2zbH2I6UmaMIh0eBbBg3CWR3ONnAdIscLIf4SeY5ahqOCr3AwXybYVLACi2MhX/
+         VqKhWgVgyyx/Ajxp801awIN/2PEuRO6LPfRLYkoKmEjG+NCoQIYST2wGkFm+wadQDt0n
+         DWZDu3GWgAE+HWKW0AWYy3y+uzPOGwKsHfZBgsgDa9j3lqHH0HpfKUXD1vVix4e2iZPA
+         xDyW10LzZVLKE72o5hxswTjvQzu34Y+IJRg4SNWuopC+TfRUyhPAmOME6GIHq0hdOYL0
+         qkLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BWT12cmS3hZogCGoRQZdPiSUfY711/3MhZolzbjO68=;
-        b=CzfK+dAbOLdylraPNNNy876JKOIHf/cp+lhagcqO7WMZfauPSxLesjBLeBCG8iXK9h
-         1hT+jJB8w+1zSsIeLvF+AgJbxC0J1U+n1SKpe4OhGw238Us0xaOuJOaSNWDW9lkoIp2d
-         tRkVyIU053qDsN8K9aOQX1oe9esdRfEVcAs0Hu7qTGJJLpy7hwjUBuAttEDEwiUFrHP4
-         65Ct+KjIS5iPmLSDgEbyvYpXvDZ01Xgk7tv9zeqUMxjUg9sxF0P32csAwu/a46FN/UyP
-         zMECk56MaNS4kB99y6HBO5KDeLsSR0tKXjAjaw5gfVsBrwIDsuK1K3THE26BDLtoZ7rM
-         NqvQ==
-X-Gm-Message-State: ACrzQf1UsKP5GAhQycxcUtEreeHVYf/QkN8CiBwbrAbuMCJ3upydkJHX
-        K5AaFgeh0Hb19qRba0yB2I8NM7uy6VAE6A==
-X-Google-Smtp-Source: AMsMyM7R4pV35Ac0Ut6hmcynP9u2Swne9bQcW3gcQ8DsD39A/z8fNafRdy0YOTjAOD/DwE5dqG6JeQ==
-X-Received: by 2002:a05:620a:d94:b0:6bc:5a8c:3168 with SMTP id q20-20020a05620a0d9400b006bc5a8c3168mr1451802qkl.56.1667000949580;
-        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bs11-20020ac86f0b000000b0039cc82a319asm8100qtb.76.2022.10.28.16.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 16:49:09 -0700 (PDT)
-Message-ID: <360e6322-e5c1-b698-22d7-d7c8c5be368a@linaro.org>
-Date:   Fri, 28 Oct 2022 19:49:07 -0400
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EusSo/p3BKtiGbC/ZHm4yuPM5rgXDVCJOfRp7hcyVL0=;
+        b=IPaOb3SUGp2BEDcFSnp2Kah921c5DmkQ9SATQxQk+KNS8Tvj/RxaEmdQWZB+iGdcUb
+         OKcowxgjyIMfbNjMWwwJxfOEE5Sz6SBcbrVy3WoveJ60GoDIPWJwte5cMVPaRAwLE0la
+         J+uvHxLAV6lU/y7kDIeMjG6d0v+TnvDgXmmMCx3lQO4cTxC1H3iRTwn9qWU7GzyHk9Ut
+         2dFHktS3mjGQTHQGKM+rpnoezIxy8TP8TmuMkAqwQQrE1U19kG5j/ZFGjDRI1YYdQC6k
+         FFWBvVGrBQzH6gofTO+tMWD48np4MfpxH8uXpDvdVst8bYv8qTLHjcqmK0ZwGhITD9qd
+         Bh/A==
+X-Gm-Message-State: ACrzQf1e7WQftJePkf2Mojy0E+04hIUoD1zHQ2FyXmRYJjSmWPbYRJ9q
+        2YiOymAQX6khlSoMVKB3APZ6A98jxRA=
+X-Google-Smtp-Source: AMsMyM5yLnEPfW3W9rizu5gbKqgGEVmNI+R8PFCSBTnddUgw09TPfDCbXM+5kstLxKKQ9rQHZyAzNw==
+X-Received: by 2002:ad4:5b8b:0:b0:4bb:a86e:d7b4 with SMTP id 11-20020ad45b8b000000b004bba86ed7b4mr1951782qvp.108.1667004844848;
+        Fri, 28 Oct 2022 17:54:04 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006bc192d277csm163388qko.10.2022.10.28.17.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 17:54:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Date:   Fri, 28 Oct 2022 17:54:00 -0700
+Message-Id: <20221029005400.2712577-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] Microchip MCP795xx RTC driver patch
-Content-Language: en-US
-To:     tollsimy <simonetollardo@gmail.com>, a.zummo@towertech.it
-Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221016162913.38661-1-simonetollardo@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221016162913.38661-1-simonetollardo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 16/10/2022 12:29, tollsimy wrote:
-> RTC Microchip mcp795 patch for 5.19-rc5
-> 
-> Here is the mcp795 patch for the 5.19-rc5 merge window.
-> The main modification are the following:
->         - fixed wrong driver naming: RTC is a Microchip
->           mcp795 and not Maxim mcp795
->         - added date/time write sequences: added date/time      
->           write sequences accordingly to official silicon 
->           errata document to fix silicon bugs.
->         - added support to date/time permanent storage:
->           the driver was missing some register bits in order
->           to enable the storage of date/time whenever the       
->           device looses main power.
->         - added a check after starting oscillator in order
->           to be sure that it is properly working as specified
->           in the datasheet
->         - renamed OSCON bit to OSCRUN as in the datasheet
->         - add debug messages when setting and reading the
->           alarm
->         - removed wrong offset when retrieving the current
->           year from the device
-> 
-> The patch has been successfully tested in the latest
-> linux-next releases, and the original problems that I found have
-> all been resolved.
+RTC chips on some older Chromebooks can only handle alarms less than 24
+hours in the future. Attempts to set an alarm beyond that range fails.
+The most severe impact of this limitation is that suspend requests fail
+if alarmtimer_suspend() tries to set an alarm for more than 24 hours
+in the future.
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+Try to set the real-time alarm to just below 24 hours if setting it to
+a larger value fails to work around the problem. While not perfect, it
+is better than just failing the call. A similar workaround is already
+implemented in the rtc-tps6586x driver.
 
-You missed several people so it seems you did not follow the process.
+Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
+calling code also logs an error and to avoid spurious error messages if
+setting the alarm ultimately succeeds.
 
-> 
-> Signed-off-by: tollsimy <simonetollardo@gmail.com>
+Cc: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/rtc/rtc-cros-ec.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
 
-Full name is needed.
-
-> 
-> ---
->  .../devicetree/bindings/rtc/maxim,mcp795.txt  |  11 -
->  .../bindings/rtc/microchip,mcp795.txt         |  11 +
-
-Bindings are always separate patch.
-
->  drivers/rtc/rtc-mcp795.c                      | 359 ++++++++++++++----
->  3 files changed, 296 insertions(+), 85 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
->  create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt b/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> deleted file mode 100644
-> index a59fdd8c236d..000000000000
-> --- a/Documentation/devicetree/bindings/rtc/maxim,mcp795.txt
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -* Maxim MCP795		SPI Serial Real-Time Clock
-> -
-> -Required properties:
-> -- compatible: Should contain "maxim,mcp795".
-> -- reg: SPI address for chip
-> -
-> -Example:
-> -	mcp795: rtc@0 {
-> -		compatible = "maxim,mcp795";
-> -		reg = <0>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> new file mode 100644
-> index 000000000000..854364c3a173
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/microchip,mcp795.txt
-> @@ -0,0 +1,11 @@
-> +* Microchip MCP795		SPI Serial Real-Time Clock
-> +
-> +Required properties:
-> +- compatible: Should contain "microchip,mcp795".
-> +- reg: SPI address for chip
-> +
-> +Example:
-> +	mcp795: rtc@0 {
-> +		compatible = "microchip,mcp795";
-> +		reg = <0>;
-> +	};
-
-This part is not erally explained/justified.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+index 887f5193e253..a3ec066d8066 100644
+--- a/drivers/rtc/rtc-cros-ec.c
++++ b/drivers/rtc/rtc-cros-ec.c
+@@ -14,6 +14,8 @@
+ 
+ #define DRV_NAME	"cros-ec-rtc"
+ 
++#define SECS_PER_DAY	(24 * 60 * 60)
++
+ /**
+  * struct cros_ec_rtc - Driver data for EC RTC
+  *
+@@ -43,13 +45,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ 	msg.msg.insize = sizeof(msg.data);
+ 
+ 	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+-	if (ret < 0) {
+-		dev_err(cros_ec->dev,
+-			"error getting %s from EC: %d\n",
+-			command == EC_CMD_RTC_GET_VALUE ? "time" : "alarm",
+-			ret);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	*response = msg.data.time;
+ 
+@@ -59,7 +56,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+ 			   u32 param)
+ {
+-	int ret = 0;
++	int ret;
+ 	struct {
+ 		struct cros_ec_command msg;
+ 		struct ec_response_rtc data;
+@@ -71,13 +68,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+ 	msg.data.time = param;
+ 
+ 	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+-	if (ret < 0) {
+-		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
+-			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
+-			ret);
++	if (ret < 0)
+ 		return ret;
+-	}
+-
+ 	return 0;
+ }
+ 
+@@ -190,8 +182,21 @@ static int cros_ec_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+ 
+ 	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM, alarm_offset);
+ 	if (ret < 0) {
+-		dev_err(dev, "error setting alarm: %d\n", ret);
+-		return ret;
++		if (ret == -EINVAL && alarm_offset >= SECS_PER_DAY) {
++			/*
++			 * RTC chips on some older Chromebooks can only handle
++			 * alarms up to 24h in the future. Try to set an alarm
++			 * below that limit to avoid suspend failures.
++			 */
++			ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM,
++					      SECS_PER_DAY - 1);
++		}
++
++		if (ret < 0) {
++			dev_err(dev, "error setting alarm in %u seconds: %d\n",
++				alarm_offset, ret);
++			return ret;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.36.2
 
