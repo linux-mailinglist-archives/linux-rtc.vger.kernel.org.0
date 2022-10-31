@@ -2,77 +2,57 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1256131A6
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 09:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EA561398E
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 16:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJaIXc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 31 Oct 2022 04:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
+        id S230197AbiJaPBM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 31 Oct 2022 11:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJaIXb (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Oct 2022 04:23:31 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CB624A
-        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 01:23:29 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id cl5so3203470wrb.9
-        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 01:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GBjX1O1DcI8vaNSNvjRBLAcS9TKRieTO8wxKUL4zLUI=;
-        b=kyiMogX3Fc6zyqQ+KCFc3VfGF95/6P/uf9wCnWpawXf2OL6+Wq5/hY8b6CsxexG1mL
-         bDz1pGkcGZ+4Ho/NJ+wbYgJGbmHN01xEO/T6xdsVPtq1zk/eZK/qyNA2n2wt6ouOyhZl
-         GOcnRyGBZS9dpDxWrb6mNBrtb1cbaJdMH/ULMf2M6Bu7aPw4bz+IRAZQN8bhUD/6RI4f
-         9x/bcgz/lvpkOPPJrPssJ6gseFHsCIRKPXQK/HhCJzm4Fn/YqPWGBr382M3r2Bc5EVTq
-         hAi/nkC8xsMvYTZg7hxK01Nnq4rElsM9L51KhbUQakpar9Dgym7BIB5UkE+zsB0zMZcg
-         xzuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GBjX1O1DcI8vaNSNvjRBLAcS9TKRieTO8wxKUL4zLUI=;
-        b=XXFyCMlMqdqR1Z/rFHU0n7OzjgzF8k3T+XoDqM0RWe7t/61yIu9Uekt+eJjXNa4AKH
-         bK3FpXy66W560+WV+3ABhYAsamOmJ3UbDDDVoQZ+X2JJMWxfASfJ/b1SEiLpptjPaPHC
-         nqjbBfZ9ieN6uN8TfetQerBlvL6PuMPTFtniki+stMmxlRpdACvaLcn6QCMSgosqathx
-         LbwhzNOp8HkWiTm2E9uIAGvg6AACKNBAQkhayU3P6KmUdVVDJc3ttgYAG+P0axLC9WpV
-         vqF0hxDHkQ2Q+9E6104Sjaj4MWrLJmZBf6fJXJnuMpx2NVWQTZfAEv6MFB7cQhPLM3MK
-         USBA==
-X-Gm-Message-State: ACrzQf3PaN6l0BZoUaIu/3s+JoeUsAiOZaMHZijebebOmY5OOiqYtrWh
-        1oiCNoHncTHe7zTkrOTXwy+3s0V4l9okYewn
-X-Google-Smtp-Source: AMsMyM5IFBtq6DgiyrWcyRfDJxoQ0QJzxCDg8oD5MIyuqTVwTfLHW+/92iI1o7CJpSzKRfkKQ1ExSg==
-X-Received: by 2002:adf:f883:0:b0:236:a6a3:d6ac with SMTP id u3-20020adff883000000b00236a6a3d6acmr7345634wrp.538.1667204607833;
-        Mon, 31 Oct 2022 01:23:27 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id e7-20020adff347000000b00226dba960b4sm6416302wrp.3.2022.10.31.01.23.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 01:23:27 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S229988AbiJaPBL (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Oct 2022 11:01:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFFF11144;
+        Mon, 31 Oct 2022 08:01:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F90DB816D9;
+        Mon, 31 Oct 2022 15:01:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65C79C433D6;
+        Mon, 31 Oct 2022 15:01:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667228468;
+        bh=BULsYzioOvNI0VWQL6Gy4RFiFJVJG/1pz1rnZm68F1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j4LTJWzgkHrNHCmG/CW/Sec38zDcOSuTDJu1FMuaGM6SOvq02f7KK4bdhkIKq70/n
+         oXJShIN99AmRK7C/tCy98VGy27ju/m/5F5cnbnPFUyK1ugBZCBzi9pMLxbaA9T7CYP
+         4oxTjZWhUnADBvB2NLo9QA99da4qZbqvQPsGw/L5KMxgfszXlzvhSGDTF+TQiYtNkA
+         rpPF2dtpP8UI4j10GqUIy84rADmLumi6EiWUzkVPC/J9UklnwS85HtPTKW1WCoPA9q
+         l2e9INDhNlVcy8Ga6JnArlYhh25/wplevXqK0Dk9e0qcYE6/9PwAhHVQxeFJrMaXID
+         D5smSrNmjvgvA==
+Date:   Mon, 31 Oct 2022 15:01:02 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-rockchip@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>, kernel@collabora.com,
-        devicetree@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>
-In-Reply-To: <20221024165549.74574-1-sebastian.reichel@collabora.com>
-References: <20221024165549.74574-1-sebastian.reichel@collabora.com>
-Subject: Re: (subset) [PATCHv2 0/6] Convert HYM8563 RTC binding to YAML
-Message-Id: <166720460675.3774207.3260903176135865754.b4-ty@linaro.org>
-Date:   Mon, 31 Oct 2022 09:23:26 +0100
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-input@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 06/14] mfd: remove dm355evm_msp driver
+Message-ID: <Y1/jLvg5AYCk1CkD@google.com>
+References: <20221019152947.3857217-1-arnd@kernel.org>
+ <20221019152947.3857217-7-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221019152947.3857217-7-arnd@kernel.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,45 +60,33 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
+On Wed, 19 Oct 2022, Arnd Bergmann wrote:
 
-On Mon, 24 Oct 2022 18:55:43 +0200, Sebastian Reichel wrote:
-> This converts HYM8563 binding to YAML and fixes
-> the existing DTs.
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Changes since PATCHv1:
->  * https://lore.kernel.org/all/20221021170605.85163-1-sebastian.reichel@collabora.com/
->  * Added patches fixing the existing devicetrees (Rob Herring)
->  * Dual licensed the binding (Krzysztof Kozlowski)
->  * Added maxItems for clock-output-names (Krzysztof Kozlowski)
+> The DaVinci DM355EVM platform is gone after the removal of all
+> unused board files, so the MTD device along with its sub-devices
+> can be removed as well.
 > 
-> [...]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/input/misc/Kconfig         |  11 -
+>  drivers/input/misc/Makefile        |   1 -
+>  drivers/input/misc/dm355evm_keys.c | 238 ---------------
+>  drivers/mfd/Kconfig                |   8 -
+>  drivers/mfd/Makefile               |   1 -
+>  drivers/mfd/dm355evm_msp.c         | 454 -----------------------------
+>  drivers/rtc/Kconfig                |   6 -
+>  drivers/rtc/Makefile               |   1 -
+>  drivers/rtc/rtc-dm355evm.c         | 151 ----------
+>  include/linux/mfd/dm355evm_msp.h   |  79 -----
+>  10 files changed, 950 deletions(-)
+>  delete mode 100644 drivers/input/misc/dm355evm_keys.c
+>  delete mode 100644 drivers/mfd/dm355evm_msp.c
+>  delete mode 100644 drivers/rtc/rtc-dm355evm.c
+>  delete mode 100644 include/linux/mfd/dm355evm_msp.h
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/arm64-dt)
-
-[5/6] arm64: dts: meson: remove clock-frequency from rtc
-      https://git.kernel.org/amlogic/c/2c5240a018afd6f46fe648ee2396983f5ce1e087
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.2/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Acked-by: Lee Jones <lee@kernel.org>
 
 -- 
-Neil
+Lee Jones [李琼斯]
