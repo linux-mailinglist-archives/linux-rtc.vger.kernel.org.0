@@ -2,137 +2,72 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F73A612DFF
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 00:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1A0612F4F
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 04:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiJ3XVy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 30 Oct 2022 19:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S229531AbiJaD0v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 30 Oct 2022 23:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiJ3XVx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 30 Oct 2022 19:21:53 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1C09FE2
-        for <linux-rtc@vger.kernel.org>; Sun, 30 Oct 2022 16:21:51 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so25595302ejr.2
-        for <linux-rtc@vger.kernel.org>; Sun, 30 Oct 2022 16:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3/pfXAVw4Ivwn2DWScT8HOO7Use0H7cuBO89OCz06+U=;
-        b=BMExSFtnE0iCBk0yhHy/gvZ+EafpsgLJKPvP3c7I9COx93Csws2qGRfnMN7xyEHoGV
-         j9rAw4/O0GppU8e65nKvipDDN+cegTsb5W0GcbBhn3zpzHG0Gcmk9rr2zBqmVUe36zHK
-         EMeNEv60q2rwZfyZAwrjFmo4iHVa9FNUKwOJUSajNUaj4R7dubfbF29O+Jyp+46fJ0C3
-         Tyh66AvZnF3Sz2/vXS0bX1s/oRfQkG4Bre1QhWyrb2AQ6DX1EH473CCMr8iv2ANhjGs0
-         GwXxBv8Q5As8B4fsrx445z3C5xX4w7M84qquXt7Y011fYJ9Bl4Az2HY+c4sHZ6CNd4ey
-         LD5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3/pfXAVw4Ivwn2DWScT8HOO7Use0H7cuBO89OCz06+U=;
-        b=gkmdB4Uq40JZa9+ZoSHMnwJw9dh3HFdLQe+JWEP1d08s9F4V2JO+X9wnujrGX42ewG
-         MUA/2oxcUjqkUn3YoGD13ErKgJ46mvx7epQ6AWX3MCqIlWaRkMQ6G7z98j+lJONQYU+Z
-         hK7GU8craAjysRop4efGI6eskeUz3Uj8t8g6AOHYUKzPkIkljtjtcszX57mVNJw+lh4E
-         hUK6XnlU6NyNBoQ3TmprE82Zv77UKMQ1z0NhX2s2IDeVUD40mRfKHrhFH6ZuYgutyWNr
-         9537irRNeSSRgggI+dol8HrkpCXh4c/FS1Uoo1CXV0OcjZ20X8dDwA+q0RMjhXFlbKOU
-         T4VQ==
-X-Gm-Message-State: ACrzQf3mHMOCGrYEQKIKyPbcWnGaAVd1y4w2s3llAkFAgrEMlUv4NgN4
-        +N7P73QrYe4dgDfqEv5JsCarvg==
-X-Google-Smtp-Source: AMsMyM6awiKR05N4eNcj8/rHX0BzOk6+BQcSzoIpnq5PU++MvhA3fASDIVHxLFzkZvxmZSGbe/Iw1g==
-X-Received: by 2002:a17:906:30c5:b0:782:707:9e2d with SMTP id b5-20020a17090630c500b0078207079e2dmr9981745ejb.286.1667172109822;
-        Sun, 30 Oct 2022 16:21:49 -0700 (PDT)
-Received: from localhost.localdomain (host-87-0-236-69.retail.telecomitalia.it. [87.0.236.69])
-        by smtp.gmail.com with ESMTPSA id w27-20020a50d79b000000b00461e4498666sm2572055edi.11.2022.10.30.16.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Oct 2022 16:21:49 -0700 (PDT)
-From:   Angelo Dureghello <angelo.dureghello@timesys.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-rtc@vger.kernel.org,
-        Angelo Dureghello <angelo.dureghello@timesys.com>
-Subject: [PATCH resend 2/2] dt-bindings: rtc: add pcf2131
-Date:   Mon, 31 Oct 2022 00:20:20 +0100
-Message-Id: <20221030232020.465322-2-angelo.dureghello@timesys.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221030232020.465322-1-angelo.dureghello@timesys.com>
-References: <20221030232020.465322-1-angelo.dureghello@timesys.com>
+        with ESMTP id S229476AbiJaD0v (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 30 Oct 2022 23:26:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AD267;
+        Sun, 30 Oct 2022 20:26:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D7960F55;
+        Mon, 31 Oct 2022 03:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C938C433C1;
+        Mon, 31 Oct 2022 03:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667186808;
+        bh=K7fJIDBZ9sghIrX7z558eOwkI5MBy/4uAVIbC63i3HQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HJbnJPZvaYXQ/oydCCLVqh1oWpWjOXpPn4ApRW1LLeaeVIWPVIgAckcg6H2Cgr8LA
+         gLrWvEqZj0ePI1OsBS5Y3eREQyrwCJvX5/oB8Lkj0fgP+L7CaxiKRDg7c6l8EREbxU
+         jLZGLB082BhHA3RiEE1R456go4l7OCAmZGWcbGffI0Ve+DugbRf40XpPbih+DL4g7t
+         H/GnAxx32ItKm/nN2+H0e/p9rO64R2Pzv/guK7+33KQBx0xjRsJib8OfAV6vie78hZ
+         MQkXcX/JoUjo/qUa+ccKAfnCdlPxYTrR7YRWOY3qHE7b+2XTVIz8wGhmlWx5Nu6ki3
+         u6kdvPgk/AiFQ==
+Date:   Mon, 31 Oct 2022 11:26:44 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <Y19AdIntJZGnBh/y@google.com>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029005400.2712577-1-linux@roeck-us.net>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Add NXP pcf2131 fdt bindings..
+On Fri, Oct 28, 2022 at 05:54:00PM -0700, Guenter Roeck wrote:
+> Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
+> calling code also logs an error and to avoid spurious error messages if
+> setting the alarm ultimately succeeds.
 
-Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
----
- .../devicetree/bindings/rtc/nxp,pcf2131.yaml  | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf2131.yaml
+It only retries for cros_ec_rtc_set().  cros_ec_rtc_get() doesn't emit
+spurious error messages.
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2131.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2131.yaml
-new file mode 100644
-index 000000000000..5e0e040a2631
---- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2131.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/rtc/nxp,pcf2131.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP PCF2131 Real Time Clock
-+
-+allOf:
-+  - $ref: "rtc.yaml#"
-+
-+maintainers:
-+  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-+
-+properties:
-+  compatible:
-+    const: nxp,pcf2131
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  start-year: true
-+
-+  reset-source: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@53 {
-+            compatible = "nxp,pcf2131";
-+            reg = <0x53>;
-+            pinctrl-0 = <&rtc_nint_pins>;
-+        };
-+    };
-+
-+...
--- 
-2.38.1
+cros_ec_rtc_get() could preserve the error log; cros_ec_rtc_set() could change
+from using dev_err() to dev_warn() since cros_ec_rtc_set_alarm() calls
+dev_err() if cros_ec_rtc_set() fails.  But this is quite nitpick so anyway.
 
+> Cc: Brian Norris <briannorris@chromium.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
