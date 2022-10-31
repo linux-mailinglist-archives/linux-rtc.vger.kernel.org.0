@@ -2,86 +2,67 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B67613A1C
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 16:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659A9613B6D
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 17:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiJaPfr (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 31 Oct 2022 11:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41374 "EHLO
+        id S231831AbiJaQgx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 31 Oct 2022 12:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiJaPfp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Oct 2022 11:35:45 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE9634A
-        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 08:35:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bk15so16472657wrb.13
-        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 08:35:44 -0700 (PDT)
+        with ESMTP id S231806AbiJaQgw (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Oct 2022 12:36:52 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466AA11C2F
+        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 09:36:51 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id b11so10843891pjp.2
+        for <linux-rtc@vger.kernel.org>; Mon, 31 Oct 2022 09:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TsXJSVmpsfRwUaoUkQeZoN5vrNGuaXJ+yHnFyn7q25I=;
-        b=kNDVSruV16A9lm4yIH6ED5p3NglZj4zIWm6IWzCXkUhLysu/9kFqTnjIKo0B5mdWtE
-         bVkze8vz56g3cNUjHYUhdd2HSRi3Lr77pdsuZdu/ZSMft7E+XFsIZcNWXo6s6H0+dMVH
-         x5hy2kxnN7LVX3Yki1W5sEdlWJRu5LnLP0Z30WQ5M4r6Xw4Aq0ROJk3qcBp2JfWxarBl
-         zZTGvO9QBblm1HmA+daQtS4fyx7f1QGrlVWeziluZvNx7LQ0REWS2xw6IZ/EyUs2cjDK
-         ZxxhWhPVf2FcTxe9wbNDK87W4N6DD4Gjf4lnkHIyHwncXHxqgu0zsO1XLUNAzjCI0n2i
-         /RwA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ktu8OH92DZspQ/EalzrzH2xRK2hDUy12EpR7qlAoKb0=;
+        b=cJOxA2b0uPiBCezL07Ov82tEB4jHsTf3Ta5PEIqG7TnX4XNfxyySy0wk6i+wDyySZj
+         i2+/m2JEoZUui7IU/AN9q1CbDBYhtHU1Ep/oFUbIYkB1PITOZjwszPoHhCTTLN/xE6Lr
+         FtMUFI5OTIUTPNNQ/FUTjCvTa88nV+YH7D03w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TsXJSVmpsfRwUaoUkQeZoN5vrNGuaXJ+yHnFyn7q25I=;
-        b=5bk/jg6juPaElfEpW15Ild9ngCqBXo0IPSEYKU+T/MxnaDweuTAoJkspm5WxVj2tkj
-         uIGgSPsZV+rhnhr4PhQxHaIrMtXIV6AobyXF1SaHbaMSran24BFx5Un+QfSLDyEXJSt5
-         FOg+26Wpicc1y1DDpHLY1pf6w0TGB5oC5ODh+Mm53xHygYiafkAJWGXYXCnqSJqpi717
-         hTmG2DgN3WEQJpYPtCk/teMDKL4YHi2ONaaD3FX0P1CNBFkCuvoeoO5JRSwH8hXay+YR
-         ADVcaeUkrVgvePxQ2FBdPAG2gvLFISfbg2y56/qBamAPkr80Nssh+P8y+PWEXyQmwiRG
-         Zl6w==
-X-Gm-Message-State: ACrzQf0AFJJkkC1udq7aeRg2ye4JO1g2rS9GGIFCopwx7LKkvu8O4ibU
-        NN65DC3COPENlqcctOnh2fjM6g==
-X-Google-Smtp-Source: AMsMyM73Wi/PfFl19dSX+YB0TWP0LDVvL+RVag0yoxDj3CQC07pDBzEctGykPU2rWEpvK1FkJgWkuQ==
-X-Received: by 2002:adf:f4c7:0:b0:236:c415:c707 with SMTP id h7-20020adff4c7000000b00236c415c707mr5202241wrp.24.1667230543206;
-        Mon, 31 Oct 2022 08:35:43 -0700 (PDT)
-Received: from ?IPV6:2a0d:e487:34f:ed70:97ca:71f8:f780:5cf1? ([2a0d:e487:34f:ed70:97ca:71f8:f780:5cf1])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c070600b003cf483ee8e0sm7306730wmn.24.2022.10.31.08.35.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 08:35:42 -0700 (PDT)
-Message-ID: <6858acf3-eb90-41aa-b714-a2ceb6afe9db@linaro.org>
-Date:   Mon, 31 Oct 2022 16:35:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 08/11] mfd: qcom-pm8xxx: drop unused PM8018 compatible
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
+        bh=ktu8OH92DZspQ/EalzrzH2xRK2hDUy12EpR7qlAoKb0=;
+        b=59RsBea1gNKwuRpZ009vNYyNWmUZlZAFbZ6wX4Nqg72TujFEfNva4AVJmg7FJ0JzZt
+         hmdIvcwTz3Ql6ktRoIGlQCFu4ZayKpgxfYnZVjh5b7uAuSg2cZ4DWhyjbo1wiUvnKnxD
+         B5AK7JydfoEMcjgEBaibofWD5ciE6HQIH0biOBtSYWXGwxGXQkz8XjvcY1+oOSxF5Wzw
+         VFI6uaoertmWQ2VFMPGFKgb4goHnMoJ9hz7Fo9OTmPam1DBYLxJRO833xsGtR/YcdRun
+         YSYpbj6hP0Xw0/fRBpXw8G4OvRelcjyj7n72GMRecgbi7R2CN+z9aHxvpfw/wBkNg9ea
+         lfgg==
+X-Gm-Message-State: ACrzQf13oxkRgqs8FtxqaDuHQHxg+RA2bqOknqv/a42+z61GUOW2DSQC
+        MbJbtvl5R5SqKcHgb7ul6oScYw==
+X-Google-Smtp-Source: AMsMyM6TSgLhlriqWZHeTadke/nSbx3vqmxUQeI1Dl0qdWWkCayFHXAce3dvg+tYvHkGMJ3J6ekueg==
+X-Received: by 2002:a17:903:234c:b0:187:28b2:85f6 with SMTP id c12-20020a170903234c00b0018728b285f6mr3796395plh.106.1667234210737;
+        Mon, 31 Oct 2022 09:36:50 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:cf9d:6561:637d:2194])
+        by smtp.gmail.com with ESMTPSA id m3-20020a17090a3f8300b0020a7d076bfesm4443584pjc.2.2022.10.31.09.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 09:36:50 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 09:36:47 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-8-dac2dfaac703@linaro.org>
- <Y1/qnCyav/S35mRo@google.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-Reply-To: neil.armstrong@linaro.org
-In-Reply-To: <Y1/qnCyav/S35mRo@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <Y1/5nyplwrxSLg+M@google.com>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y19AdIntJZGnBh/y@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y19AdIntJZGnBh/y@google.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,43 +70,31 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hi,
-
-On 31/10/2022 16:32, Lee Jones wrote:
-> On Fri, 21 Oct 2022, Neil Armstrong wrote:
+On Mon, Oct 31, 2022 at 11:26:44AM +0800, Tzung-Bi Shih wrote:
+> On Fri, Oct 28, 2022 at 05:54:00PM -0700, Guenter Roeck wrote:
+> > Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
+> > calling code also logs an error and to avoid spurious error messages if
+> > setting the alarm ultimately succeeds.
 > 
->> The PM8018 compatible is always used with PM8921 fallback, so PM8018
->> compatible can be safely removed from device ID table
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Tags should appear chronologically.
+> It only retries for cros_ec_rtc_set().  cros_ec_rtc_get() doesn't emit
+> spurious error messages.
 
-Indeed, they were added by b4, I'll report this.
+All of cros_ec_rtc_get()'s callers were also logging the same message.
+So it was redundant. I think the general strategy here was to log the
+error(s) in callers (last point before we "exit" the driver), to have
+the best chance at context-relevant error messages, or ignoring them
+where proper.
 
-Thanks,
-Neil
+It's already a bit dubious to log kernel messages at all in response to
+normal sysfs operations. We probably want them in some cases, when
+things are particularly unexpected, but it shouldn't be a regular
+occurrence, and we certainly don't need *two* log lines for each error.
 
-> 
-> I've fixed this up and applied the patch, thanks.
-> 
->> ---
->>   drivers/mfd/qcom-pm8xxx.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/mfd/qcom-pm8xxx.c b/drivers/mfd/qcom-pm8xxx.c
->> index 2f2734ba5273..601106580e2e 100644
->> --- a/drivers/mfd/qcom-pm8xxx.c
->> +++ b/drivers/mfd/qcom-pm8xxx.c
->> @@ -497,7 +497,6 @@ static const struct pm_irq_data pm8821_data = {
->>   };
->>   
->>   static const struct of_device_id pm8xxx_id_table[] = {
->> -	{ .compatible = "qcom,pm8018", .data = &pm8xxx_data},
->>   	{ .compatible = "qcom,pm8058", .data = &pm8xxx_data},
->>   	{ .compatible = "qcom,pm8821", .data = &pm8821_data},
->>   	{ .compatible = "qcom,pm8921", .data = &pm8xxx_data},
->>
-> 
+Technically, if one wants to be super-nitpicky about one purpose per
+patch, then maybe a patch to trim the logging, and a patch to fix the
+alarm range issues...
+...but I think that would be a little silly, and perhaps even harmful.
+They are related concerns that should be patched (and probably
+backported) together.
 
+Brian
