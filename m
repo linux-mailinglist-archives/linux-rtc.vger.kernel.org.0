@@ -2,72 +2,94 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1A0612F4F
-	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 04:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3405E6130C5
+	for <lists+linux-rtc@lfdr.de>; Mon, 31 Oct 2022 07:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbiJaD0v (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 30 Oct 2022 23:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S229696AbiJaGys (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 31 Oct 2022 02:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJaD0v (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 30 Oct 2022 23:26:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AD267;
-        Sun, 30 Oct 2022 20:26:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D7960F55;
-        Mon, 31 Oct 2022 03:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C938C433C1;
-        Mon, 31 Oct 2022 03:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667186808;
-        bh=K7fJIDBZ9sghIrX7z558eOwkI5MBy/4uAVIbC63i3HQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJbnJPZvaYXQ/oydCCLVqh1oWpWjOXpPn4ApRW1LLeaeVIWPVIgAckcg6H2Cgr8LA
-         gLrWvEqZj0ePI1OsBS5Y3eREQyrwCJvX5/oB8Lkj0fgP+L7CaxiKRDg7c6l8EREbxU
-         jLZGLB082BhHA3RiEE1R456go4l7OCAmZGWcbGffI0Ve+DugbRf40XpPbih+DL4g7t
-         H/GnAxx32ItKm/nN2+H0e/p9rO64R2Pzv/guK7+33KQBx0xjRsJib8OfAV6vie78hZ
-         MQkXcX/JoUjo/qUa+ccKAfnCdlPxYTrR7YRWOY3qHE7b+2XTVIz8wGhmlWx5Nu6ki3
-         u6kdvPgk/AiFQ==
-Date:   Mon, 31 Oct 2022 11:26:44 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <Y19AdIntJZGnBh/y@google.com>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029005400.2712577-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229726AbiJaGyP (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 31 Oct 2022 02:54:15 -0400
+Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9D5BC30;
+        Sun, 30 Oct 2022 23:54:13 -0700 (PDT)
+Received: from host-ubmmyvj.static.zeelandnet.nl ([217.102.255.198] helo=mail.zeelandnet.nl)
+        by spamfilter04.delta.nl with esmtp (Exim 4.92)
+        (envelope-from <glasveze@delta.nl>)
+        id 1opOgY-0007fF-Vc; Mon, 31 Oct 2022 07:54:18 +0100
+X-Sender-IP: 204.168.188.16
+Received: from phenom.domain_not_set.invalid (016-188-168-204.dynamic.caiway.nl [204.168.188.16])
+        (Authenticated sender: glasveze@delta.nl)
+        by mail.zeelandnet.nl (Postfix) with ESMTPA;
+        Mon, 31 Oct 2022 07:54:06 +0100 (CET)
+From:   glasveze@delta.nl
+To:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Subject: [PATCH 1/2] dt-bindings: rtc: ds1307: Add support for Epson RX8111
+Date:   Mon, 31 Oct 2022 07:54:06 +0100
+Message-Id: <20221031065406.5684-1-glasveze@delta.nl>
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: 217.102.255.198
+X-DELTA-Domain: zeelandnet.nl
+X-DELTA-Username: 217.102.255.198
+Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.198@zeelandnet.nl
+X-DELTA-Outgoing-Class: ham
+X-DELTA-Outgoing-Evidence: SB/global_tokens (0.00228891675809)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT8pe3h4GQsYWORTVb8eeiC2PUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wqSBOxlRVmV45FJ8CYZCUIt8C9mOBdONdnsxgsk1D2p824
+ MyjFWyZM3gh7kZ3N2o0EIJgF/Accv4lLtE4TWYNIJfRvS2W4wMvaxnuacmrzO63tkTFTGbdbrgNb
+ v6tn6AfNVkAfS7Ep78PSHeldbo1JKbK8f51zBH5eEJ3C3XgargegwxR90Cn/9qseLqmc4NPbC8dt
+ /CV3fELBVC/AS5PvDdqpp0PwvA0T6h+PF2lQM+UptZeMWqwM87Sr86NOUNNXJcphKwwtkJ0il/aM
+ E1JA8sEks4fS8ifuVDuaqtVJkeKVse1sVhWabI0/+PN3sIJkYWvWNZaZ0U+2WAj4IohtB5Wku8Z+
+ HjscnTdG7OzuuhO9UWZR6DygHL2uL+fpoKfkmbmoofKALtn/uXeLjRifqraCXgGgCDOczZcC0s+1
+ rMP5P71XxSY6Bud0I4P+npSUhdUKb/ejZlGAm5aYDC522S9lxf1W0a5eEMc7eunFGmvh9GiopPC0
+ UD6wcbWJMl9n+3TblTAKGom+tz90NlkS2XisTmNxpUcDTKRyhJJrVG18n/RbDuZUqQqTgt7VC9CP
+ AtwL+re6Uz43RIVa9gaV9SxdNCEKGT/Znx3aa/MYykHvm3Pq/TMVhLiLVSlbDnIwjZjn7QogpmK0
+ eNWmS0n931/E3ahF5MMcDI7KdpjQKTxLZ9y9gIsjefalsT+at7OgkXa3w91ZfeRDvUeK4qGp36oy
+ bTZpB4Wv6ElyTZU8c8TJRwRvw2AEVD26W3GQDiXO7ujGdCQPoAa02/HGzYqRDuOlu0DGJJ/yi3xl
+ Qv+7Ye5iAwG6iqW74zZvnRHNN8z2hfLHYZfhIu9CjVUoDSebyrFWzpgoFwAM9mR6li7gxtc7xQ2h
+ dHEckmcQGOuBPq9rt4dOEn9WJA7yfGK6BkBGG0mLtmuzbfeFGb2hZWsDt/fmCo6d12yvI0wed/0Q
+ udAWg/9etw9TIOEergZFaJ91hnCJ4odIJjOae1BAYoct5jhM/YMnopl8+mg4rtJ+nU4vAYpdTk6U
+ w5YlH8w8IsnwctgzcDoFd+96Xw4QUNtTnctHmbpOK0RKd6E2YmmZo3u87jDsfKYWdCAewd7hjSHD
+ v1yU8GDv9kO7wH7K9y8hX1+STHELjwkcdmgWo2JoBLv+psOGtMjI9qGEbmhFtfi+crcUX31Co0Zg
+ NRr7F4I7T5HIIbgqOGhNKCbnOkqTNOYxCCw6fqSlOTqlv1QhfFxXVbH+G+02TrybDOP2Co+U5w==
+X-Report-Abuse-To: spam@spamfilter03.delta.nl
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 05:54:00PM -0700, Guenter Roeck wrote:
-> Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
-> calling code also logs an error and to avoid spurious error messages if
-> setting the alarm ultimately succeeds.
+From: Mike Looijmans <mike.looijmans@topic.nl>
 
-It only retries for cros_ec_rtc_set().  cros_ec_rtc_get() doesn't emit
-spurious error messages.
+The rx_8111 is quite similar to the rx_8030. This adds support for this
+chip to the ds1307 driver.
 
-cros_ec_rtc_get() could preserve the error log; cros_ec_rtc_set() could change
-from using dev_err() to dev_warn() since cros_ec_rtc_set_alarm() calls
-dev_err() if cros_ec_rtc_set() fails.  But this is quite nitpick so anyway.
+This adds the entry to the devicetree bindings.
 
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+---
+ Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+diff --git a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+index 98d10e680144..a9590da64b84 100644
+--- a/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
++++ b/Documentation/devicetree/bindings/rtc/rtc-ds1307.yaml
+@@ -30,6 +30,7 @@ properties:
+           - pericom,pt7c4338
+           - epson,rx8025
+           - isil,isl12057
++          - epson,rx8111
+           - epson,rx8130
+ 
+       - items:
+-- 
+2.17.1
+
