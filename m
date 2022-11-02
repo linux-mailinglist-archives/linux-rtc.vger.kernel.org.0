@@ -2,95 +2,133 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00176616B0A
-	for <lists+linux-rtc@lfdr.de>; Wed,  2 Nov 2022 18:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB2D616D1F
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Nov 2022 19:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiKBRkn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 2 Nov 2022 13:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S231587AbiKBStH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Nov 2022 14:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiKBRk3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Nov 2022 13:40:29 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF1025EA6;
-        Wed,  2 Nov 2022 10:40:12 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0983A240004;
-        Wed,  2 Nov 2022 17:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667410811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gGuazh88qunSG4Zit4G5LhacSw9tqlTZP/9FORmH9Ck=;
-        b=kceZ2KlQxyxh5tkb5b2vNF2IvtuBMbJiLmQu1w5P8ripvP5mDZPv2OFB33LqbJfAlEOw1O
-        0HA9Agc8yKZclSDcB/grN0/IUGYoU6IZh0wtBmtQ2ILsUK0jWH88N64br4PpvF0lISdWqZ
-        k9WtkpTuv00460sOYFPBdJT4B3DudcHrFUlqPiMqCXDa+yrddqHK/GHVuf8sQ0iE+UxQ/G
-        C444R8PXeWuRYf+gwMCUA9/VCXKWoYklz8Hj+DwJHq/WLU9uQrzoclBWE9+Vx3LdVZRJ97
-        kPZEigrQmt/Cyff+a0o7qe1ElzgJFyumI2neBSaWRMDFTWZDYhyll+lenH7ZHA==
-Date:   Wed, 2 Nov 2022 18:40:08 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Paul Cercueil <paul@crapouillou.net>
+        with ESMTP id S231761AbiKBSsm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Nov 2022 14:48:42 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2AE30F49;
+        Wed,  2 Nov 2022 11:48:09 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bd19c3b68so21266263fac.7;
+        Wed, 02 Nov 2022 11:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jZJlUjmoywLu4Jn3VXKQaPRQMjrLxrDkednVdGcojiw=;
+        b=JVbeTp/824oo5yASIOPKcgSUV05qgrHX8c5KhgJ6il6eeK0+sXrXrNSRlAqjmjUKom
+         5yJSqNah1oELETUH+vzT/PwTiPzY+FM48OTe/GCIaVHaY42BeNnaL8pvF1V+n3PvcPFX
+         PAZxi4bAAyCOXPr8eqvOAcDD7wZ1Qh3LHg77I2WGONHjl4KSXIMTx49W4Asxje81Gm3z
+         T1eVrUKkI3HcbII5A1cRXBdNRjv7HVymmpZBBQiDJSDkiZ2dDS9El33hP23/ortELZtF
+         9jt7g9qJID8YQxt23mZdb51iqay8g50GNPxCKuuV74JHcGJFscGXgvgn1Ev4rtNYa8Qi
+         WdkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jZJlUjmoywLu4Jn3VXKQaPRQMjrLxrDkednVdGcojiw=;
+        b=mI2Ua8501wqk521ZkyGQ0ApMkY79bdx3EC1dl1a55D3/fvAwJKyj1HMF+OPTUNjo0z
+         UjBQkIY3Oc0F2Fp+VG+Ofxf4Vk9NOns3PpfLklxXIzg1tccheiSBomSJ+J2zUHqz8rL8
+         FDjq8IGcagVuRegdH2p9vJefligneWn60jqMgClGp9PZ36EpNC5c01n7Yf+sCqeSxr4a
+         0E020YdYb4gkNVBO/PLzuI1K0wpAf2hcG20wmc1YFNlB0jztrdfV1gfUWRaJPbIFO62K
+         +mQqD8T3Ua+WcVlqb+I2tifsNPlKNVy9r2KzW2D5YcoFLAM1LuzuQlNuQUnPGYFKM8IR
+         Vt1w==
+X-Gm-Message-State: ACrzQf2NzOc90hcRtbXEWaLxkpWN1IBZ3W8/nfFvLIJbToO2UaadXRKJ
+        qQue9wY0DkeS4nPV+HRxbpc=
+X-Google-Smtp-Source: AMsMyM6DcKIwtrXUC1XBuDG2PZz1mpZ0CEVkG0Y+UCQV0oklHkJ2wN9IuLUgx2xb+05nVwRdjVVYgw==
+X-Received: by 2002:a05:6870:d210:b0:13b:9601:89fb with SMTP id g16-20020a056870d21000b0013b960189fbmr7193588oac.203.1667414886480;
+        Wed, 02 Nov 2022 11:48:06 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x50-20020a056830247200b0066c7733be43sm801291otr.30.2022.11.02.11.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:48:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Nov 2022 11:48:04 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        od@opendingux.net
-Subject: Re: [PATCH v2 0/4] rtc: ingenic: various updates
-Message-ID: <Y2KreBRUnSVxHfZF@mail.local>
-References: <20221028225519.89210-1-paul@crapouillou.net>
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <20221102184804.GA1918067@roeck-us.net>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
+ <20221031181913.GA3841664@roeck-us.net>
+ <Y2BIv21U7lpN0z23@mail.local>
+ <20221031230749.GB2082109@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221028225519.89210-1-paul@crapouillou.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031230749.GB2082109@roeck-us.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 28/10/2022 23:55:15+0100, Paul Cercueil wrote:
-> Hi Alessandro / Alexandre,
-> 
-> Here's the V2 of a previous patchset I sent back in April.
-> 
-> Patch [1/4] was updated with Krzysztof's feedback.
-> 
-> Patches 2-4 are unmodified from V1 as they didn't receive any feedback.
-> Patch 4 is RFC; I *think* it works, but I don't know how to test it.
-> 
+Alexandre,
 
-You should simply adjust the RTC and see whether the drift changes. The
-best is to simply use chrony as this will actually tell you how much the
-RTC drifts. This actually gives you the exact value to put in offset to
-remove the drift.
+On Mon, Oct 31, 2022 at 04:07:51PM -0700, Guenter Roeck wrote:
+[ ... ]
+> > > 
+> > > On a side note, I tried an alternate implementation by adding a retry into
+> > > alarmtimer_suspend(), where it would request a smaller timeout if the
+> > > requested timeout failed. I did not pursue/submit this since it seemed
+> > > hacky. To solve that problem, I'd rather discuss extending the RTC API
+> > > to provide a maximum offset to its users. Such a solution would probably
+> > > be desirable, but that it more longer term and would not solve the
+> > > immediate problem.
+> > 
+> > Yes, this is what I was aiming for. This is something that is indeed
+> > missing in the RTC API and that I already thought about. But indeed, it
+> > would be great to have a way to set the alarm range separately from the
+> > time keeping range. This would indeed have to be a range relative to the
+> > current time.
+> > 
+> > alarmtimer_suspend() can then get the allowed alarm range for the RTC,
+> > and set the alarm to max(alarm range, timer value) and loop until the
+> > timer has expired. Once we have this API, userspace can do the same.
+> > 
+> > I guess that ultimately, this doesn't help your driver unless you are
+> > wanting to wakeup all the chromebooks at least once a day regardless of
+> > their EC.
+> 
+> That is a no-go. It would reduce battery lifetime on all Chromebooks,
+> including those not affected by the problem (that is, almost all of them).
+> 
+> To implement reporting the maximum supported offset, I'd probably either
+> try to identify affected Chromebooks using devicetree information,
+> or by sending am alarm request > 24h in the future in the probe function
+> and setting the maximum offset just below 24h if that request fails.
+> We'd have to discuss the best approach internally.
+> 
+> Either case, that doesn't help with the short term problem that we
+> have to solve now and that can be backported to older kernels. It also
+> won't help userspace - userspace alarm requests, as Brian has pointed out,
+> are separate from limits supported by the RTC hardware. We can not change
+> the API for CLOCK_xxx_ALARM to userspace, and doing so would not make
+> sense anyway since it works just fine as long as the system isn't
+> suspended. Besides, changing alarmtimer_suspend() as you suggest above
+> would solve the problem for userspace, so I don't see a need for a
+> userspace API/ABI change unless I am missing something.
+>
 
-> V1 had a 5th patch which would reset the scratchpad register on power
-> loss, but was dropped following upstream feedback.
-> 
-> Cheers,
-> - Paul
-> 
-> Paul Cercueil (4):
->   dt-bindings: rtc: ingenic: Rework compatible strings and add #clock-cells
->   rtc: jz4740: Use readl_poll_timeout
->   rtc: jz4740: Register clock provider for the CLK32K pin
->   rtc: jz4740: Support for fine-tuning the RTC clock
-> 
->  .../devicetree/bindings/rtc/ingenic,rtc.yaml  |  32 ++++-
->  drivers/rtc/rtc-jz4740.c                      | 113 +++++++++++++++---
->  2 files changed, 129 insertions(+), 16 deletions(-)
-> 
-> -- 
-> 2.35.1
-> 
+Would you be open to accepting this patch, with me starting to work
+on the necessary infastructure changes as suggested above for a more
+comprehensive solution ?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+Guenter
