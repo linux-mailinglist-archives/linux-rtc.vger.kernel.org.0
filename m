@@ -2,105 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641376150BD
-	for <lists+linux-rtc@lfdr.de>; Tue,  1 Nov 2022 18:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BED3D616485
+	for <lists+linux-rtc@lfdr.de>; Wed,  2 Nov 2022 15:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiKAReG (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 1 Nov 2022 13:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S231338AbiKBOKg (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 2 Nov 2022 10:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiKARcV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 1 Nov 2022 13:32:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCD31C416;
-        Tue,  1 Nov 2022 10:32:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41BB0B81EA8;
-        Tue,  1 Nov 2022 17:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF8EC433D6;
-        Tue,  1 Nov 2022 17:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667323936;
-        bh=eOjxTt1qzXYpd+vexpbm9/lLy1/vQDQwdcCuCWSj0Kk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J0HsDOslmUL61WbPEA56amtuHWxp+nZ1i1E6yiLPJeZblYnRKfC0i9ZpOIdmQNtb3
-         jWruSl4BgReiqOHRbzVIk9r3KGePf0Tt/EM6NR6gm++9wTfCr9R8F+SpZUN/VCWmLg
-         o8anPKsN8cf/zQ+hb9VVeTTejuUPXtHqb6N6dQnCUzPzbbuP8TUxMM4rciWWUsQ5gd
-         THyo84rpDPnZZdlXALPdpT7KVi3t8GMW2H6MjxfKDgPAlrgsolxEdgxXBfVZUtj99P
-         zMri+hT6IOAqi2ZKCGBsFnFQ+ZFgGXz6WtHFxvblsBJ8Z0ocNwtviKj+UQrZ4EW6jG
-         kLwxE3lnp+phw==
-Received: by mail-lf1-f50.google.com with SMTP id g12so24448660lfh.3;
-        Tue, 01 Nov 2022 10:32:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3rOh6px4PBH6DcenVPghp/rmRNYrGhp0uatEopQyHaf/dfzDbD
-        AwWRY6cCzzRaDFdeodNHHpyrY8GgV4GdgTfNOA==
-X-Google-Smtp-Source: AMsMyM55ZQx6ERNnT2ewevQAIODBodrEpIuNlVPuqGNhSoa1jfV7LFjGf9SbOgrxVTM/C2na9B1/Xga8hv/kvtwUcbk=
-X-Received: by 2002:a05:6512:3e10:b0:4a2:48c1:8794 with SMTP id
- i16-20020a0565123e1000b004a248c18794mr7390625lfv.17.1667323934009; Tue, 01
- Nov 2022 10:32:14 -0700 (PDT)
+        with ESMTP id S231364AbiKBOKe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 2 Nov 2022 10:10:34 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7523B1D0C3
+        for <linux-rtc@vger.kernel.org>; Wed,  2 Nov 2022 07:10:31 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id a27so8049862qtw.10
+        for <linux-rtc@vger.kernel.org>; Wed, 02 Nov 2022 07:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r3baLHNRjybhUwz1VU0EpNO+mXmWZFbwxaMY2qdvCTY=;
+        b=DjhE16/tTUTVdFjgcA3BT/LtmSUuv28pvQFIpl8ORPofZEozhGnObHSwmFZBGObNSi
+         hzZnR9IRHQEJYRfxDXJhI/YyjT04AnAq879/iczPm3+pr8+yKiNmP5yDXpFp32k5+ZAs
+         O8M70dWjOzVfoF3c2vfzHE3lg39oneXBo3w0jrE5NFlvyPx4mxkZ89jQiWQX9a9qmyKc
+         hA7tGLgXHI8MU1645wPN0iHjeTtd3N4wfLjierTYe49bPwE+EyBV4qw/tnkIKYPH3soO
+         ZZGjcRoTzwLAyfVaNwKZ0Gg3P/weB5NYm9DWga6U7cSAOQGdYmAhdkyDuwvpma9kycDz
+         cvHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r3baLHNRjybhUwz1VU0EpNO+mXmWZFbwxaMY2qdvCTY=;
+        b=xD0MW78tGmt4Z/P5un4oMsqc3KoRWz+FB0lJwlcl+rzf1iR3jnOBQmsXyj6gsE7K81
+         mOPVdcaEs1jVvpQPYvI+0sap+bA6zlZUmYDbh3mC1ZZlEP3PvQDVaw5E5CUQrUaLEfW4
+         aA496G0gvs95eW+zp06WMk/ZEnxlK1paSf5TZC0z/9z1TLvo3Z0tvGHdIIgfZ2uXryA6
+         v2IMeQ2Tp5KMj6cTZwzXjJotgQClYUT6EwPN/KamHPn2Nur6bXir44AZOSHKrLKa2FU+
+         mJYWoDybtSykflhGu08dKXQ7xFflAXEHA1ygLnK1Yt1Wrbt7ME85vUsL/a8I3ZTqn4Ij
+         Ypig==
+X-Gm-Message-State: ACrzQf3QS1ty3w1dRLyfp/pHvYB1J5L6Iqy3wcJENHORG4l65tGIUMy4
+        im5ea36G/xAWpjE4F+Hot1VxuQ==
+X-Google-Smtp-Source: AMsMyM7AK3jlPObOnz/rPlu+Up2ji8ZFVw+pIdHlReQDzjpBxb2W96SkuyWtnj/IOe72KUZ9Bx+5tQ==
+X-Received: by 2002:ac8:5d89:0:b0:3a4:f465:9434 with SMTP id d9-20020ac85d89000000b003a4f4659434mr19797213qtx.459.1667398230631;
+        Wed, 02 Nov 2022 07:10:30 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id bs6-20020a05620a470600b006b61b2cb1d2sm8623326qkb.46.2022.11.02.07.10.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 07:10:30 -0700 (PDT)
+Message-ID: <69d57d4e-8a43-f8f5-f491-916197f6f4a8@linaro.org>
+Date:   Wed, 2 Nov 2022 10:10:23 -0400
 MIME-Version: 1.0
-References: <20221028225519.89210-1-paul@crapouillou.net> <20221028225519.89210-2-paul@crapouillou.net>
- <20221031192341.GA3270129-robh@kernel.org> <WNUMKR.BWKAZLU4SGE52@crapouillou.net>
-In-Reply-To: <WNUMKR.BWKAZLU4SGE52@crapouillou.net>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 1 Nov 2022 12:32:05 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLOdnm8XNrEbeVtQeq4qtTyqUs_uGyhwzmUKha43ijTuw@mail.gmail.com>
-Message-ID: <CAL_JsqLOdnm8XNrEbeVtQeq4qtTyqUs_uGyhwzmUKha43ijTuw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: rtc: ingenic: Rework compatible
- strings and add #clock-cells
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 08/11] mfd: qcom-pm8xxx: drop unused PM8018 compatible
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        od@opendingux.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Gross <agross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+ <20220928-mdm9615-dt-schema-fixes-v4-8-dac2dfaac703@linaro.org>
+ <Y1/qnCyav/S35mRo@google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y1/qnCyav/S35mRo@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 2:41 PM Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Rob,
->
-> Le lun. 31 oct. 2022 =C3=A0 14:23:41 -0500, Rob Herring <robh@kernel.org>=
- a
-> =C3=A9crit :
-> > On Fri, Oct 28, 2022 at 11:55:16PM +0100, Paul Cercueil wrote:
-> >>  The RTC in the JZ4770 is compatible with the JZ4760, but has an
-> >> extra
-> >>  register that permits to configure the behaviour of the CLK32K pin.
-> >> The
-> >>  same goes for the RTC in the JZ4780.
-> >>
-> >>  Therefore, the ingenic,jz4770-rtc and ingenic,jz4780-rtc strings do
-> >> not
-> >>  fall back anymore to ingenic,jz4760-rtc. The ingenic,jz4780-rtc
-> >> string
-> >>  now falls back to the ingenic,jz4770-rtc string.
-> >
-> > This is a compatibility mess. There is no driver support in v6.1-rc
-> > for
-> > ingenic,jz4770-rtc, so a new DT would not work with existing kernels.
-> > It
-> > sounds like you need 3 compatibles for 4780.
->
-> Do newer DTs need to work with older kernels? I always assumed the
-> compatibility was only enforced for the other way around.
+On 31/10/2022 11:32, Lee Jones wrote:
+> On Fri, 21 Oct 2022, Neil Armstrong wrote:
+> 
+>> The PM8018 compatible is always used with PM8921 fallback, so PM8018
+>> compatible can be safely removed from device ID table
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> Tags should appear chronologically.
+> 
 
-For a stable platform, yes. Would you want a firmware update carrying
-the DT to break an existing OS install?
+I would assume that as well, but `b4 trailers` disagrees. It documents
+even this behavior (the chain of custody) here:
+https://b4.docs.kernel.org/en/latest/config.html
 
-Compatibility either way ultimately is up to the platform whether you
-care or not. I just ask that the commit msg spell that out. In this
-case, it is easily avoided.
+So while I agree with you, I also prefer the tools to make the decision
+instead of humans (to follow the process, assuming the tool implements
+the process). Either the tool should be fixed or the tool's decision is
+correct.
 
-Rob
+Best regards,
+Krzysztof
+
