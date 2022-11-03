@@ -2,36 +2,36 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739F1618510
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 17:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF2B618540
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 17:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKCQrP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Nov 2022 12:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S232009AbiKCQuC (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Nov 2022 12:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiKCQq5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 12:46:57 -0400
+        with ESMTP id S231849AbiKCQtp (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 12:49:45 -0400
 Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A0822B32;
-        Thu,  3 Nov 2022 09:44:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8628CFF4;
+        Thu,  3 Nov 2022 09:48:56 -0700 (PDT)
 Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 2C07385183;
-        Thu,  3 Nov 2022 17:44:01 +0100 (CET)
+        by phobos.denx.de (Postfix) with ESMTPSA id C354885183;
+        Thu,  3 Nov 2022 17:48:54 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1667493841;
-        bh=QST4LK774pDdg37jwZflAjVWkOd+5exu2du+u5wwcJ8=;
+        s=phobos-20191101; t=1667494135;
+        bh=6XxFcLsxBc6TFkvSDCM7pp2KEdFZoXPI+8fuOfymsZY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aF/811f3xgirHYofDVippEhyMOPR3AA9VD0o+AEXXHIVNx4SBleJXds2GoARnD7q0
-         0ElMeQI4OPaXNbahwwpfsc4tadFowcX2267eqTv6KAAEm4vyo79/baDi53ie401KZ8
-         NKPt7QS0NvuBgHHxDLU9X7pb/a7KdBIwX99CM1Uxay+sqd4GHPR/+KSaYQZkJlYGnp
-         OIEDadSgDMcV9hcmXxTtgtM2OGzmX8q0c+pqnzuyNktLK7Ooc8to5ukTg4Sn1gdyyy
-         8gAURznVU3BHZccoWMmsEJPDXJz+EWMB9aFNCROT52BK0+7pErmaZqps0LCHRHPErO
-         I1nYC0IL6/oEQ==
-Message-ID: <b34ba792-ba15-14fd-9f1d-7b45c7ae3d39@denx.de>
-Date:   Thu, 3 Nov 2022 17:44:00 +0100
+        b=nrpW3XGurEIJtr+7EGhdATNW2m6f6hPUfCNJoI9zXdAhvC8hOsJatOxpXCg954FfN
+         Fg/vyDoto096JEDzl3IlrFdNfdK1I01+xJIYUm9wCmfLD2PrSIVceuq/klyYBgU8aH
+         bFEx4CvD1eC4V48W2bIe8HJsMKsxoSYR2X0K29sB1/IpWFnYSqlZcSemknICzy34Di
+         mlrn9/Dt2bIetywT/x9o0VJcUPp0i1SKhDpUYfH8rSlAIMm4fXbXLx+Oq9Vffv229z
+         FeshZtd4Q2yJM/mCNrcMPzQ1Bw3OisAhGnZuenp8IYyhyNWbCuXdTKoA+caanSLSHW
+         NfKWJKaRS65+g==
+Message-ID: <b0f752a3-84ac-f6ef-a251-7dd265015d8e@denx.de>
+Date:   Thu, 3 Nov 2022 17:48:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
@@ -80,41 +80,21 @@ On 11/3/22 14:40, Krzysztof Kozlowski wrote:
 > The "rtc" name can be skipped as it is implied from subsystem folder,
 > unless st,m41txx is a name of some SoC?
 
+It's dedicated I2C RTC, a discrete soic8 chip with optional coin cell 
+battery.
+
+We cannot really call it m41txx because there are other m41txx chips 
+with different register layouts and thus different RTC drivers:
+
+next$ ls -1 drivers/rtc/*m41t*
+drivers/rtc/rtc-m41t80.c
+drivers/rtc/rtc-m41t93.c
+drivers/rtc/rtc-m41t94.c
+
+The m41t80 is a sane choice, the m41t80 was the first supported, the 
+other chips are just compatible to it.
+
+Whether I should drop the rtc- prefix or not, I will defer that 
+preference to Alexandre .
+
 [...]
-
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  "#clock-cells":
->> +    const: 1
-> 
-> Hm, why do you have it?
-
-Because of the following warning:
-
-$ make dt_binding_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/rtc/rtc-m41t80.yaml
-   LINT    Documentation/devicetree/bindings
-   DTEX    Documentation/devicetree/bindings/rtc/rtc-m41t80.example.dts
-   CHKDT   Documentation/devicetree/bindings/processed-schema.json
-Documentation/devicetree/bindings/rtc/rtc-m41t80.yaml: properties: 
-'#clock-cells' is a dependency of 'clock-output-names'
-
->> +
->> +  clock-output-names:
->> +    description: From common clock binding to override the default output clock name.
-> 
-> You need maxItems
-
-Done
-
->> +
->> +  wakeup-source:
->> +    description: Enables wake up of host system on alarm.
-> 
-> Skip the property - it comes from rtc.yaml.
-
-Done
