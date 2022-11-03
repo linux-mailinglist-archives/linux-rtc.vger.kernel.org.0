@@ -2,121 +2,147 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CE16185F8
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 18:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEE6618B65
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 23:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbiKCROY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Nov 2022 13:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
+        id S229481AbiKCW1W (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Nov 2022 18:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiKCRNw (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 13:13:52 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897802AEA
-        for <linux-rtc@vger.kernel.org>; Thu,  3 Nov 2022 10:13:35 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id x15so1584606qvp.1
-        for <linux-rtc@vger.kernel.org>; Thu, 03 Nov 2022 10:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TVZsy7B7v5prpCTdyV3oODVBC5t2PSAPI9K9QHFn3vY=;
-        b=D3uBEEtkFPGtAHHVH6JLASDP8Tc4T3q4AWswG/NdJEPrgftqzvGuzUO3KHVSEJLWvo
-         E3ANsYZdA/EfxZbFv5HdjvRKq3mDoTZYDq1RFYudnv1j+LxpTr9uVZmZXQKzo5cpgXqI
-         afGqtRFbBex6pvshYqARroui7XJwY921Lj3Lhp+ZGeFZb9O90wE+ZKPhrvODIWGHdDss
-         oCMrebRyszrw7ZOQ4WlPpWF1CDQJyYVQ8BdaK7H1r2LrqUgPKm5D1tO4/8c1RNvT6DSA
-         9i3BaC1KNdpDnaR082vJZBS4Ec46/W1UP6wIXK4iig5WMlBigrIVyIkO7Ek9RERpsvuT
-         +cEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TVZsy7B7v5prpCTdyV3oODVBC5t2PSAPI9K9QHFn3vY=;
-        b=kXTEeICxgO6XOps0++C1GZhmpNMpT4hD+Crcp+qHg3vYb46xva9r58WpRQivOyjY2E
-         KmydABs0gJ8woWkKFYB/GxxQwGE7VJNUUcgZ7Tk6TPqMoPtOyfTXNT7vXGEq5BszQDMq
-         5Up+7wDEHTktkC01K8DaF98Up0E9G6n7+fGqKYW+7eTYyEcXNBYRWaxhf2j7V260cmMi
-         fo5s15Y8MC+961sgCbyXZkjL18qWmwcceDDS/Teqzk95X5YIzuXB6HxJAv/SWXlz53ZI
-         HrlzNf4sdE/eDA1LWQGEx00ODxH38+QTjM0hnsSIjW4J/q2XaefDIyZWy30WXcIMSi8g
-         VQNQ==
-X-Gm-Message-State: ACrzQf1tz+jPMc4Z2FXCbrWeJ7FyHODEQzKpStQOZpiSBOf2CMbBxNSC
-        YN8dbkg7c9gTJg1gbKR/o4f5yw==
-X-Google-Smtp-Source: AMsMyM4TW3Y0yHfKPsOpETMEfMl0d0K7+0Ax02wgM6Lc8/athEpvPdzE0tcMn/X4TVdgLi+M54yQ+A==
-X-Received: by 2002:a05:6214:411e:b0:4bb:f5bc:f807 with SMTP id kc30-20020a056214411e00b004bbf5bcf807mr21221625qvb.114.1667495614741;
-        Thu, 03 Nov 2022 10:13:34 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id 22-20020ac84e96000000b003a50b9f099esm896034qtp.12.2022.11.03.10.13.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 10:13:34 -0700 (PDT)
-Message-ID: <619870ec-f068-93d5-7bf0-b34b929d43a7@linaro.org>
-Date:   Thu, 3 Nov 2022 13:13:33 -0400
+        with ESMTP id S231349AbiKCW1R (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 18:27:17 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9576220358
+        for <linux-rtc@vger.kernel.org>; Thu,  3 Nov 2022 15:27:15 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 85A98100007;
+        Thu,  3 Nov 2022 22:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667514434;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jnTI1u7MnUEq2cywTcmMPC7hlNNzCQqVOznTNanq8WI=;
+        b=FyMQqVjgvK8v9HX6loteM+MO+rPFOVtW9LsgH6AWoeppZhzhmYupSpC8ABX0DnNCNn0wxo
+        H6nfeb1fEQ2SzKWDsNtrGElpaNqxklZsX00RFu6/rX/uRnGKEtz/D/SD7drE0nHt6ax2AF
+        TzpDJnYFWHdOUN+5uXRN1jY9LnVXniuk9hIz6i0lHFoYvBeBxs8clEl7WCRSfuyk9UrE6w
+        LnxqnfTLxczVsodEdmZ+k1GmaPLcPwmuKT+Jzdn+Pz9NmyC30s2OTI/vaVf6JfMuZge9pO
+        iy8/46Klq2Q6hoHAT4ePUETOvEt+73vTxUUUNkz4mGR7NburU/5xqmuek+PKDQ==
+Date:   Thu, 3 Nov 2022 23:27:13 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Trent Piepho <tpiepho@impinj.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] rtc: snvs: Allow a time difference on clock register
+ read
+Message-ID: <Y2RAQbuUWVdolxXz@mail.local>
+References: <20221103111309.211915-1-francesco@dolcini.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/2] dt-bindings: rtc: m41t80: Convert text schema to YAML
- one
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org
-References: <20221102225943.157344-1-marex@denx.de>
- <abbccd73-7e49-b70b-d552-c1ff9426ea8c@linaro.org>
- <b0f752a3-84ac-f6ef-a251-7dd265015d8e@denx.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b0f752a3-84ac-f6ef-a251-7dd265015d8e@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103111309.211915-1-francesco@dolcini.it>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 03/11/2022 12:48, Marek Vasut wrote:
-> On 11/3/22 14:40, Krzysztof Kozlowski wrote:
+On 03/11/2022 12:13:09+0100, Francesco Dolcini wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > 
-> [...]
+> On an iMX6ULL the following message appears when a wakealarm is set:
 > 
->>> diff --git a/Documentation/devicetree/bindings/rtc/rtc-m41t80.yaml b/Documentation/devicetree/bindings/rtc/rtc-m41t80.yaml
->>> new file mode 100644
->>> index 0000000000000..7f31a22caec9b
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/rtc/rtc-m41t80.yaml
->>
->> Filename based on compatibles (more or less), so could be:
->> st,m41t80.yaml
->> or:
->> st,m41txx.yaml
->>
->> The "rtc" name can be skipped as it is implied from subsystem folder,
->> unless st,m41txx is a name of some SoC?
+> echo 0 > /sys/class/rtc/rtc1/wakealarm
+> rtc rtc1: Timeout trying to get valid LPSRT Counter read
 > 
-> It's dedicated I2C RTC, a discrete soic8 chip with optional coin cell 
-> battery.
+> This does not always happen but is reproducible quite often (7 out of 10
+> times). The problem appears because the iMX6ULL is not able to read the
+> registers within one 32kHz clock cycle which is the base clock of the
+> RTC. Therefore, this patch allows a difference of up to 320 cycles
+> (10ms). 10ms was chosen to be big enough even on systems with less cpu
+> power (e.g. iMX6ULL). According to the reference manual a difference is
+> fine:
+> - If the two consecutive reads are similar, the value is correct.
+> The values have to be similar, not equal.
 > 
-> We cannot really call it m41txx because there are other m41txx chips 
-> with different register layouts and thus different RTC drivers:
+> Fixes: cd7f3a249dbe ("rtc: snvs: Add timeouts to avoid kernel lockups")
+> Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+>  drivers/rtc/rtc-snvs.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
 > 
-> next$ ls -1 drivers/rtc/*m41t*
-> drivers/rtc/rtc-m41t80.c
-> drivers/rtc/rtc-m41t93.c
-> drivers/rtc/rtc-m41t94.c
-> 
-> The m41t80 is a sane choice, the m41t80 was the first supported, the 
-> other chips are just compatible to it.
-> 
-> Whether I should drop the rtc- prefix or not, I will defer that 
-> preference to Alexandre .
+> diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
+> index bd929b0e7d7d..f9bbcb83ba04 100644
+> --- a/drivers/rtc/rtc-snvs.c
+> +++ b/drivers/rtc/rtc-snvs.c
+> @@ -32,6 +32,14 @@
+>  #define SNVS_LPPGDR_INIT	0x41736166
+>  #define CNTR_TO_SECS_SH		15
+>  
+> +/* The maximum RTC clock cycles that are allowed to pass between two
+> + * consecutive clock counter register reads. If the values are corrupted a
+> + * bigger difference is expected. The RTC frequency is 32kHz. With 320 cycles
+> + * we end at 10ms which should be enough for most cases. If it once takes
+> + * longer than expected we do a retry.
+> + */
+> +#define MAX_RTC_READ_DIFF_CYCLES	320
+> +
+>  struct snvs_rtc_data {
+>  	struct rtc_device *rtc;
+>  	struct regmap *regmap;
+> @@ -56,6 +64,7 @@ static u64 rtc_read_lpsrt(struct snvs_rtc_data *data)
+>  static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+>  {
+>  	u64 read1, read2;
+> +	s64 diff;
+>  	unsigned int timeout = 100;
+>  
+>  	/* As expected, the registers might update between the read of the LSB
+> @@ -66,7 +75,8 @@ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+>  	do {
+>  		read2 = read1;
+>  		read1 = rtc_read_lpsrt(data);
+> -	} while (read1 != read2 && --timeout);
+> +		diff = read1 - read2;
+> +	} while ((abs(diff) > MAX_RTC_READ_DIFF_CYCLES) && --timeout);
 
-so st,m41t80.yaml
+Why are you using abs() here? I would expect read2 to be strictly equal
+or greater than read1. If this is not the case, then you certainly have
+an issue.
 
-Best regards,
-Krzysztof
+>  	if (!timeout)
+>  		dev_err(&data->rtc->dev, "Timeout trying to get valid LPSRT Counter read\n");
+>  
+> @@ -78,13 +88,15 @@ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+>  static int rtc_read_lp_counter_lsb(struct snvs_rtc_data *data, u32 *lsb)
+>  {
+>  	u32 count1, count2;
+> +	s32 diff;
+>  	unsigned int timeout = 100;
+>  
+>  	regmap_read(data->regmap, data->offset + SNVS_LPSRTCLR, &count1);
+>  	do {
+>  		count2 = count1;
+>  		regmap_read(data->regmap, data->offset + SNVS_LPSRTCLR, &count1);
+> -	} while (count1 != count2 && --timeout);
+> +		diff = count1 - count2;
+> +	} while ((abs(diff) > MAX_RTC_READ_DIFF_CYCLES) && --timeout);
+>  	if (!timeout) {
+>  		dev_err(&data->rtc->dev, "Timeout trying to get valid LPSRT Counter read\n");
+>  		return -ETIMEDOUT;
+> -- 
+> 2.25.1
+> 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
