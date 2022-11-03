@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEE6618B65
-	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 23:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04233618B76
+	for <lists+linux-rtc@lfdr.de>; Thu,  3 Nov 2022 23:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKCW1W (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 3 Nov 2022 18:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S230267AbiKCW2q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 3 Nov 2022 18:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbiKCW1R (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 18:27:17 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9576220358
-        for <linux-rtc@vger.kernel.org>; Thu,  3 Nov 2022 15:27:15 -0700 (PDT)
+        with ESMTP id S231530AbiKCW2Y (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 3 Nov 2022 18:28:24 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F744233AE
+        for <linux-rtc@vger.kernel.org>; Thu,  3 Nov 2022 15:27:58 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 85A98100007;
-        Thu,  3 Nov 2022 22:27:13 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0666840007;
+        Thu,  3 Nov 2022 22:27:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667514434;
+        t=1667514477;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jnTI1u7MnUEq2cywTcmMPC7hlNNzCQqVOznTNanq8WI=;
-        b=FyMQqVjgvK8v9HX6loteM+MO+rPFOVtW9LsgH6AWoeppZhzhmYupSpC8ABX0DnNCNn0wxo
-        H6nfeb1fEQ2SzKWDsNtrGElpaNqxklZsX00RFu6/rX/uRnGKEtz/D/SD7drE0nHt6ax2AF
-        TzpDJnYFWHdOUN+5uXRN1jY9LnVXniuk9hIz6i0lHFoYvBeBxs8clEl7WCRSfuyk9UrE6w
-        LnxqnfTLxczVsodEdmZ+k1GmaPLcPwmuKT+Jzdn+Pz9NmyC30s2OTI/vaVf6JfMuZge9pO
-        iy8/46Klq2Q6hoHAT4ePUETOvEt+73vTxUUUNkz4mGR7NburU/5xqmuek+PKDQ==
-Date:   Thu, 3 Nov 2022 23:27:13 +0100
+        bh=Xr45S1dYls8mw6ygF14IDYuysRCOiT4DDnKdZWGUGGw=;
+        b=QrXCKbP28Z39Dva12FwC4upZmrxLzIo+sitn5QATRkFBXdRXJQwfY3sr/kV4oyCnGVUWC6
+        Hvc8Kb5YoK930nxZNXvvVC+ATBLqWQjJDSrvU21WoLkvN2NYcHRf64cwD6GMEDUvXEJszu
+        7YsEsjY1+eCkCmt8kT8kusiQPGq1Nwq62CMoYDaSFsNuvyU4jK5dG2GYVpN0QRRRLdCtLx
+        WoHFniTKfBUxRMCghm2LLG8BC0shh8gtBMiUVYucB3EY5i3tf/gS0cE+L16ffTUV+8gv/R
+        ndlevFUZrurWHBGoZ77JNfyKS7TZPtfWDwNPNnqTCCRj/m9PtjzBrYzq5Lj6OA==
+Date:   Thu, 3 Nov 2022 23:27:56 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Francesco Dolcini <francesco@dolcini.it>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
@@ -37,7 +37,7 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         Francesco Dolcini <francesco.dolcini@toradex.com>
 Subject: Re: [PATCH v1] rtc: snvs: Allow a time difference on clock register
  read
-Message-ID: <Y2RAQbuUWVdolxXz@mail.local>
+Message-ID: <Y2RAbLzvNJDRocgZ@mail.local>
 References: <20221103111309.211915-1-francesco@dolcini.it>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -45,8 +45,8 @@ Content-Disposition: inline
 In-Reply-To: <20221103111309.211915-1-francesco@dolcini.it>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,6 +75,9 @@ On 03/11/2022 12:13:09+0100, Francesco Dolcini wrote:
 > Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+
+Also, your SoB needs to match the sender address.
+
 > ---
 >  drivers/rtc/rtc-snvs.c | 16 ++++++++++++++--
 >  1 file changed, 14 insertions(+), 2 deletions(-)
@@ -113,11 +116,6 @@ On 03/11/2022 12:13:09+0100, Francesco Dolcini wrote:
 > -	} while (read1 != read2 && --timeout);
 > +		diff = read1 - read2;
 > +	} while ((abs(diff) > MAX_RTC_READ_DIFF_CYCLES) && --timeout);
-
-Why are you using abs() here? I would expect read2 to be strictly equal
-or greater than read1. If this is not the case, then you certainly have
-an issue.
-
 >  	if (!timeout)
 >  		dev_err(&data->rtc->dev, "Timeout trying to get valid LPSRT Counter read\n");
 >  
