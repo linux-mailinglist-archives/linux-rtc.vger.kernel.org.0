@@ -2,33 +2,33 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95535619328
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Nov 2022 10:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8649761932D
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Nov 2022 10:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiKDJJ6 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 4 Nov 2022 05:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S231217AbiKDJLp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Nov 2022 05:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiKDJJ5 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Nov 2022 05:09:57 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A332B1
-        for <linux-rtc@vger.kernel.org>; Fri,  4 Nov 2022 02:09:55 -0700 (PDT)
+        with ESMTP id S229756AbiKDJLm (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Nov 2022 05:11:42 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB01B41
+        for <linux-rtc@vger.kernel.org>; Fri,  4 Nov 2022 02:11:40 -0700 (PDT)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 41D05C000D;
-        Fri,  4 Nov 2022 09:09:53 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6025E240008;
+        Fri,  4 Nov 2022 09:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667552993;
+        t=1667553099;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=b3Tkig9iISCY1nujx73bJa+ve4f6Qz3gHcxkx2aL6q8=;
-        b=kXVS5N4CJNgZ8fwbUVGIVx5ggSIcLbFCaeQKtatVHuvkDvdhV2nAf9fLzVompDIX8O+Zir
-        sHslLjAxAkSugYFhBRc8e0sR+b9wPWr5CxIezTwYvUaDFxu2UhCO4tNxwIaw6BUOC/ZIn9
-        himI9WKQTSyiKhkmUYf8kCqx13CIz38tFGYi1xw05XhsMo5Z5cVTYZDmUddKkT4Y1D6Atd
-        zGhd+UcHsnUOz95SXpBPum/xPv2+M80dYApseVGjnZLnHj+7mteCYrf+Ubhko00NGydQ7o
-        ajbJy4mkWKqpV/qAgujdA8jPAZ3whXA2/P3OzvbhN2/MdfkUfoRDj3Z80C3xLw==
-Date:   Fri, 4 Nov 2022 10:09:52 +0100
+        bh=AYBQ/wVGgG0FVlbWFYE296sk3oKWiIDGgsA4YKgiTKw=;
+        b=lv5hw58JH8MQLXMN5pGrvnxwulZieADo3mzROXAEboVrVsoC9jEzxnN1hYFxceE1cXSUSL
+        ZgJvFiEa7jrNpGGIaUEt993/lVgUDhCo8CL/XiDqPc6TgCpdx1lWV9Nqv/NLdrSGjb4a2u
+        uSlbQD8Gjwnk3C5mHY/meJqG/VtZK1HLdQbQVtGEejbO/slUHuhudK0nJREdiILo82HMYL
+        BgpIMUDveLtkGRmhP+G+zy4EdKvg1o+CVDLR+PDJ0XHp0A4NMFfGFALUsl/w+wMqRiD+mt
+        pM2v79ESN3X3ppfptJUIubM45kSUdeLjrAWgvqZVLtwA+FpOLgsN9V9hE9ggqA==
+Date:   Fri, 4 Nov 2022 10:11:37 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Francesco Dolcini <francesco@dolcini.it>
 Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
@@ -37,14 +37,14 @@ Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         Francesco Dolcini <francesco.dolcini@toradex.com>
 Subject: Re: [PATCH v1] rtc: snvs: Allow a time difference on clock register
  read
-Message-ID: <Y2TW4IRgyI0I1Cs0@mail.local>
+Message-ID: <Y2TXSfl4IbYM2dkB@mail.local>
 References: <20221103111309.211915-1-francesco@dolcini.it>
- <Y2RAbLzvNJDRocgZ@mail.local>
- <Y2TRDdCc+kl/J3DO@francesco-nb.int.toradex.com>
+ <Y2RAQbuUWVdolxXz@mail.local>
+ <Y2TPFf+oc60DEvJt@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2TRDdCc+kl/J3DO@francesco-nb.int.toradex.com>
+In-Reply-To: <Y2TPFf+oc60DEvJt@francesco-nb.int.toradex.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,8 +54,8 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 04/11/2022 09:45:01+0100, Francesco Dolcini wrote:
-> On Thu, Nov 03, 2022 at 11:27:56PM +0100, Alexandre Belloni wrote:
+On 04/11/2022 09:36:37+0100, Francesco Dolcini wrote:
+> On Thu, Nov 03, 2022 at 11:27:13PM +0100, Alexandre Belloni wrote:
 > > On 03/11/2022 12:13:09+0100, Francesco Dolcini wrote:
 > > > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > > > 
@@ -78,34 +78,61 @@ On 04/11/2022 09:45:01+0100, Francesco Dolcini wrote:
 > > > Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 > > > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > > ---
+> > >  drivers/rtc/rtc-snvs.c | 16 ++++++++++++++--
+> > >  1 file changed, 14 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
+> > > index bd929b0e7d7d..f9bbcb83ba04 100644
+> > > --- a/drivers/rtc/rtc-snvs.c
+> > > +++ b/drivers/rtc/rtc-snvs.c
+> > > @@ -32,6 +32,14 @@
+> > >  #define SNVS_LPPGDR_INIT	0x41736166
+> > >  #define CNTR_TO_SECS_SH		15
+> > >  
+> > > +/* The maximum RTC clock cycles that are allowed to pass between two
+> > > + * consecutive clock counter register reads. If the values are corrupted a
+> > > + * bigger difference is expected. The RTC frequency is 32kHz. With 320 cycles
+> > > + * we end at 10ms which should be enough for most cases. If it once takes
+> > > + * longer than expected we do a retry.
+> > > + */
+> > > +#define MAX_RTC_READ_DIFF_CYCLES	320
+> > > +
+> > >  struct snvs_rtc_data {
+> > >  	struct rtc_device *rtc;
+> > >  	struct regmap *regmap;
+> > > @@ -56,6 +64,7 @@ static u64 rtc_read_lpsrt(struct snvs_rtc_data *data)
+> > >  static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+> > >  {
+> > >  	u64 read1, read2;
+> > > +	s64 diff;
+> > >  	unsigned int timeout = 100;
+> > >  
+> > >  	/* As expected, the registers might update between the read of the LSB
+> > > @@ -66,7 +75,8 @@ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+> > >  	do {
+> > >  		read2 = read1;
+> > >  		read1 = rtc_read_lpsrt(data);
+> > > -	} while (read1 != read2 && --timeout);
+> > > +		diff = read1 - read2;
+> > > +	} while ((abs(diff) > MAX_RTC_READ_DIFF_CYCLES) && --timeout);
 > > 
-> > Also, your SoB needs to match the sender address.
+> > Why are you using abs() here? I would expect read2 to be strictly equal
+> > or greater than read1. If this is not the case, then you certainly have
+> > an issue.
 > 
-> I'll fix it.
+> You meant read1 >= read2 ? read1 is the most recent reading.
 > 
-> However there is something that I do not fully understand and I thought
-> it was not strictly required when forwarding patches like I just did.
+> abs() was there to handle a theoretical counter overflow, from what I
+> can understand it is a 47-bit counter (seconds). Thinking at it once
+> more probably it does not make much sense :-).
 > 
-> How do you handle the very common case in which the patch author is the
-> corporate email address, but the email sender is a private one?
+> What about:
 > 
-> Normally you have:
->  - sender me@personal.example.com
->  - first line of the email From: me@company.example.com
->  - SoB: me@company.example.com
+> while ((diff < 0) || (diff > MAX_RTC_READ_DIFF_CYCLES)) && --timeout)
 > 
-> with that the email sender does not match the last sob, but this is very
-> common, see for example https://lore.kernel.org/all/20220705085825.21255-1-max.oss.09@gmail.com/
-> 
-> Should we have an additional
->  - sob me@personal.example.com
-> 
-> Therefore having 2 sob by the same individual, but with 2 different email
-> addresses?
 
-I would simply drop the company one if they are not able to provide you
-with a working email.
-
+This looks good
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
