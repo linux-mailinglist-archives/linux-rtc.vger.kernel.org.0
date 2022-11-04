@@ -2,197 +2,224 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B7D619357
-	for <lists+linux-rtc@lfdr.de>; Fri,  4 Nov 2022 10:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8033A619513
+	for <lists+linux-rtc@lfdr.de>; Fri,  4 Nov 2022 12:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiKDJUs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 4 Nov 2022 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S231871AbiKDLDP (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 4 Nov 2022 07:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKDJUp (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Nov 2022 05:20:45 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05466248DB;
-        Fri,  4 Nov 2022 02:20:43 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 8B17F580511;
-        Fri,  4 Nov 2022 05:20:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 04 Nov 2022 05:20:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667553641; x=1667560841; bh=SJoBz4HEVE
-        RiFUnQzb3ZIub9dT0AONhBbUZgzTI8xuQ=; b=jOAioEcqTCQaB6i99azVot5cAk
-        gre11Ve+vBmc+Fs/vkDIrNjCSzfHPOUS4wzGCXwfIKJy9biOGQnW4iqxv75LAqbt
-        RdYq92O8WI8weSFAZzxtnrW2XuUukmSBN8KcaYYLkhR8/jLD6oh6MJQ9cwWd7yl8
-        mH21fZUTzBP3gaoYiV4qH0o52fq8RuYFTCOdHa7Soal92hUHyLnB5uIHP9R7ZXTY
-        yrk8ucJVboxa6GlUfb8qItPWrs5N4B3xbNfDaXknJzA5ZsbLT0XMXiOZj0LDZKk8
-        6WHRFTqWjdbWEHnXA5Wxg4OS34kfyJ+czE32JS893SSJ8vebcjylW97lvLOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667553641; x=1667560841; bh=SJoBz4HEVERiFUnQzb3ZIub9dT0A
-        ONhBbUZgzTI8xuQ=; b=BmHXv8dWgMDB3A30MW7r0ER+x2KPnCs67D5Tm4znOHms
-        KOvE21G5Qhp1IrhrNpstSMDDbjbRSKKI+wikCsrQUA1D/bc3nhsP6Pfph0Q2sq/L
-        w5xrS9CVegwYB6hNxnfcyAYSDOlMngVd/4QaY9exxV3aeJMS+7bUlXh8ZFR6fpSK
-        gPa2Xr8LydLZo5vJzfOV1L/TUvE6+ISJhz2GoZweOm3SeuEKaa51K7Ium5W5K020
-        eA1TNoxWdJRVK08gDXfqjSbR39bjBE0aJEu+l1hoD12ykpSVSlQ8ZDa9eXuaf1Sv
-        VIUPNFOv24w/xRDpe00prXWHte2pkStlJDT70gy7rw==
-X-ME-Sender: <xms:Z9lkYzSrjU71xNBk6_zqZw7_YH6JI0yUseZ9KPinXiiMwa2ms5wZNA>
-    <xme:Z9lkY0y5CO55EwHV9Y6MI53sDiK8VD6-UVJ3Kx8hhf4HE2ApNz1-y8IkyXw6-f9C2
-    r627sGDwec4-VUhbl4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddugddtudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Z9lkY42FoeE9AWZWaTBjKK0WgCtTsBwtE9dvMmUqE911tjOLuc_EpQ>
-    <xmx:Z9lkYzD3odg97j_NLZJAinYScUOubW4GrxI_Sg6mxaH40a00usXu3A>
-    <xmx:Z9lkY8gjj31U7LlNshlCvQUZGUTi1_xePFBMFsKDj6YaX8-3AvZpfA>
-    <xmx:adlkYxI9rlur3V1K3bRsxhvV5OL9Go-r-JYQNksdhAr5r8wa1PdT3g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 17FD1B603ED; Fri,  4 Nov 2022 05:20:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <6b35d496-2313-4fd9-851b-2ba469bc9261@app.fastmail.com>
-In-Reply-To: <803778517.2279639.1667493436959.JavaMail.open-xchange@opme11oxm02aub.pom.fr.intraorange>
-References: <20221019161831.3864786-1-arnd@kernel.org>
- <m2r0z3h5yr.fsf@sopl295.home>
- <7d9eebc8-39b6-4dc1-9ffc-f17ec584bee2@app.fastmail.com>
- <803778517.2279639.1667493436959.JavaMail.open-xchange@opme11oxm02aub.pom.fr.intraorange>
-Date:   Fri, 04 Nov 2022 10:20:20 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Robert Jarzmik" <jarzmik.robert@orange.fr>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Robert Jarzmik" <robert.jarzmik@free.fr>
-Cc:     jingoohan1@gmail.com, "Linus Walleij" <linus.walleij@linaro.org>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        marek.vasut@gmail.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        "Sergey Shtylyov" <s.shtylyov@omp.ru>, alsa-devel@alsa-project.org,
-        philipp.zabel@gmail.com, linux-usb@vger.kernel.org,
-        linux-leds@vger.kernel.org, slapin@ossfans.org,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Mark Brown" <broonie@kernel.org>, linux-mtd@lists.infradead.org,
-        "Lee Jones" <lee@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        linux-input@vger.kernel.org, mkpetch@internode.on.net,
-        lgirdwood@gmail.com, "Vignesh Raghavendra" <vigneshr@ti.com>,
-        "Daniel Mack" <daniel@zonque.org>, kernel@wantstofly.org,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, sre@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        patches@opensource.cirrus.com, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, "Felipe Balbi" <balbi@kernel.org>,
-        "Helge Deller" <deller@gmx.de>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, perex@perex.cz,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        lost.distance@yahoo.com,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>, tiwai@suse.com,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Alexandre Belloni" <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH 00/30] ARM: pxa: remove all unused boards&drivers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231899AbiKDLCc (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 4 Nov 2022 07:02:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846D02CCAF
+        for <linux-rtc@vger.kernel.org>; Fri,  4 Nov 2022 04:02:30 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id b2so12304536eja.6
+        for <linux-rtc@vger.kernel.org>; Fri, 04 Nov 2022 04:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6qsrjmAB2bc2yZOLis4WUU4zk1hVdcgBYDjuUdZNYJA=;
+        b=Q0ouS1ZTGKV2jT9hNgwTXGwSTy8uz5eBnuEvnM5BR9n4JtOT+WWokoUvZjpgbRK+OZ
+         KNuVSQ+XZMbtxGIeMNz07+RulsNwkIj62SCEf/WgUVRTO/gBEDA66HGWOXC9Eycj4SA7
+         I9QLRE9SbZDZdxuo+AWlxnmJt3QcPBPWWk+Cs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6qsrjmAB2bc2yZOLis4WUU4zk1hVdcgBYDjuUdZNYJA=;
+        b=yPSlEaHcP1HxM2np6WzQKU1EKTn38RGRW1gXTLliorMzr/AUZOmAC1+cMRYnFgObux
+         eVgOnrfLrcdz44mZvziK3EjnhEHc3On2nwYd6qbAdBBJgNKkGuEyaO9cqal9Z6eTkk46
+         XlAcNTa51EuwW7JG9cVujpmmdrJhG02dJbisidVSJ0wr1kPjHQwSLMxXdLsUhQpDt5Hy
+         0XsbdB0oo+dpcVvVfm0pkrN9WLWkQcqsmh1XLhWbEXXOoBINdgS3iTXHH/dk4cF5WG9x
+         xN9avdZDeXY6gccbhv4Vc6ZwYh3eNgtVYz9Bd6/oTx/Bo5E59YOXBEVI03s7MOJDY+mm
+         EJKQ==
+X-Gm-Message-State: ACrzQf3n0/kR63w+KTU+Yfe7j2yTE1hqralDlISIBWLdHEXIO/F4Imwy
+        LmVgg911rWZZvQXWuryEFd4TONGDVhz4lUyObBY=
+X-Google-Smtp-Source: AMsMyM7rPtx7R3xBAq3mAhmYoFuzglY0OrjxSCxDNSArUyvCF4XzPOlpRmGiNBPGszAIp9JtZATw4A==
+X-Received: by 2002:a17:907:7244:b0:78d:cedc:7a9e with SMTP id ds4-20020a170907724400b0078dcedc7a9emr33822938ejc.600.1667559748911;
+        Fri, 04 Nov 2022 04:02:28 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id n28-20020a5099dc000000b004619f024864sm1777833edb.81.2022.11.04.04.02.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 04:02:28 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH v4] rtc: isl12022: add support for temperature sensor
+Date:   Fri,  4 Nov 2022 12:02:25 +0100
+Message-Id: <20221104110225.2219761-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+References: <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Nov 3, 2022, at 17:37, Jarzmik Robert wrote:
-> I'm sorry Arnd, my mailer messed up again, and instead of using my 
-> normal robert.jarzmik@free.fr, it used my ISP mail ...
->>
->
-> The reason you're not seeing the AC97_BUS_NEW used is because this 
-> becomes visible only in device-tree files, which were posted (for 
-> mioa701 for example) but never properly reviewed nor merged.
->
-> As from memory, at least mioa701, zylonite, em_x270 are DT ported, ie. 
-> there is a DT file which makes them boot. For the mioa701, the DT file 
-> offers the same functionnality, ie. all drivers in mioa701.c legacy 
-> file are working as well in a DT variant (not using mioa701.c 
-> obviously).
+The isl12022 has built-in temperature compensation effective over the
+range -40C to +85C. It exposes the average of the last two temperature
+measurements as a 10-bit value in half-Kelvins. Make this available
+via the hwmon framework.
 
-Ok, I see. I need a little clarification here, so I can adapt
-my patch series to keep the necessary files in place:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+v4: add a real commit log, include Guenter's R-b.
 
-- Zylonite has both PXA300 and PXA320 variants. I removed the PXA320
-  code because nothing selected it any more and it is not hooked
-  up to the MACH_PXA3XX_DT Kconfig symbol. Should I undo this and
-  keep all three PXA3xx variant, removing only PXA930 but selecting
-  CPU_PXA310/320 from MACH_PXA3XX_DT?
+v3 at https://lore.kernel.org/lkml/20221026133847.1193422-1-linux@rasmusvillemoes.dk/
 
-- The em_x270 board file was already removed as part of 9d3239147d6d
-  ("ARM: pxa: remove Compulab pxa2xx boards"), which already removed
-  the associated drivers. Is it correct to assume that the DT support
-  for it has also become unusable at that point, or would you expect
-  it to still have some use? I now remove the related CM-X300 machine
-  as well, but it sounds like you did not have DT support for that,
-  right?
+ drivers/rtc/rtc-isl12022.c | 94 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-- I'm not sure how the probing of the ASoC drivers works in the
-  DT case. Do I only need to make SND_PXA2XX_SOC_AC97 user-visible
-  to let everything get probed automatically from DT, or do we
-  need to also keep SND_PXA2XX_SOC_MIOA701 and SND_SOC_ZYLONITE?
+diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+index ca677c4265e6..a3b0de3393f5 100644
+--- a/drivers/rtc/rtc-isl12022.c
++++ b/drivers/rtc/rtc-isl12022.c
+@@ -17,6 +17,7 @@
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/regmap.h>
++#include <linux/hwmon.h>
+ 
+ /* ISL register offsets */
+ #define ISL12022_REG_SC		0x00
+@@ -30,6 +31,9 @@
+ #define ISL12022_REG_SR		0x07
+ #define ISL12022_REG_INT	0x08
+ 
++#define ISL12022_REG_BETA	0x0d
++#define ISL12022_REG_TEMP_L	0x28
++
+ /* ISL register bits */
+ #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
+ 
+@@ -38,6 +42,7 @@
+ 
+ #define ISL12022_INT_WRTC	(1 << 6)
+ 
++#define ISL12022_BETA_TSE	(1 << 7)
+ 
+ static struct i2c_driver isl12022_driver;
+ 
+@@ -46,6 +51,93 @@ struct isl12022 {
+ 	struct regmap *regmap;
+ };
+ 
++static umode_t isl12022_hwmon_is_visible(const void *data,
++					 enum hwmon_sensor_types type,
++					 u32 attr, int channel)
++{
++	if (type == hwmon_temp && attr == hwmon_temp_input)
++		return 0444;
++
++	return 0;
++}
++
++/*
++ * A user-initiated temperature conversion is not started by this function,
++ * so the temperature is updated once every ~60 seconds.
++ */
++static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
++{
++	struct isl12022 *isl12022 = dev_get_drvdata(dev);
++	struct regmap *regmap = isl12022->regmap;
++	u8 temp_buf[2];
++	int temp, ret;
++
++	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
++			       temp_buf, sizeof(temp_buf));
++	if (ret)
++		return ret;
++	/*
++	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
++	 */
++	temp = (temp_buf[1] << 8) | temp_buf[0];
++	temp *= 500;
++	temp -= 273000;
++
++	*mC = temp;
++
++	return 0;
++}
++
++static int isl12022_hwmon_read(struct device *dev,
++			       enum hwmon_sensor_types type,
++			       u32 attr, int channel, long *val)
++{
++	if (type == hwmon_temp && attr == hwmon_temp_input)
++		return isl12022_hwmon_read_temp(dev, val);
++
++	return -EOPNOTSUPP;
++}
++
++static const struct hwmon_channel_info *isl12022_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
++	NULL
++};
++
++static const struct hwmon_ops isl12022_hwmon_ops = {
++	.is_visible = isl12022_hwmon_is_visible,
++	.read = isl12022_hwmon_read,
++};
++
++static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
++	.ops = &isl12022_hwmon_ops,
++	.info = isl12022_hwmon_info,
++};
++
++static void isl12022_hwmon_register(struct device *dev)
++{
++	struct isl12022 *isl12022;
++	struct device *hwmon;
++	int ret;
++
++	if (!IS_REACHABLE(CONFIG_HWMON))
++		return;
++
++	isl12022 = dev_get_drvdata(dev);
++
++	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
++				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
++	if (ret) {
++		dev_warn(dev, "unable to enable temperature sensor\n");
++		return;
++	}
++
++	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
++						     &isl12022_hwmon_chip_info,
++						     NULL);
++	if (IS_ERR(hwmon))
++		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
++}
++
+ /*
+  * In the routines that deal directly with the isl12022 hardware, we use
+  * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
+@@ -160,6 +252,8 @@ static int isl12022_probe(struct i2c_client *client)
+ 		return PTR_ERR(isl12022->regmap);
+ 	}
+ 
++	isl12022_hwmon_register(&client->dev);
++
+ 	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+ 	if (IS_ERR(isl12022->rtc))
+ 		return PTR_ERR(isl12022->rtc);
+-- 
+2.37.2
 
->> Any idea where I went wrong here? Did I make a mistake in following the Kconfig dependencies, or are some parts of this
-> incorrectly annotated?
->
-> I don't think you did a mistake, I think I did. When I saw the patch of 
-> "deprecation" of mioa701 and all the other pxa files, I took it that 
-> the platform-device was deprecated, and was to be removed. This is the 
-> right thing to do in my opinion. I wouldn't mind if all board file go 
-> actually (expect the QEMU one), as this would leave only the boards 
-> with proper DT support, and would remove some clutter from the kernel.
-
-Right, this is the plan: the only board files I left in place are
-'gumstix' family that is supported by qemu and has the largest amount
-of RAM in there, and the 'spitz' family that is also supported by
-qemu and apparently had at least one user that was interested in
-working on DT (I can't find a record of who that was now). 
-
-> I also thought the drivers won't get touched by the purge, exception 
-> made of "platform similar ones", such as in the sound tree 
-> (sound/soc/pxa) where we have some of them, and maybe mfd tree.
-
-I made two lists of drivers here: the first list is for those that
-become invisible in Kconfig and can no longer even be compile tested.
-My reasoning here was that these are likely already dead and will
-only get worse without compile testing. If anyone ends up doing
-a new DT conversion of a removed board later on, these can obviously
-get resurrected. The current state of the patches is in [1],
-I'll go through them again based on your feedback, but let me know
-if you see anything else that I'm removing that you think should be
-kept.
-
-The second list of drivers is for those that have no DT support and
-are impossible to get used without anyone declaring a (platform, spi,
-i2c, ...) device in source code somewhere. The list is still
-incomplete because this is hard to check automatically. I have
-included a few patches to remove drivers that have been obviously
-unused for a long time, or never had an in-tree user at all, but
-I left the majority of these drivers for a later series.
-
-       Arnd
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=boardfile-remove&id=73c4b7cfbc2b2ef0
