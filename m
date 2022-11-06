@@ -2,73 +2,143 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0996461DA5D
-	for <lists+linux-rtc@lfdr.de>; Sat,  5 Nov 2022 13:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4AC61E0C4
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 09:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiKEMkF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 5 Nov 2022 08:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S229551AbiKFII3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Nov 2022 03:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiKEMju (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 5 Nov 2022 08:39:50 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3E1B9C1
-        for <linux-rtc@vger.kernel.org>; Sat,  5 Nov 2022 05:39:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so6684637pjk.1
-        for <linux-rtc@vger.kernel.org>; Sat, 05 Nov 2022 05:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
-         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
-         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
-         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
-         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
-         6xmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=xOEju5XOTm86UFJMQ0Yheds5cpgm1tWp5iHvxAF8yGrGTtpe0UQf0ydmJVYhd7FxBL
-         WvBuG4Jqph2gR5Rdxx8frtqbARVCN0mwh6X2pL4tNB86U9dypE30v9v9r+V+1zOKYJI3
-         J9KGdiQ/JS5/myToTjcLNx4iszdWn5+sWNxTSCIH1p4CNZnBeg4uIMZU+1XD4RiapGn4
-         vCL0Zzu3X/34A5Ovod75gcNv/QZQqwtK1/8phJWqzr/3ExlQO26jHpDOOsHLbSTb50Db
-         8iu7zaJB+qdP4x/5XFP+Ka3Tc4IWDcx6tQ9C+8c2CFmICcaVAI5cfKNS6VRBNOixY5XW
-         Jwkg==
-X-Gm-Message-State: ACrzQf2b7Qg/SSF4ZZET1swLCnmvjoWX50tXGBgiuqTOdVrbIl69+3P1
-        7xEhoK5skPkRkuDAh7LpmkDScY8Ds7GhiInC6Sg=
-X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
-X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
- mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
- Nov 2022 05:39:47 -0700 (PDT)
+        with ESMTP id S229547AbiKFII3 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 03:08:29 -0500
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 01:08:27 PDT
+Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F2B72E7
+        for <linux-rtc@vger.kernel.org>; Sun,  6 Nov 2022 01:08:26 -0700 (PDT)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id raaLoCxK7vbzbraaMoTkHw; Sun, 06 Nov 2022 09:00:54 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 06 Nov 2022 09:00:54 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH] rtc: Include <linux/kstrtox.h> when appropriate
+Date:   Sun,  6 Nov 2022 09:00:51 +0100
+Message-Id: <786421fd0435a32206288904a1f879436a717529.1667721637.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:39:47 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:39:47 +0300
-Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+The kstrto<something>() functions have been moved from kernel.h to
+kstrtox.h.
+
+So, include the latter directly in the appropriate files.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+The goal of this patch is to eventually remove <linux/kernel.h> from
+<linux/watchdog.h>.
+
+This patch is needed to avoid indirect inclusion, via <linux/watchdog.h>,
+in rtc-abx80x.c and rtc-ds1307.c.
+
+I've done my best to keep alphabetical order of the included files, to that
+is not always easy to achieve!
+---
+ drivers/rtc/rtc-abx80x.c   | 1 +
+ drivers/rtc/rtc-bq32k.c    | 1 +
+ drivers/rtc/rtc-ds1307.c   | 1 +
+ drivers/rtc/rtc-rv3029c2.c | 1 +
+ drivers/rtc/rtc-rx8025.c   | 1 +
+ drivers/rtc/sysfs.c        | 1 +
+ 6 files changed, 6 insertions(+)
+
+diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+index 9b0138d07232..973649d95e13 100644
+--- a/drivers/rtc/rtc-abx80x.c
++++ b/drivers/rtc/rtc-abx80x.c
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/bcd.h>
+ #include <linux/i2c.h>
++#include <linux/kstrtox.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/rtc.h>
+diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
+index 6d6a55efb9cc..967ddc6bf76d 100644
+--- a/drivers/rtc/rtc-bq32k.c
++++ b/drivers/rtc/rtc-bq32k.c
+@@ -13,6 +13,7 @@
+ #include <linux/i2c.h>
+ #include <linux/rtc.h>
+ #include <linux/init.h>
++#include <linux/kstrtox.h>
+ #include <linux/errno.h>
+ #include <linux/bcd.h>
+ 
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index d51565bcc189..7c2276cf5514 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -11,6 +11,7 @@
+ #include <linux/bcd.h>
+ #include <linux/i2c.h>
+ #include <linux/init.h>
++#include <linux/kstrtox.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/property.h>
+diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
+index eb483a30bd92..e4fdd47ae066 100644
+--- a/drivers/rtc/rtc-rv3029c2.c
++++ b/drivers/rtc/rtc-rv3029c2.c
+@@ -17,6 +17,7 @@
+ #include <linux/of.h>
+ #include <linux/hwmon.h>
+ #include <linux/hwmon-sysfs.h>
++#include <linux/kstrtox.h>
+ #include <linux/regmap.h>
+ 
+ /* Register map */
+diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
+index dde86f3e2a4b..078b4406acad 100644
+--- a/drivers/rtc/rtc-rx8025.c
++++ b/drivers/rtc/rtc-rx8025.c
+@@ -19,6 +19,7 @@
+ #include <linux/bitops.h>
+ #include <linux/i2c.h>
+ #include <linux/kernel.h>
++#include <linux/kstrtox.h>
+ #include <linux/module.h>
+ #include <linux/rtc.h>
+ 
+diff --git a/drivers/rtc/sysfs.c b/drivers/rtc/sysfs.c
+index 00f1945bcb7e..e3062c4d3f2c 100644
+--- a/drivers/rtc/sysfs.c
++++ b/drivers/rtc/sysfs.c
+@@ -6,6 +6,7 @@
+  * Author: Alessandro Zummo <a.zummo@towertech.it>
+  */
+ 
++#include <linux/kstrtox.h>
+ #include <linux/module.h>
+ #include <linux/rtc.h>
+ 
+-- 
+2.34.1
+
