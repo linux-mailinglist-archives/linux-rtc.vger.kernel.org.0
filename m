@@ -2,47 +2,47 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B0861E49C
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 18:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B58161E492
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 18:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbiKFRMy (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 6 Nov 2022 12:12:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
+        id S231135AbiKFRMl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Nov 2022 12:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbiKFRMZ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 12:12:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A9614D1F;
-        Sun,  6 Nov 2022 09:07:55 -0800 (PST)
+        with ESMTP id S231342AbiKFRLo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 12:11:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF5513FB8;
+        Sun,  6 Nov 2022 09:07:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6C7560BFF;
-        Sun,  6 Nov 2022 17:07:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5669FC433C1;
-        Sun,  6 Nov 2022 17:07:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D09D360D24;
+        Sun,  6 Nov 2022 17:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90678C4347C;
+        Sun,  6 Nov 2022 17:07:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667754443;
-        bh=OCq411Ero81o/ji24Kw2gCP6jOBeej2cIJITZ6eOp2A=;
+        s=k20201202; t=1667754449;
+        bh=8wkmgLIUz/8ONLcdxFh5UBQs2mnb8QbTZn5857tQxEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oZWfafUG5dXPS09cOm7wP95SgjSDMJIqxO+qfs+7I8M7NbFgDZguj6iPmKGfo+HNQ
-         Ftzn1rv+R8SCZevlHbzu7zWlPRjgQ1vAvev43YkPD4k7kcTeJJuwD6dru/J5K7g1r/
-         gJMHaBNlFbJUYAh94CCZSvuEpcfpr1j9kBULIfS0wQaJODkHDJ/HKUqWrWkjhJjWim
-         /sInjawMFpyVmD/OMNQiYz9kGH/r4wthmK/yYldMDToC5RVstnk9ufVbOuqMh8e0F1
-         ipYD/X36Yj6H22/v3atioij6RXFf0yIgolsXv6n1DCQbnwXs7CCuE8IHcYCjxPKljv
-         fUMEOs0FWw3AQ==
+        b=AO96oGDF8322xajuUwXtg+00axarcJgVRdLMHqLX8XS8NR+ETBjeQjRpwM6oMEF04
+         tE9yUJ69R4REqhx+LPXLjNPS/G0+DGweeWhZN9OuhS6036NptXj0LpQ7QDSyXXMtRd
+         BIfJMxkpft4n4UXdqYr/9hhz5aq44OhA+J7wbYQUITWXQWeDOwIK+43NHZuAzo9DtM
+         X7BkJDLElOC4s4pEJ2FMENxArgUNGtTcPYKPR+4K7VQU4SfMoq5l97I9QQU2QbPnGZ
+         P0W3F3WE8cgoL2oSiuooqKddexbtnzZTbCAII7X28JZt9+QbejlB5oldgRhWfn66BC
+         yjdATy75fMBTQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         kernel test robot <lkp@intel.com>,
         Sasha Levin <sashal@kernel.org>, a.zummo@towertech.it,
         linux-rtc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 7/7] rtc: cmos: fix build on non-ACPI platforms
-Date:   Sun,  6 Nov 2022 12:07:04 -0500
-Message-Id: <20221106170705.1580963-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 2/2] rtc: cmos: fix build on non-ACPI platforms
+Date:   Sun,  6 Nov 2022 12:07:23 -0500
+Message-Id: <20221106170724.1581086-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221106170705.1580963-1-sashal@kernel.org>
-References: <20221106170705.1580963-1-sashal@kernel.org>
+In-Reply-To: <20221106170724.1581086-1-sashal@kernel.org>
+References: <20221106170724.1581086-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 8545f0da57fe..c6147d8b622f 100644
+index 5e2ee430b3f8..655caf2cf1e6 100644
 --- a/drivers/rtc/rtc-cmos.c
 +++ b/drivers/rtc/rtc-cmos.c
-@@ -1294,6 +1294,9 @@ static void cmos_check_acpi_rtc_status(struct device *dev,
+@@ -1189,6 +1189,9 @@ static void cmos_check_acpi_rtc_status(struct device *dev,
  {
  }
  
