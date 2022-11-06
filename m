@@ -2,40 +2,49 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4AC61E0C4
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 09:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EE961E1F4
+	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 12:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKFII3 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 6 Nov 2022 03:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S229807AbiKFL7e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Nov 2022 06:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKFII3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 03:08:29 -0500
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 01:08:27 PDT
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F2B72E7
-        for <linux-rtc@vger.kernel.org>; Sun,  6 Nov 2022 01:08:26 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id raaLoCxK7vbzbraaMoTkHw; Sun, 06 Nov 2022 09:00:54 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 06 Nov 2022 09:00:54 +0100
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+        with ESMTP id S229694AbiKFL7d (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 06:59:33 -0500
+Received: from smtp-out-04.comm2000.it (smtp-out-04.comm2000.it [212.97.32.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D644BD2C3
+        for <linux-rtc@vger.kernel.org>; Sun,  6 Nov 2022 03:59:30 -0800 (PST)
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-04.comm2000.it (Postfix) with ESMTPSA id 7670FBC2247;
+        Sun,  6 Nov 2022 12:59:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1667735966;
+        bh=QH6Jrzw/KVF+RLpnjBWHyGxKzG49p3CfSqSXG7p1tfw=;
+        h=From:To:Cc:Subject:Date;
+        b=Pt8ri7dxWGnb53lVzhMA4ZcrEtyMYL9COKMQUg5yScfTH2v33dswYQxrAAY4pm042
+         5Ds5oQKEcKnct6cNdk7Cf5pK4LB3cOkL4M9DjoxLTr8HrVmDLaxndbMKnYt8ll2Cit
+         LIJb1yIPamY7hQHYlyjPbo7K0KOBGBzCRfQVXTVJXb+OQ91YhahZwJDdupMLUS3vup
+         GEDWLjD5UrQqyxVjBNvyGAGuMWoLlJz32QE6XMzPkH9XDKmKzQikiE3i9JAZG1ohrl
+         UKF6VDrDPIogqR4OUR1v0JcU6qrDZ1U4Hxz2t05EWniNEVKhM1HYDIJMAq9IHMpNEF
+         8afKWYcD1lXng==
+From:   Francesco Dolcini <francesco@dolcini.it>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-rtc@vger.kernel.org
-Subject: [PATCH] rtc: Include <linux/kstrtox.h> when appropriate
-Date:   Sun,  6 Nov 2022 09:00:51 +0100
-Message-Id: <786421fd0435a32206288904a1f879436a717529.1667721637.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+Cc:     Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Subject: [PATCH v2] rtc: snvs: Allow a time difference on clock register read
+Date:   Sun,  6 Nov 2022 12:59:15 +0100
+Message-Id: <20221106115915.7930-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,102 +52,87 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-The kstrto<something>() functions have been moved from kernel.h to
-kstrtox.h.
+From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 
-So, include the latter directly in the appropriate files.
+On an iMX6ULL the following message appears when a wakealarm is set:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+echo 0 > /sys/class/rtc/rtc1/wakealarm
+rtc rtc1: Timeout trying to get valid LPSRT Counter read
+
+This does not always happen but is reproducible quite often (7 out of 10
+times). The problem appears because the iMX6ULL is not able to read the
+registers within one 32kHz clock cycle which is the base clock of the
+RTC. Therefore, this patch allows a difference of up to 320 cycles
+(10ms). 10ms was chosen to be big enough even on systems with less cpu
+power (e.g. iMX6ULL). According to the reference manual a difference is
+fine:
+- If the two consecutive reads are similar, the value is correct.
+The values have to be similar, not equal.
+
+Fixes: cd7f3a249dbe ("rtc: snvs: Add timeouts to avoid kernel lockups")
+Reviewed-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Signed-off-by: Francesco Dolcini <francesco@dolcini.it>
 ---
-The goal of this patch is to eventually remove <linux/kernel.h> from
-<linux/watchdog.h>.
-
-This patch is needed to avoid indirect inclusion, via <linux/watchdog.h>,
-in rtc-abx80x.c and rtc-ds1307.c.
-
-I've done my best to keep alphabetical order of the included files, to that
-is not always easy to achieve!
+v2: enforce counter read to be strictly greater than previous one, removed abs()
 ---
- drivers/rtc/rtc-abx80x.c   | 1 +
- drivers/rtc/rtc-bq32k.c    | 1 +
- drivers/rtc/rtc-ds1307.c   | 1 +
- drivers/rtc/rtc-rv3029c2.c | 1 +
- drivers/rtc/rtc-rx8025.c   | 1 +
- drivers/rtc/sysfs.c        | 1 +
- 6 files changed, 6 insertions(+)
+ drivers/rtc/rtc-snvs.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
-index 9b0138d07232..973649d95e13 100644
---- a/drivers/rtc/rtc-abx80x.c
-+++ b/drivers/rtc/rtc-abx80x.c
-@@ -12,6 +12,7 @@
+diff --git a/drivers/rtc/rtc-snvs.c b/drivers/rtc/rtc-snvs.c
+index bd929b0e7d7d..d82acf1af1fa 100644
+--- a/drivers/rtc/rtc-snvs.c
++++ b/drivers/rtc/rtc-snvs.c
+@@ -32,6 +32,14 @@
+ #define SNVS_LPPGDR_INIT	0x41736166
+ #define CNTR_TO_SECS_SH		15
  
- #include <linux/bcd.h>
- #include <linux/i2c.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/rtc.h>
-diff --git a/drivers/rtc/rtc-bq32k.c b/drivers/rtc/rtc-bq32k.c
-index 6d6a55efb9cc..967ddc6bf76d 100644
---- a/drivers/rtc/rtc-bq32k.c
-+++ b/drivers/rtc/rtc-bq32k.c
-@@ -13,6 +13,7 @@
- #include <linux/i2c.h>
- #include <linux/rtc.h>
- #include <linux/init.h>
-+#include <linux/kstrtox.h>
- #include <linux/errno.h>
- #include <linux/bcd.h>
++/* The maximum RTC clock cycles that are allowed to pass between two
++ * consecutive clock counter register reads. If the values are corrupted a
++ * bigger difference is expected. The RTC frequency is 32kHz. With 320 cycles
++ * we end at 10ms which should be enough for most cases. If it once takes
++ * longer than expected we do a retry.
++ */
++#define MAX_RTC_READ_DIFF_CYCLES	320
++
+ struct snvs_rtc_data {
+ 	struct rtc_device *rtc;
+ 	struct regmap *regmap;
+@@ -56,6 +64,7 @@ static u64 rtc_read_lpsrt(struct snvs_rtc_data *data)
+ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+ {
+ 	u64 read1, read2;
++	s64 diff;
+ 	unsigned int timeout = 100;
  
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index d51565bcc189..7c2276cf5514 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -11,6 +11,7 @@
- #include <linux/bcd.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
-+#include <linux/kstrtox.h>
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/property.h>
-diff --git a/drivers/rtc/rtc-rv3029c2.c b/drivers/rtc/rtc-rv3029c2.c
-index eb483a30bd92..e4fdd47ae066 100644
---- a/drivers/rtc/rtc-rv3029c2.c
-+++ b/drivers/rtc/rtc-rv3029c2.c
-@@ -17,6 +17,7 @@
- #include <linux/of.h>
- #include <linux/hwmon.h>
- #include <linux/hwmon-sysfs.h>
-+#include <linux/kstrtox.h>
- #include <linux/regmap.h>
+ 	/* As expected, the registers might update between the read of the LSB
+@@ -66,7 +75,8 @@ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+ 	do {
+ 		read2 = read1;
+ 		read1 = rtc_read_lpsrt(data);
+-	} while (read1 != read2 && --timeout);
++		diff = read1 - read2;
++	} while (((diff < 0) || (diff > MAX_RTC_READ_DIFF_CYCLES)) && --timeout);
+ 	if (!timeout)
+ 		dev_err(&data->rtc->dev, "Timeout trying to get valid LPSRT Counter read\n");
  
- /* Register map */
-diff --git a/drivers/rtc/rtc-rx8025.c b/drivers/rtc/rtc-rx8025.c
-index dde86f3e2a4b..078b4406acad 100644
---- a/drivers/rtc/rtc-rx8025.c
-+++ b/drivers/rtc/rtc-rx8025.c
-@@ -19,6 +19,7 @@
- #include <linux/bitops.h>
- #include <linux/i2c.h>
- #include <linux/kernel.h>
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/rtc.h>
+@@ -78,13 +88,15 @@ static u32 rtc_read_lp_counter(struct snvs_rtc_data *data)
+ static int rtc_read_lp_counter_lsb(struct snvs_rtc_data *data, u32 *lsb)
+ {
+ 	u32 count1, count2;
++	s32 diff;
+ 	unsigned int timeout = 100;
  
-diff --git a/drivers/rtc/sysfs.c b/drivers/rtc/sysfs.c
-index 00f1945bcb7e..e3062c4d3f2c 100644
---- a/drivers/rtc/sysfs.c
-+++ b/drivers/rtc/sysfs.c
-@@ -6,6 +6,7 @@
-  * Author: Alessandro Zummo <a.zummo@towertech.it>
-  */
- 
-+#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/rtc.h>
- 
+ 	regmap_read(data->regmap, data->offset + SNVS_LPSRTCLR, &count1);
+ 	do {
+ 		count2 = count1;
+ 		regmap_read(data->regmap, data->offset + SNVS_LPSRTCLR, &count1);
+-	} while (count1 != count2 && --timeout);
++		diff = count1 - count2;
++	} while (((diff < 0) || (diff > MAX_RTC_READ_DIFF_CYCLES)) && --timeout);
+ 	if (!timeout) {
+ 		dev_err(&data->rtc->dev, "Timeout trying to get valid LPSRT Counter read\n");
+ 		return -ETIMEDOUT;
 -- 
-2.34.1
+2.25.1
 
