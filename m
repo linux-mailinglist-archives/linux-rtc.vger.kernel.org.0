@@ -2,97 +2,88 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A695361E523
-	for <lists+linux-rtc@lfdr.de>; Sun,  6 Nov 2022 18:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AE961E961
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 04:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiKFRy7 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 6 Nov 2022 12:54:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S230418AbiKGDPE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 6 Nov 2022 22:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiKFRy7 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 12:54:59 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F6A643F;
-        Sun,  6 Nov 2022 09:54:57 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 74AF2100003;
-        Sun,  6 Nov 2022 17:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667757295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zg7/l4xvuUyfSZ1Lnyt6Mb3nu3U4w2YBOxTgNkugPXk=;
-        b=D5sVdGo7REHqDaPlbmq9IOJE4IGSq/6p+Ihyq0bQoVoAF4LSPF9K5DbBCTZJ26R9yDu+s0
-        /ewfsA10SVS0t4fYAKXrwP7f4G76Ah6qckJt7Gz65xZBRMYp4jrHOPs0PBTFFpeXoyHadh
-        sGyOwdWnedDd8VyEwDcxYqFcSnZIroBbXYNjMxod9I3wBdlO3pmEG4SPXpmVfPtuV31NK5
-        z96ZuZlvfe5jtyyKrZIE2P5J7oB9cpGqjwHXtI02sqN6kN/S6YgnOaYlNbAwRvwmiMw9TR
-        1CCjduL2q2AE7Oz2Bxrlrz6Y0jdWDNAIP+xhoQGX28eIoePjOCmrlm5XL/cYjg==
-Date:   Sun, 6 Nov 2022 18:54:55 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        kernel test robot <lkp@intel.com>, a.zummo@towertech.it,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.9] rtc: cmos: fix build on non-ACPI platforms
-Message-ID: <Y2f079jOra55IGgr@mail.local>
-References: <20221106170729.1581125-1-sashal@kernel.org>
+        with ESMTP id S230417AbiKGDO1 (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 22:14:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604A12639;
+        Sun,  6 Nov 2022 19:13:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FC760EA3;
+        Mon,  7 Nov 2022 03:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E51DC433D7;
+        Mon,  7 Nov 2022 03:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667790795;
+        bh=0C/zbEncLKIgdwTUgPdnJzB1OdI/BNrdVQy8KMAVTnQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rzKEHCYTm6agWkPhLLAlZIT8HDWZmylleqE+pLE5GDaVzmWR9BuSGQ/Bu+D2JAXHu
+         7Y8AiNYgXrEpl72oyueU+IEB+LGdEWJGMtivC0/TA8o9L+pIn2MYICjdBXoBAL8dMJ
+         8oEwnkRl7qOo8rF4ZZBadbN0C8gDk/R3zez07spjI8/15iNKEADJCIX98DG53pqoLh
+         bSFNe5Vm7wshc4eyLXYIDXX+KT3XOAooItL0gnZB6V0qVYzoLQYFQic1NI7Wz+LmwU
+         JHuoleNNFJlZiLM/cGtYDzaGWZZTvISSWwrPRroGhwnk8qBd13Q+/FxiemGTO3iwc4
+         hx9gmjwAwAfVQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
+        konrad.dybcio@somainline.org, alexandre.belloni@bootlin.com,
+        dmitry.torokhov@gmail.com, lee@kernel.org,
+        quic_c_skakit@quicinc.com, Andy Gross <agross@kernel.org>,
+        neil.armstrong@linaro.org
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v4 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
+Date:   Sun,  6 Nov 2022 21:12:32 -0600
+Message-Id: <166779074262.500303.9983316398546692832.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221106170729.1581125-1-sashal@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello, this doesn't need to be backported unless you also backport
-those:
-0782b66ed2fb rtc: cmos: Fix wake alarm breakage
-4919d3eb2ec0 rtc: cmos: Fix event handler registration ordering issue
-6492fed7d8c9 rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
-
-
-On 06/11/2022 12:07:29-0500, Sasha Levin wrote:
-> From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+On Fri, 21 Oct 2022 11:06:36 +0200, Neil Armstrong wrote:
+> This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
 > 
-> [ Upstream commit db4e955ae333567dea02822624106c0b96a2f84f ]
+> This first round focuses on trivial changes, the remaining work will
+> mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
 > 
-> Now that rtc_wake_setup is called outside of cmos_wake_setup, it also need
-> to be defined on non-ACPI platforms.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/r/20221018203512.2532407-1-alexandre.belloni@bootlin.com
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/rtc/rtc-cmos.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-> index 1dbd8419df7d..2c3881bdf9bb 100644
-> --- a/drivers/rtc/rtc-cmos.c
-> +++ b/drivers/rtc/rtc-cmos.c
-> @@ -1113,6 +1113,9 @@ static void cmos_check_acpi_rtc_status(struct device *dev,
->  {
->  }
->  
-> +static void rtc_wake_setup(struct device *dev)
-> +{
-> +}
->  #endif
->  
->  #ifdef	CONFIG_PNP
-> -- 
-> 2.35.1
 > 
 
+Applied, thanks!
+
+[01/11] dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
+        commit: f4ec5f28af13e2b8e62ae173cb6827e137cdd8cc
+[02/11] arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
+        commit: c69af934db18ad165b1dc84f5450fa55afb34acb
+[03/11] arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
+        commit: e58bdf93db08c16dd06bc1967e978708b44d9c83
+[04/11] arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
+        commit: 75353420d0d0abe3a57cedf4a6cfa00ea05842a3
+[10/11] arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
+        commit: 3627dd180c67d3e589c38a10b4be29a0352a70b6
+[11/11] arm: dts: qcom: mdm9615: remove useless amba subnode
+        commit: 10de96ba6d4287220962cdd82826b6a14af90e2e
+
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bjorn Andersson <andersson@kernel.org>
