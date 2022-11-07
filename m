@@ -2,50 +2,50 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023C761F27B
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 13:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4D761F699
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 15:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiKGMHH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Nov 2022 07:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S232532AbiKGOwW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Nov 2022 09:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiKGMGr (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Nov 2022 07:06:47 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5761B1EF;
-        Mon,  7 Nov 2022 04:06:30 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 1008B2B066C1;
-        Mon,  7 Nov 2022 07:06:16 -0500 (EST)
+        with ESMTP id S232520AbiKGOwV (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Nov 2022 09:52:21 -0500
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9431BEBB;
+        Mon,  7 Nov 2022 06:52:16 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 10FC32B05D99;
+        Mon,  7 Nov 2022 09:52:06 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 07 Nov 2022 07:06:27 -0500
+  by compute2.internal (MEProxy); Mon, 07 Nov 2022 09:52:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1667822776; x=1667829976; bh=B05aDEGhPx
-        Oz9qxjqo1oM6WpXvxfjmgCQJwzLTnqx7o=; b=c4zx5wLHNyF7xm2AkdGG3OUdCb
-        RO+l5I2vtO9DaajfBbNfka/dBUIMlboYQcCfJquVMcsj2o9/zEXEI+l2hSRokeuQ
-        aqNSYIxr3Y0epBEAgaNnOXQEU50pT5NaDa4fjXvmfNBKbpt4a25wAzOIuLNEMx/j
-        a0NvDSHSwrN80f0eXo5zTMav2ja+eJjpbZgEWPnOAm5hx3UlDuHHMYVNOnwUKcFK
-        JhVZU1uK1lCqT7Xt4pPHgtY46Pm/9MWSSmC1SBPYRRzq2x1wtOtWfJwfe6msiD2s
-        4ftE1AIcyhD+AKlWVDWP4DZo5gxXIpFxRJOhKEGEM1+6Kwb5JLctiyuKQ9Yg==
+        :subject:to:to; s=fm2; t=1667832726; x=1667839926; bh=pH9EnTs5L3
+        AE9yRrf/TOfLTE3vMWtMQ5hIBy7+jkfxo=; b=F7wDDyPbg4B6cj4BQiM8vMTPkt
+        tkEJFLYEYVOXIksN+jqz4ftMcxZZXnzOddYWfqs9q6bd1iOFwyhB5pE4Fvz/05uZ
+        RF10RSC0RzcIedJ1G2E1LSQq4Zg42bEfK0TSyO7m7id0Yy1xeUuD5zWJX3us817V
+        rjIfPInA1Vwm/QlX4DnPJzUv40Z0ii9fRJxzgHqkydlEG9GHtOtzfSoBBYVuklOY
+        znHltzYI/nV8aA3pqWRO9oD9yS5dvx0Tnbouc9wI5DeGckOnRznPX94uGeI63tXw
+        4a6YpykXCScaYQzL11169W/UCCuCj+CqGjGcj2LOgIC8IwvROeIK920PT8Og==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1667822776; x=1667829976; bh=B05aDEGhPxOz9qxjqo1oM6WpXvxf
-        jmgCQJwzLTnqx7o=; b=uf/zn+bV9iXr/LMxeg8+E1bMrkdm7AISotuw6SbdRTQ/
-        bmzu2ZkuuQ5Jzt9xaNZorZoCwetVElpGMEulW+HJm7DFbhBqjRt+oBvI0saqW6ha
-        tgMnQ7xcD7FkrucW5A6s2F1c65udztNZ8ZiWPc7xzXIrky/pP6cidenYwLXJ/N/a
-        tM/RVYNM/OYKZDXwL9GL4OfR1g5xTlYcDOpTl2Vwv69y82DJ0f0qvqbgBPSIigA4
-        pqPSSpx1zgZLtTapbWIl0Ddl7gEq0y+oCYBzSYLsR+EeoYvAAknIs3WM8s/Nx/5b
-        jpyc8SaYuZkTPLAbmrS6XMc+jTmbPIH0iOmo3sv8bg==
-X-ME-Sender: <xms:tvRoY3PFGlEb7RJaNxEM6Ugu14yWdBktiA3qTs6-BrcOTKxv9PtG0w>
-    <xme:tvRoYx-AxZ1WQ5KPyQzG4GSF9nOnWeHRYhvJyXfy3N24GhiD2xu75K_OjpfjagZWV
-    y90fJJ-e5lUpDTgDzY>
-X-ME-Received: <xmr:tvRoY2S_J5RFPZf-4wkcmwOCc_x7XeD76M1-byAnNeAtf22t62skzxbyLnsciOlkPyG3wB15U761HZLZq9yhVcKMElIgfcsK48JM6SyhT4FcOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdefhecutefuodetggdotefrodftvf
+        fm1; t=1667832726; x=1667839926; bh=pH9EnTs5L3AE9yRrf/TOfLTE3vMW
+        tMQ5hIBy7+jkfxo=; b=tm2CjukNyGky7m61cEbNeNPEwlXow6RPoGg2KjXghbKg
+        ra/lLyp2zKjbGDhKlZm+A1NYUYItu9u5SMkA9pJHis1as3Cuaw086EXYoGiWAwEc
+        kwmgNzmeS59QVCIvcfLkrQ+Ebrrzyvxm0bLZzUJt64WJNOdWIwV+A1Lm0sxt1PlG
+        pqQrTshYGPUOlH25VHE+1Lo/JkFnLumTSx7pnL0tNbn51t3OP92FWPXw0EfQztVG
+        wtJ4RnEpesPcGbqI0l7+PnoJguGMz6X3T6Oc+iWlaBg8/BNZZbD/jeW+bRR9Y7Mm
+        aeVy4dRLsyWLoksEM3gODq0m5OD2atrQxRTwoulo5w==
+X-ME-Sender: <xms:lBtpY-40Eo4JzBjQaFjHtoUz7QeBdEwcwbk96GIlHmmJELkNOdiNuw>
+    <xme:lBtpY355rFDdDU_5_Zhsu6BuYYJ8FsknqxkvYPdHiPLl5stDZ4ymxPAwZCGrhq1q0
+    rYmNowEFVM52RrtcrQ>
+X-ME-Received: <xmr:lBtpY9dGH4qlk66IJxrnFOeAg7gL0Dzov_oSAqI9d3jUn16Bj4wfUEZhAxYh6xwVb1pD_70A4Fj78DNZ9hmuXeqDZ6FtyKnnZ6v_m9fVoJ9KEg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdeijecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
@@ -53,14 +53,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvdekgdefhecutefuodetggdote
     htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
     vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
     grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:tvRoY7vB8zdfJRUWlKeCfXorc4DFpIxrb30X2e71xu4KD0Npw-oSFw>
-    <xmx:tvRoY_dCf9FHlSc7kwHzI7umAVLs1tZN4BwIBGyAX4-0zxT4lWdE_w>
-    <xmx:tvRoY30J9PfIrSDM30MzXkeEfxvgGhpJ0dFzuHYby7zDzSEEdQesmg>
-    <xmx:uPRoYzkpBG9adcnPxB-xonp3ewdKFqQr6dIQjDA-sX9kYmvTYh0sZ_NCjqM>
+X-ME-Proxy: <xmx:lBtpY7K_De75Z1Qb3KnMLSjsRajiL-H-Ua3gdzprEa6elskIEslNHg>
+    <xmx:lBtpYyJPcAZLuZCZ9YrgeNVP2SDE0zyvQMv9GMV_qnwg12P9XLOYhg>
+    <xmx:lBtpY8zZKJW8BWrb3kvSxaP7pHRcbh-yGdZ8oBvUaVqZHP2VBvAXdw>
+    <xmx:lhtpY2R7H97-NMegP3mWI1QxFbMYDvDajfqDlJ0guaZiDLR4Zxs1FRw326M>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Nov 2022 07:06:13 -0500 (EST)
-Date:   Mon, 7 Nov 2022 13:06:11 +0100
+ 7 Nov 2022 09:52:03 -0500 (EST)
+Date:   Mon, 7 Nov 2022 15:52:02 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     David Lechner <david@lechnology.com>
 Cc:     Stephen Boyd <sboyd@kernel.org>,
@@ -118,17 +118,16 @@ Cc:     Stephen Boyd <sboyd@kernel.org>,
         linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 21/65] clk: davinci: da8xx-cfgchip: Add a
- determine_rate hook
-Message-ID: <20221107120611.vutsgpgpcorsgzwp@houat>
+Subject: Re: [PATCH v2 54/65] clk: da8xx: clk48: Switch to determine_rate
+Message-ID: <20221107145202.2mne5p2sa4l2dm6g@houat>
 References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
- <187e61cd-7d02-2453-acf1-30180559d42f@lechnology.com>
+ <20221018-clk-range-checks-fixes-v2-54-f6736dec138e@cerno.tech>
+ <6296d944-e03d-6f2b-48b1-3dad78e3c89d@lechnology.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nc45elwfwbnglqoe"
+        protocol="application/pgp-signature"; boundary="kwjqag62r4ghubsj"
 Content-Disposition: inline
-In-Reply-To: <187e61cd-7d02-2453-acf1-30180559d42f@lechnology.com>
+In-Reply-To: <6296d944-e03d-6f2b-48b1-3dad78e3c89d@lechnology.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -139,16 +138,16 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---nc45elwfwbnglqoe
+--kwjqag62r4ghubsj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi David,
 
-On Fri, Nov 04, 2022 at 11:45:17AM -0500, David Lechner wrote:
-> On 11/4/22 8:17 AM, Maxime Ripard wrote:
-> > The Davinci DA8xxx cfgchip mux clock implements a mux with a set_parent
+On Fri, Nov 04, 2022 at 11:49:34AM -0500, David Lechner wrote:
+> On 11/4/22 8:18 AM, Maxime Ripard wrote:
+> > The TI DA8xx USB0 clk48 clocks implements a mux with a set_parent
 > > hook, but doesn't provide a determine_rate implementation.
 > >=20
 > > This is a bit odd, since set_parent() is there to, as its name implies,
@@ -164,26 +163,38 @@ On Fri, Nov 04, 2022 at 11:45:17AM -0500, David Lechner wrote:
 > > oversight. However, it could also be an explicit decision by the
 > > original author to avoid any reparenting but through an explicit call to
 > > clk_set_parent().
+> >=20
+> > The driver does implement round_rate() though, which means that we can
+> > change the rate of the clock, but we will never get to change the
+> > parent.
+> >=20
+> > However, It's hard to tell whether it's been done on purpose or not.
+> >=20
+> > Since we'll start mandating a determine_rate() implementation, let's
+> > convert the round_rate() implementation to a determine_rate(), which
+> > will also make the current behavior explicit. And if it was an
+> > oversight, the clock behaviour can be adjusted later on.
 >=20
->=20
-> The parent is defined in the device tree and is not expected to change
-> at runtime, so if I am understanding the patch correctly, setting the
-> CLK_SET_RATE_NO_REPARENT flag seems correct.
+> I think this one should be the same as the clk:davinci changes and
+> not allow re-parenting. Since this is a USB 48MHz PHY clock, a rate
+> change will never be requested.
 
-Is that an acked-by/reviewed-by?
+I'm not sure, it doesn't seem to be the same clock, it's not doing the
+same thing (this one will always force the same rate, the others let the
+rate change), and we're not doing the same refactoring (this one had a
+round_rate implementation, the other one doesn't)
 
-Thanks!
 Maxime
 
---nc45elwfwbnglqoe
+--kwjqag62r4ghubsj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2j0swAKCRDj7w1vZxhR
-xQMwAQCrPeeZ2S11jlGiajn8sRupqFc/kS+IENFSoo8u57CVDQEA8P8p1AEYl25u
-k96e3hU7z8K+yJbTwZo5iph4D4IHFww=
-=Sagk
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2kbkgAKCRDj7w1vZxhR
+xdnyAPoDUCObUrCr2C1a0eiJzKGIcW+Cl1z7L7QadhXWYBxPJAD+K5Cnal04FAYQ
+nw7UCY5eZErrD6YvLzwUrAeczrFXVQw=
+=GExv
 -----END PGP SIGNATURE-----
 
---nc45elwfwbnglqoe--
+--kwjqag62r4ghubsj--
