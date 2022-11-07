@@ -2,88 +2,74 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AE961E961
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 04:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA3361EA85
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 06:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiKGDPE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 6 Nov 2022 22:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S230266AbiKGFie (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Nov 2022 00:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiKGDO1 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 6 Nov 2022 22:14:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D604A12639;
-        Sun,  6 Nov 2022 19:13:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41FC760EA3;
-        Mon,  7 Nov 2022 03:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E51DC433D7;
-        Mon,  7 Nov 2022 03:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667790795;
-        bh=0C/zbEncLKIgdwTUgPdnJzB1OdI/BNrdVQy8KMAVTnQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rzKEHCYTm6agWkPhLLAlZIT8HDWZmylleqE+pLE5GDaVzmWR9BuSGQ/Bu+D2JAXHu
-         7Y8AiNYgXrEpl72oyueU+IEB+LGdEWJGMtivC0/TA8o9L+pIn2MYICjdBXoBAL8dMJ
-         8oEwnkRl7qOo8rF4ZZBadbN0C8gDk/R3zez07spjI8/15iNKEADJCIX98DG53pqoLh
-         bSFNe5Vm7wshc4eyLXYIDXX+KT3XOAooItL0gnZB6V0qVYzoLQYFQic1NI7Wz+LmwU
-         JHuoleNNFJlZiLM/cGtYDzaGWZZTvISSWwrPRroGhwnk8qBd13Q+/FxiemGTO3iwc4
-         hx9gmjwAwAfVQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     krzysztof.kozlowski+dt@linaro.org,
-        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
-        konrad.dybcio@somainline.org, alexandre.belloni@bootlin.com,
-        dmitry.torokhov@gmail.com, lee@kernel.org,
-        quic_c_skakit@quicinc.com, Andy Gross <agross@kernel.org>,
-        neil.armstrong@linaro.org
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 00/11] arm: qcom: mdm9615: first round of bindings and DT fixes
-Date:   Sun,  6 Nov 2022 21:12:32 -0600
-Message-Id: <166779074262.500303.9983316398546692832.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
+        with ESMTP id S230408AbiKGFic (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Nov 2022 00:38:32 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312A260F0
+        for <linux-rtc@vger.kernel.org>; Sun,  6 Nov 2022 21:38:30 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id a14so14556349wru.5
+        for <linux-rtc@vger.kernel.org>; Sun, 06 Nov 2022 21:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
+        b=CPJknGh76GKBqj/JyzrYpfhZTA4iLOZ7pJx8SQi6I9UWC5yUQMpW16eNZKtSj1pHns
+         MxabvoZfAispcp4LT9u7H76KkohJEq+W1LOk7tp+rdt2UeJNaaqabgllcnG7+0wV3DKS
+         E3CI+4Fo1UvFZt+OetXKS1zqc9h4aEFJfQ2JibgX550/Ah9y/5o7KaTEeZUW6BGYcOmK
+         l7UISNPT8V+NkmCarotVjJVsCuoc5ydJ8yZOodm5O6FLxOY+86cPGmRQ9l3HA0PDBUCj
+         8C7yOfSdUCec7RqHH9C0uuHHlHW3tqR//xHBnzOyD5zwbn98F4B1IWNcLFIt+Qlybh26
+         6apQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
+        b=sN4gR6i+l9h3qC0XiZXm6Ei3b/Yflpr2fDg0/Wlf1px1W9HtVn6t03W2V2AY1xMlc3
+         tn5/YbHwqPXIWT+OXoSxrHkvlEsHTzj0VzKLNpuwObqLPUXvYTgqddsM/H7ecjoJMPVv
+         RmuhZVJ9rf6dvHa2D2a71ekZoywyvMGMg/ENM66IbJiM9PZhPZ/LUuYoh0dlnWQLLnfq
+         HEgl9pkwKKheppalrewCt9gM2bFNRVM6IuBSeQMvYI30nTbKYXrPCDIxN9kjmdZpy5r5
+         RmRGwzHPuQqF6su6DpkW2jEXu5ld9OtGSmoDBVCzcKk43kZkjtQbJSvNnLe1NXI9Qw+l
+         ogRQ==
+X-Gm-Message-State: ACrzQf0/8Aq7j+yxA3KhvnYf+1nsZ/i2PsH8dlDkderCQ3hw8zVqGF/L
+        cCgPeWHAiJoudTHSopggDASitlfT3qLiBsQnYVQ=
+X-Google-Smtp-Source: AMsMyM6+M2K/rpCN/oYhU/3GtXRvPMP688eLkiH5jTpblIC8wN5UdW0f/9qta3jzxbRjKwe06xPLl3fydUe2rzMVCKw=
+X-Received: by 2002:a5d:47aa:0:b0:236:7a97:7dde with SMTP id
+ 10-20020a5d47aa000000b002367a977ddemr30073051wrb.625.1667799509089; Sun, 06
+ Nov 2022 21:38:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6000:15ca:0:0:0:0 with HTTP; Sun, 6 Nov 2022 21:38:28
+ -0800 (PST)
+Reply-To: seyba_daniel@yahoo.com
+From:   Seyba Daniel <latifatonde4@gmail.com>
+Date:   Mon, 7 Nov 2022 06:38:28 +0100
+Message-ID: <CAFBpD=O_oWBM3Jd24LGPjrfN1QvDPqX2NMXcnXOiPQmgLR5VZw@mail.gmail.com>
+Subject: HELLO,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, 21 Oct 2022 11:06:36 +0200, Neil Armstrong wrote:
-> This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
-> 
-> This first round focuses on trivial changes, the remaining work will
-> mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
-> 
-> 
+I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it, which you will
+be communicated in details upon response.
 
-Applied, thanks!
+My dearest regards
 
-[01/11] dt-bindings: arm: qcom: move swir,mangoh-green-wp8548 board documentation to qcom.yaml
-        commit: f4ec5f28af13e2b8e62ae173cb6827e137cdd8cc
-[02/11] arm: dts: qcom: mdm9615*: add SPDX-License-Identifier
-        commit: c69af934db18ad165b1dc84f5450fa55afb34acb
-[03/11] arm: dts: qcom: mdm9615: add missing reg in cpu@0 node
-        commit: e58bdf93db08c16dd06bc1967e978708b44d9c83
-[04/11] arm: dts: qcom: mdm9615: remove invalid spi-max-frequency gsbi3_spi node
-        commit: 75353420d0d0abe3a57cedf4a6cfa00ea05842a3
-[10/11] arm: dts: qcom: mdm9615: remove invalid interrupt-names from pl18x mmc nodes
-        commit: 3627dd180c67d3e589c38a10b4be29a0352a70b6
-[11/11] arm: dts: qcom: mdm9615: remove useless amba subnode
-        commit: 10de96ba6d4287220962cdd82826b6a14af90e2e
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Seyba Daniel
