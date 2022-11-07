@@ -2,48 +2,39 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EFB61F15A
-	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 11:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E58F61F274
+	for <lists+linux-rtc@lfdr.de>; Mon,  7 Nov 2022 13:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiKGK7M (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 7 Nov 2022 05:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S231933AbiKGMGs (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 7 Nov 2022 07:06:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbiKGK6m (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Nov 2022 05:58:42 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BE119C03;
-        Mon,  7 Nov 2022 02:58:42 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A78o4vU010393;
-        Mon, 7 Nov 2022 04:58:26 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=7lexxXZ3I3hljvfG/MXh5XgWwfTCj6K6EGi2gwpMgRA=;
- b=MlOb16frReJltGone9fs4amjkqovcdEamnVC3FlFeoZZd6zluUCjkGf0ihnUMsqujkaA
- H8I/V07ZcrCtj3Me8MCnu1HzAT6c7SRFW+Hh/FVPBKLTBK0lkpQcAFdVVvECWHTUpo/L
- d/dE/5urYwZVfafPQWAGGipJxVMewDDaKcb60xAi4A8h4kLf4cmEFO87PvkJnkW7tfL0
- mbQIqr5S1dRUOd8T1/4MBzSMJ4Q4RIhkv/R5+HYlOfm7QbUPuCEQIfOD3fVC8gn6g8Oz
- NCISdICUUpF19kLQlfICj24QVNW5fiPzst1JOV1+w7Md+3AcASEfckm6g8vj5m1MRnhx Bg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3knn81j3vw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Nov 2022 04:58:26 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Mon, 7 Nov
- 2022 04:58:23 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.15 via Frontend Transport; Mon, 7 Nov 2022 04:58:23 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D68F1468;
-        Mon,  7 Nov 2022 10:58:23 +0000 (UTC)
-Date:   Mon, 7 Nov 2022 10:58:23 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+        with ESMTP id S232009AbiKGMGk (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 7 Nov 2022 07:06:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203EF1B1D4;
+        Mon,  7 Nov 2022 04:06:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE626B8101D;
+        Mon,  7 Nov 2022 12:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46DD2C433D6;
+        Mon,  7 Nov 2022 12:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667822783;
+        bh=TjwC/oCNbbUzKPDP67kFN1hAvayD11aeO+3EJVwBAHE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uVU4PMxo1R8a3xp/WKHs1dq/6doMgdlOpIsmcirQbv3czoZbcxWJpPwnRrBpNnLaM
+         RIaI2ploJwL3I8PSy07X4klDoFGje/zAjmQm0GMafEh6v9eSVzb3H6UHbMJeGYIK/0
+         3HkQjVeGkkfj4w3q16A9Jpu8h/eTG5MQNUyBXtMwVQBVCZBvcrvN6PBx8wq4Un2SsG
+         waxoneKGslH7u6FU8MFJJQeOVg92oqhsWrP6aKBcVt7eUdvfzyvh8bep0OHaNEym9f
+         kwo9TcnG/5EsDXRnkiFTaef9nelMlw97dI2zZnD+Bud8Et09b4EPGmFQOKomMmC6mm
+         cuDEys2QhiEog==
+Date:   Mon, 7 Nov 2022 12:06:07 +0000
+From:   Mark Brown <broonie@kernel.org>
 To:     Maxime Ripard <maxime@cerno.tech>
-CC:     Stephen Boyd <sboyd@kernel.org>,
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -61,6 +52,7 @@ CC:     Stephen Boyd <sboyd@kernel.org>,
         Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         Orson Zhai <orsonzhai@gmail.com>,
@@ -84,81 +76,90 @@ CC:     Stephen Boyd <sboyd@kernel.org>,
         Baolin Wang <baolin.wang@linux.alibaba.com>,
         David Lechner <david@lechnology.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
         Max Filippov <jcmvbkbc@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <linux-mips@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-actions@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        <patches@opensource.cirrus.com>, <linux-tegra@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH v2 20/65] clk: wm831x: clkout: Add a determine_rate hook
-Message-ID: <20221107105823.GF10437@ediswmail.ad.cirrus.com>
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <Y2j0r0wX1XtQBvqO@sirena.org.uk>
 References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-20-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
+ <Y2UzdYyjgahJsbHg@sirena.org.uk>
+ <20221104155123.qomguvthehnogkdd@houat>
+ <Y2U2+ePwRieYkNjv@sirena.org.uk>
+ <20221107084322.gk4j75r52zo5k7xk@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fjklijebr6IM77Hd"
 Content-Disposition: inline
-In-Reply-To: <20221018-clk-range-checks-fixes-v2-20-f6736dec138e@cerno.tech>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: BS92jlzbqC_0WCEemxbjcbgSY_UegXLF
-X-Proofpoint-GUID: BS92jlzbqC_0WCEemxbjcbgSY_UegXLF
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221107084322.gk4j75r52zo5k7xk@houat>
+X-Cookie: Minimum charge for booths.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Fri, Nov 04, 2022 at 02:17:37PM +0100, Maxime Ripard wrote:
-> The WM381x "clkout" clock implements a mux with a set_parent hook,
-> but doesn't provide a determine_rate implementation.
-> 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidate to
-> trigger that parent change is a call to clk_set_rate(), with
-> determine_rate() figuring out which parent is the best suited for a
-> given rate.
-> 
-> The other trigger would be a call to clk_set_parent(), but it's far less
-> used, and it doesn't look like there's any obvious user for that clock.
-> 
-> So, the set_parent hook is effectively unused, possibly because of an
-> oversight. However, it could also be an explicit decision by the
-> original author to avoid any reparenting but through an explicit call to
-> clk_set_parent().
-> 
-> The latter case would be equivalent to setting the flag
-> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> implementation is provided, clk_round_rate() (through
-> clk_core_round_rate_nolock()) will call itself on the parent if
-> CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> CLK_SET_RATE_NO_REPARENT is set.
-> 
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
-> 
 
-Yeah I don't think there would be anything wrong with this clock
-changing parents on a rate change, but as you say this can be
-refined down the line if someone needs the behaviour. It's an
-older part so probably better to stick roughly to the current
-behaviour for now.
+--fjklijebr6IM77Hd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+On Mon, Nov 07, 2022 at 09:43:22AM +0100, Maxime Ripard wrote:
+> On Fri, Nov 04, 2022 at 03:59:53PM +0000, Mark Brown wrote:
 
-Thanks,
-Charles
+> > Well, hopefully everyone for whom it's an issue currently will be
+> > objecting to this version of the change anyway so we'll either know
+> > where to set the flag or we'll get the whack-a-mole with the series
+> > being merged?
+
+> I'm sorry, I'm not sure what you mean here. The only issue to fix at the
+> moment is that determine_rate and set_parent aren't coupled, and it led
+> to issues due to oversight.
+
+> I initially added a warning but Stephen wanted to fix all users in that
+> case and make that an error instead.
+
+My suggestion is that instead of doing either of these things it'd be
+quicker and less error prone to just fix the core to provide the default
+implementation if nothing more specific is provided.  Any issues that
+causes would already be present with your current series.
+
+> If I filled __clk_mux_determine_rate into clocks that weren't using it
+> before, I would change their behavior. With that flag set, on all users
+> I add __clk_mux_determine_rate to, the behavior is the same than what we
+> previously had, so the risk of regressions is minimal, and everything
+> should keep going like it was?
+
+The series does fill in __clk_mux_determine_rate for everything though -
+if it was just assumed by default the only thing that'd be needed would
+be adding the flag.
+
+--fjklijebr6IM77Hd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNo9K4ACgkQJNaLcl1U
+h9CrmQf/bbIS1m2oXUj6n0mwM7QBssq/2mPiYM5zHCkJ5nf48MDZPWSwMuq37myq
+q8lR7tDeZBdU/MtjTTpvWo8j/TLyZRrhWhX5rItRjfhZdXtePpp0tci4nHKyvWuD
+Lc6+WJkeyUQsy93Y0qyvKl9DZ8o4Dyqs/lM7kkCEy+9eJNaT7QFAFZYhdUN2FJAR
+2YiQG2mvchxdE7SyVxMsOfXX/J6haXQKAcKej6M1HpuJukPGEKH2N9WqfKKNUuWY
+rMJ0QnheSBUxkPHRzdDOMo2k+xDK6cOSg8RxRtKQ2djWWWXII5JWs6VyVHLeK6Cx
+9KTsnJ+fIbHK0GK9Pq3vm90Uk4W3Ng==
+=y36Q
+-----END PGP SIGNATURE-----
+
+--fjklijebr6IM77Hd--
