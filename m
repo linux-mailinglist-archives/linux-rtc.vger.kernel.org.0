@@ -2,139 +2,184 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB00E6218A0
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 16:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56126219EA
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 17:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbiKHPly (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Nov 2022 10:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S233748AbiKHQ7Y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Nov 2022 11:59:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiKHPlx (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 10:41:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F95C751;
-        Tue,  8 Nov 2022 07:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667922112; x=1699458112;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Fj2cRf0yfLP9Hty6jDMoaxrwsB/IsUZhdIEv+NMr+lk=;
-  b=WJCQ17IGIH0C/eLm+QAik0jtkVN2S7YfJVpUalNQfjx2/xNPmMfVCTiZ
-   ppg1EorRy7HsyGn20Ly00AvEnSqD9wyzpYfQZZC2u/DsCAEgFHUMgNyQu
-   1zxtMvshpKBJvE0IqcGbZAGOYaD95kx4ZT6d4F2dM9QKDSzVMdkfA9vBI
-   glur8/yq53SojqKajMS09TV2lY4yCzkCLt8cRPYaS+G6OQYJzDH2JkFZR
-   gY9iKSpnXFCGic50UE6e78vMwqivZa3H+FMudHxAkBfA2OhRE/b3RfhSW
-   IvfYrOQR0z4TfA0UCqu2O/tcWLzyFsmJTkDXC9JaZW0NV7VgN57outFLf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="290445132"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="290445132"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669591064"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="669591064"
-Received: from liuc3-mobl1.ccr.corp.intel.com ([10.254.214.201])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:49 -0800
-Message-ID: <0ab36c3ac0841296227b96ec0a5cadca0c4ac2ed.camel@intel.com>
-Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
- cmos_do_probe()
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date:   Tue, 08 Nov 2022 23:41:47 +0800
-In-Reply-To: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
-         <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
-         <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S233680AbiKHQ7Y (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 11:59:24 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D2A1E70D;
+        Tue,  8 Nov 2022 08:59:22 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id q186so3732323oia.9;
+        Tue, 08 Nov 2022 08:59:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z/retO0IOn9gQQquHKtQyZRA1zXaOIaucGlTNCVBH/M=;
+        b=M0qgOYFr5sijy/+ZKYT67kMvMsWpLWguwITmNMkCmQ7LjbgpYKeVZhWQvt96ZEJbst
+         MgL3tOq8VHefGAhd3Gni0dakbLNxrxrlt4WxDXWKPKp50I3DvW6LMIo1sbFN7BOdWFfs
+         QsPyMTVYGqw3HCeJsqiGLGpQFuF7k5a4HR1KWxhWRDJfwtuN/pQNchIBvcYUAj4CQmge
+         phAskO2MssbrgjKlTR8OqDJNYkQZoc2tJ00rEnmd6+w+3sKe9Gj+ZNInekCpJlaHPpmJ
+         6IK53EfJC2cSYwIsGmDd1c/Iv7VtYV6NOLvqICrR8HDNatb0Arz1ed0Vz6XBT4URuOti
+         ig2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z/retO0IOn9gQQquHKtQyZRA1zXaOIaucGlTNCVBH/M=;
+        b=UVW1LLOSj06iuaMSI/LWOiv1vLLO9St9cr1fgc6ehNCtYxjZTnhV73rnZHNXHzmZwY
+         IAuYxJauPWm+bgkTCQBPYE2D3F3sAwDAZPBh2pOwAni8xo1X2zr5r5c7Y9zUKjCKWSVM
+         /ZtZ/28htPuw+2sMb0NdsR2VOuaXBd01iJuph4CB+RUyNY4ZMNW+XAhunUdKg9vXSWTY
+         3wXZUEqaoY8Aqe9dj2tI8tq8ZaKATU4hlmkPsy/lkB/azd7JhYfyCWjg+WZYp7ZgFtJI
+         Dd3cb0b/iEoblX6Pc3Pi6gS0g+ByA6nNek5BYx83ALhYuurKFG18XO+wdZCiQmOwdDms
+         DSOQ==
+X-Gm-Message-State: ACrzQf2EPDnTSLkDEl4VB3hb3CApkrVodC/934CO1sfR81c6tcRDmvKk
+        IDawmjZo5jMiKlJv59X930Q=
+X-Google-Smtp-Source: AMsMyM613LmbqXHX6qbmzPDTbRL9UTPsE0EYmYd59auwTtOZsG9X/HJb5s+yVzhvuHKcLhANl6qldA==
+X-Received: by 2002:aca:a982:0:b0:359:e9f4:5483 with SMTP id s124-20020acaa982000000b00359e9f45483mr28782336oie.127.1667926762015;
+        Tue, 08 Nov 2022 08:59:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g17-20020a056870d21100b00136cfb02a94sm4839827oac.7.2022.11.08.08.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Nov 2022 08:59:20 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 8 Nov 2022 08:59:18 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <20221108165637.GA801591@roeck-us.net>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
+ <20221031181913.GA3841664@roeck-us.net>
+ <Y2BIv21U7lpN0z23@mail.local>
+ <20221031230749.GB2082109@roeck-us.net>
+ <20221102184804.GA1918067@roeck-us.net>
+ <Y2mMQifOl7BzPCZm@mail.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2mMQifOl7BzPCZm@mail.local>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 2022-11-08 at 14:09 +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > 
-> > > Notice that cmos_wake_setup() is the only user of acpi_rtc_info
-> > > and
-> > > it
-> > > can operate on the cmos_rtc variable directly, so it need not set
-> > > the
-> > > platform_data pointer before cmos_do_probe() is called.  Instead,
-> > > it
-> > > can be called by cmos_do_probe() in the case when the
-> > > platform_data
-> > > pointer is not set to implement the default behavior (which is to
-> > > use
-> > > the FADT information as long as ACPI support is enabled).
-> > > 
-> > 
-> > ...
-> > 
-> > > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
-> > >               if (info->address_space)
-> > >                       address_space = info->address_space;
-> > > 
-> > > -             if (info->rtc_day_alarm && info->rtc_day_alarm <
-> > > 128)
-> > > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm <
-> > > 128)
-> > > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > -             if (info->rtc_century && info->rtc_century < 128)
-> > > -                     cmos_rtc.century = info->rtc_century;
-> > > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > +             cmos_rtc.century = info->rtc_century;
-> > > 
-> > >               if (info->wake_on && info->wake_off) {
-> > >                       cmos_rtc.wake_on = info->wake_on;
-> > >                       cmos_rtc.wake_off = info->wake_off;
-> > >               }
-> > > +     } else {
-> > > +             cmos_wake_setup(dev);
-> > >       }
-> > > 
-> > > 
-> > 
-> > Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup
-> > from
-> > ACPI glue into RTC driver"), dev->platform_data is set in
-> > drivers/acpi/glue.c, and the above commit moves it to
-> > cmos_wake_setup()
-> > in this file.
-> > 
-> > Now, with this patch, my understanding is that dev->platform_data
-> > is
-> > never set, thus we can remove the 'info' variable and the
-> >         if (info)
-> > check above.
+Hi,
+
+On Mon, Nov 07, 2022 at 11:52:50PM +0100, Alexandre Belloni wrote:
+[ ... ]
 > 
-> There are other users of this driver which can be found by grepping
-> for cmos_rtc_board_info.
+> I'll take the patch as-is so you can backport it and have a solution.
+> I'll also work on the alarm range and I'll let you get the series once
+> this is ready so you can test.
 > 
-> They create platform device objects with platform_data set which are
-> then bound to by this driver.
 
-yeah, I overlooked this.
+Excellent, thanks a lot. I also started looking into a poor-man's solution
+of range support. I attached what I currently have below for your
+reference. It isn't much, but it let me test follow-up changes in the
+cros-ec rtc driver. Unfortunately I was not able to find a means to
+implement something like "go back to sleep fast" in the alarm timer code.
 
-thanks,
-rui
+In this context: Is there a standardized set of error codes for RTC
+drivers ? I see -EINVAL, -ETIME, -EDOM, -ERANGE, but those are not
+consistently used. I assumed -ETIME for "time expired" and -ERANGE
+for "time too far in the future" below, but that was just a wild guess.
 
+Thanks,
+Guenter
+
+---
+commit 7918f162f947424ec0ad7a318c45febeaea51d2e
+Author:     Guenter Roeck <linux@roeck-us.net>
+AuthorDate: Wed Nov 2 19:35:09 2022 -0700
+Commit:     Guenter Roeck <linux@roeck-us.net>
+CommitDate: Fri Nov 4 09:54:06 2022 -0700
+
+    rtc: Add support for limited alarm timer offsets
+    
+    Some alarm timers are based on time offsets, not on absolute times.
+    In some situations, the amount of time that can be scheduled in the
+    future is limited. This may result in a refusal to suspend the system,
+    causing substantial battery drain.
+    
+    Some RTC alarm drivers remedy the situation by setting the alarm time
+    to the maximum supported time if a request for an out-of-range timeout
+    is made. This is not really desirable since it may result in unexpected
+    early wakeups.
+    
+    To reduce the impact of this problem, let RTC drivers report the maximum
+    supported alarm timer offset. The code setting alarm timers can then
+    decide if it wants to reject setting alarm timers to a larger value, if it
+    wants to implement recurring alarms until the actually requested alarm
+    time is met, or if it wants to accept the limited alarm time.
+    
+    Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+
+diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+index 9edd662c69ac..05ec9afbb6ba 100644
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -426,6 +426,10 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
+ 
+ 	if (scheduled <= now)
+ 		return -ETIME;
++
++	if (rtc->range_max_offset && scheduled - now > rtc->range_max_offset)
++		return -ERANGE;
++
+ 	/*
+ 	 * XXX - We just checked to make sure the alarm time is not
+ 	 * in the past, but there is still a race window where if
+diff --git a/include/linux/rtc.h b/include/linux/rtc.h
+index 1fd9c6a21ebe..b6d000ab1e5e 100644
+--- a/include/linux/rtc.h
++++ b/include/linux/rtc.h
+@@ -146,6 +146,7 @@ struct rtc_device {
+ 
+ 	time64_t range_min;
+ 	timeu64_t range_max;
++	timeu64_t range_max_offset;
+ 	time64_t start_secs;
+ 	time64_t offset_secs;
+ 	bool set_start_time;
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index 5897828b9d7e..af8e0a9e0d63 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -291,6 +291,19 @@ static int alarmtimer_suspend(struct device *dev)
+ 	rtc_timer_cancel(rtc, &rtctimer);
+ 	rtc_read_time(rtc, &tm);
+ 	now = rtc_tm_to_ktime(tm);
++
++	/*
++	 * If the RTC alarm timer only supports a limited time offset, set
++	 * the alarm time to the maximum supported value.
++	 * The system will wake up earlier than necessary and is expected
++	 * to go back to sleep if it has nothing to do.
++	 * It would be desirable to handle such early wakeups without fully
++	 * waking up the system, but it is unknown if this is even possible.
++	 */
++	if (rtc->range_max_offset &&
++	    rtc->range_max_offset * NSEC_PER_SEC > ktime_to_ns(min))
++		min = ns_to_ktime(rtc->range_max_offset * NSEC_PER_SEC);
++
+ 	now = ktime_add(now, min);
+ 
+ 	/* Set alarm, if in the past reject suspend briefly to handle */
