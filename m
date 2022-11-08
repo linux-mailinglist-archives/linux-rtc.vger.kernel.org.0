@@ -2,79 +2,103 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56126219EA
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 17:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A98621C21
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 19:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbiKHQ7Y (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Nov 2022 11:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
+        id S232062AbiKHSoR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Nov 2022 13:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiKHQ7Y (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 11:59:24 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D2A1E70D;
-        Tue,  8 Nov 2022 08:59:22 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id q186so3732323oia.9;
-        Tue, 08 Nov 2022 08:59:22 -0800 (PST)
+        with ESMTP id S231678AbiKHSoQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 13:44:16 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12691CFDB
+        for <linux-rtc@vger.kernel.org>; Tue,  8 Nov 2022 10:44:13 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id y16so22366923wrt.12
+        for <linux-rtc@vger.kernel.org>; Tue, 08 Nov 2022 10:44:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z/retO0IOn9gQQquHKtQyZRA1zXaOIaucGlTNCVBH/M=;
-        b=M0qgOYFr5sijy/+ZKYT67kMvMsWpLWguwITmNMkCmQ7LjbgpYKeVZhWQvt96ZEJbst
-         MgL3tOq8VHefGAhd3Gni0dakbLNxrxrlt4WxDXWKPKp50I3DvW6LMIo1sbFN7BOdWFfs
-         QsPyMTVYGqw3HCeJsqiGLGpQFuF7k5a4HR1KWxhWRDJfwtuN/pQNchIBvcYUAj4CQmge
-         phAskO2MssbrgjKlTR8OqDJNYkQZoc2tJ00rEnmd6+w+3sKe9Gj+ZNInekCpJlaHPpmJ
-         6IK53EfJC2cSYwIsGmDd1c/Iv7VtYV6NOLvqICrR8HDNatb0Arz1ed0Vz6XBT4URuOti
-         ig2A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8D9/RVdDuV2pZ+DNXsZtuBB7adAeFFAlhmnbxTXvqk=;
+        b=iDzrfTO37pnnR9yFxcVEXrrx3BRg8hTzeGl4FJPU8DrxThdnB1m3KAyRjmlBGlPAE1
+         Vg+PPP/BBYQmb0F06+dmDnjqRgUR8w5BZfHgxWOsLbxJFkCRLSVjKn4St8c/syMKc896
+         jGOZlwWSVg1ld+da7GDNWmKl6YlVedoR2a/h8wHKfVqVKnMkL4YfA6TNrTz6QdDsKYi8
+         N/oPFLTQEbjRAXtRjHBr2YYIwAY1U5INPJ0LHMo695essxg4dDZ6YwsV71RZ8jRPfoT3
+         P3glPEzs1TzxnWYGYsiVKZPL4JxCQhrEaVZKIBwIDwvdKvPYMURdEyQ+EUN1wE3aC4D4
+         ZYEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z/retO0IOn9gQQquHKtQyZRA1zXaOIaucGlTNCVBH/M=;
-        b=UVW1LLOSj06iuaMSI/LWOiv1vLLO9St9cr1fgc6ehNCtYxjZTnhV73rnZHNXHzmZwY
-         IAuYxJauPWm+bgkTCQBPYE2D3F3sAwDAZPBh2pOwAni8xo1X2zr5r5c7Y9zUKjCKWSVM
-         /ZtZ/28htPuw+2sMb0NdsR2VOuaXBd01iJuph4CB+RUyNY4ZMNW+XAhunUdKg9vXSWTY
-         3wXZUEqaoY8Aqe9dj2tI8tq8ZaKATU4hlmkPsy/lkB/azd7JhYfyCWjg+WZYp7ZgFtJI
-         Dd3cb0b/iEoblX6Pc3Pi6gS0g+ByA6nNek5BYx83ALhYuurKFG18XO+wdZCiQmOwdDms
-         DSOQ==
-X-Gm-Message-State: ACrzQf2EPDnTSLkDEl4VB3hb3CApkrVodC/934CO1sfR81c6tcRDmvKk
-        IDawmjZo5jMiKlJv59X930Q=
-X-Google-Smtp-Source: AMsMyM613LmbqXHX6qbmzPDTbRL9UTPsE0EYmYd59auwTtOZsG9X/HJb5s+yVzhvuHKcLhANl6qldA==
-X-Received: by 2002:aca:a982:0:b0:359:e9f4:5483 with SMTP id s124-20020acaa982000000b00359e9f45483mr28782336oie.127.1667926762015;
-        Tue, 08 Nov 2022 08:59:22 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g17-20020a056870d21100b00136cfb02a94sm4839827oac.7.2022.11.08.08.59.19
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8D9/RVdDuV2pZ+DNXsZtuBB7adAeFFAlhmnbxTXvqk=;
+        b=UY1pM/Y6Jt8o1+Emkx8D5Gz66Da8EAzhxp/iERjP6CN6Swkh+0wZIW6HieeXpBgURp
+         Kj7e6gJPW/EAmVGfodaO8dqzitia0L0WxBnYSAZhdhUHXfHwZBEJ24rSJ4BeitU/oGoY
+         ZfQRI+TSBUGyIVaYEX/7Q9u/WUmUUiurAdQQkuevliGY0Hee6LMBcd2CVRbc7roRzx1e
+         sge8yqu6xV2KhsnipldLVk/ZHZrSzJerfxUbJqvtQDwzc5vpFNWAOaLIot68aWtY+Wvc
+         0A5a0YjW2RkTr6I1QtYNeSneHsFb2w6oe5Qn+mNvbmBdizgI4lb8Eh9lEnmyxaihH7XV
+         LhgA==
+X-Gm-Message-State: ACrzQf0OOCaE4W+gajeE7eHnf2Zpey9St4ZjBbD7865bF2r/ivQXk4hs
+        kp3TZlNBbzHymqfDI40K0Y8LcQ==
+X-Google-Smtp-Source: AMsMyM4Pw/a88iDUdk91jriygXBbx7vziA1KcjbvhTwJTXjUkMQH6uF7UqE6JwKcAvueEVc7v1EWuw==
+X-Received: by 2002:adf:df82:0:b0:236:563b:6f5d with SMTP id z2-20020adfdf82000000b00236563b6f5dmr769877wrl.532.1667933052138;
+        Tue, 08 Nov 2022 10:44:12 -0800 (PST)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id m6-20020a05600c3b0600b003cf6c2f9513sm13564009wms.2.2022.11.08.10.44.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 08:59:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 8 Nov 2022 08:59:18 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <20221108165637.GA801591@roeck-us.net>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
- <Y2ABnbBGSJGM3gSS@mail.local>
- <20221031181913.GA3841664@roeck-us.net>
- <Y2BIv21U7lpN0z23@mail.local>
- <20221031230749.GB2082109@roeck-us.net>
- <20221102184804.GA1918067@roeck-us.net>
- <Y2mMQifOl7BzPCZm@mail.local>
+        Tue, 08 Nov 2022 10:44:11 -0800 (PST)
+Subject: [PATCH v4 0/9] Add MediaTek MT6357 PMIC support
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2mMQifOl7BzPCZm@mail.local>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAFejamMC/33NTQrCMBAF4KtI1kbSiTHVlfcQF/mZ2kCblKQNlNK7O7gUdDW8B++bjRXMAQu7HT
+ aWsYYSUqRwPh6Y6018IQ+eMgMB0Aih+DhfpNK8LNOU8syVkqK1LaCUHaORNQW5zSa6nmZxGQYq+1Dm
+ lNfPkwp0Hj+9ClzwrtHWgAcvzPVuzToEm/Hk0siepFX5X5AkaBTWaycbZeFL2Pf9DS0ZTUj2AAAA
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 08 Nov 2022 19:43:35 +0100
+Message-Id: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+To:     Fabien Parent <fabien.parent@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-leds@vger.kernel.org,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-input@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5627; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=KMqIoFMw2ZsnI4pz2WvDUoOJVAdC7AJXJ4JZ68KdWV4=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjaqN6igOZ3wPkALb9neByKV7+WaSiq7dQaGyZmrOz
+ uMI+cTKJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY2qjegAKCRArRkmdfjHURWWXD/
+ 0SjwYliYD6yObuoeJtg0IJfpDmts8BUvvTNZwhie1u73bGZ+++aqfHjmB5UkQiOq/m8TYBXWc75PJ1
+ KnZTV97qxdUDHrTqQSWV1rqsiLEc3gCUw/5vq8UI5S1tKHafrSoLZJRwT4nQBHe/+gdZlDIhy9coHh
+ bSmYYS48rStiXayUrH9sCwTT5w8vhlokrOp9C4F/ZHc8ml+bTLTJG5jUstA3Ji851lxN1HHg/LgAzD
+ la4e42RFpkZ0BMvUPrfWo8iEFC7Y1jO0GwmRmNBaaCt/G9Wg6Dx6geaDG0MpWwbnE49sy7j9E1sMci
+ VmQVPWlzVvmDn0LrUiUNmn+ruoZfON8tE3BYKwjkoYMW6XToEbp1gehV8H4Y0/DRW4Ks4hXLdjrMnW
+ RzKOaWin6APvF0RkFz96LX2KJJPZzmOE3uEuRfhRKl+U9VAKxXKUSLSYCS4GJrpzRXTimN7qRPtaf7
+ aeKkTNPsHMcokHfJ+7ZbEdz0g+un7jngXPCU53bXs+QXHREc+pGNP6u4dlexOTcv7rcIfD1ARUKNo+
+ FasIgRhDtGsYEo0zl5NEyiWNnpjoVqCUKJovCcd87/zQPi3/zrPgu/tMdMTI2l+38p8YydymE3xg/v
+ d3J4M9igDBzDA5WLdNi071vG+AOuUP9lQW1LVTHBvZKGt5Qb6Gc5wjh/Yxmw==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,104 +106,134 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 Hi,
+This patch series adds MFD, PMIC keys, and regulator support for MT6357.
+MT6357 is a MediaTek PMIC very similar to MT6358.
 
-On Mon, Nov 07, 2022 at 11:52:50PM +0100, Alexandre Belloni wrote:
-[ ... ]
-> 
-> I'll take the patch as-is so you can backport it and have a solution.
-> I'll also work on the alarm range and I'll let you get the series once
-> this is ready so you can test.
-> 
+Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
 
-Excellent, thanks a lot. I also started looking into a poor-man's solution
-of range support. I attached what I currently have below for your
-reference. It isn't much, but it let me test follow-up changes in the
-cros-ec rtc driver. Unfortunately I was not able to find a means to
-implement something like "go back to sleep fast" in the alarm timer code.
+soc/mediatek/pwrap.txt (all PMIC parent)
+      |
+      V
+mfd/mt6397.txt (support lot of mt63XX PMIC)
+      +---------------+----------------+---...
+      V               V                V
+regulator/...      rtc/...          codec/...
 
-In this context: Is there a standardized set of error codes for RTC
-drivers ? I see -EINVAL, -ETIME, -EDOM, -ERANGE, but those are not
-consistently used. I assumed -ETIME for "time expired" and -ERANGE
-for "time too far in the future" below, but that was just a wild guess.
+1) Convert pwrap to yaml is ok.
 
-Thanks,
-Guenter
+2) For the PMIC bindings, there are two option:
+- Convert mt6397.txt to mediatek,mt6397.yaml and continue to support multiple
+  PMIC with only one file. IMO, the file will be hard to read because
+  the supported features aren't the same for each PMIC.
+
+- Make a binding file for each PMIC ref:
+    - mfd/mediatek,mt6357.yaml
+    - mfd/mediatek,mt6358.yaml
+    - ...
+
+3) All PMIC daughter bindings (regulator, rtc, codec, led, ...) aren't fully
+converted yet. Refering to the two PMIC convertion options above:
+- To be clean, all daughter bindings should be converted. This is hard because
+  a good understanding of each device is requiered to write efficient bindings.
+- Only daughter bindings supported by the added PMIC should be converted, that
+  allows to do the task conversion step by step.
+
+In the V4 of this serie, I chose the second option.
+
+Regards,
+Alex
+
+Changes in v4:
+- "dt-bindings: mfd: mt6397: add binding for MT6357" has been applied
+  by Lee Jones
+- All fixed regulator are now refering to fixed-regulator.yaml
+- vfe28 and vcamio18 regulators have been added
+- pwrap binding has been converted and mt8365 support has been added
+- Change node names for mt8173 and mt6358 SoC to be consistent with
+  pwrap documentation.
+- mt6357 PMIC binding has been created
+- mt6397 RTC binding has been converted and mt6357 support has been added
+- Link to v3: https://lore.kernel.org/r/20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com
+
+Changes in v3:
+- To be consistent with regulator/driver.h and helper.c, shift
+  variables have been removed and the mask values have been directly shifted.
+- Remove index tables and rework volt tables to use set/get helper functions.
+- Add comment to structure and function.
+- Fix Fabien Parent mail address.
+- Link to v2: https://lore.kernel.org/r/20221005-mt6357-support-v2-0-f17ba2d2d0a9@baylibre.com
+
+Changes in v2:
+- Rebase
+- Fix typo
+- Remove dependencies with https://lore.kernel.org/all/20220415153629.1817202-1-fparent@baylibre.com/
+  which is no longer relevant.
+
+Previous versions:
+v1 - https://lore.kernel.org/all/20220531124959.202787-1-fparent@baylibre.com/
+
+To: Lee Jones <lee@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Chen Zhong <chen.zhong@mediatek.com>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+To: Fabien Parent <fabien.parent@linaro.org>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Pavel Machek <pavel@ucw.cz>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: Fabien Parent <fparent@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-leds@vger.kernel.org
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
 ---
-commit 7918f162f947424ec0ad7a318c45febeaea51d2e
-Author:     Guenter Roeck <linux@roeck-us.net>
-AuthorDate: Wed Nov 2 19:35:09 2022 -0700
-Commit:     Guenter Roeck <linux@roeck-us.net>
-CommitDate: Fri Nov 4 09:54:06 2022 -0700
+Alexandre Mergnat (5):
+      dt-bindings: rtc: mediatek: convert MT6397 rtc documentation
+      dt-bindings: mfd: mediatek: Add bindings for MT6357 PMIC
+      dt-bindings: soc: mediatek: convert pwrap documentation
+      arm64: dts: mt6358: change node names
+      arm64: dts: mt8173: change node name
 
-    rtc: Add support for limited alarm timer offsets
-    
-    Some alarm timers are based on time offsets, not on absolute times.
-    In some situations, the amount of time that can be scheduled in the
-    future is limited. This may result in a refusal to suspend the system,
-    causing substantial battery drain.
-    
-    Some RTC alarm drivers remedy the situation by setting the alarm time
-    to the maximum supported time if a request for an out-of-range timeout
-    is made. This is not really desirable since it may result in unexpected
-    early wakeups.
-    
-    To reduce the impact of this problem, let RTC drivers report the maximum
-    supported alarm timer offset. The code setting alarm timers can then
-    decide if it wants to reject setting alarm timers to a larger value, if it
-    wants to implement recurring alarms until the actually requested alarm
-    time is met, or if it wants to accept the limited alarm time.
-    
-    Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fabien Parent (4):
+      dt-bindings: input: mtk-pmic-keys: add binding for MT6357 PMIC
+      dt-bindings: regulator: Add binding schema for mt6357 regulators
+      regulator: add mt6357 regulator
+      Input: mtk-pmic-keys: add MT6357 support
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 9edd662c69ac..05ec9afbb6ba 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -426,6 +426,10 @@ static int __rtc_set_alarm(struct rtc_device *rtc, struct rtc_wkalrm *alarm)
- 
- 	if (scheduled <= now)
- 		return -ETIME;
-+
-+	if (rtc->range_max_offset && scheduled - now > rtc->range_max_offset)
-+		return -ERANGE;
-+
- 	/*
- 	 * XXX - We just checked to make sure the alarm time is not
- 	 * in the past, but there is still a race window where if
-diff --git a/include/linux/rtc.h b/include/linux/rtc.h
-index 1fd9c6a21ebe..b6d000ab1e5e 100644
---- a/include/linux/rtc.h
-+++ b/include/linux/rtc.h
-@@ -146,6 +146,7 @@ struct rtc_device {
- 
- 	time64_t range_min;
- 	timeu64_t range_max;
-+	timeu64_t range_max_offset;
- 	time64_t start_secs;
- 	time64_t offset_secs;
- 	bool set_start_time;
-diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-index 5897828b9d7e..af8e0a9e0d63 100644
---- a/kernel/time/alarmtimer.c
-+++ b/kernel/time/alarmtimer.c
-@@ -291,6 +291,19 @@ static int alarmtimer_suspend(struct device *dev)
- 	rtc_timer_cancel(rtc, &rtctimer);
- 	rtc_read_time(rtc, &tm);
- 	now = rtc_tm_to_ktime(tm);
-+
-+	/*
-+	 * If the RTC alarm timer only supports a limited time offset, set
-+	 * the alarm time to the maximum supported value.
-+	 * The system will wake up earlier than necessary and is expected
-+	 * to go back to sleep if it has nothing to do.
-+	 * It would be desirable to handle such early wakeups without fully
-+	 * waking up the system, but it is unknown if this is even possible.
-+	 */
-+	if (rtc->range_max_offset &&
-+	    rtc->range_max_offset * NSEC_PER_SEC > ktime_to_ns(min))
-+		min = ns_to_ktime(rtc->range_max_offset * NSEC_PER_SEC);
-+
- 	now = ktime_add(now, min);
- 
- 	/* Set alarm, if in the past reject suspend briefly to handle */
+ .../bindings/input/mediatek,pmic-keys.yaml         |   1 +
+ .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
+ .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 102 +++++
+ Documentation/devicetree/bindings/mfd/mt6397.txt   |   4 +-
+ .../regulator/mediatek,mt6357-regulator.yaml       | 292 +++++++++++++
+ .../bindings/rtc/mediatek,mt6397-rtc.yaml          |  40 ++
+ .../devicetree/bindings/rtc/rtc-mt6397.txt         |  31 --
+ .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 158 +++++++
+ .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 ----
+ arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   2 +-
+ arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   2 +-
+ drivers/input/keyboard/mtk-pmic-keys.c             |  17 +
+ drivers/regulator/Kconfig                          |   9 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/mt6357-regulator.c               | 453 +++++++++++++++++++++
+ include/linux/regulator/mt6357-regulator.h         |  51 +++
+ 17 files changed, 1132 insertions(+), 114 deletions(-)
+---
+base-commit: e7f535c0775b896befb4f6765c02bc065fd26156
+change-id: 20221005-mt6357-support-55308b82e33f
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
