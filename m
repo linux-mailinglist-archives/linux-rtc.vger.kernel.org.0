@@ -2,117 +2,157 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D856211FE
-	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 14:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF11621244
+	for <lists+linux-rtc@lfdr.de>; Tue,  8 Nov 2022 14:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiKHNJW (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 8 Nov 2022 08:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S234402AbiKHNZV (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 8 Nov 2022 08:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233603AbiKHNJV (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 08:09:21 -0500
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B291B9E3;
-        Tue,  8 Nov 2022 05:09:20 -0800 (PST)
-Received: by mail-qk1-f180.google.com with SMTP id p18so4452436qkg.2;
-        Tue, 08 Nov 2022 05:09:20 -0800 (PST)
+        with ESMTP id S233945AbiKHNZS (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 8 Nov 2022 08:25:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFA719025
+        for <linux-rtc@vger.kernel.org>; Tue,  8 Nov 2022 05:25:17 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so38467176ejb.13
+        for <linux-rtc@vger.kernel.org>; Tue, 08 Nov 2022 05:25:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xIunjndO5rqOpIPjGIQJB4TuLtmFYebQ0fOsvPNeO54=;
+        b=dY2KECnuVH7NYv0yOK7RrL62QdqUlhl2JmgS7xh7Aop7k+RcPrpLQgabXuGbHHpGQR
+         eHydRYWR08BPIi0DGkFfFL5aziMJHQLfVfnBD+eU2h7KlhHzcO6P+1GLNOD4+iPtpIq9
+         f+xJ7woffKNTUf34ylHgwFwugM0mjDy+MNR+/tosLv90DX21VaSDgG9tpTl2KCuCdJUO
+         uOa6Dv9G/jILV/FYPlkjsMzVEJLK96Ug7G7tfkWymeifahO0bdSmcFGNxzhRtu8RVMPO
+         uhbfFCJ4Ya/DrkwEqdNt0sBFZZ7Pau3qynHAmgL94y0H0QvBHa6kKlb7zVfFQiDHP0ks
+         6ZQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tp5OMnbOjRDcClttdvcSBeqhMkw9nAZs4zoixrpu0Ao=;
-        b=5JbFpnFsykVdYy1yIEdjFcPNjjbTPdP4tVr+X3hsZ0t3lEBfh3BDgoRcctT6ygnE3C
-         GIvTKxuYO8ni/5ekA8Y5ytu1A/jZTH37LGDd1LQg3fGlPYwHX0/S2gmE3B8rZXg4KI3G
-         qW4IKFBMkujpRNOyk7XS8PJTKLB9291oy+aFUF1nE9/ZWxyCgnUTGfDPPYY1L00bZ1am
-         PQBTQhxB6lOextBrYP4Pv1gDOtX2GPGuD4557Fwat6SjtHxHXjyx9bZSTyIUXa7nl5cP
-         VHNgcVMOCHf9htBPFpoQIWrF+g5qVLiWTvyezZQ/Q1dMCO7T7Khuw8LwHjN1QPyOyWkq
-         pWFw==
-X-Gm-Message-State: ACrzQf0QiSC0sWKCzracyMFLZSUZDKqwfPQgKnuK7CaxRmCIyGlbe04q
-        VFawEYLEDookkaNkEKinsHnqkmhG9+iYdCeXH+k=
-X-Google-Smtp-Source: AMsMyM7+IhXIk2o4MVZnaGbRer32KZO8HPffRRWa5txMjuW5kyjpco5GjzuVGiYEwwl98+vbuAF9Wuc/hiMSDY8JAAI=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr38198402qkl.443.1667912959715; Tue, 08
- Nov 2022 05:09:19 -0800 (PST)
+        bh=xIunjndO5rqOpIPjGIQJB4TuLtmFYebQ0fOsvPNeO54=;
+        b=lO44h8eayBQJOX5p4902skK8pBQ3x7uX6iWexhD8iorYoRHCC89nnO4z5SLVubZiI8
+         iNGnkNNurBoIXsBMCD6FvYWdHvD7sdEk/rFF7UAlaWyVvttWzaX6S/pxHnCwuGcojivj
+         MrgVGBO3dx7nPJuc9QuXSXgeROYSARu7+tP2sH4T0GAqBC7I2h47ypi0kfI+CTufG5nV
+         9I/MF26DGSS+DEWO921Ti5CxcNxXpe6ZMFyGk8AVQEho6DaQu0HkVFXu7gAzbbtj/DaC
+         mCrsEcQITKr1Q84AJ7X+VNmV0qftmYEW75keztg7TOsf/+kQ5o5uJ/JfKFUSAOH1IREP
+         uqNQ==
+X-Gm-Message-State: ANoB5pnL9nP2lGjXs4UhudDkadt44rX1I/noYoiwCdXxKt23TDQoS9jX
+        87byjJPFbOoVNfHbP0VJPcTfSVVkHc3cBFAHVzbXzQ==
+X-Google-Smtp-Source: AA0mqf68wWCeuB7GkTzw5Vcyy6luDq6tRlJuZOq+6MaYhZcTvhkBj9mitsGYltXA5OQs4b2+osg1ro8i402jh/hf0IY=
+X-Received: by 2002:a17:906:6acc:b0:7ae:658c:ee45 with SMTP id
+ q12-20020a1709066acc00b007ae658cee45mr11184945ejs.190.1667913915716; Tue, 08
+ Nov 2022 05:25:15 -0800 (PST)
 MIME-Version: 1.0
-References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher> <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
-In-Reply-To: <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 8 Nov 2022 14:09:07 +0100
-Message-ID: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from cmos_do_probe()
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-34-f6736dec138e@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-34-f6736dec138e@cerno.tech>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 8 Nov 2022 14:25:04 +0100
+Message-ID: <CACRpkdYwM6X8bBABCisUGX=P4F=hcFb7QLT3Cu7XUWUvV4TE1Q@mail.gmail.com>
+Subject: Re: [PATCH v2 34/65] clk: ux500: prcmu: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Notice that cmos_wake_setup() is the only user of acpi_rtc_info and
-> > it
-> > can operate on the cmos_rtc variable directly, so it need not set the
-> > platform_data pointer before cmos_do_probe() is called.  Instead, it
-> > can be called by cmos_do_probe() in the case when the platform_data
-> > pointer is not set to implement the default behavior (which is to use
-> > the FADT information as long as ACPI support is enabled).
-> >
->
-> ...
->
-> >
-> > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
-> >               if (info->address_space)
-> >                       address_space = info->address_space;
-> >
-> > -             if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
-> > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
-> > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > -             if (info->rtc_century && info->rtc_century < 128)
-> > -                     cmos_rtc.century = info->rtc_century;
-> > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > +             cmos_rtc.century = info->rtc_century;
-> >
-> >               if (info->wake_on && info->wake_off) {
-> >                       cmos_rtc.wake_on = info->wake_on;
-> >                       cmos_rtc.wake_off = info->wake_off;
-> >               }
-> > +     } else {
-> > +             cmos_wake_setup(dev);
-> >       }
-> >
-> >
->
-> Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup from
-> ACPI glue into RTC driver"), dev->platform_data is set in
-> drivers/acpi/glue.c, and the above commit moves it to cmos_wake_setup()
-> in this file.
->
-> Now, with this patch, my understanding is that dev->platform_data is
-> never set, thus we can remove the 'info' variable and the
->         if (info)
-> check above.
+On Fri, Nov 4, 2022 at 2:32 PM Maxime Ripard <maxime@cerno.tech> wrote:
 
-There are other users of this driver which can be found by grepping
-for cmos_rtc_board_info.
+> The UX500 PRCMU "clkout" clock implements a mux with a set_parent hook,
+> but doesn't provide a determine_rate implementation.
+>
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+>
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+>
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
 
-They create platform device objects with platform_data set which are
-then bound to by this driver.
+It is actually set up from the device tree, typically like this:
+
+/* clkout1 from ACLK divided by 8 */
+clocks = <&clkout_clk DB8500_CLKOUT_1 DB8500_CLKOUT_SRC_ACLK 8>;
+
+So the parent (source) and divisor comes in there.
+
+clk->source and clk->divider is already set up when clk_hw_register() is
+called.
+
+So set/get_parent() is never used on clkout.
+
+I think I just added the callbacks for completeness, should we delete them
+altogether? The patch is probably fine as-is as well so
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
