@@ -2,77 +2,77 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816096225B8
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 09:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311F26225C8
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 09:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiKIIqd (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Nov 2022 03:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S229954AbiKIItX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Nov 2022 03:49:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKIIqc (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 03:46:32 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7662BF6
-        for <linux-rtc@vger.kernel.org>; Wed,  9 Nov 2022 00:46:30 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id l8so24690724ljh.13
-        for <linux-rtc@vger.kernel.org>; Wed, 09 Nov 2022 00:46:30 -0800 (PST)
+        with ESMTP id S230095AbiKIItW (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 03:49:22 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8213D32
+        for <linux-rtc@vger.kernel.org>; Wed,  9 Nov 2022 00:49:21 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id u2so24736393ljl.3
+        for <linux-rtc@vger.kernel.org>; Wed, 09 Nov 2022 00:49:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nfRa70L7g0nxe8P0BclrazZWpKjrPweL5zf7N3oG2m4=;
-        b=IUY3VD9UK53+OdkIAp16Q6OthrEIBlaCwIS+04/+wqYsufoykWa7ec+XrK0zWZKOLa
-         9Xzj6/zUaGWLu70p+rtSjKWSbi/bwzoMKcO5hMjsnxm2lMp9viboE46t5XqiqmDkBSDJ
-         TX8RdQJKRJ76ggcJk1xc2zFytuyQPXFj6EnpPfWXt2ABSWEUv3gNt+uJQOy97TjkvrU5
-         WeriNZP5okt8MvUGbEyfjT3OZDULrDbRymmqFLkZ1yoCs/gEmG5pdEm3LWFFH4o2FYsK
-         pM50Z+BTo3pPTPnsYb1HvboYRnljbO0UhVIvdG8YTlUwLskYwJ3D54BTgBKfmN/3NEGQ
-         226A==
+        bh=7vBkkfZQWcT2BPYsBX069quROkBYsnlhEC9tn5FlJtY=;
+        b=ozMeYcbthVydFqMEaUf3m/kOWrFanjiFpobFaL089YHMZlW2jxw4BLT9lWYY3y1Bqs
+         Sl9ZCkgKygyOnYUxVIeUanR05mhyScLLevs48wNpCdDUfnfyhg72PRuD+pwavp73dSYe
+         QdocdUAfHPUFAgDjebTvxlVkr1zXRSJOUc1iv2F3XeZNcySNZr+PD5kuzrkNXcUr6OUT
+         nvFeYjYmMZUOY91cXf5YlAUYnN01MYBiQvr+twguS1/19xhBK1ecZuBDf1w95Jk8Slw8
+         LCPsKgfJdnUjSRXIcuXv000fCd2FuOjOFaetftqSrJZTNNdRNVulqWGYt3kNDwmqIrjZ
+         TVZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nfRa70L7g0nxe8P0BclrazZWpKjrPweL5zf7N3oG2m4=;
-        b=Sn/qR2bou68l9pZwcePdsoKoeTNU37hKw7SR05SZaVTI9PCKNAsBuDwKJsYbAtoFWF
-         I2+whnQbhEWuqvqhFAkx3F4XRzsuoPsuiF2Eug9iy+HZ0sY3/cCD0XCu1YOTO7Y69/7Q
-         WiINmhbIedKz3exFff+yeNVIsxN8NjPgsftMAN2pfpf2Xh7mCHpsU9oXE42zoB5JCMEI
-         EO4j2bOkCxtApTS1HSSHL07gAne/z/ODmVVNN//MRytJopDsMaoKYQtz+TSq0AJ4+sQu
-         G1ie5wKgk7jX6yaiENWlJOJAXpBXbv7QkaNP/ElzToFsGYHdbH0c7+RxBxVe3SgBoS5d
-         qEMw==
-X-Gm-Message-State: ACrzQf1egL4mQI5MBB5ogb5JtRLFkijVKBklI44MReri8ROKHQM27VZQ
-        gJGhtdqrar2mNY6ys6xFQCC6cA==
-X-Google-Smtp-Source: AMsMyM6fnwCEY5y06IZIpi9DtTIMT7zAe2zw95FGw/UKN9dOcLrqH4A5BEisW1ztQojxGaa3aHSzgA==
-X-Received: by 2002:a2e:92c6:0:b0:277:3ca2:dac6 with SMTP id k6-20020a2e92c6000000b002773ca2dac6mr7337738ljh.143.1667983588862;
-        Wed, 09 Nov 2022 00:46:28 -0800 (PST)
+        bh=7vBkkfZQWcT2BPYsBX069quROkBYsnlhEC9tn5FlJtY=;
+        b=SmC2gMfMqFpDt/16zwZEfesb1qug4M7XlfDc+rTqBFMnFJ20QfoDNPLHhvH7TUZalH
+         YX89ErEZa2l2vn1jHFXYkbf4UJlN/bBrjP38YvjJ1xZbX1XZp+lu9D4W93Ns7r2mkUqP
+         dzvHFXmBbIwLESFfknnQN3HUufoSsqDUlvUckgMy1s2HnsksXfPys/1PThRYB5pjmeLb
+         yWcdDaXRcJmStsDbvbyZRfxHkBuQx18Pm1swLHxOihTTeHaO2WpGdcvJ0jlUkv874Khn
+         vJngvjfgW3zWjW+qwM/sz3XCMXRIFl3RcUTG3DGKZl6oHH2cdc54IoOQ5KBdT4vmWCU3
+         DIag==
+X-Gm-Message-State: ACrzQf1dwvomOid+poG5MDwMvmx2FjHoh3emQXerVWA+EO9hP7Af41Z5
+        oVF97LULC1bb5h+n1GnARky8bQ==
+X-Google-Smtp-Source: AMsMyM4QTrn7WKvNp/FF7kJKkIOQR2e9NmHjjrrZaLB2cpuG6r0mVHyT23yAuPI4kNeJb/4SbsAOxw==
+X-Received: by 2002:a05:651c:12c2:b0:26c:13b9:a694 with SMTP id 2-20020a05651c12c200b0026c13b9a694mr21557955lje.79.1667983759758;
+        Wed, 09 Nov 2022 00:49:19 -0800 (PST)
 Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id d1-20020a2eb041000000b0026a92616cd2sm2026488ljl.35.2022.11.09.00.46.27
+        by smtp.gmail.com with ESMTPSA id k4-20020ac257c4000000b004b1793520a0sm2129255lfo.36.2022.11.09.00.49.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Nov 2022 00:46:28 -0800 (PST)
-Message-ID: <371d8427-b854-a39b-9d20-6c55018f670f@linaro.org>
-Date:   Wed, 9 Nov 2022 09:46:27 +0100
+        Wed, 09 Nov 2022 00:49:19 -0800 (PST)
+Message-ID: <0bf46e8b-334d-7a50-ff6f-ef336d6d1a51@linaro.org>
+Date:   Wed, 9 Nov 2022 09:49:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/7] Documentation: tps6594x: Add DT bindings for the
- TPS6594x PMIC
+Subject: Re: [PATCH v3 3/7] rtc: rtc-tps6594x: Add support for TPS6594X PMIC
+ RTC
 Content-Language: en-US
 To:     Matt Ranostay <mranostay@ti.com>, brgl@bgdev.pl, lee@kernel.org,
         linus.walleij@linaro.org, kristo@kernel.org,
         alexandre.belloni@bootlin.com, a.zummo@towertech.it,
         krzysztof.kozlowski+dt@linaro.org, robh@kernel.org, vigneshr@ti.com
 Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-gpio@vger.kernel.org
+        linux-rtc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Keerthy <j-keerthy@ti.com>
 References: <20221109065546.24912-1-mranostay@ti.com>
- <20221109065546.24912-2-mranostay@ti.com>
+ <20221109065546.24912-4-mranostay@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109065546.24912-2-mranostay@ti.com>
+In-Reply-To: <20221109065546.24912-4-mranostay@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,84 +80,81 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 On 09/11/2022 07:55, Matt Ranostay wrote:
-
-Missing commit msg.
-
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
-
+> From: Keerthy <j-keerthy@ti.com>
+> 
+> Add support for TPS6594X PMIC RTC. However, currently only get/set of
+> time + date functionality is supported.
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
 > Signed-off-by: Matt Ranostay <mranostay@ti.com>
 > ---
->  .../devicetree/bindings/mfd/ti,tps6594x.yaml  | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+>  drivers/rtc/Kconfig        |  10 ++
+>  drivers/rtc/Makefile       |   1 +
+>  drivers/rtc/rtc-tps6594x.c | 181 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 192 insertions(+)
+>  create mode 100644 drivers/rtc/rtc-tps6594x.c
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
-> new file mode 100644
-> index 000000000000..be87f0037bf9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/ti,tps6594x.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TPS6594x Power Management Integrated Circuit (PMIC)
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    contains:
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 35298c651730..0adb2c2570b8 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -588,6 +588,16 @@ config RTC_DRV_TPS65910
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called rtc-tps65910.
+>  
+> +config RTC_DRV_TPS6594X
+> +	tristate "TI TPS6594X RTC driver"
+> +	depends on MFD_TPS6594X
 
-Drop contains.
+Perhaps: || COMPILE_TEST
+(and test it)
 
-> +      enum:
-> +        - ti,tps6594x
+> +	help
+> +	  If you say yes here you get support for the RTC of TI TPS6594X series PMIC
+> +	  chips.
+> +
+> +	  This driver can also be built as a module. If so, the module
+> +	  will be called rtc-tps6594x.
+> +
 
-No wildcards in compatibles.
+(...)
 
 > +
-> +  reg:
-> +    const: 0x48
-> +    description: I2C slave address
-
-Drop description.
-
+> +static int tps6594x_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct tps6594x *tps6594x = dev_get_drvdata(pdev->dev.parent);
+> +	struct tps6594x_rtc *tps6594x_rtc = NULL;
+> +	int ret;
 > +
-> +  ti,system-power-controller:
-> +    type: boolean
-> +    description: PMIC is controlling the system power.
+> +	tps6594x_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594x_rtc), GFP_KERNEL);
+
+That's not Linux coding style. Line is too long - wrapping is at 80.
+sizeof(*), not struct.
+
+> +	if (!tps6594x_rtc)
+> +		return -ENOMEM;
 > +
-> +  rtc:
-> +    type: object
-> +    $ref: /schemas/rtc/rtc.yaml#
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,tps6594x-rtc
-
-No wildcards in compatibles.
-
+> +	tps6594x_rtc->dev = &pdev->dev;
+> +	platform_set_drvdata(pdev, tps6594x_rtc);
 > +
-> +  gpio:
-> +    type: object
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,tps6594x-gpio
-
-No wildcards in compatibles.
-
+> +	/* Start RTC */
+> +	ret = regmap_update_bits(tps6594x->regmap, TPS6594X_RTC_CTRL_1,
+> +				 TPS6594X_RTC_CTRL_REG_STOP_RTC,
+> +				 TPS6594X_RTC_CTRL_REG_STOP_RTC);
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "RTC_CTRL write failed, err = %d\n", ret);
+> +		return ret;
+> +	}
 > +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
+> +	tps6594x_rtc->rtc = devm_rtc_device_register(&pdev->dev, pdev->name,
+> +				&tps6594x_rtc_ops, THIS_MODULE);
+> +	if (IS_ERR(tps6594x_rtc->rtc)) {
+> +		ret = PTR_ERR(tps6594x_rtc->rtc);
+> +		dev_err(&pdev->dev, "RTC register failed, err = %d\n", ret);
+> +		return ret;
 
-> +...
+return dev_err_probe
+
 
 Best regards,
 Krzysztof
