@@ -2,105 +2,125 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E616231D8
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 18:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DF362349F
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 21:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiKIRt5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Nov 2022 12:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        id S231515AbiKIUbp (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Nov 2022 15:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbiKIRtn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 12:49:43 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC0656A;
-        Wed,  9 Nov 2022 09:49:34 -0800 (PST)
+        with ESMTP id S231572AbiKIUbe (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 15:31:34 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A5303DE;
+        Wed,  9 Nov 2022 12:31:32 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 94A33240002;
-        Wed,  9 Nov 2022 17:49:30 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2D9A4240006;
+        Wed,  9 Nov 2022 20:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668016172;
+        t=1668025890;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=O7d9XV6IsnIwU7Gj07fwE3ldNBJ/qjfOW6mSWa+l8tI=;
-        b=CLipaJKhG3s+/op4L0NtH9sjz2WfwiRqjsKDlScPaX0KdHktmnWhIGym0rK890RfIxNJKK
-        MLUF4Xl0RxHIqQtYZ5p5uBz7pl4+/Vj1yucDRer129pJAruTVoQ3dc55nGhoi2O/ZZvtYy
-        0QOYI5PoA9Ri918CkMmOi0zIf5yl7udtNc3QCrOAvYlTUpdGDVxispUsZ3D6wxtIBLEb7j
-        6kPYFE+xx55WzPq7oiXWScyfMSDZL8I3v9OVlxct0YVUKmTcn9glcAm9rBc+aRgd54n4bH
-        Zpd32cL6D4eyMhWabFPmWEOczgX5rfFuJugIMBT8yZ3UUaJ9yx9IoaeKImPTQA==
-Date:   Wed, 9 Nov 2022 18:49:30 +0100
+        bh=8ETbXvYBEg/yFeCJeEL3kpLNlGNar65IVNcGJHPKe/k=;
+        b=jlmmtfINw0vPXlA+sXdDn828teotLJMLzUB2TIMMRvLOXEz5LVAUuOhICrEhAyyAuHzI0C
+        1H0NoF3Uj8B10hI41fyElJGADvVxiGmV9SUkcmPGLQl6ISZ+lpWEOeFa1VRvJohF10u1jj
+        qKqX/oNf4H6yPWCT5SW7Xxb+0aItmxZFUbl1oIc6C6uMyYIME02TJIW7r6jEI36DyWj42S
+        5pnSXTXxFEWjVnPaT3UnvKVrdqZqvItDqY0twx+O1b8ikENzAsX/OeL3imrnPMfztiWvKB
+        0eVRvVTB892r3m4poWJ6cYIX1R+Ge1WLB3eywTH0nSFXDpnphIL0WxzWvVtqnw==
+Date:   Wed, 9 Nov 2022 21:31:27 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Message-ID: <Y2voKqz1zRg32jaJ@mail.local>
-References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
- <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
- <ed298a3e-25dd-af19-437c-f27c160788b3@collabora.com>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ardb@kernel.org,
+        linux-efi@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [BUG] rtc-efi: Error in efi.get_time() spams dmesg with error
+ message
+Message-ID: <Y2wOH1X0tAWWY4zd@mail.local>
+References: <Y2o1hdZK9GGDVJsS@monolith.localdoman>
+ <Y2rM/ud0JfX4QXJB@mail.local>
+ <Y2u+Z7uWfokQYwKt@monolith.localdoman>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ed298a3e-25dd-af19-437c-f27c160788b3@collabora.com>
+In-Reply-To: <Y2u+Z7uWfokQYwKt@monolith.localdoman>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 09/11/2022 10:40:39+0100, AngeloGioacchino Del Regno wrote:
-> Il 08/11/22 19:43, Alexandre Mergnat ha scritto:
-> > - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
-> > - Add mediatek,mt6357-rtc compatible.
-> > - Add maintainer
-> > - Remove the .txt binding file
+On 09/11/2022 14:51:19+0000, Alexandru Elisei wrote:
+> Hi,
+> 
+> On Tue, Nov 08, 2022 at 10:41:18PM +0100, Alexandre Belloni wrote:
+> > On 08/11/2022 10:55:15+0000, Alexandru Elisei wrote:
+> > > Hi,
+> > > 
+> > > Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+> > > possible") exposed a firmware error on an Ampere Altra machine that was
+> > > causing the machine to panic. Then commit 23715a26c8d8 ("arm64: efi:
+> > > Recover from synchronous exceptions occurring in firmware") made the EFI
+> > > exception non-fatal, and disabled runtime services when the exception
+> > > happens. The interaction between those two patches are being discussed in a
+> > > separate thread [1], but that should be orthogonal to this.
+> > > 
+> > > Now efi.get_time() fails and each time an error message is printed to
+> > > dmesg, which happens several times a second and clutters dmesg
+> > > unnecessarily, to the point it becomes unusable.
+> > > 
+> > > I was wondering if it would be possible to turn dev_err() into a
+> > > dev_WARN_ONCE() or do something to avoid this issue. Tried to replace
+> > > dev_err() with dev_err_ratelimited(), and the error message was displayed
+> > > less often (about once per second), but dmesg was still being cluttered.
+> > > 
 > > 
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> > ---
-> >   Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
-> >   .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
-> >   .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
-> >   3 files changed, 41 insertions(+), 32 deletions(-)
+> > The question this raise is what is actually trying to read the RTC this
+> > often?
 > > 
+> > This should be read once at boot and maybe every time you wake up from
+> > suspend but there is no real reason to read it multiple times per
+> > seconds.
 > 
-> Please split the txt->yaml conversion in one commit and the addition of the
-> new mt6357-rtc compatible in another commit.
+> Reverted the commit the exposed the firmware bug, which means rtc-efi works as
+> it should. Added these debug statements to check how many times efi_read_time()
+> is called if there are no errors:
 > 
-> Also, isn't the original maintainer of rtc-mt6397 supposed to be...
-> Tianping Fang <tianping.fang@mediatek.com> ?
+> --- a/drivers/rtc/rtc-efi.c
+> +++ b/drivers/rtc/rtc-efi.c
+> @@ -154,6 +154,7 @@ static int efi_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+>         return status == EFI_SUCCESS ? 0 : -EINVAL;
+>  }
 > 
-> You can add yourself to the list of maintainers, though, unless Tianping
-> explicitly says that he doesn't want to maintain this driver anymore?
+> +static unsigned long i = 0;
+>  static int efi_read_time(struct device *dev, struct rtc_time *tm)
+>  {
+>         efi_status_t status;
+> @@ -162,6 +163,9 @@ static int efi_read_time(struct device *dev, struct rtc_time *tm)
+> 
+>         status = efi.get_time(&eft, &cap);
+> 
+> +       i++;
+> +       pr_info("%s: Call number %lu\n", __func__, i);
+> +
+>         if (status != EFI_SUCCESS) {
+>                 /* should never happen */
+>                 dev_err(dev, "can't read time\n");
+> 
+> The function gets called 3 times, twice during boot and once after. I would say
+> that efi_read_time() gets called so many times because it fails.
 > 
 
-This is not about the maintenance of the driver but of the device tree
-bindings for the IP
+It should really get called only once, at device registration when
+CONFIG_RTC_HCTOSYS is set (which I despise):
+https://elixir.bootlin.com/linux/latest/source/drivers/rtc/class.c#L431
 
-> Regards,
-> Angelo
-> 
+Could you maybe use dump_stack() ?
+
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
