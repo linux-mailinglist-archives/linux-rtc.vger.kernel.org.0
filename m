@@ -2,120 +2,99 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C8B622B2D
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 13:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD27F622C26
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 14:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiKIMPu (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Nov 2022 07:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S229993AbiKINLX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Nov 2022 08:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKIMPt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 07:15:49 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D07F13E9E;
-        Wed,  9 Nov 2022 04:15:47 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id f64f02712e042cbc; Wed, 9 Nov 2022 13:15:44 +0100
-Received: from kreacher.localnet (unknown [213.134.163.195])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0EB3C66EBA7;
-        Wed,  9 Nov 2022 13:15:44 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        with ESMTP id S229716AbiKINLX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 08:11:23 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A948BE04;
+        Wed,  9 Nov 2022 05:11:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667999482; x=1699535482;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7YRItrPY4VcR4I3VaJ8cZTMt3FIj4ySR8Tj7kXkJH8k=;
+  b=iR2rXPeCxyfxtk64fWA7My8WVhOSAw9ytW5YM1wq14NQXDIUmVr7isSh
+   Yrn/4Z7RPXGU0ltGDLLI3nRRe4d3x4PgF+DsGhTHe9OOk4ju09XpwqFWF
+   UpMLEWwvqSDjNBOCftqfuC9ANrpClcO01nazcgiul3SiyaHoRqSvrccbi
+   FprCPS+ru+yXB7eIHeD3vtdI7jJ+MMhz5Dq+Q96sCn0fGmts+ohXdSJWK
+   qZMng96lbhDKiA5Pg/AtI3KNv8rTVL3H3ek0pfvr8zhuOXCh1QE9Z0pWa
+   Mu0tyDae0P4goBlYxrnPKVPOzloP9GoXeaI3w+ak0gl6l2b8rO+OewUkf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="310967580"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="310967580"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 05:11:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669945564"
+X-IronPort-AV: E=Sophos;i="5.96,150,1665471600"; 
+   d="scan'208";a="669945564"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 09 Nov 2022 05:11:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oskrN-009kUe-2E;
+        Wed, 09 Nov 2022 15:11:17 +0200
+Date:   Wed, 9 Nov 2022 15:11:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bjorn Helgaas <helgaas@kernel.org>
-Subject: [PATCH v2 5/5] rtc: rtc-cmos: Disable ACPI RTC event on removal
-Date:   Wed, 09 Nov 2022 13:15:36 +0100
-Message-ID: <2224609.iZASKD2KPV@kreacher>
-In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
+Subject: Re: [PATCH v2 0/5] rtc: rtc-cmos: Assorted ACPI-related cleanups and
+ fixes
+Message-ID: <Y2um9emkYeYP0ZZM@smile.fi.intel.com>
 References: <5640233.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.195
-X-CLIENT-HOSTNAME: 213.134.163.195
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrfedvgdefjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduleehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
- rdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Nov 09, 2022 at 01:05:13PM +0100, Rafael J. Wysocki wrote:
+> Hi All,
+> 
+> This is a v2 of the series previously posted as
+> 
+> https://lore.kernel.org/linux-acpi/2276401.ElGaqSPkdT@kreacher/
+> 
+> The first three patches in the series have not changed since then (I have
+> considered moving the last patch, which is a fix, to the front, but that turns
+> out to be a bit cumbersome and not really worth the effort).
+> 
+> This series of patches does some assorted ACPI-related cleanups to the CMOS RTC
+> driver:
+> - redundant static variable is dropped,
+> - code duplication is reduced,
+> - code is relocated so as to drop a few unnecessary forward declarations of
+>   functions,
+> - functions are renamed to avoid confusion,
+> and fixes up an issue in the driver removal path.
 
-Make cmos_do_remove() drop the ACPI RTC fixed event handler so as to
-prevent it from operating on stale data in case the event triggers
-after driver removal.
+LGTM, FWIW,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fixes: 311ee9c151ad ("rtc: cmos: allow using ACPI for RTC alarm instead of HPET")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2:
-   * Do not clear the driver data pointer (the driver core does that) (Andy)
-   * Adjust the code pattern in acpi_rtc_event_cleanup() (Andy)
-   * Drop inline from the full definition of acpi_rtc_event_cleanup()
-
----
- drivers/rtc/rtc-cmos.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-Index: linux-pm/drivers/rtc/rtc-cmos.c
-===================================================================
---- linux-pm.orig/drivers/rtc/rtc-cmos.c
-+++ linux-pm/drivers/rtc/rtc-cmos.c
-@@ -798,6 +798,14 @@ static void acpi_rtc_event_setup(struct
- 	acpi_disable_event(ACPI_EVENT_RTC, 0);
- }
- 
-+static void acpi_rtc_event_cleanup(void)
-+{
-+	if (acpi_disabled)
-+		return;
-+
-+	acpi_remove_fixed_event_handler(ACPI_EVENT_RTC, rtc_handler);
-+}
-+
- static void rtc_wake_on(struct device *dev)
- {
- 	acpi_clear_event(ACPI_EVENT_RTC);
-@@ -884,6 +892,10 @@ static inline void acpi_rtc_event_setup(
- {
- }
- 
-+static inline void acpi_rtc_event_cleanup(void)
-+{
-+}
-+
- static inline void acpi_cmos_wake_setup(struct device *dev)
- {
- }
-@@ -1138,6 +1150,9 @@ static void cmos_do_remove(struct device
- 			hpet_unregister_irq_handler(cmos_interrupt);
- 	}
- 
-+	if (!dev_get_platdata(dev))
-+		acpi_rtc_event_cleanup();
-+
- 	cmos->rtc = NULL;
- 
- 	ports = cmos->iomem;
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
