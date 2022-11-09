@@ -2,97 +2,107 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC0C622F5C
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 16:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E616231D8
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 18:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiKIPuc (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Nov 2022 10:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S230156AbiKIRt5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Nov 2022 12:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbiKIPu3 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 10:50:29 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6411D65F;
-        Wed,  9 Nov 2022 07:50:25 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1osnLL-0003Gq-O2; Wed, 09 Nov 2022 16:50:23 +0100
-Message-ID: <9b1d1006-2b58-6eda-7e43-861074e9ccfa@leemhuis.info>
-Date:   Wed, 9 Nov 2022 16:50:23 +0100
+        with ESMTP id S231535AbiKIRtn (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 12:49:43 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FC0656A;
+        Wed,  9 Nov 2022 09:49:34 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 94A33240002;
+        Wed,  9 Nov 2022 17:49:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668016172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O7d9XV6IsnIwU7Gj07fwE3ldNBJ/qjfOW6mSWa+l8tI=;
+        b=CLipaJKhG3s+/op4L0NtH9sjz2WfwiRqjsKDlScPaX0KdHktmnWhIGym0rK890RfIxNJKK
+        MLUF4Xl0RxHIqQtYZ5p5uBz7pl4+/Vj1yucDRer129pJAruTVoQ3dc55nGhoi2O/ZZvtYy
+        0QOYI5PoA9Ri918CkMmOi0zIf5yl7udtNc3QCrOAvYlTUpdGDVxispUsZ3D6wxtIBLEb7j
+        6kPYFE+xx55WzPq7oiXWScyfMSDZL8I3v9OVlxct0YVUKmTcn9glcAm9rBc+aRgd54n4bH
+        Zpd32cL6D4eyMhWabFPmWEOczgX5rfFuJugIMBT8yZ3UUaJ9yx9IoaeKImPTQA==
+Date:   Wed, 9 Nov 2022 18:49:30 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Message-ID: <Y2voKqz1zRg32jaJ@mail.local>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+ <ed298a3e-25dd-af19-437c-f27c160788b3@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [BUG] rtc-efi: Error in efi.get_time() spams dmesg with error
- message #forregzbot
-Content-Language: en-US, de-DE
-To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <Y2o1hdZK9GGDVJsS@monolith.localdoman>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <Y2o1hdZK9GGDVJsS@monolith.localdoman>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668009025;3d7d429c;
-X-HE-SMSGID: 1osnLL-0003Gq-O2
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed298a3e-25dd-af19-437c-f27c160788b3@collabora.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
-
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-Hi, this is your Linux kernel regression tracker.
-
-On 08.11.22 11:55, Alexandru Elisei wrote:
-
-> Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
-> possible") exposed a firmware error on an Ampere Altra machine that was
-> causing the machine to panic. Then commit 23715a26c8d8 ("arm64: efi:
-> Recover from synchronous exceptions occurring in firmware") made the EFI
-> exception non-fatal, and disabled runtime services when the exception
-> happens. The interaction between those two patches are being discussed in a
-> separate thread [1], but that should be orthogonal to this.
+On 09/11/2022 10:40:39+0100, AngeloGioacchino Del Regno wrote:
+> Il 08/11/22 19:43, Alexandre Mergnat ha scritto:
+> > - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+> > - Add mediatek,mt6357-rtc compatible.
+> > - Add maintainer
+> > - Remove the .txt binding file
+> > 
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> > ---
+> >   Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+> >   .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
+> >   .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
+> >   3 files changed, 41 insertions(+), 32 deletions(-)
+> > 
 > 
-> Now efi.get_time() fails and each time an error message is printed to
-> dmesg, which happens several times a second and clutters dmesg
-> unnecessarily, to the point it becomes unusable.
+> Please split the txt->yaml conversion in one commit and the addition of the
+> new mt6357-rtc compatible in another commit.
+> 
+> Also, isn't the original maintainer of rtc-mt6397 supposed to be...
+> Tianping Fang <tianping.fang@mediatek.com> ?
+> 
+> You can add yourself to the list of maintainers, though, unless Tianping
+> explicitly says that he doesn't want to maintain this driver anymore?
+> 
 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
+This is not about the maintenance of the driver but of the device tree
+bindings for the IP
 
-#regzbot ^introduced 23715a26c8d8
-#regzbot title arm64: efi: efi.get_time() fails and clutters dmesg
-#regzbot ignore-activity
+> Regards,
+> Angelo
+> 
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
