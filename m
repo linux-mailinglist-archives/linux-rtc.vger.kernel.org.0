@@ -2,153 +2,120 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8428E622422
-	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 07:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FA4622436
+	for <lists+linux-rtc@lfdr.de>; Wed,  9 Nov 2022 07:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiKIGvo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 9 Nov 2022 01:51:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S229781AbiKIG4Q (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 9 Nov 2022 01:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiKIGvn (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 01:51:43 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCC818B03;
-        Tue,  8 Nov 2022 22:51:42 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N6bCW4ljXzDsJM;
-        Wed,  9 Nov 2022 14:48:39 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 9 Nov 2022 14:51:40 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 9 Nov
- 2022 14:51:40 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: [PATCH v1 2/2] rtc: fix race condition in rtc_set_time()
-Date:   Wed, 9 Nov 2022 14:41:47 +0800
-Message-ID: <20221109064147.1836133-3-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221109064147.1836133-1-liaoyu15@huawei.com>
-References: <20221109064147.1836133-1-liaoyu15@huawei.com>
+        with ESMTP id S229554AbiKIG4P (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 9 Nov 2022 01:56:15 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492E81DA4C;
+        Tue,  8 Nov 2022 22:56:14 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A96trZe095390;
+        Wed, 9 Nov 2022 00:55:53 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667976953;
+        bh=tDvioJ6iiI0tv7VoTdxAcDlnVrvRcK7hIBA96PsZ+cs=;
+        h=From:To:CC:Subject:Date;
+        b=KpoirP9im9w7oTlX3cAC7MJlhAzvwUAQ++DSqdMYEuci3UyU6dhVmPgnJ31AtEnH4
+         5C3ODzCEnYjDcHcoXT8I3QZ9bqyPeJp+1Z62VbK3QDgQBw8eyiFsCjlCScMXny41rS
+         oNhaAcei6Iiblg6OBkoaVGDpBI7sgIiIxrijYw/o=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A96trdb091499
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Nov 2022 00:55:53 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 9 Nov
+ 2022 00:55:52 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 9 Nov 2022 00:55:52 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A96tnsV024888;
+        Wed, 9 Nov 2022 00:55:51 -0600
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <brgl@bgdev.pl>, <lee@kernel.org>, <linus.walleij@linaro.org>,
+        <kristo@kernel.org>, <alexandre.belloni@bootlin.com>,
+        <a.zummo@towertech.it>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh@kernel.org>, <vigneshr@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Matt Ranostay <mranostay@ti.com>
+Subject: [PATCH v3 0/7] mfd: add tps6594x support for Jacinto platforms
+Date:   Tue, 8 Nov 2022 22:55:39 -0800
+Message-ID: <20221109065546.24912-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.38.GIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Commit 7e7c005b4b1f ("rtc: disable uie before setting time and enable
-after") was introduced to solve problem that rtc_timer_do_work will loop
-for a while, when setting the time in the future with the uie timer
-enabled. But reading uie timer state and setting rtc time are not in
-a critical section, a race condition may occur in rtc_set_time which
-has two issues:
+This patchset series adds support for the TPS6594x PMIC along with
+initial support for its RTC + GPIO interface, and poweroff sequence.
 
-1) In the above scenario, rtc_timer_do_work may still loop for a while.
-   For example consider the following sequence:
+Additionally, add usage of the PMIC for the various Jacintor platforms
+devicetree's.
 
-   CPU0					CPU1
-   ----					----
-   ioctl(RTC_SET_TIME)			ioctl(RTC_UIE_ON)
-   uie = rtc->uie_rtctimer.enabled;
-   [ assume uie is 0 ]
-   if (uie)
-   	rtc_update_irq_enable(rtc, 0);
+Changes from v1:
+* Corrected devicetree documentation issues found with dt-schema
+* Changed MFD references to PMIC reflecting the more valid use of driver
+* Cleaning up variable naming and ordering within functions
+* Adding gpio + regulator cells for upcoming driver support 
+* Switching from .probe to .probe_new API
+* Revising comments within drivers to be more concise
+* Adding device tree nodes for j721s2 and j721e platforms
 
-   					rtc_update_irq_enable(rtc, 1);
-   					[ uie is enabled ]
-   rtc->ops->set_time();
-   [ set rtc time in the future ]
+Changes from v2:
+* Adding gpio-tps6594x driver support
+* Enabling gpio cell in MFD driver
+* Adding device tree nodes for k3-*dts platforms
 
-2) A thread try to turn off uie, however rtc_settime called by another
-   thread turns on uie when they run in parallel. Consider the following
-   sequence:
+Keerthy (3):
+  MFD: TPS6594x: Add new PMIC device driver for TPS6594x chips
+  rtc: rtc-tps6594x: Add support for TPS6594X PMIC RTC
+  arm64: dts: ti: k3-j7200-common-proc-board: Add TPS6594x PMIC node
 
-   CPU0					CPU1
-   ----					----
-   ioctl(RTC_SET_TIME)			ioctl(RTC_UIE_OFF)
-   rtc->ops->set_time();
-   					rtc_update_irq_enable(rtc, 0);
-   rtc_update_irq_enable(rtc, 1);
+Matt Ranostay (4):
+  Documentation: tps6594x: Add DT bindings for the TPS6594x PMIC
+  gpio: tps6594x: add GPIO support for TPS6594x PMIC
+  arm64: dts: ti: k3-j721e-common-proc-board: Add TPS6594x PMIC node
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add TPS6594x PMIC node
 
-Fix it by guaranteeing that reading uie timer state, setting rtc time
-and enabling uie timer within a critical section.
+ .../devicetree/bindings/mfd/ti,tps6594x.yaml  |  67 +++++++
+ .../dts/ti/k3-j7200-common-proc-board.dts     |  17 ++
+ .../dts/ti/k3-j721e-common-proc-board.dts     |  17 ++
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  17 ++
+ drivers/gpio/Kconfig                          |   7 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-tps6594x.c                  | 142 ++++++++++++++
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/tps6594x.c                        | 120 ++++++++++++
+ drivers/rtc/Kconfig                           |  10 +
+ drivers/rtc/Makefile                          |   1 +
+ drivers/rtc/rtc-tps6594x.c                    | 181 ++++++++++++++++++
+ include/linux/mfd/tps6594x.h                  |  90 +++++++++
+ 14 files changed, 685 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594x.yaml
+ create mode 100644 drivers/gpio/gpio-tps6594x.c
+ create mode 100644 drivers/mfd/tps6594x.c
+ create mode 100644 drivers/rtc/rtc-tps6594x.c
+ create mode 100644 include/linux/mfd/tps6594x.h
 
-Fixes: 7e7c005b4b1f ("rtc: disable uie before setting time and enable after")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
----
- drivers/rtc/interface.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index bc55dd31bece..ef78e2977330 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -139,21 +139,23 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
- 
- 	rtc_subtract_offset(rtc, tm);
- 
-+	err = mutex_lock_interruptible(&rtc->ops_lock);
-+	if (err)
-+		return err;
-+
- #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
- 	uie = rtc->uie_rtctimer.enabled || rtc->uie_irq_active;
- #else
- 	uie = rtc->uie_rtctimer.enabled;
- #endif
- 	if (uie) {
--		err = rtc_update_irq_enable(rtc, 0);
--		if (err)
-+		err = __rtc_update_irq_enable(rtc, 0);
-+		if (err) {
-+			mutex_unlock(&rtc->ops_lock);
- 			return err;
-+		}
- 	}
- 
--	err = mutex_lock_interruptible(&rtc->ops_lock);
--	if (err)
--		return err;
--
- 	if (!rtc->ops)
- 		err = -ENODEV;
- 	else if (rtc->ops->set_time)
-@@ -162,15 +164,17 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
- 		err = -EINVAL;
- 
- 	pm_stay_awake(rtc->dev.parent);
--	mutex_unlock(&rtc->ops_lock);
- 	/* A timer might have just expired */
- 	schedule_work(&rtc->irqwork);
- 
- 	if (uie) {
--		err = rtc_update_irq_enable(rtc, 1);
--		if (err)
-+		err = __rtc_update_irq_enable(rtc, 1);
-+		if (err) {
-+			mutex_unlock(&rtc->ops_lock);
- 			return err;
-+		}
- 	}
-+	mutex_unlock(&rtc->ops_lock);
- 
- 	trace_rtc_set_time(rtc_tm_to_time64(tm), err);
- 	return err;
 -- 
-2.25.1
+2.38.GIT
 
