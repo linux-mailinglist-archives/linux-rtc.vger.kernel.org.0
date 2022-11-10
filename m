@@ -2,107 +2,165 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545E26241D3
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 13:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 949F16242D6
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 14:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKJMAf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Nov 2022 07:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S230183AbiKJNF5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Nov 2022 08:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiKJMAf (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 07:00:35 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDAF21E0F;
-        Thu, 10 Nov 2022 04:00:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668081633; x=1699617633;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MXjGcSIK04ScLohpdYFk9DXdIqTJwmlzr90IomobVJ4=;
-  b=mK84qeq0hs/hmQbjjt7IWEwlOtGMvlpr4F/xQ7hdhwDn0Jdb7BUCasVG
-   ZkQV/eB1DS5acBoLjM8bjC9FCAgGaQmS6VzOM3S8GrpKwe8I8e8gvAX1Z
-   1plu74LaomWdSmnR18ck5L4roPEWLsbeD5W7M2vSyGDaVHoD6QkE5J7ek
-   imwrq8hCWM/WRp6qeloSf3mKqIpKnhkoeFBn7Eq9YQP12AT95eX6frQqO
-   FfDKrayLmwWO3K4yQT3r/0b8Cu32GKg9Fbk0NsfidRcDCUv92c89tw9Ob
-   BZRLbylUsE2dPCtAg6AtIOQlbBrRI/dqW1Un4WA3RVAYz4f0FKNzyeaCX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="373410977"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="373410977"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="588152059"
-X-IronPort-AV: E=Sophos;i="5.96,153,1665471600"; 
-   d="scan'208";a="588152059"
-Received: from jvpendej-mobl2.gar.corp.intel.com ([10.214.150.188])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 04:00:28 -0800
-Message-ID: <1d8ad923707b1c6347d830088a410c31b794968c.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] rtc: rtc-cmos: Assorted ACPI-related cleanups
- and fixes
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Date:   Thu, 10 Nov 2022 20:00:25 +0800
-In-Reply-To: <5640233.DvuYhMxLoT@kreacher>
-References: <5640233.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S230173AbiKJNFz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 08:05:55 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1103373755
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id h14so1479458pjv.4
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
+        b=GVZ09h+ngHWOecbTC/uzghXW93HVi79Hc3aHUMBuHut0K+MRP4qjrmbxOsy9wAvyhh
+         CzAf4wAUsz2LX8ScnTSnBYBlU0zD4SfZXHjTGLx4odMNe2HTZmWoc8/O0MjERSTJDuKQ
+         9UeL9YNFV2iAuj4M769TxWHJzx0wEKM1UD/fL8Quarzgi8/jAHx03TmKPyEcNniVs1JP
+         E1bQ9YyT5yBnS4K6hTH0QDyjNMb9vjtJqKa6/m2IeBhMmf0jPp66hTlfQCyxBUHnorSo
+         4QxzB8BVVnzEGtFh63S81NhnvCx7MGrBaQEPEUdQo8KV1MCY/puvxsLONjSQ8GgFephe
+         xQuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
+        b=QJAa4jqJi/4hgh5UEOlgiMx13zmJYrhehWU8NLhrPXEvQnk6f2B9Engp5z1opol4rT
+         /34fM27S36tx8xHGu2MEL4S+4Gi8LwGq4eqONn772UN75Hvzjkv4AbI23RcKbd3DSU9v
+         qAzo4MDAILvAYVRDjpQ7vGqQJYONdu1N310USXHwM+1RO/AHPQ9CL+I2lG8x5SQpvdXu
+         0Fikju8+KT5voSnIJx6INMSDf6YG4CKxbduN8gnpzj9oIJbeOHnCBtToZvOp4bbEdCBl
+         U8SmCKffcC1d73aGjYenmGIsUN6tPWFBd8pKOUgLeu654A3f0s4xQ6H6AR45l4ICMvrp
+         UVuA==
+X-Gm-Message-State: ACrzQf1Rc0O2KkUE4RVKuxUl15HmVi0JZ5whfRRUbhmHRTrsf48gL4fj
+        wTtIcLurJbMwkQwhQD1rvaAB9iXnsCL3WMK/vqRsZg==
+X-Google-Smtp-Source: AMsMyM4ntafpxKu1kZoVYdCyuwK4y2qgGm0PDcBHChl8r8c0pj7m0JmQ6SHmodBY/Un25AY0R73awNrQX1GtCyrtwGQ=
+X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
+ a12-20020a170903100c00b0018663a13b5dmr65965693plb.148.1668085553525; Thu, 10
+ Nov 2022 05:05:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+ <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com> <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
+In-Reply-To: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 10 Nov 2022 14:05:16 +0100
+Message-ID: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 2022-11-09 at 13:05 +0100, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> This is a v2 of the series previously posted as
-> 
-> https://lore.kernel.org/linux-acpi/2276401.ElGaqSPkdT@kreacher/
-> 
-> The first three patches in the series have not changed since then (I
-> have
-> considered moving the last patch, which is a fix, to the front, but
-> that turns
-> out to be a bit cumbersome and not really worth the effort).
-> 
-> This series of patches does some assorted ACPI-related cleanups to
-> the CMOS RTC
-> driver:
-> - redundant static variable is dropped,
-> - code duplication is reduced,
-> - code is relocated so as to drop a few unnecessary forward
-> declarations of
->   functions,
-> - functions are renamed to avoid confusion,
-> and fixes up an issue in the driver removal path.
-> 
-> 
-> 
+On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
+> > >
+> > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> > > hook, but doesn't provide a determine_rate implementation.
+> > >
+> > > This is a bit odd, since set_parent() is there to, as its name implies,
+> > > change the parent of a clock. However, the most likely candidate to
+> > > trigger that parent change is a call to clk_set_rate(), with
+> > > determine_rate() figuring out which parent is the best suited for a
+> > > given rate.
+> > >
+> > > The other trigger would be a call to clk_set_parent(), but it's far less
+> > > used, and it doesn't look like there's any obvious user for that clock.
+> >
+> > If I recall correctly, that is the use case we did target for these
+> > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
+>
+> Hm I am trying to get that driver to work ... from time to time.
+> It's just that ALSA SoC DT has changed to much that it turns out
+> into a complete rewrite :/
+>
+> So in sound/soc/ux500/mop500_ab8500.c
+> I see this:
+>
+>         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
+>         if (status)
+> (...)
+>
+> and there is elaborate code to switch between "SYSCLK" and
+> "ULPCLK" (ulta-low power clock). Just like you say... however
+> a clock named SYSCLK or ULPCLK does not appear in the
+> code in drivers/clk/ux500 or any DT bindings so... it seems to
+> be non-working for the time being.
 
-Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+It's definitely not working, but the corresponding clocks ("ulpclk",
+"intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
 
-And I have tested the patch series on a platform with both
-use_acpi_alarm parameter set and cleared, the ACPI RTC fixed event
-works as expected, for both runtime and suspend wakeups.
+What seems to be missing is a DT conversion for these clocks, so they
+can be consumed properly. Right?
 
-So
-Tested-by: Zhang Rui <rui.zhang@intel.com>
-
-thanks,
-rui
-
-
+Kind regards
+Uffe
