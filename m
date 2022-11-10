@@ -2,165 +2,167 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949F16242D6
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 14:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1591D6243F8
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 15:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiKJNF5 (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Nov 2022 08:05:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S229470AbiKJOOn (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Nov 2022 09:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbiKJNFz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 08:05:55 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1103373755
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id h14so1479458pjv.4
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 05:05:54 -0800 (PST)
+        with ESMTP id S231365AbiKJOOX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 09:14:23 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C55378303
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 06:14:05 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so3481880lfi.7
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 06:14:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=GVZ09h+ngHWOecbTC/uzghXW93HVi79Hc3aHUMBuHut0K+MRP4qjrmbxOsy9wAvyhh
-         CzAf4wAUsz2LX8ScnTSnBYBlU0zD4SfZXHjTGLx4odMNe2HTZmWoc8/O0MjERSTJDuKQ
-         9UeL9YNFV2iAuj4M769TxWHJzx0wEKM1UD/fL8Quarzgi8/jAHx03TmKPyEcNniVs1JP
-         E1bQ9YyT5yBnS4K6hTH0QDyjNMb9vjtJqKa6/m2IeBhMmf0jPp66hTlfQCyxBUHnorSo
-         4QxzB8BVVnzEGtFh63S81NhnvCx7MGrBaQEPEUdQo8KV1MCY/puvxsLONjSQ8GgFephe
-         xQuA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3Bnc98wbgCB157XtXlJ5NroBNxycOACeQVxm/1SPVs4=;
+        b=Rc8RZYG1UdjHBqHXSpcw7c7Fl3OJIs+mgExR8ZEe+5iDezQTN7XCfKOzGLV02/GFzS
+         f/trH0orM0q51kSUF73Jh+5teXTHMGgop3zKei6pVMxbmjbWjTYs9lq2vQs2RnjphnQ3
+         LgSP8Bc4k/E3y8YRK+/mnx8OBi+H+tM54YOVRgKfdccfzllR8qzxjpbYGQH0mCZgOhUe
+         UhMDSyIlPoNcKmkFND1CIVA6MF+tt9bS735B5d2iMMgsDtOchwiUlt5TpwtcsjOobjzs
+         HDfDXm+QzsaftiReSvZqrCYSwatcVOQ01Beaep3NFZlgzJJJpUKFonaZqqpxfM3s9B+V
+         yfig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lrV3scjxXBUgyRehk9/on/q8TxNDq8MdTdotV2WeMBQ=;
-        b=QJAa4jqJi/4hgh5UEOlgiMx13zmJYrhehWU8NLhrPXEvQnk6f2B9Engp5z1opol4rT
-         /34fM27S36tx8xHGu2MEL4S+4Gi8LwGq4eqONn772UN75Hvzjkv4AbI23RcKbd3DSU9v
-         qAzo4MDAILvAYVRDjpQ7vGqQJYONdu1N310USXHwM+1RO/AHPQ9CL+I2lG8x5SQpvdXu
-         0Fikju8+KT5voSnIJx6INMSDf6YG4CKxbduN8gnpzj9oIJbeOHnCBtToZvOp4bbEdCBl
-         U8SmCKffcC1d73aGjYenmGIsUN6tPWFBd8pKOUgLeu654A3f0s4xQ6H6AR45l4ICMvrp
-         UVuA==
-X-Gm-Message-State: ACrzQf1Rc0O2KkUE4RVKuxUl15HmVi0JZ5whfRRUbhmHRTrsf48gL4fj
-        wTtIcLurJbMwkQwhQD1rvaAB9iXnsCL3WMK/vqRsZg==
-X-Google-Smtp-Source: AMsMyM4ntafpxKu1kZoVYdCyuwK4y2qgGm0PDcBHChl8r8c0pj7m0JmQ6SHmodBY/Un25AY0R73awNrQX1GtCyrtwGQ=
-X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
- a12-20020a170903100c00b0018663a13b5dmr65965693plb.148.1668085553525; Thu, 10
- Nov 2022 05:05:53 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Bnc98wbgCB157XtXlJ5NroBNxycOACeQVxm/1SPVs4=;
+        b=pykgHyPtUzvqN+w2ZM0Kbyji9Ub18+ObLbC5QFvp6333gQpMZIiznB1gUawcN1SyLg
+         lW0XN6U7Z/O4L5vRJ6jWlrlK5aOAk8w2qAiSA+Ux3/peMQOg2OJKM6bfF6wl61YtFkkI
+         ljLrUSJPbePWFIsgGNZ0U6Rg9hlCQBTn3fHxy5ekXWK/QJ3o1+YgoqugEGTec7uo7+nq
+         z5Kr6NLMd1egKs41J2NO23T0eTFzrr2pH8y9TzrzOIVXiTY9uFoZSIIGe12xkJUFv+Ey
+         871A0t4bzOevMMw8rixFn1wTsuXMi9jHLQO1tC2sQWuHy+MDeNWB6tpw5iV9cPXLYT/p
+         Nh9A==
+X-Gm-Message-State: ACrzQf1gtELqf4mxw4n2u92xkf/hn0weFsz0i4MhWewpbQe/DVQ/eSlA
+        j5zsgYHuvtv2PDvW2UPfOPQKhPzpBFvvWA==
+X-Google-Smtp-Source: AMsMyM4Zc2mDjlY+RRgIUEdLQhsv+UxcTsSgJuQjuIQHS1FrmkKKXs/oNCb5HFgDi7jqXQw2KQ4odg==
+X-Received: by 2002:a05:6512:32b7:b0:4aa:8d5a:2f53 with SMTP id q23-20020a05651232b700b004aa8d5a2f53mr21028085lfe.362.1668089643827;
+        Thu, 10 Nov 2022 06:14:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id r26-20020ac25c1a000000b00499aefcf68esm2746842lfp.292.2022.11.10.06.14.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 06:14:02 -0800 (PST)
+Message-ID: <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
+Date:   Thu, 10 Nov 2022 15:14:01 +0100
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
- <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com> <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-In-Reply-To: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Nov 2022 14:05:16 +0100
-Message-ID: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Content-Language: en-US
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
         Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+ <20221109222916.GA2985917-robh@kernel.org> <Y2wwUOJ0KZdt1tZ6@mail.local>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y2wwUOJ0KZdt1tZ6@mail.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > > hook, but doesn't provide a determine_rate implementation.
-> > >
-> > > This is a bit odd, since set_parent() is there to, as its name implies,
-> > > change the parent of a clock. However, the most likely candidate to
-> > > trigger that parent change is a call to clk_set_rate(), with
-> > > determine_rate() figuring out which parent is the best suited for a
-> > > given rate.
-> > >
-> > > The other trigger would be a call to clk_set_parent(), but it's far less
-> > > used, and it doesn't look like there's any obvious user for that clock.
-> >
-> > If I recall correctly, that is the use case we did target for these
-> > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
->
-> Hm I am trying to get that driver to work ... from time to time.
-> It's just that ALSA SoC DT has changed to much that it turns out
-> into a complete rewrite :/
->
-> So in sound/soc/ux500/mop500_ab8500.c
-> I see this:
->
->         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
->         if (status)
-> (...)
->
-> and there is elaborate code to switch between "SYSCLK" and
-> "ULPCLK" (ulta-low power clock). Just like you say... however
-> a clock named SYSCLK or ULPCLK does not appear in the
-> code in drivers/clk/ux500 or any DT bindings so... it seems to
-> be non-working for the time being.
+On 09/11/2022 23:57, Alexandre Belloni wrote:
+> On 09/11/2022 16:29:16-0600, Rob Herring wrote:
+>> On Tue, Nov 08, 2022 at 07:43:37PM +0100, Alexandre Mergnat wrote:
+>>> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+>>> - Add mediatek,mt6357-rtc compatible.
+>>> - Add maintainer
+>>> - Remove the .txt binding file
+>>>
+>>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+>>>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
+>>>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
+>>>  3 files changed, 41 insertions(+), 32 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+>>> index 0088442efca1..79aaf21af8e9 100644
+>>> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+>>> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+>>> @@ -33,7 +33,7 @@ Optional subnodes:
+>>>  		- compatible: "mediatek,mt6331-rtc"
+>>>  		- compatible: "mediatek,mt6358-rtc"
+>>>  		- compatible: "mediatek,mt6397-rtc"
+>>> -	For details, see ../rtc/rtc-mt6397.txt
+>>> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
+>>>  - regulators
+>>>  	Required properties:
+>>>  		- compatible: "mediatek,mt6323-regulator"
+>>> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+>>> new file mode 100644
+>>> index 000000000000..bb48c0150f95
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+>>> @@ -0,0 +1,40 @@
+>>> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MediaTek MT6397/MT6366/MT6358/MT6357/MT6323 RTC
+>>> +
+>>> +maintainers:
+>>> +  - Alexandre Mergnat <amergnat@baylibre.com>
+>>> +
+>>> +description: |
+>>> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
+>>> +  as a type of multi-function device (MFD). The RTC can be configured and set up
+>>> +  with PMIC wrapper bus which is a common resource shared with the other
+>>> +  functions found on the same PMIC.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - mediatek,mt6323-rtc
+>>> +      - mediatek,mt6357-rtc
+>>> +      - mediatek,mt6358-rtc
+>>> +      - mediatek,mt6366-rtc
+>>> +      - mediatek,mt6397-rtc
+>>
+>> As this is only a compatible string, just fold this into the MFD schema 
+>> doc.
+> 
+> Actually, it probably also supports the start-year property
 
-It's definitely not working, but the corresponding clocks ("ulpclk",
-"intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
+What about rest of rtc.yaml schema?
 
-What seems to be missing is a DT conversion for these clocks, so they
-can be consumed properly. Right?
+Best regards,
+Krzysztof
 
-Kind regards
-Uffe
