@@ -2,156 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFE462419A
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 12:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F496241AC
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 12:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbiKJLkF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Nov 2022 06:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S229560AbiKJLnR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Nov 2022 06:43:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiKJLkB (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 06:40:01 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5AD71F08
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id a5so2617152edb.11
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 03:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
-        b=cLoqN/9Hw4WN89uoDoxpq9Ce/Ps341RBpybWaA/Ttn7dX0XjEZSpQMeE/cLupilSy+
-         h9M/AwRJwi+wD3lcUZtgCbl5J3Y1/4+a+UG987xrzyBKVQSsdTGx1Fm9p56BVwQCgeqw
-         ImbNP+V0cuLG09qZBqDEVWEBH4JmnDYapBzy20rI0QOEnuyEvU41wtqwWtHQ/Ku+SIq6
-         z/iAwWeg98cPs684u3jM1bZkrHRFlxBeM553WE2HZydhyBqAswoiUSyHfbMc8MScHPVp
-         jTxj/0bSYX2PEajd6PNI/IV0ZBru+l7g17Wn1GCvWMrBI6s8qLNSd3U7dwQx3hiin+sp
-         LiYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ck1BFgYQUoxfjthSY0Z/ICMvhRDs51HkE0D/E51e4wU=;
-        b=HC6imZR1w5/mLBEIk7Y2kjxV1lmRekxL2+13j5ADQmP0+3eW92QXXf8sYgu++cbdn2
-         2ZYZnM7NlVUP5PLg7c5JrOl6SKwDc8SwLb18W8SluaAu0xSp5mpxQhd0YjaG/TihYMlY
-         Tq7XeNu4C/KzlZSdtVQUE6mt9OOThcOEEJZeZZNRCEb1XdS41yQZtG+8URQSGmyuMbSq
-         4PBcm9cW67wIvjqRUsMkAbQjVfRz13OuRXM8EJsUOvYjp/ab1K6jrIQ/e+7rWQ0CVGrQ
-         +ppyylrporOG1G7oCob6fT0AkBdnMxhPkReZPNMo0kvrgkjMxByQxVs0CpjPijGZxLWk
-         IzYQ==
-X-Gm-Message-State: ACrzQf0ESJCeNdSmNwNLOYa8kJlOwMhXEzhdet/U+y3Q2aCwp5JxdHFH
-        6WcqtBEgfrPSeFy4aBm0YybGey9wkv1k00wvdUFVVQ==
-X-Google-Smtp-Source: AMsMyM6KPfAGNVILTJIJybxZbWNcNW1j294XPOEkghGZsATADMyuAh5FXMGRYiA9Y0UOLTHKSZCe9zdW3Mb4U369XWo=
-X-Received: by 2002:a05:6402:4002:b0:463:bc31:2604 with SMTP id
- d2-20020a056402400200b00463bc312604mr2100488eda.32.1668080397979; Thu, 10 Nov
- 2022 03:39:57 -0800 (PST)
+        with ESMTP id S229530AbiKJLnQ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 06:43:16 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C4D70194
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 03:43:14 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7Khf2S4KzmVrh;
+        Thu, 10 Nov 2022 19:42:58 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 19:43:12 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 19:43:12 +0800
+Subject: Re: [PATCH] rtc: class: Fix potential memleak in
+ devm_rtc_allocate_device()
+To:     Shang XiaoJing <shangxiaojing@huawei.com>, <a.zummo@towertech.it>,
+        <alexandre.belloni@bootlin.com>, <linux-rtc@vger.kernel.org>,
+        <yangyingliang@huawei.com>
+References: <20221110090810.11225-1-shangxiaojing@huawei.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <087c6cc2-cb7d-8e00-74d7-071313e997ab@huawei.com>
+Date:   Thu, 10 Nov 2022 19:43:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech> <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
-In-Reply-To: <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 12:39:46 +0100
-Message-ID: <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221110090810.11225-1-shangxiaojing@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > hook, but doesn't provide a determine_rate implementation.
-> >
-> > This is a bit odd, since set_parent() is there to, as its name implies,
-> > change the parent of a clock. However, the most likely candidate to
-> > trigger that parent change is a call to clk_set_rate(), with
-> > determine_rate() figuring out which parent is the best suited for a
-> > given rate.
-> >
-> > The other trigger would be a call to clk_set_parent(), but it's far less
-> > used, and it doesn't look like there's any obvious user for that clock.
+
+On 2022/11/10 17:08, Shang XiaoJing wrote:
+> devm_rtc_allocate_device() will alloc a rtc_device first, and then run
+> dev_set_name(). If dev_set_name() failed, the rtc_device will memleak.
+> Move devm_add_action_or_reset() in front of dev_set_name() to prevent
+> memleak.
 >
-> If I recall correctly, that is the use case we did target for these
-> types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
+> unreferenced object 0xffff888110a53000 (size 2048):
+>    comm "python3", pid 470, jiffies 4296078308 (age 58.882s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 00 00 00 00 08 30 a5 10 81 88 ff ff  .........0......
+>      08 30 a5 10 81 88 ff ff 00 00 00 00 00 00 00 00  .0..............
+>    backtrace:
+>      [<000000004aac0364>] kmalloc_trace+0x21/0x110
+>      [<000000000ff02202>] devm_rtc_allocate_device+0xd4/0x400
+>      [<000000001bdf5639>] devm_rtc_device_register+0x1a/0x80
+>      [<00000000351bf81c>] rx4581_probe+0xdd/0x110 [rtc_rx4581]
+>      [<00000000f0eba0ae>] spi_probe+0xde/0x130
+>      [<00000000bff89ee8>] really_probe+0x175/0x3f0
+>      [<00000000128e8d84>] __driver_probe_device+0xe6/0x170
+>      [<00000000ee5bf913>] device_driver_attach+0x32/0x80
+>      [<00000000f3f28f92>] bind_store+0x10b/0x1a0
+>      [<000000009ff812d8>] drv_attr_store+0x49/0x70
+>      [<000000008139c323>] sysfs_kf_write+0x8d/0xb0
+>      [<00000000b6146e01>] kernfs_fop_write_iter+0x214/0x2d0
+>      [<00000000ecbe3895>] vfs_write+0x61a/0x7d0
+>      [<00000000aa2196ea>] ksys_write+0xc8/0x190
+>      [<0000000046a600f5>] do_syscall_64+0x37/0x90
+>      [<00000000541a336f>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Fixes: 24d23181e43d ("rtc: class: check return value when calling dev_set_name()")
+> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+> ---
+>   drivers/rtc/class.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/rtc/class.c b/drivers/rtc/class.c
+> index e48223c00c67..e5b7b48cffac 100644
+> --- a/drivers/rtc/class.c
+> +++ b/drivers/rtc/class.c
+> @@ -374,11 +374,11 @@ struct rtc_device *devm_rtc_allocate_device(struct device *dev)
+>   
+>   	rtc->id = id;
+>   	rtc->dev.parent = dev;
+> -	err = dev_set_name(&rtc->dev, "rtc%d", id);
+> +	err = devm_add_action_or_reset(dev, devm_rtc_release_device, rtc);
+>   	if (err)
+>   		return ERR_PTR(err);
+>   
+> -	err = devm_add_action_or_reset(dev, devm_rtc_release_device, rtc);
+> +	err = dev_set_name(&rtc->dev, "rtc%d", id);
+>   	if (err)
+>   		return ERR_PTR(err);
 
-Hm I am trying to get that driver to work ... from time to time.
-It's just that ALSA SoC DT has changed to much that it turns out
-into a complete rewrite :/
-
-So in sound/soc/ux500/mop500_ab8500.c
-I see this:
-
-        status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
-        if (status)
-(...)
-
-and there is elaborate code to switch between "SYSCLK" and
-"ULPCLK" (ulta-low power clock). Just like you say... however
-a clock named SYSCLK or ULPCLK does not appear in the
-code in drivers/clk/ux500 or any DT bindings so... it seems to
-be non-working for the time being.
-
-Yours,
-Linus Walleij
+Looks good to me.
+Reviewed-by: Yang Yingliang <yangyingliang@huawei.com>
+>   
