@@ -2,64 +2,112 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01880623F98
-	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 11:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3D062416A
+	for <lists+linux-rtc@lfdr.de>; Thu, 10 Nov 2022 12:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiKJKPj (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 10 Nov 2022 05:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S229553AbiKJL3V (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 10 Nov 2022 06:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiKJKPi (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 05:15:38 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F7D65E74
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 02:15:36 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id ud5so3758065ejc.4
-        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 02:15:36 -0800 (PST)
+        with ESMTP id S229785AbiKJL3U (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 10 Nov 2022 06:29:20 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB8E178A7
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 03:29:19 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id v3so1536549pgh.4
+        for <linux-rtc@vger.kernel.org>; Thu, 10 Nov 2022 03:29:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E8Cf67Csj4VD7OjeDad04YWXxh2H8/Tism91fe0AaI4=;
-        b=fOBQm/pV8/DGgVvHGlPfc1mJ29brRXVHnGHjUjMWlUg2UzidttxHcpiMJ2HE6NjkzA
-         Jrdfoie3b2P8WvxJdwOaXX9+SSbmrVjx9KbOBBHrgtmsO4Xxy4oV7yfgzpF4+H9ez4Ch
-         /ZxTqmghUoeMwGNdNuCkRgQ8sY7o8FiURl635xYRjy7NSY1d94FTxU5+67rlS7KvRcr6
-         Khy8R35UWeqn3W+rJOvfmIsRxnj5UO9YF+NpibEaOukUgfG51JSphray/tPYJBpZ61G9
-         T6E2IXXuYZS3BfL7Gtu3xh5kCxrdojb+VHgj9Xej52p4dpEyadkIvlcmKl0PxjU+UPMD
-         56rg==
+        bh=dZWp2kHBH7BxTK24vYMYaWuh8ES61v4HZQKkOxWH97c=;
+        b=nm5AzPUP/c5SxnOWRF0E8OOs8vIUdOgDjB6wYkEQYpfYDRuGKSxS+CBIeuds7UEokj
+         CAc3O4M3Lzp0CmH9uvJ+chSuCz2e7UtgkMxDMXFmH0EFBdC81NQcL56cIa/e5fTzyvWS
+         kSegvkcOyKB6FEauX3mSzkzzDIAUq5r5SATzN3WmVSBqg1jyg/gg0kYs06KdBSG3zxV/
+         fvTxGa1dt18Ruz+5BEtQasGBTHQrEp0wpReAHWWGdK+pWMVHzmdtTwn3mkonTWk309ZV
+         x5RN6EKVnoWzvPKijsEeJPqRTGi+5rLHTCBxYP1D5lgzLbOuhL8arV0ezTVKJRNayIhr
+         L9Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E8Cf67Csj4VD7OjeDad04YWXxh2H8/Tism91fe0AaI4=;
-        b=n7ojcUVnnPaARrC322vP2KuQYmZPyKxcQRzfhd2QFpSjj5D0nIyAkKX/MW474gNzAK
-         5jeP3YQe1FclE2b5oaaHJ+odRyreM3D/T3TP2agGC4Eq2KfjTsAQuay7EZdXpngs+bT9
-         ydVsIanIamsb6/limoh3TCNnjnDZJrz3NGPLYcdLis98xO1VJe0MZe1Kn/jws2t6iLCI
-         JUcBBruBnyI7ojjF6TNQn1Q5wQVUXUh786FJe1IUGS9MrVIGnlwFUDSjW7iL5S5Z9h1P
-         lxqyQamc2JP1Bf4H1S8UK1OnnP8TiOSq3EuL3KN6dkIZXrU7H5hIuUuM4wDReLOmhH59
-         giSg==
-X-Gm-Message-State: ACrzQf1/7i5EgW0Q2oUPtVASHrAoLGy7cN3Dz/tfhACsNt2AgS97ZfRO
-        rtU9a4HrkGDyCDPY7Jp3ef97CIS2USfESCKLmywi+g==
-X-Google-Smtp-Source: AMsMyM4D0d+Hokf7UrAn5sIPHLSXdHQLYX9QQgnGs4iKs4ZA+COquSO+v27PLn+KIJj7g+TgvuEl9Xa1sTphUe/n8Q8=
-X-Received: by 2002:a17:906:3394:b0:78e:11ea:8528 with SMTP id
- v20-20020a170906339400b0078e11ea8528mr2559173eja.190.1668075334783; Thu, 10
- Nov 2022 02:15:34 -0800 (PST)
+        bh=dZWp2kHBH7BxTK24vYMYaWuh8ES61v4HZQKkOxWH97c=;
+        b=539AIKkEjM8HNRbgvqeeFz88f98pYVDV1RjveW346rnNVJeg/A12V++n1nwZNpa9ds
+         QhQYVw/upPFKA2ZQXeCs9hSZeS1EOvMLorqrCKV0iMkLKoYhZ93Khwa22xyYHUW+x+x1
+         c/hNQkGRyJqnqyUDL2ZwVqBEAS/Yp3N5zE9pcrWpBi9EvhHGdk/94+necRGAYCiXA8M/
+         REoxl/mKrEaCERIi/XX7WsQfE0u7Oj0ph65/hfu8jGSOKDK/I0iAyT1xxTlI1wPw/o4W
+         6KxXtCCJfVhEf4Fc1lfNuYAlDSTHib8yWkmerFxJ41TjIKnni/D6KBnzWZ345/vN/AOd
+         ie1A==
+X-Gm-Message-State: ACrzQf1UiTx+kywDNYZzZbXU9E0xl2krZG1YClpohwzdfDUnbGE2SCeo
+        exm6uOYrCP9fUsrP2JRDtzcCAJIfgSGQru8xdKNClQ==
+X-Google-Smtp-Source: AMsMyM4cuzpOD/TX9hqFyYyupcC8P3vPeFAFlSRm0wZ2MgnRUbZnV+cRg9A/mVHt7wBrkUdmfz48YahbcXukazUMnzc=
+X-Received: by 2002:a63:4204:0:b0:442:ee11:4894 with SMTP id
+ p4-20020a634204000000b00442ee114894mr2372631pga.595.1668079758533; Thu, 10
+ Nov 2022 03:29:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109065546.24912-1-mranostay@ti.com> <20221109065546.24912-5-mranostay@ti.com>
- <CACRpkdaTV6unVsfNj+M39jLn5FLTnhryjuzF4EB6Ytds9R1nEQ@mail.gmail.com> <Y2zOhf8lqVLyLn+A@ubuntu>
-In-Reply-To: <Y2zOhf8lqVLyLn+A@ubuntu>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 10 Nov 2022 11:15:22 +0100
-Message-ID: <CACRpkdZOR4Hcyv=bO7=rJERJK7JbCoS0_dvWj0K=YZC6Nsozdw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] gpio: tps6594x: add GPIO support for TPS6594x PMIC
-To:     Matt Ranostay <mranostay@ti.com>, Michael Walle <michael@walle.cc>
-Cc:     brgl@bgdev.pl, lee@kernel.org, kristo@kernel.org,
-        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        vigneshr@ti.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Keerthy <j-keerthy@ti.com>
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech> <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 10 Nov 2022 12:28:41 +0100
+Message-ID: <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
+Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Lechner <david@lechnology.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,43 +119,89 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:12 AM Matt Ranostay <mranostay@ti.com> wrote:
-> On Wed, Nov 09, 2022 at 10:59:08AM +0100, Linus Walleij wrote:
-> > On Wed, Nov 9, 2022 at 7:56 AM Matt Ranostay <mranostay@ti.com> wrote:
-> >
-> > > Add support for TPS6594X PMICs GPIO interface that has 11 that can be
-> > > configured as input or outputs.
-> > >
-> > > Tested-by: Keerthy <j-keerthy@ti.com>
-> > > Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> >
-> > (...)
-> > > +config GPIO_TPS6594X
-> > > +       tristate "TI TPS6594X GPIO driver"
-> > > +       depends on MFD_TPS6594X
-> > > +       help
-> > > +         Select this option to enable GPIO driver for the TPS6954X
-> > > +         PMIC chip family. There are 11 GPIOs that can be configured.
-> >
-> > select GPIO_REGMAP
-> >
-> > This driver is an archetypical example of a driver that can make great
-> > use of GPIO_REGMAP helpers, so rewrite it to use them.
-> > Look in drivers/gpio/gpio-sl28cpld.c for an example.
+On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
 >
-> Linus,
+> The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
 >
-> Those helpers look great for this usecase on the surface but however I think there could be some issues.
-> For GPIO direction it isn't configured by a bitmap on a register(s) but by a bit on a range of
-> registers (with a register for each GPIOx).
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
 >
-> For set/get values the gpio helper would work though.
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
 
-Isn't is possible to just use parts of the GPIO_REGMAP
-helpers? I thought it's designed like such.
+If I recall correctly, that is the use case we did target for these
+types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
 
-Michael Walle will know what to do with your usecase, and
-whether to use it or not, let's page him!
+Maybe there are some additional pieces missing from the old down
+stream kernel, I don't have full picture, sorry.
 
-Yours,
-Linus Walleij
+Anyway, if I am not wrong, this was about supporting a low-power audio
+use case, which requires us to switch the parent clock (to avoid
+wasting energy).
+
+>
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
+
+Yes, this was the reason.
+
+As a matter of fact, I don't even recall that re-parenting was
+possible through clk_set_rate() when this clock driver was introduced.
+But, I might be wrong, it's quite a while ago.
+
+>
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+>
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
+Seems reasonable to me!
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/clk/ux500/clk-sysctrl.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/ux500/clk-sysctrl.c b/drivers/clk/ux500/clk-sysctrl.c
+> index 702f2f8b43fa..d36336665b6d 100644
+> --- a/drivers/clk/ux500/clk-sysctrl.c
+> +++ b/drivers/clk/ux500/clk-sysctrl.c
+> @@ -110,6 +110,7 @@ static const struct clk_ops clk_sysctrl_gate_fixed_rate_ops = {
+>  };
+>
+>  static const struct clk_ops clk_sysctrl_set_parent_ops = {
+> +       .determine_rate = __clk_mux_determine_rate,
+>         .set_parent = clk_sysctrl_set_parent,
+>         .get_parent = clk_sysctrl_get_parent,
+>  };
+> @@ -220,6 +221,7 @@ struct clk *clk_reg_sysctrl_set_parent(struct device *dev,
+>                                 unsigned long flags)
+>  {
+>         return clk_reg_sysctrl(dev, name, parent_names, num_parents,
+> -                       reg_sel, reg_mask, reg_bits, 0, 0, flags,
+> +                       reg_sel, reg_mask, reg_bits, 0, 0,
+> +                       flags | CLK_SET_RATE_NO_REPARENT,
+>                         &clk_sysctrl_set_parent_ops);
+>  }
+>
+> --
+> b4 0.11.0-dev-99e3a
