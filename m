@@ -2,117 +2,90 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CDA62567D
-	for <lists+linux-rtc@lfdr.de>; Fri, 11 Nov 2022 10:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA77625D6F
+	for <lists+linux-rtc@lfdr.de>; Fri, 11 Nov 2022 15:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbiKKJUv (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 11 Nov 2022 04:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S234755AbiKKOqR (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 11 Nov 2022 09:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiKKJUt (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Nov 2022 04:20:49 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E1A66C9E
-        for <linux-rtc@vger.kernel.org>; Fri, 11 Nov 2022 01:20:48 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a13so6874525edj.0
-        for <linux-rtc@vger.kernel.org>; Fri, 11 Nov 2022 01:20:48 -0800 (PST)
+        with ESMTP id S234775AbiKKOph (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 11 Nov 2022 09:45:37 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D42E00C
+        for <linux-rtc@vger.kernel.org>; Fri, 11 Nov 2022 06:45:35 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j4so8704981lfk.0
+        for <linux-rtc@vger.kernel.org>; Fri, 11 Nov 2022 06:45:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KQqlnqh61yDEivsgLuzXFgBFvWeIkle9538NvChEgG4=;
-        b=eRHEStFUgdZI+TOEkzLgPNAUqr8je9PakORGJBpBvetm722q6+52mzO4PuK6UP2C9B
-         y5QKHELjwoL/I5ZveEAoHNQYPUFH2gG9BiO6rNE0Zoi1U/NPdjDb6jXihqpiYnUK7uS7
-         SaEgVVAc1rCLsO+PywRf34jY4cKkxjJ5rpb0iLv7Lx6icnPxIKkBSReqSNOAi5AyQqJr
-         wfParI72b+nyrA1C6NNwYpO2mYi/F3sK4RXxqU2kGu5IcDipfl9TyQkhA6GnH0/P0zga
-         4Pzu7HawlgloyguZmgsGbfP6pqVHW5N9NgfDTgsFvjn4zWaBEAPihtz4CQ3ui15zn27r
-         jJSw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nKIh7Rn2uY03gvMDxLSAjGI/gyfIpOz2PNRYMB/8BVY=;
+        b=zMLqECAHr+5NcQNla/y7bj36+Jihm72LxNXySqm8xh+3R51WS6kmb8BtZlvnSPqDe/
+         igKUE/GAiR9gOUGc4qHV9tkJW/7sbMSEYiWS0UIQYo1Z7/kmm6k5wASAJOJKomoVAY47
+         Kb2GD5r0gu5itoPz6sZK49pbQhiySjQsFbvaEAnLSVpbI0fwR2LDfRE//v5AjgFf+DD+
+         waGekmsiQWHluWL22/FWNtkd/9TBklGK4p1GLIPqkb8dKq8tCscS52QU5WvSegdzfiVX
+         aYhHp1GTJg5XGXC58x1ppi9ZDqYtjsD7f3qL4rLaZ5BbJqNFlsPuI6//YxkETH8shZdL
+         P8GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KQqlnqh61yDEivsgLuzXFgBFvWeIkle9538NvChEgG4=;
-        b=oDRLyDSWmtrMOgdqregerXQfwDgD0Mq4n0Smn8undr5QSerElzrx8FTH5YRHSnIYfp
-         Wxi4kz6FEKhB/4UJdi9WyFiTdKnooIB3qR1p8lON0S2spSTTXBzFB9zap1wt1i32PW+b
-         x8/G9tu5VoivkMMMyY5kqNpn/5pS1aNg7TywyemlkShJ98VbMn7CsssTPZOIrlEsLtdJ
-         Ec32U2vML6rxgMtL7ciE36PZrLlodNVTu1IPpuieFwaVsEzoCwiJKocjZwpgkyGSdqt9
-         wjke/MVa84yNbxq7y9qEWQhEEYAHJy1Qm7M2MdWt2B22JWjv97AxARmclGcHXfxM9eHY
-         GB0A==
-X-Gm-Message-State: ANoB5pmUtVvokIeSysvZE2kyUslp3JzkbhNGLdvL7/GsaAbyNQGqL3n9
-        FXbMhNCRyeqW6NEZSw7s2zFglHSelOmKDpGvEyG42g==
-X-Google-Smtp-Source: AA0mqf53QBR47pUgYWT2xVhbs/Lj4/kZl7NAGXQCY837HnfVAtbLsG6fA3g+X2q4OOQ/b93b11NyQoioTLD4pHwNxXU=
-X-Received: by 2002:a50:ee13:0:b0:463:a83c:e0af with SMTP id
- g19-20020a50ee13000000b00463a83ce0afmr679526eds.158.1668158446767; Fri, 11
- Nov 2022 01:20:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKIh7Rn2uY03gvMDxLSAjGI/gyfIpOz2PNRYMB/8BVY=;
+        b=3znr8ri5REEWDWHQ82a00rih42x9K/R812pzBPJVD+4DeTPrmoVMp20INZANWy0y9i
+         RKEj9McGZSKABlOfnjqI0RPcwqOQcPY2UsOG9E9403KNQ5XJnSq9sdhBk6gkcl5Jr2Nd
+         WCPPucFUETmAgnRK0DwfEI0KyWVjGI1JdIiMsNmpsZtik5lq+gM3Whb33b7DgV0z7nXa
+         NhqTTTFD8/FU15ou8tYUAqaVb4yrHnxb2zbGlY8DdVwFOusWu+As21wv8NzLlC8PuRN3
+         Cm9SRgVmyt8uF1L4s5UGtLQ4y4S4Vn241I5oMUq6UV4zrr5CS2+DDHrPMfAp7PuKleha
+         wj+Q==
+X-Gm-Message-State: ANoB5pmhzyS0Ls4paGAExVOIHjcqeVZspah1cZQXKsPqddGD/2EyvXeD
+        jGOOHZPauZqt5pneV8eZ5zIueQ==
+X-Google-Smtp-Source: AA0mqf4sgLsj52HWaY59vMgHa4fGiq4HixM8ZVYXfqlh1s69CeMqoQVflfov72D5yRE0mhynje0tUA==
+X-Received: by 2002:a19:6d0f:0:b0:4a2:23b0:b850 with SMTP id i15-20020a196d0f000000b004a223b0b850mr780143lfc.60.1668177933536;
+        Fri, 11 Nov 2022 06:45:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id n26-20020ac2491a000000b00494a603953dsm361574lfi.89.2022.11.11.06.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 06:45:32 -0800 (PST)
+Message-ID: <72093230-9da4-665d-c177-055c0a5e33cc@linaro.org>
+Date:   Fri, 11 Nov 2022 15:45:30 +0100
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-35-f6736dec138e@cerno.tech>
- <CAPDyKFoycVedCJMy0=UK+q5SiPQHqje_8bSN-gdkpBa6KhFfkg@mail.gmail.com>
- <CACRpkdYOj8uozJZO4MV-_OAKeOsQHhoEM=PyynVuNY-JkpgTOw@mail.gmail.com> <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
-In-Reply-To: <CAPDyKFr6VeF3s47JfzJ9urtMsEem+GiBtHeU=_S8jNaz-D+qnw@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Nov 2022 10:20:34 +0100
-Message-ID: <CACRpkdb8uYfs6w99FVjD_t6nZgDhPUx=yB1j=CmpHTHAM2QGQw@mail.gmail.com>
-Subject: Re: [PATCH v2 35/65] clk: ux500: sysctrl: Add a determine_rate hook
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 3/9] dt-bindings: regulator: Add binding schema for
+ mt6357 regulators
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
         Mark Brown <broonie@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Lee Jones <lee@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-3-5d2bb58e6087@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005-mt6357-support-v4-3-5d2bb58e6087@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -121,56 +94,36 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 2:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> On Thu, 10 Nov 2022 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Thu, Nov 10, 2022 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > On Fri, 4 Nov 2022 at 14:32, Maxime Ripard <maxime@cerno.tech> wrote:
-> > > >
-> > > > The UX500 sysctrl "set_parent" clocks implement a mux with a set_parent
-> > > > hook, but doesn't provide a determine_rate implementation.
-> > > >
-> > > > This is a bit odd, since set_parent() is there to, as its name implies,
-> > > > change the parent of a clock. However, the most likely candidate to
-> > > > trigger that parent change is a call to clk_set_rate(), with
-> > > > determine_rate() figuring out which parent is the best suited for a
-> > > > given rate.
-> > > >
-> > > > The other trigger would be a call to clk_set_parent(), but it's far less
-> > > > used, and it doesn't look like there's any obvious user for that clock.
-> > >
-> > > If I recall correctly, that is the use case we did target for these
-> > > types of clocks. See sound/soc/ux500/ux500_ab85xx.c, for example.
-> >
-> > Hm I am trying to get that driver to work ... from time to time.
-> > It's just that ALSA SoC DT has changed to much that it turns out
-> > into a complete rewrite :/
-> >
-> > So in sound/soc/ux500/mop500_ab8500.c
-> > I see this:
-> >
-> >         status = clk_set_parent(drvdata->clk_ptr_intclk, clk_ptr);
-> >         if (status)
-> > (...)
-> >
-> > and there is elaborate code to switch between "SYSCLK" and
-> > "ULPCLK" (ulta-low power clock). Just like you say... however
-> > a clock named SYSCLK or ULPCLK does not appear in the
-> > code in drivers/clk/ux500 or any DT bindings so... it seems to
-> > be non-working for the time being.
->
-> It's definitely not working, but the corresponding clocks ("ulpclk",
-> "intclk", "audioclk", etc) are being registered in ab8500_reg_clks().
->
-> What seems to be missing is a DT conversion for these clocks, so they
-> can be consumed properly. Right?
+On 08/11/2022 19:43, Alexandre Mergnat wrote:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Add YAML schema for the MediaTek MT6357 regulators.
 
-Yeps that and a few more things, I have a scratch rewrite here:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-stericsson.git/log/?h=ux500-audio-rewrite
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
+regulator: dt-bindings:
 
-I remember Lee said he had audio working with the mainline kernel
-on Snowball at one point, unfortunately I think that was before we
-started with the DT conversions and then we probably broke it.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  .../regulator/mediatek,mt6357-regulator.yaml       | 292 +++++++++++++++++++++
+>  1 file changed, 292 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> new file mode 100644
+> index 000000000000..3997a70a8b6c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/mediatek,mt6357-regulator.yaml
+> @@ -0,0 +1,292 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/mediatek,mt6357-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 
-Yours,
-Linus Walleij
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
