@@ -2,44 +2,68 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECC7628C56
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Nov 2022 23:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C444628C69
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Nov 2022 23:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiKNWuX (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Nov 2022 17:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S237824AbiKNW5R (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Nov 2022 17:57:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiKNWuW (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Nov 2022 17:50:22 -0500
-X-Greylist: delayed 15989 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 14:50:20 PST
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4786812AA1
-        for <linux-rtc@vger.kernel.org>; Mon, 14 Nov 2022 14:50:20 -0800 (PST)
+        with ESMTP id S237808AbiKNW5Q (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Nov 2022 17:57:16 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBEE1B7A3;
+        Mon, 14 Nov 2022 14:57:12 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 950DCFF802;
-        Mon, 14 Nov 2022 22:50:18 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 06BD5240003;
+        Mon, 14 Nov 2022 22:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668466218;
+        t=1668466631;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=wVNQpnB0O3nnAFMkzPFmO9Bkxx89nPM74j8GMCfmxu4=;
-        b=g4QV+/oDqAABSglAv/otKtAMqjMqnslZYtptK8W0aHMmXiT7+GV/C//F9viZ1agzeorceQ
-        Ie8/k9WdVDJCYvm+/PoMvZl+KrWcKxNgFc7QivpXpVo/fH7YfO+pu7YOA8YhpSRs6uqi2q
-        6L+vkg1pUvrRDiEa+I+12vxxf2eEtU5yi0T0ZOaYRpzpESW8RcFJ8DnaIQZaiIISMBqlQw
-        fx8Y2j7mzkJugfNrygcFgFXS70bXN6c2IOM4yt71PO+RNCo86PdMvA5j4N6PP/HXWhuf5B
-        c/tEbu+Kn6lTCzqwj+FnFLKfi7dlwR+ur2ayRs1ciX2w+WWRVx43x3re1hT6ZQ==
-Date:   Mon, 14 Nov 2022 23:50:18 +0100
+        bh=M3hQEMxlrNK+06eeO3xPT9LuLj4yjY7yvIvmM3pxtPo=;
+        b=bj9eV86lzO2PB1EMaUD1jpebxgmKDCSQHfN4vnk2N7CP9Sp0BntWcEb+LscO0TFl27SYbq
+        huthOt1QjAWLQOuK0MIdUHuitTti2lkheZnVDX42rOeEYo5Sm8oZ0DuvabkKthMx+xwbcF
+        kCAvB1k8/torNFRFnIY9JZHj8HWVEhjl7HceyIKCpMQrFwIMYKAH7oUxmmcYVPDWsFwvO2
+        FBjK1SdraumjMSx5Q5n3Qtrx1IUB6h6/TZ/+qh3zrAlZgZIRDPdDN6e+W4Kn/gm8idNiFP
+        ia/ECYj9ZldDZoWIuYzpmRzn0N89TSslCE+21uX6IQiQclrzRGWOLvTwmEjnFg==
+Date:   Mon, 14 Nov 2022 23:57:08 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ian Abbott <abbotti@mev.co.uk>, linux-rtc@vger.kernel.org
-Cc:     stable@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: [PATCH] rtc: ds1347: fix value written to century register
-Message-ID: <166846619726.2125405.18251869444474918297.b4-ty@bootlin.com>
-References: <20221027163249.447416-1-abbotti@mev.co.uk>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Message-ID: <Y3LHxDIzfZWhnQJN@mail.local>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+ <20221109222916.GA2985917-robh@kernel.org>
+ <Y2wwUOJ0KZdt1tZ6@mail.local>
+ <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221027163249.447416-1-abbotti@mev.co.uk>
+In-Reply-To: <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -49,19 +73,79 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Thu, 27 Oct 2022 17:32:49 +0100, Ian Abbott wrote:
-> In `ds1347_set_time()`, the wrong value is being written to the
-> `DS1347_CENTURY_REG` register.  It needs to be converted to BCD.  Fix
-> it.
+On 10/11/2022 15:14:01+0100, Krzysztof Kozlowski wrote:
+> On 09/11/2022 23:57, Alexandre Belloni wrote:
+> > On 09/11/2022 16:29:16-0600, Rob Herring wrote:
+> >> On Tue, Nov 08, 2022 at 07:43:37PM +0100, Alexandre Mergnat wrote:
+> >>> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+> >>> - Add mediatek,mt6357-rtc compatible.
+> >>> - Add maintainer
+> >>> - Remove the .txt binding file
+> >>>
+> >>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+> >>>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
+> >>>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
+> >>>  3 files changed, 41 insertions(+), 32 deletions(-)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> index 0088442efca1..79aaf21af8e9 100644
+> >>> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> @@ -33,7 +33,7 @@ Optional subnodes:
+> >>>  		- compatible: "mediatek,mt6331-rtc"
+> >>>  		- compatible: "mediatek,mt6358-rtc"
+> >>>  		- compatible: "mediatek,mt6397-rtc"
+> >>> -	For details, see ../rtc/rtc-mt6397.txt
+> >>> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
+> >>>  - regulators
+> >>>  	Required properties:
+> >>>  		- compatible: "mediatek,mt6323-regulator"
+> >>> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..bb48c0150f95
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> >>> @@ -0,0 +1,40 @@
+> >>> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: MediaTek MT6397/MT6366/MT6358/MT6357/MT6323 RTC
+> >>> +
+> >>> +maintainers:
+> >>> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> >>> +
+> >>> +description: |
+> >>> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
+> >>> +  as a type of multi-function device (MFD). The RTC can be configured and set up
+> >>> +  with PMIC wrapper bus which is a common resource shared with the other
+> >>> +  functions found on the same PMIC.
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - mediatek,mt6323-rtc
+> >>> +      - mediatek,mt6357-rtc
+> >>> +      - mediatek,mt6358-rtc
+> >>> +      - mediatek,mt6366-rtc
+> >>> +      - mediatek,mt6397-rtc
+> >>
+> >> As this is only a compatible string, just fold this into the MFD schema 
+> >> doc.
+> > 
+> > Actually, it probably also supports the start-year property
 > 
+
+I checked and it doesn't support it but this needs to be fixed.
+
+> What about rest of rtc.yaml schema?
 > 
 
-Applied, thanks!
-
-[1/1] rtc: ds1347: fix value written to century register
-      commit: c397361d7339fa3a2949758ffd5298231fb43173
-
-Best regards,
+wakeup-source would make sense but the driver doesn't support it yet.
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
