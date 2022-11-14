@@ -2,68 +2,131 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61422628B7A
-	for <lists+linux-rtc@lfdr.de>; Mon, 14 Nov 2022 22:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F15628BF0
+	for <lists+linux-rtc@lfdr.de>; Mon, 14 Nov 2022 23:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbiKNVnl (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Mon, 14 Nov 2022 16:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S236005AbiKNWSA (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Mon, 14 Nov 2022 17:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237644AbiKNVnh (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Nov 2022 16:43:37 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE4BDF2;
-        Mon, 14 Nov 2022 13:43:33 -0800 (PST)
+        with ESMTP id S237852AbiKNWRs (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Mon, 14 Nov 2022 17:17:48 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5491AF04;
+        Mon, 14 Nov 2022 14:17:32 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D26361C0002;
-        Mon, 14 Nov 2022 21:43:31 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id C80B5FF804;
+        Mon, 14 Nov 2022 22:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668462212;
+        t=1668464251;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=me0RdSJfy0GAbogzocsMoZUSm8DRysPd4wTaSa5a5fA=;
-        b=Oid0+RRzNrHRKt/r9A++VkSx3ugXlnjUxAH9BjmQzqd1USgXID4yOP5OWxb6c80MAqNVvM
-        p+1QqWTt9o3AwZBGQvY/RNTJGBCvvjGJV0p9R9pHALQxt5Vgent77h4h507kSvp4L3rnE7
-        EZpsfLTEhWrFj0O9Q5/FUhTQocNmI0dkzinMI61GTBrum+xSulQxoy4h7okKflhcSy7kVh
-        dzyV0AQGv7mzdm2rM18CgFKehh/feouyCVXV0lU6Ak9H6+83KXNxFIHDbWyUZNkoAxh6a6
-        KbNgKcNn+0jjhOaHIYwM1rKHLQvbvOz3BsvDoeNy6+8/rcBX3udTq95D9UgJog==
-Date:   Mon, 14 Nov 2022 22:43:31 +0100
+        bh=8a4wPtjVzOGoyWFiu/TeCUBsfxb3YVZS/qU+8AaCrn4=;
+        b=lXmgqsxzL2Jf3LaI2strgXSfattQSrNEl2EC6lXwkk1Crw/W98if+31YNObTan4Oh/Mz8X
+        wKpiYntr/9uwelnH6a+vuC7rECgqrkn8nLIhtWIjW9o33oE+FOUG+8rt5TxUm8qjiOiRvs
+        zZkE53bYCj24/MmZ5PPupbgRtd+mB89DoENVUvnmzj0VxJwjbEP8W4IDpnSpbLPXxL5v8p
+        emX8mj+i3N0jM3zX7viqdCT1sqkrlvrzJGdfAozanZ30OcxXtA6irhwoRMnSxfC+ZN3l1b
+        HUMV4o7calKrRg+xU5VJvXmSaV9CpdANhnkOQu0FMxQWVqr3d33L03BsEtGlhA==
+Date:   Mon, 14 Nov 2022 23:17:30 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH] rtc: Include <linux/kstrtox.h> when appropriate
-Message-ID: <166846217853.2117389.566805318530598710.b4-ty@bootlin.com>
-References: <786421fd0435a32206288904a1f879436a717529.1667721637.git.christophe.jaillet@wanadoo.fr>
+To:     glasveze@delta.nl
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        a.zummo@towertech.it, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Subject: Re: [PATCH 2/2] rtc: ds1307: Add support for Epson RX8111
+Message-ID: <Y3K+ehjZAA4AIXie@mail.local>
+References: <20221028144041.11067-1-glasveze@delta.nl>
+ <20221028144041.11067-2-glasveze@delta.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <786421fd0435a32206288904a1f879436a717529.1667721637.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221028144041.11067-2-glasveze@delta.nl>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Sun, 6 Nov 2022 09:00:51 +0100, Christophe JAILLET wrote:
-> The kstrto<something>() functions have been moved from kernel.h to
-> kstrtox.h.
-> 
-> So, include the latter directly in the appropriate files.
-> 
-> 
+Hello,
 
-Applied, thanks!
+On 28/10/2022 16:40:41+0200, glasveze@delta.nl wrote:
+> +static u8 do_trickle_setup_rx8111(struct ds1307 *ds1307, u32 ohms, bool diode)
+> +{
+> +	/* make sure that the backup battery is enabled */
+> +	u8 setup = RX8111_PSC_SMP_INIEN;
 
-[1/1] rtc: Include <linux/kstrtox.h> when appropriate
-      commit: 81d8865e8bea9de75be02231ddb42926509b44b0
+You can't do that, else it will never be possible to remove that without
+breaking existing users. Instead, you should use
+RTC_PARAM_BACKUP_SWITCH_MODE. Honestly, I would really like stopping
+adding support for more RTCs in this driver and instead split them all
+out.
 
-Best regards,
+> +
+> +	if (diode)
+> +		setup |= RX8111_PSC_SMP_CHGEN;
+> +
+> +	return setup;
+> +}
+> +
+>  static u8 do_trickle_setup_rx8130(struct ds1307 *ds1307, u32 ohms, bool diode)
+>  {
+>  	/* make sure that the backup battery is enabled */
+> @@ -1012,6 +1078,16 @@ static const struct chip_desc chips[last_ds_type] = {
+>  		.century_bit	= DS1337_BIT_CENTURY,
+>  		.bbsqi_bit	= DS3231_BIT_BBSQW,
+>  	},
+> +	[rx_8111] = {
+> +		.alarm		= 1,
+> +		.nvram_offset	= 0x40,
+> +		.nvram_size	= 0x40,	/* 0x40 .. 0x7F is user RAM */
+> +		.offset		= 0x10,
+> +		.irq_handler = rx8130_irq,
+> +		.rtc_ops = &rx8130_rtc_ops,
+> +		.trickle_charger_reg = RX8111_PWR_SWITCH_CTRL,
+> +		.do_trickle_setup = &do_trickle_setup_rx8111,
+> +	},
+>  	[rx_8130] = {
+>  		.alarm		= 1,
+>  		/* this is battery backed SRAM */
+> @@ -1063,6 +1139,7 @@ static const struct i2c_device_id ds1307_id[] = {
+>  	{ "pt7c4338", ds_1307 },
+>  	{ "rx8025", rx_8025 },
+>  	{ "isl12057", ds_1337 },
+> +	{ "rx8111", rx_8111 },
+>  	{ "rx8130", rx_8130 },
+>  	{ }
+>  };
+> @@ -1137,6 +1214,10 @@ static const struct of_device_id ds1307_of_match[] = {
+>  		.compatible = "isil,isl12057",
+>  		.data = (void *)ds_1337
+>  	},
+> +	{
+> +		.compatible = "epson,rx8111",
+> +		.data = (void *)rx_8111
+> +	},
+>  	{
+>  		.compatible = "epson,rx8130",
+>  		.data = (void *)rx_8130
+> @@ -1880,6 +1961,10 @@ static int ds1307_probe(struct i2c_client *client,
+>  				     DS1307_REG_HOUR << 4 | 0x08, hour);
+>  		}
+>  		break;
+> +	case rx_8111:
+> +		/* Use memory as user RAM */
+> +		regmap_write(ds1307->regmap, RX8111_TIME_STAMP_BUF_CTRL, 0);
+> +		break;
+>  	case ds_1388:
+>  		err = regmap_read(ds1307->regmap, DS1388_REG_CONTROL, &tmp);
+>  		if (err) {
+> -- 
+> 2.17.1
+> 
 
 -- 
 Alexandre Belloni, co-owner and COO, Bootlin
