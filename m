@@ -2,100 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8449C629B2B
-	for <lists+linux-rtc@lfdr.de>; Tue, 15 Nov 2022 14:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE87C629B3C
+	for <lists+linux-rtc@lfdr.de>; Tue, 15 Nov 2022 14:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238516AbiKONux (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Tue, 15 Nov 2022 08:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S229836AbiKONyS (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Tue, 15 Nov 2022 08:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbiKONu0 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Nov 2022 08:50:26 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BB72B267
-        for <linux-rtc@vger.kernel.org>; Tue, 15 Nov 2022 05:49:51 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id d6so24473021lfs.10
-        for <linux-rtc@vger.kernel.org>; Tue, 15 Nov 2022 05:49:51 -0800 (PST)
+        with ESMTP id S229975AbiKONyR (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Tue, 15 Nov 2022 08:54:17 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45126E9F
+        for <linux-rtc@vger.kernel.org>; Tue, 15 Nov 2022 05:54:16 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id f18so3170796ejz.5
+        for <linux-rtc@vger.kernel.org>; Tue, 15 Nov 2022 05:54:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=83HRjZKoyBhiQsQuC/2fimMYvWtEYyPCZTwB6HczlYU=;
-        b=U8aNfCV8mQrF6+8xUdV+q1DsV+b4rovI818ppeddszlbjp3ubxcnLzMH/ZKp/GV5CV
-         WqprIGc12o1WqT1enKPpTj+fFsbBNfFsRvFXB3A6iLwW0YjmguEY9dWOD91hoVQHja5N
-         bH+LMyA8vFfleHQJO2H0Su2/6fhpHECFf3GaxoSQ+Ki2VrRAICyhdymSGlVfvfjiwj9H
-         prrmSrf2iDSpt9owuBHRQg/LT4JczPXiMqNTtJEg+lPV7WvtzNkoKxbJ3KvnhAfBtuzE
-         ekUPmQdYhjp7nrd19MVz5LD253YiMUNvMvI4nGJrL5Job5/tpnfxr3uQbEwrJhZGqngA
-         nIiw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0sFkX+nbXodQt671NtDLbwnj/LAv7WU9JCGBKOzfpo=;
+        b=LCXNFQyj9iyDqZ0IoY/l3bCF9KVFvTQK/X31I9OveRprtKEzUCRvM8avrTYoCf6xR0
+         sZibGh7vNgog7H0X2Q+Fv0xpGCCnpZfbJTF/Q8J3MXrB6etR+Bv2rs256mCMkEjswuF/
+         epkHDYiuiyNEZmIHKIecEgnX8vGdb5rnfrm0irBH9Nl86aof8dyN6s4vYaOi8dGcu8k7
+         DNPJLlHBY+WHAqBxboGWbN49MfKxdl9C4hGyDmPP2hVLyhOm2ndxhvRJRb2yv6naEz9x
+         15+E27B/yeP0tR3/Jk36kZS2TR20ue0APo+lEHUq0fvCFQr9UKSjEJyvJ1Ob0szqjRpT
+         IrCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83HRjZKoyBhiQsQuC/2fimMYvWtEYyPCZTwB6HczlYU=;
-        b=JMsAXXh2f0UtmkA3yqczjvzOfpqs1YIFWDeBORZCmqLFwmpX/zcs4dBX/djkAbJFcI
-         iLWRuNaWF2dh/q/3Qbl1NEAspRk3VGA9kx8Dk5XZb/T+k4wAyPlxHXGvvoPYCgiCg8Nb
-         iJshmZqTrLlaZdpg65+Qe0mpHjfzUnQkN8urKO1UjwtOyMXbWOx71WygRUKGmRY2yUgW
-         N6dFkj+I7NZHdqwZiuhVjkpmCeSpDU65I1614NY0wHVM8oWuq8FVi8usS3OZ9m+agHQt
-         Y1Kpb+bshOnkdL1Xr4iDSkjYWQ/I1khQ/CZ20U6P4LasFEfcwJP6yS+a0KpXljaRWqrI
-         1Mdg==
-X-Gm-Message-State: ANoB5pnlo1iqoMbGjkvO/OQbMtUdBn+ST/WN82GYiIgXaCTyNdIrdcvL
-        0RT1lRcFBrkXIf4G4GdOoaXwbQ==
-X-Google-Smtp-Source: AA0mqf5HS5gfxzBVMqFriEE4HJoPWmEr5IGzGDfjoRndsB7SSJmPfMrJ7RjHxXmJSplQzZN4BQIGTQ==
-X-Received: by 2002:ac2:5c10:0:b0:4b4:6ca6:c658 with SMTP id r16-20020ac25c10000000b004b46ca6c658mr6341920lfp.359.1668520189681;
-        Tue, 15 Nov 2022 05:49:49 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t14-20020a2e8e6e000000b0026bf0d71b1esm2508099ljk.93.2022.11.15.05.49.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:49:49 -0800 (PST)
-Message-ID: <dcb65352-64c7-774f-3933-42f9dfe95cba@linaro.org>
-Date:   Tue, 15 Nov 2022 14:49:47 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R0sFkX+nbXodQt671NtDLbwnj/LAv7WU9JCGBKOzfpo=;
+        b=qn6izQG/ySgw36B/aClgTmP6z2V03ZIclKRiaPfGrmMqBn/V8MR0e29nlCZAPKT4jM
+         9fykCBVwFqmpvY+788pnBhEO+GGTyvBEJfBdaT3JWvy46hlHYWrUYRT+CVHUwan3NbNm
+         rmJLEDc0F59jyNCETFiC4PqDGs1dHMhSw/Axo28Sf4+uSzH7DksysXWb5UyO7oaepHck
+         +S6jYXXLSz3NJHDPtY6lr37o/LrGIPTyaAwjX5KtHTlic04wFTKYsxtsronNqOHuo0i6
+         KuKiAejYP07tT5xymTt6BBcfr6PCx2QaKlAbA612l4MMEu86JtcQj8o74YPYFf7Mi+Le
+         HRIw==
+X-Gm-Message-State: ANoB5pkQcKCXFk4uwcGAqFML3za0ZPP8Pvg6GK4muD0oGjLzKy4WfH+n
+        l+eTn5GrxmeV9jK63SASEGcNR2gl6ePZwAu19Mp6zg==
+X-Google-Smtp-Source: AA0mqf4WMyt4uB3gxvki+JAXsKJPJAU1cd1VDx3nBWsvAl7puGi2zyYQVi+2VHiXzUHT9ITHHgAIIdG2a5wj+RmSmso=
+X-Received: by 2002:a17:906:a1d9:b0:78d:b371:16e5 with SMTP id
+ bx25-20020a170906a1d900b0078db37116e5mr13497638ejb.456.1668520454765; Tue, 15
+ Nov 2022 05:54:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        angelogioacchino.delregno@collabora.com, broonie@kernel.org,
-        chen.zhong@mediatek.com, devicetree@vger.kernel.org,
-        dmitry.torokhov@gmail.com, fabien.parent@linaro.org,
-        fparent@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, lgirdwood@gmail.com,
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-5-5d2bb58e6087@baylibre.com> <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
+In-Reply-To: <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 15 Nov 2022 14:54:03 +0100
+Message-ID: <CAFGrd9r70XRd=4Ogei+U2QXQny7LhWr9bDCRNYco+Bsy+2XqrA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] dt-bindings: soc: mediatek: convert pwrap documentation
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Fabien Parent <fabien.parent@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org,
-        matthias.bgg@gmail.com, mkorpershoek@baylibre.com, pavel@ucw.cz,
-        robh@kernel.org, sean.wang@mediatek.com
-References: <09495553-e563-e12b-056e-bed95531ab6b@linaro.org>
- <ba0901a0-56c5-4e60-49b3-356899921934@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ba0901a0-56c5-4e60-49b3-356899921934@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 15/11/2022 11:34, Alexandre Mergnat wrote:
-> I think I understand my error.
-> Actually, the RTC (HW) support the "start-year" feature, then I suggest
-> to fix the binding like that:
-> 
-> allOf:
->    - $ref: "rtc.yaml#"
+Hi Angelo,
 
-No quotes.
+Le mer. 9 nov. 2022 =C3=A0 10:55, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+>
+> Il 08/11/22 19:43, Alexandre Mergnat ha scritto:
+> > +maintainers:
+> > +  - Alexandre Mergnat <amergnat@baylibre.com>
+>
+> I say that the maintainer for pwrap is Flora Fu <flora.fu@mediatek.com>..=
+..
 
+Flora Fu is the driver maintainer. As described in
+Documentation/devicetree/bindings/writing-schema.rst:
+maintainers
+  A DT specific property. Contains a list of email address(es)
+  for maintainers of this binding.
 
-Best regards,
-Krzysztof
+My  understanding is this field is only for binding maintainers, but
+not related driver maintainers. Are we aligned ?
 
+Regards,
+Alex
