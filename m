@@ -2,65 +2,65 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80A362CD76
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 23:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB7062CD7C
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 23:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiKPWOE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Nov 2022 17:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S232985AbiKPWRz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Nov 2022 17:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbiKPWNq (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 17:13:46 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1081F24080;
-        Wed, 16 Nov 2022 14:13:43 -0800 (PST)
+        with ESMTP id S231734AbiKPWRz (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 17:17:55 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00B059FC2;
+        Wed, 16 Nov 2022 14:17:53 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A6EB6100004;
-        Wed, 16 Nov 2022 22:13:41 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6B01240008;
+        Wed, 16 Nov 2022 22:17:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668636822;
+        t=1668637071;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HbsJ+Y08EQLASOdtyUuuzbvV1Ei3Wpv7tnXwmPZNGP8=;
-        b=bSvBBzuizOa9e+soJ3rOHJjqMKnQRexFw8pyqST2Lqk+wL39xGKdFEwdO/v8IiNdkM/oWK
-        ga1XBaBIWxx5oL6m9tIedWSaKkTwew9CVosQLA0mfPWZsBVSa1tV3lSoDTZ83mFVxynP+Q
-        xM5P4xDhE674nWwkiFFJkKh2fx/VCF1jfUr7TW7cA7xS4x23CnBfF0YKMcZ/NzjL21m0gh
-        eXzkFtszS12DBTQFvZ07Fi2EpoDy0gRsV6DpXwEto/ZHdZcOSHR2Xf/pbMOXuMcWEZEPE7
-        pFnHBhDGnn+2XkIqXa2rZzEI52bVnWJRy0OBnWBYEwGU2HcX6gKVdD9OAvWhYw==
-Date:   Wed, 16 Nov 2022 23:13:41 +0100
+        bh=RI1LvePrb+R7TFdEOddF/nsaOprjMV2xUscy58JV8Vg=;
+        b=Wug5GmIcVtrQNgWPhOq0mdJ8DIz6YYfWOpJCS90OLxs2HChw+NRzzGEfsKBsYR4iCssxOp
+        dWAo6GyKl66zIw7m2HZ+Rqckdg4u8jbyaSE4mij0YJirahN+KxHdw46P4r2urWVTq3kDmv
+        WotgcFvLd2lwsXWIYwrZzLzegUVVEYbT0B8vcp2+D7JtZr2MMfy1olcBYpei/XJfqkuwh0
+        rL2GKX0eV/5KmNs36uFvpI3nfM22LU/nqKaKYN8xp7EhasAQNqM3B7uUsi5ftnvZKkPlJH
+        HrKzpmtiJWEWEh/R3UKug2COYWtAvXtnwEk+Lgd706wVndvE51O8DAbJPoea4w==
+Date:   Wed, 16 Nov 2022 23:17:49 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
+To:     Riwen Lu <luriwen@hotmail.com>, a.zummo@towertech.it
 Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com
-Subject: Re: [PATCH] rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
-Message-ID: <166863678725.2504087.10277347266415780715.b4-ty@bootlin.com>
-References: <20220301131220.4011810-1-vincent.whitchurch@axis.com>
+        Riwen Lu <luriwen@kylinos.cn>
+Subject: Re: [PATCH v1] rtc/rtc-efi: Add wakeup support
+Message-ID: <166863698279.2504707.17372142903256716884.b4-ty@bootlin.com>
+References: <TYWP286MB260191455377CEBD2336557EB1659@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301131220.4011810-1-vincent.whitchurch@axis.com>
+In-Reply-To: <TYWP286MB260191455377CEBD2336557EB1659@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Tue, 1 Mar 2022 14:12:20 +0100, Vincent Whitchurch wrote:
-> If there is no IRQ hooked up, clear RTC_FEATURE_ALARM to make the core
-> ensure that userspace is made aware that alarms are not supported.
+On Wed, 10 Aug 2022 15:01:09 +0800, Riwen Lu wrote:
+> From: Riwen Lu <luriwen@kylinos.cn>
+> 
+> Add wakeup support for rtc-efi, so we can wakeup from S3/S4/S5 through
+> rtcwake.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] rtc: pcf8563: clear RTC_FEATURE_ALARM if no irq
-      commit: 60cfac17d0a1c28cd41959e95ba1e0ecc47165e7
+[1/1] rtc/rtc-efi: Add wakeup support
+      commit: eec79501cce6e8965e92174760c6a9e92d78a038
 
 Best regards,
 
