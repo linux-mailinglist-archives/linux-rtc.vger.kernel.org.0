@@ -2,65 +2,70 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB7062CD7C
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 23:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9343C62CD84
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 23:21:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232985AbiKPWRz (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Nov 2022 17:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
+        id S233413AbiKPWVL (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Nov 2022 17:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbiKPWRz (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 17:17:55 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00B059FC2;
-        Wed, 16 Nov 2022 14:17:53 -0800 (PST)
+        with ESMTP id S231564AbiKPWVK (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 17:21:10 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0A11B9F8;
+        Wed, 16 Nov 2022 14:21:09 -0800 (PST)
 Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A6B01240008;
-        Wed, 16 Nov 2022 22:17:49 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6205C60007;
+        Wed, 16 Nov 2022 22:21:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668637071;
+        t=1668637267;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=RI1LvePrb+R7TFdEOddF/nsaOprjMV2xUscy58JV8Vg=;
-        b=Wug5GmIcVtrQNgWPhOq0mdJ8DIz6YYfWOpJCS90OLxs2HChw+NRzzGEfsKBsYR4iCssxOp
-        dWAo6GyKl66zIw7m2HZ+Rqckdg4u8jbyaSE4mij0YJirahN+KxHdw46P4r2urWVTq3kDmv
-        WotgcFvLd2lwsXWIYwrZzLzegUVVEYbT0B8vcp2+D7JtZr2MMfy1olcBYpei/XJfqkuwh0
-        rL2GKX0eV/5KmNs36uFvpI3nfM22LU/nqKaKYN8xp7EhasAQNqM3B7uUsi5ftnvZKkPlJH
-        HrKzpmtiJWEWEh/R3UKug2COYWtAvXtnwEk+Lgd706wVndvE51O8DAbJPoea4w==
-Date:   Wed, 16 Nov 2022 23:17:49 +0100
+        bh=CesiKwdebkd+NnI1wWOiivNhWinGWLWCz0wPBQwPdog=;
+        b=SHioic4LsvYDkw4gZ4wR9hI9SYylWzaA6y8uVJRRXKaGrQjnwM4k4l3GzOMEEnq//KRBLA
+        2YPsCoYSc/Up26wzz5UMjG+BiPdbKh4+KOHVxNKbbPZqr6eyj43Pa23jxDkSkNwUg47x6f
+        YXsPKzBIpC8WcIFB8334Md/A3IkPMJet6gLoPS5FKFaJKGXyo0DvYQA3DBnAlrLnQ7m1/7
+        APnSTfaTEpfAPYXSjuKfosZNU0gswSoxop095beI1YAOyqCDYPaDRWtKqF2i3xK17XfBXg
+        HOgZafIacewU9n9QLZtsVNMxTqXJjRs9lDxFtgNnpzVQ54dFp2zZ0LslnyBeZw==
+Date:   Wed, 16 Nov 2022 23:21:07 +0100
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Riwen Lu <luriwen@hotmail.com>, a.zummo@towertech.it
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Riwen Lu <luriwen@kylinos.cn>
-Subject: Re: [PATCH v1] rtc/rtc-efi: Add wakeup support
-Message-ID: <166863698279.2504707.17372142903256716884.b4-ty@bootlin.com>
-References: <TYWP286MB260191455377CEBD2336557EB1659@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+To:     paulmn <paulmn@axis.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf8523: fix for stop bit
+Message-ID: <166863723714.2505656.147470674808069300.b4-ty@bootlin.com>
+References: <20220829124639.10906-1-paulmn@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TYWP286MB260191455377CEBD2336557EB1659@TYWP286MB2601.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <20220829124639.10906-1-paulmn@axis.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, 10 Aug 2022 15:01:09 +0800, Riwen Lu wrote:
-> From: Riwen Lu <luriwen@kylinos.cn>
+On Mon, 29 Aug 2022 14:46:39 +0200, paulmn wrote:
+> Bugfix for an issue detected when a goldcap capacitor gets
+> fully discharged due to a long absence of the power supply,
+> and then recharges again. The RTC failed to continue to keep
+> the real-time clock.
 > 
-> Add wakeup support for rtc-efi, so we can wakeup from S3/S4/S5 through
-> rtcwake.
+> This was caused by the incorrect handling of the STOP bit in
+> the RTC internal register.  This fix solves the problem.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] rtc/rtc-efi: Add wakeup support
-      commit: eec79501cce6e8965e92174760c6a9e92d78a038
+[1/1] rtc: pcf8523: fix for stop bit
+      commit: fe0157ba679dc95407dd5eae6550a4ceaea75040
 
 Best regards,
 
