@@ -2,64 +2,106 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ACB62B3EE
-	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 08:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D29C62BDF7
+	for <lists+linux-rtc@lfdr.de>; Wed, 16 Nov 2022 13:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiKPHcE (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Wed, 16 Nov 2022 02:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S231838AbiKPMdm (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Wed, 16 Nov 2022 07:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbiKPHcC (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 02:32:02 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2895EB1F6;
-        Tue, 15 Nov 2022 23:32:02 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id D39B714C1;
-        Wed, 16 Nov 2022 08:31:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1668583917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=piDfn64ODAtoaZKFwAql8Y2/q2UocH9lkh4rRnP9hco=;
-        b=vEv6i7pNqUD1YJqyKPKHL6S+GfFWxCp3JCNxh2zDhn2j6jzSrGYH8tbOfYbS+hHzey3J8j
-        yerF9dZ+i4nEFBNDjigRrxfsERL+u/WVqM8NfzMH0aYYF7ZVFCvMLufQnOKtgEguC2+TUn
-        GWgx8pWeyW7ikqXdhnX2M20WspRrcmsj1WtI/uBPMzVLxQVeWuKg6qQw2S1hsob6Dku26R
-        VQBW+Iwbc2uAZbn2Xmdu9sXeWORAELzkbh9lwu/gxp5PlE/M00rgJAU8KnQSZtVUxD+Hv8
-        7yZTefX9Oq+i0JlyYjBvrXviM9fAwyJCXn3wIClMG/IEPQ5CHKJ26AI3zlaBTQ==
+        with ESMTP id S229463AbiKPMdj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Wed, 16 Nov 2022 07:33:39 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C9C271B
+        for <linux-rtc@vger.kernel.org>; Wed, 16 Nov 2022 04:33:37 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 5so11803217wmo.1
+        for <linux-rtc@vger.kernel.org>; Wed, 16 Nov 2022 04:33:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=R0mtcbapNc12SG7qveDyhHcRn237sKO8IzVL/uWZIsQ=;
+        b=v5UzEkcqZrK1gREL0R7n3vJHHAKiPtDlOhGN4U6SBY4aJMbxeWegynJS1VWBR0z3yn
+         8lGwmhPeJ7fNydUP9xWQUogS8iToX2ihEVd+9yF6fa56JNewQOFwlVwY4FGHWEQ2QiP4
+         DP3JD9psfPG9M3kjGtjLeqlD6EH4YoX0YQAiECnVWHL/x4WxxwaXJHPw9WnBaL0f+ks6
+         RXRpaBJgI2pmKV4Kh5MaUMV4PXoQdLN6rHpIDBOZpIzOS4gX/LJIltwoSWyLjMHkuQzk
+         jBQ+mnTMeBHkW04FITUsM09dD55Fka4uUKqewnvA4hWOn+ss0tXYObudLu70worG6MjS
+         VWvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R0mtcbapNc12SG7qveDyhHcRn237sKO8IzVL/uWZIsQ=;
+        b=vwosFLctE0RMc5djioB3DzQi0ToJUtTKbgptcwGwbPOpfkIM/V0y/or4PkQQdAWYfO
+         wVB0PMwjl+e2zzQhHW5iM+c9VUiT64r0+Al1GWfGDVImCXRb+9p/FQ1pyaA38dAGgmSy
+         XLOeri+HZenjEB7GiRd3YED2myOZky5WL6VNCCmIWQfv762dsG6jyhHhY37T2AyTr3uk
+         gKtGDYtmOihE1NOz9jONBjkdOOdiWihrzIIywmV/pZOphvkBuXfi6cNMvV+YUcp1IG3i
+         jRIF7gO9QSkBCf9n1RJuHrlyTRCel6IpGez6UEVpxvSFtJavJGatAtueZw5xT3ggpKq7
+         EQzQ==
+X-Gm-Message-State: ANoB5pntmg9oLSu/78xcrqBbDTz/OzdaO+bynp7NRM0G6xHwUoCpEm3W
+        FPTNYMS1BqXxYPLDJ/ReYiz+HQ==
+X-Google-Smtp-Source: AA0mqf6bkONAJxgcou0DSMhPWfx1UdDKPf6SpVqbRBgR3aToSPxhVHiVXmce2GONDgjiznl0+Ydj7g==
+X-Received: by 2002:a1c:7715:0:b0:3cf:d18d:3bfe with SMTP id t21-20020a1c7715000000b003cfd18d3bfemr1911593wmi.203.1668602015855;
+        Wed, 16 Nov 2022 04:33:35 -0800 (PST)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id z13-20020adff1cd000000b0024166413a4fsm15051607wro.37.2022.11.16.04.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:33:35 -0800 (PST)
+Subject: [PATCH v5 00/10] Add MediaTek MT6357 PMIC support
 MIME-Version: 1.0
-Date:   Wed, 16 Nov 2022 08:31:57 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Matt Ranostay <mranostay@ti.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, brgl@bgdev.pl,
-        lee@kernel.org, kristo@kernel.org, alexandre.belloni@bootlin.com,
-        a.zummo@towertech.it, krzysztof.kozlowski+dt@linaro.org,
-        robh@kernel.org, vigneshr@ti.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH v3 4/7] gpio: tps6594x: add GPIO support for TPS6594x PMIC
-In-Reply-To: <Y24OuHmXCV/5HuEY@ubuntu>
-References: <20221109065546.24912-1-mranostay@ti.com>
- <20221109065546.24912-5-mranostay@ti.com>
- <CACRpkdaTV6unVsfNj+M39jLn5FLTnhryjuzF4EB6Ytds9R1nEQ@mail.gmail.com>
- <Y2zOhf8lqVLyLn+A@ubuntu>
- <CACRpkdZOR4Hcyv=bO7=rJERJK7JbCoS0_dvWj0K=YZC6Nsozdw@mail.gmail.com>
- <Y24OuHmXCV/5HuEY@ubuntu>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <91b51ffaadaa4c3d5ca46dc252d641c6@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAHbYdGMC/33NTQqDMBAF4KuUrJsSJ8bYrnqP0kXGjDXgH4kKIt69Q5eldTW8B++bTSSKgZK4nT
+ YRaQkpDD0Hcz6JqnH9i2TwnAUogEwpI7up0MbKNI/jECdpjFYllkBa14JH6BJJjK6vGp71c9ty2YQ0
+ DXH9PFmAz+Ovt4BUss4sOvDglbve0a1twEiXaujEk7VFHwuaBUsKva10ZhB+CPmxkLNgPCCakgpV2i 9h3/c3/ajz7DgBAAA=
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Wed, 16 Nov 2022 13:32:54 +0100
+Message-Id: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
+To:     Flora Fu <flora.fu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tianping Fang <tianping.fang@mediatek.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6543; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=NshVBYuu9TdFHoEf91yvknNPpw+L+ZYKe9wp64lvKjA=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBjdNie1B6xTOBloeueoPhUeiyM2FvEnzXWytPapQme
+ PGuEqP+JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCY3TYngAKCRArRkmdfjHURSX1D/
+ 0fhbES4V/OF3JKAj0wIXtjekYXEENu8Ek/sh0BTttoOWTT/l+wSs3JuPLNRQSzYd6ZAYSnD3oXqmpW
+ fZUBJpAwl3u62M5f2TRAclh5DFhhST0H0WxP2NMH2zY8hjEBfx+DGjSf7shTr+2Mxd+7ir10KZ8UqS
+ ILGXk4OgR9QdVRUInFinKR94s4X0756dL3Ubz/9pCgRap7DGUKLKHnMYClWsu1Wp56uhelinkO7/9s
+ UxA/VQb9dTz3Yss0eQ6UIFQKNkcrH4P3xLCtTMvEhBfV1V+kZl48k0LLYitK48GVhKR6RIRFhmasKm
+ AdRlxx2DWiBSfkBYz3lNT1NEXamtskZq9BrLz8PjJiAWzH0AWPuo8o3jVPVI4nWqX9XDMEAhvrzI9A
+ 2bMYnKuN2fOgKHeyhVx7jEqeHB4iL4u/Me+DHf8yikRD+tizkfg5KBgH9uvS+S48aMi69EoRvNulNX
+ cU1CgWiu3JE6WT0aecpyWwGQ3gftWGbLRKcI5s8FksefCCv1xHrVhnjTqBe3GdIH38Y4zvaS30CGXH
+ I+pVlNpyn3Cs6MD449VPZaUgRyBO/gE1cu326LLNJo12+wBD0TyGVtbXBIy6pz9JNOmCO5aPofdWLq
+ ihF2gc+fFwJci1VnHrXUG6a1BQZ8UYH2mRszp0+RqcApuhopFKGyzgkl/EzQ==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,73 +109,153 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 Hi,
+This patch series adds MFD, PMIC keys, and regulator support for MT6357.
+MT6357 is a MediaTek PMIC very similar to MT6358.
 
-Am 2022-11-11 09:58, schrieb Matt Ranostay:
-> On Thu, Nov 10, 2022 at 11:15:22AM +0100, Linus Walleij wrote:
->> On Thu, Nov 10, 2022 at 11:12 AM Matt Ranostay <mranostay@ti.com> 
->> wrote:
->> > On Wed, Nov 09, 2022 at 10:59:08AM +0100, Linus Walleij wrote:
->> > > On Wed, Nov 9, 2022 at 7:56 AM Matt Ranostay <mranostay@ti.com> wrote:
->> > >
->> > > > Add support for TPS6594X PMICs GPIO interface that has 11 that can be
->> > > > configured as input or outputs.
->> > > >
->> > > > Tested-by: Keerthy <j-keerthy@ti.com>
->> > > > Signed-off-by: Matt Ranostay <mranostay@ti.com>
->> > >
->> > > (...)
->> > > > +config GPIO_TPS6594X
->> > > > +       tristate "TI TPS6594X GPIO driver"
->> > > > +       depends on MFD_TPS6594X
->> > > > +       help
->> > > > +         Select this option to enable GPIO driver for the TPS6954X
->> > > > +         PMIC chip family. There are 11 GPIOs that can be configured.
->> > >
->> > > select GPIO_REGMAP
->> > >
->> > > This driver is an archetypical example of a driver that can make great
->> > > use of GPIO_REGMAP helpers, so rewrite it to use them.
->> > > Look in drivers/gpio/gpio-sl28cpld.c for an example.
->> >
->> > Linus,
->> >
->> > Those helpers look great for this usecase on the surface but however I think there could be some issues.
->> > For GPIO direction it isn't configured by a bitmap on a register(s) but by a bit on a range of
->> > registers (with a register for each GPIOx).
+Currently, MTK bindings related to the PMICs are not converted yet (still .txt):
 
-As long as there is only one register to be changed per pin/action,
-.reg_mask_xlate should work, as you've already found out.
+soc/mediatek/pwrap.txt (all PMIC parent)
+      |
+      V
+mfd/mt6397.txt (support lot of mt63XX PMIC)
+      +---------------+----------------+---...
+      V               V                V
+regulator/...      rtc/...          codec/...
 
->> > For set/get values the gpio helper would work though.
->> 
->> Isn't is possible to just use parts of the GPIO_REGMAP
->> helpers? I thought it's designed like such.
+1) Convert pwrap to yaml is ok.
 
-No, you can't use them as they are kept private, along with
-the needed struct gpio_regmap. Which was intentional back then
-as it should be easier to change the implementation or add features
-without its use being spread all over the gpio drivers.
+2) For the PMIC bindings, there are two option:
+- Convert mt6397.txt to mediatek,mt6397.yaml and continue to support multiple
+  PMIC with only one file. IMO, the file will be hard to read because
+  the supported features aren't the same for each PMIC.
 
-We could change that though - or just add the needed feature to
-gpio-regmap if it looks generic enough.
+- Make a binding file for each PMIC ref:
+    - mfd/mediatek,mt6357.yaml
+    - mfd/mediatek,mt6358.yaml
+    - ...
 
->> 
->> Michael Walle will know what to do with your usecase, and
->> whether to use it or not, let's page him!
->> 
-> 
-> So after looking around a bit and digging into the helper code I found 
-> this
-> drivers/pinctrl/bcm/pinctrl-bcm63xx.c which has a example on how to 
-> override
-> the reg_mask_xlate function which could be used for changing the
-> stride, and mask
-> based on the base address.
-> 
-> Currently have coded up using the gpio regmap helper. Will run through
-> some testing
-> first and then submit for review.
+3) All PMIC daughter bindings (regulator, rtc, codec, led, ...) aren't fully
+converted yet. Refering to the two PMIC convertion options above:
+- To be clean, all daughter bindings should be converted. This is hard because
+  a good understanding of each device is requiered to write efficient bindings.
+- Only daughter bindings supported by the added PMIC should be converted, that
+  allows to do the task conversion step by step.
 
-Sounds promising.
+In the V4 of this serie, I chose the second option.
 
--michael
+Regards,
+Alex
+
+Changes in v5:
+- Add missing maintainers
+- Improve RTC binding by adding rtc.yaml ref and start-year property
+- Split the txt->yaml conversion in one commit and the addition of the
+  new mt6357-rtc compatible in another commit.
+- Improve PWRAP binding:
+  - clocks and clock-name have been refactored.
+  - reset-names is now properly dependent to resets.
+  - additionalProperties change from true to false.
+  - change example for a most recent and popular SoC.
+  - "allOf" part has been simplified.
+- Pass binding tests with the updated tools. Here the command:
+  "make DT_CHECKER_FLAGS=-m dt_binding_check"
+- Link to v4: https://lore.kernel.org/r/20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com
+
+Changes in v4:
+- "dt-bindings: mfd: mt6397: add binding for MT6357" has been applied
+  by Lee Jones
+- All fixed regulator are now refering to fixed-regulator.yaml
+- vfe28 and vcamio18 regulators have been added
+- pwrap binding has been converted and mt8365 support has been added
+- Change node names for mt8173 and mt6358 SoC to be consistent with
+  pwrap documentation.
+- mt6357 PMIC binding has been created
+- mt6397 RTC binding has been converted and mt6357 support has been added
+- Link to v3: https://lore.kernel.org/r/20221005-mt6357-support-v3-0-7e0bd7c315b2@baylibre.com
+
+Changes in v3:
+- To be consistent with regulator/driver.h and helper.c, shift
+  variables have been removed and the mask values have been directly shifted.
+- Remove index tables and rework volt tables to use set/get helper functions.
+- Add comment to structure and function.
+- Fix Fabien Parent mail address.
+- Link to v2: https://lore.kernel.org/r/20221005-mt6357-support-v2-0-f17ba2d2d0a9@baylibre.com
+
+Changes in v2:
+- Rebase
+- Fix typo
+- Remove dependencies with https://lore.kernel.org/all/20220415153629.1817202-1-fparent@baylibre.com/
+  which is no longer relevant.
+
+Previous versions:
+v1 - https://lore.kernel.org/all/20220531124959.202787-1-fparent@baylibre.com/
+
+To: Lee Jones <lee@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Chen Zhong <chen.zhong@mediatek.com>
+To: Liam Girdwood <lgirdwood@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+To: Fabien Parent <fabien.parent@linaro.org>
+To: Alessandro Zummo <a.zummo@towertech.it>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Sean Wang <sean.wang@mediatek.com>
+To: Pavel Machek <pavel@ucw.cz>
+To: Tianping Fang <tianping.fang@mediatek.com>
+To: Flora Fu <flora.fu@mediatek.com>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: Fabien Parent <fparent@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-leds@vger.kernel.org
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+
+---
+Alexandre Mergnat (6):
+      dt-bindings: rtc: mediatek: convert MT6397 rtc documentation
+      dt-bindings: rtc: mediatek: add MT6357 support
+      dt-bindings: mfd: mediatek: Add bindings for MT6357 PMIC
+      dt-bindings: soc: mediatek: convert pwrap documentation
+      arm64: dts: mt6358: change node names
+      arm64: dts: mt8173: change node name
+
+Fabien Parent (4):
+      dt-bindings: input: mtk-pmic-keys: add binding for MT6357 PMIC
+      regulator: dt-bindings: Add binding schema for mt6357 regulators
+      regulator: add mt6357 regulator
+      Input: mtk-pmic-keys: add MT6357 support
+
+ .../bindings/input/mediatek,pmic-keys.yaml         |   1 +
+ .../devicetree/bindings/leds/leds-mt6323.txt       |   2 +-
+ .../devicetree/bindings/mfd/mediatek,mt6357.yaml   | 105 +++++
+ Documentation/devicetree/bindings/mfd/mt6397.txt   |   4 +-
+ .../regulator/mediatek,mt6357-regulator.yaml       | 293 +++++++++++++
+ .../bindings/rtc/mediatek,mt6397-rtc.yaml          |  44 ++
+ .../devicetree/bindings/rtc/rtc-mt6397.txt         |  31 --
+ .../bindings/soc/mediatek/mediatek,pwrap.yaml      | 145 +++++++
+ .../devicetree/bindings/soc/mediatek/pwrap.txt     |  75 ----
+ arch/arm64/boot/dts/mediatek/mt6358.dtsi           |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi       |   2 +-
+ arch/arm64/boot/dts/mediatek/mt8173-evb.dts        |   2 +-
+ drivers/input/keyboard/mtk-pmic-keys.c             |  17 +
+ drivers/regulator/Kconfig                          |   9 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/mt6357-regulator.c               | 454 +++++++++++++++++++++
+ include/linux/regulator/mt6357-regulator.h         |  51 +++
+ 17 files changed, 1128 insertions(+), 114 deletions(-)
+---
+base-commit: e7f535c0775b896befb4f6765c02bc065fd26156
+change-id: 20221005-mt6357-support-55308b82e33f
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
