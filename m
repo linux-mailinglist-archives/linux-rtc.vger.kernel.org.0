@@ -2,48 +2,62 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4DD62E01E
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Nov 2022 16:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB02D62E075
+	for <lists+linux-rtc@lfdr.de>; Thu, 17 Nov 2022 16:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiKQPkF (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Nov 2022 10:40:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S239890AbiKQP4r (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Thu, 17 Nov 2022 10:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239776AbiKQPju (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Nov 2022 10:39:50 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CBEEBD;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1258140otl.10;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
+        with ESMTP id S239836AbiKQP4p (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Nov 2022 10:56:45 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A0A769EC;
+        Thu, 17 Nov 2022 07:56:44 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id o30so1704288wms.2;
+        Thu, 17 Nov 2022 07:56:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jw7AXNLDquiKmb0cINuRMfIIFbIpSHUSTUYkwNek1L8=;
+        b=EMUM9y0qHFTq+fyZfZPjr80/ZVBOVEtb/zBw5xodvQA4wG6FLabyEIo8El5oxnRoL9
+         WTu5f+yqCYJajEvu4a94XN2XfeQN3HoNS1HY4b8X67zajEYV2cG0dySjS8Lz8nhRJhC3
+         B2ZOB47D/YZuR4Z5fc5vUJbTNZRrGddtS1caO+4A07Yv0BaeBah1apqpbIRMWxYHGL24
+         DA1fcNj44DcfL3eH4u0JfM++YqLwEiu9TPuNaHfETpnZGlLCR8EMKiqqtCcaZqIP/hEF
+         OMKPmThfVFPXZ7s9ZPza5sJGl/XSZgyiBJjjNhBHHavxffgtIye+/zLC4nCvW6amGZqB
+         68eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TVhbvRUqZQu6uk1nSlOpC0Wl3O1+Ha3Mzov9EJw71XE=;
-        b=qZkEGPzBU9nepJmT/trzMGKP66HWNxqpAT29SXCU4qP+k+rf1wQrg3Tu8ttQxffvKQ
-         TtmC1pRWCj72U6ptzNGgf/Bgd9JAuPRTWZq33UO0G8kgQ+bOaZPyqx3LqwipDrnBA/8c
-         99xonw/WuJ8zK3a8QRPuI0oh3q7hVEO09FMby9SXazlHRBUQtgl21pl3Rdh1RcMTomDO
-         e1OFC+alOhpZLDI4/hlxipGlTvz1rVRVbq/j4dKmsJB6BErHvd5ttNGhDHkDMDpVU6bi
-         AtkBsSo7oJxOkU+XveZVeRbZJZeH0w1YOpmc03jHrSA6pMbG70WHSHZO851EWFtOPisV
-         kJkQ==
-X-Gm-Message-State: ANoB5pktJJtd8uZLlo7Sky+8ymTZRfHKA34dbPtAR3WSGv4pFH1FDtXM
-        OjBRT5tdE2TWwnUEXGG5aQ==
-X-Google-Smtp-Source: AA0mqf4f8AEtQBCEXoach04sei0JgrD/an2wLNFUiFJXCBqskIg7Lnw9MEjrMzhIfDsicIRmbX4Fng==
-X-Received: by 2002:a05:6830:1d66:b0:66c:5b70:2396 with SMTP id l6-20020a0568301d6600b0066c5b702396mr1626581oti.357.1668699589169;
-        Thu, 17 Nov 2022 07:39:49 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 44-20020a9d04af000000b0066101e9dccdsm450844otm.45.2022.11.17.07.39.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 07:39:48 -0800 (PST)
-Received: (nullmailer pid 2918390 invoked by uid 1000);
-        Thu, 17 Nov 2022 15:39:50 -0000
-Date:   Thu, 17 Nov 2022 09:39:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Flora Fu <flora.fu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jw7AXNLDquiKmb0cINuRMfIIFbIpSHUSTUYkwNek1L8=;
+        b=VHZOOYOxzL5q1vjNLFt/ftN4S+Ihq1xRyB3PvjLi0yn2i1yiuuGFm3GfgGZjkOT1sL
+         niBK68R6oqhpezcFHAsM+1kEr2Vow8RrrTl7sbLleAGH4YQjOxvylMEIp0eJrBqXJi9W
+         l/txUETBPXjAlS1OFZO5iCxrzhRWaTv5jcdwPNpsmVBiFSN6O2EVQytnLtF/tv3VwOoI
+         eVRC5BSzx2/G+4J9eA37+PKXOO3b0edKEDhWp5w9Jvf7vCPJ2xg9tv+7sZBpQVNPdBD4
+         Z1zBLr5kNfx6CdnI0i0XIQTrnAuYWIRFhIJjZW21vlOvEaTQ1BY+Ed+ScRb0hjjNHhnC
+         mEaw==
+X-Gm-Message-State: ANoB5pmRVCerMpsaNtz97i83uKKLwsxUtD6FpGZArJPyWrYuVTPvs9wM
+        q3OyRSt1/W8Xg7i/VpPfVNo=
+X-Google-Smtp-Source: AA0mqf7PU6ZAl4D73Eqi1u337u3E+gX3npBMxRRcNin3zcfg82KMPzDIVP8aXn+bmx3EksJgOFP/Zw==
+X-Received: by 2002:a7b:ca53:0:b0:3cf:74ef:3313 with SMTP id m19-20020a7bca53000000b003cf74ef3313mr2170849wml.41.1668700602684;
+        Thu, 17 Nov 2022 07:56:42 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id t1-20020a1c7701000000b003cf4d99fd2asm1612146wmi.6.2022.11.17.07.56.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Nov 2022 07:56:41 -0800 (PST)
+Message-ID: <10300d7f-30d5-7601-6f79-10c6799c89b3@gmail.com>
+Date:   Thu, 17 Nov 2022 16:56:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 08/10] arm64: dts: mt8173: change node name
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Flora Fu <flora.fu@mediatek.com>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Tianping Fang <tianping.fang@mediatek.com>,
         Fabien Parent <fabien.parent@linaro.org>,
@@ -55,7 +69,9 @@ Cc:     Flora Fu <flora.fu@mediatek.com>,
         Chen Zhong <chen.zhong@mediatek.com>,
         Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
         Mattijs Korpershoek <mkorpershoek@baylibre.com>,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -63,19 +79,15 @@ Cc:     Flora Fu <flora.fu@mediatek.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         linux-rtc@vger.kernel.org, linux-input@vger.kernel.org
-Subject: Re: [PATCH v5 02/10] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Message-ID: <20221117153950.GA2913522-robh@kernel.org>
 References: <20221005-mt6357-support-v5-0-8210d955dd3d@baylibre.com>
- <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005-mt6357-support-v5-2-8210d955dd3d@baylibre.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+ <20221005-mt6357-support-v5-8-8210d955dd3d@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221005-mt6357-support-v5-8-8210d955dd3d@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,83 +95,45 @@ Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 01:32:56PM +0100, Alexandre Mergnat wrote:
-> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
-> - Add maintainer
-> - Remove the .txt binding file
+
+
+On 16/11/2022 13:33, Alexandre Mergnat wrote:
+> - Change the node name from "mt6397" to "pmic" to be consistent
+> with mediatek,pwrap.yaml documentation.
 > 
+
+Same here as in 7/10.
+
 > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 > ---
->  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
->  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 43 ++++++++++++++++++++++
->  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 ----------------
->  3 files changed, 44 insertions(+), 32 deletions(-)
+>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
+>   arch/arm64/boot/dts/mediatek/mt8173-evb.dts  | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> index 0088442efca1..79aaf21af8e9 100644
-> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> @@ -33,7 +33,7 @@ Optional subnodes:
->  		- compatible: "mediatek,mt6331-rtc"
->  		- compatible: "mediatek,mt6358-rtc"
->  		- compatible: "mediatek,mt6397-rtc"
-> -	For details, see ../rtc/rtc-mt6397.txt
-> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
->  - regulators
->  	Required properties:
->  		- compatible: "mediatek,mt6323-regulator"
-> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> new file mode 100644
-> index 000000000000..f5a323597f1d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> @@ -0,0 +1,43 @@
-> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek MT6397/MT6366/MT6358/MT6323 RTC
-> +
-> +maintainers:
-> +  - Tianping Fang <tianping.fang@mediatek.com>
-> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> +
-> +description: |
-
-Don't need '|' if no formatting.
-
-> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
-> +  as a type of multi-function device (MFD). The RTC can be configured and set up
-> +  with PMIC wrapper bus which is a common resource shared with the other
-> +  functions found on the same PMIC.
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt6323-rtc
-> +      - mediatek,mt6358-rtc
-> +      - mediatek,mt6366-rtc
-> +      - mediatek,mt6397-rtc
-> +
-> +  start-year: true
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +examples:
-> +  - |
-> +    pmic {
-> +        rtc {
-> +            compatible = "mediatek,mt6397-rtc";
-> +        };
-> +    };
-
-Please drop the example here. Just one complete example in the MFD 
-schema.
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> index e21feb85d822..a8f5c48e1782 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> @@ -913,7 +913,7 @@ &pwm0 {
+>   };
+>   
+>   &pwrap {
+> -	pmic: mt6397 {
+> +	pmic: pmic {
+>   		compatible = "mediatek,mt6397";
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-evb.dts b/arch/arm64/boot/dts/mediatek/mt8173-evb.dts
+> index 0b5f154007be..755df5694234 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173-evb.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173-evb.dts
+> @@ -300,7 +300,7 @@ &pwrap {
+>   	/* Only MT8173 E1 needs USB power domain */
+>   	power-domains = <&spm MT8173_POWER_DOMAIN_USB>;
+>   
+> -	pmic: mt6397 {
+> +	pmic: pmic {
+>   		compatible = "mediatek,mt6397";
+>   		interrupt-parent = <&pio>;
+>   		interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
+> 
