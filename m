@@ -2,225 +2,142 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7A762E817
-	for <lists+linux-rtc@lfdr.de>; Thu, 17 Nov 2022 23:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E6262EF40
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Nov 2022 09:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240775AbiKQWTH (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Thu, 17 Nov 2022 17:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S241430AbiKRI2e (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Nov 2022 03:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240642AbiKQWSk (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Thu, 17 Nov 2022 17:18:40 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8C27AF52;
-        Thu, 17 Nov 2022 14:18:02 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2AE5C240003;
-        Thu, 17 Nov 2022 22:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668723480;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PMEGGaHv4ym/vEJJOXTPs/ct/uPum/odo/7JSOnoUdo=;
-        b=Cn6U+mATiVHhbL+s2mlEZZ7jPclAmYenakyRH+5WOfTRV+2HpobwF3xdZRV5fKgDa9v8f3
-        fzfh4gotM4jMZDcjTfL6cdXGkdPOB3ItNowG1EW8cJy7bNlSlA2zfj0Jex23Ip7ojh2Q34
-        BaMi4pamR4/H7v79LFIbAHZ+juHCtpcPdTG7MxFQdSnbjolpT/YjwjvpkC0YC0CyXvhD4S
-        z29FFI3o4ZviVWkKZrx6AXHnehgKc22WVsb3EOA1JuwLrw3QCTENvOOKeyH/o3HsWr5Vas
-        AGuGLe6NVFf4LZBMJ9UTm+57Cho5Ipf/8QEyX5/IcwhZVMZTiwMMzZkby1ePHg==
-Date:   Thu, 17 Nov 2022 23:17:59 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] rtc: max31329: Add Maxim max31329 real time clock
-Message-ID: <Y3azF55qLiH3uaH7@mail.local>
-References: <20220923185358.11023-1-jagathjog1996@gmail.com>
- <20220923185358.11023-3-jagathjog1996@gmail.com>
+        with ESMTP id S241311AbiKRI2a (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 03:28:30 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34EDCE8
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 00:28:24 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id t10so5960102ljj.0
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 00:28:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MrA5CDs46lQZm6VaAVmPmV1Nyk9XIySNq9lvhXdo7k8=;
+        b=yIT6wd8Tn/4EigMdSev3RTx1dShvONUZ1o2LJic5y3UzW8LgMuG7uFp80Y8Mw7p+2i
+         u+Hx+MWiciMmXSYnrFx98cxa4sbmSAURAUt99p8E3r2tMmF0ygoLGxcFQPJrif3jPMLj
+         y0DxRVohO6j383Jju+uqZkJFVPAKCT7G1d+SNz0aRrDl59ec+iH3SvLunNJnRAN3fFHp
+         uj/yuz8SV/cGRRKi6lGP5BHU+Y9YeVlbn5zwGo+B4clkg1nQfYqsfFdJXz60NiVE7C5x
+         xoWYk/DHjlYtipany3Ms311spap+ZgR86DO9tnSirVslPkUYj7drcMZpd/Ds56w7qUSX
+         eO2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MrA5CDs46lQZm6VaAVmPmV1Nyk9XIySNq9lvhXdo7k8=;
+        b=PMAfzy7EtZq0eoBqIxn2+k7qhEscLUVtR+KiAIkjz3elhD7KmyxtKpp7ouUdWHX7cV
+         Y9Lnpy5mdVLo+NESKf02gR8hybyat8NwdymDCXEZj28eU5NPUyNwaf5Z7kjdZG6+/Q9Y
+         PgTKKo5gMxel3/5pygVqWU4NdNWktRHkCi7ObQbxFXcc7kvod4ZV9ttInh8tLJlSKtH/
+         tQf9/QfJyMFBc09FYGEuQ10eQOPDnj7Oir4ON6nKLXSRabUUsxtxH/jn5ZqNOLRZXo8K
+         3cv/GTZ5u9tcnQShJ3LlM4D1B4jzFOmea1FFBKfB3PR0P7GH0RUT1csk8nXjzqnr+6jU
+         drWA==
+X-Gm-Message-State: ANoB5pn7PFlhXlNzRrEcHtKelZMRaSsOeOj5GJ2BACwEFL4IFi7AvJco
+        K+S1+K06E/8zpDW1ZLgLJ5Cdnw==
+X-Google-Smtp-Source: AA0mqf4FSTsj7jWLGFDuUM1KolU0pAAAlYx7n+VRF6tfHUnjgf3Tz4kJo9qfndGCbN01BGn3foVCSQ==
+X-Received: by 2002:a2e:9052:0:b0:26e:eeb:f9cf with SMTP id n18-20020a2e9052000000b0026e0eebf9cfmr2211769ljg.480.1668760070041;
+        Fri, 18 Nov 2022 00:27:50 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g27-20020a2eb0db000000b0026bf0d71b1esm573326ljl.93.2022.11.18.00.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 00:27:49 -0800 (PST)
+Message-ID: <06ac1c86-22f7-97ff-bf59-6fb0994dfcc5@linaro.org>
+Date:   Fri, 18 Nov 2022 09:27:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220923185358.11023-3-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org
+References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
+ <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+ <Y3Z0w6JH1f5zgwvW@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y3Z0w6JH1f5zgwvW@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-Hello,
-
-I have a few small comments:
-
-On 24/09/2022 00:23:58+0530, Jagath Jog J wrote:
-> +static int max31329_get_osc_status(struct device *dev)
-
-This function should be folded in its only call site, this will reduce
-the size of the code.
-
-> +{
-> +	struct max31329_data *max31329 = dev_get_drvdata(dev);
-> +	unsigned int status;
-> +	int ret;
-> +
-> +	ret = regmap_read(max31329->regmap, MAX31329_STATUS_REG, &status);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (status & MAX31329_STATUS_OSF)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
-
-> +static int max31329_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> +{
-> +	struct max31329_data *max31329 = dev_get_drvdata(dev);
-> +	const struct rtc_time *tm = &alrm->time;
-> +	u8 regs[6], year;
-> +	int ret;
-> +
-> +	regs[REG_TO_OFFSET(MAX31329_SECONDS_REG)] = bin2bcd(tm->tm_sec) & 0x7F;
-> +	regs[REG_TO_OFFSET(MAX31329_MINUTES_REG)] = bin2bcd(tm->tm_min) & 0x7f;
-> +	regs[REG_TO_OFFSET(MAX31329_HOURS_REG)] = bin2bcd(tm->tm_hour) & 0x3f;
-> +	regs[REG_TO_OFFSET(MAX31329_DATE_REG) - 1] = bin2bcd(tm->tm_mday) & 0x3f;
-> +	regs[REG_TO_OFFSET(MAX31329_MONTH_REG) - 1] = bin2bcd(tm->tm_mon + 1) & 0x1f;
-> +
-> +	if (tm->tm_year >= 200)
-> +		return -EINVAL;
-> +
-This check is unnecessary.
-
-> +	year = bin2bcd(tm->tm_year - 100);
-> +	regs[REG_TO_OFFSET(MAX31329_YEAR_REG) - 1] = year;
-> +
-> +	ret = regmap_bulk_write(max31329->regmap, MAX31329_ALM1_SEC_REG, regs,
-> +				MAX31329_ALM1_SEC_LEN);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return max31329_alarm_irq_enable(dev, alrm->enabled);
-> +}
-
-[...]
-
-> +static int max31329_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
-> +				    unsigned long parent_rate)
-> +{
-> +	struct max31329_data *max31329 = clkout_hw_to_max31329(hw);
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(clkout_rates); i++)
-> +		if (rate == clkout_rates[i])
-> +			return regmap_update_bits(max31329->regmap,
-> +						  MAX31329_RTC_CONFIG2_REG,
-> +						  MAX31329_RTC_CFG2_CLKOHZ_MSK,
-> +						  FIELD_PREP(MAX31329_RTC_CFG2_CLKOHZ_MSK,
-> +							     i));
-
-Doesn't that i fit on the previous line?
-
-> +	return -EINVAL;
-> +}
-> +
-> +static int max31329_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-
-Doesn't that fit on one line?
-
-> +{
-> +	struct max31329_data *max31329;
-> +	int ret;
-> +	struct nvmem_config nvmem_cfg = {
-> +		.name = "max31329_nvram",
-> +		.word_size = 1,
-> +		.stride = 1,
-> +		.size = 64,
-> +		.type = NVMEM_TYPE_BATTERY_BACKED,
-> +		.reg_read = max31329_nvram_read,
-> +		.reg_write = max31329_nvram_write,
-> +	};
-> +
-> +	max31329 = devm_kzalloc(&client->dev, sizeof(*max31329), GFP_KERNEL);
-> +	if (!max31329)
-> +		return -ENOMEM;
-> +
-> +	max31329->regmap = devm_regmap_init_i2c(client, &config);
-> +	if (IS_ERR(max31329->regmap))
-> +		return PTR_ERR(max31329->regmap);
-> +
-> +	dev_set_drvdata(&client->dev, max31329);
-> +
-> +	max31329->rtc = devm_rtc_allocate_device(&client->dev);
-> +	if (IS_ERR(max31329->rtc))
-> +		return PTR_ERR(max31329->rtc);
-> +
-> +	max31329->rtc->ops = &max31329_rtc_ops;
-> +	max31329->irq = client->irq;
-> +	max31329->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	max31329->rtc->range_max = RTC_TIMESTAMP_END_2199;
-> +
-> +	if (max31329->irq) {
-> +		ret = devm_request_threaded_irq(&client->dev, max31329->irq,
-> +						NULL, max31329_irq_handler,
-> +						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> +						"max31329", &client->dev);
-> +		if (ret)
-> +			return ret;
-> +	} else {
-> +		clear_bit(RTC_FEATURE_ALARM, max31329->rtc->features);
-> +		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, max31329->rtc->features);
-> +	}
-> +
-> +	if (max31329->irq || device_property_read_bool(&client->dev,
-> +						       "wakeup-source"))
-> +		device_init_wakeup(&client->dev, true);
-> +
-> +	ret = devm_rtc_register_device(max31329->rtc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	max31329_trickle_config(&client->dev);
-> +
-> +	nvmem_cfg.priv = max31329->regmap;
-> +	devm_rtc_nvmem_register(max31329->rtc, &nvmem_cfg);
-> +
-> +#ifdef CONFIG_COMMON_CLK
-> +	max31329_clkout_register_clk(max31329, client);
-> +#endif
-> +
-> +	return 0;
-> +}
-> +
-> +static const __maybe_unused struct of_device_id max31329_of_match[] = {
-> +	{ .compatible = "maxim,max31329", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max31329_of_match);
-> +
-> +static struct i2c_driver max31329_driver = {
-> +	.driver = {
-> +		.name = "rtc-max31329",
-> +		.of_match_table = of_match_ptr(max31329_of_match),
-> +	},
-> +	.probe = max31329_probe,
-> +};
-> +module_i2c_driver(max31329_driver);
-> +
-> +MODULE_AUTHOR("Jagath Jog J <jagathjog1996@gmail.com>");
-> +MODULE_DESCRIPTION("Maxim MAX31329 RTC driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
+On 17/11/2022 18:52, Conor Dooley wrote:
+> On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
+>> The Devicetree bindings document does not have to say in the title that
+>> it is a "binding", but instead just describe the hardware.  For shared
+>> (re-usable) schemas, name them all as "common properties".
 > 
+> 
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> index 1ab416c83c8d..d2de3d128b73 100644
+>> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>> @@ -4,7 +4,7 @@
+>>  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+>>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>  
+>> -title: Qualcomm Global Clock & Reset Controller Common Bindings
+>> +title: Qualcomm Global Clock & Reset Controller common parts
+>>  
+>>  maintainers:
+>>    - Stephen Boyd <sboyd@kernel.org>
+> 
+> 
+>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> index cf9c2f7bddc2..20ac432dc683 100644
+>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> @@ -4,7 +4,7 @@
+>>  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
+>>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>  
+>> -title: Generic OPP (Operating Performance Points) Common Binding
+>> +title: Generic OPP (Operating Performance Points) common parts
+>>  
+>>  maintainers:
+>>    - Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> Hey Krzysztof,
+> 
+> Hopefully I've not overlooked something obvious, but it wasnt noted in
+> the commit message - how come these two are "parts" rather than
+> "properties"? The opp one at least don't seem to have much more than
+> properties and patterProperties in it.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+They should be properties, will fix in v2.
+
+
+Best regards,
+Krzysztof
+
