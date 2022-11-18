@@ -2,261 +2,98 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C4362FD07
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Nov 2022 19:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C604D630441
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Nov 2022 00:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242767AbiKRSvM (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Nov 2022 13:51:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S236090AbiKRXiO (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Nov 2022 18:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235217AbiKRSu6 (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 13:50:58 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D369B8CF11;
-        Fri, 18 Nov 2022 10:50:57 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id n186so6294667oih.7;
-        Fri, 18 Nov 2022 10:50:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k/ee9MiYM54ZuabkBQ/+PieDZU39cYWg6HtAgSwxpls=;
-        b=bEV6fb1eT54bWlkpcyqazB8Z/zxFT0Xp2RwhYuyc6VMqNAhGeuk3a/JFjYq8g4iraB
-         0O0HD2VwufUVWZUgwoaXUuAZLLL/3UavosSR/WePqqbcGX/dxTHKIawNCj6kkgVY9zu/
-         4mL/SmqOOgSanvy9WzAZ8/YnQDNFEphSL9lAfAcXEukLzJezNAg9f8LZsRWeT6jhja2j
-         Kq9Z6pEdh6/UlyraisSNxOc5Yir8w12rV3ZFPnxpweeh2ekjRorS1dP79upYypfM6LhQ
-         X1qx42Ea2GhU2sNsd6saQFEcbpN9K0SlCUqr2Cmd8LGH+uTX2qF18BfEXeYC1wLIqkx0
-         H9ng==
-X-Gm-Message-State: ANoB5pnbiH+tbeZTyJP/lS6SBux4fKDpNMZvl7XjBzAxs6BpJtzTCB/3
-        aAd5AINPa3dQE3DxjlSycA==
-X-Google-Smtp-Source: AA0mqf4e21GRZkvWRvpSWmFSf0jhJjI8oAjyXchPeZTiL+IQp+8Fo3DKEDFsXheGcyees+YCBTMuIw==
-X-Received: by 2002:aca:2113:0:b0:35a:d72:5504 with SMTP id 19-20020aca2113000000b0035a0d725504mr4073684oiz.209.1668797457330;
-        Fri, 18 Nov 2022 10:50:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e19-20020a0568301e5300b00637032a39a3sm1883737otj.6.2022.11.18.10.50.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 10:50:56 -0800 (PST)
-Received: (nullmailer pid 856967 invoked by uid 1000);
-        Fri, 18 Nov 2022 18:50:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-watchdog@vger.kernel.org,
+        with ESMTP id S236637AbiKRXhZ (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 18:37:25 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D11A5217C
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 15:22:11 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9e-0005Ao-U5; Fri, 18 Nov 2022 23:48:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9b-0058qi-Sl; Fri, 18 Nov 2022 23:48:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9c-0000TB-0A; Fri, 18 Nov 2022 23:48:12 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>, linux-pci@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-phy@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        devicetree@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-11-3f025599b968@linaro.org>
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org> 
- <20221117-b4-amlogic-bindings-convert-v1-11-3f025599b968@linaro.org>
-Message-Id: <166879731890.853508.15161413381354216091.robh@kernel.org>
-Subject: Re: [PATCH 11/12] dt-bindings: pcie: convert amlogic,meson-pcie.txt
- to dt-schema
-Date:   Fri, 18 Nov 2022 12:50:54 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 560/606] rtc: ds1307: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:44:54 +0100
+Message-Id: <20221118224540.619276-561-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-On Fri, 18 Nov 2022 15:33:37 +0100, Neil Armstrong wrote:
-> Convert the Amlogic Meson AXG DWC PCIE SoC controller bindings to
-> dt-schema.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 129 +++++++++++++++++++++
->  .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
->  2 files changed, 129 insertions(+), 70 deletions(-)
-> 
+.probe_new() doesn't get the i2c_device_id * parameter, so determine
+that explicitly in the probe function.
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/rtc/rtc-ds1307.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221117-b4-amlogic-bindings-convert-v1-11-3f025599b968@linaro.org
-
-
-pcie@f9800000: clock-names:0: 'pclk' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@f9800000: clock-names:1: 'port' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@f9800000: clock-names:2: 'general' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@f9800000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@fa000000: clock-names:0: 'pclk' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@fa000000: clock-names:1: 'port' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@fa000000: clock-names:2: 'general' was expected
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@fa000000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-2.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j110-rev-3.dtb
-	arch/arm64/boot/dts/amlogic/meson-axg-s400.dtb
-
-pcie@fc000000: clock-names:0: 'pclk' was expected
-	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
-
-pcie@fc000000: clock-names:1: 'port' was expected
-	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
-
-pcie@fc000000: clock-names:2: 'general' was expected
-	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
-
-pcie@fc000000: Unevaluated properties are not allowed ('clock-names', 'power-domains' were unexpected)
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-gbit.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-c4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-odroid-hc4.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air.dtb
-	arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-gbit.dtb
-
-pcie@fc000000: Unevaluated properties are not allowed ('clock-names' was unexpected)
-	arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-u200.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-a311d-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gsking-x.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-gtking-pro.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2-plus.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-s922x-khadas-vim3.dtb
-	arch/arm64/boot/dts/amlogic/meson-g12b-ugoos-am6.dtb
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index 7c2276cf5514..b49c02fd78f7 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -1713,9 +1713,9 @@ static const struct regmap_config regmap_config = {
+ 	.val_bits = 8,
+ };
+ 
+-static int ds1307_probe(struct i2c_client *client,
+-			const struct i2c_device_id *id)
++static int ds1307_probe(struct i2c_client *client)
+ {
++	const struct i2c_device_id *id = i2c_client_get_device_id(client);
+ 	struct ds1307		*ds1307;
+ 	const void		*match;
+ 	int			err = -ENODEV;
+@@ -2012,7 +2012,7 @@ static struct i2c_driver ds1307_driver = {
+ 		.name	= "rtc-ds1307",
+ 		.of_match_table = ds1307_of_match,
+ 	},
+-	.probe		= ds1307_probe,
++	.probe_new	= ds1307_probe,
+ 	.id_table	= ds1307_id,
+ };
+ 
+-- 
+2.38.1
 
