@@ -2,92 +2,109 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BDC62F26D
-	for <lists+linux-rtc@lfdr.de>; Fri, 18 Nov 2022 11:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616A262F61D
+	for <lists+linux-rtc@lfdr.de>; Fri, 18 Nov 2022 14:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241626AbiKRKXK (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Nov 2022 05:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S241823AbiKRNbY (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Nov 2022 08:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241547AbiKRKXJ (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 05:23:09 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEC49038B
-        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 02:23:08 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id l8so6179327ljh.13
-        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 02:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SZjogBHbu6Hox+r5R773aRSxF9DDXAIJw7tfb5nqEF0=;
-        b=RzDAHrjqmmXJRJtMDHScshl90a0ew3DPG71B897qVi1fY/6m/zKUdGnjs9pXVgIgJO
-         BQYvB5vWlBF4kbheGuxghWw390g3RTILI6nhfPP50cYUs1vHbJvED6gL6M53PlJ8O3mm
-         0TrqKvi98qdenE7Eh38hiQT48iikpW0dIWAtJC7KtSWLJq3Q8xvArvcRspM+p/U/KlWn
-         M+iyDTbty5FRR5uwKWm/SWHRd+XWrwzzxCYoljRj8U+JgF6GUWS5bDYYpL2NGfkqiZ1R
-         3Jc5UcJxf9cdCwctiOYKiiNanc5hdqbMHS6f3nzMBXQYGNun1ox3r1GKBsPEceq0oTCC
-         HUDQ==
+        with ESMTP id S241701AbiKRNbX (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 08:31:23 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBFD67F6C;
+        Fri, 18 Nov 2022 05:31:20 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1322d768ba7so5933039fac.5;
+        Fri, 18 Nov 2022 05:31:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SZjogBHbu6Hox+r5R773aRSxF9DDXAIJw7tfb5nqEF0=;
-        b=och+cbWMbnbslaI8w14UYEbBLqkDg4EXs2nQAakKb9EGmATfuO1SMgfMcx2fxhEN64
-         1tiSEpdmN2IPmO6lvrodL3ltEYh6zTuDKN5SAG6jQ6wKW2Boh/31t9SrRGJAeERsBp7c
-         Ik/+O+mf9pg3vyuAEVLhSvYIUQrRsfcjohppq1vkNKJsMDB85rYUZPLT7GoMZKHOKpLf
-         mS0eJCtKDY2/j3kecSIa9eUpXY8TmCCv4/8BJLO+eE4kfVeSs6yF9yQ2VjLjJ+tSOGzV
-         Rw3FeEULb8ovybNgGtt6xE1FvtTxyCCWYbkDHrtGYRO8/GNYR9xqjTySWVrWheEC+CtQ
-         W8rg==
-X-Gm-Message-State: ANoB5pkYgzZXH3bcBadPTsbaIUMMTg13ykAvBWUrSLdUVNnTm0EZZI3f
-        tJuEgYYFy8gWwjXjsCmerF/K0w==
-X-Google-Smtp-Source: AA0mqf4w/54HorPUxYTe6YSbQtht4ss6LQG0GXx1kPqIetT0khZ9z5aSaUDr2YgFGLtSnHscXHqFKQ==
-X-Received: by 2002:a2e:8e63:0:b0:26e:6c5:2a6c with SMTP id t3-20020a2e8e63000000b0026e06c52a6cmr2429146ljk.36.1668766986598;
-        Fri, 18 Nov 2022 02:23:06 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b1-20020a056512070100b004b4bb6286d8sm241786lfs.84.2022.11.18.02.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Nov 2022 02:23:06 -0800 (PST)
-Message-ID: <966aa391-8a49-c64b-9985-3d50a8c35891@linaro.org>
-Date:   Fri, 18 Nov 2022 11:23:05 +0100
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EfogeLm9YKn41KXzs/CGTbBvXGpNupwTv41nqDxYWRc=;
+        b=Avk7dIxCFQk0G0gCJgSP8hQqIGuOs8CfWSGXLtonIRJdg7PzG5a1T4Dt1oRgulFQ1Z
+         7CqSvotc4vrkbCOg0PyWbzFcoXCEYfIXcycfsVh6TUj4RmCrYGFhj3o6rMMIFKpD9nSE
+         mLc/4mP4X2oi7A1PrpxxzvkFVgzHZ3hodNLPSIadUGGJdms8QW1Szg3EPeIlFsCm/BIt
+         TYslSX4kYWGrlO+Kf6FZB89rvwuy+kURhhXi7GPIjUdsj1IpCdwUayJXc10TZ0RCm4Qk
+         imPiXkoqw9kUo2cohavXXjiLnQ9z0G4D34bk1f/kjVsOAMN3z9rq+utjH7LVel9aC13s
+         nJbw==
+X-Gm-Message-State: ANoB5plihOkJxsUQwtE0lAEpIa1XZnhfh8VAp9wG/fVZyDRRXLOod0Ke
+        r++WyX9zuP9cUT0XiVLfQg==
+X-Google-Smtp-Source: AA0mqf7QRfsdsSbMWIOmsFpInlQ9vxFriR4ebriv3bGHGVpNO2xEQLPYKgVDxvgK/vJX4Yu7Z6iQ0g==
+X-Received: by 2002:a05:6870:40ca:b0:141:e308:fab5 with SMTP id l10-20020a05687040ca00b00141e308fab5mr4049099oal.49.1668778278208;
+        Fri, 18 Nov 2022 05:31:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id be41-20020a05680821a900b00339befdfad0sm1392635oib.50.2022.11.18.05.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 05:31:17 -0800 (PST)
+Received: (nullmailer pid 1482189 invoked by uid 1000);
+        Fri, 18 Nov 2022 13:31:19 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 2/4] MFD: TPS6594x: Add new PMIC device driver for
- TPS6594x chips
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>, vigneshr@ti.com, robh@kernel.org,
-        a.zummo@towertech.it, linus.walleij@linaro.org, lee@kernel.org,
-        brgl@bgdev.pl
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>
+From:   Rob Herring <robh@kernel.org>
+To:     Matt Ranostay <mranostay@ti.com>
+Cc:     brgl@bgdev.pl, devicetree@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org, a.zummo@towertech.it,
+        vigneshr@ti.com, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        lee@kernel.org, linus.walleij@linaro.org
+In-Reply-To: <20221118092218.480147-2-mranostay@ti.com>
 References: <20221118092218.480147-1-mranostay@ti.com>
- <20221118092218.480147-3-mranostay@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221118092218.480147-3-mranostay@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <20221118092218.480147-2-mranostay@ti.com>
+Message-Id: <166877739931.1425860.1214658943409919491.robh@kernel.org>
+Subject: Re: [PATCH v4 1/4] Documentation: ti,tps6594: Add DT bindings for the
+ TPS6594x PMIC
+Date:   Fri, 18 Nov 2022 07:31:19 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 18/11/2022 10:22, Matt Ranostay wrote:
-> From: Keerthy <j-keerthy@ti.com>
+
+On Fri, 18 Nov 2022 01:22:15 -0800, Matt Ranostay wrote:
+> Add documentation for the TPS6594x PMIC including its RTC and GPIO
+> functionalities.
 > 
-> The TPS6594x chip is a PMIC, and contains the following components:
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> ---
+>  .../devicetree/bindings/mfd/ti,tps6594.yaml   | 65 +++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+> 
 
-No improvements in the subject. The subject prefixes are lowercase.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-In the binding you said device is "TPS6594", not TPS6594x.
+yamllint warnings/errors:
 
-Best regards,
-Krzysztof
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/ti,tps6594.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,tps6594.example.dtb: pmic@48: gpio: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,tps6594.example.dtb: pmic@48: gpio:compatible:0: 'ti,tps6594x-gpio' was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+Documentation/devicetree/bindings/mfd/ti,tps6594.example.dtb:0:0: /example-0/i2c0/pmic@48/gpio: failed to match any schema with compatible: ['ti,tps6594-gpio']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221118092218.480147-2-mranostay@ti.com
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command.
 
