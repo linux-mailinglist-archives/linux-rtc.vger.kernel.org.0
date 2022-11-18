@@ -2,85 +2,134 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B232163071D
-	for <lists+linux-rtc@lfdr.de>; Sat, 19 Nov 2022 01:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A020063061E
+	for <lists+linux-rtc@lfdr.de>; Sat, 19 Nov 2022 01:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237920AbiKSAZf (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Fri, 18 Nov 2022 19:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S237250AbiKSAFZ (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Fri, 18 Nov 2022 19:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbiKSAZO (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 19:25:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25125D6A5
-        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 15:38:33 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA9f-0005Bv-65; Fri, 18 Nov 2022 23:48:15 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA9c-0058qt-Cv; Fri, 18 Nov 2022 23:48:13 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1owA9c-0000TP-Hf; Fri, 18 Nov 2022 23:48:12 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S237238AbiKSAFF (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Fri, 18 Nov 2022 19:05:05 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3D4EBF15
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 15:31:11 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id b62so6315925pgc.0
+        for <linux-rtc@vger.kernel.org>; Fri, 18 Nov 2022 15:31:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=33uTqF7+W9KqoilqutefSDNFwFq6HUhByT2ijkZ5G9U=;
+        b=W7BD5tRI2ij3JGhvPX7uO8vqAdAyVOqI9DLZKtEoNRzDBDtdyxCMAXG4j1tyxVCRUJ
+         vovMvBOZBrVZi/mehG9tAFdBnkNYl/5uVOONDWEVQbnKxaAnud8exlwTl0qnL+ACLAYb
+         CAp+d12k8Q3YC0kSv41zBn2Y5Sh/wxJWEbiuA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=33uTqF7+W9KqoilqutefSDNFwFq6HUhByT2ijkZ5G9U=;
+        b=7RBceg2SuTVa+mRCEbqGpD1cw0BarazGVFBKpwPCjd3kKlZUrn2/5CvGgE9eyA4Big
+         sUDvBpChVIoG1+uZ5XJxKLRIzeiezPtRyQfNk17+SL0AjpmorYAOb3ML/BjQW5hpevSo
+         +UGBGy3n3777JAM3qOH1GgHupqD0PAAzhU/nxTuHrTkDbgq9MBvhtymywKU4N/Fz2udk
+         ntsnUp4ckYRNbKpghcEO2H0BZ/Q1KbkKvV67/FWp1JuQjOjTHFO2bJoDLvKI54IgoGU1
+         OJEQw/ZVoaYC9IOdOpVI04epDfa75KO6hLIaxCf51og/rBY2epFuJtUz0Iql4oW1h4bN
+         YHiQ==
+X-Gm-Message-State: ANoB5pmo+rJSAmqRHTvCykwpvj1LH5cj4k/ouzdnQqPMP+67VJjOJHlD
+        hjzdDSdZFxL0z+mSY8CRwZMxLw==
+X-Google-Smtp-Source: AA0mqf6wi59hZOm6qV685//732ZaWyFw539tCrYb7S5osK83avH6C4bX0DQYRJw1N6Xnew1vP6XUiQ==
+X-Received: by 2002:a62:ab18:0:b0:56b:9ae8:ca05 with SMTP id p24-20020a62ab18000000b0056b9ae8ca05mr9949345pff.59.1668814265054;
+        Fri, 18 Nov 2022 15:31:05 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n1-20020a170902f60100b00186ac4b21cfsm4261573plg.230.2022.11.18.15.31.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 15:31:04 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Daniel Palmer <daniel@thingy.jp>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        Romain Perier <romain.perier@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 563/606] rtc: rs5c372: Convert to i2c's .probe_new()
-Date:   Fri, 18 Nov 2022 23:44:57 +0100
-Message-Id: <20221118224540.619276-564-uwe@kleine-koenig.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: [PATCH] rtc: msc313: Fix function prototype mismatch in msc313_rtc_probe()
+Date:   Fri, 18 Nov 2022 15:31:02 -0800
+Message-Id: <20221118233101.never.215-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2135; h=from:subject:message-id; bh=2uMBrJl4p11kK9eP2yD/st+7tL8825ju2BfNzfsIAFA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjeBW2pC2rpMYTXJkLShGmag664z+K5tiPE3dQug6d 6k7LWyyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY3gVtgAKCRCJcvTf3G3AJqmjD/ 9x/r5mwDVIWZVDGrRBJNY7gBhWQVZs9Z/nqdCrOe6qOkAmhPjIchn1IB6cV1GmDz8UW59kGEtnLdS7 jC1s1/P6gDmZxDY0YrSjBwBrCYTjgk5SEdiG7UleuvQHMDj4ivlWWYw1Yqt2M3qa6wWcjVLZVrBwiW xRgtgPDq8FVLfcjzIztHR/cnfpj5bIFbB4IgjY6l3OgpNY7mssysn2+ggS9aSPfJ5gkG3pPvGtWIi6 EEtLfAjNUNWlED/tP+Tkmmp1PTPTQy6PgDvNCMJrygx0Fv75AsxP7RlPthymvYAGFF+43FCQgQSmLR Yj7JsKW/WC/nTnrsPgyoJME7NdMR3xSOQPspj3DlCxT1EwEn3CEnDdQm/A9amOcCGkiWLUF0Ad0ML7 Qbw+Hf8rGp4VNDDvh54agrBrF29dyoWZj0Dc3fYNZmv/eBV0zjd9IoTkeC1viSK1Bjb1xVrQixTci5 kvaylDZn64g0v7V2S6i8HppnbUtYlHLV973KUmaqypRQP9FNfwo959Bw+LcTa/SCVjNB75LTr7PxaQ cLrhF9jVvisMmnMX44nc/0YGD+rAGhjVRAZkNiyaJycNQd4UJRIMsuTYjBuNUuIZCoL40Nc5IQo+4k qDdrX+pjyAvguJBTMEt2wCJMJIn6QqaLdnvI6LevBtHnBsoy8iGJbeGEZ5JA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed.
 
-.probe_new() doesn't get the i2c_device_id * parameter, so determine
-that explicitly in the probe function.
+msc313_rtc_probe() was passing clk_disable_unprepare() directly, which
+did not have matching prototypes for devm_add_action_or_reset()'s callback
+argument. Add a wrapper and remove the cast.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+This was found as a result of Clang's new -Wcast-function-type-strict
+flag, which is more sensitive than the simpler -Wcast-function-type,
+which only checks for type width mismatches.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202211041527.HD8TLSE1-lkp@intel.com
+Cc: Daniel Palmer <daniel@thingy.jp>
+Cc: Romain Perier <romain.perier@gmail.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-rtc@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/rtc/rtc-rs5c372.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rtc/rtc-msc313.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-rs5c372.c b/drivers/rtc/rtc-rs5c372.c
-index 5047afefcceb..41f10dcbb360 100644
---- a/drivers/rtc/rtc-rs5c372.c
-+++ b/drivers/rtc/rtc-rs5c372.c
-@@ -793,6 +793,7 @@ static int rs5c_oscillator_setup(struct rs5c372 *rs5c372)
+diff --git a/drivers/rtc/rtc-msc313.c b/drivers/rtc/rtc-msc313.c
+index f3fde013c4b8..36e3e77f303e 100644
+--- a/drivers/rtc/rtc-msc313.c
++++ b/drivers/rtc/rtc-msc313.c
+@@ -177,6 +177,13 @@ static irqreturn_t msc313_rtc_interrupt(s32 irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
  
- static int rs5c372_probe(struct i2c_client *client)
++static void msc313_clk_disable_unprepare(void *data)
++{
++	struct clk *clk = data;
++
++	clk_disable_unprepare(clk);
++}
++
+ static int msc313_rtc_probe(struct platform_device *pdev)
  {
-+	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	int err = 0;
- 	int smbus_mode = 0;
- 	struct rs5c372 *rs5c372;
+ 	struct device *dev = &pdev->dev;
+@@ -224,7 +231,7 @@ static int msc313_rtc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare, clk);
++	ret = devm_add_action_or_reset(dev, msc313_clk_disable_unprepare, clk);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
-2.38.1
+2.34.1
 
