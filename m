@@ -2,77 +2,56 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBCE6315EE
-	for <lists+linux-rtc@lfdr.de>; Sun, 20 Nov 2022 20:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2B9631656
+	for <lists+linux-rtc@lfdr.de>; Sun, 20 Nov 2022 21:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiKTTnx (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sun, 20 Nov 2022 14:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S229650AbiKTUak (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sun, 20 Nov 2022 15:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTTns (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sun, 20 Nov 2022 14:43:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
-        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
-        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668973425;
-        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
-         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
-         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
-         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
-         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
-         +Bmg67/Ow+Rwg==
-Received: by mercury (Postfix, from userid 1000)
-        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
-Date:   Sun, 20 Nov 2022 20:43:43 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
+        with ESMTP id S229551AbiKTUaj (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sun, 20 Nov 2022 15:30:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C42223BC2
+        for <linux-rtc@vger.kernel.org>; Sun, 20 Nov 2022 12:30:39 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owqxS-0007So-8g; Sun, 20 Nov 2022 21:30:30 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owqxP-005WVD-QO; Sun, 20 Nov 2022 21:30:28 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owqxP-000Pmo-U1; Sun, 20 Nov 2022 21:30:27 +0100
+Date:   Sun, 20 Nov 2022 21:30:23 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-rtc@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
         Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 561/606] rtc: isl1208: Convert to i2c's .probe_new()
+Message-ID: <20221120203023.7ovrabaep7ya4ibz@pengutronix.de>
 References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-562-uwe@kleine-koenig.org>
+ <Y3lttA22QlR46RXz@mail.local>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
+        protocol="application/pgp-signature"; boundary="iroxzsru4bx4wlf3"
 Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3lttA22QlR46RXz@mail.local>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-rtc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,97 +59,49 @@ List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
 
---wvm2z6appxwdd5fa
+--iroxzsru4bx4wlf3
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hello Alexandre,
 
-On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
+On Sun, Nov 20, 2022 at 12:58:44AM +0100, Alexandre Belloni wrote:
+> On 18/11/2022 23:44:55+0100, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > .probe_new() doesn't get the i2c_device_id * parameter, so determine
+> > that explicitly in the probe function.
+> >=20
 >=20
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
->=20
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch t=
-hat
-> you can pull into your tree to get it:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
-_device_id_helper-immutable
->=20
-> I don't think it's feasable to apply this series in one go, so I ask the
-> maintainers of the changed files to apply via their tree. I guess it
-> will take a few kernel release iterations until all patch are in, but I
-> think a single tree creates too much conflicts.
->=20
-> The last patch changes i2c_driver::probe, all non-converted drivers will
-> fail to compile then. So I hope the build bots will tell me about any
-> driver I missed to convert. This patch is obviously not for application
-> now.
->=20
-> I dropped most individuals from the recipents of this mail to not
-> challenge the mail servers and mailing list filters too much. Sorry if
-> you had extra efforts to find this mail.
->=20
-> Best regards
-> Uwe
+> This is already done later on in the function, please check the rtc
+> patches as I took your previous series.
 
-=2E..
+huh, sorry I missed that. In this previous series you refused to take
+the ds1307 patch. The one from this series is better.
 
->   power: supply: adp5061: Convert to i2c's .probe_new()
->   power: supply: bq2415x: Convert to i2c's .probe_new()
->   power: supply: bq24190: Convert to i2c's .probe_new()
->   power: supply: bq24257: Convert to i2c's .probe_new()
->   power: supply: bq24735: Convert to i2c's .probe_new()
->   power: supply: bq2515x: Convert to i2c's .probe_new()
->   power: supply: bq256xx: Convert to i2c's .probe_new()
->   power: supply: bq25890: Convert to i2c's .probe_new()
->   power: supply: bq25980: Convert to i2c's .probe_new()
->   power: supply: bq27xxx: Convert to i2c's .probe_new()
->   power: supply: ds2782: Convert to i2c's .probe_new()
->   power: supply: lp8727: Convert to i2c's .probe_new()
->   power: supply: ltc2941: Convert to i2c's .probe_new()
->   power: supply: ltc4162-l: Convert to i2c's .probe_new()
->   power: supply: max14656: Convert to i2c's .probe_new()
->   power: supply: max17040: Convert to i2c's .probe_new()
->   power: supply: max17042_battery: Convert to i2c's .probe_new()
->   power: supply: rt5033_battery: Convert to i2c's .probe_new()
->   power: supply: rt9455: Convert to i2c's .probe_new()
->   power: supply: sbs: Convert to i2c's .probe_new()
->   power: supply: sbs-manager: Convert to i2c's .probe_new()
->   power: supply: smb347: Convert to i2c's .probe_new()
->   power: supply: ucs1002: Convert to i2c's .probe_new()
->   power: supply: z2_battery: Convert to i2c's .probe_new()
->   [...]
+I dropped the other rtc patches from my queue.
 
-Thanks, I queued patches 513-536 to the power-supply subsystem.
+Best regards
+Uwe
 
--- Sebastian
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
---wvm2z6appxwdd5fa
+--iroxzsru4bx4wlf3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
-+pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
-lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
-qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
-hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
-agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
-QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
-A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
-AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
-Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
-hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
-fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
-=Dh+o
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmN6jlwACgkQwfwUeK3K
+7AmXgggAhHbPUzMA+WKU+kjYHD2L1B7//ep5XOhktSGgOf7dAmrK9tUikXWz6YjM
+0Nt5PFLUkvM1sUYU0obkdi1oa06hfLo0AP4D/lxI9/seQ66zoiXRL+wAdQe19AM3
+M4GtRe2/9/NcsLwzNU4Nt8knMFCC7W1J7mPhrV93YiWwKFkDUAq6lOVIFYuWHKJA
+tYfdG9QgVYoFNYigBPk+XBYahIVlgdtDN0KWFfHlPS2hdCKYEOWuW5HtV3eacwzw
+rfPX1YUYgm11dktnc3AQWbKxLU0zh4Oh+/f10tKIe/lzh6POOpUw+b9qp/jh7ToQ
+h9xZDliByO8JeSOFoPaIFOlEw7WNOQ==
+=xGWZ
 -----END PGP SIGNATURE-----
 
---wvm2z6appxwdd5fa--
+--iroxzsru4bx4wlf3--
