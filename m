@@ -2,95 +2,84 @@ Return-Path: <linux-rtc-owner@vger.kernel.org>
 X-Original-To: lists+linux-rtc@lfdr.de
 Delivered-To: lists+linux-rtc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725206311F8
-	for <lists+linux-rtc@lfdr.de>; Sun, 20 Nov 2022 00:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A44C2631209
+	for <lists+linux-rtc@lfdr.de>; Sun, 20 Nov 2022 01:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiKSX6u (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
-        Sat, 19 Nov 2022 18:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229441AbiKTAjo (ORCPT <rfc822;lists+linux-rtc@lfdr.de>);
+        Sat, 19 Nov 2022 19:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbiKSX6t (ORCPT
-        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Nov 2022 18:58:49 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BED313DEF;
-        Sat, 19 Nov 2022 15:58:47 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 386471BF207;
-        Sat, 19 Nov 2022 23:58:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668902326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=17CqComxe+k6h8f0mE/chWaXjRFAVcoSj3D8bZumfx0=;
-        b=akFF+cTrOMDG+B+BpYqPxd+pmuBuDC3i+6oD0CJgq9R0IhWRKIX36egShNIOdpyA/XueLh
-        xGdSUiSocTV1O1UzmNSL7WHeI1bojNgcUILzod+VhYa4ymUMg3fyUTLTS9r4S5oAeAYO+y
-        Tf5cOfyOKlH1WbrIdFptcgjVWprnnDoMIY+XrUoaMk2yzhb51qSJV0LBF/WDa7tXOWzwda
-        TNdfx7Fc1cdZhQg5P0tcnzkHYX49S2r2crrkPPR0uHM1ge3PnlBCjVrPf3RVlFhNtaIyW6
-        H3D5XazNjHRejV+wXtEYXYZhEwmjUniS1nT0j3nCJL+BdaeBhT1Wyc/A6fWMXg==
-Date:   Sun, 20 Nov 2022 00:58:44 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
+        with ESMTP id S229437AbiKTAjo (ORCPT
+        <rfc822;linux-rtc@vger.kernel.org>); Sat, 19 Nov 2022 19:39:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F4978B31;
+        Sat, 19 Nov 2022 16:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=h1esYPTYICzVqS5zAnG6MaCABy6Ms8LkfzyARU9oPIY=; b=gKLzyG3B8UGZAqDl0MeoZVyvbi
+        tQL2LouaZiHMmUT0e3ZW1B8ZZxGUN/utMa5sk9hpERle6VBqxug5xD7PC3WaoGXEcpAx6eUUVolR7
+        NWWLZFcvfK4w/gcctHit4V5Ojj/7lKyea1ZJ2lO5ha67GYhhUo/8cOyIbm6BFvertlVqX8qSAhtzR
+        4odCN9QYFcg1MhG7vwy7CstPOuHG1KcrBdPzyYRuirWjeGH5nMzs1+VEyuvcjQM9TF+tR8K6qg636
+        CCOXu1cJS5eSivisuSKRPg6PLO1483+htVc/H8E8hSRlXCrE51gyhcWetuqQGmDd//Zx0hsZXshQO
+        V6C5qoMQ==;
+Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1owYN4-003hNr-95; Sun, 20 Nov 2022 00:39:42 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Qin Jian <qinjian@cqplus1.com>, Arnd Bergmann <arnd@arndb.de>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 561/606] rtc: isl1208: Convert to i2c's .probe_new()
-Message-ID: <Y3lttA22QlR46RXz@mail.local>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-562-uwe@kleine-koenig.org>
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH] ARM: sunplus: use %pap to print resource_size_t
+Date:   Sat, 19 Nov 2022 16:39:30 -0800
+Message-Id: <20221120003930.23846-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221118224540.619276-562-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-rtc.vger.kernel.org>
 X-Mailing-List: linux-rtc@vger.kernel.org
 
-On 18/11/2022 23:44:55+0100, Uwe Kleine-König wrote:
-> From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> 
-> .probe_new() doesn't get the i2c_device_id * parameter, so determine
-> that explicitly in the probe function.
-> 
+Prevent a printk format warning by using %pap, which is designed for
+this purpose and can handle any size of resource_size_t.
 
-This is already done later on in the function, please check the rtc
-patches as I took your previous series.
+../drivers/rtc/rtc-sunplus.c: In function 'sp_rtc_probe':
+../drivers/rtc/rtc-sunplus.c:243:33: warning: format '%x' expects argument of type 'unsigned int', but argument 4 has type 'resource_size_t' {aka 'long long unsigned int'} [-Wformat=]
+  243 |         dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/rtc/rtc-isl1208.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/rtc/rtc-isl1208.c b/drivers/rtc/rtc-isl1208.c
-> index 73cc6aaf9b8b..fca9cc440296 100644
-> --- a/drivers/rtc/rtc-isl1208.c
-> +++ b/drivers/rtc/rtc-isl1208.c
-> @@ -799,6 +799,7 @@ static int isl1208_setup_irq(struct i2c_client *client, int irq)
->  static int
->  isl1208_probe(struct i2c_client *client)
->  {
-> +	const struct i2c_device_id *id = i2c_client_get_device_id(client);
->  	int rc = 0;
->  	struct isl1208_state *isl1208;
->  	int evdet_irq = -1;
-> -- 
-> 2.38.1
-> 
+Fixes: 0aa94eea8d95 ("ARM: sunplus: Add initial support for Sunplus SP7021 SoC")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Qin Jian <qinjian@cqplus1.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Vincent Shih <vincent.sunplus@gmail.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: linux-rtc@vger.kernel.org
+---
+ drivers/rtc/rtc-sunplus.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff -- a/drivers/rtc/rtc-sunplus.c b/drivers/rtc/rtc-sunplus.c
+--- a/drivers/rtc/rtc-sunplus.c
++++ b/drivers/rtc/rtc-sunplus.c
+@@ -240,8 +240,8 @@ static int sp_rtc_probe(struct platform_
+ 	if (IS_ERR(sp_rtc->reg_base))
+ 		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc->reg_base),
+ 					    "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
+-	dev_dbg(&plat_dev->dev, "res = 0x%x, reg_base = 0x%lx\n",
+-		sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
++	dev_dbg(&plat_dev->dev, "res = 0x%pap, reg_base = 0x%lx\n",
++		&sp_rtc->res->start, (unsigned long)sp_rtc->reg_base);
+ 
+ 	sp_rtc->irq = platform_get_irq(plat_dev, 0);
+ 	if (sp_rtc->irq < 0)
